@@ -294,26 +294,7 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 <!-- plan-archive: T068 to T068 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
 <!-- plan-archive: T069 to T069 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 <!-- plan-archive: T071 to T071 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
-### T070 Approach (checklist part A)
-
-1. **The goal, in the world.** Phase 2 closed on its measured outcome.
-2. **The constraints.** SC-002, FR-010.
-   **Decisions** (the close of phase 2; `ask:449-T071-scope`, FR-001b):
-   - SC-002 AS MEASURED: `m:done-rust-edit-phase2`, 22.0 s against the 15.1 s owed: not met, recorded with its shares in `dev/phase-2-close.md`, the line unmoved and re-measured at the phase-3 close. The round arbiter's `ask:449-T071-scope` (`arbiter.jsonl`) rules this case: "phase 2 closes without a new ask: dev/ records the figure and the shares, states SC-002 NOT MET at phase 2 by that named share ... and leaves SC-002's line unmoved; it is re-measured at the phase-3 close". The planner it named is gone (FR-001b), so the shares are the kept pytest's two runs, the preflight's Python tools and the seeds.
-   - AN UNCHANGED TREE RUNS NO TEST: the preflight stands aside on a verified tree, so `make done`'s "already verified" path starts no test (SC-002's second half), `m:done-unchanged-after`.
-   - THE TIME FLOOR: a `make done` reuses each crate's unchanged checks, so it is judged at the incremental floor, 5 s (`ABSOLUTE_MIN` in `run_plausible.rs`, a setting), in place of the floor of 10% of the pinned ratchet baseline (40 s, a setting of `dev/ratchets.json`): `m:done-rust-edit-phase2` did every check its delta owed in 22.0 s of wall time, and the old floor refused such a run.
-   - FR-008'S ONE END-TO-END TEST: `test_rust_tooling.py` was deleted by FR-001b; FR-008's test against the real command is `rustc/tests.rs`'s `the_real_cargo_tests_a_real_crate`, the real cargo over the fixture crate.
-   - THE CENSUSES: the `.py` census's phase-2 share is `git ls-files 'scripts/gates/*.py' 'scripts/measure/*.py' 'l7r/diagram/ci/*' l7r/diagram/switches.py scripts/hooks/lib/hm_conflict.py` (observed 2026-11-10, one-shot): it lists only files `dev/phase-2-close.md` names with their phase, and neither of the last two exists. The second census returns the four `make audit` recipes and the two fixtures of `ask:449-T069-suites`. The `ask:449-T069-xdist` probe is gone with the planner's recipe: `git grep -c 'pip show' -- Makefile` printed 'nothing' (observed 2026-11-10, one-shot).
-3. **Where each comes from.** `m:done-rust-edit`.
-4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** As the phase's plan above; each stands on the ones before it.
-6. **The exits.** Green: the figures re-run and recorded beside their first values, SC-002's result stated (met, or not met by its named shares as `ask:449-T071-scope` rules), and the censuses' phase-2 share holding only the expected remainders named in `dev/phase-2-close.md`. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** SC-002's measurement and both censuses, recorded in `dev/`. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
-10. **Before moving a constant.** No constant's value moves; the Time Floor decision changes which existing floor applies to `make done`.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T070 to T070 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 ## Project Structure
 
 ### Documentation (this feature)
