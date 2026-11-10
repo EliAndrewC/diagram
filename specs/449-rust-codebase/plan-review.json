@@ -8431,6 +8431,64 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T79": {
+   "section_sha256": "8c88429bfe944027ff083b37db03d8f20b9ce6fb5f23ea9860d8a1649438ae0f",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "WHAT-IS-HERE",
+     "summary": "canon, money_conversions, found, stale_terms, money_candidates, fragment_move, open_questions and agent_census become l7r-gate record verbs, with rust/gate/src/difflib.rs the one SequenceMatcher port (autojunk off).",
+     "class": "within",
+     "why": "FR-001 replaces every Python file and the GM asked for the whole codebase in Rust. 'Autojunk off' is a same-verdict matter under FR-002; whether the Python sets it is not in the bundle and was not checked."
+    },
+    {
+     "id": "MOVES-TO-CALLER",
+     "summary": "Tools still imported by Python move to the task porting their importers (T81, T82, T83), found by a stated git grep over scripts/, l7r/, tests/.",
+     "class": "within",
+     "why": "Sequencing inside the feature so one implementation runs (FR-003); nothing leaves FR-001. Caveat, not a narrowing: the search is stated but finds only statements of the form import/from <bare name>, so it misses package-qualified imports, importlib, and Python embedded as a string in make, shell or Rust - a form this same block shows exists (review_round_hooks' inline Python). A miss would leave a Python caller running a file the block says nothing runs."
+    },
+    {
+     "id": "SIZE-TABLE-PHASE-4",
+     "summary": "size_table.py goes in phase 4 because it imports the Mode A code.",
+     "class": "within",
+     "why": "Resequencing inside FR-001's phases on a stated dependency; it stays owed by the feature and SC-005's census."
+    },
+    {
+     "id": "AGENT-SYNC-WAITS",
+     "summary": "agent_sync.py stays with its kept test test_agent_sync.py until that test is ported.",
+     "class": "within",
+     "why": "FR-001b ports kept tests with the piece they test, so the two travel together. The block names no task for it, unlike every other deferred tool; only SC-005's census holds it."
+    },
+    {
+     "id": "VERDICTS-NINE-VERBS-FIVE-MEASURED",
+     "summary": "The block heads its equivalence evidence THE VERDICTS ARE THE PYTHON'S, but compares only canon, money-conversions, found, stale-terms and money-candidates; fragment_move, open_questions, agent_census and the stale-dirs verb have no comparison stated, and no reason is given.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 asks the same verdicts of each replaced piece, FR-003 makes a passing replacement the condition for the Python to stop being the one that runs, and FR-001b, having deleted the Python unit tests, names each port's differential as what holds the Python until its port. Four of nine verbs have no measured pass, so the block assumes a state it did not measure. No impossibility or purpose argument is offered. Unlabeled by the author. Cure: state the same comparison for those four, or commit each to it before it becomes the one that runs."
+    },
+    {
+     "id": "HTML-ENTITY-SUBSET",
+     "summary": "The Rust port decodes only the HTML entities the record holds today plus numeric references; a later fragment naming another entity would need its row added.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block's own sentence concedes the port handles less than the piece it replaces. Not impossible, since the whole table is static data; not implied by the GM, who asked for a port of Python that works; and the literal rule defeats no purpose. The block does not say what an unknown entity does, so a check over a new fragment can give a different verdict from the Python, on input that grows as the record grows. FR-002's full text is not in the bundle and the block does not cite it; its first line bounds cases by 'its tests and its ...', which at best defends this at word level, while the purpose of same-verdicts is that the replacement behaves as the Python did. Cure: carry the full set the Python decodes, or take the subset to the GM as an exception."
+    },
+    {
+     "id": "GUARD-STALE-DIRS",
+     "summary": "review_round_hooks asks l7r-gate record stale-dirs in place of its inline Python.",
+     "class": "within",
+     "why": "Replaces Python with Rust and keeps one implementation (FR-001, FR-003). It swaps one subprocess for another, so it adds nothing against FR-007. Its missing comparison is ruled under VERDICTS-NINE-VERBS-FIVE-MEASURED."
+    },
+    {
+     "id": "PYTHON-STAYS-UNRUN",
+     "summary": "The Python files remain in the tree until the GM approves removal, with no recipe, hook or figure running them meanwhile.",
+     "class": "within",
+     "why": "Timing of deletion only: SC-005's census still requires them gone at close, and nothing runs both (FR-003). The safety check the block cites is not in the bundle and was not checked."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

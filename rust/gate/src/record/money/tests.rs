@@ -27,13 +27,31 @@ fn record(tag: &str) -> PathBuf {
 const Q: &str = "research/questions/0001-a.html";
 
 #[test]
-fn text_is_plain_with_entities_read_and_macrons_dropped() {
-    assert_eq!(
-        plain("<b>1 ryō</b>  &amp; 2 shū &#x27;x&#39; &bogus; &frac12 &#xFFFFFFFF; &path"),
-        "1 ryo & 2 shu 'x' &bogus; \u{bd} &#xFFFFFFFF; &path"
-    );
-    assert_eq!(plain("&apos a"), "&apos a");
-    assert_eq!(plain("&apos;"), "'");
+fn text_is_plain_with_macrons_dropped() {
+    assert_eq!(plain("<b>1 ryō</b>   2 shū"), "1 ryo 2 shu");
+}
+
+/// Each answer below is CPython's `html.unescape` on the same text (observed 2026-11-10).
+#[test]
+fn entities_are_read_as_html_unescape_reads_them() {
+    for (text, want) in [
+        ("&amp; &quot;&#x27;&#39;", "& \"''"),
+        ("&bogus; &path &apos a", "&bogus; &path &apos a"),
+        ("&frac12 &frac12x &notit", "\u{bd} \u{bd}x \u{ac}it"),
+        ("&#128; &#x80;", "\u{20ac} \u{20ac}"),
+        (
+            "&#xD800; &#1114112; &#99999999999999;",
+            "\u{fffd} \u{fffd} \u{fffd}",
+        ),
+        ("[&#xFDD0;]", "[]"),
+        ("&ThickSpace;", "\u{205f}\u{200a}"),
+    ] {
+        assert_eq!(
+            super::ENTITY.replace_all(text, |c: &fancy_regex::Captures| super::entity(c)),
+            want,
+            "{text}"
+        );
+    }
 }
 
 #[test]
