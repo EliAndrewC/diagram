@@ -674,6 +674,11 @@ fn a_run_with_several_differing_records_starts_codeid_once() {
 }
 
 #[test]
+fn each_counter_question_has_its_own_scratch_directory() {
+    assert_ne!(counter_dir(), counter_dir());
+}
+
+#[test]
 fn codeid_failing_fails_the_gate_with_no_substitute_answer() {
     let (root, base, head, _) = work("failing", Some("integrated"));
     rec(&root, "u1", &base, 1, &[], 0);

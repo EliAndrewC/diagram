@@ -36,6 +36,14 @@ const SEEDS: usize = 48;
 const FRESH_BASE: u64 = 10_000;
 const FRESH_SPAN: u64 = 990_000;
 const REFUSING: [&str; 3] = [" NEWLY FAILING", " WORSENED", " NO BASELINE"];
+
+/// A scratch directory for one `ask_counters` call. The process id alone is not enough: parallel tests share a process, and
+/// one call's cleanup deleted another's files, the cause of this crate's intermittent "codeid.py could not say" (2026-11-10).
+fn counter_dir() -> std::path::PathBuf {
+    static NEXT: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    let call = NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    std::env::temp_dir().join(format!("l7r-gate-counter-{}-{call}", std::process::id()))
+}
 /// The paths whose bytes unchanged mean the same engine at once.
 pub(crate) const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
 
@@ -180,7 +188,7 @@ impl<'a> Repo<'a> {
     /// Each pair's "the same but for counter blocks", from one run of `codeid.py`, which reads the AST until phase 4
     /// (`round:spec-fidelity|plan:449-rust-codebase#T068@3`: at most one process a run, whatever the records). `None` when it could not answer.
     fn ask_counters(&self, pairs: &[&(Vec<u8>, Vec<u8>)]) -> Option<Vec<bool>> {
-        let dir = std::env::temp_dir().join(format!("l7r-gate-counter-{}", std::process::id()));
+        let dir = counter_dir();
         let mut files = Vec::new();
         let mut written = std::fs::create_dir_all(&dir).is_ok();
         for (n, (old, new)) in pairs.iter().enumerate() {
