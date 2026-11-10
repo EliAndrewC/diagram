@@ -267,3 +267,13 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T78 The Python unit tests, the planner and the Python-only static checks deleted (FR-001b)
       research: rendering
       verify: DONE. landed: the Python unit tests, the planner, the floor and the Python-only checks are deleted (FR-001b)
+- [ ] T79 Phase 3, the standalone tools: ledger_lint, review_cost, moves, agent_census, agent_sync, brief_load, canon, found, fragment_move, money_candidates, money_conversions, open_questions, pager, size_table, stale_terms, task_phases, tool_yield, turn_time, work_budget_view, work_budget_bundle, each checked against its callers first and deleted if nothing uses it
+      research: rendering
+- [ ] T80 Phase 3, archive and sources: archive, archive_ops, sources, attempts, access_tags, downloads, uncited, uncited_imports, reserve-prefix, check-partial-citations
+      research: rendering
+- [ ] T81 Phase 3, the record, hook and review core in one cut with T011, T043 and T048: hm_checks, hm_arbiter, hm_fixloop, hm_planhold, hm_budget_rounds, hm_record, hm_house, record_owed, record_units, the modal_ files, entry_owed, translation_owed, apply_edits, check_bundle, bundle_owed, earlier_rounds, quote_verbatim, source_pages, record_cache, review_owed, review_prereq, checkpoint and the bundle files, depiction_replay onto the Rust modal_owed
+      research: rendering
+- [ ] T82 Phase 3, claims: claims.py and its satellites
+      research: rendering
+- [ ] T83 Phase 3, measure and events: event_log, feature_report, ledger_owed, where_time, stepback_bundle, fix_yield, replay_owing's ruling, the three make audit recipes, land.py and speckit-todo.py
+      research: rendering
