@@ -348,34 +348,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T79 to T79 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 <!-- plan-archive: T80 to T80 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
-### T81 (the first record leaves, `ask:449-T81-slices`)
-
-- **Approach**: three leaves ported with the decisions below; everything else the old T81 named is T85-T89.
-
-   **Decisions** (`ask:449-T81-slices`):
-   - `hm_record.py` becomes `l7r-gate record edit-route` and `record fragments`; `hm_house.py` becomes `record americanize`, reaching the guard's own correction; `moves.py` becomes `record moved-only`, reaching `checks/moves.rs`. One implementation of each.
-   - Python callers reach them through `scripts/record_door.py`, one process a run (FR-006): `review_owed` asks every new folder at once, `entry_owed` every hit, `apply_edits` and `claims_reply` every text, `check_bundle` from memory.
-   - The old Python files are removed with T84's approval, not here.
-   - `edit-route` compared on the real tree, Python `main()` against the verb, exit, stdout and stderr, a traceback's text not bound (`ask:449-usage-text`): 566 payloads, every rule of the router and malformed input among them, 0 differ (observed 2026-11-10, method: a one-shot harness sampling fragment text from the questions, the registry and the glossary with a fixed seed). `scripts/record_door.py` goes with its last Python caller (`ask:449-T81-hm-record`).
-   - Differential, both on the real tree: `moved-only` 15 cases, 0 differ; `fragments` 204 payloads and 2,356 listings, 0 differ; `americanize` 5,114 paragraphs and 495 seeded, 0 differ after the fix for `\s` on U+001C-U+001F around a dash (observed 2026-11-10, method: each Python against its verb, exit, stdout and stderr compared). A whole-file `americanize` run was killed unfinished and compared nothing, so the paragraph run is the evidence.
-
-### T81 Approach (checklist part A)
-
-1. **The goal, in the world.** What a record edit routes to, a question's fragments, the house spelling and the moved-only check are decided by Rust.
-2. **The constraints.** FR-001, FR-002, FR-003, FR-006; `ask:449-T81-slices`.
-3. **Where each comes from.** The Python tools of this slice, each compared with its port.
-4. **Do they describe the world here?** Tooling; no researched value moves.
-5. **The order.** First of the old T81's slices; T85 follows.
-6. **The exits.** Green: the decisions' differential shows no mismatch and `make land` is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The decisions' differential; `git grep -nE "(hm_record|hm_house|moves)\.py" -- Makefile '*.mk' '*.sh'` names no invocation.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** no.
-
-
+<!-- plan-archive: T81 to T81 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 ### T82 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

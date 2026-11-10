@@ -273,8 +273,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T80 Phase 3, the archive's first slice (`ask:449-T80-order`): `access_tags.py`, `downloads.py`, `check-partial-citations.py`; `uncited.py`, `uncited_imports.py`, `archive_ops.py` and `archive.py` follow T81 in its order
       research: rendering
       verify: DONE. landed: access-tags, downloads and partial-citations are Rust; their Python stays until the GM approves its removal
-- [ ] T81 Phase 3, the record's first leaves (`ask:449-T81-slices`): `hm_record` as `record edit-route` and `record fragments`, `hm_house` as `record americanize`, `moves` as `record moved-only`, Python's callers through `scripts/record_door.py`; the rest of the old T81 is T85-T89 and `quote_verbatim.py` moves to phase 4
+- [x] T81 Phase 3, the record's first leaves (`ask:449-T81-slices`): `hm_record` as `record edit-route` and `record fragments`, `hm_house` as `record americanize`, `moves` as `record moved-only`, Python's callers through `scripts/record_door.py`; the rest of the old T81 is T85-T89 and `quote_verbatim.py` moves to phase 4
       research: rendering
+      verify: DONE. landed: the first record leaves in Rust: edit-route, fragments, americanize, moved-only
 - [ ] T82 Phase 3, claims: claims.py and its satellites
       research: rendering
 - [ ] T83 Phase 3, measure and events: event_log, feature_report, ledger_owed, where_time, stepback_bundle, fix_yield, replay_owing's ruling, the three make audit recipes, land.py and speckit-todo.py
