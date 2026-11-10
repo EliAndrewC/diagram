@@ -8433,92 +8433,78 @@
    "verdict": "CLEAR"
   },
   "T79": {
-   "section_sha256": "719409fc54d6f3d97dab6e46338c1e76408a3cd41abe7a9b93626ff1fbbee4d8",
+   "section_sha256": "a246456e6e25004b022b1722aa3fc0b4493195696c8111103b722f9aa9302b35",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T79-here",
-     "summary": "canon, money_conversions, found, stale_terms, money_candidates, fragment_move and agent_census become l7r-gate record verbs, with rust/gate/src/difflib.rs the one SequenceMatcher port",
+     "id": "what-is-here",
+     "summary": "The seven tools become l7r-gate record verbs, with one difflib port.",
      "class": "within",
-     "why": "FR-001 replaces these files in phase 3; where a port lives is not something the request or spec fixes, and one difflib port serves FR-003."
+     "why": "FR-001 places the rest of scripts/ and l7r/diagram/tools/ in phase 3; a port into the gate binary is that replacement."
     },
     {
-     "id": "T79-no-importer-census",
-     "summary": "The slice is defined as tools no Python still imports, established by git grep -lE '^\\s*(import|from) +<name>\\b' over scripts/, l7r/, tests/ and by git grep -n '<name>' over scripts/, rust/, the Makefile and the .sh files",
+     "id": "moves-to-caller-within-phase-3",
+     "summary": "ledger_lint, review_cost, moves, brief_load, pager, task_phases, turn_time, tool_yield and work_budget_view/bundle are ported in T81-T83 with their callers.",
+     "class": "within",
+     "why": "Slicing inside phase 3, so one implementation runs (FR-003); ask:449-T76-scope and ask:449-T77-scope put the named ones in phase 3 and every destination is phase 3."
+    },
+    {
+     "id": "size_table-open_questions-to-phase-4",
+     "summary": "size_table.py and open_questions.py leave phase 3 for phase 4, carrying the T065 clause and named at the phase-3 close.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "The partition silently excepts this slice from FR-003 (no piece runs both) on a premise its stated search cannot establish. The first regex needs the bare name directly after import/from, so it cannot match 'from .canon import X', 'from l7r.diagram.tools.canon import X' or 'from l7r.diagram.tools import canon'; the second search, the one that would, was not run over l7r/ or tests/, the place sibling tools import each other. A package-qualified importer that stays Python would leave the Python running beside the verb. No such importer was found or looked for by this review (the bundle forbids reading the repository): the finding is that the premise is unmeasured. Required: state a search that reaches relative and package-qualified imports under l7r/ and whatever tests outlive FR-001b, and move anything it finds to its caller."
+     "why": "FR-001 places these in phase 3. Neither name appears in spec-cited.md or spec-index.md, so no requirement or ruling moves them; this plan grants the move to itself in the arbiter's own phrasing. Every comparable move in FR-001 carries an ask: ruling (codeid.py to phase 4 with Mode A, check-entry-headings.py with the registry, the recipe reading CLASSES in ask:449-T069-suites). The reason given (they import Mode A code and CLASSES) may well earn the same ruling, but it does not meet the MODE 1 bar here: the rule is not shown impossible (FR-001 has a by-path route for Python a port still needs, and the route of asking is the one the spec used in the identical case), and the GM's words do not imply it. Requires a make arbiter-ask ruling and FR-001 naming the two files, with the plan citing the ask."
     },
     {
-     "id": "T79-moves-to-caller",
-     "summary": "ledger_lint, review_cost, moves, brief_load to T81; pager to T82; task_phases, turn_time, tool_yield, work_budget_view, work_budget_bundle to T83, each with its caller",
+     "id": "agent_sync-with-kept-test",
+     "summary": "agent_sync.py goes in T83 with the Rust port of test_agent_sync.py.",
      "class": "within",
-     "why": "Sequencing inside phase 3 so one implementation runs (FR-003); agrees with ask:449-hm-checks-route, ask:449-T76-scope and ask:449-T77-scope."
+     "why": "FR-001b: checks of agent files outlive the Python and are ported with the piece they test; T83 is in phase 3."
     },
     {
-     "id": "T79-size-table-phase-4",
-     "summary": "size_table.py goes in phase 4 because it imports the engine's Mode A code",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "FR-001 lists the rest of scripts/ and l7r/diagram/tools/ in phase 3, so this departs from the spec's placement. A real Rust replacement cannot import Python, and FR-001 orders Mode A last; a phase-3 port would be a shell over Python, not a replacement. Against the request nothing is lost: the file is still ported and the GM set no phase order. FR-001's rulings put the CLASSES reader (ask:449-T069-suites) and the registry reader (ask:449-T065-scope) in phase 4 the same way. Premise taken from the block, not checked in the repository. Every other move in FR-001 carries the T065 clause and is named by the phase-3 close; the block states neither for this file and should."
-    },
-    {
-     "id": "T79-open-questions-phase-4",
-     "summary": "open_questions.py moves from this task's verbs to phase 4 because it imports the engine's CLASSES",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Same departure from FR-001's phase 3, judged separately: the last-judged text had it as a verb here. A Rust copy of CLASSES would be a second source of the registry beside the Python (against FR-003's one implementation), and FR-001 already places a CLASSES reader in phase 4 by ask:449-T069-suites. The file is still ported, so the request loses nothing. Premise taken from the block, not checked in the repository. The T065 clause and the phase-3 close naming it are owed as for size_table."
-    },
-    {
-     "id": "T79-agent-sync",
-     "summary": "agent_sync.py stays with its kept test test_agent_sync.py and goes in T83 with that test's Rust port",
-     "class": "within",
-     "why": "FR-001b ports kept tests with the piece they test."
-    },
-    {
-     "id": "T79-differentials",
-     "summary": "Each verb's verdicts are proved by a differential against the Python on the real repository",
-     "class": "within",
-     "why": "FR-002 requires the same verdicts and outputs and FR-001b names each port's differential as what holds Python until its port. Figures carry a dated one-shot label and method."
-    },
-    {
-     "id": "T79-agent-census-command-lines",
-     "summary": "agent-census differs from the Python in one way: the command lines --record writes name the verb",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "FR-002's letter is the same outputs and no ruled case covers this. It is already implied by the spec: FR-001 requires a recorded command naming a ported file to be rewritten to the port, and SC-005 requires that no recorded command run Python at close. Matching the Python here would write a command that runs the file being replaced, defeating both. Scope is the command lines only."
-    },
-    {
-     "id": "T79-html-entities",
-     "summary": "HTML entities are CPython's whole html5 table and numeric rules, generated into record/html5_entities.tsv",
-     "class": "within",
-     "why": "Holds html.unescape's answers for any fragment, as FR-002 asks; the subset the last-judged text carried is gone."
-    },
-    {
-     "id": "T79-guard-stale-dirs",
-     "summary": "review_round_hooks asks l7r-gate record stale-dirs in place of its inline Python",
-     "class": "within",
-     "why": "FR-001 replaces inline Python with the piece it belongs to; 8 differential cases are stated against the Python functions the guard called."
-    },
-    {
-     "id": "T79-python-stays",
-     "summary": "The slice's .py files stay until the GM approves removal; no recipe, hook or figure runs them meanwhile",
-     "class": "within",
-     "why": "FR-003 and FR-002 order replacement before deletion and name no commit for it; the census at each phase's end and SC-005 still owe the deletion, so this is sequencing and removes nothing from the request."
-    },
-    {
-     "id": "T79-done-measure",
-     "summary": "Done is measured by git grep of the slice's .py names over the Makefile, .sh, rust/ and .claude/settings.json",
+     "id": "seeded-py-deleted-not-ported",
+     "summary": "specs/251-tiered-subagent-checks/measure/seeded.py is deleted rather than ported, as a harness nothing runs.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "FR-001 requires every specs/*/measurements*.json command that runs a ported file to be rewritten to the port in the commit that ports it, and its second census includes *.mk. The stated done-check searches neither, so T79 could land green with a recorded command still running one of these files, while the block asserts that no figure runs them with no search behind the claim. Nothing makes the wider search impossible. Required: add specs/*/measurements*.json and *.mk to the done-check, or name the search that already covers them."
+     "why": "The GM's 2026-11-09 rule waives the port only 'if those are not still used', and FR-001 repeats the condition. The premise is measured over git grep -n seeded -- 'specs/251*/measurements*.json' Makefile only. That is narrower than FR-001's own second census (Makefile '*.mk' '*.sh') and than this block's item 9 (specs/*/measurements*.json), and it omits siblings under specs/251/measure/, other features' measurements, scripts and the docs, where FR-001 itself treats a step a document directs as still used (model_trial.py). The carve-out is the GM's; its condition is not established. Legitimate once a search over those spaces is stated and comes back empty. Not re-run: the bundle forbids reading the repository."
     },
     {
-     "id": "T79-order",
-     "summary": "T79 lands before T80 to T83, in one landing",
+     "id": "verdicts-are-the-pythons",
+     "summary": "Each verb's differential against the Python on the real repository shows no difference, but for agent-census's command lines (ruled separately).",
      "class": "within",
-     "why": "Order inside phase 3, not fixed by the request or spec."
+     "why": "FR-002, with FR-001b naming each port's differential as what holds running Python once its unit tests are gone. Figures carry one-shot labels and were not re-run (bundle-only read)."
+    },
+    {
+     "id": "agent-census-command-lines-differ",
+     "summary": "agent-census differs from the Python in the command lines --record writes, which name the verb.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002's list of differences is closed, so this is an exception to it, but it is already implied by the spec's own words: FR-001 requires every recorded command to be rewritten to the port in the porting commit. A record that named the deleted Python would break FR-001."
+    },
+    {
+     "id": "guard-uses-stale-dirs",
+     "summary": "review_round_hooks asks l7r-gate record stale-dirs in place of its inline Python.",
+     "class": "within",
+     "why": "FR-001's second census: an inline site follows the piece it belongs to; this removes one with its port compared in the differential."
+    },
+    {
+     "id": "python-stays-until-gm-approves-removal",
+     "summary": "The Python files remain on disk, unrun, until the GM approves their removal.",
+     "class": "within",
+     "why": "Sequencing, not waiver: FR-001 and SC-005's census still require their removal and FR-003 is honored if nothing runs them. The decision stands, but its condition 'no recipe, hook or figure runs these files' is not established by the searches stated. Item 9's pattern \\b(<the seven>)\\.py\\b cannot match python3 -m l7r.diagram.tools.<name> or a dotted-module string, forms FR-001 names ('runs python3 -c or -m'); the import search is over .py files only, so inline python3 -c in the Makefile and shell (FR-001's second census) is outside it, and its character class [ .a-zA-Z_]* stops at a comma, missing 'from pkg import other, canon' and parenthesized lists. The earlier block's bare-name grep over the Makefile and .sh files, which found the guard's use, was dropped in this revision. The enumeration naming seeded.py as 'the one importer outside it' also has no stated search space, since the shown grep excludes specs/. The plan must state a search reaching these forms."
+    },
+    {
+     "id": "order-before-T80-T83",
+     "summary": "T79 lands before T80 to T83.",
+     "class": "within",
+     "why": "Ordering inside phase 3."
+    },
+    {
+     "id": "measurements-rewritten-in-porting-commit",
+     "summary": "specs/251's measurement commands and every figure's command are rewritten to the verb in the porting commit.",
+     "class": "within",
+     "why": "FR-001, in terms."
     }
    ],
    "verdict": "BLOCKED"
