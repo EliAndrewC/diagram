@@ -156,6 +156,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-09",
    "declared": "spec-fidelity"
+  },
+  "### T77 Approach (checklist part A)": {
+   "sha256": "e9284f93d51170d4825558c79958c16640c906ec6bb5c29597e121b78043523e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4491,6 +4497,81 @@
      "why": "FR-001 requires exactly this."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-10",
+   "blocks": [
+    "### T77 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "ONE LANDING",
+     "summary": "The five measure tools become l7r-gate measure subcommands in one landing; the Makefile and three figure files are rewritten, and docs/spec-kit-and-reviews.md's model_trial step and rust/phases/src/driver/CLAUDE.md's pointer with them.",
+     "class": "within",
+     "why": "FR-001 places these files through ask:449-T068-scope, model_trial.py, popup_rounds.py and push_check_times.py in the last slice, and names the docs step. Changed since last judged: the two documents are now rewritten with the port. The search spaces are stated."
+    },
+    {
+     "id": "THE DELETION WAITS ON THE GM",
+     "summary": "The ports land first; the removal of the five tools and two tests was refused by the built-in safety check, so the task stays open until the GM runs it; the two tests that import the tools stay and pass until then.",
+     "class": "within",
+     "why": "Nothing asked for is dropped: the exits and item 9 still require the files gone and the task cannot close without it. FR-002 binds the port before the deletion. On FR-003's 'no piece runs both': recipes, hooks and figures run only the port, and the Python's only remaining run is its own two tests, which test it and do not serve the piece. Changed since last judged: 'nothing invokes the Python' is replaced by this exact statement."
+    },
+    {
+     "id": "WHAT MOVES",
+     "summary": "replay_owing.py and depiction_replay.py go to phase 3 with modal_owed, modal_triage and claims; the other deferred tools as FR-001 and T070's row place them.",
+     "class": "within",
+     "why": "FR-001 carries ask:449-T77-replays and ask:449-T77-scope. Each file is still ported or deleted under the request's own terms; only its phase moves."
+    },
+    {
+     "id": "THE FOLD",
+     "summary": "model_trial.rs holds a Rust fold_usage, and agent_census.py's phase-3 port calls that one.",
+     "class": "within",
+     "why": "FR-003's unit is the piece: model-trial usage runs the Rust fold and agent_census.py, unported until phase 3, runs its Python one; neither runs both. The 40-transcript differential is the plan's stated proof. The spec's record of ask:449-T77-replays does not name fold_usage, so this rests on FR-003, not on that record."
+    },
+    {
+     "id": "THE VERDICTS ARE THE PYTHON'S",
+     "summary": "One-shot differentials of each command through the Python and the binary over the real repository.",
+     "class": "within",
+     "why": "FR-002's reach is every case the tests and suites hold, carried by WHAT THE TESTS REPLAY. The differentials are proof beyond that reach and take nothing from it; that run and run-all are not among them, and that usage is a seeded sample of 40, does not lower it."
+    },
+    {
+     "id": "DIFFERENCE: run in a process group",
+     "summary": "run starts each session in its own process group, not its own session.",
+     "class": "within",
+     "why": "FR-002 binds verdicts and outputs, the line the spec's own ask:449-T77-bad-since draws. Which process session a launched child sits in is neither, and the plan states the only effect is the controlling terminal. This ground stands alone: the plan's remark about the standard library is a cost argument and is not relied on."
+    },
+    {
+     "id": "DIFFERENCE: bad --since",
+     "summary": "A bad --since to popup-rounds exits 1 with empty stdout and one stderr line naming the value; which values parse, and the local-time conversion, stay the Python's.",
+     "class": "within",
+     "why": "Exactly FR-002's ruled case ask:449-T77-bad-since. Changed since last judged: 'refused where the Python raised' is replaced by the ruled shape, with a labeled one-shot differential over 13,876 forms showing which values parse."
+    },
+    {
+     "id": "run-all progress times",
+     "summary": "run-all's progress times read the local zone, as the Python's did.",
+     "class": "within",
+     "why": "Sameness with the Python, which FR-002 asks. Changed since last judged: the earlier block's UTC difference is gone."
+    },
+    {
+     "id": "push_check_times",
+     "summary": "The Rust rows are the Rust push's CHECKS table plus the one-process run; the proof is m:push-checks-rust.",
+     "class": "within",
+     "why": "FR-001 names it an FR-002 ruled case under ask:449-T77-scope with that proof over the Rust push's table, and the commands the Python listed are of a shell line already removed, so the tool still measures the push as it now is."
+    },
+    {
+     "id": "WHAT THE TESTS REPLAY",
+     "summary": "Every case of test_maps_moved.py and test_model_trial.py is in measure/*/tests.rs.",
+     "class": "within",
+     "why": "This is FR-002's own requirement carried out."
+    },
+    {
+     "id": "Done, measured",
+     "summary": "git ls-files names none of the slice's files; every measurements command running a ported or deleted file is rewritten in the same commit and re-run.",
+     "class": "within",
+     "why": "FR-001's census and recorded-measurement clauses, stated without reduction."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7737,80 +7818,78 @@
    "verdict": "CLEAR"
   },
   "T77": {
-   "section_sha256": "829268c4422a2ddd77c2a8a25cf3ee3ed97766a3b24ae3f81d91f17116f9c6c8",
+   "section_sha256": "e9284f93d51170d4825558c79958c16640c906ec6bb5c29597e121b78043523e",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "one-landing",
-     "summary": "The five tools become l7r-gate measure subcommands in one landing, the census by the named git grep and import search.",
+     "id": "ONE LANDING",
+     "summary": "The five measure tools become l7r-gate measure subcommands in one landing; the Makefile and three figure files are rewritten, and docs/spec-kit-and-reviews.md's model_trial step and rust/phases/src/driver/CLAUDE.md's pointer with them.",
      "class": "within",
-     "why": "FR-001 places this slice at T068's last and the request asks for all of it in Rust. Not a narrowing, but the invocation search's pathspecs do not reach docs/ or any *.md, while FR-001 itself calls model_trial.py a step docs/spec-kit-and-reviews.md still directs: the census misses a caller the spec names, and that doc must be rewritten with the port."
+     "why": "FR-001 places these files through ask:449-T068-scope, model_trial.py, popup_rounds.py and push_check_times.py in the last slice, and names the docs step. Changed since last judged: the two documents are now rewritten with the port. The search spaces are stated."
     },
     {
-     "id": "deletion-waits-on-gm",
-     "summary": "The ports land first; the task stays open until the GM runs the removal the safety check refused.",
+     "id": "THE DELETION WAITS ON THE GM",
+     "summary": "The ports land first; the removal of the five tools and two tests was refused by the built-in safety check, so the task stays open until the GM runs it; the two tests that import the tools stay and pass until then.",
      "class": "within",
-     "why": "Item 9 and exit 6 still require git ls-files to name none of the slice, so this decides who deletes and when, not whether. FR-002's order (same verdicts before deletion) is kept. The block's 'nothing invokes the Python meanwhile' is loose: the two tests that import the tools remain until the same removal."
+     "why": "Nothing asked for is dropped: the exits and item 9 still require the files gone and the task cannot close without it. FR-002 binds the port before the deletion. On FR-003's 'no piece runs both': recipes, hooks and figures run only the port, and the Python's only remaining run is its own two tests, which test it and do not serve the piece. Changed since last judged: 'nothing invokes the Python' is replaced by this exact statement."
     },
     {
-     "id": "replays-to-phase-3",
-     "summary": "replay_owing.py and depiction_replay.py go to phase 3 with modal_owed, modal_triage and claims; other deferred tools per FR-001 and T070's row.",
+     "id": "WHAT MOVES",
+     "summary": "replay_owing.py and depiction_replay.py go to phase 3 with modal_owed, modal_triage and claims; the other deferred tools as FR-001 and T070's row place them.",
      "class": "within",
-     "why": "FR-001 carries it from ask:449-T77-replays. Ordering only: both are still replaced, so the GM's 'all be ported' is not narrowed by this block."
+     "why": "FR-001 carries ask:449-T77-replays and ask:449-T77-scope. Each file is still ported or deleted under the request's own terms; only its phase moves."
     },
     {
-     "id": "fold",
-     "summary": "model_trial.rs holds a Rust fold_usage which agent_census.py's phase-3 port will call.",
+     "id": "THE FOLD",
+     "summary": "model_trial.rs holds a Rust fold_usage, and agent_census.py's phase-3 port calls that one.",
      "class": "within",
-     "why": "Each piece runs one implementation, which is what FR-003 asks. The bundle's text of ask:449-T77-replays covers the two replay files and not the fold, so the block's citation for this is taken on its word."
+     "why": "FR-003's unit is the piece: model-trial usage runs the Rust fold and agent_census.py, unported until phase 3, runs its Python one; neither runs both. The 40-transcript differential is the plan's stated proof. The spec's record of ask:449-T77-replays does not name fold_usage, so this rests on FR-003, not on that record."
     },
     {
-     "id": "verdicts-are-the-pythons",
-     "summary": "Differentials over the real repository, each tool through Python and through the binary.",
+     "id": "THE VERDICTS ARE THE PYTHON'S",
+     "summary": "One-shot differentials of each command through the Python and the binary over the real repository.",
      "class": "within",
-     "why": "This is FR-002's proof. The counts carry a one-shot label with date and method. They ran in the UTC container and so cannot detect the time-zone difference ruled on below."
+     "why": "FR-002's reach is every case the tests and suites hold, carried by WHAT THE TESTS REPLAY. The differentials are proof beyond that reach and take nothing from it; that run and run-all are not among them, and that usage is a seeded sample of 40, does not lower it."
     },
     {
-     "id": "diff-process-group",
-     "summary": "run starts each session in its own process group rather than its own session.",
+     "id": "DIFFERENCE: run in a process group",
+     "summary": "run starts each session in its own process group, not its own session.",
      "class": "within",
-     "why": "Within on one ground only: FR-002 binds verdicts and outputs, and how a child is launched is neither. The block's reason, that the standard library offers no safe way, is an argument about unsafe code and not an impossibility, and is not accepted as a basis for any difference that does reach an output."
+     "why": "FR-002 binds verdicts and outputs, the line the spec's own ask:449-T77-bad-since draws. Which process session a launched child sits in is neither, and the plan states the only effect is the controlling terminal. This ground stands alone: the plan's remark about the standard library is a cost argument and is not relied on."
     },
     {
-     "id": "diff-utc-progress-times",
-     "summary": "model-trial run-all progress times are read in UTC where the Python's strftime read the local zone.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "An output the Python produced is changed with no ruling; every other difference FR-002 admits is an arbiter-ruled case, as push_check_times in this same block is. Reading the local zone in Rust is not impossible, the GM's words do not imply the change, and matching it does not defeat the request's purpose. 'The container's zone is UTC' argues that nothing can catch it, not that it is the same. FR-002's 'every case its tests and its suites hold' might put it out of reach, but the block does not claim that and the bundle cannot show it. Unblocked by the port reading the local zone, or by an ask: ruling named in the block."
-    },
-    {
-     "id": "diff-bad-since-refused",
-     "summary": "A bad --since to popup-rounds is refused where the Python raised.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Not reproducing a Python traceback is fair in itself, and the verdict stays a failure, but the block does not state that the exit status is the Python's, and it carries no ruling. The spec's closest case, ask:449-T066-json-message, needed a ruling and still held verdict, exit status, location and fixed words to the Python's. Unblocked by an ask: ruling named in the block, the exit status stated and matched."
-    },
-    {
-     "id": "push-check-times",
-     "summary": "push_check_times' rows are the Rust push's CHECKS plus the one-process run, proved by m:push-checks-rust.",
+     "id": "DIFFERENCE: bad --since",
+     "summary": "A bad --since to popup-rounds exits 1 with empty stdout and one stderr line naming the value; which values parse, and the local-time conversion, stay the Python's.",
      "class": "within",
-     "why": "FR-001 names it an FR-002 ruled case with exactly this proof. The rows in the bundle sum to the recorded 7.76 s; the command was not re-run because the dispatch forbids the repository."
+     "why": "Exactly FR-002's ruled case ask:449-T77-bad-since. Changed since last judged: 'refused where the Python raised' is replaced by the ruled shape, with a labeled one-shot differential over 13,876 forms showing which values parse."
     },
     {
-     "id": "tests-replayed",
-     "summary": "Every case of test_maps_moved.py and test_model_trial.py moves into measure/*/tests.rs.",
+     "id": "run-all progress times",
+     "summary": "run-all's progress times read the local zone, as the Python's did.",
      "class": "within",
-     "why": "FR-002 and FR-001's rule that each tests/ file goes with its piece."
+     "why": "Sameness with the Python, which FR-002 asks. Changed since last judged: the earlier block's UTC difference is gone."
     },
     {
-     "id": "exits-and-done",
-     "summary": "Green is the differential on the final port and the files gone; red goes to make arbiter-ask; recorded commands are rewritten to the port in the same commit and re-run.",
+     "id": "push_check_times",
+     "summary": "The Rust rows are the Rust push's CHECKS table plus the one-process run; the proof is m:push-checks-rust.",
      "class": "within",
-     "why": "FR-001's rewrite-and-re-run rule. The block's own red path names make arbiter-ask, the route the two unruled differences above did not take."
+     "why": "FR-001 names it an FR-002 ruled case under ask:449-T77-scope with that proof over the Rust push's table, and the commands the Python listed are of a shell line already removed, so the tool still measures the push as it now is."
+    },
+    {
+     "id": "WHAT THE TESTS REPLAY",
+     "summary": "Every case of test_maps_moved.py and test_model_trial.py is in measure/*/tests.rs.",
+     "class": "within",
+     "why": "This is FR-002's own requirement carried out."
+    },
+    {
+     "id": "Done, measured",
+     "summary": "git ls-files names none of the slice's files; every measurements command running a ported or deleted file is rewritten in the same commit and re-run.",
+     "class": "within",
+     "why": "FR-001's census and recorded-measurement clauses, stated without reduction."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
