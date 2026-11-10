@@ -80,9 +80,9 @@
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
-   "sha256": "1d36145bf88d4d1a6adff16d92c1b98534d5627ba1c43c67f313cad162f2c19a",
+   "sha256": "4a5fe03ada91bf11ffc3b39c828fcdeae74b7494338f68eaa3d57d081954a11d",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
+   "reviewed": "2026-11-10",
    "declared": "round-arbiter"
   },
   "### T011 Approach (checklist part A)": {
@@ -115,83 +115,113 @@
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
-  "### T069 Approach (checklist part A)": {
-   "sha256": "9e2003abd49d8aecd7d10a2bf0ad8fa0241caf07527043edba8e0a993ecfcd0d",
+  "### T81 (the first record leaves, `ask:449-T81-slices`)": {
+   "sha256": "2c854546e7c7b8b078fbe6a44fcd82ed13758a8a43820f06fdb04b5aa1e96582",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
-  },
-  "### T070 Approach (checklist part A)": {
-   "sha256": "8d75aec61c1eee3fe3a8ea30244277f6cc41f87791ab91d1a169276df77f95e0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
-  },
-  "### T071 Approach (checklist part A)": {
-   "sha256": "e9a69c11aac6d32c7ad05697f3102255e77d9df09e7130ecf9bd2dd55b05acbd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
-  },
-  "### T73 Approach (checklist part A)": {
-   "sha256": "deee6a9bbefc910b098e94dea4dd7000cc16aa4d880002f971799256b5b00cae",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
    "declared": "round-arbiter"
   },
-  "### T74 Approach (checklist part A)": {
-   "sha256": "4a3d7edb4b0c882b7ddc56d2dac5cbd59719b77f8d3924f93526de6f20672aa9",
+  "### T81 Approach (checklist part A)": {
+   "sha256": "dc6de8e03d76b1c541dcdc5b5d7e79503f73cb31f2cf54c3a4579141de3ebe42",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
+   "reviewed": "2026-11-10",
    "declared": "round-arbiter"
   },
-  "### T75 Approach (checklist part A)": {
-   "sha256": "142cb0e572fa44b2104685577739d62698d97d940ba2b0cad034a06462790d53",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
-   "declared": "spec-fidelity"
-  },
-  "### T76 Approach (checklist part A)": {
-   "sha256": "75403f99b90cd4e97e9d2423a8fe447c1499590f5342e8deb7855d2bcab31249",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
-   "declared": "spec-fidelity"
-  },
-  "### T77 Approach (checklist part A)": {
-   "sha256": "e9284f93d51170d4825558c79958c16640c906ec6bb5c29597e121b78043523e",
+  "### T82 (<why: the finding or measurement that files it>)": {
+   "sha256": "289700f215510cea7796f9589c98d95335d00f7eb02912b590cccc7081f2bd31",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T78 Approach (checklist part A)": {
-   "sha256": "4e840ce575e06d84b6d1f1b7fa95d23a68b82910739538e2af85768576eff4aa",
+  "### T82 Approach (checklist part A)": {
+   "sha256": "2709f8f87b14ff6c33b32a304e85a6cbf3af3acc7b645aac65378f166f5bef06",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T79 (<why: the finding or measurement that files it>)": {
-   "sha256": "988054ab8fc4bc76ad8e7b8949326705b8af27a59b4cd03cc2634290c20e3dc0",
+  "### T83 (<why: the finding or measurement that files it>)": {
+   "sha256": "5e5ea38b150b3ecceffc22ab437737801c697c4a2b214047efa4932fd87752ea",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T79 Approach (checklist part A)": {
-   "sha256": "0f8cdb0ffb3196d8cd0ead1cf569ab56d56e49db0c0e5ca88ea712c5dc39720f",
+  "### T83 Approach (checklist part A)": {
+   "sha256": "8af32b28610ec8a501185ff29377a65a1580e4484f52d02b4043a484ecfae7c4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T80 (the first slice of the archive, `ask:449-T80-order`)": {
-   "sha256": "d852ceab61efa9fcab5f8ce40f6a8302764056582c584f2a20439f210d3cb296",
+  "### T84 (<why: the finding or measurement that files it>)": {
+   "sha256": "4b37f97e9a5b28c11e6a3df3360d1275fffda555233aea480f7eede0dc6d2da3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T80 Approach (checklist part A)": {
-   "sha256": "30cad109c595e4f2c600479ed08ccad1aaf863ce3d16e3750056b02c43532619",
+  "### T84 Approach (checklist part A)": {
+   "sha256": "f1590d41da76298a5ba36c7ed2e8aa98e335d2d8d4d339085bb21343e84171f5",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
+  },
+  "### T85 (<why: the finding or measurement that files it>)": {
+   "sha256": "c7f853f11d9f08e9752ec4b0d48cdc0b6e83b9361ee9e433d33880caf9ef9ecf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T85 Approach (checklist part A)": {
+   "sha256": "f6d169dae70126217aece04e95e73222313c8a9121f0d94a39c84fe2cce241dc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T86 (<why: the finding or measurement that files it>)": {
+   "sha256": "75269bfec00092a62854f27465d4a6eb9b26e10bae57e0c85ad6ac86de557616",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T86 Approach (checklist part A)": {
+   "sha256": "c07908146b741001ad390e27882eccd83bff9ad19cac07343cda0af7f945d169",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T87 (<why: the finding or measurement that files it>)": {
+   "sha256": "81d65efea81f391c474b3352eea61adc789c0fdab1062a28618605deea11a8b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T87 Approach (checklist part A)": {
+   "sha256": "f97d6db0536d08ea6e8d0e2297a719fe9ce64e5519b4bc379529e042d56fa753",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T88 (<why: the finding or measurement that files it>)": {
+   "sha256": "57645c4e80d644c5deaf15787c36f8c7bf0e079be2e7c1396a3f0f83c876e707",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T88 Approach (checklist part A)": {
+   "sha256": "7859c49faf50c71d078f9c2cc0c198ee80921197f3d165ea9be120d72c68aea6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T89 (<why: the finding or measurement that files it>)": {
+   "sha256": "da40ae34ba421a1066ff7780d781e556c8ee35029a0f0faeed027fdada539860",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
+  },
+  "### T89 Approach (checklist part A)": {
+   "sha256": "fd60c5bf2bd640301d611eb95cb3c79b183098d071156b8436bd9b4510cbc31c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -5019,6 +5049,39 @@
      "why": "The order is ask:449-T80-order's. The grep states its search space and covers the recorded measurements FR-001 requires rewritten in the commit that ports them. No requirement is exempted: FR-004, FR-005 and FR-008 go unnamed in the constraints list but none is waived."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-10",
+   "blocks": [
+    "## Complexity Tracking",
+    "### T81 (the first record leaves, `ask:449-T81-slices`)",
+    "### T81 Approach (checklist part A)",
+    "### T82 (<why: the finding or measurement that files it>)",
+    "### T82 Approach (checklist part A)",
+    "### T83 (<why: the finding or measurement that files it>)",
+    "### T83 Approach (checklist part A)",
+    "### T84 (<why: the finding or measurement that files it>)",
+    "### T84 Approach (checklist part A)",
+    "### T85 (<why: the finding or measurement that files it>)",
+    "### T85 Approach (checklist part A)",
+    "### T86 (<why: the finding or measurement that files it>)",
+    "### T86 Approach (checklist part A)",
+    "### T87 (<why: the finding or measurement that files it>)",
+    "### T87 Approach (checklist part A)",
+    "### T88 (<why: the finding or measurement that files it>)",
+    "### T88 Approach (checklist part A)",
+    "### T89 (<why: the finding or measurement that files it>)",
+    "### T89 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-T81-hm-record",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8683,6 +8746,57 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T81": {
+   "section_sha256": "acdc71a479339447e8a4e0ff84dc7334c304a4b39fe72809beabe09ead1ee739",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "leaves-placement",
+     "summary": "T81 ports hm_record.py, hm_house.py and moves.py to Rust verbs (one implementation each); the rest of the old T81 goes to T85-T89.",
+     "class": "within",
+     "why": "FR-001 places all three in phase 3, and ask:449-T81-slices has T81 file as separately landable tasks. That ruling's text does not name these three leaves, so their being first is the plan's own choice, inside what was asked. ask:449-T80-order's 'by path until T81 lands' now ends at the task holding reserve-prefix, which ask:449-T81-slices already ties to reserve-prefix landing."
+    },
+    {
+     "id": "hm_record-door",
+     "summary": "hm_record.py is ported alone; its Python callers (review_owed, entry_owed, apply_edits, claims_reply, check_bundle) stay Python and reach the port through scripts/record_door.py.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 (ask:449-hm-checks-route) names hm_record.py and the guards check-bundle, checks and record-edit as 'ported in one cut with their Python callers so that one implementation ever writes checks-open.json and the arbiter files'. The block ports it without those callers, does not name that clause, and cites only ask:449-T81-slices, whose text never names hm_record and is compatible with one separately landable task holding hm_record and its callers, so the later ruling does not lift the earlier one. Against the MODE 1 tests: porting with the callers is not impossible; nothing in the GM's words implies the split; the literal rule does not defeat the request's purpose. That edit-route and fragments may write neither file is a plausible argument about the clause's purpose, but it is the session completing a ruling's thought, and the block neither makes nor measures it. The caller list has no search behind it, and item 9's done-check greps only Makefile, *.mk and *.sh, so it cannot see a Python import of hm_record or a guard's by-path run; FR-003's 'no piece runs both' is therefore unshown. To clear: port the callers and the three guards in the cut, or have the round arbiter rule through make arbiter-ask that hm_record's read-only verbs may land ahead of them, with a caller census that names its search space."
+    },
+    {
+     "id": "hm_house-moves-door",
+     "summary": "Python callers of hm_house.py and moves.py reach the ports through scripts/record_door.py, one process a run.",
+     "class": "within",
+     "why": "Adjudicated apart from hm_record: FR-001's one-cut clause does not name hm_house.py or moves.py; hm_house.py is placed in phase 3 with no such condition. A door to a ported piece has precedent in the spec (plan_door.py, preflight's door) and one process a run is in FR-006's direction."
+    },
+    {
+     "id": "record_door-new-file",
+     "summary": "A new Python file, scripts/record_door.py, is added for the transition.",
+     "class": "within",
+     "why": "It falls in FR-001's phase 3 ('the rest of scripts/') and the phase-end censuses and SC-005 will return it until it is gone, so the end state is unchanged. The block does not say when it goes; ask:449-T066-scope's door is deleted with its last caller and this one owes the same."
+    },
+    {
+     "id": "old-files-at-T84",
+     "summary": "The old Python files are removed with T84's approval, not in this task.",
+     "class": "within",
+     "why": "FR-002 binds a passing port before deletion and sets no deadline for deleting inside the feature; FR-001's census still requires them gone. Within only while nothing runs them (FR-003), which the hm_record-door decision's missing census leaves unshown. T84 is not in the bundle. FR-001's rewrite of recorded measurements that run a ported file falls in the commit that ports it, whatever the deletion date."
+    },
+    {
+     "id": "differential-evidence",
+     "summary": "Each port is proved by a differential on the real tree, Python against verb on exit, stdout and stderr; americanize's evidence is the paragraph run, the whole-file run having compared nothing; Rust's \\s is fixed to match Python on U+001C-U+001F.",
+     "class": "within",
+     "why": "FR-001b makes each port's differential one of the things holding Python until its port, and no requirement sets its granularity. The killed whole-file run is disclosed and claimed as nothing. The bundle cannot show whether a kept test or suite case holds a whole-file input; if one does, FR-002 binds that case, and the Python is still present to compare against. The \\s fix brings the port to the Python's output, which FR-002 requires."
+    },
+    {
+     "id": "checklist-exits-order-budget",
+     "summary": "First of the old T81's slices, one landing, green on no mismatch and make land, red recorded and a claim of impossibility ruled through make arbiter-ask; no constant moved, not a room question.",
+     "class": "within",
+     "why": "Sequencing and exits inside FR-001 to FR-003; no researched value moves."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
