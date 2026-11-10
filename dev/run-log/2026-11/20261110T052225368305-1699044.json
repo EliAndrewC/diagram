@@ -1,0 +1,44 @@
+{
+  "utc": "2026-11-10T05:22:25Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 76,
+  "result": "failed: counters-inert",
+  "commit": "841f460f6",
+  "first_failure_s": 31.6,
+  "last_failure_s": 31.6,
+  "host": {
+    "load": [
+      1.24,
+      6.57
+    ],
+    "mem_avail_mb": [
+      10735,
+      10564
+    ],
+    "cpu_temp_c": [
+      101.0,
+      92.0
+    ],
+    "stall_s": {
+      "cpu": 3.9,
+      "io": 0.4,
+      "io_full": 0.3,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 111767,
+      "package": 39410
+    }
+  },
+  "phases": {
+    "preflight": 5.0,
+    "reference": 0.0,
+    "counters-inert": 31.0,
+    "pytest": 4.0,
+    "test-full": 6.0,
+    "static": 70.0,
+    "format": 1.0,
+    "seeds": 5.0
+  }
+}
