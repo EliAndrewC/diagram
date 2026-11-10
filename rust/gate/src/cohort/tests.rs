@@ -675,7 +675,7 @@ fn a_run_with_several_differing_records_starts_codeid_once() {
 
 #[test]
 fn each_counter_question_has_its_own_scratch_directory() {
-    assert_ne!(counter_dir(), counter_dir());
+    assert_ne!(super::counter_dir(), super::counter_dir());
 }
 
 #[test]
