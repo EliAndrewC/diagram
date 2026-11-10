@@ -15,21 +15,26 @@ const RECORD: &str = "research";
 const MAPPING: &str = "moved-303.json";
 const CURRENT_DIRS: [&str; 5] = ["questions", "sources", "assets", "site", "archive"];
 const VERBATIM: [&str; 2] = ["tests/hooks/fixtures/", "research/source-attempts.jsonl"];
-const REFUSAL_DATA: [&str; 7] = [
+const REFUSAL_DATA: [&str; 8] = [
     "tests/tooling/test_attempts.py",
     "rust/gate/src/record/leaves/tests.rs",
     "tests/hooks/test-record-edit-hooks.sh",
     "tests/hooks/test-check-bundle-hooks.sh",
+    "rust/guard/src/guards/check_bundle_hooks/tests.rs",
     "tests/interactive/test_record.py",
     "rust/gate/src/checks/research_pointers/tests.rs",
     "rust/gate/src/checks/research_pointers.rs",
 ];
-const FIXTURES: [&str; 5] = [
+const FIXTURES: [&str; 9] = [
     "rust/gate/src/plan/",
     "tests/",
     "rust/gate/src/record/", // the record tools' tests and fragment-move's self-test name records of a scratch repository
     "scripts/gates/check-entry-headings.py",
     "rust/gate/src/checks/", // the checks' own tests and self-tests name fixture records
+    "rust/gate/src/checks_door/", // the door's tests name fixture records (feature 449 T86)
+    "rust/guard/src/guards/check_bundle_hooks/", // a dispatch's fixture prompts name records of a scratch repository
+    "rust/guard/src/guards/record_edit_hooks/",
+    "rust/guard/src/shared/checks/", // the check state's tests name fixture records
 ];
 const EXEMPT_EXT: [&str; 5] = [".png", ".webp", ".jpg", ".pdf", ".gz"];
 

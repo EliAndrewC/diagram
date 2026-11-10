@@ -109,9 +109,9 @@ pub fn owed(root: &Path) -> Map<String, Value> {
 
 fn mine(root: &Path, v: &Value) -> bool {
     let d = feature_dir(root, "");
-    text(v, "feature").is_empty()
+    super::falsy(v.get("feature"))
         || d.is_none()
-        || d.is_some_and(|d| text(v, "feature") == name_of(&d))
+        || d.is_some_and(|d| v.get("feature").and_then(Value::as_str) == Some(name_of(&d).as_str()))
 }
 
 /// The owed triggers another feature fired, left out of this feature's holds and named so none vanishes (`hm_arbiter.aside`).

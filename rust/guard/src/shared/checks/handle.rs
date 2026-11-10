@@ -524,7 +524,7 @@ pub fn escape_for(msg: &str) -> &'static str {
 /// The refusal as the hook's stderr writes it: `BLOCKED: <msg>` and the escape line.
 #[must_use]
 pub fn blocked_text(msg: &str) -> String {
-    format!("BLOCKED: {msg}\n(scripts/hooks/lib/hm_checks.py; escape {}=\"<reason>\" in the prompt or the edit)", escape_for(msg))
+    format!("BLOCKED: {msg}\n(scripts/hooks/lib/hm_checks.py; escape {}=\"<reason>\" in the prompt or the edit)\n", escape_for(msg))
 }
 
 /// `make check-closed`: `(exit code, stdout, stderr)`.

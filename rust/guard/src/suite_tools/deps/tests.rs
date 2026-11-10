@@ -367,9 +367,9 @@ fn over_the_real_tree_the_rules_hold() {
     let t = Tree::at(&root);
     assert!(t.deps_for("sync-with-main.sh").len() > 20);
     let helpers = |g: &str| t.deps_for(g).len();
-    assert!(helpers("record-edit-hooks.sh") < t.index.len());
-    let deps = t.deps_for("record-edit-hooks.sh");
-    assert!(names(&deps, "guardlog.sh") && names(&deps, "hm_escape.py"));
+    assert!(helpers("claims-gate.sh") < t.index.len());
+    let deps = t.deps_for("claims-gate.sh");
+    assert!(names(&deps, "hm_escape.py"));
     let on_disk = std::fs::read_dir(root.join("scripts/hooks/lib"))
         .unwrap()
         .flatten();

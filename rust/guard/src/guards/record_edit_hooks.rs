@@ -65,7 +65,7 @@ fn routed(verdict: &Value, event: &Event, session: &Session) -> Vec<Answer> {
             };
             fire(event, "blocked", "edit", rule, &shown, session);
             vec![Answer::Refuse(format!(
-                "BLOCKED: {}\n(scripts/hooks/record-edit-hooks.sh; feature 258, spec FR-028)",
+                "BLOCKED: {}\n(scripts/hooks/record-edit-hooks.sh; feature 258, spec FR-028)\n",
                 field(verdict, "message")
             ))]
         }

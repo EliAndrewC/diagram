@@ -136,7 +136,7 @@ fn decide_first(
         Some(&line),
         session,
     );
-    Some(Answer::Refuse(format!("\nBLOCKED: {line}\n(or DECIDE_OK=\"<reason>\" in the prompt; scripts/hooks/check-bundle-hooks.sh, feature 375)")))
+    Some(Answer::Refuse(format!("\nBLOCKED: {line}\n(or DECIDE_OK=\"<reason>\" in the prompt; scripts/hooks/check-bundle-hooks.sh, feature 375)\n")))
 }
 
 /// A check the bundle owes, or what its MANIFEST owes instead: `Some((manifest, owes))` when `atype` is not owed, the MANIFEST's words.
@@ -183,7 +183,7 @@ fn not_owed_refusal(
         session,
     );
     vec![Answer::Refuse(format!(
-        "\n\x1b[1mBLOCKED: `{atype}` is not owed on this bundle.\x1b[0m\n\nIts MANIFEST ({mp}) owes: {owes}\nA check is owed only where the words it reads changed (`make record-owed` lists every unit, feature 311) -\nre-running it on words it already passed is the waste the GM named. Dispatch only what is owed;\na check the GM asked for, or a backfill: CHECK_NOT_OWED_OK=\"<why>\" in the prompt.\n(scripts/hooks/check-bundle-hooks.sh; feature 311)"
+        "\n\x1b[1mBLOCKED: `{atype}` is not owed on this bundle.\x1b[0m\n\nIts MANIFEST ({mp}) owes: {owes}\nA check is owed only where the words it reads changed (`make record-owed` lists every unit, feature 311) -\nre-running it on words it already passed is the waste the GM named. Dispatch only what is owed;\na check the GM asked for, or a backfill: CHECK_NOT_OWED_OK=\"<why>\" in the prompt.\n(scripts/hooks/check-bundle-hooks.sh; feature 311)\n"
     ))]
 }
 
@@ -234,7 +234,7 @@ fn repository_refusal(
     );
     let listed: String = cmds.iter().map(|c| format!("    {c}\n")).collect();
     vec![Answer::Refuse(format!(
-        "\n\x1b[1mBLOCKED: this `{atype}` dispatch points the agent at files IN the repository.\x1b[0m\n\nReading one attaches every CLAUDE.md above it - about 28,000 tokens, 55-65% of a check's context\non the measured runs (feature 250, research R1). Copy what it reads out first:\n\n{listed}\nthen re-send the dispatch naming the MANIFEST.md it prints (and nothing under /diagram).\nA file the bundle lacks: EXTRA=\"<path> ...\" on the same command. A check that truly cannot be\nbundled: CHECK_BUNDLE_OK=\"<why>\" in the prompt.\n(scripts/hooks/check-bundle-hooks.sh; feature 250)"
+        "\n\x1b[1mBLOCKED: this `{atype}` dispatch points the agent at files IN the repository.\x1b[0m\n\nReading one attaches every CLAUDE.md above it - about 28,000 tokens, 55-65% of a check's context\non the measured runs (feature 250, research R1). Copy what it reads out first:\n\n{listed}\nthen re-send the dispatch naming the MANIFEST.md it prints (and nothing under /diagram).\nA file the bundle lacks: EXTRA=\"<path> ...\" on the same command. A check that truly cannot be\nbundled: CHECK_BUNDLE_OK=\"<why>\" in the prompt.\n(scripts/hooks/check-bundle-hooks.sh; feature 250)\n"
     ))]
 }
 
@@ -252,7 +252,7 @@ fn bundle_verdict(event: &Event, session: &Session, atype: &str, prompt: &str) -
             None,
             session,
         );
-        return vec![Answer::Refuse("BLOCKED: CHECK_BUNDLE_OK needs a REASON - two words and eight characters - so the audit says why.".to_owned())];
+        return vec![Answer::Refuse("BLOCKED: CHECK_BUNDLE_OK needs a REASON - two words and eight characters - so the audit says why.\n".to_owned())];
     }
     if prompt.contains("MANIFEST.md") {
         if let Some(reason) = capture(&CHECK_NOT_OWED_OK, prompt) {
@@ -275,7 +275,7 @@ fn bundle_verdict(event: &Event, session: &Session, atype: &str, prompt: &str) -
                 None,
                 session,
             );
-            return vec![Answer::Refuse("BLOCKED: CHECK_NOT_OWED_OK needs a REASON - two words and eight characters - so the audit says why.".to_owned())];
+            return vec![Answer::Refuse("BLOCKED: CHECK_NOT_OWED_OK needs a REASON - two words and eight characters - so the audit says why.\n".to_owned())];
         }
         if let Some((mp, owes)) = not_owed_on(atype, prompt) {
             return not_owed_refusal(event, session, atype, &mp, &owes);
