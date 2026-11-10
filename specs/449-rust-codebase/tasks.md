@@ -264,5 +264,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T77 `scripts/measure/`, the last slice (`ask:449-T068-scope`, `ask:449-T77-scope`, `ask:449-T77-replays`): `maps_moved.py`, `work_budget_rust.py`, `model_trial.py`, `popup_rounds.py`, `push_check_times.py`
       research: rendering
       verify: DONE. landed in batch T071+T73+T77: the gate's first phase is Rust, the AWS path and the ported measure tools are gone
-- [ ] T78 The Python unit tests, the planner and the Python-only static checks deleted (FR-001b)
+- [x] T78 The Python unit tests, the planner and the Python-only static checks deleted (FR-001b)
       research: rendering
+      verify: DONE. landed: the Python unit tests, the planner, the floor and the Python-only checks are deleted (FR-001b)

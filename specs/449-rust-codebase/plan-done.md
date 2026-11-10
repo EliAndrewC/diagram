@@ -1346,3 +1346,24 @@ censuses empty (work breakdown 8, FR-010).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-10 -->
+### T78 Approach (checklist part A)
+
+1. **The goal, in the world.** A change to this repository no longer waits on the Python unit tests, the planner that selected them, the coverage floor over Python or the static checks whose only subject is Python source.
+2. **The constraints.** FR-001b, FR-002 for every tool that stays, the guards' suites under `tests/hooks/`.
+   **Decisions** (the GM's words, FR-001b):
+   - WHAT STAYS UNDER `tests/`, by subject, what outlives the Python: `test_mode_a_sheets.py` (the sweep of the hand-drawn sheets), `test_agent_models.py`, `test_agent_sync.py`, `test_claude_md_quotes.py`, `test_one_root_claude_md.py`, `tooling/test_docs_match_the_mechanism.py`, `test_citation_rule_inventory.py`, `test_task_research_boxes.py`, `test_settlement_review_contract.py`, `test_operations_registry.py`; what those and pytest load: `conftest.py`, `__init__.py`, `_scope.py`, `_gate_failures.py`, `_heap.py`, `_sheets.py`; and everything that is not Python (`tests/hooks/`, `tests/fixtures/`). Of the live-pool search's matches, read by hand (observed 2026-11-10, method: every `test_*` function naming the pool by path, `ast`-walked over the tracked tests: 70 functions in 32 files), only `test_mode_a_sheets.py` sweeps the live maps; the rest exercise Python code on fixtures.
+   - THE PLANNER AND THE FLOOR GO WITH THE TESTS (`ask:449-T071-scope` placed them in the commit that removes pytest; the GM's approval moves that here): `l7r/diagram/ci/selection.py`, `gate_plugin.py`, `incremental.py`, `pool_readers.py`, `gate_config.py`'s two readers, `scripts/gates/pool-readers.py`, `cover_changed.py`, `refresh_baseline.py`, and `scripts/gates/preflight.py`, whose only remaining half was `--cover`, with no tests to run. The kept suite runs whole, with no selection and no coverage.
+   - PYTHON-ONLY STATIC CHECKS GO: `check-function-cap.py`, `check-duplicate-defs.py`, `ruff format`, `pyrefly`, and `check stale-dirs`. The `.py` arm of `check file-scale`'s line bar goes, as the list told to the GM named it; its `.rs` bar and its per-directory file count stay, their subject not being Python. `ruff check` stays, narrowed to outright errors (`E9`, `F63`, `F7`, `F82`), the only automatic check left on the Python still being edited as ports land.
+   - THE OLD TESTS STAY READABLE: the commit before the removal is tagged `python-tests-before-removal`; a port reads the cases it used to replay from there. New Rust code still owes 100% line coverage from its own tests (`rust cover`, FR-004).
+   - THE COST, told to the GM before the approval: a regression in Python that is still running and being edited before its port is caught only by the kept checks, the guards' suites, the differentials of its port, or use. Priced against keeping the tests: observed 2026-11-10, method: the last green `make done` record, pytest 135 s of 212 s, beside static checks that bound the saving at roughly 0 to 50 s on the last four green runs before static speeds up.
+3. **Where each comes from.** The GM's words in FR-001b; the census above.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves, and the sweep of the hand-drawn sheets stays.
+5. **The order.** Tag; delete the tests and the Python-only tooling in one commit with the Makefile, `land.py`, the guards and the crates edited to stop reading them.
+6. **The exits.** Green: `make done`, `make quick`, `make land` and `make hooks-test` run with only the kept tests. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files 'tests/*.py'` holds only the kept files; no recipe names the deleted tools; `make done` green and its time recorded against `m:done-rust-edit`.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
