@@ -1053,5 +1053,41 @@
    "gm-questions": 0.07,
    "closing": 0.09
   }
+ },
+ "done-rust-edit-phase2": {
+  "quantity": "a one-line Rust CODE edit's make done at the close of phase 2 (the edit of m:done-rust-edit), after the Python tests' deletion",
+  "observed": "2026-11-10",
+  "subject": "rust/phases/src/driver/check.rs against a fresh make done just before it",
+  "command": "make done; sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done; (the edit reverted)",
+  "method": "the wall clock of the second make done, one run, a one-shot; its run record for the phases' seconds",
+  "varies": true,
+  "unit": "s",
+  "value": {
+   "wall_s": 22.0,
+   "recorded_s": 16,
+   "preflight_s": 5,
+   "pytest_s": 4,
+   "test_full_s": 4,
+   "static_s": 6,
+   "seeds_s": 8,
+   "counters_s": 1,
+   "format_s": 1,
+   "first_value_wall_s": 30.2,
+   "sc_002_target_s": 15.1,
+   "met": false
+  }
+ },
+ "done-unchanged-phase2": {
+  "quantity": "an unchanged tree's make done at the close of phase 2",
+  "observed": "2026-11-10",
+  "subject": "this clone, straight after a green make done",
+  "command": "make done; make done",
+  "method": "the wall clock of the second make done, one run, a one-shot, before preflight learned to stand aside on a verified tree (T070 made that change: SC-002's second half)",
+  "varies": true,
+  "unit": "s",
+  "value": {
+   "wall_s": 6.5,
+   "said": "already verified"
+  }
  }
 }

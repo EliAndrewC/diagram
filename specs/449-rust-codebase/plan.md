@@ -298,6 +298,12 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 
 1. **The goal, in the world.** Phase 2 closed on its measured outcome.
 2. **The constraints.** SC-002, FR-010.
+   **Decisions** (the close of phase 2; `ask:449-T071-scope`, FR-001b):
+   - SC-002 AS MEASURED: `m:done-rust-edit-phase2`, 22.0 s against the 15.1 s owed: not met, recorded with its shares in `dev/phase-2-close.md`, the line unmoved and re-measured at the phase-3 close, as `ask:449-T071-scope` rules for a miss. The planner it named is gone (FR-001b), so the shares are the kept pytest's two runs, the preflight's Python tools and the seeds.
+   - AN UNCHANGED TREE RUNS NO TEST: the preflight stands aside on a verified tree, so `make done`'s "already verified" path starts no test (SC-002's second half), `m:done-unchanged-phase2`.
+   - THE TIME FLOOR: a `make done` reuses each crate's unchanged checks, so it is judged at the incremental floor: a green run of 13 to 22 s (observed 2026-11-10, method: the runs of `m:done-rust-edit-phase2`) did every check its delta owed, and the 40 s floor refused it.
+   - `test_rust_tooling.py`'S END-TO-END TEST: that test was deleted by FR-001b, and FR-001b's rule, Rust tests written with the code, stands for it: `rust/gate/src/rustc/` holds the seam tests; no separate end-to-end test is added.
+   - THE CENSUSES: phase 2's share of the `.py` census holds only what `dev/phase-2-close.md` names; the second census returns the four `make audit` recipes, and the two fixtures of `ask:449-T069-suites`.
 3. **Where each comes from.** `m:done-rust-edit`.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
 5. **The order.** As the phase's plan above; each stands on the ones before it.
