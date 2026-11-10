@@ -501,3 +501,31 @@ fn a_nested_source_is_read_a_check_is_dispatched_and_cargo_is_found() {
     assert_eq!(super::cargo_exe(Path::new("/no/such/cargo")), "cargo");
     assert_eq!(super::cargo_exe(&a), a.display().to_string());
 }
+
+/// FR-008's one end-to-end test: the real cargo over the fixture crate, every other test here standing a fake cargo in its place.
+#[test]
+fn the_real_cargo_tests_a_real_crate() {
+    let root = scratch("rustc-real");
+    let fixture = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/rust/fixture");
+    let crate_dir = root.join("rust/fixture");
+    std::fs::create_dir_all(crate_dir.join("src")).unwrap();
+    for name in ["Cargo.toml", "rust-toolchain.toml", "src/lib.rs"] {
+        std::fs::copy(fixture.join(name), crate_dir.join(name)).unwrap();
+    }
+    let target = scratch("rustc-real-target");
+    let world = World {
+        root,
+        cargo: "cargo".to_owned(),
+        path_dir: target.clone(),
+        target_override: None,
+        no_reuse: true,
+        hamlet_features: String::new(),
+        hamlet_args: String::new(),
+        hamlet_spec: "spec.json".to_owned(),
+        cover_work: None,
+        target,
+    };
+    let got = answer(&world, "test", &[], false);
+    assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
+    assert!(got.stdout.contains("test result: ok"), "{}", got.stdout);
+}

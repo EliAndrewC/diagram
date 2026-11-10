@@ -1082,11 +1082,25 @@
   "observed": "2026-11-10",
   "subject": "this clone, straight after a green make done",
   "command": "make done; make done",
-  "method": "the wall clock of the second make done, one run, a one-shot, before preflight learned to stand aside on a verified tree (T070 made that change: SC-002's second half)",
+  "method": "the wall clock of the second make done, one run, a one-shot, before preflight learned to stand aside on a verified tree",
   "varies": true,
   "unit": "s",
   "value": {
    "wall_s": 6.5,
+   "said": "already verified"
+  }
+ },
+ "done-unchanged-after": {
+  "quantity": "an unchanged tree's make done, after the preflight stands aside on a verified tree",
+  "observed": "2026-11-10",
+  "subject": "this clone, straight after a green make done",
+  "command": "make done; make done",
+  "method": "the wall clock of the second make done, one run, a one-shot; its output holds no test count",
+  "varies": true,
+  "unit": "s",
+  "value": {
+   "wall_s": 1.7,
+   "tests_run": 0,
    "said": "already verified"
   }
  }
