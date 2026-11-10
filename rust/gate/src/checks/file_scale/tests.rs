@@ -20,7 +20,7 @@ fn ask(args: &[&str]) -> super::Outcome {
 #[test]
 fn the_bar_is_a_thousand_raw_lines_and_a_thousand_itself_passes() {
     let dir = scratch("bar");
-    put(&dir, "edge.py", &lines(MAX_LINES));
+    put(&dir, "edge.rs", &lines(MAX_LINES));
     put(&dir, "big.rs", &lines(MAX_LINES + 1));
     let scan = run(&dir);
     assert_eq!(
@@ -37,7 +37,7 @@ fn a_justified_file_passes_and_a_bare_or_buried_marker_does_not() {
     let dir = scratch("marker");
     put(
         &dir,
-        "ok.py",
+        "ok.rs",
         &format!(
             "# {MARKER} an ordered registry whose row order is the execution contract\n{}",
             lines(MAX_LINES + 1)
@@ -45,12 +45,12 @@ fn a_justified_file_passes_and_a_bare_or_buried_marker_does_not() {
     );
     put(
         &dir,
-        "thin.py",
+        "thin.rs",
         &format!("# {MARKER} ordered\n{}", lines(MAX_LINES + 1)),
     );
     put(
         &dir,
-        "late.py",
+        "late.rs",
         &format!(
             "{}# {MARKER} an ordered registry whose rows are the contract\n{}",
             lines(HEADER_LINES + 1),
@@ -63,14 +63,14 @@ fn a_justified_file_passes_and_a_bare_or_buried_marker_does_not() {
             .iter()
             .map(|(p, ..)| p.as_str())
             .collect::<Vec<_>>(),
-        ["ok.py"]
+        ["ok.rs"]
     );
     assert_eq!(
         scan.over
             .iter()
             .map(|(p, _)| p.as_str())
             .collect::<Vec<_>>(),
-        ["late.py", "thin.py"]
+        ["late.rs", "thin.rs"]
     );
     let listed = ask(&["--list", &dir.display().to_string()]);
     assert!(
@@ -83,15 +83,15 @@ fn a_justified_file_passes_and_a_bare_or_buried_marker_does_not() {
 fn the_excluded_trees_are_not_scanned() {
     let dir = repo("skip");
     for rel in [
-        "legacy-hand-authored-pool/a.py",
-        ".clones/b.py",
-        "specs/c.py",
-        "x/__pycache__/d.py",
-        "node_modules/e.py",
+        "legacy-hand-authored-pool/a.rs",
+        ".clones/b.rs",
+        "specs/c.rs",
+        "x/__pycache__/d.rs",
+        "node_modules/e.rs",
     ] {
         put(&dir, rel, &lines(MAX_LINES + 1));
     }
-    put(&dir, "ok.py", "x = 1\n");
+    put(&dir, "ok.rs", "x = 1\n");
     put(&dir, "note.txt", &lines(MAX_LINES + 1));
     commit(&dir);
     assert_eq!(run(&dir).over, Vec::new());
@@ -101,10 +101,10 @@ fn the_excluded_trees_are_not_scanned() {
 #[test]
 fn a_deleted_file_still_in_the_index_is_not_read() {
     let dir = repo("deleted");
-    put(&dir, "gone.py", "x = 1\n");
-    put(&dir, "kept.py", "x = 1\n");
+    put(&dir, "gone.rs", "x = 1\n");
+    put(&dir, "kept.rs", "x = 1\n");
     commit(&dir);
-    std::fs::remove_file(dir.join("gone.py")).unwrap();
+    std::fs::remove_file(dir.join("gone.rs")).unwrap();
     assert_eq!(run(&dir).scanned, 1);
 }
 
@@ -114,12 +114,12 @@ fn scanning_nothing_fails_loudly_and_a_refusal_prints_the_procedure() {
     let empty = ask(&[&dir.display().to_string()]);
     assert_eq!(empty.code, 1);
     assert!(empty.stderr.contains("scanned ZERO files"));
-    put(&dir, "big.py", &lines(MAX_LINES + 2));
+    put(&dir, "big.rs", &lines(MAX_LINES + 2));
     let refused = ask(&[&dir.display().to_string()]);
     assert!(
         refused.stderr.contains("1 file(s) past the 1,000-line bar")
             && refused.stderr.contains("(+2)")
-            && refused.stderr.contains("big.py")
+            && refused.stderr.contains("big.rs")
             && refused.stderr.contains("Principle X clause 13")
     );
 }
@@ -166,7 +166,7 @@ fn the_ceiling_fires_past_the_limit_and_counts_each_file_in_its_own_directory() 
 #[test]
 fn a_crowded_directory_fails_the_check() {
     let dir = repo("crowded");
-    put(&dir, "a.py", "x = 1\n");
+    put(&dir, "a.rs", "x = 1\n");
     for i in 0..=super::MAX_DIR_FILES {
         std::fs::create_dir_all(dir.join("full")).unwrap();
         std::fs::write(dir.join("full").join(i.to_string()), "").unwrap();
@@ -197,11 +197,11 @@ fn the_repository_itself_is_under_the_bar_and_a_relative_root_prints_relative_pa
 #[test]
 fn several_over_the_bar_list_largest_first_and_a_path_is_shown_from_its_root() {
     let dir = repo("order");
-    put(&dir, "small.py", &lines(MAX_LINES + 1));
-    put(&dir, "large.py", &lines(MAX_LINES + 2));
+    put(&dir, "small.rs", &lines(MAX_LINES + 1));
+    put(&dir, "large.rs", &lines(MAX_LINES + 2));
     put(
         &dir,
-        "a.py",
+        "a.rs",
         &format!(
             "# {MARKER} an ordered registry whose row order is the execution contract\n{}",
             lines(MAX_LINES + 1)
@@ -209,7 +209,7 @@ fn several_over_the_bar_list_largest_first_and_a_path_is_shown_from_its_root() {
     );
     put(
         &dir,
-        "b.py",
+        "b.rs",
         &format!(
             "# {MARKER} an ordered registry whose row order is the execution contract\n{}",
             lines(MAX_LINES + 2)
@@ -218,11 +218,11 @@ fn several_over_the_bar_list_largest_first_and_a_path_is_shown_from_its_root() {
     commit(&dir);
     let root = dir.display().to_string();
     let refused = ask(&[&root]);
-    assert!(refused.stderr.find("large.py").unwrap() < refused.stderr.find("small.py").unwrap());
+    assert!(refused.stderr.find("large.rs").unwrap() < refused.stderr.find("small.rs").unwrap());
     let listed = ask(&["--list", &root]).stdout;
-    assert!(listed.find("b.py").unwrap() < listed.find("a.py").unwrap());
-    assert_eq!(super::shown_path(".", "a.py"), "a.py");
-    assert_eq!(super::shown_path("/x", "a.py"), "/x/a.py");
+    assert!(listed.find("b.rs").unwrap() < listed.find("a.rs").unwrap());
+    assert_eq!(super::shown_path(".", "a.rs"), "a.rs");
+    assert_eq!(super::shown_path("/x", "a.rs"), "/x/a.rs");
     for name in ["one", "two"] {
         for i in 0..4 {
             put(&dir, &format!("{name}/{i}.json"), "{}");

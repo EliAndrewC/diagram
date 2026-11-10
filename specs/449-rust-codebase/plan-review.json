@@ -164,7 +164,7 @@
    "declared": "spec-fidelity"
   },
   "### T78 Approach (checklist part A)": {
-   "sha256": "c52b0055e5a705888acd9246ccfa7b0d9907998733339966ca5b51af1ca1bb29",
+   "sha256": "4e840ce575e06d84b6d1f1b7fa95d23a68b82910739538e2af85768576eff4aa",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity"
@@ -4783,6 +4783,63 @@
      "why": "Changes nothing about what is deleted; matches FR-001b's held-by sentence plus 'or use'. Attribution caveat: the GM's quoted premise is 'we are no longer changing it. Except insofar as we are deleting it', while the block says the Python is still being edited as ports land. The GM's words do not accept that cost in terms; the label overstates them."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-10",
+   "blocks": [
+    "### T78 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T78-kept-tests",
+     "summary": "Under tests/ only ten named test files, the six modules they and pytest load, and the non-Python directories stay; every other Python test is deleted.",
+     "class": "within",
+     "why": "The GM said 'delete everything except that group', and FR-001b records the group by subject (the sweep of the hand-drawn sheets and the checks of agent files, CLAUDE.md files and other documents) and delegates naming it to this plan. Each of the ten is one of those by name; the six helpers are what makes them loadable. The bundle does not hold the group as it was shown to the GM, so membership is checked against FR-001b's record of it, not against that text."
+    },
+    {
+     "id": "T78-planner-and-floor",
+     "summary": "selection.py, gate_plugin.py, incremental.py, pool_readers.py, gate_config.py's two readers, scripts/gates/pool-readers.py, cover_changed.py, refresh_baseline.py and preflight.py are deleted here rather than in the commit removing pytest; the kept suite runs whole with no selection and no coverage.",
+     "class": "within",
+     "why": "FR-001b settles it: the planner and the coverage floor over Python go with the tests, in place of ask:449-T071-scope's commit. With them gone a whole run of the kept group is the only remaining form, and the GM exempted that group from the deletion."
+    },
+    {
+     "id": "T78-python-only-checks-go",
+     "summary": "check-function-cap.py, check-duplicate-defs.py, ruff format, pyrefly and check stale-dirs are deleted.",
+     "class": "within",
+     "why": "The GM asked which static checks on the Python can go away and approved the answer ('Sounds good, please proceed with that'); FR-001b carries it. Nothing here retains or adds a check. The approved list itself is not in the bundle."
+    },
+    {
+     "id": "T78-file-scale-py-arm",
+     "summary": "The .py arm of check file-scale's line bar goes; the .rs bar and the per-directory file count stay.",
+     "class": "within",
+     "why": "The only text changed since the BLOCKED round. The earlier block kept the bar whole by calling the list's 'Python-file size bar' a mislabel, which completed the GM's thought against what was approved. This block deletes the part the approved list named. The .rs bar and the directory count are not checks on the Python, so keeping them narrows nothing the GM asked about."
+    },
+    {
+     "id": "T78-ruff-check-stays",
+     "summary": "ruff check stays, narrowed to E9, F63, F7 and F82.",
+     "class": "within",
+     "why": "Taken against the request and not only the spec: the GM's words were a question, 'which of our static checks ... can also go away now?', so a list leaving one standing does not contradict them, and FR-001b records 'ruff check stays, narrowed to outright errors' under the GM's approval of that answer. The plan's four rule families only spell out 'outright errors'. It keeps no behavior the GM asked to change, and it does reduce what the check reports. Item 1's goal sentence reads more broadly than this and is loosely worded; the decision is the operative text."
+    },
+    {
+     "id": "T78-tag-old-tests",
+     "summary": "The commit before the removal is tagged python-tests-before-removal so a port can read the cases it replays; new Rust still owes 100% line coverage.",
+     "class": "within",
+     "why": "The tag removes nothing and preserves nothing in the tree: the deletion the GM asked for still happens. It is how FR-002's 'on every case its tests and its suites hold' stays reachable after the tests are gone. The coverage clause restates FR-004."
+    },
+    {
+     "id": "T78-one-commit-order",
+     "summary": "Tag, then delete the tests and Python-only tooling in one commit with the Makefile, land.py, the guards and the crates edited to stop reading them.",
+     "class": "within",
+     "why": "The GM: 'if literally any of our tests or gates required that to work, we can edit them to no longer run unit tests on any of the Python stuff.' The edits are limited to what stops reading the deleted things."
+    },
+    {
+     "id": "T78-exits-and-done",
+     "summary": "Green is make done, quick, land and hooks-test on only the kept tests; red goes to make arbiter-ask; done is git ls-files showing only kept files, no recipe naming a deleted tool, and make done's time recorded against m:done-rust-edit.",
+     "class": "within",
+     "why": "Each check only fails when the requested deletion is absent or broke the gate, so it enforces the request. The recorded time is the measurement FR-010 and SC-002 already require."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8243,61 +8300,60 @@
    "verdict": "CLEAR"
   },
   "T78": {
-   "section_sha256": "48d21092f461638b1c5d1692636bd64dee9670f1cd69fd7e334bf52c48563588",
+   "section_sha256": "4e840ce575e06d84b6d1f1b7fa95d23a68b82910739538e2af85768576eff4aa",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T78-kept-tests",
-     "summary": "The ten named test files, the helpers those and pytest load, and everything non-Python under tests/ stay; every other Python test is deleted.",
+     "summary": "Under tests/ only ten named test files, the six modules they and pytest load, and the non-Python directories stay; every other Python test is deleted.",
      "class": "within",
-     "why": "FR-001b leaves the kept list to the task's plan ('named in the task's plan') within the category sheets sweep, agent files, CLAUDE.md files, other documents; the GM said 'delete everything except that group'. Placed by name only, since the bundle forbids the repository: test_settlement_review_contract.py and test_operations_registry.py are the two least obviously document checks, and the helper list's import claim is the plan's own assertion."
+     "why": "The GM said 'delete everything except that group', and FR-001b records the group by subject (the sweep of the hand-drawn sheets and the checks of agent files, CLAUDE.md files and other documents) and delegates naming it to this plan. Each of the ten is one of those by name; the six helpers are what makes them loadable. The bundle does not hold the group as it was shown to the GM, so membership is checked against FR-001b's record of it, not against that text."
     },
     {
      "id": "T78-planner-and-floor",
-     "summary": "The test planner, its readers, cover_changed, refresh_baseline and preflight are deleted with the tests; the kept suite runs whole with no selection and no coverage.",
+     "summary": "selection.py, gate_plugin.py, incremental.py, pool_readers.py, gate_config.py's two readers, scripts/gates/pool-readers.py, cover_changed.py, refresh_baseline.py and preflight.py are deleted here rather than in the commit removing pytest; the kept suite runs whole with no selection and no coverage.",
      "class": "within",
-     "why": "FR-001b: 'The planner, the coverage floor over Python and the Python-only static checks go with them, in place of ask:449-T071-scope's commit'."
+     "why": "FR-001b settles it: the planner and the coverage floor over Python go with the tests, in place of ask:449-T071-scope's commit. With them gone a whole run of the kept group is the only remaining form, and the GM exempted that group from the deletion."
     },
     {
      "id": "T78-python-only-checks-go",
-     "summary": "check-function-cap, check-duplicate-defs, ruff format, pyrefly and check stale-dirs are removed.",
+     "summary": "check-function-cap.py, check-duplicate-defs.py, ruff format, pyrefly and check stale-dirs are deleted.",
      "class": "within",
-     "why": "FR-001b and the GM's 'which of our static checks are static checks on the python code which can also go away now?' / 'Sounds good, please proceed with that'."
+     "why": "The GM asked which static checks on the Python can go away and approved the answer ('Sounds good, please proceed with that'); FR-001b carries it. Nothing here retains or adds a check. The approved list itself is not in the bundle."
     },
     {
-     "id": "T78-file-scale-stays",
-     "summary": "check file-scale stays whole, including its line bar over .py files, though the list told to the GM and approved named a 'Python-file size bar' among the checks going; the plan calls that name a mislabel and says there is no separate rule to delete.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The change since the earlier BLOCKED verdict adds argument, not a fact that changes the class: the decision is the same. The GM asked which static checks on the Python code could go, was told a list holding a 'Python-file size bar', and said 'please proceed with that'. Not impossible: the plan's own citation, has_ext(rel, \"py\") || has_ext(rel, \"rs\"), shows a separable .py arm, so 'no separate rule to delete' and 'nothing in it is Python-only' are refuted by the code it quotes; a line bar on .py files is what 'Python-file size bar' plainly names. Not implied by the GM's words: no words of the GM keep it. Calling the approved item a mislabel after the approval is the session deciding what the GM's 'that' really covered. The Rust bar and the directory file count are not what was named and rightly stay. Within would be dropping the .py arm; keeping it needs the GM's own correction, through make arbiter-ask, not a plan decision."
+     "id": "T78-file-scale-py-arm",
+     "summary": "The .py arm of check file-scale's line bar goes; the .rs bar and the per-directory file count stay.",
+     "class": "within",
+     "why": "The only text changed since the BLOCKED round. The earlier block kept the bar whole by calling the list's 'Python-file size bar' a mislabel, which completed the GM's thought against what was approved. This block deletes the part the approved list named. The .rs bar and the directory count are not checks on the Python, so keeping them narrows nothing the GM asked about."
     },
     {
-     "id": "T78-ruff-check-narrowed",
-     "summary": "ruff check stays, narrowed to E9, F63, F7, F82.",
+     "id": "T78-ruff-check-stays",
+     "summary": "ruff check stays, narrowed to E9, F63, F7 and F82.",
      "class": "within",
-     "why": "FR-001b says so verbatim: 'ruff check stays, narrowed to outright errors'; the accepted spec records it under the GM's approval of the static-check answer, and the GM's question asked which checks could go rather than ordering all to. The answer the GM approved is not in the bundle."
+     "why": "Taken against the request and not only the spec: the GM's words were a question, 'which of our static checks ... can also go away now?', so a list leaving one standing does not contradict them, and FR-001b records 'ruff check stays, narrowed to outright errors' under the GM's approval of that answer. The plan's four rule families only spell out 'outright errors'. It keeps no behavior the GM asked to change, and it does reduce what the check reports. Item 1's goal sentence reads more broadly than this and is loosely worded; the decision is the operative text."
     },
     {
      "id": "T78-tag-old-tests",
-     "summary": "The commit before removal is tagged python-tests-before-removal so ports can read the cases they replay; new Rust still owes 100% line coverage.",
+     "summary": "The commit before the removal is tagged python-tests-before-removal so a port can read the cases it replays; new Rust still owes 100% line coverage.",
      "class": "within",
-     "why": "Takes nothing from the deletion and keeps FR-002's 'every case its tests and its suites hold' reachable once the tests are gone; FR-004 carries the coverage."
+     "why": "The tag removes nothing and preserves nothing in the tree: the deletion the GM asked for still happens. It is how FR-002's 'on every case its tests and its suites hold' stays reachable after the tests are gone. The coverage clause restates FR-004."
     },
     {
-     "id": "T78-regression-cost",
-     "summary": "Python still running before its port is held only by the kept checks, the guards' suites, the port's differentials or use.",
+     "id": "T78-one-commit-order",
+     "summary": "Tag, then delete the tests and Python-only tooling in one commit with the Makefile, land.py, the guards and the crates edited to stop reading them.",
      "class": "within",
-     "why": "FR-001b: 'Python still running until its port is held by the kept checks, the guards' suites and each port's differential'. The plan adds use, which is no added check."
+     "why": "The GM: 'if literally any of our tests or gates required that to work, we can edit them to no longer run unit tests on any of the Python stuff.' The edits are limited to what stops reading the deleted things."
     },
     {
-     "id": "T78-one-commit-and-exits",
-     "summary": "Tag, then delete tests and tooling in one commit with the Makefile, land.py, the guards and the crates edited to stop reading them; done when only the kept files are tracked and make done, quick, land and hooks-test are green.",
+     "id": "T78-exits-and-done",
+     "summary": "Green is make done, quick, land and hooks-test on only the kept tests; red goes to make arbiter-ask; done is git ls-files showing only kept files, no recipe naming a deleted tool, and make done's time recorded against m:done-rust-edit.",
      "class": "within",
-     "why": "The GM: 'if literally any of our tests or gates required that to work, we can edit them to no longer run unit tests on any of the Python stuff'."
+     "why": "Each check only fails when the requested deletion is absent or broke the gate, so it enforces the request. The recorded time is the measurement FR-010 and SC-002 already require."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
