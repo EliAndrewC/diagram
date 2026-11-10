@@ -17,6 +17,10 @@ static STAGE: LazyLock<Regex> = LazyLock::new(|| {
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
+#[expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "the `<stage>.verdict-<N>.txt` the tool writes"
+)]
 fn verdicts(dir: &Path, stage: &str) -> Vec<std::path::PathBuf> {
     let prefix = format!("{stage}.verdict-");
     let mut out: Vec<std::path::PathBuf> = std::fs::read_dir(dir.join("phases"))

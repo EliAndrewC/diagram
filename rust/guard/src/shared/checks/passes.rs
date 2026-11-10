@@ -158,6 +158,10 @@ fn cost(lines: &[String]) -> Option<(u64, Usage)> {
 }
 
 /// `round(wall)`: to the nearest integer, ties to even.
+#[expect(
+    clippy::float_cmp,
+    reason = "an exact tie is what rounding to even asks about"
+)]
 fn round_half_even(wall: f64) -> u64 {
     let floor = wall.floor();
     let frac = wall - floor;
@@ -388,6 +392,7 @@ fn append_line(path: &Path, line: &str) -> std::io::Result<()> {
 }
 
 /// One line in `<common>/tool-usage.jsonl` (`usage_log.record`), never failing its tool.
+#[expect(clippy::many_single_char_names, reason = "the fields of a date")]
 pub fn usage(common: &Path, tool: &str, kind: &str, outcome: &str) {
     let secs = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)

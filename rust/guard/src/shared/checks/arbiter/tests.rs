@@ -1,3 +1,5 @@
+#![expect(clippy::float_cmp, reason = "the fixture's exact epoch values")]
+
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
@@ -11,7 +13,7 @@ use crate::shared::checks::testkit::clone_at;
 use crate::shared::checks::{common_dir, OWED};
 
 fn ruled(root: &Path, rows: &[Value]) {
-    let body: String = rows.iter().map(|r| format!("{r}\n")).collect();
+    let body: String = rows.iter().map(|r| r.to_string() + "\n").collect();
     std::fs::write(
         root.join("specs/999-x/arbiter.jsonl"),
         format!("{body}not json\n{{\"no\": \"trigger\"}}\n"),
@@ -311,15 +313,13 @@ fn a_trigger_is_recorded_once_under_its_lock() {
     assert!(trip(&orphan, "x", "k", "", "d", &json!(0), ""));
     assert_eq!(owed(&orphan)["x"]["feature"], json!(""));
     std::fs::remove_file(common_dir(&d).join("arbiter-owed.json")).ok();
-    assert!(
-        trip(
-            &Path::new("/proc/nonexistent-l7r").to_path_buf(),
-            "x",
-            "k",
-            "",
-            "d",
-            &json!(0),
-            ""
-        ) == false
-    );
+    assert!(!trip(
+        Path::new("/proc/nonexistent-l7r"),
+        "x",
+        "k",
+        "",
+        "d",
+        &json!(0),
+        ""
+    ));
 }

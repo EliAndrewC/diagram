@@ -48,7 +48,7 @@ fn ruled(d: &Path, rows: &[&str]) {
         .iter()
         .map(|r| {
             let (t, v) = r.rsplit_once(':').unwrap();
-            format!("{}\n", json!({"trigger": t, "ruling": v}))
+            json!({"trigger": t, "ruling": v}).to_string() + "\n"
         })
         .collect();
     std::fs::write(d.join("specs/301-x/arbiter.jsonl"), lines).unwrap();

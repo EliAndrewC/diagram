@@ -16,11 +16,13 @@ static ANY_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#{2,4}\s.*$"));
 
 /// `{task id: its section}`: every heading naming a task id, to the next heading at its level or above (feature 375 FR-003(a)). A
 /// title that begins with the id is that task's own (feature 385 T56), and every one of its own headings counts (405 T26).
+#[must_use]
 pub fn task_sections(plan: &str) -> BTreeMap<String, String> {
     ordered_sections(plan).into_iter().collect()
 }
 
 /// The sections in the order a reader meets their ids: those a heading only mentions, then each task's own (`archive` moves them so).
+#[must_use]
 pub fn ordered_sections(plan: &str) -> Vec<(String, String)> {
     let heads: Vec<(usize, usize, &str)> = HEAD
         .captures_iter(plan)
@@ -73,6 +75,7 @@ pub fn ordered_sections(plan: &str) -> Vec<(String, String)> {
 }
 
 /// The task id a title opens with, if it opens with one.
+#[must_use]
 pub fn leading_task(title: &str) -> Option<&str> {
     TASK_ID
         .find(title)
@@ -83,6 +86,7 @@ pub fn leading_task(title: &str) -> Option<&str> {
 }
 
 /// (key, text, offset) of every block (D60, FR-043): each heading line to the next heading, and the text before the first as `preamble`.
+#[must_use]
 pub fn blocks(plan: &str) -> Vec<(String, String, usize)> {
     let heads: Vec<(usize, &str)> = ANY_HEAD
         .find_iter(plan)

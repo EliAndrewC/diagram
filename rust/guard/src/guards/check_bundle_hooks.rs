@@ -232,7 +232,7 @@ fn repository_refusal(
         None,
         session,
     );
-    let listed: String = cmds.iter().map(|c| format!("    {c}\n")).collect();
+    let listed: String = cmds.iter().map(|c| ["    ", c, "\n"].concat()).collect();
     vec![Answer::Refuse(format!(
         "\n\x1b[1mBLOCKED: this `{atype}` dispatch points the agent at files IN the repository.\x1b[0m\n\nReading one attaches every CLAUDE.md above it - about 28,000 tokens, 55-65% of a check's context\non the measured runs (feature 250, research R1). Copy what it reads out first:\n\n{listed}\nthen re-send the dispatch naming the MANIFEST.md it prints (and nothing under /diagram).\nA file the bundle lacks: EXTRA=\"<path> ...\" on the same command. A check that truly cannot be\nbundled: CHECK_BUNDLE_OK=\"<why>\" in the prompt.\n(scripts/hooks/check-bundle-hooks.sh; feature 250)\n"
     ))]

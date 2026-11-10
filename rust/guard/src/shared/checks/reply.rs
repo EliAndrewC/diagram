@@ -113,6 +113,10 @@ pub fn blocks(reply: &str) -> Vec<(String, String, String)> {
 
 /// The reply `make apply-edits FROM=` reads: an agent's transcript (`.jsonl` / `.output`, its last text) or a saved reply.
 #[must_use]
+#[expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "the transcript names Claude Code writes, as `str.endswith` read them"
+)]
 pub fn reply_file(path: &str) -> String {
     if path.ends_with(".jsonl") || path.ends_with(".output") {
         return reply_of(path, "");

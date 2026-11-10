@@ -14,7 +14,7 @@ use crate::Reply;
 
 const BATCHES: &str = "modal-batches.json";
 
-fn arg<'a>(args: &'a [Value], i: usize) -> &'a str {
+fn arg(args: &[Value], i: usize) -> &str {
     args.get(i).and_then(Value::as_str).unwrap_or("")
 }
 
@@ -48,7 +48,7 @@ fn keep_batches(root: &Path, batches: &Value) -> Result<(), String> {
     std::fs::rename(&tmp, &path).map_err(|e| e.to_string())
 }
 
-fn triple(b: (String, String, String)) -> Value {
+fn triple(b: &(String, String, String)) -> Value {
     json!([b.0, b.1, b.2])
 }
 
@@ -57,12 +57,7 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
     Ok(match verb {
         "load" => checks::load(Path::new(arg(args, 0))),
         "state_path" => path_json(checks::state_path(arg(args, 0))),
-        "_blocks" => Value::Array(
-            reply::blocks(arg(args, 0))
-                .into_iter()
-                .map(triple)
-                .collect(),
-        ),
+        "_blocks" => Value::Array(reply::blocks(arg(args, 0)).iter().map(triple).collect()),
         "_reply_of" => json!(reply::reply_of(arg(args, 0), arg(args, 1))),
         "ROUND_CAP" => json!(rounds::ROUND_CAP),
         "PAGE_CHECKS" => json!(rounds::PAGE_CHECKS),

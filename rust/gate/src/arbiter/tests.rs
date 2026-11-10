@@ -60,6 +60,10 @@ fn refused<T: std::fmt::Debug>(result: Result<T, Stop>, words: &str) {
     assert!(why.contains(words), "{why}");
 }
 
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "the call's result, read here and dropped"
+)]
 fn declined<T: std::fmt::Debug>(result: Result<T, Stop>) {
     assert!(matches!(result, Err(Stop::Declined(_))), "{result:?}");
 }
@@ -209,7 +213,7 @@ fn a_round_owed_with_others_is_ruled_as_a_batch() {
     assert_eq!(done.len(), 2);
     match record_batch(&root, &w, "round-arbiter", None) {
         Err(Stop::Refused(why)) => {
-            assert!(why.contains("already ruled: round:a|q:1@3, round:b|q:2@3"))
+            assert!(why.contains("already ruled: round:a|q:1@3, round:b|q:2@3"));
         }
         other => panic!("{other:?}"),
     }
@@ -261,8 +265,8 @@ fn a_batch_fix_lands_on_one_row() {
         batch_plan(&own_fix, &["t1".to_owned()]).map(|_| Value::Null),
         "where does the batch's fix go",
     );
-    let plain = json!({"ruling": "c", "why": "w"});
-    let p = batch_plan(&plain, &["t1".to_owned()]).unwrap();
+    let bare = json!({"ruling": "c", "why": "w"});
+    let p = batch_plan(&bare, &["t1".to_owned()]).unwrap();
     assert!(p[0].1.get("tooling_fix_on").is_none() && p[0].1.get("tooling_fix").is_none());
 }
 
@@ -656,16 +660,13 @@ fn every_verb_answers_on_a_clone() {
 
 fn committed(root: &Path, rel: &str) {
     let run_git = |args: &[&str]| {
-        assert!(
-            std::process::Command::new("git")
-                .arg("-C")
-                .arg(root)
-                .args(args)
-                .status()
-                .unwrap()
-                .success(),
-            "{args:?}"
-        )
+        assert!(std::process::Command::new("git")
+            .arg("-C")
+            .arg(root)
+            .args(args)
+            .status()
+            .unwrap()
+            .success());
     };
     run_git(&["add", rel]);
     run_git(&[
@@ -681,6 +682,10 @@ fn committed(root: &Path, rel: &str) {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one fixture walked through every path a settled fix can take"
+)]
 fn fixes_are_settled_and_nits_answered() {
     let root = clone_at("fixes-cli");
     python_tools(&root);

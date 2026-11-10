@@ -6,6 +6,7 @@ use std::fmt::Write as _;
 use serde_json::{Map, Value};
 
 /// A string as Python's `json.dumps` writes it: every non-ASCII character escaped.
+#[must_use]
 pub fn ascii_string(text: &str, ascii: bool) -> String {
     let mut out = String::with_capacity(text.len() + 2);
     for c in Value::String(text.to_owned()).to_string().chars() {
@@ -22,6 +23,7 @@ pub fn ascii_string(text: &str, ascii: bool) -> String {
 }
 
 /// A float as Python's `repr` writes it: shortest digits, positional from 1e-4 up to 1e16, and a signed two-digit exponent outside that.
+#[must_use]
 pub fn py_float(f: f64) -> String {
     let scientific = format!("{f:e}");
     let (mantissa, exponent) = scientific.split_once('e').unwrap_or((&scientific, "0"));

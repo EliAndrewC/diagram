@@ -1,3 +1,5 @@
+#![expect(clippy::float_cmp, reason = "the fixture's exact epoch values")]
+
 use std::collections::BTreeSet;
 use std::path::Path;
 
@@ -160,6 +162,10 @@ fn repeating_state(rounds: u64, n: &str) -> Value {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one fixture walked through every way a cap resolves"
+)]
 fn the_cap_refuses_a_repeat_and_an_arbiter_lifts_it() {
     let root = clone_at("cap");
     let mut state = repeating_state(2, "/m/MANIFEST.md");

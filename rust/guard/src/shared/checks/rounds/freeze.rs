@@ -42,6 +42,10 @@ fn proposed(state: &Value, subject: &str, old: &str, new: &str) -> bool {
 
 /// Why an Edit to `path` is refused now (FR-003(b)), or "".
 #[must_use]
+#[expect(
+    clippy::similar_names,
+    reason = "the edit's old and new text, beside the clock"
+)]
 pub fn edit_refusal(state: &Value, path: &str, old: &str, new: &str, now: f64) -> String {
     let s = subject_of_path(path);
     if s.is_empty() || open_round(state, &s, now).is_empty() {
@@ -167,7 +171,7 @@ pub fn window_start(root: &Path) -> f64 {
 pub fn dispatches_since(state: &Value, since: f64) -> u64 {
     let n = dispatches(state)
         .iter()
-        .filter(|d| t_of(d) >= since && !d.get("prewrite").is_some_and(|p| !falsy(Some(p))))
+        .filter(|d| t_of(d) >= since && d.get("prewrite").is_none_or(|p| falsy(Some(p))))
         .count();
     u64::try_from(n).unwrap_or(0)
 }

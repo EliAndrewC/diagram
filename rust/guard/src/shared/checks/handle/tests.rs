@@ -199,6 +199,10 @@ fn escapes_and_their_rules() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one clone walked through every branch of a dispatch"
+)]
 fn the_round_arbiter_and_budget_and_plan_holds_are_handled() {
     let (root, _) = setup("branches");
     std::fs::write(
@@ -445,7 +449,7 @@ fn a_popup_batch_refuses_one_agent_on_one_popup() {
             root.join(".git/modal-batches.json"),
             json!({"utc": utc, "batches": {"modal-form": kinds}}).to_string(),
         )
-        .unwrap()
+        .unwrap();
     };
     write(1.0, &["sheet/bath", "sheet/well"]);
     let msg = batch_refusal(Some(&root), "modal-form", unit, 100.0).unwrap();

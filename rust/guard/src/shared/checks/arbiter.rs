@@ -305,12 +305,13 @@ fn days_from_civil(y: i64, m: i64, d: i64) -> i64 {
     let yoe = y.rem_euclid(400);
     let mp = (m + 9) % 12;
     let doy = (153 * mp + 2) / 5 + d - 1;
-    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
-    era * 146_097 + doe - 719_468
+    let of_era = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    era * 146_097 + of_era - 719_468
 }
 
 /// A ruling's `utc` (`%Y-%m-%dT%H:%M:%SZ`) as epoch seconds; 0 where it reads as none (`hm_arbiter._epoch`).
 #[must_use]
+#[expect(clippy::many_single_char_names, reason = "the fields of a date")]
 pub fn epoch(utc: &str) -> f64 {
     let Ok(Some(c)) = EPOCH.captures(utc) else {
         return 0.0;
@@ -357,6 +358,7 @@ pub fn epoch_iso(utc: &str) -> f64 {
 
 /// An ISO stamp's epoch seconds (`datetime.fromisoformat(...).timestamp()`), None where it reads as none.
 #[must_use]
+#[expect(clippy::many_single_char_names, reason = "the fields of a date")]
 pub fn iso_seconds(stamp: &str) -> Option<f64> {
     let c = ISO.captures(stamp).ok().flatten()?;
     let field = |i: usize| {

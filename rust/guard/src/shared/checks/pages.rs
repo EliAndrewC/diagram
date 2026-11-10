@@ -41,6 +41,10 @@ fn page_blocks(text: &str) -> Vec<String> {
         .collect()
 }
 
+#[expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "a glob of the record's lowercase file names"
+)]
 fn question_pages(root: &Path, number: &str) -> Vec<String> {
     let dir = root.join("research/questions");
     let prefix = format!("{number}-");

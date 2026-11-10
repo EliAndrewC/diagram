@@ -135,6 +135,74 @@ fn str_values(ti: &Value) -> String {
         .join(" ")
 }
 
+/// A launch's or a return's bookkeeping, the state saved by the caller.
+fn book_keep(mode: &str, tool: &str, state: &mut Value, payload: &Value, ti: &Value, path: &Path) {
+    match (mode, tool) {
+        ("launched", "Agent") => {
+            let resp = payload
+                .get("tool_response")
+                .filter(|v| v.is_object())
+                .cloned()
+                .unwrap_or_else(|| json!({}));
+            planhold::launched(state, text(payload, "tool_use_id"), text(&resp, "agentId"));
+            rounds::launched(
+                state,
+                text(payload, "tool_use_id"),
+                text(&resp, "agentId"),
+                text(&resp, "status") == "async_launched",
+                &super::reply::response_text(&resp),
+                Some(
+                    &path
+                        .parent()
+                        .unwrap_or_else(|| Path::new("."))
+                        .join("check-replies"),
+                ),
+            );
+        }
+        ("launched", "TaskStop") => {
+            let stopped = if text(ti, "task_id").is_empty() {
+                text(ti, "shell_id")
+            } else {
+                text(ti, "task_id")
+            };
+            planhold::returned(state, stopped);
+            for d in map_mut(state, "dispatches").values_mut() {
+                if !stopped.is_empty()
+                    && text(d, "aid") == stopped
+                    && matches!(text(d, "state"), "running" | "pending")
+                {
+                    d["state"] = json!("answered");
+                    d["closed"] = json!("stopped by the session (TaskStop)");
+                }
+            }
+        }
+        ("returned", _) => {
+            planhold::returned(state, text(payload, "agent_id"));
+            rounds::pair_wave(
+                state,
+                text(payload, "agent_id"),
+                text(payload, "agent_transcript_path"),
+            );
+            let reply_text = super::reply::reply_of(
+                text(payload, "agent_transcript_path"),
+                text(payload, "last_assistant_message"),
+            );
+            rounds::returned(
+                state,
+                text(payload, "agent_id"),
+                &reply_text,
+                Some(
+                    &path
+                        .parent()
+                        .unwrap_or_else(|| Path::new("."))
+                        .join("check-replies"),
+                ),
+            );
+        }
+        _ => unreachable!("the caller matched these three"),
+    }
+}
+
 fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
     if mode == "returned" || mode == "launched" {
         passes::log_pass(parent_of(path), mode, payload, t);
@@ -161,70 +229,8 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
             Flow::Return(msg) => return msg,
             Flow::Continue(said) => out = said,
         },
-        ("launched", "Agent") => {
-            let resp = payload
-                .get("tool_response")
-                .filter(|v| v.is_object())
-                .cloned()
-                .unwrap_or_else(|| json!({}));
-            planhold::launched(
-                &mut state,
-                text(payload, "tool_use_id"),
-                text(&resp, "agentId"),
-            );
-            rounds::launched(
-                &mut state,
-                text(payload, "tool_use_id"),
-                text(&resp, "agentId"),
-                text(&resp, "status") == "async_launched",
-                &super::reply::response_text(&resp),
-                Some(
-                    &path
-                        .parent()
-                        .unwrap_or_else(|| Path::new("."))
-                        .join("check-replies"),
-                ),
-            );
-        }
-        ("launched", "TaskStop") => {
-            let stopped = if text(&ti, "task_id").is_empty() {
-                text(&ti, "shell_id")
-            } else {
-                text(&ti, "task_id")
-            };
-            planhold::returned(&mut state, stopped);
-            for d in map_mut(&mut state, "dispatches").values_mut() {
-                if !stopped.is_empty()
-                    && text(d, "aid") == stopped
-                    && matches!(text(d, "state"), "running" | "pending")
-                {
-                    d["state"] = json!("answered");
-                    d["closed"] = json!("stopped by the session (TaskStop)");
-                }
-            }
-        }
-        ("returned", _) => {
-            planhold::returned(&mut state, text(payload, "agent_id"));
-            rounds::pair_wave(
-                &mut state,
-                text(payload, "agent_id"),
-                text(payload, "agent_transcript_path"),
-            );
-            let reply_text = super::reply::reply_of(
-                text(payload, "agent_transcript_path"),
-                text(payload, "last_assistant_message"),
-            );
-            rounds::returned(
-                &mut state,
-                text(payload, "agent_id"),
-                &reply_text,
-                Some(
-                    &path
-                        .parent()
-                        .unwrap_or_else(|| Path::new("."))
-                        .join("check-replies"),
-                ),
-            );
+        ("launched", "Agent" | "TaskStop") | ("returned", _) => {
+            book_keep(mode, tool, &mut state, payload, &ti, path);
         }
         ("after", _) => {
             let root = clone_root(cwd_of(payload));
@@ -277,7 +283,7 @@ fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t:
     if check == "spec-fidelity" {
         let tid = text(payload, "tool_use_id");
         let id = if tid.is_empty() {
-            t.to_string()
+            crate::shared::pyjson::py_float(t)
         } else {
             tid.to_owned()
         };
@@ -311,7 +317,7 @@ fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t:
     }
     let tid_given = text(payload, "tool_use_id");
     let tid = if tid_given.is_empty() {
-        t.to_string()
+        crate::shared::pyjson::py_float(t)
     } else {
         tid_given.to_owned()
     };

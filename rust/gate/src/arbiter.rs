@@ -2,6 +2,7 @@
 //! reads the review gate asks. `arbiter.jsonl` is appended here alone; a ruling that lifts a hold is `pop_owed` under the same lock `trip` takes, so the guards and this command never race. The modules still Python - `gm_review`,
 //! `checkpoint`, `record_owed`, `claims` and `review_prereq` - are asked by path on these rare branches, never on a plain Bash call or Edit (the T065 clause).
 
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -369,6 +370,10 @@ fn insert_opt(row: &mut Map<String, Value>, key: &str, value: Option<Value>) {
 }
 
 /// The ruling's row, its keys in the order `arbiter.jsonl` has always carried them.
+#[expect(
+    clippy::too_many_arguments,
+    reason = "the row's parts, the locals of the ruling it records"
+)]
 fn build_row(
     root: &Path,
     d: &Path,
@@ -456,8 +461,8 @@ pub fn record_ruling(
         return Err(Stop::Declined("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof".to_owned()));
     }
     if let Some(prior) = core::rulings(root, trigger).get(trigger) {
-        if !(rekeys(prior, trigger, ruling)
-            && !unit_content_key(root, &core::unit_of(trigger)).is_empty())
+        if !rekeys(prior, trigger, ruling)
+            || unit_content_key(root, &core::unit_of(trigger)).is_empty()
         {
             return Err(Stop::Refused(format!("{trigger} is already ruled - one ruling per trigger, binding; the session neither re-asks nor overrules")));
         }
@@ -733,8 +738,16 @@ fn ruled_cli(root: &Path, trigger: &str, file: &str, who: &str) -> Reply {
     if plan_review && matches!(text(&row, "ruling"), "accept" | "process-fault") {
         if let Some(d) = core::feature_dir(root, t) {
             match crate::plan::arbiter_accept_listed(&d, t) {
-                Ok(named) => out.push_str(&format!("arbiter-ruled: {} plan block(s) recorded CLEAR - the accept is the plan's verdict\n", named.len())),
-                Err(e) => return Reply { stdout: out, stderr: format!("{e}\n"), code: 1 },
+                Ok(named) => {
+                    let _ = writeln!(out, "arbiter-ruled: {} plan block(s) recorded CLEAR - the accept is the plan's verdict", named.len());
+                }
+                Err(e) => {
+                    return Reply {
+                        stdout: out,
+                        stderr: format!("{e}\n"),
+                        code: 1,
+                    }
+                }
             }
         }
     }
@@ -782,13 +795,13 @@ fn ruled_batch_cli(root: &Path, file: &str, who: &str) -> Reply {
     let mut out = String::new();
     for row in &rows {
         let t = text(row, "trigger");
-        out.push_str(&format!("arbiter-ruled: {t} - {}\n", text(row, "ruling")));
+        let _ = writeln!(out, "arbiter-ruled: {t} - {}", text(row, "ruling"));
         if let Some(o) = crate::plan::approach_ruled(root, t) {
             out.push_str(&o);
             out.push('\n');
         }
     }
-    out.push_str(&format!("arbiter-ruled: the batch's {} triggers recorded (binding; each in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)\n", rows.len()));
+    let _ = writeln!(out, "arbiter-ruled: the batch's {} triggers recorded (binding; each in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)", rows.len());
     ok(out)
 }
 
@@ -803,7 +816,7 @@ fn ask_cli(root: &Path, args: &[String]) -> Reply {
     }
     if !review.is_empty()
         && !REVIEWS.contains(&review)
-        && !(review.starts_with("claims:") && review.len() > "claims:".len())
+        && (!review.starts_with("claims:") || review.len() <= "claims:".len())
     {
         return fail(format!("arbiter-ask: REVIEW= is spec, plan or claims:<key>;<key> (the review whose verdict the ruling stands as), or left out - not {}\n", py_repr(review)), 2);
     }
@@ -828,7 +841,7 @@ fn ask_cli(root: &Path, args: &[String]) -> Reply {
     );
     let mut out = format!("arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM (its ruling reaches him only as a kept for_gm question, feature 432); dispatch `round-arbiter` with the MANIFEST below\n");
     if !stands.is_empty() {
-        out.push_str(&format!("arbiter-ask: {stands}\n"));
+        let _ = writeln!(out, "arbiter-ask: {stands}");
     } else if ASK_HINT.is_match(subject).unwrap_or(false)
         || ASK_WORDS.is_match(why).unwrap_or(false)
     {

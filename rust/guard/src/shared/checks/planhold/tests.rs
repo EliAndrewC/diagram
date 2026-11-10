@@ -168,6 +168,10 @@ fn a_held_block_is_written_back() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one hold walked through every way a write can reach it"
+)]
 fn a_write_to_held_text_is_refused() {
     let root = clone_at("refusal");
     feature(&root);

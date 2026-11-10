@@ -1,4 +1,4 @@
-use std::io::Cursor;
+use std::io::{Cursor, Write as _};
 
 use serde_json::{json, Value};
 
@@ -38,6 +38,10 @@ fn clone_at(name: &str) -> std::path::PathBuf {
     root
 }
 
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "the verb's args, read and dropped"
+)]
 fn ask(verb: &str, args: Value) -> Value {
     answer(verb, args.as_array().unwrap()).unwrap()
 }
@@ -134,10 +138,9 @@ fn the_write_verbs_and_the_door_loop() {
     .unwrap();
     assert_eq!(kept["batches"], json!({"modal-form": ["a", "b"]}));
     assert!(answer("keep_batches", &[json!("/proc/nonexistent/x"), json!({})]).is_err());
-    use std::io::Write as _;
     let mut w = Closed;
     assert!(w.flush().is_ok());
-    assert_eq!(reply_line("not json").starts_with("{\"error\""), true);
+    assert!(reply_line("not json").starts_with("{\"error\""));
     assert!(
         reply_line("{\"verb\": \"unit_of\", \"args\": [\"round:a|b@3\"]}")
             .contains("\"ok\": \"a|b\"")
@@ -152,15 +155,6 @@ fn the_write_verbs_and_the_door_loop() {
         String::from_utf8(out).unwrap(),
         "{\"ok\": 2}\n{\"error\": \"checks-door: no verb nope\"}\n"
     );
-    struct Closed;
-    impl std::io::Write for Closed {
-        fn write(&mut self, _: &[u8]) -> std::io::Result<usize> {
-            Err(std::io::Error::other("closed"))
-        }
-        fn flush(&mut self) -> std::io::Result<()> {
-            Ok(())
-        }
-    }
     assert_eq!(
         serve(&mut Cursor::new("{\"verb\": \"ROUND_CAP\"}\n"), &mut Closed).code,
         0
