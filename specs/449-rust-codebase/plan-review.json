@@ -8851,7 +8851,7 @@
    "verdict": "BLOCKED"
   },
   "T86": {
-   "section_sha256": "c000d2e014569bded01facf1cf420071f5dcf30ce4d5b9c27150e36b4ed2cd56",
+   "section_sha256": "cadd00531e84a8eaacfc9b7bac28b96199f50d74311a6b0826e3cad117ece009",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
@@ -8862,48 +8862,54 @@
      "why": "The shape ask:449-T86-door rules: Rust guards calling Rust directly, with FR-001's clause on plain calls kept."
     },
     {
-     "id": "outside-writers",
+     "id": "outside-writers-handled",
      "summary": "record_owed.py keep_batches moves to a door verb; rust/gate/src/state.rs second_red_gate moves to the shared lock and atomic rename.",
      "class": "within",
-     "why": "The ruling: a writer found outside the five joins the cut or moves to a verb. Caveat: the block calls its census 'the ruled search of the state files' names' and neither it nor the ruling text in the bundle states the search. A search by name also cannot see a writer that gets its path from the state_path verb. The next text should name the command and that reach."
+     "why": "The ruling gives a writer found outside the five two routes, joining the cut or moving to a verb, and these take one each. 'One implementation' in FR-001 is said of the Python and Rust writers coexisting, and second_red_gate is Rust changed in this cut under the same lock. This rules the two writers found; whether the search for writers reached far enough is the separate decision writer-search-excludes-specs."
+    },
+    {
+     "id": "writer-search-excludes-specs",
+     "summary": "The search that finds writers outside the five, and the state_path caller read beside it, exclude specs/ (the grep's ':!specs'), and the block concludes 'So one implementation writes.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A carve-out from the ruling's 'A writer of those files found outside the five modules joins the cut or moves to a verb' and from FR-001's purpose that one implementation ever writes those files. It became visible only now that the command is stated, as the last round asked. No reason is given. Not impossible: it is one pathspec. Not implied by the GM's words: the GM's rule on specs/ is that a harness nothing runs is deleted and not ported, and FR-001 puts every file under specs/ that something still runs in phase 3, ported like any other, with make figures re-running them. Last round blocked the import census for this same exclusion and that census is now fixed, but it does not cover this: t86-census.py matches the five module names, so a specs/ harness that names and writes arbiter-owed.json or checks-open.json directly passes it. Nothing in the bundle shows specs/ holds no such writer. Remedy: drop ':!specs' from the search and from the state_path caller read, and state the result, each hit shown to write only a scratch or fixture path, or shown unrun and deleted, or moved to a verb."
     },
     {
      "id": "door-reopen-on-env-change",
      "summary": "checks_door.py is one process a run, reopened if the environment it reads changes mid-run, because land.py exports SPECIFY_FEATURE.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "A carve-out from the ruling's 'a run's verbs through one door process (FR-006)'. Applied literally, a door started before the export answers from the old environment, which breaks FR-002's same outputs on exactly the case named. The rule's purpose is FR-006's per-process cost, and a reopen only on an environment change does not gut it; the differential holds 6 cases on it. Carrying the environment on each verb would also work, but that is a design choice, not a fidelity one."
+     "why": "A carve-out from the ruling's 'a run's verbs through one door process (FR-006)'. Applied literally, a door started before the export answers from the old environment, which breaks FR-002's same outputs on exactly the case named. The rule's purpose is FR-006's per-process cost, and a reopen only on an environment change does not gut it; the differential holds 6 cases on it. Unchanged from the last round."
     },
     {
      "id": "extra-door-verbs",
      "summary": "Door verbs beyond the ruling's list: rulings, _round_no, PAGE_CHECKS, notes_of_manifest, subjects_of_manifest, fix_hold, keep_batches.",
      "class": "within",
-     "why": "The ruling moves every Python caller to the door and sends only a name a command cannot carry into the cut, so a further verb for a read or write callers already make serves it; keep_batches is licensed by the writer clause. It widens the list and narrows nothing."
+     "why": "The ruling moves every Python caller to the door and sends only a name a command cannot carry into the cut, so a further verb for a read or write callers already make serves it; keep_batches is licensed by the writer clause. It widens the list and narrows nothing. The ruling's 'covers each verb' holds: t86-diff.py exercises every read verb, the ruling's and these, and the three write verbs."
     },
     {
      "id": "arbiter-by-path-branches",
      "summary": "l7r-gate arbiter runs Python by path on rare branches under the T065 clause: record_owed.answer, gm_review.question, checkpoint.close_checkpoint, review_prereq.py content-key, claims.py accept.",
      "class": "within",
-     "why": "FR-003 keeps the Python of a piece not yet ported as the one that runs, and FR-001 and the T065 clause settle by-path runs on rare branches. Within only on the premise that none of the five writes checks-open.json or an arbiter file directly; the block implies that through the outside-writers census but never states it for these five. The next text should state it."
+     "why": "FR-003 keeps the Python of a piece not yet ported as the one that runs, and FR-001 and the T065 clause settle by-path runs on rare branches. The last round's caveat is answered: the block now states that none of the five writes the state directly, with its method and that method's limit (no by-path run outside the import graph). The by-name writer search is what covers that limit, so its reach is decided under writer-search-excludes-specs."
+    },
+    {
+     "id": "differential-success-path-and-writes",
+     "summary": "The differential now covers door writes 21 (trip 10, record_answer 7, keep_batches 4), the accept seam's failure path 2 and success path 1 with the store, state files and arbiter.jsonl row compared; 9,455 in all, 0 differ; one difference found and fixed so a failed trip through the door answers an error as the Python raised, the guards keeping the quiet false; no lock held across the seam.",
+     "class": "within",
+     "why": "Resolves the last round's NOT LEGITIMATE on the unexercised success path: the harness runs the real record_owed.answer on a scratch store each side, and the lock-across-seam concern is answered by the block's statement that record_ruling calls accept_answers with none held. The parts now sum to the stated total (9265+6+21+30+16+17+92+5+2+1 = 9,455). The fix moves the Rust to the Python's behavior, FR-002's direction."
     },
     {
      "id": "normalization-parsed-json",
      "summary": "The differential compares the merged hook reply as parsed JSON.",
      "class": "within",
-     "why": "Every key and value is still compared; only key order and whitespace fall away, in a reply the block states the hook protocol reads by key. No case or value is excluded from FR-002's same outputs."
+     "why": "Every key and value is still compared; only key order and separators fall away, on replies that both begin with hookSpecificOutput, in a reply the block states the hook protocol reads by key. No case or value is excluded from FR-002's same outputs. Unchanged from the last round."
     },
     {
      "id": "normalization-library-text",
      "summary": "A library's error text inside 'refused - ...' is not compared.",
      "class": "within",
-     "why": "Ruled by ask:449-T066-json-message: verdict, exit status, location and fixed words stay bound and the quoted text is the Rust library's."
-    },
-    {
-     "id": "differential-not-exercised-answer",
-     "summary": "NOT EXERCISED: a successful record_owed.answer through the seam, both sides failing alike in the fixture for want of the engine; the seam only calls that Python, which is unchanged.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The excluded case is the success path of new Rust, while hm_arbiter.py is deleted in the same cut (FR-002: same outputs before the Python is deleted). Not impossible: the shortfall is the fixture's, and this same differential ran on the real tree with writes on scratch copies, so 'harder to set up' is the only reason given. Not implied by the GM's words. The argument addresses the wrong side: the Python is unchanged, but its caller is new, and only a failing return was compared. The bundle does not show what the Rust does with a successful result, and this path is the one place the chain Rust arbiter, Python record_owed, door, Rust writer would run, so a lock held across the seam would show only here. The block does not claim that no test holds the case; ask:449-T069-suites names answer_all over record_owed.py in test-entry-gate. Exercise the success path on both sides. Separately, the block's stated total does not match its parts: they sum to 9,461 and the block says 9,436."
+     "why": "Ruled by ask:449-T066-json-message; in the harness it applies to two arbiter cases, a missing file and a bad JSON file. A disclosure note: the harness has a third normalization the block's 'two normalizations' does not name, blanking both sides' stderr when the Python's holds a traceback. ask:449-usage-text rules that (traceback text not bound, exit status and stdout held), so it is within, but the block should name it."
     },
     {
      "id": "direct-readers-stand",
@@ -8921,7 +8927,7 @@
      "id": "deletions",
      "summary": "The five .py files, the three guards' .sh and the dangling tests/hooks/record-edit-gate.sh are deleted in the cut.",
      "class": "within",
-     "why": "The five are ordered deleted by the ruling under the GM's quoted approval, and the guards' .sh are what the cut replaces. The approval quoted names Python files, so it does not itself cover the dangling shell test; that file goes with the guard it belongs to and narrows nothing."
+     "why": "The five are ordered deleted by the ruling under the GM's quoted approval, and the guards' .sh are what the cut replaces. The approval quoted names Python files, so it does not itself cover the dangling shell test; that file goes with the guard it belongs to and narrows nothing, FR-001 naming test-record-edit-hooks as the suite that moves. Unchanged from the last round."
     },
     {
      "id": "order-and-exits",
@@ -8930,11 +8936,10 @@
      "why": "Order and exits inside the ruling, which deletes the door with its last caller."
     },
     {
-     "id": "done-census-excludes-specs",
-     "summary": "Done, measured: an ast walk of tracked Python outside specs/ finds no import or by-path load of the five; .claude/settings.json names no removed guard.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The ruling says the census is re-run at the cut to show no import of the five remains, and FR-001's census is git ls-files '*.py', which includes specs/. FR-001 puts every file under specs/ that something still runs in phase 3, ported like any other, and make figures re-runs those measurements. The block carves specs/ out with no reason given, and nothing in the bundle shows specs/ cannot hold a live importer, which deleting the five would break. A file there that nothing runs is deleted under the GM's 2026-11-09 rule, not skipped by the census. The walk also reads only Python, so a Makefile recipe or shell script running one of the five by path is outside it, though FR-001's second census covers those files; and FR-001's rewrite of recorded measurements that run a ported .py, in the commit that ports it, is not addressed. Extend the check over specs/ and the non-Python forms, each hit moved to the door or shown unrun and deleted."
+     "id": "done-census-over-all-forms",
+     "summary": "Done, measured: t86-census.py walks all of git ls-files '*.py', specs/ included, with ast, searches shell and Makefile, and reads specs/*/measurements*.json's commands: no import, by-path load or run of the five; .claude/settings.json names no removed guard.",
+     "class": "within",
+     "why": "Resolves the last round's NOT LEGITIMATE: the census now spans FR-001's whole census, its string constants catch by-path loads, and the shell, Makefile and recorded-measurement forms are read. It answers the ruling's 'no import of the five remains' and shows FR-001's rewrite of recorded measurements has nothing to rewrite for these five."
     }
    ],
    "verdict": "BLOCKED"
