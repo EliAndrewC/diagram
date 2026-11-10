@@ -180,6 +180,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity"
+  },
+  "### T80 (the first slice of the archive, `ask:449-T80-order`)": {
+   "sha256": "d852ceab61efa9fcab5f8ce40f6a8302764056582c584f2a20439f210d3cb296",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity"
+  },
+  "### T80 Approach (checklist part A)": {
+   "sha256": "30cad109c595e4f2c600479ed08ccad1aaf863ce3d16e3750056b02c43532619",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4955,6 +4967,58 @@
      "why": "Unchanged since the last reading. It only delays deletion, and removes nothing from what was asked; FR-003 holds that no piece runs both."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-10",
+   "blocks": [
+    "### T80 (the first slice of the archive, `ask:449-T80-order`)",
+    "### T80 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "what-is-here",
+     "summary": "access_tags, downloads and check-partial-citations become l7r-gate record access-tags, record downloads and check partial-citations; the push's and the Makefile's rows and recipes move to the verbs.",
+     "class": "within",
+     "why": "The GM asked that the Python all be ported to Rust; FR-001's ruled order (ask:449-T80-order) names exactly this slice in one cut."
+    },
+    {
+     "id": "partial-citations-delta-gate",
+     "summary": "partial-citations keeps its delta gate, only the files it reads named anew.",
+     "class": "within",
+     "why": "FR-002 binds verdicts and outputs, and keeping the delta gate moves neither; the input path names are not an output. Whether the renamed list is complete cannot be checked from the bundle (the MANIFEST forbids the repository), and nothing in the block claims a narrower reach."
+    },
+    {
+     "id": "callers-through-the-command",
+     "summary": "archive_ops.py and uncited.py, which import access_tags, reach the Rust through access-tags entry-keys and access-tags set, so one implementation decides; check_bundle.py and memo_check.py's dynamic imports name neither module.",
+     "class": "within",
+     "why": "Serves FR-003 (no piece runs both) while those callers wait for step 3 of ask:449-T80-order. The census states its search space (an ast walk of every tracked .py for imports and importlib/by-path strings, dated one-shot)."
+    },
+    {
+     "id": "no-python-for-the-lock",
+     "summary": "mirror_of and Lock are ported in-process, the lock through flock(1) on the same download-ids.lock so Python and Rust callers still exclude each other; ingest runs archive_ops.py inbox by path until step 3.",
+     "class": "within",
+     "why": "FR-001's ruled order paragraph carries this finding nearly verbatim (both ported in-process through the flock(1) helper T014 decided, ingest by path until step 3). It removes Python sooner than the older by-path wording allowed, so it moves toward the request."
+    },
+    {
+     "id": "date-is-local",
+     "summary": "today asks date(1) for the local date, as Python's date.today() does, not the UTC clock.",
+     "class": "within",
+     "why": "FR-002: the same outputs as the Python replaced."
+    },
+    {
+     "id": "differential-and-its-exclusion",
+     "summary": "The verdicts are held by a differential of each command through Python and binary on the real repository and two scratch clones (249 comparisons, 0 differences, one-shot, observed 2026-11-10); argparse usage text and a Python traceback's text are not compared, citing ask:449-usage-text.",
+     "class": "within",
+     "why": "The request does not ask for byte-equal parser text, and FR-002 carries ask:449-usage-text as a ruled case. The exclusion stays inside that ruling's seam: only stderr argparse generates and an uncaught traceback's text are unbound; exit status and stdout stay held and are among what was compared; a parser.error message, a hand-written usage line or refusal, usage text read by a caller and --help held by a kept suite case stay bound, and the block claims none of those excluded. The figure carries a date and method as a one-shot label; it was not re-run because the MANIFEST forbids the repository. The doubled sentence is a drafting wart, not a fidelity finding."
+    },
+    {
+     "id": "approach-order-exits-done",
+     "summary": "T80 lands before T81 in one landing; green is no differential mismatch and the recipes, push and named callers running only the verbs; red is recorded and set down, a claim of impossibility ruled through make arbiter-ask; done is the differential plus a git grep over Makefile, *.mk, *.sh, settings.json, measurements and Rust naming no invocation.",
+     "class": "within",
+     "why": "The order is ask:449-T80-order's. The grep states its search space and covers the recorded measurements FR-001 requires rewritten in the commit that ports them. No requirement is exempted: FR-004, FR-005 and FR-008 go unnamed in the constraints list but none is waived."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8571,56 +8635,54 @@
    "verdict": "CLEAR"
   },
   "T80": {
-   "section_sha256": "d20a55b912adcbfd8cd506f5b8ffd4a15ab9fb6231a7a70ba0420a5241cd1467",
+   "section_sha256": "86837bbb8067d7430fd86da562cfcf1c42ba0be42ea2aa04f2705572b33080b6",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T80-what-is-here",
-     "summary": "Three Rust verbs (record access-tags, record downloads, check partial-citations); the push's and Makefile's rows and recipes moved to them; partial-citations keeps its delta gate with the files it reads named anew.",
+     "id": "what-is-here",
+     "summary": "access_tags, downloads and check-partial-citations become l7r-gate record access-tags, record downloads and check partial-citations; the push's and the Makefile's rows and recipes move to the verbs.",
      "class": "within",
-     "why": "FR-001's ask:449-T80-order names exactly these three as the first slice in one cut; keeping the delta gate is the Python's behavior carried over (FR-002)."
+     "why": "The GM asked that the Python all be ported to Rust; FR-001's ruled order (ask:449-T80-order) names exactly this slice in one cut."
     },
     {
-     "id": "T80-callers",
-     "summary": "archive_ops.py and uncited.py, the two importers of access_tags, reach the Rust through its command so one implementation decides.",
+     "id": "partial-citations-delta-gate",
+     "summary": "partial-citations keeps its delta gate, only the files it reads named anew.",
      "class": "within",
-     "why": "Serves FR-003 (no piece runs both). The list states its search space (ast walk of tracked .py for imports and importlib/by-path strings, one-shot dated)."
+     "why": "FR-002 binds verdicts and outputs, and keeping the delta gate moves neither; the input path names are not an output. Whether the renamed list is complete cannot be checked from the bundle (the MANIFEST forbids the repository), and nothing in the block claims a narrower reach."
     },
     {
-     "id": "T80-no-python-for-lock",
-     "summary": "downloads add ports mirror_of and Lock in-process through flock(1) on the same lock file instead of running reserve-prefix.py by path; ingest runs archive_ops.py inbox by path until step 3.",
+     "id": "callers-through-the-command",
+     "summary": "archive_ops.py and uncited.py, which import access_tags, reach the Rust through access-tags entry-keys and access-tags set, so one implementation decides; check_bundle.py and memo_check.py's dynamic imports name neither module.",
      "class": "within",
-     "why": "FR-001's ruled order states this finding in terms: mirror_of and Lock ported in-process through T014's flock(1) helper, ingest by path until step 3. It ports more than the ruling required, not less."
+     "why": "Serves FR-003 (no piece runs both) while those callers wait for step 3 of ask:449-T80-order. The census states its search space (an ast walk of every tracked .py for imports and importlib/by-path strings, dated one-shot)."
     },
     {
-     "id": "T80-date",
-     "summary": "today asks date(1) for the local date, matching Python's date.today(), not the UTC clock.",
+     "id": "no-python-for-the-lock",
+     "summary": "mirror_of and Lock are ported in-process, the lock through flock(1) on the same download-ids.lock so Python and Rust callers still exclude each other; ingest runs archive_ops.py inbox by path until step 3.",
      "class": "within",
-     "why": "Same output as the Python, FR-002."
+     "why": "FR-001's ruled order paragraph carries this finding nearly verbatim (both ported in-process through the flock(1) helper T014 decided, ingest by path until step 3). It removes Python sooner than the older by-path wording allowed, so it moves toward the request."
     },
     {
-     "id": "T80-differential",
-     "summary": "Proof by a differential of each command through Python and the binary on the real repository and two scratch clones: exit, stdout, stderr and every written file (249 comparisons, 0 differences, dated one-shot).",
+     "id": "date-is-local",
+     "summary": "today asks date(1) for the local date, as Python's date.today() does, not the UTC clock.",
      "class": "within",
-     "why": "FR-002's same verdicts and outputs; FR-001b names each port's differential as what holds Python until its port."
+     "why": "FR-002: the same outputs as the Python replaced."
     },
     {
-     "id": "T80-traceback-text-not-compared",
-     "summary": "A Python traceback's text is excluded from the differential's stderr comparison.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Physically impossible to match: a traceback names Python frames, files and line numbers that a Rust binary does not have. Already stated in the accepted spec in general words: ask:449-T77-bad-since, 'the stderr text of its uncaught exception is not an output FR-002 binds'. The exit status of such a case stays compared."
+     "id": "differential-and-its-exclusion",
+     "summary": "The verdicts are held by a differential of each command through Python and binary on the real repository and two scratch clones (249 comparisons, 0 differences, one-shot, observed 2026-11-10); argparse usage text and a Python traceback's text are not compared, citing ask:449-usage-text.",
+     "class": "within",
+     "why": "The request does not ask for byte-equal parser text, and FR-002 carries ask:449-usage-text as a ruled case. The exclusion stays inside that ruling's seam: only stderr argparse generates and an uncaught traceback's text are unbound; exit status and stdout stay held and are among what was compared; a parser.error message, a hand-written usage line or refusal, usage text read by a caller and --help held by a kept suite case stay bound, and the block claims none of those excluded. The figure carries a date and method as a one-shot label; it was not re-run because the MANIFEST forbids the repository. The doubled sentence is a drafting wart, not a fidelity finding."
     },
     {
-     "id": "T80-argparse-usage-text-not-compared",
-     "summary": "Argparse usage text on exit 2 is excluded from the differential's stderr comparison.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-002 binds 'verdicts and outputs' and its exceptions are named one by one. The only usage-text precedent, ask:449-T75-gatecost-class, is a ruling for gatecost alone, which shows a usage line needed a ruling; ask:449-T66-json-message covers a parser's text quoted inside a fixed message on spec lint check 5, not a whole usage message; ask:449-T80-order rules order and the lock, not output. The block extends those instances to three new tools on its own authority, in one sentence with no ask. Not physically impossible: argparse's text is deterministic, only the program name must change to the new verb. Not implied by the GM's words, which are silent on it. Remedy: a ruled case through make arbiter-ask for this slice, or an FR-002 amendment generalizing the usage-text exclusion, cited in the block; or compare the usage text, with the program name normalized."
+     "id": "approach-order-exits-done",
+     "summary": "T80 lands before T81 in one landing; green is no differential mismatch and the recipes, push and named callers running only the verbs; red is recorded and set down, a claim of impossibility ruled through make arbiter-ask; done is the differential plus a git grep over Makefile, *.mk, *.sh, settings.json, measurements and Rust naming no invocation.",
+     "class": "within",
+     "why": "The order is ask:449-T80-order's. The grep states its search space and covers the recorded measurements FR-001 requires rewritten in the commit that ports them. No requirement is exempted: FR-004, FR-005 and FR-008 go unnamed in the constraints list but none is waived."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
