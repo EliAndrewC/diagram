@@ -1272,3 +1272,77 @@ censuses empty (work breakdown 8, FR-010).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-10 -->
+### T071 Approach (checklist part A)
+
+1. **The goal, in the world.** The gate's first phase and its tree check are decided by Rust; what can only be read from pytest stays behind one door until pytest goes.
+2. **The constraints.** FR-001, FR-002, FR-006; the Assumptions clause on a Python test driving a Rust binary.
+   **Carried from T063 through T067** (`ask:T063-browser-raw`, `ask:449-T067-scope`): an area on the repository root takes the `diagram` area's exclusions, so a docstring edit in `tests/full/interactive/page_browser/*.py` is called not byte-hashed by `preflight.unseen` while the browser key moves. T071 ports it with the same verdict under FR-002 by default; any correction goes through its own case, named in the commit and the phase's record.
+   **Decisions** (the round arbiter's `ask:449-T071-scope`; T071 is `preflight.py`):
+   - THE PHASE AND THE TREE CHECK ARE RUST: `l7r-gate preflight` (`rust/gate/src/preflight.rs`): the derived files, the record and its pointers, the quick tier, the stray-probe refusal, the snapshot, the check, what the gate itself rolled and the gate-write guard's question. The Makefile's four calls and `gate_write_hooks.rs` call it.
+   - ONE NAMED DOOR, `scripts/gates/preflight.py`, kept at its path and cut to what reads pytest: `--cover`, the changed lines' coverage, asked only by `make preflight`. `make done` passes `--no-coverage`, as the Python's `make done` already did (feature 405 T47, D25: the step's cost on every gate, and the gate's own coverage floor judges the same lines), so no `make done` starts it. It goes in phase 4 with pytest.
+   - THE TWO-VERSION QUESTION IS `codeid.py`'s (FR-001's one Python library), a new verb `--same-program` beside `--debug-free-equal`: whether a `.py` file's two versions differ only where the gate does not look, asked at most once a run, in one batch, and only when a `.py` file outside the byte-hashed areas changed. So it starts Python only with a gate running and such a file changed, or on the tree check of a `make done` whose tree moved one.
+   - THE CLAIMS CALL (`ask:449-T067-scope`) STAYS WHERE IT WAS: `hamlet_path`'s import of `l7r.diagram.tools.claims` is inside the door's `--cover`, reached only by `make preflight` when the coverage step found gaps, so it is Python by path until phase 3 as ruled and never runs on a `make done`.
+   - THE T063 CARRIED CASE (`ask:T063-browser-raw`) IS UNCHANGED: `raw_areas` asks the stamp's `--raw-match` the same question the Python did, so a `tests/full/interactive/page_browser/*.py` docstring edit is called as before.
+   - THE DOOR'S JSON: `--cover`'s answer is new, between the two halves; each line the phase prints is the Python's.
+   - WHAT THE TESTS REPLAY: `test_preflight.py`'s cases of the phase and the tree are in `preflight/tests.rs`; those of the door stay in it, with a new one for `--cover` and one for `--same-program`.
+   - THE VERDICTS ARE THE PYTHON'S (observed 2026-11-10, method: the tree snapshot, the tree check against both tools' snapshots, the guard's `--would-write` on eleven kinds of path each unchanged, changed and deleted, a docstring edit, a code edit, a moved tree and an unreadable HEAD, through the last commit's Python and the binary on the real repository, exit status and output compared, a one-shot: 43 cases, 0 differences).
+3. **Where each comes from.** the baseline under `<git dir>/gate-baseline/`; coverage.py's data as it stands.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).
+6. **The exits.** Green: every phase and tree case gives the Python's verdict, and `preflight.py` is cut to the door. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** The differential over the real repository (the tree snapshot, the tree check and the guard's question) shows no mismatch, and `scripts/gates/preflight.py` holds only `--cover` and what it calls. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+<!-- plan-archive: archived 2026-11-10 -->
+### T73 Approach (checklist part A)
+
+1. **The goal, in the world.** Nothing in the repository runs a test on AWS, and a gated push lands on a green local `make done`: the GM, 2026-11-09, "Let's delete rather than port our tooling which runs our tests remotely on AWS."
+2. **The constraints.** FR-001, as amended for the deletion; FR-002 for what stays: the route (DIRECT or GATED) and a gated push's conditions, which were the remote-off path's. The remote has been off since 2026-09-05 (`dev/switches.json`), so the behavior of a push does not change.
+   **Decisions** (FR-001a, the GM 2026-11-09):
+   - WHAT GOES, IN ONE LANDING: `buildspec/`, `Dockerfile.ci`, `dev/ci.md`, `requirements-ci.in`, `requirements-ci.txt`, and under `rust/gate/src/ci/` the modules `aws`, `cachepolicy`, `decision`, `dispatch`, `door`, `imagecheck`, `main`, `runlog` and `real_tree` with their tests; the make targets `ci-off`, `ci-on`, `ci-check`, `ci-merge`, `ci-measure`, `ci-image` and `commit-permitted`, the `REMOTE_OK` macro, `audit`'s remote spend and the `bypass-audit` branch for a build; the `remote` axis of `dev/switches.json`; the aws CLI's install, `boto3` and `CODEBUILD_BUILD_ID`'s branches. The tracked files themselves are deleted by the GM's own command, because a built-in safety check refused the session's and said only a person may approve it; the task's done line holds until that has run and the Rust modules were out of the build before it.
+   - WHAT STAYS, ON THE PATH IT ALREADY TOOK (FR-002): the remote has been off since 2026-09-05, so a gated push has been the old LOCAL-GATED path. `l7r-gate ci status --route` gives DIRECT or GATED; `l7r-gate ci gated-check` (`rust/gate/src/ci/gated.rs`, `make gated-check`) gives what `ci-merge` gave with the remote off: the merge conflict first, then feature-complete, green-local-since-edit and a green local `make done` on the engine content the merge lands, every condition printed even after one fails, a push only when all hold. `sync-with-main.sh` then does the locked pull and push it did on SKIP-VERIFIED. Four differences follow from the deletion and hold no verdict: the route word `GATED-LOCAL` is now `GATED`; the `remote-enabled`, `route-is-gated` and `breaker-not-tripped` rows, and the `.git/ci-verdict` file, are gone, because each answered a question about the remote or about a caller that now asks only on GATED; the refusal names `merged-engine-green` where it named `remote-enabled`; and `make ci-status` keeps its name, because a guard's corpus and every refusal name it, but it is local.
+   - WHAT THE TESTS REPLAY: `gated/tests.rs` holds the route, the three conditions' refusals and the merge conflict, and `switches/tests.rs` and `config/tests.rs` keep their cases on the axes that remain. `test-sync-with-main.sh`'s gated cases are the local path: a pass lands, a refusal keeps the work, an unknown route word refuses, and the cohort's and port switch's cases run on the GATED route. NOT REPLAYED, each because the behavior is deleted: the dispatch sequence, the AWS adapter, the parked build, the mailbox, the verified-record lookup, the run log's remote entries and spend, the image check, the bucket lifecycle and the tests of the `CODEBUILD_BUILD_ID` branches.
+   - THE CENSUS: `git grep -nE "ci-(check|merge|measure|image|on|off)\b|buildspec|Dockerfile\.ci" -- 'specs/*/measurements*.json'` returns two lines, a recorded census row and a recorded T064 comparison, neither a command `make figures` runs against the files deleted here (observed 2026-11-09, method: that grep, each row read).
+3. **Where each comes from.** `rust/gate/src/ci/`, `buildspec/`, `Dockerfile.ci`, `scripts/sync-with-main.sh`.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** The push's use first (a local route and gated check), then the targets, the Rust, the files, the docs, all in one landing.
+6. **The exits.** Green: a gated push still refuses without a green local `make done` on the merged engine content, and the census below is empty. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files buildspec Dockerfile.ci dev/ci.md` returns nothing; `git grep -nE "ci-(check|merge|measure|image|on|off)\b|CodeBuild|buildspecOverride" -- Makefile 'scripts/*.sh' 'scripts/*.py' 'rust/*.rs' 'l7r/*.py'` names no invocation; `make hooks-test HOOKS_ALL=1` green with `test-sync-with-main`'s gated cases on the local path.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+
+<!-- plan-archive: T74 to T74 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
+
+<!-- plan-archive: T75 to T75 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
+<!-- plan-archive: T76 to T76 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-10 -->
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** What things cost is measured by Rust.
+2. **The constraints.** FR-001, FR-002, FR-008; the slice and its files as the round arbiter's `ask:449-T068-scope` names them.
+   **Decisions** (the round arbiter's `ask:449-T77-scope` and `ask:449-T77-replays`; the last slice):
+   - ONE LANDING: `maps_moved.py`, `work_budget_rust.py`, `popup_rounds.py`, `push_check_times.py` and `model_trial.py` become `l7r-gate measure maps-moved | work-budget | popup-rounds | push-check-times | model-trial` (`rust/gate/src/measure/`). `git grep -nE "(maps_moved|work_budget_rust|popup_rounds|push_check_times|model_trial)\.py" -- Makefile '*.mk' '*.sh' 'scripts/*.py' 'l7r/*.py' .claude/settings.json 'specs/*.py' 'specs/*.sh' 'specs/*/measurements*.json'` names no invocation once the Makefile and the three figure files are rewritten, and `docs/spec-kit-and-reviews.md`'s `model_trial.py` step and `rust/phases/src/driver/CLAUDE.md`'s pointer are rewritten with them; a bare-name import search (`(import|from) +(maps_moved|work_budget_rust|popup_rounds|push_check_times|model_trial)`, `spec_from_file_location`, `sys.path`) finds only `tests/tooling/test_maps_moved.py` and `tests/tooling/test_model_trial.py`, which go with them.
+   - THE DELETION WAITS ON THE GM (as T73's does): the built-in safety check refused the removal of the five tools and those two tests, observed 2026-11-09, and leaves it to a person, so this task stays open until the GM runs it. The ports land first; no recipe, hook or figure runs the Python meanwhile, and the two tests that import those tools stay, and pass, until the same removal.
+   - WHAT MOVES, BY THE RULINGS: `replay_owing.py` and `depiction_replay.py` import `modal_owed`, `modal_triage` and `claims`, which stay Python until phase 3, so they go to phase 3 with them; the other deferred tools are in FR-001 and T070's row.
+   - THE FOLD (`ask:449-T77-replays`, FR-003): `model_trial.py`'s `usage` read `agent_census.fold_usage`; `model_trial.rs` holds a Rust `fold_usage` and `agent_census.py`'s phase-3 port calls that one. No piece runs both.
+   - THE VERDICTS ARE THE PYTHON'S (observed 2026-11-09, method: each command run over the real repository through the Python and through the binary, exit status and output compared, a one-shot): `maps-moved` three ways, `popup-rounds` on the clone by name, with `--json` and with a zoned `--since`, its usage and its `--record` over the tracked snapshots (byte for byte, and equal to the tracked file), `model-trial catalog` three ways, 15 cases and 0 differences; `model-trial usage` on 40 real transcripts picked by a seeded shuffle, 0 differences, the fold's differential the ruling asks; `prepare` on a real run through both, its prompt, recorded reply, meta and output and its agent files identical; `make work-budget`'s table identical.
+   - DELIBERATE DIFFERENCES: `run` starts each session in its own process group, not its own session: the only difference is the controlling terminal, which a backgrounded `claude -p` does not use, and the standard library offers no safe way to start a session. A bad `--since` to `popup-rounds` exits 1 with empty stdout, as the Python's uncaught `ValueError` does, with one line on stderr naming the value where the Python printed a traceback (`ask:449-T77-bad-since`). WHICH values parse stays the Python's, and the local-time conversion with them (observed 2026-11-09, method: 13,876 generated `--since` forms, every date, separator, time and zone form the parser takes and the malformed ones around them, through `datetime.fromisoformat(...).timestamp()` and the binary, a one-shot: the Python accepts 2,677, the epoch equal on each; on the other 11,199 both exit 1 with empty stdout; 0 differences). `run-all`'s progress times read the local zone, as the Python's did.
+   - `push_check_times` (FR-002 ruled case, `ask:449-T77-scope`): the Python's table listed commands of a shell line T067 removed, so the same-output test cannot hold. The Rust rows are the Rust push's own `CHECKS` table plus the one-process run, so a row the push adds is timed. Its proof is the re-run figure `m:push-checks-rust`.
+   - WHAT THE TESTS REPLAY: every case of `test_maps_moved.py` and `test_model_trial.py` is in `measure/*/tests.rs`.
+3. **Where each comes from.** The Python tools of this slice, each compared with its port.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the ruling's slices; each stands on the ones before it.
+6. **The exits.** Green: each tool's verdicts the Python's, by a differential over the repository run on the final port, and the slice's files gone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files` names none of the slice's files. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+

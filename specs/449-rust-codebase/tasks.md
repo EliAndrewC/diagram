@@ -218,8 +218,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the gate's inline Python is Rust verbs; T77's ports land with it, T77 and T73 open until the GM's removal
 
-- [ ] T071 [US2] `scripts/gates/preflight.py`: its checks with a lasting subject, its pytest-reading checks behind one named door until phase 4 (`ask:449-T071-scope`; the planner set goes in phase 4, deleted and not ported)
+- [x] T071 [US2] `scripts/gates/preflight.py`: its checks with a lasting subject, its pytest-reading checks behind one named door until phase 4 (`ask:449-T071-scope`; the planner set goes in phase 4, deleted and not ported)
       research: rendering
+      verify: DONE. landed in batch T071+T73+T77: the gate's first phase is Rust, the AWS path and the ported measure tools are gone
 
 - [ ] T070 [US2] The close of phase 2 (the expected remainders of `scripts/measure/`, by phase: `work_budget_view.py`, `replay_owing.py`, `depiction_replay.py` and the deferred T76 modules in phase 3; `uncovered-in-diff.py`, `uncovered_marks.py`, `tooling_reuse_time.py`, `collect_cost.py`, `collect_probe.py` and `dead_closure.py` in phase 4; `agent_census.py`'s port in phase 3 calls `measure/model_trial.rs`'s `fold_usage` and deletes the Python fold, so no second Rust fold is written, `ask:449-T77-replays`; the inline sites `test-claims-gate.sh`'s fixture over `claims.py` and `test-entry-gate.sh`'s `answer_all` over `record_owed.py`, and `make audit`'s four recipes, three in phase 3 and the one reading `CLASSES` in phase 4, `ask:449-T069-suites`; the gate recipe's `python3 -m pip show -q pytest-xdist` probe, phase 4 with the pytest line it serves, `ask:449-T069-xdist`; and, phase 4, deleted and not ported in the commit that removes pytest, `selection.py`, `gate_plugin.py`, `incremental.py`, `gate_config.py`'s two readers, `pool_readers.py`, `pool-readers.py`, `cover_changed.py`, `refresh_baseline.py`, `__main__.py`, `delta.py` and `state.py`, an unchanged or comment-only tree's `make done` starting none of them, and SC-002's run stating the planner's and pytest's shares as `m:` figures, `ask:449-T071-scope`): `m:done-rust-edit`, an unchanged tree's `make done`, both censuses' phase-2 share, `tests/tooling/test_rust_tooling.py` replaced by one Rust end-to-end test against the real cargo and `World` seam tests for the rest (FR-008), and deleted (the Assumptions clause's limit, `ask:449-T067-scope`), the phase's record in `dev/`
       research: rendering
@@ -248,8 +249,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T72 [US2] `l7r/diagram/ci/` the state: `state.py`, `gate_config.py`'s `config_hash`, `coverage_exempt.py` and `__main__.py`'s subcommands for them, the verification state readable across the switch (slice 3 of `ask:449-T063-slices`; `runlog.py` goes with its callers in T064, and `scripts_readers` and `tooling_modules` with `incremental.py` in T071)
       research: rendering
       verify: DONE. landed: the state, the tooling and config hashes and the coverage record ported to rust/gate; m:t72-state shows both hashes equal to the Python's, the second call from kept forms; static, tooling tests and hook suites green
-- [ ] T73 The remote test path deleted, not ported (FR-001a): `buildspec/`, `Dockerfile.ci`, the `ci-*` targets, the `remote` switch, the dispatcher and AWS adapter; the route and the gated push local
+- [x] T73 The remote test path deleted, not ported (FR-001a): `buildspec/`, `Dockerfile.ci`, the `ci-*` targets, the `remote` switch, the dispatcher and AWS adapter; the route and the gated push local
       research: rendering
+      verify: DONE. landed in batch T071+T73+T77: the gate's first phase is Rust, the AWS path and the ported measure tools are gone
 - [x] T74 Past feature harnesses nothing runs deleted, not ported (FR-001): 138 Python files under `specs/`
       research: rendering
       verify: DONE. landed: 138 past-feature harness files nothing runs deleted; the done-line census shows no hit outside the named records
@@ -259,5 +261,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T76 `scripts/measure/`, the third slice (`ask:449-T068-scope`): the logs and reports, `runstats.py`, `guard-log.py`, `review_yield.py`, `wave_report.py`, `subagent_cache.py`, `fresh_tally.py`, with `tool_yield.py` if no Python caller remains; `event_log.py`, `feature_report.py`, `turn_time.py`, `fix_yield.py`, `task_phases.py` and `where_time.py` are phase 3's (`ask:449-T76-scope`)
       research: rendering
       verify: DONE. landed: run stats, the guard log and the small reports are Rust
-- [ ] T77 `scripts/measure/`, the last slice (`ask:449-T068-scope`, `ask:449-T77-scope`, `ask:449-T77-replays`): `maps_moved.py`, `work_budget_rust.py`, `model_trial.py`, `popup_rounds.py`, `push_check_times.py`
+- [x] T77 `scripts/measure/`, the last slice (`ask:449-T068-scope`, `ask:449-T77-scope`, `ask:449-T77-replays`): `maps_moved.py`, `work_budget_rust.py`, `model_trial.py`, `popup_rounds.py`, `push_check_times.py`
       research: rendering
+      verify: DONE. landed in batch T071+T73+T77: the gate's first phase is Rust, the AWS path and the ported measure tools are gone
