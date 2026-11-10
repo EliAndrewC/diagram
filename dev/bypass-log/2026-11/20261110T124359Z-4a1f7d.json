@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-10T12:43:59Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "b968efc5f",
+  "why": "T84 is a straight removal under FR-001c (the GM 2026-11-10); the later tasks' sections are filed and each is reviewed before its own work"
+}
