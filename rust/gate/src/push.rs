@@ -205,7 +205,7 @@ struct Row(
 
 const CHECKS: [Row; 23] = [
     Row("file-scale selftest", Tool::Gate, &["check", "file-scale", "--selftest"], "check-file-scale selftest failed - the guard itself is broken; fix rust/gate/src/checks/ before pushing", true, ""),
-    Row("file-scale", Tool::Gate, &["check", "file-scale", "{root}"], "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", false, ""),
+    Row("file-scale", Tool::Gate, &["check", "file-scale", "{root}"], "a Rust file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", false, ""),
     Row("make-docs", Tool::Py("make-docs.py"), &["{root}", "--check"], "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", false, "docs/make-targets.html"),
     Row("ledger-owed", Tool::Py("reviews/ledger_owed.py"), &["--ledger", "{root}/dev/review-ledger.md", "--refuse"], "a check's pass has no row in dev/review-ledger.md (above) - write each from its reply: make ledger-owed WRITE=\"<where you recorded what you did>\" (or add the row printed, its ?s filled); features 371, 385 FR-019", false, ""),
     Row("entry-headings selftest", Tool::Py("gates/check-entry-headings.py"), &["--selftest"], "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing", true, "delta:entry-headings"),

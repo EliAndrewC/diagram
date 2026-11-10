@@ -70,8 +70,7 @@ fn listed(root: &Path, pathspec: &[&str]) -> Vec<String> {
 }
 
 fn wanted(rel: &str) -> bool {
-    (super::has_ext(rel, "py") || super::has_ext(rel, "rs"))
-        && !rel.split('/').any(|p| SKIP_PARTS.contains(&p))
+    super::has_ext(rel, "rs") && !rel.split('/').any(|p| SKIP_PARTS.contains(&p))
 }
 
 #[derive(Debug, Default, PartialEq, Eq)]
@@ -82,7 +81,7 @@ struct Scan {
 }
 
 fn run(root: &Path) -> Scan {
-    let mut rels: Vec<String> = listed(root, &["*.py", "*.rs"])
+    let mut rels: Vec<String> = listed(root, &["*.rs"])
         .into_iter()
         .filter(|r| wanted(r) && root.join(r).is_file())
         .collect();
@@ -240,15 +239,15 @@ fn selftest() -> Outcome {
     let put = |name: &str, text: String| {
         let _ = std::fs::write(base.join(name), text);
     };
-    put("big.py", body.clone());
-    put("edge.py", "x = 1\n".repeat(MAX_LINES));
+    put("big.rs", body.clone());
+    put("edge.rs", "x = 1\n".repeat(MAX_LINES));
     put(
-        "ok.py",
+        "ok.rs",
         format!("# {MARKER} an ordered registry whose row order is the execution contract\n{body}"),
     );
-    put("thin.py", format!("# {MARKER} ordered\n{body}"));
+    put("thin.rs", format!("# {MARKER} ordered\n{body}"));
     put(
-        "late.py",
+        "late.rs",
         format!(
             "{}# {MARKER} an ordered registry whose rows are the contract\n{}",
             "x = 1\n".repeat(HEADER_LINES + 1),
@@ -258,7 +257,7 @@ fn selftest() -> Outcome {
     let scan = run(&base);
     let names: Vec<&str> = scan.over.iter().map(|(p, _)| p.as_str()).collect();
     let files_right =
-        names == ["big.py", "late.py", "thin.py"] && scan.justified.len() == 1 && scan.scanned == 5;
+        names == ["big.rs", "late.rs", "thin.rs"] && scan.justified.len() == 1 && scan.scanned == 5;
     let dirs = super::scratch("file-scale-dirs");
     for (name, n) in [("full", 3), ("over", 4)] {
         let _ = std::fs::create_dir_all(dirs.join(name));
