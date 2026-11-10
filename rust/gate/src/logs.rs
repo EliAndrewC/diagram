@@ -58,6 +58,22 @@ impl Now {
     }
 }
 
+/// A record's text with every non-ASCII character escaped, as Python's `json.dumps` writes it; outside a string JSON holds none, so this touches only text.
+fn ascii_escaped(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    for c in text.chars() {
+        if c.is_ascii() {
+            out.push(c);
+        } else {
+            let mut units = [0u16; 2];
+            for unit in c.encode_utf16(&mut units) {
+                let _ = write!(out, "\\u{unit:04x}");
+            }
+        }
+    }
+    out
+}
+
 fn indented(value: &Value) -> String {
     use serde::Serialize as _;
     let mut out = Vec::new();
@@ -66,7 +82,48 @@ fn indented(value: &Value) -> String {
         serde_json::ser::PrettyFormatter::with_indent(b"  "),
     );
     let _ = value.serialize(&mut writer);
-    String::from_utf8_lossy(&out).into_owned() + "\n"
+    ascii_escaped(&String::from_utf8_lossy(&out)) + "\n"
+}
+
+/// `json.dumps`'s default separators, `", "` and `": "`.
+struct Spaced;
+
+impl serde_json::ser::Formatter for Spaced {
+    fn begin_array_value<W: ?Sized + std::io::Write>(
+        &mut self,
+        writer: &mut W,
+        first: bool,
+    ) -> std::io::Result<()> {
+        if first {
+            Ok(())
+        } else {
+            writer.write_all(b", ")
+        }
+    }
+
+    fn begin_object_key<W: ?Sized + std::io::Write>(
+        &mut self,
+        writer: &mut W,
+        first: bool,
+    ) -> std::io::Result<()> {
+        self.begin_array_value(writer, first)
+    }
+
+    fn begin_object_value<W: ?Sized + std::io::Write>(
+        &mut self,
+        writer: &mut W,
+    ) -> std::io::Result<()> {
+        writer.write_all(b": ")
+    }
+}
+
+/// One line as Python's `json.dumps` writes it.
+fn one_line(value: &Value) -> String {
+    use serde::Serialize as _;
+    let mut out = Vec::new();
+    let mut writer = serde_json::Serializer::with_formatter(&mut out, Spaced);
+    let _ = value.serialize(&mut writer);
+    ascii_escaped(&String::from_utf8_lossy(&out))
 }
 
 fn head(root: &Path) -> String {
@@ -202,7 +259,7 @@ fn land_tooling(args: &[String]) -> Result<(), String> {
         "log": dir.join("land-tooling.log").display().to_string(), "utc": Now::read().utc()});
     let path = dir.join("land-tooling.jsonl");
     let mut text = std::fs::read_to_string(&path).unwrap_or_default();
-    let _ = writeln!(text, "{line}");
+    let _ = writeln!(text, "{}", one_line(&line));
     std::fs::write(path, text).map_err(crate::measure::text_err)
 }
 

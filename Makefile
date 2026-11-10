@@ -1167,7 +1167,7 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	@$(if $(COV_FLOORS),$(if $(NO_CUTOFF),INCR_NO_CUTOFF=1 ,)python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
 	$(if $(COV_FLOORS),paths=$$(python3 -m l7r.diagram.ci incremental paths 2>/dev/null);,) \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
-	tpy=$$(date +%s); $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; ec=$$?; \
+	tpy=$$(date +%s); if python3 -m pip show -q pytest-xdist >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; fi; ec=$$?; \
 	$(if $(COV_FLOORS),$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" pytest $$(( $$(date +%s) - tpy )) 2>/dev/null || true; tfl=$$(date +%s);,) \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
 	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 scripts/measure/uncovered-in-diff.py || true; }; exit $$ec; fi; \

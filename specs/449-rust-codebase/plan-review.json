@@ -7890,6 +7890,46 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T069": {
+   "section_sha256": "7949fa366944b93da8aef9977c0c1cc7c1838d71583a5b1249072b2e02844b37",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T069-verbs",
+     "summary": "The gate path's inline Python becomes l7r-gate verbs in rust/gate/src/logs.rs: log run, log bypass, log gate-bypass, log land-tooling, ruff-toml, json-field.",
+     "class": "within",
+     "why": "FR-001's second census puts these sites (Makefile gate recipes, scripts/gates/*.sh, sync-with-main.sh, land-tooling.sh) in phase 2 and the request is to port the Python to Rust. Where the verbs live is left open by the spec and narrows nothing. m:inline-python-census carries its key; the bundle forbids repository reads, so it was not re-run."
+    },
+    {
+     "id": "T069-xdist-probe",
+     "summary": "The Makefile's python3 -c 'import xdist' fork is deleted rather than ported: an absent plugin was a serial pytest and is now a failure.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a removal with a stated behavior change, not a port, and FR-002 asks for the same verdicts and outputs; the block does not name FR-002 and the bundle holds only its first line, so nothing in the bundle confines 'every case' so as to exclude this one. None of the three grounds is shown. Not impossible: a check that starts no Python keeps the fork. Not implied by the GM's words: the deletion rulings of 2026-11-09 cover harnesses nothing runs and the AWS tooling, and a probe on the pytest path is neither; extending them would be completing the GM's thought. Keeping the fork does not defeat the request's purpose. The premise carrying the decision ('pinned, so the fork never takes its other arm') is stated, not measured: no m: key, no command, and a pin in a .in file is not a census of the environments that run this recipe. Cure: keep the serial arm with a non-Python check, or take the removal to make arbiter-ask with the premise measured and have the spec carry the ruling."
+    },
+    {
+     "id": "T069-suites-tools",
+     "summary": "test-cohort-gate.sh, test-land-tooling.sh and test-claims-gate.sh's index edit use jq; test-entry-gate.sh's edit is a literal shell replacement.",
+     "class": "within",
+     "why": "FR-001 requires the inline Python gone from these suites and places them in phase 2; it does not require a shell suite's fixture edit to be Rust, and these suites are test scaffolding that produce the same fixture. The choice of non-Python tool is left open and narrows nothing."
+    },
+    {
+     "id": "T069-what-stays",
+     "summary": "make audit's four recipes go to phase 3 (the CLASSES reader to phase 4); buildspec/run.sh goes with the deletion T73 waits on; test-claims-gate.sh's claims.py fixture and test-entry-gate.sh's answer_all go with their modules in phase 3.",
+     "class": "within",
+     "why": "Every item is already placed by the accepted spec: FR-001's ask:449-T069-suites clause names the two fixtures and make audit's four recipes with the same three/one split, and FR-001a deletes buildspec/. Each is a sequencing inside the feature; each is still ported or deleted, so the request is not narrowed. The plan must honor the T065 clause FR-001 attaches to these until ported."
+    },
+    {
+     "id": "T069-json-text",
+     "summary": "The Rust verbs write non-ASCII as UTF-8 where Python's json.dumps wrote \\uXXXX, accepted because 'every reader parses the JSON'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block itself states the written output differs from the Python it replaces, and FR-002 asks for the same outputs; the block does not name FR-002 and the bundle's first line does not confine 'outputs' to parsed content. None of the three grounds is shown. Not impossible: serde_json takes a custom formatter that escapes non-ASCII, so byte identity is available. Nothing in the GM's words implies it, and matching the bytes does not defeat the purpose; being easier is not a ground. The premise is an enumeration with no search space: 'every reader parses the JSON' names no command and no m: key, so a reader that greps these logs as text is not ruled out. Cure: escape non-ASCII as the Python did, or take the difference to make arbiter-ask with the reader census produced by a named command and have the spec carry the ruling."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

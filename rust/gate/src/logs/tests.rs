@@ -275,3 +275,13 @@ fn the_run_environment_is_read() {
         !std::env::var("RUN_MODE").unwrap_or_default().is_empty()
     );
 }
+
+#[test]
+fn a_record_is_written_as_pythons_json_dumps_writes_it() {
+    let value = json!({"why": "caf\u{e9} \u{1f600}", "files": ["a", "b"], "n": {"m": 1}});
+    assert_eq!(
+        super::one_line(&value),
+        "{\"why\": \"caf\\u00e9 \\ud83d\\ude00\", \"files\": [\"a\", \"b\"], \"n\": {\"m\": 1}}"
+    );
+    assert!(super::indented(&value).contains("caf\\u00e9"));
+}
