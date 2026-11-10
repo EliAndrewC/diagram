@@ -270,8 +270,8 @@ struct Tools {
     off: bool,
 }
 
-/// Run one row in the clone: its output passes through, but for a self-test's stdout.
-fn run_row(tools: &Tools, row: &Row, root: &Path) -> bool {
+/// A row's command, in the clone.
+fn row_command(tools: &Tools, row: &Row, root: &Path) -> Command {
     let root_text = root.display().to_string();
     let args: Vec<String> = row
         .2
@@ -288,6 +288,32 @@ fn run_row(tools: &Tools, row: &Row, root: &Path) -> bool {
         }
     };
     command.args(&args).current_dir(root);
+    command
+}
+
+/// The push's rows as `make`'s timing reads them: the one-process run, then each row its own process, a row the clone cannot run named with no command; a row the push would skip on this delta is timed all the same, the measure being what the checks cost.
+pub(crate) fn timing_rows(tree: &Path, root: &Path) -> Vec<(String, Option<Command>)> {
+    let tools = Tools {
+        tree: tree.to_owned(),
+        python: "python3".to_owned(),
+        off: false,
+    };
+    let mut whole = Command::new(tree.join("scripts/gates/l7r-gate.sh"));
+    whole.arg("push-checks").arg(root).current_dir(root);
+    let mut rows = vec![("push checks (one process)".to_owned(), Some(whole))];
+    rows.extend(CHECKS.iter().map(|row| {
+        (
+            row.0.to_owned(),
+            (row.5.starts_with("delta:") || holds(root, row.5))
+                .then(|| row_command(&tools, row, root)),
+        )
+    }));
+    rows
+}
+
+/// Run one row in the clone: its output passes through, but for a self-test's stdout.
+fn run_row(tools: &Tools, row: &Row, root: &Path) -> bool {
+    let mut command = row_command(tools, row, root);
     if row.4 {
         command.stdout(Stdio::null());
     }

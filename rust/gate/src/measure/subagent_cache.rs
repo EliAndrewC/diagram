@@ -176,7 +176,7 @@ fn runs(root: &Path, since: &str) -> Vec<Run> {
 }
 
 /// Seconds since the epoch of an ISO time with its zone.
-fn at(stamp: &str) -> f64 {
+pub(crate) fn at(stamp: &str) -> f64 {
     let digits: Vec<f64> = stamp
         .split(|c: char| !c.is_ascii_digit() && c != '.')
         .filter(|s| !s.is_empty())
@@ -294,18 +294,20 @@ fn first_call(rs: &[&Run], key: &str) -> i64 {
     total.div_euclid(i64::try_from(rs.len()).unwrap_or(1))
 }
 
-fn commas(n: i64) -> String {
+pub(crate) fn commas(n: i64) -> String {
     let digits = n.abs().to_string();
-    digits
-        .chars()
-        .enumerate()
-        .fold(String::new(), |mut out, (i, c)| {
-            if i > 0 && (digits.len() - i) % 3 == 0 {
-                out.push(',');
-            }
-            out.push(c);
-            out
-        })
+    let mut out = String::new();
+    for (i, c) in digits.chars().enumerate() {
+        if i > 0 && (digits.len() - i) % 3 == 0 {
+            out.push(',');
+        }
+        out.push(c);
+    }
+    if n < 0 {
+        format!("-{out}")
+    } else {
+        out
+    }
 }
 
 #[expect(

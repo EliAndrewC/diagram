@@ -2376,7 +2376,7 @@
   "quantity": "pop-up check dispatches per checked unit after 375 amendment 3 (SC-012, carried to 374)",
   "observed": "2026-10-13",
   "source": "the diagram-backlog clone's .git/checks-open.json (374's pop-up dispatches)",
-  "command": "python3 scripts/measure/popup_rounds.py --since 2026-10-11T21:08:34-04:00 --json .",
+  "command": "scripts/gates/l7r-gate.sh measure popup-rounds --since 2026-10-11T21:08:34-04:00 --json .",
   "method": "the baseline's script and counting (m:375-a3-popup-rounds-before), from amendment 3's landing (8c1894f92) to 374's close",
   "value": {
    "units": 102,

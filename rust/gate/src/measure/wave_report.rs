@@ -9,7 +9,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::Value;
 
-use super::{median, reply};
+use super::{commas, median, reply};
 
 const WAVE_N: usize = 4;
 static TOOL_USE_ID: LazyLock<Regex> = LazyLock::new(|| {
@@ -164,22 +164,6 @@ fn last_hand_wave(main: &Path, before: &str) -> Option<(String, Vec<String>)> {
         .flat_map(|(_, kinds)| kinds)
         .filter(|(_, ids)| ids.len() >= WAVE_N)
         .next_back()
-}
-
-fn commas(n: i64) -> String {
-    let digits = n.abs().to_string();
-    let mut out = String::new();
-    for (i, c) in digits.chars().enumerate() {
-        if i > 0 && (digits.len() - i) % 3 == 0 {
-            out.push(',');
-        }
-        out.push(c);
-    }
-    if n < 0 {
-        format!("-{out}")
-    } else {
-        out
-    }
 }
 
 fn table(rows: &[Row]) -> Vec<String> {

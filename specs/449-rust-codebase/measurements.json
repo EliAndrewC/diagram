@@ -1,1014 +1,1057 @@
 {
-  "done-rust-edit": {
-    "quantity": "a one-line Rust CODE edit's make done (a token changed: `const SLACK_FT: f64 = 1.0;` to `1.0_f64`), each output line timestamped",
-    "observed": "2026-11-07",
-    "subject": "rust/phases/src/driver/check.rs, against a fresh full baseline (make done INCREMENTAL=0 just before): the plan named 1 Rust file and 11 test modules that read it",
-    "command": "make done INCREMENTAL=0; sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done (each line timestamped from its start); git checkout -- rust/phases/src/driver/check.rs",
-    "method": "the run's timestamps read phase by phase; its run record (dev/run-log/2026-11/20261108T030413524621-2865217.json) for the phases' own seconds",
-    "value": {
-      "wall_s": 30.2,
-      "recorded_s": 24,
-      "preflight_s": 4.0,
-      "test_full_s": 19,
-      "pytest_s": 14,
-      "python_test_modules": 11,
-      "static_s": 13,
-      "seeds_s": 10,
-      "cpu_temp_c": [
-        102.0,
-        88.0
-      ]
-    }
-  },
-  "hooks-bash": {
-    "quantity": "this repository's guards that run before a Bash call: how many, the slowest, all of them summed",
-    "observed": "2026-11-07",
-    "subject": "the PreToolUse hooks of .claude/settings.json whose matcher takes Bash (the GM's own ~/.claude hooks left out: not this repository's)",
-    "command": "each hook's command run with a sample PreToolUse JSON for a Bash `ls` on stdin, three times, CLAUDE_PROJECT_DIR=/diagram",
-    "method": "the median of three runs a hook; the slowest and the sum of the medians",
-    "value": {
-      "hooks": 26,
-      "slowest_ms": 175,
-      "slowest": "pair-hooks.sh",
-      "second_ms": 111,
-      "second": "gate-hooks.sh",
-      "summed_ms": 1045
-    }
-  },
-  "pair-hooks-suite": {
-    "quantity": "pair-hooks.sh's runs inside its own suite",
-    "observed": "2026-11-08",
-    "subject": "tests/hooks/test-pair-hooks.sh, its HOOK pointed at a wrapper that times each run",
-    "command": "a scratch copy of the suite beside it, its HOOK a timing wrapper around tests/hooks/pair-hooks.sh, run once",
-    "method": "the wrapper's per-run times summed; the 100 cases all green, where the first figure's copy had 19 failing on relocated fixture paths",
-    "value": {
-      "runs": 92,
-      "summed_s": 22.28,
-      "mean_ms": 242.2,
-      "suite_wall_s": 5.0
-    },
-    "was": {
-      "observed": "2026-11-07",
-      "value": {
-        "runs": 90,
-        "summed_s": 39.7,
-        "mean_ms": 441,
-        "suite_wall_s": 8.2
-      }
-    }
-  },
-  "suite-cpu": {
-    "quantity": "every test's own time, summed over the tree outside tests/tooling and over tests/tooling",
-    "observed": "2026-11-07",
-    "subject": "the gate's test trees",
-    "command": "make durations FULL=1 N=20000; PYTEST_ADDOPTS=\"--durations=0\" make test-file FILE=tests/tooling",
-    "method": "each call, setup and teardown row summed, per tree",
-    "value": {
-      "outside_tooling_s": 198,
-      "tooling_s": 434,
-      "summed_s": 632,
-      "tests_100ms_or_more": 717
-    }
-  },
-  "rust-tests": {
-    "quantity": "the Rust crate's tests",
-    "observed": "2026-11-07",
-    "subject": "rust/phases",
-    "command": "make rust-test",
-    "method": "the summary line make rust-test prints, cargo's own: 'test result: ok. 91 passed ... finished in 0.11s' (one #[test] more stands behind the counters feature, run by the counting build)",
-    "value": {
-      "tests": 91,
-      "s": 0.11
-    }
-  },
-  "python-start": {
-    "quantity": "a Python interpreter's start with nothing to run",
-    "observed": "2026-11-07",
-    "subject": "python3 3.14 in the container",
-    "command": "python3 -c pass, timed three times",
-    "method": "wall time of each run",
-    "value": {
-      "ms": [
-        16,
-        16,
-        15
-      ]
-    }
-  },
-  "design-fixes": {
-    "quantity": "three of the day's speedups that changed what a tool does, not its language",
-    "observed": "2026-11-07",
-    "subject": "the claims gate test, the counters mutation test, a check bundle",
-    "command": "cProfile of tests.tooling.test_claims_index's slowest test in process, before and after 39112f3ec; make test-file of tests/tooling/test_rust_tooling.py before and after 2b4238a6c; scripts/record/check_bundle.py 0086 --for record-format timed before and after d3ff0e16d",
-    "method": "the test's or the command's own time, warm, before and after its commit",
-    "value": {
-      "claims_test_s": [
-        6.7,
-        0.5
-      ],
-      "counters_test_s": [
-        20.7,
-        1.1
-      ],
-      "check_bundle_s": [
-        3.3,
-        1.55
-      ]
-    }
-  },
-  "python-census": {
-    "quantity": "the Python files the repository tracks",
-    "observed": "2026-11-08",
-    "subject": "the clone's HEAD",
-    "command": "git ls-files '*.py' | wc -l; git ls-files '*.py' | awk -F/ '{print $1}' | sort | uniq -c",
-    "method": "the count, and the count by top directory",
-    "value": {
-      "files": 845,
-      "scripts_hooks": 13,
-      "tests_hooks": 0
-    },
-    "was": {
-      "observed": "2026-11-07",
-      "value": {
-        "files": 872,
-        "tests": 326,
-        "specs": 222,
-        "scripts": 186,
-        "l7r": 132,
-        "pool": 6
-      }
-    }
-  },
-  "inline-python-census": {
-    "quantity": "Python run inline - python3 -c, python3 - and heredocs - in the Makefile and the shell scripts",
-    "observed": "2026-11-07",
-    "subject": "the clone's HEAD",
-    "command": "git grep -nE \"python3 (-c|-[[:space:]]|-$|<<)\" -- Makefile '*.mk' '*.sh' | wc -l; git grep -lE \"python3 (-c|-[[:space:]]|-$|<<)\" -- Makefile '*.mk' '*.sh'",
-    "method": "the sites counted, and the files listed by directory",
-    "value": {
-      "sites": 300,
-      "files": 93,
-      "by_dir": {
-        "tests/hooks": 41,
-        "scripts/hooks": 34,
-        "specs": 7,
-        "scripts/gates": 5,
-        "scripts/sync-with-main.sh": 1,
-        "scripts/land-tooling.sh": 1,
-        "scripts/container": 1,
-        "buildspec/run.sh": 1,
-        "Makefile": 1,
-        ".specify": 1
-      }
-    }
-  },
-  "recorded-python-commands": {
-    "quantity": "the recorded measurements whose command RUNS Python - a .py file, python3 -c/-m/-I/-X, or a prose command saying it ran under python3 - not one that only names the word",
-    "observed": "2026-11-07",
-    "subject": "every specs/*/measurements.json and specs/*/measurements/*.json",
-    "command": "git grep -c -E '\"command\": \"[^\"]*\\bpython3([:+]| (-[cmIX]\\b|[^ \"]*\\.py\\b))' -- 'specs/*/measurements.json' 'specs/*/measurements/*.json'",
-    "method": "the per-file counts summed; the .py runs and the inline or prose ones counted apart",
-    "value": {
-      "commands": 4473,
-      "files": 23,
-      "run_a_py": 4465,
-      "inline_or_prose": 8,
-      "this_feature": [
-        "python-start"
-      ]
-    }
-  },
-  "lockfiles": {
-    "quantity": "the Python lockfiles and their sources at the repository root",
-    "observed": "2026-11-07",
-    "subject": "the clone's HEAD",
-    "command": "git ls-files 'requirements*'",
-    "method": "the files listed, paired by stem",
-    "value": {
-      "files": 8,
-      "pairs": 4,
-      "stems": [
-        "requirements",
-        "requirements-dev",
-        "requirements-ci",
-        "requirements-semantic"
-      ]
-    }
-  },
-  "guard-sources": {
-    "quantity": "phase 1's sources: the guards' shell, their Python libraries, the suites, the suites' Python",
-    "observed": "2026-11-07",
-    "subject": "scripts/hooks/ and tests/hooks/",
-    "command": "cat scripts/hooks/*.sh | wc -l; ls scripts/hooks/*.sh | wc -l; cat scripts/hooks/lib/*.py | wc -l; ls scripts/hooks/lib/*.py | wc -l; ls tests/hooks/test-*.sh | wc -l; cat tests/hooks/*.sh | wc -l; cat tests/hooks/*.py | wc -l; ls tests/hooks/*.py",
-    "method": "lines and files counted",
-    "value": {
-      "guard_shell_lines": 6258,
-      "guard_shell_files": 44,
-      "guard_lib_py_lines": 9053,
-      "guard_lib_py_files": 33,
-      "suite_files": 53,
-      "suite_lines": 8184,
-      "suite_py_lines": 1121,
-      "suite_py_files": [
-        "hookbench.py",
-        "hookdeps.py",
-        "hooktrace.py",
-        "test_hooks_cases.py"
-      ]
-    }
-  },
-  "registered-guards": {
-    "quantity": "the repository's guards registered in .claude/settings.json, by name, across every hook event",
-    "observed": "2026-11-07",
-    "subject": ".claude/settings.json",
-    "command": "python3 -c \"import json,re;s=json.load(open('.claude/settings.json'));print(len({m.group(1) for gs in s['hooks'].values() for g in gs for h in g['hooks'] for m in [re.search(r'([\\\\w-]+-hooks)\\\\.sh',h['command'])] if m}))\"",
-    "method": "every hook command's `<name>-hooks.sh` collected over all events, the distinct names counted; each is one of the 44 shell files under scripts/hooks/ (m:guard-sources), the two counts the same files",
-    "value": {
-      "registered": 44,
-      "taking_bash": 26
-    }
-  },
-  "guard-regex-features": {
-    "quantity": "the guard libraries' patterns using lookaround or backreferences",
-    "observed": "2026-11-07",
-    "subject": "scripts/hooks/lib/*.py",
-    "command": "grep -c '(?<\\|(?=\\|(?!\\|\\\\1\\|\\\\2' scripts/hooks/lib/*.py | awk -F: '{s+=$2; if($2>0) n++} END {print s, n}'",
-    "method": "the matching lines summed over the files, and the files with any",
-    "value": {
-      "uses": 43,
-      "files": 15,
-      "of_files": 33
-    }
-  },
-  "python-dead-fails-open": {
-    "quantity": "what a guard answers today when its Python cannot start, beside what it answers when Python starts",
-    "observed": "2026-11-07",
-    "subject": "/diagram/scripts/hooks/{make-only,repo-safety,gate,pair}-hooks.sh pretool, on a Bash `pytest tests/x.py` and a Bash `git push --force origin main`",
-    "command": "a python3 that prints an error and exits 127 put first on PATH (PATH=<dir>:$PATH), each guard run on each input; then each guard run with the real PATH",
-    "method": "exit code and stdout compared between the two runs",
-    "value": "every guard measured fails OPEN: repo-safety on the force push exits 0 with Python dead (2, a refusal, with it live); make-only on the pytest prints nothing (its rewrite to `make test-file` with it live); gate-hooks exits 127 (Claude Code's hook rule: only exit 2 blocks, another exit is a non-blocking error); pair-hooks exits 0 both ways. A missing guard script exits 127, the same"
-  },
-  "dispatcher-floor": {
-    "quantity": "phase 1's floor: the Rust dispatcher's own cost on a Bash call, with its guard list empty, beside the guards it will take over",
-    "observed": "2026-11-07",
-    "subject": "the PreToolUse hooks of .claude/settings.json whose matcher takes Bash, after T005 added scripts/hooks/l7r-guard.sh (its binary built and self-checked in the clone's target)",
-    "command": "m:hooks-bash's command: each hook's command run with a sample PreToolUse JSON for a Bash `ls` on stdin, three times, CLAUDE_PROJECT_DIR set to the clone",
-    "method": "the median of three runs a hook; the slowest and the sum of the medians",
-    "value": {
-      "hooks": 27,
-      "l7r_guard_ms": 4.7,
-      "slowest_ms": 208,
-      "slowest": "pair-hooks.sh",
-      "summed_ms": 1085,
-      "wrapper_alone_100_calls_ms": 3.8
-    }
-  },
-  "pair-hooks-ported": {
-    "quantity": "a Bash `ls`'s cost in the pair-hooks guard, the shell's against the Rust dispatcher carrying it (T006)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/pair-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks], on a sample PreToolUse JSON for a Bash `ls`",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call",
-    "value": {
-      "shell_ms": 200.0,
-      "rust_dispatcher_ms": 6.8,
-      "suite_cases": 100,
-      "suite_passed_against_rust": 100
-    }
-  },
-  "gate-hooks-ported": {
-    "quantity": "a Bash `ls`'s cost in the gate-hooks guard, the shell's against the Rust dispatcher carrying it beside pair-hooks (T007)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/gate-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks, gate-hooks], on a sample PreToolUse JSON for a Bash `ls`",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call; the dispatcher measured before and after the literal pre-checks (a pattern compiled only where its literal stands in the command)",
-    "value": {
-      "shell_ms": 111.6,
-      "rust_dispatcher_ms_before_prechecks": 11.4,
-      "rust_dispatcher_ms": 5.5,
-      "suite_cases": 45,
-      "suite_passed_against_rust": 45,
-      "new_case": "a -k in description arms nothing; the shell refused the gate after it (exit 2)"
-    }
-  },
-  "measure-hooks-ported": {
-    "quantity": "a Bash `ls`'s cost in the measure-hooks guard, the shell's against the Rust dispatcher carrying it beside pair-hooks and gate-hooks (T008)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/measure-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks, gate-hooks, measure-hooks], on a sample PreToolUse JSON for a Bash `ls`",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call",
-    "value": {
-      "shell_ms": 74.0,
-      "rust_dispatcher_ms": 7.3,
-      "suite_cases": 48,
-      "suite_passed_against_rust": 48
-    }
-  },
-  "no-poll-hooks-ported": {
-    "quantity": "a Bash `ls`'s cost in the no-poll guard, the shell's against the Rust dispatcher carrying it beside pair, gate and measure (T009)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/no-poll-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks, gate-hooks, measure-hooks, no-poll-hooks], on a sample PreToolUse JSON for a Bash `ls`",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call",
-    "value": {
-      "shell_ms": 57.4,
-      "rust_dispatcher_ms": 8.4,
-      "suite_cases": 115,
-      "suite_passed_against_rust": 115
-    }
-  },
-  "main-tree-hooks-ported": {
-    "quantity": "a Bash `ls`'s cost in the main-tree guard, the shell's against the Rust dispatcher carrying it beside pair, gate, measure and no-poll (T010)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/main-tree-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree], on a sample PreToolUse JSON for a Bash `ls`",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, measured beside a running hooks-test",
-    "value": {
-      "shell_ms": 60.7,
-      "rust_dispatcher_ms": 10.5,
-      "suite_cases": 87,
-      "suite_passed_against_rust": 87
-    }
-  },
-  "event-log-hooks-ported": {
-    "quantity": "a Bash `ls`'s cost in the event-log guard, the shell's against the Rust dispatcher carrying it beside five ported guards (T012)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/event-log-hooks.sh (main's shell guard, a Python start) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree, event-log], on a sample PreToolUse JSON for a Bash `ls`, each writing its line to a temporary L7R_EVENTS_DIR",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, measured beside a running hooks-test; and 8 payloads of every event kind through both, their lines compared byte for byte once the timestamp is removed",
-    "value": {
-      "shell_ms": 32.9,
-      "rust_dispatcher_ms": 12.4,
-      "suite_cases": 18,
-      "suite_passed_against_rust": 18,
-      "lines_byte_identical": "8 of 8"
-    }
-  },
-  "clone-sync-hooks-ported": {
-    "quantity": "an Edit-shaped call's cost in the clone-sync guard, the shell's against the Rust dispatcher carrying it beside six ported guards (T013)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/clone-sync-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree, event-log, clone-sync], on a sample PreToolUse JSON for a Write into a dirty clone and for a Bash `ls`, an empty session id so nothing is claimed, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, on an otherwise idle host (load 3.5); the guard's own suite replayed against the Rust guard through tests/hooks/clone-sync-hooks.sh",
-    "value": {
-      "shell_write_ms": 82.7,
-      "rust_dispatcher_write_ms": 32.2,
-      "shell_bash_ls_ms": 34.6,
-      "rust_dispatcher_bash_ls_ms": 13.0,
-      "suite_cases": 63,
-      "suite_passed_against_rust": 63
-    }
-  },
-  "idle-tests-hooks-ported": {
-    "quantity": "a prompt's cost in the idle-tests guard, the shell's against the Rust dispatcher carrying it beside seven ported guards (T014)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/idle-tests-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload with an empty session id, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call on a quiet host (load 1.6); the suite replayed through tests/hooks/idle-tests-hooks.sh. A Stop's dispatcher figure carries every guard on Stop, not this one, which is disabled and returns first, so it is not compared",
-    "value": {
-      "shell_prompt_ms": 41.8,
-      "rust_dispatcher_prompt_ms": 6.6,
-      "suite_cases": 34,
-      "suite_passed_against_rust": 34
-    }
-  },
-  "agent-stall-hooks-ported": {
-    "quantity": "a prompt's cost in the agent-stall guard over a session of 100 finished subagents, the shell's against the Rust dispatcher carrying it beside eight ported guards (T015)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/agent-stall-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload whose transcript_path names a directory of 100 transcripts ten minutes old, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work (load 5.2); the suite replayed through tests/hooks/agent-stall-hooks.sh",
-    "value": {
-      "shell_prompt_ms": 46.1,
-      "rust_dispatcher_prompt_ms": 7.1,
-      "suite_cases": 15,
-      "suite_passed_against_rust": 15
-    }
-  },
-  "stall-watchdog-hooks-ported": {
-    "quantity": "a prompt's cost in the stall-watchdog guard, the loop already running, the shell's against the Rust dispatcher carrying it beside nine ported guards (T016)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/stall-watchdog-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload, a state directory whose pid file names a live process, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work (load 3.0); the suite replayed through tests/hooks/stall-watchdog-hooks.sh, its pass now the Rust module",
-    "value": {
-      "shell_prompt_ms": 15.8,
-      "rust_dispatcher_prompt_ms": 6.7,
-      "suite_cases": 28,
-      "suite_passed_against_rust": 28
-    }
-  },
-  "finished-run-hooks-ported": {
-    "quantity": "a prompt's cost in the finished-run guard, the shell's against the Rust dispatcher carrying it beside ten ported guards (T017)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/finished-run-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload outside any working tree, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work (load 4.0); the suite replayed through tests/hooks/finished-run-hooks.sh",
-    "value": {
-      "shell_prompt_ms": 32.7,
-      "rust_dispatcher_prompt_ms": 6.7,
-      "suite_cases": 67,
-      "suite_passed_against_rust": 67
-    }
-  },
-  "engine-freeze-hooks-ported": {
-    "quantity": "an engine Edit's cost in the engine-freeze guard with nothing live, the shell's against the Rust guard alone (T018)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/engine-freeze-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only engine-freeze-hooks PreToolUse in the clone, on a sample Edit of l7r/diagram/switches.py with no subagents, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/engine-freeze-hooks.sh",
-    "value": {
-      "shell_edit_ms": 74.0,
-      "rust_guard_edit_ms": 6.9,
-      "suite_cases": 31,
-      "suite_passed_against_rust": 31
-    }
-  },
-  "gm-tree-hooks-ported": {
-    "quantity": "a Bash call naming the tree, its cost in the gm-tree guard, the shell's against the Rust guard alone (T019)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/gm-tree-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only gm-tree-hooks PreToolUse in the clone, on a sample Bash grep of the tree, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/gm-tree-hooks.sh",
-    "value": {
-      "shell_bash_ms": 33.4,
-      "rust_guard_bash_ms": 10.6,
-      "suite_cases": 24,
-      "suite_passed_against_rust": 24
-    }
-  },
-  "batching-hooks-ported": {
-    "quantity": "a Read's cost in the batching guard, the shell's against the Rust guard alone (T020)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/batching-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only batching-hooks PreToolUse in the clone, on a sample Read, each log and state directory temporary",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/batching-hooks.sh",
-    "value": {
-      "shell_read_ms": 24.9,
-      "rust_guard_read_ms": 6.9,
-      "suite_cases": 56,
-      "suite_passed_against_rust": 56
-    }
-  },
-  "no-branch-hooks-ported": {
-    "quantity": "a Bash ls's cost in the no-branch guard, the shell's against the Rust guard alone (T021)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/no-branch-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only no-branch-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/no-branch-hooks.sh",
-    "value": {
-      "shell_bash_ms": 32.81,
-      "rust_guard_bash_ms": 6.78,
-      "suite_cases": 19,
-      "suite_passed_against_rust": 19
-    }
-  },
-  "discard-hooks-ported": {
-    "quantity": "a Bash ls's cost in the discard guard, the shell's against the Rust guard alone (T022)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/discard-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only discard-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/discard-hooks.sh",
-    "value": {
-      "shell_bash_ms": 28.6,
-      "rust_guard_bash_ms": 6.5,
-      "suite_cases": 27,
-      "suite_passed_against_rust": 27
-    }
-  },
-  "conflict-marker-hooks-ported": {
-    "quantity": "a Bash ls's cost in the conflict-marker guard, the shell's against the Rust guard alone (T023)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/conflict-marker-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only conflict-marker-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/conflict-marker-hooks.sh",
-    "value": {
-      "shell_bash_ms": 29.5,
-      "rust_guard_bash_ms": 6.8,
-      "suite_cases": 28,
-      "suite_passed_against_rust": 28
-    }
-  },
-  "gate-write-hooks-ported": {
-    "quantity": "a Bash ls's cost in the gate-write guard with no gate running, the shell's against the Rust guard alone (T024)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/gate-write-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only gate-write-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/gate-write-hooks.sh",
-    "value": {
-      "shell_bash_ms": 48.6,
-      "rust_guard_bash_ms": 8.01,
-      "suite_cases": 27,
-      "suite_passed_against_rust": 27
-    }
-  },
-  "feature-approval-hooks-ported": {
-    "quantity": "a `git add -A` outside a repository, its cost in the feature-approval guard, the shell's against the Rust guard alone (T025)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/feature-approval-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only feature-approval-hooks PreToolUse in the clone, standing in /tmp, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/feature-approval-hooks.sh",
-    "value": {
-      "shell_git_add_ms": 40.82,
-      "rust_guard_git_add_ms": 11.2,
-      "suite_cases": 55,
-      "suite_passed_against_rust": 55
-    }
-  },
-  "budget-change-hooks-ported": {
-    "quantity": "a Bash call naming no guarded budget target, its cost in the budget-change guard, the shell's against the Rust guard alone (T026)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/budget-change-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only budget-change-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the shell left at its literal pre-check, so alone it is no slower than the wrapper - the saving is the process this guard no longer adds to the dispatcher's call; the suite replayed through tests/hooks/budget-change-hooks.sh",
-    "value": {
-      "shell_other_bash_ms": 6.6,
-      "rust_guard_other_bash_ms": 6.7,
-      "suite_cases": 11,
-      "suite_passed_against_rust": 11
-    }
-  },
-  "ledger-hooks-ported": {
-    "quantity": "a Bash ls's cost in the ledger guard, the shell's against the Rust guard alone (T027)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/ledger-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only ledger-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/ledger-hooks.sh",
-    "value": {
-      "shell_bash_ms": 26.7,
-      "rust_guard_bash_ms": 7.0,
-      "suite_cases": 22,
-      "suite_passed_against_rust": 22
-    }
-  },
-  "archive-first-hooks-ported": {
-    "quantity": "a WebFetch of an unarchived page, its cost in the archive-first guard, the shell's against the Rust guard alone (T030)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/archive-first-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only archive-first-hooks PreToolUse in the clone, each log and state directory temporary",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/archive-first-hooks.sh",
-    "value": {
-      "shell_fetch_ms": 43.5,
-      "rust_guard_fetch_ms": 5.9,
-      "suite_cases": 8,
-      "suite_passed_against_rust": 8
-    }
-  },
-  "readme-hooks-ported": {
-    "quantity": "a Bash ls's cost in the readme guard, the shell's against the Rust guard alone (T032; T031 and T033 leave at a literal pre-check before any Python, so a plain call cost them almost nothing)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/readme-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only readme-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the three suites replayed through their links (24, 28 and 21 cases)",
-    "value": {
-      "shell_bash_ms": 29.76,
-      "rust_guard_bash_ms": 10.7,
-      "claims_file_suite_cases": 24,
-      "readme_suite_cases": 28,
-      "download_copy_suite_cases": 21
-    }
-  },
-  "phase-source-hooks-ported": {
-    "quantity": "a Read's cost in the phase-source guard with nothing held, the shell's against the Rust guard alone (T046): no speedup on this path, because the shell left before any Python when no phase-sources.json exists, and the Rust figure is the whole wrapper and process start, which in production is shared by every guard of the event",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/phase-source-hooks.sh (main's shell guard) against scripts/hooks/l7r-guard.sh --only phase-source-hooks PreToolUse in the clone, PHASE_SOURCE_GLOB matching nothing, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (17 cases)",
-    "value": {
-      "shell_read_ms": 5.88,
-      "rust_guard_read_ms": 9.84,
-      "phase_source_suite_cases": 17
-    }
-  },
-  "new-file-hooks-ported": {
-    "quantity": "a Bash ls's cost in the new-file guard, the shell's against the Rust guard alone (T047)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/new-file-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only new-file-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (21 cases)",
-    "value": {
-      "shell_bash_ms": 43.72,
-      "rust_guard_bash_ms": 10.66,
-      "new_file_suite_cases": 21
-    }
-  },
-  "blocked-fetch-hooks-ported": {
-    "quantity": "a Bash call's cost in the blocked-fetch guard, the shell's against the Rust guard alone (T039): a command the shell's literal pre-filter let through (it holds the word archive) and a plain ls, which the pre-filter stopped before any Python",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/blocked-fetch-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only blocked-fetch-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (22 cases)",
-    "value": {
-      "shell_word_ms": 90.95,
-      "rust_guard_word_ms": 9.22,
-      "shell_ls_ms": 8.26,
-      "rust_guard_ls_ms": 8.9,
-      "blocked_fetch_suite_cases": 22
-    }
-  },
-  "set-down-hooks-ported": {
-    "quantity": "a Stop event's cost in the set-down guard with no feature to hold, the shell's against the Rust guard alone (T049)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/set-down-hooks.sh stop (main's shell guard) against scripts/hooks/l7r-guard.sh --only set-down-hooks Stop in the clone, SET_DOWN_ROOT naming no directory and an empty transcript, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (34 cases)",
-    "value": {
-      "shell_stop_ms": 171.79,
-      "rust_guard_stop_ms": 63.1,
-      "set_down_suite_cases": 34
-    }
-  },
-  "repo-safety-agent-model-ported": {
-    "quantity": "a call's cost in the repo-safety guard (a Bash ls) and the agent-model guard (an Agent dispatch of a pinned type), each shell's against the Rust guard alone (T034, T041)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/repo-safety-hooks.sh and agent-model-hooks.sh pretool (main's shell guards) against scripts/hooks/l7r-guard.sh --only <guard> PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suites replayed through their links (28 and 20 cases)",
-    "value": {
-      "repo_safety_shell_ms": 35.74,
-      "repo_safety_rust_ms": 19.83,
-      "agent_model_shell_ms": 124.6,
-      "agent_model_rust_ms": 8.86,
-      "repo_safety_suite_cases": 28,
-      "agent_model_suite_cases": 20
-    }
-  },
-  "wakeup-hooks-ported": {
-    "quantity": "a Stop event's cost in the wakeup guard with no wakeup pending, the shell's against the Rust guard alone (T038)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/wakeup-hooks.sh stop (main's shell guard) against scripts/hooks/l7r-guard.sh --only wakeup-hooks Stop in the clone, an empty transcript, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (24 cases)",
-    "value": {
-      "shell_stop_ms": 31.11,
-      "rust_guard_stop_ms": 7.22,
-      "wakeup_suite_cases": 24
-    }
-  },
-  "agent-prefix-workflow-ported": {
-    "quantity": "a call's cost in the agent-prefix guard (an Agent dispatch) and the workflow guard (an empty script), each shell's against the Rust guard alone (T040, T042)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/agent-prefix-hooks.sh and workflow-hooks.sh pretool (main's shell guards) against scripts/hooks/l7r-guard.sh --only <guard> PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suites replayed through their links (23 and 24 cases)",
-    "value": {
-      "agent_prefix_shell_ms": 130.36,
-      "workflow_shell_ms": 61.68,
-      "workflow_rust_ms": 10.77,
-      "agent_prefix_suite_cases": 23,
-      "workflow_suite_cases": 24,
-      "agent_prefix_rust_ms": 10.33
-    }
-  },
-  "wave-unit-hooks": {
-    "quantity": "one check-wave unit's time through every PreToolUse hook an Agent call meets (T040): 600 s holds about 1,300 units at this rate, the former 60 s about 130",
-    "observed": "2026-11-08",
-    "subject": "the four hook commands .claude/settings.json gives an Agent call, in the clone, L7R_WAVE_UNIT=1, a quote-check unit, each log directed to a temporary directory",
-    "command": "each hook run through bash -c on the unit's JSON, 10 rounds, the wall time divided by the rounds",
-    "method": "the mean wall time a unit, beside other work",
-    "value": {
-      "unit_ms": 462.7,
-      "hooks": 4
-    }
-  },
-  "source-block-hooks-ported": {
-    "quantity": "an Edit's cost in the source-block guard, the shell's against the Rust guard alone (T037)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/source-block-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only source-block-hooks PreToolUse in the clone, an Edit of /diagram/CLAUDE.md, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the case table replayed through its link (6 cases)",
-    "value": {
-      "shell_edit_ms": 27.66,
-      "rust_guard_edit_ms": 7.63,
-      "source_block_cases": 6
-    }
-  },
-  "shell-check-parse": {
-    "quantity": "a plain Bash call's cost in the shell-check guard, the shell's against the Rust guard alone, and the bash -O extglob -n child both ask (T035)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/shell-check-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only shell-check-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50, the parse 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the case table and the 238-command corpus replayed through its link",
-    "value": {
-      "shell_bash_ms": 41.34,
-      "rust_guard_bash_ms": 11.64,
-      "bash_parse_ms": 1.33,
-      "shell_check_cases": 29,
-      "corpus_commands": 238
-    }
-  },
-  "house-style-hooks-ported": {
-    "quantity": "a plain Bash call's cost in the house-style guard, the shell's against the Rust guard alone (T036)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/house-style-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only house-style-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the case table replayed through its link",
-    "value": {
-      "shell_bash_ms": 37.41,
-      "rust_guard_bash_ms": 14.15
-    }
-  },
-  "escalation-hooks-ported": {
-    "quantity": "an Agent dispatch's and a Stop's cost in the escalation guard, the shell's against the Rust guard alone (T044)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/escalation-hooks.sh (main's shell guard) against scripts/hooks/l7r-guard.sh --only escalation-hooks in a fixture repository, a quote-check dispatch and an empty Stop, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (41 cases)",
-    "value": {
-      "shell_agent_ms": 62.88,
-      "rust_guard_agent_ms": 6.32,
-      "shell_stop_ms": 53.72,
-      "rust_guard_stop_ms": 6.86,
-      "escalation_suite_cases": 41
-    }
-  },
-  "review-round-hooks-ported": {
-    "quantity": "an Agent dispatch's cost in the review-round guard, the shell's against the Rust guard alone (T045)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/review-round-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only review-round-hooks PreToolUse in the clone, a quote-check dispatch, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (84 cases)",
-    "value": {
-      "shell_agent_ms": 106.34,
-      "rust_guard_agent_ms": 9.23,
-      "review_round_suite_cases": 84
-    }
-  },
-  "make-only-hooks-ported": {
-    "quantity": "a plain Bash call's cost in the make-only guard, the shell's against the Rust guard alone (T028)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/make-only-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only make-only-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (101 cases)",
-    "value": {
-      "shell_bash_ms": 41.02,
-      "rust_guard_bash_ms": 8.05,
-      "make_only_suite_cases": 101
-    }
-  },
-  "guard-file-hooks-ported": {
-    "quantity": "an Edit of an ordinary file's cost in the guard-file guard, the shell's against the Rust guard alone (T029)",
-    "observed": "2026-11-08",
-    "subject": "/diagram/scripts/hooks/guard-file-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only guard-file-hooks PreToolUse in the clone, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work; the suite replayed through its link (55 cases)",
-    "value": {
-      "shell_edit_ms": 46.12,
-      "rust_guard_edit_ms": 8.26,
-      "guard_file_suite_cases": 55
-    }
-  },
-  "record-edit-gate": {
-    "quantity": "a plain Bash call's cost in the record-edit guard, the shell's (which started Python on every call) against the Rust gate that starts nothing for it (T053)",
-    "observed": "2026-11-08",
-    "subject": "scripts/hooks/record-edit-hooks.sh pretool-bash against scripts/hooks/l7r-guard.sh --only record-edit-gate PreToolUse in the clone, a plain ls, no plan review holding text, each log directed to a temporary directory",
-    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50 twice), the loop's wall time divided by its runs",
-    "method": "the mean wall time a call, beside other work, at load about 1.7; no Python on such a call is observed by tests/hooks/test-record-edit-gate.sh's sentinel, and that suite drives the 15 record-edit cases through the gate",
-    "value": {
-      "shell_bash_ms": 53.64,
-      "rust_gate_bash_ms": 10.71,
-      "rust_gate_bash_ms_second_run": 10.66,
-      "record_edit_suite_cases": 15
-    }
-  },
-  "t050-deps-differential": {
-    "quantity": "the Rust suite tooling against the Python it replaced, over the whole repository: a suite's key, its dependency list, a Python test's file set, and which traced suites are fresh",
-    "observed": "2026-11-08",
-    "subject": "tests/hooks/hookdeps.py and hooktrace.py against l7r-guard deps and trace at the same tree, before the Python was deleted",
-    "command": "each roster suite's --keys and --deps, each tests/**/test_*.py's --pydeps, and trace fresh over the kept traces, from both, compared",
-    "method": "exact comparison of the sorted outputs; the mismatch counts are the value",
-    "value": {
-      "suites": 57,
-      "key_mismatches": 0,
-      "deps_mismatches": 0,
-      "python_test_files": 291,
-      "pydeps_mismatches": 0,
-      "traced_suites": 8,
-      "fresh_lists_equal": true
-    }
-  },
-  "t054-plain-bash": {
-    "quantity": "the settings entry's whole command on a Bash call, the guards' dispatcher through its shell wrapper: SC-001 asks under a tenth of m:hooks-bash's slowest guard, 17.5 ms",
-    "observed": "2026-11-08",
-    "subject": "the .claude/settings.json PreToolUse entry, pointed at this clone's scripts/hooks/l7r-guard.sh; each log directed to a temporary directory",
-    "command": "the entry's command under sh -c with the hook input on stdin, 40 spawns, three times, once for `ls` and once for `git -C /tmp log --format='%h %s' -3 | head -2`; and the same over 400 unique Bash commands from this project's 12 most recent transcripts (seed 449), one spawn each",
-    "method": "the median of 40 spawns, three times, at load 1.4-2.8; before the fast exits the plain call measured 35.79 ms by one such run (the wrapper alone, without sh)",
-    "value": {
-      "plain_ls_ms": [
-        16.51,
-        15.8,
-        15.41
-      ],
-      "quoted_git_ms": [
-        19.02,
-        19.66,
-        18.52
-      ],
-      "before_plain_ms": 35.79,
-      "target_ms": 17.5,
-      "real_commands": {
-        "sampled": 400,
-        "of": 45697,
-        "median_ms": 22.99,
-        "p90_ms": 109.38,
-        "p99_ms": 401.35,
-        "max_ms": 485.25,
-        "share_under_17_5": 0.072,
-        "tail": "ledger-hooks starting ledger_lint.py on commit-shaped commands, 14.67 ms mean over the sample, 200-260 ms each when it runs"
-      },
-      "summed_cpu_ms": [
-        15.95,
-        15.15,
-        16.0
-      ],
-      "summed_cpu_bound_ms": 52,
-      "commit_branch": {
-        "commands_naming_git_commit": 48,
-        "of_sample": 400,
-        "start_python": 29,
-        "the_branch": "ledger_hooks::judge after commit_root resolves a real `git commit` in a tree holding the ledger: ledger_owed.py on every such commit, ledger_lint.py when it stages the ledger (T027 decision (b)); none on a command with no commit",
-        "no_commit_commands": {
-          "count": 352,
-          "median_ms_in_binary": 17.1,
-          "p90_ms_in_binary": 23.5
-        }
-      },
-      "near_p90": "feature-approval and conflict-marker asking git over a large staged commit (40-54 ms each), make-only on a guard-file write in a long heredoc (62 ms), record-edit-gate running its guard on an apply-edits (56 ms)"
-    },
-    "reading": "SC-001 is met on m:hooks-bash's sample `ls` alone, by the named exception ask:449-T054-sc001 (the round arbiter, 2026-11-08), and not on real commands: the quoted git command is 19.0 ms and the 400 real commands' median 23.0 ms, p90 109 ms, 7.2 percent under 17.5 ms. Re-measured at phase 3's close, when the by-path Python is ported."
-  },
-  "inline-census-sites": {
-    "quantity": "feature 449's second census under scripts/hooks/ and tests/hooks/, every site under a group FR-001 names",
-    "observed": "2026-11-08",
-    "subject": "the clone's working tree at T052's close",
-    "command": "make inline-census",
-    "method": "the command's own counts: exact-line for the guard-input group, by path for the two others; a site outside them exits 1; converted is the start's count less today's",
-    "value": {
-      "sites": 57,
-      "guard_input": 27,
-      "later_phase": 27,
-      "last_caller": 3,
-      "outside": 0,
-      "at_the_start_of_t052": 168,
-      "converted": 111
-    }
-  },
-  "phase-1-other-calls": {
-    "quantity": "the calls that still run more than one process until phase 3: a record-page Edit, a subagent's return and launch",
-    "observed": "2026-11-08",
-    "subject": "the settings entry's command for an Edit; scripts/hooks/checks-hooks.sh for the two others",
-    "command": "each run 20 times on a sample payload, each log directed to a temporary directory",
-    "method": "the median of 20 spawns, at load 2 to 5",
-    "value": {
-      "record_page_edit_ms": 108.3,
-      "plain_edit_ms": 37.9,
-      "agent_return_ms": 56.6,
-      "agent_launch_ms": 50.3
-    }
-  },
-  "phase-1-python-share": {
-    "quantity": "phase 1's share of feature 449's first census at the phase's end, by path and by use: the tracked Python files under scripts/hooks/ and tests/hooks/, each placed later by name in FR-001; any module outside them only the guards use; and any tests/ file outside tests/hooks/ that tests a phase-1 piece",
-    "observed": "2026-11-08",
-    "subject": "the clone's working tree at T052's close",
-    "command": "git ls-files '*.py' | wc -l; git ls-files 'scripts/hooks/*.py' 'tests/hooks/*.py'; for f in $(git ls-files '*.py' | grep -vE '^(scripts/hooks|specs|pool|tests)/'); do git grep -lE \"$(basename \"$f\")\" -- ':!'\"$f\" ; done (each file's callers, comments stripped, kept where they are all under rust/guard/, scripts/hooks/ or tests/); and for each tests/ file outside tests/hooks/, the hook libraries and guard scripts it names",
-    "method": "the count, and the listing compared with FR-001's named files: exactly those thirteen, none under tests/hooks/; the scan by use, observed 2026-11-08, read by hand: of three modules with only guard callers, l7r/diagram/ci/decision.py is the word `decision` matched in protocol.rs and has none, scripts/patch.py is a command a session runs by hand and hm_house only names it, and scripts/gates/engine_edit.py is real; of 29 tests outside tests/hooks/ that name a hook library or a guard, 28 test a library FR-001 places later or only hold a fixture name, and tests/tooling/test_guard_firing_log.py is real",
-    "value": {
-      "tracked_python_files": 845,
-      "first_value": 872,
-      "phase_1_paths": 13,
-      "under_tests_hooks": 0,
-      "all_placed_by_name": true,
-      "files": [
-        "hm_approval",
-        "hm_arbiter",
-        "hm_budget_rounds",
-        "hm_checks",
-        "hm_conflict",
-        "hm_escape",
-        "hm_fixloop",
-        "hm_house",
-        "hm_planhold",
-        "hm_record",
-        "hm_shape",
-        "hm_tree",
-        "usage_log"
-      ],
-      "by_use": {
-        "guards_only_modules_found": [
-          "scripts/gates/engine_edit.py"
-        ],
-        "phase_1_tests_found": [
-          "tests/tooling/test_guard_firing_log.py"
-        ],
-        "engine_edit": "76 lines over l7r/diagram/ci/delta.py is_engine and gate-stamp.py semantic_bytes, both phase 2, asked only while a map review or a roll is live; goes with them",
-        "firing_log_test": "its census reads guardlog.sh and the *_OK tokens across shell and Rust and two cases drive ported guards; goes with guardlog.sh, phase 3"
-      }
-    }
-  },
-  "t060-done-rust-edit": {
-    "quantity": "a one-line Rust edit's make done, on today's tree, before and after a crate's unchanged checks reuse their last green result",
-    "observed": "2026-11-08",
-    "subject": "rust/phases/src/driver/check.rs, the edit of m:done-rust-edit, against a fresh full baseline (make done INCREMENTAL=0 just before); phase 1's rust/guard present",
-    "command": "make done INCREMENTAL=0; sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done; git checkout -- rust/phases/src/driver/check.rs",
-    "method": "the wall clock of the second make done, and its run record for the phases' seconds (dev/run-log/2026-11/20261109T005012826984-1203108.json); before: the same run ahead of T060's change",
-    "value": {
-      "before_wall_s": 60,
-      "before_static_s": 40,
-      "after_wall_s": 38,
-      "after_static_s": 15,
-      "after_counters_s": 2,
-      "after_pytest_s": 17,
-      "after_seeds_s": 13,
-      "first_value_wall_s": 30.2,
-      "after_preflight_s": 6
-    }
-  },
-  "t062-content-ids": {
-    "quantity": "every tracked .rs and .py file's content id from the Rust gate against the Python's, computed with an empty cache, and against the ids kept in the real cache",
-    "observed": "2026-11-08",
-    "subject": "the clone's tracked .rs and .py files, copied to an empty repository so no id is served from a cache",
-    "command": "a harness: scripts/gates/l7r-gate.sh content-ids over the files beside sha256(codeid.semantic_bytes(...)) for each; then the same ids against .git/semantic-id-cache-2.json",
-    "method": "exact comparison; the mismatch counts are the value. Note: the harness compares with the Python it replaces for .rs, and for .py the Rust gate asks codeid.py itself",
-    "value": {
-      "files": 1112,
-      "rs": 266,
-      "py": 846,
-      "mismatch": 0,
-      "in_the_real_cache": 567,
-      "differ_from_real_cache": 0,
-      "first_run_s": 4.77,
-      "all_cached_s": 0.087
-    }
-  },
-  "t063-slice1": {
-    "quantity": "gate-stamp's area keys and content ids before and after content_id moves into codeid.py",
-    "observed": "2026-11-09",
-    "subject": "the clone's tree; HEAD's gate-stamp.py and codeid.py against the working tree's",
-    "command": "the two versions of gate-stamp.py at commits 82c164a69^ and 82c164a69 (git show; the file is gone since T063's slice 2) loaded by path, _area_key for every area and content_id for scripts/gates/*.py, compared",
-    "method": "exact comparison",
-    "value": {
-      "areas": 4,
-      "area_keys_equal": true,
-      "files": 38,
-      "ids_equal": true
-    }
-  },
-  "t063-slice2": {
-    "quantity": "the Rust gate's stamps, delta and engine key against the Python they replace",
-    "observed": "2026-11-09",
-    "subject": "the clone at HEAD before the slice's commit (a detached worktree of it) and the working tree's binary",
-    "command": "gate-stamp.py and delta.py at commit 2a9baf4c5 (git worktree add --detach; both are gone or a client since) loaded by path; l7r-gate stamp --key and --list for every area, delta key for every 4th of the last 200 commits and the worktree, delta compute at seven bases, delta engine-paths over every tracked path, content-ids for every file of every area against codeid.py's content_id; stamp --raw-match over every tracked path and seven paths on no disk against gate-stamp._matches over the raw areas",
-    "method": "exact comparison",
-    "value": {
-      "areas": 4,
-      "area_keys_equal": true,
-      "area_lists_equal": true,
-      "content_id_files": 8885,
-      "content_id_mismatches": 0,
-      "engine_key_commits": 50,
-      "engine_key_mismatches": 0,
-      "worktree_key_equal": true,
-      "delta_bases": 7,
-      "delta_mismatches": 0,
-      "is_engine_paths": 26664,
-      "is_engine_mismatches": 0,
-      "raw_match_paths": 26670,
-      "raw_match_synthetic": 7,
-      "raw_match_mismatches": 0,
-      "raw_match_tracked_paths": 26663
-    }
-  },
-  "t72-state": {
-    "quantity": "the Rust gate's tooling hash, config hash and verification record against the Python they replace",
-    "observed": "2026-11-09",
-    "subject": "the clone's working tree",
-    "command": "state.py and gate_config.py at commit db62ac8bb^ (git show; a client since) loaded by path; tooling_hash against l7r-gate state tooling-hash and config_hash against l7r-gate config-hash, each binary call run twice so the second reads the kept forms, and the record read by both",
-    "method": "exact comparison",
-    "value": {
-      "tooling_hash_equal": true,
-      "config_hash_equal": true,
-      "record_read_equal": true,
-      "tooling_cold_s": 1.22,
-      "tooling_warm_s": 0.09,
-      "config_cold_s": 0.15,
-      "config_warm_s": 0.03
-    }
-  },
-  "t064-remote": {
-    "quantity": "the Rust gate's remote path against the Python it replaces",
-    "observed": "2026-11-09",
-    "subject": "a detached worktree of commit 169f0df58^, remote off, the Python's own files at that commit",
-    "command": "under make in a detached worktree of 169f0df58^, the Python at that commit against l7r-gate ci status --route, status, remote-spend and door, switches show and idle and lifecycle (the commands that were there to compare)",
-    "method": "exact comparison",
-    "value": {
-      "route": true,
-      "status_lines": 45,
-      "status": true,
-      "spend": true,
-      "door": true,
-      "switches": true,
-      "idle": true,
-      "lifecycle": true
-    }
+ "done-rust-edit": {
+  "quantity": "a one-line Rust CODE edit's make done (a token changed: `const SLACK_FT: f64 = 1.0;` to `1.0_f64`), each output line timestamped",
+  "observed": "2026-11-07",
+  "subject": "rust/phases/src/driver/check.rs, against a fresh full baseline (make done INCREMENTAL=0 just before): the plan named 1 Rust file and 11 test modules that read it",
+  "command": "make done INCREMENTAL=0; sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done (each line timestamped from its start); git checkout -- rust/phases/src/driver/check.rs",
+  "method": "the run's timestamps read phase by phase; its run record (dev/run-log/2026-11/20261108T030413524621-2865217.json) for the phases' own seconds",
+  "value": {
+   "wall_s": 30.2,
+   "recorded_s": 24,
+   "preflight_s": 4.0,
+   "test_full_s": 19,
+   "pytest_s": 14,
+   "python_test_modules": 11,
+   "static_s": 13,
+   "seeds_s": 10,
+   "cpu_temp_c": [
+    102.0,
+    88.0
+   ]
   }
+ },
+ "hooks-bash": {
+  "quantity": "this repository's guards that run before a Bash call: how many, the slowest, all of them summed",
+  "observed": "2026-11-07",
+  "subject": "the PreToolUse hooks of .claude/settings.json whose matcher takes Bash (the GM's own ~/.claude hooks left out: not this repository's)",
+  "command": "each hook's command run with a sample PreToolUse JSON for a Bash `ls` on stdin, three times, CLAUDE_PROJECT_DIR=/diagram",
+  "method": "the median of three runs a hook; the slowest and the sum of the medians",
+  "value": {
+   "hooks": 26,
+   "slowest_ms": 175,
+   "slowest": "pair-hooks.sh",
+   "second_ms": 111,
+   "second": "gate-hooks.sh",
+   "summed_ms": 1045
+  }
+ },
+ "pair-hooks-suite": {
+  "quantity": "pair-hooks.sh's runs inside its own suite",
+  "observed": "2026-11-08",
+  "subject": "tests/hooks/test-pair-hooks.sh, its HOOK pointed at a wrapper that times each run",
+  "command": "a scratch copy of the suite beside it, its HOOK a timing wrapper around tests/hooks/pair-hooks.sh, run once",
+  "method": "the wrapper's per-run times summed; the 100 cases all green, where the first figure's copy had 19 failing on relocated fixture paths",
+  "value": {
+   "runs": 92,
+   "summed_s": 22.28,
+   "mean_ms": 242.2,
+   "suite_wall_s": 5.0
+  },
+  "was": {
+   "observed": "2026-11-07",
+   "value": {
+    "runs": 90,
+    "summed_s": 39.7,
+    "mean_ms": 441,
+    "suite_wall_s": 8.2
+   }
+  }
+ },
+ "suite-cpu": {
+  "quantity": "every test's own time, summed over the tree outside tests/tooling and over tests/tooling",
+  "observed": "2026-11-07",
+  "subject": "the gate's test trees",
+  "command": "make durations FULL=1 N=20000; PYTEST_ADDOPTS=\"--durations=0\" make test-file FILE=tests/tooling",
+  "method": "each call, setup and teardown row summed, per tree",
+  "value": {
+   "outside_tooling_s": 198,
+   "tooling_s": 434,
+   "summed_s": 632,
+   "tests_100ms_or_more": 717
+  }
+ },
+ "rust-tests": {
+  "quantity": "the Rust crate's tests",
+  "observed": "2026-11-07",
+  "subject": "rust/phases",
+  "command": "make rust-test",
+  "method": "the summary line make rust-test prints, cargo's own: 'test result: ok. 91 passed ... finished in 0.11s' (one #[test] more stands behind the counters feature, run by the counting build)",
+  "value": {
+   "tests": 91,
+   "s": 0.11
+  }
+ },
+ "python-start": {
+  "quantity": "a Python interpreter's start with nothing to run",
+  "observed": "2026-11-07",
+  "subject": "python3 3.14 in the container",
+  "command": "python3 -c pass, timed three times",
+  "method": "wall time of each run",
+  "value": {
+   "ms": [
+    16,
+    16,
+    15
+   ]
+  }
+ },
+ "design-fixes": {
+  "quantity": "three of the day's speedups that changed what a tool does, not its language",
+  "observed": "2026-11-07",
+  "subject": "the claims gate test, the counters mutation test, a check bundle",
+  "command": "cProfile of tests.tooling.test_claims_index's slowest test in process, before and after 39112f3ec; make test-file of tests/tooling/test_rust_tooling.py before and after 2b4238a6c; scripts/record/check_bundle.py 0086 --for record-format timed before and after d3ff0e16d",
+  "method": "the test's or the command's own time, warm, before and after its commit",
+  "value": {
+   "claims_test_s": [
+    6.7,
+    0.5
+   ],
+   "counters_test_s": [
+    20.7,
+    1.1
+   ],
+   "check_bundle_s": [
+    3.3,
+    1.55
+   ]
+  }
+ },
+ "python-census": {
+  "quantity": "the Python files the repository tracks",
+  "observed": "2026-11-08",
+  "subject": "the clone's HEAD",
+  "command": "git ls-files '*.py' | wc -l; git ls-files '*.py' | awk -F/ '{print $1}' | sort | uniq -c",
+  "method": "the count, and the count by top directory",
+  "value": {
+   "files": 845,
+   "scripts_hooks": 13,
+   "tests_hooks": 0
+  },
+  "was": {
+   "observed": "2026-11-07",
+   "value": {
+    "files": 872,
+    "tests": 326,
+    "specs": 222,
+    "scripts": 186,
+    "l7r": 132,
+    "pool": 6
+   }
+  }
+ },
+ "inline-python-census": {
+  "quantity": "Python run inline - python3 -c, python3 - and heredocs - in the Makefile and the shell scripts",
+  "observed": "2026-11-07",
+  "subject": "the clone's HEAD",
+  "command": "git grep -nE \"python3 (-c|-[[:space:]]|-$|<<)\" -- Makefile '*.mk' '*.sh' | wc -l; git grep -lE \"python3 (-c|-[[:space:]]|-$|<<)\" -- Makefile '*.mk' '*.sh'",
+  "method": "the sites counted, and the files listed by directory",
+  "value": {
+   "sites": 300,
+   "files": 93,
+   "by_dir": {
+    "tests/hooks": 41,
+    "scripts/hooks": 34,
+    "specs": 7,
+    "scripts/gates": 5,
+    "scripts/sync-with-main.sh": 1,
+    "scripts/land-tooling.sh": 1,
+    "scripts/container": 1,
+    "buildspec/run.sh": 1,
+    "Makefile": 1,
+    ".specify": 1
+   }
+  }
+ },
+ "recorded-python-commands": {
+  "quantity": "the recorded measurements whose command RUNS Python - a .py file, python3 -c/-m/-I/-X, or a prose command saying it ran under python3 - not one that only names the word",
+  "observed": "2026-11-07",
+  "subject": "every specs/*/measurements.json and specs/*/measurements/*.json",
+  "command": "git grep -c -E '\"command\": \"[^\"]*\\bpython3([:+]| (-[cmIX]\\b|[^ \"]*\\.py\\b))' -- 'specs/*/measurements.json' 'specs/*/measurements/*.json'",
+  "method": "the per-file counts summed; the .py runs and the inline or prose ones counted apart",
+  "value": {
+   "commands": 4473,
+   "files": 23,
+   "run_a_py": 4465,
+   "inline_or_prose": 8,
+   "this_feature": [
+    "python-start"
+   ]
+  }
+ },
+ "lockfiles": {
+  "quantity": "the Python lockfiles and their sources at the repository root",
+  "observed": "2026-11-07",
+  "subject": "the clone's HEAD",
+  "command": "git ls-files 'requirements*'",
+  "method": "the files listed, paired by stem",
+  "value": {
+   "files": 8,
+   "pairs": 4,
+   "stems": [
+    "requirements",
+    "requirements-dev",
+    "requirements-ci",
+    "requirements-semantic"
+   ]
+  }
+ },
+ "guard-sources": {
+  "quantity": "phase 1's sources: the guards' shell, their Python libraries, the suites, the suites' Python",
+  "observed": "2026-11-07",
+  "subject": "scripts/hooks/ and tests/hooks/",
+  "command": "cat scripts/hooks/*.sh | wc -l; ls scripts/hooks/*.sh | wc -l; cat scripts/hooks/lib/*.py | wc -l; ls scripts/hooks/lib/*.py | wc -l; ls tests/hooks/test-*.sh | wc -l; cat tests/hooks/*.sh | wc -l; cat tests/hooks/*.py | wc -l; ls tests/hooks/*.py",
+  "method": "lines and files counted",
+  "value": {
+   "guard_shell_lines": 6258,
+   "guard_shell_files": 44,
+   "guard_lib_py_lines": 9053,
+   "guard_lib_py_files": 33,
+   "suite_files": 53,
+   "suite_lines": 8184,
+   "suite_py_lines": 1121,
+   "suite_py_files": [
+    "hookbench.py",
+    "hookdeps.py",
+    "hooktrace.py",
+    "test_hooks_cases.py"
+   ]
+  }
+ },
+ "registered-guards": {
+  "quantity": "the repository's guards registered in .claude/settings.json, by name, across every hook event",
+  "observed": "2026-11-07",
+  "subject": ".claude/settings.json",
+  "command": "python3 -c \"import json,re;s=json.load(open('.claude/settings.json'));print(len({m.group(1) for gs in s['hooks'].values() for g in gs for h in g['hooks'] for m in [re.search(r'([\\\\w-]+-hooks)\\\\.sh',h['command'])] if m}))\"",
+  "method": "every hook command's `<name>-hooks.sh` collected over all events, the distinct names counted; each is one of the 44 shell files under scripts/hooks/ (m:guard-sources), the two counts the same files",
+  "value": {
+   "registered": 44,
+   "taking_bash": 26
+  }
+ },
+ "guard-regex-features": {
+  "quantity": "the guard libraries' patterns using lookaround or backreferences",
+  "observed": "2026-11-07",
+  "subject": "scripts/hooks/lib/*.py",
+  "command": "grep -c '(?<\\|(?=\\|(?!\\|\\\\1\\|\\\\2' scripts/hooks/lib/*.py | awk -F: '{s+=$2; if($2>0) n++} END {print s, n}'",
+  "method": "the matching lines summed over the files, and the files with any",
+  "value": {
+   "uses": 43,
+   "files": 15,
+   "of_files": 33
+  }
+ },
+ "python-dead-fails-open": {
+  "quantity": "what a guard answers today when its Python cannot start, beside what it answers when Python starts",
+  "observed": "2026-11-07",
+  "subject": "/diagram/scripts/hooks/{make-only,repo-safety,gate,pair}-hooks.sh pretool, on a Bash `pytest tests/x.py` and a Bash `git push --force origin main`",
+  "command": "a python3 that prints an error and exits 127 put first on PATH (PATH=<dir>:$PATH), each guard run on each input; then each guard run with the real PATH",
+  "method": "exit code and stdout compared between the two runs",
+  "value": "every guard measured fails OPEN: repo-safety on the force push exits 0 with Python dead (2, a refusal, with it live); make-only on the pytest prints nothing (its rewrite to `make test-file` with it live); gate-hooks exits 127 (Claude Code's hook rule: only exit 2 blocks, another exit is a non-blocking error); pair-hooks exits 0 both ways. A missing guard script exits 127, the same"
+ },
+ "dispatcher-floor": {
+  "quantity": "phase 1's floor: the Rust dispatcher's own cost on a Bash call, with its guard list empty, beside the guards it will take over",
+  "observed": "2026-11-07",
+  "subject": "the PreToolUse hooks of .claude/settings.json whose matcher takes Bash, after T005 added scripts/hooks/l7r-guard.sh (its binary built and self-checked in the clone's target)",
+  "command": "m:hooks-bash's command: each hook's command run with a sample PreToolUse JSON for a Bash `ls` on stdin, three times, CLAUDE_PROJECT_DIR set to the clone",
+  "method": "the median of three runs a hook; the slowest and the sum of the medians",
+  "value": {
+   "hooks": 27,
+   "l7r_guard_ms": 4.7,
+   "slowest_ms": 208,
+   "slowest": "pair-hooks.sh",
+   "summed_ms": 1085,
+   "wrapper_alone_100_calls_ms": 3.8
+  }
+ },
+ "pair-hooks-ported": {
+  "quantity": "a Bash `ls`'s cost in the pair-hooks guard, the shell's against the Rust dispatcher carrying it (T006)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/pair-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks], on a sample PreToolUse JSON for a Bash `ls`",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call",
+  "value": {
+   "shell_ms": 200.0,
+   "rust_dispatcher_ms": 6.8,
+   "suite_cases": 100,
+   "suite_passed_against_rust": 100
+  }
+ },
+ "gate-hooks-ported": {
+  "quantity": "a Bash `ls`'s cost in the gate-hooks guard, the shell's against the Rust dispatcher carrying it beside pair-hooks (T007)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/gate-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks, gate-hooks], on a sample PreToolUse JSON for a Bash `ls`",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call; the dispatcher measured before and after the literal pre-checks (a pattern compiled only where its literal stands in the command)",
+  "value": {
+   "shell_ms": 111.6,
+   "rust_dispatcher_ms_before_prechecks": 11.4,
+   "rust_dispatcher_ms": 5.5,
+   "suite_cases": 45,
+   "suite_passed_against_rust": 45,
+   "new_case": "a -k in description arms nothing; the shell refused the gate after it (exit 2)"
+  }
+ },
+ "measure-hooks-ported": {
+  "quantity": "a Bash `ls`'s cost in the measure-hooks guard, the shell's against the Rust dispatcher carrying it beside pair-hooks and gate-hooks (T008)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/measure-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks, gate-hooks, measure-hooks], on a sample PreToolUse JSON for a Bash `ls`",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call",
+  "value": {
+   "shell_ms": 74.0,
+   "rust_dispatcher_ms": 7.3,
+   "suite_cases": 48,
+   "suite_passed_against_rust": 48
+  }
+ },
+ "no-poll-hooks-ported": {
+  "quantity": "a Bash `ls`'s cost in the no-poll guard, the shell's against the Rust dispatcher carrying it beside pair, gate and measure (T009)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/no-poll-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks, gate-hooks, measure-hooks, no-poll-hooks], on a sample PreToolUse JSON for a Bash `ls`",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call",
+  "value": {
+   "shell_ms": 57.4,
+   "rust_dispatcher_ms": 8.4,
+   "suite_cases": 115,
+   "suite_passed_against_rust": 115
+  }
+ },
+ "main-tree-hooks-ported": {
+  "quantity": "a Bash `ls`'s cost in the main-tree guard, the shell's against the Rust dispatcher carrying it beside pair, gate, measure and no-poll (T010)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/main-tree-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree], on a sample PreToolUse JSON for a Bash `ls`",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, measured beside a running hooks-test",
+  "value": {
+   "shell_ms": 60.7,
+   "rust_dispatcher_ms": 10.5,
+   "suite_cases": 87,
+   "suite_passed_against_rust": 87
+  }
+ },
+ "event-log-hooks-ported": {
+  "quantity": "a Bash `ls`'s cost in the event-log guard, the shell's against the Rust dispatcher carrying it beside five ported guards (T012)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/event-log-hooks.sh (main's shell guard, a Python start) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree, event-log], on a sample PreToolUse JSON for a Bash `ls`, each writing its line to a temporary L7R_EVENTS_DIR",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, measured beside a running hooks-test; and 8 payloads of every event kind through both, their lines compared byte for byte once the timestamp is removed",
+  "value": {
+   "shell_ms": 32.9,
+   "rust_dispatcher_ms": 12.4,
+   "suite_cases": 18,
+   "suite_passed_against_rust": 18,
+   "lines_byte_identical": "8 of 8"
+  }
+ },
+ "clone-sync-hooks-ported": {
+  "quantity": "an Edit-shaped call's cost in the clone-sync guard, the shell's against the Rust dispatcher carrying it beside six ported guards (T013)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/clone-sync-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree, event-log, clone-sync], on a sample PreToolUse JSON for a Write into a dirty clone and for a Bash `ls`, an empty session id so nothing is claimed, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, on an otherwise idle host (load 3.5); the guard's own suite replayed against the Rust guard through tests/hooks/clone-sync-hooks.sh",
+  "value": {
+   "shell_write_ms": 82.7,
+   "rust_dispatcher_write_ms": 32.2,
+   "shell_bash_ls_ms": 34.6,
+   "rust_dispatcher_bash_ls_ms": 13.0,
+   "suite_cases": 63,
+   "suite_passed_against_rust": 63
+  }
+ },
+ "idle-tests-hooks-ported": {
+  "quantity": "a prompt's cost in the idle-tests guard, the shell's against the Rust dispatcher carrying it beside seven ported guards (T014)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/idle-tests-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload with an empty session id, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call on a quiet host (load 1.6); the suite replayed through tests/hooks/idle-tests-hooks.sh. A Stop's dispatcher figure carries every guard on Stop, not this one, which is disabled and returns first, so it is not compared",
+  "value": {
+   "shell_prompt_ms": 41.8,
+   "rust_dispatcher_prompt_ms": 6.6,
+   "suite_cases": 34,
+   "suite_passed_against_rust": 34
+  }
+ },
+ "agent-stall-hooks-ported": {
+  "quantity": "a prompt's cost in the agent-stall guard over a session of 100 finished subagents, the shell's against the Rust dispatcher carrying it beside eight ported guards (T015)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/agent-stall-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload whose transcript_path names a directory of 100 transcripts ten minutes old, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work (load 5.2); the suite replayed through tests/hooks/agent-stall-hooks.sh",
+  "value": {
+   "shell_prompt_ms": 46.1,
+   "rust_dispatcher_prompt_ms": 7.1,
+   "suite_cases": 15,
+   "suite_passed_against_rust": 15
+  }
+ },
+ "stall-watchdog-hooks-ported": {
+  "quantity": "a prompt's cost in the stall-watchdog guard, the loop already running, the shell's against the Rust dispatcher carrying it beside nine ported guards (T016)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/stall-watchdog-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload, a state directory whose pid file names a live process, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work (load 3.0); the suite replayed through tests/hooks/stall-watchdog-hooks.sh, its pass now the Rust module",
+  "value": {
+   "shell_prompt_ms": 15.8,
+   "rust_dispatcher_prompt_ms": 6.7,
+   "suite_cases": 28,
+   "suite_passed_against_rust": 28
+  }
+ },
+ "finished-run-hooks-ported": {
+  "quantity": "a prompt's cost in the finished-run guard, the shell's against the Rust dispatcher carrying it beside ten ported guards (T017)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/finished-run-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload outside any working tree, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work (load 4.0); the suite replayed through tests/hooks/finished-run-hooks.sh",
+  "value": {
+   "shell_prompt_ms": 32.7,
+   "rust_dispatcher_prompt_ms": 6.7,
+   "suite_cases": 67,
+   "suite_passed_against_rust": 67
+  }
+ },
+ "engine-freeze-hooks-ported": {
+  "quantity": "an engine Edit's cost in the engine-freeze guard with nothing live, the shell's against the Rust guard alone (T018)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/engine-freeze-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only engine-freeze-hooks PreToolUse in the clone, on a sample Edit of l7r/diagram/switches.py with no subagents, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/engine-freeze-hooks.sh",
+  "value": {
+   "shell_edit_ms": 74.0,
+   "rust_guard_edit_ms": 6.9,
+   "suite_cases": 31,
+   "suite_passed_against_rust": 31
+  }
+ },
+ "gm-tree-hooks-ported": {
+  "quantity": "a Bash call naming the tree, its cost in the gm-tree guard, the shell's against the Rust guard alone (T019)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/gm-tree-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only gm-tree-hooks PreToolUse in the clone, on a sample Bash grep of the tree, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/gm-tree-hooks.sh",
+  "value": {
+   "shell_bash_ms": 33.4,
+   "rust_guard_bash_ms": 10.6,
+   "suite_cases": 24,
+   "suite_passed_against_rust": 24
+  }
+ },
+ "batching-hooks-ported": {
+  "quantity": "a Read's cost in the batching guard, the shell's against the Rust guard alone (T020)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/batching-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only batching-hooks PreToolUse in the clone, on a sample Read, each log and state directory temporary",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/batching-hooks.sh",
+  "value": {
+   "shell_read_ms": 24.9,
+   "rust_guard_read_ms": 6.9,
+   "suite_cases": 56,
+   "suite_passed_against_rust": 56
+  }
+ },
+ "no-branch-hooks-ported": {
+  "quantity": "a Bash ls's cost in the no-branch guard, the shell's against the Rust guard alone (T021)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/no-branch-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only no-branch-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/no-branch-hooks.sh",
+  "value": {
+   "shell_bash_ms": 32.81,
+   "rust_guard_bash_ms": 6.78,
+   "suite_cases": 19,
+   "suite_passed_against_rust": 19
+  }
+ },
+ "discard-hooks-ported": {
+  "quantity": "a Bash ls's cost in the discard guard, the shell's against the Rust guard alone (T022)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/discard-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only discard-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/discard-hooks.sh",
+  "value": {
+   "shell_bash_ms": 28.6,
+   "rust_guard_bash_ms": 6.5,
+   "suite_cases": 27,
+   "suite_passed_against_rust": 27
+  }
+ },
+ "conflict-marker-hooks-ported": {
+  "quantity": "a Bash ls's cost in the conflict-marker guard, the shell's against the Rust guard alone (T023)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/conflict-marker-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only conflict-marker-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/conflict-marker-hooks.sh",
+  "value": {
+   "shell_bash_ms": 29.5,
+   "rust_guard_bash_ms": 6.8,
+   "suite_cases": 28,
+   "suite_passed_against_rust": 28
+  }
+ },
+ "gate-write-hooks-ported": {
+  "quantity": "a Bash ls's cost in the gate-write guard with no gate running, the shell's against the Rust guard alone (T024)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/gate-write-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only gate-write-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/gate-write-hooks.sh",
+  "value": {
+   "shell_bash_ms": 48.6,
+   "rust_guard_bash_ms": 8.01,
+   "suite_cases": 27,
+   "suite_passed_against_rust": 27
+  }
+ },
+ "feature-approval-hooks-ported": {
+  "quantity": "a `git add -A` outside a repository, its cost in the feature-approval guard, the shell's against the Rust guard alone (T025)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/feature-approval-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only feature-approval-hooks PreToolUse in the clone, standing in /tmp, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/feature-approval-hooks.sh",
+  "value": {
+   "shell_git_add_ms": 40.82,
+   "rust_guard_git_add_ms": 11.2,
+   "suite_cases": 55,
+   "suite_passed_against_rust": 55
+  }
+ },
+ "budget-change-hooks-ported": {
+  "quantity": "a Bash call naming no guarded budget target, its cost in the budget-change guard, the shell's against the Rust guard alone (T026)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/budget-change-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only budget-change-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the shell left at its literal pre-check, so alone it is no slower than the wrapper - the saving is the process this guard no longer adds to the dispatcher's call; the suite replayed through tests/hooks/budget-change-hooks.sh",
+  "value": {
+   "shell_other_bash_ms": 6.6,
+   "rust_guard_other_bash_ms": 6.7,
+   "suite_cases": 11,
+   "suite_passed_against_rust": 11
+  }
+ },
+ "ledger-hooks-ported": {
+  "quantity": "a Bash ls's cost in the ledger guard, the shell's against the Rust guard alone (T027)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/ledger-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only ledger-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/ledger-hooks.sh",
+  "value": {
+   "shell_bash_ms": 26.7,
+   "rust_guard_bash_ms": 7.0,
+   "suite_cases": 22,
+   "suite_passed_against_rust": 22
+  }
+ },
+ "archive-first-hooks-ported": {
+  "quantity": "a WebFetch of an unarchived page, its cost in the archive-first guard, the shell's against the Rust guard alone (T030)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/archive-first-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only archive-first-hooks PreToolUse in the clone, each log and state directory temporary",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/archive-first-hooks.sh",
+  "value": {
+   "shell_fetch_ms": 43.5,
+   "rust_guard_fetch_ms": 5.9,
+   "suite_cases": 8,
+   "suite_passed_against_rust": 8
+  }
+ },
+ "readme-hooks-ported": {
+  "quantity": "a Bash ls's cost in the readme guard, the shell's against the Rust guard alone (T032; T031 and T033 leave at a literal pre-check before any Python, so a plain call cost them almost nothing)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/readme-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only readme-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the three suites replayed through their links (24, 28 and 21 cases)",
+  "value": {
+   "shell_bash_ms": 29.76,
+   "rust_guard_bash_ms": 10.7,
+   "claims_file_suite_cases": 24,
+   "readme_suite_cases": 28,
+   "download_copy_suite_cases": 21
+  }
+ },
+ "phase-source-hooks-ported": {
+  "quantity": "a Read's cost in the phase-source guard with nothing held, the shell's against the Rust guard alone (T046): no speedup on this path, because the shell left before any Python when no phase-sources.json exists, and the Rust figure is the whole wrapper and process start, which in production is shared by every guard of the event",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/phase-source-hooks.sh (main's shell guard) against scripts/hooks/l7r-guard.sh --only phase-source-hooks PreToolUse in the clone, PHASE_SOURCE_GLOB matching nothing, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (17 cases)",
+  "value": {
+   "shell_read_ms": 5.88,
+   "rust_guard_read_ms": 9.84,
+   "phase_source_suite_cases": 17
+  }
+ },
+ "new-file-hooks-ported": {
+  "quantity": "a Bash ls's cost in the new-file guard, the shell's against the Rust guard alone (T047)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/new-file-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only new-file-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (21 cases)",
+  "value": {
+   "shell_bash_ms": 43.72,
+   "rust_guard_bash_ms": 10.66,
+   "new_file_suite_cases": 21
+  }
+ },
+ "blocked-fetch-hooks-ported": {
+  "quantity": "a Bash call's cost in the blocked-fetch guard, the shell's against the Rust guard alone (T039): a command the shell's literal pre-filter let through (it holds the word archive) and a plain ls, which the pre-filter stopped before any Python",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/blocked-fetch-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only blocked-fetch-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (22 cases)",
+  "value": {
+   "shell_word_ms": 90.95,
+   "rust_guard_word_ms": 9.22,
+   "shell_ls_ms": 8.26,
+   "rust_guard_ls_ms": 8.9,
+   "blocked_fetch_suite_cases": 22
+  }
+ },
+ "set-down-hooks-ported": {
+  "quantity": "a Stop event's cost in the set-down guard with no feature to hold, the shell's against the Rust guard alone (T049)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/set-down-hooks.sh stop (main's shell guard) against scripts/hooks/l7r-guard.sh --only set-down-hooks Stop in the clone, SET_DOWN_ROOT naming no directory and an empty transcript, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (34 cases)",
+  "value": {
+   "shell_stop_ms": 171.79,
+   "rust_guard_stop_ms": 63.1,
+   "set_down_suite_cases": 34
+  }
+ },
+ "repo-safety-agent-model-ported": {
+  "quantity": "a call's cost in the repo-safety guard (a Bash ls) and the agent-model guard (an Agent dispatch of a pinned type), each shell's against the Rust guard alone (T034, T041)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/repo-safety-hooks.sh and agent-model-hooks.sh pretool (main's shell guards) against scripts/hooks/l7r-guard.sh --only <guard> PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suites replayed through their links (28 and 20 cases)",
+  "value": {
+   "repo_safety_shell_ms": 35.74,
+   "repo_safety_rust_ms": 19.83,
+   "agent_model_shell_ms": 124.6,
+   "agent_model_rust_ms": 8.86,
+   "repo_safety_suite_cases": 28,
+   "agent_model_suite_cases": 20
+  }
+ },
+ "wakeup-hooks-ported": {
+  "quantity": "a Stop event's cost in the wakeup guard with no wakeup pending, the shell's against the Rust guard alone (T038)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/wakeup-hooks.sh stop (main's shell guard) against scripts/hooks/l7r-guard.sh --only wakeup-hooks Stop in the clone, an empty transcript, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (24 cases)",
+  "value": {
+   "shell_stop_ms": 31.11,
+   "rust_guard_stop_ms": 7.22,
+   "wakeup_suite_cases": 24
+  }
+ },
+ "agent-prefix-workflow-ported": {
+  "quantity": "a call's cost in the agent-prefix guard (an Agent dispatch) and the workflow guard (an empty script), each shell's against the Rust guard alone (T040, T042)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/agent-prefix-hooks.sh and workflow-hooks.sh pretool (main's shell guards) against scripts/hooks/l7r-guard.sh --only <guard> PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suites replayed through their links (23 and 24 cases)",
+  "value": {
+   "agent_prefix_shell_ms": 130.36,
+   "workflow_shell_ms": 61.68,
+   "workflow_rust_ms": 10.77,
+   "agent_prefix_suite_cases": 23,
+   "workflow_suite_cases": 24,
+   "agent_prefix_rust_ms": 10.33
+  }
+ },
+ "wave-unit-hooks": {
+  "quantity": "one check-wave unit's time through every PreToolUse hook an Agent call meets (T040): 600 s holds about 1,300 units at this rate, the former 60 s about 130",
+  "observed": "2026-11-08",
+  "subject": "the four hook commands .claude/settings.json gives an Agent call, in the clone, L7R_WAVE_UNIT=1, a quote-check unit, each log directed to a temporary directory",
+  "command": "each hook run through bash -c on the unit's JSON, 10 rounds, the wall time divided by the rounds",
+  "method": "the mean wall time a unit, beside other work",
+  "value": {
+   "unit_ms": 462.7,
+   "hooks": 4
+  }
+ },
+ "source-block-hooks-ported": {
+  "quantity": "an Edit's cost in the source-block guard, the shell's against the Rust guard alone (T037)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/source-block-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only source-block-hooks PreToolUse in the clone, an Edit of /diagram/CLAUDE.md, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the case table replayed through its link (6 cases)",
+  "value": {
+   "shell_edit_ms": 27.66,
+   "rust_guard_edit_ms": 7.63,
+   "source_block_cases": 6
+  }
+ },
+ "shell-check-parse": {
+  "quantity": "a plain Bash call's cost in the shell-check guard, the shell's against the Rust guard alone, and the bash -O extglob -n child both ask (T035)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/shell-check-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only shell-check-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50, the parse 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the case table and the 238-command corpus replayed through its link",
+  "value": {
+   "shell_bash_ms": 41.34,
+   "rust_guard_bash_ms": 11.64,
+   "bash_parse_ms": 1.33,
+   "shell_check_cases": 29,
+   "corpus_commands": 238
+  }
+ },
+ "house-style-hooks-ported": {
+  "quantity": "a plain Bash call's cost in the house-style guard, the shell's against the Rust guard alone (T036)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/house-style-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only house-style-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the case table replayed through its link",
+  "value": {
+   "shell_bash_ms": 37.41,
+   "rust_guard_bash_ms": 14.15
+  }
+ },
+ "escalation-hooks-ported": {
+  "quantity": "an Agent dispatch's and a Stop's cost in the escalation guard, the shell's against the Rust guard alone (T044)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/escalation-hooks.sh (main's shell guard) against scripts/hooks/l7r-guard.sh --only escalation-hooks in a fixture repository, a quote-check dispatch and an empty Stop, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (41 cases)",
+  "value": {
+   "shell_agent_ms": 62.88,
+   "rust_guard_agent_ms": 6.32,
+   "shell_stop_ms": 53.72,
+   "rust_guard_stop_ms": 6.86,
+   "escalation_suite_cases": 41
+  }
+ },
+ "review-round-hooks-ported": {
+  "quantity": "an Agent dispatch's cost in the review-round guard, the shell's against the Rust guard alone (T045)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/review-round-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only review-round-hooks PreToolUse in the clone, a quote-check dispatch, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (84 cases)",
+  "value": {
+   "shell_agent_ms": 106.34,
+   "rust_guard_agent_ms": 9.23,
+   "review_round_suite_cases": 84
+  }
+ },
+ "make-only-hooks-ported": {
+  "quantity": "a plain Bash call's cost in the make-only guard, the shell's against the Rust guard alone (T028)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/make-only-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only make-only-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (101 cases)",
+  "value": {
+   "shell_bash_ms": 41.02,
+   "rust_guard_bash_ms": 8.05,
+   "make_only_suite_cases": 101
+  }
+ },
+ "guard-file-hooks-ported": {
+  "quantity": "an Edit of an ordinary file's cost in the guard-file guard, the shell's against the Rust guard alone (T029)",
+  "observed": "2026-11-08",
+  "subject": "/diagram/scripts/hooks/guard-file-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only guard-file-hooks PreToolUse in the clone, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work; the suite replayed through its link (55 cases)",
+  "value": {
+   "shell_edit_ms": 46.12,
+   "rust_guard_edit_ms": 8.26,
+   "guard_file_suite_cases": 55
+  }
+ },
+ "record-edit-gate": {
+  "quantity": "a plain Bash call's cost in the record-edit guard, the shell's (which started Python on every call) against the Rust gate that starts nothing for it (T053)",
+  "observed": "2026-11-08",
+  "subject": "scripts/hooks/record-edit-hooks.sh pretool-bash against scripts/hooks/l7r-guard.sh --only record-edit-gate PreToolUse in the clone, a plain ls, no plan review holding text, each log directed to a temporary directory",
+  "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50 twice), the loop's wall time divided by its runs",
+  "method": "the mean wall time a call, beside other work, at load about 1.7; no Python on such a call is observed by tests/hooks/test-record-edit-gate.sh's sentinel, and that suite drives the 15 record-edit cases through the gate",
+  "value": {
+   "shell_bash_ms": 53.64,
+   "rust_gate_bash_ms": 10.71,
+   "rust_gate_bash_ms_second_run": 10.66,
+   "record_edit_suite_cases": 15
+  }
+ },
+ "t050-deps-differential": {
+  "quantity": "the Rust suite tooling against the Python it replaced, over the whole repository: a suite's key, its dependency list, a Python test's file set, and which traced suites are fresh",
+  "observed": "2026-11-08",
+  "subject": "tests/hooks/hookdeps.py and hooktrace.py against l7r-guard deps and trace at the same tree, before the Python was deleted",
+  "command": "each roster suite's --keys and --deps, each tests/**/test_*.py's --pydeps, and trace fresh over the kept traces, from both, compared",
+  "method": "exact comparison of the sorted outputs; the mismatch counts are the value",
+  "value": {
+   "suites": 57,
+   "key_mismatches": 0,
+   "deps_mismatches": 0,
+   "python_test_files": 291,
+   "pydeps_mismatches": 0,
+   "traced_suites": 8,
+   "fresh_lists_equal": true
+  }
+ },
+ "t054-plain-bash": {
+  "quantity": "the settings entry's whole command on a Bash call, the guards' dispatcher through its shell wrapper: SC-001 asks under a tenth of m:hooks-bash's slowest guard, 17.5 ms",
+  "observed": "2026-11-08",
+  "subject": "the .claude/settings.json PreToolUse entry, pointed at this clone's scripts/hooks/l7r-guard.sh; each log directed to a temporary directory",
+  "command": "the entry's command under sh -c with the hook input on stdin, 40 spawns, three times, once for `ls` and once for `git -C /tmp log --format='%h %s' -3 | head -2`; and the same over 400 unique Bash commands from this project's 12 most recent transcripts (seed 449), one spawn each",
+  "method": "the median of 40 spawns, three times, at load 1.4-2.8; before the fast exits the plain call measured 35.79 ms by one such run (the wrapper alone, without sh)",
+  "value": {
+   "plain_ls_ms": [
+    16.51,
+    15.8,
+    15.41
+   ],
+   "quoted_git_ms": [
+    19.02,
+    19.66,
+    18.52
+   ],
+   "before_plain_ms": 35.79,
+   "target_ms": 17.5,
+   "real_commands": {
+    "sampled": 400,
+    "of": 45697,
+    "median_ms": 22.99,
+    "p90_ms": 109.38,
+    "p99_ms": 401.35,
+    "max_ms": 485.25,
+    "share_under_17_5": 0.072,
+    "tail": "ledger-hooks starting ledger_lint.py on commit-shaped commands, 14.67 ms mean over the sample, 200-260 ms each when it runs"
+   },
+   "summed_cpu_ms": [
+    15.95,
+    15.15,
+    16.0
+   ],
+   "summed_cpu_bound_ms": 52,
+   "commit_branch": {
+    "commands_naming_git_commit": 48,
+    "of_sample": 400,
+    "start_python": 29,
+    "the_branch": "ledger_hooks::judge after commit_root resolves a real `git commit` in a tree holding the ledger: ledger_owed.py on every such commit, ledger_lint.py when it stages the ledger (T027 decision (b)); none on a command with no commit",
+    "no_commit_commands": {
+     "count": 352,
+     "median_ms_in_binary": 17.1,
+     "p90_ms_in_binary": 23.5
+    }
+   },
+   "near_p90": "feature-approval and conflict-marker asking git over a large staged commit (40-54 ms each), make-only on a guard-file write in a long heredoc (62 ms), record-edit-gate running its guard on an apply-edits (56 ms)"
+  },
+  "reading": "SC-001 is met on m:hooks-bash's sample `ls` alone, by the named exception ask:449-T054-sc001 (the round arbiter, 2026-11-08), and not on real commands: the quoted git command is 19.0 ms and the 400 real commands' median 23.0 ms, p90 109 ms, 7.2 percent under 17.5 ms. Re-measured at phase 3's close, when the by-path Python is ported."
+ },
+ "inline-census-sites": {
+  "quantity": "feature 449's second census under scripts/hooks/ and tests/hooks/, every site under a group FR-001 names",
+  "observed": "2026-11-08",
+  "subject": "the clone's working tree at T052's close",
+  "command": "make inline-census",
+  "method": "the command's own counts: exact-line for the guard-input group, by path for the two others; a site outside them exits 1; converted is the start's count less today's",
+  "value": {
+   "sites": 57,
+   "guard_input": 27,
+   "later_phase": 27,
+   "last_caller": 3,
+   "outside": 0,
+   "at_the_start_of_t052": 168,
+   "converted": 111
+  }
+ },
+ "phase-1-other-calls": {
+  "quantity": "the calls that still run more than one process until phase 3: a record-page Edit, a subagent's return and launch",
+  "observed": "2026-11-08",
+  "subject": "the settings entry's command for an Edit; scripts/hooks/checks-hooks.sh for the two others",
+  "command": "each run 20 times on a sample payload, each log directed to a temporary directory",
+  "method": "the median of 20 spawns, at load 2 to 5",
+  "value": {
+   "record_page_edit_ms": 108.3,
+   "plain_edit_ms": 37.9,
+   "agent_return_ms": 56.6,
+   "agent_launch_ms": 50.3
+  }
+ },
+ "phase-1-python-share": {
+  "quantity": "phase 1's share of feature 449's first census at the phase's end, by path and by use: the tracked Python files under scripts/hooks/ and tests/hooks/, each placed later by name in FR-001; any module outside them only the guards use; and any tests/ file outside tests/hooks/ that tests a phase-1 piece",
+  "observed": "2026-11-08",
+  "subject": "the clone's working tree at T052's close",
+  "command": "git ls-files '*.py' | wc -l; git ls-files 'scripts/hooks/*.py' 'tests/hooks/*.py'; for f in $(git ls-files '*.py' | grep -vE '^(scripts/hooks|specs|pool|tests)/'); do git grep -lE \"$(basename \"$f\")\" -- ':!'\"$f\" ; done (each file's callers, comments stripped, kept where they are all under rust/guard/, scripts/hooks/ or tests/); and for each tests/ file outside tests/hooks/, the hook libraries and guard scripts it names",
+  "method": "the count, and the listing compared with FR-001's named files: exactly those thirteen, none under tests/hooks/; the scan by use, observed 2026-11-08, read by hand: of three modules with only guard callers, l7r/diagram/ci/decision.py is the word `decision` matched in protocol.rs and has none, scripts/patch.py is a command a session runs by hand and hm_house only names it, and scripts/gates/engine_edit.py is real; of 29 tests outside tests/hooks/ that name a hook library or a guard, 28 test a library FR-001 places later or only hold a fixture name, and tests/tooling/test_guard_firing_log.py is real",
+  "value": {
+   "tracked_python_files": 845,
+   "first_value": 872,
+   "phase_1_paths": 13,
+   "under_tests_hooks": 0,
+   "all_placed_by_name": true,
+   "files": [
+    "hm_approval",
+    "hm_arbiter",
+    "hm_budget_rounds",
+    "hm_checks",
+    "hm_conflict",
+    "hm_escape",
+    "hm_fixloop",
+    "hm_house",
+    "hm_planhold",
+    "hm_record",
+    "hm_shape",
+    "hm_tree",
+    "usage_log"
+   ],
+   "by_use": {
+    "guards_only_modules_found": [
+     "scripts/gates/engine_edit.py"
+    ],
+    "phase_1_tests_found": [
+     "tests/tooling/test_guard_firing_log.py"
+    ],
+    "engine_edit": "76 lines over l7r/diagram/ci/delta.py is_engine and gate-stamp.py semantic_bytes, both phase 2, asked only while a map review or a roll is live; goes with them",
+    "firing_log_test": "its census reads guardlog.sh and the *_OK tokens across shell and Rust and two cases drive ported guards; goes with guardlog.sh, phase 3"
+   }
+  }
+ },
+ "t060-done-rust-edit": {
+  "quantity": "a one-line Rust edit's make done, on today's tree, before and after a crate's unchanged checks reuse their last green result",
+  "observed": "2026-11-08",
+  "subject": "rust/phases/src/driver/check.rs, the edit of m:done-rust-edit, against a fresh full baseline (make done INCREMENTAL=0 just before); phase 1's rust/guard present",
+  "command": "make done INCREMENTAL=0; sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done; git checkout -- rust/phases/src/driver/check.rs",
+  "method": "the wall clock of the second make done, and its run record for the phases' seconds (dev/run-log/2026-11/20261109T005012826984-1203108.json); before: the same run ahead of T060's change",
+  "value": {
+   "before_wall_s": 60,
+   "before_static_s": 40,
+   "after_wall_s": 38,
+   "after_static_s": 15,
+   "after_counters_s": 2,
+   "after_pytest_s": 17,
+   "after_seeds_s": 13,
+   "first_value_wall_s": 30.2,
+   "after_preflight_s": 6
+  }
+ },
+ "t062-content-ids": {
+  "quantity": "every tracked .rs and .py file's content id from the Rust gate against the Python's, computed with an empty cache, and against the ids kept in the real cache",
+  "observed": "2026-11-08",
+  "subject": "the clone's tracked .rs and .py files, copied to an empty repository so no id is served from a cache",
+  "command": "a harness: scripts/gates/l7r-gate.sh content-ids over the files beside sha256(codeid.semantic_bytes(...)) for each; then the same ids against .git/semantic-id-cache-2.json",
+  "method": "exact comparison; the mismatch counts are the value. Note: the harness compares with the Python it replaces for .rs, and for .py the Rust gate asks codeid.py itself",
+  "value": {
+   "files": 1112,
+   "rs": 266,
+   "py": 846,
+   "mismatch": 0,
+   "in_the_real_cache": 567,
+   "differ_from_real_cache": 0,
+   "first_run_s": 4.77,
+   "all_cached_s": 0.087
+  }
+ },
+ "t063-slice1": {
+  "quantity": "gate-stamp's area keys and content ids before and after content_id moves into codeid.py",
+  "observed": "2026-11-09",
+  "subject": "the clone's tree; HEAD's gate-stamp.py and codeid.py against the working tree's",
+  "command": "the two versions of gate-stamp.py at commits 82c164a69^ and 82c164a69 (git show; the file is gone since T063's slice 2) loaded by path, _area_key for every area and content_id for scripts/gates/*.py, compared",
+  "method": "exact comparison",
+  "value": {
+   "areas": 4,
+   "area_keys_equal": true,
+   "files": 38,
+   "ids_equal": true
+  }
+ },
+ "t063-slice2": {
+  "quantity": "the Rust gate's stamps, delta and engine key against the Python they replace",
+  "observed": "2026-11-09",
+  "subject": "the clone at HEAD before the slice's commit (a detached worktree of it) and the working tree's binary",
+  "command": "gate-stamp.py and delta.py at commit 2a9baf4c5 (git worktree add --detach; both are gone or a client since) loaded by path; l7r-gate stamp --key and --list for every area, delta key for every 4th of the last 200 commits and the worktree, delta compute at seven bases, delta engine-paths over every tracked path, content-ids for every file of every area against codeid.py's content_id; stamp --raw-match over every tracked path and seven paths on no disk against gate-stamp._matches over the raw areas",
+  "method": "exact comparison",
+  "value": {
+   "areas": 4,
+   "area_keys_equal": true,
+   "area_lists_equal": true,
+   "content_id_files": 8885,
+   "content_id_mismatches": 0,
+   "engine_key_commits": 50,
+   "engine_key_mismatches": 0,
+   "worktree_key_equal": true,
+   "delta_bases": 7,
+   "delta_mismatches": 0,
+   "is_engine_paths": 26664,
+   "is_engine_mismatches": 0,
+   "raw_match_paths": 26670,
+   "raw_match_synthetic": 7,
+   "raw_match_mismatches": 0,
+   "raw_match_tracked_paths": 26663
+  }
+ },
+ "t72-state": {
+  "quantity": "the Rust gate's tooling hash, config hash and verification record against the Python they replace",
+  "observed": "2026-11-09",
+  "subject": "the clone's working tree",
+  "command": "state.py and gate_config.py at commit db62ac8bb^ (git show; a client since) loaded by path; tooling_hash against l7r-gate state tooling-hash and config_hash against l7r-gate config-hash, each binary call run twice so the second reads the kept forms, and the record read by both",
+  "method": "exact comparison",
+  "value": {
+   "tooling_hash_equal": true,
+   "config_hash_equal": true,
+   "record_read_equal": true,
+   "tooling_cold_s": 1.22,
+   "tooling_warm_s": 0.09,
+   "config_cold_s": 0.15,
+   "config_warm_s": 0.03
+  }
+ },
+ "t064-remote": {
+  "quantity": "the Rust gate's remote path against the Python it replaces",
+  "observed": "2026-11-09",
+  "subject": "a detached worktree of commit 169f0df58^, remote off, the Python's own files at that commit",
+  "command": "under make in a detached worktree of 169f0df58^, the Python at that commit against l7r-gate ci status --route, status, remote-spend and door, switches show and idle and lifecycle (the commands that were there to compare)",
+  "method": "exact comparison",
+  "value": {
+   "route": true,
+   "status_lines": 45,
+   "status": true,
+   "spend": true,
+   "door": true,
+   "switches": true,
+   "idle": true,
+   "lifecycle": true
+  }
+ },
+ "push-checks-rust": {
+  "quantity": "the Rust push's checks, each timed as its own process (the second of two runs, warm), summed - the one-process run included as the first row",
+  "observed": "2026-11-09",
+  "source": "the diagram-backlog clone at T77; the table is rust/gate/src/push.rs CHECKS",
+  "command": "scripts/gates/l7r-gate.sh measure push-check-times",
+  "method": "each command run twice, the second run's wall time kept; the rows summed",
+  "unit": "s",
+  "varies": true,
+  "value": 7.76,
+  "load": 4.7,
+  "rows": {
+   "push checks (one process)": 3.69,
+   "duplicate-defs selftest": 0.05,
+   "duplicate-defs": 0.11,
+   "file-scale selftest": 0.04,
+   "stale-dirs selftest": 0.04,
+   "stale-dirs": 0.04,
+   "file-scale": 0.1,
+   "function-cap selftest": 0.07,
+   "function-cap": 0.15,
+   "make-docs": 0.04,
+   "ledger-owed": 0.23,
+   "entry-headings selftest": 0.05,
+   "entry-headings": 0.05,
+   "research-pointers selftest": 0.04,
+   "research-pointers": 0.28,
+   "partial-citations": 0.26,
+   "downloads selftest": 0.05,
+   "downloads": 0.07,
+   "spec-lint selftest": 0.06,
+   "spec-lint": 0.12,
+   "speckit-todo check": 0.14,
+   "conflict selftest": 0.05,
+   "conflict": 0.08,
+   "record": 0.11,
+   "money-candidates": 1.48,
+   "glossary": 0.09,
+   "gate-stamp selftest": 0.07,
+   "gate-stamp": 0.04,
+   "gm-questions": 0.07,
+   "closing": 0.09
+  }
+ }
 }

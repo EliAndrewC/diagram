@@ -127,7 +127,7 @@ session starts: a change to one reaches a session's dispatches after it restarts
 
 Load this section when: someone proposes running a review check on a cheaper model, or asks whether one was tried. The GM,
 2026-10-17, on finding no record of these trials: *"I have checked and I cannot find any record of us having tried those"* - so
-every trial, either way, is a row here. The method is `scripts/measure/model_trial.py` (a recorded Opus run with known
+every trial, either way, is a row here. The method is `scripts/gates/l7r-gate.sh measure model-trial` (a recorded Opus run with known
 findings re-run in a clone at the commit it read, three runs a leg); a check moves only when every run finds every known
 finding and raises no false alarm. The tier each check runs on is `tests/test_agent_models.py`.
 

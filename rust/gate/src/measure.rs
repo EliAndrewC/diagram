@@ -8,12 +8,19 @@ pub(crate) mod fresh_tally;
 pub(crate) mod gate_costs;
 pub(crate) mod gatecost;
 pub(crate) mod guard_log;
+pub(crate) mod maps_moved;
+pub(crate) mod model_trial;
+pub(crate) mod popup_rounds;
 pub(crate) mod probe;
+pub(crate) mod push_check_times;
 pub(crate) mod ratchet;
 pub(crate) mod review_yield;
 pub(crate) mod runstats;
 pub(crate) mod subagent_cache;
 pub(crate) mod wave_report;
+pub(crate) mod work_budget;
+
+pub(crate) use subagent_cache::{at, commas};
 
 pub(crate) fn reply(stdout: String, stderr: String, code: i32) -> crate::Reply {
     crate::Reply {
@@ -38,9 +45,14 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("wave-report") => wave_report::cli(rest, &home()),
         Some("subagent-cache") => subagent_cache::cli(rest, &home(), &a_week_ago()),
         Some("fresh-tally") => fresh_tally::cli(rest, root),
+        Some("maps-moved") => maps_moved::cli(rest, root),
+        Some("popup-rounds") => popup_rounds::cli(rest),
+        Some("work-budget") => work_budget::cli(rest, root),
+        Some("push-check-times") => push_check_times::cli(rest, root, root),
+        Some("model-trial") => model_trial::cli(rest, &model_trial::live(&home(), root)),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally\n"
+            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial\n"
                 .to_owned(),
             2,
         ),
@@ -58,6 +70,11 @@ fn a_week_ago() -> String {
         .map_or(0, |d| d.as_secs());
     let (y, m, d, ..) = l7r_guard::shared::log::civil(now.saturating_sub(7 * 86_400));
     format!("{y:04}-{m:02}-{d:02}")
+}
+
+/// An error as its text, for `map_err`.
+pub(crate) fn text_err(e: impl std::fmt::Display) -> String {
+    e.to_string()
 }
 
 /// Every `.json` under `dir`, recursively, sorted.

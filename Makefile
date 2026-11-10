@@ -14,7 +14,7 @@
 # ---- performance: a bookend pair over band 1 is a flag mentioned at landing, never a refusal ----
 
 work-budget:    ## [performance] the counted work of the reference hamlet per stage, from the Rust driver built with its counters, against its budget at 10/20/40/80 households (features 443, 444)   [WRITE=1: replace the standing record dev/work-budget.md]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/work_budget_rust.py" $(if $(WRITE),--write,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure work-budget $(if $(WRITE),--write,)
 
 rust-tooling:   ## [tests] every check, hook, gate and make target that reads Python's syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check rust-tooling
@@ -173,10 +173,10 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
 	fi
 	@$(MAKE) --no-print-directory pool-index-if-stale
-	@python3 scripts/measure/maps_moved.py --only "$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --only "$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"
 
 maps-moved:     ## [maps] which pool manifests differ from HEAD - the comparison a wave records, never a scratch copy (feature 429)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/maps_moved.py" --root "$$(git rev-parse --show-toplevel)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --root "$$(git rev-parse --show-toplevel)"
 
 probe:          ## [maps] what a change does to every seed and pool map against HEAD: the landing cohort, HEAD's fresh block and the pool in WT, every seed beside HEAD's stored verdict (feature 426)   [WT=<worktree>] [EXITFIRST=1] [JOBS=<n>]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure probe $(if $(WT),--wt $(WT),) $(if $(EXITFIRST),--exitfirst,) $(if $(JOBS),--jobs $(JOBS),)
