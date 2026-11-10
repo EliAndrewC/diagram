@@ -277,3 +277,5 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T83 Phase 3, measure and events: event_log, feature_report, ledger_owed, where_time, stepback_bundle, fix_yield, replay_owing's ruling, the three make audit recipes, land.py and speckit-todo.py
       research: rendering
+- [ ] T84 The removal the GM approves of T79's ported Python: canon.py, money_conversions.py, found.py, stale_terms.py, money_candidates.py, fragment_move.py, agent_census.py, and specs/251's seeded.py and run_seeded.sh, with docs/spec-kit-and-reviews.md:109 rewritten to name make model-trial's verb
+      research: rendering
