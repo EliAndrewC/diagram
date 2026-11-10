@@ -131,71 +131,9 @@ XIV) are fixed as they move.
 <!-- plan-archive: T001 to T005 moved to plan-done.md, 2026-11-07 (feature 375 FR-044) -->
 <!-- plan-archive: T049 to T049 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T050 to T052 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-### T011 Approach (checklist part A)
-
-1. **The goal, in the world.** `record-edit-hooks`'s verdicts given by the Rust guard, its shell gone.
-2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
-3. **Where each comes from.** `tests/hooks/test-record-edit-hooks.sh`, the guard's own suite; plan D3-D4.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
-6. **The exits.** Green: `tests/hooks/test-record-edit-hooks.sh` green against `l7r-guard --only record-edit-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
-9. **Done, measured.** every case of `test-record-edit-hooks.sh` passes against the Rust guard; `scripts/hooks/record-edit-hooks.sh` and its settings entry are gone in the commit that registers the decider.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-<!-- plan-archive: T012 to T012 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T013 to T013 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T014 to T014 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T015 to T015 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T016 to T016 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T017 to T017 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T018 to T018 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T019 to T019 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T020 to T020 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T021 to T021 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T022 to T022 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T023 to T023 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T024 to T024 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T025 to T025 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T026 to T026 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T027 to T027 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T028 to T028 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T029 to T029 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-### T043 Approach (checklist part A)
-
-1. **The goal, in the world.** `check-bundle-hooks`'s verdicts given by the Rust guard, its shell gone.
-2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
-3. **Where each comes from.** `tests/hooks/test-check-bundle-hooks.sh`, the guard's own suite; plan D3-D4.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
-6. **The exits.** Green: `tests/hooks/test-check-bundle-hooks.sh` green against `l7r-guard --only check-bundle-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
-9. **Done, measured.** every case of `test-check-bundle-hooks.sh` passes against the Rust guard; `scripts/hooks/check-bundle-hooks.sh` and its settings entry are gone in the commit that registers the decider.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-<!-- plan-archive: T044 to T044 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T045 to T045 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-### T048 Approach (checklist part A)
-
-1. **The goal, in the world.** `checks-hooks`'s verdicts given by the Rust guard, its shell gone.
-2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
-3. **Where each comes from.** `tests/hooks/test-checks-hooks.sh`, the guard's own suite; plan D3-D4.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
-6. **The exits.** Green: `tests/hooks/test-checks-hooks.sh` green against `l7r-guard --only checks-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
-9. **Done, measured.** every case of `test-checks-hooks.sh` passes against the Rust guard; `scripts/hooks/checks-hooks.sh` and its settings entry are gone in the commit that registers the decider.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-<!-- plan-archive: T006 to T049 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T050 to T052 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-<!-- plan-archive: T052 to T052 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T011 to T011 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
+<!-- plan-archive: T043 to T043 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
+<!-- plan-archive: T048 to T048 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 ### Phase 2 - the gate (Story 2, P2)
 
 **Approach.** The gate's own Python path moves to a Rust binary the Makefile calls: `l7r/diagram/ci/` (the test planner, the
@@ -397,30 +335,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T84 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T84 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
+<!-- plan-archive: T84 to T84 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 ### T85 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -445,37 +360,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T86 (the arbiter and checks state, `ask:449-T86-door`)
-
-- **Approach**: the five modules and three guards ported as one cut, with T011, T043 and T048, on the ruled door.
-
-   **Decisions** (`ask:449-T86-door`, FR-001, FR-002, FR-003, FR-006):
-   - The core is `l7r_guard::shared::checks`; the guards `check-bundle`, `checks` and `record-edit` call it directly, and `l7r-gate arbiter`, `checks-close` and `checks-door` are the commands. No guard starts Python on a plain Bash call or a plain Edit.
-   - Writers found outside the five, by `git grep -nE 'checks-open\.json|arbiter-owed\.json|modal-batches\.json|arbiter\.jsonl|arbiter-[a-z]+\.json|gm-rulings|arbiter_owed|checks-open' -- '*.py' '*.sh' 'Makefile' '*.mk' '*.rs'`, `specs/` included: `record_owed.py`'s `keep_batches` writes `modal-batches.json` and moves to a door verb; `rust/gate/src/state.rs`'s `second_red_gate` writes `arbiter-owed.json` and moves to the shared lock and atomic rename. A search by name cannot see a path taken from the `state_path` verb, so its callers were read as well: `arbiter_bundle.py`, `modal_bundle.py`, `earlier_rounds.py` and `check_bundle.py` only read it, their writes going to a bundle's own directory. Under `specs/` no Python or shell file names any of those files or the `state_path` verb, and two features' `measurements.json` name `checks-open.json` only as the source a figure was read from (374 and 375, three entries; their commands are `make feature-report` and `measure popup-rounds`, which read it) (observed 2026-11-10, method: the search above over `specs/**/*.py`, `specs/**/*.sh` and `specs/*/*measurements*.json`, and each hit read). So one implementation writes.
-   - `scripts/checks_door.py` is one process a run, reopened if the environment it reads changes mid-run, because `land.py` exports `SPECIFY_FEATURE`. It holds no logic. The door's verbs beyond the ruling's list, each a read or write the callers already made: `rulings`, `_round_no`, `PAGE_CHECKS`, `notes_of_manifest`, `subjects_of_manifest`, `fix_hold`, `keep_batches`.
-   - `l7r-gate arbiter` still runs Python by path on rare branches that are later tasks' ports and the T065 clause: `record_owed.answer`, `gm_review.question`, `checkpoint.close_checkpoint`, `review_prereq.py content-key`, `claims.py accept`. None writes `checks-open.json` or an arbiter file directly: an `ast` import closure from each, listing every file naming a state file and every write on those lines, found none, the writes reaching the state through door verbs only (observed 2026-11-10, method: `t86-closure.py` in the session's scratchpad). It reads line by line and cannot see a by-path run outside the import graph.
-   - Differential against the Python at commit 9c77004cf, on the real tree with writes on scratch copies, exit, stdout and stderr compared: door reads 9,265, door after an environment change 6, door writes 21 (`trip` 10, `record_answer` 7, `keep_batches` 4, covering what `checks_door/tests.rs`, `arbiter/tests.rs`, `rounds/tests.rs` and the Rust hook suites hold; no kept Python test uses those verbs), guards `check-bundle` 30, `checks` 16, `record-edit` 17, arbiter commands 92, `check-closed` 5, the accept seam's failure path 2 and its success path 1, on sparse clones where the engine imports, the store record, `arbiter-owed.json`, `checks-open.json` and the new `arbiter.jsonl` row compared too; 9,455 in all, 0 differ (observed 2026-11-10, method: `python3 /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t86-diff.py`). It found one difference, fixed: a failed `trip` through the door returned false where the Python raised; the door now answers an error and the guards keep the quiet false. No lock is held across the seam: `record_ruling` calls `accept_answers` with none held and `pop_owed` takes the owed lock afterwards. Three normalizations: the merged hook reply is compared as parsed JSON, the hook protocol's order being its keys'; a library's error text inside `refused - ...` is not compared; and where the Python's stderr holds a traceback, only the traceback itself is unbound (`ask:449-usage-text`): what either side wrote before the `Traceback (most recent call last):` line is compared, with exit status and stdout. One case of the 9,455 reached that, with no text before its traceback (observed 2026-11-10, method: the same harness, re-run with that comparison and a count).
-   - Reads that open the state files themselves today stand, Rust keeping the files' shape: `gm_review`, `set-down`, `budget_change`, `claims_carry`, `fix_yield`, `tool_yield`, `popup_rounds.rs`, `plan/record.rs`.
-   - The Rust keeps the Python's hand-written words, including refusal tags naming the old file, as the earlier guard ports did (FR-002).
-   - The five `.py` files, the three guards' `.sh` and the dangling link `tests/hooks/record-edit-gate.sh`, which nothing runs (`git grep -n record-edit-gate` names only its own suite, which needs no such link, and `make hooks-test HOOKS_ALL=1` is green without it), are deleted in the cut (the GM's standing approval of 2026-11-10; `ask:449-T86-door`).
-
-### T86 Approach (checklist part A)
-
-1. **The goal, in the world.** The state of the record checks and the arbiter is decided and written by Rust alone.
-2. **The constraints.** FR-001, FR-002, FR-003, FR-006; `ask:449-hm-checks-route`, `ask:449-T86-door`.
-3. **Where each comes from.** The Python compared with its port.
-4. **Do they describe the world here?** Tooling; no researched value moves.
-5. **The order.** After T81; T87-T89 and T83 then port their callers off the door.
-6. **The exits.** Green: the differential above shows no difference, the census no import of the five, and `make land` is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The differential; `python3 /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t86-census.py` walks all of `git ls-files '*.py'`, `specs/` included, with `ast`, searches shell and Makefile, and reads `specs/*/measurements*.json`'s commands: no import, by-path load or run of the five (observed 2026-11-10: 324 Python files, 84 under `specs/`; two comment lines in suites); `.claude/settings.json` names no removed guard.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** no.
-
-
+<!-- plan-archive: T86 to T86 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 ### T87 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

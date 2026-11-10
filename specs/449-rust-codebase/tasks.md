@@ -228,12 +228,15 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 ### Phase 3 (moved by the round arbiter's ruling `ask:449-hm-checks-route`, 2026-11-08; ported in one cut with their Python callers, FR-001)
       verify: DONE. landed: phase 2 closed; SC-002's one-line edit recorded not met at 22.0 s, an unchanged tree runs no test
 
-- [ ] T011 [US1] `record-edit-hooks`: its decider `rust/guard/src/guards/record_edit_hooks.rs`, its suite `tests/hooks/test-record-edit-hooks.sh` replayed against `l7r-guard --only record-edit-hooks`, then `scripts/hooks/record-edit-hooks.sh` and its settings entry removed
+- [x] T011 [US1] `record-edit-hooks`: its decider `rust/guard/src/guards/record_edit_hooks.rs`, its suite `tests/hooks/test-record-edit-hooks.sh` replayed against `l7r-guard --only record-edit-hooks`, then `scripts/hooks/record-edit-hooks.sh` and its settings entry removed
       research: rendering
-- [ ] T043 [US1] `check-bundle-hooks`: its decider `rust/guard/src/guards/check_bundle_hooks.rs`, its suite `tests/hooks/test-check-bundle-hooks.sh` replayed against `l7r-guard --only check-bundle-hooks`, then `scripts/hooks/check-bundle-hooks.sh` and its settings entry removed
+      verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
+- [x] T043 [US1] `check-bundle-hooks`: its decider `rust/guard/src/guards/check_bundle_hooks.rs`, its suite `tests/hooks/test-check-bundle-hooks.sh` replayed against `l7r-guard --only check-bundle-hooks`, then `scripts/hooks/check-bundle-hooks.sh` and its settings entry removed
       research: rendering
-- [ ] T048 [US1] `checks-hooks`: its decider `rust/guard/src/guards/checks_hooks.rs`, its suite `tests/hooks/test-checks-hooks.sh` replayed against `l7r-guard --only checks-hooks`, then `scripts/hooks/checks-hooks.sh` and its settings entry removed
+      verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
+- [x] T048 [US1] `checks-hooks`: its decider `rust/guard/src/guards/checks_hooks.rs`, its suite `tests/hooks/test-checks-hooks.sh` replayed against `l7r-guard --only checks-hooks`, then `scripts/hooks/checks-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
 
 ## Dependencies
 
@@ -280,12 +283,14 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T83 Phase 3, measure and events: event_log, feature_report, ledger_owed, where_time, stepback_bundle, fix_yield, replay_owing's ruling, the three make audit recipes, land.py and speckit-todo.py
       research: rendering
-- [ ] T84 The first removal under the GM's standing approval (the GM, 2026-11-10: "Yes please delete Python files once their Rust ports land."): the ported `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `agent_census.py`, `access_tags.py`, `downloads.py`, `check-partial-citations.py`, `moves.py`, `hm_record.py`, `hm_house.py` and specs/251's `seeded.py` and `run_seeded.sh`, the docs renamed to their verbs; each later task removes its own ported files at its landing
+- [x] T84 The first removal under the GM's standing approval (the GM, 2026-11-10: "Yes please delete Python files once their Rust ports land."): the ported `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `agent_census.py`, `access_tags.py`, `downloads.py`, `check-partial-citations.py`, `moves.py`, `hm_record.py`, `hm_house.py` and specs/251's `seeded.py` and `run_seeded.sh`, the docs renamed to their verbs; each later task removes its own ported files at its landing
       research: rendering
+      verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
 - [ ] T85 Phase 4, the archive cluster with `interactive/record` (`ask:449-T81-slices`, moved by its test, each carrying the T065 clause and named at the phase-3 close): `quote_verbatim`, `sources`, `attempts`, `source_pages`, `reserve-prefix`, `apply_edits`, `uncited`, `uncited_imports`, `archive_ops`, `archive`; Rust `downloads`' by-path run of `reserve-prefix.py` ends here
       research: rendering
-- [ ] T86 Phase 3, the arbiter and checks state, with T011, T043 and T048: hm_arbiter, hm_checks, hm_fixloop, hm_planhold, hm_budget_rounds, one owner of checks-open.json, arbiter-owed.json and modal-batches.json
+- [x] T86 Phase 3, the arbiter and checks state, with T011, T043 and T048: hm_arbiter, hm_checks, hm_fixloop, hm_planhold, hm_budget_rounds, one owner of checks-open.json, arbiter-owed.json and modal-batches.json
       research: rendering
+      verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
 - [ ] T87 Phase 3, the owed core: record_owed, record_units, modal_owed, entry_owed, translation_owed, modal_triage; record_cache.py deleted with its last Python caller (`ask:449-T81-slices`)
       research: rendering
 - [ ] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed
