@@ -158,8 +158,8 @@ fn a_close_that_breaks_a_rule_is_refused_and_changes_nothing() {
 
 fn feature(tag: &str) -> (PathBuf, String) {
     let dir = crate::checks::scratch(tag);
-    let body: String = rows().iter().map(|r| format!("{r}\n")).collect();
-    std::fs::write(dir.join("found.jsonl"), body + "\n").unwrap();
+    let body: Vec<String> = rows().iter().map(ToString::to_string).collect();
+    std::fs::write(dir.join("found.jsonl"), body.join("\n") + "\n\n").unwrap();
     let name = dir.display().to_string();
     (dir, name)
 }

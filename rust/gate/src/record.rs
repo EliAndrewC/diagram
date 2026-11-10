@@ -8,6 +8,8 @@ use serde_json::{json, Value};
 
 use crate::Reply;
 
+mod stale_terms;
+
 const CANON_ROOTS: [&str; 2] = [
     "/host-l7r-repo/setting",
     "/host-l7r-repo/gm-assistant/setting",
@@ -98,7 +100,7 @@ fn canon_search(terms: &[String], files: &[PathBuf]) -> HashMap<String, Vec<Stri
         let mut heading = String::new();
         for (i, line) in py_lines(&body).into_iter().enumerate() {
             if line.starts_with('#') {
-                heading = line.trim_start_matches('#').trim().to_owned();
+                line.trim_start_matches('#').trim().clone_into(&mut heading);
             }
             let low = line.to_lowercase();
             for term in terms {
@@ -230,10 +232,9 @@ pub(crate) fn close_rows(
         return Err(format!("--task names a task id - T61, or 385 T12 / 405 T17 (the GM's routing names those two features only) - not '{task}'"));
     }
     // SETTLED ONLY WHERE IT NO LONGER HOLDS (the plan review of 405 D36): a finding that still holds is filed as a task (FR-002)
-    if !why.is_empty()
-        && !(why.to_lowercase().starts_with("no longer holds")
-            && why.split_whitespace().count() >= 6)
-    {
+    let measured =
+        why.to_lowercase().starts_with("no longer holds") && why.split_whitespace().count() >= 6;
+    if !why.is_empty() && !measured {
         return Err("--why starts \"no longer holds\" and records what was measured against the current file (a finding that still holds is filed as a task)".to_owned());
     }
     for n in numbers {
@@ -361,6 +362,8 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         Some("canon") => canon(rest, &CANON_ROOTS.map(PathBuf::from)),
         Some("money-conversions") => money(rest, Path::new(MONEY_SOURCE), Path::new(".")),
         Some("found") => found(rest),
+        Some("stale-terms") => stale_terms::cli(rest),
+        Some("stale-dirs") => stale_terms::dirs_cli(rest),
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),

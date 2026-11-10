@@ -25,11 +25,15 @@ fn world(tag: &str) -> PathBuf {
 }
 
 fn ctx<'a>(d: &Path, stale: &'a str, active: &'a str) -> Ctx<'a> {
+    std::fs::create_dir_all(d.join("scripts/gates")).unwrap();
+    crate::guards::write_executable(
+        &d.join("scripts/gates/l7r-gate.sh"),
+        &format!("#!/bin/sh\n{stale}\n"),
+    );
     Ctx {
         tree: d.to_path_buf(),
         python: "sh",
         arbiter_code: ARBITER,
-        stale_code: stale,
         active_code: active,
     }
 }

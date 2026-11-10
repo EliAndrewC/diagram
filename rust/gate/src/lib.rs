@@ -5,6 +5,7 @@ mod ci;
 pub mod codeid;
 mod cohort;
 pub mod delta;
+mod difflib;
 mod exempt;
 mod hashing;
 mod lock;

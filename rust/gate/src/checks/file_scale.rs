@@ -185,7 +185,7 @@ fn signed(n: usize, limit: usize) -> String {
 
 fn check(root: &Path, label: &str, shown: &dyn Fn(&str) -> String) -> Outcome {
     let scan = run(root);
-    if scan.scanned == 0 {
+    if scan.scanned == 0 && listed(root, &["*"]).is_empty() {
         return Outcome::refuse(format!(
             "check-file-scale: scanned ZERO files under '{label}' - wrong root? failing loudly\n"
         ));

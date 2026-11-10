@@ -48,11 +48,6 @@ if op == "closed": print(h.closed(root, sys.argv[4]))
 elif op == "continues": print(h.continues(root, sys.argv[4]))
 else:
     h.trip(root, sys.argv[4], "round", sys.argv[5], sys.argv[6]); print(h.refusal([sys.argv[4]]))"#;
-/// `stale_terms.py` by path (it has `make stale-terms` of its own): the rendered candidates, or nothing.
-const STALE_CODE: &str = r"import sys, pathlib; sys.path.insert(0, sys.argv[1]); import stale_terms as s
-old, new = s.read_dir(pathlib.Path(sys.argv[2])), s.read_dir(pathlib.Path(sys.argv[3]))
-found = s.stale_candidates(old, new) + s.criteria_left_behind(old, new)
-if found: print(len(found)); print(s.render(found))";
 /// The active feature's directory and its task, a line each, asked of the plan gate (`l7r-gate plan door active-task`).
 const ACTIVE_CODE: &str = r#"import json, subprocess, sys
 done = subprocess.run([sys.argv[1] + "/l7r-gate.sh", "plan", "door", "active-task", sys.argv[2]], capture_output=True, text=True)
@@ -87,7 +82,6 @@ pub(crate) struct Ctx<'a> {
     pub(crate) tree: PathBuf,
     pub(crate) python: &'a str,
     pub(crate) arbiter_code: &'a str,
-    pub(crate) stale_code: &'a str,
     pub(crate) active_code: &'a str,
 }
 
@@ -96,7 +90,6 @@ fn production(tree: PathBuf) -> Ctx<'static> {
         tree,
         python: "python3",
         arbiter_code: ARBITER_CODE,
-        stale_code: STALE_CODE,
         active_code: ACTIVE_CODE,
     }
 }
@@ -612,14 +605,13 @@ fn later_round(
         }
         note = format!(" {STALE_TOKEN}: {why}");
     } else {
-        let reviews = ctx.tree.join("scripts/reviews");
+        let gate = ctx.tree.join("scripts/gates/l7r-gate.sh");
         let said = ask(
             root,
-            ctx.python,
+            &gate.to_string_lossy(),
             &[
-                "-c",
-                ctx.stale_code,
-                &reviews.to_string_lossy(),
+                "record",
+                "stale-dirs",
                 &snap.to_string_lossy(),
                 &feature_dir.to_string_lossy(),
             ],

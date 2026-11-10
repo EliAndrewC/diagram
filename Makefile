@@ -888,7 +888,7 @@ stale-terms:    ## [project] after a value changed in a feature's spec, where do
 ##  F=<feature>    the feature number or directory name under specs/
 ##  AGAINST=<ref>  compare with the feature directory at this git ref (default: what the previous review round saw)
 	@if [ -z "$(F)" ]; then printf 'make stale-terms: F=<feature> is required - e.g. make stale-terms F=253\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/stale_terms.py" "$(F)" --clone "$$(git rev-parse --show-toplevel)" $(if $(AGAINST),--against "$(AGAINST)",); test $$? -le 1
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record stale-terms "$(F)" --clone "$$(git rev-parse --show-toplevel)" $(if $(AGAINST),--against "$(AGAINST)",); test $$? -le 1
 
 size-table:     ## [project] every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit   PLAN=pool/<subject>.svg
 ##  PLAN=<svg>     the plan's SVG, relative to the skill directory or absolute
