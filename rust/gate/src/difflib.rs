@@ -106,8 +106,113 @@ pub(crate) fn opcodes(a: &[&str], b: &[&str]) -> Vec<Opcode> {
     out
 }
 
+/// `get_grouped_opcodes(n)`.
+fn grouped(mut codes: Vec<Opcode>, n: usize) -> Vec<Vec<Opcode>> {
+    if let Some(first) = codes.first_mut().filter(|c| c.0 == Tag::Equal) {
+        first.1 = first.1.max(first.2.saturating_sub(n));
+        first.3 = first.3.max(first.4.saturating_sub(n));
+    }
+    if let Some(last) = codes.last_mut().filter(|c| c.0 == Tag::Equal) {
+        last.2 = last.2.min(last.1 + n);
+        last.4 = last.4.min(last.3 + n);
+    }
+    let (mut out, mut group) = (Vec::new(), Vec::new());
+    for (tag, mut i1, i2, mut j1, j2) in codes {
+        if tag == Tag::Equal && i2 - i1 > n + n {
+            group.push((tag, i1, i2.min(i1 + n), j1, j2.min(j1 + n)));
+            out.push(std::mem::take(&mut group));
+            i1 = i1.max(i2.saturating_sub(n));
+            j1 = j1.max(j2.saturating_sub(n));
+        }
+        group.push((tag, i1, i2, j1, j2));
+    }
+    let lone_equal = group.len() == 1 && group[0].0 == Tag::Equal;
+    if !group.is_empty() && !lone_equal {
+        out.push(group);
+    }
+    out
+}
+
+/// `_format_range_unified`.
+fn range(start: usize, stop: usize) -> String {
+    let (beginning, length) = (start + 1, stop - start);
+    match length {
+        1 => beginning.to_string(),
+        0 => format!("{},0", beginning - 1),
+        _ => format!("{beginning},{length}"),
+    }
+}
+
+/// `difflib.unified_diff(a, b, from_file, to_file, lineterm="", n=n)` over lines (no line of `a` or `b` carries its end).
+pub(crate) fn unified_diff(
+    a: &[&str],
+    b: &[&str],
+    from_file: &str,
+    to_file: &str,
+    n: usize,
+) -> Vec<String> {
+    let mut out = Vec::new();
+    for group in grouped(opcodes(a, b), n) {
+        if out.is_empty() {
+            out.push(format!("--- {from_file}"));
+            out.push(format!("+++ {to_file}"));
+        }
+        let (first, last) = (group[0], group[group.len() - 1]);
+        out.push(format!(
+            "@@ -{} +{} @@",
+            range(first.1, last.2),
+            range(first.3, last.4)
+        ));
+        for (tag, i1, i2, j1, j2) in group {
+            if tag == Tag::Equal {
+                out.extend(a[i1..i2].iter().map(|l| format!(" {l}")));
+                continue;
+            }
+            if tag != Tag::Insert {
+                out.extend(a[i1..i2].iter().map(|l| format!("-{l}")));
+            }
+            if tag != Tag::Delete {
+                out.extend(b[j1..j2].iter().map(|l| format!("+{l}")));
+            }
+        }
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
+    use super::unified_diff;
+
+    fn lines(text: &str) -> Vec<&str> {
+        text.split('\n').collect()
+    }
+
+    /// Each expected string is `difflib.unified_diff(a, b, ..., lineterm="", n=n)`'s, from `CPython`.
+    #[test]
+    fn unified_diff_matches_pythons() {
+        let (a, b) = (
+            lines("h\nb\nc\nd\ne\nf\ng\nh2\ni\nj\nk"),
+            lines("h\nx\nc\nd\ne\nf\ng\nh2\ny\nj\nk\nl"),
+        );
+        assert_eq!(
+            unified_diff(&a, &b, "at the last sync", "your copy", 1).join("\n"),
+            "--- at the last sync\n+++ your copy\n@@ -1,3 +1,3 @@\n h\n-b\n+x\n c\n@@ -8,4 +8,5 @@\n h2\n-i\n+y\n j\n k\n+l"
+        );
+        assert_eq!(
+            unified_diff(&[""], &["a"], "f", "t", 1).join("\n"),
+            "--- f\n+++ t\n@@ -1 +1 @@\n-\n+a"
+        );
+        assert!(unified_diff(&["x"], &["x"], "f", "t", 1).is_empty());
+        assert_eq!(
+            unified_diff(&["x", "y"], &["y"], "f", "t", 0).join("\n"),
+            "--- f\n+++ t\n@@ -1 +0,0 @@\n-x"
+        );
+        assert_eq!(
+            unified_diff(&["a", "b", "c"], &["a", "c"], "f", "t", 0).join("\n"),
+            "--- f\n+++ t\n@@ -2 +1,0 @@\n-b"
+        );
+    }
+
     use super::{matching_blocks, opcodes, Tag};
 
     #[test]

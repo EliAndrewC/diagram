@@ -23,7 +23,7 @@
     },
     "check-partial-citations": {
       "kind": "check",
-      "what": "scripts/gates/check-partial-citations.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/partial_citations.rs - a refusing check; each run recorded passed or refused"
     },
     "check-question-size": {
       "kind": "check",

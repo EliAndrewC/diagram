@@ -8,6 +8,7 @@ mod conflict;
 mod file_scale;
 mod house_style_delta;
 mod moves;
+mod partial_citations;
 mod question_size;
 mod research_pointers;
 mod run_plausible;
@@ -177,7 +178,7 @@ pub(crate) fn one_shot_pattern() -> &'static fancy_regex::Regex {
     &spec_figures::ONE_SHOT
 }
 
-/// Does `check`, one of the four still in Python, read this path? Each set is that check's own, from its source and what it
+/// Does `check`, one of the four gated on their delta (three still Python, `partial-citations` in Rust since T80), read this path? Each set is that check's own, from its source and what it
 /// imports. An unknown name reads everything: it runs.
 fn reads(check: &str, path: &str) -> bool {
     let python = has_ext(path, "py");
@@ -194,15 +195,17 @@ fn reads(check: &str, path: &str) -> bool {
                 || (python && under(&["l7r/", "tests/", "scripts/", "pool/"]))
         }
         "partial-citations" => {
-            own(check)
-                || under(&["research/sources/010-works-cited/", "research/archive/"])
-                || (path.starts_with("research/questions/") && path.ends_with(".notes.html"))
+            under(&[
+                "research/sources/010-works-cited/",
+                "research/archive/",
+                "rust/gate/src/record/downloads",
+            ]) || (path.starts_with("research/questions/") && path.ends_with(".notes.html"))
                 || [
                     "research/partial-confirmations.jsonl",
                     "research/source-access.json",
                     "research/to-download.md",
-                    "scripts/record/access_tags.py",
-                    "scripts/record/downloads.py",
+                    "rust/gate/src/checks/partial_citations.rs",
+                    "rust/gate/src/record/access_tags.rs",
                 ]
                 .contains(&path)
         }
@@ -254,6 +257,7 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("spec-lint") => (spec_lint::USAGE_LOG_TOOL, spec_lint::cli(rest)),
         Some("run-plausible") => (run_plausible::USAGE_LOG_TOOL, run_plausible::cli(rest, root, &std::env::var("MAKEFLAGS").unwrap_or_default())),
         Some("tool-signals") => (tool_signals::USAGE_LOG_TOOL, tool_signals::cli(rest, root)),
+        Some("partial-citations") => (partial_citations::USAGE_LOG_TOOL, partial_citations::cli(rest)),
         Some("needs") => {
             let o = needs(rest.first().map_or("", String::as_str), root);
             return crate::Reply { stdout: o.stdout, stderr: o.stderr, code: o.code };

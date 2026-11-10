@@ -165,11 +165,9 @@ def resolve_matches(
     """`<file>=<key>[,<key>]` or `<file>=#17` / `<file>=H3` (feature 313 FR-006): an entry id resolves to the registry keys
     that download-list entry names, `[]` where it names none, and is returned beside them. An id the list lacks is a
     refusal naming it."""
-    import access_tags as at
-
     match: dict[str, list[str]] = {}
     downloads: dict[str, str] = {}
-    world = None
+    gate = pathlib.Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"  # the access tags are Rust since 449 T80, one implementation
     for m in raw:
         if "=" not in m:
             continue
@@ -178,11 +176,11 @@ def resolve_matches(
         if not found:
             match[name] = [k for k in value.split(",") if k]
             continue
-        world = world or at.load(root)
         eid = found.group(1)
-        if f"download:{eid}" not in world.entry_keys:
-            raise SystemExit(f"archive: no download-list entry {eid} in {at.dl.CANON}")
-        match[name] = sorted(world.entry_keys[f"download:{eid}"])
+        done = subprocess.run([str(gate), "record", "access-tags", "entry-keys", eid], cwd=root, capture_output=True, text=True, check=False)
+        if done.returncode:
+            raise SystemExit(done.stderr.strip())
+        match[name] = json.loads(done.stdout)
         downloads[name] = eid
     return match, downloads
 

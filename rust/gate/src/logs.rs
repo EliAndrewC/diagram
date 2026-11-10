@@ -134,7 +134,7 @@ fn indented(value: &Value) -> String {
     out + "\n"
 }
 
-fn one_line(value: &Value) -> String {
+pub(crate) fn one_line(value: &Value) -> String {
     let mut out = String::new();
     dumps(value, None, 0, &mut out, true);
     out

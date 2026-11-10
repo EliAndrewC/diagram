@@ -351,6 +351,13 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
+   **Decisions** (the first slice, `ask:449-T80-order`: `access_tags`, `downloads`, `check-partial-citations`):
+   - WHAT IS HERE: `l7r-gate record access-tags`, `l7r-gate record downloads`, `l7r-gate check partial-citations` (`rust/gate/src/record/`, `rust/gate/src/checks/`), the push's and the Makefile's rows and recipes moved to the verbs. `partial-citations` keeps its delta gate, only the files it reads named anew.
+   - THE CALLERS (an `ast` walk of every tracked `.py` for imports, and `importlib`/by-path strings, 2026-11-10, one-shot): `archive_ops.py` (`resolve_matches`) and `uncited.py` (`retire_cited`) import `access_tags`; both reach the Rust through its command, `access-tags entry-keys` and `access-tags set`, so one implementation decides. `check_bundle.py` and `memo_check.py`'s dynamic imports name neither module.
+   - NO PYTHON FOR THE LOCK: `downloads add` used `reserve-prefix.py` for `mirror_of` and `Lock` alone, and neither has a verb a subprocess could use; both are ported in-process, the lock through `flock(1)` on the same `<mirror>/.specify/download-ids.lock` (T014's decision, `File::try_lock` being past this toolchain), so the Python and Rust callers still exclude each other. `ingest` runs `archive_ops.py inbox` by path, as the Python did, until step 3.
+   - THE DATE IS THE PYTHON'S: `date.today()` is the local date; `today` asks `date(1)`, not the UTC clock.
+   - THE VERDICTS ARE THE PYTHON'S (observed 2026-11-10, method: each command through the Python and the binary on the real repository and two scratch clones, exit, stdout, stderr and every written file compared, a one-shot): 249 comparisons, 0 differences. Argparse usage text (exit 2) and a Python traceback's text are not compared.
+
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 

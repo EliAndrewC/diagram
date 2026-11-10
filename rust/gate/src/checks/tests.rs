@@ -114,7 +114,15 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
     );
     alone("research/archive/a/b.json", [false, false, true, false]);
     alone("research/source-access.json", [false, false, true, false]);
-    alone("scripts/record/access_tags.py", [false, true, true, false]);
+    alone("scripts/record/access_tags.py", [false, true, false, false]);
+    alone(
+        "rust/gate/src/record/access_tags.rs",
+        [false, false, true, false],
+    );
+    alone(
+        "rust/gate/src/record/downloads/parse.rs",
+        [false, false, true, false],
+    );
     alone(
         "scripts/gates/check-entry-headings.py",
         [false, true, false, true],
@@ -123,8 +131,8 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
         "scripts/gates/check-duplicate-defs.py",
         [true, true, false, false],
     );
-    put(&dir, "scripts/gates/check-partial-citations.py", "x = 1\n");
-    assert_eq!(ran(&dir), [false, true, true, false]);
+    put(&dir, "rust/gate/src/checks/partial_citations.rs", "\n");
+    assert_eq!(ran(&dir), [false, false, true, false]);
     assert_eq!(needs("something-else", &dir).code, 0);
     assert_eq!(needs("function-cap", &repo("needs-base")).code, 0);
 }
@@ -133,6 +141,8 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
 fn each_check_answers_by_name_and_its_run_is_recorded() {
     let dir = repo("cli");
     assert_eq!(cli(&owned(&["nonsense"]), &dir).code, 2);
+    let tree = dir.display().to_string();
+    assert_eq!(cli(&owned(&["partial-citations", &tree]), &dir).code, 0);
     assert_eq!(cli(&[], &dir).code, 2);
     assert_eq!(cli(&owned(&["needs", "duplicate-defs"]), &dir).code, 0);
     assert_eq!(cli(&owned(&["needs"]), &dir).code, 0);

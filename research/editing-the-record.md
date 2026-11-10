@@ -57,7 +57,7 @@ up in `research/sources/040-uncited-works/` exactly as a cited work is (no `Used
 KEY=<k>` moves it to the works cited; the build refuses a footnote citing it where it stands. A footnote citing a source no
 one can wholly read (`paywalled`, `gm-partial`, `never-read`) stands only on a passage `quote-check` confirmed in the
 readable part, recorded in `research/partial-confirmations.jsonl` - the push and `make quick` refuse it otherwise
-(`scripts/gates/check-partial-citations.py`).
+(`l7r-gate check partial-citations`).
 
 **A check round, as the tooling holds it (feature 375).** A pop-up owed only because a page it names moved is TRIAGED first
 (`make modal-triage`, one ad-hoc opus agent, `make modal-triaged`), as claims are (`make claims-triage`). While a check on a

@@ -43,7 +43,7 @@ static NAME: LazyLock<Regex> =
     LazyLock::new(|| compiled(r"^(\d{4})-([^./\s]+)(\.drawing)?\.html\n?$"));
 
 /// `Path.read_text(encoding="utf-8")`: strict UTF-8, and universal newlines, so a file this rewrites comes out with Python's line ends.
-fn read_text(path: &Path) -> std::io::Result<String> {
+pub(crate) fn read_text(path: &Path) -> std::io::Result<String> {
     let text = String::from_utf8(std::fs::read(path)?).map_err(|_| ErrorKind::InvalidData)?;
     Ok(text.replace("\r\n", "\n").replace('\r', "\n"))
 }

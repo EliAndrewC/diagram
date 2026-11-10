@@ -861,21 +861,21 @@ archive-find: ## [project] does the archive already hold it? by URL, registry ke
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
 
 downloads-ingest: ## [project] on the GM's word "ingest": the marks in the GM's copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP="<ids>"] [DROP="<ids>"] [MARK="<id>=<downloaded|partial|paywalled|not-found> ..."]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" ingest --keep "$(KEEP)" --drop "$(DROP)" --mark "$(MARK)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads ingest --keep "$(KEEP)" --drop "$(DROP)" --mark "$(MARK)"
 
 downloads-sync: ## [project] on the GM's word "sync": the GM's copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" sync
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads sync
 
 downloads-tag: ## [project] tag every download-list entry [money] or [diagram] after its number, derived from the questions its Rests-on line points at (the GM, 2026-10-20); download-add tags a new entry itself
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" tag
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads tag
 
 download-add: ## [project] append a source only the GM can fetch at the end of the canonical download list, under the next number taken under a host-wide lock (feature 313)   FILE=<draft.md, entries headed "### NEW. <the work>">
 	@if [ -z "$(FILE)" ]; then printf 'make download-add: FILE=<draft.md> is required - entries headed "### NEW. <the work>", each with a link line, "- Fallback:", "- **Rests on it:**" naming research/questions/<file>, and "- Blocked by:"\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" add "$(FILE)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads add "$(FILE)"
 
 access-tags: ## [project] what can be got of each source - open, gm-full, gm-partial, paywalled, bot-refused, down, gone, never-read - derived from the archive, the registry and the GM's marks (feature 313)   [KEY=<key|download:ID>] [JSON=1] | SET=<state> KEY= DATE=<YYYY-MM-DD> REASON="<what it rests on>"
-	@if [ -n "$(SET)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/record/access_tags.py" set "$(KEY)" "$(SET)" "$(DATE)" "$(REASON)"; \
-	else python3 "$$(git rev-parse --show-toplevel)/scripts/record/access_tags.py" report $(if $(KEY),--key "$(KEY)",) $(if $(JSON),--json,); fi
+	@if [ -n "$(SET)" ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record access-tags set "$(KEY)" "$(SET)" "$(DATE)" "$(REASON)"; \
+	else "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record access-tags report $(if $(KEY),--key "$(KEY)",) $(if $(JSON),--json,); fi
 
 sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
 	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi
@@ -961,7 +961,7 @@ quick:           ## [tests] tier 2: lint and the kept Python tests that roll no 
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
-	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then python3 scripts/gates/check-partial-citations.py .; fi
+	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check partial-citations .; fi
 	@python3 -m pytest -q --no-cov -m "not rolls_map" tests
 	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(grep -rho --include='*.py' '@pytest.mark.rolls_map' tests | wc -l)"
 	@$(STATE) green-local quick

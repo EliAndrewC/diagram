@@ -422,7 +422,7 @@ fn the_push_runs_the_make_page_check_and_the_money_check() {
 fn every_makefile_line_starting_a_retained_python_check_asks_first() {
     let makefile = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../Makefile");
     let text = std::fs::read_to_string(makefile).unwrap();
-    let names = ["partial-citations"].map(|n| format!("python3 scripts/gates/check-{n}"));
+    let names = ["partial-citations"].map(|n| format!("l7r-gate.sh\" check {n} "));
     let lines: Vec<&str> = text
         .lines()
         .filter(|l| l.starts_with('\t') && names.iter().any(|n| l.contains(n.as_str())))

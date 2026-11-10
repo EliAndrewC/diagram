@@ -43,6 +43,7 @@ import hashlib
 import json
 import pathlib
 import re
+import subprocess
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -723,8 +724,6 @@ def retire_cited(root: pathlib.Path, key: str, access: str, note: str) -> pathli
     """FR-019 (plan D14): a works-cited source no one can read, its footnotes gone, leaves the works cited - its entry
     removed, a not-kept line (`unreadable`, its access state) and the access state recorded by hand with the reason.
     Refused while any question still cites it: its footnotes are removed or re-sourced first."""
-    import access_tags as tags  # noqa: PLC0415
-
     entry = [f for f in (at.base(root) / SOURCES / "010-works-cited").glob(f"*-{key}.html") if re.fullmatch(rf"\d+-{re.escape(key)}\.html", f.name)]
     if not entry:
         raise ValueError(f"no works-cited entry for {key!r}")
@@ -733,7 +732,10 @@ def retire_cited(root: pathlib.Path, key: str, access: str, note: str) -> pathli
         raise ValueError(f"{key} is still cited in {', '.join(sorted(citing))} - remove or re-source those footnotes first (FR-019)")
     raw = src._URL.findall(entry[0].read_text(encoding="utf-8"))[0].rstrip(").,;:")
     at.write(root, [line(raw, ["unreadable"], "fr-019", f"{key}: {note}", access)], NOT_KEPT)
-    tags.set_state(root, key, access, today(), note)
+    gate = pathlib.Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"  # the access tags are Rust since 449 T80, one implementation
+    done = subprocess.run([str(gate), "record", "access-tags", "set", key, access, today(), note], cwd=root, capture_output=True, text=True, check=False)
+    if done.returncode:
+        raise ValueError(done.stderr.strip())
     entry[0].unlink()
     return entry[0]
 

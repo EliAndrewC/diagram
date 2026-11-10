@@ -289,6 +289,8 @@ fn the_command_line_routes_each_verb() {
     assert_eq!(cli(&words(&["frob"])).code, 2);
     assert_eq!(cli(&words(&["canon"])).code, 2);
     assert_eq!(cli(&words(&["found"])).code, 2);
+    assert_eq!(cli(&words(&["access-tags"])).code, 2);
+    assert_eq!(cli(&words(&["downloads"])).code, 2);
     assert_eq!(cli(&words(&["canon", "zzz-no-such-term"])).code, 0);
     assert!([0, 1].contains(&cli(&words(&["money-conversions", "--check"])).code));
 }
