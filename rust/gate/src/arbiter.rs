@@ -106,13 +106,12 @@ fn py(code: &str, args: &[&str]) -> Result<String, Stop> {
         .arg(code)
         .args(args)
         .output();
+    let said = done.as_ref().ok().map_or_else(String::new, |o| {
+        String::from_utf8_lossy(&o.stderr).trim().to_owned()
+    });
     match done {
         Ok(o) if o.status.success() => Ok(String::from_utf8_lossy(&o.stdout).trim().to_owned()),
-        Ok(o) => Err(Stop::Refused(format!(
-            "python3 said: {}",
-            String::from_utf8_lossy(&o.stderr).trim()
-        ))),
-        Err(e) => Err(Stop::Refused(format!("python3 did not start: {e}"))),
+        _ => Err(Stop::Refused(format!("python3 said: {said}"))),
     }
 }
 
