@@ -30,3 +30,5 @@ The GM, 2026-11-09: "Let's delete rather than port our tooling which runs our te
 ## 2026-11-10, reviews on straight ports (FR-001c)
 
 The GM, asking about the time a port's reviews take: "why did we need 12 minutes on plan reviews and arbitur rulings for a straightforward tool port? Is that something we can skip for this porting effort?" and, on the session's proposal: "yes please applh this starting with the next task".
+
+The session then corrected the evidence it had given and offered a narrower rule; the GM: "yes I approve the narrower rule".
