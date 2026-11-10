@@ -188,3 +188,33 @@ fn a_step_leaves_a_tool_usage_line() {
             && line.contains("\"outcome\": \"changed\"")
     );
 }
+
+#[test]
+fn a_prompt_after_noise_and_two_transcripts_of_one_agent() {
+    let g = dir("noise");
+    let t = g.join("found.jsonl");
+    std::fs::write(
+        &t,
+        transcript(&[
+            "not json at first".to_owned(),
+            line(&json!({"timestamp": "2026-01-01T00:00:00Z"})),
+            line(&json!({"message": {"role": "user", "content": [{"text": "from parts"}, 4]}})),
+        ]),
+    )
+    .unwrap();
+    let found = t.clone();
+    let done = |_: &str| Some(found.clone());
+    let payload = json!({"tool_response": {"status": "completed", "agentId": "x"}, "tool_input": {"subagent_type": "quote-check"}});
+    assert!(super::log_pass_found(&g, "launched", &payload, 1.0, &done));
+    let odd_input =
+        json!({"tool_response": {"status": "completed", "agentId": "x"}, "tool_input": 3});
+    assert!(!super::log_pass_found(
+        &g, "launched", &odd_input, 1.0, &done
+    ));
+    let root = dir("two-projects");
+    for s in ["p/s/subagents", "p/t/subagents"] {
+        std::fs::create_dir_all(root.join(s)).unwrap();
+        std::fs::write(root.join(s).join("agent-ab.jsonl"), "x").unwrap();
+    }
+    assert!(super::transcript_under(&root, "ab").is_some());
+}
