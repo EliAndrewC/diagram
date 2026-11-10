@@ -58,10 +58,10 @@ impl Now {
     }
 }
 
-/// A record's text with every non-ASCII character escaped, as Python's `json.dumps` writes it; outside a string JSON holds none, so this touches only text.
-fn ascii_escaped(text: &str) -> String {
-    let mut out = String::with_capacity(text.len());
-    for c in text.chars() {
+/// A string as Python's `json.dumps` writes it: every non-ASCII character escaped.
+fn ascii_string(text: &str) -> String {
+    let mut out = String::with_capacity(text.len() + 2);
+    for c in Value::String(text.to_owned()).to_string().chars() {
         if c.is_ascii() {
             out.push(c);
         } else {
@@ -74,56 +74,70 @@ fn ascii_escaped(text: &str) -> String {
     out
 }
 
-fn indented(value: &Value) -> String {
-    use serde::Serialize as _;
-    let mut out = Vec::new();
-    let mut writer = serde_json::Serializer::with_formatter(
-        &mut out,
-        serde_json::ser::PrettyFormatter::with_indent(b"  "),
-    );
-    let _ = value.serialize(&mut writer);
-    ascii_escaped(&String::from_utf8_lossy(&out)) + "\n"
-}
-
-/// `json.dumps`'s default separators, `", "` and `": "`.
-struct Spaced;
-
-impl serde_json::ser::Formatter for Spaced {
-    fn begin_array_value<W: ?Sized + std::io::Write>(
-        &mut self,
-        writer: &mut W,
-        first: bool,
-    ) -> std::io::Result<()> {
-        if first {
-            Ok(())
+/// A float as Python's `repr` writes it: shortest digits, positional from 1e-4 up to 1e16, and a signed two-digit exponent outside that.
+fn py_float(f: f64) -> String {
+    let scientific = format!("{f:e}");
+    let (mantissa, exponent) = scientific.split_once('e').unwrap_or((&scientific, "0"));
+    let exponent: i32 = exponent.parse().unwrap_or(0);
+    if (-4..16).contains(&exponent) {
+        let plain = format!("{f}");
+        return if plain.contains('.') {
+            plain
         } else {
-            writer.write_all(b", ")
+            plain + ".0"
+        };
+    }
+    format!(
+        "{mantissa}e{}{:02}",
+        if exponent < 0 { '-' } else { '+' },
+        exponent.abs()
+    )
+}
+
+/// `value` as Python's `json.dumps(value, indent=indent)` writes it, byte for byte.
+fn dumps(value: &Value, indent: Option<usize>, level: usize, out: &mut String) {
+    let line =
+        |depth: usize| indent.map_or_else(String::new, |n| format!("\n{}", " ".repeat(n * depth)));
+    let comma = if indent.is_some() { "," } else { ", " };
+    match value {
+        Value::Number(n) if n.is_f64() => *out += &py_float(n.as_f64().unwrap_or(0.0)),
+        Value::String(s) => *out += &ascii_string(s),
+        Value::Array(items) if !items.is_empty() => {
+            out.push('[');
+            for (i, item) in items.iter().enumerate() {
+                *out += if i == 0 { "" } else { comma };
+                *out += &line(level + 1);
+                dumps(item, indent, level + 1, out);
+            }
+            *out += &line(level);
+            out.push(']');
         }
-    }
-
-    fn begin_object_key<W: ?Sized + std::io::Write>(
-        &mut self,
-        writer: &mut W,
-        first: bool,
-    ) -> std::io::Result<()> {
-        self.begin_array_value(writer, first)
-    }
-
-    fn begin_object_value<W: ?Sized + std::io::Write>(
-        &mut self,
-        writer: &mut W,
-    ) -> std::io::Result<()> {
-        writer.write_all(b": ")
+        Value::Object(map) if !map.is_empty() => {
+            out.push('{');
+            for (i, (key, item)) in map.iter().enumerate() {
+                *out += if i == 0 { "" } else { comma };
+                *out += &line(level + 1);
+                *out += &ascii_string(key);
+                *out += ": ";
+                dumps(item, indent, level + 1, out);
+            }
+            *out += &line(level);
+            out.push('}');
+        }
+        other => *out += &other.to_string(),
     }
 }
 
-/// One line as Python's `json.dumps` writes it.
+fn indented(value: &Value) -> String {
+    let mut out = String::new();
+    dumps(value, Some(2), 0, &mut out);
+    out + "\n"
+}
+
 fn one_line(value: &Value) -> String {
-    use serde::Serialize as _;
-    let mut out = Vec::new();
-    let mut writer = serde_json::Serializer::with_formatter(&mut out, Spaced);
-    let _ = value.serialize(&mut writer);
-    ascii_escaped(&String::from_utf8_lossy(&out))
+    let mut out = String::new();
+    dumps(value, None, 0, &mut out);
+    out
 }
 
 fn head(root: &Path) -> String {

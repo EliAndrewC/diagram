@@ -285,3 +285,31 @@ fn a_record_is_written_as_pythons_json_dumps_writes_it() {
     );
     assert!(super::indented(&value).contains("caf\\u00e9"));
 }
+
+#[test]
+fn a_float_is_written_as_python_writes_it() {
+    for (f, want) in [
+        (1.5, "1.5"),
+        (1.0, "1.0"),
+        (0.0001, "0.0001"),
+        (0.00005, "5e-05"),
+        (1e16, "1e+16"),
+        (1.5e16, "1.5e+16"),
+        (1e15, "1000000000000000.0"),
+        (-2.5e-7, "-2.5e-07"),
+        (1e100, "1e+100"),
+    ] {
+        assert_eq!(super::py_float(f), want);
+    }
+}
+
+#[test]
+fn every_value_is_written_in_its_python_form() {
+    let value =
+        json!({"a": [], "b": {}, "c": null, "d": true, "e": 3, "f": 2.5e-7, "g": [{"h": 1}, 2]});
+    assert_eq!(super::one_line(&value), "{\"a\": [], \"b\": {}, \"c\": null, \"d\": true, \"e\": 3, \"f\": 2.5e-07, \"g\": [{\"h\": 1}, 2]}");
+    assert_eq!(
+        super::indented(&json!({"g": [1, {"h": []}]})),
+        "{\n  \"g\": [\n    1,\n    {\n      \"h\": []\n    }\n  ]\n}\n"
+    );
+}
