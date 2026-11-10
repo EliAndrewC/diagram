@@ -273,11 +273,21 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T80 Phase 3, the archive's first slice (`ask:449-T80-order`): `access_tags.py`, `downloads.py`, `check-partial-citations.py`; `uncited.py`, `uncited_imports.py`, `archive_ops.py` and `archive.py` follow T81 in its order
       research: rendering
       verify: DONE. landed: access-tags, downloads and partial-citations are Rust; their Python stays until the GM approves its removal
-- [ ] T81 Phase 3, the record, hook and review core in one cut with T011, T043 and T048: hm_checks, hm_arbiter, hm_fixloop, hm_planhold, hm_budget_rounds, hm_record, hm_house, record_owed, record_units, the modal_ files, entry_owed, translation_owed, apply_edits, check_bundle, bundle_owed, earlier_rounds, quote_verbatim, source_pages, record_cache, review_owed, review_prereq, checkpoint and the bundle files, depiction_replay onto the Rust modal_owed (its five slices, each leaving one implementation of every piece, a Python caller reaching the Rust through a command only: 1. leaves: `hm_house`, `hm_record`, `record_units`, `record_cache`, `moves`, `quote_verbatim`, `source_pages`, `sources`, `attempts`, `reserve-prefix`, `apply_edits`' use of them; 2. the arbiter and checks state, the one owner of `checks-open.json`, `arbiter-owed.json` and `modal-batches.json`: `hm_arbiter`, `hm_checks`, `hm_fixloop`, `hm_planhold`, `hm_budget_rounds` with T011, T043, T048; 3. the owed core: `record_owed`, `modal_owed`, `entry_owed`, `translation_owed`, `modal_triage`, `apply_edits`; 4. the bundles: `bundle_owed`, `check_bundle`, `modal_bundle`, `earlier_rounds`, `arbiter_bundle`; 5. the reviews: `review_owed`, `review_prereq`, `checkpoint`, `stepback_bundle`)
+- [ ] T81 Phase 3, the record's first leaves (`ask:449-T81-slices`): `hm_record` as `record edit-route` and `record fragments`, `hm_house` as `record americanize`, `moves` as `record moved-only`, Python's callers through `scripts/record_door.py`; the rest of the old T81 is T85-T89 and `quote_verbatim.py` moves to phase 4
       research: rendering
 - [ ] T82 Phase 3, claims: claims.py and its satellites
       research: rendering
 - [ ] T83 Phase 3, measure and events: event_log, feature_report, ledger_owed, where_time, stepback_bundle, fix_yield, replay_owing's ruling, the three make audit recipes, land.py and speckit-todo.py
       research: rendering
 - [ ] T84 The removal the GM approves of T79's ported Python: canon.py, money_conversions.py, found.py, stale_terms.py, money_candidates.py, fragment_move.py, agent_census.py, and specs/251's seeded.py and run_seeded.sh, with docs/spec-kit-and-reviews.md:109 rewritten to name make model-trial's verb
+      research: rendering
+- [ ] T85 Phase 3, the source tools (`ask:449-T81-slices`): sources, attempts, source_pages, reserve-prefix, what they use of record.blocked and source_tags; Rust downloads' by-path run ends
+      research: rendering
+- [ ] T86 Phase 3, the arbiter and checks state, with T011, T043 and T048: hm_arbiter, hm_checks, hm_fixloop, hm_planhold, hm_budget_rounds, one owner of checks-open.json, arbiter-owed.json and modal-batches.json
+      research: rendering
+- [ ] T87 Phase 3, the owed core: record_owed, record_units, modal_owed, entry_owed, translation_owed, modal_triage, apply_edits; record_cache.py deleted with its last Python caller (`ask:449-T81-slices`)
+      research: rendering
+- [ ] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed
+      research: rendering
+- [ ] T89 Phase 3, the reviews: review_owed, review_prereq, checkpoint, stepback_bundle
       research: rendering
