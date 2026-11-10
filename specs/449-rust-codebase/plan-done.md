@@ -1251,3 +1251,24 @@ censuses empty (work breakdown 8, FR-010).
 11. **Before fitting things into room.** Not a room question.
 
 
+<!-- plan-archive: archived 2026-11-10 -->
+### T069 Approach (checklist part A)
+
+1. **The goal, in the world.** No inline Python in the gate's own path, or in the suites of the gate's scripts: `test-entry-gate`, `test-claims-gate`, `test-cohort-gate` and `test-land-tooling`.
+2. **The constraints.** FR-001's second census.
+   **Decisions** (the inline Python of the gate's own path):
+   - THE VERBS: `l7r-gate log run` (the Makefile's `LOGRUN`), `log bypass` (`LOGBYPASS`), `log gate-bypass` (the bypass heredocs of `claims-gate.sh`, `cohort-gate.sh` and `entry-gate.sh`), `log land-tooling` and `ruff-toml` (`land-tooling.sh`), `json-field` (`review-gate.sh` and `sync-with-main.sh`), in `rust/gate/src/logs.rs`.
+   - THE XDIST PROBE KEEPS ITS FORK (`ask:449-T069-xdist`): the Makefile's `python3 -c "import xdist"` chose a serial pytest when the plugin was absent; `python3 -m pip show -q pytest-xdist` asks the same question with no inline Python, and the serial arm stays. It starts Python, on the recipe line that then starts pytest, and goes with that line in phase 4; the phase-2 close names it by its own search, the census's pattern not matching `-m`. Until then it carries the T065 clause as far as the line allows: it runs only when that pytest line runs, never at Makefile parse time, on a plain Bash call or on a plain Edit, and not on a `make done` that stops at "already verified". It does run on every other `make done`, as the import probe did: `done`'s phase loop always calls `test-full`, whose recipe also starts `python3 -m l7r.diagram.ci incremental` and pytest (read from the Makefile, 2026-11-09), so the clause's last limb, a `make done` picking no Python test, cannot be held on this line until T071 and phase 4.
+   - THE SUITES: `test-cohort-gate.sh`, `test-land-tooling.sh`, and `test-claims-gate.sh`'s index edit use `jq` (already installed by `setup-dev-env.sh` and already used by the hook suites), `test-entry-gate.sh`'s edit a literal shell replacement.
+   - WHAT STAYS, EACH NAMED: `make audit`'s four recipes are not gate recipes and go in phase 3 (the one reading `CLASSES` in phase 4 with `check-entry-headings.py`). `buildspec/run.sh` goes with the deletion T73 waits on. `test-claims-gate.sh`'s fixture over `claims.py` and `test-entry-gate.sh`'s `answer_all` over `record_owed.py` call the modules phase 3 ports, and go with them (`ask:449-T069-suites`).
+   - JSON TEXT: a record's bytes are the Python's, numbers included: `logs.rs`'s `dumps` writes `json.dumps`'s form (non-ASCII escaped as `\\uXXXX`, its separators and indent) and a float as `repr` writes it (`5e-05`, `1e+16`), each form pinned by a test. No exception.
+3. **Where each comes from.** `m:inline-python-census`.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: the census's phase-2 share holds only what **What stays** names. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** The census's phase-2 share returns only the sites named in **What stays** above (the Makefile's four `make audit` recipes, `buildspec/run.sh` until T73's removal, and the two fixtures of `ask:449-T069-suites`): `git grep -nE "python3 (-c|-[[:space:]]|-$|<<)" -- Makefile 'scripts/gates/*.sh' scripts/sync-with-main.sh scripts/land-tooling.sh buildspec/run.sh tests/hooks/test-entry-gate.sh tests/hooks/test-claims-gate.sh tests/hooks/test-cohort-gate.sh tests/hooks/test-land-tooling.sh` prints only those sites. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
