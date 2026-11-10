@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-10T12:45:19Z",
+  "target": "plan-gate push",
+  "commit": "b372ae960",
+  "why": "T84 is a straight removal under FR-001c (the GM 2026-11-10); the later tasks' sections are filed and each is reviewed before its own work"
+}
