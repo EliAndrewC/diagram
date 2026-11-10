@@ -122,10 +122,10 @@
    "declared": "spec-fidelity"
   },
   "### T070 Approach (checklist part A)": {
-   "sha256": "57634dc36ea79a9706af5c0e07144392912ae89b33acd84f8669ea0ee7f47bf4",
+   "sha256": "8d75aec61c1eee3fe3a8ea30244277f6cc41f87791ab91d1a169276df77f95e0",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity"
   },
   "### T071 Approach (checklist part A)": {
    "sha256": "e9a69c11aac6d32c7ad05697f3102255e77d9df09e7130ecf9bd2dd55b05acbd",
@@ -4840,6 +4840,45 @@
      "why": "Each check only fails when the requested deletion is absent or broke the gate, so it enforces the request. The recorded time is the measurement FR-010 and SC-002 already require."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-10",
+   "blocks": [
+    "### T070 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "SC-002-as-measured",
+     "summary": "Phase 2 closes with SC-002 recorded NOT MET (22.0 s against 15.1 s), its shares named in dev/, the line unmoved and re-measured at the phase-3 close.",
+     "class": "within",
+     "why": "SC-002 is not phase-scoped and is not relaxed: its line stays and is measured again. What binds a phase end is FR-010 (measure against the spec's figures, record in dev/), which this does. The shares change only because FR-001b removed the planner the ruling named; pytest 4 s, preflight 5 s and seeds 8 s cover the 6.9 s gap. The arbiter's quoted ruling is not in the bundle beyond FR-001/FR-001b's references to it, and m: figures were taken as labeled, not re-run, because the MANIFEST forbids reading the repository."
+    },
+    {
+     "id": "unchanged-tree-runs-no-test",
+     "summary": "The preflight stands aside on a verified tree, so make done's already-verified path starts no test.",
+     "class": "within",
+     "why": "This is SC-002's second half; m:done-unchanged-after records tests_run 0."
+    },
+    {
+     "id": "time-floor",
+     "summary": "A make done is judged at the existing 5 s incremental floor instead of the 40 s floor of the pinned ratchet baseline; neither setting's value moves.",
+     "class": "within",
+     "why": "It narrows nothing the GM asked for, and the request's purpose is a faster loop. SC-002 requires under 15.1 s, which is below a 40 s floor, so keeping that floor would refuse every run that meets SC-002. Item 10 now says this openly in place of the earlier 'None moved'. FR-002 is port equivalence and FR-006 appears only as a first line; neither visibly holds this floor, which the bundle cannot settle further. Noted for the record: the reach is every make done, including one that reuses no crate's checks, where the stated reason does not apply; no clause of the request or cited requirement speaks to that case."
+    },
+    {
+     "id": "FR-008-end-to-end-test",
+     "summary": "With test_rust_tooling.py deleted by FR-001b, FR-008's one end-to-end test is rustc/tests.rs's the_real_cargo_tests_a_real_crate.",
+     "class": "within",
+     "why": "It names which test fills the one end-to-end place FR-008 allows; the real cargo over a fixture crate is a test against the real command."
+    },
+    {
+     "id": "censuses",
+     "summary": "The .py census's phase-2 share is a stated pathspec, now including switches.py and hm_conflict.py; the second census's remainder is the four make audit recipes and the two T069-suites fixtures; the xdist probe is gone by its own search.",
+     "class": "within",
+     "why": "The pathspec now holds FR-001's phase-2 locations and the phase-2 library hm_conflict.py; own-make.sh is a shell file and outside the .py census. The xdist clause meets FR-001's 'named at the phase-2 close by its own search', at the Makefile gate recipe FR-001 names. The second-census clause carries no command, filter or date of its own, but it narrows nothing: FR-001 defines that census by an exact git grep and assigns its phase-2 sites, FR-001 itself names these six as what the close names, and items 6 and 9 run both censuses and read the phase-2 share. Its loose wording is a drafting point, not a narrowing. The census results were not re-run (no repository reads)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8356,67 +8395,42 @@
    "verdict": "CLEAR"
   },
   "T070": {
-   "section_sha256": "0ae6e82023db0b3a5291bc1b2d45eddd15144d26b5a0f9c900ba86dfec562849",
+   "section_sha256": "8d75aec61c1eee3fe3a8ea30244277f6cc41f87791ab91d1a169276df77f95e0",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "SC-002-as-measured",
-     "summary": "Phase 2 closes with SC-002 not met (22.0 s against 15.1 s, m:done-rust-edit-phase2), recorded with its shares in dev/phase-2-close.md, the line unmoved and re-measured at the phase-3 close; the shares replace the deleted planner with the kept pytest's two runs, the preflight's Python tools and the seeds.",
+     "summary": "Phase 2 closes with SC-002 recorded NOT MET (22.0 s against 15.1 s), its shares named in dev/, the line unmoved and re-measured at the phase-3 close.",
      "class": "within",
-     "why": "FR-010 obliges a phase to measure against the spec's figures and record the result; nothing cited makes SC-002 a phase-2 condition, and the line is not moved. The planner share is gone by FR-001b, the GM's own amendment. Caveat: ask:449-T071-scope's text is not in the bundle although the MANIFEST promises every named decision, so the quotation, elided at the point the share is named, could not be checked; the class does not rest on it."
+     "why": "SC-002 is not phase-scoped and is not relaxed: its line stays and is measured again. What binds a phase end is FR-010 (measure against the spec's figures, record in dev/), which this does. The shares change only because FR-001b removed the planner the ruling named; pytest 4 s, preflight 5 s and seeds 8 s cover the 6.9 s gap. The arbiter's quoted ruling is not in the bundle beyond FR-001/FR-001b's references to it, and m: figures were taken as labeled, not re-run, because the MANIFEST forbids reading the repository."
     },
     {
      "id": "unchanged-tree-runs-no-test",
-     "summary": "The preflight stands aside on a verified tree, so make done's already-verified path starts no test (m:done-unchanged-after).",
+     "summary": "The preflight stands aside on a verified tree, so make done's already-verified path starts no test.",
      "class": "within",
-     "why": "This is SC-002's second half, and the cited measurement records 0 tests run."
+     "why": "This is SC-002's second half; m:done-unchanged-after records tests_run 0."
     },
     {
      "id": "time-floor",
-     "summary": "A make done is judged at the incremental floor of 5 s (ABSOLUTE_MIN) in place of 10% of the pinned ratchet baseline (40 s).",
+     "summary": "A make done is judged at the existing 5 s incremental floor instead of the 40 s floor of the pinned ratchet baseline; neither setting's value moves.",
      "class": "within",
-     "why": "SC-002 requires a run under 15.1 s; a 40 s floor refuses every run that meets it, so the requested criterion implies a change to the floor. 5 s is an existing setting, and which value is right is design, not fidelity. Note for the author: item 10 says 'None moved' while this decision changes which floor applies; that line should say so."
+     "why": "It narrows nothing the GM asked for, and the request's purpose is a faster loop. SC-002 requires under 15.1 s, which is below a 40 s floor, so keeping that floor would refuse every run that meets SC-002. Item 10 now says this openly in place of the earlier 'None moved'. FR-002 is port equivalence and FR-006 appears only as a first line; neither visibly holds this floor, which the bundle cannot settle further. Noted for the record: the reach is every make done, including one that reuses no crate's checks, where the stated reason does not apply; no clause of the request or cited requirement speaks to that case."
     },
     {
      "id": "FR-008-end-to-end-test",
-     "summary": "With test_rust_tooling.py deleted by FR-001b, FR-008's one end-to-end test is rustc/tests.rs's the_real_cargo_tests_a_real_crate, real cargo over the fixture crate.",
+     "summary": "With test_rust_tooling.py deleted by FR-001b, FR-008's one end-to-end test is rustc/tests.rs's the_real_cargo_tests_a_real_crate.",
      "class": "within",
-     "why": "It keeps FR-008's one end-to-end test against the real command, which the earlier text had dropped. The bundle cannot confirm the test exists."
+     "why": "It names which test fills the one end-to-end place FR-008 allows; the real cargo over a fixture crate is a test against the real command."
     },
     {
-     "id": "py-census-phase-2-share",
-     "summary": "The .py census's phase-2 share is defined by git ls-files 'scripts/gates/*.py' 'scripts/measure/*.py' 'l7r/diagram/ci/*' and the green exit reads that share.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-001's phase 2 also holds l7r/diagram/switches.py and, by ask:449-T051-lib-route, scripts/hooks/lib/hm_conflict.py; neither is in the pathspec, and the requirement says the censuses are run again at each phase's end. The phase-2 close therefore cannot show those two files are ported or named. Running the wider pathspec is not impossible, the GM's words do not imply the omission, and it defeats the purpose of a census, which is that nothing of the phase escapes it. The block must extend the pathspec to both files, or state that each is gone from the search that shows it."
-    },
-    {
-     "id": "second-census-remainders",
-     "summary": "The second census's phase-2 share returns the four make audit recipes and the two fixtures of ask:449-T069-suites.",
+     "id": "censuses",
+     "summary": "The .py census's phase-2 share is a stated pathspec, now including switches.py and hm_conflict.py; the second census's remainder is the four make audit recipes and the two T069-suites fixtures; the xdist probe is gone by its own search.",
      "class": "within",
-     "why": "FR-001 names exactly these as the phase-2 close's expected remainders, and it defines the share's scope."
-    },
-    {
-     "id": "xdist-probe-gone",
-     "summary": "The pytest-xdist probe, outside the second census's pattern, went with the planner's recipe in T78 and no longer exists.",
-     "class": "within",
-     "why": "FR-001b removes the planner and says the phase-2 close names none of the tools it deletes, which discharges FR-001's naming of the probe if it is gone. The premise is asserted with no search; since the census pattern cannot see this form, the block must name the search and its empty result."
-    },
-    {
-     "id": "green-exit-admits-miss-and-remainders",
-     "summary": "Item 6's green exit now accepts SC-002 not met by named shares and a phase-2 share holding the expected remainders, where the earlier text required SC-002 met and both shares empty.",
-     "class": "within",
-     "why": "FR-001 itself lists expected remainders for the phase-2 close, so an empty share was never what the spec asked, and FR-010 asks for measurement and record. The exit's census half inherits the pathspec finding above."
-    },
-    {
-     "id": "recorded-commands-rewritten",
-     "summary": "Item 9: every recorded measurement command that runs a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
-     "class": "within",
-     "why": "It restates FR-001's rule."
+     "why": "The pathspec now holds FR-001's phase-2 locations and the phase-2 library hm_conflict.py; own-make.sh is a shell file and outside the .py census. The xdist clause meets FR-001's 'named at the phase-2 close by its own search', at the Makefile gate recipe FR-001 names. The second-census clause carries no command, filter or date of its own, but it narrows nothing: FR-001 defines that census by an exact git grep and assigns its phase-2 sites, FR-001 itself names these six as what the close names, and items 6 and 9 run both censuses and read the phase-2 share. Its loose wording is a drafting point, not a narrowing. The census results were not re-run (no repository reads)."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
