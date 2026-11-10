@@ -59,10 +59,10 @@ impl Now {
 }
 
 /// A string as Python's `json.dumps` writes it: every non-ASCII character escaped.
-fn ascii_string(text: &str) -> String {
+fn ascii_string(text: &str, ascii: bool) -> String {
     let mut out = String::with_capacity(text.len() + 2);
     for c in Value::String(text.to_owned()).to_string().chars() {
-        if c.is_ascii() {
+        if c.is_ascii() || !ascii {
             out.push(c);
         } else {
             let mut units = [0u16; 2];
@@ -95,19 +95,19 @@ fn py_float(f: f64) -> String {
 }
 
 /// `value` as Python's `json.dumps(value, indent=indent)` writes it, byte for byte.
-fn dumps(value: &Value, indent: Option<usize>, level: usize, out: &mut String) {
+fn dumps(value: &Value, indent: Option<usize>, level: usize, out: &mut String, ascii: bool) {
     let line =
         |depth: usize| indent.map_or_else(String::new, |n| format!("\n{}", " ".repeat(n * depth)));
     let comma = if indent.is_some() { "," } else { ", " };
     match value {
         Value::Number(n) if n.is_f64() => *out += &py_float(n.as_f64().unwrap_or(0.0)),
-        Value::String(s) => *out += &ascii_string(s),
+        Value::String(s) => *out += &ascii_string(s, ascii),
         Value::Array(items) if !items.is_empty() => {
             out.push('[');
             for (i, item) in items.iter().enumerate() {
                 *out += if i == 0 { "" } else { comma };
                 *out += &line(level + 1);
-                dumps(item, indent, level + 1, out);
+                dumps(item, indent, level + 1, out, ascii);
             }
             *out += &line(level);
             out.push(']');
@@ -117,9 +117,9 @@ fn dumps(value: &Value, indent: Option<usize>, level: usize, out: &mut String) {
             for (i, (key, item)) in map.iter().enumerate() {
                 *out += if i == 0 { "" } else { comma };
                 *out += &line(level + 1);
-                *out += &ascii_string(key);
+                *out += &ascii_string(key, ascii);
                 *out += ": ";
-                dumps(item, indent, level + 1, out);
+                dumps(item, indent, level + 1, out, ascii);
             }
             *out += &line(level);
             out.push('}');
@@ -130,13 +130,20 @@ fn dumps(value: &Value, indent: Option<usize>, level: usize, out: &mut String) {
 
 fn indented(value: &Value) -> String {
     let mut out = String::new();
-    dumps(value, Some(2), 0, &mut out);
+    dumps(value, Some(2), 0, &mut out, true);
     out + "\n"
 }
 
 fn one_line(value: &Value) -> String {
     let mut out = String::new();
-    dumps(value, None, 0, &mut out);
+    dumps(value, None, 0, &mut out, true);
+    out
+}
+
+/// One line as `json.dumps(value, ensure_ascii=False)` writes it.
+pub(crate) fn one_line_utf8(value: &Value) -> String {
+    let mut out = String::new();
+    dumps(value, None, 0, &mut out, false);
     out
 }
 

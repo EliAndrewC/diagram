@@ -274,7 +274,7 @@ record:         ## [docs] build the record's site, research/site/, from its ques
 	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" mark-filled)
 
 money-conversions: ## [docs] copy gm-assistant's money conversion table into research/assets/money-conversions.json, which the record's build converts each marked amount of money from (feature 413)   CHECK=1: write nothing, exit 1 while the copy is stale
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/money_conversions.py" $(if $(CHECK),--check,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record money-conversions $(if $(CHECK),--check,)
 
 money-candidates: ## [docs] every amount of money in the record not yet marked for the conversion tooltip, those within 25 years of a built era first; each is marked or passed over with its reason in specs/413-money-tooltip-on-the-record/backfill.md (feature 413)   CHECK=1: exit 1 while one is neither
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/money_candidates.py" $(if $(CHECK),--check,) $(if $(ALL),--all,) $(if $(Q),--stem $(Q),) $(if $(CONTEXT),--context,)
@@ -457,9 +457,9 @@ set-down:       ## [project] set a feature's work down, so a turn may end with t
 	@SET_DOWN_OK="$(SET_DOWN_OK)" python3 "$$(git rev-parse --show-toplevel)/scripts/set-down.py" "$(F)"
 
 found-list:     ## [project] a feature's open findings (found.jsonl), numbered - what is not yet filed as a task or settled (405 T29)   F=405
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/found.py" list --feature "$$(ls -d specs/$(F)-* | head -1)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record found list --feature "$$(ls -d specs/$(F)-* | head -1)"
 found-close:    ## [project] close found.jsonl rows: FILED as a task, or SETTLED with a reason (405 T29)   F=405 ROWS=3,7 TASK=T61 | WHY="..."
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/found.py" close --feature "$$(ls -d specs/$(F)-* | head -1)" --rows "$(ROWS)" $(if $(TASK),--task "$(TASK)",) $(if $(WHY),--why "$(WHY)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record found close --feature "$$(ls -d specs/$(F)-* | head -1)" --rows "$(ROWS)" $(if $(TASK),--task "$(TASK)",) $(if $(WHY),--why "$(WHY)",)
 
 task-add: export TASK_TITLE = $(TITLE)
 task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical] [PERF=1: a performance task, docs/performance-checklist.md's questions appended]
@@ -773,7 +773,7 @@ reserve: ## [project] reserve the next glossary, registry-entry or question numb
 
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"
 	@if [ -z "$(TERMS)" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/canon.py" "$(TERMS)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record canon "$(TERMS)"
 
 apply-edits: ## [project] apply a quote-check or record-format report's EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)   FROM=<the agent's output_file or a saved reply> [SKIP=2,5: EDIT and GLOSSARY blocks counted together, in reply order] [DRY=1]
 	@if [ -z "$(FROM)" ]; then printf 'make apply-edits: FROM=<the output_file the agent dispatch named> is required\n' >&2; exit 2; fi
