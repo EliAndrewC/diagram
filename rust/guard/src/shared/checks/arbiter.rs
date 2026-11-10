@@ -444,7 +444,6 @@ pub fn trip(
 /// # Errors
 ///
 /// The lock or the owed file cannot be had.
-#[must_use]
 pub fn try_trip(
     root: &Path,
     trigger: &str,
