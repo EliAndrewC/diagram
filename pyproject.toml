@@ -29,7 +29,7 @@ line-length = 200
 # R3 compares the two file lists) and touches nothing no package has adopted. tests/tooling/test_lint_scope.py pins it.
 extend-exclude = [
     "pool", "legacy-hand-authored-pool",
-    "specs", "scripts", "tests/hooks", ".clones", ".claude", ".specify", "buildspec", "docs",
+    "specs", "scripts", "tests/hooks", ".clones", ".claude", ".specify", "docs",
 ]
 
 [tool.ruff.lint]

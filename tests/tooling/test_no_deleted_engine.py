@@ -30,8 +30,7 @@ FORMS = re.compile(
 SCOPE = (
     ":(glob)specs/*/measurements*.json",
     # the frozen reference of the Python stages, prose history until its Rust page replaces it (FR-024 part 1) - excluded, not
-    # listed, because the remote build does not check it out (tests/tooling/ci/test_sparse_checkout.py), where a listed entry would
-    # read as stale; named without its trailing slash, which is the form that sparse check reads as a use of the path
+    # listed, because it is frozen reference prose and names deleted modules on purpose
     ":(exclude)dev/placement-stages-frozen",
     "docs/**",
     "CLAUDE.md",
@@ -44,10 +43,8 @@ SCOPE = (
     "pool/**",
     "legacy-hand-authored-pool/**",
     "dev/**",
-    "buildspec/**",
     "Makefile",
     "pyproject.toml",
-    "Dockerfile.ci",
     "clippy.toml",
     ":(glob)requirements*",
 )

@@ -204,7 +204,7 @@ fn list(root: &Path, prune: bool) -> Result<String, String> {
     Ok(out)
 }
 
-fn paths(root: &Path) -> Result<Vec<String>, String> {
+pub(crate) fn paths(root: &Path) -> Result<Vec<String>, String> {
     let mut found: Vec<String> = split(root)?
         .0
         .iter()

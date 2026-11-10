@@ -6,10 +6,13 @@ later session could break: which changed lines count, which uncovered ones stop 
 
 from __future__ import annotations
 
+import io
 import json
 import re
 import subprocess
 from pathlib import Path
+
+import pytest
 
 from tests.tooling.test_modal_checks import _load
 
@@ -43,24 +46,6 @@ def test_uncovered_changed_lines_are_read_from_the_coverage_report() -> None:
     assert pf.coverage_step(Path("."), {}, "1") == ({}, {}), "nothing changed: nothing to run"
 
 
-def test_a_tree_that_moves_while_the_gate_runs_is_named(tmp_path: Path, capsys) -> None:  # noqa: ANN001
-    root = _repo(tmp_path)
-    (root / "notes.md").write_text("an edit before the gate\n")
-    snap = tmp_path / "snap.json"
-    assert pf.main(["--root", str(root), "--tree-snap", str(snap)]) == 0
-    assert set(json.loads(snap.read_text())) == {"HEAD", "notes.md"}
-    assert pf.main(["--root", str(root), "--tree-check", str(snap)]) == 0, "nothing moved"
-    (root / "l7r" / "diagram" / "a.py").write_text("x = 9\n")
-    assert pf.main(["--root", str(root), "--tree-check", str(snap)]) == 1
-    assert "l7r/diagram/a.py" in capsys.readouterr().out
-    subprocess.run(["git", "-C", str(root), "commit", "-qam", "mid-gate"], check=True, env=ENV)
-    assert pf.main(["--root", str(root), "--tree-check", str(snap)]) == 1
-    assert "l7r/diagram/a.py" in capsys.readouterr().out, "a commit is read for what it changed (405 T41)"
-    assert pf.seen_moves(root, {"HEAD": "0" * 40}, {"HEAD": "1" * 40}) == ["HEAD"], "a HEAD move that cannot be read"
-    assert pf.tree_moved({"HEAD": "a", "x": "1"}, {"HEAD": "a", "x": "2", "y": "3"}) == ["x", "y"]
-    assert pf.main(["--root", str(root), "--tree-check", str(tmp_path / "missing.json")]) == 0, "no snapshot: nothing to judge"
-
-
 def test_modules_tested_outside_the_quick_tier_are_left_to_the_gate() -> None:
     root = Path(__file__).resolve().parents[2]
     out = pf.outside_quick(root)
@@ -82,38 +67,6 @@ def test_the_moved_tree_check_runs_before_the_gate_vouches_for_anything() -> Non
     assert check < recipe.index(" green \"$$(cat"), "and before the green run-log entry"
     refusal = recipe[check : recipe.index("exit 1; }", check)]
     assert '"failed: tree moved"' in refusal and "failed-gate" in refusal, "a refusal is logged as a failure"
-
-
-def test_a_probe_test_left_in_the_tree_stops_the_gate(tmp_path: Path, capsys) -> None:  # type: ignore[no-untyped-def]
-    """Feature 385 (the round arbiter's fix on red-gate@2026-10-17T17:21:08Z): a `tests/**/test_zz_probe*.py` a diagnosis left
-    behind would run in the full suite; the preflight refuses to start while one stands, naming it."""
-    (tmp_path / "tests" / "tooling").mkdir(parents=True)
-    assert pf.stray_probes(tmp_path) == []
-    (tmp_path / "tests" / "tooling" / "test_zz_probe_a05.py").write_text("def test_x(): pass\n", encoding="utf-8")
-    (tmp_path / "tests" / "tooling" / "test_zz_probe_old.cpython-314.pyc").write_text("", encoding="utf-8")
-    assert pf.stray_probes(tmp_path) == ["tests/tooling/test_zz_probe_a05.py"], "a stale .pyc is no probe"
-    assert pf.main(["--root", str(tmp_path)]) == 1 and "test_zz_probe_a05.py" in capsys.readouterr().out
-
-
-def test_a_pool_map_the_gate_rolled_itself_is_no_tree_move_and_another_map_s_still_is(tmp_path: Path, capsys) -> None:  # noqa: ANN001
-    """Feature 385 T87 (plan D108): T10's gate rolled Kuwabata, then failed on its own kuwabata.json as a tree move."""
-    root = _repo(tmp_path)
-    for m in ("kuwa", "other"):
-        d = root / "pool" / "hamlets" / m
-        d.mkdir(parents=True)
-        (d / f"{m}.gen.py").write_text("x = 1\n")
-        (d / f"{m}.json").write_text("{}\n")
-    subprocess.run(["git", "-C", str(root), "add", "-A"], check=True, env=ENV)
-    subprocess.run(["git", "-C", str(root), "commit", "-qm", "maps"], check=True, env=ENV)
-    snap, census = tmp_path / "snap.json", tmp_path / "census.jsonl"
-    assert pf.main(["--root", str(root), "--tree-snap", str(snap)]) == 0
-    census.write_text(json.dumps({"kind": "roll", "gen": str(root / "pool/hamlets/kuwa/kuwa.gen.py")}) + "\n")
-    (root / "pool/hamlets/kuwa/kuwa.json").write_text('{"rolled": 1}\n')  # the gate's own re-roll
-    assert pf.main(["--root", str(root), "--tree-check", str(snap), "--census", str(census)]) == 0
-    assert "re-rolled by the gate - commit them" in capsys.readouterr().out
-    (root / "pool/hamlets/other/other.json").write_text('{"hand": 1}\n')  # a map the gate did not roll
-    assert pf.main(["--root", str(root), "--tree-check", str(snap), "--census", str(census)]) == 1
-    assert "pool/hamlets/other/other.json" in capsys.readouterr().out
 
 
 def test_a_changed_function_is_judged_whole() -> None:
@@ -181,64 +134,25 @@ def test_a_line_only_unit_tests_reached_at_the_last_green_gate_stops_the_preflig
     assert pf.gate_reached(root, {f: [1]}, quick) == {}, "a line in no function"
 
 
-def test_a_change_the_gate_does_not_see_does_not_move_the_tree(tmp_path: Path) -> None:
-    """Feature 405 T41 (D15): T14's claims round - claim docstrings and its records - voided a running gate. The gate's own key
-    strips docstrings; the claims round's records are read by no phase of it. Code, a byte-hashed area, a deleted file still move it."""
-    root = _repo(tmp_path)
-    (root / ".specify").mkdir()
-    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/405-x"}))
-    f = "l7r/diagram/a.py"
+def test_the_door_compares_python_by_what_the_gate_reads() -> None:
+    """Feature 405 T41 (D15), the part that reads Python: a claim docstring or a comment moves nothing, code or a line shift does."""
     old = b'def f(x):\n    """Research: a - NONE"""\n    return x\n'
-    assert pf.unseen(root, f, old, old.replace(b"a - NONE", b"a reworded - NONE"))
-    assert pf.unseen(root, f, old, old.replace(b"return x", b"return x  # why"))
-    assert not pf.unseen(root, f, old, old.replace(b"return x", b"return x + 1"))
-    assert not pf.unseen(root, f, old, old.replace(b"a - NONE", b"a\n    reworded - NONE")), "a docstring a line longer moves the code below it: coverage reads lines"
+    assert pf.same_program(old, old.replace(b"a - NONE", b"a reworded - NONE"), "a.py")
+    assert pf.same_program(old, old.replace(b"return x", b"return x  # why"), "a.py")
+    assert not pf.same_program(old, old.replace(b"return x", b"return x + 1"), "a.py")
+    assert not pf.same_program(old, old.replace(b"a - NONE", b"a\n    reworded - NONE"), "a.py"), "a docstring a line longer moves the code below it"
     assert pf.stmt_lines(b"def (") is None
-    assert not pf.unseen(root, f, old, None) and not pf.unseen(root, "notes.md", b"a", b"b")
-    assert pf.unseen(root, "dev/claims-index.json", b"{}", b"{1}") and pf.unseen(root, "specs/405-x/found.jsonl", None, b"r")
-    assert pf.unseen(root, "dev/cohort-log/20261021T1046Z-x.json", None, b"{}"), "a new cohort record, committed beside the gate (405 T48)"
-    assert not pf.unseen(root, "dev/cohort-log/20261021T1046Z-x.json", b"{}", b"{1}"), "...an existing one changed is seen"
-    assert not pf.unseen(root, "dev/cohort-log/CLAUDE.md", None, b"x")
-    assert not pf.unseen(root, "specs/405-x/plan.md", b"a", b"b") and not pf.unseen(root, "specs/406-y/tasks.md", b"a", b"b")
-    reg = "l7r/diagram/interactive/classes/k.py"
-    assert not pf.unseen(root, reg, old, old.replace(b"a - NONE", b"b - NONE")), "the registry's docstrings are the page's text"
-    (root / ".specify" / "feature.json").write_text("not json")
-    assert pf.active_records(root) == set()
 
 
-def test_the_gate_s_preflight_leaves_the_coverage_step_to_make_preflight(tmp_path: Path, monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
-    """Feature 405 T47 (D25): the step cost 98-107 s of each gate and refused about twice in the whole record, once wrongly;
-    `--no-coverage` (the `done` recipe's) ends after the quick tier, `make preflight` still runs it."""
-    asked: list[str] = []
-    monkeypatch.setattr(pf, "run", lambda cmd, root, quiet=True: 0)
-    monkeypatch.setattr(pf, "git", lambda root, *a: "")
+def test_the_door_s_two_questions(tmp_path: Path, monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    a, b = tmp_path / "a", tmp_path / "b"
+    a.write_bytes(b"x = 1\n")
+    b.write_bytes(b"x = 2\n")
+    assert pf.same_lines(f"n.py\t{a}\t{a}\nn.py\t{a}\t{b}\n") == "1\n0\n"
+    monkeypatch.setattr(pf.sys, "stdin", io.StringIO(f"n.py\t{a}\t{a}\n"))
+    assert pf.main(["--same-py", "--root", str(tmp_path)]) == 0 and capsys.readouterr().out == "1\n"
     monkeypatch.setattr(pf, "changed_lines", lambda root: {})
-    monkeypatch.setattr(pf, "coverage_step", lambda root, changed, workers: asked.append("coverage") or ({}, {}))
-    assert pf.main(["--root", str(tmp_path), "--no-coverage"]) == 0 and asked == []
-    assert "coverage of the changed lines" not in capsys.readouterr().out
-    assert pf.main(["--root", str(tmp_path)]) == 0 and asked == ["coverage"]
-    assert "coverage of the changed lines" in capsys.readouterr().out
-    done = Path(__file__).resolve().parents[2].joinpath("Makefile").read_text(encoding="utf-8").split("\ndone:", 1)[1].split("\n\n", 1)[0]
-    assert "--no-coverage" in done, "the gate passes it"
-
-
-def test_a_slated_modules_unrun_lines_are_reported_not_refused(tmp_path: Path, monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
-    """Feature 448 (the GM 2026-11-02): an off-path line of a module `dev/coverage-exempt.json` names is information; a kept
-    module's still stops the gate."""
-    monkeypatch.setattr(pf, "run", lambda cmd, root, quiet=True: 0)
-    monkeypatch.setattr(pf, "git", lambda root, *a: "")
-    monkeypatch.setattr(pf, "changed_lines", lambda root: {})
-    monkeypatch.setattr(pf, "exempt_files", lambda root: {"l7r/slated.py"})
-    monkeypatch.setattr(pf, "coverage_step", lambda root, changed, workers: ({"l7r/slated.py": [4]}, {}))
-    assert pf.main(["--root", str(tmp_path)]) == 0
-    assert "l7r/slated.py lines [4] - unrun, and slated for the Rust port" in capsys.readouterr().out
-    monkeypatch.setattr(pf, "coverage_step", lambda root, changed, workers: ({"l7r/slated.py": [4], "l7r/kept.py": [2]}, {}))
-    assert pf.main(["--root", str(tmp_path)]) == 1 and "l7r/kept.py lines [2]" in capsys.readouterr().out
-
-
-def test_exempt_files_reads_the_record(tmp_path: Path) -> None:
-    (tmp_path / "dev").mkdir()
-    (tmp_path / "l7r").mkdir()
-    (tmp_path / "l7r" / "s.py").write_text("x = 1\n")
-    (tmp_path / "dev" / "coverage-exempt.json").write_text('{"entries": [{"path": "l7r/s.py", "stages": ["sink"], "why": "t"}]}\n')
-    assert pf.exempt_files(tmp_path) == {"l7r/s.py"}
+    assert pf.main(["--cover", "--root", str(tmp_path)]) == 0
+    assert json.loads(capsys.readouterr().out) == {"off": {}, "on": {}}
+    with pytest.raises(SystemExit):
+        pf.main(["--root", str(tmp_path)])

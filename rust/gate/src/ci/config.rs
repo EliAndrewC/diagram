@@ -60,7 +60,7 @@ fn load_from(places: &[PathBuf]) -> Result<Secrets, String> {
             .map(|p| p.display().to_string())
             .collect::<Vec<_>>()
             .join("\n  ");
-        return Err(format!("no development-secrets.ini found; looked in:\n  {looked}\n(copy development-secrets.ini.example at the repository root and fill the [aws] and [github] keys)"));
+        return Err(format!("no development-secrets.ini found; looked in:\n  {looked}\n(copy development-secrets.ini.example at the repository root and fill the [github] key)"));
     };
     let parsed = ini(&text);
     let of = |section: &str, key: &str, default: &str| {

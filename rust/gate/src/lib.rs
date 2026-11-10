@@ -11,6 +11,7 @@ mod lock;
 mod logs;
 mod measure;
 mod plan;
+mod preflight;
 mod push;
 mod rustc;
 mod stamp;
@@ -100,6 +101,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("log") => logs::log_cli(&args[1..], Path::new(".")),
         Some("json-field") => logs::json_field(&args[1..]),
         Some("ruff-toml") => logs::ruff_cli(&mut std::io::stdin()),
+        Some("preflight") => preflight::cli(&args[1..]),
         Some("--version") => Reply {
             stdout: format!("l7r-gate {}\n", env!("CARGO_PKG_VERSION")),
             stderr: String::new(),

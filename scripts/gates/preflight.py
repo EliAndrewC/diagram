@@ -1,33 +1,20 @@
 #!/usr/bin/env python3
-"""The gate's first phase - the cheap checks that turned feature 372's gates red, in seconds, before the expensive ones
-(feature 375, FR-004, plan D14).
+"""The door of the gate's first phase to what reads Python and pytest (feature 449 T071, `ask:449-T071-scope`): the phase and the tree check are the Rust
+gate's (`l7r-gate preflight`, `rust/gate/src/preflight.rs`); this file goes in phase 4, in the commit that removes pytest.
 
-WHY. Measured from 372's wave 106 (2026-10-10): its gate went red about six times, every cause one a cheap check finds - a file
-edited mid-gate, `building-programs.md` stale twice, stub pointers in found rows, two untested lines. Each red cost a gate run.
-So `make done` begins here and stops here on a failure:
+THE CHANGED ENGINE LINES covered - the quick tree run once more with coverage over just the engine files the delta changed, and every changed line it leaves
+unrun named. A line in a module OFF the hamlet path (no rolled map reaches it; the path is `tools/claims.scope`, the import graph of hamlet generation) stops
+the preflight: only a unit test can cover it, and the gate's 100% floor would refuse it minutes later. A line ON the path may be reached only by a rolled map,
+which the preflight does not roll, so it is reported and left to the gate (the floor judges it there) - UNLESS the last green gate's coverage
+(`<git dir>/gate-baseline/`) shows that line, as the baseline had it, reached by no test but those the quick tier runs: then no roll reaches it either, and the
+preflight stops on it. The lines judged are every line of a FUNCTION the delta changed, not only its changed lines (feature 405 T40, D14: T14 reworked the one
+unit test that reached an unchanged line, `sweeps.py:738`; the preflight passed and the gate's floor failed 5.7 minutes in).
 
-1. THE DERIVED FILES regenerated - `make docs`, `make building-programs`, `make glossary` - and any that moved named, to commit;
-2. THE RECORD builds (`make record CHECK=1`) and its pointers resolve (`l7r-gate check research-pointers`);
-3. THE QUICK TIER (`make quick FROM_PREFLIGHT=1`: lint, types, spec-lint on the delta, the file-size bar, house style, the unit
-   tests - its TIME not judged here: a green but slow quick after a merge of main stopped a gate whose tests all passed);
-4. THE CHANGED ENGINE LINES covered - the quick tree run once more with coverage over just the engine files the delta changed,
-   and every changed line it leaves unrun named. A line in a module OFF the hamlet path (no rolled map reaches it; the path
-   is `tools/claims.scope`, the import graph of hamlet generation) stops the preflight: only a unit test can cover it, and
-   the gate's 100% floor would refuse it minutes later. A line ON the path may be reached only by a rolled map, which the
-   preflight does not roll, so it is reported and left to the gate (the floor judges it there) - UNLESS the last green gate's
-   coverage (`<git dir>/gate-baseline/`) shows that line, as the baseline had it, reached by no test but those the quick tier
-   runs: then no roll reaches it either, and the preflight stops on it. The lines judged are every line of a FUNCTION the delta
-   changed, not only its changed lines (feature 405 T40, D14: T14 reworked the one unit test that reached an unchanged line,
-   `sweeps.py:738`; the preflight passed and the gate's floor failed 5.7 minutes in).
-
-And THE TREE HELD STILL: the gate hashes every tracked file that differs from HEAD (and HEAD itself) when it starts and again
-before it reports green, and a difference fails it, naming the file - 372's wave 106 went red once on a file edited mid-gate,
-and a green run over a tree that moved under it vouches for nothing.
-
-    preflight.py [--root DIR] [--skip-quick]
-    preflight.py --tree-snap FILE | --tree-check FILE
+    preflight.py --cover --root DIR --workers N     {"off": {file: [lines]}, "on": {...}}   (only `make preflight` asks)
+    preflight.py --same-py --root DIR               stdin `<name>\\t<old file>\\t<new file>` lines; 1 or 0 per line
 """
 
+# TOOL_RECORD: `l7r-gate preflight` records each run; this door is its helper
 from __future__ import annotations
 
 import argparse
@@ -40,20 +27,11 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
-import time
 from collections.abc import Callable
 from pathlib import Path
 
 sys.dont_write_bytecode = True
-DERIVED = ("docs", "building-programs", "glossary")
 _HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@", re.M)
-
-
-def run(cmd: list[str], root: Path, quiet: bool = True) -> int:
-    r = subprocess.run(cmd, cwd=root, capture_output=quiet, text=True, check=False)
-    if r.returncode and quiet:
-        sys.stdout.write((r.stdout or "")[-3000:] + (r.stderr or "")[-3000:])
-    return r.returncode
 
 
 def git(root: Path, *args: str) -> str:
@@ -219,12 +197,6 @@ def outside_quick(root: Path) -> set[str]:
     return out
 
 
-def exempt_files(root: Path) -> set[str]:
-    """The engine files the coverage floor does not hold (feature 448), through the floor's one reader."""
-    gate = Path(__file__).resolve().parent / "l7r-gate.sh"
-    return set(subprocess.run([str(gate), "coverage-exempt", "exempt"], cwd=root, capture_output=True, text=True, check=True).stdout.splitlines())
-
-
 def coverage_step(root: Path, changed: dict[str, set[int]], workers: str) -> tuple[dict[str, list[int]], dict[str, list[int]]]:
     """(off-path uncovered lines, on-path uncovered lines) from one quick-tree run with coverage over the changed files."""
     if not changed:
@@ -267,32 +239,6 @@ def split_gaps(root: Path, gaps: dict[str, list[int]], path: set[str], quick: se
     return off, {f: v for f, v in on.items() if v}
 
 
-#: tracked files the gate itself writes, measured on a gate run (feature 375 T23) - never a moved file of the session's
-# the known-failing seeds `make seeds` rewrites within the gate at rust-only: a seed that rolls clean dropped, a fresh failure added
-# (feature 444 T36) - the gate's own record of what it found, not a change to what it judged
-GATE_WRITES: frozenset[str] = frozenset({"dev/known-seeds.txt"})
-
-
-def tree(root: Path) -> dict[str, str]:
-    """HEAD and every tracked file that differs from it, by content hash."""
-    out = {"HEAD": git(root, "rev-parse", "HEAD").strip()}
-    paths = [p for p in git(root, "diff", "--name-only", "HEAD").splitlines() if p and p not in GATE_WRITES]
-    if paths:
-        # -w: each blob is kept, so a later check can read what the file held and judge the change (405 T41, D15)
-        r = subprocess.run(["git", "-C", str(root), "hash-object", "-w", "--stdin-paths"], input="\n".join(paths), capture_output=True,
-                           text=True, check=False)
-        out.update(zip(paths, (r.stdout.split() if r.returncode == 0 else ["?"] * len(paths)), strict=False))
-    return out
-
-
-#: the records the claims round writes, which no phase of the gate reads (405 T41, D15) - beside the active feature's own
-RECORDS = frozenset({"dev/claims-index.json", "dev/claims-pages.json", "dev/review-ledger.md"})
-FEATURE_RECORDS = ("found.jsonl", "arbiter.jsonl", "claims-carried.jsonl", "tasks.md")
-#: the landing cohort's records: a NEW one is a run beside the gate committing its result (405 T48, D21) - no test reads the real
-#: directory (each uses a temporary tree); an existing one changed is seen
-COHORT_LOG = "dev/cohort-log/"
-
-
 def _codeid() -> object:
     """`codeid.py`, by path: the semantic id the gate's own key is built on."""
     import importlib.util  # noqa: PLC0415
@@ -304,46 +250,6 @@ def _codeid() -> object:
     return mod
 
 
-_RAW: dict[tuple[str, str], bool] = {}
-
-
-def _ask_raw(root: Path, paths: set[str]) -> None:
-    """Which of `paths` are in a byte-hashed area, asked of the Rust gate as one batch (FR-006), never once a file; kept for the process."""
-    asked = sorted(p for p in paths if (str(root), p) not in _RAW)
-    if asked:
-        gate = Path(__file__).resolve().parent / "l7r-gate.sh"
-        found = set(subprocess.run([str(gate), "stamp", "--raw-match"], cwd=root, input="".join(f"{p}\n" for p in asked), capture_output=True, text=True, check=True).stdout.splitlines())
-        _RAW.update({(str(root), p): p in found for p in asked})
-
-
-def active_records(root: Path) -> set[str]:
-    """The claims round's record files of the active feature (`.specify/feature.json`)."""
-    try:
-        fd = str(json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")).rstrip("/")
-    except (OSError, ValueError):
-        return set()
-    return {f"{fd}/{n}" for n in FEATURE_RECORDS} if fd else set()
-
-
-def unseen(root: Path, path: str, old: bytes | None, new: bytes | None) -> bool:
-    """Is a change of `path` from `old` to `new` (None: absent) one the gate does not see (405 T41, D15)? The same bytes; one of
-    the claims round's records; or a `.py` file outside the byte-hashed areas (`page`, `browser`) whose semantic id - the AST
-    with docstrings stripped, the gate's own key - is unchanged: a claim docstring, a comment."""
-    if old == new or path in RECORDS or path in active_records(root):
-        return True
-    if old is None and path.startswith(COHORT_LOG) and path.endswith(".json"):  # 405 T48 (D21): the landing cohort's new record
-        return True
-    if not path.endswith(".py") or old is None or new is None:
-        return False
-    _ask_raw(root, {path})
-    if _RAW[(str(root), path)]:
-        return False
-    codeid = _codeid()
-    # ...AND NO STATEMENT MOVED A LINE (405 batch 7): coverage records lines, so a docstring one line longer above code the gate
-    # ran voided its report - street.py's `return n` read as missed one line below where it ran (a false red)
-    return codeid.semantic_bytes(old, path) == codeid.semantic_bytes(new, path) and stmt_lines(old) == stmt_lines(new)  # type: ignore[attr-defined]
-
-
 def stmt_lines(data: bytes) -> list[int] | None:
     """The line every statement of a Python source starts on - what a coverage record is keyed by; None where it does not parse."""
     try:
@@ -353,169 +259,40 @@ def stmt_lines(data: bytes) -> list[int] | None:
     return [n.lineno for n in ast.walk(tree) if isinstance(n, ast.stmt)]
 
 
-def blob(root: Path, spec: str) -> bytes | None:
-    """A blob's bytes (`<sha>` or `<commit>:<path>`), or None when there is none."""
-    r = subprocess.run(["git", "-C", str(root), "cat-file", "-p", spec], capture_output=True, check=False)
-    return r.stdout if r.returncode == 0 else None
+def same_program(old: bytes, new: bytes, name: str) -> bool:
+    """A `.py` file's two versions the same but for what the gate does not see: its semantic id - the AST with docstrings stripped, the gate's own key - and,
+    as coverage records lines, every statement's line (405 batch 7: a docstring one line longer voided a report)."""
+    codeid = _codeid()
+    return codeid.semantic_bytes(old, name) == codeid.semantic_bytes(new, name) and stmt_lines(old) == stmt_lines(new)  # type: ignore[attr-defined]
 
 
-def seen_moves(root: Path, before: dict[str, str], after: dict[str, str]) -> list[str]:
-    """`tree_moved`, less every change the gate does not see (`unseen`) - across a HEAD move too, which a commit holding only
-    such changes makes (405 T41, D15: the claims round's commits while the gate runs). "HEAD" stays when its move cannot be read."""
-    moved = tree_moved(before, after)
-    if not moved:
-        return []
-    bh, ah = before.get("HEAD", ""), after.get("HEAD", "")
-    paths = {m for m in moved if m != "HEAD"}
-    if bh != ah:
-        diff = subprocess.run(["git", "-C", str(root), "diff", "--name-only", bh, ah], capture_output=True, text=True, check=False)
-        if diff.returncode:
-            return sorted(paths | {"HEAD"})
-        paths |= {x for x in diff.stdout.splitlines() if x}
-    _ask_raw(root, {p for p in paths if p.endswith(".py")})
-    return sorted(p for p in paths if not unseen(root, p, blob(root, before.get(p) or f"{bh}:{p}"), blob(root, after.get(p) or f"{ah}:{p}")))
-
-
-def tree_moved(before: dict[str, str], after: dict[str, str]) -> list[str]:
-    return sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
-
-
-#: what a pool map's roll writes beside its generator (feature 385 T87, plan D108)
-_MAP_OUTPUTS = (".json", ".png", ".svg", ".html", ".webp")
-
-
-def rolled_outputs(root: Path, census: Path) -> set[str]:
-    """The map outputs (beside each `.gen.py`) of every pool map the gate's own run rolled, by its roll census (feature 385 T87,
-    plan D108; T10's gate rolled Kuwabata and then failed on its own `kuwabata.json` as a tree move)."""
-    out: set[str] = set()
-    try:
-        lines = census.read_text(encoding="utf-8").splitlines()
-    except OSError:
-        return out
-    for line in lines:
-        try:
-            r = json.loads(line)
-        except ValueError:
-            continue
-        gen = Path(str(r.get("gen") or "")) if r.get("kind") == "roll" and r.get("gen") else None
-        if gen is None or not gen.name.endswith(".gen.py"):
-            continue
-        stem = gen.name[: -len(".gen.py")]
-        try:
-            rel = gen.resolve().parent.relative_to(root.resolve())
-        except ValueError:
-            continue
-        out |= {f"{rel.as_posix()}/{stem}{ext}" for ext in _MAP_OUTPUTS}
-    return out
-
-
-def stray_probes(root: Path) -> list[str]:
-    """Probe test files a diagnosis left in the tree (`tests/**/test_zz_probe*.py`): each runs in the full suite and can turn it
-    red on its own, and the round arbiter found four in pytest's failure list on red-gate@2026-10-17T17:21:08Z (feature 385,
-    its tooling fix) - so the gate refuses to start while any stands."""
-    return sorted(str(p.relative_to(root)) for p in (root / "tests").rglob("test_zz_probe*.py"))
+def same_lines(text: str) -> str:
+    """The answer to `--same-py`'s lines, one 1 or 0 each."""
+    out = []
+    for line in text.splitlines():
+        name, old, new = line.split("\t")
+        out.append("1" if same_program(Path(old).read_bytes(), Path(new).read_bytes(), name) else "0")
+    return "".join(f"{v}\n" for v in out)
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=".")
-    ap.add_argument("--skip-quick", action="store_true", help="the quick tier already ran (a test of the other steps)")
     ap.add_argument("--workers", default=os.environ.get("XDIST_WORKERS", "4"))
-    ap.add_argument("--tree-snap", default="")
-    ap.add_argument("--tree-check", default="")
-    ap.add_argument("--census", default="", help="the roll census the gate wrote (default <root>/.git/roll-census.jsonl)")
-    ap.add_argument("--would-write", default="", help="with --tree-check: exit 0 when writing PATH (to --content's bytes) is unseen by the gate")
-    ap.add_argument("--content", default="", help="the file holding the bytes --would-write would write")
-    ap.add_argument("--quiet", action="store_true")
-    ap.add_argument("--no-coverage", action="store_true", help="end after the quick tier: the gate's own floor judges the changed lines (405 T47, D25)")
+    ap.add_argument("--cover", action="store_true")
+    ap.add_argument("--same-py", action="store_true")
     a = ap.parse_args(argv)
     root = Path(a.root).resolve()
-    if a.would_write and a.tree_check:  # the gate-write guard's question for an Edit or a Write (405 T41, D15)
-        try:
-            snap = json.loads(Path(a.tree_check).read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            return 1
-        rel = a.would_write
-        new = Path(a.content).read_bytes() if a.content else None
-        return 0 if unseen(root, rel, blob(root, snap.get(rel) or f"{snap.get('HEAD', '')}:{rel}"), new) else 1
-    if a.tree_snap:
-        Path(a.tree_snap).write_text(json.dumps(tree(root)), encoding="utf-8")
+    if a.same_py:
+        sys.stdout.write(same_lines(sys.stdin.read()))
         return 0
-    if a.tree_check:
-        try:
-            before = json.loads(Path(a.tree_check).read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            return 0
-        moved = seen_moves(root, before, tree(root))
-        rerolled = sorted(set(moved) & rolled_outputs(root, Path(a.census) if a.census else root / ".git" / "roll-census.jsonl"))
-        moved = [m for m in moved if m not in rerolled]
-        if rerolled:
-            print("preflight: re-rolled by the gate - commit them (feature 385 T87):\n  " + "\n  ".join(rerolled))
-        if moved and a.quiet:
-            return 1
-        if moved:
-            print("GATE NOT GREEN: the tree moved while the gate ran - it vouches for none of it (feature 375 FR-004):\n  "
-                  + "\n  ".join("HEAD (a commit or a checkout)" if m == "HEAD" else m for m in moved))
-            return 1
+    if a.cover:
+        off, on = coverage_step(root, changed_lines(root), a.workers)
+        print(json.dumps({"off": off, "on": on}))
         return 0
-    if probes := stray_probes(root):
-        print("preflight: probe test files are left in the tree - delete them; the gate stops here (feature 385):\n  " + "\n  ".join(probes))
-        return 1
-    t0 = time.monotonic()
-    marks: list[tuple[str, float]] = []
-
-    def mark(step: str) -> None:
-        marks.append((step, time.monotonic()))
-
-    before = git(root, "status", "--porcelain")
-    for target in DERIVED:
-        if run(["make", "--no-print-directory", target], root):
-            print(f"preflight: `make {target}` failed - the gate stops here (feature 375 FR-004)")
-            return 1
-    mark("derived")
-    moved = sorted(set(git(root, "status", "--porcelain").splitlines()) - set(before.splitlines()))
-    moved = [m for m in moved if m[3:].strip()]
-    if moved:
-        print("preflight: regenerated, commit them with the change:\n  " + "\n  ".join(m[3:] for m in moved))
-    for cmd, what in ((["make", "--no-print-directory", "record", "CHECK=1"], "the record does not build"),
-                      ([str(root / "scripts/gates/l7r-gate.sh"), "check", "research-pointers", str(root)], "a research pointer does not resolve")):
-        if run(cmd, root):
-            print(f"preflight: {what} - the gate stops here (feature 375 FR-004)")
-            return 1
-    mark("record and pointers")
-    if not a.skip_quick and run(["make", "--no-print-directory", "quick", "FROM_PREFLIGHT=1"], root, quiet=False):
-        print("preflight: `make quick` failed - the gate stops here (feature 375 FR-004)")
-        return 1
-    mark("quick")
-    # THE COVERAGE STEP IS make preflight's, NOT THE GATE'S (405 T47, D25): 98-107 s of every gate, and in the whole transcript
-    # record it refused about twice, once wrongly - the gate's own 100% floor judges the same lines a few minutes later
-    off, on = ({}, {}) if a.no_coverage else coverage_step(root, changed_lines(root), a.workers)
-    # THE ENGINE CODE THE RUST PORT REPLACES IS REPORTED, NOT REFUSED (feature 448, the GM 2026-11-02): the gate's floor omits it
-    slated = {f: off.pop(f) for f in sorted(set(off) & exempt_files(root))}
-    if not a.no_coverage:
-        mark("coverage of the changed lines")
-    prev = t0
-    steps = []
-    for step, t in marks:
-        steps.append(f"{step} {t - prev:.0f} s")
-        prev = t
-    print("preflight: " + ", ".join(steps))
-    for f, ls in slated.items():
-        print(f"preflight: {f} lines {ls[:12]} - unrun, and slated for the Rust port (dev/coverage-exempt.json): information, not refused")
-    for f, ls in sorted(on.items()):
-        print(f"preflight: {f} lines {ls[:12]} - no quick test runs them; a rolled map or a test the quick tier skips may (the gate's floor judges)")
-    if off:
-        for f, ls in sorted(off.items()):
-            print(f"preflight: {f} lines {ls[:12]} - in a changed function, run by no quick test, and reached by no roll (off the hamlet path, or only unit tests reached it at the last green gate): only a unit test covers them")
-        print("preflight: the gate stops here - the 100% floor would refuse these minutes from now (feature 375 FR-004)")
-        return 1
-    print(f"preflight: clean in {time.monotonic() - t0:.0f} s")
-    return 0
+    ap.error("--cover or --same-py")
+    return 2
 
 
 if __name__ == "__main__":
-    sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1] / "hooks" / "lib"))
-    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
-    import usage_log  # noqa: E402 - feature 406 T03 (D162): every refusing check records its run
-
-    raise SystemExit(usage_log.exited("preflight", main()))
+    sys.exit(main())

@@ -19,4 +19,6 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/push.rs` | the push's checks and what each push gate judges: `push-checks`, `push-gate` (T067) |
 | `src/cohort.rs`, `src/cohort/` | the landing cohort, each seed's standing against main's engine, the seed report, the room table: `l7r-gate cohort` (T068) |
 | `src/measure.rs`, `src/measure/` | what things cost: `figures`, `gatecost`, `gate-costs`, `ratchet` (its table is `dev/ratchets.json`), `probe` (T75) |
+| `src/preflight.rs` | the gate's first phase and its tree check, `preflight` (T071); `scripts/gates/preflight.py` is its door to Python and pytest until phase 4 |
+| `src/logs.rs` | the records the gate's shell writes, `log run`, `log bypass`, `log gate-bypass`, `log land-tooling`; `json-field`, `ruff-toml` (T069) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

@@ -130,7 +130,7 @@ top_up-improvement.md
 # D2), so a missing one is recreated by the next claim rather than restored from git.
 .specify/feature-numbers.jsonl
 
-# feature 130: the AWS/GitHub credentials the CodeBuild dispatcher reads (see development-secrets.ini.example)
+# feature 130: the GitHub credential a push reads (see development-secrets.ini.example)
 development-secrets.ini
 # feature 129: raw cProfile output stays out of this repository (FR-011a); the derived table is committed
 dev/perf-raw/

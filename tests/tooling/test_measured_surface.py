@@ -47,7 +47,7 @@ def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
     import subprocess
 
     tracked = subprocess.run(["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, capture_output=True, text=True, check=True).stdout.split("\0")
-    excluded = ("l7r/", "tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "docs/")
+    excluded = ("l7r/", "tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "docs/")
     owed = {str(REPO / t) for t in tracked if t and not t.startswith(excluded)}
     # by prefix, as the stamp's own exclusion is: a `tests/` directory inside another tree (the Rust crate's Python driver,
     # `rust/phases/tests/py_driver.py`) is that tree's, not the test tree

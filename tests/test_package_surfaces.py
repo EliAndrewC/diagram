@@ -40,7 +40,6 @@ SKIP = {
     "scripts",
     ".claude",
     ".specify",
-    "buildspec",
     "container-scripts",
     "docs",
 }  # the root trees outside the project's package (feature 329)

@@ -1,7 +1,7 @@
 //! `gate-write-hooks` (feature 385 T02, plan D13; ported from the shell of the same name, feature 449 T024): NO WRITE TO THE WORKING TREE
 //! WHILE THIS TREE'S OWN `make done` RUNS. A gate ends by checking that the tree did not move while it ran; a session voided two gates
 //! this way, the second an hour after the round arbiter named the slip (the GM, 2026-10-17: "a guard, not a reminder"). A change the gate
-//! does not see passes, asked of the gate's own `preflight.py --tree-check` (feature 405 T41). While `make cache-audit` runs, an engine
+//! does not see passes, asked of the gate's own `l7r-gate preflight --tree-check` (feature 405 T41). While `make cache-audit` runs, an engine
 //! file holds a perturbed literal, so no engine edit and no commit (feature 426 T10). `GATE_WRITE_OK` with a reason is the escape.
 //!
 //! Plan T024's decisions: (a) the guard and `own-make.sh`'s question in-process, by pid; (b) `preflight.py` is a phase-2 piece, asked by
@@ -43,7 +43,6 @@ static MAKE_WRITE: LazyLock<Regex> = LazyLock::new(|| {
 pub(crate) struct Ctx {
     pub procs: Procs,
     pub top: PathBuf,
-    pub python: &'static str,
 }
 
 /// Whether a make of this target runs in this tree (`own-make.sh`): the program by its name, the tree by its cwd.
@@ -134,16 +133,22 @@ fn unseen(c: &Ctx, extra: &[&str]) -> bool {
     let top = c.top.to_string_lossy();
     let gate_dir = ask(&c.top, "git", &["rev-parse", "--absolute-git-dir"], "").out;
     let snap = format!("{gate_dir}/gate-tree.json");
-    let tool = c.top.join("scripts/gates/preflight.py");
+    let tool = c.top.join("scripts/gates/l7r-gate.sh");
     let mut args = vec![
-        tool.to_str().unwrap_or(""),
+        "preflight",
         "--root",
         top.as_ref(),
         "--tree-check",
         snap.as_str(),
     ];
     args.extend_from_slice(extra);
-    ask_within(&c.top, c.python, &args, Duration::from_secs(20)).ok()
+    ask_within(
+        &c.top,
+        &tool.to_string_lossy(),
+        &args,
+        Duration::from_secs(20),
+    )
+    .ok()
 }
 
 /// The file's text as this edit would leave it, or None.
@@ -228,7 +233,6 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
                 mine: std::process::id(),
             },
             top,
-            python: "python3",
         },
     )
 }

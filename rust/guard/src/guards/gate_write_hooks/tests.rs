@@ -33,11 +33,10 @@ fn world(tag: &str) -> World {
         ""
     )
     .ok());
-    std::fs::write(
-        t.join("scripts/gates/preflight.py"),
-        format!("[ -f {}/unseen ]\n", t.display()),
-    )
-    .unwrap();
+    crate::guards::write_executable(
+        &t.join("scripts/gates/l7r-gate.sh"),
+        &format!("#!/bin/sh\n[ -f {}/unseen ]\n", t.display()),
+    );
     World {
         top: t,
         proc: root.join("proc"),
@@ -67,7 +66,6 @@ impl World {
                     mine: 99_999,
                 },
                 top: self.top.clone(),
-                python: "sh",
             },
         )
     }

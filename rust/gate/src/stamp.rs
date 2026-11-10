@@ -409,7 +409,7 @@ pub(crate) fn in_raw_area(root: &Path, path: &str) -> bool {
 }
 
 /// Those of the newline-separated `paths` that are in a byte-hashed area, a whole batch in one process.
-fn raw_matches(root: &Path, paths: &mut dyn Read) -> Result<String, String> {
+pub(crate) fn raw_matches(root: &Path, paths: &mut dyn Read) -> Result<String, String> {
     let mut text = String::new();
     stated(paths.read_to_string(&mut text), "reading the paths")?;
     Ok(text

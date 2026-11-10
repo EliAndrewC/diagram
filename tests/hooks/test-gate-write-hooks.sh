@@ -56,7 +56,7 @@ printf 'def f(x):\n    """Research: a claim - NONE"""\n    return x + 1\n' > "$S
 printf '{}\n' > "$S/dev/claims-index.json"
 printf 'done:\n\t@sleep 30\n' > "$S/Makefile"
 git -C "$S" add -A; git -C "$S" -c user.email=t@t -c user.name=t commit -qm base
-python3 "$S/scripts/gates/preflight.py" --root "$S" --tree-snap "$S/.git/gate-tree.json"
+"$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-snap "$S/.git/gate-tree.json"
 ( cd "$S" && setsid nohup make done </dev/null >/dev/null 2>&1 & )
 for _ in $(seq 1 50); do ( cd "$S" && "$HERE/../../scripts/gates/l7r-gate.sh" own-make done ) && break; sleep 0.1; done
 DOC=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"a claim - NONE","new_string":"a claim reworded - NONE"}}' "$S")
@@ -67,10 +67,10 @@ check "a Write of a claims-round record: let through" 0 "$(run "$S" "$(printf '{
 sed -i 's/a claim - NONE/a claim reworded - NONE/' "$S/l7r/diagram/m.py"; printf '{"k": 1}\n' > "$S/dev/claims-index.json"
 check "a commit of only those: let through" 0 "$(run "$S" "$COMMIT")"
 git -C "$S" -c user.email=t@t -c user.name=t commit -qam claims
-check "...and the gate's tree check reads the run as unmoved" 0 "$(python3 "$S/scripts/gates/preflight.py" --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
+check "...and the gate's tree check reads the run as unmoved" 0 "$("$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
 sed -i 's/x + 1/x + 2/' "$S/l7r/diagram/m.py"
 check "a commit holding code: refused" 2 "$(run "$S" "$COMMIT")"
-check "...and the tree check names it" 1 "$(python3 "$S/scripts/gates/preflight.py" --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
+check "...and the tree check names it" 1 "$("$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
 pkill -f "sleep 30" 2>/dev/null
 rm -rf "$S"
 

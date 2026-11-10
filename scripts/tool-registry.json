@@ -99,7 +99,7 @@
     },
     "preflight": {
       "kind": "check",
-      "what": "scripts/gates/preflight.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/preflight.rs (`l7r-gate preflight`) - a refusing check; each run recorded passed or refused"
     },
     "spec-lint": {
       "kind": "check",
