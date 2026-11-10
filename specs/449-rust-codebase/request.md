@@ -26,3 +26,7 @@ The GM, 2026-11-09: "Let's delete rather than port our tooling which runs our te
 "and then: which of our static checks are static checks on the python code which can also go away now?"
 
 "Sounds good, please proceed with that, thanks."
+
+## 2026-11-10, reviews on straight ports (FR-001c)
+
+The GM, asking about the time a port's reviews take: "why did we need 12 minutes on plan reviews and arbitur rulings for a straightforward tool port? Is that something we can skip for this porting effort?" and, on the session's proposal: "yes please applh this starting with the next task".
