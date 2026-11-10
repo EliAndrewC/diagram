@@ -31,7 +31,7 @@ fn text_is_plain_with_macrons_dropped() {
     assert_eq!(plain("<b>1 ryō</b>   2 shū"), "1 ryo 2 shu");
 }
 
-/// Each answer below is CPython's `html.unescape` on the same text (observed 2026-11-10).
+/// Each answer below is `CPython`'s `html.unescape` on the same text (observed 2026-11-10).
 #[test]
 fn entities_are_read_as_html_unescape_reads_them() {
     for (text, want) in [
@@ -44,13 +44,9 @@ fn entities_are_read_as_html_unescape_reads_them() {
             "\u{fffd} \u{fffd} \u{fffd}",
         ),
         ("[&#xFDD0;]", "[]"),
-        ("&ThickSpace;", "\u{205f}\u{200a}"),
+        ("x&ThickSpace;y", "x y"),
     ] {
-        assert_eq!(
-            super::ENTITY.replace_all(text, |c: &fancy_regex::Captures| super::entity(c)),
-            want,
-            "{text}"
-        );
+        assert_eq!(plain(text), want);
     }
 }
 

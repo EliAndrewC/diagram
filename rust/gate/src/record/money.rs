@@ -42,7 +42,7 @@ const CHINA_WORDS: [(&str, &str); 15] = [
 const CENTS: (&str, &str) = ("cents", "dollar");
 const NUMBER: &str = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\d[\d,]*(?:\.\d+)?)?";
 const DOLLAR: &str = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\$?\d[\d,]*(?:\.\d+)?)?";
-/// CPython's own entity tables, generated once from `html.entities.html5`, `html._invalid_charrefs` and `html._invalid_codepoints`: `html.unescape`, whole.
+/// `CPython`'s own entity tables, generated once from `html.entities.html5`, `html._invalid_charrefs` and `html._invalid_codepoints`: `html.unescape`, whole.
 const HTML5: &str = include_str!("html5_entities.tsv");
 
 fn compiled(p: &str) -> Regex {
