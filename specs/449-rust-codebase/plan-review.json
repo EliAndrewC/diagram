@@ -8851,95 +8851,95 @@
    "verdict": "BLOCKED"
   },
   "T86": {
-   "section_sha256": "cadd00531e84a8eaacfc9b7bac28b96199f50d74311a6b0826e3cad117ece009",
+   "section_sha256": "204994d2601daf13e19f1274cc3e61c25e51123dea431f6ba92980178eeacb0d",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "core-and-commands",
-     "summary": "The core is l7r_guard::shared::checks; check-bundle, checks and record-edit call it directly; l7r-gate arbiter, checks-close and checks-door are the commands; no guard starts Python on a plain Bash call or Edit.",
+     "id": "T86-core",
+     "summary": "The core is l7r_guard::shared::checks; check-bundle, checks and record-edit call it directly; l7r-gate arbiter, checks-close and checks-door are the commands; no guard starts Python on a plain Bash call or plain Edit.",
      "class": "within",
-     "why": "The shape ask:449-T86-door rules: Rust guards calling Rust directly, with FR-001's clause on plain calls kept."
+     "why": "ask:449-T86-door's words: the Rust guards calling Rust directly, one implementation writing; FR-001's clause on plain Bash and Edit."
     },
     {
-     "id": "outside-writers-handled",
-     "summary": "record_owed.py keep_batches moves to a door verb; rust/gate/src/state.rs second_red_gate moves to the shared lock and atomic rename.",
+     "id": "T86-writers",
+     "summary": "Census of writers, specs/ now included: keep_batches moves to a door verb, second_red_gate moves to the shared lock and atomic rename; state_path's callers read and found to be readers.",
      "class": "within",
-     "why": "The ruling gives a writer found outside the five two routes, joining the cut or moving to a verb, and these take one each. 'One implementation' in FR-001 is said of the Python and Rust writers coexisting, and second_red_gate is Rust changed in this cut under the same lock. This rules the two writers found; whether the search for writers reached far enough is the separate decision writer-search-excludes-specs."
+     "why": "ask:449-T86-door: a writer outside the five joins the cut or moves to a verb, and Rust writes by atomic rename. The search now reaches specs/ and states its command and its hits, including the measurements.json entries; the block's earlier ':!specs' is gone."
     },
     {
-     "id": "writer-search-excludes-specs",
-     "summary": "The search that finds writers outside the five, and the state_path caller read beside it, exclude specs/ (the grep's ':!specs'), and the block concludes 'So one implementation writes.'",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "A carve-out from the ruling's 'A writer of those files found outside the five modules joins the cut or moves to a verb' and from FR-001's purpose that one implementation ever writes those files. It became visible only now that the command is stated, as the last round asked. No reason is given. Not impossible: it is one pathspec. Not implied by the GM's words: the GM's rule on specs/ is that a harness nothing runs is deleted and not ported, and FR-001 puts every file under specs/ that something still runs in phase 3, ported like any other, with make figures re-running them. Last round blocked the import census for this same exclusion and that census is now fixed, but it does not cover this: t86-census.py matches the five module names, so a specs/ harness that names and writes arbiter-owed.json or checks-open.json directly passes it. Nothing in the bundle shows specs/ holds no such writer. Remedy: drop ':!specs' from the search and from the state_path caller read, and state the result, each hit shown to write only a scratch or fixture path, or shown unrun and deleted, or moved to a verb."
+     "id": "T86-door-verbs",
+     "summary": "The door holds no logic and carries seven verbs beyond the ruling's list (rulings, _round_no, PAGE_CHECKS, notes_of_manifest, subjects_of_manifest, fix_hold, keep_batches), each a read or write the callers already made.",
+     "class": "within",
+     "why": "ask:449-T86-door moves EVERY Python caller to the one door, so a verb a caller needs is what the ruling requires; keep_batches is its 'moves to a verb'. No new behavior: each is an existing read or write."
     },
     {
-     "id": "door-reopen-on-env-change",
-     "summary": "checks_door.py is one process a run, reopened if the environment it reads changes mid-run, because land.py exports SPECIFY_FEATURE.",
+     "id": "T86-door-reopen",
+     "summary": "The door is one process a run EXCEPT that it is reopened if the environment it reads changes mid-run, because land.py exports SPECIFY_FEATURE.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "A carve-out from the ruling's 'a run's verbs through one door process (FR-006)'. Applied literally, a door started before the export answers from the old environment, which breaks FR-002's same outputs on exactly the case named. The rule's purpose is FR-006's per-process cost, and a reopen only on an environment change does not gut it; the differential holds 6 cases on it. Unchanged from the last round."
+     "why": "A carve-out from the ruling's 'a run's verbs through one door process (FR-006)'. A running process cannot see an environment its parent exports after it started, so a single process would answer for the old SPECIFY_FEATURE where the Python read the new one: the literal rule would break FR-002's same outputs, the purpose the door exists to serve. FR-006's purpose (no process per verb) survives, since the reopen happens only on a change; the read-after-own-write order survives because each verb is a completed round trip before the next. The differential holds 6 cases of exactly this."
     },
     {
-     "id": "extra-door-verbs",
-     "summary": "Door verbs beyond the ruling's list: rulings, _round_no, PAGE_CHECKS, notes_of_manifest, subjects_of_manifest, fix_hold, keep_batches.",
+     "id": "T86-by-path",
+     "summary": "l7r-gate arbiter still runs Python by path on rare branches that are later tasks' ports: record_owed.answer, gm_review.question, checkpoint.close_checkpoint, review_prereq.py content-key, claims.py accept; none writes the state directly.",
      "class": "within",
-     "why": "The ruling moves every Python caller to the door and sends only a name a command cannot carry into the cut, so a further verb for a read or write callers already make serves it; keep_batches is licensed by the writer clause. It widens the list and narrows nothing. The ruling's 'covers each verb' holds: t86-diff.py exercises every read verb, the ruling's and these, and the three write verbs."
+     "why": "FR-001's by-path clause and T065 pattern for pieces placed later; these are placed in phase 3. The closure's stated blind spot (a by-path run outside the import graph) is covered by the name census over all files plus the read of state_path's callers."
     },
     {
-     "id": "arbiter-by-path-branches",
-     "summary": "l7r-gate arbiter runs Python by path on rare branches under the T065 clause: record_owed.answer, gm_review.question, checkpoint.close_checkpoint, review_prereq.py content-key, claims.py accept.",
+     "id": "T86-differential",
+     "summary": "Differential of 9,455 cases against the Python at 9c77004cf on scratch copies, exit, stdout, stderr and state files compared; one difference found and fixed (a failed trip through the door now answers an error, guards keep the quiet false).",
      "class": "within",
-     "why": "FR-003 keeps the Python of a piece not yet ported as the one that runs, and FR-001 and the T065 clause settle by-path runs on rare branches. The last round's caveat is answered: the block now states that none of the five writes the state directly, with its method and that method's limit (no by-path run outside the import graph). The by-name writer search is what covers that limit, so its reach is decided under writer-search-excludes-specs."
+     "why": "The ruling's 'differential covers each verb against the Python it replaces' and FR-002. The fix moves the port toward the Python. The itemized counts close: 9,265+6+21+30+16+17+92+5+2+1 = 9,455 and 10+7+4 = 21; every figure carries a one-shot label."
     },
     {
-     "id": "differential-success-path-and-writes",
-     "summary": "The differential now covers door writes 21 (trip 10, record_answer 7, keep_batches 4), the accept seam's failure path 2 and success path 1 with the store, state files and arbiter.jsonl row compared; 9,455 in all, 0 differ; one difference found and fixed so a failed trip through the door answers an error as the Python raised, the guards keeping the quiet false; no lock held across the seam.",
+     "id": "T86-norm-json",
+     "summary": "Normalization 1: the merged hook reply is compared as parsed JSON.",
      "class": "within",
-     "why": "Resolves the last round's NOT LEGITIMATE on the unexercised success path: the harness runs the real record_owed.answer on a scratch store each side, and the lock-across-seam concern is answered by the block's statement that record_ruling calls accept_answers with none held. The parts now sum to the stated total (9265+6+21+30+16+17+92+5+2+1 = 9,455). The fix moves the Rust to the Python's behavior, FR-002's direction."
+     "why": "Same keys, same values; a JSON object's key order carries nothing the hook protocol reads, and FR-007 is what merges the replies. Verdict and content remain compared."
     },
     {
-     "id": "normalization-parsed-json",
-     "summary": "The differential compares the merged hook reply as parsed JSON.",
+     "id": "T86-norm-library-text",
+     "summary": "Normalization 2: a library's error text inside refused - ... is not compared.",
      "class": "within",
-     "why": "Every key and value is still compared; only key order and separators fall away, on replies that both begin with hookSpecificOutput, in a reply the block states the hook protocol reads by key. No case or value is excluded from FR-002's same outputs. Unchanged from the last round."
+     "why": "ask:449-T066-json-message rules the general case: the quoted text is the Rust library's, the fixed words stay bound."
     },
     {
-     "id": "normalization-library-text",
-     "summary": "A library's error text inside 'refused - ...' is not compared.",
+     "id": "T86-norm-traceback-text",
+     "summary": "Normalization 3, first part: the text of an uncaught Python traceback is not compared; exit status and stdout still are.",
      "class": "within",
-     "why": "Ruled by ask:449-T066-json-message; in the harness it applies to two arbiter cases, a missing file and a bad JSON file. A disclosure note: the harness has a third normalization the block's 'two normalizations' does not name, blanking both sides' stderr when the Python's holds a traceback. ask:449-usage-text rules that (traceback text not bound, exit status and stdout held), so it is within, but the block should name it."
+     "why": "ask:449-usage-text in terms: an uncaught Python traceback's text is not bound for any port, exit status and stdout staying held."
     },
     {
-     "id": "direct-readers-stand",
+     "id": "T86-norm-whole-stderr",
+     "summary": "Normalization 3, second part: stderr is set aside WHOLE on both sides wherever the Python's holds a traceback, so any words beside the traceback go uncompared. t86-diff.py line 110: if 'Traceback' in pe: pe, re_ = '', ''.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The same sentence of ask:449-usage-text that frees the traceback's text says a tool's own words, a message or refusal the Python writes by hand, stay bound. A substring test that blanks everything also frees hand-written stderr printed before a crash and a hand-written refusal that quotes a child's traceback, a plausible form here since l7r-gate arbiter runs Python by path. Not physically impossible (compare what precedes the line 'Traceback (most recent call last):'), not implied by the GM's or the ruling's words, and the literal rule does not defeat any purpose. It guts FR-002 for those cases at the one moment it can be checked: the cut deletes the Python. How many of the 9,455 cases it touches was not measured, and 0 differ cannot speak for what was blanked. To clear: compare stderr up to the traceback header on the Python side (and the Rust side's corresponding text), re-run, state the count of cases that reached this normalization; or measure and state that every such case's Python stderr held nothing but the traceback and restrict the test to exactly that."
+    },
+    {
+     "id": "T86-standing-reads",
      "summary": "Reads that open the state files today stand, Rust keeping the files' shape: gm_review, set-down, budget_change, claims_carry, fix_yield, tool_yield, popup_rounds.rs, plan/record.rs.",
      "class": "within",
-     "why": "The ruling: a read that opens the file today may stand until its own port, Rust keeping the file's shape."
+     "why": "ask:449-T86-door: a read that opens the file today may stand until its own port, Rust keeping the file's shape."
     },
     {
-     "id": "handwritten-words-kept",
+     "id": "T86-words",
      "summary": "The Rust keeps the Python's hand-written words, including refusal tags naming the old file.",
      "class": "within",
-     "why": "FR-002, ask:449-usage-text: a refusal the Python writes by hand stays bound."
+     "why": "FR-002."
     },
     {
-     "id": "deletions",
+     "id": "T86-deletions",
      "summary": "The five .py files, the three guards' .sh and the dangling tests/hooks/record-edit-gate.sh are deleted in the cut.",
      "class": "within",
-     "why": "The five are ordered deleted by the ruling under the GM's quoted approval, and the guards' .sh are what the cut replaces. The approval quoted names Python files, so it does not itself cover the dangling shell test; that file goes with the guard it belongs to and narrows nothing, FR-001 naming test-record-edit-hooks as the suite that moves. Unchanged from the last round."
+     "why": "ask:449-T86-door's deletion under the GM's standing approval of 2026-11-10; the guards' .sh are the replaced pieces. The dangling test's status is asserted without a search space: if anything still runs it, FR-002 binds its cases first, which the session should confirm."
     },
     {
-     "id": "order-and-exits",
-     "summary": "After T81; T87-T89 and T83 then port their callers off the door; green on the differential, the census and make land; red recorded and set down, a claim of impossibility ruled through make arbiter-ask.",
+     "id": "T86-order-and-exits",
+     "summary": "After T81; T87-T89 and T83 then port their callers off the door; green is no difference, no import of the five, make land green; red is recorded and ruled through make arbiter-ask.",
      "class": "within",
-     "why": "Order and exits inside the ruling, which deletes the door with its last caller."
-    },
-    {
-     "id": "done-census-over-all-forms",
-     "summary": "Done, measured: t86-census.py walks all of git ls-files '*.py', specs/ included, with ast, searches shell and Makefile, and reads specs/*/measurements*.json's commands: no import, by-path load or run of the five; .claude/settings.json names no removed guard.",
-     "class": "within",
-     "why": "Resolves the last round's NOT LEGITIMATE: the census now spans FR-001's whole census, its string constants catch by-path loads, and the shell, Makefile and recorded-measurement forms are read. It answers the ruling's 'no import of the five remains' and shows FR-001's rewrite of recorded measurements has nothing to rewrite for these five."
+     "why": "The ruling: the door is deleted with its last caller and the census is re-run at the cut."
     }
    ],
    "verdict": "BLOCKED"
