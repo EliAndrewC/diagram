@@ -282,11 +282,11 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T84 The removal the GM approves of T79's ported Python: canon.py, money_conversions.py, found.py, stale_terms.py, money_candidates.py, fragment_move.py, agent_census.py, and specs/251's seeded.py and run_seeded.sh, with docs/spec-kit-and-reviews.md:109 rewritten to name make model-trial's verb
       research: rendering
-- [ ] T85 Phase 3, the source tools (`ask:449-T81-slices`): sources, attempts, source_pages, reserve-prefix, what they use of record.blocked and source_tags; Rust downloads' by-path run ends
+- [ ] T85 Phase 4, the archive cluster with `interactive/record` (`ask:449-T81-slices`, moved by its test, each carrying the T065 clause and named at the phase-3 close): `quote_verbatim`, `sources`, `attempts`, `source_pages`, `reserve-prefix`, `apply_edits`, `uncited`, `uncited_imports`, `archive_ops`, `archive`; Rust `downloads`' by-path run of `reserve-prefix.py` ends here
       research: rendering
 - [ ] T86 Phase 3, the arbiter and checks state, with T011, T043 and T048: hm_arbiter, hm_checks, hm_fixloop, hm_planhold, hm_budget_rounds, one owner of checks-open.json, arbiter-owed.json and modal-batches.json
       research: rendering
-- [ ] T87 Phase 3, the owed core: record_owed, record_units, modal_owed, entry_owed, translation_owed, modal_triage, apply_edits; record_cache.py deleted with its last Python caller (`ask:449-T81-slices`)
+- [ ] T87 Phase 3, the owed core: record_owed, record_units, modal_owed, entry_owed, translation_owed, modal_triage; record_cache.py deleted with its last Python caller (`ask:449-T81-slices`)
       research: rendering
 - [ ] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed
       research: rendering
