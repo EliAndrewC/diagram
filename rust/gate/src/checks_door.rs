@@ -87,15 +87,15 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
             rounds::record_answer(&path_arg(args, 0), arg(args, 1), &strings(args.get(2)));
             Value::Null
         }
-        "trip" => json!(core::trip(
+        "trip" => json!(core::try_trip(
             &path_arg(args, 0),
             arg(args, 1),
             arg(args, 2),
             arg(args, 3),
             arg(args, 4),
             args.get(5).unwrap_or(&Value::Null),
-            arg(args, 6)
-        )),
+            arg(args, 6),
+        )?),
         "keep_batches" => {
             keep_batches(&path_arg(args, 0), args.get(1).unwrap_or(&Value::Null))?;
             Value::Null

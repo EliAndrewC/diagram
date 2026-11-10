@@ -124,6 +124,19 @@ fn the_write_verbs_and_the_door_loop() {
     assert!(std::fs::read_to_string(root.join(".git/arbiter-owed.json"))
         .unwrap()
         .contains("ask:x"));
+    assert!(answer(
+        "trip",
+        &[
+            json!("/proc/nonexistent/x"),
+            json!("ask:x"),
+            json!("ask"),
+            json!(""),
+            json!("why"),
+            json!(null),
+            json!("")
+        ]
+    )
+    .is_err());
     assert_eq!(
         ask("record_answer", json!([r, "c", ["c:0105"]])),
         Value::Null

@@ -425,7 +425,7 @@ fn dispatches_in(detail: &str) -> Option<u64> {
     group(detail, &DISPATCHES).and_then(|d| d.parse().ok())
 }
 
-/// Record a trigger once (a second firing changes nothing); true when it is new. `now` is the epoch time written, null for the clock's; `review` names the spec or plan review an ask is about.
+/// `try_trip` for a guard, which never fails its call over a bookkeeping write: false where the trigger could not be recorded.
 #[must_use]
 pub fn trip(
     root: &Path,
@@ -436,12 +436,30 @@ pub fn trip(
     when: &Value,
     review: &str,
 ) -> bool {
+    try_trip(root, trigger, kind, unit, detail, when, review).unwrap_or(false)
+}
+
+/// Record a trigger once (a second firing changes nothing); true when it is new; `Err` where the file could not be written (the door's Python caller raises, as `hm_arbiter.trip` did). `now` is the epoch time written, null for the clock's; `review` names the spec or plan review an ask is about.
+///
+/// # Errors
+///
+/// The lock or the owed file cannot be had.
+#[must_use]
+pub fn try_trip(
+    root: &Path,
+    trigger: &str,
+    kind: &str,
+    unit: &str,
+    detail: &str,
+    when: &Value,
+    review: &str,
+) -> Result<bool, String> {
     if rulings(root, trigger).contains_key(trigger) {
-        return false;
+        return Ok(false);
     }
     let common = common_dir(root);
     let mut new = false;
-    let written = with_owed(&common, &mut |state| {
+    with_owed(&common, &mut |state| {
         if state.get(trigger).is_some() {
             return false;
         }
@@ -472,8 +490,8 @@ pub fn trip(
         state[trigger] = Value::Object(row);
         new = true;
         true
-    });
-    written.is_ok() && new
+    })?;
+    Ok(new)
 }
 
 /// The stored JSON's `state[trigger]`, popped under the owed lock, written back only where it was there (`record_ruling`'s last step).
