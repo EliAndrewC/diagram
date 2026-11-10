@@ -4,8 +4,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use serde_json::{json, Value};
 
 use super::{
-    batch_plan, cli, cli_in, fix_hold, open_fixes, py_repr, record_batch, record_ruling,
-    spec_body_sha, spec_ruled, spec_verdict, unit_ruled, Stop,
+    batch_plan, cli_in, fix_hold, open_fixes, py_repr, record_batch, record_ruling, spec_body_sha,
+    spec_ruled, spec_verdict, unit_ruled, Stop,
 };
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
