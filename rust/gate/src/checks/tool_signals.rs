@@ -174,7 +174,11 @@ fn called(root: &Path) -> BTreeMap<String, String> {
         p.extension().is_some_and(|x| x == "py" || x == "sh")
             && !p.components().any(|c| c.as_os_str() == "__pycache__")
     });
-    for dir in ["rust/guard/src/guards", "rust/gate/src"] {
+    for dir in [
+        "rust/guard/src/guards",
+        "rust/guard/src/shared",
+        "rust/gate/src",
+    ] {
         let mut rust = Vec::new();
         walk(&root.join(dir), &mut rust);
         files.extend(

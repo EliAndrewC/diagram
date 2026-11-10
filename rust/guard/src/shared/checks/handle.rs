@@ -25,6 +25,8 @@ fn is_check_kind(check: &str) -> bool {
 }
 
 const MANIFEST_REASON_TOKENS: [&str; 2] = ["FREEZE_OK", "ARBITER_OK"];
+/// The tool a restored plan section records in the usage log (`usage_log`'s registry, `check tool-signals`).
+const USAGE_LOG_TOOL: &str = "planhold-restore";
 
 fn re(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
@@ -227,7 +229,7 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
             let _ = save(path, &state);
             if !msg.is_empty() {
                 if let Some(r) = root.as_deref() {
-                    passes::usage(&super::common_dir(r), "planhold-restore", "step", "changed");
+                    passes::usage(&super::common_dir(r), USAGE_LOG_TOOL, "step", "changed");
                 }
             }
             return msg;
