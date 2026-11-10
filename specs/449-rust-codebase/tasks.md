@@ -214,9 +214,8 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the first slice of scripts/measure/: the cohort, the room table, the run floor and the tool-signals check are Rust
 
-- [x] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them
+- [ ] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them
       research: rendering
-      verify: DONE. landed: the gate's inline Python is Rust verbs; T77's ports land with it, T77 and T73 open until the GM's removal
 
 - [ ] T071 [US2] `l7r/diagram/ci/` the pytest-driven planner: `incremental.py`, `selection.py`, `gate_plugin.py`, last in the phase (the round arbiter's `ask:449-T062-order`); a Python test may drive the Rust binary black-box only until its Rust tests replace it, and `gate_config.py`'s `scripts_readers` and `tooling_modules` (moved from T72: `incremental.py` is their caller), `scripts/gates/preflight.py`, `cover_changed.py`, `refresh_baseline.py` and `pool-readers.py` (`ask:449-T067-scope`)
       research: rendering
