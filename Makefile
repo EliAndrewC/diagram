@@ -284,7 +284,7 @@ source-tags-contract: ## [docs] derive research/source-tags.json's values and ex
 
 fragment-move:  ## [docs] rename or renumber a question - every file of its stem - and rewrite every pointer to it - the record's own links, about: markers, confusables, the Entry: lines, the code and docs (features 301, 303)   FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html
 	@test -n "$(FROM)" -a -n "$(TO)" || { echo "make fragment-move FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html" >&2; exit 2; }
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/fragment_move.py" "$(FROM)" "$(TO)" --root "$$(git rev-parse --show-toplevel)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record fragment-move "$(FROM)" "$(TO)" --root "$$(git rev-parse --show-toplevel)"
 
 # The suites fan out in parallel. A suite that turns out to race is serialized, never retried: a retry hides the race.
 hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
@@ -654,7 +654,7 @@ agent-sync:     ## [project] write into each agent file the text every dispatch 
 agent-census:   ## [project] what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=<json>]
 ##  SINCE=<date>   only the runs that started on or after it
 ##  OUT=<json>     also write the rows to this file
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/agent_census.py" $(if $(SINCE),--since "$(SINCE)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record agent-census $(if $(SINCE),--since "$(SINCE)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
 quote-verbatim: ## [project] is every quoted passage on the page it cites, character for character - run BEFORE quote-check   Q=0412 | IN=homesteads [NOTES=1-4] [OUT=<json>]
 ##  Q=<NNNN>       one or more questions, by number (both pages) or a page's file name; its own notes are read beside it

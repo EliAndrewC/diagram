@@ -24,10 +24,11 @@ const REFUSAL_DATA: [&str; 7] = [
     "rust/gate/src/checks/research_pointers/tests.rs",
     "rust/gate/src/checks/research_pointers.rs",
 ];
-const FIXTURES: [&str; 6] = [
+const FIXTURES: [&str; 7] = [
     "rust/gate/src/plan/",
     "tests/",
     "scripts/record/fragment_move.py",
+    "rust/gate/src/record/", // the record tools' tests and fragment-move's self-test name records of a scratch repository
     "scripts/gates/check-entry-headings.py",
     "scripts/hooks/lib/hm_record.py",
     "rust/gate/src/checks/", // the checks' own tests and self-tests name fixture records

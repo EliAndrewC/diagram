@@ -195,7 +195,7 @@ pub(crate) fn replayable(run: &Run) -> bool {
     })
 }
 
-fn children(dir: &Path) -> Vec<PathBuf> {
+pub(crate) fn children(dir: &Path) -> Vec<PathBuf> {
     let mut out: Vec<PathBuf> = std::fs::read_dir(dir)
         .into_iter()
         .flatten()
@@ -206,7 +206,7 @@ fn children(dir: &Path) -> Vec<PathBuf> {
     out
 }
 
-fn named(path: &Path, starts: &str, ends: &str) -> bool {
+pub(crate) fn named(path: &Path, starts: &str, ends: &str) -> bool {
     path.file_name()
         .and_then(|n| n.to_str())
         .is_some_and(|n| n.starts_with(starts) && n.ends_with(ends))
@@ -271,10 +271,10 @@ impl Trial {
     }
 }
 
-/// One run's totals: usage folded per message id as the per-field maximum (R2 of feature 383), then summed - `agent_census.fold_usage`, whose port
-/// in phase 3 calls this (`ask:449-T77-replays`).
+/// One run's totals: usage folded per message id as the per-field maximum (R2 of feature 383), then summed; `started` is the run's first timestamp, of any
+/// record. The one fold: `record agent-census` calls this (`ask:449-T77-replays`).
 pub(crate) fn fold_usage(records: &[Value]) -> Value {
-    let mut per: BTreeMap<String, [i64; 3]> = BTreeMap::new();
+    let mut per: BTreeMap<String, [i64; 4]> = BTreeMap::new();
     let mut models: Vec<(String, i64)> = Vec::new();
     for record in records.iter().filter(|r| r["type"] == "assistant") {
         let message = &record["message"];
@@ -286,6 +286,7 @@ pub(crate) fn fold_usage(records: &[Value]) -> Value {
             int(&usage["input_tokens"]) + int(&usage["cache_creation_input_tokens"]),
             int(&usage["cache_read_input_tokens"]),
             int(&usage["output_tokens"]),
+            int(&usage["output_tokens_details"]["thinking_tokens"]),
         ];
         let id = text(message, "id");
         if !per.contains_key(&id) {
@@ -299,7 +300,7 @@ pub(crate) fn fold_usage(records: &[Value]) -> Value {
                 None => models.push((model, 1)),
             }
         }
-        let kept = per.entry(id).or_insert([0; 3]);
+        let kept = per.entry(id).or_insert([0; 4]);
         for (old, new) in kept.iter_mut().zip(row) {
             *old = (*old).max(new);
         }
@@ -312,7 +313,11 @@ pub(crate) fn fold_usage(records: &[Value]) -> Value {
             best
         }
     });
-    json!({"fresh": sum(0), "cached": sum(1), "output": sum(2), "turns": per.len(), "model": top.map_or("none", |m| m.0.as_str())})
+    let started = records
+        .iter()
+        .find(|r| truthy(&r["timestamp"]))
+        .map_or_else(String::new, |r| text(r, "timestamp"));
+    json!({"fresh": sum(0), "cached": sum(1), "output": sum(2), "thinking": sum(3), "turns": per.len(), "model": top.map_or("none", |m| m.0.as_str()), "started": started})
 }
 
 /// `model_trial`'s words after its subcommand: the flags with a value, the bare flags and the positional words.

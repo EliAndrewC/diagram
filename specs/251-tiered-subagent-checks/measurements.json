@@ -1,242 +1,242 @@
 {
   "census.general-purpose.runs": {
     "value": 295,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.general-purpose.turns_per_run": {
     "value": 22,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.general-purpose.input_per_run": {
     "value": 3889331,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.general-purpose.output_per_run": {
     "value": 25756,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.settlement-review.runs": {
     "value": 123,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.settlement-review.turns_per_run": {
     "value": 43,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.settlement-review.input_per_run": {
     "value": 6633973,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.settlement-review.output_per_run": {
     "value": 44077,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.spec-fidelity.runs": {
     "value": 416,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.spec-fidelity.turns_per_run": {
     "value": 9,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.spec-fidelity.input_per_run": {
     "value": 844484,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.spec-fidelity.output_per_run": {
     "value": 11826,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.quote-check.runs": {
     "value": 65,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.quote-check.turns_per_run": {
     "value": 14,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.quote-check.input_per_run": {
     "value": 3499186,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.quote-check.output_per_run": {
     "value": 28524,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.record-format.runs": {
     "value": 38,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.record-format.turns_per_run": {
     "value": 17,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.record-format.input_per_run": {
     "value": 4524622,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.record-format.output_per_run": {
     "value": 36692,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.source-reader.runs": {
     "value": 117,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.source-reader.turns_per_run": {
     "value": 10,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.source-reader.input_per_run": {
     "value": 1439781,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.source-reader.output_per_run": {
     "value": 21773,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.source-applicability.runs": {
     "value": 26,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.source-applicability.turns_per_run": {
     "value": 19,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.source-applicability.input_per_run": {
     "value": 4056874,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.source-applicability.output_per_run": {
     "value": 28570,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.entry-drift.runs": {
     "value": 52,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.entry-drift.turns_per_run": {
     "value": 6,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.entry-drift.input_per_run": {
     "value": 766177,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.entry-drift.output_per_run": {
     "value": 5720,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.fork.runs": {
     "value": 7,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.fork.turns_per_run": {
     "value": 15,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.fork.input_per_run": {
     "value": 3286776,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.fork.output_per_run": {
     "value": 33888,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.perf-audit.runs": {
     "value": 10,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.perf-audit.turns_per_run": {
     "value": 17,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.perf-audit.input_per_run": {
     "value": 1487349,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.perf-audit.output_per_run": {
     "value": 18566,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.escalation-check.runs": {
     "value": 7,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.escalation-check.turns_per_run": {
     "value": 11,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.escalation-check.input_per_run": {
     "value": 868002,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.escalation-check.output_per_run": {
     "value": 9834,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.claude-code-guide.runs": {
     "value": 3,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.claude-code-guide.turns_per_run": {
     "value": 6,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.claude-code-guide.input_per_run": {
     "value": 252710,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.claude-code-guide.output_per_run": {
     "value": 1663,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.Explore.runs": {
     "value": 1,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.Explore.turns_per_run": {
     "value": 1,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.Explore.input_per_run": {
     "value": 0,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.Explore.output_per_run": {
     "value": 0,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.adhoc.general-purpose.no_model": {
     "value": 72,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.adhoc.general-purpose.on_fable": {
     "value": 62,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.adhoc.fork.no_model": {
     "value": 7,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.adhoc.fork.on_fable": {
     "value": 5,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.adhoc.claude-code-guide.no_model": {
     "value": 3,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.adhoc.claude-code-guide.on_fable": {
     "value": 0,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.adhoc.Explore.no_model": {
     "value": 1,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   },
   "census.adhoc.Explore.on_fable": {
     "value": 0,
-    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+    "command": "scripts/gates/l7r-gate.sh record agent-census --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   }
 }

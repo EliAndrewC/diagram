@@ -8,6 +8,8 @@ use serde_json::{json, Value};
 
 use crate::Reply;
 
+mod agent_census;
+mod fragment_move;
 mod money;
 mod stale_terms;
 
@@ -366,6 +368,8 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         Some("money-candidates") => money::cli(rest, Path::new(".")),
         Some("stale-terms") => stale_terms::cli(rest),
         Some("stale-dirs") => stale_terms::dirs_cli(rest),
+        Some("fragment-move") => fragment_move::cli(rest),
+        Some("agent-census") => agent_census::cli(rest, &crate::measure::home()),
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),

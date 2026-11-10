@@ -140,6 +140,13 @@ fn one_line(value: &Value) -> String {
     out
 }
 
+/// `json.dumps(value, indent=indent, ensure_ascii=ascii)`, byte for byte.
+pub(crate) fn py_dumps(value: &Value, indent: usize, ascii: bool) -> String {
+    let mut out = String::new();
+    dumps(value, Some(indent), 0, &mut out, ascii);
+    out
+}
+
 /// One line as `json.dumps(value, ensure_ascii=False)` writes it.
 pub(crate) fn one_line_utf8(value: &Value) -> String {
     let mut out = String::new();

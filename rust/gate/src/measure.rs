@@ -59,7 +59,7 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
     }
 }
 
-fn home() -> std::path::PathBuf {
+pub(crate) fn home() -> std::path::PathBuf {
     std::env::var_os("HOME").map_or_else(std::path::PathBuf::new, std::path::PathBuf::from)
 }
 

@@ -237,13 +237,22 @@ fn the_fold_keeps_each_messages_maximum_and_the_commonest_model() {
     ]);
     assert_eq!(
         got,
-        json!({"fresh": 14, "cached": 6, "output": 11, "turns": 3, "model": "y"})
+        json!({"fresh": 14, "cached": 6, "output": 11, "thinking": 0, "turns": 3, "model": "y", "started": ""})
     );
     assert_eq!(fold_usage(&[])["model"], "none");
     let bare = json!({"type": "assistant", "message": {"id": "a", "usage": {}}});
     assert_eq!(fold_usage(&[bare])["model"], "unknown");
     let ties = fold_usage(&[rec("a", "first", 1), rec("b", "second", 1)]);
     assert_eq!(ties["model"], "first");
+    let later = json!({"type": "assistant", "timestamp": "t2", "message": {"id": "a", "usage": {"output_tokens_details": {"thinking_tokens": 7}}}});
+    let thought = fold_usage(&[
+        json!({"timestamp": ""}),
+        json!({"type": "user", "timestamp": "t1"}),
+        later.clone(),
+        later,
+    ]);
+    assert_eq!(thought["thinking"], 7);
+    assert_eq!(thought["started"], "t1");
 }
 
 #[test]
