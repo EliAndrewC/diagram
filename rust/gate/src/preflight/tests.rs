@@ -4,8 +4,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
 use super::{
-    judge_coverage, parse, rolled_outputs, run, seen_moves, stray_probes, tree, tree_moved, unseen,
-    Asked, Tools,
+    parse, rolled_outputs, run, seen_moves, stray_probes, tree, tree_moved, unseen, Asked, Tools,
 };
 
 fn git(dir: &Path, args: &[&str]) -> String {
@@ -123,7 +122,7 @@ fn flags_are_read() {
         ),
         ("r", "9", "s", "c", "e", "w", "t")
     );
-    assert!(a.skip_quick && a.quiet && a.no_coverage);
+    assert!(a.skip_quick && a.quiet);
     assert_eq!(parse(&[]).root, ".");
 }
 
@@ -408,37 +407,6 @@ fn a_probe_test_left_in_the_tree_stops_the_gate() {
 }
 
 #[test]
-fn the_gates_preflight_leaves_the_coverage_step_to_make_preflight() {
-    let root = repo("pf-steps");
-    let t = tools(&root, "", "echo '{\"off\": {}, \"on\": {}}'");
-    let (code, out) = go(
-        &Asked {
-            no_coverage: true,
-            ..asked(&root)
-        },
-        &t,
-    );
-    assert!(
-        code == 0
-            && !out.contains("coverage of the changed lines")
-            && out.contains("preflight: clean in")
-    );
-    assert!(!root.join("door-ran").exists());
-    let ran = std::fs::read_to_string(root.join("make-ran")).unwrap();
-    assert!(
-        ran.contains("docs")
-            && ran.contains("glossary")
-            && ran.contains("record CHECK=1")
-            && ran.contains("quick FROM_PREFLIGHT=1")
-    );
-    let (code, out) = go(&asked(&root), &t);
-    assert!(code == 0 && out.contains("coverage of the changed lines"));
-    assert!(std::fs::read_to_string(root.join("door-ran"))
-        .unwrap()
-        .contains("--cover --workers 1"));
-}
-
-#[test]
 fn skip_quick_runs_no_quick_and_a_regenerated_file_is_named() {
     let root = repo("pf-skip");
     let mut t = tools(&root, "", "exit 1");
@@ -448,7 +416,6 @@ fn skip_quick_runs_no_quick_and_a_regenerated_file_is_named() {
     let (code, out) = go(
         &Asked {
             skip_quick: true,
-            no_coverage: true,
             ..asked(&root)
         },
         &t,
@@ -466,13 +433,7 @@ fn each_step_that_fails_stops_the_phase_and_says_so() {
     ] {
         let root = repo(&format!("pf-fail-{target}"));
         let t = tools(&root, target, "exit 1");
-        let (code, out) = go(
-            &Asked {
-                no_coverage: true,
-                ..asked(&root)
-            },
-            &t,
-        );
+        let (code, out) = go(&Asked { ..asked(&root) }, &t);
         assert!(code == 1 && out.contains(words));
         if target != "quick" {
             assert!(out.contains("make-out") && out.contains("make-err"));
@@ -484,74 +445,11 @@ fn each_step_that_fails_stops_the_phase_and_says_so() {
         &root.join("scripts/gates/l7r-gate.sh"),
         "#!/bin/sh\nexit 1\n",
     );
-    let (code, out) = go(
-        &Asked {
-            no_coverage: true,
-            ..asked(&root)
-        },
-        &t,
-    );
+    let (code, out) = go(&Asked { ..asked(&root) }, &t);
     assert!(code == 1 && out.contains("a research pointer does not resolve"));
     let mut gone = tools(&root, "", "exit 1");
     gone.make = "/nonexistent/make".to_owned();
-    assert_eq!(
-        go(
-            &Asked {
-                no_coverage: true,
-                ..asked(&root)
-            },
-            &gone
-        )
-        .0,
-        1
-    );
-}
-
-#[test]
-fn a_door_that_fails_stops_the_coverage_step() {
-    let root = repo("pf-door-fail");
-    let t = tools(&root, "", "echo boom >&2; exit 1");
-    let (code, out) = go(&asked(&root), &t);
-    assert!(code == 1 && out.contains("the coverage step failed:\nboom"));
-    let mut gone = tools(&root, "", "exit 0");
-    gone.python = "/nonexistent/python".to_owned();
-    assert_eq!(go(&asked(&root), &gone).0, 1);
-}
-
-#[test]
-fn the_coverage_answer_is_judged() {
-    let root = repo("pf-judge");
-    let t = tools(
-        &root,
-        "",
-        "echo '{\"off\": {\"l7r/kept.py\": [2]}, \"on\": {\"l7r/on.py\": [5]}}'",
-    );
-    let (code, out) = go(&asked(&root), &t);
-    assert!(
-        code == 1
-            && out.contains("l7r/kept.py lines [2] - in a changed function")
-            && out.contains("l7r/on.py lines [5] - no quick test")
-            && out.contains("the 100% floor would refuse")
-    );
-    let mut said = Vec::new();
-    let off = BTreeMap::from([("l7r/slated.py".to_owned(), vec![4])]);
-    let exempt = BTreeSet::from(["l7r/slated.py".to_owned(), "l7r/other.py".to_owned()]);
-    assert_eq!(judge_coverage(off, &BTreeMap::new(), &exempt, &mut said), 0);
-    assert!(String::from_utf8_lossy(&said)
-        .contains("l7r/slated.py lines [4] - unrun, and slated for the Rust port"));
-    let t = tools(&root, "", "echo '[]'");
-    assert_eq!(go(&asked(&root), &t).0, 0);
-    let t = tools(&root, "", "echo '{\"off\": {\"f\": 3}}'");
-    assert_eq!(go(&asked(&root), &t).0, 1);
-}
-
-#[test]
-fn twelve_lines_are_shown_at_most() {
-    let lines: Vec<i64> = (1..=14).collect();
-    assert_eq!(
-        super::twelve(&lines),
-        "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
-    );
+    assert_eq!(go(&Asked { ..asked(&root) }, &gone).0, 1);
 }
 
 #[test]
@@ -582,13 +480,7 @@ fn a_long_failure_shows_its_tail() {
         "#!/bin/sh\nhead -c 4000 /dev/zero | tr '\\\\0' x\nexit 3\n",
     );
     t.make = make.display().to_string();
-    let (code, out) = go(
-        &Asked {
-            no_coverage: true,
-            ..asked(&root)
-        },
-        &t,
-    );
+    let (code, out) = go(&Asked { ..asked(&root) }, &t);
     assert!(code == 1 && out.matches('x').count() < 3100);
 }
 
@@ -607,7 +499,6 @@ fn a_root_that_is_not_there_stops_the_phase() {
         go(
             &Asked {
                 root: "/nonexistent/r".to_owned(),
-                no_coverage: true,
                 ..Asked::default()
             },
             &t
@@ -632,4 +523,19 @@ fn the_command_line_runs_the_snapshot() {
     );
     assert_eq!(got.code, 0);
     assert!(snap.is_file());
+}
+
+#[test]
+fn the_phase_runs_its_steps_and_ends_clean() {
+    let root = repo("pf-steps");
+    let t = tools(&root, "", "exit 1");
+    let (code, out) = go(&asked(&root), &t);
+    assert!(code == 0 && out.contains("preflight: clean in"));
+    let ran = std::fs::read_to_string(root.join("make-ran")).unwrap();
+    assert!(
+        ran.contains("docs")
+            && ran.contains("glossary")
+            && ran.contains("record CHECK=1")
+            && ran.contains("quick FROM_PREFLIGHT=1")
+    );
 }

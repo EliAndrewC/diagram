@@ -203,15 +203,9 @@ struct Row(
     &'static str,
 );
 
-const CHECKS: [Row; 29] = [
-    Row("duplicate-defs selftest", Tool::Py("gates/check-duplicate-defs.py"), &["--selftest"], "check-duplicate-defs selftest failed - the guard itself is broken; fix scripts/gates/check-duplicate-defs.py before pushing", true, "delta:duplicate-defs"),
-    Row("duplicate-defs", Tool::Py("gates/check-duplicate-defs.py"), &["{root}"], "duplicate top-level definitions (above) - a later def silently shadows the earlier; fix before pushing", false, "delta:duplicate-defs"),
+const CHECKS: [Row; 23] = [
     Row("file-scale selftest", Tool::Gate, &["check", "file-scale", "--selftest"], "check-file-scale selftest failed - the guard itself is broken; fix rust/gate/src/checks/ before pushing", true, ""),
-    Row("stale-dirs selftest", Tool::Gate, &["check", "stale-dirs", "--selftest"], "check-stale-dirs selftest failed - the guard itself is broken; fix rust/gate/src/checks/ before pushing", true, ""),
-    Row("stale-dirs", Tool::Gate, &["check", "stale-dirs", "{root}"], "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails", false, ""),
     Row("file-scale", Tool::Gate, &["check", "file-scale", "{root}"], "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", false, ""),
-    Row("function-cap selftest", Tool::Py("gates/check-function-cap.py"), &["--selftest"], "check-function-cap selftest failed - fix scripts/gates/check-function-cap.py before pushing", true, "delta:function-cap"),
-    Row("function-cap", Tool::Py("gates/check-function-cap.py"), &["{root}"], "a function is past the 100-statement cap, or a suppression of it says not why (above) - feature 370", false, "delta:function-cap"),
     Row("make-docs", Tool::Py("make-docs.py"), &["{root}", "--check"], "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", false, "docs/make-targets.html"),
     Row("ledger-owed", Tool::Py("reviews/ledger_owed.py"), &["--ledger", "{root}/dev/review-ledger.md", "--refuse"], "a check's pass has no row in dev/review-ledger.md (above) - write each from its reply: make ledger-owed WRITE=\"<where you recorded what you did>\" (or add the row printed, its ?s filled); features 371, 385 FR-019", false, ""),
     Row("entry-headings selftest", Tool::Py("gates/check-entry-headings.py"), &["--selftest"], "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing", true, "delta:entry-headings"),

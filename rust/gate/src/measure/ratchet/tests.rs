@@ -252,18 +252,3 @@ fn a_class_median_over_its_ceiling_is_printed_and_does_not_refuse() {
     let (ok, msg) = verdict("done", Some(&done), classed, 1.0);
     assert!(ok && msg.contains("at or over its"));
 }
-
-#[test]
-fn the_makefile_holds_the_budget_to_warm_selective_runs_and_the_typecheck_to_make_s_python() {
-    let recipe = std::fs::read_to_string(repository().join("Makefile")).unwrap();
-    let line = recipe
-        .lines()
-        .find(|l| l.contains("-gt $(QUICK_BUDGET)"))
-        .unwrap();
-    assert!(line.contains("\"$$warm\" = yes") && line.contains("[ -z \"$(ALL)\" ]"));
-    let check = recipe
-        .lines()
-        .find(|l| l.starts_with("TYPECHECK ="))
-        .unwrap();
-    assert!(check.contains("--python-interpreter-path") && check.contains("command -v python3"));
-}

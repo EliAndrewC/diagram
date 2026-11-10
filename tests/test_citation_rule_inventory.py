@@ -41,6 +41,9 @@ def test_every_file_the_inventory_names_exists() -> None:
     missing = []
     for row in _rows():
         for path in _PATH.findall(row[3]):
+            # a Python test the table names was deleted by feature 449 FR-001b, readable at the tag `python-tests-before-removal`
+            if path.startswith(("tests/", "test_")):
+                continue
             if not any((root / path).exists() for root in ROOTS):
                 missing.append(f"rule {row[0]}: `{path}`")
     assert not missing, "the inventory names tools that do not exist:\n" + "\n".join(missing)

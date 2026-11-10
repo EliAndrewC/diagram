@@ -54,7 +54,7 @@ FINDING = re.compile(
     r"|\b(?:TRUTH|COVERAGE|LINKS) [1-9]",
     re.I,
 )
-ENTRY_SCRIPTS = ("scripts/sync-with-main.sh", "rust/gate/src/push.rs", "scripts/gates/preflight.py")
+ENTRY_SCRIPTS = ("scripts/sync-with-main.sh", "rust/gate/src/push.rs", "rust/gate/src/preflight.rs")
 ENTRY_TARGETS = ("done", "quick", "tick")
 UNSEEN = (
     "the outcome of a target run no session made (a recipe, a script, the timer) - its run is counted, its outcome is not",

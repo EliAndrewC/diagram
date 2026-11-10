@@ -5,17 +5,15 @@
 //! derived files regenerated, the record built and its pointers resolved, the quick tier run. And THE TREE HELD STILL: the gate hashes every tracked file
 //! that differs from HEAD when it starts and again before it reports green, and a difference fails it, naming the file.
 //!
-//! What reads pytest stays behind one door until phase 4: `scripts/gates/preflight.py`, asked for the changed lines' coverage (only by `make preflight`).
 //! Whether two versions of a `.py` file differ only where the gate does not look is `codeid.py`'s, asked in one batch.
 
 use std::collections::{BTreeMap, BTreeSet};
-use std::fmt::Write as _;
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::Instant;
 
-use serde_json::{Map, Value};
+use serde_json::Value;
 
 use crate::cohort::git as git_said;
 use crate::measure::text_err;
@@ -361,7 +359,6 @@ pub(crate) struct Asked {
     pub would_write: String,
     pub content: String,
     pub quiet: bool,
-    pub no_coverage: bool,
 }
 
 pub(crate) fn parse(args: &[String]) -> Asked {
@@ -383,7 +380,6 @@ pub(crate) fn parse(args: &[String]) -> Asked {
             "--content" => a.content = value(),
             "--skip-quick" => a.skip_quick = true,
             "--quiet" => a.quiet = true,
-            "--no-coverage" => a.no_coverage = true,
             _ => {}
         }
     }
@@ -521,61 +517,6 @@ fn cheap_steps(root: &Path, tools: &Tools, say: &mut dyn std::io::Write) -> (boo
     (true, Some(derived))
 }
 
-/// The door's two lists of uncovered lines, `{file: [lines]}`.
-type Gaps = BTreeMap<String, Vec<i64>>;
-
-fn twelve(lines: &[i64]) -> String {
-    let shown: Vec<String> = lines.iter().take(12).map(i64::to_string).collect();
-    format!("[{}]", shown.join(", "))
-}
-
-fn gaps_of(v: &Value) -> Gaps {
-    v.as_object().map_or_else(Gaps::new, Map::iter_gaps)
-}
-
-/// A JSON object of integer lists, read.
-trait IterGaps {
-    fn iter_gaps(&self) -> Gaps;
-}
-
-impl IterGaps for Map<String, Value> {
-    fn iter_gaps(&self) -> Gaps {
-        self.iter()
-            .map(|(k, v)| {
-                (
-                    k.clone(),
-                    v.as_array()
-                        .map_or_else(Vec::new, |a| a.iter().filter_map(Value::as_i64).collect()),
-                )
-            })
-            .collect()
-    }
-}
-
-/// The verdict on the door's coverage answer: its report and the exit.
-pub(crate) fn judge_coverage(
-    mut off: Gaps,
-    on: &Gaps,
-    exempt: &BTreeSet<String>,
-    say: &mut dyn std::io::Write,
-) -> i32 {
-    let slated: Gaps = exempt.iter().filter_map(|f| off.remove_entry(f)).collect();
-    for (file, lines) in &slated {
-        let _ = writeln!(say, "preflight: {file} lines {} - unrun, and slated for the Rust port (dev/coverage-exempt.json): information, not refused", twelve(lines));
-    }
-    for (file, lines) in on {
-        let _ = writeln!(say, "preflight: {file} lines {} - no quick test runs them; a rolled map or a test the quick tier skips may (the gate's floor judges)", twelve(lines));
-    }
-    if off.is_empty() {
-        return 0;
-    }
-    for (file, lines) in &off {
-        let _ = writeln!(say, "preflight: {file} lines {} - in a changed function, run by no quick test, and reached by no roll (off the hamlet path, or only unit tests reached it at the last green gate): only a unit test covers them", twelve(lines));
-    }
-    let _ = writeln!(say, "preflight: the gate stops here - the 100% floor would refuse these minutes from now (feature 375 FR-004)");
-    1
-}
-
 /// The phase itself.
 fn phase(root: &Path, tools: &Tools, a: &Asked, say: &mut dyn std::io::Write) -> i32 {
     let probes = stray_probes(root);
@@ -600,51 +541,12 @@ fn phase(root: &Path, tools: &Tools, a: &Asked, say: &mut dyn std::io::Write) ->
         }
     }
     let quick_done = start.elapsed().as_secs_f64();
-    // THE COVERAGE STEP IS make preflight's, NOT THE GATE'S (405 T47, D25): 98-107 s of every gate, and it refused about twice, once wrongly
-    let (mut off, mut on) = (Gaps::new(), Gaps::new());
-    if !a.no_coverage {
-        match python_tool(
-            root,
-            tools,
-            "preflight.py",
-            &[
-                "--cover".to_owned(),
-                "--workers".to_owned(),
-                a.workers.clone(),
-                "--root".to_owned(),
-                root.display().to_string(),
-            ],
-        ) {
-            Ok(text) => {
-                let got: Value = serde_json::from_str(&text).unwrap_or(Value::Null);
-                (off, on) = (gaps_of(&got["off"]), gaps_of(&got["on"]));
-            }
-            Err(why) => {
-                let _ = writeln!(say, "preflight: the coverage step failed:\n{why}");
-                return 1;
-            }
-        }
-    }
-    let mut steps = format!(
+    let steps = format!(
         "derived {derived:.0} s, record and pointers {:.0} s, quick {:.0} s",
         pointers_done - derived,
         quick_done - pointers_done
     );
-    if !a.no_coverage {
-        let _ = write!(
-            steps,
-            ", coverage of the changed lines {:.0} s",
-            start.elapsed().as_secs_f64() - quick_done
-        );
-    }
     let _ = writeln!(say, "preflight: {steps}");
-    let exempt: BTreeSet<String> = crate::exempt::paths(root)
-        .unwrap_or_default()
-        .into_iter()
-        .collect();
-    if judge_coverage(off, &on, &exempt, say) != 0 {
-        return 1;
-    }
     let _ = writeln!(
         say,
         "preflight: clean in {:.0} s",

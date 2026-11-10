@@ -80,16 +80,6 @@ def test_no_operative_document_names_a_coverage_key_the_config_does_not_set() ->
     assert not bad, "these PRESCRIBE a coverage config key that is not set; the floor is `coverage report --fail-under=100` in the skill Makefile:\n  " + "\n  ".join(bad)
 
 
-def test_the_floor_the_docs_describe_is_the_one_the_makefile_runs() -> None:
-    """The positive half: the Makefile really does carry the flag the docs are told to name."""
-    mk = (SKILL / "Makefile").read_text()
-    assert re.search(r"coverage report -m --fail-under=100", mk), "the mechanism the docs describe must exist"
-    floored = next(ln for ln in mk.splitlines() if "--fail-under=100" in ln)
-    # it covers the whole tree but the record's files (feature 448, the GM 2026-11-02: "We can relax that for the engine code at
-    # this pooint since that's going away"): its one omission is generated from `dev/coverage-exempt.json`, never a hand list
-    assert "--omit" not in floored and 'coverage-exempt omit)' in floored, floored[:160]
-
-
 def test_no_engine_module_claims_exemption_from_the_coverage_rule() -> None:
     """GM 2026-09-02: *"a new tool absolutely should silently owe one hundred percent coverage the day
     it lands ... for everything."* Four modules carried such a claim in their own docstrings and the

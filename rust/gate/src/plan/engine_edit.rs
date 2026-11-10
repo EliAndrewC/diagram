@@ -76,7 +76,7 @@ fn docstring_only(rel: &str, path: &str, input: &Value, tool: &str, python: &str
 }
 
 fn is_engine(root: &str, rel: &str) -> bool {
-    Path::new(root).join("l7r/diagram/ci/delta.py").is_file() && crate::delta::is_engine(rel)
+    Path::new(root).join("scripts/gates/l7r-gate.sh").is_file() && crate::delta::is_engine(rel)
 }
 
 /// The path with its existing part resolved, the rest kept: a new file or package has no real path of its own.

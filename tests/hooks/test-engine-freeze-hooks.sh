@@ -15,7 +15,7 @@ export GUARD_LOG_DIR="$T/guard-log"
 C=$T/clone
 git init -q "$C"
 mkdir -p "$C/l7r/diagram/ci" "$C/l7r/diagram/settlement" "$C/docs" "$C/tests" "$C/pool/hamlets/sawada"
-cp "$REPO/l7r/diagram/ci/delta.py" "$C/l7r/diagram/ci/delta.py"
+mkdir -p "$C/scripts/gates"; : > "$C/scripts/gates/l7r-gate.sh"
 SESSION=$T/proj/sess; SUB=$SESSION/subagents; mkdir -p "$SUB"
 
 agent() { # agent <id> <type> <last record json> [finished]

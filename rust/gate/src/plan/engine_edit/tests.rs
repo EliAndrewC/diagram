@@ -9,7 +9,7 @@ use super::cli;
 
 fn clone_with(file: &str, text: &str) -> std::path::PathBuf {
     let root = repo();
-    for (path, body) in [("l7r/diagram/ci/delta.py", "x\n"), (file, text)] {
+    for (path, body) in [("scripts/gates/l7r-gate.sh", "x\n"), (file, text)] {
         std::fs::create_dir_all(root.join(path).parent().unwrap()).unwrap();
         std::fs::write(root.join(path), body).unwrap();
     }

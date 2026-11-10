@@ -162,6 +162,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity"
+  },
+  "### T78 Approach (checklist part A)": {
+   "sha256": "c52b0055e5a705888acd9246ccfa7b0d9907998733339966ca5b51af1ca1bb29",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4714,6 +4720,69 @@
      "why": "ask:449-T062-order, FR-006, SC-002 and the arbiter's standing role; the budget line settles nothing the request addressed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-10",
+   "blocks": [
+    "### T78 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T78-kept-list",
+     "summary": "Ten test files, their loaders and everything non-Python stay under tests/; all other Python tests are deleted.",
+     "class": "within",
+     "why": "FR-001b delegates the list to this plan by a criterion: subject outlives the Python (sheets sweep, agent files, CLAUDE.md files, other documents). Warrant is FR-001b's quotation of the GM's 2026-11-10 words; request.md stops at 2026-11-09 and 'that group' is defined nowhere else in the bundle. Six names fit on sight. test_citation_rule_inventory, test_task_research_boxes, test_settlement_review_contract and test_operations_registry do not show their subject in the bundle, and the only census given (70 functions in 32 files) is the live-pool search, not a check of these; the implementer confirms each tests a document or agent file and not Python code before keeping it."
+    },
+    {
+     "id": "T78-planner-floor",
+     "summary": "selection.py, gate_plugin.py, incremental.py, pool_readers.py, gate_config.py's two readers, scripts/gates/pool-readers.py, cover_changed.py, refresh_baseline.py and scripts/gates/preflight.py are deleted.",
+     "class": "within",
+     "why": "FR-001b: the planner and the coverage floor over Python go with the tests. Caveat on preflight.py: the block's only reason is that its --cover has no tests to run, and m:done-rust-edit records a preflight phase (preflight_s) in make done, so the bundle does not show whether the file goes whole or only --cover. If it does anything but the floor, that part is outside FR-001b and FR-001's port applies; the plan should say which."
+    },
+    {
+     "id": "T78-static-checks",
+     "summary": "check-function-cap.py, check-duplicate-defs.py, ruff format, pyrefly, the Python-file size bar and check stale-dirs are deleted as Python-only.",
+     "class": "within",
+     "why": "FR-001b and the GM's 'please proceed' cover static checks whose only subject is Python source. ruff format, pyrefly, duplicate-defs and the Python-file size bar are that by name. check-function-cap.py and check stale-dirs are not evidently so in the bundle; a check that also covers Rust or non-Python trees is outside what was approved and must be kept for that subject."
+    },
+    {
+     "id": "T78-ruff-narrowed",
+     "summary": "ruff check stays, selecting E9, F63, F7, F82.",
+     "class": "within",
+     "why": "FR-001b: ruff check stays, narrowed to outright errors; these rule groups are a direct reading of that."
+    },
+    {
+     "id": "T78-tag",
+     "summary": "The commit before removal is tagged python-tests-before-removal and ports read their cases from it.",
+     "class": "within",
+     "why": "Serves FR-002 (same verdicts on every case its tests hold) once the tests are gone; adds no behavior and no scope."
+    },
+    {
+     "id": "T78-rust-coverage",
+     "summary": "New Rust code still owes 100% line coverage from its own tests.",
+     "class": "within",
+     "why": "Restates FR-004."
+    },
+    {
+     "id": "T78-kept-suite-whole",
+     "summary": "The kept suite runs whole, with no selection and no coverage.",
+     "class": "within",
+     "why": "Direct consequence of FR-001b removing the planner and the Python coverage floor."
+    },
+    {
+     "id": "T78-one-commit",
+     "summary": "Tag, then delete tests and Python-only tooling in one commit with the Makefile, land.py, guards and crates edited to stop reading them.",
+     "class": "within",
+     "why": "FR-001b: gates that required the tests are edited to stop running them. FR-002 still binds the guards that stay."
+    },
+    {
+     "id": "T78-cost-accepted",
+     "summary": "Records as accepted that a regression in still-running Python is caught only by the kept checks, guards' suites, port differentials, or use.",
+     "class": "within",
+     "why": "Changes nothing about what is deleted; matches FR-001b's held-by sentence plus 'or use'. Attribution caveat: the GM's quoted premise is 'we are no longer changing it. Except insofar as we are deleting it', while the block says the Python is still being edited as ports land. The GM's words do not accept that cost in terms; the label overstates them."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8169,6 +8238,68 @@
      "summary": "Leaf first by imports, callers reach the binary once a process or in a batch; a red exit goes to make arbiter-ask; no work budget.",
      "class": "within",
      "why": "ask:449-T062-order, FR-006, SC-002 and the arbiter's standing role; the budget line settles nothing the request addressed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T78": {
+   "section_sha256": "c52b0055e5a705888acd9246ccfa7b0d9907998733339966ca5b51af1ca1bb29",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T78-kept-list",
+     "summary": "Ten test files, their loaders and everything non-Python stay under tests/; all other Python tests are deleted.",
+     "class": "within",
+     "why": "FR-001b delegates the list to this plan by a criterion: subject outlives the Python (sheets sweep, agent files, CLAUDE.md files, other documents). Warrant is FR-001b's quotation of the GM's 2026-11-10 words; request.md stops at 2026-11-09 and 'that group' is defined nowhere else in the bundle. Six names fit on sight. test_citation_rule_inventory, test_task_research_boxes, test_settlement_review_contract and test_operations_registry do not show their subject in the bundle, and the only census given (70 functions in 32 files) is the live-pool search, not a check of these; the implementer confirms each tests a document or agent file and not Python code before keeping it."
+    },
+    {
+     "id": "T78-planner-floor",
+     "summary": "selection.py, gate_plugin.py, incremental.py, pool_readers.py, gate_config.py's two readers, scripts/gates/pool-readers.py, cover_changed.py, refresh_baseline.py and scripts/gates/preflight.py are deleted.",
+     "class": "within",
+     "why": "FR-001b: the planner and the coverage floor over Python go with the tests. Caveat on preflight.py: the block's only reason is that its --cover has no tests to run, and m:done-rust-edit records a preflight phase (preflight_s) in make done, so the bundle does not show whether the file goes whole or only --cover. If it does anything but the floor, that part is outside FR-001b and FR-001's port applies; the plan should say which."
+    },
+    {
+     "id": "T78-static-checks",
+     "summary": "check-function-cap.py, check-duplicate-defs.py, ruff format, pyrefly, the Python-file size bar and check stale-dirs are deleted as Python-only.",
+     "class": "within",
+     "why": "FR-001b and the GM's 'please proceed' cover static checks whose only subject is Python source. ruff format, pyrefly, duplicate-defs and the Python-file size bar are that by name. check-function-cap.py and check stale-dirs are not evidently so in the bundle; a check that also covers Rust or non-Python trees is outside what was approved and must be kept for that subject."
+    },
+    {
+     "id": "T78-ruff-narrowed",
+     "summary": "ruff check stays, selecting E9, F63, F7, F82.",
+     "class": "within",
+     "why": "FR-001b: ruff check stays, narrowed to outright errors; these rule groups are a direct reading of that."
+    },
+    {
+     "id": "T78-tag",
+     "summary": "The commit before removal is tagged python-tests-before-removal and ports read their cases from it.",
+     "class": "within",
+     "why": "Serves FR-002 (same verdicts on every case its tests hold) once the tests are gone; adds no behavior and no scope."
+    },
+    {
+     "id": "T78-rust-coverage",
+     "summary": "New Rust code still owes 100% line coverage from its own tests.",
+     "class": "within",
+     "why": "Restates FR-004."
+    },
+    {
+     "id": "T78-kept-suite-whole",
+     "summary": "The kept suite runs whole, with no selection and no coverage.",
+     "class": "within",
+     "why": "Direct consequence of FR-001b removing the planner and the Python coverage floor."
+    },
+    {
+     "id": "T78-one-commit",
+     "summary": "Tag, then delete tests and Python-only tooling in one commit with the Makefile, land.py, guards and crates edited to stop reading them.",
+     "class": "within",
+     "why": "FR-001b: gates that required the tests are edited to stop running them. FR-002 still binds the guards that stay."
+    },
+    {
+     "id": "T78-cost-accepted",
+     "summary": "Records as accepted that a regression in still-running Python is caught only by the kept checks, guards' suites, port differentials, or use.",
+     "class": "within",
+     "why": "Changes nothing about what is deleted; matches FR-001b's held-by sentence plus 'or use'. Attribution caveat: the GM's quoted premise is 'we are no longer changing it. Except insofar as we are deleting it', while the block says the Python is still being edited as ports land. The GM's words do not accept that cost in terms; the label overstates them."
     }
    ],
    "verdict": "CLEAR"

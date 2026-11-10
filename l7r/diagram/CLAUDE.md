@@ -36,7 +36,6 @@ last efficient stage parked in `rust/parked/`), and the stage-by-stage reference
 | `switches.py` | the iteration switch (feature 132) in `dev/switches.json`: remote on or off ([`docs/switches.md`](../../docs/switches.md)) | a remote run refused, or you throw the switch |
 | `_invocation.py`, `_census.py`, `_memory.py` | refuse an operation not invoked through this project's make; the roll census's writer; give freed C memory back after a roll | a refusal or the census fired |
 | [`tools/`](tools/CLAUDE.md) | read-only diagnostics and audits | a map came out wrong and you need to ask WHY, or a number needs measuring |
-| [`ci/`](ci/CLAUDE.md) | the CodeBuild dispatcher and the incremental gate | a remote run refused, money may be spent, or the gate selected oddly |
 | [`tests/`](../../tests/CLAUDE.md) | every test, mirroring the source layout, plus the frozen fixtures | you need to find or add a test |
 
 `pool/` holds the shipped maps (`<name>.gen.py`, its manifest, render and `.notes.md`); `legacy-hand-authored-pool/` the frozen hand-authored exhibits.
@@ -78,12 +77,7 @@ diagnosed and the tooling improved.
   work is a BUG in the guard to fix (it was always a MENTION mistaken for an INVOCATION).
 - `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
   `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make test-file FILE=...`
-  for a whole affected file (never a `-k` subset alone). **The engine code the Rust port replaces owes no coverage**
-  (feature 448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)."): `dev/coverage-exempt.json` names it (`make coverage-exempt`), and every floor reports its unrun
-  lines as information; write no test only to cover one of them. `make cover-changed` (~30 s: every line of each changed
-  engine module the floor's tests leave unrun, the floor's carried coverage honored, feature 430 - `make land` runs it beside
-  the gate, escape `COVER_OK`), then `make done` once,
-  backgrounded, never polled.
+  for a kept test file. The Python unit tests, their planner and the coverage floor over Python were deleted (feature 449 FR-001b, the GM 2026-11-10); `make done` runs the kept tests whole, once, backgrounded, never polled.
 - **The cohort, by stage** (feature 386, the GM 2026-10-17): `make cohort` (ten seeds and the pinned rows, ~50 s) after each
   fix; `make cohort-landing` before a GATED landing - seeds 1-48 and the pinned rows, ~2 min uncached - which `sync-with-main.sh
   done` requires on the engine it lands, refusing a seed regressed against main. `make land` rolls a fresh block of 48 that

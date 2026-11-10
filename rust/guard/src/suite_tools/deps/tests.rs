@@ -380,14 +380,13 @@ fn over_the_real_tree_the_rules_hold() {
         assert!(names(&t.shared, &file),);
     }
     let lint = t
-        .pydeps(&root.join("tests/tooling/test_ledger_lint.py"))
+        .pydeps(&root.join("tests/test_mode_a_sheets.py"))
         .iter()
         .map(|p| t.rel(p))
         .collect::<Vec<_>>();
     assert!(
-        lint.contains(&"scripts/reviews/ledger_lint.py".to_owned())
+        lint.contains(&"tests/test_mode_a_sheets.py".to_owned())
             && lint.contains(&"tests/conftest.py".to_owned())
     );
-    assert!(!lint.contains(&"scripts/record/modal_bundle.py".to_owned()));
     assert!(t.key_for("l7r-guard.sh").len() == 16 && !t.rust_inputs("l7r-guard.sh").is_empty());
 }

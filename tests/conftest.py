@@ -65,79 +65,17 @@ def pytest_addoption(parser):  # type: ignore[no-untyped-def]
     )
 
 
-@pytest.hookimpl(trylast=True)
-def pytest_configure(config):  # type: ignore[no-untyped-def]
-    """testmon's xdist sync wrote `.testmondata` while slow workers were still reading it, and
-    `make quick` failed on the first run after a test was added (`tests/_testmon_sync.py`).
-
-    TRYLAST, MEASURED: a conftest registers after testmon and pluggy calls the later plugin first, so
-    unmarked this ran before testmon had registered the plugin it replaces, and replaced nothing."""
-    from tests._testmon_sync import install
-
-    install(config)
-
-
 @pytest.hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def]
-    """TRYFIRST, AND THE REASON IS A TARGET THAT RAN NOTHING (feature 170, found by feature 169's
-    round-4 review). The `tooling` marker below is added BY LOCATION, and pytest applies `-m` in its
-    own `pytest_collection_modifyitems`. Without `tryfirst` ours ran second, so `make tooling`
-    (`pytest -m tooling`) never saw the location-added markers and collected ZERO tests - exit 5,
-    every time, on the target whose whole job is to run that suite and record it green. Selecting by
-    PATH instead would have missed the source-marked tooling tests in `tests/gate/pipeline/`, so the
-    fix is the ordering rather than the selector.
-
-    TIER RELEVANCE (GM 2026-08-26, feature 133 T17): while scope is locked to the reference hamlet,
-    a test tagged `tiers("town", "city")` cannot say anything about the map on the sheet - skip it.
-    A test with no `tiers` marker is relevant to every tier and always runs."""
-    from tests._scope import FULL
-
+    """TIER RELEVANCE (GM 2026-08-26, feature 133 T17): a test tagged for other tiers cannot say anything about the map on the sheet."""
     tier = config.getoption("--tier")
-    # AT THE GATE TOO (feature 135 T22): a green `make done` records the tooling hash only when it RAN the tooling
-    # tests, so an unchanged hash means a gate already vouched for exactly this tooling - the same reasoning the
-    # gate applies to `hooks-test` with its stamp. Never in the FULL run, where the ci package owes its 100%.
-    # ...BUT NEVER A RUN THAT ASKS FOR THEM: `make tooling` (`-m tooling`) and `make test-file` on a tooling file collected
-    # ZERO tests while the hash stood unchanged - exit 5, the target failing - so a changed tool none of the hash's files
-    # covers (`tools/mapcheck.py`, 2026-10-01) could not have its own tests run at all
-    asked = tooling_asked(config.getoption("markexpr", "") or "", config.args)
-    skip_tooling = _tooling_unchanged() and not FULL and not asked
     keep, drop = [], []
-
     for item in items:
-        if "/tests/tooling/" in str(item.fspath) and item.get_closest_marker("tooling") is None:
-            item.add_marker(pytest.mark.tooling)  # the ci package's tests are tooling tests by location (git repos in tmp, the dispatcher)
         m = item.get_closest_marker("tiers")
-        if (m is not None and tier and tier not in m.args) or (skip_tooling and item.get_closest_marker("tooling") is not None):
-            drop.append(item)
-        else:
-            keep.append(item)
+        (drop if m is not None and tier and tier not in m.args else keep).append(item)
     if drop:
         config.hook.pytest_deselected(items=drop)
         items[:] = keep
-        config._tier_dropped = len(drop)  # type: ignore[attr-defined]
-
-
-def tooling_asked(markexpr: str, args: list[str]) -> bool:
-    """Did this run ask for the tooling tests by name: `-m tooling`, a test file, or the `tests/tooling` tree itself? THE TREE
-    TOO (feature 417 T54, 2026-10-27): `make land` runs `make test-file FILE=tests/tooling` when its delta changes the Makefile,
-    and with the tooling hash unchanged every test was deselected - pytest's exit 5, read as a red suite, refused the landing."""
-    return "tooling" in markexpr or any(str(a).split("::")[0].endswith(".py") or str(a).rstrip("/").endswith("tests/tooling") for a in args)
-
-
-def _tooling_unchanged() -> bool:
-    """TOOLING TESTS RUN ONLY WHEN THE TOOLING CHANGED (GM 2026-08-26, T22): true when the tooling hash
-    recorded by the last green `make done` equals the current one. Any doubt (no record, no git
-    root, a read error) means the tests run."""
-    from pathlib import Path
-
-    try:
-        from l7r.diagram.ci import state
-
-        root = Path(__file__).resolve().parents[1]
-        st = state.read(root)
-        return st is not None and bool(st.tooling) and st.tooling == state.tooling_hash(root)
-    except Exception:  # noqa: BLE001 - any failure to decide means "run them"
-        return False
 
 
 _TIER_DIRS = {"hamlet": "hamlets", "village": "villages", "town": "towns", "city": "provincial-cities", "capital": "capitals"}
@@ -159,8 +97,6 @@ def pytest_report_header(config):  # type: ignore[no-untyped-def]
     if tier:
         lines.append(f"tier: {tier} - tests tagged for other tiers only are deselected (scope locked to the reference settlement)")
     lines.append("scope: EXHAUSTIVE - every sweep in full" if EXHAUSTIVE else "scope: quick - sweeps run their documented subset (EXHAUSTIVE=1 for the full form)")
-    if not FULL and _tooling_unchanged():
-        lines.append("tooling: unchanged since the last green gate - the make/ci/pipeline tooling tests are deselected")
     if FULL:
         lines.append("scope: FULL - the full tree is collected, the coverage floors are enforced, no cache serves a roll")
     return lines

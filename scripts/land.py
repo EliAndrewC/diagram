@@ -550,16 +550,8 @@ COVER_STOPPED = 75
 
 
 def start_cover(root: Path) -> tuple[subprocess.Popen, Path] | None:
-    """THE CHANGED MODULES' COVERAGE, BESIDE THE GATE (feature 415 T03, D6; the GM 2026-10-24 - it ran 48 s before the gate on
-    T26's landing): `gates/cover_changed.py` in its own session, its output to a log under the git dir; None under
-    COVER_OK="<reason>" (a line only a roll or another directory reaches)."""
-    if os.environ.get("COVER_OK"):
-        return None
-    log = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "land-cover.log"
-    with log.open("w") as fh:
-        proc = subprocess.Popen([sys.executable, str(HERE / "gates" / "cover_changed.py")], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
-    RUNNING.append(proc)
-    return proc, log
+    """No coverage runs beside a gate since the Python tests were deleted (feature 449 FR-001b)."""
+    return None
 
 
 def cover_refusal(cover: tuple[subprocess.Popen, Path] | None) -> str:
@@ -590,40 +582,6 @@ def run_gate(root: Path, target: str, cover: tuple[subprocess.Popen, Path] | Non
         return proc.returncode
     finally:
         RUNNING.remove(proc)
-
-
-#: the share of its baseline an incremental landing gate may select before a full run is started after the push (feature 415
-#: T05, D8): at research.md R2's 12.7 ms per selected test, 25% of a ~12,000-test baseline is ~38 s past the 67 s fixed cost,
-#: and the selection grows with every landing until a full run resets it
-REFRESH_FRACTION = 0.25
-
-
-def refresh_due(root: Path, since: float) -> str:
-    """The refresh's reason when THIS landing's gate (its result written since `since`) ran incremental and selected at least
-    `REFRESH_FRACTION` of its baseline's tests; "" otherwise."""
-    bdir = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "gate-baseline"
-    try:
-        if (bdir / "result.json").stat().st_mtime < since:
-            return ""
-        res = json.loads((bdir / "result.json").read_text(encoding="utf-8"))
-        total = len(json.loads((bdir / "tests.json").read_text(encoding="utf-8")))
-    except OSError, ValueError:
-        return ""
-    sel = res.get("selected")
-    n = len(sel) if isinstance(sel, list) else int(sel or 0)
-    if res.get("mode") != "incremental" or not total or n < REFRESH_FRACTION * total:
-        return ""
-    return f"refresh: {n} of {total} baseline tests selected"
-
-
-def start_refresh(root: Path, reason: str) -> Path:
-    """`gates/refresh_baseline.py` detached, in its own session (feature 415 T05, D8): a full gate in a worktree at the pushed
-    commit, its baseline into the clone's; one at a time under its own lock. Returns its log."""
-    log = Path(run(root, ["git", "rev-parse", "--absolute-git-dir"])[1].strip() or root / ".git") / "land-refresh.log"
-    head = run(root, ["git", "rev-parse", "HEAD"])[1].strip()
-    with log.open("a") as fh:
-        subprocess.Popen([sys.executable, str(HERE / "gates" / "refresh_baseline.py"), str(root), head, reason], cwd=root, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
-    return log
 
 
 def start_fresh_block(root: Path) -> Path:
@@ -666,7 +624,7 @@ def commit_records(root: Path) -> None:
 #: process-fault on ask:430-machinery-gate, 2026-10-26): the done recipe's reuse branch ignores scripts/, tests/ and the Makefile
 #: by the GM's 2026-08-25 rule ("I thought we were omitting make done results for changes to the hooks or scripts or makefile
 #: changes"), so the `make done` this used to add always short-circuited - it ran no test and land said it ran a gate
-GATE_MACHINERY = re.compile(r"^(scripts/land\.py|scripts/gates/.*|Makefile|l7r/diagram/ci/.*|tests/conftest\.py|tests/_scope\.py)$")
+GATE_MACHINERY = re.compile(r"^(scripts/land\.py|scripts/gates/.*|Makefile|tests/conftest\.py|tests/_scope\.py)$")
 
 
 def delta_names(root: Path) -> list[str]:
@@ -698,13 +656,11 @@ def machinery_tests(root: Path, machinery: list[str]) -> str:
     tooling tests (`make test-file FILE=tests/tooling`); why nothing lands, or ''."""
     print(
         f"land: the delta changes how a landing or its gate runs ({', '.join(machinery[:3])}) - the gate's reuse stands (the GM's "
-        "2026-08-25 rule: scripts/ and the Makefile owe no make done), so the tooling tests run instead (ask:430-machinery-gate)",
+        "2026-08-25 rule: scripts/ and the Makefile owe no make done), so the guard suites run instead (ask:430-machinery-gate)",
         flush=True,
     )
     if run(root, [str(HERE / "gates" / "l7r-gate.sh"), "stamp", "--fresh", "hooks"])[0] and run(root, ["make", "--no-print-directory", "hooks-test"], quiet=False)[0]:
         return "land: make hooks-test is red - nothing landed; fix it and run make land again"
-    if run(root, ["make", "--no-print-directory", "test-file", "FILE=tests/tooling"], quiet=False)[0]:
-        return "land: the tooling tests are red (make test-file FILE=tests/tooling) - nothing landed; fix them and run make land again"
     return ""
 
 
@@ -936,8 +892,6 @@ def main(argv: list[str]) -> int:
         print(line, flush=True)
     if engine_delta_landed:  # the distance from the goal, at every engine landing (443 FR-007, plan D8)
         print("\n".join(work_budget_lines(root)), flush=True)
-    if reason := refresh_due(root, landing_started):
-        print(f"land: the gate's baseline is refreshed after the push, in a worktree ({reason}); its log {start_refresh(root, reason)}", flush=True)
     return 0
 
 

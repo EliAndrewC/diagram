@@ -140,8 +140,7 @@ full").
   first budget needs its SOUND, a change the GM's words (`make budget-change`) - but a budget is an estimate (444 FR-022, the GM
   2026-11-03: "even twice as high"): a stage lands at up to 2x it on the audit's LEEWAY, work the derivation missed raises it on a
   SOUND re-derivation (`RAISE=1`; past 2x its first, two independent SOUNDs; past 10x, his words), and growth gets no leeway; an accepted stage is held at the push.
-- Python: ruff, ruff format, pyrefly, 100% coverage held as a floor - but for the engine code the Rust port replaces, listed in `dev/coverage-exempt.json` and reported as information (feature 448, the GM 2026-11-02: "We can relax that for the engine code ... since that's going away"); a Python file past 1,000 raw lines fails the gate - split it into a package of ~650-line submodules whose `__init__.py`
-  re-exports every name, never trim it to just under (405 T53).
+- Python: `ruff check` for outright errors alone; the Python unit tests, their planner, the coverage floor over Python and the Python-only static checks were deleted (feature 449 FR-001b, the GM 2026-11-10: "Yes delete everything except that group, please."), the tests readable at the tag `python-tests-before-removal`. New Rust code owes 100% line coverage from its own tests.
 - Edit with `Edit`; a large file through its make target; batch the lookups you already know you need.
 - An overlap check builds an index once (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says
   how it is indexed.

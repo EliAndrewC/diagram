@@ -128,5 +128,5 @@ fn the_detector_finds_a_real_reader_on_the_real_tree() {
     let files: Vec<&str> = listed.split_whitespace().collect();
     assert!(super::readers(&real, &files)
         .iter()
-        .any(|f| f == "scripts/gates/check-function-cap.py"));
+        .any(|f| f == "scripts/gates/codeid.py"));
 }

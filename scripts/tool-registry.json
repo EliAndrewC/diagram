@@ -5,10 +5,6 @@
       "kind": "check",
       "what": "rust/gate/src/plan/approach.rs - a refusing check; each run recorded passed or refused"
     },
-    "check-duplicate-defs": {
-      "kind": "check",
-      "what": "scripts/gates/check-duplicate-defs.py - a refusing check; each run recorded passed or refused"
-    },
     "check-entry-headings": {
       "kind": "check",
       "what": "scripts/gates/check-entry-headings.py - a refusing check; each run recorded passed or refused"
@@ -20,10 +16,6 @@
     "check-file-scale": {
       "kind": "check",
       "what": "rust/gate/src/checks/file_scale.rs - a refusing check; each run recorded passed or refused"
-    },
-    "check-function-cap": {
-      "kind": "check",
-      "what": "scripts/gates/check-function-cap.py - a refusing check; each run recorded passed or refused"
     },
     "check-house-style-delta": {
       "kind": "check",
@@ -93,10 +85,6 @@
       "kind": "step",
       "what": "hm_checks (checks-hooks after) - a held plan section changed under a running review is written back"
     },
-    "pool-readers": {
-      "kind": "check",
-      "what": "scripts/gates/pool-readers.py - a refusing check; each run recorded passed or refused"
-    },
     "preflight": {
       "kind": "check",
       "what": "rust/gate/src/preflight.rs (`l7r-gate preflight`) - a refusing check; each run recorded passed or refused"
@@ -133,10 +121,6 @@
       "kind": "check",
       "what": "scripts/gates/phase_sources.py - make phase-read: one of a started phase task's held old-code files let through the phase-source guard for ten minutes, the reason logged (feature 444, the GM 2026-10-30); each run recorded passed or refused"
     },
-    "cover_changed": {
-      "kind": "check",
-      "what": "scripts/gates/cover_changed.py - every line of each changed engine module asked of the floor's tests, the floor's carried coverage honored (make cover-changed, beside make land's gate; the GM 2026-10-24, feature 430 T03); each run recorded passed or refused"
-    },
     "push_gates": {
       "kind": "check",
       "what": "rust/gate/src/push.rs (`l7r-gate push-gate`) - whether a push gate may skip a delta: nothing it judges, or a pass stored for the same committed content (the claims, record and cohort gates; feature 430 T04); each run recorded skipped (0) or judged (1)"
@@ -144,10 +128,6 @@
     "gate_costs": {
       "kind": "report",
       "what": "rust/gate/src/measure/gate_costs.rs (`l7r-gate measure gate-costs`) - what a gate run costs, from the run records' phases and plan (make gate-costs; feature 415 T04)"
-    },
-    "refresh_baseline": {
-      "kind": "step",
-      "what": "scripts/gates/refresh_baseline.py - the incremental gate's baseline refreshed by a full run in a worktree after a landing's push (feature 415 T05); each run recorded"
     },
     "conflict-markers": {
       "kind": "check",

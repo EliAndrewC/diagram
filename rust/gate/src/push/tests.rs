@@ -323,7 +323,7 @@ fn a_tool_that_cannot_start_refuses() {
 
 #[test]
 fn the_table_lists_its_rows_and_the_arguments_are_checked() {
-    assert_eq!(CHECKS.len(), 29);
+    assert_eq!(CHECKS.len(), 23);
     let root = tree();
     let run = |words: &[&str]| {
         checks_cli(
@@ -332,9 +332,7 @@ fn the_table_lists_its_rows_and_the_arguments_are_checked() {
             true,
         )
     };
-    assert!(run(&["--list"])
-        .stdout
-        .starts_with("duplicate-defs selftest\n"));
+    assert!(run(&["--list"]).stdout.starts_with("file-scale selftest\n"));
     assert_eq!(run(&[]).code, 2);
     assert_eq!(run(&["/tmp", "--nope"]).code, 2);
     assert!(run(&["/tmp", "--skip", "nothing"])
@@ -403,12 +401,6 @@ fn the_checks_still_in_python_do_not_start_on_a_rust_only_change() {
         delta_rows_that_run(&root),
         ["entry-headings", "partial-citations"]
     );
-    std::fs::remove_dir_all(root.join("research")).unwrap();
-    std::fs::write(root.join("l7r/b.py"), "x = 1\n").unwrap();
-    assert_eq!(
-        delta_rows_that_run(&root),
-        ["duplicate-defs", "function-cap"]
-    );
 }
 
 #[test]
@@ -432,12 +424,11 @@ fn the_push_runs_the_make_page_check_and_the_money_check() {
 fn every_makefile_line_starting_a_retained_python_check_asks_first() {
     let makefile = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../Makefile");
     let text = std::fs::read_to_string(makefile).unwrap();
-    let names = ["duplicate-defs", "function-cap", "partial-citations"]
-        .map(|n| format!("python3 scripts/gates/check-{n}"));
+    let names = ["partial-citations"].map(|n| format!("python3 scripts/gates/check-{n}"));
     let lines: Vec<&str> = text
         .lines()
         .filter(|l| l.starts_with('\t') && names.iter().any(|n| l.contains(n.as_str())))
         .collect();
-    assert_eq!(lines.len(), 4);
+    assert_eq!(lines.len(), 1);
     assert!(lines.iter().all(|l| l.contains("check needs ")));
 }

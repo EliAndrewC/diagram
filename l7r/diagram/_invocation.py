@@ -196,7 +196,6 @@ def _reason() -> str:
 #
 # `cost` decides PROMPTING only. REFUSAL applies to every row.
 OPERATIONS: dict[str, tuple[str, str]] = {
-    "l7r.diagram.ci": ("ci-status", "expensive"),  # ci-status is the diagnostic every refusal names
     "l7r.diagram.pipeline.regen": ("map", "expensive"),
     "l7r.diagram.pipeline.render_cache": ("render-sync", "expensive"),
     "l7r.diagram.pipeline.pool_index": ("pool-index", "expensive"),

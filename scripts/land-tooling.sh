@@ -68,10 +68,10 @@ if [ -n "$first_pys" ] && [ -z "${LAND_TOOLING_LINT:-}" ] && ( cd "$ROOT" && pyt
   git -C "$ROOT" show origin/main:pyproject.toml 2>/dev/null | "$LT_GATE" ruff-toml > "$cfg" || : > "$cfg"
   cfgarg=""; [ -s "$cfg" ] && cfgarg="--config $cfg"
   # shellcheck disable=SC2086 # one word per file
-  if ! lint_out=$( cd "$ROOT" && python3 -m ruff check $cfgarg --force-exclude $first_pys 2>&1 && python3 -m ruff format --check $cfgarg --force-exclude $first_pys 2>&1 ); then
+  if ! lint_out=$( cd "$ROOT" && python3 -m ruff check $cfgarg --force-exclude $first_pys 2>&1 2>&1 ); then
     rm -f "$cfg"
     printf '%s\n' "$lint_out" | head -12 >&2
-    die "the checks failed in the clone (lint, before anything else ran) on$first_pys - python3 -m ruff format$first_pys, fix what ruff names, commit, and land again (feature 385 T91)"
+    die "the checks failed in the clone (lint, before anything else ran) on$first_pys - python3 -m ruff check$first_pys, fix what ruff names, commit, and land again (feature 385 T91)"
   fi
   rm -f "$cfg"
 fi
@@ -193,16 +193,16 @@ step patch
 # which reuses the clone's passes - 57 files ran twice before, once without reuse (research R7). Both must pass; each one's
 # output and seconds land in the landing's log. LAND_TOOLING_CHECKS, the suite's seam, stands for both;
 # LAND_TOOLING_GUARDS and LAND_TOOLING_TOOLING for one each.
-guards=${LAND_TOOLING_GUARDS:-${LAND_TOOLING_CHECKS:-make hooks-test HOOKS_PYTEST_SKIP=tests/tooling/}}
+guards=${LAND_TOOLING_GUARDS:-${LAND_TOOLING_CHECKS:-make hooks-test}}
 tooling_tests=${LAND_TOOLING_TOOLING:-${LAND_TOOLING_CHECKS:-make test-file FILE=tests/tooling}}
 run_test=${LAND_TOOLING_TEST:-make test-file FILE=}
 # GUARD_EDIT_OK: feature 385 T52 - THE PYTHON THAT LANDS IS LINTED FIRST: T49's test landed with its imports unsorted (and a merge's
 # duplicate import after it), T51's fixture with the wrong blank lines - each caught by the next session's `make done`, on main.
-# `ruff check` and `ruff format --check` on the landed .py files, in the worktree, beside the other two checks
+# `ruff check` on the landed .py files, in the worktree, beside the other two checks
 pys=""; for f in "$@"; do case "$f" in *.py) pys="$pys $f" ;; esac; done
 # --force-exclude (feature 385 T55): ruff lints a file it is NAMED even where pyproject.toml excludes it, and the gate leaves
 # scripts/ and tests/hooks/ out on purpose - so without it a script's fix was refused for rules the gate never applies there
-lint=${LAND_TOOLING_LINT:-${pys:+ruff check --force-exclude$pys && ruff format --check --force-exclude$pys}}
+lint=${LAND_TOOLING_LINT:-${pys:+ruff check --force-exclude$pys}}
 lint=${lint:-true}
 for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && tooling_tests="$tooling_tests && $run_test\"$f\"" ;; esac; done
 # GUARD_EDIT_OK: feature 374 batch 4 - THE CHECKS RUN WITHOUT THE CALLER'S ESCAPES: a LEDGER_ROWS_OK meant for the push reached
@@ -244,7 +244,7 @@ step checks
 if [ -n "$failed" ]; then
   steps_done "checks-failed:${failed# }"
   tail -25 "$log" >&2
-  case " $failed " in *" lint "*) printf 'land-tooling: lint failed on%s - `ruff format%s` for the format, the rule ruff names for the rest\n' "$pys" "$pys" >&2 ;; esac
+  case " $failed " in *" lint "*) printf 'land-tooling: lint failed on%s - `ruff check%s` names the error\n' "$pys" "$pys" >&2 ;; esac
   die "the checks failed in the worktree (${failed# }; full log: $log) - fix in the clone, commit, run this again"
 fi
 push=${LAND_TOOLING_PUSH:-scripts/sync-with-main.sh done}

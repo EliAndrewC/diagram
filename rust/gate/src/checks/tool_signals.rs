@@ -21,7 +21,7 @@ const ENTRY_TARGETS: [&str; 3] = ["done", "quick", "tick"];
 const ENTRY_SCRIPTS: [&str; 3] = [
     "scripts/sync-with-main.sh",
     "rust/gate/src/push.rs",
-    "scripts/gates/preflight.py",
+    "rust/gate/src/preflight.rs",
 ];
 
 fn compiled(pattern: &str) -> Regex {

@@ -28,13 +28,11 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 195 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 191 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make collect-cost</td><td class=a>TREE</td><td>where a run&#x27;s time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)</td></tr>
-<tr><td class=n>make cov-file</td><td class=a><div class=ad><span class=an>FILE=&lt;test path&gt;</span><span class=aw>the test file to run</span></div><div class=ad><span class=an>MOD=&lt;module path&gt;</span><span class=aw>the module to report coverage for - e.g. `l7r/diagram/compound.py`</span></div></td><td>which lines of MOD does ONE test file reach?</td></tr>
-<tr><td class=n>make cover-changed</td><td class=a>BASE</td><td>the coverage floor on the engine modules the change touched, in seconds: every line of each changed module the floor&#x27;s tests leave unrun, the floor&#x27;s carried coverage honored (the GM 2026-10-24; feature 430 T03)   [BASE=origin/main]</td></tr>
 <tr><td class=n>make coverage-exempt</td><td class=a>PRUNE</td><td>the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]</td></tr>
 <tr><td class=n>make done</td><td class=a>FULL INCREMENTAL</td><td>tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded</td></tr>
 <tr><td class=n>make durations</td><td class=a><div class=ad><span class=an>FULL=1</span><span class=aw>also profile `tests/full/` (default: it is ignored, so this is the quick tree only)</span></div><div class=ad><span class=an>MARK=&lt;expr&gt;</span><span class=aw>a pytest `-m` marker expression, e.g. `tooling` (default: `not rolls_map`)</span></div><div class=ad><span class=an>N=&lt;rows&gt;</span><span class=aw>how many of the slowest rows to print (default: 12)</span></div></td><td>where the suite&#x27;s time goes - run when a target feels slow</td></tr>
@@ -42,16 +40,15 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make hooks-test</td><td class=a>&ndash;</td><td>run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion</td></tr>
 <tr><td class=n>make idle-tests<span class='b off' title="arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand">inactive</span></td><td class=a>&ndash;</td><td>what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done` <span class=w>arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand</span></td></tr>
 <tr><td class=n>make inline-census</td><td class=a>&ndash;</td><td>phase 1&#x27;s share of feature 449&#x27;s second census: every inline Python site under scripts/hooks/ and tests/hooks/, each under a group FR-001 names; a site outside them fails</td></tr>
-<tr><td class=n>make page-check</td><td class=a>&ndash;</td><td>the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push</td></tr>
+<tr><td class=n>make page-check</td><td class=a>&ndash;</td><td>write the `page` and `browser` stamps - what an asset edit owes at push (its Python tests were deleted, feature 449 FR-001b)</td></tr>
 <tr><td class=n>make parts-sweep</td><td class=a>SUITES</td><td>run each split guard suite at 1, 2, 3 and 8 parts and report any count whose result differs - after a suite&#x27;s cases change; never in the gate   [SUITES=&quot;test-pair-hooks.sh ...&quot;]</td></tr>
 <tr><td class=n>make preflight</td><td class=a>&ndash;</td><td>the gate&#x27;s first phase, in seconds: the derived files regenerated, the record and its pointers, make quick - and, here only (not in the gate, 405 T47), the changed engine lines a quick test runs (feature 375)</td></tr>
-<tr><td class=n>make quick</td><td class=a><div class=ad><span class=an>ALL=1</span><span class=aw>run EVERY quick test, not just the ones whose code changed (default: change-selected via testmon)</span></div></td><td>tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure</td></tr>
+<tr><td class=n>make quick</td><td class=a>&ndash;</td><td>tier 2: lint and the kept Python tests that roll no map</td></tr>
 <tr><td class=n>make rust-tooling</td><td class=a>&ndash;</td><td>every check, hook, gate and make target that reads Python&#x27;s syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)</td></tr>
 <tr><td class=n>make soak</td><td class=a>&ndash;</td><td>the tier ABOVE the gate, run by nothing ordinary (constitution VI v2.23.0): the tests that roll more than the floor needs; REFUSES when empty rather than reporting a vacuous green and larger maps (tests/soak/)</td></tr>
 <tr><td class=n>make test<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>the pytest phase itself (internal - `done` and `test-full` call it, not you)</td></tr>
 <tr><td class=n>make test-file</td><td class=a><div class=ad><span class=an>FILE=&lt;paths&gt;</span><span class=aw>the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run</span></div><div class=ad><span class=an>K=&lt;expr&gt;</span><span class=aw>a pytest `-k` expression - a SUBSET, which owes a whole-file run before the gate</span></div></td><td>run test files whole, or a targeted subset</td></tr>
-<tr><td class=n>make test-full</td><td class=a>&ndash;</td><td>the gate&#x27;s whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)</td></tr>
-<tr><td class=n>make tooling</td><td class=a>&ndash;</td><td>run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes</td></tr>
+<tr><td class=n>make test-full</td><td class=a>&ndash;</td><td>the gate&#x27;s test phase: the kept Python tests, whole (feature 449 FR-001b)</td></tr>
 <tr><td class=n>make verify</td><td class=a>&ndash;</td><td>THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)</td></tr>
 <tr><td class=n>make verify-wait</td><td class=a>&ndash;</td><td>wait for the gate `make verify` started, on ITS OWN log, and print its verdict - run it with run_in_background (exit 0 green, 1 red, 3 no log, 4 timed out, 5 the gate died)</td></tr>
 </table></div>
@@ -101,10 +98,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <h2>Static checks</h2>
 <p class=sec>What the gate runs before it spends anything on a map roll.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make format</td><td class=a>&ndash;</td><td>ruff format over the tree, and rustfmt over the Rust phases&#x27; crates (feature 444 T17)</td></tr>
+<tr><td class=n>make format</td><td class=a>&ndash;</td><td>rustfmt over the Rust phases&#x27; crates (feature 444 T17)</td></tr>
 <tr><td class=n>make guard<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>refuse to run in main&#x27;s tree - main is the integration point, never a workspace</td></tr>
-<tr><td class=n>make static</td><td class=a>&ndash;</td><td>the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)</td></tr>
-<tr><td class=n>make typecheck</td><td class=a>&ndash;</td><td>pyrefly over the engine, one-shot, no daemon (feature 142)</td></tr>
+<tr><td class=n>make static</td><td class=a>&ndash;</td><td>the static checks: ruff&#x27;s outright errors, file-scale, the Rust crates&#x27; checks (was `lint`)</td></tr>
 </table></div>
 <h2>Project state</h2>
 <p class=sec>Switches, audits and the records that make the tooling&#x27;s own behavior reviewable.</p>

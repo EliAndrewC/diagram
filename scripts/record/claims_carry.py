@@ -11,7 +11,7 @@ A LANDING WITH NO ENGINE CODE FILES INTO THE CLAIMS FEATURE (the GM, 2026-10-26:
 changes no engine code should go to 405 instead. Please make that the standing rule"): a research-record or tooling landing
 cannot fix engine code, and option 3 held feature 422 (miso and soy sauce) open on five engine findings while 405, the feature
 that fixes claims findings, was on hold. So `target` is `CLAIMS_FEATURE` when the delta changes no engine code, the active
-feature otherwise. "Engine code" is the project's one definition (`l7r.diagram.ci.delta`): a path `is_engine` accepts (so not
+feature otherwise. "Engine code" is the project's one definition (`rust/gate/src/delta.rs`): a path `is_engine` accepts (so not
 `l7r/diagram/ci/`), changed in what it executes - a comment-only, docstring-only or formatting edit is no engine change (the GM
 2026-08-25, 08-26, 08-28; spec-fidelity on this amendment, 2026-10-26).
 
@@ -61,13 +61,15 @@ def _git_lines(root: Path, *args: str) -> list[str]:
 
 
 def _engine_tools() -> tuple[Any, Any]:
-    """(`l7r.diagram.ci.delta.engine_paths`, `codeid.py`'s `content_id`) from THIS checkout, not the root it reads (a fixture tree
+    """(the Rust gate's `delta engine-paths`, `codeid.py`'s `content_id`) from THIS checkout, not the root it reads (a fixture tree
     has no engine package)."""
     import importlib.util  # noqa: PLC0415
 
-    if str(_CHECKOUT) not in sys.path:
-        sys.path.insert(0, str(_CHECKOUT))
-    from l7r.diagram.ci.delta import engine_paths  # noqa: PLC0415
+    def engine_paths(root: Path, paths: list[str]) -> list[str]:
+        """Those of `paths` that are engine code, by the Rust gate's one list, in one process."""
+        gate = _CHECKOUT / "scripts" / "gates" / "l7r-gate.sh"
+        done = subprocess.run([str(gate), "delta", "engine-paths"], cwd=root, input="".join(f"{p}\n" for p in paths), capture_output=True, text=True, check=True)
+        return done.stdout.splitlines()
 
     spec = importlib.util.spec_from_file_location("l7r_codeid", _CHECKOUT / "scripts" / "gates" / "codeid.py")
     assert spec is not None and spec.loader is not None
