@@ -445,28 +445,35 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T86 (<why: the finding or measurement that files it>)
+### T86 (the arbiter and checks state, `ask:449-T86-door`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the five modules and three guards ported as one cut, with T011, T043 and T048, on the ruled door.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-T86-door`, FR-001, FR-002, FR-003, FR-006):
+   - The core is `l7r_guard::shared::checks`; the guards `check-bundle`, `checks` and `record-edit` call it directly, and `l7r-gate arbiter`, `checks-close` and `checks-door` are the commands. No guard starts Python on a plain Bash call or a plain Edit.
+   - Writers found outside the five by the ruled search of the state files' names: `record_owed.py`'s `keep_batches` writes `modal-batches.json` and moves to a door verb; `rust/gate/src/state.rs`'s `second_red_gate` writes `arbiter-owed.json` and moves to the shared lock and atomic rename. So one implementation writes.
+   - `scripts/checks_door.py` is one process a run, reopened if the environment it reads changes mid-run, because `land.py` exports `SPECIFY_FEATURE`. It holds no logic. The door's verbs beyond the ruling's list, each a read or write the callers already made: `rulings`, `_round_no`, `PAGE_CHECKS`, `notes_of_manifest`, `subjects_of_manifest`, `fix_hold`, `keep_batches`.
+   - `l7r-gate arbiter` still runs Python by path on rare branches that are later tasks' ports and the T065 clause: `record_owed.answer`, `gm_review.question`, `checkpoint.close_checkpoint`, `review_prereq.py content-key`, `claims.py accept`.
+   - Differential against the Python, on the real tree with writes on scratch copies, exit, stdout and stderr compared: door reads 9,290, door after an environment change 6, door writes 3, guards `check-bundle` 30, `checks` 16, `record-edit` 17, arbiter commands 92, `check-closed` 5, the accept seam 2; 9,436 in all, 0 differ (observed 2026-11-10, method: a one-shot harness). Two normalizations: the merged hook reply is compared as parsed JSON, the hook protocol's order being its keys', and a library's error text inside `refused - ...` is not compared. NOT EXERCISED: a successful `record_owed.answer` through the seam, both sides failing alike in the fixture for want of the engine; the seam only calls that Python, which is unchanged.
+   - Reads that open the state files themselves today stand, Rust keeping the files' shape: `gm_review`, `set-down`, `budget_change`, `claims_carry`, `fix_yield`, `tool_yield`, `popup_rounds.rs`, `plan/record.rs`.
+   - The Rust keeps the Python's hand-written words, including refusal tags naming the old file, as the earlier guard ports did (FR-002).
+   - The five `.py` files, the three guards' `.sh` and the dangling `tests/hooks/record-edit-gate.sh` are deleted in the cut (the GM's standing approval of 2026-11-10; `ask:449-T86-door`).
 
 ### T86 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The state of the record checks and the arbiter is decided and written by Rust alone.
+2. **The constraints.** FR-001, FR-002, FR-003, FR-006; `ask:449-hm-checks-route`, `ask:449-T86-door`.
+3. **Where each comes from.** The Python compared with its port.
+4. **Do they describe the world here?** Tooling; no researched value moves.
+5. **The order.** After T81; T87-T89 and T83 then port their callers off the door.
+6. **The exits.** Green: the differential above shows no difference, the census no import of the five, and `make land` is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The differential; an `ast` walk of tracked Python outside `specs/` finds no import or by-path load of the five; `.claude/settings.json` names no removed guard.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T87 (<why: the finding or measurement that files it>)
