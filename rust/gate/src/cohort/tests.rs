@@ -421,7 +421,7 @@ fn a_cohort_with_a_newly_failing_seed_prints_what_is_owed_only_when_a_task_is_in
     rec(&root, "u1", &base, 1, &[], 0);
     rec(&root, "u2", &head, 1, &[5], 0);
     let got = say(&root, &py, &["known"]);
-    assert_eq!(got.code, 0);
+    assert_eq!(got.code, 0, "{}", got.stderr);
     assert!(got.stdout.contains("seed 5 NEWLY FAILING"));
     assert_eq!(say(&repo("owed-none"), &py, &["known"]).stdout, "");
 }
