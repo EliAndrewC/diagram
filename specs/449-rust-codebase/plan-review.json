@@ -116,10 +116,10 @@
    "declared": "spec-fidelity"
   },
   "### T069 Approach (checklist part A)": {
-   "sha256": "8b0c18ca2cfe4c8af90831ce42ef8f4869a46ce008414e145b8b699a6c3b5855",
+   "sha256": "9e2003abd49d8aecd7d10a2bf0ad8fa0241caf07527043edba8e0a993ecfcd0d",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity"
   },
   "### T070 Approach (checklist part A)": {
    "sha256": "57634dc36ea79a9706af5c0e07144392912ae89b33acd84f8669ea0ee7f47bf4",
@@ -4572,6 +4572,58 @@
      "why": "FR-001's census and recorded-measurement clauses, stated without reduction."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-10",
+   "blocks": [
+    "### T069 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE VERBS",
+     "summary": "the gate's inline Python becomes l7r-gate log run/bypass/gate-bypass/land-tooling, ruff-toml and json-field in rust/gate/src/logs.rs",
+     "class": "within",
+     "why": "FR-001's second census puts the Makefile's gate recipes, scripts/gates/*.sh, sync-with-main.sh and land-tooling.sh in phase 2; unchanged since last judged."
+    },
+    {
+     "id": "XDIST PROBE: form and placement",
+     "summary": "python3 -m pip show -q pytest-xdist replaces the import probe, the serial arm stays, and it goes with the pytest line in phase 4, named at the phase-2 close by its own search",
+     "class": "within",
+     "why": "FR-001 carries ask:449-T069-xdist in these terms, so placement is not reopened. Both arms measured 2026-11-09, method: the two probes run under python3 and python3 -s, -s hiding the user-site xdist with the system pip still visible. Present: both exit 0. Absent, the real package name: both exit 1, so the probe forks as the import did and 'the same question' holds on both arms. The two differ only on an interpreter without pip (the import can succeed, pip show cannot), which falls to the serial arm: a slower run, same verdict."
+    },
+    {
+     "id": "XDIST PROBE: the T065 clause's last limb",
+     "summary": "the probe holds the clause on a plain Bash call, a plain Edit, Makefile parse time and an already-verified make done, but still runs on every other make done, including one picking no Python test, until T071 and phase 4",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001 says the probe carries the T065 clause and the block concedes one limb, so this is a narrowing whether or not it is labeled one. Limb by limb: Bash call, Edit, parse time and already-verified are held and excepted from nothing. The make-done limb cannot be held inside the ruled form: the ruling fixes a probe that is itself a Python start on the pytest line, and that line runs on every make done that passes already-verified, so while the line runs the probe runs. The exception is the physically-impossible case, not an awkward one, and it does not gut the clause's purpose, since the same recipe starts python3 -m l7r.diagram.ci incremental and pytest on that make done regardless. It ends where the block says, at T071 and phase 4. The premise that done always reaches test-full is the block's one-shot reading of the Makefile dated 2026-11-09; the bundle bars re-reading the repository, so it was weighed as labeled and not re-measured."
+    },
+    {
+     "id": "THE SUITES",
+     "summary": "test-cohort-gate, test-land-tooling and test-claims-gate's index edit use jq; test-entry-gate's edit is a literal shell replacement",
+     "class": "within",
+     "why": "ask:449-T052-inline-census moves these four suites to phase 2, and removing their inline Python is what that asks; unchanged since last judged."
+    },
+    {
+     "id": "WHAT STAYS",
+     "summary": "make audit's four recipes, buildspec/run.sh until T73, and the two fixtures over claims.py and record_owed.py remain after T069",
+     "class": "within",
+     "why": "Each is placed by the accepted spec: FR-001's ask:449-T069-suites names the two fixtures and make audit's four recipes with their phases, and FR-001a deletes buildspec. Unchanged since last judged."
+    },
+    {
+     "id": "JSON TEXT",
+     "summary": "a record's bytes are the Python's, numbers included: logs.rs's dumps writes json.dumps's form and a float as repr writes it, each form pinned by a test, no exception",
+     "class": "within",
+     "why": "FR-002 held whole. The earlier text excepted serde's exponent form on a one-shot grep of existing logs; that exception is gone and the block says so. The rule governs every form, not only the parenthetical's examples. Python 3.14 measured 2026-11-09, method: json.dumps on each value: 5e-05, 1e+16, 1e+22, 0.0001, 1.0, -0.0, 1.2345678901234568e+17, DEL escaped as backslash-u007f, non-BMP as a surrogate pair, NaN and Infinity written bare, and an integer past 64 bits written whole. The tests should pin those too."
+    },
+    {
+     "id": "DONE, MEASURED",
+     "summary": "the census's phase-2 share prints only What stays' sites; measurement commands running a ported or deleted file are rewritten and re-run in the same commit",
+     "class": "within",
+     "why": "FR-001's second census over the phase-2 set and the four suites, and FR-001's rule on recorded measurements; unchanged since last judged. The probe is outside this pattern, which does not match -m, and the XDIST block assigns it its own search."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7892,74 +7944,55 @@
    "verdict": "CLEAR"
   },
   "T069": {
-   "section_sha256": "a4e08a5049192c99055454a66d17f38c0e11a3551c23fa71f27b8469dbd5cc83",
+   "section_sha256": "9e2003abd49d8aecd7d10a2bf0ad8fa0241caf07527043edba8e0a993ecfcd0d",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "THE VERBS",
-     "summary": "The gate's inline Python (LOGRUN, LOGBYPASS, the bypass heredocs, land-tooling, json-field) becomes l7r-gate verbs in rust/gate/src/logs.rs.",
+     "summary": "the gate's inline Python becomes l7r-gate log run/bypass/gate-bypass/land-tooling, ruff-toml and json-field in rust/gate/src/logs.rs",
      "class": "within",
-     "why": "This is FR-001's second census phase-2 share ported to Rust, what the GM asked for."
+     "why": "FR-001's second census puts the Makefile's gate recipes, scripts/gates/*.sh, sync-with-main.sh and land-tooling.sh in phase 2; unchanged since last judged."
     },
     {
-     "id": "THE XDIST PROBE KEEPS ITS FORK",
-     "summary": "The Makefile's python3 -c 'import xdist' becomes python3 -m pip show -q pytest-xdist, the serial arm kept, leaving with pytest in phase 4.",
+     "id": "XDIST PROBE: form and placement",
+     "summary": "python3 -m pip show -q pytest-xdist replaces the import probe, the serial arm stays, and it goes with the pytest line in phase 4, named at the phase-2 close by its own search",
+     "class": "within",
+     "why": "FR-001 carries ask:449-T069-xdist in these terms, so placement is not reopened. Both arms measured 2026-11-09, method: the two probes run under python3 and python3 -s, -s hiding the user-site xdist with the system pip still visible. Present: both exit 0. Absent, the real package name: both exit 1, so the probe forks as the import did and 'the same question' holds on both arms. The two differ only on an interpreter without pip (the import can succeed, pip show cannot), which falls to the serial arm: a slower run, same verdict."
+    },
+    {
+     "id": "XDIST PROBE: the T065 clause's last limb",
+     "summary": "the probe holds the clause on a plain Bash call, a plain Edit, Makefile parse time and an already-verified make done, but still runs on every other make done, including one picking no Python test, until T071 and phase 4",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Keeping the fork answers the earlier block's dropped arm, but a python3 process still starts at this Makefile gate-recipe site, which FR-001 places in phase 2, and the block moves it to phase 4 with no ask: ruling, unlike every other phase move FR-001 records. The rewrite takes the site out of the census regex only because the regex does not match -m, so item 9's done-check passes with this Python still run and the phase-2 close will not name it as a remainder: the name was censused, not the mechanism. A probe starting no python3 is not shown impossible (pytest -VV was refused outside a recipe, which says nothing of a recipe, and is Python besides), the GM's words do not imply it, and the literal rule does not defeat the purpose; the purpose is the Python's cost in the gate's path, and pip is not cheaper than the import it replaces. Clears with a probe that starts no python3, or a recorded arbiter ruling placing this site in phase 4 with the phase-2 close naming it."
+     "ruling": "LEGITIMATE",
+     "why": "FR-001 says the probe carries the T065 clause and the block concedes one limb, so this is a narrowing whether or not it is labeled one. Limb by limb: Bash call, Edit, parse time and already-verified are held and excepted from nothing. The make-done limb cannot be held inside the ruled form: the ruling fixes a probe that is itself a Python start on the pytest line, and that line runs on every make done that passes already-verified, so while the line runs the probe runs. The exception is the physically-impossible case, not an awkward one, and it does not gut the clause's purpose, since the same recipe starts python3 -m l7r.diagram.ci incremental and pytest on that make done regardless. It ends where the block says, at T071 and phase 4. The premise that done always reaches test-full is the block's one-shot reading of the Makefile dated 2026-11-09; the bundle bars re-reading the repository, so it was weighed as labeled and not re-measured."
     },
     {
      "id": "THE SUITES",
-     "summary": "test-cohort-gate, test-land-tooling and test-claims-gate's index edit use jq; test-entry-gate's edit is a literal shell replacement.",
+     "summary": "test-cohort-gate, test-land-tooling and test-claims-gate's index edit use jq; test-entry-gate's edit is a literal shell replacement",
      "class": "within",
-     "why": "FR-001 moves these four suites' inline Python to phase 2 and these suites stay shell; jq is not Python."
+     "why": "ask:449-T052-inline-census moves these four suites to phase 2, and removing their inline Python is what that asks; unchanged since last judged."
     },
     {
-     "id": "WHAT STAYS: make audit",
-     "summary": "make audit's four recipes are not gate recipes: three go in phase 3, the one reading CLASSES in phase 4.",
+     "id": "WHAT STAYS",
+     "summary": "make audit's four recipes, buildspec/run.sh until T73, and the two fixtures over claims.py and record_owed.py remain after T069",
      "class": "within",
-     "why": "FR-001 states this split, naming them at the phase-2 close; every recipe is still ported, so nothing the GM asked for is removed."
+     "why": "Each is placed by the accepted spec: FR-001's ask:449-T069-suites names the two fixtures and make audit's four recipes with their phases, and FR-001a deletes buildspec. Unchanged since last judged."
     },
     {
-     "id": "WHAT STAYS: buildspec/run.sh",
-     "summary": "buildspec/run.sh's site goes with the deletion T73 waits on.",
+     "id": "JSON TEXT",
+     "summary": "a record's bytes are the Python's, numbers included: logs.rs's dumps writes json.dumps's form and a float as repr writes it, each form pinned by a test, no exception",
      "class": "within",
-     "why": "FR-001a, carrying the GM's 2026-11-09 words, deletes buildspec/ and takes it out of the censuses."
+     "why": "FR-002 held whole. The earlier text excepted serde's exponent form on a one-shot grep of existing logs; that exception is gone and the block says so. The rule governs every form, not only the parenthetical's examples. Python 3.14 measured 2026-11-09, method: json.dumps on each value: 5e-05, 1e+16, 1e+22, 0.0001, 1.0, -0.0, 1.2345678901234568e+17, DEL escaped as backslash-u007f, non-BMP as a surrogate pair, NaN and Infinity written bare, and an integer past 64 bits written whole. The tests should pin those too."
     },
     {
-     "id": "WHAT STAYS: the two fixtures",
-     "summary": "test-claims-gate's fixture over claims.py and test-entry-gate's answer_all over record_owed.py go with those modules in phase 3.",
+     "id": "DONE, MEASURED",
+     "summary": "the census's phase-2 share prints only What stays' sites; measurement commands running a ported or deleted file are rewritten and re-run in the same commit",
      "class": "within",
-     "why": "FR-001 carries ask:449-T069-suites. Checked against the GM's request as well: it changes when two sites are ported, not whether, and the fixtures call modules that are Python until phase 3."
-    },
-    {
-     "id": "JSON TEXT: escaping and separators",
-     "summary": "A record's bytes match the Python's: non-ASCII escaped as \\uXXXX and json.dumps's separators on the landing's line.",
-     "class": "within",
-     "why": "Byte-same output is what FR-002 asks, and it removes the UTF-8 divergence the earlier block accepted."
-    },
-    {
-     "id": "JSON TEXT: numbers in RUN_STATS",
-     "summary": "A number in RUN_STATS is re-written by serde, whose exponent form differs from Python's below 1e-4 or from 1e16 up, accepted because no number in dev/run-log or dev/bypass-log has an exponent.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The block commits to a record's bytes being the Python's, then excepts a class of numbers on a premise its stated method cannot establish. The grep's context windows, .{30} before and .{10} after, cannot see an exponent in a line's first 30 or last 10 bytes: on four synthetic lines it matched only the mid-line one, missing a trailing field, a leading field and a pretty-printed line (run for this review; the repository's logs were not read, per the bundle, so whether any real record has one is unknown). The premise also covers only records already written, while the port writes future ones, and Python emits 5e-05 for such a value. Byte-sameness is not shown impossible here. Clears by keeping the number's source text, so there is no exception, or by a pattern with no context windows together with a stated reason an out-of-range number cannot occur or does not matter."
-    },
-    {
-     "id": "DONE AND EXITS",
-     "summary": "Green is the census's phase-2 share printing only the sites WHAT STAYS names, replacing 'returns nothing'.",
-     "class": "within",
-     "why": "FR-001's expected-remainders pattern, and each named site is carried by the spec. That it cannot see the -m probe is ruled under THE XDIST PROBE."
-    },
-    {
-     "id": "RECORDED MEASUREMENTS",
-     "summary": "Every measurements command running a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
-     "class": "within",
-     "why": "FR-001's clause on recorded measurements, restated."
+     "why": "FR-001's second census over the phase-2 set and the four suites, and FR-001's rule on recorded measurements; unchanged since last judged. The probe is outside this pattern, which does not match -m, and the XDIST block assigns it its own search."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }

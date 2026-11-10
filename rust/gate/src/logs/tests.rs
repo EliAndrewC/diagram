@@ -313,3 +313,10 @@ fn every_value_is_written_in_its_python_form() {
         "{\n  \"g\": [\n    1,\n    {\n      \"h\": []\n    }\n  ]\n}\n"
     );
 }
+
+#[test]
+fn the_json_corners_are_pythons() {
+    assert_eq!(super::py_float(-0.0), "-0.0");
+    assert_eq!(super::one_line(&json!("del\u{7f}")), "\"del\u{7f}\"");
+    assert_eq!(super::one_line(&json!(u64::MAX)), "18446744073709551615");
+}
