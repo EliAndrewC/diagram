@@ -79,8 +79,10 @@ edit Edit "$R/sources/010-works-cited/0010-fei-1939.html" "Fei"
 edit Edit "$FIX/docs/guards.md" "anything"
 [ "$(rc)" = 0 ] && [ -z "$(rewrote_to)" ] && ok "a file outside the record passes" || no "a file outside the record passes"
 
-echo "4. the decision module's own selftest"
-python3 "$HERE/../../scripts/hooks/lib/hm_record.py" --selftest >/dev/null && ok "_hm_record --selftest" || no "_hm_record --selftest"
+echo "4. the listing a check reads, through the Rust verb the Python callers reach (feature 449 T81)"
+got="$(printf '["0010"]' | "$HERE/../../scripts/gates/l7r-gate.sh" record fragments --root "$FIX" 2>/dev/null)"
+want='{"0010": ["research/questions/0010-x.html", "research/questions/0010-x.notes.html"]}'
+[ "$got" = "$want" ] && ok "l7r-gate record fragments lists a question's pages and notes" || no "record fragments" "got=$got"
 
 echo
 echo "record-edit-hooks: $PASS passed, $FAIL failed"

@@ -157,10 +157,7 @@ def apply_edit(root: pathlib.Path, b: dict, dry: bool, form: bool = False) -> st
     if count != 1:
         return f"REFUSED - the old text occurs {count} times in {target.name}, not once"
     if not dry:
-        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "hooks" / "lib"))
-        from hm_house import americanize  # noqa: PLC0415 - feature 385 T78: an agent's new text in the house style
-
-        target.write_text(replaced(text, {**b, "new": americanize(b["new"])}), encoding="utf-8")
+        target.write_text(replaced(text, {**b, "new": b["styled"]}), encoding="utf-8")  # feature 385 T78: an agent's new text in the house style
     return f"applied to {target.name}"
 
 
@@ -380,6 +377,13 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     skip = {int(s) for s in args.skip.split(",") if s.strip()}
     refused = terms = 0
+    edits = [b for b in found if b["kind"] == "edit" and b["n"] not in skip]
+    if edits and not args.dry_run:  # 449 T81: every block's new text in the house style, one `record americanize` for the run
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+        from record_door import americanize_json  # noqa: PLC0415
+
+        for b, styled in zip(edits, americanize_json([b["new"] for b in edits]), strict=True):
+            b["styled"] = styled
 
     def apply() -> int:
         nonlocal refused, terms

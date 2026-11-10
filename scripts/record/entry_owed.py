@@ -194,6 +194,10 @@ def named_pairs(
     section to have drifted from.
     """
     out: list[str] = []
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from record_door import fragments_batch  # noqa: PLC0415 - 449 T81: FR-006, every hit of the run asked in one process
+
+    fragments_batch(sorted({str(f) for key in anchors for f in anchors[key] & moved}), os.getcwd())
     for key in sorted(anchors):
         hit = sorted(anchors[key] & moved)
         if hit and key in was and was[key] == now.get(key):
@@ -249,7 +253,8 @@ def _fragments_line(hit: Sequence[str]) -> str:
     names in `hit` are question pages' files (feature 303), each read with nothing else.
     """
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from hm_record import fragments_for  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
     out: list[str] = []
     for file in hit:

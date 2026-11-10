@@ -162,7 +162,8 @@ def main(argv: list[str] | None = None) -> int:
     root = pathlib.Path(args.root).resolve()
     rows = owed(root)
     if args.q:
-        from hm_record import fragments_for  # noqa: PLC0415
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+        from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
         mine = {r for r in fragments_for(args.q, str(root)) if r.endswith(".notes.html")}
         rows = [r for r in rows if r[0] in mine]

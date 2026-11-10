@@ -38,7 +38,7 @@ pretool() {
   local verdict rule
   INPUT="$(cat)"
   freeze
-  verdict="$(printf '%s' "$INPUT" | python3 "$RE_HERE/lib/hm_record.py" 2>/dev/null)" || exit 0
+  verdict="$(printf '%s' "$INPUT" | "$RE_HERE/../gates/l7r-gate.sh" record edit-route 2>/dev/null)" || exit 0  # feature 449 T81: `hm_record.py`'s decision, in Rust
   case "$verdict" in
     *'"verdict": "rewrite"'*)
       printf '%s' "$verdict" | python3 -c 'import json,sys; print(json.dumps(json.load(sys.stdin)["hook"]))'
@@ -59,6 +59,5 @@ pretool() {
 case "$MODE" in
   pretool) pretool ;;
   pretool-bash) INPUT="$(cat)"; freeze; exit 0 ;;  # GUARD_EDIT_OK: feature 375 - `make apply-edits` admitted only for the round's blocks
-  --selftest) python3 "$RE_HERE/lib/hm_record.py" --selftest ;;
-  *) echo "usage: record-edit-hooks.sh pretool|pretool-bash|--selftest" >&2; exit 64 ;;
+  *) echo "usage: record-edit-hooks.sh pretool|pretool-bash" >&2; exit 64 ;;
 esac

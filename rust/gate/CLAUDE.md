@@ -21,4 +21,5 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/measure.rs`, `src/measure/` | what things cost: `figures`, `gatecost`, `gate-costs`, `ratchet` (its table is `dev/ratchets.json`), `probe` (T75) |
 | `src/preflight.rs` | the gate's first phase and its tree check, `preflight` (T071) |
 | `src/logs.rs` | the records the gate's shell writes, `log run`, `log bypass`, `log gate-bypass`, `log land-tooling`; `json-field`, `ruff-toml` (T069) |
+| `src/record.rs`, `src/record/` | the research record's tools: `canon`, `money-conversions`, `found`, `access-tags`, `downloads`, and the leaves Python reaches through a verb (`leaves.rs`: `edit-route`, `fragments`, `moved-only`, `americanize`; `scripts/record_door.py` is the door) (T79-T81) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

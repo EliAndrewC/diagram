@@ -568,7 +568,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.q:
         sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
         sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
-        from hm_record import fragments_for  # noqa: PLC0415
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+        from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
         files = [pathlib.Path(f).name for f in fragments_for(args.q, str(pathlib.Path(args.root).resolve())) if not f.endswith(".notes.html")]
     else:

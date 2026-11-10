@@ -332,7 +332,8 @@ def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str]
                  notes: frozenset[str] = frozenset(), for_: str = "all", owed: str = "", bare: bool = False,
                  images: list[str] | None = None) -> int:
     sys.path.insert(0, str(HERE))
-    from hm_record import fragments_for  # noqa: PLC0415
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+    from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
     fragments = fragments_for(q, str(root))
     if not fragments:
@@ -470,7 +471,8 @@ def print_notes(root: pathlib.Path, q: str, keys: frozenset[str]) -> int:
     session needs to edit a few notes, where the first page session dumped whole notes files and wide `sed`
     ranges of large fragments, 17,000 to 20,000 characters apiece (feature 250, recommendation 4)."""
     sys.path.insert(0, str(HERE))
-    from hm_record import fragments_for  # noqa: PLC0415
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+    from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
     found = fragments_for(q, str(root))
     if not found or not keys:
@@ -517,7 +519,8 @@ def claims_read(root: pathlib.Path, units: list) -> str:
             wanted.setdefault(stem, set()).add(note)
     if not wanted:
         return ""
-    from hm_record import fragments_for  # noqa: PLC0415
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+    from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
     parts = ["", "## The claims to read (the owed notes, and the sentences carrying them)", ""]
     for stem, keys in sorted(wanted.items()):
@@ -556,7 +559,8 @@ def since_last_round(root: pathlib.Path, units: list) -> str:
 
     path = er.ab.hc.state_path(str(root))
     state = er.ab.hc.load(path) if path is not None and path.is_file() else {}
-    from hm_record import fragments_for  # noqa: PLC0415
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+    from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
     parts: list[str] = []
     for u in units:
@@ -715,7 +719,8 @@ def batched_manifests(out: pathlib.Path, n: int | Sequence[int]) -> str:
 
 
 def fragments_for_q(root: pathlib.Path, q: str) -> list[str]:
-    from hm_record import fragments_for  # noqa: PLC0415
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+    from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
     return fragments_for(q, str(root))
 
@@ -776,7 +781,8 @@ def note_batches(root: pathlib.Path, q: str) -> list[list[str]]:
     """The question's note keys in runs of at most `NOTES_BUDGET` bytes of notes each, in note order (a single note
     over the budget is a run of its own). One run when they fit - the ordinary bundle."""
     sys.path.insert(0, str(HERE))
-    from hm_record import fragments_for  # noqa: PLC0415
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+    from record_door import fragments_for  # noqa: PLC0415 - 449 T81: `hm_record.fragments_for` is Rust
 
     batches: list[list[str]] = [[]]
     size = 0

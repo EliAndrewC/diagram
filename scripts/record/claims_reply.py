@@ -36,17 +36,24 @@ def outside_tag(note: str) -> tuple[bool, str]:
 
 def parse_reply(text: str) -> tuple[dict[str, tuple[str, str]], list[tuple[str, str]]]:
     """({key: (verdict, note)}, [(uid, decision)]) from a check's reply."""
-    sys.path.insert(0, str(HERE.parent / "hooks" / "lib"))
-    from hm_house import americanize  # noqa: PLC0415 - feature 385 T78: a note's words in the house style, its key as written
+    sys.path.insert(0, str(HERE.parent))
+    from record_door import americanize_json  # noqa: PLC0415 - feature 385 T78: a note's words in the house style, its key as written; 449 T81: one call
 
-    verdicts: dict[str, tuple[str, str]] = {}
-    unclaimed: list[tuple[str, str]] = []
+    rows: list[tuple[str, str, str, str]] = []  # (table, key, verdict, note)
     for raw in text.split("\n"):
         line = raw.strip().strip("`")
         if m := _VERDICT.match(line):
-            verdicts[m.group(1).strip("`")] = (m.group(2), americanize(m.group(3).strip()))
+            rows.append(("verdict", m.group(1).strip("`"), m.group(2), m.group(3).strip()))
         elif m := _UNCLAIMED.match(line):
-            unclaimed.append((m.group(1).strip("`"), americanize(m.group(2).strip())))
+            rows.append(("unclaimed", m.group(1).strip("`"), "", m.group(2).strip()))
+    styled = americanize_json([r[3] for r in rows]) if rows else []
+    verdicts: dict[str, tuple[str, str]] = {}
+    unclaimed: list[tuple[str, str]] = []
+    for (table, key, verdict, _), note in zip(rows, styled, strict=True):
+        if table == "verdict":
+            verdicts[key] = (verdict, note)
+        else:
+            unclaimed.append((key, note))
     return verdicts, unclaimed
 
 _RESTS = re.compile(r"\[(§[^\]]*)\]\s*$")

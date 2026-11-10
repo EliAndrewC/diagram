@@ -12,6 +12,7 @@ pub(crate) mod access_tags;
 mod agent_census;
 mod downloads;
 mod fragment_move;
+mod leaves;
 mod money;
 mod stale_terms;
 
@@ -38,6 +39,10 @@ fn reply(stdout: String, stderr: String, code: i32) -> Reply {
 fn top_level() -> PathBuf {
     let done = crate::cohort::git(Path::new("."), &["rev-parse", "--show-toplevel"]).1;
     PathBuf::from(Some(done.trim()).filter(|t| !t.is_empty()).unwrap_or("."))
+}
+
+fn current_dir() -> PathBuf {
+    std::env::current_dir().unwrap_or_default()
 }
 
 /// `text` split as Python's `str.splitlines` splits it, so a form feed still ends a line and a line number means what it did.
@@ -382,6 +387,9 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         Some("agent-census") => agent_census::cli(rest, &crate::measure::home()),
         Some("access-tags") => access_tags::cli(rest, &top_level()),
         Some("downloads") => downloads::cli(rest, &top_level()),
+        Some(verb @ ("edit-route" | "fragments" | "moved-only" | "americanize")) => {
+            leaves::cli(verb, rest, &mut std::io::stdin(), &current_dir())
+        }
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),

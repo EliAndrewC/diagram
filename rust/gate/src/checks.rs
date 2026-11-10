@@ -7,7 +7,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 mod conflict;
 mod file_scale;
 mod house_style_delta;
-mod moves;
+pub(crate) mod moves;
 mod partial_citations;
 mod question_size;
 mod research_pointers;

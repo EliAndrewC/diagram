@@ -29,7 +29,8 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../reviews',)]  # the moved scripts it imports (2026-10-08)
-from moves import moved_only  # noqa: E402  (feature 329: a page the delta only moved changed no word)
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+from record_door import moved_only  # noqa: E402  (feature 329: a page the delta only moved changed no word; 449 T81: one implementation, in Rust)
 import record_cache as rc  # noqa: E402  (feature 375 amendment 3: one git batch per revision)
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass

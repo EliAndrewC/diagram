@@ -11,6 +11,11 @@ fn words(list: &[&str]) -> Vec<String> {
 }
 
 #[test]
+fn a_leaf_verb_is_reached_through_the_record_command() {
+    assert_eq!(cli(&words(&["moved-only"])).code, 2);
+}
+
+#[test]
 fn lines_split_as_python_splits_them() {
     assert_eq!(
         py_lines("a\nb\r\nc\rd\u{c}e\u{2028}f\n"),

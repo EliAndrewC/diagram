@@ -43,7 +43,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from moves import moved_only  # noqa: E402  (feature 329: a map or module the delta only moved is not new)
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from record_door import moved_only  # noqa: E402  (feature 329: a map or module the delta only moved is not new; 449 T81: one implementation, in Rust)
 
 TREES = ("pool", "legacy-hand-authored-pool")
 #: git pathspecs for every manifest in both pool trees (fnmatch without FNM_PATHNAME: `*` spans `/`)
@@ -244,19 +245,18 @@ def detected(root: Path, base: str) -> list[Unit]:
     units: list[Unit] = []
     new_folders: list[Path] = []
     before: dict[str, set[str]] = {}
-    for d in _folders(root):
+    folders = [d for d in _folders(root) if not exempt(d) and ((d / f"{d.name}.json").is_file() or (d / f"{d.name}.svg").is_file() or (d / f"{d.name}.gen.py").is_file())]
+    # EVERY NEW FOLDER'S TRACKED FILES ASKED AT ONCE (449 T81, FR-006): one `record moved-only` process for the run, whatever the folder count.
+    unborn = {d: [ln for ln in (_git(root, "ls-files", "--", f"{_rel(root, d)}/") or "").splitlines() if ln] for d in folders if not _existed(root, base, d)}
+    moved_names = moved_only(root, base, [n for names in unborn.values() for n in names])
+    for d in folders:
         manifest, svg = d / f"{d.name}.json", d / f"{d.name}.svg"
-        if exempt(d):
-            continue
-        if not (manifest.is_file() or svg.is_file() or (d / f"{d.name}.gen.py").is_file()):
-            continue
-        if not _existed(root, base, d):
+        if d in unborn:
             # MOVED, NOT NEW (feature 329): a folder any of whose tracked files stood at the base with these same bytes was
             # renamed by the delta (its renders are untracked, and a pointer comment in a hand-drawn sheet may have moved
             # with it), so it is no new map or sheet. Its legend is taken as the one it had: a delta that both renames a
             # folder and adds an element to it would not be seen here - none has, and a rename is its own commit.
-            tracked = [ln for ln in (_git(root, "ls-files", "--", f"{_rel(root, d)}/") or "").splitlines() if ln]
-            if tracked and moved_only(root, base, tracked):
+            if moved_names.intersection(unborn[d]):
                 before[d.name] = legends_of(d)
                 continue
             new_folders.append(d)

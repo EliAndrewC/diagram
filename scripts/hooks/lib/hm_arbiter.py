@@ -523,15 +523,10 @@ def house_styled(obj: Any) -> Any:  # noqa: ANN401 - a ruling's JSON, any shape
     """A ruling with its text in the house style (American spellings) before it is recorded - the GM 2026-10-24: T26's ruling
     wrote a British spelling into arbiter.jsonl and gm-review.jsonl, and the gate's preflight refused the landing on it. The edit hooks
     correct what a session writes; a record a make target writes passes none of them."""
-    import hm_house  # noqa: PLC0415 - the module beside this one
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from record_door import americanize_json  # noqa: PLC0415 - 449 T81: `hm_house.americanize` is Rust, the ruling's strings styled in one call
 
-    if isinstance(obj, str):
-        return hm_house.americanize(obj)
-    if isinstance(obj, list):
-        return [house_styled(x) for x in obj]
-    if isinstance(obj, dict):
-        return {k: house_styled(v) for k, v in obj.items()}
-    return obj
+    return americanize_json(obj)
 
 
 def spec_ruled(d: Path) -> str:
