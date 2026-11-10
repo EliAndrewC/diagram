@@ -267,8 +267,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T78 The Python unit tests, the planner and the Python-only static checks deleted (FR-001b)
       research: rendering
       verify: DONE. landed: the Python unit tests, the planner, the floor and the Python-only checks are deleted (FR-001b)
-- [ ] T79 Phase 3, the standalone tools with no Python caller: `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `agent_census.py`
+- [x] T79 Phase 3, the standalone tools with no Python caller: `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `agent_census.py`
       research: rendering
+      verify: DONE. landed: the phase-3 tools no Python imports are Rust; their Python stays until the GM approves its removal (T84)
 - [ ] T80 Phase 3, archive and sources: archive, archive_ops, sources, attempts, access_tags, downloads, uncited, uncited_imports, reserve-prefix, check-partial-citations
       research: rendering
 - [ ] T81 Phase 3, the record, hook and review core in one cut with T011, T043 and T048: hm_checks, hm_arbiter, hm_fixloop, hm_planhold, hm_budget_rounds, hm_record, hm_house, record_owed, record_units, the modal_ files, entry_owed, translation_owed, apply_edits, check_bundle, bundle_owed, earlier_rounds, quote_verbatim, source_pages, record_cache, review_owed, review_prereq, checkpoint and the bundle files, depiction_replay onto the Rust modal_owed

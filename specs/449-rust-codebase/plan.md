@@ -346,36 +346,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T78 to T78 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 
-### T79 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T79 Approach (checklist part A)
-
-1. **The goal, in the world.** The phase-3 tools no Python still imports are Rust, each giving the Python's output.
-2. **The constraints.** FR-001, FR-002, FR-003, FR-001b; `ask:449-T77-replays` (one Rust fold).
-   **Decisions** (T79 is the phase-3 tools no Python still imports):
-   - WHAT IS HERE: `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py` and `agent_census.py` become `l7r-gate record` verbs (`rust/gate/src/record/`), with `rust/gate/src/difflib.rs` the one port of `SequenceMatcher` (autojunk off).
-   - WHAT MOVES TO ITS CALLER, the T76 shape, so one implementation runs (FR-003), by the search `git grep -lE "^\s*(import|from) +<name>\b"` over `scripts/`, `l7r/`, `tests/` (observed 2026-11-10, one-shot): `ledger_lint`, `review_cost`, `moves` and `brief_load` to T81 with `hm_checks`, `ledger_owed`, `modal_owed`, `review_owed` and `page_session_runner`; `pager` to T82 with `claims`; `task_phases`, `turn_time`, `tool_yield`, `work_budget_view` and `work_budget_bundle` to T83 with `feature_report`, `stepback_bundle`, `fix_yield`, `land.py` and `speckit-todo.py`. `size_table.py` and `open_questions.py` import the engine's Mode A code and `CLASSES` and go in phase 4 (`ask:449-T79-moves`). `agent_sync.py` stays with its kept test, `test_agent_sync.py`, and goes in T83 with that test's Rust port. THE SEARCH (closed by `ask:449-T79-moves`, observed 2026-11-10, one-shots): an `ast` walk of every tracked `.py` (341 files: `ast.Import` and `ast.ImportFrom`, the last dotted part and each imported name) finds no importer of the seven tools; a word-bounded `git grep` of the seven names over the Makefile, `.sh` files and `rust/`, read by hand, finds the ordinary word "found" and the JSON key `canon`. `specs/251-tiered-subagent-checks/measure/seeded.py` and `run_seeded.sh` are deleted, not ported (`ask:449-T79-moves`, the GM's 2026-11-09 rule): a whole-tree `git grep` of `seeded.py` and `run_seeded` finds only `docs/spec-kit-and-reviews.md:109` as a live direction, historic text under `specs/251`, `255`, `256`, `294`, `383` and `449`, and `specs/256`'s `dispatch_seeded.sh` header; and `seeded.py`'s by-path load names `scripts/_agent_census.py`, which no tracked file is, so it cannot run today. `size_table.py` and `open_questions.py` carry the T065 clause until phase 4 and the phase-3 close names them.
-   - THE VERDICTS ARE THE PYTHON'S (observed 2026-11-10, method: each command through the Python and the binary on the real repository, exit and output compared, a one-shot): `canon`, `money-conversions` and `found` 12 cases, `stale-terms` 13 over the eight newest specs, `money-candidates` 5 over the record's 1,439 amounts, `stale-dirs` 8 (kept review-round snapshots against their feature directories and two git-history pairs, against the Python functions the guard called), 0 differences; `fragment-move` 12 on real moves of 41, 21 and 7 files in scratch copies, `agent-census` 11, whose one difference is the `command` lines `--record` writes, which name the verb. HTML entities are CPython's whole table and its numeric rules (`record/html5_entities.tsv`, generated from `html.entities.html5`), so `html.unescape`'s answers hold for any fragment.
-   - THE GUARD: `review_round_hooks` asks `l7r-gate record stale-dirs` in place of its inline Python.
-   - THE PYTHON STAYS UNTIL THE GM APPROVES ITS REMOVAL: the safety check reserves that to a person (the request is in the session); no recipe, hook or figure runs these files meanwhile.
-3. **Where each comes from.** The Python tools of this slice, each compared with its port.
-4. **Do they describe the world here?** Tooling; no researched value moves.
-5. **The order.** Before T80 to T83, whose tools import these or are imported by them.
-6. **The exits.** Green: each verb's differential below shows no mismatch, the recipes and the guard run only the verbs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The differentials below; `git grep -nE "\b(<the seven>)\.py\b" -- Makefile '*.mk' '*.sh' .claude/settings.json 'specs/*/measurements*.json' 'rust/*.rs'` names no invocation (observed 2026-11-10, one-shot: its lines are one list of paths in `research_pointers.rs` and comments), the commands in `specs/251`'s measurements rewritten to the verb, every figure's command so rewritten in the porting commit (FR-001). `docs/spec-kit-and-reviews.md:109` is rewritten in the removal commit to name `scripts/gates/l7r-gate.sh measure model-trial` in place of `seeded.py`, so no document directs the deleted file.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** no.
-
-
+<!-- plan-archive: T79 to T79 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 ### T80 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
