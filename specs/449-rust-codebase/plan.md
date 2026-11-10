@@ -356,7 +356,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
    - `hm_record.py` becomes `l7r-gate record edit-route` and `record fragments`; `hm_house.py` becomes `record americanize`, reaching the guard's own correction; `moves.py` becomes `record moved-only`, reaching `checks/moves.rs`. One implementation of each.
    - Python callers reach them through `scripts/record_door.py`, one process a run (FR-006): `review_owed` asks every new folder at once, `entry_owed` every hit, `apply_edits` and `claims_reply` every text, `check_bundle` from memory.
    - The old Python files are removed with T84's approval, not here.
-   - Differential, both on the real tree: `moved-only` 15 cases, 0 differ; `fragments` 204 payloads and 2,356 listings, 0 differ; `americanize` 5,114 paragraphs and 495 seeded, 0 differ after the fix for `\s` on U+001C-U+001F around a dash (observed 2026-11-10, method: each Python against its verb, exit, stdout and stderr compared). A whole-file `americanize` run was killed after 16 minutes and compared nothing, so the paragraph run is the evidence.
+   - Differential, both on the real tree: `moved-only` 15 cases, 0 differ; `fragments` 204 payloads and 2,356 listings, 0 differ; `americanize` 5,114 paragraphs and 495 seeded, 0 differ after the fix for `\s` on U+001C-U+001F around a dash (observed 2026-11-10, method: each Python against its verb, exit, stdout and stderr compared). A whole-file `americanize` run was killed unfinished and compared nothing, so the paragraph run is the evidence.
 
 ### T81 Approach (checklist part A)
 
