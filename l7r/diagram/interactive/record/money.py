@@ -11,7 +11,7 @@ text its hover box shows: goods dollars (what it bought) as a range from the cen
 mean throughout), and "the toolkit page never shows one goods figure without the other", so neither does this box.
 
 THE TABLE IS GM-ASSISTANT'S. `research/assets/money-conversions.json` is a copy of its
-`webapp/l7r/money/data/conversions.json`, refreshed by `make money-conversions` (`scripts/record/money_conversions.py`);
+`webapp/l7r/money/data/conversions.json`, refreshed by `make money-conversions` (`scripts/gates/l7r-gate.sh record money-conversions`);
 nothing here computes a price. An era it has not built yet may be marked only when `research/assets/money-eras-awaiting.json`
 lists it (FR-008), so a typo is never taken for an era to come; such an amount keeps the glossary tooltip alone.
 
