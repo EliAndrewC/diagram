@@ -15,9 +15,10 @@ const RECORD: &str = "research";
 const MAPPING: &str = "moved-303.json";
 const CURRENT_DIRS: [&str; 5] = ["questions", "sources", "assets", "site", "archive"];
 const VERBATIM: [&str; 2] = ["tests/hooks/fixtures/", "research/source-attempts.jsonl"];
-const REFUSAL_DATA: [&str; 7] = [
+const REFUSAL_DATA: [&str; 8] = [
     "tests/tooling/test_attempts.py",
     "scripts/hooks/lib/hm_record.py",
+    "rust/gate/src/record/leaves/tests.rs",
     "tests/hooks/test-record-edit-hooks.sh",
     "tests/hooks/test-check-bundle-hooks.sh",
     "tests/interactive/test_record.py",

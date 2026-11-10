@@ -134,7 +134,12 @@ fn correct_plain(text: &str) -> (String, Vec<String>) {
     let (mut text, mut notes) = (text.to_owned(), Vec::new());
     for (dash, name) in [(EM, "em-dash"), (EN, "en-dash")] {
         if text.contains(dash) {
-            text = sub_all(&re(&format!(r"\s*{dash}\s*")), &text, &|_| " - ".to_owned());
+            // Python's `\s` also takes U+001C-U+001F, as `str.isspace` does; the regex crate's does not (449 T81's differential).
+            text = sub_all(
+                &re(&format!(r"[\s\x1c-\x1f]*{dash}[\s\x1c-\x1f]*")),
+                &text,
+                &|_| " - ".to_owned(),
+            );
             notes.push(format!("{name} -> hyphen"));
         }
     }

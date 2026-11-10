@@ -205,6 +205,12 @@ fn case_is_kept() {
 }
 
 #[test]
+fn a_dash_takes_the_whitespace_python_counts_around_it() {
+    assert_eq!(super::americanize("a\u{1c}\u{2014}\u{1f}b"), "a - b");
+    assert_eq!(super::americanize("a\u{a0}\u{2013}\u{a0}b"), "a - b");
+}
+
+#[test]
 fn a_tool_s_text_is_americanized_its_quotations_held_out() {
     let (brit, us) = (format!("gr{}", "ey"), "gray");
     assert_eq!(
