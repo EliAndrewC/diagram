@@ -4,6 +4,7 @@ function a forwarder and never a fallback. Writes - `record_answer`, `trip`, `ke
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import subprocess
 from collections.abc import Iterable, Mapping
@@ -12,11 +13,21 @@ from typing import Any
 GATE = pathlib.Path(__file__).resolve().parent / "gates" / "l7r-gate.sh"
 
 _door: subprocess.Popen[str] | None = None
+_door_env: tuple[str | None, ...] = ()
+#: what the door reads from its environment: a caller that changes one of them mid-run (`land.py` exports SPECIFY_FEATURE) gets a fresh door
+_READ_FROM_ENV = ("L7R_FEATURE_DIRECTORY", "SPECIFY_FEATURE", "RECORD_CHECKS_DIR", "HOME", "L7R_GATE_TREE", "GUARD_LOG_DIR")
 
 
 def _ask(verb: str, *args: Any) -> Any:  # noqa: ANN401 - the verb's JSON
-    global _door  # noqa: PLW0603 - one process a run (FR-006)
+    global _door, _door_env  # noqa: PLW0603 - one process a run (FR-006), but a changed environment is a new one
+    wanted = tuple(os.environ.get(k) for k in _READ_FROM_ENV)
+    if _door is not None and wanted != _door_env:
+        assert _door.stdin is not None
+        _door.stdin.close()
+        _door.wait()
+        _door = None
     if _door is None:
+        _door_env = wanted
         _door = subprocess.Popen([str(GATE), "checks-door"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, encoding="utf-8")
     assert _door.stdin is not None and _door.stdout is not None
     _door.stdin.write(json.dumps({"verb": verb, "args": list(args)}) + "\n")

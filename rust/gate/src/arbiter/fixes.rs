@@ -181,7 +181,7 @@ pub(super) fn settle_fix(
     let value = Value::Object(row);
     append_jsonl(&d.join("arbiter.jsonl"), &value)?;
     if status == "declined" {
-        gm_question(root, &d, &format!("Build this tooling fix the round arbiter asked for, which the session declined? The fix: {fix} Declined because: {note}"), trigger, &when);
+        gm_question(root, &d, &format!("Build this tooling fix the round arbiter asked for, which the session declined? The fix: {fix} Declined because: {note}"), trigger, &when)?;
     }
     Ok(value)
 }
@@ -225,7 +225,7 @@ pub(super) fn nit_answers(
             .map_or_else(|| subject.to_owned(), |p| p.to_string_lossy().into_owned());
         return Err(Stop::Refused(format!("{named} must hold NEW and no longer OLD - make the edit first (a page's nit is not this target's)")));
     }
-    Ok(accept_answers(
+    accept_answers(
         root,
         &format!("{check}|{subject}"),
         &format!(
@@ -233,5 +233,5 @@ pub(super) fn nit_answers(
             py_repr(old),
             py_repr(new)
         ),
-    ))
+    )
 }

@@ -99,17 +99,21 @@ fn root_dir() -> PathBuf {
     std::env::current_dir().unwrap_or_default()
 }
 
-/// `python3 -c code args...`, a module the five named modules call by path until its own port; the stdout, stripped, where it succeeded.
-fn py(code: &str, args: &[&str]) -> Option<String> {
-    let mut full = vec!["-c", code];
-    full.extend_from_slice(args);
+/// `python3 -c code args...`, a module the five named modules call by path until its own port; its stripped stdout, or the refusal its failure is (the Python raised there, the ruling left half-recorded).
+fn py(code: &str, args: &[&str]) -> Result<String, Stop> {
     let done = std::process::Command::new("python3")
-        .args(&full)
-        .output()
-        .ok()?;
-    done.status
-        .success()
-        .then(|| String::from_utf8_lossy(&done.stdout).trim().to_owned())
+        .arg("-c")
+        .arg(code)
+        .args(args)
+        .output();
+    match done {
+        Ok(o) if o.status.success() => Ok(String::from_utf8_lossy(&o.stdout).trim().to_owned()),
+        Ok(o) => Err(Stop::Refused(format!(
+            "python3 said: {}",
+            String::from_utf8_lossy(&o.stderr).trim()
+        ))),
+        Err(e) => Err(Stop::Refused(format!("python3 did not start: {e}"))),
+    }
 }
 
 const REPO_ANSWER: &str = r"import json, sys
@@ -143,11 +147,11 @@ fn scripts(root: &Path) -> PathBuf {
 }
 
 /// `hm_arbiter.accept_answers`: an accept on a round cap answers that check's units on its subject at today's words.
-fn accept_answers(root: &Path, unit: &str, result: &str) -> Vec<String> {
+fn accept_answers(root: &Path, unit: &str, result: &str) -> Result<Vec<String>, Stop> {
     let (check, subject) = unit.split_once('|').unwrap_or((unit, ""));
     let (kind, name) = subject.split_once(':').unwrap_or((subject, ""));
     if !matches!(kind, "modal" | "q") || check.is_empty() || name.is_empty() {
-        return Vec::new();
+        return Ok(Vec::new());
     }
     let checks_named: &[&str] = if check == "modal-research" {
         &["modal-accuracy", "modal-references", "modal-gaps"]
@@ -168,16 +172,20 @@ fn accept_answers(root: &Path, unit: &str, result: &str) -> Vec<String> {
                 name,
             ],
         );
-        if let Some(rows) = said.and_then(|t| serde_json::from_str::<Vec<String>>(&t).ok()) {
-            done.extend(rows);
-        }
+        done.extend(serde_json::from_str::<Vec<String>>(&said?).unwrap_or_default());
     }
-    done
+    Ok(done)
 }
 
-fn gm_question(root: &Path, d: &Path, question: &str, source: &str, when: &str) {
+fn gm_question(
+    root: &Path,
+    d: &Path,
+    question: &str,
+    source: &str,
+    when: &str,
+) -> Result<(), Stop> {
     let tree = scripts(root);
-    let _ = py(
+    py(
         GM_QUESTION,
         &[
             &tree.to_string_lossy(),
@@ -186,7 +194,8 @@ fn gm_question(root: &Path, d: &Path, question: &str, source: &str, when: &str) 
             source,
             when,
         ],
-    );
+    )
+    .map(|_| ())
 }
 
 /// sha256 of what a review of feature `d`'s spec judged: spec.md above its Review history, title and body.
@@ -505,24 +514,24 @@ pub fn record_ruling(
     let value = Value::Object(row);
     append_jsonl(&d.join("arbiter.jsonl"), &value)?;
     if !for_gm.is_empty() {
-        gm_question(root, &d, &for_gm, trigger, &when);
+        gm_question(root, &d, &for_gm, trigger, &when)?;
     }
     if hour {
-        let _ = py(
+        py(
             CLOSE_CHECKPOINT,
             &[
                 &tree_of(root).to_string_lossy(),
                 &root.to_string_lossy(),
                 trigger,
             ],
-        );
+        )?;
     }
     if text(&value, "ruling") == "accept" && text(&value, "kind") == "round" {
         accept_answers(
             root,
             text(&value, "unit"),
             &format!("accepted by the round arbiter ({trigger})"),
-        );
+        )?;
     }
     core::pop_owed(&checks::common_dir(root), trigger).map_err(Stop::Refused)?;
     Ok(value)
