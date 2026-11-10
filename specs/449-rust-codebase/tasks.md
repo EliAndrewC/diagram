@@ -267,7 +267,7 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T78 The Python unit tests, the planner and the Python-only static checks deleted (FR-001b)
       research: rendering
       verify: DONE. landed: the Python unit tests, the planner, the floor and the Python-only checks are deleted (FR-001b)
-- [ ] T79 Phase 3, the standalone tools: ledger_lint, review_cost, moves, agent_census, agent_sync, brief_load, canon, found, fragment_move, money_candidates, money_conversions, open_questions, pager, size_table, stale_terms, task_phases, tool_yield, turn_time, work_budget_view, work_budget_bundle, each checked against its callers first and deleted if nothing uses it
+- [ ] T79 Phase 3, the standalone tools with no Python caller: `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `open_questions.py`, `agent_census.py`
       research: rendering
 - [ ] T80 Phase 3, archive and sources: archive, archive_ops, sources, attempts, access_tags, downloads, uncited, uncited_imports, reserve-prefix, check-partial-citations
       research: rendering

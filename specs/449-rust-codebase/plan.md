@@ -357,6 +357,12 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
+   **Decisions** (T79 is the phase-3 tools no Python still imports):
+   - WHAT IS HERE: `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `open_questions.py` and `agent_census.py` become `l7r-gate record` verbs (`rust/gate/src/record/`), with `rust/gate/src/difflib.rs` the one port of `SequenceMatcher` (autojunk off).
+   - WHAT MOVES TO ITS CALLER, the T76 shape, so one implementation runs (FR-003), by the search `git grep -lE "^\s*(import|from) +<name>\b"` over `scripts/`, `l7r/`, `tests/` (observed 2026-11-10, one-shot): `ledger_lint`, `review_cost`, `moves` and `brief_load` to T81 with `hm_checks`, `ledger_owed`, `modal_owed`, `review_owed` and `page_session_runner`; `pager` to T82 with `claims`; `task_phases`, `turn_time`, `tool_yield`, `work_budget_view` and `work_budget_bundle` to T83 with `feature_report`, `stepback_bundle`, `fix_yield`, `land.py` and `speckit-todo.py`. `size_table.py` imports the Mode A code and goes in phase 4. `agent_sync.py` stays with its kept test, `test_agent_sync.py`, until that test is ported.
+   - THE VERDICTS ARE THE PYTHON'S (observed 2026-11-10, method: each command through the Python and the binary on the real repository, exit and output compared, a one-shot): `canon`, `money-conversions` and `found` 12 cases, `stale-terms` 13 over the eight newest specs, `money-candidates` 5 over the record's 1,439 amounts, 0 differences. HTML entities are the set the record holds and numeric references (observed 2026-11-10, method: every `&name;` under `research/questions/`), so a later fragment naming another entity would need its row added.
+   - THE GUARD: `review_round_hooks` asks `l7r-gate record stale-dirs` in place of its inline Python.
+   - THE PYTHON STAYS UNTIL THE GM APPROVES ITS REMOVAL: the safety check reserves that to a person (the request is in the session); no recipe, hook or figure runs these files meanwhile.
 3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
 4. **Do they describe the world here?** <how it was measured>
 5. **The order.** <before and after what>
