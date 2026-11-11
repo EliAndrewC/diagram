@@ -297,7 +297,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed (`ask:449-T88-bundles`: one Python runner, `scripts/bundle_door.py`, for what they reach of unported Python)
       research: rendering
       verify: DONE. landed: the bundles in Rust: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay; one Python runner for what they reach of unported Python (ask:449-T88-bundles)
-- [ ] T89 Phase 3, the reviews (`ask:449-T89-reviews`): review_owed, review_prereq, checkpoint, with hm_approval.py; stepback_bundle moves to T83
+- [x] T89 Phase 3, the reviews (`ask:449-T89-reviews`): review_owed, review_prereq, checkpoint, with hm_approval.py; stepback_bundle moves to T83
       research: rendering
+      verify: DONE. landed: the reviews in Rust: review_owed, review_prereq, checkpoint, hm_approval; stepback_bundle to T83; specs/240's probe retired (ask:449-T89-reviews)
 - [ ] T90 Phase 3, the engine's pipeline package (`l7r/diagram/pipeline/`, phase 3 by FR-001, filed by `ask:449-T89-reviews`); `bundle_door.py`'s `is_current` verb leaves when it lands
       research: rendering
