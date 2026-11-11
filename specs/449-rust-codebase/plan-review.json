@@ -194,10 +194,10 @@
    "declared": "round-arbiter"
   },
   "### T87 Approach (checklist part A)": {
-   "sha256": "f97d6db0536d08ea6e8d0e2297a719fe9ce64e5519b4bc379529e042d56fa753",
+   "sha256": "0fd541568e111474c41e3fe5f9dd5cd5cf045671e7e029834964e2727bf28eef",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   },
   "### T88 (<why: the finding or measurement that files it>)": {
    "sha256": "57645c4e80d644c5deaf15787c36f8c7bf0e079be2e7c1396a3f0f83c876e707",
@@ -227,6 +227,12 @@
    "sha256": "ae223a311e02194fe59a96d8b5d5e133e92f7f338ff1066356be08550899157f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
+   "declared": "spec-fidelity"
+  },
+  "### T87 (the owed core, `ask:449-T87-entry-owed`)": {
+   "sha256": "a96c31e8120700f857a434bd9c7a60d665f501348fd736059f0d73466a5e3626",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
   }
  },
@@ -5229,6 +5235,122 @@
      "why": "The ruling requires the census re-run at the cut and the door deleted with its last caller; a claim that the work cannot be done goes to the arbiter rather than being decided by the session."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T87 (the owed core, `ask:449-T87-entry-owed`)",
+    "### T87 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T87-rust-layout",
+     "summary": "The five files port as rust/gate/src/record/* behind l7r-gate record verbs; Makefile and entry-gate.sh run the binary; arbiter.rs calls the answer function directly.",
+     "class": "within",
+     "why": "FR-001 phase 3 and ask:449-T87-entry-owed ('T87's other five files port'); calling the answer function in-process is the port, not a change of what is decided."
+    },
+    {
+     "id": "T87-owed-door",
+     "summary": "Python callers not in the cut (bundle_owed, check_bundle, claims, claims_triage, modal_bundle, apply_edits, arbiter_bundle, depiction_replay, replay_owing, entry_owed, test-entry-gate.sh) reach the port through one logic-free door, scripts/owed_door.py, one process a run, deleted with its last caller and named at the phase-3 close.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:449-T77-replays places replay_owing and depiction_replay in phase 3 'with modal_owed ... no door'. The later ask:449-T87-entry-owed ruling limits T87's cut to the five files and itself routes callers 'through the door' (fingerprint and quotation_key 'go on the door as verbs', 'one door call returning both where a caller takes the pair from one read', a caller holding a Record 'joins the cut'), so the door for callers outside the five is implied by the controlling ruling. T77-replays' own words 'depiction_replay.py then porting onto the Rust modal_owed' put that port after modal_owed's, and its 'no door' reads, as in ask:449-T76-scope, as a move to phase 3 rather than a phase-2 door. FR-003 forbids the deleted modules being imported, and FR-006 forbids a process per call; the door follows the plan_door/T065 pattern. A second door file rather than T86's door is design, not fidelity."
+    },
+    {
+     "id": "T87-old-modals",
+     "summary": "replay_owing's _OLD_MODALS still imports the historic modal_owed from a worktree at an old commit.",
+     "class": "within",
+     "why": "The block leaves replay_owing's old side untouched and does not rule it; ask:449-T77-replays defers that side to a new ask at replay_owing's own port. It runs that commit's file, not a tracked file of this tree."
+    },
+    {
+     "id": "T87-fingerprint-verbs",
+     "summary": "fingerprint and quotation_key as door verbs keyed on root, rev and sources, working tree uncached; apply_edits takes both from one call; no caller mutates or holds a Record.",
+     "class": "within",
+     "why": "Restates ask:449-T87-entry-owed's ruling on those two names."
+    },
+    {
+     "id": "T87-entry-owed-start",
+     "summary": "entry_owed.py stays Python (phase 4) and is started by the Rust only when the entry-drift family is asked for, the base has commits, and a file in ENTRY_READS changed against the base (untracked included) or the engine is missing.",
+     "class": "within",
+     "why": "The T065 clause as ask:449-T87-entry-owed applies it: never started on a change holding no file it reads. 'Base has commits' and 'engine is missing' are guards that start it where the Python would have failed, not narrowings of when it is owed."
+    },
+    {
+     "id": "T87-entry-reads",
+     "summary": "ENTRY_READS = l7r/diagram/interactive/, l7r/diagram/__init__.py, research/, the four scripts it loads, scripts/gates/l7r-gate.sh and rust/gate/, built from a Python audit hook plus an inotify watch over the whole worktree on a real run.",
+     "class": "within",
+     "why": "The set is a superset of every file the labeled measurement saw opened, the permitted direction under the T065 clause (a wider trigger only starts it more often). Taken as given from its labeled method (observed 2026-11-10); the bundle cannot re-run it. A test pins each case."
+    },
+    {
+     "id": "T87-translation-by-command",
+     "summary": "quote_verbatim and style_prepass run as one python3 -c a run, only for notes files whose parse is not cached; apply_edits.reply_of goes by command because it is not T86's _reply_of; kinds_in on pylex.rs.",
+     "class": "within",
+     "why": "ask:449-T81-slices puts quote_verbatim in phase 4 reached by command; ask:449-T87-entry-owed sends style_prepass.glosses and apply_edits.reply_of by command, _reply_of only if the same function; one process a run is FR-006."
+    },
+    {
+     "id": "T87-merge-answers",
+     "summary": "record merge-answers replaces pull-queue.sh's jq merge and cp, JSON-equal to jq including key collisions, atomic rename; one writer of .git/record-checks.",
+     "class": "within",
+     "why": "Restates ask:449-T87-entry-owed."
+    },
+    {
+     "id": "T87-no-disk-cache",
+     "summary": "The Rust keeps parses in memory for a process and reads the translation cache once a run; no disk cache is ported, record_cache.py's included.",
+     "class": "within",
+     "why": "ask:449-T81-slices: each Rust caller keeps or drops caching on its own recorded measurement; the measurement is recorded with methods; FR-006's semantic-id cache is not touched. The Rust being slower than the Python's warm run is a cost observation, not a fidelity finding."
+    },
+    {
+     "id": "T87-arbiter-test-message",
+     "summary": "arbiter.rs's Rust tests use a test double for the fake record_owed.py, and expect 'record-owed said' in place of 'python3 said'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A changed case. The message names the source of a failure, and the python3 subprocess it named no longer exists once the ruled port runs the answer in Rust; keeping 'python3 said' would misname the failure, so the literal rule is impossible here. The words are the Rust arbiter's own, not the Python's hand-written words FR-002 binds."
+    },
+    {
+     "id": "T87-usage-text",
+     "summary": "Hand-written words kept; argparse-generated usage and traceback text unbound.",
+     "class": "within",
+     "why": "FR-002's ruled case ask:449-usage-text."
+    },
+    {
+     "id": "T87-diff-norm-caches",
+     "summary": "The differential does not compare translation-pairs.json or l7r-cache/.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by ask:449-T81-slices: each caller keeps or drops caching 'its differential matching either way', so cache state is not an output the differential binds."
+    },
+    {
+     "id": "T87-diff-norm-commit",
+     "summary": "The differential normalizes paths, utc and bypass-log file names, and the bypass-log commit, the two sides sitting on different HEADs.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible to match: a Python side at 7efe2ab04 and a Rust side at d43e55542 record different commits, paths and times; verdicts, exit, stdout and other written state stay compared."
+    },
+    {
+     "id": "T87-diff-norm-text",
+     "summary": "The differential excludes traceback text and argparse usage text.",
+     "class": "within",
+     "why": "FR-002's ruled case ask:449-usage-text unbinds exactly those."
+    },
+    {
+     "id": "T87-record-cache-stays",
+     "summary": "record_cache.py, which the task line deleted here, stays until its last importer goes.",
+     "class": "within",
+     "why": "ask:449-T81-slices: record_cache.py is deleted with its last Python caller and named at the phase-3 close."
+    },
+    {
+     "id": "T87-deletions-and-docs",
+     "summary": "The five .py deleted in the cut; docs naming them now name the Rust; 375-a3-record-tooling-before's command rewritten to make record-owed and re-run, the re-run kept beside the 2026-10-11 figure as its own dated field.",
+     "class": "within",
+     "why": "The GM's standing approval to delete ported Python; FR-001 requires the recorded command rewritten to the port and re-run as proof, which it is; keeping the old baseline beside it removes nothing."
+    },
+    {
+     "id": "T87-approach",
+     "summary": "Checklist part A: goal, order after T86 with entry_owed to phase 4, exits, census and gate runs as the done measure; review kept since T87 amends the spec.",
+     "class": "within",
+     "why": "Consistent with FR-001c (T87 is not straight and keeps its review) and the rulings cited."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -9033,85 +9155,118 @@
    "verdict": "CLEAR"
   },
   "T87": {
-   "section_sha256": "40678102185fbf340ba4a81c4522ec889054f144ad5d03d4e34116e2522a438f",
+   "section_sha256": "fd893e05531ecd46c1e4280ee376d8e7a8c6ad1ea46b2a464231e569e0bcd0ec",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T87-rust-layout",
-     "summary": "The five modules ported to rust/gate/src/record/*, reached as l7r-gate record <verb>; Makefile recipes and entry-gate.sh run the binary; arbiter.rs calls the answer function directly.",
+     "summary": "The five files port as rust/gate/src/record/* behind l7r-gate record verbs; Makefile and entry-gate.sh run the binary; arbiter.rs calls the answer function directly.",
      "class": "within",
-     "why": "FR-001 (every Python file replaced by Rust) and ask:449-T87-entry-owed ('T87's other five files port')."
+     "why": "FR-001 phase 3 and ask:449-T87-entry-owed ('T87's other five files port'); calling the answer function in-process is the port, not a change of what is decided."
     },
     {
      "id": "T87-owed-door",
-     "summary": "Python callers reach the port through one door, scripts/owed_door.py, no logic, one process a run, deleted with its last caller and named at the phase-3 close.",
-     "class": "within",
-     "why": "The ask:449-T86-door pattern, and ask:449-T87-entry-owed itself has entry_owed reach read_page, kinds_in and modal_file 'through the door'. ask:449-T77-replays' 'no door' does not bar depiction_replay/replay_owing from it: the same ruling has depiction_replay 'then porting onto the Rust modal_owed', which presupposes modal_owed ports first. _OLD_MODALS' historic import is not decided here; T77-replays defers the old side to a new ask at replay_owing's own port."
-    },
-    {
-     "id": "T87-fingerprint-quotation-key",
-     "summary": "fingerprint and quotation_key are door verbs keyed on root, rev and sources, working tree uncached, one call returning both for apply_edits; no caller mutates or holds a Record.",
-     "class": "within",
-     "why": "ask:449-T87-entry-owed verbatim."
-    },
-    {
-     "id": "T87-entry-owed-trigger",
-     "summary": "The Rust starts entry_owed.py only when the entry-drift family is asked, the base has commits, and a question page or a 'file it reads' changed (untracked included) or the engine is missing; 'files it reads' = the engine import closure (20 files) plus four scripts, as ENTRY_READS.",
+     "summary": "Python callers not in the cut (bundle_owed, check_bundle, claims, claims_triage, modal_bundle, apply_edits, arbiter_bundle, depiction_replay, replay_owing, entry_owed, test-entry-gate.sh) reach the port through one logic-free door, scripts/owed_door.py, one process a run, deleted with its last caller and named at the phase-3 close.",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The ruling's clause permits not starting it only on a change that 'holds no file it reads' - reads, not imports. The enumeration of what it reads was produced by importing sources, classes and compound_kinds and listing sys.modules: an import census, which cannot see a file opened at runtime (open(), a data or registry file, a file reached through modal_file or another door verb whose content feeds entry_owed's output). The block states no second method for runtime reads and does not show there are none, so the condition under which the Rust withholds the Python's verdict (FR-002, FR-003) rests on an unmeasured completeness claim, and a change touching only such a file would skip a run the clause requires. Within once the block names a census that sees runtime reads (e.g. sys.addaudithook 'open' events over a real entry_owed run and over the door verbs it calls, since ptrace is unavailable) and shows every file it finds is in ENTRY_READS or the question-page set, or adds them; the residual 'engine failing to import not seen when none of those files changed' is then exactly what the clause allows."
+     "ruling": "LEGITIMATE",
+     "why": "ask:449-T77-replays places replay_owing and depiction_replay in phase 3 'with modal_owed ... no door'. The later ask:449-T87-entry-owed ruling limits T87's cut to the five files and itself routes callers 'through the door' (fingerprint and quotation_key 'go on the door as verbs', 'one door call returning both where a caller takes the pair from one read', a caller holding a Record 'joins the cut'), so the door for callers outside the five is implied by the controlling ruling. T77-replays' own words 'depiction_replay.py then porting onto the Rust modal_owed' put that port after modal_owed's, and its 'no door' reads, as in ask:449-T76-scope, as a move to phase 3 rather than a phase-2 door. FR-003 forbids the deleted modules being imported, and FR-006 forbids a process per call; the door follows the plan_door/T065 pattern. A second door file rather than T86's door is design, not fidelity."
     },
     {
-     "id": "T87-python-by-command",
-     "summary": "quote_verbatim and style_prepass started as one python3 -c a run, only for notes files not already parsed in translation-pairs.json; apply_edits.reply_of by command (not the T86 door's _reply_of); kinds_in built on pylex.rs.",
+     "id": "T87-old-modals",
+     "summary": "replay_owing's _OLD_MODALS still imports the historic modal_owed from a worktree at an old commit.",
      "class": "within",
-     "why": "ask:449-T81-slices (quote_verbatim to phase 4, Rust callers reaching it by command) and ask:449-T87-entry-owed (style_prepass.glosses and apply_edits.reply_of by command, _reply_of the door verb only if the same function)."
+     "why": "The block leaves replay_owing's old side untouched and does not rule it; ask:449-T77-replays defers that side to a new ask at replay_owing's own port. It runs that commit's file, not a tracked file of this tree."
+    },
+    {
+     "id": "T87-fingerprint-verbs",
+     "summary": "fingerprint and quotation_key as door verbs keyed on root, rev and sources, working tree uncached; apply_edits takes both from one call; no caller mutates or holds a Record.",
+     "class": "within",
+     "why": "Restates ask:449-T87-entry-owed's ruling on those two names."
+    },
+    {
+     "id": "T87-entry-owed-start",
+     "summary": "entry_owed.py stays Python (phase 4) and is started by the Rust only when the entry-drift family is asked for, the base has commits, and a file in ENTRY_READS changed against the base (untracked included) or the engine is missing.",
+     "class": "within",
+     "why": "The T065 clause as ask:449-T87-entry-owed applies it: never started on a change holding no file it reads. 'Base has commits' and 'engine is missing' are guards that start it where the Python would have failed, not narrowings of when it is owed."
+    },
+    {
+     "id": "T87-entry-reads",
+     "summary": "ENTRY_READS = l7r/diagram/interactive/, l7r/diagram/__init__.py, research/, the four scripts it loads, scripts/gates/l7r-gate.sh and rust/gate/, built from a Python audit hook plus an inotify watch over the whole worktree on a real run.",
+     "class": "within",
+     "why": "The set is a superset of every file the labeled measurement saw opened, the permitted direction under the T065 clause (a wider trigger only starts it more often). Taken as given from its labeled method (observed 2026-11-10); the bundle cannot re-run it. A test pins each case."
+    },
+    {
+     "id": "T87-translation-by-command",
+     "summary": "quote_verbatim and style_prepass run as one python3 -c a run, only for notes files whose parse is not cached; apply_edits.reply_of goes by command because it is not T86's _reply_of; kinds_in on pylex.rs.",
+     "class": "within",
+     "why": "ask:449-T81-slices puts quote_verbatim in phase 4 reached by command; ask:449-T87-entry-owed sends style_prepass.glosses and apply_edits.reply_of by command, _reply_of only if the same function; one process a run is FR-006."
     },
     {
      "id": "T87-merge-answers",
-     "summary": "record merge-answers replaces pull-queue.sh's jq merge and cp, JSON-equal to jq including key collisions, atomic rename; one writer of .git/record-checks/*.json.",
+     "summary": "record merge-answers replaces pull-queue.sh's jq merge and cp, JSON-equal to jq including key collisions, atomic rename; one writer of .git/record-checks.",
      "class": "within",
-     "why": "ask:449-T87-entry-owed verbatim."
+     "why": "Restates ask:449-T87-entry-owed."
     },
     {
-     "id": "T87-caching",
-     "summary": "In-memory parse cache per process and the translation cache read once a run; no disk cache, record_cache.py's not ported, decided on recorded measurements (cold/warm through the door, callers not on any hook path).",
+     "id": "T87-no-disk-cache",
+     "summary": "The Rust keeps parses in memory for a process and reads the translation cache once a run; no disk cache is ported, record_cache.py's included.",
      "class": "within",
-     "why": "ask:449-T81-slices: 'each Rust caller keeps or drops caching on its own recorded measurement, its differential matching either way', and FR-006's kept cache of semantic file ids is untouched (record_cache holds parses). The figures carry one-shot labels; whether the bar is well chosen is design, not fidelity."
+     "why": "ask:449-T81-slices: each Rust caller keeps or drops caching on its own recorded measurement; the measurement is recorded with methods; FR-006's semantic-id cache is not touched. The Rust being slower than the Python's warm run is a cost observation, not a fidelity finding."
     },
     {
      "id": "T87-arbiter-test-message",
-     "summary": "The arbiter's Rust tests use a test double instead of a fake record_owed.py, expecting 'record-owed said' for 'python3 said'.",
-     "class": "within",
-     "why": "The arbiter is already Rust and now calls the function directly; this is its own wording about a source that no longer exists, not an output of the replaced Python that FR-002 binds."
+     "summary": "arbiter.rs's Rust tests use a test double for the fake record_owed.py, and expect 'record-owed said' in place of 'python3 said'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A changed case. The message names the source of a failure, and the python3 subprocess it named no longer exists once the ruled port runs the answer in Rust; keeping 'python3 said' would misname the failure, so the literal rule is impossible here. The words are the Rust arbiter's own, not the Python's hand-written words FR-002 binds."
     },
     {
      "id": "T87-usage-text",
      "summary": "Hand-written words kept; argparse-generated usage and traceback text unbound.",
      "class": "within",
-     "why": "FR-002 ruled case ask:449-usage-text."
+     "why": "FR-002's ruled case ask:449-usage-text."
     },
     {
-     "id": "T87-differential",
-     "summary": "87 cases against the Python, 0 differ; normalizations of paths, utc/bypass-log names, caches not compared, traceback/usage text, bypass-log commit across HEADs.",
+     "id": "T87-diff-norm-caches",
+     "summary": "The differential does not compare translation-pairs.json or l7r-cache/.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by ask:449-T81-slices: each caller keeps or drops caching 'its differential matching either way', so cache state is not an output the differential binds."
+    },
+    {
+     "id": "T87-diff-norm-commit",
+     "summary": "The differential normalizes paths, utc and bypass-log file names, and the bypass-log commit, the two sides sitting on different HEADs.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible to match: a Python side at 7efe2ab04 and a Rust side at d43e55542 record different commits, paths and times; verdicts, exit, stdout and other written state stay compared."
+    },
+    {
+     "id": "T87-diff-norm-text",
+     "summary": "The differential excludes traceback text and argparse usage text.",
      "class": "within",
-     "why": "FR-002 differential; cache state excluded per ask:449-T81-slices' 'its differential matching either way'; text exclusions per ask:449-usage-text; the remaining normalizations are environment, not outputs."
+     "why": "FR-002's ruled case ask:449-usage-text unbinds exactly those."
     },
     {
      "id": "T87-record-cache-stays",
-     "summary": "record_cache.py, which the task line deleted here, stays while memo_check.py, claims.py and entry_owed.py import it.",
+     "summary": "record_cache.py, which the task line deleted here, stays until its last importer goes.",
      "class": "within",
-     "why": "ask:449-T81-slices: deleted with its last Python caller, carrying the T065 clause, named at the phase-3 close if present."
+     "why": "ask:449-T81-slices: record_cache.py is deleted with its last Python caller and named at the phase-3 close."
     },
     {
-     "id": "T87-deletions-docs-measurement",
-     "summary": "The five .py deleted in the cut, docs naming them renamed to the Rust; 375-a3-record-tooling-before's command rewritten to make record-owed and re-run, the re-run kept beside the 2026-10-11 baseline as its own dated field.",
+     "id": "T87-deletions-and-docs",
+     "summary": "The five .py deleted in the cut; docs naming them now name the Rust; 375-a3-record-tooling-before's command rewritten to make record-owed and re-run, the re-run kept beside the 2026-10-11 figure as its own dated field.",
      "class": "within",
-     "why": "The GM's standing approval of 2026-11-10 (quoted in ask:449-T86-door); FR-001 requires a recorded measurement that runs a ported file to be rewritten to the port in the porting commit and re-run, which this now does; keeping the old baseline beside it removes nothing the requirement asks for."
+     "why": "The GM's standing approval to delete ported Python; FR-001 requires the recorded command rewritten to the port and re-run as proof, which it is; keeping the old baseline beside it removes nothing."
+    },
+    {
+     "id": "T87-approach",
+     "summary": "Checklist part A: goal, order after T86 with entry_owed to phase 4, exits, census and gate runs as the done measure; review kept since T87 amends the spec.",
+     "class": "within",
+     "why": "Consistent with FR-001c (T87 is not straight and keeps its review) and the rulings cited."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
