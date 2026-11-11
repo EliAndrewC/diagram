@@ -264,6 +264,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T94 (the landing's slow hook suites, FR-011)": {
+   "sha256": "793980d858f8d6d0292e2148b2851038b3531c53b135534539ba20ca17ab41c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T94 Approach (checklist part A)": {
+   "sha256": "d44129b63adc7b5c21ef399f8991550655d20f2479451c7a49ac9a77e9986b4a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5729,6 +5741,40 @@
      "why": "This is a measured resource decision and touches no requested behavior."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T94 (the landing's slow hook suites, FR-011)",
+    "### T94 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T94-guard-real-build",
+     "summary": "The guard suite's real-build case runs the clone's own wrapper on the clone's own tree into the wrapper's own target (the one make hooks-test's l7r-guard.sh trace/deps calls build), no longer deletes the kept binary to force a build, and judges that the kept binary answers; build/self-check/keep paths stay covered by cases 1-6 on the fake cargo.",
+     "class": "within",
+     "why": "FR-011's T94 clause and SC-006 ask that the landing's hook suites reuse what make done has already built rather than build it again; the GM 2026-11-11: 'being able to reuse things which have already been compiled ... is exactly what we should be doing'. This resolves the earlier BLOCKED text, which kept a forced rebuild (deleting the kept binary) of what the hooks-test wrapper call had already built and rested that on the premise 'make done builds no release guard binary'; the new block retracts the premise and names the shared target. Dropping the forced build is the very behavior SC-006 removes, not a narrowing of test coverage; a changed guard crate still gets its one real build."
+    },
+    {
+     "id": "T94-sleep-pipeline",
+     "summary": "The case's last check no longer pipes from sleep 30 (which the suite waited on every run) and judges in the suite's own shell, so its ok/bad reaches the counts (30 cases became 31).",
+     "class": "within",
+     "why": "Removes 30 s of waiting from every landing (the GM's 'the iteration loops do indeed need to be faster'); counting the check is enforcement of a check that already existed, not new scope."
+    },
+    {
+     "id": "T94-sync-with-main-left",
+     "summary": "The sync-with-main suite is left as it is: 19.3 s alone, parts already parallel, builds no crate; its landing time is shared CPU, and phase scheduling is deferred to the measurement after T93.",
+     "class": "within",
+     "why": "FR-011's T94 clause is about suites rebuilding what make done built; the trace shows this suite builds nothing, so nothing in that clause is left undone. Deferring the scheduling question matches the GM's 'then we will stop and measure again ... what the next most low-hanging fruit is'."
+    },
+    {
+     "id": "T94-every-suite-census",
+     "summary": "A warm-tree make hooks-test HOOKS_ALL=1 run of all 53 suites wrote no build output and made no new target directory; the suites reach cargo only through the named wrappers and shims (search space: git grep over tests/hooks), the guard suite's real-build case having been the one second target.",
+     "class": "within",
+     "why": "SC-006 covers all of make done's hook suites, not only the two slowest; this is the verification that the requested property holds across them, with both a name search and a mechanism census stated. Enforcement of the request, not unrequested scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -9987,44 +10033,36 @@
    "verdict": "CLEAR"
   },
   "T94": {
-   "section_sha256": "a214eab3dc3ba754470530141ab8992fe6967b5deab42389f45e7446d57b0f92",
+   "section_sha256": "01b330d5d903e072f84a852e799138849d12b9f11aefd361f06008355433da85",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T94-D1",
-     "summary": "The guard suite's real-build case builds the clone's own tree into the same -guard target instead of a copied rust/ tree (which cargo recompiled whole on every run); the kept binary is still removed so the wrapper still builds, self-checks and keeps one.",
+     "id": "T94-guard-real-build",
+     "summary": "The guard suite's real-build case runs the clone's own wrapper on the clone's own tree into the wrapper's own target (the one make hooks-test's l7r-guard.sh trace/deps calls build), no longer deletes the kept binary to force a build, and judges that the kept binary answers; build/self-check/keep paths stay covered by cases 1-6 on the fake cargo.",
      "class": "within",
-     "why": "This is FR-011's T94 clause put into practice: the case stops rebuilding the crate from scratch and reuses the build already in the target. Measured at 0.2 s for the case (observed 2026-11-11). The case still proves the wrapper against the real crate."
+     "why": "FR-011's T94 clause and SC-006 ask that the landing's hook suites reuse what make done has already built rather than build it again; the GM 2026-11-11: 'being able to reuse things which have already been compiled ... is exactly what we should be doing'. This resolves the earlier BLOCKED text, which kept a forced rebuild (deleting the kept binary) of what the hooks-test wrapper call had already built and rested that on the premise 'make done builds no release guard binary'; the new block retracts the premise and names the shared target. Dropping the forced build is the very behavior SC-006 removes, not a narrowing of test coverage; a changed guard crate still gets its one real build."
     },
     {
-     "id": "T94-D2",
-     "summary": "The same case's last check stops piping from `sleep 30` (the suite waited 30 s on every run) and stops judging in a subshell (its ok/bad never counted); it now uses a process substitution and judges in the suite's own shell, so 30 cases become 31.",
+     "id": "T94-sleep-pipeline",
+     "summary": "The case's last check no longer pipes from sleep 30 (which the suite waited on every run) and judges in the suite's own shell, so its ok/bad reaches the counts (30 cases became 31).",
      "class": "within",
-     "why": "It removes time spent on nothing, which serves the GM's 2026-11-11 'iteration loops ... need to be faster'. The check that used to be dropped silently now counts, so nothing is narrowed."
+     "why": "Removes 30 s of waiting from every landing (the GM's 'the iteration loops do indeed need to be faster'); counting the check is enforcement of a check that already existed, not new scope."
     },
     {
-     "id": "T94-D3",
-     "summary": "The sync-with-main suite is left as it is: 19.3 s alone, a traced run shows it builds no crate, and its time in a landing is shared CPU. How make done schedules its phases is deferred to the measurement after T93.",
+     "id": "T94-sync-with-main-left",
+     "summary": "The sync-with-main suite is left as it is: 19.3 s alone, parts already parallel, builds no crate; its landing time is shared CPU, and phase scheduling is deferred to the measurement after T93.",
      "class": "within",
-     "why": "FR-011's T94 clause is about suites building again what make done already built. A traced run (observed 2026-11-11) shows this suite builds nothing, so the clause has nothing to apply to here. Deferring the scheduling question follows the GM's own words: 'then we will stop and measure again ... what the next most low-hanging fruit is'."
+     "why": "FR-011's T94 clause is about suites rebuilding what make done built; the trace shows this suite builds nothing, so nothing in that clause is left undone. Deferring the scheduling question matches the GM's 'then we will stop and measure again ... what the next most low-hanging fruit is'."
     },
     {
-     "id": "T94-D4",
-     "summary": "Not done: having the suite reuse a release guard binary built by make done, because make done builds none; the suite keeps its one real build of the guard crate in its own target.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Nothing can be reused that was never built, so the literal reuse is physically impossible here. The purpose (no duplicated compile) is met anyway: when the crate is unchanged the build costs nothing (0.2 s, D1), and the one build left is the artifact the case exists to prove. Caveat: the premise 'make done builds no release guard binary' is stated without a method. If it is false, this ruling falls."
-    },
-    {
-     "id": "T94-D5",
-     "summary": "Scope: the task examines and changes only 'the two slowest suites' of the T82 landing's make done read. No census shows that the other hook suites (53 in HOOKS_ALL) build no crate make done already built.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "SC-006 covers every suite: 'make done's hook suites build no crate make done already built'. FR-011 says 'the landing's hook suites reuse what make done has already built'. Choosing the suites by wall time is a stand-in for asking which suites build a crate, and this stand-in can miss real cases. After T92 split the gate into crates, a suite that rebuilds one small crate in a fresh target can cost seconds and still not be among the two slowest. Covering all suites is not impossible, is not implied by the GM's words, and is needed for the purpose. To clear: add an enumeration with its search space stated, for example every cargo invocation, build wrapper call or CARGO_TARGET_DIR setting under tests/hooks/ and the scripts and Makefile targets they call, or a traced run of the whole hooks-test. It must show which suites build a crate and that each one reuses make done's or its own existing target. Fix any that do not."
+     "id": "T94-every-suite-census",
+     "summary": "A warm-tree make hooks-test HOOKS_ALL=1 run of all 53 suites wrote no build output and made no new target directory; the suites reach cargo only through the named wrappers and shims (search space: git grep over tests/hooks), the guard suite's real-build case having been the one second target.",
+     "class": "within",
+     "why": "SC-006 covers all of make done's hook suites, not only the two slowest; this is the verification that the requested property holds across them, with both a name search and a mechanism census stated. Enforcement of the request, not unrequested scope."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
