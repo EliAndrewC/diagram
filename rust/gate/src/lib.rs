@@ -3,8 +3,6 @@
 pub mod arbiter;
 pub mod checks_door;
 mod ci;
-mod measure;
-mod preflight;
 pub(crate) mod record;
 
 use std::path::{Path, PathBuf};
@@ -14,11 +12,10 @@ pub use l7r_gate_bundle::owed_door;
 pub use l7r_gate_checks::checks;
 pub use l7r_gate_claims::claims;
 pub use l7r_gate_cohort::{cohort, push, rustc};
+pub use l7r_gate_measure::{measure, preflight};
 pub use l7r_gate_plan::plan;
 pub use l7r_gate_reviews::reviews;
 pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
-#[cfg(test)]
-pub(crate) use l7r_gate_core::write_executable;
 
 /// `l7r-gate content-ids <path>...`: `<path> <id>` for each file (a tree's code ids, T062).
 fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {

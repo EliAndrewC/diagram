@@ -284,7 +284,8 @@ fn every_feature(root: &Path) -> Vec<PathBuf> {
 }
 
 /// `l7r-gate measure figures [specs/NNN-slug ...]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let named: Vec<PathBuf> = args
         .iter()
         .filter(|a| !a.starts_with('-'))

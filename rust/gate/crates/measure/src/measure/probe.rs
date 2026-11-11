@@ -22,7 +22,7 @@ static RECORD: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 /// How a probe reaches a command, so a test can answer for make.
-pub(crate) trait Runs {
+pub trait Runs {
     fn run(&self, cmd: &[String], dir: &Path) -> (i32, String);
 }
 
@@ -462,7 +462,8 @@ fn drive(args: &[String], root: &Path, h: &dyn Runs) -> crate::Reply {
 }
 
 /// `l7r-gate measure probe [--wt <worktree>] [--exitfirst] [--jobs <n>]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     drive(args, root, &Live)
 }
 

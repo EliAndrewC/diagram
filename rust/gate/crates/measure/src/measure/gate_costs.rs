@@ -121,7 +121,8 @@ fn points(green: &[Value]) -> Vec<(f64, f64)> {
 }
 
 /// `l7r-gate measure gate-costs [--since <utc>]`; `L7R_ROOT` is read by the caller as the root.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let since = args
         .windows(2)
         .find(|w| w[0] == "--since")

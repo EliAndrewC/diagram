@@ -438,7 +438,8 @@ fn run(args: &[String], h: &Host) -> crate::Reply {
 }
 
 /// `l7r-gate measure runstats ...`.
-pub(crate) fn cli(args: &[String]) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> crate::Reply {
     run(
         args,
         &Host {

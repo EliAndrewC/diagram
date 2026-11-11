@@ -43,7 +43,7 @@ const MAP_OUTPUTS: [&str; 5] = [".json", ".png", ".svg", ".html", ".webp"];
 const USAGE_LOG_TOOL: &str = "preflight";
 
 /// What the phase starts.
-pub(crate) struct Tools {
+pub struct Tools {
     pub make: String,
     pub python: String,
 }
@@ -82,7 +82,7 @@ fn hash_paths(root: &Path, paths: &[String]) -> Option<Vec<String>> {
 }
 
 /// HEAD and every tracked file that differs from it, by content hash; each blob is kept, so a later check can read what the file held (405 T41, D15).
-pub(crate) fn tree(root: &Path) -> BTreeMap<String, String> {
+pub fn tree(root: &Path) -> BTreeMap<String, String> {
     let mut out = BTreeMap::new();
     out.insert(
         "HEAD".to_owned(),
@@ -101,7 +101,8 @@ pub(crate) fn tree(root: &Path) -> BTreeMap<String, String> {
     out
 }
 
-pub(crate) fn tree_moved(
+#[must_use]
+pub fn tree_moved(
     before: &BTreeMap<String, String>,
     after: &BTreeMap<String, String>,
 ) -> Vec<String> {
@@ -222,7 +223,8 @@ fn plainly_unseen(change: &Change, active: &BTreeSet<String>) -> Option<bool> {
 
 /// The paths of `changes` the gate does not see (405 T41, D15): the same bytes; one of the claims round's records; or a `.py` file outside the byte-hashed
 /// areas whose semantic id and statement lines are unchanged. The Python is started at most once, and only when such a file changed.
-pub(crate) fn unseen(root: &Path, tools: &Tools, changes: &[Change]) -> BTreeSet<String> {
+#[must_use]
+pub fn unseen(root: &Path, tools: &Tools, changes: &[Change]) -> BTreeSet<String> {
     let active = active_records(root);
     let mut out = BTreeSet::new();
     let mut undecided = Vec::new();
@@ -247,7 +249,7 @@ pub(crate) fn unseen(root: &Path, tools: &Tools, changes: &[Change]) -> BTreeSet
 }
 
 /// `tree_moved`, less every change the gate does not see, across a HEAD move too. "HEAD" stays when its move cannot be read.
-pub(crate) fn seen_moves(
+pub fn seen_moves(
     root: &Path,
     tools: &Tools,
     before: &BTreeMap<String, String>,
@@ -283,7 +285,8 @@ pub(crate) fn seen_moves(
 }
 
 /// The map outputs of every pool map the gate's own run rolled, by its roll census (feature 385 T87, plan D108).
-pub(crate) fn rolled_outputs(root: &Path, census: &Path) -> BTreeSet<String> {
+#[must_use]
+pub fn rolled_outputs(root: &Path, census: &Path) -> BTreeSet<String> {
     let mut out = BTreeSet::new();
     let top = root;
     for line in std::fs::read_to_string(census).unwrap_or_default().lines() {
@@ -317,7 +320,8 @@ pub(crate) fn rolled_outputs(root: &Path, census: &Path) -> BTreeSet<String> {
 }
 
 /// Probe test files a diagnosis left in the tree (`tests/**/test_zz_probe*.py`): each runs in the full suite and can turn it red on its own.
-pub(crate) fn stray_probes(root: &Path) -> Vec<String> {
+#[must_use]
+pub fn stray_probes(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
     let mut todo = vec![root.join("tests")];
     while let Some(dir) = todo.pop() {
@@ -349,7 +353,7 @@ pub(crate) fn stray_probes(root: &Path) -> Vec<String> {
 
 /// The flags of a run.
 #[derive(Default)]
-pub(crate) struct Asked {
+pub struct Asked {
     pub root: String,
     pub skip_quick: bool,
     pub workers: String,
@@ -361,7 +365,8 @@ pub(crate) struct Asked {
     pub quiet: bool,
 }
 
-pub(crate) fn parse(args: &[String]) -> Asked {
+#[must_use]
+pub fn parse(args: &[String]) -> Asked {
     let mut a = Asked {
         root: ".".to_owned(),
         workers: std::env::var("XDIST_WORKERS").unwrap_or_else(|_| "4".to_owned()),
@@ -556,7 +561,7 @@ fn phase(root: &Path, tools: &Tools, a: &Asked, say: &mut dyn std::io::Write) ->
 }
 
 /// One run; its exit.
-pub(crate) fn run(a: &Asked, tools: &Tools, say: &mut dyn std::io::Write) -> i32 {
+pub fn run(a: &Asked, tools: &Tools, say: &mut dyn std::io::Write) -> i32 {
     let root = std::fs::canonicalize(&a.root).unwrap_or_else(|_| PathBuf::from(&a.root));
     let code = if !a.would_write.is_empty() && !a.tree_check.is_empty() {
         would_write(&root, tools, a)
@@ -577,7 +582,8 @@ pub(crate) fn run(a: &Asked, tools: &Tools, say: &mut dyn std::io::Write) -> i32
 }
 
 /// `l7r-gate preflight ...`; the output is live, a phase taking minutes.
-pub(crate) fn cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
     let tools = Tools {
         make: "make".to_owned(),
         python: "python3".to_owned(),

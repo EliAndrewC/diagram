@@ -16,10 +16,11 @@ use super::reply;
 use crate::plan::pretty;
 
 /// A row's name and its command; none when the clone does not have what the row needs.
-pub(crate) type Timed = (String, Option<Command>);
+pub type Timed = (String, Option<Command>);
 
 /// Each command's last run: its wall time in hundredths of a second, its exit; a row with no command is skipped and named.
-pub(crate) fn measure(rows: Vec<Timed>, runs: usize) -> Vec<Value> {
+#[must_use]
+pub fn measure(rows: Vec<Timed>, runs: usize) -> Vec<Value> {
     let mut out = Vec::new();
     for (check, command) in rows {
         let Some(mut command) = command else {
@@ -46,14 +47,15 @@ fn hundredths(x: f64) -> f64 {
 }
 
 /// The one-minute load average, from the file every Linux keeps it in.
-pub(crate) fn load(text: &str) -> f64 {
+#[must_use]
+pub fn load(text: &str) -> f64 {
     text.split_whitespace()
         .next()
         .and_then(|w| w.parse().ok())
         .unwrap_or(0.0)
 }
 
-pub(crate) fn report(rows: &[Value], load_now: f64) -> (String, f64) {
+pub fn report(rows: &[Value], load_now: f64) -> (String, f64) {
     let mut out = String::new();
     let mut total = 0.0;
     for r in rows {
@@ -84,7 +86,7 @@ fn flag<'a>(args: &'a [String], name: &str) -> Option<&'a str> {
 }
 
 /// `l7r-gate measure push-check-times [--root <clone>] [--runs N] [--json <out>]`.
-pub(crate) fn cli(args: &[String], root: &Path, tree: &Path) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path, tree: &Path) -> crate::Reply {
     let Ok(at) = std::fs::canonicalize(flag(args, "--root").map_or(root, Path::new)) else {
         return reply(
             String::new(),

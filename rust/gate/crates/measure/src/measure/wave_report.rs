@@ -323,7 +323,8 @@ fn newest_run(root: &Path) -> Option<PathBuf> {
 }
 
 /// `l7r-gate measure wave-report [--run D] [--root D]`.
-pub(crate) fn cli(args: &[String], home: &Path) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], home: &Path) -> crate::Reply {
     let flag = |name: &str| {
         args.windows(2)
             .find(|w| w[0] == name)

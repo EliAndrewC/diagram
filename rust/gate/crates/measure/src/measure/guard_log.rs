@@ -130,7 +130,7 @@ fn flag<'a>(args: &'a [String], name: &str) -> Option<&'a str> {
 }
 
 /// `l7r-gate measure guard-log [--guard G] [--since D] [--event E] [--full] [--dir D]`.
-pub(crate) fn cli(args: &[String], home: &Path) -> crate::Reply {
+pub fn cli(args: &[String], home: &Path) -> crate::Reply {
     let event = flag(args, "--event");
     if event.is_some_and(|e| !EVENTS.contains(&e)) {
         return reply(

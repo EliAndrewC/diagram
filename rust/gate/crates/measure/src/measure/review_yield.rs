@@ -205,7 +205,7 @@ fn render(t: &[(String, Value)], since: &str, n: usize) -> String {
 }
 
 /// `l7r-gate measure review-yield [--since D] [--ledger F] [--record F --key K]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let flag = |name: &str| {
         args.windows(2)
             .find(|w| w[0] == name)

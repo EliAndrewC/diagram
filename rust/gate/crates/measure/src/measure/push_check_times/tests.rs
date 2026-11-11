@@ -35,7 +35,7 @@ fn each_row_reports_its_last_run_and_its_exit() {
 fn a_row_that_cannot_start_reports_no_exit_and_no_run_count_still_runs_once() {
     let touched = crate::checks::scratch("pct-once").join("t");
     let body = format!("echo x >> {}", touched.display());
-    measure(vec![("once".to_owned(), Some(sh(&body)))], 0);
+    let _ = measure(vec![("once".to_owned(), Some(sh(&body)))], 0);
     assert_eq!(
         std::fs::read_to_string(&touched).unwrap().lines().count(),
         1

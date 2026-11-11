@@ -138,7 +138,7 @@ fn render(seeds: &[&Value]) -> String {
 }
 
 /// `l7r-gate measure fresh-tally [--log D] [--commit SHA] [--since UTC]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let flag = |name: &str| {
         args.windows(2)
             .find(|w| w[0] == name)

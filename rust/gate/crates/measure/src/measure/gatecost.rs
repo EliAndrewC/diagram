@@ -57,7 +57,8 @@ fn runs(root: &Path, target: &str, scope: Option<&str>, cache: Option<&str>) -> 
     clippy::cast_possible_truncation,
     reason = "Python's int() of a duration in seconds"
 )]
-pub(crate) fn median_seconds(
+#[must_use]
+pub fn median_seconds(
     root: &Path,
     target: &str,
     scope: Option<&str>,
@@ -74,7 +75,8 @@ pub(crate) fn median_seconds(
 }
 
 /// How many recent green runs the class holds: what the ratchet's below-sample rule reads.
-pub(crate) fn class_count(
+#[must_use]
+pub fn class_count(
     root: &Path,
     target: &str,
     scope: Option<&str>,
@@ -84,7 +86,7 @@ pub(crate) fn class_count(
 }
 
 /// `l7r-gate measure gatecost <target> [scope] [cache] | --count <target> [scope] [cache]`; nothing printed when the log cannot answer.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let (count, words) = match args.first().map(String::as_str) {
         Some("--count") => (true, &args[1..]),
         _ => (false, args),

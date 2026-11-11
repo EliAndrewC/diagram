@@ -11,7 +11,7 @@ use super::reply;
 use crate::cohort::git;
 
 /// Pool manifests (`pool/**/*.json`) whose working-tree content differs from HEAD, untracked ones included.
-pub(crate) fn moved(root: &Path, only: Option<&str>) -> Vec<String> {
+pub fn moved(root: &Path, only: Option<&str>) -> Vec<String> {
     let spec = only.map_or_else(
         || "pool".to_owned(),
         |o| {
@@ -40,7 +40,7 @@ fn flag<'a>(args: &'a [String], name: &str) -> Option<&'a str> {
 }
 
 /// `l7r-gate measure maps-moved [--root DIR] [--only <gen or manifest path>]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let only = flag(args, "--only");
     let hits = moved(flag(args, "--root").map_or(root, Path::new), only);
     let mut out = String::new();

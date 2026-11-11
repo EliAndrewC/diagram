@@ -3,24 +3,24 @@
 
 use std::path::Path;
 
-pub(crate) mod figures;
-pub(crate) mod fresh_tally;
-pub(crate) mod gate_costs;
-pub(crate) mod gatecost;
-pub(crate) mod guard_log;
-pub(crate) mod maps_moved;
-pub(crate) mod probe;
-pub(crate) mod push_check_times;
-pub(crate) mod review_yield;
-pub(crate) mod runstats;
-pub(crate) mod wave_report;
+pub mod figures;
+pub mod fresh_tally;
+pub mod gate_costs;
+pub mod gatecost;
+pub mod guard_log;
+pub mod maps_moved;
+pub mod probe;
+pub mod push_check_times;
+pub mod review_yield;
+pub mod runstats;
+pub mod wave_report;
 
 pub use l7r_gate_tree::measure::*;
 pub use l7r_gate_trials::measure::*;
 pub use l7r_gate_trials::measure::popup_rounds;
 
 /// `l7r-gate measure ...`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let rest = args.get(1..).unwrap_or(&[]);
     match args.first().map(String::as_str) {
         Some("figures") => figures::cli(rest, root),
