@@ -13,7 +13,10 @@ use serde_json::{json, Map, Value};
 
 use super::glyph::{active_feature, entry, feature_start, CLOCK, GLYPH_HOUR_S, PAIRING};
 use super::owed::all_owed;
-use super::{as_float, git, gitdir, int_of, iso_seconds, local_time, now, py_path, read_object, reply, write_json};
+use super::{
+    as_float, git, gitdir, int_of, iso_seconds, local_time, now, py_path, read_object, reply,
+    write_json,
+};
 use crate::record::args::{parse_with, Spec};
 use crate::record::bundle::py_repr;
 use crate::Reply;
@@ -28,7 +31,10 @@ const ADMITTED: &str = "checkpoint-admitted";
 
 fn clock(root: &Path) -> (Option<PathBuf>, Map<String, Value>) {
     let path = gitdir(root).map(|g| g.join(CLOCK));
-    let clock = path.as_deref().map(|p| read_object(Some(p))).unwrap_or_default();
+    let clock = path
+        .as_deref()
+        .map(|p| read_object(Some(p)))
+        .unwrap_or_default();
     (path, clock)
 }
 
@@ -51,17 +57,23 @@ pub(crate) fn suspended(root: &Path) -> Map<String, Value> {
 /// Set the switch: `off` suspends the step-back, `on` resumes it; a reason of two words or more, who and when kept.
 fn throw(root: &Path, state: &str, why: &str, at: f64) -> Result<Map<String, Value>, String> {
     if !matches!(state, "on" | "off") || why.split_whitespace().count() < 2 {
-        return Err("make step-back-off|step-back-on REASON=\"<why, two words or more>\"".to_owned());
+        return Err(
+            "make step-back-off|step-back-on REASON=\"<why, two words or more>\"".to_owned(),
+        );
     }
-    let who = git(root, &["config", "user.name"]).filter(|w| !w.is_empty()).unwrap_or_else(|| "unknown".to_owned());
+    let named = git(root, &["config", "user.name"]).filter(|w| !w.is_empty());
+    let person = named.as_deref().unwrap_or("unknown");
     let secs = int_of(at.floor());
     #[expect(clippy::cast_sign_loss, reason = "the clock is past the epoch")]
     let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs as u64);
     let mut sw = Map::new();
     sw.insert("state".to_owned(), json!(state));
     sw.insert("why".to_owned(), json!(why.trim()));
-    sw.insert("who".to_owned(), json!(who));
-    sw.insert("utc".to_owned(), json!(format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")));
+    sw.insert("who".to_owned(), json!(person));
+    sw.insert(
+        "utc".to_owned(),
+        json!(format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")),
+    );
     let _ = std::fs::create_dir_all(root.join("dev"));
     let _ = write_json(&root.join(SWITCH), &Value::Object(sw.clone()));
     Ok(sw)
@@ -69,7 +81,8 @@ fn throw(root: &Path, state: &str, why: &str, at: f64) -> Result<Map<String, Val
 
 /// The feature's event log, each event with its time; an unreadable line skipped.
 fn events(root: &Path, feature: &str) -> Vec<(f64, Value)> {
-    let Some(path) = gitdir(root).map(|g| g.join("l7r-events").join(format!("{feature}.jsonl"))) else {
+    let Some(path) = gitdir(root).map(|g| g.join("l7r-events").join(format!("{feature}.jsonl")))
+    else {
         return Vec::new();
     };
     let text = std::fs::read_to_string(path).unwrap_or_default();
@@ -129,7 +142,11 @@ fn idle(root: &Path, feature: &str, since: f64, at: f64) -> f64 {
 pub(crate) fn state(root: &Path, at: Option<f64>) -> Map<String, Value> {
     let at = at.unwrap_or_else(now);
     let feature = active_feature(root);
-    let start = if feature.is_empty() { None } else { feature_start(root, &feature) };
+    let start = if feature.is_empty() {
+        None
+    } else {
+        feature_start(root, &feature)
+    };
     let mut out = Map::new();
     out.insert("feature".to_owned(), json!(feature));
     let Some(start) = start else {
@@ -142,8 +159,13 @@ pub(crate) fn state(root: &Path, at: Option<f64>) -> Map<String, Value> {
     };
     let since = start.max(as_float(mine.get("checkpoint_at")));
     let off = !suspended(root).is_empty();
-    let due = !off && at - since - gm_waits(root, &feature, since, at) - idle(root, &feature, since, at) >= GLYPH_HOUR_S;
-    let hour = mine.get("checkpoints").map_or(0, |v| int_of(as_float(Some(v)))) + 1;
+    let due = !off
+        && at - since - gm_waits(root, &feature, since, at) - idle(root, &feature, since, at)
+            >= GLYPH_HOUR_S;
+    let hour = mine
+        .get("checkpoints")
+        .map_or(0, |v| int_of(as_float(Some(v))))
+        + 1;
     let open = if off {
         String::new()
     } else {
@@ -157,24 +179,42 @@ pub(crate) fn state(root: &Path, at: Option<f64>) -> Map<String, Value> {
     out.insert("since".to_owned(), json!(since));
     out.insert("hour".to_owned(), json!(hour));
     out.insert("open".to_owned(), json!(open));
-    out.insert("units".to_owned(), mine.get("checkpoint_units").filter(|v| crate::cohort::truthy(v)).cloned().unwrap_or_else(|| json!([])));
-    out.insert("units_since".to_owned(), json!(as_float(mine.get("units_since"))));
+    out.insert(
+        "units".to_owned(),
+        mine.get("checkpoint_units")
+            .filter(|v| crate::cohort::truthy(v))
+            .cloned()
+            .unwrap_or_else(|| json!([])),
+    );
+    out.insert(
+        "units_since".to_owned(),
+        json!(as_float(mine.get("units_since"))),
+    );
     out
 }
 
 /// Why the hour cannot be opened: the session exported one feature and `.specify/feature.json` names another; "" when they agree.
-fn misaligned(root: &Path) -> String {
-    let named = std::env::var("SPECIFY_FEATURE").unwrap_or_default();
-    let named = named.trim().trim_matches('/');
+fn misaligned(root: &Path, exported: &str) -> String {
+    let named = exported.trim().trim_matches('/');
     let Some(pointer) = std::fs::read_to_string(root.join(".specify/feature.json"))
         .ok()
         .and_then(|t| serde_json::from_str::<Value>(&t).ok())
     else {
         return String::new();
     };
-    let fd = pointer.get("feature_directory").map(crate::record::bundle::py_str).unwrap_or_default();
-    let held = py_path(&fd).file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
-    if !named.is_empty() && root.join("specs").join(named).is_dir() && !held.is_empty() && held != named {
+    let fd = pointer
+        .get("feature_directory")
+        .map(crate::record::bundle::py_str)
+        .unwrap_or_default();
+    let held = py_path(&fd)
+        .file_name()
+        .map(|n| n.to_string_lossy().into_owned())
+        .unwrap_or_default();
+    if !named.is_empty()
+        && root.join("specs").join(named).is_dir()
+        && !held.is_empty()
+        && held != named
+    {
         let number = named.split('-').next().unwrap_or(named);
         return format!(".specify/feature.json names {held} but this session works {named}: run `make use-feature F={number}` first");
     }
@@ -186,8 +226,8 @@ fn text(m: &Map<String, Value>, k: &str) -> String {
 }
 
 /// `make step-back`: the hour's trigger, opened once - its time and the units owed then kept with it; refused before the hour is up.
-fn open_checkpoint(root: &Path, at: f64) -> Result<String, String> {
-    let why = misaligned(root);
+fn open_checkpoint(root: &Path, at: f64, exported: &str) -> Result<String, String> {
+    let why = misaligned(root, exported);
     if !why.is_empty() {
         return Err(why);
     }
@@ -199,7 +239,10 @@ fn open_checkpoint(root: &Path, at: f64) -> Result<String, String> {
     let due = st.get("due") == Some(&json!(true));
     if st.get("suspended") == Some(&json!(true)) && !due {
         let sw = suspended(root);
-        let say = |k: &str| sw.get(k).map_or_else(|| "None".to_owned(), crate::record::bundle::py_str);
+        let say = |k: &str| {
+            sw.get(k)
+                .map_or_else(|| "None".to_owned(), crate::record::bundle::py_str)
+        };
         return Err(format!(
             "the hourly step-back is suspended ({}, {}: {}) - make step-back-on REASON=\"<why>\" resumes it (feature 405 T43)",
             say("who"),
@@ -210,15 +253,27 @@ fn open_checkpoint(root: &Path, at: f64) -> Result<String, String> {
     if !due {
         let when = st.get("since").and_then(Value::as_f64).map_or_else(
             || "never (no feature or event log)".to_owned(),
-            |since| format!("{}, in {} s", local_time(since + GLYPH_HOUR_S, "%H:%M:%S"), int_of(since + GLYPH_HOUR_S - at)),
+            |since| {
+                format!(
+                    "{}, in {} s",
+                    local_time(since + GLYPH_HOUR_S, "%H:%M:%S"),
+                    int_of(since + GLYPH_HOUR_S - at)
+                )
+            },
         );
-        return Err(format!("the checkpoint is not due - the feature's next hour is up at {when}"));
+        return Err(format!(
+            "the checkpoint is not due - the feature's next hour is up at {when}"
+        ));
     }
     let feature = text(&st, "feature");
     let hour = st.get("hour").and_then(Value::as_i64).unwrap_or(1);
     let trigger = format!("hour:{feature}@{hour}");
     let (path, mut clock) = clock(root);
-    let units: Vec<String> = all_owed(root).1.iter().map(super::owed::Unit::slug).collect();
+    let units: Vec<String> = all_owed(root)
+        .1
+        .iter()
+        .map(super::owed::Unit::slug)
+        .collect();
     let mine = entry(&mut clock, &feature);
     let stamp = int_of(at);
     mine.insert("checkpoint_open_at".to_owned(), json!(stamp));
@@ -249,7 +304,9 @@ pub fn close_checkpoint(root: &Path, trigger: &str) {
             .shift_remove("checkpoint_open_at")
             .unwrap_or_else(|| json!(int_of(now())));
         mine.insert("checkpoint_at".to_owned(), opened);
-        let n = mine.get("checkpoints").map_or(0, |v| int_of(as_float(Some(v))));
+        let n = mine
+            .get("checkpoints")
+            .map_or(0, |v| int_of(as_float(Some(v))));
         mine.insert("checkpoints".to_owned(), json!(n + 1));
         mine.shift_remove("checkpoint_trigger");
     }
@@ -269,14 +326,22 @@ fn current_key(root: &Path) -> String {
 }
 
 fn nowhere(root: &Path) -> PathBuf {
-    gitdir(root).unwrap_or_else(|| PathBuf::from("/nonexistent"))
+    gitdir(root).unwrap_or(PathBuf::from("/nonexistent"))
 }
 
 /// Does the unit's verdict record answer it at `key` - PASS or NEEDS-WORK at the engine key the tree has now?
 fn answered(root: &Path, slug: &str, key: &str) -> bool {
-    let rec = read_object(Some(&nowhere(root).join("review-verdicts").join(format!("{slug}.json"))));
+    let rec = read_object(Some(
+        &nowhere(root)
+            .join("review-verdicts")
+            .join(format!("{slug}.json")),
+    ));
     let verdict = rec.get("verdict").and_then(Value::as_str).unwrap_or("");
-    let at = rec.get("engine_key").filter(|v| crate::cohort::truthy(v)).map(crate::record::bundle::py_str).unwrap_or_default();
+    let at = rec
+        .get("engine_key")
+        .filter(|v| crate::cohort::truthy(v))
+        .map(crate::record::bundle::py_str)
+        .unwrap_or_default();
     !key.is_empty() && matches!(verdict, "PASS" | "NEEDS-WORK") && at == key
 }
 
@@ -285,27 +350,43 @@ fn undispatched(root: &Path, units: &[String], since: f64) -> Vec<String> {
     if units.is_empty() {
         return Vec::new();
     }
-    let owed_now: Vec<String> = all_owed(root).1.iter().map(super::owed::Unit::slug).collect();
+    let owed_now: Vec<String> = all_owed(root)
+        .1
+        .iter()
+        .map(super::owed::Unit::slug)
+        .collect();
     let pairing = read_object(Some(&nowhere(root).join(PAIRING)));
     let disp = pairing.get("dispatched").cloned().unwrap_or(Value::Null);
     let at = |s: &str| as_float(disp.get(s).and_then(|d| d.get("at")));
-    let left: Vec<String> = units.iter().filter(|s| owed_now.contains(s) && at(s) < since).cloned().collect();
+    let left: Vec<String> = units
+        .iter()
+        .filter(|s| owed_now.contains(s) && at(s) < since)
+        .cloned()
+        .collect();
     if left.is_empty() {
         return Vec::new();
     }
     let key = current_key(root);
-    left.into_iter().filter(|s| !answered(root, s, &key)).collect()
+    left.into_iter()
+        .filter(|s| !answered(root, s, &key))
+        .collect()
 }
 
 /// The refusal `make tick` prints while the checkpoint holds it, or "".
 pub(crate) fn hold(root: &Path, at: Option<f64>) -> String {
     let st = state(root, at);
-    if text(&st, "feature").is_empty() || !st.contains_key("since") || st.get("suspended") == Some(&json!(true)) {
+    if text(&st, "feature").is_empty()
+        || !st.contains_key("since")
+        || st.get("suspended") == Some(&json!(true))
+    {
         return String::new();
     }
     let open = text(&st, "open");
     if !open.is_empty() {
-        let bundle = open.split_once(':').map_or("", |(_, b)| b).replace('@', "-");
+        let bundle = open
+            .split_once(':')
+            .map_or("", |(_, b)| b)
+            .replace('@', "-");
         return format!(
             "the feature's hourly checkpoint is open ({open}) and owes the round arbiter's ruling: dispatch `round-arbiter` on the bundle \
              `make step-back` built (/tmp/l7r-check/step-back-{bundle}/MANIFEST.md); it records the ruling with make arbiter-ruled (feature 383)"
@@ -361,12 +442,21 @@ fn due(root: &Path, tool: &str, atype: &str, at: f64) -> String {
 }
 
 fn usage(why: &str) -> Reply {
-    reply(String::new(), format!("l7r-gate reviews checkpoint: {why}\n"), 2)
+    reply(
+        String::new(),
+        format!("l7r-gate reviews checkpoint: {why}\n"),
+        2,
+    )
 }
 
 /// `checkpoint.py`'s command line.
 pub(crate) fn cli(args: &[String]) -> Reply {
-    let specs = [Spec::value("--why"), Spec::value("--root"), Spec::value("--tool"), Spec::value("--agent")];
+    let specs = [
+        Spec::value("--why"),
+        Spec::value("--root"),
+        Spec::value("--tool"),
+        Spec::value("--agent"),
+    ];
     let p = match parse_with(args, &specs, 2) {
         Ok(p) => p,
         Err(why) => return usage(&why),
@@ -379,29 +469,54 @@ pub(crate) fn cli(args: &[String]) -> Reply {
     }
     let state_word = p.positional.get(1).map_or("", String::as_str);
     if !state_word.is_empty() && !matches!(state_word, "on" | "off") {
-        return usage(&format!("argument state: invalid choice: {}", py_repr(state_word)));
+        return usage(&format!(
+            "argument state: invalid choice: {}",
+            py_repr(state_word)
+        ));
     }
     let asked = p.text("--root", ".");
     let root = git(&py_path(asked), &["rev-parse", "--show-toplevel"])
         .filter(|t| !t.is_empty())
         .map_or_else(|| py_path(asked), PathBuf::from);
-    let lines = |s: String, code: i32| if s.is_empty() { reply(String::new(), String::new(), 0) } else { reply(s + "\n", String::new(), code) };
+    let lines = |s: String, code: i32| {
+        if s.is_empty() {
+            reply(String::new(), String::new(), 0)
+        } else {
+            reply(s + "\n", String::new(), code)
+        }
+    };
     match verb {
         "switch" => match throw(&root, state_word, p.text("--why", ""), now()) {
             Ok(sw) => {
-                let did = if sw.get("state") == Some(&json!("off")) { "suspended" } else { "resumed" };
-                reply(format!("step-back: {did} - {}\n", text(&sw, "why")), String::new(), 0)
+                let did = if sw.get("state") == Some(&json!("off")) {
+                    "suspended"
+                } else {
+                    "resumed"
+                };
+                reply(
+                    format!("step-back: {did} - {}\n", text(&sw, "why")),
+                    String::new(),
+                    0,
+                )
             }
             Err(e) => reply(String::new(), format!("step-back: {e}\n"), 2),
         },
-        "open" => match open_checkpoint(&root, now()) {
+        "open" => match open_checkpoint(
+            &root,
+            now(),
+            &std::env::var("SPECIFY_FEATURE").unwrap_or_default(),
+        ) {
             Ok(t) => reply(t + "\n", String::new(), 0),
             Err(e) => reply(String::new(), format!("step-back: {e}\n"), 1),
         },
-        "due" => lines(due(&root, p.text("--tool", ""), p.text("--agent", ""), now()), 1),
+        "due" => lines(
+            due(&root, p.text("--tool", ""), p.text("--agent", ""), now()),
+            1,
+        ),
         "hold" => lines(hold(&root, None), 1),
         _ => reply(
-            l7r_guard::shared::pyjson::dumps(&Value::Object(state(&root, None)), Some(1), true) + "\n",
+            l7r_guard::shared::pyjson::dumps(&Value::Object(state(&root, None)), Some(1), true)
+                + "\n",
             String::new(),
             0,
         ),

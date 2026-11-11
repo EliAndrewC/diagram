@@ -42,7 +42,9 @@ static NUMBER: LazyLock<Regex> = LazyLock::new(|| re(r"-?\d[\d,]*(?:\.\d+)?"));
 static PARAGRAPH: LazyLock<Regex> = LazyLock::new(|| re(r"\n\s*\n"));
 static UNIT: LazyLock<Regex> = LazyLock::new(|| re(r"\bUNIT:\s*([a-z][a-z0-9-]*)"));
 static UNIT_SNAPSHOT: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"review-snapshot/((?:settlement-review|building-review|glyph-check|size-audit|fix-check)--[a-z0-9-]+)")
+    re(
+        r"review-snapshot/((?:settlement-review|building-review|glyph-check|size-audit|fix-check)--[a-z0-9-]+)",
+    )
 });
 
 /// `_read_json`: the file's JSON, or None where it is unreadable or not JSON.
@@ -55,7 +57,7 @@ fn get<'a>(v: &'a Value, k: &str) -> Option<&'a Value> {
 }
 
 fn text_of(v: &Value, k: &str, default: &str) -> String {
-    get(v, k).map_or_else(|| default.to_owned(), py_str)
+    get(v, k).map_or(default.to_owned(), py_str)
 }
 
 fn is(v: &Value, k: &str) -> bool {
@@ -95,7 +97,8 @@ fn items(v: Option<&Value>) -> &[Value] {
 
 /// Finding ids `make review-accept` dispositioned for the verdict whose engine key is `key` (FR-003; feature 261).
 fn accepted_ids(clone: &Path, name: &str, key: &str) -> BTreeSet<String> {
-    let rec = read_json(&disposition_dir(clone).join(format!("{name}.json"))).unwrap_or(Value::Null);
+    let rec =
+        read_json(&disposition_dir(clone).join(format!("{name}.json"))).unwrap_or(Value::Null);
     items(get(&rec, "accepted"))
         .iter()
         .filter(|i| {
@@ -193,7 +196,8 @@ fn answers_hint(clone: &Path, name: &str) -> String {
 }
 
 fn has_findings(clone: &Path, name: &str) -> bool {
-    latest_verdict(clone, name).is_some_and(|v| get(&v, "verdict") != Some(&json!(NR)) && is(&v, "findings"))
+    latest_verdict(clone, name)
+        .is_some_and(|v| get(&v, "verdict") != Some(&json!(NR)) && is(&v, "findings"))
 }
 
 /// The pool generator of a map: the first `pool/*/<name>/<name>.gen.py`.
@@ -202,7 +206,11 @@ fn gen_of(skill: &Path, name: &str) -> Option<PathBuf> {
     let mut hits: Vec<PathBuf> = std::fs::read_dir(&pool)
         .map(|rd| {
             rd.filter_map(Result::ok)
-                .map(|e| pool.join(e.file_name()).join(name).join(format!("{name}.gen.py")))
+                .map(|e| {
+                    pool.join(e.file_name())
+                        .join(name)
+                        .join(format!("{name}.gen.py"))
+                })
                 .filter(|p| p.exists())
                 .collect()
         })
@@ -235,8 +243,8 @@ fn stale_maps(
         };
         let parent = gen.parent().unwrap_or(skill).to_path_buf();
         let snap = snapshot_of.get(name).unwrap_or(name);
-        let named = prompt.contains(&format!("review-snapshot/{snap}"));
-        let at = if named {
+        let in_snapshot = prompt.contains(&format!("review-snapshot/{snap}"));
+        let at = if in_snapshot {
             snapshots.join(snap).join("clone")
         } else {
             parent.clone()
@@ -246,20 +254,24 @@ fn stale_maps(
         let missing: Vec<&str> = ARTIFACTS
             .iter()
             .copied()
-            .filter(|ext| !file(&at, ext).is_file() && !(sheet && *ext == ".json"))
+            .filter(|ext| !(file(&at, ext).is_file() || (sheet && *ext == ".json")))
             .collect();
-        let rel = gen.strip_prefix(skill).unwrap_or(&gen).to_string_lossy().into_owned();
-        let older = named
+        let rel = gen
+            .strip_prefix(skill)
+            .unwrap_or(&gen)
+            .to_string_lossy()
+            .into_owned();
+        let older = in_snapshot
             && missing.is_empty()
-            && [".json", ".svg"]
-                .iter()
-                .any(|ext| file(&parent, ext).is_file() && !same_bytes(&file(&at, ext), &file(&parent, ext)));
+            && [".json", ".svg"].iter().any(|ext| {
+                file(&parent, ext).is_file() && !same_bytes(&file(&at, ext), &file(&parent, ext))
+            });
         let gone = missing.join(" ");
         if !current(&gen.to_string_lossy()) {
             out.push(format!("{name}: its generation key has moved - the map on disk is not what the engine draws now - `make map GEN={rel}`"));
         } else if older {
             out.push(format!("{name}: the review snapshot the dispatch names is of an older map than the pool's - re-take it (`make verify`), or run `make map GEN={rel}` and dispatch against the pool folder without naming the snapshot"));
-        } else if !missing.is_empty() && named {
+        } else if !missing.is_empty() && in_snapshot {
             out.push(format!("{name}: the review snapshot the dispatch names lacks {gone} - re-take it (`make verify`), or run `make map GEN={rel}` and dispatch against the pool folder without naming the snapshot"));
         } else if !missing.is_empty() {
             out.push(format!("{name}: its pool folder lacks {gone} - a reviewer would read an incomplete map - `make map GEN={rel}`"));
@@ -283,13 +295,18 @@ pub(crate) fn figure_pattern(tree: &Path) -> Result<Regex, String> {
     if !done.status.success() {
         return Err(String::from_utf8_lossy(&done.stderr).into_owned());
     }
-    let pattern = String::from_utf8_lossy(&done.stdout).trim().replace(r"\w", r"\w\p{N}");
+    let pattern = String::from_utf8_lossy(&done.stdout)
+        .trim()
+        .replace(r"\w", r"\w\p{N}");
     Regex::new(&pattern).map_err(|e| e.to_string())
 }
 
 /// Each measured figure in the dispatch that no record backs, by feature 239's convention (FR-006): the spec lint's own pattern.
 fn unresolved_figures(prompt: &str, records: &[Value], figure: &Regex) -> Vec<String> {
-    let by_key: BTreeMap<String, &Value> = records.iter().map(|r| (text_of(r, "key", "None"), r)).collect();
+    let by_key: BTreeMap<String, &Value> = records
+        .iter()
+        .map(|r| (text_of(r, "key", "None"), r))
+        .collect();
     let mut out = Vec::new();
     for para in PARAGRAPH.split(prompt).filter_map(Result::ok) {
         if ONE_SHOT.is_match(para).unwrap_or(false) && para.to_lowercase().contains("method") {
@@ -298,12 +315,21 @@ fn unresolved_figures(prompt: &str, records: &[Value], figure: &Regex) -> Vec<St
         let values: Vec<Option<f64>> = KEY
             .captures_iter(para)
             .filter_map(Result::ok)
-            .filter_map(|c| by_key.get(&c[1]).map(|r| number(&text_of(r, "value", "None"))))
+            .filter_map(|c| {
+                by_key
+                    .get(&c[1])
+                    .map(|r| number(&text_of(r, "value", "None")))
+            })
             .collect();
         let bare = BACKTICKS.replace_all(para, " ");
         for m in figure.find_iter(&bare).filter_map(Result::ok) {
             let n = number(m.as_str());
-            let backed = n.is_some_and(|n| values.iter().flatten().any(|v| (v - n).abs() <= 0.051_f64.max(v.abs() * 0.005)));
+            let backed = n.is_some_and(|n| {
+                values
+                    .iter()
+                    .flatten()
+                    .any(|v| (v - n).abs() <= 0.051_f64.max(v.abs() * 0.005))
+            });
             if !backed {
                 out.push(m.as_str().trim().to_owned());
             }
@@ -316,7 +342,11 @@ fn unresolved_figures(prompt: &str, records: &[Value], figure: &Regex) -> Vec<St
 fn units_named(prompt: &str, pool: &[String]) -> Vec<String> {
     let mut units: BTreeSet<String> = BTreeSet::new();
     for re in [&*UNIT, &*UNIT_SNAPSHOT] {
-        units.extend(re.captures_iter(prompt).filter_map(Result::ok).map(|c| c[1].to_owned()));
+        units.extend(
+            re.captures_iter(prompt)
+                .filter_map(Result::ok)
+                .map(|c| c[1].to_owned()),
+        );
     }
     if units.is_empty() {
         maps_named(prompt, pool)
@@ -331,7 +361,12 @@ fn maps_named(prompt: &str, pool: &[String]) -> Vec<String> {
     let hit = |pattern: String| re(&pattern).is_match(prompt).unwrap_or(false);
     let by_snapshot: Vec<String> = names
         .iter()
-        .filter(|n| hit(format!("review-snapshot/{}(?![A-Za-z0-9_-])", fancy_regex::escape(n))))
+        .filter(|n| {
+            hit(format!(
+                "review-snapshot/{}(?![A-Za-z0-9_-])",
+                fancy_regex::escape(n)
+            ))
+        })
         .map(|n| (*n).clone())
         .collect();
     if !by_snapshot.is_empty() {
@@ -339,18 +374,33 @@ fn maps_named(prompt: &str, pool: &[String]) -> Vec<String> {
     }
     names
         .iter()
-        .filter(|n| hit(format!("(?i)(?<![A-Za-z0-9_-]){}(?![A-Za-z0-9_-])", fancy_regex::escape(n))))
+        .filter(|n| {
+            hit(format!(
+                "(?i)(?<![A-Za-z0-9_-]){}(?![A-Za-z0-9_-])",
+                fancy_regex::escape(n)
+            ))
+        })
         .map(|n| (*n).clone())
         .collect()
 }
 
 /// Each owed unit's slug -> the map or sheet it is reviewed on (feature 294).
 fn unit_maps(clone: &Path) -> BTreeMap<String, String> {
-    owed(clone, true).1.into_iter().map(|u| (u.slug(), u.on)).collect()
+    owed(clone, true)
+        .1
+        .into_iter()
+        .map(|u| (u.slug(), u.on))
+        .collect()
 }
 
 /// Every reason this dispatch should not run, in the order a session would fix them. Empty means go.
-fn check(clone: &Path, names: &[String], prompt: &str, gate_green: bool, current: &mut Current) -> Result<Vec<String>, String> {
+fn check(
+    clone: &Path,
+    names: &[String],
+    prompt: &str,
+    gate_green: bool,
+    current: &mut Current,
+) -> Result<Vec<String>, String> {
     let records = measurement_records(clone);
     let mut problems = Vec::new();
     for name in names {
@@ -380,7 +430,11 @@ fn check(clone: &Path, names: &[String], prompt: &str, gate_green: bool, current
         }
     }
     let maps: Vec<String> = maps.into_iter().collect();
-    problems.extend(stale_maps(clone, &maps, current, prompt, &snapshot_of).into_iter().map(|p| format!("FR-005 {p}")));
+    problems.extend(
+        stale_maps(clone, &maps, current, prompt, &snapshot_of)
+            .into_iter()
+            .map(|p| format!("FR-005 {p}")),
+    );
     let figure = figure_pattern(&crate::record::repo::tree_of(clone))?;
     let figures = unresolved_figures(prompt, &records, &figure);
     if !figures.is_empty() {
@@ -398,11 +452,21 @@ fn accept(clone: &Path, name: &str, finding: &str, reason: &str) -> Option<Strin
         return Some("an acceptance needs a REASON of at least two words and eight characters - it is what a later audit reads".to_owned());
     }
     let verdict = latest_verdict(clone, name).unwrap_or(Value::Null);
-    let raised: BTreeSet<String> = raised_findings(&verdict).iter().map(|f| text_of(f, "id", "None")).collect();
+    let raised: BTreeSet<String> = raised_findings(&verdict)
+        .iter()
+        .map(|f| text_of(f, "id", "None"))
+        .collect();
     if !raised.contains(finding) {
         let listed = raised.iter().cloned().collect::<Vec<_>>().join(", ");
-        let listed = if listed.is_empty() { "none".to_owned() } else { listed };
-        return Some(format!("{name}'s last verdict raised no finding {} (it raised: {listed})", py_repr(finding)));
+        let listed = if listed.is_empty() {
+            "none".to_owned()
+        } else {
+            listed
+        };
+        return Some(format!(
+            "{name}'s last verdict raised no finding {} (it raised: {listed})",
+            py_repr(finding)
+        ));
     }
     let path = disposition_dir(clone).join(format!("{name}.json"));
     let _ = std::fs::create_dir_all(disposition_dir(clone));
@@ -410,7 +474,11 @@ fn accept(clone: &Path, name: &str, finding: &str, reason: &str) -> Option<Strin
     let key = head(&round_key(&verdict), 12).to_owned();
     let mut kept: Vec<Value> = items(get(&rec, "accepted"))
         .iter()
-        .filter(|i| i.is_object() && !(get(i, "finding") == Some(&json!(finding)) && get(i, "round") == Some(&json!(key))))
+        .filter(|i| {
+            i.is_object()
+                && !(get(i, "finding") == Some(&json!(finding))
+                    && get(i, "round") == Some(&json!(key)))
+        })
         .cloned()
         .collect();
     kept.push(json!({"finding": finding, "round": key, "reason": reason.trim()}));
@@ -424,7 +492,9 @@ fn recorded(clone: &Path, names: &[String], key: &str) -> bool {
         return false;
     }
     names.iter().all(|name| {
-        latest_verdict(clone, name).is_some_and(|v| get(&v, "verdict") != Some(&json!(NR)) && text_of(&v, "engine_key", "") == key)
+        latest_verdict(clone, name).is_some_and(|v| {
+            get(&v, "verdict") != Some(&json!(NR)) && text_of(&v, "engine_key", "") == key
+        })
     })
 }
 
@@ -469,7 +539,11 @@ fn unit_sheet(clone: &Path, unit: &str) -> String {
 
 fn dirs_in(dir: &Path) -> Vec<String> {
     std::fs::read_dir(dir)
-        .map(|rd| rd.filter_map(Result::ok).map(|e| e.file_name().to_string_lossy().into_owned()).collect())
+        .map(|rd| {
+            rd.filter_map(Result::ok)
+                .map(|e| e.file_name().to_string_lossy().into_owned())
+                .collect()
+        })
         .unwrap_or_default()
 }
 
@@ -505,7 +579,13 @@ pub fn unit_content_key(clone: &Path, unit: &str) -> String {
 }
 
 /// Write the map's verdict record, the review's last act (FR-001): `(what was recorded, the record)`.
-fn write_verdict(clone: &Path, name: &str, verdict: &str, mut findings: Vec<Map<String, Value>>, state: &str) -> (String, Value) {
+fn write_verdict(
+    clone: &Path,
+    name: &str,
+    verdict: &str,
+    mut findings: Vec<Map<String, Value>>,
+    state: &str,
+) -> (String, Value) {
     let pairing = read_json(&clone.join(".git").join("pairing-state.json")).unwrap_or(Value::Null);
     let key = if pairing.is_object() {
         text_of(&pairing, "review_dispatch_key", "")
@@ -513,7 +593,8 @@ fn write_verdict(clone: &Path, name: &str, verdict: &str, mut findings: Vec<Map<
         String::new()
     };
     for (i, f) in findings.iter_mut().enumerate() {
-        f.entry("id").or_insert_with(|| json!(format!("F{}", i + 1)));
+        f.entry("id")
+            .or_insert_with(|| json!(format!("F{}", i + 1)));
     }
     let mut rec = Map::new();
     rec.insert("map".to_owned(), json!(name));
@@ -521,7 +602,10 @@ fn write_verdict(clone: &Path, name: &str, verdict: &str, mut findings: Vec<Map<
     rec.insert("engine_key".to_owned(), json!(key));
     rec.insert("verdict".to_owned(), json!(verdict));
     rec.insert("gate".to_owned(), json!(state));
-    rec.insert("findings".to_owned(), Value::Array(findings.into_iter().map(Value::Object).collect()));
+    rec.insert(
+        "findings".to_owned(),
+        Value::Array(findings.into_iter().map(Value::Object).collect()),
+    );
     rec.insert("strict".to_owned(), json!(true));
     let ck = unit_content_key(clone, name);
     if !ck.is_empty() {
@@ -530,12 +614,18 @@ fn write_verdict(clone: &Path, name: &str, verdict: &str, mut findings: Vec<Map<
     if verdict != NR && state == "red" {
         rec.insert("verdict".to_owned(), json!(NR));
         rec.insert("concluded".to_owned(), json!(verdict));
-        rec.insert("why".to_owned(), json!("the paired gate was red when the verdict was written"));
+        rec.insert(
+            "why".to_owned(),
+            json!("the paired gate was red when the verdict was written"),
+        );
     }
     if rec["verdict"] == json!(NR) {
         if let Some(prior) = latest_verdict(clone, name) {
             rec.insert("carried".to_owned(), Value::Array(raised_findings(&prior)));
-            rec.insert("carried_from".to_owned(), json!(text_of(&prior, "engine_key", "")));
+            rec.insert(
+                "carried_from".to_owned(),
+                json!(text_of(&prior, "engine_key", "")),
+            );
         }
     }
     let _ = std::fs::create_dir_all(verdict_dir(clone));
@@ -544,16 +634,34 @@ fn write_verdict(clone: &Path, name: &str, verdict: &str, mut findings: Vec<Map<
     (text_of(&rec, "verdict", ""), rec)
 }
 
-const COMMANDS: [&str; 7] = ["check", "accept", "recorded", "gate-state", "verdict", "named", "content-key"];
+const COMMANDS: [&str; 7] = [
+    "check",
+    "accept",
+    "recorded",
+    "gate-state",
+    "verdict",
+    "named",
+    "content-key",
+];
 
 fn usage(why: &str) -> Reply {
-    reply(String::new(), format!("l7r-gate reviews prereq: {why}\n"), 2)
+    reply(
+        String::new(),
+        format!("l7r-gate reviews prereq: {why}\n"),
+        2,
+    )
 }
 
 fn read_prompt(file: &str) -> Result<String, Reply> {
     std::fs::read_to_string(py_path(file))
         .map(|t| crate::record::repo::universal(&t))
-        .map_err(|e| reply(String::new(), format!("l7r-gate reviews prereq: {file}: {e}\n"), 1))
+        .map_err(|e| {
+            reply(
+                String::new(),
+                format!("l7r-gate reviews prereq: {file}: {e}\n"),
+                1,
+            )
+        })
 }
 
 /// `review_prereq.py`'s command line.
@@ -579,14 +687,20 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         return usage("the following arguments are required: command, --clone");
     };
     if !COMMANDS.contains(&command) {
-        return usage(&format!("argument command: invalid choice: {}", py_repr(command)));
+        return usage(&format!(
+            "argument command: invalid choice: {}",
+            py_repr(command)
+        ));
     }
     if !p.has("--clone") {
         return usage("the following arguments are required: --clone");
     }
     let green = p.text("--gate-green", "no");
     if !matches!(green, "yes" | "no") {
-        return usage(&format!("argument --gate-green: invalid choice: {}", py_repr(green)));
+        return usage(&format!(
+            "argument --gate-green: invalid choice: {}",
+            py_repr(green)
+        ));
     }
     run(command, &p)
 }
@@ -599,8 +713,16 @@ fn run(command: &str, p: &Parsed) -> Reply {
         "gate-state" => reply(format!("{}\n", gate_state(&clone)), String::new(), 0),
         "verdict" => verdict_cli(&clone, &map, p),
         "recorded" => {
-            let maps: Vec<String> = p.text("--maps", "").split_whitespace().map(str::to_owned).collect();
-            reply(String::new(), String::new(), i32::from(!recorded(&clone, &maps, p.text("--key", ""))))
+            let maps: Vec<String> = p
+                .text("--maps", "")
+                .split_whitespace()
+                .map(str::to_owned)
+                .collect();
+            reply(
+                String::new(),
+                String::new(),
+                i32::from(!recorded(&clone, &maps, p.text("--key", ""))),
+            )
         }
         "named" => {
             let maps = p.text("--maps", "");
@@ -610,7 +732,14 @@ fn run(command: &str, p: &Parsed) -> Reply {
                 maps.split_whitespace().map(str::to_owned).collect()
             };
             match read_prompt(p.text("--prompt-file", "")) {
-                Ok(prompt) => reply(units_named(&prompt, &pool).iter().map(|n| n.clone() + "\n").collect(), String::new(), 0),
+                Ok(prompt) => reply(
+                    units_named(&prompt, &pool)
+                        .iter()
+                        .map(|n| n.clone() + "\n")
+                        .collect(),
+                    String::new(),
+                    0,
+                ),
                 Err(r) => r,
             }
         }
@@ -633,13 +762,24 @@ fn verdict_cli(clone: &Path, map: &str, p: &Parsed) -> Reply {
         read_json(&py_path(file))
     };
     let Some(Value::Array(findings)) = findings else {
-        return reply("--findings-file must hold a JSON list of {id, severity, what}\n".to_owned(), String::new(), 2);
+        return reply(
+            "--findings-file must hold a JSON list of {id, severity, what}\n".to_owned(),
+            String::new(),
+            2,
+        );
     };
     let verdict = p.text("--verdict", "");
     // the gate's state is read before the verdict is judged, as the Python's argument order read it (its stamp check is recorded)
     let state = gate_state(clone);
     if !VERDICTS.contains(&verdict) {
-        return reply(String::new(), format!("l7r-gate reviews prereq: verdict must be one of {}\n", VERDICTS.join(", ")), 1);
+        return reply(
+            String::new(),
+            format!(
+                "l7r-gate reviews prereq: verdict must be one of {}\n",
+                VERDICTS.join(", ")
+            ),
+            1,
+        );
     }
     let findings = findings
         .into_iter()
@@ -650,9 +790,16 @@ fn verdict_cli(clone: &Path, map: &str, p: &Parsed) -> Reply {
         .collect();
     let (got, rec) = write_verdict(clone, map, verdict, findings, state);
     let key = text_of(&rec, "engine_key", "");
-    let key = if key.is_empty() { "NONE - no dispatch recorded".to_owned() } else { key };
+    let key = if key.is_empty() {
+        "NONE - no dispatch recorded".to_owned()
+    } else {
+        key
+    };
     reply(
-        format!("recorded {got} for {map} (engine key {key}, gate {})\n", text_of(&rec, "gate", "")),
+        format!(
+            "recorded {got} for {map} (engine key {key}, gate {})\n",
+            text_of(&rec, "gate", "")
+        ),
         String::new(),
         0,
     )
@@ -663,7 +810,11 @@ fn check_cli(clone: &Path, p: &Parsed) -> Reply {
         Ok(t) => t,
         Err(r) => return r,
     };
-    let maps: Vec<String> = p.text("--maps", "").split_whitespace().map(str::to_owned).collect();
+    let maps: Vec<String> = p
+        .text("--maps", "")
+        .split_whitespace()
+        .map(str::to_owned)
+        .collect();
     let mut runner = Runner::new(clone);
     let mut failed: Option<String> = None;
     let mut current = |gen: &str| match runner.ask("is_current", &json!([gen])) {
@@ -673,7 +824,13 @@ fn check_cli(clone: &Path, p: &Parsed) -> Reply {
             false
         }
     };
-    let problems = check(clone, &maps, &prompt, p.text("--gate-green", "no") == "yes", &mut current);
+    let problems = check(
+        clone,
+        &maps,
+        &prompt,
+        p.text("--gate-green", "no") == "yes",
+        &mut current,
+    );
     let problems = match (problems, failed) {
         (Ok(p), None) => p,
         (Err(why), _) | (_, Some(why)) => return reply(String::new(), why, 1),

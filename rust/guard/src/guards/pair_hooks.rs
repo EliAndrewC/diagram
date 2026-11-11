@@ -93,7 +93,13 @@ pub(crate) fn python(
 pub(crate) fn reviews(cx: &Ctx, args: &[&str]) -> crate::shared::tool::Said {
     let mut all = vec!["reviews"];
     all.extend_from_slice(args);
-    python("bash", &cx.clone, &cx.tree.join("scripts/gates/l7r-gate.sh"), &all, "")
+    python(
+        "bash",
+        &cx.clone,
+        &cx.tree.join("scripts/gates/l7r-gate.sh"),
+        &all,
+        "",
+    )
 }
 
 /// The tree the guard runs from: `L7R_GUARD_TREE`, which the wrapper and the suites' shim export, else `cwd`.

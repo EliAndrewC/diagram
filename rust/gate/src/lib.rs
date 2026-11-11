@@ -173,6 +173,8 @@ mod tests {
     fn the_checks_door_reads_stdin_to_its_end() {
         assert_eq!(cli(&["checks-door".to_owned()]).code, 0);
         assert_eq!(cli(&["owed-door".to_owned()]).code, 0);
+        assert_eq!(cli(&["reviews-door".to_owned()]).code, 0);
+        assert_eq!(cli(&["reviews".to_owned()]).code, 2);
     }
 
     #[test]

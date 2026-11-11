@@ -224,7 +224,13 @@ fn glyph(cx: &Ctx, atype: &str, ptext: &str, named: &[String]) -> Result<bool, A
     for m in named {
         let early = reviews(
             cx,
-            &["owed", "--root", &cx.clone.to_string_lossy(), "--glyph-gate", m],
+            &[
+                "owed",
+                "--root",
+                &cx.clone.to_string_lossy(),
+                "--glyph-gate",
+                m,
+            ],
         );
         if !early.ok() {
             cx.log("blocked", &format!("{atype}:{m}"), "glyph-not-due");
@@ -400,7 +406,13 @@ fn dispatched(cx: &Ctx, atype: &str, named: &[String], key: &str, glyph_escaped:
     for m in named {
         if atype == "glyph-check" {
             let clone = cx.clone.to_string_lossy();
-            let mut args = vec!["owed", "--root", clone.as_ref(), "--glyph-dispatched", m.as_str()];
+            let mut args = vec![
+                "owed",
+                "--root",
+                clone.as_ref(),
+                "--glyph-dispatched",
+                m.as_str(),
+            ];
             if glyph_escaped {
                 args.push("--escaped");
             }

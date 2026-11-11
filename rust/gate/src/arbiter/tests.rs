@@ -85,6 +85,7 @@ fn a_ruling_is_recorded_once_and_lifts_its_trigger() {
         &json!({"ask:foo": {"kind": "ask", "unit": "", "detail": "why asked", "t": 1, "feature": "999-x"}, "ask:bar": {"kind": "cascade", "unit": "u", "t": 1, "feature": "999-x", "dispatches": 12}}),
     );
     let row = record_ruling(&root, "ask:foo", &w, "round-arbiter", when, false).unwrap();
+    // a unit owed on no sheet has no content key
     assert_eq!(
         row,
         json!({"trigger": "ask:foo", "kind": "ask", "unit": "", "asked": "why asked", "ruling": "continue", "why": "w", "what": "", "utc": "2026-01-01T00:00:00Z"})
@@ -407,7 +408,7 @@ fn the_rulings_tools_are_asked_by_path() {
         false,
     )
     .unwrap();
-    assert!(row.get("content_key").is_none(), "a unit owed on no sheet has no content key");
+    assert!(row.get("content_key").is_none());
     std::fs::write(
         root.join(".git/glyph-clock.json"),
         r#"{"999-x": {"checkpoint_open_at": 5, "checkpoint_trigger": "hour:999-x@1"}}"#,
@@ -424,7 +425,8 @@ fn the_rulings_tools_are_asked_by_path() {
     .unwrap();
     assert_eq!(hour["kind"], json!("hour"));
     let clock: Value =
-        serde_json::from_str(&std::fs::read_to_string(root.join(".git/glyph-clock.json")).unwrap()).unwrap();
+        serde_json::from_str(&std::fs::read_to_string(root.join(".git/glyph-clock.json")).unwrap())
+            .unwrap();
     assert_eq!(clock["999-x"]["checkpoint_at"], json!(5));
     assert_eq!(clock["999-x"]["checkpoints"], json!(1));
     let row = record_ruling(

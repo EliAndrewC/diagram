@@ -42,7 +42,7 @@ fn speckit_state(root: &Path, dir: &Path) -> String {
     let said = std::process::Command::new("python3")
         .arg(&tool)
         .arg("--state")
-        .arg(std::path::absolute(dir).unwrap_or_else(|_| dir.to_path_buf()))
+        .arg(std::path::absolute(dir).unwrap_or(dir.to_path_buf()))
         .current_dir("/")
         .output()
         .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
@@ -69,9 +69,12 @@ pub(crate) fn active_feature(root: &Path) -> String {
 
 /// When the feature began in this clone: the first event of `<git dir>/l7r-events/<feature>.jsonl`, or None.
 pub(crate) fn first_event(root: &Path, feature: &str) -> Option<f64> {
-    let path = gitdir(root)?.join("l7r-events").join(format!("{feature}.jsonl"));
+    let path = gitdir(root)?
+        .join("l7r-events")
+        .join(format!("{feature}.jsonl"));
     let text = std::fs::read_to_string(path).ok()?;
-    let first: Value = serde_json::from_str(text.split_inclusive('\n').next().unwrap_or("")).ok()?;
+    let first: Value =
+        serde_json::from_str(text.split_inclusive('\n').next().unwrap_or("")).ok()?;
     iso_seconds(first.get("t"))
 }
 
@@ -84,13 +87,10 @@ pub(crate) fn last_reopening(root: &Path, feature: &str, since: f64) -> Option<f
         return None;
     }
     let g = gitdir(root);
-    if let Some(g) = &g {
-        let clock = read_object(Some(&g.join(CLOCK)));
-        let kept = clock.get(feature).and_then(|m| m.get("reopened"));
-        if let Some(Value::Object(kept)) = kept {
-            if kept.get("key").and_then(Value::as_str) == Some(newest.as_str()) {
-                return kept.get("at").and_then(Value::as_f64);
-            }
+    let clock = read_object(g.as_ref().map(|g| g.join(CLOCK)).as_deref());
+    if let Some(Value::Object(kept)) = clock.get(feature).and_then(|m| m.get("reopened")) {
+        if kept.get("key").and_then(Value::as_str) == Some(newest.as_str()) {
+            return kept.get("at").and_then(Value::as_f64);
         }
     }
     let walk = format!("-{}", REOPEN_WALK + 1);
@@ -105,13 +105,19 @@ pub(crate) fn last_reopening(root: &Path, feature: &str, since: f64) -> Option<f
             .map_or("", |r| r.state);
         if let Some((t, s)) = newer {
             if !s.is_empty() && !CLOSED.contains(&s) && CLOSED.contains(&state) {
-                #[expect(clippy::cast_precision_loss, reason = "a commit time is far below 2^53")]
+                #[expect(
+                    clippy::cast_precision_loss,
+                    reason = "a commit time is far below 2^53"
+                )]
                 let t = t as f64;
                 at = Some(t);
                 break;
             }
         }
-        #[expect(clippy::cast_precision_loss, reason = "a commit time is far below 2^53")]
+        #[expect(
+            clippy::cast_precision_loss,
+            reason = "a commit time is far below 2^53"
+        )]
         if (ct as f64) < since {
             break;
         }
@@ -127,7 +133,10 @@ pub(crate) fn last_reopening(root: &Path, feature: &str, since: f64) -> Option<f
 }
 
 /// `clock.setdefault(feature, {})`.
-pub(crate) fn entry<'a>(clock: &'a mut Map<String, Value>, feature: &str) -> &'a mut Map<String, Value> {
+pub(crate) fn entry<'a>(
+    clock: &'a mut Map<String, Value>,
+    feature: &str,
+) -> &'a mut Map<String, Value> {
     let slot = clock
         .entry(feature.to_owned())
         .or_insert_with(|| Value::Object(Map::new()));
@@ -159,9 +168,17 @@ pub(crate) fn mine(root: &Path, feature: &str) -> Map<String, Value> {
 }
 
 /// `(the glyph units due, the glyph units owed and waiting with when each comes due)` - plan D53-D55.
-pub(crate) fn glyph_due(root: &Path, units: &[Unit], at: Option<f64>) -> (Vec<Unit>, Vec<(Unit, String)>) {
+pub(crate) fn glyph_due(
+    root: &Path,
+    units: &[Unit],
+    at: Option<f64>,
+) -> (Vec<Unit>, Vec<(Unit, String)>) {
     let now = at.unwrap_or_else(now);
-    let glyph: Vec<Unit> = units.iter().filter(|u| u.check == "glyph-check").cloned().collect();
+    let glyph: Vec<Unit> = units
+        .iter()
+        .filter(|u| u.check == "glyph-check")
+        .cloned()
+        .collect();
     if glyph.is_empty() {
         return (Vec::new(), Vec::new());
     }
@@ -175,7 +192,13 @@ pub(crate) fn glyph_due(root: &Path, units: &[Unit], at: Option<f64>) -> (Vec<Un
         feature_start(root, &feature)
     };
     let Some(start) = start else {
-        return (Vec::new(), glyph.into_iter().map(|u| (u, "at landing".to_owned())).collect());
+        return (
+            Vec::new(),
+            glyph
+                .into_iter()
+                .map(|u| (u, "at landing".to_owned()))
+                .collect(),
+        );
     };
     let g = gitdir(root).unwrap_or_else(nowhere);
     let mine = mine(root, &feature);
@@ -194,7 +217,9 @@ pub(crate) fn glyph_due(root: &Path, units: &[Unit], at: Option<f64>) -> (Vec<Un
     let undispatched = |slug: &str| as_float(disp.get(slug).and_then(|d| d.get("at"))) < batch_at;
     let due: Vec<Unit> = glyph
         .iter()
-        .filter(|u| batch_at != 0.0 && batch.contains(&u.slug().as_str()) && undispatched(&u.slug()))
+        .filter(|u| {
+            batch_at != 0.0 && batch.contains(&u.slug().as_str()) && undispatched(&u.slug())
+        })
         .cloned()
         .collect();
     let when = local_time(hour + GLYPH_HOUR_S, "%H:%M");
@@ -206,7 +231,7 @@ pub(crate) fn glyph_due(root: &Path, units: &[Unit], at: Option<f64>) -> (Vec<Un
     (due, waiting)
 }
 
-/// A glyph dispatch passed on the hour, or under GLYPH_DUE_OK, opens a batch (D53, D55).
+/// A glyph dispatch passed on the hour, or under `GLYPH_DUE_OK`, opens a batch (D53, D55).
 fn open_batch(root: &Path, units: &[Unit], at: f64) {
     let feature = active_feature(root);
     let Some(g) = gitdir(root) else { return };
@@ -269,7 +294,8 @@ pub(crate) fn glyph_cli(root: &Path, slug: &str, gate: bool, escaped: bool) -> (
         feature_start(root, &feature)
     };
     let batch_at = as_float(mine(root, &feature).get("batch_at"));
-    let on_the_hour = start.is_some_and(|s| !landing(root, &feature) && at - s.max(batch_at) >= GLYPH_HOUR_S);
+    let on_the_hour =
+        start.is_some_and(|s| !landing(root, &feature) && at - s.max(batch_at) >= GLYPH_HOUR_S);
     if on_the_hour || escaped {
         open_batch(root, &units, at);
     }

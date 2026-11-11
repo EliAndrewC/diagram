@@ -194,3 +194,20 @@ fn close_answers_its_usage_and_its_verdict() {
     ]);
     assert_eq!(three.code, 0);
 }
+
+#[test]
+fn the_reviews_verbs_answer_through_the_door() {
+    let root = clone_at("reviews");
+    let path = root.to_string_lossy().into_owned();
+    assert_eq!(answer("review_hold", &[json!(path)]).unwrap(), json!(""));
+    let owed = answer("review_owed", &[json!(path)]).unwrap();
+    assert_eq!(owed[1], json!([]));
+    let map = root.join("pool/hamlets/m");
+    std::fs::create_dir_all(&map).unwrap();
+    std::fs::write(map.join("m.json"), "{}").unwrap();
+    let owed = answer("review_owed", &[json!(path)]).unwrap();
+    assert_eq!(
+        owed[1][0],
+        json!({"slug": "settlement-review--m", "check": "settlement-review", "subject": "m", "on": "m", "occasion": "a map new to the pool"})
+    );
+}
