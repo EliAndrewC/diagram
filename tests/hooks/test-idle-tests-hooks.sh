@@ -23,7 +23,10 @@ HOMEDIR="$TMP/home"; SESS="$TMP/sessions"; mkdir -p "$HOMEDIR" "$SESS"
 printf '{"sessionId":"sid-a"}' > "$SESS/$$.json"
 CLOCKF="$TMP/clock"; echo 1000000 > "$CLOCKF"
 CLOCK="$TMP/clock.sh"; printf '#!/bin/sh\ncat %s\n' "$CLOCKF" > "$CLOCK"; chmod +x "$CLOCK"
-tick_clock() { echo $(( $(cat "$CLOCKF") + ${1:-1} )) > "$CLOCKF"; }
+# The ticker and the suspend jumps advance the clock at once: a plain `> "$CLOCKF"` truncated the file while the other writer
+# or the hook read it, so a read saw it empty or torn (`01620 + 1: arithmetic syntax error`, three cases red, 2026-11-11 in
+# T95's landing and again alone). One writer at a time (flock), and a rename, so a reader sees the old value or the new, whole.
+tick_clock() { ( flock 9; n=$(( $(cat "$CLOCKF") + ${1:-1} )); echo "$n" > "$CLOCKF.$BASHPID"; mv -f "$CLOCKF.$BASHPID" "$CLOCKF" ) 9>"$CLOCKF.lock"; }
 # a run stand-in that records start/end and sleeps a little
 RUNNER="$TMP/run.sh"; RUNLOG="$TMP/runs.log"
 printf '#!/bin/sh\necho "start $(date +%%s.%%N) $PWD" >> %s; sleep 0.6; echo "end $(date +%%s.%%N) $PWD" >> %s; echo FAKE-OK\n' "$RUNLOG" "$RUNLOG" > "$RUNNER"; chmod +x "$RUNNER"
