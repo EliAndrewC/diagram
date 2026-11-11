@@ -308,8 +308,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T92 Split the gate crate (74,199 lines) into crates so an edit recompiles one, the binary a thin crate over them (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the gate crate split into 15 crates and a dispatching binary (FR-011); the plan cites FR-003 for the coverage rule, which is FR-004, and its path counts name no command (both noted by the review, not changed after it)
-- [ ] T93 The fast Rust loop by default and enforced: make rust-test and make static run only the crates whose test binary changed since their last green run, the passed result reused; the whole run an escape with a reason (the GM 2026-11-11)
+- [x] T93 The fast Rust loop by default and enforced: make rust-test and make static run only the crates whose test binary changed since their last green run, the passed result reused; the whole run an escape with a reason (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: the Rust runner's own binary, reuse keyed on sources, declared reads and the test binary, FRESH=1 REASON= as the logged escape; the first-key bullet's 1,105 lines is unlabeled (review aside)
 - [x] T94 The landing's slow hook suites reuse what make done already built: the guard suite's real build and the sync-with-main suite (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the guard suite reuses the wrapper's build and no longer sleeps 30 s (86.5 s -> 1.4 s); every suite measured to build nothing on a warm tree; built-once on a changed guard crate is reasoned, not measured
