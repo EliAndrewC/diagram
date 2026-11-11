@@ -206,17 +206,8 @@ fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ran {
 
 /// The cargo feature flags naming every feature of the crate but `left_out` (none when that leaves none).
 fn features_but(manifest: &Path, left_out: &str) -> Vec<String> {
-    let text = std::fs::read_to_string(manifest).unwrap_or_default();
-    let section = re(r"(?ms)^\[features\]\n(.*?)(?:^\[|\z)")
-        .captures(&text)
-        .ok()
-        .flatten()
-        .map_or(String::new(), |c| c[1].to_owned());
-    let names = re(r"(?m)^([A-Za-z_][\w-]*)\s*=");
-    let rest: Vec<String> = names
-        .captures_iter(&section)
-        .flatten()
-        .map(|c| c[1].to_owned())
+    let rest: Vec<String> = features(manifest)
+        .into_iter()
         .filter(|n| n != left_out)
         .collect();
     if rest.is_empty() {
@@ -224,6 +215,21 @@ fn features_but(manifest: &Path, left_out: &str) -> Vec<String> {
     } else {
         vec!["--features".to_owned(), rest.join(",")]
     }
+}
+
+/// The names of the crate's own features (its manifest's `[features]`).
+fn features(manifest: &Path) -> Vec<String> {
+    let text = std::fs::read_to_string(manifest).unwrap_or_default();
+    let section = re(r"(?ms)^\[features\]\n(.*?)(?:^\[|\z)")
+        .captures(&text)
+        .ok()
+        .flatten()
+        .map_or(String::new(), |c| c[1].to_owned());
+    re(r"(?m)^([A-Za-z_][\w-]*)\s*=")
+        .captures_iter(&section)
+        .flatten()
+        .map(|c| c[1].to_owned())
+        .collect()
 }
 
 /// Each file's lines no test ran and the first line of each function no test called: the one reader of the floor (a closure never
@@ -658,6 +664,17 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             .unwrap_or(Path::new(""))
             .display()
             .to_string();
+        // THE COUNTING BUILD IS RUN ONLY WHERE THERE IS ONE (feature 449 T97): a crate with no `counters` feature builds the same with
+        // `--all-features` as without (core's one other, `testkit`, is on in its test build already), so its counting build was its
+        // default test build run a second time - every gate crate and the guard, 59-113 s of a landing's `make done` (2026-11-11),
+        // whose tests `make static`'s `cover` runs anyway. Only a crate with the feature has counters for the run to prove inert.
+        if cmd == "test-counters" && !features(manifest).iter().any(|f| f == "counters") {
+            let _ = writeln!(
+                stdout,
+                "rust-checks: test-counters passes over {shown} - no counters feature, so its counting build is its default one"
+            );
+            continue;
+        }
         let (verdict, stands) = Verdict::ask(world, cmd, manifest, inputs.as_ref());
         if stands {
             let _ = writeln!(

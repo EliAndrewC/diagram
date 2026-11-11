@@ -497,6 +497,12 @@ fn the_arguments_are_parsed_and_each_failure_says_its_fix() {
     assert_eq!(parse(&args(&["lint", "--crate"])), None);
     assert_eq!(parse(&args(&["lint", "--what"])), None);
     let (root, ..) = two_crates();
+    // a counting build is run only where the crate has counters (T97)
+    std::fs::write(
+        root.join("rust/a/Cargo.toml"),
+        "[package]\n[features]\ncounters = []\n",
+    )
+    .unwrap();
     let world = world_with(&root, "exit 1");
     assert_eq!(dispatch(&world, &args(&["nothing"])).code, 2);
     for (cmd, fix) in [
@@ -824,7 +830,8 @@ exit 0"#;
 
 #[test]
 fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
-    let (root, a, _) = kept_crates();
+    let (root, a, b) = kept_crates();
+    std::fs::write(&b, "[package]\n[features]\ncounters = []\n").unwrap();
     // a declares what its tests read: its binary key carries those paths, its own sources the binary
     std::fs::write(
         &a,
@@ -862,9 +869,13 @@ fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
     let rebuilt = answer(&world, "test", &[], false);
     assert!(rebuilt.stdout.contains("test unchanged on rust/a"));
     assert_eq!(runs(&world), 2);
-    // the counting build shares the plain one's result where its binary is the same
+    // the counting build shares the plain one's result where its binary is the same (b has counters); a crate with none has no
+    // counting build to run (T97)
     let counted = answer(&world, "test-counters", &[], false);
     assert!(counted.stdout.contains("test-counters unchanged on rust/b"));
+    assert!(counted.stdout.contains(
+        "test-counters passes over rust/a - no counters feature, so its counting build is its default one"
+    ));
     assert_eq!(runs(&world), 2);
     // a binary that moved runs; a build that fails runs, and its failure is cargo's to tell
     std::fs::write(world.target.join("exe"), "binary two").unwrap();

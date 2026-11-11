@@ -336,6 +336,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T97 (make done's counters-inert phase, FR-012)": {
+   "sha256": "9f6abe47c2df64bd6ccabcfc8fd772b814a04284964b925fced171a87b493137",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T97 Approach (checklist part A)": {
+   "sha256": "1260b4046e5996b8b176331011035b450dbdab314e215f0a6a830108a9c3a593",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6224,6 +6236,52 @@
      "why": "The dry run shows what the sweep removes today, not SC-008's property that the cache's size stops growing with test runs. The fixture tests cover the mechanism that gives that property. This is a plan-quality point and narrows nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T97 (make done's counters-inert phase, FR-012)",
+    "### T97 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T97-D1",
+     "summary": "l7r-gate rust test-counters runs a crate's counting build only where the crate has a `counters` feature and passes over the rest by name",
+     "class": "within",
+     "why": "FR-012 asks for the counters-inert phase's cost to be cut with every verdict held. The phase exists to prove the counters change no result, and a crate with no counters has nothing for it to prove. On the plan's labeled census (only rust/phases has the feature; core's testkit is already on under cfg(any(test, ...)); no other crate has features), the counting build of the other 18 crates was the default test build run a second time. That makes this removal of duplicate work, which is what was asked, not a narrowing of what is proven. The ruling rests on one premise the plan states without a method label: that make static's cover runs those same default tests in the same make done. The implementation has to keep that true."
+    },
+    {
+     "id": "T97-D2",
+     "summary": "the phase's output changes: a pass-over line per skipped crate replaces its test run",
+     "class": "within",
+     "why": "FR-012's 'every output and verdict' clause is there so that results do not move. A pass-over line reports work not repeated and is not a changed result. Every verdict still comes out the same: from cover for the skipped crates, and from the unchanged counting run for rust/phases."
+    },
+    {
+     "id": "T97-D3",
+     "summary": "rustc crate tests give a crate a `counters` feature where they run the counting build and assert the pass-over line for one without",
+     "class": "within",
+     "why": "Enforcement of the requested change: if the gating were deleted, the test would have nothing left to check. It is not unrequested scope."
+    },
+    {
+     "id": "T97-D4",
+     "summary": "measurement: before from two landings' make done counters-inert phase (113 s, 59 s); after from make counters-inert FRESH=1 (4.96 s) plus T97's own landing's counters-inert phase",
+     "class": "within",
+     "why": "FR-012 and SC-007 require the before and after figures to come from the same command. Item 9 (Done, measured), with a one-landing budget, makes the counters-inert phase of the landing that carries T97 a done condition, and that is the same command as the before figure. SC-007 is satisfied by that landing-phase figure, which must be recorded. The FRESH=1 timing does not satisfy it, because it is a different command and is only supplementary evidence. If the landing-phase figure were deferred past T97's landing, this would become a narrowing, and an illegitimate one."
+    },
+    {
+     "id": "T97-D5",
+     "summary": "the gate is keyed on a feature literally named `counters`",
+     "class": "within",
+     "why": "The phase is the counters-inert phase, and today's labeled census finds the counters under exactly that feature name in the one crate that has them. No case that exists today is excluded."
+    },
+    {
+     "id": "T97-D6",
+     "summary": "ordered after T101-T103; one landing; red exit via make arbiter-ask; no engine code or map change",
+     "class": "within",
+     "why": "Sequencing and procedure inside FR-012. None of it narrows the request or the spec."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10876,6 +10934,50 @@
      "summary": "'Done, measured' is the dry run, with the mechanism pinned by fixture tests.",
      "class": "within",
      "why": "The dry run shows what the sweep removes today, not SC-008's property that the cache's size stops growing with test runs. The fixture tests cover the mechanism that gives that property. This is a plan-quality point and narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T97": {
+   "section_sha256": "8f426b5172b75320e5e5db345421af9f38f3d6f338b6323a52e886a56208b90f",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T97-D1",
+     "summary": "l7r-gate rust test-counters runs a crate's counting build only where the crate has a `counters` feature and passes over the rest by name",
+     "class": "within",
+     "why": "FR-012 asks for the counters-inert phase's cost to be cut with every verdict held. The phase exists to prove the counters change no result, and a crate with no counters has nothing for it to prove. On the plan's labeled census (only rust/phases has the feature; core's testkit is already on under cfg(any(test, ...)); no other crate has features), the counting build of the other 18 crates was the default test build run a second time. That makes this removal of duplicate work, which is what was asked, not a narrowing of what is proven. The ruling rests on one premise the plan states without a method label: that make static's cover runs those same default tests in the same make done. The implementation has to keep that true."
+    },
+    {
+     "id": "T97-D2",
+     "summary": "the phase's output changes: a pass-over line per skipped crate replaces its test run",
+     "class": "within",
+     "why": "FR-012's 'every output and verdict' clause is there so that results do not move. A pass-over line reports work not repeated and is not a changed result. Every verdict still comes out the same: from cover for the skipped crates, and from the unchanged counting run for rust/phases."
+    },
+    {
+     "id": "T97-D3",
+     "summary": "rustc crate tests give a crate a `counters` feature where they run the counting build and assert the pass-over line for one without",
+     "class": "within",
+     "why": "Enforcement of the requested change: if the gating were deleted, the test would have nothing left to check. It is not unrequested scope."
+    },
+    {
+     "id": "T97-D4",
+     "summary": "measurement: before from two landings' make done counters-inert phase (113 s, 59 s); after from make counters-inert FRESH=1 (4.96 s) plus T97's own landing's counters-inert phase",
+     "class": "within",
+     "why": "FR-012 and SC-007 require the before and after figures to come from the same command. Item 9 (Done, measured), with a one-landing budget, makes the counters-inert phase of the landing that carries T97 a done condition, and that is the same command as the before figure. SC-007 is satisfied by that landing-phase figure, which must be recorded. The FRESH=1 timing does not satisfy it, because it is a different command and is only supplementary evidence. If the landing-phase figure were deferred past T97's landing, this would become a narrowing, and an illegitimate one."
+    },
+    {
+     "id": "T97-D5",
+     "summary": "the gate is keyed on a feature literally named `counters`",
+     "class": "within",
+     "why": "The phase is the counters-inert phase, and today's labeled census finds the counters under exactly that feature name in the one crate that has them. No case that exists today is excluded."
+    },
+    {
+     "id": "T97-D6",
+     "summary": "ordered after T101-T103; one landing; red exit via make arbiter-ask; no engine code or map change",
+     "class": "within",
+     "why": "Sequencing and procedure inside FR-012. None of it narrows the request or the spec."
     }
    ],
    "verdict": "CLEAR"
