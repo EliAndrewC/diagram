@@ -190,7 +190,8 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 - **SC-005** (FR-001, FR-001a, FR-001b, FR-005, FR-009): When the feature closes, both censuses (FR-001) return nothing, `m:recorded-python-commands`' command returns none, and
   `make done` and `make figures` run with no Python interpreter. Its one entry here, this feature's own `m:python-start` (the before
   figure of the interpreter the close removes), is retired in the closing commit - git history keeps it - the only exemption.
-- **SC-006** (FR-011): After T92-T94, re-measured by the same commands as the 2026-11-11 figures in T92's plan section: a one-file edit of one gate crate followed by `make rust-test` takes well under the 68 s it took on 2026-11-11, `make rust-test` and `make static` with nothing changed run no test and no coverage run, and `make done`'s hook suites build no crate `make done` already built.
+
+- **SC-006** (FR-011): After T92-T94, re-measured by the same commands as the 2026-11-11 figures recorded in T92's plan section: a one-file edit of one gate crate followed by `make rust-test` takes well under that section's one-crate figure, `make rust-test` and `make static` with nothing changed run no test and no coverage run, and `make done`'s hook suites build no crate `make done` already built.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
