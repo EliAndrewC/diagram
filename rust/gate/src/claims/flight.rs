@@ -1,0 +1,116 @@
+//! A claims check IN FLIGHT, seen rather than inferred (`scripts/record/claims_flight.py`, ported by feature 449 T82; feature 426 D1):
+//! `make claims-bundle` and `make claims-triage` mark their bundle, `make claims-checked` and `make claims-triaged` clear it, and
+//! `make land` waits for a claims round only while a live mark stands.
+
+use std::path::{Component, Path, PathBuf};
+
+use l7r_guard::shared::pyjson::py_float;
+use l7r_guard::shared::sha256;
+use serde_json::Value;
+
+use crate::record::repo::{fail, Fail};
+
+/// A mark older than this is stale: the landing's own claims wait, past which it would have stopped waiting anyway.
+pub(crate) const MAX_AGE_S: f64 = 1200.0;
+
+/// `Path(p).resolve()`: absolute, every symlink of the part that exists resolved, the rest appended.
+pub(crate) fn resolved(p: &Path) -> PathBuf {
+    let abs = std::path::absolute(p).unwrap_or_else(|_| p.to_path_buf());
+    let mut clean = PathBuf::new();
+    for c in abs.components() {
+        match c {
+            Component::ParentDir => {
+                clean.pop();
+            }
+            Component::CurDir => {}
+            other => clean.push(other),
+        }
+    }
+    let mut head = clean.clone();
+    let mut tail: Vec<std::ffi::OsString> = Vec::new();
+    loop {
+        if let Ok(real) = std::fs::canonicalize(&head) {
+            return tail.iter().rev().fold(real, |acc, t| acc.join(t));
+        }
+        match (head.file_name().map(std::ffi::OsStr::to_os_string), head.parent()) {
+            (Some(name), Some(parent)) => {
+                tail.push(name);
+                head = parent.to_path_buf();
+            }
+            _ => return clean,
+        }
+    }
+}
+
+fn dir(root: &Path) -> PathBuf {
+    let out = std::process::Command::new("git")
+        .arg("-C")
+        .arg(root)
+        .args(["rev-parse", "--git-common-dir"])
+        .output();
+    let common = out
+        .ok()
+        .filter(|o| o.status.success())
+        .map(|o| l7r_guard::shared::py_text::strip(&String::from_utf8_lossy(&o.stdout)).to_owned())
+        .filter(|s| !s.is_empty())
+        .map_or_else(|| root.join(".git"), PathBuf::from);
+    let common = if common.is_absolute() { common } else { root.join(common) };
+    common.join("claims-in-flight")
+}
+
+fn name(bundle: &Path) -> String {
+    format!("{}.json", &sha256::hex(resolved(bundle).to_string_lossy().as_bytes())[..16])
+}
+
+/// The time now, as `time.time()`.
+pub(crate) fn now() -> f64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map_or(0.0, |d| d.as_secs_f64())
+}
+
+/// `bundle` is in flight: built, its check about to be dispatched.
+pub(crate) fn mark(root: &Path, bundle: &Path) -> Result<(), Fail> {
+    let d = dir(root);
+    std::fs::create_dir_all(&d).map_err(fail)?;
+    let text = format!(
+        "{{\"bundle\": {}, \"at\": {}}}",
+        l7r_guard::shared::pyjson::ascii_string(&resolved(bundle).to_string_lossy(), true),
+        py_float(now())
+    );
+    std::fs::write(d.join(name(bundle)), text).map_err(fail)
+}
+
+/// `bundle`'s reply is recorded: no longer in flight.
+pub(crate) fn clear(root: &Path, bundle: &Path) {
+    let _ = std::fs::remove_file(dir(root).join(name(bundle)));
+}
+
+/// The bundles in flight at `now`: marked within [`MAX_AGE_S`] and not cleared.
+pub(crate) fn live(root: &Path, now: f64) -> Vec<String> {
+    let d = dir(root);
+    let mut files: Vec<PathBuf> = std::fs::read_dir(&d)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.extension().is_some_and(|e| e == "json"))
+        .collect();
+    files.sort();
+    let mut out = Vec::new();
+    for f in files {
+        let Ok(rec) = std::fs::read_to_string(&f).map(|t| serde_json::from_str::<Value>(&t)) else {
+            continue;
+        };
+        let Ok(rec) = rec else { continue };
+        let at = rec.get("at").and_then(Value::as_f64).unwrap_or(0.0);
+        if now - at <= MAX_AGE_S {
+            let fallback = f.file_name().unwrap_or_default().to_string_lossy().into_owned();
+            out.push(rec.get("bundle").map_or(fallback, |b| b.as_str().map_or_else(|| b.to_string(), str::to_owned)));
+        }
+    }
+    out
+}
+
+#[cfg(test)]
+mod tests;

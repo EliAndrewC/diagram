@@ -176,6 +176,29 @@ def chase(root: Path, path: str, names: list[str], context_source: Any, budget: 
     return out
 
 
+def py_source(root: Path, ref: str) -> str:
+    """The source of `path::qualname` in a `.py` file - a function, method, class or module-level constant - by Python's own syntax
+    tree (`claims.context_source`'s Python half, which stays Python with the Python it reads: feature 449 T82, `ask:449-T82-claims`)."""
+    path, _, qual = ref.partition("::")
+    text = (root / path).read_text(encoding="utf-8")
+    body: list[ast.stmt] = ast.parse(text).body
+    node: ast.AST | None = None
+    for name in qual.split("."):
+        node = next(
+            (
+                n
+                for n in body
+                if (isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and n.name == name)
+                or (isinstance(n, (ast.Assign, ast.AnnAssign)) and name in [t.id for t in (n.targets if isinstance(n, ast.Assign) else [n.target]) if isinstance(t, ast.Name)])
+            ),
+            None,
+        )
+        if node is None:
+            raise ValueError(f"no `{qual}` in {path}")
+        body = getattr(node, "body", [])
+    return ast.get_source_segment(text, node) or ""
+
+
 def callees(root: Path, unit: Any, source: str, limit: int) -> list[str]:  # noqa: ANN401
     """The first bundle's context (D47a): the unit's own module's functions it calls, at most `limit` (as before T25), then the
     module constants it reads - its module's and those it imports. Deeper layers come from `chase`, on what a CANNOT-TELL names."""

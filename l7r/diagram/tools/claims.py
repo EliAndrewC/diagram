@@ -633,6 +633,26 @@ def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = Fals
     """Every unit in scope with its module's errors: the code (FR-002), then the procedure sections (FR-003). Paths are
     repository-relative, as the index keys them. `memo` keeps each module's parse and units (feature 375 amendment 8)."""
     memo = memo if memo is not None else _NoMemo()
+    inside, outside = py_units(skill, repo_prefix, every_module_unit, memo)
+    yield from inside
+    # ...AND THE RUST PHASES (feature 444 T17): every unit of every `.rs` under `rust/`, from its doc comments - in the scope
+    from l7r.diagram.tools.claims_rust import all_rust_units  # noqa: PLC0415 - it imports this module
+
+    yield from all_rust_units(skill, repo_prefix)
+    yield from outside
+    for doc, tops in PROCEDURES.items():
+        if not (skill / doc).is_file():  # a tree read at an older commit (the push's base) may predate a document
+            continue
+        text = (skill / doc).read_text(encoding="utf-8")
+        for unit in doc_units(text, repo_prefix + doc, tops):
+            yield unit, []
+
+
+def py_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = False, memo: Memo | None = None) -> tuple[list[tuple[Unit, list[str]]], list[tuple[Unit, list[str]]]]:
+    """(the hamlet scope's units, those `claimed_outside` adds), each with its module's errors: the Python half of `all_units`, which
+    stays Python while the Python it reads does (feature 449 T82, `ask:449-T82-claims`: a `.py` unit's fingerprint is CPython's
+    `ast.dump`); the Rust claims tools reach it through `scripts/bundle_door.py`."""
+    memo = memo if memo is not None else _NoMemo()
     known = engine_modules(skill)
     mods: dict[str, tuple[Path, str, dict[str, Any]]] = {}
     todo = [m for m in known if m == ROOT_PACKAGE or m.startswith(ROOT_PACKAGE + ".")]
@@ -645,22 +665,30 @@ def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = Fals
         todo += [m for m in facts["imports"] if m not in mods]
     mods = dict(sorted(mods.items()))
     constants = reexported({m: f["constants"] for m, (_p, _s, f) in mods.items()}, {m: f["table"] for m, (_p, _s, f) in mods.items()})
+    inside: list[tuple[Unit, list[str]]] = []
     for mod, (p, src, facts) in mods.items():
         rel = repo_prefix + p.relative_to(skill).as_posix()
         errors, units = _units_of(src, facts, rel, mod, p.name == "__init__.py", constants, every_module_unit, "scope", memo)
-        for unit in units:
-            yield unit, errors
-    # ...AND THE RUST PHASES (feature 444 T17): every unit of every `.rs` under `rust/`, from its doc comments - in the scope
-    from l7r.diagram.tools.claims_rust import all_rust_units  # noqa: PLC0415 - it imports this module
+        inside += [(unit, errors) for unit in units]
+    return inside, list(claimed_outside(skill, set(mods), repo_prefix, memo))
 
-    yield from all_rust_units(skill, repo_prefix)
-    yield from claimed_outside(skill, set(mods), repo_prefix, memo)
-    for doc, tops in PROCEDURES.items():
-        if not (skill / doc).is_file():  # a tree read at an older commit (the push's base) may predate a document
-            continue
-        text = (skill / doc).read_text(encoding="utf-8")
-        for unit in doc_units(text, repo_prefix + doc, tops):
-            yield unit, []
+
+def unit_json(unit: Unit, errors: list[str]) -> dict[str, Any]:
+    """One unit and its module's errors as the Rust claims tools read them: each claim as its line, which they parse again."""
+    return {
+        "path": unit.path,
+        "qualname": unit.qualname,
+        "kind": unit.kind,
+        "lineno": unit.lineno,
+        "end_lineno": unit.end_lineno,
+        "claims": [c.line for c in unit.claims],
+        "inherited": unit.inherited,
+        "core": unit.core,
+        "errors": list(unit.errors),
+        "names": list(unit.names),
+        "blocks": list(unit.blocks),
+        "module_errors": list(errors),
+    }
 
 
 def claimed_outside(skill: Path, inside: set[str], repo_prefix: str = "", memo: Memo | None = None) -> Iterator[tuple[Unit, list[str]]]:

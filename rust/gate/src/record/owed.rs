@@ -1,6 +1,6 @@
 //! Which record checks this delta owes, and which are still unanswered (from `record_owed.py`, feature 449 T87): the one scripted answer, read against the merge base and the working tree or between two revisions. `make record-owed`, the push's record gate and the check bundles ask it; `answers.rs` is its record of what was answered.
 
-mod answers;
+pub(crate) mod answers;
 
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};

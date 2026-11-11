@@ -18,6 +18,7 @@ import datetime
 import importlib.util
 import subprocess
 import sys
+import types
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -130,6 +131,18 @@ def counter_only(cl: Any, root: Path, base: str, was: dict[str, Any], row: Any) 
         return False  # the recorded version is not the base's (or a constant it reads changed)
     _drop_added(cnode, Counter(ast.dump(b) for b in _blocks(bnode)))
     return cl.nameless_dump(cnode) == cl.nameless_dump(bnode)
+
+
+def counter_only_json(root: Path, base: str, was: dict[str, Any], unit: dict[str, Any], claim: str) -> bool:
+    """`counter_only` asked by the Rust claims tools (feature 449 T82, `ask:449-T82-claims`): the unit as `tools/claims.unit_json`
+    gives it and its claim's line, rebuilt as the engine's reader holds them; a Python syntax tree stays Python."""
+    sys.path.insert(0, str(HERE.parents[1]))
+    from l7r.diagram.tools import claims as cl  # noqa: PLC0415 - the engine's reader, the stripping and the dump it fingerprints
+
+    parsed = cl.parse_claim(claim)
+    fields = {k: unit[k] for k in ("path", "qualname", "kind", "lineno", "end_lineno", "inherited", "core")}
+    u = cl.Unit(**fields, claims=[cl.parse_claim(c) for c in unit["claims"]], errors=list(unit["errors"]), names=tuple(unit["names"]), blocks=tuple(unit["blocks"]))
+    return counter_only(cl, root, base, was, types.SimpleNamespace(unit=u, claim=parsed))
 
 
 def clear(claims: Any, root: Path, cur: dict[str, Any], index: dict[str, dict[str, Any]], cmd: str) -> dict[str, dict[str, Any]]:  # noqa: ANN401 - `scripts/record/claims.py`

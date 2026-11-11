@@ -490,6 +490,16 @@ fn answer(
 
 /// `l7r-gate plan <verb> ...`.
 /// What an hour or red-gate ruling owes the active task's part B (`plan_door.approach_ruled`), for `l7r-gate arbiter`.
+/// The active task's feature directory, as `plan_door.active_task` answered it (the claims carry's, 449 T82).
+pub(crate) fn active_feature(root: &Path) -> Option<PathBuf> {
+    task::active_task(root).0
+}
+
+/// A spec directory from a number or a name, as `plan_door.resolve` answered it (the claims carry's, 449 T82).
+pub(crate) fn resolve_feature(feature: &str, root: &Path) -> Option<PathBuf> {
+    resolve(feature, root)
+}
+
 pub(crate) fn approach_ruled(root: &Path, trigger: &str) -> Option<String> {
     approach::ruled(root, trigger, None)
 }

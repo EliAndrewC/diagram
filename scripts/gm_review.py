@@ -73,6 +73,15 @@ def rows(d: Path) -> list[dict]:
     return out
 
 
+def add_row(d: Path, row: dict) -> bool:
+    """Append `row` to the feature's `gm-review.jsonl` and add the GM's review box with it (`ensure_box`): `make claims-known`'s write,
+    which the Rust claims tools ask through `scripts/bundle_door.py` so this file stays the one writer of both until it ports (feature
+    449 T82, `ask:449-T82-claims`; T91 holds this file)."""
+    with (d / ROWS).open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+    return ensure_box(d)
+
+
 def ensure_box(d: Path) -> bool:
     """Add the GM-review box to `tasks.md` when the feature has an open row and no box yet; True when added."""
     tasks = d / "tasks.md"

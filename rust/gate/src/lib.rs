@@ -2,6 +2,7 @@
 
 pub mod arbiter;
 mod checks;
+mod claims;
 pub mod checks_door;
 mod ci;
 pub mod codeid;
@@ -118,6 +119,9 @@ pub fn cli(args: &[String]) -> Reply {
         Some("reviews-door") => {
             reviews::door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
         }
+        Some("claims") => claims::cli(&args[1..]),
+        Some("tunables") => claims::tunables_cli(&args[1..]),
+        Some("claims-door") => claims::door_cli(),
         Some("checks-door") => {
             checks_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
         }
