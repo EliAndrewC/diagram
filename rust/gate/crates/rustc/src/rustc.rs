@@ -365,6 +365,42 @@ fn remove(path: &Path) {
 
 /// Instrument, run the crate's tests, and write the report. Only the last run's profiles are cleared and only the tests' binary is built:
 /// `llvm-cov clean` rebuilt the crate from scratch on every run (the GM 2026-11-07: "Are we recompiling EVERYTHING every time?").
+/// The flags `show-env` adds to RUSTFLAGS for coverage, every crate built with them.
+const COVERAGE_FLAGS: [&str; 3] = [
+    "-C instrument-coverage",
+    "--cfg=coverage",
+    "--cfg=trybuild_no_target",
+];
+
+/// COVERAGE INSTRUMENTS THE WORKSPACE'S OWN CRATES ONLY (feature 449 T100): `show-env`'s RUSTFLAGS instrumented every crate the build
+/// compiles, `fancy-regex` and `serde` too, though the report counts only the workspace's lines - and the checks crate's tests, which
+/// scan the tree with regexes, took 23 s under coverage against 0.6 s plain (2026-11-11). The coverage flags move out of RUSTFLAGS
+/// into a `RUSTC_WORKSPACE_WRAPPER` that adds them, which cargo calls for the workspace's crates alone, the rest of RUSTFLAGS (rust-lld,
+/// T96) left to every crate. `script` is written each run with the same text, so its path and content never move a build's key.
+fn workspace_only(env: &mut BTreeMap<String, String>, script: &Path) {
+    let Some(flags) = env.get("RUSTFLAGS").cloned() else {
+        return;
+    };
+    let added: Vec<&str> = COVERAGE_FLAGS
+        .iter()
+        .copied()
+        .filter(|f| flags.contains(f))
+        .collect();
+    let rest = COVERAGE_FLAGS.iter().fold(flags, |f, c| f.replace(c, ""));
+    let rest: Vec<&str> = rest.split_whitespace().collect();
+    let text = format!("#!/bin/sh\nexec \"$@\" {}\n", added.join(" "));
+    if std::fs::read_to_string(script).ok().as_deref() != Some(text.as_str()) {
+        let _ = std::fs::write(script, &text);
+        let _ =
+            std::fs::set_permissions(script, std::os::unix::fs::PermissionsExt::from_mode(0o755));
+    }
+    env.insert("RUSTFLAGS".to_owned(), rest.join(" "));
+    env.insert(
+        "RUSTC_WORKSPACE_WRAPPER".to_owned(),
+        script.display().to_string(),
+    );
+}
+
 fn cover(world: &World, manifest: &Path, work: &Path, report: &[String], tmp: &Path) -> Ran {
     let manifest_arg = manifest.display().to_string();
     let target = work.join("target");
@@ -400,6 +436,7 @@ fn cover(world: &World, manifest: &Path, work: &Path, report: &[String], tmp: &P
             );
         }
     }
+    workspace_only(&mut env, &work.join("instrument.sh"));
     for old in std::fs::read_dir(&target)
         .into_iter()
         .flatten()

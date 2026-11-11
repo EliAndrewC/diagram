@@ -6,9 +6,9 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
-# What the tests read of the tree at run time (feature 449 T93): the binary's tests answer through `top()`, the repository. A change there runs them again.
+# What the tests read of the tree at run time (feature 449 T93): the binary's tests answer through `top()`, the repository, and read only the push credential's file (traced 2026-11-11 by the hook suites' read shim over a full test run, feature 449 T100; `.git` is git's own lookup, not the tree). A change there runs them again.
 [package.metadata.l7r]
-reads = ["."]
+reads = ["development-secrets.ini"]
 
 [lib]
 name = "l7r_gate"

@@ -443,39 +443,38 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T100 (<why: the finding or measurement that files it>)
+### T100 (make static's lint, coverage and dead-code reruns after a fresh gate crate edit, FR-012)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: three changes to `l7r-gate rust` (`rust/gate/crates/rustc/src/rustc.rs`, `rustc/kept.rs`) and the crates' declared reads.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (FR-012, SC-007):
+   - Coverage instruments the workspace's own crates only: `show-env`'s RUSTFLAGS instrumented every crate the build compiles, `fancy-regex` and `serde` too, though the report counts only the workspace's lines, and the checks crate's tests, which scan the tree with regexes, took 23 s under coverage against 0.6 s plain (observed 2026-11-11, method: T96's bench, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t100/../t96/bench.py`). `workspace_only` moves the three coverage flags out of RUSTFLAGS into a `RUSTC_WORKSPACE_WRAPPER` script, which cargo calls for the workspace's crates alone, the rest of RUSTFLAGS (rust-lld, T96) left to every crate; the script is rewritten only when its text changes. The coverage is the same: claims' 7,640 lines and core's 3,654 all hit before and after with identical `uncovered` reports, one loop's hit count in core's `units.rs` moving with the live tree it reads, 121 to 110, hit both times (observed 2026-11-11, method: `l7r-gate.sh rust uncovered` for each crate with `L7R_RUST_FRESH=1` before and after, the lcov reports compared line by line on the crate's own files by `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t100/lcovcmp.py`).
+   - The declared reads narrowed to what the tests read: plan, cohort, tree and the gate binary declared `"."`, so any edit anywhere, a spec or a doc, ran their lint-free checks again; a full run of each test binary under the hook suites' read shim (LD_PRELOAD) recorded what they open of the tree, plan the approach checklist and three scripts, cohort the Makefile and one script, tree `dev/ratchets.json` and two scripts, the binary only `development-secrets.ini`, beside `.git`, which is git's own lookup (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t100/trace_reads.sh`). Each now declares those, whole directories where a script was read (`scripts/`) and the plan template its comment names; checks, whose file-scale and pointer checks read 36,499 files of the tree, keeps `"."`.
+   - The dead check is keyed on its whole family: it counts a `pub fn`'s callers across every crate of the family (all of `rust/gate/`), but its key held only the crate and what it builds from, so a dependent dropping the last call left its kept green result standing. Its key is every file of the family; a test moves low's dead key with the binary's file and a sibling's, and not with a file outside the family.
+   - Measured the same way before and after (SC-007): the tree without these changes in a scratch clone and this clone, each after `make rust-test` and a green `make static`, each edit a one-line comment unique to the run (a repeated text is answered from the kept results), `make static` timed after each: core 68.7 s before and 54.0 s after, claims 44.5 s and 25.3 s, a docs file 34.2 s and 13.5 s, each revert 3.7-5.7 s both ways, the coverage tests after a core edit 36.2 s and 16.6 s, and after the docs edit five crates' coverage ran before and one after (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t100/static_runs_before.sh` then `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t100/static_runs.sh`, back to back, `date +%s.%N` around each `make static` and the logs' `cover build` and `cover tests` lines summed).
+   - What is left: a core edit still builds every gate crate's coverage binary one crate after another, 17 builds and 14.6 s of the 54.0 s (observed 2026-11-11, method: the same logs); building them together is a change to how the coverage run shares its build, filed apart if it is taken up.
 
 ### T100 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An edit costs `make static` the checks it can change, and coverage measures only the workspace.
+2. **The constraints.** FR-012 and SC-007: every coverage figure and verdict held; a kept result never stands over an input that moved.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the traces and the timings above.
+4. **Do they describe the world here?** Measured on this clone and a scratch clone of its committed tree.
+5. **The order.** After T96, whose bench found the coverage cost.
+6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The before-and-after timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T100 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: `make perf-profile` time beside `make phase-calls` / `make perf-fanout` calls>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <calls; `make perf-ab` best of N with each arm's spread,
-   the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** Coverage instrumenting third-party crates, whole-tree reads rerunning five crates on any edit, and the coverage builds of a core edit's dependents.
+2. **Does the change remove work, or only move it?** Removes it: uninstrumented dependencies, and checks no longer rerun when nothing they read moved.
+3. **What do you expect it to save, and why?** Most of the coverage test time, and most of a non-Rust edit's reruns.
+4. **How does the work grow?** With what an edit reaches, no longer with every crate that declared the whole tree.
+5. **What did the before and after show, and under what conditions?** One back-to-back run each on a throttled host, read as evidence.
+6. **Did any map move?** No: no engine code changes.
 
 
 ### T101 (every temporary directory a check or test makes is removed, FR-013)

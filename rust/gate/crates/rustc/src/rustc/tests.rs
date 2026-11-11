@@ -7,7 +7,7 @@ use std::process::Command;
 use super::{
     answer, check, content_ids, crates, dead_public, declared_reads, dispatch, features_but,
     kept_reads, lcov_missed, own_libs, parse, relative, run, tail, uncovered, undeclared,
-    verdict_key, Reads, World,
+    verdict_key, workspace_only, Reads, World,
 };
 use crate::checks::scratch;
 use l7r_guard::shared::tempdir::{Held, TempDir};
@@ -744,6 +744,14 @@ fn a_nested_crate_owns_its_files_and_a_dependency_s_dependency_moves_the_key() {
         assert_eq!(key(&low, &base), key(&low, &moved("rust/g/src/lib.rs")));
         assert_eq!(key(&mid, &base), key(&mid, &moved("rust/g/src/lib.rs")));
     }
+    // the dead check counts calls across the whole family (T100): low's dead key moves with the binary's file, which can drop the last
+    // call to a low function; a file outside the family moves nothing
+    let dead = |ids: &BTreeMap<String, String>| {
+        verdict_key(&root, &low, "dead", Reads::Source, &all, ids, "c")
+    };
+    assert_ne!(dead(&base), dead(&moved("rust/g/src/lib.rs")));
+    assert_ne!(dead(&base), dead(&moved("rust/g/crates/mid/src/lib.rs")));
+    assert_eq!(dead(&base), dead(&moved("rust/other/src/lib.rs")));
 }
 
 #[test]
@@ -925,4 +933,45 @@ fn a_named_crate_is_kept_and_its_key_follows_the_crates_it_builds_from() {
     assert!(answer(&world, "lint", &outside, false)
         .stdout
         .contains("lint unchanged on tests/fx"));
+}
+
+/// Coverage instruments the workspace's crates only (T100): the coverage flags leave RUSTFLAGS, the rest stays for every crate, and a
+/// wrapper cargo calls for the workspace's crates alone adds them; written once, and left be while its text is the same; no RUSTFLAGS,
+/// nothing done.
+#[test]
+fn coverage_instruments_the_workspace_s_crates_only() {
+    let dir = scratch("rustc-cover-wrapper");
+    let script = dir.join("instrument.sh");
+    let lld = "-C link-arg=-fuse-ld=lld";
+    let shown = || {
+        BTreeMap::from([(
+            "RUSTFLAGS".to_owned(),
+            format!("{lld} -C instrument-coverage --cfg=coverage --cfg=trybuild_no_target"),
+        )])
+    };
+    let mut env = shown();
+    workspace_only(&mut env, &script);
+    assert_eq!(env["RUSTFLAGS"], lld);
+    assert_eq!(env["RUSTC_WORKSPACE_WRAPPER"], script.display().to_string());
+    let text = std::fs::read_to_string(&script).unwrap();
+    assert_eq!(
+        text,
+        "#!/bin/sh\nexec \"$@\" -C instrument-coverage --cfg=coverage --cfg=trybuild_no_target\n"
+    );
+    let ran = Command::new(&script)
+        .args(["echo", "rustc"])
+        .output()
+        .unwrap();
+    assert_eq!(
+        String::from_utf8_lossy(&ran.stdout),
+        "rustc -C instrument-coverage --cfg=coverage --cfg=trybuild_no_target\n"
+    );
+    let before = std::fs::metadata(&script).unwrap().modified().unwrap();
+    std::thread::sleep(std::time::Duration::from_millis(20));
+    workspace_only(&mut shown(), &script);
+    let after = std::fs::metadata(&script).unwrap().modified().unwrap();
+    assert_eq!(after, before, "not written again");
+    let mut none = BTreeMap::new();
+    workspace_only(&mut none, &script);
+    assert!(none.is_empty());
 }

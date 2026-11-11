@@ -242,7 +242,21 @@ pub(super) fn verdict_key(
     compiler: &str,
 ) -> String {
     let mut hash: Vec<u8> = format!("{cmd}\n{compiler}\n").into_bytes();
-    for (path, id) in inputs(root, manifest, reads, all, ids) {
+    let mut keyed: Vec<(&str, &str)> = inputs(root, manifest, reads, all, ids);
+    // THE DEAD CHECK READS ITS WHOLE FAMILY (feature 449 T100): it counts a `pub fn`'s callers across every crate of the family (all of
+    // `rust/gate/`), so a dependent crate dropping the last call made a function dead with this crate's own inputs unmoved, and its kept
+    // green result stood. Its key is every file of the family.
+    if cmd == "dead" {
+        let fam = relative(&super::family(manifest), root);
+        keyed.extend(
+            ids.iter()
+                .filter(|(p, _)| Path::new(p.as_str()).starts_with(&fam))
+                .map(|(p, i)| (p.as_str(), i.as_str())),
+        );
+        keyed.sort_unstable();
+        keyed.dedup();
+    }
+    for (path, id) in keyed {
         hash.extend(format!("{path} {id}\n").into_bytes());
     }
     sha256::hex(&hash)

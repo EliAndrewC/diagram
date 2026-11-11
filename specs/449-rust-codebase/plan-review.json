@@ -360,6 +360,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T100 (make static's lint, coverage and dead-code reruns after a fresh gate crate edit, FR-012)": {
+   "sha256": "42856ed0be2426b7c257de1b0d64c65e399addbaf9a03d542e495438bf47f944",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T100 Approach (checklist part A)": {
+   "sha256": "929a068c56cdcf48ff61b1f265b688d6daec1af7ba8d37963ce070e3473e645d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6334,6 +6346,46 @@
      "why": "Procedure only; no part of the request is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T100 (make static's lint, coverage and dead-code reruns after a fresh gate crate edit, FR-012)",
+    "### T100 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T100-D1 workspace-only coverage",
+     "summary": "Coverage's three instrumentation flags move out of RUSTFLAGS into a RUSTC_WORKSPACE_WRAPPER so only the workspace's crates are instrumented; third-party crates (fancy-regex, serde) build plain.",
+     "class": "within",
+     "why": "Cuts the coverage rerun cost FR-012 names for T100 without changing what is measured: the report only ever counted workspace lines, and the plan records identical `uncovered` reports for claims and core before and after (FR-004's floor and FR-012's held outputs). The one moved hit count (121 to 110 in units.rs) is a live-tree input, hit both times, not a changed verdict."
+    },
+    {
+     "id": "T100-D2 declared reads narrowed",
+     "summary": "plan, cohort, tree and the gate binary crates stop declaring the whole tree '.' and declare what a full traced run of their tests opened (whole scripts/ directory where a script was read, plus the plan template); checks keeps '.'.",
+     "class": "within",
+     "why": "Removes reruns of checks whose inputs did not move, the 'results of tests which have already run' reuse the GM asked for (FR-011, FR-012/T100), while keeping FR-011's rule that a kept result never stands over an input that moved; the narrowed sets come from a measured trace, not assumption, and the crate whose reads are tree-wide keeps the whole tree. No case of the request is excluded."
+    },
+    {
+     "id": "T100-D3 dead check keyed on its family",
+     "summary": "The dead-code check's key widens from the crate and its build inputs to every file of rust/gate/, so a dependent dropping a pub fn's last caller invalidates the kept green result; pinned by a test.",
+     "class": "within",
+     "why": "Enforces that the dead-code rerun T100 names gives the verdict a fresh run would give (FR-012 'held to every output and verdict', FR-011 kept results never over moved inputs). It widens rather than narrows; a check whose only effect is that the requested caching stays correct serves the request."
+    },
+    {
+     "id": "T100-D4 before/after measurement",
+     "summary": "Before and after measured by the same make static runs, back to back on a scratch clone of the unchanged tree and this clone, with core, claims, a docs edit and reverts timed.",
+     "class": "within",
+     "why": "Exactly SC-007's requirement: re-measured by the same command, lower (core 68.7 to 54.0 s, claims 44.5 to 25.3 s, docs 34.2 to 13.5 s, each with an observed-date and method label)."
+    },
+    {
+     "id": "T100-D5 serial coverage builds left",
+     "summary": "A core edit still builds 17 coverage binaries one after another (14.6 s of 54.0 s); sharing that build is filed apart if taken up.",
+     "class": "within",
+     "why": "FR-012 asks T100's reruns be cut and SC-007 asks the cost be lower, both met; neither asks every remaining second removed, and the GM's own procedure for this work is to land, re-measure and pick the next cost. The plan states the remainder openly with its measured size rather than excluding a case the request names, so nothing asked is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11068,6 +11120,44 @@
      "summary": "Exits: green on make static and make land; red records the failure and sets the task down, any cannot-be-done claim ruled through make arbiter-ask. Budget one landing; no constant moved, no map moved.",
      "class": "within",
      "why": "Procedure only; no part of the request is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T100": {
+   "section_sha256": "9644644097952ea0502067410872e0164cb999d463614c8a0f655b87385e2640",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T100-D1 workspace-only coverage",
+     "summary": "Coverage's three instrumentation flags move out of RUSTFLAGS into a RUSTC_WORKSPACE_WRAPPER so only the workspace's crates are instrumented; third-party crates (fancy-regex, serde) build plain.",
+     "class": "within",
+     "why": "Cuts the coverage rerun cost FR-012 names for T100 without changing what is measured: the report only ever counted workspace lines, and the plan records identical `uncovered` reports for claims and core before and after (FR-004's floor and FR-012's held outputs). The one moved hit count (121 to 110 in units.rs) is a live-tree input, hit both times, not a changed verdict."
+    },
+    {
+     "id": "T100-D2 declared reads narrowed",
+     "summary": "plan, cohort, tree and the gate binary crates stop declaring the whole tree '.' and declare what a full traced run of their tests opened (whole scripts/ directory where a script was read, plus the plan template); checks keeps '.'.",
+     "class": "within",
+     "why": "Removes reruns of checks whose inputs did not move, the 'results of tests which have already run' reuse the GM asked for (FR-011, FR-012/T100), while keeping FR-011's rule that a kept result never stands over an input that moved; the narrowed sets come from a measured trace, not assumption, and the crate whose reads are tree-wide keeps the whole tree. No case of the request is excluded."
+    },
+    {
+     "id": "T100-D3 dead check keyed on its family",
+     "summary": "The dead-code check's key widens from the crate and its build inputs to every file of rust/gate/, so a dependent dropping a pub fn's last caller invalidates the kept green result; pinned by a test.",
+     "class": "within",
+     "why": "Enforces that the dead-code rerun T100 names gives the verdict a fresh run would give (FR-012 'held to every output and verdict', FR-011 kept results never over moved inputs). It widens rather than narrows; a check whose only effect is that the requested caching stays correct serves the request."
+    },
+    {
+     "id": "T100-D4 before/after measurement",
+     "summary": "Before and after measured by the same make static runs, back to back on a scratch clone of the unchanged tree and this clone, with core, claims, a docs edit and reverts timed.",
+     "class": "within",
+     "why": "Exactly SC-007's requirement: re-measured by the same command, lower (core 68.7 to 54.0 s, claims 44.5 to 25.3 s, docs 34.2 to 13.5 s, each with an observed-date and method label)."
+    },
+    {
+     "id": "T100-D5 serial coverage builds left",
+     "summary": "A core edit still builds 17 coverage binaries one after another (14.6 s of 54.0 s); sharing that build is filed apart if taken up.",
+     "class": "within",
+     "why": "FR-012 asks T100's reruns be cut and SC-007 asks the cost be lower, both met; neither asks every remaining second removed, and the GM's own procedure for this work is to land, re-measure and pick the next cost. The plan states the remainder openly with its measured size rather than excluding a case the request names, so nothing asked is narrowed."
     }
    ],
    "verdict": "CLEAR"

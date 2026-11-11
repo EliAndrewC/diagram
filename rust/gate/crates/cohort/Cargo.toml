@@ -5,9 +5,9 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
-# What the tests read of the tree at run time (feature 449 T93): the push's tests read the Makefile and the gate's scripts over the real tree. A change there runs them again.
+# What the tests read of the tree at run time (feature 449 T93): the push's tests read the Makefile and the gate's scripts over the real tree (traced 2026-11-11 by the hook suites' read shim over a full test run, feature 449 T100; `.git` is git's own lookup, not the tree). A change there runs them again.
 [package.metadata.l7r]
-reads = ["."]
+reads = ["Makefile", "scripts/"]
 
 [dependencies]
 fancy-regex = { workspace = true }
