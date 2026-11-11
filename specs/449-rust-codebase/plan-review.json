@@ -11263,6 +11263,52 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T99": {
+   "section_sha256": "344afa42a2407d7e3771c8cb1c9bd829266297b04d41aace371cfd07226946bd",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T99-mechanism",
+     "summary": "A fixed git reader rather than a shared computed fixture or a pre-built record, because the fixture repository changes between a test's computations (measured: 140 git calls for the slowest test).",
+     "class": "within",
+     "why": "The ruling ask:set-down-449-efficiency-round-2 names all three mechanisms as acceptable. Picking one, with a measured reason for setting another aside, stays inside it."
+    },
+    {
+     "id": "T99-owed-seam",
+     "summary": "owed_units returns a list the test supplies (GIVEN, #[cfg(test)] only), and otherwise record::owed::unanswered. The five bundle tests get an empty list. The capped-round cause test gets an empty list and, for its unreadable case, an error.",
+     "class": "within",
+     "why": "This is the 'fixed git reader fed to the six tests' the ruling names. It exists only in the test build, so the binary's behavior is unchanged, and the plan reports every test passing as before."
+    },
+    {
+     "id": "T99-transcripts-seam",
+     "summary": "asks_reversals_red_gates_and_reviews reads an empty fixture folder (TRANSCRIPTS, test build only) instead of the machine's transcripts.",
+     "class": "within",
+     "why": "Same kind of seam as the one the ruling authorises. The plan says the test only ever checked that the folder exists, which an empty fixture folder still shows. No output or verdict of the tool changes."
+    },
+    {
+     "id": "T99-remainder",
+     "summary": "The real owed-list computation is tested once, in the_capped_round_cause_reads_the_record_s_owed_list (0.143 s), and that test is named as the remainder over FR-008's bar.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the ruling's own escape: a test that cannot reach the bar without changing what the arbiter does at its git boundary is landed with its measured cut and named as the remainder. A supplied list cannot test this computation, so the escape applies. It rests on the ruling, not on FR-008's end-to-end exemption, which this test does not fit (it runs real git on a fixture, not the real command)."
+    },
+    {
+     "id": "T99-asks-reversals-over-bar",
+     "summary": "asks_reversals_red_gates_and_reviews measures 0.123 s by the plan's own per-test method (each test alone with --exact, best of three), but it is counted as meeting FR-008's bar. The overrun is put down to process start and the first use of its regexes, which a whole-crate run would share. Checklist step 1 claims every test is under the bar except the one remainder.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The ruling requires each of the six arbiter tests to run under FR-008's bar, with exactly one escape: a test that cannot get there without changing what the arbiter does at its git boundary. By the plan's own account, this test's overrun is process start and regex first use, not the git boundary, so the escape does not reach it, and the plan does not name it as a remainder anyway. Its claim to meet the bar switches how time is counted. Before and after were both measured per test in its own process, and by that method the test is over 0.1 s. The figure for a whole-crate run is inferred (0.123 s minus 0.064 s of timed bundle calls), and no command measured it. FR-012 and SC-007 require the same command before and after. To clear this, do one of three things: (a) bring the test under 0.1 s by the plan's own method; (b) measure every test's in-process time with a stated command and use that method for all six, before and after; or (c) take a second remainder to the round arbiter, because the current ruling does not allow one that is not at the git boundary."
+    },
+    {
+     "id": "T99-order",
+     "summary": "Runs after T104, which carries the transcript-scan cut, and before the set-down.",
+     "class": "within",
+     "why": "Sequencing only. Nothing in the request or spec is narrowed."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

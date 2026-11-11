@@ -156,9 +156,25 @@ fn reviewed_feature(prompt: &str) -> String {
         .map_or_else(String::new, |m| m.as_str().to_owned())
 }
 
+#[cfg(test)]
+thread_local! {
+    /// The transcripts a test's spec rounds read on its own thread, `None` for this machine's (T99): the machine's 8,696 cost a bundle
+    /// test 0.28 s against FR-008's 0.1 s, and tested only that the folder was there. The build of the binary has no such seam.
+    pub(crate) static TRANSCRIPTS: std::cell::RefCell<Option<PathBuf>> = const { std::cell::RefCell::new(None) };
+}
+
 /// A spec review's rounds, each reviewer's whole reply beside the MANIFEST and its findings marked (387's ruling).
 pub fn spec_rounds(out: &Path, subject: &str) -> Result<Vec<String>, Fail> {
-    spec_rounds_in(&transcripts(), out, subject)
+    let base = given_transcripts().unwrap_or_else(transcripts);
+    spec_rounds_in(&base, out, subject)
+}
+
+/// The transcripts a test gave ([`TRANSCRIPTS`]); in the binary's build, none.
+fn given_transcripts() -> Option<PathBuf> {
+    #[cfg(test)]
+    return TRANSCRIPTS.with(|t| t.borrow().clone());
+    #[cfg(not(test))]
+    None
 }
 
 /// [`spec_rounds`] over the transcripts under `base`.

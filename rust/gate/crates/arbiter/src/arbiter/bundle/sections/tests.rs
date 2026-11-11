@@ -72,8 +72,10 @@ fn what_owes_a_round() {
 }
 
 #[test]
-fn the_capped_round_cause() {
-    let root = scratch("arbiter-capped");
+fn the_capped_round_cause_reads_the_record_s_owed_list() {
+    // the one real computation of the owed list here, about 35 `git` calls and 0.1 s on the fixture: FR-008's remainder (T99), the
+    // test of the arbiter's own git boundary; the cases below give the list instead
+    let root = scratch("arbiter-capped-real");
     crate::record::testkit::edit_everything(&root);
     let out = root.join("out");
     std::fs::create_dir_all(&out).unwrap();
@@ -81,6 +83,18 @@ fn the_capped_round_cause() {
     let lines =
         capped_round_cause(&root, &out, ("quote-check", "q:0094"), &files, 1.0, &[]).unwrap();
     assert!(lines[1].contains("- `quote-check:0094#k`: "));
+}
+
+#[test]
+fn the_capped_round_cause() {
+    let give =
+        |owed: Result<Vec<Unit>, String>| super::GIVEN.with(|g| *g.borrow_mut() = Some(owed));
+    give(Ok(Vec::new()));
+    let root = scratch("arbiter-capped");
+    crate::record::testkit::edit_everything(&root);
+    let out = root.join("out");
+    std::fs::create_dir_all(&out).unwrap();
+    let files = vec!["research/questions/0094-trade.notes.html".to_owned()];
     assert!(
         capped_round_cause(&root, &out, ("quote-check", "q:0094"), &files, 0.0, &[]).unwrap()[2]
             .contains("- none; the working tree only")
@@ -98,10 +112,11 @@ fn the_capped_round_cause() {
     )
     .unwrap();
     assert!(lines[1].contains("- (nothing listed as owed)") || lines[1].contains("modal-"));
-    put(&root, "l7r/diagram/interactive/classes/bad.py", "class (\n");
+    give(Err("the classes would not parse".to_owned()));
     let lines =
         capped_round_cause(&root, &out, ("quote-check", "q:0094"), &files, 1.0, &[]).unwrap();
     assert!(lines[1].contains("the record's owed list could not be read"));
+    give(Ok(Vec::new()));
     git(&root, &["add", "-A"]);
     commit(&root, "now committed");
     let lines =
@@ -315,6 +330,8 @@ fn evidence_pool_and_claims() {
 
 #[test]
 fn the_sections_rare_paths() {
+    // the owed list given, not computed (T99): the owed crate tests that computation
+    super::GIVEN.with(|g| *g.borrow_mut() = Some(Ok(Vec::new())));
     let root = scratch("arbiter-sections-rare");
     let out = root.join("out");
     std::fs::create_dir_all(&out).unwrap();

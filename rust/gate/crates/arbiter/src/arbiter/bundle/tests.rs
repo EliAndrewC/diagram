@@ -28,6 +28,12 @@ fn owed(root: &Path, value: &serde_json::Value) {
     .unwrap();
 }
 
+/// The bundle's tests give the capped round's owed list instead of computing it (T99): the owed crate tests that computation, about
+/// 35 `git` calls a time, and these test the bundle around it.
+fn no_owed() {
+    super::sections::GIVEN.with(|g| *g.borrow_mut() = Some(Ok(Vec::new())));
+}
+
 fn bundle_cli(root: &Path, extra: &[&str]) -> Reply {
     let r = root.to_string_lossy().into_owned();
     let mut a = vec!["--root", r.as_str()];
@@ -37,6 +43,7 @@ fn bundle_cli(root: &Path, extra: &[&str]) -> Reply {
 
 #[test]
 fn a_round_trigger_and_its_rounds() {
+    no_owed();
     let root = scratch("arbiter-bundle-round");
     feature(&root);
     let reply = root.join("r.md");
@@ -109,7 +116,11 @@ fn a_round_trigger_and_its_rounds() {
 }
 
 #[test]
-fn asks_reversals_red_gates_and_reviews() {
+fn an_ask_s_bundle_and_a_busy_out() {
+    no_owed();
+    // the spec rounds read a fixture's transcripts, not this machine's (T99)
+    let none = scratch("arbiter-no-transcripts");
+    super::reviews::TRANSCRIPTS.with(|t| *t.borrow_mut() = Some(none.to_path_buf()));
     let root = scratch("arbiter-bundle-kinds");
     feature(&root);
     owed(
@@ -137,6 +148,35 @@ fn asks_reversals_red_gates_and_reviews() {
     for part in ["## The question\n\nDoes ROUND_CAP", "## The evidence the question cites", "## The room table", "## The numbers it names", "## The plan review's rounds", "## Edits between rounds\n\n`edits.diff` beside this file: the last 20 commits touching specs/500-f/plan.md"] {
         assert!(text.contains(part));
     }
+    put(&root, "busy", "a file where the bundle goes");
+    assert_eq!(
+        bundle_cli(
+            &root,
+            &["ask:x", "--out", &root.join("busy").to_string_lossy()]
+        )
+        .code,
+        1
+    );
+}
+
+/// The reversals, a red gate and the review rounds, split from the ask's test (T99): together they took 0.123 s run alone,
+/// over FR-008's bar.
+#[test]
+fn reversals_red_gates_and_reviews() {
+    no_owed();
+    // the spec rounds read a fixture's transcripts, not this machine's (T99)
+    let none = scratch("arbiter-no-transcripts");
+    super::reviews::TRANSCRIPTS.with(|t| *t.borrow_mut() = Some(none.to_path_buf()));
+    let root = scratch("arbiter-bundle-kinds");
+    feature(&root);
+    owed(
+        &root,
+        &json!({
+            "ask:probe": {"kind": "ask", "detail": "Does ROUND_CAP hold at 12 ft? The plan review rounds, and two knots here.", "unit": ""},
+            "reversal:research/questions/0094-trade.html@1": {"kind": "reversal", "detail": "A -> B -> A"}
+        }),
+    );
+    let o = root.join("out").to_string_lossy().into_owned();
     let file = root
         .join("research/questions/0094-trade.html")
         .to_string_lossy()
@@ -186,19 +226,11 @@ fn asks_reversals_red_gates_and_reviews() {
     assert!(std::fs::read_to_string(root.join("out/MANIFEST.md"))
         .unwrap()
         .contains("## The earlier rounds (from the verdict record"));
-    put(&root, "busy", "a file where the bundle goes");
-    assert_eq!(
-        bundle_cli(
-            &root,
-            &["ask:x", "--out", &root.join("busy").to_string_lossy()]
-        )
-        .code,
-        1
-    );
 }
 
 #[test]
 fn a_batch_and_the_command_line() {
+    no_owed();
     let root = scratch("arbiter-bundle-batch");
     feature(&root);
     let reply = root.join("r.md");
@@ -283,6 +315,7 @@ fn a_batch_and_the_command_line() {
 
 #[test]
 fn the_rare_paths_of_the_arbiters_bundle() {
+    no_owed();
     let root = scratch("arbiter-bundle-rare");
     feature(&root);
     state(

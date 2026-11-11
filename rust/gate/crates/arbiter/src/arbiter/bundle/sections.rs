@@ -19,6 +19,24 @@ use crate::record::py_lines;
 use crate::record::repo::{fail, git, git_out, Fail};
 use crate::record::units::Unit;
 
+/// The record's unanswered units, for a capped round's cause (`record::owed::unanswered`). In the test build a test may give them
+/// instead ([`GIVEN`]): one computation is about 35 `git` calls and 0.1 s on a fixture repository, and the arbiter's bundle tests,
+/// which test the bundle and not the owed list (the owed crate's own tests do), computed it up to four times each, six of them over
+/// FR-008's 0.1 s (feature 449 T99, 2026-11-11). The build of the binary has no such seam.
+fn owed_units(root: &Path) -> Result<Vec<Unit>, Fail> {
+    #[cfg(test)]
+    if let Some(given) = GIVEN.with(|g| g.borrow().clone()) {
+        return given;
+    }
+    unanswered(root)
+}
+
+#[cfg(test)]
+thread_local! {
+    /// The units a test gives [`owed_units`] on its own thread, `None` for the real computation.
+    pub(crate) static GIVEN: std::cell::RefCell<Option<Result<Vec<Unit>, Fail>>> = const { std::cell::RefCell::new(None) };
+}
+
 /// A diff between two reds past this many lines is shown by its stat alone (the round arbiter's fix on red-gate@2026-10-19T02:31:38Z).
 const BETWEEN_DIFF_LINES: usize = 1500;
 
@@ -192,7 +210,7 @@ pub fn capped_round_cause(
         vec![check]
     };
     let mut owed: Vec<String> = Vec::new();
-    let owing: Vec<Unit> = match unanswered(root) {
+    let owing: Vec<Unit> = match owed_units(root) {
         Ok(all) => all
             .into_iter()
             .filter(|u| {

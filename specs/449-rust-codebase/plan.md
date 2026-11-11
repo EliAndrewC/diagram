@@ -396,28 +396,38 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T96 to T96 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T97 to T97 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T98 to T98 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-### T99 (<why: the finding or measurement that files it>)
+### T99 (the arbiter crate's tests against FR-008's bar, FR-012)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the cut of the transcript scan landed as T104; here the arbiter's bundle tests are given what they do not test - the record's owed list and the machine's transcripts - through two seams of the test build alone, and the one real computation of the owed list is its own test, under the round arbiter's ruling `ask:set-down-449-efficiency-round-2`, which reads: "(a) finish T99 by building the owed list once per test binary (a shared computed fixture, or a pre-built record or fixed git reader fed to the six tests), so each of the six arbiter tests runs under FR-008's [bar] with every output and verdict unchanged; if one cannot reach the bar without changing what the arbiter does at its git boundary, land T99 with its measured cut and name that test as remainder in the report rather than spend rounds on it."
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (FR-012, FR-008, SC-007):
+   - Before: after T104 six tests took 0.14-0.43 s, `the_capped_round_cause` 0.43 s, `asks_reversals_red_gates_and_reviews` 0.30 s, `a_round_trigger_and_its_rounds` 0.26 s, `the_rare_paths_of_the_arbiters_bundle` 0.21 s, `a_batch_and_the_command_line` 0.15 s, `the_sections_rare_paths` 0.14 s, and the crate's tests 1.09 s (observed 2026-11-11, method: the test binary run once per test with `--exact` and `make rust-test CRATE=rust/gate/crates/arbiter`'s `finished in`). Each computed the record's owed list one to four times, about 35 `git` calls and 0.1 s a computation on a fixture repository it changes between them, so a shared computed fixture cannot serve them (observed 2026-11-11, method: `git` and `python3` wrapped by timing scripts ahead on `PATH`, 140 `git` and 8 `python3` calls for the slowest).
+   - The fixed reader the ruling names: the one place the arbiter computes the owed list, a capped round's cause (`bundle/sections.rs`), now asks `owed_units`, which in the test build alone returns what a test gave it on its own thread (`GIVEN`, `#[cfg(test)]`, so the binary's build has no seam), else `record::owed::unanswered`. The five bundle tests that do not test the owed list give it an empty one, and the capped round's cause gives it an empty list and, for its unreadable-list case, an error, the owed crate's own tests testing the computation. The same for the spec rounds' transcripts (`bundle/reviews.rs`, `TRANSCRIPTS`): `asks_reversals_red_gates_and_reviews` reads an empty fixture folder, not the machine's 8,696 transcripts (observed 2026-11-11, method: `ls ~/.claude/projects/*/*/subagents/agent-*.jsonl | wc -l`), of which it tested only that the folder was there.
+   - The real computation stays tested once: `the_capped_round_cause_reads_the_record_s_owed_list` computes the owed list on the fixture and finds `quote-check:0094#k` in the cause, the arbiter's own git boundary, which a given list would not test; it is the named remainder, 0.143 s, one computation and the fixture's repository (observed 2026-11-11, method: best of three runs of that test alone).
+   - `asks_reversals_red_gates_and_reviews` held two concerns, an ask's bundle and the reversals, red gates and review rounds, and took 0.123 s run alone (observed 2026-11-11, method: best of three runs with `--exact`), so it is two tests, `an_ask_s_bundle_and_a_busy_out` and `reversals_red_gates_and_reviews`, each with its own fixture.
+   - After, by the same method as before: every one of the crate's 34 tests runs under 0.1 s alone but the named remainder, the slowest of the rest 0.097 s, the two split tests 0.084 s and 0.086 s, `a_round_trigger_and_its_rounds` 0.081 s, and the crate's tests took 0.18 s together, every test passing (observed 2026-11-11, method: each test run alone with `--exact`, best of three, and `make rust-test CRATE=rust/gate/crates/arbiter`'s `finished in`).
 
 ### T99 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The arbiter crate's tests cost well under a second, each under FR-008's bar alone but the one real computation of the owed list.
+2. **The constraints.** FR-008 and FR-012, under the round arbiter's ruling.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the timings and the call counts above; the ruling `ask:set-down-449-efficiency-round-2`.
+4. **Do they describe the world here?** Measured on this clone.
+5. **The order.** After T104, which carries the cut, and before the set-down.
+6. **The exits.** Green: `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The per-test times above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** One transcript scan, now cut, and repeated `git` reads of the record's owed list.
+2. **Does the change remove work, or only move it?** T104 removed the scan; the rest is named, not moved.
+3. **What do you expect it to save, and why?** The crate's tests' time, measured above.
+4. **How does the work grow?** With the owed list's families and the computations a test makes.
+5. **What did the before and after show, and under what conditions?** Each test run alone with `--exact`, before once and after best of three, on a throttled host, read as evidence.
+6. **Did any map move?** No: no engine code changes.
 
 
 <!-- plan-archive: T100 to T100 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->

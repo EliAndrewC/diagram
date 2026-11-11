@@ -1167,5 +1167,29 @@
    "new_target_dirs": 0,
    "rekept_binaries": 1
   }
+ },
+ "rust-loop-after-t104": {
+  "quantity": "the Rust edit-and-check loop after T95-T104 (SC-006, SC-007): make rust-test for one gate crate after a touch, a one-line edit and its revert, and make rust-test and make static with nothing changed",
+  "observed": "2026-11-11",
+  "subject": "the diagram-backlog clone after T98 and T99's plan, the build warm",
+  "command": "<one-shot: make rust-test then make static to settle; for claims, owed and core, a touch of lib.rs, a one-line comment unique to the run added at its top, and the file restored, each followed by make rust-test CRATE=rust/gate/crates/<crate>; then make rust-test and make static with nothing changed>",
+  "method": "wall time of each make, one run each, date +%s.%N (scratchpad remeasure.sh); the same commands as rust-loop-after-t93, whose one-line edits were claims 13.9 s, owed 8.4 s, core 10 s",
+  "varies": true,
+  "unit": "s",
+  "value": {
+   "settle-rust-test": 29.8,
+   "settle-static": 10.4,
+   "touch-claims": 0.2,
+   "edit-claims": 0.9,
+   "revert-claims": 0.2,
+   "touch-owed": 0.2,
+   "edit-owed": 0.7,
+   "revert-owed": 0.2,
+   "touch-core": 0.6,
+   "edit-core": 1.5,
+   "revert-core": 0.6,
+   "idle-rust-test": 0.3,
+   "idle-static": 4.9
+  }
  }
 }
