@@ -410,7 +410,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 ### T92 Approach (checklist part A)
 
 1. **The goal, in the world.** An edit of the gate's Rust recompiles one crate and what depends on it.
-2. **The constraints.** FR-011, FR-002 (every output byte for byte, `ask:449-T92-messages` for the five messages), FR-003 (100% of a crate's lines by its own tests, clippy pedantic).
+2. **The constraints.** FR-011, FR-002 (every output byte for byte, `ask:449-T92-messages` for the five messages), FR-003 (every line of a crate reached by its own tests, clippy pedantic).
 3. **Where each comes from.** G: the GM 2026-11-11 (`request.md`); O: the baseline and after figures above.
 4. **Do they describe the world here?** Tooling; no researched value moves.
 5. **The order.** Before T93 (the fast loop by default) and T94 (the landing's hook suites).
