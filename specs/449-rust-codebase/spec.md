@@ -195,6 +195,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 
 - **SC-006** (FR-011): After T92-T94, re-measured by the same commands as the 2026-11-11 figures recorded in T92's plan section: a one-file edit of one gate crate followed by `make rust-test` takes well under that section's one-crate figure, `make rust-test` and `make static` with nothing changed run no test and no coverage run, and `make done`'s hook suites build no crate `make done` already built.
 - **SC-007** (FR-012): Each of T95-T100 lands with its cost re-measured by the command that measured it before, lower, and every check it touches giving the verdicts and outputs it gave before.
+- **SC-008** (FR-013): A full `make rust-test` and `make hooks-test HOOKS_ALL=1` leave no new `l7r-*` entry in the temporary directory, the runners themselves failing a crate or suite that does (T101); the cargo target cache's size after a sweep no longer grows with the number of test runs (T102); and no session scratch idle past the sweep's threshold remains under `/tmp/claude-1000` (T103).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
