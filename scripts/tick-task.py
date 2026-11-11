@@ -149,11 +149,9 @@ def _arbiter():  # noqa: ANN202 - `fix_hold` through the checks door (feature 44
 
 def checkpoint_hold(root: Path) -> str:
     """Feature 383 FR-011: the feature's hourly checkpoint - the step-back's ruling and every review it owed - holds the tick
-    (`scripts/reviews/checkpoint.py`). No escape: the hold is "not optional", as the 379 tooling-fix hold beside it is."""
-    sys.path.insert(0, str(Path(__file__).resolve().parent / "reviews"))
-    import checkpoint  # noqa: PLC0415
-
-    return checkpoint.hold(root)
+    (`l7r-gate reviews checkpoint hold`, through the checks door since feature 449 T89). No escape: the hold is "not optional",
+    as the 379 tooling-fix hold beside it is."""
+    return _arbiter().review_hold(root)
 
 
 #: what lands beside every run and moves on its own (append-only rows), so it is never compared with main

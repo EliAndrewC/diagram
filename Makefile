@@ -130,11 +130,11 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
 	@root=$$(git rev-parse --show-toplevel) && "$$root/scripts/gates/l7r-gate.sh" delta key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
-	  @root=$$(git rev-parse --show-toplevel); undeclared=$$(python3 "$$root/scripts/reviews/review_owed.py" --root "$$root" --check-declared); \
+	  @root=$$(git rev-parse --show-toplevel); undeclared=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" --check-declared); \
 	  [ -z "$$undeclared" ] || printf '\n\033[1mOCCASIONS NOT DECLARED\033[0m: %s\n' "$$undeclared"
 	  @root=$$(git rev-parse --show-toplevel); \
-	  maps=$$(python3 "$$root/scripts/reviews/review_owed.py" --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); \
-	  why=$$(python3 "$$root/scripts/reviews/review_owed.py" --root "$$root" --why); \
+	  maps=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); \
+	  why=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" --why); \
 	  if [ -z "$$maps" ]; then \
 	    printf '\n\033[1mNO REVIEW CHECK OWED\033[0m: %s (feature 294: a check is owed on its occasion, never because a manifest moved). The gate runs alone; the GM looks at the map.\n' "$$why"; \
 	  else \
@@ -517,7 +517,7 @@ use-feature:  ## [project] make F the clone's active feature for the hooks (.spe
 	@cd "$$(git rev-parse --show-toplevel)" && d=$$(ls -d specs/$(F)-* 2>/dev/null | head -1) && [ -n "$$d" ] || { printf 'make use-feature: no specs/$(F)-* directory\n' >&2; exit 2; }; printf '{\n  "feature_directory": "%s"\n}\n' "$$d" > .specify/feature.json && printf 'use-feature: .specify/feature.json names %s; export SPECIFY_FEATURE=%s\n' "$$d" "$${d#specs/}"
 
 step-back:  ## [project] the feature's hourly checkpoint: open it and build the round arbiter's step-back bundle (feature 383)   [TRIGGER=hour:<f>@<n> TRANSCRIPT=<jsonl> SINCE=<ISO> UNTIL=<ISO>: replay an hour]
-	@cd "$$(git rev-parse --show-toplevel)" && if [ -n "$(TRIGGER)" ]; then python3 scripts/reviews/stepback_bundle.py "$(TRIGGER)" --root "$$(pwd)" $(if $(TRANSCRIPT),--transcript "$(TRANSCRIPT)",) $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(OUT),--out "$(OUT)",); else t=$$(python3 scripts/reviews/checkpoint.py open) && python3 scripts/reviews/stepback_bundle.py "$$t" --root "$$(pwd)"; fi
+	@cd "$$(git rev-parse --show-toplevel)" && if [ -n "$(TRIGGER)" ]; then python3 scripts/reviews/stepback_bundle.py "$(TRIGGER)" --root "$$(pwd)" $(if $(TRANSCRIPT),--transcript "$(TRANSCRIPT)",) $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(OUT),--out "$(OUT)",); else t=$$(scripts/gates/l7r-gate.sh reviews checkpoint open) && python3 scripts/reviews/stepback_bundle.py "$$t" --root "$$(pwd)"; fi
 
 arbiter-ask: export ARBITER_WHY = $(WHY)
 arbiter-ask: export ARBITER_REVIEW = $(REVIEW)
@@ -533,9 +533,9 @@ arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a 
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter fix declined "$(ID)" "$(REASON)"
 
 step-back-off:  ## [project] suspend the hourly step-back, not remove it: the hour comes due for nothing until step-back-on; the tripwire rulings stay (feature 405 T43)   REASON="..."
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/checkpoint.py switch off --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back suspended - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh reviews checkpoint switch off --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back suspended - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
 step-back-on:   ## [project] resume the hourly step-back (feature 405 T43)   REASON="..."
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/checkpoint.py switch on --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back resumed - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh reviews checkpoint switch on --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back resumed - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
 land: export LAND_NOTE = $(NOTE)
 land: export LAND_BOXES = $(BOXES)
 land: export COVER_OK := $(COVER_OK)
@@ -899,10 +899,10 @@ review-accept:  ## [project] record a review finding as deliberately LEFT, with 
 ##  MAP=<map>        the pool map whose last settlement-review verdict raised the finding
 ##  FINDING=<id>     the finding's id, as that verdict record names it
 ##  REASON="..."     why it is left; at least two words and eight characters
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$(FINDING)" --reason "$(REASON)" && $(LOGBYPASS) permitted "review-accept $(MAP) $(FINDING): $(REASON)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$(FINDING)" --reason "$(REASON)" && $(LOGBYPASS) permitted "review-accept $(MAP) $(FINDING): $(REASON)"
 
 review-paired-gate:  ## [project] the settlement-review's paired gate - green, running or red (exit 1 on red)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq gate-state --clone "$$(git rev-parse --show-toplevel)"
 
 ledger-owed:     ## [project] every check pass logged in this clone with no row in the review ledger, each with the row to add (feature 371); WRITE= writes them from each reply   [WRITE="<where you recorded what you did>"]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)" $(if $(CLAUDE_CODE_SESSION_ID),--session "$(CLAUDE_CODE_SESSION_ID)",),)
@@ -921,7 +921,7 @@ review-verdict:  ## [project] a review check's LAST act - write the unit's verdi
 ##  UNIT=<unit>        the owed unit reviewed (its prompt's UNIT: line; MAP= is the same field)
 ##  VERDICT=<v>        PASS, NEEDS-WORK or NOT-REVIEWABLE
 ##  FINDINGS=<file>    a JSON list of {"id", "severity", "what"}; ids default to F1, F2, ...
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
 
 test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tests/pipeline/test_gencache.py [K="expr"]
 ##  FILE=<paths>  the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run

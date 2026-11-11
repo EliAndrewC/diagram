@@ -1,6 +1,7 @@
 //! `l7r-gate arbiter`: the round arbiter's rulings and tripwires from the shell and the make targets (feature 449 T86, from `scripts/hooks/lib/hm_arbiter.py`'s `main`, `record_ruling` and `record_batch`), and the verdict
-//! reads the review gate asks. `arbiter.jsonl` is appended here alone; a ruling that lifts a hold is `pop_owed` under the same lock `trip` takes, so the guards and this command never race. The modules still Python - `gm_review`,
-//! `checkpoint`, `claims` and `review_prereq` - are asked by path on these rare branches, never on a plain Bash call or Edit (the T065 clause).
+//! reads the review gate asks. `arbiter.jsonl` is appended here alone; a ruling that lifts a hold is `pop_owed` under the same lock `trip` takes, so the guards and this command never race. The modules still Python - `gm_review`
+//! and `claims` - are asked by path on these rare branches, never on a plain Bash call or Edit (the T065 clause); the checkpoint's close and a unit's
+//! content key are the reviews' port, in-process (T89).
 
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -120,12 +121,6 @@ from pathlib import Path
 sys.path.insert(0, sys.argv[1])
 import gm_review
 gm_review.question(Path(sys.argv[2]), sys.argv[3], sys.argv[4], sys.argv[5])";
-
-const CLOSE_CHECKPOINT: &str = r"import sys
-from pathlib import Path
-sys.path.insert(0, sys.argv[1] + '/scripts/reviews')
-import checkpoint
-checkpoint.close_checkpoint(Path(sys.argv[2]), sys.argv[3])";
 
 /// The tree the running binary's scripts live in: `L7R_GUARD_TREE` from the wrapper, else the root.
 fn tree_of(root: &Path) -> PathBuf {
@@ -299,21 +294,7 @@ pub fn unit_ruled(d: &Path, unit: &str, content: &str) -> String {
 }
 
 fn unit_content_key(root: &Path, unit: &str) -> String {
-    let script = scripts(root).join("reviews/review_prereq.py");
-    let done = std::process::Command::new("python3")
-        .arg(&script)
-        .args([
-            "content-key",
-            "--clone",
-            &root.to_string_lossy(),
-            "--map",
-            bare_unit(unit),
-        ])
-        .output();
-    match done {
-        Ok(o) if o.status.success() => String::from_utf8_lossy(&o.stdout).trim().to_owned(),
-        _ => String::new(),
-    }
+    crate::reviews::prereq::unit_content_key(root, bare_unit(unit))
 }
 
 fn row_unit(trig: &Value, trigger: &str) -> String {
@@ -536,14 +517,7 @@ pub fn record_ruling(
         gm_question(root, &d, &for_gm, trigger, &when)?;
     }
     if hour {
-        py(
-            CLOSE_CHECKPOINT,
-            &[
-                &tree_of(root).to_string_lossy(),
-                &root.to_string_lossy(),
-                trigger,
-            ],
-        )?;
+        crate::reviews::checkpoint::close_checkpoint(root, trigger);
     }
     if text(&value, "ruling") == "accept" && text(&value, "kind") == "round" {
         accept_answers(

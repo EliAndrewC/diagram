@@ -27,7 +27,7 @@ mkrepo() {
   git init -q .; git config user.email t@t; git config user.name t
   echo base > seed.txt
   # GUARD_EDIT_OK: feature 248 - the gate reads the pushed tree's ENGINE KEY (a stub target, never the engine) and
-  # asks review_owed.py, which needs an origin/main to diff against; both are fixture state, like the map itself
+  # asks `l7r-gate reviews owed` (449 T89), which needs an origin/main to diff against; both are fixture state, like the map itself
   printf 'engine-key:\n\t@printf k\n' > Makefile
   # GUARD_EDIT_OK: feature 294 - the map carries its ink census, the record the occasions are read from
   [ "${2:-}" = withmap ] && { echo '{"v":1,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
@@ -242,13 +242,13 @@ echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findi
 check "a PASS record at ANOTHER key, no notes touch: refused" r1 blocked
 # GUARD_EDIT_OK: feature 374 batch 4, the round arbiter's tooling fix - a verdict stales on ITS sheet, not on the engine's key:
 # a record at another engine key whose content key matches the sheet now ships; the sheet's notes changed, it is refused again
-CK="$(cd "$T/r1" && python3 "$HERE/../../scripts/reviews/review_prereq.py" content-key --clone "$T/r1" --map glyph-check--well--m)"
+CK="$(cd "$T/r1" && "$HERE/../../scripts/gates/l7r-gate.sh" reviews prereq content-key --clone "$T/r1" --map glyph-check--well--m)"
 echo "{\"map\":\"glyph-check--well--m\",\"engine_key\":\"stale\",\"content_key\":\"$CK\",\"verdict\":\"PASS\",\"findings\":[]}" > "$T/r1/$V"
 check "a PASS record at another engine key whose sheet is unchanged ships" r1 ok
 ( cd "$T/r1" && echo "a later line" >> "$POOL/m.notes.md" && git add -A && git commit -qm notes )
 check "...and once the sheet's notes change, it is refused" r1 blocked
 # GUARD_EDIT_OK: feature 374 batch 5 - the round arbiter's ACCEPT on a unit stands for its verdict while the sheet reads as ruled
-CK2="$(cd "$T/r1" && python3 "$HERE/../../scripts/reviews/review_prereq.py" content-key --clone "$T/r1" --map glyph-check--well--m)"
+CK2="$(cd "$T/r1" && "$HERE/../../scripts/gates/l7r-gate.sh" reviews prereq content-key --clone "$T/r1" --map glyph-check--well--m)"
 ( cd "$T/r1" && mkdir -p .specify specs/902-a && echo '{"feature_directory":"specs/902-a"}' > .specify/feature.json \
   && echo "{\"trigger\":\"round:glyph-check|glyph-check--well--m@3\",\"unit\":\"glyph-check--well--m\",\"ruling\":\"accept\",\"why\":\"fixed\",\"content_key\":\"$CK2\"}" > specs/902-a/arbiter.jsonl \
   && git add -A && git commit -qm ruled )

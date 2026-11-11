@@ -142,20 +142,20 @@ done
 
 # --- 2. every OWED review unit ships on its reviewer's VERDICT RECORD (feature 294) -------------------------
 # GUARD_EDIT_OK: feature 294 - THE OCCASIONS REPLACE THE MOVED MANIFEST (GM 2026-10-01: the review checks run only when
-# what they judge is new or changed; research R1 sorts every check). A push ships when every unit `review_owed.py` owes
+# what they judge is new or changed; research R1 sorts every check). A push ships when every unit `l7r-gate reviews owed` owes
 # - `<check>:<subject>`, detected from the delta or declared in the feature's `## Occasions` - has a PASS or NEEDS-WORK
 # record at the engine key being pushed (feature 240's record, per unit since this feature). A map that moved and owes
 # nothing ships. The notes-file touch that stood in for a review on a never-reviewed map (2026-07-27) and the
 # rendering-only waiver (feature 248) went with the manifest trigger. And a delta that touches drawing or placement code
 # with no `## Occasions` section in any active feature is refused: whether a change is substantial is the feature's call
 # to DECLARE, never to leave silent (the GM's tannery example).
-undeclared="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --check-declared 2>/dev/null)"
+undeclared="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --check-declared 2>/dev/null)"
 if [ -n "$undeclared" ]; then
   printf '\n\033[1mREVIEW GATE: the delta does not declare its occasions.\033[0m\n'
   printf '%s\n' "$undeclared"
   fail="$fail occasions"; rules="$rules occasions-undeclared"
 fi
-owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing 2>/dev/null || true)"
+owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/dev/null || true)"
 # AT RUST-ONLY A HAMLET'S MAP REVIEWS WAIT FOR THE THROW BACK (feature 444 FR-023; the GM 2026-11-07: "You should immediately stop
 # running all of the python map generating code as well"): no hamlet map is rolled while the port switch stands at rust-only, so a
 # review of one is neither redrawn below (`make map` rolled Inashiro and Kashikawa through the Python stages in a landing's cheap
@@ -177,11 +177,11 @@ fi
 # its sheet: a spec-only push owed 374's glyph-check and size-audit on a corridor main no longer drew. Redraw what each owed
 # unit sits on (`make map` answers CACHED when the render is current), then ask again.
 if [ -n "$owed_units" ]; then
-  for on in $(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' '{print $4}' | sort -u); do
+  for on in $("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' '{print $4}' | sort -u); do
     g="$(find "$ROOT/pool" -path "*/$on/$on.gen.py" 2>/dev/null | head -1)"
     [ -n "$g" ] && ( cd "$ROOT" && make -s map GEN="${g#"$ROOT"/}" >/dev/null 2>&1 )
   done
-  owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing 2>/dev/null || true)"
+  owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/dev/null || true)"
 fi
 if [ -n "$owed_units" ]; then
   tree_key="$( cd "$ROOT" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
@@ -190,7 +190,7 @@ for unit in $owed_units; do
   verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$unit.json"
   if [ ! -f "$verdict_rec" ]; then
     printf '\n\033[1mREVIEW GATE: %s is owed and has no verdict record.\033[0m\n' "$unit"
-    printf 'Its occasion: %s\n' "$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' -v u="$unit" '$1 == u {print $5}')"
+    printf 'Its occasion: %s\n' "$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' -v u="$unit" '$1 == u {print $5}')"
     printf 'Dispatch it (`make verify` writes its prompt) once the gate is green; it records the verdict as its last act.\n'
     fail="$fail $unit"; rules="$rules unit-no-review"
     continue
@@ -199,7 +199,7 @@ for unit in $owed_units; do
   # GUARD_EDIT_OK: feature 374 batch 4, the round arbiter's tooling fix - A VERDICT STALES ON ITS OWN SHEET: one value in one
   # generated program moved the whole-engine key and staled ten verdicts across sheets it never touched. A verdict whose sheet
   # (drawing and notes) hashes as it did when the review read it still answers for that sheet.
-  now_content="$(python3 "$RG_HERE/../reviews/review_prereq.py" content-key --clone "$ROOT" --map "$unit" 2>/dev/null)"
+  now_content="$("$RG_HERE/l7r-gate.sh" reviews prereq content-key --clone "$ROOT" --map "$unit" 2>/dev/null)"
   if [ "$verdict" = "NOT-REVIEWABLE" ]; then
     printf '\n\033[1mREVIEW GATE: %s was last returned NOT-REVIEWABLE.\033[0m\n' "$unit"
     printf 'Its reviewer stopped at the first stage - a prerequisite was missing, so no judgment was made.\n'
@@ -222,7 +222,7 @@ done
 # GUARD_EDIT_OK: feature 375 amendment 9, D55 - THE PUSH ASKS EVERY OWED UNIT (--landing above), the glyph units' hour aside; a
 # glyph unit with no answer marks the work LANDING, so the dispatch this refusal asks for is due and passes the pair guard
 # without GLYPH_DUE_OK - a clean push clears the mark (sync-with-main.sh)
-case " $fail " in *" glyph-check--"*) python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing-mark on >/dev/null 2>&1 ;; esac
+case " $fail " in *" glyph-check--"*) "$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing-mark on >/dev/null 2>&1 ;; esac
 if [ -n "$fail" ]; then
   printf '\n\033[1mreview-gate FAILED:%s\033[0m\n' "$fail"
   printf 'If a case is genuinely exempt - a superseded spec, a mechanical sweep across every map -\n'

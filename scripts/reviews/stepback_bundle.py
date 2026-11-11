@@ -41,7 +41,8 @@ sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent / "measure"))
-import review_owed as ro  # noqa: E402
+sys.path.insert(0, str(HERE.parent))
+import reviews_door as ro  # noqa: E402 - the reviews' port in Rust (feature 449 T89, `ask:449-T89-reviews`), until T83 ports this file
 
 OUT = Path("/tmp/l7r-check")
 WORDS_CAP = 40_000
@@ -285,7 +286,7 @@ def silent_minutes(records: list[dict], since: float, until: float, gap: float =
 
 def build(trigger: str, root: Path, out: Path, since: float, until: float, transcript: Path | None, sids: Sequence[str] = (), projects: Path = PROJECTS) -> Path:
     feature = trigger.split(":", 1)[-1].rsplit("@", 1)[0]
-    g = ro._gitdir(root)  # noqa: SLF001
+    g = ro.gitdir(root)
     events = _lines(g / "l7r-events" / f"{feature}.jsonl") if g is not None else []
     # EVERY SESSION OF THE CLONE IN THE WINDOW (the round arbiter's tooling fix on hour:395-shrine-building-costs@2): the main
     # session's events went to 397's log while `.specify/feature.json` named 397, so its 16 minutes of 395's work (four tooling
@@ -339,14 +340,11 @@ def main(argv: list[str] | None = None) -> int:
     if not args.trigger.startswith("hour:") or "@" not in args.trigger:
         print("stepback-bundle: the trigger is hour:<feature>@<n>", file=sys.stderr)
         return 2
-    root = Path(ro._git(Path(args.root), "rev-parse", "--show-toplevel") or args.root)  # noqa: SLF001
+    root = Path(ro.git(Path(args.root), "rev-parse", "--show-toplevel") or args.root)
     if args.since:
         since = _ts(args.since if args.since.endswith("Z") or "+" in args.since else args.since + "Z")
     else:
-        sys.path.insert(0, str(HERE))
-        import checkpoint  # noqa: PLC0415
-
-        since = float(checkpoint.state(root).get("since") or time.time() - 3600)
+        since = float(ro.checkpoint_state(root).get("since") or time.time() - 3600)
     until = _ts(args.until if args.until.endswith("Z") or "+" in args.until else args.until + "Z") if args.until else time.time()
     name = args.trigger.split(":", 1)[1].replace("@", "-")
     out = Path(args.out) if args.out else OUT / f"step-back-{name}"

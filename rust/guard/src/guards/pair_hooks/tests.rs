@@ -10,20 +10,27 @@ use super::{decide, find_root, is_gate_invocation, judge, resolved, Ctx};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-/// The fake tools, `sh` scripts run as the guard runs its Python tools (`<interpreter> <script> args`): each answers from the
-/// clone's `.git/<file>`. The arbiter's check is Python code the guard runs as itself, so its fake module stays Python.
-const TOOLS: [(&str, &str); 5] = [
-    ("scripts/reviews/checkpoint.py", "cat \"$3/.git/due\" 2>/dev/null\n"),
+/// The fake tools: the gate binary's `plan decided` and `reviews` (the checkpoint, the prerequisites and the owed lookup, feature
+/// 449 T89) as one `bash` script, each answering from the clone's `.git/<file>` - the arguments after `reviews <tool>` are the
+/// Python's were, so each answer reads them where it did.
+const TOOLS: [(&str, &str); 2] = [
     (
-        "scripts/reviews/review_prereq.py",
-        "if [ \"$1\" = content-key ]; then printf ck; exit 0; fi\nif [ \"$1\" = named ]; then cat \"$3/.git/named\" 2>/dev/null; exit 0; fi\n[ -f \"$3/.git/problems\" ] || exit 0\ncat \"$3/.git/problems\"; echo; echo 'on stderr' >&2; exit 1\n",
+        "scripts/gates/l7r-gate.sh",
+        "if [ \"$1\" = plan ]; then cat \"$3/.git/undecided\" 2>/dev/null; exit 0; fi\n\
+         if [ \"$1\" = reviews ]; then tool=$2; shift 2\n\
+         case $tool in\n\
+         checkpoint) cat \"$3/.git/due\" 2>/dev/null; exit 0 ;;\n\
+         prereq) if [ \"$1\" = content-key ]; then printf ck; exit 0; fi\n\
+           if [ \"$1\" = named ]; then cat \"$3/.git/named\" 2>/dev/null; exit 0; fi\n\
+           [ -f \"$3/.git/problems\" ] || exit 0; cat \"$3/.git/problems\"; echo; echo 'on stderr' >&2; exit 1 ;;\n\
+         owed) c=$2\n\
+           if [ $# -eq 2 ]; then : > \"$c/.git/owed-asked\"; cat \"$c/.git/owed\" 2>/dev/null; exit 0; fi\n\
+           if [ \"$3\" = --glyph-gate ]; then [ -f \"$c/.git/early\" ] && { echo \"not due: $4\"; exit 1; }; exit 0; fi\n\
+           suffix=; [ $# -gt 4 ] && suffix=-escaped\n\
+           : > \"$c/.git/glyph-$4$suffix\" ;;\n\
+         esac; exit 0; fi\n\
+         [ -f .git/green ]\n",
     ),
-    (
-        "scripts/reviews/review_owed.py",
-        "c=$2\nif [ $# -eq 2 ]; then : > \"$c/.git/owed-asked\"; cat \"$c/.git/owed\" 2>/dev/null; exit 0; fi\nif [ \"$3\" = --glyph-gate ]; then [ -f \"$c/.git/early\" ] && { echo \"not due: $4\"; exit 1; }; exit 0; fi\nsuffix=; [ $# -gt 4 ] && suffix=-escaped\n: > \"$c/.git/glyph-$4$suffix\"\n",
-    ),
-    ("scripts/gates/l7r-gate.sh", "if [ \"$1\" = plan ]; then cat \"$3/.git/undecided\" 2>/dev/null; exit 0; fi
-[ -f .git/green ]\n"),
     ("Makefile", "engine-key:\n\t@printf KEY\n"),
 ];
 
@@ -91,7 +98,6 @@ impl Fixture {
             session: &session,
             clone: self.clone.clone(),
             tree: self.clone.clone(),
-            python: "sh",
             fell_back,
         })
     }
@@ -225,8 +231,7 @@ fn a_glyph_unit_waits_for_its_hour_unless_glyph_due_ok_says_why() {
         &json!({"subagent_type": "glyph-check", "prompt": "x"}),
     );
     none.set("green", "");
-    std::fs::remove_file(none.clone.join("scripts/reviews/review_owed.py")).unwrap();
-    assert!(none.judge().is_empty(), "no owed tool, no glyph hour");
+    assert!(none.judge().is_empty(), "no unit named, no glyph hour");
 }
 
 #[test]
@@ -251,10 +256,6 @@ fn a_review_is_not_spent_on_unverified_work() {
     assert!(ok.judge().is_empty());
     let bare = Fixture::new("prereq-bare", "Agent", &review(r#"REVIEW_PREREQ_OK="no""#));
     assert!(refusal(&bare.judge()).contains("REVIEW_PREREQ_OK needs a REASON"));
-    let none = Fixture::new("prereq-none", "Agent", &review("x"));
-    none.set("green", "").set("problems", "stale");
-    std::fs::remove_file(none.clone.join("scripts/reviews/review_prereq.py")).unwrap();
-    assert!(none.judge().is_empty());
 }
 
 /// A fixture at its third round of `m1`.

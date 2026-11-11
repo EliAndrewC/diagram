@@ -37,10 +37,13 @@ fn speckit_state(root: &Path, dir: &Path) -> String {
         return s;
     }
     let tool = crate::record::repo::tree_of(root).join("scripts/speckit-todo.py");
+    // from `/`, outside any repository: the tool's run record (`usage_log`) is the landing's holding check's, and the Python asked
+    // this in-process, recording nothing
     let said = std::process::Command::new("python3")
         .arg(&tool)
         .arg("--state")
-        .arg(dir)
+        .arg(std::path::absolute(dir).unwrap_or_else(|_| dir.to_path_buf()))
+        .current_dir("/")
         .output()
         .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
         .unwrap_or_default();

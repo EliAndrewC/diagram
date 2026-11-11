@@ -33,13 +33,13 @@ DIR="$TMP/proj/sid-1/subagents"
 # decide it live beside the guard, so the fixture carries them and a moved manifest. `moved`/`unmoved`
 # switch the world between cases; every case below section 1 runs in the world it names.
 MAPDIR_F="$SKILL/pool/hamlets/testmap"
-# GUARD_EDIT_OK: feature 240 - a settlement-review dispatch now asks `review_prereq.py` first, so the fixture
+# GUARD_EDIT_OK: feature 240 - a settlement-review dispatch now asks `review_prereq` first (`l7r-gate reviews prereq`, 449 T89), so the fixture
 # carries it, spec-lint (whose figure pattern it imports), a stub gate stamp (green while `.git/stub-gate-green`
 # exists) and a stub generation cache (current unless `<gen>.stale` exists), and a moved map is a WHOLE map.
 # GUARD_EDIT_OK: feature 240 - spec-lint imports `_spec_figures` since feature 239 (the figure pattern's one home)
 "$(dirname "$HOOK")/../../scripts/gates/l7r-gate.sh" check spec-lint --figure-pattern > "$CLONE/figure-pattern"   # the one definition of a figure, the Rust spec lint's
 REAL_GATE="$(cd "$(dirname "$HOOK")/../.." && pwd)/scripts/gates/l7r-gate.sh"
-printf '#!/usr/bin/env bash\n[ "$1" = check ] && exec cat "%s/figure-pattern"\n[ "$1" = checks-door ] && exec "%s" checks-door   # feature 449 T86: the checks door is the real gate binary\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' "$CLONE" "$REAL_GATE" > "$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
+printf '#!/usr/bin/env bash\n[ "$1" = check ] && exec cat "%s/figure-pattern"\n[ "$1" = checks-door ] && exec "%s" checks-door   # feature 449 T86: the checks door is the real gate binary\n[ "$1" = reviews ] && exec "%s" "$@"   # feature 449 T89: the reviews are the real gate binary\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' "$CLONE" "$REAL_GATE" "$REAL_GATE" >"$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
 mkdir -p "$SKILL/l7r/diagram/pipeline"
 printf 'import os\n\ndef is_current(gen):\n    return not os.path.exists(gen + ".stale")\n' > "$SKILL/l7r/diagram/pipeline/gencache.py"
 # GUARD_EDIT_OK: feature 240 - REGULAR packages, as the engine's are. Under `make hooks-test` the real skill is on
@@ -88,13 +88,13 @@ case_01() {  # 9 s measured alone 2026-10-12
 reset_prereq
 # GUARD_EDIT_OK: feature 383 FR-003, SC-004 (the GM 2026-10-12: "why are we comparing our stuff to main when we're not ready
 # to land there?") - THE GATE RUNS AS TYPED, with a review owed (this fixture's moved map) or not: no rewrite into `make
-# verify`, no permit naming owed units, and NO review lookup at all - the trace of the hook's run never reaches review_owed.py.
+# verify`, no permit naming owed units, and NO review lookup at all - the trace of the hook's run never reaches `l7r-gate reviews owed` (449 T89; was review_owed.py).
 # A review comes due at the checkpoint (`make tick`'s hold) or at the landing (review-gate.sh).
 check "the gate runs as typed with a review owed" '[ "$(rc_pretool "$GATE")" -eq 0 ]'
 check "...is not rewritten into make verify" '! run_pretool "$GATE" | grep -q "updatedInput"'
 check "...says nothing" '[ -z "$(run_pretool "$GATE")" ]'
 check "...and records the gate key for the pairing" 'grep -q "gate_key" "$CLONE/.git/pairing-state.json"'
-check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$GATE" | bash -x "$HOOK" pretool 2>&1 ) | grep -q "review_owed.py"'
+check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$GATE" | bash -x "$HOOK" pretool 2>&1 ) | grep -q "reviews owed"'
 for shape in "$GATE_FULL" "$(stdin_for Bash '{"command":"make maps SCOPE=all 2>&1 | tail -60"}')" "$(stdin_for Bash '{"command":"setsid nohup make done > /tmp/done.log 2>&1 &"}')" "$(stdin_for Bash '{"command":"make maps","run_in_background":true}')"; do
   check "every gate shape runs as typed: $(printf '%s' "$shape" | cut -c1-60)" '[ "$(rc_pretool "$shape")" -eq 0 ] && ! run_pretool "$shape" | grep -q "updatedInput"'
 done
@@ -162,7 +162,7 @@ printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; tou
 rm -f "$CLONE/.git/pairing-state.json"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); FIRST=$?
 check "stop is quiet on a green gate with a review owed" '[ "$FIRST" -eq 0 ]'
-check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$STOP" | bash -x "$HOOK" stop 2>&1 ) | grep -q "review_owed.py"'
+check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$STOP" | bash -x "$HOOK" stop 2>&1 ) | grep -q "reviews owed"'
 }
 
 case_07() {  # 2 s of its chain, measured as one 2026-10-12
@@ -231,7 +231,7 @@ mkdir -p "$CLONE/specs/240-x"
 printf '{"m:canopy-clear":{"value":0,"unit":"px","command":"make x","taken":"2026-09-13","verifies":"F1","subject":"settlement-review--testmap","quantity":"board to crown edge","source":"tree_crowns"}}' > "$CLONE/specs/240-x/measurements.json"
 check "...and runs once a record verifies that finding" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 rm -rf "$CLONE/specs"
-( cd "$CLONE" && python3 scripts/reviews/review_prereq.py accept --clone "$CLONE" --map settlement-review--testmap --finding F1 --reason "left on purpose for the fixture" >/dev/null )
+( cd "$CLONE" && "$REAL_GATE" reviews prereq accept --clone "$CLONE" --map settlement-review--testmap --finding F1 --reason "left on purpose for the fixture" >/dev/null )
 check "...or once the finding is ACCEPTED with a reason" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 
 # FR-004: a review of fixes needs the gate green, not merely running
@@ -375,7 +375,7 @@ printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": 
 refused_for "...an accept closes the unit" "$GLYPH" "the round arbiter closed"
 # the round arbiter's tooling fix on ask:444-T16-kuwabata-stale-keys - an accept bound to the sheet as it read then closes the
 # unit only while the sheet still reads so; once a later fix moves it, the accept has lapsed and lets one round through
-CK=$(cd "$CLONE" && python3 scripts/reviews/review_prereq.py content-key --clone "$CLONE" --map settlement-review--testmap 2>/dev/null)
+CK=$(cd "$CLONE" && "$REAL_GATE" reviews prereq content-key --clone "$CLONE" --map settlement-review--testmap 2>/dev/null)
 check "the fixture's sheet has a content key" '[ -n "$CK" ]'
 printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "accept", "why": "fine as it stands", "content_key": "%s"}\n' "$CK" > "$CLONE/specs/900-x/arbiter.jsonl"
 refused_for "...an accept on the sheet as it reads now still closes it" "$GLYPH" "the round arbiter closed"
@@ -462,7 +462,7 @@ rm -f "$CLONE/.git/glyph-clock.json" "$CLONE/.git/pairing-state.json"; started 7
 out="$(run_pretool "$early")"
 check "...on the feature's hour it passes" '! printf "%s" "$out" | grep -q "not yet due"'
 rm -f "$CLONE/.git/glyph-clock.json" "$CLONE/.git/pairing-state.json"; started 600; green
-python3 "$CLONE/scripts/reviews/review_owed.py" --root "$CLONE" --landing-mark on >/dev/null 2>&1
+"$REAL_GATE" reviews owed --root "$CLONE" --landing-mark on >/dev/null 2>&1
 out="$(run_pretool "$early")"
 check "...and once a push was refused for it (the landing mark) it passes without the escape" '! printf "%s" "$out" | grep -q "not yet due"'
 rm -rf "$gm" "$CLONE/specs/999-g" "$CLONE/.specify/feature.json" "$CLONE/.git/l7r-events/999-g.jsonl" "$CLONE/.git/glyph-clock.json" "$CLONE/.git/glyph-landing"

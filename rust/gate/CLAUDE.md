@@ -28,4 +28,5 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/arbiter/bundle.rs`, `src/arbiter/bundle/` | the round arbiter's bundle, `arbiter bundle` (its sections, the review rounds, the round marks) (T88) |
 | `src/arbiter.rs`, `src/arbiter/` | the round arbiter's rulings and tripwires: `arbiter ruled`, `ruled-batch`, `ask`, `fix`, `nit`, `gate-held`, `spec-verdict`, `spec-ruled`, `unit-ruled` (T86) |
 | `src/checks_door.rs` | Python's door to the check state and the arbiter (`checks-door`, one process a run; `scripts/checks_door.py`), `checks-close` (T86) |
+| `src/reviews.rs`, `src/reviews/` | the review checks' tooling: `reviews owed` (`owed.rs`, what a delta owes; `glyph.rs`, the glyph hour), `reviews prereq` (`prereq.rs`, a dispatch's prerequisites, the verdict record, a unit's content key), `reviews checkpoint` (`checkpoint.rs`, the hourly step-back), and `door.rs`, `reviews-door` for `scripts/reviews_door.py` (T89) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

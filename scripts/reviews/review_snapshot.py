@@ -19,7 +19,7 @@ automatically"*. So each map's snapshot carries `dispatch.md`, the whole prompt 
 guard refuses a dispatch naming more than one map (pair-hooks.sh); the session's part is to send N Agent
 calls in one message, each with one file's contents.
 
-PER UNIT, NOT PER MAP (feature 294). A review is owed per OCCASION now (`review_owed.py`): a unit is
+PER UNIT, NOT PER MAP (feature 294). A review is owed per OCCASION now (`l7r-gate reviews owed`): a unit is
 `<check>:<subject>`, reviewed on one map or sheet. The snapshot is that map's or sheet's files, and the prompt is the
 CHECK's - a glyph check is told the element and why it is owed, a whole-map review that the map is new.
 
@@ -34,7 +34,6 @@ Usage: review_snapshot.py --root CLONE [--mirror MAIN] [--key ENGINE_KEY] UNIT..
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import shutil
 import sys
 from collections.abc import Sequence
@@ -56,18 +55,11 @@ def map_dir(tree_root: Path, name: str) -> Path | None:
 
 
 def owed_module() -> Any:
-    """`review_owed.py`, loaded by path (a hook calls this script; no package to import from)."""
-    here = Path(__file__).resolve().parent
-    spec = importlib.util.spec_from_file_location("review_owed_for_snapshot", here / "review_owed.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = mod
-    prior, sys.dont_write_bytecode = sys.dont_write_bytecode, True
-    try:
-        spec.loader.exec_module(mod)
-    finally:
-        sys.dont_write_bytecode = prior
-    return mod
+    """The owed units' lookup: `l7r-gate reviews owed`, through the checks door (feature 449 T89, `ask:449-T89-reviews`)."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import checks_door  # noqa: PLC0415
+
+    return checks_door
 
 
 #: what each check is asked, per its contract (`.claude/agents/<check>.md`)
@@ -188,13 +180,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--mirror", default=None, help="main's tree (default: the parent of the clone's .clones/, when it has one)")
     ap.add_argument("--key", default="", help="the engine key the dispatch prompt quotes (feature 248)")
     ap.add_argument("--stale-renders", action="store_true", help="print the generator of each unit's map whose render is missing or stale, and stop (385 T26)")
-    ap.add_argument("units", nargs="+", help="the owed unit slugs (`review_owed.py`)")
+    ap.add_argument("units", nargs="+", help="the owed unit slugs (`l7r-gate reviews owed`)")
     args = ap.parse_args(argv)
     root = Path(args.root).resolve()
     mirror = Path(args.mirror) if args.mirror else None
     if mirror is None and ".clones" in root.parts:
         mirror = Path(*root.parts[: root.parts.index(".clones")])
-    _, units, _ = owed_module().owed(root, landing=True)  # every owed unit: the caller named the due ones (375 amendment 9)
+    _, units, _ = owed_module().review_owed(root)  # every owed unit: the caller named the due ones (375 amendment 9)
     by_slug = {u.slug: u for u in units}
     unknown = [s for s in args.units if s not in by_slug]
     if unknown:

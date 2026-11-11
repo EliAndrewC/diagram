@@ -18,7 +18,7 @@ use serde_json::Value;
 use super::{git, glyph, py_path, reply};
 use crate::record::args::{parse, Spec};
 use crate::record::bundle::py_repr;
-use crate::record::repo::{cat_blobs, git_show};
+use crate::record::repo::cat_blobs;
 use crate::Reply;
 
 /// Both pool trees, the live one first.
@@ -251,11 +251,8 @@ impl<'a> AtBase<'a> {
         self.listing().iter().any(|n| n.starts_with(&prefix))
     }
 
-    /// Each file's text at the base, or None where it has none.
+    /// Each file's text at the base, or None where it has none (every path asked is under a pool tree, so in the listing or absent).
     fn read(&mut self, paths: &[String]) -> Vec<Option<String>> {
-        if self.rev.is_empty() {
-            return vec![None; paths.len()];
-        }
         let listed: Vec<bool> = {
             let all = self.listing();
             paths.iter().map(|p| all.contains(p)).collect()
@@ -267,19 +264,7 @@ impl<'a> AtBase<'a> {
             .map(|(p, _)| format!("{}:{p}", self.rev))
             .collect();
         let mut texts = cat_blobs(self.root, &asked).into_iter();
-        paths
-            .iter()
-            .zip(listed)
-            .map(|(p, l)| {
-                if l {
-                    texts.next()
-                } else if TREES.iter().any(|t| p == t || p.starts_with(&format!("{t}/"))) {
-                    None
-                } else {
-                    git_show(self.root, self.rev, p)
-                }
-            })
-            .collect()
+        listed.into_iter().map(|l| if l { texts.next() } else { None }).collect()
     }
 }
 

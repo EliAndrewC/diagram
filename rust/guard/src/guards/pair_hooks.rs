@@ -4,8 +4,9 @@
 //! step-back refuses both past its hour; a turn may not end with a refused dispatch never re-sent. The reasons behind each rule
 //! stand in the shell's comments, kept in git history; the refusals' words are the shell's.
 //!
-//! Plan T006's decisions: (a) the tools it consults - the checkpoint, the plan gate, `review_prereq`, `review_owed`, the gate stamp,
-//! `make engine-key`, the arbiter - stay theirs, asked by path, until phase 3 ports them; a plain Bash call asks none;
+//! Plan T006's decisions: (a) the tools it consults - the plan gate, the gate stamp, `make engine-key` - stay theirs, asked by path; the
+//! checkpoint and the review lookups (`l7r-gate reviews`, feature 449 T89) are the gate binary's, asked by command as the plan gate is
+//! (the gate crate depends on this one, not the reverse), and the arbiter is in-process (T86); a plain Bash call asks none;
 //! (b) the engine key is asked only on the branches that read it; (c) its own state is in-process (`state`).
 
 pub mod dropped;
@@ -45,8 +46,6 @@ pub(crate) struct Ctx<'a> {
     pub session: &'a Session,
     pub clone: PathBuf,
     pub tree: PathBuf,
-    /// The interpreter the consulted tools run under: `python3`; `sh` for a test's fakes (FR-008).
-    pub python: &'a str,
     /// No clone resolved and the shell's tree is main's (feature 231's amendment): said in the refusal that judges it.
     pub fell_back: bool,
 }
@@ -75,7 +74,7 @@ impl Ctx<'_> {
     }
 }
 
-/// `<interpreter> <script> args` asked in `dir` - `python3`, the tools being Python; a test's fakes are `sh`.
+/// `<interpreter> <script> args` asked in `dir`.
 pub(crate) fn python(
     interpreter: &str,
     dir: &Path,
@@ -88,6 +87,13 @@ pub(crate) fn python(
         .chain(args.iter().copied())
         .collect();
     ask(dir, interpreter, &all, stdin)
+}
+
+/// `l7r-gate reviews <args>` from the guard's tree (feature 449 T89): the review lookups, the glyph hour and the checkpoint.
+pub(crate) fn reviews(cx: &Ctx, args: &[&str]) -> crate::shared::tool::Said {
+    let mut all = vec!["reviews"];
+    all.extend_from_slice(args);
+    python("bash", &cx.clone, &cx.tree.join("scripts/gates/l7r-gate.sh"), &all, "")
 }
 
 /// The tree the guard runs from: `L7R_GUARD_TREE`, which the wrapper and the suites' shim export, else `cwd`.
@@ -122,7 +128,6 @@ fn resolved(event: &Event, session: &Session, cwd: &Path, seam: Option<String>) 
             session,
             clone,
             tree: tree(seam, cwd),
-            python: "python3",
             fell_back,
         })
     })
@@ -175,12 +180,10 @@ fn pretool(cx: &Ctx) -> Vec<Answer> {
     let (cmd, atype) = (cx.field("command"), cx.field("subagent_type"));
     let gate = tool == "Bash" && is_gate_invocation(cmd);
     if gate || tool == "Agent" {
-        let script = cx.clone.join("scripts/reviews/checkpoint.py");
-        let due = python(
-            cx.python,
-            &cx.clone,
-            &script,
+        let due = reviews(
+            cx,
             &[
+                "checkpoint",
                 "due",
                 "--root",
                 &cx.clone.to_string_lossy(),
@@ -189,7 +192,6 @@ fn pretool(cx: &Ctx) -> Vec<Answer> {
                 "--agent",
                 atype,
             ],
-            "",
         );
         if !due.out.is_empty() {
             cx.log(

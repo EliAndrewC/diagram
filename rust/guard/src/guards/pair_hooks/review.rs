@@ -7,7 +7,7 @@ use std::time::SystemTime;
 
 use fancy_regex::Regex;
 
-use super::{python, state, Ctx};
+use super::{python, reviews, state, Ctx};
 use crate::protocol::Answer;
 use crate::shared::checks;
 use crate::shared::escape::enough;
@@ -57,18 +57,9 @@ fn words(text: &str) -> Vec<String> {
     text.split_whitespace().map(str::to_owned).collect()
 }
 
-/// The maps whose manifest moved against main (`review_owed_names`).
+/// The review units owed now (`l7r-gate reviews owed`).
 fn owed(cx: &Ctx) -> Vec<String> {
-    words(
-        &python(
-            cx.python,
-            &cx.clone,
-            &cx.tree.join("scripts/reviews/review_owed.py"),
-            &["--root", &cx.clone.to_string_lossy()],
-            "",
-        )
-        .out,
-    )
+    words(&reviews(cx, &["owed", "--root", &cx.clone.to_string_lossy()]).out)
 }
 
 pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
@@ -79,18 +70,16 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
     let pf = PromptFile::new(ptext);
     let clone = cx.clone.to_string_lossy().into_owned();
     let named = words(
-        &python(
-            cx.python,
-            &cx.clone,
-            &cx.tree.join("scripts/reviews/review_prereq.py"),
+        &reviews(
+            cx,
             &[
+                "prereq",
                 "named",
                 "--clone",
                 &clone,
                 "--prompt-file",
                 &pf.0.to_string_lossy(),
             ],
-            "",
         )
         .out,
     );
@@ -218,8 +207,7 @@ fn reasoned(
 
 /// A glyph unit goes out at its hour, with the others (feature 294), unless `GLYPH_DUE_OK="<why>"`: whether it escaped, or the refusal.
 fn glyph(cx: &Ctx, atype: &str, ptext: &str, named: &[String]) -> Result<bool, Answer> {
-    let script = cx.clone.join("scripts/reviews/review_owed.py");
-    if atype != "glyph-check" || named.is_empty() || !script.is_file() {
+    if atype != "glyph-check" || named.is_empty() {
         return Ok(false);
     }
     if ptext.contains("GLYPH_DUE_OK=") {
@@ -234,12 +222,9 @@ fn glyph(cx: &Ctx, atype: &str, ptext: &str, named: &[String]) -> Result<bool, A
         return Ok(true);
     }
     for m in named {
-        let early = python(
-            cx.python,
-            &cx.clone,
-            &script,
-            &["--root", &cx.clone.to_string_lossy(), "--glyph-gate", m],
-            "",
+        let early = reviews(
+            cx,
+            &["owed", "--root", &cx.clone.to_string_lossy(), "--glyph-gate", m],
         );
         if !early.ok() {
             cx.log("blocked", &format!("{atype}:{m}"), "glyph-not-due");
@@ -261,10 +246,6 @@ fn prerequisites(
     named: &[String],
     pf: &PromptFile,
 ) -> Option<Answer> {
-    let script = cx.clone.join("scripts/reviews/review_prereq.py");
-    if !script.is_file() {
-        return None;
-    }
     if ptext.contains("REVIEW_PREREQ_OK=") {
         let why = match reasoned(
             cx,
@@ -298,11 +279,10 @@ fn prerequisites(
     }
     .join(" ");
     let clone = cx.clone.to_string_lossy();
-    let said = python(
-        cx.python,
-        &cx.clone,
-        &script,
+    let said = reviews(
+        cx,
         &[
+            "prereq",
             "check",
             "--clone",
             &clone,
@@ -313,7 +293,6 @@ fn prerequisites(
             "--gate-green",
             green,
         ],
-        "",
     );
     if said.ok() {
         return None;
@@ -336,22 +315,19 @@ fn prerequisites(
     )))
 }
 
-/// A review unit's sheet as it reads now (`review_prereq.py content-key`), or "" where it has none; that tool stays Python until its own port.
+/// A review unit's sheet as it reads now (`l7r-gate reviews prereq content-key`), or "" where it has none.
 fn unit_content_key(cx: &Ctx, unit: &str) -> String {
-    let script = cx.tree.join("scripts/reviews/review_prereq.py");
     let bare = unit.split_once('|').map_or(unit, |(_, b)| b);
-    python(
-        cx.python,
-        &cx.clone,
-        &script,
+    reviews(
+        cx,
         &[
+            "prereq",
             "content-key",
             "--clone",
             &cx.clone.to_string_lossy(),
             "--map",
             bare,
         ],
-        "",
     )
     .out
     .trim()
@@ -423,13 +399,12 @@ fn dispatched(cx: &Ctx, atype: &str, named: &[String], key: &str, glyph_escaped:
     let owed = owed(cx);
     for m in named {
         if atype == "glyph-check" {
-            let script = cx.clone.join("scripts/reviews/review_owed.py");
             let clone = cx.clone.to_string_lossy();
-            let mut args = vec!["--root", clone.as_ref(), "--glyph-dispatched", m.as_str()];
+            let mut args = vec!["owed", "--root", clone.as_ref(), "--glyph-dispatched", m.as_str()];
             if glyph_escaped {
                 args.push("--escaped");
             }
-            let _ = python(cx.python, &cx.clone, &script, &args, "");
+            let _ = reviews(cx, &args);
         }
         let span = state::record_dispatch(&cx.clone, m, key, state::now(&cx.clone), &owed);
         state::record_round(&cx.clone, m, key, state::wall()); // the shell's `time.time()`: the fixture clock is the dispatch record's alone

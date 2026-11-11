@@ -273,8 +273,22 @@ fn number(text: &str) -> Option<f64> {
     m.as_str().replace(',', "").parse().ok()
 }
 
+/// The one definition of a figure (feature 239 spec D4), asked of the spec lint by command as the Python asked it (`check spec-lint
+/// --figure-pattern`, whose run the tool-usage log records), Python's `\w` (which holds every numeric character) read as `\w\p{N}`.
+pub(crate) fn figure_pattern(tree: &Path) -> Result<Regex, String> {
+    let done = Command::new(tree.join("scripts/gates/l7r-gate.sh"))
+        .args(["check", "spec-lint", "--figure-pattern"])
+        .output()
+        .map_err(|e| e.to_string())?;
+    if !done.status.success() {
+        return Err(String::from_utf8_lossy(&done.stderr).into_owned());
+    }
+    let pattern = String::from_utf8_lossy(&done.stdout).trim().replace(r"\w", r"\w\p{N}");
+    Regex::new(&pattern).map_err(|e| e.to_string())
+}
+
 /// Each measured figure in the dispatch that no record backs, by feature 239's convention (FR-006): the spec lint's own pattern.
-fn unresolved_figures(prompt: &str, records: &[Value]) -> Vec<String> {
+fn unresolved_figures(prompt: &str, records: &[Value], figure: &Regex) -> Vec<String> {
     let by_key: BTreeMap<String, &Value> = records.iter().map(|r| (text_of(r, "key", "None"), r)).collect();
     let mut out = Vec::new();
     for para in PARAGRAPH.split(prompt).filter_map(Result::ok) {
@@ -287,7 +301,7 @@ fn unresolved_figures(prompt: &str, records: &[Value]) -> Vec<String> {
             .filter_map(|c| by_key.get(&c[1]).map(|r| number(&text_of(r, "value", "None"))))
             .collect();
         let bare = BACKTICKS.replace_all(para, " ");
-        for m in crate::checks::figure_pattern().find_iter(&bare).filter_map(Result::ok) {
+        for m in figure.find_iter(&bare).filter_map(Result::ok) {
             let n = number(m.as_str());
             let backed = n.is_some_and(|n| values.iter().flatten().any(|v| (v - n).abs() <= 0.051_f64.max(v.abs() * 0.005)));
             if !backed {
@@ -336,7 +350,7 @@ fn unit_maps(clone: &Path) -> BTreeMap<String, String> {
 }
 
 /// Every reason this dispatch should not run, in the order a session would fix them. Empty means go.
-fn check(clone: &Path, names: &[String], prompt: &str, gate_green: bool, current: &mut Current) -> Vec<String> {
+fn check(clone: &Path, names: &[String], prompt: &str, gate_green: bool, current: &mut Current) -> Result<Vec<String>, String> {
     let records = measurement_records(clone);
     let mut problems = Vec::new();
     for name in names {
@@ -367,14 +381,15 @@ fn check(clone: &Path, names: &[String], prompt: &str, gate_green: bool, current
     }
     let maps: Vec<String> = maps.into_iter().collect();
     problems.extend(stale_maps(clone, &maps, current, prompt, &snapshot_of).into_iter().map(|p| format!("FR-005 {p}")));
-    let figures = unresolved_figures(prompt, &records);
+    let figure = figure_pattern(&crate::record::repo::tree_of(clone))?;
+    let figures = unresolved_figures(prompt, &records, &figure);
     if !figures.is_empty() {
         problems.push(format!(
             "FR-006 figure(s) quoted with no record behind them: {} - cite the `m:` key or record it",
             figures.join("; ")
         ));
     }
-    problems
+    Ok(problems)
 }
 
 /// Record a finding deliberately left as it is (FR-003): the refusal, or None when recorded.
@@ -621,6 +636,8 @@ fn verdict_cli(clone: &Path, map: &str, p: &Parsed) -> Reply {
         return reply("--findings-file must hold a JSON list of {id, severity, what}\n".to_owned(), String::new(), 2);
     };
     let verdict = p.text("--verdict", "");
+    // the gate's state is read before the verdict is judged, as the Python's argument order read it (its stamp check is recorded)
+    let state = gate_state(clone);
     if !VERDICTS.contains(&verdict) {
         return reply(String::new(), format!("l7r-gate reviews prereq: verdict must be one of {}\n", VERDICTS.join(", ")), 1);
     }
@@ -631,7 +648,7 @@ fn verdict_cli(clone: &Path, map: &str, p: &Parsed) -> Reply {
             _ => None,
         })
         .collect();
-    let (got, rec) = write_verdict(clone, map, verdict, findings, gate_state(clone));
+    let (got, rec) = write_verdict(clone, map, verdict, findings, state);
     let key = text_of(&rec, "engine_key", "");
     let key = if key.is_empty() { "NONE - no dispatch recorded".to_owned() } else { key };
     reply(
@@ -657,9 +674,10 @@ fn check_cli(clone: &Path, p: &Parsed) -> Reply {
         }
     };
     let problems = check(clone, &maps, &prompt, p.text("--gate-green", "no") == "yes", &mut current);
-    if let Some(why) = failed {
-        return reply(String::new(), why, 1);
-    }
+    let problems = match (problems, failed) {
+        (Ok(p), None) => p,
+        (Err(why), _) | (_, Some(why)) => return reply(String::new(), why, 1),
+    };
     let mut out = String::new();
     for line in &problems {
         let _ = writeln!(out, "{line}");

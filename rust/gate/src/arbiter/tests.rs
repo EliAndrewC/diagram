@@ -358,18 +358,12 @@ fn a_python_string_repr_chooses_its_quote() {
 }
 
 const FAKE_GM_REVIEW: &str = "from pathlib import Path\ndef question(d, text, source, when):\n    Path(d, 'gm-question.txt').write_text(text + '|' + source + '|' + when)\n";
-const FAKE_CHECKPOINT: &str = "from pathlib import Path\ndef close_checkpoint(root, trigger):\n    Path(root, 'closed-checkpoint.txt').write_text(trigger)\n";
 
 fn python_tools(root: &Path) {
     std::fs::write(root.join(".fake-answer"), "ok").unwrap();
     let scripts = root.join("scripts");
     for (rel, body) in [
         ("gm_review.py", FAKE_GM_REVIEW),
-        ("reviews/checkpoint.py", FAKE_CHECKPOINT),
-        (
-            "reviews/review_prereq.py",
-            "import sys\nprint('ck-' + sys.argv[sys.argv.index('--map') + 1])\n",
-        ),
         (
             "record/claims.py",
             "import sys\nprint('claims accepted', sys.argv[sys.argv.index('--keys') + 1])\n",
@@ -413,7 +407,12 @@ fn the_rulings_tools_are_asked_by_path() {
         false,
     )
     .unwrap();
-    assert_eq!(row["content_key"], json!("ck-q:0105"));
+    assert!(row.get("content_key").is_none(), "a unit owed on no sheet has no content key");
+    std::fs::write(
+        root.join(".git/glyph-clock.json"),
+        r#"{"999-x": {"checkpoint_open_at": 5, "checkpoint_trigger": "hour:999-x@1"}}"#,
+    )
+    .unwrap();
     let hour = record_ruling(
         &root,
         "hour:999-x@1",
@@ -424,10 +423,10 @@ fn the_rulings_tools_are_asked_by_path() {
     )
     .unwrap();
     assert_eq!(hour["kind"], json!("hour"));
-    assert_eq!(
-        std::fs::read_to_string(root.join("closed-checkpoint.txt")).unwrap(),
-        "hour:999-x@1"
-    );
+    let clock: Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join(".git/glyph-clock.json")).unwrap()).unwrap();
+    assert_eq!(clock["999-x"]["checkpoint_at"], json!(5));
+    assert_eq!(clock["999-x"]["checkpoints"], json!(1));
     let row = record_ruling(
         &root,
         "round:spec-fidelity|999-x#1@6",
@@ -442,22 +441,29 @@ fn the_rulings_tools_are_asked_by_path() {
         std::fs::read_to_string(root.join("specs/999-x/gm-question.txt")).unwrap(),
         "is this right sir please|round:spec-fidelity|999-x#1@6|2026-01-01T00:00:00Z"
     );
-    // a content-key ruling written without its key may be recorded again, the rekey
+    // a content-key ruling written without its key may be recorded again, the rekey: the unit a map new to the pool
     let before = rows(&root).len();
+    let map = root.join("pool/hamlets/m");
+    std::fs::create_dir_all(&map).unwrap();
+    std::fs::write(map.join("m.json"), "{}").unwrap();
+    std::fs::write(map.join("m.svg"), "<svg/>").unwrap();
+    let unit = "settlement-review|settlement-review--m";
     std::fs::write(
         root.join("specs/999-x/arbiter.jsonl"),
         format!(
             "{}\n",
-            json!({"trigger": "round:c|u@3", "ruling": "accept", "kind": "round", "unit": "c|u"})
+            json!({"trigger": format!("round:{unit}@3"), "ruling": "accept", "kind": "round", "unit": unit})
         ),
     )
     .unwrap();
-    let rekeyed =
-        record_ruling(&root, "round:c|u@3", &accept, "round-arbiter", None, false).unwrap();
-    assert_eq!(rekeyed["content_key"], json!("ck-u"));
+    let trigger = format!("round:{unit}@3");
+    let rekeyed = record_ruling(&root, &trigger, &accept, "round-arbiter", None, false).unwrap();
+    let key = crate::reviews::prereq::unit_content_key(&root, "settlement-review--m");
+    assert_eq!(key.len(), 16);
+    assert_eq!(rekeyed["content_key"], json!(key));
     assert!(before >= 1);
     refused(
-        record_ruling(&root, "round:c|u@3", &accept, "round-arbiter", None, false),
+        record_ruling(&root, &trigger, &accept, "round-arbiter", None, false),
         "already ruled",
     );
     let bad_dir = root.join("specs/afile");
@@ -609,22 +615,6 @@ fn a_failed_tool_leaves_the_ruling_half_recorded_and_refuses() {
             &root,
             "ask:gm2",
             &json!({"ruling": "continue", "why": "w", "for_gm": "is this all right for you"}),
-            "round-arbiter",
-            None,
-            false,
-        ),
-        "python3 said",
-    );
-    std::fs::write(
-        root.join("scripts/reviews/checkpoint.py"),
-        "raise ImportError('x')\n",
-    )
-    .unwrap();
-    refused(
-        record_ruling(
-            &root,
-            "hour:999@1",
-            &json!({"ruling": "continue", "why": "w"}),
             "round-arbiter",
             None,
             false,
