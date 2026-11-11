@@ -98,7 +98,9 @@ if [ -n "$CARGO_BIN" ]; then
   # kept binary is removed so the wrapper still builds, self-checks and keeps one
   RT="$HOME/.cache/l7r-cargo-target/$(basename "$ROOT")-guard"; rm -f "$RT/l7r-guard.good"
   t0=${EPOCHREALTIME/,/.}
-  out=$(L7R_GUARD_TARGET="$RT" L7R_GUARD_CARGO="$CARGO_BIN" "$R/scripts/hooks/l7r-guard.sh" --version < /dev/null 2>&1)
+  # the build's own limit (45 s) is case 1's subject; here a cold target on a loaded machine outran it (2026-11-10 54.9 s, 2026-11-11
+  # 60.0 s, both landings), so this case gives the real build room and judges only what it answers
+  out=$(L7R_GUARD_BUILD_SECS=600 L7R_GUARD_TARGET="$RT" L7R_GUARD_CARGO="$CARGO_BIN" "$R/scripts/hooks/l7r-guard.sh" --version < /dev/null 2>&1)
   case "$out" in "l7r-guard "*) ok ;; *) bad "real build: --version [$out]" ;; esac
   [ -x "$RT/l7r-guard.good" ] && ok || bad "real build: the self-checked binary kept"
   # the self-check touches nothing: run in a clone with a feature, it writes no event log there (T012)
