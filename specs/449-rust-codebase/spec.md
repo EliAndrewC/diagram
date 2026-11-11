@@ -193,6 +193,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   figure of the interpreter the close removes), is retired in the closing commit - git history keeps it - the only exemption.
 
 - **SC-006** (FR-011): After T92-T94, re-measured by the same commands as the 2026-11-11 figures recorded in T92's plan section: a one-file edit of one gate crate followed by `make rust-test` takes well under that section's one-crate figure, `make rust-test` and `make static` with nothing changed run no test and no coverage run, and `make done`'s hook suites build no crate `make done` already built.
+- **SC-007** (FR-012): Each of T95-T99 lands with its cost re-measured by the command that measured it before, lower, and every check it touches giving the verdicts and outputs it gave before.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
