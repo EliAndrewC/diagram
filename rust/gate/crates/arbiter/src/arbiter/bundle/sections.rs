@@ -38,21 +38,21 @@ static MODAL_KEY: LazyLock<Regex> = LazyLock::new(|| pyre(r"^[+-]([A-Z][A-Za-z]*
 static PAGE_IN: LazyLock<Regex> = LazyLock::new(|| pyre(r"research/questions/([^ ]+?\.html)"));
 
 /// `_git`: stdout on success, else "".
-pub(crate) fn g(root: &Path, args: &[&str]) -> String {
+pub fn g(root: &Path, args: &[&str]) -> String {
     git(root, args)
 }
 
-pub(crate) fn text<'a>(v: &'a Value, k: &str) -> &'a str {
+pub fn text<'a>(v: &'a Value, k: &str) -> &'a str {
     v.get(k).and_then(Value::as_str).unwrap_or("")
 }
 
 /// Whether a value is what Python reads as true.
-pub(crate) fn truthy(v: Option<&Value>) -> bool {
+pub fn truthy(v: Option<&Value>) -> bool {
     !l7r_guard::shared::checks::falsy(v)
 }
 
 /// `str(v.get(k, default))`.
-pub(crate) fn field(v: &Value, k: &str, default: &str) -> String {
+pub fn field(v: &Value, k: &str, default: &str) -> String {
     v.get(k).map_or_else(|| default.to_owned(), py_str)
 }
 
@@ -74,7 +74,7 @@ fn git_flow(root: &Path, files: &[String]) -> Vec<String> {
 }
 
 /// Whether the round's diff shows what owes a unit (feature 374 wave 122).
-pub(crate) fn owe_evidence(slug: &str, diff: &str) -> String {
+pub fn owe_evidence(slug: &str, diff: &str) -> String {
     let name = slug
         .split_once('#')
         .map_or_else(|| slug.split_once(':').map_or(slug, |p| p.1), |p| p.1);
@@ -106,7 +106,7 @@ pub(crate) fn owe_evidence(slug: &str, diff: &str) -> String {
 }
 
 /// The keyed lines a diff changes in the modal file of `name`, and each research page it touches.
-pub(crate) fn modal_changed_keys(name: &str, lines: &[&str]) -> Vec<String> {
+pub fn modal_changed_keys(name: &str, lines: &[&str]) -> Vec<String> {
     let (mut keys, mut in_modal): (Vec<String>, bool) = (Vec::new(), false);
     for ln in lines {
         if ln.starts_with("diff --git") || ln.starts_with("+++ ") || ln.starts_with("--- ") {
@@ -177,7 +177,7 @@ fn with_files<'a>(mut args: Vec<&'a str>, files: &'a [String]) -> Vec<&'a str> {
 }
 
 /// What owes the CAPPED round itself (feature 374 wave 120): the record's owed reason now, and the commits since the last round.
-pub(crate) fn capped_round_cause(
+pub fn capped_round_cause(
     root: &Path,
     out: &Path,
     (check, subject): (&str, &str),
@@ -280,7 +280,7 @@ fn read_jsonl(path: &Path) -> Vec<Value> {
 }
 
 /// (path, time) of every Edit that put back a passage an earlier Edit of the same file had replaced (`feature_report.reversals`, which T83 takes from here).
-pub(crate) fn reversals(events: &[Value]) -> Vec<(String, String)> {
+pub fn reversals(events: &[Value]) -> Vec<(String, String)> {
     let mut out: Vec<(String, String)> = Vec::new();
     let mut replaced: HashMap<String, HashSet<String>> = HashMap::new();
     for e in events {
@@ -304,7 +304,7 @@ pub(crate) fn reversals(events: &[Value]) -> Vec<(String, String)> {
 }
 
 /// The cascade and the oscillation - for a unit, only the edits and reversals on its own files (343's rulings).
-pub(crate) fn flow_sections(
+pub fn flow_sections(
     root: &Path,
     out: &Path,
     d: Option<&Path>,
@@ -387,7 +387,7 @@ pub(crate) fn flow_sections(
     ])
 }
 
-pub(crate) fn json_file(path: &Path) -> Result<Value, ()> {
+pub fn json_file(path: &Path) -> Result<Value, ()> {
     let t = std::fs::read_to_string(path).map_err(|_| ())?;
     serde_json::from_str(&t).map_err(|_| ())
 }
@@ -423,7 +423,7 @@ fn record_round_counter(root: &Path, unit: &str) -> Vec<String> {
 }
 
 /// What the pair guard counted for `unit`'s round cap (feature 374 batch 5); a record check's from `hm_checks.py`.
-pub(crate) fn round_counter(root: &Path, unit: &str) -> Vec<String> {
+pub fn round_counter(root: &Path, unit: &str) -> Vec<String> {
     let record = record_round_counter(root, unit);
     if !record.is_empty() {
         return record;
@@ -535,7 +535,7 @@ fn between(root: &Path, a: &Value, b: &Value) -> Vec<String> {
 }
 
 /// A red-gate trigger's evidence: the last four red `make done` runs of this feature's line, each with its own failed tests (feature 374 batch 10, 385).
-pub(crate) fn red_gate_runs(root: &Path) -> Vec<String> {
+pub fn red_gate_runs(root: &Path) -> Vec<String> {
     let mut files: Vec<PathBuf> = Vec::new();
     for d in std::fs::read_dir(root.join("dev").join("run-log"))
         .into_iter()
@@ -606,7 +606,7 @@ pub(crate) fn red_gate_runs(root: &Path) -> Vec<String> {
 }
 
 /// Copy each file a question cites into `evidence/` beside the MANIFEST and name each (ask:b13-w149-strip-route).
-pub(crate) fn evidence_section(out: &Path, files: &[String]) -> Result<Vec<String>, Fail> {
+pub fn evidence_section(out: &Path, files: &[String]) -> Result<Vec<String>, Fail> {
     if files.is_empty() {
         return Ok(Vec::new());
     }
@@ -648,7 +648,7 @@ pub(crate) fn evidence_section(out: &Path, files: &[String]) -> Result<Vec<Strin
 }
 
 /// What a route or regression question leaves unstated about the POOL (ask:b13-w149-route-matrix); none where nothing is owed.
-pub(crate) fn pool_unstated(why: &str, files: &[String]) -> Vec<String> {
+pub fn pool_unstated(why: &str, files: &[String]) -> Vec<String> {
     if !hit(&ROUTES, why) || !hit(&MAP_WORDS, why) {
         return Vec::new();
     }
@@ -684,7 +684,7 @@ pub(crate) fn pool_unstated(why: &str, files: &[String]) -> Vec<String> {
 }
 
 /// Each research claim on a name the question or its evidence cites, with its class and last verdict (ask:t06-scattered-single-file); the rows and index through the runner (Q1a, to Rust in T82).
-pub(crate) fn claims_section(root: &Path, texts: &[String]) -> Result<Vec<String>, Fail> {
+pub fn claims_section(root: &Path, texts: &[String]) -> Result<Vec<String>, Fail> {
     let names: HashSet<String> = texts
         .iter()
         .flat_map(|t| {

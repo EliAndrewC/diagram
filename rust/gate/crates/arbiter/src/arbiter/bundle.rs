@@ -20,7 +20,7 @@ use crate::record::bundle::{
 use crate::record::repo::{fail, read_text, tree_of, Fail};
 use crate::Reply;
 
-pub(crate) use l7r_gate_bundle::arbiter::bundle::marks;
+pub use l7r_gate_bundle::arbiter::bundle::marks;
 mod reviews;
 mod sections;
 
@@ -38,7 +38,7 @@ static TRIGGER_FEATURE: LazyLock<Regex> =
 static MADE_UP: LazyLock<Regex> = LazyLock::new(|| pyre(r"^round-\d+@"));
 
 /// Why a bundle cannot be built: a refusal (`ValueError`), what the loop's record lacks (`MissingRecord`), or a failure the Python raised.
-pub(crate) enum Stop {
+pub enum Stop {
     Value(String),
     Missing(Vec<String>),
     Fail(Fail),
@@ -425,7 +425,11 @@ fn subject_parts(
 }
 
 /// The MANIFEST for `trigger`; `Missing` where a round kept no reply or a reversal has no record, unless `allow_missing` gives the reason.
-pub(crate) fn bundle(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn bundle(
     root: &Path,
     trigger: &str,
     out: &Path,
@@ -650,7 +654,7 @@ fn answer(mut run: Run, done: Result<PathBuf, Stop>) -> Reply {
 }
 
 /// `arbiter bundle ...`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String]) -> Reply {
     let p = match parse_with(args, &specs(), 1) {
         Ok(p) => p,
         Err(complaint) => {

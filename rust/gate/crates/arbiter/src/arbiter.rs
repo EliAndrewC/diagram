@@ -668,7 +668,7 @@ fn join_refs(v: &[&String]) -> String {
     v.iter().map(|s| s.as_str()).collect::<Vec<_>>().join(", ")
 }
 
-pub(crate) mod bundle;
+pub mod bundle;
 mod fixes;
 pub use fixes::{fix_hold, open_fixes};
 use fixes::{fix_home, nit_answers, settle_fix};

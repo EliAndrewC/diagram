@@ -37,7 +37,7 @@ fn object(path: &Path) -> Map<String, Value> {
 }
 
 /// An ask about a plan review carries that review's rounds (ask:t14-plan-round4): (lines, the plan's path).
-pub(crate) fn plan_rounds(d: &Path) -> (Vec<String>, PathBuf) {
+pub fn plan_rounds(d: &Path) -> (Vec<String>, PathBuf) {
     let review = object(&d.join("plan-review.json"));
     let rounds: Vec<&Value> = review
         .get("block_reviews")
@@ -152,7 +152,7 @@ fn reviewed_feature(prompt: &str) -> String {
 }
 
 /// A spec review's rounds, each reviewer's whole reply beside the MANIFEST and its findings marked (387's ruling).
-pub(crate) fn spec_rounds(out: &Path, subject: &str) -> Result<Vec<String>, Fail> {
+pub fn spec_rounds(out: &Path, subject: &str) -> Result<Vec<String>, Fail> {
     spec_rounds_in(&transcripts(), out, subject)
 }
 
@@ -324,7 +324,7 @@ fn sheet_edits(root: &Path, out: &Path, rec: &Path, name: &str) -> Result<(), Fa
 }
 
 /// A review unit's earlier rounds from its verdict record and its ledger rows, where the check state holds none (feature 374 batch 4).
-pub(crate) fn review_verdicts(root: &Path, out: &Path, subject: &str) -> Result<Vec<String>, Fail> {
+pub fn review_verdicts(root: &Path, out: &Path, subject: &str) -> Result<Vec<String>, Fail> {
     let git_dir = strip(&g(root, &["rev-parse", "--absolute-git-dir"])).to_owned();
     let git_dir = if git_dir.is_empty() {
         root.join(".git")
@@ -402,7 +402,7 @@ fn under(p: &Path, root: &Path) -> String {
 }
 
 /// Copy the feature's `request.md` and `spec.md` beside the MANIFEST and name ONLY the ones copied (`ask:f335-garden-modal-depiction`).
-pub(crate) fn feature_section(
+pub fn feature_section(
     root: &Path,
     out: &Path,
     d: Option<&Path>,
