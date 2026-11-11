@@ -1785,3 +1785,31 @@ censuses empty (work breakdown 8, FR-010).
 **Performance work?** Yes, of the build, not the engine: it removes work (an edit compiles a crate and its dependents, not 74,199 lines); no engine call count moves.
 
 
+<!-- plan-archive: archived 2026-11-11 -->
+### T94 (the landing's slow hook suites, FR-011)
+
+- **Approach**: the two slowest suites of the T82 landing's `make done` read, measured alone and changed only where they did work `make done` need not repeat.
+
+   **Decisions** (FR-011, SC-006):
+   - The guard suite (`tests/hooks/test-l7r-guard.sh`) took 86.5 s in that landing (observed 2026-11-11, method: `make done`'s hooks-test line, `ran l7r-guard.sh 86.5s`). Its real-build case copied `rust/` into a scratch directory and built the guard crate there; cargo keys a build on the package's path as well as its sources, so the copy recompiled the whole crate on every run, the comment's "cp -p keeps the times, so cargo finds nothing to do" being wrong. It now runs the clone's own wrapper on the clone's own tree into the wrapper's own target, the one `make done`'s hook calls build (`make hooks-test` runs `scripts/hooks/l7r-guard.sh trace` and `deps`, and that wrapper rebuilds the release guard binary there when the guard's sources changed), so a changed guard crate is built once in a landing, not twice; it no longer deletes the kept binary to force a build, the build, self-check and keep paths being cases 1-6's on the fake cargo, and judges that the kept binary answers.
+   - The same case's last check ran `sleep 30 | ( timeout 10 ... )`: a pipeline waits for its `sleep`, so the suite slept 30 s on every run, and the right side ran in a subshell, so its `ok`/`bad` never reached the suite's counts. It now feeds stdin from a process substitution, which the shell does not wait for, and judges in the suite's own shell, so the case counts (30 cases became 31).
+   - Together: the suite runs in 1.5 s, both runs, the real-build case in 0.2 s (observed 2026-11-11, method: `bash tests/hooks/test-l7r-guard.sh` timed twice with `date +%s.%N`, the suite's own `real build through the wrapper` line). A change to the guard crate still pays its one real build there, which is the case's purpose.
+   - The sync-with-main suite took 83.7 s in the T82 landing and 94.3 s in T92's hook run, but 19.3 s alone (observed 2026-11-11, method: `bash tests/hooks/test-sync-with-main.sh` timed alone, and a `bash -x` trace with `PS4` carrying `EPOCHREALTIME` summed by command, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/speed/trace.py`). The trace shows its parts already run in parallel under one `wait`, and none builds a crate; its time in a landing is CPU shared with the parallel coverage and counters builds. It is left as it is; how `make done` schedules its phases is the measured question after T93.
+   - Every suite, not only the two slowest (SC-006 covers all of them): with the tree's build warm from the T92 landing's `make done`, one `make hooks-test HOOKS_ALL=1` run of all 53 suites wrote no build output under any cargo target directory and made no new one; the only file written was the guard suite's kept `l7r-guard.good`, re-kept with nothing compiled (observed 2026-11-11, method: `bash /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/speed/buildcensus.sh`, which lists every file under `~/.cache/l7r-cargo-target/` newer than a marker made before the run, excluding `incremental/`, and diffs the target directories before and after). The suites that build at all reach cargo only through the wrappers `scripts/hooks/l7r-guard.sh` and `scripts/gates/l7r-gate.sh`, and through `tests/hooks/guard-shim.sh` and `tests/hooks/guard-cases.sh`, which set the clone's own target (found by `git grep -nE 'cargo|CARGO_TARGET_DIR|L7R_GATE_TARGET|L7R_GUARD_TARGET' -- tests/hooks`); the guard suite's real-build case was the one second target.
+
+### T94 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing's hook suites spend their time on what they check, not on rebuilding or sleeping.
+2. **The constraints.** FR-011 and SC-006; the guard suite's real-build case keeps proving the wrapper against the real crate.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the landing's hooks-test line and the timings above.
+4. **Do they describe the world here?** Measured on this clone, alone and inside `make done`.
+5. **The order.** After T92; T93 follows.
+6. **The exits.** Green: the guard suite green in about a second and its new case counted, the hook suites green, `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The guard suite's two timed runs above; `make hooks-test HOOKS_ALL=1` green on 53 suites (observed 2026-11-11, method: that command on the T92 tree, which carries this change).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** no.
+
