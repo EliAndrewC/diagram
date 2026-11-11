@@ -1,0 +1,21 @@
+# The landing cohort, the push's checks and gates, the Rust crates' checks (feature 449 T92's split).
+[package]
+name = "l7r_gate_cohort"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_gate_plan = { path = "../plan" }
+l7r_gate_tree = { path = "../tree" }
+l7r_guard = { path = "../../../guard" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

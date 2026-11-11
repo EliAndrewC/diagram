@@ -19,12 +19,12 @@ use serde_json::Value;
 use crate::delta;
 pub use l7r_gate_core::cohort::*;
 
-pub(crate) mod known;
-pub(crate) mod room;
-pub(crate) mod seeds;
+pub mod known;
+pub mod room;
+pub mod seeds;
 
 /// The name its runs are recorded under in the `usage_log`.
-pub(crate) const USAGE_LOG_TOOL: &str = "cohort_gate";
+pub const USAGE_LOG_TOOL: &str = "cohort_gate";
 const LOG: &str = "dev/cohort-log";
 const RUST_LOG: &str = "dev/rust-gate";
 const RUST_COMMAND: &str = "make rust-gate";
@@ -46,7 +46,7 @@ fn counter_dir() -> std::path::PathBuf {
     std::env::temp_dir().join(format!("l7r-gate-counter-{}-{call}", std::process::id()))
 }
 /// The paths whose bytes unchanged mean the same engine at once.
-pub(crate) const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
+pub const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
 
 /// The landing's own list of engine files (`codeid.ENGINE`, which stays in Python until phase 4).
 static ENGINE: LazyLock<Regex> = LazyLock::new(|| {
@@ -58,7 +58,7 @@ static ENGINE: LazyLock<Regex> = LazyLock::new(|| {
 type Versions = Vec<(Vec<u8>, Vec<u8>)>;
 
 /// A repository and what it has been asked already: `baselines` asks an engine key once per record.
-pub(crate) struct Repo<'a> {
+pub struct Repo<'a> {
     pub root: &'a Path,
     pub python: &'a str,
     keys: RefCell<HashMap<String, String>>,
@@ -76,7 +76,7 @@ fn git_bytes(root: &Path, args: &[&str]) -> Vec<u8> {
         .unwrap_or_default()
 }
 
-pub(crate) fn seeds_of(rec: &Value) -> &[Value] {
+pub fn seeds_of(rec: &Value) -> &[Value] {
     rec["seeds"].as_array().map_or(&[], Vec::as_slice)
 }
 
@@ -86,7 +86,8 @@ fn is_pinned(seed: i64) -> bool {
 }
 
 impl<'a> Repo<'a> {
-    pub(crate) fn new(root: &'a Path, python: &'a str) -> Self {
+    #[must_use]
+    pub fn new(root: &'a Path, python: &'a str) -> Self {
         Self {
             root,
             python,
@@ -97,7 +98,7 @@ impl<'a> Repo<'a> {
     }
 
     /// The engine key of `reference`, or of the working tree for `None`; empty for a reference that does not resolve.
-    pub(crate) fn engine_key(&self, reference: Option<&str>) -> String {
+    pub fn engine_key(&self, reference: Option<&str>) -> String {
         let Some(reference) = reference else {
             return delta::engine_key_worktree(self.root, self.python).unwrap_or_default();
         };
@@ -134,12 +135,12 @@ impl<'a> Repo<'a> {
     }
 
     /// Do the two commits carry the same engine? Identical bytes answer at once, then the keys, then a counter-only difference (feature 446).
-    pub(crate) fn same_key(&self, a: &str, b: &str) -> bool {
+    pub fn same_key(&self, a: &str, b: &str) -> bool {
         self.same_by_key(a, b) || self.counter_only(a, b)
     }
 
     /// Was `commit` rolled on main's engine?
-    pub(crate) fn same_engine(&self, commit: &str) -> bool {
+    pub fn same_engine(&self, commit: &str) -> bool {
         self.same_key(commit, self.main_ref())
     }
 
@@ -200,7 +201,7 @@ impl<'a> Repo<'a> {
     }
 
     /// Answer every commit pair a run will ask, in one process.
-    pub(crate) fn prime(&self, asks: &[(String, String)]) {
+    pub fn prime(&self, asks: &[(String, String)]) {
         let mut todo: Vec<((String, String), Versions)> = Vec::new();
         for ask in asks {
             if self.counters.borrow().contains_key(ask) || todo.iter().any(|(t, _)| t == ask) {
@@ -261,7 +262,7 @@ impl<'a> Repo<'a> {
     }
 
     /// Is every engine file that differs a modification whose two versions are counter-only-equal? No engine file differing is not one.
-    pub(crate) fn counter_only(&self, a: &str, b: &str) -> bool {
+    pub fn counter_only(&self, a: &str, b: &str) -> bool {
         let ask = (a.to_owned(), b.to_owned());
         self.prime(std::slice::from_ref(&ask));
         self.counters.borrow().get(&ask).copied().unwrap_or(false)
@@ -290,7 +291,8 @@ impl<'a> Repo<'a> {
 }
 
 /// Every cohort record, oldest first; a record that does not parse is skipped.
-pub(crate) fn records(root: &Path) -> Vec<Value> {
+#[must_use]
+pub fn records(root: &Path) -> Vec<Value> {
     let mut names: Vec<_> = std::fs::read_dir(root.join(LOG))
         .into_iter()
         .flatten()
@@ -336,7 +338,8 @@ fn landing_shaped(rec: &Value, need_fresh: bool) -> bool {
 }
 
 /// The records newest first, the order of equal times as they came.
-pub(crate) fn newest_first(recs: &[Value]) -> Vec<&Value> {
+#[must_use]
+pub fn newest_first(recs: &[Value]) -> Vec<&Value> {
     let mut sorted: Vec<&Value> = recs.iter().collect();
     sorted.sort_by_key(|r| std::cmp::Reverse(text(r, "utc")));
     sorted
@@ -426,7 +429,8 @@ fn port_state(text: &str) -> Option<String> {
 }
 
 /// The port switch; a malformed entry closes to the last committed file's state, the state in force.
-pub(crate) fn port_mode(root: &Path) -> String {
+#[must_use]
+pub fn port_mode(root: &Path) -> String {
     let Ok(now) = std::fs::read_to_string(root.join(SWITCHES)) else {
         return "rust-only".to_owned();
     };
@@ -559,7 +563,7 @@ fn gate_check(repo: &Repo<'_>) -> crate::Reply {
 }
 
 /// `l7r-gate cohort ...`.
-pub(crate) fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     let repo = Repo::new(root, python);
     let reply_of = answer(&words, &repo, root);

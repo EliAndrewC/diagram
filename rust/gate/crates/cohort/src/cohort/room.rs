@@ -23,7 +23,8 @@ static FIT_WORDS: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 /// Is any of a cohort seed's `failures` a fit failure (a refusal is `refused:<kind>`)?
-pub(crate) fn is_fit(failures: &[Value]) -> bool {
+#[must_use]
+pub fn is_fit(failures: &[Value]) -> bool {
     failures.iter().any(|f| {
         FIT.contains(
             &f.as_str()
@@ -36,12 +37,12 @@ pub(crate) fn is_fit(failures: &[Value]) -> bool {
 }
 
 /// Does a question put to the arbiter name a fit failure?
-pub(crate) fn names_fit(text: &str) -> bool {
+pub fn names_fit(text: &str) -> bool {
     FIT_WORDS.is_match(text).unwrap_or(false)
 }
 
 /// The table as Markdown, headed with what to do with it.
-pub(crate) fn table(root: &Path) -> String {
+pub fn table(root: &Path) -> String {
     let data: Value = serde_json::from_str(
         &std::fs::read_to_string(root.join("scripts/gates/room_table.json")).unwrap_or_default(),
     )
@@ -67,7 +68,8 @@ pub(crate) fn table(root: &Path) -> String {
     out
 }
 
-pub(crate) fn render(root: &Path) -> crate::Reply {
+#[must_use]
+pub fn render(root: &Path) -> crate::Reply {
     crate::Reply {
         stdout: table(root),
         stderr: String::new(),

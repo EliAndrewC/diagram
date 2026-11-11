@@ -4,19 +4,17 @@ pub mod arbiter;
 pub mod checks_door;
 mod ci;
 mod claims;
-mod cohort;
 mod measure;
 pub mod owed_door;
 mod preflight;
-mod push;
 pub(crate) mod record;
 pub mod reviews;
-mod rustc;
 
 use std::path::{Path, PathBuf};
 
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
 pub use l7r_gate_checks::checks;
+pub use l7r_gate_cohort::{cohort, push, rustc};
 pub use l7r_gate_plan::plan;
 pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
 #[cfg(test)]
@@ -198,5 +196,23 @@ mod tests {
                 .contains("cannot start")
         );
         assert_eq!(cli(&names(&["content-ids"])).code, 0);
+    }
+    /// What the claims tools and the modal tools read, each judged by its push gate (moved from `push/tests.rs` by feature 449 T92:
+    /// the push's crate sits below the crates that own those paths).
+    #[test]
+    fn each_push_gate_judges_every_path_the_claims_and_modal_tools_read() {
+        use crate::push::{judged, judges};
+        let covered = |gate: &str, path: &str| {
+            let probe = if crate::checks::has_ext(path, "json") || crate::checks::has_ext(path, "md") {
+                path.to_owned()
+            } else {
+                format!("{}/x", path.trim_end_matches('/'))
+            };
+            !judged(judges(gate).unwrap().0, &[probe]).is_empty()
+        };
+        for p in crate::claims::read_paths() {
+            assert!(covered("claims", p), "{p}");
+        }
+        assert!(covered("entry", crate::record::modals::MODALS));
     }
 }

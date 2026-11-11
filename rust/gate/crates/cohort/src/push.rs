@@ -17,7 +17,8 @@ use crate::Reply;
 const USAGE_LOG_TOOL: &str = "push_gates";
 
 /// What each gate judges, read off the gate's own constants and pinned by `test_push_gates.py`.
-fn judges(gate: &str) -> Option<(&'static [&'static str], &'static str)> {
+#[must_use]
+pub fn judges(gate: &str) -> Option<(&'static [&'static str], &'static str)> {
     match gate {
         "claims" => Some((
             &[
@@ -72,7 +73,9 @@ fn delta(root: &Path) -> Option<(String, Vec<String>, Vec<String>)> {
     Some((base, paths, dirty))
 }
 
-fn judged(prefixes: &[&str], paths: &[String]) -> Vec<String> {
+/// The paths of `paths` under one of `prefixes`.
+#[must_use]
+pub fn judged(prefixes: &[&str], paths: &[String]) -> Vec<String> {
     paths
         .iter()
         .filter(|p| {
@@ -138,7 +141,7 @@ fn record_pass(root: &Path, gate: &str, prefixes: &[&str]) {
 }
 
 /// `l7r-gate push-gate skip|pass <gate>`.
-pub(crate) fn gate_cli(args: &[String], root: &Path) -> Reply {
+pub fn gate_cli(args: &[String], root: &Path) -> Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     let usage = || {
         Reply { stdout: String::new(), stderr: "push-gate skip <gate>    exit 0, saying why, when the delta holds nothing the gate judges or a pass is stored for it\npush-gate pass <gate>    store the gate's pass for the delta as it stands\n".to_owned(), code: 2 }
@@ -286,7 +289,8 @@ fn row_command(tools: &Tools, row: &Row, root: &Path) -> Command {
 }
 
 /// The push's rows as `make`'s timing reads them: the one-process run, then each row its own process, a row the clone cannot run named with no command; a row the push would skip on this delta is timed all the same, the measure being what the checks cost.
-pub(crate) fn timing_rows(tree: &Path, root: &Path) -> Vec<(String, Option<Command>)> {
+#[must_use]
+pub fn timing_rows(tree: &Path, root: &Path) -> Vec<(String, Option<Command>)> {
     let tools = Tools {
         tree: tree.to_owned(),
         python: "python3".to_owned(),
@@ -388,7 +392,7 @@ fn parse_skips(rest: &[String]) -> Result<Vec<String>, String> {
 }
 
 /// `l7r-gate push-checks <root> [--skip <name> ...] [--list]`.
-pub(crate) fn checks_cli(args: &[String], tree: &Path, off: bool) -> Reply {
+pub fn checks_cli(args: &[String], tree: &Path, off: bool) -> Reply {
     let usage = |text: String| Reply {
         stdout: String::new(),
         stderr: text,

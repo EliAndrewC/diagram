@@ -109,7 +109,7 @@ fn known(root: &Path, record: &Value) -> Vec<String> {
 }
 
 /// Each seed's baseline: its entry in the newest earlier record, rolled at the same household count on main's engine.
-pub(crate) fn baselines<'r>(
+pub fn baselines<'r>(
     record: &Value,
     earlier: &'r [Value],
     ok: &dyn Fn(&str) -> bool,
@@ -167,7 +167,8 @@ fn worsened(x: &Value, b: &Value) -> bool {
 }
 
 /// One line per seed that fails now or failed at its baseline.
-pub(crate) fn standing(record: &Value, base: &BTreeMap<i64, &Value>) -> Vec<String> {
+#[must_use]
+pub fn standing(record: &Value, base: &BTreeMap<i64, &Value>) -> Vec<String> {
     let mut out = Vec::new();
     for x in seeds_of(record).iter().filter(|y| !truthy(&y["fresh"])) {
         let n = int(&x["seed"]);
@@ -302,7 +303,7 @@ fn say(stdout: String) -> crate::Reply {
 }
 
 /// `l7r-gate cohort known [--root R] [--stamp]`.
-pub(crate) fn cli(words: &[&str], repo: &Repo<'_>) -> crate::Reply {
+pub fn cli(words: &[&str], repo: &Repo<'_>) -> crate::Reply {
     let root = words
         .windows(2)
         .find(|w| w[0] == "--root")

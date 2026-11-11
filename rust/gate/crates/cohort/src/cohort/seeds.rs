@@ -15,7 +15,8 @@ const PINNED: std::ops::Range<i64> = 901..907;
 const FRESH_BASE: i64 = 10_000;
 
 /// A JSON file as Python's `json.dumps(indent=1, ensure_ascii=False)` writes it, the form these records are kept in.
-pub(crate) fn dumped(v: &Value) -> String {
+#[must_use]
+pub fn dumped(v: &Value) -> String {
     let mut buf = Vec::new();
     let mut ser = serde_json::Serializer::with_formatter(
         &mut buf,
@@ -240,7 +241,7 @@ fn load(log: &Path) -> (Vec<Value>, Value) {
 }
 
 /// `l7r-gate cohort seeds [--log L] [--record FILE --key KEY]`.
-pub(crate) fn cli(words: &[&str], root: &Path) -> crate::Reply {
+pub fn cli(words: &[&str], root: &Path) -> crate::Reply {
     let flag = |name: &str| words.windows(2).find(|w| w[0] == name).map(|w| w[1]);
     let log = flag("--log").map_or_else(|| root.join("dev/cohort-log"), std::path::PathBuf::from);
     let (recs, known) = load(&log);

@@ -311,7 +311,7 @@ fn a_public_function_nothing_calls_is_refused() {
     let (root, a, _) = two_crates();
     std::fs::write(
         root.join("rust/a/src/lib.rs"),
-        "pub fn used() {}\npub(crate) fn orphan() {}\nfn f() { used(); }\n",
+        "pub fn used() {}\npub fn orphan() {}\nfn f() { used(); }\n",
     )
     .unwrap();
     assert_eq!(dead_public(&a), ["orphan"]);
@@ -506,7 +506,7 @@ fn a_nested_source_is_read_a_check_is_dispatched_and_cargo_is_found() {
 #[test]
 fn the_real_cargo_tests_a_real_crate() {
     let root = scratch("rustc-real");
-    let fixture = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/rust/fixture");
+    let fixture = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../tests/fixtures/rust/fixture");
     let crate_dir = root.join("rust/fixture");
     std::fs::create_dir_all(crate_dir.join("src")).unwrap();
     for name in ["Cargo.toml", "rust-toolchain.toml", "src/lib.rs"] {

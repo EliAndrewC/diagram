@@ -67,7 +67,7 @@ fn kept_reads(cmd: &str) -> Option<Reads> {
 }
 
 /// Where everything runs, read once from the environment.
-pub(crate) struct World {
+pub struct World {
     root: PathBuf,
     target: PathBuf,
     cargo: String,
@@ -858,7 +858,8 @@ fn dispatch(world: &World, args: &[String]) -> Reply {
 }
 
 /// `l7r-gate rust <cmd> [--crate DIR]... [--check]`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
     let world = world_here();
     let reply = dispatch(&world, args);
     crate::stamp::record_for(
