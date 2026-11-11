@@ -323,8 +323,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T97 make done's counters-inert phase (53 s of 57 s): the counting builds of core and phases rerun less, measured (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the counting build runs only on a crate with a counters feature: counters-inert 59-113 s to about 5 s
-- [ ] T98 The hook suites in parallel (about 95 s): the slowest few profiled and made cheaper (the GM 2026-11-11)
+- [x] T98 The hook suites in parallel (about 95 s): the slowest few profiled and made cheaper (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: the batching suite moves its guard's clock by a file: 29.3 s to 1.4 s, a full hook run 71.2 to 63.8 s
 - [ ] T99 The arbiter crate's slow tests (100-300 ms each against FR-008's tenth of a second): made fast (the GM 2026-11-11)
       research: rendering
 - [x] T100 make static after a fresh gate crate edit (103.3 s core, 64.8 s claims after a comment, 2026-11-11): the lint, coverage and dead-code reruns for the edited crate and every crate built on it, measured and cut (the GM 2026-11-11)

@@ -395,40 +395,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T95 to T95 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T96 to T96 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T97 to T97 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-### T98 (the hook suites run in parallel, FR-012)
-
-- **Approach**: the batching suite moves its guard's clock by a file instead of sleeping, and the rest is measured and left.
-
-   **Decisions** (FR-012, SC-007):
-   - Each slow suite timed alone against its time in a full run tells its own cost from contention: sync-with-main 25.6 s alone, entry-gate 18.4 s, idle-tests 34.9 s, batching 29.3 s, land-tooling 8.9 s (observed 2026-11-11, method: `bash tests/hooks/<suite>` timed alone with `date +%s.%N`), against 62.7 s, 47.6 s, 36.3 s, 31.5 s and 17.3 s in a full `make hooks-test HOOKS_ALL=1` of the tree without this change (observed 2026-11-11, method: that run's `hooks-test: ran` line in a scratch clone). So batching and idle-tests cost their own time and sync-with-main and entry-gate mostly contention.
-   - Batching's time was sleeps: 0.75 s before each simulated turn and 2.1 s inside a slow one, to move the wall clock the guard reads (observed 2026-11-11, method: the suite's `sleep` lines, 14 of them). The guard now takes its time from a file named by `BATCH_CLOCK`, honored only beside a fixture's own `BATCH_STATE_DIR`, so a session's hook never reads it (`rust/guard/src/guards/batching_hooks.rs`, a unit test of the file, its absence and a session without a state directory), and the suite moves it with `tick`, one clock a case since the cases run in parallel parts (a shared one moved every part's time, and two cases failed). Its one real wait, for the guard log's notice record, polls instead of sleeping. The suite took 1.4 s three times, all 56 checks passing (observed 2026-11-11, method: `bash tests/hooks/test-batching-hooks.sh` timed thrice).
-   - Idle-tests is left: its time is real timer processes it exists to test, polled at a tenth of a second, and its timings have flaked before when tightened (observed 2026-11-11, method: a `bash -x` trace with `EPOCHREALTIME` in `PS4`, summed by line, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t98idle.trace`).
-   - Tried and dropped: starting the suites longest-first by each one's last time made the full run slower, 74.8 s and 77.0 s, sync-with-main 67.5 s and 69.5 s, since the heaviest suites then contend with each other (observed 2026-11-11, method: two `make hooks-test HOOKS_ALL=1` runs with the queue sorted, reverted).
-   - The same command before and after (SC-007): a full `make hooks-test HOOKS_ALL=1` took 71.2 s on the tree without this change and 63.8 s with it, all 54 suites green, sync-with-main 62.7 s and 56.5 s its longest (observed 2026-11-11, method: `date +%s.%N` around each, the scratch clone then this clone). What is left is sync-with-main's own time, measured alone above, and the contention around it.
-
-### T98 Approach (checklist part A)
-
-1. **The goal, in the world.** A full hook-suite run costs what its suites check, not their sleeps.
-2. **The constraints.** FR-012 and SC-007: every suite's verdicts held; a session's hook never reads a test clock.
-3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the timings above.
-4. **Do they describe the world here?** Measured on this clone and a scratch clone of its committed tree.
-5. **The order.** After T100.
-6. **The exits.** Green: `make hooks-test HOOKS_ALL=1`, `make static` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The before and after runs above.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** yes, tooling time, not the generator:
-1. **Where does the time go?** In one suite's sleeps, and in contention around the longest suite.
-2. **Does the change remove work, or only move it?** Removes it: the batching suite's sleeping, the suite measured above.
-3. **What do you expect it to save, and why?** The batching suite's whole sleep, and some wall time where it overlapped the others.
-4. **How does the work grow?** With the suite's cases, no longer with sleeps between them.
-5. **What did the before and after show, and under what conditions?** One run each, and three of the suite, on a throttled host, read as evidence.
-6. **Did any map move?** No: no engine code changes.
-
-
+<!-- plan-archive: T98 to T98 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 ### T99 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
