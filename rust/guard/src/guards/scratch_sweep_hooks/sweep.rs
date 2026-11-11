@@ -10,6 +10,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use super::Config;
 
+mod cargo;
+
 /// An entry the sweep removes: where, its size on disk, and why it is finished.
 pub(crate) struct Item {
     pub path: PathBuf,
@@ -54,6 +56,7 @@ pub(crate) fn plan(c: &Config, now: SystemTime) -> Vec<Item> {
             }
         }
     }
+    out.extend(cargo::plan(c, cutoff));
     out.into_iter()
         .filter(|(p, _)| !live.iter().any(|l| l.starts_with(p)))
         .map(|(path, why)| Item {
@@ -119,6 +122,16 @@ fn lstat(p: &Path) -> Option<(PathBuf, Metadata)> {
     std::fs::symlink_metadata(p)
         .ok()
         .map(|m| (p.to_path_buf(), m))
+}
+
+/// The newest mtime at or under `path`; None where a directory in it cannot be read.
+fn newest(path: &Path) -> Option<SystemTime> {
+    let mut latest = UNIX_EPOCH;
+    let read = walk(path, |m| {
+        latest = latest.max(m.modified().unwrap_or(UNIX_EPOCH));
+        true
+    });
+    read.then_some(latest)
 }
 
 /// Nothing at or under `path` modified at or after `cutoff`; a directory that cannot be read is not idle.

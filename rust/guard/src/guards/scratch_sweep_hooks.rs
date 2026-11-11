@@ -41,6 +41,12 @@ pub(crate) struct Config {
     pub root: PathBuf,
     /// `~/.claude/projects`, where each session's transcript says when it was last used.
     pub projects: PathBuf,
+    /// The cargo target cache (`~/.cache/l7r-cargo-target`, T102): one build directory a tree that builds, named for the tree.
+    pub cargo: PathBuf,
+    /// Where the session clones are (`/diagram/.clones`): a clone's build directory is never removed whole.
+    pub clones: PathBuf,
+    /// The mirror (`/diagram`), whose build directory holds the guard hook's kept binary, never removed whole.
+    pub mirror: PathBuf,
     /// Claude Code's registry of running sessions (`~/.claude/sessions`), read so a live session's scratch is never swept.
     pub sessions: PathBuf,
     /// The stamp and the lock (`~/.claude/scratch-sweep`), outside the root so they are never a loose entry.
@@ -72,6 +78,12 @@ impl Config {
             ),
             projects: set("SCRATCH_SWEEP_PROJECTS")
                 .map_or_else(|| home.join(".claude/projects"), PathBuf::from),
+            cargo: set("SCRATCH_SWEEP_CARGO")
+                .map_or_else(|| home.join(".cache/l7r-cargo-target"), PathBuf::from),
+            clones: set("SCRATCH_SWEEP_CLONES")
+                .map_or_else(|| PathBuf::from("/diagram/.clones"), PathBuf::from),
+            mirror: set("SCRATCH_SWEEP_MIRROR")
+                .map_or_else(|| PathBuf::from("/diagram"), PathBuf::from),
             sessions: set("SCRATCH_SWEEP_SESSIONS")
                 .map_or_else(|| home.join(".claude/sessions"), PathBuf::from),
             state: set("SCRATCH_SWEEP_STATE")

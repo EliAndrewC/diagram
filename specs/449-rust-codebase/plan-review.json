@@ -324,6 +324,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T102 (the cargo target cache stops growing, FR-013)": {
+   "sha256": "daee636e3b4e1e3980d341d242320c8d411655144a8f331be5a3a0240db9ecc0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T102 Approach (checklist part A)": {
+   "sha256": "802907e6ee54e73788353585cd722965e4c4f53afef937828606443c23ea9371",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6160,6 +6172,58 @@
      "why": "It restates FR-013 and records process, and narrows nothing. Its figures are labeled."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T102 (the cargo target cache stops growing, FR-013)",
+    "### T102 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T102-mechanism",
+     "summary": "The cargo target cache is pruned by extending T103's daily sweep (same lock, stamp, live-process check, log and make scratch-sweep [DRY=1]).",
+     "class": "within",
+     "why": "FR-013 and the GM's 'Fix those leaks as well' ask that the cache stop growing without bound and leave the mechanism open. A periodic prune is a direct means to that end and narrows nothing."
+    },
+    {
+     "id": "T102-variant-cap",
+     "summary": "Within a store, each crate's variants beyond its newest four are removed once idle three days.",
+     "class": "within",
+     "why": "This bounds growth from moved paths and changed flags, which serves SC-008. One caveat: the premise that cargo makes a new variant only on a path or flag change is stated, not measured, and the bundle does not show how variants are grouped. Per-run-named crates (l7r_fixture_broken_<n>) would escape a per-name cap. What covers the measured leak is the dry run, which reports the l7r_fixture variants removed, and the fact that the source is gone. The cap's adequacy therefore rests on the dry run, not on the rule as written. That is a design caveat, not a narrowing: nothing the GM asked for is excluded."
+    },
+    {
+     "id": "T102-whole-dir",
+     "summary": "A build directory named for no live tree is removed whole after three idle days. The mirror's and every clone's directories are never removed whole. Where the clones directory cannot be read, nothing is removed whole.",
+     "class": "within",
+     "why": "Live trees' directories are still variant-pruned, so growth stays bounded. The protections keep the guard's binary and live builds safe, in line with the relayed caution not to touch what a running gate may own. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T102-live-process",
+     "summary": "Anything a live process holds is kept, as in T103.",
+     "class": "within",
+     "why": "A safety condition in line with the relayed 'don't touch dirs ... a running gate may own'. It does not limit the leak fix."
+    },
+    {
+     "id": "T102-existing-content",
+     "summary": "The sweep's first run removes stale content already in the cache: about 2.4 GB, including six stale build directories.",
+     "class": "within",
+     "why": "FR-013's 'the existing pile is left to the GM's laptop session' comes from the relayed message, where 'the existing pile' is defined in the preceding sentence as the /tmp l7r-* scratch directories (T101). The GM's only words on the cargo cache are 'Fix those leaks as well', and a sweep that fixes a growth leak necessarily removes what is stale. T103 did the same for /tmp/claude-1000 and was cleared. The three-day idle threshold and the live-process check go beyond the 'younger than a few hours' caution."
+    },
+    {
+     "id": "T102-constants",
+     "summary": "Four variants and three idle days are new constants, labeled GUESS knobs.",
+     "class": "within",
+     "why": "These are parameters of the requested mechanism, declared as guesses and not claimed as measurements. They narrow nothing."
+    },
+    {
+     "id": "T102-done-measure",
+     "summary": "'Done, measured' is the dry run, with the mechanism pinned by fixture tests.",
+     "class": "within",
+     "why": "The dry run shows what the sweep removes today, not SC-008's property that the cache's size stops growing with test runs. The fixture tests cover the mechanism that gives that property. This is a plan-quality point and narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10765,6 +10829,56 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T102": {
+   "section_sha256": "41a87f69da1d1f9f7c6562a413fccdf29fa6485c6e91055fdf105eab9b6eb8ea",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T102-mechanism",
+     "summary": "The cargo target cache is pruned by extending T103's daily sweep (same lock, stamp, live-process check, log and make scratch-sweep [DRY=1]).",
+     "class": "within",
+     "why": "FR-013 and the GM's 'Fix those leaks as well' ask that the cache stop growing without bound and leave the mechanism open. A periodic prune is a direct means to that end and narrows nothing."
+    },
+    {
+     "id": "T102-variant-cap",
+     "summary": "Within a store, each crate's variants beyond its newest four are removed once idle three days.",
+     "class": "within",
+     "why": "This bounds growth from moved paths and changed flags, which serves SC-008. One caveat: the premise that cargo makes a new variant only on a path or flag change is stated, not measured, and the bundle does not show how variants are grouped. Per-run-named crates (l7r_fixture_broken_<n>) would escape a per-name cap. What covers the measured leak is the dry run, which reports the l7r_fixture variants removed, and the fact that the source is gone. The cap's adequacy therefore rests on the dry run, not on the rule as written. That is a design caveat, not a narrowing: nothing the GM asked for is excluded."
+    },
+    {
+     "id": "T102-whole-dir",
+     "summary": "A build directory named for no live tree is removed whole after three idle days. The mirror's and every clone's directories are never removed whole. Where the clones directory cannot be read, nothing is removed whole.",
+     "class": "within",
+     "why": "Live trees' directories are still variant-pruned, so growth stays bounded. The protections keep the guard's binary and live builds safe, in line with the relayed caution not to touch what a running gate may own. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T102-live-process",
+     "summary": "Anything a live process holds is kept, as in T103.",
+     "class": "within",
+     "why": "A safety condition in line with the relayed 'don't touch dirs ... a running gate may own'. It does not limit the leak fix."
+    },
+    {
+     "id": "T102-existing-content",
+     "summary": "The sweep's first run removes stale content already in the cache: about 2.4 GB, including six stale build directories.",
+     "class": "within",
+     "why": "FR-013's 'the existing pile is left to the GM's laptop session' comes from the relayed message, where 'the existing pile' is defined in the preceding sentence as the /tmp l7r-* scratch directories (T101). The GM's only words on the cargo cache are 'Fix those leaks as well', and a sweep that fixes a growth leak necessarily removes what is stale. T103 did the same for /tmp/claude-1000 and was cleared. The three-day idle threshold and the live-process check go beyond the 'younger than a few hours' caution."
+    },
+    {
+     "id": "T102-constants",
+     "summary": "Four variants and three idle days are new constants, labeled GUESS knobs.",
+     "class": "within",
+     "why": "These are parameters of the requested mechanism, declared as guesses and not claimed as measurements. They narrow nothing."
+    },
+    {
+     "id": "T102-done-measure",
+     "summary": "'Done, measured' is the dry run, with the mechanism pinned by fixture tests.",
+     "class": "within",
+     "why": "The dry run shows what the sweep removes today, not SC-008's property that the cache's size stops growing with test runs. The fixture tests cover the mechanism that gives that property. This is a plan-quality point and narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
