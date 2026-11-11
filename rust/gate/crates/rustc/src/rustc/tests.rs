@@ -515,6 +515,13 @@ fn a_tree_s_content_is_its_index_and_what_differs_from_it() {
     std::fs::write(dir.join("b"), "3").unwrap();
     let after = content_ids(&dir);
     assert!(before["a"] != after["a"] && after.contains_key("b") && !before.contains_key("b"));
+    // one id for one content, edited, staged or committed (feature 449 T93); a deleted file's is empty
+    git(&["add", "-A"]);
+    assert_eq!(content_ids(&dir), after);
+    git(&["commit", "-qm", "d"]);
+    assert_eq!(content_ids(&dir), after);
+    std::fs::remove_file(dir.join("a")).unwrap();
+    assert_eq!(content_ids(&dir)["a"], "");
 }
 
 #[test]
@@ -795,6 +802,11 @@ fn a_named_crate_is_kept_and_its_key_follows_the_crates_it_builds_from() {
     std::fs::write(root.join("rust/b/src/lib.rs"), "//! moved\n").unwrap();
     assert_eq!(answer(&world, "lint", &named, false).code, 0);
     assert_eq!(clippy(&world), 4, "b moved, and a builds from it");
+    // b taken back: a's earlier green key is among those kept
+    std::fs::write(root.join("rust/b/src/lib.rs"), "//! x\n").unwrap();
+    assert!(answer(&world, "lint", &named, false)
+        .stdout
+        .contains("lint unchanged on rust/a"));
     // a crate named outside rust/ is keyed too
     std::fs::create_dir_all(root.join("tests/fx/src")).unwrap();
     std::fs::write(root.join("tests/fx/Cargo.toml"), "[package]\n").unwrap();

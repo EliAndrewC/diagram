@@ -3,8 +3,9 @@
 //! binaries, asked only when the first moved. A check whose key stands is not run again.
 
 use std::collections::{BTreeMap, BTreeSet};
+use std::io::Write as _;
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -103,7 +104,10 @@ fn git_z(root: &Path, args: &[&str]) -> Vec<String> {
         .collect()
 }
 
-/// `{path: content id}`: each tracked file's index blob, or a hash of its bytes where the work tree differs or git does not track it.
+/// `{path: content id}`: each file's git blob id - the index's for a tracked file, `git hash-object`'s where the work tree differs or
+/// git does not track it, empty for a file deleted from the work tree. One id for one content whether it is edited, staged or committed
+/// (feature 449 T93): a hash of the bytes for the edited file and the index's blob id once committed had run every crate a commit
+/// touched once more after it.
 pub(super) fn content_ids(root: &Path) -> BTreeMap<String, String> {
     let mut ids: BTreeMap<String, String> = BTreeMap::new();
     for record in git_z(root, &["ls-files", "-s", "-z"]) {
@@ -116,11 +120,62 @@ pub(super) fn content_ids(root: &Path) -> BTreeMap<String, String> {
     }
     let changed = git_z(root, &["diff", "--name-only", "-z"]);
     let others = git_z(root, &["ls-files", "--others", "--exclude-standard", "-z"]);
-    for path in changed.into_iter().chain(others) {
-        let id = hash_file(&root.join(&path));
-        ids.insert(path, id);
+    let (here, gone): (Vec<String>, Vec<String>) = changed
+        .into_iter()
+        .chain(others)
+        .partition(|p| root.join(p).is_file());
+    for path in gone {
+        ids.insert(path, String::new());
     }
+    let blobs = blob_ids(root, &here);
+    ids.extend(here.into_iter().zip(blobs));
     ids
+}
+
+/// `git hash-object` of each path, one process for them all.
+fn blob_ids(root: &Path, paths: &[String]) -> Vec<String> {
+    if paths.is_empty() {
+        return Vec::new();
+    }
+    let mut input = paths.join("\n");
+    input.push('\n');
+    let done = Command::new("git")
+        .arg("-C")
+        .arg(root)
+        .args(["hash-object", "--stdin-paths"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .and_then(|mut child| {
+            let stdin = child.stdin.take();
+            stdin.map_or(Ok(()), |mut s| s.write_all(input.as_bytes()))?;
+            child.wait_with_output()
+        });
+    let out = done.map(|o| o.stdout).unwrap_or_default();
+    String::from_utf8_lossy(&out)
+        .lines()
+        .map(str::to_owned)
+        .collect()
+}
+
+/// The lines of a kept file, oldest first.
+fn kept_lines(path: Option<&Path>) -> Vec<String> {
+    path.and_then(|p| std::fs::read_to_string(p).ok())
+        .unwrap_or_default()
+        .lines()
+        .map(str::to_owned)
+        .collect()
+}
+
+/// Add `new` to a kept file's lines, the last eight kept: an edit tried and taken back finds its earlier green result.
+fn keep_line(path: Option<&Path>, mut lines: Vec<String>, new: Option<String>) {
+    if let (Some(path), Some(new)) = (path, new) {
+        lines.retain(|l| *l != new);
+        lines.push(new);
+        let from = lines.len().saturating_sub(8);
+        let _ = std::fs::create_dir_all(path.parent().unwrap_or(path));
+        let _ = std::fs::write(path, lines[from..].join("\n") + "\n");
+    }
 }
 
 fn rel_dir(manifest: &Path, root: &Path) -> String {
@@ -327,30 +382,12 @@ impl Kept {
     }
 }
 
-/// The binary keys that passed, newest last: `test` and `test-counters` share them, so a binary either built once is green for both.
-fn passed_binaries(root: &Path, manifest: &Path) -> (Option<PathBuf>, Vec<String>) {
-    let path = kept_path(root, "binary", manifest);
-    let lines = path
-        .as_ref()
-        .and_then(|p| std::fs::read_to_string(p).ok())
-        .unwrap_or_default()
-        .lines()
-        .map(str::to_owned)
-        .collect();
-    (path, lines)
-}
-
-/// Keep `text` at `path`, when there are both.
-fn remember(path: Option<&Path>, text: Option<&str>) {
-    if let (Some(path), Some(text)) = (path, text) {
-        let _ = std::fs::create_dir_all(path.parent().unwrap_or(path));
-        let _ = std::fs::write(path, text);
-    }
-}
-
-/// A crate's kept result for one check: where it lives, its key, and for a test run the binary key and the binaries that passed.
+/// A crate's kept result for one check: where its keys live and the last eight green ones, this run's key, and for a test run the
+/// binary key and where the binaries that passed are kept (`test` and `test-counters` share them, so a binary either built once is green
+/// for both).
 pub(super) struct Verdict {
     at: Option<PathBuf>,
+    kept: Vec<String>,
     key: Option<String>,
     binary: Option<String>,
     passed_at: Option<PathBuf>,
@@ -358,8 +395,8 @@ pub(super) struct Verdict {
 }
 
 impl Verdict {
-    /// The crate's kept result for `cmd`, and whether it stands: its key unmoved, or, for a test run, a binary that already passed (its
-    /// key then kept too). A fresh run (`L7R_RUST_FRESH`) stands on nothing, and still keeps what it finds green.
+    /// The crate's kept result for `cmd`, and whether it stands: its key among the last green ones, or, for a test run, a binary that
+    /// already passed (its key then kept too). A fresh run (`L7R_RUST_FRESH`) stands on nothing, and still keeps what it finds green.
     pub(super) fn ask(
         world: &World,
         cmd: &str,
@@ -380,6 +417,7 @@ impl Verdict {
             )
         });
         let mut verdict = Verdict {
+            kept: kept_lines(at.as_deref()),
             at,
             key,
             binary: None,
@@ -389,42 +427,34 @@ impl Verdict {
         if world.no_reuse || verdict.key.is_none() {
             return (verdict, false);
         }
-        if verdict
-            .at
-            .as_ref()
-            .and_then(|p| std::fs::read_to_string(p).ok())
-            == verdict.key
-        {
+        if verdict.kept.iter().any(|l| Some(l) == verdict.key.as_ref()) {
             return (verdict, true);
         }
         if cmd.starts_with("test") {
             verdict.binary =
                 k.and_then(|k| binary_key(world, cmd, manifest, &k.all, &k.ids, &k.compiler));
-            (verdict.passed_at, verdict.passed) = passed_binaries(&world.root, manifest);
+            verdict.passed_at = kept_path(&world.root, "binary", manifest);
+            verdict.passed = kept_lines(verdict.passed_at.as_deref());
             if verdict
                 .binary
                 .as_ref()
                 .is_some_and(|b| verdict.passed.contains(b))
             {
-                remember(verdict.at.as_deref(), verdict.key.as_deref());
+                keep_line(
+                    verdict.at.as_deref(),
+                    verdict.kept.clone(),
+                    verdict.key.clone(),
+                );
                 return (verdict, true);
             }
         }
         (verdict, false)
     }
 
-    /// A green run: its key kept, and its binary among the last eight that passed.
+    /// A green run: its key kept, and its binary among those that passed.
     pub(super) fn keep(self) {
-        remember(self.at.as_deref(), self.key.as_deref());
-        if let Some(b) = self.binary {
-            let mut lines = self.passed;
-            lines.push(b);
-            let from = lines.len().saturating_sub(8);
-            remember(
-                self.passed_at.as_deref(),
-                Some(&(lines[from..].join("\n") + "\n")),
-            );
-        }
+        keep_line(self.at.as_deref(), self.kept, self.key);
+        keep_line(self.passed_at.as_deref(), self.passed, self.binary);
     }
 }
 
