@@ -20,7 +20,7 @@ mod tool_signals;
 
 /// What a check answered.
 #[derive(Debug, PartialEq, Eq)]
-pub(crate) struct Outcome {
+pub struct Outcome {
     stdout: String,
     stderr: String,
     code: i32,
@@ -89,7 +89,7 @@ fn blank_matches(pattern: &fancy_regex::Regex, text: &str) -> String {
 }
 
 /// `l7r-gate check <name> [args]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let rest = args.get(1..).unwrap_or(&[]);
     let (tool, outcome) = match args.first().map(String::as_str) {
         Some("file-scale") => (file_scale::USAGE_LOG_TOOL, file_scale::cli(rest)),

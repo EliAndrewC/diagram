@@ -11,6 +11,7 @@ name = "l7r_gate"
 
 [dependencies]
 fancy-regex = { workspace = true }
+l7r_gate_checks = { path = "crates/checks" }
 l7r_gate_core = { path = "crates/core" }
 l7r_gate_downloads = { path = "crates/downloads" }
 l7r_gate_tree = { path = "crates/tree" }

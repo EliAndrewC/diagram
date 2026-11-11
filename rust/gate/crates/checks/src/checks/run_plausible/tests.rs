@@ -62,7 +62,7 @@ fn the_reuse_path_is_guarded_too_and_the_command_line_says_how_to_use_it() {
 }
 
 fn repository() -> std::path::PathBuf {
-    std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
+    std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..")
 }
 
 #[test]

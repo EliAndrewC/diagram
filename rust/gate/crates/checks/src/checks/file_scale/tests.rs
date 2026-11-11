@@ -184,7 +184,7 @@ fn a_crowded_directory_fails_the_check() {
 
 #[test]
 fn the_repository_itself_is_under_the_bar_and_a_relative_root_prints_relative_paths() {
-    let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     assert_eq!(run(&real).over, Vec::new());
     assert_eq!(crowded(&real, super::MAX_DIR_FILES), Vec::new());
     assert!(ask(&["--selftest"]).stdout.contains("selftest ok"));

@@ -1,7 +1,6 @@
 //! The gate's own tools (feature 449 phase 2): one binary the Makefile's gate recipes call, each subcommand ported from the Python piece it replaces (T062-T069).
 
 pub mod arbiter;
-mod checks;
 pub mod checks_door;
 mod ci;
 mod claims;
@@ -18,6 +17,7 @@ mod rustc;
 use std::path::{Path, PathBuf};
 
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
+pub use l7r_gate_checks::checks;
 pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
 #[cfg(test)]
 pub(crate) use l7r_gate_core::write_executable;

@@ -102,7 +102,7 @@ fn a_line_with_no_pointer_but_an_old_number_is_still_asked() {
 
 #[test]
 fn every_pointer_in_the_repository_resolves_to_a_fragment() {
-    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let done = cli(&[real.display().to_string()]);
     assert_eq!((done.code, done.stderr.as_str()), (0, ""));
 }

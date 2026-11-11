@@ -273,7 +273,7 @@ fn a_freshly_claimed_spec_and_an_empty_directory_pass() {
 #[test]
 fn this_feature_s_own_spec_passes_checks_1_and_3() {
     let own = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../specs/236-catch-mistakes-early-and-cheaply/spec.md");
+        .join("../../../../specs/236-catch-mistakes-early-and-cheaply/spec.md");
     assert_eq!(check_figures(&own), Vec::<String>::new());
     assert_eq!(check_orphans(&own), Vec::<String>::new());
 }

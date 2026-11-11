@@ -17,24 +17,40 @@ const CURRENT_DIRS: [&str; 5] = ["questions", "sources", "assets", "site", "arch
 const VERBATIM: [&str; 2] = ["tests/hooks/fixtures/", "research/source-attempts.jsonl"];
 const REFUSAL_DATA: [&str; 8] = [
     "tests/tooling/test_attempts.py",
-    "rust/gate/src/record/leaves/tests.rs",
+    "rust/gate/crates/owed/src/record/leaves/tests.rs",
     "tests/hooks/test-record-edit-hooks.sh",
     "tests/hooks/test-check-bundle-hooks.sh",
     "rust/guard/src/guards/check_bundle_hooks/tests.rs",
     "tests/interactive/test_record.py",
-    "rust/gate/src/checks/research_pointers/tests.rs",
-    "rust/gate/src/checks/research_pointers.rs",
+    "rust/gate/crates/checks/src/checks/research_pointers/tests.rs",
+    "rust/gate/crates/checks/src/checks/research_pointers.rs",
 ];
-const FIXTURES: [&str; 12] = [
-    "rust/gate/src/plan/",
-    "rust/gate/src/claims/", // the claims tools' tests name records of a scratch repository (feature 449 T82)
+const FIXTURES: [&str; 22] = [
+    "rust/gate/crates/plan/src/plan/",
+    // the claims tools' tests name records of a scratch repository (feature 449 T82)
+    "rust/gate/crates/claims_base/src/claims/",
+    "rust/gate/crates/claims/src/claims/",
     "tests/",
-    "rust/gate/src/record/", // the record tools' tests and fragment-move's self-test name records of a scratch repository
+    // the record tools' tests and fragment-move's self-test name records of a scratch repository; the record's modules sit in six
+    // of the gate's crates (feature 449 T92)
+    "rust/gate/crates/core/src/record/",
+    "rust/gate/crates/downloads/src/record/",
+    "rust/gate/crates/owed/src/record/",
+    "rust/gate/crates/bundle/src/record/",
+    "rust/gate/crates/trials/src/record/",
+    "rust/gate/crates/record/src/record/",
     "scripts/gates/check-entry-headings.py",
-    "rust/gate/src/checks/", // the checks' own tests and self-tests name fixture records
-    "rust/gate/src/checks_door/", // the door's tests name fixture records (feature 449 T86)
-    "rust/gate/src/arbiter/bundle/", // the arbiter bundle's tests name records of a scratch repository (feature 449 T88)
-    "rust/gate/src/measure/depiction_replay/", // the replay's tests name records of a scratch repository (feature 449 T88)
+    // the checks' own tests and self-tests name fixture records, in the checks' crate and the two that hold their shared readers
+    "rust/gate/crates/checks/src/checks/",
+    "rust/gate/crates/core/src/checks/",
+    "rust/gate/crates/tree/src/checks/",
+    // the door's tests name fixture records (feature 449 T86)
+    "rust/gate/crates/arbiter/src/checks_door/",
+    "rust/gate/crates/core/src/checks_door/",
+    // the arbiter bundle's tests name records of a scratch repository (feature 449 T88), its round marks in the bundles' crate
+    "rust/gate/crates/arbiter/src/arbiter/bundle/",
+    "rust/gate/crates/bundle/src/arbiter/bundle/",
+    "rust/gate/crates/trials/src/measure/depiction_replay/", // the replay's tests name records of a scratch repository (feature 449 T88)
     "rust/guard/src/guards/check_bundle_hooks/", // a dispatch's fixture prompts name records of a scratch repository
     "rust/guard/src/guards/record_edit_hooks/",
     "rust/guard/src/shared/checks/", // the check state's tests name fixture records

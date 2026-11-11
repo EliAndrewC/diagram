@@ -69,6 +69,6 @@ fn the_command_line_takes_a_root_and_a_self_test() {
 
 #[test]
 fn the_tree_is_clean() {
-    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     assert_eq!(check(&real).code, 0);
 }

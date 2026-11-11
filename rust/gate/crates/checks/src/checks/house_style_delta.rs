@@ -11,7 +11,7 @@ use super::moves::moved_only;
 use super::{git_text, Outcome};
 
 pub(super) const USAGE_LOG_TOOL: &str = "check-house-style-delta";
-const WORDS: &str = include_str!("../../../guard/src/guards/house_style_words.tsv");
+const WORDS: &str = include_str!("../../../../../guard/src/guards/house_style_words.tsv");
 const EXEMPT_DIRS: [&str; 3] = ["/.clones/", "/host-l7r-repo/", "/tests/hooks/fixtures/"];
 
 fn pattern(text: &str) -> Regex {

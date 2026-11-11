@@ -123,7 +123,7 @@ fn no_inventory_names_nothing_and_the_command_line_says_how_to_add_a_row() {
 
 #[test]
 fn the_detector_finds_a_real_reader_on_the_real_tree() {
-    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let listed = super::super::git_text(&real, &["ls-files"]);
     let files: Vec<&str> = listed.split_whitespace().collect();
     assert!(super::readers(&real, &files)

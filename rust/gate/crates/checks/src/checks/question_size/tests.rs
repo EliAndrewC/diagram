@@ -75,7 +75,7 @@ fn the_report_is_largest_first_and_every_question_is_found() {
 }
 
 fn real() -> std::path::PathBuf {
-    std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
+    std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..")
 }
 
 #[test]

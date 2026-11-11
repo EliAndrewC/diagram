@@ -20,8 +20,8 @@ const RECORDS: [&str; 3] = ["guard_log", "usage_log", "# TOOL_RECORD:"];
 const ENTRY_TARGETS: [&str; 3] = ["done", "quick", "tick"];
 const ENTRY_SCRIPTS: [&str; 3] = [
     "scripts/sync-with-main.sh",
-    "rust/gate/src/push.rs",
-    "rust/gate/src/preflight.rs",
+    "rust/gate/crates/cohort/src/push.rs",
+    "rust/gate/crates/measure/src/preflight.rs",
 ];
 
 fn compiled(pattern: &str) -> Regex {
@@ -177,7 +177,7 @@ fn called(root: &Path) -> BTreeMap<String, String> {
     for dir in [
         "rust/guard/src/guards",
         "rust/guard/src/shared",
-        "rust/gate/src",
+        "rust/gate",
     ] {
         let mut rust = Vec::new();
         walk(&root.join(dir), &mut rust);

@@ -128,7 +128,7 @@ fn it_reaches_an_old_feature_a_draft_with_no_tasks_and_passes_the_number_claim()
 fn the_spec_template_does_not_trip_it() {
     let dir = scratch("template");
     let template =
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../.specify/templates/spec-template.md");
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../.specify/templates/spec-template.md");
     std::fs::copy(template, dir.join("spec.md")).unwrap();
     assert_eq!(check_measured_figures(&dir), Vec::<String>::new());
 }
