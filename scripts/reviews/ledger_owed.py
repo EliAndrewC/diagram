@@ -113,7 +113,9 @@ def settled(passes: Sequence[dict[str, str]], root: Path = review_cost.DEFAULT_R
     for p in passes:
         key = f"{p.get('agent', '')}#{p.get('segment', '')}#{p.get('check', '')}#{p.get('wall', '')}"
         hit = kept.get(key) if p.get("agent") else None
-        if isinstance(hit, dict) and hit.get("stat") == _stat(Path(hit.get("path", ""))):
+        # a transcript since deleted (Claude Code removes them after 30 days; 2026-11-10 saw 2026-10-10's go, 70 answered
+        # passes reading as owed again and refusing every landing) keeps the cells it was costed at: it can change no more
+        if isinstance(hit, dict) and _stat(Path(hit.get("path", ""))) in (hit.get("stat"), []):
             out.append({**p, **hit["cells"]} if hit.get("cells") else p)
             continue
         path = index.find(p["agent"]) if p.get("agent") else None
