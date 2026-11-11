@@ -314,3 +314,13 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T94 The landing's slow hook suites reuse what make done already built: the guard suite's real build and the sync-with-main suite (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the guard suite reuses the wrapper's build and no longer sleeps 30 s (86.5 s -> 1.4 s); every suite measured to build nothing on a warm tree; built-once on a changed guard crate is reasoned, not measured
+- [ ] T95 The full l7r-gate release binary rebuilt after any gate crate edit (48 s after core): a lighter or incremental release build for the tool, measured (the GM 2026-11-11)
+      research: rendering
+- [ ] T96 A test binary rebuilt after a one-line edit (13.9 s claims): the gate crates' test profile and the linker, measured (the GM 2026-11-11)
+      research: rendering
+- [ ] T97 make done's counters-inert phase (53 s of 57 s): the counting builds of core and phases rerun less, measured (the GM 2026-11-11)
+      research: rendering
+- [ ] T98 The hook suites in parallel (about 95 s): the slowest few profiled and made cheaper (the GM 2026-11-11)
+      research: rendering
+- [ ] T99 The arbiter crate's slow tests (100-300 ms each against FR-008's tenth of a second): made fast (the GM 2026-11-11)
+      research: rendering

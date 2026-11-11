@@ -45,3 +45,9 @@ And then yes, being able to reuse things which have already been compiled, and a
 
 So let's go ahead and do all of that and then we will stop and measure again where things are at, how long things take, and then we can look at what the next most low-hanging fruit is."
 
+## 2026-11-11, the Rust tooling's efficiency (T95-T99)
+
+The GM, after T92-T94 landed: "Okay, well, for what it's worth, before we tackle any more ports, I do want to focus more on the performance efficiency of the Rust code that we already have, because it does seem like the writing and linting and testing of our Rust code is still suboptimal and has a lot of room for improvement even after this round of changes, I suspect." and "Thanks, and to be clear we'll talk about the Rust tooling efficiency before you actually start on anything."
+
+Then, given the re-measured loop and six ranked costs (the full l7r-gate release binary rebuilt after any gate crate edit; a test binary rebuilt after a one-line edit; make done's counters-inert phase; the hook suites run in parallel; the arbiter crate's slow tests; cold builds in a fresh worktree): "Tell me more about these numbers: "claims 13.9 s, owed 8.4 s, core 10 s" Regardless of your answers, the first five options under where the time still goes all sound like they are worth doing.  I'm less concerned about the one-time ramp-up for a fresh clone."
+
