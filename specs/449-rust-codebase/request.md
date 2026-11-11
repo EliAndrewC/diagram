@@ -53,3 +53,9 @@ Then, given the re-measured loop and six ranked costs (the full l7r-gate release
 
 Then, told that `make static` after a fresh gate crate edit still took 103 s (core) and 65 s (claims), mostly the lint, coverage and dead-code reruns, and that no task of T95-T99 named it: "Yeah, you should go ahead and add the make to the list of tasks that we are So like you could make that T100 or something." (dictated; "the make" is the `make static` reruns just described) - filed as T100.
 
+## 2026-11-11, the disk leaks (T101-T103)
+
+Relayed to this session at the GM's request by his laptop-troubleshooting session (the memwatch channel): the laptop's disk was 97% full, this container's writable layer ~220 GB; /tmp held ~329,000 leftover l7r-gate-check-* and l7r-guard-* scratch directories (~126 GB) back to early October, /tmp/claude-1000 38 GB and ~/.cache/l7r-cargo-target 54 GB. "Eli asks you to fix the bug: make every gate check / test that creates an l7r-* temp dir remove it on exit, including failure and interrupt (trap / try-finally / tempfile.TemporaryDirectory / pytest tmp_path), and add a test that pins it (e.g. run a check and assert no new /tmp/l7r-* remains). Fixing the leak is your job. The laptop session will delete the existing pile once Eli approves, so leave that alone unless he asks you to, and don't touch dirs younger than a few hours (a running gate may own them)." - filed as T101.
+
+Then the GM, told the other two were the session scratch under /tmp/claude-1000 and the cargo target cache: "Fix those leaks as well, thanks" - filed as T102 (the cargo cache) and T103 (the session scratch).
+
