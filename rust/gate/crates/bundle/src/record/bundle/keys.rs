@@ -98,7 +98,7 @@ fn walk(dir: &Path, out: &mut Vec<PathBuf>) {
 }
 
 /// The cached text of every page a quotation was not found VERBATIM on, saved under `out/pages/` from the host's page cache only (feature 288 FR-010, FR-011); the count of pages named.
-pub(crate) fn residue_pages(run: &mut Run, out: &Path) -> Result<usize, Fail> {
+pub fn residue_pages(run: &mut Run, out: &Path) -> Result<usize, Fail> {
     let report = out.join("quote-verbatim.json");
     let data: Value = if report.is_file() {
         serde_json::from_str(&read_text(&report)?).map_err(fail)?
@@ -145,7 +145,7 @@ pub(crate) fn residue_pages(run: &mut Run, out: &Path) -> Result<usize, Fail> {
 }
 
 /// The quote-verbatim report cut to the notes being re-checked: an entry kept when one of its passages is quoted in the cut notes, or its assertion stands in the excerpt.
-pub(crate) fn scoped_verbatim(out: &Path, full_text: &str) -> Result<String, Fail> {
+pub fn scoped_verbatim(out: &Path, full_text: &str) -> Result<String, Fail> {
     let path = out.join("quote-verbatim.json");
     let mut data: Value = serde_json::from_str(&read_text(&path)?).map_err(fail)?;
     let mut joined = String::new();
@@ -253,7 +253,7 @@ fn claims_read(root: &Path, rows: &[Unit]) -> Result<String, Fail> {
 }
 
 /// The page images a scanned source is read from, copied into `images/` and listed BY NAME (feature 395).
-pub(crate) fn images_section(out: &Path, images: &[String]) -> Result<String, Fail> {
+pub fn images_section(out: &Path, images: &[String]) -> Result<String, Fail> {
     let mut files: Vec<PathBuf> = Vec::new();
     for i in images {
         let p = py_path(i);
@@ -437,7 +437,7 @@ fn key_rows(
 
 /// A source's bundle (`key_bundle`): its entry and its page, the claims a whole read is owed for.
 #[expect(clippy::too_many_arguments, reason = "the Python's own parameters")]
-pub(crate) fn key_bundle(
+pub fn key_bundle(
     run: &mut Run,
     root: &Path,
     key: &str,
@@ -472,7 +472,7 @@ pub(crate) fn key_bundle(
 }
 
 /// A source-applicability bundle over several keys (feature 312), refused for a key nothing owes unless a reason is given.
-pub(crate) fn keys_bundle(
+pub fn keys_bundle(
     run: &mut Run,
     root: &Path,
     keys: &[String],
@@ -534,7 +534,7 @@ pub(crate) fn keys_bundle(
 }
 
 /// An intro-check bundle over one question or a batch (plan D4, D10), refused for a question nothing owes it on unless a reason is given.
-pub(crate) fn intro_bundle(
+pub fn intro_bundle(
     run: &mut Run,
     root: &Path,
     questions: &[String],

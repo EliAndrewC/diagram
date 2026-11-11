@@ -46,7 +46,8 @@ const STOP: [&str; 26] = [
 ];
 
 /// `" ".join(re.sub(r"[^a-z0-9 ]", " ", text.lower()).split())`.
-pub(crate) fn words(text: &str) -> String {
+#[must_use]
+pub fn words(text: &str) -> String {
     let lowered: String = text
         .to_lowercase()
         .chars()
@@ -66,7 +67,7 @@ pub(crate) fn words(text: &str) -> String {
 }
 
 /// A reply's findings, each WHOLE - its first line with its continuation lines and sub-bullets (`findings_of`).
-pub(crate) fn findings_of(reply_text: &str) -> Vec<String> {
+pub fn findings_of(reply_text: &str) -> Vec<String> {
     let lines = py_lines(reply_text);
     let numbered = lines.iter().any(|ln| hit(&NUMBERED_START, ln));
     let mut out: Vec<Vec<String>> = Vec::new();
@@ -190,7 +191,7 @@ fn near_reversal(o: &str, n: &str, earlier: &[(String, String)]) -> bool {
 }
 
 /// Each round's findings, `(mark, finding)` (`mark_rounds`); `others` are other checks' EDITs on the subject.
-pub(crate) fn mark_rounds(
+pub fn mark_rounds(
     replies: &[String],
     others: &[(String, String)],
 ) -> Vec<Vec<(String, String)>> {
@@ -248,12 +249,14 @@ pub(crate) fn mark_rounds(
 }
 
 /// Where a background agent's transcript lives, by its id.
-pub(crate) fn transcripts() -> PathBuf {
+#[must_use]
+pub fn transcripts() -> PathBuf {
     crate::measure::home().join(".claude").join("projects")
 }
 
 /// `sorted(TRANSCRIPTS.glob("*/*/subagents/agent-<aid>.jsonl"))`'s first.
-pub(crate) fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
+#[must_use]
+pub fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
     let name = format!("agent-{aid}.jsonl");
     let mut found: Vec<PathBuf> = Vec::new();
     for a in std::fs::read_dir(base).into_iter().flatten().flatten() {
@@ -269,12 +272,13 @@ pub(crate) fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
 }
 
 /// A round's reply: the one the hook kept, else the last text of the agent's own transcript (`reply_of`).
-pub(crate) fn reply_of(v: &Value) -> String {
+#[must_use]
+pub fn reply_of(v: &Value) -> String {
     reply_in(v, &transcripts())
 }
 
 /// [`reply_of`], the transcripts under `base`.
-pub(crate) fn reply_in(v: &Value, base: &Path) -> String {
+pub fn reply_in(v: &Value, base: &Path) -> String {
     let kept = v
         .get("reply")
         .and_then(Value::as_str)
@@ -298,7 +302,8 @@ static LINKED: LazyLock<Regex> = LazyLock::new(|| pyre(r"research/questions/[^\s
 static KEYED_LINE: LazyLock<Regex> = LazyLock::new(|| pyre(r"(?m)^(?:Entry|Drawing):(.*)$"));
 
 /// The files a subject's checks read: a question's pages, or a pop-up's file with the pages its Entry: and Drawing: name.
-pub(crate) fn subject_files(root: &Path, subject: &str) -> Vec<String> {
+#[must_use]
+pub fn subject_files(root: &Path, subject: &str) -> Vec<String> {
     if let Some(q) = subject.strip_prefix("q:") {
         let dir = root.join("research").join("questions");
         let prefix = format!("{q}-");
@@ -329,7 +334,8 @@ pub(crate) fn subject_files(root: &Path, subject: &str) -> Vec<String> {
 }
 
 /// The last answered round's EDIT blocks, each marked applied or not against the files as they stand (`last_edits`).
-pub(crate) fn last_edits(root: &Path, reply_text: &str, files: &[String]) -> Vec<String> {
+#[must_use]
+pub fn last_edits(root: &Path, reply_text: &str, files: &[String]) -> Vec<String> {
     let text = files
         .iter()
         .filter(|f| root.join(f).is_file())

@@ -20,7 +20,7 @@ use crate::record::bundle::{
 use crate::record::repo::{fail, read_text, tree_of, Fail};
 use crate::Reply;
 
-pub(crate) mod marks;
+pub(crate) use l7r_gate_bundle::arbiter::bundle::marks;
 mod reviews;
 mod sections;
 

@@ -14,7 +14,7 @@ use crate::record::repo::{read_text, Fail};
 use crate::record::units::{self, fingerprint, re, Unit, QUESTIONS};
 
 /// The checks a question bundle is owed for; `record-style` is owed by a declared sweep (feature 292), never by a delta.
-pub(crate) const GATED: [&str; 5] = [
+pub const GATED: [&str; 5] = [
     "intro-check",
     "record-format",
     "quote-check",
@@ -27,15 +27,16 @@ const NEEDS_REASON: &str =
 static NUMBER: LazyLock<Regex> = LazyLock::new(|| re(r"^(\d{1,4})"));
 
 /// (the units a bundle carries, its `owed-checks:` value, a refusal or "").
-pub(crate) type Owed = (Vec<Unit>, String, String);
+pub type Owed = (Vec<Unit>, String, String);
 
 /// `hm_escape.reason_is_enough`.
-pub(crate) fn reason_ok(text: &str) -> bool {
+#[must_use]
+pub fn reason_ok(text: &str) -> bool {
     enough(text)
 }
 
 /// A question's number, four digits (`0412`), or `q` as given.
-pub(crate) fn question_of(q: &str) -> String {
+pub fn question_of(q: &str) -> String {
     NUMBER
         .captures(q)
         .ok()
@@ -59,7 +60,11 @@ fn unique_checks(rows: &[Unit]) -> String {
     reason = "a page's file name as given, as `str.endswith` read it"
 )]
 /// The owed units for `make check-bundle Q= FOR=`; `every` is the delta's units when the caller already has them.
-pub(crate) fn owed_for_question(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn owed_for_question(
     root: &Path,
     q: &str,
     for_: &str,
@@ -170,7 +175,11 @@ fn tree_units(root: &Path, q: &str, checks: &[&str]) -> Result<Vec<Unit>, Fail> 
 }
 
 /// The owed units for `make check-bundle KEY= [WHOLE=1]`; `every` is the record family's units when the caller has them.
-pub(crate) fn owed_for_key(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn owed_for_key(
     root: &Path,
     key: &str,
     whole: bool,
@@ -239,7 +248,8 @@ pub(crate) fn owed_for_key(
 }
 
 /// The lines the dispatch hook and `make record-checked` read from a MANIFEST.
-pub(crate) fn manifest_lines(rows: &[Unit], owed_checks: &str, escape: &str) -> String {
+#[must_use]
+pub fn manifest_lines(rows: &[Unit], owed_checks: &str, escape: &str) -> String {
     let mut lines = vec![
         "## Owed (feature 311)".to_owned(),
         String::new(),
@@ -265,6 +275,7 @@ fn note_of(u: &Unit) -> &str {
 }
 
 /// The owed units ONE quote-check batch can answer: its own notes', and the unfootnoted reading the FIRST batch carries.
+#[must_use]
 pub(crate) fn batch_units(rows: &[Unit], batch: &HashSet<String>, first: bool) -> Vec<Unit> {
     rows.iter()
         .filter(|u| batch.contains(note_of(u)) || (first && note_of(u) == "unfootnoted"))
@@ -273,7 +284,8 @@ pub(crate) fn batch_units(rows: &[Unit], batch: &HashSet<String>, first: bool) -
 }
 
 /// The owed units ONE modal's entry-drift bundle can answer: that modal's own (feature 319, G4).
-pub(crate) fn kind_units(rows: &[Unit], key: &str) -> Vec<Unit> {
+#[must_use]
+pub fn kind_units(rows: &[Unit], key: &str) -> Vec<Unit> {
     rows.iter()
         .filter(|u| u.check() != "entry-drift" || u.subject() == key)
         .cloned()
@@ -281,13 +293,15 @@ pub(crate) fn kind_units(rows: &[Unit], key: &str) -> Vec<Unit> {
 }
 
 /// Is a quote-check of the page's unfootnoted blocks among the owed units?
-pub(crate) fn unfootnoted_owed(rows: &[Unit]) -> bool {
+#[must_use]
+pub fn unfootnoted_owed(rows: &[Unit]) -> bool {
     rows.iter()
         .any(|u| u.check() == "quote-check" && note_of(u) == "unfootnoted")
 }
 
 /// The notes a `FOR=quote-check` bundle with no NOTES= is cut to.
-pub(crate) fn owed_notes(rows: &[Unit]) -> HashSet<String> {
+#[must_use]
+pub fn owed_notes(rows: &[Unit]) -> HashSet<String> {
     rows.iter()
         .filter(|u| u.check() == "quote-check")
         .map(|u| note_of(u).to_owned())
@@ -345,7 +359,11 @@ fn page_text(text: &str) -> String {
     reason = "the record's page names, as the Python's glob matched them"
 )]
 /// One question's part of an intro-check bundle: its research page whole, its drawing page, and the map elements written from it.
-pub(crate) fn intro_bundle_text(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn intro_bundle_text(
     root: &Path,
     q: &str,
     docs: &mut Option<Vec<(String, String)>>,

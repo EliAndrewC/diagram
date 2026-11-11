@@ -46,10 +46,10 @@ const LISTED: &str = "LISTED - a page the modal's Drawing: names - how our maps 
 /// The crop, run as the Python ran it: `python3 -c` of this script with the page, the key and the output file. The script is the
 /// tracked `scripts/record/glyph_crop.py`, so both censuses count it; it moves onto the CDP crate in T85 (`ask:449-T88-bundles`).
 #[cfg(not(test))]
-pub(crate) const CROP: &str = include_str!("../../../../../scripts/record/glyph_crop.py");
+pub const CROP: &str = include_str!("../../../../../../../scripts/record/glyph_crop.py");
 /// The tests' crop: no browser - a page named `nocrop` fails, one named `slow` outlasts the timeout, any other gets an image and two kinds.
 #[cfg(test)]
-pub(crate) const CROP: &str = "import sys, time, pathlib\np, k, o = sys.argv[1:4]\nif 'slow' in p: time.sleep(5)\nif 'nocrop' in p: sys.exit(1)\npathlib.Path(o).write_bytes(b'png')\nif 'nokinds' not in p: pathlib.Path(o + '.kinds').write_text('well\\nother\\n')\n";
+pub const CROP: &str = "import sys, time, pathlib\np, k, o = sys.argv[1:4]\nif 'slow' in p: time.sleep(5)\nif 'nocrop' in p: sys.exit(1)\npathlib.Path(o).write_bytes(b'png')\nif 'nokinds' not in p: pathlib.Path(o + '.kinds').write_text('well\\nother\\n')\n";
 
 /// The claims-index rows whose cited pages include any of `files`, each with its verdict (plan D13).
 fn claims_citing(root: &Path, files: &[String]) -> Result<Vec<String>, Fail> {
@@ -486,7 +486,11 @@ fn glyph_part(
 }
 
 /// What `modal-depiction` reads (plan D13), put beside the MANIFEST.
-pub(crate) fn parts(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn parts(
     run: &mut Run,
     root: &Path,
     m: &Modal,

@@ -15,7 +15,7 @@ use crate::arbiter::bundle::marks::{last_edits, mark_rounds, reply_of, subject_f
 use crate::record::bundle::{dash_runs, pyre, write};
 use crate::record::repo::{git, Fail};
 
-pub(crate) const HEAD: &str = "## Earlier rounds (feature 393)";
+pub const HEAD: &str = "## Earlier rounds (feature 393)";
 const DIR: &str = "earlier";
 const INTRO: &str = "Earlier rounds of this check on this subject in this feature, oldest first, with the round arbiter's rulings; each round's whole reply is the file named under it. What to do with them is your contract's **Earlier rounds (feature 393)** paragraph.";
 
@@ -61,7 +61,7 @@ fn strs(v: &Value, key: &str) -> Vec<String> {
 }
 
 /// The dispatches of the check state, oldest first.
-pub(crate) fn dispatches(state: &Value) -> Vec<&Value> {
+pub fn dispatches(state: &Value) -> Vec<&Value> {
     let mut all: Vec<&Value> = state
         .get("dispatches")
         .and_then(Value::as_object)
@@ -211,7 +211,11 @@ fn unit_section(
 }
 
 /// The MANIFEST's Earlier rounds section for the checks and subjects `manifest` owes, or "".
-pub(crate) fn section(root: &Path, out: &Path, manifest: &str) -> Result<String, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn section(root: &Path, out: &Path, manifest: &str) -> Result<String, Fail> {
     let owed = OWED
         .captures(manifest)
         .ok()

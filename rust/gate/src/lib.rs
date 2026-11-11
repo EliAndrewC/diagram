@@ -5,7 +5,6 @@ pub mod checks_door;
 mod ci;
 mod claims;
 mod measure;
-pub mod owed_door;
 mod preflight;
 pub(crate) mod record;
 pub mod reviews;
@@ -13,6 +12,7 @@ pub mod reviews;
 use std::path::{Path, PathBuf};
 
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
+pub use l7r_gate_bundle::owed_door;
 pub use l7r_gate_checks::checks;
 pub use l7r_gate_cohort::{cohort, push, rustc};
 pub use l7r_gate_plan::plan;

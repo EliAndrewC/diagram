@@ -95,7 +95,7 @@ fn registry_part(root: &Path, out: &Path, rows: &mut Rows, keys: &[String]) -> R
 }
 
 /// Every helper's part in the bundle's order; Some(exit) where one failed.
-pub(crate) fn helper_parts(
+pub fn helper_parts(
     run: &mut Run,
     root: &Path,
     e: &Entry<'_>,

@@ -89,13 +89,13 @@ fn tag_or<'a>(m: &'a Modal, name: &str, default: &'a str) -> &'a str {
 }
 
 /// A page's reader-visible words: comments and tags out, entities unescaped, whitespace folded.
-pub(crate) fn visible(text: &str) -> String {
+pub fn visible(text: &str) -> String {
     let bare = COMMENT.replace_all(text, " ");
     let bare = TAG.replace_all(&bare, " ");
     split(&unescape(&bare)).join(" ")
 }
 
-pub(crate) fn heading(text: &str) -> String {
+pub fn heading(text: &str) -> String {
     HEAD.captures(text)
         .ok()
         .flatten()
@@ -171,7 +171,7 @@ fn terms_of(root: &Path, m: &Modal) -> Result<Vec<String>, Fail> {
 }
 
 /// One candidate: (score, file, heading, tags, term hits, first words).
-pub(crate) type Candidate = (usize, String, String, Vec<String>, usize, String);
+pub type Candidate = (usize, String, String, Vec<String>, usize, String);
 
 /// Every candidate, best first - the UNION rule, never cut (plan D5).
 fn candidates(root: &Path, m: &Modal) -> Result<Vec<Candidate>, Fail> {
@@ -327,7 +327,7 @@ fn around(text: &str, start: usize, end: usize, window: usize) -> String {
 }
 
 /// The mechanical half of the modal checks: the About band, barred phrases, long guesses, Entry files.
-pub(crate) fn prepass(root: &Path, m: &Modal) -> String {
+pub fn prepass(root: &Path, m: &Modal) -> String {
     let about = m.tag("About");
     let n = split(about).len();
     let (lo, hi) = band(m.form());
@@ -374,7 +374,8 @@ pub(crate) fn prepass(root: &Path, m: &Modal) -> String {
 }
 
 /// The wording `modal-research` rounds fixed on the pop-up `uid` that still stands in `text` (343's border-court ruling): `apply_edits.py` refuses a modal-form EDIT that drops one.
-pub(crate) fn research_held(root: &Path, uid: &str, text: &str) -> Vec<String> {
+#[must_use]
+pub fn research_held(root: &Path, uid: &str, text: &str) -> Vec<String> {
     research_held_in(root, uid, text, &transcripts())
 }
 
@@ -487,13 +488,16 @@ fn owed_lines(root: &Path, m: &Modal, for_: &str, owed: &[Unit]) -> Result<Strin
 }
 
 /// What a bundle copies, in its MANIFEST's order.
-pub(crate) struct Put {
-    pub(crate) out: PathBuf,
-    pub(crate) rows: Vec<(String, String, String)>,
+pub struct Put {
+    pub out: PathBuf,
+    pub rows: Vec<(String, String, String)>,
 }
 
 impl Put {
-    pub(crate) fn put(
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn put(
         &mut self,
         name: &str,
         text: &str,
@@ -619,11 +623,11 @@ fn held_back(
 }
 
 /// What a bundle is asked for: the check, the OUT given, the REASON and the `CHECK_ORDER_OK` escapes.
-pub(crate) struct Ask<'a> {
-    pub(crate) for_: &'a str,
-    pub(crate) out: &'a str,
-    pub(crate) reason: &'a str,
-    pub(crate) order_ok: &'a str,
+pub struct Ask<'a> {
+    pub for_: &'a str,
+    pub out: &'a str,
+    pub reason: &'a str,
+    pub order_ok: &'a str,
 }
 
 /// The MANIFEST's head, its table of copies and every copy inlined.
@@ -658,7 +662,11 @@ fn manifest_lines(m: &Modal, for_: &str, put: &Put, beside: bool) -> Result<Vec<
 }
 
 /// One pop-up's bundle (`bundle`).
-pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> Result<i32, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> Result<i32, Fail> {
     let (for_, out_arg, reason) = (ask.for_, ask.out, ask.reason);
     let now = modals::modals_now(root, true)?;
     let Some(m) = modals::find(&now, kind).cloned() else {
@@ -841,7 +849,8 @@ fn specs() -> [Spec; 5] {
 }
 
 /// `record modal-bundle ...`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
     let p = match parse_with(args, &specs(), 1) {
         Ok(p) if p.positional.is_empty() => {
             return super::usage("modal-bundle", "the following arguments are required: kind")

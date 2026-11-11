@@ -30,13 +30,13 @@ use crate::Reply;
 const REGISTRY: &str = "research/sources/010-works-cited";
 /// The uncited sources' write-ups (feature 312 FR-012), bundled for `source-applicability` as a cited work's are.
 const UNCITED: &str = "research/sources/040-uncited-works";
-pub(crate) const VARIANTS: &str = "research/assets/glossary-variants.txt";
+pub const VARIANTS: &str = "research/assets/glossary-variants.txt";
 const CLASSES: &str = "l7r/diagram/interactive/classes";
 const COMPOUND_KINDS: &str = "l7r/diagram/interactive/compound_kinds";
 /// The style guide `record-style` judges against (feature 292), handed in the bundle.
-pub(crate) const STYLE: &str = "research/STYLE.md";
+pub const STYLE: &str = "research/STYLE.md";
 /// A quote-check reads notes in BATCHES of at most this many bytes (feature 292: on 2026-09-29 the median notes file was 4,838 bytes, the 90th percentile 8,599).
-pub(crate) const NOTES_BUDGET: usize = 12_000;
+pub const NOTES_BUDGET: usize = 12_000;
 
 static CITED: LazyLock<Regex> =
     LazyLock::new(|| pyre(r#"<a href="[^"]*">\s*<code>([a-z0-9][a-z0-9-]*)</code>\s*</a>"#));
@@ -45,7 +45,7 @@ static URL: LazyLock<Regex> = LazyLock::new(|| pyre(r#"https?://[^\s<"]+"#));
 static BLOCK: LazyLock<Regex> = LazyLock::new(|| {
     pyre(r"(?s)<(p|li|blockquote|td|dd)\b[^>]*>.*?(?:</\1>|(?=<(?:p|li|blockquote|td|dd)\b)|\Z)")
 });
-pub(crate) static NOTE_LI: LazyLock<Regex> =
+pub static NOTE_LI: LazyLock<Regex> =
     LazyLock::new(|| pyre(r#"(?s)<li data-note="([^"]+)">.*?</li>\n?"#));
 static NESTED_OPEN: LazyLock<Regex> = LazyLock::new(|| pyre(r"<(?:ul|ol)\b[^>]*>\s*\Z"));
 static LI_TAG: LazyLock<Regex> = LazyLock::new(|| pyre(r"<(/?)li\b[^>]*>"));
@@ -55,7 +55,8 @@ static TAG: LazyLock<Regex> = LazyLock::new(|| pyre(r"<[^>]+>"));
 static FN_LINE: LazyLock<Regex> = LazyLock::new(|| pyre(r"^\s+fn-\d+ "));
 
 /// WHAT EACH CHECK READS (feature 250 D14, research R5): `FOR=<agent>` keeps only that agent's parts.
-pub(crate) fn parts(for_: &str) -> &'static [&'static str] {
+#[must_use]
+pub fn parts(for_: &str) -> &'static [&'static str] {
     match for_ {
         "quote-check" => &["quote", "notes"],
         "record-format" => &["prepass", "variants", "notes"],
@@ -89,7 +90,7 @@ fn cited_keys(notes_html: &str) -> Vec<String> {
 }
 
 /// The pointer a registry entry names: a closing parenthesis ends it unless the URL opened one; an entity is unescaped (feature 269).
-pub(crate) fn url_of(entry_html: &str) -> String {
+pub fn url_of(entry_html: &str) -> String {
     let Some(found) = URL.find(entry_html).ok().flatten() else {
         return String::new();
     };
@@ -103,7 +104,8 @@ pub(crate) fn url_of(entry_html: &str) -> String {
 }
 
 /// The one registry file of a key: its four-digit prefix and the key, nothing between.
-pub(crate) fn registry_entry(root: &Path, key: &str) -> Option<PathBuf> {
+#[must_use]
+pub fn registry_entry(root: &Path, key: &str) -> Option<PathBuf> {
     let exact = pyre(&format!(r"^\d+-{}\.html\z", fancy_regex::escape(key)));
     let tail = format!("{key}.html");
     [REGISTRY, UNCITED].iter().find_map(|d| {
@@ -241,7 +243,11 @@ fn inline(out: &Path, rows: &[(String, String, String)]) -> Result<String, Fail>
 }
 
 /// An empty bundle directory; an existing one is cleared only if it is a bundle (its refusal the `SystemExit` the Python raised).
-pub(crate) fn fresh(out: &Path) -> Result<(), Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn fresh(out: &Path) -> Result<(), Fail> {
     if out.exists() && std::fs::read_dir(out).map_err(fail)?.next().is_some() {
         if !out.join(MANIFEST).is_file() {
             return Err(format!(
@@ -255,7 +261,11 @@ pub(crate) fn fresh(out: &Path) -> Result<(), Fail> {
 }
 
 /// The MANIFEST's head and every copy inlined.
-pub(crate) fn manifest(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn manifest(
     out: &Path,
     title: &str,
     rows: &[(String, String, String)],
@@ -332,12 +342,20 @@ fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
 }
 
 /// A MANIFEST with the earlier rounds of the checks it owes (feature 393).
-pub(crate) fn with_earlier(root: &Path, out: &Path, text: &str) -> Result<String, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn with_earlier(root: &Path, out: &Path, text: &str) -> Result<String, Fail> {
     Ok(format!("{text}{}", earlier::section(root, out, text)?))
 }
 
 /// A helper's output and exit: `translation-owed` is the port in this process, the rest the runner's (feature 383 D6).
-pub(crate) fn run_script(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn run_script(
     run: &mut Run,
     name: &str,
     args: &[String],
@@ -351,23 +369,27 @@ pub(crate) fn run_script(
 }
 
 /// What one question bundle carries.
-pub(crate) struct Entry<'a> {
-    pub(crate) q: &'a str,
-    pub(crate) out: PathBuf,
-    pub(crate) extra: &'a [String],
-    pub(crate) quotes: bool,
-    pub(crate) kind: &'a str,
-    pub(crate) notes: HashSet<String>,
-    pub(crate) for_: &'a str,
-    pub(crate) owed: String,
-    pub(crate) bare: bool,
-    pub(crate) images: &'a [String],
+pub struct Entry<'a> {
+    pub q: &'a str,
+    pub out: PathBuf,
+    pub extra: &'a [String],
+    pub quotes: bool,
+    pub kind: &'a str,
+    pub notes: HashSet<String>,
+    pub for_: &'a str,
+    pub owed: String,
+    pub bare: bool,
+    pub images: &'a [String],
 }
 
-pub(crate) type Rows = Vec<(String, String, String)>;
+pub type Rows = Vec<(String, String, String)>;
 
 /// A helper's text written to `file`, its row added; Some(exit) where it failed, its output on stderr.
-pub(crate) fn helper_part(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn helper_part(
     run: &mut Run,
     root: &Path,
     out: &Path,
@@ -442,7 +464,11 @@ fn copies(
 }
 
 /// One question's bundle (`entry_bundle`).
-pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<i32, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<i32, Fail> {
     let q = e.q;
     let fragments = fragments_for(q, root);
     if fragments.is_empty() {
@@ -528,17 +554,18 @@ fn print_notes(run: &mut Run, root: &Path, q: &str, keys: &HashSet<String>) -> R
 }
 
 /// The quote-verbatim report cut to the notes being re-checked (whitespace-collapsed both sides, feature 250 2d).
-pub(crate) fn flat(text: &str) -> String {
+#[must_use]
+pub fn flat(text: &str) -> String {
     collapse(text)
 }
 
 /// The tag-stripped text (`re.sub(r"<[^>]+>", "", text)`).
-pub(crate) fn untagged(text: &str) -> String {
+pub fn untagged(text: &str) -> String {
     TAG.replace_all(text, "").into_owned()
 }
 
 /// The report's lines with its per-footnote lines dropped.
-pub(crate) fn report_lines(full_text: &str) -> Vec<String> {
+pub fn report_lines(full_text: &str) -> Vec<String> {
     crate::record::py_lines(full_text)
         .into_iter()
         .filter(|ln| !hit(&FN_LINE, ln))
@@ -612,7 +639,8 @@ fn out_or(given: &str, default: String) -> PathBuf {
 }
 
 /// `record check-bundle ...`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
     let p = match parse_with(args, &specs(), 1) {
         Ok(p) if FORS.contains(&p.text("--for", "all")) => p,
         Ok(p) => {
@@ -851,7 +879,8 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
 }
 
 /// A quotation report as JSON: `json.dumps(data, ensure_ascii=False, indent=1) + "\n"`.
-pub(crate) fn dumps(data: &Value) -> String {
+#[must_use]
+pub fn dumps(data: &Value) -> String {
     pyjson::dumps(data, Some(1), false) + "\n"
 }
 
