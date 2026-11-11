@@ -206,10 +206,10 @@
    "declared": "round-arbiter"
   },
   "### T88 Approach (checklist part A)": {
-   "sha256": "7859c49faf50c71d078f9c2cc0c198ee80921197f3d165ea9be120d72c68aea6",
+   "sha256": "5aa1ec7e3d17470662a57ab9061e33dbaf1c78ddd1f52f001db5dccf2b6b7f3a",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   },
   "### T89 (<why: the finding or measurement that files it>)": {
    "sha256": "da40ae34ba421a1066ff7780d781e556c8ee35029a0f0faeed027fdada539860",
@@ -231,6 +231,12 @@
   },
   "### T87 (the owed core, `ask:449-T87-entry-owed`)": {
    "sha256": "a96c31e8120700f857a434bd9c7a60d665f501348fd736059f0d73466a5e3626",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T88 (the bundles, `ask:449-T88-bundles`)": {
+   "sha256": "11c396ed2c4326e2d425682fed0b719309d010f944c7d6364263f18dc1a1d59d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
@@ -5351,6 +5357,106 @@
      "why": "Consistent with FR-001c (T87 is not straight and keeps its review) and the rulings cited."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T88 (the bundles, `ask:449-T88-bundles`)",
+    "### T88 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T88-layout",
+     "summary": "The six ported as one cut into rust/gate record/bundle, arbiter/bundle and measure/depiction_replay, reached as l7r-gate verbs; the Makefile recipes run the binary; args.rs gains positionals and nargs='*' lists.",
+     "class": "within",
+     "why": "ask:449-T88-bundles orders the six ported in one cut, and FR-005 keeps make as the one entry point. Laying out the Rust narrows nothing the GM asked for."
+    },
+    {
+     "id": "T88-runner",
+     "summary": "scripts/bundle_door.py, started on a run's first verb, one process a run, verbs run/passages/save_cached/claims_rows/load_index/knobs/knob_table; residue_pages split so only its save (CachedPages and the NotCached stub fetcher) stays in Python and the URLs are picked in Rust.",
+     "class": "within",
+     "why": "The ruling's verbs are carried, run keeping D6's in-process helpers (FR-006). The ruling said residue_pages goes 'whole', but the reason it gave was 'so CachedPages never leaves Python', and the plan keeps CachedPages and its in-process fetcher in Python, so FR-003 holds. Moving URL picking into Rust is more of the port, not less. The NotCached stub returns a constant and has to live beside CachedPages once check_bundle.py is deleted, so it adds no logic to the door."
+    },
+    {
+     "id": "T88-runner-stdout-bound",
+     "summary": "Helper prints from save_cached/passages/claims_rows/knobs now reach stderr rather than the bundle command's stdout; argparse prog stays check_bundle.py; a verb's failure is its traceback, exit 1.",
+     "class": "within",
+     "why": "FR-002 binds the cases the tests and suites hold. The plan names the possible divergence and says nothing printed on the differential's real data, where stdout matched in every case. Traceback text is unbound under ask:449-usage-text, while exit status and stdout stay held."
+    },
+    {
+     "id": "T88-glyph-crop",
+     "summary": "glyph_crop stays a by-command python3 -c Playwright start of tracked scripts/record/glyph_crop.py (embedded by include_str!), only on FOR=modal-depiction with a pool page drawing the kind; the first census counts it, the second cannot see it, so it is named at the phase-3 close; T85 removes it before the feature closes.",
+     "class": "within",
+     "why": "This is what ask:449-T88-bundles orders: the crop stays a by-command start under the T065 clause and moves to the CDP crate in T85. The earlier text named it a remainder at the feature's close, which contradicts SC-005. The new text removes it before the close and says honestly that the second census cannot see it. If ask:449-T80-order sends archive.py to phase 4, the crop is still gone before the feature closes."
+    },
+    {
+     "id": "T88-doors-and-shared-rust",
+     "summary": "apply_edits and sources reach research_held and url_of through owed_door.py; translation-owed in-process; verdict_of and the event-log path from the guard crate; feature_report.reversals ported into arbiter/bundle/sections.rs for T83; bundle_owed.reason_ok calls shared::escape::enough in place of hm_escape.py's.",
+     "class": "within",
+     "why": "The owed_door route is what the ruling orders for the two phase-4 importers. The other three use Rust that already exists, or port a function ahead of its module, and leave the Python original for its own Python callers. FR-003 binds the piece being replaced, the bundle, and the bundle runs only one side. Whether reason_ok's swap to shared::escape::enough changes behavior rests on the differential (48 check-bundle cases, escapes given, none differing but the ruled one). The plan claims nothing beyond that, and this review does not either."
+    },
+    {
+     "id": "T88-no-plain-path",
+     "summary": "No start of the runner or the crop is conditional on a changed file or reached by a guard, a plain Edit or make done, so no read set is measured.",
+     "class": "within",
+     "why": "This is the T065 clause, and the plan holds it more strictly: none of these starts happens on a make done at all."
+    },
+    {
+     "id": "T88-check-order-escape",
+     "summary": "The check-order-escape: MANIFEST line carries the reason CHECK_ORDER_OK gave and appears only where the order held the bundle; the Python's rebinding of held/first is not reproduced. One case differs.",
+     "class": "within",
+     "why": "The accepted spec states this as a ruled FR-002 case in its own words (ask:449-T88-check-order-escape, the round arbiter, 2026-11-11). Against the request itself nothing is dropped from the port. Every line of the six is still ported, and the one changed output is a MANIFEST line that no reader parses."
+    },
+    {
+     "id": "T88-owed-door-modal-fix",
+     "summary": "T87's owed_door.Modal shadowed the entry_files/drawing_files methods with lists, failing every modal-bundle and modal-prepass; fixed in the door, which the differential's Python side runs (N7).",
+     "class": "within",
+     "why": "The fix puts back what the tool did before T87's door broke it, so the Python side is compared as the original tool behaved. Leaving the door broken would have left nothing to compare against."
+    },
+    {
+     "id": "T88-refresh-not-ported",
+     "summary": "check_bundle.refresh, which nothing calls or runs by name, is not ported.",
+     "class": "within",
+     "why": "The case rests on reach, not on the GM's 2026-11-09 words about past feature harnesses. The import census over every tracked .py, specs/ included, finds no importer of the six outside themselves. git grep 'refresh(' over scripts/ finds no caller. git grep -w refresh over the Makefile, *.sh, *.mk and settings.json finds only other tools'. The measurements grep's three hits were each read and run make targets. The docs naming the six were each read for the rewrite. Nothing reaches the function, so leaving it out removes no behavior, and its file is still deleted as FR-001 requires. The one space not searched is .md instruction files outside the doc list that do not name check_bundle, and a file that never names check_bundle could not instruct anyone to run its refresh."
+    },
+    {
+     "id": "T88-manifest-bytes",
+     "summary": "The MANIFEST text the Rust guards parse is the Python's byte for byte, origin column still naming scripts/record/modal_bundle.py.",
+     "class": "within",
+     "why": "Holding the output byte for byte is what FR-002 asks for."
+    },
+    {
+     "id": "T88-coverage",
+     "summary": "Tests on the testkit scratch record with stub runner and stub crop; default OUT under the test temp dir; 100% line coverage, clippy::pedantic clean.",
+     "class": "within",
+     "why": "These enforce FR-004 and FR-008."
+    },
+    {
+     "id": "T88-differential",
+     "summary": "135 cases across check-bundle, modal-bundle, arbiter-bundle, depiction-replay and the doors, exit/stdout/stderr/every written file compared; 2 differing, both the ruled fix; normalizations N1-N7.",
+     "class": "within",
+     "why": "FR-002, and what ask:449-T88-bundles requires: every runner verb is included. Each normalization is either covered by a ruling (N4 and N5 by ask:449-usage-text) or not part of the tool's output (paths, timestamps, each side's own commit, PNG bytes with the kinds compared in glyph.txt, and the T87 door fix). Nothing a reader takes as the tool's output is excluded."
+    },
+    {
+     "id": "T88-census",
+     "summary": "Census at the cut shows the six imported only by each other, apply_edits and sources through the door, Rust reaching Python only through the runner's seven listed verbs and the crop.",
+     "class": "within",
+     "why": "This is the census re-run that the ruling requires. The seven verbs listed match the ruling's verbs, with save_cached as residue_pages' kept part."
+    },
+    {
+     "id": "T88-docs-and-recorded-commands",
+     "summary": "Docs naming the six rewritten to the Rust; the three recorded commands naming a ported file (search command stated, each hit read) rewritten to the port and re-run, re-runs kept beside the old figures as dated fields.",
+     "class": "within",
+     "why": "FR-001 requires a rewritten measurement to be re-run as its proof. The search space is stated and covers the six names, with or without .py."
+    },
+    {
+     "id": "T88-approach-checklist",
+     "summary": "Goal, constraints, order after T87 with T82/T83/T85 taking the runner's verbs, exits, one-landing budget, done measured.",
+     "class": "within",
+     "why": "This repeats the ruling's order, in which each verb leaves the runner when its owner is ported. It narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -9269,98 +9375,102 @@
    "verdict": "CLEAR"
   },
   "T88": {
-   "section_sha256": "c7476f42cf0ce468d019ae92557d89922d655c635dd332a744737386d6d2bd7d",
+   "section_sha256": "e736fc5508454cf44175f0d579a9bddf57d98925eeda828d16c8b8d99fd4169d",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T88-rust-layout",
-     "summary": "The Rust modules and l7r-gate verbs; the notes, check-bundle, modal-bundle, modal-prepass, arbiter-bundle and arbiter-ask recipes run the binary; args.rs gains positionals and nargs=* lists.",
+     "id": "T88-layout",
+     "summary": "The six ported as one cut into rust/gate record/bundle, arbiter/bundle and measure/depiction_replay, reached as l7r-gate verbs; the Makefile recipes run the binary; args.rs gains positionals and nargs='*' lists.",
      "class": "within",
-     "why": "Implements ask:449-T88-bundles' one cut of the six files; make stays the entry point (FR-005)."
+     "why": "ask:449-T88-bundles orders the six ported in one cut, and FR-005 keeps make as the one entry point. Laying out the Rust narrows nothing the GM asked for."
     },
     {
-     "id": "T88-runner-seven-verbs",
-     "summary": "scripts/bundle_door.py: one process a run, started on the first verb, one JSON line each way; verbs run (record_prepass, quote_verbatim, style_prepass, source_pages in one process), passages, save_cached, claims_rows, load_index, knobs, knob_table; replies on their own descriptor; failure is the Python traceback, exit 1.",
+     "id": "T88-runner",
+     "summary": "scripts/bundle_door.py, started on a run's first verb, one process a run, verbs run/passages/save_cached/claims_rows/load_index/knobs/knob_table; residue_pages split so only its save (CachedPages and the NotCached stub fetcher) stays in Python and the URLs are picked in Rust.",
      "class": "within",
-     "why": "Each of the seven named verbs is on the ruling's list (helpers and passages; residue_pages; claims rows and load_index; knobs and knob_table) with the owner the ruling names; D6's one process kept (FR-006). The stdout-to-stderr bound for helper prints is stated and measured as empty on real data."
+     "why": "The ruling's verbs are carried, run keeping D6's in-process helpers (FR-006). The ruling said residue_pages goes 'whole', but the reason it gave was 'so CachedPages never leaves Python', and the plan keeps CachedPages and its in-process fetcher in Python, so FR-003 holds. Moving URL picking into Rust is more of the port, not less. The NotCached stub returns a constant and has to live beside CachedPages once check_bundle.py is deleted, so it adds no logic to the door."
     },
     {
-     "id": "T88-save-cached-split",
-     "summary": "save_cached carries residue_pages' save only, CachedPages and the cache-only fetcher kept in Python; the URLs are picked in Rust; check_bundle's NotCached stub moves into bundle_door.py and goes with the verb in T85.",
+     "id": "T88-runner-stdout-bound",
+     "summary": "Helper prints from save_cached/passages/claims_rows/knobs now reach stderr rather than the bundle command's stdout; argparse prog stays check_bundle.py; a verb's failure is its traceback, exit 1.",
      "class": "within",
-     "why": "The ruling's 'residue_pages whole' exists so that CachedPages never leaves Python (FR-003: no command carries a fetcher); that purpose holds. Picking the URLs in Rust ports more, not less, with one implementation because check_bundle.py is deleted in the cut. The stub is a constant answer whose only Python home is deleted, so moving it is not logic of the door's own in the ruling's sense; save_cached still calls one existing function, source_pages.save."
+     "why": "FR-002 binds the cases the tests and suites hold. The plan names the possible divergence and says nothing printed on the differential's real data, where stdout matched in every case. Traceback text is unbound under ask:449-usage-text, while exit status and stdout stay held."
     },
     {
      "id": "T88-glyph-crop",
-     "summary": "glyph_crop stays a by-command Playwright start of the tracked scripts/record/glyph_crop.py, embedded with include_str!, only on make modal-bundle FOR=modal-depiction with a pool page drawing the kind, T065 clause, named as an expected remainder until T85 moves it onto the CDP crate.",
+     "summary": "glyph_crop stays a by-command python3 -c Playwright start of tracked scripts/record/glyph_crop.py (embedded by include_str!), only on FOR=modal-depiction with a pool page drawing the kind; the first census counts it, the second cannot see it, so it is named at the phase-3 close; T85 removes it before the feature closes.",
      "class": "within",
-     "why": "Matches the ruling. Tracking the file puts the Python in the first census, which fixes the earlier crop.py.in. Two pins: 'both FR-001 censuses count it' is an overclaim, because the second census greps Makefile, *.mk and *.sh and a Rust python3 -c does not match it; the first census is the one that sees it, and that is enough. Naming it 'at the feature's close as an expected remainder' licenses nothing: SC-005 requires both censuses to return nothing at the close, and T85 comes before the close in every order the spec allows."
+     "why": "This is what ask:449-T88-bundles orders: the crop stays a by-command start under the T065 clause and moves to the CDP crate in T85. The earlier text named it a remainder at the feature's close, which contradicts SC-005. The new text removes it before the close and says honestly that the second census cannot see it. If ask:449-T80-order sends archive.py to phase 4, the crop is still gone before the feature closes."
     },
     {
-     "id": "T88-doors-and-shared",
-     "summary": "apply_edits and sources reach research_held and url_of through owed_door.py; translation-owed runs in-process; verdict_of and the event-log path come from the guard crate; feature_report.reversals is ported into arbiter/bundle/sections.rs for T83; bundle_owed.reason_ok is shared::escape::enough.",
+     "id": "T88-doors-and-shared-rust",
+     "summary": "apply_edits and sources reach research_held and url_of through owed_door.py; translation-owed in-process; verdict_of and the event-log path from the guard crate; feature_report.reversals ported into arbiter/bundle/sections.rs for T83; bundle_owed.reason_ok calls shared::escape::enough in place of hm_escape.py's.",
      "class": "within",
-     "why": "The owed_door routing is the ruling's own. Reusing the guard crate gives one implementation. Porting reversals in-process follows ask:449-T76-scope's 'no door'. The claim that reason_ok equals the guard's escape rule rests on the differential, and only a case that hits the refusing branch (a reason too short) measures it; SC-004 and the gate own that."
+     "why": "The owed_door route is what the ruling orders for the two phase-4 importers. The other three use Rust that already exists, or port a function ahead of its module, and leave the Python original for its own Python callers. FR-003 binds the piece being replaced, the bundle, and the bundle runs only one side. Whether reason_ok's swap to shared::escape::enough changes behavior rests on the differential (48 check-bundle cases, escapes given, none differing but the ruled one). The plan claims nothing beyond that, and this review does not either."
     },
     {
-     "id": "T88-no-conditional-start",
-     "summary": "Neither the runner nor the crop is reached by a guard, a plain Edit or make done, so no read set is measured.",
+     "id": "T88-no-plain-path",
+     "summary": "No start of the runner or the crop is conditional on a changed file or reached by a guard, a plain Edit or make done, so no read set is measured.",
      "class": "within",
-     "why": "The T065 clause the ruling imposes, with a stated search space (git grep over rust/guard, scripts/hooks, scripts/gates, tests/hooks and the done/quick recipes)."
+     "why": "This is the T065 clause, and the plan holds it more strictly: none of these starts happens on a make done at all."
     },
     {
      "id": "T88-check-order-escape",
-     "summary": "The port writes the CHECK_ORDER_OK reason given, and only where the order held the bundle; it does not reproduce the Python's rebinding of held and first.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "This changes an output FR-002 would otherwise bind. The spec carries the round arbiter's ruled case ask:449-T88-check-order-escape (the arbiter stands where the GM was asked), and the plan matches all three of its terms: the reason given, only where the order held, and no reader of the line (git grep check-order-escape). The differential's two differing cases are this case and the state it carries forward, and nothing else."
+     "summary": "The check-order-escape: MANIFEST line carries the reason CHECK_ORDER_OK gave and appears only where the order held the bundle; the Python's rebinding of held/first is not reproduced. One case differs.",
+     "class": "within",
+     "why": "The accepted spec states this as a ruled FR-002 case in its own words (ask:449-T88-check-order-escape, the round arbiter, 2026-11-11). Against the request itself nothing is dropped from the port. Every line of the six is still ported, and the one changed output is a MANIFEST line that no reader parses."
     },
     {
      "id": "T88-owed-door-modal-fix",
-     "summary": "owed_door.Modal stops shadowing the entry_files and drawing_files methods with lists; the differential's Python side runs the fixed door (N7).",
+     "summary": "T87's owed_door.Modal shadowed the entry_files/drawing_files methods with lists, failing every modal-bundle and modal-prepass; fixed in the door, which the differential's Python side runs (N7).",
      "class": "within",
-     "why": "Repairs a T87 regression that broke make modal-bundle and make modal-prepass on every modal, so the Python baseline is the behavior it had before T87 rather than a crash. No case of the original Python is excluded."
+     "why": "The fix puts back what the tool did before T87's door broke it, so the Python side is compared as the original tool behaved. Leaving the door broken would have left nothing to compare against."
     },
     {
      "id": "T88-refresh-not-ported",
-     "summary": "check_bundle.refresh, which nothing calls, is not ported.",
+     "summary": "check_bundle.refresh, which nothing calls or runs by name, is not ported.",
      "class": "within",
-     "why": "The search space now reaches every form of the name. The importer census over git ls-files '*.py' (specs/ included) finds check_bundle imported only by the six, apply_edits and sources, which reach it only through the door's url_of. The git grep -w refresh over the Makefile, *.sh, *.mk and settings.json closes the by-name routes. With no caller there is no output FR-002 binds, and check_bundle.py is still replaced whole."
+     "why": "The case rests on reach, not on the GM's 2026-11-09 words about past feature harnesses. The import census over every tracked .py, specs/ included, finds no importer of the six outside themselves. git grep 'refresh(' over scripts/ finds no caller. git grep -w refresh over the Makefile, *.sh, *.mk and settings.json finds only other tools'. The measurements grep's three hits were each read and run make targets. The docs naming the six were each read for the rewrite. Nothing reaches the function, so leaving it out removes no behavior, and its file is still deleted as FR-001 requires. The one space not searched is .md instruction files outside the doc list that do not name check_bundle, and a file that never names check_bundle could not instruct anyone to run its refresh."
     },
     {
      "id": "T88-manifest-bytes",
-     "summary": "The MANIFEST text is the Python's byte for byte, the origin column still naming scripts/record/modal_bundle.py.",
+     "summary": "The MANIFEST text the Rust guards parse is the Python's byte for byte, origin column still naming scripts/record/modal_bundle.py.",
      "class": "within",
-     "why": "FR-002: the outputs are kept, and the hooks that parse them are unchanged."
+     "why": "Holding the output byte for byte is what FR-002 asks for."
     },
     {
      "id": "T88-coverage",
-     "summary": "Tests on the testkit's scratch record with a stub runner and a stub crop; 100% line coverage; clippy::pedantic clean.",
+     "summary": "Tests on the testkit scratch record with stub runner and stub crop; default OUT under the test temp dir; 100% line coverage, clippy::pedantic clean.",
      "class": "within",
-     "why": "FR-004, FR-008."
+     "why": "These enforce FR-004 and FR-008."
     },
     {
      "id": "T88-differential",
-     "summary": "135 cases over check-bundle, modal-bundle, arbiter-bundle, depiction-replay and the doors; 2 differ, both the ruled fix; normalizations N1-N7.",
+     "summary": "135 cases across check-bundle, modal-bundle, arbiter-bundle, depiction-replay and the doors, exit/stdout/stderr/every written file compared; 2 differing, both the ruled fix; normalizations N1-N7.",
      "class": "within",
-     "why": "Each normalization is a ruled exemption or a non-output: N4 and N5 under ask:449-usage-text; N3 because the same Python crop script makes the PNG on both sides; N6 each side's own commit; N7 the regression fix above; N1 and N2 paths and stamps. Every runner verb is compared against its Python function, as the ruling requires."
+     "why": "FR-002, and what ask:449-T88-bundles requires: every runner verb is included. Each normalization is either covered by a ruling (N4 and N5 by ask:449-usage-text) or not part of the tool's output (paths, timestamps, each side's own commit, PNG bytes with the kinds compared in glyph.txt, and the T87 door fix). Nothing a reader takes as the tool's output is excluded."
     },
     {
-     "id": "T88-census-verb-count",
-     "summary": "The census reports the new Rust reaching Python 'only through the runner's eight verbs and the crop', but the runner bullet names seven (run, passages, save_cached, claims_rows, load_index, knobs, knob_table).",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "ask:449-T88-bundles lists the runner's verbs in full and makes the census at the cut the proof that 'only the named Python names are reached'. The plan's own proof counts one verb more than the plan names. Either an eighth verb reaches unported Python without being placed by the ruling or named in the plan, which keeps Python the request asks to replace, or the measured count is wrong. Neither can be accepted, and the bundle cannot settle which. Resolve it by naming the eighth verb, its Python function and the ruling that places it on the runner, or by correcting the figure from a re-run of census.py."
+     "id": "T88-census",
+     "summary": "Census at the cut shows the six imported only by each other, apply_edits and sources through the door, Rust reaching Python only through the runner's seven listed verbs and the crop.",
+     "class": "within",
+     "why": "This is the census re-run that the ruling requires. The seven verbs listed match the ruling's verbs, with save_cached as residue_pages' kept part."
     },
     {
      "id": "T88-docs-and-recorded-commands",
-     "summary": "The docs name the Rust; the three recorded commands that named a ported file are rewritten to the port and re-run, each re-run kept beside its old figure.",
+     "summary": "Docs naming the six rewritten to the Rust; the three recorded commands naming a ported file (search command stated, each hit read) rewritten to the port and re-run, re-runs kept beside the old figures as dated fields.",
      "class": "within",
-     "why": "FR-001's rule for recorded measurements, re-run as proof (375-a6 reproduces its figures exactly). The 'three' has no stated search command (feature 185); SC-005's close census of m:recorded-python-commands backstops it. Noted, not ruled."
+     "why": "FR-001 requires a rewritten measurement to be re-run as its proof. The search space is stated and covers the six names, with or without .py."
+    },
+    {
+     "id": "T88-approach-checklist",
+     "summary": "Goal, constraints, order after T87 with T82/T83/T85 taking the runner's verbs, exits, one-landing budget, done measured.",
+     "class": "within",
+     "why": "This repeats the ruling's order, in which each verb leaves the runner when its owner is ported. It narrows nothing."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
