@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-11T16:23:54Z",
+  "target": "plan-gate push",
+  "commit": "0cf75829f",
+  "why": "the plan delta is the archived T92-T94 sections; no open task's section changed"
+}
