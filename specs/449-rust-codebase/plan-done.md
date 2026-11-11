@@ -1884,3 +1884,44 @@ censuses empty (work breakdown 8, FR-010).
 6. **Did any map move?** No: no engine code changes and the hamlet engine's release build is untouched.
 
 
+<!-- plan-archive: archived 2026-11-11 -->
+### T96 (a test binary rebuilt after a one-line edit, FR-012)
+
+- **Approach**: every cargo build links with `rust-lld`, the linker the toolchain ships, through one repository-root `.cargo/config.toml`, and the dev profile (which the test profile inherits) keeps line tables only for debug info.
+
+   **Decisions** (FR-012, SC-007):
+   - Where a one-line edit's test rebuild went: a comment in `claims/src/lib.rs` rebuilt in 3.8 s and 3.9 s, the claims library 1.5 s, the test harness 1.6 s and GNU ld's link 1.2-1.4 s, and the GM's 13.9 s was that rebuild after a core edit and its revert, which cargo's timestamp check rebuilds through core, tree, owed and plan (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t96/bench.py` running `make rust-test CRATE=rust/gate/crates/claims` in a scratch clone, compile and link timed by a `RUSTC_WRAPPER` and a `cc` shim, two samples each).
+   - GNU ld linked each gate crate's test binary one at a time, 27-61 s of `make static` after a core edit, and rust-lld linked them in 3.7-4.1 s (observed 2026-11-11, method: the same bench, option b against base).
+   - Line-tables-only debug info cut the link to 17 s alone and the coverage tests to 37 s (observed 2026-11-11, method: the same bench, option a), and halved the build output.
+   - One config file for every build, so no build's flags differ from another's that shares its target: cargo reads `.cargo/config.toml` from its working directory upward, so `scripts/gates/l7r-gate.sh`, `scripts/hooks/l7r-guard.sh` and `rustc.rs` (every cargo call, cover's `show-env`, build, tests and report included) now run cargo from the tree's root, and make's recipes and `HAMLET_RUN` already do. `cargo llvm-cov show-env` folds the config's flags into the RUSTFLAGS it prints, so the coverage build keeps lld, its test binaries reporting `Linker: LLD 20.1.1`.
+   - No toolchain is pinned, so the config names the 1.87.0 `gcc-ld` directory and a moved toolchain is caught with its fix: `scripts/hooks/lib/lld-path.sh` makes `l7r-gate.sh` refuse and `l7r-guard.sh` keep its last good binary, each naming the `-B` path to set, and `make rust-test` fails `the_configured_rust_lld_is_the_active_toolchain_s`.
+   - `.cargo/config.toml` joins the kept-result key's workspace files in `kept.rs`, and `rustc/Cargo.toml` declares `.cargo/` in its reads, so a config change reruns every crate rather than leaving stale results standing.
+   - The release and tool profiles do not inherit dev's debug setting, so the hamlet engine's code generation is unchanged by it, and its release build relinks once with lld.
+   - Rejected or left: opt-level 0 for our crates (option c) bought less than a and b, and instrumenting only our own crates for coverage (option e, 20 s a run) is T100's, as are the `"."` reads and the dead-code key (observed 2026-11-11, method: the same bench, options c and e).
+   - After the change: `make rust-test CRATE=rust/gate/crates/claims` after a comment edit took 1.1 s and 0.9 s and after its revert 0.2 s and 0.2 s, the claims test binary went from 136 MB to 48 MB, and this clone's target directory from 41 GB to 6.0 GB (observed 2026-11-11, method: those makes timed twice on this clone, `ls -l` on the binary and `du -sh` on the target).
+   - `make static` after a core comment edit took 74.9 s, 81.8 s and 75 s against T95's 103.3 s, and after a claims comment edit 55.8 s and 56.6 s against 64.8 s (observed 2026-11-11, method: `make static` timed on this clone after each edit), most of what is left being the coverage tests, which is T100's.
+   - The same verdicts: `make rust-test` green on 19 crates, claims' and core's coverage reports identical to before once build hashes are stripped, `bash tests/hooks/test-l7r-guard.sh` 37 of 37, and the 8 `l7r-gate` verbs identical from the before and after binaries over one tree (observed 2026-11-11, method: those commands on this clone, the reports diffed by `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t96/lcovdiff.py`).
+
+### T96 Approach (checklist part A)
+
+1. **The goal, in the world.** A one-line edit to a gate crate costs about a second of test rebuild, and links stop dominating `make static`.
+2. **The constraints.** FR-012 and SC-007: every coverage figure, lint finding and tool output held.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the bench and the after-figures above.
+4. **Do they describe the world here?** Measured on a scratch clone, then on this clone.
+5. **The order.** After T95, before T101-T103 and T97-T100.
+6. **The exits.** Green: `make rust-test`, `make static`, the guard suite and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The after-figures above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling build time, not the generator:
+1. **Where does the time go?** In the link (GNU ld, one binary at a time) and the debug info it writes, measured above.
+2. **Does the change remove work, or only move it?** Removes it: a faster linker and less debug info to write and link.
+3. **What do you expect it to save, and why?** Most of each link, which the bench showed before building.
+4. **How does the work grow?** With the number of test binaries linked, now each about a third of the size.
+5. **What did the before and after show, and under what conditions?** Two samples per option on a throttled host, read as evidence, with a noisy spread noted (an earlier pair of core runs took 178-194 s, observed 2026-11-11, method: `make static` timed on this clone after a core edit).
+6. **Did any map move?** No: no engine code changes.
+
+

@@ -317,8 +317,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T95 The full l7r-gate release binary rebuilt after any gate crate edit (48 s after core): a lighter or incremental release build for the tool, measured (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the tool binaries build in an incremental profile: l7r-gate rebuilds in 1-2 s after a crate edit, from 8-45 s
-- [ ] T96 A test binary rebuilt after a one-line edit (13.9 s claims): the gate crates' test profile and the linker, measured (the GM 2026-11-11)
+- [x] T96 A test binary rebuilt after a one-line edit (13.9 s claims): the gate crates' test profile and the linker, measured (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: every build links with rust-lld and dev keeps line tables only: a claims test rebuild 13.9 s to 1 s, make static after a core edit 103 s to 75 s
 - [ ] T97 make done's counters-inert phase (53 s of 57 s): the counting builds of core and phases rerun less, measured (the GM 2026-11-11)
       research: rendering
 - [ ] T98 The hook suites in parallel (about 95 s): the slowest few profiled and made cheaper (the GM 2026-11-11)
