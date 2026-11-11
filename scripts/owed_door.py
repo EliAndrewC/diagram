@@ -55,7 +55,9 @@ class Modal:
     """A modal the door returned: its fields and its derived properties, every one computed in Rust; handed back to a verb whole."""
 
     def __init__(self, d: dict[str, Any]) -> None:
-        self.__dict__.update(d)
+        # the two lists are the methods' answers, never attributes: an attribute named for a method shadowed it, and every
+        # `m.entry_files()` raised TypeError (`make modal-bundle` and `make modal-prepass`, from T87 until 449 T88 found it)
+        self.__dict__.update({k: v for k, v in d.items() if k not in ("entry_files", "drawing_files")})
         self._raw = d
 
     def entry_files(self) -> list[str]:
