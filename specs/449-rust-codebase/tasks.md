@@ -326,8 +326,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T98 The hook suites in parallel (about 95 s): the slowest few profiled and made cheaper (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the batching suite moves its guard's clock by a file: 29.3 s to 1.4 s, a full hook run 71.2 to 63.8 s
-- [ ] T99 The arbiter crate's slow tests (100-300 ms each against FR-008's tenth of a second): made fast (the GM 2026-11-11)
+- [x] T99 The arbiter crate's slow tests (100-300 ms each against FR-008's tenth of a second): made fast (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: every arbiter test under 0.1 s alone but the one real owed-list computation (0.143 s, the named remainder); the crate's tests 8-11 s to 0.18 s
 - [x] T100 make static after a fresh gate crate edit (103.3 s core, 64.8 s claims after a comment, 2026-11-11): the lint, coverage and dead-code reruns for the edited crate and every crate built on it, measured and cut (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: make static after an edit: core 68.7 to 54.0 s, claims 44.5 to 25.3 s, a docs file 34.2 to 13.5 s, coverage unchanged

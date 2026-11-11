@@ -2092,3 +2092,37 @@ censuses empty (work breakdown 8, FR-010).
 6. **Did any map move?** No: no engine code changes.
 
 
+<!-- plan-archive: archived 2026-11-11 -->
+### T104 (a spec round's arbiter bundle read every subagent transcript whole, found under T99, FR-012)
+
+- **Approach**: `first_prompt` (`rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs`) reads a transcript's first line only, through a buffered reader, where it read the whole file to take that line.
+
+   **Decisions** (FR-012, SC-007):
+   - Where T99's time went: one of the arbiter crate's 32 tests took 7.64 s of its 8-11 s, the next 0.42 s (observed 2026-11-11, method: the crate's test binary run once per test with `--exact`, timed by `date +%s.%N`), and within it one call, the bundle of `round:spec-fidelity|500-f#1@3`, took 7.62 s (observed 2026-11-11, method: a temporary timer around each bundle call in that test, reverted).
+   - That call lists every subagent transcript on the machine to find the spec review's rounds, and `first_prompt` read each whole for its first line: 8,696 files, 8.0 GB (observed 2026-11-11, method: `ls ~/.claude/projects/*/*/subagents/agent-*.jsonl | wc -l` and `du -sch` over them). A real spec round's bundle paid the same.
+   - After: the same test took 0.30 s and the whole crate's tests 1.09 s (observed 2026-11-11, method: the same per-test run, and `make rust-test CRATE=rust/gate/crates/arbiter`'s `finished in`).
+   - The same output: the first line is what was parsed before, and a path that cannot be opened, a directory (whose read now fails at the first line rather than the open), an empty file and a first line that is not JSON each still give an empty prompt; the crate's 32 tests pass unchanged.
+   - Left to T99: six tests still take 0.14-0.43 s against FR-008's 0.1 s, each computing the record's owed list one to four times, about 25 `git` calls and 0.1 s a computation (observed 2026-11-11, method: `git` and `python3` wrapped by timing scripts ahead on `PATH` for one test, 140 `git` and 8 `python3` calls).
+
+### T104 Approach (checklist part A)
+
+1. **The goal, in the world.** A spec round's bundle reads what it needs of each transcript and no more.
+2. **The constraints.** FR-012 and SC-007: the bundle says what it said.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the timings above.
+4. **Do they describe the world here?** Measured on this machine's transcripts.
+5. **The order.** Found under T99, landed before it.
+6. **The exits.** Green: `make static` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The after-figures above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** Reading every transcript whole, 8.0 GB, to take one line of each (observed 2026-11-11, method: `du -sch` over them).
+2. **Does the change remove work, or only move it?** Removes it: one line read a file.
+3. **What do you expect it to save, and why?** Nearly the whole call, its reads falling from gigabytes to the first lines.
+4. **How does the work grow?** With the number of transcripts, no longer with their length.
+5. **What did the before and after show, and under what conditions?** One timed run each of the same test, on a throttled host, read as evidence.
+6. **Did any map move?** No: no engine code changes.
+
