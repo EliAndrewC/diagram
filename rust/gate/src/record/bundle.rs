@@ -13,9 +13,23 @@ pub(crate) mod earlier;
 mod keys;
 pub(crate) mod modal;
 pub(crate) mod owed;
+mod parts;
 
 /// Where a bundle goes by default: no `CLAUDE.md` sits above it.
-pub(crate) const DEFAULT_ROOT: &str = "/tmp/l7r-check";
+#[cfg(not(test))]
+const DEFAULT_ROOT: &str = "/tmp/l7r-check";
+
+/// [`DEFAULT_ROOT`].
+#[cfg(not(test))]
+pub(crate) fn default_root() -> PathBuf {
+    PathBuf::from(DEFAULT_ROOT)
+}
+
+/// The tests' default directory, so a test of a default OUT never writes a session's real bundles.
+#[cfg(test)]
+pub(crate) fn default_root() -> PathBuf {
+    std::env::temp_dir().join("l7r-check-tests")
+}
 pub(crate) const MANIFEST: &str = "MANIFEST.md";
 
 /// What a run printed, and the runner it opened, carried to its reply.
@@ -161,20 +175,19 @@ pub(crate) fn pyre(pattern: &str) -> fancy_regex::Regex {
     let (mut chars, mut class) = (pattern.chars().peekable(), false);
     while let Some(c) = chars.next() {
         match (c, class) {
-            ('\\', _) => match chars.next() {
-                Some('s') if class => out.push_str(PY_SPACE),
-                Some('s') => {
+            ('\\', _) => match chars.next().unwrap_or('\\') {
+                's' if class => out.push_str(PY_SPACE),
+                's' => {
                     let _ = write!(out, "[{PY_SPACE}]");
                 }
-                Some('S') if !class => {
+                'S' if !class => {
                     let _ = write!(out, "[^{PY_SPACE}]");
                 }
-                Some('Z') => out.push_str(r"\z"),
-                Some(n) => {
+                'Z' => out.push_str(r"\z"),
+                n => {
                     out.push('\\');
                     out.push(n);
                 }
-                None => out.push('\\'),
             },
             ('[', false) => {
                 class = true;
@@ -320,8 +333,8 @@ fn printable(c: char) -> bool {
     !matches!(u32::from(c),
         0..=0x1f | 0x7f..=0xa0 | 0xad | 0x600..=0x605 | 0x61c | 0x6dd | 0x70f | 0x890..=0x891 | 0x8e2 | 0x1680 | 0x180e
         | 0x2000..=0x200f | 0x2028..=0x202f | 0x205f..=0x2064 | 0x2066..=0x206f | 0x3000 | 0xe000..=0xf8ff | 0xfeff
-        | 0xfff9..=0xfffb | 0x110bd | 0x110cd | 0x13430..=0x1343f | 0x1bca0..=0x1bca3 | 0x1d173..=0x1d17a | 0xe0001
-        | 0xe0020..=0xe007f | 0xf0000..=0x10ffff)
+        | 0xfff9..=0xfffb | 0x1_10bd | 0x1_10cd | 0x1_3430..=0x1_343f | 0x1_bca0..=0x1_bca3 | 0x1_d173..=0x1_d17a | 0xe_0001
+        | 0xe_0020..=0xe_007f | 0xf_0000..=0x0010_ffff)
 }
 
 /// `dest.parent.mkdir(parents=True, exist_ok=True); dest.write_text(text)`.

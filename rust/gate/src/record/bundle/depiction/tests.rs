@@ -57,15 +57,14 @@ fn a_depiction_bundle_with_its_crop() {
     put(&root, "pool/sheets/s1/s1.html", "<g>none</g>");
     put(&root, "pool/notes.txt", "a file among the trees");
     let o = root.join("out").to_string_lossy().into_owned();
-    let (code, run) = depiction(&root, &o);
-    assert_eq!(code, 0, "{} {}", run.out, run.err);
+    let (code, _) = depiction(&root, &o);
+    assert_eq!(code, 0);
     let glyph = std::fs::read_to_string(root.join("out/glyph.txt")).unwrap();
     assert!(
         glyph.contains("- `well` opens `hamlet/well`\n- `other` opens the `other` pop-up")
             && glyph.contains(
                 "- <rect> x=\"1\" y=\"2\" width=\"3\"\n- <circle> cx=\"4\" cy=\"5\" r=\"6\"\n"
-            ),
-        "{glyph}"
+            )
     );
     let knobs = std::fs::read_to_string(root.join("out/knobs.md")).unwrap();
     assert!(
@@ -73,18 +72,13 @@ fn a_depiction_bundle_with_its_crop() {
             && knobs.contains("```python\ndef rule():\n    pass\n```")
             && knobs.contains("- `rust/phases/src/a.rs:1: let k = \"winter_crop\";`")
             && knobs.contains("## role\n\nforms: (not registered)")
-            && knobs.contains("## empty\n\nforms: (not registered)\n"),
-        "{knobs}"
+            && knobs.contains("## empty\n\nforms: (not registered)\n")
     );
     let claims = std::fs::read_to_string(root.join("out/claims.md")).unwrap();
-    assert!(
-        claims.contains("- DRIFTED | `x.py::A#a` | n\n- ? | `y.py::B#b` | \n"),
-        "{claims}"
-    );
+    assert!(claims.contains("- DRIFTED | `x.py::A#a` | n\n- ? | `y.py::B#b` | \n"));
     let text = std::fs::read_to_string(root.join("out/MANIFEST.md")).unwrap();
     assert!(
-        text.contains("| `drawing/0098-more.drawing.html` |") && !text.contains("drawing/0099"),
-        "{text}"
+        text.contains("| `drawing/0098-more.drawing.html` |") && !text.contains("drawing/0099")
     );
     assert!(!root.join("out/glyph.png.kinds").exists());
 }
@@ -114,8 +108,8 @@ fn no_crop_a_stale_page_and_the_failures() {
         .set_modified(old)
         .unwrap();
     let (code, run) = depiction(&root, &o);
-    assert_eq!(code, -1, "{}", run.err);
-    assert!(run.err.contains("nocrop.html is older than nocrop.svg - its crop would show the drawing before the edit; regenerate it first: make map GEN=pool/hamlets/nocrop/nocrop.gen.py"), "{}", run.err);
+    assert_eq!(code, -1);
+    assert!(run.err.contains("nocrop.html is older than nocrop.svg - its crop would show the drawing before the edit; regenerate it first: make map GEN=pool/hamlets/nocrop/nocrop.gen.py"));
     std::fs::remove_dir_all(root.join("pool/hamlets/nocrop")).unwrap();
     put(&root, "pool/hamlets/slow/slow.html", POOL_PAGE);
     let (code, run) = depiction(&root, &format!("{o}1"));
@@ -182,4 +176,37 @@ fn the_candidates_at_the_merge_base_and_the_geometry() {
     assert_eq!(stale_page(&root.join("g.html"), &root), "");
     put(&root, "g.svg", "<svg/>");
     assert_eq!(stale_page(&root.join("g.html"), &root), "");
+}
+
+#[test]
+fn the_rare_paths_of_a_depiction_bundle() {
+    let root = scratch("modal-depiction-rare");
+    let hits: String = (0..16)
+        .map(|i| format!("let k{i} = \"winter_crop\";\n"))
+        .collect::<Vec<_>>()
+        .concat();
+    put(&root, "rust/phases/src/deep/a.rs", &hits);
+    put(&root, WELL, "Name: Well\nAbout: [winter_crop=wheat] A well.\nEntry: research/questions/0095-other.html\n");
+    put(&root, "pool/hamlets/a/a.html", "<g data-k=\"other\"></g>");
+    put(&root, "pool/hamlets/b-example/b.html", POOL_PAGE);
+    put(&root, "pool/hamlets/c/nokinds.html", POOL_PAGE);
+    put(&root, "pool/hamlets/d/locked.html", POOL_PAGE);
+    let locked = root.join("pool/hamlets/d/locked.html");
+    std::fs::set_permissions(&locked, std::os::unix::fs::PermissionsExt::from_mode(0o000)).unwrap();
+    let o = root.join("out").to_string_lossy().into_owned();
+    let (code, _) = depiction(&root, &o);
+    std::fs::set_permissions(&locked, std::os::unix::fs::PermissionsExt::from_mode(0o644)).unwrap();
+    assert_eq!(code, 0);
+    let knobs = std::fs::read_to_string(root.join("out/knobs.md")).unwrap();
+    assert_eq!(knobs.matches("let k").count(), 15);
+    let glyph = std::fs::read_to_string(root.join("out/glyph.txt")).unwrap();
+    assert!(glyph.contains("pool/hamlets/c/nokinds.html") && !glyph.contains("opens"));
+    let fresh = Modal {
+        cls: "x.Fresh".to_owned(),
+        key: "fresh".to_owned(),
+        origin: "l7r/diagram/interactive/assets/modals/hamlet/fresh.md".to_owned(),
+        tags: Vec::new(),
+        doc: String::new(),
+    };
+    assert!(drawing_candidates(&root, &fresh).unwrap().is_empty());
 }

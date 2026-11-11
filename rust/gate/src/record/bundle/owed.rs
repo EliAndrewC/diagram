@@ -54,6 +54,10 @@ fn unique_checks(rows: &[Unit]) -> String {
     seen.join(" ")
 }
 
+#[expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "a page's file name as given, as `str.endswith` read it"
+)]
 /// The owed units for `make check-bundle Q= FOR=`; `every` is the delta's units when the caller already has them.
 pub(crate) fn owed_for_question(
     root: &Path,
@@ -67,16 +71,15 @@ pub(crate) fn owed_for_question(
     }
     let qn = question_of(q);
     let drift = matches!(for_, "entry-drift" | "all");
-    let scoped = match every {
-        Some(rows) => rows.to_vec(),
-        None => {
-            let families: &[&str] = if drift {
-                &["record", "translation", "entry-drift"]
-            } else {
-                &["record", "translation"]
-            };
-            owed_units(root, None, None, families, "")?
-        }
+    let scoped = if let Some(rows) = every {
+        rows.to_vec()
+    } else {
+        let families: &[&str] = if drift {
+            &["record", "translation", "entry-drift"]
+        } else {
+            &["record", "translation"]
+        };
+        owed_units(root, None, None, families, "")?
     };
     let mut rows: Vec<Unit> = scoped
         .into_iter()
@@ -139,7 +142,7 @@ pub(crate) fn owed_for_question(
     ))
 }
 
-/// The units a NOT_OWED_OK bundle carries: every unit of those checks on the question, at today's content.
+/// The units a `NOT_OWED_OK` bundle carries: every unit of those checks on the question, at today's content.
 fn tree_units(root: &Path, q: &str, checks: &[&str]) -> Result<Vec<Unit>, Fail> {
     let rec = read_at(root, None, Some(&HashSet::new()))?;
     let mut slugs: Vec<String> = Vec::new();
@@ -180,10 +183,11 @@ pub(crate) fn owed_for_key(
         None => owed_units(root, None, None, &["record"], "")?,
     };
     let (rows, check): (Vec<Unit>, &str) = if whole {
-        let now = read_at(root, None, Some(&HashSet::new()))?;
+        let record = read_at(root, None, Some(&HashSet::new()))?;
         let cited = |u: &Unit| {
             let (stem, note) = u.subject().split_once('#').unwrap_or((u.subject(), ""));
-            now.cites
+            record
+                .cites
                 .get(stem)
                 .and_then(|c| c.get(note))
                 .is_some_and(|keys| keys.iter().any(|k| k == key))
@@ -336,6 +340,10 @@ fn page_text(text: &str) -> String {
     lines.join("\n")
 }
 
+#[expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "the record's page names, as the Python's glob matched them"
+)]
 /// One question's part of an intro-check bundle: its research page whole, its drawing page, and the map elements written from it.
 pub(crate) fn intro_bundle_text(
     root: &Path,

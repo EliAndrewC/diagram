@@ -38,10 +38,8 @@ pub(crate) fn git_out(root: &Path, args: &[&str]) -> String {
         .arg(root)
         .args(args)
         .output()
-        .map_or_else(
-            |_| String::new(),
-            |o| universal(&String::from_utf8_lossy(&o.stdout)),
-        )
+        .map(|o| universal(&String::from_utf8_lossy(&o.stdout)))
+        .unwrap_or_default()
 }
 
 /// `git show rev:path`, or None where the revision has no such file.

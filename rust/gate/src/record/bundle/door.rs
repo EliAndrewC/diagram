@@ -6,7 +6,7 @@ use std::process::{Child, ChildStdin, ChildStdout, Command, Stdio};
 
 use serde_json::{json, Value};
 
-use crate::record::repo::Fail;
+use crate::record::repo::{fail, Fail};
 
 /// The runner of one bundle run: not started until a verb is asked.
 pub(crate) struct Runner {
@@ -25,22 +25,22 @@ impl Runner {
 
     fn start(&mut self) -> Result<&mut (Child, ChildStdin, BufReader<ChildStdout>), Fail> {
         if self.live.is_none() {
-            let mut child = Command::new("python3")
-                .arg(&self.script)
+            let mut cmd = Command::new("python3");
+            cmd.arg(&self.script)
                 .stdin(Stdio::piped())
-                .stdout(Stdio::piped())
-                .stderr(Stdio::inherit())
-                .spawn()
-                .map_err(|e| format!("bundle-door: {}: {e}", self.script.display()))?;
-            let pipes = child.stdin.take().zip(child.stdout.take());
-            let (stdin, stdout) = pipes.ok_or_else(|| "bundle-door: no pipe".to_owned())?;
-            self.live = Some((child, stdin, BufReader::new(stdout)));
+                .stdout(Stdio::piped());
+            let mut child = cmd.stderr(Stdio::inherit()).spawn().map_err(fail)?;
+            let (stdin, stdout) = (child.stdin.take(), child.stdout.take());
+            let pipes = stdin.zip(stdout).map(|(i, o)| (i, BufReader::new(o)));
+            self.live = pipes.map(|(i, o)| (child, i, o));
         }
-        Ok(self.live.as_mut().unwrap_or_else(|| unreachable!()))
+        self.live
+            .as_mut()
+            .ok_or(String::from("bundle-door: no pipe"))
     }
 
     /// The verb's value, or the traceback the Python raised.
-    pub(crate) fn ask(&mut self, verb: &str, args: Value) -> Result<Value, Fail> {
+    pub(crate) fn ask(&mut self, verb: &str, args: &Value) -> Result<Value, Fail> {
         let (_, stdin, stdout) = self.start()?;
         let line = json!({"verb": verb, "args": args}).to_string() + "\n";
         let mut said = String::new();
@@ -67,7 +67,7 @@ impl Runner {
         args: &[String],
         root: &Path,
     ) -> Result<(i32, String), Fail> {
-        let got = self.ask("run", json!([name, args, root.to_string_lossy()]))?;
+        let got = self.ask("run", &json!([name, args, root.to_string_lossy()]))?;
         let code = got.get(0).and_then(Value::as_i64).unwrap_or(1);
         Ok((
             i32::try_from(code).unwrap_or(1),

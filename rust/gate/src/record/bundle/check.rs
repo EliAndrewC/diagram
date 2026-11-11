@@ -3,6 +3,7 @@
 //! `l7r-gate record check-bundle Q | --key KEY | --keys "K K" | --for intro-check --qs "Q Q" [...]`, the Python's command line.
 
 use std::collections::HashSet;
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -15,8 +16,8 @@ use serde_json::Value;
 
 use super::owed::{self as bo};
 use super::{
-    copy, earlier, findall, head, hit, py_path, pyre, relative, remove_tree, rstrip, shown, slug,
-    today, write, Run, DEFAULT_ROOT, MANIFEST,
+    copy, default_root, earlier, findall, head, hit, py_path, pyre, remove_tree, rstrip, shown,
+    slug, today, write, Run, MANIFEST,
 };
 use crate::record::args::{parse_with, Parsed, Spec};
 use crate::record::leaves::fragments_for;
@@ -29,11 +30,11 @@ use crate::Reply;
 const REGISTRY: &str = "research/sources/010-works-cited";
 /// The uncited sources' write-ups (feature 312 FR-012), bundled for `source-applicability` as a cited work's are.
 const UNCITED: &str = "research/sources/040-uncited-works";
-const VARIANTS: &str = "research/assets/glossary-variants.txt";
+pub(crate) const VARIANTS: &str = "research/assets/glossary-variants.txt";
 const CLASSES: &str = "l7r/diagram/interactive/classes";
 const COMPOUND_KINDS: &str = "l7r/diagram/interactive/compound_kinds";
 /// The style guide `record-style` judges against (feature 292), handed in the bundle.
-const STYLE: &str = "research/STYLE.md";
+pub(crate) const STYLE: &str = "research/STYLE.md";
 /// A quote-check reads notes in BATCHES of at most this many bytes (feature 292: on 2026-09-29 the median notes file was 4,838 bytes, the 90th percentile 8,599).
 pub(crate) const NOTES_BUDGET: usize = 12_000;
 
@@ -298,12 +299,12 @@ fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
             git(root, &["show", &format!("{base}:{rel}")])
         };
         if rel.ends_with(".notes.html") {
-            let (old, new) = (read_notes(&was, ""), read_notes(&now, ""));
-            let mut keys: Vec<&String> = new.iter().map(|(k, _)| k).collect();
+            let (before, after) = (read_notes(&was, ""), read_notes(&now, ""));
+            let mut keys: Vec<&String> = after.iter().map(|(k, _)| k).collect();
             keys.sort();
             lines.extend(
                 keys.into_iter()
-                    .filter(|k| old.get(k) != new.get(k))
+                    .filter(|k| before.get(k) != after.get(k))
                     .map(|k| format!("changed-note: {rel} | {k}")),
             );
         } else {
@@ -336,7 +337,7 @@ pub(crate) fn with_earlier(root: &Path, out: &Path, text: &str) -> Result<String
 }
 
 /// A helper's output and exit: `translation-owed` is the port in this process, the rest the runner's (feature 383 D6).
-fn run_script(
+pub(crate) fn run_script(
     run: &mut Run,
     name: &str,
     args: &[String],
@@ -363,10 +364,10 @@ pub(crate) struct Entry<'a> {
     pub(crate) images: &'a [String],
 }
 
-type Rows = Vec<(String, String, String)>;
+pub(crate) type Rows = Vec<(String, String, String)>;
 
 /// A helper's text written to `file`, its row added; Some(exit) where it failed, its output on stderr.
-fn helper_part(
+pub(crate) fn helper_part(
     run: &mut Run,
     root: &Path,
     out: &Path,
@@ -396,7 +397,7 @@ fn copies(
         let notes_file = rel.ends_with(".notes.html");
         if notes_file
             && !want.contains(&"notes")
-            && !(e.for_ == "record-style" && !e.extra.is_empty())
+            && (e.for_ != "record-style" || e.extra.is_empty())
         {
             continue;
         }
@@ -417,7 +418,8 @@ fn copies(
             write(&e.out.join(&name), &cut)?;
             let mut named: Vec<&String> = e.notes.iter().collect();
             named.sort();
-            what += &format!(
+            let _ = write!(
+                what,
                 " - ONLY the notes {} and the blocks that carry them{}",
                 named
                     .iter()
@@ -473,107 +475,10 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
         ));
     }
     copies(root, e, &fragments, &mut rows, &mut keys)?;
-    let want = parts(e.for_);
-    let base_args = vec![q.to_owned(), "--root".to_owned(), shown(root)];
-    let out = e.out.clone();
-    if want.contains(&"prepass") {
-        let job = ("record_prepass", base_args.clone());
-        let row = (
-            "prepass.txt",
-            format!("make record-prepass Q={q}"),
-            "for record-format: the WORDS TO RULE ON and the pattern candidates",
-        );
-        if let Some(code) = helper_part(run, root, &out, &mut rows, job, row)? {
-            return Ok(code);
-        }
+    if let Some(code) = super::parts::helper_parts(run, root, e, &mut rows, &keys)? {
+        return Ok(code);
     }
-    if e.quotes && want.contains(&"quote") {
-        let mut args = base_args.clone();
-        args.extend(["--json".to_owned(), shown(&out.join("quote-verbatim.json"))]);
-        let (code, mut text) = run_script(run, "quote_verbatim", &args, root)?;
-        if !e.notes.is_empty() && code == 0 {
-            text = super::keys::scoped_verbatim(&out, &text)?;
-        }
-        write(&out.join("quote-verbatim.txt"), &text)?;
-        rows.push((
-            "quote-verbatim.txt".to_owned(),
-            format!("make quote-verbatim Q={q}"),
-            "for quote-check: which quotations are on their pages, character for character"
-                .to_owned(),
-        ));
-        if code != 0 {
-            run.warn(&text);
-            return Ok(code);
-        }
-        if super::keys::residue_pages(run, &out)? > 0 {
-            rows.push(("pages/".to_owned(), "the host's page cache (feature 288)".to_owned(), "for quote-check: the saved text of each page a quotation was not found VERBATIM on - grep it before any WebFetch; its MANIFEST.txt names a page the cache did not hold".to_owned()));
-        }
-    }
-    if want.contains(&"registry") {
-        let mut seen: Vec<&String> = Vec::new();
-        for key in &keys {
-            if seen.contains(&key) {
-                continue;
-            }
-            seen.push(key);
-            if let Some(src) = registry_entry(root, key) {
-                rows.push((
-                    copy(&src, &out, Some(&format!("sources/{key}.html")))?,
-                    relative(&src, root),
-                    format!("the registry entry of `{key}`"),
-                ));
-            }
-        }
-    }
-    if want.contains(&"styleprepass") {
-        let job = ("style_prepass", base_args.clone());
-        let row = ("style-prepass.txt", format!("make style-prepass Q={q}"), "for record-style: the metric figures with no conversion (each a FAIL) and every lead line to rule on");
-        if let Some(code) = helper_part(run, root, &out, &mut rows, job, row)? {
-            return Ok(code);
-        }
-    }
-    if want.contains(&"translations") {
-        let job = (
-            "translation_owed",
-            vec![
-                "--root".to_owned(),
-                shown(root),
-                "--q".to_owned(),
-                q.to_owned(),
-            ],
-        );
-        let row = ("translations.txt", format!("make translation-owed Q={q}"), "for translation-check: each owed translated quotation, its translation and its original");
-        if let Some(code) = helper_part(run, root, &out, &mut rows, job, row)? {
-            return Ok(code);
-        }
-    }
-    if want.contains(&"style") {
-        rows.push((copy(&root.join(STYLE), &out, None)?, STYLE.to_owned(), "for record-style: the style guide - every rule you judge, with the GM's words it comes from".to_owned()));
-    }
-    if want.contains(&"variants") {
-        rows.push((
-            copy(&root.join(VARIANTS), &out, None)?,
-            VARIANTS.to_owned(),
-            "the glossary's variant index: one line per defined word - grep it".to_owned(),
-        ));
-    }
-    for path in e.extra {
-        let src = if Path::new(path).is_absolute() {
-            py_path(path)
-        } else {
-            root.join(py_path(path))
-        };
-        let name = format!(
-            "extra/{}",
-            src.file_name()
-                .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
-        );
-        rows.push((
-            copy(&src, &out, Some(&name))?,
-            path.clone(),
-            "named by the dispatcher".to_owned(),
-        ));
-    }
+    let out = &e.out;
     let title = format!(
         "question {q}{}",
         if e.for_ == "all" {
@@ -582,15 +487,15 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
             format!(", for {}", e.for_)
         }
     );
-    let text = manifest(&out, &title, &rows)?
+    let text = manifest(out, &title, &rows)?
         + &e.owed
         + &changed_section(root, &fragments)?
-        + &super::keys::images_section(&out, e.images)?;
-    write(&out.join(MANIFEST), &with_earlier(root, &out, &text)?)?;
+        + &super::keys::images_section(out, e.images)?;
+    write(&out.join(MANIFEST), &with_earlier(root, out, &text)?)?;
     run.say(&format!(
         "check-bundle: {} file(s) in {} - hand the agent {}",
         rows.len(),
-        shown(&out),
+        shown(out),
         shown(&out.join(MANIFEST))
     ));
     Ok(0)
@@ -700,7 +605,7 @@ fn specs() -> [Spec; 16] {
 
 fn out_or(given: &str, default: String) -> PathBuf {
     if given.is_empty() {
-        Path::new(DEFAULT_ROOT).join(default)
+        default_root().join(default)
     } else {
         py_path(given)
     }
@@ -727,25 +632,22 @@ pub(crate) fn cli(args: &[String]) -> Reply {
     run.reply(done)
 }
 
-fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
-    let q = p.positional.first().map_or("", String::as_str);
-    let (for_, not_owed_ok, new) = (
+/// A source's, several sources' or the intro-check bundle; None for a question's.
+fn source_main(run: &mut Run, root: &Path, p: &Parsed) -> Result<Option<i32>, Fail> {
+    let (q, for_, not_owed_ok, new) = (
+        p.positional.first().map_or("", String::as_str),
         p.text("--for", "all"),
         p.text("--not-owed-ok", ""),
         p.text("--new", ""),
     );
-    let escape = if not_owed_ok.is_empty() {
-        new
-    } else {
-        not_owed_ok
-    };
     if !p.text("--keys", "").is_empty() {
         let keys: Vec<String> = p
             .text("--keys", "")
             .split_whitespace()
             .map(str::to_owned)
             .collect();
-        return super::keys::keys_bundle(run, root, &keys, p.text("--out", ""), not_owed_ok);
+        return super::keys::keys_bundle(run, root, &keys, p.text("--out", ""), not_owed_ok)
+            .map(Some);
     }
     let key = p.text("--key", "");
     if !key.is_empty() {
@@ -753,23 +655,33 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
         let (rows, checks, refusal) = bo::owed_for_key(root, key, whole, not_owed_ok, new, None)?;
         if !refusal.is_empty() {
             run.warn(&format!("check-bundle: REFUSED - {refusal}"));
-            return Ok(3);
+            return Ok(Some(3));
         }
         let out = out_or(
             p.text("--out", ""),
             format!("key-{key}{}", if whole { "-whole" } else { "" }),
         );
-        let owed = bo::manifest_lines(&rows, &checks, escape);
+        let owed = bo::manifest_lines(
+            &rows,
+            &checks,
+            if not_owed_ok.is_empty() {
+                new
+            } else {
+                not_owed_ok
+            },
+        );
+        let read = (whole, p.text("--question", ""));
         return super::keys::key_bundle(
             run,
             root,
             key,
             &out,
-            (whole, p.text("--question", "")),
+            read,
             &owed,
             &rows,
             p.list("--images"),
-        );
+        )
+        .map(Some);
     }
     if for_ == "intro-check" {
         let qs = if p.text("--qs", "").is_empty() {
@@ -778,8 +690,88 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
             p.text("--qs", "")
         };
         let qs: Vec<String> = qs.split_whitespace().map(str::to_owned).collect();
-        return super::keys::intro_bundle(run, root, &qs, p.text("--out", ""), not_owed_ok);
+        return super::keys::intro_bundle(run, root, &qs, p.text("--out", ""), not_owed_ok)
+            .map(Some);
     }
+    Ok(None)
+}
+
+/// One batch of a split quote-check bundle: its number, its notes, the units it can answer.
+type Batch = (usize, HashSet<String>, Vec<Unit>);
+
+/// A large question's quote-check bundles, each batch only where it owes something (feature 385 T02, plan D12).
+fn batched<'a>(
+    run: &mut Run,
+    root: &Path,
+    batches: &[Vec<String>],
+    rows: &[Unit],
+    (out, checks, bare): (&Path, &str, bool),
+    entry: &dyn Fn(PathBuf, HashSet<String>, String, bool) -> Entry<'a>,
+    not_owed_ok: &str,
+) -> Result<i32, Fail> {
+    run.say(&format!(
+        "check-bundle: the notes are over {} bytes - {} quote-check bundles, one agent each:",
+        super::thousands(NOTES_BUDGET),
+        batches.len()
+    ));
+    let all: Vec<Batch> = batches
+        .iter()
+        .enumerate()
+        .map(|(i, b)| {
+            let set: HashSet<String> = b.iter().cloned().collect();
+            let us = bo::batch_units(rows, &set, i == 0);
+            (i + 1, set, us)
+        })
+        .collect();
+    let owing: Vec<&Batch> = all.iter().filter(|(_, _, us)| !us.is_empty()).collect();
+    let chosen: Vec<&Batch> = if owing.is_empty() {
+        all.iter().collect()
+    } else {
+        owing
+    };
+    let mut codes = Vec::new();
+    for (i, set, us) in &chosen {
+        let e = entry(
+            out.join(format!("batch-{i}")),
+            set.clone(),
+            bo::manifest_lines(us, checks, not_owed_ok),
+            bare && *i == 1,
+        );
+        codes.push(entry_bundle(run, root, &e)?);
+    }
+    let nums: Vec<usize> = chosen.iter().map(|(i, _, _)| *i).collect();
+    run.say(&batched_manifests(out, &nums));
+    Ok(codes.into_iter().max().unwrap_or(0))
+}
+
+/// ONE modal's entry-drift units (feature 319, G4); None where none is owed and no reason is given, the refusal printed.
+fn kind_rows(
+    run: &mut Run,
+    root: &Path,
+    kind: &str,
+    rows: &[Unit],
+    not_owed_ok: &str,
+) -> Result<Option<Vec<Unit>>, Fail> {
+    let kept = bo::kind_units(rows, &kind_key(root, kind)?);
+    if kept.is_empty() && not_owed_ok.is_empty() {
+        run.warn(&format!(
+            "check-bundle: REFUSED - no entry-drift is owed on the modal {} by this delta",
+            super::py_repr(kind)
+        ));
+        return Ok(None);
+    }
+    Ok(Some(kept))
+}
+
+fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
+    if let Some(code) = source_main(run, root, p)? {
+        return Ok(code);
+    }
+    let (q, for_, not_owed_ok) = (
+        p.positional.first().map_or("", String::as_str),
+        p.text("--for", "all"),
+        p.text("--not-owed-ok", ""),
+    );
     if q.is_empty() {
         run.err.push_str("usage: l7r-gate record check-bundle\ncheck-bundle: error: Q (a question's number), or --key\n");
         return Ok(2);
@@ -810,13 +802,9 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
     }
     let kind = p.text("--kind", "");
     if for_ == "entry-drift" && !kind.is_empty() {
-        rows = bo::kind_units(&rows, &kind_key(root, kind)?);
-        if rows.is_empty() && not_owed_ok.is_empty() {
-            run.warn(&format!(
-                "check-bundle: REFUSED - no entry-drift is owed on the modal {} by this delta",
-                super::py_repr(kind)
-            ));
-            return Ok(3);
+        match kind_rows(run, root, kind, &rows, not_owed_ok)? {
+            Some(kept) => rows = kept,
+            None => return Ok(3),
         }
     }
     let owed = bo::manifest_lines(&rows, &checks, not_owed_ok);
@@ -832,10 +820,10 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
             }
         ),
     );
-    let batches = if !wanted.is_empty() || for_ != "quote-check" {
-        Vec::new()
-    } else {
+    let batches = if wanted.is_empty() && for_ == "quote-check" {
         note_batches(root, q)?
+    } else {
+        Vec::new()
     };
     let bare = for_ == "quote-check" && bo::unfootnoted_owed(&rows);
     let entry = |out: PathBuf, notes: HashSet<String>, owed: String, bare: bool| Entry {
@@ -851,40 +839,15 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
         images: p.list("--images"),
     };
     if batches.len() > 1 {
-        run.say(&format!(
-            "check-bundle: the notes are over {} bytes - {} quote-check bundles, one agent each:",
-            super::thousands(NOTES_BUDGET),
-            batches.len()
-        ));
-        let all: Vec<(usize, HashSet<String>, Vec<Unit>)> = batches
-            .iter()
-            .enumerate()
-            .map(|(i, b)| {
-                let set: HashSet<String> = b.iter().cloned().collect();
-                let us = bo::batch_units(&rows, &set, i == 0);
-                (i + 1, set, us)
-            })
-            .collect();
-        let owing: Vec<&(usize, HashSet<String>, Vec<Unit>)> =
-            all.iter().filter(|(_, _, us)| !us.is_empty()).collect();
-        let chosen: Vec<&(usize, HashSet<String>, Vec<Unit>)> = if owing.is_empty() {
-            all.iter().collect()
-        } else {
-            owing
-        };
-        let mut codes = Vec::new();
-        for (i, set, us) in &chosen {
-            let e = entry(
-                out.join(format!("batch-{i}")),
-                set.clone(),
-                bo::manifest_lines(us, &checks, not_owed_ok),
-                bare && *i == 1,
-            );
-            codes.push(entry_bundle(run, root, &e)?);
-        }
-        let nums: Vec<usize> = chosen.iter().map(|(i, _, _)| *i).collect();
-        run.say(&batched_manifests(&out, &nums));
-        return Ok(codes.into_iter().max().unwrap_or(0));
+        return batched(
+            run,
+            root,
+            &batches,
+            &rows,
+            (&out, &checks, bare),
+            &entry,
+            not_owed_ok,
+        );
     }
     entry_bundle(run, root, &entry(out, wanted, owed, bare))
 }

@@ -270,6 +270,11 @@ pub(crate) fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
 
 /// A round's reply: the one the hook kept, else the last text of the agent's own transcript (`reply_of`).
 pub(crate) fn reply_of(v: &Value) -> String {
+    reply_in(v, &transcripts())
+}
+
+/// [`reply_of`], the transcripts under `base`.
+pub(crate) fn reply_in(v: &Value, base: &Path) -> String {
     let kept = v
         .get("reply")
         .and_then(Value::as_str)
@@ -285,7 +290,7 @@ pub(crate) fn reply_of(v: &Value) -> String {
     if aid.is_empty() {
         return String::new();
     }
-    transcript_of(&transcripts(), &aid)
+    transcript_of(base, &aid)
         .map_or_else(String::new, |t| reply::reply_of(&t.to_string_lossy(), ""))
 }
 

@@ -34,13 +34,10 @@ fn the_pure_parts_of_a_bundle() {
     assert_eq!(url_of("none"), "");
     let html = "<h2 id=\"t\">T</h2>\n<p>one<sup data-note=\"a\"></sup></p>\n<ul><li>lead<ul><li>inner<sup data-note=\"b\"></sup></li></ul> tail<sup data-note=\"c\"></sup></li></ul>\n<li>open<ul>\n<p>bare\n<p>bare";
     let cut = excerpt(html, &keys(&["c"]), false);
-    assert!(cut.starts_with("<h2 id=\"t\">T</h2>\n<!-- an EXCERPT: only the blocks carrying the named notes -->\n<li>lead"), "{cut}");
+    assert!(cut.starts_with("<h2 id=\"t\">T</h2>\n<!-- an EXCERPT: only the blocks carrying the named notes -->\n<li>lead"));
     assert!(!excerpt(html, &keys(&["b"]), false).contains("<li>lead"));
     let bare = excerpt(html, &keys(&["a"]), true);
-    assert!(
-        bare.contains("and every block carrying none") && bare.contains("<p>bare\n"),
-        "{bare}"
-    );
+    assert!(bare.contains("and every block carrying none") && bare.contains("<p>bare\n"));
     assert!(excerpt("<p>x</p>", &keys(&["a"]), false).starts_with("<!-- an EXCERPT"));
     let notes = "<li data-note=\"a\">A</li>\n<li data-note=\"b\">B</li>\n";
     assert_eq!(
@@ -55,10 +52,7 @@ fn the_pure_parts_of_a_bundle() {
         vec!["head", "tail"]
     );
     assert_eq!(dumps(&json!({"a": [1]})), "{\n \"a\": [\n  1\n ]\n}\n");
-    assert_eq!(
-        out_or("", "x".to_owned()),
-        Path::new(DEFAULT_ROOT).join("x")
-    );
+    assert_eq!(out_or("", "x".to_owned()), default_root().join("x"));
     assert_eq!(out_or("./o/", "x".to_owned()), Path::new("o"));
 }
 
@@ -106,39 +100,37 @@ fn a_registry_entry_and_a_fresh_directory() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one bundle's every part, in the order it is built"
+)]
 fn a_question_bundle_end_to_end() {
     let root = scratch("bundle-check-q");
     edit_everything(&root);
     let out = root.join("out");
     let o = out.to_string_lossy().into_owned();
     let all = bundle(&root, &["0094", "--out", &format!("{o}/a"), "--no-quotes"]);
-    assert_eq!(all.code, 0, "{}", all.stderr);
+    assert_eq!(all.code, 0);
     let text = std::fs::read_to_string(out.join("a/MANIFEST.md")).unwrap();
-    assert!(
-        text.contains("| `prepass.txt` | `make record-prepass Q=0094` |"),
-        "{text}"
-    );
+    assert!(text.contains("| `prepass.txt` | `make record-prepass Q=0094` |"));
     assert!(
         text.contains("## The change (feature 375, FR-006)")
-            && text.contains("changed-note: research/questions/0094-trade.notes.html | "),
-        "{text}"
+            && text.contains("changed-note: research/questions/0094-trade.notes.html | ")
     );
     assert!(
         text.contains("| `sources/key-a.html` |")
-            && text.contains("changed-block: research/questions/0094-trade.html | "),
-        "{text}"
+            && text.contains("changed-block: research/questions/0094-trade.html | ")
     );
     put(&root, "qv.json", &json!({"footnotes": [{"id": "fn-1", "key": "key-a", "readability": "OK", "links": ["https://e.org/b", "ftp://x", "https://e.org/b"], "passages": [{"quote": "a passage", "quotation": "NOT FOUND"}], "assertion": ""}, {"id": "fn-2", "class": "absence", "links": ["https://e.org/c"], "passages": [{"quote": "", "original": "x", "quotation": "VERBATIM"}], "assertion": "A short distance apart."}]}).to_string());
     let q = bundle(
         &root,
         &["0094", "--for", "quote-check", "--out", &format!("{o}/b")],
     );
-    assert_eq!(q.code, 0, "{}", q.stderr);
+    assert_eq!(q.code, 0);
     let text = std::fs::read_to_string(out.join("b/MANIFEST.md")).unwrap();
     assert!(
         text.contains("| `pages/` | `the host's page cache (feature 288)` |")
-            && out.join("b/pages/MANIFEST.txt").is_file(),
-        "{text}"
+            && out.join("b/pages/MANIFEST.txt").is_file()
     );
     let scoped = bundle(
         &root,
@@ -152,11 +144,10 @@ fn a_question_bundle_end_to_end() {
             &format!("{o}/c"),
         ],
     );
-    assert_eq!(scoped.code, 0, "{}", scoped.stderr);
+    assert_eq!(scoped.code, 0);
     let report = std::fs::read_to_string(out.join("c/quote-verbatim.txt")).unwrap();
     assert!(
-        report.contains("(scoped to the 2 footnote(s)") && report.contains("  fn-2 absence - None"),
-        "{report}"
+        report.contains("(scoped to the 2 footnote(s)") && report.contains("  fn-2 absence - None")
     );
     for (for_, file) in [
         ("record-style", "style-prepass.txt"),
@@ -178,8 +169,8 @@ fn a_question_bundle_end_to_end() {
                 &format!("{}/research/STYLE.md", root.display()),
             ],
         );
-        assert_eq!(r.code, 0, "{for_}: {}", r.stderr);
-        assert!(out.join(for_).join(file).is_file(), "{for_}");
+        assert_eq!(r.code, 0);
+        assert!(out.join(for_).join(file).is_file());
     }
     let drift = bundle(
         &root,
@@ -195,13 +186,13 @@ fn a_question_bundle_end_to_end() {
             &format!("{o}/k"),
         ],
     );
-    assert_eq!(drift.code, 0, "{}", drift.stderr);
+    assert_eq!(drift.code, 0);
     assert!(std::fs::read_to_string(out.join("k/kind.txt"))
         .unwrap()
         .starts_with("class homestead.Well  ("));
     let images = root.join("imgs");
     put(&root, "imgs/p1.png", "one");
-    let im = bundle(
+    let _im = bundle(
         &root,
         &[
             "0094",
@@ -213,16 +204,16 @@ fn a_question_bundle_end_to_end() {
             "/no/such.png",
         ],
     );
-    assert!(
-        std::fs::read_to_string(out.join("im/MANIFEST.md"))
-            .unwrap()
-            .contains("- `images/p1.png`"),
-        "{}",
-        im.stderr
-    );
+    assert!(std::fs::read_to_string(out.join("im/MANIFEST.md"))
+        .unwrap()
+        .contains("- `images/p1.png`"));
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "every refusal, one after another on one record"
+)]
 fn the_refusals_of_a_question_bundle() {
     let root = scratch("bundle-check-refused");
     let o = root.join("out").to_string_lossy().into_owned();
@@ -279,13 +270,9 @@ fn the_refusals_of_a_question_bundle() {
     assert_eq!(busy.code, 1);
     assert!(busy.stderr.contains("exists and is not a bundle"));
     let printed = bundle(&root, &["0094", "--notes", "k", "--print-notes"]);
-    assert!(
-        printed
-            .stdout
-            .contains("== research/questions/0094-trade.notes.html\n<li data-note=\"k\">"),
-        "{}",
-        printed.stdout
-    );
+    assert!(printed
+        .stdout
+        .contains("== research/questions/0094-trade.notes.html\n<li data-note=\"k\">"));
     assert_eq!(bundle(&root, &["0094", "--print-notes"]).code, 2);
     assert_eq!(
         bundle(&root, &["0777", "--notes", "k", "--print-notes"]).code,
@@ -305,7 +292,7 @@ fn the_refusals_of_a_question_bundle() {
                 &format!("{o}2/{for_}"),
             ],
         );
-        assert_eq!(r.code, 5, "{for_}");
+        assert_eq!(r.code, 5);
         assert!(r.stderr.contains("helper said no"));
     }
     put(&root, "scripts/bundle_door.py", "import json, sys\nfor l in sys.stdin:\n    print(json.dumps({'error': 'Traceback (most recent call last):\\nOSError: no'}), flush=True)\n");
@@ -357,7 +344,7 @@ fn the_refusals_of_a_question_bundle() {
 fn a_large_question_is_batched() {
     let root = scratch("bundle-check-batches");
     let note = |k: usize| format!("<li data-note=\"n{k}\">\"{}\"</li>\n", "w".repeat(5000));
-    let notes: String = (0..5).map(note).collect();
+    let notes: String = (0..5).map(note).collect::<Vec<_>>().concat();
     put(
         &root,
         "research/questions/0094-trade.notes.html",
@@ -374,14 +361,12 @@ fn a_large_question_is_batched() {
     let o = root.join("out").to_string_lossy().into_owned();
     put(&root, "out/MANIFEST.md", "stale");
     let r = bundle(&root, &["0094", "--for", "quote-check", "--out", &o]);
-    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert_eq!(r.code, 0);
     assert!(
         r.stdout
             .contains("over 12,000 bytes - 3 quote-check bundles")
             && r.stdout.contains("batch-1/MANIFEST.md")
-            && !r.stdout.contains("batch-3/MANIFEST.md"),
-        "{}",
-        r.stdout
+            && !r.stdout.contains("batch-3/MANIFEST.md")
     );
     assert!(!root.join("out/MANIFEST.md").exists());
     std::fs::write(
@@ -414,8 +399,117 @@ fn earlier_rounds_ride_a_bundle() {
     );
     let o = root.join("out").to_string_lossy().into_owned();
     let r = bundle(&root, &["0094", "--for", "record-format", "--out", &o]);
-    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert_eq!(r.code, 0);
     assert!(std::fs::read_to_string(root.join("out/MANIFEST.md"))
         .unwrap()
         .contains("## Earlier rounds (feature 393)"));
+}
+
+#[test]
+fn the_rare_paths_of_a_question_bundle() {
+    let root = scratch("bundle-check-rare");
+    assert!(
+        changed_section(&root, &["research/questions/0777-none.html".to_owned()])
+            .unwrap()
+            .contains("(none - every block and note predates this change")
+    );
+    let bare = crate::checks::scratch("bundle-check-nocommit");
+    crate::record::testkit::git(&bare, &["init", "-q"]);
+    assert!(changed_section(&bare, &["x.notes.html".to_owned()])
+        .unwrap()
+        .contains("(none - "));
+    put(&root, "research/questions/0094-trade.notes.html", "<li data-note=\"k\"><a href=\"x\"><code>key-a</code></a> again <a href=\"y\"><code>key-a</code></a></li><li data-note=\"j\"><a href=\"z\"><code>key-a</code></a></li>");
+    let o = root.join("out").to_string_lossy().into_owned();
+    let r = bundle(
+        &root,
+        &[
+            "0094",
+            "--notes",
+            "k",
+            "--not-owed-ok",
+            "an audit asked",
+            "--no-quotes",
+            "--out",
+            &o,
+        ],
+    );
+    assert_eq!(r.code, 0);
+    let mut run = Run::new(&root);
+    let e = |q: &'static str| Entry {
+        q,
+        out: root.join("e"),
+        extra: &[],
+        quotes: false,
+        kind: "",
+        notes: HashSet::new(),
+        for_: "all",
+        owed: String::new(),
+        bare: false,
+        images: &[],
+    };
+    assert_eq!(entry_bundle(&mut run, &root, &e("0777")).unwrap(), 2);
+    let rows = vec![Unit {
+        slug: "quote-check:0094.drawing#d".to_owned(),
+        occasion: String::new(),
+        fingerprint: String::new(),
+        reading: String::new(),
+    }];
+    let entry = |out: PathBuf, notes: HashSet<String>, owed: String, bare: bool| Entry {
+        q: "0094",
+        out,
+        extra: &[],
+        quotes: false,
+        kind: "",
+        notes,
+        for_: "quote-check",
+        owed,
+        bare,
+        images: &[],
+    };
+    let batches = vec![vec!["k".to_owned()], vec!["t".to_owned()]];
+    assert_eq!(
+        batched(
+            &mut run,
+            &root,
+            &batches,
+            &rows,
+            (&root.join("bb"), "quote-check", false),
+            &entry,
+            ""
+        )
+        .unwrap(),
+        0
+    );
+    assert!(run.out.contains("2 batches"));
+    let owed = vec![Unit {
+        slug: "entry-drift:barn".to_owned(),
+        occasion: String::new(),
+        fingerprint: String::new(),
+        reading: String::new(),
+    }];
+    assert_eq!(kind_rows(&mut run, &root, "Well", &owed, "").unwrap(), None);
+    assert!(run
+        .err
+        .contains("no entry-drift is owed on the modal 'Well'"));
+    assert_eq!(
+        kind_rows(&mut run, &root, "Well", &owed, "an audit asked").unwrap(),
+        Some(Vec::new())
+    );
+    put(&root, "scripts/bundle_door.py", "import json, sys\nfor l in sys.stdin:\n    a = json.loads(l)['args']\n    print(json.dumps({'ok': [6 if a[0] == 'quote_verbatim' else 0, 'said']}), flush=True)\n");
+    assert_eq!(
+        bundle(
+            &root,
+            &[
+                "0094",
+                "--for",
+                "quote-check",
+                "--not-owed-ok",
+                "an audit asked",
+                "--out",
+                &format!("{o}2")
+            ]
+        )
+        .code,
+        6
+    );
 }

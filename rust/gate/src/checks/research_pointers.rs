@@ -25,7 +25,7 @@ const REFUSAL_DATA: [&str; 8] = [
     "rust/gate/src/checks/research_pointers/tests.rs",
     "rust/gate/src/checks/research_pointers.rs",
 ];
-const FIXTURES: [&str; 10] = [
+const FIXTURES: [&str; 11] = [
     "rust/gate/src/plan/",
     "tests/",
     "rust/gate/src/record/", // the record tools' tests and fragment-move's self-test name records of a scratch repository
@@ -33,6 +33,7 @@ const FIXTURES: [&str; 10] = [
     "rust/gate/src/checks/", // the checks' own tests and self-tests name fixture records
     "rust/gate/src/checks_door/", // the door's tests name fixture records (feature 449 T86)
     "rust/gate/src/arbiter/bundle/", // the arbiter bundle's tests name records of a scratch repository (feature 449 T88)
+    "rust/gate/src/measure/depiction_replay/", // the replay's tests name records of a scratch repository (feature 449 T88)
     "rust/guard/src/guards/check_bundle_hooks/", // a dispatch's fixture prompts name records of a scratch repository
     "rust/guard/src/guards/record_edit_hooks/",
     "rust/guard/src/shared/checks/", // the check state's tests name fixture records

@@ -1,5 +1,6 @@
 //! The EARLIER ROUNDS of a record or pop-up check, handed to its next round in the bundle (from `earlier_rounds.py`, feature 393, the GM 2026-10-18: "give each reviewer the earlier rounds' verdicts and reasons to prevent reviewer loops"). Reads the check state and the rulings and never writes them.
 
+use std::fmt::Write as _;
 use std::path::Path;
 use std::sync::LazyLock;
 
@@ -131,7 +132,11 @@ fn ruling_lines(
                 .get("what")
                 .filter(|w| !l7r_guard::shared::checks::falsy(Some(w)))
             {
-                line += &format!(" | what the next round looks at: {}", core::py_text(what));
+                let _ = write!(
+                    line,
+                    " | what the next round looks at: {}",
+                    core::py_text(what)
+                );
             }
             line
         })

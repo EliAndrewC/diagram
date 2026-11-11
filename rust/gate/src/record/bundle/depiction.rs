@@ -1,6 +1,7 @@
 //! What `modal-depiction` reads beyond the modal and the rules (from `modal_bundle.py`, plan D13): each drawing page its `Drawing:` lists and each candidate its kind has, the knobs its conditions name (feature 374), the engine's claims citing those pages, and the glyph's crop - a by-command Playwright start under the T065 clause, only for this check (`ask:449-T88-bundles`).
 
 use std::collections::HashSet;
+use std::fmt::Write as _;
 use std::io::Read as _;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
@@ -40,12 +41,14 @@ static KEEP: LazyLock<Regex> = LazyLock::new(|| {
 });
 static VIEWBOX: LazyLock<Regex> = LazyLock::new(|| pyre(r#"viewBox="([^"]*)""#));
 
+const LISTED: &str = "LISTED - a page the modal's Drawing: names - how our maps draw it";
+
 /// The crop, run as the Python ran it: `python3 -c` of this script with the page, the key and the output file.
 #[cfg(not(test))]
 pub(crate) const CROP: &str = include_str!("crop.py.in");
 /// The tests' crop: no browser - a page named `nocrop` fails, one named `slow` outlasts the timeout, any other gets an image and two kinds.
 #[cfg(test)]
-pub(crate) const CROP: &str = "import sys, time, pathlib\np, k, o = sys.argv[1:4]\nif 'slow' in p: time.sleep(5)\nif 'nocrop' in p: sys.exit(1)\npathlib.Path(o).write_bytes(b'png')\npathlib.Path(o + '.kinds').write_text('well\\nother\\n')\n";
+pub(crate) const CROP: &str = "import sys, time, pathlib\np, k, o = sys.argv[1:4]\nif 'slow' in p: time.sleep(5)\nif 'nocrop' in p: sys.exit(1)\npathlib.Path(o).write_bytes(b'png')\nif 'nokinds' not in p: pathlib.Path(o + '.kinds').write_text('well\\nother\\n')\n";
 
 /// The claims-index rows whose cited pages include any of `files`, each with its verdict (plan D13).
 fn claims_citing(root: &Path, files: &[String]) -> Result<Vec<String>, Fail> {
@@ -98,7 +101,7 @@ fn pool_page_with(root: &Path, key: &str, sheet: bool) -> Option<PathBuf> {
         p.file_name()
             .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
     };
-    trees.sort_by(|a, b| (name(a) != HAMLETS, name(a)).cmp(&(name(b) != HAMLETS, name(b))));
+    trees.sort_by_key(|p| (name(p) != HAMLETS, name(p)));
     for d in trees.iter().filter(|t| !(sheet && name(t) == HAMLETS)) {
         let mut pages: Vec<PathBuf> = Vec::new();
         for sub in std::fs::read_dir(d)
@@ -245,6 +248,10 @@ fn glyph_crop(page: &Path, key: &str, out: &Path) -> Result<bool, Fail> {
     }
 }
 
+#[expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "the record's page names, as `str.endswith` read them"
+)]
 /// The drawing pages the modal's KIND may rest on beyond its own `Drawing:` list (the plan review of D13, rounds 2 and 3).
 fn drawing_candidates(root: &Path, m: &Modal) -> Result<Vec<String>, Fail> {
     let mut out: Vec<String> = Vec::new();
@@ -317,8 +324,8 @@ fn knobs_note(run: &mut Run, tree: &Path, doc: &str) -> Result<String, Fail> {
     if names.is_empty() {
         return Ok(String::new());
     }
-    let forms = run.door.ask("knobs", json!([]))?;
-    let table = run.door.ask("knob_table", json!([]))?;
+    let forms = run.door.ask("knobs", &json!([]))?;
+    let table = run.door.ask("knob_table", &json!([]))?;
     let engine = rust_files(&tree.join("rust").join("phases").join("src"));
     let mut parts = vec![
         "# The knobs this modal's conditions name - which maps draw what it conditions\n"
@@ -406,41 +413,13 @@ fn file_name(p: &Path) -> String {
         .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
 }
 
-/// What `modal-depiction` reads (plan D13), put beside the MANIFEST.
-pub(crate) fn parts(
-    run: &mut Run,
+/// The pool page that draws the kind, its crop and the kinds a click in it opens, or why there is no crop (plan D13).
+fn glyph_part(
     root: &Path,
     m: &Modal,
     put: &mut Put,
     grep_targets: &mut Vec<String>,
 ) -> Result<(), Fail> {
-    for f in m.drawing_files() {
-        let p = root.join(&f);
-        if p.is_file() {
-            put.put(
-                &format!("drawing/{}", file_name(&p)),
-                &read_text(&p)?,
-                &f,
-                "LISTED - a page the modal's Drawing: names - how our maps draw it",
-            )?;
-        }
-    }
-    let cands = drawing_candidates(root, m)?;
-    for f in &cands {
-        let p = root.join(f);
-        put.put(&format!("drawing/{}", file_name(&p)), &read_text(&p)?, f, "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?")?;
-    }
-    let note = knobs_note(run, &tree_of(root), &m.doc)?;
-    if !note.is_empty() {
-        put.put("knobs.md", &note, "l7r/diagram/knobs.json", "which maps draw what the modal's conditions name: each knob's forms, typing rule and engine lines - read it before ruling on a conditional link")?;
-    }
-    let rows = claims_citing(root, &[m.drawing_files(), cands].concat())?;
-    let body = if rows.is_empty() {
-        "(none)".to_owned()
-    } else {
-        rows.join("\n")
-    };
-    put.put("claims.md", &format!("# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n{body}\n"), CLAIMS_INDEX, "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")?;
     let page = pool_page_with(root, &m.key, m.uid().starts_with("sheet/"));
     if let Some(p) = &page {
         let why = stale_page(p, root);
@@ -474,10 +453,15 @@ pub(crate) fn parts(
         } else {
             modals::modals_now(root, true)?
         };
-        let clicks: String = kinds
-            .iter()
-            .map(|k| format!("\n- `{k}` opens {}", click_target(&found, k, m)))
-            .collect();
+        let clicks = kinds.iter().fold(String::new(), |mut acc, k| {
+            let _ = write!(
+                acc,
+                "
+- `{k}` opens {}",
+                click_target(&found, k, m)
+            );
+            acc
+        });
         let listing = if clicks.is_empty() {
             String::new()
         } else {
@@ -498,6 +482,40 @@ pub(crate) fn parts(
         put.put("glyph.txt", &format!("no crop: {why} - judge from the drawing pages, the claims and the geometry below, and say so.\n{shape}"), "scripts/record/modal_bundle.py", "why there is no crop, and the drawn geometry")?;
     }
     Ok(())
+}
+
+/// What `modal-depiction` reads (plan D13), put beside the MANIFEST.
+pub(crate) fn parts(
+    run: &mut Run,
+    root: &Path,
+    m: &Modal,
+    put: &mut Put,
+    grep_targets: &mut Vec<String>,
+) -> Result<(), Fail> {
+    for f in m.drawing_files() {
+        let p = root.join(&f);
+        if p.is_file() {
+            let text = read_text(&p)?;
+            put.put(&format!("drawing/{}", file_name(&p)), &text, &f, LISTED)?;
+        }
+    }
+    let cands = drawing_candidates(root, m)?;
+    for f in &cands {
+        let p = root.join(f);
+        put.put(&format!("drawing/{}", file_name(&p)), &read_text(&p)?, f, "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?")?;
+    }
+    let note = knobs_note(run, &tree_of(root), &m.doc)?;
+    if !note.is_empty() {
+        put.put("knobs.md", &note, "l7r/diagram/knobs.json", "which maps draw what the modal's conditions name: each knob's forms, typing rule and engine lines - read it before ruling on a conditional link")?;
+    }
+    let rows = claims_citing(root, &[m.drawing_files(), cands].concat())?;
+    let body = if rows.is_empty() {
+        "(none)".to_owned()
+    } else {
+        rows.join("\n")
+    };
+    put.put("claims.md", &format!("# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n{body}\n"), CLAIMS_INDEX, "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")?;
+    glyph_part(root, m, put, grep_targets)
 }
 
 #[cfg(test)]

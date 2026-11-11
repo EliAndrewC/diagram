@@ -56,14 +56,11 @@ fn a_question_bundle_is_owed_refused_or_escaped() {
     );
     edit_everything(&root);
     let (rows, checks, why) = owed_for_question(&root, "0094", "all", "", None).unwrap();
-    assert!(
-        why.is_empty() && !rows.is_empty() && checks.contains("quote-check"),
-        "{checks} {why}"
-    );
+    assert!(why.is_empty() && !rows.is_empty() && checks.contains("quote-check"));
     let refused = owed_for_question(&root, "0095", "quote-check", "", None)
         .unwrap()
         .2;
-    assert!(refused.contains("What IS owed:\n    "), "{refused}");
+    assert!(refused.contains("What IS owed:\n    "));
     let page = owed_for_question(&root, "0094-trade.drawing.html", "all", "", None)
         .unwrap()
         .0;
@@ -139,18 +136,14 @@ fn the_intro_bundle_text() {
     assert!(text.starts_with("=== QUESTION 0094 - origin `research/questions/0094-trade.html`"));
     assert!(
         text.contains("--- how our maps draw it")
-            && text.contains("--- the map elements written from it"),
-        "{text}"
+            && text.contains("--- the map elements written from it")
     );
     let other = intro_bundle_text(&root, "0095", &mut docs).unwrap();
-    assert!(
-        other.contains("- Barn") && !other.contains("how our maps draw it"),
-        "{other}"
-    );
+    assert!(other.contains("- Barn") && !other.contains("how our maps draw it"));
     assert_eq!(intro_bundle_text(&root, "0777", &mut docs).unwrap(), "");
     put(&root, "l7r/diagram/interactive/classes/more.py", "class Named(Kind):\n    \"\"\"Name: The named one\n    About: x\n    Entry: research/questions/0095-other.html\n    \"\"\"\n    key = \"named\"\n");
     let named = intro_bundle_text(&root, "0095", &mut None).unwrap();
-    assert!(named.contains("- The named one"), "{named}");
+    assert!(named.contains("- The named one"));
     std::fs::write(root.join("research/questions/0095-other.html"), [0xff]).unwrap();
     assert!(intro_bundle_text(&root, "0095", &mut None).is_err());
     put(&root, "l7r/diagram/interactive/classes/bad.py", "class (\n");
@@ -163,4 +156,17 @@ fn the_intro_bundle_text() {
     .unwrap();
     assert!(intro_bundle_text(&root, "0094", &mut Some(Vec::new())).is_err());
     assert!(reason_ok("two words"));
+}
+
+#[test]
+fn a_question_no_modal_draws_from() {
+    let root = scratch("bundle-owed-unnamed");
+    put(
+        &root,
+        "research/questions/0096-alone.html",
+        "<h2 id=\"alone\">Alone</h2>\n<p>x</p>\n",
+    );
+    assert!(intro_bundle_text(&root, "0096", &mut None)
+        .unwrap()
+        .contains("- (none: no modal's Entry names this question)"));
 }

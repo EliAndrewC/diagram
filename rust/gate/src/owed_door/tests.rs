@@ -326,3 +326,29 @@ fn the_loop_answers_in_order() {
     assert_eq!(serve(&mut input, &mut out).code, 0);
     assert_eq!(String::from_utf8(out).unwrap(), "{\"ok\": \"0001\"}\n");
 }
+
+#[test]
+fn the_bundles_two_names_a_phase_4_caller_reads() {
+    let root = crate::record::testkit::record("owed-door-bundles");
+    let r = root.to_string_lossy().into_owned();
+    assert_eq!(
+        super::answer(
+            "cb.url_of",
+            &[serde_json::json!("<p>(https://e.org/a).</p>")]
+        )
+        .unwrap(),
+        serde_json::json!("https://e.org/a")
+    );
+    assert_eq!(
+        super::answer(
+            "mb.research_held",
+            &[
+                serde_json::json!(r),
+                serde_json::json!("hamlet/well"),
+                serde_json::json!("x")
+            ]
+        )
+        .unwrap(),
+        serde_json::json!([])
+    );
+}

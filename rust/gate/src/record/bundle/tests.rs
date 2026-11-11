@@ -168,3 +168,36 @@ fn a_run_replies_as_the_python_exited() {
     let r = Run::new(Path::new("/nonexistent")).reply(Err("boom\n".to_owned()));
     assert_eq!(r.stderr, "boom\n");
 }
+
+#[test]
+fn every_unprintable_range_is_escaped() {
+    for c in [
+        '\u{fff9}',
+        '\u{110bd}',
+        '\u{110cd}',
+        '\u{13430}',
+        '\u{1bca0}',
+        '\u{1d173}',
+        '\u{e0001}',
+        '\u{e0020}',
+        '\u{f0000}',
+        '\u{600}',
+        '\u{61c}',
+        '\u{6dd}',
+        '\u{70f}',
+        '\u{890}',
+        '\u{8e2}',
+        '\u{1680}',
+        '\u{180e}',
+        '\u{2028}',
+        '\u{205f}',
+        '\u{2066}',
+        '\u{e000}',
+        '\u{feff}',
+        '\u{ad}',
+    ] {
+        assert!(!printable(c));
+    }
+    assert!(printable(' ') && printable('\u{57a3}'));
+    assert!(hit(&pyre("a\\"), "a\\"));
+}

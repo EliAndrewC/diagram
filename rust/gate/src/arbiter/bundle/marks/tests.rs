@@ -51,9 +51,7 @@ fn rounds_are_marked_new_repeated_and_reversing() {
             "REVERSING",
             "REVERSING",
             "REVERSING"
-        ],
-        "{:?}",
-        marks[1]
+        ]
     );
     assert!(
         marks[1][3].1.contains("undoes an earlier round's fix")

@@ -11,11 +11,7 @@ fn the_rounds_rulings_and_replies_of_a_unit() {
     let root = scratch("bundle-earlier");
     let out = root.join("out");
     let manifest = "owed-checks: quote-check, record-format\nunit: quote-check:0094#k fp\nunit: record-format:0094 fp\n";
-    assert_eq!(
-        section(&root, &out, manifest).unwrap(),
-        "",
-        "no check state"
-    );
+    assert_eq!(section(&root, &out, manifest).unwrap(), "");
     put(&root, "specs/500-f/spec.md", "spec");
     commit(&root, "the feature");
     put(
@@ -48,17 +44,13 @@ fn the_rounds_rulings_and_replies_of_a_unit() {
         }}),
     );
     let text = section(&root, &out, manifest).unwrap();
-    assert!(
-        text.starts_with("\n## Earlier rounds (feature 393)\n\n"),
-        "{text}"
-    );
+    assert!(text.starts_with("\n## Earlier rounds (feature 393)\n\n"));
     assert!(
         text.contains("**Round 1** - verdict: none read")
             && text.contains("- NEW: the first finding")
-            && text.contains("- NOT APPLIED: research/questions/0094-trade.html:"),
-        "{text}"
+            && text.contains("- NOT APPLIED: research/questions/0094-trade.html:")
     );
-    assert!(text.contains("**Round 3** - no reply kept") && text.contains("- the round arbiter on `round:quote-check|q:0094@2`: **accept** - (no reason recorded)\n- the round arbiter on `round:quote-check|q:0094@3`: **continue** - more | what the next round looks at: the notes"), "{text}");
+    assert!(text.contains("**Round 3** - no reply kept") && text.contains("- the round arbiter on `round:quote-check|q:0094@2`: **accept** - (no reason recorded)\n- the round arbiter on `round:quote-check|q:0094@3`: **continue** - more | what the next round looks at: the notes"));
     assert!(out.join("earlier/quote-check-q-0094-round-1.md").is_file());
     assert_eq!(
         section(&root, &out, "owed-checks: bogus\nunit: x:0094 f\n").unwrap(),
@@ -77,4 +69,27 @@ fn the_rounds_rulings_and_replies_of_a_unit() {
     assert!(section(&root, &root.join("blocked"), manifest).is_err());
     put(&root, ".specify/feature.json", "{}");
     assert!(feature_start(&root) == 0.0);
+}
+
+#[test]
+fn a_ruling_with_no_word_and_a_unit_with_no_round() {
+    let root = scratch("bundle-earlier-bare");
+    put(
+        &root,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/500-f\"}",
+    );
+    put(
+        &root,
+        "specs/500-f/arbiter.jsonl",
+        &format!("{}\n", json!({"trigger": "round:quote-check|q:0094@3"})),
+    );
+    state(&root, &json!({"dispatches": {}}));
+    let text = section(
+        &root,
+        &root.join("out"),
+        "owed-checks: quote-check\nunit: quote-check:0094#k fp\n",
+    )
+    .unwrap();
+    assert!(text.contains("**?** - (no reason recorded)"));
 }

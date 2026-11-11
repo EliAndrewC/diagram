@@ -17,6 +17,10 @@ fn bundle(root: &Path, extra: &[&str]) -> Reply {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one bundle's every part, in the order it is built"
+)]
 fn a_source_bundle_end_to_end() {
     let root = scratch("bundle-key");
     put(
@@ -55,7 +59,7 @@ fn a_source_bundle_end_to_end() {
             &o,
         ],
     );
-    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert_eq!(r.code, 0);
     let quoted: serde_json::Value =
         serde_json::from_str(&std::fs::read_to_string(root.join("out/quotes.json")).unwrap())
             .unwrap();
@@ -92,20 +96,15 @@ fn a_source_bundle_end_to_end() {
             &format!("{}/r.md", root.display()),
         ],
     );
-    assert_eq!(whole.code, 0, "{}", whole.stderr);
-    assert!(
-        whole
-            .stdout
-            .starts_with("sources-consulted: earlier reads\n"),
-        "{}",
-        whole.stdout
-    );
+    assert_eq!(whole.code, 0);
+    assert!(whole
+        .stdout
+        .starts_with("sources-consulted: earlier reads\n"));
     let text = std::fs::read_to_string(root.join("out/w/MANIFEST.md")).unwrap();
     assert!(
         text.contains("## The claims to read")
             && text.contains("```diff\n--- at the last round\n+++ now\n")
-            && text.contains("- `images/r.md`"),
-        "{text}"
+            && text.contains("- `images/r.md`")
     );
     put(&root, "scripts/bundle_door.py", "import json, sys\nfor l in sys.stdin:\n    print(json.dumps({'ok': [2, 'pointer | file | state\\nno']}), flush=True)\n");
     let failed = bundle(
@@ -120,11 +119,7 @@ fn a_source_bundle_end_to_end() {
             &format!("{o}/f"),
         ],
     );
-    assert!(
-        failed.stderr.contains("pointer | file | state"),
-        "{}",
-        failed.stderr
-    );
+    assert!(failed.stderr.contains("pointer | file | state"));
     put(
         &root,
         "research/sources/010-works-cited/0003-key-n.html",
@@ -175,7 +170,7 @@ fn several_keys_and_the_intro_batch() {
             &o,
         ],
     );
-    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert_eq!(r.code, 0);
     assert!(root.join("out/pages/key-c.quotes.json").is_file());
     assert!(bundle(&root, &["--keys", " "])
         .stderr
@@ -193,7 +188,7 @@ fn several_keys_and_the_intro_batch() {
             &format!("{o}/i"),
         ],
     );
-    assert_eq!(intro.code, 0, "{}", intro.stderr);
+    assert_eq!(intro.code, 0);
     assert!(root.join("out/i/q-0095.txt").is_file());
     assert_eq!(
         bundle(&root, &["0094", "--for", "intro-check", "--out", &o]).code,
@@ -222,7 +217,7 @@ fn several_keys_and_the_intro_batch() {
         &root,
         &["0094", "--for", "intro-check", "--out", &format!("{o}/one")],
     );
-    assert_eq!(one.code, 0, "{}", one.stderr);
+    assert_eq!(one.code, 0);
 }
 
 #[test]
@@ -248,10 +243,7 @@ fn the_borrowed_parts_and_their_failures() {
         "<p>the kept text and <b>said</b> here</p>",
     );
     let text = scoped_verbatim(&out, "head\n").unwrap();
-    assert!(
-        text.contains("  1 c - None\n  2 None - None\n  (scoped to the 2 footnote(s)"),
-        "{text}"
-    );
+    assert!(text.contains("  1 c - None\n  2 None - None\n  (scoped to the 2 footnote(s)"));
     std::fs::write(out.join("page.html"), [0xff]).unwrap();
     assert!(scoped_verbatim(&out, "").is_err());
     assert!(scoped_verbatim(&root.join("none"), "").is_err());
@@ -276,4 +268,85 @@ fn the_borrowed_parts_and_their_failures() {
     );
     std::fs::write(root.join("research/questions/0099-bad.notes.html"), [0xff]).unwrap();
     assert!(quoted_passages(&mut run, &root, "key-a").is_err());
+}
+
+#[test]
+fn what_changed_since_a_source_readers_last_round() {
+    let root = scratch("bundle-keys-since");
+    edit_everything(&root);
+    put(
+        &root,
+        "research/questions/0094-trade.drawing.notes.html",
+        "<li data-note=\"d\">\"drawn\" <a href=\"x\"><code>key-b</code></a></li>",
+    );
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs_f64();
+    state(
+        &root,
+        &json!({"dispatches": {"a": {"check": "source-reader", "subjects": ["q:0094"], "t": now, "state": "returned"}}}),
+    );
+    let unit = |slug: &str| crate::record::units::Unit {
+        slug: slug.to_owned(),
+        occasion: String::new(),
+        fingerprint: String::new(),
+        reading: String::new(),
+    };
+    let text = since_last_round(
+        &root,
+        &[
+            unit("source-reader:0094#n"),
+            unit("source-reader:0094.drawing#d"),
+            unit("source-reader:0095#x"),
+            unit("quote-check:0094#k"),
+        ],
+    )
+    .unwrap();
+    assert!(text.contains("### `research/questions/0094-trade.notes.html` | n"));
+    let claims = claims_read(
+        &root,
+        &[
+            unit("source-reader:0094#n"),
+            unit("source-reader:0094.drawing#d"),
+        ],
+    )
+    .unwrap();
+    assert!(claims.contains("0094-trade.drawing.notes.html"));
+    assert_eq!(
+        since_last_round(&root, &[unit("source-reader:0095#x")]).unwrap(),
+        ""
+    );
+    let r = root.to_string_lossy().into_owned();
+    let default = crate::record::bundle::check::cli(&crate::record::bundle::tests::args(&[
+        "--root",
+        &r,
+        "--keys",
+        "key-a",
+        "--not-owed-ok",
+        "a batch asked",
+    ]));
+    assert!(default.stdout.contains("keys-key-a-1"));
+    let intro = crate::record::bundle::check::cli(&crate::record::bundle::tests::args(&[
+        "--root",
+        &r,
+        "--for",
+        "intro-check",
+        "--qs",
+        "0094 0095",
+        "--not-owed-ok",
+        "a backfill asked",
+    ]));
+    assert!(intro.stdout.contains("intro-0094-2"));
+    let one = crate::record::bundle::check::cli(&crate::record::bundle::tests::args(&[
+        "--root",
+        &r,
+        "--for",
+        "intro-check",
+        "--qs",
+        "0095",
+        "--not-owed-ok",
+        "a backfill asked",
+    ]));
+    assert!(one.stdout.contains("intro-0095 "));
 }

@@ -357,3 +357,18 @@ fn a_bash_call_that_runs_no_make_target_names_none() {
     .get("make")
     .is_none());
 }
+
+#[test]
+fn a_features_log_is_named_for_it() {
+    let root = clone("log-path");
+    assert!(super::log_path(&root, "500-f").ends_with("500-f.jsonl"));
+    let named = |k: &str| (k == "L7R_EVENTS_DIR").then(|| "/elsewhere".to_owned());
+    assert_eq!(
+        super::log_path_in(&root, "", &named),
+        Path::new("/elsewhere/_unassigned.jsonl")
+    );
+    assert_eq!(
+        super::log_path_in(&root, "f", &none),
+        root.join(".git/l7r-events/f.jsonl")
+    );
+}

@@ -45,11 +45,7 @@ fn the_prepass() {
     let root = scratch("modal-prepass");
     let r = root.to_string_lossy().into_owned();
     let p = cli(&args(&["hamlet/well", "--prepass", "--root", &r]));
-    assert!(
-        p.stdout.starts_with("prepass - ") && p.stdout.contains("<- OUTSIDE THE BAND"),
-        "{}",
-        p.stdout
-    );
+    assert!(p.stdout.starts_with("prepass - ") && p.stdout.contains("<- OUTSIDE THE BAND"));
     assert_eq!(cli(&args(&["Nope", "--prepass", "--root", &r])).code, 2);
     assert_eq!(cli(&args(&[])).code, 2);
     assert_eq!(cli(&args(&["x", "--for", "bogus"])).code, 2);
@@ -61,9 +57,7 @@ fn the_prepass() {
             .contains("barred phrase in About (M11/M16): 'this project'")
             && p.stdout.contains("a guess past two sentences")
             && p.stdout
-                .contains("Entry names no file: research/questions/0777-none.html"),
-        "{}",
-        p.stdout
+                .contains("Entry names no file: research/questions/0777-none.html")
     );
     put(
         &root,
@@ -71,11 +65,7 @@ fn the_prepass() {
         &format!("Name: Well\nAbout: {}\n", "word ".repeat(130)),
     );
     let p = cli(&args(&["hamlet/well", "--prepass", "--root", &r]));
-    assert!(
-        p.stdout.contains("- Entry names no question file"),
-        "{}",
-        p.stdout
-    );
+    assert!(p.stdout.contains("- Entry names no question file"));
     put(&root, "l7r/diagram/interactive/classes/bad.py", "class (\n");
     assert_eq!(
         cli(&args(&["hamlet/well", "--prepass", "--root", &r])).code,
@@ -85,6 +75,10 @@ fn the_prepass() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one bundle's every part, in the order it is built"
+)]
 fn each_checks_bundle() {
     let root = scratch("modal-bundle");
     put(
@@ -113,12 +107,10 @@ fn each_checks_bundle() {
             &ask("modal-research", &format!("{o}/r"), "a backfill asked", "")
         )
         .unwrap(),
-        0,
-        "{}",
-        run.err
+        0
     );
     let cands = std::fs::read_to_string(root.join("out/r/candidates.md")).unwrap();
-    assert!(cands.contains("1. `research/questions/0096-wells.html` - Wells below  [tags water; term hits 3; score 14]"), "{cands}");
+    assert!(cands.contains("1. `research/questions/0096-wells.html` - Wells below  [tags water; term hits 3; score 14]"));
     assert!(
         root.join("out/r/cand/0096-wells.html").is_file()
             && root.join("out/r/record/0097-dry.html").is_file()
@@ -128,8 +120,7 @@ fn each_checks_bundle() {
     assert!(
         text.contains("Beside it, NOT inlined")
             && text.contains("owed-checks: modal-research\nunit: modal-accuracy:hamlet/well ")
-            && text.contains("page: research/questions/0094-trade.html "),
-        "{text}"
+            && text.contains("page: research/questions/0094-trade.html ")
     );
     let mut run = run_on(&root);
     assert_eq!(
@@ -140,9 +131,7 @@ fn each_checks_bundle() {
             &ask("modal-research", &format!("{o}/s"), "a backfill asked", "")
         )
         .unwrap(),
-        0,
-        "{}",
-        run.err
+        0
     );
     let reply = root.join("held.md");
     put(&root, "held.md", "EDIT l7r/diagram/interactive/assets/modals/hamlet/well.md\n<<<\nold\n===\nA well in the yard.\n>>>\nEDIT x\n<<<\nold\n===\n  \n>>>\n");
@@ -159,9 +148,7 @@ fn each_checks_bundle() {
             &ask("modal-form", &format!("{o}/f"), "", "")
         )
         .unwrap(),
-        0,
-        "{}",
-        run.err
+        0
     );
     assert_eq!(
         std::fs::read_to_string(root.join("out/f/research-held.md")).unwrap(),
@@ -194,15 +181,12 @@ fn each_checks_bundle() {
             &ask("modal-form", &format!("{o}/b"), "", "")
         )
         .unwrap(),
-        0,
-        "{}",
-        run.err
+        0
     );
     let top = std::fs::read_to_string(root.join("out/b/MANIFEST.md")).unwrap();
     assert!(
         top.starts_with("# 2 pop-ups for modal-form, one agent")
-            && top.contains("unit: modal-form:sheet/well "),
-        "{top}"
+            && top.contains("unit: modal-form:sheet/well ")
     );
     assert_eq!(
         bundles(
@@ -222,7 +206,7 @@ fn each_checks_bundle() {
         "--out",
         &format!("{o}/c"),
     ]));
-    assert_eq!(both.code, 0, "{}", both.stderr);
+    assert_eq!(both.code, 0);
     std::fs::write(root.join("research/questions/0097-dry.html"), [0xff]).unwrap();
     assert!(bundle(
         &mut run_on(&root),
@@ -252,9 +236,7 @@ fn the_order_and_the_triage_hold_a_bundle() {
     assert!(
         run.err
             .contains("modal-form:hamlet/well is owed and unanswered")
-            && run.err.contains("CHECK_ORDER_OK=\"<why>\""),
-        "{}",
-        run.err
+            && run.err.contains("CHECK_ORDER_OK=\"<why>\"")
     );
     assert_eq!(
         bundle(
@@ -275,9 +257,7 @@ fn the_order_and_the_triage_hold_a_bundle() {
             &ask("modal-research", &o, "", " an audit asked ")
         )
         .unwrap(),
-        0,
-        "{}",
-        run.err
+        0
     );
     assert!(run
         .out
@@ -296,13 +276,10 @@ fn the_order_and_the_triage_hold_a_bundle() {
         &ask("modal-depiction", &o, "x", "an audit asked"),
     )
     .unwrap();
-    assert_eq!(code, 3, "{} {}", run.out, run.err);
-    assert!(
-        run.err
-            .contains("A check the GM asked for, or a backfill: REASON=\"<why>\""),
-        "{}",
-        run.err
-    );
+    assert_eq!(code, 3);
+    assert!(run
+        .err
+        .contains("A check the GM asked for, or a backfill: REASON=\"<why>\""));
     let mut run = run_on(&fresh);
     assert_eq!(
         bundle(
@@ -312,11 +289,121 @@ fn the_order_and_the_triage_hold_a_bundle() {
             &ask("modal-depiction", &o, "a backfill asked", "an audit asked")
         )
         .unwrap(),
-        0,
-        "{}",
-        run.err
+        0
     );
     assert!(run
         .out
         .starts_with("modal-bundle: bundled without its triage, because: a backfill asked\n"));
+}
+
+#[test]
+fn the_rare_paths_of_a_modal_bundle() {
+    let root = scratch("modal-rare");
+    std::fs::remove_file(root.join("research/assets/glossary-variants.txt")).unwrap();
+    put(&root, WELL, "Name: Well\nAbout: A well.\nEntry: research/questions/0777-gone.html research/questions/0094-trade.html\nDrawing: research/questions/0778-gone.drawing.html\n");
+    put(
+        &root,
+        "research/questions/0096-a.html",
+        "<h2>A</h2>\n<p>a well and a well</p>\n",
+    );
+    put(
+        &root,
+        "research/questions/0097-b.html",
+        "<h2>B</h2>\n<p>one well</p>\n",
+    );
+    let o = root.join("out").to_string_lossy().into_owned();
+    let mut run = run_on(&root);
+    assert_eq!(
+        bundle(
+            &mut run,
+            &root,
+            "hamlet/well",
+            &ask("modal-research", &o, "a backfill asked", "an audit asked")
+        )
+        .unwrap(),
+        0
+    );
+    let modal = std::fs::read_to_string(root.join("out/modal.md")).unwrap();
+    assert!(modal.contains("- (MISSING FILE)  - `research/questions/0777-gone.html`"));
+    let cands = std::fs::read_to_string(root.join("out/candidates.md")).unwrap();
+    assert!(
+        cands.contains("1. `research/questions/0096-a.html` - A  [tags -; term hits 2; score 6]")
+    );
+    put(
+        &root,
+        "research/assets/glossary-variants.txt",
+        "pail\twell\nother\tthing\n",
+    );
+    let m = modals::find(&modals::modals_now(&root, true).unwrap(), "hamlet/well")
+        .cloned()
+        .unwrap();
+    assert_eq!(terms_of(&root, &m).unwrap(), vec!["pail", "well"]);
+    put(
+        &root,
+        WELL,
+        "Name: Well\nForm: particular\nAbout: A well.\n",
+    );
+    assert_eq!(
+        bundle(
+            &mut run_on(&root),
+            &root,
+            "hamlet/well",
+            &ask("modal-research", &o, "a backfill asked", "an audit asked")
+        )
+        .unwrap(),
+        0
+    );
+    assert!(std::fs::read_to_string(root.join("out/candidates.md"))
+        .unwrap()
+        .contains(" - 0, best first"));
+    let mut d = run_on(&root);
+    assert_eq!(
+        bundle(
+            &mut d,
+            &root,
+            "hamlet/well",
+            &ask("modal-form", "", "a backfill asked", "")
+        )
+        .unwrap(),
+        0
+    );
+    assert!(d.out.contains("modal-hamlet-well-modal-form"));
+    let mut b = run_on(&root);
+    assert_eq!(
+        bundles(
+            &mut b,
+            &root,
+            &["hamlet/well", "sheet/well"],
+            &ask("modal-form", "", "a backfill asked", "")
+        )
+        .unwrap(),
+        0
+    );
+    assert!(b.out.contains("modal-batch-modal-form"));
+    let plain = crate::checks::scratch("modal-held-plain");
+    assert!(research_held(&plain, "hamlet/well", "x").is_empty());
+    put(&root, "home/x/y/subagents/agent-a1.jsonl", "{\"message\": {\"content\": [{\"type\": \"text\", \"text\": \"EDIT x\\n<<<\\no\\n===\\nA well.\\n>>>\"}]}}\n");
+    state(
+        &root,
+        &json!({"dispatches": {"a": {"check": "modal-research", "subjects": ["modal:hamlet/well"], "t": 1, "aid": "a1"}}}),
+    );
+    assert_eq!(
+        research_held_in(&root, "hamlet/well", "A well.", &root.join("home")),
+        vec!["A well."]
+    );
+}
+
+#[test]
+fn an_answered_check_holds_nothing() {
+    let root = scratch("modal-answered");
+    put(&root, WELL, "Name: Well\nAbout: A well in the yard, changed.\nEntry: research/questions/0094-trade.html\n");
+    let m = modals::find(&modals::modals_now(&root, true).unwrap(), "hamlet/well")
+        .cloned()
+        .unwrap();
+    let rows = owed_units(&root, None, None, &["modal"], &m.uid()).unwrap();
+    assert!(!order_hold(&root, &m, "modal-research", &rows).is_empty());
+    let form = rows.iter().find(|u| u.check() == FORM_CHECK).unwrap();
+    crate::record::owed::write_answer(&store(&root), &form.slug, &form.fingerprint, "clean", None)
+        .unwrap();
+    assert!(order_hold(&root, &m, "modal-research", &rows).is_empty());
 }

@@ -3,6 +3,7 @@
 //! `l7r-gate record modal-bundle KIND [--for modal-form|modal-research|modal-depiction] [--out DIR] [--root DIR] [--prepass] [--reason WHY]`.
 
 use std::collections::HashSet;
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -14,8 +15,8 @@ use serde_json::Value;
 
 use super::earlier::{self, dispatches};
 use super::{
-    findall, head, py_path, py_repr, pyre, remove_tree, rstrip, shown, today, write, Run,
-    DEFAULT_ROOT,
+    default_root, findall, head, py_path, py_repr, pyre, remove_tree, rstrip, shown, today, write,
+    Run,
 };
 use crate::arbiter::bundle::marks::{transcript_of, transcripts};
 use crate::record::args::{parse_with, Parsed, Spec};
@@ -48,6 +49,7 @@ const BARRED: [&str; 10] = [
 ];
 const TOP: usize = 10;
 const ME: &str = "scripts/record/modal_bundle.py";
+const ENTRY_PAGE: &str = "a page the modal's Entry names - what its statements must rest on";
 
 static COMMENT: LazyLock<Regex> = LazyLock::new(|| pyre(r"(?s)<!--.*?-->"));
 static TAG: LazyLock<Regex> = LazyLock::new(|| pyre(r"<[^>]+>"));
@@ -120,6 +122,10 @@ fn subjects(text: &str) -> Vec<String> {
 }
 
 /// Every question and drawing page - not the notes, not the originals.
+#[expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "the record's page names, as `str.endswith` read them"
+)]
 fn question_pages(root: &Path) -> Vec<PathBuf> {
     let mut out: Vec<PathBuf> = std::fs::read_dir(root.join(QUESTIONS))
         .into_iter()
@@ -369,6 +375,11 @@ pub(crate) fn prepass(root: &Path, m: &Modal) -> String {
 
 /// The wording `modal-research` rounds fixed on the pop-up `uid` that still stands in `text` (343's border-court ruling): `apply_edits.py` refuses a modal-form EDIT that drops one.
 pub(crate) fn research_held(root: &Path, uid: &str, text: &str) -> Vec<String> {
+    research_held_in(root, uid, text, &transcripts())
+}
+
+/// [`research_held`], the transcripts under `base`.
+fn research_held_in(root: &Path, uid: &str, text: &str, base: &Path) -> Vec<String> {
     let state =
         load(&state_path(&root.to_string_lossy()).unwrap_or_else(|| PathBuf::from("/nonexistent")));
     let subject = format!("modal:{uid}");
@@ -395,7 +406,7 @@ pub(crate) fn research_held(root: &Path, uid: &str, text: &str) -> Vec<String> {
             .filter(|a| !l7r_guard::shared::checks::falsy(v.get("aid")) && !a.is_empty());
         if text_of.is_empty() {
             if let Some(aid) = aid {
-                text_of = transcript_of(&transcripts(), &aid)
+                text_of = transcript_of(base, &aid)
                     .map_or_else(String::new, |t| reply::reply_of(&t.to_string_lossy(), ""));
             }
         }
@@ -454,12 +465,12 @@ fn owed_lines(root: &Path, m: &Modal, for_: &str, owed: &[Unit]) -> Result<Strin
     };
     let mut text = format!("## Owed (feature 311)\n\nowed-checks: {for_}\n");
     for (s, fp) in &units {
-        text += &format!("unit: {s} {fp}\n");
+        let _ = writeln!(text, "unit: {s} {fp}");
     }
     for f in &files {
         let b = triage::keep(root, f);
         if !b.is_empty() {
-            text += &format!("page: {f} {b}\n");
+            let _ = writeln!(text, "page: {f} {b}");
         }
     }
     for (s, _) in &units {
@@ -469,7 +480,7 @@ fn owed_lines(root: &Path, m: &Modal, for_: &str, owed: &[Unit]) -> Result<Strin
             .find(|u| &u.slug == s)
             .filter(|u| !u.occasion.is_empty())
         {
-            text += &format!("owed: {s} - {}\n", u.occasion);
+            let _ = writeln!(text, "owed: {s} - {}", u.occasion);
         }
     }
     Ok(text)
@@ -510,12 +521,8 @@ fn research_parts(
                 p.file_name()
                     .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
             );
-            put.put(
-                &name,
-                &read_text(&p)?,
-                &f,
-                "a page the modal's Entry names - what its statements must rest on",
-            )?;
+            let text = read_text(&p)?;
+            put.put(&name, &text, &f, ENTRY_PAGE)?;
         }
     }
     let cands = if m.form() == "standard" {
@@ -611,12 +618,43 @@ fn held_back(
     Ok(Ok((!held.is_empty(), first)))
 }
 
-/// What a bundle is asked for: the check, the OUT given, the REASON and the CHECK_ORDER_OK escapes.
+/// What a bundle is asked for: the check, the OUT given, the REASON and the `CHECK_ORDER_OK` escapes.
 pub(crate) struct Ask<'a> {
     pub(crate) for_: &'a str,
     pub(crate) out: &'a str,
     pub(crate) reason: &'a str,
     pub(crate) order_ok: &'a str,
+}
+
+/// The MANIFEST's head, its table of copies and every copy inlined.
+fn manifest_lines(m: &Modal, for_: &str, put: &Put, beside: bool) -> Result<Vec<String>, Fail> {
+    let mut manifest = vec![
+        format!("# Check bundle - modal {}, for {for_}", m.cls),
+        String::new(),
+        format!("Written {} by `make modal-bundle`. Every file here is a COPY. Read these and nothing under the repository (feature 250). A finding names the ORIGIN column - the file the session will edit.", today()),
+        String::new(),
+        format!(
+            "**Everything you need is in THIS file**, each copy under its origin below; read it once.{}",
+            if beside { " Beside it, NOT inlined: `cand/` (the top ten candidates, each a file to Read when its line in `candidates.md` looks like an answer) and `record/` (every question page - a GREP target; never read it whole)." } else { "" }
+        ),
+        String::new(),
+        "| file | origin | what it is for |".to_owned(),
+        "|---|---|---|".to_owned(),
+    ];
+    manifest.extend(
+        put.rows
+            .iter()
+            .map(|(f, o, w)| format!("| `{f}` | `{o}` | {w} |")),
+    );
+    manifest.push(String::new());
+    for (name, origin, _) in &put.rows {
+        manifest.push(format!(
+            "## `{name}` - origin `{origin}`\n\n```\n{}\n```\n",
+            rstrip(&read_text(&put.out.join(name))?)
+        ));
+    }
+    manifest.push("Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).\n".to_owned());
+    Ok(manifest)
 }
 
 /// One pop-up's bundle (`bundle`).
@@ -637,7 +675,7 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> R
         Err(code) => return Ok(code),
     };
     let out = if out_arg.is_empty() {
-        Path::new(DEFAULT_ROOT).join(format!("modal-{}-{for_}", m.uid().replace('/', "-")))
+        default_root().join(format!("modal-{}-{for_}", m.uid().replace('/', "-")))
     } else {
         py_path(out_arg)
     };
@@ -656,17 +694,24 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> R
         out: out.clone(),
         rows: Vec::new(),
     };
+    let rendered = render(root, &m)?;
     put.put(
         "modal.md",
-        &render(root, &m)?,
+        &rendered,
         &m.origin,
         "the modal as its reader meets it - the thing you judge",
     )?;
     put.put("text.md", &format!("{}\n", rstrip(&m.doc)), &m.origin, "the modal's file line for line - an EDIT block's old text is one of these lines (or part of one), exactly, and its target is this origin")?;
     let g = guide(m.form());
+    let form = if g == PARTICULAR {
+        "particular"
+    } else {
+        "standard"
+    };
+    let rules = format!("This modal is of the {form} form: rule on it by the guidelines from `{g}` at the end of your agent file (`make agent-sync` writes them from that source).\n");
     put.put(
         "guidelines.txt",
-        &format!("This modal is of the {} form: rule on it by the guidelines from `{g}` at the end of your agent file (`make agent-sync` writes them from that source).\n", if g == PARTICULAR { "particular" } else { "standard" }),
+        &rules,
         g,
         "which guidelines govern this modal - the rules are in your contract; name a rule (M#/P#) in every finding",
     )?;
@@ -690,32 +735,7 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> R
     if for_ == RESEARCH_AGENT {
         research_parts(root, &m, &mut put, &mut grep_targets)?;
     }
-    let mut manifest = vec![
-        format!("# Check bundle - modal {}, for {for_}", m.cls),
-        String::new(),
-        format!("Written {} by `make modal-bundle`. Every file here is a COPY. Read these and nothing under the repository (feature 250). A finding names the ORIGIN column - the file the session will edit.", today()),
-        String::new(),
-        format!(
-            "**Everything you need is in THIS file**, each copy under its origin below; read it once.{}",
-            if grep_targets.is_empty() { "" } else { " Beside it, NOT inlined: `cand/` (the top ten candidates, each a file to Read when its line in `candidates.md` looks like an answer) and `record/` (every question page - a GREP target; never read it whole)." }
-        ),
-        String::new(),
-        "| file | origin | what it is for |".to_owned(),
-        "|---|---|---|".to_owned(),
-    ];
-    manifest.extend(
-        put.rows
-            .iter()
-            .map(|(f, o, w)| format!("| `{f}` | `{o}` | {w} |")),
-    );
-    manifest.push(String::new());
-    for (name, origin, _) in &put.rows {
-        manifest.push(format!(
-            "## `{name}` - origin `{origin}`\n\n```\n{}\n```\n",
-            rstrip(&read_text(&out.join(name))?)
-        ));
-    }
-    manifest.push("Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).\n".to_owned());
+    let manifest = manifest_lines(&m, for_, &put, !grep_targets.is_empty())?;
     // the escape line records the reason CHECK_ORDER_OK gave, only where the order held the bundle: the Python rebound both names
     // (`held` to the research-held wording, `first` to the last candidate's first words), a defect fixed here (449 T88)
     let escape = if held {
@@ -739,7 +759,7 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> R
 fn bundles(run: &mut Run, root: &Path, kinds: &[&str], ask: &Ask<'_>) -> Result<i32, Fail> {
     let (for_, out_arg) = (ask.for_, ask.out);
     let out = if out_arg.is_empty() {
-        Path::new(DEFAULT_ROOT).join(format!("modal-batch-{for_}"))
+        default_root().join(format!("modal-batch-{for_}"))
     } else {
         py_path(out_arg)
     };

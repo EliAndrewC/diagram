@@ -14,19 +14,21 @@ use serde_json::{Map, Value};
 use crate::record::args::{parse_with, Spec};
 use crate::record::bundle::earlier::dispatches;
 use crate::record::bundle::{
-    dashed, hit, py_path, py_str, pyre, relative, remove_tree, resolve, shown, write, Run,
-    DEFAULT_ROOT,
+    dashed, default_root, hit, py_path, py_str, pyre, relative, remove_tree, resolve, shown, write,
+    Run,
 };
 use crate::record::repo::{fail, read_text, tree_of, Fail};
 use crate::Reply;
 
 pub(crate) mod marks;
+mod reviews;
 mod sections;
 
 use marks::{last_edits, mark_rounds, reply_of, subject_files};
+use reviews::{feature_section, plan_rounds, review_verdicts, spec_rounds};
 use sections::{
-    capped_round_cause, claims_section, evidence_section, feature_section, field, flow_sections, g,
-    plan_rounds, red_gate_runs, review_verdicts, round_counter, spec_rounds,
+    capped_round_cause, claims_section, evidence_section, field, flow_sections, g, red_gate_runs,
+    round_counter,
 };
 
 static PLAN_REVIEW: LazyLock<Regex> =
@@ -84,14 +86,82 @@ fn target(root: &Path, trigger: &str, owed: &Value) -> (String, String, Vec<Stri
     (check, subject, files, unit)
 }
 
-/// The Rounds section (`rounds_section`): (lines, rounds, rounds with no reply, the last reply).
+/// What the Rounds section found: its lines, the rounds, the rounds with no reply, the last reply.
+struct Rounds {
+    lines: Vec<String>,
+    kept: Vec<Value>,
+    missing: Vec<String>,
+    last: String,
+}
+
+/// One round's lines: its verdict, what owed it, its reply beside the MANIFEST, its findings marked.
+fn round_lines(
+    out: &Path,
+    i: usize,
+    v: &Value,
+    r: &str,
+    marked: &[(String, String)],
+    missing: &mut Vec<String>,
+) -> Result<Vec<String>, Fail> {
+    let c = field(v, "check", "None");
+    let verdict = l7r_guard::guards::event_log_hooks::verdict_of(r);
+    let shown_verdict = if verdict.is_empty() {
+        "no reply kept"
+    } else {
+        &verdict
+    };
+    let mut parts = vec![format!(
+        "### Round {i}: {c} ({}; verdict: {shown_verdict})\n",
+        field(v, "state", "None")
+    )];
+    let owed: Vec<String> = v
+        .get("owed")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .map(|o| format!("Owed by: {}", py_str(o)))
+        .collect();
+    if owed.is_empty() {
+        parts.push(
+            "Owed by: (not recorded - a dispatch before feature 374 kept no occasion)".to_owned(),
+        );
+    } else {
+        parts.extend(owed);
+    }
+    if r.is_empty() {
+        let bundle = v
+            .get("manifest")
+            .filter(|m| sections::truthy(Some(m)))
+            .map_or_else(|| "?".to_owned(), py_str);
+        missing.push(format!("round {i} ({c}, bundle {bundle})"));
+    } else {
+        write(&out.join(format!("round-{i}-{c}.md")), r)?;
+        parts.push(format!(
+            "The whole reply: `round-{i}-{c}.md` beside this file."
+        ));
+    }
+    if marked.is_empty() {
+        let none = if r.is_empty() {
+            "- (no reply kept for this round)"
+        } else {
+            "- (no findings it numbers or bullets - read the whole reply)"
+        };
+        parts.push(none.to_owned());
+    } else {
+        parts.extend(marked.iter().map(|(m, f)| format!("- {m}: {f}")));
+    }
+    parts.push(String::new());
+    Ok(parts)
+}
+
+/// The Rounds section (`rounds_section`): each dispatch of the check (or of every check, for a reversal) on the subject.
 fn rounds_section(
     root: &Path,
     out: &Path,
     check: &str,
     subject: &str,
     trigger: &str,
-) -> Result<(Vec<String>, Vec<Value>, Vec<String>, String), Fail> {
+) -> Result<Rounds, Fail> {
     let state =
         load(&state_path(&root.to_string_lossy()).unwrap_or_else(|| PathBuf::from("/nonexistent")));
     let on = |v: &&Value| {
@@ -121,7 +191,7 @@ fn rounds_section(
     } else {
         ""
     };
-    let mut parts = vec![format!(
+    let mut lines = vec![format!(
         "## Rounds - {} on {subject}\n",
         if check.is_empty() {
             "every check"
@@ -130,7 +200,7 @@ fn rounds_section(
         }
     )];
     if !n.is_empty() {
-        parts.push(format!("The owed round is the counter's round {n}: it counts the dispatches let through on this unit in this feature, a first reading of new notes not counted, so the list below - every dispatch kept - may run longer.\n"));
+        lines.push(format!("The owed round is the counter's round {n}: it counts the dispatches let through on this unit in this feature, a first reading of new notes not counted, so the list below - every dispatch kept - may run longer.\n"));
     }
     let mut missing = Vec::new();
     for (i, (v, marked)) in rounds
@@ -138,58 +208,14 @@ fn rounds_section(
         .zip(mark_rounds(&replies, &others))
         .enumerate()
     {
-        let (i, r) = (i + 1, &replies[i]);
-        let c = field(v, "check", "None");
-        let verdict = l7r_guard::guards::event_log_hooks::verdict_of(r);
-        parts.push(format!(
-            "### Round {i}: {c} ({}; verdict: {})\n",
-            field(v, "state", "None"),
-            if verdict.is_empty() {
-                "no reply kept"
-            } else {
-                &verdict
-            }
-        ));
-        let owed: Vec<String> = v
-            .get("owed")
-            .and_then(Value::as_array)
-            .into_iter()
-            .flatten()
-            .map(|o| format!("Owed by: {}", py_str(o)))
-            .collect();
-        if owed.is_empty() {
-            parts.push(
-                "Owed by: (not recorded - a dispatch before feature 374 kept no occasion)"
-                    .to_owned(),
-            );
-        } else {
-            parts.extend(owed);
-        }
-        if r.is_empty() {
-            let bundle = v
-                .get("manifest")
-                .filter(|m| sections::truthy(Some(m)))
-                .map_or_else(|| "?".to_owned(), py_str);
-            missing.push(format!("round {i} ({c}, bundle {bundle})"));
-        } else {
-            write(&out.join(format!("round-{i}-{c}.md")), r)?;
-            parts.push(format!(
-                "The whole reply: `round-{i}-{c}.md` beside this file."
-            ));
-        }
-        if marked.is_empty() {
-            parts.push(
-                if r.is_empty() {
-                    "- (no reply kept for this round)"
-                } else {
-                    "- (no findings it numbers or bullets - read the whole reply)"
-                }
-                .to_owned(),
-            );
-        } else {
-            parts.extend(marked.iter().map(|(m, f)| format!("- {m}: {f}")));
-        }
-        parts.push(String::new());
+        lines.extend(round_lines(
+            out,
+            i + 1,
+            v,
+            &replies[i],
+            &marked,
+            &mut missing,
+        )?);
     }
     let last = replies
         .iter()
@@ -197,7 +223,12 @@ fn rounds_section(
         .find(|r| !r.is_empty())
         .cloned()
         .unwrap_or_default();
-    Ok((parts, rounds, missing, last))
+    Ok(Rounds {
+        lines,
+        kept: rounds,
+        missing,
+        last,
+    })
 }
 
 /// The feature directory a round trigger names, if it exists (round:spec-fidelity|413-money-tooltip-on-the-record#1@6).
@@ -248,6 +279,155 @@ fn ask_parts(
     Ok(())
 }
 
+/// The spec review's and the ask's own sections, with the plan as a file where they read one.
+fn review_parts(
+    run: &mut Run,
+    root: &Path,
+    out: &Path,
+    (trigger, owed, d): (&str, &Value, Option<&Path>),
+    (check, subject): (&str, &str),
+    evidence: &[String],
+    (parts, files): (&mut Vec<String>, &mut Vec<String>),
+) -> Result<(), Fail> {
+    if check == "spec-fidelity" && trigger.contains("|plan:") && d.is_some() {
+        with_plan(root, d.unwrap_or(root), parts, files);
+    } else if check == "spec-fidelity" {
+        parts.push(format!("## Rounds - the spec review of {subject}\n\nIts rounds are `spec.md`'s Review history (beside this file): each round's verdict and what was applied. Rule as for any round cap: `accept` lets the spec stand as the last round left it (the review gate takes the ruling as its verdict).\n"));
+        parts.extend(spec_rounds(out, subject)?);
+    }
+    if trigger.starts_with("ask:") {
+        ask_parts(run, root, out, owed, evidence, parts)?;
+        if let Some(d) = d.filter(|_| hit(&PLAN_REVIEW, &field(owed, "detail", ""))) {
+            with_plan(root, d, parts, files);
+        }
+    }
+    Ok(())
+}
+
+/// What the loop's record lacks for a ruling, each a line the refusal prints.
+fn gaps_of(
+    root: &Path,
+    out: &Path,
+    (trigger, check, subject, unit): (&str, &str, &str, &str),
+    (rounds, missing, files, diff): (&[Value], &[String], &[String], &str),
+    parts: &mut Vec<String>,
+) -> Result<Vec<String>, Fail> {
+    let mut gaps: Vec<String> = missing
+        .iter()
+        .map(|m| format!("no reply kept for {m}"))
+        .collect();
+    if trigger.starts_with("reversal:")
+        && rounds.is_empty()
+        && l7r_guard::shared::py_text::strip(diff).is_empty()
+    {
+        let what = if !subject.is_empty() {
+            subject
+        } else if !unit.is_empty() {
+            unit
+        } else {
+            "?"
+        };
+        let history = if files.is_empty() {
+            "?".to_owned()
+        } else {
+            files.join(", ")
+        };
+        gaps.push(format!(
+            "a reversal with no check rounds on {what} and no history of {history}"
+        ));
+    }
+    if trigger.starts_with("round:") && check != "spec-fidelity" && rounds.is_empty() {
+        let earlier = review_verdicts(root, out, subject)?;
+        if earlier.is_empty() {
+            let (c, s) = (
+                if check.is_empty() { "?" } else { check },
+                if subject.is_empty() { "?" } else { subject },
+            );
+            gaps.push(format!("no dispatch of {c} on {s} in the check state - a round trigger with no rounds to rule on"));
+        } else {
+            parts.extend(earlier);
+        }
+    }
+    Ok(gaps)
+}
+
+/// The edits between rounds: the last 20 commits touching `files`, then the working tree, as `edits.diff`.
+fn edits_part(
+    root: &Path,
+    out: &Path,
+    files: &[String],
+    parts: &mut Vec<String>,
+) -> Result<String, Fail> {
+    if files.is_empty() {
+        return Ok(String::new());
+    }
+    let mut log = vec![
+        "log",
+        "-p",
+        "--format=--- %h %ad %s",
+        "--date=iso",
+        "-20",
+        "--",
+    ];
+    log.extend(files.iter().map(String::as_str));
+    let mut wt = vec!["diff", "--"];
+    wt.extend(files.iter().map(String::as_str));
+    let diff = g(root, &log) + &g(root, &wt);
+    write(
+        &out.join("edits.diff"),
+        if diff.is_empty() {
+            "(no edits)\n"
+        } else {
+            &diff
+        },
+    )?;
+    parts.push(format!("## Edits between rounds\n\n`edits.diff` beside this file: the last 20 commits touching {}, then the working tree.\n", files.join(", ")));
+    Ok(diff)
+}
+
+/// A subject's rounds, the last round's EDITs against the files now, and what owes a capped round; `files` is the subject's where none was given.
+fn subject_parts(
+    root: &Path,
+    out: &Path,
+    (trigger, check, subject): (&str, &str, &str),
+    files: &mut Vec<String>,
+    parts: &mut Vec<String>,
+) -> Result<Rounds, Fail> {
+    let mut found = rounds_section(root, out, check, subject, trigger)?;
+    parts.append(&mut found.lines);
+    if files.is_empty() {
+        *files = subject_files(root, subject);
+    }
+    if !found.last.is_empty() {
+        let edits = last_edits(root, &found.last, files);
+        let edits = if edits.is_empty() {
+            "- (it proposed none)".to_owned()
+        } else {
+            edits.join("\n")
+        };
+        parts.push(format!(
+            "## The last answered round's EDITs, against the files now\n\n{edits}\n"
+        ));
+    }
+    if trigger.starts_with("round:") && !found.kept.is_empty() {
+        let since = found
+            .kept
+            .last()
+            .and_then(|v| v.get("t"))
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0);
+        parts.extend(capped_round_cause(
+            root,
+            out,
+            (check, subject),
+            files,
+            since,
+            &found.kept,
+        )?);
+    }
+    Ok(found)
+}
+
 /// The MANIFEST for `trigger`; `Missing` where a round kept no reply or a reversal has no record, unless `allow_missing` gives the reason.
 pub(crate) fn bundle(
     run: &mut Run,
@@ -281,54 +461,29 @@ pub(crate) fn bundle(
         format!("Clone root (for `make arbiter-ruled`): {}\n", shown(root)),
     ];
     let (check, subject, mut files, unit) = target(root, trigger, &owed);
-    if check == "spec-fidelity" && trigger.contains("|plan:") && d.is_some() {
-        with_plan(root, d.as_deref().unwrap_or(root), &mut parts, &mut files);
-    } else if check == "spec-fidelity" {
-        parts.push(format!("## Rounds - the spec review of {subject}\n\nIts rounds are `spec.md`'s Review history (beside this file): each round's verdict and what was applied. Rule as for any round cap: `accept` lets the spec stand as the last round left it (the review gate takes the ruling as its verdict).\n"));
-        parts.extend(spec_rounds(out, &subject)?);
-    }
-    if trigger.starts_with("ask:") {
-        ask_parts(run, root, out, &owed, evidence, &mut parts)?;
-        if hit(&PLAN_REVIEW, &field(&owed, "detail", "")) {
-            if let Some(d) = &d {
-                with_plan(root, d, &mut parts, &mut files);
-            }
-        }
-    }
-    let (mut rounds, mut missing): (Vec<Value>, Vec<String>) = (Vec::new(), Vec::new());
+    review_parts(
+        run,
+        root,
+        out,
+        (trigger, &owed, d.as_deref()),
+        (&check, &subject),
+        evidence,
+        (&mut parts, &mut files),
+    )?;
+    let mut found = Rounds {
+        lines: Vec::new(),
+        kept: Vec::new(),
+        missing: Vec::new(),
+        last: String::new(),
+    };
     if !subject.is_empty() && check != "spec-fidelity" {
-        let (lines, r, m, last) = rounds_section(root, out, &check, &subject, trigger)?;
-        (rounds, missing) = (r, m);
-        parts.extend(lines);
-        if files.is_empty() {
-            files = subject_files(root, &subject);
-        }
-        if !last.is_empty() {
-            let edits = last_edits(root, &last, &files);
-            parts.push(format!(
-                "## The last answered round's EDITs, against the files now\n\n{}\n",
-                if edits.is_empty() {
-                    "- (it proposed none)".to_owned()
-                } else {
-                    edits.join("\n")
-                }
-            ));
-        }
-        if trigger.starts_with("round:") && !rounds.is_empty() {
-            let since = rounds
-                .last()
-                .and_then(|v| v.get("t"))
-                .and_then(Value::as_f64)
-                .unwrap_or(0.0);
-            parts.extend(capped_round_cause(
-                root,
-                out,
-                (&check, &subject),
-                &files,
-                since,
-                &rounds,
-            )?);
-        }
+        found = subject_parts(
+            root,
+            out,
+            (trigger, &check, &subject),
+            &mut files,
+            &mut parts,
+        )?;
     }
     if trigger.starts_with("round:") && !unit.is_empty() {
         parts.extend(round_counter(root, &unit));
@@ -336,75 +491,23 @@ pub(crate) fn bundle(
     if trigger.starts_with("red-gate@") {
         parts.extend(red_gate_runs(root));
     }
-    let mut diff = String::new();
-    if !files.is_empty() {
-        let mut log = vec![
-            "log",
-            "-p",
-            "--format=--- %h %ad %s",
-            "--date=iso",
-            "-20",
-            "--",
-        ];
-        log.extend(files.iter().map(String::as_str));
-        let mut wt = vec!["diff", "--"];
-        wt.extend(files.iter().map(String::as_str));
-        diff = g(root, &log) + &g(root, &wt);
-        write(
-            &out.join("edits.diff"),
-            if diff.is_empty() {
-                "(no edits)\n"
-            } else {
-                &diff
-            },
-        )?;
-        parts.push(format!("## Edits between rounds\n\n`edits.diff` beside this file: the last 20 commits touching {}, then the working tree.\n", files.join(", ")));
-    }
-    let mut gaps: Vec<String> = missing
-        .iter()
-        .map(|m| format!("no reply kept for {m}"))
-        .collect();
-    if trigger.starts_with("reversal:")
-        && rounds.is_empty()
-        && l7r_guard::shared::py_text::strip(&diff).is_empty()
-    {
-        let what = if subject.is_empty() {
-            if unit.is_empty() {
-                "?"
-            } else {
-                &unit
-            }
-        } else {
-            &subject
-        };
-        gaps.push(format!(
-            "a reversal with no check rounds on {what} and no history of {}",
-            if files.is_empty() {
-                "?".to_owned()
-            } else {
-                files.join(", ")
-            }
-        ));
-    }
-    if trigger.starts_with("round:") && check != "spec-fidelity" && rounds.is_empty() {
-        let earlier = review_verdicts(root, out, &subject)?;
-        if earlier.is_empty() {
-            gaps.push(format!("no dispatch of {} on {} in the check state - a round trigger with no rounds to rule on", if check.is_empty() { "?" } else { &check }, if subject.is_empty() { "?" } else { &subject }));
-        } else {
-            parts.extend(earlier);
-        }
-    }
+    let diff = edits_part(root, out, &files, &mut parts)?;
+    let gaps = gaps_of(
+        root,
+        out,
+        (trigger, &check, &subject, &unit),
+        (&found.kept, &found.missing, &files, &diff),
+        &mut parts,
+    )?;
     if !gaps.is_empty() && allow_missing.is_empty() {
         remove_tree(out)?;
         return Err(Stop::Missing(gaps));
     }
     if !gaps.is_empty() {
+        let listed: Vec<String> = gaps.iter().map(|g| format!("- {g}")).collect();
         parts.push(format!(
             "## Missing from the record (bundled anyway: {allow_missing})\n\n{}\n",
-            gaps.iter()
-                .map(|g| format!("- {g}"))
-                .collect::<Vec<_>>()
-                .join("\n")
+            listed.join("\n")
         ));
     }
     parts.extend(flow_sections(
@@ -542,6 +645,26 @@ fn reply_of_run(out: String, err: String, code: i32) -> Reply {
     }
 }
 
+/// The bundle's reply: its MANIFEST, or the refusal the Python printed.
+fn answer(mut run: Run, done: Result<PathBuf, Stop>) -> Reply {
+    match done {
+        Ok(manifest) => {
+            run.say(&shown(&manifest));
+            run.say("arbiter-bundle: dispatch `round-arbiter` on that MANIFEST; it records its own ruling (make arbiter-ruled)");
+            run.reply(Ok(0))
+        }
+        Err(Stop::Value(why)) => {
+            run.warn(&format!("arbiter-bundle: {why}"));
+            run.reply(Ok(2))
+        }
+        Err(Stop::Missing(gaps)) => {
+            run.warn(&format!("arbiter-bundle: the record lacks what the arbiter rules on - {} (neither the hook's kept reply nor the agent's transcript has it). Bundle anyway, so the arbiter weighs the gap: `make arbiter-bundle TRIGGER=... MISSING_OK=\"<why it is gone>\"`", gaps.join("; ")));
+            run.reply(Ok(2))
+        }
+        Err(Stop::Fail(why)) => run.reply(Err(why)),
+    }
+}
+
 /// `arbiter bundle ...`.
 pub(crate) fn cli(args: &[String]) -> Reply {
     let p = match parse_with(args, &specs(), 1) {
@@ -590,7 +713,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
             .map(str::to_owned)
             .collect();
         let out = if out_arg.is_empty() {
-            Path::new(DEFAULT_ROOT).join("arbiter-batch")
+            default_root().join("arbiter-batch")
         } else {
             py_path(out_arg)
         };
@@ -599,7 +722,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         let wrong = misnumbered(&root, std::slice::from_ref(&trigger));
         if wrong.is_empty() {
             let out = if out_arg.is_empty() {
-                Path::new(DEFAULT_ROOT).join(format!("arbiter-{slug}"))
+                default_root().join(format!("arbiter-{slug}"))
             } else {
                 py_path(out_arg)
             };
@@ -611,22 +734,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
             )))
         }
     };
-    match done {
-        Ok(manifest) => {
-            run.say(&shown(&manifest));
-            run.say("arbiter-bundle: dispatch `round-arbiter` on that MANIFEST; it records its own ruling (make arbiter-ruled)");
-            run.reply(Ok(0))
-        }
-        Err(Stop::Value(why)) => {
-            run.warn(&format!("arbiter-bundle: {why}"));
-            run.reply(Ok(2))
-        }
-        Err(Stop::Missing(gaps)) => {
-            run.warn(&format!("arbiter-bundle: the record lacks what the arbiter rules on - {} (neither the hook's kept reply nor the agent's transcript has it). Bundle anyway, so the arbiter weighs the gap: `make arbiter-bundle TRIGGER=... MISSING_OK=\"<why it is gone>\"`", gaps.join("; ")));
-            run.reply(Ok(2))
-        }
-        Err(Stop::Fail(why)) => run.reply(Err(why)),
-    }
+    answer(run, done)
 }
 
 #[cfg(test)]

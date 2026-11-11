@@ -25,6 +25,10 @@ fn same_tags(a: &Modal, b: &Modal) -> bool {
     sorted(a) == sorted(b)
 }
 
+#[expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "the pop-up files' names, as `str.endswith` read them"
+)]
 /// (before, after) of every pop-up file a non-merge commit changed, present on both sides, its tags moved.
 fn edits(root: &Path, since: &str, until: &str) -> Vec<(Modal, Modal)> {
     let mut out = Vec::new();
@@ -86,7 +90,7 @@ fn replay(rows: &[(Modal, Modal)]) -> Map<String, Value> {
         .iter()
         .filter(|(w, m)| !depiction_owed_by(Some(w), m))
         .collect();
-    let now = about_only
+    let owed_now = about_only
         .iter()
         .filter(|(w, m)| depiction_owed_by(Some(w), m))
         .count();
@@ -101,7 +105,10 @@ fn replay(rows: &[(Modal, Modal)]) -> Map<String, Value> {
         "About-only edits (owed before, not now)".to_owned(),
         json!(about_only.len()),
     );
-    out.insert("owed now among the About-only edits".to_owned(), json!(now));
+    out.insert(
+        "owed now among the About-only edits".to_owned(),
+        json!(owed_now),
+    );
     out
 }
 

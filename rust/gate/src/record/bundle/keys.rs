@@ -1,6 +1,7 @@
 //! A source's bundles, the intro-check bundle and the parts a question bundle borrows (from `check_bundle.py`): a key's registry entry and its saved page (feature 250 D19), several keys for source-applicability (feature 312), the intro-check batch (feature 311 D4), the residue pages and the scoped quotation report (feature 288), the page images (feature 395) and what changed since a source-reader's last round.
 
 use std::collections::{BTreeMap, HashSet};
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use l7r_guard::shared::checks::{load, state_path};
@@ -14,7 +15,7 @@ use super::check::{
 use super::earlier::dispatches;
 use super::owed::{self as bo};
 use super::{
-    copy, head, py_path, py_str, relative, shown, slug, write, Run, DEFAULT_ROOT, MANIFEST,
+    copy, default_root, head, py_path, py_str, relative, shown, slug, write, Run, MANIFEST,
 };
 use crate::difflib::unified_diff;
 use crate::record::leaves::fragments_for;
@@ -54,7 +55,7 @@ fn quoted_passages(run: &mut Run, root: &Path, key: &str) -> Result<Vec<String>,
             let body = comment
                 .replace_all(c.get(1).map_or("", |g| g.as_str()), "")
                 .into_owned();
-            let got = run.door.ask("passages", json!([body]))?;
+            let got = run.door.ask("passages", &json!([body]))?;
             for p in got.as_array().into_iter().flatten() {
                 let text = |k: &str| {
                     p.get(k)
@@ -139,7 +140,7 @@ pub(crate) fn residue_pages(run: &mut Run, out: &Path) -> Result<usize, Fail> {
         return Ok(0);
     }
     run.door
-        .ask("save_cached", json!([urls, shown(&out.join("pages"))]))?;
+        .ask("save_cached", &json!([urls, shown(&out.join("pages"))]))?;
     Ok(urls.len())
 }
 
@@ -279,7 +280,7 @@ pub(crate) fn images_section(out: &Path, images: &[String]) -> Result<String, Fa
             .file_name()
             .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
         std::fs::copy(f, out.join("images").join(&name)).map_err(fail)?;
-        listing += &format!("- `images/{name}`\n");
+        let _ = writeln!(listing, "- `images/{name}`");
     }
     Ok(format!(
         "\n## The page images (read these for a scanned page)\n\n{listing}"
@@ -340,12 +341,8 @@ fn since_last_round(root: &Path, rows: &[Unit]) -> Result<String, Fail> {
                 git_out(root, &["show", &format!("{before}:{rel}")])
             };
             let path = root.join(&rel);
-            let now = if path.is_file() {
-                read_text(&path)?
-            } else {
-                String::new()
-            };
-            let (old_all, new_all) = (read_notes(&was, ""), read_notes(&now, ""));
+            let current = read_text(&path)?;
+            let (old_all, new_all) = (read_notes(&was, ""), read_notes(&current, ""));
             let (old, new) = (
                 old_all.get(note).cloned().unwrap_or_default(),
                 new_all.get(note).cloned().unwrap_or_default(),
@@ -378,18 +375,17 @@ fn since_last_round(root: &Path, rows: &[Unit]) -> Result<String, Fail> {
 fn key_rows(
     run: &mut Run,
     root: &Path,
-    key: &str,
+    (key, entry): (&str, &Path),
     out: &Path,
     (whole, question): (bool, &str),
     pages: &str,
 ) -> Result<Rows, Fail> {
-    let entry = registry_entry(root, key).ok_or_else(|| "AssertionError".to_owned())?;
     let mut rows = vec![(
-        copy(&entry, out, Some(&format!("sources/{key}.html")))?,
-        relative(&entry, root),
+        copy(entry, out, Some(&format!("sources/{key}.html")))?,
+        relative(entry, root),
         format!("the registry entry of `{key}`: its two write-ups"),
     )];
-    let url = url_of(&read_text(&entry)?);
+    let url = url_of(&read_text(entry)?);
     if url.is_empty() {
         return Ok(rows);
     }
@@ -451,15 +447,15 @@ pub(crate) fn key_bundle(
     rows_owed: &[Unit],
     images: &[String],
 ) -> Result<i32, Fail> {
-    if registry_entry(root, key).is_none() {
+    let Some(entry) = registry_entry(root, key) else {
         run.warn(&format!(
             "check-bundle: no registry entry for {}",
             super::py_repr(key)
         ));
         return Ok(2);
-    }
+    };
     fresh(out)?;
-    let rows = key_rows(run, root, key, out, read, "pages")?;
+    let rows = key_rows(run, root, (key, &entry), out, read, "pages")?;
     let extra = images_section(out, images)? + &since_last_round(root, rows_owed)?;
     let text = manifest(out, &format!("source {key}"), &rows)?
         + owed
@@ -485,14 +481,16 @@ pub(crate) fn keys_bundle(
 ) -> Result<i32, Fail> {
     let mut rows_owed: Vec<Unit> = Vec::new();
     let every = owed_units(root, None, None, &["record"], "")?;
+    let mut entries = Vec::new();
     for key in keys {
-        if registry_entry(root, key).is_none() {
+        let Some(entry) = registry_entry(root, key) else {
             run.warn(&format!(
                 "check-bundle: no registry entry for {}",
                 super::py_repr(key)
             ));
             return Ok(2);
-        }
+        };
+        entries.push(entry);
         let (got, _, refusal) = bo::owed_for_key(root, key, false, not_owed_ok, "", Some(&every))?;
         if !refusal.is_empty() {
             run.warn(&format!("check-bundle: REFUSED - {key}: {refusal}"));
@@ -504,17 +502,17 @@ pub(crate) fn keys_bundle(
         .first()
         .ok_or_else(|| "IndexError: list index out of range".to_owned())?;
     let out = if out_arg.is_empty() {
-        Path::new(DEFAULT_ROOT).join(format!("keys-{first}-{}", keys.len()))
+        default_root().join(format!("keys-{first}-{}", keys.len()))
     } else {
         py_path(out_arg)
     };
     fresh(&out)?;
     let mut rows = Vec::new();
-    for key in keys {
+    for (key, entry) in keys.iter().zip(&entries) {
         rows.extend(key_rows(
             run,
             root,
-            key,
+            (key, entry),
             &out,
             (false, ""),
             &format!("pages/{key}"),
@@ -580,7 +578,7 @@ pub(crate) fn intro_bundle(
         } else {
             String::new()
         };
-        Path::new(DEFAULT_ROOT).join(format!("intro-{}{many}", slug(first)))
+        default_root().join(format!("intro-{}{many}", slug(first)))
     } else {
         py_path(out_arg)
     };
