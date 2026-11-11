@@ -157,6 +157,9 @@ export IDLE_WAIT_S=1 IDLE_RUN="$SLOW"; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*
 touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA"; wait_grep "^start" "$RUNLOG" 8; sleep 0.3
 hook prompt "$CA"; sleep 0.5
+# the aborted record is written as the run dies: waited for, not slept on (a landing's parallel suites made 0.5 s too short,
+# 2026-11-11, the land-tooling worktree's run of this suite)
+wait_for "$CA/dev/idle-log/*.json" 8
 check "the run was aborted on the prompt" '! grep -q "^end" "$RUNLOG" && [ ! -f "$CA/.git/idle-tests.running" ]'
 check "an aborted record exists and surfaces" 'grep -q "aborted" "$CA"/dev/idle-log/*.json && printf "%s" "$OUT" | grep -q "aborted on your prompt"'
 sleep 5; check "no end line ever" '! grep -q "^end" "$RUNLOG"'
