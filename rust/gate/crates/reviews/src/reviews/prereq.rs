@@ -220,7 +220,7 @@ fn gen_of(skill: &Path, name: &str) -> Option<PathBuf> {
 }
 
 /// The generation cache's key comparison for a generator's path.
-pub(crate) type Current<'a> = dyn FnMut(&str) -> bool + 'a;
+pub type Current<'a> = dyn FnMut(&str) -> bool + 'a;
 
 fn same_bytes(a: &Path, b: &Path) -> bool {
     std::fs::read(a).ok() == std::fs::read(b).ok()
@@ -287,7 +287,11 @@ fn number(text: &str) -> Option<f64> {
 
 /// The one definition of a figure (feature 239 spec D4), asked of the spec lint by command as the Python asked it (`check spec-lint
 /// --figure-pattern`, whose run the tool-usage log records), Python's `\w` (which holds every numeric character) read as `\w\p{N}`.
-pub(crate) fn figure_pattern(tree: &Path) -> Result<Regex, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn figure_pattern(tree: &Path) -> Result<Regex, String> {
     let done = Command::new(tree.join("scripts/gates/l7r-gate.sh"))
         .args(["check", "spec-lint", "--figure-pattern"])
         .output()
@@ -548,7 +552,8 @@ fn dirs_in(dir: &Path) -> Vec<String> {
 }
 
 /// A hash of what a review of `sheet` read: its drawing and its notes, wherever its folder is in the pool trees; "" with none.
-pub(crate) fn content_key(clone: &Path, sheet: &str) -> String {
+#[must_use]
+pub fn content_key(clone: &Path, sheet: &str) -> String {
     if sheet.is_empty() {
         return String::new();
     }
@@ -665,7 +670,7 @@ fn read_prompt(file: &str) -> Result<String, Reply> {
 }
 
 /// `review_prereq.py`'s command line.
-pub(crate) fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String]) -> Reply {
     let specs = [
         Spec::value("--verdict"),
         Spec::value("--findings-file"),

@@ -45,7 +45,8 @@ fn save(path: Option<&Path>, clock: Map<String, Value>) {
 }
 
 /// The switch's record while the step-back is suspended (`{state, why, who, utc}`), or an empty one.
-pub(crate) fn suspended(root: &Path) -> Map<String, Value> {
+#[must_use]
+pub fn suspended(root: &Path) -> Map<String, Value> {
     let sw = read_object(Some(&root.join(SWITCH)));
     if sw.get("state") == Some(&json!("off")) {
         sw
@@ -139,7 +140,7 @@ fn idle(root: &Path, feature: &str, since: f64, at: f64) -> f64 {
 }
 
 /// `{feature, suspended, due, since, hour, open, units, units_since}`; `{feature, due: false}` with no feature or no event log.
-pub(crate) fn state(root: &Path, at: Option<f64>) -> Map<String, Value> {
+pub fn state(root: &Path, at: Option<f64>) -> Map<String, Value> {
     let at = at.unwrap_or_else(now);
     let feature = active_feature(root);
     let start = if feature.is_empty() {
@@ -373,7 +374,7 @@ fn undispatched(root: &Path, units: &[String], since: f64) -> Vec<String> {
 }
 
 /// The refusal `make tick` prints while the checkpoint holds it, or "".
-pub(crate) fn hold(root: &Path, at: Option<f64>) -> String {
+pub fn hold(root: &Path, at: Option<f64>) -> String {
     let st = state(root, at);
     if text(&st, "feature").is_empty()
         || !st.contains_key("since")
@@ -450,7 +451,7 @@ fn usage(why: &str) -> Reply {
 }
 
 /// `checkpoint.py`'s command line.
-pub(crate) fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String]) -> Reply {
     let specs = [
         Spec::value("--why"),
         Spec::value("--root"),

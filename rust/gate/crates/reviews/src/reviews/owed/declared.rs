@@ -135,7 +135,7 @@ fn occasion(line: &str) -> Option<(String, String)> {
 }
 
 /// The `(kind, argument)` lines of a `tasks.md`'s `## Occasions` section, or None when it has no such section.
-pub(crate) fn occasions_section(text: &str) -> Option<Vec<(String, String)>> {
+pub fn occasions_section(text: &str) -> Option<Vec<(String, String)>> {
     let c = SECTION.captures(text).ok().flatten()?;
     let body = c.name("body").map_or("", |m| m.as_str());
     Some(splitlines(body).into_iter().filter_map(occasion).collect())
@@ -160,7 +160,7 @@ fn commit_occasions(root: &Path, base: &str) -> Vec<(String, String)> {
 type Lines = Vec<(String, String)>;
 
 /// What `declared` found: the units, the problems with the declarations, and whether any feature declares at all.
-pub(crate) struct Declared {
+pub struct Declared {
     pub units: Vec<Unit>,
     pub problems: Vec<String>,
     pub any_section: bool,
@@ -241,7 +241,8 @@ fn declared_units(
 }
 
 /// The units the active features (and the delta's commit messages) declare, the problems, whether any declares at all.
-pub(crate) fn declared(tree: &Tree, base: &str) -> Declared {
+#[must_use]
+pub fn declared(tree: &Tree, base: &str) -> Declared {
     let root = tree.root;
     let mut shown = Shown {
         root,

@@ -3,11 +3,11 @@
 //! `review_prereq.py`), the feature's hourly checkpoint (`checkpoint`, `checkpoint.py`), and `door`, the one door the step-back
 //! bundle reaches them through until T83 ports it. `hm_approval._state_at` is the guard's `feature_approval_hooks::at_rev`, reused.
 
-pub(crate) mod checkpoint;
+pub mod checkpoint;
 pub mod door;
-pub(crate) mod glyph;
-pub(crate) mod owed;
-pub(crate) mod prereq;
+pub mod glyph;
+pub mod owed;
+pub mod prereq;
 
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
@@ -33,7 +33,8 @@ pub fn cli(args: &[String]) -> Reply {
     }
 }
 
-pub(crate) fn reply(stdout: String, stderr: String, code: i32) -> Reply {
+#[must_use]
+pub fn reply(stdout: String, stderr: String, code: i32) -> Reply {
     Reply {
         stdout,
         stderr,
@@ -42,7 +43,8 @@ pub(crate) fn reply(stdout: String, stderr: String, code: i32) -> Reply {
 }
 
 /// `_git`: `git -C root args...`'s stdout, stripped, or None when git refused.
-pub(crate) fn git(root: &Path, args: &[&str]) -> Option<String> {
+#[must_use]
+pub fn git(root: &Path, args: &[&str]) -> Option<String> {
     let done = Command::new("git")
         .arg("-C")
         .arg(root)
@@ -57,14 +59,15 @@ pub(crate) fn git(root: &Path, args: &[&str]) -> Option<String> {
 }
 
 /// `_gitdir`: the repository's absolute git directory.
-pub(crate) fn gitdir(root: &Path) -> Option<PathBuf> {
+pub fn gitdir(root: &Path) -> Option<PathBuf> {
     git(root, &["rev-parse", "--absolute-git-dir"])
         .filter(|g| !g.is_empty())
         .map(PathBuf::from)
 }
 
 /// `Path(text)` as pathlib reads it: `.` components and a trailing slash dropped, `.` for nothing.
-pub(crate) fn py_path(text: &str) -> PathBuf {
+#[must_use]
+pub fn py_path(text: &str) -> PathBuf {
     let kept: PathBuf = Path::new(text)
         .components()
         .filter(|c| !matches!(c, Component::CurDir))
@@ -77,7 +80,8 @@ pub(crate) fn py_path(text: &str) -> PathBuf {
 }
 
 /// `_read_json`: the file's JSON object, or an empty one where it is unreadable, not JSON or not an object.
-pub(crate) fn read_object(path: Option<&Path>) -> Map<String, Value> {
+#[must_use]
+pub fn read_object(path: Option<&Path>) -> Map<String, Value> {
     path.and_then(|p| std::fs::read_to_string(p).ok())
         .and_then(|t| serde_json::from_str::<Value>(&t).ok())
         .and_then(|v| match v {
@@ -88,7 +92,8 @@ pub(crate) fn read_object(path: Option<&Path>) -> Map<String, Value> {
 }
 
 /// `float(value)` of a JSON value already known truthy-or-zero (`float(x or 0)`).
-pub(crate) fn as_float(value: Option<&Value>) -> f64 {
+#[must_use]
+pub fn as_float(value: Option<&Value>) -> f64 {
     match value {
         Some(Value::Number(n)) => n.as_f64().unwrap_or(0.0),
         Some(Value::Bool(true)) => 1.0,
@@ -102,12 +107,14 @@ pub(crate) fn as_float(value: Option<&Value>) -> f64 {
     clippy::cast_possible_truncation,
     reason = "an epoch time fits an i64, as Python's int() of one does"
 )]
-pub(crate) fn int_of(at: f64) -> i64 {
+#[must_use]
+pub fn int_of(at: f64) -> i64 {
     at.trunc() as i64
 }
 
 /// `time.strftime(fmt, time.localtime(at))`: the standard library reads no time zone, so `date` answers, as `passes.rs` asks it.
-pub(crate) fn local_time(at: f64, fmt: &str) -> String {
+#[must_use]
+pub fn local_time(at: f64, fmt: &str) -> String {
     let secs = int_of(at.floor());
     Command::new("date")
         .args(["-d", &format!("@{secs}"), &format!("+{fmt}")])
@@ -117,12 +124,17 @@ pub(crate) fn local_time(at: f64, fmt: &str) -> String {
 }
 
 /// The epoch seconds now, as `time.time()`.
-pub(crate) fn now() -> f64 {
+#[must_use]
+pub fn now() -> f64 {
     l7r_guard::shared::checks::now()
 }
 
 /// `json.dumps(value, indent=1) + "\n"` written to `path`, as `Path.write_text` writes it.
-pub(crate) fn write_json(path: &Path, value: &Value) -> std::io::Result<()> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn write_json(path: &Path, value: &Value) -> std::io::Result<()> {
     std::fs::write(
         path,
         l7r_guard::shared::pyjson::dumps(value, Some(1), true) + "\n",
@@ -130,7 +142,8 @@ pub(crate) fn write_json(path: &Path, value: &Value) -> std::io::Result<()> {
 }
 
 /// An ISO time's epoch seconds as `datetime.fromisoformat(str(t).replace("Z", "+00:00")).timestamp()` reads one, or None.
-pub(crate) fn iso_seconds(t: Option<&Value>) -> Option<f64> {
+#[must_use]
+pub fn iso_seconds(t: Option<&Value>) -> Option<f64> {
     let text = t?.as_str()?.replace('Z', "+00:00");
     crate::measure::popup_rounds::iso::parse(&text)
 }

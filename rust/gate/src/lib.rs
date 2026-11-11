@@ -6,7 +6,6 @@ mod ci;
 mod measure;
 mod preflight;
 pub(crate) mod record;
-pub mod reviews;
 
 use std::path::{Path, PathBuf};
 
@@ -16,6 +15,7 @@ pub use l7r_gate_checks::checks;
 pub use l7r_gate_claims::claims;
 pub use l7r_gate_cohort::{cohort, push, rustc};
 pub use l7r_gate_plan::plan;
+pub use l7r_gate_reviews::reviews;
 pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
 #[cfg(test)]
 pub(crate) use l7r_gate_core::write_executable;

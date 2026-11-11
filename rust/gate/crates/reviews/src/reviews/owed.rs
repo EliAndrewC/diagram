@@ -22,7 +22,7 @@ use crate::record::repo::cat_blobs;
 use crate::Reply;
 
 /// Both pool trees, the live one first.
-pub(crate) const TREES: [&str; 2] = ["pool", "legacy-hand-authored-pool"];
+pub const TREES: [&str; 2] = ["pool", "legacy-hand-authored-pool"];
 /// The checks an occasion can owe, in the order a session dispatches them.
 const CHECKS: [&str; 5] = [
     "settlement-review",
@@ -61,7 +61,7 @@ pub(super) fn found(re: &Regex, text: &str) -> bool {
 
 /// One owed review: a check of a subject, on the map or sheet it is judged on ("" when nothing draws it), for an occasion.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct Unit {
+pub struct Unit {
     pub check: String,
     pub subject: String,
     pub on: String,
@@ -92,7 +92,8 @@ impl Unit {
     }
 
     /// The unit's file-safe name; a glyph check's carries its map too (feature 374 FR-007).
-    pub(crate) fn slug(&self) -> String {
+    #[must_use]
+    pub fn slug(&self) -> String {
         let name = format!("{}--{}", self.check, safe(&self.subject));
         if self.check == "glyph-check" && !self.on.is_empty() {
             format!("{name}--{}", safe(&self.on))
@@ -103,7 +104,8 @@ impl Unit {
 }
 
 /// `(ref, description)`: the merge base of HEAD with origin/main; HEAD without origin/main; "" with no commits.
-pub(crate) fn base_of(root: &Path) -> (String, String) {
+#[must_use]
+pub fn base_of(root: &Path) -> (String, String) {
     let head = git(root, &["rev-parse", "--verify", "-q", "HEAD"]).unwrap_or_default();
     if head.is_empty() {
         return (String::new(), "no commits yet".to_owned());
@@ -126,7 +128,7 @@ fn head8(text: &str) -> &str {
 
 /// A map or sheet folder: `<tree>/<category>/<name>`.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub(crate) struct Folder {
+pub struct Folder {
     pub path: PathBuf,
     pub name: String,
     tree: usize,
@@ -142,7 +144,8 @@ impl Folder {
     }
 
     /// A Mode A sheet: an SVG (or its generator) and no manifest.
-    pub(crate) fn is_sheet(&self) -> bool {
+    #[must_use]
+    pub fn is_sheet(&self) -> bool {
         !self.has(".json") && (self.has(".svg") || self.has(".gen.py"))
     }
 
@@ -167,7 +170,8 @@ fn names_in(dir: &Path) -> Vec<String> {
 }
 
 /// `_folders`: every map or sheet folder (pathlib's `glob("*/*")`, hidden names included), the live pool first, then by path.
-pub(crate) fn folders(root: &Path) -> Vec<Folder> {
+#[must_use]
+pub fn folders(root: &Path) -> Vec<Folder> {
     let mut out = Vec::new();
     for (tree, name) in TREES.iter().enumerate() {
         let base = root.join(name);
@@ -190,7 +194,7 @@ pub(crate) fn folders(root: &Path) -> Vec<Folder> {
 }
 
 /// Every map or sheet folder's name, of both pool trees (feature 248 FR-001).
-pub(crate) fn pool_map_names(root: &Path) -> Vec<String> {
+pub fn pool_map_names(root: &Path) -> Vec<String> {
     let names: BTreeSet<String> = folders(root)
         .into_iter()
         .filter(Folder::drawn)
@@ -281,7 +285,8 @@ fn read_replace(path: &Path) -> String {
 }
 
 /// The element classes a manifest's ink census names (`ink_classes`), or none.
-pub(crate) fn ink_classes(text: Option<&str>) -> BTreeSet<String> {
+#[must_use]
+pub fn ink_classes(text: Option<&str>) -> BTreeSet<String> {
     let Ok(Value::Object(top)) = serde_json::from_str::<Value>(text.unwrap_or("")) else {
         return BTreeSet::new();
     };
@@ -296,7 +301,7 @@ pub(crate) fn ink_classes(text: Option<&str>) -> BTreeSet<String> {
 }
 
 /// The `data-kind`s a Mode A sheet's SVG tags.
-pub(crate) fn sheet_kinds(text: Option<&str>) -> BTreeSet<String> {
+pub fn sheet_kinds(text: Option<&str>) -> BTreeSet<String> {
     DATA_KIND
         .captures_iter(text.unwrap_or(""))
         .filter_map(Result::ok)
@@ -317,7 +322,7 @@ fn legend_of(d: &Folder) -> Option<BTreeSet<String>> {
 
 /// Each folder's elements now, by name, in the order Python's dict kept them (a later folder of one name updates it in place).
 #[derive(Default)]
-pub(crate) struct Legends(Vec<(String, BTreeSet<String>)>);
+pub struct Legends(Vec<(String, BTreeSet<String>)>);
 
 impl Legends {
     fn put(&mut self, name: &str, set: BTreeSet<String>) {
@@ -328,7 +333,8 @@ impl Legends {
         }
     }
 
-    pub(crate) fn get(&self, name: &str) -> Option<&BTreeSet<String>> {
+    #[must_use]
+    pub fn get(&self, name: &str) -> Option<&BTreeSet<String>> {
         self.0.iter().find(|(n, _)| n == name).map(|(_, s)| s)
     }
 
@@ -343,7 +349,8 @@ impl Legends {
 }
 
 /// `legends`: each non-exempt folder's elements now.
-pub(crate) fn legends(all: &[Folder]) -> Legends {
+#[must_use]
+pub fn legends(all: &[Folder]) -> Legends {
     let mut out = Legends::default();
     for d in all.iter().filter(|d| !d.exempt()) {
         if let Some(set) = legend_of(d) {
@@ -354,14 +361,15 @@ pub(crate) fn legends(all: &[Folder]) -> Legends {
 }
 
 /// What the owed lookup reads once a run: the folders and their legends now.
-pub(crate) struct Tree<'a> {
+pub struct Tree<'a> {
     pub root: &'a Path,
     pub folders: Vec<Folder>,
     pub legends: Legends,
 }
 
 impl<'a> Tree<'a> {
-    pub(crate) fn read(root: &'a Path) -> Self {
+    #[must_use]
+    pub fn read(root: &'a Path) -> Self {
         let folders = folders(root);
         let legends = legends(&folders);
         Self {
@@ -408,7 +416,8 @@ fn element_units(
 type AtBaseOrNow = Result<BTreeSet<String>, (String, bool)>;
 
 /// The occasions the delta itself shows: maps and sheets new to the pool, and elements new to a map or sheet.
-pub(crate) fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
+#[must_use]
+pub fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
     let root = tree.root;
     let mut at = AtBase::new(root, base);
     let live: Vec<&Folder> = tree
@@ -514,7 +523,8 @@ fn moved_only(root: &Path, base: &str, names: &[String]) -> BTreeSet<String> {
 }
 
 /// Every owed unit, detected and declared, deduplicated, in dispatch order: `(the base's description, units, problems)`.
-pub(crate) fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
+#[must_use]
+pub fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
     let (base, desc) = base_of(root);
     let tree = Tree::read(root);
     let declared = declared(&tree, &base);
@@ -547,7 +557,8 @@ pub(crate) fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
 }
 
 /// The units DUE: every non-glyph unit, and the glyph units the feature's hour makes due; at `landing`, every owed unit.
-pub(crate) fn owed(root: &Path, landing: bool) -> (String, Vec<Unit>, Vec<String>) {
+#[must_use]
+pub fn owed(root: &Path, landing: bool) -> (String, Vec<Unit>, Vec<String>) {
     let (desc, units, problems) = all_owed(root);
     if landing {
         return (desc, units, problems);
@@ -580,7 +591,8 @@ fn touched_code(root: &Path, base: &str) -> Vec<String> {
 }
 
 /// The refusal when drawing or placement code moved and no active feature declares its occasions, else None.
-pub(crate) fn check_declared(root: &Path) -> Option<String> {
+#[must_use]
+pub fn check_declared(root: &Path) -> Option<String> {
     let (base, _) = base_of(root);
     let code = touched_code(root, &base);
     if code.is_empty() || declared(&Tree::read(root), &base).any_section {
@@ -600,7 +612,8 @@ pub(crate) fn check_declared(root: &Path) -> Option<String> {
 }
 
 /// The one-line answer a person or a guard message quotes.
-pub(crate) fn ruling(desc: &str, units: &[Unit], problems: &[String]) -> String {
+#[must_use]
+pub fn ruling(desc: &str, units: &[Unit], problems: &[String]) -> String {
     let head = if units.is_empty() {
         format!("no review owed against {desc}: no occasion in the delta")
     } else {
@@ -634,7 +647,8 @@ fn usage(why: &str) -> Reply {
 }
 
 /// `review_owed.py`'s command line.
-pub(crate) fn cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
     let specs = [
         Spec::value("--root"),
         Spec::flag("--why"),
@@ -754,9 +768,9 @@ fn run(root: &Path, p: &crate::record::args::Parsed, mark: &str) -> Reply {
 }
 
 mod declared;
-pub(crate) use declared::declared;
+pub use declared::declared;
 #[cfg(test)]
-pub(crate) use declared::occasions_section;
+pub use declared::occasions_section;
 
 #[cfg(test)]
 mod tests;

@@ -19,6 +19,7 @@ l7r_gate_core = { path = "crates/core" }
 l7r_gate_owed = { path = "crates/owed" }
 l7r_gate_plan = { path = "crates/plan" }
 l7r_gate_downloads = { path = "crates/downloads" }
+l7r_gate_reviews = { path = "crates/reviews" }
 l7r_gate_tree = { path = "crates/tree" }
 l7r_guard = { path = "../guard" }
 serde = { workspace = true }

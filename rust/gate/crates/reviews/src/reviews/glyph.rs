@@ -13,13 +13,13 @@ use super::owed::{all_owed, Unit};
 use super::{as_float, git, gitdir, int_of, iso_seconds, local_time, now, read_object, write_json};
 
 /// An hour of the feature's time.
-pub(crate) const GLYPH_HOUR_S: f64 = 3600.0;
+pub const GLYPH_HOUR_S: f64 = 3600.0;
 /// The clock, in the git dir.
-pub(crate) const CLOCK: &str = "glyph-clock.json";
+pub const CLOCK: &str = "glyph-clock.json";
 /// `{"feature", "at"}`: the push refused for an unanswered glyph unit.
 const LANDING: &str = "glyph-landing";
 /// The pair guard's `dispatched[<slug>].at`.
-pub(crate) const PAIRING: &str = "pairing-state.json";
+pub const PAIRING: &str = "pairing-state.json";
 /// How far back the reopening is looked for (feature 375 amendment 10: no feature directory had more than 57 commits in an hour).
 const REOPEN_WALK: usize = 200;
 /// The states `make speckit-todo` reads as closed.
@@ -55,7 +55,8 @@ fn speckit_state(root: &Path, dir: &Path) -> String {
 
 /// The feature whose hour a glyph check keeps, or "" (D54): `.specify/feature.json` names one, it exists, and `make speckit-todo`
 /// does not read it closed.
-pub(crate) fn active_feature(root: &Path) -> String {
+#[must_use]
+pub fn active_feature(root: &Path) -> String {
     let Some(d) = l7r_guard::shared::checks::arbiter::feature_dir(root, "") else {
         return String::new();
     };
@@ -68,7 +69,8 @@ pub(crate) fn active_feature(root: &Path) -> String {
 }
 
 /// When the feature began in this clone: the first event of `<git dir>/l7r-events/<feature>.jsonl`, or None.
-pub(crate) fn first_event(root: &Path, feature: &str) -> Option<f64> {
+#[must_use]
+pub fn first_event(root: &Path, feature: &str) -> Option<f64> {
     let path = gitdir(root)?
         .join("l7r-events")
         .join(format!("{feature}.jsonl"));
@@ -80,7 +82,7 @@ pub(crate) fn first_event(root: &Path, feature: &str) -> Option<f64> {
 
 /// When the feature was last REOPENED (feature 375 amendment 10, FR-042): the newest commit to `specs/<feature>` after which its
 /// state is open where the previous change left it closed; kept in the clock, keyed by the directory's newest commit.
-pub(crate) fn last_reopening(root: &Path, feature: &str, since: f64) -> Option<f64> {
+pub fn last_reopening(root: &Path, feature: &str, since: f64) -> Option<f64> {
     let dir = format!("specs/{feature}");
     let newest = git(root, &["log", "-1", "--format=%H", "--", &dir]).unwrap_or_default();
     if newest.is_empty() {
@@ -133,7 +135,7 @@ pub(crate) fn last_reopening(root: &Path, feature: &str, since: f64) -> Option<f
 }
 
 /// `clock.setdefault(feature, {})`.
-pub(crate) fn entry<'a>(
+pub fn entry<'a>(
     clock: &'a mut Map<String, Value>,
     feature: &str,
 ) -> &'a mut Map<String, Value> {
@@ -147,19 +149,20 @@ pub(crate) fn entry<'a>(
 }
 
 /// When the feature's hour began (D53, D58): the later of its first event and its most recent reopening, or None with no event log.
-pub(crate) fn feature_start(root: &Path, feature: &str) -> Option<f64> {
+#[must_use]
+pub fn feature_start(root: &Path, feature: &str) -> Option<f64> {
     let first = first_event(root, feature)?;
     Some(last_reopening(root, feature, first).map_or(first, |r| first.max(r)))
 }
 
 /// Is the work landing - the push refused for an unanswered glyph unit, the marker naming this feature (or none)?
-pub(crate) fn landing(root: &Path, feature: &str) -> bool {
+pub fn landing(root: &Path, feature: &str) -> bool {
     let mark = read_object(Some(&gitdir(root).unwrap_or_else(nowhere).join(LANDING)));
     !mark.is_empty() && mark.get("feature").unwrap_or(&json!("")) == &json!(feature)
 }
 
 /// The feature's own clock entry (`clock.get(feature) or {}`).
-pub(crate) fn mine(root: &Path, feature: &str) -> Map<String, Value> {
+pub fn mine(root: &Path, feature: &str) -> Map<String, Value> {
     let clock = read_object(Some(&gitdir(root).unwrap_or_else(nowhere).join(CLOCK)));
     match clock.get(feature) {
         Some(Value::Object(m)) => m.clone(),
@@ -168,7 +171,7 @@ pub(crate) fn mine(root: &Path, feature: &str) -> Map<String, Value> {
 }
 
 /// `(the glyph units due, the glyph units owed and waiting with when each comes due)` - plan D53-D55.
-pub(crate) fn glyph_due(
+pub fn glyph_due(
     root: &Path,
     units: &[Unit],
     at: Option<f64>,
@@ -252,7 +255,7 @@ fn open_batch(root: &Path, units: &[Unit], at: f64) {
 }
 
 /// `review-gate.sh`'s refusal for an unanswered glyph unit sets the marker; a clean push clears it (D55).
-pub(crate) fn mark_landing(root: &Path, on: bool) {
+pub fn mark_landing(root: &Path, on: bool) {
     let Some(g) = gitdir(root) else { return };
     if on {
         let body = json!({"feature": active_feature(root), "at": now()});
@@ -267,7 +270,8 @@ pub(crate) fn mark_landing(root: &Path, on: bool) {
 
 /// `--glyph-gate SLUG` (`gate`): 0 when the unit may be dispatched now, else 1 naming when it comes due. `--glyph-dispatched
 /// SLUG`: a passed dispatch on the hour or under the escape opens a batch. `(exit, stdout)`.
-pub(crate) fn glyph_cli(root: &Path, slug: &str, gate: bool, escaped: bool) -> (i32, String) {
+#[must_use]
+pub fn glyph_cli(root: &Path, slug: &str, gate: bool, escaped: bool) -> (i32, String) {
     let units = all_owed(root).1;
     let Some(unit) = units.iter().find(|u| u.slug() == slug) else {
         return (0, String::new());
