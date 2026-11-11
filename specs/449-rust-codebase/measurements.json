@@ -1126,5 +1126,46 @@
    "tests_run": 0,
    "said": "already verified"
   }
+ },
+ "rust-loop-after-t93": {
+  "quantity": "the Rust edit-and-check loop after T92-T94 (SC-006): make rust-test for one gate crate after a touch, a one-line edit and its revert, and with nothing changed",
+  "observed": "2026-11-11",
+  "subject": "the diagram-backlog clone at T93's landing, the build warm",
+  "command": "<one-shot: make rust-test CRATE=rust/gate/crates/<crate> after a touch of one source file, after a one-line comment added at its top, and after the file restored with git; then make rust-test and make static with nothing changed>",
+  "method": "wall time of each make, one run each (T93's after-figures, the same commands as T92's); the before is T92's 68 s for a one-file edit of the one 74,199-line crate",
+  "varies": true,
+  "unit": "s",
+  "value": {
+   "warm: all": 13.5,
+   "warm: static": 3.3,
+   "claims touch": 0.2,
+   "claims edit": 13.9,
+   "claims restored": 0.1,
+   "owed touch": 0.2,
+   "owed edit": 8.4,
+   "owed restored": 0.1,
+   "core touch": 5.1,
+   "core edit": 10.0,
+   "core restored": 5.1,
+   "all, nothing changed (1)": 0.4,
+   "all, nothing changed (2)": 0.4,
+   "static, nothing changed (1)": 32.2,
+   "static, nothing changed (2)": 3.3
+  }
+ },
+ "hook-suites-build-census": {
+  "quantity": "build outputs written under any cargo target directory while every hook suite runs once on a warm tree (SC-006's third clause)",
+  "observed": "2026-11-11",
+  "subject": "the diagram-backlog clone after the T92 landing's make done",
+  "command": "<one-shot: make hooks-test HOOKS_ALL=1 with a marker file made before, then every file under ~/.cache/l7r-cargo-target/ newer than it, incremental/ left out, and the target directories diffed>",
+  "method": "find -newer the marker, one run; the guard suite's kept l7r-guard.good re-kept with nothing compiled",
+  "varies": false,
+  "unit": "files",
+  "value": {
+   "suites": 53,
+   "build_outputs_written": 0,
+   "new_target_dirs": 0,
+   "rekept_binaries": 1
+  }
  }
 }
