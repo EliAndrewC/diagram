@@ -201,3 +201,9 @@ fn every_unprintable_range_is_escaped() {
     assert!(printable(' ') && printable('\u{57a3}'));
     assert!(hit(&pyre("a\\"), "a\\"));
 }
+
+#[test]
+fn a_path_with_no_parent() {
+    assert!(write(Path::new(""), "x").is_err());
+    assert!(copy(Path::new("/no/such"), Path::new(""), Some("")).is_err());
+}

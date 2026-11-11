@@ -71,3 +71,21 @@ fn edits_are_counted_under_both_rules_and_recorded() {
     );
     assert_eq!(cli(&args(&["--bogus"]), &root).code, 2);
 }
+
+#[test]
+fn a_record_that_cannot_be_read_or_written() {
+    let root = record("depiction-replay-record");
+    let rec = root.join("rec.json");
+    std::fs::write(&rec, "not json").unwrap();
+    let path = rec.to_string_lossy().into_owned();
+    assert_eq!(
+        cli(&args(&["--record", &path, "--key", "k"]), &root).code,
+        1
+    );
+    std::fs::write(&rec, "{}").unwrap();
+    std::fs::set_permissions(&rec, std::os::unix::fs::PermissionsExt::from_mode(0o444)).unwrap();
+    assert_eq!(
+        cli(&args(&["--record", &path, "--key", "k"]), &root).code,
+        1
+    );
+}

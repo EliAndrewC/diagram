@@ -304,7 +304,7 @@ fn the_rare_paths_of_a_modal_bundle() {
     put(
         &root,
         "research/questions/0096-a.html",
-        "<h2>A</h2>\n<p>a well and a well</p>\n",
+        "<h2>A</h2>\n<p>a well</p>\n",
     );
     put(
         &root,
@@ -327,7 +327,7 @@ fn the_rare_paths_of_a_modal_bundle() {
     assert!(modal.contains("- (MISSING FILE)  - `research/questions/0777-gone.html`"));
     let cands = std::fs::read_to_string(root.join("out/candidates.md")).unwrap();
     assert!(
-        cands.contains("1. `research/questions/0096-a.html` - A  [tags -; term hits 2; score 6]")
+        cands.contains("1. `research/questions/0096-a.html` - A  [tags -; term hits 1; score 3]")
     );
     put(
         &root,

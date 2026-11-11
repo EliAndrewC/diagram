@@ -280,3 +280,50 @@ fn a_batch_and_the_command_line() {
     );
     assert_eq!(batch_dir("Round:A--B"), "round-a-b");
 }
+
+#[test]
+fn the_rare_paths_of_the_arbiters_bundle() {
+    let root = scratch("arbiter-bundle-rare");
+    feature(&root);
+    state(
+        &root,
+        &json!({"feature": "other", "dispatches": {"a": {"check": "quote-check", "subjects": ["q:0094"], "t": 1.0}}}),
+    );
+    let o = root.join("out").to_string_lossy().into_owned();
+    let missing = bundle_cli(&root, &["round:quote-check|q:0094@1", "--out", &o]);
+    assert!(missing
+        .stderr
+        .contains("no reply kept for round 1 (quote-check, bundle ?)"));
+    owed(
+        &root,
+        &json!({"reversal:x@1": {"kind": "reversal", "unit": "no/such/thing.txt"}, "reversal:y@1": {"kind": "reversal", "unit": "q:0777"}}),
+    );
+    assert!(bundle_cli(&root, &["reversal:x@1", "--out", &o])
+        .stderr
+        .contains("a reversal with no check rounds on no/such/thing.txt"));
+    assert!(bundle_cli(&root, &["reversal:y@1", "--out", &o])
+        .stderr
+        .contains("a reversal with no check rounds on q:0777 and no history of ?"));
+    let plain = crate::checks::scratch("arbiter-bundle-plain");
+    assert!(rounds_section(&plain, &plain, "c", "s", "t")
+        .unwrap()
+        .kept
+        .is_empty());
+    assert_eq!(counted(&plain, "u"), 0);
+    assert_eq!(counted(&root, "quote-check|q:0094"), 0);
+    put(&root, ".specify/feature.json", "{}");
+    assert_eq!(counted(&root, "quote-check|q:0094"), 0);
+    feature(&root);
+    owed(
+        &root,
+        &json!({"round:quote-check|q:0094@1": {"kind": "round", "unit": "quote-check|q:0094"}}),
+    );
+    let spec = root.join("specs/500-f/spec.md");
+    std::fs::set_permissions(&spec, std::os::unix::fs::PermissionsExt::from_mode(0o000)).unwrap();
+    let failed = bundle_cli(
+        &root,
+        &["--batch", "--out", &o, "--missing-ok", "a probe asked"],
+    );
+    std::fs::set_permissions(&spec, std::os::unix::fs::PermissionsExt::from_mode(0o644)).unwrap();
+    assert_eq!(failed.code, 1);
+}

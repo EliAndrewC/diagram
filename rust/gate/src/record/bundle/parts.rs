@@ -6,6 +6,11 @@ use super::check::{helper_part, parts, registry_entry, run_script, Entry, Rows, 
 use super::{copy, py_path, relative, shown, write, Run};
 use crate::record::repo::Fail;
 
+const PREPASS: &str = "for record-format: the WORDS TO RULE ON and the pattern candidates";
+const STYLE_PREPASS: &str = "for record-style: the metric figures with no conversion (each a FAIL) and every lead line to rule on";
+const TRANSLATIONS: &str =
+    "for translation-check: each owed translated quotation, its translation and its original";
+
 /// The quote-verbatim report, scoped where notes are named, and the residue pages; Some(exit) where it failed.
 fn quote_part(
     run: &mut Run,
@@ -99,39 +104,19 @@ pub(crate) fn helper_parts(
 ) -> Result<Option<i32>, Fail> {
     let (want, q, out) = (parts(e.for_), e.q, e.out.clone());
     let base_args = vec![q.to_owned(), "--root".to_owned(), shown(root)];
-    if want.contains(&"prepass") {
-        let row = (
-            "prepass.txt",
-            format!("make record-prepass Q={q}"),
-            "for record-format: the WORDS TO RULE ON and the pattern candidates",
-        );
-        if let Some(code) = helper_part(
-            run,
-            root,
-            &out,
-            rows,
-            ("record_prepass", base_args.clone()),
-            row,
-        )? {
-            return Ok(Some(code));
-        }
-    }
-    if e.quotes && want.contains(&"quote") {
-        if let Some(code) = quote_part(run, root, e, rows, base_args.clone())? {
-            return Ok(Some(code));
-        }
-    }
-    if want.contains(&"registry") {
-        registry_part(root, &out, rows, keys)?;
-    }
-    if want.contains(&"styleprepass") {
-        let row = ("style-prepass.txt", format!("make style-prepass Q={q}"), "for record-style: the metric figures with no conversion (each a FAIL) and every lead line to rule on");
-        if let Some(code) = helper_part(run, root, &out, rows, ("style_prepass", base_args), row)? {
-            return Ok(Some(code));
-        }
-    }
-    if want.contains(&"translations") {
-        let job = (
+    let late = [
+        (
+            "styleprepass",
+            "style_prepass",
+            base_args.clone(),
+            (
+                "style-prepass.txt",
+                format!("make style-prepass Q={q}"),
+                STYLE_PREPASS,
+            ),
+        ),
+        (
+            "translations",
             "translation_owed",
             vec![
                 "--root".to_owned(),
@@ -139,10 +124,34 @@ pub(crate) fn helper_parts(
                 "--q".to_owned(),
                 q.to_owned(),
             ],
-        );
-        let row = ("translations.txt", format!("make translation-owed Q={q}"), "for translation-check: each owed translated quotation, its translation and its original");
-        if let Some(code) = helper_part(run, root, &out, rows, job, row)? {
-            return Ok(Some(code));
+            (
+                "translations.txt",
+                format!("make translation-owed Q={q}"),
+                TRANSLATIONS,
+            ),
+        ),
+    ];
+    let prepass = (
+        "prepass",
+        "record_prepass",
+        base_args.clone(),
+        ("prepass.txt", format!("make record-prepass Q={q}"), PREPASS),
+    );
+    for (i, (part, name, args, row)) in std::iter::once(prepass).chain(late).enumerate() {
+        if i == 1 {
+            if e.quotes && want.contains(&"quote") {
+                if let Some(code) = quote_part(run, root, e, rows, base_args.clone())? {
+                    return Ok(Some(code));
+                }
+            }
+            if want.contains(&"registry") {
+                registry_part(root, &out, rows, keys)?;
+            }
+        }
+        if want.contains(&part) {
+            if let Some(code) = helper_part(run, root, &out, rows, (name, args), row)? {
+                return Ok(Some(code));
+            }
         }
     }
     copied_parts(root, e, rows)?;

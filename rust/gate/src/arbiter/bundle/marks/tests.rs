@@ -120,3 +120,17 @@ fn replies_files_and_edits() {
     );
     assert!(transcripts().ends_with(".claude/projects"));
 }
+
+#[test]
+fn a_reply_from_the_agents_own_transcript() {
+    let root = crate::checks::scratch("marks-transcript");
+    put(
+        &root,
+        "h/a/b/subagents/agent-x1.jsonl",
+        "{\"message\": {\"content\": [{\"type\": \"text\", \"text\": \"from the transcript\"}]}}\n",
+    );
+    assert_eq!(
+        reply_in(&json!({"aid": "x1"}), &root.join("h")),
+        "from the transcript"
+    );
+}

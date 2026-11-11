@@ -703,12 +703,12 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> R
     )?;
     put.put("text.md", &format!("{}\n", rstrip(&m.doc)), &m.origin, "the modal's file line for line - an EDIT block's old text is one of these lines (or part of one), exactly, and its target is this origin")?;
     let g = guide(m.form());
-    let form = if g == PARTICULAR {
+    let kind = if g == PARTICULAR {
         "particular"
     } else {
         "standard"
     };
-    let rules = format!("This modal is of the {form} form: rule on it by the guidelines from `{g}` at the end of your agent file (`make agent-sync` writes them from that source).\n");
+    let rules = format!("This modal is of the {kind} form: rule on it by the guidelines from `{g}` at the end of your agent file (`make agent-sync` writes them from that source).\n");
     put.put(
         "guidelines.txt",
         &rules,

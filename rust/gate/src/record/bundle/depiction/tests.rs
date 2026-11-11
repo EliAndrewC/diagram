@@ -186,7 +186,7 @@ fn the_rare_paths_of_a_depiction_bundle() {
         .collect::<Vec<_>>()
         .concat();
     put(&root, "rust/phases/src/deep/a.rs", &hits);
-    put(&root, WELL, "Name: Well\nAbout: [winter_crop=wheat] A well.\nEntry: research/questions/0095-other.html\n");
+    put(&root, WELL, "Name: Well\nAbout: [winter_crop=wheat] A well.\nEntry: research/questions/0095-other.html research/questions/0094-trade.drawing.html\nDrawing: research/questions/0779-gone.drawing.html\n");
     put(&root, "pool/hamlets/a/a.html", "<g data-k=\"other\"></g>");
     put(&root, "pool/hamlets/b-example/b.html", POOL_PAGE);
     put(&root, "pool/hamlets/c/nokinds.html", POOL_PAGE);
@@ -209,4 +209,7 @@ fn the_rare_paths_of_a_depiction_bundle() {
         doc: String::new(),
     };
     assert!(drawing_candidates(&root, &fresh).unwrap().is_empty());
+    let bare = crate::checks::scratch("depiction-nocommit");
+    git(&bare, &["init", "-q"]);
+    assert!(drawing_candidates(&bare, &fresh).unwrap().is_empty());
 }

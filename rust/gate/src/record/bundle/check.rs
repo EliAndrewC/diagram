@@ -744,23 +744,24 @@ fn batched<'a>(
     Ok(codes.into_iter().max().unwrap_or(0))
 }
 
-/// ONE modal's entry-drift units (feature 319, G4); None where none is owed and no reason is given, the refusal printed.
+/// ONE modal's entry-drift units (feature 319, G4), and the refusal where none is owed and no reason is given.
 fn kind_rows(
-    run: &mut Run,
     root: &Path,
     kind: &str,
     rows: &[Unit],
     not_owed_ok: &str,
-) -> Result<Option<Vec<Unit>>, Fail> {
+) -> Result<(Vec<Unit>, String), Fail> {
     let kept = bo::kind_units(rows, &kind_key(root, kind)?);
-    if kept.is_empty() && not_owed_ok.is_empty() {
-        run.warn(&format!(
-            "check-bundle: REFUSED - no entry-drift is owed on the modal {} by this delta",
+    let refused = kept.is_empty() && not_owed_ok.is_empty();
+    let why = if refused {
+        format!(
+            "no entry-drift is owed on the modal {} by this delta",
             super::py_repr(kind)
-        ));
-        return Ok(None);
-    }
-    Ok(Some(kept))
+        )
+    } else {
+        String::new()
+    };
+    Ok((kept, why))
 }
 
 fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
@@ -792,20 +793,17 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
         run.warn(&format!("check-bundle: Q={} names no question - name one by its number, e.g. make check-bundle Q=0041", super::py_repr(q)));
         return Ok(2);
     }
-    let (mut rows, checks, refusal) = bo::owed_for_question(root, q, for_, not_owed_ok, None)?;
+    let (mut rows, checks, mut refusal) = bo::owed_for_question(root, q, for_, not_owed_ok, None)?;
+    let kind = p.text("--kind", "");
+    if refusal.is_empty() && for_ == "entry-drift" && !kind.is_empty() {
+        (rows, refusal) = kind_rows(root, kind, &rows, not_owed_ok)?;
+    }
     if !refusal.is_empty() {
         run.warn(&format!("check-bundle: REFUSED - {refusal}"));
         return Ok(3);
     }
     if for_ == "quote-check" && wanted.is_empty() && not_owed_ok.is_empty() {
         wanted = bo::owed_notes(&rows);
-    }
-    let kind = p.text("--kind", "");
-    if for_ == "entry-drift" && !kind.is_empty() {
-        match kind_rows(run, root, kind, &rows, not_owed_ok)? {
-            Some(kept) => rows = kept,
-            None => return Ok(3),
-        }
     }
     let owed = bo::manifest_lines(&rows, &checks, not_owed_ok);
     let out = out_or(

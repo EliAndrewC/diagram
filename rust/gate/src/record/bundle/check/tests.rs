@@ -406,6 +406,10 @@ fn earlier_rounds_ride_a_bundle() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "each rare path, one after another on one record"
+)]
 fn the_rare_paths_of_a_question_bundle() {
     let root = scratch("bundle-check-rare");
     assert!(
@@ -418,6 +422,11 @@ fn the_rare_paths_of_a_question_bundle() {
     assert!(changed_section(&bare, &["x.notes.html".to_owned()])
         .unwrap()
         .contains("(none - "));
+    put(
+        &root,
+        "research/questions/0094-trade.drawing.notes.html",
+        "<li data-note=\"k\"><a href=\"x\"><code>key-a</code></a></li>",
+    );
     put(&root, "research/questions/0094-trade.notes.html", "<li data-note=\"k\"><a href=\"x\"><code>key-a</code></a> again <a href=\"y\"><code>key-a</code></a></li><li data-note=\"j\"><a href=\"z\"><code>key-a</code></a></li>");
     let o = root.join("out").to_string_lossy().into_owned();
     let r = bundle(
@@ -487,13 +496,13 @@ fn the_rare_paths_of_a_question_bundle() {
         fingerprint: String::new(),
         reading: String::new(),
     }];
-    assert_eq!(kind_rows(&mut run, &root, "Well", &owed, "").unwrap(), None);
-    assert!(run
-        .err
+    assert!(kind_rows(&root, "Well", &owed, "")
+        .unwrap()
+        .1
         .contains("no entry-drift is owed on the modal 'Well'"));
     assert_eq!(
-        kind_rows(&mut run, &root, "Well", &owed, "an audit asked").unwrap(),
-        Some(Vec::new())
+        kind_rows(&root, "Well", &owed, "an audit asked").unwrap(),
+        (Vec::new(), String::new())
     );
     put(&root, "scripts/bundle_door.py", "import json, sys\nfor l in sys.stdin:\n    a = json.loads(l)['args']\n    print(json.dumps({'ok': [6 if a[0] == 'quote_verbatim' else 0, 'said']}), flush=True)\n");
     assert_eq!(

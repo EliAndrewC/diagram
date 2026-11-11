@@ -373,14 +373,12 @@ fn edits_part(
     let mut wt = vec!["diff", "--"];
     wt.extend(files.iter().map(String::as_str));
     let diff = g(root, &log) + &g(root, &wt);
-    write(
-        &out.join("edits.diff"),
-        if diff.is_empty() {
-            "(no edits)\n"
-        } else {
-            &diff
-        },
-    )?;
+    let text = if diff.is_empty() {
+        "(no edits)\n"
+    } else {
+        &diff
+    };
+    write(&out.join("edits.diff"), text)?;
     parts.push(format!("## Edits between rounds\n\n`edits.diff` beside this file: the last 20 commits touching {}, then the working tree.\n", files.join(", ")));
     Ok(diff)
 }
@@ -510,12 +508,8 @@ pub(crate) fn bundle(
             listed.join("\n")
         ));
     }
-    parts.extend(flow_sections(
-        root,
-        out,
-        d.as_deref(),
-        if subject.is_empty() { &[] } else { &files },
-    )?);
+    let unit_files: &[String] = if subject.is_empty() { &[] } else { &files };
+    parts.extend(flow_sections(root, out, d.as_deref(), unit_files)?);
     parts.push(feature_section(root, out, d.as_deref(), trigger)?);
     let manifest = out.join("MANIFEST.md");
     write(&manifest, &(parts.join("\n") + "\n"))?;
