@@ -302,3 +302,5 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       verify: DONE. landed: the reviews in Rust: review_owed, review_prereq, checkpoint, hm_approval; stepback_bundle to T83; specs/240's probe retired (ask:449-T89-reviews)
 - [ ] T90 Phase 3, the engine's pipeline package (`l7r/diagram/pipeline/`, phase 3 by FR-001, filed by `ask:449-T89-reviews`); `bundle_door.py`'s `is_current` verb leaves when it lands
       research: rendering
+- [ ] T91 Phase 3, the GM-review queue (`scripts/gm_review.py`, phase 3, filed by `ask:449-T82-claims`); `bundle_door.py`'s gm-review write verb leaves when it lands
+      research: rendering
