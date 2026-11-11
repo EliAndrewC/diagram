@@ -135,7 +135,7 @@ fn approach(item6: &str, item2: &str, item9: &str) -> String {
 fn an_approach_block_of_template_wording_and_ids_decides_nothing() {
     let template = super::template_answers(
         std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../..")
+            .join("../../../..")
             .as_path(),
     )[&6]
         .clone();

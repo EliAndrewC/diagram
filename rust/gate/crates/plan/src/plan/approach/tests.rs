@@ -196,7 +196,7 @@ fn a_part_b_stamped_after_the_clock_is_refused() {
 #[test]
 fn part_a_holds_the_constant_and_the_arithmetic_items() {
     let text = std::fs::read_to_string(
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/approach-checklist.md"),
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../docs/approach-checklist.md"),
     )
     .unwrap();
     let items = part_items(&text, "A");

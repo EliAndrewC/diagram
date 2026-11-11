@@ -7,7 +7,6 @@ mod claims;
 mod cohort;
 mod measure;
 pub mod owed_door;
-mod plan;
 mod preflight;
 mod push;
 pub(crate) mod record;
@@ -18,6 +17,7 @@ use std::path::{Path, PathBuf};
 
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
 pub use l7r_gate_checks::checks;
+pub use l7r_gate_plan::plan;
 pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
 #[cfg(test)]
 pub(crate) use l7r_gate_core::write_executable;
@@ -74,7 +74,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("switches") => ci::switches::guarded(&args[1..], &top(), &ci::via_make::Live),
         Some("github-token") => ci::config::github_token(&top()),
         Some("check") => checks::cli(&args[1..], &top()),
-        Some("plan") => plan::cli(&args[1..], &top()),
+        Some("plan") => plan::cli(&args[1..], &top(), &claims::cli),
         Some("rust") => rustc::cli(&args[1..]),
         Some("push-gate") => push::gate_cli(&args[1..], &top()),
         Some("push-checks") => push::checks_cli(

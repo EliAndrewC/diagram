@@ -31,6 +31,9 @@ use task::{resolve, touched_features};
 
 pub use l7r_gate_core::plan::*;
 
+/// `l7r-gate claims <words>`, as the binary answers it.
+pub type Claims = dyn Fn(&[String]) -> crate::Reply;
+
 const BUNDLES: &str = "/tmp/l7r-check";
 
 fn clock() -> (i64, u32, u32, u64, u64, u64) {
@@ -142,9 +145,9 @@ fn stop_reply(prefix: &str, stop: Stop) -> crate::Reply {
 }
 
 /// The line `make decide` and `make plan-delta` end with when the clone owes claims a triage (feature 430 T07, D7).
-fn triage_hint(root: &Path) -> String {
+fn triage_hint(root: &Path, claims: &Claims) -> String {
     let args = ["--root", &root.to_string_lossy(), "triage-owed"].map(str::to_owned);
-    hint_of(&crate::claims::cli(&args).stdout)
+    hint_of(&claims(&args).stdout)
 }
 
 /// The hint for `claims triage-owed`'s answer: the count it printed last, when above none.
@@ -175,7 +178,7 @@ fn parse_file(path: &str) -> Result<Value, Stop> {
     serde_json::from_str(&text).map_err(|e| Stop::Refused(e.to_string()))
 }
 
-fn decide(words: &[String], root: &Path, out_root: &Path) -> crate::Reply {
+fn decide(words: &[String], root: &Path, out_root: &Path, claims: &Claims) -> crate::Reply {
     let verb = words[0].as_str();
     let dir = resolve(&words[1], root);
     let plan = dir
@@ -207,12 +210,12 @@ fn decide(words: &[String], root: &Path, out_root: &Path) -> crate::Reply {
         bundle::task_prompt(&dir, out_root, &words[2])
     };
     match prompt {
-        Ok(text) => reply(text + "\n", triage_hint(&top), 0),
+        Ok(text) => reply(text + "\n", triage_hint(&top, claims), 0),
         Err(why) => fail(why + "\n", 1),
     }
 }
 
-fn plan_delta(dir: &Path, out_root: &Path) -> crate::Reply {
+fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims) -> crate::Reply {
     let plan = dir.join("plan.md");
     let review = read_review(dir);
     let text = std::fs::read_to_string(&plan).unwrap_or_default();
@@ -253,6 +256,7 @@ fn plan_delta(dir: &Path, out_root: &Path) -> crate::Reply {
                 dir.parent()
                     .and_then(Path::parent)
                     .unwrap_or(Path::new(".")),
+                claims,
             ),
             0,
         ),
@@ -349,7 +353,8 @@ fn approach_verb(words: &[String], root: &Path) -> crate::Reply {
 }
 
 /// The cohort's trigger for part B of the active task (`approach::owe_in_flight`).
-pub(crate) fn owe_in_flight(root: &Path, trigger: &str, part: &str) -> Option<String> {
+#[must_use]
+pub fn owe_in_flight(root: &Path, trigger: &str, part: &str) -> Option<String> {
     approach::owe_in_flight(root, trigger, part, None)
 }
 
@@ -416,6 +421,7 @@ fn answer(
     python: &str,
     stdin: &mut dyn Read,
     escaped: Option<&str>,
+    claims: &Claims,
 ) -> crate::Reply {
     let verb = words.first().map_or("", String::as_str);
     let n = words.len();
@@ -434,7 +440,7 @@ fn answer(
             let why = task::decision_refusal(Path::new(words.get(1).map_or(".", String::as_str)));
             reply(if why.is_empty() { why.clone() } else { format!("{why}\n") }, String::new(), i32::from(!why.is_empty()))
         }
-        ("decide" | "section-sha", 3) => decide(words, root, out_root),
+        ("decide" | "section-sha", 3) => decide(words, root, out_root, claims),
         ("record" | "record-blocks", 5) if words[3] == "--as" => record_verb(words, root),
         ("record-task", 6) if words[4] == "--as" => record_verb(words, root),
         ("slim" | "archive" | "delta", 2) => {
@@ -448,7 +454,7 @@ fn answer(
                     let list = if ids.is_empty() { "none finished".to_owned() } else { ids.join(", ") };
                     said(format!("plan-archive: {} task section(s) moved to {}/plan-done.md: {list}\n", ids.len(), dir.file_name().unwrap_or_default().to_string_lossy()))
                 }
-                _ => plan_delta(&dir, out_root),
+                _ => plan_delta(&dir, out_root, claims),
             }
         }
         ("owed", 2) => match owed(Path::new(&words[1])) {
@@ -469,25 +475,31 @@ fn answer(
 /// `l7r-gate plan <verb> ...`.
 /// What an hour or red-gate ruling owes the active task's part B (`plan_door.approach_ruled`), for `l7r-gate arbiter`.
 /// The active task's feature directory, as `plan_door.active_task` answered it (the claims carry's, 449 T82).
-pub(crate) fn active_feature(root: &Path) -> Option<PathBuf> {
+#[must_use]
+pub fn active_feature(root: &Path) -> Option<PathBuf> {
     task::active_task(root).0
 }
 
 /// A spec directory from a number or a name, as `plan_door.resolve` answered it (the claims carry's, 449 T82).
-pub(crate) fn resolve_feature(feature: &str, root: &Path) -> Option<PathBuf> {
+#[must_use]
+pub fn resolve_feature(feature: &str, root: &Path) -> Option<PathBuf> {
     resolve(feature, root)
 }
 
-pub(crate) fn approach_ruled(root: &Path, trigger: &str) -> Option<String> {
+#[must_use]
+pub fn approach_ruled(root: &Path, trigger: &str) -> Option<String> {
     approach::ruled(root, trigger, None)
 }
 
 /// The accept as the plan's verdict: the blocks recorded CLEAR (`plan_door.arbiter_accept`), for `l7r-gate arbiter`, which has just written the ruling it reads.
-pub(crate) fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Vec<String> {
+#[must_use]
+pub fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Vec<String> {
     record::arbiter_accept(dir, trigger, None).unwrap_or_default()
 }
 
-pub(crate) fn cli(words: &[String], root: &Path) -> crate::Reply {
+/// `l7r-gate plan <verb> ...`; `claims` is `l7r-gate claims`, which the binary hands in (the claims crate reads the plan's, so the
+/// plan cannot name it - feature 449 T92), asked for the triage hint `decide` and `delta` end with.
+pub fn cli(words: &[String], root: &Path, claims: &Claims) -> crate::Reply {
     let escaped = std::env::var("PLAN_REVIEW_OK").ok();
     answer(
         words,
@@ -496,6 +508,7 @@ pub(crate) fn cli(words: &[String], root: &Path) -> crate::Reply {
         "python3",
         &mut std::io::stdin(),
         escaped.as_deref(),
+        claims,
     )
 }
 
