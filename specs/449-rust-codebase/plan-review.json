@@ -10063,6 +10063,77 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T93": {
+   "section_sha256": "d61e3d7365b4ac1565d0d175c24a57cdc7f9dea0ca8772fd2ff9da6b0c4e1f74",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T93-runner-crate",
+     "summary": "The Rust checks runner becomes its own crate (rust/gate/crates/rustc, over core and tree only) with its own binary l7r-rust, stale only over its own inputs; the wrapper's staleness scan now includes rust/guard and touches the binary after a build.",
+     "class": "within",
+     "why": "FR-011 asks that an edit recompile one crate and what depends on it and that the loop be fast; a runner that does not rebuild the 19-crate binary on every edit serves that directly. The rust/guard staleness fix makes reuse of the compiled binary correct and nothing more."
+    },
+    {
+     "id": "T93-first-key-reads",
+     "summary": "First key (a): a crate's checks re-run when what its tests read of the tree at run time changes, as declared in [package.metadata.l7r] reads ('.' for checks, cohort, plan, tree, the gate binary), even when its test binary did not change.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-011 says run ONLY the crates whose compiled test binary changed; this re-runs some whose binary did not, narrowing the reuse granted. The GM's own words cover it: reuse 'the results of tests which have already run' - a test whose input changed has not already run on that input. A literal reading would hand back a stale green for a test whose fixture changed, which defeats the request's purpose (tests that gate work)."
+    },
+    {
+     "id": "T93-first-key-static",
+     "summary": "First key (b): lint, cover and dead are keyed on the crate's sources, path dependencies and manifests (plus declared reads), not on its test binary, so they re-run on a source edit that leaves the binary unchanged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from (a). Lint and dead read source, and coverage maps to source lines, so their input is the source, not the binary; a comment edit can change what they report. Reusing their result across a source change is not reuse of a result that already ran on these inputs. Same grounds as (a): implied by the GM's words, and the literal reading would defeat the purpose."
+    },
+    {
+     "id": "T93-undeclared-reader-refusal",
+     "summary": "A crate whose sources name the tree (CARGO_MANIFEST_DIR, top(), toplevel()) and declare no reads is refused, with the fix named.",
+     "class": "within",
+     "why": "A refusal is behavior, so its reach was checked: it applies only inside the Rust checks runner, only to crates, and only to keep the reuse key sound so the reuse FR-011 asks for cannot return a false green. It reaches no other command, agent or default. The rustc.rs split the file-scale test forced is a consequence of an existing rule, not a new decision."
+    },
+    {
+     "id": "T93-second-key",
+     "summary": "Second key for test and test-counters: the crate's compiled test binaries plus every non-Rust-source input; a binary that already passed runs nothing; the counting build shares the plain build's verdict where the binary is byte-identical (all but core and phases, measured).",
+     "class": "within",
+     "why": "This is FR-011's clause in its own terms: run only crates whose compiled test binary changed, the passed result reused for the rest. Sharing a verdict between byte-identical binaries is reuse of a result that already ran."
+    },
+    {
+     "id": "T93-content-id",
+     "summary": "Content id is git's blob id whether a file is edited, staged or committed; the last eight green keys are kept.",
+     "class": "within",
+     "why": "An implementation choice so a commit or a reverted edit does not re-run tests that already passed on the same content. It serves the reuse the GM asked for."
+    },
+    {
+     "id": "T93-escape",
+     "summary": "Every crate fresh is reached by FRESH=1 REASON=... on make rust-test, make static or make counters-inert through LOGESCAPE and guard_log (refused without a two-word reason), 'or make done FULL=1's own logged path'; 'INCREMENTAL=0 and FULL no longer turn reuse off'; no new guard because the default runs nothing unchanged.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-011 allows every crate at once ONLY through an escape that states a reason AND is recorded. The FRESH=1 route meets that. The make done FULL=1 route is described only as 'logged', with no reason required, and two sentences later the block says FULL no longer turns reuse off, which contradicts it. As written the block leaves a second route to the slow run with no stated reason, and its 'no new guard' argument depends on there being no such route. This is exactly the drift the GM said the tooling must prevent ('our tooling must enforce this'). Nothing in the GM's words implies a route without a reason, nothing makes one impossible to avoid, and the literal rule does not defeat the purpose. Fix: either remove make done FULL=1 as a route to every crate fresh, or state in the block that it requires and logs a reason and through which mechanism (LOGESCAPE/guard_log or which other one). Then make the 'FULL no longer turns reuse off' sentence match whichever you chose."
+    },
+    {
+     "id": "T93-idle-run-reuse",
+     "summary": "The idle run's make done INCREMENTAL=0 keeps reuse for the Rust checks.",
+     "class": "within",
+     "why": "The GM asked for reuse of tests that have already run and did not ask to keep a fresh idle run. This takes no case out of what was asked."
+    },
+    {
+     "id": "T93-output",
+     "summary": "The l7r-gate rust verbs keep their output byte for byte except the kept-result line (now also for test, a named crate, and a second-key hit) and the new undeclared-reader refusal.",
+     "class": "within",
+     "why": "T93 is not a port, so FR-002 does not strictly bind it. The plan holds itself to byte-for-byte anyway, and the two changes are the reuse and the refusal ruled above. Aside, not a finding: the Approach cites FR-003 for line coverage and clippy, which is FR-004's subject per the index."
+    },
+    {
+     "id": "T93-after-figures",
+     "summary": "Exit measured against SC-006: one-file edits 10.0 s core vs 49 s, 13.9 s claims vs 15.5 s; nothing changed runs no test and no coverage run.",
+     "class": "within",
+     "why": "These are SC-006's own measures, each labeled with its date and method."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
