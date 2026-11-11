@@ -387,14 +387,10 @@ fn cover(world: &World, manifest: &Path, work: &Path, report: &[String]) -> Ran 
         .filter_map(|l| serde_json::from_str::<Value>(l).ok())
         .filter_map(|v| v["executable"].as_str().map(str::to_owned))
         .collect();
-    if let Some(first) = keep.iter().next() {
-        let name = Path::new(first)
-            .file_name()
-            .unwrap_or_default()
-            .to_string_lossy()
-            .into_owned();
-        let stem = name.rsplit_once('-').map_or(name.as_str(), |(a, _)| a);
-        for old in glob_prefix(&deps, &format!("{stem}-")) {
+    // every other test binary goes: llvm-cov's report reads each one in the build, and in the one build the gate's crates share
+    // (feature 449 T92) another crate's binary carries this crate's code with none of this run's counts
+    if !keep.is_empty() {
+        for old in glob_prefix(&deps, "") {
             let shown = old.display().to_string();
             if !keep.contains(&shown) && old.extension().is_none() {
                 remove(&old);
