@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-11T15:16:07Z",
+  "target": "plan-gate push",
+  "commit": "a402f2403",
+  "why": "the plan delta is the T93 and T94 template placeholders make task-add wrote; neither task's section is written yet, and each owes its own review"
+}
