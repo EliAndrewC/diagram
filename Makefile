@@ -905,7 +905,7 @@ review-paired-gate:  ## [project] the settlement-review's paired gate - green, r
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
 
 ledger-owed:     ## [project] every check pass logged in this clone with no row in the review ledger, each with the row to add (feature 371); WRITE= writes them from each reply   [WRITE="<where you recorded what you did>"]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)" $(if $(CLAUDE_CODE_SESSION_ID),--session "$(CLAUDE_CODE_SESSION_ID)",),)
 
 dispatch-dropped: ## [project] record that a dispatch a guard refused is no longer wanted, so the turn may end (feature 385 T22)   TYPE=<agent type> BUNDLE=<path> WHY="<reason>"
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" dropped drop --root "$$(git rev-parse --show-toplevel)" --type "$(TYPE)" --bundle "$(BUNDLE)" --why "$(WHY)"

@@ -9031,6 +9031,102 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T87": {
+   "section_sha256": "b2b555e68c645dc810f0dfb0cf1344e85eb8da6cc22e03cf0cc661ccd3e6a243",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T87-layout",
+     "summary": "Rust under rust/gate/src/record/ reached as l7r-gate record verbs; Makefile and entry-gate.sh run the binary; arbiter.rs calls the answer function directly.",
+     "class": "within",
+     "why": "Ports the five files ask:449-T87-entry-owed says port, with one implementation (FR-003); no scope moves."
+    },
+    {
+     "id": "T87-door",
+     "summary": "Python callers reach the port through one no-logic door scripts/owed_door.py, one process a run, deleted with its last caller and named at the phase-3 close; check_bundle's in-process translation_owed runs as the command; replay_owing's _OLD_MODALS keeps importing the historic modal_owed from an old-commit worktree.",
+     "class": "within",
+     "why": "The door is the ruling's door on the ask:449-T86-door pattern (FR-006 one process). check_bundle moving to the command is what FR-003 requires. _OLD_MODALS reads an old commit's file, not the tracked one, and ask:449-T77-replays leaves replay_owing's old side to a new ask at that file's own port, which T87 does not do."
+    },
+    {
+     "id": "T87-fingerprint",
+     "summary": "fingerprint and quotation_key are door verbs keyed on root, rev and sources, working tree uncached, apply_edits taking both from one call; no caller mutates or holds a Record.",
+     "class": "within",
+     "why": "The ruling's words, nearly word for word."
+    },
+    {
+     "id": "T87-entry-owed-a",
+     "summary": "entry_owed.py is started only when the entry-drift family is asked for, the base has commits, and a question page changed or the engine is missing. Subcase (a): a change that holds no file the engine reads no longer catches an engine that is present but fails to import.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The T065 clause in ask:449-T87-entry-owed says outright that it is never started on a make done whose change holds no file it reads. When it is not started, an import failure cannot be seen, so this lost verdict is the ruling's own."
+    },
+    {
+     "id": "T87-entry-owed-b",
+     "summary": "Subcase (b) of the same trigger: a change that edits a file the engine reads (entry_owed.py's own source or the classes and compound_kinds registries it reads) but no question page no longer starts it, so an engine broken by that very change passes where the Python failed.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The T065 clause allows starting it here, and the Python would have failed (the block says so). The only words that could forbid it are 'run it by path only when that family is owed'. But the block names 'the family is asked for' and 'a question page changed' as two separate conditions, so the page-changed gate is the plan's addition. Reading 'owed' as 'a question page changed' completes the arbiter's thought. No differential case holds this subcase. Nothing makes it physically impossible: add 'or a file the engine reads changed against the base' to the trigger, or take the narrower reading to make arbiter-ask."
+    },
+    {
+     "id": "T87-text-calls",
+     "summary": "quote_verbatim and style_prepass run as one python3 -c a run, only for notes files not in translation-pairs.json; apply_edits.reply_of goes by command because it is not the T86 door's _reply_of; kinds_in is built on pylex's lexer and checked against ast.",
+     "class": "within",
+     "why": "The ruling sends style_prepass and reply_of by command, and sends reply_of to the T86 door only if it is the same function, which the block says it is not. ask:449-T81-slices leaves caching per Rust caller with the differential matching, and sends quote_verbatim to phase 4 by command. kinds_in reached through the door is the ruling's, and building it on the existing lexer keeps one implementation."
+    },
+    {
+     "id": "T87-merge-answers",
+     "summary": "record merge-answers replaces the jq merge and cp at pull-queue.sh, JSON-equal including key collisions, written by atomic rename, so the store has one writer.",
+     "class": "within",
+     "why": "The ruling's words."
+    },
+    {
+     "id": "T87-speed-cache",
+     "summary": "record_cache's disk cache is not carried into the Rust. The Rust record-owed measured 2.69-3.46 s against the Python's 1.85-1.89 s with its disk cache warm, and the plan states the slowdown as 'a tooling cost accepted here'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request's own stated purpose is that the Python is 'too inefficient' and is ported to Rust for that. ask:449-T81-slices lets a Rust caller keep or drop caching 'on its own recorded measurement', so the measurement is what decides. The one recorded here says the port without a cache is slower than the Python it replaces. It also compares Python with its cache warm against Rust with no cache, which is not the choice the ruling asks to have measured (Rust with a cache against Rust without). 'Accepted here' is the session approving its own exception (constitution XVI). Two things would make it legitimate: a measurement showing a cache buys the Rust nothing, or an arbiter ruling that accepts the regression. Neither is in the block."
+    },
+    {
+     "id": "T87-arbiter-test",
+     "summary": "The arbiter's Rust tests take a test double in place of a fake record_owed.py, and their expected message reads 'record-owed said' for 'python3 said'.",
+     "class": "within",
+     "why": "FR-002 binds the outputs of the Python being replaced. This is arbiter.rs's own wrapper text, already Rust, and once the call is direct the old text would describe a python3 process that no longer exists. The test still checks the same failure path."
+    },
+    {
+     "id": "T87-usage-text",
+     "summary": "The Rust keeps the Python's hand-written words; argparse-generated usage and traceback text are not bound.",
+     "class": "within",
+     "why": "Applies the ruled case ask:449-usage-text as written."
+    },
+    {
+     "id": "T87-differential",
+     "summary": "Differential of 87 cases with 0 differing. Normalized: paths, utc and bypass-log names, the caches, traceback and argparse usage text, the bypass-log commit (the two sides sit on different HEADs), and the no-colon slug subject.",
+     "class": "within",
+     "why": "Each normalization is a ruled unbound output (ask:449-usage-text), an artifact of running the two sides at different commits and paths, or a cache that ask:449-T81-slices leaves to each Rust caller with only the differential's outputs bound. No case is excluded from the comparison."
+    },
+    {
+     "id": "T87-record-cache-stays",
+     "summary": "record_cache.py stays because memo_check.py, claims.py and entry_owed.py still import it, and goes with the last of them.",
+     "class": "within",
+     "why": "ask:449-T81-slices: record_cache is deleted with its last Python caller and named at the phase-3 close if still present. The task line's deletion here was ahead of the ruling."
+    },
+    {
+     "id": "T87-delete-docs",
+     "summary": "The five .py files are deleted in the cut and the docs naming them now name the Rust.",
+     "class": "within",
+     "why": "The GM's standing approval of 2026-11-10 and ask:449-T86-door's delete-in-the-cut."
+    },
+    {
+     "id": "T87-375-measurement",
+     "summary": "specs/375-enforced-wave-process/measurements.json's recorded command naming record_owed.py is left unrewritten as 'history' that 'was already not runnable'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 says every recorded measurement that runs Python 'is rewritten in the commit that ports what it runs', and the rewritten entry is re-run as the proof. SC-005 counts m:recorded-python-commands at the close, so an entry left in place will count. The GM's 2026-11-09 rule covers what is 'not still used' and says delete, not leave, while FR-001 says make figures re-runs the measurements. 'Already not runnable' carries no method: an unmeasured premise is deciding the rule's scope. Rewrite it to the port through make and re-run it, or remove it under the 2026-11-09 rule with the measured showing that nothing runs it."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
