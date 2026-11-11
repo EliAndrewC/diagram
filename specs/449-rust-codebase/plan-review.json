@@ -218,10 +218,10 @@
    "declared": "round-arbiter"
   },
   "### T89 Approach (checklist part A)": {
-   "sha256": "fd60c5bf2bd640301d611eb95cb3c79b183098d071156b8436bd9b4510cbc31c",
+   "sha256": "49dc65db056630cc5ff69fff64ce63e37575fdcaccc1aed318c443e3349d5cd9",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   },
   "### T86 (the arbiter and checks state, `ask:449-T86-door`)": {
    "sha256": "ae223a311e02194fe59a96d8b5d5e133e92f7f338ff1066356be08550899157f",
@@ -237,6 +237,12 @@
   },
   "### T88 (the bundles, `ask:449-T88-bundles`)": {
    "sha256": "11c396ed2c4326e2d425682fed0b719309d010f944c7d6364263f18dc1a1d59d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T89 (the reviews, `ask:449-T89-reviews`)": {
+   "sha256": "373bdf1893c2de7f69a5afc8901832e02e4fbdeb6ea221a46eb1df9ffdfe4233",
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
@@ -5457,6 +5463,107 @@
      "why": "This repeats the ruling's order, in which each verb leaves the runner when its owner is ported. It narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T89 (the reviews, `ask:449-T89-reviews`)",
+    "### T89 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T89-layout",
+     "summary": "Rust in rust/gate/src/reviews.rs and reviews/{owed,owed/declared,glyph,prereq,checkpoint,door}.rs, reached as l7r-gate reviews owed|prereq|checkpoint and reviews-door; Makefile verify/step-back*/review-* recipes and review-gate.sh repointed; arbiter.rs's checkpoint close and content key become in-process calls",
+     "class": "within",
+     "why": "The port FR-001 and ask:449-T89-reviews require; callers moved in the same cut so one implementation runs (FR-003)."
+    },
+    {
+     "id": "T89-pair-guard-by-command",
+     "summary": "The pair guard asks the port by command (crate direction gate->guard); guard's python interpreter field and its !script.is_file() early returns removed; SC-004 trace greps now look for reviews owed",
+     "class": "within",
+     "why": "One implementation either way (FR-003). The early returns keyed on the Python script's presence would always fire once the scripts are deleted, silencing the glyph-hour and prerequisite checks; removing them keeps the guard's behavior. No suite case held the no-Python path, so no FR-002 case changes."
+    },
+    {
+     "id": "T89-reviews-door",
+     "summary": "scripts/reviews_door.py holds exactly gitdir, git, checkpoint_state for stepback_bundle.py, leaving with T83",
+     "class": "within",
+     "why": "Exactly the three verbs and lifetime ask:449-T89-reviews names; stepback_bundle's move to T83 is the ruling's."
+    },
+    {
+     "id": "T89-checks-door-verbs",
+     "summary": "tick-task.py's checkpoint.hold and review_snapshot.py's owed(landing=True) and Unit fields reach the port via review_hold and review_owed verbs on T86's checks_door.py, carrying the T065 clause and named at the phase-3 close",
+     "class": "within",
+     "why": "The ruling requires these callers to reach the port through door verbs without naming which door; placing them on an existing no-logic door is inside that."
+    },
+    {
+     "id": "T89-pool-map-names-no-verb",
+     "summary": "pool_map_names, listed by the ruling for review_snapshot.py, gets no door verb because no Python caller left reads it (review_prereq named was its one reader, now Rust)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from the ruling's letter, so classed narrowing. The ruling binds the callers' uses: review_snapshot.py must reach the port for what it uses. The census at the cut (ast walk of git ls-files '*.py': the four ported files imported by nothing but stepback_bundle) and the before/after review_snapshot.py differential (4 cases, 0 differing) show review_snapshot.py reaches no pool_map_names, so a verb would have no caller, and the door pattern the ruling adopts (no logic, each verb leaving with its last caller) would delete it on arrival. Nothing the GM asked for is left unported or unexercised. Note: the specific pre-cut claim that review_prereq named was the sole reader carries no method of its own; the ruling rests on the census and differential instead."
+    },
+    {
+     "id": "T89-is-current-verb",
+     "summary": "gencache.is_current is one verb on scripts/bundle_door.py, started from the --clone's own scripts/, only when reviews prereq check asks about a map with a generator; leaves with l7r/diagram/pipeline/ in T90",
+     "class": "within",
+     "why": "As ruled; running from the clone's own scripts/ reproduces the Python's import of the clone's cache (FR-002)."
+    },
+    {
+     "id": "T89-speckit-todo-by-command",
+     "summary": "speckit-todo.py --state DIR asked by command once a run, cached per directory, run from / so no tool-usage row is written",
+     "class": "within",
+     "why": "By command once a run is the ruling. Running from / keeps the Python's output (it asked in-process and wrote no row), which FR-002 requires."
+    },
+    {
+     "id": "T89-revreader-not-ported",
+     "summary": "record_cache.RevReader not ported; one ls-tree and one cat-file --batch for the base's pool trees, one git ls-files per run for new folders",
+     "class": "within",
+     "why": "Exactly the ruling, and ask:449-T81-slices lets each Rust caller decide caching on its own."
+    },
+    {
+     "id": "T89-figure-pattern-by-command",
+     "summary": "Figure pattern asked of l7r-gate check spec-lint --figure-pattern by command (Python \\w read as \\w\\p{N}), keeping the spec-lint usage row the Python's command wrote",
+     "class": "within",
+     "why": "Keeps the Python's observable output (the usage row) rather than dropping it, so no FR-002 output change; the differential found the row."
+    },
+    {
+     "id": "T89-state-file-writers",
+     "summary": "glyph-clock.json, glyph-landing, review-verdicts/, review-dispositions/, checkpoint-admitted and dev/step-back.json keep one writer each, in the Python's shape",
+     "class": "within",
+     "why": "FR-002 file-shape parity and FR-003's one implementation."
+    },
+    {
+     "id": "T89-fr005-probe-retired",
+     "summary": "specs/240.../measure/fr005_probe.py deleted unported; its seven measurements.json entries keep values with commands replaced by a <retired: ...> placeholder that make figures does not run and m:recorded-python-commands does not count",
+     "class": "within",
+     "why": "Deletion is ruled under the GM's 2026-11-09 rule. The ruling pointed to ask:449-T79-moves' retirement as the form; the plan measured that no such retirement exists (git log -S, method stated), and its placeholder delivers both effects the ruling asks for: values kept as history, not re-run by make figures (figures.rs refuses placeholder commands), and not counted by the census regex, which needs a python3 token the retired string does not hold."
+    },
+    {
+     "id": "T89-no-conditional-start",
+     "summary": "No Python start is conditional on a changed file (speckit-todo.py when a feature is named, bundle_door.py when prereq check asks), so no read set is measured",
+     "class": "within",
+     "why": "Both starts are the ones the ruling permits by command; neither runs on a make done keyed to a changed file. Which hook reaches reviews owed is inherited from the pre-port guard, not decided here."
+    },
+    {
+     "id": "T89-coverage-tests",
+     "summary": "Tests on scratch repositories with by-command tools stubbed; misaligned takes the feature as an argument; owed.rs split into owed/declared.rs; 100% line coverage, clippy::pedantic clean",
+     "class": "within",
+     "why": "FR-004 and FR-008; test design does not narrow the request."
+    },
+    {
+     "id": "T89-differential",
+     "summary": "Python vs Rust differential: 178 cases over owed/checkpoint/prereq, 0 differing; doors 42 comparisons, 0 differing; repointed callers 10 cases, 1 differing only by clock; normalizations N1-N8",
+     "class": "within",
+     "why": "FR-002's proof. No case is excluded. N5 and N6 are ruled by ask:449-usage-text; N2, N3 and N7 are clock-dependent values; N1, N4 and N8 are environment. None hides a verdict or a file's content."
+    },
+    {
+     "id": "T89-census",
+     "summary": "Census at the cut: the four and hm_approval.py imported only by stepback_bundle (T83's, ruled); no runs in Makefile/sh/Rust/settings/agents; Rust reaches Python only via speckit-todo.py --state and is_current; no measurements command names the four",
+     "class": "within",
+     "why": "The census the ruling and FR-001 require at the cut."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -9468,6 +9575,105 @@
      "summary": "Goal, constraints, order after T87 with T82/T83/T85 taking the runner's verbs, exits, one-landing budget, done measured.",
      "class": "within",
      "why": "This repeats the ruling's order, in which each verb leaves the runner when its owner is ported. It narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T89": {
+   "section_sha256": "11bb850d55e697614e669151ca424fa2f8571a28c1da54a56143e94ee6d5cdff",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T89-layout",
+     "summary": "Rust in rust/gate/src/reviews.rs and reviews/{owed,owed/declared,glyph,prereq,checkpoint,door}.rs, reached as l7r-gate reviews owed|prereq|checkpoint and reviews-door; Makefile verify/step-back*/review-* recipes and review-gate.sh repointed; arbiter.rs's checkpoint close and content key become in-process calls",
+     "class": "within",
+     "why": "The port FR-001 and ask:449-T89-reviews require; callers moved in the same cut so one implementation runs (FR-003)."
+    },
+    {
+     "id": "T89-pair-guard-by-command",
+     "summary": "The pair guard asks the port by command (crate direction gate->guard); guard's python interpreter field and its !script.is_file() early returns removed; SC-004 trace greps now look for reviews owed",
+     "class": "within",
+     "why": "One implementation either way (FR-003). The early returns keyed on the Python script's presence would always fire once the scripts are deleted, silencing the glyph-hour and prerequisite checks; removing them keeps the guard's behavior. No suite case held the no-Python path, so no FR-002 case changes."
+    },
+    {
+     "id": "T89-reviews-door",
+     "summary": "scripts/reviews_door.py holds exactly gitdir, git, checkpoint_state for stepback_bundle.py, leaving with T83",
+     "class": "within",
+     "why": "Exactly the three verbs and lifetime ask:449-T89-reviews names; stepback_bundle's move to T83 is the ruling's."
+    },
+    {
+     "id": "T89-checks-door-verbs",
+     "summary": "tick-task.py's checkpoint.hold and review_snapshot.py's owed(landing=True) and Unit fields reach the port via review_hold and review_owed verbs on T86's checks_door.py, carrying the T065 clause and named at the phase-3 close",
+     "class": "within",
+     "why": "The ruling requires these callers to reach the port through door verbs without naming which door; placing them on an existing no-logic door is inside that."
+    },
+    {
+     "id": "T89-pool-map-names-no-verb",
+     "summary": "pool_map_names, listed by the ruling for review_snapshot.py, gets no door verb because no Python caller left reads it (review_prereq named was its one reader, now Rust)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from the ruling's letter, so classed narrowing. The ruling binds the callers' uses: review_snapshot.py must reach the port for what it uses. The census at the cut (ast walk of git ls-files '*.py': the four ported files imported by nothing but stepback_bundle) and the before/after review_snapshot.py differential (4 cases, 0 differing) show review_snapshot.py reaches no pool_map_names, so a verb would have no caller, and the door pattern the ruling adopts (no logic, each verb leaving with its last caller) would delete it on arrival. Nothing the GM asked for is left unported or unexercised. Note: the specific pre-cut claim that review_prereq named was the sole reader carries no method of its own; the ruling rests on the census and differential instead."
+    },
+    {
+     "id": "T89-is-current-verb",
+     "summary": "gencache.is_current is one verb on scripts/bundle_door.py, started from the --clone's own scripts/, only when reviews prereq check asks about a map with a generator; leaves with l7r/diagram/pipeline/ in T90",
+     "class": "within",
+     "why": "As ruled; running from the clone's own scripts/ reproduces the Python's import of the clone's cache (FR-002)."
+    },
+    {
+     "id": "T89-speckit-todo-by-command",
+     "summary": "speckit-todo.py --state DIR asked by command once a run, cached per directory, run from / so no tool-usage row is written",
+     "class": "within",
+     "why": "By command once a run is the ruling. Running from / keeps the Python's output (it asked in-process and wrote no row), which FR-002 requires."
+    },
+    {
+     "id": "T89-revreader-not-ported",
+     "summary": "record_cache.RevReader not ported; one ls-tree and one cat-file --batch for the base's pool trees, one git ls-files per run for new folders",
+     "class": "within",
+     "why": "Exactly the ruling, and ask:449-T81-slices lets each Rust caller decide caching on its own."
+    },
+    {
+     "id": "T89-figure-pattern-by-command",
+     "summary": "Figure pattern asked of l7r-gate check spec-lint --figure-pattern by command (Python \\w read as \\w\\p{N}), keeping the spec-lint usage row the Python's command wrote",
+     "class": "within",
+     "why": "Keeps the Python's observable output (the usage row) rather than dropping it, so no FR-002 output change; the differential found the row."
+    },
+    {
+     "id": "T89-state-file-writers",
+     "summary": "glyph-clock.json, glyph-landing, review-verdicts/, review-dispositions/, checkpoint-admitted and dev/step-back.json keep one writer each, in the Python's shape",
+     "class": "within",
+     "why": "FR-002 file-shape parity and FR-003's one implementation."
+    },
+    {
+     "id": "T89-fr005-probe-retired",
+     "summary": "specs/240.../measure/fr005_probe.py deleted unported; its seven measurements.json entries keep values with commands replaced by a <retired: ...> placeholder that make figures does not run and m:recorded-python-commands does not count",
+     "class": "within",
+     "why": "Deletion is ruled under the GM's 2026-11-09 rule. The ruling pointed to ask:449-T79-moves' retirement as the form; the plan measured that no such retirement exists (git log -S, method stated), and its placeholder delivers both effects the ruling asks for: values kept as history, not re-run by make figures (figures.rs refuses placeholder commands), and not counted by the census regex, which needs a python3 token the retired string does not hold."
+    },
+    {
+     "id": "T89-no-conditional-start",
+     "summary": "No Python start is conditional on a changed file (speckit-todo.py when a feature is named, bundle_door.py when prereq check asks), so no read set is measured",
+     "class": "within",
+     "why": "Both starts are the ones the ruling permits by command; neither runs on a make done keyed to a changed file. Which hook reaches reviews owed is inherited from the pre-port guard, not decided here."
+    },
+    {
+     "id": "T89-coverage-tests",
+     "summary": "Tests on scratch repositories with by-command tools stubbed; misaligned takes the feature as an argument; owed.rs split into owed/declared.rs; 100% line coverage, clippy::pedantic clean",
+     "class": "within",
+     "why": "FR-004 and FR-008; test design does not narrow the request."
+    },
+    {
+     "id": "T89-differential",
+     "summary": "Python vs Rust differential: 178 cases over owed/checkpoint/prereq, 0 differing; doors 42 comparisons, 0 differing; repointed callers 10 cases, 1 differing only by clock; normalizations N1-N8",
+     "class": "within",
+     "why": "FR-002's proof. No case is excluded. N5 and N6 are ruled by ask:449-usage-text; N2, N3 and N7 are clock-dependent values; N1, N4 and N8 are environment. None hides a verdict or a file's content."
+    },
+    {
+     "id": "T89-census",
+     "summary": "Census at the cut: the four and hm_approval.py imported only by stepback_bundle (T83's, ruled); no runs in Makefile/sh/Rust/settings/agents; Rust reaches Python only via speckit-todo.py --state and is_current; no measurements command names the four",
+     "class": "within",
+     "why": "The census the ruling and FR-001 require at the cut."
     }
    ],
    "verdict": "CLEAR"
