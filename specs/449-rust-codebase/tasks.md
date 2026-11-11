@@ -338,3 +338,5 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T103 Session scratch under /tmp/claude-1000 swept: a session's scratchpad and task outputs removed once its transcript has been idle for days, never a live session's (38 GB, 20 GB in one session's scratch clones) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: a finished session's scratch under /tmp/claude-<uid> is swept once a day by a detached guard, never a running session's
+- [ ] T104 A spec round's arbiter bundle read every subagent transcript whole for its first line (8,696 files, 8.0 GB): one bundle 7.6 s, the arbiter crate's tests 8-11 s; read the first line only (found under T99, 2026-11-11)
+      research: rendering

@@ -111,12 +111,17 @@ pub fn plan_rounds(d: &Path) -> (Vec<String>, PathBuf) {
 }
 
 /// The text a subagent was dispatched with: its transcript's first record.
+///
+/// Its first line only (feature 449 T99): the whole file was read for it, every subagent transcript on the machine - 8,696 files, 8.0 GB
+/// (2026-11-11) - so one spec round's bundle took 7.6 s, and the arbiter crate's tests with it.
 fn first_prompt(transcript: &Path) -> String {
-    let Ok(bytes) = std::fs::read(transcript) else {
+    let Ok(file) = std::fs::File::open(transcript) else {
         return String::new();
     };
-    let all = String::from_utf8_lossy(&bytes);
-    let line = all.split_inclusive('\n').next().unwrap_or("");
+    let mut bytes = Vec::new();
+    let _ = std::io::BufRead::read_until(&mut std::io::BufReader::new(file), b'\n', &mut bytes);
+    let line = String::from_utf8_lossy(&bytes);
+    let line = line.as_ref();
     let first: Value = if line.is_empty() {
         json!({})
     } else {

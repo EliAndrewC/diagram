@@ -348,6 +348,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T104 (a spec round's arbiter bundle read every subagent transcript whole, found under T99, FR-012)": {
+   "sha256": "e4201cc333bf806f77d7c91a80c476acf85beb6f49da22e6866d196f0256542d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T104 Approach (checklist part A)": {
+   "sha256": "b5bef68818118a2f25aa9a165f83041fa697239d4b5eeabe9867aad2ab9f11c5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6282,6 +6294,46 @@
      "why": "Sequencing and procedure inside FR-012. None of it narrows the request or the spec."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T104 (a spec round's arbiter bundle read every subagent transcript whole, found under T99, FR-012)",
+    "### T104 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T104-cause",
+     "summary": "T99's arbiter-crate test time is attributed to one test (7.64 s of 8-11 s) and within it one bundle call (7.62 s) that reads all 8,696 subagent transcripts (8.0 GB) whole to take each first line.",
+     "class": "within",
+     "why": "A measured diagnosis of the arbiter crate's slow tests, which FR-012 (T99) names as a cost to be cut against FR-008's bar; it decides where to cut, not what is asked."
+    },
+    {
+     "id": "T104-fix",
+     "summary": "first_prompt in rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs reads a transcript's first line through a buffered reader instead of reading the whole file.",
+     "class": "within",
+     "why": "A cut of a cost FR-012 lists (T99, the arbiter crate's tests), measured before and after by the same per-test run as FR-012 and SC-007 require (7.64 s to 0.30 s). That a real spec round's bundle also gets faster is the same function, not new behavior."
+    },
+    {
+     "id": "T104-same-output",
+     "summary": "Output held: the parsed first line is unchanged, and an unopenable path, a directory, an empty file and a non-JSON first line each still give an empty prompt; the crate's 32 tests pass unchanged.",
+     "class": "within",
+     "why": "FR-012 and SC-007 require every output and verdict held; the directory case only moves where the failure arises, and its result (an empty prompt) is the same. No case is excluded or changed."
+    },
+    {
+     "id": "T104-left-to-T99",
+     "summary": "Six arbiter tests still take 0.14-0.43 s against FR-008's 0.1 s, left to T99 (owed-list computation, about 25 git calls each).",
+     "class": "within",
+     "why": "Nothing is exempted from FR-008 or FR-012: the remaining cost stays owed by T99, which this task was found under and lands ahead of. It records a remainder, it does not narrow T99's scope."
+    },
+    {
+     "id": "T104-exits-budget",
+     "summary": "Exits: green on make static and make land; red records the failure and sets the task down, any cannot-be-done claim ruled through make arbiter-ask. Budget one landing; no constant moved, no map moved.",
+     "class": "within",
+     "why": "Procedure only; no part of the request is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10978,6 +11030,44 @@
      "summary": "ordered after T101-T103; one landing; red exit via make arbiter-ask; no engine code or map change",
      "class": "within",
      "why": "Sequencing and procedure inside FR-012. None of it narrows the request or the spec."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T104": {
+   "section_sha256": "53d85c9cbdfbbec9e016ccc823b85e03b8b58eb9ec8f0318fa5499ee4137fc5a",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T104-cause",
+     "summary": "T99's arbiter-crate test time is attributed to one test (7.64 s of 8-11 s) and within it one bundle call (7.62 s) that reads all 8,696 subagent transcripts (8.0 GB) whole to take each first line.",
+     "class": "within",
+     "why": "A measured diagnosis of the arbiter crate's slow tests, which FR-012 (T99) names as a cost to be cut against FR-008's bar; it decides where to cut, not what is asked."
+    },
+    {
+     "id": "T104-fix",
+     "summary": "first_prompt in rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs reads a transcript's first line through a buffered reader instead of reading the whole file.",
+     "class": "within",
+     "why": "A cut of a cost FR-012 lists (T99, the arbiter crate's tests), measured before and after by the same per-test run as FR-012 and SC-007 require (7.64 s to 0.30 s). That a real spec round's bundle also gets faster is the same function, not new behavior."
+    },
+    {
+     "id": "T104-same-output",
+     "summary": "Output held: the parsed first line is unchanged, and an unopenable path, a directory, an empty file and a non-JSON first line each still give an empty prompt; the crate's 32 tests pass unchanged.",
+     "class": "within",
+     "why": "FR-012 and SC-007 require every output and verdict held; the directory case only moves where the failure arises, and its result (an empty prompt) is the same. No case is excluded or changed."
+    },
+    {
+     "id": "T104-left-to-T99",
+     "summary": "Six arbiter tests still take 0.14-0.43 s against FR-008's 0.1 s, left to T99 (owed-list computation, about 25 git calls each).",
+     "class": "within",
+     "why": "Nothing is exempted from FR-008 or FR-012: the remaining cost stays owed by T99, which this task was found under and lands ahead of. It records a remainder, it does not narrow T99's scope."
+    },
+    {
+     "id": "T104-exits-budget",
+     "summary": "Exits: green on make static and make land; red records the failure and sets the task down, any cannot-be-done claim ruled through make arbiter-ask. Budget one landing; no constant moved, no map moved.",
+     "class": "within",
+     "why": "Procedure only; no part of the request is narrowed."
     }
    ],
    "verdict": "CLEAR"
