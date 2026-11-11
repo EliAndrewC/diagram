@@ -273,4 +273,8 @@ fn at_clean(root: &Path, reach: &str) {
         "not json\n\n{\"kind\": \"known-drift\", \"claim\": 7}\n",
     );
     assert!(recorded_known(&root).unwrap().contains("7"));
+    put(&root, "specs/405-claims/gm-review.jsonl", "3\n");
+    assert!(recorded_known(&root)
+        .unwrap_err()
+        .starts_with("AttributeError"));
 }

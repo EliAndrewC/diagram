@@ -86,8 +86,23 @@ pub(crate) fn clear(root: &Path, bundle: &Path) {
     let _ = std::fs::remove_file(dir(root).join(name(bundle)));
 }
 
+/// `float(v)` of a JSON value, 0 where it is absent: the failure Python's `float` raises on what it cannot read.
+fn float(v: Option<&Value>) -> Result<f64, Fail> {
+    match v {
+        None => Ok(0.0),
+        Some(Value::Number(n)) => Ok(n.as_f64().unwrap_or(0.0)),
+        Some(Value::Bool(b)) => Ok(f64::from(u8::from(*b))),
+        Some(Value::String(s)) => l7r_guard::shared::py_text::strip(s)
+            .parse()
+            .map_err(|_| format!("ValueError: could not convert string to float: {s:?}")),
+        Some(other) => Err(format!(
+            "TypeError: float() argument must be a string or a real number, not {other}"
+        )),
+    }
+}
+
 /// The bundles in flight at `now`: marked within [`MAX_AGE_S`] and not cleared.
-pub(crate) fn live(root: &Path, now: f64) -> Vec<String> {
+pub(crate) fn live(root: &Path, now: f64) -> Result<Vec<String>, Fail> {
     let d = dir(root);
     let mut files: Vec<PathBuf> = std::fs::read_dir(&d)
         .into_iter()
@@ -103,19 +118,20 @@ pub(crate) fn live(root: &Path, now: f64) -> Vec<String> {
             continue;
         };
         let Ok(rec) = rec else { continue };
-        let at = rec.get("at").and_then(Value::as_f64).unwrap_or(0.0);
+        let at = float(rec.as_object().ok_or("AttributeError: 'get'")?.get("at"))?;
         if now - at <= MAX_AGE_S {
             let fallback = f
                 .file_name()
                 .unwrap_or_default()
                 .to_string_lossy()
                 .into_owned();
-            out.push(rec.get("bundle").map_or(fallback, |b| {
-                b.as_str().map_or_else(|| b.to_string(), str::to_owned)
-            }));
+            out.push(
+                rec.get("bundle")
+                    .map_or(fallback, crate::record::bundle::py_str),
+            );
         }
     }
-    out
+    Ok(out)
 }
 
 #[cfg(test)]

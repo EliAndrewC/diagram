@@ -124,7 +124,9 @@ fn a_tree_with_nothing_to_read_reads_nothing() {
     assert!(classified(&mut bare, &empty, &at).unwrap().0.is_empty());
     put(&root, "dev/claims-index.json", "[1]");
     commit(&root, "a list for an index");
-    assert!(classified(&mut reader, &root, &at).unwrap().1.is_empty());
+    assert!(classified(&mut reader, &root, &at)
+        .unwrap_err()
+        .starts_with("AttributeError"));
     put(&root, "dev/claims-index.json", "{");
     commit(&root, "a broken index");
     assert!(classified(&mut reader, &root, &at)

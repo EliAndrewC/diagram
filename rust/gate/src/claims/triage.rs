@@ -22,6 +22,7 @@ use super::index::{
 use super::reply::bare;
 use super::scope::Reader;
 use super::units::{doc_units, from_json};
+use crate::record::bundle::py_str;
 use crate::record::repo::{fail, git, Fail};
 use crate::record::units::{digest, re};
 
@@ -244,11 +245,11 @@ struct Gathered {
 
 fn last_verdict(index: &Index, k: &str) -> (String, String) {
     let row = index.get(k);
-    let verdict = row.and_then(|r| r.get("verdict")).map_or_else(
-        || "None".to_owned(),
-        |v| v.as_str().map_or_else(|| v.to_string(), str::to_owned),
-    );
-    (verdict, row.map_or("", |r| field(r, "note")).to_owned())
+    let verdict = row.and_then(|r| r.get("verdict")).unwrap_or(&Value::Null);
+    let note = row
+        .and_then(|r| r.get("note"))
+        .map_or_else(String::new, py_str);
+    (py_str(verdict), note)
 }
 
 fn gather_code(
@@ -267,10 +268,7 @@ fn gather_code(
     }
     let uid = row.uid();
     if !g.codes.contains_key(&uid) {
-        let shown = was_code.map_or_else(
-            || "None".to_owned(),
-            |v| v.as_str().map_or_else(|| v.to_string(), str::to_owned),
-        );
+        let shown = py_str(was_code.unwrap_or(&Value::Null));
         let base = checked_at(root, key, &shown, seen, log);
         let hunks = code_hunks(
             root,

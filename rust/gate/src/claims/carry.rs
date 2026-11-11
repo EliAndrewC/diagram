@@ -431,12 +431,12 @@ pub(crate) fn recorded_known(root: &Path) -> Result<HashSet<String>, Fail> {
             let Ok(r) = serde_json::from_str::<Value>(&ln) else {
                 continue;
             };
-            if is(&r, "kind", KNOWN_KIND) && super::index::truthy(r.get("claim")) {
-                out.insert(
-                    r["claim"]
-                        .as_str()
-                        .map_or_else(|| r["claim"].to_string(), str::to_owned),
-                );
+            let r = r.as_object().ok_or("AttributeError: 'get'")?;
+            let claim = r.get("claim");
+            if r.get("kind").and_then(Value::as_str) == Some(KNOWN_KIND)
+                && super::index::truthy(claim)
+            {
+                out.insert(claim.map(crate::record::bundle::py_str).unwrap_or_default());
             }
         }
     }
@@ -477,7 +477,8 @@ pub(crate) fn classified(
         let text = git(root, &["show", &format!("{mb}:{INDEX}")]);
         let parsed = serde_json::from_str::<Value>(if text.is_empty() { "{}" } else { &text });
         let parsed = parsed.map_err(|e| format!("json.decoder.JSONDecodeError: {e}"));
-        parsed?.as_object().cloned().unwrap_or_default()
+        let parsed = parsed?;
+        parsed.as_object().cloned().ok_or("AttributeError: 'get'")?
     };
     let tmp = super::temp_dir("base");
     std::fs::create_dir_all(&tmp).map_err(fail)?;

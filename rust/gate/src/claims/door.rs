@@ -94,7 +94,7 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
         }
         "git_diff" => Ok(json!(git_diff(&root, &text(args, 1)))),
         "file_left" => Ok(json!(file_left(&root, &text(args, 1), &strings(args, 2))?)),
-        "flight_live" => Ok(json!(super::flight::live(&root, super::flight::now()))),
+        "flight_live" => Ok(json!(super::flight::live(&root, super::flight::now())?)),
         "constants" => Ok(
             json!({"CLAIMS_FEATURE_DIR": CLAIMS_FEATURE_DIR, "QUESTIONS": QUESTIONS,
                                  "INDEX": super::index::INDEX, "STORE": super::index::STORE}),
