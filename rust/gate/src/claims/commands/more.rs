@@ -95,6 +95,25 @@ fn the_coverage_and_the_accept() {
     assert!(claims(&root, &["refingerprint"])
         .stdout
         .starts_with("claims-refingerprint: 0 claim row(s)"));
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b + "\n## Tick\n<!-- Research: tick` - NONE -->\n",
+    )
+    .unwrap();
+    let got = claims(
+        &root,
+        &[
+            "accept",
+            "--keys",
+            "docs/buildings.md::Tick#tick`",
+            "--trigger",
+            "t",
+        ],
+    );
+    assert!(got.stdout.starts_with(
+        "claims-accept: refused: `docs/buildings.md::Tick#tick` is not a unit of this bundle\n"
+    ));
 }
 
 #[test]

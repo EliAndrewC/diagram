@@ -175,6 +175,7 @@ fn an_introduced_finding_refuses_and_an_answered_relabel_does_not() {
         .unwrap();
     let reach = cur.get("rust/phases/src/lib.rs::reach#reach").unwrap();
     let mut ix = crate::claims::index::load_map(&root.join("dev/claims-index.json")).unwrap();
+    ix.insert("gone.rs::x#y".to_owned(), json!({"verdict": "UNCLAIMED"}));
     ix["rust/phases/src/lib.rs::reach#reach"] = json!({"verdict": "MISLABELED", "code": "old", "body": body_of(&root, &reach.unit).unwrap(), "claim": "before", "research": reach.research});
     std::fs::write(
         root.join("dev/claims-index.json"),
@@ -204,4 +205,29 @@ fn an_introduced_finding_refuses_and_an_answered_relabel_does_not() {
         "{\"rust/phases/src/lib.rs::reach#reach\": {\"verdict\": \"DRIFTED\", \"code\": \"x\"}}",
     );
     let _ = record_known(&mut reader, &root, &at).unwrap();
+}
+
+#[test]
+fn a_tree_with_no_claims_feature_files_into_the_active_one_and_a_dotted_unit_is_named() {
+    let root = fixture("claims-carry-noclaims");
+    put(&root, "specs/406-x/tasks.md", "- [ ] T01 fix reach now\n");
+    put(
+        &root,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/406-x\"}",
+    );
+    assert!(target(&root).unwrap().unwrap().ends_with("specs/406-x"));
+    let mut cur = Cur::default();
+    cur.insert(row_of(
+        "x.rs::Thing.reach#d",
+        "d - NONE: until feature 406 T01",
+    ));
+    let index: Map<String, Value> = json!({"x.rs::Thing.reach#d": {"verdict": "DRIFTED"}})
+        .as_object()
+        .unwrap()
+        .clone();
+    assert_eq!(
+        known_drifts(&cur, &index, &root).unwrap()["x.rs::Thing.reach#d"],
+        "406 T01"
+    );
 }

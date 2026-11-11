@@ -154,3 +154,9 @@ fn the_rust_walk_skips_the_tooling_crates_and_targets_and_keeps_python_order() {
     assert!(all_rust_units(&root, "").is_err());
     assert!(rglob(Path::new("/no/such/dir"), ".rs").is_empty());
 }
+
+#[test]
+fn a_statement_between_a_doc_and_its_item_ends_the_doc() {
+    let got = items("/// a doc\nuse x;\nfn a() {}\n", 0, "", false);
+    assert_eq!(got[0].4, "");
+}

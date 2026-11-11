@@ -179,10 +179,12 @@ pub(crate) fn inline(
         if !MAP_CODE.iter().any(|m| r.starts_with(m)) || !r.starts_with(path) {
             continue;
         }
+        let source = read_text(&p)?;
         let got = reader.ask(
             "tunables_unstated",
-            &json!([read_text(&p)?, text.get(&r).unwrap_or(&empty)]),
-        )?;
+            &json!([source, text.get(&r).unwrap_or(&empty)]),
+        );
+        let got = got?;
         for t in got.as_array().into_iter().flatten() {
             let line = t[1]
                 .as_u64()

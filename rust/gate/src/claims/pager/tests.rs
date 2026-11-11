@@ -32,3 +32,16 @@ fn a_long_report_goes_through_the_pager_only_on_a_terminal() {
     let here = Screen::here();
     assert!(!here.tty && here.rows == 24 && !here.pager.is_empty());
 }
+
+#[test]
+fn the_screen_is_read_from_its_parts() {
+    let s = Screen::of(
+        true,
+        Some("7".into()),
+        Some(String::new()),
+        Some("1".into()),
+    );
+    assert!(s.tty && s.rows == 7 && s.pager == "less -FRSX" && s.off);
+    let s = Screen::of(false, None, Some("more".into()), Some(String::new()));
+    assert!(!s.tty && s.rows == 24 && s.pager == "more" && !s.off);
+}

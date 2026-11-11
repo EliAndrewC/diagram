@@ -134,8 +134,8 @@ fn a_form_problem_in_a_changed_file_refuses_and_the_base_tree_is_read() {
     base_tree("git", &none, "HEAD", &none).unwrap();
 }
 
-#[test]
-fn each_way_a_finding_is_read_against_the_base() {
+/// The rows and the index `classify` is asked about: (root, rows, index).
+fn classify_rows() -> (std::path::PathBuf, Cur, Map<String, Value>) {
     let root = fixture("claims-report-classify");
     let q = root.join("research/questions");
     let (same_page, moved_page) = (
@@ -163,7 +163,6 @@ fn each_way_a_finding_is_read_against_the_base() {
     for name in ["resmoved", "resonly"] {
         add(name, moved_page);
     }
-    let code = cur.get("a.rs::carry#carry").unwrap().code.clone();
     let mut index = Map::new();
     for name in [
         "pre", "carry", "out", "same", "moved", "newcode", "resmoved", "resonly", "stays",
@@ -182,6 +181,14 @@ fn each_way_a_finding_is_read_against_the_base() {
     );
     index["a.rs::out#out"]["outside"] = json!(true);
     index["a.rs::moved#moved"]["core"] = json!("core-gone");
+    (root, cur, index)
+}
+
+#[test]
+fn each_way_a_finding_is_read_against_the_base() {
+    let (root, cur, index) = classify_rows();
+    let q = root.join("research/questions");
+    let code = cur.get("a.rs::carry#carry").unwrap().code.clone();
     let base_index = obj(&json!({
         "a.rs::pre#pre": {"verdict": "MISLABELED"},
         "a.rs::carry#carry": {"verdict": "IN-STEP", "code": code},

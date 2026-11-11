@@ -92,3 +92,8 @@ fn the_list_and_the_inline_audit() {
     )
     .is_empty());
 }
+
+#[test]
+fn a_whole_number_of_six_digits_is_written_whole() {
+    assert_eq!(fmt_g(123_456.0), "123456");
+}

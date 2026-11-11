@@ -83,6 +83,7 @@ fn each_verb_answers() {
         serve(&mut "{\"verb\": \"constants\"}\n".as_bytes(), &mut closed).code,
         0
     );
+    assert!(std::io::Write::flush(&mut closed).is_ok());
 }
 
 struct Closed;

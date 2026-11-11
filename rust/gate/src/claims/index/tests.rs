@@ -273,3 +273,25 @@ fn a_relabel_alone_owes_nothing_and_answers_its_mislabel() {
         "new"
     );
 }
+
+#[test]
+fn a_key_with_no_unit_moves_nowhere_and_a_page_with_no_rests_is_triaged() {
+    let root = fixture("claims-index-more");
+    let q = root.join("research/questions");
+    let mut cur = Cur::default();
+    let r = row(
+        "nocolon",
+        unit("a.rs", "x", "function", (1, 1), &[]),
+        "x - research/questions/0001-gap.html",
+        "new",
+    );
+    cur.insert(r.clone());
+    assert!(super::moved(&cur, &obj(&json!({"a.rs::x#x": {"code": r.code}}))).is_empty());
+    let blocks = page_blocks("0001-gap.html", &q, &mut PageMemo::default())
+        .unwrap()
+        .clone();
+    let was = json!({"code": r.code, "research": "old", "pages": {"0001-gap.html": blocks.0}});
+    let store = obj(&json!({blocks.0.clone(): []}));
+    let due = owed(&cur, &obj(&json!({"nocolon": was})), Some(&q), Some(&store)).unwrap();
+    assert_eq!(due[0].1, "triage");
+}

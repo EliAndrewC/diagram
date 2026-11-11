@@ -17,8 +17,9 @@ fn units_doc(qual: &str, blocks: &[&str]) -> String {
     .to_string()
 }
 
-#[test]
-fn each_kind_of_change_is_shown_and_its_reply_recorded() {
+/// The fixture recorded, then a claimed dictionary, a page, a section and three units changed, and the index and snapshots as a
+/// triage reads them: (root, index, store).
+fn changed_everything() -> (std::path::PathBuf, Map<String, Value>, Map<String, Value>) {
     let root = fixture("claims-triage-bundle");
     let table = units_doc("TABLE", &["'a': 1", "'gone': 2"]);
     put(&root, "l7r/diagram/m.py", &table);
@@ -69,6 +70,12 @@ fn each_kind_of_change_is_shown_and_its_reply_recorded() {
         .as_array_mut()
         .unwrap()
         .push(json!("lost-digest"));
+    (root, ix, store)
+}
+
+#[test]
+fn each_kind_of_change_is_shown_and_its_reply_recorded() {
+    let (root, ix, store) = changed_everything();
     let mut reader = Reader::new(&root, &root);
     let cur = current(&mut reader, &root, &root.join("research/questions")).unwrap();
     let keys: Vec<String> = [
@@ -207,4 +214,117 @@ fn a_reply_s_lines_are_vetted_and_its_outside_rows_filed() {
         "claims-checked: filed, not fixed - x.py | the block | a finding\n"
     );
     assert!(warned.is_empty());
+}
+
+/// The fixture recorded and committed as origin/main, the index's GAP row resting on no block: (root, index, store).
+fn recorded() -> (std::path::PathBuf, Map<String, Value>, Map<String, Value>) {
+    let root = fixture("claims-triage-only");
+    record_all(&root);
+    commit(&root, "recorded");
+    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    let mut ix = load_map(&root.join("dev/claims-index.json")).unwrap();
+    ix["rust/phases/src/lib.rs::GAP#gap"]
+        .as_object_mut()
+        .unwrap()
+        .remove("rests");
+    let store = load_map(&root.join("dev/claims-pages.json")).unwrap();
+    (root, ix, store)
+}
+
+fn manifest_of(
+    root: &std::path::Path,
+    ix: &Map<String, Value>,
+    store: &Map<String, Value>,
+    keys: &[&str],
+) -> String {
+    let mut reader = Reader::new(root, root);
+    let cur = current(&mut reader, root, &root.join("research/questions")).unwrap();
+    let keys: Vec<String> = keys.iter().map(|k| (*k).to_owned()).collect();
+    let out = root.join("t");
+    let m = triage_bundle(
+        &mut reader,
+        &cur,
+        ix,
+        store,
+        &keys,
+        &root.join("research/questions"),
+        &out,
+    )
+    .unwrap();
+    std::fs::read_to_string(m).unwrap()
+}
+
+#[test]
+fn a_change_that_only_adds_shows_no_removed_blocks() {
+    let (root, ix, store) = recorded();
+    put(&root, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n<p>Added.</p>\n");
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b.replace("Walls stand.\n", "Walls stand.\n\nAdded too.\n"),
+    )
+    .unwrap();
+    let text = manifest_of(
+        &root,
+        &ix,
+        &store,
+        &[
+            "rust/phases/src/lib.rs::GAP#gap",
+            "docs/buildings.md::Walls#walls",
+        ],
+    );
+    assert!(
+        text.contains("New or changed blocks:\n\n> Added too.\n\nClaims in it:")
+            && text.contains("> Added.\n\nClaims citing it:")
+    );
+    assert!(!text.contains("Removed blocks"));
+}
+
+#[test]
+fn a_change_that_only_removes_shows_none_new_and_a_lost_block_owes_in_full() {
+    let (root, mut ix, mut store) = recorded();
+    put(
+        &root,
+        "research/questions/0001-gap.html",
+        "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n",
+    );
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b.replace("Walls stand.\n", ""),
+    )
+    .unwrap();
+    let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
+    std::fs::write(
+        root.join("rust/phases/src/lib.rs"),
+        lib.replace("x + GAP + y", "x + GAP + y + 1.0"),
+    )
+    .unwrap();
+    let section = ix["docs/buildings.md::Walls#walls"]["section"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    store[&section].as_array_mut().unwrap().push(json!("lost"));
+    ix["rust/phases/src/lib.rs::reach#reach"]["verdict"] = json!(3);
+    ix["rust/phases/src/lib.rs::reach#reach"]["code"] = json!(5);
+    let text = manifest_of(
+        &root,
+        &ix,
+        &store,
+        &[
+            "rust/phases/src/lib.rs::GAP#gap",
+            "docs/buildings.md::Walls#walls",
+            "rust/phases/src/lib.rs::reach#reach",
+        ],
+    );
+    assert!(text.contains("New or changed blocks:\n\n(none)\n\nRemoved blocks (no longer in the section):\n\n> Walls stand.\n"));
+    assert!(text.contains("New or changed blocks:\n\n(none)\n\nRemoved blocks (no longer on the page):\n\n> A second block.\n"));
+    assert!(text.contains("last verdict 3: "));
+    let data: Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join("t/triage.json")).unwrap())
+            .unwrap();
+    assert!(data["forced"]
+        .as_array()
+        .unwrap()
+        .contains(&json!("docs/buildings.md::Walls#walls")));
 }

@@ -340,11 +340,9 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
     let t = root.join("t");
     let to = t.to_string_lossy().into_owned();
     let got = claims(&root, &["triage", "--out", &to]);
-    assert!(
-        got.stdout
-            .contains("claims-triage: 4 claim(s); dispatch the `claims-triage` agent")
-            || got.stdout.contains("claims-triage: a claims triage of"),
-    );
+    assert!(got
+        .stdout
+        .contains("claims-triage: 4 claim(s); dispatch the `claims-triage` agent"));
     let manifest = std::fs::read_to_string(t.join("MANIFEST.md")).unwrap_or_default();
     assert!(
         manifest.contains("(a procedure section; the claims' own lines did not change)")
@@ -390,6 +388,8 @@ fn a_small_triage_goes_straight_to_impl_drift_and_a_bare_one_to_its_full_check()
     )
     .unwrap();
     let o = root.join("s").to_string_lossy().into_owned();
+    let got = claims(&root, &["triage", "--out", "/proc/no/such/dir"]);
+    assert_eq!(got.code, 1);
     let got = claims(&root, &["triage", "--out", &o]);
     assert!(got.stdout.contains(
         "claims-triage: a claims triage of 1 claim(s), at most 3, goes straight to impl-drift"

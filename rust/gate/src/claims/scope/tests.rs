@@ -60,3 +60,13 @@ fn the_python_half_is_asked_once_for_a_tree_it_has_read() {
     assert!(r.py_units(&plain, false, true).is_err());
     assert!(!cache_off());
 }
+
+#[test]
+fn the_cache_switch_reads_as_the_python_reads_it() {
+    assert!(
+        super::off(Some("1"))
+            && !super::off(Some("0"))
+            && !super::off(Some(""))
+            && !super::off(None)
+    );
+}

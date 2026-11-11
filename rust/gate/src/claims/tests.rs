@@ -249,3 +249,24 @@ fn the_arbiter_reads_the_rows_and_the_index() {
     );
     assert!(super::stdin_git(&root, &["no-such-command"], "").is_none());
 }
+
+#[test]
+fn the_inline_audit_runs_from_the_command_line() {
+    let root = fixture("claims-cli-inline");
+    let r = root.to_string_lossy().into_owned();
+    let got = super::tunables_cli(&[
+        "--root".to_owned(),
+        r.clone(),
+        "--inline".to_owned(),
+        "--count".to_owned(),
+    ]);
+    assert!(got
+        .stdout
+        .starts_with("tunables --inline: 3 number(s) in 1 file(s)"));
+    put(&root, "l7r/diagram/labels/x.py", "4.5\n");
+    put(&root, "scripts/bundle_door.py", "import sys\nsys.exit(1)\n");
+    assert_eq!(
+        super::tunables_cli(&["--root".to_owned(), r, "--inline".to_owned()]).code,
+        1
+    );
+}
