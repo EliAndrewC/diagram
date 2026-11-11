@@ -217,21 +217,40 @@ pub(super) fn entry_base(root: &Path) -> String {
     }
 }
 
-/// Whether `entry_owed` must run for this delta (the T065 clause, `ask:449-T87-entry-owed`): the family is asked, and a question page changed, or the engine it imports is not here (the crash the Python had then).
+/// What `entry_owed.py` reads besides the question pages: its engine import closure (the `interactive` package and the
+/// package root above it, 20 files measured 2026-11-10 by importing it and listing `sys.modules`) and the scripts it loads.
+/// A change to any of them starts it, so an engine the change broke fails as the Python's did (the plan review of T87).
+const ENTRY_READS: [&str; 6] = [
+    "l7r/diagram/interactive/",
+    "l7r/diagram/__init__.py",
+    "scripts/record/entry_owed.py",
+    "scripts/record/record_cache.py",
+    "scripts/record_door.py",
+    "scripts/owed_door.py",
+];
+
+/// Whether `entry_owed` must run for this delta (the T065 clause, `ask:449-T87-entry-owed`): the family is asked, and a
+/// question page or a file it reads changed against the base, untracked files included, or the engine it imports is not
+/// here (the crash the Python had then).
 fn entry_drift_owed(root: &Path) -> bool {
     let base = entry_base(root);
     if base.is_empty() {
         return false;
     }
+    let mut paths = vec!["research/questions/"];
+    paths.extend(ENTRY_READS);
+    let mut changed = vec!["diff", "--name-only", base.as_str(), "--"];
+    changed.extend(&paths);
+    let mut others = vec!["ls-files", "--others", "--exclude-standard", "--"];
+    others.extend(&paths);
+    let names = git(root, &changed) + &git(root, &others);
     !root
         .join("l7r/diagram/interactive/classes/__init__.py")
         .is_file()
-        || git(root, &["diff", "--name-only", &base, "--", "research/"])
-            .lines()
-            .any(|n| {
-                n.strip_prefix("research/questions/")
-                    .is_some_and(|f| stem_of(f).is_some())
-            })
+        || names.lines().any(|n| {
+            n.strip_prefix("research/questions/")
+                .map_or(!n.trim().is_empty(), |f| stem_of(f).is_some())
+        })
 }
 
 fn entry_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {

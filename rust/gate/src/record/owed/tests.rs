@@ -496,6 +496,40 @@ fn the_entry_drift_seam() {
 }
 
 #[test]
+fn a_file_entry_owed_reads_starts_it_with_no_page_changed() {
+    let root = record("owed-entry-reads");
+    put(&root, "entry-raise", "");
+    // nothing it reads changed: not started, so its failure is not seen
+    assert!(units(&root, None, None, &["entry-drift"], "")
+        .unwrap()
+        .is_empty());
+    // a registry it reads, edited in the working tree: started, and the broken engine fails as the Python's did
+    put(
+        &root,
+        "l7r/diagram/interactive/classes/homestead.py",
+        "class Well(Kind):\n    key = \"well\"\n",
+    );
+    assert!(units(&root, None, None, &["entry-drift"], "").is_err());
+    git(
+        &root,
+        &[
+            "checkout",
+            "--",
+            "l7r/diagram/interactive/classes/homestead.py",
+        ],
+    );
+    // a new file in its import closure, untracked: started too
+    put(&root, "l7r/diagram/interactive/sources.py", "");
+    assert!(units(&root, None, None, &["entry-drift"], "").is_err());
+    std::fs::remove_file(root.join("l7r/diagram/interactive/sources.py")).unwrap();
+    // a non-page file under the questions, alone: not started
+    put(&root, "research/questions/README.md", "x\n");
+    assert!(units(&root, None, None, &["entry-drift"], "")
+        .unwrap()
+        .is_empty());
+}
+
+#[test]
 fn a_revision_read_and_a_failing_read() {
     let root = record("owed-read");
     let rec = read_at(&root, Some("HEAD"), Some(&std::collections::HashSet::new())).unwrap();
