@@ -7,7 +7,11 @@ use crate::claims::tests::{fixture, py_units};
 use crate::record::testkit::put;
 
 fn ask(lines: &[Value]) -> Vec<Value> {
-    let input: String = lines.iter().map(|l| format!("{l}\n\n")).collect();
+    let input: String = lines.iter().fold(String::new(), |mut acc, l| {
+        acc.push_str(&l.to_string());
+        acc.push_str("\n\n");
+        acc
+    });
     let mut out = Vec::new();
     let done = serve(&mut input.as_bytes(), &mut out);
     assert_eq!(done.code, 0);

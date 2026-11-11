@@ -2,6 +2,11 @@
 //! claims_carry.py`, ported by feature 449 T82; feature 385 amendment 3, FR-013, plan D26-D29, and feature 445's switch): the record
 //! `specs/<feature>/claims-carried.jsonl`, the known drifts, and what the gate refuses and warns.
 
+#![expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
+)]
+
 use std::collections::{BTreeSet, HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -364,7 +369,9 @@ pub(crate) fn known_drifts(
         .collect();
     let mut boxes: HashMap<(String, String), String> = HashMap::new();
     for (key, (feat, task)) in cand {
-        if !boxes.contains_key(&(feat.clone(), task.clone())) {
+        if let std::collections::hash_map::Entry::Vacant(slot) =
+            boxes.entry((feat.clone(), task.clone()))
+        {
             let specs = spec_glob(root, &feat, Some("tasks.md"));
             let found = match specs.first() {
                 Some(p) => {
@@ -377,7 +384,7 @@ pub(crate) fn known_drifts(
                 }
                 None => None,
             };
-            boxes.insert((feat.clone(), task.clone()), found.unwrap_or_default());
+            slot.insert(found.unwrap_or_default());
         }
         let uid = key.rsplit_once('#').map_or(key.as_str(), |p| p.0);
         let tail = uid.split_once("::").map_or(uid, |p| p.1);
@@ -436,6 +443,9 @@ pub(crate) fn recorded_known(root: &Path) -> Result<HashSet<String>, Fail> {
     Ok(out)
 }
 
+/// (owed refusals, introduced, pre-existing, carried (key, line)).
+pub(crate) type Classified = (Vec<String>, Vec<String>, Vec<String>, Vec<(String, String)>);
+
 /// What the gate reads of a tree: the rows now, the index, and what is owed.
 pub(crate) struct Reading {
     pub(crate) cur: Cur,
@@ -447,7 +457,7 @@ pub(crate) fn classified(
     reader: &mut Reader,
     root: &Path,
     at: &Reading,
-) -> Result<(Vec<String>, Vec<String>, Vec<String>, Vec<(String, String)>), Fail> {
+) -> Result<Classified, Fail> {
     let store = load_map(&root.join(STORE))?;
     let due = owed(
         &at.cur,
@@ -459,7 +469,7 @@ pub(crate) fn classified(
         l7r_guard::shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"]))
             .to_owned();
     if mb.is_empty() {
-        mb = l7r_guard::shared::py_text::strip(&git(root, &["rev-parse", "HEAD"])).to_owned();
+        l7r_guard::shared::py_text::strip(&git(root, &["rev-parse", "HEAD"])).clone_into(&mut mb);
     }
     let base_index = if mb.is_empty() {
         Index::new()

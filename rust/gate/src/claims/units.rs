@@ -1,6 +1,6 @@
 //! The units claims sit on (`l7r/diagram/tools/claims.py`'s `Unit`, `doc_units` and `section_blocks`, and `claims_rust.py` whole, ported
 //! by feature 449 T82): a Mode A procedure section, and a Rust item read from its doc comments. A `.py` unit comes from the Python's own
-//! reader through the runner ([`super::scope`]), its fingerprint being CPython's `ast.dump` (`ask:449-T82-claims`).
+//! reader through the runner ([`super::scope`]), its fingerprint being `CPython`'s `ast.dump` (`ask:449-T82-claims`).
 
 use std::path::Path;
 use std::sync::LazyLock;
@@ -273,48 +273,48 @@ pub(crate) fn splitlines(text: &str) -> Vec<String> {
 }
 
 /// Past the item that opens at char `start`: its matching `}`, or the `;` ending a body-less item - strings, chars and comments skipped.
-fn item_end(s: &[char], start: usize) -> usize {
-    let n = s.len();
-    let (mut i, mut depth, mut nest) = (start, 0i64, 0i64);
-    let find = |from: usize, needle: &[char]| (from..n).find(|&j| s[j..].starts_with(needle));
-    while i < n {
-        let c = s[i];
-        if s[i..].starts_with(&['/', '/']) {
-            i = find(i, &['\n']).unwrap_or(n);
+fn item_end(text: &[char], start: usize) -> usize {
+    let len = text.len();
+    let (mut at, mut depth, mut nest) = (start, 0i64, 0i64);
+    let find = |from: usize, needle: &[char]| (from..len).find(|&k| text[k..].starts_with(needle));
+    while at < len {
+        let ch = text[at];
+        if text[at..].starts_with(&['/', '/']) {
+            at = find(at, &['\n']).unwrap_or(len);
             continue;
         }
-        if s[i..].starts_with(&['/', '*']) {
-            i = find(i + 2, &['*', '/']).map_or(n, |j| j + 2);
+        if text[at..].starts_with(&['/', '*']) {
+            at = find(at + 2, &['*', '/']).map_or(len, |k| k + 2);
             continue;
         }
-        if c == '"' {
-            let mut j = i + 1;
-            while j < n && s[j] != '"' {
-                j += if s[j] == '\\' { 2 } else { 1 };
+        if ch == '"' {
+            let mut k = at + 1;
+            while k < len && text[k] != '"' {
+                k += if text[k] == '\\' { 2 } else { 1 };
             }
-            i = j + 1;
+            at = k + 1;
             continue;
         }
-        if c == '\'' && i + 2 < n && (s[i + 2] == '\'' || s[i + 1] == '\\') {
-            i = find(i + 2, &['\'']).map_or(n, |j| j + 1);
+        if ch == '\'' && at + 2 < len && (text[at + 2] == '\'' || text[at + 1] == '\\') {
+            at = find(at + 2, &['\'']).map_or(len, |k| k + 1);
             continue;
         }
-        match c {
+        match ch {
             '{' => depth += 1,
             '}' => {
                 depth -= 1;
                 if depth == 0 {
-                    return i + 1;
+                    return at + 1;
                 }
             }
             '(' | '[' => nest += 1,
             ')' | ']' => nest -= 1,
-            ';' if depth == 0 && nest == 0 => return i + 1,
+            ';' if depth == 0 && nest == 0 => return at + 1,
             _ => {}
         }
-        i += 1;
+        at += 1;
     }
-    n
+    len
 }
 
 /// One Rust item: (qualname, kind, first line, last line, doc, item text).

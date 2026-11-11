@@ -2,8 +2,9 @@
 //! `l7r/diagram/tools/claims_rust.py`, with the grammar, the section reader and `doc_units` of `l7r/diagram/tools/claims.py`, ported by
 //! feature 449 T82 under `ask:449-T82-claims`): `l7r-gate claims <command>` behind `make claims-*`, `l7r-gate tunables` behind
 //! `make tunables`, and `l7r-gate claims-door` for the Python that stays Python until its own port. A `.py` unit's fingerprint stays
-//! CPython's `ast.dump`, read through `scripts/bundle_door.py` only when a `.py` file changed ([`scope`]).
+//! `CPython`'s `ast.dump`, read through `scripts/bundle_door.py` only when a `.py` file changed ([`scope`]).
 
+use std::fmt::Write as _;
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
 
@@ -128,7 +129,7 @@ fn split_top(args: &[String]) -> Result<(String, &str, &[String]), String> {
     while i < args.len() {
         let a = &args[i];
         if let Some(value) = a.strip_prefix("--root=") {
-            root = value.to_owned();
+            value.clone_into(&mut root);
             i += 1;
         } else if a.len() > 2 && "--root".starts_with(a.as_str()) {
             match args.get(i + 1) {
@@ -187,9 +188,10 @@ pub(crate) fn cli(args: &[String]) -> Reply {
     let code = match commands::run(cmd, &parsed, &root, &mut out) {
         Ok(code) => code,
         Err(why) => {
-            out.err.push_str(&format!(
+            let _ = write!(
+                out.err,
                 "Traceback (most recent call last):\n  l7r-gate claims {cmd}\n{why}\n"
-            ));
+            );
             1
         }
     };

@@ -2,6 +2,11 @@
 //! the form check, ported by feature 449 T82): counts by verdict, the open findings, and whether a finding is introduced, pre-existing or
 //! carried against the merge base with origin/main.
 
+#![expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
+)]
+
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::io::Write as _;
 use std::path::Path;
@@ -110,7 +115,7 @@ pub(crate) fn shown(key: &str, verdict: &str, deferred: &HashSet<String>) -> Str
 }
 
 /// A row's verdict: the failure Python's `v["verdict"]` raises where it has none.
-pub(crate) fn verdict_of<'a>(v: &'a Value) -> Result<&'a str, Fail> {
+pub(crate) fn verdict_of(v: &Value) -> Result<&str, Fail> {
     match v.get("verdict") {
         Some(Value::String(s)) => Ok(s),
         Some(other) => Err(format!("TypeError: a verdict {other}")),
@@ -318,18 +323,17 @@ pub(crate) struct Base<'a> {
     pub(crate) answered: &'a HashSet<String>,
 }
 
+/// (introduced, pre-existing, carried (key, line)).
+pub(crate) type Judged = (Vec<String>, Vec<String>, Vec<(String, String)>);
+
 /// (introduced, pre-existing, carried) findings (spec FR-010; carried: 385 FR-013).
-pub(crate) fn classify(
-    cur: &Cur,
-    index: &Index,
-    base: &Base,
-) -> Result<(Vec<String>, Vec<String>, Vec<(String, String)>), Fail> {
+pub(crate) fn classify(cur: &Cur, index: &Index, base: &Base) -> Result<Judged, Fail> {
     let head_uids = cur.uids();
-    let gone_cores: HashSet<&String> = base
+    let gone_cores: HashSet<&str> = base
         .cores
         .iter()
         .filter(|(u, _)| !head_uids.contains(*u))
-        .map(|(_, c)| c)
+        .map(|(_, c)| c.as_str())
         .collect();
     let mut memo = HashMap::new();
     let (mut intro, mut pre, mut carried) = (Vec::new(), Vec::new(), Vec::new());
@@ -378,7 +382,7 @@ pub(crate) fn classify(
         if same_core && research_changed {
             carried.push((key.clone(), line));
         } else {
-            let code_changed = !(same_core || gone_cores.contains(&core.to_owned()));
+            let code_changed = !(same_core || gone_cores.contains(core));
             if code_changed || research_changed {
                 intro.push(line);
             } else {

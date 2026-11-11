@@ -2,6 +2,11 @@
 //! delta changed marked, its claims, what it calls or reads as context, the cited questions as files beside the MANIFEST, and units.json
 //! with the fingerprints `claims-checked` records.
 
+#![expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
+)]
+
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -19,6 +24,9 @@ use super::scope::Reader;
 use super::units::{items, splitlines, Unit};
 use crate::record::repo::{fail, git, read_text, Fail};
 use crate::record::units::{digest, re};
+
+/// The questions' part's answer: the numbered blocks, the snapshots, the pages read.
+type Cited = (Map<String, Value>, Map<String, Value>, PageMemo);
 
 /// The most of its own module's functions a unit carries into its bundle as context.
 const CALLEES_MAX: usize = 6;
@@ -295,7 +303,7 @@ fn questions_part(
     qdir: &Path,
     out: &Path,
     parts: &mut Vec<String>,
-) -> Result<(Map<String, Value>, Map<String, Value>, PageMemo), Fail> {
+) -> Result<Cited, Fail> {
     std::fs::create_dir(out.join("questions")).map_err(fail)?;
     parts.push("# The cited questions\n\nEach is a file under `questions/` beside this MANIFEST - read each one a unit cites, once:\n".to_owned());
     let (mut numbered, mut snapshots, mut memo) = (Map::new(), Map::new(), PageMemo::default());

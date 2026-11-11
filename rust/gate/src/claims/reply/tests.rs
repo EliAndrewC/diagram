@@ -4,7 +4,7 @@ use serde_json::{json, Map, Value};
 
 use super::{outside_tag, parse_reply, record, rests_of, unelide};
 
-fn obj(v: Value) -> Map<String, Value> {
+fn obj(v: &Value) -> Map<String, Value> {
     v.as_object().unwrap().clone()
 }
 
@@ -34,7 +34,7 @@ fn a_reply_is_read_in_each_form() {
         ),
         "see 0236-shrine-home-plot.drawing.html and 0300-..b.html and 0999-...x.html"
     );
-    let numbered = obj(json!({"§1": "p.html:d1", "§2": "q.html:d2"}));
+    let numbered = obj(&json!({"§1": "p.html:d1", "§2": "q.html:d2"}));
     assert_eq!(
         rests_of("note [§2, §1, §9]", &numbered),
         (
@@ -52,13 +52,13 @@ fn a_reply_is_read_in_each_form() {
 #[test]
 fn a_reply_writes_its_rows() {
     let index =
-        obj(json!({"a::u#old": {"verdict": "UNCLAIMED"}, "z::v#k": {"verdict": "IN-STEP"}}));
-    let units = obj(json!({
+        obj(&json!({"a::u#old": {"verdict": "UNCLAIMED"}, "z::v#k": {"verdict": "IN-STEP"}}));
+    let units = obj(&json!({
         "a::u#c": {"code": "1", "core": "c1", "body": "b", "claim": "c", "research": "r", "uid": "a::u", "pages": {"p.html": "f"}, "section": "s"},
         "a::u#d": {"code": "2", "core": "c1", "research": "", "uid": "a::u", "pages": {"p.html": "f"}},
         "a::u#e": {"code": "3", "core": "c1", "research": "", "uid": "a::u"},
     }));
-    let numbered = obj(json!({"§1": "p.html:d1", "§2": "q.html:d2"}));
+    let numbered = obj(&json!({"§1": "p.html:d1", "§2": "q.html:d2"}));
     let text = "VERDICT a::u#c DRIFTED - [outside the change] off [§1]\nVERDICT a::u#d IN-STEP - fine [§2]\nVERDICT gone#x IN-STEP - no\nUNCLAIMED a::u - [outside the change] new one\nUNCLAIMED b::x - no";
     let (out, msgs) = record(&index, &units, text, "2026-11-11", &numbered);
     assert!(!out.contains_key("a::u#old") && out.contains_key("z::v#k"));

@@ -41,7 +41,7 @@ static RESTS: LazyLock<Regex> = LazyLock::new(|| re(r"\[(§[^\]]*)\]\s*\z"));
 static ELIDED: LazyLock<Regex> =
     LazyLock::new(|| re(r"\b(\d{4})-[\w-]*\.\.\.?[\w-]*?((?:\.drawing)?\.html)"));
 
-/// `line.strip().strip("`")`: a reply line as the readers take it.
+/// A reply line as the readers take it: stripped of whitespace, then of backticks.
 pub(crate) fn bare(raw: &str) -> &str {
     strip(raw).trim_matches('`')
 }
@@ -55,10 +55,11 @@ pub(crate) fn outside_tag(note: &str) -> (bool, String) {
     )
 }
 
+/// A reply parsed: (verdict, note) by key, and each UNCLAIMED (uid, decision).
+pub(crate) type Parsed = (HashMap<String, (String, String)>, Vec<(String, String)>);
+
 /// The verdicts by key, and each UNCLAIMED (uid, decision), from a check's reply; the notes in the house style.
-pub(crate) fn parse_reply(
-    text: &str,
-) -> (HashMap<String, (String, String)>, Vec<(String, String)>) {
+pub(crate) fn parse_reply(text: &str) -> Parsed {
     let mut verdicts = HashMap::new();
     let mut unclaimed = Vec::new();
     for raw in text.split('\n') {

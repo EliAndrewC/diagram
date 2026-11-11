@@ -95,6 +95,13 @@ fn what_is_owed_then_bundled_then_recorded() {
             && manifest.contains("```python\ndef GAP(): pass"),
         "{manifest}"
     );
+    record_and_report(&root, &out);
+}
+
+/// The second half: the bundle's reply recorded in each form, then reported with and without the deferred.
+fn record_and_report(root: &Path, out: &Path) {
+    let root = root.to_path_buf();
+    let o = out.to_string_lossy().into_owned();
     let units: Value =
         serde_json::from_str(&std::fs::read_to_string(out.join("units.json")).unwrap()).unwrap();
     assert_eq!(

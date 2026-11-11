@@ -3,6 +3,7 @@
 //! `.py` file's numbers by Python's syntax tree through the runner (`ask:449-T82-claims`).
 
 use std::collections::HashMap;
+use std::fmt::Write as _;
 use std::path::Path;
 use std::sync::LazyLock;
 
@@ -169,7 +170,7 @@ pub(crate) fn inline(
             .or_default()
             .entry(bare.to_owned())
             .or_default();
-        bag.push_str(&format!(" {} {}", row.claim.label, row.claim.account));
+        let _ = write!(bag, " {} {}", row.claim.label, row.claim.account);
     }
     let empty = HashMap::new();
     let mut out = Vec::new();

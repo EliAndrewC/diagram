@@ -1,6 +1,11 @@
 //! The claims TRIAGE (`scripts/record/claims_triage.py`, ported by feature 449 T82): one cheap agent over what changed, so a claim is
 //! re-judged only when a change bears on it - a cited page's new, changed or removed blocks, a procedure section's, a unit's diff.
 
+#![expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
+)]
+
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::Write as _;
 use std::path::Path;
@@ -222,6 +227,9 @@ pub(crate) fn code_hunks(root: &Path, path: &str, lo: usize, hi: usize, base: &s
     out
 }
 
+/// A procedure section's (new or changed blocks, removed blocks, claims).
+type Section = (Vec<String>, Vec<String>, Vec<String>);
+
 /// What the triage bundle gathers of each kind of change.
 #[derive(Default)]
 struct Gathered {
@@ -230,7 +238,7 @@ struct Gathered {
     gone: HashMap<String, Vec<String>>,
     lost: HashMap<(String, String), bool>,
     forced: BTreeSet<String>,
-    sections: BTreeMap<String, (Vec<String>, Vec<String>, Vec<String>)>,
+    sections: BTreeMap<String, Section>,
     codes: BTreeMap<String, (Vec<String>, Vec<String>)>,
 }
 

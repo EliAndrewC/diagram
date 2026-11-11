@@ -366,7 +366,7 @@ fn lines_of(root: &Path, path: &str) -> Result<Option<Vec<String>>, Fail> {
     }
 }
 
-fn at<'a>(lines: &'a [String], i: usize) -> Result<&'a str, Fail> {
+fn at(lines: &[String], i: usize) -> Result<&str, Fail> {
     lines
         .get(i)
         .map(String::as_str)

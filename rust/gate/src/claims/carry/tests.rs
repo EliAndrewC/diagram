@@ -207,6 +207,12 @@ fn the_push_reads_carries_known_drifts_and_open_findings() {
     assert!(got.stdout.contains("claims-gate: known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
     let got = claims(&root, &["known"]);
     assert_eq!(got.stdout, "claims-known: no known drift is unrecorded\n");
+    at_clean(&root, reach);
+}
+
+/// The same tree with the switch at `clean`: the known drift recorded, the carry filed, every open finding refused.
+fn at_clean(root: &Path, reach: &str) {
+    let root = root.to_path_buf();
     put(
         &root,
         "dev/switches.json",

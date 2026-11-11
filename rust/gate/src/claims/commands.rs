@@ -1,6 +1,11 @@
 //! `l7r-gate claims <command>`: each command's body (`scripts/record/claims.py`'s `main` and `claims_cli.py`'s handlers, with
 //! `claims_accept.py` and `claims_counters.clear`, ported by feature 449 T82).
 
+#![expect(
+    clippy::case_sensitive_file_extension_comparisons,
+    reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
+)]
+
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 use std::io::Write as _;
@@ -383,13 +388,13 @@ fn bundle_cmd(
     let _ = std::fs::remove_dir_all(&out);
     let unknown: Vec<&String> = keys.iter().filter(|k| !cur.contains(k)).collect();
     if !unknown.is_empty() || keys.is_empty() {
-        let names: Vec<&str> = unknown.iter().map(|s| s.as_str()).collect();
+        let unknown_names: Vec<&str> = unknown.iter().map(|s| s.as_str()).collect();
         o.warn(&format!(
             "claims-bundle: no such claim(s): {}",
-            if names.is_empty() {
+            if unknown_names.is_empty() {
                 "(none selected)".to_owned()
             } else {
-                names.join(", ")
+                unknown_names.join(", ")
             }
         ));
         return Ok(2);

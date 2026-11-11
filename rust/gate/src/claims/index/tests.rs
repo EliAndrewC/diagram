@@ -41,7 +41,7 @@ fn row(key: &str, u: Unit, line: &str, research: &str) -> Row {
     }
 }
 
-fn obj(v: Value) -> Map<String, Value> {
+fn obj(v: &Value) -> Map<String, Value> {
     v.as_object().unwrap().clone()
 }
 
@@ -183,8 +183,8 @@ fn each_reason_a_claim_is_owed() {
     for r in rows {
         cur.insert(r);
     }
-    let store = obj(json!({blocks.0.clone(): []}));
-    let due = owed(&cur, &obj(index.clone()), Some(&q), Some(&store)).unwrap();
+    let store = obj(&json!({blocks.0.clone(): []}));
+    let due = owed(&cur, &obj(&index), Some(&q), Some(&store)).unwrap();
     let got: HashMap<String, String> = due
         .into_iter()
         .map(|(k, w)| {
@@ -213,14 +213,14 @@ fn each_reason_a_claim_is_owed() {
         assert_eq!(got.get(k).map(String::as_str), Some(w), "{k}");
     }
     assert!(!got.contains_key("ok"));
-    let none = owed(&cur, &obj(index.clone()), None, None).unwrap();
+    let none = owed(&cur, &obj(&index), None, None).unwrap();
     assert!(none
         .iter()
         .any(|(k, w)| k.contains("::tri#") && w == "research changed"));
     let live = live_rows(
         &cur,
         &obj(
-            json!({"rust/phases/src/lib.rs::ok#ok": {}, "rust/phases/src/lib.rs::ok#u": {"verdict": "UNCLAIMED"}, "gone::x#y": {"verdict": "UNCLAIMED"}, "gone::x#z": {}}),
+            &json!({"rust/phases/src/lib.rs::ok#ok": {}, "rust/phases/src/lib.rs::ok#u": {"verdict": "UNCLAIMED"}, "gone::x#y": {"verdict": "UNCLAIMED"}, "gone::x#z": {}}),
         ),
     );
     assert_eq!(live.len(), 2);
@@ -248,7 +248,7 @@ fn a_relabel_alone_owes_nothing_and_answers_its_mislabel() {
     let was = json!({"code": "old", "body": body, "claim": "gap - NONE: before", "verdict": "MISLABELED", "research": ""});
     assert!(owed(
         &cur,
-        &obj(json!({r.key.clone(): was.clone()})),
+        &obj(&json!({r.key.clone(): was.clone()})),
         Some(&q),
         None
     )
@@ -260,7 +260,7 @@ fn a_relabel_alone_owes_nothing_and_answers_its_mislabel() {
     assert!(
         owed(
             &cur,
-            &obj(json!({r.key.clone(): {"code": "old", "body": "other"}})),
+            &obj(&json!({r.key.clone(): {"code": "old", "body": "other"}})),
             Some(&q),
             None
         )
@@ -269,7 +269,7 @@ fn a_relabel_alone_owes_nothing_and_answers_its_mislabel() {
             == 1
     );
     assert_eq!(
-        owed(&cur, &obj(json!({r.key.clone(): {}})), Some(&q), None).unwrap()[0].1,
+        owed(&cur, &obj(&json!({r.key.clone(): {}})), Some(&q), None).unwrap()[0].1,
         "new"
     );
 }

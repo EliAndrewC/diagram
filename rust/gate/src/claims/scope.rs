@@ -1,7 +1,7 @@
 //! Every unit in scope at a tree (`tools/claims.all_units`, feature 449 T82): the hamlet scope's `.py` units, every Rust phase's, the
 //! `.py` units claimed outside the scope, then the procedure sections - in the Python's order, which the form problems print in.
 //!
-//! THE `.py` HALF STAYS PYTHON (`ask:449-T82-claims`): a `.py` unit's core is CPython's `ast.dump`, so `tools/claims.py_units` is asked
+//! THE `.py` HALF STAYS PYTHON (`ask:449-T82-claims`): a `.py` unit's core is `CPython`'s `ast.dump`, so `tools/claims.py_units` is asked
 //! through `scripts/bundle_door.py`, and only when a file it reads changed: its answer is kept under the clone's common git directory,
 //! keyed by the reader's code and every `.py` file under `l7r/diagram/` (its read set, measured in T82's plan), so a run with no `.py`
 //! change starts no Python. A tree with no `.py` file there asks nothing: the reader's answer is empty.
