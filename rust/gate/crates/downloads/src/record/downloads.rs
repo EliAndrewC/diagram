@@ -22,9 +22,9 @@ use crate::Reply;
 mod add;
 mod check;
 mod ingest;
-pub(crate) mod parse;
+pub mod parse;
 
-pub(crate) const CANON: &str = "research/to-download.md";
+pub const CANON: &str = "research/to-download.md";
 const STATE: &str = "research/to-download.state.json";
 const HIGH_RISK: &str = "specs/312-uncited-source-catalog/high-risk-sources.md";
 const USAGE: &str = "usage: l7r-gate record downloads import [--gm F] [--high-risk F] | ingest [--keep IDS] [--drop IDS] [--mark ID=STATE ...] | sync | add <draft.md> | check [--base REF] | selftest | tag\n";
@@ -256,7 +256,8 @@ fn cli_at(args: &[String], ctx: &Ctx) -> Reply {
 }
 
 /// `l7r-gate record downloads ...`.
-pub(crate) fn cli(args: &[String], root: &Path) -> Reply {
+#[must_use]
+pub fn cli(args: &[String], root: &Path) -> Reply {
     let inbox = std::env::var("L7R_GM_SOURCES")
         .unwrap_or_else(|_| "/host-l7r-repo/academic-sources".to_owned());
     cli_at(

@@ -27,16 +27,18 @@ static MARK2: LazyLock<Regex> = LazyLock::new(|| {
 });
 static MARK3: LazyLock<Regex> =
     LazyLock::new(|| compiled(r"^- Saved as \(optional, the file's name\):(.*)$"));
-pub(crate) static RECORDED: LazyLock<Regex> =
+pub static RECORDED: LazyLock<Regex> =
     LazyLock::new(|| compiled(r"^- Marks recorded (\d{4}-\d{2}-\d{2})\b.*$"));
 
 /// Python's `str.strip()`: what `char::is_whitespace` strips and the four separators it leaves.
-pub(crate) fn strip(text: &str) -> &str {
+#[must_use]
+pub fn strip(text: &str) -> &str {
     text.trim_matches(|c: char| c.is_whitespace() || ('\x1c'..='\x1f').contains(&c))
 }
 
 /// Python's `str.split()`.
-pub(crate) fn words(text: &str) -> Vec<&str> {
+#[must_use]
+pub fn words(text: &str) -> Vec<&str> {
     text.split(|c: char| c.is_whitespace() || ('\x1c'..='\x1f').contains(&c))
         .filter(|w| !w.is_empty())
         .collect()
@@ -45,14 +47,14 @@ pub(crate) fn words(text: &str) -> Vec<&str> {
 /// The GM's marks on one entry.
 #[expect(clippy::struct_excessive_bools, reason = "the five boxes the GM ticks")]
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub(crate) struct Marks {
-    pub(crate) downloaded: bool,
-    pub(crate) partial: bool,
-    pub(crate) paywalled: bool,
-    pub(crate) not_found: bool,
-    pub(crate) elsewhere: bool,
-    pub(crate) where_from: String,
-    pub(crate) saved: String,
+pub struct Marks {
+    pub downloaded: bool,
+    pub partial: bool,
+    pub paywalled: bool,
+    pub not_found: bool,
+    pub elsewhere: bool,
+    pub where_from: String,
+    pub saved: String,
 }
 
 fn tick(on: bool) -> char {
@@ -72,7 +74,8 @@ fn tail(words: &str, value: &str) -> String {
 }
 
 impl Marks {
-    pub(crate) fn lines(&self) -> [String; 3] {
+    #[must_use]
+    pub fn lines(&self) -> [String; 3] {
         [
             format!(
                 "- Mark: [{}] downloaded | [{}] partial (abstract or excerpt) | [{}] paywalled | [{}] not found",
@@ -92,7 +95,8 @@ impl Marks {
         ]
     }
 
-    pub(crate) fn any(&self) -> bool {
+    #[must_use]
+    pub fn any(&self) -> bool {
         self.downloaded || self.partial || self.paywalled || self.not_found || self.elsewhere
     }
 
@@ -139,12 +143,12 @@ impl Marks {
 
 /// One entry of the list.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct Entry {
-    pub(crate) id: String,
-    pub(crate) heading: String,
-    pub(crate) marks: Option<Marks>,
-    pub(crate) recorded: Option<String>,
-    pub(crate) body: Vec<String>,
+pub struct Entry {
+    pub id: String,
+    pub heading: String,
+    pub marks: Option<Marks>,
+    pub recorded: Option<String>,
+    pub body: Vec<String>,
 }
 
 impl Entry {
@@ -159,7 +163,8 @@ impl Entry {
         out
     }
 
-    pub(crate) fn body_text(&self) -> String {
+    #[must_use]
+    pub fn body_text(&self) -> String {
         self.body.join("\n")
     }
 
@@ -171,7 +176,7 @@ impl Entry {
 
 /// A run of text, or an entry.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) enum Block {
+pub enum Block {
     Text(String),
     Item(Entry),
 }
@@ -238,7 +243,8 @@ fn make_entry(lines: &[&str]) -> Entry {
 }
 
 /// The list as text runs and entries, in order; `render(parse(t)) == t` for any text.
-pub(crate) fn parse(text: &str) -> Vec<Block> {
+#[must_use]
+pub fn parse(text: &str) -> Vec<Block> {
     let mut blocks = Vec::new();
     let mut run: Vec<&str> = Vec::new();
     let mut open: Option<Vec<&str>> = None;
@@ -293,7 +299,7 @@ impl Block {
     }
 }
 
-pub(crate) fn entries(blocks: &[Block]) -> impl Iterator<Item = &Entry> {
+pub fn entries(blocks: &[Block]) -> impl Iterator<Item = &Entry> {
     blocks.iter().filter_map(Block::item)
 }
 

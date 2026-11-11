@@ -60,8 +60,8 @@ fn found_groups(pattern: &Regex, text: &str) -> Vec<String> {
 
 /// One source's tag.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct Tag {
-    pub(crate) state: String,
+pub struct Tag {
+    pub state: String,
     date: Option<String>,
     basis: String,
 }
@@ -76,7 +76,8 @@ impl Tag {
     }
 
     /// `<state> (<date>) - <basis>`, the line the report and ingest print.
-    pub(crate) fn line(&self) -> String {
+    #[must_use]
+    pub fn line(&self) -> String {
         format!(
             "{} ({}) - {}",
             self.state,
@@ -91,14 +92,14 @@ impl Tag {
 }
 
 /// What the repository records, read once.
-pub(crate) struct World {
+pub struct World {
     order: Vec<String>,
     recorded: Map<String, Value>,
     keys: BTreeMap<String, Vec<String>>,
     rows: HashMap<String, Vec<Value>>,
     marks: HashMap<String, Vec<(String, Entry)>>,
     keyless: Vec<String>,
-    pub(crate) entry_keys: HashMap<String, BTreeSet<String>>,
+    pub entry_keys: HashMap<String, BTreeSet<String>>,
 }
 
 impl World {
@@ -248,7 +249,11 @@ fn read_rows(root: &Path) -> Result<Rows, String> {
 }
 
 /// Everything the tags are derived from.
-pub(crate) fn load(root: &Path) -> Result<World, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn load(root: &Path) -> Result<World, String> {
     let doc: Value = serde_json::from_str(&read_text(&root.join(ACCESS)).map_err(text_err)?)
         .map_err(text_err)?;
     let order = doc["states"]
@@ -400,7 +405,7 @@ fn derived(w: &World, key: &str) -> Tag {
 }
 
 /// The tag of one registry key or `download:<id>` (plan D9).
-pub(crate) fn tag(w: &World, key: &str) -> Tag {
+pub fn tag(w: &World, key: &str) -> Tag {
     let gm = from_marks(w, key);
     if let Some(found) = gm.as_ref().filter(|t| !t.state.is_empty()) {
         return found.clone();
@@ -439,7 +444,8 @@ pub(crate) fn tag(w: &World, key: &str) -> Tag {
 }
 
 /// Every key, sorted, then the keyless entries; a repeated keyless entry once.
-pub(crate) fn every(w: &World) -> Vec<(String, Tag)> {
+#[must_use]
+pub fn every(w: &World) -> Vec<(String, Tag)> {
     let mut seen = HashSet::new();
     w.keys
         .keys()
@@ -569,7 +575,7 @@ fn valid_flags(args: &[String]) -> bool {
 }
 
 /// `l7r-gate record access-tags ...`.
-pub(crate) fn cli(args: &[String], root: &Path) -> Reply {
+pub fn cli(args: &[String], root: &Path) -> Reply {
     let rest = args.get(1..).unwrap_or(&[]);
     let done = match (args.first().map(String::as_str), rest) {
         (Some("report"), _) if valid_flags(rest) => report(rest, root),

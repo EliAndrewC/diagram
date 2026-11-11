@@ -7,12 +7,11 @@ use std::path::{Path, PathBuf};
 use serde_json::{json, Value};
 
 pub use l7r_gate_core::record::*;
+pub use l7r_gate_downloads::record::{access_tags, downloads};
 use crate::Reply;
 
-pub(crate) mod access_tags;
 mod agent_census;
 pub(crate) mod bundle;
-mod downloads;
 mod fragment_move;
 mod leaves;
 mod merge_answers;
