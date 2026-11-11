@@ -5,7 +5,7 @@ A `.py` file's id is its AST with every docstring dropped and no line or column 
 comment, a docstring, a constant's claim string, a blank line or reformatting leaves it alone, and any token that runs moves
 it. One definition, read three ways:
 
-- `semantic_bytes` - a whole file, what the Rust gate's stamp hashes for `make done` (asked by `rust/gate/src/codeid.rs`, stdlib
+- `semantic_bytes` - a whole file, what the Rust gate's stamp hashes for `make done` (asked by `rust/gate/crates/core/src/codeid.rs`, stdlib
   only, because it runs inside the guards and must not import the engine package) and `ci/delta.py` through it; the engine's
   keys read it through `l7r/diagram/pipeline/codeid.py`, a shim that loads this file;
 - `split_ids` - a module's top level and each function, what the roll and map key (`gencache.split_sources`) hashes per

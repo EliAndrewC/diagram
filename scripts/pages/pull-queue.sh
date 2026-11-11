@@ -25,7 +25,7 @@ fi
 [ -z "$(git -C "$ROOT" status --porcelain)" ] || { echo "pull-queue: commit this clone's work first" >&2; exit 2; }
 
 # THE QUEUE'S ANSWERS COME BACK TOO (feature 319, 2026-10-05). A record check's answer lives in the clone's git dir
-# (`.git/record-checks/<unit>.json`, rust/gate/src/record/owed.rs `store`), which a pull never carries: three queues' worth
+# (`.git/record-checks/<unit>.json`, rust/gate/crates/owed/src/record/owed.rs `store`), which a pull never carries: three queues' worth
 # of answered quote-checks came back owed. Before the pull, each of the queue's records is merged in - a unit this
 # clone never answered is copied, one both answered keeps every fingerprint either answered and the newer record.
 # (feature 449 T87: the merge is `l7r-gate record merge-answers`, one writer of the answer store, by atomic rename.)

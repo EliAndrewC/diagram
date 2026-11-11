@@ -428,3 +428,11 @@ fn every_makefile_line_starting_a_retained_python_check_asks_first() {
     assert_eq!(lines.len(), 1);
     assert!(lines.iter().all(|l| l.contains("check needs ")));
 }
+
+#[test]
+fn the_timing_rows_start_with_the_one_process_run() {
+    let work = repo();
+    let rows = super::timing_rows(&work, &work);
+    assert_eq!(rows[0].0, "push checks (one process)");
+    assert!(rows[0].1.is_some() && rows.len() == CHECKS.len() + 1);
+}

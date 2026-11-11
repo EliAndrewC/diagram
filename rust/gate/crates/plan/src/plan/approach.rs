@@ -1,7 +1,7 @@
 //! A task's Approach is answered before it is ticked, and answered again after a trigger (feature 385 T02, plan D8 and D9; feature 449
 //! T066, from `approach_gate.py`). The GM, 2026-10-17: sessions hyper-focused because nothing made them ask, in time, where a constraint
 //! came from and whether it described the world there. The checklist asks; this makes the asking happen. The cohort's trigger stays in
-//! `rust/gate/src/cohort/known.rs` (T068).
+//! `rust/gate/crates/cohort/src/cohort/known.rs` (T068).
 
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;

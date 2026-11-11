@@ -60,7 +60,7 @@ _ENTRY = re.compile(r'<h3 id="([a-z0-9][a-z0-9-]*)">.*?</h3>\s*(.*?)(?=<h3 id=|<
 def clean(url: str) -> str:
     """A URL as it is cited: entity-unescaped (the record is HTML - `&amp;` in a query is `&`), its fragment dropped, and
     the punctuation a sentence puts after it trimmed - a closing parenthesis only where the URL did not open one, since
-    `(https://.../Edo)` wraps a URL and `町屋_(商家)` is part of one (the rule of `rust/gate/src/record/bundle/check.rs:url_of`)."""
+    `(https://.../Edo)` wraps a URL and `町屋_(商家)` is part of one (the rule of `rust/gate/crates/bundle/src/record/bundle/check.rs:url_of`)."""
     url = html.unescape(url).split("#")[0]
     while url.endswith((".", ",", ";", ":")) or (url.endswith(")") and url.count(")") > url.count("(")):
         url = url[:-1]

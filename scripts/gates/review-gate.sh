@@ -124,7 +124,7 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   # only a ruling on the spec AS IT READS NOW (the ruling carries the spec's hash; plan review round 2): an amended spec is
   # never passed on an old ruling, whichever clone pushes it
   # ONE READING OF THE VERDICT (feature 442): the FAITHFUL line and the arbiter's standing ruling, asked of `l7r-gate arbiter spec-verdict`,
-  # the function the merge's feature-complete check (`rust/gate/src/ci/features.rs`) asks too - two readings drifted twice (features 387, 440)
+  # the function the merge's feature-complete check (`rust/gate/crates/ci/src/ci/features.rs`) asks too - two readings drifted twice (features 387, 440)
   if ! "$RG_HERE/l7r-gate.sh" arbiter spec-verdict "$(dirname "$spec")" 2>/dev/null; then
     printf '\n\033[1mREVIEW GATE: %s has no fidelity verdict.\033[0m\n' "$spec"
     printf 'Constitution XVI: a specification is reviewed against the GM'"'"'S OWN WORDS before\n'

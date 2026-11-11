@@ -8,7 +8,7 @@ measurements, then that's fine". `make fix-yield` (385 T119) read a command rate
 THE TOOLS, LISTED FROM THE CODE (D163), never from what has fired, so a tool that never fired reads 0:
   guard   - every hook wired in `.claude/settings.json` and every name the guard log carries
   check   - every refusing check: a `.py` with a `__main__` or a `.sh` under `scripts/gates/`, and every `scripts/...` path the
-            entry points name (the Makefile recipes of `done`, `quick` and `tick`; `sync-with-main.sh`, `rust/gate/src/push.rs`,
+            entry points name (the Makefile recipes of `done`, `quick` and `tick`; `sync-with-main.sh`, `rust/gate/crates/cohort/src/push.rs`,
             `preflight.py`), read from them at run time
   target  - every target the Makefile defines
   review  - every `.claude/agents/` type
@@ -54,7 +54,7 @@ FINDING = re.compile(
     r"|\b(?:TRUTH|COVERAGE|LINKS) [1-9]",
     re.I,
 )
-ENTRY_SCRIPTS = ("scripts/sync-with-main.sh", "rust/gate/src/push.rs", "rust/gate/src/preflight.rs")
+ENTRY_SCRIPTS = ("scripts/sync-with-main.sh", "rust/gate/crates/cohort/src/push.rs", "rust/gate/crates/measure/src/preflight.rs")
 ENTRY_TARGETS = ("done", "quick", "tick")
 UNSEEN = (
     "the outcome of a target run no session made (a recipe, a script, the timer) - its run is counted, its outcome is not",

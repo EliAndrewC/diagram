@@ -123,3 +123,9 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
     assert_eq!(needs("function-cap", &repo("needs-base")), 0);
 }
 
+#[test]
+fn needs_run_is_needs_exit_zero_and_the_top_is_the_repository() {
+    let dir = repo("needs-run");
+    assert!(super::needs_run("function-cap", &dir));
+    assert!(crate::top().join("rust").is_dir());
+}

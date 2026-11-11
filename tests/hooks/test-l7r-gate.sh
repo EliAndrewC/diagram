@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for l7r-gate stamp (rust/gate/src/stamp.rs) - the push-time "a green gate saw exactly this code" guard.
+# Tests for l7r-gate stamp (rust/gate/crates/tree/src/stamp.rs) - the push-time "a green gate saw exactly this code" guard.
 # Run: tests/hooks/test-l7r-gate.sh   (exit 0 = all green). Runs under `make hooks-test`.
 #
 # THE CASE THAT MOTIVATED THIS FILE (2026-08-25): a session ran `make hooks-test` (RED), then

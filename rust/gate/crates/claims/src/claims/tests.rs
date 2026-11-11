@@ -270,3 +270,8 @@ fn the_inline_audit_runs_from_the_command_line() {
         1
     );
 }
+
+#[test]
+fn the_door_reads_stdin_to_its_end() {
+    assert_eq!(super::door_cli().code, 0);
+}

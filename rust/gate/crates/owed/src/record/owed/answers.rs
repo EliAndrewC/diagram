@@ -14,12 +14,15 @@ use serde_json::{json, Map, Value};
 
 use super::{listing, merge_base, units, zfill4, FAMILIES};
 use crate::record::args::Parsed;
-use crate::record::modals::{self, Modal};
+use crate::record::modals;
 use crate::record::repo::{self, fail, git, python, read_universal, tree_of, utc_now, Fail};
 use crate::record::units::{
     self as ru, pairs_of, question, re, Unit, HREF, NOTE, ORIG_STORED, ORIG_TOKEN, PASSAGE,
 };
 use crate::Reply;
+
+mod depiction;
+pub use depiction::{amendment1_depiction_answered, legacy_depiction_answered};
 
 /// A round's own EDIT blocks settled it.
 pub const SETTLED: &str = "settled - only its round's own EDIT blocks were applied, verbatim, since it was answered (make apply-edits)";
@@ -41,7 +44,6 @@ static REPLY_ANY: LazyLock<Regex> =
     LazyLock::new(|| re(&format!(r"(?m)^`?({}): \S", BATCH_CHECKS.join("|"))));
 static RUN: LazyLock<Regex> = LazyLock::new(|| re("\u{300c}([^\u{300c}\u{300d}]+)\u{300d}"));
 static TAG: LazyLock<Regex> = LazyLock::new(|| re(r"<[^>]+>"));
-static LINE_NUMBERED: LazyLock<Regex> = LazyLock::new(|| re(r":\d+$"));
 static OUTSIDE: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?m)^#*\s*\**OUTSIDE THE CHANGE\**\s*:?\s*$"));
 static ROW: LazyLock<Regex> =
@@ -480,97 +482,6 @@ pub fn keep_reading(
     list.push(json!(reading));
     rec.insert(field.to_owned(), Value::Array(list));
     write_record(store_dir, slug, &rec, Some(1), true)
-}
-
-/// The pop-up `m` as its file stood when an answer was recorded at `utc`, or None.
-fn modal_then(root: &Path, m: &Modal, utc: &str) -> Option<Modal> {
-    let rel = if LINE_NUMBERED.is_match(&m.origin).unwrap_or(false) {
-        m.origin.rsplit_once(':').map_or(m.origin.as_str(), |p| p.0)
-    } else {
-        m.origin.as_str()
-    };
-    let then = git(
-        root,
-        &[
-            "rev-list",
-            "-1",
-            &format!("--before={utc}"),
-            "HEAD",
-            "--",
-            rel,
-        ],
-    );
-    let then = then.trim();
-    if then.is_empty() || !rel.as_bytes().ends_with(b".md") {
-        return None;
-    }
-    let text = git(root, &["show", &format!("{then}:{rel}")]);
-    modals::choice_modal(rel, &text, true)
-}
-
-/// A modal-depiction answer recorded under the fingerprint's old formula still answers the words it read.
-///
-/// # Errors
-///
-/// Where what it reads, writes or runs fails: the error says which and why.
-pub fn legacy_depiction_answered(
-    root: &Path,
-    store_dir: &Path,
-    slug: &str,
-    modals_now: &[Modal],
-) -> Result<bool, Fail> {
-    let Some(kind) = slug.strip_prefix("modal-depiction:") else {
-        return Ok(false);
-    };
-    let rec = read_answer(store_dir, slug);
-    let Some(m) = modals::find(modals_now, kind) else {
-        return Ok(false);
-    };
-    let utc = rec.get("utc").and_then(Value::as_str).unwrap_or("");
-    if utc.is_empty()
-        || !answered(
-            store_dir,
-            slug,
-            &modals::legacy_depiction_fingerprint(root, m)?,
-            "",
-        )
-    {
-        return Ok(false);
-    }
-    Ok(modal_then(root, m, utc).is_some_and(|old| old.entry() == m.entry()))
-}
-
-/// A modal-depiction answer recorded under amendment 1's formula still answers its pop-up where what the check judges since amendment 6 is unchanged since the answer.
-///
-/// # Errors
-///
-/// Where what it reads, writes or runs fails: the error says which and why.
-pub fn amendment1_depiction_answered(
-    root: &Path,
-    store_dir: &Path,
-    slug: &str,
-    modals_now: &[Modal],
-) -> Result<bool, Fail> {
-    let Some(kind) = slug.strip_prefix("modal-depiction:") else {
-        return Ok(false);
-    };
-    let rec = read_answer(store_dir, slug);
-    let Some(m) = modals::find(modals_now, kind) else {
-        return Ok(false);
-    };
-    let utc = rec.get("utc").and_then(Value::as_str).unwrap_or("");
-    if utc.is_empty() {
-        return Ok(false);
-    }
-    let Some(old) = modal_then(root, m, utc) else {
-        return Ok(false);
-    };
-    Ok(answered(
-        store_dir,
-        slug,
-        &modals::amendment1_depiction_fingerprint(root, &old)?,
-        "",
-    ) && modals::depiction_fingerprint(root, &old)? == modals::depiction_fingerprint(root, m)?)
 }
 
 /// Every owed unit with no current answer.

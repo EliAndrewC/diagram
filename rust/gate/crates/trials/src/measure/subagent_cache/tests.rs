@@ -243,3 +243,8 @@ fn families_sort_and_a_body_reads_every_shape() {
     assert_eq!(super::body_text(&json!("x")), "x");
     assert_eq!(super::body_text(&json!(3)), "");
 }
+
+#[test]
+fn a_negative_count_keeps_its_sign() {
+    assert_eq!(commas(-1_234_567), "-1,234,567");
+}

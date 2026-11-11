@@ -7,7 +7,7 @@
     "compare": "run",
     "armed": true,
     "calibration_s": 0.116,
-    "calibration_reason": "measured 2026-11-09 (the Rust loop of rust/gate/src/measure/ratchet.rs, 300,000,000 iterations, on 6 threads, best of 3 runs of `make`-free `l7r-gate measure ratchet --calibrate 6`, each the best of 5 rounds' slowest, load average 7 on this 22-CPU host): 0.116 s, chosen to take about the time the Python loop's 0.12 s did. The Python figure's history: measured 2026-10-27, load average 1.0; the GM 2026-10-27 approved reading quick net of load (feature 440: \"quick's 15 s ceiling failing under load\") - the 15 s ceiling and the 11 s baseline unchanged",
+    "calibration_reason": "measured 2026-11-09 (the Rust loop of rust/gate/crates/tree/src/measure/ratchet.rs, 300,000,000 iterations, on 6 threads, best of 3 runs of `make`-free `l7r-gate measure ratchet --calibrate 6`, each the best of 5 rounds' slowest, load average 7 on this 22-CPU host): 0.116 s, chosen to take about the time the Python loop's 0.12 s did. The Python figure's history: measured 2026-10-27, load average 1.0; the GM 2026-10-27 approved reading quick net of load (feature 440: \"quick's 15 s ceiling failing under load\") - the 15 s ceiling and the 11 s baseline unchanged",
     "min_class_runs": 5
   },
   "done": {

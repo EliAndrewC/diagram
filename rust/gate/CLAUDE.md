@@ -2,32 +2,24 @@
 
 One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate.sh`, each subcommand ported from the Python piece it replaces (`specs/449-rust-codebase/tasks.md`, T062-T069). `make static` and `make rust-test` check it beside the other crates.
 
-| file | look here when |
-|---|---|
-| `src/lib.rs` | the command line, `cli` |
-| `src/codeid.rs` | a file's content id, and the id cache shared with the Python callers (T062) |
-| `src/stamp.rs` | the green-gate stamps: `stamp --write`, `--fresh`, `--check`, `--selftest`, and what Python callers ask once a process (T063) |
-| `src/delta.rs` | the delta, the one list of engine paths (`is_engine`), the engine key (T063) |
-| `src/state.rs` | the verification state, `.git/verification-state.json`, and the tooling hash (T72) |
-| `src/hashing.rs` | hashing the repository's files by what runs; what decides how the gate's tests run (`config-hash`) (T72) |
-| `src/exempt.rs` | the coverage-exemption record, `dev/coverage-exempt.json` (T72) |
-| `src/ci.rs`, `src/ci/` | the route and a gated push's conditions, the switches, the push's credential (T064, T73) |
-| `src/checks.rs`, `src/checks/` | the text checks and the spec lint: `l7r-gate check <name>` (T065, T066) |
-| `src/plan.rs`, `src/plan/` | the plan gates: sections and blocks, what a plan owes, recording a verdict, the review bundle, the approach gate, the engine-edit question (T066); `scripts/plan_door.py` is the Python callers' door |
-| `src/lock.rs` | the host-wide gate lock and whether a make runs in this tree: `lock`, `own-make` (T067) |
-| `src/rustc.rs` | the Rust crates' checks: `rust lint`, `format`, `test`, `cover`, `dead`, `uncovered` (T067) |
-| `src/push.rs` | the push's checks and what each push gate judges: `push-checks`, `push-gate` (T067) |
-| `src/cohort.rs`, `src/cohort/` | the landing cohort, each seed's standing against main's engine, the seed report, the room table: `l7r-gate cohort` (T068) |
-| `src/measure.rs`, `src/measure/` | what things cost: `figures`, `gatecost`, `gate-costs`, `ratchet` (its table is `dev/ratchets.json`), `probe` (T75); `depiction-replay` (T88) |
-| `src/preflight.rs` | the gate's first phase and its tree check, `preflight` (T071) |
-| `src/logs.rs` | the records the gate's shell writes, `log run`, `log bypass`, `log gate-bypass`, `log land-tooling`; `json-field`, `ruff-toml` (T069) |
-| `src/record.rs`, `src/record/` | the research record's tools: `canon`, `money-conversions`, `found`, `access-tags`, `downloads`, and the leaves Python reaches through a verb (`leaves.rs`: `edit-route`, `fragments`, `moved-only`, `americanize`; `scripts/record_door.py` is the door) (T79-T81) |
-| `src/record/owed.rs`, `owed/answers.rs`, `units.rs`, `modals.rs`, `translation.rs`, `triage.rs` | what a delta owes the record checks and what answered them: `record record-owed`, `modal-owed`, `translation-owed`, `modal-triage`, `merge-answers` (`pull-queue.sh`); `args.rs` reads their command lines as argparse did, `repo.rs` their git and Python seams (`entry_owed.py`, `quote_verbatim`, `style_prepass`, `apply_edits.reply_of`, by path) (T87) |
-| `src/owed_door.rs` | Python's door to those tools (`owed-door`, one process a run; `scripts/owed_door.py`) (T87) |
-| `src/record/bundle.rs`, `src/record/bundle/` | the check bundles: `record check-bundle` (`check.rs`, `parts.rs`, `keys.rs`, `owed.rs`), `record modal-bundle` (`modal.rs`, `depiction.rs`), the earlier rounds (`earlier.rs`), and `door.rs`, the runner of `scripts/bundle_door.py` (T88) |
-| `src/arbiter/bundle.rs`, `src/arbiter/bundle/` | the round arbiter's bundle, `arbiter bundle` (its sections, the review rounds, the round marks) (T88) |
-| `src/arbiter.rs`, `src/arbiter/` | the round arbiter's rulings and tripwires: `arbiter ruled`, `ruled-batch`, `ask`, `fix`, `nit`, `gate-held`, `spec-verdict`, `spec-ruled`, `unit-ruled` (T86) |
-| `src/checks_door.rs` | Python's door to the check state and the arbiter (`checks-door`, one process a run; `scripts/checks_door.py`), `checks-close` (T86) |
-| `src/reviews.rs`, `src/reviews/` | the review checks' tooling: `reviews owed` (`owed.rs`, what a delta owes; `glyph.rs`, the glyph hour), `reviews prereq` (`prereq.rs`, a dispatch's prerequisites, the verdict record, a unit's content key), `reviews checkpoint` (`checkpoint.rs`, the hourly step-back), and `door.rs`, `reviews-door` for `scripts/reviews_door.py` (T89) |
-| `src/claims.rs`, `src/claims/` | the research claims' tools: `claims <command>` (`make claims-*`: `commands.rs`; what is owed, `index.rs`; a check's reply, `reply.rs`; the triage, `triage.rs`; the bundle, `bundle.rs`; the report and the push's reading, `report.rs`, `carry.rs`; the grammar and the units, `grammar.rs`, `units.rs`), `tunables`, and `claims-door` for `scripts/claims_door.py`; a `.py` unit's fingerprint stays CPython's `ast.dump`, its half asked through `scripts/bundle_door.py` only when a `.py` file changed (`scope.rs`, `ask:449-T82-claims`) (T82) |
-| `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |
+**The gate is a binary over crates** (T92, the GM 2026-11-11: an edit recompiles one crate and what depends on it, not 74,199 lines). `rust/gate` itself is the binary, `l7r_gate`: `src/lib.rs` dispatches each subcommand, `src/main.rs` prints the reply. The work is in `crates/<dir>/`, package `l7r_gate_<dir>`, each keeping the module paths it had in the one crate (`crate::record::owed`, `crate::checks::py_repr`): a crate's `lib.rs` re-exports what it reads of the crates below it under those names, so a moved file's paths still resolve. Each crate owes 100% of its own lines by its own tests (`make rust-test CRATE=rust/gate/crates/<dir>`), and its test helpers come from `core`'s `testkit` feature. A gate crate names another by `path` and an outside crate only as `{ workspace = true }` (`rust/Cargo.toml`), so one crate's build never rebuilds another's dependencies.
+
+| crate (`crates/`) | look here when | builds on |
+|---|---|---|
+| `core` | the shared helpers under their old module names (`checks::py_repr`, `cohort::git`, `record::repo`, `record::args`, `record::units`, `record::bundle`'s helpers and runner `door.rs`, the door loop `checks_door::serve_with`), `codeid` (a file's content id, T062), `difflib`, `logs` (`log run`, `log bypass`, `json-field`, `ruff-toml`, T069), `Reply`; the `testkit` feature: `record::testkit`, `ci::fixtures`, `record::bundle::tests`, `write_executable` | - |
+| `tree` | `stamp` (the green-gate stamps, T063), `delta` (the delta, `is_engine`, the engine key), `state` (`.git/verification-state.json`, T72), `hashing` (`config-hash`), `exempt` (`dev/coverage-exempt.json`), `lock` (`lock`, `own-make`, T067), `measure::ratchet` (`dev/ratchets.json`), `checks::needs` (which retained check a change starts), `top()` | core |
+| `downloads` | `record downloads`, `record access-tags` (T80-T81) | core |
+| `checks` | `l7r-gate check <name>`: the text checks and the spec lint (T065, T066) | core, tree, downloads |
+| `plan` | `l7r-gate plan <verb>`: sections and blocks, what a plan owes, a verdict, the review bundle, the approach gate, the engine-edit question (T066); `scripts/plan_door.py` is Python's door. `plan::cli` takes the claims tool as a `&dyn Fn` the binary hands in (the claims read the plan's) | core, tree |
+| `cohort` | `cohort` (the landing cohort, the seed report, the room table, T068), `push` (`push-checks`, `push-gate`, T067), `rustc` (`l7r-gate rust lint`, `format`, `test`, `cover`, `dead`, `uncovered`) | core, tree, plan |
+| `owed` | `record record-owed`, `modal-owed`, `translation-owed`, `modal-triage` (`record/owed.rs`, `owed/answers.rs`, `modals.rs`, `translation.rs`, `triage.rs`, T87); the leaves Python reaches through a verb (`leaves.rs`: `edit-route`, `fragments`, `moved-only`, `americanize`) | core |
+| `bundle` | `record check-bundle` (`check.rs`, `parts.rs`, `keys.rs`, `owed.rs`), `record modal-bundle` (`modal.rs`, `depiction.rs`), the earlier rounds (`earlier.rs`) (T88); the round marks (`arbiter/bundle/marks.rs`); `owed-door` (`scripts/owed_door.py`, T87) | core, owed |
+| `claims` | `l7r-gate claims <command>` (`make claims-*`: `commands.rs`; what is owed, `index.rs`; a check's reply, `reply.rs`; the triage, `triage.rs`; the bundle, `bundle.rs`; the report and the push's reading, `report.rs`, `carry.rs`; the grammar and the units, `grammar.rs`, `units.rs`), `tunables`, `claims-door`; a `.py` unit's fingerprint stays `CPython`'s `ast.dump` (`scope.rs`, `ask:449-T82-claims`) (T82) | core, tree, plan, owed |
+| `reviews` | `reviews owed` (`owed.rs`; `glyph.rs`, the glyph hour), `reviews prereq` (`prereq.rs`), `reviews checkpoint` (`checkpoint.rs`), `reviews-door` (T89) | core |
+| `trials` | `measure model-trial`, `subagent-cache`, `depiction-replay` (T88), `popup-rounds`, `work-budget`; `record agent-census` | core, owed |
+| `measure` | `l7r-gate measure figures`, `gatecost`, `gate-costs`, `probe`, `runstats`, `guard-log` ... (T75), and `preflight`, the gate's first phase and its tree check (T071) | core, tree, cohort, trials |
+| `arbiter` | the round arbiter's rulings and tripwires (`arbiter ruled`, `ask`, `fix`, `gate-held`, `spec-verdict`, ..., T86), its bundle (`arbiter/bundle.rs`, `sections.rs`, `reviews.rs`, T88), `checks-door` and `checks-close` (`scripts/checks_door.py`) | core, plan, cohort, owed, bundle, claims, reviews |
+| `ci` | the route and a gated push's conditions, the switches, the push's credential (T064, T73) | core, tree, arbiter |
+| `record` | `record <verb>`'s dispatch, and `canon`, `money-conversions`, `found`, `fragment-move`, `stale-terms`, `merge-answers` (`pull-queue.sh`) (T79-T81); `scripts/record_door.py` is the door | core, downloads, bundle, trials |
+
+`src/lib.rs` (the binary's `cli`, `content-ids`) is the one place that names every crate.

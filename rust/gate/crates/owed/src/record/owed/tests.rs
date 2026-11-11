@@ -712,3 +712,13 @@ fn a_second_pending_settle_survives_the_first_answer() {
     write_answer(&s, "e:f", "b1", "r", None).unwrap();
     assert_eq!(read_answer(&s, "e:f")["settles"], json!({"b2": "a2"}));
 }
+
+#[test]
+fn the_door_s_reads_of_the_fingerprints_and_the_notes() {
+    let root = record("owed-door-reads");
+    let got = super::fingerprints(&root, &["quote-check".to_owned()]).unwrap();
+    assert!(got.iter().all(|(slug, _)| slug.starts_with("quote-check")));
+    let rec = read_at(&root, None, None).unwrap();
+    let (notes, cites) = super::notes_of(&rec);
+    assert!(notes.is_object() && cites.is_object());
+}

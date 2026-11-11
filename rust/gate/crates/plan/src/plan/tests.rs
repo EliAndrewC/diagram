@@ -671,3 +671,13 @@ fn the_verbs_report_what_is_owed_after_and_read_the_active_feature() {
         .contains("approach owed: hour:1"));
     assert_eq!(super::cli(&["no-such-verb".to_owned()], &root, &no_claims).code, 2);
 }
+
+#[test]
+fn what_the_other_tools_ask_of_the_plan_answers_nothing_on_an_empty_tree() {
+    let root = crate::checks::scratch("plan-asked");
+    assert_eq!(super::owe_in_flight(&root, "t", "B"), None);
+    assert_eq!(super::active_feature(&root), None);
+    assert_eq!(super::resolve_feature("999", &root), None);
+    assert_eq!(super::approach_ruled(&root, "t"), None);
+    assert!(super::arbiter_accept_listed(&root, "t").is_empty());
+}

@@ -51,6 +51,9 @@ pub fn write_executable(path: &std::path::Path, text: &str) {
 }
 
 #[cfg(test)]
+mod kit_tests;
+
+#[cfg(test)]
 mod tests {
     #[test]
     fn an_executable_is_written_whole() {

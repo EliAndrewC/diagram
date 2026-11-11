@@ -3,7 +3,7 @@
   "tools": {
     "approach_gate": {
       "kind": "check",
-      "what": "rust/gate/src/plan/approach.rs - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/plan/src/plan/approach.rs - a refusing check; each run recorded passed or refused"
     },
     "check-entry-headings": {
       "kind": "check",
@@ -11,35 +11,35 @@
     },
     "check-rust-tooling": {
       "kind": "check",
-      "what": "rust/gate/src/checks/rust_tooling.rs - a refusing check (make rust-tooling, a step of make hooks-test); each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/rust_tooling.rs - a refusing check (make rust-tooling, a step of make hooks-test); each run recorded passed or refused"
     },
     "check-file-scale": {
       "kind": "check",
-      "what": "rust/gate/src/checks/file_scale.rs - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/file_scale.rs - a refusing check; each run recorded passed or refused"
     },
     "check-house-style-delta": {
       "kind": "check",
-      "what": "rust/gate/src/checks/house_style_delta.rs - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/house_style_delta.rs - a refusing check; each run recorded passed or refused"
     },
     "check-partial-citations": {
       "kind": "check",
-      "what": "rust/gate/src/checks/partial_citations.rs - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/partial_citations.rs - a refusing check; each run recorded passed or refused"
     },
     "check-question-size": {
       "kind": "check",
-      "what": "rust/gate/src/checks/question_size.rs - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/question_size.rs - a refusing check; each run recorded passed or refused"
     },
     "check-research-pointers": {
       "kind": "check",
-      "what": "rust/gate/src/checks/research_pointers.rs - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/research_pointers.rs - a refusing check; each run recorded passed or refused"
     },
     "check-run-plausible": {
       "kind": "check",
-      "what": "rust/gate/src/checks/run_plausible.rs (`l7r-gate check run-plausible`) - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/run_plausible.rs (`l7r-gate check run-plausible`) - a refusing check; each run recorded passed or refused"
     },
     "check-stale-dirs": {
       "kind": "check",
-      "what": "rust/gate/src/checks/stale_dirs.rs - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/stale_dirs.rs - a refusing check; each run recorded passed or refused"
     },
     "clone-sync-merge": {
       "kind": "step",
@@ -51,11 +51,11 @@
     },
     "cohort_gate": {
       "kind": "check",
-      "what": "rust/gate/src/cohort.rs (`l7r-gate cohort check`) - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/cohort/src/cohort.rs (`l7r-gate cohort check`) - a refusing check; each run recorded passed or refused"
     },
     "gate-stamp": {
       "kind": "check",
-      "what": "l7r-gate stamp (rust/gate/src/stamp.rs) - a refusing check; each run recorded passed or refused"
+      "what": "l7r-gate stamp (rust/gate/crates/tree/src/stamp.rs) - a refusing check; each run recorded passed or refused"
     },
     "idle-tests": {
       "kind": "target",
@@ -87,11 +87,11 @@
     },
     "preflight": {
       "kind": "check",
-      "what": "rust/gate/src/preflight.rs (`l7r-gate preflight`) - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/measure/src/preflight.rs (`l7r-gate preflight`) - a refusing check; each run recorded passed or refused"
     },
     "spec-lint": {
       "kind": "check",
-      "what": "rust/gate/src/checks/spec_lint.rs - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/spec_lint.rs - a refusing check; each run recorded passed or refused"
     },
     "tick-archive": {
       "kind": "step",
@@ -103,11 +103,11 @@
     },
     "ratchet": {
       "kind": "check",
-      "what": "rust/gate/src/measure/ratchet.rs (`l7r-gate measure ratchet`) - refuses a gate timing past its ratcheted ceiling; each run recorded passed or refused"
+      "what": "rust/gate/crates/tree/src/measure/ratchet.rs (`l7r-gate measure ratchet`) - refuses a gate timing past its ratcheted ceiling; each run recorded passed or refused"
     },
     "check-tool-signals": {
       "kind": "check",
-      "what": "rust/gate/src/checks/tool_signals.rs (`l7r-gate check tool-signals`) - make hooks-test refuses a tool that records none of its runs, and a registry out of step with the calls; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/tool_signals.rs (`l7r-gate check tool-signals`) - make hooks-test refuses a tool that records none of its runs, and a registry out of step with the calls; each run recorded passed or refused"
     },
     "land": {
       "kind": "check",
@@ -115,7 +115,7 @@
     },
     "rust_checks": {
       "kind": "check",
-      "what": "rust/gate/src/rustc.rs (`l7r-gate rust`) - the Rust phases' clippy (all, pedantic, the function cap, reasons on every exception) and rustfmt, in make static and make format (feature 444 T17, FR-011); no crate under rust/ is no work; each run recorded passed or refused"
+      "what": "rust/gate/crates/cohort/src/rustc.rs (`l7r-gate rust`) - the Rust phases' clippy (all, pedantic, the function cap, reasons on every exception) and rustfmt, in make static and make format (feature 444 T17, FR-011); no crate under rust/ is no work; each run recorded passed or refused"
     },
     "phase_sources": {
       "kind": "check",
@@ -123,15 +123,15 @@
     },
     "push_gates": {
       "kind": "check",
-      "what": "rust/gate/src/push.rs (`l7r-gate push-gate`) - whether a push gate may skip a delta: nothing it judges, or a pass stored for the same committed content (the claims, record and cohort gates; feature 430 T04); each run recorded skipped (0) or judged (1)"
+      "what": "rust/gate/crates/cohort/src/push.rs (`l7r-gate push-gate`) - whether a push gate may skip a delta: nothing it judges, or a pass stored for the same committed content (the claims, record and cohort gates; feature 430 T04); each run recorded skipped (0) or judged (1)"
     },
     "gate_costs": {
       "kind": "report",
-      "what": "rust/gate/src/measure/gate_costs.rs (`l7r-gate measure gate-costs`) - what a gate run costs, from the run records' phases and plan (make gate-costs; feature 415 T04)"
+      "what": "rust/gate/crates/measure/src/measure/gate_costs.rs (`l7r-gate measure gate-costs`) - what a gate run costs, from the run records' phases and plan (make gate-costs; feature 415 T04)"
     },
     "conflict-markers": {
       "kind": "check",
-      "what": "rust/gate/src/checks/conflict.rs (`l7r-gate check conflict`) - a merge conflict committed; each run recorded passed or refused"
+      "what": "rust/gate/crates/checks/src/checks/conflict.rs (`l7r-gate check conflict`) - a merge conflict committed; each run recorded passed or refused"
     }
   }
 }

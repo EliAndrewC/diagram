@@ -9,7 +9,7 @@ The repository's review process; the short always-on version is in the root [`CL
 A review check is owed only on the occasion its answer can change - never because an engine change moved a manifest. The GM:
 *"as the number of settlements that we have in our pool grows ... This will become quickly untenable"*, and of the glyph
 review, *"something that would be run only when a new element is added to the map and then not run it other times"* - *"a
-category of thing"*. `l7r-gate reviews owed` (`rust/gate/src/reviews/owed.rs`, feature 449 T89) is the one answer, asked by `make verify`, the pair guard and `review-gate.sh`:
+category of thing"*. `l7r-gate reviews owed` (`rust/gate/crates/reviews/src/reviews/owed.rs`, feature 449 T89) is the one answer, asked by `make verify`, the pair guard and `review-gate.sh`:
 
 | check | owed when | looks at |
 |---|---|---|
@@ -23,7 +23,7 @@ category of thing"*. `l7r-gate reviews owed` (`rust/gate/src/reviews/owed.rs`, f
 **A hand-drawn map awaiting conversion owes nothing.** The GM, 2026-10-01: *"All hand-drawn maps should be excempted from
 settlement reviews because they will be converted to being scripted later. Hand-drawn diagrams of magistracies and country
 shrines and later things which will never be scripted (by design) should still get setlement review."* A Mode B map in
-`legacy-hand-authored-pool/` is skipped by every occasion (`Folder::exempt` in `rust/gate/src/reviews/owed.rs`); a Mode A sheet keeps its review wherever it
+`legacy-hand-authored-pool/` is skipped by every occasion (`Folder::exempt` in `rust/gate/crates/reviews/src/reviews/owed.rs`); a Mode A sheet keeps its review wherever it
 lives.
 
 **The declaration.** Every feature that touches drawing or placement code carries an `## Occasions` section in its `tasks.md`,

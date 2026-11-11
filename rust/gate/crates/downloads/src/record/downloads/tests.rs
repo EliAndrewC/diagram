@@ -816,3 +816,9 @@ fn a_bad_state_file_refuses() {
     let c = ctx(&root, &scratch("badstate-inbox"));
     assert!(sync(&c, "d").is_err());
 }
+
+#[test]
+fn the_command_line_reads_the_gm_s_inbox_from_the_environment() {
+    let root = crate::checks::scratch("downloads-cli");
+    assert_eq!(super::cli(&["no-such-verb".to_owned()], &root).code, 2);
+}

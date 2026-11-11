@@ -194,3 +194,13 @@ fn the_edges_of_a_bundle() {
                 .contains("## research/questions/0094-trade.html")
     );
 }
+
+#[test]
+fn a_page_that_only_lost_a_block_names_none_new() {
+    let root = fixture("triage-removed");
+    put(&root, DRAWING, "<h2>How drawn</h2>\n");
+    let out = root.join("tri");
+    let (manifest, _) = bundle(&root, &out, "").unwrap().unwrap();
+    let text = std::fs::read_to_string(manifest).unwrap();
+    assert!(text.contains("New or changed blocks:\n\n(none)"), "{text}");
+}

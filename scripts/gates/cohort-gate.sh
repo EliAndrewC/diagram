@@ -5,7 +5,7 @@
 # GUARD_EDIT_OK: feature 386 - a NEW push gate, the GM 2026-10-17 approving the recommendation "Run 48 seeds when a feature or
 # batch lands ... it's what would have caught 17/21/40/45 the same day" and "a block of fresh seeds that rotates each run,
 # recorded as a failure rate rather than a pass/fail". `l7r-gate cohort check` decides it (plan D2-D5); the
-# regression reading is `rust/gate/src/cohort/known.rs`'s own. Run by sync-with-main.sh on the GATED route only: a DIRECT
+# regression reading is `rust/gate/crates/cohort/src/cohort/known.rs`'s own. Run by sync-with-main.sh on the GATED route only: a DIRECT
 # delta changes no map. COHORT_OK="<reason>" discharges, to the guard log and dev/bypass-log/.
 set -uo pipefail
 

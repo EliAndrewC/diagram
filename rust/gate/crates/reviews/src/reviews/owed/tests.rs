@@ -429,3 +429,12 @@ fn a_folder_of_one_name_in_both_trees_keeps_its_first_place() {
     assert_eq!(tree.legends.first_drawing("nothing"), "");
     let _ = json!(null);
 }
+
+#[test]
+fn a_map_in_a_repository_with_no_commits_is_new_to_the_pool() {
+    let root = super::super::tests::dir("unborn-map");
+    sh(&root, "git init -q");
+    put(&root, "pool/hamlets/m/m.json", "{}");
+    let (_, units, _) = super::owed(&root, true);
+    assert_eq!(slugs(&units), ["settlement-review--m"]);
+}

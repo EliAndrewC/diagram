@@ -241,3 +241,13 @@ fn the_route_and_its_reason() {
     };
     assert!(docs.reason().contains("none of them diagram engine code"));
 }
+
+#[test]
+fn a_short_engine_list_names_every_path_and_no_more() {
+    let d = super::Delta {
+        base: "b".to_owned(),
+        files: vec!["l7r/a.py".to_owned()],
+        engine: vec!["l7r/a.py".to_owned()],
+    };
+    assert_eq!(d.reason(), "1 engine path(s) in our delta: l7r/a.py");
+}
