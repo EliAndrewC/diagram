@@ -13,7 +13,7 @@ use serde_json::{json, Map, Value};
 use super::args::{parse, Parsed, Spec};
 use super::modals::{self, Modal, DEPICTION_CHECK, RESEARCH_AGENT, RESEARCH_CHECKS};
 use super::owed::{self, answered as is_answered, merge_base, read_answer, write_answer};
-use super::repo::{git, read_text, read_universal, Fail};
+use super::repo::{fail, git, read_text, read_universal, Fail};
 use super::units::re;
 use crate::Reply;
 
@@ -41,7 +41,7 @@ pub(crate) fn touched(store: &Path) -> Result<std::collections::HashMap<String, 
     let Some(text) = read_universal(&store.join(TOUCHED))? else {
         return Ok(std::collections::HashMap::new());
     };
-    let value: Map<String, Value> = serde_json::from_str(&text).map_err(|e| e.to_string())?;
+    let value: Map<String, Value> = serde_json::from_str(&text).map_err(fail)?;
     Ok(value
         .into_iter()
         .map(|(k, v)| (k, v.as_str().unwrap_or("").to_owned()))
@@ -103,16 +103,15 @@ fn page_before(
         .and_then(Value::as_str)
         .unwrap_or("")
         .to_owned();
-    if !blob.is_empty() {
-        let text = blob_text(root, &blob);
-        if !text.is_empty() {
-            return text;
-        }
-    }
-    if base.is_empty() {
-        String::new()
-    } else {
+    let kept = Some(blob)
+        .filter(|b| !b.is_empty())
+        .map(|b| blob_text(root, &b))
+        .unwrap_or_default();
+    let fall_back = kept.is_empty() && !base.is_empty();
+    if fall_back {
         read.read(path).unwrap_or_default()
+    } else {
+        kept
     }
 }
 
@@ -153,8 +152,8 @@ fn pages_of(m: &Modal, check: &str) -> Vec<String> {
 
 fn clear_dir(dir: &Path) -> Result<(), Fail> {
     if dir.exists() {
-        for entry in std::fs::read_dir(dir).map_err(|e| e.to_string())?.flatten() {
-            std::fs::remove_file(entry.path()).map_err(|e| e.to_string())?;
+        for entry in std::fs::read_dir(dir).map_err(fail)?.flatten() {
+            std::fs::remove_file(entry.path()).map_err(fail)?;
         }
     }
     Ok(())
@@ -198,16 +197,13 @@ pub(crate) fn bundle(
     let (mut reads, mut blobs) = (Map::new(), Map::new());
     for (slug, why, _fp) in &units {
         let (check, uid) = slug.split_once(':').unwrap_or((slug, ""));
-        let Some(m) = find(uid) else {
-            continue;
-        };
-        for path in pages_of(m, check) {
-            let name = Path::new(&path)
-                .file_name()
-                .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
-            if !why.contains(&name) {
-                continue;
-            }
+        let named = |p: &String| why.contains(&name_of(p));
+        for path in find(uid)
+            .map(|m| pages_of(m, check))
+            .unwrap_or_default()
+            .into_iter()
+            .filter(named)
+        {
             let now = read_universal(&root.join(&path))?.unwrap_or_default();
             let key = (path.clone(), baseline(&store, slug, &path));
             if !blocks.contains_key(&key) {
@@ -232,7 +228,7 @@ pub(crate) fn bundle(
         }
     }
     clear_dir(out)?;
-    std::fs::create_dir_all(out).map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(out).map_err(fail)?;
     let mut parts = vec![
         "# Triage of pop-up checks (feature 375, FR-001)\n".to_owned(),
         "owed-checks: modal-triage\n".to_owned(),
@@ -277,7 +273,7 @@ pub(crate) fn bundle(
         parts.push(String::new());
     }
     let manifest = out.join("MANIFEST.md");
-    std::fs::write(&manifest, parts.join("\n") + "\n").map_err(|e| e.to_string())?;
+    std::fs::write(&manifest, parts.join("\n") + "\n").map_err(fail)?;
     let units_map: Map<String, Value> = units
         .iter()
         .map(|(s, _, fp)| (s.clone(), json!(fp)))
@@ -287,7 +283,7 @@ pub(crate) fn bundle(
         out.join("triage.json"),
         pyjson::dumps(&pyjson::sorted(&data), Some(1), true) + "\n",
     )
-    .map_err(|e| e.to_string())?;
+    .map_err(fail)?;
     Ok(Some((manifest, units.len())))
 }
 
@@ -399,13 +395,13 @@ pub(crate) fn record(
             write_answer(store, slug, fp, "triage: untouched", Some(&pages_value))?;
         }
     }
-    std::fs::create_dir_all(store).map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(store).map_err(fail)?;
     let body = Value::Object(mark.into_iter().map(|(k, v)| (k, json!(v))).collect());
     std::fs::write(
         store.join(TOUCHED),
         pyjson::dumps(&pyjson::sorted(&body), Some(1), true) + "\n",
     )
-    .map_err(|e| e.to_string())?;
+    .map_err(fail)?;
     Ok(msgs)
 }
 
@@ -469,7 +465,7 @@ fn run_bundle(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
 fn run_record(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     let (dir, reply_file) = (parsed.text("--bundle", ""), parsed.text("--reply", ""));
     let text = read_text(&Path::new(dir).join("triage.json"))?;
-    let data: Value = serde_json::from_str(&text).map_err(|e| e.to_string())?;
+    let data: Value = serde_json::from_str(&text).map_err(fail)?;
     let units = data
         .get("units")
         .and_then(Value::as_object)
@@ -502,13 +498,13 @@ fn owed_reply(root: &Path, path: &str) -> Result<String, Fail> {
 
 /// `record modal-triage [--root DIR] bundle [--out DIR] | record --bundle DIR --reply F`.
 pub(crate) fn cli(args: &[String]) -> Reply {
-    const MAIN: [Spec; 1] = [Spec::value("--root")];
+    let main = [Spec::value("--root")];
     let mut i = 0;
     while i < args.len() && args[i].starts_with('-') {
         i += if args[i].contains('=') { 1 } else { 2 };
     }
     let split_at = i.min(args.len());
-    let parsed_main = match parse(&args[..split_at], &MAIN) {
+    let parsed_main = match parse(&args[..split_at], &main) {
         Ok(p) => p,
         Err(complaint) => {
             return usage(&format!("usage: l7r-gate record modal-triage: {complaint}"))
@@ -539,3 +535,6 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         code: 1,
     })
 }
+
+#[cfg(test)]
+mod tests;

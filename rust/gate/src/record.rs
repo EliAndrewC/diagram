@@ -24,6 +24,9 @@ pub(crate) mod translation;
 pub(crate) mod triage;
 pub(crate) mod units;
 
+#[cfg(test)]
+pub(crate) mod testkit;
+
 pub(crate) use fragment_move::read_text;
 
 const CANON_ROOTS: [&str; 2] = [

@@ -90,6 +90,13 @@ impl<V> Keyed<V> {
         self.map.insert(key, value);
     }
 
+    /// Inserts each `(key, value)` in turn.
+    pub(crate) fn extend<I: IntoIterator<Item = (String, V)>>(&mut self, items: I) {
+        for (k, v) in items {
+            self.insert(k, v);
+        }
+    }
+
     pub(crate) fn contains(&self, key: &str) -> bool {
         self.map.contains_key(key)
     }
@@ -220,7 +227,7 @@ static PAGES: LazyLock<std::sync::Mutex<HashMap<String, Page>>> = LazyLock::new(
 static NOTES: LazyLock<std::sync::Mutex<HashMap<(String, String), std::sync::Arc<NotesParse>>>> =
     LazyLock::new(Default::default);
 /// Past this many texts a kept table starts again: the door lives a whole run, and a run reads two revisions.
-const KEPT: usize = 20_000;
+const KEPT: usize = if cfg!(test) { 8 } else { 20_000 };
 
 fn page_kept(text: &str) -> Page {
     let mut kept = PAGES
@@ -343,15 +350,19 @@ impl Unit {
         self.slug.split_once(':').map_or("", |p| p.1)
     }
 
+    /// The unit for a Python caller; a slug with no colon has no `subject`, which the Python's raised on reading.
     pub(crate) fn json(&self) -> Value {
-        json!({
+        let mut v = json!({
             "slug": self.slug,
             "occasion": self.occasion,
             "fingerprint": self.fingerprint,
             "reading": self.reading,
             "check": self.check(),
-            "subject": self.subject(),
-        })
+        });
+        if let (Some(m), Some((_, subject))) = (v.as_object_mut(), self.slug.split_once(':')) {
+            m.insert("subject".to_owned(), json!(subject));
+        }
+        v
     }
 }
 
@@ -406,7 +417,12 @@ fn owe_page(now: &Record, base: &Record, ix: &Index, stem: &str, page: &Page, ow
     };
     let base_links = base.links.get(stem);
     for (k, w) in notes.iter() {
-        if !ix.notes.contains(w) {
+        let is_new = !ix.notes.contains(w);
+        let was = base_links.and_then(|l| l.get(k));
+        let is = now.links.get(stem).and_then(|l| l.get(k));
+        let link_moved =
+            !is_new && notes_of(base, stem).is_some_and(|n| n.contains(k)) && was != is;
+        if is_new {
             if !w.contains(ABSENCE) {
                 owing.owe(
                     format!("source-reader:{stem}#{k}"),
@@ -418,17 +434,14 @@ fn owe_page(now: &Record, base: &Record, ix: &Index, stem: &str, page: &Page, ow
                 "the note is new or changed",
             );
             owing.owe(format!("record-format:{q}"), "visible words new or changed");
-        } else if notes_of(base, stem).is_some_and(|n| n.contains(k)) {
-            let was = base_links.and_then(|l| l.get(k));
-            let is = now.links.get(stem).and_then(|l| l.get(k));
-            if was != is {
-                let slug = format!("quote-check:{stem}#{k}");
-                owing.owe(
-                    slug.clone(),
-                    "the note's link changed (READABLE on the page it now opens)",
-                );
-                owing.moved.insert(slug);
-            }
+        }
+        if link_moved {
+            let slug = format!("quote-check:{stem}#{k}");
+            owing.owe(
+                slug.clone(),
+                "the note's link changed (READABLE on the page it now opens)",
+            );
+            owing.moved.insert(slug);
         }
     }
 }
@@ -444,11 +457,12 @@ pub(crate) fn owed(now: &Record, base: &Record) -> Vec<Unit> {
     for (s, _) in now.pages.iter().filter(|(s, _)| !s.ends_with(".drawing")) {
         held.insert(now.slugs.get(s).map_or("", String::as_str), s);
     }
-    for (stem, page) in base.pages.iter().filter(|(s, _)| !s.ends_with(".drawing")) {
+    for (stem, page) in base
+        .pages
+        .iter()
+        .filter(|(s, p)| !s.ends_with(".drawing") && !p.intro().is_empty())
+    {
         let slug = base.slugs.get(stem).map_or("", String::as_str);
-        if page.intro().is_empty() {
-            continue;
-        }
         if let Some(h) = held.get(slug) {
             if now.pages.get(h).map_or("", Page::intro) != page.intro() {
                 owing.owe(
@@ -635,3 +649,6 @@ pub(crate) fn fingerprint(rec: &Record, slug: &str) -> String {
     );
     digest_of(&parts)
 }
+
+#[cfg(test)]
+mod tests;

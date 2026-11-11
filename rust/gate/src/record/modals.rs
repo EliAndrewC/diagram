@@ -444,10 +444,7 @@ pub(crate) fn modals_at(root: &Path, rev: &str, about_only: bool) -> Result<Keye
     let mut out = Keyed::default();
     let mut read = read_at(root, rev);
     for d in MODAL_DIRS {
-        for name in read.names(d) {
-            if !ends(&name, ".py") {
-                continue;
-            }
+        for name in read.names(d).into_iter().filter(|n| ends(n, ".py")) {
             let source = read.read(&name).unwrap_or_default();
             let mut reader = |f: &str| Ok(read.read(f));
             for m in modals_in(&source, &name, &mut reader, about_only)? {
@@ -455,13 +452,13 @@ pub(crate) fn modals_at(root: &Path, rev: &str, about_only: bool) -> Result<Keye
             }
         }
     }
-    for name in read.names(&format!("{MODALS}/choice")) {
-        if ends(&name, ".md") {
-            if let Some(m) = choice_modal(&name, &read.read(&name).unwrap_or_default(), about_only)
-            {
-                out.insert(m.uid(), m);
-            }
-        }
+    for name in read
+        .names(&format!("{MODALS}/choice"))
+        .into_iter()
+        .filter(|n| ends(n, ".md"))
+    {
+        let text = read.read(&name).unwrap_or_default();
+        out.extend(choice_modal(&name, &text, about_only).map(|m| (m.uid(), m)));
     }
     Ok(out)
 }
@@ -571,9 +568,10 @@ fn changed_pages(root: &Path, base: &str) -> Result<HashSet<String>, Fail> {
         v.sort();
         v
     };
-    for moved in crate::checks::moves::moved_only(root, base, &names) {
-        changed.remove(&moved);
-    }
+    let moved: HashSet<String> = crate::checks::moves::moved_only(root, base, &names)
+        .into_iter()
+        .collect();
+    changed.retain(|n| !moved.contains(n));
     let mut listed: Vec<String> = changed.iter().cloned().collect();
     listed.sort();
     let objects: Vec<String> = listed.iter().map(|f| format!("{base}:{f}")).collect();
@@ -699,8 +697,8 @@ pub(crate) fn about_keys(root: &Path) -> Result<HashSet<String>, Fail> {
 
 /// `record modal-owed [--root DIR]`: the owed units, one a line (`modal_owed.py`'s own command line).
 pub(crate) fn cli(args: &[String]) -> crate::Reply {
-    const FLAGS: [super::args::Spec; 1] = [super::args::Spec::value("--root")];
-    let parsed = match super::args::parse(args, &FLAGS) {
+    let flags = [super::args::Spec::value("--root")];
+    let parsed = match super::args::parse(args, &flags) {
         Ok(p) => p,
         Err(complaint) => {
             return crate::Reply {
@@ -728,3 +726,6 @@ pub(crate) fn cli(args: &[String]) -> crate::Reply {
         },
     }
 }
+
+#[cfg(test)]
+mod tests;

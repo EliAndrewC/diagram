@@ -17,7 +17,7 @@ pub(crate) use answers::{
 
 use super::args::{parse, Parsed, Spec};
 use super::modals;
-use super::repo::{cat_blobs, git, python, read_text, tree_of, Fail};
+use super::repo::{cat_blobs, fail, git, python, read_text, tree_of, Fail};
 use super::translation;
 use super::units::{
     self, digest, question, re, stem_of, Keyed, Record, Unit, QUESTIONS, SOURCE_DIRS,
@@ -195,25 +195,26 @@ fn translation_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {
 }
 
 /// The base `entry_owed` diffs against (`entry_owed.base_of`).
-fn entry_base(root: &Path) -> String {
+pub(super) fn entry_base(root: &Path) -> String {
     let head = git(root, &["rev-parse", "--verify", "-q", "HEAD"])
         .trim()
         .to_owned();
-    if head.is_empty() {
-        return head;
-    }
-    if !git(root, &["rev-parse", "--verify", "-q", "origin/main"])
-        .trim()
-        .is_empty()
-    {
-        let mb = git(root, &["merge-base", "HEAD", "origin/main"])
+    let origin = !head.is_empty()
+        && !git(root, &["rev-parse", "--verify", "-q", "origin/main"])
             .trim()
-            .to_owned();
-        if !mb.is_empty() {
-            return mb;
-        }
+            .is_empty();
+    let mb = if origin {
+        git(root, &["merge-base", "HEAD", "origin/main"])
+            .trim()
+            .to_owned()
+    } else {
+        String::new()
+    };
+    if mb.is_empty() {
+        head
+    } else {
+        mb
     }
-    head
 }
 
 /// Whether `entry_owed` must run for this delta (the T065 clause, `ask:449-T87-entry-owed`): the family is asked, and a question page changed, or the engine it imports is not here (the crash the Python had then).
@@ -237,7 +238,7 @@ fn entry_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {
     let tree = tree_of(root);
     let (tree, top) = (tree.to_string_lossy(), root.to_string_lossy());
     let said = python(ENTRY_OWED, &[&tree, &top], "")?;
-    let lines: Vec<String> = serde_json::from_str(&said).map_err(|e| e.to_string())?;
+    let lines: Vec<String> = serde_json::from_str(&said).map_err(fail)?;
     let about = modals::about_keys(root)?;
     let mut out = Vec::new();
     for line in lines {
@@ -519,27 +520,29 @@ fn touched_of(store_dir: &Path) -> Result<HashMap<String, String>, Fail> {
     super::triage::touched(store_dir)
 }
 
-const FLAGS: [Spec; 15] = [
-    Spec::value("--root"),
-    Spec::value("--q"),
-    Spec::flag("--unanswered"),
-    Spec::flag("--slugs"),
-    Spec::value("--skip-check"),
-    Spec::pair("--between"),
-    Spec::value("--answer"),
-    Spec::value("--result"),
-    Spec::value("--bundle"),
-    Spec::value("--notes"),
-    Spec::value("--key"),
-    Spec::value("--kind"),
-    Spec::value("--reason"),
-    Spec::value("--reply"),
-    Spec::value("--fixed-by"),
-];
+fn flags() -> [Spec; 15] {
+    [
+        Spec::value("--root"),
+        Spec::value("--q"),
+        Spec::flag("--unanswered"),
+        Spec::flag("--slugs"),
+        Spec::value("--skip-check"),
+        Spec::pair("--between"),
+        Spec::value("--answer"),
+        Spec::value("--result"),
+        Spec::value("--bundle"),
+        Spec::value("--notes"),
+        Spec::value("--key"),
+        Spec::value("--kind"),
+        Spec::value("--reason"),
+        Spec::value("--reply"),
+        Spec::value("--fixed-by"),
+    ]
+}
 
 /// `record record-owed ...`.
 pub(crate) fn cli(args: &[String]) -> Reply {
-    let parsed = match parse(args, &FLAGS) {
+    let parsed = match parse(args, &flags()) {
         Ok(p) => p,
         Err(complaint) => {
             return usage(&format!("usage: l7r-gate record record-owed: {complaint}"))
@@ -659,3 +662,6 @@ pub(crate) fn notes_of(rec: &Record) -> (Value, Value) {
         .collect();
     (Value::Object(notes), Value::Object(cites))
 }
+
+#[cfg(test)]
+mod tests;

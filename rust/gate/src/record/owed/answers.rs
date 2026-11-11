@@ -14,7 +14,7 @@ use serde_json::{json, Map, Value};
 use super::{listing, merge_base, units, zfill4, FAMILIES};
 use crate::record::args::Parsed;
 use crate::record::modals::{self, Modal};
-use crate::record::repo::{self, git, python, read_universal, tree_of, utc_now, Fail};
+use crate::record::repo::{self, fail, git, python, read_universal, tree_of, utc_now, Fail};
 use crate::record::units::{
     self as ru, pairs_of, question, re, Unit, HREF, NOTE, ORIG_STORED, ORIG_TOKEN, PASSAGE,
 };
@@ -82,7 +82,12 @@ fn quoted(slug: &str) -> String {
 
 /// The clone's answer records: `RECORD_CHECKS_DIR` (a test's throwaway store), else its git dir.
 pub(crate) fn store(root: &Path) -> PathBuf {
-    if let Some(dir) = std::env::var_os("RECORD_CHECKS_DIR").filter(|d| !d.is_empty()) {
+    store_given(root, std::env::var_os("RECORD_CHECKS_DIR"))
+}
+
+/// [`store`] with `RECORD_CHECKS_DIR` given.
+pub(super) fn store_given(root: &Path, named: Option<std::ffi::OsString>) -> PathBuf {
+    if let Some(dir) = named.filter(|d| !d.is_empty()) {
         return dir.into();
     }
     let common = git(root, &["rev-parse", "--git-common-dir"]);
@@ -112,7 +117,7 @@ fn write_record(
     ascii: bool,
 ) -> Result<(), Fail> {
     let body = pyjson::dumps(&Value::Object(rec.clone()), indent, ascii) + "\n";
-    std::fs::write(file_of(store_dir, slug), body).map_err(|e| e.to_string())
+    std::fs::write(file_of(store_dir, slug), body).map_err(fail)
 }
 
 fn strings(v: Option<&Value>) -> Vec<String> {
@@ -137,7 +142,7 @@ pub(crate) fn write_answer(
     result: &str,
     pages: Option<&Value>,
 ) -> Result<(), Fail> {
-    std::fs::create_dir_all(store_dir).map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(store_dir).map_err(fail)?;
     let old = read_answer(store_dir, slug);
     let mut seen: Vec<Value> = old
         .get("answered")
@@ -200,7 +205,7 @@ pub(crate) fn settle(
         }
         return Ok("answered".to_owned());
     }
-    std::fs::create_dir_all(store_dir).map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(store_dir).map_err(fail)?;
     if !rec.contains_key("unit") {
         rec.insert("unit".to_owned(), json!(slug));
     }
@@ -246,12 +251,15 @@ pub(crate) fn answered(store_dir: &Path, slug: &str, fp: &str, reading: &str) ->
 
 /// The other session clones' answer stores.
 fn sibling_stores(root: &Path) -> Vec<PathBuf> {
+    siblings_given(root, std::env::var_os("RECORD_CHECKS_DIR"))
+}
+
+/// [`sibling_stores`] with `RECORD_CHECKS_DIR` given: a test's throwaway store has no siblings.
+pub(super) fn siblings_given(root: &Path, named: Option<std::ffi::OsString>) -> Vec<PathBuf> {
     let clones = root
         .parent()
         .filter(|p| p.file_name().is_some_and(|n| n == ".clones"));
-    let Some(parent) =
-        clones.filter(|_| std::env::var_os("RECORD_CHECKS_DIR").is_none_or(|d| d.is_empty()))
-    else {
+    let Some(parent) = clones.filter(|_| named.is_none_or(|d| d.is_empty())) else {
         return Vec::new();
     };
     let mut dirs: Vec<PathBuf> = std::fs::read_dir(parent)
@@ -275,7 +283,7 @@ fn adopt(s: &Path, others: &[PathBuf], slug: &str, fp: &str, reading: &str) -> R
             continue;
         }
         let rec = read_answer(o, slug);
-        std::fs::create_dir_all(s).map_err(|e| e.to_string())?;
+        std::fs::create_dir_all(s).map_err(fail)?;
         let mut mine = read_answer(s, slug);
         let mut have = strings(mine.get("answered"));
         let mut extra: Vec<String> = rec
@@ -394,7 +402,12 @@ fn sorted_union(old: Vec<String>, new: Vec<String>) -> Value {
 }
 
 /// Add what a source-reader answer read - its pages and passages - and the passages its reply quoted.
-fn keep_parts(store_dir: &Path, slug: &str, root: &Path, reply: &str) -> Result<(), Fail> {
+pub(super) fn keep_parts(
+    store_dir: &Path,
+    slug: &str,
+    root: &Path,
+    reply: &str,
+) -> Result<(), Fail> {
     let mut rec = read_answer(store_dir, slug);
     if rec.is_empty() {
         return Ok(());
@@ -588,13 +601,12 @@ fn token_hex() -> String {
 pub(crate) fn bypass_log(root: &Path, target: &str, why: &str) -> Result<(), Fail> {
     let now = utc_now();
     let bl = root.join("dev/bypass-log").join(&now[..7]);
-    std::fs::create_dir_all(&bl).map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(&bl).map_err(fail)?;
     let head = git(root, &["rev-parse", "--short", "HEAD"]);
     let rec = json!({"utc": now, "target": target, "commit": head.trim(), "why": why});
     let stamp = format!("{}Z", now.replace(['-', ':'], "").trim_end_matches('Z'));
     let name = format!("{stamp}-{}.json", token_hex());
-    std::fs::write(bl.join(name), pyjson::dumps(&rec, Some(2), true) + "\n")
-        .map_err(|e| e.to_string())
+    std::fs::write(bl.join(name), pyjson::dumps(&rec, Some(2), true) + "\n").map_err(fail)
 }
 
 /// {slug: `quotation_key`} of quote-check note units at `rev` (None: the working tree); no write-up is read.
@@ -823,9 +835,7 @@ pub(crate) fn file_outside(
     let target = checks::arbiter::feature_dir(root, "")
         .unwrap_or_else(|| root.join("specs/_unfiled"))
         .join("found.jsonl");
-    if let Some(parent) = target.parent() {
-        std::fs::create_dir_all(parent).map_err(|e| e.to_string())?;
-    }
+    std::fs::create_dir_all(target.parent().unwrap_or(root)).map_err(fail)?;
     let mut body = String::new();
     let mut out = Vec::new();
     for (file, block, finding) in rows {
@@ -839,10 +849,10 @@ pub(crate) fn file_outside(
             .append(true)
             .create(true)
             .open(&target)
-            .map_err(|e| e.to_string())?,
+            .map_err(fail)?,
         body.as_bytes(),
     )
-    .map_err(|e| e.to_string())?;
+    .map_err(fail)?;
     Ok(out)
 }
 
@@ -891,7 +901,7 @@ fn run_fixed(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
 pub(crate) fn reply_of(root: &Path, path: &str) -> Result<String, Fail> {
     let tree = tree_of(root);
     let said = python(REPLY_OF, &[&tree.to_string_lossy(), path], "")?;
-    serde_json::from_str(&said).map_err(|e| e.to_string())
+    serde_json::from_str(&said).map_err(fail)
 }
 
 fn run_answer(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {

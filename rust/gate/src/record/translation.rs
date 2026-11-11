@@ -10,7 +10,7 @@ use serde_json::{json, Map, Value};
 
 use super::args::{parse, Spec};
 use super::leaves::fragments_for;
-use super::repo::{cat_blobs, python, read_universal, tree_of, Fail};
+use super::repo::{cat_blobs, fail, python, read_universal, tree_of, Fail};
 use super::units::{pairs_of, restored, NOTE, ORIG_STORED};
 use crate::Reply;
 
@@ -51,10 +51,8 @@ fn git_any(root: &Path, args: &[&str]) -> String {
         .current_dir(root)
         .args(args)
         .output()
-        .map_or_else(
-            |_| String::new(),
-            |o| String::from_utf8_lossy(&o.stdout).into_owned(),
-        )
+        .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
+        .unwrap_or_default()
 }
 
 fn notes_files(names: &[String]) -> Vec<String> {
@@ -170,9 +168,9 @@ fn parse_uncached(root: &Path, items: &[Value]) -> Result<Vec<Value>, Fail> {
     let said = python(
         READER,
         &[&tree.to_string_lossy()],
-        &serde_json::to_string(items).map_err(|e| e.to_string())?,
+        &serde_json::to_string(items).map_err(fail)?,
     )?;
-    serde_json::from_str(&said).map_err(|e| e.to_string())
+    serde_json::from_str(&said).map_err(fail)
 }
 
 fn load_cache(path: &Path) -> Map<String, Value> {
@@ -306,8 +304,8 @@ fn report(rows: &[Row]) -> String {
 
 /// `record translation-owed [--root DIR] [--q QUESTIONS]`.
 pub(crate) fn cli(args: &[String]) -> Reply {
-    const FLAGS: [Spec; 2] = [Spec::value("--root"), Spec::value("--q")];
-    let parsed = match parse(args, &FLAGS) {
+    let flags = [Spec::value("--root"), Spec::value("--q")];
+    let parsed = match parse(args, &flags) {
         Ok(p) => p,
         Err(complaint) => {
             return usage(&format!(
@@ -341,3 +339,6 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         code: 0,
     }
 }
+
+#[cfg(test)]
+mod tests;

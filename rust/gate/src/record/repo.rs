@@ -7,6 +7,15 @@ use std::process::{Command, Stdio};
 /// A failure the Python would have raised: its uncaught exception, the exit status 1 a port holds.
 pub(crate) type Fail = String;
 
+/// Any error as the failure it is.
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "a `map_err` callback takes its error by value"
+)]
+pub(crate) fn fail<E: std::fmt::Display>(e: E) -> Fail {
+    e.to_string()
+}
+
 /// `text.replace` of `\r\n` and `\r` with `\n`, as Python's text mode and `subprocess` `text=True` read.
 pub(crate) fn universal(text: &str) -> String {
     text.replace("\r\n", "\n").replace('\r', "\n")
@@ -68,29 +77,25 @@ pub(crate) fn cat_blobs(root: &Path, objects: &[String]) -> Vec<String> {
     out
 }
 
-/// `git -C root args...` fed `input`; its stdout's bytes, whatever its exit.
-fn git_stdin(root: &Path, args: &[&str], input: &str) -> Vec<u8> {
-    let child = Command::new("git")
-        .arg("-C")
-        .arg(root)
-        .args(args)
+/// `cmd` fed `input` on its stdin, written beside the read so neither pipe fills.
+fn piped(cmd: &mut Command, input: &str) -> std::io::Result<std::process::Output> {
+    let mut child = cmd
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
-        .stderr(Stdio::null())
-        .spawn();
-    let Ok(mut child) = child else {
-        return Vec::new();
-    };
-    let stdin = child.stdin.take();
-    let body = input.to_owned();
-    let writer = std::thread::spawn(move || {
-        if let Some(mut pipe) = stdin {
-            let _ = pipe.write_all(body.as_bytes());
-        }
-    });
+        .stderr(Stdio::piped())
+        .spawn()?;
+    let (pipe, body) = (child.stdin.take(), input.to_owned());
+    let writer = std::thread::spawn(move || pipe.map(|mut p| p.write_all(body.as_bytes())));
     let done = child.wait_with_output();
     let _ = writer.join();
-    done.map_or_else(|_| Vec::new(), |o| o.stdout)
+    done
+}
+
+/// `git -C root args...` fed `input`; its stdout's bytes, whatever its exit.
+fn git_stdin(root: &Path, args: &[&str], input: &str) -> Vec<u8> {
+    piped(Command::new("git").arg("-C").arg(root).args(args), input)
+        .map(|o| o.stdout)
+        .unwrap_or_default()
 }
 
 /// `path.read_text(encoding="utf-8")`: `\r\n` and `\r` as `\n`, an unreadable file the failure the Python would raise.
@@ -111,35 +116,32 @@ pub(crate) fn read_universal(path: &Path) -> Result<Option<String>, Fail> {
 
 /// Runs a Python seam: `python3 -c code args...` fed `input`, its stdout on success and the stderr it wrote on failure.
 pub(crate) fn python(code: &str, args: &[&str], input: &str) -> Result<String, Fail> {
-    let child = Command::new("python3")
-        .arg("-c")
-        .arg(code)
-        .args(args)
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn()
-        .map_err(|e| e.to_string())?;
-    let mut child = child;
-    let stdin = child.stdin.take();
-    let body = input.to_owned();
-    let writer = std::thread::spawn(move || {
-        if let Some(mut pipe) = stdin {
-            let _ = pipe.write_all(body.as_bytes());
-        }
-    });
-    let done = child.wait_with_output().map_err(|e| e.to_string())?;
-    let _ = writer.join();
+    let done = piped(
+        Command::new("python3").arg("-c").arg(code).args(args),
+        input,
+    )
+    .map_err(fail)?;
+    let (out, err) = (
+        String::from_utf8_lossy(&done.stdout).into_owned(),
+        String::from_utf8_lossy(&done.stderr).into_owned(),
+    );
     if done.status.success() {
-        Ok(String::from_utf8_lossy(&done.stdout).into_owned())
+        Ok(out)
     } else {
-        Err(String::from_utf8_lossy(&done.stderr).into_owned())
+        Err(err)
     }
 }
 
 /// The tree the scripts live in: where the wrapper said, else the root.
+#[cfg(not(test))]
 pub(crate) fn tree_of(root: &Path) -> std::path::PathBuf {
     std::env::var_os("L7R_GATE_TREE").map_or_else(|| root.to_path_buf(), Into::into)
+}
+
+/// The tests' tree: a scratch record carries its own stubs of the Python seams, so a test never runs the real `entry_owed` on it.
+#[cfg(test)]
+pub(crate) fn tree_of(root: &Path) -> std::path::PathBuf {
+    root.to_path_buf()
 }
 
 /// The current UTC time as `%Y-%m-%dT%H:%M:%SZ`.
@@ -150,3 +152,6 @@ pub(crate) fn utc_now() -> String {
     let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs);
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
+
+#[cfg(test)]
+mod tests;

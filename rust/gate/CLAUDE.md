@@ -22,6 +22,8 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/preflight.rs` | the gate's first phase and its tree check, `preflight` (T071) |
 | `src/logs.rs` | the records the gate's shell writes, `log run`, `log bypass`, `log gate-bypass`, `log land-tooling`; `json-field`, `ruff-toml` (T069) |
 | `src/record.rs`, `src/record/` | the research record's tools: `canon`, `money-conversions`, `found`, `access-tags`, `downloads`, and the leaves Python reaches through a verb (`leaves.rs`: `edit-route`, `fragments`, `moved-only`, `americanize`; `scripts/record_door.py` is the door) (T79-T81) |
+| `src/record/owed.rs`, `owed/answers.rs`, `units.rs`, `modals.rs`, `translation.rs`, `triage.rs` | what a delta owes the record checks and what answered them: `record record-owed`, `modal-owed`, `translation-owed`, `modal-triage`, `merge-answers` (`pull-queue.sh`); `args.rs` reads their command lines as argparse did, `repo.rs` their git and Python seams (`entry_owed.py`, `quote_verbatim`, `style_prepass`, `apply_edits.reply_of`, by path) (T87) |
+| `src/owed_door.rs` | Python's door to those tools (`owed-door`, one process a run; `scripts/owed_door.py`) (T87) |
 | `src/arbiter.rs`, `src/arbiter/` | the round arbiter's rulings and tripwires: `arbiter ruled`, `ruled-batch`, `ask`, `fix`, `nit`, `gate-held`, `spec-verdict`, `spec-ruled`, `unit-ruled` (T86) |
 | `src/checks_door.rs` | Python's door to the check state and the arbiter (`checks-door`, one process a run; `scripts/checks_door.py`), `checks-close` (T86) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

@@ -100,3 +100,49 @@ fn what_python_could_not_read_is_none() {
     assert!(read("x = 'a\\").is_none());
     assert_eq!(read("").unwrap(), super::Facts::default());
 }
+
+#[test]
+fn the_classes_that_set_a_key_as_ast_reads_them() {
+    use super::kinds;
+    let found = kinds(concat!(
+        "class A(Kind):\n    \"\"\"  Doc line\n\n\t  tabbed\n      indented\n    \"\"\"\n    key = \"a k\"\n",
+        "class B(X): key = 'b'; other = 1\n",
+        "class C:\n    key = 1\n    key = 'late'\n",
+        "class D:\n    if x:\n        key = 'nested'\n    key: str = 'annotated'\n    key += 'aug'\n    key == 'cmp'\n",
+        "class E:\n    a = key = ('p' 'q')\n    b = (key) = 'r'\n",
+        "class F:\n    \"\"\"\n    \"\"\"\n    key = 'x' 'y'\n    def f(self):\n        key = 'z'\n",
+        "class G:\n    b'doc'\n    key = f'k{x}'\n",
+        "class H:\n    key = b'bytes'\n",
+        "class I:\n    key = None\n",
+        "class J:\n    key = 1.5\n    key = 'after'\n",
+        "class K:\n    key = -1\n    key = 'neg'\n",
+        "class L:\n    key = 'l'\n",
+        "def f():\n    class M:\n        key = 'inner'\n",
+        "class O: pass\n",
+        "class P:\n    key = [\"x\"]\n    key = 'p'\n",
+        "class R:\n    key = ('a', 'b')\n    key = ('r')\n",
+        "class S:\n    key = (1) + (2)\n    key = 's'\n",
+    ))
+    .unwrap();
+    let got: Vec<(&str, &str, usize, &str)> = found
+        .iter()
+        .map(|k| (k.name.as_str(), k.key.as_str(), k.line, k.doc.as_str()))
+        .collect();
+    assert_eq!(
+        got,
+        [
+            ("A", "a k", 1, "Doc line\n\n    tabbed\nindented"),
+            ("B", "b", 8, ""),
+            ("E", "pq", 18, ""),
+            ("F", "xy", 21, "    "),
+            ("K", "neg", 37, ""),
+            ("L", "l", 40, ""),
+            ("P", "p", 46, ""),
+            ("R", "r", 49, ""),
+            ("S", "s", 52, ""),
+        ]
+    );
+    assert!(kinds("x = (\n").is_none());
+    assert!(kinds("class Q:\n").unwrap().is_empty());
+    assert!(kinds("class Q:\nx = 1\n").unwrap().is_empty());
+}

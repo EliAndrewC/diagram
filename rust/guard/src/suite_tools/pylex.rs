@@ -399,27 +399,66 @@ fn assignment_parts(stmt: &[Tok]) -> Vec<&[Tok]> {
     parts
 }
 
-/// A statement's constant value as `ast.Constant` holds it: `Some(Some(text))` for a string, `Some(None)` for any other constant, `None` for anything else.
-fn constant_of(value: &[Tok]) -> Option<Option<String>> {
-    if !value.is_empty() && value.iter().all(|t| matches!(t.kind, Kind::Str { .. })) {
-        let mut out = String::new();
-        for t in value {
-            if let Kind::Str {
-                pieces,
-                bytes,
-                plain,
-            } = &t.kind
-            {
-                if !plain {
-                    return None;
-                }
-                if *bytes {
-                    return Some(None);
-                }
-                out.extend(pieces.iter().map(String::as_str));
+/// `toks` without the parentheses that wrap the whole of it (`('p' 'q')`, `(key)`): grouping, not a tuple, to `ast`.
+fn unwrapped(mut toks: &[Tok]) -> &[Tok] {
+    while toks.len() >= 2
+        && toks[0].kind == Kind::Op('(')
+        && toks[toks.len() - 1].kind == Kind::Op(')')
+    {
+        let mut depth = 0usize;
+        let closes_last = toks.iter().enumerate().all(|(i, t)| {
+            match t.kind {
+                Kind::Op('(' | '[' | '{') => depth += 1,
+                Kind::Op(')' | ']' | '}') => depth -= 1,
+                _ => {}
             }
+            depth > 0 || i == toks.len() - 1
+        });
+        let inner = &toks[1..toks.len() - 1];
+        if !closes_last || inner.iter().any(|t| t.kind == Kind::Op(',')) {
+            break;
         }
-        return Some(Some(out));
+        toks = inner;
+    }
+    toks
+}
+
+/// A statement's constant value as `ast.Constant` holds it: a string's text, any other constant, or None for anything else.
+/// An `ast.Constant`: a string's text, or any other constant (a number, `None`, bytes).
+#[derive(Debug, PartialEq, Eq)]
+enum Constant {
+    Text(String),
+    Other,
+}
+
+/// A string token's pieces and flags, or None for any other token.
+fn str_of(t: &Tok) -> Option<(&[String], bool, bool)> {
+    match &t.kind {
+        Kind::Str {
+            pieces,
+            bytes,
+            plain,
+        } => Some((pieces.as_slice(), *bytes, *plain)),
+        _ => None,
+    }
+}
+
+fn constant_of(value: &[Tok]) -> Option<Constant> {
+    let value = unwrapped(value);
+    let strings: Option<Vec<(&[String], bool, bool)>> = value.iter().map(str_of).collect();
+    if let Some(parts) = strings.filter(|p| !p.is_empty()) {
+        if parts.iter().any(|(_, _, plain)| !plain) {
+            return None;
+        }
+        if parts.iter().any(|(_, bytes, _)| *bytes) {
+            return Some(Constant::Other);
+        }
+        return Some(Constant::Text(
+            parts
+                .iter()
+                .flat_map(|(pieces, ..)| pieces.iter().map(String::as_str))
+                .collect(),
+        ));
     }
     let number = !value.is_empty()
         && value.iter().all(|t| match &t.kind {
@@ -430,11 +469,11 @@ fn constant_of(value: &[Tok]) -> Option<Option<String>> {
             Kind::Op('.') => true,
             _ => false,
         });
-    number.then_some(None)
+    number.then_some(Constant::Other)
 }
 
 /// What a body statement sets `key` to, where it is an `ast.Assign` of a constant to the bare name `key`.
-fn key_of(stmt: &[Tok]) -> Option<Option<String>> {
+fn key_of(stmt: &[Tok]) -> Option<Constant> {
     let parts = assignment_parts(stmt);
     let (value, targets) = parts.split_last()?;
     if targets.is_empty()
@@ -550,12 +589,15 @@ pub fn kinds(src: &str) -> Option<Vec<KindClass>> {
             continue;
         }
         let stmts = body_statements(&lines, at, body_of(line)?, &indent_of);
-        let Some(Some(key)) = stmts.iter().find_map(|s| key_of(s)) else {
+        let Some(Constant::Text(key)) = stmts.iter().find_map(|s| key_of(s)) else {
             continue;
         };
         let doc = stmts
             .first()
-            .and_then(|s| constant_of(s).flatten())
+            .and_then(|s| match constant_of(s) {
+                Some(Constant::Text(d)) => Some(d),
+                _ => None,
+            })
             .map_or_else(String::new, |d| cleandoc(&d));
         out.push(KindClass {
             name: name_of(line.get(1)).to_owned(),

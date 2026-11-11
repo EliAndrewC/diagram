@@ -18,21 +18,21 @@ enum Arity {
 }
 
 impl Spec {
-    pub(crate) const fn value(name: &'static str) -> Self {
+    pub(crate) fn value(name: &'static str) -> Self {
         Self {
             name,
             kind: Arity::Value,
         }
     }
 
-    pub(crate) const fn flag(name: &'static str) -> Self {
+    pub(crate) fn flag(name: &'static str) -> Self {
         Self {
             name,
             kind: Arity::Flag,
         }
     }
 
-    pub(crate) const fn pair(name: &'static str) -> Self {
+    pub(crate) fn pair(name: &'static str) -> Self {
         Self {
             name,
             kind: Arity::Pair,
@@ -46,8 +46,6 @@ pub(crate) struct Parsed {
     values: Vec<(String, String)>,
     flags: Vec<String>,
     pairs: Vec<(String, (String, String))>,
-    /// Positional arguments, in order.
-    pub(crate) rest: Vec<String>,
 }
 
 impl Parsed {
@@ -107,11 +105,7 @@ pub(crate) fn parse(args: &[String], specs: &[Spec]) -> Result<Parsed, String> {
         let arg = &args[i];
         i += 1;
         if !arg.starts_with("--") || arg.len() == 2 {
-            if looks_like_flag(arg, specs) {
-                return Err(format!("unrecognized arguments: {arg}"));
-            }
-            out.rest.push(arg.clone());
-            continue;
+            return Err(format!("unrecognized arguments: {arg}"));
         }
         let (word, inline) = arg
             .split_once('=')
@@ -158,3 +152,6 @@ pub(crate) fn parse(args: &[String], specs: &[Spec]) -> Result<Parsed, String> {
     }
     Ok(out)
 }
+
+#[cfg(test)]
+mod tests;

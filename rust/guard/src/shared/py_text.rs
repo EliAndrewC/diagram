@@ -48,7 +48,13 @@ mod tests {
 
     #[test]
     fn the_separator_characters_are_whitespace_as_python_reads_them() {
-        assert!(is_space('\x1c') && is_space('\u{3000}') && !is_space('x'));
+        for c in [
+            '\t', '\r', '\x1c', '\x1f', ' ', '\u{85}', '\u{a0}', '\u{1680}', '\u{2000}',
+            '\u{200a}', '\u{2028}', '\u{2029}', '\u{202f}', '\u{205f}', '\u{3000}',
+        ] {
+            assert!(is_space(c));
+        }
+        assert!(!is_space('x'));
         assert_eq!(strip("\x1f a\u{a0}"), "a");
         assert_eq!(split(" a\x1db\n c "), ["a", "b", "c"]);
         assert_eq!(collapse("a\x1eb   c"), "a b c");

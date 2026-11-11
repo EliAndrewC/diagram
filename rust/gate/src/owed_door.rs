@@ -323,3 +323,6 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
 pub fn serve(input: &mut dyn std::io::BufRead, output: &mut dyn std::io::Write) -> crate::Reply {
     crate::checks_door::serve_with(input, output, &answer)
 }
+
+#[cfg(test)]
+mod tests;

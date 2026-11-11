@@ -207,6 +207,10 @@ mod tests {
         assert_eq!(page.blocks.len(), 3);
         assert_eq!(read_page("no heading").intro(), "");
         assert_eq!(words("a\x1fb <br/> c"), "a b c");
+        assert_eq!(
+            read_page("<p>an unclosed end").blocks[0].words,
+            "an unclosed end"
+        );
     }
 
     #[test]

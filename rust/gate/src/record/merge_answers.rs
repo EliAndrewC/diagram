@@ -160,3 +160,6 @@ pub(super) fn cli(args: &[String]) -> Reply {
         code: i32::from(!failed.is_empty()),
     }
 }
+
+#[cfg(test)]
+mod tests;
