@@ -394,39 +394,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T95 to T95 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T96 to T96 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-### T97 (make done's counters-inert phase, FR-012)
-
-- **Approach**: `l7r-gate rust test-counters` (`rust/gate/crates/rustc/src/rustc.rs`) runs a crate's counting build only where the crate has a `counters` feature, and passes over the rest by name.
-
-   **Decisions** (FR-012, SC-007):
-   - Where the time went: the phase took 113 s in T102's landing's `make done` and 59 s in T101's (observed 2026-11-11, method: the `phases` field of the run records `dev/run-log/2026-11/20261111T220512696061-2826777.json` and `20261111T215633488253-2744162.json`). It ran `cargo test --all-features` on every crate whose key moved, and an edit of the guard crate, which every gate crate builds on, moves all 19; the arbiter crate's tests alone took 8-11 s of it (observed 2026-11-11, method: the landings' `test-counters on rust/gate/crates/arbiter` lines).
-   - Only `rust/phases` has a `counters` feature; core's one feature, `testkit`, is on in its own test build already (`#[cfg(any(test, feature = "testkit"))]`), every other crate has none, and no crate builds on `rust/phases` (observed 2026-11-11, method: each `Cargo.toml`'s `[features]` read, and `grep -l phases` over every manifest). So for 18 of the 19 crates the counting build was the default test build run a second time, and `make static`'s `cover` runs those same tests in the same `make done`. The phase's purpose, that the counters change no result, has only `rust/phases` to prove it on, which it still does.
-   - After: `make counters-inert FRESH=1` with every crate run fresh took 4.96 s, 18 crates passed over and `rust/phases` 93 passed (observed 2026-11-11, method: `/usr/bin/time` on that command on this clone).
-   - The same verdicts: every test a skipped crate's counting build ran is run by `cover` in the same `make done`, and `rust/phases`' counting run is unchanged. The rustc crate's tests give a crate a `counters` feature where they run the counting build, and assert the pass-over line for one without (`make rust-test CRATE=rust/gate/crates/rustc`, 27 passed, observed 2026-11-11, method: that command on this clone).
-
-### T97 Approach (checklist part A)
-
-1. **The goal, in the world.** `make done` proves the counters inert where there are counters, and nowhere else.
-2. **The constraints.** FR-012 and SC-007: every verdict held.
-3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the run records and the timing above.
-4. **Do they describe the world here?** Measured on this clone.
-5. **The order.** After T101-T103.
-6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The forced-fresh timing above (observed 2026-11-11, method: `/usr/bin/time make counters-inert FRESH=1`), and the next landing's `counters-inert` phase.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** yes, tooling time, not the generator:
-1. **Where does the time go?** In counting builds identical to the default ones, rerun for every crate a shared edit moves.
-2. **Does the change remove work, or only move it?** Removes it: 18 duplicate test runs a landing.
-3. **What do you expect it to save, and why?** Nearly the whole phase, since 18 of its 19 crates were duplicates.
-4. **How does the work grow?** With the crates that have counters, one today, not with every crate ported.
-5. **What did the before and after show, and under what conditions?** One landing's phase each before and one forced-fresh run after, on a throttled host, read as evidence.
-6. **Did any map move?** No: no engine code changes.
-
-
+<!-- plan-archive: T97 to T97 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 ### T98 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

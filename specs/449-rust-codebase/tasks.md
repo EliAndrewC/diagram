@@ -320,8 +320,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T96 A test binary rebuilt after a one-line edit (13.9 s claims): the gate crates' test profile and the linker, measured (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: every build links with rust-lld and dev keeps line tables only: a claims test rebuild 13.9 s to 1 s, make static after a core edit 103 s to 75 s
-- [ ] T97 make done's counters-inert phase (53 s of 57 s): the counting builds of core and phases rerun less, measured (the GM 2026-11-11)
+- [x] T97 make done's counters-inert phase (53 s of 57 s): the counting builds of core and phases rerun less, measured (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: the counting build runs only on a crate with a counters feature: counters-inert 59-113 s to about 5 s
 - [ ] T98 The hook suites in parallel (about 95 s): the slowest few profiled and made cheaper (the GM 2026-11-11)
       research: rendering
 - [ ] T99 The arbiter crate's slow tests (100-300 ms each against FR-008's tenth of a second): made fast (the GM 2026-11-11)
