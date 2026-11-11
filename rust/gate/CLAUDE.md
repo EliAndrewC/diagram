@@ -18,12 +18,14 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/rustc.rs` | the Rust crates' checks: `rust lint`, `format`, `test`, `cover`, `dead`, `uncovered` (T067) |
 | `src/push.rs` | the push's checks and what each push gate judges: `push-checks`, `push-gate` (T067) |
 | `src/cohort.rs`, `src/cohort/` | the landing cohort, each seed's standing against main's engine, the seed report, the room table: `l7r-gate cohort` (T068) |
-| `src/measure.rs`, `src/measure/` | what things cost: `figures`, `gatecost`, `gate-costs`, `ratchet` (its table is `dev/ratchets.json`), `probe` (T75) |
+| `src/measure.rs`, `src/measure/` | what things cost: `figures`, `gatecost`, `gate-costs`, `ratchet` (its table is `dev/ratchets.json`), `probe` (T75); `depiction-replay` (T88) |
 | `src/preflight.rs` | the gate's first phase and its tree check, `preflight` (T071) |
 | `src/logs.rs` | the records the gate's shell writes, `log run`, `log bypass`, `log gate-bypass`, `log land-tooling`; `json-field`, `ruff-toml` (T069) |
 | `src/record.rs`, `src/record/` | the research record's tools: `canon`, `money-conversions`, `found`, `access-tags`, `downloads`, and the leaves Python reaches through a verb (`leaves.rs`: `edit-route`, `fragments`, `moved-only`, `americanize`; `scripts/record_door.py` is the door) (T79-T81) |
 | `src/record/owed.rs`, `owed/answers.rs`, `units.rs`, `modals.rs`, `translation.rs`, `triage.rs` | what a delta owes the record checks and what answered them: `record record-owed`, `modal-owed`, `translation-owed`, `modal-triage`, `merge-answers` (`pull-queue.sh`); `args.rs` reads their command lines as argparse did, `repo.rs` their git and Python seams (`entry_owed.py`, `quote_verbatim`, `style_prepass`, `apply_edits.reply_of`, by path) (T87) |
 | `src/owed_door.rs` | Python's door to those tools (`owed-door`, one process a run; `scripts/owed_door.py`) (T87) |
+| `src/record/bundle.rs`, `src/record/bundle/` | the check bundles: `record check-bundle` (`check.rs`, `parts.rs`, `keys.rs`, `owed.rs`), `record modal-bundle` (`modal.rs`, `depiction.rs`), the earlier rounds (`earlier.rs`), and `door.rs`, the runner of `scripts/bundle_door.py` (T88) |
+| `src/arbiter/bundle.rs`, `src/arbiter/bundle/` | the round arbiter's bundle, `arbiter bundle` (its sections, the review rounds, the round marks) (T88) |
 | `src/arbiter.rs`, `src/arbiter/` | the round arbiter's rulings and tripwires: `arbiter ruled`, `ruled-batch`, `ask`, `fix`, `nit`, `gate-held`, `spec-verdict`, `spec-ruled`, `unit-ruled` (T86) |
 | `src/checks_door.rs` | Python's door to the check state and the arbiter (`checks-door`, one process a run; `scripts/checks_door.py`), `checks-close` (T86) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

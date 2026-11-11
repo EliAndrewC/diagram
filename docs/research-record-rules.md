@@ -574,7 +574,7 @@ holds its whole argument, which is the test of a sensible cap: the smallest cohe
 **Since feature 292 the cap counts the prose only** (GM 2026-09-29, approving the session's proposal after asking
 *"can we make the size cap not count the notes? ... the whole point of the size cap is to conserve tokens"*). Every check
 and every editing session reads a question's prose whole; only the quote-check reads its notes whole, so the notes are
-bounded where that check reads them - in batches of at most 12,000 bytes (`check_bundle.py`, `NOTES_BUDGET`: with its
+bounded where that check reads them - in batches of at most 12,000 bytes (`rust/gate/src/record/bundle/check.rs`, `NOTES_BUDGET`: with its
 excerpt of the prose, a batch stays within what the old 20,000-byte cap on prose and notes let one check read) - and the
 checks that judge prose (`record-style`, `entry-drift`) are not handed the notes at all. Merged topics may therefore
 carry the notes their findings need. On 2026-09-29, with the notes uncounted, no question in the record was over the
