@@ -252,6 +252,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T92 (the gate crate split, the GM 2026-11-11, `request.md` \"the Rust iteration loop\", FR-011)": {
+   "sha256": "4a2e273482fe733e12f7c9c354802672a24a1fbc11721ae1bf045fc977cdc92c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T92 Approach (checklist part A)": {
+   "sha256": "b367f84103cf9b45d87a28a86657b85758ded47752d8c17c75f5f216ae1186cf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5646,6 +5658,77 @@
      "why": "This is the block that changed since the BLOCKED verdict. Earlier it kept claims_rust.py until phase 4, contrary to ask:449-T82-claims, which lists claims_rust.py among the files T82 PORTS. It is now deleted in the cut, under the GM's standing approval of 2026-11-10 ('Yes please delete Python files once their Rust ports land'), and what it alone reached (all_units, coverage, PROCEDURES, the .rs branch and main of tunables.py, replaced by Rust make tunables) goes with it. What stays is exactly the ruling's .py half and doors. Note, not a fidelity finding: bullet 2 still says all_units calls py_units, which describes the state the differential ran against, while this bullet removes all_units; py_units keeping Memo/_NoMemo is consistent."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T92 (the gate crate split, the GM 2026-11-11, `request.md` \"the Rust iteration loop\", FR-011)",
+    "### T92 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T92-split",
+     "summary": "The gate crate is split into fifteen library crates under rust/gate/crates/<dir> plus a dispatch-only binary, forming a DAG.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-11 request ('splitting the gate crate into several crates') and FR-011's T92 clause. Neither the request nor the spec fixes a crate count or partition."
+    },
+    {
+     "id": "T92-module-paths",
+     "summary": "Moved files keep their module paths through re-exports in each lib.rs. Cross-crate items become pub with must_use/Errors/Panics docs. Three targeted #[expect]s with reasons, no blanket allow.",
+     "class": "within",
+     "why": "These are implementation mechanics of the split. They keep the lint bar as it was and change no behavior."
+    },
+    {
+     "id": "T92-plan-claims-inversion",
+     "summary": "The plan -> claims::cli edge is inverted through the binary as a &dyn Fn the binary hands in, and plan's tests use a stub. Other edges become plain dependencies or items moved down.",
+     "class": "within",
+     "why": "This is how the DAG is formed. The plan says the output stays claims::cli's own, so no output changes."
+    },
+    {
+     "id": "T92-one-claims-crate",
+     "summary": "The claims code becomes one crate (9,506 lines), not the two the earlier design drew.",
+     "class": "within",
+     "why": "It departs from the plan's own earlier design, not from the request or the spec. The request asks for 'several crates' and FR-011 asks that an edit recompile one crate and what depends on it. Both still hold, and the measured claims-edit loop of 15.5 s is under the 68 s baseline."
+    },
+    {
+     "id": "T92-tests",
+     "summary": "870 tests: the 842 kept, each with its module, and 28 new ones for lines that only another crate's tests had reached.",
+     "class": "within",
+     "why": "This keeps each crate covered by its own tests. It enforces the existing coverage floor and adds no new behavior."
+    },
+    {
+     "id": "T92-coverage",
+     "summary": "Every gate crate is at 100% of its own lines except ci/gated.rs 196-197, which only a run under make reaches.",
+     "class": "within",
+     "why": "The floor is the one the Rust crate held before the split, and the baseline had the same two lines unreached outside make. make static is reported green. Mis-citation: the block names FR-003 for 'every line reached by its own tests, clippy pedantic'. FR-003 is the rule that Python stays the runner until its port passes. The coverage floor is FR-004, which is in this bundle only as its first line."
+    },
+    {
+     "id": "T92-rust-tool-crates",
+     "summary": "l7r-gate rust learns nested crates: transitive path-dependency verdict keys, nearest-directory ownership, uncovered and dead over the nested crates, and one shared cover-gate build.",
+     "class": "within",
+     "why": "Without it, a nested crate's checks would never run again, so the tooling has to follow the split. The shared coverage build serves the GM's 'reuse things which have already been compiled'."
+    },
+    {
+     "id": "T92-paths",
+     "summary": "Checks and scripts that read the gate's files by path name the new locations. Not repointed: three historical 'moved from' comments, a doc naming a file deleted before T92, and two scratch-fixture paths. The five push.rs selftest messages are corrected under ask:449-T92-messages.",
+     "class": "within",
+     "why": "The message changes are exactly what ask:449-T92-messages rules. The mentions left alone are history, a file already gone, and synthetic fixtures, and no clause asks for any of them to change. Enumeration defect: the '118 rust/gate/src/ mentions outside specs/' figure and 'a grep of the split tree finds no other' name no command, so their search space cannot be checked (for example, whether Makefiles and shell scripts were covered)."
+    },
+    {
+     "id": "T92-research-pointers-verdict",
+     "summary": "In the 102-invocation behavior comparison on the pre-split fixture clone, one verdict differs. check research-pointers' fixture list now names the crate paths, so on the pre-split tree it reads the moved files' fixtures as unexempted. The exits call this 'the ruled path difference'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The plan's 'ruled' label is wrong, so this ruling is mine. ask:449-T92-messages covers only a path in a message the Rust itself writes, and it binds every other verdict byte for byte. A fixture or exemption list is data the check reads, and what differs here is a verdict, so the ask does not reach it. It is still legitimate on physical grounds. The split the GM asked for moves the files. A check that finds fixtures by path cannot exempt them at a path that no longer exists. Keeping the old list would make the check refuse correct work on the split tree, which is the case FR-002 itself carves out (constitution XIV). The difference shows up only when the new binary runs on the old tree. On the tree each binary is built for, the verdict is unchanged. The exits line should say 'the path difference ruled in this plan review', not cite the ask."
+    },
+    {
+     "id": "T92-no-jobs-cap",
+     "summary": "No build jobs cap is set: a cold build peaked at 3,791 MB, under the 10 GB cap.",
+     "class": "within",
+     "why": "This is a measured resource decision and touches no requested behavior."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -9830,6 +9913,75 @@
      "summary": "Deleted in the cut: claims.py, claims_accept/carry/cli/flight/labels/owed/reply/triage.py, pager.py and now l7r/diagram/tools/claims_rust.py, with tools/claims.py's all_units, coverage, PROCEDURES and tunables.py's .rs branch and main; staying as named phase-3-close remainders under T065: tools/claims.py's .py half, claims_context/counters/stale/scope.py, tunables.py's syntax-tree half, claims_door.py, gm_review.py (T91). dev/rust-tooling.md's research-claims row drops the claims_rust.py key.",
      "class": "within",
      "why": "This is the block that changed since the BLOCKED verdict. Earlier it kept claims_rust.py until phase 4, contrary to ask:449-T82-claims, which lists claims_rust.py among the files T82 PORTS. It is now deleted in the cut, under the GM's standing approval of 2026-11-10 ('Yes please delete Python files once their Rust ports land'), and what it alone reached (all_units, coverage, PROCEDURES, the .rs branch and main of tunables.py, replaced by Rust make tunables) goes with it. What stays is exactly the ruling's .py half and doors. Note, not a fidelity finding: bullet 2 still says all_units calls py_units, which describes the state the differential ran against, while this bullet removes all_units; py_units keeping Memo/_NoMemo is consistent."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T92": {
+   "section_sha256": "f5d8b4e8c646a83cada4a0dd42cee96ec24334e411a04f51a6dbe3274cab568f",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T92-split",
+     "summary": "The gate crate is split into fifteen library crates under rust/gate/crates/<dir> plus a dispatch-only binary, forming a DAG.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-11 request ('splitting the gate crate into several crates') and FR-011's T92 clause. Neither the request nor the spec fixes a crate count or partition."
+    },
+    {
+     "id": "T92-module-paths",
+     "summary": "Moved files keep their module paths through re-exports in each lib.rs. Cross-crate items become pub with must_use/Errors/Panics docs. Three targeted #[expect]s with reasons, no blanket allow.",
+     "class": "within",
+     "why": "These are implementation mechanics of the split. They keep the lint bar as it was and change no behavior."
+    },
+    {
+     "id": "T92-plan-claims-inversion",
+     "summary": "The plan -> claims::cli edge is inverted through the binary as a &dyn Fn the binary hands in, and plan's tests use a stub. Other edges become plain dependencies or items moved down.",
+     "class": "within",
+     "why": "This is how the DAG is formed. The plan says the output stays claims::cli's own, so no output changes."
+    },
+    {
+     "id": "T92-one-claims-crate",
+     "summary": "The claims code becomes one crate (9,506 lines), not the two the earlier design drew.",
+     "class": "within",
+     "why": "It departs from the plan's own earlier design, not from the request or the spec. The request asks for 'several crates' and FR-011 asks that an edit recompile one crate and what depends on it. Both still hold, and the measured claims-edit loop of 15.5 s is under the 68 s baseline."
+    },
+    {
+     "id": "T92-tests",
+     "summary": "870 tests: the 842 kept, each with its module, and 28 new ones for lines that only another crate's tests had reached.",
+     "class": "within",
+     "why": "This keeps each crate covered by its own tests. It enforces the existing coverage floor and adds no new behavior."
+    },
+    {
+     "id": "T92-coverage",
+     "summary": "Every gate crate is at 100% of its own lines except ci/gated.rs 196-197, which only a run under make reaches.",
+     "class": "within",
+     "why": "The floor is the one the Rust crate held before the split, and the baseline had the same two lines unreached outside make. make static is reported green. Mis-citation: the block names FR-003 for 'every line reached by its own tests, clippy pedantic'. FR-003 is the rule that Python stays the runner until its port passes. The coverage floor is FR-004, which is in this bundle only as its first line."
+    },
+    {
+     "id": "T92-rust-tool-crates",
+     "summary": "l7r-gate rust learns nested crates: transitive path-dependency verdict keys, nearest-directory ownership, uncovered and dead over the nested crates, and one shared cover-gate build.",
+     "class": "within",
+     "why": "Without it, a nested crate's checks would never run again, so the tooling has to follow the split. The shared coverage build serves the GM's 'reuse things which have already been compiled'."
+    },
+    {
+     "id": "T92-paths",
+     "summary": "Checks and scripts that read the gate's files by path name the new locations. Not repointed: three historical 'moved from' comments, a doc naming a file deleted before T92, and two scratch-fixture paths. The five push.rs selftest messages are corrected under ask:449-T92-messages.",
+     "class": "within",
+     "why": "The message changes are exactly what ask:449-T92-messages rules. The mentions left alone are history, a file already gone, and synthetic fixtures, and no clause asks for any of them to change. Enumeration defect: the '118 rust/gate/src/ mentions outside specs/' figure and 'a grep of the split tree finds no other' name no command, so their search space cannot be checked (for example, whether Makefiles and shell scripts were covered)."
+    },
+    {
+     "id": "T92-research-pointers-verdict",
+     "summary": "In the 102-invocation behavior comparison on the pre-split fixture clone, one verdict differs. check research-pointers' fixture list now names the crate paths, so on the pre-split tree it reads the moved files' fixtures as unexempted. The exits call this 'the ruled path difference'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The plan's 'ruled' label is wrong, so this ruling is mine. ask:449-T92-messages covers only a path in a message the Rust itself writes, and it binds every other verdict byte for byte. A fixture or exemption list is data the check reads, and what differs here is a verdict, so the ask does not reach it. It is still legitimate on physical grounds. The split the GM asked for moves the files. A check that finds fixtures by path cannot exempt them at a path that no longer exists. Keeping the old list would make the check refuse correct work on the split tree, which is the case FR-002 itself carves out (constitution XIV). The difference shows up only when the new binary runs on the old tree. On the tree each binary is built for, the verdict is unchanged. The exits line should say 'the path difference ruled in this plan review', not cite the ask."
+    },
+    {
+     "id": "T92-no-jobs-cap",
+     "summary": "No build jobs cap is set: a cold build peaked at 3,791 MB, under the 10 GB cap.",
+     "class": "within",
+     "why": "This is a measured resource decision and touches no requested behavior."
     }
    ],
    "verdict": "CLEAR"
