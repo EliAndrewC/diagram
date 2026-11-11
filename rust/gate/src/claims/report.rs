@@ -8,7 +8,6 @@
 )]
 
 use std::collections::{BTreeMap, HashMap, HashSet};
-use std::io::Write as _;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::sync::LazyLock;
@@ -260,12 +259,12 @@ pub(crate) fn report(
 }
 
 /// The engine, procedures and questions at `base`, extracted under `into`.
-pub(crate) fn base_tree(root: &Path, base: &str, into: &Path) -> Result<(), Fail> {
+pub(crate) fn base_tree(git: &str, root: &Path, base: &str, into: &Path) -> Result<(), Fail> {
     let present: Vec<&str> = BASE_PATHS
         .iter()
         .copied()
         .filter(|p| {
-            Command::new("git")
+            Command::new(git)
                 .arg("-C")
                 .arg(root)
                 .args(["cat-file", "-e", &format!("{base}:{p}")])
@@ -275,7 +274,7 @@ pub(crate) fn base_tree(root: &Path, base: &str, into: &Path) -> Result<(), Fail
         })
         .collect();
     if !present.is_empty() {
-        let archive = Command::new("git")
+        let archive = Command::new(git)
             .arg("-C")
             .arg(root)
             .args(["archive", "--format=tar", base, "--"])
@@ -288,17 +287,15 @@ pub(crate) fn base_tree(root: &Path, base: &str, into: &Path) -> Result<(), Fail
                 l7r_guard::shared::py_text::strip(&String::from_utf8_lossy(&archive.stderr))
             ));
         }
-        let mut tar = Command::new("tar")
-            .arg("-x")
+        let tar = into.join("base.tar");
+        std::fs::write(&tar, &archive.stdout).map_err(fail)?;
+        let done = Command::new("tar")
+            .arg("-xf")
+            .arg(&tar)
             .arg("-C")
             .arg(into)
-            .stdin(Stdio::piped())
-            .spawn()
-            .map_err(fail)?;
-        if let Some(mut pipe) = tar.stdin.take() {
-            pipe.write_all(&archive.stdout).map_err(fail)?;
-        }
-        tar.wait().map_err(fail)?;
+            .status();
+        done.map_err(fail)?;
     }
     std::fs::create_dir_all(into.join("l7r/diagram/hamletgen")).map_err(fail)
 }

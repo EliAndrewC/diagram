@@ -176,13 +176,9 @@ fn the_push_reads_carries_known_drifts_and_open_findings() {
     commit(&root, "named its task");
     let got = claims(&root, &["gate"]);
     assert_eq!(got.code, 1);
-    assert!(
-        got.stdout.contains(
-            "claims-gate: REFUSED owed (code changed): rust/phases/src/lib.rs::reach#reach"
-        ),
-        "{}",
-        got.stdout
-    );
+    assert!(got
+        .stdout
+        .contains("claims-gate: REFUSED owed (code changed): rust/phases/src/lib.rs::reach#reach"),);
     let reach = "rust/phases/src/lib.rs::reach#reach";
     let o = root.join("b").to_string_lossy().into_owned();
     claims(&root, &["bundle", "--units", reach, "--out", &o]);
@@ -222,25 +218,18 @@ fn at_clean(root: &Path, reach: &str) {
     assert!(got.stdout.contains("claims-gate: REFUSED known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
     let got = claims(&root, &["known"]);
     assert_eq!(
-        got.stdout, "claims-known: recorded 405-claims T01: rust/phases/src/lib.rs::reach#reach\n",
-        "{}",
-        got.stderr
+        got.stdout,
+        "claims-known: recorded 405-claims T01: rust/phases/src/lib.rs::reach#reach\n",
     );
     assert!(recorded_known(&root).unwrap().contains(reach));
     let got = claims(&root, &["gate"]);
-    assert!(
-        got.stdout
-            .contains("claims-gate: pre-existing: known drift (405 T01): DRIFTED"),
-        "{}",
-        got.stdout
-    );
+    assert!(got
+        .stdout
+        .contains("claims-gate: pre-existing: known drift (405 T01): DRIFTED"),);
     let got = claims(&root, &["carry", "--feature", "405"]);
-    assert!(
-        got.stderr
-            .contains("filed only into the active task's (406-other), not 405"),
-        "{}",
-        got.stderr
-    );
+    assert!(got
+        .stderr
+        .contains("filed only into the active task's (406-other), not 405"),);
     put(
         &root,
         "specs/406-other/tasks.md",
@@ -252,12 +241,7 @@ fn at_clean(root: &Path, reach: &str) {
         "{\"trigger\": \"ask:x\"}\n",
     );
     let got = claims(&root, &["carry", "--feature", "406"]);
-    assert!(
-        got.stdout.contains("1 finding(s) filed into 406-other T04"),
-        "{}{}",
-        got.stdout,
-        got.stderr
-    );
+    assert!(got.stdout.contains("1 finding(s) filed into 406-other T04"),);
     let got = claims(&root, &["gate"]);
     assert!(
         got.stdout
@@ -265,8 +249,6 @@ fn at_clean(root: &Path, reach: &str) {
             && got
                 .stdout
                 .contains("REFUSED open (DRIFTED): rust/phases/src/lib.rs::GAP#gap - a carry"),
-        "{}",
-        got.stdout
     );
     let got = claims(&root, &["carry", "--feature", "406", "--keys", "a"]);
     assert_eq!((got.code, got.stderr.as_str()), (2, "claims-carry: KEYS= and RULING= go together: the findings a round-arbiter ruling carried, and that ruling's trigger\n"));
@@ -284,12 +266,7 @@ fn at_clean(root: &Path, reach: &str) {
             "T03",
         ],
     );
-    assert!(
-        got.stdout.contains("2 finding(s) filed into 406-other T03"),
-        "{}{}",
-        got.stdout,
-        got.stderr
-    );
+    assert!(got.stdout.contains("2 finding(s) filed into 406-other T03"),);
     put(
         &root,
         "specs/405-claims/gm-review.jsonl",

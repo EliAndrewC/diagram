@@ -175,10 +175,8 @@ fn py_context(
         .iter()
         .any(|r| DISTANCE.is_match(&r.claim.label).unwrap_or(false))
     {
-        out.extend(strings(&reader.ask(
-            "claims_direct",
-            &json!([r, unit.path, unit.qualname, src]),
-        )?));
+        let far = reader.ask("claims_direct", &json!([r, unit.path, unit.qualname, src]))?;
+        out.extend(strings(&far));
     }
     out.extend(strings(
         &reader.ask("claims_chase", &json!([r, unit.path, asked]))?,

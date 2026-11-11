@@ -209,11 +209,7 @@ fn a_failure_is_the_traceback_with_its_exit() {
     put(&root, "dev/claims-index.json", "[not json");
     let got = claims(&root, &["owed"]);
     assert_eq!(got.code, 1);
-    assert!(
-        got.stderr.starts_with("Traceback (most recent call last):"),
-        "{}",
-        got.stderr
-    );
+    assert!(got.stderr.starts_with("Traceback (most recent call last):"),);
     put(&root, "dev/claims-index.json", "[1]");
     assert!(claims(&root, &["owed"]).stderr.contains("not an object"));
     let got = super::tunables_cli(&["--root".to_owned(), root.to_string_lossy().into_owned()]);

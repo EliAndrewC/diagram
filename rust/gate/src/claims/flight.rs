@@ -15,34 +15,24 @@ pub(crate) const MAX_AGE_S: f64 = 1200.0;
 
 /// `Path(p).resolve()`: absolute, every symlink of the part that exists resolved, the rest appended.
 pub(crate) fn resolved(p: &Path) -> PathBuf {
-    let abs = std::path::absolute(p).unwrap_or_else(|_| p.to_path_buf());
     let mut clean = PathBuf::new();
-    for c in abs.components() {
-        match c {
-            Component::ParentDir => {
-                clean.pop();
-            }
-            Component::CurDir => {}
-            other => clean.push(other),
+    for c in std::path::absolute(p).unwrap_or_default().components() {
+        if c == Component::ParentDir {
+            clean.pop();
+        } else {
+            clean.push(c);
         }
     }
-    let mut head = clean.clone();
-    let mut tail: Vec<std::ffi::OsString> = Vec::new();
-    loop {
-        if let Ok(real) = std::fs::canonicalize(&head) {
-            return tail.iter().rev().fold(real, |acc, t| acc.join(t));
-        }
-        match (
-            head.file_name().map(std::ffi::OsStr::to_os_string),
-            head.parent(),
-        ) {
-            (Some(name), Some(parent)) => {
-                tail.push(name);
-                head = parent.to_path_buf();
-            }
-            _ => return clean,
-        }
-    }
+    let found = clean.ancestors().find_map(|anc| {
+        let real = std::fs::canonicalize(anc).ok()?;
+        let rest = clean.strip_prefix(anc).unwrap_or(anc);
+        Some(if rest.as_os_str().is_empty() {
+            real
+        } else {
+            real.join(rest)
+        })
+    });
+    found.unwrap_or(clean)
 }
 
 fn dir(root: &Path) -> PathBuf {

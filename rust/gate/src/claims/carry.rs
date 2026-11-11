@@ -39,8 +39,8 @@ static KNOWN_LINE: LazyLock<Regex> =
     LazyLock::new(|| re(r"\Aknown: (.*) - a known drift \((\d{3}) (T\d+[a-z]?)\) to record"));
 
 fn canon(p: &Path) -> PathBuf {
-    std::fs::canonicalize(p)
-        .unwrap_or_else(|_| std::path::absolute(p).unwrap_or_else(|_| p.to_path_buf()))
+    let real = std::fs::canonicalize(p);
+    real.unwrap_or_default()
 }
 
 fn git_lines(root: &Path, args: &[&str]) -> Vec<String> {
@@ -62,7 +62,7 @@ pub(crate) fn touches_engine(root: &Path) -> Result<bool, Fail> {
         root,
         &["ls-files", "--others", "--exclude-standard"],
     ));
-    let scratch = std::env::temp_dir().join(format!("l7r-claims-ids-{}", std::process::id()));
+    let scratch = super::temp_dir("ids");
     let mut pairs: Vec<(PathBuf, Vec<u8>)> = Vec::new();
     for f in paths.iter().filter(|p| crate::delta::is_engine(p)) {
         if !f.ends_with(".py") {
@@ -475,24 +475,17 @@ pub(crate) fn classified(
         Index::new()
     } else {
         let text = git(root, &["show", &format!("{mb}:{INDEX}")]);
-        match serde_json::from_str::<Value>(if text.is_empty() { "{}" } else { &text })
-            .map_err(|e| format!("json.decoder.JSONDecodeError: {e}"))?
-        {
-            Value::Object(m) => m,
-            _ => Index::new(),
-        }
+        let parsed = serde_json::from_str::<Value>(if text.is_empty() { "{}" } else { &text });
+        let parsed = parsed.map_err(|e| format!("json.decoder.JSONDecodeError: {e}"));
+        parsed?.as_object().cloned().unwrap_or_default()
     };
-    let tmp = std::env::temp_dir().join(format!(
-        "l7r-claims-base-{}-{}",
-        std::process::id(),
-        crate::record::repo::utc_now().replace(':', "")
-    ));
+    let tmp = super::temp_dir("base");
     std::fs::create_dir_all(&tmp).map_err(fail)?;
     let judged = (|| -> Result<_, Fail> {
         let cores = if mb.is_empty() {
             HashMap::new()
         } else {
-            base_tree(root, &mb, &tmp)?;
+            base_tree("git", root, &mb, &tmp)?;
             base_cores(reader, &tmp)?
         };
         let mut answered = HashSet::new();
@@ -627,27 +620,26 @@ pub(crate) fn record_known(
 ) -> Result<Vec<String>, Fail> {
     let (refuse, _) = gate(reader, root, at)?;
     let mut written = Vec::new();
-    for line in refuse {
-        let Some(m) = KNOWN_LINE.captures(&line).ok().flatten() else {
-            continue;
-        };
+    let found = refuse
+        .iter()
+        .filter_map(|l| KNOWN_LINE.captures(l).ok().flatten());
+    for m in found {
         let (key, feat, task) = (key_of(&m[1]), m[2].to_owned(), m[3].to_owned());
-        let Some(spec) = spec_glob(root, &feat, None).into_iter().next() else {
-            continue;
-        };
         let finding: String = l7r_guard::shared::py_text::strip(&m[1])
             .chars()
             .take(400)
             .collect();
-        let row = json!({"kind": KNOWN_KIND, "claim": key, "task": task, "finding": finding, "utc": crate::record::repo::utc_now()});
-        reader.ask("gm_review_add_row", &json!([spec.to_string_lossy(), row]))?;
-        written.push(format!(
-            "{} {task}: {key}",
-            spec.file_name().unwrap_or_default().to_string_lossy()
-        ));
+        for spec in spec_glob(root, &feat, None).into_iter().take(1) {
+            let row = json!({"kind": KNOWN_KIND, "claim": key, "task": task, "finding": finding, "utc": crate::record::repo::utc_now()});
+            reader.ask("gm_review_add_row", &json!([spec.to_string_lossy(), row]))?;
+            let name = spec.file_name().unwrap_or_default().to_string_lossy();
+            written.push(format!("{name} {task}: {key}"));
+        }
     }
     Ok(written)
 }
 
+#[cfg(test)]
+mod more;
 #[cfg(test)]
 mod tests;

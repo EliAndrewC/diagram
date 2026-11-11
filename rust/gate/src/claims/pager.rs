@@ -40,19 +40,33 @@ pub(crate) fn rows(lines: Option<String>, probe: &str) -> usize {
 impl Screen {
     /// The process's own stdout and environment.
     pub(crate) fn here() -> Self {
-        let tty = std::io::stdout().is_terminal();
+        let var = |k: &str| std::env::var(k).ok();
+        Self::of(
+            std::io::stdout().is_terminal(),
+            var("LINES"),
+            var("PAGER"),
+            var("NO_PAGER"),
+        )
+    }
+
+    /// From whether stdout is a terminal and the values of `LINES`, `PAGER` and `NO_PAGER`.
+    pub(crate) fn of(
+        tty: bool,
+        lines: Option<String>,
+        pager: Option<String>,
+        no_pager: Option<String>,
+    ) -> Self {
+        let rows = if tty {
+            rows(lines, "stty size < /dev/tty")
+        } else {
+            24
+        };
+        let pager = pager.filter(|p| !p.is_empty());
         Self {
             tty,
-            rows: if tty {
-                rows(std::env::var("LINES").ok(), "stty size < /dev/tty")
-            } else {
-                24
-            },
-            pager: std::env::var("PAGER")
-                .ok()
-                .filter(|p| !p.is_empty())
-                .unwrap_or_else(|| "less -FRSX".to_owned()),
-            off: std::env::var("NO_PAGER").is_ok_and(|v| !v.is_empty()),
+            rows,
+            pager: pager.unwrap_or("less -FRSX".to_owned()),
+            off: no_pager.is_some_and(|v| !v.is_empty()),
         }
     }
 }
@@ -73,17 +87,18 @@ pub(crate) fn page(text: &str, screen: &Screen) -> String {
         return format!("{text}\n");
     }
     let _ = std::io::stdout().flush();
-    if let Ok(mut child) = Command::new("sh")
+    let child = Command::new("sh")
         .arg("-c")
         .arg(&screen.pager)
         .stdin(Stdio::piped())
-        .spawn()
-    {
-        if let Some(mut pipe) = child.stdin.take() {
-            let _ = pipe.write_all(format!("{text}\n").as_bytes());
-        }
-        let _ = child.wait();
-    }
+        .spawn();
+    let _ = child.map(|mut child| {
+        let _ = child
+            .stdin
+            .take()
+            .map(|mut pipe| pipe.write_all(format!("{text}\n").as_bytes()));
+        child.wait()
+    });
     String::new()
 }
 

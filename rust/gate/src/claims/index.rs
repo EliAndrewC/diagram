@@ -259,9 +259,7 @@ pub(crate) fn load_map(path: &Path) -> Result<Map<String, Value>, Fail> {
 }
 
 fn write(path: &Path, text: &str) -> Result<(), Fail> {
-    if let Some(dir) = path.parent() {
-        std::fs::create_dir_all(dir).map_err(fail)?;
-    }
+    std::fs::create_dir_all(path.parent().unwrap_or(Path::new("."))).map_err(fail)?;
     std::fs::write(path, text).map_err(fail)
 }
 

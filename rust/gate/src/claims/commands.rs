@@ -719,11 +719,7 @@ fn accept_cmd(
         ));
         return Ok(2);
     }
-    let tmp = std::env::temp_dir().join(format!(
-        "l7r-claims-accept-{}-{}",
-        std::process::id(),
-        super::flight::now().to_bits()
-    ));
+    let tmp = super::temp_dir("accept");
     let made = bundle(reader, root, cur, &keys, &tmp, &[], &[])
         .and_then(|_| load_units(&tmp.join("units.json")));
     let _ = std::fs::remove_dir_all(&tmp);
@@ -881,14 +877,8 @@ pub(crate) fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32
     }
     let pairs = all_units(&mut reader, root, false, true)?;
     let cur = rows_of(pairs.clone(), &root.join(QUESTIONS))?;
-    let index = counters_clear(
-        &mut reader,
-        root,
-        &cur,
-        load_map(&root.join(INDEX))?,
-        cmd,
-        o,
-    )?;
+    let index = load_map(&root.join(INDEX))?;
+    let index = counters_clear(&mut reader, root, &cur, index, cmd, o)?;
     let (qdir, store) = (root.join(QUESTIONS), load_map(&root.join(STORE))?);
     match cmd {
         "refingerprint" => {
@@ -941,14 +931,8 @@ pub(crate) fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32
         "triage" => triage_cmd(&mut reader, root, &cur, index, &store, p, o),
         "triaged" => triaged_cmd(root, &cur, &index, &store, p, o),
         "report" => {
-            let text = report(
-                &cur,
-                &index,
-                &qdir,
-                &store,
-                &load_deferred(&root.join(DEFERRED))?,
-                p.on("--all"),
-            )?;
+            let deferred = load_deferred(&root.join(DEFERRED))?;
+            let text = report(&cur, &index, &qdir, &store, &deferred, p.on("--all"))?;
             o.out
                 .push_str(&super::pager::page(&text, &super::pager::Screen::here()));
             Ok(0)
@@ -958,5 +942,7 @@ pub(crate) fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32
     }
 }
 
+#[cfg(test)]
+mod more;
 #[cfg(test)]
 mod tests;

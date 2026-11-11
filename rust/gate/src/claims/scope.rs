@@ -32,7 +32,12 @@ pub(crate) struct Reader {
 
 /// `L7R_CACHE_OFF` set to anything but empty or `0`.
 pub(crate) fn cache_off() -> bool {
-    std::env::var("L7R_CACHE_OFF").is_ok_and(|v| !v.is_empty() && v != "0")
+    off(std::env::var("L7R_CACHE_OFF").ok().as_deref())
+}
+
+/// Whether a switch's value turns it on: anything but unset, empty or `0`.
+pub(crate) fn off(value: Option<&str>) -> bool {
+    value.is_some_and(|v| !v.is_empty() && v != "0")
 }
 
 impl Reader {

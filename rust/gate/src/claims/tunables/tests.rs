@@ -70,13 +70,11 @@ fn the_list_and_the_inline_audit() {
             && shown.contains("  rust/phases/src/lib.rs:23 m 42")
             && !shown.contains("8888")
             && !shown.contains("other.py"),
-        "{shown}"
     );
     let counted = render_inline(&inline, true);
     assert!(
         counted.contains("      2  l7r/diagram/labels/x.py\n")
             || counted.contains("    2  l7r/diagram/labels/x.py"),
-        "{counted}"
     );
     assert!(super::inline(&mut reader, &root, &cur, "rust/")
         .unwrap()

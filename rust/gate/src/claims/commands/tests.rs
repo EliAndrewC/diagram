@@ -93,7 +93,6 @@ fn what_is_owed_then_bundled_then_recorded() {
     assert!(
         manifest.contains("## CONTEXT l7r/diagram/m.py::helper")
             && manifest.contains("```python\ndef GAP(): pass"),
-        "{manifest}"
     );
     record_and_report(&root, &out);
 }
@@ -130,32 +129,22 @@ fn record_and_report(root: &Path, out: &Path) {
         "UNCLAIMED"
     );
     let got = claims(&root, &["report"]);
-    assert!(
-        got.stdout
-            .starts_with("claims: 9 in scope; IN-STEP 1, DRIFTED 1, UNCLAIMED 1; owed 7"),
-        "{}",
-        got.stdout
-    );
+    assert!(got
+        .stdout
+        .starts_with("claims: 9 in scope; IN-STEP 1, DRIFTED 1, UNCLAIMED 1; owed 7"),);
     std::fs::write(
         root.join("dev/claims-deferred.json"),
         "{\"units\": [\"l7r/diagram/m.py::TABLE\"]}",
     )
     .unwrap();
     let got = claims(&root, &["report"]);
-    assert!(
-        got.stdout
-            .contains("(2 DEFERRED findings not listed: make claims-report ALL=1 lists them)"),
-        "{}",
-        got.stdout
-    );
+    assert!(got
+        .stdout
+        .contains("(2 DEFERRED findings not listed: make claims-report ALL=1 lists them)"),);
     let got = claims(&root, &["report", "--all"]);
-    assert!(
-        got.stdout.contains(
-            "  DEFERRED       l7r/diagram/m.py::TABLE#table - see research/questions/0001-gap.html"
-        ),
-        "{}",
-        got.stdout
-    );
+    assert!(got.stdout.contains(
+        "  DEFERRED       l7r/diagram/m.py::TABLE#table - see research/questions/0001-gap.html"
+    ),);
     let empty = reply(&root, "  \n");
     let got = claims(&root, &["record", "--bundle", &o, "--reply", &empty]);
     assert_eq!(
@@ -241,12 +230,9 @@ fn a_bundle_is_refused_on_what_it_cannot_name() {
         ],
     );
     assert_eq!(got.code, 0);
-    assert!(
-        got.stdout
-            .starts_with("/tmp/l7r-check/claims-docs-buildings-md-walls-walls/MANIFEST.md"),
-        "{}",
-        got.stdout
-    );
+    assert!(got
+        .stdout
+        .starts_with("/tmp/l7r-check/claims-docs-buildings-md-walls-walls/MANIFEST.md"),);
     assert!(got
         .stdout
         .contains("claims-bundle: re-check of 1 claim(s) not owed, because: a re check"));
@@ -331,12 +317,9 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
     let page = root.join("research/questions/0001-gap.html");
     std::fs::write(&page, "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n<p>A third, new.</p>\n").unwrap();
     let got = claims(&root, &["triage"]);
-    assert!(
-        got.stdout
-            .contains("claim(s) cleared without a triage - a page each cites moved"),
-        "{}",
-        got.stdout
-    );
+    assert!(got
+        .stdout
+        .contains("claim(s) cleared without a triage - a page each cites moved"),);
     let got = claims(&root, &["triage-owed"]);
     assert_eq!(got.stdout, "0\n");
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
@@ -353,11 +336,7 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
     )
     .unwrap();
     let got = claims(&root, &["owed"]);
-    assert!(
-        got.stdout.contains("code triage") && got.stdout.contains("section triage"),
-        "{}",
-        got.stdout
-    );
+    assert!(got.stdout.contains("code triage") && got.stdout.contains("section triage"),);
     let t = root.join("t");
     let to = t.to_string_lossy().into_owned();
     let got = claims(&root, &["triage", "--out", &to]);
@@ -365,15 +344,11 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
         got.stdout
             .contains("claims-triage: 4 claim(s); dispatch the `claims-triage` agent")
             || got.stdout.contains("claims-triage: a claims triage of"),
-        "{}{}",
-        got.stdout,
-        got.stderr
     );
     let manifest = std::fs::read_to_string(t.join("MANIFEST.md")).unwrap_or_default();
     assert!(
         manifest.contains("(a procedure section; the claims' own lines did not change)")
             && manifest.contains("```diff"),
-        "{manifest}"
     );
     let r = reply(
         &root,
@@ -386,15 +361,10 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
             && got
                 .stdout
                 .contains("claims-triaged: refused: `nope#x` is not a claim of this triage"),
-        "{}",
-        got.stdout
     );
-    assert!(
-        got.stdout
-            .contains("sent on to impl-drift (1 named by the reply"),
-        "{}",
-        got.stdout
-    );
+    assert!(got
+        .stdout
+        .contains("sent on to impl-drift (1 named by the reply"),);
     let empty = reply(&root, "");
     assert_eq!(
         claims(&root, &["triaged", "--bundle", &to, "--reply", &empty]).code,
@@ -421,14 +391,9 @@ fn a_small_triage_goes_straight_to_impl_drift_and_a_bare_one_to_its_full_check()
     .unwrap();
     let o = root.join("s").to_string_lossy().into_owned();
     let got = claims(&root, &["triage", "--out", &o]);
-    assert!(
-        got.stdout.contains(
-            "claims-triage: a claims triage of 1 claim(s), at most 3, goes straight to impl-drift"
-        ),
-        "{}{}",
-        got.stdout,
-        got.stderr
-    );
+    assert!(got.stdout.contains(
+        "claims-triage: a claims triage of 1 claim(s), at most 3, goes straight to impl-drift"
+    ),);
     assert!(
         std::fs::read_to_string(root.join("dev/claims-triage-skips.jsonl"))
             .unwrap()

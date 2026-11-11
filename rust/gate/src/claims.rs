@@ -63,6 +63,17 @@ pub(crate) fn rows_and_index(
     ))
 }
 
+/// A temporary directory's path no other run of this process or another takes: `tempfile.TemporaryDirectory`'s.
+pub(crate) fn temp_dir(tag: &str) -> PathBuf {
+    static SEQ: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    let n = SEQ.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    std::env::temp_dir().join(format!(
+        "l7r-claims-{tag}-{}-{n}-{}",
+        std::process::id(),
+        flight::now().to_bits()
+    ))
+}
+
 /// `git -C dir args...` fed `input`; its stdout, or None where it failed.
 pub(crate) fn stdin_git(dir: &Path, args: &[&str], input: &str) -> Option<String> {
     let mut child = std::process::Command::new("git")
