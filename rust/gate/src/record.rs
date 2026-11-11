@@ -6,11 +6,11 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
+pub use l7r_gate_core::record::*;
 use crate::Reply;
 
 pub(crate) mod access_tags;
 mod agent_census;
-pub(crate) mod args;
 pub(crate) mod bundle;
 mod downloads;
 mod fragment_move;
@@ -19,16 +19,10 @@ mod merge_answers;
 pub(crate) mod modals;
 mod money;
 pub(crate) mod owed;
-pub(crate) mod repo;
 mod stale_terms;
 pub(crate) mod translation;
 pub(crate) mod triage;
-pub(crate) mod units;
 
-#[cfg(test)]
-pub(crate) mod testkit;
-
-pub(crate) use fragment_move::read_text;
 
 const CANON_ROOTS: [&str; 2] = [
     "/host-l7r-repo/setting",
@@ -39,14 +33,6 @@ const CANON_WIDTH: usize = 400;
 const MONEY_SOURCE: &str = "/host-l7r-repo/gm-assistant/webapp/l7r/money/data/conversions.json";
 const MONEY_COPY: &str = "research/assets/money-conversions.json";
 
-fn reply(stdout: String, stderr: String, code: i32) -> Reply {
-    Reply {
-        stdout,
-        stderr,
-        code,
-    }
-}
-
 /// The repository this runs in (`git rev-parse --show-toplevel`, "." outside one), as the record tools' root.
 fn top_level() -> PathBuf {
     let done = crate::cohort::git(Path::new("."), &["rev-parse", "--show-toplevel"]).1;
@@ -55,41 +41,6 @@ fn top_level() -> PathBuf {
 
 fn current_dir() -> PathBuf {
     std::env::current_dir().unwrap_or_default()
-}
-
-/// `text` split as Python's `str.splitlines` splits it, so a form feed still ends a line and a line number means what it did.
-pub(crate) fn py_lines(text: &str) -> Vec<&str> {
-    let mut out = Vec::new();
-    let mut start = 0;
-    let mut chars = text.char_indices().peekable();
-    while let Some((i, c)) = chars.next() {
-        if matches!(
-            c,
-            '\n' | '\r'
-                | '\u{b}'
-                | '\u{c}'
-                | '\u{1c}'
-                | '\u{1d}'
-                | '\u{1e}'
-                | '\u{85}'
-                | '\u{2028}'
-                | '\u{2029}'
-        ) {
-            out.push(&text[start..i]);
-            if c == '\r' && chars.peek().is_some_and(|(_, n)| *n == '\n') {
-                chars.next();
-            }
-            start = chars.peek().map_or(text.len(), |(n, _)| *n);
-        }
-    }
-    if start < text.len() {
-        out.push(&text[start..]);
-    }
-    out
-}
-
-fn first_chars(text: &str, n: usize) -> String {
-    text.chars().take(n).collect()
 }
 
 /// The canon: every markdown and text file under the setting directories, their CLAUDE.md files excepted, each root's in path order.
@@ -290,12 +241,6 @@ pub(crate) fn close_rows(
         row["closed_utc"] = json!(when);
     }
     Ok(numbers.len())
-}
-
-fn flag<'a>(args: &'a [String], name: &str) -> &'a str {
-    args.windows(2)
-        .find(|w| w[0] == name)
-        .map_or("", |w| w[1].as_str())
 }
 
 fn found_list(rows: &[Value], path: &Path) -> String {

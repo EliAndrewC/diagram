@@ -1,0 +1,18 @@
+# The gate's shared core (feature 449 T92): what every other gate crate reads; `testkit` carries the helpers their tests build on.
+[package]
+name = "l7r_gate_core"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[features]
+testkit = []
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_guard = { path = "../../../guard" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

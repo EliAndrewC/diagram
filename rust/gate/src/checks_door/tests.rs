@@ -2,7 +2,7 @@ use std::io::{Cursor, Write as _};
 
 use serde_json::{json, Value};
 
-use super::{answer, close_cli, reply_line, serve};
+use super::{answer, close_cli, serve};
 
 struct Closed;
 
@@ -153,12 +153,6 @@ fn the_write_verbs_and_the_door_loop() {
     assert!(answer("keep_batches", &[json!("/proc/nonexistent/x"), json!({})]).is_err());
     let mut w = Closed;
     assert!(w.flush().is_ok());
-    assert!(reply_line("not json", &answer).starts_with("{\"error\""));
-    assert!(reply_line(
-        "{\"verb\": \"unit_of\", \"args\": [\"round:a|b@3\"]}",
-        &answer
-    )
-    .contains("\"ok\": \"a|b\""));
     let mut out = Vec::new();
     let reply = serve(
         &mut Cursor::new("\n{\"verb\": \"ROUND_CAP\"}\n{\"verb\": \"nope\"}\n"),

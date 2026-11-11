@@ -1,8 +1,24 @@
 # The Rust tools as one workspace (feature 449 T001): the hamlet stages (feature 444) and the guards (feature 449 phase 1), one
 # crate a phase's tools, sharing one lockfile and the build profile below; `scripts/gates/rust_checks.py` checks each member.
+# The gate is a binary over crates (feature 449 T92, the GM 2026-11-11): `gate/crates/*`, so an edit recompiles one crate and what
+# depends on it, not all 74,199 lines.
 [workspace]
-members = ["phases", "guard", "gate"]
+members = ["phases", "guard", "gate", "gate/crates/*"]
 resolver = "2"
+
+# ONE FEATURE SET FOR EVERY GATE CRATE (feature 449 T92): a gate crate names an outside dependency only as `{ workspace = true }`, so
+# testing one crate never rebuilds what another built with other features. A crate of the gate names another by its `path`,
+# which the Rust checks read to know what a crate depends on (`l7r-gate rust`, `rustc.rs`).
+[workspace.dependencies]
+fancy-regex = "0.14"
+serde = "1"
+serde_json = { version = "1", features = ["preserve_order"] }
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+too_many_lines = "deny"
+allow_attributes_without_reason = "deny"
 
 # THE TESTS AND THE COVERAGE RUN BUILT OPTIMIZED (the GM 2026-11-07: "There's no way anything should be running for that
 # long"): unoptimized, the crate's own tests took about 17.6 minutes (measured 2026-11-07, `make rust-test`), most of it the

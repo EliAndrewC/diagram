@@ -9,4 +9,4 @@ pub(crate) mod switches;
 pub(crate) mod via_make;
 
 #[cfg(test)]
-pub(crate) mod fixtures;
+pub(crate) use l7r_gate_core::ci::fixtures;

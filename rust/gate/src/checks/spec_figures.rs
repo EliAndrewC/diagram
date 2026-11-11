@@ -15,12 +15,9 @@ use fancy_regex::{Captures, Regex};
 use serde_json::Value;
 
 use super::{blank_matches, py_repr};
+pub(super) use super::{figure_source, FIGURE, ONE_SHOT};
 
 const TIMING_UNITS: [&str; 6] = ["ms", "s", "min", "h", "%", "x"];
-const UNITS: [&str; 18] = [
-    "ft", "m", "km", "ha", "mu", "sq ft", "%", "ms", "s", "min", "minute", "minutes", "h", "MB",
-    "MiB", "GB", "GiB", "px",
-];
 const OPERATIVE: [&str; 4] = [
     "summary",
     "functional requirements",
@@ -41,26 +38,11 @@ fn re(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
-/// A figure with a unit: the longest unit first, so `minutes` is not read as `m`.
-pub(in crate::checks) fn figure_source() -> String {
-    let mut units: Vec<String> = UNITS.iter().map(|u| u.replace(' ', "\\ ")).collect();
-    units.sort_by_key(|u| std::cmp::Reverse(u.len()));
-    format!(
-        r"(?<![\w.])\d[\d,]*(?:\.\d+)?\s*(?:{})(?![\w-])",
-        units.join("|")
-    )
-}
-
-/// Python's `\\w` holds every numeric character: a figure followed by a superscript (`2,179 px\u{b2}`) is no figure there.
-pub(in crate::checks) static FIGURE: LazyLock<Regex> =
-    LazyLock::new(|| re(&figure_source().replace(r"\w", r"\w\p{N}")));
 static KEY: LazyLock<Regex> = LazyLock::new(|| re(r"\bm:([a-z0-9][a-z0-9-]*)"));
 static SPAN: LazyLock<Regex> = LazyLock::new(|| re(r"`[^`\n]*`"));
 static TOKEN: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w\p{N}.])\d[\d,]*(?:\.\d+)?"));
 static ROUND_LABEL: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?i)\b(?:round \d+|this round)'s own run\b"));
-pub(in crate::checks) static ONE_SHOT: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?i)\bobserved \d{4}-\d{2}-\d{2}\b"));
 static HEADING: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^(#{2,})\s+(.*?)\s*$"));
 static BLOCK_BREAK: LazyLock<Regex> = LazyLock::new(|| re(r"\n\s*\n"));
 static HEAD_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#{1,6}\s.*$"));

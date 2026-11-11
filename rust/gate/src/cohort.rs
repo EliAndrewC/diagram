@@ -17,6 +17,7 @@ use l7r_guard::shared::sha256;
 use serde_json::Value;
 
 use crate::delta;
+pub use l7r_gate_core::cohort::*;
 
 pub(crate) mod known;
 pub(crate) mod room;
@@ -65,16 +66,6 @@ pub(crate) struct Repo<'a> {
     failure: RefCell<Option<String>>,
 }
 
-pub(crate) fn git(root: &Path, args: &[&str]) -> (bool, String) {
-    let done = Command::new("git").arg("-C").arg(root).args(args).output();
-    done.map_or((false, String::new()), |o| {
-        (
-            o.status.success(),
-            String::from_utf8_lossy(&o.stdout).into_owned(),
-        )
-    })
-}
-
 fn git_bytes(root: &Path, args: &[&str]) -> Vec<u8> {
     Command::new("git")
         .arg("-C")
@@ -85,35 +76,10 @@ fn git_bytes(root: &Path, args: &[&str]) -> Vec<u8> {
         .unwrap_or_default()
 }
 
-pub(crate) fn int(v: &Value) -> i64 {
-    v.as_i64()
-        .or_else(|| v.as_str().and_then(|s| s.parse().ok()))
-        .unwrap_or(0)
-}
-
-/// `str(rec.get(key))`: the record's value as text, `None` when absent, because a record's `utc` is compared as text.
-pub(crate) fn text(rec: &Value, key: &str) -> String {
-    match rec.get(key) {
-        None | Some(Value::Null) => "None".to_owned(),
-        Some(Value::String(s)) => s.clone(),
-        Some(other) => other.to_string(),
-    }
-}
-
 pub(crate) fn seeds_of(rec: &Value) -> &[Value] {
     rec["seeds"].as_array().map_or(&[], Vec::as_slice)
 }
 
-pub(crate) fn truthy(v: &Value) -> bool {
-    match v {
-        Value::Null => false,
-        Value::Bool(b) => *b,
-        Value::Number(n) => n.as_f64() != Some(0.0),
-        Value::String(s) => !s.is_empty(),
-        Value::Array(a) => !a.is_empty(),
-        Value::Object(o) => !o.is_empty(),
-    }
-}
 
 fn is_pinned(seed: i64) -> bool {
     (901..907).contains(&seed)
@@ -405,13 +371,6 @@ fn rate_line(rec: &Value) -> String {
     out + "; a rate, never a refusal - the trend: make cohort-seeds"
 }
 
-#[expect(
-    clippy::cast_precision_loss,
-    reason = "seed counts, far inside f64's exact range"
-)]
-pub(crate) fn percent(part: usize, whole: usize) -> f64 {
-    100.0 * part as f64 / whole.max(1) as f64
-}
 
 /// Why the push refuses this engine under the Rust stage gate (feature 444 amendment 5, FR-019), or nothing.
 fn rust_refusal(repo: &Repo<'_>) -> Option<String> {

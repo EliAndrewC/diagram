@@ -1,13 +1,12 @@
 //! A file only moved when its bytes stood at the base.
 
-use super::super::tests::{commit, put, repo};
 use super::moved_only;
+use crate::ci::fixtures::{commit, put, repo};
 
 #[test]
 fn the_same_bytes_at_a_new_path_are_moved_and_an_edit_is_not() {
     let dir = repo("moves");
-    put(&dir, "old.md", "same\n");
-    commit(&dir);
+    commit(&dir, "old.md", "same\n");
     put(&dir, "new.md", "same\n");
     put(&dir, "edited.md", "different\n");
     let names = [

@@ -2,7 +2,7 @@
 
 use std::process::Command;
 
-use super::{cli, needs, py_lines};
+use super::{cli, needs};
 
 pub(super) fn repo(tag: &str) -> std::path::PathBuf {
     let dir = super::scratch(tag);
@@ -55,16 +55,6 @@ pub(super) fn based(dir: &std::path::Path) {
 
 fn owned(args: &[&str]) -> Vec<String> {
     args.iter().map(|s| (*s).to_owned()).collect()
-}
-
-#[test]
-fn lines_end_where_python_ends_them() {
-    assert_eq!(
-        py_lines("a\nb\r\nc\x0cd\u{2028}e").collect::<Vec<_>>(),
-        ["a", "b", "c", "d", "e"]
-    );
-    assert_eq!(py_lines("a\r\rb\n").collect::<Vec<_>>(), ["a", "", "b"]);
-    assert_eq!(py_lines("").count(), 0);
 }
 
 #[test]
@@ -182,11 +172,3 @@ fn a_refused_check_is_recorded_refused_and_a_failed_self_test_refuses() {
     );
 }
 
-#[test]
-fn a_value_is_printed_as_python_prints_it() {
-    use serde_json::json;
-    assert_eq!(
-        super::py_repr(&json!({"a": [1, null, true, false], "it's": "x'y\"z\\\n"})),
-        r#"{'a': [1, None, True, False], "it's": 'x\'y"z\\\n'}"#
-    );
-}

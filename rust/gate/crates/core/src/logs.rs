@@ -63,17 +63,20 @@ fn indented(value: &Value) -> String {
     dumps(value, Some(2), true) + "\n"
 }
 
-pub(crate) fn one_line(value: &Value) -> String {
+#[must_use]
+pub fn one_line(value: &Value) -> String {
     dumps(value, None, true)
 }
 
 /// `json.dumps(value, indent=indent, ensure_ascii=ascii)`, byte for byte.
-pub(crate) fn py_dumps(value: &Value, indent: usize, ascii: bool) -> String {
+#[must_use]
+pub fn py_dumps(value: &Value, indent: usize, ascii: bool) -> String {
     dumps(value, Some(indent), ascii)
 }
 
 /// One line as `json.dumps(value, ensure_ascii=False)` writes it.
-pub(crate) fn one_line_utf8(value: &Value) -> String {
+#[must_use]
+pub fn one_line_utf8(value: &Value) -> String {
     dumps(value, None, false)
 }
 
@@ -99,7 +102,7 @@ fn write_dated(root: &Path, log: &str, now: &Now, record: &Value) -> Result<Path
 }
 
 /// What a `make` gate run adds to its record from its environment.
-pub(crate) struct RunEnv {
+pub struct RunEnv {
     pub mode: Option<String>,
     pub selected: String,
     pub stats: String,
@@ -214,7 +217,7 @@ fn land_tooling(args: &[String]) -> Result<(), String> {
     std::fs::write(path, text).map_err(crate::measure::text_err)
 }
 
-pub(crate) fn log_cli(args: &[String], root: &Path) -> Reply {
+pub fn log_cli(args: &[String], root: &Path) -> Reply {
     let rest = args.get(1..).unwrap_or(&[]);
     let done = match args.first().map(String::as_str) {
         Some("run") => run_record(rest, &RunEnv::read(), root),
@@ -231,7 +234,8 @@ pub(crate) fn log_cli(args: &[String], root: &Path) -> Reply {
 
 /// `json-field <file> <key>...`: each key's text on one line, `-` for an empty or missing one, so a shell `read` splits it; nothing and exit 1 when
 /// the file does not read.
-pub(crate) fn json_field(args: &[String]) -> Reply {
+#[must_use]
+pub fn json_field(args: &[String]) -> Reply {
     let [file, keys @ ..] = args else {
         return reply(
             String::new(),
@@ -258,7 +262,7 @@ pub(crate) fn json_field(args: &[String]) -> Reply {
 }
 
 /// A `pyproject.toml`'s `[tool.ruff...]` sections as a `ruff.toml`, the `tool.ruff.` prefix dropped: `--config` reads that form.
-pub(crate) fn ruff_toml(pyproject: &str) -> String {
+pub fn ruff_toml(pyproject: &str) -> String {
     let mut out = String::new();
     let mut keep = false;
     for line in pyproject.lines() {
@@ -286,7 +290,7 @@ pub(crate) fn ruff_toml(pyproject: &str) -> String {
 }
 
 /// `ruff-toml`: stdin to stdout.
-pub(crate) fn ruff_cli(input: &mut dyn std::io::Read) -> Reply {
+pub fn ruff_cli(input: &mut dyn std::io::Read) -> Reply {
     let mut text = String::new();
     let _ = input.read_to_string(&mut text);
     reply(ruff_toml(&text), String::new(), 0)

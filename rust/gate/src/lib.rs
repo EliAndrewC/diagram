@@ -5,14 +5,11 @@ mod checks;
 pub mod checks_door;
 mod ci;
 mod claims;
-pub mod codeid;
 mod cohort;
 pub mod delta;
-mod difflib;
 mod exempt;
 mod hashing;
 mod lock;
-mod logs;
 mod measure;
 pub mod owed_door;
 mod plan;
@@ -26,13 +23,9 @@ mod state;
 
 use std::path::{Path, PathBuf};
 
-/// What a subcommand answered: the text for stdout and for stderr, and the exit code.
-#[derive(Debug, PartialEq, Eq)]
-pub struct Reply {
-    pub stdout: String,
-    pub stderr: String,
-    pub code: i32,
-}
+pub use l7r_gate_core::{codeid, difflib, logs, Reply};
+#[cfg(test)]
+pub(crate) use l7r_gate_core::write_executable;
 
 /// The repository the command was started in, or `.` outside one.
 fn top() -> PathBuf {
@@ -139,25 +132,6 @@ pub fn cli(args: &[String]) -> Reply {
             code: 2,
         },
     }
-}
-
-/// Write an executable a test will run, the file written by a child process.
-///
-/// A thread that forks in another test copies every open descriptor until its child execs, so a
-/// script this process has just written can still be open for writing in that child and running
-/// it fails with "Text file busy". `install` holds the only descriptor that writes the file, and
-/// it has exited by the time this returns.
-#[cfg(test)]
-pub(crate) fn write_executable(path: &std::path::Path, text: &str) {
-    let draft = path.with_extension("draft");
-    std::fs::write(&draft, text).unwrap();
-    let done = std::process::Command::new("install")
-        .args(["-m", "755"])
-        .arg(&draft)
-        .arg(path)
-        .status();
-    assert!(done.unwrap().success());
-    std::fs::remove_file(&draft).unwrap();
 }
 
 #[cfg(test)]

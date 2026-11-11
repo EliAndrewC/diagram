@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 /// What an opcode does to its two ranges.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(crate) enum Tag {
+pub enum Tag {
     Replace,
     Delete,
     Insert,
@@ -14,7 +14,7 @@ pub(crate) enum Tag {
 }
 
 /// `(tag, i1, i2, j1, j2)`.
-pub(crate) type Opcode = (Tag, usize, usize, usize, usize);
+pub type Opcode = (Tag, usize, usize, usize, usize);
 
 struct Matcher<'a> {
     a: &'a [&'a str],
@@ -52,7 +52,8 @@ impl Matcher<'_> {
 }
 
 /// `get_matching_blocks`: `(i, j, n)`, adjacent blocks merged, ending in the `(len a, len b, 0)` sentinel.
-pub(crate) fn matching_blocks(left: &[&str], right: &[&str]) -> Vec<(usize, usize, usize)> {
+#[must_use]
+pub fn matching_blocks(left: &[&str], right: &[&str]) -> Vec<(usize, usize, usize)> {
     let mut b2j: HashMap<&str, Vec<usize>> = HashMap::new();
     for (j, line) in right.iter().enumerate() {
         b2j.entry(line).or_default().push(j);
@@ -85,7 +86,8 @@ pub(crate) fn matching_blocks(left: &[&str], right: &[&str]) -> Vec<(usize, usiz
 }
 
 /// `get_opcodes`.
-pub(crate) fn opcodes(a: &[&str], b: &[&str]) -> Vec<Opcode> {
+#[must_use]
+pub fn opcodes(a: &[&str], b: &[&str]) -> Vec<Opcode> {
     let (mut i, mut j) = (0, 0);
     let mut out = Vec::new();
     for (ai, bj, size) in matching_blocks(a, b) {
@@ -144,7 +146,8 @@ fn range(start: usize, stop: usize) -> String {
 }
 
 /// `difflib.unified_diff(a, b, from_file, to_file, lineterm="", n=n)` over lines (no line of `a` or `b` carries its end).
-pub(crate) fn unified_diff(
+#[must_use]
+pub fn unified_diff(
     a: &[&str],
     b: &[&str],
     from_file: &str,

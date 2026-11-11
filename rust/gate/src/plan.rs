@@ -18,7 +18,6 @@ mod task;
 
 use std::io::Read;
 use std::path::{Path, PathBuf};
-use std::process::Command;
 
 use l7r_guard::shared::log::{civil, write as log_write, Entry};
 use l7r_guard::shared::{escape, sha256};
@@ -30,19 +29,9 @@ use sections::{blocks, digest, task_sections, wording_only};
 use status::{block_status, owed, ruled_tasks, RECORD};
 use task::{resolve, touched_features};
 
-const BUNDLES: &str = "/tmp/l7r-check";
+pub use l7r_gate_core::plan::*;
 
-/// A value as the record files write it: one-space indent, a final newline.
-pub(crate) fn pretty(value: &Value) -> String {
-    use serde::Serialize as _;
-    let mut out = Vec::new();
-    let mut writer = serde_json::Serializer::with_formatter(
-        &mut out,
-        serde_json::ser::PrettyFormatter::with_indent(b" "),
-    );
-    let _ = value.serialize(&mut writer);
-    String::from_utf8_lossy(&out).into_owned() + "\n"
-}
+const BUNDLES: &str = "/tmp/l7r-check";
 
 fn clock() -> (i64, u32, u32, u64, u64, u64) {
     civil(
@@ -60,12 +49,6 @@ pub(super) fn today() -> String {
 pub(super) fn now_utc() -> String {
     let (y, mo, d, h, mi, s) = clock();
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
-}
-
-pub(crate) fn git_line(root: &Path, args: &[&str]) -> String {
-    let done = Command::new("git").arg("-C").arg(root).args(args).output();
-    done.map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
-        .unwrap_or_default()
 }
 
 fn reply(stdout: String, stderr: String, code: i32) -> crate::Reply {

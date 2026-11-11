@@ -5,7 +5,7 @@ use std::sync::LazyLock;
 
 /// One flag of a parser.
 #[derive(Clone, Copy)]
-pub(crate) struct Spec {
+pub struct Spec {
     name: &'static str,
     kind: Arity,
 }
@@ -19,21 +19,24 @@ enum Arity {
 }
 
 impl Spec {
-    pub(crate) fn value(name: &'static str) -> Self {
+    #[must_use]
+    pub fn value(name: &'static str) -> Self {
         Self {
             name,
             kind: Arity::Value,
         }
     }
 
-    pub(crate) fn flag(name: &'static str) -> Self {
+    #[must_use]
+    pub fn flag(name: &'static str) -> Self {
         Self {
             name,
             kind: Arity::Flag,
         }
     }
 
-    pub(crate) fn pair(name: &'static str) -> Self {
+    #[must_use]
+    pub fn pair(name: &'static str) -> Self {
         Self {
             name,
             kind: Arity::Pair,
@@ -41,7 +44,8 @@ impl Spec {
     }
 
     /// `nargs="*"`: every argument after it up to the next flag.
-    pub(crate) fn list(name: &'static str) -> Self {
+    #[must_use]
+    pub fn list(name: &'static str) -> Self {
         Self {
             name,
             kind: Arity::List,
@@ -51,18 +55,19 @@ impl Spec {
 
 /// What a parser read.
 #[derive(Default)]
-pub(crate) struct Parsed {
+pub struct Parsed {
     values: Vec<(String, String)>,
     flags: Vec<String>,
     pairs: Vec<(String, (String, String))>,
     lists: Vec<(String, Vec<String>)>,
     /// The positional arguments, in order.
-    pub(crate) positional: Vec<String>,
+    pub positional: Vec<String>,
 }
 
 impl Parsed {
     /// The last value given for `name`, or `default`.
-    pub(crate) fn text<'a>(&'a self, name: &str, default: &'a str) -> &'a str {
+    #[must_use]
+    pub fn text<'a>(&'a self, name: &str, default: &'a str) -> &'a str {
         self.values
             .iter()
             .rev()
@@ -71,7 +76,8 @@ impl Parsed {
     }
 
     /// The last value given for any of `names` (argparse's flags sharing one `dest`), or `default`.
-    pub(crate) fn last_of<'a>(&'a self, names: &[&str], default: &'a str) -> &'a str {
+    #[must_use]
+    pub fn last_of<'a>(&'a self, names: &[&str], default: &'a str) -> &'a str {
         self.values
             .iter()
             .rev()
@@ -80,15 +86,18 @@ impl Parsed {
     }
 
     /// Whether a value was given for `name`.
-    pub(crate) fn has(&self, name: &str) -> bool {
+    #[must_use]
+    pub fn has(&self, name: &str) -> bool {
         self.values.iter().any(|(k, _)| k == name)
     }
 
-    pub(crate) fn on(&self, name: &str) -> bool {
+    #[must_use]
+    pub fn on(&self, name: &str) -> bool {
         self.flags.iter().any(|f| f == name)
     }
 
-    pub(crate) fn pair(&self, name: &str) -> Option<(&str, &str)> {
+    #[must_use]
+    pub fn pair(&self, name: &str) -> Option<(&str, &str)> {
         self.pairs
             .iter()
             .rev()
@@ -97,7 +106,8 @@ impl Parsed {
     }
 
     /// The last list given for `name`, or none.
-    pub(crate) fn list(&self, name: &str) -> &[String] {
+    #[must_use]
+    pub fn list(&self, name: &str) -> &[String] {
         self.lists
             .iter()
             .rev()
@@ -133,12 +143,20 @@ fn looks_like_flag(arg: &str, specs: &[Spec]) -> bool {
 }
 
 /// Reads `args` against `specs`: an argument no spec names, a missing value or an ambiguous prefix is argparse's exit 2.
-pub(crate) fn parse(args: &[String], specs: &[Spec]) -> Result<Parsed, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn parse(args: &[String], specs: &[Spec]) -> Result<Parsed, String> {
     parse_with(args, specs, 0)
 }
 
 /// [`parse`], taking up to `positionals` arguments that are no flag as positional ones (`nargs="?"` each).
-pub(crate) fn parse_with(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn parse_with(
     args: &[String],
     specs: &[Spec],
     positionals: usize,

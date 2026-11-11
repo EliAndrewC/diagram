@@ -3,7 +3,14 @@
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-pub(crate) fn git(dir: &Path, args: &[&str]) -> String {
+/// # Panics
+///
+/// Where the fixture cannot be made, which fails the test that asked for it.
+#[expect(
+    clippy::must_use_candidate,
+    reason = "a fixture runs git for what it does; most callers drop what it printed"
+)]
+pub fn git(dir: &Path, args: &[&str]) -> String {
     let out = Command::new("git")
         .arg("-C")
         .arg(dir)
@@ -14,22 +21,29 @@ pub(crate) fn git(dir: &Path, args: &[&str]) -> String {
     String::from_utf8_lossy(&out.stdout).trim().to_owned()
 }
 
-pub(crate) fn put(root: &Path, rel: &str, text: &str) {
+/// # Panics
+///
+/// Where the fixture cannot be made, which fails the test that asked for it.
+pub fn put(root: &Path, rel: &str, text: &str) {
     let p = root.join(rel);
     std::fs::create_dir_all(p.parent().unwrap()).unwrap();
     std::fs::write(p, text).unwrap();
 }
 
-pub(crate) fn commit(root: &Path, msg: &str) -> String {
+#[expect(
+    clippy::must_use_candidate,
+    reason = "a fixture commits for what it does; most callers drop the commit it names"
+)]
+pub fn commit(root: &Path, msg: &str) -> String {
     git(root, &["add", "-A"]);
     git(root, &["commit", "-qm", msg, "--allow-empty"]);
     git(root, &["rev-parse", "HEAD"])
 }
 
-pub(crate) const PAGE: &str = "research/questions/0094-trade.html";
-pub(crate) const NOTES: &str = "research/questions/0094-trade.notes.html";
-pub(crate) const DRAWING: &str = "research/questions/0094-trade.drawing.html";
-pub(crate) const WELL: &str = "l7r/diagram/interactive/assets/modals/hamlet/well.md";
+pub const PAGE: &str = "research/questions/0094-trade.html";
+pub const NOTES: &str = "research/questions/0094-trade.notes.html";
+pub const DRAWING: &str = "research/questions/0094-trade.drawing.html";
+pub const WELL: &str = "l7r/diagram/interactive/assets/modals/hamlet/well.md";
 
 const ENTRY_STUB: &str = "import json\nfrom pathlib import Path\n\ndef owed(root):\n    f = Path(root) / 'entry-lines.json'\n    if (Path(root) / 'entry-noise').exists():\n        print('noise')\n    if (Path(root) / 'entry-raise').exists():\n        raise ImportError('no engine here')\n    return 'stub', json.loads(f.read_text()) if f.exists() else []\n";
 const QV_STUB: &str = "import re\n\ndef _strip(body):\n    return re.sub('<[^>]+>', '', body)\n\ndef passages(text):\n    return [{'quote': q, 'original': o, 'language': 'ja', **({'more': ['x']} if o == 'more' else {})} for q, o in re.findall(r'\"([^\"]+)\" *\\u300c([^\\u300d]+)\\u300d', text)] + [{'quote': 'plain'}]\n";
@@ -37,12 +51,18 @@ const SP_STUB: &str = "import re\n\ndef glosses(html):\n    return re.findall(r'
 const AE_STUB: &str = "def reply_of(path):\n    return path.read_text()\n";
 
 /// A repository holding a small record, committed once and set as origin/main; the stubs of every Python seam under `scripts/record/`.
-pub(crate) fn record(tag: &str) -> PathBuf {
+#[must_use]
+pub fn record(tag: &str) -> PathBuf {
     record_at(&crate::checks::scratch(tag))
 }
 
 /// [`record`], at `root`.
-pub(crate) fn record_at(root: &Path) -> PathBuf {
+#[must_use]
+///
+/// # Panics
+///
+/// Where the fixture cannot be made, which fails the test that asked for it.
+pub fn record_at(root: &Path) -> PathBuf {
     let root = root.to_path_buf();
     std::fs::create_dir_all(&root).unwrap();
     git(&root, &["init", "-q"]);
@@ -106,7 +126,7 @@ pub(crate) fn record_at(root: &Path) -> PathBuf {
 }
 
 /// The stubs of every Python seam, under `scripts/record/`.
-pub(crate) fn stubs(root: &Path) {
+pub fn stubs(root: &Path) {
     put(root, "scripts/record/entry_owed.py", ENTRY_STUB);
     put(root, "scripts/record/quote_verbatim.py", QV_STUB);
     put(root, "scripts/record/style_prepass.py", SP_STUB);
@@ -114,7 +134,7 @@ pub(crate) fn stubs(root: &Path) {
 }
 
 /// Every kind of edit the owed rules read, in the working tree.
-pub(crate) fn edit_everything(root: &Path) {
+pub fn edit_everything(root: &Path) {
     put(root, PAGE, "<h2 id=\"t\">Trade routes</h2>\n<p class=\"intro\">Why it is asked now.</p>\n<p>A short distance apart.<sup class=\"fn\" data-note=\"k\"></sup> More here.</p>\n<p>An unmarked claim, reworded.</p>\n<p><!-- c --></p>\n");
     put(root, NOTES, "<ol>\n<li data-note=\"k\">\"a passage\" <a href=\"https://e.org/b\"><code>key-a</code></a></li>\n<li data-note=\"t\">\"the hedges\" \u{300c}\u{57a3}\u{6839}\u{300d} (translated)<span class=\"orig\" data-orig=\"o1\"></span></li>\n<li data-note=\"z\">no publicly readable source, still</li>\n<li data-note=\"n\">\"new\" \u{300c}more\u{300d} <a href=\"https://e.org/n\"><code>key-b</code></a> \u{6728}(ki, \"tree\")</li>\n</ol>\n");
     put(root, DRAWING, "<h2>How drawn</h2>\n<p>Drawn as a line, thin.<sup class=\"fn\" data-note=\"d\"></sup></p>\n");

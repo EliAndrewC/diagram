@@ -17,7 +17,7 @@ use std::sync::LazyLock;
 use fancy_regex::{escape, Captures, NoExpand, Regex};
 use serde_json::{json, Value};
 
-use super::{py_lines, reply};
+use super::{py_lines, read_text, reply};
 use crate::cohort::git;
 use crate::logs::py_dumps;
 use crate::Reply;
@@ -41,12 +41,6 @@ fn compiled(pattern: &str) -> Regex {
 /// A question's page: Python's `$` also stands before one final newline.
 static NAME: LazyLock<Regex> =
     LazyLock::new(|| compiled(r"^(\d{4})-([^./\s]+)(\.drawing)?\.html\n?$"));
-
-/// `Path.read_text(encoding="utf-8")`: strict UTF-8, and universal newlines, so a file this rewrites comes out with Python's line ends.
-pub(crate) fn read_text(path: &Path) -> std::io::Result<String> {
-    let text = String::from_utf8(std::fs::read(path)?).map_err(|_| ErrorKind::InvalidData)?;
-    Ok(text.replace("\r\n", "\n").replace('\r', "\n"))
-}
 
 fn read(path: &Path) -> Result<String, String> {
     read_text(path).map_err(|e| format!("{}: {e}", path.display()))

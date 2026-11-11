@@ -2,13 +2,15 @@
 
 use std::path::{Path, PathBuf};
 
+#[cfg(test)]
 use serde_json::json;
 
+#[cfg(test)]
 use super::*;
 use crate::record::testkit::{put, record};
 
 /// The runner's stub: canned answers for every verb, a failure on asking.
-pub(crate) const RUNNER: &str = r#"import json, os, sys, pathlib
+pub const RUNNER: &str = r#"import json, os, sys, pathlib
 for line in sys.stdin:
     ask = json.loads(line)
     v, a = ask["verb"], ask["args"]
@@ -48,7 +50,8 @@ for line in sys.stdin:
 "#;
 
 /// The testkit's record with the stub runner, the style guide and the variant index.
-pub(crate) fn scratch(tag: &str) -> PathBuf {
+#[must_use]
+pub fn scratch(tag: &str) -> PathBuf {
     let root = record(tag);
     put(&root, "scripts/bundle_door.py", RUNNER);
     put(&root, "research/STYLE.md", "# Style\n");
@@ -61,7 +64,11 @@ pub(crate) fn scratch(tag: &str) -> PathBuf {
 }
 
 /// The check state of `root`, written as `checks-open.json` in its git dir.
-pub(crate) fn state(root: &Path, value: &serde_json::Value) {
+///
+/// # Panics
+///
+/// Where the fixture cannot be made, which fails the test that asked for it.
+pub fn state(root: &Path, value: &serde_json::Value) {
     std::fs::write(
         root.join(".git").join("checks-open.json"),
         value.to_string(),
@@ -69,7 +76,8 @@ pub(crate) fn state(root: &Path, value: &serde_json::Value) {
     .unwrap();
 }
 
-pub(crate) fn args(list: &[&str]) -> Vec<String> {
+#[must_use]
+pub fn args(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
 }
 

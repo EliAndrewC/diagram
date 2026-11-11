@@ -14,7 +14,7 @@ use serde_json::{json, Map, Value};
 use super::{reply, text_err};
 use crate::plan::pretty;
 
-pub(crate) mod iso;
+pub(crate) use l7r_gate_core::measure::popup_rounds::iso;
 
 const MODAL_CHECKS: [&str; 3] = ["modal-form", "modal-research", "modal-depiction"];
 

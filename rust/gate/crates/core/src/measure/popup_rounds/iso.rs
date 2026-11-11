@@ -231,7 +231,8 @@ fn local_to_utc(local: i64, offset_at: &dyn Fn(i64) -> i64) -> i64 {
 }
 
 /// The epoch seconds of `text`, none when Python's parser or its `.timestamp()` would refuse it.
-pub(crate) fn parse(text: &str) -> Option<f64> {
+#[must_use]
+pub fn parse(text: &str) -> Option<f64> {
     const MICROS: i64 = 1_000_000;
     let at = separator(text.as_bytes())?;
     let day = date_days(text.get(..at)?)?;

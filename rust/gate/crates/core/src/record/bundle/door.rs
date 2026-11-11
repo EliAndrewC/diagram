@@ -9,14 +9,15 @@ use serde_json::{json, Value};
 use crate::record::repo::{fail, Fail};
 
 /// The runner of one bundle run: not started until a verb is asked.
-pub(crate) struct Runner {
+pub struct Runner {
     script: PathBuf,
     live: Option<(Child, ChildStdin, BufReader<ChildStdout>)>,
 }
 
 impl Runner {
     /// The runner of the scripts under `tree`.
-    pub(crate) fn new(tree: &Path) -> Self {
+    #[must_use]
+    pub fn new(tree: &Path) -> Self {
         Self {
             script: tree.join("scripts").join("bundle_door.py"),
             live: None,
@@ -40,7 +41,11 @@ impl Runner {
     }
 
     /// The verb's value, or the traceback the Python raised.
-    pub(crate) fn ask(&mut self, verb: &str, args: &Value) -> Result<Value, Fail> {
+    ///
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn ask(&mut self, verb: &str, args: &Value) -> Result<Value, Fail> {
         let (_, stdin, stdout) = self.start()?;
         let line = json!({"verb": verb, "args": args}).to_string() + "\n";
         let mut said = String::new();
@@ -61,7 +66,11 @@ impl Runner {
     }
 
     /// `main(args)` of one of the helpers `check_bundle` ran in its own process (feature 383 D6): (its exit, stdout then stderr).
-    pub(crate) fn helper(
+    ///
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn helper(
         &mut self,
         name: &str,
         args: &[String],

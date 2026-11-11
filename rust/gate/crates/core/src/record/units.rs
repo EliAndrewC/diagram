@@ -11,8 +11,8 @@ use l7r_guard::shared::sha256;
 use serde_json::{json, Value};
 
 /// The record's directory, its questions, and every directory of registry write-ups a check can be owed on.
-pub(crate) const QUESTIONS: &str = "research/questions";
-pub(crate) const SOURCE_DIRS: [&str; 2] = [
+pub const QUESTIONS: &str = "research/questions";
+pub const SOURCE_DIRS: [&str; 2] = [
     "research/sources/010-works-cited",
     "research/sources/040-uncited-works",
 ];
@@ -20,26 +20,27 @@ pub(crate) const SOURCE_DIRS: [&str; 2] = [
 const ABSENCE: &str = "no publicly readable source";
 
 /// Compiles a pattern the source spells out (`record_units`' own).
-pub(crate) fn re(pattern: &str) -> Regex {
+#[must_use]
+pub fn re(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static TAG: LazyLock<Regex> = LazyLock::new(|| re(r"<[^>]+>"));
-pub(crate) static NOTE: LazyLock<Regex> =
+pub static NOTE: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?s)<li data-note="([^"]+)">(.*?)</li>"#));
-pub(crate) static ORIG_TOKEN: LazyLock<Regex> =
+pub static ORIG_TOKEN: LazyLock<Regex> =
     LazyLock::new(|| re(r#"<span class="orig" data-orig="([^"]+)"></span>"#));
-pub(crate) static ORIG_STORED: LazyLock<Regex> =
+pub static ORIG_STORED: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?s)<li data-orig="([^"]+)">(.*?)</li>"#));
-pub(crate) static STEM: LazyLock<Regex> =
+pub static STEM: LazyLock<Regex> =
     LazyLock::new(|| re(r"^(\d{4})-([^.]+)(\.drawing)?\.html$"));
 static CODE: LazyLock<Regex> = LazyLock::new(|| {
     re(
         r#"<a href="[^"]*"(?: [^>]*)?>[\t-\r\x1c-\x1f \x85\xa0\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}]*<code>([a-z0-9][a-z0-9-]*)</code>[\t-\r\x1c-\x1f \x85\xa0\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}]*</a>"#,
     )
 });
-pub(crate) static HREF: LazyLock<Regex> = LazyLock::new(|| re(r#"<a href="([^"]+)""#));
-pub(crate) static PASSAGE: LazyLock<Regex> =
+pub static HREF: LazyLock<Regex> = LazyLock::new(|| re(r#"<a href="([^"]+)""#));
+pub static PASSAGE: LazyLock<Regex> =
     LazyLock::new(|| re("\"([^\"]+)\"|\u{201c}([^\u{201d}]+)\u{201d}"));
 static SENTENCE_END: LazyLock<Regex> = LazyLock::new(|| {
     re("[.!?\u{3002}][\"\u{201d}\u{2019})]*((?: \\[\\^[\\w.-]+\\])*)(?= [A-Z\"\u{201c}(]|$)")
@@ -49,7 +50,8 @@ static QUOTED: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 /// `re.findall` of a one- or two-group pattern, each match's group 1 (and 2).
-pub(crate) fn pairs_of(pattern: &Regex, text: &str) -> Vec<(String, String)> {
+#[must_use]
+pub fn pairs_of(pattern: &Regex, text: &str) -> Vec<(String, String)> {
     pattern
         .captures_iter(text)
         .flatten()
@@ -64,7 +66,7 @@ pub(crate) fn pairs_of(pattern: &Regex, text: &str) -> Vec<(String, String)> {
 
 /// A dict: insertion order kept, a key set again keeps its place.
 #[derive(Debug, Clone)]
-pub(crate) struct Keyed<V> {
+pub struct Keyed<V> {
     keys: Vec<String>,
     map: HashMap<String, V>,
 }
@@ -79,11 +81,12 @@ impl<V> Default for Keyed<V> {
 }
 
 impl<V> Keyed<V> {
-    pub(crate) fn get(&self, key: &str) -> Option<&V> {
+    #[must_use]
+    pub fn get(&self, key: &str) -> Option<&V> {
         self.map.get(key)
     }
 
-    pub(crate) fn insert(&mut self, key: String, value: V) {
+    pub fn insert(&mut self, key: String, value: V) {
         if !self.map.contains_key(&key) {
             self.keys.push(key.clone());
         }
@@ -91,23 +94,25 @@ impl<V> Keyed<V> {
     }
 
     /// Inserts each `(key, value)` in turn.
-    pub(crate) fn extend<I: IntoIterator<Item = (String, V)>>(&mut self, items: I) {
+    pub fn extend<I: IntoIterator<Item = (String, V)>>(&mut self, items: I) {
         for (k, v) in items {
             self.insert(k, v);
         }
     }
 
-    pub(crate) fn contains(&self, key: &str) -> bool {
+    #[must_use]
+    pub fn contains(&self, key: &str) -> bool {
         self.map.contains_key(key)
     }
 
-    pub(crate) fn iter(&self) -> impl Iterator<Item = (&String, &V)> {
+    pub fn iter(&self) -> impl Iterator<Item = (&String, &V)> {
         self.keys.iter().map(|k| (k, &self.map[k]))
     }
 }
 
 /// `hashlib.sha256("\x1f".join(parts).encode()).hexdigest()[:16]`.
-pub(crate) fn digest(parts: &[&str]) -> String {
+#[must_use]
+pub fn digest(parts: &[&str]) -> String {
     sha256::hex(parts.join("\x1f").as_bytes())
         .chars()
         .take(16)
@@ -124,7 +129,8 @@ fn stored_table(originals: &str) -> HashMap<String, String> {
 }
 
 /// The notes with their originals put back, token by token.
-pub(crate) fn restored(notes: &str, table: &HashMap<String, String>) -> String {
+#[must_use]
+pub fn restored<S: std::hash::BuildHasher>(notes: &str, table: &HashMap<String, String, S>) -> String {
     ORIG_TOKEN
         .replace_all(notes, |c: &Captures| {
             table.get(&c[1]).cloned().unwrap_or_default()
@@ -133,7 +139,8 @@ pub(crate) fn restored(notes: &str, table: &HashMap<String, String>) -> String {
 }
 
 /// key -> the note's words, with its originals put back (a changed original is a changed note).
-pub(crate) fn read_notes(notes: &str, originals: &str) -> Keyed<String> {
+#[must_use]
+pub fn read_notes(notes: &str, originals: &str) -> Keyed<String> {
     let body = restored(notes, &stored_table(originals));
     let mut out = Keyed::default();
     for (key, text) in pairs_of(&NOTE, &body) {
@@ -143,7 +150,7 @@ pub(crate) fn read_notes(notes: &str, originals: &str) -> Keyed<String> {
 }
 
 /// What `source-reader` reads of a note: the pages it opens and the passages it looks for on them; "" where it quotes nothing it can find.
-pub(crate) fn reading(body: &str, originals: &HashMap<String, String>) -> String {
+pub fn reading<S: std::hash::BuildHasher>(body: &str, originals: &HashMap<String, String, S>) -> String {
     let origs: Vec<String> = ORIG_TOKEN
         .captures_iter(body)
         .flatten()
@@ -170,7 +177,7 @@ pub(crate) fn reading(body: &str, originals: &HashMap<String, String>) -> String
 
 /// What one notes file holds: its notes' words, the keys each cites, what `source-reader` reads of each, the URLs each links.
 #[derive(Clone)]
-pub(crate) struct NotesParse {
+pub struct NotesParse {
     notes: Keyed<String>,
     cites: Keyed<Vec<String>>,
     readings: Keyed<String>,
@@ -213,7 +220,7 @@ fn subject_of(c: &Captures) -> String {
 }
 
 /// The subject a file name's stem names, and its slug, or None for no question page's name.
-pub(crate) fn stem_of(name: &str) -> Option<(String, String)> {
+pub fn stem_of(name: &str) -> Option<(String, String)> {
     STEM.captures(name)
         .ok()
         .flatten()
@@ -264,19 +271,19 @@ fn notes_kept(text: &str, originals: &str) -> std::sync::Arc<NotesParse> {
 
 /// The record as the checks read it (`record_units.Record`): pages by their stem, notes by stem, write-ups by key.
 #[derive(Default)]
-pub(crate) struct Record {
-    pub(crate) pages: Keyed<Page>,
-    pub(crate) notes: Keyed<Keyed<String>>,
-    pub(crate) slugs: Keyed<String>,
-    pub(crate) sources: Keyed<String>,
-    pub(crate) cites: Keyed<Keyed<Vec<String>>>,
-    pub(crate) readings: Keyed<Keyed<String>>,
-    pub(crate) links: Keyed<Keyed<Vec<String>>>,
+pub struct Record {
+    pub pages: Keyed<Page>,
+    pub notes: Keyed<Keyed<String>>,
+    pub slugs: Keyed<String>,
+    pub sources: Keyed<String>,
+    pub cites: Keyed<Keyed<Vec<String>>>,
+    pub readings: Keyed<Keyed<String>>,
+    pub links: Keyed<Keyed<Vec<String>>>,
 }
 
 impl Record {
     /// From each question file's name and text, and each write-up's key and text (`record_units.Record.of`).
-    pub(crate) fn of(files: &Keyed<String>, sources: &Keyed<String>) -> Self {
+    pub fn of(files: &Keyed<String>, sources: &Keyed<String>) -> Self {
         let mut rec = Self::default();
         for (name, text) in files.iter() {
             if let Some(stem) = name.strip_suffix(".notes.html") {
@@ -327,33 +334,37 @@ fn index_of(rec: &Record) -> Index {
 }
 
 /// The question a subject belongs to: `0094.drawing#k` -> `0094`.
-pub(crate) fn question(subject: &str) -> String {
+#[must_use]
+pub fn question(subject: &str) -> String {
     let head = subject.split('#').next().unwrap_or("");
     head.split('.').next().unwrap_or("").to_owned()
 }
 
 /// One owed check on one subject: `<check>:<subject>`, with what made it due and its fingerprint.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub(crate) struct Unit {
-    pub(crate) slug: String,
-    pub(crate) occasion: String,
-    pub(crate) fingerprint: String,
-    pub(crate) reading: String,
+pub struct Unit {
+    pub slug: String,
+    pub occasion: String,
+    pub fingerprint: String,
+    pub reading: String,
 }
 
 impl Unit {
-    pub(crate) fn check(&self) -> &str {
+    #[must_use]
+    pub fn check(&self) -> &str {
         self.slug
             .split_once(':')
             .map_or(self.slug.as_str(), |p| p.0)
     }
 
-    pub(crate) fn subject(&self) -> &str {
+    #[must_use]
+    pub fn subject(&self) -> &str {
         self.slug.split_once(':').map_or("", |p| p.1)
     }
 
     /// The unit for a Python caller; a slug with no colon has no `subject`, which the Python's raised on reading.
-    pub(crate) fn json(&self) -> Value {
+    #[must_use]
+    pub fn json(&self) -> Value {
         let mut v = json!({
             "slug": self.slug,
             "occasion": self.occasion,
@@ -449,7 +460,7 @@ fn owe_page(now: &Record, base: &Record, ix: &Index, stem: &str, page: &Page, ow
 }
 
 /// THE DECISION: every unit `now` owes against `base`, each with its occasion and fingerprint, sorted by slug (`record_units.owed`).
-pub(crate) fn owed(now: &Record, base: &Record) -> Vec<Unit> {
+pub fn owed(now: &Record, base: &Record) -> Vec<Unit> {
     let ix = index_of(base);
     let mut owing = Owing::default();
     for (stem, page) in now.pages.iter() {
@@ -514,7 +525,7 @@ pub(crate) fn owed(now: &Record, base: &Record) -> Vec<Unit> {
 }
 
 /// The sentences of a block that carry `[^note]`: what a quote-check of that note judges the quotation against.
-pub(crate) fn claims_of(block_words: &str, note: &str) -> Vec<String> {
+pub fn claims_of(block_words: &str, note: &str) -> Vec<String> {
     let (mut out, mut start) = (Vec::new(), 0);
     let mark = format!("[^{note}]");
     for m in SENTENCE_END.find_iter(block_words).flatten() {
@@ -553,7 +564,8 @@ fn stem_note(subject: &str) -> (&str, &str) {
 }
 
 /// A unit's `reading`, the narrower words an answer still holds for under another fingerprint; "" for every other check.
-pub(crate) fn reading_of(rec: &Record, slug: &str) -> String {
+#[must_use]
+pub fn reading_of(rec: &Record, slug: &str) -> String {
     let (check, subject) = slug.split_once(':').unwrap_or(("", ""));
     let (stem, note) = stem_note(subject);
     if check == "quote-check" && note != "unfootnoted" {
@@ -578,7 +590,7 @@ pub(crate) fn reading_of(rec: &Record, slug: &str) -> String {
 }
 
 /// A quote-check note's QUOTATION AND ITS CLAIM, and nothing else (feature 399).
-pub(crate) fn quotation_key(rec: &Record, slug: &str) -> String {
+pub fn quotation_key(rec: &Record, slug: &str) -> String {
     let (stem, note) = stem_note(slug.split_once(':').map_or("", |p| p.1));
     let w = note_of(rec, stem, note);
     let mut parts = vec!["quotation".to_owned()];
@@ -601,7 +613,7 @@ pub(crate) fn quotation_key(rec: &Record, slug: &str) -> String {
 }
 
 /// A hash of exactly the words the unit's check reads.
-pub(crate) fn fingerprint(rec: &Record, slug: &str) -> String {
+pub fn fingerprint(rec: &Record, slug: &str) -> String {
     let (check, subject) = slug.split_once(':').unwrap_or(("", ""));
     let (stem, note) = stem_note(subject);
     let q = question(subject);

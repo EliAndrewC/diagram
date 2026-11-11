@@ -1,4 +1,5 @@
 # The gate's own tools (feature 449 phase 2, `specs/449-rust-codebase/plan.md`): what `make done`, `make land` and the push decide, ported from Python piece by piece.
+# The binary `l7r-gate` over the gate's crates (`crates/*`, feature 449 T92): this crate only dispatches.
 [package]
 name = "l7r_gate"
 version = "0.1.0"
@@ -9,17 +10,18 @@ publish = false
 name = "l7r_gate"
 
 [dependencies]
-fancy-regex = "0.14"
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "crates/core" }
 l7r_guard = { path = "../guard" }
-serde = "1"
-serde_json = { version = "1", features = ["preserve_order"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "crates/core", features = ["testkit"] }
 
 [[bin]]
 name = "l7r-gate"
 path = "src/main.rs"
 
-[lints.clippy]
-all = { level = "deny", priority = -1 }
-pedantic = { level = "deny", priority = -1 }
-too_many_lines = "deny"
-allow_attributes_without_reason = "deny"
+[lints]
+workspace = true

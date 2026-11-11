@@ -32,7 +32,8 @@ fn hash_objects(root: &Path, names: &[&String]) -> Option<Vec<String>> {
 }
 
 /// The subset of `names` whose working-tree content is a blob `base` already held; a missing file is never moved.
-pub(crate) fn moved_only(root: &Path, base: &str, names: &[String]) -> BTreeSet<String> {
+#[must_use]
+pub fn moved_only(root: &Path, base: &str, names: &[String]) -> BTreeSet<String> {
     let mut present: Vec<&String> = names
         .iter()
         .filter(|n| !n.is_empty() && root.join(n).is_file())

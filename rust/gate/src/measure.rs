@@ -22,14 +22,7 @@ pub(crate) mod wave_report;
 pub(crate) mod work_budget;
 
 pub(crate) use subagent_cache::{at, commas};
-
-pub(crate) fn reply(stdout: String, stderr: String, code: i32) -> crate::Reply {
-    crate::Reply {
-        stdout,
-        stderr,
-        code,
-    }
-}
+pub use l7r_gate_core::measure::*;
 
 /// `l7r-gate measure ...`.
 pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
@@ -61,10 +54,6 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
     }
 }
 
-pub(crate) fn home() -> std::path::PathBuf {
-    std::env::var_os("HOME").map_or_else(std::path::PathBuf::new, std::path::PathBuf::from)
-}
-
 /// The date seven days before today, as `YYYY-MM-DD`: the default window of the subagent report.
 fn a_week_ago() -> String {
     let now = std::time::SystemTime::now()
@@ -72,40 +61,6 @@ fn a_week_ago() -> String {
         .map_or(0, |d| d.as_secs());
     let (y, m, d, ..) = l7r_guard::shared::log::civil(now.saturating_sub(7 * 86_400));
     format!("{y:04}-{m:02}-{d:02}")
-}
-
-/// An error as its text, for `map_err`.
-pub(crate) fn text_err(e: impl std::fmt::Display) -> String {
-    e.to_string()
-}
-
-/// Every `.json` under `dir`, recursively, sorted.
-pub(crate) fn json_files(dir: &Path) -> Vec<std::path::PathBuf> {
-    let mut out = Vec::new();
-    let mut todo = vec![dir.to_path_buf()];
-    while let Some(at) = todo.pop() {
-        for entry in std::fs::read_dir(&at).into_iter().flatten().flatten() {
-            let path = entry.path();
-            if path.is_dir() {
-                todo.push(path);
-            } else if path.extension().is_some_and(|x| x == "json") {
-                out.push(path);
-            }
-        }
-    }
-    out.sort();
-    out
-}
-
-/// Python's `median` of what is given: the middle, or the mean of the middle two.
-pub(crate) fn median(values: &mut [f64]) -> f64 {
-    values.sort_by(f64::total_cmp);
-    let n = values.len();
-    if n % 2 == 1 {
-        values[n / 2]
-    } else {
-        values[n / 2 - 1].midpoint(values[n / 2])
-    }
 }
 
 #[cfg(test)]

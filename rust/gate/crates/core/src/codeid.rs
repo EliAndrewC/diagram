@@ -207,12 +207,20 @@ impl Cache {
 }
 
 /// A fallible call's error as this crate's text, naming what was being done.
-pub(crate) fn stated<T>(done: std::io::Result<T>, what: &str) -> Result<T, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn stated<T>(done: std::io::Result<T>, what: &str) -> Result<T, String> {
     done.map_err(said(what))
 }
 
 /// JSON text, or why not.
-pub(crate) fn parsed(text: &str, what: &str) -> Result<Value, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn parsed(text: &str, what: &str) -> Result<Value, String> {
     serde_json::from_str(text).map_err(|e| format!("{what}: {e}"))
 }
 
