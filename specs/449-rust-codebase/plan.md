@@ -392,45 +392,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T92 to T92 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T93 to T93 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 
-### T95 (the full l7r-gate release binary rebuilt after any gate crate edit, FR-012)
-
-- **Approach**: the three tool binaries (`l7r-gate`, `l7r-rust`, `l7r-guard`) build in a named cargo profile, `[profile.tool]` in `rust/Cargo.toml`, which inherits release and turns incremental compilation on, and `[profile.release]` is left as cargo's default because the hamlet engine's `cargo run --release` (Makefile `HAMLET_RUN`, `rustc.rs`) builds it.
-
-   **Decisions** (FR-012, SC-007):
-   - Cargo's release profile compiles without incremental compilation, so a one-line edit to any gate crate rebuilt the whole release binary, 38-45 s after a comment in core, 21-23 s in tree, 15-17 s in plan, 8.0-8.6 s in claims and 19-21 s in owed (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t95/bench.py` in a scratch clone, the binary built through a copy of `scripts/gates/l7r-gate.sh` after a one-line comment and after its revert, two samples each, `results.jsonl` beside it).
-   - Under the tool profile the same rebuilds took 1.9-2.1 s in core, 2.0 s in tree, 1.4 s in plan, 1.1 s in claims and 1.5 s in owed (observed 2026-11-11, method: the same bench, the same edits), and a one-token code edit gave the same band, 1.3-2.6 s (observed 2026-11-11, method: the same bench, a code token changed in place of the comment).
-   - Rejected, each measured on the same bench (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t95/bench.py` and `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t95/summary.py`): `codegen-units = 256` equals incremental's own default and bought nothing, opt-level 1 saved 0.3-0.5 s a rebuild but slowed the heavy verbs by 30-60%, `lto = "off"` bought nothing and slowed the tool by 15-40%, and the dev profile rebuilt more slowly (2.7-6.0 s) and compiled the guard twice. The `rust-lld` linker saved about 0.4 s more (observed 2026-11-11, method: the same bench, its option f2 linking with `rust-lld`) but needs both wrappers' `RUSTFLAGS` kept identical and a linker installed, so it is left out of this landing.
-   - The tool runs no slower and says the same: the 8 verbs `check spec-lint`, `record record-owed`, `claims owed`, `tunables --inline`, `file-scale`, `conflict`, `research-pointers` and `delta key` gave byte-identical stdout, stderr and exit codes, with spec-lint 1.07-1.12 s before and 1.04-1.21 s after and record-owed 2.78-3.06 s before and 2.86-2.94 s after (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t95/verbs_ab.py`, three alternated runs each against a copy of the release `l7r-gate` taken before the change, outputs hashed).
-   - The guard shares the build: `scripts/hooks/l7r-guard.sh` builds `--profile tool`, its self-check and kept copy read `tool/l7r-guard`, and `tests/hooks/test-l7r-guard.sh`'s fake cargo refuses a build without `--profile tool`, so a wrapper drifting back to release goes red. `make_only_hooks` matches the binaries by name, so its code is unchanged, and one case each in `tests/hooks/test-make-only-hooks.sh` and `make_only_hooks/tests.rs` pins a `tool/l7r-gate` path.
-   - The guard answers the same and no slower: over four hook inputs (a `git status`, a bare `cargo build` it refuses, a `Read` and an `Edit`) the release and tool builds of `l7r-guard` gave identical stdout and exit codes, with a median of 29.9 ms for release and 26.4 ms for tool and a p90 of 46.1 ms and 45.1 ms (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t95/guardlat.py`, 15 alternated rounds of the four inputs through copies of both binaries, the event and guard logs sent to scratch directories).
-   - `l7r-guard bench` compares verdicts, not times, and runs the current guard in its own process, so its release-built baseline is no comparison across profiles.
-   - Left in release on purpose: the hamlet engine's run, and `bench.rs`'s baseline build, which builds the guard as it stood at an older commit whose manifest may not define the profile, into its own worktree's target.
-   - Its costs: the `tool/` directory is 485 MB per clone target against release's 141 MB, and a cold tool build took 34.1 s, `l7r-rust` 0.36 s after it (observed 2026-11-11, method: `du -sh` on the target and `/usr/bin/time` on the wrapper). `rust/Cargo.toml` is in every crate's kept-result key, so the first `make rust-test` after landing reruns every crate once, 88.0 s here (observed 2026-11-11, method: `make rust-test` timed once after the change).
-   - What it leaves: `make static` after a fresh comment in core took 103.3 s and in claims 64.8 s, and 6.5 s and 4.7 s after the revert (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t95/static_runs.sh`, one timed run each). The gate rebuild is about 2 s of that (observed 2026-11-11, method: the tool-profile bench above), the rest being the lint, coverage and dead-code runs T93's key reruns for the edited crate and every crate built on it, which is T96's measurement.
-
-### T95 Approach (checklist part A)
-
-1. **The goal, in the world.** A gate crate edit costs a couple of seconds of tool rebuild before any make target that runs the tool.
-2. **The constraints.** FR-012 and SC-007: every output and verdict the tool gives today held, the hamlet engine's release build untouched.
-3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the bench and the verb comparison above.
-4. **Do they describe the world here?** Measured on a scratch clone of this tree and then on this clone.
-5. **The order.** First of T95-T99, since T96 touches the same profile settings.
-6. **The exits.** Green: the guard suite, `make rust-test` and `make static` green on the change, the verbs identical, `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The rebuild figures above, and `bash tests/hooks/test-l7r-guard.sh` 31 passed in 1.8 s with all 19 crates of `make rust-test` green (observed 2026-11-11, method: those commands on this clone after the change).
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** yes, tooling build time, not the generator, so the checklist's generator tools do not apply:
-1. **Where does the time go?** The release profile's non-incremental compile of the whole tool binary after any gate crate edit, measured by crate above.
-2. **Does the change remove work, or only move it?** Removes it: incremental compilation keeps the unchanged code's compiled parts instead of compiling them again.
-3. **What do you expect it to save, and why?** Most of each rebuild, since a one-line edit touches a small part of the binary, which the bench confirmed.
-4. **How does the work grow?** With the edited crate's size rather than the whole binary's, so it no longer grows with every crate ported.
-5. **What did the before and after show, and under what conditions?** The bench's two samples per crate and option, edits and reverts alternated on a throttled host, and the verb and guard comparisons above, alternated, read as evidence.
-6. **Did any map move?** No: no engine code changes and the hamlet engine's release build is untouched.
-
-
+<!-- plan-archive: T95 to T95 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 ### T96 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
