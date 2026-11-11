@@ -2,11 +2,11 @@
 //! remote path that was here was deleted, not ported (FR-001a; the GM, 2026-11-09: "Let's delete rather than port our tooling which
 //! runs our tests remotely on AWS."); its history is in git.
 
-pub(crate) mod config;
-pub(crate) mod features;
-pub(crate) mod gated;
-pub(crate) mod switches;
-pub(crate) mod via_make;
+pub mod config;
+pub mod features;
+pub mod gated;
+pub mod switches;
+pub mod via_make;
 
 #[cfg(test)]
-pub(crate) use l7r_gate_core::ci::fixtures;
+pub use l7r_gate_core::ci::fixtures;

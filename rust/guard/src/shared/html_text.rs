@@ -6,7 +6,7 @@ use std::sync::LazyLock;
 use fancy_regex::{Captures, Regex};
 
 /// `CPython`'s own entity tables, generated once from `html.entities.html5`, `html._invalid_charrefs` and `html._invalid_codepoints`: `html.unescape`, whole.
-const HTML5: &str = include_str!("../../../gate/src/record/html5_entities.tsv");
+const HTML5: &str = include_str!("../../../gate/crates/record/src/record/html5_entities.tsv");
 
 static ENTITY: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"&(#[0-9]+;?|#[xX][0-9a-fA-F]+;?|[^\t\n\f <&#;]{1,32};?)")

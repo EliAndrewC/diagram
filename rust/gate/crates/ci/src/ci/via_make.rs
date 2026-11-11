@@ -7,7 +7,7 @@ const MAKE_COMMS: [&str; 3] = ["make", "gmake", "remake"];
 const FLAGS: [&str; 3] = ["-f", "--file", "--makefile"];
 
 /// What this check reads of the process table, so that a test can give it any tree.
-pub(crate) trait Procs {
+pub trait Procs {
     /// Every pid from this process up to the top, nearest first.
     fn ancestry(&self) -> Vec<u32>;
     fn comm(&self, pid: u32) -> String;
@@ -15,7 +15,7 @@ pub(crate) trait Procs {
     fn cmdline(&self, pid: u32) -> Vec<String>;
 }
 
-pub(crate) struct Live;
+pub struct Live;
 
 /// The parent named by a `/proc/<pid>/stat`: after the last `)`, since a process's name may itself hold spaces or parentheses.
 fn parent_of(stat: &str) -> Option<u32> {
@@ -106,7 +106,7 @@ fn foreign_makefile(argv: &[String], make_cwd: &str, repo: &Path) -> bool {
 }
 
 /// (is this process under this project's make, why not).
-pub(crate) fn compute(procs: &dyn Procs, repo: &Path) -> (bool, &'static str) {
+pub fn compute(procs: &dyn Procs, repo: &Path) -> (bool, &'static str) {
     let mut saw_make = false;
     for pid in procs.ancestry() {
         if !MAKE_COMMS.contains(&procs.comm(pid).as_str()) {
@@ -129,7 +129,7 @@ pub(crate) fn compute(procs: &dyn Procs, repo: &Path) -> (bool, &'static str) {
 }
 
 /// The refusal for `operation`, or None under this project's make; a refusal that does not say what to run instead is a bug.
-pub(crate) fn refusal(
+pub fn refusal(
     procs: &dyn Procs,
     repo: &Path,
     operation: &str,

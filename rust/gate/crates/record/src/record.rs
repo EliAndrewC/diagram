@@ -186,7 +186,11 @@ fn is_task(task: &str) -> bool {
 }
 
 /// Close the numbered rows (1-based, file order): filed as `task`, or settled with `why`, refusing a row already closed.
-pub(crate) fn close_rows(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn close_rows(
     rows: &mut [Value],
     numbers: &[usize],
     task: &str,
@@ -324,7 +328,7 @@ fn found(args: &[String]) -> Reply {
 }
 
 /// `l7r-gate record canon | money-conversions | found ...`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String]) -> Reply {
     let rest = args.get(1..).unwrap_or(&[]);
     match args.first().map(String::as_str) {
         Some("canon") => canon(rest, &CANON_ROOTS.map(PathBuf::from)),

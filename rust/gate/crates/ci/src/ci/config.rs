@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub(crate) struct Secrets {
+pub struct Secrets {
     pub github_pat: String,
 }
 
@@ -32,7 +32,8 @@ fn candidates(root: &Path, from_env: Option<PathBuf>) -> Vec<PathBuf> {
 }
 
 /// `section -> key -> value`, as `configparser` reads this file: `key = value` or `key: value`, a `#` or `;` line a comment.
-pub(crate) fn ini(text: &str) -> HashMap<String, HashMap<String, String>> {
+#[must_use]
+pub fn ini(text: &str) -> HashMap<String, HashMap<String, String>> {
     let mut sections: HashMap<String, HashMap<String, String>> = HashMap::new();
     let mut current = String::new();
     for raw in text.lines() {
@@ -75,7 +76,10 @@ fn load_from(places: &[PathBuf]) -> Result<Secrets, String> {
     })
 }
 
-pub(crate) fn load_secrets(root: &Path) -> Result<Secrets, String> {
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn load_secrets(root: &Path) -> Result<Secrets, String> {
     load_from(&candidates(
         root,
         std::env::var_os("DIAGRAM_SECRETS").map(PathBuf::from),
@@ -83,7 +87,8 @@ pub(crate) fn load_secrets(root: &Path) -> Result<Secrets, String> {
 }
 
 /// `l7r-gate github-token`: the push's credential, from the same file; a tree with no secrets answers nothing, and the push then reports its own failure.
-pub(crate) fn github_token(root: &Path) -> crate::Reply {
+#[must_use]
+pub fn github_token(root: &Path) -> crate::Reply {
     token_reply(load_secrets(root))
 }
 

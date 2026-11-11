@@ -41,11 +41,11 @@ static FR: LazyLock<Regex> = LazyLock::new(|| compiled(r"FR-\d{3}[a-z]?"));
 static COMMON_SET: LazyLock<HashSet<&'static str>> = LazyLock::new(|| COMMON.split(' ').collect());
 
 /// The files of a feature directory, by path relative to it.
-pub(crate) type Files = BTreeMap<String, String>;
+pub type Files = BTreeMap<String, String>;
 
 /// One thing to look at.
 #[derive(Debug, PartialEq, Eq)]
-pub(crate) struct Candidate {
+pub struct Candidate {
     file: String,
     line: usize,
     subject: String,
@@ -134,7 +134,7 @@ fn watched_lines<'a>(name: &str, text: &'a str) -> Vec<(usize, &'a str)> {
 }
 
 /// Every line of `new` that names a changed line's subject and still carries its old value.
-pub(crate) fn stale_candidates(old: &Files, new: &Files) -> Vec<Candidate> {
+pub fn stale_candidates(old: &Files, new: &Files) -> Vec<Candidate> {
     let wrote: HashMap<&String, HashMap<usize, String>> = new
         .iter()
         .map(|(n, t)| (n, rewritten_from(old.get(n), t)))
@@ -226,7 +226,7 @@ fn items(text: &str, pattern: &Regex) -> BTreeMap<String, (usize, String, String
 }
 
 /// Each success criterion that cites a requirement the change REWROTE and was not itself touched (feature 442).
-pub(crate) fn criteria_left_behind(old: &Files, new: &Files) -> Vec<Candidate> {
+pub fn criteria_left_behind(old: &Files, new: &Files) -> Vec<Candidate> {
     let mut found = Vec::new();
     for (name, text) in new {
         let Some(before) = old
@@ -274,7 +274,7 @@ pub(crate) fn criteria_left_behind(old: &Files, new: &Files) -> Vec<Candidate> {
     found
 }
 
-pub(crate) fn render(found: &[Candidate]) -> String {
+pub fn render(found: &[Candidate]) -> String {
     if found.is_empty() {
         return "stale-terms: no candidate - no line names a changed line's subject and still carries its old value".to_owned();
     }
@@ -388,7 +388,7 @@ fn refused(words: &str) -> Reply {
 }
 
 /// `record stale-terms <feature> [--clone DIR] [--against REF]`: exit 1 with candidates, as a search that found something.
-pub(crate) fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String]) -> Reply {
     let flag = |name: &str| {
         args.windows(2)
             .find(|w| w[0] == name)
@@ -427,7 +427,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
 }
 
 /// `record stale-dirs <old dir> <new dir>`: the review-round guard's question: the count and the rendered candidates, or nothing.
-pub(crate) fn dirs_cli(args: &[String]) -> Reply {
+pub fn dirs_cli(args: &[String]) -> Reply {
     let [old, new] = args else {
         return refused("usage: l7r-gate record stale-dirs <old dir> <new dir>");
     };

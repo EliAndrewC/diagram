@@ -1,0 +1,22 @@
+# The research record's small tools and its dispatcher (feature 449 T92's split): `l7r-gate record <verb>`.
+[package]
+name = "l7r_gate_record"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_bundle = { path = "../bundle" }
+l7r_gate_core = { path = "../core" }
+l7r_gate_downloads = { path = "../downloads" }
+l7r_gate_trials = { path = "../trials" }
+l7r_guard = { path = "../../../guard" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

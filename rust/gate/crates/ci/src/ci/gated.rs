@@ -197,7 +197,8 @@ fn guarded(
     cli(args, root, python, specify)
 }
 
-pub(crate) fn entry(args: &[String], root: &Path) -> crate::Reply {
+#[must_use]
+pub fn entry(args: &[String], root: &Path) -> crate::Reply {
     let specify = std::env::var("SPECIFY_FEATURE").ok();
     guarded(args, root, &via_make::Live, "python3", specify.as_deref())
 }

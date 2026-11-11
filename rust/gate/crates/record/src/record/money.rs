@@ -124,7 +124,7 @@ fn cited_years(page: &Path) -> HashMap<String, Vec<i64>> {
 
 /// One unmarked amount.
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub(crate) struct Amount {
+pub struct Amount {
     stem: String,
     text: String,
     years: Vec<i64>,
@@ -268,7 +268,7 @@ fn scan(
 }
 
 /// Every unmarked amount in a coin of these money systems, nearest a built era first.
-pub(crate) fn amounts(root: &Path) -> Vec<Amount> {
+pub fn amounts(root: &Path) -> Vec<Amount> {
     let known = eras(root);
     let pattern = amount_pattern(&known);
     let folder = root.join(QUESTIONS);
@@ -309,7 +309,7 @@ fn is_named(a: &Amount, named: &BTreeSet<(String, String)>) -> bool {
 }
 
 /// `record money-candidates [--check] [--all] [--stem S] [--context]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> Reply {
+pub fn cli(args: &[String], root: &Path) -> Reply {
     let has = |n: &str| args.iter().any(|a| a == n);
     let stem = args
         .windows(2)

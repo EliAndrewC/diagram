@@ -474,7 +474,7 @@ fn selftest() -> Reply {
 }
 
 /// `record fragment-move FROM TO [--root DIR] | --selftest`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String]) -> Reply {
     if args.first().is_some_and(|a| a == "--selftest") {
         return selftest();
     }

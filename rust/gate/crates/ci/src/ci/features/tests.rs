@@ -87,7 +87,7 @@ fn a_long_list_is_cut_at_three_and_a_python_that_cannot_start_holds_nothing() {
 #[test]
 fn the_merge_and_the_review_gate_read_one_verdict() {
     let dir = repo("one-verdict");
-    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scripts");
+    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
     std::os::unix::fs::symlink(real, dir.join("scripts")).unwrap();
     put(&dir, "specs/9-x/tasks.md", "- [x] T01 done\n");
     for (body, want) in [

@@ -7,7 +7,7 @@ use std::process::Command;
 use crate::codeid;
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub(crate) struct FeatureStatus {
+pub struct FeatureStatus {
     pub name: Option<String>,
     pub exists: bool,
     pub faithful: bool,
@@ -15,11 +15,13 @@ pub(crate) struct FeatureStatus {
 }
 
 impl FeatureStatus {
-    pub(crate) fn complete(&self) -> bool {
+    #[must_use]
+    pub fn complete(&self) -> bool {
         self.exists && self.faithful && self.open_tasks.is_empty()
     }
 
-    pub(crate) fn why(&self) -> String {
+    #[must_use]
+    pub fn why(&self) -> String {
         let Some(name) = &self.name else {
             return "no spec-kit feature is named (export SPECIFY_FEATURE=NNN-slug, or .specify/feature.json) - diagram engine work always has one".to_owned();
         };
@@ -56,7 +58,7 @@ impl FeatureStatus {
 }
 
 /// `SPECIFY_FEATURE`, or the last part of `.specify/feature.json`'s `feature_directory`.
-pub(crate) fn active_feature(root: &Path, from_env: Option<&str>) -> Option<String> {
+pub fn active_feature(root: &Path, from_env: Option<&str>) -> Option<String> {
     let named = from_env.map(str::trim).filter(|v| !v.is_empty());
     if let Some(name) = named {
         return Some(name.to_owned());
@@ -89,7 +91,7 @@ fn ask(root: &Path, python: &str, rel: &str, args: &[&str]) -> (String, bool) {
     )
 }
 
-pub(crate) fn feature_status(root: &Path, name: Option<&str>, python: &str) -> FeatureStatus {
+pub fn feature_status(root: &Path, name: Option<&str>, python: &str) -> FeatureStatus {
     let Some(name) = name else {
         return FeatureStatus::default();
     };

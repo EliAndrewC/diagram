@@ -18,7 +18,7 @@ const DEFAULT_PORT: &str = "rust-only";
 const IDLE_TIMER_MARK: &str = "--idle-tests";
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub(crate) struct Axis {
+pub struct Axis {
     pub state: String,
     pub why: String,
     pub who: String,
@@ -39,7 +39,7 @@ impl Axis {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct Switches {
+pub struct Switches {
     /// Non-empty when the file was malformed: the axes are then closed.
     pub error: String,
     pub claims: Axis,
@@ -122,7 +122,8 @@ fn axis(data: &Value, name: &str, allowed: &[&str; 2], default: &str) -> Result<
     })
 }
 
-pub(crate) fn read(root: &Path) -> Switches {
+#[must_use]
+pub fn read(root: &Path) -> Switches {
     let path = root.join(FILE);
     if !path.is_file() {
         return Switches::defaults();
@@ -168,7 +169,11 @@ fn who_am_i(root: &Path) -> String {
 }
 
 /// Set one axis, keeping the others; a malformed file is replaced here, the throw being the repair and a diff someone reads.
-pub(crate) fn write(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn write(
     root: &Path,
     name: &str,
     state: &str,
@@ -227,7 +232,8 @@ fn described(name: &str, a: &Axis, default: &str) -> String {
     }
 }
 
-pub(crate) fn describe(sw: &Switches) -> String {
+#[must_use]
+pub fn describe(sw: &Switches) -> String {
     let mut head = "switches (dev/switches.json):".to_owned();
     if !sw.error.is_empty() {
         let _ = write!(
@@ -245,12 +251,12 @@ pub(crate) fn describe(sw: &Switches) -> String {
 }
 
 /// The process table this needs, injected so that which exit of the walk a test reaches is not decided by the machine (feature 174).
-pub(crate) trait Table {
+pub trait Table {
     fn parent(&self, pid: u32) -> Option<u32>;
     fn cmdline(&self, pid: u32) -> String;
 }
 
-pub(crate) struct LiveTable;
+pub struct LiveTable;
 
 impl Table for LiveTable {
     fn parent(&self, pid: u32) -> Option<u32> {
@@ -282,7 +288,7 @@ fn ancestors(pid: u32, table: &dyn Table) -> Vec<u32> {
 }
 
 /// Does this process descend from the idle timer that wrote `.git/idle-tests.running`? The Makefile's `DONE_NAME` picks `idle-done` from it, the mechanism by which an unattended gate neither grants nor revokes a push.
-pub(crate) fn idle_context(top: &Path, pid: u32, table: &dyn Table) -> bool {
+pub fn idle_context(top: &Path, pid: u32, table: &dyn Table) -> bool {
     let Some(timer) = std::fs::read_to_string(top.join(".git/idle-tests.running"))
         .ok()
         .and_then(|t| t.trim().parse::<u32>().ok())
@@ -296,7 +302,7 @@ pub(crate) fn idle_context(top: &Path, pid: u32, table: &dyn Table) -> bool {
 }
 
 /// `l7r-gate switches show | state AXIS | idle | set AXIS STATE --why W`.
-pub(crate) fn cli(args: &[String], root: &Path, utc: &str) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path, utc: &str) -> crate::Reply {
     let say = |stdout: String, stderr: String, code: i32| crate::Reply {
         stdout,
         stderr,
@@ -334,7 +340,7 @@ fn utc_of(secs: u64) -> String {
 }
 
 /// `l7r-gate switches ...`, refused outside this project's make.
-pub(crate) fn guarded(
+pub fn guarded(
     args: &[String],
     root: &Path,
     procs: &dyn super::via_make::Procs,

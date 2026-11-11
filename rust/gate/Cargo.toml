@@ -14,6 +14,7 @@ fancy-regex = { workspace = true }
 l7r_gate_arbiter = { path = "crates/arbiter" }
 l7r_gate_bundle = { path = "crates/bundle" }
 l7r_gate_checks = { path = "crates/checks" }
+l7r_gate_ci = { path = "crates/ci" }
 l7r_gate_claims = { path = "crates/claims" }
 l7r_gate_cohort = { path = "crates/cohort" }
 l7r_gate_core = { path = "crates/core" }
@@ -21,6 +22,7 @@ l7r_gate_measure = { path = "crates/measure" }
 l7r_gate_owed = { path = "crates/owed" }
 l7r_gate_plan = { path = "crates/plan" }
 l7r_gate_downloads = { path = "crates/downloads" }
+l7r_gate_record = { path = "crates/record" }
 l7r_gate_reviews = { path = "crates/reviews" }
 l7r_gate_tree = { path = "crates/tree" }
 l7r_gate_trials = { path = "crates/trials" }
