@@ -1,6 +1,7 @@
 //! The pop-up triage (from `modal_triage.py`, feature 449 T87): a drawing or question page's edit owes a pop-up's checks only where it bears on that pop-up. `make modal-triage` writes one bundle of each moved page's changed blocks and the pop-ups naming it; `make modal-triaged` applies a triage reply, answering what the reply leaves alone and marking what it names.
 
 use std::collections::HashSet;
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -16,6 +17,9 @@ use super::owed::{self, answered as is_answered, merge_base, read_answer, write_
 use super::repo::{fail, git, read_text, read_universal, Fail};
 use super::units::re;
 use crate::Reply;
+
+/// A subcommand of the triage.
+type Runner = fn(&Path, &Parsed) -> Result<Reply, Fail>;
 
 const DEFAULT_OUT: &str = "/tmp/l7r-check";
 const TOUCHED: &str = "modal-triage-touched.json";
@@ -125,9 +129,13 @@ fn baseline(store: &Path, slug: &str, path: &str) -> String {
 }
 
 /// (blocks new or changed, blocks removed) between two versions of a page.
-fn changed_blocks(old: &str, new: &str) -> (Vec<String>, Vec<String>) {
+fn changed_blocks(old: &str, fresh: &str) -> (Vec<String>, Vec<String>) {
     let was: Vec<String> = read_page(old).blocks.into_iter().map(|b| b.words).collect();
-    let now: Vec<String> = read_page(new).blocks.into_iter().map(|b| b.words).collect();
+    let now: Vec<String> = read_page(fresh)
+        .blocks
+        .into_iter()
+        .map(|b| b.words)
+        .collect();
     let (old_set, new_set): (HashSet<&String>, HashSet<&String>) =
         (was.iter().collect(), now.iter().collect());
     (
@@ -169,72 +177,18 @@ type ByPage = std::collections::BTreeMap<
     std::collections::BTreeMap<String, std::collections::BTreeSet<String>>,
 >;
 
-/// Write the triage bundle (`MANIFEST.md`, `triage.json`); (its MANIFEST, how many units), or None for no unit owed one.
-pub(crate) fn bundle(
-    root: &Path,
-    out: &Path,
-    base: &str,
-) -> Result<Option<(PathBuf, usize)>, Fail> {
-    let base = if base.is_empty() {
-        merge_base(root)
-    } else {
-        base.to_owned()
-    };
-    let store = owed::store(root);
-    let units = pending(root, &base, &store, None)?;
-    if units.is_empty() {
-        return Ok(None);
-    }
-    let modals_now: Vec<(String, Modal)> = modals::modals_now(root, false)?
-        .into_iter()
-        .map(|m| (m.uid(), m))
-        .collect();
-    let find = |uid: &str| modals_now.iter().find(|(u, _)| u == uid).map(|(_, m)| m);
-    let mut read = modals::read_at(root, &base);
-    let mut by_page: ByPage = ByPage::new();
-    let mut blocks: std::collections::HashMap<(String, String), (Vec<String>, Vec<String>)> =
-        std::collections::HashMap::new();
-    let (mut reads, mut blobs) = (Map::new(), Map::new());
-    for (slug, why, _fp) in &units {
-        let (check, uid) = slug.split_once(':').unwrap_or((slug, ""));
-        let named = |p: &String| why.contains(&name_of(p));
-        for path in find(uid)
-            .map(|m| pages_of(m, check))
-            .unwrap_or_default()
-            .into_iter()
-            .filter(named)
-        {
-            let now = read_universal(&root.join(&path))?.unwrap_or_default();
-            let key = (path.clone(), baseline(&store, slug, &path));
-            if !blocks.contains_key(&key) {
-                let before = page_before(root, &store, slug, &path, &base, &mut read);
-                blocks.insert(key.clone(), changed_blocks(&before, &now));
-            }
-            by_page
-                .entry(key)
-                .or_default()
-                .entry(uid.to_owned())
-                .or_default()
-                .insert(check.to_owned());
-            reads
-                .entry(slug.clone())
-                .or_insert_with(|| json!([]))
-                .as_array_mut()
-                .map(|a| a.push(json!(path)));
-            let row = blobs.entry(slug.clone()).or_insert_with(|| json!({}));
-            if let Some(m) = row.as_object_mut() {
-                m.insert(path.clone(), json!(keep(root, &path)));
-            }
-        }
-    }
-    clear_dir(out)?;
-    std::fs::create_dir_all(out).map_err(fail)?;
+/// What a page changed: its blocks new or changed, and removed, keyed as [`ByPage`] is.
+type Changed = std::collections::HashMap<(String, String), (Vec<String>, Vec<String>)>;
+
+/// The bundle's `MANIFEST.md`, part by part: each moved page's changed blocks and the pop-ups naming it.
+fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]) -> Vec<String> {
+    let find = |uid: &str| modals.iter().find(|(u, _)| u == uid).map(|(_, m)| m);
     let mut parts = vec![
         "# Triage of pop-up checks (feature 375, FR-001)\n".to_owned(),
         "owed-checks: modal-triage\n".to_owned(),
         "For the `modal-triage` agent: rule on each pop-up below as your contract says, and reply in its form.\n".to_owned(),
     ];
-    for (key, popups) in &by_page {
+    for (key, popups) in by_page {
         let (path, base_blob) = key;
         let (fresh, gone) = &blocks[key];
         let against = if base_blob.is_empty() {
@@ -272,6 +226,71 @@ pub(crate) fn bundle(
         }
         parts.push(String::new());
     }
+    parts
+}
+
+/// Write the triage bundle (`MANIFEST.md`, `triage.json`); (its MANIFEST, how many units), or None for no unit owed one.
+pub(crate) fn bundle(
+    root: &Path,
+    out: &Path,
+    base: &str,
+) -> Result<Option<(PathBuf, usize)>, Fail> {
+    let base = if base.is_empty() {
+        merge_base(root)
+    } else {
+        base.to_owned()
+    };
+    let store = owed::store(root);
+    let units = pending(root, &base, &store, None)?;
+    if units.is_empty() {
+        return Ok(None);
+    }
+    let modals_now: Vec<(String, Modal)> = modals::modals_now(root, false)?
+        .into_iter()
+        .map(|m| (m.uid(), m))
+        .collect();
+    let find = |uid: &str| modals_now.iter().find(|(u, _)| u == uid).map(|(_, m)| m);
+    let mut read = modals::read_at(root, &base);
+    let mut by_page: ByPage = ByPage::new();
+    let mut blocks = Changed::new();
+    let (mut reads, mut blobs) = (Map::new(), Map::new());
+    for (slug, why, _fp) in &units {
+        let (check, uid) = slug.split_once(':').unwrap_or((slug, ""));
+        let named = |p: &String| why.contains(&name_of(p));
+        for path in find(uid)
+            .map(|m| pages_of(m, check))
+            .unwrap_or_default()
+            .into_iter()
+            .filter(named)
+        {
+            let now = read_universal(&root.join(&path))?.unwrap_or_default();
+            let key = (path.clone(), baseline(&store, slug, &path));
+            if !blocks.contains_key(&key) {
+                let before = page_before(root, &store, slug, &path, &base, &mut read);
+                blocks.insert(key.clone(), changed_blocks(&before, &now));
+            }
+            by_page
+                .entry(key)
+                .or_default()
+                .entry(uid.to_owned())
+                .or_default()
+                .insert(check.to_owned());
+            if let Some(a) = reads
+                .entry(slug.clone())
+                .or_insert_with(|| json!([]))
+                .as_array_mut()
+            {
+                a.push(json!(path));
+            }
+            let row = blobs.entry(slug.clone()).or_insert_with(|| json!({}));
+            if let Some(m) = row.as_object_mut() {
+                m.insert(path.clone(), json!(keep(root, &path)));
+            }
+        }
+    }
+    clear_dir(out)?;
+    std::fs::create_dir_all(out).map_err(fail)?;
+    let parts = manifest_parts(&by_page, &blocks, &modals_now);
     let manifest = out.join("MANIFEST.md");
     std::fs::write(&manifest, parts.join("\n") + "\n").map_err(fail)?;
     let units_map: Map<String, Value> = units
@@ -481,10 +500,10 @@ fn run_record(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     )?;
     let mut out = String::new();
     for msg in &msgs {
-        out.push_str(&format!("modal-triaged: {msg}\n"));
+        let _ = writeln!(out, "modal-triaged: {msg}");
     }
     let n = msgs.iter().filter(|m| m.starts_with("touched")).count();
-    out.push_str(&format!("modal-triaged: {n} of {} unit(s) sent on to their checks; the rest answered `triage: untouched`\n", units.len()));
+    let _ = writeln!(out, "modal-triaged: {n} of {} unit(s) sent on to their checks; the rest answered `triage: untouched`", units.len());
     Ok(Reply {
         stdout: out,
         stderr: String::new(),
@@ -516,7 +535,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         args.get(split_at).map_or("", String::as_str),
         args.get(split_at + 1..).unwrap_or(&[]),
     );
-    let (specs, runner): (&[Spec], fn(&Path, &Parsed) -> Result<Reply, Fail>) = match verb {
+    let (specs, runner): (&[Spec], Runner) = match verb {
         "bundle" => (&[Spec::value("--out")], run_bundle),
         "record" => (
             &[Spec::value("--bundle"), Spec::value("--reply")],

@@ -224,7 +224,9 @@ pub(crate) fn stem_of(name: &str) -> Option<(String, String)> {
 /// the merge base and the tree, for the listing and again for what is unanswered - 7.5 s against the Python's 2.5 s with its disk cache;
 /// the base and the tree share nearly every file). In memory only, for the process: a text is its own key, so nothing kept is stale.
 static PAGES: LazyLock<std::sync::Mutex<HashMap<String, Page>>> = LazyLock::new(Default::default);
-static NOTES: LazyLock<std::sync::Mutex<HashMap<(String, String), std::sync::Arc<NotesParse>>>> =
+/// A notes file and its originals, the key of its kept parse.
+type NotesKey = (String, String);
+static NOTES: LazyLock<std::sync::Mutex<HashMap<NotesKey, std::sync::Arc<NotesParse>>>> =
     LazyLock::new(Default::default);
 /// Past this many texts a kept table starts again: the door lives a whole run, and a run reads two revisions.
 const KEPT: usize = if cfg!(test) { 8 } else { 20_000 };

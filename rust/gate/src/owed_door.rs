@@ -33,7 +33,7 @@ fn strings(v: Option<&Value>) -> Vec<String> {
         .collect()
 }
 
-fn unit_list(rows: Vec<units::Unit>) -> Value {
+fn unit_list(rows: &[units::Unit]) -> Value {
     Value::Array(rows.iter().map(units::Unit::json).collect())
 }
 
@@ -74,7 +74,7 @@ fn rows_of(v: Option<&Value>) -> Option<Vec<(String, String, String)>> {
     })
 }
 
-fn modal_list(found: Vec<Modal>) -> Value {
+fn modal_list(found: &[Modal]) -> Value {
     Value::Array(found.iter().map(Modal::json).collect())
 }
 
@@ -135,7 +135,7 @@ fn ro_verb(verb: &str, args: &[Value]) -> Result<Option<Value>, Fail> {
             } else {
                 fam.iter().map(String::as_str).collect()
             };
-            unit_list(owed::units(
+            unit_list(&owed::units(
                 &root,
                 opt_str(args, 1),
                 opt_str(args, 2),
@@ -143,7 +143,7 @@ fn ro_verb(verb: &str, args: &[Value]) -> Result<Option<Value>, Fail> {
                 arg(args, 4),
             )?)
         }
-        "ro.unanswered" => unit_list(owed::unanswered(&root)?),
+        "ro.unanswered" => unit_list(&owed::unanswered(&root)?),
         "ro.merge_base" => json!(owed::merge_base(&root)),
         "ro.git" => json!(git(
             &root,
@@ -209,7 +209,7 @@ fn mo_verb(verb: &str, args: &[Value]) -> Result<Option<Value>, Fail> {
     let root = path_arg(args, 0);
     let modal = |i: usize| Modal::from_json(args.get(i).unwrap_or(&Value::Null));
     Ok(Some(match verb {
-        "mo.modals_now" => modal_list(modals::modals_now(
+        "mo.modals_now" => modal_list(&modals::modals_now(
             &root,
             args.get(1).and_then(Value::as_bool).unwrap_or(true),
         )?),

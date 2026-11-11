@@ -36,6 +36,10 @@ sys.stdout.write(json.dumps(out))";
 /// (notes file, key, language, translation, original).
 pub(crate) type Row = (String, String, String, String, String);
 type Where = (String, String, String, String);
+/// A (translation, original) pair and where it stands.
+type Pairs = ((String, String), Vec<Where>);
+/// A file of the record, read now or at a revision.
+type Reader = dyn FnMut(&str) -> Result<String, Fail>;
 
 fn usage(line: &str) -> Reply {
     Reply {
@@ -109,7 +113,7 @@ fn record_files(
     root: &Path,
     rev: Option<&str>,
 ) -> Result<Vec<(String, String, String, String)>, Fail> {
-    let mut read: Box<dyn FnMut(&str) -> Result<String, Fail>>;
+    let mut read: Box<Reader>;
     let names: Vec<String> = if let Some(rev) = rev {
         let listing = git_any(
             root,
@@ -201,7 +205,7 @@ fn record_pairs(
     rev: Option<&str>,
     parser: &str,
     cache: &mut Map<String, Value>,
-) -> Result<Vec<((String, String), Vec<Where>)>, Fail> {
+) -> Result<Vec<Pairs>, Fail> {
     let files = record_files(root, rev)?;
     let (mut keys, mut missing, mut items) =
         (Vec::with_capacity(files.len()), HashSet::new(), Vec::new());

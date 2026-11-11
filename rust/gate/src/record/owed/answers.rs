@@ -1,6 +1,7 @@
 //! The record of what a check answered (from `record_owed.py`, feature 449 T87): `<git common dir>/record-checks/<slug>.json`, per unit, its fingerprint and every fingerprint ever answered. One writer here; the guards read it.
 
 use std::collections::HashSet;
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -74,7 +75,7 @@ fn quoted(slug: &str) -> String {
         if b.is_ascii_alphanumeric() || b"_.-~".contains(&b) {
             out.push(char::from(b));
         } else {
-            out.push_str(&format!("%{b:02X}"));
+            let _ = write!(out, "%{b:02X}");
         }
     }
     out
@@ -486,7 +487,7 @@ fn modal_then(root: &Path, m: &Modal, utc: &str) -> Option<Modal> {
         ],
     );
     let then = then.trim();
-    if then.is_empty() || !rel.ends_with(".md") {
+    if then.is_empty() || !rel.as_bytes().ends_with(b".md") {
         return None;
     }
     let text = git(root, &["show", &format!("{then}:{rel}")]);
@@ -594,7 +595,10 @@ fn token_hex() -> String {
     let mut bytes = [0u8; 3];
     let _ = std::fs::File::open("/dev/urandom")
         .and_then(|mut f| std::io::Read::read_exact(&mut f, &mut bytes));
-    bytes.iter().map(|b| format!("{b:02x}")).collect()
+    bytes.iter().fold(String::new(), |mut out, b| {
+        let _ = write!(out, "{b:02x}");
+        out
+    })
 }
 
 /// A stated reason, written where `make audit` reads every escape.
@@ -615,11 +619,11 @@ pub(crate) fn quotation_keys(
     rev: Option<&str>,
     slugs: &[String],
 ) -> Result<std::collections::HashMap<String, String>, Fail> {
-    let rec = super::read_at(root, rev, Some(&HashSet::new()))?;
+    let record = super::read_at(root, rev, Some(&HashSet::new()))?;
     Ok(slugs
         .iter()
         .filter(|s| s.starts_with("quote-check:") && !s.ends_with("#unfootnoted"))
-        .map(|s| (s.clone(), ru::quotation_key(&rec, s)))
+        .map(|s| (s.clone(), ru::quotation_key(&record, s)))
         .collect())
 }
 
@@ -644,7 +648,7 @@ pub(crate) fn fixed_answer(
     let now = quotation_keys(root, None, &slugs)?;
     let base_rev = merge_base(root);
     let base = if base_rev.is_empty() {
-        Default::default()
+        std::collections::HashMap::default()
     } else {
         quotation_keys(root, Some(&base_rev), &slugs)?
     };
@@ -779,7 +783,7 @@ pub(crate) fn answer(
         let qk = if check == "quote-check" {
             quotation_keys(root, None, &done)?
         } else {
-            Default::default()
+            std::collections::HashMap::default()
         };
         for slug in &done {
             keep_reading(
@@ -856,35 +860,35 @@ pub(crate) fn file_outside(
     Ok(out)
 }
 
-fn fail_line(code: i32, stderr: String) -> Result<Reply, Fail> {
-    Ok(Reply {
+fn fail_line(code: i32, stderr: &str) -> Reply {
+    Reply {
         stdout: String::new(),
-        stderr: stderr + "\n",
+        stderr: format!("{stderr}\n"),
         code,
-    })
+    }
 }
 
 fn run_fixed(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     let (q, notes) = (parsed.text("--q", ""), parsed.text("--notes", ""));
     if parsed.text("--answer", "") != "quote-check" || q.is_empty() || notes.is_empty() {
-        return fail_line(2, "record-checked: FIXED_BY= declares a fix of another check's finding on quote-check notes: CHECK=quote-check Q=<NNNN> NOTES=<k,k> FIXED_BY=\"<check>: <its finding>\"".to_owned());
+        return Ok(fail_line(2, "record-checked: FIXED_BY= declares a fix of another check's finding on quote-check notes: CHECK=quote-check Q=<NNNN> NOTES=<k,k> FIXED_BY=\"<check>: <its finding>\""));
     }
     let (done, refused) = fixed_answer(root, q, notes, parsed.text("--fixed-by", ""))?;
     if !refused.is_empty() {
-        return fail_line(
+        return Ok(fail_line(
             2,
-            format!(
+            &format!(
                 "record-checked: REFUSED - the quotation or its claim changed, so quote-check is owed (feature 399): {} - check it: make check-bundle Q={} FOR=quote-check NOTES={notes}",
                 refused.join(" "),
                 zfill4(q)
             ),
-        );
+        ));
     }
     if done.is_empty() {
-        return fail_line(
+        return Ok(fail_line(
             3,
-            format!("_record_owed: no owed quote-check unit on {notes} - nothing recorded"),
-        );
+            &format!("_record_owed: no owed quote-check unit on {notes} - nothing recorded"),
+        ));
     }
     Ok(Reply {
         stdout: format!(
@@ -911,10 +915,10 @@ fn run_answer(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
         parsed.text("--bundle", ""),
     );
     if result.is_empty() {
-        return fail_line(
+        return Ok(fail_line(
             2,
-            "_record_owed: --answer needs --result \"<the check's counts>\"".to_owned(),
-        );
+            "_record_owed: --answer needs --result \"<the check's counts>\"",
+        ));
     }
     let (notes, reason) = (parsed.text("--notes", ""), parsed.text("--reason", ""));
     let refusal = if bundle.is_empty() {
@@ -923,7 +927,10 @@ fn run_answer(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
         String::new()
     };
     if !refusal.is_empty() {
-        return fail_line(2, format!("record-checked: REFUSED - {refusal}"));
+        return Ok(fail_line(
+            2,
+            &format!("record-checked: REFUSED - {refusal}"),
+        ));
     }
     let reply_arg = parsed.text("--reply", "");
     let reply = if reply_arg.is_empty() {
@@ -942,12 +949,13 @@ fn run_answer(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     if !reply.is_empty() {
         for row in file_outside(root, check, &reply)? {
             let text = |k: &str| row.get(k).and_then(Value::as_str).unwrap_or("").to_owned();
-            out.push_str(&format!(
-                "record-checked: filed, not fixed - {} | {} | {}\n",
+            let _ = writeln!(
+                out,
+                "record-checked: filed, not fixed - {} | {} | {}",
                 text("file"),
                 text("block"),
                 text("finding")
-            ));
+            );
         }
     }
     if !done.is_empty() && bundle.is_empty() && !reason.is_empty() {
@@ -960,11 +968,12 @@ fn run_answer(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     if done.is_empty() {
         return Ok(Reply { stdout: out, stderr: format!("_record_owed: no owed {check} unit matched - nothing recorded (`make record-owed` lists what is owed)\n"), code: 3 });
     }
-    out.push_str(&format!(
-        "record-checked: {} unit(s) answered - {}\n",
+    let _ = writeln!(
+        out,
+        "record-checked: {} unit(s) answered - {}",
         done.len(),
         done.join(" ")
-    ));
+    );
     Ok(Reply {
         stdout: out,
         stderr: String::new(),

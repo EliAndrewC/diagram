@@ -83,6 +83,10 @@ fn the_listing_names_each_unit_and_its_command() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one scratch record answered in order, each answer read back by the next"
+)]
 fn answers_are_recorded_and_refused_as_the_python_did() {
     let root = record("owed-answers");
     edit_everything(&root);

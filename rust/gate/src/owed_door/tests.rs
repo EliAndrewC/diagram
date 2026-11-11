@@ -3,7 +3,7 @@
 use serde_json::{json, Value};
 
 use super::{answer, serve};
-use crate::record::testkit::{edit_everything, git, record};
+use crate::record::testkit::{edit_everything, git, record, DRAWING, PAGE};
 
 fn ok(verb: &str, args: &[Value]) -> Value {
     answer(verb, args).unwrap()
@@ -85,6 +85,10 @@ fn the_pure_verbs_and_the_constants() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one scratch record walked through every verb in order, so a read follows its own write"
+)]
 fn the_verbs_that_read_and_write_the_repository() {
     let root = record("owed-door");
     edit_everything(&root);
@@ -152,14 +156,11 @@ fn the_verbs_that_read_and_write_the_repository() {
         ]
     )["intro-check:0094"]
         .is_string());
-    assert!(
-        answer(
-            "ru.fingerprints_of",
-            &[json!("/nonexistent/x"), Value::Null, Value::Null, json!([])]
-        )
-        .is_err()
-            || true
-    );
+    let _ = answer(
+        "ru.fingerprints_of",
+        &[json!("/nonexistent/x"), Value::Null, Value::Null, json!([])],
+    )
+    .is_err();
     ok(
         "ro.write_answer",
         &[
@@ -260,13 +261,10 @@ fn the_verbs_that_read_and_write_the_repository() {
         .unwrap()
         .is_empty());
     assert!(
-        ok(
-            "mt.keep",
-            &[r.clone(), json!("research/questions/0094-trade.html")]
-        )
-        .as_str()
-        .unwrap()
-        .len()
+        ok("mt.keep", &[r.clone(), json!(PAGE)])
+            .as_str()
+            .unwrap()
+            .len()
             == 40
     );
     assert_eq!(
@@ -289,36 +287,25 @@ fn the_verbs_that_read_and_write_the_repository() {
     .unwrap()
     .contains("TRIAGE"));
     let fresh = record("owed-door-none");
-    assert_eq!(
-        ok(
-            "mt.bundle",
-            &[
-                json!(fresh.to_string_lossy()),
-                json!(fresh.join("tri").to_string_lossy()),
-                json!("")
-            ]
-        ),
-        json!([Value::Null, 0])
+    let none = ok(
+        "mt.bundle",
+        &[
+            json!(fresh.to_string_lossy()),
+            json!(fresh.join("tri").to_string_lossy()),
+            json!(""),
+        ],
     );
-    std::fs::write(
-        root.join("research/questions/0094-trade.drawing.html"),
-        "<p>moved</p>",
-    )
-    .unwrap();
-    assert_eq!(
-        ok(
-            "mt.bundle",
-            &[
-                r.clone(),
-                json!(root.join("tri").to_string_lossy()),
-                json!("")
-            ]
-        )[1]
-        .as_u64()
-        .unwrap()
-            > 0,
-        true
+    assert_eq!(none, json!([Value::Null, 0]));
+    std::fs::write(root.join(DRAWING), "<p>moved</p>").unwrap();
+    let made = ok(
+        "mt.bundle",
+        &[
+            r.clone(),
+            json!(root.join("tri").to_string_lossy()),
+            json!(""),
+        ],
     );
+    assert!(made[1].as_u64().unwrap() > 0);
     assert!(ok("to.owed", &[r.clone()]).as_array().unwrap().len() >= 2);
     assert!(answer(
         "ro.settle",

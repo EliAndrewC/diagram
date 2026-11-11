@@ -8,10 +8,6 @@ use std::process::{Command, Stdio};
 pub(crate) type Fail = String;
 
 /// Any error as the failure it is.
-#[expect(
-    clippy::needless_pass_by_value,
-    reason = "a `map_err` callback takes its error by value"
-)]
 pub(crate) fn fail<E: std::fmt::Display>(e: E) -> Fail {
     e.to_string()
 }

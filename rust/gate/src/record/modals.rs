@@ -1,6 +1,7 @@
 //! Which About-form modals owe the modal checks (from `modal_owed.py`, feature 449 T87): a modal's text, its fingerprints and the units its words or its pages owe. Reads a revision through one listing and one batch.
 
 use std::collections::{HashMap, HashSet};
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -712,10 +713,10 @@ pub(crate) fn cli(args: &[String]) -> crate::Reply {
     let root = std::fs::canonicalize(given).unwrap_or_else(|_| given.into());
     match owed(&root, &super::owed::merge_base(&root), "") {
         Ok(rows) => crate::Reply {
-            stdout: rows
-                .iter()
-                .map(|(slug, why, _)| format!("{slug}  - {why}\n"))
-                .collect(),
+            stdout: rows.iter().fold(String::new(), |mut out, (slug, why, _)| {
+                let _ = writeln!(out, "{slug}  - {why}");
+                out
+            }),
             stderr: String::new(),
             code: 0,
         },

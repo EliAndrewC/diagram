@@ -352,7 +352,7 @@ fn modal_classes(key: &str, base: &Path) -> Result<Vec<String>, Fail> {
         let mut cls = String::new();
         for line in super::py_lines(&text) {
             if let Ok(Some(c)) = CLASS_LINE.captures(line) {
-                cls = c[1].to_owned();
+                c[1].clone_into(&mut cls);
             } else if !cls.is_empty() && keyed.is_match(line).unwrap_or(false) {
                 hits.push((stem.clone(), cls.clone()));
             }

@@ -104,8 +104,11 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
     })
 }
 
+/// A door's verbs: each verb and its arguments to its JSON answer.
+pub type Verbs = dyn Fn(&str, &[Value]) -> Result<Value, String>;
+
 /// One request line's reply line, under the door's own verbs.
-fn reply_line(line: &str, answer: &dyn Fn(&str, &[Value]) -> Result<Value, String>) -> String {
+fn reply_line(line: &str, answer: &Verbs) -> String {
     let parsed: Result<Value, String> = serde_json::from_str(line).map_err(|e| e.to_string());
     let said = parsed.and_then(|req| {
         let args = req
@@ -125,11 +128,7 @@ pub fn serve(input: &mut dyn BufRead, output: &mut dyn Write) -> Reply {
 }
 
 /// A door's loop over its verbs (`checks-door`, `owed-door`).
-pub fn serve_with(
-    input: &mut dyn BufRead,
-    output: &mut dyn Write,
-    answer: &dyn Fn(&str, &[Value]) -> Result<Value, String>,
-) -> Reply {
+pub fn serve_with(input: &mut dyn BufRead, output: &mut dyn Write, answer: &Verbs) -> Reply {
     let mut line = String::new();
     loop {
         line.clear();
