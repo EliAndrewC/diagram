@@ -172,7 +172,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   in it: Story 1 replaces them. The GM's own hooks in `~/.claude/` are not this repository's and are out of it.
 - **FR-010**: Each phase MUST end with its timings measured against this spec's figures and recorded in `dev/`.
 - **FR-011** (the GM, 2026-11-11, `request.md` "the Rust iteration loop"): the Rust edit-and-check loop MUST be fast by default and the tooling MUST enforce it, so no session drifts back to the slowest command: the gate's code is split into crates so an edit recompiles one crate and what depends on it (T92); `make rust-test` and `make static` run only the crates whose compiled test binary changed since their last green run, the passed result reused for the rest, every crate at once only through an escape that states a reason and is recorded (T93); and the landing's hook suites reuse what `make done` has already built rather than build it again (T94).
-- **FR-012** (the GM, 2026-11-11, `request.md` "the Rust tooling's efficiency"): before more ports, the Rust tooling's own costs measured after T92-T94 MUST be cut, each change measured before and after by the same command and held to every output and verdict the tooling gives today: the full `l7r-gate` release binary rebuilt after any gate crate edit (T95), a test binary rebuilt after a one-line edit (T96), `make done`'s counters-inert phase (T97), the hook suites run in parallel (T98), and the arbiter crate's tests against FR-008's bar (T99); a fresh worktree's cold build is left as it is.
+- **FR-012** (the GM, 2026-11-11, `request.md` "the Rust tooling's efficiency"): before more ports, the Rust tooling's own costs measured after T92-T94 MUST be cut, each change measured before and after by the same command and held to every output and verdict the tooling gives today: the full `l7r-gate` release binary rebuilt after any gate crate edit (T95), a test binary rebuilt after a one-line edit (T96), `make done`'s counters-inert phase (T97), the hook suites run in parallel (T98), the arbiter crate's tests against FR-008's bar (T99), and `make static`'s lint, coverage and dead-code reruns after a fresh gate crate edit (T100, the GM 2026-11-11, `request.md`); a fresh worktree's cold build is left as it is.
 
 ### Key Entities
 
@@ -193,7 +193,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   figure of the interpreter the close removes), is retired in the closing commit - git history keeps it - the only exemption.
 
 - **SC-006** (FR-011): After T92-T94, re-measured by the same commands as the 2026-11-11 figures recorded in T92's plan section: a one-file edit of one gate crate followed by `make rust-test` takes well under that section's one-crate figure, `make rust-test` and `make static` with nothing changed run no test and no coverage run, and `make done`'s hook suites build no crate `make done` already built.
-- **SC-007** (FR-012): Each of T95-T99 lands with its cost re-measured by the command that measured it before, lower, and every check it touches giving the verdicts and outputs it gave before.
+- **SC-007** (FR-012): Each of T95-T100 lands with its cost re-measured by the command that measured it before, lower, and every check it touches giving the verdicts and outputs it gave before.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

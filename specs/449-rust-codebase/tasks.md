@@ -325,3 +325,5 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T99 The arbiter crate's slow tests (100-300 ms each against FR-008's tenth of a second): made fast (the GM 2026-11-11)
       research: rendering
+- [ ] T100 make static after a fresh gate crate edit (103.3 s core, 64.8 s claims after a comment, 2026-11-11): the lint, coverage and dead-code reruns for the edited crate and every crate built on it, measured and cut (the GM 2026-11-11)
+      research: rendering

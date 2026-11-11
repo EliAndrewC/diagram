@@ -51,3 +51,5 @@ The GM, after T92-T94 landed: "Okay, well, for what it's worth, before we tackle
 
 Then, given the re-measured loop and six ranked costs (the full l7r-gate release binary rebuilt after any gate crate edit; a test binary rebuilt after a one-line edit; make done's counters-inert phase; the hook suites run in parallel; the arbiter crate's slow tests; cold builds in a fresh worktree): "Tell me more about these numbers: "claims 13.9 s, owed 8.4 s, core 10 s" Regardless of your answers, the first five options under where the time still goes all sound like they are worth doing.  I'm less concerned about the one-time ramp-up for a fresh clone."
 
+Then, told that `make static` after a fresh gate crate edit still took 103 s (core) and 65 s (claims), mostly the lint, coverage and dead-code reruns, and that no task of T95-T99 named it: "Yeah, you should go ahead and add the make to the list of tasks that we are So like you could make that T100 or something." (dictated; "the make" is the `make static` reruns just described) - filed as T100.
+
