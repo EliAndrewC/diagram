@@ -279,8 +279,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T81 Phase 3, the record's first leaves (`ask:449-T81-slices`): `hm_record` as `record edit-route` and `record fragments`, `hm_house` as `record americanize`, `moves` as `record moved-only`, Python's callers through `scripts/record_door.py`; the rest of the old T81 is T85-T89 and `quote_verbatim.py` moves to phase 4
       research: rendering
       verify: DONE. landed: the first record leaves in Rust: edit-route, fragments, americanize, moved-only
-- [ ] T82 Phase 3, claims: claims.py and its satellites
+- [x] T82 Phase 3, claims: claims.py and its satellites
       research: rendering
+      verify: DONE. landed: the claims tools in Rust; the .py half behind bundle_door.py, claims_door.py for the Python that stays (ask:449-T82-claims); the plan's .py-half bullet still names all_units, removed in the cut
 - [ ] T83 Phase 3, measure and events: event_log, feature_report, ledger_owed, where_time, stepback_bundle, fix_yield, replay_owing's ruling, the three make audit recipes, land.py and speckit-todo.py
       research: rendering
 - [x] T84 The first removal under the GM's standing approval (the GM, 2026-11-10: "Yes please delete Python files once their Rust ports land."): the ported `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `agent_census.py`, `access_tags.py`, `downloads.py`, `check-partial-citations.py`, `moves.py`, `hm_record.py`, `hm_house.py` and specs/251's `seeded.py` and `run_seeded.sh`, the docs renamed to their verbs; each later task removes its own ported files at its landing
