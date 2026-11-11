@@ -70,6 +70,20 @@ impl Parsed {
             .map_or(default, |(_, v)| v.as_str())
     }
 
+    /// The last value given for any of `names` (argparse's flags sharing one `dest`), or `default`.
+    pub(crate) fn last_of<'a>(&'a self, names: &[&str], default: &'a str) -> &'a str {
+        self.values
+            .iter()
+            .rev()
+            .find(|(k, _)| names.contains(&k.as_str()))
+            .map_or(default, |(_, v)| v.as_str())
+    }
+
+    /// Whether a value was given for `name`.
+    pub(crate) fn has(&self, name: &str) -> bool {
+        self.values.iter().any(|(k, _)| k == name)
+    }
+
     pub(crate) fn on(&self, name: &str) -> bool {
         self.flags.iter().any(|f| f == name)
     }

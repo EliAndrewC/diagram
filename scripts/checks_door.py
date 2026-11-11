@@ -1,5 +1,5 @@
 """The Python callers' door to the check state and the round arbiter in Rust (feature 449 T86, `ask:449-T86-door`): one `l7r-gate checks-door` process a run, its verbs in order so a read follows its own write (FR-006), each
-function a forwarder and never a fallback. Writes - `record_answer`, `trip`, `keep_batches` - are the same Rust functions, under the same locks, as the guards'. Deleted with its last caller; named at the phase-3 close if still present."""
+function a forwarder and never a fallback (and, since T89, the reviews' `review_hold` and `review_owed`, `ask:449-T89-reviews`). Writes - `record_answer`, `trip`, `keep_batches` - are the same Rust functions, under the same locks, as the guards'. Deleted with its last caller; named at the phase-3 close if still present."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ import os
 import pathlib
 import subprocess
 from collections.abc import Iterable, Mapping
+from types import SimpleNamespace
 from typing import Any
 
 GATE = pathlib.Path(__file__).resolve().parent / "gates" / "l7r-gate.sh"
@@ -125,3 +126,15 @@ def trip(root: pathlib.Path, trigger: str, kind: str, unit: str, detail: str, no
 
 def keep_batches(root: pathlib.Path, batches: Mapping[str, list[str]]) -> None:
     _ask("keep_batches", str(root), dict(batches))
+
+
+def review_hold(root: pathlib.Path) -> str:
+    """The refusal `make tick` prints while the feature's hourly checkpoint holds it, or "" (`l7r-gate reviews checkpoint hold`; T89)."""
+    return _ask("review_hold", str(root))
+
+
+def review_owed(root: pathlib.Path) -> tuple[str, list[SimpleNamespace], list[str]]:
+    """Every owed review unit, the glyph hour aside (`l7r-gate reviews owed --landing`; T89): (the base, units with `slug`, `check`,
+    `subject`, `on` and `occasion`, problems)."""
+    desc, units, problems = _ask("review_owed", str(root))
+    return desc, [SimpleNamespace(**u) for u in units], problems

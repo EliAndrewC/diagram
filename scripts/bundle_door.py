@@ -1,7 +1,8 @@
 """The Rust bundles' one runner of the Python they still reach (feature 449 T88, `ask:449-T88-bundles`): the Rust-to-Python direction,
 one process a bundle run, started by the Rust only when the run needs one of its verbs. It holds no logic: each verb calls one existing
 Python function and prints its JSON. Each verb leaves when its owner ports (the helpers, `passages` and `save_cached` in T85, `claims_rows`
-and `load_index` in T82, `knobs` and `knob_table` in phase 4); the runner is deleted with the owner of its last verb, and named at the
+and `load_index` in T82, `knobs` and `knob_table` in phase 4, `is_current` - `l7r-gate reviews prereq check`'s, T89 - with
+`l7r/diagram/pipeline/` in T90); the runner is deleted with the owner of its last verb, and named at the
 phase-3 close if still present.
 
     python3 scripts/bundle_door.py    one JSON line a request on stdin, {"verb": ..., "args": [...]}; one JSON line a reply on stdout
@@ -94,8 +95,15 @@ def knob_table() -> dict:
     return conditions.knob_table()
 
 
+def is_current(gen: str) -> bool:
+    """`gencache.is_current(gen)`: feature 240 FR-005's question, asked only by `l7r-gate reviews prereq check` (`ask:449-T89-reviews`)."""
+    from l7r.diagram.pipeline import gencache  # noqa: PLC0415 - T90's, reached here alone
+
+    return gencache.is_current(gen)
+
+
 VERBS = {"run": run, "save_cached": save_cached, "passages": passages, "claims_rows": claims_rows, "load_index": load_index,
-         "knobs": knobs, "knob_table": knob_table}
+         "knobs": knobs, "knob_table": knob_table, "is_current": is_current}
 
 
 def main() -> int:

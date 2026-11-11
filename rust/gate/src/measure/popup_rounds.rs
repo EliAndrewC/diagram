@@ -14,7 +14,7 @@ use serde_json::{json, Map, Value};
 use super::{reply, text_err};
 use crate::plan::pretty;
 
-mod iso;
+pub(crate) mod iso;
 
 const MODAL_CHECKS: [&str; 3] = ["modal-form", "modal-research", "modal-depiction"];
 

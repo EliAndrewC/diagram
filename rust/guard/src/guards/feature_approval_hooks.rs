@@ -213,15 +213,22 @@ fn push_repo(cmd: &str, at: usize, base: &str) -> String {
     git(&dest, &["rev-parse", "--show-toplevel"]).out
 }
 
-/// A feature's state at a revision: `make speckit-todo`'s reading of its status line and tasks, and what the guard compares.
-struct AtRev {
-    state: &'static str,
-    spec: String,
-    open: BTreeSet<String>,
-    status_closed: bool,
+/// A feature's state at a revision: `make speckit-todo`'s reading of its status line and tasks, and what the guard compares; also
+/// `hm_approval._state_at` for the glyph clock's reopening walk (`l7r-gate reviews`, feature 449 T89, `ask:449-T89-reviews`).
+pub struct AtRev {
+    /// `closed`, `done - GM review pending` or `open`.
+    pub state: &'static str,
+    /// The spec's text at the revision.
+    pub spec: String,
+    /// Its unticked tasks, by id where they have one.
+    pub open: BTreeSet<String>,
+    /// Whether its status line closes it.
+    pub status_closed: bool,
 }
 
-fn at_rev(top: &str, rev: &str, dir: &str) -> Option<AtRev> {
+/// `specs/<dir>` at `rev` in the repository `top`, or None where it did not exist.
+#[must_use]
+pub fn at_rev(top: &str, rev: &str, dir: &str) -> Option<AtRev> {
     let prefix = format!("specs/{dir}");
     if git(top, &["ls-tree", "-r", "--name-only", rev, "--", &prefix])
         .out

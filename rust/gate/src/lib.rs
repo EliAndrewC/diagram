@@ -18,6 +18,7 @@ mod plan;
 mod preflight;
 mod push;
 pub(crate) mod record;
+pub mod reviews;
 mod rustc;
 mod stamp;
 mod state;
@@ -112,6 +113,10 @@ pub fn cli(args: &[String]) -> Reply {
         Some("checks-close") => checks_door::close_cli(&args[1..]),
         Some("owed-door") => {
             owed_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout().lock())
+        }
+        Some("reviews") => reviews::cli(&args[1..]),
+        Some("reviews-door") => {
+            reviews::door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
         }
         Some("checks-door") => {
             checks_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
