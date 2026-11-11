@@ -9677,6 +9677,105 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T82": {
+   "section_sha256": "57391ebaf7ad2d5dac5bd014dc98470ab90444e003ab74d9aeb5d4adef757470",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-layout",
+     "summary": "Rust in rust/gate/src/claims*.rs reached as l7r-gate claims / tunables / claims-door; arbiter.rs and plan.rs call the port in process; bundle_door's claims_rows and load_index removed",
+     "class": "within",
+     "why": "ask:449-T82-claims ports these files and says the claims_rows and load_index verbs leave the runner in the cut."
+    },
+    {
+     "id": "D2-py-half-verbs",
+     "summary": "The .py half behind bundle_door verbs returning JSON (claims_py_units, module_units, context_source, callees, direct, chase, counter_only, stale, scope_units, read_units, tunables_unstated) plus write verb gm_review_add_row; py_units/unit_json lifted out of all_units and context_source's Python branch moved to claims_context.py_source",
+     "class": "within",
+     "why": "The ruling keeps module_units, _scope_trees, reexported, claimed_outside and the within-run parses of claims_context/counters/stale/scope/tunables in Python behind runner verbs returning JSON, and puts the gm-review append and ensure_box together on one write verb; the lifts are mechanical with the Python's output stated unchanged."
+    },
+    {
+     "id": "D3-when-python-starts",
+     "summary": "Each verb started only on its own condition; claims_py_units answered from a kept cache under the common git dir keyed on reader code, flags and every .py by path and bytes (read set measured); interpreter version not in the key, as with the Python's pickled parses",
+     "class": "within",
+     "why": "Implements the T065 clause the ruling imposes and carries FR-006's kept-cache design; the version gap is parity with the Python, not a new carve-out."
+    },
+    {
+     "id": "D4-counter-only-rs",
+     "summary": "claims_counter_only answers a .rs unit false without asking Python; a section refused before any parse",
+     "class": "within",
+     "why": "Same output as the Python (its ast.parse of Rust fails and returns false), confirmed by the differential; FR-002 parity."
+    },
+    {
+     "id": "D5-claims-door",
+     "summary": "scripts/claims_door.py with the ruled verbs; land.py's by-path runs rewritten to l7r-gate.sh claims; impl_check.py through the door",
+     "class": "within",
+     "why": "Exactly the door, verbs, callers and land.py rewrite ask:449-T82-claims names."
+    },
+    {
+     "id": "D6-replay-owing-older-commit",
+     "summary": "replay_owing's inline claims code uses the door where the replayed scripts tree has one and that older commit's own claims.py otherwise",
+     "class": "within",
+     "why": "Replaying a historical commit runs that commit's code, not the current Python beside the Rust; no current piece runs both (FR-003); differential over three trees shows no difference."
+    },
+    {
+     "id": "D7-backfill-copies",
+     "summary": "backfill_sections returns new copies which replay_owing writes, so no caller mutates a returned object",
+     "class": "within",
+     "why": "Meets the ruling's FR-003 condition by contract rather than evading it; before/after comparison shows replay_owing unchanged."
+    },
+    {
+     "id": "D8-claims-gate-fixture",
+     "summary": "test-claims-gate.sh fixture records verdicts via l7r-gate claims bundle --owed then record of IN-STEP lines",
+     "class": "within",
+     "why": "ask:449-T069-suites ports this fixture in the same cut as claims.py."
+    },
+    {
+     "id": "D9-parity-details",
+     "summary": "Malformed-record failures kept (exit 1), py_str printing, pager behavior, tar for the base tree, per-process temp dirs, stub-based tests at 100% line coverage and clippy pedantic",
+     "class": "within",
+     "why": "FR-002 parity and FR-004 coverage; implementation detail otherwise."
+    },
+    {
+     "id": "D10-normalizations-N1-N6",
+     "summary": "Differential normalizes flight-mark at, UTC stamps, traceback text, argparse usage text, bytecode caches, and gives the hand-made fixture an engine for the Python's coverage",
+     "class": "within",
+     "why": "Timestamps and interpreter artifacts are not outputs; traceback and argparse text are unbound by ask:449-usage-text; N6 is identical setup for both sides."
+    },
+    {
+     "id": "D11-help-N7",
+     "summary": "--help refused with exit 2 by the port where argparse printed help and exit 0",
+     "class": "within",
+     "why": "ask:449-usage-text: --help is bound only where a kept test or suite case holds it; the block states none does."
+    },
+    {
+     "id": "D12-keyerror-defect-kept",
+     "summary": "Live index row with no verdict raises in report and gate, kept as the Python did, offered for a ruling",
+     "class": "within",
+     "why": "FR-002 parity is the default; the block does not claim the XIV fix exception."
+    },
+    {
+     "id": "D13-census-docs-measurements",
+     "summary": "Census at the cut, docs repointed, four recorded measurements naming a claims make target or claims-gate.sh left unrewritten",
+     "class": "within",
+     "why": "FR-001's rewrite rule covers commands that run Python; those already route through make, which now runs Rust."
+    },
+    {
+     "id": "D14-deletions-and-ruled-remainders",
+     "summary": "scripts/record/claims*.py (nine) and pager.py deleted; tools/claims.py, claims_context/counters/stale/scope.py, tunables.py, claims_door.py, gm_review.py stay as ruled remainders; Python copies of tunables' list and claims_scope's split/file_left stay in those kept files until phase 4",
+     "class": "within",
+     "why": "The ruling keeps those files for the .py half (and the door and gm_review until T83/T91); deletions follow the GM's standing approval."
+    },
+    {
+     "id": "D15-claims-rust-py-stays",
+     "summary": "l7r/diagram/tools/claims_rust.py, which the ruling has T82 port, is not deleted in the cut but stays until phase 4 as an expected remainder, with all_units, coverage, Memo and _NoMemo of tools/claims.py and the dev/rust-tooling.md row keys kept so the hooks' rust-tooling check does not name a missing file",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "ask:449-T82-claims names claims_rust.py among the files T82 ports, and the GM's standing words are 'Yes please delete Python files once their Rust ports land.' The block itself says its only callers are code no command runs once scripts/record/claims.py is gone, so it is a dead ported file, unlike the spec's other expected remainders, which have live Python callers awaiting their port; the T065 clause on a file nothing calls is vacuous. The stated reason - removal also takes the dead all_units/coverage/Memo/_NoMemo and two dev/rust-tooling.md row keys, or a hooks check fails - is the literal reading needing more of the codebase changed, which does not make an exception legitimate. Not impossible, not implied by the GM's words, does not defeat the request's purpose. Clears by deleting claims_rust.py in the cut with its dead callers and the two row keys, or by a round-arbiter ruling that it may stay."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

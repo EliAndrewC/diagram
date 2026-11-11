@@ -47,6 +47,10 @@ fn a_mark_is_live_until_cleared_or_stale() {
     std::fs::write(d.join("x.json"), "[1]").unwrap();
     assert!(live(&root, t).unwrap_err().starts_with("AttributeError"));
     std::fs::remove_file(d.join("x.json")).unwrap();
+    // a mark with no `at` reads as 0, as Python's `float(rec.get("at", 0))` does: live at time 0
+    std::fs::write(d.join("noat.json"), "{}").unwrap();
+    assert!(live(&root, 0.0).unwrap().contains(&"noat.json".to_owned()));
+    std::fs::remove_file(d.join("noat.json")).unwrap();
     let outside = crate::checks::scratch("claims-flight-plain");
     assert_eq!(live(&outside, t).unwrap(), Vec::<String>::new());
     assert!(mark(Path::new("/proc/no/such"), &bundle).is_err());

@@ -106,72 +106,6 @@ def unstated(source: str, unit_text: Mapping[str, str]) -> list[tuple[str, int, 
     return out
 
 
-def inline(root: Path, rows: Mapping[str, Any], path: str = "") -> list[tuple[str, int, str, float]]:
-    """(file, line, function, value) for every number `unstated` finds in the map code under `root` (and under `path`)."""
-    text: dict[str, dict[str, str]] = {}
-    for key, row in rows.items():
-        if row.claim is None:
-            continue
-        unit = key.split("#", 1)[0]
-        f, _sep, name = unit.partition("::")
-        bag = text.setdefault(f, {})
-        bare = name.rsplit(".", 1)[-1]
-        bag[bare] = bag.get(bare, "") + " " + row.claim.label + " " + row.claim.account
-    out = []
-    for p in sorted((root / "l7r").rglob("*.py")):
-        rel = p.relative_to(root).as_posix()
-        if not rel.startswith(MAP_CODE) or not rel.startswith(path):
-            continue
-        out += [(rel, line, fn, v) for fn, line, v in unstated(p.read_text(encoding="utf-8"), text.get(rel, {}))]
-    # THE RUST STAGES TOO (feature 444 T40, the GM 2026-11-07: "the code that introspects the Python code should get Rust ports")
-    for p in sorted((root / "rust").rglob("*.rs")) if (root / "rust").is_dir() else []:
-        rel = p.relative_to(root).as_posix()
-        if "target" in p.parts or not rel.startswith(MAP_CODE) or not rel.startswith(path):
-            continue
-        out += [(rel, line, fn, v) for fn, line, v in unstated_rust(p.read_text(encoding="utf-8"), text.get(rel, {}))]
-    return out
-
-
-#: a Rust number literal: digits, an optional fraction and exponent, an optional type suffix - never part of an identifier
-RUST_NUMBER = re.compile(r"(?<![\w.])(\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d+)?)(?:_?(?:f32|f64|u8|u16|u32|u64|usize|i8|i16|i32|i64|isize))?(?![\w.])")
-
-
-def unstated_rust(source: str, unit_text: Mapping[str, str]) -> list[tuple[str, int, float]]:
-    """(function, line, value) for every non-trivial number literal in a Rust function's body, comments and its `#[cfg(test)]`
-    module left out, that the claims of that function never state - `unstated`'s rule, read from `.rs` (`claims_rust`'s items)."""
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-    from l7r.diagram.tools import claims_rust  # noqa: PLC0415
-
-    cut = re.search(r"^#\[cfg\(test\)\]", source, re.M)
-    source = source[: cut.start()] if cut else source
-    out = []
-    for qual, kind, first, _last, _doc, body in claims_rust._items(source, 0, "", False):
-        if kind not in ("function", "method"):
-            continue
-        name = qual.rsplit(".", 1)[-1]
-        text = unit_text.get(name, "")
-        for i, line in enumerate(body.splitlines()):
-            code = re.sub(r"//.*", "", line)
-            code = re.sub(r'"(?:[^"\\]|\\.)*"', "", code)
-            for m in RUST_NUMBER.finditer(code):
-                v = float(m.group(1).replace("_", ""))
-                if v in TRIVIAL or abs(v) < 1e-3 or _stated(v, text) or code[m.end() : m.end() + 1] == "]" and code[: m.start()].rstrip().endswith("["):
-                    continue
-                out.append((name, first + i, v))
-    return out
-
-
-def render_inline(found: Sequence[tuple[str, int, str, float]], count: bool = False) -> str:
-    """The inline audit (or its count by file)."""
-    per = Counter(f for f, _l, _fn, _v in found)
-    lines = [f"tunables --inline: {len(found)} number(s) in {len(per)} file(s) no claim states - ours by default, a knob (docs/approach-checklist.md A3)"]
-    if count:
-        lines += [f"  {n:>5}  {f}" for f, n in per.most_common()]
-    else:
-        lines += [f"  {f}:{line} {fn} {v:g}" for f, line, fn, v in found]
-    return "\n".join(lines)
-
-
 def render(found: Iterable[tuple[str, str, str]], count: bool = False) -> str:
     """The list (or its counts), with the line that says what it is for."""
     found = list(found)
@@ -181,26 +115,3 @@ def render(found: Iterable[tuple[str, str, str]], count: bool = False) -> str:
     if not count:
         lines += [f"  {label:<12} {key} - {account}" for label, key, account in found]
     return "\n".join(lines)
-
-
-def main(argv: Sequence[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
-    ap.add_argument("--root", default=".")
-    ap.add_argument("--path", default="")
-    ap.add_argument("--all", action="store_true")
-    ap.add_argument("--count", action="store_true")
-    ap.add_argument("--inline", action="store_true")
-    args = ap.parse_args(argv)
-    import claims  # noqa: PLC0415 - the module beside this one, imported on use (it loads the engine's claim grammar)
-
-    root = Path(args.root).resolve()
-    rows = claims.current(root)
-    if args.inline:
-        print(render_inline(inline(root, rows, args.path), args.count))
-    else:
-        print(render(tunables(rows, args.path, not args.all), args.count))
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

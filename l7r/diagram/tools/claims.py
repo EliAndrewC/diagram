@@ -59,12 +59,6 @@ GRAMMAR = (
 )
 #: Where hamlet generation begins; the scope is everything it imports.
 ROOT_PACKAGE = "l7r.diagram.hamletgen"
-#: The Mode A procedure documents (spec FR-003, plan D9): None takes every section; a tuple takes those top sections and
-#: every heading under them.
-PROCEDURES: dict[str, tuple[str, ...] | None] = {
-    "docs/buildings.md": None,
-    "docs/building-programs.md": ("Magistrate's manor (county magistracy)", "Country shrine (a village district's shrine)"),
-}
 _SECTION_HEAD = re.compile(r"^Research:(.*)$")
 _MARKER = re.compile(r"<!--\s*Research:\s*(.*?)\s*-->", re.S)
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
@@ -629,25 +623,6 @@ def _units_of(src: str, facts: dict[str, Any], rel: str, module: str, is_pkg: bo
     return memo.get("units:" + _key_sha(src, rel, module, str(is_pkg), str(every), where, read), make)
 
 
-def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = False, memo: Memo | None = None) -> Iterator[tuple[Unit, list[str]]]:
-    """Every unit in scope with its module's errors: the code (FR-002), then the procedure sections (FR-003). Paths are
-    repository-relative, as the index keys them. `memo` keeps each module's parse and units (feature 375 amendment 8)."""
-    memo = memo if memo is not None else _NoMemo()
-    inside, outside = py_units(skill, repo_prefix, every_module_unit, memo)
-    yield from inside
-    # ...AND THE RUST PHASES (feature 444 T17): every unit of every `.rs` under `rust/`, from its doc comments - in the scope
-    from l7r.diagram.tools.claims_rust import all_rust_units  # noqa: PLC0415 - it imports this module
-
-    yield from all_rust_units(skill, repo_prefix)
-    yield from outside
-    for doc, tops in PROCEDURES.items():
-        if not (skill / doc).is_file():  # a tree read at an older commit (the push's base) may predate a document
-            continue
-        text = (skill / doc).read_text(encoding="utf-8")
-        for unit in doc_units(text, repo_prefix + doc, tops):
-            yield unit, []
-
-
 def py_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = False, memo: Memo | None = None) -> tuple[list[tuple[Unit, list[str]]], list[tuple[Unit, list[str]]]]:
     """(the hamlet scope's units, those `claimed_outside` adds), each with its module's errors: the Python half of `all_units`, which
     stays Python while the Python it reads does (feature 449 T82, `ask:449-T82-claims`: a `.py` unit's fingerprint is CPython's
@@ -712,25 +687,3 @@ def claimed_outside(skill: Path, inside: set[str], repo_prefix: str = "", memo: 
         for unit in units:
             if unit.claims and not unit.inherited:
                 yield unit, errors
-
-
-def coverage(units: Iterable[tuple[Unit, list[str]]], questions: set[str]) -> list[str]:
-    """Every coverage failure (FR-002, FR-003): a unit with no claim own or inherited, a claim that does not parse, a pointer
-    to a question file that does not exist (`questions` holds the file names). Each line names the unit and the fix."""
-    problems: list[str] = []
-    seen: set[tuple[str, str]] = set()
-    for unit, module_errors in units:
-        where = f"{unit.path}:{unit.lineno} {unit.qualname}"
-        for err in module_errors:
-            if (unit.path, err) not in seen:
-                seen.add((unit.path, err))
-                problems.append(f"{unit.path} module docstring: {err}")
-        problems += [f"{where}: {err}" for err in unit.errors]
-        if not unit.claims and not unit.errors:
-            what = "a `<!-- Research: <label> - <backing> -->` comment" if unit.kind == "section" else "a `Research:` claim (own, or in its module docstring)"
-            problems.append(f"{where}: no claim - add {what}")
-        for claim in unit.claims:
-            for ptr in claim.pointers:
-                if ptr.rsplit("/", 1)[1] not in questions:
-                    problems.append(f"{where}: `{ptr}` names no question file (find it with a glob on its heading id; `make fragment-move` renames)")
-    return problems
