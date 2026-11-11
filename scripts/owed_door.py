@@ -1,4 +1,4 @@
-"""The Python callers' one door to the record's owed tools in Rust (feature 449 T87, on the T86 door's pattern): `ro`, `ru`, `mo`, `mt`, the four ported modules' names, each a forwarder and never a fallback, one `l7r-gate owed-door` process a run, its verbs in order so a read follows its own write (FR-006). Deleted with its last caller; named at the phase-3 close if still present.
+"""The Python callers' one door to the record's owed tools in Rust (feature 449 T87, on the T86 door's pattern): `ro`, `ru`, `mo`, `mt`, the four ported modules' names (and `mb`, `cb`, the bundles' two names a phase-4 caller reads, 449 T88), each a forwarder and never a fallback, one `l7r-gate owed-door` process a run, its verbs in order so a read follows its own write (FR-006). Deleted with its last caller; named at the phase-3 close if still present.
 
 A `Record` crosses as the key that reproduces it (root, rev, sources), `fingerprint` and `quotation_key` verbs on that key, no cache for the working tree (`ask:449-T87-entry-owed`); a caller taking the pair from one read makes one call (`fingerprint_and_keys`)."""
 
@@ -233,6 +233,18 @@ class mo(metaclass=_Consts):  # noqa: N801 - `modal_owed`, as its callers name i
     @staticmethod
     def earlier_units(unit_checks: Sequence[str]) -> tuple[str, ...]:
         return tuple(_ask("mo.earlier_units", list(unit_checks)))
+
+
+class mb:  # noqa: N801 - `modal_bundle`, as `apply_edits` names it (449 T88)
+    @staticmethod
+    def research_held(root: pathlib.Path, uid: str, text: str) -> list[str]:
+        return _ask("mb.research_held", str(root), uid, text)
+
+
+class cb:  # noqa: N801 - `check_bundle`, as `sources` names it (449 T88)
+    @staticmethod
+    def url_of(entry_html: str) -> str:
+        return _ask("cb.url_of", entry_html)
 
 
 class mt:  # noqa: N801 - `modal_triage`, as its callers name it
