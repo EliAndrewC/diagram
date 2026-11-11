@@ -550,6 +550,62 @@ fn a_nested_source_is_read_a_check_is_dispatched_and_cargo_is_found() {
     assert_eq!(super::cargo_exe(&a), a.display().to_string());
 }
 
+/// The linker's flags are every build's input (feature 449 T96): a changed `.cargo/config.toml` runs every crate's checks again, though
+/// no crate owns it and none declares it.
+#[test]
+fn the_cargo_config_moves_every_check_s_key() {
+    let (root, a, b) = two_crates();
+    let both = [a.clone(), b];
+    for (cmd, reads) in [("lint", Reads::Source), ("cover", Reads::Tests)] {
+        let mut moved = ids(&BASE);
+        moved.insert(".cargo/config.toml".to_owned(), "9".to_owned());
+        let before = verdict_key(&root, &a, cmd, reads, &both, &ids(&BASE), "c");
+        let after = verdict_key(&root, &a, cmd, reads, &both, &moved, "c");
+        assert_ne!(before, after, "{cmd}");
+    }
+}
+
+/// Every cargo call runs from the tree's root, where cargo finds `.cargo/config.toml` (rust-lld, feature 449 T96), whatever directory
+/// started the check: the test, both lints, and the coverage run's show-env, build, tests and report.
+#[test]
+fn every_cargo_call_runs_from_the_tree_s_root() {
+    let (root, a, _) = two_crates();
+    let world = world_with(&root, "pwd >> \"$(dirname \"$0\")/cwd\"");
+    assert_eq!(check(&world, "test", &a, false).code, 0);
+    assert_eq!(check(&world, "lint", &a, false).code, 0);
+    let _ = uncovered(&world, &a, &world.target.join("cover"));
+    let seen = std::fs::read_to_string(world.target.join("cwd")).unwrap();
+    let want = std::fs::canonicalize(&root).unwrap().display().to_string();
+    assert_eq!(seen.lines().count(), 7, "{seen}");
+    assert!(seen.lines().all(|l| l == want), "{seen}");
+}
+
+/// The rust-lld `.cargo/config.toml` links with is the active toolchain's (feature 449 T96): no toolchain is pinned, and one that moves
+/// leaves the `-B` path naming a directory that is gone, every link failing with gcc's "cannot find 'ld'".
+#[test]
+fn the_configured_rust_lld_is_the_active_toolchain_s() {
+    let tree = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let config = std::fs::read_to_string(tree.join(".cargo/config.toml")).unwrap();
+    let named = config
+        .split("link-arg=-B")
+        .nth(1)
+        .and_then(|r| r.split('"').next());
+    let cargo = std::env::var("CARGO").unwrap_or_default();
+    let rustc = Path::new(&cargo).with_file_name("rustc");
+    let sysroot = Command::new(&rustc)
+        .args(["--print", "sysroot"])
+        .output()
+        .unwrap();
+    let want = format!(
+        "{}/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld",
+        String::from_utf8_lossy(&sysroot.stdout).trim()
+    );
+    let fix = format!("set the -B path in .cargo/config.toml to {want}");
+    assert_eq!(named, Some(want.as_str()), "{fix}");
+    let lld = Path::new(&want).join("ld.lld");
+    assert!(lld.is_file(), "{fix}: {} is missing", lld.display());
+}
+
 /// FR-008's one end-to-end test: the real cargo over the fixture crate, every other test here standing a fake cargo in its place.
 #[test]
 fn the_real_cargo_tests_a_real_crate() {

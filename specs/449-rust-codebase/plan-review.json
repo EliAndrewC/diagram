@@ -300,6 +300,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T96 (a test binary rebuilt after a one-line edit, FR-012)": {
+   "sha256": "676a923c1c999003f0db75a3ea6a7fce4a50b839a83fb75779a4c6c146ea8050",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T96 Approach (checklist part A)": {
+   "sha256": "d101c8b6a4334f108f664b781b3d859fff464459c3f09d2d5c013f1bdfd5b09f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5980,6 +5992,70 @@
      "why": "This is the procedure for carrying out the request. The generator tools do not apply because no engine code changes. Notes, which do not block: (1) the 'runs no slower and says the same' comparison names 8 verbs and gives no census of l7r-gate's verbs, so it may be a sample. SC-007's 'every check it touches' is also carried by the 19 crates of make rust-test, the 31-case guard suite, make static and make land, all green on the change. A later round may ask for the census. (2) The block's 'before' figures (core 38-45 s, owed 19-21 s, claims 8.0-8.6 s) differ from the figures the GM was shown ('claims 13.9 s, owed 8.4 s, core 10 s'), and the block does not explain the gap. FR-012's same-command rule is met because bench.py measured both sides, and the cost is lower against either baseline, but the GM may want the difference explained."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T96 (a test binary rebuilt after a one-line edit, FR-012)",
+    "### T96 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T96-diagnosis",
+     "summary": "The GM's 13.9 s for claims was a test rebuild after a core edit and its revert (rebuilt through core, tree, owed, plan); a claims-only one-line edit costs 3.8-3.9 s, split into compile and GNU ld link.",
+     "class": "within",
+     "why": "Answers the GM's own 'Tell me more about these numbers' and locates the cost FR-012 names (T96); it narrows nothing: the core-edit path is also measured after the change (make static after a core edit, links 27-61 s to 3.7-4.1 s)."
+    },
+    {
+     "id": "T96-rust-lld",
+     "summary": "Every cargo build links with the toolchain's rust-lld via one repository-root .cargo/config.toml.",
+     "class": "within",
+     "why": "The means of cutting the cost FR-012 asks cut; outputs held (coverage reports identical, 19 crates green, guard suite 37/37, 8 l7r-gate verbs identical)."
+    },
+    {
+     "id": "T96-line-tables",
+     "summary": "The dev profile (inherited by test) keeps line tables only for debug info.",
+     "class": "within",
+     "why": "A means of cutting link time and output size; the plan records coverage reports unchanged, so FR-012's hold on outputs is kept."
+    },
+    {
+     "id": "T96-one-config-root-cwd",
+     "summary": "l7r-gate.sh, l7r-guard.sh and rustc.rs run cargo from the tree's root so every build (cover's show-env included) reads the same config; coverage build keeps lld.",
+     "class": "within",
+     "why": "Implementation needed for the change to apply uniformly and not split build flags; changes no verdict or output."
+    },
+    {
+     "id": "T96-toolchain-path",
+     "summary": "The config names the 1.87.0 gcc-ld directory; a moved toolchain makes l7r-gate.sh refuse, l7r-guard.sh keep its last good binary, and a rust-test fail, each naming the fix.",
+     "class": "within",
+     "why": "The approach's own failure handling for the path it hard-codes, not a carve-out from the request: on the toolchain the tree is built with, no verdict or output changes; it turns what would be an obscure link failure into a named one. No reach beyond the builds T96 changes."
+    },
+    {
+     "id": "T96-kept-key",
+     "summary": ".cargo/config.toml joins the kept-result key's workspace files and rustc's declared reads.",
+     "class": "within",
+     "why": "Keeps FR-011's result reuse correct under the new config file (a config change reruns every crate); serves the requested reuse rather than adding scope."
+    },
+    {
+     "id": "T96-release-unchanged",
+     "summary": "Release and tool profiles do not inherit dev's debug setting; the hamlet engine's code generation is unchanged, its release build relinks once with lld.",
+     "class": "within",
+     "why": "Confines the change to the tooling build time FR-012 targets; no map or engine output moves."
+    },
+    {
+     "id": "T96-rejected-and-deferred",
+     "summary": "opt-level 0 (option c) rejected as buying less; instrumenting only our crates for coverage (option e), the '.' reads and the dead-code key left to T100.",
+     "class": "within",
+     "why": "Choice among means for T96's cost; the deferred items are make static's coverage and dead-code reruns, which the GM filed as T100 and FR-012 assigns there, so nothing asked is dropped."
+    },
+    {
+     "id": "T96-after-measures",
+     "summary": "After figures by the same make rust-test command (3.8 s to about 1 s for a claims edit) and make static after core and claims edits (103.3 to ~75 s, 64.8 to ~56 s), outputs re-verified.",
+     "class": "within",
+     "why": "SC-007's re-measure by the same command and verdict hold; every figure carries a one-shot observed/method label."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10383,6 +10459,68 @@
      "summary": "Exits: green on the guard suite, rust-test, static, identical verbs and land; red is set down and a cannot-be-done claim goes to make arbiter-ask. Budget is one landing. The generator perf tools are declared not applicable.",
      "class": "within",
      "why": "This is the procedure for carrying out the request. The generator tools do not apply because no engine code changes. Notes, which do not block: (1) the 'runs no slower and says the same' comparison names 8 verbs and gives no census of l7r-gate's verbs, so it may be a sample. SC-007's 'every check it touches' is also carried by the 19 crates of make rust-test, the 31-case guard suite, make static and make land, all green on the change. A later round may ask for the census. (2) The block's 'before' figures (core 38-45 s, owed 19-21 s, claims 8.0-8.6 s) differ from the figures the GM was shown ('claims 13.9 s, owed 8.4 s, core 10 s'), and the block does not explain the gap. FR-012's same-command rule is met because bench.py measured both sides, and the cost is lower against either baseline, but the GM may want the difference explained."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T96": {
+   "section_sha256": "27a3b32f5dafadf74109d82a54ce85968330922b1ec58259a612a9d7c24e0190",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T96-diagnosis",
+     "summary": "The GM's 13.9 s for claims was a test rebuild after a core edit and its revert (rebuilt through core, tree, owed, plan); a claims-only one-line edit costs 3.8-3.9 s, split into compile and GNU ld link.",
+     "class": "within",
+     "why": "Answers the GM's own 'Tell me more about these numbers' and locates the cost FR-012 names (T96); it narrows nothing: the core-edit path is also measured after the change (make static after a core edit, links 27-61 s to 3.7-4.1 s)."
+    },
+    {
+     "id": "T96-rust-lld",
+     "summary": "Every cargo build links with the toolchain's rust-lld via one repository-root .cargo/config.toml.",
+     "class": "within",
+     "why": "The means of cutting the cost FR-012 asks cut; outputs held (coverage reports identical, 19 crates green, guard suite 37/37, 8 l7r-gate verbs identical)."
+    },
+    {
+     "id": "T96-line-tables",
+     "summary": "The dev profile (inherited by test) keeps line tables only for debug info.",
+     "class": "within",
+     "why": "A means of cutting link time and output size; the plan records coverage reports unchanged, so FR-012's hold on outputs is kept."
+    },
+    {
+     "id": "T96-one-config-root-cwd",
+     "summary": "l7r-gate.sh, l7r-guard.sh and rustc.rs run cargo from the tree's root so every build (cover's show-env included) reads the same config; coverage build keeps lld.",
+     "class": "within",
+     "why": "Implementation needed for the change to apply uniformly and not split build flags; changes no verdict or output."
+    },
+    {
+     "id": "T96-toolchain-path",
+     "summary": "The config names the 1.87.0 gcc-ld directory; a moved toolchain makes l7r-gate.sh refuse, l7r-guard.sh keep its last good binary, and a rust-test fail, each naming the fix.",
+     "class": "within",
+     "why": "The approach's own failure handling for the path it hard-codes, not a carve-out from the request: on the toolchain the tree is built with, no verdict or output changes; it turns what would be an obscure link failure into a named one. No reach beyond the builds T96 changes."
+    },
+    {
+     "id": "T96-kept-key",
+     "summary": ".cargo/config.toml joins the kept-result key's workspace files and rustc's declared reads.",
+     "class": "within",
+     "why": "Keeps FR-011's result reuse correct under the new config file (a config change reruns every crate); serves the requested reuse rather than adding scope."
+    },
+    {
+     "id": "T96-release-unchanged",
+     "summary": "Release and tool profiles do not inherit dev's debug setting; the hamlet engine's code generation is unchanged, its release build relinks once with lld.",
+     "class": "within",
+     "why": "Confines the change to the tooling build time FR-012 targets; no map or engine output moves."
+    },
+    {
+     "id": "T96-rejected-and-deferred",
+     "summary": "opt-level 0 (option c) rejected as buying less; instrumenting only our crates for coverage (option e), the '.' reads and the dead-code key left to T100.",
+     "class": "within",
+     "why": "Choice among means for T96's cost; the deferred items are make static's coverage and dead-code reruns, which the GM filed as T100 and FR-012 assigns there, so nothing asked is dropped."
+    },
+    {
+     "id": "T96-after-measures",
+     "summary": "After figures by the same make rust-test command (3.8 s to about 1 s for a claims edit) and make static after core and claims edits (103.3 to ~75 s, 64.8 to ~56 s), outputs re-verified.",
+     "class": "within",
+     "why": "SC-007's re-measure by the same command and verdict hold; every figure carries a one-shot observed/method label."
     }
    ],
    "verdict": "CLEAR"

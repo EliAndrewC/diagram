@@ -1,0 +1,15 @@
+# EVERY CARGO BUILD LINKS WITH rust-lld (feature 449 T96, the GM 2026-11-11; measured 2026-11-11, scratchpad/t96/bench.py): GNU ld
+# linked each gate crate's test binary in 1-15 s, one at a time, 27-61 s of `make static` after a core edit; rust-lld, shipped with the
+# toolchain, linked them in 4 s all told, the coverage reports the same line for line. Rust 1.90 links with it by default; until then
+# gcc finds `ld.lld` in the toolchain's `gcc-ld` directory, named here because no toolchain is pinned.
+#
+# ONE FILE FOR EVERY BUILD: cargo reads this from its working directory upward, so every caller builds from the tree's root -
+# `scripts/gates/l7r-gate.sh`, `scripts/hooks/l7r-guard.sh` and `l7r-gate rust` (`rustc.rs`) say so themselves, `make`'s recipes run
+# there - and a build's flags never differ from another's that shares its target. `cargo llvm-cov show-env` folds these flags into
+# the RUSTFLAGS it prints, so the coverage build keeps them.
+#
+# WHEN THE TOOLCHAIN MOVES the directory below is gone and every link fails: `l7r-gate.sh` and `l7r-guard.sh` refuse with the fix
+# (`scripts/hooks/lib/lld-path.sh`), and `make rust-test` fails `the_configured_rust_lld_is_the_active_toolchain_s`. The fix: the
+# `-B` path below set to `$(rustc --print sysroot)/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld`.
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "link-arg=-fuse-ld=lld", "-C", "link-arg=-B/home/agent/.rustup/toolchains/1.87.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld"]

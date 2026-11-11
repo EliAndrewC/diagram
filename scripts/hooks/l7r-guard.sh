@@ -28,7 +28,7 @@ TARGET=${L7R_GUARD_TARGET:-$HOME/.cache/l7r-cargo-target/${TREE##*/}}
 GOOD="$TARGET/l7r-guard.good"
 FAILED="$TARGET/guard.failed"
 LOG="$TARGET/build.log"
-SOURCES=("$TREE/rust/guard" "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock")
+SOURCES=("$TREE/rust/guard" "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml")
 
 # newer <stamp>: true when a source is newer than <stamp>, or <stamp> is missing - by bash's own `-nt` over a globstar walk, no
 # process (`find -newer` was a fork on every call); a directory counts, so a file added or removed is a change too
@@ -55,6 +55,11 @@ build() {
     flock -n 9 || exit 0
     stale || exit 0  # another call built it since this one looked
     exec 2> "$LOG"  # opened under the lock: a second call never truncates the log of the build it skipped
+    # THE LINKER (T96): a hook runs from the session's directory, which may be outside this tree; the build runs from the tree's root,
+    # where cargo finds `.cargo/config.toml` (rust-lld), and a toolchain that moved is a failed build that says the fix in the log
+    cd "$TREE" || exit 0
+    . "$HERE/lib/lld-path.sh"
+    if lld_missing "$TREE"; then touch "$FAILED"; exit 0; fi
     # the tool profile (T95): incremental release, shared with l7r-gate, so a guard edit rebuilds in about 1.5 s, not 15 s
     CARGO_TARGET_DIR="$TARGET" timeout "$secs" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" -p l7r_guard >&2
     rc=$?

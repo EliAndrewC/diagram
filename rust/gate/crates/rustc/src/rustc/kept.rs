@@ -22,9 +22,12 @@ const RECORDS: [&str; 4] = [
     "dev/perf-log/",
     "dev/idle-log/",
 ];
-const WORKSPACE: [&str; 6] = [
+/// What every crate's build reads beside its own sources: `.cargo/config.toml` its flags (rust-lld, feature 449 T96), so a change to it
+/// runs every check again.
+const WORKSPACE: [&str; 7] = [
     "rust/Cargo.toml",
     "rust/Cargo.lock",
+    ".cargo/config.toml",
     "clippy.toml",
     "rust/clippy.toml",
     "rust-toolchain",

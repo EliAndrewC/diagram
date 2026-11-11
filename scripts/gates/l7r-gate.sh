@@ -28,11 +28,15 @@ stale() {
   for d in "${SOURCES[@]}" "$TREE/rust/guard"; do
     for f in "$d"/**; do [ "$f" -nt "$BIN" ] && return 0; done
   done
-  for f in "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock"; do [ "$f" -nt "$BIN" ] && return 0; done
+  for f in "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml"; do [ "$f" -nt "$BIN" ] && return 0; done
   return 1
 }
 if stale; then
-  RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" || { echo "l7r-gate: the build failed - fix what cargo names above" >&2; exit 1; }
+  # THE LINKER (T96): the build runs from the tree's root, where cargo finds `.cargo/config.toml` (rust-lld) whatever directory called it,
+  # and refuses with the fix when that file's lld is not this toolchain's
+  . "$TREE/scripts/hooks/lib/lld-path.sh"
+  lld_missing "$TREE" && { echo "l7r-gate: not built" >&2; exit 1; }
+  ( cd "$TREE" && RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" ) || { echo "l7r-gate: the build failed - fix what cargo names above" >&2; exit 1; }
   touch "$BIN"  # cargo leaves an up-to-date binary's time alone, and a source newer than it would ask again on every call
 fi
 export L7R_GATE_TREE="$TREE"  # where the binary finds codeid.py: a fixture repository it runs in has none

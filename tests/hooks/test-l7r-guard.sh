@@ -16,7 +16,7 @@ check() { if [ "$2" = "$3" ]; then ok; else bad "$1: wanted [$3], got [$2]"; fi;
 W=$(mktemp -d); trap 'rm -rf "$W"' EXIT
 T="$W/tree"; mkdir -p "$T/scripts/hooks/lib" "$T/rust/guard/src"
 cp "$ROOT/scripts/hooks/l7r-guard.sh" "$T/scripts/hooks/"
-cp "$ROOT/scripts/hooks/lib/guardlog.sh" "$T/scripts/hooks/lib/"
+cp "$ROOT/scripts/hooks/lib/guardlog.sh" "$ROOT/scripts/hooks/lib/lld-path.sh" "$T/scripts/hooks/lib/"
 printf 'fn main() {}\n' > "$T/rust/guard/src/main.rs"; : > "$T/rust/Cargo.toml"; : > "$T/rust/Cargo.lock"
 
 # the fake cargo: BUILD=ok writes a stub answering with $VERSION, BUILD=broken fails to compile, BUILD=unchecked writes one whose
@@ -24,6 +24,7 @@ printf 'fn main() {}\n' > "$T/rust/guard/src/main.rs"; : > "$T/rust/Cargo.toml";
 cat > "$W/cargo" <<'EOF'
 #!/usr/bin/env bash
 echo build >> "$CALLS"
+pwd > "$CALLS.dir"
 [ "$BUILD" = broken ] && { echo "error[E0308]: mismatched types" >&2; exit 101; }
 [ "$BUILD" = slow ] && { echo "Compiling serde" >&2; sleep 3; exit 0; }
 [ "$2 $3" = "--profile tool" ] || { echo "fake cargo: built $2 $3, not --profile tool (T95)" >&2; exit 101; }
@@ -90,6 +91,19 @@ check "unchecked: last good runs" "$(run unchecked v3)" "v1 PreToolUse"
 touch_sources
 check "recovered: the new build runs" "$(run ok v4)" "v4 PreToolUse"
 check "recovered: builds" "$(calls)" 5
+
+# 6b. the build runs from the tree's root, where cargo finds `.cargo/config.toml` (rust-lld, T96), though the hook ran from elsewhere
+touch_sources
+out=$(cd / && run ok v5)
+check "from elsewhere: built and run" "$out" "v5 PreToolUse"
+check "from elsewhere: cargo ran in the tree" "$(cat "$CALLS.dir")" "$T"
+# 6c. a config whose rust-lld this toolchain lacks: no build tried, the last good runs, the fix in build.log
+mkdir -p "$T/.cargo"; printf 'rustflags = ["-C", "link-arg=-B/no/such/gcc-ld"]\n' > "$T/.cargo/config.toml"
+check "lld gone: last good runs" "$(run ok v6 2>/dev/null)" "v5 PreToolUse"
+check "lld gone: no build tried" "$(calls)" 6
+grep -q "rust-lld from /no/such/gcc-ld.*has no ld.lld.*rustc --print sysroot" "$W/target/build.log" && ok || bad "lld gone: the fix in build.log [$(cat "$W/target/build.log")]"
+rm -rf "$T/.cargo"; touch_sources
+check "lld back: built again" "$(run ok v7)" "v7 PreToolUse"
 
 # 7. the real crate, built by the real cargo into the clone's own target, answers through the wrapper
 CARGO_BIN=$( [ -x "$HOME/.cargo/bin/cargo" ] && echo "$HOME/.cargo/bin/cargo" || command -v cargo)

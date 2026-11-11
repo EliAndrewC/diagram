@@ -58,8 +58,23 @@ struct Ran {
 }
 
 fn run(program: &str, args: &[String], env: &BTreeMap<String, String>) -> Ran {
+    run_in(None, program, args, env)
+}
+
+/// `run`, from `dir` when one is given: cargo reads `.cargo/config.toml` (rust-lld, feature 449 T96) from its working directory up, so
+/// every cargo call runs from the tree's root, whatever directory started `l7r-gate rust`.
+fn run_in(
+    dir: Option<&Path>,
+    program: &str,
+    args: &[String],
+    env: &BTreeMap<String, String>,
+) -> Ran {
+    let mut command = Command::new(program);
+    if let Some(dir) = dir {
+        command.current_dir(dir);
+    }
     // a crate's own tests read this tree-from-wrapper variable, and it is this run's, not theirs
-    match Command::new(program)
+    match command
         .args(args)
         .envs(env)
         .env_remove("L7R_GATE_TREE")
@@ -130,7 +145,8 @@ fn cargo(world: &World, args: &[&str], manifest: &Path, after: &[&str]) -> Ran {
         .target_override
         .clone()
         .unwrap_or_else(|| world.target.display().to_string());
-    run(
+    run_in(
+        Some(&world.root),
         &world.cargo,
         &all,
         &BTreeMap::from([("CARGO_TARGET_DIR".to_owned(), target)]),
@@ -261,9 +277,9 @@ fn dead_public(manifest: &Path) -> Vec<String> {
         .collect()
 }
 
-fn timed(step: &str, program: &str, args: &[String], env: &BTreeMap<String, String>) -> Ran {
+fn timed(world: &World, step: &str, args: &[String], env: &BTreeMap<String, String>) -> Ran {
     let began = Instant::now();
-    let mut done = run(program, args, env);
+    let mut done = run_in(Some(&world.root), &world.cargo, args, env);
     let _ = writeln!(
         done.stderr,
         "rust-checks: cover {step} {:.1} s",
@@ -306,7 +322,10 @@ fn cover(world: &World, manifest: &Path, work: &Path, report: &[String]) -> Ran 
         ),
         ("CARGO_TARGET_DIR".to_owned(), target.display().to_string()),
     ]);
-    let shown = run(
+    // from the tree's root, as every cargo call: show-env folds `.cargo/config.toml`'s rustflags (rust-lld, T96) into the RUSTFLAGS it
+    // prints, which replace the config's for the build below
+    let shown = run_in(
+        Some(&world.root),
         &world.cargo,
         &[
             own(&["llvm-cov", "show-env", "--manifest-path"]),
@@ -342,8 +361,8 @@ fn cover(world: &World, manifest: &Path, work: &Path, report: &[String]) -> Ran 
     ]
     .concat();
     let built = timed(
+        world,
         "build",
-        &world.cargo,
         &[
             own(&["test", "--no-run", "--message-format=json"]),
             lib.clone(),
@@ -366,12 +385,13 @@ fn cover(world: &World, manifest: &Path, work: &Path, report: &[String]) -> Ran 
     if built.code != 0 {
         return built;
     }
-    let tests = timed("tests", &world.cargo, &[own(&["test"]), lib].concat(), &env);
+    let tests = timed(world, "tests", &[own(&["test"]), lib].concat(), &env);
     eprint!("{}", tests.stderr);
     if tests.code != 0 {
         return tests;
     }
-    run(
+    run_in(
+        Some(&world.root),
         &world.cargo,
         &[
             own(&["llvm-cov", "report"]),

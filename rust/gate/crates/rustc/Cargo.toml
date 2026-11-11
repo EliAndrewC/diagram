@@ -7,9 +7,9 @@ edition = "2021"
 publish = false
 
 # What the tests read of the tree at run time, beyond the crate's own sources (the key of a kept result, `rustc.rs`): the fixture crate
-# the one real-cargo test copies.
+# the one real-cargo test copies, and `.cargo/config.toml`, whose rust-lld a test holds to the active toolchain's (T96).
 [package.metadata.l7r]
-reads = ["tests/fixtures/rust/fixture/"]
+reads = ["tests/fixtures/rust/fixture/", ".cargo/"]
 
 [dependencies]
 fancy-regex = { workspace = true }

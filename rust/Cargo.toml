@@ -25,6 +25,11 @@ allow_attributes_without_reason = "deny"
 # row seating's geometry; `cargo test` and `cargo llvm-cov` both build this profile, and llvm-cov instruments before optimizing
 [profile.dev]
 opt-level = 2
+# LINE TABLES ONLY (feature 449 T96, measured 2026-11-11, scratchpad/t96/bench.py, each edit and its revert): full debug info made a
+# gate crate's test binary 136 MB and its link 1.2-15 s under GNU ld; line tables keep a panic's file and line and the coverage
+# report (llvm-cov reads its own mapping, not DWARF: claims' and core's reports the same line for line), and halved the target.
+# `[profile.test]` inherits this; `release` and `tool` (the hamlet engine, l7r-gate, l7r-guard) do not.
+debug = "line-tables-only"
 
 # THE TOOLS BUILD INCREMENTALLY (feature 449 T95, the GM 2026-11-11, `request.md` "the Rust tooling's efficiency"): `l7r-gate`, `l7r-rust`
 # and `l7r-guard` build this profile (`scripts/gates/l7r-gate.sh`, `scripts/hooks/l7r-guard.sh`), into `<target>/tool/`. Cargo's release
