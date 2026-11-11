@@ -99,7 +99,7 @@
   "quantity": "three of the day's speedups that changed what a tool does, not its language",
   "observed": "2026-11-07",
   "subject": "the claims gate test, the counters mutation test, a check bundle",
-  "command": "cProfile of tests.tooling.test_claims_index's slowest test in process, before and after 39112f3ec; make test-file of tests/tooling/test_rust_tooling.py before and after 2b4238a6c; scripts/record/check_bundle.py 0086 --for record-format timed before and after d3ff0e16d",
+  "command": "cProfile of tests.tooling.test_claims_index's slowest test in process, before and after 39112f3ec; make test-file of tests/tooling/test_rust_tooling.py before and after 2b4238a6c; make check-bundle Q=0086 FOR=record-format timed before and after d3ff0e16d",
   "method": "the test's or the command's own time, warm, before and after its commit",
   "value": {
    "claims_test_s": [
@@ -114,6 +114,29 @@
     3.3,
     1.55
    ]
+  },
+  "check_bundle_s, re-run under the Rust port (feature 449 T88)": {
+   "observed": "2026-11-11",
+   "source": "the diagram-backlog clone at 008c60641 (Q=0086 is not owed there, so NOT_OWED_OK builds it)",
+   "method": "date +%s.%N around `make check-bundle Q=0086 FOR=record-format NOT_OWED_OK=...`, three runs",
+   "values": [
+    2.18,
+    2.12,
+    2.16
+   ],
+   "the Python against the Rust": {
+    "method": "time.perf_counter around each process, three runs each, the Python at 00a123467 and the Rust port on the differential's two scratch clones of the same tree, network refused alike (`python3 /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t88/timing.py`)",
+    "python": [
+     4.04,
+     2.19,
+     2.21
+    ],
+    "rust": [
+     4.01,
+     2.1,
+     2.07
+    ]
+   }
   }
  },
  "python-census": {

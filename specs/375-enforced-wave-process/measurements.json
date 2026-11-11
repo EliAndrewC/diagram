@@ -216,12 +216,14 @@
   "quantity": "wall time of the record tooling on a real feature delta before amendment 3 (FR-020)",
   "observed": "2026-10-11",
   "source": "374's pushed HEAD 61a52f3c8 (origin backup/diagram-backlog) in a detached worktree, its record-checks answer store copied (RECORD_CHECKS_DIR); the container loaded by other sessions",
-  "command": "make record-owed; check_bundle.py 0190 [--no-quotes]; modal_bundle.py hamlet/notice-board --for modal-depiction --reason timing; claims.py owed",
+  "command": "make record-owed; make check-bundle Q=0190 [NO_QUOTES=1]; make modal-bundle KIND=hamlet/notice-board FOR=modal-depiction REASON=timing; claims.py owed",
   "method": "date +%s.%N around each command, one run each; the stages of record_owed.units timed in-process with time.perf_counter, and the git processes counted with cProfile",
   "value": {
    "record-owed s": 6.0,
    "record-owed s, re-run under the Rust port (feature 449 T87)": {"observed": "2026-11-10", "source": "the diagram-backlog clone at 82cacf0b2, its own delta, not 374's", "method": "date +%s.%N around `make record-owed`, three runs", "values": [2.66, 2.79, 2.79]},
    "record-owed in-process s": 5.4,
+   "check-bundle Q=0190 no quotes s, re-run under the Rust port (feature 449 T88)": {"observed": "2026-11-11", "source": "the diagram-backlog clone at 008c60641, its own delta, not 374's (Q=0190 is not owed there, so NOT_OWED_OK builds it)", "method": "date +%s.%N around `make check-bundle Q=0190 NO_QUOTES=1 NOT_OWED_OK=...`, three runs", "values": [2.31, 2.37, 2.35], "the Python against the Rust": {"method": "time.perf_counter around each process, three runs each, the Python at 00a123467 and the Rust port on the differential's two scratch clones of the same tree, network refused alike (`python3 /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t88/timing.py`)", "python": [2.44, 2.39, 2.41], "rust": [2.29, 2.36, 2.35]}},
+   "modal-bundle hamlet/notice-board depiction s, re-run under the Rust port (feature 449 T88)": {"observed": "2026-11-11", "source": "the diagram-backlog clone at 008c60641, its own delta, not 374's", "method": "date +%s.%N around `make modal-bundle KIND=hamlet/notice-board FOR=modal-depiction REASON=...` with CHECK_ORDER_OK set, three runs (the crop's browser included)", "values": [7.58, 7.67, 7.69], "the Python against the Rust": {"method": "time.perf_counter around each process, three runs each, the Python at 00a123467 and the Rust port on the differential's two scratch clones of the same tree, network refused alike (`python3 /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t88/timing.py`)", "python": [7.81, 7.77, 7.65], "rust": [7.58, 7.53, 7.57]}},
    "check-bundle Q=0190 no quotes s": 6.0,
    "check-bundle Q=0190 with quotes, first run s": 20.7,
    "modal-bundle hamlet/notice-board depiction s": 6.7,
@@ -988,7 +990,8 @@
  "375-a6-about-only-replay": {
   "what": "FR-028 / SC-021: every edit to an existing pop-up since 2026-10-05 (one file, one non-merge commit) replayed through the depiction re-owe rule, amendment 1's against amendment 6's, at the commit that reopened 375 for amendment 6. The reopening session's hand count put 44 About-only edits of 222; the kept replay finds 43 of 221 (one edit apart, not traced).",
   "date": "2026-10-12",
-  "command": "python3 scripts/measure/depiction_replay.py --until 750cb557f --record specs/375-enforced-wave-process/measurements.json --key 375-a6-about-only-replay",
+  "command": "scripts/gates/l7r-gate.sh measure depiction-replay --until 750cb557f --record specs/375-enforced-wave-process/measurements.json --key 375-a6-about-only-replay",
+  "re-run under the Rust port (feature 449 T88)": {"observed": "2026-11-11", "source": "the diagram-backlog clone at 008c60641", "method": "the rewritten command without --record, its printed figures kept here so the 2026-10-12 value stands beside them", "value": {"since": "2026-10-05", "until": "750cb557f", "edits to existing pop-ups": 221, "owed modal-depiction, amendment 1": 213, "owed modal-depiction, amendment 6": 170, "About-only edits (owed before, not now)": 43, "owed now among the About-only edits": 0}},
   "value": {
    "since": "2026-10-05",
    "until": "750cb557f",
