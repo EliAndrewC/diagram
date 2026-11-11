@@ -83,3 +83,35 @@ fn every_condition_holding_is_a_push() {
     assert_eq!(super::verdict_of(&[row(true), row(true)]), "PUSH");
     assert_eq!(super::verdict_of(&[row(true), row(false)]), "REFUSE(a)");
 }
+
+/// A process table with one make in it, run in `cwd`, or none.
+struct Under(Option<String>);
+
+impl crate::ci::via_make::Procs for Under {
+    fn ancestry(&self) -> Vec<u32> {
+        self.0.iter().map(|_| 1).collect()
+    }
+
+    fn comm(&self, _: u32) -> String {
+        "make".to_owned()
+    }
+
+    fn cwd(&self, _: u32) -> String {
+        self.0.clone().unwrap_or_default()
+    }
+
+    fn cmdline(&self, _: u32) -> Vec<String> {
+        vec!["make".to_owned(), "ci-status".to_owned()]
+    }
+}
+
+#[test]
+fn outside_make_the_route_refuses_and_names_the_target_and_under_it_answers() {
+    let dir = repo("no-make");
+    let got = super::guarded(&["status".to_owned()], &dir, &Under(None), "python3", None);
+    assert_eq!(got.code, 2);
+    assert!(got.stderr.contains("make ci-status"));
+    let here = Under(Some(dir.display().to_string()));
+    let got = super::guarded(&["nonsense".to_owned()], &dir, &here, "python3", None);
+    assert!(!got.stderr.contains("make ci-status"));
+}

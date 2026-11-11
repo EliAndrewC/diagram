@@ -718,7 +718,12 @@ fn the_door_s_reads_of_the_fingerprints_and_the_notes() {
     let root = record("owed-door-reads");
     edit_everything(&root);
     let got = super::fingerprints(&root, &["record-format".to_owned()]).unwrap();
-    assert!(!got.is_empty() && got.iter().all(|(slug, _)| slug.starts_with("record-format")));
+    assert!(
+        !got.is_empty()
+            && got
+                .iter()
+                .all(|(slug, _)| slug.starts_with("record-format"))
+    );
     let rec = read_at(&root, None, None).unwrap();
     let (notes, cites) = super::notes_of(&rec);
     assert!(notes.is_object() && cites.is_object());
