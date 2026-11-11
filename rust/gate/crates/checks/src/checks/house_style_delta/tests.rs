@@ -3,7 +3,7 @@
 use super::super::tests::{based, commit, put, repo};
 use super::{british, cli, exempt_path, findings, inside_a_name};
 
-fn base(tag: &str) -> std::path::PathBuf {
+fn base(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let dir = repo(tag);
     put(&dir, "base.md", "the pre-existing colour stays here\n");
     commit(&dir);

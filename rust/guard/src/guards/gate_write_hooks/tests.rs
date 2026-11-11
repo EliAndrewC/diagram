@@ -14,13 +14,12 @@ use crate::shared::tool::ask;
 struct World {
     top: PathBuf,
     proc: PathBuf,
+    _root: crate::shared::tempdir::TempDir,
 }
 
 fn world(tag: &str) -> World {
     crate::shared::log::quiet();
-    let root =
-        std::env::temp_dir().join(format!("l7r-guard-gate-write-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&root);
+    let root = crate::shared::tempdir::TempDir::new(&format!("guard-gate-write-{tag}"));
     let top = root.join("tree");
     std::fs::create_dir_all(top.join("scripts/gates")).unwrap();
     std::fs::create_dir_all(top.join("l7r/x")).unwrap();
@@ -40,6 +39,7 @@ fn world(tag: &str) -> World {
     World {
         top: t,
         proc: root.join("proc"),
+        _root: root,
     }
 }
 

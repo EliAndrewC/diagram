@@ -38,12 +38,11 @@ const FRESH_BASE: u64 = 10_000;
 const FRESH_SPAN: u64 = 990_000;
 const REFUSING: [&str; 3] = [" NEWLY FAILING", " WORSENED", " NO BASELINE"];
 
-/// A scratch directory for one `ask_counters` call. The process id alone is not enough: parallel tests share a process, and
-/// one call's cleanup deleted another's files, the cause of this crate's intermittent "codeid.py could not say" (2026-11-10).
-fn counter_dir() -> std::path::PathBuf {
-    static NEXT: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
-    let call = NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
-    std::env::temp_dir().join(format!("l7r-gate-counter-{}-{call}", std::process::id()))
+/// A scratch directory for one `ask_counters` call, removed when it is dropped (feature 449 T101). The process id alone is not
+/// enough: parallel tests share a process, and one call's cleanup deleted another's files, the cause of this crate's intermittent
+/// "codeid.py could not say" (2026-11-10); a `TempDir` is counted within the process too.
+fn counter_dir() -> l7r_guard::shared::tempdir::TempDir {
+    l7r_guard::shared::tempdir::TempDir::new("gate-counter")
 }
 /// The paths whose bytes unchanged mean the same engine at once.
 pub const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
@@ -167,7 +166,7 @@ impl<'a> Repo<'a> {
             .arg("--debug-free-equal")
             .args(&files)
             .output();
-        let _ = std::fs::remove_dir_all(&dir);
+        drop(dir);
         let out = done.ok().filter(|o| written && o.status.success())?;
         let answers: Vec<bool> = String::from_utf8_lossy(&out.stdout)
             .split_whitespace()

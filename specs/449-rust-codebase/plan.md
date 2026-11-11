@@ -501,28 +501,38 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
 
-### T101 (<why: the finding or measurement that files it>)
+### T101 (every temporary directory a check or test makes is removed, FR-013)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one temporary-directory type, `TempDir` in `l7r_guard::shared::tempdir`, whose `Drop` removes it, held by every test helper and production site that made a directory under the temp directory; and the runners themselves fail a crate or a hook suite that leaves anything behind.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (FR-013, SC-008):
+   - The leak: the GM's laptop found about 329,000 leftover `l7r-gate-check-*` and `l7r-guard-*` directories in `/tmp`, roughly 126 GB, back to early October (observed 2026-11-11, method: the laptop session's count and `du`, relayed in `request.md`). Nearly all came from one test helper, `l7r_gate_core::checks::scratch(tag)`, which about 300 tests call and which removed nothing; about 90 other test helpers, about 25 guard test sites and a few production paths (the stamp selftest, preflight, the probe, the cohort counter, the claims `temp_dir`, the hook bench, the guard's `--self-check`) made their own and removed them on success at most (observed 2026-11-11, method: a read-only `git grep` inventory of every `temp_dir()`, `mktemp` and `mkdtemp` under `rust/`, `scripts/` and `tests/`).
+   - `TempDir` (`new(tag)`, `path()`, `Deref<Target = Path>`, `AsRef<Path>`, `keep()`), with `Held<T>` for a helper that returns a path inside the directory, and `beside_binary(name)` for the few things one test process shares (a log directory, a fixture template, the tests' bundle root): `<temp dir>/l7r-test-scratch/<name>`, emptied when a process first asks, which under `make rust-test` is inside the run's own temp directory, so the runner removes it on exit with that directory, and both runners' leak checks (`rustc.rs`, and `hookrun.sh`, whose suites run the guard's test binary) pass over that one name only because each removes it next (a test makes it beside two leaks and finds only the two named). No crate panics with `abort`, so `Drop` runs on a return, a `?` and a test's panic, which a unit test proves inside `catch_unwind`. The guard's `--self-check` drops its directory before `process::exit`, which skips destructors.
+   - Tests no longer write into the real `/tmp/l7r-check`; the production bundle root, whose bundles review agents read later, is unchanged, as are `delta.rs`'s `Scratch` and `PromptFile`, which already removed themselves.
+   - THE PIN, in the tooling rather than in anyone's memory: `rustc.rs` runs each crate's `test`, `test-counters`, `test-no-counters` and `cover` with `TMPDIR` set to a fresh directory of that run (`/tmp/l7r-rust-tests-<crate>-*`) and fails the crate on anything left in it, naming each entry and the fix, then removes the directory, so a test killed by SIGKILL, whose `Drop` never ran, leaves nothing past the run either. `tests/hooks/hookrun.sh` does the same for each hook suite with a `LEAK:` line. The directory sits under `/tmp`, not the target, because guards that recognize a test fixture by its `/tmp/` path broke otherwise.
+   - The pin bites: before the sites moved, core went red with "left 29 entries", and with one `scratch("git-text")` given `.keep()` after, core went red naming it, and with `$GUARD_LOG_ROOT` taken out of the discard suite's trap, that suite went red with `LEAK:` (observed 2026-11-11, method: `make rust-test CRATE=rust/gate/crates/core` and `bash tests/hooks/hookrun.sh` on the scratch clone, logs `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t101-pin-red.log` and `t101-pin-red2.log`).
+   - The shell suites the pin caught: the discard and pair suites each set a second `trap ... EXIT` that replaced their first, no-poll made a stderr file per part it never removed, `parts.sh` now removes its work directory on an exit, an interrupt or a TERM, its trap appended to the suite's own EXIT trap and the suite's put back after, each part's directory made inside it, and an interrupt or a TERM stops the parts first, so a suite run alone and stopped leaves nothing (a new suite, `tests/hooks/test-parts.sh`, ends a parted suite with TERM and finds nothing left, the suite ending 143 and its own trap run, and went red against the old `parts.sh`), `test-gate-hooks.sh`'s trap covers its per-case directories, `sync-with-main.sh` removes `gdir` on an interrupt, and `collect_cost.py` uses `TemporaryDirectory`.
+   - Measured: a full `make rust-test FRESH=1` and `make hooks-test HOOKS_ALL=1` left no `l7r-*` or `tmp.*` entry newer than a marker made before them, and nothing in `/tmp/l7r-check` changed (observed 2026-11-11, method: `find /tmp -maxdepth 1 -newer` the marker on the scratch clone).
+   - INT and TERM remove a process's directories too (`rust/guard/src/shared/tempdir/signals.rs`): a process ended by a signal it does not catch never runs a `Drop`, so the first `TempDir` of a process catches INT and TERM, its handler only writing the signal's number to a pipe, which a handler may do, and a thread on that pipe removes every `TempDir` the process still holds and exits as the signal would (128 + its number); a signal the process was started ignoring, a background job's INT, stays ignored. It is the crate's one use of `unsafe`, `pipe(2)`, `write(2)` and `signal(2)` from the C library std already links, each with its SAFETY note. A test runs itself as a child that makes a `TempDir` and a kept one, sends it TERM and then INT (INT only where the test itself was not started ignoring it), and finds the child ended 143 and 130, its held directory gone and its kept one there; with the registration knocked out it went red (observed 2026-11-11, method: `make rust-test CRATE=rust/guard` with `signals::hold` commented out, then restored).
+   - Only a SIGKILL, which no process can catch, leaves a process's directories, and the next of its kind removes them: `TempDir` names its directory `l7r-{tag}-p{pid}-{seq}`, and every `TempDir::new` first removes each directory of that form and tag in its parent whose pid has no `/proc` entry and which has not changed in three hours, the GM's "don't touch dirs younger than a few hours (a running gate may own them)", since a killed process's children can still be working in its directory. `tests/hooks/hookrun.sh` names its suite directory `l7r-hooks-suite-<guard>-p<pid>.*`, removes those of a gone pid unchanged in three hours before each run, and on an INT or a TERM stops the suite and exits through its EXIT trap. Only the new form is matched, the tag and both numbers exactly, so the directories the checks left before T101 (`l7r-{tag}-{pid}-{seq}`, no `p`) are never touched, being the GM's laptop session's to delete; a pid reused by a live process keeps its directory, the safe way to be wrong; and every process sharing this `/tmp` is in this container's one pid namespace. A unit test sweeps a fixture of a gone pid's old and young directories, a live pid's, another tag's, the old form's and malformed names, and `tests/hooks/test-parts.sh` runs `hookrun.sh` beside a gone run's old and young directories, a live run's and an old-form one, and stops one with TERM, two of its cases red against T101's earlier `hookrun.sh`.
+   - Left: a SIGKILLed process's directories last until the next of its kind runs three hours on.
+   - Carried onto T96 and T103: `rustc.rs`'s cargo call keeps T96's run from the tree's root with T101's `TMPDIR`, and T103's sweep tests hold their fixture in a `TempDir`, `make rust-test CRATE=rust/guard` 511 passed under the pin (observed 2026-11-11, method: that command on this clone).
 
 ### T101 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A check or a test leaves nothing in the temp directory, and the runners refuse one that does.
+2. **The constraints.** FR-013 and SC-008; the check bundles review agents read stay where they are.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the inventory and the measurement above.
+4. **Do they describe the world here?** Measured on a scratch clone of this tree, then merged here.
+5. **The order.** After T96 and T103; T102 next.
+6. **The exits.** Green: `make static`, `make rust-test` and `make hooks-test HOOKS_ALL=1` green with the pin on, `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The marker measurement above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T102 (<why: the finding or measurement that files it>)

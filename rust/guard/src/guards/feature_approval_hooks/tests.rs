@@ -40,11 +40,9 @@ fn line(words: &str) -> String {
 }
 
 /// A repository holding feature 376 and 377, and a transcript of what the GM typed.
-fn repo(tag: &str) -> (String, String) {
+fn repo(tag: &str) -> (crate::shared::tempdir::TempDir, String, String) {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-approval-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-approval-{tag}"));
     let at = d.canonicalize().unwrap().to_string_lossy().into_owned();
     git(&at, &["init", "-q", "-b", "main"]);
     spec(&at, "376-older", "# 376\n");
@@ -54,7 +52,7 @@ fn repo(tag: &str) -> (String, String) {
     let transcript = format!("{at}/.git/t.jsonl");
     let typed = json!({"type": "user", "origin": {"kind": "human"}, "promptSource": "typed", "message": {"content": format!("Yes, {QUOTE} now")}});
     std::fs::write(&transcript, typed.to_string()).unwrap();
-    (at, transcript)
+    (d, at, transcript)
 }
 
 fn run(cmd: &str, at: &str, transcript: &str) -> Vec<Answer> {
@@ -111,7 +109,7 @@ fn every_reason_has_its_words() {
 
 #[test]
 fn a_new_feature_is_refused_without_an_approval() {
-    let (at, tr) = repo("new");
+    let (_dir, at, tr) = repo("new");
     spec(&at, "380-widget", "# 380\n");
     let got = run("git add specs/380-widget/spec.md", &at, &tr);
     assert!(
@@ -130,7 +128,7 @@ fn a_new_feature_is_refused_without_an_approval() {
 
 #[test]
 fn only_a_new_feature_at_or_above_the_first_number_is_judged() {
-    let (at, tr) = repo("old");
+    let (_dir, at, tr) = repo("old");
     spec(&at, "370-older", "# 370\n");
     assert!(run("git add -A", &at, &tr).is_empty());
     git(&at, &["add", "."]);
@@ -152,7 +150,7 @@ fn only_a_new_feature_at_or_above_the_first_number_is_judged() {
 
 #[test]
 fn a_commit_is_read_from_the_index_unless_it_takes_the_tree() {
-    let (at, _) = repo("index");
+    let (_dir, at, _) = repo("index");
     spec(&at, "381-index", &line(QUOTE));
     git(&at, &["add", "."]);
     std::fs::write(format!("{at}/specs/381-index/spec.md"), "# no line now\n").unwrap();
@@ -167,7 +165,7 @@ fn a_commit_is_read_from_the_index_unless_it_takes_the_tree() {
 
 #[test]
 fn a_rename_a_renumber_and_a_copy() {
-    let (at, _) = repo("rename");
+    let (_dir, at, _) = repo("rename");
     assert!(!is_new(&at, "specs/377-held/spec.md", "held"));
     assert!(is_new(&at, "specs/390-new/spec.md", "new"));
     assert!(is_new(&at, "specs/391-held/spec.md", "held"));
@@ -193,7 +191,7 @@ fn an_issue_filed_for_the_gm_is_approved_by_his_standing_words() {
         !standing(&line(std), "# Request: other\n**[gm-assistant]**")
             && !standing(&line("other words here"), req)
     );
-    let (at, tr) = repo("standing");
+    let (_dir, at, tr) = repo("standing");
     spec(&at, "382-issue", &line(std));
     std::fs::write(format!("{at}/specs/382-issue/request.md"), req).unwrap();
     assert!(run("git add -A", &at, &tr).is_empty());
@@ -201,7 +199,7 @@ fn an_issue_filed_for_the_gm_is_approved_by_his_standing_words() {
 
 #[test]
 fn a_feature_landed_open_or_with_a_hidden_task_is_refused_at_a_push() {
-    let (at, tr) = repo("push");
+    let (_dir, at, tr) = repo("push");
     spec(
         &at,
         "300-closed",
@@ -243,7 +241,7 @@ fn a_feature_landed_open_or_with_a_hidden_task_is_refused_at_a_push() {
 
 #[test]
 fn a_task_hidden_under_a_closed_status_and_the_gm_review_box() {
-    let (at, tr) = repo("hidden");
+    let (_dir, at, tr) = repo("hidden");
     spec(&at, "300-closed", "**Status:** Superseded by 400\n");
     git(&at, &["add", "."]);
     git(&at, &["commit", "-q", "-m", "base"]);
@@ -281,7 +279,7 @@ fn a_task_hidden_under_a_closed_status_and_the_gm_review_box() {
 
 #[test]
 fn a_feature_one_gm_box_from_done_stays_settled() {
-    let (at, tr) = repo("pending");
+    let (_dir, at, tr) = repo("pending");
     spec(&at, "305-pending", "**Status**: Filed\n");
     std::fs::write(
         format!("{at}/specs/305-pending/tasks.md"),
@@ -319,7 +317,7 @@ fn a_feature_one_gm_box_from_done_stays_settled() {
 
 #[test]
 fn a_feature_closed_by_every_task_and_one_removed() {
-    let (at, tr) = repo("gone");
+    let (_dir, at, tr) = repo("gone");
     spec(&at, "306-gone", "**Status**: Done\n");
     spec(&at, "307-tasks", "**Status**: In progress\n");
     std::fs::write(format!("{at}/specs/307-tasks/tasks.md"), "- [x] T01 a\n").unwrap();

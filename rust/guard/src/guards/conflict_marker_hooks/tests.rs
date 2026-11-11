@@ -38,10 +38,9 @@ fn git(dir: &str, args: &[&str]) {
 }
 
 /// A repository with a tracked file, committed clean.
-fn repo(tag: &str) -> String {
+fn repo(tag: &str) -> crate::shared::tempdir::Held<String> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-conflict-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-conflict-{tag}"));
     std::fs::create_dir_all(d.join("sub")).unwrap();
     let at = d.canonicalize().unwrap().to_string_lossy().into_owned();
     git(&at, &["init", "-q", "-b", "main"]);
@@ -49,7 +48,8 @@ fn repo(tag: &str) -> String {
     std::fs::write(d.join("sub/ok.md"), "clean\n").unwrap();
     git(&at, &["add", "."]);
     git(&at, &["commit", "-q", "-m", "one"]);
-    at
+    let held = at;
+    d.hold(held)
 }
 
 fn run(cmd: &str, at: &str) -> Vec<Answer> {

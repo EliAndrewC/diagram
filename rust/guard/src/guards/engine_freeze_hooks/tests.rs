@@ -11,15 +11,14 @@ use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
 struct World {
-    root: PathBuf,
+    root: crate::shared::tempdir::TempDir,
     clone: PathBuf,
     sub: PathBuf,
 }
 
 fn world(tag: &str) -> World {
     crate::shared::log::quiet();
-    let root = std::env::temp_dir().join(format!("l7r-guard-freeze-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&root);
+    let root = crate::shared::tempdir::TempDir::new(&format!("guard-freeze-{tag}"));
     let clone = root.join("clone");
     let sub = root.join("proj/sess/subagents");
     for d in [

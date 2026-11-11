@@ -1,6 +1,6 @@
 //! The record's money, on a scratch record.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use super::{amounts, cli, coin_of, plain};
 
@@ -14,7 +14,7 @@ fn put(root: &Path, name: &str, text: &str) {
     std::fs::write(path, text).unwrap();
 }
 
-fn record(tag: &str) -> PathBuf {
+fn record(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     put(
         &root,

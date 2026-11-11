@@ -1,6 +1,6 @@
 //! The delta's rules on fixture repositories; its answers against the Python over recorded commits are `m:t063-slice2`.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 
 use super::{
@@ -31,9 +31,8 @@ fn commit(dir: &Path) {
 }
 
 /// A repository with the real `codeid.py`, one engine module and a branch `base` at its first commit.
-fn repo(tag: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("l7r-gate-delta-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
+fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-delta-{tag}"));
     std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();
     git(&dir, &["init", "-q", "-b", "main"]);
     git(&dir, &["config", "user.email", "t@t"]);
@@ -140,9 +139,7 @@ fn the_key_moves_with_what_runs_and_the_worktree_key_equals_the_tree_key() {
 
 #[test]
 fn a_tree_with_no_engine_keys_on_nothing() {
-    let dir = std::env::temp_dir().join(format!("l7r-gate-delta-empty-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
-    std::fs::create_dir_all(&dir).unwrap();
+    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-delta-empty");
     git(&dir, &["init", "-q"]);
     assert_eq!(
         engine_key_worktree(&dir, "python3").unwrap(),

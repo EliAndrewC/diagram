@@ -1,12 +1,12 @@
 //! `make guard-log` lists the firings an audit starts from.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::{json, Value};
 
 use super::cli;
 
-fn log(rows: &[Value]) -> PathBuf {
+fn log(rows: &[Value]) -> l7r_guard::shared::tempdir::TempDir {
     let dir = crate::checks::scratch("guard-log");
     for (n, r) in rows.iter().enumerate() {
         std::fs::write(dir.join(format!("{n}.json")), r.to_string()).unwrap();

@@ -56,9 +56,7 @@ fn a_line_is_answered_by_its_verb_and_the_loop_ends_with_its_input() {
 
 #[test]
 fn the_batches_are_kept_whole_or_the_failure_named() {
-    let d = std::env::temp_dir().join(format!("l7r-gate-core-door-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+    let d = l7r_guard::shared::tempdir::TempDir::new("gate-core-door");
     assert!(std::process::Command::new("git")
         .arg("-C")
         .arg(&d)

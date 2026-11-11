@@ -8,13 +8,15 @@ use super::{agent_hooks, agent_type, call_end, calls, decide, judge, verdict, Ct
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-fn world(tag: &str, hook: &str) -> (PathBuf, Ctx) {
+fn world(tag: &str, hook: &str) -> (crate::shared::tempdir::Held<PathBuf>, Ctx) {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-workflow-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-workflow-{tag}"));
     std::fs::create_dir_all(d.join(".claude/agents")).unwrap();
     std::fs::create_dir_all(d.join(".claude/workflows")).unwrap();
-    let d = d.canonicalize().unwrap();
+    let (keep, d) = {
+        let canon = d.canonicalize().unwrap();
+        (d, canon)
+    };
     std::fs::write(d.join(".claude/agents/quote-check.md"), "x").unwrap();
     std::fs::write(d.join(".claude/workflows/check-wave.js"), "x").unwrap();
     let settings = json!({"hooks": {"PreToolUse": [
@@ -26,7 +28,7 @@ fn world(tag: &str, hook: &str) -> (PathBuf, Ctx) {
         root: d.clone(),
         settings: d.join("settings.json"),
     };
-    (d, ctx)
+    (keep.hold(d), ctx)
 }
 
 fn workflow(input: &Value, d: &Path) -> Event {
@@ -225,9 +227,7 @@ fn the_answers() {
 
 #[test]
 fn inside_a_repository_the_decider_is_reached() {
-    let d = std::env::temp_dir().join(format!("l7r-guard-decide-wflw-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+    let d = crate::shared::tempdir::TempDir::new("guard-decide-wflw");
     assert!(crate::shared::tool::ask(
         Path::new("/"),
         "git",

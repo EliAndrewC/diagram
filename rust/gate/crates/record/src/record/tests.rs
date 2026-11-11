@@ -25,7 +25,7 @@ fn lines_split_as_python_splits_them() {
     assert!(py_lines("").is_empty());
 }
 
-fn canon_tree(tag: &str) -> Vec<PathBuf> {
+fn canon_tree(tag: &str) -> l7r_guard::shared::tempdir::Held<Vec<PathBuf>> {
     let a = crate::checks::scratch(tag);
     std::fs::create_dir_all(a.join("deep")).unwrap();
     std::fs::write(
@@ -36,7 +36,8 @@ fn canon_tree(tag: &str) -> Vec<PathBuf> {
     std::fs::write(a.join("deep/a.txt"), format!("road {}\n", "x".repeat(500))).unwrap();
     std::fs::write(a.join("CLAUDE.md"), "road\n").unwrap();
     std::fs::write(a.join("b.json"), "road\n").unwrap();
-    vec![a, PathBuf::from("/nonexistent/x")]
+    let held = vec![a.to_path_buf(), PathBuf::from("/nonexistent/x")];
+    a.hold(held)
 }
 
 #[test]
@@ -63,7 +64,7 @@ fn every_term_is_answered_with_its_heading_and_a_miss_says_so() {
 fn a_term_past_the_cap_shows_the_first_fifteen() {
     let a = crate::checks::scratch("rec-cap");
     std::fs::write(a.join("n.md"), "road\n".repeat(20)).unwrap();
-    let got = canon(&words(&["road"]), &[a]);
+    let got = canon(&words(&["road"]), &[a.to_path_buf()]);
     assert!(got
         .stdout
         .starts_with("== road: 20 hit(s), the first 15 shown\n"));
@@ -86,7 +87,7 @@ fn no_term_is_refused() {
     assert_eq!(canon(&words(&[" | "]), &[]).code, 2);
 }
 
-fn money_tree(tag: &str, held: Option<&str>) -> (PathBuf, PathBuf) {
+fn money_tree(tag: &str, held: Option<&str>) -> (l7r_guard::shared::tempdir::TempDir, PathBuf) {
     let root = crate::checks::scratch(tag);
     std::fs::create_dir_all(root.join("research/assets")).unwrap();
     if let Some(text) = held {
@@ -161,7 +162,7 @@ fn a_close_that_breaks_a_rule_is_refused_and_changes_nothing() {
     assert_eq!(r, rows());
 }
 
-fn feature(tag: &str) -> (PathBuf, String) {
+fn feature(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, String) {
     let dir = crate::checks::scratch(tag);
     let body: Vec<String> = rows().iter().map(ToString::to_string).collect();
     std::fs::write(dir.join("found.jsonl"), body.join("\n") + "\n\n").unwrap();
@@ -203,7 +204,7 @@ fn close_writes_the_rows_back_as_json_dumps_writes_them() {
     let text = std::fs::read_to_string(dir.join("found.jsonl")).unwrap();
     assert!(text.starts_with("{\"check\": \"c\", \"file\": \"f\""));
     assert_eq!(text.lines().count(), 3);
-    let (_, name) = feature("rec-settle");
+    let (_dir, name) = feature("rec-settle");
     let got = found(&words(&[
         "close",
         "--feature",
@@ -235,10 +236,8 @@ fn found_refuses_what_it_cannot_do() {
     assert!(got.code == 2 && got.stderr.starts_with("found: refused - one of"));
     std::fs::write(dir.join("found.jsonl"), "{\n").unwrap();
     assert_eq!(found(&words(&["list", "--feature", &name])).code, 1);
-    let none = crate::checks::scratch("rec-none")
-        .join("x")
-        .display()
-        .to_string();
+    let none_dir = crate::checks::scratch("rec-none");
+    let none = none_dir.join("x").display().to_string();
     assert!(found(&words(&["list", "--feature", &none]))
         .stdout
         .starts_with("found: 0 open of 0"));

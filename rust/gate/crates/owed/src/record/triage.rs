@@ -21,18 +21,17 @@ use crate::Reply;
 /// A subcommand of the triage.
 type Runner = fn(&Path, &Parsed) -> Result<Reply, Fail>;
 
-const DEFAULT_OUT: &str = "/tmp/l7r-check";
 const TOUCHED: &str = "modal-triage-touched.json";
 
 static TOUCHES: LazyLock<Regex> =
     LazyLock::new(|| re(r"^TOUCHES\s+`?(\S+?)`?(?:\s+@\s+`?(\S+?)`?)?\s+-\s+(.*)$"));
 
-/// One clone's bundle directory.
+/// One clone's bundle directory, under the bundles' root (`/tmp/l7r-check`; a test's own, never the real one - feature 449 T101).
 fn default_out(root: &Path) -> PathBuf {
     let name = root
         .file_name()
         .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
-    Path::new(DEFAULT_OUT).join(format!("modal-triage-{name}"))
+    l7r_gate_core::record::bundle::default_root().join(format!("modal-triage-{name}"))
 }
 
 /// Whether the unit is owed only because a page it names moved.

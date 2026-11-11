@@ -1,8 +1,7 @@
 //! What the remote path's tests share: a repository with an `origin/main`, a stand-in for Python, and the two boundaries faked, the `git` underneath real.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
-use std::sync::atomic::{AtomicUsize, Ordering};
 
 /// # Panics
 ///
@@ -37,24 +36,13 @@ pub fn commit(dir: &Path, rel: &str, text: &str) {
     git(dir, &["commit", "-qm", "c"]);
 }
 
-/// # Panics
-///
-/// Where the fixture cannot be made, which fails the test that asked for it.
-pub fn scratch(tag: &str) -> PathBuf {
-    static SEQ: AtomicUsize = AtomicUsize::new(0);
-    let dir = std::env::temp_dir().join(format!(
-        "l7r-gate-ci-{tag}-{}-{}",
-        std::process::id(),
-        SEQ.fetch_add(1, Ordering::Relaxed)
-    ));
-    let _ = std::fs::remove_dir_all(&dir);
-    std::fs::create_dir_all(&dir).unwrap();
-    dir
+/// A scratch directory of the test, removed when it is dropped.
+pub fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    l7r_guard::shared::tempdir::TempDir::new(&format!("gate-ci-{tag}"))
 }
 
 /// A repository, with `origin/main` at its first commit, and one engine file.
-#[must_use]
-pub fn repo(tag: &str) -> PathBuf {
+pub fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let dir = scratch(tag);
     git(&dir, &["init", "-q", "-b", "main"]);
     git(&dir, &["config", "user.email", "t@t"]);

@@ -14,13 +14,23 @@ const START: &str =
     "{\"feature\": \"385-x\", \"task\": \"T02\", \"utc\": \"2026-10-18T23:00:00Z\"}\n";
 
 /// A clone with a started feature and an empty transcript; the status tool answers `closed`.
-fn world(tag: &str, closed: &str) -> (PathBuf, PathBuf, Ctx<'static>) {
+fn world(
+    tag: &str,
+    closed: &str,
+) -> (
+    crate::shared::tempdir::TempDir,
+    PathBuf,
+    PathBuf,
+    Ctx<'static>,
+) {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-setdown-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-setdown-{tag}"));
     std::fs::create_dir_all(d.join("c/specs/385-x")).unwrap();
     std::fs::create_dir_all(d.join("tree/scripts")).unwrap();
-    let d = d.canonicalize().unwrap();
+    let (keep, d) = {
+        let canon = d.canonicalize().unwrap();
+        (d, canon)
+    };
     let c = d.join("c");
     assert!(ask(
         Path::new("/"),
@@ -41,7 +51,7 @@ fn world(tag: &str, closed: &str) -> (PathBuf, PathBuf, Ctx<'static>) {
         tree: d.join("tree"),
         python: "sh",
     };
-    (c, d.join("tr.jsonl"), ctx)
+    (keep, c, d.join("tr.jsonl"), ctx)
 }
 
 fn said(c: &Path, tr: &Path, ctx: &Ctx) -> Option<String> {
@@ -55,7 +65,7 @@ fn append(tr: &Path, line: &str) {
 
 #[test]
 fn an_open_task_with_nothing_running_is_refused_naming_the_next_step() {
-    let (c, tr, ctx) = world("refuse", "no");
+    let (_dir, c, tr, ctx) = world("refuse", "no");
     let text = said(&c, &tr, &ctx).unwrap();
     assert!(text.contains("feature 385-x has 2 open task(s)"));
     assert!(text.contains("(T02 the next thing)"));
@@ -64,7 +74,7 @@ fn an_open_task_with_nothing_running_is_refused_naming_the_next_step() {
 
 #[test]
 fn work_still_running_lets_the_turn_end_until_it_reports_back() {
-    let (c, tr, ctx) = world("running", "no");
+    let (_dir, c, tr, ctx) = world("running", "no");
     append(&tr, r#"{"toolUseResult": {"backgroundTaskId": "b1abc"}}"#);
     assert_eq!(said(&c, &tr, &ctx), None);
     append(
@@ -88,7 +98,7 @@ fn work_still_running_lets_the_turn_end_until_it_reports_back() {
 
 #[test]
 fn a_set_down_since_the_start_or_a_closing_status_lets_it_end() {
-    let (c, tr, ctx) = world("down", "no");
+    let (_dir, c, tr, ctx) = world("down", "no");
     let log = c.join(".git/set-downs.jsonl");
     std::fs::write(
         &log,
@@ -108,13 +118,13 @@ fn a_set_down_since_the_start_or_a_closing_status_lets_it_end() {
     )
     .unwrap();
     assert_eq!(said(&c, &tr, &ctx), None);
-    let (c2, tr2, ctx2) = world("closed", "yes");
+    let (_dir, c2, tr2, ctx2) = world("closed", "yes");
     assert_eq!(said(&c2, &tr2, &ctx2), None);
 }
 
 #[test]
 fn no_feature_begun_or_only_the_gms_box_passes() {
-    let (c, tr, ctx) = world("none", "no");
+    let (_dir, c, tr, ctx) = world("none", "no");
     std::fs::write(
         c.join("specs/385-x/tasks.md"),
         "- [x] T02 done\n- [ ] GM review (make gm-reviewed F=385)\n",
@@ -131,7 +141,7 @@ fn no_feature_begun_or_only_the_gms_box_passes() {
 
 #[test]
 fn a_read_error_lets_the_turn_end_recorded() {
-    let (c, tr, ctx) = world("error", "no");
+    let (_dir, c, tr, ctx) = world("error", "no");
     std::fs::write(c.join("specs/385-x/tasks.md"), [0xff_u8, 0xfe]).unwrap();
     let e = Event {
         name: "Stop".to_owned(),
@@ -150,7 +160,7 @@ fn a_read_error_lets_the_turn_end_recorded() {
 
 #[test]
 fn the_root_is_the_seam_else_the_work_tree() {
-    let (c, tr, ctx) = world("root", "no");
+    let (_dir, c, tr, ctx) = world("root", "no");
     let at = c.to_string_lossy().into_owned();
     let run = |cwd: &str, seam: Option<String>| {
         let e = Event {

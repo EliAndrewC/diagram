@@ -1,6 +1,6 @@
 //! The derivation over fixture trees, and the rules that matter over the real one. The failure that matters is UNDER-running, so every assertion is written in that direction.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 
 use super::{answer, cli, Tree};
@@ -11,9 +11,8 @@ fn put(root: &Path, file: &str, text: &str) {
     std::fs::write(path, text).unwrap();
 }
 
-fn tree(tag: &str) -> PathBuf {
-    let root = std::env::temp_dir().join(format!("l7r-guard-deps-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&root);
+fn tree(tag: &str) -> crate::shared::tempdir::TempDir {
+    let root = crate::shared::tempdir::TempDir::new(&format!("guard-deps-{tag}"));
     for (file, text) in [
         (
             "scripts/hooks/a-hooks.sh",

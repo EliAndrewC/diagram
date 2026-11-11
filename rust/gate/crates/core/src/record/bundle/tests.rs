@@ -1,6 +1,6 @@
 //! The bundles' shared helpers, and the scratch record every bundle test builds on: the record of `testkit`, a stub runner, a check state.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 #[cfg(test)]
 use serde_json::json;
@@ -50,8 +50,7 @@ for line in sys.stdin:
 "#;
 
 /// The testkit's record with the stub runner, the style guide and the variant index.
-#[must_use]
-pub fn scratch(tag: &str) -> PathBuf {
+pub fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = record(tag);
     put(&root, "scripts/bundle_door.py", RUNNER);
     put(&root, "research/STYLE.md", "# Style\n");

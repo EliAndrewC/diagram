@@ -6,13 +6,12 @@ use serde_json::Value;
 
 use super::ensure;
 
-fn world(tag: &str) -> (PathBuf, PathBuf) {
-    let mirror =
-        std::env::temp_dir().join(format!("l7r-guard-settings-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&mirror);
+fn world(tag: &str) -> (crate::shared::tempdir::TempDir, PathBuf, PathBuf) {
+    let mirror = crate::shared::tempdir::TempDir::new(&format!("guard-settings-{tag}"));
     let clone = mirror.join(".clones/c");
     std::fs::create_dir_all(&clone).unwrap();
-    (mirror.canonicalize().unwrap(), clone)
+    let canon = mirror.canonicalize().unwrap();
+    (mirror, canon, clone)
 }
 
 fn read(clone: &std::path::Path) -> Value {
@@ -24,7 +23,7 @@ fn read(clone: &std::path::Path) -> Value {
 
 #[test]
 fn a_clone_gains_the_exclusion_once_and_keeps_its_other_keys() {
-    let (mirror, clone) = world("once");
+    let (_dir, mirror, clone) = world("once");
     let target = mirror.join("CLAUDE.md").to_string_lossy().into_owned();
     std::fs::create_dir_all(clone.join(".claude")).unwrap();
     std::fs::write(
@@ -42,13 +41,13 @@ fn a_clone_gains_the_exclusion_once_and_keeps_its_other_keys() {
 
 #[test]
 fn a_fresh_clone_and_an_empty_file_are_written() {
-    let (_, clone) = world("fresh");
+    let (_dir, _, clone) = world("fresh");
     assert!(!ensure(&clone).is_empty());
     assert_eq!(
         read(&clone)["claudeMdExcludes"].as_array().unwrap().len(),
         1
     );
-    let (_, empty) = world("empty");
+    let (_dir, _, empty) = world("empty");
     std::fs::create_dir_all(empty.join(".claude")).unwrap();
     std::fs::write(empty.join(".claude/settings.local.json"), "").unwrap();
     assert!(!ensure(&empty).is_empty());
@@ -56,7 +55,7 @@ fn a_fresh_clone_and_an_empty_file_are_written() {
 
 #[test]
 fn the_mirror_is_left_alone_and_a_bad_file_is_reported() {
-    let (mirror, clone) = world("alone");
+    let (_dir, mirror, clone) = world("alone");
     assert_eq!(ensure(&mirror), "");
     assert!(!mirror.join(".claude").exists());
     std::fs::create_dir_all(clone.join(".claude")).unwrap();

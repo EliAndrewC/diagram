@@ -167,8 +167,7 @@ mod tests {
 
     #[test]
     fn content_ids_answers_each_file_and_names_what_it_cannot_read() {
-        let dir = std::env::temp_dir().join(format!("l7r-gate-cli-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&dir);
+        let dir = l7r_guard::shared::tempdir::TempDir::new("gate-cli");
         std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();
         std::fs::write(dir.join("a.txt"), "x\n").unwrap();
         std::fs::write(dir.join("b.py"), "y = 1\n").unwrap();

@@ -8,7 +8,12 @@ use crate::shared::checks::{load, save};
 
 const MANIFEST: &str = "unit: quote-check:0105.drawing#bath abc\n";
 
-fn setup(tag: &str) -> (std::path::PathBuf, std::path::PathBuf) {
+fn setup(
+    tag: &str,
+) -> (
+    crate::shared::tempdir::Held<std::path::PathBuf>,
+    std::path::PathBuf,
+) {
     crate::shared::log::quiet();
     let root = clone_at(tag);
     let manifest = root.join("MANIFEST.md");

@@ -17,7 +17,7 @@ const PLAN: &str = "# Plan\n\n## T01 - the first\n\n### T01 Approach (checklist 
 const TASKS: &str =
     "- [ ] T01 the first\n      research: rendering\n- [ ] T02 the second\n- [ ] T03 the third\n";
 
-fn feature() -> (PathBuf, PathBuf) {
+fn feature() -> (l7r_guard::shared::tempdir::TempDir, PathBuf) {
     let root = repo();
     let dir = root.join("specs/999-x");
     std::fs::create_dir_all(&dir).unwrap();

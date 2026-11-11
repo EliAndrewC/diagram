@@ -198,14 +198,13 @@ fn the_recipes_are_read_as_make_writes_them() {
     assert!(table.contains_key("switches") && !table.contains_key("x"));
 }
 
-fn world(tag: &str) -> PathBuf {
+fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-makeonly-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-makeonly-{tag}"));
     std::fs::write(d.join("a.py"), "x").unwrap();
     std::fs::write(d.join("Makefile"), MAKEFILE).unwrap();
-    d.canonicalize().unwrap()
+    let held = d.canonicalize().unwrap();
+    d.hold(held)
 }
 
 /// A stand-in for `python3 -m ruff`: `sh -m ruff ...` fails, so the tests put a script on the command by the python field.

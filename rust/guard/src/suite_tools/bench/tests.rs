@@ -1,7 +1,7 @@
 //! The bench, proven to fire: the prefilter, the four-way classification, the diff in both directions, and a baseline at a ref. The British forms are SPLIT so the house-style
 //! guard cannot correct these cases as they are written (it did, the first time, and three of them then tested the American spelling they were meant to avoid).
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 use std::time::SystemTime;
 
@@ -38,9 +38,8 @@ fn stub(name: &'static str) -> Guard {
     }
 }
 
-fn base(tag: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("l7r-guard-bench-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
+fn base(tag: &str) -> crate::shared::tempdir::TempDir {
+    let dir = crate::shared::tempdir::TempDir::new(&format!("guard-bench-{tag}"));
     std::fs::create_dir_all(dir.join("tests/hooks/fixtures")).unwrap();
     dir
 }

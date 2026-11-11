@@ -415,7 +415,7 @@ fn the_truth_of_a_recorded_digest() {
 
 const BLOCKS: &str = "# Plan\n\n**D1 - shared.** Every gate is checked once.\n\n## Batch 1\n\n### Wave 1 (T01)\n\n**D2 - the sty.** The sty stands by the house (FR-001).\n\n## Batch 2\n\n### Wave 2 (T02)\n\n**D3 - the well.** The well stands by the lane (FR-002).\n\n## Notes\n\nA note on the waves, 3 items.\n";
 
-fn reviewed() -> std::path::PathBuf {
+fn reviewed() -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
     let dir = feature(Some(BLOCKS), None);
     let root = dir.parent().unwrap().parent().unwrap().to_owned();
     git(&root, &["init", "-q", "-b", "main"]);

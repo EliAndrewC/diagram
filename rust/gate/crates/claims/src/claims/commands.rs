@@ -31,8 +31,6 @@ use crate::record::args::Parsed;
 use crate::record::repo::{fail, Fail};
 use crate::record::units::digest;
 
-/// Where a bundle goes with no `--out`.
-const DEFAULT_OUT: &str = "/tmp/l7r-check";
 /// A triage bundle of this many claims or fewer goes straight to impl-drift (feature 430 T06, D6).
 const TRIAGE_SKIP_MAX: usize = 3;
 /// Where each skipped triage is recorded (feature 430 D6).
@@ -381,7 +379,8 @@ fn bundle_cmd(
         .rev()
         .collect();
     let out = if p.text("--out", "").is_empty() {
-        PathBuf::from(DEFAULT_OUT).join(format!("claims-{slug}"))
+        // the bundles' root (`/tmp/l7r-check`; a test's own, never the real one - feature 449 T101)
+        l7r_gate_core::record::bundle::default_root().join(format!("claims-{slug}"))
     } else {
         PathBuf::from(path_text(p.text("--out", "")))
     };
@@ -596,7 +595,7 @@ fn triage_cmd(
         return small_triage(root, &keys, out, o);
     }
     let tout = if out.is_empty() {
-        PathBuf::from(DEFAULT_OUT).join("claims-triage")
+        l7r_gate_core::record::bundle::default_root().join("claims-triage")
     } else {
         PathBuf::from(path_text(out))
     };
@@ -722,7 +721,7 @@ fn accept_cmd(
     let tmp = super::temp_dir("accept");
     let made = bundle(reader, root, cur, &keys, &tmp, &[], &[])
         .and_then(|_| load_units(&tmp.join("units.json")));
-    let _ = std::fs::remove_dir_all(&tmp);
+    drop(tmp);
     let units = made?;
     let trigger = p.text("--trigger", "");
     let empty = json!({});

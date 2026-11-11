@@ -338,10 +338,8 @@ fn record(root: &Path, outcome: &str) {
 
 /// Prove the hash still bites, since a checker never seen failing is not a checker; the failure, if it does not.
 fn selftest(root: &Path, python: &str) -> Result<(), String> {
-    let dir = std::env::temp_dir().join(format!("l7r-gate-selftest-{}", std::process::id()));
-    let result = selftest_in(&dir, root, python);
-    let _ = std::fs::remove_dir_all(&dir);
-    result
+    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-selftest");
+    selftest_in(&dir, root, python)
 }
 
 /// (file, its new text or gone, what the hash must do against the last baseline, what it means if it does not).

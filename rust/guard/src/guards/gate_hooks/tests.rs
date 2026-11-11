@@ -9,12 +9,11 @@ use super::judge;
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-fn flag(tag: &str) -> PathBuf {
+fn flag(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-gate-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
-    d.join("s.subset")
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-gate-{tag}"));
+    let held = d.join("s.subset");
+    d.hold(held)
 }
 
 fn bash(cmd: &str) -> Event {

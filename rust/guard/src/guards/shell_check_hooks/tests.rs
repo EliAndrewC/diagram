@@ -97,7 +97,8 @@ fn a_co_author_arrives_by_every_route() {
         co("git commit -F - <<'EOF'\nx\n\nClaude-Session: https://example\nEOF"),
         None
     );
-    let f = std::env::temp_dir().join(format!("l7r-guard-shell-msg-{}", std::process::id()));
+    let dir = crate::shared::tempdir::TempDir::new("guard-shell-msg");
+    let f = dir.join("msg");
     std::fs::write(&f, "x\n\nCo-Authored-By: A <a@b.c>\n").unwrap();
     let path = f.to_string_lossy();
     assert!(co(&format!("git commit -F {path}")).is_some());

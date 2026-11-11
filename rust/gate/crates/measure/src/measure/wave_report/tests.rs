@@ -85,7 +85,8 @@ fn wave(root: &Path) -> (PathBuf, PathBuf) {
 
 #[test]
 fn a_workflow_wave_against_the_last_hand_launched_one() {
-    let (proj, run) = wave(&crate::checks::scratch("wave"));
+    let dir = crate::checks::scratch("wave");
+    let (proj, run) = wave(&dir);
     let out = report(&run);
     assert!(out.contains("WORKFLOW RUN wf_1 (s1): 4 agent(s)"));
     assert!(

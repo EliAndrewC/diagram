@@ -100,7 +100,7 @@ fn the_run_file_sorts_its_keys() {
     assert_eq!(got["rows"][0]["stages"]["field"]["ops"]["cells"], 7);
 }
 
-fn world(tag: &str, body: &str) -> std::path::PathBuf {
+fn world(tag: &str, body: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
     std::fs::create_dir_all(root.join("dev/work-budget")).unwrap();

@@ -9,14 +9,16 @@ use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 use crate::shared::tool::ask;
 
-fn world(tag: &str) -> PathBuf {
+fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-gf-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-gf-{tag}"));
     std::fs::create_dir_all(d.join("scripts/hooks")).unwrap();
     std::fs::create_dir_all(d.join("specs/x")).unwrap();
     std::fs::create_dir_all(d.join("tests")).unwrap();
-    let d = d.canonicalize().unwrap();
+    let (keep, d) = {
+        let canon = d.canonicalize().unwrap();
+        (d, canon)
+    };
     assert!(ask(
         std::path::Path::new("/"),
         "git",
@@ -25,7 +27,7 @@ fn world(tag: &str) -> PathBuf {
     )
     .ok());
     std::fs::write(d.join("Makefile"), "all:\n").unwrap();
-    d
+    keep.hold(d)
 }
 
 fn edit(file: &str, new: &str) -> Vec<Answer> {
@@ -154,8 +156,7 @@ fn an_input_with_no_file_passes() {
 
 #[test]
 fn make_guard_edit_grants_a_guard_file_with_a_reason_and_only_that() {
-    let dir = std::env::temp_dir().join(format!("l7r-guard-permit-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
+    let dir = crate::shared::tempdir::TempDir::new("guard-permit");
     std::fs::create_dir_all(dir.join("scripts/hooks")).unwrap();
     assert!(std::process::Command::new("git")
         .arg("-C")

@@ -218,7 +218,9 @@ fn a_triage_with_nothing_to_show_owes_every_claim_in_full() {
     assert!(got
         .stdout
         .starts_with("claims-triage: all 4 claim(s) are cx.owed in full"));
-    assert!(std::path::Path::new("/tmp/l7r-check/claims-triage/triage.json").is_file());
+    assert!(l7r_gate_core::record::bundle::default_root()
+        .join("claims-triage/triage.json")
+        .is_file());
 }
 
 #[test]

@@ -1,6 +1,6 @@
 //! Moving a question, on a scratch repository.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use super::{cli, ensure, read_text, relocate, selftest_reply};
 
@@ -22,7 +22,7 @@ fn git(root: &Path, args: &[&str]) {
     assert!(crate::cohort::git(root, args).0, "{args:?}");
 }
 
-fn repo(tag: &str, files: &[(&str, &str)]) -> PathBuf {
+fn repo(tag: &str, files: &[(&str, &str)]) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     for (rel, text) in files {
         put(&root, rel, text);

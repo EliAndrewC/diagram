@@ -21,7 +21,7 @@ fn git(dir: &Path, args: &[&str]) {
         .success());
 }
 
-fn tree(tag: &str) -> std::path::PathBuf {
+fn tree(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     let q = root.join("research/questions");
     std::fs::create_dir_all(&q).unwrap();

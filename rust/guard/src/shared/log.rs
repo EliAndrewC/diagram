@@ -129,10 +129,12 @@ pub fn fire(
 #[cfg(test)]
 pub(crate) fn quiet() {
     static ONCE: std::sync::Once = std::sync::Once::new();
+    // the process's shared directory (`beside_binary`): nothing set once for the whole process is dropped to remove it, so it lives in the
+    // run's own temp directory, which `make rust-test` removes whole when the run ends (feature 449 T101)
     ONCE.call_once(|| {
         std::env::set_var(
             "GUARD_LOG_DIR",
-            std::env::temp_dir().join(format!("l7r-guard-tests-log-{}", std::process::id())),
+            crate::shared::tempdir::beside_binary("guard-tests-log"),
         );
     });
 }
@@ -147,8 +149,7 @@ mod tests {
 
     #[test]
     fn a_firing_is_one_file_with_todays_fields() {
-        let d = std::env::temp_dir().join(format!("l7r-guard-log-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&d);
+        let d = crate::shared::tempdir::TempDir::new("guard-log");
         let input = json!({"session_id": "sid", "cwd": "/c", "tool_name": "Bash", "transcript_path": "/t", "tool_input": {"command": "ls"}});
         let e = Entry {
             guard: "make-only",

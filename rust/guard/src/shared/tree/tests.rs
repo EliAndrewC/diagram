@@ -5,15 +5,12 @@ use serde_json::json;
 use super::{classify, context_line, explain, join, judge, normpath, relpath, walk};
 
 /// A mirror with a clone under `.clones/` that has a `.git`.
-fn mirror(tag: &str) -> (String, String) {
-    let d = std::env::temp_dir().join(format!("l7r-guard-tree-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+fn mirror(tag: &str) -> (crate::shared::tempdir::TempDir, String, String) {
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-tree-{tag}"));
     let clone = d.join("diagram/.clones/mine");
     std::fs::create_dir_all(clone.join(".git")).unwrap();
-    (
-        d.join("diagram").to_string_lossy().into_owned(),
-        clone.to_string_lossy().into_owned(),
-    )
+    let main = d.join("diagram").to_string_lossy().into_owned();
+    (d, main, clone.to_string_lossy().into_owned())
 }
 
 fn input(cmd: &str, dir: &str) -> serde_json::Value {
@@ -65,7 +62,7 @@ fn a_path_is_the_mirror_a_clone_elsewhere_or_unknown() {
 
 #[test]
 fn the_walk_follows_the_commands_own_cds_variables_and_subshells() {
-    let (m, c) = mirror("walk");
+    let (_dir, m, c) = mirror("walk");
     let h = "/home/u";
     let w = walk(
         &format!("cd {m} && git add x && git commit -q"),
@@ -147,7 +144,7 @@ fn the_walk_follows_the_commands_own_cds_variables_and_subshells() {
 
 #[test]
 fn the_walk_reads_each_tool_and_its_paths() {
-    let (m, _c) = mirror("tools");
+    let (_dir, m, _c) = mirror("tools");
     let h = "/home/u";
     assert_eq!(
         walk("sudo env X=1 timeout 5 touch /tmp/a", None, &m, h).targets[0]
@@ -220,7 +217,7 @@ fn the_walk_reads_each_tool_and_its_paths() {
 
 #[test]
 fn a_branch_is_written_by_its_flags_or_a_new_name_alone() {
-    let (m, _) = mirror("branch");
+    let (_dir, m, _) = mirror("branch");
     let n = |cmd: &str| walk(cmd, Some("/tmp"), &m, "/h").targets.len();
     assert_eq!(
         [
@@ -238,7 +235,7 @@ fn a_branch_is_written_by_its_flags_or_a_new_name_alone() {
 
 #[test]
 fn each_verdict_and_its_words() {
-    let (m, c) = mirror("judge");
+    let (_dir, m, c) = mirror("judge");
     let h = "/h";
     let named = judge(
         &input(&format!("git -C {m} commit"), "/tmp"),
@@ -276,7 +273,7 @@ fn each_verdict_and_its_words() {
 
 #[test]
 fn a_rewrite_moves_the_write_and_is_re_judged() {
-    let (m, c) = mirror("rewrite");
+    let (_dir, m, c) = mirror("rewrite");
     let h = "/h";
     let named = judge(
         &input(&format!("git -C {m} commit"), "/tmp"),

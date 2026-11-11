@@ -407,7 +407,7 @@ push_cmd() {
   # measured 2026-10-26 (each timed alone, `specs/430-faster-landings/request.md`) - and the first refusal hid the rest
   local gates=(entry-gate claims-gate) gdir g failed=()
   [ "$route" = GATED ] && gates+=(cohort-gate)
-  gdir=$(mktemp -d)
+  gdir=$(mktemp -d); GATE_SCRATCH=$gdir   # removed by backup_on_exit too, on an interrupt or a die (feature 449 T101)
   for g in "${gates[@]}"; do ( "$ROOT/scripts/gates/$g.sh" > "$gdir/$g.log" 2>&1; echo $? > "$gdir/$g.rc" ) & done
   wait
   for g in "${gates[@]}"; do
@@ -603,6 +603,7 @@ backup_step() {
 
 backup_on_exit() { # <the exit code the stop was leaving with>
   trap - EXIT; set +e
+  [ -z "${GATE_SCRATCH:-}" ] || rm -rf "$GATE_SCRATCH"
   backup_step
   exit "$1"
 }

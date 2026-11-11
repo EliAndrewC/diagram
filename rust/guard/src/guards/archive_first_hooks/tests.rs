@@ -1,6 +1,6 @@
 //! The decider on a fixture archive (`tests/hooks/test-archive-first-hooks.sh`, replayed through the shim, is the verdict).
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::json;
 
@@ -12,10 +12,9 @@ use crate::shared::sha256::hex;
 const URL: &str = "https://example.org/page";
 
 /// A repository whose archive holds `URL`, and a store with its text.
-fn world(tag: &str) -> PathBuf {
+fn world(tag: &str) -> crate::shared::tempdir::TempDir {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-archive-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-archive-{tag}"));
     let uid: String = hex(URL.as_bytes()).chars().take(12).collect();
     let (row, cap) = (
         d.join("repo/research/archive").join(&uid[..2]),

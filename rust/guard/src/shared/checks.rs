@@ -268,26 +268,17 @@ pub(crate) fn name_of(path: &Path) -> String {
 #[cfg(test)]
 pub(crate) mod testkit {
     use std::path::PathBuf;
-    use std::sync::atomic::{AtomicU64, Ordering};
 
+    use crate::shared::tempdir::{Held, TempDir};
     use crate::shared::tool::ask;
 
-    static NEXT: AtomicU64 = AtomicU64::new(0);
-
-    /// A fresh directory for one test; a process-unique, counter-unique name.
-    pub(crate) fn dir(name: &str) -> PathBuf {
-        let d = std::env::temp_dir().join(format!(
-            "l7r-guard-checks-{}-{}-{name}",
-            std::process::id(),
-            NEXT.fetch_add(1, Ordering::Relaxed)
-        ));
-        let _ = std::fs::remove_dir_all(&d);
-        std::fs::create_dir_all(&d).unwrap();
-        d
+    /// A fresh directory for one test, removed when the test lets it go.
+    pub(crate) fn dir(name: &str) -> TempDir {
+        TempDir::new(&format!("guard-checks-{name}"))
     }
 
     /// A clone under `dir`: `git init`, a feature pointer at `specs/999-x`.
-    pub(crate) fn clone_at(name: &str) -> PathBuf {
+    pub(crate) fn clone_at(name: &str) -> Held<PathBuf> {
         let d = dir(name);
         let root = std::fs::canonicalize(&d).unwrap();
         let said = ask(&root, "git", &["init", "-q"], "");
@@ -299,7 +290,7 @@ pub(crate) mod testkit {
         )
         .unwrap();
         std::fs::create_dir_all(root.join("specs/999-x")).unwrap();
-        root
+        d.hold(root)
     }
 }
 

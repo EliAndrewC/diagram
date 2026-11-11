@@ -1,7 +1,7 @@
 //! The cases of `test_preflight.py` the phase and the tree check answer, with a stand-in for `make` and for the Python door.
 
 use std::collections::{BTreeMap, BTreeSet};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use super::{
     parse, rolled_outputs, run, seen_moves, stray_probes, tree, tree_moved, unseen, Asked, Tools,
@@ -20,7 +20,7 @@ fn git(dir: &Path, args: &[&str]) -> String {
 
 const A: &str = "l7r/diagram/a.py";
 
-fn repo(tag: &str) -> PathBuf {
+fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     std::fs::create_dir_all(root.join("l7r/diagram")).unwrap();
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
@@ -490,7 +490,7 @@ fn a_root_that_is_not_there_stops_the_phase() {
     let t = tools(
         &{
             std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
-            root.clone()
+            root.to_path_buf()
         },
         "",
         "exit 1",

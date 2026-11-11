@@ -1,6 +1,6 @@
 //! The cases of the stale-value search, and every way of asking.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use super::{
     all_found, cli, criteria_left_behind, dirs_cli, read_dir, render, stale_candidates, tokens,
@@ -166,7 +166,7 @@ fn a_directory_is_read_as_text_alone() {
     assert_eq!(read_dir(&d).keys().collect::<Vec<_>>(), ["deep/a.md"]);
 }
 
-fn clone(tag: &str) -> PathBuf {
+fn clone(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     for args in [
         &["init", "-q"][..],

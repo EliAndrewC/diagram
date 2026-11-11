@@ -2,8 +2,9 @@
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::sync::Once;
+use std::sync::OnceLock;
 
+use l7r_guard::shared::tempdir::Held;
 use serde_json::{json, Value};
 
 use super::answer;
@@ -28,11 +29,16 @@ pub(super) fn within() -> Value {
 }
 
 /// The guard census of these tests: never the live one.
+/// The census's guard log, once a process, in the test build (`beside_binary`): nothing set for the whole process is dropped to remove a
+/// `TempDir` (feature 449 T101).
 pub(super) fn quiet_census() -> PathBuf {
-    static ONCE: Once = Once::new();
-    let dir = std::env::temp_dir().join(format!("l7r-gate-plan-census-{}", std::process::id()));
-    ONCE.call_once(|| std::env::set_var("GUARD_LOG_DIR", &dir));
-    dir
+    static DIR: OnceLock<PathBuf> = OnceLock::new();
+    DIR.get_or_init(|| {
+        let dir = l7r_guard::shared::tempdir::beside_binary("gate-plan-census");
+        std::env::set_var("GUARD_LOG_DIR", &dir);
+        dir
+    })
+    .clone()
 }
 
 pub(super) fn feature_at(
@@ -59,8 +65,10 @@ pub(super) fn feature_at(
     dir
 }
 
-pub(super) fn feature(plan: Option<&str>, review: Option<&Value>) -> PathBuf {
-    feature_at(&scratch("plan"), plan, review, "243-x")
+pub(super) fn feature(plan: Option<&str>, review: Option<&Value>) -> Held<PathBuf> {
+    let root = scratch("plan");
+    let dir = feature_at(&root, plan, review, "243-x");
+    root.hold(dir)
 }
 
 pub(super) fn current(decisions: &[Value], verdict: &str, plan: &str) -> Value {
@@ -79,7 +87,7 @@ pub(super) fn git(root: &Path, args: &[&str]) -> String {
     String::from_utf8_lossy(&done.stdout).trim().to_owned()
 }
 
-pub(super) fn repo() -> PathBuf {
+pub(super) fn repo() -> l7r_guard::shared::tempdir::TempDir {
     let root = scratch("plan-repo");
     git(&root, &["init", "-q", "-b", "main"]);
     root

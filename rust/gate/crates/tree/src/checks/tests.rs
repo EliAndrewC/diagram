@@ -4,7 +4,7 @@ use std::process::Command;
 
 use super::needs;
 
-fn repo(tag: &str) -> std::path::PathBuf {
+fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let dir = l7r_gate_core::checks::scratch(tag);
     for args in [
         vec!["init", "-q", "-b", "main"],

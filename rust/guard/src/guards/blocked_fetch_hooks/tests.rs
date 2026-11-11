@@ -14,15 +14,17 @@ const LIST: &str = r#"{"domains": [{"domain": "Bad.Example.", "reason": "machine
 const NOTHING: &str = r#"[{"lines": [], "plain": "x"}]"#;
 
 /// A tree holding the list and a stubbed `attempts.py`, and a clone beside it. The stub prints `reply` and keeps its arguments.
-fn world(tag: &str, reply: &str) -> (PathBuf, String) {
+fn world(tag: &str, reply: &str) -> (crate::shared::tempdir::Held<PathBuf>, String) {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-fetch-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-fetch-{tag}"));
     std::fs::create_dir_all(d.join("tree/research")).unwrap();
     std::fs::create_dir_all(d.join("tree/scripts/record")).unwrap();
     std::fs::create_dir_all(d.join(".clones/c/.git")).unwrap();
     std::fs::create_dir_all(d.join("mirror/.git")).unwrap();
-    let d = d.canonicalize().unwrap();
+    let (keep, d) = {
+        let canon = d.canonicalize().unwrap();
+        (d, canon)
+    };
     std::fs::write(d.join("tree/research/blocked-domains.json"), LIST).unwrap();
     let body = format!(
         "echo \"$@\" > {}/args\nprintf '%s' '{reply}'\n",
@@ -30,7 +32,7 @@ fn world(tag: &str, reply: &str) -> (PathBuf, String) {
     );
     std::fs::write(d.join("tree/scripts/record/attempts.py"), body).unwrap();
     let clone = d.join(".clones/c").to_string_lossy().into_owned();
-    (d, clone)
+    (keep.hold(d), clone)
 }
 
 fn event(tool: &str, input: &Value, at: &str) -> Event {

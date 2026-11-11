@@ -101,7 +101,6 @@ pub fn touches_engine(root: &Path) -> Result<bool, Fail> {
         "python3",
         &script,
     );
-    let _ = std::fs::remove_dir_all(&scratch);
     let ids = ids?;
     Ok(ids.chunks(2).any(|p| p[0] != p[1]))
 }
@@ -507,7 +506,6 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
             },
         )
     })();
-    let _ = std::fs::remove_dir_all(&tmp);
     let (intro, pre, carried) = judged?;
     Ok((
         due.into_iter()

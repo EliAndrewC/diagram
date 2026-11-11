@@ -1,5 +1,4 @@
-use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
+use std::path::Path;
 
 use serde_json::{json, Value};
 
@@ -8,16 +7,8 @@ use super::{
     spec_ruled, spec_verdict, unit_ruled, Stop,
 };
 
-static NEXT: AtomicU64 = AtomicU64::new(0);
-
-fn clone_at(name: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!(
-        "l7r-gate-arbiter-{}-{}-{name}",
-        std::process::id(),
-        NEXT.fetch_add(1, Ordering::Relaxed)
-    ));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+fn clone_at(name: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
+    let d = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-arbiter-{name}"));
     let root = std::fs::canonicalize(&d).unwrap();
     assert!(std::process::Command::new("git")
         .arg("-C")
@@ -38,7 +29,7 @@ fn clone_at(name: &str) -> PathBuf {
         "# t\n\nstatus: draft\n\n## Body\n\ntext\n\n## Review history\n\nmore\n",
     )
     .unwrap();
-    root
+    d.hold(root)
 }
 
 fn owe(root: &Path, map: &Value) {

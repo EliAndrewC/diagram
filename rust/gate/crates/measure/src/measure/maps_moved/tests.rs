@@ -1,6 +1,6 @@
 //! The cases of `test_maps_moved.py`.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use super::{cli, moved};
 
@@ -14,7 +14,7 @@ fn git(dir: &Path, args: &[&str]) {
     assert!(done.status.success());
 }
 
-fn repo(tag: &str) -> PathBuf {
+fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     git(&root, &["init", "-q"]);
     git(&root, &["config", "user.email", "t@t"]);

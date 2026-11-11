@@ -30,10 +30,9 @@ fn git(dir: &str, args: &[&str]) {
 }
 
 /// A repository with a ledger, and a tree of tools: the lint refuses a ledger holding `SHORT`, the owed report prints a file's words.
-fn world(tag: &str) -> (String, PathBuf) {
+fn world(tag: &str) -> (crate::shared::tempdir::TempDir, String, PathBuf) {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-ledger-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-ledger-{tag}"));
     let repo = d.join("repo");
     let tools = d.join("tree/scripts/reviews");
     std::fs::create_dir_all(repo.join("dev")).unwrap();
@@ -59,7 +58,8 @@ fn world(tag: &str) -> (String, PathBuf) {
         "[ \"$2\" = bad ] && exit 1; echo '80 s | 1k in'\n",
     )
     .unwrap();
-    (at, d.join("tree"))
+    let tree = d.join("tree");
+    (d, at, tree)
 }
 
 fn ctx(at: &str, tree: &Path) -> Ctx {
@@ -101,7 +101,7 @@ fn the_commit_is_found_among_a_commands_words() {
 
 #[test]
 fn a_staged_short_row_is_refused_and_named() {
-    let (at, tree) = world("short");
+    let (_dir, at, tree) = world("short");
     short(&at);
     git(&at, &["add", "dev/review-ledger.md"]);
     let got = run("git commit -m rows", &at, &tree);
@@ -114,7 +114,7 @@ fn a_staged_short_row_is_refused_and_named() {
 
 #[test]
 fn what_the_commit_takes_counts_as_staged() {
-    let (at, tree) = world("takes");
+    let (_dir, at, tree) = world("takes");
     short(&at);
     assert!(run("git commit -m rows", &at, &tree).is_empty());
     assert!(refused(
@@ -142,7 +142,7 @@ fn what_the_commit_takes_counts_as_staged() {
 
 #[test]
 fn a_row_the_command_appends_is_judged_with_the_ledger() {
-    let (at, tree) = world("append");
+    let (_dir, at, tree) = world("append");
     let append =
         "make append FILE=dev/review-ledger.md LINE=\"SHORT\" && git add dev && git commit -m row";
     assert!(refused(&run(append, &at, &tree), "row short"));
@@ -174,7 +174,7 @@ fn a_row_the_command_appends_is_judged_with_the_ledger() {
 
 #[test]
 fn a_pass_with_no_row_is_reported_never_refused() {
-    let (at, tree) = world("owed");
+    let (_dir, at, tree) = world("owed");
     std::fs::write(
         tree.parent().unwrap().join("owed"),
         "ledger-owed: 1 check pass",
@@ -186,7 +186,7 @@ fn a_pass_with_no_row_is_reported_never_refused() {
 
 #[test]
 fn the_repositorys_own_tools_come_first_and_nothing_else_is_read() {
-    let (at, tree) = world("own");
+    let (_dir, at, tree) = world("own");
     std::fs::create_dir_all(format!("{at}/scripts/reviews")).unwrap();
     std::fs::write(
         format!("{at}/scripts/reviews/ledger_lint.py"),
@@ -206,7 +206,7 @@ fn the_repositorys_own_tools_come_first_and_nothing_else_is_read() {
 
 #[test]
 fn the_escape_needs_a_reason_and_the_entry_runs() {
-    let (at, tree) = world("esc");
+    let (_dir, at, tree) = world("esc");
     short(&at);
     git(&at, &["add", "dev"]);
     assert!(run(

@@ -10,14 +10,12 @@ use super::{cli, decide, judge, last_type, report, scan, Limits};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-fn dir(tag: &str) -> PathBuf {
+fn dir(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir()
-        .join(format!("l7r-guard-stall-{tag}-{}", std::process::id()))
-        .join("sess/subagents");
-    let _ = std::fs::remove_dir_all(d.parent().unwrap());
+    let root = crate::shared::tempdir::TempDir::new(&format!("guard-stall-{tag}"));
+    let d = root.join("sess/subagents");
     std::fs::create_dir_all(&d).unwrap();
-    d
+    root.hold(d)
 }
 
 /// A transcript ending on a record of `kind`, last written `age` seconds ago.

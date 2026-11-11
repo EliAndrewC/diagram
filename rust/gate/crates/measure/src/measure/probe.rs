@@ -443,15 +443,14 @@ fn drive(args: &[String], root: &Path, h: &dyn Runs) -> crate::Reply {
         || root.to_path_buf(),
         |w| std::fs::canonicalize(w).unwrap_or_else(|_| PathBuf::from(w)),
     );
-    let tmp = std::env::temp_dir().join(format!("l7r-probe-{}", std::process::id()));
-    let _ = std::fs::create_dir_all(&tmp);
+    let tmp = l7r_guard::shared::tempdir::TempDir::new("probe");
     let probe = Probe {
         h,
         root,
         gate: crate::codeid::script(root).with_file_name("l7r-gate.sh"),
         jobs: flag(args, "--jobs").unwrap_or("3").to_owned(),
         exitfirst: args.iter().any(|a| a == "--exitfirst"),
-        tmp: tmp.clone(),
+        tmp: tmp.to_path_buf(),
     };
     let got = probe.run(&wt);
     let _ = std::fs::remove_dir_all(&tmp);

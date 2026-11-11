@@ -30,15 +30,14 @@ fn git(dir: &Path, args: &[&str]) {
 }
 
 struct World {
-    root: PathBuf,
+    root: crate::shared::tempdir::TempDir,
     clone: PathBuf,
     p: Paths,
 }
 
 /// A mirror on main, a clone of it, an empty registry and projects, a fake tmux and a fake `finished-run-hooks.sh`.
 fn world(tag: &str) -> World {
-    let root = std::env::temp_dir().join(format!("l7r-guard-pass-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&root);
+    let root = crate::shared::tempdir::TempDir::new(&format!("guard-pass-{tag}"));
     let (mirror, clone) = (root.join("mirror"), root.join("clone"));
     for d in [
         &mirror,
@@ -55,7 +54,7 @@ fn world(tag: &str) -> World {
     assert!(ask(Path::new("/"), "git", &["clone", "-q", &from, &to], "").ok());
     let base = root.display().to_string();
     std::fs::write(root.join("tmux"), format!("case \"$1\" in display) touch {base}/tty-$4; echo {base}/tty-$4 ;; capture-pane) cat {base}/screen 2>/dev/null ;; send-keys) echo \"$*\" >> {base}/sent ;; esac\n")).unwrap();
-    let r = root.clone();
+    let r = root.to_path_buf();
     let mut p = Paths::from_env(&|_| None);
     p.sessions = r.join("sessions");
     p.projects = r.join("projects");

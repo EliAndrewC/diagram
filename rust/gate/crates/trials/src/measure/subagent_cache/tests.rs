@@ -1,6 +1,6 @@
 //! Where each agent type's tokens are written against read.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::{json, Value};
 
@@ -56,7 +56,7 @@ fn run(
     .unwrap();
 }
 
-fn root() -> PathBuf {
+fn root() -> l7r_guard::shared::tempdir::TempDir {
     let t = crate::checks::scratch("subagent-cache");
     run(
         &t,

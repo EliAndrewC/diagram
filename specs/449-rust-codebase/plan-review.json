@@ -10718,6 +10718,53 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T101": {
+   "section_sha256": "d7617e77eb25cf6534cb06e03c80bd55d859fb181f111bc8c0341ba7e776d5e5",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T101-sweep-liveness",
+     "summary": "Every TempDir::new removes each l7r-{tag}-p{pid}-{seq} directory of its tag in its parent whose pid has no /proc entry, and hookrun.sh removes l7r-hooks-suite-<guard>-p<pid>.* of a gone pid before each run; neither sweep has any age condition.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Arbiter check 1: yes, the liveness test can remove a directory a live process still holds. The pid in the name is the CREATOR's, but the holders are mostly its descendants: under make rust-test the runner's TempDir is the TMPDIR of cargo and every test binary, and hookrun.sh's suite directory is held by the suite it runs. Kill the creator alone (SIGKILL, or a TERM aimed at its pid by a watchdog or timeout rather than at its group, which by the paragraph's own premise the Rust runner does not handle) and the children live on; the next run of the same tag or guard finds no /proc entry and deletes the directory under them. The plan calls pid reuse 'the safe way to be wrong' and never names this unsafe way. The request names exactly this risk and the rule against it: 'don't touch dirs younger than a few hours (a running gate may own them)'. The sweep deletes directories of any age, and the plan never mentions that clause. Substituting a pid test for the GM's age floor because it looks more precise is not a ground under MODE 1: an age floor is not impossible, nothing else the GM wrote contradicts it, and it does not defeat the purpose (the pile stays bounded). What the plan must carry: the GM's floor, so that neither sweep touches a directory younger than a few hours, whatever its pid."
+    },
+    {
+     "id": "T101-new-form-only",
+     "summary": "TempDir names directories l7r-{tag}-p{pid}-{seq} and sweeps only that form, so the pre-T101 l7r-{tag}-{pid}-{seq} pile (and mktemp-suffixed names) is never touched and stays the laptop session's to delete.",
+     "class": "within",
+     "why": "Arbiter check 2: yes, as long as the match is anchored. An exact tag, then '-p', digits, '-', digits, then end of name cannot match the old l7r-{tag}-{pid}-{seq} form (no 'p') or a mktemp XXXXXX suffix (no hyphen inside it). The bundle shows the NAME FORM, not the matcher, so this ruling assumes an anchored match. The unit test's old-form and other-tag fixtures pin that on the Rust side, and test-parts.sh's old-form fixture pins it on the shell side. Leaving the pile alone follows the request's 'leave that alone unless he asks you to' and FR-013's last sentence."
+    },
+    {
+     "id": "T101-pid-reuse",
+     "summary": "A pid reused by a live process keeps the directory carrying that pid.",
+     "class": "within",
+     "why": "Arbiter check 3: yes, by construction. A /proc/<pid> entry that is present, a zombie's included, means the directory is kept, and the unit test's live-pid fixture and test-parts.sh's live-run fixture go through that same branch. The only cost is a leftover lasting until the pid is freed and a later run of that tag, which errs in the direction the request asks for."
+    },
+    {
+     "id": "T101-hookrun-trap-and-pins",
+     "summary": "hookrun.sh stops the suite and exits through its EXIT trap on INT or TERM, and sweeps gone-pid suite directories; a unit test sweeps a fixture of gone-pid, live-pid, other-tag and old-form directories; tests/hooks/test-parts.sh runs hookrun.sh beside a gone run's, a live run's and an old-form directory and stops one with TERM, two of its cases red against the earlier hookrun.sh.",
+     "class": "within",
+     "why": "Arbiter check 4: they match, with two gaps in what is pinned. They are recorded here and do not block. (a) test-parts.sh sends only TERM, so the INT half of hookrun.sh's trap, which the plan claims, is pinned by nothing. (b) The unit test has an 'another tag's' fixture but the shell pin has no other-guard fixture, so whether hookrun.sh's sweep is confined to its own <guard> goes unchecked. 'Two of its cases red against the earlier hookrun.sh' is consistent: only the gone-run removal and the TERM exit could fail against a version that neither sweeps nor traps, while the live and old-form cases pin against a sweep that reaches too far. These tests enforce the request ('add a test that pins it') and are in scope."
+    },
+    {
+     "id": "T101-left-sigkill",
+     "summary": "Left line, SIGKILL part: a process killed by SIGKILL leaves its directory until the next of its kind runs.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request says 'remove it on exit, including failure and interrupt', and FR-013 says 'removed on exit, failure and panic included'. No code runs in a process on SIGKILL, so removing the directory at that exit cannot be done at all. Removing it on a later run is the most that is possible, and under make rust-test the runner's per-run TMPDIR already holds every test's scratch for that run."
+    },
+    {
+     "id": "T101-left-int-term",
+     "summary": "Left line, INT/TERM part: the paragraph treats SIGINT and SIGTERM 'as surely as SIGKILL', so a Rust process (the make rust-test runner, a test binary, a production command) stopped by an interrupt or a TERM leaves its directory until the next of its kind runs instead of removing it on exit.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "MODE 1's rule on bundled cases: one argument stretched over two unlike things. SIGKILL cannot be caught. SIGINT and SIGTERM can, and only their DEFAULT handling skips Drop. The plan itself traps INT and TERM in hookrun.sh and parts.sh, stopping the children and then removing the directory, which shows the Rust runner's counterpart is possible. The request names this case word for word: 'remove it on exit, including failure and interrupt (trap / ...)'. Under FR-013 ('removed on exit') an interrupted process has exited and its directory has not been removed. Being harder to do in Rust, or the sweep already bounding the pile, does not make the exception legitimate. What the plan must carry: on an interrupt or a TERM, the Rust side removes what it made at exit, as the shell side already does, so that the Left line keeps only SIGKILL."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

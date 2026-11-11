@@ -94,7 +94,7 @@ pub const PAGE: &str = "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>
 pub const BUILDINGS: &str = "# Buildings\n\n## Walls\n<!-- Research: walls - CONVENTION -->\n<!-- Research: wall height - research/questions/0001-gap.html: 12 ft -->\n\nWalls stand.\n\n- a list item\n  continued\n| a | table |\n|---|---|\n\n### Deep\n\nNo claim here.\n\n##### Too deep\n";
 
 /// A repository with the probe's Rust, procedures, questions and Python half, committed and set as origin/main; its root.
-pub fn fixture(tag: &str) -> PathBuf {
+pub fn fixture(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     git(&root, &["init", "-q", "-b", "main"]);
     git(&root, &["config", "user.email", "t@example.org"]);

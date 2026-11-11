@@ -22,7 +22,7 @@ fn git(repo: &Path, args: &[&str]) -> String {
     String::from_utf8_lossy(&done.stdout).trim().to_owned()
 }
 
-fn repo() -> PathBuf {
+fn repo() -> l7r_guard::shared::tempdir::Held<PathBuf> {
     let tmp = scratch("push");
     let (origin, work) = (tmp.join("origin.git"), tmp.join("work"));
     git(
@@ -45,7 +45,8 @@ fn repo() -> PathBuf {
     );
     git(&work, &["push", "-q", "origin", "HEAD:main"]);
     git(&work, &["fetch", "-q", "origin"]);
-    work
+    let held = work;
+    tmp.hold(held)
 }
 
 fn ask(work: &Path, gate: &str) -> String {
@@ -186,7 +187,7 @@ fn tools(tree: &Path, off: bool) -> Tools {
     }
 }
 
-fn tree() -> PathBuf {
+fn tree() -> l7r_guard::shared::tempdir::Held<PathBuf> {
     let root = repo();
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
     crate::write_executable(

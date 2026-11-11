@@ -1,12 +1,12 @@
 //! What the text checks share with the rest of the gate (feature 449 T92, from `checks.rs` and `checks/spec_figures.rs`): git's text,
 //! a scratch directory, Python's line split and `repr`, an extension test, and THE ONE DEFINITION OF A FIGURE (spec D4).
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
-use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
+pub use l7r_guard::shared::tempdir::TempDir;
 
 pub mod moves;
 
@@ -47,18 +47,10 @@ pub fn git_text(root: &Path, args: &[&str]) -> String {
         })
 }
 
-/// A scratch directory of this process.
-#[must_use]
-pub fn scratch(tag: &str) -> PathBuf {
-    static SEQ: AtomicUsize = AtomicUsize::new(0);
-    let dir = std::env::temp_dir().join(format!(
-        "l7r-gate-check-{tag}-{}-{}",
-        std::process::id(),
-        SEQ.fetch_add(1, Ordering::Relaxed)
-    ));
-    let _ = std::fs::remove_dir_all(&dir);
-    let _ = std::fs::create_dir_all(&dir);
-    dir
+/// A scratch directory of this process, `l7r-gate-check-{tag}-{pid}-{seq}`, removed when the value is dropped (feature 449 T101): hold
+/// it for as long as the directory is used.
+pub fn scratch(tag: &str) -> TempDir {
+    TempDir::new(&format!("gate-check-{tag}"))
 }
 
 /// Python's `str.splitlines`: a form feed and the Unicode line separators end a line too, so a reported line number agrees.

@@ -10,10 +10,9 @@ use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
 /// A tree with a `.git`, its streak file and seams; the clock at 1,000,000 s.
-fn tree(tag: &str) -> (PathBuf, Seams) {
+fn tree(tag: &str) -> (crate::shared::tempdir::TempDir, Seams) {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-measure-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-measure-{tag}"));
     std::fs::create_dir_all(d.join(".git")).unwrap();
     std::fs::create_dir_all(d.join("scripts/gates")).unwrap();
     crate::guards::write_executable(&d.join("scripts/gates/l7r-gate.sh"), "#!/bin/sh\necho 70\n");
@@ -22,7 +21,7 @@ fn tree(tag: &str) -> (PathBuf, Seams) {
         budget: 1,
         cadence_s: 10_800,
         now: 1_000_000,
-        tree: d.clone(),
+        tree: d.to_path_buf(),
     };
     (d, seams)
 }
@@ -169,9 +168,10 @@ fn a_red_gate_an_old_one_and_no_record_let_the_gate_run() {
     );
     std::fs::write(root.join(".git/gate-preflight-red"), "").unwrap();
     assert!(run(&bash("make done", &root), &s).is_empty());
+    let (_late, late) = tree("cadence-late");
     let late = Seams {
         now: 1_000_000 + 20_000,
-        ..tree("cadence-late").1
+        ..late
     };
     record(
         &late.tree,

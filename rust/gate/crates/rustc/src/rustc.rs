@@ -18,6 +18,7 @@ use std::sync::LazyLock;
 use std::time::Instant;
 
 use fancy_regex::Regex;
+use l7r_guard::shared::tempdir::TempDir;
 
 use crate::Reply;
 
@@ -134,6 +135,17 @@ fn crates(root: &Path, named: &[String]) -> Vec<PathBuf> {
 }
 
 fn cargo(world: &World, args: &[&str], manifest: &Path, after: &[&str]) -> Ran {
+    cargo_in(world, args, manifest, after, None)
+}
+
+/// `cargo`, its tests' `TMPDIR` set to `tmp` where one is given (`leak_checked`).
+fn cargo_in(
+    world: &World,
+    args: &[&str],
+    manifest: &Path,
+    after: &[&str],
+    tmp: Option<&Path>,
+) -> Ran {
     let mut all = own(args);
     all.push("--manifest-path".to_owned());
     all.push(manifest.display().to_string());
@@ -145,12 +157,51 @@ fn cargo(world: &World, args: &[&str], manifest: &Path, after: &[&str]) -> Ran {
         .target_override
         .clone()
         .unwrap_or_else(|| world.target.display().to_string());
-    run_in(
-        Some(&world.root),
-        &world.cargo,
-        &all,
-        &BTreeMap::from([("CARGO_TARGET_DIR".to_owned(), target)]),
-    )
+    let mut env = BTreeMap::from([("CARGO_TARGET_DIR".to_owned(), target)]);
+    if let Some(tmp) = tmp {
+        env.insert("TMPDIR".to_owned(), tmp.display().to_string());
+    }
+    run_in(Some(&world.root), &world.cargo, &all, &env)
+}
+
+/// THE LEAK PIN (feature 449 T101): a crate's tests run with their own `TMPDIR`, a fresh directory of this run, and anything a test
+/// leaves in it fails the crate, by name, with the fix. The checks and tests that never removed their scratch directories left about
+/// 329,000 of them, roughly 126 GB, in the GM's `/tmp` (2026-11-11).
+///
+/// The directory is under the temp directory itself, so a fixture check that knows a test by its `/tmp/` path still does. A SIGKILL
+/// cannot be caught, so a killed test's `Drop` never runs: this runner holds the directory in a `TempDir` and removes it whole after
+/// every run, so a killed test's leftovers go too (only a SIGKILL of the runner itself leaves its one directory).
+fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ran {
+    let name = manifest
+        .parent()
+        .and_then(Path::file_name)
+        .unwrap_or_default();
+    let tmp = TempDir::new(&format!("rust-tests-{}", name.to_string_lossy()));
+    let mut done = go(&tmp);
+    let mut left: Vec<String> = std::fs::read_dir(&tmp)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        // the one directory a whole test process shares (`beside_binary`), which nothing in the process outlives to remove: it goes
+        // with this run's directory on the next line
+        .filter(|n| n != l7r_guard::shared::tempdir::SHARED)
+        .collect();
+    drop(tmp);
+    if !left.is_empty() {
+        left.sort();
+        done.code = 1;
+        let _ = writeln!(
+            done.stderr,
+            "rust-checks: the tests left {} entr{} in their TMPDIR, which they must remove: {}\n  fix: hold the directory in an \
+             `l7r_guard::shared::tempdir::TempDir` (`TempDir::new(tag)`, or `checks::scratch(tag)`) for as long as the test uses it, so \
+             its Drop removes it on a return, a `?` or a panic",
+            left.len(),
+            if left.len() == 1 { "y" } else { "ies" },
+            left.join(", ")
+        );
+    }
+    done
 }
 
 /// The cargo feature flags naming every feature of the crate but `left_out` (none when that leaves none).
@@ -308,10 +359,11 @@ fn remove(path: &Path) {
 
 /// Instrument, run the crate's tests, and write the report. Only the last run's profiles are cleared and only the tests' binary is built:
 /// `llvm-cov clean` rebuilt the crate from scratch on every run (the GM 2026-11-07: "Are we recompiling EVERYTHING every time?").
-fn cover(world: &World, manifest: &Path, work: &Path, report: &[String]) -> Ran {
+fn cover(world: &World, manifest: &Path, work: &Path, report: &[String], tmp: &Path) -> Ran {
     let manifest_arg = manifest.display().to_string();
     let target = work.join("target");
     let mut env = BTreeMap::from([
+        ("TMPDIR".to_owned(), tmp.display().to_string()),
         (
             "PATH".to_owned(),
             format!(
@@ -407,12 +459,8 @@ fn cover(world: &World, manifest: &Path, work: &Path, report: &[String]) -> Ran 
 fn uncovered(world: &World, manifest: &Path, work: &Path) -> BTreeMap<String, Vec<u32>> {
     let lcov = work.join("lcov.info");
     let _ = std::fs::create_dir_all(work);
-    let done = cover(
-        world,
-        manifest,
-        work,
-        &own(&["--lcov", "--output-path", &lcov.display().to_string()]),
-    );
+    let report = own(&["--lcov", "--output-path", &lcov.display().to_string()]);
+    let done = leak_checked(manifest, |tmp| cover(world, manifest, work, &report, tmp));
     let parent = manifest.parent().unwrap_or(Path::new("."));
     let text = std::fs::read_to_string(&lcov);
     let (Ok(text), 0) = (text, done.code) else {
@@ -494,8 +542,13 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
                 plain
             }
         }
-        "test" => cargo(world, &["test", "--quiet"], manifest, &[]),
-        "test-counters" => cargo(world, &["test", "--quiet", "--all-features"], manifest, &[]),
+        "test" => leak_checked(manifest, |tmp| {
+            cargo_in(world, &["test", "--quiet"], manifest, &[], Some(tmp))
+        }),
+        "test-counters" => leak_checked(manifest, |tmp| {
+            let args = ["test", "--quiet", "--all-features"];
+            cargo_in(world, &args, manifest, &[], Some(tmp))
+        }),
         "hamlet" => {
             let mut args = vec!["run", "--release", "--quiet"];
             if !world.hamlet_features.is_empty() {
@@ -513,7 +566,9 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
             let flags = features_but(manifest, "counters");
             let mut args = vec!["test", "--quiet"];
             args.extend(flags.iter().map(String::as_str));
-            cargo(world, &args, manifest, &[])
+            leak_checked(manifest, |tmp| {
+                cargo_in(world, &args, manifest, &[], Some(tmp))
+            })
         }
         "dead" => {
             let dead = dead_public(manifest);

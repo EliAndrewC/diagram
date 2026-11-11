@@ -11,16 +11,16 @@ use crate::shared::session::Session;
 const NO_STALE: &str = "true";
 const NO_ACTIVE: &str = "true";
 
-fn world(tag: &str) -> PathBuf {
+fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-round-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-round-{tag}"));
     std::fs::create_dir_all(d.join("specs/301-x")).unwrap();
     std::fs::create_dir_all(d.join("specs/302-y")).unwrap();
     std::fs::create_dir_all(d.join(".git")).unwrap();
     std::fs::write(d.join("specs/301-x/spec.md"), "# 301\n\nFR-001 stands.\n").unwrap();
     std::fs::write(d.join("specs/302-y/spec.md"), "# 302\n\n## Review history\n\n- Round 1, `spec-fidelity`: CHANGES REQUIRED, an item.\n\n## After\n\nmore\n").unwrap();
-    d.canonicalize().unwrap()
+    let held = d.canonicalize().unwrap();
+    d.hold(held)
 }
 
 fn ctx<'a>(d: &Path, stale: &'a str, active: &'a str) -> Ctx<'a> {

@@ -57,7 +57,7 @@ fn a_tie_rounds_as_python_rounds() {
     assert!((two_places(1.5) - 1.5).abs() < f64::EPSILON);
 }
 
-fn clone(tag: &str) -> std::path::PathBuf {
+fn clone(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     let done = std::process::Command::new("git")
         .arg("-C")

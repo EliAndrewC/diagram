@@ -191,7 +191,7 @@ fn warm_and_cold_are_separate_populations() {
     );
 }
 
-fn tree(table: &Value) -> PathBuf {
+fn tree(table: &Value) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch("ratchet-cli");
     std::fs::create_dir_all(root.join("dev")).unwrap();
     std::fs::write(root.join("dev/ratchets.json"), table.to_string()).unwrap();

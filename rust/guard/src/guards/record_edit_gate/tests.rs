@@ -7,13 +7,13 @@ use serde_json::{json, Value};
 use super::mode_for;
 use crate::protocol::Event;
 
-fn world(tag: &str, guard: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("l7r-guard-regate-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+fn world(tag: &str, guard: &str) -> crate::shared::tempdir::Held<PathBuf> {
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-regate-{tag}"));
     std::fs::create_dir_all(d.join(".git")).unwrap();
     std::fs::create_dir_all(d.join("scripts/hooks")).unwrap();
     std::fs::write(d.join("scripts/hooks/record-edit-hooks.sh"), guard).unwrap();
-    d.canonicalize().unwrap()
+    let held = d.canonicalize().unwrap();
+    d.hold(held)
 }
 
 fn event(tool: &str, input: &Value, at: &Path) -> Event {

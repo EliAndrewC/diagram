@@ -1,6 +1,6 @@
 //! The landing cohort, the seeds' standing and the seed report, on real repositories with a stand-in Python.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::{json, Value};
 
@@ -12,7 +12,10 @@ use super::{int, rust_landing, text, truthy};
 use crate::ci::fixtures::{commit, git, put, python, repo};
 
 /// main's engine at the first return; a `work` commit changes it at the second.
-fn work(tag: &str, port: Option<&str>) -> (PathBuf, String, String, String) {
+fn work(
+    tag: &str,
+    port: Option<&str>,
+) -> (l7r_guard::shared::tempdir::TempDir, String, String, String) {
     let root = repo(tag);
     if let Some(port) = port {
         commit(
@@ -675,7 +678,7 @@ fn a_run_with_several_differing_records_starts_codeid_once() {
 
 #[test]
 fn each_counter_question_has_its_own_scratch_directory() {
-    assert_ne!(super::counter_dir(), super::counter_dir());
+    assert_ne!(super::counter_dir().path(), super::counter_dir().path());
 }
 
 #[test]

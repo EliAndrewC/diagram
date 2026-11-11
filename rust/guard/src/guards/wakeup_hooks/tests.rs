@@ -21,15 +21,14 @@ fn wake(prompt: &str) -> Value {
     tool("ScheduleWakeup", &json!({"prompt": prompt}))
 }
 
-fn transcript(tag: &str, rows: &[Value]) -> String {
+fn transcript(tag: &str, rows: &[Value]) -> crate::shared::tempdir::Held<String> {
     crate::shared::log::quiet();
-    let path = std::env::temp_dir().join(format!(
-        "l7r-guard-wakeup-{tag}-{}.jsonl",
-        std::process::id()
-    ));
+    let dir = crate::shared::tempdir::TempDir::new(&format!("guard-wakeup-{tag}"));
+    let path = dir.join("transcript.jsonl");
     let lines: Vec<String> = rows.iter().map(ToString::to_string).collect();
     std::fs::write(&path, lines.join("\n") + "\n").unwrap();
-    path.to_string_lossy().into_owned()
+    let held = path.to_string_lossy().into_owned();
+    dir.hold(held)
 }
 
 fn call(tr: &str, input: &Value) -> Vec<Answer> {
@@ -108,10 +107,8 @@ fn the_call_fails_closed_and_the_turn_end_open() {
         "could not establish"
     ));
     assert!(call("/no/such", &json!({"stop": true})).is_empty());
-    let path = std::env::temp_dir().join(format!(
-        "l7r-guard-wakeup-broken-{}.jsonl",
-        std::process::id()
-    ));
+    let dir = crate::shared::tempdir::TempDir::new("guard-wakeup-broken");
+    let path = dir.join("broken.jsonl");
     std::fs::write(&path, "[\"/loop x\"]\n{not json /loop\n").unwrap();
     let broken = path.to_string_lossy().into_owned();
     assert!(refused(
@@ -119,10 +116,7 @@ fn the_call_fails_closed_and_the_turn_end_open() {
         "could not establish"
     ));
     assert!(turn_end("/no/such", &json!([cron("a", WAKE)])).is_empty());
-    let skipped = std::env::temp_dir().join(format!(
-        "l7r-guard-wakeup-skipped-{}.jsonl",
-        std::process::id()
-    ));
+    let skipped = dir.join("skipped.jsonl");
     std::fs::write(&skipped, "{not json /loop\nunrelated\n").unwrap();
     assert!(refused(
         &call(&skipped.to_string_lossy(), &json!({"prompt": WAKE})),

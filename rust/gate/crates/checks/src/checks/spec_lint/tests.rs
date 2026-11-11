@@ -10,7 +10,11 @@ use super::{
     Row, CHECK6_MARK, GOOD, ID, POINTER, TASK,
 };
 
-fn feature(spec: &str, tasks: Option<&str>, research: Option<&str>) -> (PathBuf, PathBuf) {
+fn feature(
+    spec: &str,
+    tasks: Option<&str>,
+    research: Option<&str>,
+) -> (l7r_guard::shared::tempdir::TempDir, PathBuf) {
     let root = scratch("spec-lint-test");
     let dir = root.join("specs/999-a-feature");
     std::fs::create_dir_all(&dir).unwrap();
@@ -25,7 +29,7 @@ fn feature(spec: &str, tasks: Option<&str>, research: Option<&str>) -> (PathBuf,
 }
 
 fn found(spec: &str, research: Option<&str>) -> Vec<String> {
-    let (_, dir) = feature(spec, Some(TASK), research);
+    let (_dir, dir) = feature(spec, Some(TASK), research);
     checks_one_to_four(&dir)
 }
 
@@ -40,7 +44,7 @@ fn put(root: &Path, rel: &str, text: &str) {
 
 #[test]
 fn check_6_a_new_feature_without_the_approval_line_and_never_before_377() {
-    let (_, dir) = feature(GOOD, None, None);
+    let (_dir, dir) = feature(GOOD, None, None);
     let bad = check_approval(&dir);
     assert!(
         bad[0].contains(CHECK6_MARK)
@@ -59,11 +63,13 @@ fn check_6_a_new_feature_without_the_approval_line_and_never_before_377() {
     )
     .unwrap();
     assert_eq!(check_approval(&dir), Vec::<String>::new());
-    let old = scratch("old").join("376-older");
+    let old_dir = scratch("old");
+    let old = old_dir.join("376-older");
     std::fs::create_dir_all(&old).unwrap();
     std::fs::write(old.join("spec.md"), GOOD).unwrap();
     assert_eq!(check_approval(&old), Vec::<String>::new());
-    let unnumbered = scratch("name").join("a-feature");
+    let name_dir = scratch("name");
+    let unnumbered = name_dir.join("a-feature");
     std::fs::create_dir_all(&unnumbered).unwrap();
     std::fs::write(unnumbered.join("spec.md"), GOOD).unwrap();
     assert_eq!(check_approval(&unnumbered), Vec::<String>::new());
@@ -225,13 +231,13 @@ fn check_3_orphans_ranges_letters_and_a_criterion_naming_nothing() {
 #[test]
 fn a_criterion_under_a_sub_heading_counts() {
     let spec = "## Functional requirements\n\n**FR-001** A thing.\n\n## Success criteria\n\n### Measurable outcomes\n\n**SC-001** (FR-001) It holds.\n";
-    let (_, dir) = feature(spec, Some(TASK), None);
+    let (_dir, dir) = feature(spec, Some(TASK), None);
     assert_eq!(check_orphans(&dir.join("spec.md")), Vec::<String>::new());
 }
 
 #[test]
 fn check_4_a_task_citing_a_lost_id_and_another_feature_s_requirement() {
-    let (_, dir) = feature("## Functional requirements\n\n**FR-001** A thing.\n\n## Success criteria\n\n**SC-001** (FR-001) It holds.\n", Some("- [ ] T01 carried by the claims gate (385 FR-013) and feature 385's FR-014 (FR-001)\n- [ ] T02 bare (FR-013)\n"), None);
+    let (_dir, dir) = feature("## Functional requirements\n\n**FR-001** A thing.\n\n## Success criteria\n\n**SC-001** (FR-001) It holds.\n", Some("- [ ] T01 carried by the claims gate (385 FR-013) and feature 385's FR-014 (FR-001)\n- [ ] T02 bare (FR-013)\n"), None);
     let got = check_stale_tasks(&dir.join("spec.md"), &dir.join("tasks.md"));
     assert_eq!(got.len(), 1);
     assert!(got[0].contains(":2: cites FR-013") && got[0].contains("spec.md does not define"));
@@ -239,7 +245,7 @@ fn check_4_a_task_citing_a_lost_id_and_another_feature_s_requirement() {
 
 #[test]
 fn check_7_a_task_id_taken_twice() {
-    let (_, dir) = feature(
+    let (_dir, dir) = feature(
         GOOD,
         Some(
             "- [ ] T93 a figure\n      research: rendering\n- [x] T94 a page\n- [ ] T93 a carry\n",
@@ -376,7 +382,7 @@ fn the_command_line_names_directories_a_self_test_and_the_one_figure() {
     assert!(cli(&owned(&["--figure-pattern"]))
         .stdout
         .contains("(?:minutes|"));
-    let (_, dir) = feature(GOOD, Some(TASK), None);
+    let (_dir, dir) = feature(GOOD, Some(TASK), None);
     let done = cli(&[dir.display().to_string()]);
     assert_eq!(done.code, 1);
     assert_eq!(cli(&[]).code, 0);

@@ -1,7 +1,7 @@
 //! The line and its log against a temporary clone; the verdicts against today's are the suite's
 //! (`tests/hooks/test-event-log-hooks.sh`, replayed through the shim).
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::time::{Duration, UNIX_EPOCH};
 
 use serde_json::{json, Value};
@@ -11,9 +11,8 @@ use super::{
     typed_prompt, verdict_of,
 };
 
-fn clone(tag: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("l7r-guard-events-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+fn clone(tag: &str) -> crate::shared::tempdir::TempDir {
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-events-{tag}"));
     std::fs::create_dir_all(d.join(".git")).unwrap();
     std::fs::create_dir_all(d.join(".specify")).unwrap();
     std::fs::write(

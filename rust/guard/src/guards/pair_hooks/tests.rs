@@ -35,16 +35,14 @@ const TOOLS: [(&str, &str); 2] = [
 ];
 
 struct Fixture {
-    clone: PathBuf,
+    clone: crate::shared::tempdir::TempDir,
     input: Value,
 }
 
 impl Fixture {
     fn new(tag: &str, tool: &str, tool_input: &Value) -> Self {
         crate::shared::log::quiet();
-        let clone =
-            std::env::temp_dir().join(format!("l7r-guard-pair-{tag}-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&clone);
+        let clone = crate::shared::tempdir::TempDir::new(&format!("guard-pair-{tag}"));
         std::fs::create_dir_all(clone.join(".git")).unwrap();
         for (path, body) in TOOLS {
             let p = clone.join(path);
@@ -96,8 +94,8 @@ impl Fixture {
         judge(&Ctx {
             event: &e,
             session: &session,
-            clone: self.clone.clone(),
-            tree: self.clone.clone(),
+            clone: self.clone.to_path_buf(),
+            tree: self.clone.to_path_buf(),
             fell_back,
         })
     }
@@ -374,8 +372,7 @@ fn a_turn_may_not_end_with_a_dropped_dispatch() {
 
 #[test]
 fn the_clone_is_the_sessions_else_the_cwds_tree() {
-    let d = std::env::temp_dir().join(format!("l7r-guard-pair-root-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new("guard-pair-root");
     std::fs::create_dir_all(d.join(".clones/.session-clones")).unwrap();
     std::fs::create_dir_all(d.join(".clones/mine/.git")).unwrap();
     std::fs::create_dir_all(d.join(".git")).unwrap();
@@ -392,7 +389,7 @@ fn the_clone_is_the_sessions_else_the_cwds_tree() {
     );
     let mut none = Session::from_input(&json!({}));
     none.main_seam = Some(d.to_string_lossy().into_owned());
-    assert_eq!(find_root(&none, &d), Some((d.clone(), true)));
+    assert_eq!(find_root(&none, &d), Some((d.to_path_buf(), true)));
     assert_eq!(
         find_root(&none, &d.join(".clones/mine")),
         Some((d.join(".clones/mine"), false))

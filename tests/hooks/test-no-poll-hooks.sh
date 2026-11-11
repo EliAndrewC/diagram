@@ -429,7 +429,7 @@ check "...and inside a nested loop, after a done that only echoes" blocked 'whil
 }
 
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)
-part_env() { HOOK_ERR=$(mktemp); GUARD_LOG_ROOT=$GUARD_LOG_DIR; mkdir -p "$GUARD_LOG_ROOT"; }  # each part its own captured stderr and guard log
+part_env() { HOOK_ERR="$T/hook-err"; : > "$HOOK_ERR"; GUARD_LOG_ROOT=$GUARD_LOG_DIR; mkdir -p "$GUARD_LOG_ROOT"; }  # each part its own captured stderr and guard log
 CASES=(case_1 case_2 case_2b case_5 case_3 case_4 case_4b case_4c case_6 case_7 case_6b)
 declare -A WEIGHT=()
 # shellcheck source=/dev/null

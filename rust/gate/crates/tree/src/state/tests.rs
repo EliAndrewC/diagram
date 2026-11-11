@@ -26,10 +26,8 @@ fn put(dir: &Path, rel: &str, text: &str) {
 }
 
 /// A repository whose `.py` ids come from a shell stand-in, one commit in.
-fn repo(tag: &str) -> (PathBuf, String) {
-    let dir = std::env::temp_dir().join(format!("l7r-gate-state-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
-    std::fs::create_dir_all(&dir).unwrap();
+fn repo(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, PathBuf, String) {
+    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-state-{tag}"));
     git(&dir, &["init", "-q", "-b", "main"]);
     git(&dir, &["config", "user.email", "t@t"]);
     git(&dir, &["config", "user.name", "t"]);
@@ -44,7 +42,8 @@ fn repo(tag: &str) -> (PathBuf, String) {
     put(&dir, "scripts/s.sh", "true\n");
     git(&dir, &["add", "a.py", "scripts/s.sh"]);
     git(&dir, &["commit", "-qm", "c"]);
-    (dir.clone(), python.to_string_lossy().into_owned())
+    let at = dir.to_path_buf();
+    (dir, at, python.to_string_lossy().into_owned())
 }
 
 fn ask(dir: &Path, python: &str, args: &[&str]) -> crate::Reply {
@@ -57,8 +56,7 @@ fn ask(dir: &Path, python: &str, args: &[&str]) -> crate::Reply {
 
 #[test]
 fn a_worktree_keeps_its_record_in_its_own_git_directory() {
-    let dir = std::env::temp_dir().join(format!("l7r-gate-state-wt-{}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
+    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-state-wt");
     std::fs::write(dir.join(".git"), "gitdir: /elsewhere/wt\n").unwrap();
     assert_eq!(
         state_file(&dir),
@@ -73,7 +71,7 @@ fn a_worktree_keeps_its_record_in_its_own_git_directory() {
 
 #[test]
 fn a_green_gate_stands_against_a_green_subset_on_the_same_content() {
-    let (dir, py) = repo("subset");
+    let (_dir, dir, py) = repo("subset");
     let gate = write(&dir, GREEN, "done", false, &py).unwrap();
     assert!(!gate.tooling.is_empty() && !gate.commit.is_empty());
     assert_eq!(write(&dir, GREEN, "quick", false, &py).unwrap(), gate);
@@ -93,7 +91,7 @@ fn a_green_gate_stands_against_a_green_subset_on_the_same_content() {
 
 #[test]
 fn only_a_green_gate_that_ran_vouches_for_the_tooling() {
-    let (dir, py) = repo("tooling");
+    let (_dir, dir, py) = repo("tooling");
     assert_eq!(write(&dir, GREEN, "quick", false, &py).unwrap().tooling, "");
     assert_eq!(write(&dir, FAILED, "done", false, &py).unwrap().tooling, "");
     assert_eq!(write(&dir, GREEN, "done", true, &py).unwrap().tooling, "");
@@ -108,7 +106,7 @@ fn only_a_green_gate_that_ran_vouches_for_the_tooling() {
 
 #[test]
 fn a_second_red_gate_in_a_row_owes_the_arbiter_and_a_first_does_not() {
-    let (dir, py) = repo("red");
+    let (_dir, dir, py) = repo("red");
     let owed = dir.join(".git/arbiter-owed.json");
     write(&dir, FAILED, "done", false, &py).unwrap();
     assert!(!owed.exists());
@@ -136,7 +134,7 @@ fn a_second_red_gate_in_a_row_owes_the_arbiter_and_a_first_does_not() {
 
 #[test]
 fn the_tooling_can_be_vouched_for_with_or_without_a_record() {
-    let (dir, py) = repo("vouch");
+    let (_dir, dir, py) = repo("vouch");
     let hash = record_tooling(&dir, &py).unwrap();
     let st = read(&dir).unwrap().unwrap();
     assert_eq!(
@@ -158,7 +156,7 @@ fn the_tooling_can_be_vouched_for_with_or_without_a_record() {
 
 #[test]
 fn only_a_green_gate_on_exactly_this_content_is_reused() {
-    let (dir, py) = repo("reuse");
+    let (_dir, dir, py) = repo("reuse");
     let why = |d: &Path| already_verified(d, &py).unwrap();
     assert_eq!(
         why(&dir),
@@ -179,7 +177,7 @@ fn only_a_green_gate_on_exactly_this_content_is_reused() {
 
 #[test]
 fn the_command_line_answers_and_refuses() {
-    let (dir, py) = repo("cli");
+    let (_dir, dir, py) = repo("cli");
     assert_eq!(ask(&dir, &py, &["read"]).stdout, "null\n");
     assert_eq!(
         ask(&dir, &py, &["write", GREEN, "quick"]).stdout,

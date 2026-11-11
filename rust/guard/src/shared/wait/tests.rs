@@ -207,8 +207,7 @@ fn a_periodic_report_has_its_period() {
         periodic(&bg("while [ $SECONDS ]; do sleep 1; done"), "."),
         Some(3600)
     );
-    let d = std::env::temp_dir().join(format!("l7r-guard-wait-{}", std::process::id()));
-    std::fs::create_dir_all(&d).unwrap();
+    let d = crate::shared::tempdir::TempDir::new("guard-wait");
     std::fs::write(d.join("r.sh"), "while true; do date; sleep 120; done\n").unwrap();
     assert_eq!(periodic(&bg("bash r.sh"), &d.to_string_lossy()), Some(120));
     assert_eq!(periodic(&bg("./missing.sh"), ""), None);

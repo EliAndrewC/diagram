@@ -40,7 +40,7 @@ mod tests {
 
     #[test]
     fn a_sessions_file_is_named_safely_in_its_directory() {
-        let d = std::env::temp_dir().join(format!("l7r-guard-state-{}", std::process::id()));
+        let d = crate::shared::tempdir::TempDir::new("guard-state");
         assert_eq!(
             session_file(
                 &json!({"session_id": "a/b c"}),

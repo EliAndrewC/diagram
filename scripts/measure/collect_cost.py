@@ -15,7 +15,6 @@ import argparse
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -33,17 +32,18 @@ TREES = {
 def timed(args: list[str], env: dict[str, str] | None = None) -> tuple[float, str, dict[str, dict]]:
     """Seconds, pytest's last line, and per process (controller, each worker) the test modules it imported and the items it
     collected (`collect_probe.py`)."""
-    probe = Path(tempfile.mkdtemp(prefix="l7r-collect-"))
     path = os.pathsep.join([str(HERE), *([os.environ["PYTHONPATH"]] if os.environ.get("PYTHONPATH") else [])])
-    t = time.monotonic()
-    p = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", "--no-cov", "-p", "no:randomly", "-p", "collect_probe", *args],
-        cwd=ROOT, capture_output=True, text=True, check=False,
-        env={**os.environ, "L7R_VIA_MAKE": "1", "PYTHONPATH": path, "L7R_COLLECT_PROBE": str(probe), **(env or {})},
-    )  # fmt: skip
-    s = round(time.monotonic() - t, 2)
-    procs = {f.stem: json.loads(f.read_text()) for f in sorted(probe.glob("*.json"))}
-    shutil.rmtree(probe, ignore_errors=True)
+    # removed on an exception or an interrupt too, not only after a run that returns (feature 449 T101)
+    with tempfile.TemporaryDirectory(prefix="l7r-collect-") as held:
+        probe = Path(held)
+        t = time.monotonic()
+        p = subprocess.run(
+            [sys.executable, "-m", "pytest", "-q", "--no-cov", "-p", "no:randomly", "-p", "collect_probe", *args],
+            cwd=ROOT, capture_output=True, text=True, check=False,
+            env={**os.environ, "L7R_VIA_MAKE": "1", "PYTHONPATH": path, "L7R_COLLECT_PROBE": str(probe), **(env or {})},
+        )  # fmt: skip
+        s = round(time.monotonic() - t, 2)
+        procs = {f.stem: json.loads(f.read_text()) for f in sorted(probe.glob("*.json"))}
     out = (p.stdout + p.stderr).strip()
     return s, out.splitlines()[-1] if out else "", procs
 

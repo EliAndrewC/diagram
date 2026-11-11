@@ -36,7 +36,7 @@ fn lines(path: &Path, records: &[Value]) {
 }
 
 /// A clone at `<scratch>/m/.clones/c` with one commit and an agent file, and the stand-in `claude`.
-fn world(tag: &str) -> (PathBuf, Trial) {
+fn world(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, Trial) {
     let top = crate::checks::scratch(tag);
     let clone = top.join("m/.clones/c");
     std::fs::create_dir_all(clone.join(".claude/agents")).unwrap();
@@ -143,7 +143,7 @@ fn the_paths_a_prompt_names_outside_any_checkout() {
 
 #[test]
 fn a_clones_head_at_a_moment_comes_from_its_reflog() {
-    let (_, t) = world("mt-reflog");
+    let (_dir, t) = world("mt-reflog");
     let first = git(&t.clone, &["rev-parse", "HEAD"]);
     let log = git(
         &t.clone,
@@ -317,7 +317,7 @@ fn the_newest_file_is_found_at_any_depth() {
 
 #[test]
 fn a_case_with_no_reflog_at_the_time_stays_at_head() {
-    let (_, t, out, got) = case("mt-fallback", "the prompt", &[]);
+    let (_dir, t, out, got) = case("mt-fallback", "the prompt", &[]);
     assert_eq!(got.code, 0, "{}", got.stderr);
     assert_eq!(
         meta(&out)["commit"].as_str().unwrap(),
@@ -348,7 +348,16 @@ fn a_run_is_replayable_only_if_its_inputs_are_as_they_were() {
     assert!(replayable(&run));
 }
 
-fn case(tag: &str, prompt: &str, extra: &[&str]) -> (PathBuf, Trial, PathBuf, crate::Reply) {
+fn case(
+    tag: &str,
+    prompt: &str,
+    extra: &[&str],
+) -> (
+    l7r_guard::shared::tempdir::TempDir,
+    Trial,
+    PathBuf,
+    crate::Reply,
+) {
     let (top, t) = world(tag);
     let tr = transcript(&top, prompt);
     let out = top.join("case");
@@ -365,7 +374,7 @@ fn meta(out: &Path) -> Value {
 
 #[test]
 fn prepare_builds_a_case_at_head_with_the_tested_model() {
-    let (_, t, out, got) = case(
+    let (_dir, t, out, got) = case(
         "mt-prepare",
         "read /diagram/specs/x and /diagram/.clones/other/l7r/y",
         &["--head", "--omit-claude-md", "yes"],
@@ -451,10 +460,7 @@ fn prepare_names_what_is_not_a_fair_re_run() {
         .stdout
         .contains("MISSING (not a fair re-run): /tmp/l7r-nothing-here/x"));
     assert_eq!(meta(&out)["missing"][0], "/tmp/l7r-nothing-here/x");
-    let bundle = std::env::temp_dir().join(format!(
-        "{}-bundle",
-        top.file_name().unwrap().to_string_lossy()
-    ));
+    let bundle = l7r_guard::shared::tempdir::TempDir::new("gate-mt-bundle");
     std::fs::create_dir_all(bundle.join("deep")).unwrap();
     std::fs::write(bundle.join("deep/MANIFEST.md"), "x").unwrap();
     let tr = transcript(
@@ -557,7 +563,7 @@ fn the_runs_start_and_their_cost_is_told() {
 
 #[test]
 fn an_as_subagent_run_dispatches_the_check_once() {
-    let (_, t, out, _) = case("mt-sub", "p", &["--head", "--as-subagent"]);
+    let (_dir, t, out, _) = case("mt-sub", "p", &["--head", "--as-subagent"]);
     let cmd = t.run_command(&out, &meta(&out));
     assert_eq!(&cmd[1..4], ["-p", "--model", "sonnet"]);
     assert!(
@@ -598,7 +604,7 @@ fn run_all_starts_what_is_unfinished_and_holds_its_limit() {
 
 #[test]
 fn a_run_that_cannot_start_says_so() {
-    let (_, mut t, out, _) = case("mt-nostart", "p", &["--head"]);
+    let (_dir, mut t, out, _) = case("mt-nostart", "p", &["--head"]);
     t.claude = "/nonexistent/claude".to_owned();
     assert_eq!(
         cli(
@@ -663,7 +669,7 @@ fn a_verb_on_a_case_that_is_not_there_is_refused() {
 
 #[test]
 fn a_malformed_request_is_refused() {
-    let (_, t) = world("mt-usage");
+    let (_dir, t) = world("mt-usage");
     assert_eq!(cli(&[], &t).code, 2);
     assert_eq!(cli(&words(&["catalog"]), &t).code, 2);
     assert_eq!(cli(&words(&["prepare", "only-one"]), &t).code, 2);

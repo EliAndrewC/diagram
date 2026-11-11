@@ -1,6 +1,6 @@
 //! The decider over a fixture store (`tests/hooks/test-agent-prefix-hooks.sh`, replayed through the shim, is the verdict).
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::json;
 
@@ -8,11 +8,9 @@ use super::{decide, finding, judge, lines_kept, shared_runs, switches, verdict, 
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-fn store(tag: &str) -> PathBuf {
+fn store(tag: &str) -> crate::shared::tempdir::TempDir {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-prefix-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-prefix-{tag}"));
     d
 }
 
@@ -212,9 +210,7 @@ fn a_prompt_of_blank_tail_shows_no_line() {
 
 #[test]
 fn inside_a_repository_the_decider_is_reached() {
-    let d = std::env::temp_dir().join(format!("l7r-guard-decide-pref-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+    let d = crate::shared::tempdir::TempDir::new("guard-decide-pref");
     assert!(crate::shared::tool::ask(
         Path::new("/"),
         "git",

@@ -184,8 +184,8 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
         let file = file_of(event);
         let rel = relative_in(&c.top, file).filter(|r| !r.is_empty())?;
         let invisible = after_edit(event, file).is_some_and(|text| {
-            let scratch =
-                std::env::temp_dir().join(format!("l7r-gate-write-{}", std::process::id()));
+            let dir = crate::shared::tempdir::TempDir::new("gate-write");
+            let scratch = dir.join("after-edit");
             let wrote = std::fs::write(&scratch, text).is_ok();
             let said = wrote
                 && unseen(
@@ -197,7 +197,6 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
                         &scratch.to_string_lossy(),
                     ],
                 );
-            let _ = std::fs::remove_file(&scratch);
             said
         });
         return (!invisible).then(|| format!("an {tool} of {rel}"));

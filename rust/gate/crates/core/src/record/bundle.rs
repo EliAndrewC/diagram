@@ -19,11 +19,14 @@ pub fn default_root() -> PathBuf {
     PathBuf::from(DEFAULT_ROOT)
 }
 
-/// The tests' default directory, so a test of a default OUT never writes a session's real bundles.
+/// The tests' default directory, so a test of a default OUT never writes a session's real bundles: the process's shared directory
+/// (`beside_binary`), in the run's own temp directory, which `make rust-test` removes whole when the run ends (feature 449 T101).
 #[cfg(any(test, feature = "testkit"))]
 #[must_use]
 pub fn default_root() -> PathBuf {
-    std::env::temp_dir().join("l7r-check-tests")
+    static ROOT: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
+    ROOT.get_or_init(|| l7r_guard::shared::tempdir::beside_binary("l7r-check-tests"))
+        .clone()
 }
 pub const MANIFEST: &str = "MANIFEST.md";
 

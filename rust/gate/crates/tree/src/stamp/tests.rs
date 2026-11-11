@@ -8,10 +8,8 @@ use super::{
     listing, matches, record, salt, selftest, GATE_RECIPE,
 };
 
-fn repo(tag: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("l7r-gate-stamp-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
-    std::fs::create_dir_all(&dir).unwrap();
+fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-stamp-{tag}"));
     git(&dir, &["init", "-q", "-b", "main"]);
     git(&dir, &["config", "user.email", "t@t"]);
     git(&dir, &["config", "user.name", "t"]);
@@ -229,8 +227,7 @@ fn what_git_cannot_answer_refuses_rather_than_passes() {
     let refused = call(&dir, "python3", &["--check", "no-such-base"]);
     assert_eq!(refused.code, 1);
     assert!(refused.stderr.contains("git diff"));
-    let not_a_repo =
-        std::env::temp_dir().join(format!("l7r-gate-stamp-none-{}", std::process::id()));
+    let not_a_repo = l7r_guard::shared::tempdir::TempDir::new("gate-stamp-none");
     std::fs::create_dir_all(&not_a_repo).unwrap();
     for args in [
         ["--key", "diagram"],
@@ -352,7 +349,7 @@ fn outside_a_repository_it_stands_aside_and_nothing_is_fresh() {
 }
 
 /// A repository that can answer for Python itself: the real `codeid.py` and the module it records through.
-fn with_codeid(tag: &str) -> PathBuf {
+fn with_codeid(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let dir = repo(tag);
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
     for rel in ["gates/codeid.py", "hooks/lib/usage_log.py"] {

@@ -16,6 +16,7 @@ pub mod sha1;
 pub mod sha256;
 pub mod shape;
 pub mod state;
+pub mod tempdir;
 pub mod tool;
 pub mod transcript;
 pub mod tree;

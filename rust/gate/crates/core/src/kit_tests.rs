@@ -25,7 +25,7 @@ fn the_fixtures_build_a_repository_a_python_stand_in_and_a_record_s_edits() {
     assert_eq!(crate::record::bundle::tests::args(&["a", "b"]), ["a", "b"]);
     assert_eq!(
         crate::record::bundle::default_root(),
-        std::env::temp_dir().join("l7r-check-tests")
+        std::env::temp_dir().join("l7r-test-scratch/l7r-check-tests")
     );
     assert!(
         crate::record::repo::git_out(&root, &["rev-parse", "--is-inside-work-tree"])

@@ -14,7 +14,8 @@ GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 # GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
 # concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
 HOOK_ERR=$(mktemp)
-trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
+# the case's state directory and log too, whichever is current when the suite stops (feature 449 T101)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR" "${STATE_DIR:-}" "${GL:-}"' EXIT
 
 setup() { STATE_DIR=$(mktemp -d); export GATE_STATE_DIR="$STATE_DIR"; }
 teardown() { rm -rf "$STATE_DIR"; }

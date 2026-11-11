@@ -247,9 +247,7 @@ fn verdicts_at(
     commands: &[String],
     cargo: &str,
 ) -> Result<(Vec<&'static str>, String), String> {
-    let tree = std::env::temp_dir().join(format!("l7r-hookbench-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&tree);
-    let _ = std::fs::create_dir_all(&tree);
+    let tree = crate::shared::tempdir::TempDir::new("hookbench");
     let result = (|| {
         let tar = tree.join("a.tar").to_string_lossy().into_owned();
         let at = root.to_string_lossy().into_owned();
@@ -287,7 +285,7 @@ fn verdicts_at(
             format!("{how}, {:.1} s", began.elapsed().as_secs_f64()),
         ))
     })();
-    let _ = std::fs::remove_dir_all(&tree);
+    drop(tree);
     result
 }
 
@@ -368,11 +366,13 @@ pub(crate) fn answer(
     projects: &Path,
     cargo: &str,
 ) -> Reply {
-    // the bench is not a guard firing: no case of it reaches the real log
+    // the bench is not a guard firing: no case of it reaches the real log, and its own log goes when the bench returns (feature 449
+    // T101)
+    let own_log = crate::shared::tempdir::TempDir::new("hookbench-log");
+    let fallback = own_log.as_os_str().to_owned();
     std::env::set_var(
         "GUARD_LOG_DIR",
-        std::env::var_os("GUARD_LOG_DIR")
-            .unwrap_or(std::env::temp_dir().join("l7r-hookbench-log").into()),
+        std::env::var_os("GUARD_LOG_DIR").unwrap_or(fallback),
     );
     let fail = |stderr: String| Reply {
         stdout: String::new(),

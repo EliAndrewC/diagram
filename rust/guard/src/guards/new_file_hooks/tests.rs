@@ -13,10 +13,9 @@ const REGISTRY: &str = "research/sources/010-works-cited";
 const QUESTIONS: &str = "research/questions";
 
 /// A mirror with one clone, an old file in each directory, and one reservation.
-fn world(tag: &str) -> String {
+fn world(tag: &str) -> crate::shared::tempdir::Held<String> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-newfile-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-newfile-{tag}"));
     let clone = d.join("mirror/.clones/q");
     for dir in [GLOSSARY, REGISTRY, QUESTIONS, ".git"] {
         std::fs::create_dir_all(clone.join(dir)).unwrap();
@@ -29,7 +28,8 @@ fn world(tag: &str) -> String {
         "not json".to_owned(),
     ];
     std::fs::write(d.join("mirror/.specify/prefixes.jsonl"), rows.join("\n")).unwrap();
-    clone.canonicalize().unwrap().to_string_lossy().into_owned()
+    let held = clone.canonicalize().unwrap().to_string_lossy().into_owned();
+    d.hold(held)
 }
 
 fn event(tool: &str, input: &Value, at: &str) -> Event {

@@ -10,13 +10,13 @@ use super::{
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-fn world(tag: &str) -> PathBuf {
+fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-esc-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-esc-{tag}"));
     std::fs::create_dir_all(d.join(".git")).unwrap();
     std::fs::create_dir_all(d.join("specs/432-x")).unwrap();
-    d.canonicalize().unwrap()
+    let held = d.canonicalize().unwrap();
+    d.hold(held)
 }
 
 fn ctx(d: &Path, disposed: bool) -> Ctx<'static> {

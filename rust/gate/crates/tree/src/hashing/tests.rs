@@ -1,16 +1,14 @@
 //! The walk, the framing and the two configurations; the hashes against the Python are `m:t72-state`.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 
 use super::{
     cli, config_hash, content_hash, makefile_test_config, pyproject_test_config, under_each,
 };
 
-fn scratch(tag: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("l7r-gate-hash-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
-    std::fs::create_dir_all(&dir).unwrap();
+fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-hash-{tag}"));
     dir
 }
 

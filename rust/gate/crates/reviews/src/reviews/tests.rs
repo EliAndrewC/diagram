@@ -3,24 +3,16 @@
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::sync::atomic::{AtomicU64, Ordering};
 
 use serde_json::json;
 
 use super::*;
 
-static NEXT: AtomicU64 = AtomicU64::new(0);
-
 /// A fresh directory for one test.
-pub(super) fn dir(name: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!(
-        "l7r-gate-reviews-{}-{}-{name}",
-        std::process::id(),
-        NEXT.fetch_add(1, Ordering::Relaxed)
-    ));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
-    std::fs::canonicalize(&d).unwrap()
+pub(super) fn dir(name: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
+    let d = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-reviews-{name}"));
+    let root = std::fs::canonicalize(&d).unwrap();
+    d.hold(root)
 }
 
 /// `sh -c cmd` in `root`, which must succeed.
@@ -84,7 +76,7 @@ pub(super) fn tools(root: &Path) {
 }
 
 /// A repository with one commit, `origin/main` at it, and the stubbed tools (untracked).
-pub(super) fn repo(name: &str) -> PathBuf {
+pub(super) fn repo(name: &str) -> l7r_guard::shared::tempdir::Held<PathBuf> {
     let d = dir(name);
     sh(
         &d,

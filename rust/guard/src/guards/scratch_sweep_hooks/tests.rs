@@ -13,6 +13,7 @@ use super::sweep::{plan, remove, Item};
 use super::{cli, decide, judge, size, with, Config};
 use crate::protocol::Event;
 use crate::shared::session::Session;
+use crate::shared::tempdir::TempDir;
 use crate::shared::tool::flock;
 
 const DAY: u64 = 86_400;
@@ -21,10 +22,9 @@ fn now() -> SystemTime {
     SystemTime::now() + Duration::from_secs(4 * DAY)
 }
 
-fn world(tag: &str) -> (PathBuf, Config) {
+fn world(tag: &str) -> (TempDir, Config) {
     crate::shared::log::quiet();
-    let base = std::env::temp_dir().join(format!("l7r-guard-sweep-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&base);
+    let base = TempDir::new(&format!("guard-sweep-{tag}"));
     for d in ["root", "projects", "elsewhere", "sessions"] {
         std::fs::create_dir_all(base.join(d)).unwrap();
     }

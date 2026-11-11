@@ -1,13 +1,11 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::json;
 
 use super::Session;
 
-fn scratch(tag: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("l7r-guard-session-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+fn scratch(tag: &str) -> crate::shared::tempdir::TempDir {
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-session-{tag}"));
     d
 }
 
@@ -86,7 +84,7 @@ fn the_mirror_is_the_work_trees_top_cut_at_its_clones() {
     std::fs::create_dir_all(d.join(".clones/c/sub")).unwrap();
     let mut s = Session::from_input(&json!({"cwd": d.join(".clones/c/sub").to_string_lossy()}));
     s.main_seam = None;
-    assert_eq!(s.main(), d.as_path());
+    assert_eq!(s.main(), d.path());
     let mut none = Session::from_input(&json!({"cwd": "/"}));
     none.main_seam = None;
     assert_eq!(none.main(), std::path::Path::new("/diagram"));

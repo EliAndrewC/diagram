@@ -3,7 +3,7 @@
 use super::{baseline, check, cli, dry_run, floor_for, ABSOLUTE_MIN};
 use crate::checks::scratch;
 
-fn root() -> std::path::PathBuf {
+fn root() -> l7r_guard::shared::tempdir::TempDir {
     let dir = scratch("plausible");
     std::fs::create_dir_all(dir.join("dev")).unwrap();
     std::fs::write(dir.join("dev/ratchets.json"), "{\"quick\": {\"baseline\": 11}, \"done\": {\"baseline\": 400}, \"zero\": {\"baseline\": 0}}").unwrap();

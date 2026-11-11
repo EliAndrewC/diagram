@@ -1,6 +1,6 @@
 //! The guard on a clock of its own (`tests/hooks/test-batching-hooks.sh`, replayed through the shim, is the verdict).
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::{json, Value};
 
@@ -8,10 +8,9 @@ use super::{decide, judge, Config};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-fn dir(tag: &str) -> PathBuf {
+fn dir(tag: &str) -> crate::shared::tempdir::TempDir {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-batching-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-batching-{tag}"));
     d
 }
 

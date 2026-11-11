@@ -90,8 +90,7 @@ fn shell_check_cases() {
 
 #[test]
 fn source_block_cases() {
-    let dir = std::env::temp_dir().join(format!("l7r-guard-case-tables-{}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
+    let dir = crate::shared::tempdir::TempDir::new("guard-case-tables");
     let doc = dir.join("doc.md");
     let open = "<!-- SOURCE: GM NOTES - DO NOT MODIFY -->";
     let held = ["The col", "our of the sky was gr", "ey."].concat();

@@ -7,7 +7,7 @@ use serde_json::json;
 use super::super::tests::{git, repo};
 use super::cli;
 
-fn clone_with(file: &str, text: &str) -> std::path::PathBuf {
+fn clone_with(file: &str, text: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = repo();
     for (path, body) in [("scripts/gates/l7r-gate.sh", "x\n"), (file, text)] {
         std::fs::create_dir_all(root.join(path).parent().unwrap()).unwrap();

@@ -39,7 +39,7 @@ fn a_dispatch_into_the_repository_is_refused_with_its_command() {
     crate::shared::log::quiet();
     let d = dir("bundle");
     gate(&d, "exit 0");
-    let at = Some(d.as_path());
+    let at = Some(d.path());
     let q = "research/questions/0087-road.html";
     let s = "research/sources/010-works-cited/4220-edo-enwiki.html";
     assert!(call(&event("Bash", at, "quote-check", q), &d, &d).is_empty());
@@ -121,7 +121,7 @@ fn a_bundle_is_held_to_what_it_owes() {
     crate::shared::log::quiet();
     let d = dir("owed");
     gate(&d, "exit 0");
-    let at = Some(d.as_path());
+    let at = Some(d.path());
     let owes = d.join("a/MANIFEST.md");
     std::fs::create_dir_all(owes.parent().unwrap()).unwrap();
     std::fs::write(&owes, "owed-checks: record-format\n").unwrap();

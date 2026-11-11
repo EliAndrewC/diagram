@@ -82,7 +82,7 @@ fn git(dir: &Path, args: &[&str]) {
         .success());
 }
 
-fn repo(tag: &str) -> PathBuf {
+fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     git(&root, &["init", "-q", "-b", "main"]);
     git(&root, &["config", "user.email", "t@t"]);

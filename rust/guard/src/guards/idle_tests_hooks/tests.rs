@@ -13,11 +13,8 @@ use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 use crate::shared::tool::{ask, flock};
 
-fn dir(tag: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("l7r-guard-idle-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
-    d
+fn dir(tag: &str) -> crate::shared::tempdir::TempDir {
+    crate::shared::tempdir::TempDir::new(&format!("guard-idle-{tag}"))
 }
 
 fn script(p: &Path, body: &str) {
@@ -25,7 +22,7 @@ fn script(p: &Path, body: &str) {
 }
 
 /// A clone in a mirror's `.clones/`, and a fixture's configuration: no waiting, a fixed clock.
-fn world(tag: &str) -> (PathBuf, Config) {
+fn world(tag: &str) -> (crate::shared::tempdir::Held<PathBuf>, Config) {
     let root = dir(tag);
     let clone = root.join("main/.clones/sess");
     std::fs::create_dir_all(clone.join(".git")).unwrap();
@@ -54,7 +51,7 @@ fn world(tag: &str) -> (PathBuf, Config) {
     let mut c = Config::from_vars(&vars, Path::new("/nowhere/own"), "/");
     c.exe = PathBuf::from("/bin/true");
     c.grace = std::time::Duration::from_millis(1);
-    (clone, c)
+    (root.hold(clone), c)
 }
 
 fn armed(clone: &Path) {
@@ -102,7 +99,7 @@ fn the_hash_is_posix_cksum_and_the_stagger_stays_in_its_band() {
         (cksum("123456789"), cksum("sess-a"), cksum("")),
         (930_766_865, 812_959_857, 4_294_967_295)
     );
-    let (_, c) = world("hash");
+    let (_dir, c) = world("hash");
     assert!(
         (60..=120).contains(&c.stagger("anything")) && c.stagger("a") == c.stagger("a") && !DEF_ARM
     );

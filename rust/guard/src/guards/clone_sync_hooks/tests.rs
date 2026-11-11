@@ -51,8 +51,9 @@ fn copy(from: &Path, to: &Path) {
 fn template() -> &'static PathBuf {
     static T: OnceLock<PathBuf> = OnceLock::new();
     T.get_or_init(|| {
-        let root = std::env::temp_dir().join(format!("l7r-guard-cs-template-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&root);
+        // one template for the process, in its shared directory (`beside_binary`): a static is never dropped to remove a `TempDir`, so it
+        // goes with the run's own temp directory (feature 449 T101)
+        let root = crate::shared::tempdir::beside_binary("guard-cs-template");
         let main = root.join("diagram");
         std::fs::create_dir_all(&main).unwrap();
         std::fs::write(main.join(".gitignore"), ".clones/\n").unwrap();
@@ -84,13 +85,13 @@ struct World {
     clone: PathBuf,
     tree: PathBuf,
     sessions: PathBuf,
+    _root: crate::shared::tempdir::TempDir,
 }
 
 impl World {
     fn new(tag: &str) -> Self {
         crate::shared::log::quiet();
-        let root = std::env::temp_dir().join(format!("l7r-guard-cs-{tag}-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&root);
+        let root = crate::shared::tempdir::TempDir::new(&format!("guard-cs-{tag}"));
         copy(template(), &root);
         let main = root.join("diagram");
         let sessions = root.join("sessions");
@@ -105,6 +106,7 @@ impl World {
             tree: root.join("tree"),
             main,
             sessions,
+            _root: root,
         }
     }
 

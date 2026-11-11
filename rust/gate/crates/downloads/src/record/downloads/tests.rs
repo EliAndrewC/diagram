@@ -1,7 +1,7 @@
 //! The list's parsing, ingest, sync, add and the push check, on scratch repositories.
 
 use std::collections::{HashMap, HashSet};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 
 use super::check::{check, failing, problems, selftest, selftest_failures};
@@ -32,7 +32,7 @@ fn git(root: &Path, args: &[&str]) {
     assert!(done.status.success());
 }
 
-fn repo(tag: &str) -> PathBuf {
+fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = scratch(tag);
     git(&root, &["init", "-q"]);
     git(&root, &["config", "user.email", "t@t"]);
@@ -276,7 +276,13 @@ fn a_copy_entry_the_base_lacks_is_a_pending_text_edit() {
     assert!(!out.pending[0].1.starts_with("CONFLICT"));
 }
 
-fn synced(tag: &str, canon: &str) -> (PathBuf, PathBuf) {
+fn synced(
+    tag: &str,
+    canon: &str,
+) -> (
+    l7r_guard::shared::tempdir::TempDir,
+    l7r_guard::shared::tempdir::TempDir,
+) {
     let root = repo(tag);
     let inbox = scratch(&format!("{tag}-inbox"));
     put(&root, CANON, canon);

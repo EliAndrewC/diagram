@@ -10,10 +10,9 @@ use crate::shared::tool::ask;
 const OLD: &str = "l7r/diagram/old/stage.py";
 
 /// A checkout holding phase task T9's old module, its box open.
-fn world(tag: &str, allow: &Value) -> String {
+fn world(tag: &str, allow: &Value) -> crate::shared::tempdir::Held<String> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-phase-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-phase-{tag}"));
     std::fs::create_dir_all(d.join("l7r/diagram/old")).unwrap();
     std::fs::create_dir_all(d.join("specs/444-x")).unwrap();
     let at = d.canonicalize().unwrap().to_string_lossy().into_owned();
@@ -27,7 +26,8 @@ fn world(tag: &str, allow: &Value) -> String {
     let state =
         json!({"feature": "444-x", "task": "T9", "phase": "water", "files": [OLD], "allow": allow});
     std::fs::write(format!("{at}/.git/phase-sources.json"), state.to_string()).unwrap();
-    at
+    let held = at;
+    d.hold(held)
 }
 
 fn run(tool: &str, input: &Value, at: &str) -> Vec<Answer> {

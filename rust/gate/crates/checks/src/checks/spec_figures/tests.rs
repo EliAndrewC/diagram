@@ -15,8 +15,14 @@ fn entries() -> Value {
     })
 }
 
-fn measured(spec: &str, recorded: &Value, research: Option<&str>, number: u32) -> PathBuf {
-    let dir = scratch("figures").join(format!("specs/{number}-a-feature"));
+fn measured(
+    spec: &str,
+    recorded: &Value,
+    research: Option<&str>,
+    number: u32,
+) -> l7r_guard::shared::tempdir::Held<PathBuf> {
+    let root = scratch("figures");
+    let dir = root.join(format!("specs/{number}-a-feature"));
     std::fs::create_dir_all(&dir).unwrap();
     std::fs::write(dir.join("spec.md"), spec).unwrap();
     std::fs::write(dir.join("tasks.md"), "- [ ] T01 the thing (FR-001)\n").unwrap();
@@ -24,7 +30,7 @@ fn measured(spec: &str, recorded: &Value, research: Option<&str>, number: u32) -
     if let Some(text) = research {
         std::fs::write(dir.join("research.md"), text).unwrap();
     }
-    dir
+    root.hold(dir)
 }
 
 fn check(spec: &str) -> Vec<String> {

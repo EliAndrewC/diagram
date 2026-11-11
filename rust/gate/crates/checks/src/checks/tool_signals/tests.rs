@@ -11,7 +11,7 @@ fn put(root: &Path, rel: &str, text: &str) {
     std::fs::write(path, text).unwrap();
 }
 
-fn clean() -> std::path::PathBuf {
+fn clean() -> l7r_guard::shared::tempdir::TempDir {
     let r = scratch("signals");
     put(&r, ".claude/settings.json", "{\"hooks\":{\"PreToolUse\":[{\"hooks\":[{\"command\":\"scripts/hooks/foo-hooks.sh pretool\"}]}]}}\n");
     put(&r, "Makefile", "done: lint\nlint:\n\t@python3 scripts/tools/lint.py\nquick:\n\t@true\ntick:\n\t@$(MAKE) sub\nsub:\n\t@true\n");

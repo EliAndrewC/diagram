@@ -9,12 +9,13 @@ use crate::shared::session::Session;
 const BLOCK: &str =
     "<!-- SOURCE: GM NOTES - DO NOT MODIFY -->\nThe color of the sky.\n<!-- END SOURCE -->";
 
-fn file(tag: &str, text: &str) -> String {
+fn file(tag: &str, text: &str) -> crate::shared::tempdir::Held<String> {
     crate::shared::log::quiet();
-    let path =
-        std::env::temp_dir().join(format!("l7r-guard-source-{tag}-{}.md", std::process::id()));
+    let dir = crate::shared::tempdir::TempDir::new(&format!("guard-source-{tag}"));
+    let path = dir.join("doc.md");
     std::fs::write(&path, text).unwrap();
-    path.to_string_lossy().into_owned()
+    let held = path.to_string_lossy().into_owned();
+    dir.hold(held)
 }
 
 fn run(input: &Value) -> Vec<Answer> {

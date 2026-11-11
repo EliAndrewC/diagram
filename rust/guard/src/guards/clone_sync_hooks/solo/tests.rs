@@ -1,7 +1,7 @@
 //! Who counts as another session, and the five-minute cache.
 
 use std::cell::Cell;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use super::{alone, chain, others, processes, session, solo, Procs};
 
@@ -23,10 +23,8 @@ fn tree() -> Procs {
     .collect()
 }
 
-fn dir(tag: &str) -> PathBuf {
-    let path = std::env::temp_dir().join(format!("l7r-guard-solo-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&path);
-    std::fs::create_dir_all(&path).unwrap();
+fn dir(tag: &str) -> crate::shared::tempdir::TempDir {
+    let path = crate::shared::tempdir::TempDir::new(&format!("guard-solo-{tag}"));
     path
 }
 

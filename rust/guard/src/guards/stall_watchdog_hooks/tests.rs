@@ -10,11 +10,9 @@ use crate::shared::session::Session;
 use crate::shared::tool::flock;
 
 /// A state directory and a fake library that records each pass and writes to stderr.
-fn world(tag: &str) -> (PathBuf, Config) {
+fn world(tag: &str) -> (crate::shared::tempdir::TempDir, Config) {
     crate::shared::log::quiet();
-    let root =
-        std::env::temp_dir().join(format!("l7r-guard-stall-dog-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&root);
+    let root = crate::shared::tempdir::TempDir::new(&format!("guard-stall-dog-{tag}"));
     let lib = root.join("tree/scripts/hooks");
     std::fs::create_dir_all(&lib).unwrap();
     let passes = root.join("passes");
@@ -135,7 +133,7 @@ fn the_loop_ends_with_its_state_directory_and_fails_without_one() {
     )
     .unwrap();
     assert_eq!(run(&Config { passes: None, ..c }), 0);
-    let (_, d) = world("noplace");
+    let (_dir, d) = world("noplace");
     assert_eq!(
         run(&Config {
             state: PathBuf::from("/proc/nope/x"),
@@ -143,7 +141,7 @@ fn the_loop_ends_with_its_state_directory_and_fails_without_one() {
         }),
         1
     );
-    let (_, e) = world("nolock");
+    let (_dir, e) = world("nolock");
     std::fs::create_dir_all(e.state.join("lock")).unwrap();
     assert_eq!(run(&e), 1);
 }

@@ -1,6 +1,6 @@
 //! Each record's shape and every refusal.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::{json, Value};
 
@@ -10,7 +10,7 @@ fn words(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
 }
 
-fn repo(tag: &str) -> PathBuf {
+fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     for args in [
         &["init", "-q"][..],

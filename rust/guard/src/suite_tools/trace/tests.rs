@@ -16,9 +16,8 @@ fn git(root: &Path, args: &[&str]) {
         .success());
 }
 
-fn world(tag: &str) -> (PathBuf, PathBuf, PathBuf) {
-    let base = std::env::temp_dir().join(format!("l7r-guard-trace-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&base);
+fn world(tag: &str) -> (crate::shared::tempdir::TempDir, PathBuf, PathBuf) {
+    let base = crate::shared::tempdir::TempDir::new(&format!("guard-trace-{tag}"));
     let (root, gitdir) = (base.join("repo"), base.join("gitdir"));
     std::fs::create_dir_all(&root).unwrap();
     git(&root, &["init", "-q"]);

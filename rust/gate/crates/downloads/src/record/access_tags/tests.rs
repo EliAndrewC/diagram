@@ -1,6 +1,6 @@
 //! The tag's rules, on scratch trees.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::json;
 
@@ -19,7 +19,7 @@ fn put(root: &Path, rel: &str, text: &str) {
 
 const STATES: &str = r#"[{"id":"open"},{"id":"gm-full"},{"id":"gm-partial"},{"id":"paywalled"},{"id":"bot-refused"},{"id":"down"},{"id":"gone"},{"id":"never-read"}]"#;
 
-fn tree(tag_name: &str, recorded: &str) -> PathBuf {
+fn tree(tag_name: &str, recorded: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = scratch(tag_name);
     put(
         &root,

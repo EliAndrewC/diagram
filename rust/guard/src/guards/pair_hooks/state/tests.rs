@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::time::{Duration, UNIX_EPOCH};
 
 use serde_json::{json, Value};
@@ -8,9 +8,8 @@ use super::{
     round_number, wall, write_pairing,
 };
 
-fn clone(tag: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("l7r-guard-state-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+fn clone(tag: &str) -> crate::shared::tempdir::TempDir {
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-state-{tag}"));
     std::fs::create_dir_all(d.join(".git")).unwrap();
     d
 }

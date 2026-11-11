@@ -9,10 +9,9 @@ use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 use crate::shared::tool::ask;
 
-fn world(tag: &str) -> PathBuf {
+fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir().join(format!("l7r-guard-agentmodel-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-agentmodel-{tag}"));
     std::fs::create_dir_all(d.join(".claude/agents")).unwrap();
     assert!(ask(
         Path::new("/"),
@@ -22,7 +21,8 @@ fn world(tag: &str) -> PathBuf {
     )
     .ok());
     std::fs::write(d.join(".claude/agents/quote-check.md"), "x").unwrap();
-    d.canonicalize().unwrap()
+    let held = d.canonicalize().unwrap();
+    d.hold(held)
 }
 
 fn run(tool: &str, input: &Value, at: &Path) -> Vec<Answer> {

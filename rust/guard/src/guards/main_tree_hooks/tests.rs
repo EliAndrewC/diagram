@@ -8,12 +8,15 @@ use super::{decide, judge, mirror};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-fn tree(tag: &str) -> (std::path::PathBuf, std::path::PathBuf) {
+fn tree(
+    tag: &str,
+) -> (
+    crate::shared::tempdir::Held<std::path::PathBuf>,
+    std::path::PathBuf,
+) {
     crate::shared::log::quiet();
-    let d = std::env::temp_dir()
-        .join(format!("l7r-guard-mt-{tag}-{}", std::process::id()))
-        .join("diagram");
-    let _ = std::fs::remove_dir_all(&d);
+    let root = crate::shared::tempdir::TempDir::new(&format!("guard-mt-{tag}"));
+    let d = root.join("diagram");
     let clone = d.join(".clones/mine");
     std::fs::create_dir_all(d.join(".git")).unwrap();
     std::fs::create_dir_all(clone.join(".git")).unwrap();
@@ -23,7 +26,7 @@ fn tree(tag: &str) -> (std::path::PathBuf, std::path::PathBuf) {
         clone.to_string_lossy().as_bytes(),
     )
     .unwrap();
-    (d, clone)
+    (root.hold(d), clone)
 }
 
 fn run(cmd: &str, dir: &Path, main: &Path, sid: &str) -> Vec<Answer> {
@@ -81,8 +84,8 @@ fn main_tree_ok_stands_aside_with_a_reason_and_refuses_without() {
 #[test]
 fn the_mirror_is_the_work_trees_top_cut_at_its_clones() {
     let (m, c) = tree("mirror");
-    assert_eq!(mirror(&c.join("x")), Some(m.clone()));
-    assert_eq!(mirror(&m), Some(m.clone()));
+    assert_eq!(mirror(&c.join("x")), Some(m.to_path_buf()));
+    assert_eq!(mirror(&m), Some(m.to_path_buf()));
     assert_eq!(mirror(Path::new("/")), None);
     let none = Event {
         name: "PreToolUse".to_owned(),

@@ -16,10 +16,8 @@ impl std::io::Write for Closed {
     }
 }
 
-fn clone_at(name: &str) -> std::path::PathBuf {
-    let d = std::env::temp_dir().join(format!("l7r-gate-door-{}-{name}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&d);
-    std::fs::create_dir_all(&d).unwrap();
+fn clone_at(name: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
+    let d = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-door-{name}"));
     assert!(std::process::Command::new("git")
         .arg("-C")
         .arg(&d)
@@ -35,7 +33,7 @@ fn clone_at(name: &str) -> std::path::PathBuf {
     )
     .unwrap();
     std::fs::create_dir_all(root.join("specs/999-x")).unwrap();
-    root
+    d.hold(root)
 }
 
 #[expect(

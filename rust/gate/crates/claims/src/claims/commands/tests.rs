@@ -230,9 +230,9 @@ fn a_bundle_is_refused_on_what_it_cannot_name() {
         ],
     );
     assert_eq!(got.code, 0);
-    assert!(got
-        .stdout
-        .starts_with("/tmp/l7r-check/claims-docs-buildings-md-walls-walls/MANIFEST.md"),);
+    let manifest = l7r_gate_core::record::bundle::default_root()
+        .join("claims-docs-buildings-md-walls-walls/MANIFEST.md");
+    assert!(got.stdout.starts_with(&manifest.display().to_string()));
     assert!(got
         .stdout
         .contains("claims-bundle: re-check of 1 claim(s) not owed, because: a re check"));

@@ -1,6 +1,6 @@
 //! A fake `/proc` and `/sys` holding every figure the snapshot reads.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use serde_json::{json, Value};
 
@@ -62,7 +62,7 @@ fn host(
     Host { proc, sys }
 }
 
-fn scratch(tag: &str) -> PathBuf {
+fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     crate::checks::scratch(&format!("runstats-{tag}"))
 }
 

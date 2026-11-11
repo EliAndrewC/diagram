@@ -207,11 +207,9 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     }
     let row = appended(cmd, &c.tool(&root, "review_cost.py"), c);
     let judged = Path::new(&root).join(LEDGER);
-    let scratch = std::env::temp_dir().join(format!(
-        "l7r-ledger-{}-{}",
-        std::process::id(),
-        root.replace('/', "_")
-    ));
+    // the ledger as it will read, judged from a copy removed when this returns (feature 449 T101)
+    let dir = crate::shared::tempdir::TempDir::new("ledger");
+    let scratch = dir.join("review-ledger.md");
     let ledger = row.as_ref().map_or(judged.clone(), |r| {
         let body = std::fs::read_to_string(&judged).unwrap_or_default();
         let _ = std::fs::write(&scratch, format!("{body}{r}\n"));

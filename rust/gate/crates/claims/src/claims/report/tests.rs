@@ -135,7 +135,7 @@ fn a_form_problem_in_a_changed_file_refuses_and_the_base_tree_is_read() {
 }
 
 /// The rows and the index `classify` is asked about: (root, rows, index).
-fn classify_rows() -> (std::path::PathBuf, Cur, Map<String, Value>) {
+fn classify_rows() -> (l7r_guard::shared::tempdir::TempDir, Cur, Map<String, Value>) {
     let root = fixture("claims-report-classify");
     let q = root.join("research/questions");
     let (same_page, moved_page) = (

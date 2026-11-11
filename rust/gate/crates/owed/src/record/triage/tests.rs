@@ -78,9 +78,10 @@ fn a_triage_bundles_the_moved_pages_and_records_a_reply() {
     std::fs::create_dir_all(&s).unwrap();
     std::fs::write(s.join("modal-triage-touched.json"), "{bad").unwrap();
     assert!(touched(&s).is_err());
+    let under = l7r_gate_core::record::bundle::default_root().join("modal-triage-");
     assert!(default_out(&root)
         .to_string_lossy()
-        .starts_with("/tmp/l7r-check/modal-triage-"));
+        .starts_with(&*under.to_string_lossy()));
 }
 
 #[test]

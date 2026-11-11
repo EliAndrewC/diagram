@@ -51,9 +51,10 @@ const SP_STUB: &str = "import re\n\ndef glosses(html):\n    return re.findall(r'
 const AE_STUB: &str = "def reply_of(path):\n    return path.read_text()\n";
 
 /// A repository holding a small record, committed once and set as origin/main; the stubs of every Python seam under `scripts/record/`.
-#[must_use]
-pub fn record(tag: &str) -> PathBuf {
-    record_at(&crate::checks::scratch(tag))
+pub fn record(tag: &str) -> crate::checks::TempDir {
+    let dir = crate::checks::scratch(tag);
+    let _ = record_at(&dir);
+    dir
 }
 
 /// [`record`], at `root`.

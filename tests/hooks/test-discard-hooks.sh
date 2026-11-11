@@ -12,7 +12,8 @@ GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 
 TMP=$(mktemp -d)
-trap 'rm -rf "$TMP"' EXIT
+# one trap for both: a second `trap ... EXIT` replaces the first, which left the guard log behind (feature 449 T101)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$TMP"' EXIT
 git -C "$TMP" init -q
 git -C "$TMP" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
 printf 'a\n' > "$TMP/dirty.py"; printf 'b\n' > "$TMP/clean.py"; mkdir -p "$TMP/sub"; printf 'c\n' > "$TMP/sub/deep.py"

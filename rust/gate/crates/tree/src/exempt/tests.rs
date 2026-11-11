@@ -1,13 +1,12 @@
 //! The record's rules; the entries a stage's landing makes stale, and the entry no stage can name.
 
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 
 use super::{cli, load, missing, ranges, split};
 
-fn scratch(tag: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("l7r-gate-exempt-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
+fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-exempt-{tag}"));
     std::fs::create_dir_all(dir.join("dev")).unwrap();
     dir
 }
@@ -51,7 +50,7 @@ const LIVE: &str = r#"{"path": "a.py", "stages": ["seat", "hem"]}"#;
 const DONE: &str = r#"{"path": "b.py", "stages": ["sink"]}"#;
 const GONE: &str = r#"{"path": "gone.py", "stages": ["seat"]}"#;
 
-fn three(tag: &str) -> PathBuf {
+fn three(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let dir = scratch(tag);
     record(&dir, &[LIVE, DONE, GONE].join(","));
     file(&dir, "a.py");

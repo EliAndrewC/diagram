@@ -23,7 +23,14 @@ run_parts() {
     return 0
   fi
   local W; W=$(mktemp -d)
-  local -a LOAD PART
+  # W goes on an exit, an interrupt or a TERM too (feature 449 T101), beside whatever EXIT trap the suite set: appended to it, never
+  # replacing it - a second `trap ... EXIT` replacing the first is the leak the discard and pair suites had - and the suite's own put
+  # back after. INT and TERM stop the parts (each part's own directory is inside W) and exit through the EXIT trap.
+  local prev=""; [ -n "$(trap -p EXIT)" ] && eval "set -- $(trap -p EXIT)" && prev=$3
+  trap "rm -rf '$W'; $prev" EXIT
+  local -a LOAD PART PIDS=()
+  trap 'for p in "${PIDS[@]}"; do pkill -P "$p"; kill "$p"; done 2>/dev/null; exit 130' INT
+  trap 'for p in "${PIDS[@]}"; do pkill -P "$p"; kill "$p"; done 2>/dev/null; exit 143' TERM
   for ((k = 0; k < parts; k++)); do LOAD[k]=0; PART[k]=""; done
   while read -r w c; do
     best=0; for ((k = 1; k < parts; k++)); do [ "${LOAD[k]}" -lt "${LOAD[best]}" ] && best=$k; done
@@ -31,10 +38,11 @@ run_parts() {
   done < <(for c in "${CASES[@]}"; do echo "${WEIGHT[$c]:-10} $c"; done | sort -rn)
   for ((k = 0; k < parts; k++)); do
     [ -n "${PART[k]}" ] || continue
-    ( T=$(mktemp -d); export GUARD_LOG_DIR="$T/guard-log" HOME=$T; PASS=0; FAIL=0
+    ( T=$(mktemp -d -p "$W"); trap 'rm -rf "$T"' EXIT; export GUARD_LOG_DIR="$T/guard-log" HOME=$T; PASS=0; FAIL=0
       declare -F part_env >/dev/null && part_env
       for c in ${PART[k]}; do "$c"; echo "@@reported $c"; done
       echo "$PASS $FAIL" > "$W/$k.counts"; rm -rf "$T" ) > "$W/$k.log" 2>&1 &
+    PIDS+=($!)
   done
   wait
   for ((k = 0; k < parts; k++)); do
@@ -46,4 +54,6 @@ run_parts() {
     fi
   done
   rm -rf "$W"
+  if [ -n "$prev" ]; then trap -- "$prev" EXIT; else trap - EXIT; fi
+  trap - INT TERM
 }

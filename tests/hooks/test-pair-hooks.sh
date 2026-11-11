@@ -19,7 +19,8 @@ ok() { pass=$((pass+1)); }
 bad() { fail=$((fail+1)); echo "FAIL: $1"; }
 check() { if eval "$2"; then ok; else bad "$1"; fi; }
 
-TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
+# one trap for both: a second `trap ... EXIT` replaces the first, which left the guard log behind (feature 449 T101)
+TMP=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$TMP"' EXIT
 CLONE="$TMP/clone"; SKILL="$CLONE"
 mkdir -p "$SKILL/dev/bypass-log" "$CLONE/scripts" "$TMP/proj/sid-1/subagents"
 (cd "$CLONE" && git init -q)

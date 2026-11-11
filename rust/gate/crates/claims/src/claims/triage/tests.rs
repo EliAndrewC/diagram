@@ -19,7 +19,11 @@ fn units_doc(qual: &str, blocks: &[&str]) -> String {
 
 /// The fixture recorded, then a claimed dictionary, a page, a section and three units changed, and the index and snapshots as a
 /// triage reads them: (root, index, store).
-fn changed_everything() -> (std::path::PathBuf, Map<String, Value>, Map<String, Value>) {
+fn changed_everything() -> (
+    l7r_guard::shared::tempdir::TempDir,
+    Map<String, Value>,
+    Map<String, Value>,
+) {
     let root = fixture("claims-triage-bundle");
     let table = units_doc("TABLE", &["'a': 1", "'gone': 2"]);
     put(&root, "l7r/diagram/m.py", &table);
@@ -217,7 +221,11 @@ fn a_reply_s_lines_are_vetted_and_its_outside_rows_filed() {
 }
 
 /// The fixture recorded and committed as origin/main, the index's GAP row resting on no block: (root, index, store).
-fn recorded() -> (std::path::PathBuf, Map<String, Value>, Map<String, Value>) {
+fn recorded() -> (
+    l7r_guard::shared::tempdir::TempDir,
+    Map<String, Value>,
+    Map<String, Value>,
+) {
     let root = fixture("claims-triage-only");
     record_all(&root);
     commit(&root, "recorded");

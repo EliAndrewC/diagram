@@ -212,7 +212,7 @@ fn a_cited_measurement_is_carried_whole() {
 const PLAN: &str = "# Plan\n\n**D1 - shared.** Every gate is checked once.\n\n## Batch 2\n\n### Wave 2 (T02)\n\n**D3 - the well.** The well stands by the lane (FR-002).\n\n## Notes\n\nA note.\n";
 const SPEC2: &str = "# Spec\n\n## Requirements\n\n- **FR-001 The sty.** A sty stands against the house.\n- **FR-002 The well.** A well stands by its lane.\n- **FR-003 Unrelated.** Something else entirely.\n\n## Success criteria\n\n- **SC-001** (FR-001) The sty is drawn.\n";
 
-fn feature() -> (std::path::PathBuf, std::path::PathBuf) {
+fn feature() -> (l7r_guard::shared::tempdir::TempDir, std::path::PathBuf) {
     let root = repo();
     let dir = root.join("specs/999-x");
     std::fs::create_dir_all(&dir).unwrap();
@@ -279,7 +279,7 @@ fn a_requirement_cited_as_another_feature_s_is_bundled_from_that_feature() {
 
 #[test]
 fn the_bundle_is_lean_and_shows_each_earlier_verdict() {
-    let (_, dir) = feature();
+    let (_dir, dir) = feature();
     let out = scratch("out");
     let earlier = [
         ("T05".to_owned(), "then".to_owned(), "BLOCKED".to_owned()),
@@ -317,13 +317,14 @@ fn the_bundle_is_lean_and_shows_each_earlier_verdict() {
 
 #[test]
 fn a_feature_with_no_request_gets_no_bundle_and_a_long_name_is_cut() {
-    let dir = scratch("no-request").join("specs/905-x");
+    let root = scratch("no-request");
+    let dir = root.join("specs/905-x");
     std::fs::create_dir_all(&dir).unwrap();
     let out = scratch("out");
     let why = build(&dir, &out, "T01", &under(&[("T01", "x")]), &[], "h").unwrap_err();
     assert!(why.contains("specs/905-x/request.md is missing") && why.contains("verbatim"));
     assert_eq!(std::fs::read_dir(&out).unwrap().count(), 0);
-    let (_, dir) = feature();
+    let (_dir, dir) = feature();
     let long = "x".repeat(200);
     let m = build(&dir, &out, &long, &under(&[("T01", "y")]), &[], "h").unwrap();
     assert!(m.parent().unwrap().file_name().unwrap().len() < 150);
@@ -415,7 +416,7 @@ fn a_delta_prompt_carries_earlier_text_and_removed_blocks_and_each_block_set_its
 
 #[test]
 fn the_request_is_trimmed_to_the_amendment_the_blocks_answer() {
-    let (_, dir) = feature();
+    let (_dir, dir) = feature();
     std::fs::write(dir.join("request.md"), REQUEST).unwrap();
     let out = scratch("out");
     let m = build(

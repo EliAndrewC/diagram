@@ -10,6 +10,7 @@ use super::{
     verdict_key, Reads, World,
 };
 use crate::checks::scratch;
+use l7r_guard::shared::tempdir::{Held, TempDir};
 
 fn fake_cargo(dir: &Path, body: &str) -> String {
     let path = dir.join("cargo");
@@ -23,20 +24,21 @@ fn fake_cargo(dir: &Path, body: &str) -> String {
     path.display().to_string()
 }
 
-fn world_with(root: &Path, body: &str) -> World {
+fn world_with(root: &Path, body: &str) -> Held<World> {
     let target = scratch("rustc-target");
-    World {
+    let world = World {
         root: root.to_owned(),
         cargo: fake_cargo(&target, body),
-        path_dir: target.clone(),
+        path_dir: target.to_path_buf(),
         target_override: None,
         no_reuse: false,
         hamlet_features: String::new(),
         hamlet_args: String::new(),
         hamlet_spec: "spec.json".to_owned(),
         cover_work: None,
-        target,
-    }
+        target: target.to_path_buf(),
+    };
+    target.hold(world)
 }
 
 fn calls(world: &World) -> Vec<String> {
@@ -47,7 +49,7 @@ fn calls(world: &World) -> Vec<String> {
         .collect()
 }
 
-fn two_crates() -> (PathBuf, PathBuf, PathBuf) {
+fn two_crates() -> (TempDir, PathBuf, PathBuf) {
     let root = scratch("rustc");
     for name in ["a", "b"] {
         std::fs::create_dir_all(root.join(format!("rust/{name}/src"))).unwrap();
@@ -247,10 +249,10 @@ fn an_unchanged_crate_keeps_its_green_result_and_a_failure_is_never_kept() {
     assert_eq!(answer(&world, "lint", &[], false).code, 1);
     assert_eq!(clippy(&world), before + 1, "a failure is run again");
     std::fs::remove_file(world.target.join("fail")).unwrap();
-    let full = World {
+    let full = world.map(|w| World {
         no_reuse: true,
-        ..world
-    };
+        ..w
+    });
     assert_eq!(answer(&full, "lint", &[], false).code, 0);
     assert_eq!(clippy(&full), before + 3, "a full run runs everything");
 }
@@ -312,12 +314,12 @@ fn each_command_asks_cargo_as_it_should() {
 #[test]
 fn a_hamlet_run_takes_its_features_and_arguments_and_a_target_directory_can_be_named() {
     let (root, a, _) = two_crates();
-    let world = World {
+    let world = world_with(&root, "echo \"$CARGO_TARGET_DIR\"\nexit 0").map(|w| World {
         hamlet_features: "counters".to_owned(),
         hamlet_args: "--budget x".to_owned(),
         target_override: Some("/t".to_owned()),
-        ..world_with(&root, "echo \"$CARGO_TARGET_DIR\"\nexit 0")
-    };
+        ..w
+    });
     let done = check(&world, "hamlet", &a, false);
     assert_eq!(done.stdout.trim(), "/t");
     assert!(
@@ -372,6 +374,45 @@ const LCOV_CARGO: &str = r#"case "$1 $2" in
 esac
 [ -f "$(dirname "$0")/failtest" ] && [ "$1" = test ] && [ "$2" != --no-run ] && { echo boom; exit 1; }
 exit 0"#;
+
+#[test]
+fn what_a_crate_s_tests_leave_in_their_tmpdir_fails_it_by_name_and_goes() {
+    let (root, a, _) = two_crates();
+    let world = world_with(
+        &root,
+        "echo \"$TMPDIR\" > \"$(dirname \"$0\")/tmpdir\"\nexit 0",
+    );
+    let clean = check(&world, "test", &a, false);
+    assert_eq!(clean.code, 0, "{}", clean.stderr);
+    let used = std::fs::read_to_string(world.target.join("tmpdir")).unwrap();
+    let under = std::env::temp_dir().join("l7r-rust-tests-a-");
+    assert!(used.trim().starts_with(&under.display().to_string()));
+    assert!(!Path::new(used.trim()).exists());
+    let leaky = world_with(
+        &root,
+        // the process's shared directory is not a leak: the runner removes it with the run's directory
+        "mkdir \"$TMPDIR/l7r-leak-1\" \"$TMPDIR/l7r-test-scratch\"; touch \"$TMPDIR/l7r-leak-2\"\nexit 0",
+    );
+    for cmd in ["test", "test-counters", "test-no-counters"] {
+        let done = check(&leaky, cmd, &a, false);
+        assert_eq!(done.code, 1, "{cmd}");
+        assert!(done.stderr.contains(
+            "the tests left 2 entries in their TMPDIR, which they must remove: l7r-leak-1, l7r-leak-2"
+        ));
+        assert!(done.stderr.contains("TempDir::new(tag)"));
+    }
+    let one = world_with(
+        &root,
+        "echo \"$TMPDIR\" > \"$(dirname \"$0\")/tmpdir\"; touch \"$TMPDIR/l7r-leak\"\nexit 0",
+    );
+    let said = check(&one, "test", &a, false).stderr;
+    assert!(said.contains("left 1 entry in"));
+    let used = std::fs::read_to_string(one.target.join("tmpdir")).unwrap();
+    assert!(!Path::new(used.trim()).exists());
+    let cover = world_with(&root, &format!("touch \"$TMPDIR/l7r-cover\"\n{LCOV_CARGO}"));
+    std::fs::write(cover.target.join("lcov"), "").unwrap();
+    assert_eq!(check(&cover, "cover", &a, false).code, 1);
+}
 
 #[test]
 fn the_floor_reads_the_lines_and_clears_only_what_it_must() {
@@ -430,10 +471,10 @@ fn a_coverage_run_that_fails_names_the_crate_and_not_a_line() {
 fn uncovered_answers_in_json_at_a_directory_a_test_shares() {
     let (root, _, _) = two_crates();
     let shared = scratch("shared");
-    let world = World {
-        cover_work: Some(shared.clone()),
-        ..world_with(&root, LCOV_CARGO)
-    };
+    let world = world_with(&root, LCOV_CARGO).map(|w| World {
+        cover_work: Some(shared.to_path_buf()),
+        ..w
+    });
     std::fs::write(world.target.join("lcov"), "").unwrap();
     let done = dispatch(
         &world,
@@ -619,16 +660,16 @@ fn the_real_cargo_tests_a_real_crate() {
     }
     let target = scratch("rustc-real-target");
     let world = World {
-        root,
+        root: root.to_path_buf(),
         cargo: "cargo".to_owned(),
-        path_dir: target.clone(),
+        path_dir: target.to_path_buf(),
         target_override: None,
         no_reuse: true,
         hamlet_features: String::new(),
         hamlet_args: String::new(),
         hamlet_spec: "spec.json".to_owned(),
         cover_work: None,
-        target,
+        target: target.to_path_buf(),
     };
     let got = answer(&world, "test", &[], false);
     assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
@@ -637,7 +678,7 @@ fn the_real_cargo_tests_a_real_crate() {
 
 /// The gate's shape (feature 449 T92): a binary crate `g` whose directory holds its crates, `g/crates/low` and `g/crates/mid`, the binary
 /// building from `mid` and `mid` from `low`.
-fn nested_crates() -> (PathBuf, PathBuf, PathBuf, PathBuf) {
+fn nested_crates() -> (TempDir, PathBuf, PathBuf, PathBuf) {
     let root = scratch("rustc-nested");
     let make = |dir: &str, manifest: &str, lib: &str| {
         std::fs::create_dir_all(root.join(format!("rust/{dir}/src"))).unwrap();
@@ -661,7 +702,8 @@ fn nested_crates() -> (PathBuf, PathBuf, PathBuf, PathBuf) {
     );
     std::fs::write(root.join("rust/Cargo.toml"), "[workspace]\n").unwrap();
     let m = |d: &str| root.join(format!("rust/{d}/Cargo.toml"));
-    (root.clone(), m("g"), m("g/crates/mid"), m("g/crates/low"))
+    let (g, mid, low) = (m("g"), m("g/crates/mid"), m("g/crates/low"));
+    (root, g, mid, low)
 }
 
 #[test]
@@ -731,7 +773,7 @@ fn a_nested_crate_s_lines_and_calls_are_its_own_and_the_family_shares_one_covera
 }
 
 /// `two_crates` in a repository, so a kept result has a git directory to live in.
-fn kept_crates() -> (PathBuf, PathBuf, PathBuf) {
+fn kept_crates() -> (TempDir, PathBuf, PathBuf) {
     let (root, a, b) = two_crates();
     assert!(Command::new("git")
         .arg("-C")
@@ -834,10 +876,10 @@ fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
     assert_eq!(answer(&world, "test", &[], false).code, 0);
     assert_eq!(runs(&world), 4);
     // a fresh run runs every crate and builds nothing first
-    let fresh = World {
+    let fresh = world.map(|w| World {
         no_reuse: true,
-        ..world
-    };
+        ..w
+    });
     assert_eq!(answer(&fresh, "test", &[], false).code, 0);
     assert_eq!(runs(&fresh), 6);
 }

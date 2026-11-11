@@ -11,16 +11,14 @@ use crate::shared::session::Session;
 
 /// A clone with a `.git`, and an empty stand-in process table.
 pub(super) struct World {
-    pub root: PathBuf,
+    pub root: crate::shared::tempdir::TempDir,
     pub clone: PathBuf,
     pub proc: PathBuf,
 }
 
 pub(super) fn world(tag: &str) -> World {
     crate::shared::log::quiet();
-    let root =
-        std::env::temp_dir().join(format!("l7r-guard-finished-{tag}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&root);
+    let root = crate::shared::tempdir::TempDir::new(&format!("guard-finished-{tag}"));
     let clone = root.join("clone");
     std::fs::create_dir_all(clone.join(".git")).unwrap();
     std::fs::create_dir_all(root.join("proc")).unwrap();
