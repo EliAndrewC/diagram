@@ -9985,6 +9985,46 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T94": {
+   "section_sha256": "a214eab3dc3ba754470530141ab8992fe6967b5deab42389f45e7446d57b0f92",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T94-D1",
+     "summary": "The guard suite's real-build case builds the clone's own tree into the same -guard target instead of a copied rust/ tree (which cargo recompiled whole on every run); the kept binary is still removed so the wrapper still builds, self-checks and keeps one.",
+     "class": "within",
+     "why": "This is FR-011's T94 clause put into practice: the case stops rebuilding the crate from scratch and reuses the build already in the target. Measured at 0.2 s for the case (observed 2026-11-11). The case still proves the wrapper against the real crate."
+    },
+    {
+     "id": "T94-D2",
+     "summary": "The same case's last check stops piping from `sleep 30` (the suite waited 30 s on every run) and stops judging in a subshell (its ok/bad never counted); it now uses a process substitution and judges in the suite's own shell, so 30 cases become 31.",
+     "class": "within",
+     "why": "It removes time spent on nothing, which serves the GM's 2026-11-11 'iteration loops ... need to be faster'. The check that used to be dropped silently now counts, so nothing is narrowed."
+    },
+    {
+     "id": "T94-D3",
+     "summary": "The sync-with-main suite is left as it is: 19.3 s alone, a traced run shows it builds no crate, and its time in a landing is shared CPU. How make done schedules its phases is deferred to the measurement after T93.",
+     "class": "within",
+     "why": "FR-011's T94 clause is about suites building again what make done already built. A traced run (observed 2026-11-11) shows this suite builds nothing, so the clause has nothing to apply to here. Deferring the scheduling question follows the GM's own words: 'then we will stop and measure again ... what the next most low-hanging fruit is'."
+    },
+    {
+     "id": "T94-D4",
+     "summary": "Not done: having the suite reuse a release guard binary built by make done, because make done builds none; the suite keeps its one real build of the guard crate in its own target.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Nothing can be reused that was never built, so the literal reuse is physically impossible here. The purpose (no duplicated compile) is met anyway: when the crate is unchanged the build costs nothing (0.2 s, D1), and the one build left is the artifact the case exists to prove. Caveat: the premise 'make done builds no release guard binary' is stated without a method. If it is false, this ruling falls."
+    },
+    {
+     "id": "T94-D5",
+     "summary": "Scope: the task examines and changes only 'the two slowest suites' of the T82 landing's make done read. No census shows that the other hook suites (53 in HOOKS_ALL) build no crate make done already built.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "SC-006 covers every suite: 'make done's hook suites build no crate make done already built'. FR-011 says 'the landing's hook suites reuse what make done has already built'. Choosing the suites by wall time is a stand-in for asking which suites build a crate, and this stand-in can miss real cases. After T92 split the gate into crates, a suite that rebuilds one small crate in a fresh target can cost seconds and still not be among the two slowest. Covering all suites is not impossible, is not implied by the GM's words, and is needed for the purpose. To clear: add an enumeration with its search space stated, for example every cargo invocation, build wrapper call or CARGO_TARGET_DIR setting under tests/hooks/ and the scripts and Makefile targets they call, or a traced run of the whole hooks-test. It must show which suites build a crate and that each one reuses make done's or its own existing target. Fix any that do not."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

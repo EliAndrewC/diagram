@@ -93,11 +93,12 @@ check "recovered: builds" "$(calls)" 5
 # 7. the real crate, built by the real cargo into the clone's own target, answers through the wrapper
 CARGO_BIN=$( [ -x "$HOME/.cargo/bin/cargo" ] && echo "$HOME/.cargo/bin/cargo" || command -v cargo)
 if [ -n "$CARGO_BIN" ]; then
-  # the clone's own tree into the clone's own guard target, warm after its first build, and the kept binary removed so the wrapper
-  # still builds, self-checks and keeps one. A copy of `rust/` was built here until 449 T94: cargo keys a crate's build on its path as
-  # well as its sources, so the copy recompiled the guard crate from scratch on every run (54.9 s and 60.0 s under landings, 2026-11-10/11)
+  # the clone's own tree through its own wrapper into the wrapper's own target - the one `make done`'s hook calls already build - so
+  # a changed guard crate is built once, not twice; the build, self-check and keep paths are cases 1-6's, on the fake cargo. Until
+  # 449 T94 a copy of `rust/` was built here into a second `-guard` target: cargo keys a build on the package's path as well as its
+  # sources, so the copy recompiled the guard crate on every run (54.9 s and 60.0 s under landings, 2026-11-10/11)
   R="$ROOT"
-  RT="$HOME/.cache/l7r-cargo-target/$(basename "$ROOT")-guard"; rm -f "$RT/l7r-guard.good"
+  RT="$HOME/.cache/l7r-cargo-target/$(basename "$ROOT")"
   t0=${EPOCHREALTIME/,/.}
   # the build's own limit (45 s) is case 1's subject; here a cold target on a loaded machine outran it (2026-11-10 54.9 s, 2026-11-11
   # 60.0 s, both landings), so this case gives the real build room and judges only what it answers
