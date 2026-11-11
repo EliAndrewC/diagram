@@ -92,7 +92,14 @@ fn plant(base: &Path, c: &Config) {
     put(&p.join("-proj/running.jsonl"), false);
     let me = std::process::id();
     let stat = std::fs::read_to_string(format!("/proc/{me}/stat")).unwrap();
-    let since = stat.rsplit_once(") ").unwrap().1.split_whitespace().nth(19).unwrap().to_owned();
+    let since = stat
+        .rsplit_once(") ")
+        .unwrap()
+        .1
+        .split_whitespace()
+        .nth(19)
+        .unwrap()
+        .to_owned();
     let record = |file: &str, id: &str, start: &str| {
         let v = json!({ "pid": me, "sessionId": id, "procStart": start });
         std::fs::write(c.sessions.join(file), v.to_string()).unwrap();
