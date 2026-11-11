@@ -93,9 +93,10 @@ check "recovered: builds" "$(calls)" 5
 # 7. the real crate, built by the real cargo into the clone's own target, answers through the wrapper
 CARGO_BIN=$( [ -x "$HOME/.cargo/bin/cargo" ] && echo "$HOME/.cargo/bin/cargo" || command -v cargo)
 if [ -n "$CARGO_BIN" ]; then
-  R="$W/real"; mkdir -p "$R/scripts/hooks/lib"; cp "$ROOT/scripts/hooks/l7r-guard.sh" "$R/scripts/hooks/"; cp -rp "$ROOT/rust" "$R/rust"
-  # the clone's own target, warm after its first build: the sources keep their times (cp -p), so cargo finds nothing to do, and the
-  # kept binary is removed so the wrapper still builds, self-checks and keeps one
+  # the clone's own tree into the clone's own guard target, warm after its first build, and the kept binary removed so the wrapper
+  # still builds, self-checks and keeps one. A copy of `rust/` was built here until 449 T94: cargo keys a crate's build on its path as
+  # well as its sources, so the copy recompiled the guard crate from scratch on every run (54.9 s and 60.0 s under landings, 2026-11-10/11)
+  R="$ROOT"
   RT="$HOME/.cache/l7r-cargo-target/$(basename "$ROOT")-guard"; rm -f "$RT/l7r-guard.good"
   t0=${EPOCHREALTIME/,/.}
   # the build's own limit (45 s) is case 1's subject; here a cold target on a loaded machine outran it (2026-11-10 54.9 s, 2026-11-11
@@ -108,7 +109,10 @@ if [ -n "$CARGO_BIN" ]; then
   ( cd "$SC" && "$RT/l7r-guard.good" --self-check >/dev/null 2>&1 )
   [ ! -e "$SC/.git/l7r-events" ] && ok || bad "real build: the self-check wrote into the tree it ran in"
   # a tool verb reads no stdin: under `make` it inherits one that never closes, and `read_to_string` waited on it for ever (T050, a window target hung 590 s)
-  sleep 30 | ( timeout 10 "$RT/l7r-guard.good" deps --bogus >/dev/null 2>&1; [ $? -ne 124 ] && ok || bad "real build: a tool verb waited on an open stdin" )
+  # stdin from a process substitution, not a pipe: a pipeline waits for its `sleep` (30 s on every run until 449 T94), and its right
+  # side ran in a subshell, so this case's ok/bad never reached the counts
+  timeout 10 "$RT/l7r-guard.good" deps --bogus >/dev/null 2>&1 < <(sleep 30)
+  [ $? -ne 124 ] && ok || bad "real build: a tool verb waited on an open stdin"
   awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "real build through the wrapper: %.1f s\n", b - a }'
 else
   bad "real build: no cargo found"
