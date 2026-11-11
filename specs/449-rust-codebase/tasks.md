@@ -286,7 +286,7 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T84 The first removal under the GM's standing approval (the GM, 2026-11-10: "Yes please delete Python files once their Rust ports land."): the ported `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `agent_census.py`, `access_tags.py`, `downloads.py`, `check-partial-citations.py`, `moves.py`, `hm_record.py`, `hm_house.py` and specs/251's `seeded.py` and `run_seeded.sh`, the docs renamed to their verbs; each later task removes its own ported files at its landing
       research: rendering
       verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
-- [ ] T85 Phase 4, the archive cluster with `interactive/record` (`ask:449-T81-slices`, moved by its test, each carrying the T065 clause and named at the phase-3 close): `quote_verbatim`, `sources`, `attempts`, `source_pages`, `reserve-prefix`, `apply_edits`, `uncited`, `uncited_imports`, `archive_ops`, `archive`, `entry_owed`; Rust `downloads`' by-path run of `reserve-prefix.py` ends here
+- [ ] T85 Phase 4, the archive cluster with `interactive/record` (`ask:449-T81-slices`, moved by its test, each carrying the T065 clause and named at the phase-3 close): `quote_verbatim`, `sources`, `attempts`, `source_pages`, `reserve-prefix`, `apply_edits`, `uncited`, `uncited_imports`, `archive_ops`, `archive`, `entry_owed`, `record_prepass`, `style_prepass` (`ask:449-T88-bundles`); Rust `downloads`' by-path run of `reserve-prefix.py` ends here
       research: rendering
 - [x] T86 Phase 3, the arbiter and checks state, with T011, T043 and T048: hm_arbiter, hm_checks, hm_fixloop, hm_planhold, hm_budget_rounds, one owner of checks-open.json, arbiter-owed.json and modal-batches.json
       research: rendering
@@ -294,7 +294,7 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T87 Phase 3, the owed core (`entry_owed.py` moved to T85's phase by `ask:449-T87-entry-owed`): record_owed, record_units, modal_owed, translation_owed, modal_triage, and `pull-queue.sh`'s merge as a verb; `record_cache.py` stays for its other importers (`memo_check.py`, `claims.py`, `entry_owed.py`) and goes with the last of them with its last Python caller (`ask:449-T81-slices`)
       research: rendering
       verify: DONE. landed: the owed core in Rust: record_owed, record_units, modal_owed, translation_owed, modal_triage and the pull-queue merge; entry_owed to phase 4 by ask:449-T87-entry-owed
-- [ ] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed
+- [ ] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed (`ask:449-T88-bundles`: one Python runner, `scripts/bundle_door.py`, for what they reach of unported Python)
       research: rendering
 - [ ] T89 Phase 3, the reviews: review_owed, review_prereq, checkpoint, stepback_bundle
       research: rendering
