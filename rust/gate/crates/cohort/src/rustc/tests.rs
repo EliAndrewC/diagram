@@ -6,7 +6,7 @@ use std::process::Command;
 
 use super::{
     answer, check, content_ids, crates, dead_public, dispatch, features_but, kept_reads,
-    lcov_missed, parse, relative, run, tail, uncovered, verdict_key, Reads, World,
+    lcov_missed, own_libs, parse, relative, run, tail, uncovered, verdict_key, Reads, World,
 };
 use crate::checks::scratch;
 
@@ -528,4 +528,93 @@ fn the_real_cargo_tests_a_real_crate() {
     let got = answer(&world, "test", &[], false);
     assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
     assert!(got.stdout.contains("test result: ok"), "{}", got.stdout);
+}
+
+/// The gate's shape (feature 449 T92): a binary crate `g` whose directory holds its crates, `g/crates/low` and `g/crates/mid`, the binary
+/// building from `mid` and `mid` from `low`.
+fn nested_crates() -> (PathBuf, PathBuf, PathBuf, PathBuf) {
+    let root = scratch("rustc-nested");
+    let make = |dir: &str, manifest: &str, lib: &str| {
+        std::fs::create_dir_all(root.join(format!("rust/{dir}/src"))).unwrap();
+        std::fs::write(root.join(format!("rust/{dir}/Cargo.toml")), manifest).unwrap();
+        std::fs::write(root.join(format!("rust/{dir}/src/lib.rs")), lib).unwrap();
+    };
+    make(
+        "g",
+        "[package]\nname = \"g\"\n[dependencies]\nmid = { path = \"crates/mid\" }\n",
+        "fn main() { mid_only(); }\n",
+    );
+    make(
+        "g/crates/mid",
+        "[package]\nname = \"g_mid\"\n[dependencies]\nlow = { path = \"../low\" }\n",
+        "pub fn mid_only() { low_used(); }\n",
+    );
+    make(
+        "g/crates/low",
+        "[package]\nname = \"g_low\"\n",
+        "pub fn low_used() {}\npub fn low_dead() {}\n",
+    );
+    std::fs::write(root.join("rust/Cargo.toml"), "[workspace]\n").unwrap();
+    let m = |d: &str| root.join(format!("rust/{d}/Cargo.toml"));
+    (root.clone(), m("g"), m("g/crates/mid"), m("g/crates/low"))
+}
+
+#[test]
+fn a_nested_crate_owns_its_files_and_a_dependency_s_dependency_moves_the_key() {
+    let (root, g, mid, low) = nested_crates();
+    let all = [g.clone(), mid.clone(), low.clone()];
+    let base = ids(&[
+        ("rust/g/src/lib.rs", "1"),
+        ("rust/g/crates/mid/src/lib.rs", "2"),
+        ("rust/g/crates/low/src/lib.rs", "3"),
+    ]);
+    let moved = |path: &str| {
+        let mut m = base.clone();
+        m.insert(path.to_owned(), "9".to_owned());
+        m
+    };
+    for (cmd, reads) in [("lint", Reads::Source), ("cover", Reads::Tree)] {
+        let key = |manifest: &Path, ids: &BTreeMap<String, String>| {
+            verdict_key(&root, manifest, cmd, reads, &all, ids, "c")
+        };
+        // the binary moves with low, which it builds from only through mid
+        assert_ne!(key(&g, &base), key(&g, &moved("rust/g/crates/low/src/lib.rs")));
+        // low's own edit moves low's key, though the binary's directory holds it
+        assert_ne!(key(&low, &base), key(&low, &moved("rust/g/crates/low/src/lib.rs")));
+        // and the binary's own file does not move low's
+        assert_eq!(key(&low, &base), key(&low, &moved("rust/g/src/lib.rs")));
+        assert_eq!(key(&mid, &base), key(&mid, &moved("rust/g/src/lib.rs")));
+    }
+}
+
+#[test]
+fn a_nested_crate_s_lines_and_calls_are_its_own_and_the_family_shares_one_coverage_build() {
+    let (root, g, mid, low) = nested_crates();
+    assert_eq!(dead_public(&low), ["low_dead"]);
+    assert!(dead_public(&mid).is_empty());
+    assert_eq!(own_libs(&low), "libg_low-");
+    assert_eq!(own_libs(&root.join("rust/Cargo.toml")), "libl7r_");
+    let world = world_with(&root, LCOV_CARGO);
+    assert_eq!(super::cover_dir(&world, &low), world.target.join("cover-g"));
+    assert_eq!(super::cover_dir(&world, &g), world.target.join("cover-g"));
+    let canon = |p: &str| std::fs::canonicalize(root.join(p)).unwrap();
+    std::fs::write(
+        world.target.join("lcov"),
+        format!(
+            "SF:{}\nDA:1,0\nend_of_record\nSF:{}\nDA:2,0\nend_of_record\n",
+            canon("rust/g/src/lib.rs").display(),
+            canon("rust/g/crates/low/src/lib.rs").display()
+        ),
+    )
+    .unwrap();
+    let got = uncovered(&world, &g, &world.target.join("w"));
+    assert_eq!(
+        got.keys().cloned().collect::<Vec<_>>(),
+        [canon("rust/g/src/lib.rs").display().to_string()]
+    );
+    let got = uncovered(&world, &low, &world.target.join("w2"));
+    assert_eq!(
+        got.keys().cloned().collect::<Vec<_>>(),
+        [canon("rust/g/crates/low/src/lib.rs").display().to_string()]
+    );
 }

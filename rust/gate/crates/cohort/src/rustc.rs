@@ -243,21 +243,38 @@ fn rust_sources(dir: &Path, out: &mut Vec<PathBuf>) {
     }
 }
 
-/// Each `pub fn` of the crate nothing calls: rustc's `dead_code` sees only private items.
-fn dead_public(manifest: &Path) -> Vec<String> {
+/// The outermost crate directory holding `manifest`'s: the gate binary's for each of the gate's crates (`rust/gate/crates/*`, feature
+/// 449 T92), a crate's own otherwise.
+fn family(manifest: &Path) -> PathBuf {
+    let own = manifest.parent().unwrap_or(Path::new("."));
+    own.ancestors()
+        .filter(|d| {
+            std::fs::read_to_string(d.join("Cargo.toml")).is_ok_and(|t| t.contains("[package]"))
+        })
+        .last()
+        .unwrap_or(own)
+        .to_path_buf()
+}
+
+/// Every `.rs` file under `dir`, their text joined in path order.
+fn rust_text(dir: &Path) -> String {
     let mut files = Vec::new();
-    rust_sources(
-        &manifest.parent().unwrap_or(Path::new(".")).join("src"),
-        &mut files,
-    );
+    rust_sources(dir, &mut files);
     files.sort();
-    let rust: String = files
+    files
         .iter()
         .map(|p| std::fs::read_to_string(p).unwrap_or_default())
         .collect::<Vec<_>>()
-        .join("\n");
+        .join("\n")
+}
+
+/// Each `pub fn` of the crate nothing calls: rustc's `dead_code` sees only private items. A gate crate's function is called from the
+/// other gate crates too, so the calls are counted over its family's sources (`family`), the names read from its own.
+fn dead_public(manifest: &Path) -> Vec<String> {
+    let own = rust_text(&manifest.parent().unwrap_or(Path::new(".")).join("src"));
+    let rust = rust_text(&family(manifest));
     let names: BTreeSet<String> = PUB_FN
-        .captures_iter(&rust)
+        .captures_iter(&own)
         .flatten()
         .map(|c| c[1].to_owned())
         .collect();
@@ -345,7 +362,7 @@ fn cover(world: &World, manifest: &Path, work: &Path, report: &[String]) -> Ran 
         remove(&old);
     }
     let deps = target.join("debug/deps");
-    for old in glob_prefix(&deps, "libl7r_") {
+    for old in glob_prefix(&deps, &own_libs(manifest)) {
         remove(&old);
     }
     let lib = [
@@ -422,29 +439,44 @@ fn uncovered(world: &World, manifest: &Path, work: &Path) -> BTreeMap<String, Ve
         eprintln!("rust-checks: the coverage run failed on {} - fix what it names (a failing test), then ask again:\n{out}{err}", parent.file_name().unwrap_or_default().to_string_lossy());
         return BTreeMap::from([(parent.display().to_string(), vec![0])]);
     };
-    let mine = format!(
-        "{}/",
-        std::fs::canonicalize(parent).unwrap_or_default().display()
-    );
+    let canon = |p: &Path| format!("{}/", std::fs::canonicalize(p).unwrap_or_default().display());
+    let mine = canon(parent);
+    // a crate nested in this one's directory (the gate's `crates/*` under the binary's) owns its own lines: 100% of a crate's lines by
+    // its own tests (feature 449 T92)
+    let nested: Vec<String> = crates(&world.root, &[])
+        .iter()
+        .filter_map(|m| m.parent())
+        .map(canon)
+        .filter(|d| d != &mine && d.starts_with(&mine))
+        .collect();
     lcov_missed(&text)
         .into_iter()
         .filter(|(p, _)| {
-            std::fs::canonicalize(p)
+            let at = std::fs::canonicalize(p)
                 .unwrap_or_default()
                 .display()
-                .to_string()
-                .starts_with(&mine)
+                .to_string();
+            at.starts_with(&mine) && !nested.iter().any(|n| at.starts_with(n.as_str()))
         })
         .collect()
 }
 
-/// The directory a crate's coverage build is kept in (a test shares one over its copies of a fixture).
+/// The files of the crate's own library in a build's `deps`, which a coverage run clears: `lib<name>-` (the package's name; any
+/// `libl7r_` where the manifest names none). Only its own, so the gate's crates share one coverage build (feature 449 T92).
+fn own_libs(manifest: &Path) -> String {
+    let text = std::fs::read_to_string(manifest).unwrap_or_default();
+    re(r#"(?m)^name\s*=\s*"([^"]+)""#)
+        .captures(&text)
+        .ok()
+        .flatten()
+        .map_or_else(|| "libl7r_".to_owned(), |c| format!("lib{}-", &c[1]))
+}
+
+/// The directory a crate's coverage build is kept in (a test shares one over its copies of a fixture): one a family of crates
+/// (`family`), so the gate's crates build their shared dependencies once.
 fn cover_dir(world: &World, manifest: &Path) -> PathBuf {
-    let name = manifest
-        .parent()
-        .and_then(Path::file_name)
-        .unwrap_or_default()
-        .to_string_lossy();
+    let family = family(manifest);
+    let name = family.file_name().unwrap_or_default().to_string_lossy();
     world
         .cover_work
         .clone()
@@ -605,6 +637,30 @@ fn relative(to: &Path, base: &Path) -> String {
         .join("/")
 }
 
+/// The crates of `all` that `manifest` builds from by path, and those they build from: a dependency's dependency's edit changes this
+/// crate's build too (the gate's crates are four deep, feature 449 T92).
+fn depended<'a>(root: &Path, manifest: &Path, all: &'a [PathBuf]) -> Vec<&'a PathBuf> {
+    let mut found: Vec<&PathBuf> = Vec::new();
+    let mut todo = vec![manifest.to_path_buf()];
+    while let Some(at) = todo.pop() {
+        let text = std::fs::read_to_string(&at).unwrap_or_default();
+        let parent = at.parent().unwrap_or(root);
+        for m in all {
+            if m.as_path() != manifest
+                && !found.contains(&m)
+                && text.contains(&format!(
+                    "\"{}\"",
+                    relative(m.parent().unwrap_or(root), parent)
+                ))
+            {
+                found.push(m);
+                todo.push(m.clone());
+            }
+        }
+    }
+    found
+}
+
 /// What this check of this crate depends on, as one id: a change to any of it runs the check again.
 fn verdict_key(
     root: &Path,
@@ -615,33 +671,27 @@ fn verdict_key(
     ids: &BTreeMap<String, String>,
     compiler: &str,
 ) -> String {
-    let text = std::fs::read_to_string(manifest).unwrap_or_default();
-    let parent = manifest.parent().unwrap_or(root);
-    let depended: Vec<&PathBuf> = all
-        .iter()
-        .filter(|m| {
-            m.as_path() != manifest
-                && text.contains(&format!(
-                    "\"{}\"",
-                    relative(m.parent().unwrap_or(root), parent)
-                ))
-        })
-        .collect();
     let mine: Vec<String> = std::iter::once(rel_dir(manifest, root))
-        .chain(depended.iter().map(|m| rel_dir(m, root)))
+        .chain(depended(root, manifest, all).iter().map(|m| rel_dir(m, root)))
         .collect();
-    let others: Vec<String> = all
+    let dirs: Vec<String> = all
         .iter()
-        .filter(|m| m.as_path() != manifest && !depended.contains(m))
         .map(|m| rel_dir(m, root))
+        .chain(std::iter::once(rel_dir(manifest, root)))
         .collect();
-    let starts = |p: &str, list: &[String]| list.iter().any(|x| p.starts_with(x.as_str()));
+    // a path belongs to the crate whose directory holds it most nearly: the gate's `crates/*` sit inside the binary's (feature 449 T92)
+    let owner = |p: &str| {
+        dirs.iter()
+            .filter(|d| p.starts_with(d.as_str()))
+            .max_by_key(|d| d.len())
+    };
     let mut hash: Vec<u8> = format!("{cmd}\n{compiler}\n").into_bytes();
     for (path, id) in ids {
         let kept = if reads == Reads::Source {
-            starts(path, &mine) || WORKSPACE.contains(&path.as_str())
+            owner(path).is_some_and(|o| mine.contains(o)) || WORKSPACE.contains(&path.as_str())
         } else {
-            !starts(path, &others) && !RECORDS.iter().any(|r| path.starts_with(r))
+            owner(path).is_none_or(|o| mine.contains(o))
+                && !RECORDS.iter().any(|r| path.starts_with(r))
         };
         if kept {
             hash.extend(format!("{path} {id}\n").into_bytes());
