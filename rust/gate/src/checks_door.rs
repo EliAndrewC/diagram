@@ -35,7 +35,7 @@ fn strings(v: Option<&Value>) -> Vec<String> {
 }
 
 /// `record_owed.keep_batches`: the batches `report` names, kept for the dispatch guard, by atomic rename.
-fn keep_batches(root: &Path, batches: &Value) -> Result<(), String> {
+pub(crate) fn keep_batches(root: &Path, batches: &Value) -> Result<(), String> {
     let common = checks::common_dir(root);
     let body = pyjson::dumps(
         &json!({"utc": checks::now(), "batches": batches}),
@@ -104,8 +104,8 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
     })
 }
 
-/// One request line's reply line.
-fn reply_line(line: &str) -> String {
+/// One request line's reply line, under the door's own verbs.
+fn reply_line(line: &str, answer: &dyn Fn(&str, &[Value]) -> Result<Value, String>) -> String {
     let parsed: Result<Value, String> = serde_json::from_str(line).map_err(|e| e.to_string());
     let said = parsed.and_then(|req| {
         let args = req
@@ -121,6 +121,15 @@ fn reply_line(line: &str) -> String {
 
 /// The door's loop: until stdin closes.
 pub fn serve(input: &mut dyn BufRead, output: &mut dyn Write) -> Reply {
+    serve_with(input, output, &answer)
+}
+
+/// A door's loop over its verbs (`checks-door`, `owed-door`).
+pub fn serve_with(
+    input: &mut dyn BufRead,
+    output: &mut dyn Write,
+    answer: &dyn Fn(&str, &[Value]) -> Result<Value, String>,
+) -> Reply {
     let mut line = String::new();
     loop {
         line.clear();
@@ -135,7 +144,7 @@ pub fn serve(input: &mut dyn BufRead, output: &mut dyn Write) -> Reply {
             continue;
         }
         if output
-            .write_all(reply_line(&line).as_bytes())
+            .write_all(reply_line(&line, answer).as_bytes())
             .and_then(|()| output.flush())
             .is_err()
         {

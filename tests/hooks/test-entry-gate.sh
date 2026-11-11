@@ -44,8 +44,8 @@ edit() {
 }
 answer_all() { python3 - "$ROOT" "$HERE/../../scripts/record" <<'PY'
 import pathlib, sys
-sys.path.insert(0, sys.argv[2])
-import record_owed as ro
+sys.path.insert(0, sys.argv[2] + "/..")  # the owed tools' door (449 T87)
+from owed_door import ro
 root = pathlib.Path(sys.argv[1])
 for u in ro.unanswered(root):
     ro.write_answer(ro.store(root), u.slug, u.fingerprint, "0/0/0")

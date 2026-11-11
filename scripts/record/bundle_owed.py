@@ -23,8 +23,8 @@ import sys
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
-import record_owed as ro  # noqa: E402
-import record_units as ru  # noqa: E402
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))  # the owed tools' door (449 T87)
+from owed_door import ro, ru  # noqa: E402
 
 #: the checks a question bundle is owed for; `record-style` is owed by a declared sweep (feature 292), never by a delta
 GATED = ("intro-check", "record-format", "quote-check", "translation-check", "entry-drift")
@@ -82,7 +82,8 @@ def tree_units(root: pathlib.Path, q: str, checks: tuple[str, ...]) -> list[ru.U
         elif check == "quote-check":
             for stem in (q, f"{q}.drawing"):
                 slugs += [f"quote-check:{stem}#{k}" for k in rec.notes.get(stem, {})] + [f"quote-check:{stem}#unfootnoted"]
-    return [ru.Unit(s, "not owed - a stated reason", ru.fingerprint(rec, s)) for s in slugs]
+    prints = ru.fingerprints_of(rec, slugs)
+    return [ru.Unit(s, "not owed - a stated reason", prints[s]) for s in slugs]
 
 
 def owed_for_key(root: pathlib.Path, key: str, whole: bool, not_owed_ok: str, new: str, every: list[ru.Unit] | None = None) -> tuple[list[ru.Unit], str, str]:
@@ -154,7 +155,7 @@ def owed_notes(units: list[ru.Unit]) -> frozenset[str]:
 @functools.cache
 def _modal_docs(root: pathlib.Path) -> tuple[tuple[str, str], ...]:
     """(class name, docstring) of every modal, parsed once a run - a batch of 24 questions parsed them 24 times."""
-    import modal_owed as mo  # noqa: PLC0415 - feature 319 (plan D12): a modal's text is its own file
+    from owed_door import mo  # noqa: PLC0415 - feature 319 (plan D12): a modal's text is its own file
 
     return tuple((m.cls.split(".", 1)[1], m.doc) for m in mo.modals_now(root, about_only=False))
 
@@ -180,7 +181,7 @@ def intro_bundle_text(root: pathlib.Path, q: str) -> str:
     """One question's part of an intro-check bundle: its research page whole (the check confirms an intro adds no claim the
     body does not carry), its drawing page, and the map elements written from it."""
     qdir = root / ru.QUESTIONS
-    research = sorted(p for p in qdir.glob(f"{question_of(q)}-*.html") if ru._STEM.match(p.name) and ".drawing." not in p.name)
+    research = sorted(p for p in qdir.glob(f"{question_of(q)}-*.html") if ru.stem_matches(p.name) and ".drawing." not in p.name)
     if not research:
         return ""
     page = research[0]

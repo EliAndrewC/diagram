@@ -720,13 +720,13 @@ claims-backfill-sections: ## [project] re-key every procedure-section claim to i
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" backfill-sections
 
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record translation-owed --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
 
 record-owed: ## [project] every record check this delta owes (intro-check, record-format, source-reader, quote-check, source-applicability, translation-check, entry-drift), with the command that answers each   [Q=0412] [UNANSWERED=1] [BETWEEN="<a> <b>"]
 ##  Q=<NNNN>        only that question's units
 ##  UNANSWERED=1    only the units with no current answer record (what the push refuses)
 ##  BETWEEN="a b"   the units revision b owes against revision a (a replay; no entry-drift)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/record_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",) $(if $(UNANSWERED),--unanswered,) $(if $(BETWEEN),--between $(BETWEEN),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-owed --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",) $(if $(UNANSWERED),--unanswered,) $(if $(BETWEEN),--between $(BETWEEN),)
 
 record-checked: ## [project] record that a record check returned on the units it read - what answers an owed unit at the push   CHECK=<check> RESULT="<counts>" (BUNDLE=<dir> | Q=<NNNN> NOTES=<k,k> for source-reader | ... REASON="<why>")
 ##  BUNDLE=<dir>    the bundle the check read: its units, at the content it read
@@ -734,7 +734,7 @@ record-checked: ## [project] record that a record check returned on the units it
 ##  REPLY=<file>    the check's reply: its OUTSIDE THE CHANGE findings are filed as open rows of the feature (feature 375)
 ##  FIXED_BY="<check>: <its finding>"  CHECK=quote-check Q= NOTES=: a fix made by hand for ANOTHER check's finding, outside the quotation and its claim - the tool verifies both unchanged, else refuses (feature 399); no RESULT needed
 	@if [ -z "$(CHECK)" ] || { [ -z "$(RESULT)" ] && [ -z "$(FIXED_BY)" ]; }; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/record_owed.py" --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(FIXED_BY),--fixed-by "$(FIXED_BY)",) $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",) $(if $(REPLY),--reply "$(abspath $(REPLY))",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-owed --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(FIXED_BY),--fixed-by "$(FIXED_BY)",) $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",) $(if $(REPLY),--reply "$(abspath $(REPLY))",)
 
 style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   Q=0412
 ##  Q=<NNNN>       the question, by number (both pages) or a page's file name
@@ -788,11 +788,11 @@ modal-bundle: ## [project] the files a modal check reads (modal-form, modal-rese
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$(REASON)",)
 
 modal-triage: ## [project] the triage bundle for every pop-up owed only because a page it names moved: the changed blocks beside the kinds naming them, for the modal-triage agent (feature 375; its own agent since 383 amendment 6)   [OUT=<dir>]
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_triage.py --root . bundle $(if $(OUT),--out "$(OUT)",)
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-triage --root . bundle $(if $(OUT),--out "$(OUT)",)
 
 modal-triaged: ## [project] record a pop-up triage reply: a kind it names (TOUCHES) is sent on to its checks, every other unit of the bundle answered `triage: untouched`   BUNDLE=<dir> REPLY=<file>
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make modal-triaged: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_triage.py --root . record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-triage --root . record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
 modal-prepass: ## [project] the mechanical half of the modal checks for one About-form modal - word band, barred phrases, guesses, Entry files - feature 319   KIND=<class or key>
 	@if [ -z "$(KIND)" ]; then printf 'make modal-prepass: KIND=<class name or key> is required - e.g. make modal-prepass KIND=Farmhouse\n' >&2; exit 2; fi

@@ -338,7 +338,7 @@ def capped_round_cause(root: Path, out: Path, check: str, subject: str, files: l
     of edits.diff): the record's owed reason for the unit now, and the commits on the unit's files since the last round's
     dispatch, their hunks in `owes-round.diff`."""
     sys.path.insert(0, str((HERE / "../record").resolve()))
-    import record_owed  # noqa: PLC0415
+    from owed_door import ro as record_owed  # noqa: PLC0415
 
     name = subject.split(":", 1)[1] if ":" in subject else subject
     checks = {"modal-research": ("modal-accuracy", "modal-references", "modal-gaps")}.get(check, (check,))

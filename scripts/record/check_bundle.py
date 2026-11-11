@@ -38,6 +38,7 @@ import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(HERE.parent))  # the owed tools' door (449 T87)
 sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
 import bundle_owed as bo  # noqa: E402
 RECORD = pathlib.Path("research")
@@ -86,7 +87,7 @@ def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
     """(origin `file:line`, docstring) of one modal class - what `entry-drift` compares with its section.
     The class, not its file: a classes module holds a dozen modals, and the check is about one. A name two modules
     share (the map's `Well` and the sheet's, feature 265) is qualified by its module: `household.Well`."""
-    import modal_owed as mo  # noqa: PLC0415 - feature 319 (plan D12): the text is the kind's modal file, its origin that file
+    from owed_door import mo  # noqa: PLC0415 - feature 319 (plan D12): the text is the kind's modal file, its origin that file
 
     module, _, cls = name.rpartition(".")
     for m in mo.modals_now(root, about_only=False):
@@ -98,7 +99,7 @@ def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
 
 def kind_key(root: pathlib.Path, name: str) -> str:
     """The page key of one modal class (`Byre` -> "byre") - the subject of its `entry-drift` unit; "" for no such class."""
-    import modal_owed as mo  # noqa: PLC0415
+    from owed_door import mo  # noqa: PLC0415
 
     module, _, cls = name.rpartition(".")
     for m in mo.modals_now(root, about_only=False):
@@ -203,10 +204,14 @@ def fresh(out: pathlib.Path) -> None:
 #: the helpers run in THIS interpreter (feature 383, plan D6): each was a new interpreter re-importing and re-reading what this
 #: one already had - two of them were 2.0 s of a 4.2 s bundle. `source_pages.py` too: it imports only the standard library
 #: and carries its own fetch timeout, so nothing needs a process of its own (the plan review).
-IN_PROCESS = ("record_prepass.py", "quote_verbatim.py", "style_prepass.py", "translation_owed.py", "source_pages.py")
+IN_PROCESS = ("record_prepass.py", "quote_verbatim.py", "style_prepass.py", "source_pages.py")
 
 
 def run_script(name: str, args: list[str], root: pathlib.Path) -> tuple[int, str]:
+    if name == "translation_owed.py":  # feature 449 T87: the port, one process (`make translation-owed` runs the same command)
+        gate = HERE.parent / "gates" / "l7r-gate.sh"
+        got = subprocess.run([str(gate), "record", "translation-owed", *args], cwd=root, capture_output=True, text=True, check=False)
+        return got.returncode, got.stdout + got.stderr
     if name in IN_PROCESS:
         return _run_in_process(name, args, root)
     got = subprocess.run([sys.executable, str(HERE / name), *args], cwd=root, capture_output=True, text=True, check=False)
@@ -301,8 +306,7 @@ def changed_section(root: pathlib.Path, fragments: list[str]) -> str:
     `make record-checked REPLY=` files it as an open row rather than leaving an edit owed - the pre-existing fixes that re-owed
     a round each in 372's waves."""
     sys.path.insert(0, str(HERE))
-    import record_owed as ro  # noqa: PLC0415
-    import record_units as ru  # noqa: PLC0415
+    from owed_door import ro, ru  # noqa: PLC0415
 
     base = ro.merge_base(root)
     lines = []
@@ -555,7 +559,7 @@ def since_last_round(root: pathlib.Path, units: list) -> str:
     import difflib  # noqa: PLC0415
 
     import earlier_rounds as er  # noqa: PLC0415
-    import record_units as ru  # noqa: PLC0415
+    from owed_door import ru  # noqa: PLC0415
 
     path = er.ab.hc.state_path(str(root))
     state = er.ab.hc.load(path) if path is not None and path.is_file() else {}

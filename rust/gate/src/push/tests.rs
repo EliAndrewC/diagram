@@ -98,11 +98,17 @@ fn each_gate_judges_every_path_its_own_constants_name() {
         covered("claims", "specs/430-x/tasks.md")
             && covered("claims", "specs/430-x/gm-review.jsonl")
     );
+    for p in [
+        crate::record::units::QUESTIONS.rsplit_once('/').unwrap().0,
+        "l7r/diagram/interactive/classes",
+        "l7r/diagram/interactive/compound_kinds",
+        crate::record::modals::MODALS,
+    ] {
+        assert!(covered("entry", p), "{p}");
+    }
     for (path, name) in [
-        ("scripts/record/record_units.py", "RECORD"),
         ("scripts/record/entry_owed.py", "CLASSES"),
         ("scripts/record/entry_owed.py", "COMPOUND_KINDS"),
-        ("scripts/record/modal_owed.py", "MODALS"),
     ] {
         assert!(covered("entry", quoted(constant(&real(path), name))[0]));
     }

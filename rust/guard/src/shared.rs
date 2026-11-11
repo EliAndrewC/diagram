@@ -9,6 +9,7 @@ pub mod html_text;
 pub mod log;
 pub mod make;
 pub mod plan_text;
+pub mod py_text;
 pub mod pyjson;
 pub mod session;
 pub mod sha1;

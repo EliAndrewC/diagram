@@ -343,6 +343,230 @@ fn from_import(rest: &[Tok], out: &mut Vec<String>) {
     }
 }
 
+/// One top-level class that assigns a string `key`, as `ast` reads it (`modal_owed.kinds_in`).
+#[derive(Debug, Default, PartialEq, Eq)]
+pub struct KindClass {
+    /// The class's name.
+    pub name: String,
+    /// The value of its first constant `key = ...` assignment.
+    pub key: String,
+    /// The line its `class` keyword stands on.
+    pub line: usize,
+    /// Its docstring, as `ast.get_docstring` cleans it; "" for none.
+    pub doc: String,
+}
+
+fn is_plain_eq(stmt: &[Tok], i: usize) -> bool {
+    stmt[i].kind == Kind::Op('=')
+        && stmt.get(i + 1).is_none_or(|t| t.kind != Kind::Op('='))
+        && (i == 0
+            || !matches!(
+                stmt[i - 1].kind,
+                Kind::Op(
+                    '=' | '!'
+                        | '<'
+                        | '>'
+                        | ':'
+                        | '+'
+                        | '-'
+                        | '*'
+                        | '/'
+                        | '%'
+                        | '&'
+                        | '|'
+                        | '^'
+                        | '@'
+                        | '~'
+                )
+            ))
+}
+
+/// The parts of an assignment split at its depth-zero `=` signs.
+fn assignment_parts(stmt: &[Tok]) -> Vec<&[Tok]> {
+    let (mut parts, mut depth, mut start) = (Vec::new(), 0, 0);
+    for (i, t) in stmt.iter().enumerate() {
+        match t.kind {
+            Kind::Op('(' | '[' | '{') => depth += 1,
+            Kind::Op(')' | ']' | '}') => depth -= 1,
+            _ if depth == 0 && is_plain_eq(stmt, i) => {
+                parts.push(&stmt[start..i]);
+                start = i + 1;
+            }
+            _ => {}
+        }
+    }
+    parts.push(&stmt[start..]);
+    parts
+}
+
+/// A statement's constant value as `ast.Constant` holds it: `Some(Some(text))` for a string, `Some(None)` for any other constant, `None` for anything else.
+fn constant_of(value: &[Tok]) -> Option<Option<String>> {
+    if !value.is_empty() && value.iter().all(|t| matches!(t.kind, Kind::Str { .. })) {
+        let mut out = String::new();
+        for t in value {
+            if let Kind::Str {
+                pieces,
+                bytes,
+                plain,
+            } = &t.kind
+            {
+                if !plain {
+                    return None;
+                }
+                if *bytes {
+                    return Some(None);
+                }
+                out.extend(pieces.iter().map(String::as_str));
+            }
+        }
+        return Some(Some(out));
+    }
+    let number = !value.is_empty()
+        && value.iter().all(|t| match &t.kind {
+            Kind::Name(n) => {
+                matches!(n.as_str(), "True" | "False" | "None")
+                    || n.starts_with(|c: char| c.is_ascii_digit())
+            }
+            Kind::Op('.') => true,
+            _ => false,
+        });
+    number.then_some(None)
+}
+
+/// What a body statement sets `key` to, where it is an `ast.Assign` of a constant to the bare name `key`.
+fn key_of(stmt: &[Tok]) -> Option<Option<String>> {
+    let parts = assignment_parts(stmt);
+    let (value, targets) = parts.split_last()?;
+    if targets.is_empty()
+        || !targets
+            .iter()
+            .any(|t| t.len() == 1 && name_of(t.first()) == "key")
+    {
+        return None;
+    }
+    constant_of(value)
+}
+
+/// `inspect.cleandoc`, as `CPython` 3.14 cleans a docstring.
+fn cleandoc(doc: &str) -> String {
+    let mut lines: Vec<Vec<char>> = doc
+        .split('\n')
+        .map(|l| expand_tabs(l).chars().collect())
+        .collect();
+    let margin = lines[1..]
+        .iter()
+        .filter_map(|l| {
+            let content = l.iter().skip_while(|c| **c == ' ').count();
+            (content > 0).then(|| l.len() - content)
+        })
+        .min();
+    let skip = lines[0].iter().take_while(|c| **c == ' ').count();
+    lines[0].drain(..skip);
+    if let Some(m) = margin {
+        for line in &mut lines[1..] {
+            line.drain(..m.min(line.len()));
+        }
+    }
+    let text: Vec<String> = lines.iter().map(|l| l.iter().collect()).collect();
+    let (first, last) = (
+        text.iter().position(|l| !l.is_empty()),
+        text.iter().rposition(|l| !l.is_empty()),
+    );
+    first
+        .zip(last)
+        .map_or_else(String::new, |(a, b)| text[a..=b].join("\n"))
+}
+
+fn expand_tabs(line: &str) -> String {
+    let mut out = String::new();
+    let mut col = 0;
+    for c in line.chars() {
+        if c == '\t' {
+            let n = 8 - col % 8;
+            out.extend(std::iter::repeat_n(' ', n));
+            col += n;
+        } else {
+            out.push(c);
+            col = if matches!(c, '\r') { 0 } else { col + 1 };
+        }
+    }
+    out
+}
+
+fn statements(line: &[Tok]) -> Vec<&[Tok]> {
+    line.split(|t| t.kind == Kind::Op(';'))
+        .filter(|s| !s.is_empty())
+        .collect()
+}
+
+/// A class's body statements: what follows its colon on its own line, else the logical lines one indent in.
+fn body_statements<'a>(
+    lines: &[&'a [Tok]],
+    at: usize,
+    body: usize,
+    indent_of: &dyn Fn(&[Tok]) -> usize,
+) -> Vec<&'a [Tok]> {
+    if body < lines[at].len() {
+        return statements(&lines[at][body..]);
+    }
+    let Some(depth) = lines.get(at + 1).map(|l| indent_of(l)) else {
+        return Vec::new();
+    };
+    if depth == 0 {
+        return Vec::new();
+    }
+    lines[at + 1..]
+        .iter()
+        .take_while(|l| indent_of(l) > 0)
+        .filter(|l| indent_of(l) == depth)
+        .flat_map(|l| statements(l))
+        .collect()
+}
+
+/// The classes of `src` that set a string `key` (`modal_owed.kinds_in`), or None where it is no Python a lexer can follow. The same lexer as [`read`], so a class's text is read the way a file's facts are.
+#[must_use]
+pub fn kinds(src: &str) -> Option<Vec<KindClass>> {
+    let mut lexer = Lexer {
+        text: src.chars().collect(),
+        at: 0,
+        line: 1,
+        strings: Vec::new(),
+    };
+    let toks = lexer.tokens(false)?;
+    let source_lines: Vec<&str> = src.split('\n').collect();
+    let indent_of = |line: &[Tok]| -> usize {
+        source_lines[line[0].first - 1]
+            .chars()
+            .take_while(|c| *c == ' ' || *c == '\t')
+            .count()
+    };
+    let lines: Vec<&[Tok]> = toks
+        .split(|t| t.kind == Kind::Newline)
+        .filter(|l| !l.is_empty())
+        .collect();
+    let mut out = Vec::new();
+    for (at, line) in lines.iter().enumerate() {
+        if indent_of(line) != 0 || name_of(line.first()) != "class" {
+            continue;
+        }
+        let stmts = body_statements(&lines, at, body_of(line)?, &indent_of);
+        let Some(Some(key)) = stmts.iter().find_map(|s| key_of(s)) else {
+            continue;
+        };
+        let doc = stmts
+            .first()
+            .and_then(|s| constant_of(s).flatten())
+            .map_or_else(String::new, |d| cleandoc(&d));
+        out.push(KindClass {
+            name: name_of(line.get(1)).to_owned(),
+            key,
+            line: line[0].first,
+            doc,
+        });
+    }
+    Some(out)
+}
+
 /// The facts of `src`, or None where it is no Python a lexer can follow.
 #[must_use]
 pub fn read(src: &str) -> Option<Facts> {

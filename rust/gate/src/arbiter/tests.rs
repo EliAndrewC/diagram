@@ -357,15 +357,13 @@ fn a_python_string_repr_chooses_its_quote() {
     assert_eq!(py_repr("a\\\n\t\r"), "'a\\\\\\n\\t\\r'");
 }
 
-const FAKE_RECORD_OWED: &str =
-    "def answer(root, check, result, q='', kind=''):\n    return ['u:' + check]\n";
 const FAKE_GM_REVIEW: &str = "from pathlib import Path\ndef question(d, text, source, when):\n    Path(d, 'gm-question.txt').write_text(text + '|' + source + '|' + when)\n";
 const FAKE_CHECKPOINT: &str = "from pathlib import Path\ndef close_checkpoint(root, trigger):\n    Path(root, 'closed-checkpoint.txt').write_text(trigger)\n";
 
 fn python_tools(root: &Path) {
+    std::fs::write(root.join(".fake-answer"), "ok").unwrap();
     let scripts = root.join("scripts");
     for (rel, body) in [
-        ("record/record_owed.py", FAKE_RECORD_OWED),
         ("gm_review.py", FAKE_GM_REVIEW),
         ("reviews/checkpoint.py", FAKE_CHECKPOINT),
         (
@@ -569,11 +567,7 @@ fn a_plan_or_claims_ask_stands_as_that_reviews_verdict() {
 fn a_failed_tool_leaves_the_ruling_half_recorded_and_refuses() {
     let root = clone_at("half");
     python_tools(&root);
-    std::fs::write(
-        root.join("scripts/record/record_owed.py"),
-        "raise ImportError('no engine here')\n",
-    )
-    .unwrap();
+    std::fs::write(root.join(".fake-answer"), "fail").unwrap();
     owe(
         &root,
         &json!({"round:c|q:0105@3": {"kind": "round", "unit": "c|q:0105", "feature": "999-x", "t": 1}}),
@@ -587,7 +581,7 @@ fn a_failed_tool_leaves_the_ruling_half_recorded_and_refuses() {
             None,
             false,
         ),
-        "python3 said",
+        "record-owed said",
     );
     assert_eq!(rows(&root).len(), 1);
     assert!(std::fs::read_to_string(root.join(".git/arbiter-owed.json"))

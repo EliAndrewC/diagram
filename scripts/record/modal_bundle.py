@@ -37,7 +37,8 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
 import earlier_rounds  # noqa: E402
-import modal_owed as mo  # noqa: E402
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))  # the owed tools' door (449 T87)
+from owed_door import mo  # noqa: E402
 
 QUESTIONS = pathlib.Path("research/questions")
 VARIANTS = pathlib.Path("research/assets/glossary-variants.txt")
@@ -313,7 +314,7 @@ def drawing_candidates(root: pathlib.Path, m: mo.Modal) -> list[str]:
     """The drawing pages the modal's KIND may rest on beyond its own `Drawing:` list (the plan review of D13, round 2: a
     conversion that leaves `Drawing:` empty must still be judged against the pages its kind has): the "how our maps draw it"
     page beside each research question its `Entry:` names, and any drawing page its file listed at the merge base."""
-    import record_owed as ro  # noqa: PLC0415
+    from owed_door import ro  # noqa: PLC0415
 
     out: list[str] = []
     for f in m.entry_files():
@@ -465,7 +466,7 @@ def research_held(root: pathlib.Path, uid: str, text: str) -> list[str]:
 def order_hold(root: pathlib.Path, m: mo.Modal, for_: str, units: Sequence[Any]) -> str:
     """Why `for_` must wait on `m`: a check BEFORE it in `modal_owed.ORDER` has a unit on the pop-up owed now and unanswered
     (feature 375 amendment 3, FR-019a) - with the command that answers it; '' when nothing before it is owed."""
-    import record_owed  # noqa: PLC0415
+    from owed_door import ro as record_owed  # noqa: PLC0415
 
     store = record_owed.store(root)
     by_slug = {u.slug: u for u in units}
@@ -492,11 +493,11 @@ def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str, owed: Sequence[Any] |
     else:
         units = [(f"{c}:{m.uid}", fp_research) for c in mo.RESEARCH_CHECKS]
     # feature 375 (plan D1): the pages this check reads, kept as blobs - a later triage shows what changed since THIS read
-    import modal_triage as mt  # noqa: PLC0415
+    from owed_door import mt  # noqa: PLC0415
 
     files = m.drawing_files() if for_ == mo.DEPICTION_CHECK else m.entry_files() if for_ == mo.RESEARCH_AGENT else []
     pages = [(f, b) for f in files if (b := mt.keep(root, f))]
-    import record_owed  # noqa: PLC0415 - what made each unit due, read back per round by the arbiter's bundle (374)
+    from owed_door import ro as record_owed  # noqa: PLC0415 - what made each unit due, read back per round by the arbiter's bundle (374)
 
     why = {u.slug: u.occasion for u in (owed if owed is not None else record_owed.units(root))}
     return (
@@ -513,8 +514,8 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
     if m is None:
         print(f"modal-bundle: no About-form modal {kind!r} (a class name or key) under {', '.join(mo.MODAL_DIRS)}", file=sys.stderr)
         return 2
-    import modal_triage as mt  # noqa: PLC0415 - feature 375 FR-001: a unit owed only a triage is triaged first
-    import record_owed  # noqa: PLC0415
+    from owed_door import mt  # noqa: PLC0415 - feature 375 FR-001: a unit owed only a triage is triaged first
+    from owed_door import ro as record_owed  # noqa: PLC0415
 
     units = record_owed.units(root, families=("modal",), uid=m.uid)  # this pop-up's, once: the triage, the order and the owed lines all read it (amendment 3, plan D27)
     modal_rows = [(u.slug, u.occasion, u.fingerprint) for u in units if u.check in (mo.FORM_CHECK, mo.DEPICTION_CHECK, *mo.RESEARCH_CHECKS)]

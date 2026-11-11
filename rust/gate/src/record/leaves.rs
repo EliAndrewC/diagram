@@ -132,7 +132,7 @@ fn fragments_holding(page_dir: &str, needle: &str, root: &str, cwd: &Path) -> Ve
 }
 
 /// The files a check should read for the questions `q` names: each page and its notes, nothing else. `q` names a question by its number or a page by its file name, comma- or space-separated.
-pub(super) fn fragments_for(q: &str, root: &Path) -> Vec<String> {
+pub(crate) fn fragments_for(q: &str, root: &Path) -> Vec<String> {
     let here = root.join(RECORD).join(QUESTIONS);
     let mut names: Vec<String> = std::fs::read_dir(&here)
         .into_iter()

@@ -10,11 +10,19 @@ use crate::Reply;
 
 pub(crate) mod access_tags;
 mod agent_census;
+pub(crate) mod args;
 mod downloads;
 mod fragment_move;
 mod leaves;
+mod merge_answers;
+pub(crate) mod modals;
 mod money;
+pub(crate) mod owed;
+pub(crate) mod repo;
 mod stale_terms;
+pub(crate) mod translation;
+pub(crate) mod triage;
+pub(crate) mod units;
 
 pub(crate) use fragment_move::read_text;
 
@@ -390,6 +398,11 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         Some(verb @ ("edit-route" | "fragments" | "moved-only" | "americanize")) => {
             leaves::cli(verb, rest, &mut std::io::stdin(), &current_dir())
         }
+        Some("record-owed") => owed::cli(rest),
+        Some("modal-owed") => modals::cli(rest),
+        Some("translation-owed") => translation::cli(rest),
+        Some("modal-triage") => triage::cli(rest),
+        Some("merge-answers") => merge_answers::cli(rest),
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),

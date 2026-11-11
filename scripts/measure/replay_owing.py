@@ -55,12 +55,12 @@ import sys, json; sys.path.insert(0, 'scripts/record'); import modal_owed as mo
 print(json.dumps([[s, w] for s, w, _f in mo.owed(__import__('pathlib').Path('.').resolve(), sys.argv[1])]))
 """
 _NEW_MODALS = """
-import sys, json, pathlib; sys.path.insert(0, sys.argv[2] + '/scripts/record'); import modal_owed as mo, modal_triage as mt
+import sys, json, pathlib; sys.path.insert(0, sys.argv[2] + '/scripts'); from owed_door import mo, mt
 rows = mo.owed(pathlib.Path('.').resolve(), sys.argv[1])
 print(json.dumps([[s, w, mt.triage_only(w)] for s, w, _f in rows]))
 """
 _TRIAGE = """
-import os, sys, pathlib; sys.path.insert(0, sys.argv[2] + '/scripts/record'); import modal_triage as mt
+import os, sys, pathlib; sys.path.insert(0, sys.argv[2] + '/scripts'); from owed_door import mt
 manifest, n = mt.bundle(pathlib.Path('.').resolve(), pathlib.Path(sys.argv[3]), sys.argv[1])
 print(n)
 """

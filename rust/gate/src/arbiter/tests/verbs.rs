@@ -250,22 +250,14 @@ fn fixes_are_settled_and_nits_answered() {
         "{}",
         answered.stderr
     );
-    let none = "def answer(root, check, result, q='', kind=''):
-    return []
-";
-    std::fs::write(nit_root.join("scripts/record/record_owed.py"), none).unwrap();
+    std::fs::write(nit_root.join(".fake-answer"), "none").unwrap();
     let none_owed = run(&nit_root, &["nit", rid, "OLD", "NEW"]);
     assert!(
         none_owed.stdout.contains("0 unit(s) answered") && none_owed.stdout.contains("none owed")
     );
-    std::fs::write(
-        nit_root.join("scripts/record/record_owed.py"),
-        "raise ImportError('x')
-",
-    )
-    .unwrap();
+    std::fs::write(nit_root.join(".fake-answer"), "fail").unwrap();
     let broken = run(&nit_root, &["nit", rid, "OLD", "NEW"]);
-    assert!(broken.code == 1 && broken.stderr.contains("python3 said"));
+    assert!(broken.code == 1 && broken.stderr.contains("record-owed said"));
     std::env::set_var("ARBITER_FIX_ENGINE", "1");
     let engine = clone_at("engine");
     std::fs::write(

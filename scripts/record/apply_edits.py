@@ -263,10 +263,15 @@ class Round:
     record-format reply the prepass words of each question it edits (feature 335's round arbiter, 2026-10-11)."""
 
     def __init__(self, root: pathlib.Path, report: str, found: list[dict]) -> None:
-        self.root, self.ro = root, _sibling("record_owed")
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+        from owed_door import ro  # noqa: PLC0415 - 449 T87: the ported `record_owed`, through its one door
+
+        self.root, self.ro = root, ro
         self.checks = self.ro.reply_checks(report)
         # feature 375 amendment 3 (FR-019b): a pop-up check's blocks also settle the checks BEFORE it in the order
-        self.earlier = _sibling("modal_owed").earlier_units(self.checks) if self.checks else ()
+        from owed_door import mo  # noqa: PLC0415
+
+        self.earlier = mo.earlier_units(self.checks) if self.checks else ()
         self.before = self.ro.fingerprints(root, (*self.checks, *self.earlier)) if self.checks else {}
         rf = "record-format" in self.checks
         self.words = {q: prepass_words(root, q) for q in touched_questions(found)} if rf else {}
@@ -280,7 +285,7 @@ class Round:
         ru = self.ro.ru
         rec = self.ro.read_at(self.root, None, set())
         slugs = [f"quote-check:{stem}#{k}" for stem, notes in rec.notes.items() if ru.question(stem) in questions for k in notes]
-        return {s: (ru.fingerprint(rec, s), ru.quotation_key(rec, s)) for s in slugs}
+        return ru.fingerprint_and_keys(rec, slugs)
 
     def settle_quotes(self) -> list[str]:
         """Each quote-check note this run's blocks moved: settled where its quotation and claim stand as before and its answer

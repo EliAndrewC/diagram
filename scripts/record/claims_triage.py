@@ -20,7 +20,8 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import record_units as ru
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # the owed tools' door (449 T87)
+from owed_door import ru
 
 if TYPE_CHECKING:  # the row type `claims.py` defines; it imports this module, so only the type checker imports it back
     from claims import Row
@@ -390,7 +391,7 @@ def vet(reply: str, units: Mapping[str, Any], root: Path, pattern: re.Pattern[st
                 bad.append(f"{why}: {line[:160]}")
                 continue
         keep.append(raw)
-    import record_owed  # noqa: PLC0415 - the OUTSIDE THE CHANGE rows, filed as `make record-checked` files them (hour 32's fix)
+    from owed_door import ro as record_owed  # noqa: PLC0415 - the OUTSIDE THE CHANGE rows, filed as `make record-checked` files them (hour 32's fix)
 
     for row in record_owed.file_outside(root, "impl-drift", reply):
         print(f"claims-checked: filed, not fixed - {row['file']} | {row['block']} | {row['finding']}")

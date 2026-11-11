@@ -104,7 +104,8 @@ def classes_in(text: str, _base, lines: dict[str, int] | None = None, read=None,
     where there is none - a revision before the move), and `at` collects key -> that file, where the prose now lives."""
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     sys.path[1:1] = [str((Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
-    import modal_owed as mo  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from owed_door import mo  # noqa: PLC0415 - 449 T87: the ported `modal_owed`
 
     out: dict[str, str] = {}
     lines = {} if lines is None else lines
@@ -164,8 +165,8 @@ def findings(page: str) -> list[str]:
     """What a modal is written FROM: the page's words with its intro dropped (feature 311, spec FR-004 last row). An intro
     cites nothing and says only why the question is asked; a comment, a tag marker or a re-wrap changes no words - none of
     them is a finding moving under a modal. The words are `_record_units`'s, the one reader of them."""
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    import record_units as ru  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from owed_door import ru  # noqa: PLC0415 - 449 T87: the ported `record_units`
 
     p = ru.read_page(page)
     return [p.heading, *(b.words for b in p.blocks if not b.intro)]

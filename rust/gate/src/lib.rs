@@ -13,10 +13,11 @@ mod hashing;
 mod lock;
 mod logs;
 mod measure;
+pub mod owed_door;
 mod plan;
 mod preflight;
 mod push;
-mod record;
+pub(crate) mod record;
 mod rustc;
 mod stamp;
 mod state;
@@ -109,6 +110,9 @@ pub fn cli(args: &[String]) -> Reply {
         Some("record") => record::cli(&args[1..]),
         Some("arbiter") => arbiter::cli(&args[1..]),
         Some("checks-close") => checks_door::close_cli(&args[1..]),
+        Some("owed-door") => {
+            owed_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout().lock())
+        }
         Some("checks-door") => {
             checks_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
         }

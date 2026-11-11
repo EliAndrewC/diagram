@@ -66,7 +66,8 @@ import claims_stale  # noqa: E402
 import claims_triage  # noqa: E402
 import pager  # noqa: E402
 import record_cache as rc  # noqa: E402
-import record_units as ru  # noqa: E402
+sys.path.insert(0, str(HERE.parent))  # the owed tools' door (449 T87)
+from owed_door import ru  # noqa: E402
 from claims_reply import (  # noqa: E402, F401 - lifted out at the 1,000-line bar (feature 426); re-exported so every caller still reaches them here
     _ELIDED,
     _RESTS,

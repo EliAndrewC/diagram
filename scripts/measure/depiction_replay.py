@@ -19,8 +19,8 @@ import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "scripts" / "record"))  # the moved scripts it imports (scripts/CLAUDE.md)
-import modal_owed as mo  # noqa: E402
+sys.path.insert(0, str(ROOT / "scripts"))  # the owed tools' door (449 T87)
+from owed_door import mo  # noqa: E402
 
 
 def _git(*args: str) -> str:

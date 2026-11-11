@@ -75,7 +75,7 @@ fi
 # GUARD_EDIT_OK: feature 430 T04 (D4) - a delta holding no research record or pop-up, or a pass already stored for its exact
 # content, is not judged again (`l7r-gate push-gate`); a refusal is never stored
 if why="$("$EG_HERE/l7r-gate.sh" push-gate skip entry 2>/dev/null)"; then printf '  %s\n' "$why"; exit 0; fi
-OWED="$(PYTHONDONTWRITEBYTECODE=1 python3 "$EG_HERE/../record/record_owed.py" --root "$ROOT" --unanswered $SKIP 2>/dev/null || true)"
+OWED="$("$EG_HERE/l7r-gate.sh" record record-owed --root "$ROOT" --unanswered $SKIP 2>/dev/null || true)"  # GUARD_EDIT_OK: 449 T87 - the port of record_owed.py
 case "$OWED" in ""|"record-owed: no record check is owed"*) [ -z "$SKIP" ] && "$EG_HERE/l7r-gate.sh" push-gate pass entry 2>/dev/null; exit 0 ;; esac  # an escaped pass is never stored
 
 guard_log entry-gate blocked "$(printf '%s' "$OWED" | head -c 400)" record-owed

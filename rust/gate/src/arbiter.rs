@@ -1,6 +1,6 @@
 //! `l7r-gate arbiter`: the round arbiter's rulings and tripwires from the shell and the make targets (feature 449 T86, from `scripts/hooks/lib/hm_arbiter.py`'s `main`, `record_ruling` and `record_batch`), and the verdict
 //! reads the review gate asks. `arbiter.jsonl` is appended here alone; a ruling that lifts a hold is `pop_owed` under the same lock `trip` takes, so the guards and this command never race. The modules still Python - `gm_review`,
-//! `checkpoint`, `record_owed`, `claims` and `review_prereq` - are asked by path on these rare branches, never on a plain Bash call or Edit (the T065 clause).
+//! `checkpoint`, `claims` and `review_prereq` - are asked by path on these rare branches, never on a plain Bash call or Edit (the T065 clause).
 
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -115,13 +115,6 @@ fn py(code: &str, args: &[&str]) -> Result<String, Stop> {
     }
 }
 
-const REPO_ANSWER: &str = r"import json, sys
-from pathlib import Path
-sys.path.insert(0, sys.argv[1] + '/scripts/record')
-import record_owed
-root, check, result, kind, name = Path(sys.argv[2]), sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6]
-print(json.dumps(record_owed.answer(root, check, result, kind=name) if kind == 'modal' else record_owed.answer(root, check, result, q=name)))";
-
 const GM_QUESTION: &str = r"import sys
 from pathlib import Path
 sys.path.insert(0, sys.argv[1])
@@ -157,23 +150,50 @@ fn accept_answers(root: &Path, unit: &str, result: &str) -> Result<Vec<String>, 
     } else {
         std::slice::from_ref(&check)
     };
-    let tree = tree_of(root);
     let mut done = Vec::new();
     for c in checks_named {
-        let said = py(
-            REPO_ANSWER,
-            &[
-                &tree.to_string_lossy(),
-                &root.to_string_lossy(),
-                c,
-                result,
-                kind,
-                name,
-            ],
-        );
-        done.extend(serde_json::from_str::<Vec<String>>(&said?).unwrap_or_default());
+        done.extend(answer_units(root, c, result, kind, name)?);
     }
     Ok(done)
+}
+
+/// `record_owed.answer` on `kind=name` or `q=name`, the Rust port called directly.
+#[cfg(not(test))]
+fn answer_units(
+    root: &Path,
+    check: &str,
+    result: &str,
+    kind: &str,
+    name: &str,
+) -> Result<Vec<String>, Stop> {
+    use crate::record::owed::{answer, Named};
+    let named = Named {
+        q: if kind == "modal" { "" } else { name },
+        notes: "",
+        key: "",
+        kind: if kind == "modal" { name } else { "" },
+    };
+    answer(root, check, result, "", &named, "")
+        .map_err(|why| Stop::Refused(format!("record-owed said: {why}")))
+}
+
+/// The test double for `answer_units`: `.fake-answer` in the root says what `record_owed.answer` would (`ok`, `none`, `fail`).
+#[cfg(test)]
+fn answer_units(
+    root: &Path,
+    check: &str,
+    _result: &str,
+    _kind: &str,
+    _name: &str,
+) -> Result<Vec<String>, Stop> {
+    match std::fs::read_to_string(root.join(".fake-answer"))
+        .unwrap_or_default()
+        .trim()
+    {
+        "ok" => Ok(vec![format!("u:{check}")]),
+        "fail" => Err(Stop::Refused("record-owed said: no engine here".to_owned())),
+        _ => Ok(Vec::new()),
+    }
 }
 
 fn gm_question(
