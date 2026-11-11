@@ -522,8 +522,12 @@ fn a_file_entry_owed_reads_starts_it_with_no_page_changed() {
     put(&root, "l7r/diagram/interactive/sources.py", "");
     assert!(units(&root, None, None, &["entry-drift"], "").is_err());
     std::fs::remove_file(root.join("l7r/diagram/interactive/sources.py")).unwrap();
-    // a non-page file under the questions, alone: not started
-    put(&root, "research/questions/README.md", "x\n");
+    // a file elsewhere in the record it reads (a write-up's data): started
+    put(&root, "research/tags.json", "{}\n");
+    assert!(units(&root, None, None, &["entry-drift"], "").is_err());
+    std::fs::remove_file(root.join("research/tags.json")).unwrap();
+    // a file it never reads, alone: not started
+    put(&root, "docs/notes.md", "x\n");
     assert!(units(&root, None, None, &["entry-drift"], "")
         .unwrap()
         .is_empty());

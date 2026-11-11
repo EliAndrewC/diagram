@@ -217,40 +217,41 @@ pub(super) fn entry_base(root: &Path) -> String {
     }
 }
 
-/// What `entry_owed.py` reads besides the question pages: its engine import closure (the `interactive` package and the
-/// package root above it, 20 files measured 2026-11-10 by importing it and listing `sys.modules`) and the scripts it loads.
-/// A change to any of them starts it, so an engine the change broke fails as the Python's did (the plan review of T87).
-const ENTRY_READS: [&str; 6] = [
+/// What a run of `entry_owed.py` reads, its door processes included: every file opened under the tree during a real run
+/// on a changed question page (measured 2026-11-10 with `inotifywait -m -r -e open` over the worktree, beside Python's
+/// audit hook): the engine's `interactive` package and the package root above it, the whole research record (the
+/// `record fragments` and door verbs read the question pages, the write-ups and `research/*.json`), the scripts it loads,
+/// and the gate's own sources and wrapper, which build the binary answering its doors. A change to any of them starts it,
+/// so a change that broke what it reads fails as the Python's did (the plan review of T87).
+const ENTRY_READS: [&str; 9] = [
     "l7r/diagram/interactive/",
     "l7r/diagram/__init__.py",
+    "research/",
     "scripts/record/entry_owed.py",
     "scripts/record/record_cache.py",
     "scripts/record_door.py",
     "scripts/owed_door.py",
+    "scripts/gates/l7r-gate.sh",
+    "rust/gate/",
 ];
 
 /// Whether `entry_owed` must run for this delta (the T065 clause, `ask:449-T87-entry-owed`): the family is asked, and a
-/// question page or a file it reads changed against the base, untracked files included, or the engine it imports is not
-/// here (the crash the Python had then).
+/// file it reads changed against the base, untracked files included, or the engine it imports is not here (the crash the
+/// Python had then).
 fn entry_drift_owed(root: &Path) -> bool {
     let base = entry_base(root);
     if base.is_empty() {
         return false;
     }
-    let mut paths = vec!["research/questions/"];
-    paths.extend(ENTRY_READS);
     let mut changed = vec!["diff", "--name-only", base.as_str(), "--"];
-    changed.extend(&paths);
+    changed.extend(ENTRY_READS);
     let mut others = vec!["ls-files", "--others", "--exclude-standard", "--"];
-    others.extend(&paths);
+    others.extend(ENTRY_READS);
     let names = git(root, &changed) + &git(root, &others);
     !root
         .join("l7r/diagram/interactive/classes/__init__.py")
         .is_file()
-        || names.lines().any(|n| {
-            n.strip_prefix("research/questions/")
-                .map_or(!n.trim().is_empty(), |f| stem_of(f).is_some())
-        })
+        || names.lines().any(|n| !n.trim().is_empty())
 }
 
 fn entry_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {
