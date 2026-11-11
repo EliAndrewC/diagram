@@ -42,7 +42,7 @@
  "240-fr005-whole-pool-rc": {
   "value": 0,
   "unit": "exit code",
-  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "command": "<retired: the FR-005 probe, deleted unported by feature 449 T89 (ask:449-T89-reviews) - the value is history, not re-run>",
   "taken": "2026-09-13",
   "quantity": "no snapshot named, pool folder whole and current",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
@@ -50,7 +50,7 @@
  "240-fr005-pool-without-renders-rc": {
   "value": 1,
   "unit": "exit code",
-  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "command": "<retired: the FR-005 probe, deleted unported by feature 449 T89 (ask:449-T89-reviews) - the value is history, not re-run>",
   "taken": "2026-09-13",
   "quantity": "no snapshot named, the pool's .png and .html moved aside as a gate leaves them",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
@@ -58,7 +58,7 @@
  "240-fr005-named-current-snapshot-rc": {
   "value": 0,
   "unit": "exit code",
-  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "command": "<retired: the FR-005 probe, deleted unported by feature 449 T89 (ask:449-T89-reviews) - the value is history, not re-run>",
   "taken": "2026-09-13",
   "quantity": "a whole snapshot of the current map named, pool without renders",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
@@ -66,7 +66,7 @@
  "240-fr005-named-older-snapshot-rc": {
   "value": 1,
   "unit": "exit code",
-  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "command": "<retired: the FR-005 probe, deleted unported by feature 449 T89 (ask:449-T89-reviews) - the value is history, not re-run>",
   "taken": "2026-09-13",
   "quantity": "a whole snapshot whose SVG differs from the pool's named",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
@@ -74,7 +74,7 @@
  "240-fr005-key-moved-rc": {
   "value": 1,
   "unit": "exit code",
-  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "command": "<retired: the FR-005 probe, deleted unported by feature 449 T89 (ask:449-T89-reviews) - the value is history, not re-run>",
   "taken": "2026-09-13",
   "quantity": "the generator edited so its cache key moves, current snapshot named",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
@@ -82,7 +82,7 @@
  "240-fr005-restored-rc": {
   "value": 0,
   "unit": "exit code",
-  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "command": "<retired: the FR-005 probe, deleted unported by feature 449 T89 (ask:449-T89-reviews) - the value is history, not re-run>",
   "taken": "2026-09-13",
   "quantity": "everything restored, no snapshot named",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
@@ -90,7 +90,7 @@
  "240-fr005-check-max-s": {
   "value": 0.19,
   "unit": "s",
-  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "command": "<retired: the FR-005 probe, deleted unported by feature 449 T89 (ask:449-T89-reviews) - the value is history, not re-run>",
   "taken": "2026-09-13",
   "varies": 0.5,
   "quantity": "slowest of the probe's six checks, each a fresh interpreter importing the generation cache - sub-second, so half its value is the band, against a bound of 5 s",
