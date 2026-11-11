@@ -417,7 +417,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 6. **The exits.** Green: the behavior check shows only the ruled path difference, every crate's tests pass and cover its lines, `make static` is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** The behavior check, the 870 tests, the coverage and the timings above; `make static`, `make rust-tooling` and the citation-rule inventory's test green (observed 2026-11-11, method: those make targets).
+9. **Done, measured.** The behavior check, the 870 tests, the coverage and the timings above; `make static`'s Rust steps (lint, format, cover, dead on 18 crates) green, its spec lint naming four findings in `spec.md` lines 185 and 193 (SC-006's `68 s` and three `m:` figures, not T92's text); `make rust-tooling`, the citation-rule inventory's test (2 passed) and `make hooks-test HOOKS_ALL=1` (53 suites) green (observed 2026-11-11, method: those make targets).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
