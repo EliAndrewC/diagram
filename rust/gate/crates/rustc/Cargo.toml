@@ -1,0 +1,29 @@
+# The Rust crates' checks, `l7r-gate rust` (feature 449 T93): its own crate over core and tree, with its own binary `l7r-rust`, so an
+# edit of a crate the checks do not build from (claims, owed, ...) never rebuilds the program that runs the tests (`scripts/gates/l7r-gate.sh`).
+[package]
+name = "l7r_gate_rustc"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time, beyond the crate's own sources (the key of a kept result, `rustc.rs`): the fixture crate
+# the one real-cargo test copies.
+[package.metadata.l7r]
+reads = ["tests/fixtures/rust/fixture/"]
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_gate_tree = { path = "../tree" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[[bin]]
+name = "l7r-rust"
+path = "src/main.rs"
+
+[lints]
+workspace = true

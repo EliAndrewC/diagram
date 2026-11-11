@@ -5,6 +5,10 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
+# What the tests read of the tree at run time (feature 449 T93): the checks' tests run over the real tree (file-scale, stale dirs, research pointers, question size, the spec lint's template, the run floor's ratchets). A change there runs them again.
+[package.metadata.l7r]
+reads = ["."]
+
 [dependencies]
 fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }

@@ -7,12 +7,13 @@ pub use l7r_gate_bundle::owed_door;
 pub use l7r_gate_checks::checks;
 pub use l7r_gate_ci::ci;
 pub use l7r_gate_claims::claims;
-pub use l7r_gate_cohort::{cohort, push, rustc};
+pub use l7r_gate_cohort::{cohort, push};
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
 pub use l7r_gate_measure::{measure, preflight};
 pub use l7r_gate_plan::plan;
 pub use l7r_gate_record::record;
 pub use l7r_gate_reviews::reviews;
+pub use l7r_gate_rustc::rustc;
 pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
 
 /// `l7r-gate content-ids <path>...`: `<path> <id>` for each file (a tree's code ids, T062).

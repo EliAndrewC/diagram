@@ -5,8 +5,9 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use super::{
-    answer, check, content_ids, crates, dead_public, dispatch, features_but, kept_reads,
-    lcov_missed, own_libs, parse, relative, run, tail, uncovered, verdict_key, Reads, World,
+    answer, check, content_ids, crates, dead_public, declared_reads, dispatch, features_but,
+    kept_reads, lcov_missed, own_libs, parse, relative, run, tail, uncovered, undeclared,
+    verdict_key, Reads, World,
 };
 use crate::checks::scratch;
 
@@ -119,20 +120,57 @@ fn a_crate_s_key_moves_with_its_own_inputs_and_not_the_other_crates() {
     );
     assert_ne!(source, key("lint", Reads::Source, &[], "cargo 2"));
     assert_ne!(source, key("dead", Reads::Source, &[], "cargo 1"));
-    let tree = key("cover", Reads::Tree, &[], "cargo 1");
+    // tests that declare nothing they read are keyed on their sources alone (feature 449 T93): a spec's edit runs none of them
+    let quiet = key("cover", Reads::Tests, &[], "cargo 1");
+    assert_eq!(
+        quiet,
+        key("cover", Reads::Tests, &[("Makefile", "9")], "cargo 1")
+    );
     assert_ne!(
-        tree,
-        key("cover", Reads::Tree, &[("Makefile", "9")], "cargo 1")
+        quiet,
+        key(
+            "cover",
+            Reads::Tests,
+            &[("rust/a/src/l.rs", "9")],
+            "cargo 1"
+        )
+    );
+    // a declared path moves the key, and nothing else outside the crate does
+    std::fs::write(
+        &a,
+        "[package]\n\n[package.metadata.l7r]\nreads = [\"scripts/\"]\n\n[dependencies]\n",
+    )
+    .unwrap();
+    let narrow = key("cover", Reads::Tests, &[], "cargo 1");
+    assert_ne!(
+        narrow,
+        key("cover", Reads::Tests, &[("scripts/x.py", "9")], "cargo 1")
     );
     assert_eq!(
+        narrow,
+        key("cover", Reads::Tests, &[("Makefile", "9")], "cargo 1")
+    );
+    std::fs::write(&a, "[package]\n[package.metadata.l7r]\nreads = [\".\"]\n").unwrap();
+    let tree = key("cover", Reads::Tests, &[], "cargo 1");
+    assert_ne!(
         tree,
-        key("cover", Reads::Tree, &[("rust/b/src/l.rs", "9")], "cargo 1")
+        key("cover", Reads::Tests, &[("Makefile", "9")], "cargo 1")
+    );
+    // the whole tree is the whole tree: the checks' tests read every crate's files (file-scale caught `rustc.rs` at 1,105 lines)
+    assert_ne!(
+        tree,
+        key(
+            "cover",
+            Reads::Tests,
+            &[("rust/b/src/l.rs", "9")],
+            "cargo 1"
+        )
     );
     assert_eq!(
         tree,
         key(
             "cover",
-            Reads::Tree,
+            Reads::Tests,
             &[("dev/run-log/2026-11/r.json", "9")],
             "cargo 1"
         )
@@ -147,7 +185,7 @@ fn a_crate_built_from_another_by_path_moves_with_it() {
     let base = ids(&[("rust/a/src/l.rs", "1"), ("rust/b/src/l.rs", "2")]);
     let moved_b = ids(&[("rust/a/src/l.rs", "1"), ("rust/b/src/l.rs", "9")]);
     let moved_a = ids(&[("rust/a/src/l.rs", "9"), ("rust/b/src/l.rs", "2")]);
-    for (cmd, reads) in [("lint", Reads::Source), ("cover", Reads::Tree)] {
+    for (cmd, reads) in [("lint", Reads::Source), ("cover", Reads::Tests)] {
         assert_ne!(
             verdict_key(&root, &a, cmd, reads, &both, &base, "c"),
             verdict_key(&root, &a, cmd, reads, &both, &moved_b, "c")
@@ -218,7 +256,7 @@ fn an_unchanged_crate_keeps_its_green_result_and_a_failure_is_never_kept() {
 }
 
 #[test]
-fn no_crate_is_no_work_and_a_named_crate_is_not_kept() {
+fn no_crate_is_no_work_and_nothing_is_kept_outside_a_repository() {
     let empty = scratch("rustc-empty");
     let world = world_with(&empty, "exit 0");
     assert!(answer(&world, "format", &[], false)
@@ -230,7 +268,10 @@ fn no_crate_is_no_work_and_a_named_crate_is_not_kept() {
     assert!(answer(&world, "dead", &named, false)
         .stdout
         .contains("dead clean on 1 crate(s)"));
-    assert!(calls(&world).is_empty());
+    assert!(answer(&world, "dead", &named, false)
+        .stdout
+        .contains("dead clean on 1 crate(s)"));
+    assert_eq!(calls(&world), ["--version", "--version"]);
     assert_eq!(
         crates(&root, &["rust/a/Cargo.toml".to_owned()]),
         [root.join("rust/a/Cargo.toml")]
@@ -439,7 +480,7 @@ fn the_arguments_are_parsed_and_each_failure_says_its_fix() {
 fn the_kept_checks_and_the_small_helpers() {
     assert!(
         kept_reads("lint") == Some(Reads::Source)
-            && kept_reads("cover") == Some(Reads::Tree)
+            && kept_reads("cover") == Some(Reads::Tests)
             && kept_reads("format").is_none()
     );
     assert_eq!(
@@ -574,7 +615,7 @@ fn a_nested_crate_owns_its_files_and_a_dependency_s_dependency_moves_the_key() {
         m.insert(path.to_owned(), "9".to_owned());
         m
     };
-    for (cmd, reads) in [("lint", Reads::Source), ("cover", Reads::Tree)] {
+    for (cmd, reads) in [("lint", Reads::Source), ("cover", Reads::Tests)] {
         let key = |manifest: &Path, ids: &BTreeMap<String, String>| {
             verdict_key(&root, manifest, cmd, reads, &all, ids, "c")
         };
@@ -624,4 +665,143 @@ fn a_nested_crate_s_lines_and_calls_are_its_own_and_the_family_shares_one_covera
         got.keys().cloned().collect::<Vec<_>>(),
         [canon("rust/g/crates/low/src/lib.rs").display().to_string()]
     );
+}
+
+/// `two_crates` in a repository, so a kept result has a git directory to live in.
+fn kept_crates() -> (PathBuf, PathBuf, PathBuf) {
+    let (root, a, b) = two_crates();
+    assert!(Command::new("git")
+        .arg("-C")
+        .arg(&root)
+        .args(["init", "-q"])
+        .status()
+        .unwrap()
+        .success());
+    (root, a, b)
+}
+
+#[test]
+fn a_manifest_declares_what_its_tests_read_and_an_undeclared_reader_is_refused() {
+    let (root, a, b) = kept_crates();
+    assert!(declared_reads(&a).is_empty());
+    std::fs::write(
+        &a,
+        "[package]\nname = \"a\"\n\n[package.metadata.l7r]\n# why\nreads = [\n  \"scripts/\",\n  \"Makefile\",\n]\n\n[dependencies]\nx = \"1\"\n",
+    )
+    .unwrap();
+    assert_eq!(declared_reads(&a), ["scripts/", "Makefile"]);
+    std::fs::write(
+        root.join("rust/b/src/lib.rs"),
+        "fn f() { let _ = env!(\"CARGO_MANIFEST_DIR\"); }\n",
+    )
+    .unwrap();
+    let both = [a.clone(), b.clone()];
+    assert_eq!(undeclared(&both), [&b]);
+    let world = world_with(&root, "exit 0");
+    for cmd in ["test", "test-counters", "cover"] {
+        let refused = answer(&world, cmd, &[], false);
+        assert_eq!(refused.code, 1);
+        assert_eq!(refused.stderr, "rust-checks: these crates' sources name the tree outside the crate (CARGO_MANIFEST_DIR, top(), toplevel()) but their Cargo.toml declares nothing their tests read, so a kept result could stand over a tree the tests no longer pass on:\n  rust/b/\nadd `[package.metadata.l7r]` with `reads = [\"<path>/\", ...]` (\".\" the whole tree) to each Cargo.toml\n");
+    }
+    assert!(calls(&world).is_empty(), "refused before any cargo");
+    // lint reads no tree
+    assert_eq!(answer(&world, "lint", &[], false).code, 0);
+    std::fs::write(&b, "[package]\n[package.metadata.l7r]\nreads = [\".\"]\n").unwrap();
+    assert!(undeclared(&both).is_empty());
+}
+
+/// A cargo whose test build names one executable, `exe` beside it, and fails when `nobuild` is there; every other call passes.
+const BINARY_CARGO: &str = r#"case "$1 $2" in
+  "test --no-run") [ -f "$(dirname "$0")/nobuild" ] && exit 1; echo '{"executable":"'"$(dirname "$0")"'/exe"}';;
+  "test --quiet") echo 'test result: ok. 1 passed';;
+esac
+exit 0"#;
+
+#[test]
+fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
+    let (root, a, _) = kept_crates();
+    // a declares what its tests read: its binary key carries those paths, its own sources the binary
+    std::fs::write(
+        &a,
+        "[package]\n[package.metadata.l7r]\nreads = [\"scripts/\"]\n",
+    )
+    .unwrap();
+    let world = world_with(&root, BINARY_CARGO);
+    std::fs::write(world.target.join("exe"), "binary one").unwrap();
+    let runs = |w: &World| {
+        calls(w)
+            .iter()
+            .filter(|c| {
+                c.starts_with("test --quiet --manifest")
+                    || c.starts_with("test --quiet --all-features --manifest")
+            })
+            .count()
+    };
+    let first = answer(&world, "test", &[], false);
+    assert_eq!(first.code, 0);
+    assert_eq!(runs(&world), 2);
+    assert!(first
+        .stdout
+        .contains("rust-checks: test on rust/a: test result: ok. 1 passed"));
+    // nothing moved: the first key stands, and no build is asked
+    let builds = calls(&world).len();
+    let again = answer(&world, "test", &[], false);
+    assert_eq!(
+        again.stdout,
+        "rust-checks: test unchanged on rust/a - its last green result stands\nrust-checks: test unchanged on rust/b - its last green result stands\nrust-checks: test clean on 2 crate(s)\n"
+    );
+    // only the compiler's version
+    assert_eq!(calls(&world).len(), builds + 1);
+    // a source moved but its binary did not: built, not run
+    std::fs::write(root.join("rust/a/src/lib.rs"), "//! moved\n").unwrap();
+    let rebuilt = answer(&world, "test", &[], false);
+    assert!(rebuilt.stdout.contains("test unchanged on rust/a"));
+    assert_eq!(runs(&world), 2);
+    // the counting build shares the plain one's result where its binary is the same
+    let counted = answer(&world, "test-counters", &[], false);
+    assert!(counted.stdout.contains("test-counters unchanged on rust/b"));
+    assert_eq!(runs(&world), 2);
+    // a binary that moved runs; a build that fails runs, and its failure is cargo's to tell
+    std::fs::write(world.target.join("exe"), "binary two").unwrap();
+    std::fs::write(root.join("rust/a/src/lib.rs"), "//! moved again\n").unwrap();
+    assert_eq!(answer(&world, "test", &[], false).code, 0);
+    assert_eq!(runs(&world), 3);
+    std::fs::write(world.target.join("nobuild"), "").unwrap();
+    std::fs::write(root.join("rust/a/src/lib.rs"), "//! and again\n").unwrap();
+    assert_eq!(answer(&world, "test", &[], false).code, 0);
+    assert_eq!(runs(&world), 4);
+    // a fresh run runs every crate and builds nothing first
+    let fresh = World {
+        no_reuse: true,
+        ..world
+    };
+    assert_eq!(answer(&fresh, "test", &[], false).code, 0);
+    assert_eq!(runs(&fresh), 6);
+}
+
+#[test]
+fn a_named_crate_is_kept_and_its_key_follows_the_crates_it_builds_from() {
+    let (root, a, _) = kept_crates();
+    std::fs::write(&a, "[package]\n[dependencies]\nb = { path = \"../b\" }\n").unwrap();
+    let world = world_with(&root, "exit 0");
+    let named = ["rust/a".to_owned()];
+    let clippy = |w: &World| calls(w).iter().filter(|c| c.starts_with("clippy")).count();
+    assert_eq!(answer(&world, "lint", &named, false).code, 0);
+    assert_eq!(clippy(&world), 2);
+    assert!(answer(&world, "lint", &named, false)
+        .stdout
+        .contains("lint unchanged on rust/a"));
+    assert_eq!(clippy(&world), 2);
+    std::fs::write(root.join("rust/b/src/lib.rs"), "//! moved\n").unwrap();
+    assert_eq!(answer(&world, "lint", &named, false).code, 0);
+    assert_eq!(clippy(&world), 4, "b moved, and a builds from it");
+    // a crate named outside rust/ is keyed too
+    std::fs::create_dir_all(root.join("tests/fx/src")).unwrap();
+    std::fs::write(root.join("tests/fx/Cargo.toml"), "[package]\n").unwrap();
+    std::fs::write(root.join("tests/fx/src/lib.rs"), "//! x\n").unwrap();
+    let outside = ["tests/fx".to_owned()];
+    assert_eq!(answer(&world, "lint", &outside, false).code, 0);
+    assert!(answer(&world, "lint", &outside, false)
+        .stdout
+        .contains("lint unchanged on tests/fx"));
 }

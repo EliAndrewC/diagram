@@ -5,6 +5,10 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
+# What the tests read of the tree at run time (feature 449 T93): the stamp, delta and ratchet tests read the scripts and the ratchets of the real tree, and `top()` is the repository. A change there runs them again.
+[package.metadata.l7r]
+reads = ["."]
+
 [dependencies]
 fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }

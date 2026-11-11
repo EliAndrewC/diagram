@@ -6,6 +6,10 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
+# What the tests read of the tree at run time (feature 449 T93): the binary's tests answer through `top()`, the repository. A change there runs them again.
+[package.metadata.l7r]
+reads = ["."]
+
 [lib]
 name = "l7r_gate"
 
@@ -24,6 +28,7 @@ l7r_gate_plan = { path = "crates/plan" }
 l7r_gate_downloads = { path = "crates/downloads" }
 l7r_gate_record = { path = "crates/record" }
 l7r_gate_reviews = { path = "crates/reviews" }
+l7r_gate_rustc = { path = "crates/rustc" }
 l7r_gate_tree = { path = "crates/tree" }
 l7r_gate_trials = { path = "crates/trials" }
 l7r_guard = { path = "../guard" }

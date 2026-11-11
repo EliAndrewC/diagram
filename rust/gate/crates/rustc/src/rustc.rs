@@ -18,30 +18,17 @@ use std::sync::LazyLock;
 use std::time::Instant;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::sha256;
-use serde_json::Value;
 
 use crate::Reply;
+
+mod kept;
+#[cfg(test)]
+use kept::{content_ids, declared_reads, relative, verdict_key};
+use kept::{executables, kept_reads, undeclared, undeclared_refusal, Kept, Reads, Verdict};
 
 /// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
 const USAGE_LOG_TOOL: &str = "rust_checks";
 const CRATES: &str = "rust";
-/// The append-only records every run writes: no test reads them, and keying on them would re-run every crate's tests after every run.
-const RECORDS: [&str; 4] = [
-    "dev/run-log/",
-    "dev/bypass-log/",
-    "dev/perf-log/",
-    "dev/idle-log/",
-];
-const WORKSPACE: [&str; 6] = [
-    "rust/Cargo.toml",
-    "rust/Cargo.lock",
-    "clippy.toml",
-    "rust/clippy.toml",
-    "rust-toolchain",
-    "rust-toolchain.toml",
-];
-
 fn re(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
@@ -49,22 +36,6 @@ fn re(pattern: &str) -> Regex {
 static BUILD_HASH: LazyLock<Regex> = LazyLock::new(|| re(r"Cs[0-9A-Za-z]+_|17h[0-9a-f]{16}E"));
 static PUB_FN: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?m)^\s*pub(?:\([^)]*\))?\s+(?:const\s+)?fn\s+([A-Za-z_][A-Za-z0-9_]*)"));
-
-/// What a check depends on: `Source` the crate and the workspace's manifests, `Tree` everything but the other crates.
-#[derive(Clone, Copy, PartialEq)]
-enum Reads {
-    Source,
-    Tree,
-}
-
-/// The checks a crate's own unchanged inputs answer (feature 449 T060): `make done` on a one-line edit of one crate spent 40 s on the other.
-fn kept_reads(cmd: &str) -> Option<Reads> {
-    match cmd {
-        "lint" | "dead" => Some(Reads::Source),
-        "cover" | "test-counters" => Some(Reads::Tree),
-        _ => None,
-    }
-}
 
 /// Where everything runs, read once from the environment.
 pub struct World {
@@ -380,13 +351,7 @@ fn cover(world: &World, manifest: &Path, work: &Path, report: &[String]) -> Ran 
         .concat(),
         &env,
     );
-    let keep: BTreeSet<String> = built
-        .stdout
-        .lines()
-        .filter(|l| l.starts_with('{'))
-        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
-        .filter_map(|v| v["executable"].as_str().map(str::to_owned))
-        .collect();
+    let keep = executables(&built.stdout);
     // every other test binary goes: llvm-cov's report reads each one in the build, and in the one build the gate's crates share
     // (feature 449 T92) another crate's binary carries this crate's code with none of this run's counts
     if !keep.is_empty() {
@@ -578,133 +543,6 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
     }
 }
 
-fn hash_file(path: &Path) -> String {
-    sha256::hex(&std::fs::read(path).unwrap_or_default())
-}
-
-fn git_z(root: &Path, args: &[&str]) -> Vec<String> {
-    let done = Command::new("git").arg("-C").arg(root).args(args).output();
-    let out = done.map(|o| o.stdout).unwrap_or_default();
-    String::from_utf8_lossy(&out)
-        .split('\0')
-        .filter(|s| !s.is_empty())
-        .map(str::to_owned)
-        .collect()
-}
-
-/// `{path: content id}`: each tracked file's index blob, or a hash of its bytes where the work tree differs or git does not track it.
-fn content_ids(root: &Path) -> BTreeMap<String, String> {
-    let mut ids: BTreeMap<String, String> = BTreeMap::new();
-    for record in git_z(root, &["ls-files", "-s", "-z"]) {
-        if let Some((meta, path)) = record.split_once('\t') {
-            ids.insert(
-                path.to_owned(),
-                meta.split_whitespace().nth(1).unwrap_or("").to_owned(),
-            );
-        }
-    }
-    let changed = git_z(root, &["diff", "--name-only", "-z"]);
-    let others = git_z(root, &["ls-files", "--others", "--exclude-standard", "-z"]);
-    for path in changed.into_iter().chain(others) {
-        let id = hash_file(&root.join(&path));
-        ids.insert(path, id);
-    }
-    ids
-}
-
-fn rel_dir(manifest: &Path, root: &Path) -> String {
-    format!(
-        "{}/",
-        manifest
-            .parent()
-            .unwrap_or(root)
-            .strip_prefix(root)
-            .unwrap_or(Path::new(""))
-            .display()
-    )
-}
-
-/// A path relative to `base`, as a manifest writes a path dependency.
-fn relative(to: &Path, base: &Path) -> String {
-    let (a, b): (Vec<_>, Vec<_>) = (to.components().collect(), base.components().collect());
-    let same = a.iter().zip(&b).take_while(|(x, y)| x == y).count();
-    let up = vec![".."; b.len() - same];
-    let down: Vec<String> = a[same..]
-        .iter()
-        .map(|c| c.as_os_str().to_string_lossy().into_owned())
-        .collect();
-    [up.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>(), down]
-        .concat()
-        .join("/")
-}
-
-/// The crates of `all` that `manifest` builds from by path, and those they build from: a dependency's dependency's edit changes this
-/// crate's build too (the gate's crates are four deep, feature 449 T92).
-fn depended<'a>(root: &Path, manifest: &Path, all: &'a [PathBuf]) -> Vec<&'a PathBuf> {
-    let mut found: Vec<&PathBuf> = Vec::new();
-    let mut todo = vec![manifest.to_path_buf()];
-    while let Some(at) = todo.pop() {
-        let text = std::fs::read_to_string(&at).unwrap_or_default();
-        let parent = at.parent().unwrap_or(root);
-        for m in all {
-            if m.as_path() != manifest
-                && !found.contains(&m)
-                && text.contains(&format!(
-                    "\"{}\"",
-                    relative(m.parent().unwrap_or(root), parent)
-                ))
-            {
-                found.push(m);
-                todo.push(m.clone());
-            }
-        }
-    }
-    found
-}
-
-/// What this check of this crate depends on, as one id: a change to any of it runs the check again.
-fn verdict_key(
-    root: &Path,
-    manifest: &Path,
-    cmd: &str,
-    reads: Reads,
-    all: &[PathBuf],
-    ids: &BTreeMap<String, String>,
-    compiler: &str,
-) -> String {
-    let mine: Vec<String> = std::iter::once(rel_dir(manifest, root))
-        .chain(
-            depended(root, manifest, all)
-                .iter()
-                .map(|m| rel_dir(m, root)),
-        )
-        .collect();
-    let dirs: Vec<String> = all
-        .iter()
-        .map(|m| rel_dir(m, root))
-        .chain(std::iter::once(rel_dir(manifest, root)))
-        .collect();
-    // a path belongs to the crate whose directory holds it most nearly: the gate's `crates/*` sit inside the binary's (feature 449 T92)
-    let owner = |p: &str| {
-        dirs.iter()
-            .filter(|d| p.starts_with(d.as_str()))
-            .max_by_key(|d| d.len())
-    };
-    let mut hash: Vec<u8> = format!("{cmd}\n{compiler}\n").into_bytes();
-    for (path, id) in ids {
-        let kept = if reads == Reads::Source {
-            owner(path).is_some_and(|o| mine.contains(o)) || WORKSPACE.contains(&path.as_str())
-        } else {
-            owner(path).is_none_or(|o| mine.contains(o))
-                && !RECORDS.iter().any(|r| path.starts_with(r))
-        };
-        if kept {
-            hash.extend(format!("{path} {id}\n").into_bytes());
-        }
-    }
-    sha256::hex(&hash)
-}
-
 fn fix_for(cmd: &str) -> &'static str {
     match cmd {
         "lint" => "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)",
@@ -718,18 +556,6 @@ fn fix_for(cmd: &str) -> &'static str {
     }
 }
 
-fn kept_path(root: &Path, cmd: &str, manifest: &Path) -> PathBuf {
-    let dir = crate::plan::git_line(root, &["rev-parse", "--absolute-git-dir"]);
-    Path::new(&dir).join("rust-checks").join(format!(
-        "{cmd}-{}",
-        manifest
-            .parent()
-            .and_then(Path::file_name)
-            .unwrap_or_default()
-            .to_string_lossy()
-    ))
-}
-
 fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) -> Reply {
     let found = crates(&world.root, named);
     let (mut stdout, mut stderr) = (String::new(), String::new());
@@ -740,20 +566,14 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             code: 0,
         };
     }
-    let reads = kept_reads(cmd).filter(|_| named.is_empty());
-    let ids = if reads.is_some() {
-        content_ids(&world.root)
-    } else {
-        BTreeMap::new()
-    };
-    let compiler = if reads.is_some() {
-        run(&world.cargo, &own(&["--version"]), &BTreeMap::new())
-            .stdout
-            .trim()
-            .to_owned()
-    } else {
-        String::new()
-    };
+    let reads = kept_reads(cmd);
+    if reads == Some(Reads::Tests) {
+        let blind = undeclared(&found);
+        if !blind.is_empty() {
+            return undeclared_refusal(world, &blind);
+        }
+    }
+    let inputs = reads.map(|r| Kept::read(world, r, &found));
     let mut bad = 0;
     for manifest in &found {
         let shown = manifest
@@ -763,13 +583,8 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             .unwrap_or(Path::new(""))
             .display()
             .to_string();
-        let key =
-            reads.map(|r| verdict_key(&world.root, manifest, cmd, r, &found, &ids, &compiler));
-        let kept = key.as_ref().map(|_| kept_path(&world.root, cmd, manifest));
-        if !world.no_reuse
-            && key.is_some()
-            && kept.as_ref().and_then(|k| std::fs::read_to_string(k).ok()) == key
-        {
+        let (verdict, stands) = Verdict::ask(world, cmd, manifest, inputs.as_ref());
+        if stands {
             let _ = writeln!(
                 stdout,
                 "rust-checks: {cmd} unchanged on {shown} - its last green result stands"
@@ -792,9 +607,8 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
                 "rust-checks: {cmd} FAILED on {shown}\n{}{}",
                 done.stdout, done.stderr
             );
-        } else if let (Some(path), Some(text)) = (&kept, &key) {
-            let _ = std::fs::create_dir_all(path.parent().unwrap_or(&world.root));
-            let _ = std::fs::write(path, text);
+        } else {
+            verdict.keep();
         }
     }
     if bad > 0 {
@@ -885,7 +699,9 @@ fn world_here() -> World {
         cargo: cargo_exe(&cargo_bin),
         path_dir: home.join(".cargo/bin"),
         target_override: std::env::var("CARGO_TARGET_DIR").ok(),
-        no_reuse: var("INCREMENTAL") == "0" || !var("FULL").is_empty(),
+        // every crate run fresh only through the make escape `FRESH=1 REASON="..."`, which records why, or `make done FULL=1`'s own
+        // logged path (feature 449 T93): `INCREMENTAL=0` and `FULL` turned reuse off silently
+        no_reuse: !var("L7R_RUST_FRESH").is_empty(),
         hamlet_features: var("HAMLET_FEATURES"),
         hamlet_args: var("HAMLET_ARGS"),
         hamlet_spec: var("HAMLET_SPEC"),

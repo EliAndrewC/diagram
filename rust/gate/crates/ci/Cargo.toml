@@ -5,6 +5,10 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
+# What the tests read of the tree at run time (feature 449 T93): the switches' tests read the gate's scripts. A change there runs them again.
+[package.metadata.l7r]
+reads = ["scripts/"]
+
 [dependencies]
 fancy-regex = { workspace = true }
 l7r_gate_arbiter = { path = "../arbiter" }

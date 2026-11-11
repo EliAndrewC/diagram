@@ -37,8 +37,18 @@ budget-accept:  ## [performance] accept a rebuilt phase: its MODE AUDIT verdict 
 budget-program: ## [performance] set the whole roll's work budget with the GM's own words, checked and logged as budget-change is (feature 443; 444 FR-002)   OPS_AT_40=<ops> EXPONENT=<e> WORDS="<the GM's words>"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" program "$(OPS_AT_40)" "$(EXPONENT)" --words "$(WORDS)"
 
-counters-inert: ## [performance] the work counters change no map: every Rust test passes in the counting build as in the default one, its counters compiled out (features 443, 444; the GM 2026-11-07: "We should probably run with counters compiled out by default")
+counters-inert: ## [performance] the work counters change no map: every Rust test passes in the counting build as in the default one, its counters compiled out (features 443, 444; the GM 2026-11-07: "We should probably run with counters compiled out by default")   [FRESH=1 REASON="..."]
+	$(FRESH_ESCAPE)
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test-counters
+
+# THE RUST CHECKS REUSE A CRATE'S LAST GREEN RESULT BY DEFAULT (feature 449 T93; the GM 2026-11-11: "being able to reuse things which have
+# already been compiled, and also the results of tests which have already run so that we don't have to run them again, is exactly what we
+# should be doing"): a crate's test, cover, lint and dead run again only when its sources, the crates it builds from, or what its tests
+# declare they read moved (`rust/gate/crates/rustc/src/rustc.rs`). Every crate fresh is an escape that states its reason and is recorded
+# (`FRESH=1 REASON="..."`), or `make done FULL=1`'s own logged path; `INCREMENTAL=0` and `FULL` on these targets once turned reuse off silently.
+FRESH_ESCAPE = $(if $(FRESH),$(LOGESCAPE) FRESH "$(REASON)",@:)
+static rust-test counters-inert: export L7R_RUST_FRESH := $(if $(FRESH),1,$(L7R_RUST_FRESH))
+done: export L7R_RUST_FRESH := $(if $(FULL),1,)
 
 STATE = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state write
 
@@ -1033,7 +1043,8 @@ guard:           ## [static] {internal} refuse to run in main's tree - main is t
 
 static format test: | guard
 
-static:         ## [static] the static checks: ruff's outright errors, file-scale, the Rust crates' checks (was `lint`)
+static:         ## [static] the static checks: ruff's outright errors, file-scale, the Rust crates' checks (was `lint`), each crate's kept green result reused while its inputs stand (449 T93)   [FRESH=1 REASON="..."]
+	$(FRESH_ESCAPE)
 	python3 -m ruff check .
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
@@ -1048,7 +1059,8 @@ static:         ## [static] the static checks: ruff's outright errors, file-scal
 	python3 scripts/make-docs.py . --check
 	bash scripts/reviews/layout_carry.sh --selftest
 
-rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17)   [CRATE=tests/fixtures/rust/fixture]
+rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17); only the crates whose sources, test binary or declared reads moved since their last green run, the rest's result reused (449 T93)   [CRATE=tests/fixtures/rust/fixture] [FRESH=1 REASON="..."]
+	$(FRESH_ESCAPE)
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test $(if $(CRATE),--crate "$(CRATE)",)
 
 format:          ## [static] rustfmt over the Rust phases' crates (feature 444 T17)

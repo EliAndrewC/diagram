@@ -5,6 +5,11 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
+# What the tests read of the tree at run time (feature 449 T93): the guards' tests read the recorded command corpora (tests/hooks/fixtures/),
+# the Makefile's recipes and the hooks' helpers under scripts/. A change there runs them again.
+[package.metadata.l7r]
+reads = ["tests/hooks/", "Makefile", "scripts/"]
+
 [lib]
 name = "l7r_guard"
 
