@@ -3,7 +3,7 @@
 # Comments go above a target as `#` lines. A recipe's `: "..."` string is shell, so a backtick or $$( in it RUNS.
 # A .PHONY name with no rule still exits 0: retire a target's .PHONY entry with its rule.
 
-.PHONY: modal-bundle modal-prepass done docs static format test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim speckit-todo audit guard-edit guard-log perf-gate hooks-test explain citations fragment-move \
+.PHONY: modal-bundle modal-prepass done docs static format test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep perf-gate hooks-test explain citations fragment-move \
 	 switches _switch \
 	 map cohort cohort-landing hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
@@ -356,6 +356,10 @@ hooks-deps-window: ## [tests] how many of the Python tests of scripts/ each of t
 guard-edit: export GUARD_WHY = $(WHY)
 guard-edit:     ## [project] permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)   FILE=Makefile WHY="<why the edit is legitimate>"
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" permit grant "$(abspath $(FILE))" "$$GUARD_WHY"
+
+# The sweep a prompt starts once a day (rust/guard/src/guards/scratch_sweep_hooks.rs), run now; DRY=1 takes no lock and stamps nothing.
+scratch-sweep:  ## [project] remove finished sessions' scratch under /tmp/claude-<uid> now - idle 3 days, held by no live process, never this session's (449 T103); DRY=1 lists what it would remove and the total   [DRY=1]
+	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep $(if $(DRY),dry,now)
 
 guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure guard-log $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)

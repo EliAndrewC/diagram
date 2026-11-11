@@ -312,6 +312,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T103 (session scratch under /tmp/claude-1000 swept, FR-013)": {
+   "sha256": "22fc9b393276c14f217899aa1d2fd24487518f7ac001dc84a569dd90645a81cf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T103 Approach (checklist part A)": {
+   "sha256": "07591687a366b6b924a30a87bf7e8b17889e40f7ec70b3e9775d3cf856edb5be",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6056,6 +6068,98 @@
      "why": "SC-007's re-measure by the same command and verdict hold; every figure carries a one-shot observed/method label."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T103 (session scratch under /tmp/claude-1000 swept, FR-013)",
+    "### T103 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T103-mechanism",
+     "summary": "A new guard, scratch-sweep-hooks, starts at most one detached sweep a day from UserPromptSubmit; make scratch-sweep [DRY=1] runs one on demand.",
+     "class": "within",
+     "why": "The GM: 'Fix those leaks as well' of the session scratch under /tmp/claude-1000; FR-013 asks for a sweep of finished sessions' scratch. A recurring sweep, with make as the one entry point (FR-005), is how the leak is fixed and nothing beyond it."
+    },
+    {
+     "id": "T103-what-goes",
+     "summary": "A session directory goes when its transcript AND everything inside it have been unchanged three days; a session directory with no transcript and a loose top-level entry go when nothing inside changed in three days.",
+     "class": "within",
+     "why": "FR-013: swept 'once its transcript has been idle for days, never a live session's'. Also reading the directory's own contents is how 'never a live session's' is kept when a subagent writes there without touching the session's transcript, so it carries the spec's own constraint. Directories with no transcript and loose entries are scratch under /tmp/claude-1000 too, part of the 38 GB leak the GM said to fix, and are judged by the same idle rule."
+    },
+    {
+     "id": "T103-threshold",
+     "summary": "Three days idle, swept once a day, as GUESS knobs (SCRATCH_SWEEP_DAYS) with seams for the tests.",
+     "class": "within",
+     "why": "FR-013 says 'idle for days' and gives no number. Three days fills that in and also meets the relay's 'don't touch dirs younger than a few hours'."
+    },
+    {
+     "id": "T103-keep-live",
+     "summary": "Always kept: the prompting session's directory, every session registered as running in ~/.claude/sessions/<pid>.json whose pid still runs and whose procStart matches, and any entry a live process holds as its cwd, binary or open file.",
+     "class": "within",
+     "why": "This is FR-013's 'never a live session's' itself. A session paused over a weekend has an idle transcript but is still live, so the registry and /proc checks are what make that clause hold."
+    },
+    {
+     "id": "T103-registry-unreadable",
+     "summary": "Where the session registry cannot be read, no session directory is judged at all.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without the registry the sweep cannot tell a live session paused past three days from a finished one. Sweeping anyway would break FR-013's 'never a live session's', which is the GM's own constraint, so the exception is implied by the request's own words. It covers session directories only, and loose entries are still swept. Checked 2026-11-11 with ls -la ~/.claude/sessions/ on this container: the registry is present and readable by uid 1000, and its records carry pid and procStart. So the fail-safe is not the default on the machine that has the leak."
+    },
+    {
+     "id": "T103-proc-unreadable",
+     "summary": "Nothing is removed where /proc cannot be read.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without /proc the sweep cannot see which entries live processes hold, so removing would risk exactly what FR-013 forbids. The exception is implied by 'never a live session's'. On this Linux container /proc is readable, so the case is a fail-safe and does not hollow out the sweep."
+    },
+    {
+     "id": "T103-unreadable-tree",
+     "summary": "Any tree containing a directory the sweep cannot read is kept.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The sweep cannot establish that nothing inside changed in three days, or that no live process holds it, without reading the tree. Removing it would need the idle test that FR-013 sets as the condition for sweeping, and that test cannot be run here, so the rule cannot be applied as written. The case is per-tree and does not exempt the readable scratch the leak is made of."
+    },
+    {
+     "id": "T103-symlinks",
+     "summary": "Links are never followed or descended: a link inside a removed tree is deleted as itself with its target untouched, and a link at the root or among a project's sessions is left.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The scope is scratch UNDER /tmp/claude-1000, and following a link could delete or judge something outside it. A link at the root or in a session slot holds no disk itself, and its idleness and liveness could only be judged by following it out of the root, which the request's scope forbids. Leaving it frees nothing less, so the leak fix's purpose is untouched. Links inside a removed tree are still removed, so no scratch survives through them."
+    },
+    {
+     "id": "T103-once-a-day-lock",
+     "summary": "The hook reads only the stamp's age and starts the sweep with setsid -f; the sweep takes a lock, rechecks the stamp and writes it before walking. Cost recorded with labeled figures.",
+     "class": "within",
+     "why": "This is how the sweep runs (cost and concurrency) and settles nothing about what is or is not swept. All figures carry observed-date and method labels."
+    },
+    {
+     "id": "T103-log",
+     "summary": "Every removal and the day's total are written to the guard log with sizes.",
+     "class": "within",
+     "why": "It makes the requested sweep checkable and adds no behavior."
+    },
+    {
+     "id": "T103-dry-run",
+     "summary": "A dry run on this machine would remove 110 entries, 11.0 MB; the large trees were already cleared by the laptop session.",
+     "class": "within",
+     "why": "This is a labeled measurement. It does not conflict with FR-013's 'the existing pile is left to the GM's laptop session': the plan does not do a separate cleanup of the pile, the laptop session has already cleared the large trees, and the forward sweep that FR-013 asks for applies its idle rule to whatever is there."
+    },
+    {
+     "id": "T103-empty-project-dir",
+     "summary": "A project directory left empty is kept.",
+     "class": "within",
+     "why": "A project directory is a container for many sessions, not a finished session's scratch, which is the subject of FR-013 and SC-008. Empty, it holds no meaningful disk."
+    },
+    {
+     "id": "T103-approach",
+     "summary": "Checklist part A: goal, constraints, order after T96 beside T101 (T102 extends to the cargo cache), exits through make land and arbiter-ask, and a done measure (504 tests passed, the dry run).",
+     "class": "within",
+     "why": "It restates FR-013 and records process, and narrows nothing. Its figures are labeled."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10521,6 +10625,96 @@
      "summary": "After figures by the same make rust-test command (3.8 s to about 1 s for a claims edit) and make static after core and claims edits (103.3 to ~75 s, 64.8 to ~56 s), outputs re-verified.",
      "class": "within",
      "why": "SC-007's re-measure by the same command and verdict hold; every figure carries a one-shot observed/method label."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T103": {
+   "section_sha256": "2460803ffb819dfae3f94b0e26115dca25973fe4648b3bf1d8f15c9f4b54fe39",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T103-mechanism",
+     "summary": "A new guard, scratch-sweep-hooks, starts at most one detached sweep a day from UserPromptSubmit; make scratch-sweep [DRY=1] runs one on demand.",
+     "class": "within",
+     "why": "The GM: 'Fix those leaks as well' of the session scratch under /tmp/claude-1000; FR-013 asks for a sweep of finished sessions' scratch. A recurring sweep, with make as the one entry point (FR-005), is how the leak is fixed and nothing beyond it."
+    },
+    {
+     "id": "T103-what-goes",
+     "summary": "A session directory goes when its transcript AND everything inside it have been unchanged three days; a session directory with no transcript and a loose top-level entry go when nothing inside changed in three days.",
+     "class": "within",
+     "why": "FR-013: swept 'once its transcript has been idle for days, never a live session's'. Also reading the directory's own contents is how 'never a live session's' is kept when a subagent writes there without touching the session's transcript, so it carries the spec's own constraint. Directories with no transcript and loose entries are scratch under /tmp/claude-1000 too, part of the 38 GB leak the GM said to fix, and are judged by the same idle rule."
+    },
+    {
+     "id": "T103-threshold",
+     "summary": "Three days idle, swept once a day, as GUESS knobs (SCRATCH_SWEEP_DAYS) with seams for the tests.",
+     "class": "within",
+     "why": "FR-013 says 'idle for days' and gives no number. Three days fills that in and also meets the relay's 'don't touch dirs younger than a few hours'."
+    },
+    {
+     "id": "T103-keep-live",
+     "summary": "Always kept: the prompting session's directory, every session registered as running in ~/.claude/sessions/<pid>.json whose pid still runs and whose procStart matches, and any entry a live process holds as its cwd, binary or open file.",
+     "class": "within",
+     "why": "This is FR-013's 'never a live session's' itself. A session paused over a weekend has an idle transcript but is still live, so the registry and /proc checks are what make that clause hold."
+    },
+    {
+     "id": "T103-registry-unreadable",
+     "summary": "Where the session registry cannot be read, no session directory is judged at all.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without the registry the sweep cannot tell a live session paused past three days from a finished one. Sweeping anyway would break FR-013's 'never a live session's', which is the GM's own constraint, so the exception is implied by the request's own words. It covers session directories only, and loose entries are still swept. Checked 2026-11-11 with ls -la ~/.claude/sessions/ on this container: the registry is present and readable by uid 1000, and its records carry pid and procStart. So the fail-safe is not the default on the machine that has the leak."
+    },
+    {
+     "id": "T103-proc-unreadable",
+     "summary": "Nothing is removed where /proc cannot be read.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without /proc the sweep cannot see which entries live processes hold, so removing would risk exactly what FR-013 forbids. The exception is implied by 'never a live session's'. On this Linux container /proc is readable, so the case is a fail-safe and does not hollow out the sweep."
+    },
+    {
+     "id": "T103-unreadable-tree",
+     "summary": "Any tree containing a directory the sweep cannot read is kept.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The sweep cannot establish that nothing inside changed in three days, or that no live process holds it, without reading the tree. Removing it would need the idle test that FR-013 sets as the condition for sweeping, and that test cannot be run here, so the rule cannot be applied as written. The case is per-tree and does not exempt the readable scratch the leak is made of."
+    },
+    {
+     "id": "T103-symlinks",
+     "summary": "Links are never followed or descended: a link inside a removed tree is deleted as itself with its target untouched, and a link at the root or among a project's sessions is left.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The scope is scratch UNDER /tmp/claude-1000, and following a link could delete or judge something outside it. A link at the root or in a session slot holds no disk itself, and its idleness and liveness could only be judged by following it out of the root, which the request's scope forbids. Leaving it frees nothing less, so the leak fix's purpose is untouched. Links inside a removed tree are still removed, so no scratch survives through them."
+    },
+    {
+     "id": "T103-once-a-day-lock",
+     "summary": "The hook reads only the stamp's age and starts the sweep with setsid -f; the sweep takes a lock, rechecks the stamp and writes it before walking. Cost recorded with labeled figures.",
+     "class": "within",
+     "why": "This is how the sweep runs (cost and concurrency) and settles nothing about what is or is not swept. All figures carry observed-date and method labels."
+    },
+    {
+     "id": "T103-log",
+     "summary": "Every removal and the day's total are written to the guard log with sizes.",
+     "class": "within",
+     "why": "It makes the requested sweep checkable and adds no behavior."
+    },
+    {
+     "id": "T103-dry-run",
+     "summary": "A dry run on this machine would remove 110 entries, 11.0 MB; the large trees were already cleared by the laptop session.",
+     "class": "within",
+     "why": "This is a labeled measurement. It does not conflict with FR-013's 'the existing pile is left to the GM's laptop session': the plan does not do a separate cleanup of the pile, the laptop session has already cleared the large trees, and the forward sweep that FR-013 asks for applies its idle rule to whatever is there."
+    },
+    {
+     "id": "T103-empty-project-dir",
+     "summary": "A project directory left empty is kept.",
+     "class": "within",
+     "why": "A project directory is a container for many sessions, not a finished session's scratch, which is the subject of FR-013 and SC-008. Empty, it holds no meaningful disk."
+    },
+    {
+     "id": "T103-approach",
+     "summary": "Checklist part A: goal, constraints, order after T96 beside T101 (T102 extends to the cargo cache), exits through make land and arbiter-ask, and a done measure (504 tests passed, the dry run).",
+     "class": "within",
+     "why": "It restates FR-013 and records process, and narrows nothing. Its figures are labeled."
     }
    ],
    "verdict": "CLEAR"

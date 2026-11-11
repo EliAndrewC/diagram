@@ -23,6 +23,7 @@ pub fn guards() -> Vec<Guard> {
         guards::idle_tests_hooks::GUARD,
         guards::agent_stall_hooks::GUARD,
         guards::stall_watchdog_hooks::GUARD,
+        guards::scratch_sweep_hooks::GUARD,
         guards::finished_run_hooks::GUARD,
         guards::engine_freeze_hooks::GUARD,
         guards::gm_tree_hooks::GUARD,
@@ -123,6 +124,7 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         Some("--escalation") => guards::escalation_hooks::cli(&args[1..]),
         Some("--review-round") => guards::review_round_hooks::cli(&args[1..]),
         Some("--stall-watchdog") => guards::stall_watchdog_hooks::cli(&args[1..]),
+        Some("--scratch-sweep") => guards::scratch_sweep_hooks::cli(&args[1..]),
         Some("--finished-run") => guards::finished_run_hooks::cli(&args[1..]),
         // the suites' own tooling (T050)
         Some("permit") => guards::guard_file_hooks::cli(&args[1..]),
@@ -132,7 +134,7 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         Some("bench") => suite_tools::bench::cli(&args[1..]),
         Some(event) => decide(event, stdin, all),
         None => say(
-            "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --agent-stall <mode> | --stall-watchdog <mode> | --finished-run <mode> | --self-check | --version".to_owned(),
+            "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --agent-stall <mode> | --stall-watchdog <mode> | --scratch-sweep <mode> | --finished-run <mode> | --self-check | --version".to_owned(),
             1,
         ),
     }
@@ -239,6 +241,7 @@ mod tests {
                     "idle-tests-hooks",
                     "agent-stall-hooks",
                     "stall-watchdog-hooks",
+                    "scratch-sweep-hooks",
                     "finished-run-hooks",
                     "engine-freeze-hooks",
                     "gm-tree-hooks",

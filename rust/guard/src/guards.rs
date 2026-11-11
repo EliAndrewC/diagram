@@ -61,6 +61,7 @@ pub mod record_edit_gate;
 pub mod record_edit_hooks;
 pub mod repo_safety_hooks;
 pub mod review_round_hooks;
+pub mod scratch_sweep_hooks;
 pub mod set_down_hooks;
 pub mod shell_check_hooks;
 pub mod source_block_hooks;

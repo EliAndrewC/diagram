@@ -15,6 +15,7 @@ fn main() {
                 | "--escalation"
                 | "--review-round"
                 | "--stall-watchdog"
+                | "--scratch-sweep"
                 | "--finished-run"
                 | "permit"
                 | "dropped"
