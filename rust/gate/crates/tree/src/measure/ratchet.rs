@@ -21,15 +21,8 @@ const CALIBRATION_N: u64 = 1000;
 
 /// One row of the table.
 #[derive(Clone, Debug, Default)]
-pub(crate) struct Ratchet {
+pub struct Ratchet {
     pub baseline: i64,
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "FR-010: read by the tests that hold every baseline to its written reason"
-        )
-    )]
     pub reason: String,
     pub hard_ceiling: Option<i64>,
     pub hard_at_or_below: Option<i64>,
@@ -37,21 +30,7 @@ pub(crate) struct Ratchet {
     pub armed: bool,
     pub baseline_cold: Option<i64>,
     pub calibration_s: Option<f64>,
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "FR-010: read by the tests that hold every baseline to its written reason"
-        )
-    )]
     pub calibration_reason: String,
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "FR-010: read by the tests that hold every baseline to its written reason"
-        )
-    )]
     pub reason_cold: String,
     pub min_class_runs: i64,
 }
@@ -74,7 +53,7 @@ fn row(v: &Value) -> Ratchet {
 }
 
 /// The row for `target`, if the table holds one.
-pub(crate) fn find(root: &Path, target: &str) -> Option<Ratchet> {
+pub fn find(root: &Path, target: &str) -> Option<Ratchet> {
     let data: Value =
         serde_json::from_str(&std::fs::read_to_string(root.join(TABLE)).ok()?).ok()?;
     data.get(target).map(row)
@@ -86,13 +65,15 @@ pub(crate) fn find(root: &Path, target: &str) -> Option<Ratchet> {
     clippy::cast_precision_loss,
     reason = "Python's int(baseline * 1.3) of a small count of seconds"
 )]
-pub(crate) fn derive_ceiling(baseline: i64, hard: Option<i64>) -> i64 {
+#[must_use]
+pub fn derive_ceiling(baseline: i64, hard: Option<i64>) -> i64 {
     let grown = (baseline + 4).max((baseline as f64 * 1.3) as i64);
     hard.map_or(grown, |h| h.min(grown))
 }
 
 /// The ceiling in force, and what is compared against it: at or below `hard_at_or_below` the GM's number and the run.
-pub(crate) fn ceiling_for(r: &Ratchet) -> (i64, String) {
+#[must_use]
+pub fn ceiling_for(r: &Ratchet) -> (i64, String) {
     if let (Some(ceiling), Some(at)) = (r.hard_ceiling, r.hard_at_or_below) {
         if r.baseline <= at {
             return (ceiling, "run".to_owned());
@@ -102,7 +83,8 @@ pub(crate) fn ceiling_for(r: &Ratchet) -> (i64, String) {
 }
 
 /// One roll-cache class's ceiling: an unknown class takes the stricter warm one.
-pub(crate) fn ceiling_for_class(r: &Ratchet, cache: Option<&str>) -> (i64, String) {
+#[must_use]
+pub fn ceiling_for_class(r: &Ratchet, cache: Option<&str>) -> (i64, String) {
     match (cache, r.baseline_cold) {
         (Some("cold"), Some(cold)) => (derive_ceiling(cold, None), r.compare.clone()),
         _ => ceiling_for(r),
@@ -131,14 +113,14 @@ fn round_of(workers: usize, n: u64) -> f64 {
 }
 
 /// The best of `rounds` rounds' slowest loop.
-pub(crate) fn best_round(workers: usize, rounds: usize, run: &dyn Fn(usize) -> f64) -> f64 {
+pub fn best_round(workers: usize, rounds: usize, run: &dyn Fn(usize) -> f64) -> f64 {
     (0..rounds)
         .map(|_| run(workers))
         .fold(f64::INFINITY, f64::min)
 }
 
 /// How much slower the host runs now than when the loop was pinned; never below 1, so a run is never held to a tighter bar than the GM's.
-pub(crate) fn slowdown(
+pub fn slowdown(
     r: &Ratchet,
     workers: usize,
     rounds: usize,
@@ -151,7 +133,8 @@ pub(crate) fn slowdown(
 
 /// Python's `round`: to the nearest integer, a tie to the even one.
 #[expect(clippy::cast_possible_truncation, reason = "seconds, far inside i64")]
-pub(crate) fn round_even(x: f64) -> i64 {
+#[must_use]
+pub fn round_even(x: f64) -> i64 {
     let down = x.floor();
     let diff = x - down;
     let up = (diff - 0.5).abs() < f64::EPSILON && (down as i64) % 2 != 0 || diff > 0.5;
@@ -160,7 +143,7 @@ pub(crate) fn round_even(x: f64) -> i64 {
 
 /// What a verdict is asked about.
 #[derive(Clone, Copy, Default)]
-pub(crate) struct Asked<'a> {
+pub struct Asked<'a> {
     pub seconds: Option<i64>,
     pub median: Option<i64>,
     pub cache: Option<&'a str>,
@@ -204,7 +187,8 @@ fn over(
     clippy::cast_precision_loss,
     reason = "seconds, far inside f64's exact range"
 )]
-pub(crate) fn verdict(
+#[must_use]
+pub fn verdict(
     target: &str,
     r: Option<&Ratchet>,
     a: Asked<'_>,
@@ -256,7 +240,8 @@ fn workers_of(setting: Option<String>) -> usize {
 }
 
 /// `l7r-gate measure ratchet <target> <seconds> [median] [cache] [scope] [class_runs] | --calibrate [workers]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let workers = workers_of(std::env::var("XDIST_WORKERS").ok());
     decide(args, root, workers, &|w| round_of(w, CALIBRATION_N))
 }

@@ -14,7 +14,7 @@ fn constant(_: usize) -> f64 {
 }
 
 fn repository() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..")
 }
 
 fn real(target: &str) -> Ratchet {

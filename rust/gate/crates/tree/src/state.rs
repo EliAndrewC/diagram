@@ -29,7 +29,7 @@ const TOOLING_PATHS: [&str; 7] = [
 
 /// One record, as `.git/verification-state.json` holds it.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct State {
+pub struct State {
     pub event: String,
     pub target: String,
     pub utc: String,
@@ -65,7 +65,10 @@ fn text(data: &Value, key: &str) -> String {
     data[key].as_str().unwrap_or_default().to_owned()
 }
 
-pub(crate) fn read(root: &Path) -> Result<Option<State>, String> {
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn read(root: &Path) -> Result<Option<State>, String> {
     let path = state_file(root);
     if !path.is_file() {
         return Ok(None);
@@ -122,7 +125,10 @@ fn second_red_gate(root: &Path, now: f64) -> Result<(), String> {
     })
 }
 
-pub(crate) fn current_hash(root: &Path, python: &str) -> Result<String, String> {
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn current_hash(root: &Path, python: &str) -> Result<String, String> {
     stamp::area_key_named(root, "diagram", python)
 }
 
@@ -134,7 +140,10 @@ fn tooling_hash(root: &Path, python: &str) -> Result<String, String> {
     crate::hashing::content_hash(root, &files, true, python).map(|data| sha256::hex(&data))
 }
 
-pub(crate) fn write(
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn write(
     root: &Path,
     event: &str,
     target: &str,
@@ -233,7 +242,7 @@ fn already_verified(root: &Path, python: &str) -> Result<(bool, String), String>
 }
 
 /// `l7r-gate state write EVENT TARGET [reused] | read | dir | verified-done | tooling-green | tooling-hash`.
-pub(crate) fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     let verified = |(ok, why): (bool, String)| (format!("make done: {why}\n"), i32::from(!ok));
     let answer: Result<(String, i32), String> = match words.as_slice() {

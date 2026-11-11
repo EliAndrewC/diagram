@@ -354,7 +354,7 @@ fn outside_a_repository_it_stands_aside_and_nothing_is_fresh() {
 /// A repository that can answer for Python itself: the real `codeid.py` and the module it records through.
 fn with_codeid(tag: &str) -> PathBuf {
     let dir = repo(tag);
-    let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scripts");
+    let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
     for rel in ["gates/codeid.py", "hooks/lib/usage_log.py"] {
         let to = dir.join("scripts").join(rel);
         std::fs::create_dir_all(to.parent().unwrap()).unwrap();

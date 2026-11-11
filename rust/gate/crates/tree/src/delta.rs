@@ -220,14 +220,15 @@ fn semantically_changed(
 
 /// What this clone's own commits changed, and which of it is engine code.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub(crate) struct Delta {
+pub struct Delta {
     pub base: String,
     pub files: Vec<String>,
     pub engine: Vec<String>,
 }
 
 impl Delta {
-    pub(crate) fn route(&self) -> &'static str {
+    #[must_use]
+    pub fn route(&self) -> &'static str {
         if self.engine.is_empty() {
             "DIRECT"
         } else {
@@ -235,7 +236,8 @@ impl Delta {
         }
     }
 
-    pub(crate) fn reason(&self) -> String {
+    #[must_use]
+    pub fn reason(&self) -> String {
         if self.files.is_empty() {
             return "no commits of our own since main - nothing to push".to_owned();
         }
@@ -265,7 +267,11 @@ impl Delta {
 }
 
 /// What our own commits changed since we diverged from `base_ref`.
-pub(crate) fn compute_delta(root: &Path, base_ref: &str, python: &str) -> Result<Delta, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn compute_delta(root: &Path, base_ref: &str, python: &str) -> Result<Delta, String> {
     let base = merge_base(root, base_ref)?;
     let listed = git(root, &["diff", "--name-only", &base, "HEAD"])?;
     let mut files: Vec<String> = listed
@@ -372,7 +378,11 @@ fn key_from_ids(
 
 /// The engine key of a tree or commit: a hash over the engine paths' content ids, with no checkout, the build computing it the same way on its merge. Only the engine trees are listed (2026-10-18: the whole
 /// repository is about 21,000 entries and the cohort log keys some 90 commits a push).
-pub(crate) fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, String> {
     let mut prefixes: Vec<&str> = ENGINE_DIRS.iter().map(|(p, _)| *p).collect();
     prefixes.sort_unstable();
     let mut args = vec!["ls-tree", "-r", tree, "--"];
@@ -397,7 +407,11 @@ pub(crate) fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String
 
 /// `engine_key` for the working tree (tracked and untracked-not-ignored engine files, current contents), so a run before committing keys what the commit will carry. The index holds every unchanged file's
 /// blob id (T27: 15 ms against 270 ms), so only files that differ from it are hashed.
-pub(crate) fn engine_key_worktree(root: &Path, python: &str) -> Result<String, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn engine_key_worktree(root: &Path, python: &str) -> Result<String, String> {
     let listed = git(root, &["ls-files", "-co", "--exclude-standard"])?;
     let mut paths: Vec<&str> = listed
         .lines()
@@ -467,7 +481,7 @@ fn engine_paths(paths: &mut dyn Read) -> Result<String, String> {
 }
 
 /// `l7r-gate delta compute [base] | cov-scope [base] | key [tree|worktree] | engine-paths` (the paths on stdin; the engine ones back).
-pub(crate) fn cli(
+pub fn cli(
     args: &[String],
     root: &Path,
     python: &str,

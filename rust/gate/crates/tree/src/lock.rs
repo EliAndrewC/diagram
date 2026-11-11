@@ -116,7 +116,8 @@ fn top_of(cwd: &Path) -> PathBuf {
 }
 
 /// `l7r-gate own-make <target words...>`: exit 0 while a `make <target>` runs in this working tree, 1 otherwise.
-pub(crate) fn own_make_cli(args: &[String], proc_root: &Path) -> Reply {
+#[must_use]
+pub fn own_make_cli(args: &[String], proc_root: &Path) -> Reply {
     if args.is_empty() {
         return reply("usage: own-make <make target>\n".to_owned(), 2);
     }
@@ -125,7 +126,7 @@ pub(crate) fn own_make_cli(args: &[String], proc_root: &Path) -> Reply {
 }
 
 /// `l7r-gate lock acquire <git dir> <make pid> | held <git dir>`.
-pub(crate) fn cli(args: &[String], proc_root: &Path) -> Reply {
+pub fn cli(args: &[String], proc_root: &Path) -> Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     match words.as_slice() {
         ["held", dir] => reply(String::new(), i32::from(!held(Path::new(dir), proc_root))),

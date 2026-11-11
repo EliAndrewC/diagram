@@ -204,7 +204,10 @@ fn list(root: &Path, prune: bool) -> Result<String, String> {
     Ok(out)
 }
 
-pub(crate) fn paths(root: &Path) -> Result<Vec<String>, String> {
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn paths(root: &Path) -> Result<Vec<String>, String> {
     let mut found: Vec<String> = split(root)?
         .0
         .iter()
@@ -215,7 +218,7 @@ pub(crate) fn paths(root: &Path) -> Result<Vec<String>, String> {
 }
 
 /// `l7r-gate coverage-exempt omit | exempt | stale | report [DATA] | list [--prune]`.
-pub(crate) fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     let plain = |text: String| (text, 0);
     let answer: Result<(String, i32), String> = match words.as_slice() {

@@ -2,7 +2,7 @@
 
 use std::process::Command;
 
-use super::{cli, needs};
+use super::cli;
 
 pub(super) fn repo(tag: &str) -> std::path::PathBuf {
     let dir = super::scratch(tag);
@@ -55,76 +55,6 @@ pub(super) fn based(dir: &std::path::Path) {
 
 fn owned(args: &[&str]) -> Vec<String> {
     args.iter().map(|s| (*s).to_owned()).collect()
-}
-
-#[test]
-fn a_rust_only_change_starts_none_of_the_python_checks() {
-    let dir = repo("needs");
-    put(&dir, "rust/a.rs", "fn f() {}\n");
-    commit(&dir);
-    based(&dir);
-    let four = [
-        "duplicate-defs",
-        "function-cap",
-        "partial-citations",
-        "entry-headings",
-    ];
-    let ran = |dir: &std::path::Path| four.map(|c| needs(c, dir).code == 0);
-    put(&dir, "rust/a.rs", "fn f() { }\n");
-    assert_eq!(ran(&dir), [false, false, false, false]);
-    put(&dir, "pyproject.toml", "");
-    assert_eq!(ran(&dir), [false, true, false, false]);
-    std::fs::remove_file(dir.join("pyproject.toml")).unwrap();
-    let alone = |rel: &str, want: [bool; 4]| {
-        put(&dir, rel, "x = 1\n");
-        assert_eq!(ran(&dir), want);
-        std::fs::remove_file(dir.join(rel)).unwrap();
-    };
-    alone("tools/a.py", [false, false, false, false]);
-    alone("scripts/a.py", [false, true, false, false]);
-    alone("tests/a.py", [true, true, false, false]);
-    alone("l7r/a.py", [true, true, false, false]);
-    alone("l7r/diagram/interactive/a.py", [true, true, false, true]);
-    alone(
-        "l7r/diagram/interactive/assets/modals/hamlet/x.md",
-        [false, false, false, true],
-    );
-    alone("research/x.txt", [false, false, false, false]);
-    alone(
-        "research/questions/0001-a.html",
-        [false, false, false, true],
-    );
-    alone(
-        "research/questions/0001-a.notes.html",
-        [false, false, true, true],
-    );
-    alone(
-        "research/sources/010-works-cited/k.html",
-        [false, false, true, false],
-    );
-    alone("research/archive/a/b.json", [false, false, true, false]);
-    alone("research/source-access.json", [false, false, true, false]);
-    alone("scripts/record/access_tags.py", [false, true, false, false]);
-    alone(
-        "rust/gate/src/record/access_tags.rs",
-        [false, false, true, false],
-    );
-    alone(
-        "rust/gate/src/record/downloads/parse.rs",
-        [false, false, true, false],
-    );
-    alone(
-        "scripts/gates/check-entry-headings.py",
-        [false, true, false, true],
-    );
-    alone(
-        "scripts/gates/check-duplicate-defs.py",
-        [true, true, false, false],
-    );
-    put(&dir, "rust/gate/src/checks/partial_citations.rs", "\n");
-    assert_eq!(ran(&dir), [false, false, true, false]);
-    assert_eq!(needs("something-else", &dir).code, 0);
-    assert_eq!(needs("function-cap", &repo("needs-base")).code, 0);
 }
 
 #[test]

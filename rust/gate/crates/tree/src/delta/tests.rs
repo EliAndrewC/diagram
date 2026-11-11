@@ -38,7 +38,7 @@ fn repo(tag: &str) -> PathBuf {
     git(&dir, &["init", "-q", "-b", "main"]);
     git(&dir, &["config", "user.email", "t@t"]);
     git(&dir, &["config", "user.name", "t"]);
-    let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scripts");
+    let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
     std::fs::create_dir_all(dir.join("scripts/hooks/lib")).unwrap();
     for rel in ["gates/codeid.py", "hooks/lib/usage_log.py"] {
         std::fs::copy(real.join(rel), dir.join("scripts").join(rel)).unwrap();

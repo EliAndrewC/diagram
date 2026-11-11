@@ -3,7 +3,7 @@
 use std::path::Path;
 use std::process::Command;
 
-pub use l7r_gate_core::checks::*;
+pub use l7r_gate_tree::checks::*;
 
 mod conflict;
 mod file_scale;
@@ -88,71 +88,6 @@ fn blank_matches(pattern: &fancy_regex::Regex, text: &str) -> String {
         .into_owned()
 }
 
-/// Does `check`, one of the four gated on their delta (three still Python, `partial-citations` in Rust since T80), read this path? Each set is that check's own, from its source and what it
-/// imports. An unknown name reads everything: it runs.
-fn reads(check: &str, path: &str) -> bool {
-    let python = has_ext(path, "py");
-    let under = |trees: &[&str]| trees.iter().any(|t| path.starts_with(t));
-    let own = |name: &str| path == format!("scripts/gates/check-{name}.py");
-    match check {
-        "duplicate-defs" => {
-            own(check)
-                || (python && under(&["l7r/", "tests/", "pool/", "legacy-hand-authored-pool/"]))
-        }
-        "function-cap" => {
-            own(check)
-                || path == "pyproject.toml"
-                || (python && under(&["l7r/", "tests/", "scripts/", "pool/"]))
-        }
-        "partial-citations" => {
-            under(&[
-                "research/sources/010-works-cited/",
-                "research/archive/",
-                "rust/gate/src/record/downloads",
-            ]) || (path.starts_with("research/questions/") && path.ends_with(".notes.html"))
-                || [
-                    "research/partial-confirmations.jsonl",
-                    "research/source-access.json",
-                    "research/to-download.md",
-                    "rust/gate/src/checks/partial_citations.rs",
-                    "rust/gate/src/record/access_tags.rs",
-                ]
-                .contains(&path)
-        }
-        // a class's `Entry:` is parsed from its modal text
-        "entry-headings" => {
-            own(check)
-                || under(&[
-                    "research/questions/",
-                    "l7r/diagram/interactive/assets/modals/",
-                ])
-                || (python && path.starts_with("l7r/diagram/interactive/"))
-        }
-        _ => true,
-    }
-}
-
-/// Does this change hold a file `check` reads (`ask:449-T065-scope`: those that stay Python never start on a change that holds
-/// none of what they read, so a one-line Rust edit starts none)? Exit 0 to run it, and when there is no base to compare with.
-/// Does the change hold a file this retained Python check reads?
-pub(crate) fn needs_run(check: &str, root: &Path) -> bool {
-    needs(check, root).code == 0
-}
-
-fn needs(check: &str, root: &Path) -> Outcome {
-    let base = git_text(root, &["merge-base", "HEAD", "origin/main"]);
-    if base.trim().is_empty() {
-        return Outcome::out(String::new()); // no base to compare with: cannot tell, so it runs
-    }
-    let mut names = git_text(root, &["diff", "--name-only", base.trim()]);
-    names += &git_text(root, &["ls-files", "--others", "--exclude-standard"]);
-    Outcome {
-        stdout: String::new(),
-        stderr: String::new(),
-        code: i32::from(!names.lines().any(|p| reads(check, p))),
-    }
-}
-
 /// `l7r-gate check <name> [args]`.
 pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
     let rest = args.get(1..).unwrap_or(&[]);
@@ -169,8 +104,8 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("tool-signals") => (tool_signals::USAGE_LOG_TOOL, tool_signals::cli(rest, root)),
         Some("partial-citations") => (partial_citations::USAGE_LOG_TOOL, partial_citations::cli(rest)),
         Some("needs") => {
-            let o = needs(rest.first().map_or("", String::as_str), root);
-            return crate::Reply { stdout: o.stdout, stderr: o.stderr, code: o.code };
+            let code = needs(rest.first().map_or("", String::as_str), root);
+            return crate::Reply { stdout: String::new(), stderr: String::new(), code };
         }
         _ => return crate::Reply { stdout: String::new(), stderr: "usage: l7r-gate check file-scale | stale-dirs | question-size | rust-tooling | research-pointers | house-style-delta [args]\n".to_owned(), code: 2 },
     };

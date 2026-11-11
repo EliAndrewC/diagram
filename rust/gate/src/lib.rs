@@ -6,10 +6,6 @@ pub mod checks_door;
 mod ci;
 mod claims;
 mod cohort;
-pub mod delta;
-mod exempt;
-mod hashing;
-mod lock;
 mod measure;
 pub mod owed_door;
 mod plan;
@@ -18,19 +14,13 @@ mod push;
 pub(crate) mod record;
 pub mod reviews;
 mod rustc;
-mod stamp;
-mod state;
 
 use std::path::{Path, PathBuf};
 
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
+pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
 #[cfg(test)]
 pub(crate) use l7r_gate_core::write_executable;
-
-/// The repository the command was started in, or `.` outside one.
-fn top() -> PathBuf {
-    stamp::toplevel().unwrap_or(PathBuf::from("."))
-}
 
 /// `l7r-gate content-ids <path>...`: `<path> <id>` for each file (a tree's code ids, T062).
 fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {

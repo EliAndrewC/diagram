@@ -86,7 +86,8 @@ fn prefix(area_root: &str) -> String {
 }
 
 /// The repository's top level, the root every key is taken from; its absolute text is in the key, as it always was.
-pub(crate) fn toplevel() -> Option<PathBuf> {
+#[must_use]
+pub fn toplevel() -> Option<PathBuf> {
     let out = git(Path::new("."), &["rev-parse", "--show-toplevel"]).ok()?;
     Some(PathBuf::from(String::from_utf8_lossy(&out).trim()))
 }
@@ -199,7 +200,11 @@ fn salt(area: &Area, python: &str) -> String {
 }
 
 /// The content hash of `files`: each path with its semantic id, or the sha of its bytes in a raw area; a file gone is `<missing>`.
-pub(crate) fn hash_files(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn hash_files(
     files: &[PathBuf],
     root: &Path,
     raw: bool,
@@ -250,7 +255,11 @@ fn area_key(root: &Path, area: &Area, python: &str) -> Result<String, String> {
 }
 
 /// An area's key by name, for the verification state.
-pub(crate) fn area_key_named(root: &Path, name: &str, python: &str) -> Result<String, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn area_key_named(root: &Path, name: &str, python: &str) -> Result<String, String> {
     area_key(root, area_named(name).ok_or("no such area")?, python)
 }
 
@@ -304,7 +313,7 @@ fn refusals(root: &Path, base: &str, python: &str) -> Result<Vec<String>, String
 const USAGE_LOG_TOOL: &str = "gate-stamp";
 
 /// One line in `<git common dir>/tool-usage.jsonl`, the record every refusing check leaves (feature 406); one write of one short line in append mode, and a failure never fails the tool.
-pub(crate) fn record_for(root: &Path, tool: &str, outcome: &str) {
+pub fn record_for(root: &Path, tool: &str, outcome: &str) {
     let Some(common) = codeid::common_git_dir(root) else {
         return;
     };
@@ -390,7 +399,8 @@ fn listing(files: &[PathBuf], root: &Path) -> String {
 
 /// Is `path` in a byte-hashed area, by pattern (so a file not yet on disk answers too)? Ported unchanged from `gate-stamp._matches`, including that an area on the repository root takes `diagram`'s exclusions
 /// (`_area_exclusions` named the first area with that root): `ask:T063-browser-raw` holds what that leaves.
-pub(crate) fn in_raw_area(root: &Path, path: &str) -> bool {
+#[must_use]
+pub fn in_raw_area(root: &Path, path: &str) -> bool {
     AREAS.iter().filter(|a| a.raw).any(|area| {
         let owner = if area.root.is_empty() {
             area_named("diagram").unwrap_or(area)
@@ -409,7 +419,11 @@ pub(crate) fn in_raw_area(root: &Path, path: &str) -> bool {
 }
 
 /// Those of the newline-separated `paths` that are in a byte-hashed area, a whole batch in one process.
-pub(crate) fn raw_matches(root: &Path, paths: &mut dyn Read) -> Result<String, String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn raw_matches(root: &Path, paths: &mut dyn Read) -> Result<String, String> {
     let mut text = String::new();
     stated(paths.read_to_string(&mut text), "reading the paths")?;
     Ok(text
@@ -421,7 +435,7 @@ pub(crate) fn raw_matches(root: &Path, paths: &mut dyn Read) -> Result<String, S
 
 /// `l7r-gate stamp --write <area> | --fresh <area> | --check <base> | --selftest | --key <area> | --list <area> | --raw-match` (the paths on stdin): the first four answer and record as `gate-stamp.py` did, the other three are what a
 /// Python caller asks once a process until it is ported.
-pub(crate) fn cli(
+pub fn cli(
     args: &[String],
     top: Option<&Path>,
     python: &str,

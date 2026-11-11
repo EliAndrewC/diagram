@@ -35,7 +35,8 @@ fn walk(dir: &Path, into: &mut Vec<PathBuf>) {
 }
 
 /// Each of `rels`: a directory's whole tree sorted as paths, or the path itself, in the order given.
-pub(crate) fn under_each(root: &Path, rels: &[&str]) -> Vec<PathBuf> {
+#[must_use]
+pub fn under_each(root: &Path, rels: &[&str]) -> Vec<PathBuf> {
     let mut files = Vec::new();
     for rel in rels {
         let path = root.join(rel);
@@ -171,7 +172,11 @@ fn semantic_bytes(
 }
 
 /// Every counted file's repository-relative path and its content, joined with no separator, as the Python's `h.update` calls made them.
-pub(crate) fn content_hash(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn content_hash(
     root: &Path,
     files: &[PathBuf],
     keep: bool,
@@ -307,7 +312,8 @@ fn config_hash(root: &Path, python: &str) -> Result<String, String> {
 }
 
 /// `l7r-gate config-hash`.
-pub(crate) fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
     if !args.is_empty() {
         return crate::Reply {
             stdout: String::new(),
