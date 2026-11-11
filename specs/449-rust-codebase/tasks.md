@@ -294,7 +294,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T87 Phase 3, the owed core (`entry_owed.py` moved to T85's phase by `ask:449-T87-entry-owed`): record_owed, record_units, modal_owed, translation_owed, modal_triage, and `pull-queue.sh`'s merge as a verb; `record_cache.py` stays for its other importers (`memo_check.py`, `claims.py`, `entry_owed.py`) and goes with the last of them with its last Python caller (`ask:449-T81-slices`)
       research: rendering
       verify: DONE. landed: the owed core in Rust: record_owed, record_units, modal_owed, translation_owed, modal_triage and the pull-queue merge; entry_owed to phase 4 by ask:449-T87-entry-owed
-- [ ] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed (`ask:449-T88-bundles`: one Python runner, `scripts/bundle_door.py`, for what they reach of unported Python)
+- [x] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed (`ask:449-T88-bundles`: one Python runner, `scripts/bundle_door.py`, for what they reach of unported Python)
       research: rendering
+      verify: DONE. landed: the bundles in Rust: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay; one Python runner for what they reach of unported Python (ask:449-T88-bundles)
 - [ ] T89 Phase 3, the reviews: review_owed, review_prereq, checkpoint, stepback_bundle
       research: rendering
