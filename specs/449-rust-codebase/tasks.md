@@ -291,7 +291,7 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T86 Phase 3, the arbiter and checks state, with T011, T043 and T048: hm_arbiter, hm_checks, hm_fixloop, hm_planhold, hm_budget_rounds, one owner of checks-open.json, arbiter-owed.json and modal-batches.json
       research: rendering
       verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
-- [ ] T87 Phase 3, the owed core (`entry_owed.py` moved to T85's phase by `ask:449-T87-entry-owed`): record_owed, record_units, modal_owed, translation_owed, modal_triage, and `pull-queue.sh`'s merge as a verb; record_cache.py deleted with its last Python caller (`ask:449-T81-slices`)
+- [ ] T87 Phase 3, the owed core (`entry_owed.py` moved to T85's phase by `ask:449-T87-entry-owed`): record_owed, record_units, modal_owed, translation_owed, modal_triage, and `pull-queue.sh`'s merge as a verb; `record_cache.py` stays for its other importers (`memo_check.py`, `claims.py`, `entry_owed.py`) and goes with the last of them with its last Python caller (`ask:449-T81-slices`)
       research: rendering
 - [ ] T88 Phase 3, the bundles: bundle_owed, check_bundle, modal_bundle, earlier_rounds, arbiter_bundle, depiction_replay onto the Rust modal_owed
       research: rendering

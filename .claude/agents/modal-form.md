@@ -265,8 +265,8 @@ research questions its `Entry:` names. Nothing used to notice when such a page's
 update the pigsty write-up, asked *"if I hadn't said that ... then would you have done it?"*
 
 **What is owed.** `make record-owed` names it: a modal whose `Entry:` page changed its words (the intro aside), or whose own
-About, Guesses or `Entry:` text changed, owes `modal-form` and the three `modal-research` answers (`scripts/record/modal_owed.py`,
-folded into `record_owed.py`). Answer them with `make modal-bundle KIND=<key> FOR=modal-research` (or `FOR=modal-form`),
+About, Guesses or `Entry:` text changed, owes `modal-form` and the three `modal-research` answers (`rust/gate/src/record/modals.rs`,
+folded into `make record-owed`). Answer them with `make modal-bundle KIND=<key> FOR=modal-research` (or `FOR=modal-form`),
 the dispatch, then `make record-checked`. **The push REFUSES** (`scripts/gates/entry-gate.sh`, the record gate) until every owed unit
 is answered, or discharged with `RECORD_CHECKS_OK="<why>"`, which goes to `dev/bypass-log/` and `make audit`. A modal still
 in the old form owes `entry-drift` instead (`scripts/record/entry_owed.py`), which `ENTRY_DRIFT_OK="<what moved, and why no modal

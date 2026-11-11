@@ -4,7 +4,7 @@
 WHY (GM 2026-10-02): *"I do worry about a future session making some extremely minor formatting tweak or something and then
 having that literally rerun every subagent check for all 2,000 something of our resources"*. A check costs its tokens when it
 is DISPATCHED, and it is dispatched on a bundle; so the bundle is where "is this owed?" is asked. A bundle for a check and a
-subject the delta does not owe (`record_owed.py`) is refused with the owed list. The escapes, each a reason of two words or
+subject the delta does not owe (`make record-owed`) is refused with the owed list. The escapes, each a reason of two words or
 more recorded in the MANIFEST: `NOT_OWED_OK` (a backfill, an audit the GM asked for, a source's numbers about to reach a map
 or a rule) and, for a source-reader's whole-page read, `NEW` - a read for a claim not yet in the record, which nothing can owe
 yet because the note it will support does not exist.

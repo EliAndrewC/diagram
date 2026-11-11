@@ -21,5 +21,5 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 Each guard's suite is `tests/hooks/test-<guard>.sh`, run by `make hooks-test` (a guard without one fails it); the
 suites' recorded command corpora are `tests/hooks/fixtures/`.
 
-Helpers import each other flat (`import record_owed`): a script that imports from another subdirectory adds that
+Helpers import each other flat (`import record_prepass`): a script that imports from another subdirectory adds that
 directory to `sys.path` beside its own (search for "the moved scripts it imports").

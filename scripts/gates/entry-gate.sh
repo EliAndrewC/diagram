@@ -3,7 +3,7 @@
 # of which is where it began - a modal whose research section moved underneath it does not land unexamined.
 #
 # GUARD_EDIT_OK: feature 311 - THE GATE NOW HOLDS EVERY RECORD CHECK (GM 2026-10-02: *"not just do the correct thing, to
-# kind of enforce us doing the correct thing"*). `scripts/record/record_owed.py --unanswered` names each unit the delta owes -
+# kind of enforce us doing the correct thing"*). `l7r-gate record record-owed --unanswered` names each unit the delta owes -
 # intro-check, record-format, source-reader, quote-check, source-applicability, translation-check, entry-drift - that has
 # no answer record at the content being pushed (`make record-checked` writes one when a check returns). Before this,
 # quote-check and record-format were doctrine with no mechanism at the push. Nothing is loosened: the entry-drift units

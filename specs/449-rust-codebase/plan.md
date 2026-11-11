@@ -361,28 +361,39 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 
 <!-- plan-archive: T86 to T86 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
-### T87 (<why: the finding or measurement that files it>)
+### T87 (the owed core, `ask:449-T87-entry-owed`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `record_owed`, `record_units`, `modal_owed`, `translation_owed` and `modal_triage` ported as one cut, with `pull-queue.sh`'s jq merge as a verb; `entry_owed.py` moved to phase 4 by the ruling.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-T87-entry-owed`, FR-001, FR-002, FR-003, FR-006):
+   - The Rust is `rust/gate/src/record/{owed,owed/answers,units,modals,translation,triage,merge_answers,repo,args}.rs`, reached as `l7r-gate record record-owed|record-units|modal-owed|translation-owed|modal-triage|merge-answers`; the Makefile recipes and `scripts/gates/entry-gate.sh` run the binary, and `rust/gate/src/arbiter.rs` calls the answer function directly instead of running `record_owed.py`.
+   - Python callers reach the port through one door, `scripts/owed_door.py` (namespaces `ro`, `ru`, `mo`, `mt`, as the callers named the modules), one process a run, no logic: `bundle_owed`, `check_bundle` (its in-process `translation_owed` now runs as the command `make translation-owed` runs), `claims`, `claims_triage`, `modal_bundle`, `apply_edits`, `arbiter_bundle`, `depiction_replay`, `replay_owing` (its snippets on the current tree; `_OLD_MODALS` still imports the historic `modal_owed` from a worktree at an old commit, which is that commit's file, not this one), `entry_owed` and `tests/hooks/test-entry-gate.sh`. The door is deleted with its last caller and named at the phase-3 close if present.
+   - `fingerprint` and `quotation_key` are door verbs keyed on root, rev and sources, the working tree uncached; `apply_edits` takes both from one call. No caller mutates or holds a `Record` (the census below reads every attribute taken from the five).
+   - `entry_owed.py`, under the T065 clause: the Rust starts it only when the entry-drift family is asked for and the base has commits, and then only when a question page changed against the base or the engine is missing, so a broken tree fails as it did. Under the ruling, an engine present but failing to import is no longer seen when no question page changed. It reaches `read_page`, `kinds_in` and `modal_file` through the door.
+   - `quote_verbatim` and `style_prepass` are started as one `python3 -c` a run, only for notes files whose parse is not already in `translation-pairs.json`. `apply_edits.reply_of` is not the T86 door's `_reply_of` (it unescapes and reads a transcript differently), so it goes by command. `kinds_in` is built on `pylex.rs`'s lexer (`pylex::kinds`, grouping parentheses unwrapped, checked against `ast`), not a second reader.
+   - `.git/record-checks/*.json` has one writer: `record merge-answers` replaces the jq merge and `cp` at `pull-queue.sh`, its output JSON-equal to jq's, key collisions included, written by atomic rename; the store's other writes are `owed/answers.rs`.
+   - Speed: on this clone's tree at d43e55542, the Python `record_owed.py --root .` took 1.85 to 1.89 s with its disk cache warm and the Rust `record record-owed --root .` 2.69 to 3.46 s with no disk cache, parses kept by their text in memory for one process and the translation cache read once a run; their outputs were byte-identical (observed 2026-11-10, method: `/usr/bin/time`, three runs each, after a warm build). The Rust is about 0.9 s slower a call; `record_cache.py`'s disk cache is not ported, a tooling cost accepted here because one call runs a landing.
+   - Cases changed: the arbiter's Rust tests take a test double in place of a fake `record_owed.py`, and the message they expect reads "record-owed said" for "python3 said".
+   - The Rust keeps the Python's hand-written words (FR-002); argparse's generated usage text and traceback text are unbound (`ask:449-usage-text`).
+   - Differential against the Python at 7efe2ab04, the Rust at d43e55542, on two shared side clones, exit, stdout, stderr and written state compared: commands 26, usage errors 11 (every argparse-generated one), answers 23, the entry-drift seam 7 (success through a stub included), `merge-answers` against jq 12, the door 8 cases making about 5,800 verb calls over every verb, write verbs with state compared; 87 in all, 0 differ (observed 2026-11-10, method: `python3 /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/harness/diff.py`). Two cases reached a traceback (one answers, one seam). Normalizations: paths; `utc` and bypass-log file names; the caches (`translation-pairs.json`, `l7r-cache/`) not compared; traceback text and argparse usage text (`ask:449-usage-text`); the bypass-log `commit`, the two sides sitting on different HEADs; a slug with no colon has no `subject` on either side.
+   - `record_cache.py`, which the task line had deleted here, stays: `scripts/gates/memo_check.py`, `scripts/record/claims.py` and `scripts/record/entry_owed.py` still import it (observed 2026-11-10, method: `git grep -n record_cache -- ':!specs'`); it goes with the last of them.
+   - The five `.py` files are deleted in the cut (the GM's standing approval of 2026-11-10). The docs naming their paths now name the Rust: `dev/modals.md` and the three modal agent files generated from it, `docs/research-doctrine.md`, `scripts/CLAUDE.md`, and comments in `entry-gate.sh`, `pull-queue.sh` and `bundle_owed.py`. `specs/375-enforced-wave-process/measurements.json`'s recorded command naming `record_owed.py` is history and was already not runnable.
 
 ### T87 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** What the record checks owe, and what they answered, is decided by Rust alone.
+2. **The constraints.** FR-001, FR-002, FR-003, FR-006; `ask:449-T81-slices`, `ask:449-T86-door`, `ask:449-T87-entry-owed`, `ask:449-usage-text`.
+3. **Where each comes from.** The Python compared with its port.
+4. **Do they describe the world here?** Tooling; no researched value moves.
+5. **The order.** After T86; `entry_owed` and the archive cluster follow in phase 4 (T85).
+6. **The exits.** Green: the differential above shows no difference, the census no import or run of the five, and `make land` is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The differential; `python3 /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/census.py` walks all of `git ls-files '*.py'`, `specs/` included, with `ast`, and at d43e55542 finds the five imported only by each other; `git grep` over shell, Makefile, `*.mk`, Rust, JSON, TOML and `.claude/settings.json` finds no run of them by path outside the Rust's own provenance comments, a Rust test's fixture files and recorded history under `specs/` (observed 2026-11-10, both run by the session at that commit). `make rust-test` (gate 683, guard 499), `make static` with the new Rust at 100% line coverage, `make test-full` and `make hooks-test HOOKS_ALL=1` green, seen run by the port agent; the hook suites' first run failed only `l7r-guard.sh`'s two `--version` cases on a cold 54.9 s build, and the rerun with the build warm was green.
+10. **Before moving a constant.** None moved; `rust/gate/src/push/tests.rs` reads the Rust's constants.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T88 (<why: the finding or measurement that files it>)

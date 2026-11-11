@@ -280,7 +280,7 @@ remembering to do the correct thing."* Every citation rule the five rules files 
 RC = `research/CLAUDE.md`, RR = `docs/research-record-rules.md`, RD = this file, PS =
 `scripts/container/page-session-rules.md`) is listed with the tool that holds it: a script that refuses, a build refusal, a
 hook, a test, or - for a rule that needs judgment - a check agent the record gate owes on the words the rule governs
-(`scripts/record/record_units.py` owes it; `scripts/gates/entry-gate.sh` refuses the push until it is answered). Rows that are not
+(`rust/gate/src/record/units.rs` owes it; `scripts/gates/entry-gate.sh` refuses the push until it is answered). Rows that are not
 citation rules (rendering, process, coordination) are kept and marked out of scope, so the inventory can be read whole.
 `tests/test_citation_rule_inventory.py` holds every file this table names to existing. A Python test this table names was deleted by feature 449 FR-001b, and stands at the tag `python-tests-before-removal`; each rule's Rust port owes its own test. A NEW citation rule is added here
 with its tool in the same change.
