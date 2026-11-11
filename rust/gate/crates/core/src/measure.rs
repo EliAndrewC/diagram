@@ -74,6 +74,9 @@ mod tests {
         assert!((median(&mut [4.0, 1.0]) - 2.5).abs() < f64::EPSILON);
         assert_eq!(text_err("x"), "x");
         assert_eq!(reply(String::new(), "e".to_owned(), 2).code, 2);
-        assert_eq!(home(), std::path::PathBuf::from(std::env::var_os("HOME").unwrap_or_default()));
+        assert_eq!(
+            home(),
+            std::path::PathBuf::from(std::env::var_os("HOME").unwrap_or_default())
+        );
     }
 }

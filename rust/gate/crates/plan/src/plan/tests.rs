@@ -91,7 +91,11 @@ pub(super) fn run(root: &Path, words: &[&str]) -> crate::Reply {
 
 /// The claims tools, as a plan test sees them: nothing owed a triage.
 fn no_claims(_: &[String]) -> crate::Reply {
-    crate::Reply { stdout: String::new(), stderr: String::new(), code: 0 }
+    crate::Reply {
+        stdout: String::new(),
+        stderr: String::new(),
+        code: 0,
+    }
 }
 
 fn run_with(root: &Path, words: &[&str], stdin: &str, escaped: Option<&str>) -> crate::Reply {
@@ -598,7 +602,12 @@ fn a_tree_with_no_dev_directory_records_no_bypass_and_triage_is_named_when_owed(
     assert!(super::hint_of("x\n3\n").contains("claims owed a triage: 3"));
     assert_eq!(super::hint_of("0\n"), "");
     assert_eq!(super::triage_hint(&root, &no_claims), "");
-    assert!(super::triage_hint(&root, &|_| crate::Reply { stdout: "2\n".to_owned(), stderr: String::new(), code: 0 }).contains("triage: 2"));
+    assert!(super::triage_hint(&root, &|_| crate::Reply {
+        stdout: "2\n".to_owned(),
+        stderr: String::new(),
+        code: 0
+    })
+    .contains("triage: 2"));
 }
 
 #[test]
@@ -669,7 +678,10 @@ fn the_verbs_report_what_is_owed_after_and_read_the_active_feature() {
     assert!(run(&root, &["approach", "ruled", "hour:1"])
         .stdout
         .contains("approach owed: hour:1"));
-    assert_eq!(super::cli(&["no-such-verb".to_owned()], &root, &no_claims).code, 2);
+    assert_eq!(
+        super::cli(&["no-such-verb".to_owned()], &root, &no_claims).code,
+        2
+    );
 }
 
 #[test]

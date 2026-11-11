@@ -453,11 +453,7 @@ pub struct Reading {
 }
 
 /// (owed refusals, introduced, pre-existing, carried) at `root` against its merge base with origin/main.
-pub fn classified(
-    reader: &mut Reader,
-    root: &Path,
-    at: &Reading,
-) -> Result<Classified, Fail> {
+pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Classified, Fail> {
     let store = load_map(&root.join(STORE))?;
     let due = owed(
         &at.cur,
@@ -614,11 +610,7 @@ pub fn gate(
 }
 
 /// `make claims-known`: each known drift the gate would refuse unrecorded, written as a row of its task's feature's `gm-review.jsonl` with the GM's box, by the Python (`gm_review.add_row`, T91's); the lines written.
-pub fn record_known(
-    reader: &mut Reader,
-    root: &Path,
-    at: &Reading,
-) -> Result<Vec<String>, Fail> {
+pub fn record_known(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Vec<String>, Fail> {
     let (refuse, _) = gate(reader, root, at)?;
     let mut written = Vec::new();
     let found = refuse

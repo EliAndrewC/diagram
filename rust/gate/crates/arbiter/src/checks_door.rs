@@ -9,8 +9,8 @@ use l7r_guard::shared::checks;
 use l7r_guard::shared::checks::{arbiter as core, handle, reply, rounds};
 use serde_json::{json, Value};
 
-pub use l7r_gate_core::checks_door::*;
 use crate::Reply;
+pub use l7r_gate_core::checks_door::*;
 
 fn arg(args: &[Value], i: usize) -> &str {
     args.get(i).and_then(Value::as_str).unwrap_or("")

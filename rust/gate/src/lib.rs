@@ -1,15 +1,14 @@
 //! The gate's own tools (feature 449 phase 2): one binary the Makefile's gate recipes call, each subcommand ported from the Python piece it replaces (T062-T069).
 
-
 use std::path::{Path, PathBuf};
 
-pub use l7r_gate_core::{codeid, difflib, logs, Reply};
 pub use l7r_gate_arbiter::{arbiter, checks_door};
 pub use l7r_gate_bundle::owed_door;
 pub use l7r_gate_checks::checks;
 pub use l7r_gate_ci::ci;
 pub use l7r_gate_claims::claims;
 pub use l7r_gate_cohort::{cohort, push, rustc};
+pub use l7r_gate_core::{codeid, difflib, logs, Reply};
 pub use l7r_gate_measure::{measure, preflight};
 pub use l7r_gate_plan::plan;
 pub use l7r_gate_record::record;
@@ -199,11 +198,12 @@ mod tests {
     fn each_push_gate_judges_every_path_the_claims_and_modal_tools_read() {
         use crate::push::{judged, judges};
         let covered = |gate: &str, path: &str| {
-            let probe = if crate::checks::has_ext(path, "json") || crate::checks::has_ext(path, "md") {
-                path.to_owned()
-            } else {
-                format!("{}/x", path.trim_end_matches('/'))
-            };
+            let probe =
+                if crate::checks::has_ext(path, "json") || crate::checks::has_ext(path, "md") {
+                    path.to_owned()
+                } else {
+                    format!("{}/x", path.trim_end_matches('/'))
+                };
             !judged(judges(gate).unwrap().0, &[probe]).is_empty()
         };
         for p in crate::claims::read_paths() {

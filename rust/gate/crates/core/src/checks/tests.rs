@@ -25,7 +25,9 @@ fn a_value_is_printed_as_python_prints_it() {
 fn a_figure_an_observation_an_extension_and_git_are_read_as_the_checks_read_them() {
     assert!(figure_pattern().is_match("took 12 minutes").unwrap());
     assert!(!figure_pattern().is_match("2,179 px\u{b2}").unwrap());
-    assert!(one_shot_pattern().is_match("observed 2026-11-11, method: x").unwrap());
+    assert!(one_shot_pattern()
+        .is_match("observed 2026-11-11, method: x")
+        .unwrap());
     assert!(has_ext("a/b.rs", "rs") && !has_ext("a/b.rs", "py"));
     let dir = scratch("git-text");
     assert!(dir.is_dir());

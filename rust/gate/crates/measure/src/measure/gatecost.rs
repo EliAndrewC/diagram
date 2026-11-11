@@ -76,12 +76,7 @@ pub fn median_seconds(
 
 /// How many recent green runs the class holds: what the ratchet's below-sample rule reads.
 #[must_use]
-pub fn class_count(
-    root: &Path,
-    target: &str,
-    scope: Option<&str>,
-    cache: Option<&str>,
-) -> usize {
+pub fn class_count(root: &Path, target: &str, scope: Option<&str>, cache: Option<&str>) -> usize {
     runs(root, target, scope, cache).len()
 }
 

@@ -497,13 +497,7 @@ impl Put {
     /// # Errors
     ///
     /// Where what it reads, writes or runs fails: the error says which and why.
-    pub fn put(
-        &mut self,
-        name: &str,
-        text: &str,
-        origin: &str,
-        what: &str,
-    ) -> Result<(), Fail> {
+    pub fn put(&mut self, name: &str, text: &str, origin: &str, what: &str) -> Result<(), Fail> {
         write(&self.out.join(name), text)?;
         self.rows
             .push((name.to_owned(), origin.to_owned(), what.to_owned()));

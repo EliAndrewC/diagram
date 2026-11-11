@@ -80,7 +80,6 @@ pub fn seeds_of(rec: &Value) -> &[Value] {
     rec["seeds"].as_array().map_or(&[], Vec::as_slice)
 }
 
-
 fn is_pinned(seed: i64) -> bool {
     (901..907).contains(&seed)
 }
@@ -373,7 +372,6 @@ fn rate_line(rec: &Value) -> String {
     }
     out + "; a rate, never a refusal - the trend: make cohort-seeds"
 }
-
 
 /// Why the push refuses this engine under the Rust stage gate (feature 444 amendment 5, FR-019), or nothing.
 fn rust_refusal(repo: &Repo<'_>) -> Option<String> {

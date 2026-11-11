@@ -244,11 +244,7 @@ fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn bundle(
-    root: &Path,
-    out: &Path,
-    base: &str,
-) -> Result<Option<(PathBuf, usize)>, Fail> {
+pub fn bundle(root: &Path, out: &Path, base: &str) -> Result<Option<(PathBuf, usize)>, Fail> {
     let base = if base.is_empty() {
         merge_base(root)
     } else {

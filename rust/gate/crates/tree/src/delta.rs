@@ -481,12 +481,7 @@ fn engine_paths(paths: &mut dyn Read) -> Result<String, String> {
 }
 
 /// `l7r-gate delta compute [base] | cov-scope [base] | key [tree|worktree] | engine-paths` (the paths on stdin; the engine ones back).
-pub fn cli(
-    args: &[String],
-    root: &Path,
-    python: &str,
-    stdin: &mut dyn Read,
-) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path, python: &str, stdin: &mut dyn Read) -> crate::Reply {
     let second = args.get(1).map(String::as_str);
     let answer = match args.first().map(String::as_str) {
         Some("compute") => compute(root, second.unwrap_or("origin/main"), python),

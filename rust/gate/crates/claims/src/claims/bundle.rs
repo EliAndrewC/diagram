@@ -92,11 +92,7 @@ pub fn mark_changed(src: &str, first: usize, changed: Option<&HashSet<usize>>) -
 }
 
 /// The source of `path::qualname`: a Rust item by the item scan, a `.py` unit by Python's syntax tree through the runner.
-pub fn context_source(
-    reader: &mut Reader,
-    root: &Path,
-    reference: &str,
-) -> Result<String, Fail> {
+pub fn context_source(reader: &mut Reader, root: &Path, reference: &str) -> Result<String, Fail> {
     let (path, qual) = reference.split_once("::").unwrap_or((reference, ""));
     if path.ends_with(".rs") {
         let text = read_text(&root.join(path))?;

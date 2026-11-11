@@ -6,16 +6,15 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
+use crate::Reply;
 pub use l7r_gate_bundle::record::*;
 pub use l7r_gate_downloads::record::{access_tags, downloads};
 pub use l7r_gate_trials::record::agent_census;
-use crate::Reply;
 
 mod fragment_move;
 mod merge_answers;
 mod money;
 mod stale_terms;
-
 
 const CANON_ROOTS: [&str; 2] = [
     "/host-l7r-repo/setting",

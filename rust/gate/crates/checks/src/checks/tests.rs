@@ -101,4 +101,3 @@ fn a_refused_check_is_recorded_refused_and_a_failed_self_test_refuses() {
         "ok"
     );
 }
-

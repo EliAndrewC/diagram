@@ -32,8 +32,7 @@ pub static ORIG_TOKEN: LazyLock<Regex> =
     LazyLock::new(|| re(r#"<span class="orig" data-orig="([^"]+)"></span>"#));
 pub static ORIG_STORED: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?s)<li data-orig="([^"]+)">(.*?)</li>"#));
-pub static STEM: LazyLock<Regex> =
-    LazyLock::new(|| re(r"^(\d{4})-([^.]+)(\.drawing)?\.html$"));
+pub static STEM: LazyLock<Regex> = LazyLock::new(|| re(r"^(\d{4})-([^.]+)(\.drawing)?\.html$"));
 static CODE: LazyLock<Regex> = LazyLock::new(|| {
     re(
         r#"<a href="[^"]*"(?: [^>]*)?>[\t-\r\x1c-\x1f \x85\xa0\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}]*<code>([a-z0-9][a-z0-9-]*)</code>[\t-\r\x1c-\x1f \x85\xa0\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}]*</a>"#,
@@ -130,7 +129,10 @@ fn stored_table(originals: &str) -> HashMap<String, String> {
 
 /// The notes with their originals put back, token by token.
 #[must_use]
-pub fn restored<S: std::hash::BuildHasher>(notes: &str, table: &HashMap<String, String, S>) -> String {
+pub fn restored<S: std::hash::BuildHasher>(
+    notes: &str,
+    table: &HashMap<String, String, S>,
+) -> String {
     ORIG_TOKEN
         .replace_all(notes, |c: &Captures| {
             table.get(&c[1]).cloned().unwrap_or_default()
@@ -150,7 +152,10 @@ pub fn read_notes(notes: &str, originals: &str) -> Keyed<String> {
 }
 
 /// What `source-reader` reads of a note: the pages it opens and the passages it looks for on them; "" where it quotes nothing it can find.
-pub fn reading<S: std::hash::BuildHasher>(body: &str, originals: &HashMap<String, String, S>) -> String {
+pub fn reading<S: std::hash::BuildHasher>(
+    body: &str,
+    originals: &HashMap<String, String, S>,
+) -> String {
     let origs: Vec<String> = ORIG_TOKEN
         .captures_iter(body)
         .flatten()

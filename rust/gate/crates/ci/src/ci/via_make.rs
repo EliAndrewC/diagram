@@ -129,12 +129,7 @@ pub fn compute(procs: &dyn Procs, repo: &Path) -> (bool, &'static str) {
 }
 
 /// The refusal for `operation`, or None under this project's make; a refusal that does not say what to run instead is a bug.
-pub fn refusal(
-    procs: &dyn Procs,
-    repo: &Path,
-    operation: &str,
-    target: &str,
-) -> Option<String> {
+pub fn refusal(procs: &dyn Procs, repo: &Path, operation: &str, target: &str) -> Option<String> {
     let (ok, why) = compute(procs, repo);
     (!ok).then(|| format!("\n\x1b[1mREFUSED: {operation} was not run through make.\x1b[0m\n\n  {why}.\n\n  Run this instead:  \x1b[1mmake {target}\x1b[0m\n\n    Every operation in this project goes through a make target, so the expensive ones can ask\n    whether the cheap one would do first:\n\n        make quick        lint, types, and every test that does not roll a map\n        make help         every operation, with what it does\n        make done         the full gate, NOT the quick check\n\n    "))
 }

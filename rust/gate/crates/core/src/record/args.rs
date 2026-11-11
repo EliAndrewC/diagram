@@ -156,11 +156,7 @@ pub fn parse(args: &[String], specs: &[Spec]) -> Result<Parsed, String> {
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn parse_with(
-    args: &[String],
-    specs: &[Spec],
-    positionals: usize,
-) -> Result<Parsed, String> {
+pub fn parse_with(args: &[String], specs: &[Spec], positionals: usize) -> Result<Parsed, String> {
     let mut out = Parsed::default();
     let mut i = 0;
     while i < args.len() {

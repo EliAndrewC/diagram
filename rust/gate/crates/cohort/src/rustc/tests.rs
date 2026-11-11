@@ -506,7 +506,8 @@ fn a_nested_source_is_read_a_check_is_dispatched_and_cargo_is_found() {
 #[test]
 fn the_real_cargo_tests_a_real_crate() {
     let root = scratch("rustc-real");
-    let fixture = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../tests/fixtures/rust/fixture");
+    let fixture =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../tests/fixtures/rust/fixture");
     let crate_dir = root.join("rust/fixture");
     std::fs::create_dir_all(crate_dir.join("src")).unwrap();
     for name in ["Cargo.toml", "rust-toolchain.toml", "src/lib.rs"] {
@@ -578,9 +579,15 @@ fn a_nested_crate_owns_its_files_and_a_dependency_s_dependency_moves_the_key() {
             verdict_key(&root, manifest, cmd, reads, &all, ids, "c")
         };
         // the binary moves with low, which it builds from only through mid
-        assert_ne!(key(&g, &base), key(&g, &moved("rust/g/crates/low/src/lib.rs")));
+        assert_ne!(
+            key(&g, &base),
+            key(&g, &moved("rust/g/crates/low/src/lib.rs"))
+        );
         // low's own edit moves low's key, though the binary's directory holds it
-        assert_ne!(key(&low, &base), key(&low, &moved("rust/g/crates/low/src/lib.rs")));
+        assert_ne!(
+            key(&low, &base),
+            key(&low, &moved("rust/g/crates/low/src/lib.rs"))
+        );
         // and the binary's own file does not move low's
         assert_eq!(key(&low, &base), key(&low, &moved("rust/g/src/lib.rs")));
         assert_eq!(key(&mid, &base), key(&mid, &moved("rust/g/src/lib.rs")));

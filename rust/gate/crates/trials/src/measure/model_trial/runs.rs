@@ -119,12 +119,7 @@ impl Trial {
     /// # Errors
     ///
     /// Where what it reads, writes or runs fails: the error says which and why.
-    pub fn run_all(
-        &self,
-        root: &Path,
-        runs: usize,
-        parallel: usize,
-    ) -> Result<String, String> {
+    pub fn run_all(&self, root: &Path, runs: usize, parallel: usize) -> Result<String, String> {
         let mut queue: Vec<(PathBuf, usize)> = Vec::new();
         for out in children(root)
             .into_iter()

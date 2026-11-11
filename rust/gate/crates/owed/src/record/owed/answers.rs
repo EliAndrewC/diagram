@@ -198,12 +198,7 @@ pub fn write_answer(
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn settle(
-    store_dir: &Path,
-    slug: &str,
-    before: &str,
-    after: &str,
-) -> Result<String, Fail> {
+pub fn settle(store_dir: &Path, slug: &str, before: &str, after: &str) -> Result<String, Fail> {
     if before.is_empty() || after.is_empty() || before == after {
         return Ok(String::new());
     }
@@ -464,12 +459,7 @@ fn readers_own(root: &Path, store_dir: &Path, slug: &str) -> Result<bool, Fail> 
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn keep_reading(
-    store_dir: &Path,
-    slug: &str,
-    reading: &str,
-    field: &str,
-) -> Result<(), Fail> {
+pub fn keep_reading(store_dir: &Path, slug: &str, reading: &str, field: &str) -> Result<(), Fail> {
     let mut rec = read_answer(store_dir, slug);
     if reading.is_empty() || rec.is_empty() || holds(&rec, field, reading) {
         return Ok(());

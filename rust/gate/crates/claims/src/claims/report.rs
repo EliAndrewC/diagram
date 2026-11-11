@@ -301,10 +301,7 @@ pub fn base_tree(git: &str, root: &Path, base: &str, into: &Path) -> Result<(), 
 }
 
 /// uid -> core for every unit at a tree, claimed or not: the base the push compares with.
-pub fn base_cores(
-    reader: &mut Reader,
-    skill: &Path,
-) -> Result<HashMap<String, String>, Fail> {
+pub fn base_cores(reader: &mut Reader, skill: &Path) -> Result<HashMap<String, String>, Fail> {
     Ok(all_units(reader, skill, true, true)?
         .into_iter()
         .map(|(u, _)| (u.uid(), u.core))

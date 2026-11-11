@@ -44,7 +44,12 @@ fn a_line_is_answered_by_its_verb_and_the_loop_ends_with_its_input() {
         "{\"ok\": []}\n{\"error\": \"door: no verb nope\"}\n"
     );
     assert_eq!(
-        serve_with(&mut Cursor::new("{\"verb\": \"echo\"}\n"), &mut Closed, &verbs).code,
+        serve_with(
+            &mut Cursor::new("{\"verb\": \"echo\"}\n"),
+            &mut Closed,
+            &verbs
+        )
+        .code,
         0
     );
 }

@@ -15,9 +15,11 @@ fn the_fixtures_build_a_repository_a_python_stand_in_and_a_record_s_edits() {
     assert!(Path::new(&python).is_file());
     let root = crate::record::testkit::record("kit-record");
     crate::record::testkit::edit_everything(&root);
-    assert!(std::fs::read_to_string(root.join("research/sources/040-uncited-works/20501-key-c.html"))
-        .unwrap()
-        .contains("New."));
+    assert!(std::fs::read_to_string(
+        root.join("research/sources/040-uncited-works/20501-key-c.html")
+    )
+    .unwrap()
+    .contains("New."));
     crate::record::bundle::tests::state(&root, &json!({"open": []}));
     assert!(root.join(".git/checks-open.json").is_file());
     assert_eq!(crate::record::bundle::tests::args(&["a", "b"]), ["a", "b"]);
@@ -25,8 +27,14 @@ fn the_fixtures_build_a_repository_a_python_stand_in_and_a_record_s_edits() {
         crate::record::bundle::default_root(),
         std::env::temp_dir().join("l7r-check-tests")
     );
-    assert!(crate::record::repo::git_out(&root, &["rev-parse", "--is-inside-work-tree"]).starts_with("true"));
-    assert_eq!(crate::record::repo::git_out(Path::new("/proc/nonexistent"), &["status"]), "");
+    assert!(
+        crate::record::repo::git_out(&root, &["rev-parse", "--is-inside-work-tree"])
+            .starts_with("true")
+    );
+    assert_eq!(
+        crate::record::repo::git_out(Path::new("/proc/nonexistent"), &["status"]),
+        ""
+    );
 }
 
 #[test]
@@ -34,24 +42,34 @@ fn the_content_id_s_readers_say_what_failed() {
     let dir = crate::checks::scratch("kit-codeid");
     let cache = crate::codeid::Cache::at(&dir);
     assert!(cache.kept("nothing kept").is_none());
-    assert!(crate::codeid::parsed("{", "a table").unwrap_err().starts_with("a table: "));
+    assert!(crate::codeid::parsed("{", "a table")
+        .unwrap_err()
+        .starts_with("a table: "));
     assert_eq!(crate::codeid::parsed("[1]", "a table").unwrap(), json!([1]));
     assert!(crate::codeid::script(&dir).ends_with("scripts/gates/codeid.py"));
 }
 
 #[test]
 fn json_is_written_as_python_writes_it() {
-    assert_eq!(crate::logs::py_dumps(&json!({"a": [1]}), 1, true), "{\n \"a\": [\n  1\n ]\n}");
-    assert_eq!(crate::logs::one_line_utf8(&json!("caf\u{e9}")), "\"caf\u{e9}\"");
+    assert_eq!(
+        crate::logs::py_dumps(&json!({"a": [1]}), 1, true),
+        "{\n \"a\": [\n  1\n ]\n}"
+    );
+    assert_eq!(
+        crate::logs::one_line_utf8(&json!("caf\u{e9}")),
+        "\"caf\u{e9}\""
+    );
 }
 
 #[test]
 fn a_list_a_last_value_and_a_positional_are_read_as_argparse_reads_them() {
     let specs = [Spec::list("--keys"), Spec::value("--a"), Spec::value("--b")];
-    let words: Vec<String> = ["pos", "--keys", "x", "y", "--a", "1", "--b", "2", "--a", "3"]
-        .iter()
-        .map(|s| (*s).to_owned())
-        .collect();
+    let words: Vec<String> = [
+        "pos", "--keys", "x", "y", "--a", "1", "--b", "2", "--a", "3",
+    ]
+    .iter()
+    .map(|s| (*s).to_owned())
+    .collect();
     let got = parse_with(&words, &specs, 1).unwrap();
     assert_eq!(got.positional, ["pos"]);
     assert_eq!(got.list("--keys"), ["x", "y"]);

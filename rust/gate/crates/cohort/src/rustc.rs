@@ -439,7 +439,12 @@ fn uncovered(world: &World, manifest: &Path, work: &Path) -> BTreeMap<String, Ve
         eprintln!("rust-checks: the coverage run failed on {} - fix what it names (a failing test), then ask again:\n{out}{err}", parent.file_name().unwrap_or_default().to_string_lossy());
         return BTreeMap::from([(parent.display().to_string(), vec![0])]);
     };
-    let canon = |p: &Path| format!("{}/", std::fs::canonicalize(p).unwrap_or_default().display());
+    let canon = |p: &Path| {
+        format!(
+            "{}/",
+            std::fs::canonicalize(p).unwrap_or_default().display()
+        )
+    };
     let mine = canon(parent);
     // a crate nested in this one's directory (the gate's `crates/*` under the binary's) owns its own lines: 100% of a crate's lines by
     // its own tests (feature 449 T92)
@@ -672,7 +677,11 @@ fn verdict_key(
     compiler: &str,
 ) -> String {
     let mine: Vec<String> = std::iter::once(rel_dir(manifest, root))
-        .chain(depended(root, manifest, all).iter().map(|m| rel_dir(m, root)))
+        .chain(
+            depended(root, manifest, all)
+                .iter()
+                .map(|m| rel_dir(m, root)),
+        )
         .collect();
     let dirs: Vec<String> = all
         .iter()

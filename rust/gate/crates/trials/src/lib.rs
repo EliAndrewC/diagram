@@ -19,6 +19,6 @@ pub mod record {
     pub mod agent_census;
 }
 
-use l7r_gate_core::{checks, codeid, cohort, logs, plan, Reply};
 #[cfg(test)]
 use l7r_gate_core::write_executable;
+use l7r_gate_core::{checks, codeid, cohort, logs, plan, Reply};

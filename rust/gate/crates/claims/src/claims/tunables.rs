@@ -154,12 +154,7 @@ pub fn unstated_rust(
 pub type Found = (String, usize, String, f64);
 
 /// Every number `unstated` finds in the map code under `root` (and `path`): the `.py` files by the runner, the Rust here.
-pub fn inline(
-    reader: &mut Reader,
-    root: &Path,
-    cur: &Cur,
-    path: &str,
-) -> Result<Vec<Found>, Fail> {
+pub fn inline(reader: &mut Reader, root: &Path, cur: &Cur, path: &str) -> Result<Vec<Found>, Fail> {
     let mut text: HashMap<String, HashMap<String, String>> = HashMap::new();
     for row in cur.iter() {
         let unit = row.key.split_once('#').map_or(row.key.as_str(), |p| p.0);

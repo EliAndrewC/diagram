@@ -117,7 +117,11 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
         "scripts/gates/check-duplicate-defs.py",
         [true, true, false, false],
     );
-    put(&dir, "rust/gate/crates/checks/src/checks/partial_citations.rs", "\n");
+    put(
+        &dir,
+        "rust/gate/crates/checks/src/checks/partial_citations.rs",
+        "\n",
+    );
     assert_eq!(ran(&dir), [false, false, true, false]);
     assert_eq!(needs("something-else", &dir), 0);
     assert_eq!(needs("function-cap", &repo("needs-base")), 0);

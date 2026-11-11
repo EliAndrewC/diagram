@@ -16,8 +16,8 @@ pub mod runstats;
 pub mod wave_report;
 
 pub use l7r_gate_tree::measure::*;
-pub use l7r_gate_trials::measure::*;
 pub use l7r_gate_trials::measure::popup_rounds;
+pub use l7r_gate_trials::measure::*;
 
 /// `l7r-gate measure ...`.
 pub fn cli(args: &[String], root: &Path) -> crate::Reply {

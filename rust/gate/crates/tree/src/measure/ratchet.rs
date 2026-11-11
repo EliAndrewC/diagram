@@ -120,12 +120,7 @@ pub fn best_round(workers: usize, rounds: usize, run: &dyn Fn(usize) -> f64) -> 
 }
 
 /// How much slower the host runs now than when the loop was pinned; never below 1, so a run is never held to a tighter bar than the GM's.
-pub fn slowdown(
-    r: &Ratchet,
-    workers: usize,
-    rounds: usize,
-    run: &dyn Fn(usize) -> f64,
-) -> f64 {
+pub fn slowdown(r: &Ratchet, workers: usize, rounds: usize, run: &dyn Fn(usize) -> f64) -> f64 {
     r.calibration_s.map_or(1.0, |pinned| {
         (best_round(workers, rounds, run) / pinned).max(1.0)
     })
@@ -188,12 +183,7 @@ fn over(
     reason = "seconds, far inside f64's exact range"
 )]
 #[must_use]
-pub fn verdict(
-    target: &str,
-    r: Option<&Ratchet>,
-    a: Asked<'_>,
-    slow: f64,
-) -> (bool, String) {
+pub fn verdict(target: &str, r: Option<&Ratchet>, a: Asked<'_>, slow: f64) -> (bool, String) {
     let Some(r) = r.filter(|r| r.armed) else {
         return (true, String::new());
     };

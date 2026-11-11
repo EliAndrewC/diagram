@@ -16,6 +16,6 @@ pub mod arbiter {
 
 pub mod owed_door;
 
-use l7r_gate_core::{checks_door, difflib, measure, Reply};
 #[cfg(test)]
 use l7r_gate_core::checks;
+use l7r_gate_core::{checks_door, difflib, measure, Reply};

@@ -5,7 +5,7 @@ pub mod measure;
 pub mod preflight;
 
 use l7r_gate_cohort::{cohort, push};
-use l7r_gate_core::{codeid, plan, Reply};
-use l7r_gate_tree::{checks, stamp};
 #[cfg(test)]
 use l7r_gate_core::write_executable;
+use l7r_gate_core::{codeid, plan, Reply};
+use l7r_gate_tree::{checks, stamp};

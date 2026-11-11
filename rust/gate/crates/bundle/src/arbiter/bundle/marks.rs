@@ -191,10 +191,7 @@ fn near_reversal(o: &str, n: &str, earlier: &[(String, String)]) -> bool {
 }
 
 /// Each round's findings, `(mark, finding)` (`mark_rounds`); `others` are other checks' EDITs on the subject.
-pub fn mark_rounds(
-    replies: &[String],
-    others: &[(String, String)],
-) -> Vec<Vec<(String, String)>> {
+pub fn mark_rounds(replies: &[String], others: &[(String, String)]) -> Vec<Vec<(String, String)>> {
     let mut seen: Vec<String> = Vec::new();
     let mut edits: Vec<(String, String)> = others.to_vec();
     let mut out = Vec::new();

@@ -642,11 +642,7 @@ fn changed_pages(root: &Path, base: &str) -> Result<HashSet<String>, Fail> {
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn owed(
-    root: &Path,
-    base: &str,
-    uid: &str,
-) -> Result<Vec<(String, String, String)>, Fail> {
+pub fn owed(root: &Path, base: &str, uid: &str) -> Result<Vec<(String, String, String)>, Fail> {
     let before = if base.is_empty() {
         Keyed::default()
     } else {

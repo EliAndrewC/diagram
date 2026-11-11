@@ -135,10 +135,7 @@ pub fn last_reopening(root: &Path, feature: &str, since: f64) -> Option<f64> {
 }
 
 /// `clock.setdefault(feature, {})`.
-pub fn entry<'a>(
-    clock: &'a mut Map<String, Value>,
-    feature: &str,
-) -> &'a mut Map<String, Value> {
+pub fn entry<'a>(clock: &'a mut Map<String, Value>, feature: &str) -> &'a mut Map<String, Value> {
     let slot = clock
         .entry(feature.to_owned())
         .or_insert_with(|| Value::Object(Map::new()));
@@ -171,11 +168,7 @@ pub fn mine(root: &Path, feature: &str) -> Map<String, Value> {
 }
 
 /// `(the glyph units due, the glyph units owed and waiting with when each comes due)` - plan D53-D55.
-pub fn glyph_due(
-    root: &Path,
-    units: &[Unit],
-    at: Option<f64>,
-) -> (Vec<Unit>, Vec<(Unit, String)>) {
+pub fn glyph_due(root: &Path, units: &[Unit], at: Option<f64>) -> (Vec<Unit>, Vec<(Unit, String)>) {
     let now = at.unwrap_or_else(now);
     let glyph: Vec<Unit> = units
         .iter()
