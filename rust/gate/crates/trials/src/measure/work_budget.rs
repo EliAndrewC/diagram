@@ -29,7 +29,11 @@ fn number(cell: &str, line: &str) -> Result<i64, String> {
 }
 
 /// The driver's `--budget` lines: `seed size stage ops` for a roll's stage, `seed size stage key n` for one of its counters.
-pub(crate) fn parse(stdout: &str) -> Result<(Counts, Rolls), String> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn parse(stdout: &str) -> Result<(Counts, Rolls), String> {
     let mut totals: Vec<(String, BTreeMap<i64, Vec<i64>>)> = Vec::new();
     let mut rolls = Rolls::new();
     for line in stdout.lines() {
@@ -76,7 +80,8 @@ pub(crate) fn parse(stdout: &str) -> Result<(Counts, Rolls), String> {
 }
 
 /// The stage's budget at `size`: per thing times the derivation's items there, none unset.
-pub(crate) fn budget_at(st: &Value, size: i64) -> Option<f64> {
+#[must_use]
+pub fn budget_at(st: &Value, size: i64) -> Option<f64> {
     Some(st.get("per_thing")?.as_f64()? * st.get(format!("items_at_{size}"))?.as_f64()?)
 }
 
@@ -85,7 +90,8 @@ pub(crate) fn budget_at(st: &Value, size: i64) -> Option<f64> {
     clippy::cast_precision_loss,
     reason = "counted operations, far inside f64's exact range"
 )]
-pub(crate) fn exponent(ops: &[i64]) -> String {
+#[must_use]
+pub fn exponent(ops: &[i64]) -> String {
     if ops[1] != 0 && ops[3] != 0 {
         format!("{:.2}", (ops[3] as f64 / ops[1] as f64).ln() / 4f64.ln())
     } else {
@@ -127,7 +133,8 @@ fn cells_of(ops: &[i64]) -> Vec<String> {
 
 /// The record's table: `work_budget_view.py` reads it by header name and takes each row's last cell as its status and the one before as its
 /// ratio, so those two stay last.
-pub(crate) fn table(counts: &Counts, budgets: &Value) -> Vec<String> {
+#[must_use]
+pub fn table(counts: &Counts, budgets: &Value) -> Vec<String> {
     let mut rows = vec![
         "| stage | ops @10 | ops @20 | ops @40 | ops @80 | exponent | budget @40 | accepted @40 | ratio | status |".to_owned(),
         format!("|{}", "---|".repeat(10)),
@@ -171,7 +178,8 @@ pub(crate) fn table(counts: &Counts, budgets: &Value) -> Vec<String> {
 }
 
 /// The stages past twice their budget at 40, read off the table as the Python's reading was.
-pub(crate) fn over(lines: &[String]) -> Vec<String> {
+#[must_use]
+pub fn over(lines: &[String]) -> Vec<String> {
     lines[2..lines.len() - 1]
         .iter()
         .filter_map(|row| {
@@ -196,7 +204,8 @@ fn sorted(v: &Value) -> Value {
 
 /// The run's JSON in the deleted roll's shape: `work_budget_view.moved` reads `summary.stages.<stage>.per.<size>.ops`, the audit bundle
 /// `rows[].stages.<stage>.ops` (each counter).
-pub(crate) fn run_file(counts: &Counts, rolls: &Rolls, when: &str, head: &str) -> Value {
+#[must_use]
+pub fn run_file(counts: &Counts, rolls: &Rolls, when: &str, head: &str) -> Value {
     let stage_of = |per: &PerSize| {
         let sizes: Map<String, Value> = per
             .iter()
@@ -286,7 +295,8 @@ fn run(args: &[String], root: &Path) -> Result<String, String> {
 }
 
 /// `l7r-gate measure work-budget [--write]`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     match run(args, root) {
         Ok(out) => reply(out, String::new(), 0),
         Err(why) => reply(String::new(), why + "\n", 1),

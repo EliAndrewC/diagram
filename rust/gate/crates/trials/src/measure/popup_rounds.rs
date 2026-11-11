@@ -14,7 +14,7 @@ use serde_json::{json, Map, Value};
 use super::{reply, text_err};
 use crate::plan::pretty;
 
-pub(crate) use l7r_gate_core::measure::popup_rounds::iso;
+pub use l7r_gate_core::measure::popup_rounds::iso;
 
 const MODAL_CHECKS: [&str; 3] = ["modal-form", "modal-research", "modal-depiction"];
 
@@ -42,7 +42,7 @@ fn row(values: &[i64]) -> Map<String, Value> {
 }
 
 /// Units, dispatches, dispatches per unit, and the units with a second and a third round, overall and per check.
-pub(crate) fn counts(dispatches: &[&Value], since: f64) -> Value {
+pub fn counts(dispatches: &[&Value], since: f64) -> Value {
     let mut units: BTreeMap<(String, &str), i64> = BTreeMap::new();
     for d in dispatches {
         let check = d["check"].as_str().unwrap_or("");
@@ -140,7 +140,7 @@ fn refused(words: &str) -> crate::Reply {
 }
 
 /// `l7r-gate measure popup-rounds <clone> [--since ISO] [--json]`, or `--record <measurements.json> --key <key> <label>=<snapshot.json> ...`.
-pub(crate) fn cli(args: &[String]) -> crate::Reply {
+pub fn cli(args: &[String]) -> crate::Reply {
     let (mut named, mut plain, mut json_out) = (BTreeMap::new(), Vec::new(), false);
     let mut words = args.iter();
     while let Some(word) = words.next() {

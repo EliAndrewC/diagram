@@ -329,7 +329,8 @@ fn record_into(path: &Path, fresh: Map<String, Value>) -> Result<(), String> {
 }
 
 /// `record agent-census [--root DIR] [--since D] [--until D] [--json FILE] [--record FILE]`.
-pub(crate) fn cli(args: &[String], home: &Path) -> Reply {
+#[must_use]
+pub fn cli(args: &[String], home: &Path) -> Reply {
     let default_root = home.join(".claude/projects").display().to_string();
     let Some(asked) = parse(args, default_root) else {
         return reply(String::new(), USAGE.to_owned(), 2);

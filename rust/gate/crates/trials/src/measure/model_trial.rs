@@ -54,7 +54,7 @@ static OUTSIDE: LazyLock<Regex> =
 static REFLOG: LazyLock<Regex> = LazyLock::new(|| compiled(r"@\{(\d+)\}"));
 
 /// Where a trial looks and what it starts.
-pub(crate) struct Trial {
+pub struct Trial {
     /// This clone.
     pub clone: PathBuf,
     /// `~/.claude/projects`.
@@ -64,7 +64,7 @@ pub(crate) struct Trial {
 }
 
 /// The recorded run: its agent, prompt, final reply, start and records.
-pub(crate) struct Run {
+pub struct Run {
     pub agent: String,
     pub prompt: String,
     pub reply: String,
@@ -72,7 +72,8 @@ pub(crate) struct Run {
     pub records: Vec<Value>,
 }
 
-pub(crate) fn text_of(content: &Value) -> String {
+#[must_use]
+pub fn text_of(content: &Value) -> String {
     match content {
         Value::String(s) => s.clone(),
         Value::Array(blocks) => blocks
@@ -84,7 +85,8 @@ pub(crate) fn text_of(content: &Value) -> String {
     }
 }
 
-pub(crate) fn records_of(transcript: &Path) -> Vec<Value> {
+#[must_use]
+pub fn records_of(transcript: &Path) -> Vec<Value> {
     String::from_utf8_lossy(&std::fs::read(transcript).unwrap_or_default())
         .lines()
         .filter(|l| l.trim_start().starts_with('{'))
@@ -92,7 +94,7 @@ pub(crate) fn records_of(transcript: &Path) -> Vec<Value> {
         .collect()
 }
 
-pub(crate) fn read(transcript: &Path) -> Run {
+pub fn read(transcript: &Path) -> Run {
     let records = records_of(transcript);
     let of_kind = |kind: &str, r: &Value| r["type"] == kind;
     let prompt = records
@@ -123,7 +125,7 @@ pub(crate) fn read(transcript: &Path) -> Run {
     }
 }
 
-pub(crate) fn signature(reply: &str) -> String {
+pub fn signature(reply: &str) -> String {
     let counted = WORDS
         .iter()
         .map(|(s, re)| (*s, re.find_iter(reply).flatten().count()));
@@ -136,7 +138,7 @@ pub(crate) fn signature(reply: &str) -> String {
 
 /// Paths a prompt names that no checkout holds, each once: a bundle under `/tmp/`, and a clone's git directory (the review snapshots under
 /// `<clone>/.git/review-snapshot/`, which hold the renders a glyph or building review judges).
-pub(crate) fn outside_paths(prompt: &str) -> Vec<String> {
+pub fn outside_paths(prompt: &str) -> Vec<String> {
     let mut found: Vec<String> = OUTSIDE
         .find_iter(prompt)
         .flatten()
@@ -152,7 +154,8 @@ pub(crate) fn outside_paths(prompt: &str) -> Vec<String> {
 }
 
 /// The newest file's time under `root`, or `root`'s own when it holds none.
-pub(crate) fn newest(root: &Path) -> f64 {
+#[must_use]
+pub fn newest(root: &Path) -> f64 {
     let stamp = |p: &Path| {
         let modified = std::fs::metadata(p).and_then(|m| m.modified()).ok();
         modified
@@ -178,7 +181,8 @@ pub(crate) fn newest(root: &Path) -> f64 {
 }
 
 /// The folder a path's freshness is judged by: the path if a directory, else its parent.
-pub(crate) fn bundle_root(src: &Path) -> &Path {
+#[must_use]
+pub fn bundle_root(src: &Path) -> &Path {
     if src.is_dir() {
         src
     } else {
@@ -187,7 +191,8 @@ pub(crate) fn bundle_root(src: &Path) -> &Path {
 }
 
 /// Every path outside the repository the prompt names exists and was not written after the run started.
-pub(crate) fn replayable(run: &Run) -> bool {
+#[must_use]
+pub fn replayable(run: &Run) -> bool {
     let started = at(&run.started);
     outside_paths(&run.prompt).iter().all(|p| {
         let src = Path::new(p);
@@ -195,7 +200,8 @@ pub(crate) fn replayable(run: &Run) -> bool {
     })
 }
 
-pub(crate) fn children(dir: &Path) -> Vec<PathBuf> {
+#[must_use]
+pub fn children(dir: &Path) -> Vec<PathBuf> {
     let mut out: Vec<PathBuf> = std::fs::read_dir(dir)
         .into_iter()
         .flatten()
@@ -206,7 +212,8 @@ pub(crate) fn children(dir: &Path) -> Vec<PathBuf> {
     out
 }
 
-pub(crate) fn named(path: &Path, starts: &str, ends: &str) -> bool {
+#[must_use]
+pub fn named(path: &Path, starts: &str, ends: &str) -> bool {
     path.file_name()
         .and_then(|n| n.to_str())
         .is_some_and(|n| n.starts_with(starts) && n.ends_with(ends))
@@ -273,7 +280,7 @@ impl Trial {
 
 /// One run's totals: usage folded per message id as the per-field maximum (R2 of feature 383), then summed; `started` is the run's first timestamp, of any
 /// record. The one fold: `record agent-census` calls this (`ask:449-T77-replays`).
-pub(crate) fn fold_usage(records: &[Value]) -> Value {
+pub fn fold_usage(records: &[Value]) -> Value {
     let mut per: BTreeMap<String, [i64; 4]> = BTreeMap::new();
     let mut models: Vec<(String, i64)> = Vec::new();
     for record in records.iter().filter(|r| r["type"] == "assistant") {
@@ -321,7 +328,7 @@ pub(crate) fn fold_usage(records: &[Value]) -> Value {
 }
 
 /// `model_trial`'s words after its subcommand: the flags with a value, the bare flags and the positional words.
-pub(crate) struct Words<'a> {
+pub struct Words<'a> {
     pub plain: Vec<&'a str>,
     pub valued: BTreeMap<&'a str, &'a str>,
     pub bare: Vec<&'a str>,
@@ -343,7 +350,7 @@ impl Words<'_> {
     }
 }
 
-pub(crate) fn words(args: &[String]) -> Words<'_> {
+pub fn words(args: &[String]) -> Words<'_> {
     const VALUED: [&str; 6] = [
         "--since",
         "--model",
@@ -401,7 +408,8 @@ impl Trial {
 }
 
 /// `l7r-gate measure model-trial ...`.
-pub(crate) fn cli(args: &[String], trial: &Trial) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], trial: &Trial) -> crate::Reply {
     let Some(verb) = args.first() else {
         return reply(String::new(), USAGE.to_owned(), 2);
     };
@@ -416,7 +424,8 @@ pub(crate) fn cli(args: &[String], trial: &Trial) -> crate::Reply {
 }
 
 /// `model-trial` as the live command finds things.
-pub(crate) fn live(home: &Path, clone: &Path) -> Trial {
+#[must_use]
+pub fn live(home: &Path, clone: &Path) -> Trial {
     Trial {
         clone: clone.to_owned(),
         projects: home.join(".claude/projects"),

@@ -40,7 +40,7 @@ fn literally(re: &Regex, subject: &str, by: &str) -> String {
 }
 
 /// How a case is asked to be built.
-pub(crate) struct Asked {
+pub struct Asked {
     pub model: String,
     pub at_head: bool,
     pub omit: Option<bool>,
@@ -49,7 +49,7 @@ pub(crate) struct Asked {
 }
 
 impl Asked {
-    pub(crate) fn from_words(w: &Words) -> Self {
+    pub fn from_words(w: &Words) -> Self {
         Self {
             model: w.get("--model").unwrap_or(SONNET).to_owned(),
             at_head: w.has("--head"),
@@ -67,7 +67,7 @@ fn split_head(text: &str) -> (&str, &str) {
 }
 
 /// The tested model in the agent file's frontmatter (the case's copy).
-pub(crate) fn set_model(agent_file: &Path, model: &str) -> Result<(), String> {
+pub fn set_model(agent_file: &Path, model: &str) -> Result<(), String> {
     let text = std::fs::read_to_string(agent_file)
         .map_err(|e| format!("{}: {e}", agent_file.display()))?;
     let (head, rest) = split_head(&text);
@@ -81,7 +81,7 @@ pub(crate) fn set_model(agent_file: &Path, model: &str) -> Result<(), String> {
 }
 
 /// `omitClaudeMd: true` in the agent file's frontmatter, or none (the case's copy) - feature 383 amendment 6, plan D34.
-pub(crate) fn set_field(agent_file: &Path, omit: bool) -> Result<(), String> {
+pub fn set_field(agent_file: &Path, omit: bool) -> Result<(), String> {
     let text = std::fs::read_to_string(agent_file)
         .map_err(|e| format!("{}: {e}", agent_file.display()))?;
     let (head, rest) = split_head(&text);
@@ -92,7 +92,7 @@ pub(crate) fn set_field(agent_file: &Path, omit: bool) -> Result<(), String> {
 }
 
 /// A clone's HEAD at a moment, from its reflog ("" when the reflog does not reach back that far).
-pub(crate) fn clone_head_at(clone: &Path, when: f64) -> String {
+pub fn clone_head_at(clone: &Path, when: f64) -> String {
     let log = crate::cohort::git(
         clone,
         &["log", "-g", "--date=unix", "--format=%H %gd", "HEAD"],
@@ -140,7 +140,7 @@ fn own_clone(source: &Path, tree: &Path, commit: &str) -> Result<(), String> {
 }
 
 /// `src` copied over `dest`, file by file.
-pub(crate) fn copy_tree(src: &Path, dest: &Path) -> std::io::Result<()> {
+pub fn copy_tree(src: &Path, dest: &Path) -> std::io::Result<()> {
     std::fs::create_dir_all(dest)?;
     for entry in std::fs::read_dir(src)? {
         let path = entry?.path();
@@ -280,7 +280,10 @@ impl Trial {
         asked.omit.map_or(Ok(()), |omit| set_field(&file, omit))
     }
 
-    pub(crate) fn prepare(
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn prepare(
         &self,
         transcript: &Path,
         out: &Path,
@@ -353,7 +356,7 @@ fn render(tree: &Path, name: &str) -> Option<PathBuf> {
 }
 
 /// A file's text as the recorded agent read it whole (its Read result, line numbers stripped), or "".
-pub(crate) fn read_back(records: &[Value], suffix: &str) -> String {
+pub fn read_back(records: &[Value], suffix: &str) -> String {
     let blocks = |kind: &'static str| {
         records
             .iter()
@@ -386,7 +389,7 @@ pub(crate) fn read_back(records: &[Value], suffix: &str) -> String {
 }
 
 /// The dispatch prompt as the recorded agent saw it: its Read, or any tool output holding the whole prompt (a `cat` serves as well as a Read).
-pub(crate) fn read_dispatch(transcript: &Path, unit: &str) -> String {
+pub fn read_dispatch(transcript: &Path, unit: &str) -> String {
     let records = records_of(transcript);
     let text = read_back(&records, &format!("/{unit}/dispatch.md"));
     if !text.is_empty() {
@@ -438,7 +441,11 @@ impl Trial {
 
     /// Rebuild each review snapshot the recorded run read: the map drawn at the case's commit (`clone/`) and at main's commit of the time (`main/`),
     /// and the dispatch prompt as the recorded agent read it.
-    pub(crate) fn snapshot(&self, out: &Path) -> Result<(String, i32), String> {
+    ///
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn snapshot(&self, out: &Path) -> Result<(String, i32), String> {
         let meta: Value = std::fs::read_to_string(out.join("meta.json"))
             .ok()
             .and_then(|t| serde_json::from_str(&t).ok())

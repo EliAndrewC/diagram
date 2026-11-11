@@ -113,7 +113,8 @@ fn replay(rows: &[(Modal, Modal)]) -> Map<String, Value> {
 }
 
 /// `measure depiction-replay ...`.
-pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let p = match parse(
         args,
         &[

@@ -40,7 +40,7 @@ fn clock() -> String {
 
 impl Trial {
     /// The headless session a run is: the check itself, or (`as_subagent`) a Sonnet session that dispatches it once.
-    pub(crate) fn run_command(&self, out: &Path, meta: &Value) -> Vec<String> {
+    pub fn run_command(&self, out: &Path, meta: &Value) -> Vec<String> {
         let agent = meta["agent"].as_str().unwrap_or("");
         let off = [
             "--output-format",
@@ -85,7 +85,11 @@ impl Trial {
     }
 
     /// Start each run in the background; each writes `run-<i>.json`.
-    pub(crate) fn run_case(&self, out: &Path, runs: usize) -> Result<String, String> {
+    ///
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn run_case(&self, out: &Path, runs: usize) -> Result<String, String> {
         let meta = meta_of(out)?;
         let mut shown = String::new();
         for i in 1..=runs {
@@ -111,7 +115,11 @@ impl Trial {
 
     /// Every prepared case under `root`, `runs` runs each, at most `parallel` sessions at once (each holds a few hundred MB); a run already finished
     /// (its `run-<i>.json` parses) is not started again. Prints as it goes: a queue runs for hours.
-    pub(crate) fn run_all(
+    ///
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn run_all(
         &self,
         root: &Path,
         runs: usize,
@@ -167,7 +175,8 @@ impl Trial {
     }
 
     /// Each `as_subagent` run's reply, from the subagent's own transcript, to `reply-<i>.md` - what the scorer reads.
-    pub(crate) fn collect(&self, out: &Path) -> (String, i32) {
+    #[must_use]
+    pub fn collect(&self, out: &Path) -> (String, i32) {
         let mut n = 0;
         for run_json in children(out)
             .into_iter()
@@ -192,7 +201,7 @@ impl Trial {
 }
 
 /// Turns, tokens and seconds of the recorded run and of each new one; each finished run's result is saved beside it.
-pub(crate) fn usage(out: &Path) -> Result<String, String> {
+pub fn usage(out: &Path) -> Result<String, String> {
     let meta = meta_of(out)?;
     let u = fold_usage(&records_of(Path::new(
         meta["recorded"].as_str().unwrap_or(""),

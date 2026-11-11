@@ -3,25 +3,21 @@
 
 use std::path::Path;
 
-pub(crate) mod depiction_replay;
 pub(crate) mod figures;
 pub(crate) mod fresh_tally;
 pub(crate) mod gate_costs;
 pub(crate) mod gatecost;
 pub(crate) mod guard_log;
 pub(crate) mod maps_moved;
-pub(crate) mod model_trial;
-pub(crate) mod popup_rounds;
 pub(crate) mod probe;
 pub(crate) mod push_check_times;
 pub(crate) mod review_yield;
 pub(crate) mod runstats;
-pub(crate) mod subagent_cache;
 pub(crate) mod wave_report;
-pub(crate) mod work_budget;
 
-pub(crate) use subagent_cache::{at, commas};
 pub use l7r_gate_tree::measure::*;
+pub use l7r_gate_trials::measure::*;
+pub use l7r_gate_trials::measure::popup_rounds;
 
 /// `l7r-gate measure ...`.
 pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {

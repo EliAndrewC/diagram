@@ -176,7 +176,8 @@ fn runs(root: &Path, since: &str) -> Vec<Run> {
 }
 
 /// Seconds since the epoch of an ISO time with its zone.
-pub(crate) fn at(stamp: &str) -> f64 {
+#[must_use]
+pub fn at(stamp: &str) -> f64 {
     let digits: Vec<f64> = stamp
         .split(|c: char| !c.is_ascii_digit() && c != '.')
         .filter(|s| !s.is_empty())
@@ -294,7 +295,8 @@ fn first_call(rs: &[&Run], key: &str) -> i64 {
     total.div_euclid(i64::try_from(rs.len()).unwrap_or(1))
 }
 
-pub(crate) fn commas(n: i64) -> String {
+#[must_use]
+pub fn commas(n: i64) -> String {
     let digits = n.abs().to_string();
     let mut out = String::new();
     for (i, c) in digits.chars().enumerate() {
@@ -384,7 +386,7 @@ fn families(rs: &[Run], recent: &str) -> Vec<(String, usize, usize, String, Stri
 }
 
 /// `l7r-gate measure subagent-cache [--since D] [--root D] [--families RECENT]`.
-pub(crate) fn cli(args: &[String], home: &Path, today: &str) -> crate::Reply {
+pub fn cli(args: &[String], home: &Path, today: &str) -> crate::Reply {
     let flag = |name: &str| {
         args.windows(2)
             .find(|w| w[0] == name)

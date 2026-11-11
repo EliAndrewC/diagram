@@ -8,9 +8,9 @@ use serde_json::{json, Value};
 
 pub use l7r_gate_bundle::record::*;
 pub use l7r_gate_downloads::record::{access_tags, downloads};
+pub use l7r_gate_trials::record::agent_census;
 use crate::Reply;
 
-mod agent_census;
 mod fragment_move;
 mod merge_answers;
 mod money;
