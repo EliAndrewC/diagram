@@ -1925,3 +1925,34 @@ censuses empty (work breakdown 8, FR-010).
 6. **Did any map move?** No: no engine code changes.
 
 
+<!-- plan-archive: archived 2026-11-11 -->
+### T103 (session scratch under /tmp/claude-1000 swept, FR-013)
+
+- **Approach**: a new guard, `scratch-sweep-hooks` (`rust/guard/src/guards/scratch_sweep_hooks.rs`, what it removes in `sweep.rs`), starts at most one detached sweep a day from UserPromptSubmit, and `make scratch-sweep [DRY=1]` runs one on demand.
+
+   **Decisions** (FR-013, SC-008):
+   - Nothing removed a session's scratch: `/tmp/claude-1000` reached 38 GB and one session's scratch 20 GB (observed 2026-11-11, method: the GM's laptop session's `du`, and `du -sh` on this session's directory).
+   - What goes: a session directory `/tmp/claude-<uid>/<slug>/<session id>/` when its transcript `~/.claude/projects/<slug>/<id>.jsonl` and everything inside it have been unchanged three days (a subagent writing into its session's scratch moves no line of the session's own transcript, so both are read), one with no transcript when nothing inside changed in three days, and a loose top-level entry when nothing inside it changed in three days.
+   - What stays, always: the prompting session's directory, every session Claude Code records as running in `~/.claude/sessions/<pid>.json` while that pid still runs and started when the record says (its `procStart` against `/proc/<pid>/stat`'s 22nd field, so a reused pid keeps nothing), with no session directory judged at all where that registry cannot be read, any entry a live process holds as its cwd, its binary or an open file (read from `/proc`, and nothing is removed where `/proc` cannot be read), any tree with a directory the sweep cannot read, and anything through a symlink: a link is never followed or descended, so a link inside a removed tree is deleted as itself, its target untouched, and a link standing at the root or among a project's sessions is left. The uid is the process's own, and the root, the projects directory, the state directory, the threshold (`SCRATCH_SWEEP_DAYS`) and the clock are seams the tests set.
+   - Once a day, one at a time: the hook reads only the stamp's age and starts the sweep with `setsid -f`, which takes a lock, checks the stamp again and writes it before walking, so a sweep that dies is not retried every prompt and a second session finds the lock held or the stamp fresh. The hook added 0.15 ms to a usual prompt and 1.3 ms on the day's one start, against 5.40 ms for the process alone (observed 2026-11-11, method: the median of 20 runs of each on a fixture tree, never the real stamp).
+   - Every removal and the day's total go to the guard log with its size.
+   - The dry run on this machine would remove 110 entries, 11.0 MB, the large trees already cleared by the GM's laptop session (observed 2026-11-11, method: `make scratch-sweep DRY=1`).
+   - Left as it is: a project directory left empty is kept.
+
+### T103 Approach (checklist part A)
+
+1. **The goal, in the world.** A finished session's scratch does not outlive it by more than a few days.
+2. **The constraints.** FR-013: never a live session's, never anything outside the root.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the sizes and the dry run above.
+4. **Do they describe the world here?** The dry run was read on this machine.
+5. **The order.** After T96, beside T101; T102 extends it to the cargo cache.
+6. **The exits.** Green: the guard crate's tests, `make static` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `make rust-test CRATE=rust/guard` 504 passed with the sweep's tests, and the dry run above (observed 2026-11-11, method: those commands on this clone).
+10. **Before moving a constant.** The three days and the one day are new constants, chosen as GUESS knobs (`SCRATCH_SWEEP_DAYS`), long enough that a session paused over a weekend keeps its scratch.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** no.
+
+
