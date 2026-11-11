@@ -13,10 +13,15 @@ use l7r_guard::shared::py_text::{split, strip};
 use serde_json::Value;
 
 use super::earlier::{self, dispatches};
-use super::{findall, head, py_path, py_repr, pyre, remove_tree, rstrip, shown, today, write, Run, DEFAULT_ROOT};
+use super::{
+    findall, head, py_path, py_repr, pyre, remove_tree, rstrip, shown, today, write, Run,
+    DEFAULT_ROOT,
+};
 use crate::arbiter::bundle::marks::{transcript_of, transcripts};
 use crate::record::args::{parse_with, Parsed, Spec};
-use crate::record::modals::{self, Modal, DEPICTION_CHECK, FORM_CHECK, MODAL_DIRS, ORDER, RESEARCH_AGENT, RESEARCH_CHECKS};
+use crate::record::modals::{
+    self, Modal, DEPICTION_CHECK, FORM_CHECK, MODAL_DIRS, ORDER, RESEARCH_AGENT, RESEARCH_CHECKS,
+};
 use crate::record::owed::{answered, store, units as owed_units};
 use crate::record::py_lines;
 use crate::record::repo::{fail, read_text, Fail};
@@ -50,9 +55,11 @@ static TAGS: LazyLock<Regex> = LazyLock::new(|| pyre(r"<!--\s*tags:\s*([^>]*?)--
 static HEAD: LazyLock<Regex> = LazyLock::new(|| pyre(r"(?s)<h[23][^>]*>(.*?)</h[23]>"));
 static COND: LazyLock<Regex> =
     LazyLock::new(|| pyre(r"(?m)(^|^- )((?:\[[a-z_]+=[a-z_0-9-]+(?:\|[a-z_0-9-]+)*\])+)\s*"));
-static ONE: LazyLock<Regex> = LazyLock::new(|| pyre(r"\[([a-z_]+)=([a-z_0-9-]+(?:\|[a-z_0-9-]+)*)\]"));
+static ONE: LazyLock<Regex> =
+    LazyLock::new(|| pyre(r"\[([a-z_]+)=([a-z_0-9-]+(?:\|[a-z_0-9-]+)*)\]"));
 static SENTENCE: LazyLock<Regex> = LazyLock::new(|| pyre(r"[.!?](\s|$)"));
-static BARRED_RE: LazyLock<Vec<Regex>> = LazyLock::new(|| BARRED.iter().map(|p| pyre(&format!("(?i){p}"))).collect());
+static BARRED_RE: LazyLock<Vec<Regex>> =
+    LazyLock::new(|| BARRED.iter().map(|p| pyre(&format!("(?i){p}"))).collect());
 
 /// The About tab's word band, per form (`dev/modals.md` M3, `dev/modals-particular.md` P3; raised by the GM, 2026-10-09).
 fn band(form: &str) -> (usize, usize) {
@@ -73,7 +80,10 @@ fn guide(form: &str) -> &'static str {
 
 /// `m.tags.get(name, default)`.
 fn tag_or<'a>(m: &'a Modal, name: &str, default: &'a str) -> &'a str {
-    m.tags.iter().find(|(k, _)| k == name).map_or(default, |(_, v)| v.as_str())
+    m.tags
+        .iter()
+        .find(|(k, _)| k == name)
+        .map_or(default, |(_, v)| v.as_str())
 }
 
 /// A page's reader-visible words: comments and tags out, entities unescaped, whitespace folded.
@@ -98,7 +108,12 @@ fn subjects(text: &str) -> Vec<String> {
     for part in m.as_str().split(';') {
         let (k, v) = strip(part).split_once('=').unwrap_or((strip(part), ""));
         if strip(k) == "subject" {
-            return v.split(',').map(strip).filter(|t| !t.is_empty()).map(str::to_owned).collect();
+            return v
+                .split(',')
+                .map(strip)
+                .filter(|t| !t.is_empty())
+                .map(str::to_owned)
+                .collect();
         }
     }
     Vec::new()
@@ -112,7 +127,9 @@ fn question_pages(root: &Path) -> Vec<PathBuf> {
         .flatten()
         .map(|e| e.path())
         .filter(|p| {
-            let n = p.file_name().map_or_else(String::new, |n| n.to_string_lossy().into_owned());
+            let n = p
+                .file_name()
+                .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
             n.ends_with(".html") && !n.ends_with(".notes.html") && !n.ends_with(".originals.html")
         })
         .collect();
@@ -122,7 +139,11 @@ fn question_pages(root: &Path) -> Vec<PathBuf> {
 
 /// The kind's words: its name, its key, and every glossary variant of either, longest first.
 fn terms_of(root: &Path, m: &Modal) -> Result<Vec<String>, Fail> {
-    let base: HashSet<String> = [m.tag("Name"), m.key.as_str()].iter().filter(|t| !t.is_empty()).map(|t| t.to_lowercase()).collect();
+    let base: HashSet<String> = [m.tag("Name"), m.key.as_str()]
+        .iter()
+        .filter(|t| !t.is_empty())
+        .map(|t| t.to_lowercase())
+        .collect();
     let mut out = base.clone();
     if root.join(VARIANTS).is_file() {
         for line in py_lines(&read_text(&root.join(VARIANTS))?) {
@@ -134,7 +155,12 @@ fn terms_of(root: &Path, m: &Modal) -> Result<Vec<String>, Fail> {
         }
     }
     let mut out: Vec<String> = out.into_iter().collect();
-    out.sort_by(|a, b| b.chars().count().cmp(&a.chars().count()).then_with(|| a.cmp(b)));
+    out.sort_by(|a, b| {
+        b.chars()
+            .count()
+            .cmp(&a.chars().count())
+            .then_with(|| a.cmp(b))
+    });
     Ok(out)
 }
 
@@ -152,7 +178,14 @@ fn candidates(root: &Path, m: &Modal) -> Result<Vec<Candidate>, Fail> {
     }
     let terms = terms_of(root, m)?;
     let pat = (!terms.is_empty()).then(|| {
-        pyre(&format!(r"(?i)\b({})\b", terms.iter().map(|t| fancy_regex::escape(t).into_owned()).collect::<Vec<_>>().join("|")))
+        pyre(&format!(
+            r"(?i)\b({})\b",
+            terms
+                .iter()
+                .map(|t| fancy_regex::escape(t).into_owned())
+                .collect::<Vec<_>>()
+                .join("|")
+        ))
     });
     let mut out = Vec::new();
     for p in question_pages(root) {
@@ -163,12 +196,23 @@ fn candidates(root: &Path, m: &Modal) -> Result<Vec<Candidate>, Fail> {
         let text = read_text(&p)?;
         let words = visible(&text);
         let page_tags = subjects(&text);
-        let shared = page_tags.iter().filter(|t| tags.contains(*t)).collect::<HashSet<_>>().len();
+        let shared = page_tags
+            .iter()
+            .filter(|t| tags.contains(*t))
+            .collect::<HashSet<_>>()
+            .len();
         let hits = pat.as_ref().map_or(0, |p| findall(p, &words, 0).len());
         if shared == 0 && hits == 0 {
             continue;
         }
-        out.push((3 * hits.min(20) + 5 * shared, rel, heading(&text), page_tags, hits, head(&words, 280).to_owned()));
+        out.push((
+            3 * hits.min(20) + 5 * shared,
+            rel,
+            heading(&text),
+            page_tags,
+            hits,
+            head(&words, 280).to_owned(),
+        ));
     }
     out.sort_by(|a, b| b.0.cmp(&a.0).then_with(|| a.1.cmp(&b.1)));
     Ok(out)
@@ -180,7 +224,13 @@ fn conditions_shown(text: &str) -> String {
         let parts: Vec<String> = ONE
             .captures_iter(&c[2])
             .flatten()
-            .map(|o| format!("{} is {}", &o[1], o[2].split('|').collect::<Vec<_>>().join(" or ")))
+            .map(|o| {
+                format!(
+                    "{} is {}",
+                    &o[1],
+                    o[2].split('|').collect::<Vec<_>>().join(" or ")
+                )
+            })
             .collect();
         format!("{}(only where {}) ", &c[1], parts.join(" and "))
     })
@@ -189,11 +239,17 @@ fn conditions_shown(text: &str) -> String {
 
 fn page_heading(root: &Path, f: &str) -> Result<String, Fail> {
     let p = root.join(f);
-    Ok(if p.is_file() { heading(&read_text(&p)?) } else { "(MISSING FILE)".to_owned() })
+    Ok(if p.is_file() {
+        heading(&read_text(&p)?)
+    } else {
+        "(MISSING FILE)".to_owned()
+    })
 }
 
 fn paragraphs(text: &str) -> Vec<&str> {
-    text.split("\n\n").filter(|p| !strip(p).is_empty()).collect()
+    text.split("\n\n")
+        .filter(|p| !strip(p).is_empty())
+        .collect()
 }
 
 fn guesses(m: &Modal) -> Vec<String> {
@@ -209,7 +265,13 @@ fn render(root: &Path, m: &Modal) -> Result<String, Fail> {
     let mut lines = vec![
         format!("# {}", tag_or(m, "Name", &m.key)),
         String::new(),
-        format!("class `{}` (key `{}`), form `{}`, origin `{}`", m.cls, m.key, m.form(), m.origin),
+        format!(
+            "class `{}` (key `{}`), form `{}`, origin `{}`",
+            m.cls,
+            m.key,
+            m.form(),
+            m.origin
+        ),
         String::new(),
         "## About".to_owned(),
         String::new(),
@@ -241,14 +303,21 @@ fn render(root: &Path, m: &Modal) -> Result<String, Fail> {
     for f in m.entry_files() {
         lines.push(format!("- {}  - `{f}`", page_heading(root, &f)?));
     }
-    lines.extend([String::new(), format!("Sources: {}", m.tag("Sources")), String::new()]);
+    lines.extend([
+        String::new(),
+        format!("Sources: {}", m.tag("Sources")),
+        String::new(),
+    ]);
     Ok(conditions_shown(&lines.join("\n")))
 }
 
 /// The text `window` characters either side of the byte range `start..end` of `text`.
 fn around(text: &str, start: usize, end: usize, window: usize) -> String {
     let (before, after) = (text[..start].chars().count(), text[..end].chars().count());
-    text.chars().skip(before.saturating_sub(window)).take(after + window - before.saturating_sub(window)).collect()
+    text.chars()
+        .skip(before.saturating_sub(window))
+        .take(after + window - before.saturating_sub(window))
+        .collect()
 }
 
 /// The mechanical half of the modal checks: the About band, barred phrases, long guesses, Entry files.
@@ -258,16 +327,30 @@ pub(crate) fn prepass(root: &Path, m: &Modal) -> String {
     let (lo, hi) = band(m.form());
     let mut out = vec![
         format!("prepass - {} ({})", m.cls, m.form()),
-        format!("- About words: {n} (band {lo}-{hi}){}", if (lo..=hi).contains(&n) { "" } else { "  <- OUTSIDE THE BAND" }),
+        format!(
+            "- About words: {n} (band {lo}-{hi}){}",
+            if (lo..=hi).contains(&n) {
+                ""
+            } else {
+                "  <- OUTSIDE THE BAND"
+            }
+        ),
     ];
     for pat in BARRED_RE.iter() {
         for hit in pat.find_iter(about).flatten() {
-            out.push(format!("- barred phrase in About (M11/M16): {} - ...{}...", py_repr(hit.as_str()), around(about, hit.start(), hit.end(), 50)));
+            out.push(format!(
+                "- barred phrase in About (M11/M16): {} - ...{}...",
+                py_repr(hit.as_str()),
+                around(about, hit.start(), hit.end(), 50)
+            ));
         }
     }
     for g in guesses(m) {
         if findall(&SENTENCE, &g, 0).len() > 2 {
-            out.push(format!("- a guess past two sentences (M3): {}...", head(&g, 90)));
+            out.push(format!(
+                "- a guess past two sentences (M3): {}...",
+                head(&g, 90)
+            ));
         }
     }
     for f in m.entry_files() {
@@ -286,21 +369,34 @@ pub(crate) fn prepass(root: &Path, m: &Modal) -> String {
 
 /// The wording `modal-research` rounds fixed on the pop-up `uid` that still stands in `text` (343's border-court ruling): `apply_edits.py` refuses a modal-form EDIT that drops one.
 pub(crate) fn research_held(root: &Path, uid: &str, text: &str) -> Vec<String> {
-    let state = load(&state_path(&root.to_string_lossy()).unwrap_or_else(|| PathBuf::from("/nonexistent")));
+    let state =
+        load(&state_path(&root.to_string_lossy()).unwrap_or_else(|| PathBuf::from("/nonexistent")));
     let subject = format!("modal:{uid}");
     let mut out: Vec<String> = Vec::new();
     for v in dispatches(&state) {
         let mine = v.get("check").and_then(Value::as_str) == Some("modal-research")
-            && v.get("subjects").and_then(Value::as_array).is_some_and(|s| s.iter().any(|x| x.as_str() == Some(subject.as_str())));
+            && v.get("subjects")
+                .and_then(Value::as_array)
+                .is_some_and(|s| s.iter().any(|x| x.as_str() == Some(subject.as_str())));
         if !mine {
             continue;
         }
-        let kept = v.get("reply").and_then(Value::as_str).filter(|r| !r.is_empty()).map(Path::new);
-        let mut text_of = kept.filter(|p| p.is_file()).map_or_else(String::new, |p| read_text(p).unwrap_or_default());
-        let aid = v.get("aid").map(super::py_str).filter(|a| !l7r_guard::shared::checks::falsy(v.get("aid")) && !a.is_empty());
+        let kept = v
+            .get("reply")
+            .and_then(Value::as_str)
+            .filter(|r| !r.is_empty())
+            .map(Path::new);
+        let mut text_of = kept
+            .filter(|p| p.is_file())
+            .map_or_else(String::new, |p| read_text(p).unwrap_or_default());
+        let aid = v
+            .get("aid")
+            .map(super::py_str)
+            .filter(|a| !l7r_guard::shared::checks::falsy(v.get("aid")) && !a.is_empty());
         if text_of.is_empty() {
             if let Some(aid) = aid {
-                text_of = transcript_of(&transcripts(), &aid).map_or_else(String::new, |t| reply::reply_of(&t.to_string_lossy(), ""));
+                text_of = transcript_of(&transcripts(), &aid)
+                    .map_or_else(String::new, |t| reply::reply_of(&t.to_string_lossy(), ""));
             }
         }
         for (_, _, new) in reply::blocks(&text_of) {
@@ -339,9 +435,15 @@ fn owed_lines(root: &Path, m: &Modal, for_: &str, owed: &[Unit]) -> Result<Strin
     let units: Vec<(String, String)> = if for_ == FORM_CHECK {
         vec![(format!("{FORM_CHECK}:{}", m.uid()), fp_form)]
     } else if for_ == DEPICTION_CHECK {
-        vec![(format!("{DEPICTION_CHECK}:{}", m.uid()), modals::depiction_fingerprint(root, m)?)]
+        vec![(
+            format!("{DEPICTION_CHECK}:{}", m.uid()),
+            modals::depiction_fingerprint(root, m)?,
+        )]
     } else {
-        RESEARCH_CHECKS.iter().map(|c| (format!("{c}:{}", m.uid()), fp_research.clone())).collect()
+        RESEARCH_CHECKS
+            .iter()
+            .map(|c| (format!("{c}:{}", m.uid()), fp_research.clone()))
+            .collect()
     };
     let files = if for_ == DEPICTION_CHECK {
         m.drawing_files()
@@ -361,7 +463,12 @@ fn owed_lines(root: &Path, m: &Modal, for_: &str, owed: &[Unit]) -> Result<Strin
         }
     }
     for (s, _) in &units {
-        if let Some(u) = owed.iter().rev().find(|u| &u.slug == s).filter(|u| !u.occasion.is_empty()) {
+        if let Some(u) = owed
+            .iter()
+            .rev()
+            .find(|u| &u.slug == s)
+            .filter(|u| !u.occasion.is_empty())
+        {
             text += &format!("owed: {s} - {}\n", u.occasion);
         }
     }
@@ -375,26 +482,65 @@ pub(crate) struct Put {
 }
 
 impl Put {
-    pub(crate) fn put(&mut self, name: &str, text: &str, origin: &str, what: &str) -> Result<(), Fail> {
+    pub(crate) fn put(
+        &mut self,
+        name: &str,
+        text: &str,
+        origin: &str,
+        what: &str,
+    ) -> Result<(), Fail> {
         write(&self.out.join(name), text)?;
-        self.rows.push((name.to_owned(), origin.to_owned(), what.to_owned()));
+        self.rows
+            .push((name.to_owned(), origin.to_owned(), what.to_owned()));
         Ok(())
     }
 }
 
-fn research_parts(root: &Path, m: &Modal, put: &mut Put, grep_targets: &mut Vec<String>) -> Result<(), Fail> {
+fn research_parts(
+    root: &Path,
+    m: &Modal,
+    put: &mut Put,
+    grep_targets: &mut Vec<String>,
+) -> Result<(), Fail> {
     for f in m.entry_files() {
         let p = root.join(&f);
         if p.is_file() {
-            let name = format!("entry/{}", p.file_name().map_or_else(String::new, |n| n.to_string_lossy().into_owned()));
-            put.put(&name, &read_text(&p)?, &f, "a page the modal's Entry names - what its statements must rest on")?;
+            let name = format!(
+                "entry/{}",
+                p.file_name()
+                    .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
+            );
+            put.put(
+                &name,
+                &read_text(&p)?,
+                &f,
+                "a page the modal's Entry names - what its statements must rest on",
+            )?;
         }
     }
-    let cands = if m.form() == "standard" { candidates(root, m)? } else { Vec::new() };
-    let mut listing = vec![format!("# Candidates for {} - {}, best first (the UNION rule; never cut)", m.cls, cands.len()), String::new()];
+    let cands = if m.form() == "standard" {
+        candidates(root, m)?
+    } else {
+        Vec::new()
+    };
+    let mut listing = vec![
+        format!(
+            "# Candidates for {} - {}, best first (the UNION rule; never cut)",
+            m.cls,
+            cands.len()
+        ),
+        String::new(),
+    ];
     for (i, (score, rel, head_, tags, hits, first)) in cands.iter().enumerate() {
-        let tags = if tags.is_empty() { "-".to_owned() } else { tags.join(",") };
-        listing.push(format!("{}. `{rel}` - {head_}  [tags {tags}; term hits {hits}; score {score}]", i + 1));
+        let tags = if tags.is_empty() {
+            "-".to_owned()
+        } else {
+            tags.join(",")
+        };
+        listing.push(format!(
+            "{}. `{rel}` - {head_}  [tags {tags}; term hits {hits}; score {score}]",
+            i + 1
+        ));
         if i < 30 {
             listing.push(format!("   {first}"));
         }
@@ -402,69 +548,120 @@ fn research_parts(root: &Path, m: &Modal, put: &mut Put, grep_targets: &mut Vec<
     put.put("candidates.md", &(listing.join("\n") + "\n"), ME, "every question that may answer what the modal leaves open (gaps) - the top ten are files under cand/, every page under record/")?;
     std::fs::create_dir(put.out.join("cand")).map_err(fail)?;
     for (_, rel, ..) in cands.iter().take(TOP) {
-        let name = Path::new(rel).file_name().map_or_else(String::new, |n| n.to_string_lossy().into_owned());
+        let name = Path::new(rel)
+            .file_name()
+            .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
         std::fs::copy(root.join(rel), put.out.join("cand").join(name)).map_err(fail)?;
     }
     grep_targets.push("cand/".to_owned());
     std::fs::create_dir(put.out.join("record")).map_err(fail)?;
     for p in question_pages(root) {
-        std::fs::copy(&p, put.out.join("record").join(p.file_name().unwrap_or_default())).map_err(fail)?;
+        std::fs::copy(
+            &p,
+            put.out
+                .join("record")
+                .join(p.file_name().unwrap_or_default()),
+        )
+        .map_err(fail)?;
     }
     grep_targets.push("record/".to_owned());
     Ok(())
 }
 
 /// The refusals before a bundle is written; Some(exit) where one stands.
-fn held_back(run: &mut Run, root: &Path, m: &Modal, for_: &str, reason: &str, rows: &[Unit]) -> Result<Result<(bool, String), i32>, Fail> {
+fn held_back(
+    run: &mut Run,
+    root: &Path,
+    m: &Modal,
+    (for_, reason, order_ok): (&str, &str, &str),
+    rows: &[Unit],
+) -> Result<Result<(bool, String), i32>, Fail> {
     let modal_rows: Vec<(String, String, String)> = rows
         .iter()
-        .filter(|u| u.check() == FORM_CHECK || u.check() == DEPICTION_CHECK || RESEARCH_CHECKS.contains(&u.check()))
+        .filter(|u| {
+            u.check() == FORM_CHECK
+                || u.check() == DEPICTION_CHECK
+                || RESEARCH_CHECKS.contains(&u.check())
+        })
         .map(|u| (u.slug.clone(), u.occasion.clone(), u.fingerprint.clone()))
         .collect();
     let refused = triage::refusal(root, m, for_, Some(&modal_rows))?;
     if !refused.is_empty() && split(reason).len() < 2 {
-        run.warn(&format!("modal-bundle: {refused}. A check the GM asked for, or a backfill: REASON=\"<why>\""));
+        run.warn(&format!(
+            "modal-bundle: {refused}. A check the GM asked for, or a backfill: REASON=\"<why>\""
+        ));
         return Ok(Err(3));
     }
     if !refused.is_empty() {
-        run.say(&format!("modal-bundle: bundled without its triage, because: {reason}"));
+        run.say(&format!(
+            "modal-bundle: bundled without its triage, because: {reason}"
+        ));
     }
     let held = order_hold(root, m, for_, rows);
-    let first_raw = std::env::var("CHECK_ORDER_OK").unwrap_or_default();
-    let first = strip(&first_raw).to_owned();
+    let first = strip(order_ok).to_owned();
     if !held.is_empty() && split(&first).len() < 2 {
         run.warn(&format!("modal-bundle: {held}. To bundle it anyway: CHECK_ORDER_OK=\"<why>\" (two words or more; the MANIFEST records it)"));
         return Ok(Err(3));
     }
     if !held.is_empty() {
-        run.say(&format!("modal-bundle: bundled out of order, because: {first}"));
+        run.say(&format!(
+            "modal-bundle: bundled out of order, because: {first}"
+        ));
     }
     Ok(Ok((!held.is_empty(), first)))
 }
 
+/// What a bundle is asked for: the check, the OUT given, the REASON and the CHECK_ORDER_OK escapes.
+pub(crate) struct Ask<'a> {
+    pub(crate) for_: &'a str,
+    pub(crate) out: &'a str,
+    pub(crate) reason: &'a str,
+    pub(crate) order_ok: &'a str,
+}
+
 /// One pop-up's bundle (`bundle`).
-pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, for_: &str, out_arg: &str, reason: &str) -> Result<i32, Fail> {
+pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> Result<i32, Fail> {
+    let (for_, out_arg, reason) = (ask.for_, ask.out, ask.reason);
     let now = modals::modals_now(root, true)?;
     let Some(m) = modals::find(&now, kind).cloned() else {
-        run.warn(&format!("modal-bundle: no About-form modal {} (a class name or key) under {}", py_repr(kind), MODAL_DIRS.join(", ")));
+        run.warn(&format!(
+            "modal-bundle: no About-form modal {} (a class name or key) under {}",
+            py_repr(kind),
+            MODAL_DIRS.join(", ")
+        ));
         return Ok(2);
     };
     let rows = owed_units(root, None, None, &["modal"], &m.uid())?;
-    let (held, first) = match held_back(run, root, &m, for_, reason, &rows)? {
+    let (held, first) = match held_back(run, root, &m, (for_, reason, ask.order_ok), &rows)? {
         Ok(got) => got,
         Err(code) => return Ok(code),
     };
-    let out = if out_arg.is_empty() { Path::new(DEFAULT_ROOT).join(format!("modal-{}-{for_}", m.uid().replace('/', "-"))) } else { py_path(out_arg) };
+    let out = if out_arg.is_empty() {
+        Path::new(DEFAULT_ROOT).join(format!("modal-{}-{for_}", m.uid().replace('/', "-")))
+    } else {
+        py_path(out_arg)
+    };
     if out.exists() {
         if !out.join("MANIFEST.md").is_file() {
-            run.warn(&format!("modal-bundle: {} exists and is not a bundle - choose another OUT", shown(&out)));
+            run.warn(&format!(
+                "modal-bundle: {} exists and is not a bundle - choose another OUT",
+                shown(&out)
+            ));
             return Ok(2);
         }
         remove_tree(&out)?;
     }
     std::fs::create_dir_all(&out).map_err(fail)?;
-    let mut put = Put { out: out.clone(), rows: Vec::new() };
-    put.put("modal.md", &render(root, &m)?, &m.origin, "the modal as its reader meets it - the thing you judge")?;
+    let mut put = Put {
+        out: out.clone(),
+        rows: Vec::new(),
+    };
+    put.put(
+        "modal.md",
+        &render(root, &m)?,
+        &m.origin,
+        "the modal as its reader meets it - the thing you judge",
+    )?;
     put.put("text.md", &format!("{}\n", rstrip(&m.doc)), &m.origin, "the modal's file line for line - an EDIT block's old text is one of these lines (or part of one), exactly, and its target is this origin")?;
     let g = guide(m.form());
     put.put(
@@ -473,7 +670,12 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, for_: &str, out_arg
         g,
         "which guidelines govern this modal - the rules are in your contract; name a rule (M#/P#) in every finding",
     )?;
-    put.put("prepass.txt", &prepass(root, &m), ME, "the mechanical findings - rule on each")?;
+    put.put(
+        "prepass.txt",
+        &prepass(root, &m),
+        ME,
+        "the mechanical findings - rule on each",
+    )?;
     let mut grep_targets: Vec<String> = Vec::new();
     if for_ == DEPICTION_CHECK {
         super::depiction::parts(run, root, &m, &mut put, &mut grep_targets)?;
@@ -501,33 +703,67 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, for_: &str, out_arg
         "| file | origin | what it is for |".to_owned(),
         "|---|---|---|".to_owned(),
     ];
-    manifest.extend(put.rows.iter().map(|(f, o, w)| format!("| `{f}` | `{o}` | {w} |")));
+    manifest.extend(
+        put.rows
+            .iter()
+            .map(|(f, o, w)| format!("| `{f}` | `{o}` | {w} |")),
+    );
     manifest.push(String::new());
     for (name, origin, _) in &put.rows {
-        manifest.push(format!("## `{name}` - origin `{origin}`\n\n```\n{}\n```\n", rstrip(&read_text(&out.join(name))?)));
+        manifest.push(format!(
+            "## `{name}` - origin `{origin}`\n\n```\n{}\n```\n",
+            rstrip(&read_text(&out.join(name))?)
+        ));
     }
     manifest.push("Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).\n".to_owned());
     // the escape line records the reason CHECK_ORDER_OK gave, only where the order held the bundle: the Python rebound both names
     // (`held` to the research-held wording, `first` to the last candidate's first words), a defect fixed here (449 T88)
-    let escape = if held { format!("check-order-escape: {first}\n") } else { String::new() };
+    let escape = if held {
+        format!("check-order-escape: {first}\n")
+    } else {
+        String::new()
+    };
     let text = manifest.join("\n") + "\n" + &owed_lines(root, &m, for_, &rows)? + &escape;
     let full = format!("{text}{}", earlier::section(root, &out, &text)?);
     write(&out.join("MANIFEST.md"), &full)?;
-    run.say(&format!("modal-bundle: {} file(s) in {} - hand the {for_} agent {}", put.rows.len(), shown(&out), shown(&out.join("MANIFEST.md"))));
+    run.say(&format!(
+        "modal-bundle: {} file(s) in {} - hand the {for_} agent {}",
+        put.rows.len(),
+        shown(&out),
+        shown(&out.join("MANIFEST.md"))
+    ));
     Ok(0)
 }
 
 /// ONE AGENT FOR SEVERAL POP-UPS OF ONE CHECK (feature 385 T02, plan D12): each its own bundle, one top MANIFEST.
-fn bundles(run: &mut Run, root: &Path, kinds: &[&str], for_: &str, out_arg: &str, reason: &str) -> Result<i32, Fail> {
-    let out = if out_arg.is_empty() { Path::new(DEFAULT_ROOT).join(format!("modal-batch-{for_}")) } else { py_path(out_arg) };
+fn bundles(run: &mut Run, root: &Path, kinds: &[&str], ask: &Ask<'_>) -> Result<i32, Fail> {
+    let (for_, out_arg) = (ask.for_, ask.out);
+    let out = if out_arg.is_empty() {
+        Path::new(DEFAULT_ROOT).join(format!("modal-batch-{for_}"))
+    } else {
+        py_path(out_arg)
+    };
     if out.exists() {
         remove_tree(&out)?;
     }
     std::fs::create_dir_all(&out).map_err(fail)?;
     let mut subs: Vec<PathBuf> = Vec::new();
     for (n, kind) in kinds.iter().enumerate() {
-        let sub = out.join(format!("{:02}-{}", n + 1, super::dash_runs(kind, char::is_ascii_alphanumeric)));
-        let code = bundle(run, root, kind, for_, &shown(&sub), reason)?;
+        let sub = out.join(format!(
+            "{:02}-{}",
+            n + 1,
+            super::dash_runs(kind, char::is_ascii_alphanumeric)
+        ));
+        let sub_out = shown(&sub);
+        let code = bundle(
+            run,
+            root,
+            kind,
+            &Ask {
+                out: &sub_out,
+                ..*ask
+            },
+        )?;
         if code != 0 {
             return Ok(code);
         }
@@ -537,9 +773,17 @@ fn bundles(run: &mut Run, root: &Path, kinds: &[&str], for_: &str, out_arg: &str
     let mut held = Vec::new();
     for s in &subs {
         let text = read_text(&s.join("MANIFEST.md"))?;
-        units.extend(py_lines(&text).into_iter().filter(|l| l.starts_with("unit: ")).map(str::to_owned));
+        units.extend(
+            py_lines(&text)
+                .into_iter()
+                .filter(|l| l.starts_with("unit: "))
+                .map(str::to_owned),
+        );
         if text.contains(earlier::HEAD) {
-            held.push(format!("`{}`", s.file_name().unwrap_or_default().to_string_lossy()));
+            held.push(format!(
+                "`{}`",
+                s.file_name().unwrap_or_default().to_string_lossy()
+            ));
         }
     }
     let mut parts = vec![
@@ -547,10 +791,17 @@ fn bundles(run: &mut Run, root: &Path, kinds: &[&str], for_: &str, out_arg: &str
         format!("owed-checks: {for_}\n"),
         "Judge EACH pop-up below from its own bundle, as your contract says, and reply with one section per pop-up, headed by its `unit:` line. The drawing pages repeat from bundle to bundle: read each page once.\n".to_owned(),
     ];
-    parts.extend(subs.iter().map(|s| format!("- `{}`", shown(&s.join("MANIFEST.md")))));
+    parts.extend(
+        subs.iter()
+            .map(|s| format!("- `{}`", shown(&s.join("MANIFEST.md")))),
+    );
     parts.push(String::new());
     if !held.is_empty() {
-        parts.push(format!("Earlier rounds: {} - each MANIFEST's `{}` section.", held.join(", "), earlier::HEAD));
+        parts.push(format!(
+            "Earlier rounds: {} - each MANIFEST's `{}` section.",
+            held.join(", "),
+            earlier::HEAD
+        ));
         parts.push(String::new());
     }
     parts.extend(units);
@@ -560,30 +811,55 @@ fn bundles(run: &mut Run, root: &Path, kinds: &[&str], for_: &str, out_arg: &str
 }
 
 fn specs() -> [Spec; 5] {
-    [Spec::value("--for"), Spec::value("--out"), Spec::value("--root"), Spec::flag("--prepass"), Spec::value("--reason")]
+    [
+        Spec::value("--for"),
+        Spec::value("--out"),
+        Spec::value("--root"),
+        Spec::flag("--prepass"),
+        Spec::value("--reason"),
+    ]
 }
 
 /// `record modal-bundle ...`.
 pub(crate) fn cli(args: &[String]) -> Reply {
     let p = match parse_with(args, &specs(), 1) {
-        Ok(p) if p.positional.is_empty() => return super::usage("modal-bundle", "the following arguments are required: kind"),
+        Ok(p) if p.positional.is_empty() => {
+            return super::usage("modal-bundle", "the following arguments are required: kind")
+        }
         Ok(p) if ORDER.contains(&p.text("--for", FORM_CHECK)) => p,
-        Ok(p) => return super::usage("modal-bundle", &format!("argument --for: invalid choice: {}", py_repr(p.text("--for", "")))),
+        Ok(p) => {
+            return super::usage(
+                "modal-bundle",
+                &format!(
+                    "argument --for: invalid choice: {}",
+                    py_repr(p.text("--for", ""))
+                ),
+            )
+        }
         Err(complaint) => return super::usage("modal-bundle", &complaint),
     };
     let root = super::resolve(p.text("--root", "."));
     let mut run = Run::new(&root);
-    let done = main(&mut run, &root, &p);
+    let order_ok = std::env::var("CHECK_ORDER_OK").unwrap_or_default();
+    let done = main(&mut run, &root, &p, &order_ok);
     run.reply(done)
 }
 
-fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
+fn main(run: &mut Run, root: &Path, p: &Parsed, order_ok: &str) -> Result<i32, Fail> {
     let kind = p.positional[0].as_str();
-    let (for_, out, reason) = (p.text("--for", FORM_CHECK), p.text("--out", ""), p.text("--reason", ""));
+    let ask = Ask {
+        for_: p.text("--for", FORM_CHECK),
+        out: p.text("--out", ""),
+        reason: p.text("--reason", ""),
+        order_ok,
+    };
     if p.on("--prepass") {
         let now = modals::modals_now(root, true)?;
         let Some(m) = modals::find(&now, kind) else {
-            run.warn(&format!("modal-prepass: no About-form modal {}", py_repr(kind)));
+            run.warn(&format!(
+                "modal-prepass: no About-form modal {}",
+                py_repr(kind)
+            ));
             return Ok(2);
         };
         run.out.push_str(&prepass(root, m));
@@ -591,9 +867,9 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
     }
     let kinds = split(kind);
     if kinds.len() > 1 {
-        return bundles(run, root, &kinds, for_, out, reason);
+        return bundles(run, root, &kinds, &ask);
     }
-    bundle(run, root, kind, for_, out, reason)
+    bundle(run, root, kind, &ask)
 }
 
 #[cfg(test)]

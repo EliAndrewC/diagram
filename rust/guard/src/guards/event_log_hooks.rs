@@ -497,7 +497,11 @@ fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>)
         .map_or_else(|| common_git_dir(root).join("l7r-events"), PathBuf::from);
     base.join(format!(
         "{}.jsonl",
-        if feature.is_empty() { "_unassigned" } else { feature }
+        if feature.is_empty() {
+            "_unassigned"
+        } else {
+            feature
+        }
     ))
 }
 

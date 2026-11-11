@@ -20,23 +20,29 @@ static TOP_START: LazyLock<Regex> =
     LazyLock::new(|| pyre(r"^(?:[-*]\s+\S|\*\*[A-Z][^*]{2,}\*\*|(?:FIX|NOTE)\s+M\d+\b)"));
 static MRULE: LazyLock<Regex> = LazyLock::new(|| pyre(r"\bM\d+(?:\.\d+)?\b"));
 static NOT_FINDING: LazyLock<Regex> = LazyLock::new(|| {
-    pyre(r"(?i)^(?:`?/tmp/l7r-check\S*`?\s*$|`?\S*MANIFEST\.md`?\s*$|(?:\*\*)?(?:ok|pass|passes|clean|confirmed|dismissed|ordinary english)\b)")
+    pyre(
+        r"(?i)^(?:`?/tmp/l7r-check\S*`?\s*$|`?\S*MANIFEST\.md`?\s*$|(?:\*\*)?(?:ok|pass|passes|clean|confirmed|dismissed|ordinary english)\b)",
+    )
 });
 static QUOTED: LazyLock<Regex> = LazyLock::new(|| {
     pyre("[\"\u{201c}'\u{2018}\u{300c}]([^\"\u{201d}'\u{2019}\u{300d}\n]{12,})[\"\u{201d}'\u{2019}\u{300d}]")
 });
 static PAGE_REF: LazyLock<Regex> = LazyLock::new(|| pyre(r"\b(\d{4})(?=[-.\s,;:)]|$)"));
 static CODE: LazyLock<Regex> = LazyLock::new(|| {
-    pyre(r"\b(?:D\d+|FR-\d+|SC-\d+|ACCURACY|REFERENCES|GAPS|COVERAGE|TRUTH|LINKS|VOCABULARY|SESSION NOTE|HISTORY)\b")
+    pyre(
+        r"\b(?:D\d+|FR-\d+|SC-\d+|ACCURACY|REFERENCES|GAPS|COVERAGE|TRUTH|LINKS|VOCABULARY|SESSION NOTE|HISTORY)\b",
+    )
 });
 static UNRECORDED: LazyLock<Regex> = LazyLock::new(|| {
-    pyre(r"(?i)no page (?:holds|gives|says|records)|needs new research|not recorded|unrecorded|no source gives")
+    pyre(
+        r"(?i)no page (?:holds|gives|says|records)|needs new research|not recorded|unrecorded|no source gives",
+    )
 });
 static MARKER: LazyLock<Regex> = LazyLock::new(|| pyre(r"^(?:(?:\*\*)?\d+[.)]\s+|[-*]\s+)"));
 static SENTENCES: LazyLock<Regex> = LazyLock::new(|| pyre(r"(?<=[.;])\s+|\n"));
 const STOP: [&str; 26] = [
-    "the", "a", "an", "of", "to", "in", "on", "and", "or", "is", "are", "was", "were", "it", "its", "this", "that", "with",
-    "as", "by", "for", "from", "be", "at", "not", "no",
+    "the", "a", "an", "of", "to", "in", "on", "and", "or", "is", "are", "was", "were", "it", "its",
+    "this", "that", "with", "as", "by", "for", "from", "be", "at", "not", "no",
 ];
 
 /// `" ".join(re.sub(r"[^a-z0-9 ]", " ", text.lower()).split())`.
@@ -44,9 +50,19 @@ pub(crate) fn words(text: &str) -> String {
     let lowered: String = text
         .to_lowercase()
         .chars()
-        .map(|c| if c.is_ascii_lowercase() || c.is_ascii_digit() { c } else { ' ' })
+        .map(|c| {
+            if c.is_ascii_lowercase() || c.is_ascii_digit() {
+                c
+            } else {
+                ' '
+            }
+        })
         .collect();
-    lowered.split(' ').filter(|w| !w.is_empty()).collect::<Vec<_>>().join(" ")
+    lowered
+        .split(' ')
+        .filter(|w| !w.is_empty())
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 /// A reply's findings, each WHOLE - its first line with its continuation lines and sub-bullets (`findings_of`).
@@ -67,7 +83,9 @@ pub(crate) fn findings_of(reply_text: &str) -> Vec<String> {
             open = true;
         } else if s.is_empty() || s.starts_with('#') {
             open = false;
-        } else if open && (ln.chars().next().is_some_and(is_space) || s.starts_with(['-', '*', '>'])) {
+        } else if open
+            && (ln.chars().next().is_some_and(is_space) || s.starts_with(['-', '*', '>']))
+        {
             if let Some(last) = out.last_mut() {
                 last.push(s.to_owned());
             }
@@ -129,7 +147,11 @@ fn insertion(o: &str, n: &str) -> Option<String> {
     let a: Vec<&str> = wa.split(' ').filter(|w| !w.is_empty()).collect();
     let b: Vec<&str> = wb.split(' ').filter(|w| !w.is_empty()).collect();
     let ops = opcodes(&a, &b);
-    if a.is_empty() || ops.iter().any(|op| matches!(op.0, Tag::Delete | Tag::Replace)) {
+    if a.is_empty()
+        || ops
+            .iter()
+            .any(|op| matches!(op.0, Tag::Delete | Tag::Replace))
+    {
         return None;
     }
     Some(
@@ -155,7 +177,8 @@ fn near_reversal(o: &str, n: &str, earlier: &[(String, String)]) -> bool {
     if let Some(inserted) = insertion(o, n) {
         let tail = trigrams(&inserted);
         return earlier.iter().any(|(eo, en)| {
-            let gone: HashSet<Vec<String>> = trigrams(eo).difference(&trigrams(en)).cloned().collect();
+            let gone: HashSet<Vec<String>> =
+                trigrams(eo).difference(&trigrams(en)).cloned().collect();
             !tail.is_disjoint(&gone)
         });
     }
@@ -167,16 +190,26 @@ fn near_reversal(o: &str, n: &str, earlier: &[(String, String)]) -> bool {
 }
 
 /// Each round's findings, `(mark, finding)` (`mark_rounds`); `others` are other checks' EDITs on the subject.
-pub(crate) fn mark_rounds(replies: &[String], others: &[(String, String)]) -> Vec<Vec<(String, String)>> {
+pub(crate) fn mark_rounds(
+    replies: &[String],
+    others: &[(String, String)],
+) -> Vec<Vec<(String, String)>> {
     let mut seen: Vec<String> = Vec::new();
     let mut edits: Vec<(String, String)> = others.to_vec();
     let mut out = Vec::new();
     for r in replies {
-        let blocks: Vec<(String, String)> = reply::blocks(r).into_iter().map(|(_, o, n)| (o, n)).collect();
+        let blocks: Vec<(String, String)> = reply::blocks(r)
+            .into_iter()
+            .map(|(_, o, n)| (o, n))
+            .collect();
         let mut marked = Vec::new();
         if verdict_of(r) != "clean" {
             for f in findings_of(r) {
-                let mark = if repeats(&f, &seen) { "REPEATED" } else { "NEW" };
+                let mark = if repeats(&f, &seen) {
+                    "REPEATED"
+                } else {
+                    "NEW"
+                };
                 marked.push((mark.to_owned(), f.clone()));
                 seen.push(f);
             }
@@ -191,12 +224,20 @@ pub(crate) fn mark_rounds(replies: &[String], others: &[(String, String)]) -> Ve
             if edits.iter().any(|(eo, en)| eo == n && en == o) {
                 marked.push((
                     "REVERSING".to_owned(),
-                    format!("EDIT {} -> {} undoes an earlier round's fix", py_repr(o), py_repr(n)),
+                    format!(
+                        "EDIT {} -> {} undoes an earlier round's fix",
+                        py_repr(o),
+                        py_repr(n)
+                    ),
                 ));
             } else if near_reversal(o, n, &edits) {
                 marked.push((
                     "REVERSING".to_owned(),
-                    format!("EDIT {} -> {} adds back words an earlier fix took out", py_repr(o), py_repr(n)),
+                    format!(
+                        "EDIT {} -> {} adds back words an earlier fix took out",
+                        py_repr(o),
+                        py_repr(n)
+                    ),
                 ));
             }
         }
@@ -229,7 +270,10 @@ pub(crate) fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
 
 /// A round's reply: the one the hook kept, else the last text of the agent's own transcript (`reply_of`).
 pub(crate) fn reply_of(v: &Value) -> String {
-    let kept = v.get("reply").and_then(Value::as_str).filter(|r| !r.is_empty());
+    let kept = v
+        .get("reply")
+        .and_then(Value::as_str)
+        .filter(|r| !r.is_empty());
     if let Some(path) = kept.map(Path::new).filter(|p| p.is_file()) {
         return read_text(path).unwrap_or_default();
     }
@@ -241,7 +285,8 @@ pub(crate) fn reply_of(v: &Value) -> String {
     if aid.is_empty() {
         return String::new();
     }
-    transcript_of(&transcripts(), &aid).map_or_else(String::new, |t| reply::reply_of(&t.to_string_lossy(), ""))
+    transcript_of(&transcripts(), &aid)
+        .map_or_else(String::new, |t| reply::reply_of(&t.to_string_lossy(), ""))
 }
 
 static LINKED: LazyLock<Regex> = LazyLock::new(|| pyre(r"research/questions/[^\s,;]+?\.html"));
@@ -293,7 +338,11 @@ pub(crate) fn last_edits(root: &Path, reply_text: &str, files: &[String]) -> Vec
             format!(
                 "- {}: {}: {} -> {}",
                 if done { "APPLIED" } else { "NOT APPLIED" },
-                if p.is_empty() { "(its file)" } else { p.as_str() },
+                if p.is_empty() {
+                    "(its file)"
+                } else {
+                    p.as_str()
+                },
                 py_repr(head(&o, 120)),
                 py_repr(head(&n, 120))
             )

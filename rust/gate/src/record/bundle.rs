@@ -152,7 +152,8 @@ pub(crate) fn slug(text: &str) -> String {
 }
 
 /// Python's `\s`: Unicode whitespace and the four separators `\x1c`-`\x1f` the `regex` crate's `\s` leaves out.
-const PY_SPACE: &str = r"\t-\r\x1c-\x1f \x85\xa0\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}";
+const PY_SPACE: &str =
+    r"\t-\r\x1c-\x1f \x85\xa0\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}";
 
 /// A pattern as Python's `re` reads it: `\s` and `\S` its whitespace, `\Z` the end of the text.
 pub(crate) fn pyre(pattern: &str) -> fancy_regex::Regex {
@@ -246,7 +247,10 @@ pub(crate) fn py_str(value: &serde_json::Value) -> String {
         Value::Null => "None".to_owned(),
         Value::Bool(b) => if *b { "True" } else { "False" }.to_owned(),
         Value::String(s) => s.clone(),
-        Value::Number(n) => n.as_f64().filter(|_| n.is_f64()).map_or_else(|| n.to_string(), l7r_guard::shared::pyjson::py_float),
+        Value::Number(n) => n
+            .as_f64()
+            .filter(|_| n.is_f64())
+            .map_or_else(|| n.to_string(), l7r_guard::shared::pyjson::py_float),
         other => py_value_repr(other),
     }
 }
@@ -256,10 +260,20 @@ pub(crate) fn py_value_repr(value: &serde_json::Value) -> String {
     use serde_json::Value;
     match value {
         Value::String(s) => py_repr(s),
-        Value::Array(items) => format!("[{}]", items.iter().map(py_value_repr).collect::<Vec<_>>().join(", ")),
+        Value::Array(items) => format!(
+            "[{}]",
+            items
+                .iter()
+                .map(py_value_repr)
+                .collect::<Vec<_>>()
+                .join(", ")
+        ),
         Value::Object(map) => format!(
             "{{{}}}",
-            map.iter().map(|(k, v)| format!("{}: {}", py_repr(k), py_value_repr(v))).collect::<Vec<_>>().join(", ")
+            map.iter()
+                .map(|(k, v)| format!("{}: {}", py_repr(k), py_value_repr(v)))
+                .collect::<Vec<_>>()
+                .join(", ")
         ),
         other => py_str(other),
     }
@@ -321,7 +335,10 @@ pub(crate) fn write(dest: &Path, text: &str) -> Result<(), Fail> {
 /// `shutil.copyfile(src, out / name)` after making its directory; the copy's name under `out`.
 pub(crate) fn copy(src: &Path, out: &Path, name: Option<&str>) -> Result<String, Fail> {
     let name = name.map_or_else(
-        || src.file_name().map_or_else(String::new, |n| n.to_string_lossy().into_owned()),
+        || {
+            src.file_name()
+                .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
+        },
         str::to_owned,
     );
     let dest = out.join(&name);
@@ -347,4 +364,4 @@ pub(crate) fn usage(verb: &str, complaint: &str) -> Reply {
 }
 
 #[cfg(test)]
-mod tests;
+pub(crate) mod tests;

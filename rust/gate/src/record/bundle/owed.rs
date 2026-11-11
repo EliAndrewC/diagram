@@ -21,7 +21,8 @@ pub(crate) const GATED: [&str; 5] = [
     "translation-check",
     "entry-drift",
 ];
-const NEEDS_REASON: &str = "needs a REASON - two words and eight characters - so the audit says why";
+const NEEDS_REASON: &str =
+    "needs a REASON - two words and eight characters - so the audit says why";
 
 static NUMBER: LazyLock<Regex> = LazyLock::new(|| re(r"^(\d{1,4})"));
 
@@ -85,7 +86,11 @@ pub(crate) fn owed_for_question(
         let drawing = q.contains(".drawing.");
         rows.retain(|u| {
             !u.subject().contains('#')
-                || u.subject().split_once('#').map_or("", |p| p.0).contains(".drawing") == drawing
+                || u.subject()
+                    .split_once('#')
+                    .map_or("", |p| p.0)
+                    .contains(".drawing")
+                    == drawing
         });
     }
     if for_ != "all" {
@@ -97,14 +102,22 @@ pub(crate) fn owed_for_question(
     }
     if !not_owed_ok.is_empty() {
         if !reason_ok(not_owed_ok) {
-            return Ok((Vec::new(), String::new(), format!("NOT_OWED_OK {NEEDS_REASON}")));
+            return Ok((
+                Vec::new(),
+                String::new(),
+                format!("NOT_OWED_OK {NEEDS_REASON}"),
+            ));
         }
         let checks: Vec<&str> = if for_ == "all" {
             GATED[..4].to_vec()
         } else {
             vec![for_]
         };
-        return Ok((tree_units(root, &qn, &checks)?, checks.join(" "), String::new()));
+        return Ok((
+            tree_units(root, &qn, &checks)?,
+            checks.join(" "),
+            String::new(),
+        ));
     }
     let every = owed_units(root, None, None, &FAMILIES, "")?;
     let listing = if every.is_empty() {
@@ -194,7 +207,10 @@ pub(crate) fn owed_for_key(
     if !rows.is_empty() {
         return Ok((rows, check.to_owned(), String::new()));
     }
-    for (name, value) in [("NEW", if whole { new } else { "" }), ("NOT_OWED_OK", not_owed_ok)] {
+    for (name, value) in [
+        ("NEW", if whole { new } else { "" }),
+        ("NOT_OWED_OK", not_owed_ok),
+    ] {
         if !value.is_empty() {
             return Ok(if reason_ok(value) {
                 (Vec::new(), check.to_owned(), String::new())
@@ -228,7 +244,10 @@ pub(crate) fn manifest_lines(rows: &[Unit], owed_checks: &str, escape: &str) -> 
     if !escape.is_empty() {
         lines.push(format!("not-owed: {escape}"));
     }
-    lines.extend(rows.iter().map(|u| format!("unit: {} {}", u.slug, u.fingerprint)));
+    lines.extend(
+        rows.iter()
+            .map(|u| format!("unit: {} {}", u.slug, u.fingerprint)),
+    );
     lines.extend(
         rows.iter()
             .filter(|u| !u.occasion.is_empty())
@@ -295,7 +314,11 @@ fn modals_for(docs: &[(String, String)], page: &str) -> Vec<String> {
                 .ok()
                 .flatten()
                 .and_then(|c| c.get(1))
-                .map(|m| m.as_str().trim_matches(l7r_guard::shared::py_text::is_space).to_owned());
+                .map(|m| {
+                    m.as_str()
+                        .trim_matches(l7r_guard::shared::py_text::is_space)
+                        .to_owned()
+                });
             format!("- {}", named.unwrap_or_else(|| cls.clone()))
         })
         .collect()
@@ -314,7 +337,11 @@ fn page_text(text: &str) -> String {
 }
 
 /// One question's part of an intro-check bundle: its research page whole, its drawing page, and the map elements written from it.
-pub(crate) fn intro_bundle_text(root: &Path, q: &str, docs: &mut Option<Vec<(String, String)>>) -> Result<String, Fail> {
+pub(crate) fn intro_bundle_text(
+    root: &Path,
+    q: &str,
+    docs: &mut Option<Vec<(String, String)>>,
+) -> Result<String, Fail> {
     let qn = question_of(q);
     let qdir = root.join(QUESTIONS);
     let prefix = format!("{qn}-");
@@ -334,7 +361,10 @@ pub(crate) fn intro_bundle_text(root: &Path, q: &str, docs: &mut Option<Vec<(Str
     let Some(page) = research.first() else {
         return Ok(String::new());
     };
-    let drawing = qdir.join(format!("{}.drawing.html", &page[..page.len() - ".html".len()]));
+    let drawing = qdir.join(format!(
+        "{}.drawing.html",
+        &page[..page.len() - ".html".len()]
+    ));
     let mut parts = vec![
         format!("=== QUESTION {qn} - origin `{QUESTIONS}/{page}`"),
         String::new(),
@@ -352,7 +382,10 @@ pub(crate) fn intro_bundle_text(root: &Path, q: &str, docs: &mut Option<Vec<(Str
         *docs = Some(modal_docs(root)?);
     }
     let found = modals_for(docs.as_deref().unwrap_or_default(), page);
-    parts.extend([String::new(), "--- the map elements written from it".to_owned()]);
+    parts.extend([
+        String::new(),
+        "--- the map elements written from it".to_owned(),
+    ]);
     if found.is_empty() {
         parts.push("- (none: no modal's Entry names this question)".to_owned());
     } else {

@@ -124,7 +124,11 @@ pub(crate) fn parse(args: &[String], specs: &[Spec]) -> Result<Parsed, String> {
 }
 
 /// [`parse`], taking up to `positionals` arguments that are no flag as positional ones (`nargs="?"` each).
-pub(crate) fn parse_with(args: &[String], specs: &[Spec], positionals: usize) -> Result<Parsed, String> {
+pub(crate) fn parse_with(
+    args: &[String],
+    specs: &[Spec],
+    positionals: usize,
+) -> Result<Parsed, String> {
     let mut out = Parsed::default();
     let mut i = 0;
     while i < args.len() {

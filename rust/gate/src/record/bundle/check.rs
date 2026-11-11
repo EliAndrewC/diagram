@@ -14,7 +14,10 @@ use l7r_guard::shared::pyjson;
 use serde_json::Value;
 
 use super::owed::{self as bo};
-use super::{copy, earlier, findall, head, hit, py_path, pyre, relative, remove_tree, rstrip, shown, slug, today, write, Run, DEFAULT_ROOT, MANIFEST};
+use super::{
+    copy, earlier, findall, head, hit, py_path, pyre, relative, remove_tree, rstrip, shown, slug,
+    today, write, Run, DEFAULT_ROOT, MANIFEST,
+};
 use crate::record::args::{parse_with, Parsed, Spec};
 use crate::record::leaves::fragments_for;
 use crate::record::modals;
@@ -41,7 +44,8 @@ static URL: LazyLock<Regex> = LazyLock::new(|| pyre(r#"https?://[^\s<"]+"#));
 static BLOCK: LazyLock<Regex> = LazyLock::new(|| {
     pyre(r"(?s)<(p|li|blockquote|td|dd)\b[^>]*>.*?(?:</\1>|(?=<(?:p|li|blockquote|td|dd)\b)|\Z)")
 });
-pub(crate) static NOTE_LI: LazyLock<Regex> = LazyLock::new(|| pyre(r#"(?s)<li data-note="([^"]+)">.*?</li>\n?"#));
+pub(crate) static NOTE_LI: LazyLock<Regex> =
+    LazyLock::new(|| pyre(r#"(?s)<li data-note="([^"]+)">.*?</li>\n?"#));
 static NESTED_OPEN: LazyLock<Regex> = LazyLock::new(|| pyre(r"<(?:ul|ol)\b[^>]*>\s*\Z"));
 static LI_TAG: LazyLock<Regex> = LazyLock::new(|| pyre(r"<(/?)li\b[^>]*>"));
 static NESTED: LazyLock<Regex> = LazyLock::new(|| pyre(r"(?s)<(ul|ol)\b.*</\1>"));
@@ -89,7 +93,9 @@ pub(crate) fn url_of(entry_html: &str) -> String {
         return String::new();
     };
     let mut url = unescape(found.as_str());
-    while url.ends_with(['.', ',', ';', ':']) || (url.ends_with(')') && url.matches(')').count() > url.matches('(').count()) {
+    while url.ends_with(['.', ',', ';', ':'])
+        || (url.ends_with(')') && url.matches(')').count() > url.matches('(').count())
+    {
         url.pop();
     }
     url
@@ -136,12 +142,19 @@ fn kind_key(root: &Path, name: &str) -> Result<String, Fail> {
 fn blocks(html: &str) -> Vec<(usize, usize, String, String)> {
     let mut out = Vec::new();
     for c in BLOCK.captures_iter(html).flatten() {
-        let (m, tag) = (c.get(0).unwrap_or_else(|| unreachable!()), c.get(1).map_or("", |g| g.as_str()));
+        let (m, tag) = (
+            c.get(0).unwrap_or_else(|| unreachable!()),
+            c.get(1).map_or("", |g| g.as_str()),
+        );
         let (whole, end) = (m.as_str(), m.end());
         if tag == "li" && !whole.ends_with("</li>") && hit(&NESTED_OPEN, whole) {
             let (mut depth, mut pos) = (1i64, end);
             for t in LI_TAG.captures_iter(&html[end..]).flatten() {
-                depth += if t.get(1).is_some_and(|g| !g.as_str().is_empty()) { -1 } else { 1 };
+                depth += if t.get(1).is_some_and(|g| !g.as_str().is_empty()) {
+                    -1
+                } else {
+                    1
+                };
                 if depth == 0 {
                     pos = end + t.get(0).map_or(0, |g| g.end());
                     break;
@@ -149,7 +162,12 @@ fn blocks(html: &str) -> Vec<(usize, usize, String, String)> {
             }
             if depth == 0 {
                 let whole = &html[m.start()..pos];
-                out.push((m.start(), pos, whole.to_owned(), NESTED.replace_all(whole, "").into_owned()));
+                out.push((
+                    m.start(),
+                    pos,
+                    whole.to_owned(),
+                    NESTED.replace_all(whole, "").into_owned(),
+                ));
                 continue;
             }
         }
@@ -186,7 +204,11 @@ pub(crate) fn excerpt(fragment_html: &str, keys: &HashSet<String>, bare: bool) -
     }
     let what = format!(
         "only the blocks carrying the named notes{}",
-        if bare { ", and every block carrying none" } else { "" }
+        if bare {
+            ", and every block carrying none"
+        } else {
+            ""
+        }
     );
     format!(
         "{}<!-- an EXCERPT: {what} -->\n{}\n",
@@ -200,10 +222,19 @@ fn inline(out: &Path, rows: &[(String, String, String)]) -> Result<String, Fail>
     let mut parts = Vec::new();
     for (name, origin, _) in rows {
         let path = out.join(name);
-        if !path.is_file() || matches!(name.as_str(), "glossary-variants.txt" | "quote-verbatim.json") || name.starts_with("pages") {
+        if !path.is_file()
+            || matches!(
+                name.as_str(),
+                "glossary-variants.txt" | "quote-verbatim.json"
+            )
+            || name.starts_with("pages")
+        {
             continue;
         }
-        parts.push(format!("## `{name}` - origin `{origin}`\n\n```\n{}\n```\n", rstrip(&read_text(&path)?)));
+        parts.push(format!(
+            "## `{name}` - origin `{origin}`\n\n```\n{}\n```\n",
+            rstrip(&read_text(&path)?)
+        ));
     }
     Ok(parts.join("\n"))
 }
@@ -212,7 +243,10 @@ fn inline(out: &Path, rows: &[(String, String, String)]) -> Result<String, Fail>
 pub(crate) fn fresh(out: &Path) -> Result<(), Fail> {
     if out.exists() && std::fs::read_dir(out).map_err(fail)?.next().is_some() {
         if !out.join(MANIFEST).is_file() {
-            return Err(format!("check-bundle: {} exists and is not a bundle - choose another OUT", shown(out)));
+            return Err(format!(
+                "check-bundle: {} exists and is not a bundle - choose another OUT",
+                shown(out)
+            ));
         }
         remove_tree(out)?;
     }
@@ -220,7 +254,11 @@ pub(crate) fn fresh(out: &Path) -> Result<(), Fail> {
 }
 
 /// The MANIFEST's head and every copy inlined.
-pub(crate) fn manifest(out: &Path, title: &str, rows: &[(String, String, String)]) -> Result<String, Fail> {
+pub(crate) fn manifest(
+    out: &Path,
+    title: &str,
+    rows: &[(String, String, String)],
+) -> Result<String, Fail> {
     let mut lines = vec![
         format!("# Check bundle - {title}"),
         String::new(),
@@ -232,7 +270,10 @@ pub(crate) fn manifest(out: &Path, title: &str, rows: &[(String, String, String)
         "| file | origin | what it is for |".to_owned(),
         "|---|---|---|".to_owned(),
     ];
-    lines.extend(rows.iter().map(|(f, o, w)| format!("| `{f}` | `{o}` | {w} |")));
+    lines.extend(
+        rows.iter()
+            .map(|(f, o, w)| format!("| `{f}` | `{o}` | {w} |")),
+    );
     lines.push(String::new());
     lines.push(inline(out, rows)?);
     lines.push("Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).".to_owned());
@@ -246,8 +287,16 @@ fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
     let mut lines = Vec::new();
     for rel in fragments {
         let path = root.join(rel);
-        let now = if path.is_file() { read_text(&path)? } else { String::new() };
-        let was = if base.is_empty() { String::new() } else { git(root, &["show", &format!("{base}:{rel}")]) };
+        let now = if path.is_file() {
+            read_text(&path)?
+        } else {
+            String::new()
+        };
+        let was = if base.is_empty() {
+            String::new()
+        } else {
+            git(root, &["show", &format!("{base}:{rel}")])
+        };
         if rel.ends_with(".notes.html") {
             let (old, new) = (read_notes(&was, ""), read_notes(&now, ""));
             let mut keys: Vec<&String> = new.iter().map(|(k, _)| k).collect();
@@ -258,7 +307,11 @@ fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
                     .map(|k| format!("changed-note: {rel} | {k}")),
             );
         } else {
-            let old: HashSet<String> = read_page(&was).blocks.into_iter().map(|b| b.words).collect();
+            let old: HashSet<String> = read_page(&was)
+                .blocks
+                .into_iter()
+                .map(|b| b.words)
+                .collect();
             lines.extend(
                 read_page(&now)
                     .blocks
@@ -269,7 +322,8 @@ fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
         }
     }
     let body = if lines.is_empty() {
-        "(none - every block and note predates this change: every finding is OUTSIDE THE CHANGE)".to_owned()
+        "(none - every block and note predates this change: every finding is OUTSIDE THE CHANGE)"
+            .to_owned()
     } else {
         lines.join("\n")
     };
@@ -282,7 +336,12 @@ pub(crate) fn with_earlier(root: &Path, out: &Path, text: &str) -> Result<String
 }
 
 /// A helper's output and exit: `translation-owed` is the port in this process, the rest the runner's (feature 383 D6).
-fn run_script(run: &mut Run, name: &str, args: &[String], root: &Path) -> Result<(i32, String), Fail> {
+fn run_script(
+    run: &mut Run,
+    name: &str,
+    args: &[String],
+    root: &Path,
+) -> Result<(i32, String), Fail> {
     if name == "translation_owed" {
         let got = crate::record::translation::cli(args);
         return Ok((got.code, got.stdout + &got.stderr));
@@ -325,25 +384,51 @@ fn helper_part(
     Ok(None)
 }
 
-fn copies(root: &Path, e: &Entry<'_>, fragments: &[String], rows: &mut Rows, keys: &mut Vec<String>) -> Result<(), Fail> {
+fn copies(
+    root: &Path,
+    e: &Entry<'_>,
+    fragments: &[String],
+    rows: &mut Rows,
+    keys: &mut Vec<String>,
+) -> Result<(), Fail> {
     let want = parts(e.for_);
     for rel in fragments {
         let notes_file = rel.ends_with(".notes.html");
-        if notes_file && !want.contains(&"notes") && !(e.for_ == "record-style" && !e.extra.is_empty()) {
+        if notes_file
+            && !want.contains(&"notes")
+            && !(e.for_ == "record-style" && !e.extra.is_empty())
+        {
             continue;
         }
-        let mut what = if notes_file { "the question's footnotes" } else { "the question, as its reader meets it" }.to_owned();
+        let mut what = if notes_file {
+            "the question's footnotes"
+        } else {
+            "the question, as its reader meets it"
+        }
+        .to_owned();
         let name = copy(&root.join(rel), &e.out, None)?;
         if !e.notes.is_empty() {
             let text = read_text(&root.join(rel))?;
-            let cut = if notes_file { notes_subset(&text, &e.notes) } else { excerpt(&text, &e.notes, e.bare) };
+            let cut = if notes_file {
+                notes_subset(&text, &e.notes)
+            } else {
+                excerpt(&text, &e.notes, e.bare)
+            };
             write(&e.out.join(&name), &cut)?;
             let mut named: Vec<&String> = e.notes.iter().collect();
             named.sort();
             what += &format!(
                 " - ONLY the notes {} and the blocks that carry them{}",
-                named.iter().map(|s| s.as_str()).collect::<Vec<_>>().join(", "),
-                if e.bare { ", and every block that carries no note" } else { "" }
+                named
+                    .iter()
+                    .map(|s| s.as_str())
+                    .collect::<Vec<_>>()
+                    .join(", "),
+                if e.bare {
+                    ", and every block that carries no note"
+                } else {
+                    ""
+                }
             );
         }
         if notes_file {
@@ -362,7 +447,11 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
         run.warn(&format!("check-bundle: Q={} names no question - name one by its number, e.g. make check-bundle Q=0041", super::py_repr(q)));
         return Ok(2);
     }
-    let found_kind = if e.kind.is_empty() { None } else { kind_docstring(root, e.kind)? };
+    let found_kind = if e.kind.is_empty() {
+        None
+    } else {
+        kind_docstring(root, e.kind)?
+    };
     if !e.kind.is_empty() && found_kind.is_none() {
         run.warn(&format!("check-bundle: no modal class {} under {CLASSES} or {COMPOUND_KINDS} - KIND is the modal's class name as written in its classes file, case and all (KIND=Stables, or household.Well when two modules share a name)", super::py_repr(e.kind)));
         return Ok(2);
@@ -370,8 +459,18 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
     fresh(&e.out)?;
     let (mut rows, mut keys): (Rows, Vec<String>) = (Vec::new(), Vec::new());
     if let Some((origin, doc)) = &found_kind {
-        write(&e.out.join("kind.txt"), &format!("class {}  ({origin})\n\n{doc}\n", e.kind))?;
-        rows.push(("kind.txt".to_owned(), origin.clone(), format!("for entry-drift: the modal `{}` - its docstring, which IS what the map says", e.kind)));
+        write(
+            &e.out.join("kind.txt"),
+            &format!("class {}  ({origin})\n\n{doc}\n", e.kind),
+        )?;
+        rows.push((
+            "kind.txt".to_owned(),
+            origin.clone(),
+            format!(
+                "for entry-drift: the modal `{}` - its docstring, which IS what the map says",
+                e.kind
+            ),
+        ));
     }
     copies(root, e, &fragments, &mut rows, &mut keys)?;
     let want = parts(e.for_);
@@ -379,7 +478,11 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
     let out = e.out.clone();
     if want.contains(&"prepass") {
         let job = ("record_prepass", base_args.clone());
-        let row = ("prepass.txt", format!("make record-prepass Q={q}"), "for record-format: the WORDS TO RULE ON and the pattern candidates");
+        let row = (
+            "prepass.txt",
+            format!("make record-prepass Q={q}"),
+            "for record-format: the WORDS TO RULE ON and the pattern candidates",
+        );
         if let Some(code) = helper_part(run, root, &out, &mut rows, job, row)? {
             return Ok(code);
         }
@@ -392,7 +495,12 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
             text = super::keys::scoped_verbatim(&out, &text)?;
         }
         write(&out.join("quote-verbatim.txt"), &text)?;
-        rows.push(("quote-verbatim.txt".to_owned(), format!("make quote-verbatim Q={q}"), "for quote-check: which quotations are on their pages, character for character".to_owned()));
+        rows.push((
+            "quote-verbatim.txt".to_owned(),
+            format!("make quote-verbatim Q={q}"),
+            "for quote-check: which quotations are on their pages, character for character"
+                .to_owned(),
+        ));
         if code != 0 {
             run.warn(&text);
             return Ok(code);
@@ -409,7 +517,11 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
             }
             seen.push(key);
             if let Some(src) = registry_entry(root, key) {
-                rows.push((copy(&src, &out, Some(&format!("sources/{key}.html")))?, relative(&src, root), format!("the registry entry of `{key}`")));
+                rows.push((
+                    copy(&src, &out, Some(&format!("sources/{key}.html")))?,
+                    relative(&src, root),
+                    format!("the registry entry of `{key}`"),
+                ));
             }
         }
     }
@@ -421,7 +533,15 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
         }
     }
     if want.contains(&"translations") {
-        let job = ("translation_owed", vec!["--root".to_owned(), shown(root), "--q".to_owned(), q.to_owned()]);
+        let job = (
+            "translation_owed",
+            vec![
+                "--root".to_owned(),
+                shown(root),
+                "--q".to_owned(),
+                q.to_owned(),
+            ],
+        );
         let row = ("translations.txt", format!("make translation-owed Q={q}"), "for translation-check: each owed translated quotation, its translation and its original");
         if let Some(code) = helper_part(run, root, &out, &mut rows, job, row)? {
             return Ok(code);
@@ -431,17 +551,48 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
         rows.push((copy(&root.join(STYLE), &out, None)?, STYLE.to_owned(), "for record-style: the style guide - every rule you judge, with the GM's words it comes from".to_owned()));
     }
     if want.contains(&"variants") {
-        rows.push((copy(&root.join(VARIANTS), &out, None)?, VARIANTS.to_owned(), "the glossary's variant index: one line per defined word - grep it".to_owned()));
+        rows.push((
+            copy(&root.join(VARIANTS), &out, None)?,
+            VARIANTS.to_owned(),
+            "the glossary's variant index: one line per defined word - grep it".to_owned(),
+        ));
     }
     for path in e.extra {
-        let src = if Path::new(path).is_absolute() { py_path(path) } else { root.join(py_path(path)) };
-        let name = format!("extra/{}", src.file_name().map_or_else(String::new, |n| n.to_string_lossy().into_owned()));
-        rows.push((copy(&src, &out, Some(&name))?, path.clone(), "named by the dispatcher".to_owned()));
+        let src = if Path::new(path).is_absolute() {
+            py_path(path)
+        } else {
+            root.join(py_path(path))
+        };
+        let name = format!(
+            "extra/{}",
+            src.file_name()
+                .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
+        );
+        rows.push((
+            copy(&src, &out, Some(&name))?,
+            path.clone(),
+            "named by the dispatcher".to_owned(),
+        ));
     }
-    let title = format!("question {q}{}", if e.for_ == "all" { String::new() } else { format!(", for {}", e.for_) });
-    let text = manifest(&out, &title, &rows)? + &e.owed + &changed_section(root, &fragments)? + &super::keys::images_section(&out, e.images)?;
+    let title = format!(
+        "question {q}{}",
+        if e.for_ == "all" {
+            String::new()
+        } else {
+            format!(", for {}", e.for_)
+        }
+    );
+    let text = manifest(&out, &title, &rows)?
+        + &e.owed
+        + &changed_section(root, &fragments)?
+        + &super::keys::images_section(&out, e.images)?;
     write(&out.join(MANIFEST), &with_earlier(root, &out, &text)?)?;
-    run.say(&format!("check-bundle: {} file(s) in {} - hand the agent {}", rows.len(), shown(&out), shown(&out.join(MANIFEST))));
+    run.say(&format!(
+        "check-bundle: {} file(s) in {} - hand the agent {}",
+        rows.len(),
+        shown(&out),
+        shown(&out.join(MANIFEST))
+    ));
     Ok(0)
 }
 
@@ -449,12 +600,23 @@ pub(crate) fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<
 fn print_notes(run: &mut Run, root: &Path, q: &str, keys: &HashSet<String>) -> Result<i32, Fail> {
     let found = fragments_for(q, root);
     if found.is_empty() || keys.is_empty() {
-        run.warn(&format!("notes: Q={q} KEYS=<key,key> - {}", if found.is_empty() { "no such question" } else { "name the keys" }));
+        run.warn(&format!(
+            "notes: Q={q} KEYS=<key,key> - {}",
+            if found.is_empty() {
+                "no such question"
+            } else {
+                "name the keys"
+            }
+        ));
         return Ok(2);
     }
     for rel in found {
         let text = read_text(&root.join(&rel))?;
-        let body = if rel.ends_with(".notes.html") { notes_subset(&text, keys) } else { excerpt(&text, keys, false) };
+        let body = if rel.ends_with(".notes.html") {
+            notes_subset(&text, keys)
+        } else {
+            excerpt(&text, keys, false)
+        };
         run.say(&format!("== {rel}\n{body}"));
     }
     Ok(0)
@@ -483,7 +645,12 @@ pub(crate) fn report_lines(full_text: &str) -> Vec<String> {
 fn batched_manifests(out: &Path, nums: &[usize]) -> String {
     let _ = std::fs::remove_file(out.join(MANIFEST));
     let mut lines = vec![format!("check-bundle: {} batches - dispatch each MANIFEST below, one agent each (there is no top-level one):", nums.len())];
-    lines.extend(nums.iter().map(|i| format!("  {}", shown(&out.join(format!("batch-{i}")).join(MANIFEST)))));
+    lines.extend(nums.iter().map(|i| {
+        format!(
+            "  {}",
+            shown(&out.join(format!("batch-{i}")).join(MANIFEST))
+        )
+    }));
     lines.join("\n")
 }
 
@@ -543,7 +710,15 @@ fn out_or(given: &str, default: String) -> PathBuf {
 pub(crate) fn cli(args: &[String]) -> Reply {
     let p = match parse_with(args, &specs(), 1) {
         Ok(p) if FORS.contains(&p.text("--for", "all")) => p,
-        Ok(p) => return super::usage("check-bundle", &format!("argument --for: invalid choice: {}", super::py_repr(p.text("--for", "")))),
+        Ok(p) => {
+            return super::usage(
+                "check-bundle",
+                &format!(
+                    "argument --for: invalid choice: {}",
+                    super::py_repr(p.text("--for", ""))
+                ),
+            )
+        }
         Err(complaint) => return super::usage("check-bundle", &complaint),
     };
     let root = super::resolve(p.text("--root", "."));
@@ -554,10 +729,22 @@ pub(crate) fn cli(args: &[String]) -> Reply {
 
 fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
     let q = p.positional.first().map_or("", String::as_str);
-    let (for_, not_owed_ok, new) = (p.text("--for", "all"), p.text("--not-owed-ok", ""), p.text("--new", ""));
-    let escape = if not_owed_ok.is_empty() { new } else { not_owed_ok };
+    let (for_, not_owed_ok, new) = (
+        p.text("--for", "all"),
+        p.text("--not-owed-ok", ""),
+        p.text("--new", ""),
+    );
+    let escape = if not_owed_ok.is_empty() {
+        new
+    } else {
+        not_owed_ok
+    };
     if !p.text("--keys", "").is_empty() {
-        let keys: Vec<String> = p.text("--keys", "").split_whitespace().map(str::to_owned).collect();
+        let keys: Vec<String> = p
+            .text("--keys", "")
+            .split_whitespace()
+            .map(str::to_owned)
+            .collect();
         return super::keys::keys_bundle(run, root, &keys, p.text("--out", ""), not_owed_ok);
     }
     let key = p.text("--key", "");
@@ -568,12 +755,28 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
             run.warn(&format!("check-bundle: REFUSED - {refusal}"));
             return Ok(3);
         }
-        let out = out_or(p.text("--out", ""), format!("key-{key}{}", if whole { "-whole" } else { "" }));
+        let out = out_or(
+            p.text("--out", ""),
+            format!("key-{key}{}", if whole { "-whole" } else { "" }),
+        );
         let owed = bo::manifest_lines(&rows, &checks, escape);
-        return super::keys::key_bundle(run, root, key, &out, (whole, p.text("--question", "")), &owed, &rows, p.list("--images"));
+        return super::keys::key_bundle(
+            run,
+            root,
+            key,
+            &out,
+            (whole, p.text("--question", "")),
+            &owed,
+            &rows,
+            p.list("--images"),
+        );
     }
     if for_ == "intro-check" {
-        let qs = if p.text("--qs", "").is_empty() { q } else { p.text("--qs", "") };
+        let qs = if p.text("--qs", "").is_empty() {
+            q
+        } else {
+            p.text("--qs", "")
+        };
         let qs: Vec<String> = qs.split_whitespace().map(str::to_owned).collect();
         return super::keys::intro_bundle(run, root, &qs, p.text("--out", ""), not_owed_ok);
     }
@@ -581,7 +784,15 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
         run.err.push_str("usage: l7r-gate record check-bundle\ncheck-bundle: error: Q (a question's number), or --key\n");
         return Ok(2);
     }
-    let mut wanted: HashSet<String> = p.text("--notes", "").split(',').map(|k| k.trim_matches(l7r_guard::shared::py_text::is_space).to_owned()).filter(|k| !k.is_empty()).collect();
+    let mut wanted: HashSet<String> = p
+        .text("--notes", "")
+        .split(',')
+        .map(|k| {
+            k.trim_matches(l7r_guard::shared::py_text::is_space)
+                .to_owned()
+        })
+        .filter(|k| !k.is_empty())
+        .collect();
     if p.on("--print-notes") {
         return print_notes(run, root, q, &wanted);
     }
@@ -601,13 +812,31 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
     if for_ == "entry-drift" && !kind.is_empty() {
         rows = bo::kind_units(&rows, &kind_key(root, kind)?);
         if rows.is_empty() && not_owed_ok.is_empty() {
-            run.warn(&format!("check-bundle: REFUSED - no entry-drift is owed on the modal {} by this delta", super::py_repr(kind)));
+            run.warn(&format!(
+                "check-bundle: REFUSED - no entry-drift is owed on the modal {} by this delta",
+                super::py_repr(kind)
+            ));
             return Ok(3);
         }
     }
     let owed = bo::manifest_lines(&rows, &checks, not_owed_ok);
-    let out = out_or(p.text("--out", ""), format!("q-{}{}", slug(q), if for_ == "all" { String::new() } else { format!("-{for_}") }));
-    let batches = if !wanted.is_empty() || for_ != "quote-check" { Vec::new() } else { note_batches(root, q)? };
+    let out = out_or(
+        p.text("--out", ""),
+        format!(
+            "q-{}{}",
+            slug(q),
+            if for_ == "all" {
+                String::new()
+            } else {
+                format!("-{for_}")
+            }
+        ),
+    );
+    let batches = if !wanted.is_empty() || for_ != "quote-check" {
+        Vec::new()
+    } else {
+        note_batches(root, q)?
+    };
     let bare = for_ == "quote-check" && bo::unfootnoted_owed(&rows);
     let entry = |out: PathBuf, notes: HashSet<String>, owed: String, bare: bool| Entry {
         q,
@@ -622,7 +851,11 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
         images: p.list("--images"),
     };
     if batches.len() > 1 {
-        run.say(&format!("check-bundle: the notes are over {} bytes - {} quote-check bundles, one agent each:", super::thousands(NOTES_BUDGET), batches.len()));
+        run.say(&format!(
+            "check-bundle: the notes are over {} bytes - {} quote-check bundles, one agent each:",
+            super::thousands(NOTES_BUDGET),
+            batches.len()
+        ));
         let all: Vec<(usize, HashSet<String>, Vec<Unit>)> = batches
             .iter()
             .enumerate()
@@ -632,11 +865,21 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
                 (i + 1, set, us)
             })
             .collect();
-        let owing: Vec<&(usize, HashSet<String>, Vec<Unit>)> = all.iter().filter(|(_, _, us)| !us.is_empty()).collect();
-        let chosen: Vec<&(usize, HashSet<String>, Vec<Unit>)> = if owing.is_empty() { all.iter().collect() } else { owing };
+        let owing: Vec<&(usize, HashSet<String>, Vec<Unit>)> =
+            all.iter().filter(|(_, _, us)| !us.is_empty()).collect();
+        let chosen: Vec<&(usize, HashSet<String>, Vec<Unit>)> = if owing.is_empty() {
+            all.iter().collect()
+        } else {
+            owing
+        };
         let mut codes = Vec::new();
         for (i, set, us) in &chosen {
-            let e = entry(out.join(format!("batch-{i}")), set.clone(), bo::manifest_lines(us, &checks, not_owed_ok), bare && *i == 1);
+            let e = entry(
+                out.join(format!("batch-{i}")),
+                set.clone(),
+                bo::manifest_lines(us, &checks, not_owed_ok),
+                bare && *i == 1,
+            );
             codes.push(entry_bundle(run, root, &e)?);
         }
         let nums: Vec<usize> = chosen.iter().map(|(i, _, _)| *i).collect();

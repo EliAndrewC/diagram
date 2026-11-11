@@ -32,14 +32,11 @@ impl Runner {
                 .stderr(Stdio::inherit())
                 .spawn()
                 .map_err(|e| format!("bundle-door: {}: {e}", self.script.display()))?;
-            let (Some(stdin), Some(stdout)) = (child.stdin.take(), child.stdout.take()) else {
-                return Err("bundle-door: no pipe".to_owned());
-            };
+            let pipes = child.stdin.take().zip(child.stdout.take());
+            let (stdin, stdout) = pipes.ok_or_else(|| "bundle-door: no pipe".to_owned())?;
             self.live = Some((child, stdin, BufReader::new(stdout)));
         }
-        self.live
-            .as_mut()
-            .ok_or_else(|| "bundle-door: not started".to_owned())
+        Ok(self.live.as_mut().unwrap_or_else(|| unreachable!()))
     }
 
     /// The verb's value, or the traceback the Python raised.
@@ -47,7 +44,10 @@ impl Runner {
         let (_, stdin, stdout) = self.start()?;
         let line = json!({"verb": verb, "args": args}).to_string() + "\n";
         let mut said = String::new();
-        if stdin.write_all(line.as_bytes()).and_then(|()| stdin.flush()).is_err()
+        if stdin
+            .write_all(line.as_bytes())
+            .and_then(|()| stdin.flush())
+            .is_err()
             || stdout.read_line(&mut said).unwrap_or(0) == 0
         {
             return Err(format!("bundle-door: no answer to {verb}"));
@@ -61,12 +61,20 @@ impl Runner {
     }
 
     /// `main(args)` of one of the helpers `check_bundle` ran in its own process (feature 383 D6): (its exit, stdout then stderr).
-    pub(crate) fn helper(&mut self, name: &str, args: &[String], root: &Path) -> Result<(i32, String), Fail> {
+    pub(crate) fn helper(
+        &mut self,
+        name: &str,
+        args: &[String],
+        root: &Path,
+    ) -> Result<(i32, String), Fail> {
         let got = self.ask("run", json!([name, args, root.to_string_lossy()]))?;
         let code = got.get(0).and_then(Value::as_i64).unwrap_or(1);
         Ok((
             i32::try_from(code).unwrap_or(1),
-            got.get(1).and_then(Value::as_str).unwrap_or_default().to_owned(),
+            got.get(1)
+                .and_then(Value::as_str)
+                .unwrap_or_default()
+                .to_owned(),
         ))
     }
 }

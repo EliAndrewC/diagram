@@ -28,7 +28,13 @@ fn feature_start(root: &Path) -> f64 {
     let spec = d.join("spec.md");
     let log = git(
         root,
-        &["log", "--diff-filter=A", "--format=%ct", "--", &spec.to_string_lossy()],
+        &[
+            "log",
+            "--diff-filter=A",
+            "--format=%ct",
+            "--",
+            &spec.to_string_lossy(),
+        ],
     );
     log.split_whitespace()
         .filter(|x| x.chars().all(|c| c.is_ascii_digit()))
@@ -44,7 +50,12 @@ fn num(v: &Value, key: &str) -> f64 {
 fn strs(v: &Value, key: &str) -> Vec<String> {
     v.get(key)
         .and_then(Value::as_array)
-        .map(|a| a.iter().filter_map(Value::as_str).map(str::to_owned).collect())
+        .map(|a| {
+            a.iter()
+                .filter_map(Value::as_str)
+                .map(str::to_owned)
+                .collect()
+        })
         .unwrap_or_default()
 }
 
@@ -60,28 +71,49 @@ pub(crate) fn dispatches(state: &Value) -> Vec<&Value> {
 }
 
 /// The returned dispatches of `check` on `subject` since `since`, oldest first; a note-scoped bundle's only where they read one of its notes or the page.
-fn rounds<'a>(state: &'a Value, check: &str, subject: &str, since: f64, notes: &[String]) -> Vec<&'a Value> {
+fn rounds<'a>(
+    state: &'a Value,
+    check: &str,
+    subject: &str,
+    since: f64,
+    notes: &[String],
+) -> Vec<&'a Value> {
     dispatches(state)
         .into_iter()
         .filter(|v| {
             v.get("check").and_then(Value::as_str) == Some(check)
                 && strs(v, "subjects").iter().any(|s| s == subject)
                 && num(v, "t") >= since
-                && !matches!(v.get("state").and_then(Value::as_str), Some("pending" | "running"))
+                && !matches!(
+                    v.get("state").and_then(Value::as_str),
+                    Some("pending" | "running")
+                )
         })
         .filter(|v| {
             let read = v.get("notes").and_then(Value::as_array);
             notes.is_empty()
-                || read.is_none_or(|r| r.is_empty() || r.iter().filter_map(Value::as_str).any(|n| notes.iter().any(|k| k == n)))
+                || read.is_none_or(|r| {
+                    r.is_empty()
+                        || r.iter()
+                            .filter_map(Value::as_str)
+                            .any(|n| notes.iter().any(|k| k == n))
+                })
         })
         .collect()
 }
 
 fn name(check: &str, subject: &str, i: usize) -> String {
-    format!("{DIR}/{check}-{}-round-{i}.md", dash_runs(subject, char::is_ascii_alphanumeric))
+    format!(
+        "{DIR}/{check}-{}-round-{i}.md",
+        dash_runs(subject, char::is_ascii_alphanumeric)
+    )
 }
 
-fn ruling_lines(rulings: &serde_json::Map<String, Value>, check: &str, subject: &str) -> Vec<String> {
+fn ruling_lines(
+    rulings: &serde_json::Map<String, Value>,
+    check: &str,
+    subject: &str,
+) -> Vec<String> {
     let prefix = format!("round:{check}|{subject}@");
     let mut keyed: Vec<(&String, &Value)> = rulings.iter().collect();
     keyed.sort_by_key(|(t, _)| core::round_no(t));
@@ -95,7 +127,10 @@ fn ruling_lines(rulings: &serde_json::Map<String, Value>, check: &str, subject: 
                 text("ruling").unwrap_or_else(|| "?".to_owned()),
                 text("why").unwrap_or_else(|| "(no reason recorded)".to_owned())
             );
-            if let Some(what) = r.get("what").filter(|w| !l7r_guard::shared::checks::falsy(Some(w))) {
+            if let Some(what) = r
+                .get("what")
+                .filter(|w| !l7r_guard::shared::checks::falsy(Some(w)))
+            {
                 line += &format!(" | what the next round looks at: {}", core::py_text(what));
             }
             line
@@ -131,17 +166,28 @@ fn unit_section(
                 && v.get("check").and_then(Value::as_str) != Some(check)
                 && num(v, "t") >= since
         })
-        .flat_map(|v| reply::blocks(&reply_of(v)).into_iter().map(|(_, o, n)| (o, n)))
+        .flat_map(|v| {
+            reply::blocks(&reply_of(v))
+                .into_iter()
+                .map(|(_, o, n)| (o, n))
+        })
         .collect();
     let files = subject_files(root, subject);
     let mut lines = vec![format!("### {check} on {subject}"), String::new()];
-    for (i, (r, marked)) in replies.iter().zip(mark_rounds(&replies, &others)).enumerate() {
+    for (i, (r, marked)) in replies
+        .iter()
+        .zip(mark_rounds(&replies, &others))
+        .enumerate()
+    {
         let i = i + 1;
         if r.is_empty() {
             lines.push(format!("**Round {i}** - no reply kept"));
         } else {
             let v = verdict_of(r);
-            lines.push(format!("**Round {i}** - verdict: {}", if v.is_empty() { "none read" } else { &v }));
+            lines.push(format!(
+                "**Round {i}** - verdict: {}",
+                if v.is_empty() { "none read" } else { &v }
+            ));
             write(&out.join(name(check, subject, i)), r)?;
             lines.push(format!("The whole reply: `{}`.", name(check, subject, i)));
         }
@@ -186,7 +232,9 @@ pub(crate) fn section(root: &Path, out: &Path, manifest: &str) -> Result<String,
     let mut body = Vec::new();
     for c in &checks {
         for s in &subjects {
-            body.extend(unit_section(root, out, &state, &rulings, c, s, since, &notes)?);
+            body.extend(unit_section(
+                root, out, &state, &rulings, c, s, since, &notes,
+            )?);
         }
     }
     Ok(if body.is_empty() {
