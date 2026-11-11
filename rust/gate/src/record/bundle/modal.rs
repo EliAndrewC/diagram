@@ -478,13 +478,10 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, for_: &str, out_arg
     if for_ == DEPICTION_CHECK {
         super::depiction::parts(run, root, &m, &mut put, &mut grep_targets)?;
     }
-    // the Python rebound `held` here to the research-held wording, so a form bundle's escape line follows that list (kept as it ran)
-    let mut held_escape = held;
     if for_ == FORM_CHECK {
-        let held = research_held(root, &m.uid(), &m.doc);
-        held_escape = !held.is_empty();
-        if held_escape {
-            let list: Vec<String> = held.iter().map(|h| format!("- {}", py_repr(h))).collect();
+        let fixed = research_held(root, &m.uid(), &m.doc);
+        if !fixed.is_empty() {
+            let list: Vec<String> = fixed.iter().map(|h| format!("- {}", py_repr(h))).collect();
             put.put("research-held.md", &format!("# Wording the research rounds fixed - keep it\n\n{}\n", list.join("\n")), ME, "what modal-research rounds wrote and the record backs: a form EDIT never drops or widens these words")?;
         }
     }
@@ -510,7 +507,9 @@ pub(crate) fn bundle(run: &mut Run, root: &Path, kind: &str, for_: &str, out_arg
         manifest.push(format!("## `{name}` - origin `{origin}`\n\n```\n{}\n```\n", rstrip(&read_text(&out.join(name))?)));
     }
     manifest.push("Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).\n".to_owned());
-    let escape = if held_escape { format!("check-order-escape: {first}\n") } else { String::new() };
+    // the escape line records the reason CHECK_ORDER_OK gave, only where the order held the bundle: the Python rebound both names
+    // (`held` to the research-held wording, `first` to the last candidate's first words), a defect fixed here (449 T88)
+    let escape = if held { format!("check-order-escape: {first}\n") } else { String::new() };
     let text = manifest.join("\n") + "\n" + &owed_lines(root, &m, for_, &rows)? + &escape;
     let full = format!("{text}{}", earlier::section(root, &out, &text)?);
     write(&out.join("MANIFEST.md"), &full)?;
