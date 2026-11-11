@@ -9,7 +9,7 @@ use l7r_guard::shared::py_text::{collapse, is_space, strip};
 use crate::record::units::re;
 
 /// The classes a backing may name besides question files (spec FR-001).
-pub(crate) const CLASSES: [&str; 6] = [
+pub const CLASSES: [&str; 6] = [
     "GUESS",
     "UNRESEARCHED",
     "CONVENTION",
@@ -19,10 +19,10 @@ pub(crate) const CLASSES: [&str; 6] = [
 ];
 
 /// What every refusal prints, so the fix is in the message (the project's guard doctrine).
-pub(crate) const GRAMMAR: &str = "a claim is one line of a `Research:` docstring section: `<label> - <backing>[: <what the code does>]`, the backing being question files (`research/questions/NNNN-<id>.html` or `.drawing.html`, comma-separated), `GUESS [<drawing page>]` (searched, silent; the `.drawing.html` that records the guess), `UNRESEARCHED` (not yet searched), `CONVENTION`, `DEVIATION <question file>`, `CANON` (the GM's setting canon or ruling), or `NONE` (no physical decision); one claim may sit on the header line (`Research: <label> - <backing>`); a constant's claim is a string literal directly after its assignment; a module's claims are inherited by its units that carry none";
+pub const GRAMMAR: &str = "a claim is one line of a `Research:` docstring section: `<label> - <backing>[: <what the code does>]`, the backing being question files (`research/questions/NNNN-<id>.html` or `.drawing.html`, comma-separated), `GUESS [<drawing page>]` (searched, silent; the `.drawing.html` that records the guess), `UNRESEARCHED` (not yet searched), `CONVENTION`, `DEVIATION <question file>`, `CANON` (the GM's setting canon or ruling), or `NONE` (no physical decision); one claim may sit on the header line (`Research: <label> - <backing>`); a constant's claim is a string literal directly after its assignment; a module's claims are inherited by its units that carry none";
 
 /// A question file, as a claim names it (feature 303's flat directory).
-pub(crate) static POINTER: LazyLock<Regex> =
+pub static POINTER: LazyLock<Regex> =
     LazyLock::new(|| re(r"research/questions/(\d{4})-([a-z0-9-]+?)(\.drawing)?\.html"));
 static POINTER_WHOLE: LazyLock<Regex> =
     LazyLock::new(|| re(r"\A(?:research/questions/(\d{4})-([a-z0-9-]+?)(\.drawing)?\.html)\z"));
@@ -30,18 +30,18 @@ static SECTION_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"\AResearch:(.*)\z")
 
 /// One claim: what is decided, what backs it, and an optional account of what the code does.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct Claim {
-    pub(crate) label: String,
+pub struct Claim {
+    pub label: String,
     /// One of [`CLASSES`], or `POINTER`.
-    pub(crate) backing: String,
-    pub(crate) pointers: Vec<String>,
-    pub(crate) account: String,
-    pub(crate) line: String,
+    pub backing: String,
+    pub pointers: Vec<String>,
+    pub account: String,
+    pub line: String,
 }
 
 impl Claim {
     /// The claim line as it enters a fingerprint: whitespace collapsed, each pointer reduced to its heading id.
-    pub(crate) fn normalized(&self) -> String {
+    pub fn normalized(&self) -> String {
         POINTER
             .replace_all(&collapse(&self.line), |c: &Captures| {
                 format!("{}{}", &c[2], c.get(3).map_or("", |m| m.as_str()))
@@ -51,7 +51,7 @@ impl Claim {
 }
 
 /// `str.partition(sep)`: (before, whether found, after).
-pub(crate) fn partition<'a>(text: &'a str, sep: &str) -> (&'a str, bool, &'a str) {
+pub fn partition<'a>(text: &'a str, sep: &str) -> (&'a str, bool, &'a str) {
     text.split_once(sep)
         .map_or((text, false, ""), |(a, b)| (a, true, b))
 }
@@ -65,7 +65,7 @@ fn whole(p: &str) -> Option<bool> {
 }
 
 /// One claim line, or the error naming what is wrong.
-pub(crate) fn parse_claim(line: &str) -> Result<Claim, String> {
+pub fn parse_claim(line: &str) -> Result<Claim, String> {
     let text = collapse(line);
     let (label, sep, rest) = partition(&text, " - ");
     if !sep || strip(label).is_empty() || strip(rest).is_empty() {
@@ -112,7 +112,7 @@ pub(crate) fn parse_claim(line: &str) -> Result<Claim, String> {
 }
 
 /// `str.expandtabs()`: each tab to the next multiple of eight columns, a line break restarting the count.
-pub(crate) fn expandtabs(text: &str) -> String {
+pub fn expandtabs(text: &str) -> String {
     let mut out = String::with_capacity(text.len());
     let mut col = 0usize;
     for c in text.chars() {
@@ -136,7 +136,7 @@ pub(crate) fn expandtabs(text: &str) -> String {
 }
 
 /// `str.lstrip()`.
-pub(crate) fn lstrip(text: &str) -> &str {
+pub fn lstrip(text: &str) -> &str {
     text.trim_start_matches(is_space)
 }
 
@@ -174,7 +174,7 @@ fn section_span(lines: &[&str]) -> Option<(usize, usize, bool)> {
 }
 
 /// The raw claim lines of a docstring's `Research:` section (continuations joined), or None when it has none.
-pub(crate) fn section_lines(doc: Option<&str>) -> Option<Vec<String>> {
+pub fn section_lines(doc: Option<&str>) -> Option<Vec<String>> {
     let doc = doc.filter(|d| !d.is_empty())?;
     let text = expandtabs(doc);
     let lines: Vec<&str> = text.split('\n').collect();
@@ -213,7 +213,7 @@ pub(crate) fn section_lines(doc: Option<&str>) -> Option<Vec<String>> {
 }
 
 /// (claims, errors) of one docstring; an error is a line that does not parse.
-pub(crate) fn claims_of(doc: Option<&str>) -> (Vec<Claim>, Vec<String>) {
+pub fn claims_of(doc: Option<&str>) -> (Vec<Claim>, Vec<String>) {
     let lines = section_lines(doc);
     let (mut claims, mut errors) = (Vec::new(), Vec::new());
     for line in lines.iter().flatten() {

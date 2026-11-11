@@ -49,7 +49,7 @@ const HEAD: [&str; 5] = [
 ];
 
 /// path -> the lines the delta added or changed, against the merge base with `base`, the working tree included (405 T36).
-pub(crate) fn changed_lines(root: &Path, base: &str) -> HashMap<String, HashSet<usize>> {
+pub fn changed_lines(root: &Path, base: &str) -> HashMap<String, HashSet<usize>> {
     let mb = git(root, &["merge-base", "HEAD", base]);
     let mb = l7r_guard::shared::py_text::strip(&mb);
     let mut out: HashMap<String, HashSet<usize>> = HashMap::new();
@@ -77,7 +77,7 @@ pub(crate) fn changed_lines(root: &Path, base: &str) -> HashMap<String, HashSet<
 }
 
 /// `src` (starting at line `first`) with each line the delta changed marked `+ `, the rest indented to match - or as it is when none is.
-pub(crate) fn mark_changed(src: &str, first: usize, changed: Option<&HashSet<usize>>) -> String {
+pub fn mark_changed(src: &str, first: usize, changed: Option<&HashSet<usize>>) -> String {
     let lines: Vec<&str> = src.split('\n').collect();
     let hit = |i: usize| changed.is_some_and(|c| c.contains(&(first + i)));
     if !(0..lines.len()).any(hit) {
@@ -92,7 +92,7 @@ pub(crate) fn mark_changed(src: &str, first: usize, changed: Option<&HashSet<usi
 }
 
 /// The source of `path::qualname`: a Rust item by the item scan, a `.py` unit by Python's syntax tree through the runner.
-pub(crate) fn context_source(
+pub fn context_source(
     reader: &mut Reader,
     root: &Path,
     reference: &str,
@@ -114,7 +114,7 @@ pub(crate) fn context_source(
 }
 
 /// `path::NAME` of each `const` or `static` of the `.rs` file at `path` that `source` names (feature 444 T16).
-pub(crate) fn rust_constants(root: &Path, path: &str, source: &str) -> Result<Vec<String>, Fail> {
+pub fn rust_constants(root: &Path, path: &str, source: &str) -> Result<Vec<String>, Fail> {
     let named: HashSet<&str> = CONSTANT_NAME
         .find_iter(source)
         .flatten()
@@ -351,7 +351,7 @@ fn questions_part(
 }
 
 /// Writes the bundle for `keys` (rows of `cur`) under `out`; the MANIFEST's path.
-pub(crate) fn bundle(
+pub fn bundle(
     reader: &mut Reader,
     root: &Path,
     cur: &Cur,

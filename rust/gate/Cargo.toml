@@ -13,6 +13,7 @@ name = "l7r_gate"
 fancy-regex = { workspace = true }
 l7r_gate_bundle = { path = "crates/bundle" }
 l7r_gate_checks = { path = "crates/checks" }
+l7r_gate_claims = { path = "crates/claims" }
 l7r_gate_cohort = { path = "crates/cohort" }
 l7r_gate_core = { path = "crates/core" }
 l7r_gate_owed = { path = "crates/owed" }

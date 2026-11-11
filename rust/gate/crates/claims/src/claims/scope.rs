@@ -21,7 +21,7 @@ const KEPT: &str = "claims-py-units.json";
 const KEEP: usize = 4;
 
 /// What reaches the Python half: the runner, started on the first miss, and the kept answers.
-pub(crate) struct Reader {
+pub struct Reader {
     tree: PathBuf,
     door: Option<Runner>,
     kept: Map<String, Value>,
@@ -31,18 +31,21 @@ pub(crate) struct Reader {
 }
 
 /// `L7R_CACHE_OFF` set to anything but empty or `0`.
-pub(crate) fn cache_off() -> bool {
+#[must_use]
+pub fn cache_off() -> bool {
     off(std::env::var("L7R_CACHE_OFF").ok().as_deref())
 }
 
 /// Whether a switch's value turns it on: anything but unset, empty or `0`.
-pub(crate) fn off(value: Option<&str>) -> bool {
+#[must_use]
+pub fn off(value: Option<&str>) -> bool {
     value.is_some_and(|v| !v.is_empty() && v != "0")
 }
 
 impl Reader {
     /// The reader of the scripts under `tree`, its answers kept in `keep`'s common git directory (none outside a repository, or with the cache off).
-    pub(crate) fn new(tree: &Path, keep: &Path) -> Self {
+    #[must_use]
+    pub fn new(tree: &Path, keep: &Path) -> Self {
         let path = (!cache_off())
             .then(|| crate::codeid::common_git_dir(keep))
             .flatten()
@@ -64,13 +67,17 @@ impl Reader {
     }
 
     /// The runner, started on its first verb.
-    pub(crate) fn door(&mut self) -> &mut Runner {
+    pub fn door(&mut self) -> &mut Runner {
         let tree = self.tree.clone();
         self.door.get_or_insert_with(|| Runner::new(&tree))
     }
 
     /// A verb of the runner.
-    pub(crate) fn ask(&mut self, verb: &str, args: &Value) -> Result<Value, Fail> {
+    ///
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn ask(&mut self, verb: &str, args: &Value) -> Result<Value, Fail> {
         self.door().ask(verb, args)
     }
 
@@ -97,7 +104,11 @@ impl Reader {
     }
 
     /// (the hamlet scope's `.py` units, those claimed outside it) at `skill`, from the kept answer or the runner.
-    pub(crate) fn py_units(
+    ///
+    /// # Errors
+    ///
+    /// Where what it reads, writes or runs fails: the error says which and why.
+    pub fn py_units(
         &mut self,
         skill: &Path,
         every: bool,
@@ -135,7 +146,7 @@ impl Reader {
     }
 
     /// The kept answers written back: this run's, then those kept before, at most [`KEEP`], by atomic rename.
-    pub(crate) fn save(&mut self) {
+    pub fn save(&mut self) {
         let Some(path) = self.path.clone() else {
             return;
         };
@@ -171,7 +182,11 @@ impl Drop for Reader {
 }
 
 /// Every unit in scope at `skill` with its module's errors (`all_units`); paths repository-relative under `repo_prefix`.
-pub(crate) fn all_units(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn all_units(
     reader: &mut Reader,
     skill: &Path,
     every: bool,

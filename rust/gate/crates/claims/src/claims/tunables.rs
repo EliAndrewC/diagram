@@ -41,7 +41,7 @@ static LINE_COMMENT: LazyLock<Regex> = LazyLock::new(|| re(r"//.*"));
 static STRING: LazyLock<Regex> = LazyLock::new(|| re(r#""(?:[^"\\]|\\.)*""#));
 
 /// `f"{v:g}"`: six significant digits, trailing zeros dropped, an exponent outside 1e-4..1e6.
-pub(crate) fn fmt_g(v: f64) -> String {
+pub fn fmt_g(v: f64) -> String {
     if v == 0.0 {
         return if v.is_sign_negative() {
             "-0".to_owned()
@@ -93,7 +93,7 @@ fn trivial(v: f64) -> bool {
 }
 
 /// (label, key, account) for every claim labeled one of [`OURS`] under `path`, sorted by label then key; with `figures_only`, only those naming a figure.
-pub(crate) fn tunables(cur: &Cur, path: &str, figures_only: bool) -> Vec<(String, String, String)> {
+pub fn tunables(cur: &Cur, path: &str, figures_only: bool) -> Vec<(String, String, String)> {
     let mut out: Vec<(String, String, String)> = cur
         .iter()
         .filter(|r| OURS.contains(&r.claim.backing.as_str()) && r.key.starts_with(path))
@@ -114,7 +114,7 @@ pub(crate) fn tunables(cur: &Cur, path: &str, figures_only: bool) -> Vec<(String
 }
 
 /// (function, line, value) for every non-trivial number in a Rust function's body its claims never state.
-pub(crate) fn unstated_rust(
+pub fn unstated_rust(
     source: &str,
     unit_text: &HashMap<String, String>,
 ) -> Vec<(String, usize, f64)> {
@@ -151,10 +151,10 @@ pub(crate) fn unstated_rust(
 }
 
 /// One audit line: (file, line, function, value).
-pub(crate) type Found = (String, usize, String, f64);
+pub type Found = (String, usize, String, f64);
 
 /// Every number `unstated` finds in the map code under `root` (and `path`): the `.py` files by the runner, the Rust here.
-pub(crate) fn inline(
+pub fn inline(
     reader: &mut Reader,
     root: &Path,
     cur: &Cur,
@@ -214,7 +214,7 @@ pub(crate) fn inline(
 }
 
 /// The inline audit, or its count by file.
-pub(crate) fn render_inline(found: &[Found], count: bool) -> String {
+pub fn render_inline(found: &[Found], count: bool) -> String {
     let mut per: Vec<(String, usize)> = Vec::new();
     for (f, ..) in found {
         match per.iter_mut().find(|(g, _)| g == f) {
@@ -237,7 +237,7 @@ pub(crate) fn render_inline(found: &[Found], count: bool) -> String {
 }
 
 /// The list, or its counts, with the line that says what it is for.
-pub(crate) fn render(found: &[(String, String, String)], count: bool) -> String {
+pub fn render(found: &[(String, String, String)], count: bool) -> String {
     let tally = |l: &str| found.iter().filter(|f| f.0 == l).count();
     let head = if found.is_empty() {
         "tunables: none".to_owned()

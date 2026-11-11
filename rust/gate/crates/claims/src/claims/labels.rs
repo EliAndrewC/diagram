@@ -45,7 +45,7 @@ fn found(pat: &Regex, text: &str) -> bool {
 }
 
 /// The label faults of one claim, each with its fix.
-pub(crate) fn flag(
+pub fn flag(
     key: &str,
     claim: &Claim,
     qdir: &Path,
@@ -100,7 +100,7 @@ pub(crate) fn flag(
 }
 
 /// Every label fault among the claims of `keys`.
-pub(crate) fn flags(cur: &Cur, keys: &[String], qdir: &Path) -> Vec<String> {
+pub fn flags(cur: &Cur, keys: &[String], qdir: &Path) -> Vec<String> {
     let mut pages = HashMap::new();
     let mut seen = HashSet::new();
     let mut out = Vec::new();

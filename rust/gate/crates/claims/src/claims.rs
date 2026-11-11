@@ -22,15 +22,16 @@ mod labels;
 mod pager;
 mod reply;
 mod report;
-pub(crate) mod scope;
+pub mod scope;
 mod seam;
 mod triage;
 mod tunables;
 mod units;
 
-/// Every path the claims tools read at a tree: the base read's (the engine, the procedures, the questions) and the records.
-#[cfg(test)]
-pub(crate) fn read_paths() -> Vec<&'static str> {
+/// Every path the claims tools read at a tree: the base read's (the engine, the procedures, the questions) and the records (the push
+/// gate's test holds each judged).
+#[must_use]
+pub fn read_paths() -> Vec<&'static str> {
     let mut out = report::BASE_PATHS.to_vec();
     out.extend([
         index::INDEX,
@@ -42,7 +43,11 @@ pub(crate) fn read_paths() -> Vec<&'static str> {
 }
 
 /// What the round arbiter's bundle reads of the claims at `root` (`arbiter_bundle.claims_section`): each claim's backing and line by key, and the index.
-pub(crate) fn rows_and_index(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn rows_and_index(
     root: &Path,
 ) -> Result<(serde_json::Value, serde_json::Value), crate::record::repo::Fail> {
     let mut reader = scope::Reader::new(&crate::record::repo::tree_of(root), root);
@@ -64,7 +69,7 @@ pub(crate) fn rows_and_index(
 }
 
 /// A temporary directory's path no other run of this process or another takes: `tempfile.TemporaryDirectory`'s.
-pub(crate) fn temp_dir(tag: &str) -> PathBuf {
+pub fn temp_dir(tag: &str) -> PathBuf {
     static SEQ: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
     let n = SEQ.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
     std::env::temp_dir().join(format!(
@@ -75,7 +80,8 @@ pub(crate) fn temp_dir(tag: &str) -> PathBuf {
 }
 
 /// `git -C dir args...` fed `input`; its stdout, or None where it failed.
-pub(crate) fn stdin_git(dir: &Path, args: &[&str], input: &str) -> Option<String> {
+#[must_use]
+pub fn stdin_git(dir: &Path, args: &[&str], input: &str) -> Option<String> {
     let mut child = std::process::Command::new("git")
         .arg("-C")
         .arg(dir)
@@ -165,7 +171,8 @@ fn toplevel(root: &str) -> PathBuf {
 }
 
 /// `l7r-gate claims [--root DIR] <command> [...]`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
     let (root, cmd, rest) = match split_top(args) {
         Ok(t) => t,
         Err(why) => return usage("l7r-gate claims", &why),
@@ -214,7 +221,8 @@ pub(crate) fn cli(args: &[String]) -> Reply {
 }
 
 /// `l7r-gate tunables [--root DIR] [--path P] [--all] [--count] [--inline]`.
-pub(crate) fn tunables_cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn tunables_cli(args: &[String]) -> Reply {
     let specs = [
         Spec::value("--root"),
         Spec::value("--path"),
@@ -255,6 +263,7 @@ pub(crate) fn tunables_cli(args: &[String]) -> Reply {
 }
 
 /// `l7r-gate claims-door`: the Python callers' door, one process a run.
+#[must_use]
 pub fn door_cli() -> Reply {
     door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
 }

@@ -11,10 +11,10 @@ use serde_json::Value;
 use crate::record::repo::{fail, Fail};
 
 /// A mark older than this is stale: the landing's own claims wait, past which it would have stopped waiting anyway.
-pub(crate) const MAX_AGE_S: f64 = 1200.0;
+pub const MAX_AGE_S: f64 = 1200.0;
 
 /// `Path(p).resolve()`: absolute, every symlink of the part that exists resolved, the rest appended.
-pub(crate) fn resolved(p: &Path) -> PathBuf {
+pub fn resolved(p: &Path) -> PathBuf {
     let mut clean = PathBuf::new();
     for c in std::path::absolute(p).unwrap_or_default().components() {
         if c == Component::ParentDir {
@@ -63,14 +63,14 @@ fn name(bundle: &Path) -> String {
 }
 
 /// The time now, as `time.time()`.
-pub(crate) fn now() -> f64 {
+pub fn now() -> f64 {
     std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0.0, |d| d.as_secs_f64())
 }
 
 /// `bundle` is in flight: built, its check about to be dispatched.
-pub(crate) fn mark(root: &Path, bundle: &Path) -> Result<(), Fail> {
+pub fn mark(root: &Path, bundle: &Path) -> Result<(), Fail> {
     let d = dir(root);
     std::fs::create_dir_all(&d).map_err(fail)?;
     let text = format!(
@@ -82,7 +82,7 @@ pub(crate) fn mark(root: &Path, bundle: &Path) -> Result<(), Fail> {
 }
 
 /// `bundle`'s reply is recorded: no longer in flight.
-pub(crate) fn clear(root: &Path, bundle: &Path) {
+pub fn clear(root: &Path, bundle: &Path) {
     let _ = std::fs::remove_file(dir(root).join(name(bundle)));
 }
 
@@ -102,7 +102,7 @@ fn float(v: Option<&Value>) -> Result<f64, Fail> {
 }
 
 /// The bundles in flight at `now`: marked within [`MAX_AGE_S`] and not cleared.
-pub(crate) fn live(root: &Path, now: f64) -> Result<Vec<String>, Fail> {
+pub fn live(root: &Path, now: f64) -> Result<Vec<String>, Fail> {
     let d = dir(root);
     let mut files: Vec<PathBuf> = std::fs::read_dir(&d)
         .into_iter()

@@ -19,44 +19,44 @@ use super::units::{lstripped, Unit};
 use crate::record::repo::{fail, Fail};
 use crate::record::units::{digest, re};
 
-pub(crate) const INDEX: &str = "dev/claims-index.json";
-pub(crate) const DEFERRED: &str = "dev/claims-deferred.json";
-pub(crate) const STORE: &str = "dev/claims-pages.json";
-pub(crate) const QUESTIONS: &str = "research/questions";
-pub(crate) const SECTION_TRIAGE: &str = "section triage";
-pub(crate) const CODE_TRIAGE: &str = "code triage";
-pub(crate) const TRIAGED: [&str; 3] = ["triage", SECTION_TRIAGE, CODE_TRIAGE];
+pub const INDEX: &str = "dev/claims-index.json";
+pub const DEFERRED: &str = "dev/claims-deferred.json";
+pub const STORE: &str = "dev/claims-pages.json";
+pub const QUESTIONS: &str = "research/questions";
+pub const SECTION_TRIAGE: &str = "section triage";
+pub const CODE_TRIAGE: &str = "code triage";
+pub const TRIAGED: [&str; 3] = ["triage", SECTION_TRIAGE, CODE_TRIAGE];
 
 /// The index's rows, in the order they were read or written.
-pub(crate) type Index = Map<String, Value>;
+pub type Index = Map<String, Value>;
 /// The page snapshots: a findings digest -> its blocks' digests.
-pub(crate) type Store = Map<String, Value>;
+pub type Store = Map<String, Value>;
 
 /// One claim as the tree holds it now: its key, the unit, the claim, and its fingerprints.
 #[derive(Clone, Debug)]
-pub(crate) struct Row {
-    pub(crate) key: String,
-    pub(crate) unit: Rc<Unit>,
-    pub(crate) claim: Claim,
-    pub(crate) code: String,
-    pub(crate) research: String,
+pub struct Row {
+    pub key: String,
+    pub unit: Rc<Unit>,
+    pub claim: Claim,
+    pub code: String,
+    pub research: String,
 }
 
 impl Row {
-    pub(crate) fn uid(&self) -> String {
+    pub fn uid(&self) -> String {
         self.unit.uid()
     }
 }
 
 /// key -> Row, in the Python dict's order: a key set again keeps its place.
 #[derive(Default, Debug)]
-pub(crate) struct Cur {
+pub struct Cur {
     rows: Vec<Row>,
     at: HashMap<String, usize>,
 }
 
 impl Cur {
-    pub(crate) fn insert(&mut self, row: Row) {
+    pub fn insert(&mut self, row: Row) {
         if let Some(&i) = self.at.get(&row.key) {
             self.rows[i] = row;
         } else {
@@ -65,37 +65,37 @@ impl Cur {
         }
     }
 
-    pub(crate) fn get(&self, key: &str) -> Option<&Row> {
+    pub fn get(&self, key: &str) -> Option<&Row> {
         self.at.get(key).map(|&i| &self.rows[i])
     }
 
-    pub(crate) fn contains(&self, key: &str) -> bool {
+    pub fn contains(&self, key: &str) -> bool {
         self.at.contains_key(key)
     }
 
-    pub(crate) fn iter(&self) -> impl Iterator<Item = &Row> {
+    pub fn iter(&self) -> impl Iterator<Item = &Row> {
         self.rows.iter()
     }
 
-    pub(crate) fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.rows.len()
     }
 
     /// The rows by key, sorted.
-    pub(crate) fn sorted(&self) -> Vec<&Row> {
+    pub fn sorted(&self) -> Vec<&Row> {
         let mut v: Vec<&Row> = self.rows.iter().collect();
         v.sort_by(|a, b| a.key.cmp(&b.key));
         v
     }
 
     /// Every unit's uid.
-    pub(crate) fn uids(&self) -> HashSet<String> {
+    pub fn uids(&self) -> HashSet<String> {
         self.rows.iter().map(Row::uid).collect()
     }
 }
 
 /// Python's truth of a JSON value.
-pub(crate) fn truthy(v: Option<&Value>) -> bool {
+pub fn truthy(v: Option<&Value>) -> bool {
     match v {
         None | Some(Value::Null) => false,
         Some(Value::Bool(b)) => *b,
@@ -107,22 +107,22 @@ pub(crate) fn truthy(v: Option<&Value>) -> bool {
 }
 
 /// `row.get(key) == text`.
-pub(crate) fn is(row: &Value, key: &str, text: &str) -> bool {
+pub fn is(row: &Value, key: &str, text: &str) -> bool {
     row.get(key).and_then(Value::as_str) == Some(text)
 }
 
 /// `row.get(key, "")` as text (a non-string as its JSON).
-pub(crate) fn field<'a>(row: &'a Value, key: &str) -> &'a str {
+pub fn field<'a>(row: &'a Value, key: &str) -> &'a str {
     row.get(key).and_then(Value::as_str).unwrap_or_default()
 }
 
 /// The name a pointer names: `ptr.rsplit("/", 1)[1]`.
-pub(crate) fn page_name(ptr: &str) -> &str {
+pub fn page_name(ptr: &str) -> &str {
     ptr.rsplit_once('/').map_or(ptr, |p| p.1)
 }
 
 /// The digest of what a claim is checked against: a question's heading and its non-intro blocks' words.
-pub(crate) fn findings_of(page_text: &str) -> String {
+pub fn findings_of(page_text: &str) -> String {
     let page = read_page(page_text);
     let mut parts: Vec<&str> = vec![&page.heading];
     parts.extend(
@@ -135,18 +135,18 @@ pub(crate) fn findings_of(page_text: &str) -> String {
 }
 
 /// A page's findings digest and its non-intro blocks as (digest, words).
-pub(crate) type Blocks = (String, Vec<(String, String)>);
+pub type Blocks = (String, Vec<(String, String)>);
 
 /// The pages read in one run, by name, in the order first read.
 #[derive(Default)]
-pub(crate) struct PageMemo {
-    pub(crate) order: Vec<String>,
-    pub(crate) pages: HashMap<String, Blocks>,
+pub struct PageMemo {
+    pub order: Vec<String>,
+    pub pages: HashMap<String, Blocks>,
 }
 
 impl PageMemo {
     /// The snapshots of every page read: findings digest -> its blocks' digests.
-    pub(crate) fn snapshots(&self) -> Store {
+    pub fn snapshots(&self) -> Store {
         let mut out = Store::new();
         for name in &self.order {
             let (fp, blocks) = &self.pages[name];
@@ -165,7 +165,7 @@ impl PageMemo {
 }
 
 /// A cited question's findings digest and its non-intro blocks, read once a run; a missing file is `missing` with no blocks.
-pub(crate) fn page_blocks<'a>(
+pub fn page_blocks<'a>(
     name: &str,
     qdir: &Path,
     memo: &'a mut PageMemo,
@@ -193,7 +193,7 @@ pub(crate) fn page_blocks<'a>(
 }
 
 /// The research fingerprint of one claim's pointers (empty for a class claim); a missing file is `missing`.
-pub(crate) fn research_fp(
+pub fn research_fp(
     pointers: &[String],
     qdir: &Path,
     memo: &mut HashMap<String, String>,
@@ -221,12 +221,12 @@ pub(crate) fn research_fp(
 }
 
 /// key -> Row for every claim of every unit in scope at `skill`, its questions under `qdir`.
-pub(crate) fn current(reader: &mut Reader, skill: &Path, qdir: &Path) -> Result<Cur, Fail> {
+pub fn current(reader: &mut Reader, skill: &Path, qdir: &Path) -> Result<Cur, Fail> {
     rows_of(all_units(reader, skill, false, true)?, qdir)
 }
 
 /// key -> Row for every claim of `pairs`, their research read under `qdir`.
-pub(crate) fn rows_of(pairs: Vec<super::units::Pair>, qdir: &Path) -> Result<Cur, Fail> {
+pub fn rows_of(pairs: Vec<super::units::Pair>, qdir: &Path) -> Result<Cur, Fail> {
     let mut memo = HashMap::new();
     let mut out = Cur::default();
     for (unit, _errors) in pairs {
@@ -245,7 +245,7 @@ pub(crate) fn rows_of(pairs: Vec<super::units::Pair>, qdir: &Path) -> Result<Cur
 }
 
 /// A JSON file's object, or an empty one where there is no file.
-pub(crate) fn load_map(path: &Path) -> Result<Map<String, Value>, Fail> {
+pub fn load_map(path: &Path) -> Result<Map<String, Value>, Fail> {
     if !path.is_file() {
         return Ok(Map::new());
     }
@@ -264,7 +264,7 @@ fn write(path: &Path, text: &str) -> Result<(), Fail> {
 }
 
 /// The index, sorted, as `json.dumps(indent=1, sort_keys=True, ensure_ascii=False)` writes it.
-pub(crate) fn save_index(path: &Path, rows: &Index) -> Result<(), Fail> {
+pub fn save_index(path: &Path, rows: &Index) -> Result<(), Fail> {
     write(
         path,
         &(dumps(&sorted(&Value::Object(rows.clone())), Some(1), false) + "\n"),
@@ -272,7 +272,7 @@ pub(crate) fn save_index(path: &Path, rows: &Index) -> Result<(), Fail> {
 }
 
 /// The snapshots, as `json.dumps(indent=0, sort_keys=True)` writes them.
-pub(crate) fn save_store(path: &Path, store: &Store) -> Result<(), Fail> {
+pub fn save_store(path: &Path, store: &Store) -> Result<(), Fail> {
     write(
         path,
         &(dumps(&sorted(&Value::Object(store.clone())), Some(0), true) + "\n"),
@@ -280,7 +280,7 @@ pub(crate) fn save_store(path: &Path, store: &Store) -> Result<(), Fail> {
 }
 
 /// The index rows that still speak of something: a claim in scope, or an UNCLAIMED row whose unit still exists.
-pub(crate) fn live_rows(cur: &Cur, index: &Index) -> Index {
+pub fn live_rows(cur: &Cur, index: &Index) -> Index {
     let uids = cur.uids();
     index
         .iter()
@@ -294,7 +294,7 @@ pub(crate) fn live_rows(cur: &Cur, index: &Index) -> Index {
 }
 
 /// {new key: old key} for every claim of a unit moved to another file with its code intact (405 T53, T58).
-pub(crate) fn moved(cur: &Cur, index: &Index) -> BTreeMap<String, String> {
+pub fn moved(cur: &Cur, index: &Index) -> BTreeMap<String, String> {
     let mut gone: HashMap<&str, Vec<&String>> = HashMap::new();
     for k in index.keys() {
         if !cur.contains(k) {
@@ -325,7 +325,7 @@ pub(crate) fn moved(cur: &Cur, index: &Index) -> BTreeMap<String, String> {
 }
 
 /// Each moved claim's row carried to its new key and the old one dropped; how many moved.
-pub(crate) fn rekey(cur: &Cur, index: &mut Index) -> usize {
+pub fn rekey(cur: &Cur, index: &mut Index) -> usize {
     let moves = moved(cur, index);
     for (new, old) in &moves {
         let row = index[old].clone();
@@ -338,7 +338,7 @@ pub(crate) fn rekey(cur: &Cur, index: &mut Index) -> usize {
 }
 
 /// The owed keys `impl-drift` must judge: every owed key but those owed only a triage.
-pub(crate) fn judged(due: &[(String, String)]) -> Vec<String> {
+pub fn judged(due: &[(String, String)]) -> Vec<String> {
     due.iter()
         .filter(|(_, why)| !TRIAGED.contains(&why.as_str()))
         .map(|(k, _)| k.clone())
@@ -376,7 +376,7 @@ fn indent(line: &str) -> usize {
 }
 
 /// (the 1-based line the unit's text starts at, the text): its lines, with the comment block directly above it.
-pub(crate) fn source_span(root: &Path, unit: &Unit) -> Result<Option<(usize, String)>, Fail> {
+pub fn source_span(root: &Path, unit: &Unit) -> Result<Option<(usize, String)>, Fail> {
     let Some(lines) = lines_of(root, &unit.path)? else {
         return Ok(None);
     };
@@ -414,7 +414,7 @@ pub(crate) fn source_span(root: &Path, unit: &Unit) -> Result<Option<(usize, Str
 }
 
 /// A unit's source with its `Research:` section taken out, fingerprinted; "" where its file cannot be opened.
-pub(crate) fn body_of(root: &Path, unit: &Unit) -> Result<String, Fail> {
+pub fn body_of(root: &Path, unit: &Unit) -> Result<String, Fail> {
     let Some((_, text)) = source_span(root, unit)? else {
         return Ok(String::new());
     };
@@ -422,7 +422,7 @@ pub(crate) fn body_of(root: &Path, unit: &Unit) -> Result<String, Fail> {
 }
 
 /// Is a claim whose code fingerprint moved changed in its `Research:` lines alone (the body as last judged)?
-pub(crate) fn relabeled_only(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail> {
+pub fn relabeled_only(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail> {
     if !truthy(was.get("body"))
         || was.get("body").and_then(Value::as_str) != Some(&body_of(root, &row.unit)?)
     {
@@ -432,20 +432,20 @@ pub(crate) fn relabeled_only(was: &Value, row: &Row, root: &Path) -> Result<bool
 }
 
 /// `was.get("claim") not in (None, text)`.
-pub(crate) fn claim_rewritten(was: &Value, text: &str) -> bool {
+pub fn claim_rewritten(was: &Value, text: &str) -> bool {
     was.get("claim")
         .is_some_and(|c| !c.is_null() && c.as_str() != Some(text))
 }
 
 /// A MISLABELED verdict answered by the relabel it prescribed (385 T23, plan D45).
-pub(crate) fn relabel_answered(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail> {
+pub fn relabel_answered(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail> {
     Ok(is(was, "verdict", "MISLABELED")
         && claim_rewritten(was, &row.claim.normalized())
         && relabeled_only(was, row, root)?)
 }
 
 /// `page:digest` for every block now standing on the questions `pointers` cite.
-pub(crate) fn standing(
+pub fn standing(
     pointers: &[String],
     qdir: &Path,
     memo: &mut PageMemo,
@@ -461,7 +461,7 @@ pub(crate) fn standing(
 }
 
 /// Why a claim whose cited research moved is owed: in full where a block it rested on is gone, its row predates the snapshots or it cites a page its check never read; else the triage.
-pub(crate) fn research_why(
+pub fn research_why(
     row: &Row,
     was: &Value,
     qdir: &Path,
@@ -495,7 +495,7 @@ pub(crate) fn research_why(
 }
 
 /// (key, why) for every claim with no row, whose code moved, or whose research moved.
-pub(crate) fn owed(
+pub fn owed(
     cur: &Cur,
     index: &Index,
     qdir: Option<&Path>,

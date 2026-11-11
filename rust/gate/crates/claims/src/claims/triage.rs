@@ -27,13 +27,13 @@ use crate::record::repo::{fail, git, Fail};
 use crate::record::units::{digest, re};
 
 /// The page texts a snapshot was taken of, kept as git blobs in the clone (feature 375 T04): `{findings digest: blob sha}`.
-pub(crate) const BLOBS: &str = "claims-page-blobs.json";
+pub const BLOBS: &str = "claims-page-blobs.json";
 /// What a claim cleared without a triage records (feature 432, FR-005 a, plan D7).
-pub(crate) const CLEARED: &str =
+pub const CLEARED: &str =
     "mechanically: a page it cites moved and no block it rests on did (feature 432)";
 
 static TOUCHES: LazyLock<Regex> = LazyLock::new(|| re(r"\ATOUCHES\s+(\S.*?)\s+-\s+(.*)\z"));
-pub(crate) static HUNK: LazyLock<Regex> =
+pub static HUNK: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?m)^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@"));
 static QUESTION_PATH: LazyLock<Regex> = LazyLock::new(|| re(r"research/questions/[\w.-]+?\.html"));
 
@@ -47,7 +47,7 @@ fn blob_map(qdir: &Path) -> Option<std::path::PathBuf> {
 }
 
 /// Each page a recorded snapshot was taken of kept as a git blob, while the page still stands at it (feature 375 T04).
-pub(crate) fn keep_texts(qdir: &Path, units: &Map<String, Value>) -> Result<usize, Fail> {
+pub fn keep_texts(qdir: &Path, units: &Map<String, Value>) -> Result<usize, Fail> {
     let mut pages: BTreeMap<String, String> = BTreeMap::new();
     for u in units.values() {
         for (name, fp) in u
@@ -93,7 +93,7 @@ pub(crate) fn keep_texts(qdir: &Path, units: &Map<String, Value>) -> Result<usiz
 }
 
 /// The text of the page snapshot `fp`, from the clone's kept blobs, or "".
-pub(crate) fn kept_text(qdir: &Path, fp: &str) -> Result<String, Fail> {
+pub fn kept_text(qdir: &Path, fp: &str) -> Result<String, Fail> {
     let blob = match blob_map(qdir) {
         Some(p) if p.is_file() => field(&Value::Object(super::index::load_map(&p)?), fp).to_owned(),
         _ => String::new(),
@@ -106,7 +106,7 @@ pub(crate) fn kept_text(qdir: &Path, fp: &str) -> Result<String, Fail> {
 }
 
 /// The words of the blocks `digests` of the question `name` that no longer stand: the snapshot's kept text, then the page's history.
-pub(crate) fn removed_words(
+pub fn removed_words(
     qdir: &Path,
     name: &str,
     digests: &HashSet<String>,
@@ -135,7 +135,7 @@ pub(crate) fn removed_words(
 }
 
 /// The words of the blocks `digests` of the procedure section `title` of `path` that no longer stand, from its history (a claimed dictionary's from its module's, by the Python's reader).
-pub(crate) fn section_words(
+pub fn section_words(
     reader: &mut Reader,
     root: &Path,
     path: &str,
@@ -171,7 +171,7 @@ pub(crate) fn section_words(
 }
 
 /// The newest commit of the claims index recording `key` checked at the code fingerprint `code`, or `origin/main`.
-pub(crate) fn checked_at(
+pub fn checked_at(
     root: &Path,
     key: &str,
     code: &str,
@@ -203,7 +203,7 @@ pub(crate) fn checked_at(
 }
 
 /// The hunks of `git diff base -- path` whose new lines overlap [lo, hi].
-pub(crate) fn code_hunks(root: &Path, path: &str, lo: usize, hi: usize, base: &str) -> Vec<String> {
+pub fn code_hunks(root: &Path, path: &str, lo: usize, hi: usize, base: &str) -> Vec<String> {
     let diff = git(root, &["diff", "-U3", base, "--", path]);
     let found: Vec<(usize, usize, usize)> = HUNK
         .captures_iter(&diff)
@@ -501,7 +501,7 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
 }
 
 /// The triage bundle for `keys`: MANIFEST.md, and triage.json (each claim's fingerprints now, today's snapshots, the forced claims).
-pub(crate) fn triage_bundle(
+pub fn triage_bundle(
     reader: &mut Reader,
     cur: &Cur,
     index: &Index,
@@ -598,7 +598,7 @@ pub(crate) fn triage_bundle(
 }
 
 /// The index with a triage reply applied: a named or forced claim owed `impl-drift`, every other one cleared at the pages as they stand.
-pub(crate) fn record_triage(
+pub fn record_triage(
     index: &Index,
     units: &Map<String, Value>,
     reply: &str,
@@ -652,7 +652,7 @@ pub(crate) fn record_triage(
 }
 
 /// (the index with `keys` cleared, the page snapshots to store): each claim owed a triage only because a cited page moved while every block it rests on stands (feature 432).
-pub(crate) fn clear_page_moves(
+pub fn clear_page_moves(
     cur: &Cur,
     index: &Index,
     keys: &[String],
@@ -687,7 +687,7 @@ pub(crate) fn clear_page_moves(
 }
 
 /// The reply without its VERDICT lines that cannot be recorded as written, and those lines; the outside-the-change rows filed; what was said.
-pub(crate) fn vet(
+pub fn vet(
     reply: &str,
     units: &Map<String, Value>,
     root: &Path,
@@ -748,7 +748,7 @@ pub(crate) fn vet(
 }
 
 /// The reply `make <cmd>` is given, a transcript's last reply (`apply_edits.reply_of`, by command); with no text, the refusal said and "" returned.
-pub(crate) fn read_reply(
+pub fn read_reply(
     root: &Path,
     path: &str,
     cmd: &str,

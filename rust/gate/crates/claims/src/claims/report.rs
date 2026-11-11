@@ -29,10 +29,10 @@ use crate::record::units::re;
 static CONSTANT: LazyLock<Regex> = LazyLock::new(|| re(r"\b[A-Z][A-Z0-9_]{2,}\b"));
 static CONSTANT_WHOLE: LazyLock<Regex> = LazyLock::new(|| re(r"\A(?:\b[A-Z][A-Z0-9_]{2,}\b)\z"));
 /// What the base read needs: the engine, the procedure documents and the questions.
-pub(crate) const BASE_PATHS: [&str; 4] = ["l7r", "docs/buildings.md", "docs/buildings", QUESTIONS];
+pub const BASE_PATHS: [&str; 4] = ["l7r", "docs/buildings.md", "docs/buildings", QUESTIONS];
 
 /// Every coverage failure: a unit with no claim own or inherited, a claim that does not parse, a pointer to no question file.
-pub(crate) fn coverage(units: &[Pair], questions: &HashSet<String>) -> Vec<String> {
+pub fn coverage(units: &[Pair], questions: &HashSet<String>) -> Vec<String> {
     let mut problems = Vec::new();
     let mut seen: HashSet<(String, String)> = HashSet::new();
     for (unit, module_errors) in units {
@@ -63,7 +63,7 @@ pub(crate) fn coverage(units: &[Pair], questions: &HashSet<String>) -> Vec<Strin
 }
 
 /// The question files' names under `root`.
-pub(crate) fn question_names(root: &Path) -> HashSet<String> {
+pub fn question_names(root: &Path) -> HashSet<String> {
     std::fs::read_dir(root.join(QUESTIONS))
         .into_iter()
         .flatten()
@@ -74,7 +74,7 @@ pub(crate) fn question_names(root: &Path) -> HashSet<String> {
 }
 
 /// Each form problem whose file changed since `base`; a form is fixed, never carried.
-pub(crate) fn delta_form_problems(root: &Path, pairs: &[Pair]) -> Vec<String> {
+pub fn delta_form_problems(root: &Path, pairs: &[Pair]) -> Vec<String> {
     let diff = git(root, &["diff", "--name-only", "origin/main...HEAD"]);
     let changed: HashSet<&str> = diff.split_whitespace().collect();
     if changed.is_empty() {
@@ -88,7 +88,7 @@ pub(crate) fn delta_form_problems(root: &Path, pairs: &[Pair]) -> Vec<String> {
 }
 
 /// The units and single claims whose findings are DEFERRED (`dev/claims-deferred.json`), or none.
-pub(crate) fn load_deferred(path: &Path) -> Result<HashSet<String>, Fail> {
+pub fn load_deferred(path: &Path) -> Result<HashSet<String>, Fail> {
     let doc = Value::Object(load_map(path)?);
     let mut out = HashSet::new();
     for part in ["units", "keys"] {
@@ -104,7 +104,7 @@ pub(crate) fn load_deferred(path: &Path) -> Result<HashSet<String>, Fail> {
 }
 
 /// A finding's verdict as the report shows it: DEFERRED where its unit is deferred, else its own.
-pub(crate) fn shown(key: &str, verdict: &str, deferred: &HashSet<String>) -> String {
+pub fn shown(key: &str, verdict: &str, deferred: &HashSet<String>) -> String {
     let unit = key.rsplit_once('#').map_or(key, |p| p.0);
     if FINDINGS.contains(&verdict) && (deferred.contains(key) || deferred.contains(unit)) {
         "DEFERRED".to_owned()
@@ -114,7 +114,7 @@ pub(crate) fn shown(key: &str, verdict: &str, deferred: &HashSet<String>) -> Str
 }
 
 /// A row's verdict: the failure Python's `v["verdict"]` raises where it has none.
-pub(crate) fn verdict_of(v: &Value) -> Result<&str, Fail> {
+pub fn verdict_of(v: &Value) -> Result<&str, Fail> {
     match v.get("verdict") {
         Some(Value::String(s)) => Ok(s),
         Some(other) => Err(format!("TypeError: a verdict {other}")),
@@ -123,7 +123,7 @@ pub(crate) fn verdict_of(v: &Value) -> Result<&str, Fail> {
 }
 
 /// (verdict as shown, key, note) for every finding the report lists by default, sorted by key.
-pub(crate) fn open_findings(
+pub fn open_findings(
     rows: &Index,
     deferred: &HashSet<String>,
 ) -> Result<Vec<(String, String, String)>, Fail> {
@@ -146,7 +146,7 @@ pub(crate) fn open_findings(
 }
 
 /// (path, NAME) of each constant whose every claim stands IN-STEP.
-pub(crate) fn in_step_constants(rows: &Index) -> HashSet<(String, String)> {
+pub fn in_step_constants(rows: &Index) -> HashSet<(String, String)> {
     let mut seen: HashMap<(String, String), bool> = HashMap::new();
     for (k, v) in rows {
         let (path, rest) = k.split_once("::").unwrap_or((k, ""));
@@ -165,7 +165,7 @@ pub(crate) fn in_step_constants(rows: &Index) -> HashSet<(String, String)> {
 }
 
 /// Whether an UNCLAIMED decision names a constant of its own file whose claims stand IN-STEP.
-pub(crate) fn names_claimed(key: &str, claimed: &HashSet<(String, String)>) -> bool {
+pub fn names_claimed(key: &str, claimed: &HashSet<(String, String)>) -> bool {
     let (path, rest) = key.split_once("::").unwrap_or((key, ""));
     let decision = rest.split_once('#').map_or("", |p| p.1);
     CONSTANT
@@ -175,13 +175,13 @@ pub(crate) fn names_claimed(key: &str, claimed: &HashSet<(String, String)>) -> b
 }
 
 /// `f"{text:<14}"`.
-pub(crate) fn padded(text: &str) -> String {
+pub fn padded(text: &str) -> String {
     let n = text.chars().count();
     format!("{text}{}", " ".repeat(14usize.saturating_sub(n)))
 }
 
 /// Counts by verdict, the owed count, then every finding and every UNRESEARCHED claim (spec FR-011).
-pub(crate) fn report(
+pub fn report(
     cur: &Cur,
     index: &Index,
     qdir: &Path,
@@ -259,7 +259,7 @@ pub(crate) fn report(
 }
 
 /// The engine, procedures and questions at `base`, extracted under `into`.
-pub(crate) fn base_tree(git: &str, root: &Path, base: &str, into: &Path) -> Result<(), Fail> {
+pub fn base_tree(git: &str, root: &Path, base: &str, into: &Path) -> Result<(), Fail> {
     let present: Vec<&str> = BASE_PATHS
         .iter()
         .copied()
@@ -301,7 +301,7 @@ pub(crate) fn base_tree(git: &str, root: &Path, base: &str, into: &Path) -> Resu
 }
 
 /// uid -> core for every unit at a tree, claimed or not: the base the push compares with.
-pub(crate) fn base_cores(
+pub fn base_cores(
     reader: &mut Reader,
     skill: &Path,
 ) -> Result<HashMap<String, String>, Fail> {
@@ -312,19 +312,19 @@ pub(crate) fn base_cores(
 }
 
 /// What `classify` judges against: the merge base's index, cores and questions, the deferred and the answered.
-pub(crate) struct Base<'a> {
-    pub(crate) index: &'a Index,
-    pub(crate) cores: &'a HashMap<String, String>,
-    pub(crate) qdir: &'a Path,
-    pub(crate) deferred: &'a HashSet<String>,
-    pub(crate) answered: &'a HashSet<String>,
+pub struct Base<'a> {
+    pub index: &'a Index,
+    pub cores: &'a HashMap<String, String>,
+    pub qdir: &'a Path,
+    pub deferred: &'a HashSet<String>,
+    pub answered: &'a HashSet<String>,
 }
 
 /// (introduced, pre-existing, carried (key, line)).
-pub(crate) type Judged = (Vec<String>, Vec<String>, Vec<(String, String)>);
+pub type Judged = (Vec<String>, Vec<String>, Vec<(String, String)>);
 
 /// (introduced, pre-existing, carried) findings (spec FR-010; carried: 385 FR-013).
-pub(crate) fn classify(cur: &Cur, index: &Index, base: &Base) -> Result<Judged, Fail> {
+pub fn classify(cur: &Cur, index: &Index, base: &Base) -> Result<Judged, Fail> {
     let head_uids = cur.uids();
     let gone_cores: HashSet<&str> = base
         .cores
@@ -391,7 +391,7 @@ pub(crate) fn classify(cur: &Cur, index: &Index, base: &Base) -> Result<Judged, 
 }
 
 /// A notice for each NEW unit whose only claim is its module's inherited `NONE` (feature 405 T37, D11).
-pub(crate) fn inherited_none(cur: &Cur, due: &[(String, String)]) -> Vec<String> {
+pub fn inherited_none(cur: &Cur, due: &[(String, String)]) -> Vec<String> {
     due.iter()
         .filter(|(k, why)| why == "new" && cur.get(k).is_some_and(|r| r.unit.inherited && r.claim.backing == "NONE"))
         .map(|(k, _)| {
@@ -402,7 +402,7 @@ pub(crate) fn inherited_none(cur: &Cur, due: &[(String, String)]) -> Vec<String>
 }
 
 /// The claim keys a `sep`-separated `text` names, a label's own separator joined back into the longest run that is a known key.
-pub(crate) fn split_keys(text: &str, sep: char, known: &dyn Fn(&str) -> bool) -> Vec<String> {
+pub fn split_keys(text: &str, sep: char, known: &dyn Fn(&str) -> bool) -> Vec<String> {
     let parts: Vec<&str> = text.split(sep).collect();
     let mut keys = Vec::new();
     let mut i = 0;

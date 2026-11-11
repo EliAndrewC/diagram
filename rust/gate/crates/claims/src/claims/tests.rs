@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use crate::record::testkit::{commit, git, put};
 
-pub(crate) const RUNNER: &str = r#"import json, pathlib, sys
+pub const RUNNER: &str = r#"import json, pathlib, sys
 for line in sys.stdin:
     a = json.loads(line); v = a["verb"]; x = a.get("args", [])
     try:
@@ -52,7 +52,7 @@ for line in sys.stdin:
 const APPLY_EDITS: &str = "def reply_of(path):\n    return path.read_text()\n";
 const CODEID: &str = "import hashlib, re, sys\nfor p in sys.argv[2:]:\n    print(hashlib.sha256(re.sub(rb' *#.*', b'', open(p, 'rb').read())).hexdigest())\n";
 
-pub(crate) const LIB: &str = "//! The probe.
+pub const LIB: &str = "//! The probe.
 //!
 //! Research:
 //!     plumbing - NONE
@@ -90,11 +90,11 @@ mod tests {
 }
 ";
 
-pub(crate) const PAGE: &str = "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n";
-pub(crate) const BUILDINGS: &str = "# Buildings\n\n## Walls\n<!-- Research: walls - CONVENTION -->\n<!-- Research: wall height - research/questions/0001-gap.html: 12 ft -->\n\nWalls stand.\n\n- a list item\n  continued\n| a | table |\n|---|---|\n\n### Deep\n\nNo claim here.\n\n##### Too deep\n";
+pub const PAGE: &str = "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n";
+pub const BUILDINGS: &str = "# Buildings\n\n## Walls\n<!-- Research: walls - CONVENTION -->\n<!-- Research: wall height - research/questions/0001-gap.html: 12 ft -->\n\nWalls stand.\n\n- a list item\n  continued\n| a | table |\n|---|---|\n\n### Deep\n\nNo claim here.\n\n##### Too deep\n";
 
 /// A repository with the probe's Rust, procedures, questions and Python half, committed and set as origin/main; its root.
-pub(crate) fn fixture(tag: &str) -> PathBuf {
+pub fn fixture(tag: &str) -> PathBuf {
     let root = crate::checks::scratch(tag);
     git(&root, &["init", "-q", "-b", "main"]);
     git(&root, &["config", "user.email", "t@example.org"]);
@@ -125,7 +125,7 @@ pub(crate) fn fixture(tag: &str) -> PathBuf {
 }
 
 /// The Python half's answer: units of `l7r/diagram/m.py`, each `(qualname, kind, claim lines, inherited)`.
-pub(crate) fn py_units(
+pub fn py_units(
     root: &Path,
     inside: &[(&str, &str, &[&str], bool)],
     outside: &[(&str, &str, &[&str], bool)],
@@ -142,14 +142,14 @@ pub(crate) fn py_units(
 }
 
 /// `l7r-gate claims --root <root> args...`.
-pub(crate) fn claims(root: &Path, args: &[&str]) -> crate::Reply {
+pub fn claims(root: &Path, args: &[&str]) -> crate::Reply {
     let mut all = vec!["--root".to_owned(), root.to_string_lossy().into_owned()];
     all.extend(args.iter().map(|a| (*a).to_owned()));
     super::cli(&all)
 }
 
 /// Every claim of the fixture recorded IN-STEP through a bundle and its reply; the bundle's directory.
-pub(crate) fn record_all(root: &Path) -> PathBuf {
+pub fn record_all(root: &Path) -> PathBuf {
     let out = root.join("b-all");
     let got = claims(root, &["bundle", "--owed", "--out", &out.to_string_lossy()]);
     assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);

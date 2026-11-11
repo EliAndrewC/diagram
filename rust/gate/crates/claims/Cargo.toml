@@ -1,0 +1,22 @@
+# The research claims' tools (feature 449 T92's split): `l7r-gate claims`, `tunables`, `claims-door`.
+[package]
+name = "l7r_gate_claims"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_gate_owed = { path = "../owed" }
+l7r_gate_plan = { path = "../plan" }
+l7r_gate_tree = { path = "../tree" }
+l7r_guard = { path = "../../../guard" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

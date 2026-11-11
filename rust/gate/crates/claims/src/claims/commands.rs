@@ -43,23 +43,23 @@ const COUNTER_KINDS: [&str; 4] = ["function", "method", "class", "constant"];
 
 /// What a command printed: its stdout and its stderr, in order.
 #[derive(Default)]
-pub(crate) struct Out {
-    pub(crate) out: String,
-    pub(crate) err: String,
+pub struct Out {
+    pub out: String,
+    pub err: String,
 }
 
 impl Out {
-    pub(crate) fn say(&mut self, line: &str) {
+    pub fn say(&mut self, line: &str) {
         let _ = writeln!(self.out, "{line}");
     }
 
-    pub(crate) fn warn(&mut self, line: &str) {
+    pub fn warn(&mut self, line: &str) {
         let _ = writeln!(self.err, "{line}");
     }
 }
 
 /// `pathlib.Path(text)` as `str()` gives it back: repeated and trailing slashes and `.` parts dropped.
-pub(crate) fn path_text(text: &str) -> String {
+pub fn path_text(text: &str) -> String {
     if text.is_empty() {
         return ".".to_owned();
     }
@@ -87,7 +87,7 @@ pub(crate) fn path_text(text: &str) -> String {
 }
 
 /// Every procedure-section claim re-keyed to its own line's fingerprint without owing it; how many.
-pub(crate) fn backfill_sections(cur: &Cur, index: &mut Index, store: &mut Store) -> usize {
+pub fn backfill_sections(cur: &Cur, index: &mut Index, store: &mut Store) -> usize {
     let mut n = 0;
     for row in cur.iter() {
         let Some(Value::Object(was)) = index.get_mut(&row.key) else {
@@ -856,7 +856,7 @@ fn coverage_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Re
 }
 
 /// One command at `root`; its exit status, what it printed in `o`.
-pub(crate) fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail> {
+pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail> {
     let mut reader = Reader::new(&crate::record::repo::tree_of(root), root);
     match cmd {
         "gate" => return gate_cmd(&mut reader, root, o),

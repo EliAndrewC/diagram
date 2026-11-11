@@ -22,14 +22,14 @@ use super::scope::Reader;
 use crate::record::repo::{fail, git, read_text, Fail};
 use crate::record::units::re;
 
-pub(crate) const RECORD: &str = "claims-carried.jsonl";
+pub const RECORD: &str = "claims-carried.jsonl";
 /// The standing feature that fixes claims findings (the GM, 2026-10-26): a landing with no engine code files its carries here.
-pub(crate) const CLAIMS_FEATURE: &str = "405";
+pub const CLAIMS_FEATURE: &str = "405";
 const LANDS_OPEN: &str = " [lands-open]";
 /// The kind of a gm-review.jsonl row that records an admitted known drift (feature 430 D6).
-pub(crate) const KNOWN_KIND: &str = "known-drift";
+pub const KNOWN_KIND: &str = "known-drift";
 /// The words an accept records when the round arbiter accepts a known drift.
-pub(crate) const ACCEPTED: &str = "a known drift accepted by the round arbiter";
+pub const ACCEPTED: &str = "a known drift accepted by the round arbiter";
 const BY_ARBITER: &str = "accepted by the round arbiter";
 
 static BOX: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \[( |x)\] (T\d+)\b(.*)$"));
@@ -52,7 +52,7 @@ fn git_lines(root: &Path, args: &[&str]) -> Vec<String> {
 }
 
 /// Does this tree's delta change engine code, as the gate's one list and the content id decide it?
-pub(crate) fn touches_engine(root: &Path) -> Result<bool, Fail> {
+pub fn touches_engine(root: &Path) -> Result<bool, Fail> {
     let base = git_lines(root, &["merge-base", "origin/main", "HEAD"])
         .into_iter()
         .next()
@@ -115,7 +115,7 @@ fn read_or_empty(path: &Path) -> Result<String, Fail> {
 }
 
 /// The open task ids of a feature's tasks.md.
-pub(crate) fn open_ids(d: &Path) -> Result<HashSet<String>, Fail> {
+pub fn open_ids(d: &Path) -> Result<HashSet<String>, Fail> {
     let text = read_or_empty(&d.join("tasks.md"))?;
     Ok(BOX
         .captures_iter(&text)
@@ -126,7 +126,7 @@ pub(crate) fn open_ids(d: &Path) -> Result<HashSet<String>, Fail> {
 }
 
 /// The rows of a feature's carry record.
-pub(crate) fn rows(d: &Path) -> Result<Vec<Value>, Fail> {
+pub fn rows(d: &Path) -> Result<Vec<Value>, Fail> {
     read_or_empty(&d.join(RECORD))?
         .lines()
         .filter(|l| !l7r_guard::shared::py_text::strip(l).is_empty())
@@ -135,7 +135,7 @@ pub(crate) fn rows(d: &Path) -> Result<Vec<Value>, Fail> {
 }
 
 /// The feature carried findings are filed into: the claims feature for a delta with no engine code, while it has an open task; the active one otherwise.
-pub(crate) fn target(root: &Path) -> Result<Option<PathBuf>, Fail> {
+pub fn target(root: &Path) -> Result<Option<PathBuf>, Fail> {
     if !touches_engine(root)? {
         if let Some(claims) = crate::plan::resolve_feature(CLAIMS_FEATURE, root) {
             if !open_ids(&claims)?.is_empty() {
@@ -147,7 +147,7 @@ pub(crate) fn target(root: &Path) -> Result<Option<PathBuf>, Fail> {
 }
 
 /// key -> its open task, for every key the record of the feature carries file into files.
-pub(crate) fn filed(target: Option<&Path>) -> Result<HashMap<String, String>, Fail> {
+pub fn filed(target: Option<&Path>) -> Result<HashMap<String, String>, Fail> {
     let Some(d) = target else {
         return Ok(HashMap::new());
     };
@@ -226,7 +226,7 @@ fn new_box(text: &str, keys: &[String], ruling: &str) -> (String, String) {
 }
 
 /// The claims switch: `report` (absent, or no `claims` entry) or `clean`; a malformed file or entry closes to `clean`.
-pub(crate) fn claims_mode(root: &Path) -> String {
+pub fn claims_mode(root: &Path) -> String {
     let path = root.join("dev").join("switches.json");
     if !path.is_file() {
         return "report".to_owned();
@@ -250,7 +250,7 @@ pub(crate) fn claims_mode(root: &Path) -> String {
 }
 
 /// Files `keys` into the feature being landed; what was done, or the error naming what to do instead.
-pub(crate) fn carry(
+pub fn carry(
     root: &Path,
     feature: &str,
     task: &str,
@@ -331,13 +331,13 @@ pub(crate) fn carry(
 }
 
 /// The claim key a classified line (`f"{verdict:<14} {key} - {note}"`) names.
-pub(crate) fn key_of(line: &str) -> String {
+pub fn key_of(line: &str) -> String {
     let rest: String = line.chars().skip(14).collect();
     l7r_guard::shared::py_text::strip(rest.split(" - ").next().unwrap_or_default()).to_owned()
 }
 
 /// key -> `<feature> <task>` for every DRIFTED claim whose text names an open task row naming its unit, and every DRIFTED claim the arbiter accepted.
-pub(crate) fn known_drifts(
+pub fn known_drifts(
     cur: &Cur,
     index: &Index,
     root: &Path,
@@ -401,7 +401,7 @@ pub(crate) fn known_drifts(
 }
 
 /// `sorted((root / "specs").glob(f"{feat}-*[/leaf]"))`.
-pub(crate) fn spec_glob(root: &Path, feat: &str, leaf: Option<&str>) -> Vec<PathBuf> {
+pub fn spec_glob(root: &Path, feat: &str, leaf: Option<&str>) -> Vec<PathBuf> {
     let prefix = format!("{feat}-");
     let mut out: Vec<PathBuf> = std::fs::read_dir(root.join("specs"))
         .into_iter()
@@ -416,7 +416,7 @@ pub(crate) fn spec_glob(root: &Path, feat: &str, leaf: Option<&str>) -> Vec<Path
 }
 
 /// Every claim key a feature's `gm-review.jsonl` records as an admitted known drift.
-pub(crate) fn recorded_known(root: &Path) -> Result<HashSet<String>, Fail> {
+pub fn recorded_known(root: &Path) -> Result<HashSet<String>, Fail> {
     let mut files: Vec<PathBuf> = std::fs::read_dir(root.join("specs"))
         .into_iter()
         .flatten()
@@ -444,16 +444,16 @@ pub(crate) fn recorded_known(root: &Path) -> Result<HashSet<String>, Fail> {
 }
 
 /// (owed refusals, introduced, pre-existing, carried (key, line)).
-pub(crate) type Classified = (Vec<String>, Vec<String>, Vec<String>, Vec<(String, String)>);
+pub type Classified = (Vec<String>, Vec<String>, Vec<String>, Vec<(String, String)>);
 
 /// What the gate reads of a tree: the rows now, the index, and what is owed.
-pub(crate) struct Reading {
-    pub(crate) cur: Cur,
-    pub(crate) index: Index,
+pub struct Reading {
+    pub cur: Cur,
+    pub index: Index,
 }
 
 /// (owed refusals, introduced, pre-existing, carried) at `root` against its merge base with origin/main.
-pub(crate) fn classified(
+pub fn classified(
     reader: &mut Reader,
     root: &Path,
     at: &Reading,
@@ -524,7 +524,7 @@ pub(crate) fn classified(
 }
 
 /// (key, refusal) for every open finding `make claims-report` lists: what the gate refuses at `clean`.
-pub(crate) fn open_lines(root: &Path, at: &Reading) -> Result<Vec<(String, String)>, Fail> {
+pub fn open_lines(root: &Path, at: &Reading) -> Result<Vec<(String, String)>, Fail> {
     let rows = live_rows(&at.cur, &at.index);
     Ok(open_findings(&rows, &load_deferred(&root.join(super::index::DEFERRED))?)?
         .into_iter()
@@ -537,7 +537,7 @@ pub(crate) fn open_lines(root: &Path, at: &Reading) -> Result<Vec<(String, Strin
 }
 
 /// (refusals, warnings) for the push: owed units, introduced findings, carried ones not yet filed, unrecorded known drifts; at `clean` every open finding.
-pub(crate) fn gate(
+pub fn gate(
     reader: &mut Reader,
     root: &Path,
     at: &Reading,
@@ -614,7 +614,7 @@ pub(crate) fn gate(
 }
 
 /// `make claims-known`: each known drift the gate would refuse unrecorded, written as a row of its task's feature's `gm-review.jsonl` with the GM's box, by the Python (`gm_review.add_row`, T91's); the lines written.
-pub(crate) fn record_known(
+pub fn record_known(
     reader: &mut Reader,
     root: &Path,
     at: &Reading,

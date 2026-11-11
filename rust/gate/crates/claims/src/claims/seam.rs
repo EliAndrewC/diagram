@@ -18,10 +18,10 @@ static FINDING: LazyLock<Regex> =
     LazyLock::new(|| re(r"\A\s+([A-Z][A-Z-]+)\s+(\S[^:]*?)::(\S+?)#"));
 static HUNK: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@"));
 /// The open-claims feature (the GM, 2026-10-26).
-pub(crate) const CLAIMS_FEATURE_DIR: &str = "specs/405-engine-findings-from-385";
+pub const CLAIMS_FEATURE_DIR: &str = "specs/405-engine-findings-from-385";
 
 /// The new-side line ranges a `git diff -U0` changes; a pure deletion is the line it sits after.
-pub(crate) fn changed_lines(diff: &str) -> Vec<(i64, i64)> {
+pub fn changed_lines(diff: &str) -> Vec<(i64, i64)> {
     HUNK.captures_iter(diff)
         .flatten()
         .map(|c| {
@@ -37,12 +37,12 @@ pub(crate) fn changed_lines(diff: &str) -> Vec<(i64, i64)> {
 }
 
 /// `git diff -U0 origin/main...HEAD -- path`.
-pub(crate) fn git_diff(root: &Path, path: &str) -> String {
+pub fn git_diff(root: &Path, path: &str) -> String {
     crate::record::repo::git_out(root, &["diff", "-U0", "origin/main...HEAD", "--", path])
 }
 
 /// The open findings the landing answers for, and the rest in the files it changes, each a report line.
-pub(crate) fn split(
+pub fn split(
     reader: &mut Reader,
     root: &Path,
     report: &str,
@@ -108,7 +108,7 @@ pub(crate) fn split(
 }
 
 /// Each finding the landing does not answer for, filed once as an open row of the open-claims feature's `found.jsonl`; how many.
-pub(crate) fn file_left(root: &Path, task: &str, left: &[String]) -> Result<usize, Fail> {
+pub fn file_left(root: &Path, task: &str, left: &[String]) -> Result<usize, Fail> {
     let path = root.join(CLAIMS_FEATURE_DIR).join("found.jsonl");
     let mut have: Vec<Value> = Vec::new();
     if path.is_file() {

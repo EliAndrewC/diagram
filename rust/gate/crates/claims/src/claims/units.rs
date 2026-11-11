@@ -15,47 +15,47 @@ use crate::record::repo::Fail;
 use crate::record::units::re;
 
 /// `hashlib.sha256(text.encode()).hexdigest()[:16]`.
-pub(crate) fn sha(text: &str) -> String {
+pub fn sha(text: &str) -> String {
     sha256::hex(text.as_bytes())[..16].to_owned()
 }
 
 /// A function, method, class, constant or procedure section, with its claims (own or inherited) and its code's core.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct Unit {
-    pub(crate) path: String,
-    pub(crate) qualname: String,
-    pub(crate) kind: String,
-    pub(crate) lineno: usize,
-    pub(crate) end_lineno: usize,
-    pub(crate) claims: Vec<Claim>,
-    pub(crate) inherited: bool,
-    pub(crate) core: String,
-    pub(crate) errors: Vec<String>,
-    pub(crate) names: Vec<String>,
-    pub(crate) blocks: Vec<String>,
+pub struct Unit {
+    pub path: String,
+    pub qualname: String,
+    pub kind: String,
+    pub lineno: usize,
+    pub end_lineno: usize,
+    pub claims: Vec<Claim>,
+    pub inherited: bool,
+    pub core: String,
+    pub errors: Vec<String>,
+    pub names: Vec<String>,
+    pub blocks: Vec<String>,
 }
 
 /// A unit and its module's errors, as the Python's `all_units` yields them.
-pub(crate) type Pair = (Unit, Vec<String>);
+pub type Pair = (Unit, Vec<String>);
 
 impl Unit {
     /// Its claims fingerprinted by their own line: a procedure section, and a claimed dictionary (feature 385 T83).
-    pub(crate) fn line_keyed(&self) -> bool {
+    pub fn line_keyed(&self) -> bool {
         self.kind == "section" || !self.blocks.is_empty()
     }
 
     /// `path::qualname`.
-    pub(crate) fn uid(&self) -> String {
+    pub fn uid(&self) -> String {
         format!("{}::{}", self.path, self.qualname)
     }
 
     /// The index key of one claim of this unit.
-    pub(crate) fn key(&self, claim: &Claim) -> String {
+    pub fn key(&self, claim: &Claim) -> String {
         format!("{}::{}#{}", self.path, self.qualname, claim.label)
     }
 
     /// The code fingerprint of one claim: the core plus the normalized claim line, or a line-keyed claim's own line alone.
-    pub(crate) fn code(&self, claim: &Claim) -> String {
+    pub fn code(&self, claim: &Claim) -> String {
         if self.line_keyed() {
             return sha(&format!("section-claim\x1f{}", claim.normalized()));
         }
@@ -89,7 +89,7 @@ fn number(v: &Value, key: &str) -> usize {
 }
 
 /// A unit as `tools/claims.unit_json` gives it, with its module's errors; its claim lines parsed again (each parsed once already).
-pub(crate) fn from_json(v: &Value) -> Pair {
+pub fn from_json(v: &Value) -> Pair {
     let claims = strings(v, "claims")
         .iter()
         .filter_map(|l| parse_claim(l).ok())
@@ -113,7 +113,7 @@ pub(crate) fn from_json(v: &Value) -> Pair {
 }
 
 /// The unit as the runner's verbs take it back (`claims_counters.counter_only_json`).
-pub(crate) fn to_json(u: &Unit) -> Value {
+pub fn to_json(u: &Unit) -> Value {
     serde_json::json!({
         "path": u.path, "qualname": u.qualname, "kind": u.kind, "lineno": u.lineno, "end_lineno": u.end_lineno,
         "claims": u.claims.iter().map(|c| c.line.clone()).collect::<Vec<_>>(), "inherited": u.inherited, "core": u.core,
@@ -122,7 +122,7 @@ pub(crate) fn to_json(u: &Unit) -> Value {
 }
 
 /// The Mode A procedure documents (spec FR-003, plan D9): None takes every section; a list takes those top sections and every heading under them.
-pub(crate) const PROCEDURES: [(&str, Option<&[&str]>); 2] = [
+pub const PROCEDURES: [(&str, Option<&[&str]>); 2] = [
     ("docs/buildings.md", None),
     (
         "docs/building-programs.md",
@@ -134,7 +134,7 @@ pub(crate) const PROCEDURES: [(&str, Option<&[&str]>); 2] = [
 ];
 
 static MARKER: LazyLock<Regex> = LazyLock::new(|| re(r"(?s)<!--\s*Research:\s*(.*?)\s*-->"));
-pub(crate) static COMMENT: LazyLock<Regex> = LazyLock::new(|| re(r"(?s)<!--.*?-->"));
+pub static COMMENT: LazyLock<Regex> = LazyLock::new(|| re(r"(?s)<!--.*?-->"));
 static HEADING: LazyLock<Regex> = LazyLock::new(|| re(r"\A(#{1,6})\s+(.*?)\s*\z"));
 static LIST_ITEM: LazyLock<Regex> = LazyLock::new(|| re(r"\A\s{0,3}(?:[-*+]|\d+[.)])\s"));
 
@@ -144,7 +144,7 @@ fn heading(line: &str) -> Option<(usize, String)> {
 }
 
 /// The sections of one procedure document as units: every `##`-`####` heading, or only those under `tops`.
-pub(crate) fn doc_units(text: &str, path: &str, tops: Option<&[&str]>) -> Vec<Unit> {
+pub fn doc_units(text: &str, path: &str, tops: Option<&[&str]>) -> Vec<Unit> {
     let lines: Vec<&str> = text.split('\n').collect();
     let heads: Vec<(usize, usize, String)> = lines
         .iter()
@@ -194,7 +194,7 @@ pub(crate) fn doc_units(text: &str, path: &str, tops: Option<&[&str]>) -> Vec<Un
 }
 
 /// A procedure section's blocks, each with its whitespace folded and its comments out (feature 375, FR-002).
-pub(crate) fn section_blocks(body: &str) -> Vec<String> {
+pub fn section_blocks(body: &str) -> Vec<String> {
     let mut out: Vec<Vec<String>> = Vec::new();
     for raw in COMMENT.replace_all(body, " ").split('\n') {
         let line = strip(raw);
@@ -229,7 +229,7 @@ static IMPL_OF: LazyLock<Regex> =
     LazyLock::new(|| re(r"impl\s*(?:<[^>]*>\s*)?([A-Za-z_][A-Za-z0-9_]*)"));
 
 /// `str.splitlines(keepends=True)`.
-pub(crate) fn splitlines_keep(text: &str) -> Vec<String> {
+pub fn splitlines_keep(text: &str) -> Vec<String> {
     let mut out = Vec::new();
     let mut cur = String::new();
     let mut chars = text.chars().peekable();
@@ -258,7 +258,7 @@ pub(crate) fn splitlines_keep(text: &str) -> Vec<String> {
 }
 
 /// `str.splitlines()`.
-pub(crate) fn splitlines(text: &str) -> Vec<String> {
+pub fn splitlines(text: &str) -> Vec<String> {
     const ENDS: &str = "\r\n\x0b\x0c\x1c\x1d\x1e\u{85}\u{2028}\u{2029}";
     splitlines_keep(text)
         .into_iter()
@@ -318,7 +318,7 @@ fn item_end(text: &[char], start: usize) -> usize {
 }
 
 /// One Rust item: (qualname, kind, first line, last line, doc, item text).
-pub(crate) type Item = (String, String, usize, usize, String, String);
+pub type Item = (String, String, usize, usize, String, String);
 
 fn bracket_balance(line: &str) -> i64 {
     let count = |c: char| i64::try_from(line.matches(c).count()).unwrap_or(0);
@@ -326,7 +326,7 @@ fn bracket_balance(line: &str) -> i64 {
 }
 
 /// Each item in `text`, an `impl` block's methods inside it (`claims_rust._items`).
-pub(crate) fn items(text: &str, base_line: usize, prefix: &str, in_impl: bool) -> Vec<Item> {
+pub fn items(text: &str, base_line: usize, prefix: &str, in_impl: bool) -> Vec<Item> {
     let chars: Vec<char> = text.chars().collect();
     let lines = splitlines_keep(text);
     let mut offsets = vec![0usize];
@@ -412,7 +412,7 @@ pub(crate) fn items(text: &str, base_line: usize, prefix: &str, in_impl: bool) -
 }
 
 /// (the file's errors, its units) for one `.rs` source text: each item's own claims, else the `//!` module doc's, inherited.
-pub(crate) fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
+pub fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
     let module_doc = splitlines(source)
         .iter()
         .filter_map(|l| {
@@ -450,7 +450,7 @@ pub(crate) fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
 }
 
 /// Every file under `dir` whose name ends `suffix`, in the order Python's `sorted(dir.rglob(...))` gives (component by component); symlinked directories not followed.
-pub(crate) fn rglob(dir: &Path, suffix: &str) -> Vec<std::path::PathBuf> {
+pub fn rglob(dir: &Path, suffix: &str) -> Vec<std::path::PathBuf> {
     fn walk(dir: &Path, suffix: &str, out: &mut Vec<std::path::PathBuf>) {
         let Ok(entries) = std::fs::read_dir(dir) else {
             return;
@@ -473,7 +473,7 @@ pub(crate) fn rglob(dir: &Path, suffix: &str) -> Vec<std::path::PathBuf> {
 }
 
 /// A path relative to `root`, with `/`.
-pub(crate) fn rel(path: &Path, root: &Path) -> String {
+pub fn rel(path: &Path, root: &Path) -> String {
     path.strip_prefix(root)
         .unwrap_or(path)
         .to_string_lossy()
@@ -481,7 +481,7 @@ pub(crate) fn rel(path: &Path, root: &Path) -> String {
 }
 
 /// Every unit of every `.rs` under `rust/` (`target/`, the parked stages and the tooling crates pruned), with its file's errors.
-pub(crate) fn all_rust_units(root: &Path, repo_prefix: &str) -> Result<Vec<Pair>, Fail> {
+pub fn all_rust_units(root: &Path, repo_prefix: &str) -> Result<Vec<Pair>, Fail> {
     let base = root.join("rust");
     let mut out = Vec::new();
     for p in rglob(&base, ".rs") {
@@ -498,7 +498,7 @@ pub(crate) fn all_rust_units(root: &Path, repo_prefix: &str) -> Result<Vec<Pair>
 }
 
 /// `lstrip` re-exported for the readers of a unit's source lines.
-pub(crate) fn lstripped(text: &str) -> &str {
+pub fn lstripped(text: &str) -> &str {
     lstrip(text)
 }
 

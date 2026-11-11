@@ -12,14 +12,14 @@ use serde_json::{json, Map, Value};
 use super::index::{field, is, Index};
 use crate::record::units::re;
 
-pub(crate) const FINDINGS: [&str; 5] = [
+pub const FINDINGS: [&str; 5] = [
     "DRIFTED",
     "NEEDS-RESEARCH",
     "MISLABELED",
     "UNCLAIMED",
     "CANNOT-TELL",
 ];
-pub(crate) const VERDICTS: [&str; 6] = [
+pub const VERDICTS: [&str; 6] = [
     "IN-STEP",
     "DRIFTED",
     "NEEDS-RESEARCH",
@@ -27,10 +27,10 @@ pub(crate) const VERDICTS: [&str; 6] = [
     "UNCLAIMED",
     "CANNOT-TELL",
 ];
-pub(crate) const OUTSIDE: &str = "[outside the change]";
+pub const OUTSIDE: &str = "[outside the change]";
 
 /// A verdict line, read where a reply sets the verdict off with a dash or closes it with a colon (feature 417 T50).
-pub(crate) static VERDICT: LazyLock<Regex> = LazyLock::new(|| {
+pub static VERDICT: LazyLock<Regex> = LazyLock::new(|| {
     re(
         r"\AVERDICT\s+(\S.*?)\s+(?:-\s+)?(IN-STEP|DRIFTED|NEEDS-RESEARCH|MISLABELED|UNCLAIMED|CANNOT-TELL)(?:\s+-\s+|:\s+)(.*)\z",
     )
@@ -42,12 +42,12 @@ static ELIDED: LazyLock<Regex> =
     LazyLock::new(|| re(r"\b(\d{4})-[\w-]*\.\.\.?[\w-]*?((?:\.drawing)?\.html)"));
 
 /// A reply line as the readers take it: stripped of whitespace, then of backticks.
-pub(crate) fn bare(raw: &str) -> &str {
+pub fn bare(raw: &str) -> &str {
     strip(raw).trim_matches('`')
 }
 
 /// (did the check tag it outside the change, the note without the tag).
-pub(crate) fn outside_tag(note: &str) -> (bool, String) {
+pub fn outside_tag(note: &str) -> (bool, String) {
     let s = strip(note);
     s.strip_prefix(OUTSIDE).map_or_else(
         || (false, note.to_owned()),
@@ -56,10 +56,10 @@ pub(crate) fn outside_tag(note: &str) -> (bool, String) {
 }
 
 /// A reply parsed: (verdict, note) by key, and each UNCLAIMED (uid, decision).
-pub(crate) type Parsed = (HashMap<String, (String, String)>, Vec<(String, String)>);
+pub type Parsed = (HashMap<String, (String, String)>, Vec<(String, String)>);
 
 /// The verdicts by key, and each UNCLAIMED (uid, decision), from a check's reply; the notes in the house style.
-pub(crate) fn parse_reply(text: &str) -> Parsed {
+pub fn parse_reply(text: &str) -> Parsed {
     let mut verdicts = HashMap::new();
     let mut unclaimed = Vec::new();
     for raw in text.split('\n') {
@@ -75,7 +75,7 @@ pub(crate) fn parse_reply(text: &str) -> Parsed {
 }
 
 /// The reply with each pointer a check shortened given its full file name, where one question stem matches.
-pub(crate) fn unelide(reply: &str, stems: &[String]) -> String {
+pub fn unelide(reply: &str, stems: &[String]) -> String {
     ELIDED
         .replace_all(reply, |m: &Captures| {
             let hits: Vec<&String> = stems
@@ -92,7 +92,7 @@ pub(crate) fn unelide(reply: &str, stems: &[String]) -> String {
 }
 
 /// A verdict note without its closing `[§3, §12]`, and the `page:digest` of each block it names: `[§]` none, no tag at all None.
-pub(crate) fn rests_of(note: &str, numbered: &Map<String, Value>) -> (String, Option<Vec<String>>) {
+pub fn rests_of(note: &str, numbered: &Map<String, Value>) -> (String, Option<Vec<String>>) {
     let Some(m) = RESTS.captures(note).ok().flatten() else {
         return (note.to_owned(), None);
     };
@@ -115,7 +115,7 @@ pub(crate) fn rests_of(note: &str, numbered: &Map<String, Value>) -> (String, Op
 }
 
 /// The index with a check's reply applied, and the messages for the session (spec FR-009).
-pub(crate) fn record(
+pub fn record(
     index: &Index,
     units: &Map<String, Value>,
     reply: &str,
