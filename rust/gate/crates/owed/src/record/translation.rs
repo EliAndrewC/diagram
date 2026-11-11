@@ -34,7 +34,7 @@ for it in json.load(sys.stdin):
 sys.stdout.write(json.dumps(out))";
 
 /// (notes file, key, language, translation, original).
-pub(crate) type Row = (String, String, String, String, String);
+pub type Row = (String, String, String, String, String);
 type Where = (String, String, String, String);
 /// A (translation, original) pair and where it stands.
 type Pairs = ((String, String), Vec<Where>);
@@ -268,7 +268,11 @@ fn record_pairs(
 }
 
 /// (notes file, key, language, translation, original) for each pair now that the merge base does not hold.
-pub(crate) fn owed(root: &Path) -> Result<Vec<Row>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn owed(root: &Path) -> Result<Vec<Row>, Fail> {
     let base = git_any(root, &["merge-base", "HEAD", "origin/main"]);
     let base = base.trim();
     let parser = parser_key(&tree_of(root))?;
@@ -307,7 +311,8 @@ fn report(rows: &[Row]) -> String {
 }
 
 /// `record translation-owed [--root DIR] [--q QUESTIONS]`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
     let flags = [Spec::value("--root"), Spec::value("--q")];
     let parsed = match parse(args, &flags) {
         Ok(p) => p,

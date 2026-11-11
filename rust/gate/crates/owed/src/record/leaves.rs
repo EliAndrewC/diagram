@@ -132,7 +132,8 @@ fn fragments_holding(page_dir: &str, needle: &str, root: &str, cwd: &Path) -> Ve
 }
 
 /// The files a check should read for the questions `q` names: each page and its notes, nothing else. `q` names a question by its number or a page by its file name, comma- or space-separated.
-pub(crate) fn fragments_for(q: &str, root: &Path) -> Vec<String> {
+#[must_use]
+pub fn fragments_for(q: &str, root: &Path) -> Vec<String> {
     let here = root.join(RECORD).join(QUESTIONS);
     let mut names: Vec<String> = std::fs::read_dir(&here)
         .into_iter()
@@ -268,7 +269,7 @@ fn read_all(stdin: &mut dyn Read) -> String {
 }
 
 /// `record edit-route`: the hook's payload on stdin, the verdict as one `json.dumps` line, its `hook` key carrying a rewrite.
-pub(super) fn edit_route(stdin: &mut dyn Read, cwd: &Path) -> Reply {
+pub fn edit_route(stdin: &mut dyn Read, cwd: &Path) -> Reply {
     let text = read_all(stdin);
     let Some(payload) = serde_json::from_str::<Value>(&text)
         .ok()
@@ -311,7 +312,7 @@ pub(super) fn edit_route(stdin: &mut dyn Read, cwd: &Path) -> Reply {
 }
 
 /// `record fragments [--root <dir>]`: a JSON list of questions on stdin, `{q: [files]}` on stdout, every question of a run in the one call.
-pub(super) fn fragments_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
+pub fn fragments_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
     let root = Some(flag(args, "--root"))
         .filter(|r| !r.is_empty())
         .map_or_else(|| cwd.to_path_buf(), |r| cwd.join(r));
@@ -331,7 +332,7 @@ pub(super) fn fragments_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) -
 }
 
 /// `record moved-only --root <dir> --base <rev>`: the names on stdin, one a line, whose content stood at the base; the moved ones, one a line.
-pub(super) fn moved_only_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
+pub fn moved_only_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
     let (root, base) = (flag(args, "--root"), flag(args, "--base"));
     if root.is_empty() {
         return reply(
@@ -347,7 +348,7 @@ pub(super) fn moved_only_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) 
 }
 
 /// The leaf verbs by name.
-pub(super) fn cli(verb: &str, args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
+pub fn cli(verb: &str, args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
     match verb {
         "edit-route" => edit_route(stdin, cwd),
         "fragments" => fragments_cli(args, stdin, cwd),
@@ -368,7 +369,7 @@ fn styled(value: &Value) -> Value {
 }
 
 /// `record americanize`: any JSON on stdin, the same JSON with every string value in the house style; keys are as written.
-pub(super) fn americanize_cli(stdin: &mut dyn Read) -> Reply {
+pub fn americanize_cli(stdin: &mut dyn Read) -> Reply {
     let Ok(value) = serde_json::from_str::<Value>(&read_all(stdin)) else {
         return reply(
             String::new(),

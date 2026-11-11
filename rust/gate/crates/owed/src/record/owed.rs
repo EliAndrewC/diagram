@@ -1,6 +1,6 @@
 //! Which record checks this delta owes, and which are still unanswered (from `record_owed.py`, feature 449 T87): the one scripted answer, read against the merge base and the working tree or between two revisions. `make record-owed`, the push's record gate and the check bundles ask it; `answers.rs` is its record of what was answered.
 
-pub(crate) mod answers;
+pub mod answers;
 
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
@@ -10,7 +10,7 @@ use fancy_regex::Regex;
 use l7r_guard::shared::py_text::{split, SPACE_CLASS};
 use serde_json::{json, Value};
 
-pub(crate) use answers::{
+pub use answers::{
     answer, answered, file_outside, keep_reading, read_answer, reply_checks, reply_of, settle,
     store, unanswered, write_answer, Named, FIXED,
 };
@@ -28,7 +28,7 @@ static SOURCE_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"^\d+-([a-z0-9-]+)\.h
 static CLASS_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"^class (\w+)\("));
 
 /// The families of owed units, each computed by its own reader.
-pub(crate) const FAMILIES: [&str; 4] = ["record", "translation", "entry-drift", "modal"];
+pub const FAMILIES: [&str; 4] = ["record", "translation", "entry-drift", "modal"];
 
 const ENTRY_OWED: &str = r"import json, sys
 from pathlib import Path
@@ -45,7 +45,8 @@ fn usage(line: &str) -> Reply {
 }
 
 /// The merge base of HEAD with origin/main, else HEAD.
-pub(crate) fn merge_base(root: &Path) -> String {
+#[must_use]
+pub fn merge_base(root: &Path) -> String {
     if !git(root, &["rev-parse", "--verify", "-q", "origin/main"])
         .trim()
         .is_empty()
@@ -91,7 +92,15 @@ fn html_files(dir: &Path) -> Vec<String> {
 }
 
 /// The record at `rev` (None: the working tree), read with one listing and one batch; of the write-ups, only those named in `sources` (None: all).
-pub(crate) fn read_at(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+#[expect(
+    clippy::implicit_hasher,
+    reason = "every caller passes the std set, and a hasher parameter would have each None caller name one"
+)]
+pub fn read_at(
     root: &Path,
     rev: Option<&str>,
     sources: Option<&HashSet<String>>,
@@ -291,7 +300,11 @@ fn entry_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {
 }
 
 /// Every owed unit, against the merge base and the working tree, or between two revisions; `families` and, for the pop-ups, `uid` scope it.
-pub(crate) fn units(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn units(
     root: &Path,
     base: Option<&str>,
     head: Option<&str>,
@@ -561,7 +574,8 @@ fn flags() -> [Spec; 15] {
 }
 
 /// `record record-owed ...`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
     let parsed = match parse(args, &flags()) {
         Ok(p) => p,
         Err(complaint) => {
@@ -587,7 +601,11 @@ pub(crate) fn cli(args: &[String]) -> Reply {
 }
 
 /// The listing and answer modes of `record owed`, after the answer modes returned.
-pub(crate) fn listing(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn listing(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     let between = parsed.pair("--between");
     let all = match between {
         Some((a, b)) => units(root, Some(a), Some(b), &FAMILIES, "")?,
@@ -645,12 +663,17 @@ pub(crate) fn listing(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
 }
 
 /// `q.zfill(4)`.
-pub(crate) fn zfill4(q: &str) -> String {
+#[must_use]
+pub fn zfill4(q: &str) -> String {
     format!("{q:0>4}")
 }
 
 /// The units a door caller asks for with the common modes (`units(root, families=, uid=)`).
-pub(crate) fn fingerprints(root: &Path, wanted: &[String]) -> Result<Vec<(String, String)>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn fingerprints(root: &Path, wanted: &[String]) -> Result<Vec<(String, String)>, Fail> {
     Ok(units(root, None, None, &FAMILIES, "")?
         .into_iter()
         .filter(|u| wanted.iter().any(|c| c == u.check()))
@@ -659,7 +682,8 @@ pub(crate) fn fingerprints(root: &Path, wanted: &[String]) -> Result<Vec<(String
 }
 
 /// What a stem's notes hold and cite, for a Record read at a revision.
-pub(crate) fn notes_of(rec: &Record) -> (Value, Value) {
+#[must_use]
+pub fn notes_of(rec: &Record) -> (Value, Value) {
     let notes: serde_json::Map<String, Value> = rec
         .notes
         .iter()

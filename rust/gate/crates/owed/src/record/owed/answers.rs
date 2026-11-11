@@ -22,9 +22,9 @@ use crate::record::units::{
 use crate::Reply;
 
 /// A round's own EDIT blocks settled it.
-pub(crate) const SETTLED: &str = "settled - only its round's own EDIT blocks were applied, verbatim, since it was answered (make apply-edits)";
+pub const SETTLED: &str = "settled - only its round's own EDIT blocks were applied, verbatim, since it was answered (make apply-edits)";
 /// Another check's fix outside the quotation and its claim settled it.
-pub(crate) const FIXED: &str = "settled - another check's fix outside the quotation and its claim";
+pub const FIXED: &str = "settled - another check's fix outside the quotation and its claim";
 /// The checks a reply's counts line may name.
 const BATCH_CHECKS: [&str; 7] = [
     "modal-depiction",
@@ -82,7 +82,8 @@ fn quoted(slug: &str) -> String {
 }
 
 /// The clone's answer records: `RECORD_CHECKS_DIR` (a test's throwaway store), else its git dir.
-pub(crate) fn store(root: &Path) -> PathBuf {
+#[must_use]
+pub fn store(root: &Path) -> PathBuf {
     store_given(root, std::env::var_os("RECORD_CHECKS_DIR"))
 }
 
@@ -102,7 +103,8 @@ fn file_of(store_dir: &Path, slug: &str) -> PathBuf {
 }
 
 /// A unit's record, or `{}` for none or an unreadable one.
-pub(crate) fn read_answer(store_dir: &Path, slug: &str) -> Map<String, Value> {
+#[must_use]
+pub fn read_answer(store_dir: &Path, slug: &str) -> Map<String, Value> {
     std::fs::read_to_string(file_of(store_dir, slug))
         .ok()
         .and_then(|t| serde_json::from_str::<Value>(&t).ok())
@@ -136,7 +138,11 @@ fn holds(rec: &Map<String, Value>, field: &str, text: &str) -> bool {
 }
 
 /// Record an answer: every fingerprint ever answered is kept.
-pub(crate) fn write_answer(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn write_answer(
     store_dir: &Path,
     slug: &str,
     fp: &str,
@@ -186,7 +192,11 @@ pub(crate) fn write_answer(
 }
 
 /// A unit whose content moved from `before` to `after` by nothing but its round's own EDIT blocks is not owed that check again ("answered" or "pending"; "" for neither).
-pub(crate) fn settle(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn settle(
     store_dir: &Path,
     slug: &str,
     before: &str,
@@ -222,7 +232,7 @@ pub(crate) fn settle(
 }
 
 /// The checks whose units a reply answers.
-pub(crate) fn reply_checks(reply: &str) -> Vec<String> {
+pub fn reply_checks(reply: &str) -> Vec<String> {
     let first = reply
         .lines()
         .map(l7r_guard::shared::py_text::strip)
@@ -243,7 +253,7 @@ pub(crate) fn reply_checks(reply: &str) -> Vec<String> {
 }
 
 /// `fp` answered, or, for a source-reader note, its `reading` answered under another fingerprint.
-pub(crate) fn answered(store_dir: &Path, slug: &str, fp: &str, reading: &str) -> bool {
+pub fn answered(store_dir: &Path, slug: &str, fp: &str, reading: &str) -> bool {
     let rec = read_answer(store_dir, slug);
     rec.get("fingerprint").and_then(Value::as_str) == Some(fp)
         || holds(&rec, "answered", fp)
@@ -448,7 +458,11 @@ fn readers_own(root: &Path, store_dir: &Path, slug: &str) -> Result<bool, Fail> 
 }
 
 /// Add a source-reader or quote-check answer's `reading` to its record (with `qkeys`, a quote-check answer's quotation key).
-pub(crate) fn keep_reading(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn keep_reading(
     store_dir: &Path,
     slug: &str,
     reading: &str,
@@ -495,7 +509,11 @@ fn modal_then(root: &Path, m: &Modal, utc: &str) -> Option<Modal> {
 }
 
 /// A modal-depiction answer recorded under the fingerprint's old formula still answers the words it read.
-pub(crate) fn legacy_depiction_answered(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn legacy_depiction_answered(
     root: &Path,
     store_dir: &Path,
     slug: &str,
@@ -523,7 +541,11 @@ pub(crate) fn legacy_depiction_answered(
 }
 
 /// A modal-depiction answer recorded under amendment 1's formula still answers its pop-up where what the check judges since amendment 6 is unchanged since the answer.
-pub(crate) fn amendment1_depiction_answered(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn amendment1_depiction_answered(
     root: &Path,
     store_dir: &Path,
     slug: &str,
@@ -552,12 +574,20 @@ pub(crate) fn amendment1_depiction_answered(
 }
 
 /// Every owed unit with no current answer.
-pub(crate) fn unanswered(root: &Path) -> Result<Vec<Unit>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn unanswered(root: &Path) -> Result<Vec<Unit>, Fail> {
     unanswered_of(root, units(root, None, None, &FAMILIES, "")?)
 }
 
 /// Those of `rows` (every owed unit of the tree now) with no current answer.
-pub(crate) fn unanswered_of(root: &Path, rows: Vec<Unit>) -> Result<Vec<Unit>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn unanswered_of(root: &Path, rows: Vec<Unit>) -> Result<Vec<Unit>, Fail> {
     let s = store(root);
     let others = sibling_stores(root);
     let modals_now = modals::modals_now(root, true)?;
@@ -602,7 +632,11 @@ fn token_hex() -> String {
 }
 
 /// A stated reason, written where `make audit` reads every escape.
-pub(crate) fn bypass_log(root: &Path, target: &str, why: &str) -> Result<(), Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn bypass_log(root: &Path, target: &str, why: &str) -> Result<(), Fail> {
     let now = utc_now();
     let bl = root.join("dev/bypass-log").join(&now[..7]);
     std::fs::create_dir_all(&bl).map_err(fail)?;
@@ -614,7 +648,11 @@ pub(crate) fn bypass_log(root: &Path, target: &str, why: &str) -> Result<(), Fai
 }
 
 /// {slug: `quotation_key`} of quote-check note units at `rev` (None: the working tree); no write-up is read.
-pub(crate) fn quotation_keys(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn quotation_keys(
     root: &Path,
     rev: Option<&str>,
     slugs: &[String],
@@ -628,7 +666,11 @@ pub(crate) fn quotation_keys(
 }
 
 /// A hand fix of another check's finding, declared on quote-check notes: answered at today's words where the quotation and its claim stand, all or none.
-pub(crate) fn fixed_answer(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn fixed_answer(
     root: &Path,
     q: &str,
     notes: &str,
@@ -684,7 +726,8 @@ pub(crate) fn fixed_answer(
 }
 
 /// Why a record without a bundle is refused, or "".
-pub(crate) fn bundle_less_refusal(check: &str, notes: &str, reason: &str) -> String {
+#[must_use]
+pub fn bundle_less_refusal(check: &str, notes: &str, reason: &str) -> String {
     if check == "source-reader" && !notes.is_empty() {
         return String::new();
     }
@@ -700,11 +743,11 @@ pub(crate) fn bundle_less_refusal(check: &str, notes: &str, reason: &str) -> Str
 }
 
 /// What the named subject of an answer is: its q, note keys, key and kind names.
-pub(crate) struct Named<'a> {
-    pub(crate) q: &'a str,
-    pub(crate) notes: &'a str,
-    pub(crate) key: &'a str,
-    pub(crate) kind: &'a str,
+pub struct Named<'a> {
+    pub q: &'a str,
+    pub notes: &'a str,
+    pub key: &'a str,
+    pub kind: &'a str,
 }
 
 /// The bundle's answer, from its `MANIFEST.md`.
@@ -764,7 +807,11 @@ fn answer_inner(
 }
 
 /// Record the answer for every unit of `check` the bundle carried, or that the tree owes on the named subject, and close that check's dispatches on those subjects.
-pub(crate) fn answer(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn answer(
     root: &Path,
     check: &str,
     result: &str,
@@ -826,7 +873,11 @@ fn outside(reply: &str) -> Vec<(String, String, String)> {
 }
 
 /// Append a reply's OUTSIDE THE CHANGE findings to the active feature's `found.jsonl` as open rows.
-pub(crate) fn file_outside(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn file_outside(
     root: &Path,
     check: &str,
     reply: &str,
@@ -902,7 +953,11 @@ fn run_fixed(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
 }
 
 /// A transcript's last reply, as `make apply-edits` reads one (`apply_edits.reply_of`, phase 4, by command).
-pub(crate) fn reply_of(root: &Path, path: &str) -> Result<String, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn reply_of(root: &Path, path: &str) -> Result<String, Fail> {
     let tree = tree_of(root);
     let said = python(REPLY_OF, &[&tree.to_string_lossy(), path], "")?;
     serde_json::from_str(&said).map_err(fail)
@@ -982,7 +1037,11 @@ fn run_answer(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
 }
 
 /// The command line's modes, past `--root`.
-pub(crate) fn run(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn run(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     if !parsed.text("--answer", "").is_empty() && !parsed.text("--fixed-by", "").is_empty() {
         return run_fixed(root, parsed);
     }

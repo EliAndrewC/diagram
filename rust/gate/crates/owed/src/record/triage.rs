@@ -36,12 +36,17 @@ fn default_out(root: &Path) -> PathBuf {
 }
 
 /// Whether the unit is owed only because a page it names moved.
-pub(crate) fn triage_only(why: &str) -> bool {
+#[must_use]
+pub fn triage_only(why: &str) -> bool {
     why.starts_with("a page its ")
 }
 
 /// {slug: fingerprint} of the units a triage named.
-pub(crate) fn touched(store: &Path) -> Result<std::collections::HashMap<String, String>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn touched(store: &Path) -> Result<std::collections::HashMap<String, String>, Fail> {
     let Some(text) = read_universal(&store.join(TOUCHED))? else {
         return Ok(std::collections::HashMap::new());
     };
@@ -53,7 +58,11 @@ pub(crate) fn touched(store: &Path) -> Result<std::collections::HashMap<String, 
 }
 
 /// (slug, why, fingerprint) of every unit owed only a triage: unanswered at its fingerprint and not named by a triage.
-pub(crate) fn pending(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn pending(
     root: &Path,
     base: &str,
     store: &Path,
@@ -73,7 +82,8 @@ pub(crate) fn pending(
 }
 
 /// The page at `path` written into the clone's object store as it stands; its blob id, or "".
-pub(crate) fn keep(root: &Path, path: &str) -> String {
+#[must_use]
+pub fn keep(root: &Path, path: &str) -> String {
     if !root.join(path).is_file() {
         return String::new();
     }
@@ -230,7 +240,11 @@ fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]
 }
 
 /// Write the triage bundle (`MANIFEST.md`, `triage.json`); (its MANIFEST, how many units), or None for no unit owed one.
-pub(crate) fn bundle(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn bundle(
     root: &Path,
     out: &Path,
     base: &str,
@@ -330,7 +344,11 @@ fn as_pages(v: Option<&Value>) -> Vec<String> {
 }
 
 /// Apply a triage reply; the messages `make modal-triaged` prints.
-pub(crate) fn record(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn record(
     store: &Path,
     units: &Map<String, Value>,
     reply: &str,
@@ -425,7 +443,11 @@ pub(crate) fn record(
 }
 
 /// Why `make modal-bundle` may not bundle `check` on `m` yet: a unit of it owed only a triage that has not named it.
-pub(crate) fn refusal(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn refusal(
     root: &Path,
     m: &Modal,
     check: &str,
@@ -516,7 +538,7 @@ fn owed_reply(root: &Path, path: &str) -> Result<String, Fail> {
 }
 
 /// `record modal-triage [--root DIR] bundle [--out DIR] | record --bundle DIR --reply F`.
-pub(crate) fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String]) -> Reply {
     let main = [Spec::value("--root")];
     let mut i = 0;
     while i < args.len() && args[i].starts_with('-') {

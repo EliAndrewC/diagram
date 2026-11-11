@@ -13,20 +13,21 @@ use serde_json::{json, Map, Value};
 use super::repo::{cat_blobs, git, git_show, read_text, read_universal, Fail};
 use super::units::{digest, re, Keyed};
 
-pub(crate) const MODAL_DIRS: [&str; 2] = [
+pub const MODAL_DIRS: [&str; 2] = [
     "l7r/diagram/interactive/classes",
     "l7r/diagram/interactive/compound_kinds",
 ];
-pub(crate) const MODALS: &str = "l7r/diagram/interactive/assets/modals";
-pub(crate) const FORM_CHECK: &str = "modal-form";
-pub(crate) const RESEARCH_CHECKS: [&str; 3] = ["modal-accuracy", "modal-references", "modal-gaps"];
-pub(crate) const DEPICTION_CHECK: &str = "modal-depiction";
-pub(crate) const RESEARCH_AGENT: &str = "modal-research";
+pub const MODALS: &str = "l7r/diagram/interactive/assets/modals";
+pub const FORM_CHECK: &str = "modal-form";
+pub const RESEARCH_CHECKS: [&str; 3] = ["modal-accuracy", "modal-references", "modal-gaps"];
+pub const DEPICTION_CHECK: &str = "modal-depiction";
+pub const RESEARCH_AGENT: &str = "modal-research";
 /// A pop-up's checks in their order (feature 375 amendment 3, FR-019).
-pub(crate) const ORDER: [&str; 3] = [FORM_CHECK, RESEARCH_AGENT, DEPICTION_CHECK];
+pub const ORDER: [&str; 3] = [FORM_CHECK, RESEARCH_AGENT, DEPICTION_CHECK];
 
 /// The units each check of `ORDER` answers.
-pub(crate) fn agent_units(agent: &str) -> &'static [&'static str] {
+#[must_use]
+pub fn agent_units(agent: &str) -> &'static [&'static str] {
     match agent {
         "modal-form" => &["modal-form"],
         "modal-research" => &RESEARCH_CHECKS,
@@ -44,7 +45,8 @@ fn agent_of(unit_check: &str) -> &'static str {
 }
 
 /// The unit checks of every check BEFORE the one answering `unit_checks`; none unless they are one check's.
-pub(crate) fn earlier_units(unit_checks: &[String]) -> Vec<String> {
+#[must_use]
+pub fn earlier_units(unit_checks: &[String]) -> Vec<String> {
     let agents: HashSet<&str> = unit_checks.iter().map(|c| agent_of(c)).collect();
     let mut one = agents.iter();
     let (Some(agent), None) = (one.next(), one.next()) else {
@@ -81,16 +83,17 @@ fn slug_of(key: &str) -> String {
 
 /// One About-form modal class as its source states it: the parts the checks read.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub(crate) struct Modal {
-    pub(crate) cls: String,
-    pub(crate) key: String,
-    pub(crate) origin: String,
-    pub(crate) tags: Vec<(String, String)>,
-    pub(crate) doc: String,
+pub struct Modal {
+    pub cls: String,
+    pub key: String,
+    pub origin: String,
+    pub tags: Vec<(String, String)>,
+    pub doc: String,
 }
 
 impl Modal {
-    pub(crate) fn tag(&self, name: &str) -> &str {
+    #[must_use]
+    pub fn tag(&self, name: &str) -> &str {
         self.tags
             .iter()
             .find(|(k, _)| k == name)
@@ -98,7 +101,8 @@ impl Modal {
     }
 
     /// `<hamlet|sheet>/<slug>`, or `choice/<file stem>`.
-    pub(crate) fn uid(&self) -> String {
+    #[must_use]
+    pub fn uid(&self) -> String {
         if self.origin.contains("/modals/choice/") {
             return format!("choice/{}", stem(&self.origin));
         }
@@ -111,17 +115,20 @@ impl Modal {
         format!("{registry}/{}", slug_of(&self.key))
     }
 
-    pub(crate) fn prose(&self) -> String {
+    #[must_use]
+    pub fn prose(&self) -> String {
         ["Name", "About", "Guesses", "Form"]
             .map(|t| self.tag(t))
             .join("\n")
     }
 
-    pub(crate) fn entry(&self) -> &str {
+    #[must_use]
+    pub fn entry(&self) -> &str {
         self.tag("Entry")
     }
 
-    pub(crate) fn form(&self) -> &str {
+    #[must_use]
+    pub fn form(&self) -> &str {
         if self.tag("Form").is_empty() {
             "standard"
         } else {
@@ -129,20 +136,24 @@ impl Modal {
         }
     }
 
-    pub(crate) fn entry_files(&self) -> Vec<String> {
+    #[must_use]
+    pub fn entry_files(&self) -> Vec<String> {
         unique_paths(self.entry())
     }
 
-    pub(crate) fn depiction(&self) -> String {
+    #[must_use]
+    pub fn depiction(&self) -> String {
         ["Depiction", "Drawing"].map(|t| self.tag(t)).join("\n")
     }
 
-    pub(crate) fn drawing_files(&self) -> Vec<String> {
+    #[must_use]
+    pub fn drawing_files(&self) -> Vec<String> {
         unique_paths(self.tag("Drawing"))
     }
 
     /// The modal for a Python caller: its fields and every derived property, all computed here.
-    pub(crate) fn json(&self) -> Value {
+    #[must_use]
+    pub fn json(&self) -> Value {
         let tags: Map<String, Value> = self
             .tags
             .iter()
@@ -156,7 +167,7 @@ impl Modal {
     }
 
     /// A modal handed back by a Python caller.
-    pub(crate) fn from_json(value: &Value) -> Self {
+    pub fn from_json(value: &Value) -> Self {
         let text = |k: &str| {
             value
                 .get(k)
@@ -193,14 +204,14 @@ fn unique_paths(text: &str) -> Vec<String> {
 }
 
 /// The file stem of a repository-relative path.
-pub(crate) fn stem(path: &str) -> String {
+pub fn stem(path: &str) -> String {
     Path::new(path)
         .file_stem()
         .map_or_else(String::new, |s| s.to_string_lossy().into_owned())
 }
 
 /// A class docstring's or modal file's tags, each value its lines (`modal_owed.parse_tags`); insertion order kept.
-pub(crate) fn parse_tags(doc: &str) -> Vec<(String, String)> {
+pub fn parse_tags(doc: &str) -> Vec<(String, String)> {
     let mut out: Vec<(String, Vec<String>)> = Vec::new();
     let mut cur: Option<usize> = None;
     for raw in crate::record::py_lines(doc) {
@@ -259,7 +270,8 @@ fn join_tag(tag: &str, lines: &[String]) -> String {
 }
 
 /// The modal file (repository-relative) of the kind `key` defined in the module at `py_path`.
-pub(crate) fn modal_file(py_path: &str, key: &str) -> String {
+#[must_use]
+pub fn modal_file(py_path: &str, key: &str) -> String {
     let registry = if py_path.contains("compound_kinds") {
         "sheet"
     } else {
@@ -269,7 +281,11 @@ pub(crate) fn modal_file(py_path: &str, key: &str) -> String {
 }
 
 /// (class name, key, line, docstring) of every class in a module's source that sets a string `key`.
-pub(crate) fn kinds_in(source: &str) -> Result<Vec<(String, String, usize, String)>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn kinds_in(source: &str) -> Result<Vec<(String, String, usize, String)>, Fail> {
     pylex::kinds(source)
         .map(|found| {
             found
@@ -281,7 +297,7 @@ pub(crate) fn kinds_in(source: &str) -> Result<Vec<(String, String, usize, Strin
 }
 
 /// The file at `f`, or None; reads the tree now or a revision.
-pub(crate) type Reader<'a> = &'a mut dyn FnMut(&str) -> Result<Option<String>, Fail>;
+pub type Reader<'a> = &'a mut dyn FnMut(&str) -> Result<Option<String>, Fail>;
 
 /// The modals of one module's source.
 fn modals_in(source: &str, path: &str, read: Reader, about_only: bool) -> Result<Vec<Modal>, Fail> {
@@ -315,7 +331,7 @@ fn read_now(root: &Path) -> impl FnMut(&str) -> Result<Option<String>, Fail> + '
 }
 
 /// A revision's files under some directories, read by one listing and one `git cat-file --batch`; any other path by its own `git show`.
-pub(crate) struct RevReader {
+pub struct RevReader {
     root: PathBuf,
     rev: String,
     dirs: Vec<String>,
@@ -323,7 +339,8 @@ pub(crate) struct RevReader {
 }
 
 impl RevReader {
-    pub(crate) fn new(root: &Path, rev: &str, dirs: &[&str]) -> Self {
+    #[must_use]
+    pub fn new(root: &Path, rev: &str, dirs: &[&str]) -> Self {
         Self {
             root: root.to_path_buf(),
             rev: rev.to_owned(),
@@ -372,7 +389,7 @@ impl RevReader {
     }
 
     /// The file at `path` at the revision, or None where it has none.
-    pub(crate) fn read(&mut self, path: &str) -> Option<String> {
+    pub fn read(&mut self, path: &str) -> Option<String> {
         if self.inside(path) {
             return self.load().get(path).cloned();
         }
@@ -381,14 +398,16 @@ impl RevReader {
 }
 
 /// `read_at` on a revision's modal directories and any path else.
-pub(crate) fn read_at(root: &Path, rev: &str) -> RevReader {
+#[must_use]
+pub fn read_at(root: &Path, rev: &str) -> RevReader {
     let mut dirs: Vec<&str> = MODAL_DIRS.to_vec();
     dirs.push(MODALS);
     RevReader::new(root, rev, &dirs)
 }
 
 /// A title-card choice's modal, from its file; None for no tags (or, `about_only`, no About).
-pub(crate) fn choice_modal(path: &str, text: &str, about_only: bool) -> Option<Modal> {
+#[must_use]
+pub fn choice_modal(path: &str, text: &str, about_only: bool) -> Option<Modal> {
     let tags = parse_tags(text);
     if tags.is_empty() || (about_only && !tags.iter().any(|(k, _)| k == "About")) {
         return None;
@@ -420,7 +439,11 @@ fn glob_sorted(dir: &Path, suffix: &str) -> Vec<String> {
 }
 
 /// Every modal in the tree now.
-pub(crate) fn modals_now(root: &Path, about_only: bool) -> Result<Vec<Modal>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn modals_now(root: &Path, about_only: bool) -> Result<Vec<Modal>, Fail> {
     let mut out = Vec::new();
     for d in MODAL_DIRS {
         for name in glob_sorted(&root.join(d), ".py") {
@@ -441,7 +464,11 @@ pub(crate) fn modals_now(root: &Path, about_only: bool) -> Result<Vec<Modal>, Fa
 }
 
 /// The modals at a revision, keyed by uid.
-pub(crate) fn modals_at(root: &Path, rev: &str, about_only: bool) -> Result<Keyed<Modal>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn modals_at(root: &Path, rev: &str, about_only: bool) -> Result<Keyed<Modal>, Fail> {
     let mut out = Keyed::default();
     let mut read = read_at(root, rev);
     for d in MODAL_DIRS {
@@ -465,7 +492,8 @@ pub(crate) fn modals_at(root: &Path, rev: &str, about_only: bool) -> Result<Keye
 }
 
 /// An About-form modal by class name, key or uid, among `modals`.
-pub(crate) fn find<'a>(modals: &'a [Modal], kind: &str) -> Option<&'a Modal> {
+#[must_use]
+pub fn find<'a>(modals: &'a [Modal], kind: &str) -> Option<&'a Modal> {
     modals.iter().find(|m| {
         kind == m.uid()
             || kind == m.key
@@ -497,7 +525,11 @@ fn digest_owned(parts: &[String]) -> String {
 }
 
 /// (the form units' fingerprint, the research units' fingerprint).
-pub(crate) fn fingerprints(root: &Path, m: &Modal) -> Result<(String, String), Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn fingerprints(root: &Path, m: &Modal) -> Result<(String, String), Fail> {
     let mut research = vec![m.uid(), m.prose(), m.entry().to_owned()];
     let form = digest_owned(&research);
     research.extend(pages(root, &m.entry_files())?);
@@ -505,14 +537,22 @@ pub(crate) fn fingerprints(root: &Path, m: &Modal) -> Result<(String, String), F
 }
 
 /// What `modal-depiction` judges: the `Entry:` list, the Depiction tab, the `Drawing:` list and those pages.
-pub(crate) fn depiction_fingerprint(root: &Path, m: &Modal) -> Result<String, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn depiction_fingerprint(root: &Path, m: &Modal) -> Result<String, Fail> {
     let mut parts = vec![m.uid(), m.entry().to_owned(), m.depiction()];
     parts.extend(pages(root, &m.drawing_files())?);
     Ok(digest_owned(&parts))
 }
 
 /// The depiction fingerprint as amendment 1 computed it, About in it.
-pub(crate) fn amendment1_depiction_fingerprint(root: &Path, m: &Modal) -> Result<String, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn amendment1_depiction_fingerprint(root: &Path, m: &Modal) -> Result<String, Fail> {
     let mut parts = vec![
         m.uid(),
         m.tag("About").to_owned(),
@@ -524,14 +564,19 @@ pub(crate) fn amendment1_depiction_fingerprint(root: &Path, m: &Modal) -> Result
 }
 
 /// The depiction fingerprint as it was computed before amendment 1.
-pub(crate) fn legacy_depiction_fingerprint(root: &Path, m: &Modal) -> Result<String, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn legacy_depiction_fingerprint(root: &Path, m: &Modal) -> Result<String, Fail> {
     let mut parts = vec![m.uid(), m.prose(), m.depiction()];
     parts.extend(pages(root, &m.drawing_files())?);
     Ok(digest_owned(&parts))
 }
 
 /// Whether an edit from `was` to `m` owes `modal-depiction`.
-pub(crate) fn depiction_owed_by(was: Option<&Modal>, m: &Modal) -> bool {
+#[must_use]
+pub fn depiction_owed_by(was: Option<&Modal>, m: &Modal) -> bool {
     was.is_none_or(|w| w.depiction() != m.depiction() || w.entry() != m.entry())
 }
 
@@ -593,7 +638,11 @@ fn changed_pages(root: &Path, base: &str) -> Result<HashSet<String>, Fail> {
 }
 
 /// (slug, occasion, fingerprint) for every unit an About-form modal owes against `base`; `uid` scopes it to one pop-up.
-pub(crate) fn owed(
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn owed(
     root: &Path,
     base: &str,
     uid: &str,
@@ -692,12 +741,17 @@ fn owed_row(
 }
 
 /// The keys of every About-form modal.
-pub(crate) fn about_keys(root: &Path) -> Result<HashSet<String>, Fail> {
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn about_keys(root: &Path) -> Result<HashSet<String>, Fail> {
     Ok(modals_now(root, true)?.into_iter().map(|m| m.key).collect())
 }
 
 /// `record modal-owed [--root DIR]`: the owed units, one a line (`modal_owed.py`'s own command line).
-pub(crate) fn cli(args: &[String]) -> crate::Reply {
+#[must_use]
+pub fn cli(args: &[String]) -> crate::Reply {
     let flags = [super::args::Spec::value("--root")];
     let parsed = match super::args::parse(args, &flags) {
         Ok(p) => p,
