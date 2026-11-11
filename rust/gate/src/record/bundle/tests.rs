@@ -35,10 +35,10 @@ for line in sys.stdin:
         pathlib.Path(a[1]).mkdir(parents=True, exist_ok=True)
         pathlib.Path(a[1], "MANIFEST.txt").write_text("\n".join(a[0]) + "\n")
         print(json.dumps({"ok": None}), flush=True)
-    elif v == "claims_rows":
-        print(json.dumps({"ok": {"l7r/m.py::Mod.ROUND_CAP#cap": {"backing": "POINTER", "line": "ROUND_CAP is 12 ft"}, "l7r/m.py::other#o": {"backing": "GUESS", "line": "about 3 households"}, "l7r/m.py::Third#t": {"backing": "CONVENTION", "line": "nothing named"}}}), flush=True)
-    elif v == "load_index":
-        print(json.dumps({"ok": {"l7r/m.py::Mod.ROUND_CAP#cap": {"verdict": "IN-STEP"}}}), flush=True)
+    elif v == "claims_py_units":
+        def u(q, kind, claim):
+            return {"path": "l7r/m.py", "qualname": q, "kind": kind, "lineno": 1, "end_lineno": 1, "claims": [claim], "inherited": False, "core": "c", "errors": [], "names": [], "blocks": [], "module_errors": []}
+        print(json.dumps({"ok": [[u("Mod.ROUND_CAP", "constant", "cap - research/questions/0094-trade.html: ROUND_CAP is 12 ft"), u("other", "function", "o - GUESS: about 3 households"), u("Third", "class", "t - CONVENTION: nothing named")], []]}), flush=True)
     elif v == "knobs":
         print(json.dumps({"ok": {"winter_crop": ["none", "wheat"]}}), flush=True)
     elif v == "knob_table":

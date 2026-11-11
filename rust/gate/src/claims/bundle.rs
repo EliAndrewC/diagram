@@ -11,7 +11,10 @@ use l7r_guard::shared::checks::pages::read_page;
 use l7r_guard::shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
-use super::index::{body_of, field, is, load_map, page_blocks, page_name, source_span, Cur, PageMemo, Row, INDEX, QUESTIONS};
+use super::index::{
+    body_of, field, is, load_map, page_blocks, page_name, source_span, Cur, PageMemo, Row, INDEX,
+    QUESTIONS,
+};
 use super::scope::Reader;
 use super::units::{items, splitlines, Unit};
 use crate::record::repo::{fail, git, read_text, Fail};
@@ -20,12 +23,14 @@ use crate::record::units::{digest, re};
 /// The most of its own module's functions a unit carries into its bundle as context.
 const CALLEES_MAX: usize = 6;
 
-static HUNK_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"\A@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@"));
+static HUNK_LINE: LazyLock<Regex> =
+    LazyLock::new(|| re(r"\A@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@"));
 static CONSTANT_NAME: LazyLock<Regex> = LazyLock::new(|| re(r"\b[A-Z][A-Z0-9_]+\b"));
 static BACKTICKED: LazyLock<Regex> = LazyLock::new(|| re(r"`([A-Za-z_]\w*)"));
 /// A claim whose label names a distance, gap or standoff (`claims_context.DISTANCE`).
-static DISTANCE: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?i)\b(?:distance|gaps?|standoff|apart|reach|clear of|off the|ft|feet)\b"));
+static DISTANCE: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"(?i)\b(?:distance|gaps?|standoff|apart|reach|clear of|off the|ft|feet)\b")
+});
 
 const HEAD: [&str; 5] = [
     "# Bundle for impl-drift (feature 316)\n",
@@ -46,11 +51,18 @@ pub(crate) fn changed_lines(root: &Path, base: &str) -> HashMap<String, HashSet<
     let mut path = String::new();
     for line in splitlines(&git(root, &["diff", "-U0", mb])) {
         if line.starts_with("+++ ") {
-            path = line.strip_prefix("+++ b/").map_or_else(String::new, |_| line.chars().skip(6).collect());
-        } else if let Some(m) = (!path.is_empty()).then(|| HUNK_LINE.captures(&line).ok().flatten()).flatten() {
+            path = line
+                .strip_prefix("+++ b/")
+                .map_or_else(String::new, |_| line.chars().skip(6).collect());
+        } else if let Some(m) = (!path.is_empty())
+            .then(|| HUNK_LINE.captures(&line).ok().flatten())
+            .flatten()
+        {
             let start: usize = m[1].parse().unwrap_or(0);
             let n: usize = m.get(2).map_or(1, |g| g.as_str().parse().unwrap_or(0));
-            out.entry(path.clone()).or_default().extend(start..start + n);
+            out.entry(path.clone())
+                .or_default()
+                .extend(start..start + n);
         }
     }
     out
@@ -72,7 +84,11 @@ pub(crate) fn mark_changed(src: &str, first: usize, changed: Option<&HashSet<usi
 }
 
 /// The source of `path::qualname`: a Rust item by the item scan, a `.py` unit by Python's syntax tree through the runner.
-pub(crate) fn context_source(reader: &mut Reader, root: &Path, reference: &str) -> Result<String, Fail> {
+pub(crate) fn context_source(
+    reader: &mut Reader,
+    root: &Path,
+    reference: &str,
+) -> Result<String, Fail> {
     let (path, qual) = reference.split_once("::").unwrap_or((reference, ""));
     if path.ends_with(".rs") {
         let text = read_text(&root.join(path))?;
@@ -82,13 +98,20 @@ pub(crate) fn context_source(reader: &mut Reader, root: &Path, reference: &str) 
             .map(|i| i.5)
             .ok_or_else(|| format!("ValueError: no `{qual}` in {path}"));
     }
-    let got = reader.ask("claims_context_source", &json!([root.to_string_lossy(), reference]))?;
+    let got = reader.ask(
+        "claims_context_source",
+        &json!([root.to_string_lossy(), reference]),
+    )?;
     Ok(got.as_str().unwrap_or_default().to_owned())
 }
 
 /// `path::NAME` of each `const` or `static` of the `.rs` file at `path` that `source` names (feature 444 T16).
 pub(crate) fn rust_constants(root: &Path, path: &str, source: &str) -> Result<Vec<String>, Fail> {
-    let named: HashSet<&str> = CONSTANT_NAME.find_iter(source).flatten().map(|m| m.as_str()).collect();
+    let named: HashSet<&str> = CONSTANT_NAME
+        .find_iter(source)
+        .flatten()
+        .map(|m| m.as_str())
+        .collect();
     let text = read_text(&root.join(path))?;
     let head = super::units::lstripped(source);
     Ok(items(&text, 0, "", false)
@@ -115,24 +138,55 @@ fn strings(v: &Value) -> Vec<String> {
 }
 
 /// A `.py` unit's context: its own module's functions it calls, every constant it reads, what a distance claim turns on, what a CANNOT-TELL asked.
-fn py_context(reader: &mut Reader, root: &Path, unit: &Unit, src: &str, rows: &[&Row], index: &Map<String, Value>) -> Result<Vec<String>, Fail> {
+fn py_context(
+    reader: &mut Reader,
+    root: &Path,
+    unit: &Unit,
+    src: &str,
+    rows: &[&Row],
+    index: &Map<String, Value>,
+) -> Result<Vec<String>, Fail> {
     let mut asked = Vec::new();
     for r in rows {
         let row = index.get(&r.key).cloned().unwrap_or(Value::Null);
         if is(&row, "verdict", "CANNOT-TELL") {
-            asked.extend(BACKTICKED.captures_iter(field(&row, "note")).flatten().map(|c| c[1].to_owned()));
+            asked.extend(
+                BACKTICKED
+                    .captures_iter(field(&row, "note"))
+                    .flatten()
+                    .map(|c| c[1].to_owned()),
+            );
         }
     }
     let r = root.to_string_lossy();
-    let mut out = strings(&reader.ask("claims_callees", &json!([r, unit.path, unit.qualname, src, CALLEES_MAX]))?);
-    if rows.iter().any(|r| DISTANCE.is_match(&r.claim.label).unwrap_or(false)) {
-        out.extend(strings(&reader.ask("claims_direct", &json!([r, unit.path, unit.qualname, src]))?));
+    let mut out = strings(&reader.ask(
+        "claims_callees",
+        &json!([r, unit.path, unit.qualname, src, CALLEES_MAX]),
+    )?);
+    if rows
+        .iter()
+        .any(|r| DISTANCE.is_match(&r.claim.label).unwrap_or(false))
+    {
+        out.extend(strings(&reader.ask(
+            "claims_direct",
+            &json!([r, unit.path, unit.qualname, src]),
+        )?));
     }
-    out.extend(strings(&reader.ask("claims_chase", &json!([r, unit.path, asked]))?));
+    out.extend(strings(
+        &reader.ask("claims_chase", &json!([r, unit.path, asked]))?,
+    ));
     Ok(out)
 }
 
-fn unit_part(reader: &mut Reader, root: &Path, rows: &[&Row], index: &Map<String, Value>, marked: &HashMap<String, HashSet<usize>>, context: &mut Vec<String>, parts: &mut Vec<String>) -> Result<(), Fail> {
+fn unit_part(
+    reader: &mut Reader,
+    root: &Path,
+    rows: &[&Row],
+    index: &Map<String, Value>,
+    marked: &HashMap<String, HashSet<usize>>,
+    context: &mut Vec<String>,
+    parts: &mut Vec<String>,
+) -> Result<(), Fail> {
     let unit = &rows[0].unit;
     let lang = if unit.kind == "section" {
         "markdown"
@@ -141,23 +195,40 @@ fn unit_part(reader: &mut Reader, root: &Path, rows: &[&Row], index: &Map<String
     } else {
         "python"
     };
-    parts.push(format!("## UNIT {} ({}, {}:{})\n", unit.uid(), unit.kind, unit.path, unit.lineno));
-    let inherited = if unit.inherited { " (inherited from the module docstring)" } else { "" };
+    parts.push(format!(
+        "## UNIT {} ({}, {}:{})\n",
+        unit.uid(),
+        unit.kind,
+        unit.path,
+        unit.lineno
+    ));
+    let inherited = if unit.inherited {
+        " (inherited from the module docstring)"
+    } else {
+        ""
+    };
     for r in rows {
         parts.push(format!("- KEY `{}`: `{}`{inherited}", r.key, r.claim.line));
     }
     let owed_lines: HashSet<&String> = rows.iter().map(|r| &r.claim.line).collect();
     for c in &unit.claims {
         if !owed_lines.contains(&c.line) {
-            parts.push(format!("- ALSO CLAIMED (checked already; context, no verdict owed): `{}`", c.line));
+            parts.push(format!(
+                "- ALSO CLAIMED (checked already; context, no verdict owed): `{}`",
+                c.line
+            ));
         }
     }
     if !unit.names.is_empty() {
         let names: Vec<String> = unit.names.iter().map(|n| format!("`{n}`")).collect();
         parts.push(format!("- constants it reads: {}", names.join("; ")));
     }
-    let (first, src) = source_span(root, unit)?.ok_or_else(|| format!("FileNotFoundError: {}", unit.path))?;
-    parts.push(format!("\n```{lang}\n{}\n```\n", mark_changed(&src, first, marked.get(&unit.path))));
+    let (first, src) =
+        source_span(root, unit)?.ok_or_else(|| format!("FileNotFoundError: {}", unit.path))?;
+    parts.push(format!(
+        "\n```{lang}\n{}\n```\n",
+        mark_changed(&src, first, marked.get(&unit.path))
+    ));
     if unit.path.ends_with(".rs") {
         let mut more = std::mem::take(context);
         more.extend(rust_constants(root, &unit.path, &src)?);
@@ -170,21 +241,41 @@ fn unit_part(reader: &mut Reader, root: &Path, rows: &[&Row], index: &Map<String
     Ok(())
 }
 
-fn context_part(reader: &mut Reader, root: &Path, context: &[String], index: &Map<String, Value>, parts: &mut Vec<String>) -> Result<(), Fail> {
+fn context_part(
+    reader: &mut Reader,
+    root: &Path,
+    context: &[String],
+    index: &Map<String, Value>,
+    parts: &mut Vec<String>,
+) -> Result<(), Fail> {
     if context.is_empty() {
         return Ok(());
     }
     parts.push("# Context (read it; it is not judged)\n\nCode the units above call or read, shown so a verdict can see it:\n".to_owned());
     for reference in context {
-        let lang = if reference.split_once("::").map_or(reference.as_str(), |p| p.0).ends_with(".rs") { "rust" } else { "python" };
-        parts.push(format!("## CONTEXT {reference}\n\n```{lang}\n{}\n```\n", context_source(reader, root, reference)?));
+        let lang = if reference
+            .split_once("::")
+            .map_or(reference.as_str(), |p| p.0)
+            .ends_with(".rs")
+        {
+            "rust"
+        } else {
+            "python"
+        };
+        parts.push(format!(
+            "## CONTEXT {reference}\n\n```{lang}\n{}\n```\n",
+            context_source(reader, root, reference)?
+        ));
         let prefix = format!("{reference}#");
         let own: Vec<String> = index
             .iter()
             .filter(|(k, v)| k.starts_with(&prefix) && !is(v, "verdict", "UNCLAIMED"))
             .map(|(k, v)| {
                 let label = k.split_once('#').map_or("", |p| p.1);
-                let verdict = v.get("verdict").and_then(Value::as_str).unwrap_or("unjudged");
+                let verdict = v
+                    .get("verdict")
+                    .and_then(Value::as_str)
+                    .unwrap_or("unjudged");
                 format!("- its claim `{label}`: last judged {verdict}")
             })
             .collect();
@@ -197,20 +288,38 @@ fn context_part(reader: &mut Reader, root: &Path, context: &[String], index: &Ma
     Ok(())
 }
 
-fn questions_part(cur: &Cur, keys: &[String], cited: &[String], qdir: &Path, out: &Path, parts: &mut Vec<String>) -> Result<(Map<String, Value>, Map<String, Value>, PageMemo), Fail> {
+fn questions_part(
+    cur: &Cur,
+    keys: &[String],
+    cited: &[String],
+    qdir: &Path,
+    out: &Path,
+    parts: &mut Vec<String>,
+) -> Result<(Map<String, Value>, Map<String, Value>, PageMemo), Fail> {
     std::fs::create_dir(out.join("questions")).map_err(fail)?;
     parts.push("# The cited questions\n\nEach is a file under `questions/` beside this MANIFEST - read each one a unit cites, once:\n".to_owned());
     let (mut numbered, mut snapshots, mut memo) = (Map::new(), Map::new(), PageMemo::default());
     for k in keys {
         let row = cur.get(k).unwrap_or_else(|| unreachable!());
         if row.unit.line_keyed() {
-            snapshots.insert(row.unit.core.clone(), json!(row.unit.blocks.iter().map(|b| digest(&[b])).collect::<Vec<_>>()));
+            snapshots.insert(
+                row.unit.core.clone(),
+                json!(row
+                    .unit
+                    .blocks
+                    .iter()
+                    .map(|b| digest(&[b]))
+                    .collect::<Vec<_>>()),
+            );
         }
     }
     for name in cited {
         let page = read_page(&read_text(&qdir.join(name))?);
         let (fp, blocks) = page_blocks(name, qdir, &mut memo)?.clone();
-        snapshots.insert(fp, json!(blocks.iter().map(|(d, _)| d.clone()).collect::<Vec<_>>()));
+        snapshots.insert(
+            fp,
+            json!(blocks.iter().map(|(d, _)| d.clone()).collect::<Vec<_>>()),
+        );
         let mut lines = Vec::new();
         for b in &page.blocks {
             if b.intro {
@@ -218,10 +327,17 @@ fn questions_part(cur: &Cur, keys: &[String], cited: &[String], qdir: &Path, out
                 continue;
             }
             let n = numbered.len() + 1;
-            numbered.insert(format!("§{n}"), json!(format!("{name}:{}", digest(&[&b.words]))));
+            numbered.insert(
+                format!("§{n}"),
+                json!(format!("{name}:{}", digest(&[&b.words]))),
+            );
             lines.push(format!("[§{n}] {}", b.words));
         }
-        let text = format!("# {}\n({QUESTIONS}/{name})\n\n{}\n", page.heading, lines.join("\n\n"));
+        let text = format!(
+            "# {}\n({QUESTIONS}/{name})\n\n{}\n",
+            page.heading,
+            lines.join("\n\n")
+        );
         std::fs::write(out.join("questions").join(format!("{name}.txt")), text).map_err(fail)?;
         parts.push(format!("- `questions/{name}.txt` - {}", page.heading));
     }
@@ -229,7 +345,15 @@ fn questions_part(cur: &Cur, keys: &[String], cited: &[String], qdir: &Path, out
 }
 
 /// Writes the bundle for `keys` (rows of `cur`) under `out`; the MANIFEST's path.
-pub(crate) fn bundle(reader: &mut Reader, root: &Path, cur: &Cur, keys: &[String], out: &Path, with: &[String], pages: &[String]) -> Result<PathBuf, Fail> {
+pub(crate) fn bundle(
+    reader: &mut Reader,
+    root: &Path,
+    cur: &Cur,
+    keys: &[String],
+    out: &Path,
+    with: &[String],
+    pages: &[String],
+) -> Result<PathBuf, Fail> {
     if out.exists() {
         std::fs::remove_dir_all(out).map_err(fail)?;
     }
@@ -249,7 +373,15 @@ pub(crate) fn bundle(reader: &mut Reader, root: &Path, cur: &Cur, keys: &[String
     let marked = changed_lines(root, "origin/main");
     let mut context = with.to_vec();
     for (_, rows) in &by_uid {
-        unit_part(reader, root, rows, &index, &marked, &mut context, &mut parts)?;
+        unit_part(
+            reader,
+            root,
+            rows,
+            &index,
+            &marked,
+            &mut context,
+            &mut parts,
+        )?;
         for c in &rows[0].unit.claims {
             for ptr in &c.pointers {
                 let name = page_name(ptr).to_owned();
@@ -263,13 +395,17 @@ pub(crate) fn bundle(reader: &mut Reader, root: &Path, cur: &Cur, keys: &[String
     for p in pages {
         let p = page_name(p).to_owned();
         if !qdir.join(&p).is_file() {
-            return Err(format!("ValueError: PAGES: no question file {p} under {}", qdir.display()));
+            return Err(format!(
+                "ValueError: PAGES: no question file {p} under {}",
+                qdir.display()
+            ));
         }
         if !cited.contains(&p) {
             cited.push(p);
         }
     }
-    let (numbered, snapshots, mut memo) = questions_part(cur, keys, &cited, &qdir, out, &mut parts)?;
+    let (numbered, snapshots, mut memo) =
+        questions_part(cur, keys, &cited, &qdir, out, &mut parts)?;
     std::fs::write(out.join("MANIFEST.md"), parts.join("\n") + "\n").map_err(fail)?;
     let mut units = Map::new();
     for k in keys {
@@ -277,7 +413,10 @@ pub(crate) fn bundle(reader: &mut Reader, root: &Path, cur: &Cur, keys: &[String
         let mut pages = Map::new();
         for ptr in &row.claim.pointers {
             let name = page_name(ptr);
-            pages.insert(name.to_owned(), json!(page_blocks(name, &qdir, &mut memo)?.0));
+            pages.insert(
+                name.to_owned(),
+                json!(page_blocks(name, &qdir, &mut memo)?.0),
+            );
         }
         let mut u = json!({
             "code": row.code, "core": row.unit.core, "body": body_of(root, &row.unit)?, "claim": row.claim.normalized(),
@@ -288,9 +427,17 @@ pub(crate) fn bundle(reader: &mut Reader, root: &Path, cur: &Cur, keys: &[String
         }
         units.insert(k.clone(), u);
     }
-    std::fs::write(out.join("units.json"), dumps(&sorted(&Value::Object(units)), Some(1), true) + "\n").map_err(fail)?;
+    std::fs::write(
+        out.join("units.json"),
+        dumps(&sorted(&Value::Object(units)), Some(1), true) + "\n",
+    )
+    .map_err(fail)?;
     let blocks = json!({"numbered": numbered, "snapshots": snapshots});
-    std::fs::write(out.join("blocks.json"), dumps(&sorted(&blocks), Some(1), true) + "\n").map_err(fail)?;
+    std::fs::write(
+        out.join("blocks.json"),
+        dumps(&sorted(&blocks), Some(1), true) + "\n",
+    )
+    .map_err(fail)?;
     Ok(out.join("MANIFEST.md"))
 }
 

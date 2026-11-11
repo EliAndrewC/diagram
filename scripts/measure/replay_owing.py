@@ -66,9 +66,20 @@ print(n)
 """
 _CLAIMS = """
 import sys, json, pathlib
-scripts = sys.argv[1]; sys.path.insert(0, scripts + '/scripts/record'); import claims as cx
-root = pathlib.Path('.').resolve(); qdir = root / cx.QUESTIONS
+scripts = sys.argv[1]
+root = pathlib.Path('.').resolve()
 index = json.loads(pathlib.Path(sys.argv[2]).read_text()); store = json.loads(pathlib.Path(sys.argv[3]).read_text())
+if pathlib.Path(scripts, 'scripts', 'claims_door.py').is_file():  # the claims tools in Rust (feature 449 T82): their door
+    sys.path.insert(0, scripts + '/scripts'); import claims_door as cd
+    if sys.argv[4] == 'migrate':
+        _n, index, store = cd.backfill_sections(root, index, store)
+        pathlib.Path(sys.argv[2]).write_text(json.dumps(index)); pathlib.Path(sys.argv[3]).write_text(json.dumps(store))
+        print('[]')
+    else:
+        print(json.dumps(cd.owed(root, index, store)))
+    sys.exit(0)
+sys.path.insert(0, scripts + '/scripts/record'); import claims as cx  # a commit before T82: its own Python
+qdir = root / cx.QUESTIONS
 cur = cx.current(root)
 if sys.argv[4] == 'migrate':
     cx.backfill_sections(cur, index, store)

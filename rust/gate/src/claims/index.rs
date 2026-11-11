@@ -125,7 +125,12 @@ pub(crate) fn page_name(ptr: &str) -> &str {
 pub(crate) fn findings_of(page_text: &str) -> String {
     let page = read_page(page_text);
     let mut parts: Vec<&str> = vec![&page.heading];
-    parts.extend(page.blocks.iter().filter(|b| !b.intro).map(|b| b.words.as_str()));
+    parts.extend(
+        page.blocks
+            .iter()
+            .filter(|b| !b.intro)
+            .map(|b| b.words.as_str()),
+    );
     digest(&parts)
 }
 
@@ -147,7 +152,12 @@ impl PageMemo {
             let (fp, blocks) = &self.pages[name];
             out.insert(
                 fp.clone(),
-                Value::Array(blocks.iter().map(|(d, _)| Value::String(d.clone())).collect()),
+                Value::Array(
+                    blocks
+                        .iter()
+                        .map(|(d, _)| Value::String(d.clone()))
+                        .collect(),
+                ),
             );
         }
         out
@@ -155,7 +165,11 @@ impl PageMemo {
 }
 
 /// A cited question's findings digest and its non-intro blocks, read once a run; a missing file is `missing` with no blocks.
-pub(crate) fn page_blocks<'a>(name: &str, qdir: &Path, memo: &'a mut PageMemo) -> Result<&'a Blocks, Fail> {
+pub(crate) fn page_blocks<'a>(
+    name: &str,
+    qdir: &Path,
+    memo: &'a mut PageMemo,
+) -> Result<&'a Blocks, Fail> {
     if !memo.pages.contains_key(name) {
         let f = qdir.join(name);
         let got = if f.is_file() {
@@ -179,7 +193,11 @@ pub(crate) fn page_blocks<'a>(name: &str, qdir: &Path, memo: &'a mut PageMemo) -
 }
 
 /// The research fingerprint of one claim's pointers (empty for a class claim); a missing file is `missing`.
-pub(crate) fn research_fp(pointers: &[String], qdir: &Path, memo: &mut HashMap<String, String>) -> Result<String, Fail> {
+pub(crate) fn research_fp(
+    pointers: &[String],
+    qdir: &Path,
+    memo: &mut HashMap<String, String>,
+) -> Result<String, Fail> {
     if pointers.is_empty() {
         return Ok(String::new());
     }
@@ -197,7 +215,9 @@ pub(crate) fn research_fp(pointers: &[String], qdir: &Path, memo: &mut HashMap<S
         }
         parts.push(memo[&name].clone());
     }
-    Ok(digest(&parts.iter().map(String::as_str).collect::<Vec<_>>()))
+    Ok(digest(
+        &parts.iter().map(String::as_str).collect::<Vec<_>>(),
+    ))
 }
 
 /// key -> Row for every claim of every unit in scope at `skill`, its questions under `qdir`.
@@ -230,7 +250,9 @@ pub(crate) fn load_map(path: &Path) -> Result<Map<String, Value>, Fail> {
         return Ok(Map::new());
     }
     let text = std::fs::read_to_string(path).map_err(fail)?;
-    match serde_json::from_str::<Value>(&text).map_err(|e| format!("json.decoder.JSONDecodeError: {e}"))? {
+    match serde_json::from_str::<Value>(&text)
+        .map_err(|e| format!("json.decoder.JSONDecodeError: {e}"))?
+    {
         Value::Object(m) => Ok(m),
         other => Err(format!("{}: not an object: {other}", path.display())),
     }
@@ -245,12 +267,18 @@ fn write(path: &Path, text: &str) -> Result<(), Fail> {
 
 /// The index, sorted, as `json.dumps(indent=1, sort_keys=True, ensure_ascii=False)` writes it.
 pub(crate) fn save_index(path: &Path, rows: &Index) -> Result<(), Fail> {
-    write(path, &(dumps(&sorted(&Value::Object(rows.clone())), Some(1), false) + "\n"))
+    write(
+        path,
+        &(dumps(&sorted(&Value::Object(rows.clone())), Some(1), false) + "\n"),
+    )
 }
 
 /// The snapshots, as `json.dumps(indent=0, sort_keys=True)` writes them.
 pub(crate) fn save_store(path: &Path, store: &Store) -> Result<(), Fail> {
-    write(path, &(dumps(&sorted(&Value::Object(store.clone())), Some(0), true) + "\n"))
+    write(
+        path,
+        &(dumps(&sorted(&Value::Object(store.clone())), Some(0), true) + "\n"),
+    )
 }
 
 /// The index rows that still speak of something: a claim in scope, or an UNCLAIMED row whose unit still exists.
@@ -260,7 +288,8 @@ pub(crate) fn live_rows(cur: &Cur, index: &Index) -> Index {
         .iter()
         .filter(|(k, v)| {
             cur.contains(k)
-                || (is(v, "verdict", "UNCLAIMED") && uids.contains(k.rsplit_once('#').map_or(k.as_str(), |p| p.0)))
+                || (is(v, "verdict", "UNCLAIMED")
+                    && uids.contains(k.rsplit_once('#').map_or(k.as_str(), |p| p.0)))
         })
         .map(|(k, v)| (k.clone(), v.clone()))
         .collect()
@@ -363,7 +392,11 @@ pub(crate) fn source_span(root: &Path, unit: &Unit) -> Result<Option<(usize, Str
         for k in unit.lineno..unit.end_lineno {
             let line = at(&lines, k)?;
             let st = lstripped(line);
-            if ["def ", "async def ", "class ", "@"].iter().any(|p| st.starts_with(p)) && indent(line) > own {
+            if ["def ", "async def ", "class ", "@"]
+                .iter()
+                .any(|p| st.starts_with(p))
+                && indent(line) > own
+            {
                 end = k;
                 break;
             }
@@ -392,7 +425,9 @@ pub(crate) fn body_of(root: &Path, unit: &Unit) -> Result<String, Fail> {
 
 /// Is a claim whose code fingerprint moved changed in its `Research:` lines alone (the body as last judged)?
 pub(crate) fn relabeled_only(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail> {
-    if !truthy(was.get("body")) || was.get("body").and_then(Value::as_str) != Some(&body_of(root, &row.unit)?) {
+    if !truthy(was.get("body"))
+        || was.get("body").and_then(Value::as_str) != Some(&body_of(root, &row.unit)?)
+    {
         return Ok(false);
     }
     Ok(is(was, "claim", &row.claim.normalized()) || is(was, "verdict", "MISLABELED"))
@@ -400,7 +435,8 @@ pub(crate) fn relabeled_only(was: &Value, row: &Row, root: &Path) -> Result<bool
 
 /// `was.get("claim") not in (None, text)`.
 pub(crate) fn claim_rewritten(was: &Value, text: &str) -> bool {
-    was.get("claim").is_some_and(|c| !c.is_null() && c.as_str() != Some(text))
+    was.get("claim")
+        .is_some_and(|c| !c.is_null() && c.as_str() != Some(text))
 }
 
 /// A MISLABELED verdict answered by the relabel it prescribed (385 T23, plan D45).
@@ -411,7 +447,11 @@ pub(crate) fn relabel_answered(was: &Value, row: &Row, root: &Path) -> Result<bo
 }
 
 /// `page:digest` for every block now standing on the questions `pointers` cite.
-pub(crate) fn standing(pointers: &[String], qdir: &Path, memo: &mut PageMemo) -> Result<HashSet<String>, Fail> {
+pub(crate) fn standing(
+    pointers: &[String],
+    qdir: &Path,
+    memo: &mut PageMemo,
+) -> Result<HashSet<String>, Fail> {
     let mut out = HashSet::new();
     for ptr in pointers {
         let name = page_name(ptr);
@@ -423,20 +463,33 @@ pub(crate) fn standing(pointers: &[String], qdir: &Path, memo: &mut PageMemo) ->
 }
 
 /// Why a claim whose cited research moved is owed: in full where a block it rested on is gone, its row predates the snapshots or it cites a page its check never read; else the triage.
-pub(crate) fn research_why(row: &Row, was: &Value, qdir: &Path, store: &Store, memo: &mut PageMemo) -> Result<String, Fail> {
+pub(crate) fn research_why(
+    row: &Row,
+    was: &Value,
+    qdir: &Path,
+    store: &Store,
+    memo: &mut PageMemo,
+) -> Result<String, Fail> {
     let Some(pages) = was.get("pages").and_then(Value::as_object) else {
         return Ok("research changed".to_owned());
     };
     let unsnapped = pages
         .values()
         .any(|d| d.as_str().is_none_or(|d| !store.contains_key(d)));
-    let unread = row.claim.pointers.iter().any(|p| !pages.contains_key(page_name(p)));
+    let unread = row
+        .claim
+        .pointers
+        .iter()
+        .any(|p| !pages.contains_key(page_name(p)));
     if unsnapped || unread {
         return Ok("research changed".to_owned());
     }
     if let Some(rests) = was.get("rests").and_then(Value::as_array) {
         let now = standing(&row.claim.pointers, qdir, memo)?;
-        if !rests.iter().all(|r| r.as_str().is_some_and(|r| now.contains(r))) {
+        if !rests
+            .iter()
+            .all(|r| r.as_str().is_some_and(|r| now.contains(r)))
+        {
             return Ok("rests changed".to_owned());
         }
     }
@@ -444,7 +497,12 @@ pub(crate) fn research_why(row: &Row, was: &Value, qdir: &Path, store: &Store, m
 }
 
 /// (key, why) for every claim with no row, whose code moved, or whose research moved.
-pub(crate) fn owed(cur: &Cur, index: &Index, qdir: Option<&Path>, store: Option<&Store>) -> Result<Vec<(String, String)>, Fail> {
+pub(crate) fn owed(
+    cur: &Cur,
+    index: &Index,
+    qdir: Option<&Path>,
+    store: Option<&Store>,
+) -> Result<Vec<(String, String)>, Fail> {
     let mut out = Vec::new();
     let mut memo = PageMemo::default();
     let moves = moved(cur, index);
@@ -468,15 +526,24 @@ pub(crate) fn owed(cur: &Cur, index: &Index, qdir: Option<&Path>, store: Option<
     Ok(out)
 }
 
-fn owed_one(row: &Row, was: &Value, qdir: Option<&Path>, store: &Store, memo: &mut PageMemo) -> Result<Option<String>, Fail> {
+fn owed_one(
+    row: &Row,
+    was: &Value,
+    qdir: Option<&Path>,
+    store: &Store,
+    memo: &mut PageMemo,
+) -> Result<Option<String>, Fail> {
     let relabeled = |q: &Path| -> Result<bool, Fail> {
         let root = q.parent().and_then(Path::parent).unwrap_or(Path::new(""));
         relabeled_only(was, row, root)
     };
     if !is(was, "code", &row.code) && !qdir.map(relabeled).transpose()?.unwrap_or(false) {
         let text = row.claim.normalized();
-        let full = is(was, "triage", "touched") || row.unit.line_keyed() || claim_rewritten(was, &text);
-        return Ok(Some(if full { "code changed" } else { CODE_TRIAGE }.to_owned()));
+        let full =
+            is(was, "triage", "touched") || row.unit.line_keyed() || claim_rewritten(was, &text);
+        return Ok(Some(
+            if full { "code changed" } else { CODE_TRIAGE }.to_owned(),
+        ));
     }
     if is(was, "triage", "touched") {
         return Ok(Some("triage touched".to_owned()));

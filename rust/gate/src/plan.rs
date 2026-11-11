@@ -159,17 +159,13 @@ fn stop_reply(prefix: &str, stop: Stop) -> crate::Reply {
 }
 
 /// The line `make decide` and `make plan-delta` end with when the clone owes claims a triage (feature 430 T07, D7).
-fn triage_hint(root: &Path, python: &str) -> String {
-    let script = root.join("scripts/record/claims.py");
-    let done = Command::new(python)
-        .arg(script)
-        .arg("--root")
-        .arg(root)
-        .arg("triage-owed")
-        .output();
-    let out = done
-        .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
-        .unwrap_or_default();
+fn triage_hint(root: &Path) -> String {
+    let args = ["--root", &root.to_string_lossy(), "triage-owed"].map(str::to_owned);
+    hint_of(&crate::claims::cli(&args).stdout)
+}
+
+/// The hint for `claims triage-owed`'s answer: the count it printed last, when above none.
+fn hint_of(out: &str) -> String {
     match out.lines().last().and_then(|l| l.trim().parse::<u64>().ok()) {
         Some(n) if n > 0 => format!("claims owed a triage: {n} - `make claims-triage`, and dispatch it beside this review (impl-drift waits for the verdict)\n"),
         _ => String::new(),
@@ -196,7 +192,7 @@ fn parse_file(path: &str) -> Result<Value, Stop> {
     serde_json::from_str(&text).map_err(|e| Stop::Refused(e.to_string()))
 }
 
-fn decide(words: &[String], root: &Path, out_root: &Path, python: &str) -> crate::Reply {
+fn decide(words: &[String], root: &Path, out_root: &Path) -> crate::Reply {
     let verb = words[0].as_str();
     let dir = resolve(&words[1], root);
     let plan = dir
@@ -228,12 +224,12 @@ fn decide(words: &[String], root: &Path, out_root: &Path, python: &str) -> crate
         bundle::task_prompt(&dir, out_root, &words[2])
     };
     match prompt {
-        Ok(text) => reply(text + "\n", triage_hint(&top, python), 0),
+        Ok(text) => reply(text + "\n", triage_hint(&top), 0),
         Err(why) => fail(why + "\n", 1),
     }
 }
 
-fn plan_delta(dir: &Path, out_root: &Path, python: &str) -> crate::Reply {
+fn plan_delta(dir: &Path, out_root: &Path) -> crate::Reply {
     let plan = dir.join("plan.md");
     let review = read_review(dir);
     let text = std::fs::read_to_string(&plan).unwrap_or_default();
@@ -274,7 +270,6 @@ fn plan_delta(dir: &Path, out_root: &Path, python: &str) -> crate::Reply {
                 dir.parent()
                     .and_then(Path::parent)
                     .unwrap_or(Path::new(".")),
-                python,
             ),
             0,
         ),
@@ -456,7 +451,7 @@ fn answer(
             let why = task::decision_refusal(Path::new(words.get(1).map_or(".", String::as_str)));
             reply(if why.is_empty() { why.clone() } else { format!("{why}\n") }, String::new(), i32::from(!why.is_empty()))
         }
-        ("decide" | "section-sha", 3) => decide(words, root, out_root, python),
+        ("decide" | "section-sha", 3) => decide(words, root, out_root),
         ("record" | "record-blocks", 5) if words[3] == "--as" => record_verb(words, root),
         ("record-task", 6) if words[4] == "--as" => record_verb(words, root),
         ("slim" | "archive" | "delta", 2) => {
@@ -470,7 +465,7 @@ fn answer(
                     let list = if ids.is_empty() { "none finished".to_owned() } else { ids.join(", ") };
                     said(format!("plan-archive: {} task section(s) moved to {}/plan-done.md: {list}\n", ids.len(), dir.file_name().unwrap_or_default().to_string_lossy()))
                 }
-                _ => plan_delta(&dir, out_root, python),
+                _ => plan_delta(&dir, out_root),
             }
         }
         ("owed", 2) => match owed(Path::new(&words[1])) {

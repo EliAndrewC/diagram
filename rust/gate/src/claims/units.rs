@@ -220,7 +220,9 @@ pub(crate) fn section_blocks(body: &str) -> Vec<String> {
 }
 
 static ITEM: LazyLock<Regex> = LazyLock::new(|| {
-    re(r#"\A\s*(?:pub(?:\([^)]*\))?\s+)?(?:(?:const|async|unsafe|extern\s+"C")\s+)*(fn|struct|enum|trait|impl|const|static|type|mod)\b\s*(?:<[^>]*>\s*)?([A-Za-z_][A-Za-z0-9_]*)?"#)
+    re(
+        r#"\A\s*(?:pub(?:\([^)]*\))?\s+)?(?:(?:const|async|unsafe|extern\s+"C")\s+)*(fn|struct|enum|trait|impl|const|static|type|mod)\b\s*(?:<[^>]*>\s*)?([A-Za-z_][A-Za-z0-9_]*)?"#,
+    )
 });
 static IMPL_FOR: LazyLock<Regex> = LazyLock::new(|| re(r"\bfor\s+([A-Za-z_][A-Za-z0-9_]*)"));
 static IMPL_OF: LazyLock<Regex> =
@@ -241,9 +243,8 @@ pub(crate) fn splitlines_keep(text: &str) -> Vec<String> {
                 }
                 true
             }
-            '\n' | '\x0b' | '\x0c' | '\x1c' | '\x1d' | '\x1e' | '\u{85}' | '\u{2028}' | '\u{2029}' => {
-                true
-            }
+            '\n' | '\x0b' | '\x0c' | '\x1c' | '\x1d' | '\x1e' | '\u{85}' | '\u{2028}'
+            | '\u{2029}' => true,
             _ => false,
         };
         if ends {
@@ -275,9 +276,7 @@ pub(crate) fn splitlines(text: &str) -> Vec<String> {
 fn item_end(s: &[char], start: usize) -> usize {
     let n = s.len();
     let (mut i, mut depth, mut nest) = (start, 0i64, 0i64);
-    let find = |from: usize, needle: &[char]| {
-        (from..n).find(|&j| s[j..].starts_with(needle))
-    };
+    let find = |from: usize, needle: &[char]| (from..n).find(|&j| s[j..].starts_with(needle));
     while i < n {
         let c = s[i];
         if s[i..].starts_with(&['/', '/']) {
@@ -416,7 +415,11 @@ pub(crate) fn items(text: &str, base_line: usize, prefix: &str, in_impl: bool) -
 pub(crate) fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
     let module_doc = splitlines(source)
         .iter()
-        .filter_map(|l| strip(l).strip_prefix("//!").map(|r| r.strip_prefix(' ').unwrap_or(r).to_owned()))
+        .filter_map(|l| {
+            strip(l)
+                .strip_prefix("//!")
+                .map(|r| r.strip_prefix(' ').unwrap_or(r).to_owned())
+        })
         .collect::<Vec<_>>()
         .join("\n");
     let (mod_claims, mod_errors) = claims_of(Some(&module_doc));

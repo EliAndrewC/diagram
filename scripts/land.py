@@ -93,7 +93,7 @@ def file_carries(root: Path, d: Path) -> None:
     """Every carried claims finding filed as an open task of the feature and committed (405 T36, D10) - asked in the first pass
     and again in the claims wait, where a round beside the gate meets new carries (405 T77)."""
     num = d.name.split("-", 1)[0]
-    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "carry", "--feature", num])
+    rc, said = run(root, [*_claims(root), "carry", "--feature", num])
     if rc == 0 and "filed into" in said:
         print(f"land: {said.strip()}", flush=True)
         # ...into the claims feature when this delta holds no engine code (the GM, 2026-10-26; `claims_carry.target`)
@@ -106,7 +106,7 @@ def file_carries(root: Path, d: Path) -> None:
 def file_known(root: Path) -> None:
     """Every known drift the claims gate would refuse unrecorded, recorded for the GM in its task's feature and committed
     (feature 430 T06, D6): the claims gate admits a known drift once `make claims-known` has recorded it, and the landing runs it."""
-    rc, said = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "known"])
+    rc, said = run(root, [*_claims(root), "known"])
     if rc == 0 and "claims-known: recorded" in said:  # ...not its "no known drift is unrecorded"
         print(f"land: {said.strip()}", flush=True)
         run(
@@ -173,11 +173,17 @@ def phase_refusal(root: Path, d: Path, text: str, task: str) -> str:
     return ""
 
 
-def _claims_scope():  # noqa: ANN202 - the module
-    sys.path.insert(0, str(HERE / "record"))
-    import claims_scope  # noqa: PLC0415 - the moved scripts it imports
+def _claims(root: Path) -> list[str]:
+    """The claims tools' command (`l7r-gate claims`, feature 449 T82): `claims.py` was run by path."""
+    return [str(HERE / "gates" / "l7r-gate.sh"), "claims", "--root", str(root)]
 
-    return claims_scope
+
+def _claims_door():  # noqa: ANN202 - the module
+    """The claims tools' door (`scripts/claims_door.py`, `ask:449-T82-claims`): `claims_scope` and `claims_flight` were imported."""
+    sys.path.insert(0, str(HERE))
+    import claims_door  # noqa: PLC0415 - the door beside this file
+
+    return claims_door
 
 
 def open_claims_refusal(root: Path, d: Path, text: str, task: str, file_left: bool = False) -> str:
@@ -191,12 +197,12 @@ def open_claims_refusal(root: Path, d: Path, text: str, task: str, file_left: bo
     changed = [n for n in delta_names(root) if n.startswith(("rust/", "l7r/"))]
     if not changed:
         return ""
-    scope = _claims_scope()
+    door = _claims_door()
     seam = [p for p in _stage_seam(root, m.group(1))]
-    out = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "report"])[1]
-    own, left = scope.split(root, out, changed, seam, lambda path: scope.git_diff(root, path))
+    out = run(root, [*_claims(root), "report"])[1]
+    own, left = door.scope_split(root, out, changed, seam)
     if file_left and left:
-        print(f"land: {scope.file_left(root, task, left)} claims finding(s) outside the stage's own code filed to {scope.CLAIMS_FEATURE_DIR} (FR-021)", flush=True)
+        print(f"land: {door.file_left(root, task, left)} claims finding(s) outside the stage's own code filed to {door.CLAIMS_FEATURE_DIR} (FR-021)", flush=True)
     if not own:
         return ""
     shown = "; ".join(ln[:140] for ln in own[:5]) + (f" and {len(own) - 5} more" if len(own) > 5 else "")
@@ -235,7 +241,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         run(root, [sys.executable, str(HERE / "make-docs.py"), str(root), "--write"])
         run(root, ["git", "commit", "-q", "-m", "docs/make-targets.html regenerated at landing (make land, 405 T46)", "--", "docs/make-targets.html"])
     # A MOVED UNIT KEEPS ITS CLAIMS' ROWS (405 T58): a file split into a package at the 1,000-line bar re-keys them, owing nothing
-    run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "rekey"])
+    run(root, [*_claims(root), "rekey"])
     if run(root, ["git", "status", "--porcelain", "--", "dev/claims-index.json"])[1].strip():
         run(root, ["git", "commit", "-q", "-m", "claim rows carried to the files their units moved to (make land, 405 T58)", "--", "dev/claims-index.json"])
     # A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
@@ -287,11 +293,8 @@ def work_budget_lines(root: Path) -> list[str]:
 
 
 def _in_flight(root: Path) -> list[str]:
-    """The claims checks in flight (`claims_flight.live`), as the wait reads them."""
-    sys.path.insert(0, str(HERE / "record"))
-    import claims_flight  # noqa: PLC0415
-
-    return list(claims_flight.live(root))
+    """The claims checks in flight (`claims_flight.live`, through the door), as the wait reads them."""
+    return list(_claims_door().flight_live(root))
 
 
 #: how long the landing waits for the claims round after its gate, asking every CLAIMS_POLL_S (405 T50, D23)
@@ -384,9 +387,7 @@ def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
     (405 T50, D23)."""
     import time  # noqa: PLC0415
 
-    sys.path.insert(0, str(HERE / "record"))
-    import claims_flight  # noqa: PLC0415
-
+    door = _claims_door()
     env = {"L7R_LAND_TICKS": " ".join(tasks)}
     end, said = time.monotonic() + CLAIMS_WAIT_S, ""
     while True:
@@ -400,7 +401,7 @@ def wait_for_claims(root: Path, tasks: list[str], d: Path | None = None) -> str:
         dirty = run(root, ["git", "status", "--porcelain"])[1].strip()
         if not rc and not dirty:
             return ""
-        if rc and (cure := claims_cure(out, claims_flight.live(root))):
+        if rc and (cure := claims_cure(out, door.flight_live(root))):
             return cure
         why = ("claims-gate.sh: " + " | ".join(ln.strip() for ln in out.splitlines() if ln.strip() and "pre-existing" not in ln)[-600:]) if rc else f"uncommitted changes: {dirty.splitlines()[0]}"
         if time.monotonic() >= end:

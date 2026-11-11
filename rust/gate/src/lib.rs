@@ -2,9 +2,9 @@
 
 pub mod arbiter;
 mod checks;
-mod claims;
 pub mod checks_door;
 mod ci;
+mod claims;
 pub mod codeid;
 mod cohort;
 pub mod delta;
@@ -178,6 +178,9 @@ mod tests {
         assert_eq!(cli(&["checks-door".to_owned()]).code, 0);
         assert_eq!(cli(&["owed-door".to_owned()]).code, 0);
         assert_eq!(cli(&["reviews-door".to_owned()]).code, 0);
+        assert_eq!(cli(&["claims-door".to_owned()]).code, 0);
+        assert_eq!(cli(&["claims".to_owned()]).code, 2);
+        assert_eq!(cli(&["tunables".to_owned(), "--bogus".to_owned()]).code, 2);
         assert_eq!(cli(&["reviews".to_owned()]).code, 2);
     }
 

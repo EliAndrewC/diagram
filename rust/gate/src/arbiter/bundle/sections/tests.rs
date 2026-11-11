@@ -294,20 +294,21 @@ fn evidence_pool_and_claims() {
         ]
     );
     assert!(pool_unstated("does the route regress the maps?", &[b]).is_empty());
-    let mut run = Run::new(&root);
-    assert!(
-        claims_section(&mut run, &root, &["nothing named here".to_owned()])
-            .unwrap()
-            .is_empty()
+    put(
+        &root,
+        "dev/claims-index.json",
+        "{\"l7r/m.py::Mod.ROUND_CAP#cap\": {\"verdict\": \"IN-STEP\"}}\n",
     );
+    assert!(claims_section(&root, &["nothing named here".to_owned()])
+        .unwrap()
+        .is_empty());
     let got = claims_section(
-        &mut run,
         &root,
         &["Is `ROUND_CAP` 12 ft, or 3 households, or 99 px?".to_owned()],
     )
     .unwrap();
-    assert!(got[0].contains("- `l7r/m.py::Mod.ROUND_CAP#cap` - a research page: `ROUND_CAP is 12 ft` (last verdict IN-STEP)") && got[0].contains("- `3 households`: `l7r/m.py::other#o` - GUESS: `about 3 households` (last verdict none)") && got[0].contains("- `99 px`: no claim states it"));
-    assert!(claims_section(&mut run, &root, &["`Nothing`".to_owned()])
+    assert!(got[0].contains("- `l7r/m.py::Mod.ROUND_CAP#cap` - a research page: `cap - research/questions/0094-trade.html: ROUND_CAP is 12 ft` (last verdict IN-STEP)") && got[0].contains("- `3 households`: `l7r/m.py::other#o` - GUESS: `o - GUESS: about 3 households` (last verdict none)") && got[0].contains("- `99 px`: no claim states it"), "{got:?}");
+    assert!(claims_section(&root, &["`Nothing`".to_owned()])
         .unwrap()
         .is_empty());
 }
@@ -336,9 +337,8 @@ fn the_sections_rare_paths() {
     let e = root.join("e.txt").to_string_lossy().into_owned();
     evidence_section(&out, std::slice::from_ref(&e)).unwrap();
     assert!(evidence_section(&out, &[e]).unwrap()[0].contains("e-2.txt"));
-    let mut run = Run::new(&root);
     assert!(
-        claims_section(&mut run, &root, &["the ROUND_CAP of it".to_owned()]).unwrap()[0]
+        claims_section(&root, &["the ROUND_CAP of it".to_owned()]).unwrap()[0]
             .contains("ROUND_CAP")
     );
 }

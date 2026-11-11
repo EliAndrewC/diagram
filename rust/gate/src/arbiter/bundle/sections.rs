@@ -13,7 +13,7 @@ use l7r_guard::shared::log::civil;
 use l7r_guard::shared::py_text::strip;
 use serde_json::{json, Value};
 
-use crate::record::bundle::{findall, head, hit, py_str, pyre, shown, sort_paths, write, Run};
+use crate::record::bundle::{findall, head, hit, py_str, pyre, shown, sort_paths, write};
 use crate::record::owed::unanswered;
 use crate::record::py_lines;
 use crate::record::repo::{fail, git, git_out, Fail};
@@ -684,11 +684,7 @@ pub(crate) fn pool_unstated(why: &str, files: &[String]) -> Vec<String> {
 }
 
 /// Each research claim on a name the question or its evidence cites, with its class and last verdict (ask:t06-scattered-single-file); the rows and index through the runner (Q1a, to Rust in T82).
-pub(crate) fn claims_section(
-    run: &mut Run,
-    root: &Path,
-    texts: &[String],
-) -> Result<Vec<String>, Fail> {
+pub(crate) fn claims_section(root: &Path, texts: &[String]) -> Result<Vec<String>, Fail> {
     let names: HashSet<String> = texts
         .iter()
         .flat_map(|t| {
@@ -711,8 +707,7 @@ pub(crate) fn claims_section(
     if names.is_empty() && numbers.is_empty() {
         return Ok(Vec::new());
     }
-    let index = run.door.ask("load_index", &json!([shown(root)]))?;
-    let cur = run.door.ask("claims_rows", &json!([shown(root)]))?;
+    let (cur, index) = crate::claims::rows_and_index(Path::new(&shown(root)))?;
     let mut keys: Vec<&String> = cur
         .as_object()
         .map(|m| m.keys().collect())

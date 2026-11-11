@@ -87,12 +87,8 @@ fn covered(gate: &str, path: &str) -> bool {
 
 #[test]
 fn each_gate_judges_every_path_its_own_constants_name() {
-    let claims = real("scripts/record/claims.py");
-    for p in quoted(constant(&claims, "BASE_PATHS")) {
-        assert!(p == "QUESTIONS" || covered("claims", p), "{p}");
-    }
-    for name in ["INDEX", "DEFERRED", "STORE", "QUESTIONS"] {
-        assert!(covered("claims", quoted(constant(&claims, name))[0]));
+    for p in crate::claims::read_paths() {
+        assert!(covered("claims", p), "{p}");
     }
     assert!(
         covered("claims", "specs/430-x/tasks.md")

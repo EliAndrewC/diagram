@@ -82,13 +82,11 @@ def recorded_none(d: Path) -> dict[str, str]:
         return {}
 
 
-def _claims():  # noqa: ANN202 - scripts/record/claims.py, the claims index's one reader
-    spec = importlib.util.spec_from_file_location("claims", Path(__file__).resolve().parent / "claims.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules.setdefault("claims", mod)
-    spec.loader.exec_module(mod)
-    return mod
+def _claims():  # noqa: ANN202 - the claims tools' door (`scripts/claims_door.py`, feature 449 T82, `ask:449-T82-claims`)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import claims_door  # noqa: PLC0415
+
+    return claims_door
 
 
 def citing(root: Path) -> tuple[dict[str, list[str]], set[str], dict[str, str]]:
@@ -97,7 +95,7 @@ def citing(root: Path) -> tuple[dict[str, list[str]], set[str], dict[str, str]]:
     cur = cl.current(root)
     index = cl.load_index(root / cl.INDEX)
     store = cl.load_store(root / cl.STORE)
-    due = {k for k, _why in cl.owed(cur, index, root / cl.QUESTIONS, store)}
+    due = {k for k, _why in cl.owed(root, index, store)}
     by_q: dict[str, list[str]] = {}
     for key, row in cur.items():
         for p in row.claim.pointers if row.claim is not None else ():

@@ -15,7 +15,10 @@ pub(crate) struct Screen {
 
 /// `shutil.get_terminal_size().lines`: `LINES`, else the terminal's, else 24.
 pub(crate) fn rows(lines: Option<String>, probe: &str) -> usize {
-    if let Some(n) = lines.and_then(|l| l.parse::<usize>().ok()).filter(|n| *n > 0) {
+    if let Some(n) = lines
+        .and_then(|l| l.parse::<usize>().ok())
+        .filter(|n| *n > 0)
+    {
         return n;
     }
     Command::new("sh")
@@ -24,7 +27,12 @@ pub(crate) fn rows(lines: Option<String>, probe: &str) -> usize {
         .stderr(Stdio::null())
         .output()
         .ok()
-        .and_then(|o| String::from_utf8_lossy(&o.stdout).split_whitespace().next().and_then(|r| r.parse().ok()))
+        .and_then(|o| {
+            String::from_utf8_lossy(&o.stdout)
+                .split_whitespace()
+                .next()
+                .and_then(|r| r.parse().ok())
+        })
         .filter(|n: &usize| *n > 0)
         .unwrap_or(24)
 }
@@ -35,8 +43,15 @@ impl Screen {
         let tty = std::io::stdout().is_terminal();
         Self {
             tty,
-            rows: if tty { rows(std::env::var("LINES").ok(), "stty size < /dev/tty") } else { 24 },
-            pager: std::env::var("PAGER").ok().filter(|p| !p.is_empty()).unwrap_or_else(|| "less -FRSX".to_owned()),
+            rows: if tty {
+                rows(std::env::var("LINES").ok(), "stty size < /dev/tty")
+            } else {
+                24
+            },
+            pager: std::env::var("PAGER")
+                .ok()
+                .filter(|p| !p.is_empty())
+                .unwrap_or_else(|| "less -FRSX".to_owned()),
             off: std::env::var("NO_PAGER").is_ok_and(|v| !v.is_empty()),
         }
     }
@@ -53,11 +68,17 @@ fn on_path(word: &str) -> bool {
 /// `text` through the pager when the screen is a terminal and the text is longer than it; what is left to print (all of it, or nothing).
 pub(crate) fn page(text: &str, screen: &Screen) -> String {
     let first = screen.pager.split_whitespace().next().unwrap_or_default();
-    if screen.off || !screen.tty || text.matches('\n').count() + 1 < screen.rows || !on_path(first) {
+    if screen.off || !screen.tty || text.matches('\n').count() + 1 < screen.rows || !on_path(first)
+    {
         return format!("{text}\n");
     }
     let _ = std::io::stdout().flush();
-    if let Ok(mut child) = Command::new("sh").arg("-c").arg(&screen.pager).stdin(Stdio::piped()).spawn() {
+    if let Ok(mut child) = Command::new("sh")
+        .arg("-c")
+        .arg(&screen.pager)
+        .stdin(Stdio::piped())
+        .spawn()
+    {
         if let Some(mut pipe) = child.stdin.take() {
             let _ = pipe.write_all(format!("{text}\n").as_bytes());
         }

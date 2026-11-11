@@ -25,8 +25,9 @@ const REFUSAL_DATA: [&str; 8] = [
     "rust/gate/src/checks/research_pointers/tests.rs",
     "rust/gate/src/checks/research_pointers.rs",
 ];
-const FIXTURES: [&str; 11] = [
+const FIXTURES: [&str; 12] = [
     "rust/gate/src/plan/",
+    "rust/gate/src/claims/", // the claims tools' tests name records of a scratch repository (feature 449 T82)
     "tests/",
     "rust/gate/src/record/", // the record tools' tests and fragment-move's self-test name records of a scratch repository
     "scripts/gates/check-entry-headings.py",

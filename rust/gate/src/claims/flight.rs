@@ -32,7 +32,10 @@ pub(crate) fn resolved(p: &Path) -> PathBuf {
         if let Ok(real) = std::fs::canonicalize(&head) {
             return tail.iter().rev().fold(real, |acc, t| acc.join(t));
         }
-        match (head.file_name().map(std::ffi::OsStr::to_os_string), head.parent()) {
+        match (
+            head.file_name().map(std::ffi::OsStr::to_os_string),
+            head.parent(),
+        ) {
             (Some(name), Some(parent)) => {
                 tail.push(name);
                 head = parent.to_path_buf();
@@ -54,12 +57,19 @@ fn dir(root: &Path) -> PathBuf {
         .map(|o| l7r_guard::shared::py_text::strip(&String::from_utf8_lossy(&o.stdout)).to_owned())
         .filter(|s| !s.is_empty())
         .map_or_else(|| root.join(".git"), PathBuf::from);
-    let common = if common.is_absolute() { common } else { root.join(common) };
+    let common = if common.is_absolute() {
+        common
+    } else {
+        root.join(common)
+    };
     common.join("claims-in-flight")
 }
 
 fn name(bundle: &Path) -> String {
-    format!("{}.json", &sha256::hex(resolved(bundle).to_string_lossy().as_bytes())[..16])
+    format!(
+        "{}.json",
+        &sha256::hex(resolved(bundle).to_string_lossy().as_bytes())[..16]
+    )
 }
 
 /// The time now, as `time.time()`.
@@ -105,8 +115,14 @@ pub(crate) fn live(root: &Path, now: f64) -> Vec<String> {
         let Ok(rec) = rec else { continue };
         let at = rec.get("at").and_then(Value::as_f64).unwrap_or(0.0);
         if now - at <= MAX_AGE_S {
-            let fallback = f.file_name().unwrap_or_default().to_string_lossy().into_owned();
-            out.push(rec.get("bundle").map_or(fallback, |b| b.as_str().map_or_else(|| b.to_string(), str::to_owned)));
+            let fallback = f
+                .file_name()
+                .unwrap_or_default()
+                .to_string_lossy()
+                .into_owned();
+            out.push(rec.get("bundle").map_or(fallback, |b| {
+                b.as_str().map_or_else(|| b.to_string(), str::to_owned)
+            }));
         }
     }
     out

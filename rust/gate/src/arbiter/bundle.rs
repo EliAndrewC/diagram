@@ -254,7 +254,6 @@ fn with_plan(root: &Path, d: &Path, parts: &mut Vec<String>, files: &mut Vec<Str
 }
 
 fn ask_parts(
-    run: &mut Run,
     root: &Path,
     out: &Path,
     owed: &Value,
@@ -275,13 +274,12 @@ fn ask_parts(
             texts.push(read_text(&p)?);
         }
     }
-    parts.extend(claims_section(run, root, &texts)?);
+    parts.extend(claims_section(root, &texts)?);
     Ok(())
 }
 
 /// The spec review's and the ask's own sections, with the plan as a file where they read one.
 fn review_parts(
-    run: &mut Run,
     root: &Path,
     out: &Path,
     (trigger, owed, d): (&str, &Value, Option<&Path>),
@@ -296,7 +294,7 @@ fn review_parts(
         parts.extend(spec_rounds(out, subject)?);
     }
     if trigger.starts_with("ask:") {
-        ask_parts(run, root, out, owed, evidence, parts)?;
+        ask_parts(root, out, owed, evidence, parts)?;
         if let Some(d) = d.filter(|_| hit(&PLAN_REVIEW, &field(owed, "detail", ""))) {
             with_plan(root, d, parts, files);
         }
@@ -428,7 +426,6 @@ fn subject_parts(
 
 /// The MANIFEST for `trigger`; `Missing` where a round kept no reply or a reversal has no record, unless `allow_missing` gives the reason.
 pub(crate) fn bundle(
-    run: &mut Run,
     root: &Path,
     trigger: &str,
     out: &Path,
@@ -460,7 +457,6 @@ pub(crate) fn bundle(
     ];
     let (check, subject, mut files, unit) = target(root, trigger, &owed);
     review_parts(
-        run,
         root,
         out,
         (trigger, &owed, d.as_deref()),
@@ -563,13 +559,7 @@ fn misnumbered(root: &Path, triggers: &[String]) -> Vec<String> {
 }
 
 /// ONE bundle for every owed round trigger (FR-017; the GM 2026-10-11), each trigger's own bundle beneath it.
-fn batch(
-    run: &mut Run,
-    root: &Path,
-    out: &Path,
-    allow_missing: &str,
-    extra: &[String],
-) -> Result<PathBuf, Stop> {
+fn batch(root: &Path, out: &Path, allow_missing: &str, extra: &[String]) -> Result<PathBuf, Stop> {
     let wrong = misnumbered(root, extra);
     if !wrong.is_empty() {
         return Err(Stop::Value(format!(
@@ -590,7 +580,7 @@ fn batch(
     let (mut gaps, mut rows) = (Vec::new(), Vec::new());
     for t in &triggers {
         let sub = batch_dir(t);
-        match bundle(run, root, t, &out.join(&sub), allow_missing, &[]) {
+        match bundle(root, t, &out.join(&sub), allow_missing, &[]) {
             Ok(_) => rows.push(format!("- `{t}` - its bundle: `{sub}/MANIFEST.md`")),
             Err(Stop::Missing(g)) => gaps.extend(g.iter().map(|g| format!("{t}: {g}"))),
             Err(other) => return Err(other),
@@ -700,7 +690,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         return reply_of_run(String::new(), "arbiter-bundle: name the TRIGGER the refusal named, or BATCH=1 for every owed round trigger at once\n".to_owned(), 2);
     }
     let out_arg = p.text("--out", "");
-    let mut run = Run::new(&root);
+    let run = Run::new(&root);
     let done = if p.on("--batch") {
         let extra: Vec<String> = split(p.text("--triggers", ""))
             .into_iter()
@@ -711,7 +701,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         } else {
             py_path(out_arg)
         };
-        batch(&mut run, &root, &out, &missing_ok, &extra)
+        batch(&root, &out, &missing_ok, &extra)
     } else {
         let wrong = misnumbered(&root, std::slice::from_ref(&trigger));
         if wrong.is_empty() {
@@ -720,7 +710,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
             } else {
                 py_path(out_arg)
             };
-            bundle(&mut run, &root, &trigger, &out, &missing_ok, &evidence)
+            bundle(&root, &trigger, &out, &missing_ok, &evidence)
         } else {
             Err(Stop::Value(format!(
                 "a named round is not its unit's next: {}",

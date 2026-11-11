@@ -27,6 +27,7 @@ pub(crate) struct Reader {
     kept: Map<String, Value>,
     path: Option<PathBuf>,
     fresh: Vec<String>,
+    added: bool,
 }
 
 /// `L7R_CACHE_OFF` set to anything but empty or `0`.
@@ -53,6 +54,7 @@ impl Reader {
             kept,
             path,
             fresh: Vec::new(),
+            added: false,
         }
     }
 
@@ -67,7 +69,13 @@ impl Reader {
         self.door().ask(verb, args)
     }
 
-    fn key(&self, skill: &Path, every: bool, stars: bool, files: &[PathBuf]) -> Result<String, Fail> {
+    fn key(
+        &self,
+        skill: &Path,
+        every: bool,
+        stars: bool,
+        files: &[PathBuf],
+    ) -> Result<String, Fail> {
         let mut h: Vec<u8> = Vec::new();
         for code in ["l7r/diagram/tools/claims.py", "scripts/bundle_door.py"] {
             h.extend(std::fs::read(self.tree.join(code)).unwrap_or_default());
@@ -84,7 +92,12 @@ impl Reader {
     }
 
     /// (the hamlet scope's `.py` units, those claimed outside it) at `skill`, from the kept answer or the runner.
-    pub(crate) fn py_units(&mut self, skill: &Path, every: bool, stars: bool) -> Result<(Vec<Pair>, Vec<Pair>), Fail> {
+    pub(crate) fn py_units(
+        &mut self,
+        skill: &Path,
+        every: bool,
+        stars: bool,
+    ) -> Result<(Vec<Pair>, Vec<Pair>), Fail> {
         let files: Vec<PathBuf> = rglob(&skill.join("l7r").join("diagram"), ".py")
             .into_iter()
             .filter(|p| !p.components().any(|c| c.as_os_str() == "__pycache__"))
@@ -96,8 +109,12 @@ impl Reader {
         let answer = if let Some(v) = self.kept.get(&key) {
             v.clone()
         } else {
-            let v = self.ask("claims_py_units", &json!([skill.to_string_lossy(), every, stars]))?;
+            let v = self.ask(
+                "claims_py_units",
+                &json!([skill.to_string_lossy(), every, stars]),
+            )?;
             self.kept.insert(key.clone(), v.clone());
+            self.added = true;
             v
         };
         self.fresh.retain(|k| *k != key);
@@ -118,15 +135,21 @@ impl Reader {
             return;
         };
         let mut order: Vec<String> = self.fresh.iter().rev().cloned().collect();
-        order.extend(self.kept.keys().filter(|k| !self.fresh.contains(k)).cloned());
+        order.extend(
+            self.kept
+                .keys()
+                .filter(|k| !self.fresh.contains(k))
+                .cloned(),
+        );
         order.truncate(KEEP);
         let out: Map<String, Value> = order
             .iter()
             .filter_map(|k| Some((k.clone(), self.kept.get(k)?.clone())))
             .collect();
-        if out == self.kept {
+        if !self.added {
             return;
         }
+        self.added = false;
         let _ = std::fs::create_dir_all(path.parent().unwrap_or(Path::new(".")));
         let tmp = path.with_extension(format!("{}.tmp", std::process::id()));
         if std::fs::write(&tmp, Value::Object(out.clone()).to_string()).is_ok() {
@@ -143,7 +166,12 @@ impl Drop for Reader {
 }
 
 /// Every unit in scope at `skill` with its module's errors (`all_units`); paths repository-relative under `repo_prefix`.
-pub(crate) fn all_units(reader: &mut Reader, skill: &Path, every: bool, stars: bool) -> Result<Vec<Pair>, Fail> {
+pub(crate) fn all_units(
+    reader: &mut Reader,
+    skill: &Path,
+    every: bool,
+    stars: bool,
+) -> Result<Vec<Pair>, Fail> {
     let (inside, outside) = reader.py_units(skill, every, stars)?;
     let mut out = inside;
     out.extend(all_rust_units(skill, "")?);
@@ -154,7 +182,11 @@ pub(crate) fn all_units(reader: &mut Reader, skill: &Path, every: bool, stars: b
             continue;
         }
         let text = read_text(&p)?;
-        out.extend(doc_units(&text, doc, tops).into_iter().map(|u| (u, Vec::new())));
+        out.extend(
+            doc_units(&text, doc, tops)
+                .into_iter()
+                .map(|u| (u, Vec::new())),
+        );
     }
     Ok(out)
 }

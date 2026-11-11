@@ -4,7 +4,7 @@
 #
 # GUARD_EDIT_OK: feature 316 - a NEW push gate. The GM, 2026-10-02, accepting the session's rule: an owed row blocks; a
 # drifted row the change introduces blocks; a pre-existing drifted row is a warning, as feature 296 was treated (*"it is
-# okay for this to not block landing something on main but that it gives us a warning"*). `scripts/record/claims.py gate` decides
+# okay for this to not block landing something on main but that it gives us a warning"*). `l7r-gate claims gate` decides
 # it (spec FR-010, plan D7): OWED is a claim with no index row or whose code or cited research moved since its row; a
 # FINDING (DRIFTED, NEEDS-RESEARCH, MISLABELED, UNCLAIMED, CANNOT-TELL) is INTRODUCED when the merge base held its unit
 # IN-STEP, or held no row and the delta changed its code or its question's findings; a finding at both ends is
@@ -43,7 +43,7 @@ fi
 # GUARD_EDIT_OK: feature 430 T04 (D4) - a delta holding nothing this gate judges, or a pass already stored for its exact content,
 # is not judged again (`l7r-gate push-gate`); a refusal is never stored, so nothing the gate would refuse is let through
 if why="$("$CG_HERE/l7r-gate.sh" push-gate skip claims 2>/dev/null)"; then printf '  %s\n' "$why"; exit 0; fi
-OUT="$(PYTHONDONTWRITEBYTECODE=1 python3 "$CG_HERE/../record/claims.py" --root "$ROOT" gate 2>&1)"; rc=$?
+OUT="$("$CG_HERE/l7r-gate.sh" claims --root "$ROOT" gate 2>&1)"; rc=$?
 [ -n "$OUT" ] && printf '%s\n' "$OUT" | grep -v 'REFUSED' | sed 's/^/  /'
 [ "$rc" -eq 0 ] && { "$CG_HERE/l7r-gate.sh" push-gate pass claims 2>/dev/null; exit 0; }
 

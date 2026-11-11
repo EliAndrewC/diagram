@@ -27,9 +27,13 @@ const MAP_CODE: [&str; 5] = [
     "rust/phases/src/",
 ];
 /// Numbers too plain to be a decision.
-const TRIVIAL: [f64; 12] = [0.0, 1.0, 2.0, 3.0, 4.0, 10.0, 100.0, 90.0, 180.0, 360.0, 255.0, 0.5];
+const TRIVIAL: [f64; 12] = [
+    0.0, 1.0, 2.0, 3.0, 4.0, 10.0, 100.0, 90.0, 180.0, 360.0, 255.0, 0.5,
+];
 static RUST_NUMBER: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?<![\w.])(\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d+)?)(?:_?(?:f32|f64|u8|u16|u32|u64|usize|i8|i16|i32|i64|isize))?(?![\w.])")
+    re(
+        r"(?<![\w.])(\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d+)?)(?:_?(?:f32|f64|u8|u16|u32|u64|usize|i8|i16|i32|i64|isize))?(?![\w.])",
+    )
 });
 static CFG_TEST: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#\[cfg\(test\)\]"));
 static LINE_COMMENT: LazyLock<Regex> = LazyLock::new(|| re(r"//.*"));
@@ -38,10 +42,18 @@ static STRING: LazyLock<Regex> = LazyLock::new(|| re(r#""(?:[^"\\]|\\.)*""#));
 /// `f"{v:g}"`: six significant digits, trailing zeros dropped, an exponent outside 1e-4..1e6.
 pub(crate) fn fmt_g(v: f64) -> String {
     if v == 0.0 {
-        return if v.is_sign_negative() { "-0".to_owned() } else { "0".to_owned() };
+        return if v.is_sign_negative() {
+            "-0".to_owned()
+        } else {
+            "0".to_owned()
+        };
     }
     if v.is_infinite() {
-        return if v > 0.0 { "inf".to_owned() } else { "-inf".to_owned() };
+        return if v > 0.0 {
+            "inf".to_owned()
+        } else {
+            "-inf".to_owned()
+        };
     }
     let sci = format!("{v:.5e}");
     let (mantissa, exp) = sci.split_once('e').unwrap_or((&sci, "0"));
@@ -57,14 +69,22 @@ pub(crate) fn fmt_g(v: f64) -> String {
         let decimals = usize::try_from(5 - exp).unwrap_or(0);
         trim(&format!("{v:.decimals$}"))
     } else {
-        format!("{}e{}{:02}", trim(mantissa), if exp < 0 { '-' } else { '+' }, exp.abs())
+        format!(
+            "{}e{}{:02}",
+            trim(mantissa),
+            if exp < 0 { '-' } else { '+' },
+            exp.abs()
+        )
     }
 }
 
 fn stated(value: f64, text: &str) -> bool {
-    re(&format!(r"(?<![\d.]){}(?![\d])", fancy_regex::escape(&fmt_g(value))))
-        .is_match(text)
-        .unwrap_or(false)
+    re(&format!(
+        r"(?<![\d.]){}(?![\d])",
+        fancy_regex::escape(&fmt_g(value))
+    ))
+    .is_match(text)
+    .unwrap_or(false)
 }
 
 fn trivial(v: f64) -> bool {
@@ -77,7 +97,13 @@ pub(crate) fn tunables(cur: &Cur, path: &str, figures_only: bool) -> Vec<(String
         .iter()
         .filter(|r| OURS.contains(&r.claim.backing.as_str()) && r.key.starts_with(path))
         .filter(|r| !figures_only || FIGURE.is_match(&r.claim.account).unwrap_or(false))
-        .map(|r| (r.claim.backing.clone(), r.key.clone(), r.claim.account.clone()))
+        .map(|r| {
+            (
+                r.claim.backing.clone(),
+                r.key.clone(),
+                r.claim.account.clone(),
+            )
+        })
         .collect();
     out.sort_by(|a, b| {
         let rank = |l: &str| OURS.iter().position(|o| *o == l).unwrap_or(0);
@@ -87,7 +113,10 @@ pub(crate) fn tunables(cur: &Cur, path: &str, figures_only: bool) -> Vec<(String
 }
 
 /// (function, line, value) for every non-trivial number in a Rust function's body its claims never state.
-pub(crate) fn unstated_rust(source: &str, unit_text: &HashMap<String, String>) -> Vec<(String, usize, f64)> {
+pub(crate) fn unstated_rust(
+    source: &str,
+    unit_text: &HashMap<String, String>,
+) -> Vec<(String, usize, f64)> {
     let source = match CFG_TEST.find(source).ok().flatten() {
         Some(m) => &source[..m.start()],
         None => source,
@@ -97,7 +126,10 @@ pub(crate) fn unstated_rust(source: &str, unit_text: &HashMap<String, String>) -
         if kind != "function" && kind != "method" {
             continue;
         }
-        let name = qual.rsplit_once('.').map_or(qual.as_str(), |p| p.1).to_owned();
+        let name = qual
+            .rsplit_once('.')
+            .map_or(qual.as_str(), |p| p.1)
+            .to_owned();
         let text = unit_text.get(&name).map_or("", String::as_str);
         for (i, line) in super::units::splitlines(&body).iter().enumerate() {
             let code = LINE_COMMENT.replace_all(line, "");
@@ -105,7 +137,8 @@ pub(crate) fn unstated_rust(source: &str, unit_text: &HashMap<String, String>) -
             for m in RUST_NUMBER.captures_iter(&code).flatten() {
                 let whole = m.get(0).unwrap_or_else(|| unreachable!());
                 let v: f64 = m[1].replace('_', "").parse().unwrap_or(0.0);
-                let index = code[whole.end()..].starts_with(']') && code[..whole.start()].trim_end().ends_with('[');
+                let index = code[whole.end()..].starts_with(']')
+                    && code[..whole.start()].trim_end().ends_with('[');
                 if trivial(v) || stated(v, text) || index {
                     continue;
                 }
@@ -120,13 +153,22 @@ pub(crate) fn unstated_rust(source: &str, unit_text: &HashMap<String, String>) -
 pub(crate) type Found = (String, usize, String, f64);
 
 /// Every number `unstated` finds in the map code under `root` (and `path`): the `.py` files by the runner, the Rust here.
-pub(crate) fn inline(reader: &mut Reader, root: &Path, cur: &Cur, path: &str) -> Result<Vec<Found>, Fail> {
+pub(crate) fn inline(
+    reader: &mut Reader,
+    root: &Path,
+    cur: &Cur,
+    path: &str,
+) -> Result<Vec<Found>, Fail> {
     let mut text: HashMap<String, HashMap<String, String>> = HashMap::new();
     for row in cur.iter() {
         let unit = row.key.split_once('#').map_or(row.key.as_str(), |p| p.0);
         let (f, name) = unit.split_once("::").unwrap_or((unit, ""));
         let bare = name.rsplit_once('.').map_or(name, |p| p.1);
-        let bag = text.entry(f.to_owned()).or_default().entry(bare.to_owned()).or_default();
+        let bag = text
+            .entry(f.to_owned())
+            .or_default()
+            .entry(bare.to_owned())
+            .or_default();
         bag.push_str(&format!(" {} {}", row.claim.label, row.claim.account));
     }
     let empty = HashMap::new();
@@ -136,15 +178,29 @@ pub(crate) fn inline(reader: &mut Reader, root: &Path, cur: &Cur, path: &str) ->
         if !MAP_CODE.iter().any(|m| r.starts_with(m)) || !r.starts_with(path) {
             continue;
         }
-        let got = reader.ask("tunables_unstated", &json!([read_text(&p)?, text.get(&r).unwrap_or(&empty)]))?;
+        let got = reader.ask(
+            "tunables_unstated",
+            &json!([read_text(&p)?, text.get(&r).unwrap_or(&empty)]),
+        )?;
         for t in got.as_array().into_iter().flatten() {
-            let line = t[1].as_u64().and_then(|n| usize::try_from(n).ok()).unwrap_or(0);
-            out.push((r.clone(), line, t[0].as_str().unwrap_or_default().to_owned(), t[2].as_f64().unwrap_or(0.0)));
+            let line = t[1]
+                .as_u64()
+                .and_then(|n| usize::try_from(n).ok())
+                .unwrap_or(0);
+            out.push((
+                r.clone(),
+                line,
+                t[0].as_str().unwrap_or_default().to_owned(),
+                t[2].as_f64().unwrap_or(0.0),
+            ));
         }
     }
     for p in rglob(&root.join("rust"), ".rs") {
         let r = rel(&p, root);
-        if p.components().any(|c| c.as_os_str() == "target") || !MAP_CODE.iter().any(|m| r.starts_with(m)) || !r.starts_with(path) {
+        if p.components().any(|c| c.as_os_str() == "target")
+            || !MAP_CODE.iter().any(|m| r.starts_with(m))
+            || !r.starts_with(path)
+        {
             continue;
         }
         for (f, line, v) in unstated_rust(&read_text(&p)?, text.get(&r).unwrap_or(&empty)) {
@@ -168,7 +224,11 @@ pub(crate) fn render_inline(found: &[Found], count: bool) -> String {
         per.sort_by(|a, b| b.1.cmp(&a.1));
         lines.extend(per.iter().map(|(f, n)| format!("  {n:>5}  {f}")));
     } else {
-        lines.extend(found.iter().map(|(f, line, func, v)| format!("  {f}:{line} {func} {}", fmt_g(*v))));
+        lines.extend(
+            found
+                .iter()
+                .map(|(f, line, func, v)| format!("  {f}:{line} {func} {}", fmt_g(*v))),
+        );
     }
     lines.join("\n")
 }
@@ -179,12 +239,20 @@ pub(crate) fn render(found: &[(String, String, String)], count: bool) -> String 
     let head = if found.is_empty() {
         "tunables: none".to_owned()
     } else {
-        let parts: Vec<String> = OURS.iter().filter(|l| tally(l) > 0).map(|l| format!("{l} {}", tally(l))).collect();
+        let parts: Vec<String> = OURS
+            .iter()
+            .filter(|l| tally(l) > 0)
+            .map(|l| format!("{l} {}", tally(l)))
+            .collect();
         format!("tunables: {}", parts.join(", "))
     };
     let mut lines = vec![format!("{head} - values no source states: a goal and a knob, never a target to defend (docs/approach-checklist.md A3)")];
     if !count {
-        lines.extend(found.iter().map(|(label, key, account)| format!("  {label:<12} {key} - {account}")));
+        lines.extend(
+            found
+                .iter()
+                .map(|(label, key, account)| format!("  {label:<12} {key} - {account}")),
+        );
     }
     lines.join("\n")
 }

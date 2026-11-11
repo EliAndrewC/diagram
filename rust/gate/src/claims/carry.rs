@@ -9,7 +9,9 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
-use super::index::{field, is, live_rows, load_map, owed, relabel_answered, Cur, Index, INDEX, STORE};
+use super::index::{
+    field, is, live_rows, load_map, owed, relabel_answered, Cur, Index, INDEX, STORE,
+};
 use super::report::{base_cores, base_tree, classify, load_deferred, open_findings, Base};
 use super::scope::Reader;
 use crate::record::repo::{fail, git, read_text, Fail};
@@ -32,7 +34,8 @@ static KNOWN_LINE: LazyLock<Regex> =
     LazyLock::new(|| re(r"\Aknown: (.*) - a known drift \((\d{3}) (T\d+[a-z]?)\) to record"));
 
 fn canon(p: &Path) -> PathBuf {
-    std::fs::canonicalize(p).unwrap_or_else(|_| std::path::absolute(p).unwrap_or_else(|_| p.to_path_buf()))
+    std::fs::canonicalize(p)
+        .unwrap_or_else(|_| std::path::absolute(p).unwrap_or_else(|_| p.to_path_buf()))
 }
 
 fn git_lines(root: &Path, args: &[&str]) -> Vec<String> {
@@ -45,16 +48,27 @@ fn git_lines(root: &Path, args: &[&str]) -> Vec<String> {
 
 /// Does this tree's delta change engine code, as the gate's one list and the content id decide it?
 pub(crate) fn touches_engine(root: &Path) -> Result<bool, Fail> {
-    let base = git_lines(root, &["merge-base", "origin/main", "HEAD"]).into_iter().next().unwrap_or_else(|| "HEAD".to_owned());
+    let base = git_lines(root, &["merge-base", "origin/main", "HEAD"])
+        .into_iter()
+        .next()
+        .unwrap_or_else(|| "HEAD".to_owned());
     let mut paths = git_lines(root, &["diff", "--name-only", &base]);
-    paths.extend(git_lines(root, &["ls-files", "--others", "--exclude-standard"]));
+    paths.extend(git_lines(
+        root,
+        &["ls-files", "--others", "--exclude-standard"],
+    ));
     let scratch = std::env::temp_dir().join(format!("l7r-claims-ids-{}", std::process::id()));
     let mut pairs: Vec<(PathBuf, Vec<u8>)> = Vec::new();
     for f in paths.iter().filter(|p| crate::delta::is_engine(p)) {
         if !f.ends_with(".py") {
             return Ok(true);
         }
-        let before = std::process::Command::new("git").arg("-C").arg(root).args(["show", &format!("{base}:{f}")]).output().map_err(fail)?;
+        let before = std::process::Command::new("git")
+            .arg("-C")
+            .arg(root)
+            .args(["show", &format!("{base}:{f}")])
+            .output()
+            .map_err(fail)?;
         let now = root.join(f);
         if !before.status.success() || !now.is_file() {
             return Ok(true);
@@ -76,7 +90,12 @@ pub(crate) fn touches_engine(root: &Path) -> Result<bool, Fail> {
         })
         .collect();
     let script = crate::codeid::script(root);
-    let ids = crate::codeid::content_ids(&files, &mut crate::codeid::Cache::at(root), "python3", &script);
+    let ids = crate::codeid::content_ids(
+        &files,
+        &mut crate::codeid::Cache::at(root),
+        "python3",
+        &script,
+    );
     let _ = std::fs::remove_dir_all(&scratch);
     let ids = ids?;
     Ok(ids.chunks(2).any(|p| p[0] != p[1]))
@@ -93,7 +112,12 @@ fn read_or_empty(path: &Path) -> Result<String, Fail> {
 /// The open task ids of a feature's tasks.md.
 pub(crate) fn open_ids(d: &Path) -> Result<HashSet<String>, Fail> {
     let text = read_or_empty(&d.join("tasks.md"))?;
-    Ok(BOX.captures_iter(&text).flatten().filter(|c| &c[1] == " ").map(|c| c[2].to_owned()).collect())
+    Ok(BOX
+        .captures_iter(&text)
+        .flatten()
+        .filter(|c| &c[1] == " ")
+        .map(|c| c[2].to_owned())
+        .collect())
 }
 
 /// The rows of a feature's carry record.
@@ -129,7 +153,12 @@ pub(crate) fn filed(target: Option<&Path>) -> Result<HashMap<String, String>, Fa
         if !live.contains(task) {
             continue;
         }
-        for k in r.get("keys").and_then(Value::as_array).into_iter().flatten() {
+        for k in r
+            .get("keys")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+        {
             out.insert(k.as_str().unwrap_or_default().to_owned(), task.to_owned());
         }
     }
@@ -149,18 +178,32 @@ fn file_into(text: &str, task: &str, keys: &[String], by: &str) -> Result<String
             continue;
         }
         if &c[1] != " " {
-            return Err(format!("{task} is ticked; file into an open task, or leave T= off for a new one"));
+            return Err(format!(
+                "{task} is ticked; file into an open task, or leave T= off for a new one"
+            ));
         }
         let whole = c.get(0).unwrap_or_else(|| unreachable!());
         let line = whole.as_str();
-        let (body, tail) = line.strip_suffix(LANDS_OPEN).map_or((line, ""), |b| (b, LANDS_OPEN));
-        return Ok(format!("{}{body}; carried by {by}: {}{tail}{}", &text[..whole.start()], keys.join(", "), &text[whole.end()..]));
+        let (body, tail) = line
+            .strip_suffix(LANDS_OPEN)
+            .map_or((line, ""), |b| (b, LANDS_OPEN));
+        return Ok(format!(
+            "{}{body}; carried by {by}: {}{tail}{}",
+            &text[..whole.start()],
+            keys.join(", "),
+            &text[whole.end()..]
+        ));
     }
     Err(format!("no task {task} in tasks.md"))
 }
 
 fn new_box(text: &str, keys: &[String], ruling: &str) -> (String, String) {
-    let top = BOX.captures_iter(text).flatten().filter_map(|c| c[2][1..].parse::<u64>().ok()).max().unwrap_or(0);
+    let top = BOX
+        .captures_iter(text)
+        .flatten()
+        .filter_map(|c| c[2][1..].parse::<u64>().ok())
+        .max()
+        .unwrap_or(0);
     let task = format!("T{:02}", top + 1);
     let by = if ruling.is_empty() {
         "the claims gate (385 FR-013): findings on code the change left unchanged".to_owned()
@@ -169,7 +212,10 @@ fn new_box(text: &str, keys: &[String], ruling: &str) -> (String, String) {
     };
     let line = format!("- [ ] {task} Carried by {by} - fix the code or the claim and re-check each: {}{LANDS_OPEN}\n      research: rendering\n", keys.join(", "));
     match GM_BOX.find(text).ok().flatten() {
-        Some(m) => (format!("{}{line}{}", &text[..m.start()], &text[m.start()..]), task),
+        Some(m) => (
+            format!("{}{line}{}", &text[..m.start()], &text[m.start()..]),
+            task,
+        ),
         None => (format!("{}\n{line}", text.trim_end_matches('\n')), task),
     }
 }
@@ -199,7 +245,13 @@ pub(crate) fn claims_mode(root: &Path) -> String {
 }
 
 /// Files `keys` into the feature being landed; what was done, or the error naming what to do instead.
-pub(crate) fn carry(root: &Path, feature: &str, task: &str, keys: &[String], ruling: &str) -> Result<String, String> {
+pub(crate) fn carry(
+    root: &Path,
+    feature: &str,
+    task: &str,
+    keys: &[String],
+    ruling: &str,
+) -> Result<String, String> {
     if claims_mode(root) == "report" {
         return Err("the claims switch is at report: a carried finding is a row of `make claims-report`, filed nowhere (feature 445); `make claims-clean REASON=` when the claims are closed out".to_owned());
     }
@@ -216,9 +268,23 @@ pub(crate) fn carry(root: &Path, feature: &str, task: &str, keys: &[String], rul
     };
     if wrong {
         let moved = matches!((&here, &active), (Some(h), Some(a)) if canon(h) != canon(a));
-        let place = if moved { "the claims feature's - this delta holds no engine code" } else { "the active task's" };
-        let name = here.as_ref().map_or_else(|| "none: `make task-start F=<n> T=<Txx>` first".to_owned(), |h| h.file_name().unwrap_or_default().to_string_lossy().into_owned());
-        return Err(format!("a carried finding is filed only into {place} ({name}), not {feature}"));
+        let place = if moved {
+            "the claims feature's - this delta holds no engine code"
+        } else {
+            "the active task's"
+        };
+        let name = here.as_ref().map_or_else(
+            || "none: `make task-start F=<n> T=<Txx>` first".to_owned(),
+            |h| {
+                h.file_name()
+                    .unwrap_or_default()
+                    .to_string_lossy()
+                    .into_owned()
+            },
+        );
+        return Err(format!(
+            "a carried finding is filed only into {place} ({name}), not {feature}"
+        ));
     }
     let d = d.unwrap_or_default();
     if !ruling.is_empty() && !ruled(&d, ruling)? {
@@ -230,8 +296,16 @@ pub(crate) fn carry(root: &Path, feature: &str, task: &str, keys: &[String], rul
     }
     let tasks = d.join("tasks.md");
     let text = read_text(&tasks)?;
-    let by = if ruling.is_empty() { "the claims gate (385 FR-013)".to_owned() } else { format!("the round arbiter's ruling {ruling}") };
-    let (text, task) = if task.is_empty() { new_box(&text, keys, ruling) } else { (file_into(&text, task, keys, &by)?, task.to_owned()) };
+    let by = if ruling.is_empty() {
+        "the claims gate (385 FR-013)".to_owned()
+    } else {
+        format!("the round arbiter's ruling {ruling}")
+    };
+    let (text, task) = if task.is_empty() {
+        new_box(&text, keys, ruling)
+    } else {
+        (file_into(&text, task, keys, &by)?, task.to_owned())
+    };
     std::fs::write(&tasks, text).map_err(fail)?;
     let mut row = Map::new();
     row.insert("task".into(), json!(task));
@@ -241,7 +315,11 @@ pub(crate) fn carry(root: &Path, feature: &str, task: &str, keys: &[String], rul
         row.insert("ruling".into(), json!(ruling));
     }
     let line = crate::logs::one_line(&Value::Object(row)) + "\n";
-    let mut f = std::fs::OpenOptions::new().create(true).append(true).open(d.join(RECORD)).map_err(fail)?;
+    let mut f = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(d.join(RECORD))
+        .map_err(fail)?;
     std::io::Write::write_all(&mut f, line.as_bytes()).map_err(fail)?;
     let name = d.file_name().unwrap_or_default().to_string_lossy();
     Ok(format!("claims-carry: {} finding(s) filed into {name} {task}; commit tasks.md and {RECORD} with the landing", keys.len()))
@@ -254,11 +332,19 @@ pub(crate) fn key_of(line: &str) -> String {
 }
 
 /// key -> `<feature> <task>` for every DRIFTED claim whose text names an open task row naming its unit, and every DRIFTED claim the arbiter accepted.
-pub(crate) fn known_drifts(cur: &Cur, index: &Index, root: &Path) -> Result<HashMap<String, String>, Fail> {
+pub(crate) fn known_drifts(
+    cur: &Cur,
+    index: &Index,
+    root: &Path,
+) -> Result<HashMap<String, String>, Fail> {
     let mut cand: Vec<(String, (String, String))> = Vec::new();
     for (key, v) in index {
         let found: Vec<(String, String)> = match cur.get(key) {
-            Some(row) if is(v, "verdict", "DRIFTED") => TASK_NAMED.captures_iter(&row.claim.account).flatten().map(|c| (c[1].to_owned(), c[2].to_owned())).collect(),
+            Some(row) if is(v, "verdict", "DRIFTED") => TASK_NAMED
+                .captures_iter(&row.claim.account)
+                .flatten()
+                .map(|c| (c[1].to_owned(), c[2].to_owned()))
+                .collect(),
             _ => Vec::new(),
         };
         if let Some(last) = found.last() {
@@ -268,7 +354,12 @@ pub(crate) fn known_drifts(cur: &Cur, index: &Index, root: &Path) -> Result<Hash
     let named: HashSet<&String> = cand.iter().map(|(k, _)| k).collect();
     let mut out: HashMap<String, String> = index
         .iter()
-        .filter(|(k, v)| !named.contains(k) && cur.contains(k) && is(v, "verdict", "DRIFTED") && field(v, "note").contains(ACCEPTED))
+        .filter(|(k, v)| {
+            !named.contains(k)
+                && cur.contains(k)
+                && is(v, "verdict", "DRIFTED")
+                && field(v, "note").contains(ACCEPTED)
+        })
         .map(|(k, _)| (k.clone(), BY_ARBITER.to_owned()))
         .collect();
     let mut boxes: HashMap<(String, String), String> = HashMap::new();
@@ -278,7 +369,11 @@ pub(crate) fn known_drifts(cur: &Cur, index: &Index, root: &Path) -> Result<Hash
             let found = match specs.first() {
                 Some(p) => {
                     let text = read_text(p)?;
-                    re(&format!(r"(?m)^- \[ \] {task} .*$")).find(&text).ok().flatten().map(|m| m.as_str().to_owned())
+                    re(&format!(r"(?m)^- \[ \] {task} .*$"))
+                        .find(&text)
+                        .ok()
+                        .flatten()
+                        .map(|m| m.as_str().to_owned())
                 }
                 None => None,
             };
@@ -326,9 +421,15 @@ pub(crate) fn recorded_known(root: &Path) -> Result<HashSet<String>, Fail> {
     let mut out = HashSet::new();
     for f in files {
         for ln in super::units::splitlines(&read_text(&f)?) {
-            let Ok(r) = serde_json::from_str::<Value>(&ln) else { continue };
+            let Ok(r) = serde_json::from_str::<Value>(&ln) else {
+                continue;
+            };
             if is(&r, "kind", KNOWN_KIND) && super::index::truthy(r.get("claim")) {
-                out.insert(r["claim"].as_str().map_or_else(|| r["claim"].to_string(), str::to_owned));
+                out.insert(
+                    r["claim"]
+                        .as_str()
+                        .map_or_else(|| r["claim"].to_string(), str::to_owned),
+                );
             }
         }
     }
@@ -342,10 +443,21 @@ pub(crate) struct Reading {
 }
 
 /// (owed refusals, introduced, pre-existing, carried) at `root` against its merge base with origin/main.
-pub(crate) fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<(Vec<String>, Vec<String>, Vec<String>, Vec<(String, String)>), Fail> {
+pub(crate) fn classified(
+    reader: &mut Reader,
+    root: &Path,
+    at: &Reading,
+) -> Result<(Vec<String>, Vec<String>, Vec<String>, Vec<(String, String)>), Fail> {
     let store = load_map(&root.join(STORE))?;
-    let due = owed(&at.cur, &at.index, Some(&root.join("research").join("questions")), Some(&store))?;
-    let mut mb = l7r_guard::shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"])).to_owned();
+    let due = owed(
+        &at.cur,
+        &at.index,
+        Some(&root.join("research").join("questions")),
+        Some(&store),
+    )?;
+    let mut mb =
+        l7r_guard::shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"]))
+            .to_owned();
     if mb.is_empty() {
         mb = l7r_guard::shared::py_text::strip(&git(root, &["rev-parse", "HEAD"])).to_owned();
     }
@@ -353,12 +465,18 @@ pub(crate) fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Resu
         Index::new()
     } else {
         let text = git(root, &["show", &format!("{mb}:{INDEX}")]);
-        match serde_json::from_str::<Value>(if text.is_empty() { "{}" } else { &text }).map_err(|e| format!("json.decoder.JSONDecodeError: {e}"))? {
+        match serde_json::from_str::<Value>(if text.is_empty() { "{}" } else { &text })
+            .map_err(|e| format!("json.decoder.JSONDecodeError: {e}"))?
+        {
             Value::Object(m) => m,
             _ => Index::new(),
         }
     };
-    let tmp = std::env::temp_dir().join(format!("l7r-claims-base-{}-{}", std::process::id(), crate::record::repo::utc_now().replace(':', "")));
+    let tmp = std::env::temp_dir().join(format!(
+        "l7r-claims-base-{}-{}",
+        std::process::id(),
+        crate::record::repo::utc_now().replace(':', "")
+    ));
     std::fs::create_dir_all(&tmp).map_err(fail)?;
     let judged = (|| -> Result<_, Fail> {
         let cores = if mb.is_empty() {
@@ -377,11 +495,28 @@ pub(crate) fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Resu
         }
         let deferred = load_deferred(&root.join(super::index::DEFERRED))?;
         let qdir = tmp.join("research").join("questions");
-        classify(&at.cur, &at.index, &Base { index: &base_index, cores: &cores, qdir: &qdir, deferred: &deferred, answered: &answered })
+        classify(
+            &at.cur,
+            &at.index,
+            &Base {
+                index: &base_index,
+                cores: &cores,
+                qdir: &qdir,
+                deferred: &deferred,
+                answered: &answered,
+            },
+        )
     })();
     let _ = std::fs::remove_dir_all(&tmp);
     let (intro, pre, carried) = judged?;
-    Ok((due.into_iter().map(|(k, why)| format!("owed ({why}): {k}")).collect(), intro, pre, carried))
+    Ok((
+        due.into_iter()
+            .map(|(k, why)| format!("owed ({why}): {k}"))
+            .collect(),
+        intro,
+        pre,
+        carried,
+    ))
 }
 
 /// (key, refusal) for every open finding `make claims-report` lists: what the gate refuses at `clean`.
@@ -398,20 +533,44 @@ pub(crate) fn open_lines(root: &Path, at: &Reading) -> Result<Vec<(String, Strin
 }
 
 /// (refusals, warnings) for the push: owed units, introduced findings, carried ones not yet filed, unrecorded known drifts; at `clean` every open finding.
-pub(crate) fn gate(reader: &mut Reader, root: &Path, at: &Reading) -> Result<(Vec<String>, Vec<String>), Fail> {
+pub(crate) fn gate(
+    reader: &mut Reader,
+    root: &Path,
+    at: &Reading,
+) -> Result<(Vec<String>, Vec<String>), Fail> {
     let (refuse, intro, pre, carried) = classified(reader, root, at)?;
     let known = known_drifts(&at.cur, &at.index, root)?;
-    let (revealed, intro): (Vec<String>, Vec<String>) = intro.into_iter().partition(|x| known.contains_key(&key_of(x)));
+    let (revealed, intro): (Vec<String>, Vec<String>) = intro
+        .into_iter()
+        .partition(|x| known.contains_key(&key_of(x)));
     let done_known = recorded_known(root)?;
-    let unrecorded: Vec<&String> = revealed.iter().filter(|x| known[&key_of(x)] != BY_ARBITER && !done_known.contains(&key_of(x))).collect();
+    let unrecorded: Vec<&String> = revealed
+        .iter()
+        .filter(|x| known[&key_of(x)] != BY_ARBITER && !done_known.contains(&key_of(x)))
+        .collect();
     let mut pre = pre;
-    pre.extend(revealed.iter().filter(|x| !unrecorded.contains(x)).map(|x| format!("known drift ({}): {x}", known[&key_of(x)])));
+    pre.extend(
+        revealed
+            .iter()
+            .filter(|x| !unrecorded.contains(x))
+            .map(|x| format!("known drift ({}): {x}", known[&key_of(x)])),
+    );
     let d = target(root)?;
     let done = filed(d.as_deref())?;
-    let dname = d.as_ref().map(|p| p.file_name().unwrap_or_default().to_string_lossy().into_owned());
+    let dname = d.as_ref().map(|p| {
+        p.file_name()
+            .unwrap_or_default()
+            .to_string_lossy()
+            .into_owned()
+    });
     let how = dname.as_ref().map_or_else(
         || "`make task-start F=<n> T=<Txx>`, then `make claims-carry F=<n>`".to_owned(),
-        |n| format!("`make claims-carry F={}`", n.split('-').next().unwrap_or_default()),
+        |n| {
+            format!(
+                "`make claims-carry F={}`",
+                n.split('-').next().unwrap_or_default()
+            )
+        },
     );
     let mut flagged: Vec<String> = intro.iter().map(|x| format!("introduced: {x}")).collect();
     flagged.extend(carried.iter().filter(|(k, _)| !done.contains_key(k)).map(|(_, line)| format!("carry: {line} - a finding on code the change left unchanged: file it with {how} (make land files it itself)")));
@@ -419,7 +578,13 @@ pub(crate) fn gate(reader: &mut Reader, root: &Path, at: &Reading) -> Result<(Ve
     let warn: Vec<String> = carried
         .iter()
         .filter(|(k, _)| done.contains_key(k))
-        .map(|(k, line)| format!("carried ({} {}): {line}", dname.clone().unwrap_or_default(), done[k]))
+        .map(|(k, line)| {
+            format!(
+                "carried ({} {}): {line}",
+                dname.clone().unwrap_or_default(),
+                done[k]
+            )
+        })
         .collect();
     let pre_lines: Vec<String> = pre.iter().map(|x| format!("pre-existing: {x}")).collect();
     if claims_mode(root) == "report" {
@@ -431,7 +596,11 @@ pub(crate) fn gate(reader: &mut Reader, root: &Path, at: &Reading) -> Result<(Ve
     let mut named: BTreeSet<String> = intro.iter().map(|x| key_of(x)).collect();
     named.extend(carried.iter().map(|(k, _)| k.clone()));
     named.extend(revealed.iter().map(|x| key_of(x)));
-    let listed: Vec<String> = open_lines(root, at)?.into_iter().filter(|(k, _)| !named.contains(k) || done.contains_key(k)).map(|(_, l)| l).collect();
+    let listed: Vec<String> = open_lines(root, at)?
+        .into_iter()
+        .filter(|(k, _)| !named.contains(k) || done.contains_key(k))
+        .map(|(_, l)| l)
+        .collect();
     let mut r = refuse;
     r.extend(flagged);
     r.extend(listed);
@@ -441,17 +610,31 @@ pub(crate) fn gate(reader: &mut Reader, root: &Path, at: &Reading) -> Result<(Ve
 }
 
 /// `make claims-known`: each known drift the gate would refuse unrecorded, written as a row of its task's feature's `gm-review.jsonl` with the GM's box, by the Python (`gm_review.add_row`, T91's); the lines written.
-pub(crate) fn record_known(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Vec<String>, Fail> {
+pub(crate) fn record_known(
+    reader: &mut Reader,
+    root: &Path,
+    at: &Reading,
+) -> Result<Vec<String>, Fail> {
     let (refuse, _) = gate(reader, root, at)?;
     let mut written = Vec::new();
     for line in refuse {
-        let Some(m) = KNOWN_LINE.captures(&line).ok().flatten() else { continue };
+        let Some(m) = KNOWN_LINE.captures(&line).ok().flatten() else {
+            continue;
+        };
         let (key, feat, task) = (key_of(&m[1]), m[2].to_owned(), m[3].to_owned());
-        let Some(spec) = spec_glob(root, &feat, None).into_iter().next() else { continue };
-        let finding: String = l7r_guard::shared::py_text::strip(&m[1]).chars().take(400).collect();
+        let Some(spec) = spec_glob(root, &feat, None).into_iter().next() else {
+            continue;
+        };
+        let finding: String = l7r_guard::shared::py_text::strip(&m[1])
+            .chars()
+            .take(400)
+            .collect();
         let row = json!({"kind": KNOWN_KIND, "claim": key, "task": task, "finding": finding, "utc": crate::record::repo::utc_now()});
         reader.ask("gm_review_add_row", &json!([spec.to_string_lossy(), row]))?;
-        written.push(format!("{} {task}: {key}", spec.file_name().unwrap_or_default().to_string_lossy()));
+        written.push(format!(
+            "{} {task}: {key}",
+            spec.file_name().unwrap_or_default().to_string_lossy()
+        ));
     }
     Ok(written)
 }

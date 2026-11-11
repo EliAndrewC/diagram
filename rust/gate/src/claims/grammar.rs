@@ -44,11 +44,7 @@ impl Claim {
     pub(crate) fn normalized(&self) -> String {
         POINTER
             .replace_all(&collapse(&self.line), |c: &Captures| {
-                format!(
-                    "{}{}",
-                    &c[2],
-                    c.get(3).map_or("", |m| m.as_str())
-                )
+                format!("{}{}", &c[2], c.get(3).map_or("", |m| m.as_str()))
             })
             .into_owned()
     }
@@ -162,10 +158,8 @@ fn section_span(lines: &[&str]) -> Option<(usize, usize, bool)> {
         let Some(own) = head_of(raw) else {
             continue;
         };
-        let flat = i == 0
-            && lines.len() > 1
-            && !strip(lines[1]).is_empty()
-            && !lines[1].starts_with(' ');
+        let flat =
+            i == 0 && lines.len() > 1 && !strip(lines[1]).is_empty() && !lines[1].starts_with(' ');
         let mut end = i + 1;
         let carried = !strip(&own).is_empty() && !flat;
         while end < lines.len()

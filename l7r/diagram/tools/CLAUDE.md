@@ -33,7 +33,7 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | Does a marsh meet the open ground on a ruled or plumb line, where a reader sees it? | `marsh_edges` (feature 294 B2; the visible free edge from the page's id map) |
 | What does a hand-drawn Mode A sheet look like with its captions placed? | `make sheet-render SHEET=<svg> OUT=<png>` - the placer is `labels/hand_sheet.py`; `caption_decl` was the one-time migration of a sheet's captions from hand-seated to declared (feature 286) |
 | A map's canonical counts, in the block its `.notes.md` carries | `notes_census` - `make notes-census` |
-| The engine's and the Mode A procedures' research CLAIMS, read from the source | `claims` - behind `make claims-owed`, `claims-bundle`, `claims-checked`, `claims-report` (feature 316) |
+| The engine's and the Mode A procedures' research CLAIMS, read from the source | `l7r-gate claims` (`rust/gate/src/claims.rs`, feature 449 T82) behind `make claims-owed`, `claims-bundle`, `claims-checked`, `claims-report` (feature 316); `claims` here is its `.py` half, CPython's syntax tree, asked through `scripts/bundle_door.py` |
 | The record's footnotes counted by kind - what is owed | `footnote_census` - `make footnote-census` |
 | Assemble or check the glossary from its per-term files | `glossary_asset` - `make glossary` |
 | Build or check the record's site from its per-entry fragments | `record_asset` - `make record` |

@@ -12,7 +12,9 @@ use fancy_regex::Regex;
 use serde_json::Value;
 
 use super::grammar::GRAMMAR;
-use super::index::{field, is, live_rows, load_map, owed, research_fp, Cur, Index, Store, QUESTIONS};
+use super::index::{
+    field, is, live_rows, load_map, owed, research_fp, Cur, Index, Store, QUESTIONS,
+};
 use super::reply::{FINDINGS, VERDICTS};
 use super::scope::{all_units, Reader};
 use super::units::Pair;
@@ -23,7 +25,7 @@ use crate::record::units::re;
 static CONSTANT: LazyLock<Regex> = LazyLock::new(|| re(r"\b[A-Z][A-Z0-9_]{2,}\b"));
 static CONSTANT_WHOLE: LazyLock<Regex> = LazyLock::new(|| re(r"\A(?:\b[A-Z][A-Z0-9_]{2,}\b)\z"));
 /// What the base read needs: the engine, the procedure documents and the questions.
-const BASE_PATHS: [&str; 4] = ["l7r", "docs/buildings.md", "docs/buildings", QUESTIONS];
+pub(crate) const BASE_PATHS: [&str; 4] = ["l7r", "docs/buildings.md", "docs/buildings", QUESTIONS];
 
 /// Every coverage failure: a unit with no claim own or inherited, a claim that does not parse, a pointer to no question file.
 pub(crate) fn coverage(units: &[Pair], questions: &HashSet<String>) -> Vec<String> {
@@ -86,7 +88,13 @@ pub(crate) fn load_deferred(path: &Path) -> Result<HashSet<String>, Fail> {
     let doc = Value::Object(load_map(path)?);
     let mut out = HashSet::new();
     for part in ["units", "keys"] {
-        out.extend(doc.get(part).and_then(Value::as_array).into_iter().flatten().filter_map(|v| v.as_str().map(str::to_owned)));
+        out.extend(
+            doc.get(part)
+                .and_then(Value::as_array)
+                .into_iter()
+                .flatten()
+                .filter_map(|v| v.as_str().map(str::to_owned)),
+        );
     }
     Ok(out)
 }
@@ -111,7 +119,10 @@ pub(crate) fn verdict_of<'a>(v: &'a Value) -> Result<&'a str, Fail> {
 }
 
 /// (verdict as shown, key, note) for every finding the report lists by default, sorted by key.
-pub(crate) fn open_findings(rows: &Index, deferred: &HashSet<String>) -> Result<Vec<(String, String, String)>, Fail> {
+pub(crate) fn open_findings(
+    rows: &Index,
+    deferred: &HashSet<String>,
+) -> Result<Vec<(String, String, String)>, Fail> {
     let mut keys: Vec<&String> = rows.keys().collect();
     keys.sort();
     let claimed = in_step_constants(rows);
@@ -119,7 +130,10 @@ pub(crate) fn open_findings(rows: &Index, deferred: &HashSet<String>) -> Result<
     for k in keys {
         let v = &rows[k.as_str()];
         let verdict = shown(k, verdict_of(v)?, deferred);
-        if verdict == "IN-STEP" || verdict == "DEFERRED" || (verdict == "UNCLAIMED" && names_claimed(k, &claimed)) {
+        if verdict == "IN-STEP"
+            || verdict == "DEFERRED"
+            || (verdict == "UNCLAIMED" && names_claimed(k, &claimed))
+        {
             continue;
         }
         out.push((verdict, k.clone(), field(v, "note").to_owned()));
@@ -134,11 +148,16 @@ pub(crate) fn in_step_constants(rows: &Index) -> HashSet<(String, String)> {
         let (path, rest) = k.split_once("::").unwrap_or((k, ""));
         let name = rest.split_once('#').map_or(rest, |p| p.0);
         if CONSTANT_WHOLE.is_match(name).unwrap_or(false) && !is(v, "verdict", "UNCLAIMED") {
-            let e = seen.entry((path.to_owned(), name.to_owned())).or_insert(true);
+            let e = seen
+                .entry((path.to_owned(), name.to_owned()))
+                .or_insert(true);
             *e = *e && is(v, "verdict", "IN-STEP");
         }
     }
-    seen.into_iter().filter(|(_, ok)| *ok).map(|(k, _)| k).collect()
+    seen.into_iter()
+        .filter(|(_, ok)| *ok)
+        .map(|(k, _)| k)
+        .collect()
 }
 
 /// Whether an UNCLAIMED decision names a constant of its own file whose claims stand IN-STEP.
@@ -158,12 +177,24 @@ pub(crate) fn padded(text: &str) -> String {
 }
 
 /// Counts by verdict, the owed count, then every finding and every UNRESEARCHED claim (spec FR-011).
-pub(crate) fn report(cur: &Cur, index: &Index, qdir: &Path, store: &Store, deferred: &HashSet<String>, show_deferred: bool) -> Result<String, Fail> {
-    let rows: Index = live_rows(cur, index).into_iter().filter(|(_, v)| v.get("verdict").is_some()).collect();
+pub(crate) fn report(
+    cur: &Cur,
+    index: &Index,
+    qdir: &Path,
+    store: &Store,
+    deferred: &HashSet<String>,
+    show_deferred: bool,
+) -> Result<String, Fail> {
+    let rows: Index = live_rows(cur, index)
+        .into_iter()
+        .filter(|(_, v)| v.get("verdict").is_some())
+        .collect();
     let due = owed(cur, index, Some(qdir), Some(store))?;
     let mut counts: HashMap<String, usize> = HashMap::new();
     for (k, v) in &rows {
-        *counts.entry(shown(k, verdict_of(v)?, deferred)).or_default() += 1;
+        *counts
+            .entry(shown(k, verdict_of(v)?, deferred))
+            .or_default() += 1;
     }
     let count = |v: &str| counts.get(v).copied().unwrap_or(0);
     let tally: Vec<String> = VERDICTS
@@ -172,8 +203,16 @@ pub(crate) fn report(cur: &Cur, index: &Index, qdir: &Path, store: &Store, defer
         .filter(|v| count(v) > 0)
         .map(|v| format!("{v} {}", count(v)))
         .collect();
-    let tally = if tally.is_empty() { "no verdicts yet".to_owned() } else { tally.join(", ") };
-    let mut lines = vec![format!("claims: {} in scope; {tally}; owed {}", cur.len(), due.len())];
+    let tally = if tally.is_empty() {
+        "no verdicts yet".to_owned()
+    } else {
+        tally.join(", ")
+    };
+    let mut lines = vec![format!(
+        "claims: {} in scope; {tally}; owed {}",
+        cur.len(),
+        due.len()
+    )];
     if show_deferred {
         let mut keys: Vec<&String> = rows.keys().collect();
         keys.sort();
@@ -181,7 +220,11 @@ pub(crate) fn report(cur: &Cur, index: &Index, qdir: &Path, store: &Store, defer
             let v = &rows[key.as_str()];
             let verdict = shown(key, verdict_of(v)?, deferred);
             if verdict != "IN-STEP" {
-                lines.push(format!("  {} {key} - {}", padded(&verdict), field(v, "note")));
+                lines.push(format!(
+                    "  {} {key} - {}",
+                    padded(&verdict),
+                    field(v, "note")
+                ));
             }
         }
     } else {
@@ -190,12 +233,22 @@ pub(crate) fn report(cur: &Cur, index: &Index, qdir: &Path, store: &Store, defer
         }
     }
     if count("DEFERRED") > 0 && !show_deferred {
-        lines.push(format!("({} DEFERRED findings not listed: make claims-report ALL=1 lists them)", count("DEFERRED")));
+        lines.push(format!(
+            "({} DEFERRED findings not listed: make claims-report ALL=1 lists them)",
+            count("DEFERRED")
+        ));
     }
-    let mut unres: Vec<&String> = cur.iter().filter(|r| r.claim.backing == "UNRESEARCHED").map(|r| &r.key).collect();
+    let mut unres: Vec<&String> = cur
+        .iter()
+        .filter(|r| r.claim.backing == "UNRESEARCHED")
+        .map(|r| &r.key)
+        .collect();
     unres.sort();
     if !unres.is_empty() {
-        lines.push(format!("UNRESEARCHED claims (the open research): {}", unres.len()));
+        lines.push(format!(
+            "UNRESEARCHED claims (the open research): {}",
+            unres.len()
+        ));
         lines.extend(unres.iter().map(|k| format!("  {k}")));
     }
     Ok(lines.join("\n"))
@@ -246,7 +299,10 @@ pub(crate) fn base_tree(root: &Path, base: &str, into: &Path) -> Result<(), Fail
 }
 
 /// uid -> core for every unit at a tree, claimed or not: the base the push compares with.
-pub(crate) fn base_cores(reader: &mut Reader, skill: &Path) -> Result<HashMap<String, String>, Fail> {
+pub(crate) fn base_cores(
+    reader: &mut Reader,
+    skill: &Path,
+) -> Result<HashMap<String, String>, Fail> {
     Ok(all_units(reader, skill, true, true)?
         .into_iter()
         .map(|(u, _)| (u.uid(), u.core))
@@ -263,24 +319,42 @@ pub(crate) struct Base<'a> {
 }
 
 /// (introduced, pre-existing, carried) findings (spec FR-010; carried: 385 FR-013).
-pub(crate) fn classify(cur: &Cur, index: &Index, base: &Base) -> Result<(Vec<String>, Vec<String>, Vec<(String, String)>), Fail> {
+pub(crate) fn classify(
+    cur: &Cur,
+    index: &Index,
+    base: &Base,
+) -> Result<(Vec<String>, Vec<String>, Vec<(String, String)>), Fail> {
     let head_uids = cur.uids();
-    let gone_cores: HashSet<&String> = base.cores.iter().filter(|(u, _)| !head_uids.contains(*u)).map(|(_, c)| c).collect();
+    let gone_cores: HashSet<&String> = base
+        .cores
+        .iter()
+        .filter(|(u, _)| !head_uids.contains(*u))
+        .map(|(_, c)| c)
+        .collect();
     let mut memo = HashMap::new();
     let (mut intro, mut pre, mut carried) = (Vec::new(), Vec::new(), Vec::new());
     let rows: BTreeMap<String, Value> = live_rows(cur, index).into_iter().collect();
     for (key, v) in &rows {
         let verdict = verdict_of(v)?;
-        if !FINDINGS.contains(&verdict) || base.answered.contains(key) || shown(key, verdict, base.deferred) == "DEFERRED" {
+        if !FINDINGS.contains(&verdict)
+            || base.answered.contains(key)
+            || shown(key, verdict, base.deferred) == "DEFERRED"
+        {
             continue;
         }
         let was = base.index.get(key);
         let line = format!("{} {key} - {}", padded(verdict), field(v, "note"));
-        if was.and_then(|w| w.get("verdict")).and_then(Value::as_str).is_some_and(|w| FINDINGS.contains(&w)) {
+        if was
+            .and_then(|w| w.get("verdict"))
+            .and_then(Value::as_str)
+            .is_some_and(|w| FINDINGS.contains(&w))
+        {
             pre.push(line);
             continue;
         }
-        let same_claim = was.is_some_and(|w| super::index::truthy(w.get("claim")) && w.get("claim") == v.get("claim"));
+        let same_claim = was.is_some_and(|w| {
+            super::index::truthy(w.get("claim")) && w.get("claim") == v.get("claim")
+        });
         if super::index::truthy(v.get("outside")) && (verdict == "UNCLAIMED" || same_claim) {
             carried.push((key.clone(), line));
             continue;

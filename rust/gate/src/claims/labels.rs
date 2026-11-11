@@ -14,22 +14,30 @@ use crate::record::units::re;
 
 /// An account saying the code departs from a page.
 static DEPARTS: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?i)\b(?:stricter|looser|wider|narrower|tighter|closer|farther) than (?:the page|its page|0\d{3}\b)|\bshort of (?:the page|its page|0\d{3}\b)|\bdepart(?:s|ing|ure)? from\b|\bstricter than\b")
+    re(
+        r"(?i)\b(?:stricter|looser|wider|narrower|tighter|closer|farther) than (?:the page|its page|0\d{3}\b)|\bshort of (?:the page|its page|0\d{3}\b)|\bdepart(?:s|ing|ure)? from\b|\bstricter than\b",
+    )
 });
 /// A question named in an account.
 static NAMED: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\d.])0\d{3}\b"));
 /// An account that says the named page is silent on this, or the figure is ours.
 static SILENT: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?i)\bsilent\b|\bno page\b|\bdoes not (?:say|size|give|state|name)\b|\bis ours\b|\bour own\b|\bunsized\b")
+    re(
+        r"(?i)\bsilent\b|\bno page\b|\bdoes not (?:say|size|give|state|name)\b|\bis ours\b|\bour own\b|\bunsized\b",
+    )
 });
 /// A figure in feet, as an account writes it.
-static FEET: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:ft|feet|foot)\b"));
+static FEET: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:ft|feet|foot)\b"));
 
 fn states(text: &str, fig: &str) -> bool {
     let fig = fig.strip_suffix(".0").unwrap_or(fig);
-    re(&format!(r"(?<![\d.]){}(?!\d|\.\d)", fancy_regex::escape(fig)))
-        .is_match(text)
-        .unwrap_or(false)
+    re(&format!(
+        r"(?<![\d.]){}(?!\d|\.\d)",
+        fancy_regex::escape(fig)
+    ))
+    .is_match(text)
+    .unwrap_or(false)
 }
 
 fn found(pat: &Regex, text: &str) -> bool {
@@ -37,7 +45,12 @@ fn found(pat: &Regex, text: &str) -> bool {
 }
 
 /// The label faults of one claim, each with its fix.
-pub(crate) fn flag(key: &str, claim: &Claim, qdir: &Path, pages: &mut HashMap<String, String>) -> Vec<String> {
+pub(crate) fn flag(
+    key: &str,
+    claim: &Claim,
+    qdir: &Path,
+    pages: &mut HashMap<String, String>,
+) -> Vec<String> {
     if claim.backing != "GUESS" {
         return Vec::new();
     }
@@ -47,7 +60,11 @@ pub(crate) fn flag(key: &str, claim: &Claim, qdir: &Path, pages: &mut HashMap<St
         out.push(format!("claims-label: {key} - its account says the code departs from a page: that is `DEVIATION <page>`, recorded on the page (or say why the page does not speak, and keep GUESS)"));
     }
     if claim.pointers.is_empty() && found(&NAMED, account) && !found(&SILENT, account) {
-        let names: BTreeSet<&str> = NAMED.find_iter(account).flatten().map(|m| m.as_str()).collect();
+        let names: BTreeSet<&str> = NAMED
+            .find_iter(account)
+            .flatten()
+            .map(|m| m.as_str())
+            .collect();
         out.push(format!(
             "claims-label: {key} - a bare GUESS says no page speaks, but its account names {}: cite the page if it states this, `GUESS <its .drawing.html>` if it records it as a guess, `DEVIATION <page>` if the code departs (or say the page is silent)",
             names.into_iter().collect::<Vec<_>>().join(", ")

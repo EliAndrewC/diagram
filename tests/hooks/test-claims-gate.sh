@@ -42,13 +42,14 @@ case "$out" in *"owed (new): l7r/diagram/hamletgen/rows.py::far_row#dry share"*"
 ( cd "$T" && CLAIMS_OK="a fixture with nothing checked" "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "CLAIMS_OK with a reason"
 ok "$(find "$S/dev/bypass-log" -name '*.json' | wc -l | tr -d ' ')" 1 "the reason is in the bypass log"
 
-# every claim recorded IN-STEP: passes; then committed as the base
-CLAIMS_PY="$HERE/../../scripts/record/claims.py" python3 - "$T" <<'PY'
-import importlib.util, os, pathlib, sys
-spec = importlib.util.spec_from_file_location("_claims", os.environ["CLAIMS_PY"]); cx = importlib.util.module_from_spec(spec); sys.modules["_claims"] = cx; spec.loader.exec_module(cx)
-root = pathlib.Path(sys.argv[1]); cur = cx.current(root)
-cx.save_index(root / cx.INDEX, {k: {"verdict": "IN-STEP", "code": r.code, "core": r.unit.core, "research": r.research, "date": "d", "note": ""} for k, r in cur.items()})
-PY
+# every claim recorded IN-STEP: passes; then committed as the base - recorded as a check's reply is, through the Rust claims tools
+# (feature 449 T82: the fixture's Python over `claims.py` ported with it, `ask:449-T069-suites`)
+B="$(mktemp -d)"
+LG="$HERE/../../scripts/gates/l7r-gate.sh"
+"$LG" claims --root "$T" bundle --owed --out "$B/b" >/dev/null 2>&1
+jq -r 'keys[] | "VERDICT \(.) IN-STEP - the fixture [§]"' "$B/b/units.json" > "$B/reply.txt"
+"$LG" claims --root "$T" record --bundle "$B/b" --reply "$B/reply.txt" >/dev/null 2>&1; ok "$?" 0 "the fixture's verdicts recorded"
+rm -rf "$B"
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "every claim recorded"
 g add -A; g commit -q -m base
 

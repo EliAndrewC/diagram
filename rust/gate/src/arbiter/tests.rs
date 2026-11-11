@@ -363,13 +363,7 @@ const FAKE_GM_REVIEW: &str = "from pathlib import Path\ndef question(d, text, so
 fn python_tools(root: &Path) {
     std::fs::write(root.join(".fake-answer"), "ok").unwrap();
     let scripts = root.join("scripts");
-    for (rel, body) in [
-        ("gm_review.py", FAKE_GM_REVIEW),
-        (
-            "record/claims.py",
-            "import sys\nprint('claims accepted', sys.argv[sys.argv.index('--keys') + 1])\n",
-        ),
-    ] {
+    for (rel, body) in [("gm_review.py", FAKE_GM_REVIEW)] {
         std::fs::create_dir_all(scripts.join(rel).parent().unwrap()).unwrap();
         std::fs::write(scripts.join(rel), body).unwrap();
     }
@@ -533,7 +527,7 @@ fn a_plan_or_claims_ask_stands_as_that_reviews_verdict() {
         ],
     );
     assert!(
-        claims.stdout.contains("claims accepted a;b"),
+        claims.stdout.contains("claims-accept: no such claim: a, b"),
         "{}",
         claims.stdout
     );

@@ -765,26 +765,20 @@ fn owed_line(owed: Option<String>) -> String {
         .map_or_else(String::new, |o| o + "\n")
 }
 
+/// `make claims-accept`'s command, in process (`l7r-gate claims accept`, feature 449 T82): its stdout then its stderr.
 fn claims_accept(root: &Path, keys: &str, trigger: &str) -> String {
-    let script = scripts(root).join("record/claims.py");
-    let done = std::process::Command::new("python3")
-        .arg(&script)
-        .args([
-            "--root",
-            &root.to_string_lossy(),
-            "accept",
-            "--keys",
-            keys,
-            "--trigger",
-            trigger,
-        ])
-        .output();
-    let mut all = String::new();
-    if let Ok(o) = done {
-        all.push_str(&String::from_utf8_lossy(&o.stdout));
-        all.push_str(&String::from_utf8_lossy(&o.stderr));
-    }
-    format!("{}\n", all.trim())
+    let args = [
+        "--root",
+        &root.to_string_lossy(),
+        "accept",
+        "--keys",
+        keys,
+        "--trigger",
+        trigger,
+    ]
+    .map(str::to_owned);
+    let done = crate::claims::cli(&args);
+    format!("{}\n", (done.stdout + &done.stderr).trim())
 }
 
 fn ruled_batch_cli(root: &Path, file: &str, who: &str) -> Reply {

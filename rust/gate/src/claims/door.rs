@@ -14,11 +14,17 @@ use crate::checks_door::serve_with;
 use crate::Reply;
 
 fn text(args: &[Value], i: usize) -> String {
-    args.get(i).and_then(Value::as_str).unwrap_or_default().to_owned()
+    args.get(i)
+        .and_then(Value::as_str)
+        .unwrap_or_default()
+        .to_owned()
 }
 
 fn object(args: &[Value], i: usize) -> Map<String, Value> {
-    args.get(i).and_then(Value::as_object).cloned().unwrap_or_default()
+    args.get(i)
+        .and_then(Value::as_object)
+        .cloned()
+        .unwrap_or_default()
 }
 
 fn strings(args: &[Value], i: usize) -> Vec<String> {
@@ -64,7 +70,10 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
             let cur = read(&root)?;
             let (index, store) = (object(args, 1), object(args, 2));
             let due = owed(&cur, &index, Some(&root.join(QUESTIONS)), Some(&store))?;
-            Ok(json!(due.into_iter().map(|(k, w)| json!([k, w])).collect::<Vec<_>>()))
+            Ok(json!(due
+                .into_iter()
+                .map(|(k, w)| json!([k, w]))
+                .collect::<Vec<_>>()))
         }
         "load_index" | "load_store" => Ok(Value::Object(load_map(&root)?)),
         "backfill_sections" => {
@@ -74,14 +83,22 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
             Ok(json!([n, index, store]))
         }
         "scope_split" => {
-            let (own, left) = split(&mut reader(&root), &root, &text(args, 1), &strings(args, 2), &strings(args, 3))?;
+            let (own, left) = split(
+                &mut reader(&root),
+                &root,
+                &text(args, 1),
+                &strings(args, 2),
+                &strings(args, 3),
+            )?;
             Ok(json!([own, left]))
         }
         "git_diff" => Ok(json!(git_diff(&root, &text(args, 1)))),
         "file_left" => Ok(json!(file_left(&root, &text(args, 1), &strings(args, 2))?)),
         "flight_live" => Ok(json!(super::flight::live(&root, super::flight::now()))),
-        "constants" => Ok(json!({"CLAIMS_FEATURE_DIR": CLAIMS_FEATURE_DIR, "QUESTIONS": QUESTIONS,
-                                 "INDEX": super::index::INDEX, "STORE": super::index::STORE})),
+        "constants" => Ok(
+            json!({"CLAIMS_FEATURE_DIR": CLAIMS_FEATURE_DIR, "QUESTIONS": QUESTIONS,
+                                 "INDEX": super::index::INDEX, "STORE": super::index::STORE}),
+        ),
         other => Err(format!("claims-door: no verb {other}")),
     }
 }

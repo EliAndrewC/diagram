@@ -589,11 +589,9 @@ fn a_tree_with_no_dev_directory_records_no_bypass_and_triage_is_named_when_owed(
     let root = scratch("nodev");
     super::bypass_record(&root, "push", "a reason given");
     assert!(!root.join("dev").exists());
-    std::fs::create_dir_all(root.join("scripts/record")).unwrap();
-    std::fs::write(root.join("scripts/record/claims.py"), "echo 3\n").unwrap();
-    assert!(super::triage_hint(&root, "bash").contains("claims owed a triage: 3"));
-    std::fs::write(root.join("scripts/record/claims.py"), "echo 0\n").unwrap();
-    assert_eq!(super::triage_hint(&root, "bash"), "");
+    assert!(super::hint_of("x\n3\n").contains("claims owed a triage: 3"));
+    assert_eq!(super::hint_of("0\n"), "");
+    assert_eq!(super::triage_hint(&root), "");
 }
 
 #[test]

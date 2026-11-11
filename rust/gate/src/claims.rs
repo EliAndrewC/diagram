@@ -27,6 +27,41 @@ mod triage;
 mod tunables;
 mod units;
 
+/// Every path the claims tools read at a tree: the base read's (the engine, the procedures, the questions) and the records.
+#[cfg(test)]
+pub(crate) fn read_paths() -> Vec<&'static str> {
+    let mut out = report::BASE_PATHS.to_vec();
+    out.extend([
+        index::INDEX,
+        index::DEFERRED,
+        index::STORE,
+        index::QUESTIONS,
+    ]);
+    out
+}
+
+/// What the round arbiter's bundle reads of the claims at `root` (`arbiter_bundle.claims_section`): each claim's backing and line by key, and the index.
+pub(crate) fn rows_and_index(
+    root: &Path,
+) -> Result<(serde_json::Value, serde_json::Value), crate::record::repo::Fail> {
+    let mut reader = scope::Reader::new(&crate::record::repo::tree_of(root), root);
+    let cur = index::current(&mut reader, root, &root.join(index::QUESTIONS))?;
+    let rows: serde_json::Map<String, serde_json::Value> = cur
+        .iter()
+        .map(|r| {
+            (
+                r.key.clone(),
+                serde_json::json!({"backing": r.claim.backing, "line": r.claim.line}),
+            )
+        })
+        .collect();
+    let index = index::load_map(&root.join(index::INDEX))?;
+    Ok((
+        serde_json::Value::Object(rows),
+        serde_json::Value::Object(index),
+    ))
+}
+
 /// `git -C dir args...` fed `input`; its stdout, or None where it failed.
 pub(crate) fn stdin_git(dir: &Path, args: &[&str], input: &str) -> Option<String> {
     let mut child = std::process::Command::new("git")
@@ -59,15 +94,27 @@ fn usage(what: &str, why: &str) -> Reply {
 fn specs(cmd: &str) -> Option<(Vec<Spec>, &'static [&'static str])> {
     let v = Spec::value;
     Some(match cmd {
-        "owed" | "triage-owed" | "backfill" | "backfill-sections" | "rekey" | "refingerprint" | "gate" | "known" => (Vec::new(), &[]),
+        "owed" | "triage-owed" | "backfill" | "backfill-sections" | "rekey" | "refingerprint"
+        | "gate" | "known" => (Vec::new(), &[]),
         "bundle" => (
-            vec![Spec::flag("--owed"), v("--module"), v("--units"), v("--out"), v("--reason"), v("--with"), v("--pages")],
+            vec![
+                Spec::flag("--owed"),
+                v("--module"),
+                v("--units"),
+                v("--out"),
+                v("--reason"),
+                v("--with"),
+                v("--pages"),
+            ],
             &[],
         ),
         "record" | "triaged" => (vec![v("--bundle"), v("--reply")], &["--bundle", "--reply"]),
         "triage" => (vec![v("--out")], &[]),
         "report" => (vec![Spec::flag("--all")], &[]),
-        "carry" => (vec![v("--feature"), v("--task"), v("--keys"), v("--ruling")], &["--feature"]),
+        "carry" => (
+            vec![v("--feature"), v("--task"), v("--keys"), v("--ruling")],
+            &["--feature"],
+        ),
         "accept" => (vec![v("--keys"), v("--trigger")], &["--keys", "--trigger"]),
         "coverage" => (vec![v("--path")], &[]),
         _ => return None,
@@ -112,22 +159,37 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         Err(why) => return usage("l7r-gate claims", &why),
     };
     let Some((specs, required)) = specs(cmd) else {
-        return usage("l7r-gate claims", &format!("argument cmd: invalid choice: '{cmd}'"));
+        return usage(
+            "l7r-gate claims",
+            &format!("argument cmd: invalid choice: '{cmd}'"),
+        );
     };
     let parsed = match parse(rest, &specs) {
         Ok(p) => p,
         Err(why) => return usage(&format!("l7r-gate claims {cmd}"), &why),
     };
-    let missing: Vec<&str> = required.iter().copied().filter(|r| !parsed.has(r)).collect();
+    let missing: Vec<&str> = required
+        .iter()
+        .copied()
+        .filter(|r| !parsed.has(r))
+        .collect();
     if !missing.is_empty() {
-        return usage(&format!("l7r-gate claims {cmd}"), &format!("the following arguments are required: {}", missing.join(", ")));
+        return usage(
+            &format!("l7r-gate claims {cmd}"),
+            &format!(
+                "the following arguments are required: {}",
+                missing.join(", ")
+            ),
+        );
     }
     let root = toplevel(&root);
     let mut out = commands::Out::default();
     let code = match commands::run(cmd, &parsed, &root, &mut out) {
         Ok(code) => code,
         Err(why) => {
-            out.err.push_str(&format!("Traceback (most recent call last):\n  l7r-gate claims {cmd}\n{why}\n"));
+            out.err.push_str(&format!(
+                "Traceback (most recent call last):\n  l7r-gate claims {cmd}\n{why}\n"
+            ));
             1
         }
     };
@@ -140,7 +202,13 @@ pub(crate) fn cli(args: &[String]) -> Reply {
 
 /// `l7r-gate tunables [--root DIR] [--path P] [--all] [--count] [--inline]`.
 pub(crate) fn tunables_cli(args: &[String]) -> Reply {
-    let specs = [Spec::value("--root"), Spec::value("--path"), Spec::flag("--all"), Spec::flag("--count"), Spec::flag("--inline")];
+    let specs = [
+        Spec::value("--root"),
+        Spec::value("--path"),
+        Spec::flag("--all"),
+        Spec::flag("--count"),
+        Spec::flag("--inline"),
+    ];
     let p = match parse(args, &specs) {
         Ok(p) => p,
         Err(why) => return usage("l7r-gate tunables", &why),
@@ -150,9 +218,13 @@ pub(crate) fn tunables_cli(args: &[String]) -> Reply {
     let mut reader = scope::Reader::new(&crate::record::repo::tree_of(&root), &root);
     let said = index::current(&mut reader, &root, &root.join(index::QUESTIONS)).and_then(|cur| {
         if p.on("--inline") {
-            tunables::inline(&mut reader, &root, &cur, path).map(|found| tunables::render_inline(&found, p.on("--count")))
+            tunables::inline(&mut reader, &root, &cur, path)
+                .map(|found| tunables::render_inline(&found, p.on("--count")))
         } else {
-            Ok(tunables::render(&tunables::tunables(&cur, path, !p.on("--all")), p.on("--count")))
+            Ok(tunables::render(
+                &tunables::tunables(&cur, path, !p.on("--all")),
+                p.on("--count"),
+            ))
         }
     });
     match said {
