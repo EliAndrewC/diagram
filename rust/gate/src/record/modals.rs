@@ -121,7 +121,7 @@ impl Modal {
         self.tag("Entry")
     }
 
-    fn form(&self) -> &str {
+    pub(crate) fn form(&self) -> &str {
         if self.tag("Form").is_empty() {
             "standard"
         } else {

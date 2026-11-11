@@ -212,12 +212,11 @@ def by_key(where: pathlib.Path, pattern: str) -> list[dict]:
 # ---- the registry ----------------------------------------------------------------------------------------------
 
 
-def _check_bundle():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_check_bundle", HERE / "check_bundle.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+def _check_bundle():  # noqa: ANN202 - 449 T88: `check_bundle.url_of` is Rust, through the owed tools' door
+    sys.path.insert(0, str(HERE.parent))
+    from owed_door import cb  # noqa: PLC0415
+
+    return cb
 
 
 def registry(root: pathlib.Path) -> dict[str, str]:

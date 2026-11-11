@@ -132,10 +132,10 @@ def held_dropped(root: pathlib.Path, b: dict) -> str:
     target = resolve(root, b["path"])
     if not m or target is None or not target.is_file():
         return ""
-    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-    import modal_bundle  # noqa: PLC0415
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+    from owed_door import mb  # noqa: PLC0415 - 449 T88: `modal_bundle.research_held` is Rust
 
-    held = modal_bundle.research_held(root, f"{m.group(1)}/{m.group(2)}", target.read_text(encoding="utf-8"))
+    held = mb.research_held(root, f"{m.group(1)}/{m.group(2)}", target.read_text(encoding="utf-8"))
     return next((h for h in held if h in b["old"] and h not in b["new"]), "")
 
 

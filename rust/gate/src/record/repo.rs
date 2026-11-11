@@ -31,6 +31,16 @@ pub(crate) fn git(root: &Path, args: &[&str]) -> String {
         })
 }
 
+/// `git -C root args...`'s stdout whatever its exit, as `subprocess.run(...).stdout` reads it.
+pub(crate) fn git_out(root: &Path, args: &[&str]) -> String {
+    Command::new("git")
+        .arg("-C")
+        .arg(root)
+        .args(args)
+        .output()
+        .map_or_else(|_| String::new(), |o| universal(&String::from_utf8_lossy(&o.stdout)))
+}
+
 /// `git show rev:path`, or None where the revision has no such file.
 pub(crate) fn git_show(root: &Path, rev: &str, path: &str) -> Option<String> {
     let done = Command::new("git")

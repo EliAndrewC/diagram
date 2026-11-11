@@ -694,6 +694,7 @@ fn join_refs(v: &[&String]) -> String {
     v.iter().map(|s| s.as_str()).collect::<Vec<_>>().join(", ")
 }
 
+pub(crate) mod bundle;
 mod fixes;
 pub use fixes::{fix_hold, open_fixes};
 use fixes::{fix_home, nit_answers, settle_fix};
@@ -965,6 +966,7 @@ fn cli_in(args: &[String], root: &Path) -> Reply {
         ("ask", 3 | 4) => ask_cli(root, &args[1..]),
         ("fix", 4 | 5) if matches!(args[1].as_str(), "done" | "declined") => fix_cli(root, &args[1..]),
         ("nit", 4) => nit_cli(root, &args[1..]),
+        ("bundle", _) => bundle::cli(&args[1..]),
         _ => fail("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter | fix done|declined <trigger> <note> [<test>] | nit <trigger> <old> <new>\n".to_owned(), 2),
     }
 }

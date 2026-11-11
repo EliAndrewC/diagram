@@ -485,6 +485,22 @@ fn reversal(log: &Path, path: &Value, old: &Value, new: &Value) -> bool {
     truthy(new) && replaced.contains(new) && new != old
 }
 
+/// A feature's event log (`event_log.log_path`): under `L7R_EVENTS_DIR`, else the clone's common git dir; `_unassigned` for no feature.
+#[must_use]
+pub fn log_path(root: &Path, feature: &str) -> PathBuf {
+    log_path_in(root, feature, &|k| std::env::var(k).ok())
+}
+
+fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>) -> PathBuf {
+    let base = env("L7R_EVENTS_DIR")
+        .filter(|d| !d.is_empty())
+        .map_or_else(|| common_git_dir(root).join("l7r-events"), PathBuf::from);
+    base.join(format!(
+        "{}.jsonl",
+        if feature.is_empty() { "_unassigned" } else { feature }
+    ))
+}
+
 /// Append the payload's line to its feature's log; None outside any clone (`append`).
 pub(crate) fn append(
     payload: &Value,
@@ -498,18 +514,8 @@ pub(crate) fn append(
         .filter(|c| !c.is_empty())
         .map_or_else(|| here.to_path_buf(), PathBuf::from);
     let root = clone_root(&cwd)?;
-    let base = env("L7R_EVENTS_DIR")
-        .filter(|d| !d.is_empty())
-        .map_or_else(|| common_git_dir(&root).join("l7r-events"), PathBuf::from);
-    let feature = feature_of(&root, env);
-    let path = base.join(format!(
-        "{}.jsonl",
-        if feature.is_empty() {
-            "_unassigned"
-        } else {
-            &feature
-        }
-    ));
+    let path = log_path_in(&root, &feature_of(&root, env), env);
+    let base = path.parent().map_or_else(PathBuf::new, Path::to_path_buf);
     std::fs::create_dir_all(&base).ok()?;
     let row = line(payload, t);
     let edit = row.get("ev") == Some(&Value::from("PreToolUse"))

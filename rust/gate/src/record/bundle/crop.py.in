@@ -1,0 +1,48 @@
+
+import sys
+from playwright.sync_api import sync_playwright
+page_path, key, out = sys.argv[1], sys.argv[2], sys.argv[3]
+with sync_playwright() as p:
+    b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1200, "height": 900})
+    pg.goto("file://" + page_path); pg.wait_for_timeout(2500)
+    sel = 'g.f[data-k="' + key + '"]'
+    # THE FIRST GLYPH, not the class group: the group spans every instance on the map (a hamlet's gardens run its whole
+    # width), so measuring it never zoomed - the garden's crop came out as the whole hamlet (feature 319, the garden pilot).
+    # The first leaf shape with a box on screen is one glyph's part; the group is the fallback.
+    JS = ("(s) => { const g = document.querySelector(s); if (!g) return null;"
+          " const leaf = [...g.querySelectorAll('polygon,rect,path,ellipse,circle,line')].find(e => e.getBoundingClientRect().width > 0);"
+          " const r = (leaf || g).getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; }")
+    # ...AND MEASURED WHILE SHOWN: below the raster scale the page hides every class group (0 x 0), so a measure there found
+    # nothing and the zoom never centered on a glyph. The kind is shown for the measure alone and hidden again for the shot.
+    SHOW = "(s) => { const st = document.createElement('style'); st.id = 'crop-probe'; st.textContent = s + ', ' + s + ' * { display: inline !important; }'; document.head.appendChild(st); }"
+    HIDE = "() => { const st = document.getElementById('crop-probe'); if (st) st.remove(); }"
+    def rect():
+        pg.evaluate(SHOW, sel)
+        got = pg.evaluate(JS, sel)
+        pg.evaluate(HIDE)
+        return got
+    for _ in range(14):
+        x, y, w, h = rect()
+        if w > 200 or h > 200: break
+        pg.mouse.move(x + w / 2, y + h / 2)
+        pg.keyboard.down("Control"); pg.mouse.wheel(0, -240); pg.keyboard.up("Control")
+        pg.wait_for_timeout(200)
+    x, y, w, h = rect()
+    pg.mouse.move(2, 2); pg.wait_for_timeout(150)  # off the glyph, so it is not drawn lit
+    # ...AND NEVER LIT: zoomed in, a large glyph (a Mode A kitchen, an archive) fills the viewport, so the corner the mouse
+    # leaves for is ON it and the shot showed the page's highlight, not the drawn fill (feature 372 wave 105; fixed feature
+    # 374 wave 113, FR-007). The lit state is cleared outright, and the clip takes the glyph's whole box, at least 600 x 500.
+    pg.evaluate("() => document.querySelectorAll('g.f.on').forEach(g => g.classList.remove('on'))"); pg.wait_for_timeout(100)
+    cx, cy = x + w / 2, y + h / 2
+    cw, ch = min(1200, max(600, w + 60)), min(900, max(500, h + 60))
+    clip = {"x": max(0, min(cx - cw / 2, 1200 - cw)), "y": max(0, min(cy - ch / 2, 900 - ch)), "width": cw, "height": ch}
+    pg.screenshot(path=out, clip=clip)
+    # every kind with a part inside the crop: a click on it opens that kind's pop-up (343's office-hall ruling - the check could
+    # not tell whether the hall's front band opens office-hall or magistrate's dais)
+    KINDS = ("(c) => { const st = document.createElement('style'); st.textContent = 'g.f, g.f * { display: inline !important; }';"
+             " document.head.appendChild(st); const out = new Set();"
+             " document.querySelectorAll('g.f[data-k]').forEach(g => { for (const e of g.querySelectorAll('polygon,rect,path,ellipse,circle,line')) {"
+             " const r = e.getBoundingClientRect(); if (r.width > 0 && r.x < c.x + c.width && r.x + r.width > c.x && r.y < c.y + c.height && r.y + r.height > c.y) { out.add(g.dataset.k); break; } } });"
+             " st.remove(); return [...out]; }")
+    open(out + ".kinds", "w").write(chr(10).join(sorted(pg.evaluate(KINDS, clip))))
+    b.close()

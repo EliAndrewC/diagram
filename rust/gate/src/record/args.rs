@@ -15,6 +15,7 @@ enum Arity {
     Flag,
     Value,
     Pair,
+    List,
 }
 
 impl Spec {
@@ -38,6 +39,14 @@ impl Spec {
             kind: Arity::Pair,
         }
     }
+
+    /// `nargs="*"`: every argument after it up to the next flag.
+    pub(crate) fn list(name: &'static str) -> Self {
+        Self {
+            name,
+            kind: Arity::List,
+        }
+    }
 }
 
 /// What a parser read.
@@ -46,6 +55,9 @@ pub(crate) struct Parsed {
     values: Vec<(String, String)>,
     flags: Vec<String>,
     pairs: Vec<(String, (String, String))>,
+    lists: Vec<(String, Vec<String>)>,
+    /// The positional arguments, in order.
+    pub(crate) positional: Vec<String>,
 }
 
 impl Parsed {
@@ -68,6 +80,15 @@ impl Parsed {
             .rev()
             .find(|(k, _)| k == name)
             .map(|(_, (a, b))| (a.as_str(), b.as_str()))
+    }
+
+    /// The last list given for `name`, or none.
+    pub(crate) fn list(&self, name: &str) -> &[String] {
+        self.lists
+            .iter()
+            .rev()
+            .find(|(k, _)| k == name)
+            .map_or(&[][..], |(_, v)| v.as_slice())
     }
 }
 
@@ -99,11 +120,20 @@ fn looks_like_flag(arg: &str, specs: &[Spec]) -> bool {
 
 /// Reads `args` against `specs`: an argument no spec names, a missing value or an ambiguous prefix is argparse's exit 2.
 pub(crate) fn parse(args: &[String], specs: &[Spec]) -> Result<Parsed, String> {
+    parse_with(args, specs, 0)
+}
+
+/// [`parse`], taking up to `positionals` arguments that are no flag as positional ones (`nargs="?"` each).
+pub(crate) fn parse_with(args: &[String], specs: &[Spec], positionals: usize) -> Result<Parsed, String> {
     let mut out = Parsed::default();
     let mut i = 0;
     while i < args.len() {
         let arg = &args[i];
         i += 1;
+        if !looks_like_flag(arg, specs) && out.positional.len() < positionals {
+            out.positional.push(arg.clone());
+            continue;
+        }
         if !arg.starts_with("--") || arg.len() == 2 {
             return Err(format!("unrecognized arguments: {arg}"));
         }
@@ -132,6 +162,14 @@ pub(crate) fn parse(args: &[String], specs: &[Spec]) -> Result<Parsed, String> {
                         _ => return Err(format!("argument {word}: expected one argument")),
                     }
                 }
+            }
+            Arity::List => {
+                let mut got: Vec<String> = inline.map(str::to_owned).into_iter().collect();
+                while inline.is_none() && args.get(i).is_some_and(|v| !looks_like_flag(v, specs)) {
+                    got.push(args[i].clone());
+                    i += 1;
+                }
+                out.lists.push((spec.name.to_owned(), got));
             }
             Arity::Pair => {
                 if inline.is_some() {

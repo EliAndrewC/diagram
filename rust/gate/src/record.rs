@@ -11,6 +11,7 @@ use crate::Reply;
 pub(crate) mod access_tags;
 mod agent_census;
 pub(crate) mod args;
+pub(crate) mod bundle;
 mod downloads;
 mod fragment_move;
 mod leaves;
@@ -406,6 +407,8 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         Some("translation-owed") => translation::cli(rest),
         Some("modal-triage") => triage::cli(rest),
         Some("merge-answers") => merge_answers::cli(rest),
+        Some("check-bundle") => bundle::check::cli(rest),
+        Some("modal-bundle") => bundle::modal::cli(rest),
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),

@@ -3,6 +3,7 @@
 
 use std::path::Path;
 
+pub(crate) mod depiction_replay;
 pub(crate) mod figures;
 pub(crate) mod fresh_tally;
 pub(crate) mod gate_costs;
@@ -49,10 +50,11 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("popup-rounds") => popup_rounds::cli(rest),
         Some("work-budget") => work_budget::cli(rest, root),
         Some("push-check-times") => push_check_times::cli(rest, root, root),
+        Some("depiction-replay") => depiction_replay::cli(rest, root),
         Some("model-trial") => model_trial::cli(rest, &model_trial::live(&home(), root)),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial\n"
+            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay\n"
                 .to_owned(),
             2,
         ),

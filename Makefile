@@ -497,7 +497,7 @@ check-closed:   ## [project] close the checks in flight on a page or pop-up whos
 arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
 	@if [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named>, or BATCH=1 for every owed round trigger at once\n' >&2; exit 2; fi
 	$(if $(MISSING_OK),$(LOGESCAPE) MISSING_OK "$(MISSING_OK)",@:)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" $(if $(BATCH),--batch $(if $(TRIGGERS),--triggers "$(TRIGGERS)",),"$(TRIGGER)") --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$(MISSING_OK)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter bundle $(if $(BATCH),--batch $(if $(TRIGGERS),--triggers "$(TRIGGERS)",),"$(TRIGGER)") --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$(MISSING_OK)",)
 
 arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter  (or BATCH=1 FILE=<json> for a batch)
 	@if [ -z "$(FILE)" ] || { [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; }; then printf 'make arbiter-ruled: FILE= and TRIGGER= (or BATCH=1) are required\n' >&2; exit 2; fi
@@ -523,7 +523,7 @@ arbiter-ask: export ARBITER_WHY = $(WHY)
 arbiter-ask: export ARBITER_REVIEW = $(REVIEW)
 arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choice of route) to the round arbiter before the GM (feature 379)   SUBJECT=<short id> WHY="<the question>" [FILES="<the measurements it cites>"] [REVIEW=spec|plan|claims:<key>;<key>: an accept then stands as that review's verdict, 409; claims' since 2026-10-24]
 	@if [ -z "$(SUBJECT)" ] || [ -z "$$ARBITER_WHY" ]; then printf 'make arbiter-ask: SUBJECT= and WHY= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/arbiter_bundle.py --check-ask "$$ARBITER_WHY" --evidence "$(FILES)" && scripts/gates/l7r-gate.sh arbiter ask "$(SUBJECT)" "$$ARBITER_WHY" "$$ARBITER_REVIEW" && python3 scripts/reviews/arbiter_bundle.py "ask:$(SUBJECT)" --root "$$(pwd)" --evidence "$(FILES)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter bundle --check-ask "$$ARBITER_WHY" --evidence "$(FILES)" && scripts/gates/l7r-gate.sh arbiter ask "$(SUBJECT)" "$$ARBITER_WHY" "$$ARBITER_REVIEW" && scripts/gates/l7r-gate.sh arbiter bundle "ask:$(SUBJECT)" --root "$$(pwd)" --evidence "$(FILES)"
 
 land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
 	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)
@@ -749,7 +749,7 @@ open-questions: ## [project] every guess and every unfound source, read from the
 
 notes: ## [project] print the named notes of ONE question and only the blocks of its page that carry them - for editing a few notes without reading the whole file (feature 250)   Q=0041 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
 	@if [ -z "$(Q)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: Q=<question number or page file> KEYS=<key,key> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)" --notes "$(KEYS)" --print-notes
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record check-bundle --root "$$(git rev-parse --show-toplevel)" "$(Q)" --notes "$(KEYS)" --print-notes
 
 lines: ## [project] print ONLY a coordination file's matching lines - the claims file, a handoff, a checks report - numbered, with how many were shown of how many; never read one whole (feature 274)   FILE=<file> KEY=<regex>
 	@if [ -z "$(FILE)" ] || [ -z "$(KEY)" ]; then printf 'make lines: FILE=<file> KEY=<regex> are required - e.g. make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="^- 269"\n' >&2; exit 2; fi
@@ -785,7 +785,7 @@ page-session: ## [project] start ONE page's work in a FRESH headless session, de
 
 modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319; refused while a check before it in the order (form, research, depiction) is owed - feature 375 amendment 3   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>] [CHECK_ORDER_OK="<why>"]
 	@if [ -z "$(KIND)" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$(REASON)",)
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-bundle "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$(REASON)",)
 
 modal-triage: ## [project] the triage bundle for every pop-up owed only because a page it names moved: the changed blocks beside the kinds naming them, for the modal-triage agent (feature 375; its own agent since 383 amendment 6)   [OUT=<dir>]
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-triage --root . bundle $(if $(OUT),--out "$(OUT)",)
@@ -796,7 +796,7 @@ modal-triaged: ## [project] record a pop-up triage reply: a kind it names (TOUCH
 
 modal-prepass: ## [project] the mechanical half of the modal checks for one About-form modal - word band, barred phrases, guesses, Entry files - feature 319   KIND=<class or key>
 	@if [ -z "$(KIND)" ]; then printf 'make modal-prepass: KIND=<class name or key> is required - e.g. make modal-prepass KIND=Farmhouse\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --prepass
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-bundle "$(KIND)" --prepass
 
 check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   Q=0087 | KEY=edo-enwiki
 ##  Q=<NNNN>         one question (both pages; a page's file name for one): pages, notes, prepass, quote-verbatim, cited registry entries, the variant index
@@ -810,7 +810,7 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  FOR=intro-check [QS="<n> <n> ..."]  the intro-check bundle, one question or a batch
 ##  KEYS="<k> <k> ..."  several sources in one source-applicability bundle (the uncited write-ups, feature 312)
 	@if [ -z "$(KEY)" ] && [ -z "$(KEYS)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, KEYS="<k> <k>", or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEYS),--keys "$(KEYS)",) $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",) $(if $(IMAGES),--images $(IMAGES),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record check-bundle --root "$$(git rev-parse --show-toplevel)" $(if $(KEYS),--keys "$(KEYS)",) $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",) $(if $(IMAGES),--images $(IMAGES),)
 
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
 ##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)

@@ -308,6 +308,12 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
             return Ok(v);
         }
     }
+    if verb == "mb.research_held" {
+        return Ok(json!(crate::record::bundle::modal::research_held(&path_arg(args, 0), arg(args, 1), arg(args, 2))));
+    }
+    if verb == "cb.url_of" {
+        return Ok(json!(crate::record::bundle::check::url_of(arg(args, 0))));
+    }
     if verb == "to.owed" {
         let rows = translation::owed(&path_arg(args, 0))?;
         return Ok(Value::Array(
