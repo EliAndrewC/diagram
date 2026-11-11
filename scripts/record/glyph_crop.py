@@ -1,3 +1,5 @@
+# The glyph crop: `l7r-gate record modal-bundle` runs this as `python3 -c` for modal-depiction bundles (449 T88,
+# `ask:449-T88-bundles`); it moves onto the CDP crate in T85.
 
 import sys
 from playwright.sync_api import sync_playwright
