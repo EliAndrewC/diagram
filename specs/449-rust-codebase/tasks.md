@@ -331,8 +331,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T101 Every l7r-gate-* and l7r-guard-* temp directory a check or test makes is removed on exit, failure and panic included, and a test pins it: ~329,000 left in /tmp since early October, ~126 GB (Eli via the laptop session, 2026-11-11)
       research: rendering
       verify: DONE. landed: every temp directory a check or test makes is removed on exit, failure, panic, INT and TERM, and the Rust and hook-suite runners fail one that leaves any
-- [ ] T102 The cargo build cache stops growing: the rustc real-target test builds its fixture crate into its own removed target (3,407 l7r_fixture incremental dirs and 5,069 deps files, ~5.6 GB, in diagram-backlog's debug/), and a sweep removes incremental sessions and deps files unused for days and the target dirs of trees that no longer exist under ~/.cache/l7r-cargo-target (54 GB, 56 dirs) (the GM 2026-11-11)
+- [x] T102 The cargo build cache stops growing: the rustc real-target test builds its fixture crate into its own removed target (3,407 l7r_fixture incremental dirs and 5,069 deps files, ~5.6 GB, in diagram-backlog's debug/), and a sweep removes incremental sessions and deps files unused for days and the target dirs of trees that no longer exist under ~/.cache/l7r-cargo-target (54 GB, 56 dirs) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: the daily sweep prunes the cargo target cache: a gone tree's build directory whole, each crate's variants beyond its newest four, once idle three days
 - [x] T103 Session scratch under /tmp/claude-1000 swept: a session's scratchpad and task outputs removed once its transcript has been idle for days, never a live session's (38 GB, 20 GB in one session's scratch clones) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: a finished session's scratch under /tmp/claude-<uid> is swept once a day by a detached guard, never a running session's

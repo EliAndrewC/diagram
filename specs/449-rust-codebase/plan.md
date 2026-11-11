@@ -535,33 +535,4 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** no.
 
 
-### T102 (the cargo target cache stops growing, FR-013)
-
-- **Approach**: T103's daily sweep also prunes `~/.cache/l7r-cargo-target` (`rust/guard/src/guards/scratch_sweep_hooks/sweep/cargo.rs`), under the same lock, stamp, live-process check, log and `make scratch-sweep [DRY=1]`.
-
-   **Decisions** (FR-013, SC-008):
-   - The leak: every tree that builds gets its own `~/.cache/l7r-cargo-target/<tree name>/` and nothing removed one, 54 GB in 56 directories, and inside one clone's `debug/` cargo kept 3,407 `l7r_fixture` incremental directories and 5,069 compiled files, about 5.6 GB (observed 2026-11-11, method: `du -sh` on each directory, `ls | grep -c l7r_fixture` and `du -ch` on that clone's `debug/incremental` and `debug/deps`).
-   - Its source is gone: those were `l7r_fixture_broken_<n>` crates, built from a fresh path each run by a Python test deleted with the Python suite on 2026-11-10, the newest of them dated 2026-11-09, and the one Rust test that builds the fixture crate does so into its own scratch target, which T101 now removes (observed 2026-11-11, method: a build's `.d` file and `.fingerprint` names in `diagram-research`'s target, `ls -lt` on them, and `git grep` for `fixture_broken` finding nothing in the tree).
-   - Cargo makes a new variant of a crate (a new `-<hash>` in `deps/`, `incremental/`, `.fingerprint/`, `build/`) only when its path or its flags change, never on a source edit, so variants pile up only from moved paths and changed flags. A crate's live variants are its test, lint and all-features builds, at most three, so each crate's variants in a store beyond its newest four go once idle three days; one wrongly taken costs only its rebuild.
-   - A build directory named for no live tree, neither the mirror nor any directory under `/diagram/.clones`, goes whole once nothing in it changed in three days; the mirror's and every clone's are never removed whole, the guard hook running the mirror's kept binary; where the clones directory cannot be read, none is removed whole. Anything a live process holds is kept, as in T103.
-   - The dry run on this machine would remove 449 entries, 2,409.6 MB, of a 34 GB cache: six stale build directories whole (a top-level `debug/` and `release/` from an older layout, `base`, `pyseat`, `wt-old`, `llvm-cov-target`) and old variants inside the rest, among them the `l7r_fixture` and `l7r_phases` variants of `diagram-backlog-tooling` (observed 2026-11-11, method: `make scratch-sweep DRY=1` and `du -sh ~/.cache/l7r-cargo-target`). This session's scratch clones' builds (`t101clone`, `t103clone`), changed today, go three days after their last build.
-   - Tested on a fixture: the mirror's and a clone's build directories kept whole however old, a gone scratch clone's removed and a fresh one's kept, six old variants of one crate losing their oldest two, five fresh ones losing none, a nested coverage target's store found, a store below the depth limit and a symlink left, an entry whose age cannot be read kept, and nothing removed whole where the clones cannot be listed (`make rust-test CRATE=rust/guard`, 516 passed, observed 2026-11-11, method: that command on this clone).
-
-### T102 Approach (checklist part A)
-
-1. **The goal, in the world.** The build cache holds what live trees build with, and no more than a few days of anything else.
-2. **The constraints.** FR-013 and SC-008; the guard's kept binary and a live clone's build are never removed whole.
-3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the sizes, the counts and the dry run above.
-4. **Do they describe the world here?** The dry run was read on this machine.
-5. **The order.** After T101 and T103, whose sweep it extends.
-6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The dry run above.
-10. **Before moving a constant.** Four variants and three days are new constants, GUESS knobs: four above the three live variants a crate has, three days as T103's.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** no.
-
-
-<!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
+<!-- plan-archive: T102 to T102 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
