@@ -55,14 +55,15 @@ build() {
     flock -n 9 || exit 0
     stale || exit 0  # another call built it since this one looked
     exec 2> "$LOG"  # opened under the lock: a second call never truncates the log of the build it skipped
-    CARGO_TARGET_DIR="$TARGET" timeout "$secs" "$cargo" build --release --quiet --manifest-path "$TREE/rust/Cargo.toml" -p l7r_guard >&2
+    # the tool profile (T95): incremental release, shared with l7r-gate, so a guard edit rebuilds in about 1.5 s, not 15 s
+    CARGO_TARGET_DIR="$TARGET" timeout "$secs" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" -p l7r_guard >&2
     rc=$?
     if [ "$rc" -eq 124 ]; then
       echo "l7r-guard: the build passed its $secs s limit; the next call carries it on" >&2
     elif [ "$rc" -ne 0 ]; then
       touch "$FAILED"
-    elif "$TARGET/release/l7r-guard" --self-check > /dev/null; then
-      cp "$TARGET/release/l7r-guard" "$GOOD.tmp" && mv -f "$GOOD.tmp" "$GOOD" && rm -f "$FAILED"
+    elif "$TARGET/tool/l7r-guard" --self-check > /dev/null; then
+      cp "$TARGET/tool/l7r-guard" "$GOOD.tmp" && mv -f "$GOOD.tmp" "$GOOD" && rm -f "$FAILED"
     else
       echo "l7r-guard: the build compiled and failed its --self-check" >&2
       touch "$FAILED"

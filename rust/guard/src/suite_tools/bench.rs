@@ -190,6 +190,8 @@ fn baseline(
     {
         let manifest = tree.join("rust/Cargo.toml").to_string_lossy().into_owned();
         let target = tree.join("target");
+        // `--release`, not the tools' `--profile tool` (T95): this builds the guard as it stood at an older ref, whose manifest may
+        // define no `tool` profile, into that worktree's own target, so nothing is shared to gain from it
         let script = format!("CARGO_TARGET_DIR='{}' '{cargo}' build --release --quiet --manifest-path '{manifest}' -p l7r_guard", target.display());
         let built = ask(tree, "bash", &["-c", &script], "");
         if built.code != 0 {

@@ -111,6 +111,7 @@ check "...and an escaped pipe outside a search still refuses" blocked 'sh -c foo
 names_a_target "the guards' binary run directly" "$HOME/.cache/l7r-cargo-target/x/release/l7r-guard --only a PreToolUse"
 names_a_target "the hamlet binary run directly"  "target/release/hamlet pool/hamlets/x/x.spec.json"
 names_a_target "the gate's binary run directly"  "$HOME/.cache/l7r-cargo-target/x/release/l7r-gate --version"
+names_a_target "...from the tools' profile (T95)" "$HOME/.cache/l7r-cargo-target/x/tool/l7r-gate --version"
 check "the gate's wrapper is not the binary"    ok      "scripts/gates/l7r-gate.sh --version"
 check "the guards' wrapper is not the binary"  ok      "scripts/hooks/l7r-guard.sh --version"
 check "make hamlet is the compliant form"      ok      "make hamlet SPEC=pool/hamlets/x/x.spec.json"

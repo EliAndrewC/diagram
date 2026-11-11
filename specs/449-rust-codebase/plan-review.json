@@ -288,6 +288,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T95 (the full l7r-gate release binary rebuilt after any gate crate edit, FR-012)": {
+   "sha256": "c007c0f95b018befa06a58d82961e4865a3b0d1eb329b598bf58ec9917fa29cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T95 Approach (checklist part A)": {
+   "sha256": "1a5cd0f7c7073e96edf1fb164314e060529f78093c6519ee2e460df3524ab4a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5839,6 +5851,135 @@
      "why": "Keeping the review applies FR-001c correctly (no Python is replaced). The order and exits follow FR-011's T92-T94 and SC-006's re-measurement. The FR-003 to FR-004 citation fix corrects the coverage constraint to the requirement that carries it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T95 (the full l7r-gate release binary rebuilt after any gate crate edit, FR-012)",
+    "### T95 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-tool-profile",
+     "summary": "l7r-gate, l7r-rust and l7r-guard build in a named [profile.tool] inheriting release with incremental compilation on; [profile.release] left at cargo's default",
+     "class": "within",
+     "why": "FR-012 (T95) asks that the full l7r-gate release binary rebuild after a gate crate edit be cut; the block measures 38-45 s to about 2 s in core on one bench before and after (SC-007). Leaving [profile.release] untouched keeps the hamlet engine's build as it is."
+    },
+    {
+     "id": "D2-rejected-and-rust-lld",
+     "summary": "codegen-units=256, opt-level 1, lto off and the dev profile rejected on measurement; rust-lld (about 0.4 s more) left out of this landing",
+     "class": "within",
+     "why": "FR-012 says the cost MUST be cut, not minimized; declining a further optimization after a ~95% cut is a design choice, not a carve-out of anything asked."
+    },
+    {
+     "id": "D3-guard-and-rust-share-profile",
+     "summary": "l7r-guard and l7r-rust move to the tool profile too; the guard wrapper builds --profile tool and the fake cargo in test-l7r-guard.sh refuses a build without it; make_only_hooks pins tool/ paths in one case each",
+     "class": "within",
+     "why": "Same mechanism as D1 across the tooling the GM asked to make efficient; the fake-cargo refusal only fails when the requested profile is absent, so it is enforcement of the request, not new behavior. Seam noted: the output A/B covers eight l7r-gate verbs only; the guard's per-hook-call latency under the tool profile is not measured in the block, and FR-012 holds every output and verdict of the tooling - this is a verification gap, not a narrowing."
+    },
+    {
+     "id": "D4-hamlet-release",
+     "summary": "the hamlet engine's cargo run --release left in release",
+     "class": "within",
+     "why": "The hamlet engine is not the tooling FR-012 names; leaving it alone changes nothing the GM asked to change."
+    },
+    {
+     "id": "D5-bench-baseline-release",
+     "summary": "bench.rs's baseline build of the guard at an older commit left in release",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: an older commit's Cargo.toml may not define [profile.tool], and cargo refuses an undefined profile. Seam noted: the block does not say what bench.rs's current side builds with; a release baseline against a tool-profile current guard is a comparison across profiles, to be confirmed at landing."
+    },
+    {
+     "id": "D6-costs-accepted",
+     "summary": "485 MB tool/ target against 141 MB, 34.1 s cold tool build, one full make rust-test rerun (88.0 s) after landing",
+     "class": "within",
+     "why": "One-time and per-clone costs; the GM said 'I'm less concerned about the one-time ramp-up for a fresh clone' and FR-012 leaves the cold build as it is. No output or verdict changes."
+    },
+    {
+     "id": "D7-make-static-remainder-to-T96",
+     "summary": "make static's remaining 103.3 s / 64.8 s after an edit (lint, coverage, dead-code reruns) left to T96's measurement",
+     "class": "within",
+     "why": "T95's subject under FR-012 is the gate binary rebuild, which the block cuts to about 2 s of that time. Whether T96's item (a test binary rebuilt after a one-line edit) covers the lint/coverage/dead-code reruns is T96's to show; this verdict does not endorse that hand-off."
+    },
+    {
+     "id": "D8-instrument",
+     "summary": "before and after measured by a new bench.py run on the same edits, plus verbs_ab.py for outputs",
+     "class": "within",
+     "why": "SC-007 asks for the same command before and after, which the block uses. Its before-figures differ from the 'claims 13.9 s, owed 8.4 s, core 10 s' the GM asked about; that is a reporting matter for the caller, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T95 (the full l7r-gate release binary rebuilt after any gate crate edit, FR-012)",
+    "### T95 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T95-D1 tool profile",
+     "summary": "The gate binary builds in a new [profile.tool] (inherits release, incremental on) instead of release; [profile.release] left at cargo's default so the hamlet engine's cargo run --release is untouched.",
+     "class": "within",
+     "why": "This is the means of cutting the exact cost FR-012 names for T95 (the full l7r-gate release binary rebuilt after any gate crate edit). Leaving release alone keeps the engine's build and output unchanged, which SC-007 and the plan's no-map-moved answer require."
+    },
+    {
+     "id": "T95-D2 guard and l7r-rust share the profile",
+     "summary": "l7r-guard and l7r-rust move to the tool profile with l7r-gate; the guard wrapper, its self-check and kept copy read tool/l7r-guard.",
+     "class": "within",
+     "why": "This reaches past the one binary FR-012 names for T95. It is still inside the GM's 'performance efficiency of the Rust code that we already have' (the Rust tooling's own costs), and the wrappers share one build. The block measured that it holds outputs: identical stdout and exit codes on four hook inputs, median and p90 latency no worse. It changes how the guard is built, not what it decides."
+    },
+    {
+     "id": "T95-D3 enforcement tests",
+     "summary": "test-l7r-guard.sh's fake cargo refuses a build without --profile tool; one case each in test-make-only-hooks.sh and make_only_hooks/tests.rs pins a tool/l7r-gate path; make_only_hooks code unchanged (matches by name).",
+     "class": "within",
+     "why": "These tests fail only if the wrapper drifts back to release or the make-only guard stops covering the moved binaries (FR-005). They enforce the requested change, so they are not added scope."
+    },
+    {
+     "id": "T95-D4 rejected alternatives",
+     "summary": "codegen-units=256, opt-level 1, lto=off and the dev profile rejected on the bench.",
+     "class": "within",
+     "why": "These are design choices among ways to cut the same cost. The ones rejected for slowing the verbs were rejected to keep FR-012's 'held to every output and verdict' and no-slower runs."
+    },
+    {
+     "id": "T95-D5 rust-lld deferred",
+     "summary": "The rust-lld linker (about 0.4 s more) is left out of this landing.",
+     "class": "within",
+     "why": "FR-012 asks that the cost be cut and measured lower (SC-007), not cut as far as it can go. The cost falls from tens of seconds to about 2 s without it, so leaving out a further optimization narrows nothing that was asked."
+    },
+    {
+     "id": "T95-D6 left in release",
+     "summary": "The hamlet engine's run and bench.rs's baseline build (an older commit whose manifest may not define the profile) stay on release; l7r-guard bench compares verdicts, not times.",
+     "class": "within",
+     "why": "Neither is the T95 cost. Keeping the engine on release protects generator output. The bench baseline builds an old manifest and compares verdicts only, so its profile does not touch anything FR-012 asks for."
+    },
+    {
+     "id": "T95-D7 order",
+     "summary": "T95 goes first of T95-T99 because T96 touches the same profile settings.",
+     "class": "within",
+     "why": "The GM approved the five options together and gave no order, so sequencing them is inside the request."
+    },
+    {
+     "id": "T95-D8 make static remainder left to T96",
+     "summary": "After an edit, make static still takes 103 s (core) or 65 s (claims). About 2 s of that is the gate rebuild; the rest (lint, coverage and dead-code reruns from T93's key) is left as T96's measurement.",
+     "class": "within",
+     "why": "T95's FR-012 cost is the gate binary rebuild only, and that is what T95 cuts. The remainder is not T95's to cut. Aside for the GM: T96's FR-012 remit is 'a test binary rebuilt after a one-line edit', and the lint and dead-code part of the remainder is not named in any of T95-T99. That belongs to the GM's 'stop and measure again' step, not to a T95 finding."
+    },
+    {
+     "id": "T95-D9 accepted costs",
+     "summary": "The tool/ target is 485 MB against release's 141 MB, a cold tool build takes 34.1 s, and the first make rust-test after landing reruns every crate once (88 s).",
+     "class": "within",
+     "why": "FR-012 leaves a fresh worktree's cold build as it is, and the GM said 'I'm less concerned about the one-time ramp-up for a fresh clone'. Disk use and a one-time rerun are costs, not departures from what was asked."
+    },
+    {
+     "id": "T95-D10 exits, budget, checklist",
+     "summary": "Exits: green on the guard suite, rust-test, static, identical verbs and land; red is set down and a cannot-be-done claim goes to make arbiter-ask. Budget is one landing. The generator perf tools are declared not applicable.",
+     "class": "within",
+     "why": "This is the procedure for carrying out the request. The generator tools do not apply because no engine code changes. Notes, which do not block: (1) the 'runs no slower and says the same' comparison names 8 verbs and gives no census of l7r-gate's verbs, so it may be a sample. SC-007's 'every check it touches' is also carried by the 19 crates of make rust-test, the 31-case guard suite, make static and make land, all green on the change. A later round may ask for the census. (2) The block's 'before' figures (core 38-45 s, owed 19-21 s, claims 8.0-8.6 s) differ from the figures the GM was shown ('claims 13.9 s, owed 8.4 s, core 10 s'), and the block does not explain the gap. FR-012's same-command rule is met because bench.py measured both sides, and the cost is lower against either baseline, but the GM may want the difference explained."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10174,6 +10315,74 @@
      "summary": "T93 is not a straight port under FR-001c and keeps its review; ordered after T92 and T94; exits and done-measures are the after-figures, make static, make hooks-test HOOKS_ALL=1, make done green, and FRESH=1 refused without a reason and logged with one; FR-004 coverage holds for the new crate.",
      "class": "within",
      "why": "Keeping the review applies FR-001c correctly (no Python is replaced). The order and exits follow FR-011's T92-T94 and SC-006's re-measurement. The FR-003 to FR-004 citation fix corrects the coverage constraint to the requirement that carries it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T95": {
+   "section_sha256": "b6f03f18bfdadc9592d62968067637b497d44bbce27a989a13ffe4993b714837",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T95-D1 tool profile",
+     "summary": "The gate binary builds in a new [profile.tool] (inherits release, incremental on) instead of release; [profile.release] left at cargo's default so the hamlet engine's cargo run --release is untouched.",
+     "class": "within",
+     "why": "This is the means of cutting the exact cost FR-012 names for T95 (the full l7r-gate release binary rebuilt after any gate crate edit). Leaving release alone keeps the engine's build and output unchanged, which SC-007 and the plan's no-map-moved answer require."
+    },
+    {
+     "id": "T95-D2 guard and l7r-rust share the profile",
+     "summary": "l7r-guard and l7r-rust move to the tool profile with l7r-gate; the guard wrapper, its self-check and kept copy read tool/l7r-guard.",
+     "class": "within",
+     "why": "This reaches past the one binary FR-012 names for T95. It is still inside the GM's 'performance efficiency of the Rust code that we already have' (the Rust tooling's own costs), and the wrappers share one build. The block measured that it holds outputs: identical stdout and exit codes on four hook inputs, median and p90 latency no worse. It changes how the guard is built, not what it decides."
+    },
+    {
+     "id": "T95-D3 enforcement tests",
+     "summary": "test-l7r-guard.sh's fake cargo refuses a build without --profile tool; one case each in test-make-only-hooks.sh and make_only_hooks/tests.rs pins a tool/l7r-gate path; make_only_hooks code unchanged (matches by name).",
+     "class": "within",
+     "why": "These tests fail only if the wrapper drifts back to release or the make-only guard stops covering the moved binaries (FR-005). They enforce the requested change, so they are not added scope."
+    },
+    {
+     "id": "T95-D4 rejected alternatives",
+     "summary": "codegen-units=256, opt-level 1, lto=off and the dev profile rejected on the bench.",
+     "class": "within",
+     "why": "These are design choices among ways to cut the same cost. The ones rejected for slowing the verbs were rejected to keep FR-012's 'held to every output and verdict' and no-slower runs."
+    },
+    {
+     "id": "T95-D5 rust-lld deferred",
+     "summary": "The rust-lld linker (about 0.4 s more) is left out of this landing.",
+     "class": "within",
+     "why": "FR-012 asks that the cost be cut and measured lower (SC-007), not cut as far as it can go. The cost falls from tens of seconds to about 2 s without it, so leaving out a further optimization narrows nothing that was asked."
+    },
+    {
+     "id": "T95-D6 left in release",
+     "summary": "The hamlet engine's run and bench.rs's baseline build (an older commit whose manifest may not define the profile) stay on release; l7r-guard bench compares verdicts, not times.",
+     "class": "within",
+     "why": "Neither is the T95 cost. Keeping the engine on release protects generator output. The bench baseline builds an old manifest and compares verdicts only, so its profile does not touch anything FR-012 asks for."
+    },
+    {
+     "id": "T95-D7 order",
+     "summary": "T95 goes first of T95-T99 because T96 touches the same profile settings.",
+     "class": "within",
+     "why": "The GM approved the five options together and gave no order, so sequencing them is inside the request."
+    },
+    {
+     "id": "T95-D8 make static remainder left to T96",
+     "summary": "After an edit, make static still takes 103 s (core) or 65 s (claims). About 2 s of that is the gate rebuild; the rest (lint, coverage and dead-code reruns from T93's key) is left as T96's measurement.",
+     "class": "within",
+     "why": "T95's FR-012 cost is the gate binary rebuild only, and that is what T95 cuts. The remainder is not T95's to cut. Aside for the GM: T96's FR-012 remit is 'a test binary rebuilt after a one-line edit', and the lint and dead-code part of the remainder is not named in any of T95-T99. That belongs to the GM's 'stop and measure again' step, not to a T95 finding."
+    },
+    {
+     "id": "T95-D9 accepted costs",
+     "summary": "The tool/ target is 485 MB against release's 141 MB, a cold tool build takes 34.1 s, and the first make rust-test after landing reruns every crate once (88 s).",
+     "class": "within",
+     "why": "FR-012 leaves a fresh worktree's cold build as it is, and the GM said 'I'm less concerned about the one-time ramp-up for a fresh clone'. Disk use and a one-time rerun are costs, not departures from what was asked."
+    },
+    {
+     "id": "T95-D10 exits, budget, checklist",
+     "summary": "Exits: green on the guard suite, rust-test, static, identical verbs and land; red is set down and a cannot-be-done claim goes to make arbiter-ask. Budget is one landing. The generator perf tools are declared not applicable.",
+     "class": "within",
+     "why": "This is the procedure for carrying out the request. The generator tools do not apply because no engine code changes. Notes, which do not block: (1) the 'runs no slower and says the same' comparison names 8 verbs and gives no census of l7r-gate's verbs, so it may be a sample. SC-007's 'every check it touches' is also carried by the 19 crates of make rust-test, the 31-case guard suite, make static and make land, all green on the change. A later round may ask for the census. (2) The block's 'before' figures (core 38-45 s, owed 19-21 s, claims 8.0-8.6 s) differ from the figures the GM was shown ('claims 13.9 s, owed 8.4 s, core 10 s'), and the block does not explain the gap. FR-012's same-command rule is met because bench.py measured both sides, and the cost is lower against either baseline, but the GM may want the difference explained."
     }
    ],
    "verdict": "CLEAR"

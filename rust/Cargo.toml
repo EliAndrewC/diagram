@@ -25,3 +25,14 @@ allow_attributes_without_reason = "deny"
 # row seating's geometry; `cargo test` and `cargo llvm-cov` both build this profile, and llvm-cov instruments before optimizing
 [profile.dev]
 opt-level = 2
+
+# THE TOOLS BUILD INCREMENTALLY (feature 449 T95, the GM 2026-11-11, `request.md` "the Rust tooling's efficiency"): `l7r-gate`, `l7r-rust`
+# and `l7r-guard` build this profile (`scripts/gates/l7r-gate.sh`, `scripts/hooks/l7r-guard.sh`), into `<target>/tool/`. Cargo's release
+# default has incremental off, so a one-line edit of a gate crate rebuilt the whole binary: 38-45 s after core, 8-9 s after claims; with
+# incremental on, 1.6-2.6 s for core, tree, plan, claims or owed, the tools' output byte for byte the same and their run times within noise
+# (observed 2026-11-11, method: scratchpad/t95/bench.py, each edit and its revert). Do NOT add `codegen-units` (incremental already
+# defaults to 256; measured the same), `lto = "off"` (no faster to build, 15-40% slower to run) or `opt-level = 1` (0.3-0.5 s off a
+# rebuild, 30-60% slower to run). `[profile.release]` stays cargo's own: the hamlet engine's `cargo run --release` builds it.
+[profile.tool]
+inherits = "release"
+incremental = true

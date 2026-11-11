@@ -73,6 +73,8 @@ fn a_replacements_binary_is_refused_and_its_wrapper_is_not() {
         v("~/.cache/x/release/l7r-guard --only y PreToolUse"),
         "bare-binary"
     );
+    // the tools' own profile (T95)
+    assert_eq!(v("~/.cache/x/tool/l7r-gate --version"), "bare-binary");
     assert_eq!(v("target/release/hamlet pool/x.spec.json"), "bare-binary");
     assert_eq!(v("hamlet x"), "bare-binary");
     assert_eq!(v("scripts/hooks/l7r-guard.sh --version"), "ok");

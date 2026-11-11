@@ -26,10 +26,11 @@ cat > "$W/cargo" <<'EOF'
 echo build >> "$CALLS"
 [ "$BUILD" = broken ] && { echo "error[E0308]: mismatched types" >&2; exit 101; }
 [ "$BUILD" = slow ] && { echo "Compiling serde" >&2; sleep 3; exit 0; }
-mkdir -p "$CARGO_TARGET_DIR/release"
+[ "$2 $3" = "--profile tool" ] || { echo "fake cargo: built $2 $3, not --profile tool (T95)" >&2; exit 101; }
+mkdir -p "$CARGO_TARGET_DIR/tool"
 check=0; [ "$BUILD" = unchecked ] && check=1
-printf '#!/usr/bin/env bash\n[ "$1" = --self-check ] && exit %s\ncat > /dev/null; echo "%s $*"\n' "$check" "$VERSION" > "$CARGO_TARGET_DIR/release/l7r-guard"
-chmod +x "$CARGO_TARGET_DIR/release/l7r-guard"
+printf '#!/usr/bin/env bash\n[ "$1" = --self-check ] && exit %s\ncat > /dev/null; echo "%s $*"\n' "$check" "$VERSION" > "$CARGO_TARGET_DIR/tool/l7r-guard"
+chmod +x "$CARGO_TARGET_DIR/tool/l7r-guard"
 EOF
 chmod +x "$W/cargo"
 
