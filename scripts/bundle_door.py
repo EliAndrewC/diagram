@@ -26,6 +26,8 @@ TREE = HERE.parent
 sys.path[0:0] = [str(HERE / "record"), str(HERE), str(HERE / "hooks" / "lib"), str(TREE)]
 sys.dont_write_bytecode = True
 HELPERS = ("record_prepass", "quote_verbatim", "style_prepass", "source_pages")
+#: a helper's argparse names its program as it did run inside `check_bundle.py`
+sys.argv[0] = "check_bundle.py"
 
 
 def run(name: str, args: list[str], root: str) -> list[Any]:
