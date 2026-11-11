@@ -32,3 +32,16 @@ The GM, 2026-11-09: "Let's delete rather than port our tooling which runs our te
 The GM, asking about the time a port's reviews take: "why did we need 12 minutes on plan reviews and arbitur rulings for a straightforward tool port? Is that something we can skip for this porting effort?" and, on the session's proposal: "yes please applh this starting with the next task".
 
 The session then corrected the evidence it had given and offered a narrower rule; the GM: "yes I approve the narrower rule".
+
+## 2026-11-11, the Rust iteration loop (T92-T94)
+
+The GM, after the session measured that a one-file edit of the gate crate (74,199 lines, one crate) costs about 50 s of compiling, that the checks build the crate in several configurations that cannot share their output, and that a port agent ran the slow checks over and over while iterating:
+
+"Yeah, so given this: [the session's explanation that the gate is one crate of 74,199 lines, recompiled as a whole on any edit] Then I agree with your first option of splitting the gate crate into several crates.
+
+And then the iteration loops do indeed need to be faster. We went through so many versions of this with the Python code, where what would happen is that the iteration loops would just run the absolute slowest version of the tests. Like, they would kick off a full test run of 10 minutes every time a single line of code was edited, and it made development basically impossible to progress at any kind of decent speed. So we need not only for our standard procedures to be running things in a sensible way, our tooling must enforce this, or else future Claude Code sessions, or even this session itself, as the session moves on, will drift back to running extraordinarily slow commands over and over again when faster commands would do.
+
+And then yes, being able to reuse things which have already been compiled, and also the results of tests which have already run so that we don't have to run them again, is exactly what we should be doing.
+
+So let's go ahead and do all of that and then we will stop and measure again where things are at, how long things take, and then we can look at what the next most low-hanging fruit is."
+

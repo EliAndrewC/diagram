@@ -171,6 +171,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   this feature's scope; the dev container's `scripts/container/setup-dev-env.sh` is in it only for the Python they run and install (FR-001, phase 4). The guards' shell wrappers (`scripts/hooks/*-hooks.sh`) are
   in it: Story 1 replaces them. The GM's own hooks in `~/.claude/` are not this repository's and are out of it.
 - **FR-010**: Each phase MUST end with its timings measured against this spec's figures and recorded in `dev/`.
+- **FR-011** (the GM, 2026-11-11, `request.md` "the Rust iteration loop"): the Rust edit-and-check loop MUST be fast by default and the tooling MUST enforce it, so no session drifts back to the slowest command: the gate's code is split into crates so an edit recompiles one crate and what depends on it (T92); `make rust-test` and `make static` run only the crates whose compiled test binary changed since their last green run, the passed result reused for the rest, every crate at once only through an escape that states a reason and is recorded (T93); and the landing's hook suites reuse what `make done` has already built rather than build it again (T94).
 
 ### Key Entities
 
@@ -189,6 +190,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 - **SC-005** (FR-001, FR-001a, FR-001b, FR-005, FR-009): When the feature closes, both censuses (FR-001) return nothing, `m:recorded-python-commands`' command returns none, and
   `make done` and `make figures` run with no Python interpreter. Its one entry here, this feature's own `m:python-start` (the before
   figure of the interpreter the close removes), is retired in the closing commit - git history keeps it - the only exemption.
+- **SC-006** (FR-011): After T92-T94, re-measured by the same commands as the 2026-11-11 figures in T92's plan section: a one-file edit of one gate crate followed by `make rust-test` takes well under the 68 s it took on 2026-11-11, `make rust-test` and `make static` with nothing changed run no test and no coverage run, and `make done`'s hook suites build no crate `make done` already built.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

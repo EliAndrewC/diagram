@@ -305,3 +305,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T91 Phase 3, the GM-review queue (`scripts/gm_review.py`, phase 3, filed by `ask:449-T82-claims`); `bundle_door.py`'s gm-review write verb leaves when it lands
       research: rendering
+- [ ] T92 Split the gate crate (74,199 lines) into crates so an edit recompiles one, the binary a thin crate over them (the GM 2026-11-11)
+      research: rendering
+- [ ] T93 The fast Rust loop by default and enforced: make rust-test and make static run only the crates whose test binary changed since their last green run, the passed result reused; the whole run an escape with a reason (the GM 2026-11-11)
+      research: rendering
+- [ ] T94 The landing's slow hook suites reuse what make done already built: the guard suite's real build and the sync-with-main suite (the GM 2026-11-11)
+      research: rendering
