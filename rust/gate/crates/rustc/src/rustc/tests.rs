@@ -958,10 +958,18 @@ fn coverage_instruments_the_workspace_s_crates_only() {
         text,
         "#!/bin/sh\nexec \"$@\" -C instrument-coverage --cfg=coverage --cfg=trybuild_no_target\n"
     );
-    let ran = Command::new(&script)
+    // through sh, which reads the script: executing a file this test just wrote raced another test thread's fork, which held its write
+    // handle open ("Text file busy")
+    let ran = Command::new("sh")
+        .arg(&script)
         .args(["echo", "rustc"])
         .output()
         .unwrap();
+    assert!(
+        std::os::unix::fs::PermissionsExt::mode(&std::fs::metadata(&script).unwrap().permissions())
+            & 0o111
+            != 0
+    );
     assert_eq!(
         String::from_utf8_lossy(&ran.stdout),
         "rustc -C instrument-coverage --cfg=coverage --cfg=trybuild_no_target\n"

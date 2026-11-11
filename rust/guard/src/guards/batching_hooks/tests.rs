@@ -142,6 +142,31 @@ fn the_state_directory_has_a_default() {
     );
 }
 
+/// The suite's clock (T98): a file of milliseconds, read only beside a fixture's state directory; anything else is the wall clock.
+#[test]
+fn a_fixture_s_clock_file_is_its_time_and_nothing_else_s() {
+    let d = dir("clock");
+    let clock = d.join("clock");
+    std::fs::write(&clock, "1234\n").unwrap();
+    let with = |file: &Path| {
+        let (state, file) = (d.display().to_string(), file.display().to_string());
+        move |k: &str| match k {
+            "BATCH_STATE_DIR" => Some(state.clone()),
+            "BATCH_CLOCK" => Some(file.clone()),
+            _ => None,
+        }
+    };
+    assert_eq!(Config::from_env(&with(&clock), 9).now_ms, 1234);
+    // no state directory: a session's hook, the wall clock
+    let named = clock.display().to_string();
+    let session = |k: &str| (k == "BATCH_CLOCK").then_some(named.clone());
+    assert_eq!(Config::from_env(&session, 9).now_ms, 9);
+    // a clock file missing or not a number: the wall clock
+    assert_eq!(Config::from_env(&with(&d.join("none")), 9).now_ms, 9);
+    std::fs::write(&clock, "soon").unwrap();
+    assert_eq!(Config::from_env(&with(&clock), 9).now_ms, 9);
+}
+
 #[test]
 fn each_session_keeps_its_own_window() {
     let d = dir("sessions");

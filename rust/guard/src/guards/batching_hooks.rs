@@ -61,9 +61,18 @@ impl Config {
             dir: env("BATCH_STATE_DIR")
                 .filter(|d| !d.is_empty())
                 .map_or_else(|| PathBuf::from("/tmp/claude-batching"), PathBuf::from),
-            now_ms,
+            now_ms: fixture_clock(env).unwrap_or(now_ms),
         }
     }
+}
+
+/// THE SUITE'S CLOCK (feature 449 T98): `BATCH_CLOCK` names a file holding the time in milliseconds, honored only beside a fixture's own
+/// `BATCH_STATE_DIR`, so a session's hook never reads it. The suite slept 0.75 s before each simulated turn and 2.1 s in a slow one to
+/// move the wall clock - 29.3 s of a suite run alone (2026-11-11) - and now advances this file instead.
+fn fixture_clock(env: &dyn Fn(&str) -> Option<String>) -> Option<u64> {
+    env("BATCH_STATE_DIR").filter(|d| !d.is_empty())?;
+    let file = env("BATCH_CLOCK")?;
+    std::fs::read_to_string(file).ok()?.trim().parse().ok()
 }
 
 /// The state line: `<last pre> <calls> <rearm> <history>`.

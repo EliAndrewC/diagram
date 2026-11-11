@@ -372,6 +372,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T98 (the hook suites run in parallel, FR-012)": {
+   "sha256": "fb9db9fabd4e60bbbc436f7f71559cf1965b706c1f95b28385ef93ebeca362d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
+  },
+  "### T98 Approach (checklist part A)": {
+   "sha256": "c1b37286c9da8fea0748af19cb3c928a7044ad3938f8fb79654e40435a2247b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6386,6 +6398,52 @@
      "why": "FR-012 asks T100's reruns be cut and SC-007 asks the cost be lower, both met; neither asks every remaining second removed, and the GM's own procedure for this work is to land, re-measure and pick the next cost. The plan states the remainder openly with its measured size rather than excluding a case the request names, so nothing asked is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-11",
+   "blocks": [
+    "### T98 (the hook suites run in parallel, FR-012)",
+    "### T98 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T98-attribution",
+     "summary": "Each slow suite timed alone against its full-run time to separate its own cost from contention (batching and idle-tests own time; sync-with-main and entry-gate mostly contention).",
+     "class": "within",
+     "why": "Measurement in service of FR-012's T98 cost; decides where to cut, narrows nothing. Figures carry one-shot labels (date and method)."
+    },
+    {
+     "id": "T98-batch-clock",
+     "summary": "The batching guard takes its time from a file named by BATCH_CLOCK, honored only beside a fixture's own BATCH_STATE_DIR, unit-tested for the file, its absence and a session without a state directory; the suite moves it with tick instead of sleeping.",
+     "class": "within",
+     "why": "The means of cutting the batching suite's sleep cost, which FR-012 asks for. It stays inside FR-012's 'held to every output and verdict the tooling gives today' only because the clock is honored solely beside a fixture's BATCH_STATE_DIR and a unit test pins that a session without one never reads it; that gate is the load-bearing condition. The block reports all 56 checks passing."
+    },
+    {
+     "id": "T98-clock-per-case-and-poll",
+     "summary": "One clock per case (a shared one broke parallel parts) and polling for the guard log's notice record instead of sleeping.",
+     "class": "within",
+     "why": "Implementation detail of the same cut; keeps the suite's verdicts (SC-007)."
+    },
+    {
+     "id": "T98-idle-tests-left",
+     "summary": "The idle-tests suite is left as it is.",
+     "class": "within",
+     "why": "Not a narrowing of the named cost: its time is waiting on the real timer processes it exists to test (shown by a bash -x trace, not asserted), so it does not contend for CPU and is not on the full run's critical path (36.3 s in the full run against sync-with-main's 62.7 s); and faking its clock would put FR-012's 'every verdict held' at risk."
+    },
+    {
+     "id": "T98-longest-first-dropped",
+     "summary": "Starting suites longest-first by last time was tried, measured slower (74.8 s and 77.0 s), and reverted.",
+     "class": "within",
+     "why": "An experiment toward the requested cut, measured and dropped; changes nothing that was asked."
+    },
+    {
+     "id": "T98-rest-left",
+     "summary": "The rest - sync-with-main's own time and the contention around it - is measured and left; the full run measured 71.2 s before and 63.8 s after by the same command, all 54 suites green.",
+     "class": "within",
+     "why": "FR-012 and SC-007 require the T98 cost cut, measured before and after by the same command, lower, verdicts held; neither they nor the GM's words set a target, a floor, or name individual suites, and the GM's method in this section is explicitly incremental ('stop and measure again ... next most low-hanging fruit'). The cut is made and measured by the same command, and the obvious contention lever was tried and measured worse. Noted, not a fidelity finding: the before/after rests on one run each on a shared host (the block says so), and the critical path - sync-with-main under contention, 56.5 s of 63.8 s - is where the remaining cost sits, its 25.6 s alone not broken down as idle-tests' was."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11158,6 +11216,50 @@
      "summary": "A core edit still builds 17 coverage binaries one after another (14.6 s of 54.0 s); sharing that build is filed apart if taken up.",
      "class": "within",
      "why": "FR-012 asks T100's reruns be cut and SC-007 asks the cost be lower, both met; neither asks every remaining second removed, and the GM's own procedure for this work is to land, re-measure and pick the next cost. The plan states the remainder openly with its measured size rather than excluding a case the request names, so nothing asked is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T98": {
+   "section_sha256": "56ccac189ce9d12625d4497de73336dad66045a00d865b2bd62802b9f84ba18c",
+   "reviewed": "2026-11-11",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T98-attribution",
+     "summary": "Each slow suite timed alone against its full-run time to separate its own cost from contention (batching and idle-tests own time; sync-with-main and entry-gate mostly contention).",
+     "class": "within",
+     "why": "Measurement in service of FR-012's T98 cost; decides where to cut, narrows nothing. Figures carry one-shot labels (date and method)."
+    },
+    {
+     "id": "T98-batch-clock",
+     "summary": "The batching guard takes its time from a file named by BATCH_CLOCK, honored only beside a fixture's own BATCH_STATE_DIR, unit-tested for the file, its absence and a session without a state directory; the suite moves it with tick instead of sleeping.",
+     "class": "within",
+     "why": "The means of cutting the batching suite's sleep cost, which FR-012 asks for. It stays inside FR-012's 'held to every output and verdict the tooling gives today' only because the clock is honored solely beside a fixture's BATCH_STATE_DIR and a unit test pins that a session without one never reads it; that gate is the load-bearing condition. The block reports all 56 checks passing."
+    },
+    {
+     "id": "T98-clock-per-case-and-poll",
+     "summary": "One clock per case (a shared one broke parallel parts) and polling for the guard log's notice record instead of sleeping.",
+     "class": "within",
+     "why": "Implementation detail of the same cut; keeps the suite's verdicts (SC-007)."
+    },
+    {
+     "id": "T98-idle-tests-left",
+     "summary": "The idle-tests suite is left as it is.",
+     "class": "within",
+     "why": "Not a narrowing of the named cost: its time is waiting on the real timer processes it exists to test (shown by a bash -x trace, not asserted), so it does not contend for CPU and is not on the full run's critical path (36.3 s in the full run against sync-with-main's 62.7 s); and faking its clock would put FR-012's 'every verdict held' at risk."
+    },
+    {
+     "id": "T98-longest-first-dropped",
+     "summary": "Starting suites longest-first by last time was tried, measured slower (74.8 s and 77.0 s), and reverted.",
+     "class": "within",
+     "why": "An experiment toward the requested cut, measured and dropped; changes nothing that was asked."
+    },
+    {
+     "id": "T98-rest-left",
+     "summary": "The rest - sync-with-main's own time and the contention around it - is measured and left; the full run measured 71.2 s before and 63.8 s after by the same command, all 54 suites green.",
+     "class": "within",
+     "why": "FR-012 and SC-007 require the T98 cost cut, measured before and after by the same command, lower, verdicts held; neither they nor the GM's words set a target, a floor, or name individual suites, and the GM's method in this section is explicitly incremental ('stop and measure again ... next most low-hanging fruit'). The cut is made and measured by the same command, and the obvious contention lever was tried and measured worse. Noted, not a fidelity finding: the before/after rests on one run each on a shared host (the block says so), and the critical path - sync-with-main under contention, 56.5 s of 63.8 s - is where the remaining cost sits, its 25.6 s alone not broken down as idle-tests' was."
     }
    ],
    "verdict": "CLEAR"
