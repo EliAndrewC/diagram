@@ -416,11 +416,9 @@ Q_OUT=$(run_bg "POLL_OK=\"feature 295 quoting case\" $Q_CMD" | jq -r '.hookSpeci
 printf '%s' "$Q_OUT" | grep -q 'WAIT TIMED OUT' && bash -n <(printf '%s\n' "$Q_OUT") 2>/dev/null \
   && { echo "  ok      a wait inside bash -c \"...\" gains its ceiling and still parses"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the ceiling inside double quotes broke the command: $Q_OUT"; FAIL=$((FAIL+1)); }
-Q_LIT='setsid --fork bash -c "until grep -q X /tmp/q295.log; do sleep 5; done"'
-Q_PROOF=$("$HERE/../../scripts/hooks/lib/hm_shape.py" proof /h/_writer-alive.sh <<<"$(jq -nc '{"tool_input":{"command":$ARGS.positional[0]}}' --args -- "$Q_LIT")")
-bash -n <(printf '%s\n' "$Q_PROOF") 2>/dev/null && printf '%s' "$Q_PROOF" | grep -q 'writer-alive.sh \\"/tmp/q295.log\\"' \
-  && { echo "  ok      ...and so does its proof of life, escaped for the double quotes"; PASS=$((PASS+1)); } \
-  || { echo "  FAIL    the proof of life inside double quotes: $Q_PROOF"; FAIL=$((FAIL+1)); }
+# ...and so does its proof of life, escaped for the double quotes: a unit test of `shared::wait::proof_of_life` now
+# (`rust/guard/src/shared/wait/tests.rs`), since the case asked `hm_shape.py proof` by path, which feature 449 T129 deleted, and the
+# guard itself never reaches a loop inside `bash -c "..."` without an escape (its quoted body is not scanned)
 check "the R7 command: a sleep before a for loop, none inside it" ok \
   'pkill -f X ; sleep 1; cd /tmp; for p in $(pgrep -f Y); do echo "$p"; done'
 check "a sleep inside the loop's body still is one" blocked 'for p in 1 2; do echo "$p"; sleep 1; done'

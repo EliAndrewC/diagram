@@ -15,7 +15,9 @@ use super::Outcome;
 
 /// The name its runs are recorded under in the `usage_log`.
 pub(super) const USAGE_LOG_TOOL: &str = "check-tool-signals";
-const RECORDS: [&str; 3] = ["guard_log", "usage_log", "# TOOL_RECORD:"];
+/// What a file that records its runs names: the guard log, the usage log by name (a Rust caller's `USAGE_LOG_TOOL`) or by its command
+/// (`l7r-gate log usage`, the one writer's door since `usage_log.py` left, feature 449 T129), or a stated record.
+const RECORDS: [&str; 4] = ["guard_log", "usage_log", "log usage", "# TOOL_RECORD:"];
 fn compiled(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
@@ -61,7 +63,7 @@ fn unrecorded(root: &Path) -> Result<Vec<String>, String> {
         .map(|p| {
             let rel = p.strip_prefix(root).unwrap_or(p).display();
             let stem = p.file_stem().unwrap_or_default().to_string_lossy();
-            format!("{rel}: records none of its runs. Wrap its exit in `usage_log.exited(\"{stem}\", ...)` (a check), call `guard_log` (a hook), or add `# TOOL_RECORD: <where its runs are seen>` near its top, and register a usage-log name in scripts/tool-registry.json")
+            format!("{rel}: records none of its runs. Record its exit with `l7r-gate.sh log usage --tool {stem} --kind check --outcome <passed|refused>` (a check), call `guard_log` (a hook), or add `# TOOL_RECORD: <where its runs are seen>` near its top, and register a usage-log name in scripts/tool-registry.json")
         })
         .collect())
 }
@@ -81,20 +83,21 @@ fn called(root: &Path) -> BTreeMap<String, String> {
     ] {
         let mut rust = Vec::new();
         walk(&root.join(dir), &mut rust);
-        files.extend(
-            rust.into_iter()
-                .filter(|p| p.extension().is_some_and(|x| x == "rs")),
-        );
+        // a test module records nothing: its fixtures name tools by the same `--tool` words (feature 449 T129, whose door's tests
+        // record scratch tools `a` to `h`)
+        files.extend(rust.into_iter().filter(|p| {
+            p.extension().is_some_and(|x| x == "rs")
+                && !p
+                    .file_name()
+                    .is_some_and(|n| n.to_string_lossy().ends_with("tests.rs"))
+        }));
     }
     files.push(root.join("Makefile"));
     files.sort();
     let mut out = BTreeMap::new();
-    for path in files
-        .iter()
-        .filter(|p| p.file_name().is_some_and(|n| n != "usage_log.py"))
-    {
+    for path in &files {
         let text = read(path);
-        if !text.contains("usage_log") {
+        if !RECORDS[1..3].iter().any(|m| text.contains(m)) {
             continue;
         }
         for name in CALLS.iter().flat_map(|c| {

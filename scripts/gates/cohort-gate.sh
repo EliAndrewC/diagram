@@ -21,7 +21,7 @@ CO_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 grep -qs '^cohort-landing:' "$ROOT/Makefile" || exit 0
 
 if [ -n "${COHORT_OK:-}" ]; then
-  if ! python3 "$CO_HERE/../hooks/lib/hm_escape.py" reason-ok <<<"$COHORT_OK" >/dev/null; then
+  if ! "$CO_HERE/l7r-gate.sh" escape reason-ok <<<"$COHORT_OK" >/dev/null; then
     guard_log cohort-gate blocked "$COHORT_OK" COHORT_OK-no-reason
     printf 'cohort-gate: COHORT_OK needs a REASON, not just a value - two words and eight characters.\n' >&2
     printf 'It ships with the push: say why this engine lands without its landing cohort, or with the seeds it regressed.\n' >&2

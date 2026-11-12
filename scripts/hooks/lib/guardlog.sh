@@ -19,25 +19,6 @@
 # (GUARD_EDIT_OK: feature 204 - the record gains the fields an audit needs; nothing a guard DECIDES changes.)
 #
 # It must never take a guard down with it: every failure here is swallowed.
-# THE COMMAND, PARSED PROPERLY, for the log only. Both hooks read the command with a greedy sed that
-# takes everything to the last quote of the payload - deliberately, because every OTHER use is a
-# substring test where over-reading is safe. A log entry is read by a person, so it gets the real
-# thing; the parse costs a python start and only ever runs when something is being recorded.
-#
-# ... OR THE FILE PATH, when the tool has no command (feature 168). `readme`, `source-block` and
-# `guard-file`'s Read reminder all guard the Edit/Write/Read tools, whose payload carries `file_path`
-# and no `command` at all - so each of them was recording an entry with an EMPTY detail, which says
-# that something fired but not what on. One body, because the two are the same question: what did the
-# session try to do. (Found while auditing FR-002's coverage; fixed here per Principle XIV.)
-guard_cmd() {
-  printf '%s' "${INPUT:-}" | python3 -c '
-import json, sys
-try:
-    ti = json.load(sys.stdin).get("tool_input", {}) or {}
-    print((ti.get("command") or ti.get("file_path") or "")[:200])
-except Exception:
-    pass' 2>/dev/null || true
-}
 
 # guard_log <guard> <event> <detail> [rule]
 #
@@ -49,49 +30,10 @@ except Exception:
 # AN ESCAPE IS A BRANCH, and the one that matters most: the escape RATE is what this project has
 # actually acted on (feature 162 retired a refusal that was being escaped 62% of the time), and before
 # this feature it was computable for exactly one guard.
-# escape_or_refuse <guard> <token> <rule> <here-dir>
 #
-# THE ESCAPE, DECIDED IN ONE PLACE (feature 170, GM 2026-08-30: *"force the Claude Code session, which
-# is performing the workaround to specify why they are doing it ... otherwise, we have no way to audit
-# later when this workaround was taken and whether the stated reasons were valid use cases"*).
-#
-# Returns 0 when the session escaped WITH a reason - having recorded it, with the REASON as the entry's
-# detail, because reading the reasons is the audit. EXITS 2 when the token is there and the reason is
-# not: that is a refusal rather than a rewrite, because the missing thing is the session's reasoning
-# and no tool can supply it. Returns 1 when no escape was used, so the caller carries on.
-#
-# Every guard calls this instead of writing the rule a seventh time. `$INPUT` is the hook payload the
-# caller already read.
-escape_or_refuse() {
-  local guard=$1 token=$2 rule=$3 here=$4 reason
-  # GUARD_EDIT_OK: a performance fix found while working (2026-09-27), no rule changed - NO TOKEN, NO PYTHON.
-  # This ran `hm_escape.py` (a python start) on EVERY invocation of 13 guards, escape or not. `escape_used`
-  # answers `token in <the command, cleaned>`, and the cleaning only deletes text or inserts a space, `""` or
-  # ` <<BODY ` - none of which can complete a token - so a token absent from the command is absent from its
-  # cleaned form. The payload holds the command JSON-encoded, which leaves a token's ASCII letters and
-  # underscores as they are unless the encoder wrote `\u` escapes; a payload with any `\u` takes the full check.
-  case "${INPUT:-}" in *"$token"*|*'\u'*) ;; *) return 1 ;; esac
-  # the escape decider sits beside THIS file (scripts/hooks/lib/), not in the calling guard's directory - `here`
-  # stays the caller's, for anything else it names (2026-10-08: the guards and their helpers were one directory)
-  local lib; lib="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  printf '%s' "${INPUT:-}" | "$lib/hm_escape.py" escape "$token" 2>/dev/null | grep -q yes || return 1
-  reason=$(printf '%s' "${INPUT:-}" | "$lib/hm_escape.py" escape-reason "$token" 2>/dev/null)
-  if [ -z "$reason" ]; then
-    {
-      printf 'BLOCKED: %s with no reason given.\n\n' "$token"
-      printf 'An escape is a workaround, and a workaround nobody can audit is indistinguishable from the\n'
-      printf 'rule not existing. Say why, in the command, and it ships with it:\n\n'
-      printf '    <your command>  # %s: <why this case is legitimate>\n\n' "$token"
-      printf 'Two words and eight characters is the whole bar - "CI is down" clears it. What it stops is a\n'
-      printf 'bare token and "%s: ok", which record that a rule was bypassed and nothing about why.\n' "$token"
-      printf '(GM 2026-08-30, feature 170; the reasons are what `make audit` shows you.)\n'
-    } >&2
-    guard_log "$guard" blocked "$(guard_cmd)" "${token}-no-reason"
-    exit 2
-  fi
-  guard_log "$guard" escaped "$reason" "$rule"
-  return 0
-}
+# (`escape_or_refuse`, the escape decided in shell, and `guard_cmd`, its parse of the command for the log, were removed with
+# `hm_escape.py` - feature 449 T129: no script called either once every guard was ported to Rust. The rule is the guard's
+# `shared::escape` (`escape_or_refuse` there), and the shell's one question of it, the reason floor, is `l7r-gate escape reason-ok`.)
 
 # guard_log <guard> <event> <detail> [rule] [context-json]
 #

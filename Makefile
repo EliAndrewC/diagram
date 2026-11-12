@@ -415,7 +415,7 @@ COMMIT_RUN_RECORD = bash "$$(git rev-parse --show-toplevel)/scripts/gates/commit
 LOGBYPASS = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" log bypass '$(MAKECMDGOALS)$(if $(FULL), FULL,)'
 
 LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/hooks/lib/guardlog.sh"; \
-  printf "%s" "$$2" | python3 "$$0/scripts/hooks/lib/hm_escape.py" reason-ok >/dev/null || { \
+  printf "%s" "$$2" | "$$0/scripts/gates/l7r-gate.sh" escape reason-ok >/dev/null || { \
     printf "BLOCKED: %s needs a REASON (two words, eight characters) - it is what a later audit reads.\n" "$$1" >&2; \
     guard_log make blocked "$$2" "$$1-no-reason"; exit 2; }; \
   guard_log make escaped "$$2" "$$(printf "%s" "$$1" | tr "[:upper:]_" "[:lower:]-")"' "$$root"
@@ -1001,7 +1001,7 @@ IDLE_CTX = $(eval IDLE_CTX := $(shell $(SWITCH) idle 2>/dev/null || echo unreada
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand} what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
 	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done INCREMENTAL=0; rc=$$?; \
-	  python3 "$$(git rev-parse --show-toplevel)/scripts/hooks/lib/usage_log.py" record --tool idle-tests --kind target --outcome "$$( [ $$rc -eq 0 ] && echo passed || echo failed )"; \
+	  "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" log usage --tool idle-tests --kind target --outcome "$$( [ $$rc -eq 0 ] && echo passed || echo failed )"; \
 	  exit $$rc
 
 .PHONY: review-yield cohort-seeds task-add set-down where-time land-batch fix-yield
@@ -1095,7 +1095,8 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # often a tool is used"). The event log sees a target only when a session's Bash call runs it; one run from another target's
 # recipe, from a script or from the idle timer left no trace. Each parse records its goals `ran` in <git dir>/tool-usage.jsonl
 # (the default goal's name when none is given); `make -n` and `make -q` run nothing and record nothing. `make tool-yield` counts
-# a target's runs from these lines alone and reads their outcomes from the event log.
+# a target's runs from these lines alone and reads their outcomes from the event log. The line is the gate's (`l7r-gate log goals`,
+# feature 449 T129), where a Python start on every parse was `usage_log.py`'s; a build the gate owes runs here first, as for any target.
 ifeq (,$(findstring n,$(filter-out --%,$(firstword $(MAKEFLAGS))))$(findstring q,$(filter-out --%,$(firstword $(MAKEFLAGS)))))
-_TOOL_YIELD_RAN := $(shell python3 "$(dir $(abspath $(firstword $(MAKEFILE_LIST))))scripts/hooks/lib/usage_log.py" goals $(or $(MAKECMDGOALS),$(.DEFAULT_GOAL)) >/dev/null 2>&1)
+_TOOL_YIELD_RAN := $(shell L7R_GATE_STALE_OK=1 "$(dir $(abspath $(firstword $(MAKEFILE_LIST))))scripts/gates/l7r-gate.sh" log goals $(or $(MAKECMDGOALS),$(.DEFAULT_GOAL)) >/dev/null 2>&1)
 endif

@@ -44,7 +44,7 @@ EG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # GUARD_EDIT_OK: feature 311 - one writer of a reason to dev/bypass-log/, for either escape.
 record_bypass() {  # $1 the escape's name, $2 its reason
-  if ! python3 "$EG_HERE/../hooks/lib/hm_escape.py" reason-ok <<<"$2" >/dev/null; then
+  if ! "$EG_HERE/l7r-gate.sh" escape reason-ok <<<"$2" >/dev/null; then
     guard_log entry-gate blocked "$2" "$1-no-reason"
     printf 'entry-gate: %s needs a REASON, not just a value - two words and eight characters.\n' "$1" >&2
     printf 'It ships with the push and is what a later audit reads: say what moved and why no check is owed.\n' >&2

@@ -229,7 +229,12 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
             let _ = save(path, &state);
             if !msg.is_empty() {
                 if let Some(r) = root.as_deref() {
-                    passes::usage(&super::common_dir(r), USAGE_LOG_TOOL, "step", "changed");
+                    crate::shared::usage::append(
+                        &super::common_dir(r),
+                        USAGE_LOG_TOOL,
+                        "step",
+                        "changed",
+                    );
                 }
             }
             return msg;

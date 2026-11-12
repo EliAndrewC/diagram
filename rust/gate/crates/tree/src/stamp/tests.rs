@@ -348,15 +348,16 @@ fn outside_a_repository_it_stands_aside_and_nothing_is_fresh() {
     );
 }
 
-/// A repository that can answer for Python itself: the real `codeid.py` and the module it records through.
+/// A repository that can answer for Python itself: the real `codeid.py`.
 fn with_codeid(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let dir = repo(tag);
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
-    for rel in ["gates/codeid.py", "hooks/lib/usage_log.py"] {
-        let to = dir.join("scripts").join(rel);
-        std::fs::create_dir_all(to.parent().unwrap()).unwrap();
-        std::fs::copy(real.join(rel), to).unwrap();
-    }
+    std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();
+    std::fs::copy(
+        real.join("gates/codeid.py"),
+        dir.join("scripts/gates/codeid.py"),
+    )
+    .unwrap();
     dir
 }
 

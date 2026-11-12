@@ -103,6 +103,19 @@ fn a_file_wait_is_given_a_proof_of_life_where_it_lacks_one() {
     )
     .unwrap();
     assert!(quoted.contains("{ w \\\"/tmp/a.log\\\" || exit 3; false; }"));
+    // ...and the whole command still parses: the no-poll suite's feature-295 case, which asked `hm_shape.py proof` by path until
+    // feature 449 T129 deleted it (the guard reaches this shape only through `bash -c "..."`, whose quoted body it does not scan)
+    let lit = proof_of_life(
+        "setsid --fork bash -c \"until grep -q X /tmp/q295.log; do sleep 5; done\"",
+        "/h/_writer-alive.sh",
+    )
+    .unwrap();
+    assert!(lit.contains("writer-alive.sh \\\"/tmp/q295.log\\\""));
+    let parsed = std::process::Command::new("bash")
+        .args(["-n", "-c", &lit])
+        .status()
+        .unwrap();
+    assert!(parsed.success());
 }
 
 #[test]

@@ -1,5 +1,5 @@
 //! A check's pass logged, read off its transcript (features 371, 294; from `hm_checks.log_pass`): one line per return in `<git common dir>/check-passes.jsonl`, the ledger's
-//! cost cells computed over the transcript by `shared::ledger::cost` (the one review cost, feature 449 T83), and the tool-usage line (`usage_log.record`) an automatic step leaves. Never raises: a hook that fails here must not take the session's tool call with it.
+//! cost cells computed over the transcript by `shared::ledger::cost` (the one review cost, feature 449 T83). Never raises (the tool-usage line an automatic step leaves is `shared::usage`'s, feature 449 T129): a hook that fails here must not take the session's tool call with it.
 
 use std::path::Path;
 
@@ -9,7 +9,6 @@ use super::reply::{py_lines, read_lossy};
 use super::text;
 use crate::shared::ledger::cost::{cells, cost, segments, transcript};
 use crate::shared::ledger::CHECKS;
-use crate::shared::log::civil;
 use crate::shared::pyjson;
 use crate::shared::tool::ask;
 
@@ -190,21 +189,6 @@ fn append_line(path: &Path, line: &str) -> std::io::Result<()> {
         .create(true)
         .open(path)?;
     f.write_all(line.as_bytes())
-}
-
-/// One line in `<common>/tool-usage.jsonl` (`usage_log.record`), never failing its tool.
-#[expect(clippy::many_single_char_names, reason = "the fields of a date")]
-pub fn usage(common: &Path, tool: &str, kind: &str, outcome: &str) {
-    let secs = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map_or(0, |d| d.as_secs());
-    let (y, m, d, h, mi, s) = civil(secs);
-    let session = std::env::var("CLAUDE_SESSION_ID").unwrap_or_default();
-    let rec = json!({"utc": format!("{y:04}-{m:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z"), "tool": tool, "kind": kind, "outcome": outcome, "session": session});
-    let _ = append_line(
-        &common.join("tool-usage.jsonl"),
-        &format!("{}\n", pyjson::dumps(&rec, None, true)),
-    );
 }
 
 #[cfg(test)]

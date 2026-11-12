@@ -33,7 +33,12 @@ stale() {
   [ -n "$(find "${SOURCES[@]}" "$TREE/rust/guard" "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml" \
     -newer "$BIN" -print -quit 2>/dev/null)" ]
 }
-if stale; then
+# L7R_GATE_STALE_OK=1 runs the binary there is, stale or not, and builds none (feature 449 T129): the Makefile's parse-time goals line
+# records a make's goals on every make, and a build there would put the release l7r-gate's rebuild back in front of `make rust-test`
+# after a gate-crate edit, which T93 took out of that loop; a stale binary writes the same line. With no binary it builds as before.
+if [ -n "${L7R_GATE_STALE_OK:-}" ] && [ -x "$BIN" ]; then
+  :
+elif stale; then
   # THE LINKER (T96): the build runs from the tree's root, where cargo finds `.cargo/config.toml` (rust-lld) whatever directory called it,
   # and refuses with the fix when that file's lld is not this toolchain's
   . "$TREE/scripts/hooks/lib/lld-path.sh"

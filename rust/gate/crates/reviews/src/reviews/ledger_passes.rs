@@ -166,25 +166,9 @@ fn usage(why: &str) -> Reply {
     )
 }
 
-/// The ledger write recorded in the gate tree's usage log as an automatic step (`_usage`).
+/// The ledger write recorded in the gate tree's usage log as an automatic step (`_usage`), by the one writer (feature 449 T129).
 fn record_usage(env: &Env, outcome: &str) {
-    let common = Command::new("git")
-        .arg("-C")
-        .arg(&env.tree)
-        .args(["rev-parse", "--path-format=absolute", "--git-common-dir"])
-        .output()
-        .ok()
-        .filter(|o| o.status.success())
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
-        .unwrap_or_default();
-    if !common.is_empty() {
-        l7r_guard::shared::checks::passes::usage(
-            Path::new(&common),
-            USAGE_LOG_TOOL,
-            "step",
-            outcome,
-        );
-    }
+    l7r_guard::shared::usage::record(&env.tree, USAGE_LOG_TOOL, "step", outcome);
 }
 
 /// The ledger opened to append, created as `open(..., "a")` creates it.

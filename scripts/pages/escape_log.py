@@ -2,7 +2,7 @@
 
 WHY. The write cap on a page session (`WRITE_CAP_OK`, the runner) and the key cap on `make reserve` (`KEY_CAP_OK`) are
 refused in Python, not in a hook, and the guard doctrine asks that every escape state a reason of two words or more
-and be counted by `make audit`. So the reason is held to `_hm_escape.reason_is_enough` - the floor every hook uses - and
+and be counted by `make audit`. So the reason is held to `l7r-gate escape reason-ok` - the floor every hook uses - and
 the entry is written in `~/.claude/guard-log/`'s own format, one file per entry, serialized before it is renamed into
 place, exactly as `guard_log` in `guardlog.sh` does.
 """
@@ -12,12 +12,24 @@ from __future__ import annotations
 import json
 import os
 import pathlib
+import subprocess
 import sys
 import time
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
-from hm_escape import reason_is_enough  # noqa: E402
+GATE = pathlib.Path(__file__).resolve().parent.parent / "gates" / "l7r-gate.sh"
+
+
+def reason_is_enough(reason: str) -> bool:
+    """The reason floor, asked of `l7r-gate escape reason-ok`, one process a call (feature 449 T129, FR-003: `hm_escape.py`'s
+    `reason_is_enough`, which this imported, is the guard's `shared::escape::enough` now). A reason the command cannot be asked
+    about - the gate not built, not runnable - does not clear it."""
+    try:
+        done = subprocess.run([str(GATE), "escape", "reason-ok"], input=reason.encode("utf-8", "surrogateescape"),
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+    except OSError:
+        return False
+    return done.returncode == 0
 
 
 class NoReason(Exception):

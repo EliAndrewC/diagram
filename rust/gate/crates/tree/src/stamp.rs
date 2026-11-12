@@ -1,11 +1,10 @@
 //! The green-gate stamps (feature 449 T063 slice 2, from `scripts/gates/gate-stamp.py`): each area's key is a hash of what its gate ran over, kept under the git directory when the gate goes green, and the
 //! push refuses an area whose code changed with no matching stamp. The keys equal the Python's byte for byte, so a stamp kept before the switch still verifies.
 
-use std::io::{Read, Write as _};
+use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use l7r_guard::shared::log::civil;
 use l7r_guard::shared::sha256;
 
 use crate::codeid::{self, stated, Cache};
@@ -312,24 +311,10 @@ fn refusals(root: &Path, base: &str, python: &str) -> Result<Vec<String>, String
 /// The name its runs are recorded under, as `usage_log.exited` recorded the Python's.
 const USAGE_LOG_TOOL: &str = "gate-stamp";
 
-/// One line in `<git common dir>/tool-usage.jsonl`, the record every refusing check leaves (feature 406); one write of one short line in append mode, and a failure never fails the tool.
+/// One line in `<git common dir>/tool-usage.jsonl`, the record every refusing check leaves (feature 406): the guard's one writer
+/// (`shared::usage`, feature 449 T129), which never fails the tool.
 pub fn record_for(root: &Path, tool: &str, outcome: &str) {
-    let Some(common) = codeid::common_git_dir(root) else {
-        return;
-    };
-    let secs = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map_or(0, |d| d.as_secs());
-    let (y, mo, d, h, mi, s) = civil(secs);
-    let session = std::env::var("CLAUDE_SESSION_ID").unwrap_or_default();
-    let row = format!("{{\"utc\": \"{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z\", \"tool\": \"{tool}\", \"kind\": \"check\", \"outcome\": \"{outcome}\", \"session\": {}}}\n", serde_json::Value::from(session));
-    if let Ok(mut file) = std::fs::OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(common.join("tool-usage.jsonl"))
-    {
-        let _ = file.write_all(row.as_bytes());
-    }
+    l7r_guard::shared::usage::record(root, tool, "check", outcome);
 }
 
 fn record(root: &Path, outcome: &str) {

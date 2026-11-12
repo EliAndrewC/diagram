@@ -306,7 +306,7 @@ push_cmd() {
   # GUARD_EDIT_OK: feature 383 FR-006 - the Python calls from here on stay out of `l7r-gate push-checks`, each for one reason: it runs
   # after the fetch (the checks above precede it) and its answer is a VALUE the shell's own branches read - the feature
   # pointer, which features are in progress, the performance flag, the remote merge's route -
-  # not a pass or refusal of its own. The escape reads (`hm_escape.py reason-ok`) run only when an escape is set.
+  # not a pass or refusal of its own. The escape reads (`l7r-gate escape reason-ok`) run only when an escape is set.
   pointer=$("$ROOT/scripts/gates/l7r-gate.sh" json-field "$ROOT/.specify/feature.json" feature_directory 2>/dev/null </dev/null | sed 's#/*$##' || true); [ "$pointer" = "-" ] && pointer=""
   for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
     # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
@@ -364,7 +364,7 @@ push_cmd() {
   # shellcheck source=/dev/null
   . "$ROOT/scripts/hooks/lib/guardlog.sh" 2>/dev/null || guard_log() { :; }
   if [ -n "${LEDGER_ROWS_OK:-}" ]; then
-    if ! python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$LEDGER_ROWS_OK" >/dev/null; then
+    if ! "$ROOT/scripts/gates/l7r-gate.sh" escape reason-ok <<<"$LEDGER_ROWS_OK" >/dev/null; then
       guard_log sync-with-main blocked "$LEDGER_ROWS_OK" LEDGER_ROWS_OK-no-reason
       die "LEDGER_ROWS_OK needs a REASON: two words and eight characters, saying why these passes land without their rows"
     fi
@@ -375,7 +375,7 @@ push_cmd() {
   # GUARD_EDIT_OK: feature 170 - the green-gate guard's escape records its firing and needs a reason (an environment
   # variable's VALUE is its reason, GM 2026-08-30); an escape nobody can audit is indistinguishable from the rule not existing.
   if [ -n "${GATE_STAMP_OK:-}" ]; then
-    if ! python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$GATE_STAMP_OK" >/dev/null; then
+    if ! "$ROOT/scripts/gates/l7r-gate.sh" escape reason-ok <<<"$GATE_STAMP_OK" >/dev/null; then
       guard_log sync-with-main blocked "$GATE_STAMP_OK" GATE_STAMP_OK-no-reason
       die "GATE_STAMP_OK needs a REASON, not just a value: two words and eight characters, e.g. GATE_STAMP_OK=\"the gate is green on this content, the stamp predates a docs-only commit\". An escape nobody can audit is indistinguishable from the rule not existing (GM 2026-08-30, feature 170)."
     fi
@@ -386,7 +386,7 @@ push_cmd() {
   # GUARD_EDIT_OK: feature 375 FR-009/FR-014, moved into the runner by feature 383 (its plan review: a pass or refusal with an
   # escape, as the two above) - a touched feature that reads closed carries its report and the measurements other specs
   # carried to it; a genuinely exempt case passes CLOSE_OK="<reason>", recorded
-  if [ -n "${CLOSE_OK:-}" ] && python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$CLOSE_OK" >/dev/null 2>&1; then
+  if [ -n "${CLOSE_OK:-}" ] && "$ROOT/scripts/gates/l7r-gate.sh" escape reason-ok <<<"$CLOSE_OK" >/dev/null 2>&1; then
     guard_log sync-with-main escaped "$CLOSE_OK" close-ok
     skip+=(--skip closing)
   fi

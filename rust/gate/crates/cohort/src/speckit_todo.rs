@@ -33,7 +33,6 @@ pub mod work_budget_view;
 
 use std::fmt::Write as _;
 use std::path::Path;
-use std::process::Command;
 
 use l7r_gate_core::record::args::{parse, Spec};
 use l7r_guard::shared::speckit::{
@@ -63,26 +62,14 @@ fn raised(why: &str) -> Reply {
     )
 }
 
-/// The run recorded in the working directory's repository (`usage_log.exited`, its `root` None).
+/// The run recorded in the working directory's repository (`usage_log.exited`, its `root` None), by the one writer (feature 449 T129).
 fn record(cwd: &Path, code: i32) {
-    let common = Command::new("git")
-        .arg("-C")
-        .arg(cwd)
-        .args(["rev-parse", "--path-format=absolute", "--git-common-dir"])
-        .output()
-        .ok()
-        .filter(|o| o.status.success())
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
-        .unwrap_or_default();
-    if !common.is_empty() {
-        let outcome = if code == 0 { "passed" } else { "refused" };
-        l7r_guard::shared::checks::passes::usage(
-            Path::new(&common),
-            USAGE_LOG_TOOL,
-            "check",
-            outcome,
-        );
-    }
+    l7r_guard::shared::usage::record(
+        cwd,
+        USAGE_LOG_TOOL,
+        "check",
+        l7r_guard::shared::usage::exited(code),
+    );
 }
 
 /// The command line: what `speckit-todo.py`'s `main` answered, its run recorded in `cwd`'s repository where the Python recorded one.

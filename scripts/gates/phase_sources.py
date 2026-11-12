@@ -107,8 +107,13 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    sys.path.insert(0, str(HERE.parent / "hooks" / "lib"))
-    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
-    import usage_log  # noqa: E402 - feature 406 T03 (D162): every refusing check records its run
-
-    sys.exit(usage_log.exited("phase_sources", main()))
+    _code = main()
+    # feature 406 T03 (D162): every refusing check records its run - by the gate's one usage-log writer, `l7r-gate log usage`, run by
+    # command (feature 449 T129, FR-003), and never failing the check
+    try:
+        subprocess.run([str(HERE / "l7r-gate.sh"), "log", "usage", "--tool", "phase_sources",
+                        "--kind", "check", "--outcome", "refused" if _code else "passed"],
+                       stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+    except OSError:
+        pass
+    sys.exit(_code)

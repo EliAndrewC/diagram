@@ -330,11 +330,14 @@ def main(argv: list[str]) -> int:
     if (d / "plan.md").is_file():
         try:
             moved = _plan_gate.archive(d)
-            sys.path.insert(0, str(Path(__file__).resolve().parent / "hooks" / "lib"))
-            sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
-            import usage_log  # noqa: PLC0415 - feature 406 T03 (D162): the archive is an automatic step
-
-            usage_log.record(root, "tick-archive", "step", "changed" if moved else "unchanged")
+            # feature 406 T03 (D162): the archive is an automatic step, recorded by the gate's one usage-log writer,
+            # `l7r-gate log usage`, run by command (feature 449 T129, FR-003); a record never fails the tick
+            try:
+                subprocess.run([str(Path(__file__).resolve().parent / "gates" / "l7r-gate.sh"), "log", "usage", "--tool", "tick-archive",
+                                "--kind", "step", "--outcome", "changed" if moved else "unchanged", "--root", str(root)],
+                               stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+            except OSError:
+                pass
         except Exception as e:  # noqa: BLE001 - any failure is reported, never raised past a written tick
             print(f"tick: the plan's finished sections were not archived ({e}); `make plan-archive F={feature}` to retry")
         else:

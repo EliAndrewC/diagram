@@ -95,11 +95,12 @@ fn the_edit_applied_once_or_everywhere() {
 fn only_a_docstring_changed_passes_and_a_code_change_waits() {
     let root = clone_with("l7r/diagram/a.py", "\"\"\"Doc.\"\"\"\nX = 1\n");
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
-    for rel in ["gates/codeid.py", "hooks/lib/usage_log.py"] {
-        let to = root.join("scripts").join(rel);
-        std::fs::create_dir_all(to.parent().unwrap()).unwrap();
-        std::fs::copy(real.join(rel), to).unwrap();
-    }
+    std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
+    std::fs::copy(
+        real.join("gates/codeid.py"),
+        root.join("scripts/gates/codeid.py"),
+    )
+    .unwrap();
     let path = root.join("l7r/diagram/a.py");
     assert_eq!(
         ask(

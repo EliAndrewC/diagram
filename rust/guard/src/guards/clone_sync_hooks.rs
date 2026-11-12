@@ -33,6 +33,9 @@ pub const GUARD: Guard = Guard {
     decide,
 };
 
+/// The name a merge's run is recorded under in the `usage_log` (`scripts/tool-registry.json`).
+const USAGE_LOG_TOOL: &str = "clone-sync-merge";
+
 /// The make targets that run tests, whose clone a behind-main notice is for.
 const BEHIND_TEST_TARGETS: [&str; 22] = [
     "quick",
@@ -69,8 +72,6 @@ pub(crate) struct Ctx<'a> {
     pub session: &'a Session,
     pub main: PathBuf,
     pub tree: PathBuf,
-    /// The interpreter the tree's Python tools run under (`python3`; a test's fakes are `sh`).
-    pub python: &'static str,
     /// `L7R_SOLO`: the hook's own test suite's answer, or the GM's override.
     pub solo_forced: Option<String>,
 }
@@ -208,7 +209,6 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
         session,
         main: session.main().to_path_buf(),
         tree,
-        python: "python3",
         solo_forced: std::env::var("L7R_SOLO").ok(),
     })
 }
@@ -566,24 +566,8 @@ fn sync(cx: &Ctx, clone: &Path) -> Vec<String> {
     }
     let mut lines = vec![format!("clone-sync: auto-synced {c} with main (git)")];
     let root = clone.to_string_lossy();
-    let usage = cx.tree.join("scripts/hooks/lib/usage_log.py");
-    let _ = ask(
-        Path::new("/"),
-        cx.python,
-        &[
-            &usage.to_string_lossy(),
-            "record",
-            "--root",
-            &root,
-            "--tool",
-            "clone-sync-merge",
-            "--kind",
-            "step",
-            "--outcome",
-            "changed",
-        ],
-        "",
-    );
+    // the merge recorded as an automatic step, in process by the one writer, where `usage_log.py` was run by path (feature 449 T129)
+    crate::shared::usage::record(clone, USAGE_LOG_TOOL, "step", "changed");
     let carried = ask(
         Path::new("/"),
         &cx.tree

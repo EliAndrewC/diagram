@@ -51,7 +51,9 @@ echo "--- 3. a change the gate does not see (feature 405 T41, D15) ---"
 # a tree with the gate's own tools: a docstring or comment in an engine file, or a claims-round record, passes; code does not
 S=$(mktemp -d); git -C "$S" init -q
 mkdir -p "$S/scripts/gates" "$S/l7r/diagram" "$S/dev"
-cp "$HERE/../../scripts/gates/preflight.py" "$HERE/../../scripts/gates/codeid.py" "$S/scripts/gates/"; printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$(cd "$HERE/../.." && pwd)/scripts/gates/l7r-gate.sh" > "$S/scripts/gates/l7r-gate.sh"; chmod +x "$S/scripts/gates/l7r-gate.sh"; mkdir -p "$S/scripts/hooks/lib"; cp "$HERE/../../scripts/hooks/lib/usage_log.py" "$S/scripts/hooks/lib/"
+# (`preflight.py` and `usage_log.py` were copied here too, and are gone: the preflight is the gate's since 449 T071, the usage log's
+# writer since 449 T129; the gate's wrapper below answers for both)
+cp "$HERE/../../scripts/gates/codeid.py" "$S/scripts/gates/"; printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$(cd "$HERE/../.." && pwd)/scripts/gates/l7r-gate.sh" > "$S/scripts/gates/l7r-gate.sh"; chmod +x "$S/scripts/gates/l7r-gate.sh"
 printf 'def f(x):\n    """Research: a claim - NONE"""\n    return x + 1\n' > "$S/l7r/diagram/m.py"
 printf '{}\n' > "$S/dev/claims-index.json"
 printf 'done:\n\t@sleep 30\n' > "$S/Makefile"

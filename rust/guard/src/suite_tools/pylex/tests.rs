@@ -82,6 +82,9 @@ fn an_f_string_is_its_literal_parts_and_the_strings_of_its_expressions() {
     assert_eq!(strings("x = 'p' f'a{b}c' 'q'\n"), ["pa", "cq"]);
     assert_eq!(strings("x = f'{{a}}'\n"), ["{a}"]);
     assert_eq!(strings("x = f'{d[\"k\"]}'\n"), ["k", "", ""]);
+    // a hole whose last token is a string closes its run at the hole's end (reached by the real tree's `hm_shape.py` until
+    // feature 449 T129 deleted it)
+    assert!(strings("x = f'{\"k\"}'\n").contains(&"k".to_owned()));
     assert_eq!(strings("x = f'{a!r:>{w}3}z'\n"), [">3", "", "z"]);
     assert_eq!(strings("x = f'{a != b}'\n"), ["", ""]);
     assert_eq!(strings("x = f'{d[1:2]}'\n"), ["", ""]);

@@ -26,7 +26,7 @@ CG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [ -d "$ROOT/rust/phases" ] || [ -d "$ROOT/l7r/diagram/hamletgen" ] || exit 0
 
 if [ -n "${CLAIMS_OK:-}" ]; then
-  if ! python3 "$CG_HERE/../hooks/lib/hm_escape.py" reason-ok <<<"$CLAIMS_OK" >/dev/null; then
+  if ! "$CG_HERE/l7r-gate.sh" escape reason-ok <<<"$CLAIMS_OK" >/dev/null; then
     guard_log claims-gate blocked "$CLAIMS_OK" CLAIMS_OK-no-reason
     printf 'claims-gate: CLAIMS_OK needs a REASON, not just a value - two words and eight characters.\n' >&2
     printf 'It ships with the push: say which claims are owed or newly found and why they may land unchecked.\n' >&2

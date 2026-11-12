@@ -14,6 +14,8 @@ use serde_json::{json, Map, Value};
 use crate::cohort::git;
 use crate::Reply;
 
+pub mod usage;
+
 /// Two records written by one process in one second never share a name.
 static SERIAL: AtomicU64 = AtomicU64::new(0);
 
@@ -220,11 +222,16 @@ fn land_tooling(args: &[String]) -> Result<(), String> {
 pub fn log_cli(args: &[String], root: &Path) -> Reply {
     let rest = args.get(1..).unwrap_or(&[]);
     let done = match args.first().map(String::as_str) {
+        Some("usage") => return usage::record_cli(rest, root),
+        Some("goals") => return usage::goals_cli(rest, root),
         Some("run") => run_record(rest, &RunEnv::read(), root),
         Some("bypass") => bypass(rest, root),
         Some("gate-bypass") => gate_bypass(rest, root),
         Some("land-tooling") => land_tooling(rest),
-        _ => Err("usage: l7r-gate log run | bypass | gate-bypass | land-tooling ...".to_owned()),
+        _ => Err(
+            "usage: l7r-gate log run | bypass | gate-bypass | land-tooling | usage | goals ..."
+                .to_owned(),
+        ),
     };
     match done {
         Ok(()) => reply(String::new(), String::new(), 0),

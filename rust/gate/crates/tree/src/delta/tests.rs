@@ -38,10 +38,11 @@ fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     git(&dir, &["config", "user.email", "t@t"]);
     git(&dir, &["config", "user.name", "t"]);
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
-    std::fs::create_dir_all(dir.join("scripts/hooks/lib")).unwrap();
-    for rel in ["gates/codeid.py", "hooks/lib/usage_log.py"] {
-        std::fs::copy(real.join(rel), dir.join("scripts").join(rel)).unwrap();
-    }
+    std::fs::copy(
+        real.join("gates/codeid.py"),
+        dir.join("scripts/gates/codeid.py"),
+    )
+    .unwrap();
     put(&dir, "l7r/diagram/m.py", "def f():\n    return 1\n");
     put(&dir, "docs/a.md", "a\n");
     commit(&dir);

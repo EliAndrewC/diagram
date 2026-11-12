@@ -38,7 +38,7 @@ RG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # environment variable's VALUE is its reason, and `REVIEW_GATE_OK=1` explains nothing to the person
 # auditing later, which is the whole point (GM 2026-08-30).
 if [ -n "${REVIEW_GATE_OK:-}" ]; then
-  if ! python3 "$RG_HERE/../hooks/lib/hm_escape.py" reason-ok <<<"$REVIEW_GATE_OK" >/dev/null; then
+  if ! "$RG_HERE/l7r-gate.sh" escape reason-ok <<<"$REVIEW_GATE_OK" >/dev/null; then
     guard_log review-gate blocked "$REVIEW_GATE_OK" REVIEW_GATE_OK-no-reason
     printf 'review-gate: REVIEW_GATE_OK needs a REASON, not just a value - two words and eight characters.\n' >&2
     printf 'It ships with the push and is what a later audit reads, so say what makes this case exempt.\n' >&2

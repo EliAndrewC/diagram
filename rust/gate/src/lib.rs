@@ -84,6 +84,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
         Some("content-ids") => content_ids(&args[1..], Path::new("."), "python3"),
         Some("log") => logs::log_cli(&args[1..], Path::new(".")),
+        Some("escape") => logs::usage::escape_cli(&args[1..], &mut std::io::stdin()),
         Some("json-field") => logs::json_field(&args[1..]),
         Some("ruff-toml") => logs::ruff_cli(&mut std::io::stdin()),
         Some("preflight") => preflight::cli(&args[1..]),
@@ -132,6 +133,7 @@ mod tests {
         assert_eq!(unknown.code, 2);
         assert!(unknown.stderr.contains("no subcommand no-such-verb"));
         assert!(cli(&[]).stderr.contains("(none given)"));
+        assert_eq!(cli(&["escape".to_owned()]).code, 2);
     }
 
     #[test]

@@ -27,7 +27,7 @@ PG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$PG_HERE/../hooks/lib/guardlog.sh"
 
 if [ -n "${PLAN_REVIEW_OK:-}" ]; then
-  if ! python3 "$PG_HERE/../hooks/lib/hm_escape.py" reason-ok <<<"$PLAN_REVIEW_OK" >/dev/null; then
+  if ! "$PG_HERE/l7r-gate.sh" escape reason-ok <<<"$PLAN_REVIEW_OK" >/dev/null; then
     guard_log plan-gate blocked "$PLAN_REVIEW_OK" PLAN_REVIEW_OK-no-reason
     printf 'plan-gate: PLAN_REVIEW_OK needs a REASON, not just a value - two words and eight characters.\n' >&2
     printf 'It ships with the push and is what a later audit reads: say why these plans need no review.\n' >&2

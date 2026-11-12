@@ -73,7 +73,6 @@ fn template() -> &'static PathBuf {
         );
         let tree = root.join("tree");
         script(&tree.join("scripts/gates/l7r-gate.sh"), "[ -f .making ]");
-        script(&tree.join("scripts/hooks/lib/usage_log.py"), "exit 0");
         script(&tree.join("scripts/reviews/layout_carry.sh"), "echo carried");
         root
     })
@@ -165,7 +164,6 @@ impl World {
             session: &session,
             main: self.main.clone(),
             tree: self.tree.clone(),
-            python: "sh",
             solo_forced: Some(
                 if self.tree.join("scripts/hooks/lib/solo").exists() {
                     "1"
@@ -468,10 +466,15 @@ fn an_idle_prompt_syncs_the_clone_unless_it_is_the_only_session() {
             w.clone.display()
         )
     );
+    // the merge leaves its one usage line in the clone's own repository (feature 449 T129)
+    let usage = std::fs::read_to_string(w.clone.join(".git/tool-usage.jsonl")).unwrap();
+    assert!(usage
+        .contains("\"tool\": \"clone-sync-merge\", \"kind\": \"step\", \"outcome\": \"changed\""));
     std::fs::write(w.clone.join(".git/sync-rc"), "1").unwrap();
     assert!(w
         .prompt("s", "")
         .ends_with("resolve before modifying the repo: sync-with-main: NOTE kept\nsaid"));
+    std::fs::create_dir_all(w.tree.join("scripts/hooks/lib")).unwrap();
     std::fs::write(w.tree.join("scripts/hooks/lib/solo"), "").unwrap();
     assert!(w.prompt("s", "").is_empty());
 }

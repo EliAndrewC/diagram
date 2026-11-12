@@ -696,6 +696,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T129 (the hook libraries no task held, the phase-3 census of 2026-11-12)": {
+   "sha256": "5773a40beb2fd5051193d615a12c97ff3cfebfb07312e343b58c9ee45d609e88",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T129 Approach (checklist part A)": {
+   "sha256": "37272e4d3fabb9e048c65455f627824f8d938f50ada3e3f52ef137262ff7b221",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8265,6 +8277,96 @@
      "why": "Adjudicated apart from the '٣-x' case: none is a case any kept test or suite holds, and the real tree reaches none (every real directory's measurements.json is read in the 1,469 real cases with no difference), so FR-002's binding set is untouched. The traceback normalization is ask:449-usage-text's ruling that a traceback's text is not bound; utc and scratch paths are run-specific, not outputs."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T129 (the hook libraries no task held, the phase-3 census of 2026-11-12)",
+    "### T129 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T129-where",
+     "summary": "usage_log, hm_escape and hm_shape ported onto the guard crate's shared/ (shared::usage the one writer, shared::escape, shared::shape/wait); gate commands under `log usage|goals` and a new `escape reason-ok` verb",
+     "class": "within",
+     "why": "FR-001 places these libraries in phase 3 and ask:449-phase3-remainder names T129 the hook libraries; where the port lives and how its commands are named is design inside the request."
+    },
+    {
+     "id": "T129-callers",
+     "summary": "every caller repointed: Makefile LOGESCAPE/idle-tests/goals line, the gate shells, sync-with-main, land-tooling by command; clone_sync_hooks in process; memo_check, phase_sources, check-entry-headings, tick-task and escape_log stay Python and run the gate command",
+     "class": "within",
+     "why": "FR-003 (one implementation runs once the port passes); the Python callers keep their ruled placements (memo_check T140, check-entry-headings phase 4, phase_sources T066/phase 3, tick-task T131) and reach the port by command, which no ruling forbids."
+    },
+    {
+     "id": "T129-guardlog-dead",
+     "summary": "guardlog.sh's escape_or_refuse and guard_cmd deleted rather than repointed",
+     "class": "within",
+     "why": "nothing calls either once every guard is Rust (observed 2026-11-12 by git grep of both names, search space stated); removing dead code changes no output FR-002 binds."
+    },
+    {
+     "id": "T129-hm_tree",
+     "summary": "hm_tree.py deleted unported",
+     "class": "within",
+     "why": "its port is shared::tree since T010; the census (git grep over Makefile, *.mk, *.sh, *.py, *.rs, .claude/, tests/) shows only comments and one recorded refusal naming it; GM 2026-11-10 'Yes please delete Python files once their Rust ports land' and GM 2026-11-09 on not porting what nothing runs."
+    },
+    {
+     "id": "T129-hm_shape-case",
+     "summary": "hm_shape gets no command; its one outside caller, a no-poll suite case, becomes a unit test of shared::wait checking the same condition",
+     "class": "within",
+     "why": "hm_shape's port landed at T003/T009 with its FR-002 comparison; the case keeps its assertion (the escaped wait it builds parses under bash -n), moving with the piece it tests as FR-001 moves surviving tests; no case is dropped."
+    },
+    {
+     "id": "T129-no-flock",
+     "summary": "the usage writer appends one line in one append-mode write and takes no flock, where the Python took an exclusive lock",
+     "class": "within",
+     "why": "FR-002 binds verdicts and outputs, and a lock is neither; a single O_APPEND write of a short line on a local file is not interleaved, so the log's contents are the same, and the landed, reviewed Rust writers (stamp.rs, checks/passes.rs) already write this way. Not ruled on cost grounds."
+    },
+    {
+     "id": "T129-escape-floor",
+     "summary": "escape::enough splits words on Python's whitespace (x1c-x1f included) for every guard; reason-ok reads stdin with surrogateescape as the C.UTF-8 Python did",
+     "class": "within",
+     "why": "moves landed Rust toward the Python it replaced at the one edge the floor could differ, which is FR-002's direction, not a departure from it."
+    },
+    {
+     "id": "T129-tool-signals-skip",
+     "summary": "check tool-signals reads `log usage` as a record marker, skips Rust test files, and names the command in its fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "the check now reads less (Rust test files). Its purpose is that every registered tool records its usage; a test file is not a tool and holds no tool's record marker, while read literally the check would refuse the port itself on fixture scratch names. The block measured every registered tool still found (exit 0, suite green), and old-form markers are still accepted, so the purpose is intact."
+    },
+    {
+     "id": "T129-defects",
+     "summary": "test-gate-write-hooks.sh no longer copies the deleted preflight.py; clone-sync context drops the python field nothing read once the run is in process",
+     "class": "within",
+     "why": "removing a dangling copy and an unread field changes no verdict or output; both follow from the port itself."
+    },
+    {
+     "id": "T129-diff-normalize",
+     "summary": "FR-002 differential (7,854 cases, none differing) normalizes utc, the guard-log entry's file name, argparse's own text where both exit 2, and a traceback's text",
+     "class": "within",
+     "why": "timestamps and generated file names are not comparable outputs; argparse text and traceback text are exactly what ask:449-usage-text rules unbound, exit status and stdout held."
+    },
+    {
+     "id": "T129-diff-help",
+     "summary": "the differential normalizes --help output",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:449-usage-text binds --help only where a kept test or suite case holds it or a caller reads it; make hooks-test HOOKS_ALL=1 is green on 54 suites with the Rust in place, so no kept case binds --help text that differs, and the plan names no caller reading it. The narrowing sits inside the ruling's own condition."
+    },
+    {
+     "id": "T129-goals-stale-ok",
+     "summary": "the Makefile's parse-time goals line runs the gate wrapper with L7R_GATE_STALE_OK=1 (runs the binary present, builds only when none exists; a failed build records nothing for that run)",
+     "class": "within",
+     "why": "FR-011 requires the loop not drift back to slow commands, and before the cut make rust-test never built l7r-gate; a stale binary writes the same line. The failed-build case is outside every case FR-002 binds ('every case its tests and its suites hold'), so not recording there is no departure from it."
+    },
+    {
+     "id": "T129-census-leftovers",
+     "summary": "at the cut the four names survive only in provenance comments, test-check-tool-signals.sh's old-form fixtures, and measurements.json phase-1-python-share's historical values",
+     "class": "within",
+     "why": "the census (git grep -E of the four names) shows nothing runs them; phase-1-python-share's command runs none of them, so FR-001's rewrite-in-the-porting-commit clause does not fire."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -14340,6 +14442,94 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Adjudicated apart from the '٣-x' case: none is a case any kept test or suite holds, and the real tree reaches none (every real directory's measurements.json is read in the 1,469 real cases with no difference), so FR-002's binding set is untouched. The traceback normalization is ask:449-usage-text's ruling that a traceback's text is not bound; utc and scratch paths are run-specific, not outputs."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T129": {
+   "section_sha256": "e59d5311768e00a8bf7e3e5969a127caf71fac15fef335a0de6bb6768340e810",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T129-where",
+     "summary": "usage_log, hm_escape and hm_shape ported onto the guard crate's shared/ (shared::usage the one writer, shared::escape, shared::shape/wait); gate commands under `log usage|goals` and a new `escape reason-ok` verb",
+     "class": "within",
+     "why": "FR-001 places these libraries in phase 3 and ask:449-phase3-remainder names T129 the hook libraries; where the port lives and how its commands are named is design inside the request."
+    },
+    {
+     "id": "T129-callers",
+     "summary": "every caller repointed: Makefile LOGESCAPE/idle-tests/goals line, the gate shells, sync-with-main, land-tooling by command; clone_sync_hooks in process; memo_check, phase_sources, check-entry-headings, tick-task and escape_log stay Python and run the gate command",
+     "class": "within",
+     "why": "FR-003 (one implementation runs once the port passes); the Python callers keep their ruled placements (memo_check T140, check-entry-headings phase 4, phase_sources T066/phase 3, tick-task T131) and reach the port by command, which no ruling forbids."
+    },
+    {
+     "id": "T129-guardlog-dead",
+     "summary": "guardlog.sh's escape_or_refuse and guard_cmd deleted rather than repointed",
+     "class": "within",
+     "why": "nothing calls either once every guard is Rust (observed 2026-11-12 by git grep of both names, search space stated); removing dead code changes no output FR-002 binds."
+    },
+    {
+     "id": "T129-hm_tree",
+     "summary": "hm_tree.py deleted unported",
+     "class": "within",
+     "why": "its port is shared::tree since T010; the census (git grep over Makefile, *.mk, *.sh, *.py, *.rs, .claude/, tests/) shows only comments and one recorded refusal naming it; GM 2026-11-10 'Yes please delete Python files once their Rust ports land' and GM 2026-11-09 on not porting what nothing runs."
+    },
+    {
+     "id": "T129-hm_shape-case",
+     "summary": "hm_shape gets no command; its one outside caller, a no-poll suite case, becomes a unit test of shared::wait checking the same condition",
+     "class": "within",
+     "why": "hm_shape's port landed at T003/T009 with its FR-002 comparison; the case keeps its assertion (the escaped wait it builds parses under bash -n), moving with the piece it tests as FR-001 moves surviving tests; no case is dropped."
+    },
+    {
+     "id": "T129-no-flock",
+     "summary": "the usage writer appends one line in one append-mode write and takes no flock, where the Python took an exclusive lock",
+     "class": "within",
+     "why": "FR-002 binds verdicts and outputs, and a lock is neither; a single O_APPEND write of a short line on a local file is not interleaved, so the log's contents are the same, and the landed, reviewed Rust writers (stamp.rs, checks/passes.rs) already write this way. Not ruled on cost grounds."
+    },
+    {
+     "id": "T129-escape-floor",
+     "summary": "escape::enough splits words on Python's whitespace (x1c-x1f included) for every guard; reason-ok reads stdin with surrogateescape as the C.UTF-8 Python did",
+     "class": "within",
+     "why": "moves landed Rust toward the Python it replaced at the one edge the floor could differ, which is FR-002's direction, not a departure from it."
+    },
+    {
+     "id": "T129-tool-signals-skip",
+     "summary": "check tool-signals reads `log usage` as a record marker, skips Rust test files, and names the command in its fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "the check now reads less (Rust test files). Its purpose is that every registered tool records its usage; a test file is not a tool and holds no tool's record marker, while read literally the check would refuse the port itself on fixture scratch names. The block measured every registered tool still found (exit 0, suite green), and old-form markers are still accepted, so the purpose is intact."
+    },
+    {
+     "id": "T129-defects",
+     "summary": "test-gate-write-hooks.sh no longer copies the deleted preflight.py; clone-sync context drops the python field nothing read once the run is in process",
+     "class": "within",
+     "why": "removing a dangling copy and an unread field changes no verdict or output; both follow from the port itself."
+    },
+    {
+     "id": "T129-diff-normalize",
+     "summary": "FR-002 differential (7,854 cases, none differing) normalizes utc, the guard-log entry's file name, argparse's own text where both exit 2, and a traceback's text",
+     "class": "within",
+     "why": "timestamps and generated file names are not comparable outputs; argparse text and traceback text are exactly what ask:449-usage-text rules unbound, exit status and stdout held."
+    },
+    {
+     "id": "T129-diff-help",
+     "summary": "the differential normalizes --help output",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:449-usage-text binds --help only where a kept test or suite case holds it or a caller reads it; make hooks-test HOOKS_ALL=1 is green on 54 suites with the Rust in place, so no kept case binds --help text that differs, and the plan names no caller reading it. The narrowing sits inside the ruling's own condition."
+    },
+    {
+     "id": "T129-goals-stale-ok",
+     "summary": "the Makefile's parse-time goals line runs the gate wrapper with L7R_GATE_STALE_OK=1 (runs the binary present, builds only when none exists; a failed build records nothing for that run)",
+     "class": "within",
+     "why": "FR-011 requires the loop not drift back to slow commands, and before the cut make rust-test never built l7r-gate; a stale binary writes the same line. The failed-build case is outside every case FR-002 binds ('every case its tests and its suites hold'), so not recording there is no departure from it."
+    },
+    {
+     "id": "T129-census-leftovers",
+     "summary": "at the cut the four names survive only in provenance comments, test-check-tool-signals.sh's old-form fixtures, and measurements.json phase-1-python-share's historical values",
+     "class": "within",
+     "why": "the census (git grep -E of the four names) shows nothing runs them; phase-1-python-share's command runs none of them, so FR-001's rewrite-in-the-porting-commit clause does not fire."
     }
    ],
    "verdict": "CLEAR"

@@ -6,6 +6,7 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 
+use super::py_text::{is_space, strip};
 use super::shape::{strip_heredocs, strip_quotes};
 
 const SEARCHERS: [&str; 7] = ["grep", "egrep", "fgrep", "rg", "ack", "ag", "ripgrep"];
@@ -20,8 +21,6 @@ static ASSIGN: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^[A-Za-z_][A-Za-z0-9_]*=\S*$").expect("the assignment pattern"));
 static QUOTED_REASON: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"^\s*(["'])(.*?)\1"#).expect("the quoted reason pattern"));
-static WORDS: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"[\s\-/]+").expect("the word pattern"));
 
 /// The reason given for `token`'s escape in `text`, or "" (`escape_reason`): `TOKEN: why` to the end of its line, `TOKEN="why"`,
 /// `TOKEN='why'` or `TOKEN=why`.
@@ -62,10 +61,22 @@ pub fn reason(text: &str, token: &str) -> String {
 }
 
 /// Does `why` clear the floor - eight characters and two words, a hyphen or a slash splitting words (`reason_is_enough`)?
+///
+/// The words are counted as `re.split(r"[\s\-/]+", why.strip())` counts its pieces - one more than the runs of separators, an empty
+/// piece at either end counted - with Python's whitespace, which holds `\x1c`-`\x1f` where the regex crate's `\s` does not (feature 449
+/// T129: the reason floor's command, `l7r-gate escape reason-ok`, is held to `hm_escape.py`'s).
 #[must_use]
 pub fn enough(why: &str) -> bool {
-    why.chars().count() >= REASON_CHARS
-        && WORDS.split(why.trim()).filter_map(Result::ok).count() >= REASON_WORDS
+    let separates = |c: char| is_space(c) || c == '-' || c == '/';
+    let mut words = 1;
+    let mut in_run = false;
+    for c in strip(why).chars() {
+        if separates(c) && !in_run {
+            words += 1;
+        }
+        in_run = separates(c);
+    }
+    why.chars().count() >= REASON_CHARS && words >= REASON_WORDS
 }
 
 /// Did the session put `token` in `cmd` as an escape, not merely mention it (`escape_used`)?
@@ -159,6 +170,9 @@ mod tests {
     fn a_reason_needs_two_words_and_eight_characters_a_hyphen_splitting() {
         assert!(enough("CI is down") && enough("read-only") && enough("a/b-cdefg"));
         assert!(!enough("required") && !enough("ok") && !enough("because"));
+        // Python's whitespace splits words, and a separator at either end makes an empty word, as `re.split` does
+        assert!(enough("abcd\x1cefgh") && enough("-abcdefgh") && enough(" abcdefgh-"));
+        assert!(!enough(" abcdefgh "));
     }
 
     #[test]

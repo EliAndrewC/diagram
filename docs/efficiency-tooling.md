@@ -90,12 +90,12 @@ the thing they save: twenty `spec-fidelity` rounds over two features cost 91 min
 eight of those findings were mechanical.
 
 **Every guard's ESCAPE is an invocation too, since feature 169.** Every token matched in a COMMAND goes through
-`hm_escape.py escape <TOKEN>`; before that they were bare substring tests, so a grep for a token or a
+the escape rule (`hm_escape.py escape <TOKEN>` then; the guard's `shared::escape` since feature 449); before that they were bare substring tests, so a grep for a token or a
 commit message quoting it escaped the guard - and, in `measure` and `gate`, also reset the state that
 decides whether the NEXT expensive command is refused. `main-tree-hooks` joined the roster in the same
 feature: a bare `cd` into the mirror root followed by a write or a commit, which none of the three
 existing main-write guards could see because none of them sees a `git commit`. **Feature 204
-(2026-09-07) turned it from a refusal into a REWRITE**: it judges where a write LANDS (`hm_tree.py`,
+(2026-09-07) turned it from a refusal into a REWRITE**: it judges where a write LANDS (`hm_tree.py` then, the guard's `shared::tree` since feature 449,
 the command's own cds, variables and subshells walked from the payload's cwd) and moves one that would
 land in main to the session's clone with `additionalContext`, because its own firing log showed 173
 refusals in a week of which 2 were the shape it was built for. The same feature made EVERY guard's

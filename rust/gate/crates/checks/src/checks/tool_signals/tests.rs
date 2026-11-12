@@ -112,3 +112,29 @@ fn an_inventory_it_cannot_read_fails_the_check_as_the_python_import_failed_it() 
         assert!(got.code == 1 && got.stderr.starts_with("check-tool-signals: "));
     }
 }
+
+#[test]
+fn a_run_recorded_through_the_gates_command_counts_and_names_its_tool() {
+    // feature 449 T129: `usage_log.py` left, and a check records by `l7r-gate log usage`
+    let r = clean();
+    put(
+        &r,
+        "scripts/gates/gatey.py",
+        "# `l7r-gate log usage`\nsubprocess.run([gate, \"log\", \"usage\", \"--tool\", \"gatey\", \"--kind\", \"check\"])\n",
+    );
+    assert_eq!(ask(&r).code, 0);
+    put(
+        &r,
+        "scripts/tools/s.sh",
+        "\"$G/l7r-gate.sh\" log usage --tool shelly --kind step --outcome changed\n",
+    );
+    assert!(ask(&r).stderr.contains("records `shelly`"));
+    // a Rust test module's fixtures record nothing
+    let r = clean();
+    put(
+        &r,
+        "rust/gate/src/x/tests.rs",
+        "// usage_log\nconst USAGE_LOG_TOOL: &str = \"fixture\";\n",
+    );
+    assert_eq!(ask(&r).code, 0);
+}

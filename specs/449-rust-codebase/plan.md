@@ -381,28 +381,35 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T129 (<why: the finding or measurement that files it>)
+### T129 (the hook libraries no task held, the phase-3 census of 2026-11-12)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `scripts/hooks/lib/usage_log.py`, `hm_escape.py` and `hm_shape.py` ported onto the guard's `shared/` (the new `shared::usage`, the one writer of `.git/tool-usage.jsonl`; `shared::escape`, the reasons' floor; `shared::shape` and `shared::wait`, ported at T003 and T009), with two gate commands for the shell and Python callers (`l7r-gate log usage|goals`, `l7r-gate escape reason-ok`); every caller repointed; the three and `hm_tree.py`, which nothing ran, deleted in the same cut: before the cut only comments (`main_tree_hooks.rs`, `shared/tree.rs`, two lines of `house_style_cases.rs`) and one recorded command in `tests/hooks/fixtures/guard-refusals-2026-09.json` named it, no script, recipe, hook or module (observed 2026-11-12, method: `git grep -n hm_tree HEAD` over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/` and `tests/`), its port the guard's `shared::tree` since T010.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (FR-001, FR-002, FR-003, `ask:449-usage-text`, `ask:449-phase3-remainder`):
+   - Where it lives: the guard crate's `shared/`, which the gate builds on and the guards cannot reach past, so the gate's writers (`stamp::record_for`, `land`, `speckit-todo`, `ledger-owed`, `planhold-restore`) and the clone-sync guard call one `shared::usage::record` in process, where `stamp.rs` and `checks/passes.rs` each formatted their own line. The commands sit under the gate's `log` (beside `run` and `bypass`) and a new `escape` verb.
+   - The callers: the Makefile's `LOGESCAPE`, `idle-tests` and its parse-time goals line, the five `*-gate.sh`, `one-gate.sh`, `sync-with-main.sh` (three places) and `land-tooling.sh` (two) run the gate commands; `clone_sync_hooks.rs` records in process; `memo_check.py`, `phase_sources.py`, `check-entry-headings.py` and `tick-task.py`, which stay Python, run `log usage` by command once after their work, where they imported it, and `escape_log.py` runs `escape reason-ok` once a call. `guardlog.sh`'s `escape_or_refuse` and `guard_cmd` are deleted, not repointed: nothing called either once every guard was Rust (observed 2026-11-12, method: `git grep` of both names). `hm_shape` gets no command: its one outside caller, a no-poll suite case, became a unit test of `shared::wait` that checks the same condition, the escaped wait it builds parsing under `bash -n`.
+   - The usage writer appends one line in one write in append mode and takes no `flock`, where the Python took an exclusive one: the Rust writers it replaces already wrote so (HEAD's `tree/src/stamp.rs`, "one write of one short line in append mode", and `shared/checks/passes.rs`), landed and reviewed, and a single append-mode write of a short line is not interleaved by another on a local file; a lock would cost every `make` a process (`File::lock` needs Rust 1.89, the toolchain is 1.87, and the crate's lock helper starts `flock`).
+   - `escape::enough` now splits words on Python's whitespace (`\x1c`-`\x1f` included, as `re.split` does), moving every guard toward the Python at the one edge the floor could differ; `reason-ok` reads stdin as this container's `C.UTF-8` Python did (`surrogateescape`, a byte not UTF-8 one character).
+   - `check tool-signals` also reads `log usage` as a tool's record marker, skips Rust test files (their fixtures name scratch tools) and names the command in its fix; every registered tool is still found (observed 2026-11-12, method: `scripts/gates/l7r-gate.sh check tool-signals`, exit 0 on the working tree, its suite green in `make hooks-test HOOKS_ALL=1`). Two defects fixed on the way: `test-gate-write-hooks.sh` copied a `preflight.py` that no longer exists, and clone-sync's context carried a `python` field nothing read once the run was in process.
+   - The same outputs (FR-002): HEAD's Python from a detached worktree against the Rust, each case set up identically, exit, stdout, stderr and every file in the case's repositories compared: 7,854 cases, none differing, 399 failing on both sides (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t129/diff.py`, `results.json`). Among them 24 argument forms of `record` in three directories and three session values, every argparse refusal, `goals` with up to four goals, three unwritable logs, the 287 tool, kind and outcome triples `.git/tool-usage.jsonl` holds, 6,383 reasons to `reason-ok` (scratch edges, 3,825 real escape reasons from the guard log, every bypass record's `why`, the bash-parse corpus), the gates' and `LOGESCAPE`'s two stdin forms, `escape_log.escape()` end to end (240), and every caller's line as written (observed 2026-11-12, method: the same harness). Normalizations: a usage line's and a guard-log entry's `utc`, the entry's file name, argparse's own text where both exit 2, `--help`, a traceback's text.
+   - Timing: the cases took 172.7 s of process time in Python against 81.8 s in Rust (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t129/diff.py`). `make _reference`, which runs the parse-time goals line every `make` pays, 33.0 ms against 16.4 ms, best of nine (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t129/run2.log`). The goals line runs the gate's wrapper with `L7R_GATE_STALE_OK=1`, which runs the binary there is, stale or not, and builds none, building only where there is no binary: without it a `make rust-test` after a gate-crate edit would rebuild the release `l7r-gate` at the Makefile's parse, which `make rust-test` never built before the cut (its recipe runs only `l7r-gate.sh rust`, the separate `l7r-rust` binary T93 made for this loop; `make static`'s already ran `l7r-gate.sh check`), and a stale binary writes the same line. Measured: a one-line edit of the claims crate then `make rust-test CRATE=rust/gate/crates/claims`, three times, 0.61, 0.60 and 0.60 s, `l7r-gate` rebuilt in none (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t129/sc006.sh`, the binary's time before and after each run). A run with no binary at all builds it as before, and one whose build fails records nothing for that run.
+   - The census at the cut: provenance comments, the old-form fixtures of `test-check-tool-signals.sh` (still accepted: the word stays a marker the check reads) and `specs/449-rust-codebase/measurements.json`'s `phase-1-python-share`, whose values name the four as a census of 2026-11-08 and whose command runs none of them (observed 2026-11-12, method: `git grep -E "usage_log|hm_escape|hm_shape|hm_tree"`). The checks: `make static` clean on 20 crates, `make rust-test` green (the guard 556 tests, `core` 71, `checks` 101), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check clean (observed 2026-11-12, method: those commands). One `make static` run went red once on `ledger_passes::settle::tests::a_kept_cost_is_served_while_its_transcript_stands` while the harness loaded the machine, green on two reruns and the last run, in code this task did not change (observed 2026-11-12, method: the port's runs), the flake T120 recorded.
 
 ### T129 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The hook libraries are Rust, one writer of the usage log, no Python started on a `make` parse.
+2. **The constraints.** FR-001, FR-002 and FR-003, `ask:449-phase3-remainder`.
+3. **Where each comes from.** G: the standing approval to delete ported Python; R: the ruling; O: the census, the differential and the timings above.
+4. **Do they describe the world here?** Run on this clone's real usage log, guard log and bypass records, measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t129/diff.py`).
+5. **The order.** First of the phase-3 remainder: most other slices import `usage_log`.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The differential's 7,854 cases with none differing, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T130 (<why: the finding or measurement that files it>)

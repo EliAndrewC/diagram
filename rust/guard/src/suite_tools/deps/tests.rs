@@ -346,10 +346,10 @@ fn the_limits_on_how_far_a_helper_reaches_hold_over_the_real_tree() {
         );
     }
     // a floor: a derivation that stopped following the graph would make these small, which is the failure that passes a broken suite
-    assert!(reach("hm_escape.py") + 3 >= guards.len());
     assert!(reach("guardlog.sh") + 3 >= guards.len());
     let deps = t.deps_for("sync-with-main.sh");
-    assert!(names(&deps, "hm_shape.py") && names(&deps, "guardlog.sh"));
+    // feature 449 T129: `hm_shape.py` and `hm_escape.py` are gone; the escape read is the gate's, by `l7r-gate.sh`
+    assert!(names(&deps, "l7r-gate.sh") && names(&deps, "guardlog.sh"));
 }
 
 #[test]
@@ -360,7 +360,7 @@ fn over_the_real_tree_the_rules_hold() {
     let helpers = |g: &str| t.deps_for(g).len();
     assert!(helpers("claims-gate.sh") < t.index.len());
     let deps = t.deps_for("claims-gate.sh");
-    assert!(names(&deps, "hm_escape.py"));
+    assert!(names(&deps, "guardlog.sh"));
     let on_disk = std::fs::read_dir(root.join("scripts/hooks/lib"))
         .unwrap()
         .flatten();

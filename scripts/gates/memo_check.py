@@ -126,8 +126,13 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1] / "hooks" / "lib"))
-    sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
-    import usage_log  # noqa: E402 - feature 406 T03 (D162): every refusing check records its run
+    import subprocess  # noqa: PLC0415
 
-    sys.exit(usage_log.exited("memo_check", main()))
+    _code = main()
+    # feature 406 T03 (D162): every refusing check records its run - by the gate's one usage-log writer, `l7r-gate log usage`, run by
+    # command (feature 449 T129, FR-003), and never failing the check
+    with contextlib.suppress(OSError):
+        subprocess.run([str(__import__("pathlib").Path(__file__).resolve().parent / "l7r-gate.sh"), "log", "usage", "--tool", "memo_check",
+                        "--kind", "check", "--outcome", "refused" if _code else "passed"],
+                       stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+    sys.exit(_code)

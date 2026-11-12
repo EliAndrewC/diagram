@@ -1,7 +1,7 @@
 use serde_json::json;
 
-use super::{log_pass_at, usage};
-use crate::shared::checks::testkit::{clone_at, dir};
+use super::log_pass_at;
+use crate::shared::checks::testkit::dir;
 
 fn transcript(lines: &[String]) -> String {
     format!("{}\n", lines.join("\n"))
@@ -150,17 +150,6 @@ fn only_a_finished_foreground_launch_is_a_pass() {
         &json!({"tool_response": 3, "tool_input": 4}),
         1.0
     ));
-}
-
-#[test]
-fn a_step_leaves_a_tool_usage_line() {
-    let root = clone_at("usage");
-    usage(&root.join(".git"), "planhold-restore", "step", "changed");
-    let line = std::fs::read_to_string(root.join(".git/tool-usage.jsonl")).unwrap();
-    assert!(
-        line.contains("\"tool\": \"planhold-restore\"")
-            && line.contains("\"outcome\": \"changed\"")
-    );
 }
 
 #[test]

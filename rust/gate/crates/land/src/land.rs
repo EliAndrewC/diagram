@@ -577,26 +577,14 @@ fn spec_dir(root: &Path, feature: &str) -> Option<PathBuf> {
     (hits.len() == 1).then(|| hits.remove(0))
 }
 
-/// The run recorded in the working directory's repository (`usage_log.exited("land", code)`).
+/// The run recorded in the working directory's repository (`usage_log.exited("land", code)`), by the one writer (feature 449 T129).
 fn record(cwd: &Path, code: i32) {
-    let common = Command::new("git")
-        .arg("-C")
-        .arg(cwd)
-        .args(["rev-parse", "--path-format=absolute", "--git-common-dir"])
-        .output()
-        .ok()
-        .filter(|o| o.status.success())
-        .map(|o| strip(&String::from_utf8_lossy(&o.stdout)).to_owned())
-        .unwrap_or_default();
-    if !common.is_empty() {
-        let outcome = if code == 0 { "passed" } else { "refused" };
-        l7r_guard::shared::checks::passes::usage(
-            Path::new(&common),
-            USAGE_LOG_TOOL,
-            "check",
-            outcome,
-        );
-    }
+    l7r_guard::shared::usage::record(
+        cwd,
+        USAGE_LOG_TOOL,
+        "check",
+        l7r_guard::shared::usage::exited(code),
+    );
 }
 
 fn reply(code: i32) -> Reply {
