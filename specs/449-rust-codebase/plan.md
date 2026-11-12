@@ -607,27 +607,5 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T141 (the review-round guard's Python hop, found by T131's plan review)
-
-- **Approach**: `rust/guard/src/guards/review_round_hooks.rs` asks the plan gate for the active feature's directory and task by running `scripts/gates/l7r-gate.sh plan door active-task <root>` itself and reading its JSON, where it started `python3` on an inline snippet that ran that same command and read the same JSON, on each spec-fidelity dispatch.
-
-   **Decisions** (FR-001, FR-002; `ask:449-phase1-tools-by-path`, a guard starting no Python on a plain call):
-   - The same answers: a failed run, output that is not JSON, a null directory or an empty task hold nothing, as the snippet's `if d is not None and task` and its raise on bad JSON held nothing; a directory and a task go on to the plan-round cap as before. The guard's tests answer `active-task` from the gate stub where they ran the snippet under `sh`, and pin each of those four forms (observed 2026-11-12, method: `make rust-test CRATE=rust/guard`, 556 tests green, `rust uncovered --crate rust/guard` printing `{}`).
-   - The census: no other `python3` snippet of the guard asks the gate (observed 2026-11-12, method: `git grep -n "subprocess.run" -- rust/guard/src`, before the change this snippet and a doc comment in `shared/tool.rs`, after it the comment alone). The checks: `make hooks-test` green on the 52 suites it ran, the review-round suite among them, `make static` clean (observed 2026-11-12, method: those commands).
-
-### T141 Approach (checklist part A)
-
-1. **The goal, in the world.** A spec-fidelity dispatch starts no Python in the guard.
-2. **The constraints.** FR-001, FR-002, the phase-1 rule that a guard starts no Python on a plain call.
-3. **Where each comes from.** R: T131's plan review; O: the tests and the census above.
-4. **Do they describe the world here?** The guard's own tests and suite on this clone, measured 2026-11-12 (`make rust-test CRATE=rust/guard`).
-5. **The order.** After T131, which kept the `active-task` verb for this caller.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The guard's tests pinning the four forms, and the census.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
+<!-- plan-archive: T141 to T131 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+<!-- plan-archive: T141 to T141 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
