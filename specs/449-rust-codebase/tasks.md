@@ -359,8 +359,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T109 push-checks' Rust self-tests kept per binary: the six run on every push whether or not the binary changed, 0.28 s of a 3.7 s push at load 0.5, about 0.4 s under the sync-with-main suite's load (2026-11-11) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: push-checks' Rust self-tests kept per binary: a push 8.41-8.53 s to 8.00-8.20 s
-- [ ] T110 rustfmt kept per crate: `rust format --check` keeps nothing, all 19 crates re-checked on every make static, 2.1 s of a core edit's 29 s and of an idle run's 4.6 s (2026-11-11) (the GM 2026-11-11)
+- [x] T110 rustfmt kept per crate: `rust format --check` keeps nothing, all 19 crates re-checked on every make static, 2.1 s of a core edit's 29 s and of an idle run's 4.6 s (2026-11-11) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: rustfmt's check kept per crate: 2.3 s to 0.16 s idle, 0.78 s after a core edit
 - [ ] T111 A coverage pass records the crate's test result: make rust-test then make static run every owed crate's tests twice, plain and under coverage, and no code depends on cfg(coverage) (2026-11-11) (the GM 2026-11-11)
       research: rendering
 - [ ] T112 Comment-insensitive keys: a comment-only Rust edit moves every kept key it reaches, a core comment rerunning 29 s of make static that no check's verdict depends on (2026-11-11) (the GM 2026-11-11)
