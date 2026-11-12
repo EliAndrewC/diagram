@@ -282,8 +282,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T82 Phase 3, claims: claims.py and its satellites
       research: rendering
       verify: DONE. landed: the claims tools in Rust; the .py half behind bundle_door.py, claims_door.py for the Python that stays (ask:449-T82-claims); the plan's .py-half bullet still names all_units, removed in the cut
-- [ ] T83 Phase 3, measure and events: event_log, feature_report, ledger_owed, where_time, stepback_bundle, fix_yield, replay_owing's ruling, the three make audit recipes, land.py and speckit-todo.py
+- [x] T83 Phase 3, measure and events: event_log, feature_report, ledger_owed, where_time, stepback_bundle, fix_yield, replay_owing's ruling, the three make audit recipes, land.py and speckit-todo.py
       research: rendering
+      verify: DONE. all five slices landed: T117 (the ledger's tools), T118 (speckit-todo), T119 (the measure chain), T120 (the step-back and the yields), T121 (land.py, work_budget_view.py, replay_owing.py, three audit sections), with T124 removing the door verbs only land.py asked
 - [x] T84 The first removal under the GM's standing approval (the GM, 2026-11-10: "Yes please delete Python files once their Rust ports land."): the ported `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `agent_census.py`, `access_tags.py`, `downloads.py`, `check-partial-citations.py`, `moves.py`, `hm_record.py`, `hm_house.py` and specs/251's `seeded.py` and `run_seeded.sh`, the docs renamed to their verbs; each later task removes its own ported files at its landing
       research: rendering
       verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed

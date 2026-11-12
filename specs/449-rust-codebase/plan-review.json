@@ -596,7 +596,7 @@
    "declared": "spec-fidelity"
   },
   "### T121 (T83's fifth slice, the landing, `ask:449-T83-scope`)": {
-   "sha256": "382aa1fbee18f49cefdc2ad364304acea0e0e1bcd895af7a45e1ec07b1544f7a",
+   "sha256": "3e7b77266566462c102445d6fb5c1818b6d0fb52cae501e6e5ab147eb07ab8ea",
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
@@ -615,6 +615,30 @@
   },
   "### T124 Approach (checklist part A)": {
    "sha256": "419e1cc2e559e3cc4725b29c4548034d8ae32067d2873fd6f8f35058e09b4338",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)": {
+   "sha256": "8a3121b42a7812b3b054301f241c79f1596a5ec5e1bcbe996a55120bcd6e6c99",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T122 Approach (checklist part A)": {
+   "sha256": "7fe7787dad84502e3fe863b4f33b90fd55ab525d78e2fc511df0f135c22f01dd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T123 (<why: the finding or measurement that files it>)": {
+   "sha256": "08bdb285b6d8fc6221d387c91a73aad41b988e7e7f3de099150975a4c8c9d670",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T123 Approach (checklist part A)": {
+   "sha256": "2939e540c3a2961f203ab622b96e846acbaa3130fded83a27a9f74cd3b68f8eb",
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
@@ -7886,6 +7910,49 @@
      "summary": "Premise and done-check: git grep -n of the four names over scripts and rust finds them only in provenance comments and the door's tests (observed 2026-11-12); exits make static, make rust-test, make land green, red set down or ruled through make arbiter-ask.",
      "class": "within",
      "why": "Enforcement of the removal, not new scope; the figure carries a one-shot label (date and method). Non-blocking note: the stated search space is scripts and rust only - it does not reach the Makefile, tests/, l7r/, .specify/ or specs/, where a name can be held as a string (feature 185); a door caller there would be switched off contrary to FR-003. Running the same git grep over the whole tree before deleting closes that, and does not change this decision's class. ask:449-T82-claims names three Python callers of this door: land.py, replay_owing.py and impl_check.py; the block accounts for the first two and not impl_check.py, which stays a door caller to the phase-3 close. Precondition on the deletion: the census re-run with no pathspec, showing impl_check.py and the Makefile ask none of the four names."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T121 (T83's fifth slice, the landing, `ask:449-T83-scope`)",
+    "### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)",
+    "### T122 Approach (checklist part A)",
+    "### T123 (<why: the finding or measurement that files it>)",
+    "### T123 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T121 landing commit (the one changed bullet)",
+     "summary": "Corrects the earlier claim that the deleting commit's landing was not an engine landing: the land's engine paths include the Rust crates, so the saved HEAD land.py pushed and ticked T121 and then raised loading the deleted work_budget_view.py, losing only the work budget's post-push summary lines on that one landing.",
+     "class": "within",
+     "why": "A record of what the transition landing did, not a new rule. ask:449-T83-scope requires T121's own commit to be the last the Python land.py lands and the one that deletes it; the bullet records that it did (pushed and ticked) before the raise. FR-002 governs the Rust replacement's outputs against the Python, which the replay, command and audit differentials carry unchanged; a one-time loss of an informational summary in the Python's own last run narrows nothing the GM or the spec asked. The rest of the T121 block is byte-identical to the text judged CLEAR."
+    },
+    {
+     "id": "T122 not landed",
+     "summary": "The idle-tests suite's fraction-of-a-second waits are recorded as tried and measured but not landed, because the saving was the suite's alone (35.0 s to about 17 s) and the full hook run did not move (52.1 s before, 53.1 and 54.1 s after).",
+     "class": "within",
+     "why": "This is the GM's 2026-11-12 condition applied as written ('if you identify concrete targets with significant measured expected savings then go ahead ... Otherwise you can just keep working on the port'), and the GM accepted it ('Sounds good') when told T122 did not land. The block's record does not authorize landing it: that would need the condition met, and the GM's later priority on the tests' and landing's time is 'still under the conditions above'."
+    },
+    {
+     "id": "T122 the change as designed",
+     "summary": "IDLE_WAIT_S and IDLE_DEFER_S fixture seams parse fractions (seconds_ms, honored only in a fixture, real waits still whole minutes); the suite's tick, waits and sleeps shortened as fixture CONVENTION constants; every case and check kept.",
+     "class": "within",
+     "why": "Holds FR-002 (34 checks, every case kept, the suspend case still asks a full wait) and moves only the fixture's own constants, none of the guard's real ones. Narrows nothing; and it is not landed."
+    },
+    {
+     "id": "T122 finding on T123's premise",
+     "summary": "The full hook run is held by something the suites share, not by its longest suite or the build lock, so T123's premise (a run bound by its schedule) does not hold.",
+     "class": "within",
+     "why": "A measured finding (dated, with method) that removes a candidate rather than narrowing any request clause."
+    },
+    {
+     "id": "T123 (both blocks)",
+     "summary": "An unfilled task template: no target, no approach, no measurement, no checklist answers.",
+     "class": "within",
+     "why": "Decides nothing, so there is nothing to rule. Filling it in changes the block and owes its own review; a task filed under the 2026-11-12 pre-approval must then name its measured target and expected saving and quote the GM's words, and T122's record says the schedule premise it was presumably filed for does not hold."
     }
    ]
   }
