@@ -7,10 +7,12 @@ use std::process::Command;
 use super::{
     answer, check, content_ids, crates, dead_public, declared_reads, dispatch, features_but,
     kept_reads, lcov_missed, own_libs, parse, relative, run, tail, uncovered, undeclared,
-    verdict_key, workspace_only, Reads, World,
+    verdict_key, Reads, World,
 };
 use crate::checks::scratch;
 use l7r_guard::shared::tempdir::{Held, TempDir};
+
+mod cover;
 
 fn fake_cargo(dir: &Path, body: &str) -> String {
     let path = dir.join("cargo");
@@ -370,7 +372,7 @@ fn a_public_function_nothing_calls_is_refused() {
 const LCOV_CARGO: &str = r#"case "$1 $2" in
   "llvm-cov show-env") echo "export FOO='bar'"; echo "not an assignment";;
   "llvm-cov report") out=""; while [ $# -gt 0 ]; do [ "$1" = "--output-path" ] && out="$2"; shift; done; [ -n "$out" ] && cat "$(dirname "$0")/lcov" > "$out";;
-  "test --no-run") echo '{"executable":"'"$CARGO_TARGET_DIR"'/debug/deps/l7r_x-keep"}'; echo 'not json'; echo '{"reason":"x"}';;
+  "test --no-run") echo '{"executable":"'"$CARGO_TARGET_DIR"'/debug/deps/l7r_x-keep"}'; echo 'not json'; echo '{"reason":"x"}'; echo '{"filenames":["'"$CARGO_TARGET_DIR"'/debug/deps/libl7r_fresh.rlib"]}';;
 esac
 [ -f "$(dirname "$0")/failtest" ] && [ "$1" = test ] && [ "$2" != --no-run ] && { echo boom; exit 1; }
 exit 0"#;
@@ -430,7 +432,13 @@ fn the_floor_reads_the_lines_and_clears_only_what_it_must() {
     let work = world.target.join("cover-a");
     let deps = work.join("target/debug/deps");
     std::fs::create_dir_all(&deps).unwrap();
-    for name in ["libl7r_old", "l7r_x-keep", "l7r_x-stale", "l7r_x-stale.d"] {
+    for name in [
+        "libl7r_old",
+        "libl7r_fresh.rlib",
+        "l7r_x-keep",
+        "l7r_x-stale",
+        "l7r_x-stale.d",
+    ] {
         std::fs::write(deps.join(name), "").unwrap();
     }
     std::fs::create_dir_all(deps.join("libl7r_dir")).unwrap();
@@ -441,11 +449,11 @@ fn the_floor_reads_the_lines_and_clears_only_what_it_must() {
         done.stdout,
         format!("{} - lines no test reaches: 3\n", source.display())
     );
-    assert!(
-        !deps.join("libl7r_old").exists()
-            && !deps.join("libl7r_dir").exists()
-            && !deps.join("l7r_x-stale").exists()
-    );
+    // the crate's library the build did not write goes, the one it did stays (T105); another crate's binary is moved aside for the
+    // report and put back after
+    assert!(!deps.join("libl7r_old").exists() && !deps.join("libl7r_dir").exists());
+    assert!(deps.join("libl7r_fresh.rlib").exists());
+    assert!(deps.join("l7r_x-stale").exists() && !work.join("target/aside/l7r_x-stale").exists());
     assert!(deps.join("l7r_x-keep").exists() && deps.join("l7r_x-stale.d").exists());
     assert!(!work.join("target/old.profraw").exists());
     std::fs::write(world.target.join("lcov"), "").unwrap();
@@ -933,53 +941,4 @@ fn a_named_crate_is_kept_and_its_key_follows_the_crates_it_builds_from() {
     assert!(answer(&world, "lint", &outside, false)
         .stdout
         .contains("lint unchanged on tests/fx"));
-}
-
-/// Coverage instruments the workspace's crates only (T100): the coverage flags leave RUSTFLAGS, the rest stays for every crate, and a
-/// wrapper cargo calls for the workspace's crates alone adds them; written once, and left be while its text is the same; no RUSTFLAGS,
-/// nothing done.
-#[test]
-fn coverage_instruments_the_workspace_s_crates_only() {
-    let dir = scratch("rustc-cover-wrapper");
-    let script = dir.join("instrument.sh");
-    let lld = "-C link-arg=-fuse-ld=lld";
-    let shown = || {
-        BTreeMap::from([(
-            "RUSTFLAGS".to_owned(),
-            format!("{lld} -C instrument-coverage --cfg=coverage --cfg=trybuild_no_target"),
-        )])
-    };
-    let mut env = shown();
-    workspace_only(&mut env, &script);
-    assert_eq!(env["RUSTFLAGS"], lld);
-    assert_eq!(env["RUSTC_WORKSPACE_WRAPPER"], script.display().to_string());
-    let text = std::fs::read_to_string(&script).unwrap();
-    assert_eq!(
-        text,
-        "#!/bin/sh\nexec \"$@\" -C instrument-coverage --cfg=coverage --cfg=trybuild_no_target\n"
-    );
-    // through sh, which reads the script: executing a file this test just wrote raced another test thread's fork, which held its write
-    // handle open ("Text file busy")
-    let ran = Command::new("sh")
-        .arg(&script)
-        .args(["echo", "rustc"])
-        .output()
-        .unwrap();
-    assert!(
-        std::os::unix::fs::PermissionsExt::mode(&std::fs::metadata(&script).unwrap().permissions())
-            & 0o111
-            != 0
-    );
-    assert_eq!(
-        String::from_utf8_lossy(&ran.stdout),
-        "rustc -C instrument-coverage --cfg=coverage --cfg=trybuild_no_target\n"
-    );
-    let before = std::fs::metadata(&script).unwrap().modified().unwrap();
-    std::thread::sleep(std::time::Duration::from_millis(20));
-    workspace_only(&mut shown(), &script);
-    let after = std::fs::metadata(&script).unwrap().modified().unwrap();
-    assert_eq!(after, before, "not written again");
-    let mut none = BTreeMap::new();
-    workspace_only(&mut none, &script);
-    assert!(none.is_empty());
 }

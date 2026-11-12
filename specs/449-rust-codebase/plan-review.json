@@ -384,6 +384,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
+  },
+  "### T105 (a core edit's coverage builds made together, FR-012)": {
+   "sha256": "085837b4949c2f04172ea6f19b970342f47e5e35d75507f3e2f7ad4dcf14dec1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T105 Approach (checklist part A)": {
+   "sha256": "01f37594ec7a72699041a7e6d90923647213f5152f64615f3097dbea5514abff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6444,6 +6456,52 @@
      "why": "FR-012 and SC-007 require the T98 cost cut, measured before and after by the same command, lower, verdicts held; neither they nor the GM's words set a target, a floor, or name individual suites, and the GM's method in this section is explicitly incremental ('stop and measure again ... next most low-hanging fruit'). The cut is made and measured by the same command, and the obvious contention lever was tried and measured worse. Noted, not a fidelity finding: the before/after rests on one run each on a shared host (the block says so), and the critical path - sync-with-main under contention, 56.5 s of 63.8 s - is where the remaining cost sits, its 25.6 s alone not broken down as idle-tests' was."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T105 (a core edit's coverage builds made together, FR-012)",
+    "### T105 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T105-together",
+     "summary": "The crates a core edit owes are built first in one `cargo test --no-run --lib -p <each>` per family, in the crate run's own environment (cover_env factored out); a failed build there is left to the crate's own run to report.",
+     "class": "within",
+     "why": "This is the GM's first candidate as filed (request.md 2026-11-11 'the next three time savings': 'build a core edit's 17 coverage binaries together'; FR-012 T105). Leaving a failed build to the crate's own run keeps the verdicts and outputs FR-012 holds; it does not narrow anything."
+    },
+    {
+     "id": "T105-keep-builds",
+     "summary": "A crate's run now deletes only the copies of its own library the build did not just write (going by cargo's JSON artifact list), not every copy. It moves other crates' test binaries aside while its tests and report run, then puts them back (cover_built).",
+     "class": "within",
+     "why": "Without this the together build is wasted: the old per-crate clearing deleted the binaries it had just made, and each run rebuilt them. The reason for the old deletion (stale library copies showing as unreached lines) is kept, because only copies the build did not write are removed. FR-012 asks for the cost cut with every output held. The coverage comparison in the next decision is the check that it is held."
+    },
+    {
+     "id": "T105-coverage-held",
+     "summary": "Coverage held: claims' 7,640 and core's 3,654 lines, with hit counts and the `uncovered` report identical to T100's, compared line by line.",
+     "class": "within",
+     "why": "FR-012 and SC-007 require every output and verdict to be held. This is that check, not added scope."
+    },
+    {
+     "id": "T105-measured",
+     "summary": "Before and after by the same command (make static after a one-line core or claims edit, back to back, a scratch clone of main against this clone): core edit 65.0 s to 57.2 s, claims edit 26.0 s to 24.8 s. The together build gets its own log line.",
+     "class": "within",
+     "why": "SC-007 requires the cost re-measured by the same command, and lower. Both figures went down. They come from one run each on a loaded shared host, and the plan says so itself. The new log line reports the build's timing. It does not change any check's verdict or report, so it is not a departure from 'every output the tooling gives today' in substance."
+    },
+    {
+     "id": "T105-left",
+     "summary": "The coverage test runs (17.2 s of the core edit's run) stay one crate after another, recorded as what is left.",
+     "class": "within",
+     "why": "The GM's candidate was to build the coverage binaries together. Running the coverage tests side by side was never part of it, so leaving them alone narrows nothing that was asked. The plan states it openly as the next cost."
+    },
+    {
+     "id": "T105-tests",
+     "summary": "Tests: owed crates go to one cargo call per family, and a family of one to none. The clearing test keeps a library the build wrote, removes one it did not, and finds another crate's binary put back. The coverage-step tests move to rustc/tests/cover.rs under the 1,000-line bar.",
+     "class": "within",
+     "why": "These tests only enforce the requested behavior and the held outputs, so they are enforcement of the request, not scope. The file move is housekeeping under an existing bar."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11309,6 +11367,50 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T105": {
+   "section_sha256": "85ad030e08e3441c1712f943117cf140577a9c0c309164d13f3f5b06122a51c6",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T105-together",
+     "summary": "The crates a core edit owes are built first in one `cargo test --no-run --lib -p <each>` per family, in the crate run's own environment (cover_env factored out); a failed build there is left to the crate's own run to report.",
+     "class": "within",
+     "why": "This is the GM's first candidate as filed (request.md 2026-11-11 'the next three time savings': 'build a core edit's 17 coverage binaries together'; FR-012 T105). Leaving a failed build to the crate's own run keeps the verdicts and outputs FR-012 holds; it does not narrow anything."
+    },
+    {
+     "id": "T105-keep-builds",
+     "summary": "A crate's run now deletes only the copies of its own library the build did not just write (going by cargo's JSON artifact list), not every copy. It moves other crates' test binaries aside while its tests and report run, then puts them back (cover_built).",
+     "class": "within",
+     "why": "Without this the together build is wasted: the old per-crate clearing deleted the binaries it had just made, and each run rebuilt them. The reason for the old deletion (stale library copies showing as unreached lines) is kept, because only copies the build did not write are removed. FR-012 asks for the cost cut with every output held. The coverage comparison in the next decision is the check that it is held."
+    },
+    {
+     "id": "T105-coverage-held",
+     "summary": "Coverage held: claims' 7,640 and core's 3,654 lines, with hit counts and the `uncovered` report identical to T100's, compared line by line.",
+     "class": "within",
+     "why": "FR-012 and SC-007 require every output and verdict to be held. This is that check, not added scope."
+    },
+    {
+     "id": "T105-measured",
+     "summary": "Before and after by the same command (make static after a one-line core or claims edit, back to back, a scratch clone of main against this clone): core edit 65.0 s to 57.2 s, claims edit 26.0 s to 24.8 s. The together build gets its own log line.",
+     "class": "within",
+     "why": "SC-007 requires the cost re-measured by the same command, and lower. Both figures went down. They come from one run each on a loaded shared host, and the plan says so itself. The new log line reports the build's timing. It does not change any check's verdict or report, so it is not a departure from 'every output the tooling gives today' in substance."
+    },
+    {
+     "id": "T105-left",
+     "summary": "The coverage test runs (17.2 s of the core edit's run) stay one crate after another, recorded as what is left.",
+     "class": "within",
+     "why": "The GM's candidate was to build the coverage binaries together. Running the coverage tests side by side was never part of it, so leaving them alone narrows nothing that was asked. The plan states it openly as the next cost."
+    },
+    {
+     "id": "T105-tests",
+     "summary": "Tests: owed crates go to one cargo call per family, and a family of one to none. The clearing test keeps a library the build wrote, removes one it did not, and finds another crate's binary put back. The coverage-step tests move to rustc/tests/cover.rs under the 1,000-line bar.",
+     "class": "within",
+     "why": "These tests only enforce the requested behavior and the held outputs, so they are enforcement of the request, not scope. The file move is housekeeping under an existing bar."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
