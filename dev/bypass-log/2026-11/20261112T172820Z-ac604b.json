@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-12T17:28:20Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "6567ceeff",
+  "why": "the whole-plan delta is T127's new template section, filed by T91's plan review; T91's own section has its current CLEAR task review (2026-11-12)"
+}
