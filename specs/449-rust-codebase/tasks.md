@@ -405,8 +405,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T124 The claims-door verbs only land.py asked (scope_split, file_left, flight_live, CLAIMS_FEATURE_DIR) and seam::file_left removed, with claims_door.py's forwarders: kept through T121's landing commit so the Python land.py could land its own deletion (ask:449-T83-scope), landed by the Rust land after it (T121's plan review, 2026-11-12)
       research: rendering
       verify: DONE. landed: the four claims-door verbs only land.py asked removed; whole-tree census clean, make static and rust-test green; the Rust land's first landing
-- [ ] T125 The hook suites started longest first by each suite's last time: the full hook run (every gate's and landing's longest phase) ends on idle-tests, 36 s started 19.6 s in by roster order; idle-tests first measured 51.3 s mean against 59.6 s, longest first by last time 52.4 s (2026-11-12, scratchpad/r6) (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
+- [x] T125 The hook suites started longest first by each suite's last time: the full hook run (every gate's and landing's longest phase) ends on idle-tests, 36 s started 19.6 s in by roster order; idle-tests first measured 51.3 s mean against 59.6 s, longest first by last time 52.4 s (2026-11-12, scratchpad/r6) (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
       research: rendering
+      verify: DONE. landed: hook suites started longest first: full hook run mean 52.5 s against 59.4 s, three alternated runs a side; the engine-freeze roll race fixed, eight runs green
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
