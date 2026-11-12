@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-12T15:13:40Z",
+  "target": "plan-gate push",
+  "commit": "7db38f8c5",
+  "why": "the whole-plan delta is T121's landed section correcting its record of the landing (the work-budget summary lost after the push), T122's not-landed record and T123's unbuilt template; T124's own section has its current CLEAR task review (2026-11-12)"
+}
