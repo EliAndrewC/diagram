@@ -1222,5 +1222,22 @@
    "push-money-candidates": 2.46,
    "done-rust-edit": 36.3
   }
+ },
+ "t113-body-edit-static": {
+  "quantity": "make static after a body-only edit of core (write_executable's draft name, unique a run), T113's SC-007 figure on the landed code",
+  "observed": "2026-11-12",
+  "subject": "a scratch clone of main (T112 in) and the diagram-backlog clone with T113's final code, back to back",
+  "command": "<one-shot: the edit, make static with each output line timestamped, the edit reverted and make static settled; scratchpad t113/ts.sh>",
+  "method": "date +%s.%N at each line of make static's output; the lint step from its command line to its 'lint clean' line",
+  "varies": true,
+  "unit": "s",
+  "value": {
+   "before-lint-step": 10.8,
+   "after-lint-step": 1.9,
+   "before-total": 35.4,
+   "after-total": 26.9,
+   "before-load": 16.6,
+   "after-load": 25.0
+  }
  }
 }

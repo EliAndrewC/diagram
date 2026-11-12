@@ -1,6 +1,6 @@
 //! A Rust file's code: what a comment-only edit leaves the same, and what it does not.
 
-use super::code_text;
+use super::{code_text, interface_text};
 
 #[test]
 fn plain_comments_go_and_doc_comments_stay() {
@@ -69,4 +69,41 @@ fn an_unclosed_literal_runs_to_the_end() {
     assert_eq!(code_text("r#\"open // still"), "r#\"open // still");
     assert_eq!(code_text("'\\u{4e00"), "'\\u{4e00");
     assert_eq!(code_text("\"\\"), "\"\\");
+}
+
+/// A private body goes; a body another crate can reach stays (T113).
+#[test]
+fn an_interface_keeps_what_another_crate_can_see() {
+    let text = "/// doc\npub fn f(x: u8) -> u8 {\n    x + 1 // why\n}\nstruct S { f: fn(u8) -> u8 }\npub const fn c() -> u8 { 1 }\npub async fn a() { b() }\npub fn i() -> impl Copy { 1 }\nfn m() { impl S {} }\nfn n() { macro_rules! q { () => {} } }\nmacro_rules! r { () => { fn g() { 2 } } }\ntrait T { fn d(); fn e() { 3 } }\nconst K: &str = \"fn z() { }\";\nlet q = '{';\n";
+    assert_eq!(
+        interface_text(text),
+        "/// doc\npub fn f(x: u8) -> u8 {}\nstruct S { f: fn(u8) -> u8 }\npub const fn c() -> u8 { 1 }\npub async fn a() { b() }\npub fn i() -> impl Copy { 1 }\nfn m() { impl S {} }\nfn n() { macro_rules! q { () => {} } }\nmacro_rules! r { () => { fn g() { 2 } } }\ntrait T { fn d(); fn e() {} }\nconst K: &str = \"fn z() { }\";\nlet q = '{';\n"
+    );
+    // a body-only edit leaves the interface the same; a signature edit does not
+    assert_eq!(
+        interface_text("pub fn f() { 1 }"),
+        interface_text("pub fn f() { 2 }")
+    );
+    assert_ne!(
+        interface_text("pub fn f() { 1 }"),
+        interface_text("pub fn f(x: u8) { 1 }")
+    );
+    // a body with a char or a string holding a brace still closes where it does
+    assert_eq!(
+        interface_text("fn f() { let c = '}'; let s = \"}\"; let r = r\"{\"; }\nfn g() {}"),
+        "fn f() {}\nfn g() {}"
+    );
+}
+
+/// A text the lexer cannot read to its end keeps all its code (T113).
+#[test]
+fn an_unclosed_text_keeps_its_code() {
+    for text in [
+        "fn f() { open",
+        "fn f(",
+        "macro_rules! m { open",
+        "macro_rules! m",
+    ] {
+        assert_eq!(interface_text(text), code_text(text), "{text}");
+    }
 }

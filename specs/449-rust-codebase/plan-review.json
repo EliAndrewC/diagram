@@ -498,6 +498,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T113 (the dependents' lint keyed on a crate's public interface, FR-012)": {
+   "sha256": "ed781b579d702ef498b8760868a8d07b70ae0c8e10717fe9b8abb38a21b4accc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T113 Approach (checklist part A)": {
+   "sha256": "a25634828631fbde32176102686bbd9832450ab8a4c5b2eb8a2d9870c9288e77",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7107,6 +7119,112 @@
      "why": "SC-007 asks for the cost re-measured by the same command before and after, lower, verdicts held; the A/B uses one command on both trees and is labeled with date and method. The 29.1 s quiet-machine figure is a separately labeled observation, not the SC-007 pair."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T113 (the dependents' lint keyed on a crate's public interface, FR-012)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T113-key",
+     "summary": "A crate's lint key reads each crate it builds from by its interface (T112's code with private-to-the-body function bodies replaced by {}); the crate's own files and every other check's key unchanged.",
+     "class": "within",
+     "why": "This is the candidate the GM said yes to by name on 2026-11-11 ('the dependents' lint keyed on a crate's public interface'); FR-012 carries it as T113."
+    },
+    {
+     "id": "T113-not-exact",
+     "summary": "The key is not exact: a cross-crate body-reading lint (none enabled today) or a body edit the rules misread as private goes unrun until the dependent's files or the dependency's interface move.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-012 and SC-007 hold every change to the verdicts the tooling gives today; this departs from that. The departure is implied by the GM's own approval: the proposal the GM answered 'Yes to all 4 of those, please' named this item as 'not exact, a design reviewed first', and that review is this one. The inexactness is kept to the minimum the approach allows - the lint key only, only the dependency files, fail-closed on a file the lexer cannot finish, bodies kept wherever they can reach the interface (const, async, impl in signature, impl or macro_rules! in body). Wording to correct, not a ruling: 'fail open for one lint run' understates it - a missed lint stays unrun across every run until one of the two named keys moves."
+    },
+    {
+     "id": "T113-what-is-taken-out",
+     "summary": "Rules for which fn bodies are blanked (non-const, non-async, no impl in signature, no impl block or macro_rules! in body); everything else stays as T112's code.",
+     "class": "within",
+     "why": "Defines 'public interface' for the approved key, choosing to keep a body wherever it can reach what a dependent sees; it does not narrow the request."
+    },
+    {
+     "id": "T113-lexer-not-syn",
+     "summary": "Interface derived from T112's lexer rather than syn full or rustc .rmeta.",
+     "class": "within",
+     "why": "An implementation choice inside the approved design; no case is excluded by it beyond what the not-exact decision already covers."
+    },
+    {
+     "id": "T113-scope",
+     "summary": "Applies to the lint key alone and only to the files of crates built from; tests, coverage, format and dead keep their keys.",
+     "class": "within",
+     "why": "The GM approved the interface key for 'the dependents' lint' only; keeping the other keys exact is the request as written."
+    },
+    {
+     "id": "T113-tests-and-measure",
+     "summary": "Tests of the interface cases and of the key movements; done measured by a body-only core edit's make static before and after.",
+     "class": "within",
+     "why": "Enforcement and SC-007's before-and-after measurement of the requested change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T113 (the dependents' lint keyed on a crate's public interface, FR-012)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T113-interface",
+     "summary": "A dependency's interface is its T112 code with the bodies of non-const, non-async fns whose signature holds no impl and whose body holds no impl block or macro_rules! replaced by {}; docs, attributes, items outside bodies, macro_rules! whole kept.",
+     "class": "within",
+     "why": "This is the design of the interface key the GM approved ('the dependents' lint keyed on a crate's public interface', 'Yes to all 4 of those') and asked to have reviewed first. The kept cases (const fn, async fn, returned impl Trait, impl/macro_rules! inside a body) are the ones a dependent's check build can see through."
+    },
+    {
+     "id": "T113-scope",
+     "summary": "Applies to the lint key alone, and only to the files of crates a crate builds from; the crate's own files stay on T112 code ids; test, coverage, format and dead keys unchanged.",
+     "class": "within",
+     "why": "Matches the request's item exactly: 'the dependents' lint'. Nothing beyond the lint of dependents is loosened."
+    },
+    {
+     "id": "T113-inexact",
+     "summary": "Not exact: (a) a dependent lint that reads a dependency's body through the compiler (nursery/restriction, none enabled) and (b) a body the rules misread as private would go unrun after a body-only edit, failing open until the dependent's files or the dependency's interface move.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-012/SC-007 as written ('held to every output and verdict the tooling gives today', with no exemption for T113). Ruled against request.md: the GM said 'Yes to all 4 of those' to an item described as 'the dependents' lint keyed on a crate's public interface - not exact, a design reviewed first', so the exception is in the GM's own words. Case (a) is inherent to any interface keying and is squarely the approved inexactness. Case (b) is this design's approximation error; it is the same class of inexactness the GM accepted and is bounded by the rules reviewed here, so it is also LEGITIMATE. Note for the caller: the accepted spec text (FR-012, SC-007) does not carry this exception; recording it there is a spec-amendment matter, not a plan ruling."
+    },
+    {
+     "id": "T113-unreadable-file",
+     "summary": "A file the lexer cannot read to its end keeps its whole code.",
+     "class": "within",
+     "why": "Fails closed: such a file's lint key behaves as before."
+    },
+    {
+     "id": "T113-alternatives",
+     "summary": "syn full-parser interface and rustc .rmeta rejected.",
+     "class": "within",
+     "why": "Design choice between ways of doing the requested thing; narrows nothing."
+    },
+    {
+     "id": "T113-lint-no-declared-read",
+     "summary": "A lint key stops reading a crate's declared test reads ([package.metadata.l7r] reads); test and coverage keys keep them.",
+     "class": "within",
+     "why": "Not one of the four named items, so checked for exactness: per the block a declared read only ever chose a .rs file's full id over its code id in a lint key and never added an input, and a lint runs no test, so the only effect is that comment-only edits stop re-linting the checks crate, which is T112's already-approved behavior. The block's own after-run shows the declared read defeating T113 for the checks crate, so this makes the approved item take effect: enforcement, not new scope."
+    },
+    {
+     "id": "T113-included-files",
+     "summary": "Test and coverage keys now read every file their Rust sources include (include_str!/include_bytes!); lint, format and dead keys do not.",
+     "class": "within",
+     "why": "Adds inputs, so caching moves toward SC-007's 'giving the verdicts and outputs it gave before' (a kept test result had stood over a changed table). Lint, format and dead keys are left as they were. Narrows nothing."
+    },
+    {
+     "id": "T113-measurement",
+     "summary": "SC-007 measured by make static after a body-only core edit, before and after; plus l7r-gate.sh rust lint after the declared-read fix.",
+     "class": "within",
+     "why": "The same command before and after is what SC-007 asks. Not adjudicated by re-running (bundle-only review). Two notes for the landing: (1) the 10.6 s 'before' lint figure is given two different methods (l7r-gate.sh rust lint per crate in the first decision, 'the timestamped make static' in the measurement decision): it was measured one way and stated another; (2) the 30.1 s 'after' make static was taken before the declared-read and include fixes, and the only post-fix figure (1.95 s, l7r-gate.sh rust lint) is compared against a make static lint step, a different command. SC-007 is a landing condition: make static must be re-run on the landed tree, the same way as the 37.5 s before."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12344,6 +12462,63 @@
      "summary": "Before/after measured by one back-to-back run of the same script on a scratch clone of main and this clone, on a loaded host with load recorded (37.5 s -> 17.5 s after a one-line comment edit).",
      "class": "within",
      "why": "SC-007 asks for the cost re-measured by the same command before and after, lower, verdicts held; the A/B uses one command on both trees and is labeled with date and method. The 29.1 s quiet-machine figure is a separately labeled observation, not the SC-007 pair."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T113": {
+   "section_sha256": "9f8c26a56fa4374f2ef85731c78a095ad10eef794aae24af92f1d025456ca246",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T113-interface",
+     "summary": "A dependency's interface is its T112 code with the bodies of non-const, non-async fns whose signature holds no impl and whose body holds no impl block or macro_rules! replaced by {}; docs, attributes, items outside bodies, macro_rules! whole kept.",
+     "class": "within",
+     "why": "This is the design of the interface key the GM approved ('the dependents' lint keyed on a crate's public interface', 'Yes to all 4 of those') and asked to have reviewed first. The kept cases (const fn, async fn, returned impl Trait, impl/macro_rules! inside a body) are the ones a dependent's check build can see through."
+    },
+    {
+     "id": "T113-scope",
+     "summary": "Applies to the lint key alone, and only to the files of crates a crate builds from; the crate's own files stay on T112 code ids; test, coverage, format and dead keys unchanged.",
+     "class": "within",
+     "why": "Matches the request's item exactly: 'the dependents' lint'. Nothing beyond the lint of dependents is loosened."
+    },
+    {
+     "id": "T113-inexact",
+     "summary": "Not exact: (a) a dependent lint that reads a dependency's body through the compiler (nursery/restriction, none enabled) and (b) a body the rules misread as private would go unrun after a body-only edit, failing open until the dependent's files or the dependency's interface move.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-012/SC-007 as written ('held to every output and verdict the tooling gives today', with no exemption for T113). Ruled against request.md: the GM said 'Yes to all 4 of those' to an item described as 'the dependents' lint keyed on a crate's public interface - not exact, a design reviewed first', so the exception is in the GM's own words. Case (a) is inherent to any interface keying and is squarely the approved inexactness. Case (b) is this design's approximation error; it is the same class of inexactness the GM accepted and is bounded by the rules reviewed here, so it is also LEGITIMATE. Note for the caller: the accepted spec text (FR-012, SC-007) does not carry this exception; recording it there is a spec-amendment matter, not a plan ruling."
+    },
+    {
+     "id": "T113-unreadable-file",
+     "summary": "A file the lexer cannot read to its end keeps its whole code.",
+     "class": "within",
+     "why": "Fails closed: such a file's lint key behaves as before."
+    },
+    {
+     "id": "T113-alternatives",
+     "summary": "syn full-parser interface and rustc .rmeta rejected.",
+     "class": "within",
+     "why": "Design choice between ways of doing the requested thing; narrows nothing."
+    },
+    {
+     "id": "T113-lint-no-declared-read",
+     "summary": "A lint key stops reading a crate's declared test reads ([package.metadata.l7r] reads); test and coverage keys keep them.",
+     "class": "within",
+     "why": "Not one of the four named items, so checked for exactness: per the block a declared read only ever chose a .rs file's full id over its code id in a lint key and never added an input, and a lint runs no test, so the only effect is that comment-only edits stop re-linting the checks crate, which is T112's already-approved behavior. The block's own after-run shows the declared read defeating T113 for the checks crate, so this makes the approved item take effect: enforcement, not new scope."
+    },
+    {
+     "id": "T113-included-files",
+     "summary": "Test and coverage keys now read every file their Rust sources include (include_str!/include_bytes!); lint, format and dead keys do not.",
+     "class": "within",
+     "why": "Adds inputs, so caching moves toward SC-007's 'giving the verdicts and outputs it gave before' (a kept test result had stood over a changed table). Lint, format and dead keys are left as they were. Narrows nothing."
+    },
+    {
+     "id": "T113-measurement",
+     "summary": "SC-007 measured by make static after a body-only core edit, before and after; plus l7r-gate.sh rust lint after the declared-read fix.",
+     "class": "within",
+     "why": "The same command before and after is what SC-007 asks. Not adjudicated by re-running (bundle-only review). Two notes for the landing: (1) the 10.6 s 'before' lint figure is given two different methods (l7r-gate.sh rust lint per crate in the first decision, 'the timestamped make static' in the measurement decision): it was measured one way and stated another; (2) the 30.1 s 'after' make static was taken before the declared-read and include fixes, and the only post-fix figure (1.95 s, l7r-gate.sh rust lint) is compared against a make static lint step, a different command. SC-007 is a landing condition: make static must be re-run on the landed tree, the same way as the 37.5 s before."
     }
    ],
    "verdict": "CLEAR"

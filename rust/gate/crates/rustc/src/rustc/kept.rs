@@ -270,6 +270,39 @@ pub(super) fn verdict_key(
     verdict_key_with(root, manifest, cmd, reads, all, ids, compiler, None)
 }
 
+/// A run's two views of each Rust file (T112, T113): its code id, and its interface id.
+pub(super) type Views<'a> = (
+    &'a BTreeMap<String, String>,
+    &'a BTreeMap<String, String>,
+    &'a Includes,
+);
+
+/// The files each Rust file compiles in (`include_str!`, `include_bytes!`, `include!`), as paths from the tree's root.
+pub(super) type Includes = BTreeMap<String, Vec<String>>;
+
+static INCLUDE: LazyLock<Regex> =
+    LazyLock::new(|| re(r#"\binclude(?:_str|_bytes)?!\s*\(\s*"([^"]+)""#));
+
+/// The paths a Rust file at `path` (from the root) compiles in, resolved from its directory.
+fn included(path: &str, text: &str) -> Vec<String> {
+    let dir: Vec<&str> = path.split('/').collect();
+    INCLUDE
+        .captures_iter(text)
+        .flatten()
+        .map(|c| {
+            let mut at: Vec<&str> = dir[..dir.len() - 1].to_vec();
+            for part in c[1].split('/') {
+                match part {
+                    ".." => drop(at.pop()),
+                    "." => {}
+                    p => at.push(p),
+                }
+            }
+            at.join("/")
+        })
+        .collect()
+}
+
 /// The checks a comment cannot change (T112): clippy, the tests and coverage. rustfmt formats comments, and the dead check counts a
 /// word in one as a use, so they read the whole text.
 const BY_CODE: [&str; 4] = ["lint", "test", "test-counters", "cover"];
@@ -288,12 +321,43 @@ pub(super) fn verdict_key_with(
     all: &[PathBuf],
     ids: &BTreeMap<String, String>,
     compiler: &str,
-    code: Option<&BTreeMap<String, String>>,
+    views: Option<Views>,
 ) -> String {
-    let code = code.filter(|_| BY_CODE.contains(&cmd));
-    let declared = declared_reads(manifest);
+    let views = views.filter(|_| BY_CODE.contains(&cmd));
+    // what the crate's tests declare they read: a test or coverage key's, never a lint's, which runs no test
+    let declared = if reads == Reads::Tests {
+        declared_reads(manifest)
+    } else {
+        Vec::new()
+    };
+    let own = rel_dir(manifest, root);
+    let dirs: Vec<String> = all
+        .iter()
+        .map(|m| rel_dir(m, root))
+        .chain(std::iter::once(own.clone()))
+        .collect();
+    let owner = |p: &str| {
+        dirs.iter()
+            .filter(|d| p.starts_with(d.as_str()))
+            .max_by_key(|d| d.len())
+            .cloned()
+    };
     let mut hash: Vec<u8> = format!("{cmd}\n{compiler}\n").into_bytes();
     let mut keyed: Vec<(&str, &str)> = inputs(root, manifest, reads, all, ids);
+    // WHAT THE TESTS COMPILE IN (found under T113): a file a crate's sources include sits outside them where it is another crate's
+    // (`guard` compiles in the record crate's HTML entity table), and no key of the crate read it, so a kept test result stood over a
+    // changed table. A test or coverage key reads every file its Rust files include.
+    if let Some((_, _, includes)) = views.filter(|_| reads == Reads::Tests) {
+        let extra: Vec<(&str, &str)> = keyed
+            .iter()
+            .filter_map(|(p, _)| includes.get(*p))
+            .flatten()
+            .map(|p| (p.as_str(), ids.get(p).map_or("", String::as_str)))
+            .collect();
+        keyed.extend(extra);
+        keyed.sort_unstable();
+        keyed.dedup();
+    }
     // THE DEAD CHECK READS ITS WHOLE FAMILY (feature 449 T100): it counts a `pub fn`'s callers across every crate of the family (all of
     // `rust/gate/`), so a dependent crate dropping the last call made a function dead with this crate's own inputs unmoved, and its kept
     // green result stood. Its key is every file of the family.
@@ -309,8 +373,11 @@ pub(super) fn verdict_key_with(
     }
     for (path, id) in keyed {
         let read = declared.iter().any(|d| under(path, d));
-        let id = code
-            .and_then(|c| c.get(path))
+        // THE DEPENDENCIES' INTERFACE (T113): a lint key reads a file of a crate this one builds from by its interface
+        let theirs = cmd == "lint" && owner(path).is_some_and(|o| o != own);
+        let view = views.map(|(code, interface, _)| if theirs { interface } else { code });
+        let id = view
+            .and_then(|v| v.get(path))
             .filter(|_| !read)
             .map_or(id, String::as_str);
         hash.extend(format!("{path} {id}\n").into_bytes());
@@ -344,17 +411,36 @@ pub(super) fn comment_lints(root: &Path, ids: &BTreeMap<String, String>) -> bool
 /// COMMENT-INSENSITIVE KEYS (feature 449 T112; the GM 2026-11-11): each Rust file's code id, its text without its plain comments
 /// (`code::code_text`), so a comment-only edit moves no lint, test or coverage key - a one-line comment in core had re-run all 17 gate
 /// crates' checks, 29 s of `make static` no verdict depended on (2026-11-11). Read from the work tree once a run.
-pub(super) fn code_ids(root: &Path, ids: &BTreeMap<String, String>) -> BTreeMap<String, String> {
-    ids.iter()
+pub(super) fn code_ids(
+    root: &Path,
+    ids: &BTreeMap<String, String>,
+) -> (BTreeMap<String, String>, BTreeMap<String, String>, Includes) {
+    let texts: Vec<(&String, String)> = ids
+        .iter()
         .filter(|(p, id)| !id.is_empty() && crate::checks::has_ext(p, "rs"))
-        .filter_map(|(p, _)| {
-            let text = std::fs::read_to_string(root.join(p)).ok()?;
-            Some((
-                p.clone(),
-                format!("code:{}", sha256::hex(code::code_text(&text).as_bytes())),
-            ))
-        })
-        .collect()
+        .filter_map(|(p, _)| Some((p, std::fs::read_to_string(root.join(p)).ok()?)))
+        .collect();
+    let view = |tag: &str, of: fn(&str) -> String| -> BTreeMap<String, String> {
+        texts
+            .iter()
+            .map(|(p, t)| {
+                (
+                    (*p).clone(),
+                    format!("{tag}:{}", sha256::hex(of(t).as_bytes())),
+                )
+            })
+            .collect()
+    };
+    let includes = texts
+        .iter()
+        .map(|(p, t)| ((*p).clone(), included(p, t)))
+        .filter(|(_, i)| !i.is_empty())
+        .collect();
+    (
+        view("code", code::code_text),
+        view("interface", code::interface_text),
+        includes,
+    )
 }
 
 /// The second key, asked only when the first moved (feature 449 T93): the crate's compiled test binaries and what its tests read at run
@@ -472,6 +558,10 @@ pub(super) struct Kept {
     pub(super) ids: BTreeMap<String, String>,
     /// Each Rust file's code id, for the checks a comment cannot change (T112).
     pub(super) code: BTreeMap<String, String>,
+    /// Each Rust file's interface id, what a dependent's lint reads of it (T113).
+    pub(super) interface: BTreeMap<String, String>,
+    /// The files each Rust file compiles in.
+    pub(super) includes: Includes,
     /// Is a lint that reads plain comments (the `SAFETY:` comment lints) configured anywhere? Then lint keys keep the whole text.
     pub(super) comment_lints: bool,
     pub(super) compiler: String,
@@ -489,10 +579,13 @@ impl Kept {
                 .collect::<Vec<_>>(),
         );
         let ids = content_ids(&world.root);
+        let (code, interface, includes) = code_ids(&world.root, &ids);
         Kept {
             reads,
             comment_lints: comment_lints(&world.root, &ids),
-            code: code_ids(&world.root, &ids),
+            code,
+            interface,
+            includes,
             ids,
             compiler: run(&world.cargo, &own(&["--version"]), &BTreeMap::new())
                 .stdout
@@ -535,7 +628,8 @@ impl Verdict {
                 &k.all,
                 &k.ids,
                 &k.compiler,
-                Some(&k.code).filter(|_| !(cmd == "lint" && k.comment_lints)),
+                Some((&k.code, &k.interface, &k.includes))
+                    .filter(|_| !(cmd == "lint" && k.comment_lints)),
             )
         });
         let mut verdict = Verdict {
@@ -587,7 +681,7 @@ impl Verdict {
             &inputs.all,
             &inputs.ids,
             &inputs.compiler,
-            Some(&inputs.code),
+            Some((&inputs.code, &inputs.interface, &inputs.includes)),
         );
         keep_line(at.as_deref(), kept_lines(at.as_deref()), Some(key));
     }

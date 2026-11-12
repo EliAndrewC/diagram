@@ -140,5 +140,127 @@ fn char_end(chars: &[char], at: usize) -> usize {
     at + 1
 }
 
+/// A crate's interface as another crate's lint reads it (feature 449 T113; the GM 2026-11-11): its code with the bodies of the
+/// functions no other crate can see into replaced by `{}`. A body stays where it can reach another crate: a `const fn`'s (evaluated
+/// where it is used) and an `async fn`'s or one with `impl` in its signature (a returned `impl Trait`'s auto traits follow from it), and
+/// a body holding an `impl` block or a `macro_rules!`, seen crate-wide. A `macro_rules!` stays whole. Not exact (the plan's design
+/// review): a lint that reads another crate's body through the compiler would go unrun until the interface moves. A text the lexer
+/// cannot read to its end keeps all its code.
+pub(super) fn interface_text(text: &str) -> String {
+    let code = code_text(text);
+    let chars: Vec<char> = code.chars().collect();
+    let mut out = String::with_capacity(code.len());
+    let mut i = 0;
+    while i < chars.len() {
+        let c = chars[i];
+        if c == '"' || raw_start(&chars, i) {
+            let end = literal_end(&chars, i);
+            out.extend(&chars[i..end]);
+            i = end;
+        } else if c == '\'' {
+            let end = char_end(&chars, i);
+            out.extend(&chars[i..end]);
+            i = end;
+        } else if word_at(&chars, i, "macro_rules") {
+            let Some(end) = chars[i..]
+                .iter()
+                .position(|&x| matches!(x, '{' | '(' | '['))
+                .and_then(|o| balanced(&chars, i + o))
+            else {
+                return code;
+            };
+            out.extend(&chars[i..end]);
+            i = end;
+        } else if word_at(&chars, i, "fn") && named_after(&chars, i + 2) {
+            let Some((open, close)) = body(&chars, i) else {
+                return code;
+            };
+            let head: String = chars[i..open].iter().collect();
+            if open == close {
+                // a declaration with no body: its `;` is copied next
+                out.push_str(&head);
+                i = open;
+                continue;
+            }
+            let inner: String = chars[open..close].iter().collect();
+            let item = &out[out.rfind(['{', '}', ';']).map_or(0, |p| p + 1)..];
+            let visible = has_word(item, "const")
+                || has_word(item, "async")
+                || has_word(&head, "impl")
+                || has_word(&inner, "impl")
+                || has_word(&inner, "macro_rules");
+            out.push_str(&head);
+            out.push_str(if visible { &inner } else { "{}" });
+            i = close;
+        } else {
+            out.push(c);
+            i += 1;
+        }
+    }
+    out
+}
+
+fn ident(c: char) -> bool {
+    c.is_alphanumeric() || c == '_'
+}
+
+/// Is the word `w` at `at`, whole?
+fn word_at(chars: &[char], at: usize, w: &str) -> bool {
+    let len = w.chars().count();
+    let before = at.checked_sub(1).is_some_and(|b| ident(chars[b]));
+    let after = chars.get(at + len).is_some_and(|&c| ident(c));
+    !before && !after && chars[at..].iter().take(len).copied().eq(w.chars())
+}
+
+fn has_word(text: &str, w: &str) -> bool {
+    let chars: Vec<char> = text.chars().collect();
+    (0..chars.len()).any(|i| word_at(&chars, i, w))
+}
+
+/// Is a name next (a function item, `fn name`), not a function pointer type (`fn(u8)`)?
+fn named_after(chars: &[char], at: usize) -> bool {
+    let next = chars[at..].iter().find(|c| !c.is_whitespace());
+    next.is_some_and(|&c| c.is_alphabetic() || c == '_')
+}
+
+/// A function's body from its `fn` at `at`: where its `{` opens and its matching `}` closes (one past it); none for a declaration
+/// with no body (`;` first), and none where it never closes.
+fn body(chars: &[char], at: usize) -> Option<(usize, usize)> {
+    let mut depth = 0i32;
+    for (i, &c) in chars.iter().enumerate().skip(at) {
+        match c {
+            '(' | '[' => depth += 1,
+            ')' | ']' => depth -= 1,
+            ';' if depth == 0 => return Some((i, i)),
+            '{' if depth == 0 => return balanced(chars, i).map(|end| (i, end)),
+            _ => {}
+        }
+    }
+    None
+}
+
+/// One past the delimiter matching the one at `at`, literals and chars read as such; none where it never closes.
+fn balanced(chars: &[char], at: usize) -> Option<usize> {
+    let mut depth = 0i32;
+    let mut i = at;
+    while i < chars.len() {
+        let c = chars[i];
+        if c == '"' || raw_start(chars, i) {
+            i = literal_end(chars, i);
+            continue;
+        }
+        if c == '\'' {
+            i = char_end(chars, i);
+            continue;
+        }
+        depth += i32::from(matches!(c, '{' | '(' | '[')) - i32::from(matches!(c, '}' | ')' | ']'));
+        i += 1;
+        if depth == 0 {
+            return Some(i);
+        }
+    }
+    None
+}
+
 #[cfg(test)]
 mod tests;

@@ -4,6 +4,14 @@ use std::process::Command;
 
 use super::*;
 
+/// A file's ids, code ids and interface ids, one version of it (T112, T113).
+type Version = (
+    BTreeMap<String, String>,
+    BTreeMap<String, String>,
+    BTreeMap<String, String>,
+    BTreeMap<String, Vec<String>>,
+);
+
 #[test]
 fn a_crate_s_key_moves_with_its_own_inputs_and_not_the_other_crates() {
     let (root, a, b) = two_crates();
@@ -386,13 +394,21 @@ fn a_comment_only_edit_moves_no_lint_test_or_coverage_key() {
     let version = |text: &str, id: &str| {
         std::fs::write(&file, text).unwrap();
         let ids = BTreeMap::from([("rust/a/src/lib.rs".to_owned(), id.to_owned())]);
-        let code = super::super::kept::code_ids(&root, &ids);
-        (ids, code)
+        let (code, interface, includes) = super::super::kept::code_ids(&root, &ids);
+        (ids, code, interface, includes)
     };
-    let key =
-        |cmd: &str, reads: Reads, v: &(BTreeMap<String, String>, BTreeMap<String, String>)| {
-            super::super::kept::verdict_key_with(&root, &a, cmd, reads, &all, &v.0, "c", Some(&v.1))
-        };
+    let key = |cmd: &str, reads: Reads, v: &Version| {
+        super::super::kept::verdict_key_with(
+            &root,
+            &a,
+            cmd,
+            reads,
+            &all,
+            &v.0,
+            "c",
+            Some((&v.1, &v.2, &v.3)),
+        )
+    };
     let one = version("pub fn f() {}\n", "1");
     let commented = version("// why f\npub fn f() {} // and how\n", "2");
     let changed = version("pub fn f() { g(); }\n", "3");
@@ -417,6 +433,11 @@ fn a_comment_only_edit_moves_no_lint_test_or_coverage_key() {
         "[package]\n[package.metadata.l7r]\nreads = [\"rust/a/src/\"]\n",
     )
     .unwrap();
+    // a lint runs no test, so a declared read moves no lint key
+    assert_eq!(
+        key("lint", Reads::Source, &one),
+        key("lint", Reads::Source, &commented)
+    );
     assert_ne!(
         key("test", Reads::Tests, &one),
         key("test", Reads::Tests, &commented),
@@ -424,7 +445,7 @@ fn a_comment_only_edit_moves_no_lint_test_or_coverage_key() {
     );
     let gone = BTreeMap::from([("rust/a/src/lib.rs".to_owned(), String::new())]);
     assert!(
-        super::super::kept::code_ids(&root, &gone).is_empty(),
+        super::super::kept::code_ids(&root, &gone).0.is_empty(),
         "a deleted file has no code"
     );
 }
@@ -461,4 +482,104 @@ fn a_comment_reading_lint_is_found_where_it_is_configured() {
     let attribute = ["#![deny(clippy::unnecessary_", "safety_comment)]\n"].concat();
     std::fs::write(root.join("rust/a/src/lib.rs"), attribute).unwrap();
     assert!(found());
+}
+
+/// A dependency's body-only edit moves no lint key of the crate built on it, and moves its test and coverage keys, the dependency's own
+/// lint key and, with a signature edit, the dependent's lint key (T113).
+#[test]
+fn a_dependency_s_body_edit_moves_its_dependents_lint_key_only_through_its_interface() {
+    let (root, g, mid, _low) = nested_crates();
+    let all = [g.clone(), mid.clone()];
+    let file = root.join("rust/g/crates/mid/src/lib.rs");
+    let version = |text: &str, id: &str| {
+        std::fs::write(&file, text).unwrap();
+        let ids = BTreeMap::from([("rust/g/crates/mid/src/lib.rs".to_owned(), id.to_owned())]);
+        let (code, interface, includes) = super::super::kept::code_ids(&root, &ids);
+        (ids, code, interface, includes)
+    };
+    let key = |manifest: &Path, cmd: &str, reads: Reads, v: &Version| {
+        super::super::kept::verdict_key_with(
+            &root,
+            manifest,
+            cmd,
+            reads,
+            &all,
+            &v.0,
+            "c",
+            Some((&v.1, &v.2, &v.3)),
+        )
+    };
+    let one = version("pub fn mid_only() { low_used(); }\n", "1");
+    let body = version("pub fn mid_only() { low_used(); low_used(); }\n", "2");
+    let signature = version("pub fn mid_only(x: u8) { low_used(); }\n", "3");
+    assert_eq!(
+        key(&g, "lint", Reads::Source, &one),
+        key(&g, "lint", Reads::Source, &body)
+    );
+    assert_ne!(
+        key(&g, "lint", Reads::Source, &one),
+        key(&g, "lint", Reads::Source, &signature)
+    );
+    assert_ne!(
+        key(&g, "test", Reads::Tests, &one),
+        key(&g, "test", Reads::Tests, &body)
+    );
+    assert_ne!(
+        key(&g, "cover", Reads::Tests, &one),
+        key(&g, "cover", Reads::Tests, &body)
+    );
+    assert_ne!(
+        key(&mid, "lint", Reads::Source, &one),
+        key(&mid, "lint", Reads::Source, &body)
+    );
+}
+
+/// A test or coverage key reads the files the crate's sources compile in, wherever they are; a lint key does not (found under T113).
+#[test]
+fn a_test_key_reads_what_the_crate_s_sources_include() {
+    let (root, a, b) = two_crates();
+    let all = [a.clone(), b];
+    std::fs::create_dir_all(root.join("data")).unwrap();
+    std::fs::write(
+        root.join("rust/a/src/lib.rs"),
+        "const T: &str = include_str!(\"../../../data/table.tsv\");\nconst U: &[u8] = include_bytes!(\"./x.bin\");\n",
+    )
+    .unwrap();
+    let version = |id: &str| {
+        let ids = BTreeMap::from([
+            ("rust/a/src/lib.rs".to_owned(), "1".to_owned()),
+            ("data/table.tsv".to_owned(), id.to_owned()),
+        ]);
+        let (code, interface, includes) = super::super::kept::code_ids(&root, &ids);
+        (ids, code, interface, includes)
+    };
+    let (one, two) = (version("t1"), version("t2"));
+    assert_eq!(
+        one.3["rust/a/src/lib.rs"],
+        ["data/table.tsv", "rust/a/src/x.bin"]
+    );
+    let key = |cmd: &str, reads: Reads, v: &Version| {
+        super::super::kept::verdict_key_with(
+            &root,
+            &a,
+            cmd,
+            reads,
+            &all,
+            &v.0,
+            "c",
+            Some((&v.1, &v.2, &v.3)),
+        )
+    };
+    assert_ne!(
+        key("test", Reads::Tests, &one),
+        key("test", Reads::Tests, &two)
+    );
+    assert_ne!(
+        key("cover", Reads::Tests, &one),
+        key("cover", Reads::Tests, &two)
+    );
+    assert_eq!(
+        key("lint", Reads::Source, &one),
+        key("lint", Reads::Source, &two)
+    );
 }
