@@ -2536,3 +2536,36 @@ censuses empty (work breakdown 8, FR-010).
 4. **How does the work grow?** With interface edits, no longer with every edit of a shared crate.
 5. **What did the before and after show, and under what conditions?** One back-to-back run each on a heavily loaded host, and the lint step alone after the fix, read as evidence.
 6. **Did any map move?** No: no engine code changes.
+<!-- plan-archive: archived 2026-11-12 -->
+### T114 (the push's money-candidates check, FR-012)
+
+- **Approach**: `record money-candidates` (`rust/gate/crates/record/src/record/money.rs`) scans the record's question pages side by side, dealt round the machine's cores and put back in page order, where it scanned them one after another.
+
+   **Decisions** (FR-012, SC-007):
+   - Where the time went: the check scans every one of the record's 1,652 question pages (18 MB) with its regular expressions, one page after another on one core, 2.07-2.19 s alone and 2.46 s of a 3.68 s push (observed 2026-11-11 and 2026-11-12, method: `l7r-gate measure push-check-times`, and `date +%s.%N` around `l7r-gate.sh record money-candidates --check` three times, `ls research/questions | wc -l`, `du -sh`). Each page's scan (`scan`) reads that page, and its notes page's base, alone.
+   - Side by side rather than skipped: a skip keyed on what the check reads (the pages, the conversion table, the backfill list, the binary) would hold its verdict too, but would still cost the full scan after any record edit, the pushes that carry them. Running the pages side by side removes the time on every push, and changes nothing the check computes.
+   - The same output: the pages are dealt round the cores (page i to core i mod the core count, so long runs of heavy pages are shared) and their amounts put back in page order before the stable sort that orders the listing, so it sees the same sequence as before. `money-candidates` with `--all --context`, with `--check` and with nothing gave byte-identical stdout, stderr and exit before and after (observed 2026-11-12, method: each run before and after the change into a file, `cmp`).
+   - Measured the same way before and after (SC-007): `money-candidates --check` alone 2.08-2.19 s before and 0.37-0.81 s after, at loads of 7-9 (observed 2026-11-12, method: `date +%s.%N` around it, three runs before and five after). In the push's timing, the row 2.46 s before and 0.79 s after, the whole push in one process 3.68 s and 2.28 s (observed 2026-11-11 and 2026-11-12, method: `l7r-gate measure push-check-times`, at loads of 6.5 and 6.8).
+   - The tests: the record crate's money tests, which run `amounts` over fixture pages, unchanged and green, and every line of the change covered.
+
+### T114 Approach (checklist part A)
+
+1. **The goal, in the world.** The push's money check costs a fraction of a second.
+2. **The constraints.** FR-012 and SC-007: its output byte-identical.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the timings and the output comparison above.
+4. **Do they describe the world here?** Measured on this clone.
+5. **The order.** After T113.
+6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** The pages' regular expressions, one page after another.
+2. **Does the change remove work, or only move it?** Moves it onto idle cores: the same scans, side by side.
+3. **What do you expect it to save, and why?** Most of the scan's time, the cores being idle during a push.
+4. **How does the work grow?** With the record's pages over the cores.
+5. **What did the before and after show, and under what conditions?** A few runs each on a loaded host, read as evidence.
+6. **Did any map move?** No: no engine code changes.

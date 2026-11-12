@@ -371,8 +371,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T113 The dependents' lint keyed on a crate's public interface: after a core edit the 16 crates built on it re-lint for 8.5 s of clippy's 10.6 s, though their lint changes only with core's interface; not exact, its design reviewed first (2026-11-11) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the dependents' lint keyed on the interface: a body-only core edit's lint step 10.8 s to 1.9 s
-- [ ] T114 The push's money-candidates check: 2.46 s of a 3.68 s push, the whole record scanned on every push whatever it changed (2026-11-11) (the GM 2026-11-11)
+- [x] T114 The push's money-candidates check: 2.46 s of a 3.68 s push, the whole record scanned on every push whatever it changed (2026-11-11) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: the money check's pages side by side: its push row 2.46 s to 0.79 s
 - [ ] T115 The full hook run's two longest suites: sync-with-main 54.4 s and entry-gate 50.4 s of its 64.8 s (2026-11-11) (the GM 2026-11-11)
       research: rendering
 - [ ] T116 The checks crate's coverage tests: 8.9 s alone and 15-16 s beside the others, the floor of a core edit's coverage step, rerun on any edit anywhere since its tests declare the whole tree (2026-11-11) (the GM 2026-11-11)
