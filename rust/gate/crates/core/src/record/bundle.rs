@@ -306,51 +306,9 @@ pub fn py_value_repr(value: &serde_json::Value) -> String {
     }
 }
 
-/// A string as Python's `repr` prints it.
-#[must_use]
-pub fn py_repr(s: &str) -> String {
-    let quote = if s.contains('\'') && !s.contains('"') {
-        '"'
-    } else {
-        '\''
-    };
-    let mut out = String::with_capacity(s.len() + 2);
-    out.push(quote);
-    for c in s.chars() {
-        match c {
-            '\\' => out.push_str("\\\\"),
-            '\n' => out.push_str("\\n"),
-            '\t' => out.push_str("\\t"),
-            '\r' => out.push_str("\\r"),
-            c if c == quote => {
-                out.push('\\');
-                out.push(c);
-            }
-            c if !printable(c) => {
-                let n = u32::from(c);
-                let _ = if n <= 0xff {
-                    write!(out, "\\x{n:02x}")
-                } else if n <= 0xffff {
-                    write!(out, "\\u{n:04x}")
-                } else {
-                    write!(out, "\\U{n:08x}")
-                };
-            }
-            c => out.push(c),
-        }
-    }
-    out.push(quote);
-    out
-}
-
-/// `str.isprintable` for one character: not a control, format, separator (but the space), surrogate or private-use one.
-fn printable(c: char) -> bool {
-    !matches!(u32::from(c),
-        0..=0x1f | 0x7f..=0xa0 | 0xad | 0x600..=0x605 | 0x61c | 0x6dd | 0x70f | 0x890..=0x891 | 0x8e2 | 0x1680 | 0x180e
-        | 0x2000..=0x200f | 0x2028..=0x202f | 0x205f..=0x2064 | 0x2066..=0x206f | 0x3000 | 0xe000..=0xf8ff | 0xfeff
-        | 0xfff9..=0xfffb | 0x1_10bd | 0x1_10cd | 0x1_3430..=0x1_343f | 0x1_bca0..=0x1_bca3 | 0x1_d173..=0x1_d17a | 0xe_0001
-        | 0xe_0020..=0xe_007f | 0xf_0000..=0x0010_ffff)
-}
+/// A string as Python's `repr` prints it: the guard's `py_text::repr` since feature 449 T83, where the review ledger's lint names a
+/// cell by its repr and the guard crate cannot reach the gate's (`ask:449-T83-scope`, one implementation).
+pub use l7r_guard::shared::py_text::repr as py_repr;
 
 /// `dest.parent.mkdir(parents=True, exist_ok=True); dest.write_text(text)`.
 ///

@@ -71,7 +71,7 @@
     },
     "ledger-owed-write": {
       "kind": "step",
-      "what": "ledger_owed.py - review ledger rows written for check passes that had none"
+      "what": "l7r-gate reviews ledger-owed - review ledger rows written for check passes that had none"
     },
     "memo_check": {
       "kind": "check",

@@ -29,6 +29,9 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+#: the gate's wrapper: the ledger's owed rows are `l7r-gate reviews ledger-owed` since feature 449 T83 (`ask:449-T83-scope`), run by
+#: command until this file's own port (T83 slice 5) calls them in process
+GATE = HERE / "gates" / "l7r-gate.sh"
 def _codeid():  # noqa: ANN202 - `scripts/gates/codeid.py` by path (stdlib only), as l7r-gate stamp loads it
     import importlib.util  # noqa: PLC0415
 
@@ -83,8 +86,8 @@ def write_ledger(root: Path, d: Path) -> None:
     traced to this feature - its claims round's above all (405 T39, D13). Asked in the first pass, and again after the claims
     wait (405 T52, D27: T49's claims round ran beside the gate, after the first pass, and its row was written by hand)."""
     ledger = str(root / "dev" / "review-ledger.md")
-    run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write-plan-reviews", "--ledger", ledger])
-    run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--write", f"specs/{d.name}/ (the records its checks wrote; make land)", "--ledger", ledger])
+    run(root, [str(GATE), "reviews", "ledger-owed", "--write-plan-reviews", "--ledger", ledger])
+    run(root, [str(GATE), "reviews", "ledger-owed", "--write", f"specs/{d.name}/ (the records its checks wrote; make land)", "--ledger", ledger])
     if run(root, ["git", "status", "--porcelain", "--", "dev/review-ledger.md"])[1].strip():
         run(root, ["git", "commit", "-q", "-m", "the review passes' ledger rows, written at landing (make land)", "--", "dev/review-ledger.md"])
 
@@ -253,7 +256,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         stops.append(stale)
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
-    _rc, owed = run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--ledger", str(root / "dev" / "review-ledger.md")])
+    _rc, owed = run(root, [str(GATE), "reviews", "ledger-owed", "--ledger", str(root / "dev" / "review-ledger.md")])
     if "| ? |" in owed:
         stops.append('review passes with no ledger row - make ledger-owed WRITE="<where you recorded what you did>"')
     env = {"L7R_LAND_TICKS": " ".join(tasks)}

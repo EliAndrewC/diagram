@@ -87,7 +87,7 @@ fi
 # GUARD_EDIT_OK: feature 385 T72 (plan D92) - A PLAN REVIEW'S ROW IS WRITTEN HERE: its agent recorded the verdict with `make
 # plan-verdict`, so where it was recorded is known; 81 such rows were written by hand on 2026-10-18 and two landings refused for one.
 # Any other owed pass still refuses below, as before.
-( cd "$ROOT" && eval "${LAND_TOOLING_PLAN_ROWS:-python3 scripts/reviews/ledger_owed.py --write-plan-reviews --ledger dev/review-ledger.md}" ) >&2 || :
+( cd "$ROOT" && eval "${LAND_TOOLING_PLAN_ROWS:-scripts/gates/l7r-gate.sh reviews ledger-owed --write-plan-reviews --ledger dev/review-ledger.md}" ) >&2 || :
 if git -C "$ROOT" rev-parse -q --verify HEAD >/dev/null && [ -n "$(git -C "$ROOT" status --porcelain -- dev/review-ledger.md 2>/dev/null)" ]; then  # T72: a fresh repo has no HEAD to diff
   git -C "$ROOT" commit -q -m "the plan reviews' ledger rows, written at landing (feature 385 T72)" -- dev/review-ledger.md || die "the plan reviews' ledger rows could not be committed"
 fi
@@ -120,7 +120,7 @@ git -C "$ROOT" diff --quiet HEAD -- "$@" || die "uncommitted changes in FILES - 
 if [ -z "${LEDGER_ROWS_OK:-}" ]; then
   committed=$(mktemp)
   git -C "$ROOT" show HEAD:dev/review-ledger.md > "$committed" 2>/dev/null || :
-  if ! ( cd "$ROOT" && eval "${LAND_TOOLING_LEDGER:-python3 scripts/reviews/ledger_owed.py --refuse --ledger}" "$committed" ) >&2; then
+  if ! ( cd "$ROOT" && eval "${LAND_TOOLING_LEDGER:-scripts/gates/l7r-gate.sh reviews ledger-owed --refuse --ledger}" "$committed" ) >&2; then
     rm -f "$committed"
     die "check passes owe ledger rows (above) - write them (make ledger-owed WRITE=\"<where you recorded what you did>\"), commit, and land again"
   fi

@@ -153,32 +153,6 @@ fn only_a_finished_foreground_launch_is_a_pass() {
 }
 
 #[test]
-fn a_transcript_is_found_under_its_project() {
-    let root = dir("projects");
-    let sub = root.join("p/s/subagents");
-    std::fs::create_dir_all(&sub).unwrap();
-    std::fs::write(root.join("p/s2"), "not a dir").unwrap();
-    std::fs::write(sub.join("agent-abc.jsonl"), "x").unwrap();
-    assert_eq!(
-        super::transcript_under(&root, "abc"),
-        Some(sub.join("agent-abc.jsonl"))
-    );
-    assert_eq!(super::transcript_under(&root, "other"), None);
-    assert_eq!(
-        super::transcript_under(std::path::Path::new("/nonexistent-l7r"), "x"),
-        None
-    );
-}
-
-#[test]
-fn ties_round_to_even() {
-    assert_eq!(super::round_half_even(2.5), 2);
-    assert_eq!(super::round_half_even(3.5), 4);
-    assert_eq!(super::round_half_even(1.4), 1);
-    assert_eq!(super::round_half_even(1.6), 2);
-}
-
-#[test]
 fn a_step_leaves_a_tool_usage_line() {
     let root = clone_at("usage");
     usage(&root.join(".git"), "planhold-restore", "step", "changed");
@@ -211,10 +185,4 @@ fn a_prompt_after_noise_and_two_transcripts_of_one_agent() {
     assert!(!super::log_pass_found(
         &g, "launched", &odd_input, 1.0, &done
     ));
-    let root = dir("two-projects");
-    for s in ["p/s/subagents", "p/t/subagents"] {
-        std::fs::create_dir_all(root.join(s)).unwrap();
-        std::fs::write(root.join(s).join("agent-ab.jsonl"), "x").unwrap();
-    }
-    assert!(super::transcript_under(&root, "ab").is_some());
 }

@@ -3,14 +3,18 @@
 //! 2026-10-01). Every check pass with no row is named at each commit, never refused there. A command that appends its rows and commits is
 //! judged on the ledger as it will be committed. `LEDGER_LINT_OK` with a reason is the escape.
 //!
-//! Plan T027's decisions: (a) the guard's reading of the command in-process; (b) what a row owes and what is owed are `ledger_lint.py`,
-//! `ledger_owed.py` and `review_cost.py`, phase-3 tools asked by path on a `git commit`.
+//! Plan T027's decisions: (a) the guard's reading of the command in-process; (b) what a row owes and what is owed were phase-3 tools
+//! asked by path on a `git commit`. Since feature 449 T83 (`ask:449-T83-scope`) the lint and the cost are `shared::ledger`, called in
+//! process (the one implementation, which the gate's `reviews ledger-lint` and `review-cost` build on), and what is owed is the gate's
+//! `l7r-gate reviews ledger-owed`, asked by command as the pair guard asks `l7r-gate reviews` (the guard crate cannot depend on the gate's).
 
 use std::path::{Path, PathBuf};
 
 use crate::guards::discard_hooks::shlex;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, Escape};
+use crate::shared::ledger::cost::last_cells;
+use crate::shared::ledger::problems;
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
@@ -30,17 +34,19 @@ const LEDGER: &str = "dev/review-ledger.md";
 pub(crate) struct Ctx {
     pub here: PathBuf,
     pub tree: PathBuf,
-    pub python: &'static str,
+    /// Where the agents' transcripts are (`~/.claude/projects`), for a row's cost cells.
+    pub projects: PathBuf,
 }
 
 impl Ctx {
-    /// A review tool: the repository's own copy, else this tree's.
-    fn tool(&self, root: &str, name: &str) -> String {
-        let own = Path::new(root).join("scripts/reviews").join(name);
+    /// The gate's wrapper: the repository's own copy, else this tree's (as the Python tools it runs were found).
+    fn gate(&self, root: &str) -> String {
+        let name = "scripts/gates/l7r-gate.sh";
+        let own = Path::new(root).join(name);
         let path = if own.is_file() {
             own
         } else {
-            self.tree.join("scripts/reviews").join(name)
+            self.tree.join(name)
         };
         path.to_string_lossy().into_owned()
     }
@@ -81,7 +87,7 @@ pub(crate) fn commit_root(cmd: &str) -> Option<String> {
 }
 
 /// The row a `make append` in this command will write to the ledger, cost cells included for `AGENT=`.
-fn appended(cmd: &str, cost_tool: &str, c: &Ctx) -> Option<String> {
+fn appended(cmd: &str, c: &Ctx) -> Option<String> {
     let words = shlex(cmd).unwrap_or_default();
     let at = words
         .windows(2)
@@ -98,13 +104,7 @@ fn appended(cmd: &str, cost_tool: &str, c: &Ctx) -> Option<String> {
     }
     let mut row = line.to_owned();
     if !value("AGENT").is_empty() {
-        let said = ask(
-            &c.here,
-            c.python,
-            &[cost_tool, "--agent", value("AGENT"), "--last"],
-            "",
-        );
-        if let Some(cost) = said.out.lines().last().filter(|_| said.ok()) {
+        if let Ok(cost) = last_cells(value("AGENT"), &c.projects) {
             let head = line.trim_end();
             row = format!(
                 "{head}{} {cost} |",
@@ -140,13 +140,14 @@ fn stages_ledger(cmd: &str, root: &str, row: bool, c: &Ctx) -> bool {
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     let here = std::env::current_dir().unwrap_or_default();
     let tree = std::env::var("L7R_GUARD_TREE").map_or_else(|_| here.clone(), PathBuf::from);
+    let projects = Path::new(&std::env::var("HOME").unwrap_or_default()).join(".claude/projects");
     judge(
         event,
         session,
         &Ctx {
             here,
             tree,
-            python: "python3",
+            projects,
         },
     )
 }
@@ -205,7 +206,7 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     if root.is_empty() || !Path::new(&root).join(LEDGER).is_file() {
         return Vec::new();
     }
-    let row = appended(cmd, &c.tool(&root, "review_cost.py"), c);
+    let row = appended(cmd, c);
     let judged = Path::new(&root).join(LEDGER);
     // the ledger as it will read, judged from a copy removed when this returns (feature 449 T101)
     let dir = crate::shared::tempdir::TempDir::new("ledger");
@@ -218,8 +219,8 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     let path = ledger.to_string_lossy().into_owned();
     let owed = ask(
         Path::new(&root),
-        c.python,
-        &[&c.tool(&root, "ledger_owed.py"), "--ledger", &path],
+        "bash",
+        &[&c.gate(&root), "reviews", "ledger-owed", "--ledger", &path],
         "",
     )
     .out;
@@ -228,13 +229,9 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
         out.push(Answer::Notice(owed));
     }
     if stages_ledger(cmd, &root, row.is_some(), c) {
-        let said = ask(
-            &c.here,
-            c.python,
-            &[&c.tool(&root, "ledger_lint.py"), &path],
-            "",
-        );
-        if !said.ok() {
+        // an unreadable ledger refuses naming no row, as the Python lint's traceback did
+        let found = std::fs::read_to_string(&ledger).map(|t| problems(&t));
+        if !found.as_ref().is_ok_and(Vec::is_empty) {
             log::fire(
                 "ledger",
                 "blocked",
@@ -243,9 +240,9 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
                 &event.input,
                 session,
             );
-            let bad = said
-                .out
-                .lines()
+            let bad = found
+                .unwrap_or_default()
+                .iter()
                 .map(|l| format!("  {l}"))
                 .collect::<Vec<_>>()
                 .join("\n");

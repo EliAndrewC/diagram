@@ -278,7 +278,7 @@ push_cmd() {
   git fetch -q origin 2>/dev/null && refuse_unrelated_history
   # GUARD_EDIT_OK: feature 385 T72 (plan D92) - the plan reviews' ledger rows, which their agents' `make plan-verdict` recorded, are
   # written and committed here as a record (as the cohort's and the gate's are); every other owed pass still refuses at the checks
-  python3 "$ROOT/scripts/reviews/ledger_owed.py" --write-plan-reviews --ledger "$ROOT/dev/review-ledger.md" >&2 || :
+  "$ROOT/scripts/gates/l7r-gate.sh" reviews ledger-owed --write-plan-reviews --ledger "$ROOT/dev/review-ledger.md" >&2 || :
   if git -C "$ROOT" rev-parse -q --verify HEAD >/dev/null && [ -n "$(git -C "$ROOT" status --porcelain -- dev/review-ledger.md 2>/dev/null)" ]; then  # T72: a fresh repo has no HEAD to diff
     git -C "$ROOT" commit -q -m "the plan reviews' ledger rows, written at landing (feature 385 T72)" -- dev/review-ledger.md || die "the plan reviews' ledger rows could not be committed"
   fi

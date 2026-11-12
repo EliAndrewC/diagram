@@ -5,7 +5,7 @@ WHY (feature 294, GM 2026-10-01: *"I want to take a hard look at what it is doin
 was a hand count of the ledger by an agent; this is the same count by a script, so the answer is re-taken on demand and every
 new check (the glyph check, the fix check) shows up from its first run - including a check that never finds anything. The rows
 before feature 294 carry no class, so they are classified once, as data (`dev/review-ledger-r0.json`); the measured table's
-rows carry their class and cost in the row (`scripts/reviews/ledger_lint.py` holds them to it).
+rows carry their class and cost in the row (the gate's `reviews ledger-lint` holds them to it).
 
 Usage: review_census.py [--root CLONE]   prints one line per check: runs, NOT-REVIEWABLE runs, findings by class, author-missed,
 and - for the measured rows - wall time and tokens.
@@ -14,9 +14,9 @@ and - for the measured rows - wall time and tokens.
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
 import re
+import subprocess
 import sys
 from collections import defaultdict
 from collections.abc import Sequence
@@ -27,13 +27,12 @@ CLASSES = ("geometric", "judgment", "paperwork", "nothing")
 _TOK = re.compile(r"^(\d+)k in")
 
 
-def _lint() -> Any:
-    spec = importlib.util.spec_from_file_location("ledger_lint_for_census", Path(__file__).resolve().parent / "ledger_lint.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = mod
-    spec.loader.exec_module(mod)
-    return mod
+def _measured(ledger_text: str) -> tuple[list[str], list[tuple[int, list[str]]]]:
+    """The table's columns and its measured rows, read by the gate's `reviews ledger-rows` (the lint's reading, feature 449 T83)."""
+    gate = Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"
+    out = subprocess.run([str(gate), "reviews", "ledger-rows"], input=ledger_text, capture_output=True, text=True, check=True)
+    got = json.loads(out.stdout)
+    return got["columns"], got["rows"]
 
 
 def tally(r0: Sequence[dict[str, Any]], ledger_text: str) -> dict[str, dict[str, float]]:
@@ -49,11 +48,11 @@ def tally(r0: Sequence[dict[str, Any]], ledger_text: str) -> dict[str, dict[str,
         t["author_missed"] += float(row.get("author_missed_fixed") or 0)
         t["wall_s"] += 60.0 * float(row.get("wall_min") or 0)
     seen: set[tuple[str, ...]] = set()
-    lint = _lint()
-    for _n, cells in lint.measured_rows(ledger_text):
-        if len(cells) != len(lint.COLUMNS):
+    columns, rows = _measured(ledger_text)
+    for _n, cells in rows:
+        if len(cells) != len(columns):
             continue
-        row = dict(zip(lint.COLUMNS, cells, strict=True))
+        row = dict(zip(columns, cells, strict=True))
         t = out[row["check"]]
         if row["class"] in CLASSES:
             t[row["class"]] += 1

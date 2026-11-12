@@ -138,10 +138,11 @@ pub fn verdict_of(text: &str) -> String {
     if let Some(v) = first_group(&VERDICT, lead) {
         return v;
     }
-    let first = text
-        .trim()
-        .lines()
-        .find(|l| !l.trim().is_empty())
+    // Python's `text.strip().splitlines()` and `ln.strip()`: its whitespace and line ends, not Rust's (feature 449 T83, where the ledger
+    // write reads a reply's verdict through this)
+    let first = crate::shared::checks::reply::py_lines(crate::shared::py_text::strip(text))
+        .into_iter()
+        .find(|l| !crate::shared::py_text::strip(l).is_empty())
         .unwrap_or("");
     if found(&FINDING_COUNT, first) {
         return "findings".to_owned();

@@ -117,11 +117,12 @@ def ledger_rows(root: str, item: dict) -> None:
     """Each check pass of the session that ended gets its review-ledger row, filled from the agent's own reply, its acted-on
     cell naming the brief's directory (where the session records its checks). Headless sessions wrote none: 343's and 368's
     owed 124 rows at landing (2026-10-11), and the push refuses until each pass has one (feature 371)."""
-    tool = os.path.join(root, "scripts", "reviews", "ledger_owed.py")
+    # the ledger write is the gate's `reviews ledger-owed` since feature 449 T83 (`ask:449-T83-scope`)
+    tool = os.path.join(root, "scripts", "gates", "l7r-gate.sh")
     if not os.path.isfile(tool):  # a root that is not a clone of this repository (the runner's own tests)
         return
     where = os.path.relpath(os.path.dirname(item["brief"]), root) if os.path.isabs(item["brief"]) else os.path.dirname(item["brief"])
-    subprocess.run(["python3", tool, "--ledger", os.path.join(root, "dev", "review-ledger.md"),
+    subprocess.run([tool, "reviews", "ledger-owed", "--ledger", os.path.join(root, "dev", "review-ledger.md"),
                     "--log", os.path.join(root, ".git", "check-passes.jsonl"), "--write", f"{where or 'the brief'}'s checks file",
                     "--session", item["sid"]], cwd=root, capture_output=True, check=False)
 

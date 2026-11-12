@@ -3,9 +3,10 @@
 
 use std::path::{Path, PathBuf};
 
-/// The `popup-rounds` reader's ISO times, which the reviews read too.
+/// The `popup-rounds` reader's ISO times, which the reviews read too: the guard's `shared::iso` since feature 449 T83, where the review
+/// cost's transcript times are read with it (`ask:449-T83-scope`, one implementation).
 pub mod popup_rounds {
-    pub mod iso;
+    pub use l7r_guard::shared::iso;
 }
 
 #[must_use]

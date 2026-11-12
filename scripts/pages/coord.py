@@ -24,6 +24,10 @@ import subprocess
 import sys
 
 MAX = 80  # lines shown at most: a KEY that matches more is too wide, and the count says so
+#: the gate's wrapper, which lints a ledger row and costs a review (`l7r-gate reviews ledger-lint`, `review-cost`, feature 449 T83)
+GATE = pathlib.Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"
+#: the review ledger's measured table, whose rows the lint judges
+MEASURED_HEADING = "## Review checks, measured (feature 294 on)"
 
 
 def resolve(name: str, cwd: pathlib.Path | None = None) -> pathlib.Path:
@@ -68,10 +72,17 @@ def ledger_row_problems(path: pathlib.Path, line: str) -> list[str]:
     so a row with a wrong class word was committed and only a tooling test caught it). Any other file: nothing to judge."""
     if path.name != "review-ledger.md" or path.parent.name != "dev":
         return []
-    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "reviews"))
-    import ledger_lint  # noqa: PLC0415 - the one lint, from its own directory
+    import tempfile  # noqa: PLC0415
 
-    return [p.split(": ", 1)[-1] for p in ledger_lint.problems(f"{ledger_lint.MEASURED_HEADING}\n{line}\n")]
+    # the one lint is the gate's `reviews ledger-lint` since feature 449 T83 (`ask:449-T83-scope`): the row is judged under the measured
+    # table's heading in a scratch file, as `ledger_lint.problems` judged it in memory
+    with tempfile.NamedTemporaryFile("w", suffix=".md", encoding="utf-8", delete=False) as fh:
+        fh.write(f"{MEASURED_HEADING}\n{line}\n")
+    try:
+        out = subprocess.run([str(GATE), "reviews", "ledger-lint", fh.name], capture_output=True, text=True, check=False)
+    finally:
+        os.unlink(fh.name)
+    return [p.split(": ", 1)[-1] for p in out.stdout.splitlines()]
 
 
 def with_cost(line: str, cells: str) -> str:
@@ -81,13 +92,13 @@ def with_cost(line: str, cells: str) -> str:
 
 
 def agent_cells(agent: str) -> str:
-    """The latest return's cost cells of review agent `agent`, from `review_cost.py --last` - the one place they are read.
+    """The latest return's cost cells of review agent `agent`, from `l7r-gate reviews review-cost --last` (`review_cost.py`'s port,
+    feature 449 T83) - the one place they are read.
 
     WHY (the round arbiter on hour:374-match-the-research-continued@1): a session composing the cells through a shell variable
     (`C=$(make review-cost ...)`, then `LINE="... $C |"`) had its row judged by the ledger hook before the shell expanded it -
     about fourteen refusals in a window, one taking the reply file written before it down too."""
-    script = pathlib.Path(__file__).resolve().parents[1] / "reviews" / "review_cost.py"
-    out = subprocess.run([sys.executable, str(script), "--agent", agent, "--last"], capture_output=True, text=True, check=False)
+    out = subprocess.run([str(GATE), "reviews", "review-cost", "--agent", agent, "--last"], capture_output=True, text=True, check=False)
     if out.returncode != 0 or not out.stdout.strip():
         raise ValueError(out.stderr.strip() or f"no cost for agent {agent}")
     return out.stdout.strip().splitlines()[-1]

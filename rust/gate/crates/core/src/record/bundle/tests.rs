@@ -203,9 +203,10 @@ fn every_unprintable_range_is_escaped() {
         '\u{feff}',
         '\u{ad}',
     ] {
-        assert!(!printable(c));
+        assert!(py_repr(&c.to_string()).starts_with("'\\"));
     }
-    assert!(printable(' ') && printable('\u{57a3}'));
+    // the repr is the guard's since feature 449 T83; it is held here too, as this crate's callers read it
+    assert_eq!(py_repr(" \u{57a3}"), "' \u{57a3}'");
     assert!(hit(&pyre("a\\"), "a\\"));
 }
 

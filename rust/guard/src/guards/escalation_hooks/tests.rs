@@ -1,11 +1,12 @@
-//! The decider over a fixture clone, the ledger tool stubbed by shell snippets (`tests/hooks/test-escalation-hooks.sh`, replayed through the shim, runs the real one).
+//! The decider over a fixture clone and its ledger, read in process by `shared::ledger` (`tests/hooks/test-escalation-hooks.sh`, replayed
+//! through the shim, is the verdict).
 
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
 use super::{
-    classify, cli, decide, filtered_since_gm, judge, judge_ask, read_state, run_cli, unnamed, Ctx,
+    classify, cli, decide, filtered_since_gm, judge, judge_ask, read_state, run_cli, unnamed,
 };
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
@@ -19,33 +20,41 @@ fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     d.hold(held)
 }
 
-fn ctx(d: &Path, disposed: bool) -> Ctx<'static> {
-    Ctx {
-        tree: d.to_path_buf(),
-        python: "sh",
-        count_code: "echo 7",
-        disposed_code: if disposed { "exit 0" } else { "exit 1" },
-    }
+const HEAD: &str = "## Review checks, measured (feature 294 on)\n\n| date | check | subject | verdict | finding | class | author missed? | acted on | wall | tokens |\n|---|---|---|---|---|---|---|---|---|---|\n";
+
+fn review_row(acted: &str) -> String {
+    format!("| 2026-10-12 | settlement-review | s | v | a bug | judgment | no | {acted} | 1 s | 1k in (0k cached) / 1.0k out |\n")
 }
 
-fn agent(kind: &str, prompt: &str, d: &Path, c: &Ctx) -> Vec<Answer> {
+/// The clone's ledger: seven rows, then `more`.
+fn ledger(d: &Path, more: &str) {
+    let rows: String = (0..7).map(|_| review_row("held for the GM")).collect();
+    std::fs::create_dir_all(d.join("dev")).unwrap();
+    std::fs::write(
+        d.join("dev/review-ledger.md"),
+        format!("{HEAD}{rows}{more}"),
+    )
+    .unwrap();
+}
+
+fn agent(kind: &str, prompt: &str, d: &Path) -> Vec<Answer> {
     let e = Event {
         name: "PreToolUse".to_owned(),
         input: json!({"tool_name": "Agent", "tool_input": {"subagent_type": kind, "prompt": prompt}}),
     };
-    judge(&e, &Session::from_input(&e.input), d, c)
+    judge(&e, &Session::from_input(&e.input), d)
 }
 
-fn stop_with(input: &Value, d: &Path, c: &Ctx) -> Vec<Answer> {
+fn stop_with(input: &Value, d: &Path) -> Vec<Answer> {
     let e = Event {
         name: "Stop".to_owned(),
         input: input.clone(),
     };
-    judge(&e, &Session::from_input(&e.input), d, c)
+    judge(&e, &Session::from_input(&e.input), d)
 }
 
-fn stop(d: &Path, c: &Ctx) -> Vec<Answer> {
-    stop_with(&json!({"session_id": "t"}), d, c)
+fn stop(d: &Path) -> Vec<Answer> {
+    stop_with(&json!({"session_id": "t"}), d)
 }
 
 fn refused(got: &[Answer], words: &str) -> bool {
@@ -78,51 +87,40 @@ fn filter_dispatch() -> Value {
 #[test]
 fn a_review_arms_the_filter_disarms_and_the_refusal_comes_once() {
     let d = world("arm");
-    let c = ctx(&d, false);
+    ledger(&d, "");
     assert!(
-        matches!(&agent("settlement-review", "go", &d, &c)[..], [Answer::Notice(t)] if t.contains("escalation-check"))
+        matches!(&agent("settlement-review", "go", &d)[..], [Answer::Notice(t)] if t.contains("escalation-check"))
     );
     assert_eq!(armed(&d), "settlement-review");
     assert_eq!(
         read_state(&d).get("ledger_rows").and_then(Value::as_str),
         Some("7")
     );
-    assert!(refused(
-        &stop(&d, &c),
-        "FINDINGS UNFILTERED: settlement-review"
-    ));
-    assert!(stop(&d, &c).is_empty());
-    assert!(agent("escalation-check", "draft", &d, &c).is_empty());
+    assert!(refused(&stop(&d), "FINDINGS UNFILTERED: settlement-review"));
+    assert!(stop(&d).is_empty());
+    assert!(agent("escalation-check", "draft", &d).is_empty());
     assert_eq!(armed(&d), "");
-    agent("building-review", "go", &d, &c);
-    assert!(agent(
-        "size-audit",
-        "x ESCALATION_OK=\"nothing relayed here\"",
-        &d,
-        &c
-    )
-    .is_empty());
+    agent("building-review", "go", &d);
+    assert!(agent("size-audit", "x ESCALATION_OK=\"nothing relayed here\"", &d).is_empty());
     assert_eq!(armed(&d), "");
-    assert!(agent("quote-check", "x", &d, &c).is_empty());
+    assert!(agent("quote-check", "x", &d).is_empty());
     let bash = Event {
         name: "PreToolUse".to_owned(),
         input: json!({"tool_name": "Bash"}),
     };
-    assert!(judge(&bash, &Session::from_input(&bash.input), &d, &c).is_empty());
+    assert!(judge(&bash, &Session::from_input(&bash.input), &d).is_empty());
 }
 
 #[test]
 fn a_disposed_review_owes_nothing_and_a_failed_count_is_zero() {
     let d = world("disposed");
-    let c = ctx(&d, true);
-    agent("settlement-review", "go", &d, &c);
-    assert!(stop(&d, &c).is_empty());
+    ledger(&d, "");
+    agent("settlement-review", "go", &d);
+    ledger(&d, &review_row("fixed"));
+    assert!(stop(&d).is_empty());
     assert_eq!(armed(&d), "");
-    let failing = Ctx {
-        count_code: "exit 3",
-        ..ctx(&d, false)
-    };
-    agent("settlement-review", "go", &d, &failing);
+    std::fs::write(d.join("dev/review-ledger.md"), [0xff_u8]).unwrap();
+    agent("settlement-review", "go", &d);
     assert_eq!(
         read_state(&d).get("ledger_rows").and_then(Value::as_str),
         Some("0")
@@ -140,14 +138,14 @@ fn asks_and_offers_are_told_apart() {
 #[test]
 fn a_question_owes_the_filter_once_and_a_dispatch_since_the_gm_answers_it() {
     let d = world("ask");
-    let c = ctx(&d, false);
+    ledger(&d, "");
     let tr = transcript(&d, &[gm("2026-11-08T01:00:00Z")]);
     let ask = json!({"transcript_path": tr, "last_assistant_message": "Should I go on?", "cwd": d});
-    assert!(refused(&stop_with(&ask, &d, &c), "QUESTION UNFILTERED"));
-    assert!(stop_with(&ask, &d, &c).is_empty());
+    assert!(refused(&stop_with(&ask, &d), "QUESTION UNFILTERED"));
+    assert!(stop_with(&ask, &d).is_empty());
     let offer =
         json!({"transcript_path": tr, "last_assistant_message": "I can revert it.", "cwd": d});
-    assert!(refused(&stop_with(&offer, &d, &c), "OFFER UNFILTERED"));
+    assert!(refused(&stop_with(&offer, &d), "OFFER UNFILTERED"));
     let tr2 = transcript(&d, &[gm("x"), filter_dispatch()]);
     assert!(filtered_since_gm(&tr2));
     assert!(judge_ask(
@@ -164,7 +162,7 @@ fn a_question_owes_the_filter_once_and_a_dispatch_since_the_gm_answers_it() {
 #[test]
 fn a_kept_question_is_named_and_a_named_one_is_no_new_ask() {
     let d = world("kept");
-    let c = ctx(&d, false);
+    ledger(&d, "");
     let row = json!({"kind": "question", "status": "kept", "kept": "2026-11-08T02:00:00Z", "question": "which road?"});
     let older = json!({"kind": "question", "status": "kept", "kept": "2026-11-08T00:00:00Z", "question": "old?"});
     let lines = format!(
@@ -182,11 +180,8 @@ fn a_kept_question_is_named_and_a_named_one_is_no_new_ask() {
     );
     let input = json!({"transcript_path": tr, "last_assistant_message": "done", "cwd": d});
     assert_eq!(unnamed(&d, &input), ["432#0: which road?"]);
-    assert!(refused(
-        &stop_with(&input, &d, &c),
-        "QUESTION KEPT, NOT NAMED"
-    ));
-    assert!(stop_with(&input, &d, &c).is_empty());
+    assert!(refused(&stop_with(&input, &d), "QUESTION KEPT, NOT NAMED"));
+    assert!(stop_with(&input, &d).is_empty());
     let named = json!({"transcript_path": tr, "last_assistant_message": "Should I take 432#0, which road?", "cwd": d});
     assert!(unnamed(&d, &named).is_empty());
     assert!(judge_ask(&named, &d).is_none());
@@ -252,13 +247,7 @@ fn outside_a_repository_nothing_is_said() {
         name: "Stop".to_owned(),
         input: json!({}),
     };
-    let c = Ctx {
-        tree: "/".into(),
-        python: "sh",
-        count_code: "",
-        disposed_code: "",
-    };
-    assert!(judge(&e, &Session::from_input(&e.input), Path::new("/"), &c).is_empty());
+    assert!(judge(&e, &Session::from_input(&e.input), Path::new("/")).is_empty());
     let bash = Event {
         name: "PreToolUse".to_owned(),
         input: json!({"tool_name": "Bash"}),

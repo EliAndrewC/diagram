@@ -2,10 +2,14 @@
 //! `review_owed.py`), the glyph clock (`glyph`, its hour half), a dispatch's prerequisites and a review's verdict record (`prereq`,
 //! `review_prereq.py`), the feature's hourly checkpoint (`checkpoint`, `checkpoint.py`), and `door`, the one door the step-back
 //! bundle reaches them through until T83 ports it. `hm_approval._state_at` is the guard's `feature_approval_hooks::at_rev`, reused.
+//! The review ledger (feature 449 T83, `ask:449-T83-scope`): `ledger`, the command lines of `ledger_lint.py` and `review_cost.py` over the
+//! guard's `shared::ledger`, and `ledger_passes`, `ledger_owed.py`'s port.
 
 pub mod checkpoint;
 pub mod door;
 pub mod glyph;
+pub mod ledger;
+pub mod ledger_passes;
 pub mod owed;
 pub mod prereq;
 
@@ -25,9 +29,17 @@ pub fn cli(args: &[String]) -> Reply {
         Some("owed") => owed::cli(rest),
         Some("prereq") => prereq::cli(rest),
         Some("checkpoint") => checkpoint::cli(rest),
+        Some("ledger-lint") => ledger::lint_cli(
+            rest,
+            &std::env::var_os("L7R_GATE_TREE").map_or_else(|| PathBuf::from("."), PathBuf::from),
+        ),
+        Some("ledger-rows") => ledger::rows_cli(rest, &mut std::io::stdin()),
+        Some("review-cost") => ledger::cost_cli(rest, &std::env::var("HOME").unwrap_or_default()),
+        Some("ledger-owed") => ledger_passes::cli(rest, &ledger_passes::Env::of_process()),
+        Some("ledger-passes") => ledger_passes::passes_cli(rest, &ledger_passes::Env::of_process()),
         _ => reply(
             String::new(),
-            "usage: l7r-gate reviews owed|prereq|checkpoint ...\n".to_owned(),
+            "usage: l7r-gate reviews owed|prereq|checkpoint|ledger-lint|ledger-rows|review-cost|ledger-owed|ledger-passes ...\n".to_owned(),
             2,
         ),
     }

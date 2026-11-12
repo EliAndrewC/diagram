@@ -15,8 +15,9 @@ no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 git -C "$FIX" init -q 2>/dev/null
 git -C "$FIX" config user.email t@t >/dev/null 2>&1
 git -C "$FIX" config user.name t >/dev/null 2>&1
-mkdir -p "$FIX/dev" "$FIX/scripts"
-cp "$HERE/../../scripts/reviews/ledger_lint.py" "$FIX/scripts/"
+# the lint and the cost run inside the guard and the owed report is the tree's `l7r-gate reviews ledger-owed` (feature 449 T83), so the
+# fixture carries no tool of its own
+mkdir -p "$FIX/dev"
 HEAD_TXT='# Ledger
 
 ## Review checks, measured (feature 294 on)

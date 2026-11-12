@@ -380,6 +380,16 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T116 The checks crate's coverage tests: 8.9 s alone and 15-16 s beside the others, the floor of a core edit's coverage step, rerun on any edit anywhere since its tests declare the whole tree (2026-11-11) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the checks crate's coverage 10.7 s to 0.9 s; a body-only core edit's static 30.3 s to 23.5 s
+- [ ] T117 T83's first slice (`ask:449-T83-scope`): the review ledger's tools, `ledger_owed.py`, `ledger_lint.py` and `review_cost.py`
+      research: rendering
+- [ ] T118 T83's second slice (`ask:449-T83-scope`): `speckit-todo.py`, its Rust callers calling it in-process
+      research: rendering
+- [ ] T119 T83's third slice (`ask:449-T83-scope`): the measure chain, `event_log.py`, `task_phases.py`, `feature_report.py`, `where_time.py`
+      research: rendering
+- [ ] T120 T83's fourth slice (`ask:449-T83-scope`): `stepback_bundle.py` with `turn_time.py`, `fix_yield.py` and `tool_yield.py`; `reviews_door.py`'s three verbs go
+      research: rendering
+- [ ] T121 T83's fifth slice (`ask:449-T83-scope`): `land.py` with `work_budget_view.py` and replay_owing's OLD side, last, proved by a verdict replay over recorded landings
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

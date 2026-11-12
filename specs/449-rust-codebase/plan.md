@@ -409,3 +409,127 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T115 to T115 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 
 <!-- plan-archive: T116 to T116 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+
+### T117 (T83's first slice, the review ledger's tools, `ask:449-T83-scope`)
+
+- **Approach**: `ledger_lint.py`, `review_cost.py` and `ledger_owed.py` ported with no door: the lint and a review's cost in the guard crate (`rust/guard/src/shared/ledger.rs`, `ledger/cost.rs`), the commands and the owed rows in the gate's `reviews` crate (`reviews/ledger.rs`: `reviews ledger-lint`, `ledger-rows`, `review-cost`; `reviews/ledger_passes.rs` and its `settle`, `rows`, `trace`: `reviews ledger-owed`, `ledger-passes`), every caller repointed and the three `.py` deleted in the same cut.
+
+   **Decisions** (`ask:449-T83-scope`, `ask:449-T76-scope`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - The lint and the cost live in the guard crate: the guard's `checks/passes.rs` already held a copy of `review_cost`'s arithmetic and `ledger_lint.CHECKS`, and the guard cannot build on the gate, which builds on the guard. One implementation (FR-003) puts them in the guard, as T89 reused the guard's `at_rev`; `passes.rs` now reads the shared code. `ledger_hooks` and `escalation_hooks` ask the lint and the cost in-process, where they ran Python by path, and `ledger_hooks` runs `reviews ledger-owed` by command through the gate's wrapper (the repository's own first, else the tree's). Two leaves moved into the guard with them, since the guard cannot reach `core`: `iso.rs` (Python's `datetime.fromisoformat`) and `py_text::repr`, `core` re-exporting both so its callers are unchanged.
+   - The callers: the Makefile's `ledger-owed` and `review-cost` recipes, `sync-with-main.sh`, `land-tooling.sh` (the defaults inside its `LAND_TOOLING_PLAN_ROWS` and `LAND_TOOLING_LEDGER` overrides, the suites' contract kept), `land.py` (Python until T121, running the command by subprocess), `page_session_runner.py`, `push.rs`'s `ledger-owed` row (now a gate row), and the Python importers, each now running the command: `coord.py` (`ledger-lint` on a scratch file, `review-cost --last`), `review_census.py` (`ledger-rows`) and `feature_report.py` (`ledger-passes`, until T119 ports it).
+   - Two corrections toward the Python in the guard, which no differential case reaches: a pass's cost in the pass log is computed as `review_cost.py` computed it (integer microseconds, Python's `int()`), where the guard's copy could round a half-second tie or an odd token count differently, and `event_log_hooks::verdict_of` reads a reply's first line with Python's `strip()` and `splitlines()`.
+   - The same outputs (FR-002): the Python (from a `git archive` of HEAD) against the Rust on the same inputs, each case set up identically at one path, its file times pinned, exit, stdout, stderr, every file of the work repository and the usage-log line compared: 149 cases, `ledger-owed` 69, the lint 9, the cost 71, over the real ledger, the real pass log of 2,950 lines, about 40 real agents' transcripts and scratch fixtures for every flag and branch, 0 differing, 33 reaching a traceback and 6 an argparse usage error (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s1/diff.py`). The repointed importers before and after, `coord.py`, the census, `feature_report`'s passes on the real log and the page runner's rows: 21 cases, 0 differing (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s1/diff2.py`). Normalizations: N1 stderr from `Traceback` on, N2 argparse's usage text (`ask:449-usage-text`), N3 the usage line's `utc`, N4 no bytecode. One real difference found and fixed: a relative `--transcripts` was joined to the working directory, which moved the path the kept-cost file stores. Divergences no case reaches: `--help` exits 2 (T82's N7), Python's `\w` and `\b` on a character like `²`, a pass's `segment` read as ASCII digits, a log line holding NaN or a lone surrogate skipped where Python kept it, glob characters in an agent id, and which undecodable page raises first.
+   - Timing: the Python 29.1 s and the Rust 20.9 s over the first harness's 149 runs, process time alone (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s1/diff.py`).
+   - The census at the cut: a `git grep` of the three names over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/` and `tests/`, untracked files included, finds provenance comments and docstrings, and one error text kept byte for byte, `_review_cost: no transcript ...`; no `specs/*/measurements*.json` command runs them (observed 2026-11-12, method: that search). `turn_time.py` is still Python, `scripts/measure/turn_time.py`, 120 lines, its one importer `stepback_bundle.py`, so it ports in T120 (observed 2026-11-12, method: `git ls-files` and `git grep`).
+   - The coverage and the checks: every new line reached by its crate's tests and the crates `clippy::pedantic` clean, `make static` clean on 19 crates, `make rust-test` green (the guard 536 tests, `reviews` 62), `make hooks-test HOOKS_ALL=1` green on all 54 suites (observed 2026-11-12, method: those commands).
+   - A cost to note: a `git commit` now starts the gate's wrapper in the ledger guard, which builds the binary first if a gate source is newer, inside the hook.
+
+### T117 Approach (checklist part A)
+
+1. **The goal, in the world.** The review ledger's tools are Rust, one implementation, and no Python of theirs is left.
+2. **The constraints.** FR-001, FR-002 and FR-003, the ruling `ask:449-T83-scope`.
+3. **Where each comes from.** G: the GM's words in `request.md` and the standing approval to delete ported Python; R: the ruling; O: the differential and the census above.
+4. **Do they describe the world here?** Run on this clone's real ledger, pass log and transcripts.
+5. **The order.** First of T83's five slices.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The differential's 170 cases with no difference, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T118 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T118 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T119 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T119 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T120 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T120 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T121 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T121 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

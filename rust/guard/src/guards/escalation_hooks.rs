@@ -15,11 +15,11 @@ use serde_json::{Map, Value};
 
 use crate::guards::agent_prefix_hooks::lines_kept;
 use crate::protocol::{Answer, Event, Guard, Reply};
+use crate::shared::ledger;
 use crate::shared::log::{self, civil};
 use crate::shared::session::Session;
 use crate::shared::sha1;
 use crate::shared::state::field;
-use crate::shared::tool::ask;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -34,13 +34,6 @@ const REVIEW_AGENTS: [&str; 3] = ["settlement-review", "building-review", "size-
 const FILTER: &str = "escalation-check";
 /// CONVENTION: how much of a transcript is read at a time from its end, as `hm_gm_question.py` read it.
 const CHUNK: u64 = 1 << 20;
-
-/// `scripts/reviews/ledger_lint.py`, by path: it has its own callers and stays for its phase (T044 decision (b)).
-const COUNT_CODE: &str = "import sys; sys.path.insert(0, sys.argv[1]); import ledger_lint as l; print(len(l.measured_rows(open(sys.argv[2]).read())))";
-const DISPOSED_CODE: &str = r#"import sys; sys.path.insert(0, sys.argv[1]); import ledger_lint as l
-rows = [dict(zip(l.COLUMNS, c)) for _n, c in l.measured_rows(open(sys.argv[2]).read())[int(sys.argv[4] or 0):] if len(c) == len(l.COLUMNS)]
-mine = [r for r in rows if r["check"] == sys.argv[3]]
-sys.exit(0 if mine and all(l.disposed(r) is True for r in mine) else 1)"#;
 
 const TOLD_AT_DISPATCH: &str = "A review is running, so its findings will need the escalation-check filter before any of them reach the GM: dispatch `escalation-check` with your DRAFT writeup as the prompt, and it returns keep/cut/rewrite per item with the norms it could not verify. The GM asked for this after three findings reached them that no project norm supported (2026-09-12). If you will relay nothing, say so with ESCALATION_OK=\"<reason>\".";
 
@@ -63,14 +56,6 @@ static OFFER: LazyLock<Regex> = LazyLock::new(|| {
     )
 });
 static ADDRESSED: LazyLock<Regex> = LazyLock::new(|| re(r"\b(you|your|I)\b"));
-
-/// What this guard needs from outside the call.
-pub(crate) struct Ctx<'a> {
-    pub(crate) tree: PathBuf,
-    pub(crate) python: &'a str,
-    pub(crate) count_code: &'a str,
-    pub(crate) disposed_code: &'a str,
-}
 
 fn matches_any(pattern: &Regex, text: &str) -> bool {
     pattern.is_match(text).unwrap_or(false)
@@ -332,56 +317,30 @@ fn now_stamp() -> String {
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 
-fn reviews_dir(ctx: &Ctx) -> String {
-    ctx.tree
-        .join("scripts/reviews")
-        .to_string_lossy()
-        .into_owned()
+/// The clone's review ledger, read as `open(path).read()` reads it; none where it is missing or not UTF-8 (the Python's raise).
+fn ledger_text(clone: &Path) -> Option<String> {
+    std::fs::read_to_string(clone.join("dev/review-ledger.md")).ok()
 }
 
-fn ledger_path(clone: &Path) -> String {
-    clone
-        .join("dev/review-ledger.md")
-        .to_string_lossy()
-        .into_owned()
-}
-
-fn ledger_count(clone: &Path, ctx: &Ctx) -> String {
-    let said = ask(
-        clone,
-        ctx.python,
-        &["-c", ctx.count_code, &reviews_dir(ctx), &ledger_path(clone)],
-        "",
-    );
-    if said.ok() {
-        said.out.trim().to_owned()
-    } else {
-        "0".to_owned()
-    }
-}
-
-fn all_disposed(clone: &Path, agent: &str, rows: &str, ctx: &Ctx) -> bool {
-    ask(
-        clone,
-        ctx.python,
-        &[
-            "-c",
-            ctx.disposed_code,
-            &reviews_dir(ctx),
-            &ledger_path(clone),
-            agent,
-            rows,
-        ],
-        "",
+/// How many measured rows the ledger holds when a review is dispatched; "0" where it cannot be read. The lint is `shared::ledger`, in
+/// process since feature 449 T83 (`ask:449-T83-scope`), where it was `ledger_lint.py` by path (T044 decision (b)).
+fn ledger_count(clone: &Path) -> String {
+    ledger_text(clone).map_or_else(
+        || "0".to_owned(),
+        |t| ledger::measured_rows(&t).len().to_string(),
     )
-    .ok()
 }
 
-fn arm(clone: &Path, agent: &str, ctx: &Ctx) {
+/// Whether the review's own rows written since it was dispatched dispose of every finding.
+fn all_disposed(clone: &Path, agent: &str, rows: &str) -> bool {
+    ledger_text(clone).is_some_and(|t| ledger::disposed_since(&t, agent, rows))
+}
+
+fn arm(clone: &Path, agent: &str) {
     write_fields(
         clone,
         &[
-            ("ledger_rows", ledger_count(clone, ctx)),
+            ("ledger_rows", ledger_count(clone)),
             ("armed_by", agent.to_owned()),
             ("armed_at", now_stamp()),
             ("told", String::new()),
@@ -406,7 +365,7 @@ fn message_key(input: &Value) -> String {
     sha1::hex(field(input, "last_assistant_message").as_bytes())
 }
 
-fn pretool(event: &Event, session: &Session, clone: &Path, ctx: &Ctx) -> Vec<Answer> {
+fn pretool(event: &Event, session: &Session, clone: &Path) -> Vec<Answer> {
     if event.tool() != "Agent" {
         return Vec::new();
     }
@@ -428,7 +387,7 @@ fn pretool(event: &Event, session: &Session, clone: &Path, ctx: &Ctx) -> Vec<Ans
         disarm(clone);
         return Vec::new();
     }
-    arm(clone, kind, ctx);
+    arm(clone, kind);
     fire("armed", "review-dispatched");
     vec![Answer::Notice(TOLD_AT_DISPATCH.to_owned())]
 }
@@ -454,7 +413,7 @@ fn ask_unfiltered(event: &Event, session: &Session, clone: &Path) -> Vec<Answer>
     refuse_stop(event, session, "question-unfiltered", format!("QUESTION UNFILTERED: your final message puts something to the GM and no escalation-check has read it:\n  {line}\nDispatch `escalation-check` with the draft as its prompt and send what it keeps. A question the record or the\nresearch answers is not his (root CLAUDE.md, \"Research\"); his are taste and genuine forks."))
 }
 
-fn stop(event: &Event, session: &Session, clone: &Path, ctx: &Ctx) -> Vec<Answer> {
+fn stop(event: &Event, session: &Session, clone: &Path) -> Vec<Answer> {
     let missing = unnamed(clone, &event.input);
     if !missing.is_empty() {
         let key = message_key(&event.input);
@@ -469,7 +428,7 @@ fn stop(event: &Event, session: &Session, clone: &Path, ctx: &Ctx) -> Vec<Answer
     if armed.is_empty() {
         return ask_unfiltered(event, session, clone);
     }
-    if all_disposed(clone, &armed, &get(&state, "ledger_rows"), ctx) {
+    if all_disposed(clone, &armed, &get(&state, "ledger_rows")) {
         disarm(clone);
         log::fire(
             "escalation",
@@ -489,30 +448,20 @@ fn stop(event: &Event, session: &Session, clone: &Path, ctx: &Ctx) -> Vec<Answer
     refuse_stop(event, session, "findings-unfiltered", format!("FINDINGS UNFILTERED: {armed} returned and no escalation-check has read what you are about to tell the GM.\nDispatch `escalation-check` with your draft as the prompt - it cuts the items that name no norm,\nthe ones the record already answers, and your own process narrative (\"a bug, then I fixed it\").\nRelaying nothing from this review? Write its ledger row with every finding disposed (fixed, verified, accepted,\nfiled as a row - feature 375), or re-dispatch with ESCALATION_OK=\"<reason>\"."))
 }
 
-pub(crate) fn judge(event: &Event, session: &Session, here: &Path, ctx: &Ctx) -> Vec<Answer> {
+pub(crate) fn judge(event: &Event, session: &Session, here: &Path) -> Vec<Answer> {
     let Some(clone) = top_of(here) else {
         return Vec::new();
     };
     if event.name == "Stop" {
-        stop(event, session, &clone, ctx)
+        stop(event, session, &clone)
     } else {
-        pretool(event, session, &clone, ctx)
-    }
-}
-
-fn context(here: &Path) -> Ctx<'static> {
-    let tree = std::env::var("L7R_GUARD_TREE").map_or_else(|_| here.to_path_buf(), PathBuf::from);
-    Ctx {
-        tree,
-        python: "python3",
-        count_code: COUNT_CODE,
-        disposed_code: DISPOSED_CODE,
+        pretool(event, session, &clone)
     }
 }
 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     let here = std::env::current_dir().unwrap_or_default();
-    judge(event, session, &here, &context(&here))
+    judge(event, session, &here)
 }
 
 /// The guard's entries that are no hook event: `state`, and the fixture-only `arm` and `disarm` seams.
@@ -568,7 +517,7 @@ fn run_cli(args: &[String], here: &Path) -> Reply {
                 } else {
                     arg(2)
                 };
-                arm(Path::new(path), agent, &context(here));
+                arm(Path::new(path), agent);
             } else {
                 disarm(Path::new(path));
             }

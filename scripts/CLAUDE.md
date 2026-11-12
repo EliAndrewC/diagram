@@ -17,7 +17,7 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 | `gates/` | what refuses at the gate or the push: `l7r-gate stamp`, the `*-gate.sh` gates, `l7r-gate check <name>` (the text checks and the spec lint, `rust/gate/crates/checks/src/checks/`), `l7r-gate plan` (the plan gates, `rust/gate/crates/plan/src/plan/`; `plan_door.py` is Python's door to them), `l7r-gate lock`, `own-make`, `rust`, `push-gate` and `push-checks` (the gate lock, the Rust crates' checks, the push's checks), `l7r-gate cohort` (the landing cohort, the room table), the `check-*.py` that remain |
 | `record/` | the research record's tooling: sources, the archive, downloads, canon, check bundles, what a delta owes |
 | `pages/` | page sessions: the runner, its briefs, `pull-queue.sh`, coordination files |
-| `reviews/` | the review checks' tooling: the snapshot, cost and census, the ledger lint; what is owed, the prerequisites, the verdict record and the hourly checkpoint are `l7r-gate reviews` (`rust/gate/crates/reviews/src/reviews/`, 449 T89) |
+| `reviews/` | the review checks' tooling: the snapshot and the census; what is owed, the prerequisites, the verdict record and the hourly checkpoint are `l7r-gate reviews` (`rust/gate/crates/reviews/src/reviews/`, 449 T89), and so are the ledger's lint, a review's cost and the rows a pass owes (`reviews ledger-lint`, `review-cost`, `ledger-owed`, 449 T83) |
 | `measure/` | what things cost: `make inline-census` (feature 449's second census), gate cost, the ratchets, run stats, `make figures`, the guard log, uncovered lines |
 | `container/` | the container's setup (`setup-dev-env.sh`), the system-prompt text its `claude()` wrapper loads, the page-session rules |
 

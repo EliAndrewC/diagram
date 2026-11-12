@@ -1,5 +1,8 @@
 //! An ISO time as Python's `datetime.fromisoformat(...).timestamp()` reads it (`ask:449-T77-bad-since`: which values parse stays the Python's): a date
 //! in any of its forms, any one separator, a time to any precision and a zone in any of its forms; a time with no zone is the machine's local time.
+//! Moved here from the gate's `core` by feature 449 T83 (`ask:449-T83-scope`): the review cost, which the guards compute when they log a
+//! check's pass, reads its transcript's times with it, and the guard crate cannot reach the gate's (`core` re-exports it, so the gate's
+//! callers are unchanged).
 
 use std::process::Command;
 
@@ -230,10 +233,13 @@ fn local_to_utc(local: i64, offset_at: &dyn Fn(i64) -> i64) -> i64 {
     }
 }
 
-/// The epoch seconds of `text`, none when Python's parser or its `.timestamp()` would refuse it.
+const MICROS: i64 = 1_000_000;
+
+/// `datetime.fromisoformat(text)` as two numbers: its wall-clock moment in microseconds from the epoch's midnight, and its zone's offset
+/// in microseconds, none for a naive time; none at all where the parser refuses it. The review cost subtracts two of these as Python
+/// subtracts two datetimes (feature 449 T83): an aware time by its UTC moment, a naive one by its fields, and the two never together.
 #[must_use]
-pub fn parse(text: &str) -> Option<f64> {
-    const MICROS: i64 = 1_000_000;
+pub fn moment(text: &str) -> Option<(i64, Option<i64>)> {
     let at = separator(text.as_bytes())?;
     let day = date_days(text.get(..at)?)?;
     let after = text.get(at..)?;
@@ -247,7 +253,13 @@ pub fn parse(text: &str) -> Option<f64> {
     if local == 86_400 * MICROS && day == epoch_days(9999, 12, 31) {
         return None;
     }
-    let moment = day * 86_400 * MICROS + local;
+    Some((day * 86_400 * MICROS + local, zone))
+}
+
+/// The epoch seconds of `text`, none when Python's parser or its `.timestamp()` would refuse it.
+#[must_use]
+pub fn parse(text: &str) -> Option<f64> {
+    let (moment, zone) = moment(text)?;
     let whole = moment.div_euclid(MICROS);
     #[expect(
         clippy::cast_precision_loss,

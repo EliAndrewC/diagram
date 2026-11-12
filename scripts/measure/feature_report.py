@@ -409,11 +409,11 @@ def check_rows(events: Sequence[Mapping[str, Any]], passes: Sequence[Mapping[str
 
 
 def _passes() -> list[dict[str, str]]:
-    """Every logged check pass, costed from its transcript as `make ledger-owed` costs it."""
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "reviews"))
-    import ledger_owed as lo  # noqa: PLC0415
-
-    return lo.settled(lo.distinct(lo.load_passes(lo.default_log())), kept_file=lo._kept_file())  # noqa: SLF001
+    """Every logged check pass, costed from its transcript as `make ledger-owed` costs it: the gate's `reviews ledger-passes` since
+    feature 449 T83 (`ask:449-T83-scope`), which reads the working directory's log and kept costs as `ledger_owed` did here."""
+    gate = Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"
+    out = subprocess.run([str(gate), "reviews", "ledger-passes"], capture_output=True, text=True, check=True)
+    return json.loads(out.stdout)
 
 
 def report(root: Path, feature: str, transcripts: Sequence[Path] = (), since: str = "", until: str = "",

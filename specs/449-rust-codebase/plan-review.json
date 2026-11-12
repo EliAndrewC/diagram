@@ -546,6 +546,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T117 (T83's first slice, the review ledger's tools, `ask:449-T83-scope`)": {
+   "sha256": "32aa95e1002ebca62d2acbf8343f2e95aaaa13bde21e611712564377785b436c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T117 Approach (checklist part A)": {
+   "sha256": "62c9baa9394d006d40f83847927d0f73b8ae7f2f1f71a660fd3519684e985d9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7382,6 +7394,70 @@
      "why": "SC-007 asks for the cost re-measured by the same command before and after and lower; every figure carries a one-shot label (date and method). Measurement of what was asked, not added scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T117 (T83's first slice, the review ledger's tools, `ask:449-T83-scope`)",
+    "### T117 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T117-placement",
+     "summary": "The lint and the cost live in the guard crate (shared/ledger.rs, ledger/cost.rs), the commands and owed rows in the gate's reviews crate; passes.rs reads the shared code.",
+     "class": "within",
+     "why": "FR-003 one implementation: the guard already held a copy of review_cost's arithmetic and ledger_lint.CHECKS, and the guard cannot depend on the gate. Placement of a port, not a narrowing of FR-001/FR-002 or ask:449-T83-scope."
+    },
+    {
+     "id": "T117-leaves",
+     "summary": "iso.rs and py_text::repr move into the guard, core re-exporting both.",
+     "class": "within",
+     "why": "Forced by the same build direction; callers unchanged. Internal structure only."
+    },
+    {
+     "id": "T117-hooks",
+     "summary": "ledger_hooks and escalation_hooks call the lint and cost in-process; ledger_hooks runs `reviews ledger-owed` by command through the gate wrapper.",
+     "class": "within",
+     "why": "Replaces a by-path Python run with Rust (FR-001). FR-007's one process per tool call for guard dispatch is kept; a child on one branch is what the guard already did with Python. The hook-time build is a cost the plan discloses, not a narrowing."
+    },
+    {
+     "id": "T117-interim-commands",
+     "summary": "Unported Python importers (coord.py, review_census.py, feature_report.py until T119, land.py until T121, page_session_runner.py) run the Rust commands (ledger-lint, review-cost --last, ledger-rows, ledger-passes) instead of importing.",
+     "class": "within",
+     "why": "ask:449-T83-scope itself orders the ledger at T117 and land.py at T121 'calling the ledger ... in-process', so the ruling requires Python callers to reach the Rust ledger by command in between; 'no door' refers to a Python bridge module, and none is added. FR-003 one implementation holds (the three .py are deleted), and the 21-case before/after differential of the importers shows no difference."
+    },
+    {
+     "id": "T117-guard-corrections",
+     "summary": "Two corrections toward the Python inside the guard: a pass's cost computed as review_cost.py did (integer microseconds, int()), and verdict_of reading the first line with Python's strip()/splitlines().",
+     "class": "within",
+     "why": "FR-002 same outputs as the Python and FR-003 one implementation; moves the Rust toward the reference, all 54 hook suites green."
+    },
+    {
+     "id": "T117-normalizations",
+     "summary": "Differential normalizations N1 traceback stderr, N2 argparse usage text, N3 the usage line's utc, N4 no bytecode.",
+     "class": "within",
+     "why": "N1 and N2 are exactly what ask:449-usage-text rules unbound (exit status and stdout still held); N3 is a timestamp and N4 a Python run artifact, neither an output of the tool."
+    },
+    {
+     "id": "T117-unreached-divergences",
+     "summary": "Known divergences no case reaches: --help exits 2, Unicode \\w/\\b and non-ASCII digits, NaN or lone-surrogate log lines skipped, glob characters in an agent id, which undecodable page raises first.",
+     "class": "within",
+     "why": "FR-002 binds every case the tests and suites hold, and --help is bound only where a kept test holds it (ask:449-usage-text); no case is excluded or changed, the differential ran over the real ledger, pass log and transcripts, and the divergences are disclosed rather than hidden."
+    },
+    {
+     "id": "T117-delete",
+     "summary": "The three .py are deleted in the same cut, every caller repointed (Makefile recipes, sync-with-main.sh, land-tooling.sh defaults with the suite contract kept, push.rs's row now a gate row).",
+     "class": "within",
+     "why": "FR-001 and FR-003; the GM's standing approval of 2026-11-10 to delete Python once its port lands; one error text kept byte for byte for FR-002."
+    },
+    {
+     "id": "T117-placements-kept",
+     "summary": "turn_time.py left to T120 (its one importer is stepback_bundle.py), land.py to T121, feature_report.py to T119.",
+     "class": "within",
+     "why": "Exactly ask:449-T83-scope's slice order; ledger_owed does not import turn_time per the plan's census, so nothing it reads is left behind a door."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12791,6 +12867,68 @@
      "summary": "Before/after measured back to back on a scratch clone of main and this clone with the T108/T113 scratch scripts around make static, after comment and body edits of core and claims.",
      "class": "within",
      "why": "SC-007 asks for the cost re-measured by the same command before and after and lower; every figure carries a one-shot label (date and method). Measurement of what was asked, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T117": {
+   "section_sha256": "b2e967f050f7949cd4453e3171c798043e007a5b9259ce2f889c0c35a29bc1d7",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T117-placement",
+     "summary": "The lint and the cost live in the guard crate (shared/ledger.rs, ledger/cost.rs), the commands and owed rows in the gate's reviews crate; passes.rs reads the shared code.",
+     "class": "within",
+     "why": "FR-003 one implementation: the guard already held a copy of review_cost's arithmetic and ledger_lint.CHECKS, and the guard cannot depend on the gate. Placement of a port, not a narrowing of FR-001/FR-002 or ask:449-T83-scope."
+    },
+    {
+     "id": "T117-leaves",
+     "summary": "iso.rs and py_text::repr move into the guard, core re-exporting both.",
+     "class": "within",
+     "why": "Forced by the same build direction; callers unchanged. Internal structure only."
+    },
+    {
+     "id": "T117-hooks",
+     "summary": "ledger_hooks and escalation_hooks call the lint and cost in-process; ledger_hooks runs `reviews ledger-owed` by command through the gate wrapper.",
+     "class": "within",
+     "why": "Replaces a by-path Python run with Rust (FR-001). FR-007's one process per tool call for guard dispatch is kept; a child on one branch is what the guard already did with Python. The hook-time build is a cost the plan discloses, not a narrowing."
+    },
+    {
+     "id": "T117-interim-commands",
+     "summary": "Unported Python importers (coord.py, review_census.py, feature_report.py until T119, land.py until T121, page_session_runner.py) run the Rust commands (ledger-lint, review-cost --last, ledger-rows, ledger-passes) instead of importing.",
+     "class": "within",
+     "why": "ask:449-T83-scope itself orders the ledger at T117 and land.py at T121 'calling the ledger ... in-process', so the ruling requires Python callers to reach the Rust ledger by command in between; 'no door' refers to a Python bridge module, and none is added. FR-003 one implementation holds (the three .py are deleted), and the 21-case before/after differential of the importers shows no difference."
+    },
+    {
+     "id": "T117-guard-corrections",
+     "summary": "Two corrections toward the Python inside the guard: a pass's cost computed as review_cost.py did (integer microseconds, int()), and verdict_of reading the first line with Python's strip()/splitlines().",
+     "class": "within",
+     "why": "FR-002 same outputs as the Python and FR-003 one implementation; moves the Rust toward the reference, all 54 hook suites green."
+    },
+    {
+     "id": "T117-normalizations",
+     "summary": "Differential normalizations N1 traceback stderr, N2 argparse usage text, N3 the usage line's utc, N4 no bytecode.",
+     "class": "within",
+     "why": "N1 and N2 are exactly what ask:449-usage-text rules unbound (exit status and stdout still held); N3 is a timestamp and N4 a Python run artifact, neither an output of the tool."
+    },
+    {
+     "id": "T117-unreached-divergences",
+     "summary": "Known divergences no case reaches: --help exits 2, Unicode \\w/\\b and non-ASCII digits, NaN or lone-surrogate log lines skipped, glob characters in an agent id, which undecodable page raises first.",
+     "class": "within",
+     "why": "FR-002 binds every case the tests and suites hold, and --help is bound only where a kept test holds it (ask:449-usage-text); no case is excluded or changed, the differential ran over the real ledger, pass log and transcripts, and the divergences are disclosed rather than hidden."
+    },
+    {
+     "id": "T117-delete",
+     "summary": "The three .py are deleted in the same cut, every caller repointed (Makefile recipes, sync-with-main.sh, land-tooling.sh defaults with the suite contract kept, push.rs's row now a gate row).",
+     "class": "within",
+     "why": "FR-001 and FR-003; the GM's standing approval of 2026-11-10 to delete Python once its port lands; one error text kept byte for byte for FR-002."
+    },
+    {
+     "id": "T117-placements-kept",
+     "summary": "turn_time.py left to T120 (its one importer is stepback_bundle.py), land.py to T121, feature_report.py to T119.",
+     "class": "within",
+     "why": "Exactly ask:449-T83-scope's slice order; ledger_owed does not import turn_time per the plan's census, so nothing it reads is left behind a door."
     }
    ],
    "verdict": "CLEAR"

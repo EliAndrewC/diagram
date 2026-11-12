@@ -919,14 +919,14 @@ review-paired-gate:  ## [project] the settlement-review's paired gate - green, r
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq gate-state --clone "$$(git rev-parse --show-toplevel)"
 
 ledger-owed:     ## [project] every check pass logged in this clone with no row in the review ledger, each with the row to add (feature 371); WRITE= writes them from each reply   [WRITE="<where you recorded what you did>"]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)" $(if $(CLAUDE_CODE_SESSION_ID),--session "$(CLAUDE_CODE_SESSION_ID)",),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews ledger-owed --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)" $(if $(CLAUDE_CODE_SESSION_ID),--session "$(CLAUDE_CODE_SESSION_ID)",),)
 
 dispatch-dropped: ## [project] record that a dispatch a guard refused is no longer wanted, so the turn may end (feature 385 T22)   TYPE=<agent type> BUNDLE=<path> WHY="<reason>"
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" dropped drop --root "$$(git rev-parse --show-toplevel)" --type "$(TYPE)" --bundle "$(BUNDLE)" --why "$(WHY)"
 
 review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
 ##  AGENT=<id>  the agent id the Agent tool's result names
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_cost.py" --agent "$(AGENT)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews review-cost --agent "$(AGENT)"
 
 review-census:   ## [project] is each review check pulling its weight? the ledger's totals by check (feature 294)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_census.py" --root "$$(git rev-parse --show-toplevel)"
