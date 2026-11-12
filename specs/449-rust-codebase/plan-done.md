@@ -2162,3 +2162,54 @@ censuses empty (work breakdown 8, FR-010).
 6. **Did any map move?** No: no engine code changes.
 
 
+<!-- plan-archive: archived 2026-11-12 -->
+### T107 (the record's owed list's git calls, FR-012)
+
+- **Approach**: one computation of the record's owed list asks git for its revisions, its delta and its trees once, in a `Delta` (`rust/gate/crates/owed/src/record/delta.rs`) it makes and hands its four families (record, translation, entry-drift, modal), where each asked again.
+
+   **Decisions** (FR-012, SC-007):
+   - The cost: one computation on the arbiter's fixture made 24 `git` calls and took 519-599 ms under a timing wrapper, and `record-owed` with no flags made 47, computing its units twice (observed 2026-11-11, method: `git` wrapped by a timing script ahead on `PATH`, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t107/measure.sh`). The 35 a computation earlier counted the arbiter's own `git log` beside it.
+   - `Delta` asks once for the revisions (the merge base first, HEAD and origin/main only where it is empty, each family's own fallback kept: the plain merge base, entry-drift's base, translation's base with none), one `diff --name-status --no-renames` over entry-drift's paths and one untracked listing, each family filtering them to its own paths, and one `ls-tree` a revision, all three families' blobs read in one `cat-file --batch`. Where a family's paths hold a deleted and an added file at once (a possible rename) or an unusual status, its own narrow diff runs instead, so its answer is exact. It is passed explicitly, made by one computation, no cache outliving it. `listing()` reuses its units rather than computing them again, and `unanswered_of`, with no caller left, is removed; the old entry points stay as thin wrappers for their other callers.
+   - The same outputs: `make record-owed`, and `record-owed` (no flags, `--unanswered`, `--slugs`, `--between`), `modal-owed` and `translation-owed` on the fixture, stdout, stderr and exit codes byte-identical before and after, and the same verbs from the old and new binaries on a real record delta (the clone set back before commit 4a12ccfed, a listing of 1,075 bytes of owed units) identical too (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t107/realdiff.sh`, the old binary built from a second clone at e05e28023). `delta/tests.rs` holds each shared diff to the narrow one it replaces, the rename case included.
+   - Measured the same way before and after (SC-007): one computation on the fixture 24 `git` calls and 519-599 ms before, 9 and 208-257 ms after (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t107/measure.sh`). `make record-owed` on this tree, an empty delta, 7.7 s (cold), 3.9 s and 2.9 s before, 3.4 s, 1.9 s and 1.6 s after, its `git` calls 44 and 14, their time 1.63 s and 0.41 s (observed 2026-11-11, method: the old and new binaries built side by side and run alternately, three each). The arbiter's real owed-list test 147 ms before and 126 ms after (observed 2026-11-11, method: best of six alone with `--exact`).
+   - What is left: on the real tree every question page's base is read (one `cat-file`, about 180 ms) even on an empty delta, and `moved_only`'s whole-tree `ls-tree` is its own (observed 2026-11-11, method: the same wrapper on `make record-owed`).
+
+### T107 Approach (checklist part A)
+
+1. **The goal, in the world.** The record's owed list costs one read of git's state, wherever it is asked.
+2. **The constraints.** FR-012 and SC-007: every output byte-identical.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the call counts, the timings and the output diffs above.
+4. **Do they describe the world here?** Measured on a scratch clone of this tree and on a real record delta.
+5. **The order.** After T105.
+6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The call counts and timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** In `git` processes, each family asking the same questions.
+2. **Does the change remove work, or only move it?** Removes it: 15 of 24 calls a computation on the fixture, 30 of 44 on the tree.
+3. **What do you expect it to save, and why?** Most of the computation's git time, which was most of its time.
+4. **How does the work grow?** With one read a computation, no longer with the families.
+5. **What did the before and after show, and under what conditions?** Alternated runs of the old and new binaries on a loaded host, read as evidence.
+6. **Did any map move?** No: no engine code changes.
+
+
+### T107 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
