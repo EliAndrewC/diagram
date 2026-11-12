@@ -26,14 +26,28 @@ check() { # label expected-rc actual-rc
 expect_out() { case "$OUT" in *"$1"*) : ;; *) echo "FAIL  output lacks '$1': $OUT"; FAIL=$((FAIL+1)) ;; esac; }
 
 # ---- fixture ------------------------------------------------------------------------------------
-topology() { # $1 = name; builds $T/$1/{github.git,main,main/.clones/c}
-  local d=$T/$1; rm -rf "$d"; mkdir -p "$d"
+# THE TOPOLOGY IS BUILT ONCE AND COPIED PER CASE (feature 449 T106, measured 2026-11-11): building it - the scripts tree copied
+# into a seed, committed, pushed and cloned twice - cost 0.25 s a case against 0.03 s for a `cp -a` of the same four repositories,
+# and the first `stamp --write` in a fresh clone asks codeid.py for the id of every scripts/ file. So template_build makes it once,
+# before the parts, with the clone's id cache warmed (the semantic-id-cache a real clone holds after its first stamp, keyed by
+# blob, so a copied entry is exactly what a cold run computes) and the stamps that warming wrote removed; topology copies it
+# and re-points the two origins at the copy's own github.git (the template's path would make every sync-in re-point and say so).
+# Each case still gets its own copy - nothing is shared between cases but the read-only template.
+template_build() { # $1 = dir; builds $1/{github.git,seed,main,main/.clones/c}
+  local d=$1; rm -rf "$d"; mkdir -p "$d"
   git init -q --bare -b main "$d/github.git"
   git init -q -b main "$d/seed"; ( cd "$d/seed" && mkdir -p scripts pool/x && echo base > f && echo '.clones/' > .gitignore && echo 'def a(): return 1' > pool/x/a.py && cp -r "$HERE/../../scripts/." scripts/ && printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$(cd "$HERE/../.." && pwd)/scripts/gates/l7r-gate.sh" > scripts/gates/l7r-gate.sh && git add -A && git commit -qm base && git push -q "$d/github.git" HEAD:main )
   git clone -q "$d/github.git" "$d/main"
   git -C "$d/main" config receive.denyCurrentBranch updateInstead
   mkdir -p "$d/main/.clones/.session-clones"
   git clone -q "$d/github.git" "$d/main/.clones/c"
+  stamp_hooks "$d"; rm -f "$d/main/.clones/c/.git/gate-green-"* "$d/main/.clones/c/.git/tool-usage.jsonl"
+}
+topology() { # $1 = name; copies the template to $T/$1/{github.git,seed,main,main/.clones/c}
+  local d=$T/$1; rm -rf "$d"
+  cp -a "$TEMPLATE" "$d"
+  git -C "$d/main" remote set-url origin "$d/github.git"
+  git -C "$d/main/.clones/c" remote set-url origin "$d/github.git"
   echo "$d"
 }
 syncmain() { # $1 = topology dir, then args
@@ -47,6 +61,8 @@ stamp_hooks() { ( cd "$1/main/.clones/c" && scripts/gates/l7r-gate.sh stamp --wr
 yes_() { PASS=$((PASS+1)); }
 no_() { echo "FAIL  $1"; FAIL=$((FAIL+1)); }
 rref() { git -C "$1/github.git" rev-parse -q --verify "refs/heads/$2"; }
+# T106: a case that holds the mirror lock in the background waits until it IS held, not a fixed 0.3 s (10 s at most)
+lock_held() { local i; for i in $(seq 1 1000); do flock -n "$1" true 2>/dev/null || return 0; sleep 0.01; done; }
 # feature 405 T32 (D4): only the task being worked holds a landing - the clone's active task (`make task-start`)
 start() { printf '{"feature": "140-x", "task": "%s"}\n' "${2:-T01}" > "$1/main/.clones/c/.git/active-task"; }
 in_progress() { # $1 = topology dir: a feature with an open task being worked plus an unrelated file, so a stop is refused
@@ -364,7 +380,7 @@ for _ in $(seq 1 300); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>
 # a busy lock: the mirror is skipped this turn, the clone still merges, and the call returns inside the wait
 ( cd "$D/seed" && echo again > h && git add -A && git commit -qm upstream2 && git push -q "$D/github.git" HEAD:main )
 flock "$D/main/.clones/.sync.lock" sleep 6 & HOLDER=$!
-sleep 0.3
+lock_held "$D/main/.clones/.sync.lock"
 mirror_before=$(git -C "$D/main" rev-parse HEAD)
 start=$(date +%s)
 OUT=$(cd "$D/main/.clones/c" && SYNC_LOCK_WAIT=1 CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git" GITHUB_TOKEN=unused "$SYNC" sync-in --background-render 2>&1); check "sync-in with the lock held" 0 $?
@@ -568,7 +584,7 @@ OUT=$(syncmain "$D" push); check "STAYS QUIET: rust-only, no landing cohort -> t
 case_28() {  # 3 s
 echo "X. sync-in with the mirror lock held: no lock taken when the mirror is at the tip; the bounded wait when main moved (feature 442)"
 D=$(topology bh)
-mkdir -p "$D/main/.clones"; ( flock "$D/main/.clones/.sync.lock" sleep 20 ) & holder=$!; sleep 0.3
+mkdir -p "$D/main/.clones"; ( flock "$D/main/.clones/.sync.lock" sleep 20 ) & holder=$!; lock_held "$D/main/.clones/.sync.lock"
 start=$(date +%s); OUT=$(SYNC_LOCK_WAIT=15 syncmain "$D" sync-in); rc=$?; took=$(( $(date +%s) - start ))
 check "sync-in, the mirror at the tip, the lock held" 0 $rc
 [ "$took" -lt 5 ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited ${took}s for a lock it did not need (the mirror at the tip)"; FAIL=$((FAIL+1)); }
@@ -595,6 +611,8 @@ declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [
 # runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
 [ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES
 SYNC_PARTS=${SYNC_PARTS:-8}  # 8, not 4: with the measured weights and case_11 split, 36.2 -> 17.9 s (6 parts: 24.3 s), 2026-10-17 at load 8
+# the template every topology copies (T106), in the suite's own $T: each part reassigns T, so the path is fixed here, before them
+TEMPLATE=$T/.template; template_build "$TEMPLATE"
 # shellcheck source=/dev/null
 source "$HERE/parts.sh"
 run_parts "$SYNC_PARTS"

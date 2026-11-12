@@ -470,39 +470,37 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T104 to T99 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 
 <!-- plan-archive: T105 to T105 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-### T106 (<why: the finding or measurement that files it>)
+### T106 (the sync-with-main hook suite's own time, FR-012)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the suite (`tests/hooks/test-sync-with-main.sh`) builds its fixture topology once and copies it a case, its id cache filled once, and waits for a lock instead of sleeping; the script under test, most of the time, is named as what is left.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (FR-012, SC-007):
+   - Where its time went: a serial run of its 32 cases took 154 s, 112 s of it the script under test (36 `push` runs of about 2 s, each about 1 s in `l7r-gate push-checks`, which starts about 17 processes, six of them Rust self-tests run on every push, plus 11 `done` and 15 `sync-in`), 23.1 s in `topology()`, which copied `scripts/` into a fresh seed repository, committed, pushed and cloned twice for each case, 8.9 s in `stamp_hooks`, each fresh clone's first id of every `scripts/` file, and two fixed `sleep 0.3` (observed 2026-11-11, method: each case run alone under `bash -x` with `EPOCHREALTIME`, the function and the line in `PS4`, the gaps summed by function, the script under test traced through `SHELLOPTS=xtrace` and `BASH_XTRACEFD=7`, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t106drv.sh`).
+   - `template_build` makes the topology once before the parts run, and `topology()` copies it with `cp -a` (about 0.03 s against 0.25 s, observed 2026-11-11, method: the T106 agent timing each in a scratch clone) and points both origins at the copy's own `github.git`. The template's clone runs the stamp once, so each copy's id cache is filled, and the stamps that run wrote are deleted, so each case starts as it did. The two sleeps wait for the lock to be held (`lock_held`). Every case and every assertion stays, 138 checks passing (observed 2026-11-11, method: the suite run alone).
+   - Measured the same way before and after (SC-007): the suite before and after run alternately on this clone, 23.4 s and 24.5 s before, 19.1 s and 19.5 s after, at loads of 4.8-6.4 (observed 2026-11-11, method: `bash tests/hooks/test-sync-with-main.sh` timed with `date +%s.%N`, the old suite a copy of HEAD's beside it, removed after). In the serial traced run `topology` fell from 23.1 s to 2.4 s and `stamp_hooks` from 8.9 s to 2.2 s (observed 2026-11-11, method: the trace above, after).
+   - What is left: the script under test, about four fifths of the suite. Each fixture push reruns `push-checks`' Rust self-tests whether or not anything changed, about 0.4 s a push (observed 2026-11-11, method: the trace above), which a skip like the Python checks' would save, and that is the gate's push code (`rust/gate/crates/cohort/src/push.rs`), not the suite (observed 2026-11-11, method: the trace above). The suite's `WEIGHT` table, from 2026-10-17, is left to re-time on a quiet machine.
 
 ### T106 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The suite's own fixtures cost little beside the script it tests.
+2. **The constraints.** FR-012 and SC-007: every case and assertion held.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the trace and the timings above.
+4. **Do they describe the world here?** Measured on this clone and a scratch clone of it.
+5. **The order.** After T105 and T107.
+6. **The exits.** Green: `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The alternated timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T106 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: `make perf-profile` time beside `make phase-calls` / `make perf-fanout` calls>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <calls; `make perf-ab` best of N with each arm's spread,
-   the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** In the script under test, then the fixtures built a case.
+2. **Does the change remove work, or only move it?** Removes it: the fixture built once, not 32 times.
+3. **What do you expect it to save, and why?** The fixture's time, measured above.
+4. **How does the work grow?** With the cases' own runs, no longer with a fixture each.
+5. **What did the before and after show, and under what conditions?** Two alternated runs each on a shared host, read as evidence.
+6. **Did any map move?** No: no engine code changes.
 
 
 <!-- plan-archive: T107 to T107 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->

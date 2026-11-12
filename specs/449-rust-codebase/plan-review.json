@@ -414,6 +414,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T106 (the sync-with-main hook suite's own time, FR-012)": {
+   "sha256": "6f8486039a1922fc9f3a33299263e6b637e03763c4e09eddfa21b330191849ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T106 Approach (checklist part A)": {
+   "sha256": "c4da8c23c28e637792ec2b2343703dfc923488e70d468fd35f0b4fd7e8283d8d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6561,6 +6573,47 @@
      "why": "The GM asked to proceed with the candidate 'record-owed's git calls' as a time saving, and FR-012/SC-007 require the cost cut and measured lower, not every call removed. Nothing is excluded from the outputs or from the families the change covers; the residue is disclosed, not carved out of any requirement."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T106 (the sync-with-main hook suite's own time, FR-012)",
+    "### T106 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T106-template",
+     "summary": "template_build makes the fixture topology once; topology() copies it with cp -a and points both origins at the copy's own github.git",
+     "class": "within",
+     "why": "Removes per-case fixture rebuilding, the suite's own time FR-012 names; every case and assertion is kept (138 checks), as FR-012/SC-007 require."
+    },
+    {
+     "id": "T106-stamp-cache",
+     "summary": "the template's clone runs the id stamp once so every copy's id cache is filled; the stamps that run wrote are deleted so each case starts as before",
+     "class": "within",
+     "why": "Cuts stamp_hooks' repeated first-id cost while restoring each case's starting state; held to every case's outputs and verdicts per FR-012."
+    },
+    {
+     "id": "T106-lock-wait",
+     "summary": "the two fixed sleep 0.3 become a wait for the lock to be held (lock_held)",
+     "class": "within",
+     "why": "Replaces a fixed delay with the condition it stood in for; no case or assertion changed."
+    },
+    {
+     "id": "T106-measure",
+     "summary": "before and after measured by the same command (the suite timed alone), alternated on the same clone, before 23.4/24.5 s, after 19.1/19.5 s",
+     "class": "within",
+     "why": "Exactly SC-007: same command before and after, lower."
+    },
+    {
+     "id": "T106-stop-at-fixtures",
+     "summary": "the goal is set as the suite's own fixtures; the script under test (about four fifths of the suite's time), including push-checks re-running its Rust self-tests on every fixture push (about 0.4 s a push), is left and reported as what remains",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's candidate was the suite's time as the full hook run's critical path, so stopping at the fixtures narrows it. The plan's stated reason (the code is the gate's push.rs, not the suite) is a where-the-code-lives argument and is NOT accepted. The ground that holds: the named remedy, a skip in push-checks, would change what the gate does on every real push, not only in fixtures - new gate behavior the request to cut the suite's time does not reach, and which FR-012's hold on every output and verdict would have to be checked as its own piece of work. The request was to cut the time (done, measured lower per SC-007), not to exhaust it, and the plan surfaces the remainder for the GM's next measure-and-choose round rather than hiding it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11505,6 +11558,45 @@
      "summary": "Two residual git costs are reported and left: every question page's base read by one cat-file (about 180 ms) even on an empty delta, and moved_only's whole-tree ls-tree kept as its own call.",
      "class": "within",
      "why": "The GM asked to proceed with the candidate 'record-owed's git calls' as a time saving, and FR-012/SC-007 require the cost cut and measured lower, not every call removed. Nothing is excluded from the outputs or from the families the change covers; the residue is disclosed, not carved out of any requirement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T106": {
+   "section_sha256": "1dc027ffd00ae6bfa1deb36d0767e9e0ea1fd059f1fa6c4d0d729a06086d6fad",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T106-template",
+     "summary": "template_build makes the fixture topology once; topology() copies it with cp -a and points both origins at the copy's own github.git",
+     "class": "within",
+     "why": "Removes per-case fixture rebuilding, the suite's own time FR-012 names; every case and assertion is kept (138 checks), as FR-012/SC-007 require."
+    },
+    {
+     "id": "T106-stamp-cache",
+     "summary": "the template's clone runs the id stamp once so every copy's id cache is filled; the stamps that run wrote are deleted so each case starts as before",
+     "class": "within",
+     "why": "Cuts stamp_hooks' repeated first-id cost while restoring each case's starting state; held to every case's outputs and verdicts per FR-012."
+    },
+    {
+     "id": "T106-lock-wait",
+     "summary": "the two fixed sleep 0.3 become a wait for the lock to be held (lock_held)",
+     "class": "within",
+     "why": "Replaces a fixed delay with the condition it stood in for; no case or assertion changed."
+    },
+    {
+     "id": "T106-measure",
+     "summary": "before and after measured by the same command (the suite timed alone), alternated on the same clone, before 23.4/24.5 s, after 19.1/19.5 s",
+     "class": "within",
+     "why": "Exactly SC-007: same command before and after, lower."
+    },
+    {
+     "id": "T106-stop-at-fixtures",
+     "summary": "the goal is set as the suite's own fixtures; the script under test (about four fifths of the suite's time), including push-checks re-running its Rust self-tests on every fixture push (about 0.4 s a push), is left and reported as what remains",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's candidate was the suite's time as the full hook run's critical path, so stopping at the fixtures narrows it. The plan's stated reason (the code is the gate's push.rs, not the suite) is a where-the-code-lives argument and is NOT accepted. The ground that holds: the named remedy, a skip in push-checks, would change what the gate does on every real push, not only in fixtures - new gate behavior the request to cut the suite's time does not reach, and which FR-012's hold on every output and verdict would have to be checked as its own piece of work. The request was to cut the time (done, measured lower per SC-007), not to exhaust it, and the plan surfaces the remainder for the GM's next measure-and-choose round rather than hiding it."
     }
    ],
    "verdict": "CLEAR"
