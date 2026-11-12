@@ -174,18 +174,18 @@ fn no_dir(feature: &str, root: &Path) -> Reply {
 }
 
 /// The closing check at the tick that would close the feature, in process (`reviews::closing`, where the Python ran `close-check
-/// --reasons-json`): may it close? What the implementation check printed, and the refusal, go to `err`.
+/// --reasons-json`), its implementation check `claims::impl_check` in process too (feature 449 T132): may it close? The refusal goes
+/// to `err`.
 fn closing(ask: &Ask, err: &mut String) -> Raise<bool> {
     let tools = l7r_gate_reviews::reviews::closing::Tools {
         tree: &ask.tree,
-        python: "python3",
+        impl_check: l7r_gate_claims::claims::impl_check::missing_each,
     };
     let mut found = l7r_gate_reviews::reviews::closing::reasons(
         &tools,
         &ask.root.join("specs"),
         &[ask.dir.to_path_buf()],
     )?;
-    *err += &found.said;
     let reasons = found.each.pop().unwrap_or_default();
     if reasons.is_empty() {
         return Ok(true);

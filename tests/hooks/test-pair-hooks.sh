@@ -40,7 +40,7 @@ MAPDIR_F="$SKILL/pool/hamlets/testmap"
 # GUARD_EDIT_OK: feature 240 - spec-lint imports `_spec_figures` since feature 239 (the figure pattern's one home)
 "$(dirname "$HOOK")/../../scripts/gates/l7r-gate.sh" check spec-lint --figure-pattern > "$CLONE/figure-pattern"   # the one definition of a figure, the Rust spec lint's
 REAL_GATE="$(cd "$(dirname "$HOOK")/../.." && pwd)/scripts/gates/l7r-gate.sh"
-printf '#!/usr/bin/env bash\n[ "$1" = check ] && exec cat "%s/figure-pattern"\n[ "$1" = checks-door ] && exec "%s" checks-door   # feature 449 T86: the checks door is the real gate binary\n[ "$1" = reviews ] && exec "%s" "$@"   # feature 449 T89: the reviews are the real gate binary\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' "$CLONE" "$REAL_GATE" "$REAL_GATE" >"$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
+printf '#!/usr/bin/env bash\n[ "$1" = check ] && exec cat "%s/figure-pattern"\n[ "$1" = reviews ] && exec "%s" "$@"   # feature 449 T89: the reviews are the real gate binary (the checks door left with T132)\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' "$CLONE" "$REAL_GATE" >"$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
 mkdir -p "$SKILL/l7r/diagram/pipeline"
 printf 'import os\n\ndef is_current(gen):\n    return not os.path.exists(gen + ".stale")\n' > "$SKILL/l7r/diagram/pipeline/gencache.py"
 # GUARD_EDIT_OK: feature 240 - REGULAR packages, as the engine's are. Under `make hooks-test` the real skill is on

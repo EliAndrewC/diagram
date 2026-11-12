@@ -2,7 +2,8 @@
 # pass in process), `l7r-gate task-start` and `l7r-gate phase-read`, ported from `scripts/tick-task.py`, `task_start.py`,
 # `gates/plan_hold.py`, `gates/phase_sources.py` and `gates/wording.py`. Its own crate: the tick asks the plan gate (`plan`), the closing
 # check and the reviews' hold (`reviews`) and the work budget's sources (`trials`) in process, and no crate below the land builds on all
-# three; `cohort`, the nearest, would put `trials` under every crate that builds on it (T92).
+# three; `cohort`, the nearest, would put `trials` under every crate that builds on it (T92). The closing check's implementation check
+# is `claims`' (`impl_check.py`'s port, feature 449 T132), asked in process at the closing tick.
 [package]
 name = "l7r_gate_task"
 version = "0.1.0"
@@ -16,6 +17,7 @@ reads = ["specs/"]
 
 [dependencies]
 fancy-regex = { workspace = true }
+l7r_gate_claims = { path = "../claims" }
 l7r_gate_core = { path = "../core" }
 l7r_gate_plan = { path = "../plan" }
 l7r_gate_reviews = { path = "../reviews" }

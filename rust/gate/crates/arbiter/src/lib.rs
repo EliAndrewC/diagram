@@ -1,5 +1,5 @@
 //! The round arbiter (feature 449 T86, T88): its rulings and tripwires (`l7r-gate arbiter ...`), its bundle (`arbiter bundle`), and
-//! Python's door to the check state and the arbiter (`checks-door`, `checks-close`).
+//! `checks-close`, what `make check-closed` runs (its door `checks-door` left with its last caller, feature 449 T132).
 
 pub mod arbiter;
 pub mod checks_door;

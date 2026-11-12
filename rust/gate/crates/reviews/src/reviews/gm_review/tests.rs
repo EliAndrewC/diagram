@@ -10,25 +10,32 @@ use super::py::Raised;
 use super::{
     add_row, cli, cli_in, ensure_box, escalated, feature, name, num, question, rows, Ctx, USAGE,
 };
+use crate::reviews::closing::ImplCheck;
 use crate::Reply;
 
 pub(super) fn args(words: &[&str]) -> Vec<String> {
     words.iter().map(|w| (*w).to_owned()).collect()
 }
 
-/// `make gm-review ...` in `root` with the GM's `words`, at `cols` columns, the closing check under `python`.
+/// An implementation check that owes nothing (the closing check's, handed in since feature 449 T132).
+#[expect(clippy::unnecessary_wraps, reason = "an `ImplCheck`")]
+pub(super) fn nothing(dirs: &[&Path]) -> Result<Vec<Vec<String>>, String> {
+    Ok(vec![Vec::new(); dirs.len()])
+}
+
+/// `make gm-review ...` in `root` with the GM's `words`, at `cols` columns, the closing check's implementation check `impl_check`.
 pub(super) fn run_with(
     root: &Path,
     words: &[&str],
     gm_words: &str,
     cols: usize,
-    python: &str,
+    impl_check: ImplCheck,
 ) -> Reply {
     let width = move |_: usize| cols;
     let ctx = Ctx {
         root,
         tree: root,
-        python,
+        impl_check,
         words: gm_words,
         columns: &width,
     };
@@ -36,7 +43,7 @@ pub(super) fn run_with(
 }
 
 pub(super) fn run(root: &Path, words: &[&str]) -> Reply {
-    run_with(root, words, "", 100, "python3")
+    run_with(root, words, "", 100, nothing)
 }
 
 pub(super) fn jl(rows: &[Value]) -> String {
@@ -71,7 +78,7 @@ fn the_usage_and_the_process_entry() {
             (2, USAGE, "")
         );
     }
-    let got = cli(&args(&["bogus"]));
+    let got = cli(&args(&["bogus"]), nothing);
     assert_eq!(got.code, 2);
     let empty = run(&d, &["list"]);
     assert_eq!(empty.stdout, "gm-review: nothing waits on the GM\n");
@@ -340,7 +347,7 @@ fn escalation_checks_verdict_on_each_kind_of_row() {
 fn a_rows_review_alone() {
     let d = dir("gm-reviewed-row");
     questions(&d);
-    let got = run_with(&d, &["reviewed-row", "520", "0"], "one", 100, "python3");
+    let got = run_with(&d, &["reviewed-row", "520", "0"], "one", 100, nothing);
     assert_eq!(
         got.stderr,
         "gm-review: refused - WORDS are the GM's own, two words or more\n"
@@ -360,7 +367,7 @@ fn a_rows_review_alone() {
         &["reviewed-row", "520", "3"],
         "his own words",
         100,
-        "python3",
+        nothing,
     );
     assert_eq!(
         got.stdout,
@@ -390,13 +397,15 @@ fn a_rows_review_alone() {
     );
 }
 
-/// An `impl_check.py` stand-in under `scripts/record/` with `body`: the closing check, in process since feature 449 T127, asks it.
-fn impl_check(root: &Path, body: &str) {
-    put(
-        root,
-        "scripts/record/impl_check.py",
-        &format!("import json, sys\n{body}\n"),
-    );
+/// An implementation check that owes `another` of each directory.
+#[expect(clippy::unnecessary_wraps, reason = "an `ImplCheck`")]
+fn another(dirs: &[&Path]) -> Result<Vec<Vec<String>>, String> {
+    Ok(vec![vec!["another".to_owned()]; dirs.len()])
+}
+
+/// An implementation check that raises.
+fn raises(_: &[&Path]) -> Result<Vec<Vec<String>>, String> {
+    Err("ValueError: the claims are unreadable".to_owned())
 }
 
 #[test]
@@ -418,7 +427,7 @@ fn the_gm_reviews_a_feature_and_his_box_is_ticked() {
         "- [x] T01\n- [ ] GM review (make gm-reviewed F=530)\n",
     );
     put(&d, "specs/531-to/x", "");
-    let got = run_with(&d, &["reviewed", "530"], "one", 100, "python3");
+    let got = run_with(&d, &["reviewed", "530"], "one", 100, nothing);
     assert_eq!(
         got.stderr,
         "gm-review: refused - WORDS are the GM's own, two words or more\n"
@@ -466,7 +475,6 @@ fn the_closing_check_stands_before_the_gms_last_box() {
     );
     put(&d, "specs/531-to/x", "");
     // the GM's box the feature's last open one: the closing check is asked, its reasons refuse
-    impl_check(&d, "print(json.dumps([['another'] for a in sys.argv[2:]]))");
     put(
         &d,
         "specs/530-x/gm-review.jsonl",
@@ -475,22 +483,13 @@ fn the_closing_check_stands_before_the_gms_last_box() {
             json!({"kind": "accepted", "reviewed": "2026-01-01"}),
         ]),
     );
-    let got = run(&d, &["reviewed", "530"]);
+    let got = run_with(&d, &["reviewed", "530"], "", 100, another);
     assert_eq!(got.stderr, "gm-review: refused - the GM's box closes the feature, and: 530-x has no report.md - `make feature-report F=530 WRITE=1` writes it (FR-009); another\n");
     put(&d, "specs/530-x/report.md", "r");
-    // impl_check's traceback inside gm-review's message, as T91's by-path run of close_check.py showed it
-    impl_check(&d, "raise ValueError('the claims door is shut')");
-    let got = run(&d, &["reviewed", "530"]).stderr;
-    assert!(got.contains("close_check.reasons raised:\nTraceback (most recent call last):\n"));
-    assert!(got.contains("ValueError: the claims door is shut\n"));
-    let got = run_with(&d, &["reviewed", "530"], "", 100, "/no/such/python");
-    assert!(got.stderr.contains("OSError"), "{}", got.stderr);
-    // a passing run's warning is dropped, as T91's by-path run kept close_check.py's stderr to itself (the coordinator's ruling on T127)
-    impl_check(
-        &d,
-        "sys.stderr.write('a warning\\n')\nprint(json.dumps([[] for a in sys.argv[2:]]))",
-    );
-    let got = run_with(&d, &["reviewed", "530"], "his own words", 100, "python3");
+    // what the implementation check raised inside gm-review's message, as T91's by-path run of close_check.py showed a traceback
+    let got = run_with(&d, &["reviewed", "530"], "", 100, raises).stderr;
+    assert!(got.contains("close_check.reasons raised:\nValueError: the claims are unreadable\nimpl_check.missing raised"));
+    let got = run_with(&d, &["reviewed", "530"], "his own words", 100, nothing);
     assert_eq!(got.stderr, "");
     assert_eq!(got.stdout, "gm-reviewed: 2 row(s) of 530-x reviewed\n");
     assert_eq!(

@@ -16,15 +16,15 @@
 //! crate (T92). The arbiter's open tooling fixes (`open_fixes`, `fix_hold`) moved here from `arbiter`, which builds on `reviews`, so the
 //! one reader serves both; `arbiter` re-exports them.
 //!
-//! THE ONE PYTHON SEAM (the T065 clause): `scripts/record/impl_check.py` stays Python (phase 3, its own later port), and the closing
-//! check asks its `missing(d, d.resolve().parents[1])` for every directory that reaches it, by path, in ONE process a run
-//! (`impl_check.py --missing-json DIR...`, one JSON list per directory), where the Python imported it in process.
+//! THE IMPLEMENTATION CHECK, IN PROCESS (feature 449 T132, `ask:449-phase3-remainder` Q2 task B): `impl_check.py`'s port lives in `claims`,
+//! which builds on this crate (its `make claims-known` row is `gm_review::add_row`), so the check is a function each caller hands in
+//! ([`ImplCheck`]) - the binary for `l7r-gate close-check` and `l7r-gate gm-review`, `task`, which builds on `claims`, for the tick - as
+//! `plan::cli` takes the claims tool. T127 ran `impl_check.py --missing-json DIR...` by path here; nothing reaches Python now.
 
 #[cfg(test)]
 mod tests;
 
 use std::path::{Path, PathBuf};
-use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -36,8 +36,6 @@ use super::gm_review::name;
 
 /// The features closed when the check landed, under the tree whose tools run (`GRANDFATHERED`, beside the script it was).
 pub const GRANDFATHERED: &str = "scripts/gates/closed-before-375.txt";
-/// The implementation check, asked by path (the T065 clause).
-const IMPL_CHECK: &str = "scripts/record/impl_check.py";
 
 static CARRY: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"`?Carried:\s*(SC-\d+)\s*->\s*(\d+)\s+([\w.-]+)`?")
@@ -237,56 +235,28 @@ pub fn fix_hold(d: &Path) -> String {
     )
 }
 
-/// What the closing check runs: the tree whose tools it reads (`L7R_GATE_TREE`) and the interpreter `impl_check.py` runs under.
+/// The implementation check (`claims::impl_check::missing_each`): `impl_check.missing(d, d.resolve().parents[1])` for each directory, in
+/// order, or what it raised.
+pub type ImplCheck = fn(&[&Path]) -> Result<Vec<Vec<String>>, String>;
+
+/// What the closing check runs: the tree whose closing list it reads (`L7R_GATE_TREE`) and the implementation check.
 pub struct Tools<'a> {
     pub tree: &'a Path,
-    pub python: &'a str,
+    pub impl_check: ImplCheck,
 }
 
-/// What the closing check found: each directory's reasons, and what `impl_check.py` printed on stderr while it answered, which each
-/// caller places (the coordinator's ruling on feature 449 T127): the command line prints it, as the in-process import let it through;
-/// `make gm-reviewed` drops it, as the by-path run of T91 kept a passing run's stderr to itself.
+/// What the closing check found: each directory's reasons.
 pub struct Closing {
     pub each: Vec<Vec<String>>,
-    pub said: String,
 }
 
-/// `impl_check.missing(d, d.resolve().parents[1])` for each of `dirs`, in one process: the answers and what it printed on stderr.
-fn impl_missing(tools: &Tools, dirs: &[&Path]) -> Result<(Vec<Vec<String>>, String), String> {
+/// The implementation check of `dirs` (none asked when there are none). A raise keeps its last line `impl_check.missing raised`, under
+/// what the check said, as the by-path run's carried the traceback above its own words (feature 449 T127).
+fn impl_missing(tools: &Tools, dirs: &[&Path]) -> Result<Vec<Vec<String>>, String> {
     if dirs.is_empty() {
-        return Ok((Vec::new(), String::new()));
+        return Ok(Vec::new());
     }
-    let script = tools.tree.join(IMPL_CHECK);
-    // the import wrote no bytecode (`sys.dont_write_bytecode`, feature 406), and a `__pycache__` would dirty a fixture tree. Its stderr is
-    // captured (the coordinator's ruling on feature 449 T127): on a failure it is carried inside the error, so `make gm-reviewed` shows
-    // the traceback inside `close_check.reasons raised:` as the by-path run of T91 did, and the command line prints it on stderr as the
-    // in-process import's raise did; on success it is handed back to the caller to place
-    let out = Command::new(tools.python)
-        .arg(&script)
-        .arg("--missing-json")
-        .args(dirs)
-        .env("PYTHONDONTWRITEBYTECODE", "1")
-        .output()
-        .map_err(|e| format!("OSError: {e}: {}", tools.python))?;
-    let said_err = String::from_utf8_lossy(&out.stderr);
-    if !out.status.success() {
-        return Err(format!(
-            "{said_err}impl_check.missing raised ({} --missing-json exited {})",
-            script.display(),
-            out.status.code().unwrap_or(-1)
-        ));
-    }
-    let said: Vec<Vec<String>> = serde_json::from_slice(&out.stdout)
-        .map_err(|e| format!("{said_err}impl_check.py --missing-json: {e}"))?;
-    if said.len() == dirs.len() {
-        Ok((said, said_err.into_owned()))
-    } else {
-        Err(format!(
-            "impl_check.py --missing-json: {} answers for {} directories",
-            said.len(),
-            dirs.len()
-        ))
-    }
+    (tools.impl_check)(dirs).map_err(|why| format!("{why}\nimpl_check.missing raised"))
 }
 
 /// The reasons before the implementation check: no report, a carried key missing from `measurements.json`.
@@ -357,10 +327,11 @@ pub fn reasons(tools: &Tools, specs: &Path, dirs: &[PathBuf]) -> Result<Closing,
         .filter(|(_, f)| f.is_some())
         .map(|(d, _)| d.as_path())
         .collect();
-    let (missing, said) = impl_missing(tools, &asked)?;
+    // as the Python asked each directory in turn, the directories before one that fails are still put to the implementation check
+    // first, and its raise is the one reported
+    let missing = impl_missing(tools, &asked)?;
     if let Some(e) = failed {
-        // what impl_check printed for the directories before came first, as it did before the Python's raise
-        return Err(format!("{said}{e}"));
+        return Err(e);
     }
     let mut missing = missing.into_iter();
     let each = dirs
@@ -377,5 +348,5 @@ pub fn reasons(tools: &Tools, specs: &Path, dirs: &[PathBuf]) -> Result<Closing,
             })
         })
         .collect();
-    Ok(Closing { each, said })
+    Ok(Closing { each })
 }

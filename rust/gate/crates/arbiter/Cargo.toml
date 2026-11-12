@@ -1,4 +1,4 @@
-# The round arbiter, its bundle, the checks door (feature 449 T92's split): `l7r-gate arbiter`, `checks-door`, `checks-close`.
+# The round arbiter, its bundle, the checks door (feature 449 T92's split): `l7r-gate arbiter`, `checks-close`.
 [package]
 name = "l7r_gate_arbiter"
 version = "0.1.0"

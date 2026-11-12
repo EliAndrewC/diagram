@@ -267,7 +267,32 @@ fn the_inline_audit_runs_from_the_command_line() {
     );
 }
 
+/// What `land.py` and `replay_owing.py` asked through `claims-door` until feature 449 T121, asked in process since: the land's scope split
+/// and live marks, the replay's migration and what is owed (their tests moved here from the door's when feature 449 T132 deleted it).
 #[test]
-fn the_door_reads_stdin_to_its_end() {
-    assert_eq!(super::door_cli().code, 0);
+fn the_land_and_the_replay_ask_in_process() {
+    let root = fixture("claims-in-process");
+    py_units(
+        &root,
+        &[],
+        &[("helper", "function", &["help - GUESS: 3 households"], false)],
+    );
+    assert_eq!(
+        super::scope_split(
+            &root,
+            "  DRIFTED        l7r/diagram/m.py::read#x - y\n",
+            &["l7r/diagram/m.py".to_owned()],
+            &["l7r/diagram/m.py".to_owned()]
+        )
+        .unwrap()
+        .0,
+        vec!["DRIFTED        l7r/diagram/m.py::read#x - y"]
+    );
+    assert_eq!(super::flight_live(&root), Ok(Vec::new()));
+    let (mut index, mut store) = (serde_json::Map::new(), serde_json::Map::new());
+    assert_eq!(super::backfill_at(&root, &mut index, &mut store), Ok(0));
+    assert!(super::owed_at(&root, &index, &store)
+        .unwrap()
+        .iter()
+        .any(|(_, why)| why == "new"));
 }

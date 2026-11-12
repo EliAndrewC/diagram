@@ -149,10 +149,10 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	    printf '\n\033[1mNO REVIEW CHECK OWED\033[0m: %s (feature 294: a check is owed on its occasion, never because a manifest moved). The gate runs alone; the GM looks at the map.\n' "$$why"; \
 	  else \
 	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
-	    for gen in $$(python3 "$$root/scripts/reviews/review_snapshot.py" --root "$$root" --stale-renders $$maps); do \
+	    for gen in $$("$$root/scripts/gates/l7r-gate.sh" reviews snapshot --root "$$root" --stale-renders $$maps); do \
 	      case "$$gen" in sheet:*) svg="$${gen#sheet:}"; printf 'verify: %s has no generator and no render - make sheet-render SHEET=%s OUT=%s, then make verify again\n' "$$svg" "$$svg" "$${svg%.svg}.png" >&2; exit 2;; esac; \
 	      printf 'verify: rendering %s (its render was missing or older than its map)\n' "$$gen"; $(MAKE) --no-print-directory map GEN="$$gen" >/dev/null || { printf 'verify: make map GEN=%s failed - run it by hand, then make verify again\n' "$$gen" >&2; exit 2; }; done; \
-	    snap=$$(python3 "$$root/scripts/reviews/review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
+	    snap=$$("$$root/scripts/gates/l7r-gate.sh" reviews snapshot --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
 	    n=$$(printf '%s\n' $$maps | wc -l); \
 	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \
 	    printf '\n\033[1mWHEN THE GATE IS GREEN, dispatch %s review agent(s), ONE PER UNIT\033[0m - each Agent call is the unit'"'"'s check (its slug begins with it) and takes the contents of its prompt file named above (.git/review-snapshot/<unit>/dispatch.md). A dispatch beside a running gate, or naming more than one unit, is refused (feature 294); a turn may not end with the gate green and an owed unit undispatched.\n' "$$n"; \
@@ -682,7 +682,7 @@ tunables: ## [project] every claim whose value is ours - GUESS (searched, silent
 
 impl-check: ## [project] a research-record feature's changed questions, each with the claims citing it and their verdicts, and what its close still owes (feature 378)   F=<n>
 	@if [ -z "$(F)" ]; then printf 'make impl-check: F=<feature number> is required - e.g. make impl-check F=343\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/impl_check.py" "$(F)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" impl-check "$(F)"
 
 claims-triage: ## [project] the claims owed only a TRIAGE (a page they cite moved, the blocks they rest on stand): one bundle of the new or changed blocks for one agent   [OUT=<dir>]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" triage $(if $(OUT),--out "$(abspath $(OUT))",)

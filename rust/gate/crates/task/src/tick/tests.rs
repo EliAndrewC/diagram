@@ -153,7 +153,8 @@ fn the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded(
     let closed = tick(&ask(&root, &d, "T02", "n"), false, false);
     assert_eq!(closed.code, 0, "{}", closed.stderr);
     assert!(closed.stdout.contains("0 task(s) still open"));
-    assert_eq!(closed.stderr, "impl_check said\n");
+    // the implementation check, in process since feature 449 T132: the feature is not tagged `research record`, so it owes nothing
+    assert_eq!(closed.stderr, "");
     let usage = std::fs::read_to_string(root.join(".git/tool-usage.jsonl")).unwrap();
     assert!(usage
         .contains("\"tool\": \"tick-archive\", \"kind\": \"step\", \"outcome\": \"unchanged\""));

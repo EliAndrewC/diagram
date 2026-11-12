@@ -48,7 +48,7 @@ fn reply_line(line: &str, answer: &Verbs) -> String {
     pyjson::dumps(&shaped, None, false) + "\n"
 }
 
-/// A door's loop over its verbs (`checks-door`, `owed-door`).
+/// A door's loop over its verbs (`owed-door`; `checks-door` and `claims-door` left with feature 449 T132).
 pub fn serve_with(input: &mut dyn BufRead, output: &mut dyn Write, answer: &Verbs) -> Reply {
     let mut line = String::new();
     loop {

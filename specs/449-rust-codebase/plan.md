@@ -414,28 +414,36 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T130 to T130 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T131 to T131 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-### T132 (<why: the finding or measurement that files it>)
+### T132 (the review snapshot and the implementation check, `ask:449-phase3-remainder` Q2 task B)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `scripts/reviews/review_snapshot.py` and `scripts/record/impl_check.py` ported whole, no door (`l7r-gate reviews snapshot` in `reviews/snapshot.rs`; `l7r-gate impl-check` in `claims/impl_check.rs`), every caller repointed, and the two files deleted with `scripts/checks_door.py` and `scripts/claims_door.py`, whose last callers they were.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase3-remainder` Q2, `ask:449-T81-slices`, `ask:449-T89-reviews`, `ask:449-T82-claims`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - The ruling's import test first: `review_snapshot.py` imports the standard library and `checks_door.py` alone, `impl_check.py` the standard library and `claims_door.py` alone, neither reaching `interactive/`, Mode A or the page writer, so both port in phase 3 (observed 2026-11-12, method: each file's imports read).
+   - Where it lives: the snapshot in `reviews`, asking `owed::owed` in process; the implementation check in `claims`, beside what it reads, with `--missing-json` kept as its command form (T119's rule that no form vanishes unannounced). `claims` builds on `reviews`, so the closing check (`reviews::closing`) takes the implementation check as a function its caller hands in (`closing::ImplCheck`), as `plan::cli` takes the claims tool: `close-check` and `gm-review` hand it from the binary, `make tick` and the land's tick from the `task` crate, which now builds on `claims` (no cycle). A raise still ends in `impl_check.missing raised` and every caller exits as before; nothing is printed by a separate process any more, so `Closing`'s carried stderr goes.
+   - The callers: `make verify`'s two snapshot lines run `l7r-gate.sh reviews snapshot` with the same arguments, read by the recipe as before; `make impl-check` runs `l7r-gate.sh impl-check`; the test stand-ins for `impl_check.py` in the closing, close-check, gm-review, task and land tests become Rust function stand-ins; `tests/hooks/test-pair-hooks.sh`'s stub no longer forwards `checks-door`.
+   - The doors: the `checks-door` and `claims-door` verbs and their dispatch are removed with `claims/door.rs`; kept are `core`'s `serve_with` and `keep_batches` (for `owed-door`), `checks-close` (`make check-closed`), and the `owed`, `record`, `bundle` and `plan` doors. The door tests that were the only cover of `scope_split`, `flight_live`, `backfill_at` and `owed_at` move to `claims/tests.rs`.
+   - The claims are read once a repository a run where the Python read them once a directory; the answers are the same (the differential below).
+   - `make replay-owing`'s OLD side runs each past commit's own `claims_door.py`: a commit after this cut has none, nor `scripts/record/claims.py`, so it cannot be replayed by OLD. The recorded `sc001-replay` replays feature 372's commits, before the cut, and is unchanged; no recorded command replays a later one (observed 2026-11-12, method: `specs/375-enforced-wave-process/measurements.json`'s `sc001-replay` command and a `git grep` of `replay-owing` over every `specs/*/measurements*.json`).
+   - The same outputs (FR-002): HEAD's Python against the Rust, each case set up identically, exit, stdout, stderr and every file written compared, 829 cases, 11 differing, each explained (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t132/diff.py`, its `results-*.json`). `impl-check` on all 367 feature numbers, the 45 research-record features by relative and absolute path, odd words, no argument and `--missing-json` over every directory, none and a missing one, 476, none differing; `make impl-check` on the 45 and edge cases with the closing check end to end (the old binary running `impl_check.py` by path against the new in-process call), `--reasons-json` and `--push` over 200 and 600 commits, 139, 6 differing, each only make's own `*** [...Makefile:685]` line naming the Makefile each side ran with `-f`; the snapshot over every unit set, mirror and key form and refusal, 58, none; `make verify`'s snapshot lines as the recipe runs them over nine render and mirror setups, 90, none; scratch features for every report branch, a broken or missing index or store and odd verdicts, 66, 5 differing, raises on both sides with the same exit, stdout and files, the traceback's text above its shared last line differing (`ask:449-usage-text`) (observed 2026-11-12, method: the same harness). Normalizations: stderr up to a `Traceback` line (18 more cases), argparse's usage errors compared on exit 2 and empty stdout (7), the usage log's stamps, bytecode off on both sides, the written `dispatch.md` compared by content. Divergences no case reaches: a glob character in a map name, non-ASCII digits in a feature number, `\x1c`-`\x1f` as whitespace, invalid UTF-8's replacement, `--help`'s full text.
+   - Timing: 331.7 s of process time in Python against 241.6 s in Rust over the cases, `impl-check` 171.5 s against 124.4 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t132/diff.py`).
+   - The census at the cut: provenance comments, and `replay_owing.rs`' OLD snippet importing a past commit's own `claims_door.py`; no `specs/*/measurements*.json` command names any of the four files in command, import or `-m` form, at HEAD or after (observed 2026-11-12, method: `git grep` of each name and form). The checks: `make static` clean on 21 crates, `make rust-test` green (`reviews` 100 tests, `claims` 64, `cohort` 58, `task` 39, `arbiter` 31, `land` 50, the guard 556), `make hooks-test HOOKS_ALL=1` green on 54 suites, `check tool-signals`, `check rust-tooling` and the pointer check clean (observed 2026-11-12, method: those commands).
 
 ### T132 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The snapshot and the implementation check are Rust; no Python door is left.
+2. **The constraints.** FR-001, FR-002 and FR-003, `ask:449-phase3-remainder` Q2.
+3. **Where each comes from.** G: the standing approval to delete ported Python; R: the rulings; O: the differential and the census above.
+4. **Do they describe the world here?** Run on every feature this clone's record holds, measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t132/diff.py`).
+5. **The order.** After T131 and T141.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The differential's 829 cases with 11 explained differences, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T133 (<why: the finding or measurement that files it>)

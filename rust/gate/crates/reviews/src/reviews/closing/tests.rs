@@ -1,5 +1,6 @@
 //! The closing check's reasons on scratch trees: every branch and raise (feature 449 T127). The same answers as
-//! `scripts/gates/close_check.py` are the differential's (`scratchpad/t127/diff.py`); these pin the branches.
+//! `scripts/gates/close_check.py` are the differential's (`scratchpad/t127/diff.py`); these pin the branches. The implementation check
+//! is a function handed in since feature 449 T132 (`claims::impl_check`, whose own tests hold its answers), so these hand in stand-ins.
 
 use std::path::{Path, PathBuf};
 
@@ -8,19 +9,38 @@ use serde_json::json;
 use super::super::tests::{dir, put, sh};
 use super::{carries, fix_hold, open_fixes, reasons, Tools};
 
-/// An `impl_check.py` stand-in under `scripts/record/` with `body` after the argument check.
-fn impl_check(root: &Path, body: &str) {
-    put(
-        root,
-        "scripts/record/impl_check.py",
-        &format!("import json, sys\nassert sys.argv[1] == '--missing-json'\n{body}\n"),
-    );
+/// Each directory owes one item, named after it.
+#[expect(clippy::unnecessary_wraps, reason = "an `ImplCheck`")]
+fn owes(dirs: &[&Path]) -> Result<Vec<Vec<String>>, String> {
+    Ok(dirs
+        .iter()
+        .map(|d| vec![format!("{} owes", super::name(d))])
+        .collect())
 }
 
-const OWES: &str = "print(json.dumps([[a.rsplit('/', 1)[-1] + ' owes'] for a in sys.argv[2:]]))";
+/// Nothing owed, and the directories asked written to `asked` at their repository.
+#[expect(clippy::unnecessary_wraps, reason = "an `ImplCheck`")]
+fn none(dirs: &[&Path]) -> Result<Vec<Vec<String>>, String> {
+    let names: Vec<String> = dirs.iter().map(|d| d.display().to_string()).collect();
+    if let Some(root) = dirs.first().and_then(|d| d.parent()).and_then(Path::parent) {
+        std::fs::write(root.join("asked"), names.join(" ")).unwrap();
+    }
+    Ok(vec![Vec::new(); dirs.len()])
+}
 
-fn ask(root: &Path, python: &str, dirs: &[&str]) -> Result<Vec<Vec<String>>, String> {
-    let tools = Tools { tree: root, python };
+fn raises(_: &[&Path]) -> Result<Vec<Vec<String>>, String> {
+    Err("ValueError: the claims are unreadable".to_owned())
+}
+
+fn ask(
+    root: &Path,
+    impl_check: super::ImplCheck,
+    dirs: &[&str],
+) -> Result<Vec<Vec<String>>, String> {
+    let tools = Tools {
+        tree: root,
+        impl_check,
+    };
     let dirs: Vec<PathBuf> = dirs.iter().map(|d| root.join("specs").join(d)).collect();
     reasons(&tools, &root.join("specs"), &dirs).map(|found| found.each)
 }
@@ -61,7 +81,6 @@ fn the_carries_are_read_from_every_spec_in_order() {
 #[test]
 fn a_feature_owes_its_report_its_carried_keys_and_its_implementation_check() {
     let d = dir("closing-reasons");
-    impl_check(&d, OWES);
     put(
         &d,
         "specs/100-x/spec.md",
@@ -69,7 +88,7 @@ fn a_feature_owes_its_report_its_carried_keys_and_its_implementation_check() {
     );
     put(&d, "specs/101-y/measurements.json", r#"{"a": 1}"#);
     put(&d, "specs/102-z/report.md", "r");
-    let got = ask(&d, "python3", &["101-y", "102-z"]).unwrap();
+    let got = ask(&d, owes, &["101-y", "102-z"]).unwrap();
     assert_eq!(
         got,
         [
@@ -97,15 +116,15 @@ fn a_feature_owes_its_report_its_carried_keys_and_its_implementation_check() {
     ] {
         put(&d, "specs/101-y/measurements.json", text);
         put(&d, "specs/101-y/report.md", "");
-        let n = ask(&d, "python3", &["101-y"]).unwrap()[0].len();
+        let n = ask(&d, owes, &["101-y"]).unwrap()[0].len();
         assert_eq!((text, n), (text, owed + 1));
     }
     std::fs::write(d.join("specs/101-y/measurements.json"), b"\xff").unwrap();
-    assert_eq!(ask(&d, "python3", &["101-y"]).unwrap()[0].len(), 3);
+    assert_eq!(ask(&d, owes, &["101-y"]).unwrap()[0].len(), 3);
     // what `set()` cannot take raises
     for text in ["[[1]]", "[{}]", "null", "true", "5"] {
         put(&d, "specs/101-y/measurements.json", text);
-        let raised = ask(&d, "python3", &["101-y"]).unwrap_err();
+        let raised = ask(&d, owes, &["101-y"]).unwrap_err();
         assert_eq!((text, &raised[..9]), (text, "TypeError"));
     }
 }
@@ -113,7 +132,6 @@ fn a_feature_owes_its_report_its_carried_keys_and_its_implementation_check() {
 #[test]
 fn a_feature_s_number_is_read_as_python_s_int_reads_it() {
     let d = dir("closing-numbers");
-    impl_check(&d, "print(json.dumps([[] for a in sys.argv[2:]]))");
     for (name, f) in [
         ("0200-a", "200"),
         ("000-z", "0"),
@@ -125,7 +143,7 @@ fn a_feature_s_number_is_read_as_python_s_int_reads_it() {
         ),
     ] {
         put(&d, &format!("specs/{name}/x"), "");
-        let got = ask(&d, "python3", &[name]).unwrap();
+        let got = ask(&d, none, &[name]).unwrap();
         assert_eq!(
             got[0][0],
             format!(
@@ -142,7 +160,7 @@ fn a_feature_s_number_is_read_as_python_s_int_reads_it() {
         ("٣-x", false),
     ] {
         put(&d, &format!("specs/{name}/x"), "");
-        assert_eq!(ask(&d, "python3", &[name]).is_ok(), ok, "{name}");
+        assert_eq!(ask(&d, none, &[name]).is_ok(), ok, "{name}");
     }
     assert_eq!(super::py_int_text(" -007 ").unwrap(), "-7");
     assert_eq!(super::py_int_text("-0").unwrap(), "0");
@@ -151,31 +169,27 @@ fn a_feature_s_number_is_read_as_python_s_int_reads_it() {
 #[test]
 fn a_feature_closed_before_the_check_is_not_asked() {
     let d = dir("closing-old");
-    impl_check(&d, OWES);
     put(
         &d,
         "scripts/gates/closed-before-375.txt",
         "050-old\n051-older\n",
     );
     assert_eq!(
-        ask(&d, "python3", &["050-old", "052-new"]).unwrap()[0],
+        ask(&d, owes, &["050-old", "052-new"]).unwrap()[0],
         Vec::<String>::new()
     );
-    // nothing to ask, no process
+    // nothing to ask, the check not asked
     assert_eq!(
-        ask(&d, "/no/such/python", &["050-old"]).unwrap(),
+        ask(&d, raises, &["050-old"]).unwrap(),
         [Vec::<String>::new()]
     );
-    assert_eq!(
-        ask(&d, "/no/such/python", &[]).unwrap(),
-        Vec::<Vec<String>>::new()
-    );
+    assert_eq!(ask(&d, raises, &[]).unwrap(), Vec::<Vec<String>>::new());
     std::fs::write(d.join("scripts/gates/closed-before-375.txt"), b"\xff\n").unwrap();
-    assert!(ask(&d, "python3", &["052-new"])
+    assert!(ask(&d, owes, &["052-new"])
         .unwrap_err()
         .starts_with("UnicodeDecodeError"));
     sh(&d, "chmod 000 scripts/gates/closed-before-375.txt");
-    let unreadable = ask(&d, "python3", &["052-new"]);
+    let unreadable = ask(&d, owes, &["052-new"]);
     sh(&d, "chmod 644 scripts/gates/closed-before-375.txt");
     assert!(unreadable.unwrap_err().starts_with("OSError"));
 }
@@ -183,16 +197,15 @@ fn a_feature_closed_before_the_check_is_not_asked() {
 #[test]
 fn what_the_python_raised_fails_after_the_directories_before_it_are_asked() {
     let d = dir("closing-raise");
-    impl_check(&d, "open(sys.argv[2].rsplit('/specs/', 1)[0] + '/asked', 'w').write(' '.join(sys.argv[2:]))\nprint(json.dumps([[] for a in sys.argv[2:]]))");
     put(&d, "specs/200-a/report.md", "");
     // a number that is no number raises on the report's line, the first directory still put to the implementation check
-    let got = ask(&d, "python3", &["200-a", "x-b", "201-c"]).unwrap_err();
+    let got = ask(&d, none, &["200-a", "x-b", "201-c"]).unwrap_err();
     assert!(got.starts_with("ValueError: invalid literal"), "{got}");
     let asked = std::fs::read_to_string(d.join("asked")).unwrap_or_default();
     assert!(asked.ends_with("specs/200-a"), "{asked}");
     // a carry read that fails after the report's line
     std::fs::create_dir_all(d.join("specs/300-s/spec.md")).unwrap();
-    assert!(ask(&d, "python3", &["200-a"])
+    assert!(ask(&d, none, &["200-a"])
         .unwrap_err()
         .starts_with("OSError"));
 }
@@ -201,56 +214,21 @@ fn what_the_python_raised_fails_after_the_directories_before_it_are_asked() {
 fn the_implementation_check_failing_fails_the_closing_check() {
     let d = dir("closing-impl");
     put(&d, "specs/200-a/report.md", "");
-    impl_check(&d, "raise SystemExit(3)");
-    assert!(ask(&d, "python3", &["200-a"])
-        .unwrap_err()
-        .contains("exited 3"));
-    // what it said on stderr is captured and carried in the error, its traceback first (the coordinator's ruling on T127)
-    impl_check(&d, "raise ValueError('the claims door is shut')");
-    let raised = ask(&d, "python3", &["200-a"]).unwrap_err();
-    assert!(raised.starts_with("Traceback (most recent call last):\n"));
-    assert!(raised.contains("ValueError: the claims door is shut\nimpl_check.missing raised"));
-    // a warning on success is handed back beside the answer, for the caller to place
-    impl_check(
-        &d,
-        "sys.stderr.write('a warning\\n')\nprint(json.dumps([[] for a in sys.argv[2:]]))",
-    );
-    let tools = Tools {
-        tree: &d,
-        python: "python3",
-    };
-    let found = reasons(&tools, &d.join("specs"), &[d.join("specs/200-a")]).unwrap();
+    // what it raised, then the closing check's own last line, as the by-path run's traceback came above its words (T127)
     assert_eq!(
-        (found.each, found.said.as_str()),
-        (vec![vec![]], "a warning\n")
+        ask(&d, raises, &["200-a"]).unwrap_err(),
+        "ValueError: the claims are unreadable\nimpl_check.missing raised"
     );
-    // a later directory's raise: what impl_check said for the earlier ones comes first
+    // a later directory's raise comes after the implementation check of the earlier ones, whose own raise wins
     put(&d, "specs/x-b/x", "");
-    let raised = reasons(
-        &tools,
-        &d.join("specs"),
-        &[d.join("specs/200-a"), d.join("specs/x-b")],
-    )
-    .err()
-    .unwrap_or_default();
-    assert!(raised.starts_with("a warning\nValueError: invalid literal"));
-    impl_check(&d, "print('not json')");
-    assert!(ask(&d, "python3", &["200-a"])
+    assert!(ask(&d, raises, &["200-a", "x-b"])
         .unwrap_err()
-        .starts_with("impl_check.py --missing-json:"));
-    impl_check(&d, "print('[]')");
-    assert!(ask(&d, "python3", &["200-a"])
-        .unwrap_err()
-        .contains("0 answers for 1"));
-    assert!(ask(&d, "/no/such/python", &["200-a"])
-        .unwrap_err()
-        .starts_with("OSError"));
+        .starts_with("ValueError: the claims are unreadable"));
 }
 
 #[test]
 fn an_open_tooling_fix_holds_the_feature_until_settled() {
     let d = dir("closing-fixes");
-    impl_check(&d, "print(json.dumps([[] for a in sys.argv[2:]]))");
     put(&d, "specs/200-a/report.md", "");
     assert_eq!(fix_hold(&d.join("specs/200-a")), "");
     put(
@@ -270,7 +248,7 @@ fn an_open_tooling_fix_holds_the_feature_until_settled() {
         open_fixes(&d.join("specs/200-a")),
         [("t1", "newer"), ("3", "[\"a\"]")].map(|(a, b)| (a.to_owned(), b.to_owned()))
     );
-    let got = ask(&d, "python3", &["200-a"]).unwrap();
+    let got = ask(&d, none, &["200-a"]).unwrap();
     assert_eq!(got[0].len(), 1);
     assert!(
         got[0][0].starts_with("the round arbiter's tooling fix is open")

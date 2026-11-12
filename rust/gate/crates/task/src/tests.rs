@@ -66,12 +66,6 @@ pub(crate) fn repo(tag: &str) -> TempDir {
         "scripts/gates/codeid.py",
         "import sys\nfor n in sys.argv[2:]:\n    d = open(n, 'rb').read()\n    print(d.split(b'#')[0].strip().hex() or 'empty')\n",
     );
-    // the implementation check's stand-in: nothing missing, a line on stderr the tick passes through
-    put(
-        &root,
-        "scripts/record/impl_check.py",
-        "import json, sys\nprint(json.dumps([[] for _ in sys.argv[2:]]))\nprint('impl_check said', file=sys.stderr)\n",
-    );
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "base"]);
     let origin = dir.join("origin.git");

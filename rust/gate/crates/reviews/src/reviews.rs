@@ -6,6 +6,7 @@
 //! guard's `shared::ledger`, and `ledger_passes`, `ledger_owed.py`'s port.
 //! The GM-review queue (feature 449 T91, `ask:449-T82-claims`): `gm_review`, `scripts/gm_review.py`'s port behind `l7r-gate gm-review`, the one
 //! writer of `gm-review.jsonl` and the GM's box, which the round arbiter and the claims tools call in process.
+//! The reviewer's snapshot (feature 449 T132): `snapshot`, `scripts/reviews/review_snapshot.py`'s port behind `l7r-gate reviews snapshot`.
 //! The closing check (feature 449 T127): `closing`, the reasons of `scripts/gates/close_check.py`'s port, which `gm_review` asks in process and
 //! `cohort`'s `l7r-gate close-check` serves to the push and `make tick`.
 
@@ -17,6 +18,7 @@ pub mod ledger;
 pub mod ledger_passes;
 pub mod owed;
 pub mod prereq;
+pub mod snapshot;
 
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
@@ -34,6 +36,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("owed") => owed::cli(rest),
         Some("prereq") => prereq::cli(rest),
         Some("checkpoint") => checkpoint::cli(rest),
+        Some("snapshot") => snapshot::cli(rest),
         Some("ledger-lint") => ledger::lint_cli(
             rest,
             &std::env::var_os("L7R_GATE_TREE").map_or_else(|| PathBuf::from("."), PathBuf::from),
@@ -44,7 +47,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("ledger-passes") => ledger_passes::passes_cli(rest, &ledger_passes::Env::of_process()),
         _ => reply(
             String::new(),
-            "usage: l7r-gate reviews owed|prereq|checkpoint|ledger-lint|ledger-rows|review-cost|ledger-owed|ledger-passes ...\n".to_owned(),
+            "usage: l7r-gate reviews owed|prereq|checkpoint|snapshot|ledger-lint|ledger-rows|review-cost|ledger-owed|ledger-passes ...\n".to_owned(),
             2,
         ),
     }

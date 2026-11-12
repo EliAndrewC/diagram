@@ -95,9 +95,10 @@ pub fn cli(args: &[String]) -> Reply {
             owed_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout().lock())
         }
         Some("reviews") => reviews::cli(&args[1..]),
-        Some("gm-review") => reviews::gm_review::cli(&args[1..]),
+        Some("gm-review") => reviews::gm_review::cli(&args[1..], claims::impl_check::missing_each),
         Some("speckit-todo") => speckit_todo::cli(&args[1..], Path::new(".")),
-        Some("close-check") => close_check::cli(&args[1..]),
+        Some("close-check") => close_check::cli(&args[1..], claims::impl_check::missing_each),
+        Some("impl-check") => claims::impl_check::cli(&args[1..], &top()),
         Some("claims") => claims::cli(&args[1..]),
         Some(verb @ ("tick" | "task-start" | "phase-read")) => l7r_gate_task::cli(
             verb,
@@ -109,10 +110,6 @@ pub fn cli(args: &[String]) -> Reply {
         Some("tunables") => claims::tunables_cli(&args[1..]),
         Some("work-budget-bundle") => measure::work_budget_bundle::cli(&args[1..], &top()),
         Some("budget-change") => measure::budget_change::cli(&args[1..], &top()),
-        Some("claims-door") => claims::door_cli(),
-        Some("checks-door") => {
-            checks_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
-        }
         Some("--version") => Reply {
             stdout: format!("l7r-gate {}\n", env!("CARGO_PKG_VERSION")),
             stderr: String::new(),
@@ -144,10 +141,12 @@ mod tests {
     }
 
     #[test]
-    fn the_checks_door_reads_stdin_to_its_end() {
-        assert_eq!(cli(&["checks-door".to_owned()]).code, 0);
+    fn the_doors_read_stdin_to_its_end() {
         assert_eq!(cli(&["owed-door".to_owned()]).code, 0);
-        assert_eq!(cli(&["claims-door".to_owned()]).code, 0);
+        // the checks and claims doors left with their last callers, `review_snapshot.py` and `impl_check.py` (feature 449 T132)
+        assert_eq!(cli(&["checks-door".to_owned()]).code, 2);
+        assert_eq!(cli(&["claims-door".to_owned()]).code, 2);
+        assert_eq!(cli(&["impl-check".to_owned()]).code, 2);
         assert_eq!(cli(&["claims".to_owned()]).code, 2);
         assert_eq!(cli(&["tunables".to_owned(), "--bogus".to_owned()]).code, 2);
         assert_eq!(cli(&["reviews".to_owned()]).code, 2);

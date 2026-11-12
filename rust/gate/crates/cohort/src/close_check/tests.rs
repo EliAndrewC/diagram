@@ -1,10 +1,11 @@
 //! `l7r-gate close-check` on scratch repositories: every form, the usage log, every raise (feature 449 T127). The same outputs as
-//! `scripts/gates/close_check.py` are the differential's (`scratchpad/t127/diff.py`); these pin the branches.
+//! `scripts/gates/close_check.py` are the differential's (`scratchpad/t127/diff.py`); these pin the branches. The implementation check
+//! is handed in since feature 449 T132 (`claims::impl_check`, whose own tests hold its answers): these hand in stand-ins.
 
 use std::path::Path;
 use std::process::Command;
 
-use l7r_gate_reviews::reviews::closing::Tools;
+use l7r_gate_reviews::reviews::closing::{ImplCheck, Tools};
 
 use super::{cli, cli_in, resolve, USAGE};
 use crate::checks::scratch;
@@ -27,16 +28,22 @@ fn put(root: &Path, rel: &str, text: &str) {
     std::fs::write(p, text).unwrap();
 }
 
-/// A repository whose `origin/main` is its first commit, with an `impl_check.py` stand-in that owes nothing.
+/// An implementation check that owes nothing.
+#[expect(clippy::unnecessary_wraps, reason = "an `ImplCheck`")]
+fn nothing(dirs: &[&Path]) -> Result<Vec<Vec<String>>, String> {
+    Ok(vec![Vec::new(); dirs.len()])
+}
+
+/// An implementation check that raises.
+fn raises(_: &[&Path]) -> Result<Vec<Vec<String>>, String> {
+    Err("ValueError: the claims are unreadable".to_owned())
+}
+
+/// A repository whose `origin/main` is its first commit.
 fn repo(tag: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
     let tmp = scratch(tag);
     let root = std::fs::canonicalize(&tmp).unwrap();
     git(&root, &["init", "-q", "-b", "main"]);
-    put(
-        &root,
-        "scripts/record/impl_check.py",
-        "import json, sys\nprint(json.dumps([[] for a in sys.argv[2:]]))\n",
-    );
     put(&root, "specs/100-old/tasks.md", "- [x] T1\n");
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "base"]);
@@ -45,9 +52,13 @@ fn repo(tag: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
 }
 
 fn run(root: &Path, words: &[&str]) -> Reply {
+    run_with(root, words, nothing)
+}
+
+fn run_with(root: &Path, words: &[&str], impl_check: ImplCheck) -> Reply {
     let tools = Tools {
         tree: root,
-        python: "python3",
+        impl_check,
     };
     let args: Vec<String> = words.iter().map(|w| (*w).to_owned()).collect();
     cli_in(&args, &tools, root)
@@ -89,33 +100,14 @@ fn a_feature_s_reasons_one_a_line() {
     assert!(run(&root, &["--reasons-json", "specs/x-b", "specs"])
         .stderr
         .starts_with("Traceback (most recent call last):\n  l7r-gate close-check\nValueError"));
-    // a passing run's warning passes through on the command line, as the import let it (feature 449 T127)
-    put(
-        &root,
-        "scripts/record/impl_check.py",
-        "import json, sys\nsys.stderr.write('a warning\\n')\nprint(json.dumps([[] for a in sys.argv[2:]]))\n",
-    );
-    assert_eq!(
-        run(&root, &["--reasons-json", "specs/201-b", "specs"]).stderr,
-        "a warning\n"
-    );
-    assert_eq!(run(&root, &["specs/201-b"]).stderr, "a warning\n");
-    // impl_check raising: what it printed comes first, as the import's stderr did, and the command's own trace closes it
-    put(
-        &root,
-        "scripts/record/impl_check.py",
-        "import sys\nsys.stderr.write('a warning\\n')\nraise ValueError('the claims door is shut')\n",
-    );
-    let got = run(&root, &["--reasons-json", "specs/201-b", "specs"]);
+    // the implementation check raising: what it raised comes first, and the command's own trace closes it
+    let got = run_with(&root, &["--reasons-json", "specs/201-b", "specs"], raises);
     assert_eq!(got.code, 1);
-    let want = "ValueError: the claims door is shut\nTraceback (most recent call last):\n  l7r-gate close-check\nimpl_check.missing raised";
-    assert!(got
-        .stderr
-        .starts_with("a warning\nTraceback (most recent call last):\n  File"));
-    assert!(got.stderr.contains(want));
-    // a raise records nothing: the two runs above and the warned one
+    assert_eq!(got.stderr, "ValueError: the claims are unreadable\nTraceback (most recent call last):\n  l7r-gate close-check\nimpl_check.missing raised\n");
+    assert_eq!(run_with(&root, &["specs/201-b"], raises).code, 1);
+    // a raise records nothing: the two runs above
     assert!(run(&root, &["x"]).stderr.contains("ValueError"));
-    assert_eq!(usage(&root).len(), 3);
+    assert_eq!(usage(&root).len(), 2);
 }
 
 #[test]
@@ -203,7 +195,7 @@ fn the_grandfathered_list_is_written_from_the_closed_features() {
     let elsewhere = root.join("scripts");
     let tools = Tools {
         tree: &root,
-        python: "python3",
+        impl_check: nothing,
     };
     let got = cli_in(&["--write-grandfathered".to_owned()], &tools, &elsewhere);
     assert_eq!(
@@ -226,11 +218,14 @@ fn a_path_resolves_as_pathlib_resolves_it() {
 fn the_process_form_reads_its_working_directory() {
     // run where the tests run: `x` is no number, so the reasons raise before anything is asked or recorded
     assert_eq!(
-        cli(&[
-            "--reasons-json".to_owned(),
-            "x".to_owned(),
-            "/no/specs".to_owned()
-        ])
+        cli(
+            &[
+                "--reasons-json".to_owned(),
+                "x".to_owned(),
+                "/no/specs".to_owned()
+            ],
+            raises
+        )
         .code,
         1
     );

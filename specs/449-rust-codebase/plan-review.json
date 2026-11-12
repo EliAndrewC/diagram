@@ -756,6 +756,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T132 (the review snapshot and the implementation check, `ask:449-phase3-remainder` Q2 task B)": {
+   "sha256": "41f2b8b11ccd4396cad5d27c32e7c15fd9d12ee660726272f9fc32820098ecc3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T132 Approach (checklist part A)": {
+   "sha256": "ba92c2d21cfac9543c8e87fec1f0a84744bc480fd1f40e026fdc13d6f8313472",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8738,6 +8750,77 @@
      "why": "Excludes nothing requested: the task claims only this hop, and FR-001 phase 1 still owes any other Python start in the guard. Finding on the search space (not a narrowing): the stated goal is 'a spec-fidelity dispatch starts no Python in the guard', but the grep searches a Python API name inside snippets, not the mechanism. It misses `subprocess.check_output`, `Popen`, `os.system` and any snippet that does not shell out. The waist is the Rust side that starts the interpreter, e.g. `git grep -nE 'python3?\\b' -- rust/guard/src`, read hit by hit. The census as a done criterion should use that search."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T132 (the review snapshot and the implementation check, `ask:449-phase3-remainder` Q2 task B)",
+    "### T132 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T132-import-test",
+     "summary": "Both review_snapshot.py and impl_check.py pass the T81-slices import test (stdlib plus one door each, nothing under interactive/, Mode A or the page writer) and port in phase 3.",
+     "class": "within",
+     "why": "ask:449-phase3-remainder places review_snapshot.py with impl_check.py in T132 and orders the import test first; the block records that test with date and method. The earlier rulings that left them as door callers named at the phase-3 close (ask:449-T82-claims for impl_check.py, ask:449-T89-reviews for review_snapshot.py) are superseded by that later ruling, so porting them now is not a departure."
+    },
+    {
+     "id": "T132-homes",
+     "summary": "Snapshot in reviews (calling owed::owed in process); implementation check in claims with --missing-json kept; closing check takes the implementation check as a handed-in function (closing::ImplCheck); the task crate now builds on claims.",
+     "class": "within",
+     "why": "Internal placement serving FR-001's port with no door (the ruling says 'no door' by deleting both doors with them). No command form is removed. Design choices of crate layout are not fidelity questions."
+    },
+    {
+     "id": "T132-closing-stderr",
+     "summary": "The closing check calls the implementation check in process, so Closing's carried stderr from a separate process goes; a raise still ends in impl_check.missing raised and every caller exits as before.",
+     "class": "within",
+     "why": "An internal field, not an output: FR-002 binds what callers see, and the block's differential runs make impl-check with the closing check end to end, the old binary running impl_check.py by path against the new in-process call, over --reasons-json and --push (139 cases, the only differences make's own Makefile-path line). close-check and gm-review hand the same function from the binary."
+    },
+    {
+     "id": "T132-callers",
+     "summary": "make verify's two snapshot lines and make impl-check repointed to l7r-gate.sh; test stand-ins for impl_check.py become Rust function stand-ins; the pair-hooks stub stops forwarding checks-door.",
+     "class": "within",
+     "why": "Repointing every caller in the cut is what FR-003 (no piece runs both) and the ruling's deletion of the doors require."
+    },
+    {
+     "id": "T132-doors",
+     "summary": "checks-door and claims-door verbs and claims/door.rs removed; core serve_with/keep_batches, checks-close and the owed, record, bundle and plan doors kept; door tests that were the only cover of four functions move to claims/tests.rs.",
+     "class": "within",
+     "why": "ask:449-phase3-remainder: checks_door.py and claims_door.py are deleted with these two files, their last callers; the Rust verbs serving them go with them, and the remaining doors still have callers. Moving the tests keeps FR-004's coverage."
+    },
+    {
+     "id": "T132-claims-read-once",
+     "summary": "Claims are read once per repository per run where the Python read them once per directory; answers the same.",
+     "class": "within",
+     "why": "An internal efficiency in the spirit of FR-006; FR-002 is held by the differential, not waived."
+    },
+    {
+     "id": "T132-replay-owing-old",
+     "summary": "make replay-owing's OLD side imports each past commit's own claims_door.py, so a commit after this cut (which has no claims_door.py) cannot be replayed by OLD; the recorded sc001-replay (feature 372's commits) is unchanged and no recorded command replays a later commit.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A tool loses reach it would otherwise have had. Legitimate on two of MODE 1's grounds: keeping it is physically impossible once claims_door.py is gone, and its deletion is mandated by the ruling's own words (ask:449-phase3-remainder: 'claims_door.py deleted with them'), with the GM's standing approval to delete ported Python. The purpose ask:449-T83-scope protected - that make figures can re-run sc001-replay - is intact, and the block shows by git grep over every specs/*/measurements*.json that no recorded command replays a post-cut commit. The limit comes from how T121 ported the OLD side (a Python snippet importing the past commit's door); T132 records it rather than chooses it. The block does not say whether a post-cut OLD replay fails loudly or silently; that is not a fidelity defect, but the record should say which."
+    },
+    {
+     "id": "T132-differences",
+     "summary": "829 cases, 11 differing: 6 are make's own '*** [...Makefile:685]' line naming the Makefile each side ran with -f; 5 are raises with identical exit, stdout and files whose traceback text above the shared last line differs. Normalizations: stderr from a Traceback line, argparse usage errors on exit 2 and empty stdout, log stamps, bytecode off, dispatch.md by content.",
+     "class": "within",
+     "why": "The 6 are harness text (make's own line, from running each side's Makefile with -f), not the tool's output. The 5 and the Traceback and argparse normalizations are exactly FR-002's ruled case ask:449-usage-text: 'an uncaught Python traceback's text is not bound for any port, its exit status and stdout staying held', argparse's generated stderr not bound with exit 2 and empty stdout held. The stamps and bytecode are harness hygiene. Being non-zero, the task is not straight under FR-001c, which is why this review is owed."
+    },
+    {
+     "id": "T132-unreached-divergences",
+     "summary": "Named divergences no case reaches: a glob character in a map name, non-ASCII digits in a feature number, \\x1c-\\x1f as whitespace, invalid UTF-8 replacement, --help's full text.",
+     "class": "within",
+     "why": "FR-002 binds 'every case its tests and its suites hold'; --help is additionally ruled bound only where a kept test or suite case holds it (ask:449-usage-text). The others are disclosed, not hidden. 'No case reaches' is a statement about the 829 harness cases and the held suites, as the block says; it is not a claim that live data cannot contain them, and I did not verify it beyond the block."
+    },
+    {
+     "id": "T132-census",
+     "summary": "Census at the cut: only provenance comments and replay_owing.rs' OLD snippet name the four files; no specs/*/measurements*.json command names any of them in command, import or -m form, so no recorded measurement is rewritten.",
+     "class": "within",
+     "why": "FR-001's rule that every recorded measurement running a ported file is rewritten in the cut has nothing to act on, shown by a dated git grep of each name and form."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15128,6 +15211,75 @@
      "summary": "No other python3 snippet of the guard asks the gate, from `git grep -n \"subprocess.run\" -- rust/guard/src`; the checks make hooks-test, make static, make rust-test.",
      "class": "within",
      "why": "Excludes nothing requested: the task claims only this hop, and FR-001 phase 1 still owes any other Python start in the guard. Finding on the search space (not a narrowing): the stated goal is 'a spec-fidelity dispatch starts no Python in the guard', but the grep searches a Python API name inside snippets, not the mechanism. It misses `subprocess.check_output`, `Popen`, `os.system` and any snippet that does not shell out. The waist is the Rust side that starts the interpreter, e.g. `git grep -nE 'python3?\\b' -- rust/guard/src`, read hit by hit. The census as a done criterion should use that search."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T132": {
+   "section_sha256": "583e4c4bbc17036261c655b80a0c580a1ebbc15ab59b9e8d2e906cb283b9d2f9",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T132-import-test",
+     "summary": "Both review_snapshot.py and impl_check.py pass the T81-slices import test (stdlib plus one door each, nothing under interactive/, Mode A or the page writer) and port in phase 3.",
+     "class": "within",
+     "why": "ask:449-phase3-remainder places review_snapshot.py with impl_check.py in T132 and orders the import test first; the block records that test with date and method. The earlier rulings that left them as door callers named at the phase-3 close (ask:449-T82-claims for impl_check.py, ask:449-T89-reviews for review_snapshot.py) are superseded by that later ruling, so porting them now is not a departure."
+    },
+    {
+     "id": "T132-homes",
+     "summary": "Snapshot in reviews (calling owed::owed in process); implementation check in claims with --missing-json kept; closing check takes the implementation check as a handed-in function (closing::ImplCheck); the task crate now builds on claims.",
+     "class": "within",
+     "why": "Internal placement serving FR-001's port with no door (the ruling says 'no door' by deleting both doors with them). No command form is removed. Design choices of crate layout are not fidelity questions."
+    },
+    {
+     "id": "T132-closing-stderr",
+     "summary": "The closing check calls the implementation check in process, so Closing's carried stderr from a separate process goes; a raise still ends in impl_check.missing raised and every caller exits as before.",
+     "class": "within",
+     "why": "An internal field, not an output: FR-002 binds what callers see, and the block's differential runs make impl-check with the closing check end to end, the old binary running impl_check.py by path against the new in-process call, over --reasons-json and --push (139 cases, the only differences make's own Makefile-path line). close-check and gm-review hand the same function from the binary."
+    },
+    {
+     "id": "T132-callers",
+     "summary": "make verify's two snapshot lines and make impl-check repointed to l7r-gate.sh; test stand-ins for impl_check.py become Rust function stand-ins; the pair-hooks stub stops forwarding checks-door.",
+     "class": "within",
+     "why": "Repointing every caller in the cut is what FR-003 (no piece runs both) and the ruling's deletion of the doors require."
+    },
+    {
+     "id": "T132-doors",
+     "summary": "checks-door and claims-door verbs and claims/door.rs removed; core serve_with/keep_batches, checks-close and the owed, record, bundle and plan doors kept; door tests that were the only cover of four functions move to claims/tests.rs.",
+     "class": "within",
+     "why": "ask:449-phase3-remainder: checks_door.py and claims_door.py are deleted with these two files, their last callers; the Rust verbs serving them go with them, and the remaining doors still have callers. Moving the tests keeps FR-004's coverage."
+    },
+    {
+     "id": "T132-claims-read-once",
+     "summary": "Claims are read once per repository per run where the Python read them once per directory; answers the same.",
+     "class": "within",
+     "why": "An internal efficiency in the spirit of FR-006; FR-002 is held by the differential, not waived."
+    },
+    {
+     "id": "T132-replay-owing-old",
+     "summary": "make replay-owing's OLD side imports each past commit's own claims_door.py, so a commit after this cut (which has no claims_door.py) cannot be replayed by OLD; the recorded sc001-replay (feature 372's commits) is unchanged and no recorded command replays a later commit.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A tool loses reach it would otherwise have had. Legitimate on two of MODE 1's grounds: keeping it is physically impossible once claims_door.py is gone, and its deletion is mandated by the ruling's own words (ask:449-phase3-remainder: 'claims_door.py deleted with them'), with the GM's standing approval to delete ported Python. The purpose ask:449-T83-scope protected - that make figures can re-run sc001-replay - is intact, and the block shows by git grep over every specs/*/measurements*.json that no recorded command replays a post-cut commit. The limit comes from how T121 ported the OLD side (a Python snippet importing the past commit's door); T132 records it rather than chooses it. The block does not say whether a post-cut OLD replay fails loudly or silently; that is not a fidelity defect, but the record should say which."
+    },
+    {
+     "id": "T132-differences",
+     "summary": "829 cases, 11 differing: 6 are make's own '*** [...Makefile:685]' line naming the Makefile each side ran with -f; 5 are raises with identical exit, stdout and files whose traceback text above the shared last line differs. Normalizations: stderr from a Traceback line, argparse usage errors on exit 2 and empty stdout, log stamps, bytecode off, dispatch.md by content.",
+     "class": "within",
+     "why": "The 6 are harness text (make's own line, from running each side's Makefile with -f), not the tool's output. The 5 and the Traceback and argparse normalizations are exactly FR-002's ruled case ask:449-usage-text: 'an uncaught Python traceback's text is not bound for any port, its exit status and stdout staying held', argparse's generated stderr not bound with exit 2 and empty stdout held. The stamps and bytecode are harness hygiene. Being non-zero, the task is not straight under FR-001c, which is why this review is owed."
+    },
+    {
+     "id": "T132-unreached-divergences",
+     "summary": "Named divergences no case reaches: a glob character in a map name, non-ASCII digits in a feature number, \\x1c-\\x1f as whitespace, invalid UTF-8 replacement, --help's full text.",
+     "class": "within",
+     "why": "FR-002 binds 'every case its tests and its suites hold'; --help is additionally ruled bound only where a kept test or suite case holds it (ask:449-usage-text). The others are disclosed, not hidden. 'No case reaches' is a statement about the 829 harness cases and the held suites, as the block says; it is not a claim that live data cannot contain them, and I did not verify it beyond the block."
+    },
+    {
+     "id": "T132-census",
+     "summary": "Census at the cut: only provenance comments and replay_owing.rs' OLD snippet name the four files; no specs/*/measurements*.json command names any of them in command, import or -m form, so no recorded measurement is rewritten.",
+     "class": "within",
+     "why": "FR-001's rule that every recorded measurement running a ported file is rewritten in the cut has nothing to act on, shown by a dated git grep of each name and form."
     }
    ],
    "verdict": "CLEAR"

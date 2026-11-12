@@ -46,12 +46,13 @@ const USAGE: &str = "    gm_review.py list                                   the
 
 ";
 
-/// Where a run reads and writes: the repository (`root`, the working directory), the tree whose closing list and `impl_check.py` the
-/// closing check reads (the gate's own, `L7R_GATE_TREE`) and the interpreter `impl_check.py` runs under, the GM's words (`GM_WORDS`), and the width a listing is fitted to.
+/// Where a run reads and writes: the repository (`root`, the working directory), the tree whose closing list the closing check reads
+/// (the gate's own, `L7R_GATE_TREE`) and the implementation check it asks (handed in, feature 449 T132), the GM's words (`GM_WORDS`),
+/// and the width a listing is fitted to.
 struct Ctx<'a> {
     root: &'a Path,
     tree: &'a Path,
-    python: &'a str,
+    impl_check: super::closing::ImplCheck,
     words: &'a str,
     columns: &'a dyn Fn(usize) -> usize,
 }
@@ -69,7 +70,7 @@ fn num(d: &Path) -> R<i128> {
 
 /// `d.name` as Python's `Path` names it (a `..` is a name; a `.` is dropped when the path is made; `/` has none).
 #[must_use]
-pub(crate) fn name(d: &Path) -> String {
+pub fn name(d: &Path) -> String {
     match d.components().next_back() {
         Some(Component::Normal(n)) => n.to_string_lossy().into_owned(),
         Some(Component::ParentDir) => "..".to_owned(),
@@ -455,10 +456,8 @@ fn reviewed(ctx: &Ctx, d: &Path, overturn: Option<(i128, &Path)>) -> R<Vec<Strin
 fn close_reasons(ctx: &Ctx, d: &Path) -> R<Vec<String>> {
     let tools = super::closing::Tools {
         tree: ctx.tree,
-        python: ctx.python,
+        impl_check: ctx.impl_check,
     };
-    // what impl_check printed on a passing run is dropped, as the by-path run of T91 kept it to itself (the coordinator's ruling on
-    // T127); a failure still carries it inside the trace
     super::closing::reasons(&tools, &ctx.root.join("specs"), &[d.to_path_buf()])
         .map(|mut found| found.each.pop().unwrap_or_default())
         .map_err(|e| Raised::Trace(format!("close_check.reasons raised:\n{e}")))
@@ -672,16 +671,17 @@ fn cli_in(args: &[String], ctx: &Ctx) -> Reply {
     }
 }
 
-/// `l7r-gate gm-review <verb> ...` in the working directory, with this process's environment.
+/// `l7r-gate gm-review <verb> ...` in the working directory, with this process's environment; `impl_check` the closing check's
+/// implementation check, which the binary hands in (`claims` builds on this crate, feature 449 T132).
 #[must_use]
-pub fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String], impl_check: super::closing::ImplCheck) -> Reply {
     let root = std::env::current_dir().unwrap_or_default();
     let tree = std::env::var_os("L7R_GATE_TREE").map_or_else(|| root.clone(), PathBuf::from);
     let words = std::env::var("GM_WORDS").unwrap_or_default();
     let ctx = Ctx {
         root: &root,
         tree: &tree,
-        python: "python3",
+        impl_check,
         words: l7r_guard::shared::py_text::strip(&words),
         columns: &py::columns,
     };

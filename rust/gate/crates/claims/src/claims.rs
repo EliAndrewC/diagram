@@ -1,7 +1,8 @@
 //! The research claims' tools (feature 316; `scripts/record/claims.py` and its satellites, `tunables.py`, `pager.py` and
 //! `l7r/diagram/tools/claims_rust.py`, with the grammar, the section reader and `doc_units` of `l7r/diagram/tools/claims.py`, ported by
 //! feature 449 T82 under `ask:449-T82-claims`): `l7r-gate claims <command>` behind `make claims-*`, `l7r-gate tunables` behind
-//! `make tunables`, and `l7r-gate claims-door` for the Python that stays Python until its own port. A `.py` unit's fingerprint stays
+//! `make tunables`, and `l7r-gate impl-check` behind `make impl-check` and the closing check (`impl_check.py`'s port, feature 449 T132, which
+//! took `l7r-gate claims-door` with its last caller). A `.py` unit's fingerprint stays
 //! `CPython`'s `ast.dump`, read through `scripts/bundle_door.py` only when a `.py` file changed ([`scope`]).
 
 use std::fmt::Write as _;
@@ -14,9 +15,9 @@ use crate::Reply;
 mod bundle;
 mod carry;
 mod commands;
-pub mod door;
 mod flight;
 mod grammar;
+pub mod impl_check;
 mod index;
 mod labels;
 mod pager;
@@ -75,7 +76,7 @@ fn current_at(root: &Path) -> Result<index::Cur, crate::record::repo::Fail> {
 }
 
 /// `(key, why)` for every claim owed a check at `root` against `index` and `store` - what `claims_door.owed` answered, asked in
-/// process by `l7r-gate replay-owing` (feature 449 T121, `ask:449-T83-scope`) and by the door.
+/// process by `l7r-gate replay-owing` (feature 449 T121, `ask:449-T83-scope`).
 ///
 /// # Errors
 ///
@@ -316,12 +317,6 @@ pub fn tunables_cli(args: &[String]) -> Reply {
             code: 1,
         },
     }
-}
-
-/// `l7r-gate claims-door`: the Python callers' door, one process a run.
-#[must_use]
-pub fn door_cli() -> Reply {
-    door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
 }
 
 #[cfg(test)]

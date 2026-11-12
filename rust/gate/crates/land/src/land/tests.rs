@@ -241,13 +241,6 @@ pub(super) fn fx(tag: &str) -> Fx {
         std::fs::create_dir_all(scripts.join(tool).parent().unwrap()).unwrap();
         write_executable(&scripts.join(tool), STUB);
     }
-    // the closing check's implementation check, which the in-process tick runs from the landing's tree at a closing tick: nothing missing
-    std::fs::create_dir_all(scripts.join("record")).unwrap();
-    std::fs::write(
-        scripts.join("record/impl_check.py"),
-        "import json, sys\nprint(json.dumps([[] for _ in sys.argv[2:]]))\n",
-    )
-    .unwrap();
     let bin = dir.join("bin");
     std::fs::create_dir_all(&bin).unwrap();
     write_executable(&bin.join("python"), STUB);

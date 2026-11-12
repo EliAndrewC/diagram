@@ -20,7 +20,9 @@
 use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
 
-use l7r_gate_reviews::reviews::closing::{carries, reasons, Closing, Tools, GRANDFATHERED};
+use l7r_gate_reviews::reviews::closing::{
+    carries, reasons, Closing, ImplCheck, Tools, GRANDFATHERED,
+};
 use l7r_guard::shared::pyjson::dumps;
 use l7r_guard::shared::speckit::{py_path, state};
 use serde_json::Value;
@@ -148,18 +150,17 @@ fn main(args: &[String], tools: &Tools, cwd: &Path) -> Result<Reply, String> {
         }
         _ => return Ok(reply(String::new(), USAGE.to_owned(), 2)),
     };
-    // impl_check's stderr passes through on the command line, as the in-process import let it (feature 449 T127)
     let found_all = found.each.concat();
     let code = i32::from(!found_all.is_empty());
     Ok(reply(
         found_all.iter().flat_map(|f| [f.as_str(), "\n"]).collect(),
-        found.said,
+        String::new(),
         code,
     ))
 }
 
-/// A raise: what `impl_check.py` printed before it failed comes first, as the in-process import's stderr came before its traceback, and
-/// the command's own trace closes it (`why`'s last line; the lines before it are what the seam captured, feature 449 T127).
+/// A raise: what the implementation check raised comes first, as the in-process import's traceback did, and the command's own trace
+/// closes it (`why`'s last line, feature 449 T127; the implementation check in process since T132).
 fn raised(why: &str) -> Reply {
     let (said, last) = why.rsplit_once('\n').map_or(("", why), |(s, l)| (s, l));
     let said = if said.is_empty() {
@@ -183,7 +184,7 @@ pub fn cli_in(args: &[String], tools: &Tools, cwd: &Path) -> Reply {
             Ok(mut found) => {
                 let list = found.each.pop().unwrap_or_default();
                 let value = Value::from(list);
-                reply(format!("{}\n", dumps(&value, None, true)), found.said, 0)
+                reply(format!("{}\n", dumps(&value, None, true)), String::new(), 0)
             }
             Err(why) => raised(&why),
         };
@@ -201,14 +202,15 @@ pub fn cli_in(args: &[String], tools: &Tools, cwd: &Path) -> Reply {
     }
 }
 
-/// `l7r-gate close-check ...` in the working directory, the tools the gate's own tree's (`L7R_GATE_TREE`).
+/// `l7r-gate close-check ...` in the working directory, the closing list the gate's own tree's (`L7R_GATE_TREE`), `impl_check` the
+/// implementation check the binary hands in (`claims` builds on `reviews`, below this crate; feature 449 T132).
 #[must_use]
-pub fn cli(args: &[String]) -> Reply {
+pub fn cli(args: &[String], impl_check: ImplCheck) -> Reply {
     let cwd = std::env::current_dir().unwrap_or_default();
     let tree = std::env::var_os("L7R_GATE_TREE").map_or_else(|| cwd.clone(), PathBuf::from);
     let tools = Tools {
         tree: &tree,
-        python: "python3",
+        impl_check,
     };
     cli_in(args, &tools, &cwd)
 }
