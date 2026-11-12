@@ -1,5 +1,5 @@
 {
  "ruling": "the GM, 2026-11-02: \"We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc).\"",
- "rule": "feature 448 plan D1: (a) each unaccepted stage's own files (work_budget_bundle.stage_files); (b) the modules the port leaves unreached",
+ "rule": "feature 448 plan D1: (a) each unaccepted stage's own files (the work-budget bundle's stage_files, `l7r-gate work-budget-bundle` since feature 449 T134); (b) the modules the port leaves unreached",
  "entries": []
 }

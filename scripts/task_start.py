@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """`make task-start` (feature 449 T066, from `plan_gate.py`; `ask:449-T066-scope`): the task's mark, its start logged, and its feature named
-in `.specify/feature.json`. In Python with what it reads (`plan_hold.py`'s `speckit-todo`, `phase_sources.py`'s `work_budget_bundle`) until
-phase 3 ports them; what it needs of the plan gate goes through the door."""
+in `.specify/feature.json`. In Python with what it reads (`plan_hold.py`'s `speckit-todo`, `phase_sources.py`, which runs the gate's
+`work-budget-bundle --sources` since feature 449 T134) until phase 3 ports them; what it needs of the plan gate goes through the door."""
 
 from __future__ import annotations
 

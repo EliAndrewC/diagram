@@ -8,9 +8,10 @@ from the stage's greenfield derivation (feature 444 FR-015, FR-017); nothing sto
 Python as it wrote. So `make task-start` on such a task records the stage's old modules here, and `phase_source_hooks.rs` refuses
 a read of them until the task is ticked; `make phase-read FILE= WHY=` lets one file be read for ten minutes, the reason logged.
 
-THE OLD CODE: the module defining `stage_<phase>` (its subpackage's siblings with it, `work_budget_bundle.stage_files`), every
-module defining a function the stage's counters name in the newest `make work-budget` run (`counted_files` - where its work
-is), and any path or glob the task block names on an `old-code:` line.
+THE OLD CODE: the module defining `stage_<phase>` (its subpackage's siblings with it), every module defining a function the stage's
+counters name in the newest `make work-budget` run (where its work is) - both read by the gate's `l7r-gate work-budget-bundle
+--sources` (feature 449 T134, the port of `work_budget_bundle.py`'s `stage_files` and `counted_files`) - and any path or glob the
+task block names on an `old-code:` line.
 
     phase_sources.py allow <file> <why>     `make phase-read`
 """
@@ -25,9 +26,8 @@ import subprocess
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
-for d in (HERE, HERE.parent / "reviews"):
-    if str(d) not in sys.path:
-        sys.path.insert(0, str(d))
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
 
 STATE = "phase-sources.json"  # in the git common directory, beside `active-task`
 ALLOW_MINUTES = 10
@@ -47,16 +47,12 @@ def phase_of(block: str) -> tuple[str, list[str]]:
 
 def sources(root: pathlib.Path, phase: str, extra: list[str]) -> list[str]:
     """The stage's old modules, relative to `root`."""
-    import work_budget_bundle as wb  # noqa: PLC0415
-
-    # THE OLD CODE IS THE PYTHON: `stage_files` also names a Rust phase's `.rs` source (the audit bundle reads it), which is the
-    # very code the task writes and must stay readable
-    files = [p for p in wb.stage_files(root, phase) if p.suffix == ".py"]
-    runs = sorted((root / wb.RUNS).glob("*.json"))
-    if runs:
-        run = json.loads(runs[-1].read_text(encoding="utf-8"))
-        counts = [r["stages"][phase] for r in run["rows"] if phase in r["stages"]]
-        files += [p for p in wb.counted_files(root, counts) if p not in files]
+    # THE OLD CODE IS THE PYTHON (the gate's `--sources` leaves out a Rust phase's `.rs` source, the very code the task writes, which
+    # must stay readable), read in ONE process where the import of `work_budget_bundle` read it once (feature 449 T134, FR-003); a
+    # failure raises (`check=True`), as the import's own failure did
+    done = subprocess.run([str(HERE / "l7r-gate.sh"), "work-budget-bundle", "--sources", phase, "--root", str(root)],
+                          capture_output=True, text=True, check=True)
+    files = [root / p for p in json.loads(done.stdout)]
     for g in extra:
         files += [p for p in sorted(root.glob(g)) if p.is_file() and p not in files]
     return sorted({str(p.relative_to(root)) for p in files})

@@ -102,6 +102,8 @@ pub fn cli(args: &[String]) -> Reply {
         Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),
         Some("replay-owing") => replay_owing::cli(&args[1..]),
         Some("tunables") => claims::tunables_cli(&args[1..]),
+        Some("work-budget-bundle") => measure::work_budget_bundle::cli(&args[1..], &top()),
+        Some("budget-change") => measure::budget_change::cli(&args[1..], &top()),
         Some("claims-door") => claims::door_cli(),
         Some("checks-door") => {
             checks_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())

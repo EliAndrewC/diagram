@@ -485,28 +485,35 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T134 (<why: the finding or measurement that files it>)
+### T134 (the work budget's tools no task held, `ask:449-phase3-remainder`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `scripts/reviews/work_budget_bundle.py` and `scripts/budget_change.py` ported whole, no door, into the gate's `trials` crate beside `measure work-budget` (`measure/work_budget_bundle.rs` with `derivation.rs`, `code.rs` and `pyast/`; `measure/budget_change.rs` with `rules.rs`: `l7r-gate work-budget-bundle`, `l7r-gate budget-change`), every caller repointed and both `.py` deleted in the same cut.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase3-remainder`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - Where it lives: `trials`, beside `measure work-budget`, so `budget-change` reads `sizes` in process where the Python imported it. One writer of each file, unchanged: `measure work-budget --write` writes `dev/work-budget.md` and the run files, `budget-change` writes `dev/work-budget.json` and `dev/work-budget-changes.jsonl`, and `cohort`'s view only reads (observed 2026-11-12, method: each tool's writes read from its code).
+   - The callers: the Makefile's `work-budget-bundle`, `budget-set`, `budget-change`, `budget-accept` and `budget-program` run the gate commands with their arguments as they were. `phase_sources.py`, which stays Python until T131, runs `work-budget-bundle --sources PHASE --root R` once by command where it imported the module, a JSON list of the stage's paths on stdout, a failure raising as the import's did. The flag is `--sources`, not `--old-code`, which made `--o` ambiguous with `--out` under argparse's prefix rule (observed 2026-11-12, method: the differential, both names tried). Neither Python tool recorded a usage line, so neither command does.
+   - The audit reads the engine's Python with a parser in Rust (`pyast`): MODE BUDGET reads today's code names from the 110 `.py` files under `l7r/`, and the audit follows calls from older runs' keys in `labels/*.py`, the bundle's `code/` list ordered as `ast.walk`'s breadth-first walk orders it, so the parse needs CPython's tree shape and each call's depth, which the guard's `pylex` (no indentation, no numbers) cannot give. It is not `ask:449-T82-claims`' refused route (b): that route would have stored a Rust `ast.dump` as the `.py` units' fingerprints in `dev/claims-index.json`, which must equal CPython's byte for byte; `pyast` stores nothing, only reads structure within a run, and goes with the last Python it reads, the engine's, in phase 4. Checked against CPython's `ast` on 1,038 files (the standard library, the repository's `.py` and 197 snippets, 55 of them syntax errors): definitions, scope names, imports and calls in walk order, none differing (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t134/pyast/`).
+   - Non-finite figures: what Python's `float()` takes for a figure (`inf`, `nan`, `1e999`, any case and sign) is taken, written into `dev/work-budget.json` and its log as `json.dumps` wrote it (`Infinity`, `-Infinity`, `NaN`), and read back where a value stands as `json.loads` read it, carried through `serde_json` as a marker string. The older reader `measure work-budget` (T77) reads that table with plain `serde_json` and would report it unreadable if a non-finite figure were ever written, as it would have under the Python writer.
+   - The audit's seven 444 arbiter fixes, whose named Python tests are deleted with the file, are held by named Rust tests (`sink-round-9`, `T16-field-audit-5` and `-6`, `T02-water-round-6`, `T02-field-round-8`, `budget-standard`, `polder-sizes`), the arbiter's log left as written.
+   - The same outputs (FR-002): HEAD's Python against the Rust, each case set up identically, exit, stdout, stderr and every file written compared: MODE BUDGET on all 49 derivations and MODE AUDIT on every stage with and without the funnel budget, 103 cases, none differing; `budget-change`, every verb, refusal and status on copies of the real table, log, runs, 444's derivations, verdicts and arbiter log, with every figure spelling and a table holding non-finite figures, 471, none; the bundle on scratch trees, every form refusal and audit reading and each raise, 192, none; `phase_sources.sources` before and after on real and scratch trees, 129, none, 10 raising on both sides (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t134/harness.py`, its `results-*.json`). Normalizations: stderr where both sides exit nonzero and the Python's is a traceback or an argparse usage error (`ask:449-usage-text`, `ask:449-T77-bad-since`), exit and stdout still compared, 124 cases (the bundle 44 tracebacks and 5 usage errors, `budget-change` 48 and 27, the real tree none). Divergences no case reaches: `-h` exiting 2, non-ASCII digits, a glob character in a stage name, serde's float reading without round-trip.
+   - Timing: the real tree 27.4 s of process time in Python against 8.0 s in Rust, `budget-change` 20.7 s against 7.2 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t134/harness.py`).
+   - The census at the cut: provenance comments and history (specs, 444's arbiter log, `dev/review-ledger.md`); no `specs/*/measurements*.json` command runs or names either file, at HEAD or after the cut, so FR-001's rewrite of a recorded command owes nothing here (observed 2026-11-12, method: `git grep -n -E "work_budget_bundle|budget_change" HEAD -- 'specs/*/measurements*.json'` and the same over the working tree, no hit either side); nor does anything else run them (observed 2026-11-12, method: `git grep -E "work_budget_bundle|budget_change\.py"` over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/`, `tests/`, `docs` and `dev`), and nothing imports `budget_change` as a module, at HEAD or after the cut (observed 2026-11-12, method: `git grep -E "import +budget_change|import_module\(.budget_change"` and the `from ... import` form over `*.py`, `*.rs`, `*.sh` and the Makefile, at HEAD and on the working tree). The checks: `make static` clean on 20 crates (`trials` at 100% line coverage), `make rust-test` green (`trials` 104 tests, the guard 556), `make hooks-test HOOKS_ALL=1` green on 54 suites, `check rust-tooling`, ruff and the pointer check clean (observed 2026-11-12, method: those commands).
 
 ### T134 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The work budget's bundle and its changes are Rust, one writer of each file.
+2. **The constraints.** FR-001, FR-002 and FR-003, `ask:449-phase3-remainder`, feature 443's budgets and the budget-change guard they serve.
+3. **Where each comes from.** G: the standing approval to delete ported Python; R: the rulings; O: the differential and the census above.
+4. **Do they describe the world here?** Run on every derivation and stage this clone's record holds, measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t134/harness.py`).
+5. **The order.** After T130, before the task gate (T131), whose `phase_sources` it serves.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The differential's 895 cases and the parser's 1,038 files with none differing, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T135 (<why: the finding or measurement that files it>)

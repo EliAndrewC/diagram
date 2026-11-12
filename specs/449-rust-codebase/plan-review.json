@@ -720,6 +720,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T134 (the work budget's tools no task held, `ask:449-phase3-remainder`)": {
+   "sha256": "c72863bc9b1c65b013fbc186c351493ee8baf363f848078817215f9f6ca749b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T134 Approach (checklist part A)": {
+   "sha256": "ec21b1b4b26d9d8a8eb6aed0344edbd2a470b3d8b839c66ad1c93e3137936b2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8426,6 +8438,170 @@
      "why": "Procedure and verification of the requested deletion and retirement; nothing decided beyond the ruling."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T134 (the work budget's tools no task held, `ask:449-phase3-remainder`)",
+    "### T134 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "where-it-lives",
+     "summary": "Both tools ported whole, no door, into the trials crate beside measure work-budget; one writer of each file unchanged (measure work-budget --write: work-budget.md and runs; budget-change: work-budget.json and the changes log; cohort only reads).",
+     "class": "within",
+     "why": "ask:449-phase3-remainder files the work budget's tools as T134, a phase-3 port; FR-001 asks for the port and FR-003 for one implementation running. Crate placement is design, and the one-writer statement keeps FR-003's purpose."
+    },
+    {
+     "id": "callers",
+     "summary": "Makefile targets work-budget-bundle, budget-set, budget-change, budget-accept and budget-program run the gate commands with unchanged arguments; phase_sources.py (Python until T131) runs work-budget-bundle --sources by command where it imported the module, failure raising as the import did; no usage line recorded.",
+     "class": "within",
+     "why": "Every caller moves in the cut and the Python is deleted in it, so no piece runs both (FR-003). phase_sources staying Python until T131 is ask:449-T066-scope and ask:449-phase3-remainder's placement, not this plan's. A new --sources flag binds nothing FR-002 holds; its replacement of the import is held by the 129-case callers differential (results-callers.json: 129 cases, 0 differing, 10 raising, re-read 2026-11-12). Usage text follows ask:449-usage-text."
+    },
+    {
+     "id": "pyast",
+     "summary": "The audit reads the engine's Python with a Rust parser (pyast) giving CPython's tree shape and ast.walk order; stores nothing, reads within a run, deleted with the engine's Python in phase 4; checked against CPython ast on 1,038 files.",
+     "class": "within",
+     "why": "This ports more, not less: the alternative would leave the parse in Python behind a door. ask:449-T062-py-id and ask:449-T82-claims bind a .py unit's stored FINGERPRINT to CPython's ast.dump; pyast writes no fingerprint. T82's keeping of claims' within-run parses in Python is a ruling on the claims cut and does not reach the work budget's tools, which ask:449-phase3-remainder files as a port. I did not verify the block's description of T82's 'route (b)', which the cited ruling text does not label. The 1,038-file census and its 110 l7r/ files are in the pyast scratch (files_all.txt: 1,038 lines, 110 under l7r/)."
+    },
+    {
+     "id": "non-finite-figures",
+     "summary": "Non-finite figures accepted as Python's float() accepts them, written as json.dumps wrote them (Infinity, -Infinity, NaN), read back as json.loads did; T77's reader of the table left as it is.",
+     "class": "within",
+     "why": "FR-002 asks for the Python's outputs; this reproduces them. The remark about T77's reader describes behavior T134 does not change (it would refuse the same table under the Python writer), so it is no decision of this task."
+    },
+    {
+     "id": "arbiter-fix-tests",
+     "summary": "The seven 444 arbiter fixes, whose Python tests go with the file, are held by named Rust tests; the arbiter's log is left as written.",
+     "class": "within",
+     "why": "Enforces FR-002 on the cases the deleted tests held; deleting the Python tests is FR-001b. Keeping a historical log is not a change of scope."
+    },
+    {
+     "id": "delete-in-cut",
+     "summary": "Both .py files deleted in the same cut as the port.",
+     "class": "within",
+     "why": "The GM's standing approval of 2026-11-10, quoted in ask:449-T86-door: 'Yes please delete Python files once their Rust ports land.'; FR-003."
+    },
+    {
+     "id": "differential-and-normalization",
+     "summary": "HEAD's Python against the Rust on 895 cases (103 + 471 + 192 + 129), exit, stdout, stderr and every written file compared; stderr not compared where both sides exit nonzero and the Python's stderr is a traceback or starts 'usage:'.",
+     "class": "within",
+     "why": "ask:449-usage-text unbinds argparse-generated usage and error text and uncaught traceback text while keeping exit status and stdout, which the harness still compares; it keeps hand-written parser.error() text bound, and neither Python file holds a parser.error( call (grep of the scratch's py/ and old/ copies, 2026-11-12), and every usage-kind stderr in the results is argparse's own. Case counts re-read from the results files: 103, 471, 192, 129, none differing. FIGURE FINDING, not a ruling: the block says the normalization covered 63 cases; the results files at 16:23-16:24 count 124 (bundle 44 traceback + 5 usage, change 48 traceback + 27 usage, real 0). The block's 63 should be corrected to the measured count."
+    },
+    {
+     "id": "divergence-h",
+     "summary": "-h exits 2 in the Rust.",
+     "class": "within",
+     "why": "ask:449-usage-text: --help is bound only where a kept test or suite case holds it; the block names none."
+    },
+    {
+     "id": "divergence-non-ascii-digits",
+     "summary": "Non-ASCII digits, which Python's int()/float() take, are not taken by the Rust.",
+     "class": "within",
+     "why": "FR-002 binds every case the tool's tests and suites hold; no held case and none of the 895 differential cases on the real table and log reach such a figure, so this lies outside FR-002's stated scope rather than narrowing it."
+    },
+    {
+     "id": "divergence-glob-stage-name",
+     "summary": "A glob character in a stage name is treated differently.",
+     "class": "within",
+     "why": "Outside FR-002's held cases; no stage the record holds carries one (MODE AUDIT ran on every stage, 103 cases, none differing)."
+    },
+    {
+     "id": "divergence-serde-float",
+     "summary": "serde_json reads floats without its round-trip mode, so a figure could in principle read back differently in its last bit from Python's float().",
+     "class": "within",
+     "why": "Outside FR-002's held cases: the 471 budget-change cases on copies of the real table and log, every figure spelling included, found no written file differing, so no figure the record holds reaches it."
+    },
+    {
+     "id": "census-at-cut",
+     "summary": "Census by git grep -E 'work_budget_bundle|budget_change\\.py' over the Makefile, *.mk, *.sh, *.py, *.rs, .claude/, tests/, docs and dev; no measurements*.json command runs either file.",
+     "class": "within",
+     "why": "Implements FR-001's census and its recorded-measurement clause. NOTE on the search space, not a ruling: the pattern's budget_change half matches only the path 'budget_change.py', not a module import ('import budget_change', 'from ... budget_change import'); the work_budget_bundle half matches both. The session should confirm no Python imports budget_change as a module before the cut, since that import would fail only at run time."
+    },
+    {
+     "id": "order",
+     "summary": "After T130, before T131 whose phase_sources it serves.",
+     "class": "within",
+     "why": "Sequencing inside phase 3 as ask:449-phase3-remainder lists it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T134 (the work budget's tools no task held, `ask:449-phase3-remainder`)",
+    "### T134 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T134-scope",
+     "summary": "work_budget_bundle.py and budget_change.py ported whole into the trials crate, no door, every caller repointed and both .py deleted in the same cut",
+     "class": "within",
+     "why": "ask:449-phase3-remainder names the work budget's tools as T134; FR-003 one implementation (no door, same-cut switch); the deletion is under the GM's standing approval to delete ported Python. Nothing in the request or spec left out."
+    },
+    {
+     "id": "T134-where",
+     "summary": "Lives in trials beside measure work-budget; one writer of each file kept as today (measure work-budget writes the .md and run files, budget-change the .json and changes log, cohort's view reads)",
+     "class": "within",
+     "why": "A placement choice the spec leaves open; it keeps each file's writer count unchanged, which is FR-002/FR-003's purpose, and narrows nothing asked."
+    },
+    {
+     "id": "T134-callers",
+     "summary": "Makefile's five targets run the gate commands with the same arguments; phase_sources.py (Python until T131) runs work-budget-bundle --sources by command instead of importing, JSON list on stdout, failure raising as before; no usage line recorded since neither Python did",
+     "class": "within",
+     "why": "Same entry points (FR-005), the by-command shape carries a JSON list (no in-process object, FR-003), and the 129-case before/after differential on phase_sources.sources covers the switch (FR-002). The --sources flag name is an interface detail of a caller-only verb, not a narrowing."
+    },
+    {
+     "id": "T134-pyast",
+     "summary": "A Rust Python parser (pyast) reads the engine's .py structure within a run for MODE BUDGET and the audit; stores no fingerprint; checked against CPython ast on 1,038 files",
+     "class": "within",
+     "why": "Ports more to Rust, which is the request's direction. ask:449-T062-py-id and ask:449-T82-claims bind a .py unit's stored fingerprint to CPython's ast.dump and keep claims' own within-run parses Python; neither rules on the work budget's tools, and ask:449-phase3-remainder files them as a port. pyast writes no id into any record, so the fingerprint rule is untouched."
+    },
+    {
+     "id": "T134-nonfinite",
+     "summary": "Non-finite figures accepted as Python's float() accepts them and written/read as json.dumps/json.loads did (Infinity, NaN); T77's reader left as it is",
+     "class": "within",
+     "why": "Reproduces the Python's outputs (FR-002) rather than fixing or narrowing; leaving T77's reader unchanged preserves behavior the spec does not ask to change."
+    },
+    {
+     "id": "T134-arbiter-fixes",
+     "summary": "The seven 444 arbiter fixes' Python tests deleted with the file and held by seven named Rust tests; the arbiter's log untouched",
+     "class": "within",
+     "why": "FR-001b deletes Python tests; the rules they held are kept on the Rust, so nothing is lost."
+    },
+    {
+     "id": "T134-differential",
+     "summary": "895 cases Python vs Rust (103 real-tree, 471 budget-change, 192 bundle, 129 phase_sources), none differing; stderr normalized only where both exit nonzero and the Python's stderr is a traceback or argparse usage error (124 cases), exit and stdout still compared",
+     "class": "within",
+     "why": "FR-002 as ruled by ask:449-usage-text (argparse-generated stderr and uncaught traceback text not bound, exit and stdout held) and ask:449-T77-bad-since. Counts re-read from the harness's results-*.json: 192/129/471/103, 0 differing each, kinds traceback 44+48, usage 5+27."
+    },
+    {
+     "id": "T134-unreached-divergences",
+     "summary": "Known divergences no case reaches: -h exiting 2, non-ASCII digits, a glob character in a stage name, serde's float reading without round-trip",
+     "class": "within",
+     "why": "Adjudicated item by item. -h: ask:449-usage-text binds --help only where a kept test or suite case holds it, and none does. The other three: FR-002 binds outputs on every case the tests and suites hold, and the request says nothing narrower; the real table, log, runs and derivations are among the cases and none differ, so no input the tool is fed today diverges. They are disclosed, not hidden, and narrow neither the request nor the accepted spec."
+    },
+    {
+     "id": "T134-timing",
+     "summary": "Process time 27.4 s -> 8.0 s on the real tree, budget-change 20.7 s -> 7.2 s",
+     "class": "within",
+     "why": "A measurement, not a decision about scope; matches results-real.json and results-change.json times."
+    },
+    {
+     "id": "T134-census",
+     "summary": "No measurements*.json command runs or names either file, nothing else runs them, nothing imports budget_change, at HEAD and after the cut; the gate checks green",
+     "class": "within",
+     "why": "FR-001's rewrite of recorded commands owes nothing because none exist, with the search space stated; the census is the cut's own check, not a narrowing."
+    },
+    {
+     "id": "T134-order",
+     "summary": "After T130, before T131 whose phase_sources it serves",
+     "class": "within",
+     "why": "ask:449-phase3-remainder sets no order between them; serving T131's caller first keeps phase_sources on a single implementation."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -14634,6 +14810,80 @@
      "summary": "Order after T129 and before the phase-3 ports; checks make static, make hooks-test, the pointer check, make figures before/after (failed runs 68 to 35) and m:recorded-python-commands to 48; landing gated because two deleted files are under l7r/",
      "class": "within",
      "why": "Procedure and verification of the requested deletion and retirement; nothing decided beyond the ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T134": {
+   "section_sha256": "146c6e1b5ad61a9a4c0c990d78d5d9d9a3fe164d5e76670ca018d5a56f5d3d71",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T134-scope",
+     "summary": "work_budget_bundle.py and budget_change.py ported whole into the trials crate, no door, every caller repointed and both .py deleted in the same cut",
+     "class": "within",
+     "why": "ask:449-phase3-remainder names the work budget's tools as T134; FR-003 one implementation (no door, same-cut switch); the deletion is under the GM's standing approval to delete ported Python. Nothing in the request or spec left out."
+    },
+    {
+     "id": "T134-where",
+     "summary": "Lives in trials beside measure work-budget; one writer of each file kept as today (measure work-budget writes the .md and run files, budget-change the .json and changes log, cohort's view reads)",
+     "class": "within",
+     "why": "A placement choice the spec leaves open; it keeps each file's writer count unchanged, which is FR-002/FR-003's purpose, and narrows nothing asked."
+    },
+    {
+     "id": "T134-callers",
+     "summary": "Makefile's five targets run the gate commands with the same arguments; phase_sources.py (Python until T131) runs work-budget-bundle --sources by command instead of importing, JSON list on stdout, failure raising as before; no usage line recorded since neither Python did",
+     "class": "within",
+     "why": "Same entry points (FR-005), the by-command shape carries a JSON list (no in-process object, FR-003), and the 129-case before/after differential on phase_sources.sources covers the switch (FR-002). The --sources flag name is an interface detail of a caller-only verb, not a narrowing."
+    },
+    {
+     "id": "T134-pyast",
+     "summary": "A Rust Python parser (pyast) reads the engine's .py structure within a run for MODE BUDGET and the audit; stores no fingerprint; checked against CPython ast on 1,038 files",
+     "class": "within",
+     "why": "Ports more to Rust, which is the request's direction. ask:449-T062-py-id and ask:449-T82-claims bind a .py unit's stored fingerprint to CPython's ast.dump and keep claims' own within-run parses Python; neither rules on the work budget's tools, and ask:449-phase3-remainder files them as a port. pyast writes no id into any record, so the fingerprint rule is untouched."
+    },
+    {
+     "id": "T134-nonfinite",
+     "summary": "Non-finite figures accepted as Python's float() accepts them and written/read as json.dumps/json.loads did (Infinity, NaN); T77's reader left as it is",
+     "class": "within",
+     "why": "Reproduces the Python's outputs (FR-002) rather than fixing or narrowing; leaving T77's reader unchanged preserves behavior the spec does not ask to change."
+    },
+    {
+     "id": "T134-arbiter-fixes",
+     "summary": "The seven 444 arbiter fixes' Python tests deleted with the file and held by seven named Rust tests; the arbiter's log untouched",
+     "class": "within",
+     "why": "FR-001b deletes Python tests; the rules they held are kept on the Rust, so nothing is lost."
+    },
+    {
+     "id": "T134-differential",
+     "summary": "895 cases Python vs Rust (103 real-tree, 471 budget-change, 192 bundle, 129 phase_sources), none differing; stderr normalized only where both exit nonzero and the Python's stderr is a traceback or argparse usage error (124 cases), exit and stdout still compared",
+     "class": "within",
+     "why": "FR-002 as ruled by ask:449-usage-text (argparse-generated stderr and uncaught traceback text not bound, exit and stdout held) and ask:449-T77-bad-since. Counts re-read from the harness's results-*.json: 192/129/471/103, 0 differing each, kinds traceback 44+48, usage 5+27."
+    },
+    {
+     "id": "T134-unreached-divergences",
+     "summary": "Known divergences no case reaches: -h exiting 2, non-ASCII digits, a glob character in a stage name, serde's float reading without round-trip",
+     "class": "within",
+     "why": "Adjudicated item by item. -h: ask:449-usage-text binds --help only where a kept test or suite case holds it, and none does. The other three: FR-002 binds outputs on every case the tests and suites hold, and the request says nothing narrower; the real table, log, runs and derivations are among the cases and none differ, so no input the tool is fed today diverges. They are disclosed, not hidden, and narrow neither the request nor the accepted spec."
+    },
+    {
+     "id": "T134-timing",
+     "summary": "Process time 27.4 s -> 8.0 s on the real tree, budget-change 20.7 s -> 7.2 s",
+     "class": "within",
+     "why": "A measurement, not a decision about scope; matches results-real.json and results-change.json times."
+    },
+    {
+     "id": "T134-census",
+     "summary": "No measurements*.json command runs or names either file, nothing else runs them, nothing imports budget_change, at HEAD and after the cut; the gate checks green",
+     "class": "within",
+     "why": "FR-001's rewrite of recorded commands owes nothing because none exist, with the search space stated; the census is the cut's own check, not a narrowing."
+    },
+    {
+     "id": "T134-order",
+     "summary": "After T130, before T131 whose phase_sources it serves",
+     "class": "within",
+     "why": "ask:449-phase3-remainder sets no order between them; serving T131's caller first keeps phase_sources on a single implementation."
     }
    ],
    "verdict": "CLEAR"
