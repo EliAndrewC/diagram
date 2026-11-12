@@ -26,7 +26,6 @@ fn the_active_feature_is_the_open_one_the_pointer_names() {
     assert_eq!(active_feature(&r), "900-x");
     let c = repo("closed");
     feature(&c, "901-y", "- [x] T1\n");
-    put(&c, "specs/901-y/.state", "closed\n");
     assert_eq!(active_feature(&c), "");
     let n = repo("nospec");
     put(

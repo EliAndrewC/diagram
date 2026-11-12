@@ -311,12 +311,13 @@ push_cmd() {
   for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
     # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
     # unread or otherwise, as before - unless its spec's status line CLOSES it (Done, Superseded by, Withdrawn: the
-    # words `speckit-todo.py` states once). The exemption fails closed: an error or no answer counts as not closed.
+    # words `l7r-gate speckit-todo` states once, Rust since feature 449 T118). The exemption fails closed: an error or no answer
+    # counts as not closed.
     # GUARD_EDIT_OK: feature 405 T32 (D4; the GM 2026-10-20: "I do not want each landing to owe a lands open line") - only the
-    # task being worked holds a landing: `speckit-todo.py --holding` names the clone's active task (`make task-start`) while it
+    # task being worked holds a landing: `l7r-gate speckit-todo --holding` names the clone's active task (`make task-start`) while it
     # is open and `L7R_LAND_TICKS` (set by `make land`) does not name it; a task nobody has started holds nothing.
-    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && [ -n "$(python3 "$ROOT/scripts/speckit-todo.py" --holding "$ROOT/$f" 2>/dev/null || echo fail-closed)" ]; then
-      [ "$(python3 "$ROOT/scripts/speckit-todo.py" --closed-by-status "$ROOT/$f" 2>/dev/null)" = yes ] || active="$active $f"
+    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && [ -n "$("$ROOT/scripts/gates/l7r-gate.sh" speckit-todo --holding "$ROOT/$f" 2>/dev/null || echo fail-closed)" ]; then
+      [ "$("$ROOT/scripts/gates/l7r-gate.sh" speckit-todo --closed-by-status "$ROOT/$f" 2>/dev/null)" = yes ] || active="$active $f"
     fi
   done
   active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
@@ -326,7 +327,7 @@ push_cmd() {
     outside=$(printf '%s\n' "$ours" | grep -vE "^(${active// /|})/" || true)
     if [ -n "$outside" ] || [ "$(printf '%s\n' $active | wc -l)" -gt 1 ]; then
       printf '\n\033[1mREFUSED: feature %s has a task IN PROGRESS - its work lands with the task.\033[0m\n' "$active" >&2
-      for f in $active; do python3 "$ROOT/scripts/speckit-todo.py" --holding "$ROOT/$f" 2>/dev/null | sed "s|^|  $f holds: |" >&2; done  # GUARD_EDIT_OK: feature 375 D18 - name the boxes that hold it
+      for f in $active; do "$ROOT/scripts/gates/l7r-gate.sh" speckit-todo --holding "$ROOT/$f" 2>/dev/null | sed "s|^|  $f holds: |" >&2; done  # GUARD_EDIT_OK: feature 375 D18 - name the boxes that hold it
       printf 'Neither route lands a feature in progress, and there is no flag. The one exception is a push of\n' >&2
       printf 'that feature'"'"'s own specs/ directory ALONE (the spec-number claim); this delta also touches:\n' >&2
       printf '%s\n' "$outside" | sed 's/^/  /' >&2

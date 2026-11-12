@@ -3,9 +3,7 @@
 //! feature 449 T89). The clock is `<git dir>/glyph-clock.json`, `{<feature>: {"batch_at", "batch", "reopened", ...}}`; the push's
 //! refusal marks the work landing (`glyph-landing`); the pair guard's dispatches are `pairing-state.json`'s `dispatched`.
 
-use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
-use std::sync::Mutex;
 
 use serde_json::{json, Map, Value};
 
@@ -29,30 +27,6 @@ fn nowhere() -> PathBuf {
     PathBuf::from("/nonexistent")
 }
 
-/// Each feature directory's state, asked of `speckit-todo.py --state` once a run (`ask:449-T89-reviews`).
-static STATES: Mutex<BTreeMap<PathBuf, String>> = Mutex::new(BTreeMap::new());
-
-fn speckit_state(root: &Path, dir: &Path) -> String {
-    if let Some(s) = STATES.lock().ok().and_then(|m| m.get(dir).cloned()) {
-        return s;
-    }
-    let tool = crate::record::repo::tree_of(root).join("scripts/speckit-todo.py");
-    // from `/`, outside any repository: the tool's run record (`usage_log`) is the landing's holding check's, and the Python asked
-    // this in-process, recording nothing
-    let said = std::process::Command::new("python3")
-        .arg(&tool)
-        .arg("--state")
-        .arg(std::path::absolute(dir).unwrap_or(dir.to_path_buf()))
-        .current_dir("/")
-        .output()
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
-        .unwrap_or_default();
-    if let Ok(mut m) = STATES.lock() {
-        m.insert(dir.to_path_buf(), said.clone());
-    }
-    said
-}
-
 /// The feature whose hour a glyph check keeps, or "" (D54): `.specify/feature.json` names one, it exists, and `make speckit-todo`
 /// does not read it closed.
 #[must_use]
@@ -60,7 +34,9 @@ pub fn active_feature(root: &Path) -> String {
     let Some(d) = l7r_guard::shared::checks::arbiter::feature_dir(root, "") else {
         return String::new();
     };
-    if !d.join("spec.md").is_file() || CLOSED.contains(&speckit_state(root, &d).as_str()) {
+    // the state asked in process (feature 449 T118, `ask:449-T83-scope`); one the Python could not read answered "", which is not closed
+    let state = || l7r_guard::shared::speckit::state(&d).unwrap_or_default();
+    if !d.join("spec.md").is_file() || CLOSED.contains(&state().as_str()) {
         return String::new();
     }
     d.file_name()

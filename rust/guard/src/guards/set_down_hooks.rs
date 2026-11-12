@@ -45,12 +45,6 @@ static STOPPED: LazyLock<Regex> = LazyLock::new(|| {
     re(r#""name":\s*"TaskStop",\s*"input":\s*\{[^}]*?"(?:task_id|shell_id)":\s*"([A-Za-z0-9]+)""#)
 });
 
-/// What this guard needs from outside the call.
-pub(crate) struct Ctx<'a> {
-    pub(crate) tree: PathBuf,
-    pub(crate) python: &'a str,
-}
-
 fn rows(path: &Path) -> Result<Vec<Value>, String> {
     if !path.is_file() {
         return Ok(Vec::new());
@@ -96,24 +90,15 @@ fn open_boxes(text: &str) -> Vec<(String, String)> {
         .collect()
 }
 
-/// Whether the spec's status line closes it: `speckit-todo.py` by path (T049 decision (b)), asked last, only when the turn would be refused.
-fn closed_by_status(spec_dir: &Path, ctx: &Ctx) -> bool {
-    let tool = ctx.tree.join("scripts/speckit-todo.py");
-    let said = ask(
-        &ctx.tree,
-        ctx.python,
-        &[
-            &tool.to_string_lossy(),
-            "--closed-by-status",
-            &spec_dir.to_string_lossy(),
-        ],
-        "",
-    );
-    said.out.trim() == "yes"
+/// Whether the spec's status line closes it, asked last, only when the turn would be refused: the shared `speckit` reading in process
+/// since feature 449 T118 (`ask:449-T83-scope`), where T049 decision (b) ran `speckit-todo.py` by path; a spec that cannot be read is
+/// not closed, as the Python's failed run answered no `yes`.
+fn closed_by_status(spec_dir: &Path) -> bool {
+    crate::shared::speckit::closed_by_status(spec_dir).unwrap_or(false)
 }
 
 /// None to let the turn end, else the refusal; an Err is a read error, which lets it end too.
-pub(crate) fn verdict(root: &Path, transcript: &str, ctx: &Ctx) -> Result<Option<String>, String> {
+pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, String> {
     let at = root.to_string_lossy();
     let said = ask(
         Path::new("/"),
@@ -152,7 +137,7 @@ pub(crate) fn verdict(root: &Path, transcript: &str, ctx: &Ctx) -> Result<Option
     let set_down = rows(&git_dir.join("set-downs.jsonl"))?
         .iter()
         .any(|r| field(r, "feature") == feature && field(r, "utc") >= since);
-    if set_down || closed_by_status(&spec_dir, ctx) {
+    if set_down || closed_by_status(&spec_dir) {
         return Ok(None);
     }
     let short: String = title.chars().take(80).collect();
@@ -184,16 +169,11 @@ fn root_of(event: &Event, session: &Session, seam: Option<String>) -> Option<Pat
     said.ok().then(|| PathBuf::from(said.out.trim()))
 }
 
-pub(crate) fn judge(
-    event: &Event,
-    session: &Session,
-    ctx: &Ctx,
-    seam: Option<String>,
-) -> Vec<Answer> {
+pub(crate) fn judge(event: &Event, session: &Session, seam: Option<String>) -> Vec<Answer> {
     let Some(root) = root_of(event, session, seam) else {
         return Vec::new();
     };
-    match verdict(&root, field(&event.input, "transcript_path"), ctx) {
+    match verdict(&root, field(&event.input, "transcript_path")) {
         Ok(None) => Vec::new(),
         Err(why) => {
             let _ = log::write(&Entry {
@@ -222,17 +202,7 @@ pub(crate) fn judge(
 }
 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
-    let here = std::env::current_dir().unwrap_or_default();
-    let tree = std::env::var("L7R_GUARD_TREE").map_or(here, PathBuf::from);
-    judge(
-        event,
-        session,
-        &Ctx {
-            tree,
-            python: "python3",
-        },
-        std::env::var("SET_DOWN_ROOT").ok(),
-    )
+    judge(event, session, std::env::var("SET_DOWN_ROOT").ok())
 }
 
 #[cfg(test)]

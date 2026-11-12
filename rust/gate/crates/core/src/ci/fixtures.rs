@@ -52,7 +52,7 @@ pub fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     dir
 }
 
-/// A stand-in for `python3`: the `.py` ids by a hash of the bytes, `--holding` from `<feature>/.holding`, and a verdict by `<feature>/.faithful`.
+/// A stand-in for `python3`: the `.py` ids by a hash of the bytes, and a verdict by `<feature>/.faithful`.
 #[must_use]
 ///
 /// # Panics
@@ -60,7 +60,7 @@ pub fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
 /// Where the fixture cannot be made, which fails the test that asked for it.
 pub fn python(dir: &Path) -> String {
     let path = dir.join(".git/stand-in-python");
-    std::fs::write(&path, "#!/bin/bash\ncase \"$1\" in\n *codeid.py) [ \"$2\" = --debug-free-equal ] && { echo x >> \"$0.calls\"; shift 2; while [ $# -gt 0 ]; do echo 0; shift 2; done; exit 0; }; if [ \"$2\" = --semantic ]; then shift 3; for f in \"$@\"; do printf '1\\nz'; done; else shift 2; for f in \"$@\"; do sha1sum \"$f\" | cut -d' ' -f1; done; fi;;\n *speckit-todo.py) cat \"$3/.holding\" 2>/dev/null; true;;\n *hm_arbiter.py) [ -f \"$3/.faithful\" ];;\nesac\n").unwrap();
+    std::fs::write(&path, "#!/bin/bash\ncase \"$1\" in\n *codeid.py) [ \"$2\" = --debug-free-equal ] && { echo x >> \"$0.calls\"; shift 2; while [ $# -gt 0 ]; do echo 0; shift 2; done; exit 0; }; if [ \"$2\" = --semantic ]; then shift 3; for f in \"$@\"; do printf '1\\nz'; done; else shift 2; for f in \"$@\"; do sha1sum \"$f\" | cut -d' ' -f1; done; fi;;\n *hm_arbiter.py) [ -f \"$3/.faithful\" ];;\nesac\n").unwrap();
     Command::new("chmod").arg("+x").arg(&path).status().unwrap();
     path.to_string_lossy().into_owned()
 }

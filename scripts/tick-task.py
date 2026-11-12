@@ -118,26 +118,21 @@ _WAITS = re.compile(r"^\*\*Waits on\*\*:\s*(\d+)", re.M)
 def waits_or_marks(root: Path, d: Path) -> str:
     """Why `make tick` may not tick in `d`, or '' (feature 375, plan D18): its spec waits on a feature still open
     (`**Waits on**: NNN`). A `[lands-open]` mark is text since feature 405 T32 (D4) and is no longer refused here."""
-    todo = _todo()
     spec = d / "spec.md"
     m = _WAITS.search(spec.read_text(encoding="utf-8")) if spec.is_file() else None
     if m:
         other = spec_dir(root, m.group(1))
-        if other is not None and todo.feature(other).state != "closed":
+        if other is not None and _state(other) != "closed":
             return (f"{d.name} waits on feature {m.group(1)} ({other.name}), which is still open - its spec says "
                     f"`**Waits on**: {m.group(1)}`; take its tasks once that one has closed")
     return ""
 
 
-def _todo():  # noqa: ANN202 - `speckit-todo.py` by path (its name has a hyphen)
-    import importlib.util  # noqa: PLC0415
-
-    spec = importlib.util.spec_from_file_location("speckit_todo", Path(__file__).resolve().parent / "speckit-todo.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules["speckit_todo"] = mod  # a dataclass resolves its module by name while the class is built
-    spec.loader.exec_module(mod)
-    return mod
+def _state(d: Path) -> str:
+    """The feature directory's state, by `make speckit-todo`'s one rule (`l7r-gate speckit-todo --each-state`, Rust since feature 449
+    T118, where this imported `speckit-todo.py` by path)."""
+    gate = Path(__file__).resolve().parent / "gates" / "l7r-gate.sh"
+    return subprocess.run([str(gate), "speckit-todo", "--each-state", str(d)], capture_output=True, text=True, check=True).stdout.strip()
 
 
 def _arbiter():  # noqa: ANN202 - `fix_hold` through the checks door (feature 449 T86)

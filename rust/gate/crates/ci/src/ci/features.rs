@@ -1,10 +1,8 @@
-//! FR-011: the gated route needs a named, complete spec-kit feature (from `ci/features.py`). The rules for which open box holds a landing and what a spec's fidelity verdict is each have one reader, in Python until phase 3
-//! (`scripts/speckit-todo.py`, `scripts/hooks/lib/hm_arbiter.py`), asked here once a process.
+//! FR-011: the gated route needs a named, complete spec-kit feature (from `ci/features.py`). Which open box holds a landing is the guard's
+//! `shared::speckit::holding`, asked in process since feature 449 T118 (`ask:449-T83-scope`: the Rust callers of `speckit-todo.py` call
+//! it in process); a spec's fidelity verdict is the arbiter's `spec_verdict`.
 
 use std::path::Path;
-use std::process::Command;
-
-use crate::codeid;
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct FeatureStatus {
@@ -75,23 +73,10 @@ pub fn active_feature(root: &Path, from_env: Option<&str>) -> Option<String> {
         .map(str::to_owned)
 }
 
-/// Run a repository script with Python; its stdout and whether it passed.
-fn ask(root: &Path, python: &str, rel: &str, args: &[&str]) -> (String, bool) {
-    let tree = codeid::script(root);
-    let script = tree.ancestors().nth(3).unwrap_or(root).join(rel);
-    let done = Command::new(python).arg(script).args(args).output();
-    done.map_or_else(
-        |_| (String::new(), false),
-        |o| {
-            (
-                String::from_utf8_lossy(&o.stdout).into_owned(),
-                o.status.success(),
-            )
-        },
-    )
-}
-
-pub fn feature_status(root: &Path, name: Option<&str>, python: &str) -> FeatureStatus {
+/// The named feature's directory, verdict and the open tasks that hold the landing; an unreadable `tasks.md` holds nothing, as the Python's
+/// traceback printed nothing.
+#[must_use]
+pub fn feature_status(root: &Path, name: Option<&str>) -> FeatureStatus {
     let Some(name) = name else {
         return FeatureStatus::default();
     };
@@ -103,14 +88,7 @@ pub fn feature_status(root: &Path, name: Option<&str>, python: &str) -> FeatureS
             ..FeatureStatus::default()
         };
     };
-    let dir_text = dir.to_string_lossy().into_owned();
-    let (held, _) = ask(
-        root,
-        python,
-        "scripts/speckit-todo.py",
-        &["--holding", &dir_text],
-    );
-    let held: Vec<&str> = held.lines().collect();
+    let held = l7r_guard::shared::speckit::holding(&dir).unwrap_or_default();
     let open_tasks = tasks
         .lines()
         .filter_map(|l| {

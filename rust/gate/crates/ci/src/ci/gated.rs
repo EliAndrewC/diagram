@@ -93,7 +93,7 @@ fn picture(root: &Path, python: &str, specify: Option<&str>) -> Result<(String, 
     let st = state::read(root)?;
     let now = state::current_hash(root, python)?;
     let active = features::active_feature(root, specify);
-    let feature = features::feature_status(root, active.as_deref(), python);
+    let feature = features::feature_status(root, active.as_deref());
     let mut text = format!(
         "delta: route {} - {}\n",
         delta_now.route(),

@@ -18,6 +18,8 @@ use crate::guards::finished_run_hooks::runs::realpath;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::log;
 use crate::shared::session::Session;
+// the status line, the closing words and the task box are `make speckit-todo`'s, one copy (feature 449 T118)
+use crate::shared::speckit::{BOX, CLOSING, STATUS};
 use crate::shared::state::field;
 use crate::shared::tool::{ask, Said};
 use crate::shared::transcript::norm;
@@ -34,7 +36,6 @@ pub const FIRST: u32 = 377;
 /// The approval line's form, for a refusal to print.
 pub const FORM: &str = "**Approved**: the GM, YYYY-MM-DD, \"<the GM's words, verbatim>\"";
 const MIN_WORDS: usize = 3;
-const CLOSING: [&str; 3] = ["done", "superseded by", "withdrawn"];
 const STANDING: &str =
     "you should treat features that I have asked to be filed as automatic approval";
 
@@ -57,9 +58,6 @@ static PUSH: LazyLock<Regex> = LazyLock::new(|| {
         r"(?m)(?:^|[;&|(]\s*)(?:[A-Za-z_]\w*=\S*\s+)*(?:bash\s+)?[\w./$-]*sync-with-main\.sh\s+(?:done|push)\b",
     )
 });
-static STATUS: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?m)^\*\*Status\*\*:?\s*(.+)$|^\*\*Status:\*\*\s*(.+)$"));
-static BOX: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \[( |x|X)\] "));
 static OPEN_BOX: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^\s*- \[ \] (.*)$"));
 static TASK_ID: LazyLock<Regex> = LazyLock::new(|| re(r"^(T\d+[a-z]?)\b"));
 static CD: LazyLock<Regex> =

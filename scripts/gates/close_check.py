@@ -83,15 +83,16 @@ def _impl_check():  # noqa: ANN202 - scripts/record/impl_check.py by path (the g
     return mod
 
 
-def _todo():  # noqa: ANN202 - speckit-todo.py by path (a hyphenated script), one state rule
-    import importlib.util  # noqa: PLC0415
+def _states(dirs: list[Path]) -> list[str]:
+    """Each feature directory's state, by `make speckit-todo`'s one rule: `l7r-gate speckit-todo --each-state`, one process for all of
+    them (Rust since feature 449 T118, where this imported `speckit-todo.py` by path)."""
+    import subprocess  # noqa: PLC0415
 
-    spec = importlib.util.spec_from_file_location("speckit_todo", ROOT / "scripts" / "speckit-todo.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules["speckit_todo"] = mod
-    spec.loader.exec_module(mod)
-    return mod
+    if not dirs:
+        return []
+    out = subprocess.run([str(ROOT / "scripts" / "gates" / "l7r-gate.sh"), "speckit-todo", "--each-state", *map(str, dirs)],
+                         capture_output=True, text=True, check=True).stdout
+    return out.splitlines()
 
 
 def push_reasons(root: Path, rng: str) -> list[str]:
@@ -99,19 +100,18 @@ def push_reasons(root: Path, rng: str) -> list[str]:
     sys.path.insert(0, str(ROOT / "scripts"))
     import plan_door  # noqa: PLC0415
 
-    todo = _todo()
+    dirs = [root / name for name in plan_door.touched_features(root, rng) if (root / name).is_dir()]
     out = []
-    for name in plan_door.touched_features(root, rng):
-        d = root / name
-        if d.is_dir() and todo.feature(d).state == "closed":
+    for d, state in zip(dirs, _states(dirs), strict=True):
+        if state == "closed":
             out += reasons(d, root / "specs")
     return out
 
 
 def write_grandfathered(specs: Path) -> int:
     """The features closed when this check lands - the only ones it does not ask (plan D13). Run once, at that commit."""
-    todo = _todo()
-    names = sorted(f.name for f in todo.features(specs) if f.state == "closed")
+    dirs = sorted(d for d in specs.iterdir() if d.is_dir()) if specs.is_dir() else []
+    names = sorted(d.name for d, state in zip(dirs, _states(dirs), strict=True) if state == "closed")
     GRANDFATHERED.write_text("\n".join(names) + "\n", encoding="utf-8")
     return len(names)
 

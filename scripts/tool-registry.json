@@ -99,7 +99,7 @@
     },
     "speckit-todo": {
       "kind": "check",
-      "what": "scripts/speckit-todo.py - CHECK=1 refuses a push whose features lack an **Affects**: line; each run recorded passed or refused"
+      "what": "rust/gate/crates/cohort/src/speckit_todo.rs (`l7r-gate speckit-todo`) - CHECK=1 refuses a push whose features lack an **Affects**: line; each run recorded passed or refused"
     },
     "ratchet": {
       "kind": "check",

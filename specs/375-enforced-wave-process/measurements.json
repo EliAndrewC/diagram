@@ -195,7 +195,7 @@
   "quantity": "the clone-reading part of `make speckit-todo` (feature 375 amendment 1, FR-016): every session clone against only the active ones",
   "observed": "2026-10-11",
   "source": "/diagram's specs and its 50 clones (6 active: an event log written within 12 hours), the containers loaded by two other sessions",
-  "command": "speckit-todo.py's in_clones(root, features, active_only=False|True), three alternating runs each, wall time",
+  "command": "<retired: speckit-todo.py's in_clones comparison, deleted with the Python by feature 449 T118 (ask:449-T118-retire-375-a1) - the value is history, not re-run>",
   "method": "time.time() around each call; the features themselves read once (0.11 s, the listing without clones)",
   "value": {
    "all clones s": [

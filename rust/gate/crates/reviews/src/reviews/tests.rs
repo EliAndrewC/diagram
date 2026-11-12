@@ -1,5 +1,5 @@
-//! The reviews' shared fixtures - a scratch git repository with the tools the port asks by command stubbed (`speckit-todo.py`,
-//! the gate wrapper, the finished-run probe, the bundle runner) - and the module root's own tests.
+//! The reviews' shared fixtures - a scratch git repository with the tools the port asks by command stubbed (the gate wrapper, the
+//! finished-run probe, the bundle runner) - and the module root's own tests.
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -42,16 +42,10 @@ pub(super) fn commit(root: &Path, msg: &str) {
     );
 }
 
-/// The stubs of what the port asks by command: `speckit-todo.py --state` (a feature directory's `.state`, else `in progress`),
-/// the gate wrapper (`stamp --fresh` green while `.git/green` exists; `check spec-lint --figure-pattern` a figure with `s` or
+/// The stubs of what the port asks by command (a feature's state is asked in process since feature 449 T118): the gate wrapper (`stamp --fresh` green while `.git/green` exists; `check spec-lint --figure-pattern` a figure with `s` or
 /// `px`), the finished-run probe (`.git/live`'s lines), the bundle runner (`is_current`: current unless `<gen>.stale` exists), and
 /// the engine key.
 pub(super) fn tools(root: &Path) {
-    put(
-        root,
-        "scripts/speckit-todo.py",
-        "import sys, pathlib\np = pathlib.Path(sys.argv[2], '.state')\nprint(p.read_text().strip() if p.exists() else 'in progress')\n",
-    );
     put(
         root,
         "scripts/gates/l7r-gate.sh",

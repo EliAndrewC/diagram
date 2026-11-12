@@ -17,11 +17,10 @@ no engine file or module; anything else - a task not found, a task that names no
 
 from __future__ import annotations
 
-import importlib.util
 import pathlib
 import re
+import subprocess
 import sys
-from typing import Any
 
 _HOLD = re.compile(r"ON HOLD\b.*?\buntil feature (\d{3,})", re.S)
 #: the status PARAGRAPH, not its first line: 384's wraps, and its hold is on the second (a test pins it)
@@ -41,14 +40,12 @@ def _engine_modules(root: pathlib.Path = _ROOT) -> frozenset[str]:
     return frozenset(n for n in names if len(n) > 3)
 
 
-def _todo() -> Any:
-    path = pathlib.Path(__file__).resolve().parents[1] / "speckit-todo.py"
-    spec = importlib.util.spec_from_file_location("speckit_todo", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules.setdefault("speckit_todo", mod)
-    spec.loader.exec_module(mod)
-    return mod
+def _state(d: pathlib.Path) -> str:
+    """The feature directory's state, by `make speckit-todo`'s one rule (`l7r-gate speckit-todo --each-state`, Rust since feature 449
+    T118, where this imported `speckit-todo.py` by path)."""
+    gate = pathlib.Path(__file__).resolve().parent / "l7r-gate.sh"
+    out = subprocess.run([str(gate), "speckit-todo", "--each-state", str(d)], capture_output=True, text=True, check=True).stdout
+    return out.strip()
 
 
 def holder(d: pathlib.Path) -> pathlib.Path | None:
@@ -61,7 +58,7 @@ def holder(d: pathlib.Path) -> pathlib.Path | None:
     found = sorted(d.parent.glob(f"{m.group(1)}-*"))
     if len(found) != 1:
         return None
-    return found[0] if _todo().feature(found[0]).state != "closed" else None
+    return found[0] if _state(found[0]) != "closed" else None
 
 
 def task_lines(d: pathlib.Path, task: str) -> str:

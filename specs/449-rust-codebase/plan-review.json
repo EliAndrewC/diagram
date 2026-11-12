@@ -558,6 +558,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T118 (T83's second slice, `speckit-todo.py`, `ask:449-T83-scope`)": {
+   "sha256": "4a581a0b512a25a2d7bc553070a8079efb4918689556b5ecfa9d8a46fe1706f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T118 Approach (checklist part A)": {
+   "sha256": "7a19eb4a8dd06d0c116b5e0baf0b13c5fe5d0c6e383091d78b068d9fa25bbc70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7458,6 +7470,85 @@
      "why": "Exactly ask:449-T83-scope's slice order; ledger_owed does not import turn_time per the plan's census, so nothing it reads is left behind a door."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T118 (T83's second slice, `speckit-todo.py`, `ask:449-T83-scope`)",
+    "### T118 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T118-crates",
+     "summary": "speckit-todo's rules in the guard crate (shared/speckit.rs), its command line and report in cohort as l7r-gate speckit-todo",
+     "class": "within",
+     "why": "Crate placement is design the spec leaves open; two guards read the rules and the guard cannot build on the gate. Nothing asked is narrowed."
+    },
+    {
+     "id": "T118-in-process",
+     "summary": "ci/features.rs, reviews/glyph.rs, set_down_hooks and feature_approval_hooks call the rules in-process; glyph's run-by-command cache and features' unused python parameter go; feature_approval_hooks keeps its own at_rev",
+     "class": "within",
+     "why": "This is ask:449-T83-scope's 'its Rust callers calling it in-process' carried out. at_rev is the revision reader reused under ask:449-T89-reviews, not speckit-todo's state, so keeping it changes nothing. The dropped cache only held the results of a process that no longer runs."
+    },
+    {
+     "id": "T118-push-row",
+     "summary": "The push's speckit-todo check stays a gate row run by command (l7r-gate speckit-todo --root --check), keeping the row runner, refusal text, kept key and usage line, as T117's ledger-owed row did",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The push is a Rust caller and the ruling says Rust callers go in-process, so this departs from the ruling's words. It is legitimate because FR-002 binds the push's own outputs: its row, refusal text, kept key and usage line, and the push table that m:push-checks-rust re-measures. Moving the push in-process would change those outputs. Keeping the row by command changes none of them. The ruling exists so that no Python and no door is left, and that purpose is met: the row starts the Rust binary the push already is, with no Python and no door."
+    },
+    {
+     "id": "T118-each-state",
+     "summary": "The Python importers close_check.py, plan_hold.py, research_claims.py and tick-task.py, plus the Makefile, sync-with-main.sh and land.py, reach the port by command, the importers through one new flag --each-state DIR... (one process for all their directories, no usage line)",
+     "class": "within",
+     "why": "The ruling requires by-command callers to switch in the same cut and forbids a door. A flag on the Rust binary is not a door. One process a caller serves FR-006. The flag is new surface with no Python counterpart, so FR-002 does not bind it. The callers it serves were compared before and after (855 cases, 0 differing)."
+    },
+    {
+     "id": "T118-usage-log",
+     "summary": "The command records its usage line as usage_log.exited did; the in-process calls record none, where features.rs and set_down_hooks used to leave a speckit-todo line through their runs by command",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This changes a file the differential compares, so it narrows FR-002's 'same outputs' for two callers. It is implied by the accepted ruling ask:449-T83-scope, which makes these calls in-process. With no process there is no exit to record, and a line written anyway would record a command run that never happened. The ruling's words carry the decision; the block's 'by-product of the process' description does not. The Python importers' imports also recorded no line, so the Rust follows the same rule the Python already did."
+    },
+    {
+     "id": "T118-work-budget-view",
+     "summary": "work_budget_view.py's lines() and moved() are ported for the report in T118 while the .py stays for land.py until T121: two copies for one slice, each naming the other, the .py deleted with land.py in T121",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This bears on FR-003 ('no piece runs both') and on the ruling placing work_budget_view at T121. It is legitimate because the ruling's own words require it. 'The modules each importer reads port with it, no door' covers both importers: speckit-todo lands in T118 and land.py in T121. The speckit-todo port therefore has to carry what it reads now and cannot reach the .py through a door, while land.py needs the .py until its own port. No piece runs both: the report runs only the Rust functions and land.py only the Python. The overlap is limited to two named functions, cross-referenced, deleted in T121 as the ruling places it, with the Rust side covered by the differential."
+    },
+    {
+     "id": "T118-help-exit",
+     "summary": "-h exits 2 against the Python's 0, the one difference in 1,317 command cases, accepted as in T82 (N7) and T117",
+     "class": "within",
+     "why": "ask:449-usage-text: --help is bound only where a kept test or suite case holds it. The block says no kept case holds it but does not show this; FR-001b deleted the Python tests, so a hook suite is the only place one could be."
+    },
+    {
+     "id": "T118-normalizations-and-unreached",
+     "summary": "N1 traceback text, N2 argparse usage text, N3 the usage line's utc, N4 a raise compared as a raise and not by its type; four named divergences no case reaches (non-ASCII isdigit in F=, NaN in JSON, an alias given as a number or tags not an object, a lone --)",
+     "class": "within",
+     "why": "Traceback and argparse text are unbound under ask:449-usage-text, while the exit status and stdout are still held. A timestamp is not a verdict. FR-002 binds 'every case its tests and its suites hold', and these four inputs are held by no case. They are listed here so the record shows they were seen."
+    },
+    {
+     "id": "T118-broken-vocabulary",
+     "summary": "A broken .specify/affects.json fails where the Python raised: --state exits 1, --each-state prints error: lines and exits 1, the importers that let the import raise now raise on the nonzero exit, research_claims keeps its old handling, glyph reads the error as not closed, an absent file still reads as none",
+     "class": "within",
+     "why": "Each case keeps the Python's verdict and exit (FR-002), and the differential compares both sides failing. The --each-state error form has no Python side. Nothing changes what was asked."
+    },
+    {
+     "id": "T118-retire-375-a1",
+     "summary": "The command of 375-a1-speckit-todo-clones is retired to <retired: ...> with its values kept as history, so make figures does not run it",
+     "class": "within",
+     "why": "The accepted spec carries this exact ruling (ask:449-T118-retire-375-a1). It rests on the GM's 2026-11-09 rule on unused past harnesses: the comparison measured a mode the port does not keep, so nothing could re-run it."
+    },
+    {
+     "id": "T118-delete-and-census",
+     "summary": "speckit-todo.py deleted in the same cut after a census of callers; test stubs replaced by real .git/active-task files and status lines",
+     "class": "within",
+     "why": "FR-001, FR-003 and the GM's standing approval to delete ported Python. Note: the census names the kinds of files it searched but not the pattern it grepped, and file kinds outside the listed ones and directories (*.toml, *.yml, .specify/ non-shell non-md files) are not searched. This is not a narrowing, but the search space is not fully stated."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12929,6 +13020,83 @@
      "summary": "turn_time.py left to T120 (its one importer is stepback_bundle.py), land.py to T121, feature_report.py to T119.",
      "class": "within",
      "why": "Exactly ask:449-T83-scope's slice order; ledger_owed does not import turn_time per the plan's census, so nothing it reads is left behind a door."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T118": {
+   "section_sha256": "35f495b40d3f2982c92af3d0673689fdc79c2d6ce2374b9e2ad91896a497b5b2",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T118-crates",
+     "summary": "speckit-todo's rules in the guard crate (shared/speckit.rs), its command line and report in cohort as l7r-gate speckit-todo",
+     "class": "within",
+     "why": "Crate placement is design the spec leaves open; two guards read the rules and the guard cannot build on the gate. Nothing asked is narrowed."
+    },
+    {
+     "id": "T118-in-process",
+     "summary": "ci/features.rs, reviews/glyph.rs, set_down_hooks and feature_approval_hooks call the rules in-process; glyph's run-by-command cache and features' unused python parameter go; feature_approval_hooks keeps its own at_rev",
+     "class": "within",
+     "why": "This is ask:449-T83-scope's 'its Rust callers calling it in-process' carried out. at_rev is the revision reader reused under ask:449-T89-reviews, not speckit-todo's state, so keeping it changes nothing. The dropped cache only held the results of a process that no longer runs."
+    },
+    {
+     "id": "T118-push-row",
+     "summary": "The push's speckit-todo check stays a gate row run by command (l7r-gate speckit-todo --root --check), keeping the row runner, refusal text, kept key and usage line, as T117's ledger-owed row did",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The push is a Rust caller and the ruling says Rust callers go in-process, so this departs from the ruling's words. It is legitimate because FR-002 binds the push's own outputs: its row, refusal text, kept key and usage line, and the push table that m:push-checks-rust re-measures. Moving the push in-process would change those outputs. Keeping the row by command changes none of them. The ruling exists so that no Python and no door is left, and that purpose is met: the row starts the Rust binary the push already is, with no Python and no door."
+    },
+    {
+     "id": "T118-each-state",
+     "summary": "The Python importers close_check.py, plan_hold.py, research_claims.py and tick-task.py, plus the Makefile, sync-with-main.sh and land.py, reach the port by command, the importers through one new flag --each-state DIR... (one process for all their directories, no usage line)",
+     "class": "within",
+     "why": "The ruling requires by-command callers to switch in the same cut and forbids a door. A flag on the Rust binary is not a door. One process a caller serves FR-006. The flag is new surface with no Python counterpart, so FR-002 does not bind it. The callers it serves were compared before and after (855 cases, 0 differing)."
+    },
+    {
+     "id": "T118-usage-log",
+     "summary": "The command records its usage line as usage_log.exited did; the in-process calls record none, where features.rs and set_down_hooks used to leave a speckit-todo line through their runs by command",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This changes a file the differential compares, so it narrows FR-002's 'same outputs' for two callers. It is implied by the accepted ruling ask:449-T83-scope, which makes these calls in-process. With no process there is no exit to record, and a line written anyway would record a command run that never happened. The ruling's words carry the decision; the block's 'by-product of the process' description does not. The Python importers' imports also recorded no line, so the Rust follows the same rule the Python already did."
+    },
+    {
+     "id": "T118-work-budget-view",
+     "summary": "work_budget_view.py's lines() and moved() are ported for the report in T118 while the .py stays for land.py until T121: two copies for one slice, each naming the other, the .py deleted with land.py in T121",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This bears on FR-003 ('no piece runs both') and on the ruling placing work_budget_view at T121. It is legitimate because the ruling's own words require it. 'The modules each importer reads port with it, no door' covers both importers: speckit-todo lands in T118 and land.py in T121. The speckit-todo port therefore has to carry what it reads now and cannot reach the .py through a door, while land.py needs the .py until its own port. No piece runs both: the report runs only the Rust functions and land.py only the Python. The overlap is limited to two named functions, cross-referenced, deleted in T121 as the ruling places it, with the Rust side covered by the differential."
+    },
+    {
+     "id": "T118-help-exit",
+     "summary": "-h exits 2 against the Python's 0, the one difference in 1,317 command cases, accepted as in T82 (N7) and T117",
+     "class": "within",
+     "why": "ask:449-usage-text: --help is bound only where a kept test or suite case holds it. The block says no kept case holds it but does not show this; FR-001b deleted the Python tests, so a hook suite is the only place one could be."
+    },
+    {
+     "id": "T118-normalizations-and-unreached",
+     "summary": "N1 traceback text, N2 argparse usage text, N3 the usage line's utc, N4 a raise compared as a raise and not by its type; four named divergences no case reaches (non-ASCII isdigit in F=, NaN in JSON, an alias given as a number or tags not an object, a lone --)",
+     "class": "within",
+     "why": "Traceback and argparse text are unbound under ask:449-usage-text, while the exit status and stdout are still held. A timestamp is not a verdict. FR-002 binds 'every case its tests and its suites hold', and these four inputs are held by no case. They are listed here so the record shows they were seen."
+    },
+    {
+     "id": "T118-broken-vocabulary",
+     "summary": "A broken .specify/affects.json fails where the Python raised: --state exits 1, --each-state prints error: lines and exits 1, the importers that let the import raise now raise on the nonzero exit, research_claims keeps its old handling, glyph reads the error as not closed, an absent file still reads as none",
+     "class": "within",
+     "why": "Each case keeps the Python's verdict and exit (FR-002), and the differential compares both sides failing. The --each-state error form has no Python side. Nothing changes what was asked."
+    },
+    {
+     "id": "T118-retire-375-a1",
+     "summary": "The command of 375-a1-speckit-todo-clones is retired to <retired: ...> with its values kept as history, so make figures does not run it",
+     "class": "within",
+     "why": "The accepted spec carries this exact ruling (ask:449-T118-retire-375-a1). It rests on the GM's 2026-11-09 rule on unused past harnesses: the comparison measured a mode the port does not keep, so nothing could re-run it."
+    },
+    {
+     "id": "T118-delete-and-census",
+     "summary": "speckit-todo.py deleted in the same cut after a census of callers; test stubs replaced by real .git/active-task files and status lines",
+     "class": "within",
+     "why": "FR-001, FR-003 and the GM's standing approval to delete ported Python. Note: the census names the kinds of files it searched but not the pattern it grepped, and file kinds outside the listed ones and directories (*.toml, *.yml, .specify/ non-shell non-md files) are not searched. This is not a narrowing, but the search space is not fully stated."
     }
    ],
    "verdict": "CLEAR"

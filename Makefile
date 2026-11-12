@@ -625,7 +625,7 @@ speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, 
 ##  BY=affects  group the open features by their `**Affects**:` tags (.specify/affects.json) instead of by stage
 ##  AFFECTS=tooling  only the features carrying that tag, same layout (several: AFFECTS="tooling, magistracy")
 ##  CHECK=1 exit 1, with the line to add, when an open feature's spec has no `**Affects**:` tag or an unknown one
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/speckit-todo.py" --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(filter affects,$(BY)),--by-affects,) $(if $(AFFECTS),--affects "$(AFFECTS)",) $(if $(CHECK),--check,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" speckit-todo --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(filter affects,$(BY)),--by-affects,) $(if $(AFFECTS),--affects "$(AFFECTS)",) $(if $(CHECK),--check,)
 
 replay-owing:   ## [project] replay recorded commits through the old owing and the new: modal-depiction units and impl-drift claims owed, per commit and in total (feature 375 SC-001)   REVS="<sha> ..." [OUT=<dir>]
 	@if [ -z "$(REVS)" ]; then printf 'make replay-owing: REVS="<commit> ..." is required\n' >&2; exit 2; fi

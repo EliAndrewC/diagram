@@ -34,7 +34,6 @@ import argparse
 import contextlib
 import datetime
 import fcntl
-import importlib.util
 import json
 import os
 import pathlib
@@ -90,28 +89,23 @@ def parse(line: str) -> dict | None:
             "date": parts[4] if len(parts) > 4 else "", "line": line.rstrip("\n")}
 
 
-def _todo(top: pathlib.Path):  # noqa: ANN202 - scripts/speckit-todo.py, imported by path (its name has a hyphen)
-    spec = importlib.util.spec_from_file_location("speckit_todo", top / "scripts" / "speckit-todo.py")
-    mod = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
-    sys.modules.setdefault("speckit_todo", mod)
-    spec.loader.exec_module(mod)  # type: ignore[union-attr]
-    return mod
-
-
 def settled_features(top: pathlib.Path) -> set[str]:
-    """Every feature number `make speckit-todo` reads as closed in the mirror's specs/ (and this clone's)."""
-    out: set[str] = set()
+    """Every feature number `make speckit-todo` reads as closed in the mirror's specs/ (and this clone's), asked of
+    `l7r-gate speckit-todo --each-state` in one process (Rust since feature 449 T118, where this imported `speckit-todo.py`)."""
+    dirs = [d for specs in {mirror(top) / "specs", top / "specs"} for d in (specs.glob("[0-9][0-9][0-9]-*") if specs.is_dir() else [])]
+    if not dirs:
+        return set()
+    # `--root top`: the top's vocabulary read once, as the import's `feature(d, vocabulary(top))`; a broken one, or no gate, retires
+    # nothing, as the import's raise did; a directory that cannot be read is an `error:` line, skipped as its raise was suppressed
     try:
-        todo = _todo(top)
-        vocab = todo.vocabulary(top)
-    except Exception:  # noqa: BLE001 - a missing speckit-todo retires nothing; the status rule still holds
-        return out
-    for specs in {mirror(top) / "specs", top / "specs"}:
-        for d in specs.glob("[0-9][0-9][0-9]-*") if specs.is_dir() else []:
-            with contextlib.suppress(Exception):
-                if todo.feature(d, vocab).state in ("closed", "done - GM review pending"):
-                    out.add(d.name.split("-", 1)[0])
-    return out
+        done = subprocess.run([str(top / "scripts" / "gates" / "l7r-gate.sh"), "speckit-todo", "--root", str(top), "--each-state",
+                               *map(str, dirs)], capture_output=True, text=True, check=False)
+    except OSError:
+        return set()
+    out = done.stdout.splitlines()
+    if len(out) != len(dirs):
+        return set()
+    return {d.name.split("-", 1)[0] for d, state in zip(dirs, out, strict=True) if state in ("closed", "done - GM review pending")}
 
 
 def live(lines: list[str], top: pathlib.Path) -> dict[str, list[dict]]:

@@ -260,7 +260,7 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
     if "| ? |" in owed:
         stops.append('review passes with no ledger row - make ledger-owed WRITE="<where you recorded what you did>"')
     env = {"L7R_LAND_TICKS": " ".join(tasks)}
-    held = run(root, [sys.executable, str(HERE / "speckit-todo.py"), "--holding", str(d)], env)[1].strip()
+    held = run(root, [str(GATE), "speckit-todo", "--holding", str(d)], env)[1].strip()  # Rust since feature 449 T118
     if held:
         stops.append(f"held by {held}")
     # A RED-GATE TRIPWIRE HOLDS THE LANDING'S GATE (feature 405 T44, D18): asked here with the others, on a landing that runs one

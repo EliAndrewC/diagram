@@ -7,7 +7,7 @@ pub use l7r_gate_bundle::owed_door;
 pub use l7r_gate_checks::checks;
 pub use l7r_gate_ci::ci;
 pub use l7r_gate_claims::claims;
-pub use l7r_gate_cohort::{cohort, push};
+pub use l7r_gate_cohort::{cohort, push, speckit_todo};
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
 pub use l7r_gate_measure::{measure, preflight};
 pub use l7r_gate_plan::plan;
@@ -93,6 +93,7 @@ pub fn cli(args: &[String]) -> Reply {
             owed_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout().lock())
         }
         Some("reviews") => reviews::cli(&args[1..]),
+        Some("speckit-todo") => speckit_todo::cli(&args[1..], Path::new(".")),
         Some("reviews-door") => {
             reviews::door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
         }
@@ -140,6 +141,10 @@ mod tests {
         assert_eq!(cli(&["claims".to_owned()]).code, 2);
         assert_eq!(cli(&["tunables".to_owned(), "--bogus".to_owned()]).code, 2);
         assert_eq!(cli(&["reviews".to_owned()]).code, 2);
+        assert_eq!(
+            cli(&["speckit-todo".to_owned(), "--bogus".to_owned()]).code,
+            2
+        );
     }
 
     #[test]

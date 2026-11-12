@@ -17,6 +17,7 @@ pub mod session;
 pub mod sha1;
 pub mod sha256;
 pub mod shape;
+pub mod speckit;
 pub mod state;
 pub mod tempdir;
 pub mod tool;

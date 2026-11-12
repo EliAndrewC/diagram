@@ -1,6 +1,7 @@
 """`scripts/measure/work_budget_view.py` - the work budget's standing record, in view (feature 443 T04, FR-007, plan D8).
 
-`make land` on engine code and `make speckit-todo` (under feature 444's row) print it, so every landing shows the distance from the
+`make land` on engine code prints it (and `make speckit-todo` under feature 444's row, through its Rust port in
+`rust/gate/crates/cohort/src/speckit_todo/work_budget_view.rs` since feature 449 T118; this copy leaves with `land.py` in T121), so every landing shows the distance from the
 goal: the whole roll's line of `dev/work-budget.md`, every stage's status, and the stages whose counted operations at 40
 households moved between the two newest runs in `dev/work-budget/`. Read from the files `make work-budget` writes; stdlib only,
 so the landing and the todo list import it without the engine.

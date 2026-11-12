@@ -58,7 +58,7 @@ HELD = Path("specs/328-match-the-research/audit/overrides.json")
 
 
 def box(d: Path) -> str:
-    """The one GM-review box a feature carries, in the one form `speckit-todo.py --holding` honors."""
+    """The one GM-review box a feature carries, in the one form `l7r-gate speckit-todo --holding` honors."""
     return f"- [ ] GM review (make gm-reviewed F={int(d.name.split('-', 1)[0])}) [lands-open]"
 
 

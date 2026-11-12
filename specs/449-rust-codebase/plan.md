@@ -438,29 +438,34 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-### T118 (<why: the finding or measurement that files it>)
+### T118 (T83's second slice, `speckit-todo.py`, `ask:449-T83-scope`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `scripts/speckit-todo.py` ported with no door: its rules (the state, the vocabulary, `**Affects**:` and `**Owed at**:`, `closed_by_status`, `holding`, the active task, the GM-review rows) in the guard crate (`rust/guard/src/shared/speckit.rs`), its command line and report in the gate's `cohort` crate (`cohort/src/speckit_todo.rs`, `speckit_todo/report.rs`, `speckit_todo/work_budget_view.rs`) as `l7r-gate speckit-todo`, its Rust callers calling the rules in-process, every other caller repointed and the `.py` deleted in the same cut.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-T83-scope`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - The rules live in the guard crate: two guards read them (`set_down_hooks`, `feature_approval_hooks`) and the guard cannot build on the gate, T117's reason. The command line lives in `cohort`, the narrowest crate the binary builds on that holds the push. In-process now: `ci/features.rs` (`holding`; its unused `python` parameter and `ask` gone), `reviews/glyph.rs` (`state`; its run by command and cache gone), `set_down_hooks` (`closed_by_status`; its `Ctx` gone) and `feature_approval_hooks` (its copies of `CLOSING`, `STATUS` and `BOX` read from the shared module, its own `at_rev` rule kept as it was, deliberately different). The push's "speckit-todo check" row is a gate row (`speckit-todo --root {root} --check`), keeping the row runner, its refusal text, its kept key and its usage line, as T117's `ledger-owed` row did.
+   - By command now: the Makefile's `speckit-todo` recipe (its `##` text unchanged), `sync-with-main.sh`'s three calls (an error still failing closed), `land.py`'s holding line (Python until T121), and the Python importers `close_check.py`, `plan_hold.py`, `research_claims.py` and `tick-task.py`, each through one new flag, `--each-state DIR...` (one state a line, `""` for a directory it cannot read, no usage line, as their imports recorded none), so each runs one process for all its directories. Test stubs of `speckit-todo.py` in `core/ci/fixtures.rs`, `reviews/tests.rs` and `set_down_hooks/tests.rs` gave way to real `.git/active-task` files and status lines.
+   - The usage log: the command records as `usage_log.exited` did (`passed` or `refused`, in the working directory's repository, none on an argparse error or a traceback). The in-process calls record nothing, where `features.rs` and `set_down_hooks` left a `speckit-todo` line through their runs by command, the line a by-product of the process, not of a check.
+   - `work_budget_view.py`'s `lines()` and `moved()` are ported for the report (`speckit_todo/work_budget_view.rs`), while the `.py` stays for `land.py`, its other importer, which the ruling ports in T121: two copies for one slice, each file's comment naming the other, the `.py` deleted with `land.py` in T121.
+   - The same outputs (FR-002): the Python (HEAD's whole `scripts/` from `git archive`) against the Rust, each case set up identically at one path, exit, stdout, stderr, every file and the usage line compared. Over the real tree (`--root` this clone and `/diagram`, every report flag), every real feature's `--state`, `--closed-by-status` and `--holding`, about 170 scratch trees covering every branch (status forms, CRLF and invalid bytes, boxes, Affects and Owed-at forms, a broken vocabulary five ways, the 444 view ten ways, the holding rule over 14 marks and 2 environments, clones in both layouts), argparse's prefix and `=` forms: 1,302 cases, 1 differing, `-h` exiting 2 against Python's 0, the divergence T82 (N7) and T117 accepted, 32 reaching a traceback and 6 an argparse usage error (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s2/diff.py`). The repointed importers before and after (`plan_hold.holder`, `tick-task.waits_or_marks`, `research_claims.settled_features`, `close_check.push_reasons`, `write_grandfathered`, `land.py`'s holding line): 797 cases, 0 differing (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s2/diff2.py`). Normalizations: N1 stderr from `Traceback` on, N2 argparse's usage text, N3 the usage line's `utc`. Divergences no case reaches: `isdigit()` on non-ASCII digits in an `F=` number, Python's JSON taking `NaN`, a vocabulary alias given as a number or `tags` not an object, and a lone `--`.
+   - A broken `.specify/affects.json` fails where the Python raised (the plan review of T118, round 2): the Python's `feature(d)` read the vocabulary of `d`'s grandparent, so `--state` and every importer's state raised on it. `state(d)` reads it too and returns its error (an absent file still reads as none, as the Python's did), `state_given_vocabulary` serving the one caller that handed a vocabulary in. `--state` exits 1 with the error on stderr. `--each-state` prints `error: <why>` on the line of a directory it cannot read and exits 1, and with `--root` reads that vocabulary once, a broken one printing nothing and exiting 1. The importers that let the old import raise (`close_check.py`, `plan_hold.py`, `tick-task.py`) raise on the nonzero exit (`check=True`), and `research_claims.py`, which caught it, keeps its old handling: a broken vocabulary retires nothing, an `error:` line is skipped. `reviews/glyph.rs` read a failed run by command as `""` (not closed), and reads the in-process error the same way. `holding` and `closed_by_status` never read the vocabulary, in the Python either. Pinned by a guard test (`a_broken_vocabulary_above_the_directory_fails_its_state`) and the cohort's cases, and in the differential: 15 commands over three broken vocabularies (not JSON, a tag without its stage, bad bytes), and 58 importer cases, both sides failing (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s2/diff.py` and `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s2/diff2.py`, re-run). The differential's counts on the final binary: 1,317 command cases, 1 differing (`-h`), 41 reaching a traceback, and 855 importer cases, 0 differing, a raise compared as a raise and not by its type (N4: the import raised the reader's error, the command's caller raises `CalledProcessError`) (observed 2026-11-12, method: the same harnesses).
+   - Timing: the Python 65.6 s and the Rust 31.5 s over the 1,317 cases, process time through the wrapper, and the importers 2.5 s before and 0.6 s after (observed 2026-11-12, method: the harnesses above).
+   - The census at the cut: no caller left over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `*.json`, `*.md`, `.claude/`, `tests/`, `docs/`, `scripts/` and `rust/`, untracked files included, only provenance comments, docstrings and `dev/phase-1-close.md`'s history; `specs/375-enforced-wave-process/measurements.json`'s `375-a1-speckit-todo-clones` recorded a prose timing of the Python's `in_clones` in two modes, a comparison no make command reaches (the port keeps only the chosen mode), so its command is retired and its values kept as history (`ask:449-T118-retire-375-a1`, on the `ask:449-T79-moves` and `ask:449-T89-reviews` pattern), which `make figures` does not run (observed 2026-11-12, method: that `git grep`, and `make figures` after the retirement).
+   - The checks: `make static` clean on 19 crates, `make rust-test` green (the guard 548 tests, `cohort` 50, `ci` 30, `reviews` 62), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check clean (observed 2026-11-12, method: those commands).
 
 ### T118 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `speckit-todo` is Rust, its Rust callers asking it in-process, no Python of it left.
+2. **The constraints.** FR-001, FR-002 and FR-003, the ruling `ask:449-T83-scope`.
+3. **Where each comes from.** G: the GM's words in `request.md` and the standing approval to delete ported Python; R: the ruling; O: the differential and the census above.
+4. **Do they describe the world here?** Run on this clone's real `specs/` and its sibling clones.
+5. **The order.** After T117.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+9. **Done, measured.** The differential's 2,172 cases, one accepted difference, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
 ### T119 (<why: the finding or measurement that files it>)
 
