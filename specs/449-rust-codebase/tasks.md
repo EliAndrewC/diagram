@@ -344,8 +344,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T104 A spec round's arbiter bundle read every subagent transcript whole for its first line (8,696 files, 8.0 GB): one bundle 7.6 s, the arbiter crate's tests 8-11 s; read the first line only (found under T99, 2026-11-11)
       research: rendering
       verify: DONE. landed: a spec round's arbiter bundle reads each transcript's first line only: 7.6 s to 0.3 s, the arbiter crate's tests 8-11 s to 1.1 s
-- [ ] T105 A core edit's coverage builds made together: make static builds each gate crate's coverage binary one after another, 17 builds and 14.6 s of 54.0 s after a core edit (2026-11-11) (the GM 2026-11-11)
+- [x] T105 A core edit's coverage builds made together: make static builds each gate crate's coverage binary one after another, 17 builds and 14.6 s of 54.0 s after a core edit (2026-11-11) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: a family's owed coverage binaries built together: make static after a core edit 65.0 to 57.2 s
 - [ ] T106 The sync-with-main hook suite's own time: 25.6 s alone, 56.5 s amid the others, the full hook run's critical path (2026-11-11) (the GM 2026-11-11)
       research: rendering
 - [ ] T107 The record's owed list's git calls: about 35 a computation, 0.1 s on a fixture and more on the tree, wherever it runs (2026-11-11) (the GM 2026-11-11)

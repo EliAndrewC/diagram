@@ -2126,3 +2126,39 @@ censuses empty (work breakdown 8, FR-010).
 5. **What did the before and after show, and under what conditions?** One timed run each of the same test, on a throttled host, read as evidence.
 6. **Did any map move?** No: no engine code changes.
 
+<!-- plan-archive: archived 2026-11-12 -->
+### T105 (a core edit's coverage builds made together, FR-012)
+
+- **Approach**: `l7r-gate rust cover` (`rust/gate/crates/rustc/src/rustc.rs`) asks every crate's kept result first and builds the coverage binaries the rest owe in one cargo call a family (`build_together`), and each crate's own run keeps the builds it finds.
+
+   **Decisions** (FR-012, SC-007):
+   - Each crate's coverage run built its instrumented test binary alone, one crate after another in the family's one build directory, which cargo locks, so a core edit's 17 builds ran in a row on a machine of 22 cores (observed 2026-11-11, method: `make static` logs' `cover build` lines, and `nproc`). The crates owed are now built first in one `cargo test --no-run --lib -p <each>` a family, which compiles them side by side, in the same environment a crate's own run uses (`cover_env`, factored out); a failed build there is left to the crate's own run to report.
+   - Each crate's run kept less than it could: it deleted every copy of its own library before building, which then compiled the crate again each run, and every other crate's test binary after, which the next crate built again. It now deletes only the copies of its own library the build did not just write, the build's JSON naming each artifact (an older one beside it carries lines of older source the report reads as unreached, measured 2026-11-07, the reason the deletion was there), and moves the other crates' binaries aside while its tests and report run (the report reads every binary in the build, T92) and puts them back after (`cover_built`).
+   - The coverage is the same: claims' 7,640 lines and core's 3,654 all hit with every hit count and the `uncovered` report identical to T100's (observed 2026-11-11, method: `l7r-gate.sh rust uncovered` for each crate with `L7R_RUST_FRESH=1`, the lcov reports compared line by line on the crate's own files by `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t105/../t100/lcovcmp.py`; neither crate's sources moved since).
+   - Measured the same way before and after (SC-007): a scratch clone of main without the change and this clone, each after `make rust-test` and a green `make static`, each edit a one-line comment unique to the run, back to back: `make static` after a core edit 65.0 s before and 57.2 s after, after a claims edit 26.0 s and 24.8 s, each revert 4.2-5.9 s both ways, the per-crate builds after the core edit 23.5 s before and 6.0 s after, the together build about 10 s of the rest (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t105/runs_before.sh` then `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t105/runs_after.sh`, `date +%s.%N` around each `make static`, the logs' `cover build` lines summed, the machine shared with other sessions at a load of 7-15). The together build now prints its own line.
+   - What is left: the coverage tests themselves, 17.2 s of the core edit's run, still one crate after another (observed 2026-11-11, method: the same logs' `cover tests` lines).
+   - The tests: a family's owed crates go to one cargo call naming each package, a family of one to none (`tests/cover.rs`), and the clearing test keeps a library the build wrote, removes one it did not, and finds another crate's binary put back. The coverage-step tests moved to `rustc/tests/cover.rs`, the tests file at the 1,000-line bar.
+
+### T105 Approach (checklist part A)
+
+1. **The goal, in the world.** A core edit's coverage builds use the machine's cores, and a crate's run rebuilds nothing it already has.
+2. **The constraints.** FR-012 and SC-007: every coverage figure held.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the timings and the coverage comparison above.
+4. **Do they describe the world here?** Measured on this clone and a scratch clone of main.
+5. **The order.** First of T105-T107.
+6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The before and after timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** Serial coverage builds, each rebuilding the crate's own library.
+2. **Does the change remove work, or only move it?** Both: the rebuilds of a crate's own library go, and the builds left run side by side.
+3. **What do you expect it to save, and why?** Most of the per-crate build time, cores being idle.
+4. **How does the work grow?** With the slowest crate's build, no longer with the sum of all of them.
+5. **What did the before and after show, and under what conditions?** One back-to-back run each on a shared, loaded host, read as evidence.
+6. **Did any map move?** No: no engine code changes.
+
+
