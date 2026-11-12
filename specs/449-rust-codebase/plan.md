@@ -379,32 +379,5 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T123 to T123 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 
-### T127 (the closing check, filed by T91's plan review)
-
-- **Approach**: `scripts/gates/close_check.py` ported whole, no door: its reasons in the gate's `reviews` crate (`reviews/closing.rs`), its command line and push form in `cohort` (`cohort/close_check.rs`: `l7r-gate close-check`), every caller repointed and the `.py` deleted in the same cut; gm-review's by-path run of it (T91) goes with it.
-
-   **Decisions** (FR-001, FR-002, FR-003, `ask:449-T067-scope`'s T065 clause, `ask:449-usage-text`):
-   - Where it lives: the reasons in `reviews`, which builds on `core` alone, so gm-review asks them in process and `cohort` builds on `reviews` without a cycle (`core`, the other crate both could build on, rebuilds every gate crate on an edit, T92). `open_fixes` and `fix_hold` move from `arbiter` to `reviews`, which the closing check reads and `reviews` cannot build on `arbiter` for; `arbiter` re-exports them. The command and its push form in `cohort`, which already builds on `plan` (`touched_features`, made public) and `tree` (the usage log), and reads a feature's state in process.
-   - The callers: gm-review's last-box close asks `closing::reasons` in process, where T91 ran the file by path. The push row `closing` runs `close-check --push origin/main...HEAD` as a gate command, its refusal text, its `CLOSE_OK` skip and its guard-log entry as before. `tick-task.py`, which stays Python (`ask:449-T89-reviews`), runs `l7r-gate.sh close-check --reasons-json <spec dir> <root>/specs` by command where it imported the module, one process where it asked once, a failure raising as the import's did (T118's N4).
-   - The seam that stays Python: the closing check asks `impl_check.missing()` of a research-record feature, and `impl_check.py` stays Python (phase 3, its own later port), so the Rust runs `impl_check.py --missing-json DIR...` by path under the T065 clause, one process a run over the directories not grandfathered and none when there are none, recording no usage line. The new mode prints as JSON only what `missing()` returned. Its stderr is captured: on a failure it is carried inside the error, so a traceback reads where it read before; on success the command line and `tick-task.py` pass it through, and gm-review's in-process close drops it, as the old by-path run did.
-   - Every form is ported, `--carries` and `--write-grandfathered` included (T119's rule that no command vanishes unannounced); `--reasons-json` stays, now serving `tick-task.py`, with no usage line (the T118 `--each-state` precedent). A run records `passed` or `refused`, a usage error's exit 2 counting as refused, a raise nothing; the usage text is the Python's byte for byte. A `measurements.json` is read as Python's `json` reads it, `NaN` and `Infinity` counting as values.
-   - The same outputs (FR-002): HEAD's `scripts/` (from `git archive`) and the binary built from HEAD against the working scripts and the new binary, each case set up identically, exit, stdout, stderr and every file written compared, 1,645 cases with 2 differing (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t127/diff.py`, its `results-*.json`). Every real feature directory in both forms with the real and an empty grandfathered list, 1,469 cases, none differing; the push over real commit ranges, 22, none; `tick-task.py`'s last tick end to end, 9, none; gm-review's last box, 8, none; scratch inputs for every branch, refusal and raise, 117, 2 differing; and an `impl_check` group, a stand-in that warns, owes or raises and the real one, through all five forms, 20, none (observed 2026-11-12, method: the same harness). The 2 scratch differences are a directory named `٣-x`, whose non-ASCII digit Python's `int()` reads and the Rust refuses, the divergence T91 and T118 met (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t127/results-scratch.json`). Normalizations: stderr from the first `Traceback` on, the usage line's `utc`, each side's scratch tree path. Divergences no case reaches: a lone surrogate, nesting past 128 or `1e400` in a `measurements.json`, a directory name not UTF-8.
-   - Timing: the real directories 328.6 s of process time in Python against 245.2 s in Rust, the push 68.6 s against 55.8 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t127/diff.py`).
-   - The census at the cut: provenance comments, `dev/review-ledger.md` and the specs' history; no `specs/*/measurements*.json` command runs or names the file; `docs/guards.md`'s two rows repointed, one of which named a test file that no longer exists (observed 2026-11-12, method: `git grep close_check`). The checks: `make static` clean on 20 crates, `make rust-test` green (`reviews` 95 tests, `cohort` 58, `arbiter` 34, `plan` 118, the guard 555), `make hooks-test HOOKS_ALL=1` green on 54 suites, `check tool-signals`, ruff and the pointer check clean (observed 2026-11-12, method: those commands).
-
-### T127 Approach (checklist part A)
-
-1. **The goal, in the world.** The closing check is Rust, gm-review asks it in process, nothing runs the `.py`.
-2. **The constraints.** FR-001, FR-002 and FR-003, the T065 clause for the one seam left to Python.
-3. **Where each comes from.** G: the standing approval to delete ported Python; R: T91's plan review and the rulings; O: the differential and the census above.
-4. **Do they describe the world here?** Run on every real feature directory in this clone, measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t127/diff.py`).
-5. **The order.** After T91, whose by-path run it retires.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The differential's 1,645 cases with its 2 explained differences, and the census.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
+<!-- plan-archive: T127 to T91 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+<!-- plan-archive: T127 to T127 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
