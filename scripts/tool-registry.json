@@ -47,7 +47,7 @@
     },
     "close_check": {
       "kind": "check",
-      "what": "scripts/gates/close_check.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/cohort/src/close_check.rs (`l7r-gate close-check`) - a refusing check; each run recorded passed or refused"
     },
     "cohort_gate": {
       "kind": "check",

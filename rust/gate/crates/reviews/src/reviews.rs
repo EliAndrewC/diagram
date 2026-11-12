@@ -6,8 +6,11 @@
 //! guard's `shared::ledger`, and `ledger_passes`, `ledger_owed.py`'s port.
 //! The GM-review queue (feature 449 T91, `ask:449-T82-claims`): `gm_review`, `scripts/gm_review.py`'s port behind `l7r-gate gm-review`, the one
 //! writer of `gm-review.jsonl` and the GM's box, which the round arbiter and the claims tools call in process.
+//! The closing check (feature 449 T127): `closing`, the reasons of `scripts/gates/close_check.py`'s port, which `gm_review` asks in process and
+//! `cohort`'s `l7r-gate close-check` serves to the push and `make tick`.
 
 pub mod checkpoint;
+pub mod closing;
 pub mod glyph;
 pub mod gm_review;
 pub mod ledger;

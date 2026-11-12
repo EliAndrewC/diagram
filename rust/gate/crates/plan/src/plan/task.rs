@@ -231,8 +231,9 @@ fn show(root: &Path, reference: &str, path: &str) -> Option<Vec<u8>> {
     done.status.success().then_some(done.stdout)
 }
 
-/// Every `specs/NNN-*` directory the range touches.
-pub(super) fn touched_features(root: &Path, range: &str) -> Vec<String> {
+/// Every `specs/NNN-*` directory the range touches (the closing check's push form reads it in process too, feature 449 T127).
+#[must_use]
+pub fn touched_features(root: &Path, range: &str) -> Vec<String> {
     let names = super::git_line(root, &["diff", "--name-only", range]);
     let mut out: BTreeSet<String> = BTreeSet::new();
     for name in names.lines() {

@@ -684,6 +684,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T127 (the closing check, filed by T91's plan review)": {
+   "sha256": "f62c5139084ba5d08490369fb78c7c16eda5d243f5ffb0152ea4e3ce969b8475",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T127 Approach (checklist part A)": {
+   "sha256": "0254d42d3d1c7eff027ded06bfaa3bef6fc15bbdbff393c701bd4115972ff11a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8205,6 +8217,54 @@
      "why": "FR-001's rewrite-measurements and census requirements; the pointer fix serves the cut."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T127 (the closing check, filed by T91's plan review)",
+    "### T127 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T127-placement",
+     "summary": "The closing check's reasons in the reviews crate, its command and push form in cohort; open_fixes and fix_hold moved from arbiter to reviews with arbiter re-exporting them; plan's touched_features made public.",
+     "class": "within",
+     "why": "Rust-internal structure that neither the request nor the spec settles; it changes no output and serves FR-001's port of close_check.py, which ask:449-T067-scope places in phase 3."
+    },
+    {
+     "id": "T127-callers",
+     "summary": "gm-review's last-box close asks closing::reasons in process (retiring T91's by-path run); the push row runs close-check --push as a gate command with its refusal text, CLOSE_OK skip and guard-log entry unchanged; tick-task.py (stays Python, ask:449-T89-reviews) runs l7r-gate.sh close-check --reasons-json by command where it imported the module, a failure raising as the import's did.",
+     "class": "within",
+     "why": "Every caller repointed in the same cut and the .py deleted, as FR-001 and FR-003 require (no piece runs both); tick-task.py staying Python and reaching ported code by command is ask:449-T89-reviews' ruled pattern. The deletion rests on the GM's standing approval quoted in the spec (2026-11-10)."
+    },
+    {
+     "id": "T127-impl-check-seam",
+     "summary": "impl_check.py stays Python (phase 3, its own later port); the Rust runs impl_check.py --missing-json DIR... by path, one process a run and none when no non-grandfathered research-record directory needs it, no usage line; the new mode prints only what missing() returned; stderr carried inside the error on failure, passed through or dropped on success as before.",
+     "class": "within",
+     "why": "FR-001 places impl_check.py in phase 3 and the T065 clause governs a ported piece reaching unported Python by path; the starts are the push, gm-review's last box and tick-task's last tick, none a plain Bash call, a plain Edit or a make done. A logic-free JSON verb on the Python side is the door pattern the spec uses throughout (codeid.py --debug-free-equal, bundle_door, claims_door); impl_check runs in one implementation, so FR-003 holds. The mode leaves with impl_check's own port by that pattern."
+    },
+    {
+     "id": "T127-forms",
+     "summary": "Every form ported (--carries and --write-grandfathered included); --reasons-json kept for tick-task.py with no usage line (T118 --each-state precedent); passed/refused recording, exit 2 as refused, a raise recording nothing; usage text byte for byte; measurements.json read as Python's json reads it, NaN and Infinity as values.",
+     "class": "within",
+     "why": "FR-002 parity; the differential compares every file written (the usage log included, utc normalized), and the tick and gm groups (9 and 8 cases) show no difference."
+    },
+    {
+     "id": "T127-arabic-digit",
+     "summary": "Accept 2 of 117 scratch cases differing: a directory named '٣-x', whose non-ASCII digit Python's int() reads as 3 (pointing the user at make feature-report F=3, a different feature) and the Rust refuses. Re-derived from results-scratch.json: 'differ': 2, both this name; results-real/push/tick/gm/impl all 'differ': 0, seen totals 1,469+22+9+8+117+20 = 1,645.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled here on FR-002's own scope, not on its written exception (which covers a port that stops refusing correct work, not one that starts refusing a mis-parse) and not on the T91/T118 precedent, which the block cites without an ask: id. FR-002 binds 'every case its tests and its suites hold'; this input is one the session's harness constructed, held by no kept test or suite case, and every real feature directory in the clone (1,469 cases, both forms, real and empty grandfathered lists) and every real push range (22) match. The request's purpose - a Rust codebase that decides as the Python did on the work it actually does - is intact; the divergence is disclosed in the plan."
+    },
+    {
+     "id": "T127-unreached-divergences",
+     "summary": "Known divergences no case reaches: a lone surrogate, nesting past 128 or 1e400 in a measurements.json, a directory name not UTF-8; plus the normalizations (stderr from the first Traceback, the usage line's utc, each side's scratch path).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from the '٣-x' case: none is a case any kept test or suite holds, and the real tree reaches none (every real directory's measurements.json is read in the 1,469 real cases with no difference), so FR-002's binding set is untouched. The traceback normalization is ask:449-usage-text's ruling that a traceback's text is not bound; utc and scratch paths are run-specific, not outputs."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -14234,6 +14294,52 @@
      "summary": "census at the cut by stated pathspecs; docs/guards.md pointer to a nonexistent test repointed to the Rust tests; no measurements.json command runs the file",
      "class": "within",
      "why": "FR-001's rewrite-measurements and census requirements; the pointer fix serves the cut."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T127": {
+   "section_sha256": "d0f9ff1fb93aab05b5d1639afd0393a2ef0eacc83d3f28689bd3c8b18c7116e6",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T127-placement",
+     "summary": "The closing check's reasons in the reviews crate, its command and push form in cohort; open_fixes and fix_hold moved from arbiter to reviews with arbiter re-exporting them; plan's touched_features made public.",
+     "class": "within",
+     "why": "Rust-internal structure that neither the request nor the spec settles; it changes no output and serves FR-001's port of close_check.py, which ask:449-T067-scope places in phase 3."
+    },
+    {
+     "id": "T127-callers",
+     "summary": "gm-review's last-box close asks closing::reasons in process (retiring T91's by-path run); the push row runs close-check --push as a gate command with its refusal text, CLOSE_OK skip and guard-log entry unchanged; tick-task.py (stays Python, ask:449-T89-reviews) runs l7r-gate.sh close-check --reasons-json by command where it imported the module, a failure raising as the import's did.",
+     "class": "within",
+     "why": "Every caller repointed in the same cut and the .py deleted, as FR-001 and FR-003 require (no piece runs both); tick-task.py staying Python and reaching ported code by command is ask:449-T89-reviews' ruled pattern. The deletion rests on the GM's standing approval quoted in the spec (2026-11-10)."
+    },
+    {
+     "id": "T127-impl-check-seam",
+     "summary": "impl_check.py stays Python (phase 3, its own later port); the Rust runs impl_check.py --missing-json DIR... by path, one process a run and none when no non-grandfathered research-record directory needs it, no usage line; the new mode prints only what missing() returned; stderr carried inside the error on failure, passed through or dropped on success as before.",
+     "class": "within",
+     "why": "FR-001 places impl_check.py in phase 3 and the T065 clause governs a ported piece reaching unported Python by path; the starts are the push, gm-review's last box and tick-task's last tick, none a plain Bash call, a plain Edit or a make done. A logic-free JSON verb on the Python side is the door pattern the spec uses throughout (codeid.py --debug-free-equal, bundle_door, claims_door); impl_check runs in one implementation, so FR-003 holds. The mode leaves with impl_check's own port by that pattern."
+    },
+    {
+     "id": "T127-forms",
+     "summary": "Every form ported (--carries and --write-grandfathered included); --reasons-json kept for tick-task.py with no usage line (T118 --each-state precedent); passed/refused recording, exit 2 as refused, a raise recording nothing; usage text byte for byte; measurements.json read as Python's json reads it, NaN and Infinity as values.",
+     "class": "within",
+     "why": "FR-002 parity; the differential compares every file written (the usage log included, utc normalized), and the tick and gm groups (9 and 8 cases) show no difference."
+    },
+    {
+     "id": "T127-arabic-digit",
+     "summary": "Accept 2 of 117 scratch cases differing: a directory named '٣-x', whose non-ASCII digit Python's int() reads as 3 (pointing the user at make feature-report F=3, a different feature) and the Rust refuses. Re-derived from results-scratch.json: 'differ': 2, both this name; results-real/push/tick/gm/impl all 'differ': 0, seen totals 1,469+22+9+8+117+20 = 1,645.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled here on FR-002's own scope, not on its written exception (which covers a port that stops refusing correct work, not one that starts refusing a mis-parse) and not on the T91/T118 precedent, which the block cites without an ask: id. FR-002 binds 'every case its tests and its suites hold'; this input is one the session's harness constructed, held by no kept test or suite case, and every real feature directory in the clone (1,469 cases, both forms, real and empty grandfathered lists) and every real push range (22) match. The request's purpose - a Rust codebase that decides as the Python did on the work it actually does - is intact; the divergence is disclosed in the plan."
+    },
+    {
+     "id": "T127-unreached-divergences",
+     "summary": "Known divergences no case reaches: a lone surrogate, nesting past 128 or 1e400 in a measurements.json, a directory name not UTF-8; plus the normalizations (stderr from the first Traceback, the usage line's utc, each side's scratch path).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from the '٣-x' case: none is a case any kept test or suite holds, and the real tree reaches none (every real directory's measurements.json is read in the 1,469 real cases with no difference), so FR-002's binding set is untouched. The traceback normalization is ask:449-usage-text's ruling that a traceback's text is not bound; utc and scratch paths are run-specific, not outputs."
     }
    ],
    "verdict": "CLEAR"

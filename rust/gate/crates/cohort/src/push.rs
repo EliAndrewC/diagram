@@ -230,7 +230,7 @@ const CHECKS: [Row; 23] = [
     Row("gate-stamp selftest", Tool::Gate, &["stamp", "--selftest"], "gate-stamp selftest failed - the guard itself is broken; fix rust/gate/crates/tree/src/stamp.rs before pushing", true, ""),
     Row("gate-stamp", Tool::Gate, &["stamp", "--check", "origin/main"], "push refused by the green-gate guard (above)", false, ""),
     Row("gm-questions", Tool::Gate, &["gm-review", "owed-check"], "a question for the GM in this push is still owed escalation-check (above) - the one door to him (feature 432, FR-002)", false, "specs"),
-    Row("closing", Tool::Py("gates/close_check.py"), &["--push", "origin/main...HEAD"], "REFUSED: a feature this push closes owes what closing owes (feature 375) - the reasons above; a case that is genuinely exempt: CLOSE_OK=\"<reason>\" (recorded)", false, ""),
+    Row("closing", Tool::Gate, &["close-check", "--push", "origin/main...HEAD"], "REFUSED: a feature this push closes owes what closing owes (feature 375) - the reasons above; a case that is genuinely exempt: CLOSE_OK=\"<reason>\" (recorded)", false, ""),
 ];
 
 const STAMPS: &str = "l7r-cache/selftests.json";

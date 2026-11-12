@@ -27,7 +27,8 @@ use history::History;
 use record::Stop;
 use sections::{blocks, digest, task_sections, wording_only};
 use status::{block_status, owed, ruled_tasks, RECORD};
-use task::{resolve, touched_features};
+use task::resolve;
+pub use task::touched_features;
 
 pub use l7r_gate_core::plan::*;
 

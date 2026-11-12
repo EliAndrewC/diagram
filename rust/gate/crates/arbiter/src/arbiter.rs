@@ -624,7 +624,7 @@ fn join_refs(v: &[&String]) -> String {
 
 pub mod bundle;
 mod fixes;
-pub use fixes::{fix_hold, open_fixes};
+pub use crate::reviews::closing::{fix_hold, open_fixes};
 use fixes::{fix_home, nit_answers, settle_fix};
 
 /// A string as Python's `repr` quotes it (`{old!r}` in `nit_answers`): single quotes unless the text has one and no double quote.

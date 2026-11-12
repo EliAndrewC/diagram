@@ -20,8 +20,9 @@ message opens with its number (`Feature NNN` or `NNN:`), as this repository writ
 A DRIFTED claim satisfies (a): the verdict is what the GM asked to see in the report, and fixing the code is the
 feature's own business only if its spec says so.
 
+    impl_check.py --missing-json <dir>... `missing(d, d.resolve().parents[1])` of each, one JSON list a directory
     impl_check.py <feature dir>           what is owed and what is missing; exit 1 if anything is missing
-The closing check (`scripts/gates/close_check.py`) asks `missing()` of every research-record feature at every close.
+The closing check (`l7r-gate close-check`, feature 449 T127) asks `missing()` of every feature at every close: `--missing-json`.
 """
 
 from __future__ import annotations
@@ -154,6 +155,13 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["--missing-json"]:
+        # the closing check's ask (feature 449 T127, the T065 clause): `close_check.py` imported this module and called `missing()`
+        # per directory; its Rust port runs it here by path, one process for every directory, and records nothing, as the import did
+        import json
+
+        print(json.dumps([missing(Path(a), Path(a).resolve().parents[1]) for a in sys.argv[2:]]))
+        raise SystemExit(0)
     code = main(sys.argv[1:])
     # the claims are read through their cache (feature 375 amendment 3); the command's heap dies with it, and freezing it skips
     # the final collection's walk of the engine parse - 2 s of a cold run, measured 2026-10-11, as in claims.py's command

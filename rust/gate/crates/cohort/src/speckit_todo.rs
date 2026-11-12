@@ -19,7 +19,7 @@
 //! ```
 //!
 //! `--each-state` is new with the port (feature 449 T118): the Python callers that imported the module by path
-//! (`close_check.py`, `plan_hold.py`, `research_claims.py`, `tick-task.py`) ask it instead, one process for every directory where the
+//! (`close_check.py` until feature 449 T127 asked it in process, `plan_hold.py`, `research_claims.py`, `tick-task.py`) ask it instead, one process for every directory where the
 //! import read each in process. Each directory's state reads the vocabulary two levels above it, as `feature(d)` did, so a broken
 //! `.specify/affects.json` fails that directory as the import raised there; with `--root`, the root's vocabulary is read once
 //! instead, as `feature(d, vocab)` was handed one (`research_claims.py`), and a broken one fails the run with nothing printed. A run

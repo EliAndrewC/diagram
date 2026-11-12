@@ -390,12 +390,12 @@ fn a_rows_review_alone() {
     );
 }
 
-/// A `close_check.py` stand-in under `scripts/gates/` that prints `out` and exits `code`.
-fn close_check(root: &Path, out: &str, code: i32) {
+/// An `impl_check.py` stand-in under `scripts/record/` with `body`: the closing check, in process since feature 449 T127, asks it.
+fn impl_check(root: &Path, body: &str) {
     put(
         root,
-        "scripts/gates/close_check.py",
-        &format!("import sys\nassert sys.argv[1] == '--reasons-json'\nprint({out:?})\nsys.exit({code})\n"),
+        "scripts/record/impl_check.py",
+        &format!("import json, sys\n{body}\n"),
     );
 }
 
@@ -466,7 +466,7 @@ fn the_closing_check_stands_before_the_gms_last_box() {
     );
     put(&d, "specs/531-to/x", "");
     // the GM's box the feature's last open one: the closing check is asked, its reasons refuse
-    close_check(&d, "[\"530-x has no report.md\", \"another\"]", 0);
+    impl_check(&d, "print(json.dumps([['another'] for a in sys.argv[2:]]))");
     put(
         &d,
         "specs/530-x/gm-review.jsonl",
@@ -476,19 +476,22 @@ fn the_closing_check_stands_before_the_gms_last_box() {
         ]),
     );
     let got = run(&d, &["reviewed", "530"]);
-    assert_eq!(got.stderr, "gm-review: refused - the GM's box closes the feature, and: 530-x has no report.md; another\n");
-    close_check(&d, "not json", 0);
-    assert!(run(&d, &["reviewed", "530"])
-        .stderr
-        .contains("close_check.py --reasons-json"));
-    close_check(&d, "[]", 1);
-    assert!(run(&d, &["reviewed", "530"])
-        .stderr
-        .contains("close_check.reasons raised"));
+    assert_eq!(got.stderr, "gm-review: refused - the GM's box closes the feature, and: 530-x has no report.md - `make feature-report F=530 WRITE=1` writes it (FR-009); another\n");
+    put(&d, "specs/530-x/report.md", "r");
+    // impl_check's traceback inside gm-review's message, as T91's by-path run of close_check.py showed it
+    impl_check(&d, "raise ValueError('the claims door is shut')");
+    let got = run(&d, &["reviewed", "530"]).stderr;
+    assert!(got.contains("close_check.reasons raised:\nTraceback (most recent call last):\n"));
+    assert!(got.contains("ValueError: the claims door is shut\n"));
     let got = run_with(&d, &["reviewed", "530"], "", 100, "/no/such/python");
     assert!(got.stderr.contains("OSError"), "{}", got.stderr);
-    close_check(&d, "[]", 0);
+    // a passing run's warning is dropped, as T91's by-path run kept close_check.py's stderr to itself (the coordinator's ruling on T127)
+    impl_check(
+        &d,
+        "sys.stderr.write('a warning\\n')\nprint(json.dumps([[] for a in sys.argv[2:]]))",
+    );
     let got = run_with(&d, &["reviewed", "530"], "his own words", 100, "python3");
+    assert_eq!(got.stderr, "");
     assert_eq!(got.stdout, "gm-reviewed: 2 row(s) of 530-x reviewed\n");
     assert_eq!(
         read(&d, "specs/530-x/tasks.md"),

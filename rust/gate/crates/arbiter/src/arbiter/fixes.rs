@@ -10,48 +10,9 @@ use super::{
     accept_answers, append_jsonl, gm_question, py_repr, py_str, text, utc_now, Stop, HOUR_TRIGGER,
 };
 
-/// `(trigger, tooling_fix)` of every open arbiter tooling fix in feature `d` (`hm_arbiter.open_fixes`).
-#[must_use]
-pub fn open_fixes(d: &Path) -> Vec<(String, String)> {
-    let mut fixes: Vec<(String, String)> = Vec::new();
-    for line in std::fs::read_to_string(d.join("arbiter.jsonl"))
-        .unwrap_or_default()
-        .lines()
-    {
-        let Ok(r) = serde_json::from_str::<Value>(line) else {
-            continue;
-        };
-        if text(&r, "fix") == "open" && !checks::falsy(r.get("tooling_fix")) {
-            let t = py_str(r.get("trigger"));
-            let fix = py_str(r.get("tooling_fix"));
-            match fixes.iter_mut().find(|(k, _)| *k == t) {
-                Some(slot) => slot.1 = fix,
-                None => fixes.push((t, fix)),
-            }
-        } else if matches!(text(&r, "status"), "done" | "declined") {
-            let of = py_str(r.get("fix_of"));
-            fixes.retain(|(k, _)| *k != of);
-        }
-    }
-    fixes
-}
-
-/// Why feature `d` may not move on while an arbiter tooling fix is open, or "".
-#[must_use]
-pub fn fix_hold(d: &Path) -> String {
-    let fixes = open_fixes(d);
-    if fixes.is_empty() {
-        return String::new();
-    }
-    let listed = fixes
-        .iter()
-        .map(|(t, fix)| format!("    {t}: {fix}"))
-        .collect::<Vec<_>>()
-        .join("\n");
-    format!(
-        "the round arbiter's tooling fix is open - make it, with its test, in this feature before going on (feature 379):\n{listed}\n  made:     make arbiter-fix-done ID=\"<trigger>\" NOTE=\"<what was built>\" TEST=<its test under tests/> LAND=\"<the fix's files>\" F=<feature> TICK=<the task> (lands them, settles the fix, ticks the task)\n  overhaul: make arbiter-fix-declined ID=\"<trigger>\" REASON=\"<why it overhauls a process>\" (a question for the GM, owed escalation-check)"
-    )
-}
+// `open_fixes` and `fix_hold` moved to `reviews::closing` (feature 449 T127): the closing check reads them in process, and `reviews`
+// cannot build on this crate; `arbiter.rs` re-exports them.
+use l7r_gate_reviews::reviews::closing::open_fixes;
 
 pub(super) fn fix_home(root: &Path, trigger: &str) -> Option<PathBuf> {
     let active = core::feature_dir(root, "");

@@ -135,6 +135,15 @@ def _state(d: Path) -> str:
     return subprocess.run([str(gate), "speckit-todo", "--each-state", str(d)], capture_output=True, text=True, check=True).stdout.strip()
 
 
+def _close_reasons(d: Path, specs: Path) -> list[str]:
+    """Why the feature `d` may not close, its carries read under `specs` (`l7r-gate close-check --reasons-json`, Rust since feature 449
+    T127, where this imported `close_check.py` and called `reasons`): one process; its stderr passes through as the import's did, and a
+    raise there is a nonzero exit here, raised as `CalledProcessError`."""
+    gate = Path(__file__).resolve().parent / "gates" / "l7r-gate.sh"
+    said = subprocess.run([str(gate), "close-check", "--reasons-json", str(d), str(specs)], stdout=subprocess.PIPE, text=True, check=True)
+    return json.loads(said.stdout)
+
+
 def _arbiter():  # noqa: ANN202 - `fix_hold` through the checks door (feature 449 T86)
     import importlib  # noqa: PLC0415
 
@@ -308,10 +317,7 @@ def main(argv: list[str]) -> int:
         return 2
     remaining = sum(1 for ln in new.splitlines() if ln.startswith("- [ ] "))
     if remaining == 0:  # feature 375 FR-009/FR-014: the last tick closes the feature - its report and carried keys first
-        sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
-        import close_check  # noqa: PLC0415
-
-        why = close_check.reasons(d, root / "specs")
+        why = _close_reasons(d, root / "specs")
         if why:
             print("tick: refused - this tick would close the feature, and:\n  " + "\n  ".join(why), file=sys.stderr)
             return 2

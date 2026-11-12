@@ -46,8 +46,8 @@ const USAGE: &str = "    gm_review.py list                                   the
 
 ";
 
-/// Where a run reads and writes: the repository (`root`, the working directory), the tree whose `scripts/gates/close_check.py` the
-/// closing check runs (the gate's own, `L7R_GATE_TREE`) and the interpreter it runs under, the GM's words (`GM_WORDS`), and the width a listing is fitted to.
+/// Where a run reads and writes: the repository (`root`, the working directory), the tree whose closing list and `impl_check.py` the
+/// closing check reads (the gate's own, `L7R_GATE_TREE`) and the interpreter `impl_check.py` runs under, the GM's words (`GM_WORDS`), and the width a listing is fitted to.
 struct Ctx<'a> {
     root: &'a Path,
     tree: &'a Path,
@@ -69,7 +69,7 @@ fn num(d: &Path) -> R<i128> {
 
 /// `d.name` as Python's `Path` names it (a `..` is a name; a `.` is dropped when the path is made; `/` has none).
 #[must_use]
-fn name(d: &Path) -> String {
+pub(crate) fn name(d: &Path) -> String {
     match d.components().next_back() {
         Some(Component::Normal(n)) => n.to_string_lossy().into_owned(),
         Some(Component::ParentDir) => "..".to_owned(),
@@ -450,28 +450,18 @@ fn reviewed(ctx: &Ctx, d: &Path, overturn: Option<(i128, &Path)>) -> R<Vec<Strin
     Ok(msgs)
 }
 
-/// `close_check.reasons(d, root / "specs")`: the closing check stays Python (phase 3, held by no task) and the Rust asks it by path on
-/// this one branch, the GM's box being the feature's last open one (the T065 clause). `--reasons-json` records no usage line, as the
-/// Python's import of it recorded none (the T118 precedent of `--each-state`).
+/// `close_check.reasons(d, root / "specs")`, in process since feature 449 T127 ported the closing check here (`super::closing`), where
+/// T91 ran `close_check.py --reasons-json` by path; what the Python raised is a trace, as its raise was.
 fn close_reasons(ctx: &Ctx, d: &Path) -> R<Vec<String>> {
-    let script = ctx.tree.join("scripts/gates/close_check.py");
-    let out = Command::new(ctx.python)
-        .arg(&script)
-        .arg("--reasons-json")
-        .arg(d)
-        .arg(ctx.root.join("specs"))
-        .current_dir(ctx.root)
-        .env("PYTHONDONTWRITEBYTECODE", "1")
-        .output()
-        .map_err(|e| Raised::Trace(format!("OSError: {e}: {}", ctx.python)))?;
-    let said = String::from_utf8_lossy(&out.stderr);
-    if !out.status.success() {
-        return Err(Raised::Trace(format!(
-            "close_check.reasons raised:\n{said}"
-        )));
-    }
-    serde_json::from_slice(&out.stdout)
-        .map_err(|e| Raised::Trace(format!("close_check.py --reasons-json: {e}\n{said}")))
+    let tools = super::closing::Tools {
+        tree: ctx.tree,
+        python: ctx.python,
+    };
+    // what impl_check printed on a passing run is dropped, as the by-path run of T91 kept it to itself (the coordinator's ruling on
+    // T127); a failure still carries it inside the trace
+    super::closing::reasons(&tools, &ctx.root.join("specs"), &[d.to_path_buf()])
+        .map(|mut found| found.each.pop().unwrap_or_default())
+        .map_err(|e| Raised::Trace(format!("close_check.reasons raised:\n{e}")))
 }
 
 /// Row `row` of `d` alone is reviewed; the feature's other rows still wait on the GM, and its box stays open while they do.
