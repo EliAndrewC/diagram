@@ -383,8 +383,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T117 T83's first slice (`ask:449-T83-scope`): the review ledger's tools, `ledger_owed.py`, `ledger_lint.py` and `review_cost.py`
       research: rendering
       verify: DONE. landed: T83 slice 1: the review ledger's tools in Rust, 170 differential cases with no difference
-- [ ] T118 T83's second slice (`ask:449-T83-scope`): `speckit-todo.py`, its Rust callers calling it in-process
+- [x] T118 T83's second slice (`ask:449-T83-scope`): `speckit-todo.py`, its Rust callers calling it in-process
       research: rendering
+      verify: DONE. landed: T83 slice 2: speckit-todo in Rust, 2,172 differential cases, one accepted difference
 - [ ] T119 T83's third slice (`ask:449-T83-scope`): the measure chain, `event_log.py`, `task_phases.py`, `feature_report.py`, `where_time.py`
       research: rendering
 - [ ] T120 T83's fourth slice (`ask:449-T83-scope`): `stepback_bundle.py` with `turn_time.py`, `fix_yield.py` and `tool_yield.py`; `reviews_door.py`'s three verbs go
