@@ -43,6 +43,43 @@ pub fn py_float(f: f64) -> String {
     )
 }
 
+/// A JSON value as Python's `str()` prints what `json.loads` made of it (moved from the gate's `record::bundle` by feature 449 T119: the
+/// event-log reader in this crate names an edit's path and time by it, and the gate's crates re-export this one).
+#[must_use]
+pub fn py_str(value: &Value) -> String {
+    match value {
+        Value::Null => "None".to_owned(),
+        Value::Bool(b) => if *b { "True" } else { "False" }.to_owned(),
+        Value::String(s) => s.clone(),
+        Value::Number(n) => n
+            .as_f64()
+            .filter(|_| n.is_f64())
+            .map_or_else(|| n.to_string(), py_float),
+        other => value_repr(other),
+    }
+}
+
+/// `repr()` of what `json.loads` made of a value: a list or dict as Python prints one.
+#[must_use]
+fn value_repr(value: &Value) -> String {
+    use crate::shared::py_text::repr;
+    match value {
+        Value::String(s) => repr(s),
+        Value::Array(items) => format!(
+            "[{}]",
+            items.iter().map(value_repr).collect::<Vec<_>>().join(", ")
+        ),
+        Value::Object(map) => format!(
+            "{{{}}}",
+            map.iter()
+                .map(|(k, v)| format!("{}: {}", repr(k), value_repr(v)))
+                .collect::<Vec<_>>()
+                .join(", ")
+        ),
+        other => py_str(other),
+    }
+}
+
 /// `value` as Python's `json.dumps(value, indent=indent)` writes it, byte for byte.
 fn write_value(value: &Value, indent: Option<usize>, level: usize, out: &mut String, ascii: bool) {
     let line =
@@ -107,7 +144,22 @@ pub fn sorted(value: &Value) -> Value {
 mod tests {
     use serde_json::json;
 
-    use super::{dumps, py_float, sorted};
+    use super::{dumps, py_float, py_str, sorted, value_repr};
+
+    #[test]
+    fn a_value_prints_as_python_str_prints_it() {
+        assert_eq!(py_str(&json!(null)), "None");
+        assert_eq!(py_str(&json!(true)), "True");
+        assert_eq!(py_str(&json!(false)), "False");
+        assert_eq!(py_str(&json!("a")), "a");
+        assert_eq!(py_str(&json!(3)), "3");
+        assert_eq!(py_str(&json!(2.5)), "2.5");
+        assert_eq!(
+            py_str(&json!([1, "a'", {"k": null}])),
+            "[1, \"a'\", {'k': None}]"
+        );
+        assert_eq!(value_repr(&json!("x")), "'x'");
+    }
 
     #[test]
     fn a_float_writes_as_python_repr_writes_it() {

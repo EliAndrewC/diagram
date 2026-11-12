@@ -9,6 +9,7 @@ publish = false
 fancy-regex = { workspace = true }
 l7r_gate_cohort = { path = "../cohort" }
 l7r_gate_core = { path = "../core" }
+l7r_gate_reviews = { path = "../reviews" }
 l7r_gate_tree = { path = "../tree" }
 l7r_gate_trials = { path = "../trials" }
 l7r_guard = { path = "../../../guard" }

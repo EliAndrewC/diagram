@@ -1,6 +1,6 @@
 //! The arbiter bundle's sections, each on a scratch repository.
 
-use serde_json::json;
+use serde_json::{json, Value};
 
 use super::*;
 use crate::record::bundle::tests::{scratch, state};
@@ -342,10 +342,15 @@ fn the_sections_rare_paths() {
         "(no change since the last round)\n"
     );
     assert_eq!(
-        reversals(&[
-            json!({"ev": "PreToolUse", "tool": "Edit", "old": "A", "new": "B"}),
-            json!({"ev": "PreToolUse", "tool": "Edit", "old": "B", "new": "A"})
-        ]),
+        reversals(
+            &[
+                json!({"ev": "PreToolUse", "tool": "Edit", "old": "A", "new": "B"}),
+                json!({"ev": "PreToolUse", "tool": "Edit", "old": "B", "new": "A"})
+            ]
+            .iter()
+            .filter_map(Value::as_object)
+            .collect::<Vec<_>>()
+        ),
         vec![("None".to_owned(), "None".to_owned())]
     );
     let plain = crate::checks::scratch("arbiter-sections-plain");

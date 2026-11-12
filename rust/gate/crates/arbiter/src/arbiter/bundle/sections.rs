@@ -1,12 +1,14 @@
 //! The arbiter bundle's sections (from `arbiter_bundle.py`, feature 375 FR-011): what owes a capped round, the cascade and the oscillation, the round counters, the red gates, the cited evidence, the claims a question names. The review and plan rounds and the feature's own files are [`super::reviews`].
 
-use std::collections::{BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeSet, HashSet};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_guard::guards::event_log_hooks::log_path;
+// the event log's one reader, the guard's since feature 449 T119 (`ask:449-T83-scope`): `make feature-report` reads through it too
+use l7r_guard::guards::event_log_hooks::read::{read_jsonl, reversals};
 use l7r_guard::shared::checks::rounds::ROUND_CAP;
 use l7r_guard::shared::checks::state_path;
 use l7r_guard::shared::log::civil;
@@ -286,41 +288,6 @@ pub fn capped_round_cause(
     ])
 }
 
-/// `json.loads` of each line of a JSONL file, a line that does not parse skipped (`event_log.read_jsonl`).
-fn read_jsonl(path: &Path) -> Vec<Value> {
-    let bytes = std::fs::read(path).unwrap_or_default();
-    String::from_utf8_lossy(&bytes)
-        .split('\n')
-        .map(strip)
-        .filter(|l| !l.is_empty())
-        .filter_map(|l| serde_json::from_str(l).ok())
-        .collect()
-}
-
-/// (path, time) of every Edit that put back a passage an earlier Edit of the same file had replaced (`feature_report.reversals`, which T83 takes from here).
-pub fn reversals(events: &[Value]) -> Vec<(String, String)> {
-    let mut out: Vec<(String, String)> = Vec::new();
-    let mut replaced: HashMap<String, HashSet<String>> = HashMap::new();
-    for e in events {
-        if text(e, "ev") != "PreToolUse" || text(e, "tool") != "Edit" || !truthy(e.get("old")) {
-            continue;
-        }
-        let path = e.get("path").map_or_else(|| "None".to_owned(), py_str);
-        let seen = replaced.entry(path.clone()).or_default();
-        if e.get("new")
-            .and_then(Value::as_str)
-            .is_some_and(|n| seen.contains(n))
-        {
-            out.push((
-                path.clone(),
-                e.get("t").map_or_else(|| "None".to_owned(), py_str),
-            ));
-        }
-        seen.insert(e.get("old").map_or_else(String::new, py_str));
-    }
-    out
-}
-
 /// The cascade and the oscillation - for a unit, only the edits and reversals on its own files (343's rulings).
 pub fn flow_sections(
     root: &Path,
@@ -331,7 +298,7 @@ pub fn flow_sections(
     let log = d.map(|d| log_path(root, &d.file_name().unwrap_or_default().to_string_lossy()));
     let events = log
         .filter(|l| l.is_file())
-        .map_or_else(Vec::new, |l| read_jsonl(&l));
+        .map_or_else(Vec::new, |l| read_jsonl(&l).unwrap_or_default());
     let mine = |p: Option<&Value>| {
         let p = p
             .filter(|v| truthy(Some(v)))
@@ -376,16 +343,21 @@ pub fn flow_sections(
             "the unit's files"
         }
     );
-    let rev: Vec<String> = reversals(&events)
-        .into_iter()
-        .filter(|(p, _)| files.is_empty() || files.iter().any(|f| p.ends_with(f.as_str())))
-        .map(|(p, t)| {
-            format!(
-                "- {p} at {}: an edit put back text an earlier edit replaced",
-                t.chars().skip(11).take(8).collect::<String>()
-            )
-        })
-        .collect();
+    let rev: Vec<String> = reversals(
+        &events
+            .iter()
+            .filter_map(Value::as_object)
+            .collect::<Vec<_>>(),
+    )
+    .into_iter()
+    .filter(|(p, _)| files.is_empty() || files.iter().any(|f| p.ends_with(f.as_str())))
+    .map(|(p, t)| {
+        format!(
+            "- {p} at {}: an edit put back text an earlier edit replaced",
+            t.chars().skip(11).take(8).collect::<String>()
+        )
+    })
+    .collect();
     let rev = if rev.is_empty() {
         format!("- none on {scope} in the event log")
     } else {

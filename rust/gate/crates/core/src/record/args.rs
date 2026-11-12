@@ -75,6 +75,16 @@ impl Parsed {
             .map_or(default, |(_, v)| v.as_str())
     }
 
+    /// Every value given for `name`, in order (argparse's `action="append"`).
+    #[must_use]
+    pub fn all(&self, name: &str) -> Vec<&str> {
+        self.values
+            .iter()
+            .filter(|(k, _)| k == name)
+            .map(|(_, v)| v.as_str())
+            .collect()
+    }
+
     /// The last value given for any of `names` (argparse's flags sharing one `dest`), or `default`.
     #[must_use]
     pub fn last_of<'a>(&'a self, names: &[&str], default: &'a str) -> &'a str {

@@ -16,7 +16,7 @@
 //!                                                      (the page-session runner, at each session's end)
 //! ledger-owed ... --refuse                             exit 1 while any is unanswered (the push)
 //! ledger-owed --write-plan-reviews                     append the row of each owed plan review that recorded its verdict (385 T72)
-//! ledger-passes                                        the settled passes as JSON (`feature_report.py`'s reading)
+//! ledger-passes                                        the settled passes as JSON (what `measure feature-report` costs, in process)
 //! ```
 //!
 //! Escape at the push: `LEDGER_ROWS_OK="<reason>"` in sync-with-main's environment, recorded in the bypass log.
@@ -232,8 +232,9 @@ pub fn cli(args: &[String], env: &Env) -> Reply {
     run(&opts, env).unwrap_or_else(|why| raised(String::new(), "ledger-owed", &why))
 }
 
-/// `ledger-passes`: `settled(distinct(load_passes(default_log())), kept_file=_kept_file())` as JSON, the passes `feature_report.py`
-/// costs (it imported `ledger_owed` for them).
+/// `ledger-passes`: `settled(distinct(load_passes(default_log())), kept_file=_kept_file())` as JSON - the passes `feature_report.py`
+/// read by this command until feature 449 T119 ported the report, which now asks [`passes`] in process; the command stays, the one
+/// view of the settled passes from the shell.
 #[must_use]
 pub fn passes_cli(args: &[String], env: &Env) -> Reply {
     if !args.is_empty() {
@@ -243,16 +244,7 @@ pub fn passes_cli(args: &[String], env: &Env) -> Reply {
             2,
         );
     }
-    let passes = settle::load_passes(&env.default_log())
-        .map(|ps| settle::distinct(&ps))
-        .and_then(|ps| {
-            settle::settled(
-                &ps,
-                Path::new(&env.default_root()),
-                env.kept_file().as_deref(),
-            )
-        });
-    match passes {
+    match passes(env) {
         Ok(ps) => reply(
             format!(
                 "{}\n",
@@ -263,6 +255,24 @@ pub fn passes_cli(args: &[String], env: &Env) -> Reply {
         ),
         Err(why) => raised(String::new(), "ledger-passes", &why),
     }
+}
+
+/// The settled passes `ledger-passes` prints, which `l7r-gate measure feature-report` costs in process (feature 449 T119, where the
+/// Python ran this command).
+///
+/// # Errors
+///
+/// Where the pass log or a transcript cannot be read, as the command's raise.
+pub fn passes(env: &Env) -> Result<Vec<Pass>, String> {
+    settle::load_passes(&env.default_log())
+        .map(|ps| settle::distinct(&ps))
+        .and_then(|ps| {
+            settle::settled(
+                &ps,
+                Path::new(&env.default_root()),
+                env.kept_file().as_deref(),
+            )
+        })
 }
 
 /// The command line, read.

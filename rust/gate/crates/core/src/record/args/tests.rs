@@ -36,6 +36,7 @@ fn flags_values_and_pairs_are_read() {
     )
     .unwrap();
     assert_eq!(p.text("--root", "."), "b");
+    assert_eq!(p.all("--root"), ["a", "b"]);
     assert_eq!(p.text("--missing", "d"), "d");
     assert!(p.on("--slugs") && !p.on("--other"));
     assert_eq!(p.pair("--between"), Some(("x", "y")));

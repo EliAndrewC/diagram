@@ -570,6 +570,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T119 (T83's third slice, the measure chain, `ask:449-T83-scope`)": {
+   "sha256": "cdda01c44dd8b0f31d367ce6f2d1f971860144044541a6cfcf896faa81ba753b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T119 Approach (checklist part A)": {
+   "sha256": "17af1cf24c04111120ee25c3de5320953229b0a1f47cdc53948804afd12065a6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7549,6 +7561,97 @@
      "why": "FR-001, FR-003 and the GM's standing approval to delete ported Python. Note: the census names the kinds of files it searched but not the pattern it grepped, and file kinds outside the listed ones and directories (*.toml, *.yml, .specify/ non-shell non-md files) are not searched. This is not a narrowing, but the search space is not fully stated."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T119 (T83's third slice, the measure chain, `ask:449-T83-scope`)",
+    "### T119 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T119-one-reader",
+     "summary": "The event-log reader lives in the guard beside its writer (read_jsonl, from_transcript, reversals), reusing its helpers; the arbiter bundle's own read_jsonl/reversals now call these; py_str and value_repr move into the guard's pyjson with core re-exporting them.",
+     "class": "within",
+     "why": "ask:449-T83-scope places event_log.py in T119 'reusing the event-log reader the Rust already has'; one reader is what the ruling asks, and consolidating the arbiter's duplicate serves it. No output changes."
+    },
+    {
+     "id": "T119-ledger-in-process",
+     "summary": "feature_report reads the review passes in-process (ledger_passes::passes) instead of running `reviews ledger-passes` by command; the command stays for its other readers.",
+     "class": "within",
+     "why": "Both sides are Rust after T117; ask:449-T83-scope and FR-003 prefer no door between ported modules, and no piece runs both implementations. Keeping the command for its other callers removes nothing."
+    },
+    {
+     "id": "T119-both-verbs-and-record",
+     "summary": "Both event_log.py verbs (hook, from-transcript) are ported though nothing runs them; hook writes through a new guard function `record`, so a hook payload that is no JSON object writes no line, as the Python wrote none, where the guard's writer had written one.",
+     "class": "within",
+     "why": "FR-001 replaces every Python file, so porting both verbs rather than dropping one is the literal reading. The no-line behavior on a non-object payload moves the Rust TO the Python's behavior, which is what FR-002 requires; it carries no exception. Read either way the block's 'the hook's own path' may mean (a new function for the ported verb, or the live hook's path), the change is parity with the Python, and the block reports make hooks-test HOOKS_ALL=1 green on 54 suites, so no held guard-suite case was changed."
+    },
+    {
+     "id": "T119-callers",
+     "summary": "The callers repointed are the Makefile's feature-report and where-time recipes ('##' text and F= checks unchanged); no inline python3 -c recipe calls these modules, so none of T83's make-audit recipes goes with this slice.",
+     "class": "within",
+     "why": "ask:449-T83-scope: every by-command caller switches in the same cut, and each make-audit recipe goes with the slice whose module it calls or with T121. The census at the cut (git grep of the four names, observed 2026-11-12) finds only comments, docs and measurement prose, so no caller is left on the Python."
+    },
+    {
+     "id": "T119-385-harness-deleted",
+     "summary": "specs/385-approach-checklist/where_time.py, which imported feature_report, is deleted unported as a past harness.",
+     "class": "within",
+     "why": "FR-001 already settles it: a file under specs/ 'that nothing runs is deleted and not ported, the GM 2026-11-09: \"I don't think we need to port the past feature harnesses if those are not still used.\"' The 'nothing runs it' premise is measured (git grep over Makefile, scripts/, rust/, .claude/ and every specs/*/measurements*.json command, observed 2026-11-12) and corroborated by the repo-wide census of the name at the cut. Were it classed narrowing it would be LEGITIMATE on the GM's own words."
+    },
+    {
+     "id": "T119-failure-parity",
+     "summary": "Wherever the Python raised, the Rust fails too, pinned by 40 differential cases with both sides failing.",
+     "class": "within",
+     "why": "FR-002 parity of verdict and exit; ask:449-usage-text leaves an uncaught traceback's text unbound while holding exit status and stdout, which is what these cases compare."
+    },
+    {
+     "id": "T119-N1-N2",
+     "summary": "Differential normalizations N1 (stderr from 'Traceback' on) and N2 (argparse usage text).",
+     "class": "within",
+     "why": "Both are exactly what ask:449-usage-text unbinds: an uncaught traceback's text, and the stderr argparse itself generates on a malformed invocation (exit 2 and empty stdout still held). Premise recorded: the 8 usage-error cases are taken to be argparse-generated, not a hand-written parser.error message or a usage line a caller reads, which the ruling keeps bound; the block does not say so explicitly."
+    },
+    {
+     "id": "T119-N3-N5",
+     "summary": "Normalizations N3 (the line 'This report took X s') and N5 (the hook's own time in a written line).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Byte equality on a wall-clock time is physically impossible: two runs of the Python itself do not match there. Only the time value is normalized; the line's presence and every other byte stay compared, so FR-002's purpose (the port gives the same answers) is intact."
+    },
+    {
+     "id": "T119-N4-tie-order",
+     "summary": "Normalization N4: the order of where-time rows that tie on their sort key; the Python left it to its string hash (two PYTHONHASHSEED values gave two orders), the Rust keeps the order first booked.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "There is no single Python output to hold the Rust to: the Python's order was observed to move with the hash seed, so matching it byte for byte is physically impossible. The rows themselves stay compared; only the order among rows equal on the sort key is normalized, which carries no information the report's reader relies on. A deterministic order is the only way to have one output at all."
+    },
+    {
+     "id": "T119-N6",
+     "summary": "Normalization N6: the Makefile's path in make's own error line.",
+     "class": "within",
+     "why": "An artifact of the harness comparing HEAD's Makefile at one path with this clone's at another; it is make's text, not an output of the ported tool."
+    },
+    {
+     "id": "T119-unreached-divergences",
+     "summary": "Disclosed divergences no case reaches: non-ASCII digits in an int or float, NaN in JSON, unhashable or mixed-type event fields, a list-valued t on a lone event, which agent wins when one tool id is in two subagents' transcripts, non-UTF-8 git output (both fail, at different points), and -h exiting 2.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated by item. (a) -h exiting 2: ask:449-usage-text binds --help only where a kept test or suite case holds it, and none is reported to. (b) Which agent wins on a duplicated tool id: the Python's answer is its set order, nondeterministic, so no single Python output exists to match. (c) Non-UTF-8 git output: both fail, so the verdict is held. (d) Non-ASCII digits, NaN, unhashable or mixed-type fields, a list-valued t: inputs no held case and none of the real features, logs and transcripts in the 182-case differential produced; FR-002 binds 'every case its tests and its suites hold', and the list is disclosed rather than excluded from a held case. None of the four guts FR-002's purpose on the logs this tooling actually reads."
+    },
+    {
+     "id": "T119-measurements-no-rewrite",
+     "summary": "No recorded measurement is rewritten: the feature-report entries of specs/374 and specs/375 run make feature-report and match the differential; sc005-372, cascade-threshold and sc006-replay fail alike before and after on a transcript no longer on disk; event-hook-cost's command runs nothing since T012, only its method naming event_log.py.",
+     "class": "within",
+     "why": "FR-001's rewrite clause binds a measurement's command that runs a .py, python3 -c/-m, or describes a python3 run in prose; these commands go through make and name no deleted file, and event-hook-cost's mention is in its method, history. The three entries that fail on a missing transcript fail identically before and after, so this cut changes nothing about them (measured: git grep of the four names over every specs/*/measurements*.json, observed 2026-11-12)."
+    },
+    {
+     "id": "T119-one-cut",
+     "summary": "event_log.py, task_phases.py, feature_report.py and where_time.py are ported and deleted in one cut, after the differential, with the callers repointed.",
+     "class": "within",
+     "why": "ask:449-T83-scope names T119 as one slice holding the measure chain; its 'then ... then' orders the work inside that slice, the five slices being the separate tasks. Deletion after the port passes is FR-003 and the GM's standing approval to delete ported Python; the differential was re-run after the deletion, 0 differing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13097,6 +13200,95 @@
      "summary": "speckit-todo.py deleted in the same cut after a census of callers; test stubs replaced by real .git/active-task files and status lines",
      "class": "within",
      "why": "FR-001, FR-003 and the GM's standing approval to delete ported Python. Note: the census names the kinds of files it searched but not the pattern it grepped, and file kinds outside the listed ones and directories (*.toml, *.yml, .specify/ non-shell non-md files) are not searched. This is not a narrowing, but the search space is not fully stated."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T119": {
+   "section_sha256": "5e5751ae8516b89497d3cdc31064502fba6eb98c8774feb0d91d48e394c9786a",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T119-one-reader",
+     "summary": "The event-log reader lives in the guard beside its writer (read_jsonl, from_transcript, reversals), reusing its helpers; the arbiter bundle's own read_jsonl/reversals now call these; py_str and value_repr move into the guard's pyjson with core re-exporting them.",
+     "class": "within",
+     "why": "ask:449-T83-scope places event_log.py in T119 'reusing the event-log reader the Rust already has'; one reader is what the ruling asks, and consolidating the arbiter's duplicate serves it. No output changes."
+    },
+    {
+     "id": "T119-ledger-in-process",
+     "summary": "feature_report reads the review passes in-process (ledger_passes::passes) instead of running `reviews ledger-passes` by command; the command stays for its other readers.",
+     "class": "within",
+     "why": "Both sides are Rust after T117; ask:449-T83-scope and FR-003 prefer no door between ported modules, and no piece runs both implementations. Keeping the command for its other callers removes nothing."
+    },
+    {
+     "id": "T119-both-verbs-and-record",
+     "summary": "Both event_log.py verbs (hook, from-transcript) are ported though nothing runs them; hook writes through a new guard function `record`, so a hook payload that is no JSON object writes no line, as the Python wrote none, where the guard's writer had written one.",
+     "class": "within",
+     "why": "FR-001 replaces every Python file, so porting both verbs rather than dropping one is the literal reading. The no-line behavior on a non-object payload moves the Rust TO the Python's behavior, which is what FR-002 requires; it carries no exception. Read either way the block's 'the hook's own path' may mean (a new function for the ported verb, or the live hook's path), the change is parity with the Python, and the block reports make hooks-test HOOKS_ALL=1 green on 54 suites, so no held guard-suite case was changed."
+    },
+    {
+     "id": "T119-callers",
+     "summary": "The callers repointed are the Makefile's feature-report and where-time recipes ('##' text and F= checks unchanged); no inline python3 -c recipe calls these modules, so none of T83's make-audit recipes goes with this slice.",
+     "class": "within",
+     "why": "ask:449-T83-scope: every by-command caller switches in the same cut, and each make-audit recipe goes with the slice whose module it calls or with T121. The census at the cut (git grep of the four names, observed 2026-11-12) finds only comments, docs and measurement prose, so no caller is left on the Python."
+    },
+    {
+     "id": "T119-385-harness-deleted",
+     "summary": "specs/385-approach-checklist/where_time.py, which imported feature_report, is deleted unported as a past harness.",
+     "class": "within",
+     "why": "FR-001 already settles it: a file under specs/ 'that nothing runs is deleted and not ported, the GM 2026-11-09: \"I don't think we need to port the past feature harnesses if those are not still used.\"' The 'nothing runs it' premise is measured (git grep over Makefile, scripts/, rust/, .claude/ and every specs/*/measurements*.json command, observed 2026-11-12) and corroborated by the repo-wide census of the name at the cut. Were it classed narrowing it would be LEGITIMATE on the GM's own words."
+    },
+    {
+     "id": "T119-failure-parity",
+     "summary": "Wherever the Python raised, the Rust fails too, pinned by 40 differential cases with both sides failing.",
+     "class": "within",
+     "why": "FR-002 parity of verdict and exit; ask:449-usage-text leaves an uncaught traceback's text unbound while holding exit status and stdout, which is what these cases compare."
+    },
+    {
+     "id": "T119-N1-N2",
+     "summary": "Differential normalizations N1 (stderr from 'Traceback' on) and N2 (argparse usage text).",
+     "class": "within",
+     "why": "Both are exactly what ask:449-usage-text unbinds: an uncaught traceback's text, and the stderr argparse itself generates on a malformed invocation (exit 2 and empty stdout still held). Premise recorded: the 8 usage-error cases are taken to be argparse-generated, not a hand-written parser.error message or a usage line a caller reads, which the ruling keeps bound; the block does not say so explicitly."
+    },
+    {
+     "id": "T119-N3-N5",
+     "summary": "Normalizations N3 (the line 'This report took X s') and N5 (the hook's own time in a written line).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Byte equality on a wall-clock time is physically impossible: two runs of the Python itself do not match there. Only the time value is normalized; the line's presence and every other byte stay compared, so FR-002's purpose (the port gives the same answers) is intact."
+    },
+    {
+     "id": "T119-N4-tie-order",
+     "summary": "Normalization N4: the order of where-time rows that tie on their sort key; the Python left it to its string hash (two PYTHONHASHSEED values gave two orders), the Rust keeps the order first booked.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "There is no single Python output to hold the Rust to: the Python's order was observed to move with the hash seed, so matching it byte for byte is physically impossible. The rows themselves stay compared; only the order among rows equal on the sort key is normalized, which carries no information the report's reader relies on. A deterministic order is the only way to have one output at all."
+    },
+    {
+     "id": "T119-N6",
+     "summary": "Normalization N6: the Makefile's path in make's own error line.",
+     "class": "within",
+     "why": "An artifact of the harness comparing HEAD's Makefile at one path with this clone's at another; it is make's text, not an output of the ported tool."
+    },
+    {
+     "id": "T119-unreached-divergences",
+     "summary": "Disclosed divergences no case reaches: non-ASCII digits in an int or float, NaN in JSON, unhashable or mixed-type event fields, a list-valued t on a lone event, which agent wins when one tool id is in two subagents' transcripts, non-UTF-8 git output (both fail, at different points), and -h exiting 2.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated by item. (a) -h exiting 2: ask:449-usage-text binds --help only where a kept test or suite case holds it, and none is reported to. (b) Which agent wins on a duplicated tool id: the Python's answer is its set order, nondeterministic, so no single Python output exists to match. (c) Non-UTF-8 git output: both fail, so the verdict is held. (d) Non-ASCII digits, NaN, unhashable or mixed-type fields, a list-valued t: inputs no held case and none of the real features, logs and transcripts in the 182-case differential produced; FR-002 binds 'every case its tests and its suites hold', and the list is disclosed rather than excluded from a held case. None of the four guts FR-002's purpose on the logs this tooling actually reads."
+    },
+    {
+     "id": "T119-measurements-no-rewrite",
+     "summary": "No recorded measurement is rewritten: the feature-report entries of specs/374 and specs/375 run make feature-report and match the differential; sc005-372, cascade-threshold and sc006-replay fail alike before and after on a transcript no longer on disk; event-hook-cost's command runs nothing since T012, only its method naming event_log.py.",
+     "class": "within",
+     "why": "FR-001's rewrite clause binds a measurement's command that runs a .py, python3 -c/-m, or describes a python3 run in prose; these commands go through make and name no deleted file, and event-hook-cost's mention is in its method, history. The three entries that fail on a missing transcript fail identically before and after, so this cut changes nothing about them (measured: git grep of the four names over every specs/*/measurements*.json, observed 2026-11-12)."
+    },
+    {
+     "id": "T119-one-cut",
+     "summary": "event_log.py, task_phases.py, feature_report.py and where_time.py are ported and deleted in one cut, after the differential, with the callers repointed.",
+     "class": "within",
+     "why": "ask:449-T83-scope names T119 as one slice holding the measure chain; its 'then ... then' orders the work inside that slice, the five slices being the separate tasks. Deletion after the port passes is FR-003 and the GM's standing approval to delete ported Python; the differential was re-run after the deletion, 0 differing."
     }
    ],
    "verdict": "CLEAR"

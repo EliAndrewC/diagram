@@ -467,29 +467,35 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-### T119 (<why: the finding or measurement that files it>)
+### T119 (T83's third slice, the measure chain, `ask:449-T83-scope`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `event_log.py`, `task_phases.py`, `feature_report.py` and `where_time.py` ported with no door: the event-log reader beside its writer in the guard (`rust/guard/src/guards/event_log_hooks/read.rs`: `read_jsonl`, `from_transcript`, `reversals`), the report, the task phases and the time split in the gate's `measure` crate (`measure/events.rs`, `task_phases.rs`, `feature_report.rs` with `sources.rs` and `tables.rs`, `where_time.rs`, `event_log.rs`) as `l7r-gate measure feature-report`, `where-time` and `event-log hook|from-transcript`, the callers repointed and the four `.py`, with the unported harness `specs/385-approach-checklist/where_time.py`, deleted in the same cut.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-T83-scope`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - One event-log reader, as the ruling asks: the reader lives in the guard beside the writer, reusing its `line`, `typed_prompt`, `verdict_of`, `log_path` and `common_git_dir`, since the guard cannot build on the gate; the arbiter's bundle, which held its own `read_jsonl` and `reversals`, now calls these. `py_str` and `value_repr` moved into the guard's `pyjson`, `core` re-exporting them.
+   - The report reads the review passes in-process (`ledger_passes::passes`), where T117's interim ran `reviews ledger-passes` by command; the command stays for its other readers.
+   - Both of `event_log.py`'s verbs are ported (`hook` and `from-transcript`), though nothing runs them, so no command vanishes unannounced. `hook` writes through a new guard function, `record`, the hook's own path: a hook payload that is no JSON object now writes no line, as the Python's raised and its hook wrote none, where the guard's writer had written one.
+   - The callers: the Makefile's `feature-report` and `where-time` recipes (their `##` text and `F=` checks unchanged). No inline `python3 -c` recipe of the Makefile calls these modules, so none goes with this slice.
+   - `specs/385-approach-checklist/where_time.py`, which imported `feature_report`, is deleted unported as a past harness under the GM's 2026-11-09 rule: nothing in the Makefile, `scripts/`, `rust/`, `.claude/` or any `specs/*/measurements*.json` command ran it (observed 2026-11-12, method: `git grep` over those).
+   - Failure parity: wherever the Python raised the Rust fails too, pinned by 40 differential cases with both sides failing (a log line that is no object, an event without `ev`, an unparseable time, a bad `ms`, a `tasks.md`, `spec.md` or `plan.md` not UTF-8, a run-log record that is a list, bad task-start rows, a pass log not UTF-8, a spec "directory" that is a file under `--write`) (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s3/diff.py`).
+   - The same outputs (FR-002): the Python (HEAD's, copied) against the Rust, exit, stdout, stderr and every file written compared, over 15 real features (with SINCE and UNTIL windows, transcript forms and `--write`), `where-time` on 6 features with `--since` and `--by-tick`, `from-transcript` on real session and subagent transcripts, HEAD's Makefile against this clone's (`make feature-report F=374` among them) and scratch trees for every branch: 182 cases, 0 differing, 40 reaching a traceback and 8 a usage error (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s3/diff.py`), and the same 182 re-run after the deletion, 0 differing (observed 2026-11-12, method: the same harness against the copies). Normalizations: N1 stderr from `Traceback` on, N2 usage text (`ask:449-usage-text`), N3 the line `This report took X s`, N4 the order of `where-time` rows that tie on their sort key (tasks never started, or started in one batch in the same second), which the Python left to its string hash, different from run to run (two `PYTHONHASHSEED` values gave two orders), where the Rust keeps the order first booked, N5 the hook's own time in a written line, N6 the Makefile's path in make's own error line. Divergences no case reaches: non-ASCII digits in an `int` or `float`, `NaN` in JSON, unhashable or mixed-type event fields, a list-valued `t` on a lone event, which agent wins when one tool id is in two subagents' transcripts (Python's set order), non-UTF-8 output from git (both fail, at different points), and `-h` exiting 2.
+   - Timing: the Python 347.3 s and the Rust 244.9 s over the final run before the cut, process time with the wrapper (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s3/diff.py`).
+   - The recorded measurements: `specs/374-...`'s `sc003-375-first-three-tasks` and `sc004-375-dispatches-per-row` and `specs/375-...`'s `sc005-one-task` run `make feature-report` commands the cut leaves as they are, the differential matching them; `sc005-372`, `cascade-threshold` and `sc006-replay` run `make feature-report F=372 TRANSCRIPT=<a transcript no longer on disk>`, failing alike before and after; `event-hook-cost`'s command has run nothing since T012 and only its method names `event_log.py` (observed 2026-11-12, method: `git grep` of the four names over every `specs/*/measurements*.json`). None runs a deleted script, so FR-001's rewrite is not owed by this cut.
+   - The census at the cut: provenance comments in the Rust, `dev/phase-2-close.md`, `docs/guards.md` and measurement prose alone (observed 2026-11-12, method: `git grep` of the four names). The checks: `make static` clean on 19 crates, `make rust-test` green (`measure` 96 tests, the guard 556), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check and `ruff check scripts` clean, no file over the bar (observed 2026-11-12, method: those commands).
 
 ### T119 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The measure chain is Rust, one event-log reader, no Python of it left.
+2. **The constraints.** FR-001, FR-002 and FR-003, the ruling `ask:449-T83-scope`.
+3. **Where each comes from.** G: the GM's words in `request.md` and the standing approval to delete ported Python; R: the ruling; O: the differential and the census above.
+4. **Do they describe the world here?** Run on this clone's real event logs, features and transcripts.
+5. **The order.** After T118.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+9. **Done, measured.** The differential's 182 cases, twice, with no difference, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
 ### T120 (<why: the finding or measurement that files it>)
 

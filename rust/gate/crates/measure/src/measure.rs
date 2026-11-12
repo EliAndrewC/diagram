@@ -3,6 +3,9 @@
 
 use std::path::Path;
 
+pub mod event_log;
+pub mod events;
+pub mod feature_report;
 pub mod figures;
 pub mod fresh_tally;
 pub mod gate_costs;
@@ -13,7 +16,9 @@ pub mod probe;
 pub mod push_check_times;
 pub mod review_yield;
 pub mod runstats;
+pub mod task_phases;
 pub mod wave_report;
+pub mod where_time;
 
 pub use l7r_gate_tree::measure::*;
 pub use l7r_gate_trials::measure::popup_rounds;
@@ -40,9 +45,18 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("push-check-times") => push_check_times::cli(rest, root, root),
         Some("depiction-replay") => depiction_replay::cli(rest, root),
         Some("model-trial") => model_trial::cli(rest, &model_trial::live(&home(), root)),
+        // the measure chain (feature 449 T119): the review passes are costed from the process's own directory and `$HOME`, as the
+        // Python's `l7r-gate reviews ledger-passes` run read them
+        Some("feature-report") => feature_report::cli(
+            rest,
+            &l7r_gate_reviews::reviews::ledger_passes::Env::of_process(),
+            Path::new(events::CLONES),
+        ),
+        Some("where-time") => where_time::cli(rest, &home().join(".claude/projects"), Path::new(events::CLONES)),
+        Some("event-log") => event_log::cli(rest, &mut std::io::stdin()),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay\n"
+            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log\n"
                 .to_owned(),
             2,
         ),
@@ -87,5 +101,8 @@ mod tests {
         assert_eq!(ask(&["wave-report", "--root", &there]), 1);
         assert_eq!(ask(&["subagent-cache", "--root", &there]), 0);
         assert_eq!(ask(&["fresh-tally", "--log", &there]), 0);
+        assert_eq!(ask(&["feature-report"]), 2);
+        assert_eq!(ask(&["where-time"]), 2);
+        assert_eq!(ask(&["event-log"]), 2);
     }
 }

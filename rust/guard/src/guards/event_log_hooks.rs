@@ -1,7 +1,19 @@
 //! `event-log-hooks` (feature 375 FR-008; ported from `scripts/hooks/event-log-hooks.sh` and the hook half of
 //! `scripts/measure/event_log.py`, feature 449 T012): ONE LINE A HOOK EVENT into the feature's event log, so where a feature's time
-//! went is counted, not remembered (`make feature-report` reads it). It never refuses and never prints. The line's fields, their
-//! order and their reasons are `event_log.py`'s docstring, kept until phase 3 ports its other half.
+//! went is counted, not remembered (`make feature-report` reads it). It never refuses and never prints: a hook that adds a line to
+//! every tool call must not be able to stop one. Its reading half - a log's lines, a session transcript turned into the same events,
+//! the reversals - is `read.rs`, ported from `event_log.py`'s other half by T119 (`ask:449-T83-scope`), which deleted the `.py`.
+//!
+//! WHY (the GM, 2026-10-10): *"maybe the actual solution here is that we have hooks built into our tooling which will save off
+//! timestamps that allow us to mechanically and trivially calculate these numbers"*. THE LINE (feature 375 plan D7): one JSON line a
+//! `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` and Stop payload, to `<git common dir>/l7r-events/<feature
+//! dir>.jsonl` (`_unassigned.jsonl` with no feature). Fields: `t` (UTC), `sid`, `ev`, and where they apply `tool`, `id` (`tool_use_id`),
+//! `cat` (`category`), `make` (a Bash call's make target) and `task` (the task a tick, task-start or decide names), `path`, `old`/`new`
+//! (digests of an Edit's strings - the reversal wire) and `heading`, `agent`/`aid`/`manifest`/`unit`/`waiver` (an agent's type, id, the
+//! MANIFEST its prompt names, its unit, a round on the GM's waiver), `by` (the subagent whose tool call it is, feature 385 amendment 4),
+//! `ms` (`PostToolUse`'s duration), `gm` (a prompt the GM typed, not a notification), `verdict` (a returned agent's verdict word, or
+//! `clean` / `findings`). The gap from one `PostToolUse` to the next `PreToolUse` is the model's own time. A clone's git dir outlives its
+//! sessions and any compaction, and the report reads every clone's log for the feature.
 //!
 //! Plan T012's decisions: (a) the line, the log's path and the append are in-process; (b) the reversal test runs here, and the
 //! trigger it owes is recorded by `hm_arbiter.py`, asked by path; (c) the event is the payload's; (d) the digests are SHA-1's.
@@ -421,6 +433,15 @@ fn tool_fields(out: &mut Map<String, Value>, tool: &str, ti: &Map<String, Value>
     }
 }
 
+/// Whether a check type has a round cap: the record checks, the claims check and the review checks (`feature_report.tripwires`' `capped`,
+/// feature 449 T119).
+#[must_use]
+pub fn round_capped(agent_type: &str) -> bool {
+    agent_type == "impl-drift"
+        || RECORD_CHECKS.contains(&agent_type)
+        || REVIEW_CHECKS.contains(&agent_type)
+}
+
 /// The working tree holding `cwd`, walked up to its `.git` (`clone_root`).
 fn clone_root(cwd: &Path) -> Option<PathBuf> {
     let p = std::fs::canonicalize(cwd).unwrap_or_else(|_| cwd.to_path_buf());
@@ -430,7 +451,8 @@ fn clone_root(cwd: &Path) -> Option<PathBuf> {
 }
 
 /// The git dir a worktree shares with its clone (`common_git_dir`).
-fn common_git_dir(root: &Path) -> PathBuf {
+#[must_use]
+pub fn common_git_dir(root: &Path) -> PathBuf {
     let g = root.join(".git");
     let Some(dir) = std::fs::read_to_string(&g)
         .ok()
@@ -555,13 +577,23 @@ pub(crate) fn append(
     Some(path)
 }
 
+/// The payload's line appended now, from the process's directory and environment; nothing for a payload that is no object, which the
+/// Python's `payload.get` raised on and its hook swallowed (`event_log.py hook`, feature 449 T119).
+pub fn record(payload: &Value) {
+    if payload.is_object() {
+        let here = std::env::current_dir().unwrap_or_default();
+        let _ = append(payload, &now_stamp(SystemTime::now()), &here, &|k| {
+            std::env::var(k).ok()
+        });
+    }
+}
+
 fn decide(event: &Event, _session: &Session) -> Vec<Answer> {
-    let here = std::env::current_dir().unwrap_or_default();
-    let _ = append(&event.input, &now_stamp(SystemTime::now()), &here, &|k| {
-        std::env::var(k).ok()
-    });
+    record(&event.input);
     Vec::new()
 }
+
+pub mod read;
 
 #[cfg(test)]
 mod tests;

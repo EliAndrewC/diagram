@@ -462,7 +462,7 @@ tool-yield:     ## [project] every tool measured: how often it runs, how often i
 
 where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115)   F=<feature> [SINCE=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/where_time.py" "$(F)" $(if $(SINCE),--since "$(SINCE)",) $(if $(filter tick,$(BY)),--by-tick,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure where-time "$(F)" $(if $(SINCE),--since "$(SINCE)",) $(if $(filter tick,$(BY)),--by-tick,)
 
 set-down: export SET_DOWN_WHY = $(WHY)
 set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70); refused while an open task's part B has no arbiter ruling since (405), or while the 7-day usage is under the weekly soft cap (a goal's, where one is still armed) unless the arbiter ruled a set-down ask (GM 2026-10-23, 10-24): F=385 WHY="awaiting the GM on the cohort trend" [SET_DOWN_OK="<reason>"]
@@ -660,7 +660,7 @@ feature-report: ## [project] where a feature's time and dispatches went, as a ta
 ##  SINCE= UNTIL=      ISO UTC bounds on the events read (a transcript holding more than this feature)
 ##  WRITE=1            also write specs/NNN-*/report.md, which every closing route asks for
 	@if [ -z "$(F)" ]; then printf 'make feature-report: F=<feature number> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/feature_report.py" --root "$$(git rev-parse --show-toplevel)" "$(F)" $(foreach t,$(TRANSCRIPT),--transcript "$(t)") $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(WRITE),--write,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure feature-report --root "$$(git rev-parse --show-toplevel)" "$(F)" $(foreach t,$(TRANSCRIPT),--transcript "$(t)") $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(WRITE),--write,)
 
 agent-sync:     ## [project] write into each agent file the text every dispatch of that check shares (the modal guidelines), from its source (feature 383 amendment 6)
 	@python3 scripts/reviews/agent_sync.py

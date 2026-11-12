@@ -267,44 +267,9 @@ pub fn head(text: &str, n: usize) -> &str {
     text.char_indices().nth(n).map_or(text, |(i, _)| &text[..i])
 }
 
-/// A JSON value as Python's `str()` prints what `json.loads` made of it.
-pub fn py_str(value: &serde_json::Value) -> String {
-    use serde_json::Value;
-    match value {
-        Value::Null => "None".to_owned(),
-        Value::Bool(b) => if *b { "True" } else { "False" }.to_owned(),
-        Value::String(s) => s.clone(),
-        Value::Number(n) => n
-            .as_f64()
-            .filter(|_| n.is_f64())
-            .map_or_else(|| n.to_string(), l7r_guard::shared::pyjson::py_float),
-        other => py_value_repr(other),
-    }
-}
-
-/// `repr()` of what `json.loads` made of a value: a list or dict as Python prints one.
-pub fn py_value_repr(value: &serde_json::Value) -> String {
-    use serde_json::Value;
-    match value {
-        Value::String(s) => py_repr(s),
-        Value::Array(items) => format!(
-            "[{}]",
-            items
-                .iter()
-                .map(py_value_repr)
-                .collect::<Vec<_>>()
-                .join(", ")
-        ),
-        Value::Object(map) => format!(
-            "{{{}}}",
-            map.iter()
-                .map(|(k, v)| format!("{}: {}", py_repr(k), py_value_repr(v)))
-                .collect::<Vec<_>>()
-                .join(", ")
-        ),
-        other => py_str(other),
-    }
-}
+/// A JSON value as Python's `str()` and `repr()` print what `json.loads` made of it: the guard's `pyjson` since feature 449 T119, where the
+/// event-log reader the guard and the gate share names an edit's path by it (`ask:449-T83-scope`, one implementation).
+pub use l7r_guard::shared::pyjson::py_str;
 
 /// A string as Python's `repr` prints it: the guard's `py_text::repr` since feature 449 T83, where the review ledger's lint names a
 /// cell by its repr and the guard crate cannot reach the gate's (`ask:449-T83-scope`, one implementation).
