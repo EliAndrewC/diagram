@@ -362,8 +362,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T110 rustfmt kept per crate: `rust format --check` keeps nothing, all 19 crates re-checked on every make static, 2.1 s of a core edit's 29 s and of an idle run's 4.6 s (2026-11-11) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: rustfmt's check kept per crate: 2.3 s to 0.16 s idle, 0.78 s after a core edit
-- [ ] T111 A coverage pass records the crate's test result: make rust-test then make static run every owed crate's tests twice, plain and under coverage, and no code depends on cfg(coverage) (2026-11-11) (the GM 2026-11-11)
+- [x] T111 A coverage pass records the crate's test result: make rust-test then make static run every owed crate's tests twice, plain and under coverage, and no code depends on cfg(coverage) (2026-11-11) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: a coverage pass records the test result: rust-test after a core edit's static 18.3 s to 4.2 s
 - [ ] T112 Comment-insensitive keys: a comment-only Rust edit moves every kept key it reaches, a core comment rerunning 29 s of make static that no check's verdict depends on (2026-11-11) (the GM 2026-11-11)
       research: rendering
 - [ ] T113 The dependents' lint keyed on a crate's public interface: after a core edit the 16 crates built on it re-lint for 8.5 s of clippy's 10.6 s, though their lint changes only with core's interface; not exact, its design reviewed first (2026-11-11) (the GM 2026-11-11)
