@@ -2569,3 +2569,37 @@ censuses empty (work breakdown 8, FR-010).
 4. **How does the work grow?** With the record's pages over the cores.
 5. **What did the before and after show, and under what conditions?** A few runs each on a loaded host, read as evidence.
 6. **Did any map move?** No: no engine code changes.
+<!-- plan-archive: archived 2026-11-12 -->
+### T115 (the full hook run's two longest suites, FR-012)
+
+- **Approach**: the work under the two suites goes side by side: the record's pages parsed across the cores before `Record::of` reads them (`warm` in `rust/gate/crates/core/src/record/units.rs`), which each record gate of the entry-gate suite runs twice, and the push's checks run at once, their output shown in the table's order (`run_checks` in `rust/gate/crates/cohort/src/push.rs`), which each of the sync-with-main suite's pushes runs.
+
+   **Decisions** (FR-012, SC-007):
+   - Where the entry-gate suite's time went: a clone of the tree and five runs of the record gate, each about 2 s, its `record-owed --unanswered` 1.45-1.51 s with nothing changed and 1.70-1.85 s with one page edited, parsing every one of the record's 1,652 pages on one core, and two runs of its answer step, 3.9 s (observed 2026-11-12, method: the suite under `bash -x` with `EPOCHREALTIME` in `PS4`, the gaps summed by line, and `date +%s.%N` around `record-owed`). The parses are kept by text, so the merge base and the tree share them; the table was locked while a page parsed, so the lock is now taken only to look up and to keep, and every page is parsed into it side by side before the record is read in order, which reads the same parses in the same order.
+   - Where a push's time went: `push-checks` was 0.82 s of a fixture push's 1.33 s, its rows one process after another, each reading the clone and writing nothing another row reads (the two memo presets and the ledger check each keep a file of their own, by an atomic rename) (observed 2026-11-12, method: T106's trace driver on one direct push, and each row's writes read in its script). The rows now start at once; then, in the table's order, each row's output is shown and the first refusal ends the run with the shell's line as before. A row after a refusal ran, but shows nothing and keeps nothing (a self-test after it is not kept), and a row's stdout is shown before its stderr, where they could interleave.
+   - The same outputs: `record-owed` with no flags, `--unanswered` and `--slugs`, on an empty delta and with a page edited, byte-identical between the old binary and the new on this clone (observed 2026-11-12, method: each run into a file from both trees' binaries against this clone, `cmp`). The sync-with-main suite's 138 checks and the entry-gate suite's 13 pass.
+   - Measured the same way before and after (SC-007), on a scratch clone of main (T114 in) and this clone. `record-owed --unanswered` with a page edited took 1.71-1.74 s before and 1.21-1.23 s after (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t115/ab.sh`, the two trees alternated, `date +%s.%N` around each, at loads of 4-8). `push-checks` on this clone took 6.6-6.7 s before and 5.0-5.3 s after, five runs each (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t115/ab.sh`, the two trees alternated, `date +%s.%N` around each, at loads of 4-8). The sync-with-main suite alone took 10.3 s and 11.0 s before, 9.2 s and 9.7 s after (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t115/ab.sh`, the two trees alternated, `date +%s.%N` around each, at loads of 4-8). The entry-gate suite alone took 17.8 s and 19.3 s before, 17.9 s and 13.4 s after (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t115/ab.sh`, the two trees alternated, `date +%s.%N` around each, at loads of 4-8). Inside the full hook run (`make hooks-test HOOKS_ALL=1`), sync-with-main took 51.9 s and 52.9 s before, 49.1 s and 48.5 s after, and entry-gate 47.8 s and 47.0 s before, 43.0 s and 44.3 s after (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t115/ab.sh`, the two trees alternated, `date +%s.%N` around each, at loads of 4-8).
+   - What did not move: the full hook run itself, 64.8 s and 64.4 s before, 64.6 s and 64.2 s after (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t115/ab.sh`, the two trees alternated). It runs eight suites at a time and is not bound by the cores: 762% of 22 cores' 2,200%, its kernel time 243 s against 223 s of user time, and twelve suites at a time took 72.8 s, sixteen 76.3 s, against 64.1 s at eight (observed 2026-11-12, method: `/usr/bin/time` around `make hooks-test HOOKS_ALL=1` with `HOOKS_JOBS` 12, 16 and 8). The sync-with-main suite alone spent 38 s of user and 38 s of kernel time across its parts, the entry-gate suite 14 s and 6 s (observed 2026-11-12, method: `/usr/bin/time` around each). So the run waits on something the suites share in the kernel, which their wall time does not show; it is left measured, a candidate for the GM, not changed here. The wrapper `l7r-gate.sh` costs 18 ms a call with the binary's start, 4 ms of it its staleness walk, so it is not it (observed 2026-11-12, method: twenty no-op calls timed).
+   - The tests: a refusal's shell line is the run's verdict and a self-test after it keeps nothing (`the_runner_stops_at_the_first_refusal_with_the_shell_s_line`); the record's units unchanged in every core and owed test; the two suites green.
+
+### T115 Approach (checklist part A)
+
+1. **The goal, in the world.** The two longest hook suites, and what they run on every push, take less time.
+2. **The constraints.** FR-012 and SC-007: every output and verdict held.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the traces, the timings and the output comparison above.
+4. **Do they describe the world here?** Measured on this clone and a scratch clone of main.
+5. **The order.** After T114.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The timings above.
+10. **Before moving a constant.** None moved; eight suites at a time kept, measured above.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** The record's pages parsed on one core, and a push's checks one after another.
+2. **Does the change remove work, or only move it?** Moves it onto idle cores: the same parses and checks, side by side.
+3. **What do you expect it to save, and why?** The suites' and a push's waiting, measured above; not the full run's, which is bound elsewhere.
+4. **How does the work grow?** With the record's pages and the push's rows over the cores.
+5. **What did the before and after show, and under what conditions?** Alternated runs on a loaded host, read as evidence.
+6. **Did any map move?** No: no engine code changes.

@@ -374,8 +374,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T114 The push's money-candidates check: 2.46 s of a 3.68 s push, the whole record scanned on every push whatever it changed (2026-11-11) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the money check's pages side by side: its push row 2.46 s to 0.79 s
-- [ ] T115 The full hook run's two longest suites: sync-with-main 54.4 s and entry-gate 50.4 s of its 64.8 s (2026-11-11) (the GM 2026-11-11)
+- [x] T115 The full hook run's two longest suites: sync-with-main 54.4 s and entry-gate 50.4 s of its 64.8 s (2026-11-11) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: the two longest suites: record-owed 1.72 s to 1.22 s, push-checks 6.6 s to 5.1 s; the full hook run bound elsewhere
 - [ ] T116 The checks crate's coverage tests: 8.9 s alone and 15-16 s beside the others, the floor of a core edit's coverage step, rerun on any edit anywhere since its tests declare the whole tree (2026-11-11) (the GM 2026-11-11)
       research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
