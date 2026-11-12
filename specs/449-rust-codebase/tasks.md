@@ -377,8 +377,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T115 The full hook run's two longest suites: sync-with-main 54.4 s and entry-gate 50.4 s of its 64.8 s (2026-11-11) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the two longest suites: record-owed 1.72 s to 1.22 s, push-checks 6.6 s to 5.1 s; the full hook run bound elsewhere
-- [ ] T116 The checks crate's coverage tests: 8.9 s alone and 15-16 s beside the others, the floor of a core edit's coverage step, rerun on any edit anywhere since its tests declare the whole tree (2026-11-11) (the GM 2026-11-11)
+- [x] T116 The checks crate's coverage tests: 8.9 s alone and 15-16 s beside the others, the floor of a core edit's coverage step, rerun on any edit anywhere since its tests declare the whole tree (2026-11-11) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: the checks crate's coverage 10.7 s to 0.9 s; a body-only core edit's static 30.3 s to 23.5 s
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
