@@ -63,3 +63,6 @@ Then the GM, told the other two were the session scratch under /tmp/claude-1000 
 
 The GM, given the round's re-measurement and three ranked candidates (build a core edit's 17 coverage binaries together; cut sync-with-main's own time, the full hook run's critical path; record-owed's git calls), and asked whether the old /tmp l7r-* pile could be deleted: "the laptop session is clsoed, so you can delegte those old entries yourself - please do so" ("delegte" is dictated "delete"; the session deleted 44,904 old-form entries older than three hours, about 9 GB) and "Please also proceed with those next 3 candidates for performance improvements / time savings" - filed as T105, T106, T107.
 
+## 2026-11-11, the last two time savings of the round (T108-T109)
+
+The GM, given the T105-T107 report's two ranked candidates (run a core edit's coverage tests side by side, 17 s of `make static`'s 57 s; let push-checks skip its Rust self-tests when nothing they test changed, about 0.4 s a push and roughly 14 s of the sync-with-main suite's serial run, which loosens a gate and was left to him): "Yes please do both of those next candidates, thanks." - filed as T108 (the coverage tests) and T109 (the self-tests).
