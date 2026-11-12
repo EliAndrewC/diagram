@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-12T18:17:23Z",
+  "target": "plan-gate push",
+  "commit": "505ac0e03",
+  "why": "the one changed block is T91's template heading, removed when T91's tick archived its reviewed section to plan-done.md; T127's own section has its current CLEAR task review (2026-11-12)"
+}
