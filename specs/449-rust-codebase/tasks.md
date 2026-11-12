@@ -431,8 +431,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T133 Phase 3, the six document and agent-file tests as Rust tests (ask:449-phase3-remainder) Q3: test_agent_models, test_citation_rule_inventory, test_claude_md_quotes, test_one_root_claude_md, test_settlement_review_contract, tooling/test_docs_match_the_mechanism (583 lines)
       research: rendering
-- [ ] T134 Phase 3, the work budget's tools no task held (phase-3 census, 2026-11-12): scripts/measure/work_budget_bundle.py and budget_change.py (1,136 lines), before the task gate (phase_sources imports work_budget_bundle)
+- [x] T134 Phase 3, the work budget's tools no task held (phase-3 census, 2026-11-12): scripts/measure/work_budget_bundle.py and budget_change.py (1,136 lines), before the task gate (phase_sources imports work_budget_bundle)
       research: rendering
+      verify: DONE. landed: the work budget's tools ported to Rust (work-budget-bundle, budget-change): 895 differential cases, none differing; make static, rust-test and hooks-test green
 - [ ] T135 Phase 3, the authoring tools no task held (phase-3 census, 2026-11-12): claim-feature.py (also run by .specify's create-new-feature.sh), trial-start.py, trial-review.py, task-add.py, set-down.py, make-docs.py (run by the push and the land), patch.py (about 1,160 lines)
       research: rendering
 - [ ] T136 Phase 3, the review census and the agent sync no task held (phase-3 census, 2026-11-12): scripts/reviews/review_census.py and agent_sync.py with tests/test_agent_sync.py (216 lines)
