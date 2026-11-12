@@ -744,6 +744,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T141 (the review-round guard's Python hop, found by T131's plan review)": {
+   "sha256": "b83e05653cd443ff0fea6c5d3a10af241430c0206a2afa724b538064977f93b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T141 Approach (checklist part A)": {
+   "sha256": "91239b9eb51842baa855c44735f80b1fff9e0e2dd6fe466c2853c977b6797b35",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8692,6 +8704,40 @@
      "why": "Ordering only."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T141 (the review-round guard's Python hop, found by T131's plan review)",
+    "### T141 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T141-same-answers",
+     "summary": "The Rust reads the gate's active-task JSON itself; a failed run, non-JSON output, a null directory or an empty task hold nothing, a directory and a task go on to the plan-round cap as before.",
+     "class": "within",
+     "why": "FR-002: the same verdicts as the Python snippet it replaces. On record: the block derives all four forms from two Python mechanisms (`if d is not None and task`, the raise on bad JSON), so the 'failed run' form's equivalence rests on a failed gate run printing non-JSON stdout; a nonzero exit with valid JSON on stdout is neither named nor pinned. FR-002 binds the cases the tests hold, so this does not block."
+    },
+    {
+     "id": "T141-gate-by-subprocess",
+     "summary": "The guard runs `scripts/gates/l7r-gate.sh plan door active-task <root>` as a subprocess rather than calling the gate in-process.",
+     "class": "within",
+     "why": "The Python snippet's own shape with the Python removed; FR-001 phase 1 and `ask:449-phase1-tools-by-path` require that a guard start no Python, and with `plan_door.py` deleted in T131 (`ask:449-phase3-remainder`) the hop is Rust end to end. FR-007's one process per tool call governs the guards' fan-out, not a guard asking the gate."
+    },
+    {
+     "id": "T141-tests",
+     "summary": "The guard's tests answer active-task from the gate stub instead of running the snippet under sh, and pin each of the four nothing-forms.",
+     "class": "within",
+     "why": "Enforcement of FR-002 (same verdicts) and FR-004 (coverage floor) for the requested port; a check whose only effect is that the ported behavior holds is in scope."
+    },
+    {
+     "id": "T141-census",
+     "summary": "No other python3 snippet of the guard asks the gate, from `git grep -n \"subprocess.run\" -- rust/guard/src`; the checks make hooks-test, make static, make rust-test.",
+     "class": "within",
+     "why": "Excludes nothing requested: the task claims only this hop, and FR-001 phase 1 still owes any other Python start in the guard. Finding on the search space (not a narrowing): the stated goal is 'a spec-fidelity dispatch starts no Python in the guard', but the grep searches a Python API name inside snippets, not the mechanism. It misses `subprocess.check_output`, `Popen`, `os.system` and any snippet that does not shell out. The waist is the Rust side that starts the interpreter, e.g. `git grep -nE 'python3?\\b' -- rust/guard/src`, read hit by hit. The census as a done criterion should use that search."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15050,6 +15096,38 @@
      "summary": "Lands after T134, whose --sources it asks in process.",
      "class": "within",
      "why": "Ordering only."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T141": {
+   "section_sha256": "1e49c294bca4b085cc731c3db5da13408c371bc5d58a8eddd4ed1d07d547a78c",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T141-same-answers",
+     "summary": "The Rust reads the gate's active-task JSON itself; a failed run, non-JSON output, a null directory or an empty task hold nothing, a directory and a task go on to the plan-round cap as before.",
+     "class": "within",
+     "why": "FR-002: the same verdicts as the Python snippet it replaces. On record: the block derives all four forms from two Python mechanisms (`if d is not None and task`, the raise on bad JSON), so the 'failed run' form's equivalence rests on a failed gate run printing non-JSON stdout; a nonzero exit with valid JSON on stdout is neither named nor pinned. FR-002 binds the cases the tests hold, so this does not block."
+    },
+    {
+     "id": "T141-gate-by-subprocess",
+     "summary": "The guard runs `scripts/gates/l7r-gate.sh plan door active-task <root>` as a subprocess rather than calling the gate in-process.",
+     "class": "within",
+     "why": "The Python snippet's own shape with the Python removed; FR-001 phase 1 and `ask:449-phase1-tools-by-path` require that a guard start no Python, and with `plan_door.py` deleted in T131 (`ask:449-phase3-remainder`) the hop is Rust end to end. FR-007's one process per tool call governs the guards' fan-out, not a guard asking the gate."
+    },
+    {
+     "id": "T141-tests",
+     "summary": "The guard's tests answer active-task from the gate stub instead of running the snippet under sh, and pin each of the four nothing-forms.",
+     "class": "within",
+     "why": "Enforcement of FR-002 (same verdicts) and FR-004 (coverage floor) for the requested port; a check whose only effect is that the ported behavior holds is in scope."
+    },
+    {
+     "id": "T141-census",
+     "summary": "No other python3 snippet of the guard asks the gate, from `git grep -n \"subprocess.run\" -- rust/guard/src`; the checks make hooks-test, make static, make rust-test.",
+     "class": "within",
+     "why": "Excludes nothing requested: the task claims only this hop, and FR-001 phase 1 still owes any other Python start in the guard. Finding on the search space (not a narrowing): the stated goal is 'a spec-fidelity dispatch starts no Python in the guard', but the grep searches a Python API name inside snippets, not the mechanism. It misses `subprocess.check_output`, `Popen`, `os.system` and any snippet that does not shell out. The waist is the Rust side that starts the interpreter, e.g. `git grep -nE 'python3?\\b' -- rust/guard/src`, read hit by hit. The census as a done criterion should use that search."
     }
    ],
    "verdict": "CLEAR"

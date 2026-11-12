@@ -23,16 +23,17 @@ fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     d.hold(held)
 }
 
-fn ctx<'a>(d: &Path, stale: &'a str, active: &'a str) -> Ctx<'a> {
+/// The gate stub: `plan door active-task` answers `active`, every other call `stale` (feature 449 T141: the guard asks the gate itself).
+fn ctx(d: &Path, stale: &str, active: &str) -> Ctx {
     std::fs::create_dir_all(d.join("scripts/gates")).unwrap();
     crate::guards::write_executable(
         &d.join("scripts/gates/l7r-gate.sh"),
-        &format!("#!/bin/sh\n{stale}\n"),
+        &format!(
+            "#!/bin/sh\nif [ \"$1 $2 $3\" = \"plan door active-task\" ]; then\n{active}\nelse\n{stale}\nfi\n"
+        ),
     );
     Ctx {
         tree: d.to_path_buf(),
-        python: "sh",
-        active_code: active,
     }
 }
 
@@ -54,7 +55,7 @@ fn ruled(d: &Path, rows: &[&str]) {
     std::fs::write(d.join("specs/301-x/arbiter.jsonl"), lines).unwrap();
 }
 
-fn plain(d: &Path) -> Ctx<'static> {
+fn plain(d: &Path) -> Ctx {
     ctx(d, NO_STALE, NO_ACTIVE)
 }
 
@@ -448,7 +449,7 @@ fn a_tasks_plan_rounds_are_counted_back_to_its_clear() {
 fn the_third_plan_round_goes_to_the_arbiter() {
     let d = world("plancap");
     let dir = d.join("specs/301-x");
-    let active = format!("echo {}; echo T14", dir.display());
+    let active = format!("echo '[\"{}\", \"T14\"]'", dir.display());
     let c = ctx(&d, NO_STALE, &active);
     let r = json!({"verdict": "BLOCKED", "blocks": ["### T14 D"]});
     std::fs::write(
@@ -480,6 +481,20 @@ fn the_third_plan_round_goes_to_the_arbiter() {
     );
     ruled(&d, &["round:spec-fidelity|plan:301-x#T14@4:continue"]);
     assert_eq!(spec(plan, &d, &c).rule, "other-mode");
+    // feature 449 T141: a gate that fails, a null directory, an empty task or output that is not JSON holds nothing, as the snippet's did
+    let dir_s = dir.display().to_string();
+    for active in [
+        format!("echo '[\"{dir_s}\", \"T14\"]'; exit 1"),
+        "echo '[null, \"T14\"]'".to_owned(),
+        format!("echo '[\"{dir_s}\", \"\"]'"),
+        "echo not json".to_owned(),
+    ] {
+        ruled(&d, &[]);
+        assert_eq!(
+            spec(plan, &d, &ctx(&d, NO_STALE, &active)).rule,
+            "other-mode"
+        );
+    }
 }
 
 #[test]

@@ -42,12 +42,6 @@ const SNAP_SUFFIXES: [&str; 6] = ["md", "json", "txt", "py", "html", "csv"];
 /// CONVENTION: the largest file a snapshot holds, as `hm_review_round.py` held it.
 const SNAP_MAX_BYTES: u64 = 2_000_000;
 
-/// The active feature's directory and its task, a line each, asked of the plan gate (`l7r-gate plan door active-task`).
-const ACTIVE_CODE: &str = r#"import json, subprocess, sys
-done = subprocess.run([sys.argv[1] + "/l7r-gate.sh", "plan", "door", "active-task", sys.argv[2]], capture_output=True, text=True)
-d, task = json.loads(done.stdout) if done.returncode == 0 else (None, "")
-if d is not None and task: print(d); print(task)"#;
-
 fn re(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
@@ -71,19 +65,13 @@ static STATED: LazyLock<Regex> =
 static HISTORY: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^## Review history\s*$"));
 static NEXT_SECTION: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^## "));
 
-/// What this guard needs from outside the call.
-pub(crate) struct Ctx<'a> {
+/// What this guard needs from outside the call: the tree whose `scripts/gates/l7r-gate.sh` it asks.
+pub(crate) struct Ctx {
     pub(crate) tree: PathBuf,
-    pub(crate) python: &'a str,
-    pub(crate) active_code: &'a str,
 }
 
-fn production(tree: PathBuf) -> Ctx<'static> {
-    Ctx {
-        tree,
-        python: "python3",
-        active_code: ACTIVE_CODE,
-    }
+fn production(tree: PathBuf) -> Ctx {
+    Ctx { tree }
 }
 
 fn arbiter_trip(root: &Path, trigger: &str, unit: &str, detail: &str) -> String {
@@ -448,22 +436,27 @@ pub(crate) fn plan_rounds(feature_dir: &Path, task: &str) -> u64 {
 
 /// Why the active task's next plan round waits for the round arbiter, or "".
 fn plan_cap_refusal(root: &Path, ctx: &Ctx) -> String {
-    let gates = ctx.tree.join("scripts/gates");
+    // the active feature's directory and task, `[dir, task]` from the plan gate (`l7r-gate plan door active-task`), asked directly: an
+    // inline python3 snippet only ran that command and read its JSON, starting Python on each spec-fidelity dispatch (feature 449 T141);
+    // a failed run, unreadable JSON, a null directory or an empty task hold nothing, as the snippet's did
+    let gate = ctx.tree.join("scripts/gates/l7r-gate.sh");
     let said = ask(
         root,
-        ctx.python,
-        &[
-            "-c",
-            ctx.active_code,
-            &gates.to_string_lossy(),
-            &root.to_string_lossy(),
-        ],
+        &gate.to_string_lossy(),
+        &["plan", "door", "active-task", &root.to_string_lossy()],
         "",
     );
-    let mut lines = said.out.lines();
-    let (Some(dir), Some(task)) = (lines.next(), lines.next()) else {
+    let pair: Value = if said.code == 0 {
+        serde_json::from_str(&said.out).unwrap_or(Value::Null)
+    } else {
+        Value::Null
+    };
+    let (Some(dir), Some(task)) = (pair[0].as_str(), pair[1].as_str()) else {
         return String::new();
     };
+    if task.is_empty() {
+        return String::new();
+    }
     let d = Path::new(dir);
     let round_no = plan_rounds(d, task) + 1;
     if round_no <= PLAN_ROUND_CAP {
