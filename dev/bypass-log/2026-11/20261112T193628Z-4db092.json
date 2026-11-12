@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-12T19:36:28Z",
+  "target": "plan-gate push",
+  "commit": "cdfe339cd",
+  "why": "T129's section differs from its CLEAR round-2 review only by the one fix that review asked for, a method's unexpanded {H} placeholder written out as its scratchpad path; every other changed block is the empty template of T128 and T130-T140, filed by ask:449-T90-scope and ask:449-phase3-remainder"
+}
