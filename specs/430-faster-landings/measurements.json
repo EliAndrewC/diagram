@@ -54,7 +54,7 @@
   "unit": "runs",
   "observed": "2026-10-26",
   "source": "this clone, dev/run-log/2026-10/*.json and git",
-  "command": "python3 specs/430-faster-landings/replay_plans.py",
+  "command": "<retired: ask:449-phase3-remainder, replay_plans.py fails today (it imports the deleted l7r.diagram.ci); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "method": "replay_plans.py as committed: each run's base the latest earlier green full run at which its reason's file differs; both manifests rebuilt from git ls-tree, the configuration hash from each commit's own files; an empty coverage database (no import-time or context selection), INCR_NO_CUTOFF",
   "full_top_level_conftest": 4,
   "full_gate_configuration": 3

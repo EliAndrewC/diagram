@@ -118,7 +118,7 @@
   "unit": "sentences",
   "quantity": "the windbreak pop-up's default sentence names the direction, 'toward the northwest of the houses', not two sides",
   "source": "interactive/place.py windbreak_default and pool/hamlets/kuwabata/kuwabata.html",
-  "command": "make -C .claude/skills/diagram test-file FILE=tests/interactive/test_place.py",
+  "command": "<retired: ask:449-phase3-remainder, the old skill directory .claude/skills/diagram is gone since feature 329, so the command fails today - the value is history, not re-run>",
   "round": "e0234725"
  },
  "kuwabata-F2": {
@@ -285,7 +285,7 @@
   "unit": "bases",
   "quantity": "drawn scrub bases (blade, dot and pine, parsed from kuwabata.svg by the engine's own parse_bases) within 15 ft of a farmstead part: 0 (was 20); and inside the hull of the farmsteads' parts and houses: 0 (was 138)",
   "source": "pool/hamlets/kuwabata/kuwabata.svg scatter bases against kuwabata.json farm_fixtures, gardens, threshing_yards, byres, farm_sheds, persimmons",
-  "command": "make -C .claude/skills/diagram scatter-bases MAP=pool/hamlets/kuwabata"
+  "command": "<retired: ask:449-phase3-remainder, the old skill directory .claude/skills/diagram is gone since feature 329, so the command fails today - the value is history, not re-run>"
  },
  "inashiro-r3-spur": {
   "verifies": "F2",
@@ -675,7 +675,7 @@
   "unit": "ft",
   "quantity": "inside the old wedge's box (2276,248)-(2514,522), the radius of the largest disc with nothing drawn in it - scatter bases (1,569 blades, 70 scrub dots, 7 pines, 15 crowns), structures, dry plots, the field and the lanes - 72 ft in the round; the ground more than 20 ft from any mark is 2,000 sq ft, 24,600 in the round. The scrub now keeps off each farmstead's own grown outline and each near pair's, not the whole cluster's hull",
   "source": "pool/hamlets/kuwabata/kuwabata.svg scatter bases (tools/scatter_audit.parse_bases) with kuwabata.json houses, yards, gardens, byres, sheds, fixtures, wells, persimmons, dry_plots, fields, lanes; sampled on a 4 ft grid",
-  "command": "make -C .claude/skills/diagram scatter-bases MAP=pool/hamlets/kuwabata BOX=2276,248,2514,522"
+  "command": "<retired: ask:449-phase3-remainder, the old skill directory .claude/skills/diagram is gone since feature 329, so the command fails today - the value is history, not re-run>"
  },
  "sawada-r11-brook-straight": {
   "verifies": "F1",
@@ -762,7 +762,7 @@
   "unit": "degrees",
   "quantity": "the arc the five pool hamlets' field-to-houses bearings span (compass, from each field outline's mean vertex to the houses' middle): 249 (Sawada), 314 (Inashiro), 325 (Kashikawa), 354 (Kuwabata), 16 (Mizuguchi), from 249 through north to 16; on main 69, 74, 157, 203 and 353, round the whole compass - the pool's sameness under a wind that chooses the side, observed 2026-09-27; re-measured 2026-09-28 after main's feature 276 re-laid the pool (plan D23): main's own bearings now 72, 74, 156, 354 and 204, a 210-degree arc from 354 through east to 204; this branch's unchanged",
   "source": "pool/hamlets/*/*.json fields[].outline, houses; main's from the worktree at 7f283feb",
-  "command": "python3 specs/261-northwest-wind-by-default/measure.py"
+  "command": "<retired: ask:449-phase3-remainder, measure.py fails today (FileNotFoundError: it reads the old skill directory); deleted unported by feature 449 T130 - the value is history, not re-run>"
  },
  "mizuguchi-r11-wells": {
   "verifies": "F2",
@@ -862,7 +862,7 @@
   "unit": "lane ends",
   "quantity": "non-connector lane ends off the frame (lane 4 ran 52 ft past the connector's junction and off the sheet in the round): a lane that runs on past the connector to a loose end is cut where it met it",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json lanes, meta.view",
-  "command": "make -C .claude/skills/diagram test-file FILE=tests/gate/test_lane_network.py"
+  "command": "<retired: ask:449-phase3-remainder, the old skill directory .claude/skills/diagram is gone since feature 329, so the command fails today - the value is history, not re-run>"
  },
  "mizuguchi-r13-bearing": {
   "verifies": "F4",
@@ -1001,7 +1001,7 @@
   "unit": "ft",
   "quantity": "the windbreak band's thinnest depth across itself on the page (each near-face vertex to the far face): 20.7 ft in the round; Inashiro 33.9 -> 83.9, Sawada 13.8 -> 88.8; Kuwabata 19.1 and Mizuguchi 64.1 unchanged where the canvas edge clamps the far face; re-measured 2026-09-28 on round 31ef113b's roll (D22): Sawada 72.7 at the bend of its two arms; re-measured 2026-09-28 after the rag and the far envelope (plan D20): 92.0 on Kashikawa, and every pool belt at least 92.0 where the canvas does not clamp it (Inashiro 115.6, Kuwabata 121.2, Mizuguchi 117.7, Sawada 94.7); re-measured 2026-09-28 on the 105 ft band (plan D20): Kashikawa's thinnest 97.2, median 105.0; every pool belt's thinnest 95.0-97.2 and median 103.0-106.6 ft, at most 9% of a face over 120 ft (its bends)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly, meta.view",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "<retired: ask:449-phase3-remainder, measure/belt_depth.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>"
  },
  "brook-r16-turn": {
   "verifies": "F1",
@@ -1031,7 +1031,7 @@
   "unit": "pieces",
   "quantity": "the pieces the DRAWN windbreak is in: tree_crowns within 20 ft of the belt's outline, linked within 30 ft edge to edge - 1 piece of 1160 crowns (4 pieces of 705 at commit 881679390, the round's hole); every pool belt is 1 piece; re-measured 2026-09-28 on the far envelope: 1 piece on every pool belt",
   "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json tree_crowns, village_groves windbreak poly",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_pieces.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "<retired: ask:449-phase3-remainder, measure/belt_pieces.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>"
  },
  "sawada-r17-well": {
   "verifies": "F1",
@@ -1071,7 +1071,7 @@
   "unit": "crowns",
   "quantity": "against-the-belt copse crowns more than 5 ft windward of their nearest belt crown (31 of 75 in the round); 43 crowns, all on the belt's lee face",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json village_groves",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/copse_side.py mizuguchi"
+  "command": "<retired: ask:449-phase3-remainder, measure/copse_side.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>"
  },
  "rank-r18-spread": {
   "verifies": "F1",
@@ -1090,7 +1090,7 @@
   "unit": "ft",
   "quantity": "the farthest a Sawada farmhouse moved when its rank seats took the accretion form's jitter (four moved, 3.1-7.9 ft; the rest stand where they stood at 1f2484649); meta.homestead_fields 11 -> 7",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json houses, meta.homestead_fields; the same at commit 1f2484649",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/house_moves.py 1f2484649 sawada"
+  "command": "<retired: ask:449-phase3-remainder, measure/house_moves.py fails today (git show of the old skill directory path); deleted unported by feature 449 T130 - the value is history, not re-run>"
  },
  "sawada-r19-board": {
   "verifies": "F1",
@@ -1188,7 +1188,7 @@
   "unit": "ft",
   "quantity": "the least distance from a farmhouse center to the windbreak's near face on the pool, 72.9-82.4 ft by map (the column reach 79 ft less the near rag's 5); on main's re-laid pool before `round_the_houses`, Kashikawa's near face ran 37.3 ft from its westernmost farmhouse (932,979), through its garden, and Sawada's 33.8 ft from (364,1609) - observed 2026-09-28 on those rolls, not committed",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly, meta.belt_near_vertices, houses",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/near_face.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "<retired: ask:449-phase3-remainder, measure/near_face.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>"
  },
  "belt-r22-depth": {
   "verifies": "F1",
@@ -1198,7 +1198,7 @@
   "unit": "ft",
   "quantity": "the windbreak band's thinnest depth across itself on the page on the 100 ft band after `round_the_houses` (plan D23): thinnest 89.8 / 84.1 / 86.6 / 89.5 / 89.7 ft and median 96.9 / 95.6 / 101.4 / 97.2 / 97.7 ft on Inashiro, Kashikawa, Kuwabata, Mizuguchi and Sawada, over 120 ft on 5 / 7 / 1 / 5 / 16% of the face (Sawada's at the end of its southwest arm); the 105 ft band with the same fix drew 17% and 24% over 120 on Kashikawa and Sawada (observed 2026-09-28 on rolls not committed)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json village_groves windbreak poly",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_depth.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "<retired: ask:449-phase3-remainder, measure/belt_depth.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>"
  },
  "belt-r22-pieces": {
   "verifies": "F1",
@@ -1208,7 +1208,7 @@
   "unit": "pieces",
   "quantity": "the pieces each pool hamlet's DRAWN windbreak is in (crowns within 20 ft of its outline, linked within 30 ft edge to edge): 1 on every map, of 773 / 1227 / 357 / 530 / 1233 crowns; on main's re-laid pool Kashikawa's and Sawada's were 2",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json tree_crowns, village_groves windbreak poly",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/belt_pieces.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "<retired: ask:449-phase3-remainder, measure/belt_pieces.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>"
  },
  "dry-r22-median": {
   "verifies": "F2",

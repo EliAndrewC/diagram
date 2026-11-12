@@ -5,7 +5,7 @@
   "unit": "runs (of 39 full, of 45 in all)",
   "observed": "2026-10-26",
   "source": "this clone, dev/run-log/2026-10/2026102[56]*.json (target done)",
-  "command": "python3 specs/415-gate-incremental-across-tooling/replay_plans.py",
+  "command": "<retired: ask:449-phase3-remainder, replay_plans.py fails today (it imports the deleted l7r.diagram.ci); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "method": "feature 430's replay harness widened to every reason: each run's base is the latest earlier green full run at which the file its reason names differs; manifests rebuilt from git; an empty coverage database, so the 6 import-time runs and the 3 no-baseline runs replay as incremental but would plan full in a real clone and are counted full here"
  }
 }

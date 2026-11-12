@@ -7,20 +7,20 @@
   "value": 309
  },
  "amendment-idle-minutes": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/time_census.py de91c2c7-81d4-47af-b7e8-31fb61ee8c11 --from \"exempt that sed shape\" --to \"go ahead and land it\" --record",
+  "command": "<retired: ask:449-phase3-remainder, time_census.py fails today (StopIteration: its session transcript is gone); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "note": "waiting on the five review rounds",
   "taken": "2026-09-13",
   "unit": "min",
   "value": 78.0
  },
  "amendment-latency-minutes": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/time_census.py de91c2c7-81d4-47af-b7e8-31fb61ee8c11 --from \"exempt that sed shape\" --to \"go ahead and land it\" --record",
+  "command": "<retired: ask:449-phase3-remainder, time_census.py fails today (StopIteration: its session transcript is gone); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "taken": "2026-09-13",
   "unit": "min",
   "value": 29.3
  },
  "amendment-replay-minutes": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/time_census.py de91c2c7-81d4-47af-b7e8-31fb61ee8c11 --from \"exempt that sed shape\" --to \"go ahead and land it\" --record",
+  "command": "<retired: ask:449-phase3-remainder, time_census.py fails today (StopIteration: its session transcript is gone); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "taken": "2026-09-13",
   "unit": "min",
   "value": 78.9
@@ -33,20 +33,20 @@
   "value": 455
  },
  "amendment-test-minutes": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/time_census.py de91c2c7-81d4-47af-b7e8-31fb61ee8c11 --from \"exempt that sed shape\" --to \"go ahead and land it\" --record",
+  "command": "<retired: ask:449-phase3-remainder, time_census.py fails today (StopIteration: its session transcript is gone); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "taken": "2026-09-13",
   "unit": "min",
   "value": 15.0
  },
  "amendment-wall-minutes": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/time_census.py de91c2c7-81d4-47af-b7e8-31fb61ee8c11 --from \"exempt that sed shape\" --to \"go ahead and land it\" --record",
+  "command": "<retired: ask:449-phase3-remainder, time_census.py fails today (StopIteration: its session transcript is gone); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "note": "the GM ruling to the GM landing it",
   "taken": "2026-09-13",
   "unit": "min",
   "value": 208
  },
  "bare-python-spawn-ms": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "command": "<retired: ask:449-phase3-remainder, decision_cost.py fails today (no frozen corpus in scripts/fixtures/), with freeze_window.py deleted unported by feature 449 T130 - the value is history, not re-run>",
   "load": 2.52,
   "load_start": 1.47,
   "quantity": "wall time of `python3 -c pass`, mean of 20 spawns",
@@ -56,7 +56,7 @@
   "varies": true
  },
  "decision-in-process-ms": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "command": "<retired: ask:449-phase3-remainder, decision_cost.py fails today (no frozen corpus in scripts/fixtures/), with freeze_window.py deleted unported by feature 449 T130 - the value is history, not re-run>",
   "load": 2.52,
   "load_start": 1.47,
   "quantity": "wall time per command of the same program compiled once, in process; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
@@ -66,7 +66,7 @@
   "varies": true
  },
  "decision-spawn-ratio": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "command": "<retired: ask:449-phase3-remainder, decision_cost.py fails today (no frozen corpus in scripts/fixtures/), with freeze_window.py deleted unported by feature 449 T130 - the value is history, not re-run>",
   "load": 2.52,
   "load_start": 1.47,
   "quantity": "spawned over in-process wall time; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
@@ -76,7 +76,7 @@
   "varies": true
  },
  "decision-spawned-ms": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "command": "<retired: ask:449-phase3-remainder, decision_cost.py fails today (no frozen corpus in scripts/fixtures/), with freeze_window.py deleted unported by feature 449 T130 - the value is history, not re-run>",
   "load": 2.52,
   "load_start": 1.47,
   "quantity": "wall time per command of the shipped hook, spawned; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
@@ -86,47 +86,47 @@
   "varies": true
  },
  "frozen-window-commands": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "command": "<retired: ask:449-phase3-remainder, decision_cost.py fails today (no frozen corpus in scripts/fixtures/), with freeze_window.py deleted unported by feature 449 T130 - the value is history, not re-run>",
   "note": "in command-window-2026-09-13.json, built by measure/freeze_window.py",
   "taken": "2026-09-13",
   "unit": "commands",
   "value": 560
  },
  "guards-with-inline-python": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "command": "<retired: ask:449-phase3-remainder, guard_census.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "note": "non-test scripts/*.sh; the convention is in the harness docstring",
   "taken": "2026-09-13",
   "unit": "files",
   "value": 15
  },
  "guards-with-inline-python-including-tests": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "command": "<retired: ask:449-phase3-remainder, guard_census.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "taken": "2026-09-13",
   "unit": "files",
   "value": 25
  },
  "house-style-file-lines": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "command": "<retired: ask:449-phase3-remainder, guard_census.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "taken": "2026-09-13",
   "unit": "lines",
   "value": 367
  },
  "house-style-program-lines": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "command": "<retired: ask:449-phase3-remainder, guard_census.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "note": "of the file's whole length, below",
   "taken": "2026-09-13",
   "unit": "lines",
   "value": 275
  },
  "largest-inline-program": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "command": "<retired: ask:449-phase3-remainder, guard_census.py fails today (IndexError); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "note": "in house-style-hooks.sh",
   "taken": "2026-09-13",
   "unit": "lines",
   "value": 275
  },
  "timing-run-to-run-drift-pct": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "command": "<retired: ask:449-phase3-remainder, decision_cost.py fails today (no frozen corpus in scripts/fixtures/), with freeze_window.py deleted unported by feature 449 T130 - the value is history, not re-run>",
   "load": 2.52,
   "load_start": 1.47,
   "quantity": "widest spread across 3 runs as a percentage of the smallest; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
@@ -136,7 +136,7 @@
   "varies": true
  },
  "window-in-process-s": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "command": "<retired: ask:449-phase3-remainder, decision_cost.py fails today (no frozen corpus in scripts/fixtures/), with freeze_window.py deleted unported by feature 449 T130 - the value is history, not re-run>",
   "load": 2.52,
   "load_start": 1.47,
   "quantity": "in-process per-command time times the window size; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
@@ -146,7 +146,7 @@
   "varies": true
  },
  "window-spawned-s": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "command": "<retired: ask:449-phase3-remainder, decision_cost.py fails today (no frozen corpus in scripts/fixtures/), with freeze_window.py deleted unported by feature 449 T130 - the value is history, not re-run>",
   "load": 2.52,
   "load_start": 1.47,
   "quantity": "spawned per-command time times the window size; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",

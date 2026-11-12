@@ -1,6 +1,6 @@
 {
  "m:counts-after": {
-  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/count_work.py /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/counts-after m:counts-after",
+  "command": "<retired: ask:449-phase3-remainder, a placeholder command, which make figures refuses, run by hand through count_work.py; count_work.py and retake_counts.sh deleted unported by feature 449 T130 - the value is history, not re-run>",
   "counts": {
    "field": {
     "10": {
@@ -96,7 +96,7 @@
   }
  },
  "m:counts-before": {
-  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; specs/387-scale-the-placement-loops/count_work.py specs/387-scale-the-placement-loops/counts-before m:counts-before",
+  "command": "<retired: ask:449-phase3-remainder, a placeholder command, which make figures refuses, run by hand through count_work.py; count_work.py and retake_counts.sh deleted unported by feature 449 T130 - the value is history, not re-run>",
   "counts": {
    "field": {
     "10": {
@@ -192,7 +192,7 @@
   }
  },
  "m:counts-wells-after": {
-  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/count_work.py /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/counts-wells-after m:counts-wells-after",
+  "command": "<retired: ask:449-phase3-remainder, a placeholder command, which make figures refuses, run by hand through count_work.py; count_work.py and retake_counts.sh deleted unported by feature 449 T130 - the value is history, not re-run>",
   "counts": {
    "appurtenances": {
     "10": {
@@ -231,7 +231,7 @@
   }
  },
  "m:counts-wells-before": {
-  "command": "make perf-profile SEED=4 STAGE=<stage> HOUSEHOLDS=<10|20|40>; /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/count_work.py /diagram/.clones/diagram-unit-tests/specs/387-scale-the-placement-loops/counts-wells-before m:counts-wells-before",
+  "command": "<retired: ask:449-phase3-remainder, a placeholder command, which make figures refuses, run by hand through count_work.py; count_work.py and retake_counts.sh deleted unported by feature 449 T130 - the value is history, not re-run>",
   "counts": {
    "appurtenances": {
     "10": {

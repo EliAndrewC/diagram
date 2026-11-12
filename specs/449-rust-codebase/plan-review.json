@@ -708,6 +708,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T130 (the deletion and retire classes of `ask:449-phase3-remainder`)": {
+   "sha256": "d0c23114011ab92f9628df65ef662b8f57024d2657a72e953b78cb00a2c78e91",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T130 Approach (checklist part A)": {
+   "sha256": "c250882acc51c8ce3241f1cc2e23e6e2fe7e7fa274e313edc9ca596a77aed933",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8367,6 +8379,53 @@
      "why": "the census (git grep -E of the four names) shows nothing runs them; phase-1-python-share's command runs none of them, so FR-001's rewrite-in-the-porting-commit clause does not fire."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T130 (the deletion and retire classes of `ask:449-phase3-remainder`)",
+    "### T130 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T130-deletion-class",
+     "summary": "48 files (44 dead files under specs/, tools/caption_decl.py, tools/hit_share.py, scripts/measure/uncovered-in-diff.py, uncovered_marks.py) and 63 specs/ shell scripts that run only them deleted unported, each confirmed by git grep of its path over Makefile, *.mk, *.sh, *.py, *.rs, .claude/ and measurements*.json",
+     "class": "within",
+     "why": "Exactly ask:449-phase3-remainder's deletion class and the GM's 2026-11-09 words ('I don't think we need to port the past feature harnesses if those are not still used'); the later ruling supersedes ask:449-T77-scope's phase-4 placement of the two uncovered-* scripts. The search space is stated. It does not name docs/ as a runner space; the live pointers fixed in docs/ and the CLAUDE.md files appear to concern the four ruling-named files, which the ruling deletes regardless - nothing in the bundle shows a specs/ file that a doc still directs as a step."
+    },
+    {
+     "id": "T130-retire-class-file-commands",
+     "summary": "Each make-figures command that runs a script or Python test (python3 <file>, python3 -c, make spec-harness, make test-file, make -C .claude/skills/diagram) and fails today or invokes deleted code is retired to <retired: ask:449-phase3-remainder, why> with values kept, its script and any harness/counts file only it ran deleted: 27 files, 4,367 entries across 18 features; 387's four placeholders, 276's measure_before_five.py and 340's harness.py join",
+     "class": "within",
+     "why": "The ruling's retire class and its consequence as written, on the fr005_probe / ask:449-T79-moves pattern. 'Fails today' was tested once in a scratch clone with a 90 s bound; the block itself notes a fresh clone lacks untracked renders, and it does not show for each fails-today-only retiree that its failure is clone-independent - no wrongly retired script can be named from the bundle, so this is noted, not ruled."
+    },
+    {
+     "id": "T130-retire-class-read-as-file-commands",
+     "summary": "About 70 failing make-figures commands that run no file (35 greps of old skill paths in 261, greps/ls on moved text or untracked SVGs, prose with shell syntax, 375's three make feature-report on transcripts no longer on disk, one prose entry in 449's own file) are reported and not retired",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ruling's sentence literally reaches 'a command make figures runs that fails when run today', so this narrows the accepted spec. It is legitimate on purpose, not by completing anyone's thought: the GM's request is a Python-to-Rust port and the 2026-11-09 words are about not porting unused past-feature harnesses; FR-001's rewrite duty covers only recorded measurements that RUN Python. A failing grep, ls or prose entry runs no Python and no file, imposes no port, and retiring it serves no clause of the GM's request - it would be unrequested cleanup. The ruling's own words bound its subject to files: the consequence is 'its file deleted unported', the counterpart is 'the measurement scripts that run and work are ported (T139)', and the census it rules on is of tracked .py files. Adjudicated separately, the three make feature-report commands run feature_report, which T119 placed on the port and which is reached through make, so no port-or-delete decision rides on them either way (unlike ask:449-T120-retire-375-a7, whose command ran python3 turn_time.py and so was a Python-running measurement FR-001 had to rewrite). The narrowing guts nothing the request asked for."
+    },
+    {
+     "id": "T130-kept",
+     "summary": "Working measurement scripts kept for T139 (238, 239, 242, 261's five, 430, 432), 335's harness.py kept (noted as phase 4, T140), tooling_reuse_time.py kept (its three 383 commands pass today) for phase 4; specs/ shell scripts running no dead file stay",
+     "class": "within",
+     "why": "T130 deletes only what the ruling's classes reach; working scripts are not in them. tooling_reuse_time.py's phase-4 deletion with the pytest infrastructure is the ruling's own placement. 335's harness.py being noted under T140 rather than T139 is not a decision T130 can make or enforce - its port placement belongs to the task that holds it and is reviewed there."
+    },
+    {
+     "id": "T130-pointers-and-history",
+     "summary": "Live pointers to deleted files fixed (docs/iteration-loop.md, pyproject.toml comment, scripts/record/sources.py docstring, l7r/diagram/tools/CLAUDE.md, scripts/CLAUDE.md); history in specs/ prose, dev/phase-2-close.md, pool notes and test fixtures left as written",
+     "class": "within",
+     "why": "Consequence of the deletion the ruling orders; history is the record, not a runner."
+    },
+    {
+     "id": "T130-checks-order-landing",
+     "summary": "Order after T129 and before the phase-3 ports; checks make static, make hooks-test, the pointer check, make figures before/after (failed runs 68 to 35) and m:recorded-python-commands to 48; landing gated because two deleted files are under l7r/",
+     "class": "within",
+     "why": "Procedure and verification of the requested deletion and retirement; nothing decided beyond the ruling."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -14530,6 +14589,51 @@
      "summary": "at the cut the four names survive only in provenance comments, test-check-tool-signals.sh's old-form fixtures, and measurements.json phase-1-python-share's historical values",
      "class": "within",
      "why": "the census (git grep -E of the four names) shows nothing runs them; phase-1-python-share's command runs none of them, so FR-001's rewrite-in-the-porting-commit clause does not fire."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T130": {
+   "section_sha256": "bcaa7956d0364b63d425ee0adcb447c7653c887a26d5a242c28acf1d2cd51260",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T130-deletion-class",
+     "summary": "48 files (44 dead files under specs/, tools/caption_decl.py, tools/hit_share.py, scripts/measure/uncovered-in-diff.py, uncovered_marks.py) and 63 specs/ shell scripts that run only them deleted unported, each confirmed by git grep of its path over Makefile, *.mk, *.sh, *.py, *.rs, .claude/ and measurements*.json",
+     "class": "within",
+     "why": "Exactly ask:449-phase3-remainder's deletion class and the GM's 2026-11-09 words ('I don't think we need to port the past feature harnesses if those are not still used'); the later ruling supersedes ask:449-T77-scope's phase-4 placement of the two uncovered-* scripts. The search space is stated. It does not name docs/ as a runner space; the live pointers fixed in docs/ and the CLAUDE.md files appear to concern the four ruling-named files, which the ruling deletes regardless - nothing in the bundle shows a specs/ file that a doc still directs as a step."
+    },
+    {
+     "id": "T130-retire-class-file-commands",
+     "summary": "Each make-figures command that runs a script or Python test (python3 <file>, python3 -c, make spec-harness, make test-file, make -C .claude/skills/diagram) and fails today or invokes deleted code is retired to <retired: ask:449-phase3-remainder, why> with values kept, its script and any harness/counts file only it ran deleted: 27 files, 4,367 entries across 18 features; 387's four placeholders, 276's measure_before_five.py and 340's harness.py join",
+     "class": "within",
+     "why": "The ruling's retire class and its consequence as written, on the fr005_probe / ask:449-T79-moves pattern. 'Fails today' was tested once in a scratch clone with a 90 s bound; the block itself notes a fresh clone lacks untracked renders, and it does not show for each fails-today-only retiree that its failure is clone-independent - no wrongly retired script can be named from the bundle, so this is noted, not ruled."
+    },
+    {
+     "id": "T130-retire-class-read-as-file-commands",
+     "summary": "About 70 failing make-figures commands that run no file (35 greps of old skill paths in 261, greps/ls on moved text or untracked SVGs, prose with shell syntax, 375's three make feature-report on transcripts no longer on disk, one prose entry in 449's own file) are reported and not retired",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ruling's sentence literally reaches 'a command make figures runs that fails when run today', so this narrows the accepted spec. It is legitimate on purpose, not by completing anyone's thought: the GM's request is a Python-to-Rust port and the 2026-11-09 words are about not porting unused past-feature harnesses; FR-001's rewrite duty covers only recorded measurements that RUN Python. A failing grep, ls or prose entry runs no Python and no file, imposes no port, and retiring it serves no clause of the GM's request - it would be unrequested cleanup. The ruling's own words bound its subject to files: the consequence is 'its file deleted unported', the counterpart is 'the measurement scripts that run and work are ported (T139)', and the census it rules on is of tracked .py files. Adjudicated separately, the three make feature-report commands run feature_report, which T119 placed on the port and which is reached through make, so no port-or-delete decision rides on them either way (unlike ask:449-T120-retire-375-a7, whose command ran python3 turn_time.py and so was a Python-running measurement FR-001 had to rewrite). The narrowing guts nothing the request asked for."
+    },
+    {
+     "id": "T130-kept",
+     "summary": "Working measurement scripts kept for T139 (238, 239, 242, 261's five, 430, 432), 335's harness.py kept (noted as phase 4, T140), tooling_reuse_time.py kept (its three 383 commands pass today) for phase 4; specs/ shell scripts running no dead file stay",
+     "class": "within",
+     "why": "T130 deletes only what the ruling's classes reach; working scripts are not in them. tooling_reuse_time.py's phase-4 deletion with the pytest infrastructure is the ruling's own placement. 335's harness.py being noted under T140 rather than T139 is not a decision T130 can make or enforce - its port placement belongs to the task that holds it and is reviewed there."
+    },
+    {
+     "id": "T130-pointers-and-history",
+     "summary": "Live pointers to deleted files fixed (docs/iteration-loop.md, pyproject.toml comment, scripts/record/sources.py docstring, l7r/diagram/tools/CLAUDE.md, scripts/CLAUDE.md); history in specs/ prose, dev/phase-2-close.md, pool notes and test fixtures left as written",
+     "class": "within",
+     "why": "Consequence of the deletion the ruling orders; history is the record, not a runner."
+    },
+    {
+     "id": "T130-checks-order-landing",
+     "summary": "Order after T129 and before the phase-3 ports; checks make static, make hooks-test, the pointer check, make figures before/after (failed runs 68 to 35) and m:recorded-python-commands to 48; landing gated because two deleted files are under l7r/",
+     "class": "within",
+     "why": "Procedure and verification of the requested deletion and retirement; nothing decided beyond the ruling."
     }
    ],
    "verdict": "CLEAR"

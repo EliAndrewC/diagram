@@ -17,7 +17,7 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 | `record/` | the research record's tooling: sources, the archive, downloads, canon, check bundles, what a delta owes |
 | `pages/` | page sessions: the runner, its briefs, `pull-queue.sh`, coordination files |
 | `reviews/` | the review checks' tooling: the snapshot and the census; what is owed, the prerequisites, the verdict record and the hourly checkpoint are `l7r-gate reviews` (`rust/gate/crates/reviews/src/reviews/`, 449 T89), and so are the ledger's lint, a review's cost and the rows a pass owes (`reviews ledger-lint`, `review-cost`, `ledger-owed`, 449 T83) |
-| `measure/` | what things cost: `make inline-census` (feature 449's second census), gate cost, the ratchets, run stats, `make figures`, the guard log, uncovered lines |
+| `measure/` | what things cost: `make inline-census` (feature 449's second census), gate cost, the ratchets, run stats, `make figures`, the guard log |
 | `container/` | the container's setup (`setup-dev-env.sh`), the system-prompt text its `claude()` wrapper loads, the page-session rules |
 
 Each guard's suite is `tests/hooks/test-<guard>.sh`, run by `make hooks-test` (a guard without one fails it); the

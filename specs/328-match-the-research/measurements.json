@@ -1576,7 +1576,7 @@
     "quantity": "wave 77 (2026-10-09): the scraps settle_cells leaves bare on the pool's comb fans, and whether any could be taken in",
     "observed": "2026-10-09",
     "source": "scratch probes under make test-file (deleted after the run): settle_cells wrapped while generate() rolled the four comb-fan pool specs into a temp directory; for each bare scrap, its verdict and the verdict of its union with each neighbor; again with ROUNDS patched from 6 to 100",
-    "command": "make test-file FILE=tests/test_zz_scrap_probe.py (three probes); again after the weld (the same probe)",
+    "command": "<retired: ask:449-phase3-remainder, a one-shot probe test never kept, so the command fails today - the value is history, not re-run>",
     "method": "the settle's own Fabric, merges and verdict, read after the rounds",
     "value": {
       "inashiro": "0 scraps",

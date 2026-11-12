@@ -179,7 +179,7 @@ omit = ["*/tests/*", "pool/*/*/*.gen.py", "legacy-hand-authored-pool/*/*/*.gen.p
 # otherwise, and nobody re-read either until someone measured.
 #
 # `show_missing` stays off here so the Makefile controls when line ranges print; the gate passes `-m`
-# itself, and a failed gate additionally prints the changed-but-uncovered lines via uncovered-in-diff.py.
+# itself.
 [tool.coverage.report]
 show_missing = false
 exclude_also = [

@@ -7,7 +7,7 @@
     "unit": "sq ft",
     "quantity": "bare ground within 40 ft of the east sector head (3646, 2589), the comb floor less the plots and the engine's water opened 3 ft (was 7,218 on the reviewed manifest); the whole field's bare share 0.07% (was 0.906%)",
     "source": "pool/hamlets/inashiro/inashiro.json comb_floors, fields[0].plot_rings, drawn_channels; the reviewed manifest from 1249742be",
-    "command": "make -C .claude/skills/diagram test-file FILE=tests/gate/test_field_302.py",
+    "command": "<retired: ask:449-phase3-remainder, the old skill directory .claude/skills/diagram is gone since feature 329, and tests/gate/ with it, so the command fails today - the value is history, not re-run>",
     "round": "0b2ab1553"
   },
   "paddy-F2": {
@@ -40,7 +40,7 @@
     "unit": "sq ft",
     "quantity": "bare ground within 40 ft of the fan apex (2977, 1834), opened 3 ft (was 410)",
     "source": "pool/hamlets/inashiro/inashiro.json, as paddy-F1",
-    "command": "make -C .claude/skills/diagram test-file FILE=tests/gate/test_field_302.py",
+    "command": "<retired: ask:449-phase3-remainder, the old skill directory .claude/skills/diagram is gone since feature 329, and tests/gate/ with it, so the command fails today - the value is history, not re-run>",
     "round": "0b2ab1553"
   },
   "bamboo-F1": {

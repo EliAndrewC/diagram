@@ -1062,7 +1062,7 @@
   "subject": "building-review--county-magistracy-example",
   "answers": "fb17f9739a98",
   "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound_example.py servants_row",
-  "command": "make test-file FILE=tests/test_compound_service.py",
+  "command": "<retired: ask:449-phase3-remainder, tests/test_compound_service.py was deleted with the Python unit tests by feature 449 T78, so the command fails today - the value is history, not re-run>",
   "method": "the west dwelling's door at frac 0.15 (its approach clear of the servants' privy); five door marks part-of servants' quarters, counted on the regenerated sheet and held by the test",
   "value": {
    "doors": 5
@@ -1444,7 +1444,7 @@
   "unit": "rows",
   "observed": "2026-10-12",
   "source": "specs/328-match-the-research/ranking.json",
-  "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+  "command": "<retired: ask:449-phase3-remainder, specs/328-match-the-research/audit/merge.py, run from the root, fails today (no audit/merge.py there); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "method": "rows 0-12 and 18 of batch 4's open list marked waves 127-131 in waves.json, the ranking rebuilt"
  },
  "b6-ub-n3": {
@@ -1480,7 +1480,7 @@
   "subject": "building-review--county-magistracy-example",
   "answers": "dca6ffdfd7c0",
   "source": "l7r/diagram/compound_parts.py",
-  "command": "make test-file FILE=tests/test_compound_service.py",
+  "command": "<retired: ask:449-phase3-remainder, tests/test_compound_service.py was deleted with the Python unit tests by feature 449 T78, so the command fails today - the value is history, not re-run>",
   "method": "the hatch reach 3 ft from the wall face; the stables latrine draws its hatch; red at the old 2.5 ft reach",
   "value": {
    "fixed": true
@@ -1687,7 +1687,7 @@
   "unit": "rows",
   "observed": "2026-10-12",
   "source": "specs/328-match-the-research/ranking.json",
-  "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+  "command": "<retired: ask:449-phase3-remainder, specs/328-match-the-research/audit/merge.py, run from the root, fails today (no audit/merge.py there); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "method": "the four rows batch 6 took (main gate passage width, main gate posts, structures abut walls, well glyph) marked waves 132-135 in waves.json, the ranking rebuilt"
  },
  "w139-chessboard-rolls": {
@@ -1705,7 +1705,7 @@
   "unit": "rows",
   "observed": "2026-10-12",
   "source": "specs/328-match-the-research/ranking.json",
-  "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+  "command": "<retired: ask:449-phase3-remainder, specs/328-match-the-research/audit/merge.py, run from the root, fails today (no audit/merge.py there); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "method": "the four rows batch 7 took marked waves 136-139 in waves.json, row 0 held E2 in overrides.json, the ranking rebuilt"
  },
  "row0-coverage-at-49-tsubo": {
@@ -1741,7 +1741,7 @@
   "unit": "rows",
   "observed": "2026-10-12",
   "source": "specs/328-match-the-research/ranking.json",
-  "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+  "command": "<retired: ask:449-phase3-remainder, specs/328-match-the-research/audit/merge.py, run from the root, fails today (no audit/merge.py there); deleted unported by feature 449 T130 - the value is history, not re-run>",
   "method": "rows 772-773 marked waves 142-143 in waves.json, the ranking rebuilt"
  },
  "batch8-bookends": {
