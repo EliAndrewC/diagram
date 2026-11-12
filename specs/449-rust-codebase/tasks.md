@@ -419,6 +419,30 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       verify: DONE. landed: close_check.py ported to Rust (l7r-gate close-check): 1,645 differential cases, 2 explained; make static, rust-test and hooks-test green
 - [ ] T128 Phase 4, the engine's pipeline package (l7r/diagram/pipeline/: gencache, regen, rollcache, poolmaps, pool_index, render_cache, record_build, with codeid.py going with its last Python caller), moved from phase 3 by ask:449-T90-scope beside the Mode A generators it runs; make map, make pool-index and make render-sync are planned as a whole here, and bundle_door.py's is_current verb leaves when it lands
       research: rendering
+- [ ] T129 Phase 3, the hook libraries no task held (phase-3 census, 2026-11-12): scripts/hooks/lib/usage_log.py (85; the Makefile's  starts Python on every make), hm_escape.py (157) and hm_shape.py (594), onto the guard's shared::escape and shared::shape; hm_tree.py (520), which nothing runs, deleted
+      research: rendering
+- [ ] T130 Phase 3, the deletion and retire classes (ask:449-phase3-remainder) Q4/Q5: the 44 specs/ files nothing runs and the specs shell scripts that only run them, l7r/diagram/tools/caption_decl.py and hit_share.py, uncovered-in-diff.py and uncovered_marks.py, deleted unported; every make figures command that fails today or invokes deleted code retired to <retired: ...> with its values kept as history and its file deleted (fr005_probe / ask:449-T79-moves), 387's four placeholder commands retired, 276's measure_before_five run once to place it, 340's harness.py in the class
+      research: rendering
+- [ ] T131 Phase 3, the task gate and its last caller (ask:449-phase3-remainder) Q2 task A: scripts/tick-task.py with task_start, plan_hold, phase_sources and wording (ask:449-T066-scope) and tests/test_task_research_boxes.py in one cut, plan_door.py deleted in it; usage_log.py with it only if nothing else runs it
+      research: rendering
+- [ ] T132 Phase 3, the review snapshot and the implementation check (ask:449-phase3-remainder) Q2 task B: scripts/reviews/review_snapshot.py and scripts/record/impl_check.py, checks_door.py and claims_door.py deleted with them (each file's imports put to the ask:449-T81-slices test first)
+      research: rendering
+- [ ] T133 Phase 3, the six document and agent-file tests as Rust tests (ask:449-phase3-remainder) Q3: test_agent_models, test_citation_rule_inventory, test_claude_md_quotes, test_one_root_claude_md, test_settlement_review_contract, tooling/test_docs_match_the_mechanism (583 lines)
+      research: rendering
+- [ ] T134 Phase 3, the work budget's tools no task held (phase-3 census, 2026-11-12): scripts/measure/work_budget_bundle.py and budget_change.py (1,136 lines), before the task gate (phase_sources imports work_budget_bundle)
+      research: rendering
+- [ ] T135 Phase 3, the authoring tools no task held (phase-3 census, 2026-11-12): claim-feature.py (also run by .specify's create-new-feature.sh), trial-start.py, trial-review.py, task-add.py, set-down.py, make-docs.py (run by the push and the land), patch.py (about 1,160 lines)
+      research: rendering
+- [ ] T136 Phase 3, the review census and the agent sync no task held (phase-3 census, 2026-11-12): scripts/reviews/review_census.py and agent_sync.py with tests/test_agent_sync.py (216 lines)
+      research: rendering
+- [ ] T137 Phase 3, the page sessions' tools no task held (phase-3 census, 2026-11-12; routed to T81 and T83, which closed without them): page_session_runner.py, brief_load.py, escape_log.py, coord.py, research_claims.py (1,080 lines)
+      research: rendering
+- [ ] T138 Phase 3, the research search no task held (phase-3 census, 2026-11-12): research_search.py and semantic_index.py (520 lines), after T85 (both import archive in process)
+      research: rendering
+- [ ] T139 Phase 3, the past features' measurement scripts still run and working (ask:449-phase3-remainder) Q4: 238 inventory_shares, 239 change_size, 242 inventory_census and note_census, 261's five working scripts, 430 full_reasons, 432 triage_price, ported as make figures re-runs them
+      research: rendering
+- [ ] T140 Phase 4, the tools that reach Mode A or interactive/ (ask:449-phase3-remainder) Q1: building_programs, footnote_census, glossary_asset, notes_census, the pack_audit package, picture_diff, record_asset, source_tags_contract and scripts/gates/memo_check.py (each under the T065 clause, named at the phase-3 close), page_lit onto T85's one browser crate, tools/__init__.py, _census.py and work_counts.py with their last importer, 335's harness.py; and the pytest infrastructure's removal commit with the last kept pytest test (test_mode_a_sheets): conftest.py, the two __init__.py, _scope.py, _gate_failures.py, _heap.py, _memory.py, tooling_reuse_time.py (its three 383 commands retired)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
