@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-12T06:02:36Z",
+  "target": "claims-gate",
+  "commit": "6593948db",
+  "why": "CLAIMS_OK: tooling only, no engine claim moves"
+}
