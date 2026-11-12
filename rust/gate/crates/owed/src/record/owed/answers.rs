@@ -12,8 +12,9 @@ use l7r_guard::shared::html_text::unescape;
 use l7r_guard::shared::pyjson;
 use serde_json::{json, Map, Value};
 
-use super::{listing, merge_base, units, zfill4, FAMILIES};
+use super::{listing, merge_base, units, units_in, zfill4, FAMILIES};
 use crate::record::args::Parsed;
+use crate::record::delta::Delta;
 use crate::record::modals;
 use crate::record::repo::{self, fail, git, python, read_universal, tree_of, utc_now, Fail};
 use crate::record::units::{
@@ -91,13 +92,19 @@ pub fn store(root: &Path) -> PathBuf {
 
 /// [`store`] with `RECORD_CHECKS_DIR` given.
 pub(super) fn store_given(root: &Path, named: Option<std::ffi::OsString>) -> PathBuf {
+    store_in(named, &mut || Delta::new(root).git_dir())
+}
+
+/// [`store_given`] with the git directory asked of a computation's reads, only where no store was named (one body, not
+/// generic, so every caller's run counts toward its coverage).
+pub(crate) fn store_in(
+    named: Option<std::ffi::OsString>,
+    git_dir: &mut dyn FnMut() -> PathBuf,
+) -> PathBuf {
     if let Some(dir) = named.filter(|d| !d.is_empty()) {
         return dir.into();
     }
-    let common = git(root, &["rev-parse", "--git-common-dir"]);
-    let common = common.trim();
-    root.join(if common.is_empty() { ".git" } else { common })
-        .join("record-checks")
+    git_dir().join("record-checks")
 }
 
 fn file_of(store_dir: &Path, slug: &str) -> PathBuf {
@@ -480,16 +487,19 @@ pub fn keep_reading(store_dir: &Path, slug: &str, reading: &str, field: &str) ->
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn unanswered(root: &Path) -> Result<Vec<Unit>, Fail> {
-    unanswered_of(root, units(root, None, None, &FAMILIES, "")?)
+    let delta = &mut Delta::new(root);
+    let rows = units_in(delta, None, None, &FAMILIES, "")?;
+    unanswered_in(delta, rows)
 }
 
-/// Those of `rows` (every owed unit of the tree now) with no current answer.
+/// Those of `rows` (every owed unit of the tree now) with no current answer, on the reads of the computation that found them.
 ///
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn unanswered_of(root: &Path, rows: Vec<Unit>) -> Result<Vec<Unit>, Fail> {
-    let s = store(root);
+pub fn unanswered_in(delta: &mut Delta, rows: Vec<Unit>) -> Result<Vec<Unit>, Fail> {
+    let s = delta.store();
+    let root = delta.root();
     let others = sibling_stores(root);
     let modals_now = modals::modals_now(root, true)?;
     let mut owed: Vec<Unit> = Vec::new();

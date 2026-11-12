@@ -16,8 +16,9 @@ pub use answers::{
 };
 
 use super::args::{parse, Parsed, Spec};
+use super::delta::Delta;
 use super::modals;
-use super::repo::{cat_blobs, fail, git, python, read_text, tree_of, Fail};
+use super::repo::{fail, git, python, read_text, tree_of, Fail};
 use super::translation;
 use super::units::{
     self, digest, question, re, stem_of, Keyed, Record, Unit, QUESTIONS, SOURCE_DIRS,
@@ -61,19 +62,17 @@ pub fn merge_base(root: &Path) -> String {
 }
 
 /// The write-ups that differ between `base` and `head` (None: the working tree, untracked files included).
-fn changed_sources(root: &Path, base: &str, head: Option<&str>) -> HashSet<String> {
-    let mut args = vec!["diff", "--name-only", base];
-    args.extend(head);
-    args.push("--");
-    args.extend(SOURCE_DIRS);
-    let mut names: Vec<String> = split(&git(root, &args))
+fn changed_sources(delta: &mut Delta, base: &str, head: Option<&str>) -> HashSet<String> {
+    let mut names: Vec<String> = split(&delta.changed(base, head, &SOURCE_DIRS))
         .into_iter()
         .map(str::to_owned)
         .collect();
     if head.is_none() {
-        let mut others = vec!["ls-files", "--others", "--exclude-standard", "--"];
-        others.extend(SOURCE_DIRS);
-        names.extend(split(&git(root, &others)).into_iter().map(str::to_owned));
+        names.extend(
+            split(&delta.others(&SOURCE_DIRS))
+                .into_iter()
+                .map(str::to_owned),
+        );
     }
     names
         .iter()
@@ -105,21 +104,37 @@ pub fn read_at(
     rev: Option<&str>,
     sources: Option<&HashSet<String>>,
 ) -> Result<Record, Fail> {
+    read_at_in(&mut Delta::new(root), rev, sources)
+}
+
+/// The record's files [`read_at`] reads at `rev`: its question pages and, of the write-ups, those named in `sources`.
+fn record_names(delta: &mut Delta, rev: &str, sources: Option<&HashSet<String>>) -> Vec<String> {
+    let mut specs = vec![QUESTIONS];
+    specs.extend(SOURCE_DIRS);
+    let wanted = |name: &str| sources.is_none_or(|s| s.contains(name));
+    delta
+        .listing(rev, &specs)
+        .split('\n')
+        .filter(|n| {
+            Path::new(n).extension().is_some_and(|x| x == "html")
+                && (!is_write_up(n) || wanted(n.rsplit_once('/').map_or("", |p| p.1)))
+        })
+        .map(str::to_owned)
+        .collect()
+}
+
+/// [`read_at`], on one computation's reads.
+fn read_at_in(
+    delta: &mut Delta,
+    rev: Option<&str>,
+    sources: Option<&HashSet<String>>,
+) -> Result<Record, Fail> {
+    let root = delta.root().to_path_buf();
     let (mut files, mut write_ups) = (Keyed::default(), Vec::new());
     let wanted = |name: &str| sources.is_none_or(|s| s.contains(name));
     if let Some(rev) = rev {
-        let mut args = vec!["ls-tree", "-r", "--name-only", rev, "--", QUESTIONS];
-        args.extend(SOURCE_DIRS);
-        let names: Vec<String> = git(root, &args)
-            .split('\n')
-            .filter(|n| {
-                Path::new(n).extension().is_some_and(|x| x == "html")
-                    && (!is_write_up(n) || wanted(n.rsplit_once('/').map_or("", |p| p.1)))
-            })
-            .map(str::to_owned)
-            .collect();
-        let objects: Vec<String> = names.iter().map(|n| format!("{rev}:{n}")).collect();
-        for (name, text) in names.iter().zip(cat_blobs(root, &objects)) {
+        let names = record_names(delta, rev, sources);
+        for (name, text) in names.iter().zip(delta.texts(rev, &names)) {
             let base = name
                 .rsplit_once('/')
                 .map_or(name.as_str(), |p| p.1)
@@ -159,9 +174,9 @@ fn is_write_up(name: &str) -> bool {
         .any(|d| name.starts_with(&format!("{d}/")))
 }
 
-fn translation_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {
+fn translation_units(delta: &mut Delta, now: &Record) -> Result<Vec<Unit>, Fail> {
     let mut found: Keyed<Unit> = Keyed::default();
-    for row in translation::owed(root)? {
+    for row in translation::owed_in(delta)? {
         let file = row
             .0
             .rsplit_once('/')
@@ -203,36 +218,13 @@ fn translation_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {
     Ok(found.iter().map(|(_, u)| u.clone()).collect())
 }
 
-/// The base `entry_owed` diffs against (`entry_owed.base_of`).
-pub(super) fn entry_base(root: &Path) -> String {
-    let head = git(root, &["rev-parse", "--verify", "-q", "HEAD"])
-        .trim()
-        .to_owned();
-    let origin = !head.is_empty()
-        && !git(root, &["rev-parse", "--verify", "-q", "origin/main"])
-            .trim()
-            .is_empty();
-    let mb = if origin {
-        git(root, &["merge-base", "HEAD", "origin/main"])
-            .trim()
-            .to_owned()
-    } else {
-        String::new()
-    };
-    if mb.is_empty() {
-        head
-    } else {
-        mb
-    }
-}
-
 /// What a run of `entry_owed.py` reads, its door processes included: every file opened under the tree during a real run
 /// on a changed question page (measured 2026-11-10 with `inotifywait -m -r -e open` over the worktree, beside Python's
 /// audit hook): the engine's `interactive` package and the package root above it, the whole research record (the
 /// `record fragments` and door verbs read the question pages, the write-ups and `research/*.json`), the scripts it loads,
 /// and the gate's own sources and wrapper, which build the binary answering its doors. A change to any of them starts it,
 /// so a change that broke what it reads fails as the Python's did (the plan review of T87).
-const ENTRY_READS: [&str; 9] = [
+pub(crate) const ENTRY_READS: [&str; 9] = [
     "l7r/diagram/interactive/",
     "l7r/diagram/__init__.py",
     "research/",
@@ -247,17 +239,14 @@ const ENTRY_READS: [&str; 9] = [
 /// Whether `entry_owed` must run for this delta (the T065 clause, `ask:449-T87-entry-owed`): the family is asked, and a
 /// file it reads changed against the base, untracked files included, or the engine it imports is not here (the crash the
 /// Python had then).
-fn entry_drift_owed(root: &Path) -> bool {
-    let base = entry_base(root);
+fn entry_drift_owed(delta: &mut Delta) -> bool {
+    let base = delta.entry_base();
     if base.is_empty() {
         return false;
     }
-    let mut changed = vec!["diff", "--name-only", base.as_str(), "--"];
-    changed.extend(ENTRY_READS);
-    let mut others = vec!["ls-files", "--others", "--exclude-standard", "--"];
-    others.extend(ENTRY_READS);
-    let names = git(root, &changed) + &git(root, &others);
-    !root
+    let names = delta.changed(&base, None, &ENTRY_READS) + &delta.others(&ENTRY_READS);
+    !delta
+        .root()
         .join("l7r/diagram/interactive/classes/__init__.py")
         .is_file()
         || names.lines().any(|n| !n.trim().is_empty())
@@ -311,19 +300,57 @@ pub fn units(
     families: &[&str],
     uid: &str,
 ) -> Result<Vec<Unit>, Fail> {
+    units_in(&mut Delta::new(root), base, head, families, uid)
+}
+
+/// Reads every file at `base` the asked families will read of it, by one `git cat-file --batch`: the record's pages and
+/// touched write-ups, translation's question pages where its base is this one, the pop-ups' files.
+fn prefetch(
+    delta: &mut Delta,
+    base: &str,
+    touched: Option<&HashSet<String>>,
+    asked: (bool, bool, bool),
+) {
+    let (record, translation, modal) = asked;
+    let mut names = Vec::new();
+    if record || (translation && delta.translation_base() == base) {
+        names.extend(record_names(delta, base, touched));
+    }
+    if modal {
+        names.extend(modals::rev_names(delta, base));
+    }
+    delta.fetch(base, &names);
+}
+
+/// [`units`], on one computation's reads.
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn units_in(
+    delta: &mut Delta,
+    base: Option<&str>,
+    head: Option<&str>,
+    families: &[&str],
+    uid: &str,
+) -> Result<Vec<Unit>, Fail> {
     let base = base
         .filter(|b| !b.is_empty())
-        .map_or_else(|| merge_base(root), str::to_owned);
+        .map_or_else(|| delta.merge_base(), str::to_owned);
     let mut out: Vec<Unit> = Vec::new();
     let has = |f: &str| families.contains(&f);
     let touched = if base.is_empty() {
         None
     } else {
-        Some(changed_sources(root, &base, head))
+        Some(changed_sources(delta, &base, head))
     };
-    let entry = head.is_none() && has("entry-drift") && entry_drift_owed(root);
+    let entry = head.is_none() && has("entry-drift") && entry_drift_owed(delta);
+    if head.is_none() && !base.is_empty() {
+        let asked = (has("record"), has("translation"), has("modal"));
+        prefetch(delta, &base, touched.as_ref(), asked);
+    }
     let now = if has("record") || (head.is_none() && has("translation")) || entry {
-        Some(read_at(root, head, touched.as_ref())?)
+        Some(read_at_in(delta, head, touched.as_ref())?)
     } else {
         None
     };
@@ -331,19 +358,19 @@ pub fn units(
         let was = if base.is_empty() {
             Record::default()
         } else {
-            read_at(root, Some(&base), touched.as_ref())?
+            read_at_in(delta, Some(&base), touched.as_ref())?
         };
         out = units::owed(current, &was);
     }
     if head.is_none() {
         if let (true, Some(now)) = (has("translation"), now.as_ref()) {
-            out.extend(translation_units(root, now)?);
+            out.extend(translation_units(delta, now)?);
         }
         if let (true, Some(now)) = (entry, now.as_ref()) {
-            out.extend(entry_units(root, now)?);
+            out.extend(entry_units(delta.root(), now)?);
         }
         if has("modal") {
-            out.extend(modals::owed(root, &base, uid)?.into_iter().map(
+            out.extend(modals::owed_in(delta, &base, uid)?.into_iter().map(
                 |(slug, occasion, fingerprint)| Unit {
                     slug,
                     occasion,
@@ -607,12 +634,13 @@ pub fn cli(args: &[String]) -> Reply {
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn listing(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     let between = parsed.pair("--between");
+    let delta = &mut Delta::new(root);
     let all = match between {
-        Some((a, b)) => units(root, Some(a), Some(b), &FAMILIES, "")?,
-        None => units(root, None, None, &FAMILIES, "")?,
+        Some((a, b)) => units_in(delta, Some(a), Some(b), &FAMILIES, "")?,
+        None => units_in(delta, None, None, &FAMILIES, "")?,
     };
     let mut rows = if between.is_none() && parsed.on("--unanswered") {
-        answers::unanswered_of(root, all.clone())?
+        answers::unanswered_in(delta, all.clone())?
     } else {
         all.clone()
     };
@@ -635,7 +663,8 @@ pub fn listing(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     let done: HashSet<String> = if parsed.on("--unanswered") || between.is_some() {
         HashSet::new()
     } else {
-        let still: HashSet<String> = answers::unanswered(root)?
+        // the units of this same tree, computed once above: `unanswered` would compute them again (feature 449 T107)
+        let still: HashSet<String> = answers::unanswered_in(delta, all.clone())?
             .into_iter()
             .map(|u| u.slug)
             .collect();
@@ -644,7 +673,7 @@ pub fn listing(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
             .map(|u| u.slug.clone())
             .collect()
     };
-    let named = touched_of(&store(root))?;
+    let named = touched_of(&delta.store())?;
     let now = read_at(root, between.map(|p| p.1), None)?;
     let kinds = tree_of(root).join("l7r/diagram/interactive");
     let text = report(&rows, &now, &done, &named, &kinds)?;

@@ -5,6 +5,7 @@
 /// The record's tools held here, beside the shared record helpers of the core.
 pub mod record {
     pub use l7r_gate_core::record::*;
+    pub mod delta;
     pub mod leaves;
     pub mod modals;
     pub mod owed;

@@ -10,6 +10,7 @@ use l7r_guard::shared::py_text::{collapse, split, strip, SPACE_CLASS};
 use l7r_guard::suite_tools::pylex;
 use serde_json::{json, Map, Value};
 
+use super::delta::Delta;
 use super::repo::{cat_blobs, git, git_show, read_text, read_universal, Fail};
 use super::units::{digest, re, Keyed};
 
@@ -400,9 +401,32 @@ impl RevReader {
 /// `read_at` on a revision's modal directories and any path else.
 #[must_use]
 pub fn read_at(root: &Path, rev: &str) -> RevReader {
+    RevReader::new(root, rev, &modal_dirs())
+}
+
+fn modal_dirs() -> Vec<&'static str> {
     let mut dirs: Vec<&str> = MODAL_DIRS.to_vec();
     dirs.push(MODALS);
-    RevReader::new(root, rev, &dirs)
+    dirs
+}
+
+/// The files under the modal directories at `rev`, as [`RevReader`] lists them.
+pub fn rev_names(delta: &mut Delta, rev: &str) -> Vec<String> {
+    delta
+        .listing(rev, &modal_dirs())
+        .split('\n')
+        .filter(|n| !n.is_empty())
+        .map(str::to_owned)
+        .collect()
+}
+
+/// [`read_at`] with the modal directories' files read of one computation's reads.
+fn read_in(delta: &mut Delta, rev: &str) -> RevReader {
+    let names = rev_names(delta, rev);
+    let texts = delta.texts(rev, &names);
+    let mut read = RevReader::new(delta.root(), rev, &modal_dirs());
+    read.files = Some(names.into_iter().zip(texts).collect());
+    read
 }
 
 /// A title-card choice's modal, from its file; None for no tags (or, `about_only`, no About).
@@ -469,8 +493,12 @@ pub fn modals_now(root: &Path, about_only: bool) -> Result<Vec<Modal>, Fail> {
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn modals_at(root: &Path, rev: &str, about_only: bool) -> Result<Keyed<Modal>, Fail> {
+    modals_of(read_at(root, rev), about_only)
+}
+
+/// The modals a revision's reader holds, keyed by uid.
+fn modals_of(mut read: RevReader, about_only: bool) -> Result<Keyed<Modal>, Fail> {
     let mut out = Keyed::default();
-    let mut read = read_at(root, rev);
     for d in MODAL_DIRS {
         for name in read.names(d).into_iter().filter(|n| ends(n, ".py")) {
             let source = read.read(&name).unwrap_or_default();
@@ -580,32 +608,18 @@ pub fn depiction_owed_by(was: Option<&Modal>, m: &Modal) -> bool {
     was.is_none_or(|w| w.depiction() != m.depiction() || w.entry() != m.entry())
 }
 
-fn changed_pages(root: &Path, base: &str) -> Result<HashSet<String>, Fail> {
+fn changed_pages(delta: &mut Delta, base: &str) -> Result<HashSet<String>, Fail> {
+    const PAGES: [&str; 1] = ["research/questions"];
     let mut changed: HashSet<String> = HashSet::new();
     if !base.is_empty() {
         changed.extend(
-            split(&git(
-                root,
-                &["diff", "--name-only", base, "--", "research/questions"],
-            ))
-            .into_iter()
-            .map(str::to_owned),
+            split(&delta.changed(base, None, &PAGES))
+                .into_iter()
+                .map(str::to_owned),
         );
     }
-    changed.extend(
-        split(&git(
-            root,
-            &[
-                "ls-files",
-                "--others",
-                "--exclude-standard",
-                "--",
-                "research/questions",
-            ],
-        ))
-        .into_iter()
-        .map(str::to_owned),
-    );
+    changed.extend(split(&delta.others(&PAGES)).into_iter().map(str::to_owned));
+    let root = delta.root().to_path_buf();
     if base.is_empty() {
         return Ok(changed);
     }
@@ -614,17 +628,16 @@ fn changed_pages(root: &Path, base: &str) -> Result<HashSet<String>, Fail> {
         v.sort();
         v
     };
-    let moved: HashSet<String> = crate::checks::moves::moved_only(root, base, &names)
+    let moved: HashSet<String> = crate::checks::moves::moved_only(&root, base, &names)
         .into_iter()
         .collect();
     changed.retain(|n| !moved.contains(n));
     let mut listed: Vec<String> = changed.iter().cloned().collect();
     listed.sort();
-    let objects: Vec<String> = listed.iter().map(|f| format!("{base}:{f}")).collect();
     let old: HashMap<String, String> = listed
         .iter()
         .cloned()
-        .zip(cat_blobs(root, &objects))
+        .zip(delta.texts(base, &listed))
         .collect();
     let mut kept = HashSet::new();
     for f in changed {
@@ -643,12 +656,26 @@ fn changed_pages(root: &Path, base: &str) -> Result<HashSet<String>, Fail> {
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn owed(root: &Path, base: &str, uid: &str) -> Result<Vec<(String, String, String)>, Fail> {
+    owed_in(&mut Delta::new(root), base, uid)
+}
+
+/// [`owed`], on one computation's reads.
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn owed_in(
+    delta: &mut Delta,
+    base: &str,
+    uid: &str,
+) -> Result<Vec<(String, String, String)>, Fail> {
     let before = if base.is_empty() {
         Keyed::default()
     } else {
-        modals_at(root, base, true)?
+        modals_of(read_in(delta, base), true)?
     };
-    let changed = changed_pages(root, base)?;
+    let changed = changed_pages(delta, base)?;
+    let root = delta.root();
     let mut rows = Vec::new();
     for m in modals_now(root, true)? {
         if !uid.is_empty() && m.uid() != uid {

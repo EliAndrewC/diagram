@@ -10,7 +10,12 @@ use super::answers::{
     store, unanswered, write_answer, Named,
 };
 use super::answers::{keep_parts, siblings_given, store_given};
-use super::{cli, entry_base, entry_units, read_at, units, FAMILIES};
+use super::{cli, entry_units, read_at, units, FAMILIES};
+use crate::record::delta::Delta;
+
+fn entry_base(root: &Path) -> String {
+    Delta::new(root).entry_base()
+}
 use crate::record::modals;
 use crate::record::testkit::{commit, edit_everything, git, put, record, record_at, stubs, WELL};
 

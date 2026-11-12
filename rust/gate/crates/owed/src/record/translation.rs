@@ -9,8 +9,9 @@ use l7r_guard::shared::sha1;
 use serde_json::{json, Map, Value};
 
 use super::args::{parse, Spec};
+use super::delta::Delta;
 use super::leaves::fragments_for;
-use super::repo::{cat_blobs, fail, python, read_universal, tree_of, Fail};
+use super::repo::{fail, python, read_universal, tree_of, Fail};
 use super::units::{pairs_of, restored, NOTE, ORIG_STORED};
 use crate::Reply;
 
@@ -49,16 +50,6 @@ fn usage(line: &str) -> Reply {
     }
 }
 
-/// `subprocess.run(["git", *args], cwd=root).stdout`, whatever its exit.
-fn git_any(root: &Path, args: &[&str]) -> String {
-    std::process::Command::new("git")
-        .current_dir(root)
-        .args(args)
-        .output()
-        .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
-        .unwrap_or_default()
-}
-
 fn notes_files(names: &[String]) -> Vec<String> {
     let mut out: Vec<String> = names
         .iter()
@@ -73,15 +64,11 @@ fn notes_files(names: &[String]) -> Vec<String> {
     out
 }
 
-fn cache_path(root: &Path) -> std::path::PathBuf {
-    let common = git_any(root, &["rev-parse", "--git-common-dir"]);
-    let common = common.trim();
-    let dir = if common.is_empty() {
-        root.join(".git")
-    } else {
-        root.join(common)
-    };
-    dir.join("record-checks").join("translation-pairs.json")
+fn cache_path(delta: &mut Delta) -> std::path::PathBuf {
+    delta
+        .git_dir()
+        .join("record-checks")
+        .join("translation-pairs.json")
 }
 
 fn parser_key(tree: &Path) -> Result<String, Fail> {
@@ -110,40 +97,29 @@ fn walk_notes(dir: &Path, rel: &str, out: &mut Vec<String>) {
 
 /// Every file of the record's notes, with its originals and its page, at `rev` (None: the tree).
 fn record_files(
-    root: &Path,
+    delta: &mut Delta,
     rev: Option<&str>,
 ) -> Result<Vec<(String, String, String, String)>, Fail> {
+    let root = delta.root().to_path_buf();
     let mut read: Box<Reader>;
     let names: Vec<String> = if let Some(rev) = rev {
-        let listing = git_any(
-            root,
-            &[
-                "ls-tree",
-                "-r",
-                "--name-only",
-                rev,
-                "--",
-                "research/questions",
-            ],
-        );
+        let listing = delta.listing(rev, &["research/questions"]);
         let found: Vec<String> = split(&listing)
             .into_iter()
             .filter(|n| n.as_bytes().ends_with(b".html"))
             .map(str::to_owned)
             .collect();
-        let objects: Vec<String> = found.iter().map(|n| format!("{rev}:{n}")).collect();
         let texts: HashMap<String, String> = found
             .iter()
             .cloned()
-            .zip(cat_blobs(root, &objects))
+            .zip(delta.texts(rev, &found))
             .collect();
         read = Box::new(move |f| Ok(texts.get(f).cloned().unwrap_or_default()));
         found
     } else {
         let mut found = Vec::new();
         walk_notes(&root.join(RECORD), RECORD, &mut found);
-        let owned = root.to_path_buf();
-        read = Box::new(move |f| Ok(read_universal(&owned.join(f))?.unwrap_or_default()));
+        read = Box::new(move |f| Ok(read_universal(&root.join(f))?.unwrap_or_default()));
         found
     };
     let mut out = Vec::new();
@@ -201,12 +177,13 @@ fn text_field(v: &Value, i: usize) -> String {
 
 /// {(translation, original): [(notes file, key, language, translation)]} across the record at `rev` (None: the tree), in insertion order.
 fn record_pairs(
-    root: &Path,
+    delta: &mut Delta,
     rev: Option<&str>,
     parser: &str,
     cache: &mut Map<String, Value>,
 ) -> Result<Vec<Pairs>, Fail> {
-    let files = record_files(root, rev)?;
+    let files = record_files(delta, rev)?;
+    let root = delta.root();
     let (mut keys, mut missing, mut items) =
         (Vec::with_capacity(files.len()), HashSet::new(), Vec::new());
     for (_, notes, originals, page) in &files {
@@ -273,21 +250,29 @@ fn record_pairs(
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn owed(root: &Path) -> Result<Vec<Row>, Fail> {
-    let base = git_any(root, &["merge-base", "HEAD", "origin/main"]);
-    let base = base.trim();
-    let parser = parser_key(&tree_of(root))?;
-    let path = cache_path(root);
+    owed_in(&mut Delta::new(root))
+}
+
+/// [`owed`], on one computation's reads.
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn owed_in(delta: &mut Delta) -> Result<Vec<Row>, Fail> {
+    let base = delta.translation_base();
+    let parser = parser_key(&tree_of(delta.root()))?;
+    let path = cache_path(delta);
     let mut cache = load_cache(&path);
     let size = cache.len();
     let then: HashSet<(String, String)> = if base.is_empty() {
         HashSet::new()
     } else {
-        record_pairs(root, Some(base), &parser, &mut cache)?
+        record_pairs(delta, Some(&base), &parser, &mut cache)?
             .into_iter()
             .map(|(k, _)| k)
             .collect()
     };
-    let now = record_pairs(root, None, &parser, &mut cache)?;
+    let now = record_pairs(delta, None, &parser, &mut cache)?;
     if cache.len() != size {
         save_cache(&path, &cache);
     }

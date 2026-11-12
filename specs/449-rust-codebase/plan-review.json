@@ -396,6 +396,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T107 (the record's owed list's git calls, FR-012)": {
+   "sha256": "17774ffa2860be03827ff34a3112bf332e1cd9bb5826bfd7b38d7d9f7bb56a65",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T107 Approach (checklist part A)": {
+   "sha256": "9af8f63bd9b5f74d69c9f12637a1af87170785a7340ab3e1542c1b967a322c53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T107 Approach (checklist part A)#2": {
+   "sha256": "f85d996b64cd5fd92444c71b685c65a5d18150c406efe7c67b060c42e9f5bffc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6502,6 +6520,47 @@
      "why": "These tests only enforce the requested behavior and the held outputs, so they are enforcement of the request, not scope. The file move is housekeeping under an existing bar."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T107 (the record's owed list's git calls, FR-012)",
+    "### T107 Approach (checklist part A)",
+    "### T107 Approach (checklist part A)#2"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T107-delta",
+     "summary": "One Delta per computation asks git once for revisions, one name-status diff, one untracked listing, one ls-tree a revision and one cat-file --batch, handed to the four families (record, translation, entry-drift, modal), each filtering to its own paths; each family's own base fallback kept; a family whose paths show a possible rename or unusual status falls back to its own narrow diff so its answer is exact; no cache outlives the computation.",
+     "class": "within",
+     "why": "This is the mechanism of the requested cut to the record's owed list's git calls (FR-012, T107; the GM 2026-11-11 'the next three time savings'). The narrow-diff fallback serves FR-012's 'held to every output' and removes no case."
+    },
+    {
+     "id": "T107-listing-reuse",
+     "summary": "listing() reuses its computed units rather than computing them twice; unanswered_of, left with no caller, is removed; the old entry points stay as thin wrappers for their other callers.",
+     "class": "within",
+     "why": "Removing the duplicate computation is part of the requested cost cut; deleting a function with no remaining caller changes no behavior; keeping wrappers preserves every caller's output as FR-012 requires."
+    },
+    {
+     "id": "T107-same-outputs",
+     "summary": "make record-owed, record-owed (no flags, --unanswered, --slugs, --between), modal-owed and translation-owed compared byte-for-byte (stdout, stderr, exit code) before and after on the fixture and on a real record delta; delta/tests.rs holds each shared diff to the narrow one it replaces, the rename case included.",
+     "class": "within",
+     "why": "Verification that enforces FR-012's 'held to every output and verdict the tooling gives today' and SC-007; enforcement of the request, not unrequested scope. The byte-identical verb set names the record, modal and translation verbs; entry-drift's output is held by delta/tests.rs (each shared diff against the narrow one it replaces) and by the landing's gate run, which the plan's green exit requires - a gap in the plan's wording, not a narrowing."
+    },
+    {
+     "id": "T107-measured",
+     "summary": "Cost measured before and after by the same wrapper: 24 git calls and 519-599 ms to 9 calls and 208-257 ms a computation on the fixture; make record-owed 44 to 14 git calls; every figure carries an observed date and method.",
+     "class": "within",
+     "why": "SC-007 requires the cost re-measured by the command that measured it before, and lower; it is."
+    },
+    {
+     "id": "T107-what-is-left",
+     "summary": "Two residual git costs are reported and left: every question page's base read by one cat-file (about 180 ms) even on an empty delta, and moved_only's whole-tree ls-tree kept as its own call.",
+     "class": "within",
+     "why": "The GM asked to proceed with the candidate 'record-owed's git calls' as a time saving, and FR-012/SC-007 require the cost cut and measured lower, not every call removed. Nothing is excluded from the outputs or from the families the change covers; the residue is disclosed, not carved out of any requirement."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11408,6 +11467,44 @@
      "summary": "Tests: owed crates go to one cargo call per family, and a family of one to none. The clearing test keeps a library the build wrote, removes one it did not, and finds another crate's binary put back. The coverage-step tests move to rustc/tests/cover.rs under the 1,000-line bar.",
      "class": "within",
      "why": "These tests only enforce the requested behavior and the held outputs, so they are enforcement of the request, not scope. The file move is housekeeping under an existing bar."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T107": {
+   "section_sha256": "9fbd7ccf49974f671383167f1d7ec0728b35695003a6ce92e57ffbb2fe8ff38d",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T107-delta",
+     "summary": "One Delta per computation asks git once for revisions, one name-status diff, one untracked listing, one ls-tree a revision and one cat-file --batch, handed to the four families (record, translation, entry-drift, modal), each filtering to its own paths; each family's own base fallback kept; a family whose paths show a possible rename or unusual status falls back to its own narrow diff so its answer is exact; no cache outlives the computation.",
+     "class": "within",
+     "why": "This is the mechanism of the requested cut to the record's owed list's git calls (FR-012, T107; the GM 2026-11-11 'the next three time savings'). The narrow-diff fallback serves FR-012's 'held to every output' and removes no case."
+    },
+    {
+     "id": "T107-listing-reuse",
+     "summary": "listing() reuses its computed units rather than computing them twice; unanswered_of, left with no caller, is removed; the old entry points stay as thin wrappers for their other callers.",
+     "class": "within",
+     "why": "Removing the duplicate computation is part of the requested cost cut; deleting a function with no remaining caller changes no behavior; keeping wrappers preserves every caller's output as FR-012 requires."
+    },
+    {
+     "id": "T107-same-outputs",
+     "summary": "make record-owed, record-owed (no flags, --unanswered, --slugs, --between), modal-owed and translation-owed compared byte-for-byte (stdout, stderr, exit code) before and after on the fixture and on a real record delta; delta/tests.rs holds each shared diff to the narrow one it replaces, the rename case included.",
+     "class": "within",
+     "why": "Verification that enforces FR-012's 'held to every output and verdict the tooling gives today' and SC-007; enforcement of the request, not unrequested scope. The byte-identical verb set names the record, modal and translation verbs; entry-drift's output is held by delta/tests.rs (each shared diff against the narrow one it replaces) and by the landing's gate run, which the plan's green exit requires - a gap in the plan's wording, not a narrowing."
+    },
+    {
+     "id": "T107-measured",
+     "summary": "Cost measured before and after by the same wrapper: 24 git calls and 519-599 ms to 9 calls and 208-257 ms a computation on the fixture; make record-owed 44 to 14 git calls; every figure carries an observed date and method.",
+     "class": "within",
+     "why": "SC-007 requires the cost re-measured by the command that measured it before, and lower; it is."
+    },
+    {
+     "id": "T107-what-is-left",
+     "summary": "Two residual git costs are reported and left: every question page's base read by one cat-file (about 180 ms) even on an empty delta, and moved_only's whole-tree ls-tree kept as its own call.",
+     "class": "within",
+     "why": "The GM asked to proceed with the candidate 'record-owed's git calls' as a time saving, and FR-012/SC-007 require the cost cut and measured lower, not every call removed. Nothing is excluded from the outputs or from the families the change covers; the residue is disclosed, not carved out of any requirement."
     }
    ],
    "verdict": "CLEAR"
