@@ -99,6 +99,11 @@ pub fn cli(args: &[String]) -> Reply {
         Some("speckit-todo") => speckit_todo::cli(&args[1..], Path::new(".")),
         Some("close-check") => close_check::cli(&args[1..]),
         Some("claims") => claims::cli(&args[1..]),
+        Some(verb @ ("tick" | "task-start" | "phase-read")) => l7r_gate_task::cli(
+            verb,
+            &args[1..],
+            &std::env::current_dir().unwrap_or_default(),
+        ),
         Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),
         Some("replay-owing") => replay_owing::cli(&args[1..]),
         Some("tunables") => claims::tunables_cli(&args[1..]),
@@ -146,6 +151,7 @@ mod tests {
         assert_eq!(cli(&["claims".to_owned()]).code, 2);
         assert_eq!(cli(&["tunables".to_owned(), "--bogus".to_owned()]).code, 2);
         assert_eq!(cli(&["reviews".to_owned()]).code, 2);
+        assert_eq!(cli(&["tick".to_owned()]).code, 2);
         assert_eq!(
             cli(&["speckit-todo".to_owned(), "--bogus".to_owned()]).code,
             2

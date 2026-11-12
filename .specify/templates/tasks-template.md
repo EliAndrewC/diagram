@@ -42,7 +42,7 @@ description: "Task list template for feature implementation"
   source the pass brought in BEFORE its numbers, claims or details reached a map or a rule - APPLICABLE,
   APPLICABLE-WITH-LIMITS with each limit written into the registry entry's write-ups, or NOT-APPLICABLE and not
   used). The boxes exist
-  because a documented requirement that relies on memory gets skipped; `tests/test_task_research_boxes.py`
+  because a documented requirement that relies on memory gets skipped; `rust/gate/crates/task/src/research_boxes.rs`
   turns a ticked `physical` task with an unticked box red at the gate.
 
 - **A `research record` feature's last research task is its IMPLEMENTATION CHECK** (feature 378, GM 2026-10-10: *"every

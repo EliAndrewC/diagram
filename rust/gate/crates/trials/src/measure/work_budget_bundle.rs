@@ -18,7 +18,8 @@
 //!
 //! Where it lives (feature 449 T134): beside `measure work-budget` in the `trials` crate, the work budget's Rust; `budget_change`
 //! reads `sizes` from here in process, where the Python imported it. `--sources PHASE` prints, as JSON, the stage's old modules
-//! `scripts/gates/phase_sources.py` imported `stage_files` and `counted_files` for (phase 3's Python, run by command, FR-003).
+//! `scripts/gates/phase_sources.py` imported `stage_files` and `counted_files` for (phase 3's Python, run by command, FR-003); `make
+//! task-start` asks [`stage_sources`] in process since that file's port (feature 449 T131).
 
 use std::path::{Path, PathBuf};
 
@@ -448,10 +449,23 @@ fn audit_manifest(phase: &str, listed: &[String]) -> String {
     )
 }
 
-/// `--sources PHASE`: the stage's old modules, relative to the root - the Python defining `stage_<phase>` and every module
-/// defining a function its counters name in the newest run - as `phase_sources.sources` read them before its extra globs, a
-/// JSON list (feature 449 T134: `phase_sources.py` imported `stage_files` and `counted_files`; it runs this, one process a call).
+/// `--sources PHASE`: [`stage_sources`] as a JSON list (feature 449 T134, where `phase_sources.py` ran it by command; nothing has run
+/// the flag since `make task-start` asks [`stage_sources`] in process, feature 449 T131, but it stays the command's way to see them).
 fn sources(root: &Path, phase: &str) -> R<String> {
+    let rel: Vec<Value> = stage_sources(root, phase)?
+        .into_iter()
+        .map(Value::String)
+        .collect();
+    Ok(dumps(&Value::Array(rel), None, true) + "\n")
+}
+
+/// The stage's old modules, relative to the root - the Python defining `stage_<phase>` and every module defining a function its
+/// counters name in the newest run - as `phase_sources.sources` read them before its extra globs (feature 449 T134: `phase_sources.py`
+/// imported `stage_files` and `counted_files`; `make task-start` asks this in process since T131).
+///
+/// # Errors
+/// What the Python raised: a stage or a run that cannot be read.
+pub fn stage_sources(root: &Path, phase: &str) -> Result<Vec<String>, String> {
     // THE OLD CODE IS THE PYTHON: `stage_files` also names a Rust phase's `.rs` source (the audit bundle reads it), which is the
     // very code the task writes and must stay readable
     let mut files: Vec<PathBuf> = stage_files(root, phase)?
@@ -476,18 +490,15 @@ fn sources(root: &Path, phase: &str) -> R<String> {
             }
         }
     }
-    let rel: Vec<Value> = files
+    Ok(files
         .iter()
         .map(|p| {
-            Value::String(
-                p.strip_prefix(root)
-                    .unwrap_or(p)
-                    .to_string_lossy()
-                    .into_owned(),
-            )
+            p.strip_prefix(root)
+                .unwrap_or(p)
+                .to_string_lossy()
+                .into_owned()
         })
-        .collect();
-    Ok(dumps(&Value::Array(rel), None, true) + "\n")
+        .collect())
 }
 
 fn reply(stdout: String, stderr: String, code: i32) -> crate::Reply {

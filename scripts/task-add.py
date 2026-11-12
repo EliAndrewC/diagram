@@ -13,8 +13,10 @@ with its research line. THE SECTION, given, is a file whose text has `{T}` for t
 
 from __future__ import annotations
 
+import json
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -23,14 +25,14 @@ sys.path.insert(0, str(HERE))
 PHYSICAL = "      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited\n"
 
 
-def _tick():  # noqa: ANN202 - tick-task.py's feature resolution, the one copy
-    import importlib.util  # noqa: PLC0415
-
-    spec = importlib.util.spec_from_file_location("tick_task", HERE / "tick-task.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+def _resolve(feature: str) -> tuple[Path, Path | None]:
+    """The repository root and the feature's directory as `make tick` finds them: `l7r-gate tick --resolve`, one process where this
+    loaded `tick-task.py` by path for its `repo_root` and `spec_dir` (feature 449 T131, the tick's port; this file ports in T135). A
+    failure raises, as the load's did."""
+    gate = HERE / "gates" / "l7r-gate.sh"
+    said = subprocess.run([str(gate), "tick", "--resolve", feature], capture_output=True, text=True, check=True)
+    root, d = json.loads(said.stdout)
+    return Path(root), (Path(d) if d else None)
 
 
 def next_id(d: Path) -> str:
@@ -125,9 +127,7 @@ def main(argv: list[str]) -> int:
     if len(args) != 1 or not title:
         print('usage: make task-add F=<feature> TITLE="<what the task does>" [SECTION=<file with {T}>] [RESEARCH=physical] [PERF=1]', file=sys.stderr)
         return 2
-    tick = _tick()
-    root = tick.repo_root()
-    d = tick.spec_dir(root, args[0])
+    root, d = _resolve(args[0])
     if d is None or not (d / "tasks.md").is_file():
         print(f"task-add: no single specs/{args[0]}* directory with a tasks.md under {root}", file=sys.stderr)
         return 2

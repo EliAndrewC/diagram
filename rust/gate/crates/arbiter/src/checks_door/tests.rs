@@ -100,10 +100,6 @@ fn each_read_verb_answers_as_json() {
         ask("reversal", json!(["bad", "/f", "B", "A"])),
         json!(false)
     );
-    assert_eq!(
-        ask("fix_hold", json!([format!("{r}/specs/999-x")])),
-        json!("")
-    );
     assert!(answer("nope", &[]).is_err());
 }
 
@@ -191,7 +187,6 @@ fn close_answers_its_usage_and_its_verdict() {
 fn the_reviews_verbs_answer_through_the_door() {
     let root = clone_at("reviews");
     let path = root.to_string_lossy().into_owned();
-    assert_eq!(answer("review_hold", &[json!(path)]).unwrap(), json!(""));
     let owed = answer("review_owed", &[json!(path)]).unwrap();
     assert_eq!(owed[1], json!([]));
     let map = root.join("pool/hamlets/m");

@@ -3,8 +3,8 @@
 //! verdict: a plan decision that narrowed the spec reached ticked tasks and main unchecked (feature 239's P2). So `make tick` asks this
 //! before it ticks, and the push asks it over the features its delta touches. Both take `PLAN_REVIEW_OK="<reason>"`.
 //!
-//! `make task-start` and the cohort's trigger stay in Python with what they read (`ask:449-T066-scope`); Python that still needs a verb
-//! here reaches it through `scripts/plan_door.py`, one call each, a forwarder and never a fallback.
+//! `make tick` and `make task-start` ask it in process (`l7r-gate tick`, `l7r-gate task-start`, the task gate's crate, feature 449 T131,
+//! `ask:449-phase3-remainder`), where Python reached it through `scripts/plan_door.py`, deleted with them.
 
 mod approach;
 mod bundle;
@@ -71,10 +71,6 @@ fn fail(text: impl Into<String>, code: i32) -> crate::Reply {
     reply(String::new(), text.into(), code)
 }
 
-fn json_reply(value: &Value) -> crate::Reply {
-    said(format!("{value}\n"))
-}
-
 /// One entry in the guard census.
 fn guard_log(event: &str, detail: &str, rule: &str) {
     let detail: String = detail.chars().take(400).collect();
@@ -116,8 +112,10 @@ fn bypass_record(root: &Path, place: &str, why: &str) {
     );
 }
 
-/// FR-001, FR-005 and FR-008 for `make tick`: (may tick, what to print).
-fn tick_permitted(spec_dir: &Path, root: &Path, escaped: Option<&str>) -> (bool, String) {
+/// FR-001, FR-005 and FR-008 for `make tick`: (may tick, what to print) - the bypass recorded when `escaped` is a reason. Public since
+/// feature 449 T131: the tick's port (`l7r-gate tick`, the task gate's crate) asks it in process, where `tick-task.py` asked the door.
+#[must_use]
+pub fn tick_gate(spec_dir: &Path, root: &Path, escaped: Option<&str>) -> (bool, String) {
     let Some((rule, reason)) = owed(spec_dir) else {
         return (true, String::new());
     };
@@ -359,60 +357,47 @@ pub fn owe_in_flight(root: &Path, trigger: &str, part: &str) -> Option<String> {
     approach::owe_in_flight(root, trigger, part, None)
 }
 
-/// What Python that still needs a verb calls, through `scripts/plan_door.py`.
-fn door(words: &[String], stdin: &mut dyn Read, escaped: Option<&str>) -> crate::Reply {
-    let mut text = String::new();
+/// `l7r-gate plan door bypass-record <root> <place> <why>` (`plan-gate.sh`'s record of a push's `PLAN_REVIEW_OK`) and `plan door
+/// active-task <root>` (the review-round guard's question, `review_round_hooks.rs`): the two verbs left of the door `scripts/plan_door.py`
+/// called. Its other verbs left with that file and its last callers, `make tick` and `make task-start`, which ask the plan gate in
+/// process since feature 449 T131 (`ask:449-phase3-remainder`, `ask:449-T066-scope`: the door goes with its last caller).
+fn door(words: &[String]) -> crate::Reply {
     let word = |i: usize| words.get(i).map_or("", String::as_str);
     match word(0) {
-        "task-sections" => {
-            let _ = stdin.read_to_string(&mut text);
-            let found: serde_json::Map<String, Value> = task_sections(&text)
-                .into_iter()
-                .map(|(k, v)| (k, Value::from(v)))
-                .collect();
-            json_reply(&Value::Object(found))
-        }
-        "blocks" => {
-            let _ = stdin.read_to_string(&mut text);
-            let found: Vec<Value> = blocks(&text)
-                .into_iter()
-                .map(|(k, b, at)| json!([k, b, at]))
-                .collect();
-            json_reply(&Value::Array(found))
-        }
-        "wording-only" => {
-            let _ = stdin.read_to_string(&mut text);
-            json_reply(&json!(wording_only(&text)))
-        }
-        "active-task" => {
-            let (dir, task) = task::active_task(Path::new(word(1)));
-            json_reply(&json!([dir.map(|d| d.display().to_string()), task]))
-        }
-        "touched-features" => json_reply(&json!(touched_features(Path::new(word(1)), word(2)))),
-        "tick-permitted" => {
-            let (ok, message) = tick_permitted(Path::new(word(1)), Path::new(word(2)), escaped);
-            json_reply(&json!([ok, message]))
-        }
-        "archive" => json_reply(&json!(task::archive(Path::new(word(1)), None))),
-        "resolve" => json_reply(&json!(
-            resolve(word(1), Path::new(word(2))).map(|d| d.display().to_string())
-        )),
-        "approach-refusal" => json_reply(&json!(approach::refusal(
-            Path::new(word(1)),
-            Path::new(word(2)),
-            word(3)
-        ))),
-        "approach-ruled" => json_reply(&json!(approach::ruled(Path::new(word(1)), word(2), None))),
-        "accept" => match record::arbiter_accept(Path::new(word(1)), word(2), None) {
-            Ok(named) => json_reply(&json!(named)),
-            Err(stop) => stop_reply("arbiter-accept", stop),
-        },
         "bypass-record" => {
             bypass_record(Path::new(word(1)), word(2), word(3));
             said("")
         }
-        _ => fail("usage: l7r-gate plan door <verb>\n", 2),
+        "active-task" => {
+            let (dir, task) = task::active_task(Path::new(word(1)));
+            said(format!(
+                "{}\n",
+                json!([dir.map(|d| d.display().to_string()), task])
+            ))
+        }
+        _ => fail(
+            "usage: l7r-gate plan door bypass-record <root> <place> <why> | active-task <root>\n",
+            2,
+        ),
     }
+}
+
+/// Why `make tick` may not tick `task` for its approach (feature 385 D8, D9), or None (feature 449 T131).
+#[must_use]
+pub fn approach_refusal(spec_dir: &Path, root: &Path, task: &str) -> Option<String> {
+    approach::refusal(spec_dir, root, task)
+}
+
+/// The plan's finished sections moved to plan-done.md; the task ids moved (feature 449 T131: the tick's archive, in process).
+#[must_use]
+pub fn archive_finished(dir: &Path) -> Vec<String> {
+    task::archive(dir, None)
+}
+
+/// Does a task section declare wording only (feature 385 D137)? The tick's wording check asks it (feature 449 T131).
+#[must_use]
+pub fn section_wording_only(section: &str) -> bool {
+    wording_only(section)
 }
 
 fn answer(
@@ -421,13 +406,12 @@ fn answer(
     out_root: &Path,
     python: &str,
     stdin: &mut dyn Read,
-    escaped: Option<&str>,
     claims: &Claims,
 ) -> crate::Reply {
     let verb = words.first().map_or("", String::as_str);
     let n = words.len();
     match (verb, n) {
-        ("door", _) => door(&words[1..], stdin, escaped),
+        ("door", _) => door(&words[1..]),
         ("approach", _) => approach_verb(&words[1..], root),
         ("engine-edit", 1) => engine_edit::cli(stdin, python),
         ("arbiter-accept", 3) => match dir_of(&words[1], root, "arbiter-accept") {
@@ -501,14 +485,12 @@ pub fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Vec<String> {
 /// `l7r-gate plan <verb> ...`; `claims` is `l7r-gate claims`, which the binary hands in (the claims crate reads the plan's, so the
 /// plan cannot name it - feature 449 T92), asked for the triage hint `decide` and `delta` end with.
 pub fn cli(words: &[String], root: &Path, claims: &Claims) -> crate::Reply {
-    let escaped = std::env::var("PLAN_REVIEW_OK").ok();
     answer(
         words,
         root,
         Path::new(BUNDLES),
         "python3",
         &mut std::io::stdin(),
-        escaped.as_deref(),
         claims,
     )
 }

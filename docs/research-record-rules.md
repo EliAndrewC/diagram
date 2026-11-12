@@ -437,7 +437,7 @@ the actual content."* So every research page had, from feature 211 to 301, a cit
   imperial China and pre-Meiji Japan, and whether the write-up's limits are HONEST, MISSING one or OVERSTATED. It runs
   at TWO moments: whenever a source's write-ups are added or changed (every new registry key), and BEFORE a session
   integrates a new source's numbers, claims or details into a map or a rule - a `research: physical` task's fifth
-  box, `source-applicability confirmed` (constitution XII; `tests/test_task_research_boxes.py`, from feature 211 on).
+  box, `source-applicability confirmed` (constitution XII; `rust/gate/crates/task/src/research_boxes.rs`, from feature 211 on).
   The GM: *"whatever subagent check we create in order to justify whether a source is applicable to be used in the
   creation of our diagrams, that subagent check should also be run when we first begin to make use of the source
   prior to integrating its numbers or claims or details into our maps."* A source it finds NOT-APPLICABLE is recorded

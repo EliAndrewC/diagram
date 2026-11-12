@@ -1,6 +1,7 @@
 //! `l7r-gate land` on scratch repositories (feature 449 T121): a clone with a bare origin, every tool the landing runs a stub that logs
 //! its call and answers from files a test writes, and the in-process questions answered by [`Fake`]. `scratchpad/t83s5/` compares the
-//! port with `land.py` over the same inputs and replays recorded landings through both.
+//! port with `land.py` over the same inputs and replays recorded landings through both. The tick and the first pass's tick check are
+//! the task gate's own, in process (feature 449 T131): each test's tasks are real, and so are their refusals.
 
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -183,6 +184,8 @@ pub(super) fn tool(rel: &str) -> String {
 }
 
 /// The feature every fixture lands.
+const PLAN: &str = "# Plan\n\nThe fixture's plan, reviewed CLEAR.\n";
+const PLAN_SHA: &str = "8c79c7a920ecbecd5310903d3d791bb5aa08b592d49e976db64a1860cf4334bb";
 pub(super) const TASKS: &str = "# Tasks\n\n- [ ] T1 one\n      verify: \n- [ ] T2 two\n";
 
 /// A clone of a bare origin holding `specs/449-x/tasks.md`, the stub tools, the landing with its output captured.
@@ -211,6 +214,15 @@ pub(super) fn fx(tag: &str) -> Fx {
         &["remote", "add", "origin", &origin.to_string_lossy()],
     );
     put(&root, "specs/449-x/tasks.md", TASKS);
+    // a plan reviewed CLEAR, so the tick's plan gate passes in process (feature 449 T131); the record's digest is the plan's sha256
+    put(&root, "specs/449-x/plan.md", PLAN);
+    put(
+        &root,
+        "specs/449-x/plan-review.json",
+        &format!(
+            "{{\"plan_sha256\": \"{PLAN_SHA}\", \"verdict\": \"CLEAR\", \"decisions\": []}}\n"
+        ),
+    );
     put(&root, "dev/review-ledger.md", "| ledger |\n");
     put(&root, "dev/bypass-log/.keep", "");
     git(&root, &["add", "-A"]);
@@ -229,6 +241,13 @@ pub(super) fn fx(tag: &str) -> Fx {
         std::fs::create_dir_all(scripts.join(tool).parent().unwrap()).unwrap();
         write_executable(&scripts.join(tool), STUB);
     }
+    // the closing check's implementation check, which the in-process tick runs from the landing's tree at a closing tick: nothing missing
+    std::fs::create_dir_all(scripts.join("record")).unwrap();
+    std::fs::write(
+        scripts.join("record/impl_check.py"),
+        "import json, sys\nprint(json.dumps([[] for _ in sys.argv[2:]]))\n",
+    )
+    .unwrap();
     let bin = dir.join("bin");
     std::fs::create_dir_all(&bin).unwrap();
     write_executable(&bin.join("python"), STUB);
@@ -248,20 +267,13 @@ pub(super) fn fx(tag: &str) -> Fx {
     land.arbiter_ok = false;
     land.inproc = Box::new(Fake(Rc::clone(&answers)));
     land.export("STUB_DIR", &stub.to_string_lossy());
-    let fx = Fx {
+    Fx {
         dir,
         root,
         stub,
         answers,
         land,
-    };
-    // the first pass's tick check: every task may be ticked
-    fx.answer(
-        &format!("tick-task.py --land-check 449 {NOTE} T1"),
-        "out",
-        r#"[{"task": "T1", "tick": "", "refusal": ""}]"#,
-    );
-    fx
+    }
 }
 
 pub(super) const NOTE: &str = "checked";
@@ -273,20 +285,18 @@ fn tasks(t: &[&str]) -> Vec<String> {
 /// The landing of `T1`, start to end.
 fn land(fx: &Fx) -> Result<i32, String> {
     fx.land
-        .land("449", &fx.root.join("specs/449-x"), &tasks(&["T1"]), NOTE)
+        .land(&fx.root.join("specs/449-x"), &tasks(&["T1"]), NOTE)
 }
 
 #[test]
 fn a_clean_landing_ticks_pushes_once_and_says_so() {
     let fx = fx("land-clean");
-    fx.answer(
-        &format!("tick-task.py 449 T1 landed: {NOTE} --landing"),
-        "sh",
-        "printf '%s' '- [x] T1 one' > specs/449-x/tasks.md\n",
-    );
     assert_eq!(land(&fx), Ok(0));
     let (out, err) = fx.said();
+    assert!(out.contains("ticked - [x] T1 one\n1 task(s) still open in specs/449-x/tasks.md\n"));
     assert!(out.ends_with("land: T1 landed and ticked\n"));
+    let tasks = std::fs::read_to_string(fx.root.join("specs/449-x/tasks.md")).unwrap();
+    assert!(tasks.contains("- [x] T1 one\n      verify: DONE. landed: checked\n"));
     assert!(err.is_empty());
     assert!(fx.subjects().contains("449-x: T1 ticked (make land)"));
     let log = fx.log();
@@ -352,27 +362,26 @@ fn a_red_long_run_stops_before_the_ticks() {
 
 #[test]
 fn a_refused_tick_puts_every_tick_back_and_a_raise_ends_the_landing() {
+    // T2's tick would close the feature, and the closing check, asked at the tick alone, refuses it: no report
     let fx = fx("land-tick");
-    fx.answer(
-        &format!("tick-task.py --land-check 449 {NOTE} T1 T2"),
-        "out",
-        r#"[{"task": "T1", "tick": "", "refusal": ""}, {"task": "T2", "tick": "", "refusal": ""}]"#,
-    );
     let two = tasks(&["T1", "T2"]);
-    let how = format!("landed in batch T1+T2: {NOTE}");
-    fx.answer(
-        &format!("tick-task.py 449 T1 {how} --landing"),
-        "sh",
-        "printf x >> specs/449-x/tasks.md\n",
-    );
-    fx.answer(&format!("tick-task.py 449 T2 {how} --landing"), "rc", "2");
     let d = fx.root.join("specs/449-x");
-    assert_eq!(fx.land.land("449", &d, &two, NOTE), Ok(2));
-    assert!(fx.said().1.contains("land: T2 refused its tick (above)"));
+    assert_eq!(fx.land.land(&d, &two, NOTE), Ok(2));
+    let (out, err) = fx.said();
+    assert!(out.contains("ticked - [x] T1 one"));
+    assert!(err.contains("this tick would close the feature, and:\n  449-x has no report.md"));
+    assert!(err.contains("land: T2 refused its tick (above)"));
     assert_eq!(std::fs::read_to_string(d.join("tasks.md")).unwrap(), TASKS);
-    fx.answer(&format!("tick-task.py 449 T2 {how} --landing"), "rc", "1");
-    let raised = fx.land.land("449", &d, &two, NOTE).unwrap_err();
-    assert!(raised.contains("tick-task.py raised on T2"));
+    // a closing check that raises ends the landing
+    put(&d, "report.md", "# r\n");
+    put(&d, "measurements.json", "5");
+    git(&fx.root, &["add", "-A"]);
+    git(
+        &fx.root,
+        &["commit", "-qm", "a record the closing check cannot read"],
+    );
+    let raised = fx.land.land(&d, &two, NOTE).unwrap_err();
+    assert!(raised.contains("the tick raised on T2"));
 }
 
 #[test]
@@ -385,11 +394,9 @@ fn a_push_that_merged_keeps_its_ticks_and_one_that_failed_reverts_them() {
         .1
         .contains("the pull merged other sessions' edits"));
     fx.answer(&format!("{} done", tool("sync-with-main.sh")), "rc", "1");
-    fx.answer(
-        &format!("tick-task.py 449 T1 landed: {NOTE} --landing"),
-        "sh",
-        "printf x >> specs/449-x/tasks.md\n",
-    );
+    // T1 open again, as a fresh landing finds it
+    put(&fx.root, "specs/449-x/tasks.md", TASKS);
+    git(&fx.root, &["commit", "-qam", "T1 open again"]);
     assert_eq!(land(&fx), Ok(1));
     assert!(fx
         .said()
@@ -504,31 +511,6 @@ fn the_helpers_read_as_the_python_did() {
 }
 
 #[test]
-fn the_root_and_the_feature_are_found_as_tick_task_found_them() {
-    let fx = fx("land-where");
-    let sub = fx.root.join("specs");
-    assert_eq!(super::repo_root(&sub), fx.root);
-    let bare = scratch("land-where-bare");
-    put(&bare, "x/specs/.keep", "");
-    put(&bare, "x/y/.keep", "");
-    assert_eq!(
-        super::repo_root(&bare.join("x/y")),
-        bare.join("x").canonicalize().unwrap()
-    );
-    assert_eq!(
-        super::spec_dir(&fx.root, "449"),
-        Some(fx.root.join("specs/449-x"))
-    );
-    assert_eq!(
-        super::spec_dir(&fx.root, "449-x"),
-        Some(fx.root.join("specs/449-x"))
-    );
-    put(&fx.root, "specs/449-y/tasks.md", "");
-    assert_eq!(super::spec_dir(&fx.root, "449"), None);
-    assert_eq!(super::spec_dir(&fx.root, "7"), None);
-}
-
-#[test]
 fn main_refuses_what_land_py_refused_before_it_landed() {
     let fx = fx("land-main");
     let scripts = |_: &Path| fx.dir.join("tree/scripts");
@@ -549,7 +531,8 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
         super::main(&args(&["7", "T1"]), &fx.root, NOTE, &scripts, &nothing),
         Ok(2)
     );
-    // a landing from main: the tree's `tick-task.py` is the real interpreter's to start, and the fixture's tree has none - a raise
+    // a landing from main whose tasks.md cannot be read: the first pass raises before any tool runs
+    std::fs::write(fx.root.join("specs/449-x/tasks.md"), [0xff]).unwrap();
     assert!(super::main(&args(&["449", "T1"]), &fx.root, NOTE, &scripts, &nothing).is_err());
 }
 
@@ -584,6 +567,11 @@ fn a_landing_with_nothing_captured_prints_its_lines() {
     land.said = None;
     land.say("a line on stdout");
     land.warn("a line on stderr");
+    land.pass_through(&crate::Reply {
+        stdout: "a tick's stdout\n".to_owned(),
+        stderr: "a tick's stderr\n".to_owned(),
+        code: 0,
+    });
     assert!(land.said.is_none());
 }
 
@@ -595,15 +583,24 @@ fn a_command_that_cannot_start_or_speaks_no_text_is_a_raise() {
     assert!(fx.land.run(&["printf", "\\377"], &[]).is_err());
     assert_eq!(fx.land.run(&["sh", "-c", "kill -9 $$"], &[]).unwrap().0, -9);
     assert_eq!(fx.land.dirty(&[]).unwrap(), "");
-    assert!(fx.land.tick("449", "T1", "n").is_ok());
-    let mut boxed = fx;
-    boxed.land.boxes = true;
     // `--boxes` only where the first pass found the box open, as `_box_flag` asked
-    boxed.land.tick("449", "T1", "n").unwrap();
-    assert!(boxed.log().contains("tick-task.py 449 T1 n --landing\n"));
+    let d = fx.root.join("specs/449-x");
+    put(&d, "tasks.md", "- [ ] T1 one\n      research: physical\n      - [ ] research pass\n- [ ] T2 two\n- [ ] T3 three\n");
+    let mut boxed = fx;
+    // without BOXES=1 the open box refuses, nor does BOXES=1 tick a box the first pass did not find open
+    assert_eq!(boxed.land.tick(&d, "T1", "n"), Ok(2));
+    boxed.land.boxes = true;
+    assert_eq!(boxed.land.tick(&d, "T1", "n"), Ok(2));
     boxed.land.box_open.borrow_mut().push("T1".to_owned());
-    boxed.land.tick("449", "T1", "n").unwrap();
+    assert_eq!(boxed.land.tick(&d, "T1", "n"), Ok(0));
+    assert!(std::fs::read_to_string(d.join("tasks.md"))
+        .unwrap()
+        .contains("      - [x] research pass\n"));
+    // a raise in the tick is the landing's
+    std::fs::write(d.join("tasks.md"), b"- [ ] T2 two\n\xff").unwrap();
     assert!(boxed
-        .log()
-        .contains("tick-task.py 449 T1 n --landing --boxes"));
+        .land
+        .tick(&d, "T2", "n")
+        .unwrap_err()
+        .contains("the tick raised on T2"));
 }

@@ -462,7 +462,7 @@ tick:           ## [project] tick a task: F=188 T=T03 NOTE="what was verified" [
 ##  NOTE=<text>  what was VERIFIED, which is what the tick is asserting
 ##  BOXES=1      also tick the three physical-research boxes (only legitimate on a `research: physical` task)
 ##  PLAN_REVIEW_OK=<reason>  tick although the plan has no current CLEAR review (feature 243) - recorded
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/tick-task.py" "$(F)" "$(T)" --note-from-env $(if $(BOXES),--boxes,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" tick "$(F)" "$(T)" --note-from-env $(if $(BOXES),--boxes,)
 
 plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity SUBAGENT runs this; ARBITER=<trigger> applies the round arbiter's accept past the plan-round cap   F=243 FILE=<json> AS=spec-fidelity | F=<n> ARBITER=<trigger>
 ##  F=<feature>        the feature number or slug whose plan.md was reviewed
@@ -551,12 +551,12 @@ land-batch:     ## [project] the same command as make land (feature 385 T117's n
 
 phase-read:     ## [project] let ONE of a started phase task's held old-code files be read for ten minutes (to replace the stage's thin Python function, say), the reason logged - the phase-source guard's escape for the Read tool (feature 444)   FILE=<path> WHY="<reason>"
 	@if [ -z "$(FILE)" ] || [ -z "$(WHY)" ]; then printf 'make phase-read: FILE=<path> and WHY="<reason>" are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/phase_sources.py" allow "$(FILE)" "$(WHY)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" phase-read allow "$(FILE)" "$(WHY)"
 
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$(HOLD_OK)",@:)
-	@HOLD_OK="$(HOLD_OK)" python3 "$$(git rev-parse --show-toplevel)/scripts/task_start.py" "$(F)" "$(T)"
+	@HOLD_OK="$(HOLD_OK)" "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-start "$(F)" "$(T)"
 
 decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi

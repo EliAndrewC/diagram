@@ -1,0 +1,30 @@
+# The task gate (feature 449 T131, `ask:449-phase3-remainder` Q2 task A): `l7r-gate tick` (`make tick`, and `make land`'s tick and first
+# pass in process), `l7r-gate task-start` and `l7r-gate phase-read`, ported from `scripts/tick-task.py`, `task_start.py`,
+# `gates/plan_hold.py`, `gates/phase_sources.py` and `gates/wording.py`. Its own crate: the tick asks the plan gate (`plan`), the closing
+# check and the reviews' hold (`reviews`) and the work budget's sources (`trials`) in process, and no crate below the land builds on all
+# three; `cohort`, the nearest, would put `trials` under every crate that builds on it (T92).
+[package]
+name = "l7r_gate_task"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time (feature 449 T93): the research boxes' rule over every `specs/*/tasks.md` (the port of
+# `tests/test_task_research_boxes.py`). A change there runs them again.
+[package.metadata.l7r]
+reads = ["specs/"]
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_gate_plan = { path = "../plan" }
+l7r_gate_reviews = { path = "../reviews" }
+l7r_gate_trials = { path = "../trials" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

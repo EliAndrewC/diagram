@@ -13,68 +13,46 @@ fn tasks(t: &[&str]) -> Vec<String> {
 
 #[test]
 fn a_refusal_shared_by_tasks_is_said_once_naming_them_all() {
-    let fx = fx("cheap-shared");
-    fx.answer(
-        &format!("tick-task.py --land-check 449 {NOTE} T1 T2 T3"),
-        "out",
-        r#"[{"task": "T1", "tick": "", "refusal": "the hour"}, {"task": "T2", "tick": "", "refusal": "the hour", "box_open": true}, {"task": "T3", "tick": "T3 is already ticked", "refusal": ""}]"#,
-    );
+    // an open arbiter tooling fix refuses every task alike; T3 is ticked already; T2's box is open, kept for the tick's `--boxes`
+    let mut fx = fx("cheap-shared");
     let d = fx.root.join("specs/449-x");
+    put(&d, "tasks.md", "- [ ] T1 one\n- [ ] T2 two\n      research: physical\n      - [ ] research pass\n- [x] T3 three\n- [ ] T4 four\n");
+    put(
+        &d,
+        "arbiter.jsonl",
+        "{\"trigger\": \"round:x\", \"fix\": \"open\", \"tooling_fix\": \"the fix\"}\n",
+    );
+    git(&fx.root, &["add", "-A"]);
+    git(&fx.root, &["commit", "-qm", "the tasks"]);
+    fx.land.boxes = true;
     let mut later = Vec::new();
     let stops = fx
         .land
-        .cheap_refusals(
-            "449",
-            &d,
-            &tasks(&["T1", "T2", "T3"]),
-            NOTE,
-            Some(&mut later),
-        )
+        .cheap_refusals(&d, &tasks(&["T1", "T2", "T3"]), NOTE, Some(&mut later))
         .unwrap();
-    assert_eq!(stops, vec!["T1, T2: the hour", "T3: T3 is already ticked"]);
+    assert_eq!(stops.len(), 2, "{stops:?}");
+    assert!(stops[0].starts_with("T1, T2: tick: refused - the round arbiter's tooling fix is open"));
+    assert_eq!(stops[1], "T3: T3 is already ticked");
     assert!(later.is_empty());
     // the open box is kept for the tick's `--boxes` choice (feature 449 T121)
     assert_eq!(*fx.land.box_open.borrow(), vec!["T2".to_owned()]);
 }
 
 #[test]
-fn the_tick_check_is_tick_task_py_by_path_and_its_failure_is_the_landing_s() {
+fn the_tick_check_is_asked_in_process_and_its_raise_is_the_landing_s() {
     let fx = fx("cheap-check");
-    let line = format!("tick-task.py --land-check 449 {NOTE} T1");
-    fx.answer(&line, "out", "not json");
     let d = fx.root.join("specs/449-x");
+    // a plan the tick check cannot read raises (feature 449 T131, where `tick-task.py --land-check` was run by path)
+    std::fs::write(d.join("plan.md"), [0xff]).unwrap();
     assert!(fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, None)
-        .unwrap_err()
-        .contains("--land-check"));
-    fx.answer(&line, "rc", "1");
-    assert!(fx
-        .land
-        .land_check("449", &tasks(&["T1"]), NOTE)
-        .err()
-        .unwrap()
-        .contains("exited 1"));
-    let mut boxed = fx;
-    boxed.land.boxes = true;
-    std::fs::remove_file(
-        boxed
-            .stub
-            .join(format!("{}.rc", super::super::tests::key(&line))),
-    )
-    .unwrap();
-    boxed.answer(&format!("{line} --boxes"), "out", "[]");
-    assert!(boxed
-        .land
-        .land_check("449", &tasks(&["T1"]), NOTE)
-        .unwrap()
-        .is_empty());
-    boxed.land.python = "/no/such/python".to_owned();
-    assert!(boxed.land.land_check("449", &tasks(&["T1"]), NOTE).is_err());
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .is_err());
+    std::fs::remove_file(d.join("plan.md")).unwrap();
     std::fs::write(d.join("tasks.md"), [0xff]).unwrap();
-    assert!(boxed
+    assert!(fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
         .is_err());
 }
 
@@ -90,7 +68,7 @@ fn the_gates_refuse_and_a_claims_refusal_is_deferred_only_where_a_wait_may_cure_
     let mut later = Vec::new();
     let stops = fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, Some(&mut later))
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, Some(&mut later))
         .unwrap();
     assert!(stops[0].starts_with("claims-gate.sh: a claim is owed a check and none is in flight"));
     assert_eq!(stops[1], "plan-gate.sh: ");
@@ -98,20 +76,20 @@ fn the_gates_refuse_and_a_claims_refusal_is_deferred_only_where_a_wait_may_cure_
     fx.answers.flight.borrow_mut().push("b".to_owned());
     let stops = fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, Some(&mut later))
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, Some(&mut later))
         .unwrap();
     assert_eq!((stops.len(), later.len()), (1, 1));
     // no wait at all: said as it is
     let stops = fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
         .unwrap();
     assert_eq!(stops[0], "claims-gate.sh: owed (impl-drift) k");
     // a flight mark that cannot be read is the landing's raise
     *fx.answers.flight_fails.borrow_mut() = true;
     assert!(fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, Some(&mut later))
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, Some(&mut later))
         .is_err());
 }
 
@@ -132,13 +110,13 @@ fn a_red_gate_tripwire_holds_an_engine_landing_unless_escaped() {
     let d = fx.root.join("specs/449-x");
     let stops = fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
         .unwrap();
     assert_eq!(stops, vec!["the tripwire holds"]);
     fx.land.arbiter_ok = true;
     assert!(fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
         .unwrap()
         .is_empty());
 }
@@ -178,7 +156,7 @@ fn the_first_pass_commits_its_own_records() {
     put(&fx.root, "specs/449-x/gm-review.jsonl", "{}\n");
     let stops = fx
         .land
-        .cheap_refusals("449", &d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
         .unwrap();
     assert!(stops.is_empty());
     let subjects = fx.subjects();
@@ -353,14 +331,13 @@ fn a_phase_task_s_refusals_and_a_stale_exempt_entry_join_the_first_pass() {
     let fx = fx("cheap-phase-pass");
     let d = fx.root.join("specs/444-x");
     put(&d, "tasks.md", PHASE_TASKS);
+    // the plan reviewed CLEAR, as the fixture's 449-x has it
+    for f in ["plan.md", "plan-review.json"] {
+        std::fs::copy(fx.root.join("specs/449-x").join(f), d.join(f)).unwrap();
+    }
     put(&fx.root, ".specify/templates/phase-checklist.md", TEMPLATE);
     git(&fx.root, &["add", "-A"]);
     git(&fx.root, &["commit", "-qm", "444"]);
-    fx.answer(
-        &format!("tick-task.py --land-check 444 {NOTE} T1"),
-        "out",
-        r#"[{"task": "T1", "tick": "", "refusal": ""}]"#,
-    );
     fx.answer(
         &format!("{} coverage-exempt stale", tool("gates/l7r-gate.sh")),
         "out",
@@ -368,7 +345,7 @@ fn a_phase_task_s_refusals_and_a_stale_exempt_entry_join_the_first_pass() {
     );
     let stops = fx
         .land
-        .cheap_refusals("444", &d, &tasks(&["T1"]), NOTE, None)
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
         .unwrap();
     assert_eq!(stops.len(), 2);
     assert!(stops[0].starts_with("T1: phase seat: no checklist at specs/444-x/phases/seat.md"));

@@ -9,7 +9,6 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_guard::shared::py_text::strip;
 use l7r_guard::shared::speckit::splitlines;
-use serde_json::Value;
 
 use super::{head, name_of, py_read, rel_of, tail, Land};
 use crate::Reply;
@@ -26,15 +25,6 @@ fn re(pattern: &str) -> Regex {
 /// A reply as `run` read a command's: its code, its stdout then its stderr.
 fn said(r: Reply) -> (i32, String) {
     (r.code, r.stdout + &r.stderr)
-}
-
-/// What `tick-task.py --land-check` says of one task.
-struct Checked {
-    task: String,
-    tick: String,
-    refusal: String,
-    /// A research box still open (`boxes_refusal`), for the tick's `--boxes` choice.
-    box_open: bool,
 }
 
 /// The gates the first pass asks, in its order.
@@ -183,60 +173,10 @@ impl Land {
         ))
     }
 
-    /// What `tick-task.py --land-check` says of every task, the tick refusal and `refusal(..., landed=False)` - the file run by path, as
-    /// `ask:449-T89-reviews` keeps it Python, where `land.py` imported them. Its stderr passes through; a raise in it (exit 1) is the
-    /// landing's raise, as the import's was.
-    fn land_check(
-        &self,
-        feature: &str,
-        tasks: &[String],
-        note: &str,
-    ) -> Result<Vec<Checked>, String> {
-        let script = self.script("tick-task.py");
-        let mut cmd = vec![
-            self.python.as_str(),
-            script.as_str(),
-            "--land-check",
-            feature,
-            note,
-        ];
-        cmd.extend(tasks.iter().map(String::as_str));
-        if self.boxes {
-            cmd.push("--boxes");
-        }
-        let out = self
-            .command(&cmd)
-            .stdin(std::process::Stdio::inherit())
-            .stderr(std::process::Stdio::inherit())
-            .output()
-            .map_err(|e| super::spawn_error(&self.python, &e))?;
-        if !out.status.success() {
-            return Err(format!(
-                "tick-task.py --land-check exited {} (above)",
-                super::code_of(out.status)
-            ));
-        }
-        let said: Value = serde_json::from_slice(&out.stdout)
-            .map_err(|e| format!("tick-task.py --land-check: {e}"))?;
-        let field = |row: &Value, k: &str| row[k].as_str().unwrap_or_default().to_owned();
-        Ok(said
-            .as_array()
-            .into_iter()
-            .flatten()
-            .map(|row| Checked {
-                task: field(row, "task"),
-                tick: field(row, "tick"),
-                refusal: field(row, "refusal"),
-                box_open: row["box_open"].as_bool().unwrap_or(false),
-            })
-            .collect())
-    }
-
     /// Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
     /// `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push).
     pub(super) fn cheap_refusals(
         &self,
-        feature: &str,
         d: &Path,
         tasks: &[String],
         note: &str,
@@ -249,7 +189,11 @@ impl Land {
             Some((_, ts)) => ts.push(task.to_owned()),
             None => by_why.push((why, vec![task.to_owned()])),
         };
-        for checked in self.land_check(feature, tasks, note)? {
+        // each task's tick refusal and `refusal(..., landed=False)`, in process (feature 449 T131, where this ran `tick-task.py
+        // --land-check` by path): a raise there is the landing's, as the import's was
+        for checked in
+            l7r_gate_task::tick::checks(&self.root, d, note, tasks, self.boxes, &self.tick_env())?
+        {
             if checked.box_open {
                 self.box_open.borrow_mut().push(checked.task.clone());
             }

@@ -8,12 +8,13 @@
 //! close-check --push [<range>]           the same, for every touched feature that reads closed (origin/main...HEAD by default)
 //! close-check --carries                  every carry
 //! close-check --write-grandfathered      the features closed now, written to scripts/gates/closed-before-375.txt
-//! close-check --reasons-json DIR SPECS   the reasons of DIR as JSON, its carries read under SPECS (`make tick`'s last tick)
+//! close-check --reasons-json DIR SPECS   the reasons of DIR as JSON, its carries read under SPECS (`make tick`'s last tick until
+//!                                        feature 449 T131 asked `reviews::closing` in process; kept as the reasons' command form)
 //! ```
 //!
 //! The usage log records a run as `usage_log.exited` did: `passed`, or `refused` on a non-zero exit (a usage error's 2 among them), in
 //! the working directory's repository, none where the Python raised. `--reasons-json` records nothing, as `tick-task.py`'s import of
-//! the module recorded nothing (the T118 precedent of `--each-state`). The usage text is the Python's, byte for byte
+//! the module recorded nothing (that file is `l7r-gate tick` since feature 449 T131) (the T118 precedent of `--each-state`). The usage text is the Python's, byte for byte
 //! (`ask:449-usage-text`); a raise is exit 1 after a `Traceback` line, as the other ports answer one.
 
 use std::fmt::Write as _;

@@ -94,7 +94,7 @@ pub(super) fn repo() -> l7r_guard::shared::tempdir::TempDir {
 }
 
 pub(super) fn run(root: &Path, words: &[&str]) -> crate::Reply {
-    run_with(root, words, "", None)
+    run_with(root, words, "")
 }
 
 /// The claims tools, as a plan test sees them: nothing owed a triage.
@@ -106,7 +106,7 @@ fn no_claims(_: &[String]) -> crate::Reply {
     }
 }
 
-fn run_with(root: &Path, words: &[&str], stdin: &str, escaped: Option<&str>) -> crate::Reply {
+fn run_with(root: &Path, words: &[&str], stdin: &str) -> crate::Reply {
     quiet_census();
     let owned: Vec<String> = words.iter().map(|s| (*s).to_owned()).collect();
     answer(
@@ -115,7 +115,6 @@ fn run_with(root: &Path, words: &[&str], stdin: &str, escaped: Option<&str>) -> 
         &root.join("bundles"),
         "bash",
         &mut stdin.as_bytes(),
-        escaped,
         &no_claims,
     )
 }
@@ -463,19 +462,15 @@ fn a_tick_is_refused_then_escaped_only_with_a_reason_and_recorded() {
     let dir = feature(Some(PLAN), None);
     let root = dir.parent().unwrap().parent().unwrap().to_owned();
     std::fs::create_dir_all(root.join("dev")).unwrap();
-    let (spec, top) = (dir.display().to_string(), root.display().to_string());
-    let ask = |escaped: Option<&str>| {
-        run_with(&root, &["door", "tick-permitted", &spec, &top], "", escaped).stdout
-    };
-    let refused = ask(None);
+    let spec = dir.display().to_string();
+    let ask = |escaped: Option<&str>| super::tick_gate(&dir, &root, escaped);
+    let (ok, refused) = ask(None);
     assert!(
-        refused.contains("no current CLEAR review")
-            && refused.contains("make plan-verdict")
-            && refused.starts_with("[false,")
+        !ok && refused.contains("no current CLEAR review") && refused.contains("make plan-verdict")
     );
-    assert!(ask(Some("x")).contains("needs a REASON"));
-    let passed = ask(Some("a superseded plan nobody implements"));
-    assert!(passed.starts_with("[true,") && passed.contains("BYPASSED"));
+    assert!(ask(Some("x")).1.contains("needs a REASON"));
+    let (ok, passed) = ask(Some("a superseded plan nobody implements"));
+    assert!(ok && passed.contains("BYPASSED"));
     let month = std::fs::read_dir(root.join("dev/bypass-log"))
         .unwrap()
         .next()
@@ -492,63 +487,17 @@ fn a_tick_is_refused_then_escaped_only_with_a_reason_and_recorded() {
         run(&root, &["record", &spec, &src, "--as", "spec-fidelity"]).code,
         0
     );
-    assert_eq!(ask(None), "[true,\"\"]\n");
+    assert_eq!(ask(None), (true, String::new()));
 }
 
 #[test]
-fn the_door_forwards_each_verb() {
+fn the_door_keeps_only_the_push_s_bypass_record_and_the_tick_s_asks_are_public() {
+    // feature 449 T131: `plan_door.py` left with its last callers; `plan-gate.sh`'s bypass record and the review-round guard's active
+    // task are the door's two verbs, and what the
+    // tick asked through the door it asks in process
     let root = repo();
     let dir = feature_at(&root, Some(PLAN_TASKS), None, "375-x");
     let top = root.display().to_string();
-    let spec = dir.display().to_string();
-    let sections = run_with(&root, &["door", "task-sections"], PLAN_TASKS, None).stdout;
-    assert!(sections.contains("\"T05\":"));
-    assert!(run_with(&root, &["door", "blocks"], "# x\n", None)
-        .stdout
-        .starts_with("[[\"preamble\","));
-    assert_eq!(
-        run(&root, &["door", "active-task", &top]).stdout,
-        "[null,\"\"]\n"
-    );
-    assert_eq!(
-        run(&root, &["door", "touched-features", &top, "HEAD"]).stdout,
-        "[]\n"
-    );
-    assert!(run(&root, &["door", "resolve", "375", &top])
-        .stdout
-        .contains("375-x"));
-    assert_eq!(
-        run(&root, &["door", "resolve", "999", &top]).stdout,
-        "null\n"
-    );
-    assert_eq!(
-        run(&root, &["door", "approach-refusal", &spec, &top, "T05"]).stdout,
-        "null\n"
-    );
-    assert_eq!(
-        run(&root, &["door", "approach-ruled", &top, "other:x"]).stdout,
-        "null\n"
-    );
-    assert_eq!(run(&root, &["door", "archive", &spec]).stdout, "[]\n");
-    assert_eq!(run(&root, &["door", "accept", &spec, "no-such"]).code, 1);
-    assert_eq!(
-        run_with(&root, &["door", "wording-only"], "x", None).stdout,
-        "false\n"
-    );
-    std::fs::write(
-        dir.join("arbiter.jsonl"),
-        format!(
-            "{}\n",
-            json!({"trigger": "round:spec-fidelity|plan:x", "ruling": "accept"})
-        ),
-    )
-    .unwrap();
-    assert!(run(
-        &root,
-        &["door", "accept", &spec, "round:spec-fidelity|plan:x"]
-    )
-    .stdout
-    .starts_with('['));
     std::fs::create_dir_all(root.join("dev")).unwrap();
     assert_eq!(
         run(
@@ -558,7 +507,15 @@ fn the_door_forwards_each_verb() {
         .code,
         0
     );
-    assert_eq!(run(&root, &["door", "nonsense"]).code, 2);
+    assert_eq!(run(&root, &["door", "task-sections"]).code, 2);
+    // the review-round guard's question
+    assert_eq!(
+        run(&root, &["door", "active-task", &top]).stdout,
+        "[null,\"\"]\n"
+    );
+    assert_eq!(super::approach_refusal(&dir, &root, "T05"), None);
+    assert_eq!(super::archive_finished(&dir), Vec::<String>::new());
+    assert!(!super::section_wording_only("x"));
 }
 
 #[test]
@@ -678,11 +635,12 @@ fn the_verbs_report_what_is_owed_after_and_read_the_active_feature() {
         "{\"feature_directory\": \"specs/375-x\"}",
     )
     .unwrap();
-    assert!(
-        run(&root, &["door", "active-task", &root.display().to_string()])
-            .stdout
-            .contains("375-x")
-    );
+    assert!(super::active_feature(&root).is_some_and(|d| d.ends_with("375-x")));
+    // the review-round guard's door question names it too
+    let top = root.display().to_string();
+    assert!(run(&root, &["door", "active-task", &top])
+        .stdout
+        .contains("375-x"));
     assert!(run(&root, &["approach", "ruled", "hour:1"])
         .stdout
         .contains("approach owed: hour:1"));

@@ -30,6 +30,7 @@ l7r_gate_land = { path = "crates/land" }
 l7r_gate_record = { path = "crates/record" }
 l7r_gate_reviews = { path = "crates/reviews" }
 l7r_gate_rustc = { path = "crates/rustc" }
+l7r_gate_task = { path = "crates/task" }
 l7r_gate_tree = { path = "crates/tree" }
 l7r_gate_trials = { path = "crates/trials" }
 l7r_guard = { path = "../guard" }

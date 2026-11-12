@@ -171,7 +171,7 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
 - Every task is `research: rendering` or `research: physical`; a physical task carries the boxes
   `research pass`, `source-reader confirmed`, `recorded and cited`, `quote-check confirmed` and
-  `source-applicability confirmed`, ticked before the task is (`tests/test_task_research_boxes.py`).
+  `source-applicability confirmed`, ticked before the task is (`rust/gate/crates/task/src/research_boxes.rs`, the port of `tests/test_task_research_boxes.py`, feature 449 T131).
 - Every feature ends with `make feature-report F=NNN WRITE=1` - where its time and dispatches went, from the hooks' event
   log; its last `make tick`, a closing status line and `make gm-reviewed` refuse without it, and without any measurement
   another spec carried to it (`Carried: SC-nnn -> NNN <key>`). A feature lands with the GM's review open when it has a row

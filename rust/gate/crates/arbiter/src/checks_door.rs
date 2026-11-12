@@ -66,7 +66,6 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
             arg(args, 2),
             arg(args, 3)
         )),
-        "fix_hold" => json!(crate::arbiter::fix_hold(Path::new(arg(args, 0)))),
         "record_answer" => {
             rounds::record_answer(&path_arg(args, 0), arg(args, 1), &strings(args.get(2)));
             Value::Null
@@ -84,8 +83,8 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
             keep_batches(&path_arg(args, 0), args.get(1).unwrap_or(&Value::Null))?;
             Value::Null
         }
-        // the reviews' port (T89, `ask:449-T89-reviews`): `tick-task.py`'s hold and `review_snapshot.py`'s owed units
-        "review_hold" => json!(crate::reviews::checkpoint::hold(&path_arg(args, 0), None)),
+        // the reviews' port (T89, `ask:449-T89-reviews`): `review_snapshot.py`'s owed units; `fix_hold` and `review_hold` left with
+        // their last caller, `tick-task.py`, whose port asks them in process (feature 449 T131)
         "review_owed" => {
             let (desc, units, problems) = crate::reviews::owed::owed(&path_arg(args, 0), true);
             let units: Vec<Value> = units

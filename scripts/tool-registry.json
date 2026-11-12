@@ -119,7 +119,7 @@
     },
     "phase_sources": {
       "kind": "check",
-      "what": "scripts/gates/phase_sources.py - make phase-read: one of a started phase task's held old-code files let through the phase-source guard for ten minutes, the reason logged (feature 444, the GM 2026-10-30); each run recorded passed or refused"
+      "what": "rust/gate/crates/task/src/phase_sources.rs (`l7r-gate phase-read`, feature 449 T131) - make phase-read: one of a started phase task's held old-code files let through the phase-source guard for ten minutes, the reason logged (feature 444, the GM 2026-10-30); each run recorded passed or refused"
     },
     "push_gates": {
       "kind": "check",

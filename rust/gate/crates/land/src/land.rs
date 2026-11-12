@@ -18,9 +18,9 @@
 //!
 //! What the port asks in process, by the ruling: the review ledger's owed rows (`reviews ledger-owed`, T117), the holding box
 //! (`speckit-todo --holding`, T118) and the claims (`claims carry|known|rekey|report`, the scope split and the claims in flight, T82),
-//! each through the same function its command runs, so its reply and its usage line are the command's. What stays a process, as
-//! `land.py` ran it: `scripts/tick-task.py` by path (Python, `ask:449-T89-reviews`: `--land-check` in the first pass, the tick itself at
-//! the end), `scripts/make-docs.py` and `python3 -m ruff`, `make`, `scripts/sync-with-main.sh`, the three `*-gate.sh`, and the gate's
+//! each through the same function its command runs, so its reply and its usage line are the command's; and the tick, the first pass's
+//! check of every task and each task's tick at the end (`l7r_gate_task::tick`, feature 449 T131, `ask:449-phase3-remainder`, where this
+//! ran `scripts/tick-task.py` by path). What stays a process, as `land.py` ran it: `scripts/make-docs.py` and `python3 -m ruff`, `make`, `scripts/sync-with-main.sh`, the three `*-gate.sh`, and the gate's
 //! other subcommands through `l7r-gate.sh` (the stamp, `coverage-exempt stale`, `arbiter gate-held`, `cohort counter-only|port|check|
 //! rust-owed`). `codeid.py` is no longer started: the engine paths are the cohort's one copy of `codeid.ENGINE`
 //! ([`l7r_gate_cohort::cohort::is_landing_engine`]).
@@ -61,7 +61,7 @@ pub struct Land {
     root: PathBuf,
     /// The gate tree's `scripts/` (`L7R_GATE_TREE`, which `l7r-gate.sh` sets; the root's where unset): `land.py`'s own `HERE`.
     scripts: PathBuf,
-    /// The interpreter `make-docs.py`, `tick-task.py` and ruff run under (`sys.executable` in the Python).
+    /// The interpreter `make-docs.py` and ruff run under (`sys.executable` in the Python).
     python: String,
     /// `make`.
     make: String,
@@ -82,9 +82,9 @@ pub struct Land {
     /// `make land ... BOXES=1` (`LAND_BOXES`): the landing ticks a physical task's research boxes, as `make tick BOXES=1` does (410 T01
     /// was refused with a pointer to BOXES=1, which `make land` did not pass on).
     boxes: bool,
-    /// The tasks with a research box still open, as the first pass's `tick-task.py --land-check` read them (`box_open`): the tick's
-    /// `--boxes` choice under `BOXES=1`, `land.py`'s `_box_flag`, made here in the land (feature 449 T121, its plan review: the
-    /// choice is the land's, the reading of the boxes `tick-task.py`'s one `boxes_refusal`, asked in the process the pass already starts).
+    /// The tasks with a research box still open, as the first pass's tick check read them (`box_open`): the tick's `--boxes` choice under
+    /// `BOXES=1`, `land.py`'s `_box_flag`, made here in the land (feature 449 T121, its plan review: the choice is the land's, the reading
+    /// of the boxes the tick's one `boxes_refusal`, in process since T131).
     box_open: RefCell<Vec<String>>,
     /// `ARBITER_OK` set: the red-gate tripwire's hold not asked.
     arbiter_ok: bool,
@@ -259,9 +259,9 @@ impl Land {
     }
 
     /// The landing, after its arguments: every pass, the ticks and the push; the exit code.
-    fn land(&self, feature: &str, d: &Path, tasks: &[String], note: &str) -> Result<i32, String> {
+    fn land(&self, d: &Path, tasks: &[String], note: &str) -> Result<i32, String> {
         let mut claims: Vec<String> = Vec::new();
-        let stops = self.cheap_refusals(feature, d, tasks, note, Some(&mut claims))?;
+        let stops = self.cheap_refusals(d, tasks, note, Some(&mut claims))?;
         if !stops.is_empty() {
             let every: Vec<String> = stops.into_iter().chain(claims).collect();
             self.warn(&format!(
@@ -290,13 +290,12 @@ impl Land {
             return Ok(2);
         }
         self.write_ledger(d)?; // the passes the claims round made beside the gate (405 T52, D27)
-        self.tick_and_push(feature, d, tasks, note, engine_landed, counter_landed)
+        self.tick_and_push(d, tasks, note, engine_landed, counter_landed)
     }
 
     /// ONE PUSH, THE TICKS IN IT (405 T51, D24): T13's landing pushed its work, then its ticks - two runs of every push check.
     fn tick_and_push(
         &self,
-        feature: &str,
         d: &Path,
         tasks: &[String],
         note: &str,
@@ -316,7 +315,7 @@ impl Land {
         self.export("SPECIFY_FEATURE", &name_of(d));
         let mut failed = Vec::new();
         for task in tasks {
-            let rc = self.tick(feature, task, &format!("{how}: {note}"))?;
+            let rc = self.tick(d, task, &format!("{how}: {note}"))?;
             if rc != 0 {
                 failed.push(task.as_str());
             }
@@ -363,26 +362,50 @@ impl Land {
         Ok(0)
     }
 
-    /// One task ticked by `tick-task.py` by path (`ask:449-T89-reviews`), its output passed through; its exit code. Under `BOXES=1`,
-    /// `--boxes` where the first pass found the task's research box open ([`Land::box_open`]), as `land.py`'s `_box_flag` chose (410 T01 was refused with a
-    /// pointer to BOXES=1, which `make land` did not pass on). A raise in the tick (exit 1) ends the landing there, as the import's raise
-    /// ended `land.py`, nothing put back.
-    fn tick(&self, feature: &str, task: &str, note: &str) -> Result<i32, String> {
-        let script = self.script("tick-task.py");
-        let mut cmd = vec![
-            self.python.as_str(),
-            script.as_str(),
-            feature,
-            task,
-            note,
-            "--landing",
-        ];
-        if self.boxes && self.box_open.borrow().iter().any(|t| t == task) {
-            cmd.push("--boxes");
-        }
-        match self.loud(&cmd, &[])? {
-            1 => Err(format!("tick-task.py raised on {task} (above)")),
+    /// One task ticked, in process (`l7r_gate_task::tick::tick`, feature 449 T131, where `land.py` and then this land ran `tick-task.py`
+    /// by path), its output passed through; its exit code. Under `BOXES=1`, `--boxes` where the first pass found the task's research box
+    /// open ([`Land::box_open`]), as `land.py`'s `_box_flag` chose (410 T01 was refused with a pointer to BOXES=1, which `make land` did not
+    /// pass on). A raise in the tick (exit 1) ends the landing there, as the import's raise ended `land.py`, nothing put back. The tick is
+    /// `--landing`'s: the landed check left out, the task one this landing names.
+    fn tick(&self, d: &Path, task: &str, note: &str) -> Result<i32, String> {
+        let boxes = self.boxes && self.box_open.borrow().iter().any(|t| t == task);
+        let env = self.tick_env();
+        let ask = l7r_gate_task::tick::Ask::with_env(&self.root, d, task, note, &env);
+        let said = l7r_gate_task::tick::tick(&ask, boxes, true);
+        self.pass_through(&said);
+        match said.code {
+            1 => Err(format!("the tick raised on {task} (above)")),
             rc => Ok(rc),
+        }
+    }
+
+    /// What the tick reads of the process: its environment, but the gate tree its tools are run from, which is this landing's own
+    /// (`scripts`' parent), as `tick-task.py` run by path from there had it.
+    fn tick_env(&self) -> impl Fn(&str) -> Option<String> + '_ {
+        move |k: &str| {
+            if k == "L7R_GATE_TREE" {
+                return Some(
+                    self.scripts
+                        .parent()
+                        .unwrap_or(&self.scripts)
+                        .to_string_lossy()
+                        .into_owned(),
+                );
+            }
+            std::env::var(k).ok()
+        }
+    }
+
+    /// What an in-process step printed, written as it stands.
+    fn pass_through(&self, said: &Reply) {
+        if let Some(cap) = &self.said {
+            let mut cap = cap.borrow_mut();
+            cap.0 += &said.stdout;
+            cap.1 += &said.stderr;
+        } else {
+            print!("{}", said.stdout);
+            let _ = std::io::stdout().flush();
+            eprint!("{}", said.stderr);
         }
     }
 
@@ -538,45 +561,6 @@ fn py_read(path: &Path) -> Result<String, String> {
     Ok(text.replace("\r\n", "\n").replace('\r', "\n"))
 }
 
-/// The repository root: git's answer, or the nearest ancestor holding `specs/` (`tick-task.repo_root`).
-fn repo_root(start: &Path) -> PathBuf {
-    let out = Command::new("git")
-        .args(["rev-parse", "--show-toplevel"])
-        .current_dir(start)
-        .output();
-    match out {
-        Ok(o) if o.status.success() => PathBuf::from(strip(&String::from_utf8_lossy(&o.stdout))),
-        _ => {
-            let here = start.canonicalize().unwrap_or(start.to_path_buf());
-            here.ancestors()
-                .find(|c| c.join("specs").is_dir())
-                .map_or(here.clone(), Path::to_path_buf)
-        }
-    }
-}
-
-/// `specs/<feature>` when that exists, else the ONE `specs/<feature>-*` - None when neither, or several (`tick-task.spec_dir`).
-fn spec_dir(root: &Path, feature: &str) -> Option<PathBuf> {
-    let specs = root.join("specs");
-    let exact = specs.join(feature);
-    if exact.is_dir() {
-        return Some(exact);
-    }
-    let prefix = format!("{feature}-");
-    let mut hits: Vec<PathBuf> = std::fs::read_dir(&specs)
-        .into_iter()
-        .flatten()
-        .flatten()
-        .filter(|e| {
-            let n = e.file_name().to_string_lossy().into_owned();
-            n.starts_with(&prefix) && e.path().is_dir()
-        })
-        .map(|e| e.path())
-        .collect();
-    hits.sort();
-    (hits.len() == 1).then(|| hits.remove(0))
-}
-
 /// The run recorded in the working directory's repository (`usage_log.exited("land", code)`), by the one writer (feature 449 T129).
 fn record(cwd: &Path, code: i32) {
     l7r_guard::shared::usage::record(
@@ -633,7 +617,11 @@ fn finish(done: Result<i32, String>, cwd: &Path) -> Reply {
 #[must_use]
 pub fn cli(args: &[String], cwd: &Path) -> Reply {
     let done = if args == ["--stop"] {
-        stop::stop(&repo_root(cwd), Path::new("/proc"), &mut print_line)
+        stop::stop(
+            &l7r_gate_task::tick::repo_root(cwd),
+            Path::new("/proc"),
+            &mut print_line,
+        )
     } else {
         main(
             args,
@@ -671,8 +659,10 @@ fn main(
         eprintln!("land: refused - NOTE= is empty; say what was verified, as make tick asks");
         return Ok(2);
     }
-    let root = repo_root(cwd);
-    let Some(d) = spec_dir(&root, &args[0]).filter(|d| d.join("tasks.md").is_file()) else {
+    let root = l7r_gate_task::tick::repo_root(cwd);
+    let Some(d) =
+        l7r_gate_task::tick::spec_dir(&root, &args[0]).filter(|d| d.join("tasks.md").is_file())
+    else {
         eprintln!(
             "land: no single specs/{}* directory with a tasks.md under {}",
             args[0],
@@ -680,7 +670,7 @@ fn main(
         );
         return Ok(2);
     };
-    Land::new(&root, &scripts(&root)).land(&args[0], &d, &tasks, &note)
+    Land::new(&root, &scripts(&root)).land(&d, &tasks, &note)
 }
 
 #[cfg(test)]

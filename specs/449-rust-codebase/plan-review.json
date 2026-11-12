@@ -732,6 +732,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T131 (the task gate and its last caller, `ask:449-phase3-remainder` Q2 task A)": {
+   "sha256": "b37d887424d0c509910fa11e1a356986ae0ab4e587f162806cc594f3cab87306",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T131 Approach (checklist part A)": {
+   "sha256": "6ad6977538f2aa8a041c46662e4d1642124cdb68ec6456405bbc1eef71125eb9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8602,6 +8614,84 @@
      "why": "ask:449-phase3-remainder sets no order between them; serving T131's caller first keeps phase_sources on a single implementation."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T131 (the task gate and its last caller, `ask:449-phase3-remainder` Q2 task A)",
+    "### T131 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T131-cut",
+     "summary": "tick-task.py, task_start.py, plan_hold.py, phase_sources.py and wording.py ported whole in one cut, no door, into a new gate crate `task`; test_task_research_boxes.py becomes its Rust test; plan_door.py deleted in the cut; seven files deleted.",
+     "class": "within",
+     "why": "Exactly the placement of ask:449-phase3-remainder (tick-task.py with the T066 slice, T131, plan_door.py deleted in it) and ask:449-T066-scope (task_start, plan_hold, phase_sources, wording.refusal and the door in phase 3, the door deleted with its last caller); FR-001 and FR-003 (one cut, one implementation)."
+    },
+    {
+     "id": "T131-crate",
+     "summary": "Its own crate rust/gate/crates/task on core, plan, reviews and trials.",
+     "class": "within",
+     "why": "A crate layout choice under FR-011's split; decides nothing the request or spec bound."
+    },
+    {
+     "id": "T131-in-process",
+     "summary": "Doors and commands the Python used become in-process calls; codeid.py --ids stays a process, once over every pair the wording check needs.",
+     "class": "within",
+     "why": "In-process follows FR-003/FR-006; codeid.py staying Python by command is ask:449-T062-py-id's placement (one process a run)."
+    },
+    {
+     "id": "T131-callers",
+     "summary": "Makefile tick/phase-read/task-start run the gate commands; the land ticks in process; task-add.py (Python until T135) calls `l7r-gate.sh tick --resolve` once; checks_door's fix_hold and review_hold verbs removed with their last caller, review_owed kept for T132; land tests' stand-ins removed, fixtures carry a CLEAR plan.",
+     "class": "within",
+     "why": "Repointing every caller is what deleting a ported file requires; a Python caller reaching Rust by command keeps one implementation (FR-003); checks_door's remaining life to T132 is ask:449-phase3-remainder's."
+    },
+    {
+     "id": "T131-plan-door-rust",
+     "summary": "The Rust `plan door` subcommand keeps bypass-record (plan-gate.sh) and active-task (review_round_hooks.rs) for callers that are not Python files.",
+     "class": "within",
+     "why": "The ruling deletes scripts/plan_door.py, the Python door, and that happens; the kept verbs are Rust serving non-Python callers, so no Python remains and nothing asked for is held back. Premise, not checkable from the bundle: the block says review_round_hooks.rs asks active-task 'through an inline snippet' and places that caller among 'callers that are not Python files'. This ruling assumes the snippet starts no Python. If it does start Python, that is a phase-1 regression to be raised. It does not change this cut's fidelity."
+    },
+    {
+     "id": "T131-kept-commands",
+     "summary": "--land-check and --resolve kept as commands of the binary; Path.glob and fnmatch empty ranges ported in glob.rs.",
+     "class": "within",
+     "why": "Implementation choices that keep FR-002 parity; decide nothing the spec left to the GM."
+    },
+    {
+     "id": "T131-msg-tick-raised",
+     "summary": "The land's message 'tick-task.py raised on <task>' becomes 'the tick raised on <task> (above)'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 binds the land's own hand-written words, and this changes them. The ruling rests on the purpose test alone. The cut deletes tick-task.py and runs the tick in process, so keeping the string byte for byte would make the land report that a program no longer in the tree raised. That would be a false output, and it would work against the request's purpose: \"making this a Rust codebase instead of a Python codebase\". What a reader acts on is unchanged: the task named, the failure, the verdict and the exit. The plan names T87 and T91 as precedent. The bundle does not carry them, so this ruling takes the plan's word for them and does not rest on them. Neither ask:449-usage-text nor ask:449-T92-messages supports the change: both keep a tool's hand-written words bound."
+    },
+    {
+     "id": "T131-msg-land-check-exit",
+     "summary": "The first pass's 'tick-task.py --land-check exited N' becomes a raise carrying the crate's own error.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This one is physically impossible to keep: the check now runs in process, so there is no child process and no exit status N to report. The verdict, a raise in the first pass, is kept."
+    },
+    {
+     "id": "T131-differential",
+     "summary": "FR-002 proof: 274 command-line cases and 31 land/task-add cases, none differing, under named normalizations (traceback past its first line, bypass record file name and same-second record split, phase-read clock, the renamed message, AUTO_MERGE, stamps, commit ids); five divergences named that no case reaches.",
+     "class": "within",
+     "why": "Each normalization is a ruled one (traceback, ask:449-usage-text), clock or identity noise, or the message ruled above. The one raw difference was a same-second timing collision, and it went away on three reruns. The five named divergences are inputs that no test or suite holds, and FR-002 binds only 'every case its tests and its suites hold'. Naming them is disclosure, not an exclusion."
+    },
+    {
+     "id": "T131-census",
+     "summary": "No recorded measurement runs the deleted files or the three make targets; the constitution keeps its version-history line naming the test file.",
+     "class": "within",
+     "why": "FR-001's rewrite-in-the-cut duty is found empty by a stated search; a version-history line is not a runner."
+    },
+    {
+     "id": "T131-order",
+     "summary": "Lands after T134, whose --sources it asks in process.",
+     "class": "within",
+     "why": "Ordering only."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -14884,6 +14974,82 @@
      "summary": "After T130, before T131 whose phase_sources it serves",
      "class": "within",
      "why": "ask:449-phase3-remainder sets no order between them; serving T131's caller first keeps phase_sources on a single implementation."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T131": {
+   "section_sha256": "0c83b200c014a8434a3b1fda2c73b5645f5126b21c50dc73c0cba5ec05ba741a",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T131-cut",
+     "summary": "tick-task.py, task_start.py, plan_hold.py, phase_sources.py and wording.py ported whole in one cut, no door, into a new gate crate `task`; test_task_research_boxes.py becomes its Rust test; plan_door.py deleted in the cut; seven files deleted.",
+     "class": "within",
+     "why": "Exactly the placement of ask:449-phase3-remainder (tick-task.py with the T066 slice, T131, plan_door.py deleted in it) and ask:449-T066-scope (task_start, plan_hold, phase_sources, wording.refusal and the door in phase 3, the door deleted with its last caller); FR-001 and FR-003 (one cut, one implementation)."
+    },
+    {
+     "id": "T131-crate",
+     "summary": "Its own crate rust/gate/crates/task on core, plan, reviews and trials.",
+     "class": "within",
+     "why": "A crate layout choice under FR-011's split; decides nothing the request or spec bound."
+    },
+    {
+     "id": "T131-in-process",
+     "summary": "Doors and commands the Python used become in-process calls; codeid.py --ids stays a process, once over every pair the wording check needs.",
+     "class": "within",
+     "why": "In-process follows FR-003/FR-006; codeid.py staying Python by command is ask:449-T062-py-id's placement (one process a run)."
+    },
+    {
+     "id": "T131-callers",
+     "summary": "Makefile tick/phase-read/task-start run the gate commands; the land ticks in process; task-add.py (Python until T135) calls `l7r-gate.sh tick --resolve` once; checks_door's fix_hold and review_hold verbs removed with their last caller, review_owed kept for T132; land tests' stand-ins removed, fixtures carry a CLEAR plan.",
+     "class": "within",
+     "why": "Repointing every caller is what deleting a ported file requires; a Python caller reaching Rust by command keeps one implementation (FR-003); checks_door's remaining life to T132 is ask:449-phase3-remainder's."
+    },
+    {
+     "id": "T131-plan-door-rust",
+     "summary": "The Rust `plan door` subcommand keeps bypass-record (plan-gate.sh) and active-task (review_round_hooks.rs) for callers that are not Python files.",
+     "class": "within",
+     "why": "The ruling deletes scripts/plan_door.py, the Python door, and that happens; the kept verbs are Rust serving non-Python callers, so no Python remains and nothing asked for is held back. Premise, not checkable from the bundle: the block says review_round_hooks.rs asks active-task 'through an inline snippet' and places that caller among 'callers that are not Python files'. This ruling assumes the snippet starts no Python. If it does start Python, that is a phase-1 regression to be raised. It does not change this cut's fidelity."
+    },
+    {
+     "id": "T131-kept-commands",
+     "summary": "--land-check and --resolve kept as commands of the binary; Path.glob and fnmatch empty ranges ported in glob.rs.",
+     "class": "within",
+     "why": "Implementation choices that keep FR-002 parity; decide nothing the spec left to the GM."
+    },
+    {
+     "id": "T131-msg-tick-raised",
+     "summary": "The land's message 'tick-task.py raised on <task>' becomes 'the tick raised on <task> (above)'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 binds the land's own hand-written words, and this changes them. The ruling rests on the purpose test alone. The cut deletes tick-task.py and runs the tick in process, so keeping the string byte for byte would make the land report that a program no longer in the tree raised. That would be a false output, and it would work against the request's purpose: \"making this a Rust codebase instead of a Python codebase\". What a reader acts on is unchanged: the task named, the failure, the verdict and the exit. The plan names T87 and T91 as precedent. The bundle does not carry them, so this ruling takes the plan's word for them and does not rest on them. Neither ask:449-usage-text nor ask:449-T92-messages supports the change: both keep a tool's hand-written words bound."
+    },
+    {
+     "id": "T131-msg-land-check-exit",
+     "summary": "The first pass's 'tick-task.py --land-check exited N' becomes a raise carrying the crate's own error.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This one is physically impossible to keep: the check now runs in process, so there is no child process and no exit status N to report. The verdict, a raise in the first pass, is kept."
+    },
+    {
+     "id": "T131-differential",
+     "summary": "FR-002 proof: 274 command-line cases and 31 land/task-add cases, none differing, under named normalizations (traceback past its first line, bypass record file name and same-second record split, phase-read clock, the renamed message, AUTO_MERGE, stamps, commit ids); five divergences named that no case reaches.",
+     "class": "within",
+     "why": "Each normalization is a ruled one (traceback, ask:449-usage-text), clock or identity noise, or the message ruled above. The one raw difference was a same-second timing collision, and it went away on three reruns. The five named divergences are inputs that no test or suite holds, and FR-002 binds only 'every case its tests and its suites hold'. Naming them is disclosure, not an exclusion."
+    },
+    {
+     "id": "T131-census",
+     "summary": "No recorded measurement runs the deleted files or the three make targets; the constitution keeps its version-history line naming the test file.",
+     "class": "within",
+     "why": "FR-001's rewrite-in-the-cut duty is found empty by a stated search; a version-history line is not a runner."
+    },
+    {
+     "id": "T131-order",
+     "summary": "Lands after T134, whose --sources it asks in process.",
+     "class": "within",
+     "why": "Ordering only."
     }
    ],
    "verdict": "CLEAR"

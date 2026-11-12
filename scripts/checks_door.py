@@ -1,5 +1,5 @@
 """The Python callers' door to the check state and the round arbiter in Rust (feature 449 T86, `ask:449-T86-door`): one `l7r-gate checks-door` process a run, its verbs in order so a read follows its own write (FR-006), each
-function a forwarder and never a fallback (and, since T89, the reviews' `review_hold` and `review_owed`, `ask:449-T89-reviews`). Writes - `record_answer`, `trip`, `keep_batches` - are the same Rust functions, under the same locks, as the guards'. Deleted with its last caller; named at the phase-3 close if still present."""
+function a forwarder and never a fallback (and, since T89, the reviews' `review_owed`, `ask:449-T89-reviews`; `fix_hold` and `review_hold` left with `tick-task.py`, feature 449 T131). Writes - `record_answer`, `trip`, `keep_batches` - are the same Rust functions, under the same locks, as the guards'. Deleted with its last caller; named at the phase-3 close if still present."""
 
 from __future__ import annotations
 
@@ -112,10 +112,6 @@ def reversal(events: list[Mapping[str, Any]], path: str, old: str, new: str) -> 
     return _ask("reversal", events, path, old, new)
 
 
-def fix_hold(d: pathlib.Path) -> str:
-    return _ask("fix_hold", str(d))
-
-
 def record_answer(root: pathlib.Path, check: str, slugs: list[str]) -> None:
     _ask("record_answer", str(root), check, slugs)
 
@@ -126,11 +122,6 @@ def trip(root: pathlib.Path, trigger: str, kind: str, unit: str, detail: str, no
 
 def keep_batches(root: pathlib.Path, batches: Mapping[str, list[str]]) -> None:
     _ask("keep_batches", str(root), dict(batches))
-
-
-def review_hold(root: pathlib.Path) -> str:
-    """The refusal `make tick` prints while the feature's hourly checkpoint holds it, or "" (`l7r-gate reviews checkpoint hold`; T89)."""
-    return _ask("review_hold", str(root))
 
 
 def review_owed(root: pathlib.Path) -> tuple[str, list[SimpleNamespace], list[str]]:
