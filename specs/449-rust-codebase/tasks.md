@@ -401,8 +401,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [ ] T123 The hook suites started longest first, from each suite's last time: the eight slots take the roster in its order, the longest suite 34th, the model 44 s as run against 35 s longest first (2026-11-12); T98 measured longest first slower (74.8 s and 77 s against 63.8 s), so it lands only on a fresh A/B (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
       research: rendering
       note: not built - T122's full hook runs (53.1 s and 54.1 s against 52.1 s) showed the run is held by something its suites share, not by its schedule, so the model's saving does not hold and the GM's condition (a significant measured expected saving) is not met; to be closed or rescoped once that bound is found
-- [ ] T124 The claims-door verbs only land.py asked (scope_split, file_left, flight_live, CLAIMS_FEATURE_DIR) and seam::file_left removed, with claims_door.py's forwarders: kept through T121's landing commit so the Python land.py could land its own deletion (ask:449-T83-scope), landed by the Rust land after it (T121's plan review, 2026-11-12)
+- [x] T124 The claims-door verbs only land.py asked (scope_split, file_left, flight_live, CLAIMS_FEATURE_DIR) and seam::file_left removed, with claims_door.py's forwarders: kept through T121's landing commit so the Python land.py could land its own deletion (ask:449-T83-scope), landed by the Rust land after it (T121's plan review, 2026-11-12)
       research: rendering
+      verify: DONE. landed: the four claims-door verbs only land.py asked removed; whole-tree census clean, make static and rust-test green; the Rust land's first landing
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
