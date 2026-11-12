@@ -426,6 +426,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T109 (push-checks' Rust self-tests kept per binary, FR-012)": {
+   "sha256": "17f75927c2970a704d78d7265f853c212fc73ba4edbf789764db38050f7a845d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T109 Approach (checklist part A)": {
+   "sha256": "5e8a458a171f0c1ca290573c66e724fc86675ca7e4bd19fb516d3b0f2d08234e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6614,6 +6626,70 @@
      "why": "The GM's candidate was the suite's time as the full hook run's critical path, so stopping at the fixtures narrows it. The plan's stated reason (the code is the gate's push.rs, not the suite) is a where-the-code-lives argument and is NOT accepted. The ground that holds: the named remedy, a skip in push-checks, would change what the gate does on every real push, not only in fixtures - new gate behavior the request to cut the suite's time does not reach, and which FR-012's hold on every output and verdict would have to be checked as its own piece of work. The request was to cut the time (done, measured lower per SC-007), not to exhaust it, and the plan surfaces the remainder for the GM's next measure-and-choose round rather than hiding it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T109 (push-checks' Rust self-tests kept per binary, FR-012)",
+    "### T109 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T109-key",
+     "summary": "A passed Rust self-test is kept against the scripts/ version and the gate binary's identity, and runs again when either changes",
+     "class": "within",
+     "why": "The GM approved 'let push-checks skip its Rust self-tests when nothing they test changed' (2026-11-11, 'the last two time savings of the round'). The block bases the key on what the six self-tests read: the binary, whose fixtures are compiled in, and, for gate-stamp, codeid.py under scripts/. That is the condition the GM approved, with nothing added and nothing left out."
+    },
+    {
+     "id": "T109-binary-identity",
+     "summary": "The binary is identified by path, inode, size and nanosecond mtime, not by a content hash",
+     "class": "within",
+     "why": "A rebuild writes a new file and the wrapper touches it, so every rebuild changes the identity. Keying on metadata errs toward running again (a same-bytes rebuild reruns the self-tests). It does not skip a changed binary in any case the block describes, so 'nothing they test changed' still holds."
+    },
+    {
+     "id": "T109-current-exe",
+     "summary": "The binary keyed is the running process's own (current_exe), the one the wrapper's $BIN runs",
+     "class": "within",
+     "why": "The key names the binary that actually runs the self-tests, which is the thing they test."
+    },
+    {
+     "id": "T109-fail-closed",
+     "summary": "A binary whose file cannot be read keeps nothing, and a failed self-test is never kept",
+     "class": "within",
+     "why": "Both run the self-tests in every case where the keep condition cannot be shown to hold, so the gate loosens only as far as approved."
+    },
+    {
+     "id": "T109-suite-template",
+     "summary": "The sync-with-main suite's template clone runs push-checks once, so each copied case starts with the self-tests kept",
+     "class": "within",
+     "why": "The GM's request names 'roughly 14 s of the sync-with-main suite's serial run' as part of the saving he approved. The fixture now matches a real clone after its first push. The suite's cases test sync-with-main, not the self-tests, and the block narrows none of its cases."
+    },
+    {
+     "id": "T109-measurement",
+     "summary": "Before and after measured by alternated push-checks runs and suite runs, all 138 checks passing",
+     "class": "within",
+     "why": "SC-007 requires the same command before and after, lower, with verdicts held. The block's figures each carry a date and method label. The saving is smaller than the 0.4 s estimate, which is a fact about the measurement and not a narrowing."
+    },
+    {
+     "id": "T109-test",
+     "summary": "A test pins that the self-tests are kept on a second push and rerun on a rewritten binary, a moved scripts/, the cache off, and an unreadable binary",
+     "class": "within",
+     "why": "It enforces the requested behavior and its limits. With that behavior deleted, nothing is left for it to check."
+    },
+    {
+     "id": "T109-leftover",
+     "summary": "money-candidates (2.2 s of a 3.7 s push) is reported to the GM as a candidate and not acted on",
+     "class": "within",
+     "why": "It reports the next candidate rather than widening this task's scope, which follows the GM's 'then we will stop and measure again' pattern."
+    },
+    {
+     "id": "T109-order-exits",
+     "summary": "Before T108; exits green on make static, rust-test, hooks-test and land, red recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Ordering and exits within the two tasks the GM approved together."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11597,6 +11673,68 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "The GM's candidate was the suite's time as the full hook run's critical path, so stopping at the fixtures narrows it. The plan's stated reason (the code is the gate's push.rs, not the suite) is a where-the-code-lives argument and is NOT accepted. The ground that holds: the named remedy, a skip in push-checks, would change what the gate does on every real push, not only in fixtures - new gate behavior the request to cut the suite's time does not reach, and which FR-012's hold on every output and verdict would have to be checked as its own piece of work. The request was to cut the time (done, measured lower per SC-007), not to exhaust it, and the plan surfaces the remainder for the GM's next measure-and-choose round rather than hiding it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T109": {
+   "section_sha256": "a821a861096f33fcbbc63d05b279fe12def152d71879df86680da54498734802",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T109-key",
+     "summary": "A passed Rust self-test is kept against the scripts/ version and the gate binary's identity, and runs again when either changes",
+     "class": "within",
+     "why": "The GM approved 'let push-checks skip its Rust self-tests when nothing they test changed' (2026-11-11, 'the last two time savings of the round'). The block bases the key on what the six self-tests read: the binary, whose fixtures are compiled in, and, for gate-stamp, codeid.py under scripts/. That is the condition the GM approved, with nothing added and nothing left out."
+    },
+    {
+     "id": "T109-binary-identity",
+     "summary": "The binary is identified by path, inode, size and nanosecond mtime, not by a content hash",
+     "class": "within",
+     "why": "A rebuild writes a new file and the wrapper touches it, so every rebuild changes the identity. Keying on metadata errs toward running again (a same-bytes rebuild reruns the self-tests). It does not skip a changed binary in any case the block describes, so 'nothing they test changed' still holds."
+    },
+    {
+     "id": "T109-current-exe",
+     "summary": "The binary keyed is the running process's own (current_exe), the one the wrapper's $BIN runs",
+     "class": "within",
+     "why": "The key names the binary that actually runs the self-tests, which is the thing they test."
+    },
+    {
+     "id": "T109-fail-closed",
+     "summary": "A binary whose file cannot be read keeps nothing, and a failed self-test is never kept",
+     "class": "within",
+     "why": "Both run the self-tests in every case where the keep condition cannot be shown to hold, so the gate loosens only as far as approved."
+    },
+    {
+     "id": "T109-suite-template",
+     "summary": "The sync-with-main suite's template clone runs push-checks once, so each copied case starts with the self-tests kept",
+     "class": "within",
+     "why": "The GM's request names 'roughly 14 s of the sync-with-main suite's serial run' as part of the saving he approved. The fixture now matches a real clone after its first push. The suite's cases test sync-with-main, not the self-tests, and the block narrows none of its cases."
+    },
+    {
+     "id": "T109-measurement",
+     "summary": "Before and after measured by alternated push-checks runs and suite runs, all 138 checks passing",
+     "class": "within",
+     "why": "SC-007 requires the same command before and after, lower, with verdicts held. The block's figures each carry a date and method label. The saving is smaller than the 0.4 s estimate, which is a fact about the measurement and not a narrowing."
+    },
+    {
+     "id": "T109-test",
+     "summary": "A test pins that the self-tests are kept on a second push and rerun on a rewritten binary, a moved scripts/, the cache off, and an unreadable binary",
+     "class": "within",
+     "why": "It enforces the requested behavior and its limits. With that behavior deleted, nothing is left for it to check."
+    },
+    {
+     "id": "T109-leftover",
+     "summary": "money-candidates (2.2 s of a 3.7 s push) is reported to the GM as a candidate and not acted on",
+     "class": "within",
+     "why": "It reports the next candidate rather than widening this task's scope, which follows the GM's 'then we will stop and measure again' pattern."
+    },
+    {
+     "id": "T109-order-exits",
+     "summary": "Before T108; exits green on make static, rust-test, hooks-test and land, red recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Ordering and exits within the two tasks the GM approved together."
     }
    ],
    "verdict": "CLEAR"

@@ -1,7 +1,8 @@
 //! The push's checks (feature 383, 430; feature 449 T067, from `push_checks.py` and `push_gates.py`): what each push gate judges, so a push
 //! whose delta holds none of it skips the gate (a push of records alone took 10.9 s, observed 2026-10-26, method: the push timed gate by
 //! gate), and the push's own checks in order, the first refusal printing the shell's line and ending the run. The rows still in Python
-//! run as their own processes until their tasks port them (`ask:449-T067-scope`); a passing self-test is kept per version of `scripts/`.
+//! run as their own processes until their tasks port them (`ask:449-T067-scope`); a passing self-test is kept per version of `scripts/`, and a
+//! Rust one per gate binary too (T109).
 
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
@@ -245,6 +246,27 @@ fn scripts_version(tree: &Path) -> String {
     sha256::hex(text.as_bytes())
 }
 
+/// THE RUST SELF-TESTS KEPT PER BINARY (feature 449 T109; the GM 2026-11-11): the six ran on every push whether or not the binary had
+/// changed, 0.28 s of a 3.7 s push at load 0.5 and about 0.4 s under the sync-with-main suite's load (2026-11-11). Each tests the binary
+/// on fixtures of its own, but gate-stamp's, which hashes `.py` files through the tree's `codeid.py`: so a Rust self-test is kept
+/// against the version of `scripts/` and the binary as a file - its path, inode, size and time, which a rebuild writes anew. Hashing
+/// its 15.6 MB took 33 ms, a ninth of what keeping it saves; a binary whose file cannot be read keeps nothing.
+fn binary_id(path: &Path) -> Option<String> {
+    let meta = std::fs::metadata(path).ok()?;
+    let at = meta
+        .modified()
+        .ok()?
+        .duration_since(std::time::UNIX_EPOCH)
+        .ok()?
+        .as_nanos();
+    Some(format!(
+        "{}:{}:{}:{at}",
+        path.display(),
+        std::os::unix::fs::MetadataExt::ino(&meta),
+        meta.len()
+    ))
+}
+
 fn stamps_file(root: &Path, off: bool) -> Option<PathBuf> {
     if off {
         None
@@ -265,6 +287,8 @@ struct Tools {
     tree: PathBuf,
     python: String,
     off: bool,
+    /// The gate binary the Rust self-tests run, this process's own: what a passed one is kept against (T109).
+    binary: Option<PathBuf>,
 }
 
 /// A row's command, in the clone.
@@ -295,6 +319,7 @@ pub fn timing_rows(tree: &Path, root: &Path) -> Vec<(String, Option<Command>)> {
         tree: tree.to_owned(),
         python: "python3".to_owned(),
         off: false,
+        binary: None,
     };
     let mut whole = Command::new(tree.join("scripts/gates/l7r-gate.sh"));
     whole.arg("push-checks").arg(root).current_dir(root);
@@ -327,13 +352,22 @@ fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Rep
         .unwrap_or(json!({}));
     let mut changed = false;
     let version = scripts_version(&tools.tree);
+    let gate = tools
+        .binary
+        .as_deref()
+        .and_then(binary_id)
+        .map(|b| sha256::hex(format!("{version}\n{b}").as_bytes()));
     let mut failed = String::new();
     for row in rows
         .iter()
         .filter(|r| !skips.iter().any(|s| s == r.0) && holds(root, r.5))
     {
-        let keep = row.4 && matches!(row.1, Tool::Py(_));
-        if keep && stamps[row.0] == version.as_str() {
+        let key = match row.1 {
+            Tool::Py(_) => Some(&version),
+            Tool::Gate => gate.as_ref(),
+        }
+        .filter(|_| row.4);
+        if key.is_some_and(|k| stamps[row.0] == k.as_str()) {
             continue;
         }
         if !run_row(tools, row, root) {
@@ -351,8 +385,8 @@ fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Rep
             }
             break;
         }
-        if keep {
-            stamps[row.0] = Value::from(version.as_str());
+        if let Some(k) = key {
+            stamps[row.0] = Value::from(k.as_str());
             changed = true;
         }
     }
@@ -414,6 +448,7 @@ pub fn checks_cli(args: &[String], tree: &Path, off: bool) -> Reply {
                         tree: tree.to_owned(),
                         python: "python3".to_owned(),
                         off,
+                        binary: std::env::current_exe().ok(),
                     },
                     &CHECKS,
                     &top,

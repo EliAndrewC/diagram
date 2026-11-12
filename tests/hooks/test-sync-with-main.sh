@@ -41,7 +41,11 @@ template_build() { # $1 = dir; builds $1/{github.git,seed,main,main/.clones/c}
   git -C "$d/main" config receive.denyCurrentBranch updateInstead
   mkdir -p "$d/main/.clones/.session-clones"
   git clone -q "$d/github.git" "$d/main/.clones/c"
-  stamp_hooks "$d"; rm -f "$d/main/.clones/c/.git/gate-green-"* "$d/main/.clones/c/.git/tool-usage.jsonl"
+  stamp_hooks "$d"
+  # T109: the push's self-tests passed once here, as a real clone's are after its first push, so each copy keeps them (they are kept
+  # against this tree's scripts/ and gate binary, which every case shares); each self-test is pinned by its own crate's tests
+  ( cd "$d/main/.clones/c" && scripts/gates/l7r-gate.sh push-checks "$PWD" >/dev/null 2>&1 ) || true
+  rm -f "$d/main/.clones/c/.git/gate-green-"* "$d/main/.clones/c/.git/tool-usage.jsonl"
 }
 topology() { # $1 = name; copies the template to $T/$1/{github.git,seed,main,main/.clones/c}
   local d=$T/$1; rm -rf "$d"

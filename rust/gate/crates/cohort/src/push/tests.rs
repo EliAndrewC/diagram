@@ -4,8 +4,8 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use super::{
-    checks_cli, gate_cli, holds, judged, judges, parse_skips, run_checks, scripts_version, skip,
-    Row, Tool, Tools, CHECKS,
+    binary_id, checks_cli, gate_cli, holds, judged, judges, parse_skips, run_checks,
+    scripts_version, skip, Row, Tool, Tools, CHECKS,
 };
 use crate::checks::scratch;
 use l7r_guard::shared::sha256;
@@ -184,6 +184,7 @@ fn tools(tree: &Path, off: bool) -> Tools {
         tree: tree.to_owned(),
         python: "bash".to_owned(),
         off,
+        binary: Some(tree.join("gate-binary")),
     }
 }
 
@@ -300,6 +301,43 @@ fn a_passed_self_test_is_kept_until_its_code_changes_and_a_failure_never_is() {
     );
 }
 
+const GATE_KEPT: Row = Row("gate-kept", Tool::Gate, &["good"], "unused", true, "");
+
+/// A Rust self-test is kept per binary and per version of `scripts/` (T109): run again when the binary is rebuilt, when the scripts
+/// move, with the cache off, and every time where the binary's file cannot be read.
+#[test]
+fn a_passed_rust_self_test_is_kept_until_the_binary_or_the_scripts_change() {
+    let root = tree();
+    let binary = root.join("gate-binary");
+    std::fs::write(&binary, "one").unwrap();
+    let runs = || lines(&root.join("gate.log"));
+    let push = |tools: &Tools| run_checks(tools, &[GATE_KEPT], &root, &[]).code;
+    assert_eq!(push(&tools(&root, false)), 0);
+    assert_eq!(push(&tools(&root, false)), 0);
+    assert_eq!(runs(), 1, "kept");
+    // a rebuild writes a new file
+    std::fs::remove_file(&binary).unwrap();
+    std::fs::write(&binary, "two").unwrap();
+    assert_eq!(push(&tools(&root, false)), 0);
+    assert_eq!(runs(), 2, "the binary was rebuilt");
+    std::fs::write(root.join("scripts/codeid.py"), "# moved\n").unwrap();
+    git(&root, &["add", "scripts"]);
+    assert_eq!(push(&tools(&root, false)), 0);
+    assert_eq!(runs(), 3, "the scripts moved");
+    assert_eq!(push(&tools(&root, false)), 0);
+    assert_eq!(runs(), 3, "kept again");
+    assert_eq!(push(&tools(&root, true)), 0);
+    assert_eq!(runs(), 4, "the cache off runs it");
+    let unread = Tools {
+        binary: Some(root.join("no-binary")),
+        ..tools(&root, false)
+    };
+    // no binary, no keeping
+    let twice = (push(&unread), push(&unread), runs());
+    assert_eq!(twice, (0, 0, 6));
+    assert!(binary_id(&root.join("no-binary")).is_none());
+}
+
 #[test]
 fn a_closing_refusal_ends_the_run() {
     let root = tree();
@@ -316,6 +354,7 @@ fn a_tool_that_cannot_start_refuses() {
         tree: root.clone(),
         python: "/no/such/python".to_owned(),
         off: true,
+        binary: None,
     };
     assert_eq!(run_checks(&tool, &[OK], &root, &[]).code, 1);
 }

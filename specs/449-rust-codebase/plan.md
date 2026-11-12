@@ -471,3 +471,38 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T105 to T105 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T106 to T106 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+
+### T109 (push-checks' Rust self-tests kept per binary, FR-012)
+
+- **Approach**: `l7r-gate push-checks` (`rust/gate/crates/cohort/src/push.rs`) keeps a passed Rust self-test as it already keeps a Python one, against the version of `scripts/` and, for a Rust one, the gate binary as a file (`binary_id`), so the six run again only when the binary is rebuilt or the scripts move.
+
+   **Decisions** (FR-012, SC-007):
+   - Where the time went: the six Rust self-tests (file-scale, research-pointers, downloads, spec-lint, conflict, gate-stamp) ran on every push, 0.02-0.08 s each and 0.28 s of a 3.7 s push at a load of 0.5, while a Python self-test was already kept per version of `scripts/` (observed 2026-11-11, method: `l7r-gate measure push-check-times`).
+   - What a Rust self-test depends on: five test the binary on fixtures written in code, and gate-stamp's hashes `.py` files through the tree's `codeid.py`, so the key is the `scripts/` version (the one a Python self-test is kept against) and the binary (observed 2026-11-11, method: each `selftest` function read).
+   - The binary is keyed by its file, its path, inode, size and modification time to the nanosecond, which a rebuild writes anew (cargo writes a new file, and the wrapper touches it), rather than by its content, whose hash took 33 ms for the 15.6 MB binary, about a ninth of what keeping saves (observed 2026-11-11, method: `sha256sum` timed on `tool/l7r-gate`). A rebuild with the same bytes runs the self-tests once more, the safe direction. The binary is this process's own (`current_exe`), the one the wrapper's `$BIN` runs the rows on. A binary whose file cannot be read keeps nothing, and a failed self-test is never kept, as before.
+   - The sync-with-main suite copies a template a case (T106), so its fixture clones started with nothing kept and most cases push once: the template's clone runs `push-checks` once, as a real clone has after its first push, so each copy keeps the self-tests (they are kept against the real tree's `scripts/` and binary, which every case runs).
+   - Measured the same way before and after (SC-007): `push-checks` on this clone from the before tree (main without the change) and this one, alternated five times each after a warm run, 8.41-8.53 s before and 8.00-8.20 s after, and on this clone with the six kept or cleared, 3.56-3.69 s against 4.10-4.11 s at a load of about 5 (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t109/push_ab.sh 5`, and the keep file's six entries removed before each unkept run). The sync-with-main suite alone, alternated twice each, 15.8 s and 17.7 s before and 15.4 s and 15.1 s after at loads of 2.9-5.1, its parts running side by side, which spreads the 36 pushes' saving (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t109/suite_ab.sh`), all 138 checks passing.
+   - The test: `a_passed_rust_self_test_is_kept_until_the_binary_or_the_scripts_change` - kept on a second push, run again when the binary's file is rewritten, when `scripts/` moves, with the cache off, and every time when the binary cannot be read.
+   - What is left: `money-candidates` is 2.2 s of a real 3.7 s push at a load of 0.5, the push's largest row (observed 2026-11-11, method: `l7r-gate measure push-check-times`), a candidate for the GM.
+
+### T109 Approach (checklist part A)
+
+1. **The goal, in the world.** A push runs a Rust self-test only when the binary or the scripts it reads changed.
+2. **The constraints.** FR-012 and SC-007: every self-test still run on any change that could break it, every verdict held.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the timings above.
+4. **Do they describe the world here?** Measured on this clone and a scratch clone of main.
+5. **The order.** Before T108.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The alternated timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** Six self-test processes a push.
+2. **Does the change remove work, or only move it?** Removes it: the self-tests run once a binary.
+3. **What do you expect it to save, and why?** Their time on every push, as the decisions above measure it.
+4. **How does the work grow?** With rebuilds, no longer with pushes.
+5. **What did the before and after show, and under what conditions?** Alternated runs on a shared host, read as evidence.
+6. **Did any map move?** No: no engine code changes.
