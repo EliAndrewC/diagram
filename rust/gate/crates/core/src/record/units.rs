@@ -243,35 +243,66 @@ static NOTES: LazyLock<std::sync::Mutex<HashMap<NotesKey, std::sync::Arc<NotesPa
 /// Past this many texts a kept table starts again: the door lives a whole run, and a run reads two revisions.
 const KEPT: usize = if cfg!(test) { 8 } else { 20_000 };
 
-fn page_kept(text: &str) -> Page {
-    let mut kept = PAGES
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    if let Some(p) = kept.get(text) {
-        return p.clone();
+/// A kept table, locked only to look a text up and to keep its parse, never while it parses (T115: the pages are parsed side by side).
+fn kept_or<K: std::hash::Hash + Eq, V: Clone>(
+    table: &std::sync::Mutex<HashMap<K, V>>,
+    key: K,
+    parse: impl FnOnce() -> V,
+) -> V {
+    let lock = || {
+        table
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+    };
+    if let Some(v) = lock().get(&key) {
+        return v.clone();
     }
+    let value = parse();
+    let mut kept = lock();
     if kept.len() >= KEPT {
         kept.clear();
     }
-    let page = read_page(text);
-    kept.insert(text.to_owned(), page.clone());
-    page
+    kept.insert(key, value.clone());
+    value
+}
+
+fn page_kept(text: &str) -> Page {
+    kept_or(&PAGES, text.to_owned(), || read_page(text))
 }
 
 fn notes_kept(text: &str, originals: &str) -> std::sync::Arc<NotesParse> {
     let key = (text.to_owned(), originals.to_owned());
-    let mut kept = NOTES
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    if let Some(p) = kept.get(&key) {
-        return p.clone();
-    }
-    if kept.len() >= KEPT {
-        kept.clear();
-    }
-    let parsed = std::sync::Arc::new(notes_parse(text, originals));
-    kept.insert(key, parsed.clone());
-    parsed
+    kept_or(&NOTES, key, || {
+        std::sync::Arc::new(notes_parse(text, originals))
+    })
+}
+
+/// The originals file beside a notes file's stem, or none.
+fn originals_of<'a>(files: &'a Keyed<String>, stem: &str) -> &'a str {
+    files
+        .get(&format!("{stem}.originals.html"))
+        .map_or("", String::as_str)
+}
+
+/// THE PAGES PARSED SIDE BY SIDE (feature 449 T115; the GM 2026-11-11): every question page and notes page parsed into the kept tables,
+/// the pages dealt round the cores, before `Record::of` reads them in order. One after another, a `record-owed` with nothing changed
+/// took 1.45-1.51 s and each record gate of the entry-gate suite about 2 s, the record's 1,652 pages parsed on one core (2026-11-12).
+fn warm(files: &Keyed<String>) {
+    let entries: Vec<(&String, &String)> = files.iter().collect();
+    let cores = std::thread::available_parallelism().map_or(1, std::num::NonZero::get);
+    std::thread::scope(|s| {
+        for k in 0..cores {
+            let entries = &entries;
+            s.spawn(move || {
+                for (name, text) in entries.iter().skip(k).step_by(cores) {
+                    match name.strip_suffix(".notes.html") {
+                        Some(stem) => drop(notes_kept(text, originals_of(files, stem))),
+                        None => drop(page_kept(text)),
+                    }
+                }
+            });
+        }
+    });
 }
 
 /// The record as the checks read it (`record_units.Record`): pages by their stem, notes by stem, write-ups by key.
@@ -288,15 +319,14 @@ pub struct Record {
 
 impl Record {
     /// From each question file's name and text, and each write-up's key and text (`record_units.Record.of`).
+    #[must_use]
     pub fn of(files: &Keyed<String>, sources: &Keyed<String>) -> Self {
+        warm(files);
         let mut rec = Self::default();
         for (name, text) in files.iter() {
             if let Some(stem) = name.strip_suffix(".notes.html") {
                 if let Some((subject, _)) = stem_of(&format!("{stem}.html")) {
-                    let originals = files
-                        .get(&format!("{stem}.originals.html"))
-                        .map_or("", String::as_str);
-                    let parsed = notes_kept(text, originals);
+                    let parsed = notes_kept(text, originals_of(files, stem));
                     rec.notes.insert(subject.clone(), parsed.notes.clone());
                     rec.cites.insert(subject.clone(), parsed.cites.clone());
                     rec.readings

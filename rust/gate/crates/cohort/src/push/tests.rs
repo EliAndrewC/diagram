@@ -231,11 +231,14 @@ fn lines(path: &Path) -> usize {
 #[test]
 fn the_runner_stops_at_the_first_refusal_with_the_shell_s_line() {
     let root = tree();
-    let got = run_checks(&tools(&root, true), &[OK, BAD, GATE_OK], &root, &[]);
+    let got = run_checks(&tools(&root, false), &[OK, BAD, KEPT], &root, &[]);
     assert_eq!(got.code, 1);
     assert_eq!(got.stderr, "sync-with-main: no refused\n");
-    assert_eq!(lines(&root.join("ran.log")), 1);
-    assert!(!root.join("gate.log").exists(), "a refusal ends the run");
+    // the rows run side by side (T115), so a self-test after the refusal ran too, but a refusal ends the run: it keeps nothing
+    assert_eq!(lines(&root.join("ran.log")), 2);
+    let stamps =
+        std::fs::read_to_string(super::stamps_file(&root, false).unwrap()).unwrap_or_default();
+    assert!(!stamps.contains("\"kept\""));
 }
 
 #[test]

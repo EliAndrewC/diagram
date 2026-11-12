@@ -522,6 +522,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T115 (the full hook run's two longest suites, FR-012)": {
+   "sha256": "7a2f380717f4f922d1686af5451718475f656b693e87694f35e6fc0a5a148ac3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T115 Approach (checklist part A)": {
+   "sha256": "3e835a072d5332db59c3ba2916c5e5a5bfb100a519bae89350befab771a23a65",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7271,6 +7283,53 @@
      "why": "SC-007 requires the cost re-measured by the command that measured it before, and lower; the same two commands are used on both sides and the figures carry one-shot labels (date and method)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T115 (the full hook run's two longest suites, FR-012)",
+    "### T115 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T115-D1",
+     "summary": "The record's pages are parsed across the cores before Record::of reads them (warm in record/units.rs); the parse table's lock is taken only to look up and to keep; the record is then read in the same order from the same parses.",
+     "class": "within",
+     "why": "A means to the GM's 'the full hook run's two longest suites' (FR-012, T115). FR-012's 'held to every output and verdict' is carried by the block's own evidence: record-owed with no flags, --unanswered and --slugs, on an empty delta and with a page edited, byte-identical between the old and new binaries (cmp). Nothing narrowed."
+    },
+    {
+     "id": "T115-D2",
+     "summary": "push-checks' rows start at once; each row's output is shown in the table's order; the first refusal ends the run with the shell's line as before.",
+     "class": "within",
+     "why": "Table order, verdict and the refusal's shell line are held as FR-012 requires, and the test the_runner_stops_at_the_first_refusal_with_the_shell_s_line pins the verdict. The one output that moves is split out as T115-D3 and ruled there."
+    },
+    {
+     "id": "T115-D3",
+     "summary": "Within one row, the row's stdout is shown before its stderr, so where a row wrote to both the cross-stream interleave can differ from today's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-012's 'held to every output'. Legitimate on the impossibility bar, scoped tightly: when rows run at once their output has to be captured, and two captured pipes carry no shared order; a single merged capture (pipe or pty) keeps the order but moves stderr bytes onto stdout, which is itself an output change. So every concurrent design changes one of the two, and only a serial run changes neither. A serial run would give sync-with-main, one of the two suites the GM named for T115, nothing from this task, since push-checks is the block's only lever on that suite; so the literal rule would defeat half the request. The ruling covers ONLY the stdout/stderr interleave within a single row, replayed after that row ends. Each stream's bytes and their order within the stream, the table order, the refusal line and the verdict are not excepted and must stay as they are today. Any wider output difference is not approved here."
+    },
+    {
+     "id": "T115-D4",
+     "summary": "Rows after a refusal now run (today they do not), but show nothing and keep nothing; a self-test after a refusal is not kept.",
+     "class": "within",
+     "why": "If 'keeps nothing' holds, no output or verdict moves; running wasted work is cost, not fidelity. A seam the block should close in its text: it says the two memo presets and the ledger check each keep a file of their own by atomic rename, and its parenthetical says only how a self-test after a refusal is withheld. Nothing says how a memo or ledger row that has already run is stopped from renaming its file into place. The block should name that mechanism, or say that such a file is kept. Not blocking: a kept memo records a true pass for that tree state, so a later verdict is unchanged."
+    },
+    {
+     "id": "T115-D5",
+     "summary": "The full hook run's wall time is left as it is (measured unchanged, 64.8/64.4 s before vs 64.6/64.2 s after, bound by contention the suites share in the kernel); it is offered to the GM as a candidate, not changed here.",
+     "class": "within",
+     "why": "The GM's words for T115 name 'the full hook run's two longest suites', not the full run's wall time. The block measures the suites lower inside the full run (sync-with-main 51.9/52.9 to 49.1/48.5 s, entry-gate 47.8/47.0 to 43.0/44.3 s), reports openly that the full run did not move, and leaves the kernel-bound cause to the GM instead of quietly widening scope. That is the right way to handle it."
+    },
+    {
+     "id": "T115-D6",
+     "summary": "The hook run stays at eight suites at a time (HOOKS_JOBS 8).",
+     "class": "within",
+     "why": "No constant moved; 12 and 16 were measured slower (72.8 s, 76.3 s vs 64.1 s), so the existing value is kept. Nothing narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12597,6 +12656,51 @@
      "summary": "The check alone timed with date around it, and the push's row via l7r-gate measure push-check-times, before and after, with load recorded.",
      "class": "within",
      "why": "SC-007 requires the cost re-measured by the command that measured it before, and lower; the same two commands are used on both sides and the figures carry one-shot labels (date and method)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T115": {
+   "section_sha256": "8fb307f5740701cbc66a36d5b45403c61ad44b3a51c1189428bc63a365e82053",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T115-D1",
+     "summary": "The record's pages are parsed across the cores before Record::of reads them (warm in record/units.rs); the parse table's lock is taken only to look up and to keep; the record is then read in the same order from the same parses.",
+     "class": "within",
+     "why": "A means to the GM's 'the full hook run's two longest suites' (FR-012, T115). FR-012's 'held to every output and verdict' is carried by the block's own evidence: record-owed with no flags, --unanswered and --slugs, on an empty delta and with a page edited, byte-identical between the old and new binaries (cmp). Nothing narrowed."
+    },
+    {
+     "id": "T115-D2",
+     "summary": "push-checks' rows start at once; each row's output is shown in the table's order; the first refusal ends the run with the shell's line as before.",
+     "class": "within",
+     "why": "Table order, verdict and the refusal's shell line are held as FR-012 requires, and the test the_runner_stops_at_the_first_refusal_with_the_shell_s_line pins the verdict. The one output that moves is split out as T115-D3 and ruled there."
+    },
+    {
+     "id": "T115-D3",
+     "summary": "Within one row, the row's stdout is shown before its stderr, so where a row wrote to both the cross-stream interleave can differ from today's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-012's 'held to every output'. Legitimate on the impossibility bar, scoped tightly: when rows run at once their output has to be captured, and two captured pipes carry no shared order; a single merged capture (pipe or pty) keeps the order but moves stderr bytes onto stdout, which is itself an output change. So every concurrent design changes one of the two, and only a serial run changes neither. A serial run would give sync-with-main, one of the two suites the GM named for T115, nothing from this task, since push-checks is the block's only lever on that suite; so the literal rule would defeat half the request. The ruling covers ONLY the stdout/stderr interleave within a single row, replayed after that row ends. Each stream's bytes and their order within the stream, the table order, the refusal line and the verdict are not excepted and must stay as they are today. Any wider output difference is not approved here."
+    },
+    {
+     "id": "T115-D4",
+     "summary": "Rows after a refusal now run (today they do not), but show nothing and keep nothing; a self-test after a refusal is not kept.",
+     "class": "within",
+     "why": "If 'keeps nothing' holds, no output or verdict moves; running wasted work is cost, not fidelity. A seam the block should close in its text: it says the two memo presets and the ledger check each keep a file of their own by atomic rename, and its parenthetical says only how a self-test after a refusal is withheld. Nothing says how a memo or ledger row that has already run is stopped from renaming its file into place. The block should name that mechanism, or say that such a file is kept. Not blocking: a kept memo records a true pass for that tree state, so a later verdict is unchanged."
+    },
+    {
+     "id": "T115-D5",
+     "summary": "The full hook run's wall time is left as it is (measured unchanged, 64.8/64.4 s before vs 64.6/64.2 s after, bound by contention the suites share in the kernel); it is offered to the GM as a candidate, not changed here.",
+     "class": "within",
+     "why": "The GM's words for T115 name 'the full hook run's two longest suites', not the full run's wall time. The block measures the suites lower inside the full run (sync-with-main 51.9/52.9 to 49.1/48.5 s, entry-gate 47.8/47.0 to 43.0/44.3 s), reports openly that the full run did not move, and leaves the kernel-bound cause to the GM instead of quietly widening scope. That is the right way to handle it."
+    },
+    {
+     "id": "T115-D6",
+     "summary": "The hook run stays at eight suites at a time (HOOKS_JOBS 8).",
+     "class": "within",
+     "why": "No constant moved; 12 and 16 were measured slower (72.8 s, 76.3 s vs 64.1 s), so the existing value is kept. Nothing narrowed."
     }
    ],
    "verdict": "CLEAR"

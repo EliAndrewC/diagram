@@ -335,12 +335,13 @@ pub fn timing_rows(tree: &Path, root: &Path) -> Vec<(String, Option<Command>)> {
 }
 
 /// Run one row in the clone: its output passes through, but for a self-test's stdout.
-fn run_row(tools: &Tools, row: &Row, root: &Path) -> bool {
+/// Run one row in the clone, its output kept to be shown in the table's order (a self-test's stdout dropped); none where it cannot start.
+fn run_row(tools: &Tools, row: &Row, root: &Path) -> Option<std::process::Output> {
     let mut command = row_command(tools, row, root);
     if row.4 {
         command.stdout(Stdio::null());
     }
-    command.status().is_ok_and(|s| s.success())
+    command.output().ok()
 }
 
 fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Reply {
@@ -358,19 +359,35 @@ fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Rep
         .and_then(binary_id)
         .map(|b| sha256::hex(format!("{version}\n{b}").as_bytes()));
     let mut failed = String::new();
-    for row in rows
+    let owed: Vec<(&Row, Option<&String>)> = rows
         .iter()
         .filter(|r| !skips.iter().any(|s| s == r.0) && holds(root, r.5))
-    {
-        let key = match row.1 {
-            Tool::Py(_) => Some(&version),
-            Tool::Gate => gate.as_ref(),
-        }
-        .filter(|_| row.4);
-        if key.is_some_and(|k| stamps[row.0] == k.as_str()) {
-            continue;
-        }
-        if !run_row(tools, row, root) {
+        .map(|row| {
+            let key = match row.1 {
+                Tool::Py(_) => Some(&version),
+                Tool::Gate => gate.as_ref(),
+            };
+            (row, key.filter(|_| row.4))
+        })
+        .filter(|(row, key)| !key.is_some_and(|k| stamps[row.0] == k.as_str()))
+        .collect();
+    // THE ROWS SIDE BY SIDE (feature 449 T115; the GM 2026-11-11): one after another they were 0.82 s of a fixture push's 1.33 s and
+    // 2.28 s of a real one (2026-11-12), each its own read-only process. All start at once; then, in the table's order, each row's output
+    // is shown and the first refusal ends the run as before - a row after it shows nothing and keeps nothing.
+    let ran: Vec<Option<std::process::Output>> = std::thread::scope(|s| {
+        let runs: Vec<_> = owed
+            .iter()
+            .map(|(row, _)| s.spawn(move || run_row(tools, row, root)))
+            .collect();
+        runs.into_iter().map(|r| r.join().ok().flatten()).collect()
+    });
+    for ((row, key), out) in owed.into_iter().zip(ran) {
+        let passed = out.is_some_and(|o| {
+            let _ = std::io::Write::write_all(&mut std::io::stdout(), &o.stdout);
+            let _ = std::io::Write::write_all(&mut std::io::stderr(), &o.stderr);
+            o.status.success()
+        });
+        if !passed {
             failed = format!("sync-with-main: {}\n", row.3);
             if row.0 == "closing" {
                 let _ = log_write(&Entry {
