@@ -25,8 +25,10 @@ const HAMLETS: &str = "hamlets";
 /// How long the crop may take before the Python's `subprocess.TimeoutExpired`.
 #[cfg(not(test))]
 const CROP_TIMEOUT: Duration = Duration::from_secs(180);
+/// The tests' own, under the fake crop's 5 s sleep: 300 ms was outlasted by a Python start alone with the coverage runs five crates at
+/// a time, at a load of 13.8 (feature 449 T108, 2026-11-11), failing the crop of a page that was not slow.
 #[cfg(test)]
-const CROP_TIMEOUT: Duration = Duration::from_millis(300);
+const CROP_TIMEOUT: Duration = Duration::from_secs(1);
 
 static KNOB: LazyLock<Regex> = LazyLock::new(|| pyre(r"\[([a-z_]+)=[a-z_0-9|-]+\]"));
 static DRAWING_HREF: LazyLock<Regex> =

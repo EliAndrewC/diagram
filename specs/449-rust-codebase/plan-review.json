@@ -438,6 +438,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T108 (a core edit's coverage tests side by side, FR-012)": {
+   "sha256": "de2b1706ecd7e1a71611bcaffa39d225964cbfa218edd35b25aa3e00fb2756a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T108 Approach (checklist part A)": {
+   "sha256": "94d7467aa68c0c0729782580a6f40df431d1ea18166483c57777c71fe433c16d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6690,6 +6702,72 @@
      "why": "Ordering and exits within the two tasks the GM approved together."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T108 (a core edit's coverage tests side by side, FR-012)",
+    "### T108 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-own-report-directory",
+     "summary": "Each crate's coverage run gets a report directory of its own (a hard link to its test binary, its own profiles), and its tests run straight from the binary from the crate's directory with CARGO, CARGO_MANIFEST_DIR and CARGO_PKG_NAME set, instead of through cargo test holding the build directory's lock.",
+     "class": "within",
+     "why": "This is the mechanism of the GM's 2026-11-11 'run a core edit's coverage tests side by side' (FR-012 T108); the runs could not overlap while llvm-cov report read the whole shared build directory. Coverage equivalence is checked under D5."
+    },
+    {
+     "id": "D2-together-build-json",
+     "summary": "The family's one together build names each test binary in its JSON, so the per-crate builds, the deletion of stale libraries and the moves aside go; a failed multi-crate build is asked again a crate at a time so the failure names the crate; show-env once a family.",
+     "class": "within",
+     "why": "Removes work the side-by-side runs no longer need, and the crate-by-crate retry keeps the failure output attributable as before (FR-012 'held to every output and verdict'). Nothing the GM asked for is cut."
+    },
+    {
+     "id": "D3-five-at-a-time",
+     "summary": "Runs go a quarter of the cores at once (side_by_side, 5 on this 22-core machine), because all at once drove the load to 31 and failed two timing tests.",
+     "class": "within",
+     "why": "A concurrency level is how 'side by side' is done; it does not narrow the request, and the bound exists to keep every verdict held (SC-007)."
+    },
+    {
+     "id": "D4-crop-timeout-1s",
+     "summary": "The depiction bundle test's own crop timeout raised from 300 ms to 1 s (still under its slow page's 5 s sleep), because at five at a time it failed one of two core-edit passes under load.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated as a relaxation of a check, since SC-007 holds every check it touches to its earlier verdicts. It is a test's own constant, not product behavior, and the property the test discriminates - a crop on a page that sleeps 5 s is cut off by the timeout - is unchanged: 1 s < 5 s, so the test still fails if the timeout mechanism is absent. Holding 300 ms literally would make the test flake under the load the requested change brings, which defeats SC-007's own purpose (verdicts held) rather than serving it. Cost about 0.7 s in a crate not on the critical path."
+    },
+    {
+     "id": "D5-zero-set-bar",
+     "summary": "Coverage equivalence is judged on the set of unreached lines and never-called functions, not identical bytes; core's only difference is four closures of the guard's sweep_dead outside core's own files, reached or not depending on the temp directory's contents.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Byte identity is physically unobtainable: two runs of the old path already differ in hit counts (cmp, observed 2026-11-11). The floor (FR-004) and the verdict read each crate's own files, which are 100% covered both ways with identical zero sets for claims and checks; the sweep_dead closures lie outside core's files and their reach is state-dependent in either path. The verdict and the floor's output are held, which is what FR-012/SC-007 ask."
+    },
+    {
+     "id": "D6-slowest-first-removed",
+     "summary": "Starting the slowest crate first was tried and taken out, the checks crate already starting in the first five.",
+     "class": "within",
+     "why": "A design choice not shipped; no scope effect."
+    },
+    {
+     "id": "D7-measurement",
+     "summary": "SC-007 before/after by make static on a scratch clone of main and this clone, back to back, one-line edits: core 49.7-52.0 s before vs 40.2 s after; claims 26.7-34.7 s before vs 23.4/25.0 s after.",
+     "class": "within",
+     "why": "Same command as the T105-T107 report's make static figure; the cost is lower, as SC-007 requires. Figures carry one-shot labels with date and method."
+    },
+    {
+     "id": "D8-tests",
+     "summary": "Tests pin the floor reading a report directory holding the crate's binary alone, removed after the run, tests run from the crate's directory with cargo's variables, and the together build with crate-by-crate retry (tests/cover.rs); every cargo call still runs from the tree root.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior and of its held verdicts; serves the request."
+    },
+    {
+     "id": "D9-what-is-left",
+     "summary": "The checks crate's tests remain the step's floor; two coverage runs on one clone at once still share its report directories, as they shared its build directory before.",
+     "class": "within",
+     "why": "States the residue, not a carve-out: concurrent runs on one clone collided before (the moves aside of T92/T105), so this preserves rather than narrows prior behavior, and the GM did not ask for same-clone concurrent runs."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11735,6 +11813,70 @@
      "summary": "Before T108; exits green on make static, rust-test, hooks-test and land, red recorded and ruled through make arbiter-ask",
      "class": "within",
      "why": "Ordering and exits within the two tasks the GM approved together."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T108": {
+   "section_sha256": "a7f6e65d3187e9f42d90302f8b12bf723a9280eef5563fe05b5eca79068b5b06",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-own-report-directory",
+     "summary": "Each crate's coverage run gets a report directory of its own (a hard link to its test binary, its own profiles), and its tests run straight from the binary from the crate's directory with CARGO, CARGO_MANIFEST_DIR and CARGO_PKG_NAME set, instead of through cargo test holding the build directory's lock.",
+     "class": "within",
+     "why": "This is the mechanism of the GM's 2026-11-11 'run a core edit's coverage tests side by side' (FR-012 T108); the runs could not overlap while llvm-cov report read the whole shared build directory. Coverage equivalence is checked under D5."
+    },
+    {
+     "id": "D2-together-build-json",
+     "summary": "The family's one together build names each test binary in its JSON, so the per-crate builds, the deletion of stale libraries and the moves aside go; a failed multi-crate build is asked again a crate at a time so the failure names the crate; show-env once a family.",
+     "class": "within",
+     "why": "Removes work the side-by-side runs no longer need, and the crate-by-crate retry keeps the failure output attributable as before (FR-012 'held to every output and verdict'). Nothing the GM asked for is cut."
+    },
+    {
+     "id": "D3-five-at-a-time",
+     "summary": "Runs go a quarter of the cores at once (side_by_side, 5 on this 22-core machine), because all at once drove the load to 31 and failed two timing tests.",
+     "class": "within",
+     "why": "A concurrency level is how 'side by side' is done; it does not narrow the request, and the bound exists to keep every verdict held (SC-007)."
+    },
+    {
+     "id": "D4-crop-timeout-1s",
+     "summary": "The depiction bundle test's own crop timeout raised from 300 ms to 1 s (still under its slow page's 5 s sleep), because at five at a time it failed one of two core-edit passes under load.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated as a relaxation of a check, since SC-007 holds every check it touches to its earlier verdicts. It is a test's own constant, not product behavior, and the property the test discriminates - a crop on a page that sleeps 5 s is cut off by the timeout - is unchanged: 1 s < 5 s, so the test still fails if the timeout mechanism is absent. Holding 300 ms literally would make the test flake under the load the requested change brings, which defeats SC-007's own purpose (verdicts held) rather than serving it. Cost about 0.7 s in a crate not on the critical path."
+    },
+    {
+     "id": "D5-zero-set-bar",
+     "summary": "Coverage equivalence is judged on the set of unreached lines and never-called functions, not identical bytes; core's only difference is four closures of the guard's sweep_dead outside core's own files, reached or not depending on the temp directory's contents.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Byte identity is physically unobtainable: two runs of the old path already differ in hit counts (cmp, observed 2026-11-11). The floor (FR-004) and the verdict read each crate's own files, which are 100% covered both ways with identical zero sets for claims and checks; the sweep_dead closures lie outside core's files and their reach is state-dependent in either path. The verdict and the floor's output are held, which is what FR-012/SC-007 ask."
+    },
+    {
+     "id": "D6-slowest-first-removed",
+     "summary": "Starting the slowest crate first was tried and taken out, the checks crate already starting in the first five.",
+     "class": "within",
+     "why": "A design choice not shipped; no scope effect."
+    },
+    {
+     "id": "D7-measurement",
+     "summary": "SC-007 before/after by make static on a scratch clone of main and this clone, back to back, one-line edits: core 49.7-52.0 s before vs 40.2 s after; claims 26.7-34.7 s before vs 23.4/25.0 s after.",
+     "class": "within",
+     "why": "Same command as the T105-T107 report's make static figure; the cost is lower, as SC-007 requires. Figures carry one-shot labels with date and method."
+    },
+    {
+     "id": "D8-tests",
+     "summary": "Tests pin the floor reading a report directory holding the crate's binary alone, removed after the run, tests run from the crate's directory with cargo's variables, and the together build with crate-by-crate retry (tests/cover.rs); every cargo call still runs from the tree root.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior and of its held verdicts; serves the request."
+    },
+    {
+     "id": "D9-what-is-left",
+     "summary": "The checks crate's tests remain the step's floor; two coverage runs on one clone at once still share its report directories, as they shared its build directory before.",
+     "class": "within",
+     "why": "States the residue, not a carve-out: concurrent runs on one clone collided before (the moves aside of T92/T105), so this preserves rather than narrows prior behavior, and the GM did not ask for same-clone concurrent runs."
     }
    ],
    "verdict": "CLEAR"

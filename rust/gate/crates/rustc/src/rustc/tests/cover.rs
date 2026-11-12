@@ -1,9 +1,9 @@
-//! The coverage run's build (feature 449 T100, T105): what instruments which crate, and the builds a family's owed crates share.
+//! The coverage run's build (feature 449 T100, T105, T108): what instruments which crate, and the builds a family's owed crates share.
 
 use std::collections::BTreeMap;
 use std::process::Command;
 
-use super::super::{build_together, workspace_only};
+use super::super::cover::{uncovered_each, workspace_only};
 use super::{calls, nested_crates, scratch, two_crates, world_with};
 
 /// Coverage instruments the workspace's crates only (T100): the coverage flags leave RUSTFLAGS, the rest stays for every crate, and a
@@ -55,23 +55,44 @@ fn coverage_instruments_the_workspace_s_crates_only() {
     assert!(none.is_empty());
 }
 
-/// The coverage builds together (T105): a family's owed crates in one cargo call, each named by its package, a family of one left to
-/// its own run.
+/// The coverage builds together (T105): a family's owed crates in one cargo call, each named by its package, a family of one by its
+/// manifest alone; a failed build of several asked again a crate at a time, and a crate with no binary named failing by name (T108).
 #[test]
-fn a_family_s_owed_coverage_builds_go_together() {
+fn a_family_s_owed_coverage_builds_go_together_and_a_failed_one_crate_by_crate() {
     let (root, g, mid, low) = nested_crates();
+    let builds = |world: &super::World| -> Vec<String> {
+        calls(world)
+            .into_iter()
+            .filter(|c| c.starts_with("test --no-run --lib"))
+            .collect()
+    };
     let world = world_with(&root, "exit 0");
-    build_together(&world, &[&g, &mid, &low]);
-    let asked = calls(&world);
-    let together = asked
-        .iter()
-        .find(|c| c.starts_with("test --no-run --lib"))
-        .unwrap();
-    assert!(together.ends_with("-p g -p g_mid -p g_low"), "{together}");
+    let (got, said) = uncovered_each(&world, &[&g, &mid, &low]);
+    let together = builds(&world);
+    assert_eq!(together.len(), 1);
+    assert!(
+        together[0].ends_with("-p g -p g_mid -p g_low"),
+        "{}",
+        together[0]
+    );
+    assert!(
+        said.contains("cover build of 3 crate(s)")
+            && said.contains("of 3 crate(s), ")
+            && said.contains(" at a time")
+    );
+    let failed = BTreeMap::from([(
+        root.join("rust/g/crates/low").display().to_string(),
+        vec![0],
+    )]);
+    assert_eq!(got[&low], failed);
+    let broke = world_with(&root, "[ \"$2\" = --no-run ] && exit 1\nexit 0");
+    let (got, said) = uncovered_each(&broke, &[&g, &mid, &low]);
+    assert_eq!(builds(&broke).len(), 4);
+    assert!(said.contains("cover build of 1 crate(s)"));
+    assert_eq!((got.len(), &got[&low]), (3, &failed));
     let (other, a, _) = two_crates();
     let alone = world_with(&other, "exit 0");
-    build_together(&alone, &[&a]);
-    assert!(calls(&alone)
-        .iter()
-        .all(|c| !c.starts_with("test --no-run --lib")));
+    let _ = uncovered_each(&alone, &[&a]);
+    assert!(builds(&alone).iter().all(|c| !c.contains(" -p ")));
+    assert_eq!(builds(&alone).len(), 1);
 }

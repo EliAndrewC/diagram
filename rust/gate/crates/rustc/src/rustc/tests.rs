@@ -4,10 +4,10 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+use super::cover::{cover_dir, uncovered_each};
 use super::{
     answer, check, content_ids, crates, dead_public, declared_reads, dispatch, features_but,
-    kept_reads, lcov_missed, own_libs, parse, relative, run, tail, uncovered, undeclared,
-    verdict_key, Reads, World,
+    kept_reads, lcov_missed, parse, relative, run, tail, undeclared, verdict_key, Reads, World,
 };
 use crate::checks::scratch;
 use l7r_guard::shared::tempdir::{Held, TempDir};
@@ -41,6 +41,15 @@ fn world_with(root: &Path, body: &str) -> Held<World> {
         target: target.to_path_buf(),
     };
     target.hold(world)
+}
+
+/// One crate's coverage run: its lines no test reaches.
+fn uncovered(world: &World, manifest: &Path) -> BTreeMap<String, Vec<u32>> {
+    let m = manifest.to_path_buf();
+    uncovered_each(world, &[&m])
+        .0
+        .remove(&m)
+        .unwrap_or_default()
 }
 
 fn calls(world: &World) -> Vec<String> {
@@ -369,12 +378,17 @@ fn a_public_function_nothing_calls_is_refused() {
     );
 }
 
-const LCOV_CARGO: &str = r#"case "$1 $2" in
+/// A fake cargo for the coverage run: its build writes a test binary that records where and how it ran, and names it in the build's
+/// JSON; its report records what its build directory holds and writes the lcov the test put beside it.
+const LCOV_CARGO: &str = r#"d="$(dirname "$0")"
+case "$1 $2" in
   "llvm-cov show-env") echo "export FOO='bar'"; echo "not an assignment";;
-  "llvm-cov report") out=""; while [ $# -gt 0 ]; do [ "$1" = "--output-path" ] && out="$2"; shift; done; [ -n "$out" ] && cat "$(dirname "$0")/lcov" > "$out";;
-  "test --no-run") echo '{"executable":"'"$CARGO_TARGET_DIR"'/debug/deps/l7r_x-keep"}'; echo 'not json'; echo '{"reason":"x"}'; echo '{"filenames":["'"$CARGO_TARGET_DIR"'/debug/deps/libl7r_fresh.rlib"]}';;
+  "llvm-cov report") ls "$CARGO_TARGET_DIR/debug/deps" > "$d/report-saw"; out=""; while [ $# -gt 0 ]; do [ "$1" = "--output-path" ] && out="$2"; shift; done; [ -n "$out" ] && cat "$d/lcov" > "$out";;
+  "test --no-run") m=""; prev=""; for a in "$@"; do [ "$prev" = --manifest-path ] && m="$a"; prev="$a"; done
+    exe="$CARGO_TARGET_DIR/debug/deps/l7r_x-keep"; mkdir -p "${exe%/*}"
+    printf '#!/bin/sh\npwd > "%s/ran-in"\necho "$CARGO_MANIFEST_DIR $LLVM_PROFILE_FILE $*" >> "%s/ran-in"\n[ -f "%s/failtest" ] && { echo boom; exit 1; }\nexit 0\n' "$d" "$d" "$d" > "$exe"; chmod +x "$exe"
+    echo '{"executable":"'"$exe"'","manifest_path":"'"$m"'"}'; echo 'not json'; echo '{"reason":"x"}';;
 esac
-[ -f "$(dirname "$0")/failtest" ] && [ "$1" = test ] && [ "$2" != --no-run ] && { echo boom; exit 1; }
 exit 0"#;
 
 #[test]
@@ -411,13 +425,20 @@ fn what_a_crate_s_tests_leave_in_their_tmpdir_fails_it_by_name_and_goes() {
     assert!(said.contains("left 1 entry in"));
     let used = std::fs::read_to_string(one.target.join("tmpdir")).unwrap();
     assert!(!Path::new(used.trim()).exists());
-    let cover = world_with(&root, &format!("touch \"$TMPDIR/l7r-cover\"\n{LCOV_CARGO}"));
+    let cover = world_with(
+        &root,
+        &format!(
+            "[ \"$1 $2\" = \"llvm-cov report\" ] && touch \"$TMPDIR/l7r-cover\"\n{LCOV_CARGO}"
+        ),
+    );
     std::fs::write(cover.target.join("lcov"), "").unwrap();
     assert_eq!(check(&cover, "cover", &a, false).code, 1);
 }
 
+/// The floor reads the crate's own report (T108): a report directory holding the crate's test binary alone, gone after the run; the
+/// tests run from the crate's directory with cargo's variables, quietly, their profiles written in that directory.
 #[test]
-fn the_floor_reads_the_lines_and_clears_only_what_it_must() {
+fn the_floor_reads_the_lines_from_the_crate_s_own_report_directory() {
     let (root, a, _) = two_crates();
     let world = world_with(&root, LCOV_CARGO);
     let source = std::fs::canonicalize(root.join("rust/a/src/lib.rs")).unwrap();
@@ -429,33 +450,29 @@ fn the_floor_reads_the_lines_and_clears_only_what_it_must() {
         ),
     )
     .unwrap();
-    let work = world.target.join("cover-a");
-    let deps = work.join("target/debug/deps");
-    std::fs::create_dir_all(&deps).unwrap();
-    for name in [
-        "libl7r_old",
-        "libl7r_fresh.rlib",
-        "l7r_x-keep",
-        "l7r_x-stale",
-        "l7r_x-stale.d",
-    ] {
-        std::fs::write(deps.join(name), "").unwrap();
-    }
-    std::fs::create_dir_all(deps.join("libl7r_dir")).unwrap();
-    std::fs::write(work.join("target/old.profraw"), "").unwrap();
     let done = check(&world, "cover", &a, false);
     assert_eq!(done.code, 1);
     assert_eq!(
         done.stdout,
         format!("{} - lines no test reaches: 3\n", source.display())
     );
-    // the crate's library the build did not write goes, the one it did stays (T105); another crate's binary is moved aside for the
-    // report and put back after
-    assert!(!deps.join("libl7r_old").exists() && !deps.join("libl7r_dir").exists());
-    assert!(deps.join("libl7r_fresh.rlib").exists());
-    assert!(deps.join("l7r_x-stale").exists() && !work.join("target/aside/l7r_x-stale").exists());
-    assert!(deps.join("l7r_x-keep").exists() && deps.join("l7r_x-stale.d").exists());
-    assert!(!work.join("target/old.profraw").exists());
+    let saw = std::fs::read_to_string(world.target.join("report-saw")).unwrap();
+    assert_eq!(saw, "l7r_x-keep\n");
+    let work = world.target.join("cover-a");
+    assert!(!work.join("view/a").exists());
+    assert!(work.join("lcov-a.info").is_file());
+    let ran = std::fs::read_to_string(world.target.join("ran-in")).unwrap();
+    let crate_dir = std::fs::canonicalize(root.join("rust/a")).unwrap();
+    let profiles = work.join("view/a/rust-%p-%22m.profraw");
+    let how = format!(
+        "{} {} -q",
+        root.join("rust/a").display(),
+        profiles.display()
+    );
+    assert_eq!(
+        ran.lines().collect::<Vec<_>>(),
+        [crate_dir.display().to_string(), how]
+    );
     std::fs::write(world.target.join("lcov"), "").unwrap();
     assert_eq!(check(&world, "cover", &a, false).code, 0);
 }
@@ -465,14 +482,13 @@ fn a_coverage_run_that_fails_names_the_crate_and_not_a_line() {
     let (root, a, _) = two_crates();
     let world = world_with(&root, LCOV_CARGO);
     std::fs::write(world.target.join("failtest"), "").unwrap();
-    let work = world.target.join("w");
-    let got = uncovered(&world, &a, &work);
+    let got = uncovered(&world, &a);
     assert_eq!(
         got,
         BTreeMap::from([(a.parent().unwrap().display().to_string(), vec![0])])
     );
     let broke = world_with(&root, "[ \"$2\" = --no-run ] && exit 1\nexit 0");
-    assert_eq!(uncovered(&broke, &a, &broke.target.join("w")).len(), 1);
+    assert_eq!(uncovered(&broke, &a).len(), 1);
 }
 
 #[test]
@@ -493,7 +509,7 @@ fn uncovered_answers_in_json_at_a_directory_a_test_shares() {
         ],
     );
     assert_eq!(done.stdout, "{}\n");
-    assert!(shared.join("lcov.info").is_file());
+    assert!(shared.join("lcov-a.info").is_file());
 }
 
 #[test]
@@ -621,17 +637,22 @@ fn the_cargo_config_moves_every_check_s_key() {
 }
 
 /// Every cargo call runs from the tree's root, where cargo finds `.cargo/config.toml` (rust-lld, feature 449 T96), whatever directory
-/// started the check: the test, both lints, and the coverage run's show-env, build, tests and report.
+/// started the check: the test, both lints, and the coverage run's show-env, build and report (its tests run from the crate's own
+/// directory, T108).
 #[test]
 fn every_cargo_call_runs_from_the_tree_s_root() {
     let (root, a, _) = two_crates();
-    let world = world_with(&root, "pwd >> \"$(dirname \"$0\")/cwd\"");
+    let world = world_with(
+        &root,
+        &format!("pwd >> \"$(dirname \"$0\")/cwd\"\n{LCOV_CARGO}"),
+    );
+    std::fs::write(world.target.join("lcov"), "").unwrap();
     assert_eq!(check(&world, "test", &a, false).code, 0);
     assert_eq!(check(&world, "lint", &a, false).code, 0);
-    let _ = uncovered(&world, &a, &world.target.join("cover"));
+    assert!(uncovered(&world, &a).is_empty());
     let seen = std::fs::read_to_string(world.target.join("cwd")).unwrap();
     let want = std::fs::canonicalize(&root).unwrap().display().to_string();
-    assert_eq!(seen.lines().count(), 7, "{seen}");
+    assert_eq!(seen.lines().count(), 6, "{seen}");
     assert!(seen.lines().all(|l| l == want), "{seen}");
 }
 
@@ -767,11 +788,9 @@ fn a_nested_crate_s_lines_and_calls_are_its_own_and_the_family_shares_one_covera
     let (root, g, mid, low) = nested_crates();
     assert_eq!(dead_public(&low), ["low_dead"]);
     assert!(dead_public(&mid).is_empty());
-    assert_eq!(own_libs(&low), "libg_low-");
-    assert_eq!(own_libs(&root.join("rust/Cargo.toml")), "libl7r_");
     let world = world_with(&root, LCOV_CARGO);
-    assert_eq!(super::cover_dir(&world, &low), world.target.join("cover-g"));
-    assert_eq!(super::cover_dir(&world, &g), world.target.join("cover-g"));
+    assert_eq!(cover_dir(&world, &low), world.target.join("cover-g"));
+    assert_eq!(cover_dir(&world, &g), world.target.join("cover-g"));
     let canon = |p: &str| std::fs::canonicalize(root.join(p)).unwrap();
     std::fs::write(
         world.target.join("lcov"),
@@ -782,12 +801,12 @@ fn a_nested_crate_s_lines_and_calls_are_its_own_and_the_family_shares_one_covera
         ),
     )
     .unwrap();
-    let got = uncovered(&world, &g, &world.target.join("w"));
+    let got = uncovered(&world, &g);
     assert_eq!(
         got.keys().cloned().collect::<Vec<_>>(),
         [canon("rust/g/src/lib.rs").display().to_string()]
     );
-    let got = uncovered(&world, &low, &world.target.join("w2"));
+    let got = uncovered(&world, &low);
     assert_eq!(
         got.keys().cloned().collect::<Vec<_>>(),
         [canon("rust/g/crates/low/src/lib.rs").display().to_string()]

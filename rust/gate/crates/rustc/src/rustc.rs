@@ -15,17 +15,18 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::LazyLock;
-use std::time::Instant;
 
 use fancy_regex::Regex;
 use l7r_guard::shared::tempdir::TempDir;
 
 use crate::Reply;
 
+mod cover;
 mod kept;
+use cover::uncovered_each;
 #[cfg(test)]
 use kept::{content_ids, declared_reads, relative, verdict_key};
-use kept::{executables, kept_reads, undeclared, undeclared_refusal, Kept, Reads, Verdict};
+use kept::{kept_reads, undeclared, undeclared_refusal, Kept, Reads, Verdict};
 
 /// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
 const USAGE_LOG_TOOL: &str = "rust_checks";
@@ -334,334 +335,6 @@ fn dead_public(manifest: &Path) -> Vec<String> {
         .collect()
 }
 
-fn timed(world: &World, step: &str, args: &[String], env: &BTreeMap<String, String>) -> Ran {
-    let began = Instant::now();
-    let mut done = run_in(Some(&world.root), &world.cargo, args, env);
-    let _ = writeln!(
-        done.stderr,
-        "rust-checks: cover {step} {:.1} s",
-        began.elapsed().as_secs_f64()
-    );
-    done
-}
-
-fn glob_prefix(dir: &Path, prefix: &str) -> Vec<PathBuf> {
-    std::fs::read_dir(dir)
-        .into_iter()
-        .flatten()
-        .flatten()
-        .filter(|e| e.file_name().to_string_lossy().starts_with(prefix))
-        .map(|e| e.path())
-        .collect()
-}
-
-fn remove(path: &Path) {
-    if path.is_dir() {
-        let _ = std::fs::remove_dir_all(path);
-    } else {
-        let _ = std::fs::remove_file(path);
-    }
-}
-
-/// Instrument, run the crate's tests, and write the report. Only the last run's profiles are cleared and only the tests' binary is built:
-/// `llvm-cov clean` rebuilt the crate from scratch on every run (the GM 2026-11-07: "Are we recompiling EVERYTHING every time?").
-/// The flags `show-env` adds to RUSTFLAGS for coverage, every crate built with them.
-const COVERAGE_FLAGS: [&str; 3] = [
-    "-C instrument-coverage",
-    "--cfg=coverage",
-    "--cfg=trybuild_no_target",
-];
-
-/// COVERAGE INSTRUMENTS THE WORKSPACE'S OWN CRATES ONLY (feature 449 T100): `show-env`'s RUSTFLAGS instrumented every crate the build
-/// compiles, `fancy-regex` and `serde` too, though the report counts only the workspace's lines - and the checks crate's tests, which
-/// scan the tree with regexes, took 23 s under coverage against 0.6 s plain (2026-11-11). The coverage flags move out of RUSTFLAGS
-/// into a `RUSTC_WORKSPACE_WRAPPER` that adds them, which cargo calls for the workspace's crates alone, the rest of RUSTFLAGS (rust-lld,
-/// T96) left to every crate. `script` is written each run with the same text, so its path and content never move a build's key.
-fn workspace_only(env: &mut BTreeMap<String, String>, script: &Path) {
-    let Some(flags) = env.get("RUSTFLAGS").cloned() else {
-        return;
-    };
-    let added: Vec<&str> = COVERAGE_FLAGS
-        .iter()
-        .copied()
-        .filter(|f| flags.contains(f))
-        .collect();
-    let rest = COVERAGE_FLAGS.iter().fold(flags, |f, c| f.replace(c, ""));
-    let rest: Vec<&str> = rest.split_whitespace().collect();
-    let text = format!("#!/bin/sh\nexec \"$@\" {}\n", added.join(" "));
-    if std::fs::read_to_string(script).ok().as_deref() != Some(text.as_str()) {
-        let _ = std::fs::write(script, &text);
-        let _ =
-            std::fs::set_permissions(script, std::os::unix::fs::PermissionsExt::from_mode(0o755));
-    }
-    env.insert("RUSTFLAGS".to_owned(), rest.join(" "));
-    env.insert(
-        "RUSTC_WORKSPACE_WRAPPER".to_owned(),
-        script.display().to_string(),
-    );
-}
-
-/// THE COVERAGE BUILDS TOGETHER (feature 449 T105; the GM 2026-11-11): each crate's coverage run built its instrumented test binary
-/// alone, one crate after another in the family's one build directory, which cargo locks - after a core edit 17 builds and 14.6 s of
-/// `make static`'s 54.0 s (2026-11-11), on a machine of 22 cores. The crates whose coverage is owed are built first in one cargo call a
-/// family, which compiles them side by side; each crate's own run then finds its binary built. A failed build here is left to that
-/// crate's own run to report.
-fn build_together(world: &World, owed: &[&PathBuf]) {
-    let mut families: BTreeMap<PathBuf, Vec<&PathBuf>> = BTreeMap::new();
-    for manifest in owed {
-        families
-            .entry(cover_dir(world, manifest))
-            .or_default()
-            .push(manifest);
-    }
-    for (work, group) in families.into_iter().filter(|(_, g)| g.len() > 1) {
-        let env = cover_env(world, group[0], &work, None);
-        let mut args = own(&["test", "--no-run", "--lib", "--quiet", "--manifest-path"]);
-        args.push(group[0].display().to_string());
-        for name in group.iter().filter_map(|m| package_name(m)) {
-            args.extend(["-p".to_owned(), name]);
-        }
-        eprint!("{}", timed(world, "build together", &args, &env).stderr);
-    }
-}
-
-/// A crate's package name, from its manifest.
-fn package_name(manifest: &Path) -> Option<String> {
-    let text = std::fs::read_to_string(manifest).unwrap_or_default();
-    re(r#"(?m)^name\s*=\s*"([^"]+)""#)
-        .captures(&text)
-        .ok()
-        .flatten()
-        .map(|c| c[1].to_owned())
-}
-
-fn cover(world: &World, manifest: &Path, work: &Path, report: &[String], tmp: &Path) -> Ran {
-    let manifest_arg = manifest.display().to_string();
-    let target = work.join("target");
-    let env = cover_env(world, manifest, work, Some(tmp));
-    for old in std::fs::read_dir(&target)
-        .into_iter()
-        .flatten()
-        .flatten()
-        .map(|e| e.path())
-        .filter(|p| crate::checks::has_ext(&p.to_string_lossy(), "profraw"))
-    {
-        remove(&old);
-    }
-    cover_built(world, manifest, &target, report, &env, &manifest_arg)
-}
-
-/// The environment of a coverage build: the family's build directory, `show-env`'s coverage settings, and the coverage flags moved to
-/// the workspace's own crates (`workspace_only`).
-fn cover_env(
-    world: &World,
-    manifest: &Path,
-    work: &Path,
-    tmp: Option<&Path>,
-) -> BTreeMap<String, String> {
-    let manifest_arg = manifest.display().to_string();
-    let target = work.join("target");
-    let mut env = BTreeMap::from([
-        (
-            "PATH".to_owned(),
-            format!(
-                "{}:{}",
-                world.path_dir.display(),
-                std::env::var("PATH").unwrap_or_default()
-            ),
-        ),
-        ("CARGO_TARGET_DIR".to_owned(), target.display().to_string()),
-    ]);
-    if let Some(tmp) = tmp {
-        env.insert("TMPDIR".to_owned(), tmp.display().to_string());
-    }
-    // from the tree's root, as every cargo call: show-env folds `.cargo/config.toml`'s rustflags (rust-lld, T96) into the RUSTFLAGS it
-    // prints, which replace the config's for the build below
-    let shown = run_in(
-        Some(&world.root),
-        &world.cargo,
-        &[
-            own(&["llvm-cov", "show-env", "--manifest-path"]),
-            vec![manifest_arg.clone()],
-        ]
-        .concat(),
-        &env,
-    );
-    for line in shown.stdout.lines() {
-        if let Some((k, v)) = line.split_once('=') {
-            env.insert(
-                k.trim_start_matches("export ").to_owned(),
-                v.trim().trim_matches(['\'', '"']).to_owned(),
-            );
-        }
-    }
-    workspace_only(&mut env, &work.join("instrument.sh"));
-    env
-}
-
-/// A crate's coverage build, tests and report, in its family's build. The crate's own library a build did not just write goes - an
-/// older one beside it carries lines of older source, which the report reads as unreached (measured 2026-11-07) - where every copy
-/// of it went before the build, which then compiled the crate again each run (T105). Every other crate's test binary is moved aside
-/// while this crate's tests and report run and put back after: the report reads each binary in the build, another crate's carrying
-/// this crate's code with none of this run's counts (T92), and the binaries built together are the next crates' own.
-fn cover_built(
-    world: &World,
-    manifest: &Path,
-    target: &Path,
-    report: &[String],
-    env: &BTreeMap<String, String>,
-    manifest_arg: &str,
-) -> Ran {
-    let deps = target.join("debug/deps");
-    let lib = [
-        own(&["--lib", "--quiet", "--manifest-path"]),
-        vec![manifest_arg.to_owned()],
-    ]
-    .concat();
-    let built = timed(
-        world,
-        "build",
-        &[
-            own(&["test", "--no-run", "--message-format=json"]),
-            lib.clone(),
-        ]
-        .concat(),
-        env,
-    );
-    let written = artifacts(&built.stdout);
-    for old in glob_prefix(&deps, &own_libs(manifest)) {
-        if !written.contains(&old.display().to_string()) {
-            remove(&old);
-        }
-    }
-    let keep = executables(&built.stdout);
-    let aside = target.join("aside");
-    let mut moved: Vec<(PathBuf, PathBuf)> = Vec::new();
-    if !keep.is_empty() {
-        let _ = std::fs::create_dir_all(&aside);
-        for old in glob_prefix(&deps, "") {
-            let to = aside.join(old.file_name().unwrap_or_default());
-            let other = !keep.contains(&old.display().to_string()) && old.extension().is_none();
-            if other && std::fs::rename(&old, &to).is_ok() {
-                moved.push((to, old));
-            }
-        }
-    }
-    let done = tests_and_report(world, built, &lib, report, env, manifest_arg);
-    for (from, to) in moved {
-        let _ = std::fs::rename(from, to);
-    }
-    done
-}
-
-/// Every file a cargo build's JSON messages name as an artifact it wrote or found fresh.
-fn artifacts(stdout: &str) -> BTreeSet<String> {
-    stdout
-        .lines()
-        .filter_map(|l| serde_json::from_str::<serde_json::Value>(l).ok())
-        .filter_map(|v| v.get("filenames").and_then(|f| f.as_array()).cloned())
-        .flatten()
-        .filter_map(|f| f.as_str().map(str::to_owned))
-        .collect()
-}
-
-fn tests_and_report(
-    world: &World,
-    built: Ran,
-    lib: &[String],
-    report: &[String],
-    env: &BTreeMap<String, String>,
-    manifest_arg: &str,
-) -> Ran {
-    eprint!("{}", built.stderr);
-    if built.code != 0 {
-        return built;
-    }
-    let tests = timed(
-        world,
-        "tests",
-        &[own(&["test"]), lib.to_vec()].concat(),
-        env,
-    );
-    eprint!("{}", tests.stderr);
-    if tests.code != 0 {
-        return tests;
-    }
-    run_in(
-        Some(&world.root),
-        &world.cargo,
-        &[
-            own(&["llvm-cov", "report"]),
-            report.to_vec(),
-            vec!["--manifest-path".to_owned(), manifest_arg.to_owned()],
-        ]
-        .concat(),
-        env,
-    )
-}
-
-/// Each source file of the crate with the lines its tests do not reach; a failed run names the crate, not a line.
-fn uncovered(world: &World, manifest: &Path, work: &Path) -> BTreeMap<String, Vec<u32>> {
-    let lcov = work.join("lcov.info");
-    let _ = std::fs::create_dir_all(work);
-    let report = own(&["--lcov", "--output-path", &lcov.display().to_string()]);
-    let done = leak_checked(manifest, |tmp| cover(world, manifest, work, &report, tmp));
-    let parent = manifest.parent().unwrap_or(Path::new("."));
-    let text = std::fs::read_to_string(&lcov);
-    let (Ok(text), 0) = (text, done.code) else {
-        let (out, err) = (tail(&done.stdout), tail(&done.stderr));
-        eprintln!("rust-checks: the coverage run failed on {} - fix what it names (a failing test), then ask again:\n{out}{err}", parent.file_name().unwrap_or_default().to_string_lossy());
-        return BTreeMap::from([(parent.display().to_string(), vec![0])]);
-    };
-    let canon = |p: &Path| {
-        format!(
-            "{}/",
-            std::fs::canonicalize(p).unwrap_or_default().display()
-        )
-    };
-    let mine = canon(parent);
-    // a crate nested in this one's directory (the gate's `crates/*` under the binary's) owns its own lines: 100% of a crate's lines by
-    // its own tests (feature 449 T92)
-    let nested: Vec<String> = crates(&world.root, &[])
-        .iter()
-        .filter_map(|m| m.parent())
-        .map(canon)
-        .filter(|d| d != &mine && d.starts_with(&mine))
-        .collect();
-    lcov_missed(&text)
-        .into_iter()
-        .filter(|(p, _)| {
-            let at = std::fs::canonicalize(p)
-                .unwrap_or_default()
-                .display()
-                .to_string();
-            at.starts_with(&mine) && !nested.iter().any(|n| at.starts_with(n.as_str()))
-        })
-        .collect()
-}
-
-/// The files of the crate's own library in a build's `deps`, which a coverage run clears: `lib<name>-` (the package's name; any
-/// `libl7r_` where the manifest names none). Only its own, so the gate's crates share one coverage build (feature 449 T92).
-fn own_libs(manifest: &Path) -> String {
-    let text = std::fs::read_to_string(manifest).unwrap_or_default();
-    re(r#"(?m)^name\s*=\s*"([^"]+)""#)
-        .captures(&text)
-        .ok()
-        .flatten()
-        .map_or_else(|| "libl7r_".to_owned(), |c| format!("lib{}-", &c[1]))
-}
-
-/// The directory a crate's coverage build is kept in (a test shares one over its copies of a fixture): one a family of crates
-/// (`family`), so the gate's crates build their shared dependencies once.
-fn cover_dir(world: &World, manifest: &Path) -> PathBuf {
-    let family = family(manifest);
-    let name = family.file_name().unwrap_or_default().to_string_lossy();
-    world
-        .cover_work
-        .clone()
-        .unwrap_or_else(|| world.target.join(format!("cover-{name}")))
-}
-
 fn tail(text: &str) -> &str {
     let at = text.char_indices().rev().nth(3999).map_or(0, |(i, _)| i);
     &text[at..]
@@ -734,21 +407,9 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
             }
         }
         "cover" => {
-            let got = uncovered(world, manifest, &cover_dir(world, manifest));
-            let listing: String = got
-                .iter()
-                .map(|(p, v)| {
-                    format!(
-                        "{p} - lines no test reaches: {}\n",
-                        v.iter().map(u32::to_string).collect::<Vec<_>>().join(", ")
-                    )
-                })
-                .collect();
-            Ran {
-                code: i32::from(!got.is_empty()),
-                stdout: listing,
-                stderr: String::new(),
-            }
+            let (mut got, said) = uncovered_each(world, &[&manifest.to_path_buf()]);
+            eprint!("{said}");
+            cover_ran(&got.remove(manifest).unwrap_or_default())
         }
         _ => cargo(
             world,
@@ -763,6 +424,24 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
     }
 }
 
+/// A crate's coverage verdict: each file with the lines no test reaches.
+fn cover_ran(got: &BTreeMap<String, Vec<u32>>) -> Ran {
+    let listing: String = got
+        .iter()
+        .map(|(p, v)| {
+            format!(
+                "{p} - lines no test reaches: {}\n",
+                v.iter().map(u32::to_string).collect::<Vec<_>>().join(", ")
+            )
+        })
+        .collect();
+    Ran {
+        code: i32::from(!got.is_empty()),
+        stdout: listing,
+        stderr: String::new(),
+    }
+}
+
 fn fix_for(cmd: &str) -> &'static str {
     match cmd {
         "lint" => "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)",
@@ -774,6 +453,21 @@ fn fix_for(cmd: &str) -> &'static str {
         "test-no-counters" => "fix the test whose result hangs on the counters",
         _ => "fix the test the counting build fails: a count's assertion, or a result the counters change",
     }
+}
+
+/// The coverage of every crate whose kept result does not stand, run together (T105, T108).
+fn owed_coverage(
+    world: &World,
+    asked: &[(&PathBuf, Option<(Verdict, bool)>)],
+) -> BTreeMap<PathBuf, BTreeMap<String, Vec<u32>>> {
+    let owed: Vec<&PathBuf> = asked
+        .iter()
+        .filter(|(_, a)| a.as_ref().is_some_and(|(_, stands)| !stands))
+        .map(|(m, _)| *m)
+        .collect();
+    let (got, said) = uncovered_each(world, &owed);
+    eprint!("{said}");
+    got
 }
 
 fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) -> Reply {
@@ -795,7 +489,7 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
     }
     let inputs = reads.map(|r| Kept::read(world, r, &found));
     let mut bad = 0;
-    // every crate's kept result asked first, so the coverage builds the rest owe are built together (T105)
+    // every crate's kept result asked first, so the coverage the rest owe is built together (T105) and run side by side (T108)
     let asked: Vec<(&PathBuf, Option<(Verdict, bool)>)> = found
         .iter()
         .map(|manifest| {
@@ -809,14 +503,11 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             (manifest, ask)
         })
         .collect();
-    if cmd == "cover" {
-        let owed: Vec<&PathBuf> = asked
-            .iter()
-            .filter(|(_, a)| a.as_ref().is_some_and(|(_, stands)| !stands))
-            .map(|(m, _)| *m)
-            .collect();
-        build_together(world, &owed);
-    }
+    let mut covered = if cmd == "cover" {
+        owed_coverage(world, &asked)
+    } else {
+        BTreeMap::new()
+    };
     for (manifest, ask) in asked {
         let shown = manifest
             .parent()
@@ -839,7 +530,10 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             );
             continue;
         }
-        let done = check(world, cmd, manifest, formatting_check);
+        let done = covered.remove(manifest).map_or_else(
+            || check(world, cmd, manifest, formatting_check),
+            |got| cover_ran(&got),
+        );
         if cmd == "hamlet" {
             stdout.push_str(&done.stdout);
         }
@@ -898,9 +592,10 @@ const COMMANDS: [&str; 9] = [
 /// `uncovered --crate X`: the crate's unreached lines as JSON, for `cover_changed.py` until it is ported (T071).
 fn uncovered_json(world: &World, named: &[String]) -> Reply {
     let mut all: BTreeMap<String, Vec<u32>> = BTreeMap::new();
-    for manifest in crates(&world.root, named) {
-        all.extend(uncovered(world, &manifest, &cover_dir(world, &manifest)));
-    }
+    let found = crates(&world.root, named);
+    let (got, said) = uncovered_each(world, &found.iter().collect::<Vec<_>>());
+    eprint!("{said}");
+    all.extend(got.into_values().flatten());
     Reply {
         stdout: serde_json::to_string(&all).unwrap_or_default() + "\n",
         stderr: String::new(),
