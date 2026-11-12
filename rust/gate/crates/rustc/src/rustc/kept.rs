@@ -42,6 +42,15 @@ const RUSTFMT: [&str; 4] = [
     "rust/.rustfmt.toml",
 ];
 
+/// A doc comment's code block, which rustdoc runs as a doctest: a fence, or a line indented four spaces past the doc marker's own that
+/// starts a block - after an empty doc line or a line that is not a doc comment - since an indented line inside a paragraph continues it
+/// (markdown; the plan review of T111).
+static DOC_FENCE: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"(?m)^\s*//[/!].*```|(?:^\s*//[/!][ \t]*$|^(?!\s*//[/!]).*$|\A)\n?^\s*//[/!] {5,}\S")
+});
+/// Code that reads the coverage build's own cfg: `cfg(coverage)`, `cfg(not(coverage))`, `cfg!(...)` and `cfg_attr(...)` forms.
+static COVERAGE_CFG: LazyLock<Regex> =
+    LazyLock::new(|| re(r"\bcfg(?:_attr)?!?\s*\([^)]*\bcoverage\b"));
 static TREE_READER: LazyLock<Regex> =
     LazyLock::new(|| re(r"CARGO_MANIFEST_DIR|\btop\(\)|\btoplevel\(\)"));
 
@@ -483,11 +492,44 @@ impl Verdict {
         (verdict, false)
     }
 
+    /// A coverage pass's word for the crate's tests (feature 449 T111; the GM 2026-11-11): the coverage run ran every test `cargo test`
+    /// runs, instrumented, where the crate has no other test target (`unit_tests_only`), and no code depends on the coverage build
+    /// (`cfg(coverage)`), so its tests' green result is kept too - `make rust-test` then `make static` ran each owed crate's tests twice.
+    /// Only the key: asking the binary key would build the plain test binary, the cost this saves.
+    pub(super) fn keep_tests(world: &World, manifest: &Path, inputs: &Kept) {
+        let at = kept_path(&world.root, "test", manifest);
+        let key = verdict_key(
+            &world.root,
+            manifest,
+            "test",
+            inputs.reads,
+            &inputs.all,
+            &inputs.ids,
+            &inputs.compiler,
+        );
+        keep_line(at.as_deref(), kept_lines(at.as_deref()), Some(key));
+    }
+
     /// A green run: its key kept, and its binary among those that passed.
     pub(super) fn keep(self) {
         keep_line(self.at.as_deref(), self.kept, self.key);
         keep_line(self.passed_at.as_deref(), self.passed, self.binary);
     }
+}
+
+/// Is the crate's `cargo test` its unit tests alone - no binary, integration test, example, bench or doctest beside its library, which
+/// `cargo test` builds and runs and a coverage run (`--lib`) does not (T111)? A doc comment holding a code fence counts as a doctest.
+pub(super) fn unit_tests_only(manifest: &Path) -> bool {
+    let dir = manifest.parent().unwrap_or(Path::new("."));
+    let text = std::fs::read_to_string(manifest).unwrap_or_default();
+    let targets = ["src/main.rs", "src/bin", "tests", "examples", "benches"];
+    let declared = ["[[bin]]", "[[test]]", "[[example]]", "[[bench]]"];
+    let sources = rust_text(&dir.join("src"));
+    // the premise a coverage pass rests on, held where it could break: code reading the coverage build's own cfg
+    !targets.iter().any(|t| dir.join(t).exists())
+        && !declared.iter().any(|d| text.contains(d))
+        && !DOC_FENCE.is_match(&sources).unwrap_or(true)
+        && !COVERAGE_CFG.is_match(&sources).unwrap_or(true)
 }
 
 /// The refusal when a crate's sources read the tree undeclared.

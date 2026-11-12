@@ -26,7 +26,7 @@ mod kept;
 use cover::uncovered_each;
 #[cfg(test)]
 use kept::{content_ids, declared_reads, relative, verdict_key};
-use kept::{kept_reads, undeclared, undeclared_refusal, Kept, Reads, Verdict};
+use kept::{kept_reads, undeclared, undeclared_refusal, unit_tests_only, Kept, Reads, Verdict};
 
 /// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
 const USAGE_LOG_TOOL: &str = "rust_checks";
@@ -455,6 +455,34 @@ fn fix_for(cmd: &str) -> &'static str {
     }
 }
 
+/// A crate's directory as the checks name it, from the tree's root.
+fn shown(world: &World, manifest: &Path) -> String {
+    let dir = manifest.parent().unwrap_or(&world.root);
+    dir.strip_prefix(&world.root)
+        .unwrap_or(Path::new(""))
+        .display()
+        .to_string()
+}
+
+/// A green result kept: `make format` rewrites the files its key was read from, so only a check's is; a coverage pass keeps the crate's
+/// tests' too where they are all its `cargo test` runs (T111).
+fn keep_green(
+    world: &World,
+    cmd: &str,
+    manifest: &Path,
+    verdict: Verdict,
+    inputs: Option<&Kept>,
+    formatting_check: bool,
+) {
+    if cmd == "format" && !formatting_check {
+        return;
+    }
+    verdict.keep();
+    if let Some(k) = inputs.filter(|_| cmd == "cover" && unit_tests_only(manifest)) {
+        Verdict::keep_tests(world, manifest, k);
+    }
+}
+
 /// The coverage of every crate whose kept result does not stand, run together (T105, T108).
 fn owed_coverage(
     world: &World,
@@ -509,13 +537,7 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
         BTreeMap::new()
     };
     for (manifest, ask) in asked {
-        let shown = manifest
-            .parent()
-            .unwrap_or(&world.root)
-            .strip_prefix(&world.root)
-            .unwrap_or(Path::new(""))
-            .display()
-            .to_string();
+        let shown = shown(world, manifest);
         let Some((verdict, stands)) = ask else {
             let _ = writeln!(
                 stdout,
@@ -549,9 +571,15 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
                 "rust-checks: {cmd} FAILED on {shown}\n{}{}",
                 done.stdout, done.stderr
             );
-        } else if cmd != "format" || formatting_check {
-            // `make format` rewrites the files its key was read from: only a check's green result is kept
-            verdict.keep();
+        } else {
+            keep_green(
+                world,
+                cmd,
+                manifest,
+                verdict,
+                inputs.as_ref(),
+                formatting_check,
+            );
         }
     }
     if bad > 0 {

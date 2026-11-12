@@ -300,3 +300,78 @@ fn a_named_crate_is_kept_and_its_key_follows_the_crates_it_builds_from() {
         .stdout
         .contains("lint unchanged on tests/fx"));
 }
+
+/// A crate's `cargo test` is its unit tests alone when it has no binary, integration test, example, bench or doctest (T111).
+#[test]
+fn a_crate_whose_unit_tests_are_its_whole_cargo_test() {
+    let (root, a, _) = two_crates();
+    let dir = root.join("rust/a");
+    assert!(super::super::unit_tests_only(&a));
+    for (path, text) in [
+        ("src/main.rs", "fn main() {}\n"),
+        ("tests/t.rs", "\n"),
+        ("examples/e.rs", "\n"),
+    ] {
+        let at = dir.join(path);
+        std::fs::create_dir_all(at.parent().unwrap()).unwrap();
+        std::fs::write(&at, text).unwrap();
+        assert!(!super::super::unit_tests_only(&a), "{path}");
+        std::fs::remove_file(&at).unwrap();
+        let _ = std::fs::remove_dir(at.parent().unwrap());
+    }
+    assert!(super::super::unit_tests_only(&a));
+    std::fs::write(&a, "[package]\n[[bin]]\nname = \"x\"\n").unwrap();
+    assert!(!super::super::unit_tests_only(&a));
+    std::fs::write(&a, "[package]\n").unwrap();
+    std::fs::write(
+        dir.join("src/lib.rs"),
+        "/// ```\n/// assert!(true);\n/// ```\npub fn f() {}\n",
+    )
+    .unwrap();
+    assert!(!super::super::unit_tests_only(&a));
+    std::fs::write(dir.join("src/lib.rs"), "//! x\n// ```\n").unwrap();
+    // a plain comment is no doctest
+    assert!(super::super::unit_tests_only(&a));
+    // an indented block after an empty doc line, or opening a doc comment, is a doctest; inside a paragraph it continues it
+    for (text, doctest) in [
+        ("/// a\n///\n///     let x = 1;\npub fn f() {}\n", true),
+        ("fn g() {}\n///     let x = 1;\npub fn f() {}\n", true),
+        ("///     let x = 1;\npub fn f() {}\n", true),
+        ("//! 1. a list item\n//!      continued\n", false),
+        ("#[cfg(not(coverage))]\nfn f() {}\n", true),
+        ("/// counts toward its coverage).\npub fn f() {}\n", false),
+    ] {
+        std::fs::write(dir.join("src/lib.rs"), text).unwrap();
+        assert_eq!(super::super::unit_tests_only(&a), !doctest, "{text}");
+    }
+}
+
+/// A coverage pass keeps the crate's tests' green result where its unit tests are its whole `cargo test`, and only there (T111).
+#[test]
+fn a_coverage_pass_keeps_the_tests_of_a_crate_with_unit_tests_alone() {
+    let (root, _, _) = kept_crates();
+    std::fs::write(root.join("rust/b/src/main.rs"), "fn main() {}\n").unwrap();
+    let world = world_with(&root, LCOV_CARGO);
+    std::fs::write(world.target.join("lcov"), "").unwrap();
+    assert_eq!(answer(&world, "cover", &[], false).code, 0);
+    let ran_before = calls(&world)
+        .iter()
+        .filter(|c| c.starts_with("test --quiet"))
+        .count();
+    let tests = answer(&world, "test", &[], false);
+    assert!(
+        tests.stdout.contains("test unchanged on rust/a"),
+        "{}",
+        tests.stdout
+    );
+    assert!(
+        !tests.stdout.contains("test unchanged on rust/b"),
+        "{}",
+        tests.stdout
+    );
+    let ran = calls(&world)
+        .iter()
+        .filter(|c| c.starts_with("test --quiet"))
+        .count();
+    assert_eq!(ran - ran_before, 1, "b alone ran its tests");
+}

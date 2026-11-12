@@ -397,3 +397,36 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T97 to T97 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T98 to T98 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T99 to T110 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+
+### T111 (a coverage pass records the crate's test result, FR-012)
+
+- **Approach**: when `l7r-gate rust cover` passes a crate whose `cargo test` is its unit tests alone, it keeps the crate's `test` key as green too (`Verdict::keep_tests`, `unit_tests_only` in `rust/gate/crates/rustc/src/rustc/kept.rs`), so `make rust-test` after `make static` runs no test the coverage run already ran.
+
+   **Decisions** (FR-012, SC-007):
+   - Why a coverage pass answers for the tests: the coverage run builds the crate's library tests (`cargo test --no-run --lib`) with the coverage flags and runs every one of them. Its build differs from the plain one only by the instrumentation and `cfg(coverage)`, and no code in `rust/` reads `cfg(coverage)` (observed 2026-11-11, method: a search of the Rust sources for `cfg(coverage)` and `cfg(not(coverage))`). So the tests that pass instrumented pass plain.
+   - Where it does not: `cargo test` also builds and runs a crate's binaries, integration tests, examples, benches and doctests, which the coverage run does not. A crate holding any of them (`src/main.rs`, `src/bin`, `tests`, `examples`, `benches`, a `[[bin]]`-style table in its manifest, or a doc comment with a code block, fenced or indented: rustdoc runs an indented block too, and a doc line indented four spaces past its marker's own starts one after an empty doc line or opening a doc comment, while inside a paragraph it continues the paragraph, as markdown reads it) keeps no test result from a coverage pass. That leaves out `rust/guard`, `rust/gate`, `rust/phases` and `rust/gate/crates/rustc`, the four with a binary, and none has the others (observed 2026-11-11, method: each crate's directory listed, and its sources searched for a fenced doc comment and, by the rule above, an indented block; the indented doc lines in `claims` and `downloads` continue a paragraph).
+   - Only the test key is kept, the one `make rust-test` asks first. Asking the second key, over the plain test binaries, would build them, the cost this saves. The key is the same one `make rust-test` computes, from the same inputs the coverage run read, so any change since moves it.
+   - Measured the same way before and after (SC-007): on a scratch clone of main (T110 in) and this clone, after a one-line core edit and a green `make static`, `make rust-test` took 18.3 s before, 11 crates' results standing, and 4.2 s after, 18 standing, and after the edit's revert 0.4 s and 0.3 s, all 19 standing (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t111/ab.sh <tree> <label>`, `date +%s.%N` around `make rust-test`, at loads of 9-13).
+   - The tests: which crates' `cargo test` is their unit tests alone (`a_crate_whose_unit_tests_are_its_whole_cargo_test`), and a coverage pass keeps the tests of such a crate and not of one with a binary (`a_coverage_pass_keeps_the_tests_of_a_crate_with_unit_tests_alone`).
+
+### T111 Approach (checklist part A)
+
+1. **The goal, in the world.** A crate's tests run once after an edit, whichever of the two checks asks first.
+2. **The constraints.** FR-012 and SC-007: every test verdict held.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the search and the timings above.
+4. **Do they describe the world here?** Measured on this clone and a scratch clone of main.
+5. **The order.** After T110.
+6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** Each owed crate's tests run twice, plain and under coverage.
+2. **Does the change remove work, or only move it?** Removes it: the plain run is not repeated where the coverage run answered.
+3. **What do you expect it to save, and why?** The plain test runs of the crates the coverage run covered, measured above.
+4. **How does the work grow?** With the crates with a binary, no longer with every owed crate.
+5. **What did the before and after show, and under what conditions?** One run each on a loaded host, read as evidence.
+6. **Did any map move?** No: no engine code changes.

@@ -474,6 +474,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T111 (a coverage pass records the crate's test result, FR-012)": {
+   "sha256": "e82e81d27beb98c2ce8dfc94ff25566efa70e1a80b69e4076edf5b163aef184e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T111 Approach (checklist part A)": {
+   "sha256": "9ed2bcb3980184a14da8874360162eede6165cefd029e2cdc08fe96f0d9d1da2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6942,6 +6954,100 @@
      "why": "Enforcement of the requested caching and its held verdicts (FR-012, SC-007); a file move for the project's line bar adds no behavior."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T111 (a coverage pass records the crate's test result, FR-012)",
+    "### T111 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T111-approach",
+     "summary": "A passing `l7r-gate rust cover` run on a crate whose `cargo test` is its unit tests alone keeps that crate's `test` key green, so `make rust-test` after `make static` does not rerun those tests.",
+     "class": "within",
+     "why": "This is the GM's own words of 2026-11-11 ('a passing coverage run recording the test result', approved with 'Yes to all 4 of those, please'), carried into FR-012 as T111."
+    },
+    {
+     "id": "T111-why-coverage-answers",
+     "summary": "The coverage run's tests count as the plain tests because the coverage build differs only by instrumentation and cfg(coverage), and no Rust source reads cfg(coverage).",
+     "class": "within",
+     "why": "This argues that the recorded result is the same verdict the plain run would give, which FR-012 requires ('held to every output and verdict the tooling gives today'). The premise was observed and dated with its method rather than assumed, and it narrows nothing."
+    },
+    {
+     "id": "T111-where-it-does-not",
+     "summary": "A crate whose `cargo test` covers more than its lib unit tests (binaries, src/bin, tests/, examples, benches, a [[bin]]-style manifest table, doctests) keeps no test result from a coverage pass. This currently leaves out rust/guard, rust/gate, rust/phases and rust/gate/crates/rustc.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally, the request would record a result for the whole crate on every passing coverage run. For these crates that cannot be true: the coverage run (`cargo test --no-run --lib`) never builds or runs their binary, integration, example, bench or doc tests, so a passing coverage run has no result for them to record. Recording one anyway would mark tests green that never ran, which breaks FR-012's requirement that every verdict the tooling gives today is held, and that requirement comes from the GM's own words. The carve-out is limited to the tests the coverage run does not execute, and each excluded class is the same kind of thing (a test the coverage run did not run), so one argument covers them all. One separate point affects whether the exclusion is wide enough, not whether it is legitimate. The detection is described as finding doctests by a doc comment with a code FENCE. Rustdoc also compiles and runs indented code blocks in doc comments as doctests, and the 2026-11-11 observation searched for fences only. A crate with an indented doctest would therefore have its doctests skipped. The detection should treat any doc code block as a doctest, or check that none exists."
+    },
+    {
+     "id": "T111-only-first-key",
+     "summary": "Only the `test` key that `make rust-test` asks first is kept, computed from the same inputs the coverage run read. The second key, over the plain test binaries, is not, because asking it would build them.",
+     "class": "within",
+     "why": "This is how the recording is done. It leaves out nothing the GM asked for: a hit on the first key already spares the plain run, and any change to the inputs moves the key."
+    },
+    {
+     "id": "T111-measurement",
+     "summary": "SC-007's before and after: `make rust-test` after a one-line core edit and a green `make static`, 18.3 s and 11 crates standing before against 4.2 s and 18 standing after, with the unchanged-tree run at 0.3-0.4 s both times. Each figure carries an observed date and a method.",
+     "class": "within",
+     "why": "SC-007 requires each task to be re-measured by the same command, before and after. The figures carry one-shot labels, and the unchanged-tree case shows nothing got worse."
+    },
+    {
+     "id": "T111-tests",
+     "summary": "Two tests: which crates' `cargo test` is their unit tests alone, and that a coverage pass keeps the tests of such a crate but not of a crate with a binary.",
+     "class": "within",
+     "why": "These enforce the requested behavior and its FR-012 boundary. Take the behavior out of the spec and the tests have nothing left to check."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T111 (a coverage pass records the crate's test result, FR-012)",
+    "### T111 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T111-keep",
+     "summary": "When l7r-gate rust cover passes a crate whose cargo test is its unit tests alone, the crate's test key is kept green, so make rust-test does not rerun what the coverage run ran.",
+     "class": "within",
+     "why": "This is the GM's 'a passing coverage run recording the test result' (2026-11-11, 'Yes to all 4 of those') and his 2026-11-11 'the results of tests which have already run so that we don't have to run them again'. The equivalence premise (no code reads cfg(coverage)) is measured, with a one-shot label, not assumed."
+    },
+    {
+     "id": "T111-exclude",
+     "summary": "A crate whose cargo test also runs binaries, integration tests, examples, benches or doctests (today rust/guard, rust/gate, rust/phases, rust/gate/crates/rustc) keeps no test result from a coverage pass.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In those crates the coverage run does not run all the tests cargo test runs, so keeping the crate's whole test key green would record a result for tests that never ran. That breaks FR-012/SC-007's 'held to every output and verdict', and it is outside the GM's own purpose: reuse the results of tests 'which have already run'. On a crate-level key, the literal rule cannot be honored without a false verdict. Each class was checked separately: binaries, integration tests, examples, benches and doctests are all cases the coverage run does not execute, so one argument covers all of them. Which crates fall out is decided by inspecting each crate (unit_tests_only), not by a fixed list. The measured result (18 of 19 crates standing after a core edit, against 11 before) shows the purpose is served, not gutted. The lib tests of the excluded crates still run twice. Recording them separately would be a further saving, not something the request requires."
+    },
+    {
+     "id": "T111-one-key",
+     "summary": "Only the test key make rust-test asks first is kept. The second key, over the plain test binaries, is not, because asking it would build them.",
+     "class": "within",
+     "why": "This is a mechanism choice inside the requested saving. It narrows nothing the GM asked for. The key is computed from the same inputs, so a later change still moves it."
+    },
+    {
+     "id": "T111-measure",
+     "summary": "SC-007 is measured by the same command before and after (make rust-test after a one-line core edit and a green make static), with all 19 results standing after the revert.",
+     "class": "within",
+     "why": "SC-007 requires the cost re-measured by the same command and the verdicts held. Both are met. The figures carry a one-shot label."
+    },
+    {
+     "id": "T111-tests",
+     "summary": "Tests: which crates count as unit-tests-only, and that a coverage pass keeps the tests of such a crate but not of a crate with a binary.",
+     "class": "within",
+     "why": "These tests enforce the requested behavior and its verdict-holding bound. They serve the request and are not added scope."
+    },
+    {
+     "id": "T111-checklist",
+     "summary": "Order after T110, exits, one-landing budget, no engine code or maps moved.",
+     "class": "within",
+     "why": "These are procedural decisions. None changes what was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12089,6 +12195,51 @@
      "summary": "Two tests pin the key and the check-versus-rewrite rule; kept-result tests move to rustc/tests/kept.rs under the 1,000-line bar.",
      "class": "within",
      "why": "Enforcement of the requested caching and its held verdicts (FR-012, SC-007); a file move for the project's line bar adds no behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T111": {
+   "section_sha256": "98c30ef7a443aa2666836eb6ecaf32b6e1099c40f7ae97e93d5ef1f9d44f076b",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T111-keep",
+     "summary": "When l7r-gate rust cover passes a crate whose cargo test is its unit tests alone, the crate's test key is kept green, so make rust-test does not rerun what the coverage run ran.",
+     "class": "within",
+     "why": "This is the GM's 'a passing coverage run recording the test result' (2026-11-11, 'Yes to all 4 of those') and his 2026-11-11 'the results of tests which have already run so that we don't have to run them again'. The equivalence premise (no code reads cfg(coverage)) is measured, with a one-shot label, not assumed."
+    },
+    {
+     "id": "T111-exclude",
+     "summary": "A crate whose cargo test also runs binaries, integration tests, examples, benches or doctests (today rust/guard, rust/gate, rust/phases, rust/gate/crates/rustc) keeps no test result from a coverage pass.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In those crates the coverage run does not run all the tests cargo test runs, so keeping the crate's whole test key green would record a result for tests that never ran. That breaks FR-012/SC-007's 'held to every output and verdict', and it is outside the GM's own purpose: reuse the results of tests 'which have already run'. On a crate-level key, the literal rule cannot be honored without a false verdict. Each class was checked separately: binaries, integration tests, examples, benches and doctests are all cases the coverage run does not execute, so one argument covers all of them. Which crates fall out is decided by inspecting each crate (unit_tests_only), not by a fixed list. The measured result (18 of 19 crates standing after a core edit, against 11 before) shows the purpose is served, not gutted. The lib tests of the excluded crates still run twice. Recording them separately would be a further saving, not something the request requires."
+    },
+    {
+     "id": "T111-one-key",
+     "summary": "Only the test key make rust-test asks first is kept. The second key, over the plain test binaries, is not, because asking it would build them.",
+     "class": "within",
+     "why": "This is a mechanism choice inside the requested saving. It narrows nothing the GM asked for. The key is computed from the same inputs, so a later change still moves it."
+    },
+    {
+     "id": "T111-measure",
+     "summary": "SC-007 is measured by the same command before and after (make rust-test after a one-line core edit and a green make static), with all 19 results standing after the revert.",
+     "class": "within",
+     "why": "SC-007 requires the cost re-measured by the same command and the verdicts held. Both are met. The figures carry a one-shot label."
+    },
+    {
+     "id": "T111-tests",
+     "summary": "Tests: which crates count as unit-tests-only, and that a coverage pass keeps the tests of such a crate but not of a crate with a binary.",
+     "class": "within",
+     "why": "These tests enforce the requested behavior and its verdict-holding bound. They serve the request and are not added scope."
+    },
+    {
+     "id": "T111-checklist",
+     "summary": "Order after T110, exits, one-landing budget, no engine code or maps moved.",
+     "class": "within",
+     "why": "These are procedural decisions. None changes what was asked."
     }
    ],
    "verdict": "CLEAR"
