@@ -886,7 +886,7 @@
   "observed": "2026-10-12",
   "unit": "s",
   "source": "the diagram-backlog session's transcript (~/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl), 2026-10-10 20:51 to 2026-10-11 08:35",
-  "command": "python3 scripts/measure/turn_time.py /home/agent/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl --record specs/375-enforced-wave-process/measurements.json --key 375-a7-turn-time",
+  "command": "<retired: scripts/measure/turn_time.py deleted by 449 T120 (ask:449-T120-retire-375-a7); its source transcript is gone; the logic lives on as l7r-gate measure turn-time>",
   "method": "a turn is a reply after a tool result, timed from the result to the reply; least squares of its seconds on context and output tokens",
   "value": {
    "turns": 1385,

@@ -1,6 +1,6 @@
-//! The review checks' tooling (feature 449 T89): `reviews owed`, `reviews prereq`, `reviews checkpoint`, and `reviews-door` for
-//! `scripts/reviews_door.py`.
+//! The review checks' tooling (feature 449 T89): `reviews owed`, `reviews prereq`, `reviews checkpoint`; `reviews-door`, the
+//! step-back bundle's door, left with feature 449 T120.
 
 pub mod reviews;
 
-use l7r_gate_core::{checks, checks_door, cohort, measure, record, Reply};
+use l7r_gate_core::{checks, cohort, measure, record, Reply};

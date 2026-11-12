@@ -94,9 +94,6 @@ pub fn cli(args: &[String]) -> Reply {
         }
         Some("reviews") => reviews::cli(&args[1..]),
         Some("speckit-todo") => speckit_todo::cli(&args[1..], Path::new(".")),
-        Some("reviews-door") => {
-            reviews::door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
-        }
         Some("claims") => claims::cli(&args[1..]),
         Some("tunables") => claims::tunables_cli(&args[1..]),
         Some("claims-door") => claims::door_cli(),
@@ -136,7 +133,6 @@ mod tests {
     fn the_checks_door_reads_stdin_to_its_end() {
         assert_eq!(cli(&["checks-door".to_owned()]).code, 0);
         assert_eq!(cli(&["owed-door".to_owned()]).code, 0);
-        assert_eq!(cli(&["reviews-door".to_owned()]).code, 0);
         assert_eq!(cli(&["claims-door".to_owned()]).code, 0);
         assert_eq!(cli(&["claims".to_owned()]).code, 2);
         assert_eq!(cli(&["tunables".to_owned(), "--bogus".to_owned()]).code, 2);

@@ -497,29 +497,33 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-### T120 (<why: the finding or measurement that files it>)
+### T120 (T83's fourth slice, the step-back and the yields, `ask:449-T83-scope`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `stepback_bundle.py`, `turn_time.py`, `fix_yield.py` and `tool_yield.py` ported with no door into the gate's `measure` crate (`measure/stepback_bundle.rs` with `words.rs`, `fix_yield.rs`, `tool_yield.rs` with `records.rs`, `turn_time.rs`: `l7r-gate measure step-back`, `fix-yield`, `tool-yield`, `turn-time`), the tool inventory made one implementation in `core` (`core/src/measure/tool_inventory.rs`), `reviews_door.py` and its Rust side (`reviews-door`) removed, the callers repointed and the five `.py` deleted in the same cut.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-T83-scope`, `ask:449-T89-reviews`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - The step-back lives in `measure`, beside `fix_yield`, which it needs and `reviews` cannot build on; it calls `reviews`' `git`, `gitdir` and `checkpoint::state` in-process, which is what retires the door's three verbs (`ask:449-T89-reviews`). It writes the bundle's files in the Python's order, so a failure part-way leaves the same files. `reviews_door.py`, `reviews/door.rs` and the `reviews-door` dispatch go with it: nothing else used them (observed 2026-11-12, method: `git grep` of `reviews_door` and `reviews-door`).
+   - The tool inventory: `checks/tool_signals.rs` did not run `tool_yield.py` by command, as the ruling supposed, but held its own copy of the inventory since T068 (`hook_guards`, `recipe`, `reached`, `check_paths`, the registry reader). One implementation now, in `core`, which both `checks` and `measure` build on, `tool_signals.rs` reading it in-process and its copy removed. With it `check tool-signals` fails (exit 1, `check-tool-signals: <error>`) on a missing or broken settings file, Makefile or registry, or a gate script not UTF-8, where T068's copy read them leniently and the original `check-tool-signals.py` failed through its import of `tool_yield`: a return toward the Python, pinned by a test, the check passing on the real tree.
+   - `turn_time` stays a command with no make recipe, as the Python had none, T119's rule that no command vanishes unannounced. `tool-yield`'s default `--root` is the tree the command runs in, where the Python's was its own script's tree, the same under `make tool-yield`, which always passes `--root`. `fix_yield` asks a fix's commit by `git rev-parse --verify --quiet <sha>^{commit}` where the Python ran `git cat-file -e`, the same question through the one git reader.
+   - The callers: the Makefile's `fix-yield`, `tool-yield` and both `step-back` forms. No inline `python3 -c` recipe of the Makefile calls these modules.
+   - The recorded measurement: `specs/375-enforced-wave-process/measurements.json`'s `375-a7-turn-time` ran `python3 scripts/measure/turn_time.py` on a session transcript no longer on disk, failing before and after the cut, so its command is retired and its values kept as history (`ask:449-T120-retire-375-a7`), which `make figures` does not run (observed 2026-11-12, method: `make figures SPEC=specs/375-enforced-wave-process`).
+   - The same outputs (FR-002): the Python (HEAD's, reaching the door through a frozen copy of the binary that still held it) against the Rust built after the deletion and a green `make static`, in a frozen world (a scratch home holding the guard log and transcripts, snapshot usage and event logs), each case set up identically, exit, stdout, stderr and every file written compared: 219 cases, 0 differing, 68 reaching a traceback and 10 a usage error (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s4/diff.py`). The step-back 60 (13 real windows of this clone's features, 6 replays of real transcripts, 31 scratch cases for every branch, the argument and refusal forms), the tool yield 76 (every `--kind`, 31 broken scratch trees both sides fail on), the fix yield 44 (every real feature with a ruled fix and scratch fixes), the turn time 33 (11 real transcripts and every `--record` path), and 10 Makefile forms. Failure parity: every case where the Python raised (a bad time, a message that is no object, a zero-duration call's `KeyError`, an output path that is a file, a `tasks.md` not UTF-8, a broken settings file or registry, a bypass record that is a list, an unreadable arbiter file) fails in the Rust too (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s4/diff.py`). A rerun of 103 cases, 0 differing, and a replay of the Rust alone hours later against the kept Python outcomes, 1 differing, a step-back with no `--since` on a repository with no checkpoint, whose window starts at each run's own clock (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s4/run3.log` and `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s4/replay2.log`). Normalizations: N1 stderr from `Traceback` on, N2 argparse's usage text, N3 the clock in a case with no `--until` (T89's N7, extended to the start a missing checkpoint leaves to the clock), N4 no bytecode, N5 the `utc` of make's own usage line, N6 the new Makefile's path in make's error line, N7 the scratch fixtures' `.git` internals, and in the replay alone N8, `tool-yield`'s "uses (7 d)" column, counted back from each run's clock. Not run: `make step-back` with no `TRIGGER`, which writes a real bundle's name; its two halves ran apart. Divergences no case reaches: Python's Unicode `isalnum` in the trigger's escape, glob characters in a session id or `F=`, `NaN` or a lone surrogate in JSON, an integer past 64 bits, `-h` exiting 2, a lone `--`, a registry `kind` that is not text.
+   - Timing: the Python 529.9 s and the Rust 502.3 s over the cases, most of it the wrapper's start and reading 78,660 guard-log files a tool-yield case (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s4/diff.py`).
+   - The census at the cut: provenance comments, the Rust module names, `rust/gate/CLAUDE.md`, `dev/rust-tooling.md`, `dev/phase-2-close.md`'s history and `round-arbiter.md`'s mention of `make fix-yield`, a target that stays (observed 2026-11-12, method: `git grep --untracked` of the six names). The checks: `make static` clean on 19 crates, `make rust-test` green (`measure` 125 tests, `checks` 99, `reviews` 61, the guard 555), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check clean (observed 2026-11-12, method: those commands). One flake seen once under `make static`'s side-by-side cover run, `ledger_passes::settle::tests::a_kept_cost_is_served_while_its_transcript_stands` (it expected the kept cost and got a fresh one), passing on every later run, in code this slice did not change (observed 2026-11-12, method: the port's `make static` and `make rust-test` runs).
 
 ### T120 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The step-back and the yield tools are Rust, one tool inventory, the reviews door gone.
+2. **The constraints.** FR-001, FR-002 and FR-003, the rulings `ask:449-T83-scope` and `ask:449-T89-reviews`.
+3. **Where each comes from.** G: the GM's words in `request.md` and the standing approval to delete ported Python; R: the rulings; O: the differential and the census above.
+4. **Do they describe the world here?** Run on this clone's real windows, transcripts, features and logs.
+5. **The order.** After T119.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+9. **Done, measured.** The differential's 219 cases with no difference, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
 ### T121 (<why: the finding or measurement that files it>)
 

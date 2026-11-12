@@ -2,7 +2,7 @@
 
 use std::path::Path;
 
-use super::{cli, reached, recipe};
+use super::cli;
 use crate::checks::scratch;
 
 fn put(root: &Path, rel: &str, text: &str) {
@@ -95,13 +95,20 @@ fn a_call_the_registry_lacks_and_an_entry_nothing_records_are_refused() {
 }
 
 #[test]
-fn a_recipe_and_what_the_entry_targets_reach() {
-    let make = "quick: lint\n\t@true\ndone: lint # note\n\t@true\nlint:\n\t@$(MAKE) --no-print-directory sub; x\nsub:\n\t@true\n";
-    assert_eq!(
-        recipe(make, "lint"),
-        "lint:\n\t@$(MAKE) --no-print-directory sub; x\n"
-    );
-    assert_eq!(recipe(make, "nope"), "");
-    let seen = reached(make);
-    assert!(seen.contains("lint") && seen.contains("sub") && seen.contains("quick"));
+fn an_inventory_it_cannot_read_fails_the_check_as_the_python_import_failed_it() {
+    // feature 449 T120: `check-tool-signals.py` read the inventory through `tool_yield`, which raised on these
+    for (rel, text) in [
+        (".claude/settings.json", "not json"),
+        ("Makefile", ""),
+        ("scripts/tool-registry.json", "[1]"),
+    ] {
+        let r = clean();
+        if text.is_empty() {
+            std::fs::remove_file(r.join(rel)).unwrap();
+        } else {
+            put(&r, rel, text);
+        }
+        let got = ask(&r);
+        assert!(got.code == 1 && got.stderr.starts_with("check-tool-signals: "));
+    }
 }

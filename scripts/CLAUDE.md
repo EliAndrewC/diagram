@@ -7,7 +7,6 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 |---|---|
 | `sync-with-main.sh`, `claim-feature.py`, `tick-task.py`, `make-docs.py`, `patch.py`, `git-askpass-token.sh` | the commands: stop-work and sync, `make claim`, `make tick`, `make docs`, the anchored-edit sweep, git's HTTPS credentials |
 | `checks_door.py` | Python's one door to the check state and the arbiter in Rust (`l7r-gate checks-door`), one process a run (449 T86); also `review_hold` and `review_owed`, `tick-task.py`'s and `review_snapshot.py`'s reach into the reviews' port (449 T89) |
-| `reviews_door.py` | the step-back bundle's door to the reviews' port (`l7r-gate reviews-door`: `gitdir`, `git`, `checkpoint_state`), leaving when T83 ports `stepback_bundle.py` (449 T89, `ask:449-T89-reviews`) |
 | `record_door.py` | Python's door to the record leaves in Rust (`l7r-gate record moved-only`, `fragments`, `americanize`), one process a run (449 T81) |
 | `owed_door.py` | Python's one door to the record's owed tools in Rust (`l7r-gate owed-door`: `ro`, `ru`, `mo`, `mt`; `mb`, `cb` for the bundles' two names `apply_edits` and `sources` read), one process a run (449 T87, T88) |
 | `bundle_door.py` | the Rust bundles' one runner of the Python they still reach (`check_bundle`'s helpers, `passages`, the cache-only page save, the knobs; `is_current` for `l7r-gate reviews prereq check`, T89; the claims tools' `.py` half and `make claims-known`'s `gm-review.jsonl` row, T82), started only when a run needs a verb (449 T88, `ask:449-T88-bundles`, `ask:449-T82-claims`) |

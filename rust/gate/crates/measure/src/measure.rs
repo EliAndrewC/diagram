@@ -7,6 +7,7 @@ pub mod event_log;
 pub mod events;
 pub mod feature_report;
 pub mod figures;
+pub mod fix_yield;
 pub mod fresh_tally;
 pub mod gate_costs;
 pub mod gatecost;
@@ -16,7 +17,10 @@ pub mod probe;
 pub mod push_check_times;
 pub mod review_yield;
 pub mod runstats;
+pub mod stepback_bundle;
 pub mod task_phases;
+pub mod tool_yield;
+pub mod turn_time;
 pub mod wave_report;
 pub mod where_time;
 
@@ -54,9 +58,21 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         ),
         Some("where-time") => where_time::cli(rest, &home().join(".claude/projects"), Path::new(events::CLONES)),
         Some("event-log") => event_log::cli(rest, &mut std::io::stdin()),
+        // T83's fourth slice (feature 449 T120): the step-back bundle and the yield reports, the step-back reading the reviews crate in
+        // process where `stepback_bundle.py` reached it through `reviews_door.py`
+        Some("step-back") => stepback_bundle::cli(
+            rest,
+            &stepback_bundle::Env {
+                home: home(),
+                now: tool_yield::now(),
+            },
+        ),
+        Some("fix-yield") => fix_yield::cli(rest, &home()),
+        Some("tool-yield") => tool_yield::cli(rest, root, &home()),
+        Some("turn-time") => turn_time::cli(rest),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log\n"
+            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time\n"
                 .to_owned(),
             2,
         ),
@@ -104,5 +120,9 @@ mod tests {
         assert_eq!(ask(&["feature-report"]), 2);
         assert_eq!(ask(&["where-time"]), 2);
         assert_eq!(ask(&["event-log"]), 2);
+        assert_eq!(ask(&["step-back"]), 2);
+        assert_eq!(ask(&["fix-yield"]), 2);
+        assert_eq!(ask(&["tool-yield", "--kind", "x"]), 2);
+        assert_eq!(ask(&["turn-time"]), 2);
     }
 }

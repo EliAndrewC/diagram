@@ -9,6 +9,9 @@ pub mod popup_rounds {
     pub use l7r_guard::shared::iso;
 }
 
+/// The project's tools listed from the code, which `l7r-gate check tool-signals` and `measure tool-yield` share (feature 449 T120).
+pub mod tool_inventory;
+
 #[must_use]
 pub fn reply(stdout: String, stderr: String, code: i32) -> crate::Reply {
     crate::Reply {

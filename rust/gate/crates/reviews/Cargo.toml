@@ -1,4 +1,4 @@
-# The review checks' tooling (feature 449 T92's split): `l7r-gate reviews`, `reviews-door`.
+# The review checks' tooling (feature 449 T92's split): `l7r-gate reviews`.
 [package]
 name = "l7r_gate_reviews"
 version = "0.1.0"

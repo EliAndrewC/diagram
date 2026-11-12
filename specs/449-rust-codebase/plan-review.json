@@ -582,6 +582,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T120 (T83's fourth slice, the step-back and the yields, `ask:449-T83-scope`)": {
+   "sha256": "8971c4876a4cd381e59da81b8f1ea5e7b99c540581efcdd4aa6259c32c64b86e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T120 Approach (checklist part A)": {
+   "sha256": "a79e285898bd547ac75247196d08c12469b93a2b8cb3f073f6064a857833ce19",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7652,6 +7664,77 @@
      "why": "ask:449-T83-scope names T119 as one slice holding the measure chain; its 'then ... then' orders the work inside that slice, the five slices being the separate tasks. Deletion after the port passes is FR-003 and the GM's standing approval to delete ported Python; the differential was re-run after the deletion, 0 differing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T120 (T83's fourth slice, the step-back and the yields, `ask:449-T83-scope`)",
+    "### T120 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T120-stepback-home",
+     "summary": "The step-back is ported into the measure crate beside fix_yield and calls reviews' git, gitdir and checkpoint::state in-process. reviews_door.py, reviews/door.rs and the reviews-door dispatch are removed. Bundle files are written in the Python's order.",
+     "class": "within",
+     "why": "ask:449-T83-scope assigns stepback_bundle.py to T120 with no door and says T120 removes reviews_door.py's three verbs. ask:449-T89-reviews says the door leaves when T83 lands. FR-002 requires the same written files, which is why the write order is kept."
+    },
+    {
+     "id": "T120-tool-inventory",
+     "summary": "The ruling assumed checks/tool_signals.rs ran tool_yield.py by command. It actually held its own copy of the inventory. That copy is replaced by one implementation in core, read in-process by checks and measure. check tool-signals now fails on a broken settings file, Makefile or registry, or a non-UTF-8 gate script, where T068's copy read them leniently.",
+     "class": "within",
+     "why": "The plan names the ruling's wrong premise openly. What it does instead serves the ruling's purpose: one implementation and no piece running both (FR-003; FR-001c's one-implementation condition). Making the check stricter on broken inputs does not refuse correct work (constitution XIV runs the other way). The plan pins it with a test and the check passes on the real tree. The plan says this restores check-tool-signals.py's behavior through its import of tool_yield. No differential reaches that deleted check directly. The support in the bundle is the tool-yield differential's 31 broken scratch trees, which both the Python and the Rust fail on."
+    },
+    {
+     "id": "T120-turn-time-no-recipe",
+     "summary": "turn_time stays a command with no make recipe.",
+     "class": "within",
+     "why": "The Python had no recipe, so nothing changes. T119's rule that no command vanishes unannounced applies."
+    },
+    {
+     "id": "T120-tool-yield-root-default",
+     "summary": "tool-yield's default --root is the working tree the command runs in. The Python defaulted to the tree its own script sat in.",
+     "class": "within",
+     "why": "This is a real behavior difference, recorded here. No reachable output changes: FR-005 makes make the one entry point, the make-only guard covers the binary, and make tool-yield always passes --root. A compiled binary also has no source-tree location to inherit."
+    },
+    {
+     "id": "T120-fix-yield-commit-probe",
+     "summary": "fix_yield checks that a fix's commit exists with git rev-parse --verify --quiet <sha>^{commit} instead of git cat-file -e.",
+     "class": "within",
+     "why": "This is an implementation choice through the one git reader. The two commands differ only on a sha that names a non-commit object, which cat-file -e accepts and ^{commit} rejects. A ruled fix's recorded commit cannot be such an object, so no case reaches the difference."
+    },
+    {
+     "id": "T120-callers-and-deletion",
+     "summary": "The Makefile's fix-yield, tool-yield and both step-back forms are repointed. The five .py files are deleted in the same cut.",
+     "class": "within",
+     "why": "ask:449-T83-scope says every by-command caller switches in the same cut. The GM gave standing approval on 2026-11-10: \"Yes please delete Python files once their Rust ports land.\""
+    },
+    {
+     "id": "T120-retire-375-a7",
+     "summary": "specs/375-enforced-wave-process/measurements.json entry 375-a7-turn-time ran python3 scripts/measure/turn_time.py on a transcript that is no longer on disk. Its command is retired and its values are kept as history, so make figures no longer runs it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows FR-001's rule that a recorded measurement running Python is rewritten to the port and re-run as the proof. Here the rule is physically impossible: the input is gone, and the command fails both before and after the cut, so no rewrite could be re-run as proof. The GM's 2026-11-09 words, \"I don't think we need to port the past feature harnesses if those are not still used\", cover a measurement that nothing can run. The values stay as history, and the arbiter ruled it as ask:449-T120-retire-375-a7, on the same pattern as T79, T89 and T118."
+    },
+    {
+     "id": "T120-normalizations",
+     "summary": "The differential normalizes N1 to N8: N1 stderr from Traceback on, N2 argparse usage text, N3/N5/N8 clock-derived values, N4 bytecode, N6 the Makefile path in make's own error line, N7 the scratch fixtures' .git internals.",
+     "class": "within",
+     "why": "ask:449-usage-text rules N1 and N2: a traceback's text and argparse's own usage text are not bound, while exit status and stdout stay held. N3, N5 and N8 come from the wall clock, which differs between any two runs. N4 and N7 are artifacts of the interpreter and of git, not outputs of the tool. N6 is make's own text naming the changed Makefile, the same shape as ask:449-T92-messages. No output that the tool itself writes is relaxed."
+    },
+    {
+     "id": "T120-stepback-no-trigger-not-run",
+     "summary": "make step-back with no TRIGGER is not run end to end because it writes a real bundle's name. Its two halves are run separately.",
+     "class": "within",
+     "why": "FR-002 binds the cases that the piece's tests and suites hold. The differential's Makefile forms are the session's own extra coverage, and the plan states this exclusion openly. If a kept test or suite case held this form, it would be owed. The bundle names none."
+    },
+    {
+     "id": "T120-unreached-divergences",
+     "summary": "These divergences are declared but no case reaches them: Unicode isalnum in the trigger's escape, glob characters in a session id or F=, NaN or a lone surrogate in JSON, integers past 64 bits, -h exiting 2, a lone --, and a registry kind that is not text.",
+     "class": "within",
+     "why": "FR-002 binds the cases that tests and suites hold, and none of these is held. -h exiting 2 is ruled directly by ask:449-usage-text: --help is bound only where a kept case holds it. The most reachable item is a non-ASCII letter in a real trigger, which would change a bundle's filename only. It is recorded, not reproduced, and it does not change the class."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13289,6 +13372,75 @@
      "summary": "event_log.py, task_phases.py, feature_report.py and where_time.py are ported and deleted in one cut, after the differential, with the callers repointed.",
      "class": "within",
      "why": "ask:449-T83-scope names T119 as one slice holding the measure chain; its 'then ... then' orders the work inside that slice, the five slices being the separate tasks. Deletion after the port passes is FR-003 and the GM's standing approval to delete ported Python; the differential was re-run after the deletion, 0 differing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T120": {
+   "section_sha256": "a82d17b7f6412e54570f2ffeb7453d54e2eca0beeb1a83e1705c45b4fb4cea84",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T120-stepback-home",
+     "summary": "The step-back is ported into the measure crate beside fix_yield and calls reviews' git, gitdir and checkpoint::state in-process. reviews_door.py, reviews/door.rs and the reviews-door dispatch are removed. Bundle files are written in the Python's order.",
+     "class": "within",
+     "why": "ask:449-T83-scope assigns stepback_bundle.py to T120 with no door and says T120 removes reviews_door.py's three verbs. ask:449-T89-reviews says the door leaves when T83 lands. FR-002 requires the same written files, which is why the write order is kept."
+    },
+    {
+     "id": "T120-tool-inventory",
+     "summary": "The ruling assumed checks/tool_signals.rs ran tool_yield.py by command. It actually held its own copy of the inventory. That copy is replaced by one implementation in core, read in-process by checks and measure. check tool-signals now fails on a broken settings file, Makefile or registry, or a non-UTF-8 gate script, where T068's copy read them leniently.",
+     "class": "within",
+     "why": "The plan names the ruling's wrong premise openly. What it does instead serves the ruling's purpose: one implementation and no piece running both (FR-003; FR-001c's one-implementation condition). Making the check stricter on broken inputs does not refuse correct work (constitution XIV runs the other way). The plan pins it with a test and the check passes on the real tree. The plan says this restores check-tool-signals.py's behavior through its import of tool_yield. No differential reaches that deleted check directly. The support in the bundle is the tool-yield differential's 31 broken scratch trees, which both the Python and the Rust fail on."
+    },
+    {
+     "id": "T120-turn-time-no-recipe",
+     "summary": "turn_time stays a command with no make recipe.",
+     "class": "within",
+     "why": "The Python had no recipe, so nothing changes. T119's rule that no command vanishes unannounced applies."
+    },
+    {
+     "id": "T120-tool-yield-root-default",
+     "summary": "tool-yield's default --root is the working tree the command runs in. The Python defaulted to the tree its own script sat in.",
+     "class": "within",
+     "why": "This is a real behavior difference, recorded here. No reachable output changes: FR-005 makes make the one entry point, the make-only guard covers the binary, and make tool-yield always passes --root. A compiled binary also has no source-tree location to inherit."
+    },
+    {
+     "id": "T120-fix-yield-commit-probe",
+     "summary": "fix_yield checks that a fix's commit exists with git rev-parse --verify --quiet <sha>^{commit} instead of git cat-file -e.",
+     "class": "within",
+     "why": "This is an implementation choice through the one git reader. The two commands differ only on a sha that names a non-commit object, which cat-file -e accepts and ^{commit} rejects. A ruled fix's recorded commit cannot be such an object, so no case reaches the difference."
+    },
+    {
+     "id": "T120-callers-and-deletion",
+     "summary": "The Makefile's fix-yield, tool-yield and both step-back forms are repointed. The five .py files are deleted in the same cut.",
+     "class": "within",
+     "why": "ask:449-T83-scope says every by-command caller switches in the same cut. The GM gave standing approval on 2026-11-10: \"Yes please delete Python files once their Rust ports land.\""
+    },
+    {
+     "id": "T120-retire-375-a7",
+     "summary": "specs/375-enforced-wave-process/measurements.json entry 375-a7-turn-time ran python3 scripts/measure/turn_time.py on a transcript that is no longer on disk. Its command is retired and its values are kept as history, so make figures no longer runs it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows FR-001's rule that a recorded measurement running Python is rewritten to the port and re-run as the proof. Here the rule is physically impossible: the input is gone, and the command fails both before and after the cut, so no rewrite could be re-run as proof. The GM's 2026-11-09 words, \"I don't think we need to port the past feature harnesses if those are not still used\", cover a measurement that nothing can run. The values stay as history, and the arbiter ruled it as ask:449-T120-retire-375-a7, on the same pattern as T79, T89 and T118."
+    },
+    {
+     "id": "T120-normalizations",
+     "summary": "The differential normalizes N1 to N8: N1 stderr from Traceback on, N2 argparse usage text, N3/N5/N8 clock-derived values, N4 bytecode, N6 the Makefile path in make's own error line, N7 the scratch fixtures' .git internals.",
+     "class": "within",
+     "why": "ask:449-usage-text rules N1 and N2: a traceback's text and argparse's own usage text are not bound, while exit status and stdout stay held. N3, N5 and N8 come from the wall clock, which differs between any two runs. N4 and N7 are artifacts of the interpreter and of git, not outputs of the tool. N6 is make's own text naming the changed Makefile, the same shape as ask:449-T92-messages. No output that the tool itself writes is relaxed."
+    },
+    {
+     "id": "T120-stepback-no-trigger-not-run",
+     "summary": "make step-back with no TRIGGER is not run end to end because it writes a real bundle's name. Its two halves are run separately.",
+     "class": "within",
+     "why": "FR-002 binds the cases that the piece's tests and suites hold. The differential's Makefile forms are the session's own extra coverage, and the plan states this exclusion openly. If a kept test or suite case held this form, it would be owed. The bundle names none."
+    },
+    {
+     "id": "T120-unreached-divergences",
+     "summary": "These divergences are declared but no case reaches them: Unicode isalnum in the trigger's escape, glob characters in a session id or F=, NaN or a lone surrogate in JSON, integers past 64 bits, -h exiting 2, a lone --, and a registry kind that is not text.",
+     "class": "within",
+     "why": "FR-002 binds the cases that tests and suites hold, and none of these is held. -h exiting 2 is ruled directly by ask:449-usage-text: --help is bound only where a kept case holds it. The most reachable item is a non-ASCII letter in a real trigger, which would change a bundle's filename only. It is recorded, not reproduced, and it does not change the class."
     }
    ],
    "verdict": "CLEAR"

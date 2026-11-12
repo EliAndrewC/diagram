@@ -455,10 +455,10 @@ page-check:     ## [tests] write the `page` and `browser` stamps - what an asset
 
 fix-yield:      ## [project] did each tooling fix save what it was meant to: its measure's rate before its ruling and since it was made (feature 385 T119)   F=<feature>
 	@if [ -z "$(F)" ]; then printf 'make fix-yield: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/fix_yield.py" "$(F)" --root "$$(git rev-parse --show-toplevel)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure fix-yield "$(F)" --root "$$(git rev-parse --show-toplevel)"
 
 tool-yield:     ## [project] every tool measured: how often it runs, how often it changed something, its misfires and what the record cannot see yet (feature 406)   [KIND=guard|target|check|step|review]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/tool_yield.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KIND),--kind $(KIND))
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure tool-yield --root "$$(git rev-parse --show-toplevel)" $(if $(KIND),--kind $(KIND))
 
 where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115)   F=<feature> [SINCE=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
@@ -531,7 +531,7 @@ use-feature:  ## [project] make F the clone's active feature for the hooks (.spe
 	@cd "$$(git rev-parse --show-toplevel)" && d=$$(ls -d specs/$(F)-* 2>/dev/null | head -1) && [ -n "$$d" ] || { printf 'make use-feature: no specs/$(F)-* directory\n' >&2; exit 2; }; printf '{\n  "feature_directory": "%s"\n}\n' "$$d" > .specify/feature.json && printf 'use-feature: .specify/feature.json names %s; export SPECIFY_FEATURE=%s\n' "$$d" "$${d#specs/}"
 
 step-back:  ## [project] the feature's hourly checkpoint: open it and build the round arbiter's step-back bundle (feature 383)   [TRIGGER=hour:<f>@<n> TRANSCRIPT=<jsonl> SINCE=<ISO> UNTIL=<ISO>: replay an hour]
-	@cd "$$(git rev-parse --show-toplevel)" && if [ -n "$(TRIGGER)" ]; then python3 scripts/reviews/stepback_bundle.py "$(TRIGGER)" --root "$$(pwd)" $(if $(TRANSCRIPT),--transcript "$(TRANSCRIPT)",) $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(OUT),--out "$(OUT)",); else t=$$(scripts/gates/l7r-gate.sh reviews checkpoint open) && python3 scripts/reviews/stepback_bundle.py "$$t" --root "$$(pwd)"; fi
+	@cd "$$(git rev-parse --show-toplevel)" && if [ -n "$(TRIGGER)" ]; then scripts/gates/l7r-gate.sh measure step-back "$(TRIGGER)" --root "$$(pwd)" $(if $(TRANSCRIPT),--transcript "$(TRANSCRIPT)",) $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(OUT),--out "$(OUT)",); else t=$$(scripts/gates/l7r-gate.sh reviews checkpoint open) && scripts/gates/l7r-gate.sh measure step-back "$$t" --root "$$(pwd)"; fi
 
 arbiter-ask: export ARBITER_WHY = $(WHY)
 arbiter-ask: export ARBITER_REVIEW = $(REVIEW)

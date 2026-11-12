@@ -1,12 +1,11 @@
 //! The review checks' tooling (feature 449 T89, `ask:449-T89-reviews`), ported from `scripts/reviews/`: what a delta owes (`owed`,
 //! `review_owed.py`), the glyph clock (`glyph`, its hour half), a dispatch's prerequisites and a review's verdict record (`prereq`,
-//! `review_prereq.py`), the feature's hourly checkpoint (`checkpoint`, `checkpoint.py`), and `door`, the one door the step-back
-//! bundle reaches them through until T83 ports it. `hm_approval._state_at` is the guard's `feature_approval_hooks::at_rev`, reused.
+//! `review_prereq.py`), and the feature's hourly checkpoint (`checkpoint`, `checkpoint.py`), which the step-back bundle (`l7r-gate measure
+//! step-back`) reads in process since feature 449 T120 removed its door (`reviews-door`). `hm_approval._state_at` is the guard's `feature_approval_hooks::at_rev`, reused.
 //! The review ledger (feature 449 T83, `ask:449-T83-scope`): `ledger`, the command lines of `ledger_lint.py` and `review_cost.py` over the
 //! guard's `shared::ledger`, and `ledger_passes`, `ledger_owed.py`'s port.
 
 pub mod checkpoint;
-pub mod door;
 pub mod glyph;
 pub mod ledger;
 pub mod ledger_passes;
