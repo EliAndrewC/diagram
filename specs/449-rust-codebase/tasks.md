@@ -386,8 +386,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T118 T83's second slice (`ask:449-T83-scope`): `speckit-todo.py`, its Rust callers calling it in-process
       research: rendering
       verify: DONE. landed: T83 slice 2: speckit-todo in Rust, 2,172 differential cases, one accepted difference
-- [ ] T119 T83's third slice (`ask:449-T83-scope`): the measure chain, `event_log.py`, `task_phases.py`, `feature_report.py`, `where_time.py`
+- [x] T119 T83's third slice (`ask:449-T83-scope`): the measure chain, `event_log.py`, `task_phases.py`, `feature_report.py`, `where_time.py`
       research: rendering
+      verify: DONE. landed: T83 slice 3: the measure chain in Rust, 182 differential cases twice with no difference
 - [ ] T120 T83's fourth slice (`ask:449-T83-scope`): `stepback_bundle.py` with `turn_time.py`, `fix_yield.py` and `tool_yield.py`; `reviews_door.py`'s three verbs go
       research: rendering
 - [ ] T121 T83's fifth slice (`ask:449-T83-scope`): `land.py` with `work_budget_view.py` and replay_owing's OLD side, last, proved by a verdict replay over recorded landings
