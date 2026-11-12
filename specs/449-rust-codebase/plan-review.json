@@ -660,6 +660,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T126 (the gate wrapper's cost on every call, the GM's pre-approval of 2026-11-12)": {
+   "sha256": "83dc8cfec4b7b50aa9ed920d94a88982aa1a3f7078da1f1754441386ed2adc65",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T126 Approach (checklist part A)": {
+   "sha256": "9144ca611ef07c838ccfa218722cebc349934f410b9577a09fb2a37f3ddfcae4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T126 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "ad7c024e483e2d47569c4a7194ff944caef9e3877d86a1c73b9d33cbe214b25b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8026,6 +8044,88 @@
      "why": "Preserves all verdicts and the existing parallelism; removes nothing the GM asked to keep."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T126 (the gate wrapper's cost on every call, the GM's pre-approval of 2026-11-12)",
+    "### T126 Approach (checklist part A)",
+    "### T126 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T126-target",
+     "summary": "File T126, the gate wrapper l7r-gate.sh's per-call cost, under the GM's 2026-11-12 pre-approval and his priority on the tests' and the landing's time",
+     "class": "within",
+     "why": "The pre-approval covers 'concrete targets with significant measured expected savings' and the task names its target, its expected saving and quotes the words, as request.md requires. The condition holds on the raw record, not only the block's stated mean: all twelve full hook runs in wrap.txt and wrap2.txt give NEW 46.6 s against HEAD 51.5 s, runs 2 and 3 of both sequences favor NEW by 5 to 9 s each pair, and the per-call cost falls from 22-25 ms to 10.5 ms. The full hook run is the tests' time the GM prioritised."
+    },
+    {
+     "id": "T126-home",
+     "summary": "Read the account's home from /etc/passwd by the shell's UID, getent kept as the fallback",
+     "class": "within",
+     "why": "Same account, same home (line whose uid is $UID, getent where none is); a cost change with the same answer. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T126-stale",
+     "summary": "Decide staleness with one find -newer -quit over the same sources instead of a bash glob walk with -nt",
+     "class": "within",
+     "why": "Checked against the full NEW wrapper: stale() still returns true first when the binary is missing ([ -x \"$BIN\" ] || return 0), so find's silent failure on a missing binary cannot skip a build; -newer is strictly newer as -nt was; find also sees dot files, so it can only rebuild more, never less. Same binary, same outputs."
+    },
+    {
+     "id": "T126-guard-left",
+     "summary": "Leave the guards' wrapper l7r-guard.sh unchanged (its walk measured at 1.6 ms)",
+     "class": "within",
+     "why": "The pre-approval authorises targets with significant savings; declining one measured as insignificant narrows nothing the GM asked for."
+    },
+    {
+     "id": "T126-order",
+     "summary": "Do T126 after T125",
+     "class": "within",
+     "why": "After T121 the GM put the tests' and landing's time before the remaining ports; T125 and T126 are both that work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T126 (the gate wrapper's cost on every call, the GM's pre-approval of 2026-11-12)",
+    "### T126 Approach (checklist part A)",
+    "### T126 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 filing under the pre-approval",
+     "summary": "T126 is filed under the GM's 2026-11-12 pre-approval: target l7r-gate.sh's per-call cost, expected saving about 12 ms a call, measured saving on the full hook run 46.6 s against 51.5 s mean over twelve alternated runs.",
+     "class": "within",
+     "why": "The pre-approval's conditions are a concrete target and a significant measured saving, the task naming both and quoting the GM's words; the block does all three, and the GM's later words put the tests' and the landing's time first. About 10% of the full hook run, five of six pairs favoring the change by 5 to 9 s, re-read from wrap.txt and wrap2.txt (the twelve numbers and both means match the block). The one HEAD run faster than every new run is reported by the block itself. Soft spot, not a finding: performance item 3's 'many hundreds of calls a full hook run' carries a method that does not count calls; the measured A/B, not that estimate, is what the significance rests on. No FR codifies the 2026-11-12 round (FR-012 and SC-007 stop at T116); the request's own sentence on how such a task is filed is the rule, and the block meets it."
+    },
+    {
+     "id": "D2 home from /etc/passwd",
+     "summary": "The wrapper reads the account's home from /etc/passwd in its own shell, matching the shell's UID, with getent kept as the fallback where no line matches.",
+     "class": "within",
+     "why": "An implementation choice inside the approved target that keeps the same answer (the same account's home); narrows nothing the GM asked for."
+    },
+    {
+     "id": "D3 staleness by one find -newer -quit",
+     "summary": "The stale-binary test becomes one find -newer ... -quit over the same sources in place of a bash glob walk with -nt.",
+     "class": "within",
+     "why": "FR-002 binds Python-to-Rust ports; this is shell to shell, so FR-002 is cited by analogy rather than as the operative constraint. The change only widens the rebuild trigger (dot files now seen, strictly newer kept), never skips a rebuild the old test asked for, and the block records a touched source still rebuilding. Nothing asked for is narrowed."
+    },
+    {
+     "id": "D4 l7r-guard.sh left as it is",
+     "summary": "The guards' wrapper is not changed, its rust/guard walk measured at 1.6 ms.",
+     "class": "within",
+     "why": "The request asks for concrete targets with significant measured savings, not every wrapper; leaving one below that bar applies the GM's condition rather than narrowing it. Recorded precisely: the 1.6 ms covers the walk only, and the bundle does not say whether l7r-guard.sh also runs the getent/id/cut chain (4.7 ms in the gate wrapper), so that part is unmeasured; it is a possible later target, not a narrowing of this one."
+    },
+    {
+     "id": "D5 order and exits",
+     "summary": "After T125; green is make hooks-test HOOKS_ALL=1 and make land, red recorded and a claim of impossibility ruled through make arbiter-ask; one landing.",
+     "class": "within",
+     "why": "Follows the GM's priority on the tests' and the landing's time after the in-progress work; the exits check the requested saving and the unchanged outputs."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13946,6 +14046,44 @@
      "summary": "Every suite, its cases and checks, the stamps, HOOKS_JOBS and PARTS_MAX kept as they were.",
      "class": "within",
      "why": "Preserves all verdicts and the existing parallelism; removes nothing the GM asked to keep."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T126": {
+   "section_sha256": "1e841e11f5911fc0a44234285a461aa327dfaedc21614a45f97d9f6ee300c050",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 filing under the pre-approval",
+     "summary": "T126 is filed under the GM's 2026-11-12 pre-approval: target l7r-gate.sh's per-call cost, expected saving about 12 ms a call, measured saving on the full hook run 46.6 s against 51.5 s mean over twelve alternated runs.",
+     "class": "within",
+     "why": "The pre-approval's conditions are a concrete target and a significant measured saving, the task naming both and quoting the GM's words; the block does all three, and the GM's later words put the tests' and the landing's time first. About 10% of the full hook run, five of six pairs favoring the change by 5 to 9 s, re-read from wrap.txt and wrap2.txt (the twelve numbers and both means match the block). The one HEAD run faster than every new run is reported by the block itself. Soft spot, not a finding: performance item 3's 'many hundreds of calls a full hook run' carries a method that does not count calls; the measured A/B, not that estimate, is what the significance rests on. No FR codifies the 2026-11-12 round (FR-012 and SC-007 stop at T116); the request's own sentence on how such a task is filed is the rule, and the block meets it."
+    },
+    {
+     "id": "D2 home from /etc/passwd",
+     "summary": "The wrapper reads the account's home from /etc/passwd in its own shell, matching the shell's UID, with getent kept as the fallback where no line matches.",
+     "class": "within",
+     "why": "An implementation choice inside the approved target that keeps the same answer (the same account's home); narrows nothing the GM asked for."
+    },
+    {
+     "id": "D3 staleness by one find -newer -quit",
+     "summary": "The stale-binary test becomes one find -newer ... -quit over the same sources in place of a bash glob walk with -nt.",
+     "class": "within",
+     "why": "FR-002 binds Python-to-Rust ports; this is shell to shell, so FR-002 is cited by analogy rather than as the operative constraint. The change only widens the rebuild trigger (dot files now seen, strictly newer kept), never skips a rebuild the old test asked for, and the block records a touched source still rebuilding. Nothing asked for is narrowed."
+    },
+    {
+     "id": "D4 l7r-guard.sh left as it is",
+     "summary": "The guards' wrapper is not changed, its rust/guard walk measured at 1.6 ms.",
+     "class": "within",
+     "why": "The request asks for concrete targets with significant measured savings, not every wrapper; leaving one below that bar applies the GM's condition rather than narrowing it. Recorded precisely: the 1.6 ms covers the walk only, and the bundle does not say whether l7r-guard.sh also runs the getent/id/cut chain (4.7 ms in the gate wrapper), so that part is unmeasured; it is a possible later target, not a narrowing of this one."
+    },
+    {
+     "id": "D5 order and exits",
+     "summary": "After T125; green is make hooks-test HOOKS_ALL=1 and make land, red recorded and a claim of impossibility ruled through make arbiter-ask; one landing.",
+     "class": "within",
+     "why": "Follows the GM's priority on the tests' and the landing's time after the in-progress work; the exits check the requested saving and the unchanged outputs."
     }
    ],
    "verdict": "CLEAR"

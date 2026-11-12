@@ -448,3 +448,38 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T124 to T83 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 
 <!-- plan-archive: T125 to T125 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+
+### T126 (the gate wrapper's cost on every call, the GM's pre-approval of 2026-11-12)
+
+- **Approach**: `scripts/gates/l7r-gate.sh`, which every `make` recipe and hook suite calls to run the gate's binary, reads the account's home from `/etc/passwd` in its own shell (`getent` kept as the fallback) and asks whether the binary is stale with one `find -newer ... -quit` over the same sources, where it ran `getent`, `id` and `cut` and walked every source path in a bash glob on every call.
+
+   **Decisions** (the GM's pre-approval in `request.md`: "if you identify concrete targets with significant measured expected savings then go ahead and do them", and his priority on the tests' and the landing's time; FR-002):
+   - Where the time goes: after T125 the full hook run ends on sync-with-main, the suite with the most CPU, 53 CPU-seconds alone of about 178 over every suite (observed 2026-11-12, method: each suite alone under GNU `time`, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/cpu.sh`). Sampling its processes every 50 ms, the bash of `l7r-gate.sh` itself ran in about 100 samples against 30 for the binary it starts (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/sample2.py`). A call cost 22 to 25 ms through the wrapper against 5 to 6 ms for the binary alone (observed 2026-11-12, method: thirty calls of `json-field` each way). Of it, `getent passwd "$(id -u)" | cut` 4.7 ms and the glob walk of the 835 paths under `rust/gate` and `rust/guard` 5.0 ms, against 0.3 ms for `/etc/passwd` read in the shell and 3.5 ms for one `find` (observed 2026-11-12, method: fifty calls of each in one bash, `EPOCHREALTIME`).
+   - The change: a call 10.5 ms (observed 2026-11-12, method: thirty calls of `json-field` through the new wrapper). The full hook run, HEAD's wrapper and the new one swapped in place, alternated three runs a side, HEAD first: HEAD 42.4, 52.0 and 51.9 s, the new wrapper 44.7, 47.1 and 47.0 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/abwrap.sh`, `wrap.txt`). Again with the new wrapper first: the new wrapper 46.1, 47.1 and 47.5 s, HEAD 52.8, 53.0 and 56.8 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/abwrap2.sh`, `wrap2.txt`). Over all twelve runs a mean of 46.6 s against 51.5 s, five of the six pairs favoring the new wrapper by 5 to 9 s and HEAD's first run of the first sequence (42.4 s) the one faster than every new run (observed 2026-11-12, method: the two records above).
+   - The same answer (FR-002): `find -newer` is strictly newer, as `-nt` against an existing binary was; it also sees dot files, which the glob skipped, so it can only ask for a build the glob would not, never skip one. A source touched still rebuilds the binary (observed 2026-11-12, method: `touch rust/gate/crates/core/Cargo.toml`, then a call, the binary's time moved). The home is the same account's: the line of `/etc/passwd` whose uid is the shell's `UID`, `getent` asked where none is.
+   - Not changed: the guards' wrapper `l7r-guard.sh`, whose walk of `rust/guard` costs 1.6 ms (observed 2026-11-12, method: fifty walks in one bash), too little to move a run.
+
+### T126 Approach (checklist part A)
+
+1. **The goal, in the world.** Every call of the gate's tools costs less, and the full hook run with it.
+2. **The constraints.** FR-002, the GM's pre-approval and priority.
+3. **Where each comes from.** G: the GM's words in `request.md`; O: the profile and the A/Bs above.
+4. **Do they describe the world here?** Measured on this clone's own full hook runs (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/abwrap2.sh`).
+5. **The order.** After T125.
+6. **The exits.** Green: `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The A/Bs above, a mean of 46.6 s against 51.5 s over all twelve runs (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/wrap2.txt`).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** Yes, below.
+
+### T126 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the wrapper around every gate tool call: three processes for the home and a bash walk of 835 paths (observed 2026-11-12, method: the fifty-call timings above).
+2. **Removes work, or only moves it?** Removes it: three processes fewer a call, and the walk in C where it was in bash.
+3. **What do you expect it to save, and why?** About 12 ms a call, many hundreds of calls a full hook run, the run contended for its processors (observed 2026-11-12, method: the timings above).
+4. **How does the work grow with the settlement?** Not a settlement stage: with the number of gate calls.
+5. **What did the before and after show, and under what conditions?** Two alternated A/Bs on the shared host, three runs a side each, a mean of 46.6 s against 51.5 s over all twelve runs (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/wrap.txt` and `wrap2.txt` there).
+6. **Did any map move, and does it still keep the research?** No map: tooling only.

@@ -408,6 +408,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T125 The hook suites started longest first by each suite's last time: the full hook run (every gate's and landing's longest phase) ends on idle-tests, 36 s started 19.6 s in by roster order; idle-tests first measured 51.3 s mean against 59.6 s, longest first by last time 52.4 s (2026-11-12, scratchpad/r6) (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
       research: rendering
       verify: DONE. landed: hook suites started longest first: full hook run mean 52.5 s against 59.4 s, three alternated runs a side; the engine-freeze roll race fixed, eight runs green
+- [ ] T126 The gate wrapper's per-call cost cut: scripts/gates/l7r-gate.sh looked up its home with getent, id and cut (about 4.4 ms) and walked 835 source paths in bash (about 5 ms) on every call, about 22 ms against the binary's 5 ms; read in the shell and one find, 10.5 ms a call, the full hook run a mean of 46.6 s against 51.5 s over two alternated A/Bs, twelve runs (2026-11-12, scratchpad/r6/wrap.txt and wrap2.txt) (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

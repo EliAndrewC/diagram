@@ -6,7 +6,11 @@ set -uo pipefail
 HERE=${BASH_SOURCE[0]%/*}
 case "$HERE" in */..*|[!/]*) HERE="$(cd "$HERE" && pwd)" ;; esac  # a hook reaches it through its own `../gates`
 TREE=${HERE%/scripts/gates}
-real=$(getent passwd "$(id -u)" | cut -d: -f6)
+# the account's own home, read in this shell (a fixture may set HOME): `getent passwd "$(id -u)" | cut` cost three processes,
+# about 4.4 ms of every call (feature 449, observed 2026-11-12); getent stays the fallback for an account /etc/passwd does not hold
+real=
+while IFS=: read -r _ _ uid _ _ home _; do [ "$uid" = "$UID" ] && { real=$home; break; }; done < /etc/passwd
+[ -n "$real" ] || real=$(getent passwd "$UID" | cut -d: -f6)
 TARGET=${L7R_GATE_TARGET:-$real/.cache/l7r-cargo-target/${TREE##*/}}
 # THE TOOL PROFILE (T95): incremental release, `[profile.tool]` in rust/Cargo.toml, shared with l7r-rust and l7r-guard, into `tool/`
 BIN="$TARGET/tool/l7r-gate"
@@ -22,14 +26,12 @@ fi
 cargo=${L7R_GATE_CARGO:-}
 [ -n "$cargo" ] || { [ -x "$real/.cargo/bin/cargo" ] && cargo="$real/.cargo/bin/cargo" || cargo=cargo; }
 # every source the binary builds from: the guard crate's too, which both build on - before T93 a guard edit left `l7r-gate` stale
+# - one find, stopping at the first newer path, where a bash glob walk of the same 835 paths cost about 1.5 ms more a call (feature 449,
+# observed 2026-11-12); it also sees dot files, which the glob skipped, so it errs toward a rebuild
 stale() {
   [ -x "$BIN" ] || return 0
-  local f d; shopt -s globstar nullglob
-  for d in "${SOURCES[@]}" "$TREE/rust/guard"; do
-    for f in "$d"/**; do [ "$f" -nt "$BIN" ] && return 0; done
-  done
-  for f in "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml"; do [ "$f" -nt "$BIN" ] && return 0; done
-  return 1
+  [ -n "$(find "${SOURCES[@]}" "$TREE/rust/guard" "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml" \
+    -newer "$BIN" -print -quit 2>/dev/null)" ]
 }
 if stale; then
   # THE LINKER (T96): the build runs from the tree's root, where cargo finds `.cargo/config.toml` (rust-lld) whatever directory called it,
