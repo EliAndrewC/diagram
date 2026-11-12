@@ -389,8 +389,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T119 T83's third slice (`ask:449-T83-scope`): the measure chain, `event_log.py`, `task_phases.py`, `feature_report.py`, `where_time.py`
       research: rendering
       verify: DONE. landed: T83 slice 3: the measure chain in Rust, 182 differential cases twice with no difference
-- [ ] T120 T83's fourth slice (`ask:449-T83-scope`): `stepback_bundle.py` with `turn_time.py`, `fix_yield.py` and `tool_yield.py`; `reviews_door.py`'s three verbs go
+- [x] T120 T83's fourth slice (`ask:449-T83-scope`): `stepback_bundle.py` with `turn_time.py`, `fix_yield.py` and `tool_yield.py`; `reviews_door.py`'s three verbs go
       research: rendering
+      verify: DONE. landed: T83 slice 4: the step-back and the yields in Rust, 219 differential cases with no difference
 - [ ] T121 T83's fifth slice (`ask:449-T83-scope`): `land.py` with `work_budget_view.py` and replay_owing's OLD side, last, proved by a verdict replay over recorded landings
       research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
