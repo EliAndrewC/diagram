@@ -355,5 +355,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       verify: DONE. landed: the record's owed list reads git's state once a computation: 24 git calls to 9 on the fixture, make record-owed 44 to 14
 - [ ] T108 A core edit's coverage tests side by side: each crate's coverage tests and report run one after another in the family's one build, 17.2 s of make static's 57.2 s after a core edit, one crate 8.9 s of it (2026-11-11) (the GM 2026-11-11)
       research: rendering
-- [ ] T109 push-checks' Rust self-tests kept per binary: the six run on every push whether or not the binary changed, 0.28 s of a 3.7 s push at load 0.5, about 0.4 s under the sync-with-main suite's load (2026-11-11) (the GM 2026-11-11)
+- [x] T109 push-checks' Rust self-tests kept per binary: the six run on every push whether or not the binary changed, 0.28 s of a 3.7 s push at load 0.5, about 0.4 s under the sync-with-main suite's load (2026-11-11) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: push-checks' Rust self-tests kept per binary: a push 8.41-8.53 s to 8.00-8.20 s
