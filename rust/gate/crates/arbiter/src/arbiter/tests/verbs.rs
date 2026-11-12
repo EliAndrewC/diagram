@@ -5,7 +5,7 @@ use std::path::Path;
 use serde_json::json;
 
 use super::super::{cli, open_fixes};
-use super::{clone_at, owe, python_tools, rows, run};
+use super::{clone_at, gm_rows, owe, python_tools, rows, run};
 
 #[test]
 fn every_verb_answers_on_a_clone() {
@@ -218,7 +218,8 @@ fn fixes_are_settled_and_nits_answered() {
         "{}",
         declined_fix.stderr
     );
-    assert!(std::fs::read_to_string(d.join("gm-question.txt"))
+    assert!(gm_rows(&d).last().unwrap()["question"]
+        .as_str()
         .unwrap()
         .contains("Declined because"));
     let nofeature = clone_at("no-active");

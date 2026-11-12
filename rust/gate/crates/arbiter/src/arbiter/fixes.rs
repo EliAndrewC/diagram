@@ -181,7 +181,7 @@ pub(super) fn settle_fix(
     let value = Value::Object(row);
     append_jsonl(&d.join("arbiter.jsonl"), &value)?;
     if status == "declined" {
-        gm_question(root, &d, &format!("Build this tooling fix the round arbiter asked for, which the session declined? The fix: {fix} Declined because: {note}"), trigger, &when)?;
+        gm_question(&d, &format!("Build this tooling fix the round arbiter asked for, which the session declined? The fix: {fix} Declined because: {note}"), trigger, &when)?;
     }
     Ok(value)
 }

@@ -1,7 +1,6 @@
 //! `l7r-gate arbiter`: the round arbiter's rulings and tripwires from the shell and the make targets (feature 449 T86, from `scripts/hooks/lib/hm_arbiter.py`'s `main`, `record_ruling` and `record_batch`), and the verdict
-//! reads the review gate asks. `arbiter.jsonl` is appended here alone; a ruling that lifts a hold is `pop_owed` under the same lock `trip` takes, so the guards and this command never race. The modules still Python - `gm_review`
-//! and `claims` - are asked by path on these rare branches, never on a plain Bash call or Edit (the T065 clause); the checkpoint's close and a unit's
-//! content key are the reviews' port, in-process (T89).
+//! reads the review gate asks. `arbiter.jsonl` is appended here alone; a ruling that lifts a hold is `pop_owed` under the same lock `trip` takes, so the guards and this command never race. The checkpoint's close and a unit's content key
+//! are the reviews' port, in-process (T89), and so is a ruling's `for_gm` question, `gm_review.question` until feature 449 T91 ported it.
 
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -100,39 +99,6 @@ fn root_dir() -> PathBuf {
     std::env::current_dir().unwrap_or_default()
 }
 
-/// `python3 -c code args...`, a module the five named modules call by path until its own port; its stripped stdout, or the refusal its failure is (the Python raised there, the ruling left half-recorded).
-fn py(code: &str, args: &[&str]) -> Result<String, Stop> {
-    let done = std::process::Command::new("python3")
-        .arg("-c")
-        .arg(code)
-        .args(args)
-        .output();
-    let said = done.as_ref().ok().map_or_else(String::new, |o| {
-        String::from_utf8_lossy(&o.stderr).trim().to_owned()
-    });
-    match done {
-        Ok(o) if o.status.success() => Ok(String::from_utf8_lossy(&o.stdout).trim().to_owned()),
-        _ => Err(Stop::Refused(format!("python3 said: {said}"))),
-    }
-}
-
-const GM_QUESTION: &str = r"import sys
-from pathlib import Path
-sys.path.insert(0, sys.argv[1])
-import gm_review
-gm_review.question(Path(sys.argv[2]), sys.argv[3], sys.argv[4], sys.argv[5])";
-
-/// The tree the running binary's scripts live in: `L7R_GUARD_TREE` from the wrapper, else the root.
-fn tree_of(root: &Path) -> PathBuf {
-    std::env::var("L7R_GATE_TREE")
-        .or_else(|_| std::env::var("L7R_GUARD_TREE"))
-        .map_or_else(|_| root.to_path_buf(), PathBuf::from)
-}
-
-fn scripts(root: &Path) -> PathBuf {
-    tree_of(root).join("scripts")
-}
-
 /// `hm_arbiter.accept_answers`: an accept on a round cap answers that check's units on its subject at today's words.
 fn accept_answers(root: &Path, unit: &str, result: &str) -> Result<Vec<String>, Stop> {
     let (check, subject) = unit.split_once('|').unwrap_or((unit, ""));
@@ -191,25 +157,13 @@ fn answer_units(
     }
 }
 
-fn gm_question(
-    root: &Path,
-    d: &Path,
-    question: &str,
-    source: &str,
-    when: &str,
-) -> Result<(), Stop> {
-    let tree = scripts(root);
-    py(
-        GM_QUESTION,
-        &[
-            &tree.to_string_lossy(),
-            &d.to_string_lossy(),
-            question,
-            source,
-            when,
-        ],
-    )
-    .map(|_| ())
+/// A ruling's `for_gm`, written owed escalation-check in the feature's `gm-review.jsonl` with the ruling's own time: the GM-review queue's
+/// one writer, called in process (feature 449 T91, `ask:449-T82-claims`; the Python's `gm_review.question` by `python3 -c` before). Its
+/// refusal leaves the ruling recorded and the question not, as the Python's raise did.
+fn gm_question(d: &Path, question: &str, source: &str, when: &str) -> Result<(), Stop> {
+    crate::reviews::gm_review::question(d, question, source, Some(when))
+        .map(|_| ())
+        .map_err(|why| Stop::Refused(format!("gm-review said: {why}")))
 }
 
 /// sha256 of what a review of feature `d`'s spec judged: spec.md above its Review history, title and body.
@@ -514,7 +468,7 @@ pub fn record_ruling(
     let value = Value::Object(row);
     append_jsonl(&d.join("arbiter.jsonl"), &value)?;
     if !for_gm.is_empty() {
-        gm_question(root, &d, &for_gm, trigger, &when)?;
+        gm_question(&d, &for_gm, trigger, &when)?;
     }
     if hour {
         crate::reviews::checkpoint::close_checkpoint(root, trigger);

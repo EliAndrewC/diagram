@@ -38,10 +38,6 @@ for line in sys.stdin:
             ok = ["l7r/diagram/m.py::read"]
         elif v == "tunables_unstated":
             ok = [["fn", 3, 4.5], ["big", 4, 1234567]] if "4.5" in x[0] else []
-        elif v == "gm_review_add_row":
-            with open(pathlib.Path(x[0], "gm-review.jsonl"), "a") as fh:
-                fh.write(json.dumps(x[1]) + "\n")
-            ok = True
         else:
             raise KeyError(v)
         print(json.dumps({"ok": ok}), flush=True)

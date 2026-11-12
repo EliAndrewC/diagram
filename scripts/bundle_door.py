@@ -3,8 +3,8 @@ one process a bundle run, started by the Rust only when the run needs one of its
 Python function and prints its JSON. Each verb leaves when its owner ports (the helpers, `passages` and `save_cached` in T85, `knobs`
 and `knob_table` in phase 4, `is_current` - `l7r-gate reviews prereq check`'s, T89 - with `l7r/diagram/pipeline/` in T90; the `claims_*`
 and `tunables_unstated` verbs - the Python half of the claims tools, which reads `.py` source by CPython's own syntax tree - in phase 4
-with the Mode A code they read, and `gm_review_add_row` with `scripts/gm_review.py` in T91: `ask:449-T82-claims`, which also took
-`claims_rows` and `load_index` off this runner); the runner is deleted with the owner of its last verb, and named at the phase-3 close
+with the Mode A code they read: `ask:449-T82-claims`, which also took `claims_rows` and `load_index` off this runner, and whose
+`gm_review_add_row` left with `scripts/gm_review.py` in T91, the Rust claims-known calling the queue's writer in process); the runner is deleted with the owner of its last verb, and named at the phase-3 close
 if still present.
 
     python3 scripts/bundle_door.py    one JSON line a request on stdin, {"verb": ..., "args": [...]}; one JSON line a reply on stdout
@@ -140,11 +140,6 @@ def tunables_unstated(source: str, unit_text: dict[str, str]) -> list[list]:
     return [list(t) for t in importlib.import_module("tunables").unstated(source, unit_text)]
 
 
-def gm_review_add_row(spec_dir: str, row: dict) -> bool:
-    """`gm_review.add_row`: `make claims-known`'s row and the GM's box, Python their one writer until T91 ports the file."""
-    return importlib.import_module("gm_review").add_row(pathlib.Path(spec_dir), row)
-
-
 def knobs() -> dict[str, list[str]]:
     from l7r.diagram.interactive import conditions  # noqa: PLC0415 - phase 4's, reached here alone
 
@@ -168,7 +163,7 @@ VERBS = {"run": run, "save_cached": save_cached, "passages": passages, "knobs": 
          "claims_py_units": claims_py_units, "claims_module_units": claims_module_units, "claims_context_source": claims_context_source,
          "claims_callees": claims_callees, "claims_direct": claims_direct, "claims_chase": claims_chase,
          "claims_counter_only": claims_counter_only, "claims_stale": claims_stale, "claims_scope_units": claims_scope_units,
-         "claims_read_units": claims_read_units, "tunables_unstated": tunables_unstated, "gm_review_add_row": gm_review_add_row}
+         "claims_read_units": claims_read_units, "tunables_unstated": tunables_unstated}
 
 
 def main() -> int:

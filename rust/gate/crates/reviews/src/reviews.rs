@@ -4,9 +4,12 @@
 //! step-back`) reads in process since feature 449 T120 removed its door (`reviews-door`). `hm_approval._state_at` is the guard's `feature_approval_hooks::at_rev`, reused.
 //! The review ledger (feature 449 T83, `ask:449-T83-scope`): `ledger`, the command lines of `ledger_lint.py` and `review_cost.py` over the
 //! guard's `shared::ledger`, and `ledger_passes`, `ledger_owed.py`'s port.
+//! The GM-review queue (feature 449 T91, `ask:449-T82-claims`): `gm_review`, `scripts/gm_review.py`'s port behind `l7r-gate gm-review`, the one
+//! writer of `gm-review.jsonl` and the GM's box, which the round arbiter and the claims tools call in process.
 
 pub mod checkpoint;
 pub mod glyph;
+pub mod gm_review;
 pub mod ledger;
 pub mod ledger_passes;
 pub mod owed;

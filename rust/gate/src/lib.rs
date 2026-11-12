@@ -94,6 +94,7 @@ pub fn cli(args: &[String]) -> Reply {
             owed_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout().lock())
         }
         Some("reviews") => reviews::cli(&args[1..]),
+        Some("gm-review") => reviews::gm_review::cli(&args[1..]),
         Some("speckit-todo") => speckit_todo::cli(&args[1..], Path::new(".")),
         Some("claims") => claims::cli(&args[1..]),
         Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),

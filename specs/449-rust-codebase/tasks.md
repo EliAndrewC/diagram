@@ -412,6 +412,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T126 The gate wrapper's per-call cost cut: scripts/gates/l7r-gate.sh looked up its home with getent, id and cut (about 4.4 ms) and walked 835 source paths in bash (about 5 ms) on every call, about 22 ms against the binary's 5 ms; read in the shell and one find, 10.5 ms a call, the full hook run a mean of 46.6 s against 51.5 s over two alternated A/Bs, twelve runs (2026-11-12, scratchpad/r6/wrap.txt and wrap2.txt) (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
       research: rendering
       verify: DONE. landed: the gate wrapper's per-call cost cut (22 ms to 10.5 ms): the full hook run a mean of 46.6 s against 51.5 s over twelve alternated runs
+- [ ] T127 Phase 3, the closing check (scripts/gates/close_check.py, phase 3 by FR-001, held by no task until T91's plan review, 2026-11-12); the gm-review port runs it by path from L7R_GATE_TREE on the one branch where the GM's box is a feature's last open box (T91), which goes when it lands
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

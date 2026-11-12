@@ -607,7 +607,9 @@ pub fn gate(
     Ok((r, w))
 }
 
-/// `make claims-known`: each known drift the gate would refuse unrecorded, written as a row of its task's feature's `gm-review.jsonl` with the GM's box, by the Python (`gm_review.add_row`, T91's); the lines written.
+/// `make claims-known`: each known drift the gate would refuse unrecorded, written as a row of its task's feature's `gm-review.jsonl` with the GM's box, by the
+/// GM-review queue's one writer in process (`gm_review::add_row`, feature 449 T91, `ask:449-T82-claims`; `bundle_door.py`'s `gm_review_add_row` verb before);
+/// the lines written.
 pub fn record_known(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Vec<String>, Fail> {
     let (refuse, _) = gate(reader, root, at)?;
     let mut written = Vec::new();
@@ -622,7 +624,8 @@ pub fn record_known(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Ve
             .collect();
         for spec in spec_glob(root, &feat, None).into_iter().take(1) {
             let row = json!({"kind": KNOWN_KIND, "claim": key, "task": task, "finding": finding, "utc": crate::record::repo::utc_now()});
-            reader.ask("gm_review_add_row", &json!([spec.to_string_lossy(), row]))?;
+            crate::reviews::gm_review::add_row(&spec, &row)
+                .map_err(|why| format!("gm-review: {why}"))?;
             let name = spec.file_name().unwrap_or_default().to_string_lossy();
             written.push(format!("{name} {task}: {key}"));
         }

@@ -10,6 +10,7 @@ fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }
 l7r_gate_owed = { path = "../owed" }
 l7r_gate_plan = { path = "../plan" }
+l7r_gate_reviews = { path = "../reviews" }
 l7r_gate_tree = { path = "../tree" }
 l7r_guard = { path = "../../../guard" }
 serde = { workspace = true }

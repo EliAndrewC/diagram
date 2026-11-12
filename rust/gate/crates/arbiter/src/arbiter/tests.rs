@@ -349,13 +349,19 @@ fn a_python_string_repr_chooses_its_quote() {
     assert_eq!(py_repr("a\\\n\t\r"), "'a\\\\\\n\\t\\r'");
 }
 
-const FAKE_GM_REVIEW: &str = "from pathlib import Path\ndef question(d, text, source, when):\n    Path(d, 'gm-question.txt').write_text(text + '|' + source + '|' + when)\n";
-
+/// The test doubles a ruling's side effects meet: `.fake-answer` for `record_owed.answer`. A `for_gm` question is the GM-review queue's
+/// own writer in process (feature 449 T91), so it writes the scratch feature's `gm-review.jsonl` itself.
 fn python_tools(root: &Path) {
     std::fs::write(root.join(".fake-answer"), "ok").unwrap();
-    let scripts = root.join("scripts");
-    std::fs::create_dir_all(&scripts).unwrap();
-    std::fs::write(scripts.join("gm_review.py"), FAKE_GM_REVIEW).unwrap();
+}
+
+/// The feature's GM-review rows as written.
+pub fn gm_rows(d: &Path) -> Vec<Value> {
+    std::fs::read_to_string(d.join("gm-review.jsonl"))
+        .unwrap()
+        .lines()
+        .map(|l| serde_json::from_str(l).unwrap())
+        .collect()
 }
 
 fn run(root: &Path, args: &[&str]) -> crate::Reply {
@@ -423,8 +429,8 @@ fn the_rulings_tools_are_asked_by_path() {
     .unwrap();
     assert!(!row["spec_sha"].as_str().unwrap().is_empty());
     assert_eq!(
-        std::fs::read_to_string(root.join("specs/999-x/gm-question.txt")).unwrap(),
-        "is this right sir please|round:spec-fidelity|999-x#1@6|2026-01-01T00:00:00Z"
+        gm_rows(&root.join("specs/999-x")).last().unwrap(),
+        &json!({"kind": "question", "status": "owed", "question": "is this right sir please", "source": "round:spec-fidelity|999-x#1@6", "utc": "2026-01-01T00:00:00Z"})
     );
     // a content-key ruling written without its key may be recorded again, the rekey: the unit a map new to the pool
     let before = rows(&root).len();
@@ -590,22 +596,19 @@ fn a_failed_tool_leaves_the_ruling_half_recorded_and_refuses() {
         "",
     );
     std::fs::write(root.join("specs/999-x/arbiter.jsonl"), "").unwrap();
-    std::fs::write(
-        root.join("scripts/gm_review.py"),
-        "raise ImportError('x')\n",
-    )
-    .unwrap();
     refused(
         record_ruling(
             &root,
             "ask:gm2",
-            &json!({"ruling": "continue", "why": "w", "for_gm": "is this all right for you"}),
+            &json!({"ruling": "continue", "why": "w", "for_gm": "is this right"}),
             "round-arbiter",
             None,
             false,
         ),
-        "python3 said",
+        "gm-review said: a question for the GM is a sentence he can answer - four words or more",
     );
+    // the queue unreadable: the question raises where the Python's `read_text` raised, the fix's record kept
+    std::fs::write(root.join("specs/999-x/gm-review.jsonl"), b"\xff\n").unwrap();
     std::fs::write(
         root.join("specs/999-x/arbiter.jsonl"),
         format!(
@@ -616,7 +619,7 @@ fn a_failed_tool_leaves_the_ruling_half_recorded_and_refuses() {
     .unwrap();
     refused(
         super::settle_fix(&root, "ask:f", "declined", "a note here", ""),
-        "python3 said",
+        "gm-review said: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte",
     );
 }
 

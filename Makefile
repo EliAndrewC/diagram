@@ -612,24 +612,24 @@ preflight:      ## [tests] the gate's first phase, in seconds: the derived files
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)"
 
 gm-review:      ## [project] what waits on the GM: the questions escalation-check KEPT (his decisions, the one source - feature 432), the questions OWED escalation-check (the session's), rows waiting on other work, and per feature the TO REVIEW rows (he may overturn) - feature 375   [F=<NNN> that feature's rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=<n>]
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py $(if $(EXPLAIN),explain $(F) $(ROW),list $(F))
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review $(if $(EXPLAIN),explain $(F) $(ROW),list $(F))
 
 gm-question:    ## [project] put a question to the GM: written OWED escalation-check, it reaches him only once kept (feature 432)   F=<NNN> Q="<the question>" SOURCE="<what raised it>"
 	@if [ -z "$(F)" ] || [ -z "$(Q)" ] || [ -z "$(SOURCE)" ]; then printf 'make gm-question: F=, Q= and SOURCE= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py question "$(F)" "$(Q)" "$(SOURCE)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review question "$(F)" "$(Q)" "$(SOURCE)"
 
 gm-escalated:   ## [project] record escalation-check's verdict on an owed question: KEEP holds it for the GM (name it in the turn's final message), CUT closes it with the reason (feature 432)   F=<NNN> ROW=<n> VERDICT=KEEP|CUT REASON="<escalation-check's reason>" [SUPERSEDED_BY=<a later question row>: CUT a kept question the GM has not reviewed, its premise overturned]
 	@if [ -z "$(F)" ] || [ -z "$(ROW)" ] || [ -z "$(VERDICT)" ] || [ -z "$(REASON)" ]; then printf 'make gm-escalated: F=, ROW=, VERDICT= and REASON= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py escalated "$(F)" "$(ROW)" "$(VERDICT)" "$(REASON)" "$(SUPERSEDED_BY)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review escalated "$(F)" "$(ROW)" "$(VERDICT)" "$(REASON)" "$(SUPERSEDED_BY)"
 
 accept:         ## [project] accept a finding with a reason - the work goes on, and the GM may overturn it after landing (feature 375)   F=375 FINDING="<what>" REASON="<why it can stand>"
 	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py accept "$(F)" "$(FINDING)" "$(REASON)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review accept "$(F)" "$(FINDING)" "$(REASON)"
 
 gm-reviewed: export GM_WORDS = $(WORDS)
 gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375); ROW=<n> marks that one row alone; WORDS= his words when a session marks a row he discussed   F=375 [OVERTURN=<n> TO=<NNN> | ROW=<n>] [WORDS="<the GM's words>"]
 	@if [ -z "$(F)" ]; then printf 'make gm-reviewed: F=<feature> is required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && $(if $(ROW),python3 scripts/gm_review.py reviewed-row "$(F)" "$(ROW)",python3 scripts/gm_review.py reviewed "$(F)" $(if $(OVERTURN),"$(OVERTURN)" "$(TO)",))
+	@cd "$$(git rev-parse --show-toplevel)" && $(if $(ROW),scripts/gates/l7r-gate.sh gm-review reviewed-row "$(F)" "$(ROW)",scripts/gates/l7r-gate.sh gm-review reviewed "$(F)" $(if $(OVERTURN),"$(OVERTURN)" "$(TO)",))
 
 feature-report: ## [project] where a feature's time and dispatches went, as a table, from the event log, the run log and git   F=375 [TRANSCRIPT="<jsonl> ..."] [SINCE=<ISO>] [UNTIL=<ISO>] [WRITE=1]
 ##  F=<NNN>            the feature

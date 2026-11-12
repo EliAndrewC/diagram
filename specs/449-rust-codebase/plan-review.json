@@ -434,7 +434,7 @@
    "declared": "spec-fidelity"
   },
   "### T91 Approach (checklist part A)": {
-   "sha256": "7cb7ea870275129b44a9d5c5b5b860c4f173f6c126b852e52f5d951cc13e5852",
+   "sha256": "54d072ee89c93a580f8191f6df8fff04f82f1dbae80d5e12e22e6dd8e4c55429",
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
@@ -675,6 +675,12 @@
   },
   "### T126 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "ad7c024e483e2d47569c4a7194ff944caef9e3877d86a1c73b9d33cbe214b25b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T91 (the GM-review queue, filed by `ask:449-T82-claims`)": {
+   "sha256": "66c5cce716308a6ce6c629bac041b3da89e60adc11940632ccb2d8d6e4059914",
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
@@ -8126,6 +8132,79 @@
      "why": "Follows the GM's priority on the tests' and the landing's time after the in-progress work; the exits check the requested saving and the unchanged outputs."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T91 (the GM-review queue, filed by `ask:449-T82-claims`)",
+    "### T91 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T91-port-whole",
+     "summary": "gm_review.py ported whole with no door into the reviews crate, every caller repointed, the .py and bundle_door's gm_review_add_row verb deleted in the same cut",
+     "class": "within",
+     "why": "FR-001 places gm_review.py in phase 3; ask:449-T82-claims files it as T91 and keeps Python the one writer only until it ports; FR-003 one implementation; deletion under the GM's standing approval quoted in FR-001 ('Yes please delete Python files once their Rust ports land')."
+    },
+    {
+     "id": "T91-where",
+     "summary": "lives in the reviews crate; after the cut gm_review.rs is the one writer of gm-review.jsonl and the GM's box, by a stated git grep search space",
+     "class": "within",
+     "why": "Placement is design; the one-writer result is what ask:449-T82-claims requires, and the census names its search space."
+    },
+    {
+     "id": "T91-callers",
+     "summary": "Makefile's five recipes, the arbiter (in process), push row gm-questions (gate command), claims-known's carry (in process) repointed; the arbiter's fake fixture removed",
+     "class": "within",
+     "why": "FR-003: no piece runs both; the fixture stood in for the inline Python that no longer runs."
+    },
+    {
+     "id": "T91-command-name",
+     "summary": "top-level l7r-gate gm-review; usage text keeps naming gm_review.py byte for byte",
+     "class": "within",
+     "why": "FR-002 and ask:449-usage-text: hand-written usage stays bound; keeping it is the strict reading."
+    },
+    {
+     "id": "T91-close-check-by-path",
+     "summary": "close_check.py stays Python, run by path from reviewed only on the branch where the GM's box is a feature's last open box, under the T065 clause, gaining a new --reasons-json DIR SPECS mode that writes no usage-log line; T127 filed for its port, the by-path run going when it lands",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adding a mode changes a Python file the GM said is no longer being changed except to delete it. Legitimate because the spec's own placement requires it: ask:449-T067-scope puts close_check.py in phase 3 carrying the T065 clause until ported, and gm_review.py reached it by import, which a Rust caller cannot do (FR-003: a name a command can carry goes by command); the mode only emits, as JSON, what the import returned and keeps the import's no-usage-log behavior, adding no logic, and its run is on a rare branch, never a plain Bash call or Edit. Should the mode compute anything the import did not, this ruling does not cover it. The alternative, porting close_check in the same cut, is phase-3 work the spec allows but does not require of T91, and T127 holds it."
+    },
+    {
+     "id": "T91-arbiter-message",
+     "summary": "the arbiter's failure message 'python3 said: <traceback>' becomes 'gm-review said: <why>', two Rust tests in arbiter/tests.rs changed to expect it",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The arbiter is not the replaced piece and the fixed words are the Rust arbiter's own; keeping 'python3 said' would name a subprocess that no longer exists after the port. Ruled precedent T87-arbiter-test-message (LEGITIMATE) on the same message pattern. Exit status and verdict unchanged."
+    },
+    {
+     "id": "T91-claims-known-message",
+     "summary": "claims-known on a gm-review write failure prints 'gm-review: <why>' where it printed the runner's traceback; exit status unchanged through the same ? of the same function",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:449-usage-text: an uncaught Python traceback's text is not bound for any port, its exit status and stdout held; the block records the exit path compared at HEAD and in the working tree. Not resting on T87."
+    },
+    {
+     "id": "T91-differences",
+     "summary": "differential of 1,272 cases accepts 8 differences (7 rows holding NaN, 1 integer past 64 bits) and lists divergences no case reaches; in-process callers 55 cases with none",
+     "class": "within",
+     "why": "FR-002 binds every case the piece's tests and suites hold: the kept suites (make hooks-test HOOKS_ALL=1, 54 suites) are green and the real queues of all 47 features as stored and reopened match; the 8 are constructed row values no writer produces, and the only writer after the cut is the port. The differential reaches beyond FR-002's bound set rather than excluding a bound case."
+    },
+    {
+     "id": "T91-order",
+     "summary": "lands after T126",
+     "class": "within",
+     "why": "The GM 2026-11-12 put the tests' and landing's performance ahead of remaining ports only where a concrete target with a significant measured saving is identified, otherwise 'keep working on the port of the tooling'. The block names no open target; the bundle holds no task list, so that is the reach of this finding."
+    },
+    {
+     "id": "T91-census-docs",
+     "summary": "census at the cut by stated pathspecs; docs/guards.md pointer to a nonexistent test repointed to the Rust tests; no measurements.json command runs the file",
+     "class": "within",
+     "why": "FR-001's rewrite-measurements and census requirements; the pointer fix serves the cut."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -14084,6 +14163,77 @@
      "summary": "After T125; green is make hooks-test HOOKS_ALL=1 and make land, red recorded and a claim of impossibility ruled through make arbiter-ask; one landing.",
      "class": "within",
      "why": "Follows the GM's priority on the tests' and the landing's time after the in-progress work; the exits check the requested saving and the unchanged outputs."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T91": {
+   "section_sha256": "d95df8301ced75bbf9f82b2bd2749a12ac85d6573564e9c7d29f4368eb11d9cd",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T91-port-whole",
+     "summary": "gm_review.py ported whole with no door into the reviews crate, every caller repointed, the .py and bundle_door's gm_review_add_row verb deleted in the same cut",
+     "class": "within",
+     "why": "FR-001 places gm_review.py in phase 3; ask:449-T82-claims files it as T91 and keeps Python the one writer only until it ports; FR-003 one implementation; deletion under the GM's standing approval quoted in FR-001 ('Yes please delete Python files once their Rust ports land')."
+    },
+    {
+     "id": "T91-where",
+     "summary": "lives in the reviews crate; after the cut gm_review.rs is the one writer of gm-review.jsonl and the GM's box, by a stated git grep search space",
+     "class": "within",
+     "why": "Placement is design; the one-writer result is what ask:449-T82-claims requires, and the census names its search space."
+    },
+    {
+     "id": "T91-callers",
+     "summary": "Makefile's five recipes, the arbiter (in process), push row gm-questions (gate command), claims-known's carry (in process) repointed; the arbiter's fake fixture removed",
+     "class": "within",
+     "why": "FR-003: no piece runs both; the fixture stood in for the inline Python that no longer runs."
+    },
+    {
+     "id": "T91-command-name",
+     "summary": "top-level l7r-gate gm-review; usage text keeps naming gm_review.py byte for byte",
+     "class": "within",
+     "why": "FR-002 and ask:449-usage-text: hand-written usage stays bound; keeping it is the strict reading."
+    },
+    {
+     "id": "T91-close-check-by-path",
+     "summary": "close_check.py stays Python, run by path from reviewed only on the branch where the GM's box is a feature's last open box, under the T065 clause, gaining a new --reasons-json DIR SPECS mode that writes no usage-log line; T127 filed for its port, the by-path run going when it lands",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adding a mode changes a Python file the GM said is no longer being changed except to delete it. Legitimate because the spec's own placement requires it: ask:449-T067-scope puts close_check.py in phase 3 carrying the T065 clause until ported, and gm_review.py reached it by import, which a Rust caller cannot do (FR-003: a name a command can carry goes by command); the mode only emits, as JSON, what the import returned and keeps the import's no-usage-log behavior, adding no logic, and its run is on a rare branch, never a plain Bash call or Edit. Should the mode compute anything the import did not, this ruling does not cover it. The alternative, porting close_check in the same cut, is phase-3 work the spec allows but does not require of T91, and T127 holds it."
+    },
+    {
+     "id": "T91-arbiter-message",
+     "summary": "the arbiter's failure message 'python3 said: <traceback>' becomes 'gm-review said: <why>', two Rust tests in arbiter/tests.rs changed to expect it",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The arbiter is not the replaced piece and the fixed words are the Rust arbiter's own; keeping 'python3 said' would name a subprocess that no longer exists after the port. Ruled precedent T87-arbiter-test-message (LEGITIMATE) on the same message pattern. Exit status and verdict unchanged."
+    },
+    {
+     "id": "T91-claims-known-message",
+     "summary": "claims-known on a gm-review write failure prints 'gm-review: <why>' where it printed the runner's traceback; exit status unchanged through the same ? of the same function",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:449-usage-text: an uncaught Python traceback's text is not bound for any port, its exit status and stdout held; the block records the exit path compared at HEAD and in the working tree. Not resting on T87."
+    },
+    {
+     "id": "T91-differences",
+     "summary": "differential of 1,272 cases accepts 8 differences (7 rows holding NaN, 1 integer past 64 bits) and lists divergences no case reaches; in-process callers 55 cases with none",
+     "class": "within",
+     "why": "FR-002 binds every case the piece's tests and suites hold: the kept suites (make hooks-test HOOKS_ALL=1, 54 suites) are green and the real queues of all 47 features as stored and reopened match; the 8 are constructed row values no writer produces, and the only writer after the cut is the port. The differential reaches beyond FR-002's bound set rather than excluding a bound case."
+    },
+    {
+     "id": "T91-order",
+     "summary": "lands after T126",
+     "class": "within",
+     "why": "The GM 2026-11-12 put the tests' and landing's performance ahead of remaining ports only where a concrete target with a significant measured saving is identified, otherwise 'keep working on the port of the tooling'. The block names no open target; the bundle holds no task list, so that is the reach of this finding."
+    },
+    {
+     "id": "T91-census-docs",
+     "summary": "census at the cut by stated pathspecs; docs/guards.md pointer to a nonexistent test repointed to the Rust tests; no measurements.json command runs the file",
+     "class": "within",
+     "why": "FR-001's rewrite-measurements and census requirements; the pointer fix serves the cut."
     }
    ],
    "verdict": "CLEAR"

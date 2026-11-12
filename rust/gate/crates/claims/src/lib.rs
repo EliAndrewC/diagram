@@ -6,6 +6,7 @@ pub mod claims;
 use l7r_gate_core::{checks_door, codeid, logs, Reply};
 use l7r_gate_owed::record;
 use l7r_gate_plan::plan;
+use l7r_gate_reviews::reviews;
 use l7r_gate_tree::delta;
 
 #[cfg(test)]

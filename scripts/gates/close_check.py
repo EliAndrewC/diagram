@@ -138,6 +138,11 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["--reasons-json"] and len(sys.argv) == 4:
+        # `l7r-gate gm-review reviewed`'s ask (feature 449 T91, `ask:449-T82-claims`): `reasons(d, specs)` as JSON, which the Python
+        # gm_review.py imported; an import recorded no usage line, so neither does this (the T118 precedent of `--each-state`)
+        print(json.dumps(reasons(Path(sys.argv[2]), Path(sys.argv[3]))))
+        raise SystemExit(0)
     sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1] / "hooks" / "lib"))
     sys.dont_write_bytecode = True  # a record leaves no __pycache__ in the worktree (feature 406)
     import usage_log  # noqa: E402 - feature 406 T03 (D162): every refusing check records its run

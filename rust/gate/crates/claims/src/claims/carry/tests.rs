@@ -216,12 +216,38 @@ fn at_clean(root: &Path, reach: &str) {
     );
     let got = claims(&root, &["gate"]);
     assert!(got.stdout.contains("claims-gate: REFUSED known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
+    // the GM-review queue's one writer, in process (feature 449 T91): the row and the GM's box, the bytes HEAD's `gm_review.add_row`
+    // wrote for this row and these tasks (the differential's `scratchpad/t91/diff2.py`, its `utc` aside)
+    let tasks =
+        "# Tasks\n\n- [ ] T01 fix `reach` [lands-open]\n- [x] T02 done\n- [ ] T03 open one\n\n\n";
+    put(&root, "specs/405-claims/tasks.md", tasks);
     let got = claims(&root, &["known"]);
     assert_eq!(
         got.stdout,
         "claims-known: recorded 405-claims T01: rust/phases/src/lib.rs::reach#reach\n",
     );
     assert!(recorded_known(&root).unwrap().contains(reach));
+    let written = std::fs::read_to_string(root.join("specs/405-claims/gm-review.jsonl")).unwrap();
+    let utc = written.rsplit("\"utc\": \"").next().unwrap();
+    assert_eq!(
+        written.replace(utc, "<utc>\"}\n"),
+        "{\"kind\": \"known-drift\", \"claim\": \"rust/phases/src/lib.rs::reach#reach\", \"task\": \"T01\", \"finding\": \"DRIFTED        rust/phases/src/lib.rs::reach#reach - departs\", \"utc\": \"<utc>\"}\n"
+    );
+    assert_eq!(
+        std::fs::read_to_string(root.join("specs/405-claims/tasks.md")).unwrap(),
+        "# Tasks\n\n- [ ] T01 fix `reach` [lands-open]\n- [x] T02 done\n- [ ] T03 open one\n- [ ] GM review (make gm-reviewed F=405) [lands-open]\n      research: rendering\n      verify: the GM reviewed every row (make gm-review lists them)\n"
+    );
+    // the queue unwritable (a link to a directory that is not there, which the reading of the recorded drifts passes over): the command
+    // fails, as the Python's raise through the runner did
+    let q = root.join("specs/405-claims/gm-review.jsonl");
+    std::fs::remove_file(&q).unwrap();
+    std::os::unix::fs::symlink(root.join("no-such-dir/gm-review.jsonl"), &q).unwrap();
+    let got = claims(&root, &["known"]);
+    let said = format!("{}{}", got.stdout, got.stderr);
+    let failed = got.code != 0 && said.contains("gm-review: OSError");
+    assert!(failed, "{said}");
+    std::fs::remove_file(&q).unwrap();
+    put(&root, "specs/405-claims/gm-review.jsonl", &written);
     let got = claims(&root, &["gate"]);
     assert!(got
         .stdout
