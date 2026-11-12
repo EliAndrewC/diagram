@@ -3046,33 +3046,3 @@ censuses empty (work breakdown 8, FR-010).
 
 <!-- plan-archive: T91 to T82 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T91 to T91 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-<!-- plan-archive: archived 2026-11-12 -->
-### T130 (the deletion and retire classes of `ask:449-phase3-remainder`)
-
-- **Approach**: the files nothing runs deleted unported, and every recorded measurement command that runs a script and fails today or invokes deleted code retired with its values kept and its script deleted, as the ruling's Q4 and Q5 have it.
-
-   **Decisions** (`ask:449-phase3-remainder` Q4 and Q5, FR-001, the GM 2026-11-09: "I don't think we need to port the past feature harnesses if those are not still used."):
-   - The deletion class, 48 files, 6,160 lines: the census's 44 dead files under `specs/`, `l7r/diagram/tools/caption_decl.py` and `hit_share.py`, `scripts/measure/uncovered-in-diff.py` and `uncovered_marks.py`; and 63 shell scripts under `specs/` (257 lines) that run only those files. Each confirmed at HEAD before deletion: every hit of its path, and of its path within its feature, over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/` and every `specs/*/measurements*.json` was a file deleted with it, the specs' history or a false match on a shared name (observed 2026-11-12, method: `git grep -n -F -e <path> -e <feature-relative path>` per file, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t130/results.tsv`).
-   - The retire class: each recorded `command` that `make figures` runs, that runs a script or a Python test (`python3 <file>`, `python3 -c`, `make spec-harness`, `make test-file`, `make -C .claude/skills/diagram ...`), and that fails today or invokes deleted code, is rewritten to `<retired: ask:449-phase3-remainder, <why>>` with its values kept, and the script it ran is deleted unported with any harness or counts file only it ran: 27 files, 2,950 lines, 4,367 entries across 18 features (the hotspot passes 278, 281, 284 and 297 hold 4,271 of them, sharing ten commands), each command run once in a scratch clone with a 90 s bound and its failure recorded (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t130/results.tsv`). 387's four placeholder commands are retired; 276's `measure_before_five.py` failed (its base commit is no object in any clone) and joins; 340's `harness.py` joins, as the ruling names. `m:recorded-python-commands` falls from 4,398 commands in 22 files to 48 in 13 (observed 2026-11-12, method: the measurement's own command before and after).
-   - The class read as the commands that run a file: the ruling's test names "a command make figures runs that fails ... or that imports or invokes deleted code", and its consequence, "its file is deleted unported, together with any harness or counts.py that only it runs", is a command that runs a file; the question it answered (Q4) named the harnesses `make figures` starts. About 70 failing commands that run no file are reported and not retired: greps of paths under the old skill directory (35, in 261), greps and `ls` whose text moved or whose renders a fresh clone lacks (the maps' SVGs are not tracked, so they pass in a working clone), prose with shell syntax, 375's three `make feature-report ... TRANSCRIPT=` on transcripts no longer on disk, and one prose entry in this feature's own file (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t130/results.tsv`). Retiring them is not what the ruling's class deletes; a stale grep is the measurement's own record, not a Python port's remainder.
-   - Kept: the working measurement scripts T139 ports (238 `inventory_shares`, 239 `change_size`, 242 `inventory_census` and `note_census`, 261's five, 430 `full_reasons`, 432 `triage_price`), 335's `harness.py` (phase 4, T140), and `tooling_reuse_time.py`, whose three 383 commands pass today (rc 0), for T140's commit (observed 2026-11-12, method: each run once in the scratch clone). Shell scripts under `specs/` that run no dead file stay, listed in the record.
-   - `make figures` over the touched features before and after: failed-run lines from 68 to 35, retired and placeholder lines from 2 to 32, no moved count and no out-of-band timing either side (observed 2026-11-12, method: `l7r-gate measure figures` in a shared scratch clone, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t130/figures-before.log` and `figures-after.log`). The live pointers to deleted files fixed (`docs/iteration-loop.md`, the `pyproject.toml` comment, `scripts/record/sources.py`'s docstring, `l7r/diagram/tools/CLAUDE.md`, `scripts/CLAUDE.md`); history in `specs/` prose, `dev/phase-2-close.md`, pool notes and test fixtures left as written. The checks: `make static`, `make hooks-test` (3 suites run, green) and the pointer check clean (observed 2026-11-12, method: those commands).
-   - The landing is GATED: two of the deleted files are under `l7r/` (`tools/caption_decl.py`, `hit_share.py`).
-
-### T130 Approach (checklist part A)
-
-1. **The goal, in the world.** No file nothing runs, and no recorded command that runs a broken script, left for a port.
-2. **The constraints.** FR-001, `ask:449-phase3-remainder` Q4 and Q5, the GM's 2026-11-09 words.
-3. **Where each comes from.** G: the GM's words; R: the ruling; O: the census and each command's run.
-4. **Do they describe the world here?** Each file and command tested at this clone's HEAD, measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t130/results.tsv`).
-5. **The order.** After T129, before the phase-3 ports, so they port only what runs.
-6. **The exits.** Green: `make static`, `make hooks-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** `m:recorded-python-commands` at 48, and `make figures`' failed runs from 68 to 35.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
-
