@@ -304,8 +304,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       verify: DONE. landed: the reviews in Rust: review_owed, review_prereq, checkpoint, hm_approval; stepback_bundle to T83; specs/240's probe retired (ask:449-T89-reviews)
 - [ ] T90 Phase 3, the engine's pipeline package (`l7r/diagram/pipeline/`, phase 3 by FR-001, filed by `ask:449-T89-reviews`); `bundle_door.py`'s `is_current` verb leaves when it lands
       research: rendering
-- [ ] T91 Phase 3, the GM-review queue (`scripts/gm_review.py`, phase 3, filed by `ask:449-T82-claims`); `bundle_door.py`'s gm-review write verb leaves when it lands
+- [x] T91 Phase 3, the GM-review queue (`scripts/gm_review.py`, phase 3, filed by `ask:449-T82-claims`); `bundle_door.py`'s gm-review write verb leaves when it lands
       research: rendering
+      verify: DONE. landed: gm_review.py ported to Rust (l7r-gate gm-review): 1,272 differential cases, 8 explained (row values no writer produces), the in-process callers 55 with none; make static, rust-test and hooks-test green
 - [x] T92 Split the gate crate (74,199 lines) into crates so an edit recompiles one, the binary a thin crate over them (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the gate crate split into 15 crates and a dispatching binary (FR-011); the plan cites FR-003 for the coverage rule, which is FR-004, and its path counts name no command (both noted by the review, not changed after it)

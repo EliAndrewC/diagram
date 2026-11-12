@@ -341,59 +341,8 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T91 (the GM-review queue, filed by `ask:449-T82-claims`)
-
-- **Approach**: `scripts/gm_review.py` ported whole, no door, into the gate's `reviews` crate (`reviews/gm_review.rs` with `listing.rs` and `py.rs`: `l7r-gate gm-review <verb>`), every caller repointed and the `.py` deleted in the same cut; `bundle_door.py`'s `gm_review_add_row` verb leaves with it, as the ruling has it.
-
-   **Decisions** (`ask:449-T82-claims` Q2, `ask:449-usage-text`, FR-001, FR-002, FR-003):
-   - Where it lives: `reviews`, which builds on `core` alone; `arbiter` already builds on it, and `claims` takes it as a path dependency, which makes no cycle. After the cut `gm_review.rs` is the one writer of `specs/<f>/gm-review.jsonl` and of the GM's box in `tasks.md`, as the ruling requires (observed 2026-11-12, method: `git grep` of both file names over `*.py`, `*.sh` and `*.rs`, the only other writers four hook-suite fixtures writing test data).
-   - The callers: the Makefile's five gm-review recipes run `l7r-gate gm-review`. The arbiter asks `question` in process for a `for_gm` ruling and a declined fix, where it ran inline Python, and its fake fixture goes. The push row `gm-questions` runs `gm-review owed-check` as a gate command, as T117 and T118 did for their rows. `make claims-known`'s carry calls `add_row` in process, and the door verb with its stub branch goes.
-   - The command is top-level, `l7r-gate gm-review`, not under `reviews`, to keep the recipes and the push row short. The usage text keeps naming `gm_review.py` byte for byte.
-   - `close_check.py` stays Python (phase 3, held by no task): on the one branch where the GM's box is a feature's last open box, `reviewed` runs it by path from `L7R_GATE_TREE` under the T065 clause, with a new `--reasons-json DIR SPECS` mode that writes no usage-log line, as the Python's import recorded none (the T118 `--each-state` precedent). Its own port is T127, filed for it (phase 3 by FR-001, held by no task until this review), and this by-path run goes when it lands.
-   - Two refusals outside gm-review's own commands name the Rust where they named Python. The arbiter's when its question fails reads `gm-review said: <why>`, where it was `python3 said: <traceback>`, and its two Rust tests that held `python3 said` (HEAD's `arbiter/tests.rs`, lines 607 and 619) expect the new words (observed 2026-11-12, method: `git grep -n "python3 said" HEAD` and the same over the working tree): a changed case on T87's ruled precedent `T87-arbiter-test-message` (LEGITIMATE, in `plan-review.json`: "the message names the source of a failure, and the python3 subprocess it named no longer exists once the ruled port runs the answer in Rust ... The words are the Rust arbiter's own, not the Python's hand-written words FR-002 binds"), where T87 made the same change to `record-owed said`. claims-known's on a write failure reads `gm-review: <why>`, where it was the runner's traceback; the failure returns through the same `?` of the same function to the same caller as the door's error did, so its exit status is unchanged (observed 2026-11-12, method: HEAD's `claims/carry.rs` against the working tree's, the `reader.ask(...)?` and `add_row(...).map_err(...)?` lines).
-   - The same outputs (FR-002): HEAD's Python (from `git archive`) against the Rust through the wrapper, each case set up identically, exit, stdout, stderr and every file written compared: 1,272 cases over the real queues of all 47 features as stored and with every row reopened, 328's ranking and a variant with rows held behind others, scratch features for every trigger, fix, kind and refusal, ten `COLUMNS` widths, and broken inputs both sides fail on, 59 reaching a traceback on both sides (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t91/diff.py`). The closing branch compared end to end: refused, and passed with the box ticked. 8 differ, every one a row value no writer produces: 7 rows holding `NaN`, which Python reads and serde skips, and 1 integer past 64 bits, which comes back as `1e+20` (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t91/results.json`). The in-process callers: 55 cases, 0 differing, the arbiter's `fix declined` and `ask` with a `for_gm` ruling over 9 queue states against HEAD's `question` as the old arbiter ran it, and claims-known against the bytes HEAD's door verb wrote (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t91/diff2.py`). Normalizations: stderr from `Traceback` on, the times the run stamps, a JSON decode error's wording, `PYTHONHASHSEED=0` on the Python side. Divergences no case reaches: non-ASCII digits in F or ROW, `½`, row numbers past 128 bits, a width under 1, a real terminal's width, git output not UTF-8, Python's hash order between two unknown row kinds.
-   - Timing: the cases took 42.4 s of process time in Python against 19.9 s in Rust, and `make gm-review` 0.052 s against 0.024 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t91/diff.py`).
-   - The census at the cut: provenance comments and one guard test whose name contains `gm_review`; no `specs/*/measurements*.json` command runs the file; `docs/guards.md` pointed at a test that does not exist, repointed to the Rust tests (observed 2026-11-12, method: `git grep gm_review` over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/`, `tests/` and `docs`). The checks: `make static` clean on 20 crates, `make rust-test` green (`reviews` 88 tests, `claims` 62, `arbiter` 34, `cohort` 52, the guard 555), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check and ruff clean (observed 2026-11-12, method: those commands).
-
-### T91 Approach (checklist part A)
-
-1. **The goal, in the world.** The GM-review queue is Rust, one writer of its files, the door verb gone.
-2. **The constraints.** FR-001, FR-002 and FR-003, the ruling `ask:449-T82-claims`.
-3. **Where each comes from.** G: the GM's words in `request.md` and the standing approval to delete ported Python; R: the ruling; O: the differential and the census above.
-4. **Do they describe the world here?** Run on the real queues of all 47 features with one, measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t91/diff.py`).
-5. **The order.** After T126.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The differential's 1,272 cases with 8 explained differences, the callers' 55 with none, and the census.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
-
-<!-- plan-archive: T92 to T92 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-<!-- plan-archive: T93 to T93 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-
-<!-- plan-archive: T95 to T95 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-<!-- plan-archive: T96 to T96 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-<!-- plan-archive: T97 to T97 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-<!-- plan-archive: T98 to T98 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-<!-- plan-archive: T99 to T110 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-
-<!-- plan-archive: T111 to T111 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-
-<!-- plan-archive: T112 to T112 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-
-<!-- plan-archive: T113 to T113 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-
-<!-- plan-archive: T114 to T114 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-
-<!-- plan-archive: T115 to T115 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-
-<!-- plan-archive: T116 to T116 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-
-<!-- plan-archive: T121 to T83 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+<!-- plan-archive: T91 to T82 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+<!-- plan-archive: T91 to T91 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 ### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)
 
 **Not landed** (its plan review, BLOCKED 2026-11-12): the saving was the suite's alone, not the full hook run's, so it misses the GM's condition ("if you identify concrete targets with significant measured expected savings then go ahead and do them ... Otherwise you can just keep working on the port of the tooling"). The decisions below are the record of what was tried and measured.
