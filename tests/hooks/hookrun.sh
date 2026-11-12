@@ -63,6 +63,8 @@ if [ -n "$left" ]; then
 fi
 # feature 383 amendment 3 (plan D27): each suite's seconds beside it, so hooks-test can say which suites ran and what each cost
 awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$GUARD.s"
+# feature 449 T125: kept beside the suite's stamp, pass or fail, so the next run starts the longest suites first
+mkdir -p "$GITDIR/hooks-test" && cp "$WORK/$GUARD.s" "$GITDIR/hooks-test/$GUARD.s"
 if [ "$rc" -eq 0 ]; then
   mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD"
   [ -n "${HOOKS_SHIM:-}" ] && "$HERE/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1

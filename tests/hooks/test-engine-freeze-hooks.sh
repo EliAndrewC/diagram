@@ -88,14 +88,17 @@ touch "$SESSION/stall-ack/a5"
 # A RUST GATE, COHORT OR WORK-BUDGET ROLL IN THE CLONE FREEZES THE ENGINE TOO (feature 444, 2026-11-05: a crate edit mid-gate rebuilt
 # the extension under the rolls still to come); a roll in another tree does not
 printf 'def f():\n    return 1\n' > "$ENG"
+# a roll is waited for until /proc names it, never a fixed sleep: under a full hook run's load the subshell had not yet exec'd as the
+# roll after 0.5 s, the guard saw no roll and three cases failed (feature 449, 2026-11-12, the suites run longest first); 5 s bound
+rolling() { for _ in $(seq 50); do tr '\0' ' ' < "/proc/$1/cmdline" 2>/dev/null | grep -q "$2" && return 0; sleep 0.1; done; return 1; }
 (cd "$C" && exec -a python3 bash -c 'sleep 30; :' l7r.diagram.tools.rust_gate) & ROLL=$!
-sleep 0.5
+rolling "$ROLL" l7r.diagram.tools.rust_gate
 edit2 "$ENG" "return 1" "return 2";           check "a Rust gate rolling in the clone refuses an engine edit" 2 "$RC"
 says "the refusal names the roll" "rust_gate rolling"
 says "the refusal says why" "rebuilt under the rolls still to come"
 kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null
 (cd "$T" && exec -a python3 bash -c 'sleep 30; :' l7r.diagram.tools.cohort) & ROLL=$!
-sleep 0.5
+rolling "$ROLL" l7r.diagram.tools.cohort
 edit2 "$ENG" "return 1" "return 2";           check "a roll in another tree does not freeze this clone" 0 "$RC"
 kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null
 [ -n "$(ls "$GUARD_LOG_DIR" 2>/dev/null)" ] && { echo "ok    firings are recorded"; PASS=$((PASS+1)); } || { echo "FAIL  no guard-log entry"; FAIL=$((FAIL+1)); }

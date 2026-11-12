@@ -446,3 +446,39 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 
 <!-- plan-archive: T124 to T83 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+
+### T125 (the full hook run ends on its longest suite started late, the GM's pre-approval of 2026-11-12)
+
+- **Approach**: `make hooks-test` hands its suites to its eight slots longest first, by each suite's seconds the last time it ran (`tests/hooks/hookrun.sh` keeps them beside its stamp, `.git/hooks-test/<suite>.s`, pass or fail), a suite never timed first; and the engine-freeze suite's two roll fixtures wait for the roll to show in `/proc` instead of a fixed sleep.
+
+   **Decisions** (the GM's pre-approval in `request.md`: "if you identify concrete targets with significant measured expected savings then go ahead and do them", and his priority "After you finish the current in-progress task(s) you should prioritize the performance bits of the tests and landing"; FR-002):
+   - Where a landing's time goes: T124's landing took about 75 s, its gate's full hook run about 54 s of it (observed 2026-11-12, method: the landing's log and its commits' times). The full run is not held by the CPU: 22 processors, no quota and no throttling, about 5 in use (observed 2026-11-12, method: `nproc`, `/sys/fs/cgroup/cpu.max` and `cpu.stat`). Sampling every process of the run every 50 ms with the suite each sat under, the run ended at 55.7 s on idle-tests, 36.1 s long and started 19.6 s in, the eight slots having taken the roster in its order first (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/sample.py`).
+   - The order, A/B'd alternated three runs a side: idle-tests alone moved first 51.4, 50.9 and 51.6 s against the roster's 53.0, 62.7 and 63.0 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/ab.txt`). Every suite longest first by its last seconds 49.9, 51.9 and 53.4 s against idle-tests first 42.1, 52.2 and 52.0 s, the same within the spread, so the general rule lands rather than one suite named (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/abC.sh`). The change as landed against HEAD's Makefile: 51.0, 51.6 and 54.9 s against 52.4, 62.5 and 63.3 s, a mean of 52.5 s against 59.4 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/ab125.sh`). T98 measured longest first slower on an earlier roster (its section in `plan-done.md`); the measurement above, on today's, supersedes it.
+   - Not done, measured: a split suite's parts above two beside other suites (`PARTS_MAX`, kept at two since the 10 GB memory cap was hit on 2026-10-17) gained nothing, 52.8 s at four and 53.4 s at eight against 50.9 s at two (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/pm.txt`), the run then ending on entry-gate, which is not split.
+   - The flake the reordering showed: in one longest-first run the engine-freeze suite's Rust-gate roll was not yet in `/proc` after its fixed 0.5 s, so three cases failed (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/c-C1.log`); its two roll fixtures now wait for the roll by name, a 5 s bound (CONVENTION, the fixture's own constant), so the case tests a roll that is running, and the other-tree case no longer passes because no roll was seen yet.
+   - Kept as it was: every suite, its cases and its checks; the stamps; the eight slots (`HOOKS_JOBS`); `PARTS_MAX`. A suite's kept seconds is a hint to the order alone, and a missing or stale one only moves a suite in the queue.
+
+### T125 Approach (checklist part A)
+
+1. **The goal, in the world.** A full hook run, the longest phase of a tooling landing's gate, ends sooner.
+2. **The constraints.** FR-002, the GM's pre-approval and priority.
+3. **Where each comes from.** G: the GM's words in `request.md`; O: the sampled run and the A/Bs above.
+4. **Do they describe the world here?** Measured on this clone's own full hook runs (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/ab125.sh`).
+5. **The order.** After T124.
+6. **The exits.** Green: `make hooks-test HOOKS_ALL=1` green and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The A/B against HEAD above, a mean of 52.5 s against 59.4 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/ab125.sh`).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** Yes, below.
+
+### T125 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the full hook run, the last suite to finish: idle-tests, started 19.6 s in by roster order (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/sample.py`).
+2. **Removes work, or only moves it?** Moves it: the same suites, run in an order that starts the longest first.
+3. **What do you expect it to save, and why?** The late start of the longest suite, about 8 s of a run whose longest suite is about 36 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/ab.txt`).
+4. **How does the work grow with the settlement?** Not a settlement stage: it grows with the longest suite, not the roster.
+5. **What did the before and after show, and under what conditions?** Alternated three runs a side on the shared host: a mean of 52.5 s against 59.4 s, spread 51.0-54.9 s against 52.4-63.3 s (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r6/ab125.sh`).
+6. **Did any map move, and does it still keep the research?** No map: tooling only.

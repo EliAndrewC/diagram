@@ -642,6 +642,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T125 (the full hook run ends on its longest suite started late, the GM's pre-approval of 2026-11-12)": {
+   "sha256": "60e1658bb349235d6c2e772b17fef6da26625deaaada721ff7eaa656b5d11a34",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T125 Approach (checklist part A)": {
+   "sha256": "6ab94e542a34544fb0beafce8000767951878c1cd51115dc7d332fea4250f43b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T125 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "bcf3a8df1c2a77b5e6dc840736a30e91d4e740c08709e92b55889a12c8eba56d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7955,6 +7973,59 @@
      "why": "Decides nothing, so there is nothing to rule. Filling it in changes the block and owes its own review; a task filed under the 2026-11-12 pre-approval must then name its measured target and expected saving and quote the GM's words, and T122's record says the schedule premise it was presumably filed for does not hold."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T125 (the full hook run ends on its longest suite started late, the GM's pre-approval of 2026-11-12)",
+    "### T125 Approach (checklist part A)",
+    "### T125 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T125-filing",
+     "summary": "File T125 under the GM's 2026-11-12 pre-approval: target the full hook run's end (idle-tests, the longest suite, started 19.6 s in by roster order), expected saving about 8 s, measured 52.5 s against 59.4 s mean alternated three a side; ordered after T124.",
+     "class": "within",
+     "why": "The pre-approval's conditions are a concrete target and a significant measured expected saving, and the task names both and quotes the words, as request.md's 2026-11-12 entry requires; the GM's later priority puts the tests' and landing's time first after T121, and the full hook run is the landing's longest phase. The measured gain is the removal of the baseline's 62-63 s tail (treatment 51.0-54.9 s against 52.4-63.3 s), not a shift of the floor; that is still a concrete measured saving the GM's words cover."
+    },
+    {
+     "id": "T125-order",
+     "summary": "make hooks-test dispatches its suites to its eight slots longest first by each suite's seconds at its last run, kept beside its stamp (.git/hooks-test/<suite>.s, pass or fail); a never-timed suite first; the general rule rather than naming idle-tests.",
+     "class": "within",
+     "why": "A reordering of the same work to cut the run's wall time, the target the pre-approval covers; the general rule was A/B'd equal to the single-suite move and nothing in the request or spec fixes the roster order."
+    },
+    {
+     "id": "T125-hint-only",
+     "summary": "A suite's kept seconds is a hint to the order alone; a missing or stale one only moves a suite in the queue.",
+     "class": "within",
+     "why": "Keeps the new state from touching any verdict; narrows nothing the GM asked for."
+    },
+    {
+     "id": "T125-supersede-T98",
+     "summary": "T98's measurement that longest first was slower, on an earlier roster, is superseded by today's measurement.",
+     "class": "within",
+     "why": "T98's ordering finding was a session measurement, not a GM requirement; FR-012's T98 asks only that the suites run in parallel, which stays."
+    },
+    {
+     "id": "T125-roll-fixture",
+     "summary": "The engine-freeze suite's two roll fixtures wait (5 s bound) for the roll to appear in /proc by name instead of a fixed 0.5 s sleep, so the cases test a running roll and the other-tree case no longer passes vacuously.",
+     "class": "within",
+     "why": "A flake the requested reorder exposed (three engine-freeze cases failed in one longest-first run); the block's own 'Kept as it was: every suite, its cases and its checks' pins the cases, and the change removes the other-tree case's vacuous pass rather than altering what it expects. Needed for the requested speed-up to land green, not new behavior."
+    },
+    {
+     "id": "T125-not-parts-max",
+     "summary": "Raising PARTS_MAX above two not done: measured no gain (52.8 s at four, 53.4 s at eight against 50.9 s at two).",
+     "class": "within",
+     "why": "Declining an unrequested alternative on measurement; the pre-approval licenses only targets with significant measured savings, which this lacked."
+    },
+    {
+     "id": "T125-kept",
+     "summary": "Every suite, its cases and checks, the stamps, HOOKS_JOBS and PARTS_MAX kept as they were.",
+     "class": "within",
+     "why": "Preserves all verdicts and the existing parallelism; removes nothing the GM asked to keep."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13825,6 +13896,56 @@
      "summary": "Premise and done-check: git grep -n of the four names over scripts and rust finds them only in provenance comments and the door's tests (observed 2026-11-12); exits make static, make rust-test, make land green, red set down or ruled through make arbiter-ask.",
      "class": "within",
      "why": "Enforcement of the removal, not new scope; the figure carries a one-shot label (date and method). Non-blocking note: the stated search space is scripts and rust only - it does not reach the Makefile, tests/, l7r/, .specify/ or specs/, where a name can be held as a string (feature 185); a door caller there would be switched off contrary to FR-003. Running the same git grep over the whole tree before deleting closes that, and does not change this decision's class. ask:449-T82-claims names three Python callers of this door: land.py, replay_owing.py and impl_check.py; the block accounts for the first two and not impl_check.py, which stays a door caller to the phase-3 close. Precondition on the deletion: the census re-run with no pathspec, showing impl_check.py and the Makefile ask none of the four names."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T125": {
+   "section_sha256": "5b5ae81ab4fa9459491d29023da4aabcf23f101be5a3fb498660be03721c9c17",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T125-filing",
+     "summary": "File T125 under the GM's 2026-11-12 pre-approval: target the full hook run's end (idle-tests, the longest suite, started 19.6 s in by roster order), expected saving about 8 s, measured 52.5 s against 59.4 s mean alternated three a side; ordered after T124.",
+     "class": "within",
+     "why": "The pre-approval's conditions are a concrete target and a significant measured expected saving, and the task names both and quotes the words, as request.md's 2026-11-12 entry requires; the GM's later priority puts the tests' and landing's time first after T121, and the full hook run is the landing's longest phase. The measured gain is the removal of the baseline's 62-63 s tail (treatment 51.0-54.9 s against 52.4-63.3 s), not a shift of the floor; that is still a concrete measured saving the GM's words cover."
+    },
+    {
+     "id": "T125-order",
+     "summary": "make hooks-test dispatches its suites to its eight slots longest first by each suite's seconds at its last run, kept beside its stamp (.git/hooks-test/<suite>.s, pass or fail); a never-timed suite first; the general rule rather than naming idle-tests.",
+     "class": "within",
+     "why": "A reordering of the same work to cut the run's wall time, the target the pre-approval covers; the general rule was A/B'd equal to the single-suite move and nothing in the request or spec fixes the roster order."
+    },
+    {
+     "id": "T125-hint-only",
+     "summary": "A suite's kept seconds is a hint to the order alone; a missing or stale one only moves a suite in the queue.",
+     "class": "within",
+     "why": "Keeps the new state from touching any verdict; narrows nothing the GM asked for."
+    },
+    {
+     "id": "T125-supersede-T98",
+     "summary": "T98's measurement that longest first was slower, on an earlier roster, is superseded by today's measurement.",
+     "class": "within",
+     "why": "T98's ordering finding was a session measurement, not a GM requirement; FR-012's T98 asks only that the suites run in parallel, which stays."
+    },
+    {
+     "id": "T125-roll-fixture",
+     "summary": "The engine-freeze suite's two roll fixtures wait (5 s bound) for the roll to appear in /proc by name instead of a fixed 0.5 s sleep, so the cases test a running roll and the other-tree case no longer passes vacuously.",
+     "class": "within",
+     "why": "A flake the requested reorder exposed (three engine-freeze cases failed in one longest-first run); the block's own 'Kept as it was: every suite, its cases and its checks' pins the cases, and the change removes the other-tree case's vacuous pass rather than altering what it expects. Needed for the requested speed-up to land green, not new behavior."
+    },
+    {
+     "id": "T125-not-parts-max",
+     "summary": "Raising PARTS_MAX above two not done: measured no gain (52.8 s at four, 53.4 s at eight against 50.9 s at two).",
+     "class": "within",
+     "why": "Declining an unrequested alternative on measurement; the pre-approval licenses only targets with significant measured savings, which this lacked."
+    },
+    {
+     "id": "T125-kept",
+     "summary": "Every suite, its cases and checks, the stamps, HOOKS_JOBS and PARTS_MAX kept as they were.",
+     "class": "within",
+     "why": "Preserves all verdicts and the existing parallelism; removes nothing the GM asked to keep."
     }
    ],
    "verdict": "CLEAR"
