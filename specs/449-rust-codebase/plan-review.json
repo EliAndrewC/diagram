@@ -510,6 +510,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T114 (the push's money-candidates check, FR-012)": {
+   "sha256": "128fedaece9a381362dbbe417a754cfa4f481348d556bf02a0e657b7cc3e8b92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T114 Approach (checklist part A)": {
+   "sha256": "46547b0068016009f2f65c8f6890840bc41655abee330c9794ab5db31d0a0731",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7225,6 +7237,40 @@
      "why": "The same command before and after is what SC-007 asks. Not adjudicated by re-running (bundle-only review). Two notes for the landing: (1) the 10.6 s 'before' lint figure is given two different methods (l7r-gate.sh rust lint per crate in the first decision, 'the timestamped make static' in the measurement decision): it was measured one way and stated another; (2) the 30.1 s 'after' make static was taken before the declared-read and include fixes, and the only post-fix figure (1.95 s, l7r-gate.sh rust lint) is compared against a make static lint step, a different command. SC-007 is a landing condition: make static must be re-run on the landed tree, the same way as the 37.5 s before."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T114 (the push's money-candidates check, FR-012)",
+    "### T114 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T114-D1 side by side rather than skipped",
+     "summary": "Cut the push's money-candidates check by scanning the record's question pages in parallel across cores instead of adding a cache/skip keyed on its inputs.",
+     "class": "within",
+     "why": "FR-012 names 'the push's money-candidates check (T114)' as a cost to cut, by the GM's 2026-11-11 'The three things you suggested also seem good to work on too'; the choice of mechanism is open, and parallelism performs the same scans on every push, so no case is skipped and no verdict loosened."
+    },
+    {
+     "id": "T114-D2 same output by restoring page order",
+     "summary": "Pages dealt round-robin to cores (page i to core i mod n) and their amounts restored to page order before the existing stable sort, so the listing sees the same sequence.",
+     "class": "within",
+     "why": "Serves FR-012's 'held to every output and verdict the tooling gives today' and SC-007's identical outputs; it preserves behavior, it carves nothing out."
+    },
+    {
+     "id": "T114-D3 output verification",
+     "summary": "money-candidates with --all --context, with --check and with no flags compared byte for byte (stdout, stderr, exit) before and after; existing money tests kept unchanged and green, every changed line covered.",
+     "class": "within",
+     "why": "Enforces the output-identity half of FR-012/SC-007; it is verification of what was asked, not new scope."
+    },
+    {
+     "id": "T114-D4 timing measured before and after by the same commands",
+     "summary": "The check alone timed with date around it, and the push's row via l7r-gate measure push-check-times, before and after, with load recorded.",
+     "class": "within",
+     "why": "SC-007 requires the cost re-measured by the command that measured it before, and lower; the same two commands are used on both sides and the figures carry one-shot labels (date and method)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12519,6 +12565,38 @@
      "summary": "SC-007 measured by make static after a body-only core edit, before and after; plus l7r-gate.sh rust lint after the declared-read fix.",
      "class": "within",
      "why": "The same command before and after is what SC-007 asks. Not adjudicated by re-running (bundle-only review). Two notes for the landing: (1) the 10.6 s 'before' lint figure is given two different methods (l7r-gate.sh rust lint per crate in the first decision, 'the timestamped make static' in the measurement decision): it was measured one way and stated another; (2) the 30.1 s 'after' make static was taken before the declared-read and include fixes, and the only post-fix figure (1.95 s, l7r-gate.sh rust lint) is compared against a make static lint step, a different command. SC-007 is a landing condition: make static must be re-run on the landed tree, the same way as the 37.5 s before."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T114": {
+   "section_sha256": "db3baf4327b6c75fb7bc76c357b3059e7c4ed0afba0aa9bb4f1493f98f7a1f02",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T114-D1 side by side rather than skipped",
+     "summary": "Cut the push's money-candidates check by scanning the record's question pages in parallel across cores instead of adding a cache/skip keyed on its inputs.",
+     "class": "within",
+     "why": "FR-012 names 'the push's money-candidates check (T114)' as a cost to cut, by the GM's 2026-11-11 'The three things you suggested also seem good to work on too'; the choice of mechanism is open, and parallelism performs the same scans on every push, so no case is skipped and no verdict loosened."
+    },
+    {
+     "id": "T114-D2 same output by restoring page order",
+     "summary": "Pages dealt round-robin to cores (page i to core i mod n) and their amounts restored to page order before the existing stable sort, so the listing sees the same sequence.",
+     "class": "within",
+     "why": "Serves FR-012's 'held to every output and verdict the tooling gives today' and SC-007's identical outputs; it preserves behavior, it carves nothing out."
+    },
+    {
+     "id": "T114-D3 output verification",
+     "summary": "money-candidates with --all --context, with --check and with no flags compared byte for byte (stdout, stderr, exit) before and after; existing money tests kept unchanged and green, every changed line covered.",
+     "class": "within",
+     "why": "Enforces the output-identity half of FR-012/SC-007; it is verification of what was asked, not new scope."
+    },
+    {
+     "id": "T114-D4 timing measured before and after by the same commands",
+     "summary": "The check alone timed with date around it, and the push's row via l7r-gate measure push-check-times, before and after, with load recorded.",
+     "class": "within",
+     "why": "SC-007 requires the cost re-measured by the command that measured it before, and lower; the same two commands are used on both sides and the figures carry one-shot labels (date and method)."
     }
    ],
    "verdict": "CLEAR"

@@ -280,10 +280,28 @@ pub fn amounts(root: &Path) -> Vec<Amount> {
         .collect();
     names.retain(|n| crate::checks::has_ext(n, "html") && !n.ends_with(".originals.html"));
     names.sort();
-    let mut out: Vec<Amount> = names
-        .iter()
-        .flat_map(|n| scan(n, &folder, &pattern, &known))
-        .collect();
+    // THE PAGES SIDE BY SIDE (feature 449 T114; the GM 2026-11-11): one page after another took 2.46 s of a 3.68 s push (2026-11-11),
+    // every page's scan its own; the pages are dealt round the cores and put back in page order, so the stable sort below sees what it
+    // saw before
+    let cores = std::thread::available_parallelism().map_or(1, std::num::NonZero::get);
+    let mut pages: Vec<(usize, Vec<Amount>)> = std::thread::scope(|s| {
+        let runs: Vec<_> = (0..cores)
+            .map(|k| {
+                let (names, folder, pattern, known) = (&names, &folder, &pattern, &known);
+                s.spawn(move || {
+                    (k..names.len())
+                        .step_by(cores)
+                        .map(|i| (i, scan(&names[i], folder, pattern, known)))
+                        .collect::<Vec<_>>()
+                })
+            })
+            .collect();
+        runs.into_iter()
+            .flat_map(|r| r.join().unwrap_or_default())
+            .collect()
+    });
+    pages.sort_by_key(|(i, _)| *i);
+    let mut out: Vec<Amount> = pages.into_iter().flat_map(|(_, a)| a).collect();
     out.sort_by(|a, b| {
         (a.gap.is_none(), a.gap.unwrap_or(0), &a.stem).cmp(&(
             b.gap.is_none(),
