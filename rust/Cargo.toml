@@ -14,6 +14,11 @@ fancy-regex = "0.14"
 serde = "1"
 serde_json = { version = "1", features = ["preserve_order"] }
 
+# THE COVERAGE BUILD'S CFG IS EXPECTED (feature 449 T116): `cargo llvm-cov` builds with `--cfg=coverage`, and a whole-tree test leaves that
+# build by it
+[workspace.lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(coverage)"] }
+
 [workspace.lints.clippy]
 all = { level = "deny", priority = -1 }
 pedantic = { level = "deny", priority = -1 }

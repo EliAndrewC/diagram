@@ -154,8 +154,9 @@ fn walk_sections(list: &Value, into: &mut BTreeSet<String>) {
 }
 
 /// The alternation, longest first: a shorter name must not win over the longer one it opens.
-fn alternation<'a>(names: impl Iterator<Item = &'a str>) -> String {
-    let mut sorted: Vec<&str> = names.collect();
+/// One instantiation, a `Vec` (feature 449 T116): generic over its iterator, the caller's instantiation reached its sort's key only with two
+/// names or more, which the real tree alone gave.
+fn alternation(mut sorted: Vec<&str>) -> String {
     sorted.sort_by_key(|n| std::cmp::Reverse(n.len()));
     if sorted.is_empty() {
         return "(?!)".to_owned();
@@ -243,7 +244,7 @@ impl Mapping {
             .keys()
             .map(|k| k.split(' ').next().unwrap_or_default().to_owned())
             .collect();
-        let dirs = alternation(pages.keys().map(String::as_str));
+        let dirs = alternation(pages.keys().map(String::as_str).collect());
         Self {
             lengths: heads
                 .iter()

@@ -534,6 +534,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T116 (the checks crate's coverage tests, FR-012)": {
+   "sha256": "2421300d037b7b646aff1ee583b76b59f739b4594d62b27f66d42d3f5274c530",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T116 Approach (checklist part A)": {
+   "sha256": "77eb94e7d68604a9ddeab9b285ac5209028b4980e57218e91757c8eab49b8df1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7330,6 +7342,46 @@
      "why": "No constant moved; 12 and 16 were measured slower (72.8 s, 76.3 s vs 64.1 s), so the existing value is kept. Nothing narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T116 (the checks crate's coverage tests, FR-012)",
+    "### T116 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T116-cfg-not-coverage",
+     "summary": "The whole-tree test every_pointer_in_the_repository_resolves_to_a_fragment is left out of the coverage build (#[cfg(not(coverage))]) and runs only in the plain make rust-test run.",
+     "class": "within",
+     "why": "The GM asked for the checks crate's coverage tests to cost less (request.md 2026-11-11 'make static's own caching', T116; FR-012). FR-012/SC-007 require the cost lower and every verdict held, not that every test run under instrumentation: the test still runs and gives its verdict in the plain run, and the crate's coverage stays 100% (FR-004's floor), so no verdict or floor is given up."
+    },
+    {
+     "id": "T116-alternation-vec",
+     "summary": "alternation takes a Vec (one instantiation) and the fixture test the_alternation_puts_a_longer_name_first reaches the sort line only the whole-tree test reached.",
+     "class": "within",
+     "why": "A code change whose only purpose is to keep FR-004's 100% line coverage once the whole-tree test leaves the coverage build; enforcement of the existing floor, not new behavior, and the function's output is unchanged."
+    },
+    {
+     "id": "T116-plain-run-owed",
+     "summary": "The plain run stays owed after every coverage pass because T111 records no test result from a coverage pass for a crate that reads cfg(coverage); the workspace declares cfg(coverage) in check-cfg so the unexpected_cfgs lint accepts it.",
+     "class": "within",
+     "why": "Read as invoking T111's existing rule, not carving the checks crate out of it. The CLEAR depends on that premise: if a coverage pass recorded the crate green, the plain run would be skipped and the whole-tree test would never run, a verdict lost under SC-007. The premise is stated in the plan, not pinned by anything in the bundle; the exits (make rust-test, make land green) must show it holds."
+    },
+    {
+     "id": "T116-reads-whole-tree",
+     "summary": "The checks crate's declared reads stay the whole tree (reads = [\".\"]).",
+     "class": "within",
+     "why": "Status quo kept; it keeps any edit re-running the crate's tree-reading tests, so no verdict is skipped under FR-011's reuse."
+    },
+    {
+     "id": "T116-measurement",
+     "summary": "Before/after measured back to back on a scratch clone of main and this clone with the T108/T113 scratch scripts around make static, after comment and body edits of core and claims.",
+     "class": "within",
+     "why": "SC-007 asks for the cost re-measured by the same command before and after and lower; every figure carries a one-shot label (date and method). Measurement of what was asked, not added scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12701,6 +12753,44 @@
      "summary": "The hook run stays at eight suites at a time (HOOKS_JOBS 8).",
      "class": "within",
      "why": "No constant moved; 12 and 16 were measured slower (72.8 s, 76.3 s vs 64.1 s), so the existing value is kept. Nothing narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T116": {
+   "section_sha256": "7d395512fa7d87309e1a07fcade4a66d51d3d4c58d9c1e6f0e2d64bf19c5e4d5",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T116-cfg-not-coverage",
+     "summary": "The whole-tree test every_pointer_in_the_repository_resolves_to_a_fragment is left out of the coverage build (#[cfg(not(coverage))]) and runs only in the plain make rust-test run.",
+     "class": "within",
+     "why": "The GM asked for the checks crate's coverage tests to cost less (request.md 2026-11-11 'make static's own caching', T116; FR-012). FR-012/SC-007 require the cost lower and every verdict held, not that every test run under instrumentation: the test still runs and gives its verdict in the plain run, and the crate's coverage stays 100% (FR-004's floor), so no verdict or floor is given up."
+    },
+    {
+     "id": "T116-alternation-vec",
+     "summary": "alternation takes a Vec (one instantiation) and the fixture test the_alternation_puts_a_longer_name_first reaches the sort line only the whole-tree test reached.",
+     "class": "within",
+     "why": "A code change whose only purpose is to keep FR-004's 100% line coverage once the whole-tree test leaves the coverage build; enforcement of the existing floor, not new behavior, and the function's output is unchanged."
+    },
+    {
+     "id": "T116-plain-run-owed",
+     "summary": "The plain run stays owed after every coverage pass because T111 records no test result from a coverage pass for a crate that reads cfg(coverage); the workspace declares cfg(coverage) in check-cfg so the unexpected_cfgs lint accepts it.",
+     "class": "within",
+     "why": "Read as invoking T111's existing rule, not carving the checks crate out of it. The CLEAR depends on that premise: if a coverage pass recorded the crate green, the plain run would be skipped and the whole-tree test would never run, a verdict lost under SC-007. The premise is stated in the plan, not pinned by anything in the bundle; the exits (make rust-test, make land green) must show it holds."
+    },
+    {
+     "id": "T116-reads-whole-tree",
+     "summary": "The checks crate's declared reads stay the whole tree (reads = [\".\"]).",
+     "class": "within",
+     "why": "Status quo kept; it keeps any edit re-running the crate's tree-reading tests, so no verdict is skipped under FR-011's reuse."
+    },
+    {
+     "id": "T116-measurement",
+     "summary": "Before/after measured back to back on a scratch clone of main and this clone with the T108/T113 scratch scripts around make static, after comment and body edits of core and claims.",
+     "class": "within",
+     "why": "SC-007 asks for the cost re-measured by the same command before and after and lower; every figure carries a one-shot label (date and method). Measurement of what was asked, not added scope."
     }
    ],
    "verdict": "CLEAR"

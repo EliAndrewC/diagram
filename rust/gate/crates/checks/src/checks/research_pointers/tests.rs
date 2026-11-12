@@ -100,6 +100,13 @@ fn a_line_with_no_pointer_but_an_old_number_is_still_asked() {
     assert_eq!(refused.stderr.matches("docs/a.md:1:").count(), 1);
 }
 
+/// The whole repository's pointers, a check of the tree rather than of the code: under the coverage build it took 8.25 s against 0.27 s
+/// plain, the regular expressions it runs over every file instrumented in this crate, the whole of a core edit's longest coverage run
+/// (feature 449 T116, 2026-11-12). The fixture tests reach every line it does (`the_alternation_puts_a_longer_name_first`), so the coverage build leaves it out and
+/// the plain run,
+/// which `make rust-test` owes this crate after every coverage pass (T111 keeps no test result for a crate that reads `cfg(coverage)`),
+/// runs it.
+#[cfg(not(coverage))]
 #[test]
 fn every_pointer_in_the_repository_resolves_to_a_fragment() {
     let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
@@ -152,4 +159,11 @@ fn a_self_test_row_with_the_wrong_verdict_is_named() {
         super::wrong_rows(&rows, &forms, &mapping),
         ["research/water/", "clean"]
     );
+}
+
+/// A shorter name never wins over a longer one it opens: the alternation lists the longest first, and none matches nothing.
+#[test]
+fn the_alternation_puts_a_longer_name_first() {
+    assert_eq!(super::alternation(vec!["ab", "abc", "a"]), "abc|ab|a");
+    assert_eq!(super::alternation(Vec::new()), "(?!)");
 }

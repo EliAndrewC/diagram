@@ -407,3 +407,36 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T114 to T114 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 
 <!-- plan-archive: T115 to T115 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+
+### T116 (the checks crate's coverage tests, FR-012)
+
+- **Approach**: the one whole-tree test that made the checks crate's coverage run slow, `every_pointer_in_the_repository_resolves_to_a_fragment`, is left out of the coverage build (`#[cfg(not(coverage))]`) and runs in the plain test run, which `make rust-test` owes the crate after every coverage pass; a fixture test reaches the one line only it reached.
+
+   **Decisions** (FR-012, SC-007):
+   - Where the time went: one test of the crate's 98 took 8.25 s under the coverage build and 0.27 s plain, every other at most 0.46 s, the whole instrumented run 7.5 s (observed 2026-11-12, method: each test run alone with `--exact` from the coverage build's test binary and from the plain one, `date +%s.%N` around each). It checks every pointer in the whole repository, the regular expressions it runs on every file instrumented as generic code instantiated in this crate (T100 instruments the workspace's crates, and a dependency's generic code compiled into one of them is theirs).
+   - Why it can leave the coverage build: it checks the tree, not the code, every line it reaches but one reached by the crate's fixture tests, and that one, the sort of the alternation's names, reached only with two names or more, which the real tree alone gave (observed 2026-11-12, method: `l7r-gate.sh rust uncovered` with the test ignored). `alternation` now takes a `Vec`, so it has one instantiation, and `the_alternation_puts_a_longer_name_first` reaches it. The crate's coverage is 100% without the whole-tree test (observed 2026-11-12, method: the same, after).
+   - Why it still runs: the plain `make rust-test` runs it, and T111 keeps no test result from a coverage pass for a crate that reads `cfg(coverage)`, so the plain run stays owed after every coverage pass. The workspace declares the cfg (`[workspace.lints.rust] unexpected_cfgs`, `check-cfg = ["cfg(coverage)"]`), which `cargo llvm-cov` sets, so the lint does not refuse it.
+   - The crate's declared reads stay the whole tree (`reads = ["."]`): its tests read the tree (the pointers, the file sizes, the record's pages), so any edit still re-runs its tests and coverage, now about 1.5 s, the coverage run 0.7 s (observed 2026-11-12, method: the coverage run's `cover tests checks` line). A narrower list would have to name every path those tests read.
+   - Measured the same way before and after (SC-007), a scratch clone of main (T115 in) and this clone back to back (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t108/runs.sh <tree> <label>` and `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t113/ts.sh <tree> <label>`, `date +%s.%N` around each `make static`). After a one-line comment edit of core, `make static` took 18.2 s before and 9.9 s after, the checks crate's coverage 10.7 s and 0.9 s, at loads of 13 and 23 (observed 2026-11-12, method: as above). After one of claims, 16.8 s and 7.0 s (observed 2026-11-12, method: as above). After a body-only code edit of core, 30.3 s and 23.5 s, its coverage tests and reports 15.8 s and 7.7 s, the checks crate's 15.6 s and 3.3 s, at loads of 19 (observed 2026-11-12, method: as above).
+
+### T116 Approach (checklist part A)
+
+1. **The goal, in the world.** The checks crate's coverage no longer sets the floor of a core edit's coverage step.
+2. **The constraints.** FR-012 and SC-007: every verdict held, the crate's coverage whole (the floor's rule).
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the per-test timings and the coverage runs above.
+4. **Do they describe the world here?** Measured on this clone and a scratch clone of main.
+5. **The order.** Last of T110-T116.
+6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** One whole-tree test under the coverage build's instrumentation.
+2. **Does the change remove work, or only move it?** Removes it from the coverage run: the test runs once, plain.
+3. **What do you expect it to save, and why?** The test's instrumented time, less its plain time, measured above.
+4. **How does the work grow?** With the tree, in the plain run alone.
+5. **What did the before and after show, and under what conditions?** Back-to-back runs on a loaded host, read as evidence.
+6. **Did any map move?** No: no engine code changes.
