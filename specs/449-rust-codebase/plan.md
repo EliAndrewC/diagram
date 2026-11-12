@@ -475,3 +475,36 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T109 to T109 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 
 <!-- plan-archive: T108 to T108 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+
+### T110 (rustfmt kept per crate, FR-012)
+
+- **Approach**: `l7r-gate rust format --check` keeps each crate's green result as lint and coverage already do, keyed on what rustfmt reads (`Reads::Own` in `rust/gate/crates/rustc/src/rustc/kept.rs`).
+
+   **Decisions** (FR-012, SC-007):
+   - The cost: the format check kept nothing (`kept_reads` named no reads for it), so every `make static` ran rustfmt over all 19 crates, 2.1 s of a core edit's 29.1 s on a quiet machine (observed 2026-11-11, method: each line of `make static` timestamped after a one-line comment edit of core).
+   - The key: the crate's own files, the workspace's manifests and toolchain files (`WORKSPACE`, as every key) and rustfmt's configuration under its usual names (none tracked today), with the compiler's version, but not the crates it builds from, which rustfmt does not read. A crate's files are those its directory holds most nearly, so the binary's key stands over its nested crates' edits.
+   - Only a check's green result is kept. `make format`, which rewrites files, keeps nothing, because its key was read before the rewrite, and keeping it would mark the unformatted text green. A rewrite's own run still skips a crate whose key stands, since that text was checked clean.
+   - Measured the same way before and after (SC-007): `rust format --check` over every crate 2.32 s, then 0.16 s and 0.17 s with nothing changed, 0.78 s after a one-line core edit (core alone run) and 0.66 s after its revert (observed 2026-11-11, method: `date +%s.%N` around `l7r-gate.sh rust format --check`, the first run keeping nothing, at a load of about 1). `make static` with nothing changed 1.36-1.39 s, three runs (observed 2026-11-11, method: the same, at a load of about 2).
+   - The tests: the format key stands over a dependency's edit and moves with the crate's own file, rustfmt's configuration and `Cargo.lock` (`a_nested_crate_owns_its_files_and_a_dependency_s_dependency_moves_the_key`), and a check is kept and a rewrite is not (`a_format_check_is_kept_and_a_rewrite_is_not`). The kept-result tests moved to `rustc/tests/kept.rs`, the tests file over the 1,000-line bar.
+
+### T110 Approach (checklist part A)
+
+1. **The goal, in the world.** rustfmt runs only on a crate whose files changed.
+2. **The constraints.** FR-012 and SC-007: every format verdict held.
+3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the timings above.
+4. **Do they describe the world here?** Measured on this clone.
+5. **The order.** First of T110-T116.
+6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The timings above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** rustfmt over every crate on every run.
+2. **Does the change remove work, or only move it?** Removes it: an unchanged crate is not formatted again.
+3. **What do you expect it to save, and why?** The format step's time on every crate that did not change, measured above.
+4. **How does the work grow?** With the crates edited, no longer with all of them.
+5. **What did the before and after show, and under what conditions?** One run each on a quiet host, read as evidence.
+6. **Did any map move?** No: no engine code changes.

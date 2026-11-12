@@ -34,15 +34,25 @@ const WORKSPACE: [&str; 7] = [
     "rust-toolchain.toml",
 ];
 
+/// What rustfmt reads beside a crate's own files: its configuration, wherever rustfmt finds it (none is tracked today, 2026-11-11).
+const RUSTFMT: [&str; 4] = [
+    "rustfmt.toml",
+    ".rustfmt.toml",
+    "rust/rustfmt.toml",
+    "rust/.rustfmt.toml",
+];
+
 static TREE_READER: LazyLock<Regex> =
     LazyLock::new(|| re(r"CARGO_MANIFEST_DIR|\btop\(\)|\btoplevel\(\)"));
 
 /// What a check depends on: `Source` the crate, the crates it builds from and the workspace's manifests; `Tests` that and what its tests
-/// read of the tree at run time, as its manifest declares (`[package.metadata.l7r] reads`, feature 449 T93).
+/// read of the tree at run time, as its manifest declares (`[package.metadata.l7r] reads`, feature 449 T93); `Own` the crate's own files,
+/// the workspace's manifests and rustfmt's configuration alone (T110).
 #[derive(Clone, Copy, PartialEq)]
 pub(super) enum Reads {
     Source,
     Tests,
+    Own,
 }
 
 /// The checks a crate's own unchanged inputs answer (feature 449 T060, T93): `make done` on a one-line edit of one crate spent 40 s on
@@ -51,6 +61,9 @@ pub(super) fn kept_reads(cmd: &str) -> Option<Reads> {
     match cmd {
         "lint" | "dead" => Some(Reads::Source),
         "test" | "test-counters" | "cover" => Some(Reads::Tests),
+        // RUSTFMT KEPT PER CRATE (feature 449 T110; the GM 2026-11-11): a crate's formatting is its own files' alone, yet every
+        // `make static` re-checked all 19 crates, 2.1 s of a core edit's 29 s and of an idle run's 4.6 s (2026-11-11)
+        "format" => Some(Reads::Own),
         _ => None,
     }
 }
@@ -324,12 +337,13 @@ fn inputs<'a>(
     } else {
         Vec::new()
     };
+    let others = if reads == Reads::Own {
+        Vec::new()
+    } else {
+        depended(root, manifest, all)
+    };
     let mine: Vec<String> = std::iter::once(rel_dir(manifest, root))
-        .chain(
-            depended(root, manifest, all)
-                .iter()
-                .map(|m| rel_dir(m, root)),
-        )
+        .chain(others.iter().map(|m| rel_dir(m, root)))
         .collect();
     let dirs: Vec<String> = all
         .iter()
@@ -346,6 +360,7 @@ fn inputs<'a>(
         .filter(|(path, _)| {
             owner(path).is_some_and(|o| mine.contains(o))
                 || WORKSPACE.contains(&path.as_str())
+                || (reads == Reads::Own && RUSTFMT.contains(&path.as_str()))
                 || (declared.iter().any(|d| under(path, d))
                     && !RECORDS.iter().any(|r| path.starts_with(r)))
         })

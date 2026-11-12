@@ -462,6 +462,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T110 (rustfmt kept per crate, FR-012)": {
+   "sha256": "a314531b428b2fcac9e72692575065c913de19e172f0432897146a22e099eca1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T110 Approach (checklist part A)": {
+   "sha256": "8b3c284ec421e4787d7af09301093938d6d4522c086b6b1ddc0b58e79545075e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6890,6 +6902,46 @@
      "why": "A Python leak fixed with the mechanism the GM named; not a port and not new behavior."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T110 (rustfmt kept per crate, FR-012)",
+    "### T110 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T110-cost",
+     "summary": "States the measured cost being cut: rustfmt kept nothing, so every make static formatted all 19 crates (2.1 s of 29.1 s).",
+     "class": "within",
+     "why": "Descriptive grounding for the GM's 'rustfmt keeping its result per crate' (request.md, make static's own caching); decides no scope."
+    },
+    {
+     "id": "T110-key",
+     "summary": "The kept key is the crate's own files, the workspace manifests and toolchain files, rustfmt configuration and compiler version, not dependency crates; a nested crate's files belong to the nested crate, so the enclosing binary's key does not move on them.",
+     "class": "within",
+     "why": "This is what 'kept per crate' means: rustfmt reads only a crate's own sources and its configuration, so excluding dependencies loses no verdict, and the nested crate's own key moves on its edit, so that edit is still checked. FR-012/SC-007's 'every verdict held' is kept, and the tests named pin the key's movement."
+    },
+    {
+     "id": "T110-check-only",
+     "summary": "Only a green format check is kept; make format (the rewrite) records nothing, but still skips a crate whose check key stands.",
+     "class": "within",
+     "why": "Recording a rewrite's pre-rewrite key would mark unformatted text green, which would break FR-012's held verdicts; refusing it serves the request. Skipping a clean crate in a rewrite changes no output (rustfmt on already-clean text is a no-op), so the tooling's outputs are held."
+    },
+    {
+     "id": "T110-measure",
+     "summary": "Before/after measured by the same command (rust format --check 2.32 s to 0.16-0.17 s unchanged, 0.78 s after a core edit; make static unchanged 1.36-1.39 s).",
+     "class": "within",
+     "why": "SC-007 requires each task re-measured by the same command and lower; figures carry observed-date and method labels."
+    },
+    {
+     "id": "T110-tests",
+     "summary": "Two tests pin the key and the check-versus-rewrite rule; kept-result tests move to rustc/tests/kept.rs under the 1,000-line bar.",
+     "class": "within",
+     "why": "Enforcement of the requested caching and its held verdicts (FR-012, SC-007); a file move for the project's line bar adds no behavior."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11999,6 +12051,44 @@
      "summary": "The checks crate's tests remain the step's floor; two coverage runs on one clone at once still share its report directories, as they shared its build directory before.",
      "class": "within",
      "why": "States the residue, not a carve-out: concurrent runs on one clone collided before (the moves aside of T92/T105), so this preserves rather than narrows prior behavior, and the GM did not ask for same-clone concurrent runs."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T110": {
+   "section_sha256": "5bd1bbf18f5317eecd458eccf2592c0a7f10b3d9621d2ad3ca269f116f1a5475",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T110-cost",
+     "summary": "States the measured cost being cut: rustfmt kept nothing, so every make static formatted all 19 crates (2.1 s of 29.1 s).",
+     "class": "within",
+     "why": "Descriptive grounding for the GM's 'rustfmt keeping its result per crate' (request.md, make static's own caching); decides no scope."
+    },
+    {
+     "id": "T110-key",
+     "summary": "The kept key is the crate's own files, the workspace manifests and toolchain files, rustfmt configuration and compiler version, not dependency crates; a nested crate's files belong to the nested crate, so the enclosing binary's key does not move on them.",
+     "class": "within",
+     "why": "This is what 'kept per crate' means: rustfmt reads only a crate's own sources and its configuration, so excluding dependencies loses no verdict, and the nested crate's own key moves on its edit, so that edit is still checked. FR-012/SC-007's 'every verdict held' is kept, and the tests named pin the key's movement."
+    },
+    {
+     "id": "T110-check-only",
+     "summary": "Only a green format check is kept; make format (the rewrite) records nothing, but still skips a crate whose check key stands.",
+     "class": "within",
+     "why": "Recording a rewrite's pre-rewrite key would mark unformatted text green, which would break FR-012's held verdicts; refusing it serves the request. Skipping a clean crate in a rewrite changes no output (rustfmt on already-clean text is a no-op), so the tooling's outputs are held."
+    },
+    {
+     "id": "T110-measure",
+     "summary": "Before/after measured by the same command (rust format --check 2.32 s to 0.16-0.17 s unchanged, 0.78 s after a core edit; make static unchanged 1.36-1.39 s).",
+     "class": "within",
+     "why": "SC-007 requires each task re-measured by the same command and lower; figures carry observed-date and method labels."
+    },
+    {
+     "id": "T110-tests",
+     "summary": "Two tests pin the key and the check-versus-rewrite rule; kept-result tests move to rustc/tests/kept.rs under the 1,000-line bar.",
+     "class": "within",
+     "why": "Enforcement of the requested caching and its held verdicts (FR-012, SC-007); a file move for the project's line bar adds no behavior."
     }
    ],
    "verdict": "CLEAR"

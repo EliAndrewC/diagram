@@ -549,7 +549,8 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
                 "rust-checks: {cmd} FAILED on {shown}\n{}{}",
                 done.stdout, done.stderr
             );
-        } else {
+        } else if cmd != "format" || formatting_check {
+            // `make format` rewrites the files its key was read from: only a check's green result is kept
             verdict.keep();
         }
     }
