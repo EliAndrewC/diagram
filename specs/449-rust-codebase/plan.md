@@ -317,32 +317,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T87 to T87 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T88 to T88 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T89 to T89 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
-### T90 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T90 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-<!-- plan-archive: T91 to T82 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-<!-- plan-archive: T91 to T91 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+<!-- plan-archive: T90 to T90 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 ### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)
 
 **Not landed** (its plan review, BLOCKED 2026-11-12): the saving was the suite's alone, not the full hook run's, so it misses the GM's condition ("if you identify concrete targets with significant measured expected savings then go ahead and do them ... Otherwise you can just keep working on the port of the tooling"). The decisions below are the record of what was tried and measured.
@@ -381,3 +356,27 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T127 to T91 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T127 to T127 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+
+### T128 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T128 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

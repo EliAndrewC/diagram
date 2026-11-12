@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-12T18:22:30Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "349f71b77",
+  "why": "the changed blocks are T128's new template, filed by ask:449-T90-scope, and T91's template heading, removed when its tick archived its reviewed section"
+}

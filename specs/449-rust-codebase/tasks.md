@@ -302,8 +302,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T89 Phase 3, the reviews (`ask:449-T89-reviews`): review_owed, review_prereq, checkpoint, with hm_approval.py; stepback_bundle moves to T83
       research: rendering
       verify: DONE. landed: the reviews in Rust: review_owed, review_prereq, checkpoint, hm_approval; stepback_bundle to T83; specs/240's probe retired (ask:449-T89-reviews)
-- [ ] T90 Phase 3, the engine's pipeline package (`l7r/diagram/pipeline/`, phase 3 by FR-001, filed by `ask:449-T89-reviews`); `bundle_door.py`'s `is_current` verb leaves when it lands
+- [x] T90 Phase 3, the engine's pipeline package (`l7r/diagram/pipeline/`, phase 3 by FR-001, filed by `ask:449-T89-reviews`); `bundle_door.py`'s `is_current` verb leaves when it lands
       research: rendering
+      verify: DONE. closed as moved, nothing ported: ask:449-T90-scope (the round arbiter, 2026-11-12) moved l7r/diagram/pipeline/ to phase 4, its own task T128; FR-001 amended
 - [x] T91 Phase 3, the GM-review queue (`scripts/gm_review.py`, phase 3, filed by `ask:449-T82-claims`); `bundle_door.py`'s gm-review write verb leaves when it lands
       research: rendering
       verify: DONE. landed: gm_review.py ported to Rust (l7r-gate gm-review): 1,272 differential cases, 8 explained (row values no writer produces), the in-process callers 55 with none; make static, rust-test and hooks-test green
@@ -416,6 +417,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T127 Phase 3, the closing check (scripts/gates/close_check.py, phase 3 by FR-001, held by no task until T91's plan review, 2026-11-12); the gm-review port runs it by path from L7R_GATE_TREE on the one branch where the GM's box is a feature's last open box (T91), which goes when it lands
       research: rendering
       verify: DONE. landed: close_check.py ported to Rust (l7r-gate close-check): 1,645 differential cases, 2 explained; make static, rust-test and hooks-test green
+- [ ] T128 Phase 4, the engine's pipeline package (l7r/diagram/pipeline/: gencache, regen, rollcache, poolmaps, pool_index, render_cache, record_build, with codeid.py going with its last Python caller), moved from phase 3 by ask:449-T90-scope beside the Mode A generators it runs; make map, make pool-index and make render-sync are planned as a whole here, and bundle_door.py's is_current verb leaves when it lands
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
