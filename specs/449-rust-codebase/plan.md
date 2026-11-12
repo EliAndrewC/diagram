@@ -400,36 +400,4 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T111 to T111 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 
-### T112 (comment-insensitive keys, FR-012)
-
-- **Approach**: a crate's lint, test and coverage keys read each Rust file by its code, its text without its plain comments (`code_text`, `rust/gate/crates/rustc/src/rustc/kept/code.rs`; `code_ids` and `verdict_key_with` in `kept.rs`), so a comment-only edit moves none of them.
-
-   **Decisions** (FR-012, SC-007):
-   - The cost: a one-line comment added to core moved every gate crate's keys and re-ran 29.1 s of `make static` on a quiet machine, no verdict depending on it (observed 2026-11-11, method: each line of `make static` timestamped after such an edit).
-   - What a comment cannot change: clippy's verdict, the tests' and the coverage floor's. What stays in the code: doc comments (`///`, `//!`, `/** */`, `/*! */`), which clippy lints and rustdoc runs, and every line but one a removed comment left empty, so blank lines, which a lint can read, still move a key. Clippy's `too_many_lines` counts no comment line (observed 2026-11-11, method: a scratch crate's function of 98 code lines and 10 comment lines drew no warning under `-W clippy::too_many_lines`, one of 102 code lines did). Nothing in `rust/` uses `line!()`, includes a `.rs` file or reads its own source undeclared (observed 2026-11-11, method: a search for `line!()`, `include_str!` of a `.rs` and `include!`; the undeclared reader is refused already, T93).
-   - What keeps the whole text: rustfmt, which formats comments, and the dead check, which counts a word in a comment as a use (T100's family key), and any file a crate's tests declare they read, whose comments they may read. The checks crate declares the whole tree (`reads = ["."]`), so its tests' keys still move with any comment, its coverage 10.4 s of the comment edit's run below (observed 2026-11-11, method: that run's `cover tests checks` line). That is T116's subject, and keeping it here holds its verdict.
-   - The code is read by a small lexer that takes a string, raw string, byte string, char literal or lifetime as such (a `//` inside a literal is no comment) and nests block comments as Rust does. Each file is read from the work tree once a run, its id `code:` and the sha of its code. The keys of every crate move once, at the first run after this lands.
-   - Measured the same way before and after (SC-007): on a scratch clone of main (T111 in) and this clone, each after `make rust-test` and a green `make static`, `make static` after a one-line comment edit of core took 37.5 s before and 17.5 s after, 10.4 s of it the checks crate's coverage, after its revert 11.0 s and 3.3 s, and with nothing changed 1.5-1.6 s and 1.7-1.8 s, at loads of 11-19 (observed 2026-11-11, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t112/ab.sh <tree> <label>`, `date +%s.%N` around each `make static`). After the edit, lint, format and coverage kept 18 of 19 crates (observed 2026-11-11, method: the run's `unchanged` lines counted).
-   - The tests: the lexer's cases (`kept/code/tests.rs`), and a comment-only edit moving no lint, test or coverage key while moving format's and dead's and a declared read's (`a_comment_only_edit_moves_no_lint_test_or_coverage_key`).
-
-### T112 Approach (checklist part A)
-
-1. **The goal, in the world.** A comment-only edit re-runs only the checks that read comments.
-2. **The constraints.** FR-012 and SC-007: every verdict held.
-3. **Where each comes from.** G: the GM's words of 2026-11-11 in `request.md`; O: the experiment, the searches and the timings above.
-4. **Do they describe the world here?** Measured on this clone and a scratch clone of main.
-5. **The order.** After T111.
-6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The timings above.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** yes, tooling time, not the generator:
-1. **Where does the time go?** Every check of every crate built on an edited file, though the edit was a comment.
-2. **Does the change remove work, or only move it?** Removes it: the checks a comment cannot change do not run.
-3. **What do you expect it to save, and why?** A comment edit's lint, test and coverage reruns, measured above.
-4. **How does the work grow?** With code edits, no longer with comment edits.
-5. **What did the before and after show, and under what conditions?** One back-to-back run each on a loaded host, read as evidence.
-6. **Did any map move?** No: no engine code changes.
+<!-- plan-archive: T112 to T112 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
