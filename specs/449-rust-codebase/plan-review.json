@@ -127,12 +127,6 @@
    "reviewed": "2026-11-10",
    "declared": "round-arbiter"
   },
-  "### T82 (<why: the finding or measurement that files it>)": {
-   "sha256": "289700f215510cea7796f9589c98d95335d00f7eb02912b590cccc7081f2bd31",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
   "### T82 Approach (checklist part A)": {
    "sha256": "9aa4a16008728a1fc5c6df865e39e3b39d56db0674568eae988e17a920210f88",
    "verdict": "CLEAR",
@@ -175,23 +169,11 @@
    "reviewed": "2026-11-10",
    "declared": "round-arbiter"
   },
-  "### T86 (<why: the finding or measurement that files it>)": {
-   "sha256": "75269bfec00092a62854f27465d4a6eb9b26e10bae57e0c85ad6ac86de557616",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
   "### T86 Approach (checklist part A)": {
    "sha256": "9059fc1ccf025405836c10f9b24a3da60239e7bb62cdbc6eb702c8c9c3b22b59",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity"
-  },
-  "### T87 (<why: the finding or measurement that files it>)": {
-   "sha256": "81d65efea81f391c474b3352eea61adc789c0fdab1062a28618605deea11a8b7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
   },
   "### T87 Approach (checklist part A)": {
    "sha256": "0fd541568e111474c41e3fe5f9dd5cd5cf045671e7e029834964e2727bf28eef",
@@ -199,23 +181,11 @@
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
   },
-  "### T88 (<why: the finding or measurement that files it>)": {
-   "sha256": "57645c4e80d644c5deaf15787c36f8c7bf0e079be2e7c1396a3f0f83c876e707",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
   "### T88 Approach (checklist part A)": {
    "sha256": "5aa1ec7e3d17470662a57ab9061e33dbaf1c78ddd1f52f001db5dccf2b6b7f3a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
-  },
-  "### T89 (<why: the finding or measurement that files it>)": {
-   "sha256": "da40ae34ba421a1066ff7780d781e556c8ee35029a0f0faeed027fdada539860",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
   },
   "### T89 Approach (checklist part A)": {
    "sha256": "49dc65db056630cc5ff69fff64ce63e37575fdcaccc1aed318c443e3349d5cd9",
@@ -337,12 +307,6 @@
    "reviewed": "2026-11-11",
    "declared": "spec-fidelity"
   },
-  "### T97 (make done's counters-inert phase, FR-012)": {
-   "sha256": "9f6abe47c2df64bd6ccabcfc8fd772b814a04284964b925fced171a87b493137",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
   "### T97 Approach (checklist part A)": {
    "sha256": "1260b4046e5996b8b176331011035b450dbdab314e215f0a6a830108a9c3a593",
    "verdict": "CLEAR",
@@ -447,6 +411,54 @@
   },
   "### T108 Approach (checklist part A)": {
    "sha256": "94d7467aa68c0c0729782580a6f40df431d1ea18166483c57777c71fe433c16d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T90 (<why: the finding or measurement that files it>)": {
+   "sha256": "fabae7ab5cae61d7235cdc67b4983d5ed907440669991cfcdbffbda49c4158cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T90 Approach (checklist part A)": {
+   "sha256": "a65c04724a32e8b0ee2b63bde846635e9db5a4d8df0f5828ed6b33b3fac31089",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T91 (<why: the finding or measurement that files it>)": {
+   "sha256": "8cb1d90a4c3864a74e895d6b518cd81db010dc2871a52edb0100aed0eba88fdf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T91 Approach (checklist part A)": {
+   "sha256": "7cb7ea870275129b44a9d5c5b5b860c4f173f6c126b852e52f5d951cc13e5852",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T99 (the arbiter crate's tests against FR-008's bar, FR-012)": {
+   "sha256": "b87ec2686594ab5f1bc44dd585265c0cd8434927c2824e2c6eb407dd0830ba65",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T99 Approach (checklist part A)": {
+   "sha256": "252fc593344c17a2b665ca35061ab2970f51230266a080151e5f6bfe0fce5652",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T101 (every temporary directory a check or test makes is removed, FR-013)": {
+   "sha256": "ea57277f49cd51de00a32aea633cb2e148d4b6d69f8176aa24daae5d642644be",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T101 Approach (checklist part A)": {
+   "sha256": "183cac09aed31e3a06633ded73d9254199dead5766c2a3df0a289e0dbda1fe26",
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
@@ -6766,6 +6778,116 @@
      "summary": "The checks crate's tests remain the step's floor; two coverage runs on one clone at once still share its report directories, as they shared its build directory before.",
      "class": "within",
      "why": "States the residue, not a carve-out: concurrent runs on one clone collided before (the moves aside of T92/T105), so this preserves rather than narrows prior behavior, and the GM did not ask for same-clone concurrent runs."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T101 (every temporary directory a check or test makes is removed, FR-013)",
+    "### T101 Approach (checklist part A)",
+    "### T90 (<why: the finding or measurement that files it>)",
+    "### T90 Approach (checklist part A)",
+    "### T91 (<why: the finding or measurement that files it>)",
+    "### T91 Approach (checklist part A)",
+    "### T99 (the arbiter crate's tests against FR-008's bar, FR-012)",
+    "### T99 Approach (checklist part A)",
+    "(removed) ### T82 (<why: the finding or measurement that files it>)",
+    "(removed) ### T86 (<why: the finding or measurement that files it>)",
+    "(removed) ### T87 (<why: the finding or measurement that files it>)",
+    "(removed) ### T88 (<why: the finding or measurement that files it>)",
+    "(removed) ### T89 (<why: the finding or measurement that files it>)",
+    "(removed) ### T97 (make done's counters-inert phase, FR-012)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T90/T91 templates",
+     "summary": "T90 and T91 blocks and their checklists are unfilled templates",
+     "class": "within",
+     "why": "A placeholder decides nothing; no scope is set or narrowed."
+    },
+    {
+     "id": "removed T82, T86-T89",
+     "summary": "Unfilled template blocks deleted",
+     "class": "within",
+     "why": "Their earlier text was an empty template (CLEAR); deleting it removes no decision and no requirement's carrier."
+    },
+    {
+     "id": "removed T97",
+     "summary": "T97 section moved to plan-done.md (plan-archive line present)",
+     "class": "within",
+     "why": "FR-044: a finished, CLEAR section leaves the plan and owes no review; its decisions are unchanged, only relocated."
+    },
+    {
+     "id": "T99-seams",
+     "summary": "Test-build-only seams (GIVEN for owed_units, TRANSCRIPTS for the transcript folder) give the five bundle tests that do not test the owed list an empty list, and the transcript test an empty fixture folder",
+     "class": "within",
+     "why": "Exactly the 'fixed git reader fed to the tests' the round arbiter's ruling names; #[cfg(test)] only, so the binary's outputs and verdicts are unchanged (FR-012); the transcript test asserted only that the folder exists, which the fixture still tests."
+    },
+    {
+     "id": "T99-split",
+     "summary": "asks_reversals_red_gates_and_reviews split into two tests with their own fixtures",
+     "class": "within",
+     "why": "Same assertions, reorganized to meet FR-008's per-test bar; no coverage dropped."
+    },
+    {
+     "id": "T99-remainder",
+     "summary": "the_capped_round_cause_reads_the_record_s_owed_list stays over FR-008's 0.1 s bar at 0.143 s as the named remainder",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-012's T99 'against FR-008's bar'. The GM's own words ask that the arbiter crate's slow tests be cut ('worth doing'), not for a per-test figure; the crate went 1.09 s to 0.18 s. The remainder is the one test of the arbiter's real git boundary, whose computation alone is about 0.1 s (35 git calls), so reaching the bar needs a change to that boundary or the loss of its only test, which FR-012's 'held to every output and verdict' guards against. It is precisely the case the round arbiter's ruling ask:set-down-449-efficiency-round-2 (standing where the GM was asked) pre-authorized, quoted verbatim, and it is named and measured rather than hidden."
+    },
+    {
+     "id": "T101-TempDir",
+     "summary": "One Drop-removing TempDir type held by every test helper and production site; Drop proven under panic via catch_unwind; --self-check drops before process::exit",
+     "class": "within",
+     "why": "Directly the request: every check/test l7r-* temp dir removed on exit including failure (FR-013)."
+    },
+    {
+     "id": "T101-pin",
+     "summary": "rustc.rs and hookrun.sh run each crate/suite under a fresh TMPDIR, fail it naming any leftover entry, then remove the directory; shell suites' traps fixed; test-parts.sh added",
+     "class": "within",
+     "why": "The test that pins it, which the GM asked for ('add a test that pins it'), and SC-008's 'the runners themselves failing a crate or suite that does'; enforcement of the request, not new scope."
+    },
+    {
+     "id": "T101-signals",
+     "summary": "First TempDir installs INT/TERM handlers (pipe + thread) that remove held TempDirs and exit 128+n; signals the process started ignoring stay ignored; one unsafe use",
+     "class": "within",
+     "why": "The request names 'interrupt' explicitly; preserving an inherited ignore keeps the tooling's existing behavior for background jobs."
+    },
+    {
+     "id": "T101-sigkill-sweep",
+     "summary": "TempDir::new and hookrun.sh remove new-form dirs of their tag whose pid is gone and unchanged for three hours; old-form dirs never touched",
+     "class": "within",
+     "why": "Follows the GM's relayed words exactly: leave the existing pile (old form) alone and 'don't touch dirs younger than a few hours (a running gate may own them)'."
+    },
+    {
+     "id": "T101-sigkill-left",
+     "summary": "A SIGKILLed process's directories last until the next of its kind runs three hours on",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: SIGKILL cannot be caught, so no exit-time removal can run; the three-hour wait is the GM's own 'don't touch dirs younger than a few hours'; under the runners the run's TMPDIR is removed anyway."
+    },
+    {
+     "id": "T101-shared-scratch",
+     "summary": "Process-shared directories under <temp>/l7r-test-scratch/<name>, emptied on first use, removed by the runner with its TMPDIR; both leak checks pass over that one name because each removes it next",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A directory shared across a test process's tests has no Drop at process exit (Rust statics never drop), so self-removal is not available; under every runner it lives inside the run's TMPDIR and is removed, so nothing is left - the pin's purpose holds, and the carve-out is pinned by a test that finds the two real leaks beside it. Outside the runners it is one bounded, reused directory, the same retention the GM's own list accepts in 'pytest tmp_path'."
+    },
+    {
+     "id": "T101-bundle-root",
+     "summary": "The production bundle root /tmp/l7r-check, whose bundles review agents read after the command exits, is not removed on exit; tests no longer write into it",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Removing a bundle on its command's exit makes it unreadable by the agent dispatched to read it, so the rule is physically impossible for this output; it was not part of the measured leak (l7r-gate-check-*, l7r-guard-*), and it holds 32 entries, 1.9 MB (observed 2026-11-11 by this reviewer, ls | wc -l and du -sh), so it does not gut the request's purpose of stopping the disk filling."
+    },
+    {
+     "id": "T101-collect_cost",
+     "summary": "collect_cost.py switched to TemporaryDirectory",
+     "class": "within",
+     "why": "A Python leak fixed with the mechanism the GM named; not a port and not new behavior."
     }
    ]
   }
