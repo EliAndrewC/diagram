@@ -1,8 +1,7 @@
-//! Python's door to the claims tools (`l7r-gate claims-door`, `scripts/claims_door.py`; `ask:449-T82-claims`): what `land.py` and
-//! `impl_check.py` read of the port - `land.py` until its Rust port replaces it (feature 449 T121, its landing commit removing the verbs
-//! only it asks: `scope_split`, `file_left`, `flight_live` and `CLAIMS_FEATURE_DIR`), `impl_check.py` a door caller at the phase-3 close.
-//! `backfill_sections` and `git_diff` left with T121: `replay_owing.py`, the one caller of the first, is Rust and asks
-//! [`super::backfill_at`] in process, and nothing asked the second. One process a run, no logic of its own, deleted with its last caller.
+//! Python's door to the claims tools (`l7r-gate claims-door`, `scripts/claims_door.py`; `ask:449-T82-claims`): what `impl_check.py` reads
+//! of the port, a door caller at the phase-3 close. Feature 449 T121 took the verbs only `land.py` and `replay_owing.py` asked
+//! (`backfill_sections`, `git_diff`, `scope_split`, `file_left`, `flight_live`, `CLAIMS_FEATURE_DIR`): both are Rust, asking the claims in
+//! process. One process a run, no logic of its own, deleted with its last caller.
 
 use std::io::{BufRead, Write};
 use std::path::Path;
@@ -11,7 +10,6 @@ use serde_json::{json, Map, Value};
 
 use super::index::{current, load_map, Cur, QUESTIONS};
 use super::scope::Reader;
-use super::CLAIMS_FEATURE_DIR;
 use crate::checks_door::serve_with;
 use crate::Reply;
 
@@ -27,15 +25,6 @@ fn object(args: &[Value], i: usize) -> Map<String, Value> {
         .and_then(Value::as_object)
         .cloned()
         .unwrap_or_default()
-}
-
-fn strings(args: &[Value], i: usize) -> Vec<String> {
-    args.get(i)
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .map(|v| v.as_str().unwrap_or_default().to_owned())
-        .collect()
 }
 
 fn reader(root: &Path) -> Reader {
@@ -76,21 +65,8 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
                 .collect::<Vec<_>>()))
         }
         "load_index" | "load_store" => Ok(Value::Object(load_map(&root)?)),
-        "scope_split" => {
-            let (own, left) =
-                super::scope_split(&root, &text(args, 1), &strings(args, 2), &strings(args, 3))?;
-            Ok(json!([own, left]))
-        }
-        "file_left" => Ok(json!(super::file_left(
-            &root,
-            &text(args, 1),
-            &strings(args, 2)
-        )?)),
-        "flight_live" => Ok(json!(super::flight_live(&root)?)),
-        "constants" => Ok(
-            json!({"CLAIMS_FEATURE_DIR": CLAIMS_FEATURE_DIR, "QUESTIONS": QUESTIONS,
-                                 "INDEX": super::index::INDEX, "STORE": super::index::STORE}),
-        ),
+        "constants" => Ok(json!({"QUESTIONS": QUESTIONS,
+                                 "INDEX": super::index::INDEX, "STORE": super::index::STORE})),
         other => Err(format!("claims-door: no verb {other}")),
     }
 }

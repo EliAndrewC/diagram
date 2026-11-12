@@ -606,6 +606,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T124 (T121's follow-up: the claims-door verbs only `land.py` asked, `ask:449-T83-scope`)": {
+   "sha256": "f14cfa76647c435df016256e4cb2fd76f8dbd30d19efc4daea4f3a6d8f523a15",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T124 Approach (checklist part A)": {
+   "sha256": "419e1cc2e559e3cc4725b29c4548034d8ae32067d2873fd6f8f35058e09b4338",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7842,6 +7854,40 @@
      "why": "The census at the cut is what ask:449-T83-scope asks for, and its search space is stated (the three names and LAND_DRIVER, outside specs/ and dev/)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T124 (T121's follow-up: the claims-door verbs only `land.py` asked, `ask:449-T83-scope`)",
+    "### T124 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T124-remove-door-verbs",
+     "summary": "Remove the claims door's scope_split, file_left, flight_live and CLAIMS_FEATURE_DIR verbs from Rust door.rs and scripts/claims_door.py, with their tests, once the Rust land is make land.",
+     "class": "within",
+     "why": "ask:449-T82-claims put these verbs on scripts/claims_door.py for the Python that stays Python - land.py and replay_owing.py until T83 - on the plan_door pattern, whose door holds no logic and whose verbs leave with their callers; ask:449-T83-scope has T121 delete land.py in its own last landing. A verb only land.py asked has no caller left once T121 landed, so removing it completes the ruled lifecycle and narrows nothing the GM asked (make this a Rust codebase; delete Python once its Rust port lands). FR-003 is kept: the door stays for its remaining callers (impl_check.py and the verbs they use), and nothing still running is switched off. The task stays a follow-up of T121 rather than part of T121 for the reason the ruling gives (the Python land.py had to land its own deletion through these verbs)."
+    },
+    {
+     "id": "T124-remove-seam-file-left",
+     "summary": "Remove the Rust seam::file_left and its constant, with their tests.",
+     "class": "within",
+     "why": "The Rust half that served only the door verb file_left; the Rust land asks scope_split and flight_live in process (kept), and file_left/its constant have no other asker per the recorded census. Removing dead Rust that only served a removed door verb is inside the port; it changes no verdict or output of a live command (FR-002)."
+    },
+    {
+     "id": "T124-reuse-T121-patch",
+     "summary": "Apply the removal patch kept from T121's landing commit rather than re-deriving it.",
+     "class": "within",
+     "why": "A method choice; it decides nothing the spec or request leaves open about scope."
+    },
+    {
+     "id": "T124-census-and-exits",
+     "summary": "Premise and done-check: git grep -n of the four names over scripts and rust finds them only in provenance comments and the door's tests (observed 2026-11-12); exits make static, make rust-test, make land green, red set down or ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Enforcement of the removal, not new scope; the figure carries a one-shot label (date and method). Non-blocking note: the stated search space is scripts and rust only - it does not reach the Makefile, tests/, l7r/, .specify/ or specs/, where a name can be held as a string (feature 185); a door caller there would be switched off contrary to FR-003. Running the same git grep over the whole tree before deleting closes that, and does not change this decision's class. ask:449-T82-claims names three Python callers of this door: land.py, replay_owing.py and impl_check.py; the block accounts for the first two and not impl_check.py, which stays a door caller to the phase-3 close. Precondition on the deletion: the census re-run with no pathspec, showing impl_check.py and the Makefile ask none of the four names."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13680,6 +13726,38 @@
      "summary": "Provenance comments, rust/gate/CLAUDE.md, scripts/CLAUDE.md and docs/guards.md repointed by a git grep census; make static, rust-test and hooks-test HOOKS_ALL=1 green",
      "class": "within",
      "why": "The census at the cut is what ask:449-T83-scope asks for, and its search space is stated (the three names and LAND_DRIVER, outside specs/ and dev/)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T124": {
+   "section_sha256": "c63dabe7f9f66199c679b46e6cf8ef736c8d09793f3400ab4f26f72e3e58fc50",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T124-remove-door-verbs",
+     "summary": "Remove the claims door's scope_split, file_left, flight_live and CLAIMS_FEATURE_DIR verbs from Rust door.rs and scripts/claims_door.py, with their tests, once the Rust land is make land.",
+     "class": "within",
+     "why": "ask:449-T82-claims put these verbs on scripts/claims_door.py for the Python that stays Python - land.py and replay_owing.py until T83 - on the plan_door pattern, whose door holds no logic and whose verbs leave with their callers; ask:449-T83-scope has T121 delete land.py in its own last landing. A verb only land.py asked has no caller left once T121 landed, so removing it completes the ruled lifecycle and narrows nothing the GM asked (make this a Rust codebase; delete Python once its Rust port lands). FR-003 is kept: the door stays for its remaining callers (impl_check.py and the verbs they use), and nothing still running is switched off. The task stays a follow-up of T121 rather than part of T121 for the reason the ruling gives (the Python land.py had to land its own deletion through these verbs)."
+    },
+    {
+     "id": "T124-remove-seam-file-left",
+     "summary": "Remove the Rust seam::file_left and its constant, with their tests.",
+     "class": "within",
+     "why": "The Rust half that served only the door verb file_left; the Rust land asks scope_split and flight_live in process (kept), and file_left/its constant have no other asker per the recorded census. Removing dead Rust that only served a removed door verb is inside the port; it changes no verdict or output of a live command (FR-002)."
+    },
+    {
+     "id": "T124-reuse-T121-patch",
+     "summary": "Apply the removal patch kept from T121's landing commit rather than re-deriving it.",
+     "class": "within",
+     "why": "A method choice; it decides nothing the spec or request leaves open about scope."
+    },
+    {
+     "id": "T124-census-and-exits",
+     "summary": "Premise and done-check: git grep -n of the four names over scripts and rust finds them only in provenance comments and the door's tests (observed 2026-11-12); exits make static, make rust-test, make land green, red set down or ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Enforcement of the removal, not new scope; the figure carries a one-shot label (date and method). Non-blocking note: the stated search space is scripts and rust only - it does not reach the Makefile, tests/, l7r/, .specify/ or specs/, where a name can be held as a string (feature 185); a door caller there would be switched off contrary to FR-003. Running the same git grep over the whole tree before deleting closes that, and does not change this decision's class. ask:449-T82-claims names three Python callers of this door: land.py, replay_owing.py and impl_check.py; the block accounts for the first two and not impl_check.py, which stays a door caller to the phase-3 close. Precondition on the deletion: the census re-run with no pathspec, showing impl_check.py and the Makefile ask none of the four names."
     }
    ],
    "verdict": "CLEAR"

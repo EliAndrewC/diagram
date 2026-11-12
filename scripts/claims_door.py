@@ -1,9 +1,7 @@
 """The Python callers' door to the claims tools in Rust (feature 449 T82, `ask:449-T82-claims`, on the `plan_door` pattern): one
 `l7r-gate claims-door` process a run, each function a forwarder and never a fallback, its verbs in order so a read follows its own write
-(FR-006). Its callers: `land.py` until the landing commit of its Rust port (feature 449 T121) removes it with the verbs only it asks
-(`scope_split`, `file_left`, `flight_live`, `CLAIMS_FEATURE_DIR`), and `impl_check.py`, named at the phase-3 close. `backfill_sections`
-and `git_diff` left with T121: `replay_owing.py`, the first's one caller, is Rust, and nothing called the second. Deleted with its last
-caller; named at the phase-3 close if still present.
+(FR-006). Its caller: `impl_check.py`, named at the phase-3 close; the verbs only `land.py` and `replay_owing.py` asked left with their
+Rust ports (feature 449 T121). Deleted with its last caller; named at the phase-3 close if still present.
 
 A row of `current` is an attribute object with the fields its callers read (`claim.pointers`, `unit.path`, ...), every one computed in
 Rust; nothing it returns is handed back to the Rust mutated."""
@@ -14,7 +12,7 @@ import json
 import os
 import pathlib
 import subprocess
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from types import SimpleNamespace
 from typing import Any
 
@@ -54,8 +52,8 @@ def _row(d: dict[str, Any]) -> SimpleNamespace:
     return SimpleNamespace(key=d["key"], uid=d["uid"], code=d["code"], research=d["research"], claim=claim, unit=SimpleNamespace(**d["unit"]))
 
 
-def __getattr__(name: str) -> Any:  # noqa: ANN401 - `CLAIMS_FEATURE_DIR`, `QUESTIONS`, `INDEX`, `STORE`, asked when read
-    if name in ("CLAIMS_FEATURE_DIR", "QUESTIONS", "INDEX", "STORE"):
+def __getattr__(name: str) -> Any:  # noqa: ANN401 - `QUESTIONS`, `INDEX`, `STORE`, asked when read
+    if name in ("QUESTIONS", "INDEX", "STORE"):
         return _ask("constants")[name]
     raise AttributeError(name)
 
@@ -76,18 +74,3 @@ def load_index(path: pathlib.Path) -> dict[str, dict[str, Any]]:
 
 def load_store(path: pathlib.Path) -> dict[str, list[str]]:
     return _ask("load_store", str(path))
-
-
-def scope_split(root: pathlib.Path, report: str, changed: Sequence[str], seam: Sequence[pathlib.Path]) -> tuple[list[str], list[str]]:
-    """The open findings a Rust stage's landing answers for, and the rest in the files it changes (feature 444 FR-021)."""
-    own, left = _ask("scope_split", str(root), report, list(changed), [str(p) for p in seam])
-    return own, left
-
-
-def file_left(root: pathlib.Path, task: str, left: Sequence[str]) -> int:
-    return _ask("file_left", str(root), task, list(left))
-
-
-def flight_live(root: pathlib.Path) -> list[str]:
-    """The claims bundles in flight now (`claims_flight.live`)."""
-    return _ask("flight_live", str(root))

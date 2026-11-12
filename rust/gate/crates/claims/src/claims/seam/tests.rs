@@ -1,6 +1,6 @@
 //! A Rust stage's own findings split from the rest, and the rest filed once.
 
-use super::{changed_lines, file_left, git_diff, split, CLAIMS_FEATURE_DIR};
+use super::{changed_lines, git_diff, split};
 use crate::claims::scope::Reader;
 use crate::claims::tests::fixture;
 use crate::record::testkit::{commit, put};
@@ -54,27 +54,4 @@ fn a_landing_answers_for_its_own_findings() {
         ]
     );
     assert_eq!(left.len(), 3);
-    put(
-        &root,
-        &format!("{CLAIMS_FEATURE_DIR}/found.jsonl"),
-        &format!("{{\"finding\": \"{}\"}}\n\n", left[0]),
-    );
-    assert_eq!(file_left(&root, "T9", &left).unwrap(), 2);
-    let found = std::fs::read_to_string(root.join(CLAIMS_FEATURE_DIR).join("found.jsonl")).unwrap();
-    assert!(
-        found.contains("\"from\": \"feature 444 T9's landing (FR-021: not the stage's own code)\"")
-            && found.contains("\"block\": \"f\"")
-    );
-    assert_eq!(file_left(&root, "T9", &left).unwrap(), 0);
-    assert_eq!(
-        file_left(&root, "T9", &["no finding form".to_owned()]).unwrap(),
-        1
-    );
-    assert!(
-        std::fs::read_to_string(root.join(CLAIMS_FEATURE_DIR).join("found.jsonl"))
-            .unwrap()
-            .contains("\"file\": \"?\"")
-    );
-    put(&root, &format!("{CLAIMS_FEATURE_DIR}/found.jsonl"), "{\n");
-    assert!(file_left(&root, "T9", &left).is_err());
 }

@@ -39,9 +39,6 @@ fn each_verb_answers() {
         json!({"verb": "owed", "args": [r, {}, {}]}),
         json!({"verb": "load_index", "args": [root.join("dev/claims-index.json")]}),
         json!({"verb": "load_store", "args": [root.join("dev/claims-pages.json")]}),
-        json!({"verb": "scope_split", "args": [r, "  DRIFTED        l7r/diagram/m.py::read#x - y\n", ["l7r/diagram/m.py"], ["l7r/diagram/m.py"]]}),
-        json!({"verb": "file_left", "args": [r, "T1", []]}),
-        json!({"verb": "flight_live", "args": [r]}),
         json!({"verb": "constants", "args": []}),
         json!({"verb": "nope", "args": [r]}),
     ]);
@@ -60,19 +57,30 @@ fn each_verb_answers() {
         .any(|r| r[1] == "new"));
     assert_eq!(got[2]["ok"], json!({}));
     assert_eq!(got[3]["ok"], json!({"x": []}));
-    assert_eq!(
-        got[4]["ok"][0],
-        json!(["DRIFTED        l7r/diagram/m.py::read#x - y"])
-    );
-    assert_eq!(got[5]["ok"], 0);
-    assert_eq!(got[6]["ok"], json!([]));
-    assert_eq!(got[7]["ok"]["QUESTIONS"], "research/questions");
-    assert!(got[8]["error"].as_str().unwrap().contains("no verb nope"));
-    // the two verbs that left with feature 449 T121: no caller kept them
+    assert_eq!(got[4]["ok"]["QUESTIONS"], "research/questions");
+    assert!(got[4]["ok"].get("CLAIMS_FEATURE_DIR").is_none());
+    assert!(got[5]["error"].as_str().unwrap().contains("no verb nope"));
+    // the verbs that left with feature 449 T121: `land.py` and `replay_owing.py` asked them, and both are Rust
     let gone = ask(&[
         json!({"verb": "backfill_sections", "args": [r, {}, {}]}),
         json!({"verb": "git_diff", "args": [r, "l7r/diagram/s.py"]}),
+        json!({"verb": "scope_split", "args": [r, "", [], []]}),
+        json!({"verb": "file_left", "args": [r, "T1", []]}),
+        json!({"verb": "flight_live", "args": [r]}),
     ]);
+    // ...which the Rust land asks in process
+    assert_eq!(
+        crate::claims::scope_split(
+            &root,
+            "  DRIFTED        l7r/diagram/m.py::read#x - y\n",
+            &["l7r/diagram/m.py".to_owned()],
+            &["l7r/diagram/m.py".to_owned()]
+        )
+        .unwrap()
+        .0,
+        vec!["DRIFTED        l7r/diagram/m.py::read#x - y"]
+    );
+    assert_eq!(crate::claims::flight_live(&root), Ok(Vec::new()));
     assert!(gone.iter().all(|g| g["error"].is_string()));
     put(&root, "dev/claims-index.json", "{");
     let bad = ask(&[

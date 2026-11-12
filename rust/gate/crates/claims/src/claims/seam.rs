@@ -1,9 +1,9 @@
-//! Which open claims findings a Rust stage's landing answers for (`scripts/record/claims_scope.py`'s `split`, `file_left`, `git_diff` and
-//! `changed_lines`, ported by feature 449 T82; feature 444 FR-021 as amended 2026-11-01). A Python module's units and the units a seam
+//! Which open claims findings a Rust stage's landing answers for (`scripts/record/claims_scope.py`'s `split`, `git_diff` and
+//! `changed_lines`, ported by feature 449 T82; feature 444 FR-021 as amended 2026-11-01). Its `file_left`, which only `land.py` reached
+//! through the claims door and never with its filing asked for, left with `land.py` (feature 449 T121's landing commit). A Python module's units and the units a seam
 //! imports are read by Python's syntax tree, through the runner (`ask:449-T82-claims`).
 
 use std::collections::HashMap;
-use std::io::Write as _;
 use std::path::Path;
 use std::sync::LazyLock;
 
@@ -11,14 +11,12 @@ use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
 use super::scope::Reader;
-use crate::record::repo::{fail, read_text, Fail};
+use crate::record::repo::{read_text, Fail};
 use crate::record::units::re;
 
 static FINDING: LazyLock<Regex> =
     LazyLock::new(|| re(r"\A\s+([A-Z][A-Z-]+)\s+(\S[^:]*?)::(\S+?)#"));
 static HUNK: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@"));
-/// The open-claims feature (the GM, 2026-10-26).
-pub const CLAIMS_FEATURE_DIR: &str = "specs/405-engine-findings-from-385";
 
 /// The new-side line ranges a `git diff -U0` changes; a pure deletion is the line it sits after.
 pub fn changed_lines(diff: &str) -> Vec<(i64, i64)> {
@@ -105,47 +103,6 @@ pub fn split(
         }
     }
     Ok((own, left))
-}
-
-/// Each finding the landing does not answer for, filed once as an open row of the open-claims feature's `found.jsonl`; how many.
-pub fn file_left(root: &Path, task: &str, left: &[String]) -> Result<usize, Fail> {
-    let path = root.join(CLAIMS_FEATURE_DIR).join("found.jsonl");
-    let mut have: Vec<Value> = Vec::new();
-    if path.is_file() {
-        for x in read_text(&path)?
-            .lines()
-            .filter(|x| !l7r_guard::shared::py_text::strip(x).is_empty())
-        {
-            let row: Value = serde_json::from_str(x)
-                .map_err(|e| format!("json.decoder.JSONDecodeError: {e}"))?;
-            have.push(row.get("finding").cloned().unwrap_or(Value::Null));
-        }
-    }
-    let new: Vec<&String> = left
-        .iter()
-        .filter(|ln| !have.contains(&json!(ln)))
-        .collect();
-    if new.is_empty() {
-        return Ok(0);
-    }
-    let when = crate::record::repo::utc_now();
-    let mut fh = std::fs::OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open(&path)
-        .map_err(fail)?;
-    for ln in &new {
-        let padded = format!("  {ln}");
-        let m = FINDING.captures(&padded).ok().flatten();
-        let (file, block) = m.map_or(("?".to_owned(), "?".to_owned()), |m| {
-            (m[2].to_owned(), m[3].to_owned())
-        });
-        let row = json!({"check": "impl-drift", "file": file, "block": block, "finding": ln, "status": "open", "utc": when,
-            "from": format!("feature 444 {task}'s landing (FR-021: not the stage's own code)")});
-        fh.write_all((crate::logs::one_line_utf8(&row) + "\n").as_bytes())
-            .map_err(fail)?;
-    }
-    Ok(new.len())
 }
 
 #[cfg(test)]

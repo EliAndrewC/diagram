@@ -68,9 +68,6 @@ pub fn rows_and_index(
     ))
 }
 
-/// The open-claims feature a Rust stage's landing files the findings outside its own code to (feature 444 FR-021).
-pub const CLAIMS_FEATURE_DIR: &str = seam::CLAIMS_FEATURE_DIR;
-
 /// The claims in scope at `root`, its questions under `root/research/questions`.
 fn current_at(root: &Path) -> Result<index::Cur, crate::record::repo::Fail> {
     let mut reader = scope::Reader::new(&crate::record::repo::tree_of(root), root);
@@ -121,19 +118,6 @@ pub fn scope_split(
 ) -> Result<(Vec<String>, Vec<String>), crate::record::repo::Fail> {
     let mut reader = scope::Reader::new(&crate::record::repo::tree_of(root), root);
     seam::split(&mut reader, root, report, changed, seam)
-}
-
-/// Each finding outside the stage's own code filed once as an open row of the open-claims feature; how many.
-///
-/// # Errors
-///
-/// Where the feature's `found.jsonl` cannot be read or written.
-pub fn file_left(
-    root: &Path,
-    task: &str,
-    left: &[String],
-) -> Result<usize, crate::record::repo::Fail> {
-    seam::file_left(root, task, left)
 }
 
 /// The claims bundles in flight now (`claims_flight.live`).
