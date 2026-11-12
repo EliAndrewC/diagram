@@ -61,10 +61,14 @@ pub(super) fn world(tag: &str, log: &[String]) -> (l7r_guard::shared::tempdir::H
     put(
         &repo,
         "specs/449-x/implementation-check.md",
-        "- 0042: a claim\n",
+        "- 0094: a claim\n",
     );
     put(&repo, "specs/449-x/briefs/a.md", "SECTION=0077\n");
-    put(&repo, "research/questions/0042-a.html", "cites smith-1990");
+    put(
+        &repo,
+        concat!("research/questions/", "0094-a.html"),
+        "cites smith-1990",
+    );
     put(
         &repo,
         ".specify/feature.json",

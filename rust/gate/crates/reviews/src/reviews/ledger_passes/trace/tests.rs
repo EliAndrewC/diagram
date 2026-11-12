@@ -36,7 +36,7 @@ fn a_features_questions_come_from_the_sheet_and_its_own_files() {
     );
     assert_eq!(
         feature_questions("449", &repo, &env).unwrap(),
-        set(&["0042", "0077", "0078", "0090", "0123"])
+        set(&["0094", "0077", "0078", "0090", "0123"])
     );
     env.claims_sheet = Some("bad.md".to_owned());
     std::fs::write(repo.join("bad.md"), [0xff_u8]).unwrap();
@@ -53,7 +53,7 @@ fn a_pass_belongs_by_its_subject_its_prompt_its_question_its_bundle_or_its_key()
         env.cwd.clone(),
         Path::new(&env.home).join(".claude/projects"),
     );
-    let qs = set(&["0042"]);
+    let qs = set(&["0094"]);
     let is = |agent: &str, subject: &str| {
         belongs(
             &one(&pass("c", agent, subject, &json!({}))),
@@ -74,7 +74,7 @@ fn a_pass_belongs_by_its_subject_its_prompt_its_question_its_bundle_or_its_key()
     );
     assert!(is("long", &"z".repeat(100)));
     assert!(!is("long", &"z".repeat(99)));
-    assert!(is("", "question 0042 and 1.0043"));
+    assert!(is("", "question 0094 and 1.0043"));
     assert!(is("", "/tmp/l7r-check/claims-owed/x"));
     put(
         &repo,
@@ -84,8 +84,12 @@ fn a_pass_belongs_by_its_subject_its_prompt_its_question_its_bundle_or_its_key()
     assert!(!is("", "/tmp/l7r-check/work-budget-audit-1/"));
     assert!(is("", "/tmp/l7r-check/key-smith-1990-whole/"));
     assert!(!is("", "/tmp/l7r-check/key-jones-2001/"));
-    std::fs::write(repo.join("research/questions/0042-b.html"), [0xff_u8]).unwrap();
-    std::fs::remove_file(repo.join("research/questions/0042-a.html")).unwrap();
+    std::fs::write(
+        repo.join("research/questions").join("0094-b.html"),
+        [0xff_u8],
+    )
+    .unwrap();
+    std::fs::remove_file(repo.join("research/questions").join("0094-a.html")).unwrap();
     assert!(belongs(
         &one(&pass("c", "", "/key-smith-1990/", &json!({}))),
         "449",
