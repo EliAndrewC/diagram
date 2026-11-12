@@ -394,6 +394,12 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       verify: DONE. landed: T83 slice 4: the step-back and the yields in Rust, 219 differential cases with no difference
 - [ ] T121 T83's fifth slice (`ask:449-T83-scope`): `land.py` with `work_budget_view.py` and replay_owing's OLD side, last, proved by a verdict replay over recorded landings
       research: rendering
+- [ ] T122 The idle-tests suite's waits in milliseconds: its fixture waits 1 to 4 s of real time a case (the timer counts awake time in real ticks), 35.0 s alone and the full hook run's longest suite, about 20 s of it waits; a model of the run's eight slots puts the run at 28 s with the suite at 15 s, against 44 s as run (2026-11-12, /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r5/profile.sh and the schedule model) (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
+      research: rendering
+      note: not landed - its plan review (BLOCKED, 2026-11-12) held it to the GM's condition: the suite alone fell from 35.0 s to about 17 s, but the full hook run did not move (52.1 s against 53.1 s and 54.1 s), so no significant saving in the loop he is speeding up; the change is kept as a patch until the run's real bound is found
+- [ ] T123 The hook suites started longest first, from each suite's last time: the eight slots take the roster in its order, the longest suite 34th, the model 44 s as run against 35 s longest first (2026-11-12); T98 measured longest first slower (74.8 s and 77 s against 63.8 s), so it lands only on a fresh A/B (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
+      research: rendering
+      note: not built - T122's full hook runs (53.1 s and 54.1 s against 52.1 s) showed the run is held by something its suites share, not by its schedule, so the model's saving does not hold and the GM's condition (a significant measured expected saving) is not met; to be closed or rescoped once that bound is found
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

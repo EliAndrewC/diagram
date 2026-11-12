@@ -13444,6 +13444,45 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T122": {
+   "section_sha256": "4861f4a6635e07be615b3720504152975ff4f2f687af62f1c6fbef4b94aa48f1",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T122-saving",
+     "summary": "Land the idle-tests suite's shortened waits with the saving restated as 'the suite's own, wherever it runs alone (a change to the idle-tests guard re-runs it alone)', after the full hook run that selected the target did not move (52.1 s before, 53.1 s and 54.1 s after).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM's pre-approval (2026-11-12) is a conditional with a stated alternative: 'if you identify concrete targets with significant measured expected savings then go ahead and do them ... Otherwise you can just keep working on the port of the tooling.' The block chose this target from the full-run profile (the full hook run's longest suite, 35.0 s, no resource pressure), which is the measured expectation the task was filed on. The block's own after-measurement reports no full-run saving, then re-justifies the target as a suite-alone saving whose only named occurrence in the loop is an edit to the idle-tests guard itself, with no measure of how often that happens. That is a saving re-scoped after its measured expectation failed, and nothing in the GM's words says a saving reaching only that case is the 'significant' one he conditioned on; ruling it significant would be completing his thought. Against the purpose (a faster development iteration loop), the block's own figures show the run the landing executes gained nothing. None of the three tests for a legitimate exception is met: the literal condition is not impossible to meet, it is not implied elsewhere in the request, and applying it does not defeat the request's purpose - the GM named the path for this case, keep porting. To proceed, the block must show a significant measured saving in the loop the GM is speeding up (for example how often the suite runs alone, measured), or the landing goes to the arbiter. Noted, not by itself deciding: the request asks a task filed under this pre-approval to quote the GM's words; the block cites the pre-approval by heading and does not quote them. The full-run comparison is also confounded by the block's own figures (sync-with-main 28.3 s to 45.5 s and 46.5 s, entry-gate 24.9 s to 37.6 s and 42.7 s, the before-run's load not stated), so this ruling rests on the block claiming no full-run saving, not on proof that none exists."
+    },
+    {
+     "id": "T122-seams",
+     "summary": "The guard's fixture seams IDLE_WAIT_S and IDLE_DEFER_S parse fractions (seconds_ms), honored only inside a fixture as before; wait_awake folded into wait_ms; real waits stay whole minutes (minutes_ms) and a real deferral's message is unchanged.",
+     "class": "within",
+     "why": "On the block's claim that the seams stay fixture-only and the real waits and messages are unchanged, every verdict and output the guard gives outside a fixture is held, which is what FR-002 and the efficiency requirements' 'every output and verdict' ask."
+    },
+    {
+     "id": "T122-fixture-constants",
+     "summary": "The suite's tick 0.2 s to 0.05 s, waits 3/4/2/1 s to 0.3/0.6/0.3/0.2 s, the two 1.5 s sleeps to 0.8 s and 1.0 s, the slow runner's 5 s and the sleep outlasting it to 3 s, each a fixture CONVENTION keeping every case's order of events; every case and check kept, the suspend case's full wait after the jump and the 100 s suspend threshold preserved.",
+     "class": "within",
+     "why": "Fixture timing constants only; no case or check is dropped or changed in what it asserts, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T122-T123-premise",
+     "summary": "Reports that T123's premise (a full hook run bound by its schedule) does not hold, since the run is held by something the suites share.",
+     "class": "within",
+     "why": "A finding reported, not a decision this block makes about T123; the block does not drop or change T123, which is reviewed on its own section."
+    },
+    {
+     "id": "T122-exits-order-budget",
+     "summary": "Ordered after T120; green exits make static, make rust-test, make hooks-test HOOKS_ALL=1 and make land; red exits record the failure and set the task down, an impossibility claim ruled through make arbiter-ask; budget one landing.",
+     "class": "within",
+     "why": "Procedure that narrows nothing asked."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

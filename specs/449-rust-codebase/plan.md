@@ -548,3 +548,61 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)
+
+**Not landed** (its plan review, BLOCKED 2026-11-12): the saving was the suite's alone, not the full hook run's, so it misses the GM's condition ("if you identify concrete targets with significant measured expected savings then go ahead and do them ... Otherwise you can just keep working on the port of the tooling"). The decisions below are the record of what was tried and measured.
+
+- **Approach**: the idle-tests guard's fixture seams `IDLE_WAIT_S` and `IDLE_DEFER_S` take fractions of a second (`seconds_ms` in `rust/guard/src/guards/idle_tests_hooks.rs`, honored only inside a fixture as before), and the suite (`tests/hooks/test-idle-tests-hooks.sh`) waits fractions of a second where it waited whole seconds.
+
+   **Decisions** (the GM's pre-approval in `request.md`, "a fifth efficiency round"; FR-002):
+   - Where the suite's time went: the full hook run's longest suite, 35.0 s alone, its cases waiting whole seconds of real time (the timer counts awake time in its own ticks, so a 3-second seam is 3 real seconds), and in a profiled full run its 35.0 s the longest while the run held no pressure on CPU, memory or I/O (stalls of 0.64 s, 17 microseconds and 0.18 s over the run, peak memory 7.75 GB of the 10 GB cap) (observed 2026-11-12, method: the suite under `bash -x` with each line's process and `EPOCHREALTIME`, the main shell's time summed by case and by `check`; `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r5/profile.sh`, the cgroup's `memory.current` and the `some` totals of its `cpu`, `memory` and `io` pressure files around `make hooks-test HOOKS_ALL=1`).
+   - The change: the seams parse fractions, carried in milliseconds (`seconds_ms`; the real waits stay whole minutes, `minutes_ms`, so a real deferral's message is as before), `wait_awake` folded into `wait_ms`; the suite's tick from 0.2 s to 0.05 s so a fraction stays exact, its waits from 3, 4, 2 and 1 s to 0.3, 0.6, 0.3 and 0.2 s, its two fixed 1.5 s sleeps to 0.8 s and 1.0 s, and its slow runner's 5 s, and the sleep that outlasts it, to 3 s (each a CONVENTION, the fixture's own constant, chosen to keep every case's order of events). Every case and check stays: the suspend case still asks a full wait after the jump (at least 0.35 s, the wait 0.6 s), and the ticker's simulated second a 0.1 s drifts far under the 100 s suspend threshold at the faster tick (the fixture's CONVENTION values, `IDLE_SUSPEND_S=100` in the suite).
+   - Measured the same way before and after (SC-007): the suite alone 35.0 s before and 17.3 s, 16.9 s and 17.0 s after, its 34 checks passing each time (observed 2026-11-12, method: `date +%s.%N` around `bash tests/hooks/test-idle-tests-hooks.sh`, at a load of about 3). The full hook run did not move: 52.1 s before, 53.1 s and 54.1 s after, because the other suites slowed inside it, sync-with-main from 28.3 s to 45.5 s and 46.5 s and entry-gate from 24.9 s to 37.6 s and 42.7 s (observed 2026-11-12, method: `/usr/bin/time` around `make hooks-test HOOKS_ALL=1`, its `ran` line). The run is held by something the suites share that the pressure figures do not show, not by its longest suite; the guard wrapper's build lock is not it (it is taken with `-n` and only for a build). So the saving is the suite's own, wherever it runs alone (a change to the idle-tests guard re-runs it alone), and T123's premise, a run bound by its schedule, does not hold.
+   - The checks: the guard's tests 555 green and its lines all reached, clippy pedantic clean (the fraction's cast in one function, its saturation a reasoned exception) (observed 2026-11-12, method: `l7r-gate.sh rust test`, `uncovered` and `lint` on the guard).
+
+### T122 Approach (checklist part A)
+
+1. **The goal, in the world.** The idle-tests suite waits only as long as its cases need.
+2. **The constraints.** FR-002: every case and check held.
+3. **Where each comes from.** G: the GM's pre-approval of 2026-11-12 in `request.md`; O: the profile and the timings above.
+4. **Do they describe the world here?** Measured on this clone.
+5. **The order.** After T120.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite's time above.
+10. **Before moving a constant.** The fixture's own tick and waits, none of the guard's real ones.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** yes, tooling time, not the generator:
+1. **Where does the time go?** Real seconds of waiting the fixture asked for.
+2. **Does the change remove work, or only move it?** Removes it: the waits are shorter, the cases the same.
+3. **What do you expect it to save, and why?** The suite's waiting, measured above; not the full run's, which another bound holds.
+4. **How does the work grow?** With the cases' waits, now fractions.
+5. **What did the before and after show, and under what conditions?** Three runs alone and two full runs, on a lightly loaded host.
+6. **Did any map move?** No: no engine code changes.
+
+### T123 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T123 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
