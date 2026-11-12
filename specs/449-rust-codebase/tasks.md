@@ -347,8 +347,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T105 A core edit's coverage builds made together: make static builds each gate crate's coverage binary one after another, 17 builds and 14.6 s of 54.0 s after a core edit (2026-11-11) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: a family's owed coverage binaries built together: make static after a core edit 65.0 to 57.2 s
-- [ ] T106 The sync-with-main hook suite's own time: 25.6 s alone, 56.5 s amid the others, the full hook run's critical path (2026-11-11) (the GM 2026-11-11)
+- [x] T106 The sync-with-main hook suite's own time: 25.6 s alone, 56.5 s amid the others, the full hook run's critical path (2026-11-11) (the GM 2026-11-11)
       research: rendering
+      verify: DONE. landed: the sync-with-main suite's fixture built once and copied a case: 23.4-24.5 s to 19.1-19.5 s
 - [x] T107 The record's owed list's git calls: about 35 a computation, 0.1 s on a fixture and more on the tree, wherever it runs (2026-11-11) (the GM 2026-11-11)
       research: rendering
       verify: DONE. landed: the record's owed list reads git's state once a computation: 24 git calls to 9 on the fixture, make record-owed 44 to 14
