@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-12T18:22:55Z",
+  "target": "plan-gate push",
+  "commit": "1640c4509",
+  "why": "the changed blocks are T128's new template, filed by ask:449-T90-scope, and T91's template heading, removed when its tick archived its reviewed section"
+}
