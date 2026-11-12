@@ -111,7 +111,7 @@
     },
     "land": {
       "kind": "check",
-      "what": "scripts/land.py - make land / make land-batch: refuses a landing with every cheap refusal named together, else runs what it owes, pushes and ticks; each run recorded passed or refused"
+      "what": "rust/gate/crates/land/src/land.rs (`l7r-gate land`) - make land / make land-batch: refuses a landing with every cheap refusal named together, else runs what it owes, pushes and ticks; each run recorded passed or refused"
     },
     "rust_checks": {
       "kind": "check",

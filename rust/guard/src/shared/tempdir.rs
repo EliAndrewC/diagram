@@ -14,6 +14,13 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+/// INT and TERM caught for the rest of the process, `then` run with the signal's number first - before every held directory is removed
+/// and the process exits as the signal would (128 + its number). The one handler a process has: the `TempDir`s' and a caller's step
+/// together (feature 449 T121: the Rust land's stop of its gate and cohort).
+pub fn before_exit(then: fn(i32)) {
+    signals::before_exit(then);
+}
+
 /// A directory of this process, removed on drop.
 #[derive(Debug)]
 #[must_use = "the directory is removed as soon as this value is dropped"]

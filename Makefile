@@ -365,29 +365,8 @@ guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure guard-log $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
 
 audit:          ## [project] how the gate has actually been used - every run and every bypass
-	@python3 -c "import json,glob,collections,os; \
-rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
-print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
-[print(f\"  {r['utc']}  {r['scope']:<9} {r['seconds']:>4}s  {r['result']:<22} {r['commit']}  {(r.get('mode','')+' '+str(r.get('selected',''))).strip()}\") for r in rows[-25:]] or print('  (none yet)'); \
-c=collections.Counter(r['scope'] for r in rows); \
-print(f\"  {len(rows)} runs: \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))) if rows else None; \
-b=sorted((json.load(open(f)) for f in glob.glob('dev/bypass-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
-print(chr(10)+'\033[1mBypasses\033[0m (dev/bypass-log/) - a FULL run is only justified at the END of a feature'); \
-[print(f\"  {r['utc']}  {(r.get('outcome') or r.get('guard') or '?'):<10} {(r.get('why') or r.get('reason') or r.get('what') or '')[:76]}\") for r in b[-15:]] or print('  (none yet)'); \
-print()"
-	@python3 -c "import json,glob,os,collections; \
-rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json')) if os.path.getsize(f)]; \
-print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
-by=collections.defaultdict(collections.Counter); \
-[by[r['guard']].update([r['event']]) for r in rows]; \
-rules=collections.defaultdict(collections.Counter); \
-[rules[r['guard']].update([r.get('rule') or r['event']]) for r in rows]; \
-[ (print(f\"  {g:<12} \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))+(f\"   escape rate {c['escaped']/max(1,c['escaped']+c['blocked']):.0%}\" if c['blocked'] or c['escaped'] else '')), \
-   (print('               by rule: '+', '.join(f'{k}={v}' for k,v in rules[g].most_common(4))) if len(rules[g])>1 and set(rules[g])-set(c) else None)) for g,c in sorted(by.items())] or print('  (none recorded yet)'); \
-esc=[r for r in rows if r['event']=='escaped']; \
-[print('\033[1m  escapes taken, with what the session said\033[0m')] and [print(f\"    {r['utc'][5:16]}  {r['guard']:<12} {(r['detail'] or '(no reason recorded)')[:88]}\") for r in sorted(esc,key=lambda r:r['utc'],reverse=True)[:8]] if esc else None; \
-print(f\"  {len(rows)} entries\"+(f\", {min(r['utc'] for r in rows)} to {max(r['utc'] for r in rows)}\" if rows else '')); \
-print()"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure audit runs
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure audit guards
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - GATED since feature 173)\n'
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --list .
 	@printf '  A file over the bar FAILS `make lint`, and so `make done` and the push. The one way out\n'
@@ -402,14 +381,7 @@ print()"
 	@printf '\033[1mClass entries with no research section\033[0m (feature 234 - the declared-silence form)\n'
 	@python3 -c "import sys; sys.path.insert(0, '.'); sys.path.insert(0, 'scripts'); from l7r.diagram.interactive.classes import CLASSES; import importlib.util as u; sp=u.spec_from_file_location('ceh','scripts/gates/check-entry-headings.py'); m=u.module_from_spec(sp); sp.loader.exec_module(m); rows=[(k,fc.entry) for k,fc in sorted(CLASSES.items()) if m.SILENT.search(fc.entry)]; [print(f'  {k:<22} {e}') for k,e in rows]; print(f'  {len(rows)} of {len(CLASSES)} entries name no section; the other {len(CLASSES)-len(rows)} must RESOLVE, checked at the gate and the push.')"
 	@printf '  A broken heading and a deliberate silence are told apart by this FORM, never by a non-match.\n\n'
-	@python3 -c "import json,os,pathlib,subprocess; \
-root=pathlib.Path(subprocess.run(['git','rev-parse','--show-toplevel'],capture_output=True,text=True).stdout.strip()); \
-mirror=root.parent.parent if root.parent.name=='.clones' else root; \
-p=mirror/'.specify'/'feature-numbers.jsonl'; \
-rows=[json.loads(l) for l in p.read_text().splitlines() if l.strip()] if p.is_file() else []; \
-print('\033[1mFeature numbers claimed\033[0m ('+str(p)+' - make claim, feature 197)'); \
-[print(f\"  {r.get('utc','?'):<20} {r.get('number',0):>4}  {r.get('slug','?'):<40} {r.get('clone','?')}\") for r in rows[-10:]] or print('  (none yet - every claim made by make claim lands here)'); \
-print(f'  {len(rows)} claims recorded') if rows else None; print()"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure audit claims
 
 docs:           ## [project] regenerate docs/make-targets.html from this Makefile's own `##` lines
 	@python3 scripts/make-docs.py . --write
@@ -550,13 +522,16 @@ step-back-off:  ## [project] suspend the hourly step-back, not remove it: the ho
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh reviews checkpoint switch off --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back suspended - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
 step-back-on:   ## [project] resume the hourly step-back (feature 405 T43)   REASON="..."
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh reviews checkpoint switch on --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back resumed - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
+# THE LANDING (feature 449 T121, `ask:449-T83-scope`): `l7r-gate land`, the Rust port of `scripts/land.py`, the same in `make land`,
+# `make land-batch` and `make land-stop`. The commit deleting `land.py` was the last the Python landed, run from its saved copy.
+LAND_RUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" land
 land: export LAND_NOTE = $(NOTE)
 land: export LAND_BOXES = $(BOXES)
 land: export COVER_OK := $(COVER_OK)
 land:           ## [project] land one task or several and tick them: every cheap refusal first and together (the changed modules' coverage among them), then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446), the push, the ticks (feature 405 T33)   F=405 T="T12 [T13]" NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes] [COVER_OK="<reason>"]
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
 	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$(COVER_OK)",@:)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" "$(F)" "$(T)"
+	@$(LAND_RUN) "$(F)" "$(T)"
 
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
@@ -565,12 +540,12 @@ gate-costs:     ## [performance] what a gate run costs here, from the run record
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure gate-costs $(if $(SINCE),--since "$(SINCE)",)
 
 land-stop:       ## [project] stop this tree's running `make land` cleanly - its gate and cohort stop with it (405 T90)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" --stop
+	@$(LAND_RUN) --stop
 
 land-batch: export LAND_NOTE = $(NOTE)
 land-batch:     ## [project] the same command as make land (feature 385 T117's name, kept)   F=385 T="T106 T108" NOTE="what was verified"
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land-batch: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" "$(F)" "$(T)"
+	@$(LAND_RUN) "$(F)" "$(T)"
 
 phase-read:     ## [project] let ONE of a started phase task's held old-code files be read for ten minutes (to replace the stage's thin Python function, say), the reason logged - the phase-source guard's escape for the Read tool (feature 444)   FILE=<path> WHY="<reason>"
 	@if [ -z "$(FILE)" ] || [ -z "$(WHY)" ]; then printf 'make phase-read: FILE=<path> and WHY="<reason>" are required\n' >&2; exit 2; fi
@@ -629,7 +604,7 @@ speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, 
 
 replay-owing:   ## [project] replay recorded commits through the old owing and the new: modal-depiction units and impl-drift claims owed, per commit and in total (feature 375 SC-001)   REVS="<sha> ..." [OUT=<dir>]
 	@if [ -z "$(REVS)" ]; then printf 'make replay-owing: REVS="<commit> ..." is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/replay_owing.py" $(REVS) $(if $(OUT),--out "$(OUT)",) $(if $(TRIAGE),--triage,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" replay-owing $(REVS) $(if $(OUT),--out "$(OUT)",) $(if $(TRIAGE),--triage,)
 
 preflight:      ## [tests] the gate's first phase, in seconds: the derived files regenerated, the record and its pointers, make quick - and, here only (not in the gate, 405 T47), the changed engine lines a quick test runs (feature 375)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)"

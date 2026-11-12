@@ -594,6 +594,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T121 (T83's fifth slice, the landing, `ask:449-T83-scope`)": {
+   "sha256": "382aa1fbee18f49cefdc2ad364304acea0e0e1bcd895af7a45e1ec07b1544f7a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T121 Approach (checklist part A)": {
+   "sha256": "52f03d05597e1e490927351fda619f23a60891104badd6c887179a41c830e07a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7735,6 +7747,101 @@
      "why": "FR-002 binds the cases that tests and suites hold, and none of these is held. -h exiting 2 is ruled directly by ask:449-usage-text: --help is bound only where a kept case holds it. The most reachable item is a non-ASCII letter in a real trigger, which would change a bundle's filename only. It is recorded, not reproduced, and it does not change the class."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T121 (T83's fifth slice, the landing, `ask:449-T83-scope`)",
+    "### T121 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T121-scope",
+     "summary": "land.py, work_budget_view.py and replay_owing.py ported together with no door; make audit's three non-CLASSES sections into measure; make land, land-batch, land-stop and replay-owing repointed; the three .py deleted in the same cut",
+     "class": "within",
+     "why": "This is ask:449-T83-scope's T121 slice as ruled: land.py with work_budget_view.py, replay_owing.py's OLD side by T121 at the latest, no door (ask:449-T77-replays), the three non-CLASSES audit recipes going with T121, and the CLASSES one left as a phase-4 remainder. The deletion follows FR-001 and the GM's standing approval to delete ported Python."
+    },
+    {
+     "id": "own-crate",
+     "summary": "A new gate crate `land` (l7r-gate land, l7r-gate replay-owing)",
+     "class": "within",
+     "why": "Where the code lives is a design choice. The request and the spec leave it open, and it narrows nothing."
+    },
+    {
+     "id": "in-process-vs-commands",
+     "summary": "The ledger, speckit-todo --holding and the claims are called in process; the stamp, coverage-exempt, arbiter gate-held, cohort, the *-gate.sh scripts, make, sync-with-main, make-docs and ruff stay commands, as the Python ran them",
+     "class": "within",
+     "why": "ask:449-T83-scope says T121 calls the ledger, speckit-todo and the claims in process. Everything else is kept in the form the Python used, which FR-002 and FR-003 ask for."
+    },
+    {
+     "id": "tick-task-land-check",
+     "summary": "tick-task.py stays Python, run by path; it gains a --land-check flag so the first pass asks it about every task in one process, its rows report box_open, and the Rust makes the _box_flag choice; the refusal is asked in the first pass instead of just before each tick",
+     "class": "within",
+     "why": "ask:449-T83-scope keeps tick-task.py as Python behind the Rust land, run by path under the T065 clause. One process per run is what FR-006 asks for, the boxes are still read by the one boxes_refusal (FR-003), and the _box_flag choice stays in Rust, so no landing logic moves into Python. The block rests on an unmeasured premise: that nothing between the first pass and a tick changes that tick's refusal, because 'each of its own task'. The case that would break this is a land-batch where a later task's refusal reads an earlier task's tick in the same landing, for example a closing tick after a sibling. The block's list of 53 command cases names 'a closing tick refused and reverted', but it does not say a batch with an earlier sibling tick was among them. If the refusal does read sibling state, this becomes an FR-002 difference. That is a gap in the differential, not a narrowing of the request."
+    },
+    {
+     "id": "engine-path-regex",
+     "summary": "The engine-path question the land asked codeid.py is answered by the cohort crate's identical regex, is_landing_engine, in process",
+     "class": "within",
+     "why": "ask:449-T062-py-id keeps codeid.py for the .py id (ast.dump), not for a path regex. Rust already holds an identical regex, so this adds no second implementation of anything the Python still owns, and the outputs are covered by the differential."
+    },
+    {
+     "id": "dead-branches",
+     "summary": "land.py's file_left branch (no caller sets it) and the start_cover branches (None since FR-001b deleted the Python tests) are not ported",
+     "class": "within",
+     "why": "Code that nothing can reach produces no verdict or output, so FR-002 has nothing to bind there. start_cover went dead through FR-001b itself. Both are backed by a dated git grep census."
+    },
+    {
+     "id": "door-verbs-until-T124",
+     "summary": "The claims door verbs only land.py asks (scope_split, file_left, flight_live, CLAIMS_FEATURE_DIR) and seam::file_left stay through this commit and are removed in T124",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:449-T82-claims has land.py on claims_door until T83. Keeping these verbs past T121 is a narrowing, but the ruling's own words force it: this commit has to be landed by the Python land.py, which calls these verbs during the run. Removing them in the same commit cannot work. The removal is now owed to T124. This bundle does not show that T124 is filed or what it holds, so I have not confirmed it. The session must make sure it exists."
+    },
+    {
+     "id": "gate-machinery",
+     "summary": "GATE_MACHINERY: scripts/land.py replaced by rust/gate/crates/land/",
+     "class": "within",
+     "why": "The existing rule (a change to the land runs the tooling tests) follows the code to its new home. This keeps what is already enforced rather than adding anything."
+    },
+    {
+     "id": "term-handler-fix",
+     "summary": "The land registers its stop step on the guard's single TERM handler (l7r_guard::shared::tempdir::before_exit), pinned by tests",
+     "class": "within",
+     "why": "This fixes a Rust-side defect the differential found, where a stopped landing exited 143 with its gate still running. The fix makes the port behave as the Python did, which is what FR-002 asks for."
+    },
+    {
+     "id": "byte-parity-kept",
+     "summary": "The usage text naming land.py, -h exiting 2, and INT cleaning only the scratch and exiting 130 are kept; make land-stop finds an l7r-gate land process",
+     "class": "within",
+     "why": "ask:449-usage-text holds the exit status and the hand-written text, and keeping more than that ruling binds narrows nothing. land-stop has to look for the process that is now the land, and its cases are in the differential."
+    },
+    {
+     "id": "landing-commit-LAND_RUN",
+     "summary": "The commit deletes land.py and points make land at l7r-gate land (the LAND_DRIVER switch collapsed); it is landed by HEAD's land.py saved outside the tree and run through make land ... LAND_RUN=\"python3 <saved runner>\"",
+     "class": "within",
+     "why": "This carries out ask:449-T83-scope's 'its own commit the last the Python land.py lands and the one that deletes it'. The block does not say whether the LAND_RUN override stays in the Makefile after this commit. If it stays, it is a permanent knob that can put any command in place of the land. Nobody asked for that and no escape records its use, so it would be unrequested behavior owing either a ruling or a removal (for example in T124). It is not a narrowing of what was asked, so it does not block this verdict."
+    },
+    {
+     "id": "differential-and-normalizations",
+     "summary": "FR-002 proof: a verdict replay of 104 runs with 0 differing; 53 command cases with 1 differing (push-failed, a same-second bypass-record name); 14 replay-owing cases and 50 audit cases with 0 differing; failure parity; normalizations for tracebacks, argparse usage, record file names, utc and commit, same-second add-or-modify, JOBS and memory figures, and commit ids",
+     "class": "within",
+     "why": "This is the replay over recorded landings that the ruling asks for. Each normalization is either a ruled case (ask:449-usage-text covers traceback and argparse text) or a clock, id or machine artifact. The one remaining difference comes from naming records by the second inside the harness, not from Python and Rust behaving differently."
+    },
+    {
+     "id": "sc001-replay",
+     "summary": "specs/375's sc001-replay is left as it is (prose that make cannot parse, listed NOT RE-MEASURED before and after); the 14 replay-owing cases stand as its proof of sameness",
+     "class": "within",
+     "why": "FR-001's rewrite clause covers commands that run Python in its three named forms. ask:449-T83-scope itself says this entry records make replay-owing, which stays. Aside for the arbiter or the GM: the ruling assumed make figures re-runs this entry, and the block measured that it does not, before the cut or after. The entry stays permanently NOT RE-MEASURED under a rule that figures are re-run, never read. Fixing that is not part of this task."
+    },
+    {
+     "id": "census-and-checks",
+     "summary": "Provenance comments, rust/gate/CLAUDE.md, scripts/CLAUDE.md and docs/guards.md repointed by a git grep census; make static, rust-test and hooks-test HOOKS_ALL=1 green",
+     "class": "within",
+     "why": "The census at the cut is what ask:449-T83-scope asks for, and its search space is stated (the three names and LAND_DRIVER, outside specs/ and dev/)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13483,6 +13590,99 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T121": {
+   "section_sha256": "2a361b2a6a0aca5ef56bb8ddff92bd807b638eb3ad15cbbfdd9d3a23066274a6",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T121-scope",
+     "summary": "land.py, work_budget_view.py and replay_owing.py ported together with no door; make audit's three non-CLASSES sections into measure; make land, land-batch, land-stop and replay-owing repointed; the three .py deleted in the same cut",
+     "class": "within",
+     "why": "This is ask:449-T83-scope's T121 slice as ruled: land.py with work_budget_view.py, replay_owing.py's OLD side by T121 at the latest, no door (ask:449-T77-replays), the three non-CLASSES audit recipes going with T121, and the CLASSES one left as a phase-4 remainder. The deletion follows FR-001 and the GM's standing approval to delete ported Python."
+    },
+    {
+     "id": "own-crate",
+     "summary": "A new gate crate `land` (l7r-gate land, l7r-gate replay-owing)",
+     "class": "within",
+     "why": "Where the code lives is a design choice. The request and the spec leave it open, and it narrows nothing."
+    },
+    {
+     "id": "in-process-vs-commands",
+     "summary": "The ledger, speckit-todo --holding and the claims are called in process; the stamp, coverage-exempt, arbiter gate-held, cohort, the *-gate.sh scripts, make, sync-with-main, make-docs and ruff stay commands, as the Python ran them",
+     "class": "within",
+     "why": "ask:449-T83-scope says T121 calls the ledger, speckit-todo and the claims in process. Everything else is kept in the form the Python used, which FR-002 and FR-003 ask for."
+    },
+    {
+     "id": "tick-task-land-check",
+     "summary": "tick-task.py stays Python, run by path; it gains a --land-check flag so the first pass asks it about every task in one process, its rows report box_open, and the Rust makes the _box_flag choice; the refusal is asked in the first pass instead of just before each tick",
+     "class": "within",
+     "why": "ask:449-T83-scope keeps tick-task.py as Python behind the Rust land, run by path under the T065 clause. One process per run is what FR-006 asks for, the boxes are still read by the one boxes_refusal (FR-003), and the _box_flag choice stays in Rust, so no landing logic moves into Python. The block rests on an unmeasured premise: that nothing between the first pass and a tick changes that tick's refusal, because 'each of its own task'. The case that would break this is a land-batch where a later task's refusal reads an earlier task's tick in the same landing, for example a closing tick after a sibling. The block's list of 53 command cases names 'a closing tick refused and reverted', but it does not say a batch with an earlier sibling tick was among them. If the refusal does read sibling state, this becomes an FR-002 difference. That is a gap in the differential, not a narrowing of the request."
+    },
+    {
+     "id": "engine-path-regex",
+     "summary": "The engine-path question the land asked codeid.py is answered by the cohort crate's identical regex, is_landing_engine, in process",
+     "class": "within",
+     "why": "ask:449-T062-py-id keeps codeid.py for the .py id (ast.dump), not for a path regex. Rust already holds an identical regex, so this adds no second implementation of anything the Python still owns, and the outputs are covered by the differential."
+    },
+    {
+     "id": "dead-branches",
+     "summary": "land.py's file_left branch (no caller sets it) and the start_cover branches (None since FR-001b deleted the Python tests) are not ported",
+     "class": "within",
+     "why": "Code that nothing can reach produces no verdict or output, so FR-002 has nothing to bind there. start_cover went dead through FR-001b itself. Both are backed by a dated git grep census."
+    },
+    {
+     "id": "door-verbs-until-T124",
+     "summary": "The claims door verbs only land.py asks (scope_split, file_left, flight_live, CLAIMS_FEATURE_DIR) and seam::file_left stay through this commit and are removed in T124",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:449-T82-claims has land.py on claims_door until T83. Keeping these verbs past T121 is a narrowing, but the ruling's own words force it: this commit has to be landed by the Python land.py, which calls these verbs during the run. Removing them in the same commit cannot work. The removal is now owed to T124. This bundle does not show that T124 is filed or what it holds, so I have not confirmed it. The session must make sure it exists."
+    },
+    {
+     "id": "gate-machinery",
+     "summary": "GATE_MACHINERY: scripts/land.py replaced by rust/gate/crates/land/",
+     "class": "within",
+     "why": "The existing rule (a change to the land runs the tooling tests) follows the code to its new home. This keeps what is already enforced rather than adding anything."
+    },
+    {
+     "id": "term-handler-fix",
+     "summary": "The land registers its stop step on the guard's single TERM handler (l7r_guard::shared::tempdir::before_exit), pinned by tests",
+     "class": "within",
+     "why": "This fixes a Rust-side defect the differential found, where a stopped landing exited 143 with its gate still running. The fix makes the port behave as the Python did, which is what FR-002 asks for."
+    },
+    {
+     "id": "byte-parity-kept",
+     "summary": "The usage text naming land.py, -h exiting 2, and INT cleaning only the scratch and exiting 130 are kept; make land-stop finds an l7r-gate land process",
+     "class": "within",
+     "why": "ask:449-usage-text holds the exit status and the hand-written text, and keeping more than that ruling binds narrows nothing. land-stop has to look for the process that is now the land, and its cases are in the differential."
+    },
+    {
+     "id": "landing-commit-LAND_RUN",
+     "summary": "The commit deletes land.py and points make land at l7r-gate land (the LAND_DRIVER switch collapsed); it is landed by HEAD's land.py saved outside the tree and run through make land ... LAND_RUN=\"python3 <saved runner>\"",
+     "class": "within",
+     "why": "This carries out ask:449-T83-scope's 'its own commit the last the Python land.py lands and the one that deletes it'. The block does not say whether the LAND_RUN override stays in the Makefile after this commit. If it stays, it is a permanent knob that can put any command in place of the land. Nobody asked for that and no escape records its use, so it would be unrequested behavior owing either a ruling or a removal (for example in T124). It is not a narrowing of what was asked, so it does not block this verdict."
+    },
+    {
+     "id": "differential-and-normalizations",
+     "summary": "FR-002 proof: a verdict replay of 104 runs with 0 differing; 53 command cases with 1 differing (push-failed, a same-second bypass-record name); 14 replay-owing cases and 50 audit cases with 0 differing; failure parity; normalizations for tracebacks, argparse usage, record file names, utc and commit, same-second add-or-modify, JOBS and memory figures, and commit ids",
+     "class": "within",
+     "why": "This is the replay over recorded landings that the ruling asks for. Each normalization is either a ruled case (ask:449-usage-text covers traceback and argparse text) or a clock, id or machine artifact. The one remaining difference comes from naming records by the second inside the harness, not from Python and Rust behaving differently."
+    },
+    {
+     "id": "sc001-replay",
+     "summary": "specs/375's sc001-replay is left as it is (prose that make cannot parse, listed NOT RE-MEASURED before and after); the 14 replay-owing cases stand as its proof of sameness",
+     "class": "within",
+     "why": "FR-001's rewrite clause covers commands that run Python in its three named forms. ask:449-T83-scope itself says this entry records make replay-owing, which stays. Aside for the arbiter or the GM: the ruling assumed make figures re-runs this entry, and the block measured that it does not, before the cut or after. The entry stays permanently NOT RE-MEASURED under a rule that figures are re-run, never read. Fixing that is not part of this task."
+    },
+    {
+     "id": "census-and-checks",
+     "summary": "Provenance comments, rust/gate/CLAUDE.md, scripts/CLAUDE.md and docs/guards.md repointed by a git grep census; make static, rust-test and hooks-test HOOKS_ALL=1 green",
+     "class": "within",
+     "why": "The census at the cut is what ask:449-T83-scope asks for, and its search space is stated (the three names and LAND_DRIVER, outside specs/ and dev/)."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

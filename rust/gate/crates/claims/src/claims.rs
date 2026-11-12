@@ -68,6 +68,83 @@ pub fn rows_and_index(
     ))
 }
 
+/// The open-claims feature a Rust stage's landing files the findings outside its own code to (feature 444 FR-021).
+pub const CLAIMS_FEATURE_DIR: &str = seam::CLAIMS_FEATURE_DIR;
+
+/// The claims in scope at `root`, its questions under `root/research/questions`.
+fn current_at(root: &Path) -> Result<index::Cur, crate::record::repo::Fail> {
+    let mut reader = scope::Reader::new(&crate::record::repo::tree_of(root), root);
+    index::current(&mut reader, root, &root.join(index::QUESTIONS))
+}
+
+/// `(key, why)` for every claim owed a check at `root` against `index` and `store` - what `claims_door.owed` answered, asked in
+/// process by `l7r-gate replay-owing` (feature 449 T121, `ask:449-T83-scope`) and by the door.
+///
+/// # Errors
+///
+/// Where what it reads fails: the error says which and why.
+pub fn owed_at(
+    root: &Path,
+    index: &index::Index,
+    store: &index::Store,
+) -> Result<Vec<(String, String)>, crate::record::repo::Fail> {
+    let cur = current_at(root)?;
+    index::owed(&cur, index, Some(&root.join(index::QUESTIONS)), Some(store))
+}
+
+/// Every procedure-section claim of `root` re-keyed in `index` and `store` (`make claims-backfill-sections`); how many - the replay's
+/// migration of a parent's index (feature 449 T121), which `claims_door.backfill_sections` answered.
+///
+/// # Errors
+///
+/// Where what it reads fails: the error says which and why.
+pub fn backfill_at(
+    root: &Path,
+    index: &mut index::Index,
+    store: &mut index::Store,
+) -> Result<usize, crate::record::repo::Fail> {
+    let cur = current_at(root)?;
+    Ok(commands::backfill_sections(&cur, index, store))
+}
+
+/// The open findings a Rust stage's landing answers for, and the rest in the files it changes (feature 444 FR-021): `make land`'s
+/// question, in process since feature 449 T121 (`ask:449-T83-scope`), where `land.py` asked the door.
+///
+/// # Errors
+///
+/// Where what it reads or runs fails: the error says which and why.
+pub fn scope_split(
+    root: &Path,
+    report: &str,
+    changed: &[String],
+    seam: &[String],
+) -> Result<(Vec<String>, Vec<String>), crate::record::repo::Fail> {
+    let mut reader = scope::Reader::new(&crate::record::repo::tree_of(root), root);
+    seam::split(&mut reader, root, report, changed, seam)
+}
+
+/// Each finding outside the stage's own code filed once as an open row of the open-claims feature; how many.
+///
+/// # Errors
+///
+/// Where the feature's `found.jsonl` cannot be read or written.
+pub fn file_left(
+    root: &Path,
+    task: &str,
+    left: &[String],
+) -> Result<usize, crate::record::repo::Fail> {
+    seam::file_left(root, task, left)
+}
+
+/// The claims bundles in flight now (`claims_flight.live`).
+///
+/// # Errors
+///
+/// Where a flight mark cannot be read.
+pub fn flight_live(root: &Path) -> Result<Vec<String>, crate::record::repo::Fail> {
+    flight::live(root, flight::now())
+}
+
 /// A temporary directory no other run of this process or another takes, removed when it is dropped - on a `?` and a panic too
 /// (feature 449 T101): `tempfile.TemporaryDirectory`'s.
 pub fn temp_dir(tag: &str) -> l7r_guard::shared::tempdir::TempDir {

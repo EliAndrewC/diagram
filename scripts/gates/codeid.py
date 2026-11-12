@@ -40,8 +40,8 @@ from pathlib import Path
 
 _FUNCS = (ast.FunctionDef, ast.AsyncFunctionDef)
 #: THE ENGINE PATHS of a landing - a delta with one owes the landing cohort (`l7r.diagram.ci.delta.is_engine`'s list, feature 132
-#: FR-008). One definition, read by `scripts/land.py` and by the cohort's counter-only test (`cohort_known.counter_only`, feature
-#: 446), so the two can never disagree about what a counter-only delta may leave unchecked
+#: FR-008). `l7r-gate cohort`'s `ENGINE` (`rust/gate/crates/cohort/src/cohort.rs`) is its one live copy, which the counter-only test and
+#: `l7r-gate land` read since feature 449 T121 deleted `scripts/land.py`, its last Python reader; this one goes with this file (phase 4)
 ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")  # rust/: 444 T17
 
 

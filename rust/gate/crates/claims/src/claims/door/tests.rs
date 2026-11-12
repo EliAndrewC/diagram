@@ -39,9 +39,7 @@ fn each_verb_answers() {
         json!({"verb": "owed", "args": [r, {}, {}]}),
         json!({"verb": "load_index", "args": [root.join("dev/claims-index.json")]}),
         json!({"verb": "load_store", "args": [root.join("dev/claims-pages.json")]}),
-        json!({"verb": "backfill_sections", "args": [r, {}, {}]}),
         json!({"verb": "scope_split", "args": [r, "  DRIFTED        l7r/diagram/m.py::read#x - y\n", ["l7r/diagram/m.py"], ["l7r/diagram/m.py"]]}),
-        json!({"verb": "git_diff", "args": [r, "l7r/diagram/s.py"]}),
         json!({"verb": "file_left", "args": [r, "T1", []]}),
         json!({"verb": "flight_live", "args": [r]}),
         json!({"verb": "constants", "args": []}),
@@ -62,16 +60,20 @@ fn each_verb_answers() {
         .any(|r| r[1] == "new"));
     assert_eq!(got[2]["ok"], json!({}));
     assert_eq!(got[3]["ok"], json!({"x": []}));
-    assert_eq!(got[4]["ok"], json!([0, {}, {}]));
     assert_eq!(
-        got[5]["ok"][0],
+        got[4]["ok"][0],
         json!(["DRIFTED        l7r/diagram/m.py::read#x - y"])
     );
-    assert_eq!(got[6]["ok"], "");
-    assert_eq!(got[7]["ok"], 0);
-    assert_eq!(got[8]["ok"], json!([]));
-    assert_eq!(got[9]["ok"]["QUESTIONS"], "research/questions");
-    assert!(got[10]["error"].as_str().unwrap().contains("no verb nope"));
+    assert_eq!(got[5]["ok"], 0);
+    assert_eq!(got[6]["ok"], json!([]));
+    assert_eq!(got[7]["ok"]["QUESTIONS"], "research/questions");
+    assert!(got[8]["error"].as_str().unwrap().contains("no verb nope"));
+    // the two verbs that left with feature 449 T121: no caller kept them
+    let gone = ask(&[
+        json!({"verb": "backfill_sections", "args": [r, {}, {}]}),
+        json!({"verb": "git_diff", "args": [r, "l7r/diagram/s.py"]}),
+    ]);
+    assert!(gone.iter().all(|g| g["error"].is_string()));
     put(&root, "dev/claims-index.json", "{");
     let bad = ask(&[
         json!({"verb": "load_index", "args": [root.join("dev/claims-index.json")]}),
@@ -96,4 +98,20 @@ impl std::io::Write for Closed {
     fn flush(&mut self) -> std::io::Result<()> {
         Ok(())
     }
+}
+
+/// The replay's migration, asked in process since feature 449 T121 (`l7r-gate replay-owing`), as the door's `backfill_sections` answered.
+#[test]
+fn the_backfill_is_asked_in_process() {
+    let root = fixture("claims-backfill-at");
+    py_units(
+        &root,
+        &[],
+        &[("helper", "function", &["help - GUESS: 3 households"], false)],
+    );
+    let (mut index, mut store) = (serde_json::Map::new(), serde_json::Map::new());
+    assert_eq!(
+        crate::claims::backfill_at(&root, &mut index, &mut store),
+        Ok(0)
+    );
 }

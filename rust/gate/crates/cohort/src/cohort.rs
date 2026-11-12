@@ -53,6 +53,13 @@ static ENGINE: LazyLock<Regex> = LazyLock::new(|| {
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
+/// A path the landing counts as engine code (`codeid.ENGINE`): one regex for the counter-only test here and `l7r-gate land`'s engine
+/// delta (feature 449 T121), so the Rust land starts no `codeid.py` to read it, as `land.py` loaded that file by path for this alone.
+#[must_use]
+pub fn is_landing_engine(path: &str) -> bool {
+    ENGINE.is_match(path).unwrap_or(false)
+}
+
 /// Two versions of each file whose counters decide a commit pair.
 type Versions = Vec<(Vec<u8>, Vec<u8>)>;
 

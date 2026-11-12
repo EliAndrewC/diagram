@@ -1,0 +1,23 @@
+# The landing and the owing replay (feature 449 T121, T83's fifth slice, `ask:449-T83-scope`): `l7r-gate land`, `l7r-gate replay-owing`.
+[package]
+name = "l7r_gate_land"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_claims = { path = "../claims" }
+l7r_gate_cohort = { path = "../cohort" }
+l7r_gate_core = { path = "../core" }
+l7r_gate_owed = { path = "../owed" }
+l7r_gate_reviews = { path = "../reviews" }
+l7r_guard = { path = "../../../guard" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

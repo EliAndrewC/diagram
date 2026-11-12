@@ -525,28 +525,39 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-### T121 (<why: the finding or measurement that files it>)
+### T121 (T83's fifth slice, the landing, `ask:449-T83-scope`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `land.py` with `work_budget_view.py` and `replay_owing.py` ported with no door into a new gate crate `land` (`l7r-gate land`, `l7r-gate replay-owing`), `make audit`'s three sections that do not read `CLASSES` into `measure` (`l7r-gate measure audit runs|guards|claims`), `make land`, `make land-batch`, `make land-stop` and `make replay-owing` repointed, and the three `.py` deleted in the same cut, which lands through the Rust land.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-T83-scope`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - Its own crate: no existing gate crate builds on the ledger, the claims and the holding box together without the arbiter, which builds on most of the others. The ruling's three in-process asks (`reviews ledger-owed`, `speckit-todo --holding`, the claims' commands with their scope split and checks in flight) each call the function their command runs (`inproc.rs`). The gate's other subcommands (the stamp, `coverage-exempt stale`, `arbiter gate-held`, `cohort counter-only|port|check|rust-owed`), the three `*-gate.sh`, `make`, `sync-with-main.sh`, `make-docs.py` and `ruff` stay commands, as the Python ran them.
+   - `tick-task.py` stays Python (T85's) and is run by path: one flag added, `--land-check`, so the first pass asks it of every task in one process, as `land.py`'s import asked `tick` and `refusal` in one. Its rows also say whether `boxes_refusal` finds a research box open (`box_open`), and the Rust land makes `land.py`'s `_box_flag` choice itself from that: `--boxes` on a task's tick under `BOXES=1` where its box is open. The reading of the boxes stays `tick-task.py`'s one `boxes_refusal` (FR-003), asked in the process the first pass already starts (FR-006), where a flag doing the choice inside `tick-task.py` moved the land's logic into Python (the plan review's block, 2026-11-12). The Python asked just before each tick, the Rust in the first pass: nothing between them writes `tasks.md` but the landing's own ticks, each of its own task.
+   - The engine-path question the land asked `codeid.py` is the cohort crate's identical regex, `is_landing_engine`, asked in process.
+   - Not ported, as dead: `land.py`'s `file_left` branch, which no caller set, and the `start_cover` branches, `None` since the Python tests were deleted (feature 449 FR-001b) (observed 2026-11-12, method: `git grep` of each name). The claims door's verbs only `land.py` asks (`scope_split`, `file_left`, `flight_live`, `CLAIMS_FEATURE_DIR`) and `seam::file_left` stay through this commit, which the Python lands, and leave in T124, which the Rust land lands.
+   - `GATE_MACHINERY`, the paths that decide how a landing and its gate run: `scripts/land.py` replaced by `rust/gate/crates/land/`, the landing's code at its new home, so a change to the land still runs the tooling tests.
+   - A defect the differential found and fixed: the land's TERM handler was replaced by the guard's own the first time an in-process call made a `TempDir`, so a stopped landing exited 143 with its gate still running. The land registers its stop step on the guard's one handler (`l7r_guard::shared::tempdir::before_exit`), pinned in the guard's signal test and the land's child-process test.
+   - Kept for byte parity: the usage text naming `land.py`, `-h` exiting 2, an INT cleaning only the scratch and exiting 130 as the Python's `KeyboardInterrupt` did. `make land-stop` finds an `l7r-gate land` process, the land now being the binary.
+   - The landing commit, as the ruling has it: the last the Python `land.py` lands and the one that deletes it. The commit deletes `land.py` and points `make land` at `l7r-gate land` (the switch collapsed), so the landing runs HEAD's `land.py` as it stood before the commit, saved outside the tree and run with its own path set to `scripts/land.py` (`make land ... LAND_RUN="python3 <the saved copy's runner>"`), so every file it loads by its own directory (`tick-task.py`, `claims_door.py`, `codeid.py`, the gates, `hooks/lib`) resolves as it did. The door verbs it asks mid-run stay in this commit (above); `work_budget_view.py`, deleted with it, is loaded only at an engine landing, which this is not.
+   - The same outputs (FR-002), the Python always HEAD's. The verdict replay: every `(make land)` tick commit on the first parent since 2026-11-09 (50 landings, T066-T120), each from its tick's parent in a shared clone against a local bare origin, `make` and the push stubbed and recorded, in three modes (the real stamp; the stamp refusing once then passing, on the six newest; every escape set, through to the ticks and the push), 104 runs, 0 differing, `make done` asked in 66, ticks committed in 52, the push asked in 52 (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/replay.py`). The commands: 53 cases of `make land`, `land-batch` and `land-stop` (every argument and refusal, the six escapes good and bad, `BOXES`, a closing tick refused and reverted, push results 0, 3, 1 and a failing revert, engine, Rust, machinery and scripts deltas, the budget and Rust-gate branches, a stop idle and against a running landing), 1 differing, `push-failed`, whose revert shows a bypass record modified rather than deleted because the tick fell in the same second as an earlier record, records being named by the second (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/diff_land.py`). `make replay-owing` 14 cases (waves 106, 108 and 111, the `TRIAGE=1` commits, later commits, the argument and failure forms), 0 differing (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/diff_replay.py`). The audit 50 cases, 0 differing (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/diff_audit.py`). Failure parity: commits after T87 fail on both sides of the replay (their own `modal_owed.py` gone), and every broken-input case of the audit fails on both. Normalizations: tracebacks from `Traceback` on, argparse's usage text, the bypass records' file names, `utc` and `commit` and the same-second add-or-modify, the live machine's `JOBS` and memory figures, commit ids in a revert message.
+   - Timing: the verdict replay 430 s Python against 281 s Rust (observed 2026-11-12, method: the harnesses in `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/`). The commands 1,429 s against 1,491 s, mostly two 20-minute claims waits a side (observed 2026-11-12, method: the harnesses in `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/`). The audit 4.9 s against 3.2 s (observed 2026-11-12, method: the harnesses in `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/`).
+   - The recorded measurement: only `specs/375-enforced-wave-process/measurements.json`'s `sc001-replay` names one of the three, through `make replay-owing`, which stays. `make figures` lists it NOT RE-MEASURED before and after the cut, its command written as prose make cannot parse (observed 2026-11-12, method: `make figures SPEC=specs/375-enforced-wave-process`); the 14 replay cases above are its proof of sameness.
+   - The census at the cut: provenance comments, `rust/gate/CLAUDE.md`, `scripts/CLAUDE.md` and `docs/guards.md` repointed (observed 2026-11-12, method: `git grep` of the three names and `LAND_DRIVER` outside `specs/` and `dev/`). The checks: the port's `make static` and `make rust-test` green on 20 crates (`land` 51 tests, `measure` 130, `claims` 62, `cohort` 52, the guard 555), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check clean (observed 2026-11-12, method: those commands).
 
 ### T121 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make land` is Rust, the replay and the audit sections with it, the three `.py` gone.
+2. **The constraints.** FR-001, FR-002 and FR-003, the ruling `ask:449-T83-scope`.
+3. **Where each comes from.** G: the GM's words in `request.md` and the standing approval to delete ported Python; R: the rulings; O: the replay, the differentials and the census above.
+4. **Do they describe the world here?** Replayed over this clone's own recorded landings, every one since 2026-11-09 (measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/replay.py`)).
+5. **The order.** After T120, the slice the ruling put last.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and its own `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The verdict replay's 104 runs with no difference, the differentials' one explained difference, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)
@@ -605,4 +616,25 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 11. **Before fitting things into room.** <n/a, or the room given first>
 
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T124 (T121's follow-up: the claims-door verbs only `land.py` asked, `ask:449-T83-scope`)
+
+- **Approach**: the claims door's `scope_split`, `file_left`, `flight_live` and `CLAIMS_FEATURE_DIR` (Rust `door.rs` and `scripts/claims_door.py`) and `seam::file_left` with its constant removed, with their tests, the port's patch for them kept from T121's landing commit (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t83s5/landing-commit.patch`). They stayed through T121's commit so the Python `land.py` could land its own deletion, as the ruling has it, and leave once the Rust land is `make land`.
+
+### T124 Approach (checklist part A)
+
+1. **The goal, in the world.** No door verb is left that nothing asks.
+2. **The constraints.** FR-001 and FR-003, the ruling `ask:449-T83-scope`.
+3. **Where each comes from.** R: the ruling and T121's plan review; O: the census.
+4. **Do they describe the world here?** A `git grep` of each verb's name after T121 lands.
+5. **The order.** After T121's landing.
+6. **The exits.** Green: `make static`, `make rust-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The census naming the verbs only in provenance comments.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No.
 

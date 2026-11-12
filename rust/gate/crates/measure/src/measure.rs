@@ -3,6 +3,7 @@
 
 use std::path::Path;
 
+pub mod audit;
 pub mod event_log;
 pub mod events;
 pub mod feature_report;
@@ -70,9 +71,15 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("fix-yield") => fix_yield::cli(rest, &home()),
         Some("tool-yield") => tool_yield::cli(rest, root, &home()),
         Some("turn-time") => turn_time::cli(rest),
+        // three of `make audit`'s sections (feature 449 T121, `ask:449-T83-scope`), from the recipe's own working directory
+        Some("audit") => audit::cli(
+            rest,
+            &std::env::current_dir().unwrap_or_default(),
+            &audit::guard_dir(std::env::var("GUARD_LOG_DIR").ok().as_deref(), &home()),
+        ),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time\n"
+            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit\n"
                 .to_owned(),
             2,
         ),
@@ -97,6 +104,7 @@ mod tests {
         let dir = crate::checks::scratch("measure");
         assert_eq!(cli(&["nonsense".to_owned()], &dir).code, 2);
         assert_eq!(cli(&[], &dir).code, 2);
+        assert_eq!(cli(&["audit".to_owned()], &dir).code, 2);
         std::fs::create_dir_all(dir.join("a")).unwrap();
         std::fs::write(dir.join("a/x.json"), "{}").unwrap();
         std::fs::write(dir.join("y.txt"), "").unwrap();

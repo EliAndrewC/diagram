@@ -2,9 +2,8 @@
 //! line of `dev/work-budget.md`, every stage's status, and the stages whose counted operations at 40 households moved between the two
 //! newest runs in `dev/work-budget/`.
 //!
-//! Ported from `scripts/measure/work_budget_view.py` by feature 449 T118 because the report it prints in is ported here; `land.py` still
-//! imports the Python until T121 ports `land.py` with it (`ask:449-T83-scope` places `work_budget_view.py` in that slice), so the two
-//! copies stand together for the one slice between.
+//! Ported from `scripts/measure/work_budget_view.py` by feature 449 T118 because the report it prints in is ported here; the Rust land
+//! prints it too (`l7r-gate land`, T121, `ask:449-T83-scope`), one implementation for both, the `.py` deleted with `land.py`.
 
 use std::path::Path;
 

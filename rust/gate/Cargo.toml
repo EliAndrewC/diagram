@@ -26,6 +26,7 @@ l7r_gate_measure = { path = "crates/measure" }
 l7r_gate_owed = { path = "crates/owed" }
 l7r_gate_plan = { path = "crates/plan" }
 l7r_gate_downloads = { path = "crates/downloads" }
+l7r_gate_land = { path = "crates/land" }
 l7r_gate_record = { path = "crates/record" }
 l7r_gate_reviews = { path = "crates/reviews" }
 l7r_gate_rustc = { path = "crates/rustc" }

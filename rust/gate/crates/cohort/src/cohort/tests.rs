@@ -705,3 +705,28 @@ fn a_mode_change_alone_is_counter_only() {
     git(&root, &["commit", "-qm", "mode"]);
     assert!(Repo::new(&root, &py).counter_only(&before, "HEAD"));
 }
+
+/// The landing's engine paths, `codeid.ENGINE` path for path (feature 449 T121: the Rust land reads this one regex).
+#[test]
+fn the_landing_engine_is_codeid_s_list() {
+    use super::is_landing_engine;
+    for yes in [
+        "l7r/diagram/a.py",
+        "pool/x.gen.py",
+        "pool/m.json",
+        "rust/gate/src/lib.rs",
+        "rust/Cargo.toml",
+        "rust/gate/Cargo.lock",
+    ] {
+        assert!(is_landing_engine(yes), "{yes}");
+    }
+    for no in [
+        "scripts/land.py",
+        "l7r/diagram/a.md",
+        "rust/gate/CLAUDE.md",
+        "pool/a.py",
+        "xl7r/a.py",
+    ] {
+        assert!(!is_landing_engine(no), "{no}");
+    }
+}

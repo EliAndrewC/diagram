@@ -1,15 +1,17 @@
 //! Python's door to the claims tools (`l7r-gate claims-door`, `scripts/claims_door.py`; `ask:449-T82-claims`): what `land.py` and
-//! `replay_owing.py` read of the port until T83, and `impl_check.py`, a door caller at the phase-3 close. One process a run, no logic of
-//! its own, deleted with its last caller.
+//! `impl_check.py` read of the port - `land.py` until its Rust port replaces it (feature 449 T121, its landing commit removing the verbs
+//! only it asks: `scope_split`, `file_left`, `flight_live` and `CLAIMS_FEATURE_DIR`), `impl_check.py` a door caller at the phase-3 close.
+//! `backfill_sections` and `git_diff` left with T121: `replay_owing.py`, the one caller of the first, is Rust and asks
+//! [`super::backfill_at`] in process, and nothing asked the second. One process a run, no logic of its own, deleted with its last caller.
 
 use std::io::{BufRead, Write};
 use std::path::Path;
 
 use serde_json::{json, Map, Value};
 
-use super::index::{current, load_map, owed, Cur, QUESTIONS};
+use super::index::{current, load_map, Cur, QUESTIONS};
 use super::scope::Reader;
-use super::seam::{file_left, git_diff, split, CLAIMS_FEATURE_DIR};
+use super::CLAIMS_FEATURE_DIR;
 use crate::checks_door::serve_with;
 use crate::Reply;
 
@@ -67,34 +69,24 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
     match verb {
         "current" => Ok(rows_json(&read(&root)?)),
         "owed" => {
-            let cur = read(&root)?;
-            let (index, store) = (object(args, 1), object(args, 2));
-            let due = owed(&cur, &index, Some(&root.join(QUESTIONS)), Some(&store))?;
+            let due = super::owed_at(&root, &object(args, 1), &object(args, 2))?;
             Ok(json!(due
                 .into_iter()
                 .map(|(k, w)| json!([k, w]))
                 .collect::<Vec<_>>()))
         }
         "load_index" | "load_store" => Ok(Value::Object(load_map(&root)?)),
-        "backfill_sections" => {
-            let cur = read(&root)?;
-            let (mut index, mut store) = (object(args, 1), object(args, 2));
-            let n = super::commands::backfill_sections(&cur, &mut index, &mut store);
-            Ok(json!([n, index, store]))
-        }
         "scope_split" => {
-            let (own, left) = split(
-                &mut reader(&root),
-                &root,
-                &text(args, 1),
-                &strings(args, 2),
-                &strings(args, 3),
-            )?;
+            let (own, left) =
+                super::scope_split(&root, &text(args, 1), &strings(args, 2), &strings(args, 3))?;
             Ok(json!([own, left]))
         }
-        "git_diff" => Ok(json!(git_diff(&root, &text(args, 1)))),
-        "file_left" => Ok(json!(file_left(&root, &text(args, 1), &strings(args, 2))?)),
-        "flight_live" => Ok(json!(super::flight::live(&root, super::flight::now())?)),
+        "file_left" => Ok(json!(super::file_left(
+            &root,
+            &text(args, 1),
+            &strings(args, 2)
+        )?)),
+        "flight_live" => Ok(json!(super::flight_live(&root)?)),
         "constants" => Ok(
             json!({"CLAIMS_FEATURE_DIR": CLAIMS_FEATURE_DIR, "QUESTIONS": QUESTIONS,
                                  "INDEX": super::index::INDEX, "STORE": super::index::STORE}),

@@ -30,7 +30,7 @@ CLEARED = "counter-only (feature 446)"
 KINDS = ("function", "method", "class", "constant")
 
 
-def _codeid() -> Any:  # noqa: ANN401 - `scripts/gates/codeid.py` by path (stdlib only), as `land.py` loads it
+def _codeid() -> Any:  # noqa: ANN401 - `scripts/gates/codeid.py` by path (stdlib only), as `land.py` loaded it before feature 449 T121
     cached = sys.modules.get("l7r_codeid")
     if cached is not None:
         return cached

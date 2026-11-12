@@ -235,7 +235,41 @@ def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True, boxe
     return f"tick: refused - {why}", "" if not permitted else message
 
 
+def land_check(argv: list[str]) -> int:
+    """`tick-task.py --land-check <feature> <note> <task>... [--boxes]`: what `make land`'s first pass asks of each task, as JSON - a
+    list of `{"task", "tick", "refusal", "box_open"}`, `tick` the refusal `tick` raises ('' when it would tick), `refusal` what
+    `refusal(..., landed=False)` says ('' when none; not asked where `tick` refused), `box_open` whether `boxes_refusal` finds a research
+    box still open, which the Rust land reads to choose `--boxes` for that task's tick under `BOXES=1`, as `land.py`'s `_box_flag` did. WHY (feature 449 T121, `ask:449-T83-scope`): the Rust land runs
+    this file by path, as the ruling keeps it Python, where `land.py` imported `tick` and `refusal` - one process for every task, as the
+    import asked them in one. A failure raises, as the import's did."""
+    boxes = "--boxes" in argv
+    args = [a for a in argv if a != "--boxes"]
+    if len(args) < 3:
+        print("usage: tick-task.py --land-check <feature> <note> <task>... [--boxes]", file=sys.stderr)
+        return 2
+    feature, note, tasks = args[0], args[1], args[2:]
+    root = repo_root()
+    d = spec_dir(root, feature)
+    if d is None:
+        print(f"tick: no single specs/{feature}* directory under {root}", file=sys.stderr)
+        return 2
+    text = (d / "tasks.md").read_text(encoding="utf-8")
+    out = []
+    for task in tasks:
+        try:
+            tick(text, task, note)
+        except ValueError as e:
+            out.append({"task": task, "tick": str(e), "refusal": "", "box_open": bool(boxes_refusal(text, task))})
+            continue
+        why, _msg = refusal(root, d, task, note, landed=False, boxes=boxes)
+        out.append({"task": task, "tick": "", "refusal": why, "box_open": bool(boxes_refusal(text, task))})
+    print(json.dumps(out))
+    return 0
+
+
 def main(argv: list[str]) -> int:
+    if argv[:1] == ["--land-check"]:
+        return land_check(argv[1:])
     boxes = "--boxes" in argv
     from_env = "--note-from-env" in argv
     # `make land`'s tick, written before the push that carries it (405 T51, D24): the landed check is the one refusal left out,

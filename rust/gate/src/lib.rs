@@ -9,6 +9,7 @@ pub use l7r_gate_ci::ci;
 pub use l7r_gate_claims::claims;
 pub use l7r_gate_cohort::{cohort, push, speckit_todo};
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
+pub use l7r_gate_land::{land, replay_owing};
 pub use l7r_gate_measure::{measure, preflight};
 pub use l7r_gate_plan::plan;
 pub use l7r_gate_record::record;
@@ -95,6 +96,8 @@ pub fn cli(args: &[String]) -> Reply {
         Some("reviews") => reviews::cli(&args[1..]),
         Some("speckit-todo") => speckit_todo::cli(&args[1..], Path::new(".")),
         Some("claims") => claims::cli(&args[1..]),
+        Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),
+        Some("replay-owing") => replay_owing::cli(&args[1..]),
         Some("tunables") => claims::tunables_cli(&args[1..]),
         Some("claims-door") => claims::door_cli(),
         Some("checks-door") => {

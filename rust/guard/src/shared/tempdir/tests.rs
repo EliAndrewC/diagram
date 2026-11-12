@@ -69,11 +69,22 @@ fn a_gone_process_s_directories_go_with_the_next_of_their_tag() {
     sweep_dead(&parent.join("missing"), "t", &proc, three_hours_ago);
 }
 
+/// The step a signaled test process runs before its exit: the signal's number beside its note.
+fn note_the_signal(signum: i32) {
+    if let Some(note) = std::env::var_os("L7R_TEMPDIR_SIGNALED") {
+        let _ = std::fs::write(
+            format!("{}.before", Path::new(&note).display()),
+            signum.to_string(),
+        );
+    }
+}
+
 /// INT and TERM end a process through its handler, which removes every `TempDir` it holds and exits as the signal would (128 + its
 /// number): this test runs itself as that process, which makes one and waits to be stopped.
 #[test]
 fn an_int_or_a_term_removes_the_process_s_directories() {
     if let Some(note) = std::env::var_os("L7R_TEMPDIR_SIGNALED") {
+        super::before_exit(note_the_signal);
         let dir = TempDir::new("tempdir-signaled");
         let kept = TempDir::new("tempdir-signaled-kept").keep();
         std::fs::write(note, format!("{}\n{}", dir.display(), kept.display())).unwrap();
@@ -113,6 +124,7 @@ fn an_int_or_a_term_removes_the_process_s_directories() {
             .unwrap();
         let (held, kept) = said.split_once('\n').unwrap();
         assert!(Path::new(held).is_dir(), "{name}");
+        let before = note_dir.join("note.before");
         let sent = Command::new("kill")
             .args([format!("-{name}"), child.id().to_string()])
             .status()
@@ -125,6 +137,11 @@ fn an_int_or_a_term_removes_the_process_s_directories() {
         let _ = child.kill();
         assert_eq!(ended.and_then(|s| s.code()), Some(128 + number), "{name}");
         assert!(!Path::new(held).exists(), "{name}: held, removed");
+        // the process's own step ran first, with the signal's number (feature 449 T121)
+        assert_eq!(
+            std::fs::read_to_string(&before).ok(),
+            Some(number.to_string())
+        );
         // one kept is no longer the process's to remove
         assert!(Path::new(kept).is_dir(), "{name}: the kept one stays");
         std::fs::remove_dir_all(kept).unwrap();

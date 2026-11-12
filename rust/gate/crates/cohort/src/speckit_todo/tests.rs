@@ -415,3 +415,24 @@ fn python_truth_of_a_placeholder() {
         assert_eq!(truthy(&v), want, "{v}");
     }
 }
+
+/// The landing's in-process holding (feature 449 T121): the tasks it ticks handed in, the run recorded as the command recorded it, and
+/// a broken active-task mark failing as the command's traceback.
+#[test]
+fn the_landing_asks_the_holding_box_in_process() {
+    let dir = repo("todo-holding-reply");
+    tree(&dir);
+    let at = dir.join("specs/3-going").to_string_lossy().into_owned();
+    put(
+        &dir,
+        ".git/active-task",
+        r#"{"feature": "3-going", "task": "T2"}"#,
+    );
+    let held = super::holding_reply(&at, "T9", &dir);
+    assert!(held.stdout.contains("<- the active task"), "{held:?}");
+    assert_eq!(super::holding_reply(&at, "T2 T9", &dir).stdout, "");
+    let usage = std::fs::read_to_string(dir.join(".git/tool-usage.jsonl")).unwrap();
+    assert!(usage.contains("\"speckit-todo\""));
+    put(&dir, ".git/active-task", "[1]");
+    assert_eq!(super::holding_reply(&at, "", &dir).code, 1);
+}

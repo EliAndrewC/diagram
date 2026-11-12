@@ -504,14 +504,22 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
 /// # Errors
 /// A file that cannot be read, or an active-task mark that is not an object.
 pub fn holding(d: &Path) -> Result<Vec<String>, String> {
+    holding_with(d, &std::env::var("L7R_LAND_TICKS").unwrap_or_default())
+}
+
+/// [`holding`], the landing's tasks handed in rather than read from `L7R_LAND_TICKS`: the Rust land asks it in process (feature 449
+/// T121), where `land.py` set the variable on the one command it ran, never in its own environment.
+///
+/// # Errors
+/// A file that cannot be read, or an active-task mark that is not an object.
+pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     let tasks = d.join("tasks.md");
     let task = if tasks.is_file() {
         active_task(d)?
     } else {
         String::new()
     };
-    let ticks = std::env::var("L7R_LAND_TICKS").unwrap_or_default();
-    if task.is_empty() || split(&ticks).contains(&task.as_str()) {
+    if task.is_empty() || split(ticks).contains(&task.as_str()) {
         return Ok(Vec::new());
     }
     let name = py_name(d);

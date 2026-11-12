@@ -1,7 +1,9 @@
 """The Python callers' door to the claims tools in Rust (feature 449 T82, `ask:449-T82-claims`, on the `plan_door` pattern): one
 `l7r-gate claims-door` process a run, each function a forwarder and never a fallback, its verbs in order so a read follows its own write
-(FR-006). Its callers: `land.py` and `replay_owing.py` until T83 ports them, and `impl_check.py`, named at the phase-3 close. Deleted with
-its last caller; named at the phase-3 close if still present.
+(FR-006). Its callers: `land.py` until the landing commit of its Rust port (feature 449 T121) removes it with the verbs only it asks
+(`scope_split`, `file_left`, `flight_live`, `CLAIMS_FEATURE_DIR`), and `impl_check.py`, named at the phase-3 close. `backfill_sections`
+and `git_diff` left with T121: `replay_owing.py`, the first's one caller, is Rust, and nothing called the second. Deleted with its last
+caller; named at the phase-3 close if still present.
 
 A row of `current` is an attribute object with the fields its callers read (`claim.pointers`, `unit.path`, ...), every one computed in
 Rust; nothing it returns is handed back to the Rust mutated."""
@@ -76,20 +78,10 @@ def load_store(path: pathlib.Path) -> dict[str, list[str]]:
     return _ask("load_store", str(path))
 
 
-def backfill_sections(root: pathlib.Path, index: Mapping[str, Any], store: Mapping[str, Any]) -> tuple[int, dict[str, Any], dict[str, Any]]:
-    """(how many section claims were re-keyed, the index, the store) - new objects, the caller's left as they were."""
-    n, new_index, new_store = _ask("backfill_sections", str(root), dict(index), dict(store))
-    return n, new_index, new_store
-
-
 def scope_split(root: pathlib.Path, report: str, changed: Sequence[str], seam: Sequence[pathlib.Path]) -> tuple[list[str], list[str]]:
     """The open findings a Rust stage's landing answers for, and the rest in the files it changes (feature 444 FR-021)."""
     own, left = _ask("scope_split", str(root), report, list(changed), [str(p) for p in seam])
     return own, left
-
-
-def git_diff(root: pathlib.Path, path: str) -> str:
-    return _ask("git_diff", str(root), path)
 
 
 def file_left(root: pathlib.Path, task: str, left: Sequence[str]) -> int:

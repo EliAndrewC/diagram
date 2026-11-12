@@ -19,6 +19,8 @@ use std::sync::{Mutex, Once};
 static LIVE: Mutex<Vec<PathBuf>> = Mutex::new(Vec::new());
 /// The pipe's write end, set before any handler is installed.
 static WRITE_END: AtomicI32 = AtomicI32::new(-1);
+/// What the process asked to run first when a signal ends it ([`before_exit`]).
+static BEFORE: Mutex<Option<fn(i32)>> = Mutex::new(None);
 
 const SIGINT: i32 = 2;
 const SIGTERM: i32 = 15;
@@ -40,11 +42,20 @@ extern "C" fn on_signal(signum: i32) {
 
 /// `path` is held: removed if INT or TERM ends the process first. The first call catches the two signals.
 pub(super) fn hold(path: &Path) {
-    static CATCH: Once = Once::new();
-    CATCH.call_once(catch);
+    catch_once();
     if let Ok(mut live) = LIVE.lock() {
         live.push(path.to_path_buf());
     }
+}
+
+/// INT and TERM caught now, `then` run with the signal's number before the held directories are removed and the process exits as the
+/// signal would. WHY (feature 449 T121): the Rust land stops its gate and its cohort on TERM, and a second handler of its own would be
+/// replaced the moment an in-process call made its first `TempDir` - this one catch serves both, the landing's step first.
+pub(super) fn before_exit(then: fn(i32)) {
+    if let Ok(mut before) = BEFORE.lock() {
+        *before = Some(then);
+    }
+    catch_once();
 }
 
 /// `path` is no longer held: its `Drop` ran, or it was kept.
@@ -52,6 +63,12 @@ pub(super) fn release(path: &Path) {
     if let Ok(mut live) = LIVE.lock() {
         live.retain(|p| p != path);
     }
+}
+
+/// The two signals caught, once a process.
+fn catch_once() {
+    static CATCH: Once = Once::new();
+    CATCH.call_once(catch);
 }
 
 fn catch() {
@@ -86,8 +103,13 @@ fn listen(fds: [i32; 2]) {
     }
 }
 
-/// On INT or TERM: every directory still held removed, then the exit the signal would have made.
+/// On INT or TERM: the process's own step first ([`before_exit`]), every directory still held removed, then the exit the signal would
+/// have made.
 fn remove_and_exit(signum: i32) -> ! {
+    let then = BEFORE.lock().ok().and_then(|b| *b);
+    if let Some(then) = then {
+        then(signum);
+    }
     let live = LIVE.lock().map(|l| l.clone()).unwrap_or_default();
     for path in live {
         let _ = std::fs::remove_dir_all(path);

@@ -29,7 +29,7 @@
 //! non-zero exit). Argparse's own usage text is not kept (`ask:449-usage-text`); its exit 2 is.
 
 mod report;
-mod work_budget_view;
+pub mod work_budget_view;
 
 use std::fmt::Write as _;
 use std::path::Path;
@@ -37,7 +37,7 @@ use std::process::Command;
 
 use l7r_gate_core::record::args::{parse, Spec};
 use l7r_guard::shared::speckit::{
-    affects, closed_by_status, features, holding, py_path, state, state_given_vocabulary,
+    affects, closed_by_status, features, holding_with, py_path, state, state_given_vocabulary,
     vocabulary, Feature, Vocabulary, STAGES,
 };
 
@@ -134,6 +134,27 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
     }
 }
 
+/// `--holding <dir>`'s lines, the landing's tasks handed in.
+fn holding_text(dir: &str, ticks: &str) -> Result<String, String> {
+    Ok(holding_with(&py_path(dir), ticks)?
+        .into_iter()
+        .map(|l| l + "\n")
+        .collect())
+}
+
+/// `speckit-todo --holding <dir>` as the landing asks it, in process since feature 449 T121 (`ask:449-T83-scope`: the Rust land calls
+/// `speckit-todo` in process): the same reply and the same usage line as the command `land.py` ran, its `L7R_LAND_TICKS` handed in.
+#[must_use]
+pub fn holding_reply(dir: &str, ticks: &str, cwd: &Path) -> Reply {
+    match holding_text(dir, ticks) {
+        Ok(out) => {
+            record(cwd, 0);
+            reply(out, String::new(), 0)
+        }
+        Err(why) => raised(&why),
+    }
+}
+
 /// `--each-state`: each directory's state, or an `error:` line where its reading failed, exit 1 when one did; with `root`, that
 /// root's vocabulary read once (a broken one fails the run, nothing printed) and none above each directory.
 fn each_state(dirs: &[String], root: Option<&str>) -> Reply {
@@ -176,11 +197,8 @@ struct Flags<'a> {
 /// `main`, in its order: the holding boxes, the status line, the check, one state, the tag filter, the report.
 fn answer(root: &str, f: &Flags) -> Result<Reply, String> {
     if !f.holding.is_empty() {
-        let out: String = holding(&py_path(f.holding))?
-            .into_iter()
-            .map(|l| l + "\n")
-            .collect();
-        return Ok(reply(out, String::new(), 0));
+        let ticks = std::env::var("L7R_LAND_TICKS").unwrap_or_default();
+        return Ok(reply(holding_text(f.holding, &ticks)?, String::new(), 0));
     }
     if !f.closed_by_status.is_empty() {
         let yes = closed_by_status(&py_path(f.closed_by_status))?;
