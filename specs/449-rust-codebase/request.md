@@ -59,3 +59,7 @@ Relayed to this session at the GM's request by his laptop-troubleshooting sessio
 
 Then the GM, told the other two were the session scratch under /tmp/claude-1000 and the cargo target cache: "Fix those leaks as well, thanks" - filed as T102 (the cargo cache) and T103 (the session scratch).
 
+## 2026-11-11, the next three time savings (T105-T107)
+
+The GM, given the round's re-measurement and three ranked candidates (build a core edit's 17 coverage binaries together; cut sync-with-main's own time, the full hook run's critical path; record-owed's git calls), and asked whether the old /tmp l7r-* pile could be deleted: "the laptop session is clsoed, so you can delegte those old entries yourself - please do so" ("delegte" is dictated "delete"; the session deleted 44,904 old-form entries older than three hours, about 9 GB) and "Please also proceed with those next 3 candidates for performance improvements / time savings" - filed as T105, T106, T107.
+
