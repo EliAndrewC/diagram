@@ -375,3 +375,90 @@ fn a_coverage_pass_keeps_the_tests_of_a_crate_with_unit_tests_alone() {
         .count();
     assert_eq!(ran - ran_before, 1, "b alone ran its tests");
 }
+
+/// A comment-only edit moves no lint, test or coverage key, and moves format's and dead's, which read comments; a file the crate's
+/// tests declare they read keeps its whole text in the key (T112).
+#[test]
+fn a_comment_only_edit_moves_no_lint_test_or_coverage_key() {
+    let (root, a, b) = two_crates();
+    let all = [a.clone(), b];
+    let file = root.join("rust/a/src/lib.rs");
+    let version = |text: &str, id: &str| {
+        std::fs::write(&file, text).unwrap();
+        let ids = BTreeMap::from([("rust/a/src/lib.rs".to_owned(), id.to_owned())]);
+        let code = super::super::kept::code_ids(&root, &ids);
+        (ids, code)
+    };
+    let key =
+        |cmd: &str, reads: Reads, v: &(BTreeMap<String, String>, BTreeMap<String, String>)| {
+            super::super::kept::verdict_key_with(&root, &a, cmd, reads, &all, &v.0, "c", Some(&v.1))
+        };
+    let one = version("pub fn f() {}\n", "1");
+    let commented = version("// why f\npub fn f() {} // and how\n", "2");
+    let changed = version("pub fn f() { g(); }\n", "3");
+    for (cmd, reads) in [
+        ("lint", Reads::Source),
+        ("test", Reads::Tests),
+        ("cover", Reads::Tests),
+    ] {
+        assert_eq!(key(cmd, reads, &one), key(cmd, reads, &commented), "{cmd}");
+        assert_ne!(key(cmd, reads, &one), key(cmd, reads, &changed), "{cmd}");
+    }
+    assert_ne!(
+        key("format", Reads::Own, &one),
+        key("format", Reads::Own, &commented)
+    );
+    assert_ne!(
+        key("dead", Reads::Source, &one),
+        key("dead", Reads::Source, &commented)
+    );
+    std::fs::write(
+        &a,
+        "[package]\n[package.metadata.l7r]\nreads = [\"rust/a/src/\"]\n",
+    )
+    .unwrap();
+    assert_ne!(
+        key("test", Reads::Tests, &one),
+        key("test", Reads::Tests, &commented),
+        "a declared read keeps its comments"
+    );
+    let gone = BTreeMap::from([("rust/a/src/lib.rs".to_owned(), String::new())]);
+    assert!(
+        super::super::kept::code_ids(&root, &gone).is_empty(),
+        "a deleted file has no code"
+    );
+}
+
+/// A lint that reads plain comments, configured in a manifest, a clippy.toml or an attribute, keeps comments in the lint keys (T112).
+#[test]
+fn a_comment_reading_lint_is_found_where_it_is_configured() {
+    let (root, _, _) = two_crates();
+    let ids = BTreeMap::from([
+        ("rust/Cargo.toml".to_owned(), "1".to_owned()),
+        ("rust/a/src/lib.rs".to_owned(), "2".to_owned()),
+        ("rust/clippy.toml".to_owned(), "3".to_owned()),
+        ("notes.md".to_owned(), "4".to_owned()),
+    ]);
+    let found = || super::super::kept::comment_lints(&root, &ids);
+    assert!(!found());
+    std::fs::write(root.join("notes.md"), "undocumented_unsafe_blocks = 1\n").unwrap();
+    assert!(
+        !found(),
+        "only a manifest, clippy.toml or Rust file configures a lint"
+    );
+    std::fs::write(
+        root.join("rust/Cargo.toml"),
+        [
+            "[workspace.lints.clippy]\nundocumented_",
+            "unsafe_blocks = \"deny\"\n",
+        ]
+        .concat(),
+    )
+    .unwrap();
+    assert!(found());
+    std::fs::write(root.join("rust/Cargo.toml"), "[workspace]\n").unwrap();
+    // split, so this file's own text configures no lint for the tree scan
+    let attribute = ["#![deny(clippy::unnecessary_", "safety_comment)]\n"].concat();
+    std::fs::write(root.join("rust/a/src/lib.rs"), attribute).unwrap();
+    assert!(found());
+}

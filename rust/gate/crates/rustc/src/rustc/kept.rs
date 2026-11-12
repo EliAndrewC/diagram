@@ -13,6 +13,8 @@ use l7r_guard::shared::sha256;
 use serde_json::Value;
 
 use super::{cargo, crates, own, re, run, rust_text, World};
+
+mod code;
 use crate::Reply;
 
 /// The append-only records every run writes: no test reads them, and keying on them would re-run every crate's tests after every run.
@@ -253,7 +255,9 @@ fn depended<'a>(root: &Path, manifest: &Path, all: &'a [PathBuf]) -> Vec<&'a Pat
     found
 }
 
-/// What this check of this crate depends on, as one id: a change to any of it runs the check again.
+/// What this check of this crate depends on, as one id: a change to any of it runs the check again (the tests' form; a run's adds the
+/// code ids, `verdict_key_with`).
+#[cfg(test)]
 pub(super) fn verdict_key(
     root: &Path,
     manifest: &Path,
@@ -263,6 +267,31 @@ pub(super) fn verdict_key(
     ids: &BTreeMap<String, String>,
     compiler: &str,
 ) -> String {
+    verdict_key_with(root, manifest, cmd, reads, all, ids, compiler, None)
+}
+
+/// The checks a comment cannot change (T112): clippy, the tests and coverage. rustfmt formats comments, and the dead check counts a
+/// word in one as a use, so they read the whole text.
+const BY_CODE: [&str; 4] = ["lint", "test", "test-counters", "cover"];
+
+/// `verdict_key`, each Rust file of a check in `BY_CODE` keyed by its code (`code`, its text without its plain comments) where it is
+/// given, but for a file the crate's tests declare they read, whose comments they may read.
+#[expect(
+    clippy::too_many_arguments,
+    reason = "verdict_key's seven, and the code ids beside them"
+)]
+pub(super) fn verdict_key_with(
+    root: &Path,
+    manifest: &Path,
+    cmd: &str,
+    reads: Reads,
+    all: &[PathBuf],
+    ids: &BTreeMap<String, String>,
+    compiler: &str,
+    code: Option<&BTreeMap<String, String>>,
+) -> String {
+    let code = code.filter(|_| BY_CODE.contains(&cmd));
+    let declared = declared_reads(manifest);
     let mut hash: Vec<u8> = format!("{cmd}\n{compiler}\n").into_bytes();
     let mut keyed: Vec<(&str, &str)> = inputs(root, manifest, reads, all, ids);
     // THE DEAD CHECK READS ITS WHOLE FAMILY (feature 449 T100): it counts a `pub fn`'s callers across every crate of the family (all of
@@ -279,9 +308,53 @@ pub(super) fn verdict_key(
         keyed.dedup();
     }
     for (path, id) in keyed {
+        let read = declared.iter().any(|d| under(path, d));
+        let id = code
+            .and_then(|c| c.get(path))
+            .filter(|_| !read)
+            .map_or(id, String::as_str);
         hash.extend(format!("{path} {id}\n").into_bytes());
     }
     sha256::hex(&hash)
+}
+
+/// A lint that reads plain comments, configured: clippy's `SAFETY:` comment lints (the restriction group, not enabled 2026-11-11, the plan
+/// review of T112) named in a manifest or a `clippy.toml`, or in a lint attribute of a Rust file.
+static COMMENT_LINT: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?m)^\s*(?:undocumented_unsafe_blocks|unnecessary_safety_comment)\s*=|(?:warn|deny|forbid|expect)\s*\([^)]*clippy::(?:undocumented_unsafe_blocks|unnecessary_safety_comment)",
+    )
+});
+
+/// Is a lint that reads plain comments configured in the tree?
+pub(super) fn comment_lints(root: &Path, ids: &BTreeMap<String, String>) -> bool {
+    ids.keys()
+        .filter(|p| {
+            p.ends_with("Cargo.toml")
+                || p.ends_with("clippy.toml")
+                || crate::checks::has_ext(p, "rs")
+        })
+        .any(|p| {
+            COMMENT_LINT
+                .is_match(&std::fs::read_to_string(root.join(p)).unwrap_or_default())
+                .unwrap_or(true)
+        })
+}
+
+/// COMMENT-INSENSITIVE KEYS (feature 449 T112; the GM 2026-11-11): each Rust file's code id, its text without its plain comments
+/// (`code::code_text`), so a comment-only edit moves no lint, test or coverage key - a one-line comment in core had re-run all 17 gate
+/// crates' checks, 29 s of `make static` no verdict depended on (2026-11-11). Read from the work tree once a run.
+pub(super) fn code_ids(root: &Path, ids: &BTreeMap<String, String>) -> BTreeMap<String, String> {
+    ids.iter()
+        .filter(|(p, id)| !id.is_empty() && crate::checks::has_ext(p, "rs"))
+        .filter_map(|(p, _)| {
+            let text = std::fs::read_to_string(root.join(p)).ok()?;
+            Some((
+                p.clone(),
+                format!("code:{}", sha256::hex(code::code_text(&text).as_bytes())),
+            ))
+        })
+        .collect()
 }
 
 /// The second key, asked only when the first moved (feature 449 T93): the crate's compiled test binaries and what its tests read at run
@@ -397,6 +470,10 @@ fn kept_path(root: &Path, cmd: &str, manifest: &Path) -> Option<PathBuf> {
 pub(super) struct Kept {
     pub(super) reads: Reads,
     pub(super) ids: BTreeMap<String, String>,
+    /// Each Rust file's code id, for the checks a comment cannot change (T112).
+    pub(super) code: BTreeMap<String, String>,
+    /// Is a lint that reads plain comments (the `SAFETY:` comment lints) configured anywhere? Then lint keys keep the whole text.
+    pub(super) comment_lints: bool,
     pub(super) compiler: String,
     pub(super) all: Vec<PathBuf>,
 }
@@ -411,9 +488,12 @@ impl Kept {
                 .cloned()
                 .collect::<Vec<_>>(),
         );
+        let ids = content_ids(&world.root);
         Kept {
             reads,
-            ids: content_ids(&world.root),
+            comment_lints: comment_lints(&world.root, &ids),
+            code: code_ids(&world.root, &ids),
+            ids,
             compiler: run(&world.cargo, &own(&["--version"]), &BTreeMap::new())
                 .stdout
                 .trim()
@@ -447,7 +527,7 @@ impl Verdict {
         let at = inputs.and_then(|_| kept_path(&world.root, cmd, manifest));
         let k = inputs.filter(|_| at.is_some());
         let key = k.map(|k| {
-            verdict_key(
+            verdict_key_with(
                 &world.root,
                 manifest,
                 cmd,
@@ -455,6 +535,7 @@ impl Verdict {
                 &k.all,
                 &k.ids,
                 &k.compiler,
+                Some(&k.code).filter(|_| !(cmd == "lint" && k.comment_lints)),
             )
         });
         let mut verdict = Verdict {
@@ -498,7 +579,7 @@ impl Verdict {
     /// Only the key: asking the binary key would build the plain test binary, the cost this saves.
     pub(super) fn keep_tests(world: &World, manifest: &Path, inputs: &Kept) {
         let at = kept_path(&world.root, "test", manifest);
-        let key = verdict_key(
+        let key = verdict_key_with(
             &world.root,
             manifest,
             "test",
@@ -506,6 +587,7 @@ impl Verdict {
             &inputs.all,
             &inputs.ids,
             &inputs.compiler,
+            Some(&inputs.code),
         );
         keep_line(at.as_deref(), kept_lines(at.as_deref()), Some(key));
     }

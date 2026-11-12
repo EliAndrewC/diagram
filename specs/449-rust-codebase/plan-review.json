@@ -486,6 +486,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T112 (comment-insensitive keys, FR-012)": {
+   "sha256": "551aa84a76e773fc3cd2d9ab5dcc1dcd9a799a177c3c1d5676921877247916bb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
+  },
+  "### T112 Approach (checklist part A)": {
+   "sha256": "5278097e2384a64b1a146963a7d1879474300aa5c7fb6dc211c57aa181db6615",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7048,6 +7060,53 @@
      "why": "These are procedural decisions. None changes what was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-12",
+   "blocks": [
+    "### T112 (comment-insensitive keys, FR-012)",
+    "### T112 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T112-keys-scope",
+     "summary": "Only the lint, test and coverage keys read a file's code without plain comments; rustfmt's (format) and the dead check's keys keep the whole text.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 'comment-insensitive keys' is unqualified, so carving out two keys narrows it. It is legitimate because applying it literally would defeat the request's own stated constraint (FR-012/SC-007: every output and verdict held): rustfmt formats comments and the dead check counts a word in a comment as a use, so a key blind to comments would reuse a verdict a comment can change. The literal rule is impossible to apply to those two without breaking verdicts, not merely awkward."
+    },
+    {
+     "id": "T112-doc-comments-kept",
+     "summary": "Doc comments (///, //!, /** */, /*! */) stay in the code text the keys read.",
+     "class": "within",
+     "why": "Clippy lints doc comments and rustdoc runs doctests, so stripping them would break the verdict-hold FR-012 requires; keeping them is the request applied correctly."
+    },
+    {
+     "id": "T112-blank-lines-and-premise",
+     "summary": "Line structure: blank lines still move a key; the claim that plain comments cannot change clippy's, the tests' or the coverage floor's verdict rests on a too_many_lines experiment and a search for line!(), include_str! of a .rs and include!.",
+     "class": "within",
+     "why": "Conservative choices that keep FR-012's verdict hold; the measured 18-of-19 crates kept after a one-line comment edit shows the purpose is reached. Unverified premise (repository not read, per the bundle): the stated search space does not name column!(), #[track_caller]/Location::caller(), or clippy's undocumented_unsafe_blocks / unnecessary_safety_comment, which read plain // SAFETY: comments. If any is in use or enabled, the lint or test key must keep those comments; the landing's verdict-hold test and SC-007's re-measure are what must cover it. Not a narrowing."
+    },
+    {
+     "id": "T112-checks-crate-whole-text",
+     "summary": "A file a crate's tests declare they read keeps its whole text; the checks crate (reads = ['.']) still reruns its tests and coverage on any comment edit, that cost left to T116.",
+     "class": "within",
+     "why": "A declared read may be read for its comments, so keying it on code alone would risk a verdict (FR-012). Deferring the checks crate's coverage cost to T116 is not dropping it: T116 is the GM's own filed task for that crate's coverage tests (request.md, 'make static's own caching')."
+    },
+    {
+     "id": "T112-lexer-and-one-time-move",
+     "summary": "A small lexer that honors string/raw/byte/char literals and lifetimes and nests block comments; code ids 'code:' + sha read once a run from the work tree; every crate's keys move once at the first run after landing.",
+     "class": "within",
+     "why": "Implementation of the requested keys; a one-time key move is the unavoidable cost of changing a key's definition and narrows nothing."
+    },
+    {
+     "id": "T112-measurement",
+     "summary": "Before/after measured by one back-to-back run of the same script on a scratch clone of main and this clone, on a loaded host with load recorded (37.5 s -> 17.5 s after a one-line comment edit).",
+     "class": "within",
+     "why": "SC-007 asks for the cost re-measured by the same command before and after, lower, verdicts held; the A/B uses one command on both trees and is labeled with date and method. The 29.1 s quiet-machine figure is a separately labeled observation, not the SC-007 pair."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12240,6 +12299,51 @@
      "summary": "Order after T110, exits, one-landing budget, no engine code or maps moved.",
      "class": "within",
      "why": "These are procedural decisions. None changes what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T112": {
+   "section_sha256": "ff41af5f07aa8603e92fd743e98f65821a0566f027778941649cce198445996e",
+   "reviewed": "2026-11-12",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T112-keys-scope",
+     "summary": "Only the lint, test and coverage keys read a file's code without plain comments; rustfmt's (format) and the dead check's keys keep the whole text.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's 'comment-insensitive keys' is unqualified, so carving out two keys narrows it. It is legitimate because applying it literally would defeat the request's own stated constraint (FR-012/SC-007: every output and verdict held): rustfmt formats comments and the dead check counts a word in a comment as a use, so a key blind to comments would reuse a verdict a comment can change. The literal rule is impossible to apply to those two without breaking verdicts, not merely awkward."
+    },
+    {
+     "id": "T112-doc-comments-kept",
+     "summary": "Doc comments (///, //!, /** */, /*! */) stay in the code text the keys read.",
+     "class": "within",
+     "why": "Clippy lints doc comments and rustdoc runs doctests, so stripping them would break the verdict-hold FR-012 requires; keeping them is the request applied correctly."
+    },
+    {
+     "id": "T112-blank-lines-and-premise",
+     "summary": "Line structure: blank lines still move a key; the claim that plain comments cannot change clippy's, the tests' or the coverage floor's verdict rests on a too_many_lines experiment and a search for line!(), include_str! of a .rs and include!.",
+     "class": "within",
+     "why": "Conservative choices that keep FR-012's verdict hold; the measured 18-of-19 crates kept after a one-line comment edit shows the purpose is reached. Unverified premise (repository not read, per the bundle): the stated search space does not name column!(), #[track_caller]/Location::caller(), or clippy's undocumented_unsafe_blocks / unnecessary_safety_comment, which read plain // SAFETY: comments. If any is in use or enabled, the lint or test key must keep those comments; the landing's verdict-hold test and SC-007's re-measure are what must cover it. Not a narrowing."
+    },
+    {
+     "id": "T112-checks-crate-whole-text",
+     "summary": "A file a crate's tests declare they read keeps its whole text; the checks crate (reads = ['.']) still reruns its tests and coverage on any comment edit, that cost left to T116.",
+     "class": "within",
+     "why": "A declared read may be read for its comments, so keying it on code alone would risk a verdict (FR-012). Deferring the checks crate's coverage cost to T116 is not dropping it: T116 is the GM's own filed task for that crate's coverage tests (request.md, 'make static's own caching')."
+    },
+    {
+     "id": "T112-lexer-and-one-time-move",
+     "summary": "A small lexer that honors string/raw/byte/char literals and lifetimes and nests block comments; code ids 'code:' + sha read once a run from the work tree; every crate's keys move once at the first run after landing.",
+     "class": "within",
+     "why": "Implementation of the requested keys; a one-time key move is the unavoidable cost of changing a key's definition and narrows nothing."
+    },
+    {
+     "id": "T112-measurement",
+     "summary": "Before/after measured by one back-to-back run of the same script on a scratch clone of main and this clone, on a loaded host with load recorded (37.5 s -> 17.5 s after a one-line comment edit).",
+     "class": "within",
+     "why": "SC-007 asks for the cost re-measured by the same command before and after, lower, verdicts held; the A/B uses one command on both trees and is labeled with date and method. The 29.1 s quiet-machine figure is a separately labeled observation, not the SC-007 pair."
     }
    ],
    "verdict": "CLEAR"
