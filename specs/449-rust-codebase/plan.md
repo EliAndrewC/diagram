@@ -415,36 +415,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T130 to T130 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T131 to T131 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T132 to T132 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
-### T133 (the six document and agent-file tests, `ask:449-phase3-remainder` Q3)
-
-- **Approach**: `tests/test_agent_models.py`, `test_citation_rule_inventory.py`, `test_claude_md_quotes.py`, `test_one_root_claude_md.py`, `test_settlement_review_contract.py` and `tests/tooling/test_docs_match_the_mechanism.py` become Rust tests in the gate's `checks` crate (`checks/documents.rs` and one file each under `documents/`), each checking the same files for the same defects with a message naming the fix, and the six `.py` deleted; the pytest infrastructure stays for the kept pytest tests (T140).
-
-   **Decisions** (`ask:449-phase3-remainder` Q3 and Q5, FR-001b, FR-002):
-   - Where they live: `checks`, which holds the repository's text checks and already declares `reads = ["."]`, so `make rust-test` re-runs them on any change to what they read; not `task`, whose `reads` would widen from `specs/` to the tree and re-run the tick's tests on every doc edit. Each check returns its problems, the real-tree test asserting none and a seeded test making every message fire; the root is read from `CARGO_MANIFEST_DIR` at run time, so the built test binary also runs against a scratch tree.
-   - The same checks (FR-002): every assertion of the six has its Rust counterpart, mapped one to one (the two `claudeMdExcludes` tests one Rust test over one problem list, both mutations failing it). 51 mutations, each the defect an assertion guards against made in a scratch clone of HEAD, each failing the Python and the Rust test both and passing both undone (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t133/t133-mutate.py`, `mutate.log` and `mutations.json`): 25 on the agent files and their tier table, wave authorization and `check-wave.js`, 4 on the citation inventory, 2 on the CLAUDE.md quotes, 2 on `claudeMdExcludes`, 13 on the review contracts, 5 on the coverage docs. Divergences no case reaches: `fnmatch` classes `[...]` (no settings glob uses one), lossy where the Python read strictly, `fail_under` found by a line scan where the Python parsed TOML (no TOML crate; invalid TOML would fail the Python), a directory named `*.sh`, symlinked directories under `scripts/`.
-   - The ported citation check confirms the tool paths `docs/research-doctrine.md` names exist, where the Python skipped paths under `tests/`, so that doc's three pointers to `tests/test_agent_models.py` move to the Rust file, with the eight agent files, `docs/spec-kit-and-reviews.md`, `docs/guards.md` and two comments citing it.
-   - `tests/tooling/` holds no test after the cut, and `make land-tooling`'s default step ran `make test-file FILE=tests/tooling`, which pytest fails with exit 5 when it collects nothing: `scripts/land-tooling.sh` skips that step where the tree holds no `test_*.py`, pinned by a new case of `tests/hooks/test-land-tooling.sh`, red with the fix reverted and green with it (observed 2026-11-12, method: that suite both ways). The Rust land already skips an empty tooling list.
-   - `scripts/measure/tooling_reuse_time.py` and its three commands in `specs/383-tooling-caches-and-hourly-step-back/measurements.json`: they timed pytest over `tests/tooling`, which this cut empties, so they fail from this commit (pytest's exit 5, the failure `land-tooling` met above); by the ruling's Q5 ("If its commands fail today, it joins Q4's retire class now") the three are retired to `<retired: ...>` with their values kept and the script deleted unported here, where T140's commit would have taken them. The script refuses to run over uncommitted changes, so the failure is read from the cut, not run (observed 2026-11-12, method: `python3 scripts/measure/tooling_reuse_time.py`, rc 2, "the clone has uncommitted changes"). `scripts/measure/collect_cost.py`'s diagnostic tree `tooling` counts the same empty tree and is left to its own port (T140).
-   - The census at the cut: before it, nothing ran the six by path, `make done`, `make quick` and `land-tooling` collecting them by tree; after it, only history (`dev/review-ledger.md`, the bash-parse fixtures, `specs/` text, and 375's recorded file list, which is not a command) (observed 2026-11-12, method: `git grep` of each name over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/`, `tests/`, `docs`, `dev` and every `specs/*/measurements*.json`). `tests/CLAUDE.md`'s `tests/tooling/` rows describe a tree empty until T140. The checks: `make static` clean on 21 crates (one first run red on `trials::...::an_audit_fails_where_the_python_raised` under the parallel cover run, green alone and on the second run, in code this task did not change), `make rust-test` green (`checks` 135 tests, 35 new), `make hooks-test` green, `check rust-tooling`, `check tool-signals` and the pointer check clean (observed 2026-11-12, method: those commands).
-
-### T133 Approach (checklist part A)
-
-1. **The goal, in the world.** The six document checks are Rust tests, run on every change to what they read.
-2. **The constraints.** FR-001b, FR-002, `ask:449-phase3-remainder` Q3 and Q5.
-3. **Where each comes from.** R: the ruling; O: the assertion map, the mutations and the census above.
-4. **Do they describe the world here?** Run on this clone's real tree and 51 mutated copies, measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t133/mutate.log`).
-5. **The order.** After T132.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** 51 mutations failing both sides, the real tree passing both, and the census.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
-
-<!-- plan-archive: T134 to T134 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
+<!-- plan-archive: T133 to T133 moved to plan-done.md, 2026-11-13 (feature 375 FR-044) -->
 ### T135 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

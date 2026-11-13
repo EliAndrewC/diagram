@@ -431,8 +431,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T132 Phase 3, the review snapshot and the implementation check (ask:449-phase3-remainder) Q2 task B: scripts/reviews/review_snapshot.py and scripts/record/impl_check.py, checks_door.py and claims_door.py deleted with them (each file's imports put to the ask:449-T81-slices test first)
       research: rendering
       verify: DONE. landed: review_snapshot.py and impl_check.py ported, the last Python doors deleted: 829 differential cases, 11 explained; make static, rust-test and hooks-test green
-- [ ] T133 Phase 3, the six document and agent-file tests as Rust tests (ask:449-phase3-remainder) Q3: test_agent_models, test_citation_rule_inventory, test_claude_md_quotes, test_one_root_claude_md, test_settlement_review_contract, tooling/test_docs_match_the_mechanism (583 lines)
+- [x] T133 Phase 3, the six document and agent-file tests as Rust tests (ask:449-phase3-remainder) Q3: test_agent_models, test_citation_rule_inventory, test_claude_md_quotes, test_one_root_claude_md, test_settlement_review_contract, tooling/test_docs_match_the_mechanism (583 lines)
       research: rendering
+      verify: DONE. landed: the six document and agent-file tests ported to Rust tests: 51 mutations failing both sides; make static, rust-test and hooks-test green
 - [x] T134 Phase 3, the work budget's tools no task held (phase-3 census, 2026-11-12): scripts/measure/work_budget_bundle.py and budget_change.py (1,136 lines), before the task gate (phase_sources imports work_budget_bundle)
       research: rendering
       verify: DONE. landed: the work budget's tools ported to Rust (work-budget-bundle, budget-change): 895 differential cases, none differing; make static, rust-test and hooks-test green
