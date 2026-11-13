@@ -31,7 +31,7 @@ imagination.
 You run in one of the modes below. The caller says which.
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`tests/test_agent_models.py`, GM 2026-09-19).** Weighing a specification, an exception or a plan against
+`rust/gate/crates/checks/src/checks/documents/agent_models.rs`, GM 2026-09-19).** Weighing a specification, an exception or a plan against
 the GM's own words is judgment, and the verdict gates a push; a round after the first is a narrower job
 and runs on the twin (MODE 3 below).
 

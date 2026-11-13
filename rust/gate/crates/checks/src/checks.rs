@@ -6,6 +6,8 @@ use std::process::Command;
 pub use l7r_gate_tree::checks::*;
 
 mod conflict;
+#[cfg(test)]
+mod documents;
 mod file_scale;
 mod house_style_delta;
 mod partial_citations;

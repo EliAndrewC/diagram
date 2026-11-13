@@ -25,7 +25,7 @@ pub const GUARD: Guard = Guard {
     decide,
 };
 
-/// The jobs the appended system prompt authorizes a workflow for (`tests/test_agent_models.py` holds the two equal). Not spec-fidelity: its round hook rewrites the
+/// The jobs the appended system prompt authorizes a workflow for (`rust/gate/crates/checks/src/checks/documents/agent_waves.rs` holds the two equal). Not spec-fidelity: its round hook rewrites the
 /// prompt, which a workflow cannot carry. The GM, 2026-10-26: "I also do pre-authorize the translation check as a wave job".
 pub(crate) const WAVE_JOBS: [&str; 16] = [
     "source-applicability",

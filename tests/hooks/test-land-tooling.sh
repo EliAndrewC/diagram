@@ -136,6 +136,11 @@ setup
 LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='echo guard-out; exit 1' LAND_TOOLING_TOOLING='true' land scripts/a.sh; rc=$?
 ok "a failing job is named and lands nothing" '[ "$rc" -ne 0 ] && grep -q "checks failed in the worktree (guard-suites" "$T/out" && grep -q guard-out "$C/.git/land-tooling.log" && [ "$(on_main scripts/a.sh | tail -1)" = "two" ]'
 ok "...and leaves no job file behind" '! ls "$C/.git/" | grep "land-tooling.log\\." >/dev/null'
+# feature 449 T133: tests/tooling/ holds no test_*.py once its last test went to Rust, and pytest over it answers "no tests ran" (exit
+# 5); the default tooling run is then `true`, so a landing does not fail on an empty tree (the fixture has no tests/tooling/ at all)
+setup
+( cd "$C" && env -u LAND_TOOLING_CHECKS -u LAND_TOOLING_TOOLING LAND_TOOLING_GUARDS=true "$LAND" scripts/a.sh ) >"$T/out" 2>&1; rc=$?
+ok "with no tooling test the default tooling run passes and the landing lands (449 T133)" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/a.sh | tail -1)" = "TWO" ] && [ "$(cat "$C/.git/land-tooling.log.tooling-tests.rc" 2>/dev/null || echo 0)" = 0 ]'
 
 echo "3. a change that does not apply cleanly onto main, and a failed check, land nothing"
 setup

@@ -20,7 +20,7 @@ complaint is the `fix-check`'s; captions are the caption placer's (features 266,
 agreement with a Mode A sheet is feature 257's check; caste and status geography are an obligation on the town and city
 generators (the migration plan). Do not judge any of them here.
 
-You are an independent reviewer. **You did not draw it.** **Tier: Sonnet at high effort, pinned** (`tests/test_agent_models.py`; feature 294 T34: Opus and 3 of 3 Sonnet runs caught the seeded re-skin).
+You are an independent reviewer. **You did not draw it.** **Tier: Sonnet at high effort, pinned** (`rust/gate/crates/checks/src/checks/documents/agent_models.rs`; feature 294 T34: Opus and 3 of 3 Sonnet runs caught the seeded re-skin).
 Send the reads, greps and fetches you already know you need in ONE message.
 
 ## First stage

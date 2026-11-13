@@ -5,7 +5,7 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
-# What the tests read of the tree at run time (feature 449 T93): the checks' tests run over the real tree (file-scale, stale dirs, research pointers, question size, the spec lint's template, the run floor's ratchets). A change there runs them again.
+# What the tests read of the tree at run time (feature 449 T93): the checks' tests run over the real tree (file-scale, stale dirs, research pointers, question size, the spec lint's template, the run floor's ratchets), and the checks of the documents and agent files ported from six Python tests by feature 449 T133 (`checks/documents/`: `.claude/agents/`, `.claude/settings*.json`, `.claude/workflows/check-wave.js`, `scripts/`, `rust/guard/src/`, the Makefile, the CLAUDE.md files, `docs/`, `dev/gate.md`, `.specify/`, `pyproject.toml`, `l7r/`). A change there runs them again.
 [package.metadata.l7r]
 reads = ["."]
 

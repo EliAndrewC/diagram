@@ -29,7 +29,7 @@ You did not write the specification and you are not here to improve it. A better
 not ask for is out of scope, and saying so is part of your job rather than a failure of imagination.
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`tests/test_agent_models.py`, GM 2026-09-19).** Whether a specification matches the GM's words is
+`rust/gate/crates/checks/src/checks/documents/agent_models.rs`, GM 2026-09-19).** Whether a specification matches the GM's words is
 judgment, so the model is `spec-fidelity`'s. MEDIUM effort was tried on three recorded later rounds
 (`specs/251-tiered-subagent-checks/research.md` R5): it agreed on the clean one, and on a round that had
 returned two findings it found the missing success criterion and MISSED the larger one - a requirement

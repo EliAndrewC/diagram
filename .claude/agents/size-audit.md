@@ -18,7 +18,7 @@ table (`make size-table`) does the arithmetic and lists every tagged kind; the p
 hugging, gate widths and the relays are registry checks; the dead-space, vacancy and gap sweeps are `building-review`'s on a
 sheet drawn or revised.
 
-**Tier: Opus at high effort, pinned** (`tests/test_agent_models.py`). Send the reads, greps and fetches you already know you
+**Tier: Opus at high effort, pinned** (`rust/gate/crates/checks/src/checks/documents/agent_models.rs`). Send the reads, greps and fetches you already know you
 need in ONE message. You judge FEET, nothing else.
 
 ## Independence rule (the reason you exist)

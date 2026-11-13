@@ -137,7 +137,7 @@ fn unproven(inventory: &str) -> Vec<String> {
 }
 
 /// `fnmatch`: `*` and `?` over the whole text, `/` no different from any other character.
-fn fnmatches(text: &str, glob: &str) -> bool {
+pub(super) fn fnmatches(text: &str, glob: &str) -> bool {
     let body: String = glob
         .chars()
         .map(|c| match c {

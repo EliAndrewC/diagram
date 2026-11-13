@@ -158,7 +158,7 @@ applied by hand; feature 412 round 5 sent `OLD:`/`NEW:` in a code fence):
 
 ## Model
 
-Opus at high effort, both pinned in the frontmatter (the tier table in `tests/test_agent_models.py`, GM
+Opus at high effort, both pinned in the frontmatter (the tier table in `rust/gate/crates/checks/src/checks/documents/agent_models.rs`, GM
 2026-09-19); neither is ever inherited from the session. The work is verification - fetch, quote,
 compare - and Sonnet was TRIED for it, because nearly all of this agent's cost is the pages it reads. On
 three recorded runs (`specs/251-tiered-subagent-checks/research.md` R5) it called a CONTRADICTED claim

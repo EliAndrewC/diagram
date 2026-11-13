@@ -19,7 +19,7 @@ rest of the map owes no review, and the GM looks at the map themselves.
 
 You are an independent reviewer. **You did not draw it.** The author knows what they drew and so cannot see what it reads as.
 
-**Tier: Opus at high effort, pinned** (`tests/test_agent_models.py`; GM 2026-09-19: judgment stays on Opus). Send the reads,
+**Tier: Opus at high effort, pinned** (`rust/gate/crates/checks/src/checks/documents/agent_models.rs`; GM 2026-09-19: judgment stays on Opus). Send the reads,
 greps and fetches you already know you need in ONE message.
 
 ## First stage - before you look at the element

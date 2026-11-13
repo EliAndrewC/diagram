@@ -25,7 +25,7 @@ You are an independent reviewer of a top-down compound plan for the L5R/L7R sett
 models administrative and domestic culture on Edo-period Japan first, imperial-Chinese practice second; a deliberate fantasy
 divergence must be recorded in the docs or the notes.
 
-**Tier: Opus at high effort, pinned** (`tests/test_agent_models.py`). Send the reads, greps and fetches you already know you
+**Tier: Opus at high effort, pinned** (`rust/gate/crates/checks/src/checks/documents/agent_models.rs`). Send the reads, greps and fetches you already know you
 need in ONE message.
 
 ## First stage

@@ -768,6 +768,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
+  },
+  "### T133 (the six document and agent-file tests, `ask:449-phase3-remainder` Q3)": {
+   "sha256": "3725d6860424c125907b97ecd8736371d249baf43d0c4b8e2a2ddaa9124bf0ca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-13",
+   "declared": "spec-fidelity"
+  },
+  "### T133 Approach (checklist part A)": {
+   "sha256": "21e872df8072079e9f2b02d09f6252fd560a644aa06168878b1ba44ecc378fa7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-13",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8821,6 +8833,65 @@
      "why": "FR-001's rule that every recorded measurement running a ported file is rewritten in the cut has nothing to act on, shown by a dated git grep of each name and form."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-13",
+   "blocks": [
+    "### T133 (the six document and agent-file tests, `ask:449-phase3-remainder` Q3)",
+    "### T133 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T133-where",
+     "summary": "The six ported document checks live in the checks crate (reads = [\".\"]), not task; each returns its problems, real-tree test asserts none, seeded test fires every message, root read from CARGO_MANIFEST_DIR at run time.",
+     "class": "within",
+     "why": "Neither the request nor the spec settles crate placement; FR-001b asks only that these checks be ported with what they test. Placement narrows nothing."
+    },
+    {
+     "id": "T133-same-checks",
+     "summary": "Every assertion of the six mapped one to one to a Rust test; the two claudeMdExcludes tests become one Rust test over one problem list, both mutations failing it. 51 mutations fail both sides and pass both undone.",
+     "class": "within",
+     "why": "FR-002 binds verdicts on held cases; merging two tests keeps both defects' verdicts (both mutations fail the merged test). Evidence checked: mutations.json holds 51 entries and mutate.log 51 OK lines; 25+4+2+2+13+5 = 51."
+    },
+    {
+     "id": "T133-divergences",
+     "summary": "Five disclosed divergences on inputs no case reaches: fnmatch [...] classes, lossy vs strict UTF-8 read, fail_under by line scan instead of TOML parse, a directory named *.sh, symlinked directories under scripts/.",
+     "class": "within",
+     "why": "The accepted FR-002 binds verdicts on every case the tests and suites hold; these are inputs absent from the tree and from every held case, and the block states them openly. Noted: the lossy read and the line scan could pass where the Python would have errored (invalid UTF-8, invalid TOML, a commented fail_under), on inputs not present."
+    },
+    {
+     "id": "T133-citation-tests-paths",
+     "summary": "The ported citation check also confirms tool paths under tests/ (the Python skipped them); research-doctrine.md's three pointers to tests/test_agent_models.py, and the agent files, docs and comments citing it, move to the Rust file.",
+     "class": "within",
+     "why": "Widens the check rather than narrowing the request; no held case is a tests/ path citing a missing file, and the moved pointers follow the deleted file as FR-001b's deletion requires."
+    },
+    {
+     "id": "T133-land-tooling-empty",
+     "summary": "scripts/land-tooling.sh skips its default make test-file FILE=tests/tooling step when the tree holds no test_*.py (pytest exits 5 on an empty collection), pinned by a new test-land-tooling.sh case red/green.",
+     "class": "within",
+     "why": "The GM's own words, FR-001b: 'if literally any of our tests or gates required that to work, we can edit them'. This edits a gate that would otherwise fail on the deletion."
+    },
+    {
+     "id": "T133-retire-tooling-reuse-time",
+     "summary": "scripts/measure/tooling_reuse_time.py deleted unported and its three commands in feature 383's measurements.json retired (values kept), in this commit rather than T140's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-001's replace-every-Python-file by deleting one unported. Not legitimate on the quoted Q5 condition alone ('if its commands fail today'): before this cut tests/tooling held tests, so the commands failed only because this cut empties the tree. Legitimate on impossibility: the script's whole subject is pytest's time over tests/tooling, which holds no test after this cut, so no port of it can measure anything; pytest's exit 5 on that empty tree is measured in this block by the land-tooling case, red with its fix reverted. The values are kept, so no record is lost. The ruling's text (ask:449-phase3-remainder) was not in the bundle; this rests on the block's quotation and the impossibility, not on the ruling."
+    },
+    {
+     "id": "T133-collect-cost-deferred",
+     "summary": "collect_cost.py's diagnostic tree 'tooling' (now counting an empty tree) left to its own port in T140; tests/CLAUDE.md's tests/tooling rows left until T140.",
+     "class": "within",
+     "why": "Deferral of an existing piece to the task that ports it; nothing asked is dropped."
+    },
+    {
+     "id": "T133-census",
+     "summary": "Census at the cut: nothing runs the six by path; make done, make quick and land-tooling collected them by tree; afterwards only history references remain. Search space stated (git grep of each name over Makefile, *.mk, *.sh, *.py, *.rs, .claude/, tests/, docs, dev, specs/*/measurements*.json).",
+     "class": "within",
+     "why": "Evidence for the cut, not a scope decision; its search space is stated, as the enumeration rule asks."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15280,6 +15351,63 @@
      "summary": "Census at the cut: only provenance comments and replay_owing.rs' OLD snippet name the four files; no specs/*/measurements*.json command names any of them in command, import or -m form, so no recorded measurement is rewritten.",
      "class": "within",
      "why": "FR-001's rule that every recorded measurement running a ported file is rewritten in the cut has nothing to act on, shown by a dated git grep of each name and form."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T133": {
+   "section_sha256": "f03463b81d7fa91e745211e0c75c9af78701729246a870fa450d3fcd8d298e41",
+   "reviewed": "2026-11-13",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T133-where",
+     "summary": "The six ported document checks live in the checks crate (reads = [\".\"]), not task; each returns its problems, real-tree test asserts none, seeded test fires every message, root read from CARGO_MANIFEST_DIR at run time.",
+     "class": "within",
+     "why": "Neither the request nor the spec settles crate placement; FR-001b asks only that these checks be ported with what they test. Placement narrows nothing."
+    },
+    {
+     "id": "T133-same-checks",
+     "summary": "Every assertion of the six mapped one to one to a Rust test; the two claudeMdExcludes tests become one Rust test over one problem list, both mutations failing it. 51 mutations fail both sides and pass both undone.",
+     "class": "within",
+     "why": "FR-002 binds verdicts on held cases; merging two tests keeps both defects' verdicts (both mutations fail the merged test). Evidence checked: mutations.json holds 51 entries and mutate.log 51 OK lines; 25+4+2+2+13+5 = 51."
+    },
+    {
+     "id": "T133-divergences",
+     "summary": "Five disclosed divergences on inputs no case reaches: fnmatch [...] classes, lossy vs strict UTF-8 read, fail_under by line scan instead of TOML parse, a directory named *.sh, symlinked directories under scripts/.",
+     "class": "within",
+     "why": "The accepted FR-002 binds verdicts on every case the tests and suites hold; these are inputs absent from the tree and from every held case, and the block states them openly. Noted: the lossy read and the line scan could pass where the Python would have errored (invalid UTF-8, invalid TOML, a commented fail_under), on inputs not present."
+    },
+    {
+     "id": "T133-citation-tests-paths",
+     "summary": "The ported citation check also confirms tool paths under tests/ (the Python skipped them); research-doctrine.md's three pointers to tests/test_agent_models.py, and the agent files, docs and comments citing it, move to the Rust file.",
+     "class": "within",
+     "why": "Widens the check rather than narrowing the request; no held case is a tests/ path citing a missing file, and the moved pointers follow the deleted file as FR-001b's deletion requires."
+    },
+    {
+     "id": "T133-land-tooling-empty",
+     "summary": "scripts/land-tooling.sh skips its default make test-file FILE=tests/tooling step when the tree holds no test_*.py (pytest exits 5 on an empty collection), pinned by a new test-land-tooling.sh case red/green.",
+     "class": "within",
+     "why": "The GM's own words, FR-001b: 'if literally any of our tests or gates required that to work, we can edit them'. This edits a gate that would otherwise fail on the deletion."
+    },
+    {
+     "id": "T133-retire-tooling-reuse-time",
+     "summary": "scripts/measure/tooling_reuse_time.py deleted unported and its three commands in feature 383's measurements.json retired (values kept), in this commit rather than T140's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-001's replace-every-Python-file by deleting one unported. Not legitimate on the quoted Q5 condition alone ('if its commands fail today'): before this cut tests/tooling held tests, so the commands failed only because this cut empties the tree. Legitimate on impossibility: the script's whole subject is pytest's time over tests/tooling, which holds no test after this cut, so no port of it can measure anything; pytest's exit 5 on that empty tree is measured in this block by the land-tooling case, red with its fix reverted. The values are kept, so no record is lost. The ruling's text (ask:449-phase3-remainder) was not in the bundle; this rests on the block's quotation and the impossibility, not on the ruling."
+    },
+    {
+     "id": "T133-collect-cost-deferred",
+     "summary": "collect_cost.py's diagnostic tree 'tooling' (now counting an empty tree) left to its own port in T140; tests/CLAUDE.md's tests/tooling rows left until T140.",
+     "class": "within",
+     "why": "Deferral of an existing piece to the task that ports it; nothing asked is dropped."
+    },
+    {
+     "id": "T133-census",
+     "summary": "Census at the cut: nothing runs the six by path; make done, make quick and land-tooling collected them by tree; afterwards only history references remain. Search space stated (git grep of each name over Makefile, *.mk, *.sh, *.py, *.rs, .claude/, tests/, docs, dev, specs/*/measurements*.json).",
+     "class": "within",
+     "why": "Evidence for the cut, not a scope decision; its search space is stated, as the enumeration rule asks."
     }
    ],
    "verdict": "CLEAR"
