@@ -1,5 +1,5 @@
 //! `l7r-gate reviews ledger-lint`, `ledger-rows` and `review-cost` (feature 449 T83, `ask:449-T83-scope`): the command lines of
-//! `scripts/reviews/ledger_lint.py` and `review_cost.py`, and the measured rows `review_census.py` reads. The lint and the cost themselves
+//! `scripts/reviews/ledger_lint.py` and `review_cost.py`, and the measured rows `review_census.py` read (its port, `census.rs`, reads them in process since feature 449 T136; the command form stays). The lint and the cost themselves
 //! are the guard's `shared::ledger` (one implementation, FR-003): the guards call them in process, and the guard crate cannot reach these.
 //!
 //! What the Python raised (an unreadable ledger or transcript, a cost the transcript cannot give) is answered with exit 1 and a
@@ -48,7 +48,7 @@ pub fn lint_cli(args: &[String], tree: &Path) -> Reply {
 }
 
 /// `ledger-rows [LEDGER]`: the measured rows of the ledger (its text on `input` when none is named), as `{"columns": [...], "rows":
-/// [[line, [cells]], ...]}` - what `review_census.py` read of `ledger_lint` by import.
+/// [[line, [cells]], ...]}` - what `review_census.py` read of `ledger_lint` by import, until feature 449 T136's port asked `measured_rows` in process.
 #[must_use]
 pub fn rows_cli(args: &[String], input: &mut dyn std::io::Read) -> Reply {
     let mut text = String::new();

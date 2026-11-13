@@ -7,9 +7,14 @@
 //! The GM-review queue (feature 449 T91, `ask:449-T82-claims`): `gm_review`, `scripts/gm_review.py`'s port behind `l7r-gate gm-review`, the one
 //! writer of `gm-review.jsonl` and the GM's box, which the round arbiter and the claims tools call in process.
 //! The reviewer's snapshot (feature 449 T132): `snapshot`, `scripts/reviews/review_snapshot.py`'s port behind `l7r-gate reviews snapshot`.
+//! The review census and the agent sync (feature 449 T136, `ask:449-phase3-remainder`): `census`, `review_census.py`'s port behind
+//! `l7r-gate reviews census`, and `agent_sync`, `agent_sync.py`'s port behind `l7r-gate reviews agent-sync`, the one writer of the modal
+//! checks' agent files' generated guidelines.
 //! The closing check (feature 449 T127): `closing`, the reasons of `scripts/gates/close_check.py`'s port, which `gm_review` asks in process and
 //! `cohort`'s `l7r-gate close-check` serves to the push and `make tick`.
 
+pub mod agent_sync;
+pub mod census;
 pub mod checkpoint;
 pub mod closing;
 pub mod glyph;
@@ -37,6 +42,8 @@ pub fn cli(args: &[String]) -> Reply {
         Some("prereq") => prereq::cli(rest),
         Some("checkpoint") => checkpoint::cli(rest),
         Some("snapshot") => snapshot::cli(rest),
+        Some("census") => census::cli(rest, &gate_tree()),
+        Some("agent-sync") => agent_sync::cli(rest, &gate_tree(), agent_sync::SYNC),
         Some("ledger-lint") => ledger::lint_cli(
             rest,
             &std::env::var_os("L7R_GATE_TREE").map_or_else(|| PathBuf::from("."), PathBuf::from),
@@ -47,10 +54,15 @@ pub fn cli(args: &[String]) -> Reply {
         Some("ledger-passes") => ledger_passes::passes_cli(rest, &ledger_passes::Env::of_process()),
         _ => reply(
             String::new(),
-            "usage: l7r-gate reviews owed|prereq|checkpoint|snapshot|ledger-lint|ledger-rows|review-cost|ledger-owed|ledger-passes ...\n".to_owned(),
+            "usage: l7r-gate reviews owed|prereq|checkpoint|snapshot|census|agent-sync|ledger-lint|ledger-rows|review-cost|ledger-owed|ledger-passes ...\n".to_owned(),
             2,
         ),
     }
+}
+
+/// The gate's own tree (`L7R_GATE_TREE`, which `l7r-gate.sh` sets; the working directory where unset): where the Python's `__file__` stood.
+fn gate_tree() -> PathBuf {
+    std::env::var_os("L7R_GATE_TREE").map_or_else(|| PathBuf::from("."), PathBuf::from)
 }
 
 #[must_use]

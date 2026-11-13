@@ -5,6 +5,11 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
+# What the tests read of the tree at run time (feature 449 T93): the agent sync's real-tree test (feature 449 T136) holds the three modal
+# checks' agent files to their sources. A change there runs it again.
+[package.metadata.l7r]
+reads = [".claude/agents/", "dev/modals.md", "dev/modals-particular.md"]
+
 [dependencies]
 fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }

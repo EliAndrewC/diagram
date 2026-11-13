@@ -116,9 +116,10 @@ defined agent dispatched minutes after another of its type writes ~2.5-3.5k toke
 harness's environment block - and reads its agent file from the cache; `spec-fidelity`, keeping the instruction files, wrote
 ~25.8k fresh even back to back, and the ad-hoc triage agents ~29.2k; the modal checks' bundles each repeated the guidelines,
 15-17k characters. So: a check dispatched again and again is a DEFINED agent (the claims and modal triage became two); text its
-bundles would repeat is in its agent file (`make agent-sync` writes the modal guidelines there, `tests/test_agent_sync.py`
-keeps them in step); a bundle carries only its unit (`tests/tooling/test_bundle_shared_text.py`: two bundles of a check share
-under 2,000 characters); a prompt repeats nothing of another of its type, wherever it would sit - only the agent file is reused across launches, text placed first in a prompt is not (383 research R16, a proxy capture) - and a wave of 4 or more of one type goes through the `check-wave` workflow, which wakes the session once (383 amendment 7; `agent_prefix_hooks.rs` refuses a 4th hand launch within ten seconds, `workflow_hooks.rs` holds each unit to the Agent guards). A defined agent's file is read when a
+bundles would repeat is in its agent file (`make agent-sync` writes the modal guidelines there, its Rust test
+`rust/gate/crates/reviews/src/reviews/agent_sync/tests.rs` keeps them in step, feature 449 T136); a bundle carries only its unit (two
+bundles of a check shared under 2,000 characters; the test that held them to it, `test_bundle_shared_text.py`, went with the Python
+unit tests, feature 449 T78); a prompt repeats nothing of another of its type, wherever it would sit - only the agent file is reused across launches, text placed first in a prompt is not (383 research R16, a proxy capture) - and a wave of 4 or more of one type goes through the `check-wave` workflow, which wakes the session once (383 amendment 7; `agent_prefix_hooks.rs` refuses a 4th hand launch within ten seconds, `workflow_hooks.rs` holds each unit to the Agent guards). A defined agent's file is read when a
 session starts: a change to one reaches a session's dispatches after it restarts.
 
 **Review subagents are pre-authorized (GM 2026-07-27).** Claude Code's default system prompt tells a session not to call the Agent tool unless the user asked - a sensible default that nonetheless sits ABOVE CLAUDE.md in the instruction hierarchy, so it silently outranked the mandate to run `settlement-review` before shipping a Mode B map, and maps went out unreviewed with nothing warning. The fix is [`scripts/container/append-system-prompt.md`](../scripts/container/append-system-prompt.md), loaded via `--append-system-prompt` by the `claude()` wrapper that `setup-dev-env.sh` installs into `~/.bashrc`: it lands AFTER that line with the same authority and grants standing authorization for the review agents only. **If a review agent ever gets skipped again, check `type claude` first** - the wrapper is per-container and dies with a rebuild. Since 383 amendment 7 it also authorizes `Workflow` for a wave of 4 or more of the named check jobs, through `check-wave`; broad fan-out, any other `Workflow`, and deep research still need an explicit request.
@@ -231,6 +232,6 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   file - is reused across launches; text placed first in a launch prompt is not (feature 383 research R16, a proxy capture),
   so a bundle or a prompt carries only its unit; `agent_prefix_hooks.rs` refuses a large block a prompt repeats from an
   earlier dispatch of its type wherever it sits, and a 4th hand launch of a type within ten seconds (a wave goes through
-  `check-wave`, amendment 7), `tests/tooling/test_bundle_shared_text.py` holds the bundles to it, `make agent-sync` writes a shared source
+  `check-wave`, amendment 7), `make agent-sync` writes a shared source
   into its agents' files, and `make subagent-cache` measures what each type writes fresh. The review agents are pre-authorized through
   `scripts/container/append-system-prompt.md`; if one is skipped, check `type claude` first.

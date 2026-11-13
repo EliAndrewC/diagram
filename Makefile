@@ -640,7 +640,7 @@ feature-report: ## [project] where a feature's time and dispatches went, as a ta
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure feature-report --root "$$(git rev-parse --show-toplevel)" "$(F)" $(foreach t,$(TRANSCRIPT),--transcript "$(t)") $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(WRITE),--write,)
 
 agent-sync:     ## [project] write into each agent file the text every dispatch of that check shares (the modal guidelines), from its source (feature 383 amendment 6)
-	@python3 scripts/reviews/agent_sync.py
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews agent-sync
 
 agent-census:   ## [project] what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=<json>]
 ##  SINCE=<date>   only the runs that started on or after it
@@ -906,7 +906,7 @@ review-cost:     ## [project] a finished review agent's wall time and tokens - t
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews review-cost --agent "$(AGENT)"
 
 review-census:   ## [project] is each review check pulling its weight? the ledger's totals by check (feature 294)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_census.py" --root "$$(git rev-parse --show-toplevel)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews census --root "$$(git rev-parse --show-toplevel)"
 
 review-verdict:  ## [project] a review check's LAST act - write the unit's verdict record   UNIT=<unit> VERDICT=PASS|NEEDS-WORK|NOT-REVIEWABLE [FINDINGS=<json file>]
 ##  UNIT=<unit>        the owed unit reviewed (its prompt's UNIT: line; MAP= is the same field)

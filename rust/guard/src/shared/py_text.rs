@@ -42,6 +42,44 @@ pub fn collapse(text: &str) -> String {
     split(text).join(" ")
 }
 
+/// `float(text)`: Python's whitespace stripped, an underscore only between two digits, `inf` and `nan` read (moved here from the gate's
+/// `measure::events` and `trials::budget_change`, which each held a copy, by feature 449 T136 under `ask:449-phase3-remainder`: the review
+/// census reads its old rows' figures as `float()` read them, and the crates below `measure` could reach neither copy; one implementation, FR-003).
+#[must_use]
+pub fn py_float_text(text: &str) -> Option<f64> {
+    let t = strip(text);
+    let b = t.as_bytes();
+    for (i, c) in b.iter().enumerate() {
+        if *c == b'_'
+            && !(i > 0 && b[i - 1].is_ascii_digit() && b.get(i + 1).is_some_and(u8::is_ascii_digit))
+        {
+            return None;
+        }
+    }
+    t.replace('_', "").parse().ok()
+}
+
+/// Python's `float()` of a value `json.loads` made: a number as it is, `True` one, a string as `float(str)` reads it (moved with
+/// `py_float_text`, feature 449 T136).
+///
+/// # Errors
+///
+/// `float()`'s `ValueError` or `TypeError`, as the traceback's last line names it.
+pub fn py_float_of(v: &serde_json::Value) -> Result<f64, String> {
+    use serde_json::Value;
+    match v {
+        Value::Bool(b) => Ok(f64::from(u8::from(*b))),
+        Value::Number(n) => Ok(n.as_f64().unwrap_or(0.0)),
+        Value::String(text) => py_float_text(text).ok_or_else(|| {
+            format!(
+                "ValueError: could not convert string to float: {}",
+                repr(text)
+            )
+        }),
+        _ => Err("TypeError: float() argument must be a string or a real number".to_owned()),
+    }
+}
+
 /// A string as Python's `repr` prints it (moved from the gate's `record::bundle` by feature 449 T83: the review ledger's lint names a cell
 /// by its repr, and the gate's crates re-export this one).
 #[must_use]
@@ -92,7 +130,26 @@ fn printable(c: char) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::{collapse, is_space, repr, split, strip};
+    use super::{collapse, is_space, py_float_of, py_float_text, repr, split, strip};
+
+    #[test]
+    fn float_reads_text_and_values_as_python_reads_them() {
+        assert_eq!(py_float_text(" 6_000 "), Some(6000.0));
+        assert_eq!(py_float_text("1."), Some(1.0));
+        assert_eq!(py_float_text("-Infinity"), Some(f64::NEG_INFINITY));
+        for bad in ["_1", "1_", "1__0", ".", "", "abc"] {
+            assert_eq!(py_float_text(bad), None, "{bad}");
+        }
+        assert_eq!(py_float_of(&serde_json::json!(true)), Ok(1.0));
+        assert_eq!(py_float_of(&serde_json::json!(2.5)), Ok(2.5));
+        assert_eq!(py_float_of(&serde_json::json!("7")), Ok(7.0));
+        assert!(py_float_of(&serde_json::json!("x"))
+            .unwrap_err()
+            .starts_with("ValueError"));
+        assert!(py_float_of(&serde_json::json!([1]))
+            .unwrap_err()
+            .starts_with("TypeError"));
+    }
 
     #[test]
     fn a_repr_is_pythons() {

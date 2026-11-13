@@ -92,6 +92,7 @@ fn pythons_numbers_are_read_as_python_reads_them() {
         ("+5", Some(5)),
         ("-1", Some(-1)),
         ("5_0", Some(50)),
+        ("5__0", None),
         ("1.0", None),
         ("x5", None),
         ("", None),

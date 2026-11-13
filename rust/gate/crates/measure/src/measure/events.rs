@@ -192,39 +192,9 @@ pub fn hhmm(t: f64) -> String {
     format!("{h:02}:{m:02}")
 }
 
-/// Python's `float()` of a value: a number as it is, `True` one, a string as `float(str)` reads it.
-///
-/// # Errors
-///
-/// `float()`'s `ValueError` or `TypeError`.
-pub fn py_float_of(v: &Value) -> Result<f64, Raised> {
-    match v {
-        Value::Bool(b) => Ok(f64::from(u8::from(*b))),
-        Value::Number(n) => Ok(n.as_f64().unwrap_or(0.0)),
-        Value::String(text) => py_float_text(text).ok_or_else(|| {
-            format!(
-                "ValueError: could not convert string to float: {}",
-                repr(text)
-            )
-        }),
-        _ => Err("TypeError: float() argument must be a string or a real number".to_owned()),
-    }
-}
-
-/// `float(text)`: Python's whitespace stripped, an underscore only between two digits.
-#[must_use]
-pub fn py_float_text(text: &str) -> Option<f64> {
-    let t = strip(text);
-    let b = t.as_bytes();
-    for (i, c) in b.iter().enumerate() {
-        if *c == b'_'
-            && !(i > 0 && b[i - 1].is_ascii_digit() && b.get(i + 1).is_some_and(u8::is_ascii_digit))
-        {
-            return None;
-        }
-    }
-    t.replace('_', "").parse().ok()
-}
+/// Python's `float()` of a value and of a text: the guard's `py_text` since feature 449 T136, where the review census reads them too
+/// (one implementation, FR-003).
+pub use l7r_guard::shared::py_text::{py_float_of, py_float_text};
 
 /// `int(text)`: Python's whitespace stripped, a sign, ASCII digits with an underscore only between two.
 ///

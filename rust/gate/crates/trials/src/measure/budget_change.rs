@@ -116,10 +116,8 @@ fn verdict_of(path: &Path) -> R<String> {
     }))
 }
 
-/// `float(text)`: Python's whitespace around it, `_` between digits, `inf` and `nan` read.
-fn py_float_text(text: &str) -> Option<f64> {
-    underscored(strip(text))?.parse().ok()
-}
+/// `float(text)`: the guard's `py_text` since feature 449 T136 (one implementation, FR-003).
+use l7r_guard::shared::py_text::py_float_text;
 
 /// `int(text)`: Python's whitespace around it, a sign, `_` between digits.
 fn py_int_text(text: &str) -> Option<i64> {
