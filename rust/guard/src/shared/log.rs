@@ -60,11 +60,6 @@ pub fn civil(secs: u64) -> (i64, u32, u32, u64, u64, u64) {
 pub fn write_at(dir: &Path, e: &Entry, now: SystemTime) -> Option<PathBuf> {
     let since = now.duration_since(UNIX_EPOCH).ok()?;
     let (year, month, day, hour, min, sec) = civil(since.as_secs());
-    let path = dir.join(format!(
-        "{year:04}{month:02}{day:02}T{hour:02}{min:02}{sec:02}{:06}-{}.json",
-        since.subsec_micros(),
-        std::process::id()
-    ));
     let field = |k: &str| {
         e.input
             .get(k)
@@ -91,9 +86,24 @@ pub fn write_at(dir: &Path, e: &Entry, now: SystemTime) -> Option<PathBuf> {
         "tool": field("tool_name"), "transcript": field("transcript_path"), "detail": e.detail.chars().take(200).collect::<String>(),
         "command": command, "context": e.context.clone().unwrap_or(Value::Null),
     });
+    place(dir, &serde_json::to_string_pretty(&entry).ok()?, now)
+}
+
+/// One entry's text put into `dir` at `now`: `<UTC to the microsecond>-<pid>.json`, written to a temporary beside it and renamed into
+/// place; the path, or None where a step failed. The one writer of the file's name and its rename, which the gate's `escape take`
+/// (`escape_log.py`'s port, feature 449 T137) shares with [`write_at`].
+#[must_use]
+pub fn place(dir: &Path, text: &str, now: SystemTime) -> Option<PathBuf> {
+    let since = now.duration_since(UNIX_EPOCH).ok()?;
+    let (year, month, day, hour, min, sec) = civil(since.as_secs());
+    let path = dir.join(format!(
+        "{year:04}{month:02}{day:02}T{hour:02}{min:02}{sec:02}{:06}-{}.json",
+        since.subsec_micros(),
+        std::process::id()
+    ));
     std::fs::create_dir_all(dir).ok()?;
     let tmp = path.with_extension("json.tmp");
-    std::fs::write(&tmp, serde_json::to_string_pretty(&entry).ok()?).ok()?;
+    std::fs::write(&tmp, text).ok()?;
     std::fs::rename(&tmp, &path).ok()?;
     Some(path)
 }

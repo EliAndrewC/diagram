@@ -17,9 +17,10 @@
 #
 # The sessions commit in the clone and do NOT push. Do not edit the clone while they run.
 #
-# DETACHED THROUGH Popen(close_fds, start_new_session), not `setsid nohup ... &`: the shell form hands the
-# child every descriptor the caller holds open, and a caller reading this script through a pipe then waits
-# for the CHILD to end - measured on the first run (feature 250 T18), which held its `make` for the whole
+# DETACHED BY THE RUNNER (`l7r-gate page-session`, the Rust port of page_session_runner.py since feature 449 T137),
+# in a session of its own and holding none of the caller's descriptors, not `setsid nohup ... &`: the shell form
+# hands the child every descriptor the caller holds open, and a caller reading this script through a pipe then
+# waits for the CHILD to end - measured on the first run (feature 250 T18), which held its `make` for the whole
 # session.
 set -uo pipefail
 ROOT=$(git rev-parse --show-toplevel)
@@ -28,7 +29,7 @@ BRIEFS=${1:-}; NAME=${2:-$(basename "$ROOT")}; MODEL=${3:-}; EFFORT=${4:-}; AGEN
 for b in $BRIEFS; do f=${b#then:}; case $f in resume:*) f=${f#resume:*:};; esac; [ -f "$f" ] || { echo "page-session: no brief or step at $f" >&2; exit 2; }; done
 command -v claude >/dev/null || { echo "page-session: no claude on PATH" >&2; exit 2; }
 # The appended system prompt - the standing authorization, then the slim rules file in place of the root CLAUDE.md
-# (feature 274 D6) - is added by the runner's floor_flags, where its test reads it.
+# (feature 274 D6) - is added by the runner's floor_flags (rust/gate/crates/pages/src/runner.rs), where its test reads it.
 # EFFORT and AGENTS (feature 293): the effort level for every session, and a JSON file of session-scoped agents passed as
 # --agents - the effort experiment pins its ad-hoc judge this way (research R1 D2). Unset, the command line is unchanged.
 EXTRA=(); [ -n "$MODEL" ] && EXTRA+=(--model "$MODEL")
@@ -36,4 +37,4 @@ EXTRA=(); [ -n "$MODEL" ] && EXTRA+=(--model "$MODEL")
 if [ -n "$AGENTS" ]; then [ -f "$AGENTS" ] || { echo "page-session: no agents file at $AGENTS" >&2; exit 2; }; EXTRA+=(--agents "$(cat "$AGENTS")"); fi
 MANGLED=$(printf '%s' "$ROOT" | sed 's#[/.]#-#g')
 # shellcheck disable=SC2086 # BRIEFS is a space-separated list on purpose
-exec python3 "$ROOT/scripts/pages/page_session_runner.py" "$ROOT" "$NAME" "$HOME/.claude/projects/$MANGLED" "${EXTRA[@]}" -- $BRIEFS
+exec "$ROOT/scripts/gates/l7r-gate.sh" page-session "$ROOT" "$NAME" "$HOME/.claude/projects/$MANGLED" "${EXTRA[@]}" -- $BRIEFS

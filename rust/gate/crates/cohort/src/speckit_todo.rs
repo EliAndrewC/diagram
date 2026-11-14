@@ -19,12 +19,12 @@
 //! ```
 //!
 //! `--each-state` is new with the port (feature 449 T118): the Python callers that imported the module by path
-//! (`close_check.py` until feature 449 T127 asked it in process, `plan_hold.py` and `tick-task.py` until T131 did, `research_claims.py`) ask it instead, one process for every directory where the
+//! (`close_check.py` until feature 449 T127 asked it in process, `plan_hold.py` and `tick-task.py` until T131 did, `research_claims.py` until T137 did) ask it instead, one process for every directory where the
 //! import read each in process. Each directory's state reads the vocabulary two levels above it, as `feature(d)` did, so a broken
 //! `.specify/affects.json` fails that directory as the import raised there; with `--root`, the root's vocabulary is read once
-//! instead, as `feature(d, vocab)` was handed one (`research_claims.py`), and a broken one fails the run with nothing printed. A run
+//! instead, as `feature(d, vocab)` was handed one (`research_claims.py`; its port, `pages::research_claims`, reads `shared::speckit` in process, and the form stays, T119's rule), and a broken one fails the run with nothing printed. A run
 //! with any failure exits 1, its reasons on stderr, so a caller that let the import's raise through fails, and one that caught
-//! it per directory (`research_claims.py`) reads the other lines. It records no run in the usage log, as the import recorded none;
+//! it per directory (`research_claims.py`, until feature 449 T137) reads the other lines. It records no run in the usage log, as the import recorded none;
 //! every other form records the run in the working directory's repository as `usage_log.exited` did (`passed`, or `refused` on a
 //! non-zero exit). Argparse's own usage text is not kept (`ask:449-usage-text`); its exit 2 is.
 

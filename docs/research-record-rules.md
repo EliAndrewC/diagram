@@ -107,7 +107,7 @@ paragraphs carrying them; a re-check names only the notes that moved (`make chec
 feature 250 the cost per thing checked held (median 1.02 M), but the largest context doubled to 246 K, and it was the
 write sessions: median 74 turns, a cost that follows the turn count (r = 0.92) and grows roughly with the square of
 the length; one 272 write session cost 24.5 M over 109 turns. So the runner counts the questions every brief ASSIGNS
-(`scripts/pages/brief_load.py`, which reads `## Your items`, `**Your questions:**` and `**Your pairs**` and never a
+(`l7r-gate brief-load`, `rust/gate/crates/pages/src/brief_load.rs`, which reads `## Your items`, `**Your questions:**` and `**Your pairs**` and never a
 do-not-edit paragraph) and refuses one over four, or one assigning nothing, naming the split; a brief that is not a
 group's writing declares `<!-- page-load: kind=<kind> -->`, one of `check`, `assertions`, `split` and `handover`, and
 is not capped. Keys are not known before writing, so `make reserve` refuses a write session's eleventh registry key

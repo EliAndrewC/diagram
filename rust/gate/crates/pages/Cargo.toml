@@ -1,0 +1,26 @@
+# The page sessions' tools (feature 449 T137, `ask:449-phase3-remainder`): `l7r-gate page-session` (the detached runner behind
+# `make page-session`), `brief-load` (the write cap's count), `coord` (`make lines`, `make append`), `research-claims` (`make research-claim`,
+# `make research-claims`) and `escape take` (an escape taken outside a hook, which `make reserve` asks). Their own crate on `core`, `reviews`
+# (the runner's ledger rows and `make append`'s cost cells, in process) and the guard, so an edit here rebuilds nothing below the binary (T92).
+[package]
+name = "l7r_gate_pages"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time (feature 449 T93): the write cap's count over the real briefs `brief_load.py`'s tests held.
+[package.metadata.l7r]
+reads = ["tests/tooling/fixtures/brief_load/"]
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_gate_reviews = { path = "../reviews" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

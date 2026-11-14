@@ -744,19 +744,19 @@ notes: ## [project] print the named notes of ONE question and only the blocks of
 
 lines: ## [project] print ONLY a coordination file's matching lines - the claims file, a handoff, a checks report - numbered, with how many were shown of how many; never read one whole (feature 274)   FILE=<file> KEY=<regex>
 	@if [ -z "$(FILE)" ] || [ -z "$(KEY)" ]; then printf 'make lines: FILE=<file> KEY=<regex> are required - e.g. make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="^- 269"\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/coord.py" lines "$(FILE)" "$$KEY"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coord lines "$(FILE)" "$$KEY"
 
 append: ## [project] append ONE line to a coordination file without reading or printing it (feature 274)   FILE=<file> LINE="<text>"
 	@if [ -z "$(FILE)" ]; then printf 'make append: FILE=<file> LINE="<text>" are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/coord.py" append "$(FILE)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coord append "$(FILE)"
 
 research-claim: ## [project] claim research questions for this clone, refused when another session holds one; STATUS=done releases (feature 376)   Q="0060 0246" FEATURE=<n> [STATUS="in progress"] [RELEASE=<owner> WHY="<reason>"]
 	@if [ -z "$(Q)" ] || [ -z "$(FEATURE)" ]; then printf 'make research-claim: Q="<question numbers>" FEATURE=<n> are required - e.g. make research-claim Q="0060 0246" FEATURE=376\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/research_claims.py" claim "$(Q)" --feature "$(FEATURE)" $(if $(STATUS),--status "$(STATUS)",) $(if $(RELEASE),--release "$(RELEASE)" --why "$$WHY",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" research-claims claim "$(Q)" --feature "$(FEATURE)" $(if $(STATUS),--status "$(STATUS)",) $(if $(RELEASE),--release "$(RELEASE)" --why "$$WHY",)
 
 research-claims: ## [project] the live claims on research questions, and nothing else of the sheet (feature 376)   Q="0060 0246"
 	@if [ -z "$(Q)" ]; then printf 'make research-claims: Q="<question numbers>" is required - e.g. make research-claims Q="0060 0246"\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/research_claims.py" query "$(Q)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" research-claims query "$(Q)"
 
 reserve: ## [project] reserve the next glossary, registry-entry or question number under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused; feature 303: a question's stub carries a tags marker to fill)   KIND=glossary|registry|question KEY=<term, key or heading id> [KEY_CAP_OK='<reason>']
 	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry|question KEY=<term, key or heading id> are required\n' >&2; exit 2; fi

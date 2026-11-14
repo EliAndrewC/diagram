@@ -43,8 +43,25 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-sys.path[1:1] = [str((Path(__file__).resolve().parent / _d).resolve()) for _d in ('../pages',)]  # the moved scripts it imports (2026-10-08)
-import escape_log as _escape_log  # noqa: E402
+GATE = HERE.parent / "gates" / "l7r-gate.sh"
+
+
+def key_cap_escaped(key: str, session: str, reserved: int) -> bool:
+    """`KEY_CAP_OK` taken with a reason, and logged as a hook's escape is: `l7r-gate escape take`, one process where the cap is reached
+    with the token set (feature 449 T137, FR-003: `escape_log.py`, which this imported, is the gate's `pages::escape_log` now). True when it
+    is taken, False when it is not set; a reason too thin to audit, or a gate that cannot answer, is the refusal `escape_log.NoReason` was."""
+    if not os.environ.get("KEY_CAP_OK", "").strip():
+        return False
+    context = json.dumps({"key": key, "session": session, "reserved": reserved})
+    thin = "KEY_CAP_OK needs a REASON, not just a value - two words and eight characters; say why this case is legitimate"
+    try:
+        done = subprocess.run([str(GATE), "escape", "take", "--token", "KEY_CAP_OK", "--guard", "reserve", "--rule", "key-cap",
+                               "--context", context, "--command", " ".join(sys.argv)], capture_output=True, text=True, check=False)
+    except OSError:
+        raise Refusal(thin) from None
+    if done.returncode in (0, 1):
+        return done.returncode == 0
+    raise Refusal(done.stderr.strip() if done.returncode == 3 else thin)
 
 # GUARD_EDIT_OK: feature 303 - a third kind, `question`: a new question of the record takes the next free identity number
 # (`research/questions/NNNN-<heading id>.html`) under the same lock, so two sessions never number two questions alike.
@@ -177,11 +194,8 @@ def check_key_cap(kind: str, key: str, mirror: Path) -> None:
     n = session_keys(mirror, session)
     if n < int(cap):
         return
-    try:
-        if _escape_log.escape("KEY_CAP_OK", "reserve", "key-cap", {"key": key, "session": session, "reserved": n}):
-            return
-    except _escape_log.NoReason as e:
-        raise Refusal(str(e)) from None
+    if key_cap_escaped(key, session, n):
+        return
     cont = os.environ.get("L7R_CONTINUE", "$L7R_CONTINUE")
     raise Refusal(f"this write session has reserved {n} new registry keys, its cap (feature 274: a write session takes at "
                   f"most {cap}; its cost grows with its length). Do not reserve {key!r}. Finish the question in hand with the "

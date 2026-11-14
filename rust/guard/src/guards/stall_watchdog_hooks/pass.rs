@@ -295,12 +295,18 @@ pub(crate) fn in_retry_wait(p: &Paths, clone: &str, sid: &str, now: f64) -> bool
             lines.iter().any(|l| l.contains(&format!("started {sid}")))
                 && waited
                     .is_some_and(|min| now - mtime(log).unwrap_or(0.0) <= min * 60.0 + RETRY_SLACK)
-                && cmdlines(p).iter().any(|argv| {
-                    argv.iter().any(|a| a.contains("page_session_runner.py"))
-                        && argv.iter().any(|a| a == "--work")
-                        && argv.iter().any(|a| *a == *named)
-                })
+                && cmdlines(p).iter().any(|argv| runs_queue(argv, &named))
         })
+}
+
+/// Is `argv` the page-session runner's detached queue writing the run log `log`? Exactly its own command line, `<dir>/l7r-gate
+/// page-session --work <root> <name> <extra> <queue> <log>` (feature 449 T137: the runner is the gate binary's `page-session` since
+/// `page_session_runner.py` was ported, and it starts itself again by that argv), never a process that merely names the log.
+pub(crate) fn runs_queue(argv: &[String], log: &str) -> bool {
+    // `/proc/<pid>/cmdline` ends each argument with a NUL, so its split ends with an empty one
+    let argv = argv.strip_suffix(&[String::new()]).unwrap_or(argv);
+    matches!(argv, [exe, verb, work, _, _, _, _, at]
+        if exe.rsplit('/').next() == Some("l7r-gate") && verb == "page-session" && work == "--work" && at == log)
 }
 
 fn dispatcher_of(p: &Paths, pid: Option<&Value>) -> String {

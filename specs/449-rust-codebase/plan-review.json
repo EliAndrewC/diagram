@@ -176,10 +176,10 @@
    "declared": "round-arbiter"
   },
   "### T137 Approach (checklist part A)": {
-   "sha256": "2c916e156e40ca74a62192f64c6c5be9d9353691587979ce67e3a8d7ff828920",
+   "sha256": "94afb4a1168cfb32bd6e211da53021202dbbf70284b596214d6e828811cc4a4a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T138 (<why: the finding or measurement that files it>)": {
    "sha256": "557d015f05fb5263becaf4a857bd9174e95c4d2133140d54ba8ed7262eab4630",
@@ -204,6 +204,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-14",
    "declared": "round-arbiter"
+  },
+  "### T137 (the page sessions' tools no task held, `ask:449-phase3-remainder`)": {
+   "sha256": "d797d0b50f2ccf0d9b893c6e0450a94b487f7c0ba0469d4c979b9e0a477cbbd1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8480,6 +8486,76 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-14",
+   "blocks": [
+    "### T137 (the page sessions' tools no task held, `ask:449-phase3-remainder`)",
+    "### T137 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T137-crate",
+     "summary": "The five page-session tools are ported whole, with no door, into a new gate crate `pages` built on core, reviews and the guard; the ledger rows, append's lint and cost cells are called in process; the guard log's file naming and rename move into one helper, shared::log::place, which the guards' own writer also uses.",
+     "class": "within",
+     "why": "Where the port lives is a design choice. FR-001 asks for the port and ask:449-phase3-remainder assigns these files to T137. Having one log helper with two users follows FR-003's one implementation. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "T137-callers",
+     "summary": "In the same cut, the Makefile's lines/append/research-claim/research-claims, page-session.sh and the runner's setsid self-restart are repointed to the gate commands and the five .py files are deleted.",
+     "class": "within",
+     "why": "This repoints callers in the cut that ports them, as FR-003 requires, and deletes the Python under the GM's standing approval of 2026-11-10. The environment variables are still read as before."
+    },
+    {
+     "id": "T137-reserve-prefix",
+     "summary": "reserve-prefix.py stays Python and reaches the Rust escape by command (`escape take`, exit 0/1/3, 2 for usage). If the gate cannot start, it refuses without the 'blocked' guard-log entry that the in-process call used to write.",
+     "class": "within",
+     "why": "The spec already places reserve-prefix.py in phase 4 (ask:449-T81-slices), and a by-command call from staying Python follows the door pattern the spec rules elsewhere. The gate-cannot-start case is a failure mode the by-command call creates. The verdict there is the same (it refuses) and only a log line is lost. FR-002 binds the cases the tests and suites hold, and none holds this one. The statement that nothing reaches it at the cut is asserted, not measured, so it is noted here but does not block."
+    },
+    {
+     "id": "T137-stall-watchdog",
+     "summary": "The stall watchdog recognizes a page-session queue by the Rust runner's exact argv. Its unit and suite tests check that the old Python form is no longer exempt, and a Python queue still running across the cut loses its retry-wait exemption until it ends.",
+     "class": "within",
+     "why": "The exemption is for page-session queues, and that rule is unchanged. The argv that identifies such a queue changes because the runner is ported and the Python deleted (FR-003, the GM's 2026-11-10 approval to delete). The changed suite case repoints the recognized name and leaves the verdict on a page-session queue as it was. Neither the request nor the spec promises in-flight Python processes a grace period across a cut, so keeping the old form exempt would preserve behavior nobody asked to preserve. This is not FR-002's 'refuses correct work' exception and does not need it."
+    },
+    {
+     "id": "T137-regex-and-lock",
+     "summary": "make lines translates Python's \\Z to the Rust regex's \\z. The claims sheet's lock is a blocking flock -x on <sheet>.lock, which works together with the old Python's fcntl.flock.",
+     "class": "within",
+     "why": "Both serve FR-002: the differential found a \\Z mismatch and this removes it, and the lock keeps the Python's blocking semantics across both implementations during the cut."
+    },
+    {
+     "id": "T137-kept-forms",
+     "summary": "brief-load, research-claims sweep and speckit-todo --each-state are kept as command forms that have no caller (T119's rule).",
+     "class": "within",
+     "why": "This ports the tools whole under the plan's existing T119 rule. It adds a little and narrows nothing."
+    },
+    {
+     "id": "T137-help-difference",
+     "summary": "The one differing case: `research-claims -h` prints help and exits 0 in Python, and exits 2 in Rust, under ask:449-usage-text.",
+     "class": "within",
+     "why": "This applies a case the accepted spec already rules: ask:449-usage-text binds --help only where a kept test or suite case holds it or a caller reads its usage text. The block does not state that condition outright. Its nearest evidence is the census (git grep of each name over the Makefile, tests/, .claude/, the shell scripts and the measurements files, which finds only provenance comments and history) and green hook suites. The difference is ruled, so the task is not straight under FR-001c and gets this review, which it is getting."
+    },
+    {
+     "id": "T137-normalizations",
+     "summary": "The differential normalizes: Traceback stderr; argparse's exit-2 usage text; the quoted regex-library text after 'KEY is not a regular expression - '; session ids and run-log names; the guard-log file name, utc and command; a goals line's utc; the stub's environment keys; the case path in the long cases. It lists unreached divergences (non-ASCII digits, isdigit vs is_numeric, re syntax beyond \\Z, a non-UTF-8 environment value, a moved-303.json that is not an object, -p with no prompt, ties in claim times).",
+     "class": "within",
+     "why": "Each normalization is covered by a ruled case or is nondeterminism or a harness artifact. Traceback text and argparse's text fall under ask:449-usage-text. The quoted library error text falls under ask:449-T066-json-message, which keeps the fixed words bound. Ids, timestamps and pid-based file names are nondeterministic. The harness (diff.py's NORMALIZED list) says the runner's guard-log 'command' is the process's own argv: the generator naming itself, deleted in this cut, which ask:449-T135-generator rules, though the block does not cite it. Reserve's 'command' differs only by the harness's old/ directory. The listed divergences lie outside the cases FR-002 binds (the cases its tests and suites hold)."
+    },
+    {
+     "id": "T137-probe-deletion",
+     "summary": "specs/274-leaner-research-sessions/measure/probe.sh, which nothing runs, is deleted unported in this cut.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-09 rule ('I don't think we need to port the past feature harnesses if those are not still used') and FR-001's phase-3 clause. ask:449-phase3-remainder's deletion class holds it. Deleting it with the files it runs, rather than in T130, changes the timing and not the outcome."
+    },
+    {
+     "id": "T137-order-exits",
+     "summary": "The task runs after T135 in one landing. It exits on make static, rust-test, hooks-test HOOKS_ALL=1 and land, and a claim that it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Procedure inside the plan's own process. Nothing that was asked is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15207,6 +15283,74 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T137": {
+   "section_sha256": "ba0baa61b9a7a15185a06d0733549773fb97f7e9cb64f41344031430368281ff",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T137-crate",
+     "summary": "The five page-session tools are ported whole, with no door, into a new gate crate `pages` built on core, reviews and the guard; the ledger rows, append's lint and cost cells are called in process; the guard log's file naming and rename move into one helper, shared::log::place, which the guards' own writer also uses.",
+     "class": "within",
+     "why": "Where the port lives is a design choice. FR-001 asks for the port and ask:449-phase3-remainder assigns these files to T137. Having one log helper with two users follows FR-003's one implementation. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "T137-callers",
+     "summary": "In the same cut, the Makefile's lines/append/research-claim/research-claims, page-session.sh and the runner's setsid self-restart are repointed to the gate commands and the five .py files are deleted.",
+     "class": "within",
+     "why": "This repoints callers in the cut that ports them, as FR-003 requires, and deletes the Python under the GM's standing approval of 2026-11-10. The environment variables are still read as before."
+    },
+    {
+     "id": "T137-reserve-prefix",
+     "summary": "reserve-prefix.py stays Python and reaches the Rust escape by command (`escape take`, exit 0/1/3, 2 for usage). If the gate cannot start, it refuses without the 'blocked' guard-log entry that the in-process call used to write.",
+     "class": "within",
+     "why": "The spec already places reserve-prefix.py in phase 4 (ask:449-T81-slices), and a by-command call from staying Python follows the door pattern the spec rules elsewhere. The gate-cannot-start case is a failure mode the by-command call creates. The verdict there is the same (it refuses) and only a log line is lost. FR-002 binds the cases the tests and suites hold, and none holds this one. The statement that nothing reaches it at the cut is asserted, not measured, so it is noted here but does not block."
+    },
+    {
+     "id": "T137-stall-watchdog",
+     "summary": "The stall watchdog recognizes a page-session queue by the Rust runner's exact argv. Its unit and suite tests check that the old Python form is no longer exempt, and a Python queue still running across the cut loses its retry-wait exemption until it ends.",
+     "class": "within",
+     "why": "The exemption is for page-session queues, and that rule is unchanged. The argv that identifies such a queue changes because the runner is ported and the Python deleted (FR-003, the GM's 2026-11-10 approval to delete). The changed suite case repoints the recognized name and leaves the verdict on a page-session queue as it was. Neither the request nor the spec promises in-flight Python processes a grace period across a cut, so keeping the old form exempt would preserve behavior nobody asked to preserve. This is not FR-002's 'refuses correct work' exception and does not need it."
+    },
+    {
+     "id": "T137-regex-and-lock",
+     "summary": "make lines translates Python's \\Z to the Rust regex's \\z. The claims sheet's lock is a blocking flock -x on <sheet>.lock, which works together with the old Python's fcntl.flock.",
+     "class": "within",
+     "why": "Both serve FR-002: the differential found a \\Z mismatch and this removes it, and the lock keeps the Python's blocking semantics across both implementations during the cut."
+    },
+    {
+     "id": "T137-kept-forms",
+     "summary": "brief-load, research-claims sweep and speckit-todo --each-state are kept as command forms that have no caller (T119's rule).",
+     "class": "within",
+     "why": "This ports the tools whole under the plan's existing T119 rule. It adds a little and narrows nothing."
+    },
+    {
+     "id": "T137-help-difference",
+     "summary": "The one differing case: `research-claims -h` prints help and exits 0 in Python, and exits 2 in Rust, under ask:449-usage-text.",
+     "class": "within",
+     "why": "This applies a case the accepted spec already rules: ask:449-usage-text binds --help only where a kept test or suite case holds it or a caller reads its usage text. The block does not state that condition outright. Its nearest evidence is the census (git grep of each name over the Makefile, tests/, .claude/, the shell scripts and the measurements files, which finds only provenance comments and history) and green hook suites. The difference is ruled, so the task is not straight under FR-001c and gets this review, which it is getting."
+    },
+    {
+     "id": "T137-normalizations",
+     "summary": "The differential normalizes: Traceback stderr; argparse's exit-2 usage text; the quoted regex-library text after 'KEY is not a regular expression - '; session ids and run-log names; the guard-log file name, utc and command; a goals line's utc; the stub's environment keys; the case path in the long cases. It lists unreached divergences (non-ASCII digits, isdigit vs is_numeric, re syntax beyond \\Z, a non-UTF-8 environment value, a moved-303.json that is not an object, -p with no prompt, ties in claim times).",
+     "class": "within",
+     "why": "Each normalization is covered by a ruled case or is nondeterminism or a harness artifact. Traceback text and argparse's text fall under ask:449-usage-text. The quoted library error text falls under ask:449-T066-json-message, which keeps the fixed words bound. Ids, timestamps and pid-based file names are nondeterministic. The harness (diff.py's NORMALIZED list) says the runner's guard-log 'command' is the process's own argv: the generator naming itself, deleted in this cut, which ask:449-T135-generator rules, though the block does not cite it. Reserve's 'command' differs only by the harness's old/ directory. The listed divergences lie outside the cases FR-002 binds (the cases its tests and suites hold)."
+    },
+    {
+     "id": "T137-probe-deletion",
+     "summary": "specs/274-leaner-research-sessions/measure/probe.sh, which nothing runs, is deleted unported in this cut.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-09 rule ('I don't think we need to port the past feature harnesses if those are not still used') and FR-001's phase-3 clause. ask:449-phase3-remainder's deletion class holds it. Deleting it with the files it runs, rather than in T130, changes the timing and not the outcome."
+    },
+    {
+     "id": "T137-order-exits",
+     "summary": "The task runs after T135 in one landing. It exits on make static, rust-test, hooks-test HOOKS_ALL=1 and land, and a claim that it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Procedure inside the plan's own process. Nothing that was asked is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

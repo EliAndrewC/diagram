@@ -12,6 +12,7 @@ pub use l7r_gate_cohort::{close_check, cohort, make_docs, push, speckit_todo};
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
 pub use l7r_gate_land::{land, replay_owing};
 pub use l7r_gate_measure::{measure, preflight};
+pub use l7r_gate_pages as pages;
 pub use l7r_gate_plan::plan;
 pub use l7r_gate_record::record;
 pub use l7r_gate_reviews::reviews;
@@ -90,6 +91,10 @@ pub fn cli(args: &[String]) -> Reply {
         Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
         Some("content-ids") => content_ids(&args[1..], Path::new("."), "python3"),
         Some("log") => logs::log_cli(&args[1..], Path::new(".")),
+        // an escape taken outside a hook, logged as a hook's (`make reserve`'s key cap, feature 449 T137); the reason floor's form beside it
+        Some("escape") if args.get(1).map(String::as_str) == Some("take") => {
+            pages::cli("escape-take", &args[2..])
+        }
         Some("escape") => logs::usage::escape_cli(&args[1..], &mut std::io::stdin()),
         Some("json-field") => logs::json_field(&args[1..]),
         Some("ruff-toml") => logs::ruff_cli(&mut std::io::stdin()),
@@ -135,6 +140,10 @@ pub fn cli(args: &[String]) -> Reply {
             &mut std::io::stdin(),
             &l7r_guard::shared::tempdir::TempDir::new("gate-patch-selftest"),
         ),
+        // the page sessions' tools (feature 449 T137): the runner starts this binary again for its detached queue
+        Some(verb @ ("page-session" | "brief-load" | "coord" | "research-claims")) => {
+            pages::cli(verb, &args[1..])
+        }
         Some("make-docs") => {
             make_docs::cli(&args[1..], &std::env::current_dir().unwrap_or_default())
         }
@@ -203,6 +212,17 @@ mod tests {
         let dir = l7r_guard::shared::tempdir::TempDir::new("gate-cli-docs");
         assert_eq!(ask(&["make-docs", dir.to_str().unwrap()]).code, 2);
         assert!(super::gate_tree().is_absolute());
+    }
+
+    /// The page sessions' tools ported by feature 449 T137, each refusing an empty command line (the runner's launch raising on one).
+    #[test]
+    fn the_page_session_tools_are_subcommands() {
+        let ask = |a: &[&str]| cli(&a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>());
+        for verb in ["brief-load", "coord", "research-claims"] {
+            assert_eq!(ask(&[verb]).code, 2, "{verb}");
+        }
+        assert_eq!(ask(&["escape", "take"]).code, 2);
+        assert_eq!(ask(&["page-session", "a", "b"]).code, 1);
     }
 
     #[test]

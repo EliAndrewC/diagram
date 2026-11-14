@@ -258,8 +258,22 @@ fn a_retry_wait_exempts_only_a_live_current_queue() {
     w.p.proc = proc;
     let t = now();
     assert!(!in_retry_wait(&w.p, &c, "s", t));
+    // the Python runner's old form, and a process that only names the log, exempt nothing (feature 449 T137)
+    for loose in [
+        format!(
+            "python3\0page_session_runner.py\0--work\0{}\0",
+            log.display()
+        ),
+        format!(
+            "bash\0-c\0sleep 600\0l7r-gate\0page-session\0--work\0r\0n\0[]\0[]\0{}\0",
+            log.display()
+        ),
+    ] {
+        std::fs::write(at.join("cmdline"), loose).unwrap();
+        assert!(!in_retry_wait(&w.p, &c, "s", t));
+    }
     let argv = format!(
-        "python3\0page_session_runner.py\0--work\0{}\0",
+        "/home/u/.cache/l7r-cargo-target/x/tool/l7r-gate\0page-session\0--work\0/r\0n\0[]\0[]\0{}\0",
         log.display()
     );
     std::fs::write(at.join("cmdline"), argv).unwrap();
