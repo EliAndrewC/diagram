@@ -446,8 +446,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T138 Phase 3, the research search no task held (phase-3 census, 2026-11-12): research_search.py and semantic_index.py (520 lines), after T85 (both import archive in process)
       research: rendering
-- [ ] T139 Phase 3, the past features' measurement scripts still run and working (ask:449-phase3-remainder) Q4: 238 inventory_shares, 239 change_size, 242 inventory_census and note_census, 261's five working scripts, 430 full_reasons, 432 triage_price, ported as make figures re-runs them
+- [x] T139 Phase 3, the past features' measurement scripts still run and working (ask:449-phase3-remainder) Q4: 238 inventory_shares, 239 change_size, 242 inventory_census and note_census, 261's five working scripts, 430 full_reasons, 432 triage_price, ported as make figures re-runs them
       research: rendering
+      verify: DONE. landed: the past features' measurement scripts ported (l7r-gate measure spec): 574 differential cases, none differing; 29 recorded commands rewritten and re-run; note_census retired
 - [ ] T140 Phase 4, the tools that reach Mode A or interactive/ (ask:449-phase3-remainder) Q1: building_programs, footnote_census, glossary_asset, notes_census, the pack_audit package, picture_diff, record_asset, source_tags_contract and scripts/gates/memo_check.py (each under the T065 clause, named at the phase-3 close), page_lit onto T85's one browser crate, tools/__init__.py, _census.py and work_counts.py with their last importer, 335's harness.py; and the pytest infrastructure's removal commit with the last kept pytest test (test_mode_a_sheets): conftest.py, the two __init__.py, _scope.py, _gate_failures.py, _heap.py, _memory.py, tooling_reuse_time.py (its three 383 commands retired)
       research: rendering
 - [x] T141 The review-round guard's Python hop removed: review_round_hooks.rs starts python3 on an inline snippet that only runs l7r-gate.sh plan door active-task and parses its JSON, on each spec-fidelity dispatch; the guard runs the gate command itself (found by T131's plan review, 2026-11-12)
