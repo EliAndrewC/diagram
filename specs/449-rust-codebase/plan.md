@@ -440,35 +440,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T136 (the review census and the agent sync no task held, `ask:449-phase3-remainder`)
-
-- **Approach**: `scripts/reviews/review_census.py` and `agent_sync.py` ported whole, no door, into the gate's `reviews` crate (`reviews/census.rs`, `reviews/agent_sync.rs`: `l7r-gate reviews census`, `reviews agent-sync`), `tests/test_agent_sync.py` as its Rust tests, the two Makefile recipes repointed and the three files deleted.
-
-   **Decisions** (`ask:449-phase3-remainder`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
-   - Where it lives: `reviews`, where T117 put the ledger rows the census reads, now read in process through the guard's `shared::ledger::measured_rows` where the Python ran `reviews ledger-rows`. `agent-sync` is the one writer of the generated part of the three modal agent files (`.claude/agents/modal-form.md`, `modal-depiction.md`, `modal-research.md`) from `dev/modals.md` and `dev/modals-particular.md` (observed 2026-11-12, method: `git grep` of the three files' writers). The crate declares those reads for its real-tree test. With no root given, both default to `L7R_GATE_TREE`, where the Python's own file resolved.
-   - Python's float reading (`float()`'s text and falsy rules, round half to even) moves into the guard's `py_text` as one implementation, which the census needs and `measure` and `trials` held two copies of (FR-003); `reviews ledger-rows`, now without a caller, keeps its command form (T119's rule that no form vanishes unannounced).
-   - The same outputs (FR-002): HEAD's Python against the Rust, each case set up identically, exit, stdout, stderr and every file of the tree compared, bytes and mode: 163 cases, 3 differing, 50 reaching a traceback and 9 an argparse error on both sides (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t136/diff.py`, `results.json`). The census 81 (the real ledger and r0, every flag and prefix, broken ledgers and r0 files of every kind), agent-sync 73 (32 tree states with and without `--check`, argv forms), and both recipes through make as written, 9. The differences: `--help` on each tool, which Python answers with its help and exit 0 and the Rust with exit 2 (`ask:449-usage-text`); and a superscript wall cell (`² s`), which Python's `isdigit` takes and `float()` then raises on and the Rust reads as 0, a cell `reviews ledger-lint` refuses at commit, so no committed row holds one (observed 2026-11-12, method: `reviews ledger-lint` on that cell). Normalizations: stderr up to `Traceback`, argparse errors as exit 2 with empty stdout and a `usage:` opening, make's own Makefile line, the goals line's stamp, bytecode off. Divergences no case reaches: NaN run counts' sort order, `NaN` literals in r0, an integer past f64.
-   - The test: its three tests mapped one to one, with newline, raise and argv tests added; 12 mutations, each failing the Python and the Rust test both as a test failure and passing both undone (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t136/mutate.py`, `mutations.json`).
-   - Timing: 7.5 s of process time in Python against 1.9 s in Rust (observed 2026-11-12, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t136/diff.py`).
-   - The census at the cut: provenance comments and the repointed doc line; no `specs/*/measurements*.json` command names either tool in any form, at HEAD or after (observed 2026-11-12, method: `git grep` of `review_census|agent_sync|test_agent_sync` over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/`, `tests/`, `docs`, `dev` and every measurements file). Two dead pointers in `docs/spec-kit-and-reviews.md` to a test T78 deleted are fixed with it. The checks: `make static` clean on 21 crates, `make rust-test` green (`reviews` 111 tests, the guard 557), `make hooks-test HOOKS_ALL=1` green on 54 suites, `check tool-signals`, `check rust-tooling` and the pointer check clean (observed 2026-11-12, method: those commands).
-
-### T136 Approach (checklist part A)
-
-1. **The goal, in the world.** The review census and the agent sync are Rust, one writer of the modal agents' generated part.
-2. **The constraints.** FR-001, FR-002 and FR-003, `ask:449-phase3-remainder`.
-3. **Where each comes from.** G: the standing approval to delete ported Python; R: the ruling; O: the differential, the mutations and the census above.
-4. **Do they describe the world here?** Run on this clone's real ledger and agent files, measured 2026-11-12 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t136/diff.py`).
-5. **The order.** After T133.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The differential's 163 cases with 3 explained differences, 12 mutations failing both sides, and the census.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
-
+<!-- plan-archive: T136 to T136 moved to plan-done.md, 2026-11-14 (feature 375 FR-044) -->
 ### T137 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

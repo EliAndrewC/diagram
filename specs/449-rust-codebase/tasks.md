@@ -439,8 +439,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       verify: DONE. landed: the work budget's tools ported to Rust (work-budget-bundle, budget-change): 895 differential cases, none differing; make static, rust-test and hooks-test green
 - [ ] T135 Phase 3, the authoring tools no task held (phase-3 census, 2026-11-12): claim-feature.py (also run by .specify's create-new-feature.sh), trial-start.py, trial-review.py, task-add.py, set-down.py, make-docs.py (run by the push and the land), patch.py (about 1,160 lines)
       research: rendering
-- [ ] T136 Phase 3, the review census and the agent sync no task held (phase-3 census, 2026-11-12): scripts/reviews/review_census.py and agent_sync.py with tests/test_agent_sync.py (216 lines)
+- [x] T136 Phase 3, the review census and the agent sync no task held (phase-3 census, 2026-11-12): scripts/reviews/review_census.py and agent_sync.py with tests/test_agent_sync.py (216 lines)
       research: rendering
+      verify: DONE. landed: the review census and the agent sync ported to Rust (reviews census, agent-sync): 163 differential cases, 3 explained; 12 mutations failing both sides; make static, rust-test and hooks-test green
 - [ ] T137 Phase 3, the page sessions' tools no task held (phase-3 census, 2026-11-12; routed to T81 and T83, which closed without them): page_session_runner.py, brief_load.py, escape_log.py, coord.py, research_claims.py (1,080 lines)
       research: rendering
 - [ ] T138 Phase 3, the research search no task held (phase-3 census, 2026-11-12): research_search.py and semantic_index.py (520 lines), after T85 (both import archive in process)
