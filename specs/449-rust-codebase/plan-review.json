@@ -780,6 +780,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-13",
    "declared": "spec-fidelity"
+  },
+  "### T136 (the review census and the agent sync no task held, `ask:449-phase3-remainder`)": {
+   "sha256": "c3be8145cc8cf0d1fe47c6c0bb8266c28c41e1c9b605871a5d3bdb12d64842d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity"
+  },
+  "### T136 Approach (checklist part A)": {
+   "sha256": "adc2636e7ac75069aeb8f44ffdf4be859c4f89e5b503dee158a465eef04a46e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8892,6 +8904,58 @@
      "why": "Evidence for the cut, not a scope decision; its search space is stated, as the enumeration rule asks."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-14",
+   "blocks": [
+    "### T136 (the review census and the agent sync no task held, `ask:449-phase3-remainder`)",
+    "### T136 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T136-where",
+     "summary": "review_census.py and agent_sync.py ported whole, no door, into the gate's reviews crate (census.rs, agent_sync.rs) as `l7r-gate reviews census` / `reviews agent-sync`; ledger rows read in process via shared::ledger::measured_rows instead of spawning `reviews ledger-rows`; both default their root to L7R_GATE_TREE as the Python resolved its own file; the three Python files deleted with the two Makefile recipes repointed.",
+     "class": "within",
+     "why": "FR-001 (every tracked .py replaced by Rust; ask:449-phase3-remainder names T136 as the task for exactly these two tools), FR-003 (no door, nothing runs both), and the GM's standing approval of 2026-11-10 to delete Python files once their Rust ports land. The root default preserves the Python's behavior."
+    },
+    {
+     "id": "T136-py-text",
+     "summary": "Python float() reading (text and falsy rules, round half to even) moved into the guard's py_text as one implementation, replacing the two copies measure and trials held; `reviews ledger-rows` keeps its command form though now uncalled.",
+     "class": "within",
+     "why": "Implementation placement of the behavior FR-002 requires the port to reproduce; it removes nothing the request or spec asks for, and keeping the uncalled command form removes nothing either. Design, not fidelity."
+    },
+    {
+     "id": "T136-help",
+     "summary": "`--help` on each tool: Python prints help and exits 0, the Rust exits 2 with a one-line usage complaint.",
+     "class": "within",
+     "why": "Spec FR-002 ruled case ask:449-usage-text: --help is bound only where a kept test or suite case holds it, or where a caller reads the usage text. The tools' only callers are the two Makefile recipes (the plan's git-grep census) and the three ported tests do not assert --help, so this is the ruling applied, not an exception to it."
+    },
+    {
+     "id": "T136-superscript",
+     "summary": "A superscript wall cell ('² s'): Python's isdigit accepts it and float() then raises (exit 1, traceback); the Rust reads it as 0 and prints the table (exit 0). Accepted as a difference, with ledger-lint refusing such a cell at commit.",
+     "class": "within",
+     "why": "FR-002 binds the same outputs 'on every case its tests and its suites hold'; this is a case the session built for its differential, held by no Python test or suite, and the committed ledger cannot carry it (ledger-lint refuses it, measured 2026-11-12). Outside FR-002's bound cases, so not a narrowing of the request or the spec. Confirmed on the differential's own results.json: census case 'superscript wall', py [1, '', TRACEBACK], rs [0, table]."
+    },
+    {
+     "id": "T136-unreached",
+     "summary": "Divergences no case reaches named and left: NaN run counts' sort order, NaN literals in r0, an integer past f64.",
+     "class": "within",
+     "why": "No test or suite case holds them, so FR-002 does not bind them; naming them adds disclosure and removes nothing that was asked."
+    },
+    {
+     "id": "T136-tests",
+     "summary": "tests/test_agent_sync.py's three tests mapped one to one into Rust tests, with newline, raise and argv tests added; 12 mutations each failing both the Python and the Rust test.",
+     "class": "within",
+     "why": "Carries the kept test into Rust as the 2026-11-10 rulings and ask:449-phase3-remainder direct; added tests only enforce FR-002 and are not new behavior."
+    },
+    {
+     "id": "T136-cut-census",
+     "summary": "The census at the cut (provenance comments, repointed doc line, no measurements command naming either tool), plus two dead pointers in docs/spec-kit-and-reviews.md to a test T78 deleted fixed in the same cut.",
+     "class": "within",
+     "why": "The cut census serves FR-001/FR-003 (no remaining runner of deleted files); the dead-pointer fix is documentation hygiene adjacent to the cut and narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15408,6 +15472,56 @@
      "summary": "Census at the cut: nothing runs the six by path; make done, make quick and land-tooling collected them by tree; afterwards only history references remain. Search space stated (git grep of each name over Makefile, *.mk, *.sh, *.py, *.rs, .claude/, tests/, docs, dev, specs/*/measurements*.json).",
      "class": "within",
      "why": "Evidence for the cut, not a scope decision; its search space is stated, as the enumeration rule asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T136": {
+   "section_sha256": "23eaa4dc5af1dd2c83e609ec6d40d68156c5a6e3566b785645c111a378d72e91",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T136-where",
+     "summary": "review_census.py and agent_sync.py ported whole, no door, into the gate's reviews crate (census.rs, agent_sync.rs) as `l7r-gate reviews census` / `reviews agent-sync`; ledger rows read in process via shared::ledger::measured_rows instead of spawning `reviews ledger-rows`; both default their root to L7R_GATE_TREE as the Python resolved its own file; the three Python files deleted with the two Makefile recipes repointed.",
+     "class": "within",
+     "why": "FR-001 (every tracked .py replaced by Rust; ask:449-phase3-remainder names T136 as the task for exactly these two tools), FR-003 (no door, nothing runs both), and the GM's standing approval of 2026-11-10 to delete Python files once their Rust ports land. The root default preserves the Python's behavior."
+    },
+    {
+     "id": "T136-py-text",
+     "summary": "Python float() reading (text and falsy rules, round half to even) moved into the guard's py_text as one implementation, replacing the two copies measure and trials held; `reviews ledger-rows` keeps its command form though now uncalled.",
+     "class": "within",
+     "why": "Implementation placement of the behavior FR-002 requires the port to reproduce; it removes nothing the request or spec asks for, and keeping the uncalled command form removes nothing either. Design, not fidelity."
+    },
+    {
+     "id": "T136-help",
+     "summary": "`--help` on each tool: Python prints help and exits 0, the Rust exits 2 with a one-line usage complaint.",
+     "class": "within",
+     "why": "Spec FR-002 ruled case ask:449-usage-text: --help is bound only where a kept test or suite case holds it, or where a caller reads the usage text. The tools' only callers are the two Makefile recipes (the plan's git-grep census) and the three ported tests do not assert --help, so this is the ruling applied, not an exception to it."
+    },
+    {
+     "id": "T136-superscript",
+     "summary": "A superscript wall cell ('² s'): Python's isdigit accepts it and float() then raises (exit 1, traceback); the Rust reads it as 0 and prints the table (exit 0). Accepted as a difference, with ledger-lint refusing such a cell at commit.",
+     "class": "within",
+     "why": "FR-002 binds the same outputs 'on every case its tests and its suites hold'; this is a case the session built for its differential, held by no Python test or suite, and the committed ledger cannot carry it (ledger-lint refuses it, measured 2026-11-12). Outside FR-002's bound cases, so not a narrowing of the request or the spec. Confirmed on the differential's own results.json: census case 'superscript wall', py [1, '', TRACEBACK], rs [0, table]."
+    },
+    {
+     "id": "T136-unreached",
+     "summary": "Divergences no case reaches named and left: NaN run counts' sort order, NaN literals in r0, an integer past f64.",
+     "class": "within",
+     "why": "No test or suite case holds them, so FR-002 does not bind them; naming them adds disclosure and removes nothing that was asked."
+    },
+    {
+     "id": "T136-tests",
+     "summary": "tests/test_agent_sync.py's three tests mapped one to one into Rust tests, with newline, raise and argv tests added; 12 mutations each failing both the Python and the Rust test.",
+     "class": "within",
+     "why": "Carries the kept test into Rust as the 2026-11-10 rulings and ask:449-phase3-remainder direct; added tests only enforce FR-002 and are not new behavior."
+    },
+    {
+     "id": "T136-cut-census",
+     "summary": "The census at the cut (provenance comments, repointed doc line, no measurements command naming either tool), plus two dead pointers in docs/spec-kit-and-reviews.md to a test T78 deleted fixed in the same cut.",
+     "class": "within",
+     "why": "The cut census serves FR-001/FR-003 (no remaining runner of deleted files); the dead-pointer fix is documentation hygiene adjacent to the cut and narrows nothing."
     }
    ],
    "verdict": "CLEAR"
