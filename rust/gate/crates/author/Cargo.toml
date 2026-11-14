@@ -1,0 +1,21 @@
+# The authoring tools (feature 449 T135, `ask:449-phase3-remainder`): `l7r-gate claim` (`make claim`, `scripts/claim-feature.py`'s port),
+# `trial-start` and `trial-review` (`make trial`, `make trial-review`) and `patch` (the anchored-edit sweep). Their own crate on `core`
+# alone: none reads the plan, the reviews or the claims, so an edit here rebuilds nothing below the binary, and the crates above `core`
+# keep their builds (T92). `make docs` is `cohort`'s, which the push and the land ask in process.
+[package]
+name = "l7r_gate_author"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

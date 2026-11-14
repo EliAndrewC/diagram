@@ -133,13 +133,15 @@ fn approach(item6: &str, item2: &str, item9: &str) -> String {
 
 #[test]
 fn an_approach_block_of_template_wording_and_ids_decides_nothing() {
-    let template = super::template_answers(
-        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../..")
-            .as_path(),
-    )[&6]
-        .clone();
-    assert!(template.starts_with("Green:") && template.contains("make arbiter-ask"));
+    let template = super::template_answers()[&6].clone();
+    // the wording the approach gate read from `task-add.py`'s source until feature 449 T135, byte for byte
+    assert_eq!(
+        template,
+        format!(
+            "Green: <the measurement that lands it>. {}",
+            crate::plan::template::RED_EXIT
+        )
+    );
     let (key, plan) = (
         "### T01 Approach (checklist part A)",
         "**D1 - a rule.** x\n",

@@ -2,10 +2,12 @@
 //! (`l7r-gate cohort`); the push's checks and what each push gate judges (`push-checks`, `push-gate`). The Rust crates' checks
 //! (`l7r-gate rust`) are their own crate, `crates/rustc` (T93). `l7r-gate speckit-todo` lives here beside the push that runs its `--check`
 //! (feature 449 T118), the narrowest crate the binary already builds on; `l7r-gate close-check` beside the push that runs its `--push`
-//! row, over the reasons in `reviews::closing` (feature 449 T127).
+//! row, over the reasons in `reviews::closing` (feature 449 T127); `l7r-gate make-docs` beside the push and the land that ask it in
+//! process (feature 449 T135).
 
 pub mod close_check;
 pub mod cohort;
+pub mod make_docs;
 pub mod push;
 pub mod speckit_todo;
 

@@ -3,10 +3,8 @@
 
 use std::fs::{File, OpenOptions};
 use std::io::Write as _;
-use std::os::unix::fs::OpenOptionsExt as _;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::sync::LazyLock;
-use std::time::{Duration, Instant};
 
 use fancy_regex::Regex;
 use serde_json::json;
@@ -273,45 +271,13 @@ fn append(canon_text: &str, new: &[Entry]) -> String {
     )
 }
 
-/// The mirror: a clone's grandparent when its parent is `.clones`, else the root itself.
-fn mirror_of(root: &Path) -> PathBuf {
-    if root
-        .parent()
-        .and_then(Path::file_name)
-        .is_some_and(|n| n == ".clones")
-    {
-        root.parent()
-            .and_then(Path::parent)
-            .unwrap_or(root)
-            .to_owned()
-    } else {
-        root.to_owned()
-    }
-}
-
-/// `flock` on the lock file, polled so a hung holder is a refusal rather than a hang; the lock lasts as long as the open file.
+/// `flock` on the lock file, polled so a hung holder is a refusal rather than a hang; the lock lasts as long as the open file. The poll
+/// and the mirror are `core`'s one copy, which `make claim` takes too (feature 449 T135, FR-003).
 fn lock(path: &Path, timeout: f64) -> Result<File, String> {
-    let dir = path.parent().unwrap_or(Path::new("."));
-    std::fs::create_dir_all(dir).map_err(text_err)?;
-    let file = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .truncate(false)
-        .mode(0o644)
-        .open(path)
-        .map_err(text_err)?;
-    let deadline = Instant::now() + Duration::from_secs_f64(timeout);
-    while !l7r_guard::shared::tool::flock(&file, "-n") {
-        if Instant::now() >= deadline {
-            let shown = path.display();
-            return Err(format!(
-                "could not take the prefix lock within {timeout}s: {shown} is held (fuser {shown})"
-            ));
-        }
-        std::thread::sleep(Duration::from_millis(20));
-    }
-    Ok(file)
+    crate::record::repo::flock_within(path, timeout)?.ok_or_else(|| {
+        let shown = path.display();
+        format!("could not take the prefix lock within {timeout}s: {shown} is held (fuser {shown})")
+    })
 }
 
 /// `datetime.datetime.now(datetime.UTC).isoformat()`.
@@ -355,7 +321,7 @@ pub(super) fn add(ctx: &Ctx, draft: &str) -> Result<Vec<String>, String> {
     let record = ctx.root.join("research");
     let items = drafts(draft, &record)?;
     let resolved = std::fs::canonicalize(&ctx.root).map_err(text_err)?;
-    let mirror = mirror_of(&resolved);
+    let mirror = crate::record::repo::mirror_of(&resolved);
     let ledger_path = mirror.join(".specify").join(LEDGER);
     let _held = lock(&mirror.join(".specify").join(LOCK), ctx.timeout)?;
     let mut n = highest_held(&ctx.root, &mirror, &ledger_path)?;

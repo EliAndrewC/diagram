@@ -8,7 +8,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/set-down-hooks.sh"
-SETDOWN="$HERE/../../scripts/set-down.py"
+SETDOWN="$HERE/../../scripts/gates/l7r-gate.sh"  # `l7r-gate set-down`, set-down.py's port (feature 449 T135)
 T=$(mktemp -d)
 GUARD_LOG_DIR="$T/log"; export GUARD_LOG_DIR
 USAGE_CAP_DIR="$T/cap"; export USAGE_CAP_DIR  # never the real session's cap
@@ -60,10 +60,10 @@ jq -nc '{"type": "assistant", "message": {"content": [{"type": "text", "text": "
 [ "$(stop)" = 2 ] && ok "a turn ending on a question is refused" || no "question"
 
 echo "5. make set-down: a reason of two words or more, recorded; it counts after the task-start only"
-( cd "$C" && SET_DOWN_WHY="waiting" python3 "$SETDOWN" 385 >/dev/null 2>&1 ); [ $? -ne 0 ] && ok "a one-word reason is refused" || no "one-word reason"
+( cd "$C" && SET_DOWN_WHY="waiting" "$SETDOWN" set-down 385 >/dev/null 2>&1 ); [ $? -ne 0 ] && ok "a one-word reason is refused" || no "one-word reason"
 printf '{"feature": "385-x", "why": "an old one", "utc": "2026-10-18T22:00:00Z"}\n' > "$G/set-downs.jsonl"
 [ "$(stop)" = 2 ] && ok "a set-down before the task-start does not count" || no "old set-down"
-( cd "$C" && SET_DOWN_WHY="awaiting the GM on the cohort" python3 "$SETDOWN" 385 ) | grep -q "385-x set down" && ok "make set-down records it" || no "set-down records"
+( cd "$C" && SET_DOWN_WHY="awaiting the GM on the cohort" "$SETDOWN" set-down 385 ) | grep -q "385-x set down" && ok "make set-down records it" || no "set-down records"
 [ "$(stop)" = 0 ] && ok "set down: the turn ends" || no "set down"
 
 echo "6. only the GM's review box open: the turn ends"
@@ -79,46 +79,46 @@ echo "8. a part B owed with no arbiter ruling since: set-down refused, naming ma
 chmod 644 "$C/specs/385-x/tasks.md"
 printf -- '- [ ] T26 the wood shed\n- [x] T103 the nub\n' > "$C/specs/385-x/tasks.md"
 printf '[{"feature": "385-x", "task": "T26", "trigger": "cohort@x: seed(s) 10 newly failing", "part": "B", "utc": "2026-10-21T19:28:05Z"}]\n' > "$G/approach-owed.json"
-( cd "$C" && SET_DOWN_WHY="the GM sees it first" python3 "$SETDOWN" 385 >/dev/null 2>"$T/err" ); rc=$?
+( cd "$C" && SET_DOWN_WHY="the GM sees it first" "$SETDOWN" set-down 385 >/dev/null 2>"$T/err" ); rc=$?
 [ "$rc" = 2 ] && grep -q "make arbiter-ask SUBJECT=set-down-T26" "$T/err" && grep -q "more room" "$T/err" && ok "refused, naming the arbiter ask" || no "unruled set-down" "rc=$rc $(cat "$T/err")"
-( cd "$C" && SET_DOWN_OK="the usage cap wind-down" SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "the escape lets it through" || no "escape"
+( cd "$C" && SET_DOWN_OK="the usage cap wind-down" SET_DOWN_WHY="the cap is reached" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "the escape lets it through" || no "escape"
 printf '{"trigger": "ask:set-down-T26", "ruling": "continue", "utc": "2026-10-21T19:20:00Z"}\n' > "$C/specs/385-x/arbiter.jsonl"
-( cd "$C" && SET_DOWN_WHY="the GM sees it first" python3 "$SETDOWN" 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "a ruling from before the trigger answers nothing" || no "old ruling"
+( cd "$C" && SET_DOWN_WHY="the GM sees it first" "$SETDOWN" set-down 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "a ruling from before the trigger answers nothing" || no "old ruling"
 printf '{"trigger": "ask:set-down-T26", "ruling": "continue", "utc": "2026-10-21T19:40:00Z"}\n' >> "$C/specs/385-x/arbiter.jsonl"
-( cd "$C" && SET_DOWN_WHY="the arbiter ruled it" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "ruled since: set down" || no "ruled set-down"
+( cd "$C" && SET_DOWN_WHY="the arbiter ruled it" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "ruled since: set down" || no "ruled set-down"
 printf -- '- [x] T26 the wood shed\n' > "$C/specs/385-x/tasks.md"; rm -f "$C/specs/385-x/arbiter.jsonl"
-( cd "$C" && SET_DOWN_WHY="nothing owed now" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "a ticked task's part B holds nothing" || no "ticked owed"
+( cd "$C" && SET_DOWN_WHY="nothing owed now" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "a ticked task's part B holds nothing" || no "ticked owed"
 
 echo "9. a usage cap armed and not reached: set-down refused until the arbiter rules on a set-down ask (the GM 2026-10-23)"
 mkdir -p "$T/cap"; export CLAUDE_CODE_SESSION_ID=s-1
 printf -- '- [ ] T07 the merge\n' > "$C/specs/385-x/tasks.md"; rm -f "$G/approach-owed.json"
 printf '{"cap": 80.0, "goal": "385 to completion"}' > "$T/cap/budget-s-1.json"
 printf '{"seven_day": 69}' > "$T/cap/latest-s-1.json"
-( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>"$T/err" ); rc=$?
+( cd "$C" && SET_DOWN_WHY="past the usage left" "$SETDOWN" set-down 385 >/dev/null 2>"$T/err" ); rc=$?
 [ "$rc" = 2 ] && grep -q "the weekly cap is 80% and the 7-day figure is 69%" "$T/err" && grep -q "make arbiter-ask SUBJECT=set-down-385" "$T/err" && ok "under the cap: refused, naming the arbiter ask" || no "under cap" "rc=$rc $(cat "$T/err")"
 printf '{"trigger": "ask:set-down-385", "ruling": "accept", "utc": "2026-10-18T22:30:00Z"}\n' > "$C/specs/385-x/arbiter.jsonl"
-( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "a ruling before the task-start answers nothing" || no "old cap ruling"
+( cd "$C" && SET_DOWN_WHY="past the usage left" "$SETDOWN" set-down 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "a ruling before the task-start answers nothing" || no "old cap ruling"
 printf '{"trigger": "ask:set-down-385", "ruling": "accept", "utc": "2026-10-19T01:00:00Z"}\n' >> "$C/specs/385-x/arbiter.jsonl"
-( cd "$C" && SET_DOWN_WHY="the arbiter ruled it" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "ruled since the task-start: set down" || no "cap ruled"
+( cd "$C" && SET_DOWN_WHY="the arbiter ruled it" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "ruled since the task-start: set down" || no "cap ruled"
 rm -f "$C/specs/385-x/arbiter.jsonl"; printf '{"seven_day": 80}' > "$T/cap/latest-s-1.json"
-( cd "$C" && SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "at the cap: set down" || no "at cap"
+( cd "$C" && SET_DOWN_WHY="the cap is reached" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "at the cap: set down" || no "at cap"
 rm -f "$T/cap/budget-s-1.json"
 
 echo "10. no goal cap (retired, the GM 2026-10-24): the account's weekly soft cap holds the set-down"
 printf '{"seven_day": 76, "account": {"uuid": "u-1"}}' > "$T/cap/latest-s-1.json"
-( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>"$T/err" ); rc=$?
+( cd "$C" && SET_DOWN_WHY="past the usage left" "$SETDOWN" set-down 385 >/dev/null 2>"$T/err" ); rc=$?
 [ "$rc" = 2 ] && grep -q "the weekly cap is 90% and the 7-day figure is 76%" "$T/err" && ok "under the default soft cap: refused" || no "soft default" "rc=$rc $(cat "$T/err")"
 printf '{"u-1": {"cap": 70}}' > "$T/cap/caps.json"
-( cd "$C" && SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "past the account's own soft cap: set down" || no "soft set"
+( cd "$C" && SET_DOWN_WHY="the cap is reached" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "past the account's own soft cap: set down" || no "soft set"
 printf '{"u-1": {"cap": 95}}' > "$T/cap/caps.json"
-( cd "$C" && SET_DOWN_WHY="past the usage left" python3 "$SETDOWN" 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "the cap raised mid-work: refused at the next call" || no "raised cap"
+( cd "$C" && SET_DOWN_WHY="past the usage left" "$SETDOWN" set-down 385 >/dev/null 2>&1 ); [ $? = 2 ] && ok "the cap raised mid-work: refused at the next call" || no "raised cap"
 printf '{"u-1": {"cap": 70}}' > "$T/cap/caps.json"
-( cd "$C" && SET_DOWN_WHY="the cap is reached" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "lowered again: set down at the next call" || no "lowered cap"
+( cd "$C" && SET_DOWN_WHY="the cap is reached" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "lowered again: set down at the next call" || no "lowered cap"
 printf '{"u-1": {"cap": 95}}' > "$T/cap/caps.json"
 printf '{"seven_day": 76, "seven_day_resets_at": 1, "account": {"uuid": "u-1"}}' > "$T/cap/latest-s-1.json"
-( cd "$C" && SET_DOWN_WHY="a new week" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "last week's reading decides nothing" || no "stale reading"
+( cd "$C" && SET_DOWN_WHY="a new week" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "last week's reading decides nothing" || no "stale reading"
 rm -f "$T/cap/latest-s-1.json"
-( cd "$C" && SET_DOWN_WHY="no reading here" python3 "$SETDOWN" 385 >/dev/null 2>&1 ) && ok "no reading: set down" || no "no reading"
+( cd "$C" && SET_DOWN_WHY="no reading here" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "no reading: set down" || no "no reading"
 
 echo "set-down-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

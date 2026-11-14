@@ -195,6 +195,9 @@ enum Tool {
     Gate,
     /// A Python script under `scripts/`, until its task ports it.
     Py(&'static str),
+    /// A check asked in process, given the clone (`make-docs`, feature 449 T135, where it ran `scripts/make-docs.py`); its arguments
+    /// are its command form, which make's timing runs.
+    InProcess(fn(&Path) -> Reply),
 }
 
 /// A row of the push: its name, what runs it, its arguments (`{root}` is the clone), the refusal, is it a self-test, what it needs.
@@ -210,7 +213,7 @@ struct Row(
 const CHECKS: [Row; 23] = [
     Row("file-scale selftest", Tool::Gate, &["check", "file-scale", "--selftest"], "check-file-scale selftest failed - the guard itself is broken; fix rust/gate/crates/checks/src/checks/ before pushing", true, ""),
     Row("file-scale", Tool::Gate, &["check", "file-scale", "{root}"], "a Rust file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", false, ""),
-    Row("make-docs", Tool::Py("make-docs.py"), &["{root}", "--check"], "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", false, "docs/make-targets.html"),
+    Row("make-docs", Tool::InProcess(crate::make_docs::check), &["make-docs", "{root}", "--check"], "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", false, "docs/make-targets.html"),
     Row("ledger-owed", Tool::Gate, &["reviews", "ledger-owed", "--ledger", "{root}/dev/review-ledger.md", "--refuse"], "a check's pass has no row in dev/review-ledger.md (above) - write each from its reply: make ledger-owed WRITE=\"<where you recorded what you did>\" (or add the row printed, its ?s filled); features 371, 385 FR-019", false, ""),
     Row("entry-headings selftest", Tool::Py("gates/check-entry-headings.py"), &["--selftest"], "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing", true, "delta:entry-headings"),
     Row("entry-headings", Tool::Py("gates/check-entry-headings.py"), &["{root}"], "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234", false, "delta:entry-headings"),
@@ -300,7 +303,9 @@ fn row_command(tools: &Tools, row: &Row, root: &Path) -> Command {
         .map(|a| a.replace("{root}", &root_text))
         .collect();
     let mut command = match row.1 {
-        Tool::Gate => Command::new(tools.tree.join("scripts/gates/l7r-gate.sh")),
+        Tool::Gate | Tool::InProcess(_) => {
+            Command::new(tools.tree.join("scripts/gates/l7r-gate.sh"))
+        }
         Tool::Py(rel) => {
             let mut c = Command::new(&tools.python);
             c.arg(tools.tree.join("scripts").join(rel))
@@ -337,6 +342,15 @@ pub fn timing_rows(tree: &Path, root: &Path) -> Vec<(String, Option<Command>)> {
 /// Run one row in the clone: its output passes through, but for a self-test's stdout.
 /// Run one row in the clone, its output kept to be shown in the table's order (a self-test's stdout dropped); none where it cannot start.
 fn run_row(tools: &Tools, row: &Row, root: &Path) -> Option<std::process::Output> {
+    if let Tool::InProcess(check) = row.1 {
+        let said = check(root);
+        return Some(std::process::Output {
+            status: std::os::unix::process::ExitStatusExt::from_raw((said.code & 0xff) << 8),
+            // no self-test is asked in process, so its stdout is shown as a command's is
+            stdout: said.stdout.into_bytes(),
+            stderr: said.stderr.into_bytes(),
+        });
+    }
     let mut command = row_command(tools, row, root);
     if row.4 {
         command.stdout(Stdio::null());
@@ -365,7 +379,7 @@ fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Rep
         .map(|row| {
             let key = match row.1 {
                 Tool::Py(_) => Some(&version),
-                Tool::Gate => gate.as_ref(),
+                Tool::Gate | Tool::InProcess(_) => gate.as_ref(),
             };
             (row, key.filter(|_| row.4))
         })

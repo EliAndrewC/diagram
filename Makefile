@@ -386,7 +386,7 @@ audit:          ## [project] how the gate has actually been used - every run and
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure audit claims
 
 docs:           ## [project] regenerate docs/make-targets.html from this Makefile's own `##` lines
-	@python3 scripts/make-docs.py . --write
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" make-docs . --write
 
 help:           ## [project] list every target with its one-line purpose
 	@printf '\n\033[1mOperations\033[0m - everything runs through one of these.\n\n'
@@ -442,7 +442,7 @@ set-down: export SET_DOWN_WHY = $(WHY)
 set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70); refused while an open task's part B has no arbiter ruling since (405), or while the 7-day usage is under the weekly soft cap (a goal's, where one is still armed) unless the arbiter ruled a set-down ask (GM 2026-10-23, 10-24): F=385 WHY="awaiting the GM on the cohort trend" [SET_DOWN_OK="<reason>"]
 	@if [ -z "$(F)" ]; then printf 'make set-down: F=<feature> is required\n' >&2; exit 2; fi
 	$(if $(SET_DOWN_OK),$(LOGESCAPE) SET_DOWN_OK "$(SET_DOWN_OK)",@:)
-	@SET_DOWN_OK="$(SET_DOWN_OK)" python3 "$$(git rev-parse --show-toplevel)/scripts/set-down.py" "$(F)"
+	@SET_DOWN_OK="$(SET_DOWN_OK)" "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" set-down "$(F)"
 
 found-list:     ## [project] a feature's open findings (found.jsonl), numbered - what is not yet filed as a task or settled (405 T29)   F=405
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record found list --feature "$$(ls -d specs/$(F)-* | head -1)"
@@ -452,7 +452,7 @@ found-close:    ## [project] close found.jsonl rows: FILED as a task, or SETTLED
 task-add: export TASK_TITLE = $(TITLE)
 task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical] [PERF=1: a performance task, docs/performance-checklist.md's questions appended]
 	@if [ -z "$(F)" ]; then printf 'make task-add: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/task-add.py" "$(F)" $(if $(SECTION),--section "$(abspath $(SECTION))",) $(if $(filter physical,$(RESEARCH)),--physical,) $(if $(PERF),--performance,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-add "$(F)" $(if $(SECTION),--section "$(abspath $(SECTION))",) $(if $(filter physical,$(RESEARCH)),--physical,) $(if $(PERF),--performance,)
 
 tick: export TICK_NOTE = $(NOTE)
 tick: export PLAN_REVIEW_OK := $(PLAN_REVIEW_OK)
@@ -584,18 +584,18 @@ spec-harness:   ## [project] run a feature's measurement harness (its harness.py
 	rm -f tests/test_zz_spec_harness_tmp.py; exit $$ec
 
 trial-review:   ## [project] a trial's ONE review: its brief, request and research bundled, and the dispatch printed - check each figure against its recorded output, re-run only what is missing (feature 442)   F=<trial number>
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/trial-review.py" "$(F)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" trial-review "$(F)"
 
 trial: export TRIAL_APPROVED = $(APPROVED)
 trial:          ## [project] start a TRIAL - a question a measurement answers: claims a number and writes the trial brief (**Form**: trial), measured first, reviewed once when Done (features 438, 440; docs/spec-kit-and-reviews.md)   SLUG=kebab-slug [APPROVED="<the GM's words, verbatim>"]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/trial-start.py" "$(SLUG)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" trial-start "$(SLUG)"
 
 claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug | RENUMBER=specs/NNN-slug [PEEK=1: look, claim nothing]
 ##  SLUG=<slug>          lower-case kebab; the directory becomes specs/NNN-<slug>/ in THIS clone
 ##  RENUMBER=<specs/dir> instead of a slug: MOVE that existing directory to the next number (a deduplication, GM 2026-09-07)
 ##  PEEK=1               print what the claim would be and create or move nothing
 	@if [ -z "$(SLUG)$(RENUMBER)" ]; then printf 'make claim: SLUG=<kebab-slug> is required (or RENUMBER=specs/NNN-slug to move an existing directory) - e.g. make claim SLUG=cheaper-widgets\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/claim-feature.py" $(if $(PEEK),--dry-run,) $(if $(RENUMBER),--renumber "$(RENUMBER)",-- "$(SLUG)")
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claim $(if $(PEEK),--dry-run,) $(if $(RENUMBER),--renumber "$(RENUMBER)",-- "$(SLUG)")
 
 speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, planned, in progress - by the stage each is owed at   [ALL=1: also the closed; BY=affects: by tag; CHECK=1: refuse missing or unknown tags]
 ##  ALL=1   also list the closed features and the reason each is closed
@@ -1037,7 +1037,7 @@ static:         ## [static] the static checks: ruff's outright errors, file-scal
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --tracked .
-	python3 scripts/make-docs.py . --check
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" make-docs . --check
 	bash scripts/reviews/layout_carry.sh --selftest
 
 rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17); only the crates whose sources, test binary or declared reads moved since their last green run, the rest's result reused (449 T93)   [CRATE=tests/fixtures/rust/fixture] [FRESH=1 REASON="..."]

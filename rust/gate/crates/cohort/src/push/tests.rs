@@ -448,8 +448,8 @@ fn the_checks_still_in_python_do_not_start_on_a_rust_only_change() {
 fn the_push_runs_the_make_page_check_and_the_money_check() {
     let row = |name: &str| CHECKS.iter().find(|r| r.0 == name).unwrap();
     assert!(
-        matches!(row("make-docs").1, Tool::Py("make-docs.py"))
-            && row("make-docs").2 == ["{root}", "--check"]
+        matches!(row("make-docs").1, Tool::InProcess(_))
+            && row("make-docs").2 == ["make-docs", "{root}", "--check"]
     );
     assert!(row("make-docs").3.contains("make docs"));
     assert!(
@@ -478,4 +478,30 @@ fn the_timing_rows_start_with_the_one_process_run() {
     let rows = super::timing_rows(&work, &work);
     assert_eq!(rows[0].0, "push checks (one process)");
     assert!(rows[0].1.is_some() && rows.len() == CHECKS.len() + 1);
+}
+
+/// The make-targets page asked in process (feature 449 T135, where the row ran `scripts/make-docs.py`): a current page passes, a stale one
+/// refuses with the row's line; its timing form is the gate command.
+#[test]
+fn the_make_page_row_runs_in_process() {
+    let root = tree();
+    let docs = std::slice::from_ref(CHECKS.iter().find(|r| r.0 == "make-docs").unwrap());
+    std::fs::write(
+        root.join("Makefile"),
+        "a:   ## [tests] a target\n\techo a\n",
+    )
+    .unwrap();
+    assert_eq!(crate::make_docs::write(&root).code, 0);
+    assert_eq!(run_checks(&tools(&root, true), docs, &root, &[]).code, 0);
+    std::fs::write(root.join("Makefile"), "b:   ## [tests] another\n\techo b\n").unwrap();
+    let refused = run_checks(&tools(&root, true), docs, &root, &[]);
+    assert_eq!(
+        (refused.code, refused.stderr.contains("make docs")),
+        (1, true)
+    );
+    let timed = super::row_command(&tools(&root, true), &docs[0], &root);
+    assert!(timed
+        .get_program()
+        .to_string_lossy()
+        .ends_with("l7r-gate.sh"));
 }

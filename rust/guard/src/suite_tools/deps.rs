@@ -174,7 +174,8 @@ impl Tree {
             .filter(|e| helper(e))
             .map(|(n, _)| n.clone())
             .collect();
-        shared.extend(["hookrun.sh".to_owned(), "patch.py".to_owned()]);
+        // `patch.py`, a top-level command the list named too, left with its port to `l7r-gate patch` (feature 449 T135)
+        shared.extend(["hookrun.sh".to_owned()]);
         let shared: Vec<String> = shared.into_iter().collect();
         let mut stems: Vec<String> = shared
             .iter()

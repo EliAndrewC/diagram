@@ -40,44 +40,9 @@ static CFG_TEST: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#\[cfg\(test\)\]")
 static LINE_COMMENT: LazyLock<Regex> = LazyLock::new(|| re(r"//.*"));
 static STRING: LazyLock<Regex> = LazyLock::new(|| re(r#""(?:[^"\\]|\\.)*""#));
 
-/// `f"{v:g}"`: six significant digits, trailing zeros dropped, an exponent outside 1e-4..1e6.
-pub fn fmt_g(v: f64) -> String {
-    if v == 0.0 {
-        return if v.is_sign_negative() {
-            "-0".to_owned()
-        } else {
-            "0".to_owned()
-        };
-    }
-    if v.is_infinite() {
-        return if v > 0.0 {
-            "inf".to_owned()
-        } else {
-            "-inf".to_owned()
-        };
-    }
-    let sci = format!("{v:.5e}");
-    let (mantissa, exp) = sci.split_once('e').unwrap_or((&sci, "0"));
-    let exp: i32 = exp.parse().unwrap_or(0);
-    let trim = |s: &str| {
-        if s.contains('.') {
-            s.trim_end_matches('0').trim_end_matches('.').to_owned()
-        } else {
-            s.to_owned()
-        }
-    };
-    if (-4..6).contains(&exp) {
-        let decimals = usize::try_from(5 - exp).unwrap_or(0);
-        trim(&format!("{v:.decimals$}"))
-    } else {
-        format!(
-            "{}e{}{:02}",
-            trim(mantissa),
-            if exp < 0 { '-' } else { '+' },
-            exp.abs()
-        )
-    }
-}
+/// `f"{v:g}"`: the guard's `py_text::fmt_g` since feature 449 T135, where `make set-down`'s and `make claim`'s refusals write a figure
+/// as Python's `:g` did and the crates below `claims` could not reach this copy (`ask:449-phase3-remainder`, one implementation, FR-003).
+pub use l7r_guard::shared::py_text::fmt_g;
 
 fn stated(value: f64, text: &str) -> bool {
     re(&format!(

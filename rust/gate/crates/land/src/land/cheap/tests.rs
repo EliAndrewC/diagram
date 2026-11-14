@@ -126,16 +126,10 @@ fn the_first_pass_commits_its_own_records() {
     let fx = fx("cheap-records");
     let d = fx.root.join("specs/449-x");
     *fx.answers.ledger_writes.borrow_mut() = Some(fx.root.join("dev/review-ledger.md"));
-    fx.answer(
-        &format!("make-docs.py {} --check", fx.root.display()),
-        "rc",
-        "1",
-    );
-    fx.answer(
-        &format!("make-docs.py {} --write", fx.root.display()),
-        "sh",
-        "mkdir -p docs && echo page > docs/make-targets.html && git add docs/make-targets.html\n",
-    );
+    // a real Makefile and a stale page: the check asked in process finds it stale and the page is written (feature 449 T135)
+    put(&fx.root, "Makefile", "a:   ## [tests] a target\n\techo a\n");
+    put(&fx.root, "docs/make-targets.html", "stale\n");
+    git(&fx.root, &["add", "Makefile", "docs/make-targets.html"]);
     fx.answers
         .claims
         .borrow_mut()
@@ -174,6 +168,7 @@ fn the_first_pass_commits_its_own_records() {
         .said()
         .0
         .contains("land: claims-carry: 1 filed into 405-engine T7"));
+    assert_eq!(l7r_gate_cohort::make_docs::check(&fx.root).code, 0);
     // a carry that names no feature is filed into this one
     fx.answers.claims.borrow_mut().insert(
         "carry".to_owned(),
@@ -182,6 +177,18 @@ fn the_first_pass_commits_its_own_records() {
     put(&fx.root, "specs/449-x/claims-carried.jsonl", "{}\n");
     fx.land.file_carries(&d).unwrap();
     assert!(fx.subjects().matches("filed as a task").count() == 2);
+    // the page current now: a second pass regenerates and commits nothing
+    let before = fx
+        .subjects()
+        .matches("docs/make-targets.html regenerated")
+        .count();
+    fx.land.records_on_the_way(&d).unwrap();
+    assert_eq!(
+        fx.subjects()
+            .matches("docs/make-targets.html regenerated")
+            .count(),
+        before
+    );
 }
 
 #[test]

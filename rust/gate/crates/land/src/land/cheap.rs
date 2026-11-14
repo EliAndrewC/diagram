@@ -285,10 +285,10 @@ impl Land {
         self.write_ledger(d)?;
         // ...and the make-targets page, regenerated where the Makefile moved (feature 405 T46, D19): the push's `make-docs` check
         // refused T43's landing after its hooks-test, for a page `make docs` writes in a second
-        let docs = self.script("make-docs.py");
-        let root = self.root.to_string_lossy().into_owned();
-        if self.run(&[&self.python, &docs, &root, "--check"], &[])?.0 != 0 {
-            self.run(&[&self.python, &docs, &root, "--write"], &[])?;
+        // asked in process (feature 449 T135, where it ran `scripts/make-docs.py`): a failed write is passed over as the command's
+        // exit was, and the commit below then finds nothing to take
+        if l7r_gate_cohort::make_docs::check(&self.root).code != 0 {
+            let _ = l7r_gate_cohort::make_docs::write(&self.root);
             self.run(
                 &[
                     "git",

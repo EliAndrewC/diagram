@@ -85,24 +85,6 @@
    "reviewed": "2026-11-10",
    "declared": "round-arbiter"
   },
-  "### T011 Approach (checklist part A)": {
-   "sha256": "24a3b87c119466e2c02bc560cf64255e922bb29f08e2db18c43129b43f194dc2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
-  },
-  "### T043 Approach (checklist part A)": {
-   "sha256": "b512a9f598fe04a0738b1d308e65d38d04ee88640c27c34a7a582cbddc810197",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
-  },
-  "### T048 Approach (checklist part A)": {
-   "sha256": "d516e0715bf5ff24f01aac1d18cdedf242328a25960910e189d66ed479417fd9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
-  },
   "### T061 Approach (checklist part A)": {
    "sha256": "659eb9091f453ab90040810c022f06b7d9169a5d9351b15f6dad0c37a3b500dd",
    "verdict": "CLEAR",
@@ -114,48 +96,6 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
-  },
-  "### T81 (the first record leaves, `ask:449-T81-slices`)": {
-   "sha256": "9554f2d4615b492bf194c23ddaa3a48fbfe597fbab0fb97fd4f8956bcc491281",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
-  },
-  "### T81 Approach (checklist part A)": {
-   "sha256": "dc6de8e03d76b1c541dcdc5b5d7e79503f73cb31f2cf54c3a4579141de3ebe42",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
-  "### T82 Approach (checklist part A)": {
-   "sha256": "9aa4a16008728a1fc5c6df865e39e3b39d56db0674568eae988e17a920210f88",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T83 (<why: the finding or measurement that files it>)": {
-   "sha256": "5e5ea38b150b3ecceffc22ab437737801c697c4a2b214047efa4932fd87752ea",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
-  "### T83 Approach (checklist part A)": {
-   "sha256": "8af32b28610ec8a501185ff29377a65a1580e4484f52d02b4043a484ecfae7c4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
-  "### T84 (<why: the finding or measurement that files it>)": {
-   "sha256": "4b37f97e9a5b28c11e6a3df3360d1275fffda555233aea480f7eede0dc6d2da3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
-  "### T84 Approach (checklist part A)": {
-   "sha256": "f1590d41da76298a5ba36c7ed2e8aa98e335d2d8d4d339085bb21343e84171f5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
   },
   "### T85 (<why: the finding or measurement that files it>)": {
    "sha256": "c7f853f11d9f08e9752ec4b0d48cdc0b6e83b9361ee9e433d33880caf9ef9ecf",
@@ -169,456 +109,6 @@
    "reviewed": "2026-11-10",
    "declared": "round-arbiter"
   },
-  "### T86 Approach (checklist part A)": {
-   "sha256": "9059fc1ccf025405836c10f9b24a3da60239e7bb62cdbc6eb702c8c9c3b22b59",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
-  },
-  "### T87 Approach (checklist part A)": {
-   "sha256": "0fd541568e111474c41e3fe5f9dd5cd5cf045671e7e029834964e2727bf28eef",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T88 Approach (checklist part A)": {
-   "sha256": "5aa1ec7e3d17470662a57ab9061e33dbaf1c78ddd1f52f001db5dccf2b6b7f3a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T89 Approach (checklist part A)": {
-   "sha256": "49dc65db056630cc5ff69fff64ce63e37575fdcaccc1aed318c443e3349d5cd9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T86 (the arbiter and checks state, `ask:449-T86-door`)": {
-   "sha256": "ae223a311e02194fe59a96d8b5d5e133e92f7f338ff1066356be08550899157f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "spec-fidelity"
-  },
-  "### T87 (the owed core, `ask:449-T87-entry-owed`)": {
-   "sha256": "a96c31e8120700f857a434bd9c7a60d665f501348fd736059f0d73466a5e3626",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T88 (the bundles, `ask:449-T88-bundles`)": {
-   "sha256": "11c396ed2c4326e2d425682fed0b719309d010f944c7d6364263f18dc1a1d59d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T89 (the reviews, `ask:449-T89-reviews`)": {
-   "sha256": "373bdf1893c2de7f69a5afc8901832e02e4fbdeb6ea221a46eb1df9ffdfe4233",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T82 (the claims, `ask:449-T82-claims`)": {
-   "sha256": "1d22cf14d2e891f9e9f44abbb51754d6d6b15ef4f048edd5750cd180985f1054",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T92 (the gate crate split, the GM 2026-11-11, `request.md` \"the Rust iteration loop\", FR-011)": {
-   "sha256": "4a2e273482fe733e12f7c9c354802672a24a1fbc11721ae1bf045fc977cdc92c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T92 Approach (checklist part A)": {
-   "sha256": "b367f84103cf9b45d87a28a86657b85758ded47752d8c17c75f5f216ae1186cf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T94 (the landing's slow hook suites, FR-011)": {
-   "sha256": "793980d858f8d6d0292e2148b2851038b3531c53b135534539ba20ca17ab41c6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T94 Approach (checklist part A)": {
-   "sha256": "d44129b63adc7b5c21ef399f8991550655d20f2479451c7a49ac9a77e9986b4a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T93 (the fast Rust loop by default and enforced, the GM 2026-11-11, `request.md` \"the Rust iteration loop\", FR-011)": {
-   "sha256": "5a3ebb308cae8aff555b75803a961d3f216c57471c8040292380f3e0e5f20d9b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T93 Approach (checklist part A)": {
-   "sha256": "7c52c4471a9e13da309d7025e1e172fd7828dbf7c23afd4d9b967d29b37f904e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T95 (the full l7r-gate release binary rebuilt after any gate crate edit, FR-012)": {
-   "sha256": "c007c0f95b018befa06a58d82961e4865a3b0d1eb329b598bf58ec9917fa29cd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T95 Approach (checklist part A)": {
-   "sha256": "1a5cd0f7c7073e96edf1fb164314e060529f78093c6519ee2e460df3524ab4a1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T96 (a test binary rebuilt after a one-line edit, FR-012)": {
-   "sha256": "676a923c1c999003f0db75a3ea6a7fce4a50b839a83fb75779a4c6c146ea8050",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T96 Approach (checklist part A)": {
-   "sha256": "d101c8b6a4334f108f664b781b3d859fff464459c3f09d2d5c013f1bdfd5b09f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T103 (session scratch under /tmp/claude-1000 swept, FR-013)": {
-   "sha256": "22fc9b393276c14f217899aa1d2fd24487518f7ac001dc84a569dd90645a81cf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T103 Approach (checklist part A)": {
-   "sha256": "07591687a366b6b924a30a87bf7e8b17889e40f7ec70b3e9775d3cf856edb5be",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T102 (the cargo target cache stops growing, FR-013)": {
-   "sha256": "daee636e3b4e1e3980d341d242320c8d411655144a8f331be5a3a0240db9ecc0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T102 Approach (checklist part A)": {
-   "sha256": "802907e6ee54e73788353585cd722965e4c4f53afef937828606443c23ea9371",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T97 Approach (checklist part A)": {
-   "sha256": "1260b4046e5996b8b176331011035b450dbdab314e215f0a6a830108a9c3a593",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T104 (a spec round's arbiter bundle read every subagent transcript whole, found under T99, FR-012)": {
-   "sha256": "e4201cc333bf806f77d7c91a80c476acf85beb6f49da22e6866d196f0256542d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T104 Approach (checklist part A)": {
-   "sha256": "b5bef68818118a2f25aa9a165f83041fa697239d4b5eeabe9867aad2ab9f11c5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T100 (make static's lint, coverage and dead-code reruns after a fresh gate crate edit, FR-012)": {
-   "sha256": "42856ed0be2426b7c257de1b0d64c65e399addbaf9a03d542e495438bf47f944",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T100 Approach (checklist part A)": {
-   "sha256": "929a068c56cdcf48ff61b1f265b688d6daec1af7ba8d37963ce070e3473e645d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T98 (the hook suites run in parallel, FR-012)": {
-   "sha256": "fb9db9fabd4e60bbbc436f7f71559cf1965b706c1f95b28385ef93ebeca362d8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T98 Approach (checklist part A)": {
-   "sha256": "c1b37286c9da8fea0748af19cb3c928a7044ad3938f8fb79654e40435a2247b0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-11",
-   "declared": "spec-fidelity"
-  },
-  "### T105 (a core edit's coverage builds made together, FR-012)": {
-   "sha256": "085837b4949c2f04172ea6f19b970342f47e5e35d75507f3e2f7ad4dcf14dec1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T105 Approach (checklist part A)": {
-   "sha256": "01f37594ec7a72699041a7e6d90923647213f5152f64615f3097dbea5514abff",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T107 (the record's owed list's git calls, FR-012)": {
-   "sha256": "17774ffa2860be03827ff34a3112bf332e1cd9bb5826bfd7b38d7d9f7bb56a65",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T107 Approach (checklist part A)": {
-   "sha256": "9af8f63bd9b5f74d69c9f12637a1af87170785a7340ab3e1542c1b967a322c53",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T107 Approach (checklist part A)#2": {
-   "sha256": "f85d996b64cd5fd92444c71b685c65a5d18150c406efe7c67b060c42e9f5bffc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T106 (the sync-with-main hook suite's own time, FR-012)": {
-   "sha256": "6f8486039a1922fc9f3a33299263e6b637e03763c4e09eddfa21b330191849ac",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T106 Approach (checklist part A)": {
-   "sha256": "c4da8c23c28e637792ec2b2343703dfc923488e70d468fd35f0b4fd7e8283d8d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T109 (push-checks' Rust self-tests kept per binary, FR-012)": {
-   "sha256": "17f75927c2970a704d78d7265f853c212fc73ba4edbf789764db38050f7a845d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T109 Approach (checklist part A)": {
-   "sha256": "5e8a458a171f0c1ca290573c66e724fc86675ca7e4bd19fb516d3b0f2d08234e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T108 (a core edit's coverage tests side by side, FR-012)": {
-   "sha256": "de2b1706ecd7e1a71611bcaffa39d225964cbfa218edd35b25aa3e00fb2756a4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T108 Approach (checklist part A)": {
-   "sha256": "94d7467aa68c0c0729782580a6f40df431d1ea18166483c57777c71fe433c16d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T90 (<why: the finding or measurement that files it>)": {
-   "sha256": "fabae7ab5cae61d7235cdc67b4983d5ed907440669991cfcdbffbda49c4158cc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T90 Approach (checklist part A)": {
-   "sha256": "a65c04724a32e8b0ee2b63bde846635e9db5a4d8df0f5828ed6b33b3fac31089",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T91 (<why: the finding or measurement that files it>)": {
-   "sha256": "8cb1d90a4c3864a74e895d6b518cd81db010dc2871a52edb0100aed0eba88fdf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T91 Approach (checklist part A)": {
-   "sha256": "54d072ee89c93a580f8191f6df8fff04f82f1dbae80d5e12e22e6dd8e4c55429",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T99 (the arbiter crate's tests against FR-008's bar, FR-012)": {
-   "sha256": "b87ec2686594ab5f1bc44dd585265c0cd8434927c2824e2c6eb407dd0830ba65",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T99 Approach (checklist part A)": {
-   "sha256": "252fc593344c17a2b665ca35061ab2970f51230266a080151e5f6bfe0fce5652",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T101 (every temporary directory a check or test makes is removed, FR-013)": {
-   "sha256": "ea57277f49cd51de00a32aea633cb2e148d4b6d69f8176aa24daae5d642644be",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T101 Approach (checklist part A)": {
-   "sha256": "183cac09aed31e3a06633ded73d9254199dead5766c2a3df0a289e0dbda1fe26",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T110 (rustfmt kept per crate, FR-012)": {
-   "sha256": "a314531b428b2fcac9e72692575065c913de19e172f0432897146a22e099eca1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T110 Approach (checklist part A)": {
-   "sha256": "8b3c284ec421e4787d7af09301093938d6d4522c086b6b1ddc0b58e79545075e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T111 (a coverage pass records the crate's test result, FR-012)": {
-   "sha256": "e82e81d27beb98c2ce8dfc94ff25566efa70e1a80b69e4076edf5b163aef184e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T111 Approach (checklist part A)": {
-   "sha256": "9ed2bcb3980184a14da8874360162eede6165cefd029e2cdc08fe96f0d9d1da2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T112 (comment-insensitive keys, FR-012)": {
-   "sha256": "551aa84a76e773fc3cd2d9ab5dcc1dcd9a799a177c3c1d5676921877247916bb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T112 Approach (checklist part A)": {
-   "sha256": "5278097e2384a64b1a146963a7d1879474300aa5c7fb6dc211c57aa181db6615",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T113 (the dependents' lint keyed on a crate's public interface, FR-012)": {
-   "sha256": "ed781b579d702ef498b8760868a8d07b70ae0c8e10717fe9b8abb38a21b4accc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T113 Approach (checklist part A)": {
-   "sha256": "a25634828631fbde32176102686bbd9832450ab8a4c5b2eb8a2d9870c9288e77",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T114 (the push's money-candidates check, FR-012)": {
-   "sha256": "128fedaece9a381362dbbe417a754cfa4f481348d556bf02a0e657b7cc3e8b92",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T114 Approach (checklist part A)": {
-   "sha256": "46547b0068016009f2f65c8f6890840bc41655abee330c9794ab5db31d0a0731",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T115 (the full hook run's two longest suites, FR-012)": {
-   "sha256": "7a2f380717f4f922d1686af5451718475f656b693e87694f35e6fc0a5a148ac3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T115 Approach (checklist part A)": {
-   "sha256": "3e835a072d5332db59c3ba2916c5e5a5bfb100a519bae89350befab771a23a65",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T116 (the checks crate's coverage tests, FR-012)": {
-   "sha256": "2421300d037b7b646aff1ee583b76b59f739b4594d62b27f66d42d3f5274c530",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T116 Approach (checklist part A)": {
-   "sha256": "77eb94e7d68604a9ddeab9b285ac5209028b4980e57218e91757c8eab49b8df1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T117 (T83's first slice, the review ledger's tools, `ask:449-T83-scope`)": {
-   "sha256": "32aa95e1002ebca62d2acbf8343f2e95aaaa13bde21e611712564377785b436c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T117 Approach (checklist part A)": {
-   "sha256": "62c9baa9394d006d40f83847927d0f73b8ae7f2f1f71a660fd3519684e985d9f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T118 (T83's second slice, `speckit-todo.py`, `ask:449-T83-scope`)": {
-   "sha256": "4a581a0b512a25a2d7bc553070a8079efb4918689556b5ecfa9d8a46fe1706f1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T118 Approach (checklist part A)": {
-   "sha256": "7a19eb4a8dd06d0c116b5e0baf0b13c5fe5d0c6e383091d78b068d9fa25bbc70",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T119 (T83's third slice, the measure chain, `ask:449-T83-scope`)": {
-   "sha256": "cdda01c44dd8b0f31d367ce6f2d1f971860144044541a6cfcf896faa81ba753b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T119 Approach (checklist part A)": {
-   "sha256": "17af1cf24c04111120ee25c3de5320953229b0a1f47cdc53948804afd12065a6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T120 (T83's fourth slice, the step-back and the yields, `ask:449-T83-scope`)": {
-   "sha256": "8971c4876a4cd381e59da81b8f1ea5e7b99c540581efcdd4aa6259c32c64b86e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T120 Approach (checklist part A)": {
-   "sha256": "a79e285898bd547ac75247196d08c12469b93a2b8cb3f073f6064a857833ce19",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T121 (T83's fifth slice, the landing, `ask:449-T83-scope`)": {
-   "sha256": "3e7b77266566462c102445d6fb5c1818b6d0fb52cae501e6e5ab147eb07ab8ea",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T121 Approach (checklist part A)": {
-   "sha256": "52f03d05597e1e490927351fda619f23a60891104badd6c887179a41c830e07a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T124 (T121's follow-up: the claims-door verbs only `land.py` asked, `ask:449-T83-scope`)": {
-   "sha256": "f14cfa76647c435df016256e4cb2fd76f8dbd30d19efc4daea4f3a6d8f523a15",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T124 Approach (checklist part A)": {
-   "sha256": "419e1cc2e559e3cc4725b29c4548034d8ae32067d2873fd6f8f35058e09b4338",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
   "### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)": {
    "sha256": "8a3121b42a7812b3b054301f241c79f1596a5ec5e1bcbe996a55120bcd6e6c99",
    "verdict": "CLEAR",
@@ -626,82 +116,16 @@
    "declared": "spec-fidelity"
   },
   "### T122 Approach (checklist part A)": {
-   "sha256": "7fe7787dad84502e3fe863b4f33b90fd55ab525d78e2fc511df0f135c22f01dd",
+   "sha256": "ea0be815529d8292428eab059e576537afe22b5159e08f2b882d986348f94db2",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T123 (<why: the finding or measurement that files it>)": {
-   "sha256": "08bdb285b6d8fc6221d387c91a73aad41b988e7e7f3de099150975a4c8c9d670",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T123 Approach (checklist part A)": {
-   "sha256": "2939e540c3a2961f203ab622b96e846acbaa3130fded83a27a9f74cd3b68f8eb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T125 (the full hook run ends on its longest suite started late, the GM's pre-approval of 2026-11-12)": {
-   "sha256": "60e1658bb349235d6c2e772b17fef6da26625deaaada721ff7eaa656b5d11a34",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T125 Approach (checklist part A)": {
-   "sha256": "6ab94e542a34544fb0beafce8000767951878c1cd51115dc7d332fea4250f43b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T125 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "bcf3a8df1c2a77b5e6dc840736a30e91d4e740c08709e92b55889a12c8eba56d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T126 (the gate wrapper's cost on every call, the GM's pre-approval of 2026-11-12)": {
-   "sha256": "83dc8cfec4b7b50aa9ed920d94a88982aa1a3f7078da1f1754441386ed2adc65",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T126 Approach (checklist part A)": {
-   "sha256": "9144ca611ef07c838ccfa218722cebc349934f410b9577a09fb2a37f3ddfcae4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T126 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "ad7c024e483e2d47569c4a7194ff944caef9e3877d86a1c73b9d33cbe214b25b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T91 (the GM-review queue, filed by `ask:449-T82-claims`)": {
-   "sha256": "66c5cce716308a6ce6c629bac041b3da89e60adc11940632ccb2d8d6e4059914",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T127 (the closing check, filed by T91's plan review)": {
-   "sha256": "f62c5139084ba5d08490369fb78c7c16eda5d243f5ffb0152ea4e3ce969b8475",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T127 Approach (checklist part A)": {
-   "sha256": "0254d42d3d1c7eff027ded06bfaa3bef6fc15bbdbff393c701bd4115972ff11a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
   },
   "### T129 (the hook libraries no task held, the phase-3 census of 2026-11-12)": {
-   "sha256": "5773a40beb2fd5051193d615a12c97ff3cfebfb07312e343b58c9ee45d609e88",
+   "sha256": "8e645acd13e59631eea3b4412b098012d8308724e49cc8f446ace1f61b8ee37a",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
   },
   "### T129 Approach (checklist part A)": {
    "sha256": "37272e4d3fabb9e048c65455f627824f8d938f50ada3e3f52ef137262ff7b221",
@@ -709,101 +133,77 @@
    "reviewed": "2026-11-12",
    "declared": "spec-fidelity"
   },
-  "### T130 (the deletion and retire classes of `ask:449-phase3-remainder`)": {
-   "sha256": "d0c23114011ab92f9628df65ef662b8f57024d2657a72e953b78cb00a2c78e91",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T130 Approach (checklist part A)": {
-   "sha256": "c250882acc51c8ce3241f1cc2e23e6e2fe7e7fa274e313edc9ca596a77aed933",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T134 (the work budget's tools no task held, `ask:449-phase3-remainder`)": {
-   "sha256": "c72863bc9b1c65b013fbc186c351493ee8baf363f848078817215f9f6ca749b3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T134 Approach (checklist part A)": {
-   "sha256": "ec21b1b4b26d9d8a8eb6aed0344edbd2a470b3d8b839c66ad1c93e3137936b2e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T131 (the task gate and its last caller, `ask:449-phase3-remainder` Q2 task A)": {
-   "sha256": "b37d887424d0c509910fa11e1a356986ae0ab4e587f162806cc594f3cab87306",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T131 Approach (checklist part A)": {
-   "sha256": "6ad6977538f2aa8a041c46662e4d1642124cdb68ec6456405bbc1eef71125eb9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T141 (the review-round guard's Python hop, found by T131's plan review)": {
-   "sha256": "b83e05653cd443ff0fea6c5d3a10af241430c0206a2afa724b538064977f93b3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T141 Approach (checklist part A)": {
-   "sha256": "91239b9eb51842baa855c44735f80b1fff9e0e2dd6fe466c2853c977b6797b35",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T132 (the review snapshot and the implementation check, `ask:449-phase3-remainder` Q2 task B)": {
-   "sha256": "41f2b8b11ccd4396cad5d27c32e7c15fd9d12ee660726272f9fc32820098ecc3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T132 Approach (checklist part A)": {
-   "sha256": "ba92c2d21cfac9543c8e87fec1f0a84744bc480fd1f40e026fdc13d6f8313472",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T133 (the six document and agent-file tests, `ask:449-phase3-remainder` Q3)": {
-   "sha256": "3725d6860424c125907b97ecd8736371d249baf43d0c4b8e2a2ddaa9124bf0ca",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-13",
-   "declared": "spec-fidelity"
-  },
-  "### T133 Approach (checklist part A)": {
-   "sha256": "21e872df8072079e9f2b02d09f6252fd560a644aa06168878b1ba44ecc378fa7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-13",
-   "declared": "spec-fidelity"
-  },
-  "### T136 (the review census and the agent sync no task held, `ask:449-phase3-remainder`)": {
-   "sha256": "c3be8145cc8cf0d1fe47c6c0bb8266c28c41e1c9b605871a5d3bdb12d64842d3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "spec-fidelity"
-  },
-  "### T136 Approach (checklist part A)": {
-   "sha256": "adc2636e7ac75069aeb8f44ffdf4be859c4f89e5b503dee158a465eef04a46e3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "spec-fidelity"
-  },
   "### T139 (the past features' measurement scripts that still run, `ask:449-phase3-remainder` Q4)": {
-   "sha256": "7d1271be093911de03b8d64a09927a8892ce9799fe5898f9f8fea95312e0cefe",
+   "sha256": "81901163d81f2735fa47a0051d5e4da14a108240bb2209f77f3b21dd5efccd59",
    "verdict": "CLEAR",
    "reviewed": "2026-11-14",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T139 Approach (checklist part A)": {
    "sha256": "0dc03e6120e3bdc40fbb511a38762e2677c2fe5e494ad6f99693b74f44065248",
    "verdict": "CLEAR",
    "reviewed": "2026-11-14",
    "declared": "spec-fidelity"
+  },
+  "### T128 (<why: the finding or measurement that files it>)": {
+   "sha256": "f390fde5d660315f1af2752e2b9c7b7a6d9d1a02f0d3c8986f9136a3bfcff959",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T128 Approach (checklist part A)": {
+   "sha256": "4021ec48adf008b29d7a64928a674280a8687fcdbc395468ec308e19974c57f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T135 (the authoring tools no task held, `ask:449-phase3-remainder`)": {
+   "sha256": "2c284170ab6b612b53d3f19b62a2b4714a52104f5a1fdde2fb77e8f3d61b8892",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T135 Approach (checklist part A)": {
+   "sha256": "116af50c935e45c9738f4145d93aa8f22864b274bf778fb230e9baf38b98ee80",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T137 (<why: the finding or measurement that files it>)": {
+   "sha256": "e50ce6087f3fbcd0c226e0f65689443b133b097138944b733b09edbdab37de8b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T137 Approach (checklist part A)": {
+   "sha256": "2c916e156e40ca74a62192f64c6c5be9d9353691587979ce67e3a8d7ff828920",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T138 (<why: the finding or measurement that files it>)": {
+   "sha256": "557d015f05fb5263becaf4a857bd9174e95c4d2133140d54ba8ed7262eab4630",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T138 Approach (checklist part A)": {
+   "sha256": "f5b931be6e98062d989d8515aea2cea4d9221d5fc6d6f363fcb44a8c8dd9756d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T140 (<why: the finding or measurement that files it>)": {
+   "sha256": "044b6e58fb6e5734627a641418bf7007cc3b021dd31d6a980f27eb135d0e2625",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
+  },
+  "### T140 Approach (checklist part A)": {
+   "sha256": "9779b736cbbbc14be82f8d390fedc81d17506441193616c606845dc3e82c206e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -9053,6 +8453,33 @@
      "why": "This is an implementation shape with the same outputs (FR-002), in line with FR-006's one-process fixes. Nothing that was asked is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-14",
+   "blocks": [
+    "### T122 Approach (checklist part A)",
+    "### T128 (<why: the finding or measurement that files it>)",
+    "### T128 Approach (checklist part A)",
+    "### T129 (the hook libraries no task held, the phase-3 census of 2026-11-12)",
+    "### T135 (the authoring tools no task held, `ask:449-phase3-remainder`)",
+    "### T135 Approach (checklist part A)",
+    "### T137 (<why: the finding or measurement that files it>)",
+    "### T137 Approach (checklist part A)",
+    "### T138 (<why: the finding or measurement that files it>)",
+    "### T138 Approach (checklist part A)",
+    "### T139 (the past features' measurement scripts that still run, `ask:449-phase3-remainder` Q4)",
+    "### T140 (<why: the finding or measurement that files it>)",
+    "### T140 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-T135-generator",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15705,6 +15132,81 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T135": {
+   "section_sha256": "72e25e689c351634af80934c909c738fb179d319e9335b06abf55d5bb768ef45",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T135-placement",
+     "summary": "claim, trial-start, trial-review and patch in a new gate crate `author` on `core`; make-docs in `cohort`; task-add and set-down in `task`; task-add calls the tick's repo_root/spec_dir in process, `tick --resolve` keeping its command form",
+     "class": "within",
+     "why": "Where a port lives is a design choice the spec leaves open; FR-001 places these phase-3 files and ask:449-phase3-remainder files T135. No output or scope changes."
+    },
+    {
+     "id": "T135-callers-and-delete",
+     "summary": "Every caller (Makefile targets, make static's page check, create-new-feature.sh, land-tooling.sh's default page check, test-set-down-hooks.sh, docs/efficiency-tooling.md) repointed and the seven .py files deleted in the same cut, no door",
+     "class": "within",
+     "why": "FR-003 (one implementation, none run both) and the GM's standing approval of 2026-11-10, 'Yes please delete Python files once their Rust ports land'."
+    },
+    {
+     "id": "T135-push-row-and-land-pass",
+     "summary": "The push row's make-docs becomes an in-process kind under the same name and timing key; the land's first pass checks and writes in process, a failed write ignored as the command's exit was; neither is diffed against HEAD's binary, covered by the make-docs cases and their own tests",
+     "class": "within",
+     "why": "Preserves the existing behavior (same name, same key, same ignore-on-failure) with one implementation (FR-003); they call the same function the 45 make-docs differential cases cover."
+    },
+    {
+     "id": "T135-one-copy",
+     "summary": "The task template moves to plan/src/plan/template.rs, read by task-add, sections.rs and lint.rs; the polled lock and mirror_of into core::record::repo (used by make download-add); fmt_g into the guard's py_text",
+     "class": "within",
+     "why": "FR-003: one copy, no second implementation; sections.rs previously read task-add.py's source, which this cut deletes. No output changes."
+    },
+    {
+     "id": "T135-spelling",
+     "summary": "make-docs' unknown-category line spells 'Unrecognized' where the Python wrote 'Unrecognised'",
+     "class": "within",
+     "why": "Already a ruled case in the accepted spec, FR-002's ask:449-T135-spelling (the round arbiter, 2026-11-14)."
+    },
+    {
+     "id": "T135-generator-lines",
+     "summary": "docs/make-targets.html's three generator lines name the Rust port instead of scripts/make-docs.py, on 'the T87 and T91 precedent', and the differential normalizes those three lines away",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 requires the same outputs as the Python. The arbiter's ruling on THIS port today, ask:449-T135-spelling, changes one word and says 'every other output, verdict and exit status stays byte for byte'; ask:449-T92-messages adds that 'a path the Python wrote by hand stays bound', which a generator line naming scripts/make-docs.py is. The 'T87 and T91 precedent' is not a ruled case anywhere in the spec (spec-cited.md and spec-index.md hold none), and a prior task's plan is not the GM's words. None of the legitimating tests holds: writing the old path is not impossible; the GM's approval to delete Python files says nothing about what a generated page says about its generator; and keeping the string does not defeat the request's purpose, it satisfies FR-002 literally. 'The page would name a deleted file' is an accuracy ground, which does not legitimate an exception. The normalization also means '344 cases, 1 differing' counts one difference only after these lines were taken out (FR-001c: no case excluded or changed). Remedy: get a second FR-002 ruled case through make arbiter-ask, the route the spelling took, or keep the three lines byte for byte and drop them from the normalizations."
+    },
+    {
+     "id": "T135-help-exit",
+     "summary": "--help exits 2 where the Python exited 0, the one differing case of the 344",
+     "class": "within",
+     "why": "ask:449-usage-text: '--help is bound only where a kept test or suite case holds it, and a port whose usage text is read by a caller or asserted by a kept suite case keeps it.' Within ONLY on that condition. The block does not say a search was made that no kept test, suite case or caller holds --help for these seven tools; the record should state that search."
+    },
+    {
+     "id": "T135-normalizations-other",
+     "summary": "Normalized: stderr from Traceback on, argparse errors as exit 2 with empty stdout and a usage: opening, rows' utc, a guard-edit record's file name",
+     "class": "within",
+     "why": "Traceback text and argparse's generated stderr are unbound under ask:449-usage-text (exit and stdout held); utc and a generated record file name are run-dependent, not compared outputs."
+    },
+    {
+     "id": "T135-unreached-divergences",
+     "summary": "Divergences no case reaches: JSON NaN and lone surrogates, non-ASCII digits, integers past i128, isalnum on a session id, float vs whole seconds at the week's reset, a NaN lock timeout",
+     "class": "within",
+     "why": "FR-002 binds 'every case its tests and its suites hold'; these are outside every held case, and the plan names them openly rather than excluding a case."
+    },
+    {
+     "id": "T135-docs-tagged-kept",
+     "summary": "make-docs keeps its handling of nine [docs]-tagged targets as unrecognized categories, which --check has always passed",
+     "class": "within",
+     "why": "Keeps the Python's behavior, as FR-002 requires."
+    },
+    {
+     "id": "T135-order-budget",
+     "summary": "After T139, one landing; exits green on make static, rust-test, hooks-test HOOKS_ALL=1 and make land, red set down or ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and the exits, nothing the spec settles differently."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

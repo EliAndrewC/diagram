@@ -416,28 +416,34 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T131 to T131 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T132 to T132 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T133 to T133 moved to plan-done.md, 2026-11-13 (feature 375 FR-044) -->
-### T135 (<why: the finding or measurement that files it>)
+### T135 (the authoring tools no task held, `ask:449-phase3-remainder`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `scripts/claim-feature.py`, `trial-start.py`, `trial-review.py`, `task-add.py`, `set-down.py`, `make-docs.py` and `patch.py` ported whole, no door: `claim`, the two trial commands and `patch` in a new gate crate `author` (on `core` alone), `make-docs` in `cohort`, `task-add` and `set-down` in `task`; every caller repointed and the seven deleted in the same cut.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase3-remainder`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - Where each lives: `author` for the four that need neither plan, reviews nor claims, so an edit there rebuilds nothing below the binary (`trial-start` claims its number in process); `make-docs` in `cohort`, at or below the push row and the land's first pass that now call its check and write in process; `task-add` and `set-down` in `task`, `task-add` calling the tick's `repo_root` and `spec_dir` in process where it ran `tick --resolve`, which keeps its command form (T119's rule).
+   - The callers: the Makefile's `claim`, `trial`, `trial-review`, `task-add`, `set-down`, `docs` and `make static`'s page check run the gate commands; `.specify/scripts/bash/create-new-feature.sh` runs `l7r-gate.sh claim`; `scripts/land-tooling.sh`'s default page check (`LAND_TOOLING_DOCS_CHECK`) runs `make-docs . --check`; `tests/hooks/test-set-down-hooks.sh` runs `l7r-gate.sh set-down`. The push row `make-docs` is a new in-process kind under the same name, so its timing key in `measurements.json` still matches; the land's first pass checks and writes in process, a failed write ignored as the command's exit was, its test running the real check on a real Makefile and a stale page. `docs/efficiency-tooling.md` directs `l7r-gate.sh patch` for a mechanical sweep.
+   - `plan/sections.rs` read `task-add.py`'s source for the template's checklist item 6 and red exit, to tell an approach block that only repeats the template; the template now lives in `plan/src/plan/template.rs`, which `task-add` writes from and `sections.rs` and `lint.rs` read, one copy (FR-003). One copy each also for the polled lock and `mirror_of` (into `core::record::repo`, which `make download-add` now uses) and `fmt_g` (into the guard's `py_text`).
+   - `docs/make-targets.html` names its generator in three lines: it names the Rust port, FR-002's ruled case `ask:449-T135-generator` (the round arbiter, 2026-11-14), with "Unrecognised" spelled "Unrecognized", FR-002's ruled case `ask:449-T135-spelling` (the round arbiter, 2026-11-14: the house-style rule names generated content, nothing reads the word, every other output stays byte for byte); the page is regenerated in the cut and `--check` passes on it.
+   - The same outputs (FR-002): HEAD's Python against the Rust, each case set up identically at one path, exit, stdout, stderr, every file's bytes and mode and git status compared: 344 tool cases, 1 differing, `--help` exiting 2 where Python exited 0 (`ask:449-usage-text`) (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t135/diff.py`, `run-final.log`). By tool: claim 94, trial-start 11, trial-review 24, task-add 57 over ten real features, set-down 67 over three real features with the clone's own state files, make-docs 45 with the real Makefile, patch 46. Through make and the other callers, HEAD's tree against the final tree as clones under one scratch mirror: 27 cases (`make claim` with SLUG, PEEK, RENUMBER and refusals, both trial targets, `task-add` with TITLE, SECTION, RESEARCH and PERF, `set-down` with WHY and SET_DOWN_OK, `make docs`, `create-new-feature.sh` and its dry run, land-tooling's page check), none differing on the final run; its first run caught a dropped space in the `task-add` recipe, fixed and re-run (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t135/mk.py`, `run-make.log`). Normalizations: stderr up to `Traceback`, argparse errors as exit 2 with empty stdout and a `usage:` opening, the rows' `utc`, the page's three generator lines and that one word's spelling (`ask:449-T135-spelling`), a guard-edit record's file name. Divergences no case reaches: JSON `NaN` and lone surrogates, non-ASCII digits in a number, integers past i128, `isalnum` on a session id, float against whole seconds at the week's reset, a NaN lock timeout. Not compared against HEAD's binary: the push row and the land's first pass, covered by the make-docs cases and their own tests.
+   - Timing (process time, Python against Rust): claim 4.17 s against 0.59 s, task-add 1.70 s against 0.51 s, set-down 2.08 s against 0.34 s, make-docs 1.17 s against 0.48 s, through make 1.35 s against 0.73 s (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t135/diff.py` and `mk.py`).
+   - The census at the cut: provenance comments, history files and spec text; no `specs/*/measurements*.json` command names any of the seven in any form, the push row's `make-docs` timing key still matching (observed 2026-11-14, method: `git grep` of each name over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/`, `.specify/`, `tests/`, `docs`, `dev` and every measurements file). Kept as it was: make-docs' handling of nine `[docs]`-tagged targets as "Unrecognized categories", which `--check` has always passed. The checks: `make static` clean on 22 crates, `make rust-test` green (the guard 558 tests, `cohort` 62, `land` 50, `plan` 118), `make hooks-test HOOKS_ALL=1` green on 54 suites, `check tool-signals`, `check rust-tooling`, ruff and the pointer check clean (observed 2026-11-14, method: those commands).
 
 ### T135 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make claim`, `task-add`, `set-down`, the trials, `make docs` and the sweep are Rust; no push or landing starts Python for the page.
+2. **The constraints.** FR-001, FR-002 and FR-003, `ask:449-phase3-remainder`.
+3. **Where each comes from.** G: the standing approval to delete ported Python; R: the ruling; O: the differential, the make runs and the census above.
+4. **Do they describe the world here?** Run on this clone's real Makefile and features and through make end to end, measured 2026-11-14 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t135/mk.py`).
+5. **The order.** After T139.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The differential's 344 cases with one ruled difference, the 27 make cases with none, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 <!-- plan-archive: T136 to T136 moved to plan-done.md, 2026-11-14 (feature 375 FR-044) -->

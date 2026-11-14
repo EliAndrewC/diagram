@@ -13,7 +13,7 @@
 //! work budget's `stage_sources`, asked in process where the Python ran `work-budget-bundle --sources`), and any path or glob the task
 //! block names on an `old-code:` line, matched as `Path.glob` matches it.
 
-mod glob;
+pub(crate) mod glob;
 
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;

@@ -128,9 +128,70 @@ fn printable(c: char) -> bool {
         | 0xe_0020..=0xe_007f | 0xf_0000..=0x0010_ffff)
 }
 
+/// `f"{v:g}"`: six significant digits, trailing zeros dropped, an exponent outside 1e-4..1e6 (moved from the gate's `claims::tunables` by
+/// feature 449 T135: `make set-down` and `make claim` write their figures by it too).
+#[must_use]
+pub fn fmt_g(v: f64) -> String {
+    if v == 0.0 {
+        return if v.is_sign_negative() {
+            "-0".to_owned()
+        } else {
+            "0".to_owned()
+        };
+    }
+    if v.is_infinite() {
+        return if v > 0.0 {
+            "inf".to_owned()
+        } else {
+            "-inf".to_owned()
+        };
+    }
+    let sci = format!("{v:.5e}");
+    let (mantissa, exp) = sci.split_once('e').unwrap_or((&sci, "0"));
+    let exp: i32 = exp.parse().unwrap_or(0);
+    let trim = |s: &str| {
+        if s.contains('.') {
+            s.trim_end_matches('0').trim_end_matches('.').to_owned()
+        } else {
+            s.to_owned()
+        }
+    };
+    if (-4..6).contains(&exp) {
+        let decimals = usize::try_from(5 - exp).unwrap_or(0);
+        trim(&format!("{v:.decimals$}"))
+    } else {
+        format!(
+            "{}e{}{:02}",
+            trim(mantissa),
+            if exp < 0 { '-' } else { '+' },
+            exp.abs()
+        )
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{collapse, is_space, py_float_of, py_float_text, repr, split, strip};
+    use super::{collapse, fmt_g, is_space, py_float_of, py_float_text, repr, split, strip};
+
+    #[test]
+    fn a_number_is_written_as_python_writes_it() {
+        for (v, s) in [
+            (12.5, "12.5"),
+            (1_234_567.0, "1.23457e+06"),
+            (999_999.5, "1e+06"),
+            (123_456.0, "123456"),
+            (0.0001, "0.0001"),
+            (0.000_01, "1e-05"),
+            (100.0, "100"),
+            (0.0, "0"),
+            (-0.0, "-0"),
+            (-2.5, "-2.5"),
+            (f64::INFINITY, "inf"),
+            (f64::NEG_INFINITY, "-inf"),
+        ] {
+            assert_eq!(fmt_g(v), s, "{v}");
+        }
+    }
 
     #[test]
     fn float_reads_text_and_values_as_python_reads_them() {

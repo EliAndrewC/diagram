@@ -178,5 +178,55 @@ pub fn utc_now() -> String {
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 
+/// The mirror: a clone's grandparent when its parent is `.clones`, else the root itself - the derivation `sync-with-main.sh` uses. One
+/// copy (feature 449 T135, `ask:449-phase3-remainder`, FR-003): `make download-add`'s numbers and `make claim`'s both take their lock
+/// under it, where each held its own until the claim's port.
+#[must_use]
+pub fn mirror_of(root: &Path) -> std::path::PathBuf {
+    match root.parent() {
+        Some(parent) if parent.file_name().is_some_and(|n| n == ".clones") => {
+            parent.parent().unwrap_or(root).to_owned()
+        }
+        _ => root.to_owned(),
+    }
+}
+
+/// `flock` on the lock file at `path`, polled every 20 ms so a hung holder is a refusal rather than a hang: the open file holding it
+/// (the lock lasts as long as it does), or none when `timeout` seconds passed first. Its directory is made, the file opened `0o644`, as
+/// `claim-feature.py`'s and `reserve-prefix.py`'s `Lock` did; the one copy of both since feature 449 T135 (FR-003).
+///
+/// # Errors
+///
+/// The directory cannot be made or the file opened: what the Python's `mkdir` or `os.open` raised.
+pub fn flock_within(path: &Path, timeout: f64) -> Result<Option<std::fs::File>, Fail> {
+    use std::os::unix::fs::OpenOptionsExt as _;
+    use std::time::{Duration, Instant};
+    std::fs::create_dir_all(path.parent().unwrap_or(Path::new("."))).map_err(fail)?;
+    let file = std::fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .truncate(false)
+        .mode(0o644)
+        .open(path)
+        .map_err(fail)?;
+    // `time.monotonic() + timeout`: a negative timeout a deadline already passed; NaN, or one past what an `Instant` holds (infinity), a
+    // deadline the Python's comparison never reached
+    let deadline = if timeout.is_nan() {
+        None
+    } else {
+        Duration::try_from_secs_f64(timeout.max(0.0))
+            .ok()
+            .and_then(|d| Instant::now().checked_add(d))
+    };
+    while !l7r_guard::shared::tool::flock(&file, "-n") {
+        if deadline.is_some_and(|d| Instant::now() >= d) {
+            return Ok(None);
+        }
+        std::thread::sleep(Duration::from_millis(20));
+    }
+    Ok(Some(file))
+}
+
 #[cfg(test)]
 mod tests;

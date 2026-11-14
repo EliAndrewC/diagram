@@ -3,11 +3,12 @@
 use std::path::{Path, PathBuf};
 
 pub use l7r_gate_arbiter::{arbiter, checks_door};
+pub use l7r_gate_author as author;
 pub use l7r_gate_bundle::owed_door;
 pub use l7r_gate_checks::checks;
 pub use l7r_gate_ci::ci;
 pub use l7r_gate_claims::claims;
-pub use l7r_gate_cohort::{close_check, cohort, push, speckit_todo};
+pub use l7r_gate_cohort::{close_check, cohort, make_docs, push, speckit_todo};
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
 pub use l7r_gate_land::{land, replay_owing};
 pub use l7r_gate_measure::{measure, preflight};
@@ -47,6 +48,11 @@ fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {
     }
 }
 
+/// The tree the wrapper started this binary from (`L7R_GATE_TREE`), else the repository here.
+fn gate_tree() -> PathBuf {
+    std::env::var_os("L7R_GATE_TREE").map_or_else(top, PathBuf::from)
+}
+
 /// `L7R_CACHE_OFF` set to anything but empty or `0` turns the content cache off.
 fn cache_off(value: Option<&str>) -> bool {
     value.is_some_and(|v| !v.is_empty() && v != "0")
@@ -74,7 +80,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("push-gate") => push::gate_cli(&args[1..], &top()),
         Some("push-checks") => push::checks_cli(
             &args[1..],
-            &std::env::var_os("L7R_GATE_TREE").map_or_else(top, PathBuf::from),
+            &gate_tree(),
             cache_off(std::env::var("L7R_CACHE_OFF").ok().as_deref()),
         ),
         Some("lock") => lock::cli(&args[1..], Path::new("/proc")),
@@ -100,16 +106,38 @@ pub fn cli(args: &[String]) -> Reply {
         Some("close-check") => close_check::cli(&args[1..], claims::impl_check::missing_each),
         Some("impl-check") => claims::impl_check::cli(&args[1..], &top()),
         Some("claims") => claims::cli(&args[1..]),
-        Some(verb @ ("tick" | "task-start" | "phase-read")) => l7r_gate_task::cli(
-            verb,
-            &args[1..],
-            &std::env::current_dir().unwrap_or_default(),
-        ),
+        Some(verb @ ("tick" | "task-start" | "task-add" | "set-down" | "phase-read")) => {
+            l7r_gate_task::cli(
+                verb,
+                &args[1..],
+                &std::env::current_dir().unwrap_or_default(),
+            )
+        }
         Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),
         Some("replay-owing") => replay_owing::cli(&args[1..]),
         Some("tunables") => claims::tunables_cli(&args[1..]),
         Some("work-budget-bundle") => measure::work_budget_bundle::cli(&args[1..], &top()),
         Some("budget-change") => measure::budget_change::cli(&args[1..], &top()),
+        // the authoring tools (feature 449 T135): the trials read the tree the wrapper names, as the Python read its own file's tree
+        Some("claim") => {
+            author::claim::cli(&args[1..], &std::env::current_dir().unwrap_or_default())
+        }
+        Some("trial-start") => author::trial::start_cli(
+            &args[1..],
+            &gate_tree(),
+            &std::env::var("TRIAL_APPROVED").unwrap_or_default(),
+        ),
+        Some("trial-review") => {
+            author::trial::review_cli(&args[1..], &gate_tree(), Path::new("/tmp/l7r-check"))
+        }
+        Some("patch") => author::patch::cli(
+            &args[1..],
+            &mut std::io::stdin(),
+            &l7r_guard::shared::tempdir::TempDir::new("gate-patch-selftest"),
+        ),
+        Some("make-docs") => {
+            make_docs::cli(&args[1..], &std::env::current_dir().unwrap_or_default())
+        }
         Some("--version") => Reply {
             stdout: format!("l7r-gate {}\n", env!("CARGO_PKG_VERSION")),
             stderr: String::new(),
@@ -155,6 +183,26 @@ mod tests {
             cli(&["speckit-todo".to_owned(), "--bogus".to_owned()]).code,
             2
         );
+    }
+
+    /// The authoring tools and the two task tools ported by feature 449 T135, each refusing an empty command line by its exit 2.
+    #[test]
+    fn the_authoring_tools_are_subcommands() {
+        let ask = |a: &[&str]| cli(&a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>());
+        for verb in [
+            "claim",
+            "trial-start",
+            "trial-review",
+            "patch",
+            "task-add",
+            "set-down",
+        ] {
+            assert_eq!(ask(&[verb]).code, 2, "{verb}");
+        }
+        assert_eq!(ask(&["patch", "--selftest"]).code, 0);
+        let dir = l7r_guard::shared::tempdir::TempDir::new("gate-cli-docs");
+        assert_eq!(ask(&["make-docs", dir.to_str().unwrap()]).code, 2);
+        assert!(super::gate_tree().is_absolute());
     }
 
     #[test]

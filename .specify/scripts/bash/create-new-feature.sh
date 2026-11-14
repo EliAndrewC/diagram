@@ -278,14 +278,14 @@ if [ "$USE_TIMESTAMP" = true ]; then
 else
     # Determine branch number - THROUGH THE ONE ALLOCATOR (feature 197, GM 2026-09-07). This script used to
     # compute "highest under specs/ (and the branches) plus one" on its own, which is the scan two concurrent
-    # sessions perform at the same moment and get the same answer from. scripts/claim-feature.py takes the
+    # sessions perform at the same moment and get the same answer from. `l7r-gate claim` (feature 449 T135's port of claim-feature.py) takes the
     # host-wide lock, reads every clone's unpushed claims, and creates specs/NNN-<suffix>/ before releasing;
     # `--dry-run` only names it. An explicit --number is a deliberate re-use of an existing claim and is honored.
     # (check_existing_branches / get_highest_from_specs above are kept only as helpers for that manual path.)
     if [ -z "$BRANCH_NUMBER" ]; then
         CLAIM_ARGS=()
         [ "$DRY_RUN" = true ] && CLAIM_ARGS+=(--dry-run)
-        if ! CLAIMED=$(python3 "$REPO_ROOT/scripts/claim-feature.py" "${CLAIM_ARGS[@]}" -- "$BRANCH_SUFFIX"); then
+        if ! CLAIMED=$("$REPO_ROOT/scripts/gates/l7r-gate.sh" claim "${CLAIM_ARGS[@]}" -- "$BRANCH_SUFFIX"); then
             >&2 echo "Error: the feature-number claim was refused (see above) - nothing created."
             exit 2
         fi

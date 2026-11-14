@@ -3,12 +3,15 @@
 //! `scripts/tick-task.py` by path; `l7r-gate task-start` (`make task-start`, `scripts/task_start.py` with `gates/plan_hold.py`); and
 //! `l7r-gate phase-read` (`make phase-read`, `gates/phase_sources.py`). `gates/wording.py`, the wording-only check the tick asks, is
 //! [`wording`]. What the Python reached through `scripts/plan_door.py`, the closing check, the reviews' checkpoint and the work budget's
-//! sources by command is asked in process, each the function its command runs.
+//! sources by command is asked in process, each the function its command runs. `l7r-gate task-add` (`make task-add`, [`task_add`]) and
+//! `l7r-gate set-down` (`make set-down`, [`set_down`]) are `scripts/task-add.py` and `set-down.py`, ported whole by T135.
 
 pub mod phase_sources;
 mod plan_hold;
 #[cfg(test)]
 mod research_boxes;
+pub mod set_down;
+pub mod task_add;
 pub mod task_start;
 pub mod tick;
 mod wording;
@@ -19,12 +22,14 @@ use std::process::Command;
 use l7r_gate_core::Reply;
 use l7r_guard::shared::py_text::strip;
 
-/// `l7r-gate tick|task-start|phase-read <args>` from `cwd`, as the binary dispatches them.
+/// `l7r-gate tick|task-start|task-add|set-down|phase-read <args>` from `cwd`, as the binary dispatches them.
 #[must_use]
 pub fn cli(verb: &str, args: &[String], cwd: &Path) -> Reply {
     match verb {
         "tick" => tick::cli(args, cwd),
         "task-start" => task_start::cli(args, cwd),
+        "task-add" => task_add::cli(args, cwd, &std::env::var("TASK_TITLE").unwrap_or_default()),
+        "set-down" => set_down::cli(args, cwd),
         _ => phase_sources::cli(args, cwd),
     }
 }

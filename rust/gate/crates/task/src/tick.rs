@@ -12,8 +12,9 @@
 //! tick, written before the push that carries it, for a task named in `L7R_LAND_TICKS`. Refusals exit 2 and write nothing. The last tick
 //! closes the feature only past the closing check (feature 375 FR-009/FR-014), and a tick archives the plan's finished sections (feature
 //! 385 T63). `--land-check <feature> <note> <task>... [--boxes]` prints, as JSON, what `make land`'s first pass asks of each task, which
-//! the land asks in process ([`land_check`]); `--resolve <feature>` prints the repository root and the feature's directory as JSON, for
-//! `scripts/task-add.py`, which loaded this file by path for them (one process where it loaded once; it ports in T135), no run recorded.
+//! the land asks in process ([`land_check`]); `--resolve <feature>` prints the repository root and the feature's directory as JSON, no run
+//! recorded - its caller `scripts/task-add.py` ported in T135 and asks [`repo_root`] and [`spec_dir`] in process, and the form is kept
+//! (T119's rule that no command form vanishes unannounced).
 
 pub mod refusal;
 pub mod text;

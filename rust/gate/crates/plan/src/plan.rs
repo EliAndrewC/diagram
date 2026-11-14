@@ -15,6 +15,7 @@ mod record;
 mod sections;
 mod status;
 mod task;
+pub mod template;
 
 use std::io::Read;
 use std::path::{Path, PathBuf};

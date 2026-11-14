@@ -154,15 +154,18 @@ fn a_script_loaded_by_a_string_is_reached_and_a_prose_mention_is_not() {
     put(&root, "scripts/record/record_owed.py", "X = 1\n");
     put(&root, "scripts/record/modal_owed.py", "X = 1\n");
     put(&root, "scripts/record/moves.py", "X = 1\n");
-    put(&root, "scripts/patch.py", "X = 1\n");
+    put(&root, "scripts/record/loader.py", "X = 1\n");
     put(&root, "scripts/hooks/lib/hm_arbiter.py", "X = 1\n");
     let t = Tree::at(&root);
     let refs = t.word_refs("x.py", "import json\nro = _sibling(\"record_owed\")\nmo = script(\"_modal_owed\")\nprint(\"see moves.py for why\")\n");
     assert!(refs.contains("record_owed.py") && refs.contains("modal_owed.py"));
     assert!(!refs.contains("moves.py"));
     assert!(t
-        .word_refs("x.py", "P = ROOT / \"scripts\" / \"patch.py\"\n")
-        .contains("patch.py"));
+        .word_refs(
+            "x.py",
+            "P = ROOT / \"scripts\" / \"record\" / \"loader.py\"\n"
+        )
+        .contains("loader.py"));
     assert!(t
         .word_refs("x.py", "from hm_arbiter import trip\n")
         .contains("hm_arbiter.py"));
@@ -173,8 +176,8 @@ fn a_script_loaded_by_a_string_is_reached_and_a_prose_mention_is_not() {
         .word_refs("x.py", "x = 'broken\nguardlog.sh\n")
         .contains("guardlog.sh"),);
     assert!(!t
-        .word_refs("patch.py", "x = \"patch.py\"\n")
-        .contains("patch.py"),);
+        .word_refs("loader.py", "x = \"loader.py\"\n")
+        .contains("loader.py"),);
 }
 
 #[test]

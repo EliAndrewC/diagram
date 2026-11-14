@@ -9,7 +9,8 @@ use fancy_regex::{Captures, Regex};
 use super::sections::re;
 use crate::checks::{figure_pattern, one_shot_pattern};
 
-const RED_EXIT_HINT: &str = "Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.";
+// The red exit the hint quotes: the template's own (feature 449 T135, one text where this held a copy).
+use super::template::RED_EXIT as RED_EXIT_HINT;
 
 static GM: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)\bthe GM(?:'s)?\b"));
 static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"[a-z0-9]+"));

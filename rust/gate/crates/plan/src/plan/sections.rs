@@ -2,7 +2,6 @@
 //! a typo told from a change, and which blocks decide nothing.
 
 use std::collections::{BTreeMap, BTreeSet};
-use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -244,25 +243,15 @@ fn decision_ids(text: &str) -> BTreeSet<String> {
         .collect()
 }
 
-/// `make task-add`'s own wording for items 6 and 9 (feature 430 D5): an answer that is the template's says nothing new.
-fn template_answers(root: &Path) -> BTreeMap<u32, String> {
-    let source = std::fs::read_to_string(root.join("scripts/task-add.py")).unwrap_or_default();
-    let red_exit = re(r#"(?m)^RED_EXIT = "(.*)"$"#)
-        .captures(&source)
-        .ok()
-        .flatten()
-        .map_or(String::new(), |c| c[1].to_owned());
-    let item6 = source
+/// `make task-add`'s own wording for items 6 and 9 (feature 430 D5): an answer that is the template's says nothing new. Read from the
+/// template itself ([`super::template`], feature 449 T135), where this read `scripts/task-add.py`'s source text from the tree the wrapper
+/// named: item 6 is the template's line after its bold label, the red exit in it.
+fn template_answers() -> BTreeMap<u32, String> {
+    let item6 = super::template::TEMPLATE
         .lines()
         .find(|l| l.starts_with("6."))
         .and_then(|l| l.splitn(3, "**").nth(2))
         .unwrap_or("");
-    let item6 = format!(
-        "{}{red_exit}",
-        item6
-            .trim_end_matches("\"\"\" + RED_EXIT + \"\"\"")
-            .trim_start()
-    );
     BTreeMap::from([
         (6, item6.trim().to_owned()),
         (9, "Its tests red without D<n>.".to_owned()),
@@ -271,7 +260,7 @@ fn template_answers(root: &Path) -> BTreeMap<u32, String> {
 
 /// An approach block that matches the template and decides nothing (feature 430 T05, D5): every answer, its ids set aside, is bare or
 /// the template's own wording, it holds no number outside those ids, and every `D<n>` it names is defined elsewhere.
-fn approach_decides_nothing(body: &str, plan: &str, done: &str, root: &Path) -> bool {
+fn approach_decides_nothing(body: &str, plan: &str, done: &str) -> bool {
     let marks: Vec<(u32, usize, usize)> = ITEM
         .captures_iter(body)
         .flatten()
@@ -286,7 +275,7 @@ fn approach_decides_nothing(body: &str, plan: &str, done: &str, root: &Path) -> 
     if marks.is_empty() {
         return false;
     }
-    let template = template_answers(root);
+    let template = template_answers();
     let mut own = body.to_owned();
     for (i, (n, _, end)) in marks.iter().enumerate() {
         let stop = marks.get(i + 1).map_or(body.len(), |m| m.1);
@@ -319,17 +308,11 @@ fn approach_decides_nothing(body: &str, plan: &str, done: &str, root: &Path) -> 
     decision_ids(&own).is_subset(&defined_ids(&format!("{}{done}", plan.replace(body, ""))))
 }
 
-/// Where `scripts/task-add.py` is: the checkout the wrapper started this binary from (a fixture repository has none of its own).
-fn template_root() -> std::path::PathBuf {
-    let tree = std::env::var_os("L7R_GATE_TREE").map(std::path::PathBuf::from);
-    tree.or_else(crate::stamp::toplevel).unwrap_or_default()
-}
-
 /// A part B block that decides nothing (feature 385 T75, plan D94): item 4 "No", item 5 "Neither", and every `D<n>` defined elsewhere.
 /// An approach block is asked its own form.
 pub(super) fn decides_nothing(key: &str, body: &str, plan: &str, done: &str) -> bool {
     if APPROACH.is_match(key).unwrap_or(false) {
-        return approach_decides_nothing(body, plan, done, &template_root());
+        return approach_decides_nothing(body, plan, done);
     }
     if !PART_B.is_match(key).unwrap_or(false) {
         return false;

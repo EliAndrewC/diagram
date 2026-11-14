@@ -53,3 +53,24 @@ fn files_and_the_seam() {
         .contains("said"));
     assert_eq!(utc_now().len(), 20);
 }
+
+#[test]
+fn the_mirror_and_the_polled_lock() {
+    use super::{flock_within, mirror_of};
+    assert_eq!(mirror_of(Path::new("/m/.clones/c")), Path::new("/m"));
+    assert_eq!(mirror_of(Path::new("/m/c")), Path::new("/m/c"));
+    assert_eq!(mirror_of(Path::new("/")), Path::new("/"));
+    let dir = crate::checks::scratch("repo-lock");
+    let at = dir.join("deep/x.lock");
+    let held = flock_within(&at, 1.0).unwrap().unwrap();
+    // a second open file cannot take it: refused after the timeout, a negative one at once
+    assert!(flock_within(&at, 0.05).unwrap().is_none());
+    assert!(flock_within(&at, -1.0).unwrap().is_none());
+    drop(held);
+    assert!(flock_within(&at, f64::NAN).unwrap().is_some());
+    assert!(flock_within(&dir.join("x.lock/y/z"), 0.0).is_ok());
+    std::fs::write(dir.join("file"), "").unwrap();
+    assert!(flock_within(&dir.join("file/x.lock"), 0.0).is_err());
+    std::fs::create_dir(dir.join("adir")).unwrap();
+    assert!(flock_within(&dir.join("adir"), 0.0).is_err());
+}

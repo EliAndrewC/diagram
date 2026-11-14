@@ -70,7 +70,7 @@ class Refusal(Exception):
 
 
 def mirror_of(root: Path) -> Path:
-    """The mirror: a clone's grandparent when its parent is `.clones`, else the root itself (as `claim-feature.py`)."""
+    """The mirror: a clone's grandparent when its parent is `.clones`, else the root itself (as `l7r-gate claim`, `core::record::repo::mirror_of`)."""
     return root.parent.parent if root.parent.name == ".clones" else root
 
 

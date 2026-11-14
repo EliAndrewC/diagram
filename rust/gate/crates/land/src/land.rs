@@ -20,7 +20,7 @@
 //! (`speckit-todo --holding`, T118) and the claims (`claims carry|known|rekey|report`, the scope split and the claims in flight, T82),
 //! each through the same function its command runs, so its reply and its usage line are the command's; and the tick, the first pass's
 //! check of every task and each task's tick at the end (`l7r_gate_task::tick`, feature 449 T131, `ask:449-phase3-remainder`, where this
-//! ran `scripts/tick-task.py` by path). What stays a process, as `land.py` ran it: `scripts/make-docs.py` and `python3 -m ruff`, `make`, `scripts/sync-with-main.sh`, the three `*-gate.sh`, and the gate's
+//! ran `scripts/tick-task.py` by path). The make-targets page's check and write are asked in process too (`l7r_gate_cohort::make_docs`, feature 449 T135). What stays a process, as `land.py` ran it: `python3 -m ruff`, `make`, `scripts/sync-with-main.sh`, the three `*-gate.sh`, and the gate's
 //! other subcommands through `l7r-gate.sh` (the stamp, `coverage-exempt stale`, `arbiter gate-held`, `cohort counter-only|port|check|
 //! rust-owed`). `codeid.py` is no longer started: the engine paths are the cohort's one copy of `codeid.ENGINE`
 //! ([`l7r_gate_cohort::cohort::is_landing_engine`]).
@@ -61,7 +61,7 @@ pub struct Land {
     root: PathBuf,
     /// The gate tree's `scripts/` (`L7R_GATE_TREE`, which `l7r-gate.sh` sets; the root's where unset): `land.py`'s own `HERE`.
     scripts: PathBuf,
-    /// The interpreter `make-docs.py` and ruff run under (`sys.executable` in the Python).
+    /// The interpreter ruff runs under (`sys.executable` in the Python).
     python: String,
     /// `make`.
     make: String,

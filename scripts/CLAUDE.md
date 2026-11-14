@@ -5,7 +5,7 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 
 | path | what is in it |
 |---|---|
-| `sync-with-main.sh`, `claim-feature.py`, `make-docs.py`, `patch.py`, `git-askpass-token.sh` | the commands: stop-work and sync, `make claim`, `make docs`, the anchored-edit sweep, git's HTTPS credentials |
+| `sync-with-main.sh`, `git-askpass-token.sh` | the commands: stop-work and sync, git's HTTPS credentials (`make claim`, `make trial`, `make trial-review`, `make docs`, `make task-add`, `make set-down` and the anchored-edit sweep `l7r-gate.sh patch` are `l7r-gate`'s since 449 T135) |
 | `record_door.py` | Python's door to the record leaves in Rust (`l7r-gate record moved-only`, `fragments`, `americanize`), one process a run (449 T81) |
 | `owed_door.py` | Python's one door to the record's owed tools in Rust (`l7r-gate owed-door`: `ro`, `ru`, `mo`, `mt`; `mb`, `cb` for the bundles' two names `apply_edits` and `sources` read), one process a run (449 T87, T88) |
 | `bundle_door.py` | the Rust bundles' one runner of the Python they still reach (`check_bundle`'s helpers, `passages`, the cache-only page save, the knobs; `is_current` for `l7r-gate reviews prereq check`, T89; the claims tools' `.py` half, T82; `make claims-known`'s `gm-review.jsonl` row left with `gm_review.py`'s port, 449 T91), started only when a run needs a verb (449 T88, `ask:449-T88-bundles`, `ask:449-T82-claims`) |

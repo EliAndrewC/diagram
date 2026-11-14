@@ -183,7 +183,7 @@ fn step(here: Vec<PathBuf>, part: &str, last: bool) -> Result<Vec<PathBuf>, Stri
 ///
 /// # Errors
 /// What Python raises: an empty pattern, or an absolute one.
-pub(super) fn glob(root: &Path, pattern: &str) -> Result<Vec<PathBuf>, String> {
+pub(crate) fn glob(root: &Path, pattern: &str) -> Result<Vec<PathBuf>, String> {
     if pattern.is_empty() {
         return Err(format!("ValueError: Unacceptable pattern: {pattern:?}"));
     }

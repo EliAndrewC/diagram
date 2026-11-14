@@ -102,7 +102,7 @@ fi
 # worktree regenerates main's make-targets page, but the clone's own copy stayed stale, and the clone's next push refused it. So a
 # Makefile in FILES lands only with the clone's page current, and that page lands beside it.
 if printf '%s\n' "$@" | grep -qx 'Makefile'; then
-  ( cd "$ROOT" && eval "${LAND_TOOLING_DOCS_CHECK:-python3 scripts/make-docs.py . --check}" ) >/dev/null 2>&1 \
+  ( cd "$ROOT" && eval "${LAND_TOOLING_DOCS_CHECK:-scripts/gates/l7r-gate.sh make-docs . --check}" ) >/dev/null 2>&1 \
     || die "docs/make-targets.html is stale against the clone's Makefile - run \`make docs\`, commit the page, and land again"
   if ! printf '%s\n' "$@" | grep -qx 'docs/make-targets.html' && ! git -C "$ROOT" diff --quiet "$base" HEAD -- docs/make-targets.html 2>/dev/null; then
     set -- "$@" docs/make-targets.html
