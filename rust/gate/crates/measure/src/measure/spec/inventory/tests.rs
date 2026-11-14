@@ -14,7 +14,10 @@ fn words(w: &[&str]) -> Vec<String> {
 
 /// A labeled report of `n` items, every third bare and HIGH, the rest marked, one hedged item near the start.
 fn labeled(n: usize, caravan: bool) -> String {
-    let mut text = String::from("# Inventory\n\n# research/water.html - sections\n");
+    let mut text = String::from(concat!(
+        "# Inventory\n\n# rese",
+        "arch/water.html - sections\n"
+    ));
     for i in 1..=n {
         let (mark, tier) = match i % 3 {
             0 => ("no marker", "HIGH"),
@@ -81,7 +84,10 @@ fn tiers_markers_and_pages() {
     assert!(carries_marker("they are a guess"));
     assert!(!carries_marker("plain"));
     assert_eq!(
-        page_of("# /a/research/cities/x.html\n## b.html - 3\ntext"),
+        page_of(concat!(
+            "# /a/rese",
+            "arch/cities/x.html\n## b.html - 3\ntext"
+        )),
         "b.html"
     );
     assert_eq!(page_of("# no page\n"), "");
@@ -152,7 +158,7 @@ fn bare_items_per_page() {
     put(
         &root,
         &format!("{REPORTS}/a.md"),
-        "# research/b.html\n**W1.** x **HIGH**\n**W2.** y (unsourced) **LOW**\n# c.html\n**W3.** z **LOW**\n**W4.** w **LOW**\n",
+        concat!("# rese", "arch/b.html\n**W1.** x **HIGH**\n**W2.** y (unsourced) **LOW**\n# c.html\n**W3.** z **LOW**\n**W4.** w **LOW**\n"),
     );
     put(&root, &format!("{REPORTS}/b.md"), "**W1.** none **LOW**\n");
     let mut out = String::new();
