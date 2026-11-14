@@ -18,6 +18,7 @@ pub mod probe;
 pub mod push_check_times;
 pub mod review_yield;
 pub mod runstats;
+pub mod spec;
 pub mod stepback_bundle;
 pub mod task_phases;
 pub mod tool_yield;
@@ -71,6 +72,9 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("fix-yield") => fix_yield::cli(rest, &home()),
         Some("tool-yield") => tool_yield::cli(rest, root, &home()),
         Some("turn-time") => turn_time::cli(rest),
+        // the past features' measurement scripts that still run (feature 449 T139, `ask:449-phase3-remainder` Q4), from the tree's
+        // top and the working directory, as each script read one or the other
+        Some("spec") => spec::cli(rest, root, &std::env::current_dir().unwrap_or_default()),
         // three of `make audit`'s sections (feature 449 T121, `ask:449-T83-scope`), from the recipe's own working directory
         Some("audit") => audit::cli(
             rest,
@@ -79,7 +83,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         ),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit\n"
+            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit | spec\n"
                 .to_owned(),
             2,
         ),

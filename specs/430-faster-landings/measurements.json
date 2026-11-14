@@ -30,7 +30,7 @@
   "unit": "runs",
   "observed": "2026-10-26",
   "source": "this clone, dev/run-log/2026-10/20261026*.json",
-  "command": "python3 specs/430-faster-landings/full_reasons.py",
+  "command": "scripts/gates/l7r-gate.sh measure spec 430 full-reasons",
   "method": "full_reasons.py as committed: each target-done run record whose plan reason names a non-Python engine file or a non-module file under tests/, counted by that reason",
   "by_reason": {
    "pool/hamlets/inashiro/inashiro.json": 11,

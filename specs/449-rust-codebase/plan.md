@@ -489,28 +489,34 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T139 (<why: the finding or measurement that files it>)
+### T139 (the past features' measurement scripts that still run, `ask:449-phase3-remainder` Q4)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: nine of the ten scripts the ruling keeps ported whole but for two branches no input reaches (below), no door, as gate commands of the `measure` crate (`l7r-gate measure spec <feature> <name>`, `measure/spec.rs` with `spec/inventory.rs`, `spec/hamlets.rs` and `spec/runs.rs`); their 29 recorded commands rewritten to those commands and re-run; the nine `.py` deleted. The tenth, `specs/242-.../measure/note_census.py`, is in the retire class and is retired here.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase3-remainder` Q4, FR-001, FR-002, FR-003):
+   - The form: one gate command per past measurement, as recorded commands already name the gate script (`record agent-census`, `measure push-check-times`), run by `make figures` from the tree's top as it ran the Python; a port of a script that read its own tree reads the top (238, 239, 242, 432), one that read the working directory still reads it (261's pool, 430's run log). `spec.rs` is the one writer of the three scripts' `measurements.json` writes; one inventory parser serves 238 and 242, as 238's script loaded 242's by path.
+   - The recorded commands (FR-001): 238's four, 239's two, 242's twelve, 261's nine, 430's and 432's one each, edited line by line. Re-run: 238, 239 and 242's `inventory_census` reproduce every recorded value, `make figures` listing no moved count for them; 430 reproduces its 19 runs and the `by_reason` split 11, 4, 2, 1 and 1; 432 its 7 triage findings (observed 2026-11-14, method: the rewritten commands and `l7r-gate measure figures` over the six features, `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t139/figures-before.log` and `figures-after.log`). 261's nine print past rounds' figures of maps the pool has since re-laid (last 2026-10-30) and do not reproduce them, the same on both sides (for example `sawada-r17-well` 173.3 recorded, 335.5 today), the round commits no object in any clone; they print and record nothing, so `make figures` compares nothing for them (observed 2026-11-14, method: each command run on both sides).
+   - `note_census.py` is in the ruling's retire class: it read `.claude/skills/diagram/research/citations/*.html`, pages feature 258 deleted (commit `3e2fe218b`), so it counts no page and all four of its recorded values move (`citation-notes` 995 to 0, `absence-notes` 260 to 0, `grounds-notes` 2 to 0, `absence-notes-never-searched` 120 to 0), and `make figures` fails on it before and after the cut (observed 2026-11-14, method: its command run and `measure figures` over 242). Its four commands are retired to `<retired: ...>` with their values kept and the script deleted, the `fr005_probe` pattern T130 followed.
+   - Three defects of the shared Rust found by the differential, fixed for every crate: `serde_json`'s default float parse misread 509 of 6,000 of the maps' long floats by one place, so `float_roundtrip` is on in `rust/Cargo.toml` and the guard's manifest (0 of 6,000 with it, every crate's tests green); `math.hypot` follows CPython's own algorithm, where libm's differed in the last place on 1,760 of 300,000 pairs (0 of 300,000 after); and the guard's `pyjson::py_float` printed `inf` as `inf.0` (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t139/harness/diff.py` and its float and `hypot` checks).
+   - The same outputs (FR-002): HEAD's Python, frozen, against the Rust built after the deletion, each case set up identically, exit, stdout, stderr and every file written compared: 574 cases, none differing, 116 failing on both sides, over the real reports, pool, run logs and claims history and scratch trees for every branch and broken input (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t139/harness/diff.py`, `diff-final.log`). Normalizations: a failing run's stderr, which in these nine is only argparse's own text or a traceback, both unbound by `ask:449-usage-text`: none of the nine writes stderr by hand, no `sys.exit("...")`, `print(..., file=sys.stderr)`, `sys.stderr.write`, `parser.error(...)` or `raise SystemExit("...")` in any (observed 2026-11-14, method: `git show HEAD:<path> | grep -cE` of those five forms over each of the nine, 0 in every one); the old `python3 ...` command in a written `measurements.json` swapped for the new on both sides, bytecode off. Two Python branches no input reaches are not carried, each commented: the census's tier-share sum, which cannot fail once no tier is stray, and triage's unpacking error, git printing no empty line. `fixtures-and-board` takes its arguments and ignores them, as the Python did.
+   - Timing: `triage-price` 49.3 s in Python against 10.4 s in Rust, one streaming `git cat-file --batch` (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t139/harness/diff.py`). Every other script 0.1 to 1.8 s, a little faster than its Python (observed 2026-11-14, method: the same harness). `make figures` over the six features 89 s before and 12 s after (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t139/figures-before.log` and `figures-after.log`).
+   - The census: no Makefile recipe, shell script or other code ran the ten (observed 2026-11-14, method: `git grep` of each name over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs` and `.claude/`). The checks: `make static` clean on 21 crates (`measure` at 100% line coverage), `make rust-test` green (`measure` 148 tests, the guard 557), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check clean (observed 2026-11-14, method: those commands).
 
 ### T139 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The past measurements that still run are Rust, re-run by `make figures` through make.
+2. **The constraints.** FR-001 (a recorded command rewritten and re-run in the cut), FR-002, FR-003, `ask:449-phase3-remainder` Q4.
+3. **Where each comes from.** R: the ruling; O: the re-runs, the differential and the figures above.
+4. **Do they describe the world here?** Each recorded command re-run on this clone, measured 2026-11-14 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t139/figures-after.log`).
+5. **The order.** After T136.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The differential's 574 cases with none differing, the recorded values reproduced, and `note_census` retired.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T140 (<why: the finding or measurement that files it>)

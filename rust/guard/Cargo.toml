@@ -16,7 +16,8 @@ name = "l7r_guard"
 [dependencies]
 # the hook protocol's JSON, read and written (feature 449 plan, Complexity Tracking: the one crate phase 1 adds)
 serde = "1"
-serde_json = { version = "1", features = ["preserve_order"] }
+# `float_roundtrip`: floats read as Python's `json.loads` reads them, the workspace's set (feature 449 T139, `rust/Cargo.toml`)
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
 # the guards' patterns, 43 of them with lookaround or backreferences (research R8)
 fancy-regex = "0.14"
 

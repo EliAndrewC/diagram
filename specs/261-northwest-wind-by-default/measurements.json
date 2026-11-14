@@ -952,7 +952,7 @@
   "unit": "plots",
   "quantity": "homestead dry plots on the dike-pond hamlet (6 barley, millet and buckwheat plots in the round); meta.homestead_fields 0",
   "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.json dry_plots, meta.homestead_fields",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 fixtures-and-board"
  },
  "kuwabata-r15-notes": {
   "verifies": "F3",
@@ -972,7 +972,7 @@
   "unit": "fixtures",
   "quantity": "farmstead fixtures and persimmons whose line to their house crosses a lane (4 in the round); the shrine passed to the house at 1466.6,119.4, and meta.farm_fixtures_unseated is empty - the coop and stack of the farmstead at (1277,257) seat on the yard ring past the homestead bundles",
   "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json farm_fixtures, persimmons, lanes",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 fixtures-and-board"
  },
  "mizuguchi-r15-belt": {
   "verifies": "F2",
@@ -991,7 +991,7 @@
   "unit": "fixtures",
   "quantity": "farmstead fixtures and persimmons recorded in meta.farm_fixtures_unseated across the five pool hamlets after the lane rule, the yard ring past the bundles and the persimmon's outer step (the commit before the lane rule: Sawada one heap; with the lane rule alone: seven on four maps)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json meta.farm_fixtures_unseated",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 fixtures-and-board"
  },
  "belt-r16-depth": {
   "verifies": "F1",
@@ -1011,7 +1011,7 @@
   "unit": "degrees",
   "quantity": "the sharpest turn at any vertex of Sawada's recorded brook (47 in the round, with corners of 41 and 27); across the pool 9.0-22.7, the largest at a held tap",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json streams",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/brook_turn.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 brook-turn inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "kuwabata-r16-copse": {
   "verifies": "F1",
@@ -1041,7 +1041,7 @@
   "unit": "ft",
   "quantity": "meta.kosatsuba_well_ft, now the drawn board's distance to its nearest well (353.5 recorded in the round for the engine's first seat); every pool map's recorded figure equals its drawn one",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json meta.kosatsuba_well_ft, kosatsuba, wells",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/board_well.py sawada kashikawa inashiro mizuguchi"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 board-well sawada kashikawa inashiro mizuguchi"
  },
  "sawada-r17-alder": {
   "verifies": "F2",
@@ -1081,7 +1081,7 @@
   "unit": "ft",
   "quantity": "the tightest rank of three or more houses on Sawada, the pool's one alleys hamlet (ranks 37.0, 60.7 and 17.1 ft); Mizuguchi, back_lane, keeps its regular ranks (rows of 4.7, 5.2 and 40.5 ft) by the record's planned form",
   "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.json houses; .claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.json houses",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/row_spread.py sawada mizuguchi"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 row-spread sawada mizuguchi"
  },
  "sawada-r18-moves": {
   "subject": "sawada",
@@ -1218,7 +1218,7 @@
   "unit": "ft",
   "quantity": "the median distance from a farmhouse to the center of its nearest dry plot, the largest of the four hamlets that lay homestead fields: Inashiro 70, Kashikawa 81, Mizuguchi 80, Sawada 99 ft, with 11 / 14 / 6 / 12 homestead plots; on main's re-laid pool Mizuguchi laid 3 and its median was 157 ft; SUPERSEDED 2026-09-28 by plan D24: the homestead field is retired (`m:dry-r24-retired`)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots, houses, meta.homestead_fields",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 fixtures-and-board inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "pool-r22-unseated": {
   "subject": "pool",
@@ -1227,7 +1227,7 @@
   "unit": "fixtures",
   "quantity": "farmstead fixtures and persimmons in meta.farm_fixtures_unseated across the five pool hamlets; on main's re-laid pool Mizuguchi's north-row house (1368,255) left its woodpile and persimmon unseated",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json meta.farm_fixtures_unseated",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 fixtures-and-board inashiro kashikawa kuwabata mizuguchi sawada"
  },
  "lanes-r22-ends": {
   "subject": "pool",
@@ -1256,6 +1256,6 @@
   "unit": "homestead plots",
   "quantity": "grain plots laid beside a house across the five pool hamlets after the homestead field was retired on the research pass (plan D24); the median straight-line distance from a house to its nearest dry plot is now 575 / 418 / 383 / 367 ft on Inashiro, Kashikawa, Mizuguchi and Sawada (Kuwabata draws no dry plot), the canal hem's (near_dry_median_ft of measure/notes_figures.py)",
   "source": ".claude/skills/diagram/pool/hamlets/*/*.json dry_plots, meta",
-  "command": "python3 specs/261-northwest-wind-by-default/measure/fixtures_and_board.py inashiro kashikawa kuwabata mizuguchi sawada"
+  "command": "scripts/gates/l7r-gate.sh measure spec 261 fixtures-and-board inashiro kashikawa kuwabata mizuguchi sawada"
  }
 }

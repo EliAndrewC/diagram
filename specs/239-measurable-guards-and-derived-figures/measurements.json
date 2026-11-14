@@ -1,6 +1,6 @@
 {
  "amendment-guard-lines-added": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/change_size.py 06cb3c1c^ 49027b6b --record",
+  "command": "scripts/gates/l7r-gate.sh measure spec 239 change-size 06cb3c1c^ 49027b6b --record",
   "note": "feature 236 amendment 2: the hook and its new module",
   "taken": "2026-09-13",
   "unit": "lines",
@@ -26,7 +26,7 @@
   "value": 78.9
  },
  "amendment-scripts-lines-added": {
-  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/change_size.py 06cb3c1c^ 49027b6b --record",
+  "command": "scripts/gates/l7r-gate.sh measure spec 239 change-size 06cb3c1c^ 49027b6b --record",
   "note": "the same window, all of scripts/",
   "taken": "2026-09-13",
   "unit": "lines",

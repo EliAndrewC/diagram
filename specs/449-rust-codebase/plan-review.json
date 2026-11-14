@@ -792,6 +792,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-14",
    "declared": "spec-fidelity"
+  },
+  "### T139 (the past features' measurement scripts that still run, `ask:449-phase3-remainder` Q4)": {
+   "sha256": "7d1271be093911de03b8d64a09927a8892ce9799fe5898f9f8fea95312e0cefe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity"
+  },
+  "### T139 Approach (checklist part A)": {
+   "sha256": "0dc03e6120e3bdc40fbb511a38762e2677c2fe5e494ad6f99693b74f44065248",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8956,6 +8968,91 @@
      "why": "The cut census serves FR-001/FR-003 (no remaining runner of deleted files); the dead-pointer fix is documentation hygiene adjacent to the cut and narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-14",
+   "blocks": [
+    "### T139 (the past features' measurement scripts that still run, `ask:449-phase3-remainder` Q4)",
+    "### T139 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T139-form",
+     "summary": "Each past measurement becomes one gate command under the measure crate (l7r-gate measure spec <feature> <name>), re-run by make figures from the tree's top as the Python ran.",
+     "class": "within",
+     "why": "FR-005 keeps make as the one entry point, and ask:449-phase3-remainder says the measurement scripts that run and work are ported (T139). Recorded commands already name gate commands, so this follows the existing pattern."
+    },
+    {
+     "id": "T139-cwd",
+     "summary": "A port reads the tree's top where its Python read its own tree (238, 239, 242, 432), and the working directory where its Python read that (261's pool, 430's run log).",
+     "class": "within",
+     "why": "FR-002: the same inputs give the same outputs. Each port keeps its Python's behavior."
+    },
+    {
+     "id": "T139-one-writer",
+     "summary": "spec.rs is the one writer of the three scripts' measurements.json writes, and one inventory parser serves both 238 and 242, as 238's script already loaded 242's by path.",
+     "class": "within",
+     "why": "This is an internal shape inside FR-002's same-outputs rule, and it keeps one implementation where the Python already shared one. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "T139-recorded-commands",
+     "summary": "The recorded commands of 238, 239, 242, 261, 430 and 432 are rewritten to the gate commands and re-run, and the values of 238, 239, 242's inventory_census, 430 and 432 reproduce.",
+     "class": "within",
+     "why": "FR-001: a recorded command is rewritten in the commit that ports what it runs, and the rewritten command is re-run as the proof. Note: the Approach line says 29 commands, but this decision's per-feature list adds up to 28 (4+2+12+8+1+1), so one command is unaccounted for. That is a count to reconcile, not a narrowing."
+    },
+    {
+     "id": "T139-261-unreproduced",
+     "summary": "261's eight commands are ported even though they no longer reproduce their recorded figures (the maps they read have since been re-laid). They write nothing, so make figures compares nothing for them, and both sides give the same output.",
+     "class": "within",
+     "why": "The retire test in ask:449-phase3-remainder is 'a command make figures runs that fails when run today, or that invokes deleted code'. Neither half fires here: make figures does not fail on these commands, and they read live maps. FR-002 allows maps to change. Python and Rust print the same thing, so FR-002 holds. This is the same test that retires note_census, applied the same way."
+    },
+    {
+     "id": "T139-note-census-retired",
+     "summary": "specs/242/measure/note_census.py is retired here instead of ported: its four commands become <retired: ...> with their values kept, and the script is deleted.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Both halves of the ruling's own retire test are met as stated. make figures fails on the script before and after the cut (all four values move to 0), and it reads .claude/skills/diagram/research/citations/*.html, which feature 258 deleted (3e2fe218b), so no port could reproduce 995/260/2/120. The ground is the arbiter's class test, not the GM's 'not still used' line; make figures does run the script, so that line would be the weaker ground. The retire class was assigned to T130, but the ruling defines the class by a test and not by a list, so a member T130 missed is still in the class. The retirement keeps the values as history, the fr005_probe pattern, so no recorded figure is lost."
+    },
+    {
+     "id": "T139-unreached-branch-tier-share",
+     "summary": "The census's tier-share sum check is not carried into the Rust (a commented omission): it cannot fail once no tier is stray, and the stray-tier check runs first.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The Approach line says the scripts are 'ported whole', which contradicts this omission. The plan should say 'whole but two unreached branches'. Ruled on its merits: FR-002 binds outputs on cases, and no input reaches this branch because it follows logically from the stray-tier check before it. A literal carry would be a Rust line that no test can reach, which conflicts with FR-004's floor of every line reached (measure is held at 100%). Applying the rule literally is therefore impossible, not just awkward."
+    },
+    {
+     "id": "T139-unreached-branch-triage-unpack",
+     "summary": "Triage's unpacking-error branch is not carried into the Rust (a commented omission), on the premise that git prints no empty line in the output it parses.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is judged separately from the tier-share branch because it is a different kind of claim. The tier-share branch is dead by logic; this one is dead only if a fact about git's output format holds. The block gives that fact without its own method label. The differential's 574 cases over the real claims history are taken as the measurement of it: a branch no case reaches is a branch with no output for FR-002 to bind. The FR-004 conflict is the same as for the tier-share branch. The premise is recorded here so that if git ever prints an empty line, this ruling falls with it."
+    },
+    {
+     "id": "T139-shared-rust-fixes",
+     "summary": "Three defects in the shared Rust are fixed for every crate: serde_json float_roundtrip turned on, math.hypot following CPython's algorithm, and py_float printing inf as inf.0.",
+     "class": "within",
+     "why": "Each fix makes a Rust port give the outputs of the Python it replaces, which FR-002 demands of every crate and not only of this task's. The before and after counts are recorded (509 to 0 of 6,000; 1,760 to 0 of 300,000). No behavior beyond FR-002 is added."
+    },
+    {
+     "id": "T139-differential-normalizations",
+     "summary": "The differential normalizes away a failing run's stderr (argparse's own text or a traceback; none of the nine writes stderr by hand, checked by grep of five forms) and swaps the old python3 command for the new one in written measurements.json files.",
+     "class": "within",
+     "why": "ask:449-usage-text: argparse-generated stderr and an uncaught traceback's text are not outputs FR-002 binds, and exit status and stdout stay compared. The grep shows nothing hand-written is hidden by this. The command swap is FR-001's required rewrite. Neither hides a bound output."
+    },
+    {
+     "id": "T139-fixtures-and-board-args",
+     "summary": "fixtures-and-board takes its arguments and ignores them, as the Python did.",
+     "class": "within",
+     "why": "FR-002: this reproduces the Python's behavior."
+    },
+    {
+     "id": "T139-triage-streaming",
+     "summary": "triage-price reads git objects through one streaming git cat-file --batch.",
+     "class": "within",
+     "why": "This is an implementation shape with the same outputs (FR-002), in line with FR-006's one-process fixes. Nothing that was asked is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15522,6 +15619,89 @@
      "summary": "The census at the cut (provenance comments, repointed doc line, no measurements command naming either tool), plus two dead pointers in docs/spec-kit-and-reviews.md to a test T78 deleted fixed in the same cut.",
      "class": "within",
      "why": "The cut census serves FR-001/FR-003 (no remaining runner of deleted files); the dead-pointer fix is documentation hygiene adjacent to the cut and narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T139": {
+   "section_sha256": "5c4f4cb83b8578d59e9c58146a4b22a169ea2f8d0be468afbcb93f8f761dbf06",
+   "reviewed": "2026-11-14",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T139-form",
+     "summary": "Each past measurement becomes one gate command under the measure crate (l7r-gate measure spec <feature> <name>), re-run by make figures from the tree's top as the Python ran.",
+     "class": "within",
+     "why": "FR-005 keeps make as the one entry point, and ask:449-phase3-remainder says the measurement scripts that run and work are ported (T139). Recorded commands already name gate commands, so this follows the existing pattern."
+    },
+    {
+     "id": "T139-cwd",
+     "summary": "A port reads the tree's top where its Python read its own tree (238, 239, 242, 432), and the working directory where its Python read that (261's pool, 430's run log).",
+     "class": "within",
+     "why": "FR-002: the same inputs give the same outputs. Each port keeps its Python's behavior."
+    },
+    {
+     "id": "T139-one-writer",
+     "summary": "spec.rs is the one writer of the three scripts' measurements.json writes, and one inventory parser serves both 238 and 242, as 238's script already loaded 242's by path.",
+     "class": "within",
+     "why": "This is an internal shape inside FR-002's same-outputs rule, and it keeps one implementation where the Python already shared one. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "T139-recorded-commands",
+     "summary": "The recorded commands of 238, 239, 242, 261, 430 and 432 are rewritten to the gate commands and re-run, and the values of 238, 239, 242's inventory_census, 430 and 432 reproduce.",
+     "class": "within",
+     "why": "FR-001: a recorded command is rewritten in the commit that ports what it runs, and the rewritten command is re-run as the proof. Note: the Approach line says 29 commands, but this decision's per-feature list adds up to 28 (4+2+12+8+1+1), so one command is unaccounted for. That is a count to reconcile, not a narrowing."
+    },
+    {
+     "id": "T139-261-unreproduced",
+     "summary": "261's eight commands are ported even though they no longer reproduce their recorded figures (the maps they read have since been re-laid). They write nothing, so make figures compares nothing for them, and both sides give the same output.",
+     "class": "within",
+     "why": "The retire test in ask:449-phase3-remainder is 'a command make figures runs that fails when run today, or that invokes deleted code'. Neither half fires here: make figures does not fail on these commands, and they read live maps. FR-002 allows maps to change. Python and Rust print the same thing, so FR-002 holds. This is the same test that retires note_census, applied the same way."
+    },
+    {
+     "id": "T139-note-census-retired",
+     "summary": "specs/242/measure/note_census.py is retired here instead of ported: its four commands become <retired: ...> with their values kept, and the script is deleted.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Both halves of the ruling's own retire test are met as stated. make figures fails on the script before and after the cut (all four values move to 0), and it reads .claude/skills/diagram/research/citations/*.html, which feature 258 deleted (3e2fe218b), so no port could reproduce 995/260/2/120. The ground is the arbiter's class test, not the GM's 'not still used' line; make figures does run the script, so that line would be the weaker ground. The retire class was assigned to T130, but the ruling defines the class by a test and not by a list, so a member T130 missed is still in the class. The retirement keeps the values as history, the fr005_probe pattern, so no recorded figure is lost."
+    },
+    {
+     "id": "T139-unreached-branch-tier-share",
+     "summary": "The census's tier-share sum check is not carried into the Rust (a commented omission): it cannot fail once no tier is stray, and the stray-tier check runs first.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The Approach line says the scripts are 'ported whole', which contradicts this omission. The plan should say 'whole but two unreached branches'. Ruled on its merits: FR-002 binds outputs on cases, and no input reaches this branch because it follows logically from the stray-tier check before it. A literal carry would be a Rust line that no test can reach, which conflicts with FR-004's floor of every line reached (measure is held at 100%). Applying the rule literally is therefore impossible, not just awkward."
+    },
+    {
+     "id": "T139-unreached-branch-triage-unpack",
+     "summary": "Triage's unpacking-error branch is not carried into the Rust (a commented omission), on the premise that git prints no empty line in the output it parses.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is judged separately from the tier-share branch because it is a different kind of claim. The tier-share branch is dead by logic; this one is dead only if a fact about git's output format holds. The block gives that fact without its own method label. The differential's 574 cases over the real claims history are taken as the measurement of it: a branch no case reaches is a branch with no output for FR-002 to bind. The FR-004 conflict is the same as for the tier-share branch. The premise is recorded here so that if git ever prints an empty line, this ruling falls with it."
+    },
+    {
+     "id": "T139-shared-rust-fixes",
+     "summary": "Three defects in the shared Rust are fixed for every crate: serde_json float_roundtrip turned on, math.hypot following CPython's algorithm, and py_float printing inf as inf.0.",
+     "class": "within",
+     "why": "Each fix makes a Rust port give the outputs of the Python it replaces, which FR-002 demands of every crate and not only of this task's. The before and after counts are recorded (509 to 0 of 6,000; 1,760 to 0 of 300,000). No behavior beyond FR-002 is added."
+    },
+    {
+     "id": "T139-differential-normalizations",
+     "summary": "The differential normalizes away a failing run's stderr (argparse's own text or a traceback; none of the nine writes stderr by hand, checked by grep of five forms) and swaps the old python3 command for the new one in written measurements.json files.",
+     "class": "within",
+     "why": "ask:449-usage-text: argparse-generated stderr and an uncaught traceback's text are not outputs FR-002 binds, and exit status and stdout stay compared. The grep shows nothing hand-written is hidden by this. The command swap is FR-001's required rewrite. Neither hides a bound output."
+    },
+    {
+     "id": "T139-fixtures-and-board-args",
+     "summary": "fixtures-and-board takes its arguments and ignores them, as the Python did.",
+     "class": "within",
+     "why": "FR-002: this reproduces the Python's behavior."
+    },
+    {
+     "id": "T139-triage-streaming",
+     "summary": "triage-price reads git objects through one streaming git cat-file --batch.",
+     "class": "within",
+     "why": "This is an implementation shape with the same outputs (FR-002), in line with FR-006's one-process fixes. Nothing that was asked is narrowed."
     }
    ],
    "verdict": "CLEAR"

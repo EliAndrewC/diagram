@@ -22,9 +22,20 @@ pub fn ascii_string(text: &str, ascii: bool) -> String {
     out
 }
 
-/// A float as Python's `repr` writes it: shortest digits, positional from 1e-4 up to 1e16, and a signed two-digit exponent outside that.
+/// A float as Python's `repr` writes it: shortest digits, positional from 1e-4 up to 1e16, and a signed two-digit exponent outside that;
+/// `inf`, `-inf` and `nan` as Python names them (feature 449 T139: `float("inf")` of a figure printed `inf.0` before).
 #[must_use]
 pub fn py_float(f: f64) -> String {
+    if !f.is_finite() {
+        return if f.is_nan() {
+            "nan"
+        } else if f > 0.0 {
+            "inf"
+        } else {
+            "-inf"
+        }
+        .to_owned();
+    }
     let scientific = format!("{f:e}");
     let (mantissa, exponent) = scientific.split_once('e').unwrap_or((&scientific, "0"));
     let exponent: i32 = exponent.parse().unwrap_or(0);
@@ -168,6 +179,9 @@ mod tests {
         assert_eq!(py_float(1e16), "1e+16");
         assert_eq!(py_float(1.5e-7), "1.5e-07");
         assert_eq!(py_float(3.0), "3.0");
+        assert_eq!(py_float(f64::INFINITY), "inf");
+        assert_eq!(py_float(f64::NEG_INFINITY), "-inf");
+        assert_eq!(py_float(f64::NAN), "nan");
     }
 
     #[test]
