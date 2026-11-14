@@ -437,8 +437,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T134 Phase 3, the work budget's tools no task held (phase-3 census, 2026-11-12): scripts/measure/work_budget_bundle.py and budget_change.py (1,136 lines), before the task gate (phase_sources imports work_budget_bundle)
       research: rendering
       verify: DONE. landed: the work budget's tools ported to Rust (work-budget-bundle, budget-change): 895 differential cases, none differing; make static, rust-test and hooks-test green
-- [ ] T135 Phase 3, the authoring tools no task held (phase-3 census, 2026-11-12): claim-feature.py (also run by .specify's create-new-feature.sh), trial-start.py, trial-review.py, task-add.py, set-down.py, make-docs.py (run by the push and the land), patch.py (about 1,160 lines)
+- [x] T135 Phase 3, the authoring tools no task held (phase-3 census, 2026-11-12): claim-feature.py (also run by .specify's create-new-feature.sh), trial-start.py, trial-review.py, task-add.py, set-down.py, make-docs.py (run by the push and the land), patch.py (about 1,160 lines)
       research: rendering
+      verify: DONE. landed: the authoring tools ported to Rust (claim, trials, patch, make-docs, task-add, set-down): 344 tool cases, 1 ruled difference, 27 make cases with none; make static, rust-test and hooks-test green
 - [x] T136 Phase 3, the review census and the agent sync no task held (phase-3 census, 2026-11-12): scripts/reviews/review_census.py and agent_sync.py with tests/test_agent_sync.py (216 lines)
       research: rendering
       verify: DONE. landed: the review census and the agent sync ported to Rust (reviews census, agent-sync): 163 differential cases, 3 explained; 12 mutations failing both sides; make static, rust-test and hooks-test green
