@@ -416,3 +416,6 @@
 - [x] T146 Phase 4 S3a, the one browser crate (ask:449-phase4-slices) Q4: scripts/record/archive.py and glyph_crop.py over CDP (995 lines), the crate page_lit later uses; retires depiction.rs's include_str! and python3 run and the Playwright install in setup-dev-env.sh; before S3b (ask:449-T80-order's condition met by S1)
       research: rendering
       verify: DONE. landed: phase 4 S3a, the one browser crate: 109 differential cases with one explained difference, 36 crops identical, a kept end-to-end case; make static, rust-test and hooks-test green
+- [x] T159 The pre-review count check: make decide refuses a count (lines, cases, files ...) whose sentence carries no label, the plan review's commonest unreviewable return (request.md 2026-11-16)
+      research: rendering
+      verify: DONE. landed: make decide refuses an unlabeled count; plan crate tests green, coverage complete; ask:449-T159-rounds

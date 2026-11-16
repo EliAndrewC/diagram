@@ -330,38 +330,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T127 to T127 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 
 <!-- plan-archive: T128 to T128 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-### T135 (the authoring tools no task held, `ask:449-phase3-remainder`)
-
-- **Approach**: `scripts/claim-feature.py`, `trial-start.py`, `trial-review.py`, `task-add.py`, `set-down.py`, `make-docs.py` and `patch.py` ported whole, no door: `claim`, the two trial commands and `patch` in a new gate crate `author` (on `core` alone), `make-docs` in `cohort`, `task-add` and `set-down` in `task`; every caller repointed and the seven deleted in the same cut.
-
-   **Decisions** (`ask:449-phase3-remainder`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
-   - Where each lives: `author` for the four that need neither plan, reviews nor claims, so an edit there rebuilds nothing below the binary (`trial-start` claims its number in process); `make-docs` in `cohort`, at or below the push row and the land's first pass that now call its check and write in process; `task-add` and `set-down` in `task`, `task-add` calling the tick's `repo_root` and `spec_dir` in process where it ran `tick --resolve`, which keeps its command form (T119's rule).
-   - The callers: the Makefile's `claim`, `trial`, `trial-review`, `task-add`, `set-down`, `docs` and `make static`'s page check run the gate commands; `.specify/scripts/bash/create-new-feature.sh` runs `l7r-gate.sh claim`; `scripts/land-tooling.sh`'s default page check (`LAND_TOOLING_DOCS_CHECK`) runs `make-docs . --check`; `tests/hooks/test-set-down-hooks.sh` runs `l7r-gate.sh set-down`. The push row `make-docs` is a new in-process kind under the same name, so its timing key in `measurements.json` still matches; the land's first pass checks and writes in process, a failed write ignored as the command's exit was, its test running the real check on a real Makefile and a stale page. `docs/efficiency-tooling.md` directs `l7r-gate.sh patch` for a mechanical sweep.
-   - `plan/sections.rs` read `task-add.py`'s source for the template's checklist item 6 and red exit, to tell an approach block that only repeats the template; the template now lives in `plan/src/plan/template.rs`, which `task-add` writes from and `sections.rs` and `lint.rs` read, one copy (FR-003). One copy each also for the polled lock and `mirror_of` (into `core::record::repo`, which `make download-add` now uses) and `fmt_g` (into the guard's `py_text`).
-   - `docs/make-targets.html` names its generator in three lines: it names the Rust port, FR-002's ruled case `ask:449-T135-generator` (the round arbiter, 2026-11-14), with "Unrecognised" spelled "Unrecognized", FR-002's ruled case `ask:449-T135-spelling` (the round arbiter, 2026-11-14: the house-style rule names generated content, nothing reads the word, every other output stays byte for byte); the page is regenerated in the cut and `--check` passes on it.
-   - The same outputs (FR-002): HEAD's Python against the Rust, each case set up identically at one path, exit, stdout, stderr, every file's bytes and mode and git status compared: 344 tool cases, 1 differing, `--help` exiting 2 where Python exited 0 (`ask:449-usage-text`) (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t135/diff.py`, `run-final.log`). By tool: claim 94, trial-start 11, trial-review 24, task-add 57 over ten real features, set-down 67 over three real features with the clone's own state files, make-docs 45 with the real Makefile, patch 46. Through make and the other callers, HEAD's tree against the final tree as clones under one scratch mirror: 27 cases (`make claim` with SLUG, PEEK, RENUMBER and refusals, both trial targets, `task-add` with TITLE, SECTION, RESEARCH and PERF, `set-down` with WHY and SET_DOWN_OK, `make docs`, `create-new-feature.sh` and its dry run, land-tooling's page check), none differing on the final run; its first run caught a dropped space in the `task-add` recipe, fixed and re-run (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t135/mk.py`, `run-make.log`). Normalizations: stderr up to `Traceback`, argparse errors as exit 2 with empty stdout and a `usage:` opening, the rows' `utc`, the page's three generator lines and that one word's spelling (`ask:449-T135-spelling`), a guard-edit record's file name. Divergences no case reaches: JSON `NaN` and lone surrogates, non-ASCII digits in a number, integers past i128, `isalnum` on a session id, float against whole seconds at the week's reset, a NaN lock timeout. Not compared against HEAD's binary: the push row and the land's first pass, covered by the make-docs cases and their own tests.
-   - Timing (process time, Python against Rust): claim 4.17 s against 0.59 s, task-add 1.70 s against 0.51 s, set-down 2.08 s against 0.34 s, make-docs 1.17 s against 0.48 s, through make 1.35 s against 0.73 s (observed 2026-11-14, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t135/diff.py` and `mk.py`).
-   - The census at the cut: provenance comments, history files and spec text; no `specs/*/measurements*.json` command names any of the seven in any form, the push row's `make-docs` timing key still matching (observed 2026-11-14, method: `git grep` of each name over the Makefile, `*.mk`, `*.sh`, `*.py`, `*.rs`, `.claude/`, `.specify/`, `tests/`, `docs`, `dev` and every measurements file). Kept as it was: make-docs' handling of nine `[docs]`-tagged targets as "Unrecognized categories", which `--check` has always passed. The checks: `make static` clean on 22 crates, `make rust-test` green (the guard 558 tests, `cohort` 62, `land` 50, `plan` 118), `make hooks-test HOOKS_ALL=1` green on 54 suites, `check tool-signals`, `check rust-tooling`, ruff and the pointer check clean (observed 2026-11-14, method: those commands).
-
-### T135 Approach (checklist part A)
-
-1. **The goal, in the world.** `make claim`, `task-add`, `set-down`, the trials, `make docs` and the sweep are Rust; no push or landing starts Python for the page.
-2. **The constraints.** FR-001, FR-002 and FR-003, `ask:449-phase3-remainder`.
-3. **Where each comes from.** G: the standing approval to delete ported Python; R: the ruling; O: the differential, the make runs and the census above.
-4. **Do they describe the world here?** Run on this clone's real Makefile and features and through make end to end, measured 2026-11-14 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t135/mk.py`).
-5. **The order.** After T139.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The differential's 344 cases with one ruled difference, the 27 make cases with none, and the census.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
-
-<!-- plan-archive: T136 to T136 moved to plan-done.md, 2026-11-14 (feature 375 FR-044) -->
-<!-- plan-archive: T137 to T137 moved to plan-done.md, 2026-11-14 (feature 375 FR-044) -->
+<!-- plan-archive: T135 to T135 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
 ### T138 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -388,41 +357,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T139 to T139 moved to plan-done.md, 2026-11-14 (feature 375 FR-044) -->
 <!-- plan-archive: T140 to T140 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-### T143 (the shell libraries' inline Python, `ask:449-phase4-slices` Q12)
-
-- **Approach**: every inline Python site of `scripts/hooks/lib/guardlog.sh`, `scripts/hooks/lib/clone-resolve.sh` and `.specify/scripts/bash/common.sh` replaced by the Rust, no door: `guard_log` calls a new gate command `l7r-gate log guard` over the guard crate's one guard-log writer (`shared::log::write_entry`) and one session resolver (`shared::session`); `common.sh`'s four sites (six `python3` lines) go, two ported - the `feature.json` read and the presets - calling `l7r-gate speckit feature-dir` and `speckit presets` (the `author` crate); `clone-resolve.sh`, whose one caller was `guardlog.sh`, and `common.sh`'s `resolve_template_content`, which nothing calls, deleted. The shell functions keep their names and arguments, so the five `*-gate.sh`, `LOGESCAPE`, `sync-with-main.sh`, `l7r-guard.sh` and the `.specify` scripts do not change.
-
-   **Decisions** (`ask:449-phase4-slices` Q12, `ask:449-T051-lib-route`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
-   - The gate binary, not the guard's through `l7r-guard.sh`: every caller but one has just run `l7r-gate.sh escape reason-ok`, so the gate binary is current; the suites' fixture trees link the real `l7r-gate.sh` where the guard binary is found under a `$HOME` they move; and `l7r-guard.sh`'s no-binary path calls `guard_log` itself, so routing through it would loop. That one hook-time caller never waits on a build: it runs under `L7R_GATE_STALE_OK=1` and a new `L7R_GATE_NO_BUILD=1` seam of `l7r-gate.sh`.
-   - The no-binary entry: `l7r-guard.sh`'s no-binary path tries the gate's writer first and, where that exits nonzero because the gate has no binary either, writes its "failed-open" entry through `scripts/hooks/lib/failed-open-log.sh`, which needs neither Python nor a binary (`jq -a --indent 2`, a `printf` path where `jq` is absent), byte for byte the entry HEAD's Python wrote on that path: its fields and order, `payload.get(k) or ""`, the `SID` fallback, the session name resolved as `clone-resolve.sh` did, the file name's form, written to a temporary and renamed. It is that one path's alone, the only record that the guards did not run on a tree with nothing built; every other entry keeps the one Rust writer. `guard_log` is a wrapper that always returns 0, its work in `_guard_log_write`, whose exit only the no-binary path reads. Edges named in the file's header: a float literal `jq` reads otherwise than Python (`nan` in lower case), and without `iconv` an input not UTF-8 that also holds a real U+FFFD.
-   - A payload's numbers read as Python read them: `pyjson::loads`, scoped to the guard log's reader, keeps an integer's digits past u64 and reads `NaN`, `Infinity` and floats past a double's range as Python's JSON did, held as marked strings `pyjson::dumps` writes back bare (where the Rust wrote `1.2345678901234568e+29` for Python's `123456789012345678901234567890`); not serde_json's `arbitrary_precision`, a feature of the whole build that would change every crate's numbers (`1.50` written as read where Python writes `1.5`); no other crate's output moves, every crate's tests green.
-   - Toward the Python, every writer and resolver sharing them: `pyjson::ascii_string` escapes 0x7f as `ensure_ascii` does (a core test that pinned it bare was wrong against the Python), changing the bytes of `log run`, `log bypass`, `escape take` and the guard log for that one character; the guards' own entries share the shell's writer; the shared resolver (clone-sync's routing reads it too) resolves the cwd to its real path, skips dot files among the sessions, reads Python's whitespace in the kebab-case name and an empty `CLONE_SESSIONS_DIR`, `HOME` or `GUARD_LOG_DIR` as unset (`/diagram` and the clone are not symlinks, so live routing does not move). `l7r-gate` takes its arguments as bytes: `log guard` decodes them as Python's `surrogateescape` did, and any other subcommand handed one not UTF-8 exits 101 with a message where it panicked.
-   - The same outputs (FR-002): HEAD's shell (its inline Python as it was) against the new, each case set up identically at one path, exit, stdout, stderr and every file written compared: 2,194 cases in two runs, none differing, with 364 spec-kit cases in a third, none differing (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t143/diff.py`, `run-final2.log`, `results.json`) - the guard log 1,166 (400 real entries rebuilt as payloads against the real clones, sessions and transcripts read-only, 250 recorded hook inputs, 253 resolver branches on scratch layouts, 125 payload shapes with integers past u64 and `NaN`, 22 argument forms, 7 log-directory cases, and every sourcer's real call: 18 gate escapes and refusals, 6 `LOGESCAPE`, 5 `sync-with-main` lines, 80 no-binary runs on real payloads), the no-binary entry with the gate binary absent too 1,028 (400 real payloads, 250 fixture inputs, 125 shapes, 253 resolver cases), and, in the third run (`results-speckit.json`), the spec-kit functions 364 (every `feature.json` form and preset registry, with and without `jq`, through each function and `check-prerequisites.sh`, `setup-plan.sh` and `setup-tasks.sh`). Normalizations: an entry's `utc` and file name (nanoseconds then, microseconds now, as T137), a bypass record's name and `utc`. End to end: gate escapes in the scratch tree, `create-new-feature.sh` on a scratch mirror and clone the same both sides, `check-prerequisites.sh --json` the same in the real clone, `test-sync-with-main.sh` green, and `test-l7r-guard.sh`'s new case comparing the fallback's entry with HEAD's Python's bytes (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t143/e2e-claim.sh` and those runs).
-   - Timing: a `guard_log` call 47 ms against 8 ms with no hook input (the gates' form) and 67 ms against 8 ms with one (the hooks' form), paid only where a guard or gate refuses or is escaped (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t143/diff.py`).
-   - Left for a ruling: `specs/449-rust-codebase/measurements.json`'s `inline-census-sites` (`make inline-census`, recorded at T052's close as 57 sites, 27, 27 and 3) reads 41 (27, 14 and 0) on this tree, the census script updated for the deleted file; it measured a past tree, so whether it is retired or re-recorded is the arbiter's. `.specify/integrations/speckit.manifest.json` pins `common.sh`'s old hash, a file nothing reads. A reader defect found, not this task's: `measure audit`'s `load()` fails on a guard-log entry holding a lone `\udcXX`, which the Python's JSON read; the new writer writes those exactly as the Python did, and none exists in the log today.
-   - The census: `guardlog.sh`'s sourcers the five gates, `l7r-guard.sh`, `sync-with-main.sh` and the Makefile's `LOGESCAPE`; `clone-resolve.sh`'s callers `guardlog.sh` and one case of `test-clone-sync-hooks.sh`, which now checks the name through `guard_log`; `common.sh`'s sourcers the four `.specify` scripts (observed 2026-11-16, method: `git grep -n -E "guardlog.sh|clone-resolve.sh|common.sh|guard_log|guard_cmd|resolve"` over `scripts/`, `.specify/`, `rust/`, `tests/`, the Makefile and `.claude/`). The checks: `make static` clean, `make rust-test` green on 23 crates (the guard 573 tests), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check clean (observed 2026-11-16, method: those commands).
-
-### T143 Approach (checklist part A)
-
-1. **The goal, in the world.** A gate, a guard or a sync that logs a firing starts no Python, nor does a spec-kit script.
-2. **The constraints.** FR-001, FR-002 and FR-003, `ask:449-phase4-slices` Q12.
-3. **Where each comes from.** R: the ruling; O: the differential, the end-to-end runs and the census above.
-4. **Do they describe the world here?** Run on this clone's real guard log, clones, sessions and hook fixtures, measured 2026-11-16 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t143/diff.py`).
-5. **The order.** Before S1, as the ruling has it.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The 2,194 cases with none differing, and the census.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
-
-<!-- plan-archive: T144 to T144 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-<!-- plan-archive: T145 to T81 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-<!-- plan-archive: T145 to T145 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-<!-- plan-archive: T146 to T146 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
+<!-- plan-archive: T143 to T143 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
 ### T147 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -711,35 +646,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T159 (the plan review's commonest unreviewable return, a count no label reaches; the GM 2026-11-16, request.md)
-
-- **Approach**: `make decide`'s lint (`rust/gate/crates/plan/src/plan/lint.rs`, which `make plan-delta` asks too) refuses a sentence stating a count - a number before a noun this project's plans count by measuring (lines, cases, files, pages, calls, crates, suites, tests, rows, keys, findings, differences, runs, commits, bytes and their kin) - with no label in that sentence, as it already refuses a figure with a physical unit; its message names the labels and says to re-read the count from the run's own record after the last edit.
-
-   **Decisions** (the GM's words in request.md, 2026-11-16; FR-001's tooling, feature 385 T86 and feature 430 D5, whose check it extends):
-   - Why: of four port agents' time, the checks took 5-14% and the differentials 2-30%, the rest the model's own work (observed 2026-11-16, method: each tool call's wait and each background wait in the agents' transcripts, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/agent_time.py`); the avoidable cost was the review's round trips, and T145's plan took five dispatches, three of them returned for a figure - two unlabeled, then one count misreported (observed 2026-11-16, method: this session's dispatches and their replies). Each such return costs a dispatch, a rewrite and a fresh `make decide`.
-   - The nouns are counts a plan measures; the plan's own parts ("14 decisions", "two tasks", "11 recipes") name and do not measure, so they stay out; a rule's threshold ("no file over 1,000 lines", "at most 10 keys") states a limit and is exempt; a date, a task or requirement id and a code span are not figures, as the unit check already reads them.
-   - A count is split by sentence only, where the unit check splits at ";" too: over the sixteen reviewed sections of 449 from T121 to T145, the ";" split flagged 11 counts their reviews had passed and the sentence split 3, each a count no label reached - "110 `.py` files" (T134), "124 cases" (T134), "336 calls" (T144) (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/figcheck/proto2.py`, the rule mirrored in Python, over `plan-done.md`). The tick's own "**Done, measured.**" lines, written after the review, were left out of that count.
-   - It catches the case that filed it: T145's `(183, 98 and 57 lines)` is refused and its labeled form passes, pinned by the lint's tests.
-   - Kept with it: every port task's brief from T147 on asks for each figure re-measured after the agent's last edit, with its method. The GM's second proposal - the differentials rerunning only what a fix touched - is enforced by tooling, as the GM's 2026-11-11 words ask ("our tooling must enforce this"), so it is its own task, T161: one shared runner in the repository keying each case by the inputs and code it runs, rerunning after a fix only the cases whose key moved, the port briefs using it. The third proposal, compile and test speed, is T160, ordered last as the GM was shown it, opening with a measurement of where compile and test time goes.
-   - The checks: the plan crate's tests green, its line coverage complete (observed 2026-11-16, method: `make rust-test CRATE=rust/gate/crates/plan` and `l7r-gate.sh rust uncovered --crate rust/gate/crates/plan`).
-
-### T159 Approach (checklist part A)
-
-1. **The goal, in the world.** A plan section reaches its review with every count labeled, so no round is spent on one.
-2. **The constraints.** The GM's words (request.md, 2026-11-16); feature 430 D5's rule that a plan review is never dispatched on what a script can see.
-3. **Where each comes from.** G: the GM's approval; O: the transcript split and the sixteen-section measurement above.
-4. **Do they describe the world here?** Measured on this feature's own reviewed sections, measured 2026-11-16 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/figcheck/proto2.py`).
-5. **The order.** After T146; before T147, whose plan it checks first.
-6. **The exits.** Green: the plan crate's tests and coverage, and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The lint's tests, and T147's plan reaching its review with no figure returned.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No - it saves review rounds, not running time.
-
-
+<!-- plan-archive: T159 to T159 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
 ### T160 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
