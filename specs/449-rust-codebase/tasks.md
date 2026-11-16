@@ -41,8 +41,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       note: not landed - its plan review (BLOCKED, 2026-11-12) held it to the GM's condition: the suite alone fell from 35.0 s to about 17 s, but the full hook run did not move (52.1 s against 53.1 s and 54.1 s), so no significant saving in the loop he is speeding up; the change is kept as a patch until the run's real bound is found
 - [ ] T138 Phase 3, the research search no task held (phase-3 census, 2026-11-12): research_search.py and semantic_index.py (520 lines), after T85 (both import archive in process)
       research: rendering
-- [ ] T145 Phase 4 S2, T81's cut together (ask:449-phase4-slices), ask:449-T80-order: scripts/record/sources, attempts, reserve-prefix, quote_verbatim, source_pages, record_prepass, style_prepass, apply_edits (3,075 lines); retires owed/answers.rs REPLY_OF, owed/translation.rs READER and parser_key, bundle_door's run, passages and save_cached verbs, blocked_fetch_hooks.rs's by-path run
-      research: rendering
 - [ ] T146 Phase 4 S3a, the one browser crate (ask:449-phase4-slices) Q4: scripts/record/archive.py and glyph_crop.py over CDP (995 lines), the crate page_lit later uses; retires depiction.rs's include_str! and python3 run and the Playwright install in setup-dev-env.sh; before S3b (ask:449-T80-order's condition met by S1)
       research: rendering
 - [ ] T147 Phase 4 S3b, the uncited cluster (ask:449-phase4-slices): scripts/record/uncited, uncited_imports, archive_ops (1,623 lines); retires downloads.rs's by-path run of archive_ops.py inbox

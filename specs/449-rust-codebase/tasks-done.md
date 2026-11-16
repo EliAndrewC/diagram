@@ -410,3 +410,6 @@
 - [x] T144 Phase 4 S1, the record's core (ask:449-phase4-slices): interactive/record's split, assemble, absence, contents, fragments, notes, originals, passages, questions, confusables, xref, store, site_notes, source_tags, blocked, archive and __init__, with interactive/sources.py and content.py (2,721 lines), extending core::record; its own task, since S2-S12 import it
       research: rendering
       verify: DONE. landed: phase 4 S1, the record's core as a Rust library: 378,360 recorded calls replayed, none differing; make static, rust-test and hooks-test green
+- [x] T145 Phase 4 S2, T81's cut together (ask:449-phase4-slices), ask:449-T80-order: scripts/record/sources, attempts, reserve-prefix, quote_verbatim, source_pages, record_prepass, style_prepass, apply_edits (3,075 lines); retires owed/answers.rs REPLY_OF, owed/translation.rs READER and parser_key, bundle_door's run, passages and save_cached verbs, blocked_fetch_hooks.rs's by-path run
+      research: rendering
+      verify: DONE. landed: phase 4 S2, T81's record tools in Rust: 1,261 differential cases with two ruled differences, the write paths 204; make static, rust-test and hooks-test green
