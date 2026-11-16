@@ -6,14 +6,15 @@
 #   input         a `python3` inside a string a case feeds a guard as its input: nothing runs it. By exact line, listed in tests/hooks/census-guard-inputs.txt, so a real run in the same
 #                 suite still counts. Those suites stay shell past phase 1.
 #   later-phase   a file that moves whole with a piece FR-001 places later.
-#   last-caller   a file that goes with its only caller (`clone-resolve.sh`, called by `guardlog.sh`).
+#   last-caller   a file that goes with its only caller - none since feature 449 T143, which ported `guardlog.sh`'s and `clone-resolve.sh`'s
+#                 inline Python to the gate's `log guard` and deleted `clone-resolve.sh`; the group stays so the census's report keeps its shape.
 # Anything else is printed and exits 1: phase 1's share is not empty.
 set -uo pipefail
 root=$(git rev-parse --show-toplevel)
 cd "$root" || exit 2
 pattern='python3 (-c|-[[:space:]]|-$|<<)'
-later='^(tests/hooks/test-(checks-hooks|record-edit-hooks|check-bundle-hooks|entry-gate|claims-gate|cohort-gate|land-tooling)\.sh|scripts/hooks/(check-bundle-hooks|record-edit-hooks|lib/guardlog)\.sh):'
-caller='^scripts/hooks/lib/clone-resolve\.sh:'
+later='^(tests/hooks/test-(checks-hooks|record-edit-hooks|check-bundle-hooks|entry-gate|claims-gate|cohort-gate|land-tooling)\.sh|scripts/hooks/(check-bundle-hooks|record-edit-hooks)\.sh):'
+caller='^$'  # no file is left in the group (T143)
 listed=tests/hooks/census-guard-inputs.txt
 sites=$(git grep -nE "$pattern" -- 'scripts/hooks/*.sh' 'tests/hooks/*.sh')
 inputs=0 later_n=0 caller_n=0 outside=""

@@ -49,50 +49,28 @@
 # map's one file read on every firing (do not "optimize" this away; a name not recorded at firing
 # time cannot be recovered), and the transcript scan only for a session that has never claimed a
 # clone. The name is the CLONE's directory name - the project's identity for a session - not the
-# verbatim /rename title. The payload reaches python through a file: an environment variable has a
-# size limit a heredoc-carrying command can exceed, and an entry that fails to write is the one
-# failure this function must never have.
+# verbatim /rename title. The payload ($INPUT) reaches the writer on stdin: an environment variable
+# has a size limit a heredoc-carrying command can exceed.
+#
+# THE ENTRY IS THE GUARD'S RUST (feature 449 T143, the round arbiter's `ask:449-phase4-slices` Q12): `l7r-gate log guard`, over the
+# guard's one writer (`rust/guard/src/shared/log.rs`) and its one resolver of the session's clone (`shared/session.rs`), where this ran
+# two Python starts (`clone-resolve.sh resolve`, deleted, and the writer) on every firing. The gate's binary, not the guard's: every
+# caller but one has just run `l7r-gate.sh escape reason-ok`, and a suite's fixture tree stands `l7r-gate.sh` in as a link to the real
+# one. `L7R_GATE_STALE_OK` and `L7R_GATE_NO_BUILD`: the one hook-time caller, `l7r-guard.sh`'s no-binary path, must never wait on a
+# build, so the binary there is runs, stale or not; with none, that one caller writes its entry by `lib/failed-open-log.sh`, the one
+# entry written without a binary (the plan review of T143). The directory, the session the caller's
+# shell names (`SID`) and the tree the session's mirror falls back to are handed over here, as the Python read them from this shell.
 guard_log() {
-  { GL_DIR=${GUARD_LOG_DIR:-$HOME/.claude/guard-log}
-    mkdir -p "$GL_DIR" 2>/dev/null || return 0
-    GL_TS=$(date -u +%Y%m%dT%H%M%S%6N 2>/dev/null || date -u +%Y%m%dT%H%M%S)
-    GL_F="$GL_DIR/$GL_TS-$$.json"
-    GL_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    GL_NAME=$(printf '%s' "${INPUT:-}" | "$GL_HERE/clone-resolve.sh" resolve 2>/dev/null | tail -1)
-    GL_NAME=${GL_NAME##*/}
-    GL_IN=$(mktemp 2>/dev/null || echo "$GL_F.in")
-    printf '%s' "${INPUT:-}" > "$GL_IN"
-    python3 - "$GL_F" "$1" "$2" "$3" "${SID:-unknown}" "${4:-}" "${5:-}" "$GL_NAME" "$GL_IN" <<'PY' 2>/dev/null || true
-import json, sys, time
-path, guard, event, detail, sid_env, rule, context, name, inp = sys.argv[1:10]
-try:
-    payload = json.load(open(inp))
-except Exception:
-    payload = {}
-if not isinstance(payload, dict):
-    payload = {}
-ti = payload.get("tool_input") or {}
-if not isinstance(ti, dict):
-    ti = {}
-sid = payload.get("session_id") or (sid_env if sid_env not in ("unknown", "nosession") else "") or "unknown"
-try:
-    ctx = json.loads(context) if context else None
-except Exception:
-    ctx = context or None
-# GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - `open(path, "w")` created the file
-# BEFORE the entry was serialized, so a hook killed mid-write left a zero-byte entry (two on 2026-09-26)
-# and `make audit` died reading it. Serialize first, write a temp beside it, rename into place.
-import os
-text = json.dumps({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "guard": guard,
-                   "event": event, "rule": rule or event, "session": sid, "session_name": name or sid,
-                   "cwd": payload.get("cwd") or "", "tool": payload.get("tool_name") or "",
-                   "transcript": payload.get("transcript_path") or "", "detail": detail[:200],
-                   "command": ti.get("command") or ti.get("file_path") or "", "context": ctx}, indent=2)
-with open(path + ".tmp", "w") as fh:
-    fh.write(text)
-os.replace(path + ".tmp", path)
-PY
-    rm -f "$GL_IN"
-  } >/dev/null 2>&1 || true
+  _guard_log_write "$@" >/dev/null 2>&1 || true
   return 0
+}
+
+# _guard_log_write <guard> <event> <detail> [rule] [context-json] - the entry, its exit the writer's: 0 written, else not (no gate binary
+# here, an unwritable log). Only `l7r-guard.sh`'s no-binary path reads it, to write its one entry without a binary when this did not.
+_guard_log_write() {
+  local here=${BASH_SOURCE[0]%/*}
+  case "${BASH_SOURCE[0]}" in */*) ;; *) here=. ;; esac  # sourced by a bare name, from its own directory
+  case "$here" in /*) ;; *) here="$(cd "$here" && pwd)" ;; esac
+  printf '%s' "${INPUT:-}" | GUARD_LOG_DIR="${GUARD_LOG_DIR:-$HOME/.claude/guard-log}" L7R_GUARD_TREE="${here%/scripts/hooks/lib}" \
+    L7R_GATE_STALE_OK=1 L7R_GATE_NO_BUILD=1 "$here/../../gates/l7r-gate.sh" log guard "$1" "$2" "$3" "${SID:-unknown}" "${4:-}" "${5:-}"
 }

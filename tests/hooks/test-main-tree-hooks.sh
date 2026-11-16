@@ -22,7 +22,7 @@ export HOME="$T/home"; mkdir -p "$HOME"
 
 # A fake mirror with a clone under it, so the guard's own derivation (toplevel, minus /.clones/<name>)
 # is exercised rather than stubbed - and the CLAIM MAP clone-sync writes at a session's first edit,
-# naming session "t" -> the worker clone, which is what `clone-resolve.sh resolve` reads first.
+# naming session "t" -> the worker clone, which is what the session's resolver (`shared::session`, T143) reads first.
 MAIN=$T/diagram
 git init -q "$MAIN"; git -C "$MAIN" config user.email t@t; git -C "$MAIN" config user.name t
 echo a > "$MAIN/f"; mkdir -p "$MAIN/specs"; git -C "$MAIN" add f; git -C "$MAIN" commit -qm a

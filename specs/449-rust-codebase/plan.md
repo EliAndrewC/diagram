@@ -388,28 +388,35 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T139 to T139 moved to plan-done.md, 2026-11-14 (feature 375 FR-044) -->
 <!-- plan-archive: T140 to T140 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-### T143 (<why: the finding or measurement that files it>)
+### T143 (the shell libraries' inline Python, `ask:449-phase4-slices` Q12)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: every inline Python site of `scripts/hooks/lib/guardlog.sh`, `scripts/hooks/lib/clone-resolve.sh` and `.specify/scripts/bash/common.sh` replaced by the Rust, no door: `guard_log` calls a new gate command `l7r-gate log guard` over the guard crate's one guard-log writer (`shared::log::write_entry`) and one session resolver (`shared::session`); `common.sh`'s four sites (six `python3` lines) go, two ported - the `feature.json` read and the presets - calling `l7r-gate speckit feature-dir` and `speckit presets` (the `author` crate); `clone-resolve.sh`, whose one caller was `guardlog.sh`, and `common.sh`'s `resolve_template_content`, which nothing calls, deleted. The shell functions keep their names and arguments, so the five `*-gate.sh`, `LOGESCAPE`, `sync-with-main.sh`, `l7r-guard.sh` and the `.specify` scripts do not change.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase4-slices` Q12, `ask:449-T051-lib-route`, `ask:449-usage-text`, FR-001, FR-002, FR-003):
+   - The gate binary, not the guard's through `l7r-guard.sh`: every caller but one has just run `l7r-gate.sh escape reason-ok`, so the gate binary is current; the suites' fixture trees link the real `l7r-gate.sh` where the guard binary is found under a `$HOME` they move; and `l7r-guard.sh`'s no-binary path calls `guard_log` itself, so routing through it would loop. That one hook-time caller never waits on a build: it runs under `L7R_GATE_STALE_OK=1` and a new `L7R_GATE_NO_BUILD=1` seam of `l7r-gate.sh`.
+   - The no-binary entry: `l7r-guard.sh`'s no-binary path tries the gate's writer first and, where that exits nonzero because the gate has no binary either, writes its "failed-open" entry through `scripts/hooks/lib/failed-open-log.sh`, which needs neither Python nor a binary (`jq -a --indent 2`, a `printf` path where `jq` is absent), byte for byte the entry HEAD's Python wrote on that path: its fields and order, `payload.get(k) or ""`, the `SID` fallback, the session name resolved as `clone-resolve.sh` did, the file name's form, written to a temporary and renamed. It is that one path's alone, the only record that the guards did not run on a tree with nothing built; every other entry keeps the one Rust writer. `guard_log` is a wrapper that always returns 0, its work in `_guard_log_write`, whose exit only the no-binary path reads. Edges named in the file's header: a float literal `jq` reads otherwise than Python (`nan` in lower case), and without `iconv` an input not UTF-8 that also holds a real U+FFFD.
+   - A payload's numbers read as Python read them: `pyjson::loads`, scoped to the guard log's reader, keeps an integer's digits past u64 and reads `NaN`, `Infinity` and floats past a double's range as Python's JSON did, held as marked strings `pyjson::dumps` writes back bare (where the Rust wrote `1.2345678901234568e+29` for Python's `123456789012345678901234567890`); not serde_json's `arbitrary_precision`, a feature of the whole build that would change every crate's numbers (`1.50` written as read where Python writes `1.5`); no other crate's output moves, every crate's tests green.
+   - Toward the Python, every writer and resolver sharing them: `pyjson::ascii_string` escapes 0x7f as `ensure_ascii` does (a core test that pinned it bare was wrong against the Python), changing the bytes of `log run`, `log bypass`, `escape take` and the guard log for that one character; the guards' own entries share the shell's writer; the shared resolver (clone-sync's routing reads it too) resolves the cwd to its real path, skips dot files among the sessions, reads Python's whitespace in the kebab-case name and an empty `CLONE_SESSIONS_DIR`, `HOME` or `GUARD_LOG_DIR` as unset (`/diagram` and the clone are not symlinks, so live routing does not move). `l7r-gate` takes its arguments as bytes: `log guard` decodes them as Python's `surrogateescape` did, and any other subcommand handed one not UTF-8 exits 101 with a message where it panicked.
+   - The same outputs (FR-002): HEAD's shell (its inline Python as it was) against the new, each case set up identically at one path, exit, stdout, stderr and every file written compared: 2,194 cases in two runs, none differing, with 364 spec-kit cases in a third, none differing (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t143/diff.py`, `run-final2.log`, `results.json`) - the guard log 1,166 (400 real entries rebuilt as payloads against the real clones, sessions and transcripts read-only, 250 recorded hook inputs, 253 resolver branches on scratch layouts, 125 payload shapes with integers past u64 and `NaN`, 22 argument forms, 7 log-directory cases, and every sourcer's real call: 18 gate escapes and refusals, 6 `LOGESCAPE`, 5 `sync-with-main` lines, 80 no-binary runs on real payloads), the no-binary entry with the gate binary absent too 1,028 (400 real payloads, 250 fixture inputs, 125 shapes, 253 resolver cases), and, in the third run (`results-speckit.json`), the spec-kit functions 364 (every `feature.json` form and preset registry, with and without `jq`, through each function and `check-prerequisites.sh`, `setup-plan.sh` and `setup-tasks.sh`). Normalizations: an entry's `utc` and file name (nanoseconds then, microseconds now, as T137), a bypass record's name and `utc`. End to end: gate escapes in the scratch tree, `create-new-feature.sh` on a scratch mirror and clone the same both sides, `check-prerequisites.sh --json` the same in the real clone, `test-sync-with-main.sh` green, and `test-l7r-guard.sh`'s new case comparing the fallback's entry with HEAD's Python's bytes (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t143/e2e-claim.sh` and those runs).
+   - Timing: a `guard_log` call 47 ms against 8 ms with no hook input (the gates' form) and 67 ms against 8 ms with one (the hooks' form), paid only where a guard or gate refuses or is escaped (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t143/diff.py`).
+   - Left for a ruling: `specs/449-rust-codebase/measurements.json`'s `inline-census-sites` (`make inline-census`, recorded at T052's close as 57 sites, 27, 27 and 3) reads 41 (27, 14 and 0) on this tree, the census script updated for the deleted file; it measured a past tree, so whether it is retired or re-recorded is the arbiter's. `.specify/integrations/speckit.manifest.json` pins `common.sh`'s old hash, a file nothing reads. A reader defect found, not this task's: `measure audit`'s `load()` fails on a guard-log entry holding a lone `\udcXX`, which the Python's JSON read; the new writer writes those exactly as the Python did, and none exists in the log today.
+   - The census: `guardlog.sh`'s sourcers the five gates, `l7r-guard.sh`, `sync-with-main.sh` and the Makefile's `LOGESCAPE`; `clone-resolve.sh`'s callers `guardlog.sh` and one case of `test-clone-sync-hooks.sh`, which now checks the name through `guard_log`; `common.sh`'s sourcers the four `.specify` scripts (observed 2026-11-16, method: `git grep -n -E "guardlog.sh|clone-resolve.sh|common.sh|guard_log|guard_cmd|resolve"` over `scripts/`, `.specify/`, `rust/`, `tests/`, the Makefile and `.claude/`). The checks: `make static` clean, `make rust-test` green on 23 crates (the guard 573 tests), `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check clean (observed 2026-11-16, method: those commands).
 
 ### T143 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A gate, a guard or a sync that logs a firing starts no Python, nor does a spec-kit script.
+2. **The constraints.** FR-001, FR-002 and FR-003, `ask:449-phase4-slices` Q12.
+3. **Where each comes from.** R: the ruling; O: the differential, the end-to-end runs and the census above.
+4. **Do they describe the world here?** Run on this clone's real guard log, clones, sessions and hook fixtures, measured 2026-11-16 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t143/diff.py`).
+5. **The order.** Before S1, as the ruling has it.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The 2,194 cases with none differing, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T144 (<why: the finding or measurement that files it>)

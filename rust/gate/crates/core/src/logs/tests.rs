@@ -317,6 +317,8 @@ fn every_value_is_written_in_its_python_form() {
 #[test]
 fn the_json_corners_are_pythons() {
     assert_eq!(l7r_guard::shared::pyjson::py_float(-0.0), "-0.0");
-    assert_eq!(super::one_line(&json!("del\u{7f}")), "\"del\u{7f}\"");
+    // DEL escaped, as Python's `ensure_ascii` escapes it (feature 449 T143: this line pinned it bare, which no Python wrote)
+    assert_eq!(super::one_line(&json!("del\u{7f}")), "\"del\\u007f\"");
+    assert_eq!(super::one_line_utf8(&json!("del\u{7f}")), "\"del\u{7f}\"");
     assert_eq!(super::one_line(&json!(u64::MAX)), "18446744073709551615");
 }

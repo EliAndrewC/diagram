@@ -222,6 +222,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
+  },
+  "### T143 (the shell libraries' inline Python, `ask:449-phase4-slices` Q12)": {
+   "sha256": "716c9d2494e1394843f6c1fad9a8994228d18ca7f608b0356ae1401ec3320865",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
+  },
+  "### T143 Approach (checklist part A)": {
+   "sha256": "6600f268db097d2d2d943449d37138a13f2ab104103a6481e0df9eec564dcb6b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8614,6 +8626,77 @@
      "why": "This is sequencing within the feature. It takes nothing out of the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T143 (the shell libraries' inline Python, `ask:449-phase4-slices` Q12)",
+    "### T143 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T143-route",
+     "summary": "guard_log reaches the Rust through the gate binary (l7r-gate log guard), not the guard binary through l7r-guard.sh; the one hook-time caller runs under L7R_GATE_STALE_OK=1 and a new L7R_GATE_NO_BUILD=1 seam so it never waits on a build",
+     "class": "within",
+     "why": "A choice of route for the port FR-001 and ask:449-phase4-slices Q12 require; it keeps no Python and changes no output. The loop through l7r-guard.sh's no-binary path is the stated reason. The no-build seam keeps hook-time cost off a compile, which serves the request's own purpose (hook latency, the GM 2026-11-07)."
+    },
+    {
+     "id": "T143-no-binary-writer",
+     "summary": "On l7r-guard.sh's no-binary path, when the gate has no binary either, the failed-open entry is written by a new shell writer, scripts/hooks/lib/failed-open-log.sh (jq, or printf without jq), byte for byte HEAD's Python entry; every other entry goes through the one Rust writer",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001 says the Python is replaced by Rust, and this one path is replaced by shell instead. Running Rust there is physically impossible: the path exists because no binary is built. The only other choices are keeping Python (the request refuses that) or dropping the entry (an FR-002 output lost, and the only record that the guards did not run). The request's purpose is no Python, and that holds on this path too. The writer is confined to that one path, and the differential's 1,028 no-binary cases match HEAD."
+    },
+    {
+     "id": "T143-no-binary-edges",
+     "summary": "Two disclosed edges of the shell writer: a lower-case float literal (nan) that jq reads and Python's JSON rejects, and, without iconv, a non-UTF-8 input that also holds a real U+FFFD",
+     "class": "within",
+     "why": "FR-002 binds every case the tests and suites hold. Neither edge is a held case: upper-case NaN and the payload shapes are held, run on the no-binary path, and match (nogate-payload 125/0 in results.json). No held case is excluded or changed. The edges are disclosed in the file header, on a path reached only when nothing is built, and on input Claude Code's JSON serializer does not emit. If a held case is ever found among them, this becomes a narrowing."
+    },
+    {
+     "id": "T143-pyjson",
+     "summary": "pyjson::loads keeps integers past u64, NaN, Infinity and floats past a double's range as Python's JSON did, written back bare by pyjson::dumps; serde_json arbitrary_precision is rejected because it would change every crate's numbers",
+     "class": "within",
+     "why": "This serves FR-002 (the Python's outputs). It is kept local so that no other crate's output moves (FR-002 for every other piece). Wording only: the decision says 'scoped to the door' while the approach says 'no door'. That is an inconsistency in the text, not a decision."
+    },
+    {
+     "id": "T143-toward-python-shared",
+     "summary": "pyjson::ascii_string escapes 0x7f as ensure_ascii does, changing log run, log bypass, escape take and the guard log for that character; the guards' entries share the shell's writer; the shared resolver (also read by clone-sync routing) takes clone-resolve.sh's real-path, dot-file, whitespace and empty-variable semantics",
+     "class": "within",
+     "why": "Each change moves an already-ported Rust writer or resolver toward the Python it replaced. Python's ensure_ascii escapes 0x7f: its ESCAPE_ASCII class is everything outside space to tilde. So the old core test pinned an FR-002 divergence. One writer and one resolver serve FR-003 and FR-001c's one implementation. No held case of any suite or crate moves (54 suites and 23 crates green), and live routing does not move because /diagram and the clone are not symlinks."
+    },
+    {
+     "id": "T143-bytes-args",
+     "summary": "l7r-gate takes its arguments as bytes: log guard decodes them as Python's surrogateescape did; any other subcommand given non-UTF-8 exits 101 with a message where it panicked",
+     "class": "within",
+     "why": "For log guard this is FR-002 fidelity to the shell's Python. For the other subcommands the exit status stays 101, and only a Rust panic's text becomes a message. That text is no output FR-002 binds (by analogy with ask:449-usage-text's traceback ruling), and no held case changes."
+    },
+    {
+     "id": "T143-differential",
+     "summary": "The FR-002 proof is HEAD's shell against the new one: exit, stdout, stderr and every file written compared, normalizing an entry's utc, its file name and a bypass record's name and utc",
+     "class": "within",
+     "why": "Carries FR-002. The normalizations remove time values only. HEAD's guardlog.sh named entries with date -u +%Y%m%dT%H%M%S%6N (microseconds), and the new Rust writer's header gives microseconds too, so the shell's entries keep the Python's name form and only the unreproducible timestamp digits are normalized. FIGURE FINDING (not a narrowing): the block's '2,194 cases' with 'the guard log 1,167 (... 8 log-directory cases ...)' and 'the spec-kit functions 364' does not reconcile with its own run. results.json gives 2,194 = 1,166 guard-log cases (logdir 7, not 8) + 1,028 no-binary cases, and the 364 spec-kit cases are a separate run (results-speckit.json, 364/0). All differ in none, but the block's figures must be corrected: 1,166 and 7, and 2,194 stated as excluding the 364 (2,558 in all)."
+    },
+    {
+     "id": "T143-deletions",
+     "summary": "clone-resolve.sh (one caller, guardlog.sh) and common.sh's resolve_template_content (no caller) are deleted unported; test-clone-sync-hooks.sh's one clone-resolve.sh case now checks the name through guard_log",
+     "class": "within",
+     "why": "FR-001 places clone-resolve.sh with guardlog.sh in phase 3, and Q12 names both files' Python. Code nothing runs is deleted rather than ported (the GM 2026-11-09). The census names its git grep and its search space (scripts/, .specify/, rust/, tests/, the Makefile, .claude/). The rerouted test case keeps its assertion and expected verdict, only its entry point moves."
+    },
+    {
+     "id": "T143-deferred",
+     "summary": "The inline-census-sites figure (57 recorded, 41 now) is left to the arbiter to retire or re-record; speckit.manifest.json's stale hash of common.sh is left; measure audit's load() defect on a lone \\udcXX is named as not this task's",
+     "class": "within",
+     "why": "These are deferred or out of task, not decided in a way that narrows the request. The figure goes to the arbiter. The reader defect belongs to an already-landed port and no entry triggers it today. The manifest hash rests on an unmeasured 'nothing reads it' but decides nothing within T143's scope."
+    },
+    {
+     "id": "T143-timing",
+     "summary": "guard_log costs 47 ms against 8 ms (no hook input) and 67 ms against 8 ms (with one), paid only where a guard or gate refuses or is escaped",
+     "class": "within",
+     "why": "This is a measurement report with a one-shot label (date and method). It decides nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15450,6 +15533,75 @@
      "summary": "Done before the phase-4 slices, which file their tasks into the archived tasks.md; budget one landing.",
      "class": "within",
      "why": "This is sequencing within the feature. It takes nothing out of the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T143": {
+   "section_sha256": "0c27a66ecc535bd8b6f95b558b0c21c40b9689f3868f2b5cbf1b56e93459e1be",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T143-route",
+     "summary": "guard_log reaches the Rust through the gate binary (l7r-gate log guard), not the guard binary through l7r-guard.sh; the one hook-time caller runs under L7R_GATE_STALE_OK=1 and a new L7R_GATE_NO_BUILD=1 seam so it never waits on a build",
+     "class": "within",
+     "why": "A choice of route for the port FR-001 and ask:449-phase4-slices Q12 require; it keeps no Python and changes no output. The loop through l7r-guard.sh's no-binary path is the stated reason. The no-build seam keeps hook-time cost off a compile, which serves the request's own purpose (hook latency, the GM 2026-11-07)."
+    },
+    {
+     "id": "T143-no-binary-writer",
+     "summary": "On l7r-guard.sh's no-binary path, when the gate has no binary either, the failed-open entry is written by a new shell writer, scripts/hooks/lib/failed-open-log.sh (jq, or printf without jq), byte for byte HEAD's Python entry; every other entry goes through the one Rust writer",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001 says the Python is replaced by Rust, and this one path is replaced by shell instead. Running Rust there is physically impossible: the path exists because no binary is built. The only other choices are keeping Python (the request refuses that) or dropping the entry (an FR-002 output lost, and the only record that the guards did not run). The request's purpose is no Python, and that holds on this path too. The writer is confined to that one path, and the differential's 1,028 no-binary cases match HEAD."
+    },
+    {
+     "id": "T143-no-binary-edges",
+     "summary": "Two disclosed edges of the shell writer: a lower-case float literal (nan) that jq reads and Python's JSON rejects, and, without iconv, a non-UTF-8 input that also holds a real U+FFFD",
+     "class": "within",
+     "why": "FR-002 binds every case the tests and suites hold. Neither edge is a held case: upper-case NaN and the payload shapes are held, run on the no-binary path, and match (nogate-payload 125/0 in results.json). No held case is excluded or changed. The edges are disclosed in the file header, on a path reached only when nothing is built, and on input Claude Code's JSON serializer does not emit. If a held case is ever found among them, this becomes a narrowing."
+    },
+    {
+     "id": "T143-pyjson",
+     "summary": "pyjson::loads keeps integers past u64, NaN, Infinity and floats past a double's range as Python's JSON did, written back bare by pyjson::dumps; serde_json arbitrary_precision is rejected because it would change every crate's numbers",
+     "class": "within",
+     "why": "This serves FR-002 (the Python's outputs). It is kept local so that no other crate's output moves (FR-002 for every other piece). Wording only: the decision says 'scoped to the door' while the approach says 'no door'. That is an inconsistency in the text, not a decision."
+    },
+    {
+     "id": "T143-toward-python-shared",
+     "summary": "pyjson::ascii_string escapes 0x7f as ensure_ascii does, changing log run, log bypass, escape take and the guard log for that character; the guards' entries share the shell's writer; the shared resolver (also read by clone-sync routing) takes clone-resolve.sh's real-path, dot-file, whitespace and empty-variable semantics",
+     "class": "within",
+     "why": "Each change moves an already-ported Rust writer or resolver toward the Python it replaced. Python's ensure_ascii escapes 0x7f: its ESCAPE_ASCII class is everything outside space to tilde. So the old core test pinned an FR-002 divergence. One writer and one resolver serve FR-003 and FR-001c's one implementation. No held case of any suite or crate moves (54 suites and 23 crates green), and live routing does not move because /diagram and the clone are not symlinks."
+    },
+    {
+     "id": "T143-bytes-args",
+     "summary": "l7r-gate takes its arguments as bytes: log guard decodes them as Python's surrogateescape did; any other subcommand given non-UTF-8 exits 101 with a message where it panicked",
+     "class": "within",
+     "why": "For log guard this is FR-002 fidelity to the shell's Python. For the other subcommands the exit status stays 101, and only a Rust panic's text becomes a message. That text is no output FR-002 binds (by analogy with ask:449-usage-text's traceback ruling), and no held case changes."
+    },
+    {
+     "id": "T143-differential",
+     "summary": "The FR-002 proof is HEAD's shell against the new one: exit, stdout, stderr and every file written compared, normalizing an entry's utc, its file name and a bypass record's name and utc",
+     "class": "within",
+     "why": "Carries FR-002. The normalizations remove time values only. HEAD's guardlog.sh named entries with date -u +%Y%m%dT%H%M%S%6N (microseconds), and the new Rust writer's header gives microseconds too, so the shell's entries keep the Python's name form and only the unreproducible timestamp digits are normalized. FIGURE FINDING (not a narrowing): the block's '2,194 cases' with 'the guard log 1,167 (... 8 log-directory cases ...)' and 'the spec-kit functions 364' does not reconcile with its own run. results.json gives 2,194 = 1,166 guard-log cases (logdir 7, not 8) + 1,028 no-binary cases, and the 364 spec-kit cases are a separate run (results-speckit.json, 364/0). All differ in none, but the block's figures must be corrected: 1,166 and 7, and 2,194 stated as excluding the 364 (2,558 in all)."
+    },
+    {
+     "id": "T143-deletions",
+     "summary": "clone-resolve.sh (one caller, guardlog.sh) and common.sh's resolve_template_content (no caller) are deleted unported; test-clone-sync-hooks.sh's one clone-resolve.sh case now checks the name through guard_log",
+     "class": "within",
+     "why": "FR-001 places clone-resolve.sh with guardlog.sh in phase 3, and Q12 names both files' Python. Code nothing runs is deleted rather than ported (the GM 2026-11-09). The census names its git grep and its search space (scripts/, .specify/, rust/, tests/, the Makefile, .claude/). The rerouted test case keeps its assertion and expected verdict, only its entry point moves."
+    },
+    {
+     "id": "T143-deferred",
+     "summary": "The inline-census-sites figure (57 recorded, 41 now) is left to the arbiter to retire or re-record; speckit.manifest.json's stale hash of common.sh is left; measure audit's load() defect on a lone \\udcXX is named as not this task's",
+     "class": "within",
+     "why": "These are deferred or out of task, not decided in a way that narrows the request. The figure goes to the arbiter. The reader defect belongs to an already-landed port and no entry triggers it today. The manifest hash rests on an unmeasured 'nothing reads it' but decides nothing within T143's scope."
+    },
+    {
+     "id": "T143-timing",
+     "summary": "guard_log costs 47 ms against 8 ms (no hook input) and 67 ms against 8 ms (with one), paid only where a guard or gate refuses or is escaped",
+     "class": "within",
+     "why": "This is a measurement report with a one-shot label (date and method). It decides nothing."
     }
    ],
    "verdict": "CLEAR"

@@ -14,6 +14,7 @@ use serde_json::{json, Map, Value};
 use crate::cohort::git;
 use crate::Reply;
 
+pub mod guard;
 pub mod usage;
 
 /// Two records written by one process in one second never share a name.
@@ -229,7 +230,7 @@ pub fn log_cli(args: &[String], root: &Path) -> Reply {
         Some("gate-bypass") => gate_bypass(rest, root),
         Some("land-tooling") => land_tooling(rest),
         _ => Err(
-            "usage: l7r-gate log run | bypass | gate-bypass | land-tooling | usage | goals ..."
+            "usage: l7r-gate log run | bypass | gate-bypass | land-tooling | usage | goals | guard ..."
                 .to_owned(),
         ),
     };

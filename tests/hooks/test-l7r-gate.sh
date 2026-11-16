@@ -146,5 +146,12 @@ rm -f "$COMMON/gate-green-hooks"
 ( cd "$WT" && "$STAMP" stamp --fresh hooks ); check "--fresh inside a worktree reads the stamp it just wrote" 0 $?
 git -C "$W" worktree remove --force "$WT"
 
+# ---- the wrapper's no-build seam (feature 449 T143): `guard_log` runs `log guard` from a hook, which must never wait on a build -----------
+printf '#!/usr/bin/env bash\necho build >> "%s/cargo.calls"; exit 101\n' "$TMP" > "$TMP/cargo"; chmod +x "$TMP/cargo"
+OUT=$(L7R_GATE_TARGET="$TMP/no-target" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_STALE_OK=1 L7R_GATE_NO_BUILD=1 "$STAMP" --version 2>&1)
+check "no binary, L7R_GATE_NO_BUILD -> refused" 1 $?
+[ ! -e "$TMP/cargo.calls" ]; check "no binary, L7R_GATE_NO_BUILD -> no build tried" 0 $?
+case $OUT in *"L7R_GATE_NO_BUILD builds none"*) : ;; *) echo "FAIL  the no-build refusal says why: $OUT"; FAILED=1 ;; esac
+
 echo -----
 if [ "$FAILED" -eq 0 ]; then echo "all gate-stamp tests passed"; exit 0; else echo "SOME TESTS FAILED"; exit 1; fi

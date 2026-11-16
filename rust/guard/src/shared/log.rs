@@ -1,11 +1,17 @@
 //! The guard log (`scripts/hooks/lib/guardlog.sh`'s `guard_log`): one JSON file a firing, `<UTC to the microsecond>-<pid>.json` in
 //! `GUARD_LOG_DIR` (else `~/.claude/guard-log`), written to a temporary beside it and renamed into place, its fields those
 //! `make audit` and `make guard-log` read. A write that fails is silent: an entry must never cost the guard its answer.
+//!
+//! ONE WRITER FOR THE GUARDS AND THE SHELL (feature 449 T143, `ask:449-phase4-slices` Q12): `guard_log`'s inline Python is this module's
+//! [`write_entry`], which the shell reaches through `l7r-gate log guard`, so an entry is the same text whoever writes it - Python's
+//! `json.dumps(indent=2)`, every non-ASCII character escaped, each field `payload.get(k) or ""` as the Python wrote it.
 
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use serde_json::{json, Value};
+use serde_json::{json, Map, Value};
+
+use crate::shared::pyjson::{dumps, truthy};
 
 /// One firing: the guard, its event (`blocked`, `escaped`, `rewrote`, ...), the detail (cut at 200 characters), the rule (the event
 /// where none is given), the guard's own decision inputs, the hook input and the session's name and id.
@@ -28,11 +34,12 @@ pub fn dir() -> PathBuf {
     )
 }
 
-/// The log's directory given the environment's `GUARD_LOG_DIR` and `HOME`.
+/// The log's directory given the environment's `GUARD_LOG_DIR` and `HOME`, read as the shell's `${GUARD_LOG_DIR:-$HOME/.claude/guard-log}`
+/// reads them: an empty seam is no seam, so an entry never lands in the working directory (feature 449 T143).
 fn dir_from(seam: Option<String>, home: &str) -> PathBuf {
-    match seam {
+    match seam.filter(|d| !d.is_empty()) {
         Some(d) => PathBuf::from(d),
-        None => Path::new(home).join(".claude/guard-log"),
+        None => PathBuf::from(format!("{home}/.claude/guard-log")),
     }
 }
 
@@ -58,27 +65,35 @@ pub fn civil(secs: u64) -> (i64, u32, u32, u64, u64, u64) {
 /// Write `e` into `dir` at `now`; the path written, or None where the write failed.
 #[must_use]
 pub fn write_at(dir: &Path, e: &Entry, now: SystemTime) -> Option<PathBuf> {
+    write_entry(dir, e, "", now)
+}
+
+/// Write `e` into `dir` at `now`, `sid` the session the caller's environment names where the input names none (the shell's
+/// `${SID:-unknown}`; "" for a guard) - `guard_log`'s Python, field for field (feature 449 T143): the input read as a dict only when it
+/// is one, `tool_input` likewise, each field `payload.get(k) or ""` with a value that is not a string written as it is, the session
+/// `payload.get("session_id") or sid or "unknown"` (`sid` neither `unknown` nor `nosession`), the name `name or session`.
+#[must_use]
+pub fn write_entry(dir: &Path, e: &Entry, sid: &str, now: SystemTime) -> Option<PathBuf> {
     let since = now.duration_since(UNIX_EPOCH).ok()?;
     let (year, month, day, hour, min, sec) = civil(since.as_secs());
-    let field = |k: &str| {
-        e.input
-            .get(k)
-            .and_then(Value::as_str)
-            .unwrap_or("")
-            .to_owned()
-    };
-    let ti = e.input.get("tool_input").cloned().unwrap_or(Value::Null);
-    let command = ["command", "file_path"]
-        .iter()
-        .find_map(|k| ti.get(*k).and_then(Value::as_str).filter(|s| !s.is_empty()))
-        .unwrap_or("");
-    let session = Some(field("session_id"))
-        .filter(|s| !s.is_empty())
-        .unwrap_or_else(|| "unknown".to_owned());
+    let empty = Value::Object(Map::new());
+    let payload = if e.input.is_object() { e.input } else { &empty };
+    let given = |v: Option<&Value>| v.filter(|v| truthy(v)).cloned();
+    let field = |k: &str| given(payload.get(k)).unwrap_or_else(|| json!(""));
+    let ti = payload
+        .get("tool_input")
+        .filter(|v| v.is_object())
+        .unwrap_or(&empty);
+    let command = given(ti.get("command"))
+        .or_else(|| given(ti.get("file_path")))
+        .unwrap_or_else(|| json!(""));
+    let session = given(payload.get("session_id"))
+        .or_else(|| (!matches!(sid, "" | "unknown" | "nosession")).then(|| json!(sid)))
+        .unwrap_or_else(|| json!("unknown"));
     let name = if e.session_name.is_empty() {
         session.clone()
     } else {
-        e.session_name.to_owned()
+        json!(e.session_name)
     };
     let entry = json!({
         "utc": format!("{year:04}-{month:02}-{day:02}T{hour:02}:{min:02}:{sec:02}Z"), "guard": e.guard, "event": e.event,
@@ -86,7 +101,65 @@ pub fn write_at(dir: &Path, e: &Entry, now: SystemTime) -> Option<PathBuf> {
         "tool": field("tool_name"), "transcript": field("transcript_path"), "detail": e.detail.chars().take(200).collect::<String>(),
         "command": command, "context": e.context.clone().unwrap_or(Value::Null),
     });
-    place(dir, &serde_json::to_string_pretty(&entry).ok()?, now)
+    place(dir, &python_surrogates(&dumps(&entry, Some(2), true)), now)
+}
+
+/// The first stand-in of [`surrogate_escaped`]: the byte `0x80` is `U+10FF80`, `0xff` is `U+10FFFF`.
+const STAND_IN: u32 = 0x0010_FF00;
+
+/// Bytes as Python decodes an argument under this container's `C.UTF-8` locale, with `surrogateescape` (feature 449 T143): each byte UTF-8
+/// cannot take is one character, here the stand-in `U+10FF00` plus the byte, which [`write_entry`] writes as the `\udcXX` Python wrote.
+/// A gate's detail is `head -c 400` of its output, which can cut a character in two.
+#[must_use]
+pub fn surrogate_escaped(raw: &[u8]) -> String {
+    let mut out = String::with_capacity(raw.len());
+    let mut rest = raw;
+    while !rest.is_empty() {
+        match std::str::from_utf8(rest) {
+            Ok(text) => {
+                out += text;
+                break;
+            }
+            Err(e) => {
+                let (good, bad) = rest.split_at(e.valid_up_to());
+                out += std::str::from_utf8(good).unwrap_or_default();
+                let n = e.error_len().unwrap_or(bad.len());
+                out.extend(
+                    bad[..n]
+                        .iter()
+                        .filter_map(|b| char::from_u32(STAND_IN + u32::from(*b))),
+                );
+                rest = &bad[n..];
+            }
+        }
+    }
+    out
+}
+
+/// JSON text with each stand-in's escape (`\udbff\udfXX`, the pair `ensure_ascii` writes for `U+10FFXX`) written as the lone surrogate
+/// `\udcXX` Python's `json.dumps` wrote for a `surrogateescape` byte. It walks the escapes in order, so an escaped backslash followed by
+/// the same letters is left alone.
+fn python_surrogates(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut rest = text;
+    while let Some(at) = rest.find('\\') {
+        out += &rest[..at];
+        let tail = &rest[at..];
+        let byte = tail
+            .strip_prefix("\\udbff\\udf")
+            .and_then(|h| h.get(..2))
+            .filter(|h| h.as_bytes()[0] >= b'8');
+        if let Some(hex) = byte {
+            out += "\\udc";
+            out += hex;
+            rest = &tail[12..];
+        } else {
+            let step = tail.chars().take(2).map(char::len_utf8).sum::<usize>();
+            out += &tail[..step];
+            rest = &tail[step..];
+        }
+    }
+    out + rest
 }
 
 /// One entry's text put into `dir` at `now`: `<UTC to the microsecond>-<pid>.json`, written to a temporary beside it and renamed into
@@ -150,72 +223,4 @@ pub(crate) fn quiet() {
 }
 
 #[cfg(test)]
-mod tests {
-    use std::time::{Duration, UNIX_EPOCH};
-
-    use serde_json::{json, Value};
-
-    use super::{civil, dir_from, write_at, Entry};
-
-    #[test]
-    fn a_firing_is_one_file_with_todays_fields() {
-        let d = crate::shared::tempdir::TempDir::new("guard-log");
-        let input = json!({"session_id": "sid", "cwd": "/c", "tool_name": "Bash", "transcript_path": "/t", "tool_input": {"command": "ls"}});
-        let e = Entry {
-            guard: "make-only",
-            event: "blocked",
-            detail: &"x".repeat(250),
-            rule: "",
-            context: Some(json!({"why": 1})),
-            input: &input,
-            session_name: "",
-        };
-        let at = UNIX_EPOCH + Duration::from_micros(1_794_112_496_123_456);
-        let p = write_at(&d, &e, at).unwrap();
-        assert!(p
-            .file_name()
-            .unwrap()
-            .to_string_lossy()
-            .starts_with("20261108T043456123456-"));
-        let v: Value = serde_json::from_str(&std::fs::read_to_string(&p).unwrap()).unwrap();
-        assert_eq!(v["utc"], "2026-11-08T04:34:56Z");
-        assert_eq!(
-            (
-                v["rule"].as_str(),
-                v["session_name"].as_str(),
-                v["command"].as_str()
-            ),
-            (Some("blocked"), Some("sid"), Some("ls"))
-        );
-        assert_eq!(v["detail"].as_str().unwrap().len(), 200);
-        let bare = json!({});
-        let e2 = Entry {
-            guard: "g",
-            event: "escaped",
-            detail: "",
-            rule: "r",
-            context: None,
-            input: &bare,
-            session_name: "named",
-        };
-        let v2: Value =
-            serde_json::from_str(&std::fs::read_to_string(write_at(&d, &e2, at).unwrap()).unwrap())
-                .unwrap();
-        assert_eq!(
-            (
-                v2["session"].as_str(),
-                v2["session_name"].as_str(),
-                v2["context"].clone()
-            ),
-            (Some("unknown"), Some("named"), Value::Null)
-        );
-        std::fs::write(d.join("a-file"), "").unwrap();
-        assert!(write_at(&d.join("a-file"), &e2, at).is_none());
-        assert_eq!(civil(951_782_400), (2000, 2, 29, 0, 0, 0), "a leap day");
-        assert_eq!(civil(0), (1970, 1, 1, 0, 0, 0));
-        assert_eq!(
-            dir_from(None, "/h"),
-            std::path::Path::new("/h/.claude/guard-log")
-        );
-    }
-}
+mod tests;

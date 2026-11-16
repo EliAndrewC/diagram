@@ -1,10 +1,12 @@
 //! The authoring tools (feature 449 T135, `ask:449-phase3-remainder`, ported whole with no door, FR-003): `l7r-gate claim` (`make claim`
 //! and spec-kit's `create-new-feature.sh`, [`claim`]), `l7r-gate trial-start` and `trial-review` (`make trial`, `make trial-review`,
 //! [`trial`]) and `l7r-gate patch` (the anchored-edit sweep, [`patch`]), from `scripts/claim-feature.py`, `trial-start.py`,
-//! `trial-review.py` and `patch.py`. `make trial` claims its number in process, where `trial-start.py` ran `claim-feature.py`.
+//! `trial-review.py` and `patch.py`. `make trial` claims its number in process, where `trial-start.py` ran `claim-feature.py`. Spec-kit's
+//! own JSON reads, `common.sh`'s inline Python, are `l7r-gate speckit` ([`speckit`], feature 449 T143).
 
 pub mod claim;
 pub mod patch;
+pub mod speckit;
 pub mod trial;
 
 use l7r_gate_core::Reply;

@@ -106,22 +106,28 @@ runt pretool sid-me "$TR/plain.jsonl" miscellaneous a.txt;         check "transc
 runt pretool sid-me "$TR/missing.jsonl" miscellaneous a.txt;       check "transcript path that does not exist -> sessions json fallback" 0 "$RC"
 rm -f "$MAPDIR/sid-cleared" "$MAPDIR/sid-me"
 
-# ---- resolve mode (GUARD_EDIT_OK: feature 204 - the resolver exposed for main-tree and the firing log) ----
+# ---- the guard log's session name (GUARD_EDIT_OK: feature 204 - the resolver exposed for main-tree and the firing log) ----
 # The load-bearing case is the SUBAGENT one: its payload carries the parent's session_id and a
 # transcript under <parent>/subagents/ with no rename record, and the answer must be the PARENT's
 # clone - a rewrite into a different session's clone would write one session's work into another's.
-res() { # res <sid> <transcript> ; OUT = the clone path resolve prints (or nothing)
-  OUT=$(printf '{"session_id":"%s","transcript_path":"%s","cwd":"%s"}' "$1" "$2" "$FMAIN" \
-        | CLONE_MAIN="$FMAIN" CLONE_SESSIONS_DIR="$SESS" "$HERE/../../scripts/hooks/lib/clone-resolve.sh" resolve 2>/dev/null); RC=$?
+# `clone-resolve.sh resolve` is deleted (feature 449 T143): `guard_log` names the session through the guard's Rust resolver
+# (`l7r-gate log guard`, `shared::session`), so these cases read the name the entry records - the clone's directory name, or the
+# session id where nothing names it, as `guard_log` always wrote.
+res() { # res <sid> <transcript> ; OUT = the session_name guard_log records
+  local L; L=$(mktemp -d)
+  ( export CLONE_MAIN="$FMAIN" CLONE_SESSIONS_DIR="$SESS" GUARD_LOG_DIR="$L"
+    INPUT=$(printf '{"session_id":"%s","transcript_path":"%s","cwd":"%s"}' "$1" "$2" "$FMAIN")
+    . "$HERE/../../scripts/hooks/lib/guardlog.sh"; guard_log clone-sync-suite blocked resolve )
+  OUT=$(sed -n 's/^  "session_name": "\(.*\)",$/\1/p' "$L"/*.json 2>/dev/null); RC=$?; rm -rf "$L"
 }
 printf '%s' "$FMAIN/.clones/diagram-town" > "$MAPDIR/sid-mapped"
-res sid-mapped "";                            check "resolve: the claim map answers first" "$FMAIN/.clones/diagram-town" "$OUT"
+res sid-mapped "";                            check "resolve: the claim map answers first" "diagram-town" "$OUT"
 rm -f "$MAPDIR/sid-mapped"
-res sid-cleared "$TR/cleared.jsonl";          check "resolve: no map entry -> the transcript's rename" "$FMAIN/.clones/diagram-town" "$OUT"
+res sid-cleared "$TR/cleared.jsonl";          check "resolve: no map entry -> the transcript's rename" "diagram-town" "$OUT"
 mkdir -p "$TR/sid-me/subagents"
 echo '{"type":"user","message":{"role":"user","content":"a subagent transcript, no rename record"}}' > "$TR/sid-me/subagents/abc123.jsonl"
-res sid-me "$TR/sid-me/subagents/abc123.jsonl"; check "resolve: a SUBAGENT payload (parent id, own transcript) -> the PARENT's clone" "$FMAIN/.clones/miscellaneous" "$OUT"
-res sid-nobody "$TR/missing.jsonl";           check "resolve: an unresolvable id prints nothing" "" "$OUT"
+res sid-me "$TR/sid-me/subagents/abc123.jsonl"; check "resolve: a SUBAGENT payload (parent id, own transcript) -> the PARENT's clone" "miscellaneous" "$OUT"
+res sid-nobody "$TR/missing.jsonl";           check "resolve: an unresolvable id names the entry by the id" "sid-nobody" "$OUT"
 rm -f "$MAPDIR/sid-me"
 
 printf '%s' "$FMAIN/.clones/miscellaneous" > "$MAPDIR/sid-live-other"

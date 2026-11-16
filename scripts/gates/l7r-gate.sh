@@ -36,8 +36,12 @@ stale() {
 # L7R_GATE_STALE_OK=1 runs the binary there is, stale or not, and builds none (feature 449 T129): the Makefile's parse-time goals line
 # records a make's goals on every make, and a build there would put the release l7r-gate's rebuild back in front of `make rust-test`
 # after a gate-crate edit, which T93 took out of that loop; a stale binary writes the same line. With no binary it builds as before.
+# L7R_GATE_NO_BUILD=1 builds none even where there is no binary, and exits 1 (feature 449 T143): `guard_log` runs `log guard` from
+# `l7r-guard.sh`'s no-binary path, inside a hook's timeout, where a build of the gate from nothing is the wait a hook must never take.
 if [ -n "${L7R_GATE_STALE_OK:-}" ] && [ -x "$BIN" ]; then
   :
+elif [ -n "${L7R_GATE_NO_BUILD:-}" ] && [ ! -x "$BIN" ]; then
+  echo "l7r-gate: not built, and L7R_GATE_NO_BUILD builds none" >&2; exit 1
 elif stale; then
   # THE LINKER (T96): the build runs from the tree's root, where cargo finds `.cargo/config.toml` (rust-lld) whatever directory called it,
   # and refuses with the fix when that file's lld is not this toolchain's

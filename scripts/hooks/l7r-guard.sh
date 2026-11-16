@@ -85,7 +85,12 @@ fi
 # none ever built: the call goes through, said and recorded
 INPUT=$(cat)
 . "$HERE/lib/guardlog.sh"
-guard_log l7r-guard failed-open "no good l7r-guard binary has been built (see $LOG)" failed-open
+# the entry is the gate's (`l7r-gate log guard`, feature 449 T143); where the gate has no binary either, the one entry written without
+# one (`lib/failed-open-log.sh`, the T143 plan review): the only record that the guards did not run, on the tree where nothing else leaves one
+if ! _guard_log_write l7r-guard failed-open "no good l7r-guard binary has been built (see $LOG)" failed-open >/dev/null 2>&1; then
+  . "$HERE/lib/failed-open-log.sh"
+  failed_open_log "no good l7r-guard binary has been built (see $LOG)" "$TREE" >/dev/null 2>&1 || true
+fi
 note="l7r-guard: no good guard binary has ever been built from $TREE, so this $EVENT call went through unguarded. The build's output is in $LOG; fix the build and the next call builds it."
 case "$EVENT" in
   PreToolUse|PostToolUse|UserPromptSubmit|SessionStart|SubagentStart|PostToolUseFailure)

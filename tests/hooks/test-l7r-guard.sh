@@ -17,6 +17,10 @@ W=$(mktemp -d); trap 'rm -rf "$W"' EXIT
 T="$W/tree"; mkdir -p "$T/scripts/hooks/lib" "$T/rust/guard/src"
 cp "$ROOT/scripts/hooks/l7r-guard.sh" "$T/scripts/hooks/"
 cp "$ROOT/scripts/hooks/lib/guardlog.sh" "$ROOT/scripts/hooks/lib/lld-path.sh" "$T/scripts/hooks/lib/"
+# the guard log's entry is the gate's `log guard` (feature 449 T143), reached through the tree's `l7r-gate.sh`: here the real one, as the
+# other suites' fixture trees stand it in, so the no-binary path's entry is written by the binary this clone built
+mkdir -p "$T/scripts/gates"
+printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$ROOT/scripts/gates/l7r-gate.sh" > "$T/scripts/gates/l7r-gate.sh"; chmod +x "$T/scripts/gates/l7r-gate.sh"
 printf 'fn main() {}\n' > "$T/rust/guard/src/main.rs"; : > "$T/rust/Cargo.toml"; : > "$T/rust/Cargo.lock"
 
 # the fake cargo: BUILD=ok writes a stub answering with $VERSION, BUILD=broken fails to compile, BUILD=unchecked writes one whose
@@ -64,6 +68,18 @@ case "$out" in *'"additionalContext": "l7r-guard: no good guard binary has ever 
 log=$(cat "$W"/log/*.json 2>/dev/null)
 case "$log" in *'"event": "failed-open"'*'"guard"'*|*'"guard": "l7r-guard"'*'"event": "failed-open"'*) ok ;; *) bad "none built: guard-log line [$log]" ;; esac
 grep -q E0308 "$W/target/build.log" && ok || bad "none built: the build's error kept in build.log"
+# ...and where the gate has no binary either, the entry is still written, without one (`lib/failed-open-log.sh`, feature 449 T143's plan
+# review), byte for byte the text `guard_log`'s Python wrote for this input
+rm -f "$W"/log/*.json; cp "$ROOT/scripts/hooks/lib/failed-open-log.sh" "$T/scripts/hooks/lib/"
+IN2='{"session_id": 12345678901234567890123, "cwd": "/cé", "tool_name": "Edit", "tool_input": {"command": "", "file_path": "/f"}}'
+out=$(IN="$IN2" L7R_GATE_TARGET="$W/no-gate" SID=s run broken v0 2>/dev/null); rc=$?
+check "none built, no gate: exit" "$rc" 0
+files=$(ls "$W"/log/ 2>/dev/null)
+case "$files" in [0-9]*T[0-9]*-[0-9]*.json) ok ;; *) bad "none built, no gate: one entry by name [$files]" ;; esac
+want=$(printf '{\n  "utc": "<utc>",\n  "guard": "l7r-guard",\n  "event": "failed-open",\n  "rule": "failed-open",\n  "session": 12345678901234567890123,\n  "session_name": 12345678901234567890123,\n  "cwd": "/c\\u00e9",\n  "tool": "Edit",\n  "transcript": "",\n  "detail": "no good l7r-guard binary has been built (see %s)",\n  "command": "/f",\n  "context": null\n}' "$W/target/build.log")
+got=$(sed -E 's/"utc": "[0-9TZ:-]+"/"utc": "<utc>"/' "$W"/log/*.json 2>/dev/null)
+check "none built, no gate: the Python's entry, byte for byte" "$got" "$want"
+rm -f "$T/scripts/hooks/lib/failed-open-log.sh" "$W"/log/*.json
 check "none built: one build tried" "$(calls)" 1
 # ...and a Stop event, which takes no additionalContext, is told on stderr with a non-blocking exit
 err=$(BUILD=broken VERSION=v0 "$T/scripts/hooks/l7r-guard.sh" Stop < <(printf '{}') 2>&1 >/dev/null); rc=$?

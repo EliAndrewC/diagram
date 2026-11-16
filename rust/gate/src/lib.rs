@@ -59,6 +59,33 @@ fn cache_off(value: Option<&str>) -> bool {
     value.is_some_and(|v| !v.is_empty() && v != "0")
 }
 
+/// The command line as the process was given it (feature 449 T143): `log guard` reads its arguments' bytes, as `guard_log`'s Python read
+/// its `sys.argv` (a gate's detail is `head -c 400` of its output, which can cut a character), and every other subcommand takes UTF-8 as
+/// before - an argument that is not is refused with the exit (101) the old `std::env::args` panic gave.
+#[must_use]
+pub fn cli_os(args: &[std::ffi::OsString]) -> Reply {
+    if let [verb, sub, rest @ ..] = args {
+        if verb == "log" && sub == "guard" {
+            return logs::guard::cli(rest, &mut std::io::stdin(), &l7r_guard::shared::log::dir());
+        }
+    }
+    match args
+        .iter()
+        .map(|a| a.clone().into_string())
+        .collect::<Result<Vec<_>, _>>()
+    {
+        Ok(text) => cli(&text),
+        Err(bad) => Reply {
+            stdout: String::new(),
+            stderr: format!(
+                "l7r-gate: an argument is not UTF-8: {}\n",
+                bad.to_string_lossy()
+            ),
+            code: 101,
+        },
+    }
+}
+
 /// The command line. `--version` is the one subcommand until the first port lands; an unknown one is refused by name, so a recipe that names a tool not yet ported fails rather than passes.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
@@ -97,6 +124,8 @@ pub fn cli(args: &[String]) -> Reply {
         }
         Some("escape") => logs::usage::escape_cli(&args[1..], &mut std::io::stdin()),
         Some("json-field") => logs::json_field(&args[1..]),
+        // spec-kit's JSON reads, `common.sh`'s inline Python (feature 449 T143)
+        Some("speckit") => author::speckit::cli(&args[1..]),
         Some("ruff-toml") => logs::ruff_cli(&mut std::io::stdin()),
         Some("preflight") => preflight::cli(&args[1..]),
         Some("record") => record::cli(&args[1..]),
@@ -167,6 +196,24 @@ pub fn cli(args: &[String]) -> Reply {
 mod tests {
     use super::cli;
 
+    /// The bytes' door (feature 449 T143): `log guard` reached with its arguments as bytes, anything else as text, a byte that is not
+    /// UTF-8 refused outside `log guard`.
+    #[test]
+    fn the_command_line_as_bytes() {
+        use std::ffi::OsString;
+        use std::os::unix::ffi::OsStringExt as _;
+        let os = |a: &[&str]| a.iter().map(OsString::from).collect::<Vec<_>>();
+        assert_eq!(
+            super::cli_os(&os(&["--version"])).stdout,
+            "l7r-gate 0.1.0\n"
+        );
+        assert_eq!(super::cli_os(&os(&["log", "guard"])).code, 2, "too few");
+        let mut bad = os(&["--version"]);
+        bad.push(OsString::from_vec(vec![0xff]));
+        let r = super::cli_os(&bad);
+        assert_eq!((r.code, r.stderr.contains("not UTF-8")), (101, true));
+    }
+
     #[test]
     fn it_says_its_version_and_refuses_what_it_does_not_know() {
         assert_eq!(cli(&["--version".to_owned()]).stdout, "l7r-gate 0.1.0\n");
@@ -199,6 +246,7 @@ mod tests {
     fn the_authoring_tools_are_subcommands() {
         let ask = |a: &[&str]| cli(&a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>());
         for verb in [
+            "speckit",
             "claim",
             "trial-start",
             "trial-review",
