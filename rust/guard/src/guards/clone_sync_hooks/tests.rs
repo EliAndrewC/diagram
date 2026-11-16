@@ -7,7 +7,7 @@ use std::sync::OnceLock;
 
 use serde_json::{json, Value};
 
-use super::{both, decide, forbidden, judge, notes, sid_is_live, tail, Ctx};
+use super::{both, decide, forbidden, forked_from, judge, notes, sid_is_live, tail, Ctx};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 use crate::shared::tool::{ask, Said};
@@ -276,6 +276,60 @@ fn a_clone_another_live_session_claims_is_refused() {
     ));
     assert!(!sid_is_live("nopid", &w.sessions) && !sid_is_live("them", Path::new("/nowhere")));
     assert!(w.edit("", "", &w.clone.join("a.txt")).is_empty());
+}
+
+/// A process running `sh -c 'sleep 5; :' <args...>` once its own command line shows (a spawned child carries its parent's until it
+/// execs).
+fn fake(args: &[&str]) -> std::process::Child {
+    let child = std::process::Command::new("sh")
+        .args(["-c", "sleep 5; :"])
+        .args(args)
+        .spawn()
+        .unwrap();
+    let cmdline = format!("/proc/{}/cmdline", child.id());
+    let _ = (0..1000).find(|_| {
+        std::thread::sleep(std::time::Duration::from_millis(2));
+        std::fs::read_to_string(&cmdline).is_ok_and(|c| c.contains("claude"))
+    });
+    child
+}
+
+#[test]
+fn a_forked_background_session_shares_its_launchers_clone() {
+    // feature 449 T162: a background job runs as `--fork-session --resume <parent>`; the parent claims the clone and is live
+    let w = World::new("forked");
+    let mut parent = fake(&["claude"]);
+    let mut child = fake(&["claude", "--fork-session", "--resume", "/p/them.jsonl"]);
+    let mut stranger = fake(&["claude", "--resume", "/p/them.jsonl"]);
+    for (pid, sid) in [
+        (parent.id(), "them"),
+        (child.id(), "s"),
+        (stranger.id(), "t"),
+    ] {
+        std::fs::write(
+            w.sessions.join(format!("{pid}.json")),
+            // named for the clone, as a session working in it is
+            json!({"sessionId": sid, "name": w.clone.file_name().unwrap().to_string_lossy()})
+                .to_string(),
+        )
+        .unwrap();
+    }
+    w.claim("them", &w.clone);
+    // the stranger first: the forked session's own edit claims the clone for it too
+    let not_forked = w.edit("t", "", &w.clone.join("a.txt"));
+    let forked = w.edit("s", "", &w.clone.join("a.txt"));
+    assert_eq!(forked_from("s", &w.sessions), "them");
+    assert_eq!(forked_from("t", &w.sessions), "");
+    assert_eq!(forked_from("nobody", &w.sessions), "");
+    for p in [&mut parent, &mut child, &mut stranger] {
+        let _ = p.kill();
+        let _ = p.wait();
+    }
+    assert!(!refused(&forked, "already occupied"), "{forked:?}");
+    assert!(refused(
+        &not_forked,
+        "already occupied by another live session (them)"
+    ));
 }
 
 #[test]

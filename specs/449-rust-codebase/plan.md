@@ -676,3 +676,30 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 **Performance work?** No - it saves an agent's waiting on reruns, not the tools' running time.
 
+
+### T162 (a guard defect T147's port agent met: its own clone refused by the session that launched it)
+
+- **Approach**: the clone-sync guard (`rust/guard/src/guards/clone_sync_hooks.rs`) lets a session through the clone its dispatcher claims; the dispatcher was only `L7R_DISPATCHER`, which a page session's runner sets. A background job Claude Code starts from an interactive session runs as `--fork-session --resume <the parent's transcript>`, the parent stays live and claims the same clone, and nothing named it, so the job's first write was refused as a second live session in the tree. With no `L7R_DISPATCHER`, the guard now reads the session's own process arguments (the sessions json's pid, its `/proc` command line) and takes the session it was forked from as its dispatcher.
+
+   **Decisions** (constitution XIV, a defect fixed where it was found; FR-001's guards ported in phase 1, whose behavior this extends):
+   - Found where: T147's agent was refused on its first write into this session's clone, `already occupied by another live session` naming this session's own parent, and wrote through a copy from scratch instead; this session's process runs as `--fork-session --resume <the parent's transcript>`, and the parent's process is live (observed 2026-11-16, method: the sessions json and `/proc` of both processes).
+   - Only a fork counts: a session resumed without `--fork-session` is the same conversation continued, not a launched job, and it stays refused beside a live claimant; the resumed argument's leaf, less `.jsonl`, is the parent's id.
+   - The exemption is the one a page session already has (the dispatcher's claim alone is let through); every other live claimant still refuses.
+   - The checks: the guard's tests green with a test holding a forked session through and an unforked one refused, the test failing with the fix taken out, and the guard's line coverage complete (observed 2026-11-16, method: `make rust-test CRATE=rust/guard`, run with and without the fix, and `l7r-gate.sh rust uncovered --crate rust/guard`).
+
+### T162 Approach (checklist part A)
+
+1. **The goal, in the world.** A background job writes in its launcher's clone without a workaround, and two unrelated live sessions still never share one.
+2. **The constraints.** Constitution XIV; the guard's existing claim rule and its dispatcher exemption.
+3. **Where each comes from.** O: the refusal T147's agent met and the two processes' arguments.
+4. **Do they describe the world here?** Read from this session's own processes, measured 2026-11-16 (`/proc/<pid>/cmdline` of both).
+5. **The order.** After T147, which found it; before the next port's agent writes.
+6. **The exits.** Green: the guard's tests and coverage, and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The guard's tests, and the next port agent's first write in this clone let through.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No.
+

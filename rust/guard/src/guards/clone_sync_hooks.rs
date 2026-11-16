@@ -171,12 +171,10 @@ fn forbidden(path: &Path, main: &Path) -> bool {
             .is_some_and(|m| m.to_string_lossy() == name)
 }
 
-/// Whether a live process backs session `sid` (`sid_is_live`): its sessions json's file name is its pid, and that pid runs claude.
-fn sid_is_live(sid: &str, sessions_dir: &Path) -> bool {
-    let Ok(entries) = std::fs::read_dir(sessions_dir) else {
-        return false;
-    };
-    let pid = entries
+/// The pid of the process backing session `sid`: its sessions json names it, and the json's file name is the pid.
+fn pid_of(sid: &str, sessions_dir: &Path) -> Option<String> {
+    let entries = std::fs::read_dir(sessions_dir).ok()?;
+    entries
         .filter_map(Result::ok)
         .map(|e| e.path())
         .filter(|p| p.extension().is_some_and(|x| x == "json"))
@@ -189,14 +187,47 @@ fn sid_is_live(sid: &str, sessions_dir: &Path) -> bool {
                     .map(|s| s.to_string_lossy().into_owned())
                     .unwrap_or_default()
             })
-        });
-    pid.filter(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
-        .and_then(|p| std::fs::read(format!("/proc/{p}/cmdline")).ok())
-        .is_some_and(|c| {
-            String::from_utf8_lossy(&c)
-                .replace('\0', " ")
-                .contains("claude")
         })
+        .filter(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
+}
+
+/// A process's arguments, or none when it has ended.
+fn args_of(pid: &str) -> Vec<String> {
+    std::fs::read(format!("/proc/{pid}/cmdline"))
+        .map(|c| {
+            String::from_utf8_lossy(&c)
+                .split('\0')
+                .filter(|a| !a.is_empty())
+                .map(str::to_owned)
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+/// Whether a live process backs session `sid` (`sid_is_live`): its sessions json's file name is its pid, and that pid runs claude.
+fn sid_is_live(sid: &str, sessions_dir: &Path) -> bool {
+    pid_of(sid, sessions_dir).is_some_and(|p| args_of(&p).join(" ").contains("claude"))
+}
+
+/// The session `sid` was forked from, or "": a background job Claude Code starts from an interactive session runs as
+/// `--fork-session --resume <the parent's transcript or id>`, and the parent - still live, and claiming the same clone - is its
+/// dispatcher, as `L7R_DISPATCHER` names a page session's (feature 449 T162: T147's port agent was refused in its own clone by
+/// the interactive session that launched it, which nothing had named).
+fn forked_from(sid: &str, sessions_dir: &Path) -> String {
+    let args = pid_of(sid, sessions_dir)
+        .map(|p| args_of(&p))
+        .unwrap_or_default();
+    if !args.iter().any(|a| a == "--fork-session") {
+        return String::new();
+    }
+    args.iter()
+        .position(|a| a == "--resume")
+        .and_then(|i| args.get(i + 1))
+        .map(|r| {
+            let leaf = r.rsplit('/').next().unwrap_or(r);
+            leaf.strip_suffix(".jsonl").unwrap_or(leaf).to_owned()
+        })
+        .unwrap_or_default()
 }
 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
@@ -352,7 +383,10 @@ working tree (the 2026-07-22 collision). Work in {c} - if it does not exist: git
             clone.display()
         )));
     }
-    let dispatcher = std::env::var("L7R_DISPATCHER").unwrap_or_default();
+    let mut dispatcher = std::env::var("L7R_DISPATCHER").unwrap_or_default();
+    if dispatcher.is_empty() {
+        dispatcher = forked_from(&sid, &cx.session.sessions_dir);
+    }
     let entries = (!sid.is_empty())
         .then(|| std::fs::read_dir(cx.mapdir()).ok())
         .flatten()?;

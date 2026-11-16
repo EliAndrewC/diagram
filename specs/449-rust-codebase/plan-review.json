@@ -336,6 +336,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
+  },
+  "### T162 (a guard defect T147's port agent met: its own clone refused by the session that launched it)": {
+   "sha256": "209bcb64a006165350410bde14acb332d758c9683cb0de3d1950e9b21b1447fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
+  },
+  "### T162 Approach (checklist part A)": {
+   "sha256": "7b6590731becad2046d58271313335d3cf962e041810732ed6eb9e677beea070",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -9489,6 +9501,40 @@
      "why": "FR-001's measurement-rewrite census, FR-004's coverage and the kept checks of FR-001c; timings recorded with date and method, not a bar."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T162 (a guard defect T147's port agent met: its own clone refused by the session that launched it)",
+    "### T162 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T162-fork-exemption",
+     "summary": "With no L7R_DISPATCHER, the clone-sync guard reads the session's own process arguments and treats the session it was forked from (--fork-session --resume <parent transcript>) as its dispatcher, letting the forked job through the parent's clone.",
+     "class": "within",
+     "why": "A defect fix in a guard this feature ported (constitution XIV), found on this feature's own T147 port agent; it narrows nothing the GM asked (the port of all tooling to Rust) or the spec states, and it reuses the dispatcher exemption the ported guard already has rather than inventing a new rule. Every case the guard's existing tests hold keeps its verdict (FR-002)."
+    },
+    {
+     "id": "T162-only-a-fork",
+     "summary": "Only a --fork-session resume counts as a launched job; a plain resume stays refused beside a live claimant; the parent id is the resumed argument's leaf less .jsonl.",
+     "class": "within",
+     "why": "Bounds the exemption to the measured defect and keeps the guard's existing refusal for every other case; restricts the fix, not the request."
+    },
+    {
+     "id": "T162-same-exemption",
+     "summary": "The exemption is the one a page session already has: the dispatcher's claim alone is let through, every other live claimant still refuses.",
+     "class": "within",
+     "why": "Keeps the guard's purpose (two unrelated live sessions never share a clone) intact; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T162-checks",
+     "summary": "Guard tests green with a forked-through and an unforked-refused test that fails with the fix removed; guard line coverage complete; make land green.",
+     "class": "within",
+     "why": "Enforces the fix and holds FR-004's coverage floor; verification of the change itself, not added scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16965,6 +17011,38 @@
      "summary": "Incremental rerun counts and timings recorded, timing not held; census of measurements commands; make static/rust-test/hooks-test/pointer check as the checks",
      "class": "within",
      "why": "FR-001's measurement-rewrite census, FR-004's coverage and the kept checks of FR-001c; timings recorded with date and method, not a bar."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T162": {
+   "section_sha256": "7f81b28c00c075b58ea7182d05418dcf898f1df8e01384f366a0392564423663",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T162-fork-exemption",
+     "summary": "With no L7R_DISPATCHER, the clone-sync guard reads the session's own process arguments and treats the session it was forked from (--fork-session --resume <parent transcript>) as its dispatcher, letting the forked job through the parent's clone.",
+     "class": "within",
+     "why": "A defect fix in a guard this feature ported (constitution XIV), found on this feature's own T147 port agent; it narrows nothing the GM asked (the port of all tooling to Rust) or the spec states, and it reuses the dispatcher exemption the ported guard already has rather than inventing a new rule. Every case the guard's existing tests hold keeps its verdict (FR-002)."
+    },
+    {
+     "id": "T162-only-a-fork",
+     "summary": "Only a --fork-session resume counts as a launched job; a plain resume stays refused beside a live claimant; the parent id is the resumed argument's leaf less .jsonl.",
+     "class": "within",
+     "why": "Bounds the exemption to the measured defect and keeps the guard's existing refusal for every other case; restricts the fix, not the request."
+    },
+    {
+     "id": "T162-same-exemption",
+     "summary": "The exemption is the one a page session already has: the dispatcher's claim alone is let through, every other live claimant still refuses.",
+     "class": "within",
+     "why": "Keeps the guard's purpose (two unrelated live sessions never share a clone) intact; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T162-checks",
+     "summary": "Guard tests green with a forked-through and an unforked-refused test that fails with the fix removed; guard line coverage complete; make land green.",
+     "class": "within",
+     "why": "Enforces the fix and holds FR-004's coverage floor; verification of the change itself, not added scope."
     }
    ],
    "verdict": "CLEAR"

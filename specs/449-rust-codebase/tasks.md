@@ -66,6 +66,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T160 Compile and test speed, the GM's third approved proposal (request.md 2026-11-16), ordered last: first measure where compile and test time goes across a port task, then take any target with a significant measured saving
       research: rendering
+- [ ] T162 The clone-sync guard's launcher exemption for a forked background session: a session started with --fork-session --resume <parent> treats that parent as its dispatcher, as L7R_DISPATCHER does for a page session (found by T147's port agent, refused in its own clone)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
