@@ -47,8 +47,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T140 Phase 4, the tools that reach Mode A or interactive/ (ask:449-phase3-remainder) Q1: building_programs, footnote_census, glossary_asset, notes_census, the pack_audit package, picture_diff, record_asset, source_tags_contract and scripts/gates/memo_check.py (each under the T065 clause, named at the phase-3 close), page_lit onto T85's one browser crate, tools/__init__.py, _census.py and work_counts.py with their last importer, 335's harness.py; and the pytest infrastructure's removal commit with the last kept pytest test (test_mode_a_sheets): conftest.py, the two __init__.py, _scope.py, _gate_failures.py, _heap.py, _memory.py, tooling_reuse_time.py (its three 383 commands retired)
       research: rendering
-- [ ] T142 Ticked tasks archived out of tasks.md into tasks-done.md, as ticked tasks' plan sections already go to plan-done.md, and every reader of a feature's tasks reading both (the next free task number, the spec-kit state, the closing check, the tick's already-ticked and landed checks, the research boxes, the feature report): 449's tasks.md holds 131 ticked tasks of 137, about 63 KB read whole by every session and agent that opens it (the GM 2026-11-15: "please do that, because I imagine that will make our long-running featuers with tons of tasks much more token efficient")
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
