@@ -26,9 +26,11 @@ fn british() -> Vec<&'static str> {
         .collect()
 }
 
+// `mimetypes.tsv` (feature 449 T146): CPython's media-type table copied verbatim for the archive crate, registered names such as
+// `application/vnd.piaccess.application-licence` a quotation that keeps its own spelling
 fn exempt_path(path: &str) -> bool {
     let names = pattern(
-        r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh|house_style_cases\.rs|house_style_delta\.rs|house_style_delta/tests\.rs|test_guard_firing_log\.py|hm_house\.py|house_style_hooks\.rs|house_style_words\.tsv|l7r\.md|gm-request\.md)$",
+        r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh|house_style_cases\.rs|house_style_delta\.rs|house_style_delta/tests\.rs|test_guard_firing_log\.py|hm_house\.py|house_style_hooks\.rs|house_style_words\.tsv|l7r\.md|gm-request\.md|mimetypes\.tsv)$",
     );
     let verbatim = pattern(r"specs/[^/]+/request\.md$");
     let dump = pattern(r"(^|/)specs/[^/]+/measure/[^/]+_(?:cells_by_address|rows_raw)\.txt$");

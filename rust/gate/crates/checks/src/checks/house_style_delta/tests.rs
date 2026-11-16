@@ -101,6 +101,7 @@ fn what_is_exempt_by_its_path() {
         "tests/hooks/fixtures/x.txt",
         "x/.clones/y.md",
         "specs/412-x/measure/a_cells_by_address.txt",
+        "rust/gate/crates/archive/src/mimetypes.tsv",
     ] {
         assert!(exempt_path(path), "{path}");
     }
