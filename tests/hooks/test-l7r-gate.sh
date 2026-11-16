@@ -184,29 +184,31 @@ grep -q '"keys": \[' "$R"/research/archive/*/*.json; check "the manifest row wri
 OUT=$(arch backfill --workers 1); check "record archive backfill: nothing owed, the push and the coverage" 0 $?
 case $OUT in *"0 cited URL(s) owed a copy"*"archive coverage: 0 cited URL(s)"*) : ;; *) echo "FAIL  the backfill's lines: $OUT"; FAILED=1 ;; esac
 OUT=$(arch gm-copies); check "record archive gm-copies: no table, no copies" 0 $?
-# `uncited.py`'s lane through `archive.py`'s Browser forwarder (`record archive serve`) meeting a blocked page mid-way (the round
-# arbiter's `ask:449-T146-browser`: the lane's output with the blocked page held): the page refused before any request, said as an
-# error, the browser replaced, and the lane goes on to the next page and finishes - HEAD's Playwright `Browser` printed these lines
-# (the T146 differential's case "uncited fetch, the blocked page mid-lane")
-printf '{"domains": [{"domain": "blocked.example", "reason": "a test", "approved": {"date": "2026-11-16", "words": "block it"}}]}\n' \
-  > "$R/research/blocked-domains.json"
+# The uncited filter's production wiring end to end (feature 449 T147, phase 4's S3b): `record uncited fetch`'s lanes on the real browser
+# (the archive's `start_browser`), each line printed as it goes - the ledger names two long pages on the loopback server and the fetch
+# reads both into the page cache. The lane meeting a blocked page mid-way (the round arbiter's `ask:449-T146-browser`, which this case
+# held while the Python's lane ran) is held by the `uncited` crate's own test, `fetch::tests`, since the set never holds a blocked page.
 for n in 1 2; do printf '<!DOCTYPE html><html><body><p>%s</p></body></html>' "$(printf 'a long page %s, ' "$n" | head -c 15; printf 'words %.0s' $(seq 120))" > "$A/site/long$n.html"; done
-cat > "$A/lane.py" <<EOF
-import pathlib, sys
-sys.path.insert(0, "$HERE/../../scripts/record")
-import archive as ar, uncited as un
-b = ar.Browser()
-try:
-    print(un.fetch(pathlib.Path.cwd(), ["http://127.0.0.1:$PORT/long1.html", "https://blocked.example/x", "http://127.0.0.1:$PORT/long2.html"], b))
-finally:
-    b.close()
-EOF
-OUT=$(cd "$R" && L7R_SOURCES_HOME="$A/home" DIAGRAM_SECRETS="$A/no-secrets.ini" PYTHONDONTWRITEBYTECODE=1 python3 "$A/lane.py" 2>&1)
-check "uncited's lane through the Browser forwarder, a blocked page mid-way" 0 $?
-case $OUT in "read                   http://127.0.0.1:$PORT/long1.html
-error                  https://blocked.example/x - Blocked: an archive fetch refused: https://blocked.example/x is on the blocked list"*"
+printf '{"url": "127.0.0.1:%s/long1.html", "raw": "http://127.0.0.1:%s/long1.html"}\n{"url": "127.0.0.1:%s/long2.html", "raw": "http://127.0.0.1:%s/long2.html"}\n' \
+  "$PORT" "$PORT" "$PORT" "$PORT" > "$A/home/sources-consulted.jsonl"
+OUT=$(cd "$R" && L7R_SOURCES_HOME="$A/home" DIAGRAM_SECRETS="$A/no-secrets.ini" "$STAMP" record uncited fetch --workers 1 2>&1)
+check "record uncited fetch: the lanes on the real browser" 0 $?
+case $OUT in "uncited: fetching 2 page(s) in up to 1 lane(s)
+read                   http://127.0.0.1:$PORT/long1.html
 read                   http://127.0.0.1:$PORT/long2.html
-{'read': 2, 'unreadable': 0, 'error': 1}") : ;; *) echo "FAIL  the lane's lines: $OUT"; FAILED=1 ;; esac
+uncited: {\"read\": 2, \"unreadable\": 0, \"error\": 0}") : ;; *) echo "FAIL  the fetch's lines: $OUT"; FAILED=1 ;; esac
+grep -q '"route": "uncited-fetch"' "$R/research/source-attempts.jsonl"; check "the fetch's attempts logged" 0 $?
+# a cited page read, archived in process (`record sources outcome`, where it ran `archive_ops.py urls`): the production browser and store
+printf '<!DOCTYPE html><html><body><p>a cited page</p></body></html>' > "$A/site/cited.html"
+OUT=$(cd "$R" && L7R_SOURCES_HOME="$A/home" DIAGRAM_SECRETS="$A/no-secrets.ini" "$STAMP" record sources outcome "http://127.0.0.1:$PORT/cited.html" cited:e2e-key 2>&1)
+check "record sources outcome cited: the page archived in process" 0 $?
+case $OUT in *"archive: archived - http://127.0.0.1:$PORT/cited.html"*) : ;; *) echo "FAIL  the cited read's archiving: $OUT"; FAILED=1 ;; esac
+# `record downloads ingest` ends with the archive's inbox in process (where it ran `archive_ops.py inbox`): a synced list, one GM download
+mkdir -p "$A/gm"; printf '# Downloads\n' > "$R/research/to-download.md"; git -C "$R" add -A; git -C "$R" -c user.name=t -c user.email=t@t commit -qm list
+(cd "$R" && L7R_GM_SOURCES="$A/gm" "$STAMP" record downloads sync >/dev/null 2>&1); printf 'a download\n' > "$A/gm/e2e.txt"
+OUT=$(cd "$R" && L7R_SOURCES_HOME="$A/home" DIAGRAM_SECRETS="$A/no-secrets.ini" L7R_GM_SOURCES="$A/gm" "$STAMP" record downloads ingest --keep "" --drop "" --mark "" 2>&1)
+check "record downloads ingest: the inbox in process" 0 $?
+case $OUT in *"archive: 0 inbox file(s) archived, pushed and removed from $A/gm"*"WAITING e2e.txt: a new download"*) : ;; *) echo "FAIL  the ingest's inbox: $OUT"; FAILED=1 ;; esac
 kill "$SRV" 2>/dev/null; wait "$SRV" 2>/dev/null
 
 echo -----

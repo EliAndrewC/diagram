@@ -342,21 +342,19 @@ fn the_report_counts_and_prints_each_form() {
     assert_eq!(run(&["report", "--key"]).code, 2);
     assert_eq!(run(&[]).code, 2);
     assert_eq!(run(&["set", "a"]).code, 2);
-    let keyed = run(&["entry-keys", "5"]);
-    assert_eq!((keyed.code, keyed.stdout.as_str()), (0, "[]\n"));
-    let missing = run(&["entry-keys", "99"]);
+    // the inbox's resolution, in process since feature 449 T147 retired the `entry-keys` door
+    assert_eq!(super::entry_keys_of("5", &root), Ok(Vec::new()));
     assert_eq!(
-        (missing.code, missing.stderr.as_str()),
-        (
-            1,
-            "archive: no download-list entry 99 in research/to-download.md\n"
-        )
+        super::entry_keys_of("99", &root),
+        Err("archive: no download-list entry 99 in research/to-download.md".to_owned())
     );
-    assert_eq!(run(&["entry-keys"]).code, 2);
+    assert_eq!(run(&["entry-keys", "5"]).code, 2);
     let empty = scratch("report-empty");
     let refused = cli(&owned(&["report"]), &empty);
     assert!(refused.code == 1 && refused.stderr.starts_with("access-tags: REFUSED - "));
-    assert_eq!(cli(&owned(&["entry-keys", "1"]), &empty).code, 1);
+    assert!(
+        super::entry_keys_of("1", &empty).is_err_and(|e| e.starts_with("access-tags: REFUSED - "))
+    );
     put(&empty, "research/source-access.json", "not json");
     assert_eq!(cli(&owned(&["report"]), &empty).code, 1);
     put(

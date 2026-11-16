@@ -152,10 +152,10 @@
    "declared": "round-arbiter"
   },
   "### T147 Approach (checklist part A)": {
-   "sha256": "df5db7d6829e4340130052d0645cca8661533850a6bc57e704c86827c378edc3",
+   "sha256": "cc58ec730668d4f1be8118a78c67d25ad93b34cfe6f315a80af07a40b06a0171",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T148 (<why: the finding or measurement that files it>)": {
    "sha256": "a97fdbc9d7ab975dfdfee9a64dced6cbed1ff89c12dc73c646cdb133b7dbc569",
@@ -327,6 +327,12 @@
   },
   "### T161 (the GM's second approved proposal, the differentials rerunning only what a fix touched, enforced by tooling; request.md 2026-11-16, the GM 2026-11-11)": {
    "sha256": "9e21d63223a37c241c4df9cf9c0f0862f1f1af3c75250de6c36253e600aa4ddc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
+  },
+  "### T147 (phase 4's S3b, the uncited cluster, `ask:449-phase4-slices`)": {
+   "sha256": "9719622b5d2b7ca1f4641e5a0d41c948845b7d7837168db82b82c688d053b87b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
@@ -9397,6 +9403,92 @@
      "why": "The task is filed under the GM's direct approval of 2026-11-16, not the 2026-11-12 conditional pre-approval, so that pre-approval's measured-target condition does not govern it; it still carries a dated, methoded measurement of the wait it targets. The classification narrows nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T147 (phase 4's S3b, the uncited cluster, `ask:449-phase4-slices`)",
+    "### T147 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T147-port",
+     "summary": "uncited.py, uncited_imports.py and archive_ops.py ported (new gate crate `uncited`, archive operations into the `archive` crate) and deleted; attempts.py and reserve-prefix.py, imported by no Python any more, deleted",
+     "class": "within",
+     "why": "FR-001 and ask:449-phase4-slices S3b / ask:449-T80-order (3) place exactly this cluster; deleting a ported file is the GM's standing approval (FR-001, 2026-11-10)."
+    },
+    {
+     "id": "T147-callers",
+     "summary": "make uncited, cite-uncited, archive-sources, archive-inbox, archive-find, downloads ingest, record sources outcome cited: and uncited install wired to the Rust in this cut, Python by-path runs retired",
+     "class": "within",
+     "why": "Departs from the letter of ask:449-phase4-slices ('a slice lands its Rust as a library with no production caller'), but toward the request (the GM 2026-11-15: port until all tooling is ported) and not against that rule's purpose: the callers are make targets and Rust crates, no Python importer of these files remains, and Python stays the implementation for S4's importers. It does more of what was asked, so it narrows nothing; it does make the task non-straight under FR-001c, which this review covers."
+    },
+    {
+     "id": "T147-python-left",
+     "summary": "archive.py and sources.py cut to the names S4's research_search.py and semantic_index.py import (read-only names plus the `push` door); door verbs only the deleted importers used retire",
+     "class": "within",
+     "why": "The ask:449-T81-slices test and ask:449-phase4-slices (Python stays for Python importers until wired); doors are deleted with their last caller on the spec's T065 pattern."
+    },
+    {
+     "id": "T147-one-writer",
+     "summary": "The filter's three lists written by uncited::lists alone; every other write through the one writer S2/S3a gave it",
+     "class": "within",
+     "why": "FR-003 as written."
+    },
+    {
+     "id": "T147-ported-whole",
+     "summary": "relayout (no caller) and verify --sample (CPython's Mersenne Twister and random.sample ported so a seed draws the same sample) ported, not dropped",
+     "class": "within",
+     "why": "Porting rather than dropping keeps FR-002's same outputs; dropping would have been the narrowing."
+    },
+    {
+     "id": "T147-library-match",
+     "summary": "rglob's CPython 3.14 listing order reproduced in archive::ops; research::pyre folds U+0130/U+0131 with i/I under an inline i flag as CPython re.I does, moving only (?i) patterns; archive_urls uses one browser for all its URLs, outputs the same",
+     "class": "within",
+     "why": "Each moves the Rust toward the Python's outputs (FR-002); the browser change is an implementation choice with outputs held equal (FR-006's one-process direction). Unmeasured premise noted, not blocking: 'the five in uncited; prepass's one other translates as before' carries no method, and it can only widen what matches CPython."
+    },
+    {
+     "id": "T147-seam",
+     "summary": "T146's kept blocked-page case becomes uncited::fetch's unit test (same words, 120-char cut); tests/hooks/test-l7r-gate.sh runs the Rust production paths on the real browser behind dead proxies",
+     "class": "within",
+     "why": "The Python lane it drove is deleted; the case moves to the Rust whole, and the end-to-end test stays the one FR-008 and ask:449-T146-browser allow."
+    },
+    {
+     "id": "T147-norm-ruled",
+     "summary": "Differential normalizations taken under ruled cases: the JSON parser's words in install's refusal, argparse's usage/error text (also before make's line), uncaught traceback text",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Each is a case FR-002 itself rules apart (ask:449-T066-json-message; ask:449-usage-text, including tracebacks). The patterns in cases.json replace only the library/argparse/traceback text: exit status, stdout and the fixed words around the JSON message are still compared."
+    },
+    {
+     "id": "T147-norm-time",
+     "summary": "Stamps, ISO dates, Date headers, MHTML boundaries/cids, tmp paths normalized",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Values that differ between two runs of the same Python; comparing them is impossible, not merely awkward."
+    },
+    {
+     "id": "T147-norm-lanes",
+     "summary": "Two lanes' appended lines (not-kept.jsonl, source-attempts.jsonl, import-check.jsonl) sorted",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Opt-in only on the two --workers 2 cases (fetch, verify --sample 3), where two workers append in either order on the Python side too; the Python's own order is not fixed, so it is not an output FR-002 binds. Premise asserted from the worker design rather than measured by a repeated Python run."
+    },
+    {
+     "id": "T147-norm-t146-sorts",
+     "summary": "T146's sorts: sorted-stdout, server-log-sorted, git-log-sorted",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block names no object or reason; read in the cited cases.json: sorted-stdout is opt-in on exactly the three --workers 2 cases (fetch, verify --sample 3, consulted), whose Python output order is set by worker completion; server-log-sorted sorts the loopback stub server's request log, the world's record and not a tool output, filled by a browser's concurrent requests; git-log-sorted applies to no case (no case captures a '<log ' file). None hides a fixed Python order."
+    },
+    {
+     "id": "T147-figures",
+     "summary": "Incremental rerun counts and timings recorded, timing not held; census of measurements commands; make static/rust-test/hooks-test/pointer check as the checks",
+     "class": "within",
+     "why": "FR-001's measurement-rewrite census, FR-004's coverage and the kept checks of FR-001c; timings recorded with date and method, not a bar."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16789,6 +16881,90 @@
      "summary": "Classed 'Performance work? No' - it saves an agent's waiting on reruns, not the tools' running time",
      "class": "within",
      "why": "The task is filed under the GM's direct approval of 2026-11-16, not the 2026-11-12 conditional pre-approval, so that pre-approval's measured-target condition does not govern it; it still carries a dated, methoded measurement of the wait it targets. The classification narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T147": {
+   "section_sha256": "55ed262a5a9c60a5ed9e5dd77a95b5ecbd1e3618d705952cfda5bc05fca596f5",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T147-port",
+     "summary": "uncited.py, uncited_imports.py and archive_ops.py ported (new gate crate `uncited`, archive operations into the `archive` crate) and deleted; attempts.py and reserve-prefix.py, imported by no Python any more, deleted",
+     "class": "within",
+     "why": "FR-001 and ask:449-phase4-slices S3b / ask:449-T80-order (3) place exactly this cluster; deleting a ported file is the GM's standing approval (FR-001, 2026-11-10)."
+    },
+    {
+     "id": "T147-callers",
+     "summary": "make uncited, cite-uncited, archive-sources, archive-inbox, archive-find, downloads ingest, record sources outcome cited: and uncited install wired to the Rust in this cut, Python by-path runs retired",
+     "class": "within",
+     "why": "Departs from the letter of ask:449-phase4-slices ('a slice lands its Rust as a library with no production caller'), but toward the request (the GM 2026-11-15: port until all tooling is ported) and not against that rule's purpose: the callers are make targets and Rust crates, no Python importer of these files remains, and Python stays the implementation for S4's importers. It does more of what was asked, so it narrows nothing; it does make the task non-straight under FR-001c, which this review covers."
+    },
+    {
+     "id": "T147-python-left",
+     "summary": "archive.py and sources.py cut to the names S4's research_search.py and semantic_index.py import (read-only names plus the `push` door); door verbs only the deleted importers used retire",
+     "class": "within",
+     "why": "The ask:449-T81-slices test and ask:449-phase4-slices (Python stays for Python importers until wired); doors are deleted with their last caller on the spec's T065 pattern."
+    },
+    {
+     "id": "T147-one-writer",
+     "summary": "The filter's three lists written by uncited::lists alone; every other write through the one writer S2/S3a gave it",
+     "class": "within",
+     "why": "FR-003 as written."
+    },
+    {
+     "id": "T147-ported-whole",
+     "summary": "relayout (no caller) and verify --sample (CPython's Mersenne Twister and random.sample ported so a seed draws the same sample) ported, not dropped",
+     "class": "within",
+     "why": "Porting rather than dropping keeps FR-002's same outputs; dropping would have been the narrowing."
+    },
+    {
+     "id": "T147-library-match",
+     "summary": "rglob's CPython 3.14 listing order reproduced in archive::ops; research::pyre folds U+0130/U+0131 with i/I under an inline i flag as CPython re.I does, moving only (?i) patterns; archive_urls uses one browser for all its URLs, outputs the same",
+     "class": "within",
+     "why": "Each moves the Rust toward the Python's outputs (FR-002); the browser change is an implementation choice with outputs held equal (FR-006's one-process direction). Unmeasured premise noted, not blocking: 'the five in uncited; prepass's one other translates as before' carries no method, and it can only widen what matches CPython."
+    },
+    {
+     "id": "T147-seam",
+     "summary": "T146's kept blocked-page case becomes uncited::fetch's unit test (same words, 120-char cut); tests/hooks/test-l7r-gate.sh runs the Rust production paths on the real browser behind dead proxies",
+     "class": "within",
+     "why": "The Python lane it drove is deleted; the case moves to the Rust whole, and the end-to-end test stays the one FR-008 and ask:449-T146-browser allow."
+    },
+    {
+     "id": "T147-norm-ruled",
+     "summary": "Differential normalizations taken under ruled cases: the JSON parser's words in install's refusal, argparse's usage/error text (also before make's line), uncaught traceback text",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Each is a case FR-002 itself rules apart (ask:449-T066-json-message; ask:449-usage-text, including tracebacks). The patterns in cases.json replace only the library/argparse/traceback text: exit status, stdout and the fixed words around the JSON message are still compared."
+    },
+    {
+     "id": "T147-norm-time",
+     "summary": "Stamps, ISO dates, Date headers, MHTML boundaries/cids, tmp paths normalized",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Values that differ between two runs of the same Python; comparing them is impossible, not merely awkward."
+    },
+    {
+     "id": "T147-norm-lanes",
+     "summary": "Two lanes' appended lines (not-kept.jsonl, source-attempts.jsonl, import-check.jsonl) sorted",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Opt-in only on the two --workers 2 cases (fetch, verify --sample 3), where two workers append in either order on the Python side too; the Python's own order is not fixed, so it is not an output FR-002 binds. Premise asserted from the worker design rather than measured by a repeated Python run."
+    },
+    {
+     "id": "T147-norm-t146-sorts",
+     "summary": "T146's sorts: sorted-stdout, server-log-sorted, git-log-sorted",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block names no object or reason; read in the cited cases.json: sorted-stdout is opt-in on exactly the three --workers 2 cases (fetch, verify --sample 3, consulted), whose Python output order is set by worker completion; server-log-sorted sorts the loopback stub server's request log, the world's record and not a tool output, filled by a browser's concurrent requests; git-log-sorted applies to no case (no case captures a '<log ' file). None hides a fixed Python order."
+    },
+    {
+     "id": "T147-figures",
+     "summary": "Incremental rerun counts and timings recorded, timing not held; census of measurements commands; make static/rust-test/hooks-test/pointer check as the checks",
+     "class": "within",
+     "why": "FR-001's measurement-rewrite census, FR-004's coverage and the kept checks of FR-001c; timings recorded with date and method, not a bar."
     }
    ],
    "verdict": "CLEAR"

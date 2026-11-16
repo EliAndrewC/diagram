@@ -8,6 +8,4 @@ pub mod record {
     pub mod downloads;
 }
 
-#[cfg(test)]
-use l7r_gate_core::write_executable;
 use l7r_gate_core::{checks, cohort, difflib, logs, measure, Reply};

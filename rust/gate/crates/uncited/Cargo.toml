@@ -1,0 +1,29 @@
+# The uncited pages' filter (feature 449 T147, phase 4's S3b under `ask:449-phase4-slices`): `scripts/record/uncited.py` and
+# `uncited_imports.py` ported - the set of pages read and never cited, the rule's verdicts, the fetch, the `source-filter` agent's
+# bundles and its verdicts applied, the write-ups' drafts installed, and the imported copies read again - `l7r-gate record uncited ...`
+# (`make uncited`, `make cite-uncited`). The one writer of the filter's own lists (`research/not-kept.jsonl`, feature 312's kept list
+# and its import check). On `core`, `research`, `archive` (the fetch, the lanes, the rows, the kept-page reads), `downloads` (the
+# access tags `retire-cited` records) and the guard; the reservation `install` makes is `record`'s, handed in by `record`'s dispatch,
+# which builds on this crate.
+[package]
+name = "l7r_gate_uncited"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_archive = { path = "../archive" }
+l7r_gate_core = { path = "../core" }
+l7r_gate_downloads = { path = "../downloads" }
+l7r_gate_research = { path = "../research" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_archive = { path = "../archive", features = ["testkit"] }
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+l7r_gate_research = { path = "../research", features = ["testkit"] }
+
+[lints]
+workspace = true

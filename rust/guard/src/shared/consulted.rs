@@ -2,9 +2,9 @@
 //! `ask:449-phase4-slices`): the normalized URL, the mirror's `.specify/` the ledger and the page cache live under, the feature, clone and
 //! session a line is written under, the polled lock, and the ledger's lines read, appended and shown. In the guard's shared code because
 //! the blocked-fetch guard writes an attempt in process (`shared::attempts`) and the attempts log takes this ledger's lock; the gate's
-//! `l7r-gate record sources` and `source-pages` call the same functions. `sources.py` stays the implementation for its Python importers
-//! (`archive.py`, `uncited*.py`, `research_search.py`) until S3b and S4; an edit of its ledger half makes the same change here in the same
-//! commit (the ruling's Q1).
+//! `l7r-gate record sources` and `source-pages` call the same functions. `sources.py` keeps only `repo_root` and `home` (and its
+//! forwarders' `raised`) for `archive.py`, S4's door, until S4 (feature 449 T147 deleted the rest with `uncited*.py`); an edit of those
+//! makes the same change here in the same commit (the ruling's Q1).
 
 use std::fs::File;
 use std::io::Write as _;

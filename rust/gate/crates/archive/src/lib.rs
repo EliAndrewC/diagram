@@ -16,7 +16,8 @@
 //!
 //! THE BROWSER is the one browser crate (`rust/browser/`), run as a program ([`client`]): this crate never compiles it, so the gate's
 //! build does not either. The modules: [`fetch`] one fetch, [`capture`] one capture, [`store`] the working copy, [`manifest`] the rows and
-//! one URL archived, [`backfill`] the lanes, [`cli`] `l7r-gate record archive ...`.
+//! one URL archived, [`backfill`] the lanes, [`ops`] the housekeeping and lookups (`archive_ops.py`, feature 449 T147), [`cli`]
+//! `l7r-gate record archive ...`.
 
 use std::fmt;
 
@@ -26,10 +27,14 @@ pub mod cli;
 pub mod client;
 pub mod fetch;
 pub mod manifest;
+pub mod ops;
 pub mod store;
 
 #[cfg(test)]
 pub(crate) mod testkit;
+// the tests' world for the crates whose tests drive the archive (feature 449 T147: the `uncited` crate), the same file
+#[cfg(all(not(test), feature = "testkit"))]
+pub mod testkit;
 
 /// A refusal, as the Python raised it: the exception's class name and its message.
 #[derive(Debug, Clone, PartialEq, Eq)]

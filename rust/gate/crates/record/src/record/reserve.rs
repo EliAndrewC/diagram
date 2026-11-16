@@ -4,8 +4,8 @@
 //! 10 past the highest prefix held by the mirror's tree, every clone under `<mirror>/.clones/` and the ledger
 //! `<mirror>/.specify/prefixes.jsonl`; the reservation is the file, a stub written before the lock is released. A write session's
 //! registry key past its cap (`L7R_KEY_CAP`) is refused unless `KEY_CAP_OK` gives a reason, taken in process through `pages`'
-//! `escape_log` where the Python ran `l7r-gate escape take`. `reserve-prefix.py` stays the implementation for `uncited.py`, its Python
-//! importer, until S3b; an edit of it makes the same change here in the same commit (the ruling's Q1).
+//! `escape_log` where the Python ran `l7r-gate escape take`. Since feature 449 T147 (S3b) the `uncited` crate's `install` asks [`reserve`]
+//! in process too, and `reserve-prefix.py`, whose last importer that was, is deleted.
 
 use std::fmt::Write as _;
 use std::io::Write as _;
@@ -464,28 +464,50 @@ pub fn reserved(
     Ok(false)
 }
 
-/// A record tool still Python (`archive_ops.py` until S3b) run by path from the gate's tree in `root`, its stdout and stderr both to the
-/// caller's stderr as the Python routed them; its exit, 1 where it could not start.
-pub fn python_tool(root: &Path, tool: &str, args: &[&str], err: &mut String) -> i32 {
-    let at = l7r_gate_core::record::repo::tree_of(root)
-        .join("scripts/record")
-        .join(tool);
-    match std::process::Command::new("python3")
-        .arg(&at)
-        .args(args)
-        .current_dir(root)
-        .output()
-    {
-        Ok(o) => {
-            err.push_str(&String::from_utf8_lossy(&o.stdout));
-            err.push_str(&String::from_utf8_lossy(&o.stderr));
-            o.status.code().unwrap_or(1)
+/// The reservation the `uncited` crate's `install` makes, in process (feature 449 T147, where `uncited.py` loaded `reserve-prefix.py` and
+/// ran this command): an uncited entry for `key`, its URL named, from the mirror of `root`. A refusal is kind `Refusal`, its words the
+/// reservation's own; what the reservation raised keeps its kind where the Python's forwarder raised that kind by name, and is a
+/// `RuntimeError` naming it otherwise, as `sources.raised` made one.
+///
+/// # Errors
+/// The reservation's refusal or raise.
+pub fn reserve_uncited(key: &str, root: &Path, url: &str) -> l7r_gate_archive::Result<PathBuf> {
+    let mirror = l7r_gate_core::record::repo::mirror_of(root);
+    let ask = Ask {
+        kind: "uncited",
+        key,
+        root,
+        mirror: Some(&mirror),
+        stub: None,
+        timeout: 30.0,
+        url,
+        tags: "",
+        command: std::env::args().collect::<Vec<_>>().join(" "),
+        var: &consulted::var,
+    };
+    reserve(&ask).map_err(|r| match r {
+        Refused::Refusal(why) => l7r_gate_archive::Error::new("Refusal", why),
+        Refused::Raised(kind, why) => {
+            const BY_NAME: [&str; 12] = [
+                "Blocked",
+                "BlockedListError",
+                "OSError",
+                "TimeoutError",
+                "ValueError",
+                "KeyError",
+                "FileNotFoundError",
+                "PermissionError",
+                "IndexError",
+                "TypeError",
+                "RuntimeError",
+                "AttributeError",
+            ];
+            match BY_NAME.iter().find(|k| **k == kind) {
+                Some(k) => l7r_gate_archive::Error::new(k, why),
+                None => l7r_gate_archive::Error::new("RuntimeError", format!("{kind}: {why}")),
+            }
         }
-        Err(e) => {
-            let _ = writeln!(err, "{e}");
-            1
-        }
-    }
+    })
 }
 
 /// `archive_at_cite`: a source cited from now on archived as it is cited (feature 309 FR-006) - the archive's `url` command on the new

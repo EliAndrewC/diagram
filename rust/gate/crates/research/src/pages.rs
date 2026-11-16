@@ -2,8 +2,8 @@
 //! under `ask:449-phase4-slices`): `<mirror>/.specify/page-cache/<h2>/<h>/`, `<h>` the SHA-256 of the normalized URL, holding the page's
 //! visible text as fetched (`text.txt`), its saved form in parts (`page.txt`, or `page.p1.txt` ...) and `meta.json`; [`CachedPages`],
 //! which asks the cache first, stores what it fetches, and reads the archive behind a page that cannot be read (feature 376). The ledger
-//! half is the guard's `shared::consulted`. `sources.py` stays the implementation for its Python importers until S3b and S4; an edit of
-//! its cache half makes the same change here in the same commit (the ruling's Q1).
+//! half is the guard's `shared::consulted`. `sources.py`'s cache half left with its last importers, `uncited.py` and `uncited_imports.py`
+//! (feature 449 T147, S3b), so this is the cache's one implementation.
 
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;

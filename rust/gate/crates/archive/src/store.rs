@@ -3,8 +3,8 @@
 //! having its own copy"*): `<mirror>/.specify/source-archive/`, written under `<mirror>/.specify/source-archive.lock`, pushed straight to
 //! GitHub. The PAT reaches git as `GIT_CONFIG_*` environment entries, never on a command line, in a file or in a log (FR-011).
 //!
-//! This is the working copy's one writer (FR-003): Python's `archive.Archive` keeps only the lock, `git` and the reads until S3b, and
-//! its writes forward here (`l7r-gate record archive ensure|push|place-gm`).
+//! This is the working copy's one writer (FR-003): Python's `archive.Archive` keeps only the lock, `git` and the reads until S4, and
+//! its one write left, the push, forwards here (`l7r-gate record archive push`; T147 retired `ensure` and `place-gm` with S3b).
 
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};

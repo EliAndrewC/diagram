@@ -253,10 +253,6 @@ fn the_one_time_seed_and_import() {
 }
 
 #[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "attempts.py's four subcommands and the door's form, one after another on one log"
-)]
 fn the_attempts_commands() {
     let (_d, root, _home) = world("sources-attempts");
     let r = root.to_string_lossy().into_owned();
@@ -307,29 +303,6 @@ fn the_attempts_commands() {
         2
     );
     assert_eq!(attempts_cli(&a(&["add", "--url", "u"]), &root).code, 2);
-    // the door's form: its root named, the line it wrote told back (feature 449 T145)
-    let r = root.to_string_lossy().into_owned();
-    let told = attempts_cli(
-        &a(&[
-            "add",
-            "--root",
-            &r,
-            "--url",
-            "https://e.org/door",
-            "--sought",
-            "s",
-            "--route",
-            "archive",
-            "--print",
-        ]),
-        Path::new("/"),
-    );
-    assert!(
-        told.stdout
-            .starts_with("{\"url\": \"e.org/door\", \"raw\": \"https://e.org/door\""),
-        "{}",
-        told.stderr
-    );
     assert_eq!(
         attempts_cli(
             &a(&["add", "--url", "https://bad.example/x", "--sought", "s"]),
@@ -387,6 +360,11 @@ fn an_odd_registry_and_the_archive_switch() {
     let mut err = String::new();
     super::archive_reads(&root, &["https://a.org"], &mut err, &|_| "0".to_owned());
     assert!(err.is_empty());
+    // the test's stand-in browser (the real one is the archive's production wiring, never started by a test)
+    assert_eq!(
+        super::reads_browser(&root).err().map(|e| e.kind),
+        Some("Error")
+    );
     std::fs::set_permissions(
         reg.join("0010-a-key.html"),
         std::fs::Permissions::from_mode(0o000),

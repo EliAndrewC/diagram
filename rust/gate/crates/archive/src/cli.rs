@@ -5,7 +5,18 @@
 //! - `report`: the coverage table, fetching nothing (`make archive-sources REPORT=1`)
 //! - `gm-copies`: the GM's matched files copied in, their rows told (`make archive-sources GM=1`)
 //!
-//! - and the doors Python's `archive.py` forwards its writes and its browser through until S3b and S4 port its importers ([`door`]).
+//! and `archive_ops.py`'s five since feature 449 T147 (phase 4's S3b, [`crate::ops`]):
+//!
+//! - `inbox [--match F=K ...] [--none F ...]`: the GM's downloads archived, then removed (`make archive-inbox`; `record downloads
+//!   ingest` asks it in process through [`inbox_cli`])
+//! - `consulted [--limit N] [--workers N]`: the uncited pages feature 312's filter kept, archived (`make archive-sources CONSULTED=1`)
+//! - `find [--url U] [--key K] [--terms "a|b"]`: what the archive holds (`make archive-find`)
+//! - `urls <u> ...`: the cited pages read, archived where they have no row (`make source-outcome` asks [`crate::ops::archive_urls`] in
+//!   process)
+//! - `relayout`: the one-time move to the sharded layout
+//!
+//! - and the one door left of those Python's `archive.py` forwarded through, `push`, which S4's `semantic_index.py` still reaches
+//!   ([`door`]).
 
 use std::fmt::Write as _;
 use std::io::Write as _;
@@ -22,6 +33,7 @@ use crate::store::Archive;
 use crate::{Error, Reply, Result};
 
 pub mod door;
+pub mod ops;
 
 fn reply(stdout: String, stderr: String, code: i32) -> Reply {
     Reply {
@@ -132,14 +144,12 @@ pub fn production_store(root: &Path) -> Archive {
     )
 }
 
-/// What the commands reach beyond the repository: the archive's working copy, the browser, where a lane's lines go and the
-/// door's input (the real ones in [`cli`], a test's stand-ins otherwise).
+/// What the commands reach beyond the repository: the archive's working copy, the browser and where a lane's lines go (the real ones in
+/// [`cli`], a test's stand-ins otherwise).
 pub struct Reach<'a> {
     pub store: &'a dyn Fn(&Path) -> Archive,
     pub start: &'a (dyn Fn(&Path) -> Result<Box<dyn Client>> + Sync),
     pub say: &'a (dyn Fn(&str) + Sync),
-    pub input: &'a mut dyn std::io::BufRead,
-    pub output: &'a mut dyn std::io::Write,
 }
 
 /// `l7r-gate record archive <command>` from `cwd`'s repository: the real working copy and browser (the production wiring, which the
@@ -147,20 +157,28 @@ pub struct Reach<'a> {
 #[cfg(not(test))]
 #[must_use]
 pub fn cli(args: &[String], cwd: &Path) -> Reply {
-    let mut reach = Reach {
+    // a lane's line is printed at once, stdout locked a line at a time: the lanes print from their own threads while this one waits
+    let reach = Reach {
         store: &production_store,
         start: &start_browser,
         say: &print_now,
-        input: &mut std::io::stdin().lock(),
-        // stdout itself, locked a write at a time: a backfill lane prints its lines from its own thread while this one waits on it
-        output: &mut std::io::stdout(),
     };
-    cli_with(args, cwd, &mut reach)
+    cli_with(args, cwd, &reach)
+}
+
+/// `record archive inbox <args>` run as `record downloads ingest` ran `archive_ops.py inbox` (feature 449 T147: in process, where it
+/// ran the Python by path), from `root`.
+#[cfg(not(test))]
+#[must_use]
+pub fn inbox_cli(root: &Path, args: &[String]) -> Reply {
+    let mut all = vec!["inbox".to_owned()];
+    all.extend_from_slice(args);
+    cli(&all, root)
 }
 
 /// [`cli`] with what it reaches handed in.
 #[must_use]
-pub fn cli_with(args: &[String], cwd: &Path, reach: &mut Reach<'_>) -> Reply {
+pub fn cli_with(args: &[String], cwd: &Path, reach: &Reach<'_>) -> Reply {
     let root = l7r_guard::shared::consulted::repo_root(Some(cwd));
     let rest = args.get(1..).unwrap_or(&[]);
     let start = reach.start;
@@ -222,12 +240,12 @@ pub fn cli_with(args: &[String], cwd: &Path, reach: &mut Reach<'_>) -> Reply {
         Some("report" | "gm-copies") => {
             usage(&format!("unrecognized arguments: {}", rest.join(" ")))
         }
-        Some(
-            verb @ ("ensure" | "push" | "place-gm" | "url-row" | "lane" | "settle" | "sync-gm"
-            | "write-row" | "serve"),
-        ) => door::cli(verb, rest, reach),
+        Some(verb @ ("inbox" | "consulted" | "find" | "urls" | "relayout")) => {
+            ops::cli(verb, rest, &root, reach)
+        }
+        Some("push") => door::cli(rest),
         _ => usage(
-            "argument cmd: invalid choice (choose from 'url', 'backfill', 'report', 'gm-copies')",
+            "argument cmd: invalid choice (choose from 'url', 'backfill', 'report', 'gm-copies', 'inbox', 'consulted', 'find', 'urls', 'relayout')",
         ),
     }
 }

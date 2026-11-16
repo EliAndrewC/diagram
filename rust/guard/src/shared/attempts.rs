@@ -2,8 +2,8 @@
 //! `ask:449-phase4-slices`): what each source was tried for and what came of it, `research/source-attempts.jsonl`, one JSON line an
 //! attempt, appended under the sources-consulted ledger's lock. In the guard's shared code because the blocked-fetch guard asks it once
 //! a fetch, in process, where it ran `attempts.py seen` by path (T039 decision (c)); `l7r-gate record attempts` (`make attempts`) and the
-//! gate's `source-outcome` and `source-pages` call the same functions. `attempts.py` stays the implementation for its Python importers
-//! (`uncited.py`, `uncited_imports.py`) until S3b; an edit of it makes the same change here in the same commit (the ruling's Q1).
+//! gate's `source-outcome` and `source-pages` call the same functions, and the `uncited` crate's fetch and lists (feature 449 T147, S3b,
+//! which deleted `attempts.py` with its last importers): this is the log's one implementation.
 
 use std::collections::HashSet;
 use std::io::Write as _;

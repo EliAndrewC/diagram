@@ -825,11 +825,11 @@ source-outcome: ## [project] record what came of reading a source page on the ho
 
 uncited: ## [project] the uncited pages judged once, and the kept ones written up - DO=set (count; OUT= writes the URLs) | rule | fetch [LIMIT=n] | bundle OUT=<dir> [LIMIT=n] [START=n] | apply DIRS="<bundle> ..." | score DIR=<bundle> ANSWERS=<labels.json> | draft OUT=<dir> [START=n] | install DIRS="<draft> ..." | merge KEY=<dup> INTO=<kept key> | dedupe [DRY=1] | unkeep URL=<u> REASONS=<r,r> NOTE=<why> | requeue URL=<u> | copy-verdicts | stands URL=<u> NOTE=<why> | retire-cited KEY=<k> ACCESS=<state> NOTE=<why> | report (feature 312)   DO=<step>
 	@if [ -z "$(DO)" ]; then printf 'make uncited: DO=set|rule|fetch|bundle|apply|score|draft|install|merge|dedupe|unkeep|requeue|copy-verdicts|stands|retire-cited|report is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/uncited.py" $(DO) $(if $(filter set,$(DO)),$(if $(OUT),--write "$(abspath $(OUT))",),) $(if $(filter bundle draft,$(DO)),"$(abspath $(OUT))" $(if $(START),--start $(START),),) $(if $(filter fetch bundle,$(DO)),$(if $(LIMIT),--limit $(LIMIT),),) $(if $(filter apply install,$(DO)),$(DIRS),) $(if $(filter score,$(DO)),"$(DIR)" "$(ANSWERS)",) $(if $(filter merge,$(DO)),"$(KEY)" "$(INTO)",) $(if $(filter dedupe,$(DO)),$(if $(DRY),--dry,),) $(if $(filter unkeep,$(DO)),"$(URL)" "$(REASONS)" "$(NOTE)",) $(if $(filter requeue,$(DO)),"$(URL)",) $(if $(filter stands,$(DO)),"$(URL)" "$(NOTE)",) $(if $(filter retire-cited,$(DO)),"$(KEY)" "$(ACCESS)" "$(NOTE)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record uncited $(DO) $(if $(filter set,$(DO)),$(if $(OUT),--write "$(abspath $(OUT))",),) $(if $(filter bundle draft,$(DO)),"$(abspath $(OUT))" $(if $(START),--start $(START),),) $(if $(filter fetch bundle,$(DO)),$(if $(LIMIT),--limit $(LIMIT),),) $(if $(filter apply install,$(DO)),$(DIRS),) $(if $(filter score,$(DO)),"$(DIR)" "$(ANSWERS)",) $(if $(filter merge,$(DO)),"$(KEY)" "$(INTO)",) $(if $(filter dedupe,$(DO)),$(if $(DRY),--dry,),) $(if $(filter unkeep,$(DO)),"$(URL)" "$(REASONS)" "$(NOTE)",) $(if $(filter requeue,$(DO)),"$(URL)",) $(if $(filter stands,$(DO)),"$(URL)" "$(NOTE)",) $(if $(filter retire-cited,$(DO)),"$(KEY)" "$(ACCESS)" "$(NOTE)",)
 
 cite-uncited: ## [project] an uncited source's entry moved to the works cited, keeping its number, when a footnote first cites it - then write its Used for: line (feature 312)   KEY=<registry key>
 	@if [ -z "$(KEY)" ]; then printf 'make cite-uncited: KEY=<the uncited entry'"'"'s key> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/uncited.py" cite "$(KEY)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record uncited cite "$(KEY)"
 
 attempts: ## [project] what a source was tried for and what came of it, and the filter's verdict on it - by URL, registry key, or question - BEFORE you read it again (feature 312)   URL=<u> | KEY=<k> | Q=<NNNN>
 	@if [ -z "$(URL)$(KEY)$(Q)" ]; then printf 'make attempts: URL=<u>, KEY=<k> or Q=<NNNN> is required\n' >&2; exit 2; fi
@@ -840,10 +840,10 @@ archive: ## [project] archive ONE cited URL now into the private source archive 
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive url "$(URL)" $(if $(KEY),--key "$(KEY)",)
 
 archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, the uncited pages feature 312's filter KEPT, and no other (features 309, 312)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
-	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),) --workers $(or $(WORKERS),4); else "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
+	@if [ -n "$(CONSULTED)" ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive consulted $(if $(LIMIT),--limit $(LIMIT),) --workers $(or $(WORKERS),4); else "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
 
 archive-inbox: ## [project] the GM's downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass; a NEW download waits until you give its keys (feature 309)   [MATCH="<file>=<key>[,<key>] ..."] [NONE="<file> ..."]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")
 
 semantic-index: ## [project] build or update the semantic index of the record and the archive - only new or changed passages embedded, its shards committed to the archive and pushed (feature 447; BGE-M3, run locally, half the cores)   [SHARD=<s>] [LIMIT=<n>]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/semantic_index.py" build $(foreach s,$(SHARD),--shard "$(s)") $(if $(LIMIT),--limit "$(LIMIT)",)
@@ -857,7 +857,7 @@ research-search: ## [project] THE local search before the web: the meaning searc
 
 archive-find: ## [project] does the archive already hold it? by URL, registry key, or words in the archived text - names each copy's local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)   URL=<u> | KEY=<k> | TERMS="a|b" (every term required; one term per call to try alternatives)
 	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
 
 downloads-ingest: ## [project] on the GM's word "ingest": the marks in the GM's copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP="<ids>"] [DROP="<ids>"] [MARK="<id>=<downloaded|partial|paywalled|not-found> ..."]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads ingest --keep "$(KEEP)" --drop "$(DROP)" --mark "$(MARK)"

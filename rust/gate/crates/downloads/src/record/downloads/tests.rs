@@ -52,11 +52,20 @@ fn head(root: &Path) -> String {
         .to_owned()
 }
 
-fn ctx(root: &Path, inbox: &Path) -> Ctx {
+/// The archive step of a run that never reaches it, or says nothing where it does.
+fn no_inbox(_: &Path, _: &[String]) -> crate::Reply {
+    crate::Reply {
+        stdout: String::new(),
+        stderr: String::new(),
+        code: 0,
+    }
+}
+
+fn ctx(root: &Path, inbox: &Path) -> Ctx<'static> {
     Ctx {
         root: root.to_owned(),
         copy: inbox.join("TO-DOWNLOAD.md"),
-        python: "true".to_owned(),
+        inbox: &no_inbox,
         timeout: 2.0,
     }
 }
@@ -659,7 +668,7 @@ fn every_verb_answers_through_the_command_line() {
         entry_text("1", "`alpha`", "- body research/contents.json#money")
     );
     let (root, inbox) = synced("verbs", &canon);
-    let mut c = ctx(&root, &inbox);
+    let c = ctx(&root, &inbox);
     assert_eq!(run(&["nonsense"], &c).code, 2);
     assert_eq!(run(&[], &c).code, 2);
     assert_eq!(run(&["add"], &c).code, 2);
@@ -709,16 +718,23 @@ fn every_verb_answers_through_the_command_line() {
     )
     .unwrap();
     put(&inbox, "f.pdf", "x");
-    let argv = inbox.join("argv");
-    let stub = inbox.join("stub");
-    crate::write_executable(
-        &stub,
-        &format!(
-            "#!/bin/sh\necho child out\necho child err >&2\necho \"$@\" > {}\nexit 0\n",
-            argv.display()
-        ),
-    );
-    c.python = stub.display().to_string();
+    // the archive step `record`'s dispatch hands in: here one that records what it was asked and answers as the archive's inbox would
+    let asked = std::sync::Mutex::new(Vec::new());
+    let code = std::sync::atomic::AtomicI32::new(0);
+    let step = |at: &Path, args: &[String]| {
+        asked
+            .lock()
+            .unwrap()
+            .push(format!("{} {}", at.display(), args.join(" ")));
+        crate::Reply {
+            stdout: "child out\n".to_owned(),
+            stderr: "child err\n".to_owned(),
+            code: code.load(std::sync::atomic::Ordering::SeqCst),
+        }
+    };
+    // the step a run that never reaches it is handed says nothing
+    assert_eq!(no_inbox(&root, &[]).stdout, "");
+    let c = Ctx { inbox: &step, ..c };
     let ingested = run(
         &[
             "ingest",
@@ -737,12 +753,12 @@ fn every_verb_answers_through_the_command_line() {
             && ingested.stdout.ends_with("child out\n")
     );
     assert_eq!(ingested.stderr, "child err\n");
-    let seen = std::fs::read_to_string(&argv).unwrap();
-    assert!(seen.contains("scripts/record/archive_ops.py inbox --match=f.pdf=1"));
-    crate::write_executable(&stub, "#!/bin/sh\nexit 7\n");
+    assert_eq!(
+        asked.lock().unwrap()[0],
+        format!("{} --match=f.pdf=1", root.display())
+    );
+    code.store(7, std::sync::atomic::Ordering::SeqCst);
     assert_eq!(run(&["ingest"], &c).code, 7);
-    c.python = inbox.join("no-such-interpreter").display().to_string();
-    assert_eq!(run(&["ingest"], &c).code, 1);
 }
 
 #[test]
@@ -826,5 +842,8 @@ fn a_bad_state_file_refuses() {
 #[test]
 fn the_command_line_reads_the_gm_s_inbox_from_the_environment() {
     let root = crate::checks::scratch("downloads-cli");
-    assert_eq!(super::cli(&["no-such-verb".to_owned()], &root).code, 2);
+    assert_eq!(
+        super::cli(&["no-such-verb".to_owned()], &root, &no_inbox).code,
+        2
+    );
 }

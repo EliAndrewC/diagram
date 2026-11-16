@@ -58,6 +58,16 @@ impl Client for Fake {
 }
 
 /// `git` in `dir`, its output; a failure fails the test.
+///
+/// # Panics
+/// git fails.
+#[cfg_attr(
+    not(test),
+    expect(
+        clippy::must_use_candidate,
+        reason = "its output read where a test wants it, its run where it does not"
+    )
+)]
 pub fn git(dir: &Path, args: &[&str]) -> String {
     let out = Command::new("git")
         .arg("-C")
@@ -80,6 +90,10 @@ pub struct World {
 
 impl World {
     /// A new world, its working copy cloned from a bare remote with one commit.
+    ///
+    /// # Panics
+    /// The world cannot be made.
+    #[must_use]
     pub fn new(tag: &str) -> Self {
         let dir = TempDir::new(&format!("archive-{tag}"));
         let root = dir.path().join("m/.clones/c");
@@ -134,6 +148,9 @@ impl World {
     }
 
     /// The working copy cloned (again), its committer set.
+    ///
+    /// # Panics
+    /// The clone fails.
     pub fn clone_copy(&self) {
         let wc = self.home.join("source-archive");
         let _ = std::fs::remove_dir_all(&wc);
@@ -151,6 +168,7 @@ impl World {
     }
 
     /// The store over the working copy: the process's environment, the local remote, the world's GM folder.
+    #[must_use]
     pub fn store(&self) -> Archive {
         let mut a = Archive::new(&self.home, None);
         a.remote = self.remote.to_string_lossy().into_owned();
@@ -159,6 +177,7 @@ impl World {
     }
 
     /// The research record's directory.
+    #[must_use]
     pub fn research(&self) -> PathBuf {
         self.root.join("research")
     }

@@ -2,7 +2,9 @@
 # fetch, one capture, the working copy of the PRIVATE archive repository, the manifest's rows, the backfill's lanes and
 # `l7r-gate record archive ...`. The browser is the one browser crate (`rust/browser/`), run as a program, never a dependency here, so
 # the gate's build never compiles it. On `core`, `research` and the guard; `record` takes it for its dispatch and `make reserve`'s
-# archiving at citation.
+# archiving at citation. Since T147 (S3b) also `archive_ops.py`'s port (`ops`), on `downloads` for the download list's entry keys the
+# inbox resolves in process; `record downloads ingest` reaches the inbox through the callback `record` hands it, so `downloads` never
+# depends on this crate.
 [package]
 name = "l7r_gate_archive"
 version = "0.1.0"
@@ -12,9 +14,14 @@ publish = false
 [dependencies]
 fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }
+l7r_gate_downloads = { path = "../downloads" }
 l7r_gate_research = { path = "../research" }
 l7r_guard = { path = "../../../guard" }
 serde_json = { workspace = true }
+
+[features]
+# the tests' world and browser, for the crates whose tests drive the archive (feature 449 T147: the `uncited` crate)
+testkit = ["l7r_gate_research/testkit"]
 
 [dev-dependencies]
 l7r_gate_core = { path = "../core", features = ["testkit"] }

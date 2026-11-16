@@ -358,28 +358,36 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T139 to T139 moved to plan-done.md, 2026-11-14 (feature 375 FR-044) -->
 <!-- plan-archive: T140 to T140 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
 <!-- plan-archive: T143 to T143 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-### T147 (<why: the finding or measurement that files it>)
+### T147 (phase 4's S3b, the uncited cluster, `ask:449-phase4-slices`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `scripts/record/uncited.py`, `uncited_imports.py` and `archive_ops.py` ported and deleted - the uncited filter a new gate crate `uncited` (`l7r-gate record uncited ...`), the archive's operations into the `archive` crate (`record archive consulted|inbox|find|relayout|verify`); `attempts.py` and `reserve-prefix.py`, which no Python imports any more, deleted; `archive.py` and `sources.py` cut to what S4's `research_search.py` and `semantic_index.py` still import (107 and 80 lines, observed 2026-11-16, method: `wc -l`).
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase4-slices`, `ask:449-T80-order` (3), `ask:449-T81-slices`, `ask:449-T86-door`, `ask:449-T88-bundles`, `ask:449-T146-browser`, `ask:449-usage-text`, `ask:449-T066-json-message`, FR-001, FR-002, FR-003, FR-004, FR-008):
+   - The callers: `make uncited` and `make cite-uncited` run `l7r-gate.sh record uncited ...` with their arguments as they were; `make archive-sources CONSULTED=`, `make archive-inbox` and `make archive-find` run `record archive consulted|inbox|find`; the downloads crate's ingest calls the inbox in process, retiring its by-path run of `archive_ops.py inbox`; `record sources outcome cited:` archives in process (`archive::ops::archive_urls`); `uncited install` reserves in process (`record::reserve::reserve_uncited`), retiring `reserve::python_tool`; the inbox resolves an `#id` match through `access_tags::entry_keys_of`, retiring `access-tags entry-keys`. Production callers wired in this cut as T145 and T146 did (`ask:449-T80-order` (3), `ask:449-T88-bundles`).
+   - One live writer per file (FR-003): the filter's three lists (kept, not kept, misfiled) are written by `uncited::lists` alone; every other write goes through the one writer S2 and S3a gave it. The doors only these importers used retire: the archive's `ensure`, `place-gm`, `url-row`, `lane`, `settle`, `sync-gm`, `write-row` and `serve`, `record sources put`, and `attempts add`'s `--root` and `--print`; `push` stays for `semantic_index`. What stays Python (`ask:449-T81-slices`, read-only names and the one door): `archive.py`'s `src`, `home_of`, `git_env`, `token`, `mirror` and `Archive` (`dir`, `locked`, `git`, `push`), and `sources.py`'s `repo_root`, `home` and `raised`, until S4 deletes them (observed 2026-11-16, method: each S4 importer's uses read, and the three modules imported).
+   - Ported whole, not dropped: `relayout`, which no caller runs and which moves nothing on today's archive, and `verify --sample`, whose sampling is CPython's (`random.rs`, a port of its Mersenne Twister and `random.sample`, so a seed draws the same sample).
+   - Matched where a library differs, after the plan review (FR-002): `too_big` names a folder's files in `rglob("*")`'s own order - CPython 3.14's `glob` lists the root's children in `scandir` order, then pops directories last in first out, listing each real directory's children as it meets it (`archive::ops::scan` and `files_under`, from CPython's `glob.py` and a run of `rglob` on a test tree); and `research::pyre`'s translation folds `İ` (U+0130) and `ı` (U+0131) with `i` and `I` under an inline `i` flag, in letters, classes, ranges and negations, as CPython's `re.I` does in all sixteen directions it answers true, a change whose output moves only `py()` patterns opening with `(?i)` (the five in `uncited`; `prepass`'s one other translates as before). `archive_urls` starts one browser for its URLs where HEAD's forwarder started one a URL, the outputs the same.
+   - The seam and its end-to-end case (`ask:449-T80-order`, FR-004, FR-008): T146's kept case that drove the Python lane with a blocked page mid-way is now `uncited::fetch`'s unit test, the same words and its 120-character cut (`ask:449-T146-browser`), and `tests/hooks/test-l7r-gate.sh` runs the Rust production paths - `record uncited fetch`, `record sources outcome cited:`, `record downloads ingest` - on the real browser behind dead proxies.
+   - The same outputs (FR-002), through the shared runner (T161): HEAD's Python against the Rust, every subcommand, flag and refusal of the three files directly and through make, both Rust callers, and S4's importers (`make research-search`, `semantic_index.commit` through `Archive.push`), on copies of the real record and lists, a frozen snapshot of the page cache and the archive's texts, in T146's network namespace with its loopback server and a local bare remote: the differential's 128 cases, none differing, a folder of three files over the limit and the dotted and dotless i among them (measured 2026-11-16 (`make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t147/cases.json VERIFY=1`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t147/cases.diff-run/reports/diff-run-verify-20261116T185513Z.json`)). Normalizations taken: the JSON parser's own words in `install`'s refusal (`ask:449-T066-json-message`), argparse's words before make's line (`ask:449-usage-text`), two lanes' lines sorted (they append in either order on both sides), and T146's stamps, dates, tracebacks and sorts.
+   - The incremental reruns, as T161's Done asks: the first run reran 242 sides and kept 2, the run after the first fixes 214 and 30, the run after the plan review's two fixes 127 and 129, the single-case runs 2 and 0 each (observed 2026-11-16, method: the incremental and only reports in `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t147/cases.diff-run/reports/`).
+   - Timing, recorded and not held: the verify run took 470.9 s (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t147/cases.diff-run/reports/diff-run-verify-20261116T185513Z.json`). In the first verify run its cases' Python sides took 378.4 s and Rust sides 179.9 s summed, `dedupe` 41.1 s against 14.4 s (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t147/cases.diff-run/reports/diff-run-verify-20261116T182413Z.json`).
+   - The census: no `specs/*/measurements*.json` command runs the five deleted files or the archive commands that replace them (observed 2026-11-16, method: `git grep` of each name in command, import and `-m` forms). The checks: `make static` clean on 28 crates (`uncited`, `archive`, `record` and `downloads` at 100% line coverage), `make rust-test` clean, `make hooks-test HOOKS_ALL=1` green on 54 suites, the pointer check clean on a clone with the new files added (observed 2026-11-16, method: those commands).
 
 ### T147 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The uncited filter and the archive's operations run in Rust, their make and Rust callers on them, and only S4's reads left in Python.
+2. **The constraints.** FR-001 to FR-004 and FR-008, `ask:449-phase4-slices`.
+3. **Where each comes from.** R: the rulings; O: the differential and the census above.
+4. **Do they describe the world here?** Run on copies of this clone's real record with the network and the archive's remote stubbed, measured 2026-11-16 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t147/cases.json`).
+5. **The order.** After S3a (T146) and T161, whose runner it is the first to use.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The verify run's cases with none differing, the reruns' counts, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T148 (<why: the finding or measurement that files it>)

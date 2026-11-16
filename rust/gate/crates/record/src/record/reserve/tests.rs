@@ -404,13 +404,6 @@ fn the_command_line() {
         l7r_gate_archive::fetch::Client::render(&mut Dead, "u"),
         (String::new(), String::new())
     );
-    // a still-Python tool run from a directory that is not there
-    let mut said = String::new();
-    assert_eq!(
-        python_tool(&root.join("no/such/dir"), "archive_ops.py", &[], &mut said),
-        1
-    );
-    assert!(!said.is_empty());
 }
 
 /// A browser to which every page is dead.
@@ -464,4 +457,34 @@ fn the_ledgers_odd_rows_and_a_tree_that_cannot_be_written() {
     assert!(
         matches!(reserve(&ask("question", "q", &root, &none)), Err(Refused::Raised(k, _)) if k == "OSError")
     );
+}
+
+#[test]
+fn the_uncited_filters_reservation_in_process() {
+    // feature 449 T147: `uncited.py install`'s reservation, in process where it loaded `reserve-prefix.py`
+    let (_d, mirror, root) = world("reserve-uncited");
+    let got = reserve_uncited("u-key", &root, "https://e.org/x").unwrap();
+    assert!(got.ends_with("research/sources/040-uncited-works/0010-u-key.html"));
+    assert!(
+        std::fs::read_to_string(mirror.join(".specify/prefixes.jsonl"))
+            .unwrap()
+            .contains("\"key\": \"u-key\"")
+    );
+    let held = reserve_uncited("u-key", &root, "").unwrap_err();
+    assert_eq!(held.kind, "Refusal");
+    assert!(held.message.contains("already"));
+    std::fs::write(mirror.join(".specify/prefixes.jsonl"), [0xff]).unwrap();
+    let odd = reserve_uncited("w", &root, "").unwrap_err();
+    assert_eq!(odd.kind, "RuntimeError");
+    assert!(odd.message.starts_with("UnicodeDecodeError: "));
+    std::fs::write(mirror.join(".specify/prefixes.jsonl"), "").unwrap();
+    std::fs::write(root.join("research/sources/040-uncited-works"), "").ok();
+    std::fs::remove_dir_all(root.join("research/sources/040-uncited-works")).ok();
+    std::fs::write(
+        root.join("research/sources/040-uncited-works"),
+        "a file where the folder goes",
+    )
+    .unwrap();
+    let os = reserve_uncited("b", &root, "").unwrap_err();
+    assert_eq!(os.kind, "OSError");
 }

@@ -29,23 +29,19 @@ fn no_browser(_: &Path) -> crate::Result<Box<dyn Client>> {
 
 type Start = dyn Fn(&Path) -> crate::Result<Box<dyn Client>> + Sync;
 
-fn run(w: &World, args: &[&str], start: &Start, input: &str) -> (Reply, Vec<String>, String) {
+fn run(w: &World, args: &[&str], start: &Start, _input: &str) -> (Reply, Vec<String>, String) {
     let said = Mutex::new(Vec::new());
     let say = |l: &str| said.lock().unwrap().push(l.to_owned());
     let store = |_: &Path| w.store();
-    let mut output = Vec::new();
-    let mut input = input.as_bytes();
-    let mut reach = Reach {
+    let reach = Reach {
         store: &store,
         start,
         say: &say,
-        input: &mut input,
-        output: &mut output,
     };
     let args: Vec<String> = args.iter().map(|a| (*a).to_owned()).collect();
-    let reply = cli_with(&args, &w.root.join("research"), &mut reach);
+    let reply = cli_with(&args, &w.root.join("research"), &reach);
     let lines = said.into_inner().unwrap();
-    (reply, lines, String::from_utf8(output).unwrap())
+    (reply, lines, String::new())
 }
 
 #[test]
@@ -149,16 +145,22 @@ fn backfill_report_and_the_gms_copies_and_each_refusal() {
 }
 
 #[test]
-fn the_doors_are_reached_through_the_command_line() {
+fn the_one_door_left_is_reached_through_the_command_line() {
     let w = World::new("cli-doors");
-    let root = w.root.to_string_lossy().into_owned();
-    let (r, _, out) = run(
-        &w,
-        &["serve", "--root", &root],
-        &browser,
-        "{\"op\": \"close\"}\n",
-    );
-    assert_eq!((r.code, out.trim()), (0, "{\"ready\":true}"));
-    let (r, _, _) = run(&w, &["settle", "--root", &root], &browser, "");
-    assert_eq!(r.stdout, "0\n");
+    let home = w.home.to_string_lossy().into_owned();
+    let (r, _, _) = run(&w, &["push", "--home", &home], &browser, "");
+    assert_eq!((r.code, r.stdout.as_str()), (0, ""));
+    // the eight T147 retired are no command now
+    for gone in [
+        "serve",
+        "settle",
+        "ensure",
+        "place-gm",
+        "url-row",
+        "lane",
+        "sync-gm",
+        "write-row",
+    ] {
+        assert_eq!(run(&w, &[gone], &browser, "").0.code, 2, "{gone}");
+    }
 }

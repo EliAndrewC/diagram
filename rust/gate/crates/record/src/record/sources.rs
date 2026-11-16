@@ -3,7 +3,7 @@
 //! mark-filled | import` (`make source-outcome`, `sources-consulted`, `record`'s fill pass, `sources-import`) and `l7r-gate record
 //! attempts show | add | seed | seen` (`make attempts`). The ledger and the log are the guard's `shared::consulted` and
 //! `shared::attempts`, the page cache the `research` crate's `pages`; the registry's pointer is `bundle`'s `url_of`. A page read that is
-//! cited is archived by `archive_ops.py urls`, still Python until S3b, run by path as the Python ran it.
+//! cited is archived by the archive crate's `urls`, in process since feature 449 T147 (where `archive_ops.py urls` ran by path).
 
 use std::collections::{BTreeMap, HashSet};
 use std::fmt::Write as _;
@@ -23,8 +23,6 @@ use serde_json::{json, Map, Value};
 use crate::record::args::{parse_with, Spec};
 use crate::record::bundle::check::url_of;
 use crate::Reply;
-
-mod door;
 
 pub const REGISTRY: &str = "research/sources/010-works-cited";
 pub const SEED: &str = "reread-2026-09-29";
@@ -182,17 +180,47 @@ pub fn mark_filled(root: &Path, home: &Path) -> Result<Vec<Value>, Fault> {
     Ok(rows)
 }
 
-/// `archive_reads`: each cited URL with no archive row yet captured by `archive_ops.py urls` (still Python until S3b), its report on
-/// stderr; a failure never blocks the read. `L7R_ARCHIVE_READS=0` switches it off.
+/// The browser and the working copy a cited read is archived with: the archive's own (production) wiring, which a test of this crate
+/// never starts - its launcher is the real tree's when `l7r-gate.sh` runs the tests - so a test meets a browser that will not start.
+#[cfg(not(test))]
+fn reads_browser(
+    root: &Path,
+) -> l7r_gate_archive::Result<Box<dyn l7r_gate_archive::fetch::Client>> {
+    l7r_gate_archive::cli::start_browser(root)
+}
+
+#[cfg(test)]
+fn reads_browser(_: &Path) -> l7r_gate_archive::Result<Box<dyn l7r_gate_archive::fetch::Client>> {
+    Err(l7r_gate_archive::Error::new(
+        "Error",
+        "BrowserType.launch: no browser in a test",
+    ))
+}
+
+#[cfg(not(test))]
+fn reads_store(root: &Path) -> l7r_gate_archive::store::Archive {
+    l7r_gate_archive::cli::production_store(root)
+}
+
+#[cfg(test)]
+fn reads_store(root: &Path) -> l7r_gate_archive::store::Archive {
+    l7r_gate_archive::store::Archive::new(&consulted::home(root), None)
+}
+
+/// `archive_reads`: each cited URL with no archive row yet captured by the archive's `urls` (`archive_ops.py urls`, in process since
+/// feature 449 T147 where it ran the Python by path), its report on stderr; a failure never blocks the read. `L7R_ARCHIVE_READS=0`
+/// switches it off.
 fn archive_reads(root: &Path, urls: &[&str], err: &mut String, var: &dyn Fn(&str) -> String) {
     if urls.is_empty() || var("L7R_ARCHIVE_READS") == "0" {
         return;
     }
-    let mut args = vec!["urls"];
-    args.extend(urls);
-    let code = super::reserve::python_tool(root, "archive_ops.py", &args, err);
-    if code != 0 {
-        let _ = writeln!(err, "archive: archiving the pages read failed (exit {code}) - `make archive URL=<u>` retries one");
+    let urls: Vec<String> = urls.iter().map(|u| (*u).to_owned()).collect();
+    if let Err(e) =
+        l7r_gate_archive::ops::archive_urls(root, &urls, &reads_browser, &reads_store, err)
+    {
+        // the exception's one line where the Python's traceback ended (`ask:449-usage-text`), and the exit it gave
+        let _ = writeln!(err, "{e}");
+        let _ = writeln!(err, "archive: archiving the pages read failed (exit 1) - `make archive URL=<u>` retries one");
     }
 }
 
@@ -607,7 +635,6 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
             Err(f) => raised(String::new(), &f),
         },
         Some("import") => import(rest, &root, &home),
-        Some("put") => door::put_cli(rest, cwd, &mut std::io::stdin()),
         _ => reply(
             String::new(),
             "sources.py: error: argument cmd: invalid choice\n".to_owned(),
@@ -701,11 +728,8 @@ pub fn attempts_cli(args: &[String], cwd: &Path) -> Reply {
                 Spec::value("--sought"),
                 Spec::value("--outcome"),
                 Spec::value("--route"),
+                // the door's `--root` and `--print` (T145, for `attempts.add`'s forwarder) left with its last importer, `uncited.py` (T147)
                 Spec::value("--key"),
-                // the door's two (feature 449 T145): `attempts.add`, a forwarder for `uncited.py` (and for `archive.py` until T146 ported it), names its root and
-                // reads back the line it wrote
-                Spec::value("--root"),
-                Spec::flag("--print"),
             ];
             let p = match parse_with(rest, &specs, 0) {
                 Ok(p) => p,
@@ -721,10 +745,7 @@ pub fn attempts_cli(args: &[String], cwd: &Path) -> Reply {
                     repr(outcome)
                 ));
             }
-            let root = match p.text("--root", "") {
-                "" => consulted::repo_root(Some(cwd)),
-                r => cwd.join(r),
-            };
+            let root = consulted::repo_root(Some(cwd));
             let more = More {
                 key: p.text("--key", ""),
                 route: p.text("--route", ""),
@@ -739,7 +760,6 @@ pub fn attempts_cli(args: &[String], cwd: &Path) -> Reply {
                 &more,
                 &record_dir(&root),
             ) {
-                Ok(x) if p.on("--print") => reply(dumps(&x, None, false) + "\n", String::new(), 0),
                 Ok(_) => reply(String::new(), String::new(), 0),
                 Err(f) => raised(String::new(), &f),
             }

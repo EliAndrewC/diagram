@@ -34,7 +34,7 @@ use crate::Reply;
 const ACCESS: &str = "research/source-access.json";
 const REGISTRY: &str = "research/sources/010-works-cited";
 const MANIFEST: &str = "research/archive";
-const USAGE: &str = "usage: l7r-gate record access-tags report [--key K] [--json] | set <key|download:ID> <state> <date> <reason> | entry-keys <id>\n";
+const USAGE: &str = "usage: l7r-gate record access-tags report [--key K] [--json] | set <key|download:ID> <state> <date> <reason>\n";
 
 fn compiled(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
@@ -547,17 +547,16 @@ fn report(args: &[String], root: &Path) -> Result<String, String> {
     })
 }
 
-/// `entry-keys <id>`: the registry keys that download-list entry names, as JSON; the door `archive_ops.py` reaches this module by (`ask:449-T80-order`).
-fn entry_keys(id: &str, root: &Path) -> Reply {
-    let found = load(root).map(|w| w.entry_keys.get(&format!("download:{id}")).cloned());
-    match found {
-        Err(why) => reply(String::new(), format!("access-tags: REFUSED - {why}\n"), 1),
-        Ok(None) => reply(
-            String::new(),
-            format!("archive: no download-list entry {id} in {CANON}\n"),
-            1,
-        ),
-        Ok(Some(keys)) => reply(one_line_utf8(&json!(keys)) + "\n", String::new(), 0),
+/// The registry keys download-list entry `id` names, which `record archive inbox` resolves `MATCH='<file>=#<id>'` by, in process (feature
+/// 449 T147, where `archive_ops.py` ran this as the `entry-keys` door, retired with it). Its refusal is the line the door printed.
+///
+/// # Errors
+/// The record will not load (`access-tags: REFUSED - ...`), or no entry has that id (`archive: no download-list entry ...`).
+pub fn entry_keys_of(id: &str, root: &Path) -> Result<Vec<String>, String> {
+    match load(root).map(|w| w.entry_keys.get(&format!("download:{id}")).cloned()) {
+        Err(why) => Err(format!("access-tags: REFUSED - {why}")),
+        Ok(None) => Err(format!("archive: no download-list entry {id} in {CANON}")),
+        Ok(Some(keys)) => Ok(keys.into_iter().collect()),
     }
 }
 
@@ -584,7 +583,6 @@ pub fn cli(args: &[String], root: &Path) -> Reply {
                 format!("access-tags: {key} recorded {state} ({date}) in {ACCESS} - commit it\n")
             })
         }
-        (Some("entry-keys"), [id]) => return entry_keys(id, root),
         _ => return reply(String::new(), USAGE.to_owned(), 2),
     };
     match done {

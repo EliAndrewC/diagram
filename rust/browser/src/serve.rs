@@ -1,6 +1,6 @@
 //! `l7r-browser serve`: one browser context held open for a caller that asks it, a JSON line at a time, for a request or a render
-//! (feature 449 T146) - the gate's `archive` crate, whose capture logic `archive.py` was, and through it Python's `archive.Browser`
-//! forwarder until S3b. One process a context, as `archive.py` held one Playwright context a `Browser`.
+//! (feature 449 T146) - the gate's `archive` crate, whose capture logic `archive.py` was, and the `uncited` crate's fetch (T147, where
+//! Python's `archive.Browser` forwarder reached it). One process a context, as `archive.py` held one Playwright context a `Browser`.
 //!
 //! In: `{"op": "get", "url", "headers": [[name, value], ...], "timeout_ms", "max_redirects", "out"}` (the body written to `out`),
 //! `{"op": "render", "url", "timeout_ms", "idle_ms"}`, `{"op": "close"}`. Out, a line each: `{"status", "url", "content_type"}`,

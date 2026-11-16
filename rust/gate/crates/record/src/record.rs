@@ -342,7 +342,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("fragment-move") => fragment_move::cli(rest),
         Some("agent-census") => agent_census::cli(rest, &crate::measure::home()),
         Some("access-tags") => access_tags::cli(rest, &top_level()),
-        Some("downloads") => downloads::cli(rest, &top_level()),
+        Some("downloads") => downloads::cli(rest, &top_level(), &l7r_gate_archive::cli::inbox_cli),
         Some(verb @ ("edit-route" | "fragments" | "moved-only" | "americanize")) => {
             leaves::cli(verb, rest, &mut std::io::stdin(), &current_dir())
         }
@@ -364,6 +364,9 @@ pub fn cli(args: &[String]) -> Reply {
         Some("modal-bundle") => bundle::modal::cli(rest),
         // feature 449 T146 (phase 4's S3a): `archive.py`'s commands and the doors its Python importers forward through
         Some("archive") => l7r_gate_archive::cli::cli(rest, &current_dir()),
+        Some("uncited") => {
+            l7r_gate_uncited::cli::cli(rest, &current_dir(), &reserve::reserve_uncited)
+        }
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),

@@ -6,7 +6,7 @@
 //!
 //! The canonical list is `research/to-download.md`; what was last imported, synced and ingested is `research/to-download.state.json`; the GM's copy is
 //! `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, written by `sync` alone (`download-copy-hooks` refuses a session's own write to it). Ingest ends by running the
-//! still-Python `archive_ops.py inbox` by path until its task lands (`ask:449-T80-order` step 3); nothing else here runs Python.
+//! archive's inbox, in process since feature 449 T147 (where it ran `archive_ops.py inbox` by path); nothing here runs Python.
 
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
@@ -33,11 +33,15 @@ fn compiled(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
-/// Where this run works: the clone, the GM's copy, the interpreter `ingest`'s archive step runs under and how long `add` waits for the lock.
-pub(super) struct Ctx {
+/// `ingest`'s archive step: `record archive inbox <args>` from the clone, which `record`'s dispatch hands in (feature 449 T147: the
+/// `archive` crate builds on this one, so it is reached through this, never named).
+pub type Inbox<'a> = dyn Fn(&Path, &[String]) -> Reply + 'a;
+
+/// Where this run works: the clone, the GM's copy, `ingest`'s archive step and how long `add` waits for the lock.
+pub(super) struct Ctx<'a> {
     pub(super) root: PathBuf,
     pub(super) copy: PathBuf,
-    pub(super) python: String,
+    pub(super) inbox: &'a Inbox<'a>,
     pub(super) timeout: f64,
 }
 
@@ -199,20 +203,14 @@ fn run_ingest(ctx: &Ctx, found: &[(String, String)]) -> Result<Reply, String> {
     let (mut stdout, code) = ingest::report(&done, &ctx.root)?;
     let inbox = ctx.copy.parent().unwrap_or(Path::new("."));
     let matches = ingest::inbox_matches(&done.saved, inbox);
-    let child = Command::new(&ctx.python)
-        .arg(ctx.root.join("scripts/record/archive_ops.py"))
-        .arg("inbox")
-        .args(
-            matches
-                .iter()
-                .map(|(eid, name)| format!("--match={name}={eid}")),
-        )
-        .current_dir(&ctx.root)
-        .output()
-        .map_err(text_err)?;
-    stdout += &String::from_utf8_lossy(&child.stdout);
-    let stderr = String::from_utf8_lossy(&child.stderr).into_owned();
-    let last = child.status.code().unwrap_or(1);
+    let args: Vec<String> = matches
+        .iter()
+        .map(|(eid, name)| format!("--match={name}={eid}"))
+        .collect();
+    let child = (ctx.inbox)(&ctx.root, &args);
+    stdout += &child.stdout;
+    let stderr = child.stderr;
+    let last = child.code;
     Ok(reply(stdout, stderr, if code != 0 { code } else { last }))
 }
 
@@ -255,17 +253,18 @@ fn cli_at(args: &[String], ctx: &Ctx) -> Reply {
         .unwrap_or_else(|why| reply(String::new(), format!("downloads: REFUSED - {why}\n"), 1))
 }
 
-/// `l7r-gate record downloads ...`.
+/// `l7r-gate record downloads ...`, `ingest`'s archive step `inbox` (the archive's inbox, in process since feature 449 T147 where it ran
+/// `archive_ops.py inbox` by path).
 #[must_use]
-pub fn cli(args: &[String], root: &Path) -> Reply {
-    let inbox = std::env::var("L7R_GM_SOURCES")
+pub fn cli(args: &[String], root: &Path, inbox: &Inbox<'_>) -> Reply {
+    let gm = std::env::var("L7R_GM_SOURCES")
         .unwrap_or_else(|_| "/host-l7r-repo/academic-sources".to_owned());
     cli_at(
         args,
         &Ctx {
             root: root.to_owned(),
-            copy: Path::new(&inbox).join("TO-DOWNLOAD.md"),
-            python: "python3".to_owned(),
+            copy: Path::new(&gm).join("TO-DOWNLOAD.md"),
+            inbox,
             timeout: 30.0,
         },
     )
