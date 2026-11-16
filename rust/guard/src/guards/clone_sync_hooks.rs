@@ -385,7 +385,7 @@ working tree (the 2026-07-22 collision). Work in {c} - if it does not exist: git
     }
     let mut dispatcher = std::env::var("L7R_DISPATCHER").unwrap_or_default();
     if dispatcher.is_empty() {
-        dispatcher = forked_from(&sid, &cx.session.sessions_dir);
+        dispatcher = forked_from(sid, &cx.session.sessions_dir);
     }
     let entries = (!sid.is_empty())
         .then(|| std::fs::read_dir(cx.mapdir()).ok())
