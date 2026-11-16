@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-16T15:33:14Z",
+  "target": "plan-gate push",
+  "commit": "ea2ed897e",
+  "why": "T159's own section has the round arbiter's accept ask:449-T159-rounds as its plan verdict; the other changed blocks are T160's and T161's empty templates, filed in this cut"
+}
