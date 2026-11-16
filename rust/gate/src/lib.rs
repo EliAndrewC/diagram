@@ -49,6 +49,18 @@ fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {
     }
 }
 
+/// `l7r-gate diff-run ...` (feature 449 T161): `--all`'s escape recorded in the guard log every escape writes to, under the session.
+fn diff_run(args: &[String]) -> Reply {
+    l7r_gate_diffrun::cli(
+        args,
+        &l7r_gate_diffrun::Ctx {
+            log_dir: &l7r_guard::shared::log::dir(),
+            session: std::env::var("CLAUDE_CODE_SESSION_ID").unwrap_or_default(),
+            cwd: std::env::current_dir().unwrap_or_default(),
+        },
+    )
+}
+
 /// The tree the wrapper started this binary from (`L7R_GATE_TREE`), else the repository here.
 fn gate_tree() -> PathBuf {
     std::env::var_os("L7R_GATE_TREE").map_or_else(top, PathBuf::from)
@@ -170,6 +182,8 @@ pub fn cli(args: &[String]) -> Reply {
         Some(verb @ ("page-session" | "brief-load" | "coord" | "research-claims")) => {
             pages::cli(verb, &args[1..])
         }
+        // the shared differential runner (feature 449 T161): `--all`'s escape recorded in the guard log every escape writes to
+        Some("diff-run") => diff_run(&args[1..]),
         Some("make-docs") => {
             make_docs::cli(&args[1..], &std::env::current_dir().unwrap_or_default())
         }
@@ -219,6 +233,10 @@ mod tests {
         assert!(unknown.stderr.contains("no subcommand no-such-verb"));
         assert!(cli(&[]).stderr.contains("(none given)"));
         assert_eq!(cli(&["escape".to_owned()]).code, 2);
+        // the differential runner's usage refusal (feature 449 T161), reached before any log or file
+        assert!(cli(&["diff-run".to_owned()])
+            .stderr
+            .contains("the cases file is required"));
     }
 
     #[test]

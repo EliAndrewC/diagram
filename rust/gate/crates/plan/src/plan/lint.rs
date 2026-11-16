@@ -192,7 +192,8 @@ static THRESHOLD: LazyLock<Regex> = LazyLock::new(|| {
 /// The first sentence stating a count with no label, or "" (feature 449 T159).
 fn unlabeled_count(section: &str) -> String {
     let text = FENCE.replace_all(section, " ").into_owned();
-    for sentence in split_on(&SPLIT_SENTENCE, &text) {
+    // split outside code spans: a method span such as `wc -l a. b` held the sentence's end and cut the count from its label (T161)
+    for sentence in sentences_outside_spans(&SPLIT_SENTENCE, &text) {
         let bare = SPAN.replace_all(sentence, " ");
         let bare = NOT_A_FIGURE.replace_all(&bare, " ");
         let bare = THRESHOLD.replace_all(&bare, " ");
@@ -200,6 +201,57 @@ fn unlabeled_count(section: &str) -> String {
             .iter()
             .any(|p| p.is_match(sentence).unwrap_or(false));
         if COUNT.is_match(&bare).unwrap_or(false) && !labeled {
+            return sentence
+                .split_whitespace()
+                .collect::<Vec<_>>()
+                .join(" ")
+                .chars()
+                .take(160)
+                .collect();
+        }
+    }
+    String::new()
+}
+
+// A DIFFERENTIAL'S CASE COUNT CITES THE RUNNER'S VERIFY REPORT (feature 449 T161, the plan's enforcement of the GM's 2026-11-16 approval and his 2026-11-11 words):
+// the runner reruns only the sides whose key moved, and a declaration of what a case exercises can be too narrow, so the count a plan
+// reports is the one `make diff-run ... VERIFY=1` wrote - every case's new side rerun against the kept old sides, its report's path
+// carrying `diff-run-verify`. An incremental report's path does not, nor does a hand-written loop's results file, so a port whose
+// comparison ran outside the runner cannot reach its review with that figure. The citation is looked for in the raw sentence, since
+// the path stands in a code span; the count with its code spans read as words and up to three words before its noun ("1,261 `cmd` and `sources` cases").
+static CASE_COUNT: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?i)(?<![\w.-])\d[\d,]*\s+(?:\S+\s+){0,3}?cases?\b"));
+static DIFFERENTIAL: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?i)\bdifferentials?\b|\bsame\s+outputs\b"));
+static VERIFY_REPORT: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)diff-run-verify[^\s`)]*\.json"));
+
+/// `text`'s sentences, split where `pattern` matches outside a code span: the cited command `make diff-run ... VERIFY=1` holds a period
+/// and a space inside its span, which the plain split took for a sentence's end, leaving the count without its citation (feature 449
+/// T161, found on the refusal's own example).
+fn sentences_outside_spans<'t>(pattern: &Regex, text: &'t str) -> Vec<&'t str> {
+    let masked = CODE_SPAN
+        .replace_all(text, |c: &Captures<'_>| "x".repeat(c[0].len()))
+        .into_owned();
+    let mut out = Vec::new();
+    let mut at = 0;
+    for gap in pattern.find_iter(&masked).flatten() {
+        out.push(&text[at..gap.start()]);
+        at = gap.end();
+    }
+    out.push(&text[at..]);
+    out
+}
+
+/// The first sentence stating a differential's case count that cites no runner verify report, or "" (feature 449 T161).
+fn uncited_differential(section: &str) -> String {
+    let text = FENCE.replace_all(section, " ").into_owned();
+    for sentence in sentences_outside_spans(&SPLIT_SENTENCE, &text) {
+        let words = SPAN.replace_all(sentence, "$1");
+        let words = NOT_A_FIGURE.replace_all(&words, " ");
+        if CASE_COUNT.is_match(&words).unwrap_or(false)
+            && DIFFERENTIAL.is_match(sentence).unwrap_or(false)
+            && !VERIFY_REPORT.is_match(sentence).unwrap_or(false)
+        {
             return sentence
                 .split_whitespace()
                 .collect::<Vec<_>>()
@@ -273,6 +325,10 @@ pub(super) fn refusal(spec_dir: &Path, section: &str) -> String {
     let fig = unlabeled_unit_figure(section);
     if !fig.is_empty() {
         return format!("a figure with a unit whose sentence carries no label - a measurement `measured <YYYY-MM-DD> (<method>)`, `observed <YYYY-MM-DD>, method: ...` or `m:<key>`; a decided size its research label (GUESS, CONVENTION, ...), its page or its knob - label it where it stands (feature 430 D5):\n  {fig}");
+    }
+    let fig = uncited_differential(section);
+    if !fig.is_empty() {
+        return format!("a differential's case count that cites no verify report - run `make diff-run CASES=<cases file> VERIFY=1` (every case's new side rerun against the kept old sides) and cite the report it writes, `<cases>.diff-run/reports/diff-run-verify-<UTC>.json`, in the sentence beside its label, as in \"16 cases, 0 differing (measured 2026-11-16 (`make diff-run ... VERIFY=1`, `t161/cases.diff-run/reports/diff-run-verify-20261116T120000Z.json`))\"; a hand-written loop's or an incremental run's count does not stand (feature 449 T161):\n  {fig}");
     }
     let fig = unlabeled_count(section);
     if !fig.is_empty() {

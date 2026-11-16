@@ -320,10 +320,16 @@
    "declared": "round-arbiter"
   },
   "### T161 Approach (checklist part A)": {
-   "sha256": "36e915cf1f89f124cd9a0315b9577bd8104f0e7837c3fa838913f0d690ecf214",
+   "sha256": "bdc0ecbf1e4c1f96bd7b492d54a9767ab581cbd3f7bedc744d682a5c4d2cd29c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
+  },
+  "### T161 (the GM's second approved proposal, the differentials rerunning only what a fix touched, enforced by tooling; request.md 2026-11-16, the GM 2026-11-11)": {
+   "sha256": "9e21d63223a37c241c4df9cf9c0f0862f1f1af3c75250de6c36253e600aa4ddc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -9302,6 +9308,95 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T161 (the GM's second approved proposal, the differentials rerunning only what a fix touched, enforced by tooling; request.md 2026-11-16, the GM 2026-11-11)",
+    "### T161 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T161-runner",
+     "summary": "One shared differential runner, l7r-gate diff-run in a new Rust gate crate, used by every port task's comparison from T147 on in place of hand-written driver loops",
+     "class": "within",
+     "why": "It is the GM's approved second proposal of 2026-11-16 ('the differentials rerunning only what a fix touched' ... 'please proceed with that'); Rust is FR-001's rule for new tooling, and it carries FR-002's comparison rather than changing it."
+    },
+    {
+     "id": "T161-shape",
+     "summary": "Case shape: per-side world built by a setup command into a fresh directory, both sides as command templates, per-case steps, outputs compared (exit, stdout, stderr, every file written under the world, named extra files), one results row a case",
+     "class": "within",
+     "why": "Takes the shape the T143-T146 harnesses share, so no case is lost moving onto it; the outputs compared are at least what FR-002 binds (verdicts and outputs)."
+    },
+    {
+     "id": "T161-normalizations",
+     "summary": "Named normalizations (regex and replacement), each listed in the report as taken",
+     "class": "within",
+     "why": "The runner provides and reports the facility; it pre-authorizes no particular normalization, so FR-002's binding of outputs is not relaxed by this block - each normalization a port uses still answers to FR-002 and its ruled cases, and is visible in the report."
+    },
+    {
+     "id": "T161-old-key",
+     "summary": "The old side's result is kept on a key over the case definition, its normalizations, declared inputs and the old side's fingerprint (its files, the Python tree at its revision), so a port fix never reruns it",
+     "class": "within",
+     "why": "The old Python does not change under a port fix (FR-003 keeps it as is until replaced); any change to what it runs from moves its key. Rerunning it would only repeat a result the key proves unchanged - exactly the 'rerunning only what a fix touched' the GM approved."
+    },
+    {
+     "id": "T161-new-key",
+     "summary": "The new side's key uses the content of the source paths a case declares it exercises instead of the whole binary (whole new-side fingerprint when none declared), so an incremental run can keep a new-side result on a hand-written declaration",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "On the incremental path a kept new-side result rests on a declaration that can be too narrow, which is less than FR-002's 'every case'. Legitimate because it is the GM's own words ('rerunning only what a fix touched', 2026-11-16) and because the block itself preserves FR-002's purpose: the figures a plan reports come from --verify, one run of every case's new side against the kept old sides, named in the report as a verify run. The ruling rests on that sentence; the lint as described checks only that a diff-run report is cited, not that it is a verify run, so verify-backing is a stated rule rather than a tool-enforced one (noted, not blocking: the block does not relax FR-002)."
+    },
+    {
+     "id": "T161-verify-only",
+     "summary": "--verify reruns every case's new side at the end and is the source of a plan's reported figures; --only <name> reruns one case",
+     "class": "within",
+     "why": "--verify is what keeps FR-002's every-case proof under incremental reruns; --only is a narrower rerun, the direction the GM's 2026-11-11 words ask for."
+    },
+    {
+     "id": "T161-twice",
+     "summary": "--twice runs the old side twice and reports what differs, as evidence a normalization covers only run-to-run noise",
+     "class": "within",
+     "why": "Moves into the runner a check T146's harness already did by hand; it bounds normalizations, serving FR-002, and adds no behavior the request lacks."
+    },
+    {
+     "id": "T161-default-incremental",
+     "summary": "Incremental rerun is the runner's default",
+     "class": "within",
+     "why": "The GM 2026-11-11: 'our tooling must enforce this' so sessions do not drift back to the slowest command; the default is that enforcement."
+    },
+    {
+     "id": "T161-all-reason",
+     "summary": "--all (every side of every case) takes REASON= of two words or more, recorded in the report and the guard log, as FR-011's escapes do",
+     "class": "within",
+     "why": "Same escape shape FR-011 already gives make rust-test and make static; it enforces the requested incremental default and does not forbid the full run."
+    },
+    {
+     "id": "T161-decide-lint",
+     "summary": "make decide's lint refuses a sentence stating a differential's case count (cases beside 'differential' or FR-002's 'same outputs') that cites no diff-run runner report",
+     "class": "within",
+     "why": "Enforcement of the requested thing - port differentials going through the runner that reruns only what a fix touched - as the GM's 2026-11-11 rule asks ('our tooling must enforce this'). Note: it is a refusing guard and the block does not bound which features or tasks make decide applies it to; the GM's enforcement rule is not feature-limited, so not ruled out of scope, but its reach is worth stating in the plan."
+    },
+    {
+     "id": "T161-out-of-scope",
+     "summary": "What a world needs beyond a setup command (network namespace, loopback server, bare remote) stays the harness's setup script, which the runner runs and keys",
+     "class": "within",
+     "why": "No class of case escapes the runner: the setup script is still run by it and is part of the key, so such cases still rerun only when touched. Only native modelling of those worlds is left out, which the request never asked for."
+    },
+    {
+     "id": "T161-order-exits",
+     "summary": "Order after T159 and before T147 (its first user); exits: the crate's tests and coverage including named rerun/keep/verify/--all/lint cases, make land green; done measured by T147's runner reports counting reruns and kept sides, figures from a verify run",
+     "class": "within",
+     "why": "Order follows the GM's ranked list (figure check first, then the differentials); FR-004 coverage held; the exit tests check the requested behavior."
+    },
+    {
+     "id": "T161-not-performance",
+     "summary": "Classed 'Performance work? No' - it saves an agent's waiting on reruns, not the tools' running time",
+     "class": "within",
+     "why": "The task is filed under the GM's direct approval of 2026-11-16, not the 2026-11-12 conditional pre-approval, so that pre-approval's measured-target condition does not govern it; it still carries a dated, methoded measurement of the wait it targets. The classification narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16610,6 +16705,93 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T161": {
+   "section_sha256": "440dd677459aec46096947a23fcf563c79a90139dfbe9ce5a13ea7efe995084d",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T161-runner",
+     "summary": "One shared differential runner, l7r-gate diff-run in a new Rust gate crate, used by every port task's comparison from T147 on in place of hand-written driver loops",
+     "class": "within",
+     "why": "It is the GM's approved second proposal of 2026-11-16 ('the differentials rerunning only what a fix touched' ... 'please proceed with that'); Rust is FR-001's rule for new tooling, and it carries FR-002's comparison rather than changing it."
+    },
+    {
+     "id": "T161-shape",
+     "summary": "Case shape: per-side world built by a setup command into a fresh directory, both sides as command templates, per-case steps, outputs compared (exit, stdout, stderr, every file written under the world, named extra files), one results row a case",
+     "class": "within",
+     "why": "Takes the shape the T143-T146 harnesses share, so no case is lost moving onto it; the outputs compared are at least what FR-002 binds (verdicts and outputs)."
+    },
+    {
+     "id": "T161-normalizations",
+     "summary": "Named normalizations (regex and replacement), each listed in the report as taken",
+     "class": "within",
+     "why": "The runner provides and reports the facility; it pre-authorizes no particular normalization, so FR-002's binding of outputs is not relaxed by this block - each normalization a port uses still answers to FR-002 and its ruled cases, and is visible in the report."
+    },
+    {
+     "id": "T161-old-key",
+     "summary": "The old side's result is kept on a key over the case definition, its normalizations, declared inputs and the old side's fingerprint (its files, the Python tree at its revision), so a port fix never reruns it",
+     "class": "within",
+     "why": "The old Python does not change under a port fix (FR-003 keeps it as is until replaced); any change to what it runs from moves its key. Rerunning it would only repeat a result the key proves unchanged - exactly the 'rerunning only what a fix touched' the GM approved."
+    },
+    {
+     "id": "T161-new-key",
+     "summary": "The new side's key uses the content of the source paths a case declares it exercises instead of the whole binary (whole new-side fingerprint when none declared), so an incremental run can keep a new-side result on a hand-written declaration",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "On the incremental path a kept new-side result rests on a declaration that can be too narrow, which is less than FR-002's 'every case'. Legitimate because it is the GM's own words ('rerunning only what a fix touched', 2026-11-16) and because the block itself preserves FR-002's purpose: the figures a plan reports come from --verify, one run of every case's new side against the kept old sides, named in the report as a verify run. The ruling rests on that sentence; the lint as described checks only that a diff-run report is cited, not that it is a verify run, so verify-backing is a stated rule rather than a tool-enforced one (noted, not blocking: the block does not relax FR-002)."
+    },
+    {
+     "id": "T161-verify-only",
+     "summary": "--verify reruns every case's new side at the end and is the source of a plan's reported figures; --only <name> reruns one case",
+     "class": "within",
+     "why": "--verify is what keeps FR-002's every-case proof under incremental reruns; --only is a narrower rerun, the direction the GM's 2026-11-11 words ask for."
+    },
+    {
+     "id": "T161-twice",
+     "summary": "--twice runs the old side twice and reports what differs, as evidence a normalization covers only run-to-run noise",
+     "class": "within",
+     "why": "Moves into the runner a check T146's harness already did by hand; it bounds normalizations, serving FR-002, and adds no behavior the request lacks."
+    },
+    {
+     "id": "T161-default-incremental",
+     "summary": "Incremental rerun is the runner's default",
+     "class": "within",
+     "why": "The GM 2026-11-11: 'our tooling must enforce this' so sessions do not drift back to the slowest command; the default is that enforcement."
+    },
+    {
+     "id": "T161-all-reason",
+     "summary": "--all (every side of every case) takes REASON= of two words or more, recorded in the report and the guard log, as FR-011's escapes do",
+     "class": "within",
+     "why": "Same escape shape FR-011 already gives make rust-test and make static; it enforces the requested incremental default and does not forbid the full run."
+    },
+    {
+     "id": "T161-decide-lint",
+     "summary": "make decide's lint refuses a sentence stating a differential's case count (cases beside 'differential' or FR-002's 'same outputs') that cites no diff-run runner report",
+     "class": "within",
+     "why": "Enforcement of the requested thing - port differentials going through the runner that reruns only what a fix touched - as the GM's 2026-11-11 rule asks ('our tooling must enforce this'). Note: it is a refusing guard and the block does not bound which features or tasks make decide applies it to; the GM's enforcement rule is not feature-limited, so not ruled out of scope, but its reach is worth stating in the plan."
+    },
+    {
+     "id": "T161-out-of-scope",
+     "summary": "What a world needs beyond a setup command (network namespace, loopback server, bare remote) stays the harness's setup script, which the runner runs and keys",
+     "class": "within",
+     "why": "No class of case escapes the runner: the setup script is still run by it and is part of the key, so such cases still rerun only when touched. Only native modelling of those worlds is left out, which the request never asked for."
+    },
+    {
+     "id": "T161-order-exits",
+     "summary": "Order after T159 and before T147 (its first user); exits: the crate's tests and coverage including named rerun/keep/verify/--all/lint cases, make land green; done measured by T147's runner reports counting reruns and kept sides, figures from a verify run",
+     "class": "within",
+     "why": "Order follows the GM's ranked list (figure check first, then the differentials); FR-004 coverage held; the exit tests check the requested behavior."
+    },
+    {
+     "id": "T161-not-performance",
+     "summary": "Classed 'Performance work? No' - it saves an agent's waiting on reruns, not the tools' running time",
+     "class": "within",
+     "why": "The task is filed under the GM's direct approval of 2026-11-16, not the 2026-11-12 conditional pre-approval, so that pre-approval's measured-target condition does not govern it; it still carries a dated, methoded measurement of the wait it targets. The classification narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

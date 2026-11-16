@@ -5,7 +5,7 @@ use std::path::Path;
 use super::super::tests::{feature_at, run};
 use super::{
     gm_quotes_missing, missing_red_exit, plan_refusal, refusal, tasks_without_approach,
-    unlabeled_count, unlabeled_figure, unlabeled_unit_figure,
+    uncited_differential, unlabeled_count, unlabeled_figure, unlabeled_unit_figure,
 };
 use crate::checks::scratch;
 
@@ -208,6 +208,7 @@ fn a_count_needs_a_label_in_its_sentence() {
     for fine in [
         "Forwarders of 198, 98 and 66 lines (observed 2026-11-16, method: `wc -l`).\n",
         "Its 1,261 cases, measured 2026-11-16 (the harness).\n",
+        "The 1,261 cases differ in none (`run.sh a. b`, observed 2026-11-16, method: the run).\n",
         "The 1,261 cases (`m:t145-cases`).\n",
         "No file over 1,000 lines; at most 10 keys a write.\n",
         "The review ruled 14 decisions and 11 recipes.\n",
@@ -216,5 +217,51 @@ fn a_count_needs_a_label_in_its_sentence() {
         "Task T145 and FR-002 on 2026-11-16.\n",
     ] {
         assert_eq!(unlabeled_count(fine), "", "{fine}");
+    }
+}
+
+#[test]
+fn a_differential_count_cites_the_runners_verify_report() {
+    // feature 449 T161: the count a plan reports is the one `make diff-run ... VERIFY=1` wrote
+    let hand = "- The differential's 109 cases, 0 differing (observed 2026-11-16, method: `t146/harness/driver.py`, `final/results.jsonl`).\n";
+    let told = refusal(Path::new("/no/such"), hand);
+    assert!(told.contains("cites no verify report"));
+    assert!(told.contains("make diff-run CASES=<cases file> VERIFY=1"));
+    assert!(told.contains("109 cases"));
+    let incremental = "The differential ran 16 cases (measured 2026-11-16 (`make diff-run`, `t161/cases.diff-run/reports/diff-run-incremental-20261116T120000Z.json`)).\n";
+    assert!(uncited_differential(incremental).contains("16 cases"));
+    for refused in [
+        "FR-002's same outputs over 1,261 `cmd` and `sources` cases.\n",
+        "Same outputs on 16 Cases.\n",
+        "Two differentials, 3 of 16 cases differing.\n",
+    ] {
+        assert!(!uncited_differential(refused).is_empty(), "{refused}");
+    }
+    let cited = "The differential's 16 cases, 0 differing (measured 2026-11-16 (`make diff-run CASES=t161/cases.json VERIFY=1`, `t161/cases.diff-run/reports/diff-run-verify-20261116T120000Z.json`)).\n";
+    // a cited, labeled count passes the whole lint
+    assert_eq!(refusal(Path::new("/no/such"), cited), "");
+    // and so does the refusal's own example, whose cited command holds a period inside its code span
+    let example = told
+        .split("as in \"")
+        .nth(1)
+        .unwrap()
+        .split("\";")
+        .next()
+        .unwrap();
+    assert_eq!(
+        refusal(
+            Path::new("/no/such"),
+            &format!("The differential's {example}.\n")
+        ),
+        ""
+    );
+    for fine in [
+        cited,
+        "The differential's cases are the harness's.\n",
+        "It has 16 cases, none differing (observed 2026-11-16, method: the suite).\n",
+        "The differential (T146) rows of 2026-11-16 differ.\n",
+        "```\nthe differential's 16 cases\n```\n",
+    ] {
+        assert_eq!(uncited_differential(fine), "", "{fine}");
     }
 }

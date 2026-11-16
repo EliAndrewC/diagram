@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 192 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 193 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -147,6 +147,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make claims-triage</td><td class=a>OUT</td><td>the claims owed only a TRIAGE (a page they cite moved, the blocks they rest on stand): one bundle of the new or changed blocks for one agent   [OUT=&lt;dir&gt;]</td></tr>
 <tr><td class=n>make claims-triaged</td><td class=a>BUNDLE REPLY</td><td>record a triage reply: a claim it names (TOUCHES) is owed impl-drift, every other claim of the bundle is cleared</td></tr>
 <tr><td class=n>make decide</td><td class=a>F T</td><td>the spec-fidelity dispatch that rules on one task&#x27;s plan section before its checks (feature 375)</td></tr>
+<tr><td class=n>make diff-run</td><td class=a>ALL CASES ONLY REASON TWICE VERIFY</td><td>run a differential&#x27;s cases on both sides, rerunning only what a fix touched (feature 449 T161; docs/diff-run.md)</td></tr>
 <tr><td class=n>make dispatch-dropped</td><td class=a>BUNDLE TYPE WHY</td><td>record that a dispatch a guard refused is no longer wanted, so the turn may end (feature 385 T22)</td></tr>
 <tr><td class=n>make docs</td><td class=a>&ndash;</td><td>regenerate docs/make-targets.html from this Makefile&#x27;s own `##` lines</td></tr>
 <tr><td class=n>make download-add</td><td class=a>FILE</td><td>append a source only the GM can fetch at the end of the canonical download list, under the next number taken under a host-wide lock (feature 313)</td></tr>

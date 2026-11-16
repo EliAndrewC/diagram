@@ -671,26 +671,31 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T161 (<why: the finding or measurement that files it>)
+### T161 (the GM's second approved proposal, the differentials rerunning only what a fix touched, enforced by tooling; request.md 2026-11-16, the GM 2026-11-11)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one shared differential runner in the repository, `l7r-gate diff-run <cases file>` (a new gate crate, Rust as all new tooling is under FR-001), which every port task's comparison uses from T147 on in place of a hand-written driver loop: it runs each case on both sides, compares, records, and after a fix reruns only the cases whose key moved.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (the GM's words in request.md, 2026-11-16 and 2026-11-11; FR-002, whose proof the runner carries; `ask:449-T159-rounds`, which filed it):
+   - Why: the differential is the part of a port task's time a script can cut. T145's agent waited on its harness 53.8 min in the background and 10.1 min in the foreground of a 232 min run, and T143's 20.9 min and 9.2 min of a 100 min run (observed 2026-11-16, method: each tool call's and background run's wait in the agents' transcripts, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/agent_time.py`); each of those runs reran every case after each fix, the hand-written drivers keeping no record of what a case had already shown.
+   - The shape is the one the hand-written harnesses of T143 to T146 share, so a port's harness moves onto it without losing a case: a world built per side (a setup command run into a fresh directory), the two sides as command templates over that world, each case's steps, the outputs compared (exit, stdout, stderr, every file the case wrote under the world, named extra files such as a server's log), named normalizations (a regex and its replacement, each listed in the report as taken), and one results row a case.
+   - Each side of a case is kept on its own key, so a fix to the port reruns what it could change and nothing else: the old side's key is the hash of the case's definition, its normalizations, the content of the inputs it declares and the old side's fingerprint (the files it runs from, the Python tree at its revision), so a fix to the port never moves it and the old side's recorded result stands across every rerun of a task; the new side's key is the same with, in place of the whole binary, the content of the source paths the case declares it exercises (a crate's directory, say), so a fix reruns the new side of the cases whose declared sources it touched. A case that declares no sources keys its new side on the whole new-side fingerprint, as a rebuild then reruns it. Because a declaration can be too narrow, the figures a plan reports come from `--verify`, one run of every case's new side at the end against the kept old sides, which the report names as a verify run; `--only <name>` reruns one case.
+   - Noise is the runner's too: `--twice` runs the old side twice and reports what differs between the two runs, the evidence that a normalization covers run-to-run noise and nothing more (T146's harness did this by hand).
+   - Enforced by tooling, as the GM's 2026-11-11 words ask: the runner makes the incremental rerun its default; `--all`, which reruns every side of every case, takes a `REASON=` of two words or more and records it in the report and the guard log, as the gate's escapes do (FR-011); and `make decide`'s lint refuses a sentence stating a differential's case count (`cases` beside `differential` or FR-002's `same outputs`) that cites no runner verify report - the path `--verify` writes, which carries `diff-run-verify` in its name, a report of an incremental run not counting - in any feature's plan, so a port whose comparison ran through a hand-written loop cannot reach its review with that figure.
+   - Out of scope: what a world needs beyond a setup command (a network namespace, a loopback server, a bare remote) stays the harness's setup script, which the runner runs and keys.
 
 ### T161 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A port's differential reruns after a fix only the cases the fix could change, through one runner every port uses.
+2. **The constraints.** The GM's words (request.md, 2026-11-16 and 2026-11-11); FR-002, whose comparison it carries; FR-001 and FR-004 (new tooling in Rust, full line coverage).
+3. **Where each comes from.** G: the GM's approval and his enforcement rule; O: the transcript split above; R: the four hand-written harnesses whose shape it takes.
+4. **Do they describe the world here?** The shape read from T143's to T146's harnesses, measured 2026-11-16 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/agent_time.py`).
+5. **The order.** After T159; before T147, whose differential is its first user.
+6. **The exits.** Green: the crate's tests and coverage - among them a case whose input moved rerun and one whose did not kept, a change to one declared source rerunning only the new side of the cases declaring it with every old side kept, `--verify` rerunning every new side, `--all` refused without a reason, and the lint refusing a differential count with no runner report - and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The crate's tests, and T147's runner reports counting, after each fix, the sides it reran and the sides it kept, its figures from a verify run.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No - it saves an agent's waiting on reruns, not the tools' running time.
 

@@ -23,6 +23,7 @@ l7r_gate_ci = { path = "crates/ci" }
 l7r_gate_claims = { path = "crates/claims" }
 l7r_gate_cohort = { path = "crates/cohort" }
 l7r_gate_core = { path = "crates/core" }
+l7r_gate_diffrun = { path = "crates/diffrun" }
 l7r_gate_measure = { path = "crates/measure" }
 l7r_gate_owed = { path = "crates/owed" }
 l7r_gate_pages = { path = "crates/pages" }

@@ -1,0 +1,20 @@
+# The shared differential runner (feature 449 T161, the GM 2026-11-16 and 2026-11-11): `l7r-gate diff-run <cases file>`, which every port
+# task's comparison uses in place of a hand-written driver loop. Its own crate on `core` alone: it reads no plan, review or claim, so an
+# edit here rebuilds nothing below the binary (T92).
+[package]
+name = "l7r_gate_diffrun"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

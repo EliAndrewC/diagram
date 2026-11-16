@@ -562,6 +562,14 @@ decide:         ## [project] the spec-fidelity dispatch that rules on one task's
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan decide "$(F)" "$(T)"
 
+# THE SHARED DIFFERENTIAL RUNNER (feature 449 T161; the GM 2026-11-16 and 2026-11-11): every port's comparison runs here, not through a
+# hand-written driver loop. The default reruns only the sides whose key moved; VERIFY=1 reruns every new side and writes the report a
+# plan's case count cites (`make decide` refuses an uncited one); ALL=1 takes a REASON, which the runner itself refuses short and records
+# in the guard log, so a direct `l7r-gate diff-run --all` is held the same (docs/diff-run.md).
+diff-run:       ## [project] run a differential's cases on both sides, rerunning only what a fix touched (feature 449 T161; docs/diff-run.md)   CASES=<cases file> [ONLY=<case name>] [VERIFY=1] [TWICE=1] [ALL=1 REASON="..."]
+	@if [ -z "$(CASES)" ]; then printf 'make diff-run: CASES=<cases file> is required (docs/diff-run.md has the format)\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" diff-run "$(CASES)" $(if $(ONLY),--only "$(ONLY)",) $(if $(VERIFY),--verify,) $(if $(TWICE),--twice,) $(if $(ALL),--all --reason "$(REASON)",)
+
 section-sha:    ## [project] {internal} the digest of one task's plan section, which a decision preflight records   F=375 T=T13
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan section-sha "$(F)" "$(T)"
 
