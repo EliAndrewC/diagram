@@ -419,3 +419,6 @@
 - [x] T159 The pre-review count check: make decide refuses a count (lines, cases, files ...) whose sentence carries no label, the plan review's commonest unreviewable return (request.md 2026-11-16)
       research: rendering
       verify: DONE. landed: make decide refuses an unlabeled count; plan crate tests green, coverage complete; ask:449-T159-rounds
+- [x] T161 The differential runner, the GM's second approved proposal (request.md 2026-11-16) enforced by tooling (the GM 2026-11-11, 'our tooling must enforce this'): one shared runner in the repository that keys each case by the inputs and code it runs and reruns after a fix only the cases whose key moved, the port briefs from T147 on using it
+      research: rendering
+      verify: DONE. landed: the shared differential runner and its lint; 16 real cases rerun 32/0/6/16 sides across a first, a no-change, a one-file and a verify run

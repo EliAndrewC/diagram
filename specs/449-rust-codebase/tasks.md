@@ -68,8 +68,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T160 Compile and test speed, the GM's third approved proposal (request.md 2026-11-16), ordered last: first measure where compile and test time goes across a port task, then take any target with a significant measured saving
       research: rendering
-- [ ] T161 The differential runner, the GM's second approved proposal (request.md 2026-11-16) enforced by tooling (the GM 2026-11-11, 'our tooling must enforce this'): one shared runner in the repository that keys each case by the inputs and code it runs and reruns after a fix only the cases whose key moved, the port briefs from T147 on using it
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
