@@ -138,6 +138,8 @@ fn the_rust_walk_skips_the_tooling_crates_and_targets_and_keeps_python_order() {
     let root = fixture("claims-units-walk");
     put(&root, "rust/phases/src/a-x/c.rs", "pub fn c() {}\n");
     put(&root, "rust/phases/src/a/b.rs", "pub fn b() {}\n");
+    put(&root, "rust/browser/src/lib.rs", "pub fn launch() {}\n");
+    put(&root, "rust/gate/src/lib.rs", "pub fn cli() {}\n");
     let paths: Vec<String> = rglob(&root.join("rust"), ".rs")
         .iter()
         .map(|p| super::rel(p, &root))
