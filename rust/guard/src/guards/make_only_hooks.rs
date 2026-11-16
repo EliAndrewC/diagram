@@ -246,9 +246,7 @@ pub(crate) fn classify(cmd: &str) -> String {
         return "bare-cargo".to_owned();
     }
     // every replacement binary (FR-005): `l7r-rust` (T93) and `l7r-browser` (T146) too, which `l7r-gate.sh rust` and `browser` run
-    if (cmd.contains("l7r-") || cmd.contains("hamlet"))
-        && hit(&BINARY, &clean)
-    {
+    if (cmd.contains("l7r-") || cmd.contains("hamlet")) && hit(&BINARY, &clean) {
         return "bare-binary".to_owned();
     }
     if cmd.contains("make") && cmd.matches('=').count() >= 2 {
