@@ -13,9 +13,10 @@ use serde_json::Value;
 
 use crate::guards::finished_run_hooks::runs::realpath;
 use crate::protocol::{Answer, Event, Guard};
+use crate::shared::blocked::{blocked, domains, refusal, Rule};
+use crate::shared::cited_url::url_id;
 use crate::shared::log;
 use crate::shared::session::Session;
-use crate::shared::sha256;
 use crate::shared::state::field;
 use crate::shared::tool::ask_within;
 
@@ -27,7 +28,6 @@ pub const GUARD: Guard = Guard {
     decide,
 };
 
-const LIST: &str = "blocked-domains.json";
 /// CONVENTION: how much of what was sought an attempt keeps (`SOUGHT_CHARS`).
 const SOUGHT_CHARS: usize = 300;
 /// CONVENTION: under the 15 s the shell guard's settings entry gave it; a hung log read costs the fetch its context and nothing else.
@@ -50,14 +50,6 @@ static URL: LazyLock<Regex> =
 static HEREDOC: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?ms)<<-?\s*(['"]?)(\w+)\1[^\n]*\n.*?^\s*\2\s*$"#));
 static HTTP_URL: LazyLock<Regex> = LazyLock::new(|| re(r#"(?i)https?://[^\s'"<>)]+"#));
-static SCHEME: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)^[a-z][a-z0-9+.-]*://"));
-
-/// One entry of the blocked list.
-struct Rule {
-    domain: String,
-    reason: String,
-    approved: String,
-}
 
 /// What this guard needs from outside the call.
 pub(crate) struct Ctx<'a> {
@@ -66,52 +58,10 @@ pub(crate) struct Ctx<'a> {
     pub(crate) python: &'a str,
 }
 
-fn rule_of(raw: &Value) -> Option<Rule> {
-    let approved = raw.get("approved")?;
-    let (domain, reason) = (field(raw, "domain"), field(raw, "reason"));
-    let (date, words) = (field(approved, "date"), field(approved, "words"));
-    [domain, reason, date, words]
-        .iter()
-        .all(|f| !f.is_empty())
-        .then(|| Rule {
-            domain: domain.to_lowercase().trim_matches('.').to_owned(),
-            reason: reason.to_owned(),
-            approved: format!("{date}: {words}"),
-        })
-}
-
-/// The list: a missing file is an empty list, and a list that cannot be trusted is None (the loader's refusal, under which every fetch passed).
+/// The list: a missing file is an empty list, and a list that cannot be trusted is None (the loader's refusal, under which every fetch
+/// passed) - the record's one reader, `shared::blocked` (feature 449 T144).
 fn rules(tree: &Path) -> Option<Vec<Rule>> {
-    let Ok(text) = std::fs::read_to_string(tree.join("research").join(LIST)) else {
-        return Some(Vec::new());
-    };
-    let data: Value = serde_json::from_str(&text).ok()?;
-    data.get("domains")
-        .and_then(Value::as_array)
-        .map_or(&[][..], Vec::as_slice)
-        .iter()
-        .map(rule_of)
-        .collect()
-}
-
-/// The URL's host, lower-cased; a URL written without its scheme is read as https.
-fn host(url: &str) -> String {
-    let u = url.trim();
-    let rest = SCHEME.find(u).ok().flatten().map_or(u, |m| &u[m.end()..]);
-    let authority = rest.split(['/', '?', '#']).next().unwrap_or("");
-    let at = authority.rsplit('@').next().unwrap_or("");
-    let name = match at.strip_prefix('[') {
-        Some(inner) => inner.split(']').next().unwrap_or(""),
-        None => at.split(':').next().unwrap_or(""),
-    };
-    name.to_lowercase().trim_matches(['.', '[', ']']).to_owned()
-}
-
-/// The rule a URL falls under: its host is the domain or a subdomain, never a name that merely ends with the same letters.
-fn blocked<'r>(url: &str, list: &'r [Rule]) -> Option<&'r Rule> {
-    let h = host(url);
-    list.iter()
-        .find(|r| h == r.domain || h.ends_with(&format!(".{}", r.domain)))
+    domains(&tree.join("research")).ok()
 }
 
 /// `cmd` with each heredoc gone: a fetch named only in a body is a script's text, refused if blocked yet never logged as an attempt.
@@ -194,21 +144,13 @@ fn clone_of(cwd: &str, here: &Path) -> Option<PathBuf> {
         .map(Path::to_path_buf)
 }
 
-/// Whether the source archive holds a row for the URL, its entities already decoded (`record/archive.py:clean`, restated).
-fn archived(root: &Path, plain: &str) -> bool {
-    let mut clean = plain.split('#').next().unwrap_or("");
-    loop {
-        let close = clean.matches(')').count() > clean.matches('(').count();
-        if clean.ends_with(['.', ',', ';', ':']) || (clean.ends_with(')') && close) {
-            clean = &clean[..clean.len() - 1];
-        } else {
-            break;
-        }
-    }
-    let uid = sha256::hex(clean.as_bytes());
+/// Whether the source archive holds a row for the URL, by the archive's own id (`shared::cited_url`, feature 449 T144: this restatement
+/// had dropped `hm_fetch.archived`'s unescaping).
+fn archived(root: &Path, url: &str) -> bool {
+    let uid = url_id(url);
     root.join("research/archive")
         .join(&uid[..2])
-        .join(format!("{}.json", &uid[..12]))
+        .join(format!("{uid}.json"))
         .is_file()
 }
 
@@ -276,8 +218,8 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
             session,
         );
         return vec![Answer::Refuse(format!(
-            "BLOCKED: this {tool} refused: {url} is on the blocked list ({LIST}: {} - {}; approved {}). Find the same fact on another page; a blocked site is never read, cited or recorded.",
-            rule.domain, rule.reason, rule.approved
+            "BLOCKED: {}",
+            refusal(url, rule, &format!("this {tool}"))
         ))];
     }
     let urls: Vec<String> = fetch

@@ -165,13 +165,9 @@ fn parse(text: &str) -> (Vec<Row>, Vec<String>) {
     (documented, undocumented)
 }
 
-/// `html.escape(text)`: `&`, `<`, `>`, `"` and `'`.
+/// `html.escape(text)`: `&`, `<`, `>`, `"` and `'` - the guard's, one implementation (feature 449 T144).
 fn escape(text: &str) -> String {
-    text.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&#x27;")
+    l7r_guard::shared::html_text::escape(text, true)
 }
 
 /// The arguments column: each documented argument on its own line with what it DOES. An undocumented argument still shows (its bare

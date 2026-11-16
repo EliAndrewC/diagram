@@ -148,13 +148,9 @@ fn pool_page_with(root: &Path, key: &str, sheet: bool) -> Option<PathBuf> {
     None
 }
 
-/// `html.escape(text, quote=True)`.
+/// `html.escape(text, quote=True)`: the guard's, one implementation (feature 449 T144).
 fn html_escape(text: &str) -> String {
-    text.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&#x27;")
+    l7r_guard::shared::html_text::escape(text, true)
 }
 
 /// The first `n` characters of `text` from character `at`.

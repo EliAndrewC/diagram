@@ -106,9 +106,31 @@ pub fn unescape(text: &str) -> String {
         .into_owned()
 }
 
+/// `html.escape(text, quote)`: `&`, `<` and `>`, and with `quote` both quotation marks (moved here by feature 449 T144 from the private
+/// copies in the gate's `bundle::depiction` and `cohort::make_docs`, which the research record's port needs a third time; one implementation).
+#[must_use]
+pub fn escape(text: &str, quote: bool) -> String {
+    let out = text
+        .replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;");
+    if quote {
+        out.replace('"', "&quot;").replace('\'', "&#x27;")
+    } else {
+        out
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use super::unescape;
+    use super::{escape, unescape};
+
+    /// `CPython`'s `html.escape` on the same text, quoting and not.
+    #[test]
+    fn escape_is_html_escape() {
+        assert_eq!(escape("a&<b>\"c'", true), "a&amp;&lt;b&gt;&quot;c&#x27;");
+        assert_eq!(escape("a&<b>\"c'", false), "a&amp;&lt;b&gt;\"c'");
+    }
 
     /// Each answer is `CPython`'s `html.unescape` on the same text (observed 2026-11-10).
     #[test]

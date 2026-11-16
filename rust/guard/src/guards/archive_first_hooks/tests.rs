@@ -4,8 +4,9 @@ use std::path::Path;
 
 use serde_json::json;
 
-use super::{cited, decide, held, judge};
+use super::{decide, held, judge};
 use crate::protocol::{Answer, Event};
+use crate::shared::cited_url::clean as cited;
 use crate::shared::session::Session;
 use crate::shared::sha256::hex;
 

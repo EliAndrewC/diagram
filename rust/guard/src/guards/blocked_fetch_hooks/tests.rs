@@ -4,8 +4,9 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
-use super::{archived, clone_of, decide, fetch_of, host, judge, sans_heredocs, Ctx};
+use super::{archived, clone_of, decide, fetch_of, judge, sans_heredocs, Ctx};
 use crate::protocol::{Answer, Event};
+use crate::shared::blocked::host;
 use crate::shared::session::Session;
 use crate::shared::sha256;
 

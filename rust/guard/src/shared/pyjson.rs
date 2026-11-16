@@ -90,7 +90,7 @@ pub fn py_str(value: &Value) -> String {
 
 /// `repr()` of what `json.loads` made of a value: a list or dict as Python prints one.
 #[must_use]
-fn value_repr(value: &Value) -> String {
+pub fn value_repr(value: &Value) -> String {
     use crate::shared::py_text::repr;
     match value {
         Value::String(s) => repr(s),

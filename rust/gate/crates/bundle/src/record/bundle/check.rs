@@ -94,13 +94,8 @@ pub fn url_of(entry_html: &str) -> String {
     let Some(found) = URL.find(entry_html).ok().flatten() else {
         return String::new();
     };
-    let mut url = unescape(found.as_str());
-    while url.ends_with(['.', ',', ';', ':'])
-        || (url.ends_with(')') && url.matches(')').count() > url.matches('(').count())
-    {
-        url.pop();
-    }
-    url
+    // the archive's trim, one implementation (`shared::cited_url`, feature 449 T144)
+    l7r_guard::shared::cited_url::trimmed(&unescape(found.as_str())).to_owned()
 }
 
 /// The one registry file of a key: its four-digit prefix and the key, nothing between.

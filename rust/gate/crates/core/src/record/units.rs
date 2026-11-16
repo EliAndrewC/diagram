@@ -122,8 +122,9 @@ fn digest_of<S: AsRef<str>>(parts: &[S]) -> String {
     digest(&parts.iter().map(AsRef::as_ref).collect::<Vec<_>>())
 }
 
-/// `dict(findall)` of a stored-originals file: the last of a key wins.
-fn stored_table(originals: &str) -> HashMap<String, String> {
+/// `dict(findall)` of a stored-originals file: the last of a key wins (also `originals.restore`'s table, the research crate's, feature 449 T144).
+#[must_use]
+pub fn stored_table(originals: &str) -> HashMap<String, String> {
     pairs_of(&ORIG_STORED, originals).into_iter().collect()
 }
 

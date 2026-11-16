@@ -1,0 +1,23 @@
+# The research record's core (feature 449 T144, phase 4's S1 under `ask:449-phase4-slices`): the record read, checked and assembled as
+# `l7r/diagram/interactive/record/` and `sources.py` read it - the split and the assembly, the questions and their contents, the notes and
+# their numbers, the originals and the passages, the registry and its source tags, the blocked lists and the archive. A library with no
+# production caller until S5, S11 or S12 wires it in; the Python stays the implementation for every Python importer until then, and an
+# edit of that Python makes the same change here in the same commit. Its own crate on `core` and the guard, below `owed`, `bundle` and
+# `record`, which take it as a `path` dependency when their slice ports.
+[package]
+name = "l7r_gate_research"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

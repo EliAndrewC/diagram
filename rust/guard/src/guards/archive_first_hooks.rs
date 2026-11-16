@@ -9,9 +9,9 @@ use std::path::{Path, PathBuf};
 use serde_json::Value;
 
 use crate::protocol::{Answer, Event, Guard};
+use crate::shared::cited_url::url_id;
 use crate::shared::log;
 use crate::shared::session::Session;
-use crate::shared::sha256::hex;
 use crate::shared::state::field;
 
 /// The guard.
@@ -21,33 +21,6 @@ pub const GUARD: Guard = Guard {
     matcher: "WebFetch",
     decide,
 };
-
-/// A decoded character reference, for a URL's `&amp;` and its kin (`html.unescape`, for what a URL carries).
-fn unescape(url: &str) -> String {
-    let named = [
-        ("&amp;", "&"),
-        ("&lt;", "<"),
-        ("&gt;", ">"),
-        ("&quot;", "\""),
-        ("&#39;", "'"),
-        ("&#x27;", "'"),
-    ];
-    named
-        .iter()
-        .fold(url.to_owned(), |text, (from, to)| text.replace(from, to))
-}
-
-/// A URL as the archive's manifest ids it (`sources._cited`, the one rule).
-pub(crate) fn cited(url: &str) -> String {
-    let whole = unescape(url);
-    let mut text = whole.split('#').next().unwrap_or("").to_owned();
-    while text.ends_with(['.', ',', ';', ':'])
-        || (text.ends_with(')') && text.matches(')').count() > text.matches('(').count())
-    {
-        text.pop();
-    }
-    text
-}
 
 /// The archived text's path and its capture date, where the archive holds readable text of `url`.
 pub(crate) fn held(url: &str, root: &Path, store: Option<&str>) -> Option<(String, String)> {
@@ -61,7 +34,8 @@ pub(crate) fn held(url: &str, root: &Path, store: Option<&str>) -> Option<(Strin
         root
     };
     let store = store.map_or_else(|| mirror.join(".specify/source-archive"), PathBuf::from);
-    let uid: String = hex(cited(url).as_bytes()).chars().take(12).collect();
+    // the archive's own id (`shared::cited_url`, feature 449 T144: this guard had restated it with six entities of `html.unescape`)
+    let uid = url_id(url);
     let row: Value = serde_json::from_str(
         &std::fs::read_to_string(
             root.join("research/archive")

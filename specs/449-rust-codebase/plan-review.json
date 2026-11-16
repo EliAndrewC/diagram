@@ -234,6 +234,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
+  },
+  "### T144 (phase 4's S1, the research record's core, `ask:449-phase4-slices`)": {
+   "sha256": "81bf54417cb84c94e723f913fa386a7f893f39bdb0d45bc976040f4d180e5a76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
+  },
+  "### T144 Approach (checklist part A)": {
+   "sha256": "2e231b7b9612d2fcfaf1839181b4c41ae118be4451b57da4c1753ae0c17214e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8697,6 +8709,98 @@
      "why": "This is a measurement report with a one-shot label (date and method). It decides nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T144 (phase 4's S1, the research record's core, `ask:449-phase4-slices`)",
+    "### T144 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T144-library",
+     "summary": "Port the record core (17 record modules, sources.py, content.py) as the gate crate `research` with no production caller; the Python stays the implementation and is not deleted here",
+     "class": "within",
+     "why": "FR-003 (the Python remains the one that runs until its replacement passes; no piece runs both) and FR-002 ('before that Python is deleted') carry this without the ruling. ask:449-phase4-slices Q1 was cited but its text was not in the bundle, so the plan's paraphrase of it was not relied on. Module count and slice assignment checked against the phase-4 census (17 record/ rows plus sources.py and content.py, all slice S1)."
+    },
+    {
+     "id": "T144-one-impl",
+     "summary": "Reuse the Rust already present and fold duplicated helpers (cited-URL cleaning and url id, blocked list, html.escape, trailing-punctuation trim) into one copy; keep units::restored and the raw readers of five checks apart because they port different Python or refuse less",
+     "class": "within",
+     "why": "FR-003's one implementation. Keeping the near-duplicates apart is done expressly so no check's verdict moves (FR-002); that is fidelity, not a carve-out."
+    },
+    {
+     "id": "T144-dead-functions",
+     "summary": "Eleven Python functions nothing calls are not ported and go with their files",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-001's 'every Python file replaced' at function level, but the GM's own words (2026-11-09: 'I don't think we need to port the past feature harnesses if those are not still used') imply not porting unused code, and an uncalled function has no verdict or output FR-002 could bind. The census states its search space (git grep of each name over the whole tree, which reaches Makefiles, shell and registries holding a name as a string). The eleven are not named in the block; the ruling rests on the stated method, not on a checked list."
+    },
+    {
+     "id": "T144-guard-url-id",
+     "summary": "archive_first_hooks (six entities decoded) and blocked_fetch_hooks (none) both now call the shared url_id, which decodes every entity as the Python hm_fetch.archived did",
+     "class": "within",
+     "why": "Changes two landed guards on live input, but toward the Python they replaced, which is FR-002's direction, and removes a duplicate (FR-003). Suites unmoved means no suite case holds the affected URL form; that is acceptable here because the change restores the Python's behavior rather than departing from it."
+    },
+    {
+     "id": "T144-no-cache",
+     "summary": "No process cache: the Python's per-file memo, @cache readers and clear_caches left to each caller; sources::Reader holds a loaded record for its lifetime; notes as ordered pairs, sections as owned trees matched by id",
+     "class": "within",
+     "why": "FR-002 binds verdicts and outputs, not memoization or object identity; the replay shows no output differing on the real record. clear_caches' two recorded calls are the replay's skips, consistent with this decision. ask:449-T81-slices was cited but not supplied in the bundle."
+    },
+    {
+     "id": "T144-dead-check",
+     "summary": "make static's dead check counts pub fn names over every .rs including tests, so the uncalled library passes it; no caller added for the check",
+     "class": "within",
+     "why": "An observation of an existing check; nothing is relaxed or added."
+    },
+    {
+     "id": "T144-differential",
+     "summary": "Recorded-run differential over every public function: 378,360 calls, 118 functions, none differing; byte offsets compared as character offsets (the refusal still printing the character offset); a library's own words compared up to them; 336 calls inside a load covered by the load's output",
+     "class": "within",
+     "why": "Re-read replay.out: TOTAL 378360, 0 differing, 119 functions listed of which 118 called (clear_caches 0); split_originals 163 files same bytes. Offsets are comparison-side only; library words are ask:449-T066-json-message, inside FR-002. Two comparison details the block does not state: the replay skips 339 calls, not 336 (the other three are clear_caches' 2, covered by T144-no-cache, and one split.heading_id call with offset -1 from the driver's own sweep input bad.find('<h2'), which no caller passes), and its same_error treats any two OS-error kinds (OSError, FileNotFoundError, IsADirectoryError, NotADirectoryError) as equal without comparing their messages. Neither touches a case a test or suite holds, so FR-002 still holds; both should be stated in the record rather than left in the harness."
+    },
+    {
+     "id": "T144-keyerror-quotes",
+     "summary": "A KeyError's message compared with its quotes stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case changed in comparison, which FR-001c names. Legitimate for this slice only: the library has no caller, so no bound output moves, and a KeyError the Python left uncaught is a traceback FR-002 does not bind. The plan does not say whether any Python caller prints str(e) of these KeyErrors; where one does, that caller's wiring slice (S5, S11 or S12) must reproduce the quotes, and this ruling does not release it."
+    },
+    {
+     "id": "T144-host-divergence",
+     "summary": "host neither drops tabs nor applies urlsplit's NFKC check",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from NaN. A known departure from the Python, legitimate for the unwired library only: no production caller exists (FR-003), and FR-002 binds the cases tests and suites hold, which none of these is. 'No real case reaches' was measured against the record's cited and attempted URLs, not against the live fetch URLs the blocked-fetch guard reads, and this host sits beside the blocked-domain list. S5, which wires blocked.py, owes its own decision on closing the divergence or ruling on it, and this ruling does not decide that."
+    },
+    {
+     "id": "T144-nan-divergence",
+     "summary": "JSON NaN, which Python's json accepts, is not accepted",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from host. The readers read files the tooling writes; the sweep covered every record file and found none holding NaN; no test or suite case holds it (FR-002's scope); and nothing changes now, because there is no production caller."
+    },
+    {
+     "id": "T144-unicode-digits",
+     "summary": "Unicode digits read as Python's int() reads them, found by the sweep and fixed",
+     "class": "within",
+     "why": "Brings the Rust to the Python's output (FR-002)."
+    },
+    {
+     "id": "T144-deletion-slices",
+     "summary": "S5 deletes archive, blocked, site_notes and source_tags; S11 the other record modules and sources.py; S12 content.py",
+     "class": "within",
+     "why": "Scheduling under FR-003. Checked against p4census/census.tsv python_leaves_in: every row agrees."
+    },
+    {
+     "id": "T144-checklist",
+     "summary": "Exits, budget and checks (make static, rust-test, hooks-test, land); no constant moved; not performance work",
+     "class": "within",
+     "why": "Holds the coverage floor and gate that FR-001c keeps on every task; it decides nothing beyond the spec."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15602,6 +15706,96 @@
      "summary": "guard_log costs 47 ms against 8 ms (no hook input) and 67 ms against 8 ms (with one), paid only where a guard or gate refuses or is escaped",
      "class": "within",
      "why": "This is a measurement report with a one-shot label (date and method). It decides nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T144": {
+   "section_sha256": "9f91f573f07f0c7be650ef1d35a7ca05a6a5eec960cf11fa8759e72ed16bcf54",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T144-library",
+     "summary": "Port the record core (17 record modules, sources.py, content.py) as the gate crate `research` with no production caller; the Python stays the implementation and is not deleted here",
+     "class": "within",
+     "why": "FR-003 (the Python remains the one that runs until its replacement passes; no piece runs both) and FR-002 ('before that Python is deleted') carry this without the ruling. ask:449-phase4-slices Q1 was cited but its text was not in the bundle, so the plan's paraphrase of it was not relied on. Module count and slice assignment checked against the phase-4 census (17 record/ rows plus sources.py and content.py, all slice S1)."
+    },
+    {
+     "id": "T144-one-impl",
+     "summary": "Reuse the Rust already present and fold duplicated helpers (cited-URL cleaning and url id, blocked list, html.escape, trailing-punctuation trim) into one copy; keep units::restored and the raw readers of five checks apart because they port different Python or refuse less",
+     "class": "within",
+     "why": "FR-003's one implementation. Keeping the near-duplicates apart is done expressly so no check's verdict moves (FR-002); that is fidelity, not a carve-out."
+    },
+    {
+     "id": "T144-dead-functions",
+     "summary": "Eleven Python functions nothing calls are not ported and go with their files",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-001's 'every Python file replaced' at function level, but the GM's own words (2026-11-09: 'I don't think we need to port the past feature harnesses if those are not still used') imply not porting unused code, and an uncalled function has no verdict or output FR-002 could bind. The census states its search space (git grep of each name over the whole tree, which reaches Makefiles, shell and registries holding a name as a string). The eleven are not named in the block; the ruling rests on the stated method, not on a checked list."
+    },
+    {
+     "id": "T144-guard-url-id",
+     "summary": "archive_first_hooks (six entities decoded) and blocked_fetch_hooks (none) both now call the shared url_id, which decodes every entity as the Python hm_fetch.archived did",
+     "class": "within",
+     "why": "Changes two landed guards on live input, but toward the Python they replaced, which is FR-002's direction, and removes a duplicate (FR-003). Suites unmoved means no suite case holds the affected URL form; that is acceptable here because the change restores the Python's behavior rather than departing from it."
+    },
+    {
+     "id": "T144-no-cache",
+     "summary": "No process cache: the Python's per-file memo, @cache readers and clear_caches left to each caller; sources::Reader holds a loaded record for its lifetime; notes as ordered pairs, sections as owned trees matched by id",
+     "class": "within",
+     "why": "FR-002 binds verdicts and outputs, not memoization or object identity; the replay shows no output differing on the real record. clear_caches' two recorded calls are the replay's skips, consistent with this decision. ask:449-T81-slices was cited but not supplied in the bundle."
+    },
+    {
+     "id": "T144-dead-check",
+     "summary": "make static's dead check counts pub fn names over every .rs including tests, so the uncalled library passes it; no caller added for the check",
+     "class": "within",
+     "why": "An observation of an existing check; nothing is relaxed or added."
+    },
+    {
+     "id": "T144-differential",
+     "summary": "Recorded-run differential over every public function: 378,360 calls, 118 functions, none differing; byte offsets compared as character offsets (the refusal still printing the character offset); a library's own words compared up to them; 336 calls inside a load covered by the load's output",
+     "class": "within",
+     "why": "Re-read replay.out: TOTAL 378360, 0 differing, 119 functions listed of which 118 called (clear_caches 0); split_originals 163 files same bytes. Offsets are comparison-side only; library words are ask:449-T066-json-message, inside FR-002. Two comparison details the block does not state: the replay skips 339 calls, not 336 (the other three are clear_caches' 2, covered by T144-no-cache, and one split.heading_id call with offset -1 from the driver's own sweep input bad.find('<h2'), which no caller passes), and its same_error treats any two OS-error kinds (OSError, FileNotFoundError, IsADirectoryError, NotADirectoryError) as equal without comparing their messages. Neither touches a case a test or suite holds, so FR-002 still holds; both should be stated in the record rather than left in the harness."
+    },
+    {
+     "id": "T144-keyerror-quotes",
+     "summary": "A KeyError's message compared with its quotes stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case changed in comparison, which FR-001c names. Legitimate for this slice only: the library has no caller, so no bound output moves, and a KeyError the Python left uncaught is a traceback FR-002 does not bind. The plan does not say whether any Python caller prints str(e) of these KeyErrors; where one does, that caller's wiring slice (S5, S11 or S12) must reproduce the quotes, and this ruling does not release it."
+    },
+    {
+     "id": "T144-host-divergence",
+     "summary": "host neither drops tabs nor applies urlsplit's NFKC check",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from NaN. A known departure from the Python, legitimate for the unwired library only: no production caller exists (FR-003), and FR-002 binds the cases tests and suites hold, which none of these is. 'No real case reaches' was measured against the record's cited and attempted URLs, not against the live fetch URLs the blocked-fetch guard reads, and this host sits beside the blocked-domain list. S5, which wires blocked.py, owes its own decision on closing the divergence or ruling on it, and this ruling does not decide that."
+    },
+    {
+     "id": "T144-nan-divergence",
+     "summary": "JSON NaN, which Python's json accepts, is not accepted",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from host. The readers read files the tooling writes; the sweep covered every record file and found none holding NaN; no test or suite case holds it (FR-002's scope); and nothing changes now, because there is no production caller."
+    },
+    {
+     "id": "T144-unicode-digits",
+     "summary": "Unicode digits read as Python's int() reads them, found by the sweep and fixed",
+     "class": "within",
+     "why": "Brings the Rust to the Python's output (FR-002)."
+    },
+    {
+     "id": "T144-deletion-slices",
+     "summary": "S5 deletes archive, blocked, site_notes and source_tags; S11 the other record modules and sources.py; S12 content.py",
+     "class": "within",
+     "why": "Scheduling under FR-003. Checked against p4census/census.tsv python_leaves_in: every row agrees."
+    },
+    {
+     "id": "T144-checklist",
+     "summary": "Exits, budget and checks (make static, rust-test, hooks-test, land); no constant moved; not performance work",
+     "class": "within",
+     "why": "Holds the coverage floor and gate that FR-001c keeps on every task; it decides nothing beyond the spec."
     }
    ],
    "verdict": "CLEAR"
