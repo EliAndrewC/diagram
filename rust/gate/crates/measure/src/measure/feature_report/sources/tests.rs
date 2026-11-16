@@ -73,6 +73,21 @@ fn the_spec_tasks_and_starts_are_read() {
     put(&d, "specs/901-s/tasks.md", "- [x] T01\n- [x] T02\n");
     git(&d, "2026-11-01T12:00:00Z", &["commit", "-qam", "901 T02"]);
     assert_eq!(task_ticks(&d, "901-s").unwrap().len(), 2);
+    // feature 449 T142: a task ticked and archived in one write is found in tasks-done.md, and the archive counts as tasks.md did
+    put(
+        &d,
+        "specs/901-s/tasks.md",
+        "- [x] T01\n- [x] T02\n- [ ] T04\n",
+    );
+    put(&d, "specs/901-s/tasks-done.md", "- [x] T03\n");
+    git(&d, "2026-11-01T13:00:00Z", &["add", "-A"]);
+    git(&d, "2026-11-01T13:00:00Z", &["commit", "-qm", "901 T03"]);
+    let ticks = task_ticks(&d, "901-s").unwrap();
+    assert_eq!(
+        ticks.iter().map(|t| t.0.as_str()).collect::<Vec<_>>(),
+        ["T01", "T02", "T03"]
+    );
+    assert_eq!(tasks_done(&d.join("specs/901-s")).unwrap(), (3, 4));
     let starts = task_starts(&d, "901-s").unwrap();
     assert_eq!(
         starts.iter().map(|s| s.0.as_str()).collect::<Vec<_>>(),

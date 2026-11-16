@@ -417,9 +417,20 @@ fn archive_and_accept_verbs() {
         run(&root, &["record", "375", &src, "--as", "spec-fidelity"]).code,
         0
     );
+    let said = run(&root, &["archive", "375"]).stdout;
+    assert!(said.contains("1 task section(s) moved to 375-x/plan-done.md: T05"));
+    // ...and the ticked task itself, to tasks-done.md (feature 449 T142); a second run moves none
+    assert!(said.contains("1 ticked task(s) moved to 375-x/tasks-done.md: T05"));
     assert!(run(&root, &["archive", "375"])
         .stdout
-        .contains("1 task section(s) moved to 375-x/plan-done.md: T05"));
+        .contains("0 ticked task(s) moved to 375-x/tasks-done.md: none ticked"));
+    // an archive that cannot be written is the verb's failure
+    std::fs::write(dir.join("tasks.md"), "- [x] T07 x\n").unwrap();
+    std::fs::remove_file(dir.join("tasks-done.md")).unwrap();
+    std::fs::create_dir(dir.join("tasks-done.md")).unwrap();
+    assert_eq!(run(&root, &["archive", "375"]).code, 1);
+    std::fs::remove_dir(dir.join("tasks-done.md")).unwrap();
+    std::fs::write(dir.join("tasks.md"), "- [ ] T06 the wells\n").unwrap();
     assert_eq!(run(&root, &["arbiter-accept", "999", "x"]).code, 2);
     let trigger = "round:spec-fidelity|plan:375-x#T06@3";
     assert_eq!(run(&root, &["arbiter-accept", "375", trigger]).code, 2);

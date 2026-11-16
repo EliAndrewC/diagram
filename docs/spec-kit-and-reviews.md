@@ -197,7 +197,9 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   then the round arbiter rules (a sixth round waits for it; feature 379); an amendment after acceptance resets the counter. A plan's decisions are
   reviewed by the same agent before a task is ticked (`make tick`, `scripts/gates/plan-gate.sh`) - block by block since 375
   amendment 11: a changed block owes `make plan-delta F=<n>` (a review of that block alone, on a lean bundle), never the whole
-  plan again, and `make plan-archive F=<n>` moves finished sections to `plan-done.md`, which no review reads. A later
+  plan again, and `make plan-archive F=<n>` moves finished sections to `plan-done.md`, which no review reads. The tick
+  also moves each ticked task, its lines with it, from `tasks.md` to `tasks-done.md` (feature 449 T142), so `tasks.md` holds the open
+  tasks; every tool that counts ticked tasks reads both (`shared::speckit::tasks`), and `make plan-archive` runs the same move by hand (`scripts/gates/l7r-gate.sh tick --archive <F>` the tasks' alone). A later
   round is handed the previous verdict and the diff by `rust/guard/src/guards/review_round_hooks.rs`.
 - No known regressions (constitution XIII). A regression is measured, never remembered: the baseline
   is taken in a detached worktree (`git worktree add --detach /tmp/base HEAD`, never a stash) and

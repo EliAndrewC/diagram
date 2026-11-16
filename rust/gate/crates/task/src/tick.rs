@@ -14,7 +14,8 @@
 //! 385 T63). `--land-check <feature> <note> <task>... [--boxes]` prints, as JSON, what `make land`'s first pass asks of each task, which
 //! the land asks in process ([`land_check`]); `--resolve <feature>` prints the repository root and the feature's directory as JSON, no run
 //! recorded - its caller `scripts/task-add.py` ported in T135 and asks [`repo_root`] and [`spec_dir`] in process, and the form is kept
-//! (T119's rule that no command form vanishes unannounced).
+//! (T119's rule that no command form vanishes unannounced). `--archive <feature>` moves the feature's ticked tasks to tasks-done.md, the
+//! tick's last step alone (feature 449 T142).
 
 pub mod refusal;
 pub mod text;
@@ -25,7 +26,7 @@ use std::process::Command;
 
 use l7r_guard::shared::py_text::strip;
 use l7r_guard::shared::pyjson::dumps;
-use l7r_guard::shared::speckit::py_path;
+use l7r_guard::shared::speckit::{py_path, tasks};
 use serde_json::{json, Value};
 
 use crate::{raised, read_strict, reply, Reply};
@@ -113,7 +114,7 @@ pub fn checks(
     let mut out = Vec::new();
     for task in tasks {
         let box_open = !text::boxes_refusal(&text, task, false).is_empty();
-        let row = match text::tick(&text, task, note, false) {
+        let row = match tick_text(dir, &text, task, note, false) {
             Err(Refused::Value(why) | Refused::Exit(why)) => Checked {
                 task: task.clone(),
                 tick: why,
@@ -133,6 +134,30 @@ pub fn checks(
         out.push(row);
     }
     Ok(out)
+}
+
+/// [`text::tick`] over tasks.md, a task archived in tasks-done.md read as "already ticked" where tasks.md no longer holds it (feature
+/// 449 T142): the archive is the ticked tasks' place, not a task that never was. Its line is read as the tick reads one, `- [x]` in
+/// lower case alone, so a task the tick called "no open task" before the archive (an old `- [X]`) it calls so after.
+fn tick_text(
+    dir: &Path,
+    text: &str,
+    task: &str,
+    note: &str,
+    boxes: bool,
+) -> Result<(String, String), Refused> {
+    match text::tick(text, task, note, boxes) {
+        Err(Refused::Value(why))
+            if why.starts_with("no open task")
+                && tasks::done_text(dir)
+                    .unwrap_or_default()
+                    .lines()
+                    .any(|l| text::task_line("x", task).is_match(l).unwrap_or(false)) =>
+        {
+            Err(Refused::Value(format!("{task} is already ticked")))
+        }
+        other => other,
+    }
 }
 
 /// `--land-check <feature> <note> <task>... [--boxes]`: [`checks`] as JSON, `[{"task", "tick", "refusal", "box_open"}, ...]`.
@@ -227,7 +252,7 @@ pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
         Ok(t) => t,
         Err(why) => return raised("tick", out, &err, &why),
     };
-    let (new, line) = match text::tick(&text, task, note, boxes) {
+    let (new, line) = match tick_text(dir, &text, task, note, boxes) {
         Ok(done) => done,
         Err(Refused::Value(why)) => {
             return reply(
@@ -275,22 +300,42 @@ pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
     // THE PLAN ARCHIVED AT THE TICK (feature 385 T63, the GM 2026-10-18: "perhaps that should be something that is run automatically
     // when certain actions are taken"): 385's plan.md reached 168 KB with 54 finished sections, every review reading them, because
     // `make plan-archive` was a step to remember. Recorded by the one usage-log writer as an automatic step (feature 406 T03, D162).
-    if dir.join("plan.md").is_file() {
-        let moved = l7r_gate_plan::plan::archive_finished(dir);
-        let outcome = if moved.is_empty() {
-            "unchanged"
-        } else {
-            "changed"
-        };
-        l7r_guard::shared::usage::record(root, USAGE_LOG_TOOL, "step", outcome);
-        if !moved.is_empty() {
-            let _ = writeln!(
-                out,
-                "tick: archived the plan sections of {} to plan-done.md",
-                moved.join(", ")
-            );
-        }
+    let moved = if dir.join("plan.md").is_file() {
+        l7r_gate_plan::plan::archive_finished(dir)
+    } else {
+        Vec::new()
+    };
+    if !moved.is_empty() {
+        let _ = writeln!(
+            out,
+            "tick: archived the plan sections of {} to plan-done.md",
+            moved.join(", ")
+        );
     }
+    // ...AND THE TICKED TASKS (feature 449 T142, the GM 2026-11-15: "please do that, because I imagine that will make our long-running
+    // featuers with tons of tasks much more token efficient"): 449's tasks.md held 131 ticked tasks of 137. The task is ticked whatever
+    // the archive does; one that cannot move stays in tasks.md, said.
+    let archived = match tasks::archive(dir) {
+        Ok(ids) => ids,
+        Err(why) => {
+            let _ = writeln!(err, "tick: the ticked tasks stay in tasks.md - {why}");
+            Vec::new()
+        }
+    };
+    if !archived.is_empty() {
+        let _ = writeln!(
+            out,
+            "tick: archived the ticked task(s) {} to tasks-done.md",
+            archived.join(", ")
+        );
+    }
+    // one step, the plan's archive and the tasks', recorded on every tick (before T142, only where a plan.md stood)
+    let outcome = if moved.is_empty() && archived.is_empty() {
+        "unchanged"
+    } else {
+        "changed"
+    };
+    l7r_guard::shared::usage::record(root, USAGE_LOG_TOOL, "step", outcome);
     reply(out, err, 0)
 }
 
@@ -309,6 +354,39 @@ fn resolve_cli(args: &[String], cwd: &Path) -> Reply {
     reply(format!("{}\n", dumps(&said, None, true)), String::new(), 0)
 }
 
+/// `--archive <feature>`: the tick's archive step alone - every ticked task that may move, to tasks-done.md (feature 449 T142) - for a
+/// feature whose tasks were ticked before the tick moved them and that has no plan.md for `make plan-archive` to run it; no run recorded.
+fn archive_cli(args: &[String], cwd: &Path) -> Reply {
+    if args.len() != 1 {
+        return reply(
+            String::new(),
+            "usage: l7r-gate tick --archive <feature>\n".to_owned(),
+            2,
+        );
+    }
+    let root = repo_root(cwd);
+    let Some(dir) = spec_dir(&root, &args[0]) else {
+        return no_dir(&args[0], &root);
+    };
+    match tasks::archive(&dir) {
+        Ok(ids) => reply(
+            format!(
+                "tick --archive: {} ticked task(s) moved to {}/tasks-done.md: {}\n",
+                ids.len(),
+                dir.file_name().unwrap_or_default().to_string_lossy(),
+                if ids.is_empty() {
+                    "none".to_owned()
+                } else {
+                    ids.join(", ")
+                }
+            ),
+            String::new(),
+            0,
+        ),
+        Err(why) => reply(String::new(), format!("tick --archive: {why}\n"), 1),
+    }
+}
+
 /// `l7r-gate tick ...` from `cwd`, the process's environment read.
 #[must_use]
 pub fn cli(words: &[String], cwd: &Path) -> Reply {
@@ -320,6 +398,7 @@ fn cli_with(words: &[String], cwd: &Path, env: Env) -> Reply {
     match words.first().map(String::as_str) {
         Some("--land-check") => return land_check_cli(&words[1..], cwd, env),
         Some("--resolve") => return resolve_cli(&words[1..], cwd),
+        Some("--archive") => return archive_cli(&words[1..], cwd),
         _ => {}
     }
     let flag = |f: &str| words.iter().any(|a| a == f);

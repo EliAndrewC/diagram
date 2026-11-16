@@ -288,8 +288,22 @@ fn a_clean_landing_ticks_pushes_once_and_says_so() {
     let (out, err) = fx.said();
     assert!(out.contains("ticked - [x] T1 one\n1 task(s) still open in specs/449-x/tasks.md\n"));
     assert!(out.ends_with("land: T1 landed and ticked\n"));
-    let tasks = std::fs::read_to_string(fx.root.join("specs/449-x/tasks.md")).unwrap();
+    // the ticked task is archived at its tick, and the tick's commit carries the new file (feature 449 T142)
+    let tasks = std::fs::read_to_string(fx.root.join("specs/449-x/tasks-done.md")).unwrap();
     assert!(tasks.contains("- [x] T1 one\n      verify: DONE. landed: checked\n"));
+    assert!(fx.subjects().contains("449-x: T1 ticked (make land)"));
+    let shown = std::process::Command::new("git")
+        .args([
+            "-C",
+            &fx.root.to_string_lossy(),
+            "log",
+            "--format=%s",
+            "--",
+            "specs/449-x/tasks-done.md",
+        ])
+        .output()
+        .unwrap();
+    assert!(String::from_utf8_lossy(&shown.stdout).contains("449-x: T1 ticked (make land)"));
     assert!(err.is_empty());
     assert!(fx.subjects().contains("449-x: T1 ticked (make land)"));
     let log = fx.log();
@@ -365,6 +379,9 @@ fn a_refused_tick_puts_every_tick_back_and_a_raise_ends_the_landing() {
     assert!(err.contains("this tick would close the feature, and:\n  449-x has no report.md"));
     assert!(err.contains("land: T2 refused its tick (above)"));
     assert_eq!(std::fs::read_to_string(d.join("tasks.md")).unwrap(), TASKS);
+    // ...and T1's archive, which its tick created, is gone with it (feature 449 T142)
+    assert!(out.contains("tick: archived the ticked task(s) T1 to tasks-done.md"));
+    assert!(!d.join("tasks-done.md").exists());
     // a closing check that raises ends the landing
     put(&d, "report.md", "# r\n");
     put(&d, "measurements.json", "5");
@@ -586,7 +603,7 @@ fn a_command_that_cannot_start_or_speaks_no_text_is_a_raise() {
     assert_eq!(boxed.land.tick(&d, "T1", "n"), Ok(2));
     boxed.land.box_open.borrow_mut().push("T1".to_owned());
     assert_eq!(boxed.land.tick(&d, "T1", "n"), Ok(0));
-    assert!(std::fs::read_to_string(d.join("tasks.md"))
+    assert!(std::fs::read_to_string(d.join("tasks-done.md"))
         .unwrap()
         .contains("      - [x] research pass\n"));
     // a raise in the tick is the landing's

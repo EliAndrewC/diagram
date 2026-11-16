@@ -8,7 +8,8 @@
 //! eat up a lot of tokens if we are doing it by hand. And hence why it should get tooling." Tasks T41-T64 were each added by a
 //! hand-written insertion script of 1-2k tokens, and two hand-picked ids (T47, T48) collided with an umbrella heading.
 //!
-//! THE ID is one more than the highest id of the feature's own tasks in its tasks.md, plan.md and plan-done.md. THE BOX goes before
+//! THE ID is one more than the highest id of the feature's own tasks in its tasks.md, tasks-done.md (the ticked tasks `make tick`
+//! archives, feature 449 T142: an id there is taken), plan.md and plan-done.md. THE BOX goes before
 //! the GM-review box (as `claims-carry` places its boxes), else at the end, with its research line. THE SECTION, given, is a file whose
 //! text has `{T}` for the id; it goes into plan.md before the feature's `## T<n> - the close` heading, else at the end. The title is
 //! `TASK_TITLE`. NO LANDS-OPEN MARK OR LINE (feature 405 T32, D4; the GM 2026-10-20): a task nobody has started holds no landing, so a
@@ -44,7 +45,12 @@ static CLOSE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^## T[0-9]+ - the clos
 /// `T<n>` gave its new tasks T148 on.
 fn next_id(d: &Path) -> Result<String, String> {
     let mut text = String::new();
-    for name in ["tasks.md", "plan.md", "plan-done.md"] {
+    for name in [
+        "tasks.md",
+        l7r_guard::shared::speckit::tasks::DONE,
+        "plan.md",
+        "plan-done.md",
+    ] {
         if d.join(name).is_file() {
             text += &read_strict(&d.join(name))?;
         }

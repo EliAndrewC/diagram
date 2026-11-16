@@ -32,6 +32,10 @@ fn a_task_takes_the_next_id_and_its_box_and_section_land_in_place() {
         "  - [X] T07b archived\n",
     );
     assert_eq!(next_id(&d).unwrap(), "T08");
+    // an id archived in tasks-done.md is taken (feature 449 T142)
+    put(&root, "specs/9001-x/tasks-done.md", "- [x] T09 archived\n");
+    assert_eq!(next_id(&d).unwrap(), "T10");
+    std::fs::remove_file(d.join("tasks-done.md")).unwrap();
     let said = cli(
         &words(&["9001", "--physical", "--performance"]),
         &root,

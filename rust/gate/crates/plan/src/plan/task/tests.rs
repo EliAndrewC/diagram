@@ -369,3 +369,27 @@ fn a_range_heading_and_its_tasks_own_blocks_are_archived_once_each() {
     assert!(!done.contains("moved to plan-done.md") && plan.contains("## Notes"));
     assert_eq!(archive(&dir, None), Vec::<String>::new());
 }
+
+#[test]
+fn a_task_archived_in_tasks_done_is_ticked_for_the_archive_and_the_push() {
+    // feature 449 T142: the ticked task moved to tasks-done.md, its section moves when its review is CLEAR...
+    let dir = ticked_feature(PLAN_TASKS, "- [ ] T06 the wells\n");
+    std::fs::write(dir.join("tasks-done.md"), "# h\n\n- [x] T05 the bath\n").unwrap();
+    assert_eq!(archive(&dir, Some("2026-01-01")), ["T05"]);
+    // ...and a feature whose ticked tasks all moved still owes the push its plan review
+    let root = repo();
+    std::fs::write(root.join("README"), "x").unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "base"]);
+    let base = git(&root, &["rev-parse", "HEAD"]);
+    let moved = feature_at(&root, Some(PLAN), None, "001-a");
+    std::fs::write(moved.join("tasks.md"), "# Tasks\n\n- [ ] T02 build it\n").unwrap();
+    std::fs::write(moved.join("tasks-done.md"), "- [x] T01 x\n").unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "work"]);
+    let found: Vec<&str> = push_owed(&root, &format!("{base}..HEAD"), "HEAD")
+        .into_iter()
+        .map(|(_, r, _)| r)
+        .collect();
+    assert_eq!(found, ["plan-review-missing"]);
+}

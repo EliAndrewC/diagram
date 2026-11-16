@@ -95,7 +95,7 @@
     },
     "tick-archive": {
       "kind": "step",
-      "what": "make tick - the plan's finished sections archived to plan-done.md at a tick"
+      "what": "make tick - the plan's finished sections archived to plan-done.md, and the ticked tasks to tasks-done.md (feature 449 T142), at a tick"
     },
     "speckit-todo": {
       "kind": "check",

@@ -210,6 +210,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-14",
    "declared": "spec-fidelity"
+  },
+  "### T142 (ticked tasks archived out of tasks.md, the GM 2026-11-15)": {
+   "sha256": "c86560a968134b6ce03e1850bc1cdf966cd5ba77e723696474e9c9a16db17195",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
+  },
+  "### T142 Approach (checklist part A)": {
+   "sha256": "8d9486884496e324fad3d26577a039b122df217048096da45f924cf64db5065a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8556,6 +8568,52 @@
      "why": "Procedure inside the plan's own process. Nothing that was asked is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T142 (ticked tasks archived out of tasks.md, the GM 2026-11-15)",
+    "### T142 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T142-what-moves",
+     "summary": "Every ticked task with an id (lowercase `- [x] Tnn`) and its indented lines moves to tasks-done.md, unless it holds an open box; the GM-review box, headings, Occasions and prose stay; no recent ticked tasks kept; blocks byte for byte in id order; one pointer line, no per-block marker.",
+     "class": "within",
+     "why": "The GM asked for tooling that moves completed tasks out of tasks.md so it stops eating tokens. A ticked task that still holds an open box is not completed work (it holds a landing), and the GM box is an open review state, not a finished task, so keeping them is not a carve-out from the request. The tick itself treats only lowercase [x] as ticked and writes it that way, so every task finished through the tooling moves. Moving all finished tasks instead of keeping a few recent ones reads 'old completed tasks' at its widest and serves the token purpose."
+    },
+    {
+     "id": "T142-when",
+     "summary": "Every tick archives all of its feature's ticked tasks, plan section or not; make plan-archive and `tick --archive` move them by hand; 449 archived in the cut; closed features are not backfilled; the tick-archive usage line is recorded on every tick.",
+     "class": "within",
+     "why": "'Automatically move' is carried by the tick. The purpose is long-running features worked on now, and each open feature clears at its next tick. The request asks for the mechanism, not a migration of closed features, so not backfilling does not take any case away from it, and the manual command stays available for any feature. The tool-yield shift is a side effect, not new behavior."
+    },
+    {
+     "id": "T142-one-implementation",
+     "summary": "One reader/mover in the guard's shared::speckit::tasks; the readers that need ticked tasks (state, approval at_rev, plan checks, next id, already-ticked, spec lint, report) read both files; readers of open tasks only keep reading tasks.md, from a stated grep census.",
+     "class": "within",
+     "why": "Without this, the archive would break readers: a feature would read as reopened, an archived id could be handed out again, and so on. Wiring the readers to the moved file is what makes the requested move correct (FR-003, one implementation). The enumeration states its search space."
+    },
+    {
+     "id": "T142-defects",
+     "summary": "The tick's block end becomes any heading (it was only `## `, so a `###` heading got swallowed and 449's T001/T005/T070 were misplaced, repaired before the archive; closed 383/417 left as history); a refused land batch removes the tasks-done.md/plan-done.md its tick created.",
+     "class": "within",
+     "why": "The archive moves blocks by the tick's own block boundary, so a boundary that swallows a heading would carry that heading into tasks-done.md. A refused landing that leaves the new archive file untracked would leave the tree half-moved. Both fixes exist only so that the requested move is correct. Leaving closed features' history alone is not a narrowing of anything the GM asked for."
+    },
+    {
+     "id": "T142-same-answers",
+     "summary": "A before/after comparison over every feature archived in a copy (1,001 outputs, none differing); the archived lookup reads lowercase [x] alone to match the tick's rule; an end-to-end make run; 449's sizes; static, rust-test and hooks-test green.",
+     "class": "within",
+     "why": "These are checks that only fail if the requested archive changes what any reader answers, or if it does not happen. That is enforcement of the request and FR-002, not a property the GM never mentioned. The lowercase rule keeps the archived lookup consistent with the tick, so it is not a carve-out."
+    },
+    {
+     "id": "T142-order",
+     "summary": "Done before the phase-4 slices, which file their tasks into the archived tasks.md; budget one landing.",
+     "class": "within",
+     "why": "This is sequencing within the feature. It takes nothing out of the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15348,6 +15406,50 @@
      "summary": "The task runs after T135 in one landing. It exits on make static, rust-test, hooks-test HOOKS_ALL=1 and land, and a claim that it cannot be done goes to make arbiter-ask.",
      "class": "within",
      "why": "Procedure inside the plan's own process. Nothing that was asked is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T142": {
+   "section_sha256": "3ca3f33deedfbddcc091d3f49340a42356ab5ff35096984ef344003f197347df",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T142-what-moves",
+     "summary": "Every ticked task with an id (lowercase `- [x] Tnn`) and its indented lines moves to tasks-done.md, unless it holds an open box; the GM-review box, headings, Occasions and prose stay; no recent ticked tasks kept; blocks byte for byte in id order; one pointer line, no per-block marker.",
+     "class": "within",
+     "why": "The GM asked for tooling that moves completed tasks out of tasks.md so it stops eating tokens. A ticked task that still holds an open box is not completed work (it holds a landing), and the GM box is an open review state, not a finished task, so keeping them is not a carve-out from the request. The tick itself treats only lowercase [x] as ticked and writes it that way, so every task finished through the tooling moves. Moving all finished tasks instead of keeping a few recent ones reads 'old completed tasks' at its widest and serves the token purpose."
+    },
+    {
+     "id": "T142-when",
+     "summary": "Every tick archives all of its feature's ticked tasks, plan section or not; make plan-archive and `tick --archive` move them by hand; 449 archived in the cut; closed features are not backfilled; the tick-archive usage line is recorded on every tick.",
+     "class": "within",
+     "why": "'Automatically move' is carried by the tick. The purpose is long-running features worked on now, and each open feature clears at its next tick. The request asks for the mechanism, not a migration of closed features, so not backfilling does not take any case away from it, and the manual command stays available for any feature. The tool-yield shift is a side effect, not new behavior."
+    },
+    {
+     "id": "T142-one-implementation",
+     "summary": "One reader/mover in the guard's shared::speckit::tasks; the readers that need ticked tasks (state, approval at_rev, plan checks, next id, already-ticked, spec lint, report) read both files; readers of open tasks only keep reading tasks.md, from a stated grep census.",
+     "class": "within",
+     "why": "Without this, the archive would break readers: a feature would read as reopened, an archived id could be handed out again, and so on. Wiring the readers to the moved file is what makes the requested move correct (FR-003, one implementation). The enumeration states its search space."
+    },
+    {
+     "id": "T142-defects",
+     "summary": "The tick's block end becomes any heading (it was only `## `, so a `###` heading got swallowed and 449's T001/T005/T070 were misplaced, repaired before the archive; closed 383/417 left as history); a refused land batch removes the tasks-done.md/plan-done.md its tick created.",
+     "class": "within",
+     "why": "The archive moves blocks by the tick's own block boundary, so a boundary that swallows a heading would carry that heading into tasks-done.md. A refused landing that leaves the new archive file untracked would leave the tree half-moved. Both fixes exist only so that the requested move is correct. Leaving closed features' history alone is not a narrowing of anything the GM asked for."
+    },
+    {
+     "id": "T142-same-answers",
+     "summary": "A before/after comparison over every feature archived in a copy (1,001 outputs, none differing); the archived lookup reads lowercase [x] alone to match the tick's rule; an end-to-end make run; 449's sizes; static, rust-test and hooks-test green.",
+     "class": "within",
+     "why": "These are checks that only fail if the requested archive changes what any reader answers, or if it does not happen. That is enforcement of the request and FR-002, not a property the GM never mentioned. The lowercase rule keeps the archived lookup consistent with the tick, so it is not a carve-out."
+    },
+    {
+     "id": "T142-order",
+     "summary": "Done before the phase-4 slices, which file their tasks into the archived tasks.md; budget one landing.",
+     "class": "within",
+     "why": "This is sequencing within the feature. It takes nothing out of the request."
     }
    ],
    "verdict": "CLEAR"

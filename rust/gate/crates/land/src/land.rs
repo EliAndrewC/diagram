@@ -323,6 +323,20 @@ impl Land {
         if !failed.is_empty() {
             // the ticks already written put back: a landing that does not push ticks nothing
             self.run(&["git", "checkout", "--", &rel], &[])?;
+            // ...and an archive a tick created, which the checkout leaves: an earlier task of the batch archived in a new
+            // tasks-done.md (or plan-done.md) would read ticked beside its box put back open (feature 449 T142)
+            self.run(
+                &[
+                    "git",
+                    "clean",
+                    "-q",
+                    "-f",
+                    "--",
+                    &format!("{rel}/tasks-done.md"),
+                    &format!("{rel}/plan-done.md"),
+                ],
+                &[],
+            )?;
             self.warn(&format!(
                 "land: {} refused its tick (above) - nothing landed, nothing ticked",
                 failed.join(", ")

@@ -1,7 +1,8 @@
 //! A spec-kit feature's state, what it affects and what holds its landing (feature 330; ported from `scripts/speckit-todo.py` by
 //! feature 449 T118, the round arbiter's `ask:449-T83-scope`: "its Rust callers calling it in-process").
 //!
-//! THE STATE RULE (feature 330 plan D1). A feature is CLOSED when its `tasks.md` holds at least one task and no open one, or when its
+//! THE STATE RULE (feature 330 plan D1). A feature is CLOSED when its tasks (`tasks.md` and the ticked ones `make tick` archived in
+//! `tasks-done.md`, feature 449 T142, [`tasks`]) hold at least one task and no open one, or when its
 //! spec's `**Status**:` value begins with one of [`CLOSING`]. Otherwise it is OPEN: FILED (no tasks yet), PLANNED (tasks, none ticked)
 //! or IN PROGRESS (some ticked). A task is a box at column 0 - the form `make tick` writes and `l7r-gate plan` counts; an indented box
 //! is part of its task. `Implemented` closes nothing: features say it while holding open tasks, so only the tasks or a closing word
@@ -33,6 +34,8 @@ use fancy_regex::Regex;
 use serde_json::Value;
 
 use crate::shared::py_text::{split, strip, SPACE_CLASS};
+
+pub mod tasks;
 
 /// What a `**Status**:` value begins with when a feature is closed without every task ticked (plan D1, D3).
 pub const CLOSING: [&str; 3] = ["done", "superseded by", "withdrawn"];
@@ -360,7 +363,9 @@ pub fn feature(d: &Path, vocab: &Vocabulary) -> Result<Feature, String> {
 
 /// The state rule over the spec's text and the directory's tasks: (state, why, ticked, total).
 fn state_parts(d: &Path, spec: &str) -> Result<(String, String, usize, usize), String> {
-    let tasks = text_if_file(&d.join("tasks.md"))?;
+    // the ticked tasks archived in tasks-done.md count as they did in tasks.md (feature 449 T142): a feature whose every task moved
+    // there is closed, not filed
+    let tasks = tasks::all_text(d)?;
     let boxes: Vec<bool> = BOX
         .captures_iter(&tasks)
         .filter_map(Result::ok)

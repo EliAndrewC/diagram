@@ -47,9 +47,12 @@ fn the_command_line_s_arguments_and_resolution() {
     assert!(done
         .stdout
         .contains("ticked - [x] T01 the first\n2 task(s) still open in specs/9001-x/tasks.md\n"));
-    assert!(std::fs::read_to_string(root.join("specs/9001-x/tasks.md"))
-        .unwrap()
-        .contains("verify: DONE. from the environment"));
+    // the ticked task, archived at its tick (feature 449 T142)
+    assert!(
+        std::fs::read_to_string(root.join("specs/9001-x/tasks-done.md"))
+            .unwrap()
+            .contains("verify: DONE. from the environment")
+    );
     // `--landing` is `make land`'s alone
     let landing = cli_with(
         &words(&["9001", "T02", "n", "--landing"]),
@@ -155,9 +158,14 @@ fn the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded(
     assert!(closed.stdout.contains("0 task(s) still open"));
     // the implementation check, in process since feature 449 T132: the feature is not tagged `research record`, so it owes nothing
     assert_eq!(closed.stderr, "");
+    // the plan's sections stay (no CLEAR review), the two ticked tasks move: the step changed something (feature 449 T142)
     let usage = std::fs::read_to_string(root.join(".git/tool-usage.jsonl")).unwrap();
-    assert!(usage
-        .contains("\"tool\": \"tick-archive\", \"kind\": \"step\", \"outcome\": \"unchanged\""));
+    assert!(
+        usage.contains("\"tool\": \"tick-archive\", \"kind\": \"step\", \"outcome\": \"changed\"")
+    );
+    assert!(closed
+        .stdout
+        .ends_with("tick: archived the ticked task(s) T01, T02 to tasks-done.md\n"));
     // a closing check that cannot read its record raises
     std::fs::write(d.join("tasks.md"), "- [x] T01 a\n- [ ] T02 b\n").unwrap();
     put(&d, "measurements.json", "5");
@@ -199,8 +207,7 @@ fn a_finished_section_is_archived_at_the_tick() {
     let said = tick(&gated, false, false);
     assert_eq!(said.code, 0, "{}", said.stderr);
     assert!(
-        said.stdout
-            .ends_with("tick: archived the plan sections of T01, T09 to plan-done.md\n"),
+        said.stdout.ends_with("tick: archived the plan sections of T01, T09 to plan-done.md\ntick: archived the ticked task(s) T01, T09 to tasks-done.md\n"),
         "{}",
         said.stdout
     );
@@ -232,10 +239,36 @@ fn a_feature_with_no_plan_ticks_with_no_archive() {
     std::fs::remove_file(root.join("docs/approach-checklist.md")).unwrap();
     let said = tick(&ask(&root, &d, "T02", "n"), false, false);
     assert_eq!(said.code, 0, "{}", said.stderr);
-    assert!(said
-        .stdout
-        .ends_with("2 task(s) still open in specs/9001-x/tasks.md\n"));
-    assert!(!root.join(".git/tool-usage.jsonl").exists());
+    // ...but the ticked tasks move, and the step is recorded where no plan.md stands too (feature 449 T142)
+    assert!(said.stdout.ends_with(
+        "2 task(s) still open in specs/9001-x/tasks.md\ntick: archived the ticked task(s) T02, T09 to tasks-done.md\n"
+    ));
+    let usage = std::fs::read_to_string(root.join(".git/tool-usage.jsonl")).unwrap();
+    assert!(usage.contains("\"outcome\": \"changed\""));
+    // an archived task is already ticked, for the tick and the land's first pass alike
+    assert!(tick(&ask(&root, &d, "T09", "n"), false, false)
+        .stderr
+        .contains("T09 is already ticked ("));
+    // ...and an id in neither file is no task
+    assert!(tick(&ask(&root, &d, "T77", "n"), false, false)
+        .stderr
+        .contains("no open task T77 in tasks.md"));
+    // an old capital `- [X]`, which the tick never read as its own, is no open task archived or not
+    let done = std::fs::read_to_string(d.join("tasks-done.md")).unwrap();
+    std::fs::write(d.join("tasks-done.md"), format!("{done}- [X] T66 old\n")).unwrap();
+    assert!(tick(&ask(&root, &d, "T66", "n"), false, false)
+        .stderr
+        .contains("no open task T66 in tasks.md"));
+    // an archive that cannot be written leaves the task ticked in tasks.md, said, and the tick done
+    std::fs::remove_file(d.join("tasks-done.md")).unwrap();
+    std::fs::create_dir(d.join("tasks-done.md")).unwrap();
+    let kept = tick(&ask(&root, &d, "T01", "n"), false, false);
+    assert_eq!(kept.code, 0, "{}", kept.stderr);
+    assert!(kept
+        .stderr
+        .starts_with("tick: the ticked tasks stay in tasks.md - "));
+    let usage = std::fs::read_to_string(root.join(".git/tool-usage.jsonl")).unwrap();
+    assert!(usage.contains("\"outcome\": \"unchanged\""));
 }
 
 #[test]
@@ -289,4 +322,28 @@ fn the_land_s_first_pass_asks_every_task_in_one_reading() {
     put(&d, "tasks.md", "- [ ] T01 a\n");
     std::fs::write(d.join("plan.md"), [0xff]).unwrap();
     assert!(checks(&root, &d, "n", &words(&["T01"]), false, &env).is_err());
+}
+
+#[test]
+fn the_archive_form_moves_the_ticked_tasks_alone() {
+    // feature 449 T142: the tick's last step by hand
+    let dir = repo("archive-form");
+    let root = root_of(&dir);
+    let d = root.join("specs/9001-x");
+    assert_eq!(cli(&words(&["--archive"]), &root).code, 2);
+    assert_eq!(cli(&words(&["--archive", "9"]), &root).code, 2);
+    assert_eq!(
+        cli(&words(&["--archive", "9001"]), &root).stdout,
+        "tick --archive: 1 ticked task(s) moved to 9001-x/tasks-done.md: T09\n"
+    );
+    assert_eq!(
+        cli(&words(&["--archive", "9001"]), &root).stdout,
+        "tick --archive: 0 ticked task(s) moved to 9001-x/tasks-done.md: none\n"
+    );
+    put(&d, "tasks.md", "- [x] T05 x\n");
+    std::fs::remove_file(d.join("tasks-done.md")).unwrap();
+    std::fs::create_dir(d.join("tasks-done.md")).unwrap();
+    let failed = cli(&words(&["--archive", "9001"]), &root);
+    assert_eq!(failed.code, 1);
+    assert!(failed.stderr.starts_with("tick --archive: "));
 }

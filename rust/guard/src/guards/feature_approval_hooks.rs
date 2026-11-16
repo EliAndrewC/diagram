@@ -235,7 +235,10 @@ pub fn at_rev(top: &str, rev: &str, dir: &str) -> Option<AtRev> {
         return None;
     }
     let show = |name: &str| git(top, &["show", &format!("{rev}:{prefix}/{name}")]).out;
-    let (spec, tasks, rows) = (show("spec.md"), show("tasks.md"), show("gm-review.jsonl"));
+    // the ticked tasks archived in tasks-done.md are the feature's as they were in tasks.md (feature 449 T142): read alone, a feature
+    // whose every task moved there would read open at HEAD and be refused as reopened
+    let tasks = crate::shared::speckit::tasks::joined(&show("tasks.md"), &show("tasks-done.md"));
+    let (spec, rows) = (show("spec.md"), show("gm-review.jsonl"));
     let status = STATUS
         .captures(&spec)
         .ok()

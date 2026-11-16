@@ -23,6 +23,11 @@ fn a_task_with_no_verify_line_gets_one_before_the_blank_lines() {
     // a last line with no newline gets one
     let (end, _) = tick(TASKS, "T10", "n", false).unwrap();
     assert!(end.ends_with("- [x] T10 last\n      verify: DONE. n\n"));
+    // a `###` heading ends the task too, and the prose under it is not the task's (feature 449 T142: 449's T001 took both)
+    let phased =
+        "- [ ] T01 one\n      research: rendering\n\n### Phase 2\n\nprose\n- [ ] T02 two\n";
+    let (new, _) = tick(phased, "T01", "n", false).unwrap();
+    assert_eq!(new, "- [x] T01 one\n      research: rendering\n      verify: DONE. n\n\n### Phase 2\n\nprose\n- [ ] T02 two\n");
 }
 
 #[test]

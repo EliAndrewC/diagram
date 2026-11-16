@@ -70,7 +70,7 @@ fn tick_boxes(line: &str) -> String {
 }
 
 /// The task's line as `^- \[<mark>\] <task>\b` matches it, `marks` the characters the box may hold.
-fn task_line(marks: &str, task: &str) -> Regex {
+pub(crate) fn task_line(marks: &str, task: &str) -> Regex {
     re(&format!(r"^- \[{marks}\] {}\b", fancy_regex::escape(task)))
 }
 
@@ -99,7 +99,9 @@ pub fn tick(text: &str, task: &str, note: &str, boxes: bool) -> Result<(String, 
         return Err(Refused::Value(format!("no open task {task} in tasks.md")));
     };
     let end = (start + 1..lines.len())
-        .find(|&i| lines[i].starts_with("- [") || lines[i].starts_with("## "))
+        // ...or any heading (feature 449 T142): ending only at `## `, a task above a `###` phase heading took the heading and the prose
+        // under it into its block, and its verify line was written below them - 449's T001, T005 and T070
+        .find(|&i| lines[i].starts_with("- [") || lines[i].starts_with('#'))
         .unwrap_or(lines.len());
     let mut block: Vec<String> = lines[start..end].iter().map(|l| (*l).to_owned()).collect();
     block[0] = format!("- [x]{}", &block[0]["- [ ]".len()..]);

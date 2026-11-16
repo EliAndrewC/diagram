@@ -201,9 +201,12 @@ fn file_into(text: &str, task: &str, keys: &[String], by: &str) -> Result<String
     Err(format!("no task {task} in tasks.md"))
 }
 
-fn new_box(text: &str, keys: &[String], ruling: &str) -> (String, String) {
+/// A new open box for the carried keys, its id one past every id of the feature's - `done` the ticked tasks archived in tasks-done.md,
+/// whose ids are taken (feature 449 T142).
+fn new_box(text: &str, done: &str, keys: &[String], ruling: &str) -> (String, String) {
+    let all = l7r_guard::shared::speckit::tasks::joined(text, done);
     let top = BOX
-        .captures_iter(text)
+        .captures_iter(&all)
         .flatten()
         .filter_map(|c| c[2][1..].parse::<u64>().ok())
         .max()
@@ -305,8 +308,14 @@ pub fn carry(
     } else {
         format!("the round arbiter's ruling {ruling}")
     };
+    let done = l7r_guard::shared::speckit::tasks::done_text(&d)?;
     let (text, task) = if task.is_empty() {
-        new_box(&text, keys, ruling)
+        new_box(&text, &done, keys, ruling)
+    } else if l7r_guard::shared::speckit::tasks::archived(&done, task) {
+        // a ticked task archived in tasks-done.md is ticked, not missing (feature 449 T142)
+        return Err(format!(
+            "{task} is ticked; file into an open task, or leave T= off for a new one"
+        ));
     } else {
         (file_into(&text, task, keys, &by)?, task.to_owned())
     };

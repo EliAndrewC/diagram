@@ -87,7 +87,8 @@ pub(super) fn decision_refusal(root: &Path) -> String {
 fn archivable(dir: &Path) -> Vec<String> {
     let plan = dir.join("plan.md");
     let text = read(&plan);
-    let tasks = read(&dir.join("tasks.md"));
+    // a task archived in tasks-done.md is ticked (feature 449 T142): its section may move once its review turns CLEAR after the task did
+    let tasks = l7r_guard::shared::speckit::tasks::all_text(dir).unwrap_or_default();
     let done: BTreeSet<String> = re(r"(?m)^- \[[xX]\] (T\d+[a-z]?)\b")
         .captures_iter(&tasks)
         .flatten()
@@ -263,7 +264,14 @@ pub(super) fn push_owed(
         let Some(tasks) = show(root, reference, &format!("{feature}/tasks.md")) else {
             continue;
         };
-        if !has_ticked(&String::from_utf8_lossy(&tasks)) {
+        // ...or a ticked task archived in tasks-done.md (feature 449 T142): a feature whose ticked tasks all moved still owes its review
+        let archived =
+            show(root, reference, &format!("{feature}/tasks-done.md")).unwrap_or_default();
+        let tasks = l7r_guard::shared::speckit::tasks::joined(
+            &String::from_utf8_lossy(&tasks),
+            &String::from_utf8_lossy(&archived),
+        );
+        if !has_ticked(&tasks) {
             continue;
         }
         let review = show(root, reference, &format!("{feature}/{RECORD}"))

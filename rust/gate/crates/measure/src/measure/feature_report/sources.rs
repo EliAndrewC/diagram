@@ -234,13 +234,16 @@ pub fn plan_blocks(root: &Path, name: &str, shas: &HashSet<&str>) -> Result<usiz
     Ok(n)
 }
 
-/// (ticked, boxes) of `tasks.md` (`tasks_done`).
+/// (ticked, boxes) of `tasks.md` and the ticked tasks archived in `tasks-done.md` (feature 449 T142) (`tasks_done`).
 ///
 /// # Errors
 ///
-/// A `tasks.md` that cannot be read as UTF-8.
+/// A `tasks.md` or `tasks-done.md` that cannot be read as UTF-8.
 pub fn tasks_done(d: &Path) -> Result<(usize, usize), Raised> {
-    let text = super::super::events::text_if_file(&d.join("tasks.md"))?;
+    let text = l7r_guard::shared::speckit::tasks::joined(
+        &super::super::events::text_if_file(&d.join("tasks.md"))?,
+        &super::super::events::text_if_file(&d.join("tasks-done.md"))?,
+    );
     Ok((DONE.find_iter(&text).count(), BOX.find_iter(&text).count()))
 }
 
@@ -283,7 +286,9 @@ pub fn task_starts(root: &Path, name: &str) -> Result<Vec<(String, f64)>, Raised
     Ok(out)
 }
 
-/// When each task was ticked: the first commit adding its `- [x] Txx` line to the feature's tasks.md (`task_ticks`).
+/// When each task was ticked: the first commit adding its `- [x] Txx` line to the feature's tasks.md, or to tasks-done.md where the tick
+/// archived it in the same write (feature 449 T142; a task ticked before the archive keeps its tick in tasks.md, the earlier commit)
+/// (`task_ticks`).
 ///
 /// # Errors
 ///
@@ -298,6 +303,7 @@ pub fn task_ticks(root: &Path, name: &str) -> Result<Vec<(String, f64)>, Raised>
             "-p",
             "--",
             &format!("specs/{name}/tasks.md"),
+            &format!("specs/{name}/tasks-done.md"),
         ],
     )?;
     let mut out: Vec<(String, f64)> = Vec::new();

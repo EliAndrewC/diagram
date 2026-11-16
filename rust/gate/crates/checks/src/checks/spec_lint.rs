@@ -355,19 +355,31 @@ fn check_stale_tasks(spec: &Path, tasks: &Path) -> Vec<String> {
     bad
 }
 
-/// Check 7: a task id on two task lines of one `tasks.md`.
-fn check_duplicate_tasks(tasks: &Path) -> Vec<String> {
-    let text = read(tasks);
-    let mut seen: BTreeMap<String, usize> = BTreeMap::new();
+/// Check 7: a task id on two task lines of one feature's tasks - its `tasks.md` and the ticked tasks archived in `tasks-done.md` (feature
+/// 449 T142), read as one list: an id archived and filed again is taken as surely as one filed twice.
+fn check_duplicate_tasks(files: &[PathBuf]) -> Vec<String> {
+    let mut seen: BTreeMap<String, String> = BTreeMap::new();
     let mut bad = Vec::new();
-    for (n, line) in py_lines(&text).enumerate() {
-        let Ok(Some(m)) = TASK_LINE.captures(line) else {
-            continue;
-        };
-        if let Some(first) = seen.get(&m[1]) {
-            bad.push(format!("{}:{}: task id {} is taken (line {first}) - file a task with `make task-add F=<n> TITLE=...`, which takes the next free id", tasks.display(), n + 1, &m[1]));
-        } else {
-            seen.insert(m[1].to_owned(), n + 1);
+    for tasks in files {
+        let text = read(tasks);
+        for (n, line) in py_lines(&text).enumerate() {
+            let Ok(Some(m)) = TASK_LINE.captures(line) else {
+                continue;
+            };
+            let here = if files.len() > 1 {
+                format!(
+                    "{}:{}",
+                    tasks.file_name().unwrap_or_default().to_string_lossy(),
+                    n + 1
+                )
+            } else {
+                format!("line {}", n + 1)
+            };
+            if let Some(first) = seen.get(&m[1]) {
+                bad.push(format!("{}:{}: task id {} is taken ({first}) - file a task with `make task-add F=<n> TITLE=...`, which takes the next free id", tasks.display(), n + 1, &m[1]));
+            } else {
+                seen.insert(m[1].to_owned(), here);
+            }
         }
     }
     bad
@@ -408,10 +420,18 @@ fn lint(spec_dir: &Path, tree_root: &Path) -> Vec<String> {
     let tasks = spec_dir.join("tasks.md");
     let mut bad = check_withdrawn(spec_dir, tree_root);
     if tasks.is_file() {
+        // the archived tasks are the feature's tasks as they were in tasks.md (feature 449 T142)
+        let mut files = vec![tasks];
+        let done = spec_dir.join("tasks-done.md");
+        if done.is_file() {
+            files.push(done);
+        }
         bad.extend(check_figures(&spec));
         bad.extend(check_orphans(&spec));
-        bad.extend(check_stale_tasks(&spec, &tasks));
-        bad.extend(check_duplicate_tasks(&tasks));
+        for f in &files {
+            bad.extend(check_stale_tasks(&spec, f));
+        }
+        bad.extend(check_duplicate_tasks(&files));
     }
     bad.extend(check_measured_figures(spec_dir));
     bad.extend(check_approval(spec_dir));

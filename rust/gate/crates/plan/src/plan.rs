@@ -438,7 +438,15 @@ fn answer(
                 "archive" => {
                     let ids = task::archive(&dir, None);
                     let list = if ids.is_empty() { "none finished".to_owned() } else { ids.join(", ") };
-                    said(format!("plan-archive: {} task section(s) moved to {}/plan-done.md: {list}\n", ids.len(), dir.file_name().unwrap_or_default().to_string_lossy()))
+                    let name = dir.file_name().unwrap_or_default().to_string_lossy();
+                    // ...AND THE TICKED TASKS (feature 449 T142): `make plan-archive` is the one-time archive of a feature's tasks
+                    // ticked before the tick moved them, the tick's own step run by hand
+                    let moved = match l7r_guard::shared::speckit::tasks::archive(&dir) {
+                        Ok(moved) => moved,
+                        Err(why) => return fail(format!("plan-archive: {why}\n"), 1),
+                    };
+                    let tasks = if moved.is_empty() { "none ticked".to_owned() } else { moved.join(", ") };
+                    said(format!("plan-archive: {} task section(s) moved to {name}/plan-done.md: {list}\nplan-archive: {} ticked task(s) moved to {name}/tasks-done.md: {tasks}\n", ids.len(), moved.len()))
                 }
                 _ => plan_delta(&dir, out_root, claims),
             }

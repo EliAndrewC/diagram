@@ -252,17 +252,27 @@ fn check_7_a_task_id_taken_twice() {
         ),
         None,
     );
-    let got = check_duplicate_tasks(&dir.join("tasks.md"));
+    let got = check_duplicate_tasks(&[dir.join("tasks.md")]);
     assert!(
         got[0].contains(":4: task id T93 is taken (line 1)") && got[0].contains("make task-add")
     );
+    // an id archived in tasks-done.md and filed again is taken too, each file named (feature 449 T142)
+    std::fs::write(dir.join("tasks-done.md"), "# h\n\n- [x] T94 a page\n").unwrap();
+    let both = check_duplicate_tasks(&[dir.join("tasks.md"), dir.join("tasks-done.md")]);
+    assert!(both[1].contains("tasks-done.md:3: task id T94 is taken (tasks.md:3)"));
+    // the lint reads both: a stale citation in the archive is named there
+    std::fs::write(dir.join("tasks-done.md"), "- [x] T95 cites FR-404\n").unwrap();
+    assert!(lint(&dir, &dir)
+        .iter()
+        .any(|b| b.contains("tasks-done.md:1: cites FR-404")));
+    std::fs::remove_file(dir.join("tasks-done.md")).unwrap();
     std::fs::write(
         dir.join("tasks.md"),
         "- [ ] T93 a figure\n- [ ] T93a its half\n",
     )
     .unwrap();
     assert_eq!(
-        check_duplicate_tasks(&dir.join("tasks.md")),
+        check_duplicate_tasks(&[dir.join("tasks.md")]),
         Vec::<String>::new()
     );
 }

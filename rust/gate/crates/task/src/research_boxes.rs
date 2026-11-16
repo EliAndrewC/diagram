@@ -106,8 +106,9 @@ fn every_ticked_physical_task_has_its_research_boxes_ticked() {
             .to_string_lossy()
             .into_owned();
         let n: u32 = dir.split('-').next().unwrap().parse().unwrap();
+        // the ticked tasks archived in tasks-done.md owe their boxes as they did in tasks.md (feature 449 T142)
         bad.extend(violations(
-            &std::fs::read_to_string(f).unwrap(),
+            &l7r_guard::shared::speckit::tasks::all_text(f.parent().unwrap()).unwrap(),
             n,
             &format!("specs/{dir}/tasks.md "),
         ));

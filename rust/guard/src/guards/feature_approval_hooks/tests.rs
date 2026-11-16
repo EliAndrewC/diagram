@@ -349,3 +349,25 @@ fn the_push_reads_the_form_of_the_approval_line() {
         ""
     );
 }
+
+#[test]
+fn a_feature_whose_ticked_tasks_were_archived_reads_as_it_did() {
+    // feature 449 T142: tasks-done.md is read beside tasks.md at the revision, so the archive closes nothing and reopens nothing
+    let (_dir, at, _tr) = repo("archived");
+    let d = format!("{at}/specs/376-older");
+    std::fs::write(format!("{d}/tasks.md"), "- [x] T1 a\n- [ ] T2 b\n").unwrap();
+    commit(&at, "two tasks");
+    let before = super::at_rev(&at, "HEAD", "376-older").unwrap();
+    std::fs::write(format!("{d}/tasks.md"), "- [ ] T2 b\n").unwrap();
+    std::fs::write(format!("{d}/tasks-done.md"), "# h\n\n- [x] T1 a\n").unwrap();
+    commit(&at, "archived");
+    let after = super::at_rev(&at, "HEAD", "376-older").unwrap();
+    assert_eq!((before.state, before.open), (after.state, after.open));
+    std::fs::write(format!("{d}/tasks.md"), "# t\n").unwrap();
+    std::fs::write(format!("{d}/tasks-done.md"), "- [x] T1 a\n- [x] T2 b\n").unwrap();
+    commit(&at, "all archived");
+    assert_eq!(
+        super::at_rev(&at, "HEAD", "376-older").unwrap().state,
+        "closed"
+    );
+}

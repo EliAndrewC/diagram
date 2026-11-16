@@ -76,10 +76,15 @@ fn the_switch_and_the_record() {
         file_into(&text, "T09", &["a".into()], "me").unwrap_err(),
         "no task T09 in tasks.md"
     );
-    let (boxed, task) = new_box(&text, &["a".into(), "b".into()], "");
+    let (boxed, task) = new_box(&text, "", &["a".into(), "b".into()], "");
     assert_eq!(task, "T04");
     assert!(boxed.contains("- [ ] T04 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: a, b [lands-open]\n      research: rendering\n- [ ] GM review"));
-    let (boxed, task) = new_box("- [ ] T7 x", &["a".into()], "ask:r");
+    // an id archived in tasks-done.md is taken (feature 449 T142)
+    assert_eq!(
+        new_box(&text, "# h\n\n- [x] T11 x\n", &["a".into()], "").1,
+        "T12"
+    );
+    let (boxed, task) = new_box("- [ ] T7 x", "", &["a".into()], "ask:r");
     assert_eq!((task.as_str(), boxed.ends_with("findings it carried - fix the code or the claim and re-check each: a [lands-open]\n      research: rendering\n")), ("T08", true));
     assert_eq!(key_of("DRIFTED        a::b#c - note - more"), "a::b#c");
     assert_eq!(key_of("DRIFTED        a::b#c -"), "a::b#c -");
@@ -120,9 +125,25 @@ fn a_carry_is_filed_only_where_the_switch_and_the_delta_allow() {
             .unwrap()
             .contains("\"ruling\": \"ask:x\"")
     );
+    // a task archived in tasks-done.md is ticked, and its id is taken (feature 449 T142)
+    put(
+        &root,
+        "specs/405-claims/tasks-done.md",
+        "- [x] T04 archived\n",
+    );
+    assert!(carry(&root, "405", "T04", &["k".into()], "ask:x")
+        .unwrap_err()
+        .contains("T04 is ticked"));
     assert!(carry(&root, "405", "", &["k2".into()], "")
         .unwrap()
-        .contains("filed into 405-claims T04"));
+        .contains("filed into 405-claims T05"));
+    std::fs::remove_file(root.join("specs/405-claims/tasks-done.md")).unwrap();
+    let text = std::fs::read_to_string(root.join("specs/405-claims/tasks.md")).unwrap();
+    std::fs::write(
+        root.join("specs/405-claims/tasks.md"),
+        text.replace("- [ ] T05 ", "- [ ] T04 "),
+    )
+    .unwrap();
     assert!(carry(&root, "406", "", &["k3".into()], "")
         .unwrap()
         .contains("filed into 405-claims T05"));

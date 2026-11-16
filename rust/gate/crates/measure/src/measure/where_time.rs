@@ -570,10 +570,20 @@ fn run(
     let feature_no = name.split('-').next().unwrap_or_default();
     if by_tick {
         // ...EACH TASK'S TICK WINDOW (feature 385 T115, D132): what the GM's speed question was answered with by hand
+        // ...a tick the tick archived in the same write is in tasks-done.md's history (feature 449 T142)
         let rel = format!("specs/{name}/tasks.md");
+        let done = format!("specs/{name}/tasks-done.md");
         let log_p = git(
             &root,
-            &["log", "--reverse", "--format=@@%cI", "-p", "--", &rel],
+            &[
+                "log",
+                "--reverse",
+                "--format=@@%cI",
+                "-p",
+                "--",
+                &rel,
+                &done,
+            ],
         )?;
         let t0 = if since.is_empty() {
             let mut first: Option<f64> = None;
