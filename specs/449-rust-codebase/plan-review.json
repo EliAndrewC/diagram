@@ -97,18 +97,6 @@
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
-  "### T85 (<why: the finding or measurement that files it>)": {
-   "sha256": "c7f853f11d9f08e9752ec4b0d48cdc0b6e83b9361ee9e433d33880caf9ef9ecf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
-  "### T85 Approach (checklist part A)": {
-   "sha256": "f6d169dae70126217aece04e95e73222313c8a9121f0d94a39c84fe2cce241dc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
-  },
   "### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)": {
    "sha256": "8a3121b42a7812b3b054301f241c79f1596a5ec5e1bcbe996a55120bcd6e6c99",
    "verdict": "CLEAR",
@@ -121,46 +109,10 @@
    "reviewed": "2026-11-14",
    "declared": "round-arbiter"
   },
-  "### T129 (the hook libraries no task held, the phase-3 census of 2026-11-12)": {
-   "sha256": "8e645acd13e59631eea3b4412b098012d8308724e49cc8f446ace1f61b8ee37a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
-  },
-  "### T129 Approach (checklist part A)": {
-   "sha256": "37272e4d3fabb9e048c65455f627824f8d938f50ada3e3f52ef137262ff7b221",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
-  "### T139 (the past features' measurement scripts that still run, `ask:449-phase3-remainder` Q4)": {
-   "sha256": "81901163d81f2735fa47a0051d5e4da14a108240bb2209f77f3b21dd5efccd59",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
-  },
-  "### T139 Approach (checklist part A)": {
-   "sha256": "0dc03e6120e3bdc40fbb511a38762e2677c2fe5e494ad6f99693b74f44065248",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "spec-fidelity"
-  },
-  "### T128 (<why: the finding or measurement that files it>)": {
-   "sha256": "f390fde5d660315f1af2752e2b9c7b7a6d9d1a02f0d3c8986f9136a3bfcff959",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
-  },
-  "### T128 Approach (checklist part A)": {
-   "sha256": "4021ec48adf008b29d7a64928a674280a8687fcdbc395468ec308e19974c57f7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
-  },
   "### T135 (the authoring tools no task held, `ask:449-phase3-remainder`)": {
-   "sha256": "2c284170ab6b612b53d3f19b62a2b4714a52104f5a1fdde2fb77e8f3d61b8892",
+   "sha256": "e0004779e10eb8019f41a6cb9e19330c11ce5f788f16e0f24f83ab2a13a01891",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
+   "reviewed": "2026-11-16",
    "declared": "round-arbiter"
   },
   "### T135 Approach (checklist part A)": {
@@ -168,18 +120,6 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-14",
    "declared": "round-arbiter"
-  },
-  "### T137 (<why: the finding or measurement that files it>)": {
-   "sha256": "e50ce6087f3fbcd0c226e0f65689443b133b097138944b733b09edbdab37de8b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
-  },
-  "### T137 Approach (checklist part A)": {
-   "sha256": "94afb4a1168cfb32bd6e211da53021202dbbf70284b596214d6e828811cc4a4a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "spec-fidelity"
   },
   "### T138 (<why: the finding or measurement that files it>)": {
    "sha256": "557d015f05fb5263becaf4a857bd9174e95c4d2133140d54ba8ed7262eab4630",
@@ -193,41 +133,11 @@
    "reviewed": "2026-11-14",
    "declared": "round-arbiter"
   },
-  "### T140 (<why: the finding or measurement that files it>)": {
-   "sha256": "044b6e58fb6e5734627a641418bf7007cc3b021dd31d6a980f27eb135d0e2625",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
-  },
-  "### T140 Approach (checklist part A)": {
-   "sha256": "9779b736cbbbc14be82f8d390fedc81d17506441193616c606845dc3e82c206e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
-  },
-  "### T137 (the page sessions' tools no task held, `ask:449-phase3-remainder`)": {
-   "sha256": "d797d0b50f2ccf0d9b893c6e0450a94b487f7c0ba0469d4c979b9e0a477cbbd1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "spec-fidelity"
-  },
-  "### T142 (ticked tasks archived out of tasks.md, the GM 2026-11-15)": {
-   "sha256": "c86560a968134b6ce03e1850bc1cdf966cd5ba77e723696474e9c9a16db17195",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
-  },
-  "### T142 Approach (checklist part A)": {
-   "sha256": "8d9486884496e324fad3d26577a039b122df217048096da45f924cf64db5065a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
-  },
   "### T143 (the shell libraries' inline Python, `ask:449-phase4-slices` Q12)": {
-   "sha256": "716c9d2494e1394843f6c1fad9a8994228d18ca7f608b0356ae1401ec3320865",
+   "sha256": "f8cfb96f7c09b7f12f674b62349a3305c40626b6077cf5c61dbb5c8cfec84cd2",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T143 Approach (checklist part A)": {
    "sha256": "6600f268db097d2d2d943449d37138a13f2ab104103a6481e0df9eec564dcb6b",
@@ -235,41 +145,185 @@
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
   },
-  "### T144 (phase 4's S1, the research record's core, `ask:449-phase4-slices`)": {
-   "sha256": "81bf54417cb84c94e723f913fa386a7f893f39bdb0d45bc976040f4d180e5a76",
+  "### T147 (<why: the finding or measurement that files it>)": {
+   "sha256": "22916a683fc17fa130c05935fcd2bb05dd5a30a2a0acc59c7d39626857591ee7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T144 Approach (checklist part A)": {
-   "sha256": "2e231b7b9612d2fcfaf1839181b4c41ae118be4451b57da4c1753ae0c17214e5",
+  "### T147 Approach (checklist part A)": {
+   "sha256": "df5db7d6829e4340130052d0645cca8661533850a6bc57e704c86827c378edc3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T145 (phase 4's S2, T81's cut together, `ask:449-phase4-slices`)": {
-   "sha256": "11e45bc2323c975d81bc9fd2f4b475c33d40f4fcd998fe7aaac6f2efc8af1a20",
+  "### T148 (<why: the finding or measurement that files it>)": {
+   "sha256": "a97fdbc9d7ab975dfdfee9a64dced6cbed1ff89c12dc73c646cdb133b7dbc569",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T145 Approach (checklist part A)": {
-   "sha256": "153d0d51a8463e3ba5d9f3d5aee8a04e6ed5035ed0294d17f85b9b567945f983",
+  "### T148 Approach (checklist part A)": {
+   "sha256": "b3b3d1a747e40f11e09cd32142a6ade6674215fe0942673f720c86ec02631731",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T146 (phase 4's S3a, the one browser crate, `ask:449-phase4-slices`)": {
-   "sha256": "45c56434549e4333f7878f3f31507dc446a9e0f9fdf7e53641446fed6c424025",
+  "### T149 (<why: the finding or measurement that files it>)": {
+   "sha256": "c697d8f6b56ed91ec293960ca0d6743234fb0319cec1ba5d7436cfc7b46f880d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T146 Approach (checklist part A)": {
-   "sha256": "89cae8a66fd32b858fb91b3689ec4651825c4254185341e05b001dcb71f58d8e",
+  "### T149 Approach (checklist part A)": {
+   "sha256": "e3eeb4cbd2460a7fdab2734476a79fe7fbc06471000e7eb3bdd82d214605801c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
+  },
+  "### T150 (<why: the finding or measurement that files it>)": {
+   "sha256": "eb5f23d52992a47eb1f466ff61c9340833bd98a14a9ed460ce0ede4b53b40c62",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T150 Approach (checklist part A)": {
+   "sha256": "2138959c3911462f5513ef34a44b62bd7e4aea967996766711ad9238bd070322",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T151 (<why: the finding or measurement that files it>)": {
+   "sha256": "4ce71f90185f4fa753c100fdbe35fd95d5f21431a6b41d54bfa5afd93f4f2c76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T151 Approach (checklist part A)": {
+   "sha256": "9a545aad0c0c4ed62d4841bc76da6ef2516bd7344110f77c87244a77681a2789",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T152 (<why: the finding or measurement that files it>)": {
+   "sha256": "c0af6ae7e3eb1a9b4c5d4c19cd52f8f7c8b45884de95ac28c57db38fee5369c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T152 Approach (checklist part A)": {
+   "sha256": "096035d84d86e5d6184a8dc7fb492ecd1568eea19e995497916dc971cc591c96",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T153 (<why: the finding or measurement that files it>)": {
+   "sha256": "af4a5108dee352474c4bfd0877c35b8a1392fe590f2eeecd8c5b058b12767074",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T153 Approach (checklist part A)": {
+   "sha256": "c8cabec2ac57bf1d0aff3f485d18d3875e614c43e3be344070a561f16ecdf83d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T154 (<why: the finding or measurement that files it>)": {
+   "sha256": "300dd419bf08af92ed8cf668c422cec7c8c7bcd403963c631d158a8693854af1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T154 Approach (checklist part A)": {
+   "sha256": "7a2eb0ed579754978d747e81cf5ce9a45e0370266b386fbb7463275b2c4ad8ba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T155 (<why: the finding or measurement that files it>)": {
+   "sha256": "181ca40cd13269697957d4f4dc9ecd364c4afa3afeb60120034303308f10c9db",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T155 Approach (checklist part A)": {
+   "sha256": "3a67f28d0f55e13bdbbb577dfa3e17147f862f42d94001020dd44bbe251548b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T156 (<why: the finding or measurement that files it>)": {
+   "sha256": "69b6a3404f5ed8be8fa85309455cbc430f654367a9eb1fdfe40090061e0a4761",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T156 Approach (checklist part A)": {
+   "sha256": "8d518fc0a06bc1048415e581489549987933f42408f03245ac8ff68d3c17df80",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T157 (<why: the finding or measurement that files it>)": {
+   "sha256": "4e3adf3aa84c166f7e886c5f21346e9b96eed0ae56ae5cf235e0c2b97d49a00f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T157 Approach (checklist part A)": {
+   "sha256": "81212083ef2f1057fcba1b18b6cd70d3c499324b6a026f45ec9917aebb0703dd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T158 (<why: the finding or measurement that files it>)": {
+   "sha256": "ed621ed581a98464317c0bda08519177dc237dc731c36b52fcb31400d147b158",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T158 Approach (checklist part A)": {
+   "sha256": "8d3a59a30e437ba97863034f7acb9c9582095f48a7687b48b18f671c5c8f76ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T159 (the plan review's commonest unreviewable return, a count no label reaches; the GM 2026-11-16, request.md)": {
+   "sha256": "616557451d12c4aab90ee96877c5d22d8e1caa5d43fc27b46fd14ac0542b73fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T159 Approach (checklist part A)": {
+   "sha256": "ef7d157634d75b307c731bd5c82804d74cb1ed30399c553ab0c24905b9f6b2c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T160 (<why: the finding or measurement that files it>)": {
+   "sha256": "a4dfceef13394457701bcea4aa122664c18196f196724cf58b099ed425c7374b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T160 Approach (checklist part A)": {
+   "sha256": "5d03c60978702f82da3c9edc663551f63b6db4eac409d3caacdf60521af46740",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T161 (<why: the finding or measurement that files it>)": {
+   "sha256": "9349d6caead39b02fea65662ab19a2bd17b8c4cab178c9a570dff45a018254bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
+  },
+  "### T161 Approach (checklist part A)": {
+   "sha256": "36e915cf1f89f124cd9a0315b9577bd8104f0e7837c3fa838913f0d690ecf214",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -9202,6 +9256,52 @@
      "why": "FR-001's rewrite of recorded measurements in the porting commit; ask:449-phase4-slices' slice order; FR-004 coverage held by make static."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T135 (the authoring tools no task held, `ask:449-phase3-remainder`)",
+    "### T143 (the shell libraries' inline Python, `ask:449-phase4-slices` Q12)",
+    "### T147 (<why: the finding or measurement that files it>)",
+    "### T147 Approach (checklist part A)",
+    "### T148 (<why: the finding or measurement that files it>)",
+    "### T148 Approach (checklist part A)",
+    "### T149 (<why: the finding or measurement that files it>)",
+    "### T149 Approach (checklist part A)",
+    "### T150 (<why: the finding or measurement that files it>)",
+    "### T150 Approach (checklist part A)",
+    "### T151 (<why: the finding or measurement that files it>)",
+    "### T151 Approach (checklist part A)",
+    "### T152 (<why: the finding or measurement that files it>)",
+    "### T152 Approach (checklist part A)",
+    "### T153 (<why: the finding or measurement that files it>)",
+    "### T153 Approach (checklist part A)",
+    "### T154 (<why: the finding or measurement that files it>)",
+    "### T154 Approach (checklist part A)",
+    "### T155 (<why: the finding or measurement that files it>)",
+    "### T155 Approach (checklist part A)",
+    "### T156 (<why: the finding or measurement that files it>)",
+    "### T156 Approach (checklist part A)",
+    "### T157 (<why: the finding or measurement that files it>)",
+    "### T157 Approach (checklist part A)",
+    "### T158 (<why: the finding or measurement that files it>)",
+    "### T158 Approach (checklist part A)",
+    "### T159 (the plan review's commonest unreviewable return, a count no label reaches; the GM 2026-11-16, request.md)",
+    "### T159 Approach (checklist part A)",
+    "### T160 (<why: the finding or measurement that files it>)",
+    "### T160 Approach (checklist part A)",
+    "### T161 (<why: the finding or measurement that files it>)",
+    "### T161 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-T159-rounds",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16434,6 +16534,82 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T159": {
+   "section_sha256": "742d2fc2ddc136c49a448c4f38d8272033ea792d05800c9c2fd85bb713bf7e6d",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T159-count-rule",
+     "summary": "make decide's lint (asked by make plan-delta too) refuses a sentence stating a count of a measured noun with no label in that sentence, as feature 430 D5 already refuses an unlabeled figure with a physical unit; the message names the labels and says to re-read the count from the run's record after the last edit.",
+     "class": "within",
+     "why": "This is the GM's first proposal of 2026-11-16, 'a pre-review figure check in make decide', approved with 'Sounds good, please proceed with that'. It extends D5's existing pre-review refusal to the unlabeled counts that were costing review rounds, which is the evidence the GM was shown."
+    },
+    {
+     "id": "T159-carve-plan-parts",
+     "summary": "Counts of the plan's own parts ('14 decisions', 'two tasks', '11 recipes') are not refused.",
+     "class": "within",
+     "why": "These name the document. They make no measured claim about the world, so they are not figures in the project's figure contract. A figure check that refused them would add rewrites, the opposite of the request's purpose of fewer round trips. No measured figure is exempted."
+    },
+    {
+     "id": "T159-carve-thresholds",
+     "summary": "A rule's threshold ('no file over 1,000 lines', 'at most 10 keys') is exempt.",
+     "class": "within",
+     "why": "A threshold states a limit and has no measurement to label, so a label cannot be asked of it. That puts it outside the class of thing the figure check exists for. It narrows nothing the GM asked to have checked."
+    },
+    {
+     "id": "T159-carve-ids-dates-code",
+     "summary": "Dates, task and requirement ids, and code spans are not figures.",
+     "class": "within",
+     "why": "This is the same reading D5's unit check already makes. It is not a new carve-out."
+    },
+    {
+     "id": "T159-sentence-split",
+     "summary": "A count's label is looked for in its sentence only, where the unit check also splits at ';'. The choice was measured over sixteen reviewed sections of 449: 11 flags with the ';' split, 3 with the sentence split, each of the 3 a real unlabeled count.",
+     "class": "within",
+     "why": "D5 itself defines the rule at sentence level ('whose sentence carries no label'). The GM's words leave the granularity open, and the plan chose it by measurement, against false refusals that would themselves cost round trips. Nothing the GM asked to have checked is dropped."
+    },
+    {
+     "id": "T159-miscount",
+     "summary": "The miscounted-figure case (T145's third return) is answered by the lint's message and by a brief rule (re-measure each figure after the agent's last edit, with its method), not by the lint verifying values.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM was shown returns lost to 'unlabeled or miscounted figures' and approved 'a pre-review figure check'. The check reaches the unlabeled case only. Mechanically verifying a one-shot count's value is impossible: its method is an observation or a scratch script that the lint cannot rerun. Keyed figures are already rerun by make figures under the existing contract. The plan does not drop the case: it puts it in the refusal message and in every brief. This is the physical-impossibility ground, not convenience."
+    },
+    {
+     "id": "T159-test-T145",
+     "summary": "T145's '(183, 98 and 57 lines)' is refused and its labeled form passes, pinned by the lint's tests.",
+     "class": "within",
+     "why": "Enforcement of the requested check, on the case that motivated it."
+    },
+    {
+     "id": "T159-proposal2-in-briefs",
+     "summary": "The GM's second proposal (differentials rerun only the cases a fix touched) is carried 'outside the code', as a rule in every port task's brief from T147 on: each harness keys its cases by inputs and code and reruns only the changed ones, with the full run kept once at the end. The only check is item 9, a one-time look at T147's report. No tooling makes a harness do it or refuses one that does not.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM approved 'the differentials rerunning only what a fix touched' (2026-11-16). Earlier, on the exact pattern of port agents rerunning slow checks while iterating, the GM said: 'we need not only for our standard procedures to be running things in a sensible way, our tooling must enforce this, or else future Claude Code sessions, or even this session itself, as the session moves on, will drift back to running extraordinarily slow commands over and over again when faster commands would do' (2026-11-11, request.md). A brief is a standard procedure, and the plan labels this rule 'outside the code'. Nothing keeps it after T147: a brief that omits it, or a harness that ignores it, passes every gate. No GM words confine the 2026-11-11 passage to compiling. It was said after measuring that 'a port agent ran the slow checks over and over while iterating', and a differential is such a check. It is not impossible: a shared case-keyed runner, or a check that refuses a harness without one, is tooling the plan could carry. 'Harnesses are written per task' is cost, not impossibility. To clear: carry proposal 2 in tooling that makes rerunning only the touched cases the default, or that refuses a harness that does not do it, with tests. Otherwise put the brief-only form to the GM or the round arbiter as an exception."
+    },
+    {
+     "id": "T159-T160-last",
+     "summary": "The third proposal, compile and test speed, is filed as T160, ordered last and opening with a measurement of where compile and test time goes.",
+     "class": "within",
+     "why": "The GM was shown it ranked last ('compile and test speed last') and approved the order as shown. Measuring first follows this feature's standing rule for efficiency work."
+    },
+    {
+     "id": "T159-order",
+     "summary": "T159 lands after T146 and before T147, whose plan it checks first.",
+     "class": "within",
+     "why": "The GM: 'Those all seem like goofd things to prioritize so that we can make progress more quickly.' Landing it before the next port honors that."
+    },
+    {
+     "id": "T159-exits-done",
+     "summary": "Green: the plan crate's tests, full line coverage and make land. Done is measured by the lint's tests, T147's plan reaching review with no figure returned, and T147's report of its harness's selective rerun.",
+     "class": "within",
+     "why": "These verify the requested behavior and are within the request. (The weakness of the T147 check as the only hold on proposal 2 is ruled on in T159-proposal2-in-briefs.)"
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

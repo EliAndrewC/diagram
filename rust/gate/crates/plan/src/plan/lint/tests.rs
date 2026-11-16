@@ -5,7 +5,7 @@ use std::path::Path;
 use super::super::tests::{feature_at, run};
 use super::{
     gm_quotes_missing, missing_red_exit, plan_refusal, refusal, tasks_without_approach,
-    unlabeled_figure, unlabeled_unit_figure,
+    unlabeled_count, unlabeled_figure, unlabeled_unit_figure,
 };
 use crate::checks::scratch;
 
@@ -194,4 +194,27 @@ fn an_approach_block_ends_at_the_next_heading() {
         approach("T01", "Green: landed.")
     );
     assert_eq!(missing_red_exit(&text), "T01");
+}
+
+#[test]
+fn a_count_needs_a_label_in_its_sentence() {
+    let t145 = "- **Approach**: five ported whole; `sources.py` and `attempts.py` cut to thin forwarders (183, 98 and 57 lines) that the importers call.\n";
+    assert!(unlabeled_count(t145).contains("57 lines"));
+    assert!(refusal(Path::new("/no/such"), t145).contains("a count whose sentence"));
+    assert!(
+        unlabeled_count("The differential's 1,261 cases differ in two.\n").contains("1,261 cases")
+    );
+    assert!(unlabeled_count("- reads the 110 `.py` files under `l7r/`.\n").contains("110"));
+    for fine in [
+        "Forwarders of 198, 98 and 66 lines (observed 2026-11-16, method: `wc -l`).\n",
+        "Its 1,261 cases, measured 2026-11-16 (the harness).\n",
+        "The 1,261 cases (`m:t145-cases`).\n",
+        "No file over 1,000 lines; at most 10 keys a write.\n",
+        "The review ruled 14 decisions and 11 recipes.\n",
+        "The span `wc -l 57 lines` is code.\n",
+        "```\n57 lines\n```\n",
+        "Task T145 and FR-002 on 2026-11-16.\n",
+    ] {
+        assert_eq!(unlabeled_count(fine), "", "{fine}");
+    }
 }

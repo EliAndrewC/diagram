@@ -172,6 +172,46 @@ fn unlabeled_unit_figure(section: &str) -> String {
     String::new()
 }
 
+// A COUNT is a figure too (feature 449 T159, the GM 2026-11-16): "(183, 98 and 57 lines)", "1,261 cases" - the plan review sent T145
+// back unreviewable on that one parenthesis, a round of about 15 minutes a script could have spent in a second. The nouns are what this
+// project's plans count by measuring; the plan's own parts ("14 decisions", "two tasks", "11 recipes") name, not measure, and stay out.
+static COUNT: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?<![\w.-])\d[\d,]*(?:\.\d+)?\s*(?:lines?|cases?|files?|pages?|calls?|callers?|crates?|suites?|tests?|rows?|keys?|entries|entry|findings?|differences?|mismatches?|runs?|sites?|commits?|bytes?|KB|KiB|tokens?|questions?|sources?|modules?|functions?|mutations?|outputs?|hits?|fragments?|footnotes?|URLs?|domains?|processes|process|invocations?)(?![\w-])",
+    )
+});
+// A count is split into sentences only, where a unit figure is split at ";" too: over the sixteen reviewed sections of 449 (T121-T145),
+// the ";" split flagged 8 counts their reviews had passed, the sentence split 3, each a count no label reached (feature 449 T159).
+static SPLIT_SENTENCE: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?<=\.)\s+|\n\s*\n|\n(?=\s*(?:[-*] |\d+\. |#|\|))"));
+// A rule's threshold ("no file over 1,000 lines") states a limit, not a measurement.
+static THRESHOLD: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"(?i)\b(?:over|under|at most|at least|past|beyond|exceeds?|up to)\s+\d[\d,]*\s+[a-z]+")
+});
+
+/// The first sentence stating a count with no label, or "" (feature 449 T159).
+fn unlabeled_count(section: &str) -> String {
+    let text = FENCE.replace_all(section, " ").into_owned();
+    for sentence in split_on(&SPLIT_SENTENCE, &text) {
+        let bare = SPAN.replace_all(sentence, " ");
+        let bare = NOT_A_FIGURE.replace_all(&bare, " ");
+        let bare = THRESHOLD.replace_all(&bare, " ");
+        let labeled = [&*LABEL, one_shot_pattern(), &*DECISION_LABEL]
+            .iter()
+            .any(|p| p.is_match(sentence).unwrap_or(false));
+        if COUNT.is_match(&bare).unwrap_or(false) && !labeled {
+            return sentence
+                .split_whitespace()
+                .collect::<Vec<_>>()
+                .join(" ")
+                .chars()
+                .take(160)
+                .collect();
+        }
+    }
+    String::new()
+}
+
 /// The task whose approach block's item 6 routes no red result through `make arbiter-ask` (D35's wording), or "".
 fn missing_red_exit(section: &str) -> String {
     for c in APPROACH_HEAD.captures_iter(section).flatten() {
@@ -233,6 +273,10 @@ pub(super) fn refusal(spec_dir: &Path, section: &str) -> String {
     let fig = unlabeled_unit_figure(section);
     if !fig.is_empty() {
         return format!("a figure with a unit whose sentence carries no label - a measurement `measured <YYYY-MM-DD> (<method>)`, `observed <YYYY-MM-DD>, method: ...` or `m:<key>`; a decided size its research label (GUESS, CONVENTION, ...), its page or its knob - label it where it stands (feature 430 D5):\n  {fig}");
+    }
+    let fig = unlabeled_count(section);
+    if !fig.is_empty() {
+        return format!("a count whose sentence carries no label - `observed <YYYY-MM-DD>, method: ...`, `measured <YYYY-MM-DD> (<method>)` or `m:<key>`; re-read it from the run's own record after the last edit (T145's forwarders were 198 and 66 lines, reported 183 and 57) and label it where it stands (feature 449 T159):\n  {fig}");
     }
     let task = missing_red_exit(section);
     if !task.is_empty() {

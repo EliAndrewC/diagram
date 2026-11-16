@@ -710,3 +710,80 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T159 (the plan review's commonest unreviewable return, a count no label reaches; the GM 2026-11-16, request.md)
+
+- **Approach**: `make decide`'s lint (`rust/gate/crates/plan/src/plan/lint.rs`, which `make plan-delta` asks too) refuses a sentence stating a count - a number before a noun this project's plans count by measuring (lines, cases, files, pages, calls, crates, suites, tests, rows, keys, findings, differences, runs, commits, bytes and their kin) - with no label in that sentence, as it already refuses a figure with a physical unit; its message names the labels and says to re-read the count from the run's own record after the last edit.
+
+   **Decisions** (the GM's words in request.md, 2026-11-16; FR-001's tooling, feature 385 T86 and feature 430 D5, whose check it extends):
+   - Why: of four port agents' time, the checks took 5-14% and the differentials 2-30%, the rest the model's own work (observed 2026-11-16, method: each tool call's wait and each background wait in the agents' transcripts, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/agent_time.py`); the avoidable cost was the review's round trips, and T145's plan took five dispatches, three of them returned for a figure - two unlabeled, then one count misreported (observed 2026-11-16, method: this session's dispatches and their replies). Each such return costs a dispatch, a rewrite and a fresh `make decide`.
+   - The nouns are counts a plan measures; the plan's own parts ("14 decisions", "two tasks", "11 recipes") name and do not measure, so they stay out; a rule's threshold ("no file over 1,000 lines", "at most 10 keys") states a limit and is exempt; a date, a task or requirement id and a code span are not figures, as the unit check already reads them.
+   - A count is split by sentence only, where the unit check splits at ";" too: over the sixteen reviewed sections of 449 from T121 to T145, the ";" split flagged 11 counts their reviews had passed and the sentence split 3, each a count no label reached - "110 `.py` files" (T134), "124 cases" (T134), "336 calls" (T144) (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/figcheck/proto2.py`, the rule mirrored in Python, over `plan-done.md`). The tick's own "**Done, measured.**" lines, written after the review, were left out of that count.
+   - It catches the case that filed it: T145's `(183, 98 and 57 lines)` is refused and its labeled form passes, pinned by the lint's tests.
+   - Kept with it: every port task's brief from T147 on asks for each figure re-measured after the agent's last edit, with its method. The GM's second proposal - the differentials rerunning only what a fix touched - is enforced by tooling, as the GM's 2026-11-11 words ask ("our tooling must enforce this"), so it is its own task, T161: one shared runner in the repository keying each case by the inputs and code it runs, rerunning after a fix only the cases whose key moved, the port briefs using it. The third proposal, compile and test speed, is T160, ordered last as the GM was shown it, opening with a measurement of where compile and test time goes.
+   - The checks: the plan crate's tests green, its line coverage complete (observed 2026-11-16, method: `make rust-test CRATE=rust/gate/crates/plan` and `l7r-gate.sh rust uncovered --crate rust/gate/crates/plan`).
+
+### T159 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan section reaches its review with every count labeled, so no round is spent on one.
+2. **The constraints.** The GM's words (request.md, 2026-11-16); feature 430 D5's rule that a plan review is never dispatched on what a script can see.
+3. **Where each comes from.** G: the GM's approval; O: the transcript split and the sixteen-section measurement above.
+4. **Do they describe the world here?** Measured on this feature's own reviewed sections, measured 2026-11-16 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/figcheck/proto2.py`).
+5. **The order.** After T146; before T147, whose plan it checks first.
+6. **The exits.** Green: the plan crate's tests and coverage, and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The lint's tests, and T147's plan reaching its review with no figure returned.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No - it saves review rounds, not running time.
+
+
+### T160 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T160 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T161 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T161 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
