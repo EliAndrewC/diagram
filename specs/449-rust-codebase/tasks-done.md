@@ -425,3 +425,6 @@
 - [x] T161 The differential runner, the GM's second approved proposal (request.md 2026-11-16) enforced by tooling (the GM 2026-11-11, 'our tooling must enforce this'): one shared runner in the repository that keys each case by the inputs and code it runs and reruns after a fix only the cases whose key moved, the port briefs from T147 on using it
       research: rendering
       verify: DONE. landed: the shared differential runner and its lint; 16 real cases rerun 32/0/6/16 sides across a first, a no-change, a one-file and a verify run
+- [x] T162 The clone-sync guard's launcher exemption for a forked background session: a session started with --fork-session --resume <parent> treats that parent as its dispatcher, as L7R_DISPATCHER does for a page session (found by T147's port agent, refused in its own clone)
+      research: rendering
+      verify: DONE. landed: the clone-sync guard's forked-session dispatcher; guard tests green, coverage complete, the test failing without the fix
