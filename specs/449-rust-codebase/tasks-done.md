@@ -413,3 +413,6 @@
 - [x] T145 Phase 4 S2, T81's cut together (ask:449-phase4-slices), ask:449-T80-order: scripts/record/sources, attempts, reserve-prefix, quote_verbatim, source_pages, record_prepass, style_prepass, apply_edits (3,075 lines); retires owed/answers.rs REPLY_OF, owed/translation.rs READER and parser_key, bundle_door's run, passages and save_cached verbs, blocked_fetch_hooks.rs's by-path run
       research: rendering
       verify: DONE. landed: phase 4 S2, T81's record tools in Rust: 1,261 differential cases with two ruled differences, the write paths 204; make static, rust-test and hooks-test green
+- [x] T146 Phase 4 S3a, the one browser crate (ask:449-phase4-slices) Q4: scripts/record/archive.py and glyph_crop.py over CDP (995 lines), the crate page_lit later uses; retires depiction.rs's include_str! and python3 run and the Playwright install in setup-dev-env.sh; before S3b (ask:449-T80-order's condition met by S1)
+      research: rendering
+      verify: DONE. landed: phase 4 S3a, the one browser crate: 109 differential cases with one explained difference, 36 crops identical, a kept end-to-end case; make static, rust-test and hooks-test green
