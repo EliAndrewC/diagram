@@ -41,8 +41,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       note: not landed - its plan review (BLOCKED, 2026-11-12) held it to the GM's condition: the suite alone fell from 35.0 s to about 17 s, but the full hook run did not move (52.1 s against 53.1 s and 54.1 s), so no significant saving in the loop he is speeding up; the change is kept as a patch until the run's real bound is found
 - [ ] T138 Phase 3, the research search no task held (phase-3 census, 2026-11-12): research_search.py and semantic_index.py (520 lines), after T85 (both import archive in process)
       research: rendering
-- [ ] T143 Phase 3, the shell libraries' inline Python (ask:449-phase4-slices) Q12: scripts/hooks/lib/guardlog.sh and clone-resolve.sh (sourced by five *-gate.sh, l7r-guard.sh and sync-with-main.sh on every run) and .specify/scripts/bash/common.sh's four sites, onto the Rust; before S1
-      research: rendering
 - [ ] T144 Phase 4 S1, the record's core (ask:449-phase4-slices): interactive/record's split, assemble, absence, contents, fragments, notes, originals, passages, questions, confusables, xref, store, site_notes, source_tags, blocked, archive and __init__, with interactive/sources.py and content.py (2,721 lines), extending core::record; its own task, since S2-S12 import it
       research: rendering
 - [ ] T145 Phase 4 S2, T81's cut together (ask:449-phase4-slices), ask:449-T80-order: scripts/record/sources, attempts, reserve-prefix, quote_verbatim, source_pages, record_prepass, style_prepass, apply_edits (3,075 lines); retires owed/answers.rs REPLY_OF, owed/translation.rs READER and parser_key, bundle_door's run, passages and save_cached verbs, blocked_fetch_hooks.rs's by-path run

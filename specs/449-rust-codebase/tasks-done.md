@@ -404,3 +404,6 @@
 - [x] T142 Ticked tasks archived out of tasks.md into tasks-done.md, as ticked tasks' plan sections already go to plan-done.md, and every reader of a feature's tasks reading both (the next free task number, the spec-kit state, the closing check, the tick's already-ticked and landed checks, the research boxes, the feature report): 449's tasks.md holds 131 ticked tasks of 137, about 63 KB read whole by every session and agent that opens it (the GM 2026-11-15: "please do that, because I imagine that will make our long-running featuers with tons of tasks much more token efficient")
       research: rendering
       verify: DONE. landed: ticked tasks archived to tasks-done.md, every reader reading both: 1,001 outputs with none differing; 449's tasks.md 63,691 to 6,040 bytes; make static, rust-test and hooks-test green
+- [x] T143 Phase 3, the shell libraries' inline Python (ask:449-phase4-slices) Q12: scripts/hooks/lib/guardlog.sh and clone-resolve.sh (sourced by five *-gate.sh, l7r-guard.sh and sync-with-main.sh on every run) and .specify/scripts/bash/common.sh's four sites, onto the Rust; before S1
+      research: rendering
+      verify: DONE. landed: the shell libraries' inline Python replaced (guardlog.sh, common.sh; clone-resolve.sh deleted): 2,558 differential cases, none differing; make static, rust-test and hooks-test green
