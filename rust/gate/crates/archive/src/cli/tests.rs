@@ -145,12 +145,9 @@ fn backfill_report_and_the_gms_copies_and_each_refusal() {
 }
 
 #[test]
-fn the_one_door_left_is_reached_through_the_command_line() {
+fn the_doors_are_all_retired() {
     let w = World::new("cli-doors");
-    let home = w.home.to_string_lossy().into_owned();
-    let (r, _, _) = run(&w, &["push", "--home", &home], &browser, "");
-    assert_eq!((r.code, r.stdout.as_str()), (0, ""));
-    // the eight T147 retired are no command now
+    // the eight T147 retired, and `push`, the last, with T138 (S4)
     for gone in [
         "serve",
         "settle",
@@ -160,6 +157,7 @@ fn the_one_door_left_is_reached_through_the_command_line() {
         "lane",
         "sync-gm",
         "write-row",
+        "push",
     ] {
         assert_eq!(run(&w, &[gone], &browser, "").0.code, 2, "{gone}");
     }

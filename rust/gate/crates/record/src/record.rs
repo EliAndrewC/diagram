@@ -367,6 +367,9 @@ pub fn cli(args: &[String]) -> Reply {
         Some("uncited") => {
             l7r_gate_uncited::cli::cli(rest, &current_dir(), &reserve::reserve_uncited)
         }
+        // feature 449 T138 (phase 4's S4): `semantic_index.py`'s two commands and `research_search.py`
+        Some("semantic") => l7r_gate_semantic::cli::cli(rest, &current_dir()),
+        Some("search") => l7r_gate_semantic::cli::search_cli(rest, &current_dir()),
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),

@@ -139,6 +139,8 @@ fn the_rust_walk_skips_the_tooling_crates_and_targets_and_keeps_python_order() {
     put(&root, "rust/phases/src/a-x/c.rs", "pub fn c() {}\n");
     put(&root, "rust/phases/src/a/b.rs", "pub fn b() {}\n");
     put(&root, "rust/browser/src/lib.rs", "pub fn launch() {}\n");
+    // the embedder program holds no research claim either (feature 449 T138)
+    put(&root, "rust/embed/src/lib.rs", "pub fn cli() {}\n");
     put(&root, "rust/gate/src/lib.rs", "pub fn cli() {}\n");
     let paths: Vec<String> = rglob(&root.join("rust"), ".rs")
         .iter()

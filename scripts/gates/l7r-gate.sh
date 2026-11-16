@@ -30,6 +30,14 @@ if [ "${1:-}" = browser ]; then
   shift; BIN="$TARGET/tool/l7r-browser"; PKG=(-p l7r_browser --bin l7r-browser)
   SOURCES=("$TREE"/rust/browser "$TREE"/scripts/container/chromium.pin)
 fi
+# THE EMBEDDER IS ITS OWN PROGRAM (feature 449 T138, `ask:449-phase4-slices` Q11): `embed <cmd>` runs `l7r-embed`, the one crate that
+# runs BGE-M3 through ONNX Runtime (`rust/embed/`), built alone from its own sources and the runtime's pin; neither `l7r-gate` nor
+# `l7r-guard` depends on it, so their builds never compile the runtime's bindings or the tokenizer. The gate's `record semantic` and
+# `record search` reach it as a program.
+if [ "${1:-}" = embed ]; then
+  shift; BIN="$TARGET/tool/l7r-embed"; PKG=(-p l7r_embed --bin l7r-embed)
+  SOURCES=("$TREE"/rust/embed "$TREE"/scripts/container/onnxruntime.pin)
+fi
 cargo=${L7R_GATE_CARGO:-}
 [ -n "$cargo" ] || { [ -x "$real/.cargo/bin/cargo" ] && cargo="$real/.cargo/bin/cargo" || cargo=cargo; }
 # every source the binary builds from: the guard crate's too, which both build on - before T93 a guard edit left `l7r-gate` stale

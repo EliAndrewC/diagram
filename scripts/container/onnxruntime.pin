@@ -1,0 +1,8 @@
+# The one ONNX Runtime the embedder crate loads (feature 449 T138, the round arbiter's `ask:449-phase4-slices` Q11; `rust/embed/`):
+# Microsoft's own Linux x64 release of the version the Python's `onnxruntime` wheel was (1.31.1, the version `fastembed` ran BGE-M3 on),
+# so the Rust embeds the stored index's passages and a question with the same runtime - its vectors bit for bit the Python's on the
+# probes (observed 2026-11-16, method: 24 English, Japanese, Chinese and archive texts, batched and alone, both sides compared).
+# `install-onnxruntime.sh` downloads and checks it, and the crate finds the library by this version. A new version: change both lines
+# together (the SHA-256 is the archive's, `sha256sum onnxruntime-linux-x64-<version>.tgz`).
+ONNXRUNTIME_VERSION=1.31.1
+ONNXRUNTIME_SHA256=c849e36a1ef3e22d4ff217b9d1ce4a3cf5b9467b975610913ae959ad5b16bdc9

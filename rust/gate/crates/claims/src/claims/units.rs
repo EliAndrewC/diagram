@@ -487,8 +487,10 @@ pub fn all_rust_units(root: &Path, repo_prefix: &str) -> Result<Vec<Pair>, Fail>
     for p in rglob(&base, ".rs") {
         let inner = rel(&p, &base);
         let parts: Vec<&str> = inner.split('/').collect();
-        // the tooling crates hold no research claims: the guard, the gate, and the browser program (feature 449 T146)
-        if parts.contains(&"target") || ["parked", "guard", "gate", "browser"].contains(&parts[0]) {
+        // the tooling crates hold no research claims: the guard, the gate, the browser program (feature 449 T146) and the embedder (T138)
+        if parts.contains(&"target")
+            || ["parked", "guard", "gate", "browser", "embed"].contains(&parts[0])
+        {
             continue;
         }
         let text = crate::record::repo::read_text(&p)?;

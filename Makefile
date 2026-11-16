@@ -845,15 +845,15 @@ archive-sources: ## [project] archive every cited URL with no copy yet (resumabl
 archive-inbox: ## [project] the GM's downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass; a NEW download waits until you give its keys (feature 309)   [MATCH="<file>=<key>[,<key>] ..."] [NONE="<file> ..."]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")
 
-semantic-index: ## [project] build or update the semantic index of the record and the archive - only new or changed passages embedded, its shards committed to the archive and pushed (feature 447; BGE-M3, run locally, half the cores)   [SHARD=<s>] [LIMIT=<n>]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/semantic_index.py" build $(foreach s,$(SHARD),--shard "$(s)") $(if $(LIMIT),--limit "$(LIMIT)",)
+semantic-index: ## [project] build or update the semantic index of the record and the archive - only new or changed passages embedded, its shards committed to the archive and pushed (feature 447; BGE-M3, run locally, half the cores; Rust since 449 T138)   [SHARD=<s>] [LIMIT=<n>]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record semantic build $(foreach s,$(SHARD),--shard "$(s)") $(if $(LIMIT),--limit "$(LIMIT)",)
 
 semantic-find: ## [project] the passages of the record and the archive nearest a question by meaning, in any language - each with its file, place and opening words; beside archive-find, never in its place (feature 447)   Q="<question>" [K=<n>]
 	@if [ -z "$(Q)" ]; then printf 'make semantic-find: Q="<question>" is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/semantic_index.py" find "$(Q)" $(if $(K),--k "$(K)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record semantic find "$(Q)" $(if $(K),--k "$(K)",)
 
 research-search: ## [project] THE local search before the web: the meaning search (a question per language) and the text search (term sets, every term required) over the record and the archive in one call, merged by source, each printed once with its best passage and what found it; a call prints a batch and counts the rest, and under KEY= the next call prints the next batch, never one already shown (feature 447 amendment 3)   Q="<english>" [Q_JA="<日本語>"] [Q_ZH="<中文>"] [Q_KO="<한국어>"] [TERMS="a|b;c|d"] [KEY=<question key>] [LIMIT=<archive sources, 15>] [RECORD_LIMIT=<pages, 5>]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/research_search.py" $(if $(Q),--q "$(Q)",) $(if $(Q_JA),--q "$(Q_JA)",) $(if $(Q_ZH),--q "$(Q_ZH)",) $(if $(Q_KO),--q "$(Q_KO)",) $(if $(TERMS),--terms "$(TERMS)",) $(if $(KEY),--key "$(KEY)",) $(if $(LIMIT),--limit "$(LIMIT)",) $(if $(RECORD_LIMIT),--record-limit "$(RECORD_LIMIT)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record search $(if $(Q),--q "$(Q)",) $(if $(Q_JA),--q "$(Q_JA)",) $(if $(Q_ZH),--q "$(Q_ZH)",) $(if $(Q_KO),--q "$(Q_KO)",) $(if $(TERMS),--terms "$(TERMS)",) $(if $(KEY),--key "$(KEY)",) $(if $(LIMIT),--limit "$(LIMIT)",) $(if $(RECORD_LIMIT),--record-limit "$(RECORD_LIMIT)",)
 
 archive-find: ## [project] does the archive already hold it? by URL, registry key, or words in the archived text - names each copy's local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)   URL=<u> | KEY=<k> | TERMS="a|b" (every term required; one term per call to try alternatives)
 	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi

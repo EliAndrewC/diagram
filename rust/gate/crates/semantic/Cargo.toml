@@ -1,0 +1,28 @@
+# The research search (feature 449 T138, phase 4's S4 under `ask:449-phase4-slices`): `scripts/record/semantic_index.py` and
+# `research_search.py` ported - the semantic index of the record and the archive (its `.npz` shards in the archive's working copy, kept
+# by a fingerprint of each passage so an update embeds only what is new), the meaning search over it, and the combined search
+# (`l7r-gate record semantic build|find`, `l7r-gate record search`; `make semantic-index`, `make semantic-find`, `make research-search`).
+# The embedder is the `l7r-embed` program (`rust/embed/`), run through `scripts/gates/l7r-gate.sh embed`, never a dependency here, so
+# the gate's build never compiles ONNX Runtime's bindings (Q11: "a Rust embedder runs the same BGE-M3 weights ... against the stored
+# index"). On `core`, `research` (Python's patterns, `pyre`), `archive` (the working copy, its lock and its push) and the guard; `record`
+# takes it for its dispatch.
+[package]
+name = "l7r_gate_semantic"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_archive = { path = "../archive" }
+l7r_gate_core = { path = "../core" }
+l7r_gate_research = { path = "../research" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_archive = { path = "../archive", features = ["testkit"] }
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

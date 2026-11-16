@@ -2,9 +2,11 @@
 # crate a phase's tools, sharing one lockfile and the build profile below; `scripts/gates/rust_checks.py` checks each member.
 # The gate is a binary over crates (feature 449 T92, the GM 2026-11-11): `gate/crates/*`, so an edit recompiles one crate and what
 # depends on it, not all 74,199 lines. `browser` is the one browser crate (feature 449 T146, `ask:449-phase4-slices` Q4), its own
-# binary `l7r-browser`: no gate or guard crate depends on it, so their builds never compile it.
+# binary `l7r-browser`: no gate or guard crate depends on it, so their builds never compile it. `embed` is the embedder (feature 449
+# T138, `ask:449-phase4-slices` Q11), its own binary `l7r-embed` for the same reason: ONNX Runtime's bindings and the tokenizer stay out
+# of the gate's and the guard's builds.
 [workspace]
-members = ["phases", "guard", "gate", "gate/crates/*", "browser"]
+members = ["phases", "guard", "gate", "gate/crates/*", "browser", "embed"]
 resolver = "2"
 
 # ONE FEATURE SET FOR EVERY GATE CRATE (feature 449 T92): a gate crate names an outside dependency only as `{ workspace = true }`, so

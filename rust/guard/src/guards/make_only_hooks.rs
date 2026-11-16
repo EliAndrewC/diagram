@@ -77,7 +77,7 @@ lazy!(
 );
 lazy!(
     BINARY,
-    format!(r"{POS}(?:\S*/)?(l7r-guard|l7r-gate|l7r-rust|l7r-browser|hamlet)(?![\w.-])")
+    format!(r"{POS}(?:\S*/)?(l7r-guard|l7r-gate|l7r-rust|l7r-browser|l7r-embed|hamlet)(?![\w.-])")
 );
 lazy!(MAKE_ARGS, format!(r"{POS}(?:\$\(MAKE\)|make)\b([^\n;|&]*)"));
 lazy!(ASSIGN, r"(?<!\S)([A-Za-z_][A-Za-z0-9_]*)=");
@@ -245,7 +245,8 @@ pub(crate) fn classify(cmd: &str) -> String {
     if cmd.contains("cargo") && hit(&CARGO, &clean) {
         return "bare-cargo".to_owned();
     }
-    // every replacement binary (FR-005): `l7r-rust` (T93) and `l7r-browser` (T146) too, which `l7r-gate.sh rust` and `browser` run
+    // every replacement binary (FR-005): `l7r-rust` (T93), `l7r-browser` (T146) and `l7r-embed` (T138) too, which `l7r-gate.sh rust`,
+    // `browser` and `embed` run
     if (cmd.contains("l7r-") || cmd.contains("hamlet")) && hit(&BINARY, &clean) {
         return "bare-binary".to_owned();
     }

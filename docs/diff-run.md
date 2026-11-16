@@ -53,7 +53,7 @@ the side's `cmd`. Each process gets the runner's environment less make's own var
     "timeout_s": 900, "max_text_bytes": 5000000, "inputs": ["setup.py", "pages"]
   },
   "sides": {
-    "old": {"label": "py", "cmd": ["python3", "scripts/record/archive.py"], "vars": {"REV": "<old sha>"},
+    "old": {"label": "py", "cmd": ["python3", "{ROOT}/old_tool.py"], "vars": {"REV": "<old sha>"},
             "fingerprint": [{"git": "/diagram/.clones/x", "rev": "<old sha>"}]},
     "new": {"label": "rs", "cmd": ["scripts/gates/l7r-gate.sh", "record", "archive"], "vars": {"REV": "<new sha>"},
             "build": [["sh", "-c", "env -u L7R_GATE_STALE_OK /diagram/.clones/x/scripts/gates/l7r-gate.sh --version"]],

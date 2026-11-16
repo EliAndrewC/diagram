@@ -81,6 +81,14 @@ fn a_replacements_binary_is_refused_and_its_wrapper_is_not() {
     assert_eq!(v("~/.cache/x/tool/l7r-browser serve"), "bare-binary");
     assert_eq!(v("scripts/gates/l7r-gate.sh browser crop x"), "ok");
     assert_eq!(v("ls rust/browser/src/l7r-browser-notes"), "ok");
+    // the embedder's program (feature 449 T138; FR-005)
+    assert_eq!(
+        v("~/.cache/x/tool/l7r-embed serve --cache c"),
+        "bare-binary"
+    );
+    assert_eq!(v("l7r-embed serve"), "bare-binary");
+    assert_eq!(v("scripts/gates/l7r-gate.sh embed serve --cache c"), "ok");
+    assert_eq!(v("ls rust/embed/src/l7r-embed.md"), "ok");
     assert_eq!(v("hamlet x"), "bare-binary");
     assert_eq!(v("scripts/hooks/l7r-guard.sh --version"), "ok");
     assert_eq!(v("git log --grep hamlet"), "ok");

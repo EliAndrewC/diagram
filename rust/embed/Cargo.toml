@@ -1,0 +1,39 @@
+# The embedder (feature 449 T138, phase 4's S4; the round arbiter's `ask:449-phase4-slices` Q11): BGE-M3's 8-bit ONNX build
+# (`Xenova/bge-m3`'s `onnx/model_int8.onnx`, the files `fastembed` downloaded into the mirror's `.specify/model-cache/`) run as
+# `semantic_index.py`'s `model_embed` ran it, so the Rust searches the index the Python stored and updates it passage for passage. Its
+# own binary, `l7r-embed`, which `scripts/gates/l7r-gate.sh embed ...` builds and runs: neither the gate (`l7r-gate`) nor the guard
+# (`l7r-guard`) depends on it, so neither build compiles ONNX Runtime's bindings or the tokenizer.
+#
+# `ort` + `tokenizers`, NOT `fastembed-rs` (a decision the ruling left open): `fastembed-rs` wraps the same two crates with a Hugging Face
+# downloader and a model table of its own, neither wanted here (the model is on disk, and this crate must never download a different
+# one); the two alone repeat `fastembed`'s Python exactly - its tokenizer settings, its batches of eight, its ONNX session and its pooling
+# (`tok.rs`, `serve.rs`, `model.rs`, `pool.rs`). `ort` is pinned to 2.0.0-rc.10, the last release whose MSRV (1.81) the toolchain here
+# (1.87) builds, and loads the pinned ONNX Runtime 1.31.1 at run time (`load-dynamic`, `scripts/container/onnxruntime.pin`); `tokenizers`
+# to 0.23.2, the crate under the Python's `tokenizers` 0.23.3 wheel, with `onig`, the regex engine that wheel is built with.
+[package]
+name = "l7r_embed"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time (the key of a kept result): the pinned runtime's version, `include_str!`'d.
+[package.metadata.l7r]
+reads = ["scripts/container/onnxruntime.pin"]
+
+[lib]
+name = "l7r_embed"
+
+[dependencies]
+ort = { version = "=2.0.0-rc.10", default-features = false, features = ["load-dynamic", "std"] }
+serde_json = { workspace = true }
+tokenizers = { version = "=0.23.2", default-features = false, features = ["onig"] }
+
+[dev-dependencies]
+l7r_guard = { path = "../guard" }
+
+[[bin]]
+name = "l7r-embed"
+path = "src/main.rs"
+
+[lints]
+workspace = true

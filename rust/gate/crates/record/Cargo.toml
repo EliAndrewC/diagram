@@ -13,6 +13,7 @@ l7r_gate_core = { path = "../core" }
 l7r_gate_downloads = { path = "../downloads" }
 l7r_gate_pages = { path = "../pages" }
 l7r_gate_research = { path = "../research" }
+l7r_gate_semantic = { path = "../semantic" }
 l7r_gate_trials = { path = "../trials" }
 l7r_gate_uncited = { path = "../uncited" }
 l7r_guard = { path = "../../../guard" }

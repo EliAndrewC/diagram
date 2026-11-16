@@ -15,8 +15,8 @@
 //!   process)
 //! - `relayout`: the one-time move to the sharded layout
 //!
-//! - and the one door left of those Python's `archive.py` forwarded through, `push`, which S4's `semantic_index.py` still reaches
-//!   ([`door`]).
+//! The last door the Python's `archive.py` forwarded through, `push`, retired with feature 449 T138 (S4): `semantic_index.py`, its one
+//! caller, is the `semantic` crate now, which pushes in process ([`crate::store::Archive::push`]).
 
 use std::fmt::Write as _;
 use std::io::Write as _;
@@ -32,7 +32,6 @@ use crate::manifest::{archive_url, report, sync_gm_copies};
 use crate::store::Archive;
 use crate::{Error, Reply, Result};
 
-pub mod door;
 pub mod ops;
 
 fn reply(stdout: String, stderr: String, code: i32) -> Reply {
@@ -243,7 +242,6 @@ pub fn cli_with(args: &[String], cwd: &Path, reach: &Reach<'_>) -> Reply {
         Some(verb @ ("inbox" | "consulted" | "find" | "urls" | "relayout")) => {
             ops::cli(verb, rest, &root, reach)
         }
-        Some("push") => door::cli(rest),
         _ => usage(
             "argument cmd: invalid choice (choose from 'url', 'backfill', 'report', 'gm-copies', 'inbox', 'consulted', 'find', 'urls', 'relayout')",
         ),

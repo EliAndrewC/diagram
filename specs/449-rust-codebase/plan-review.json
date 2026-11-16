@@ -128,10 +128,10 @@
    "declared": "round-arbiter"
   },
   "### T138 Approach (checklist part A)": {
-   "sha256": "f5b931be6e98062d989d8515aea2cea4d9221d5fc6d6f363fcb44a8c8dd9756d",
+   "sha256": "559f834d347bd648b14934abc8cc7c106f91e9e965bfc620285c38ae39e97dab",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
   },
   "### T143 (the shell libraries' inline Python, `ask:449-phase4-slices` Q12)": {
    "sha256": "f8cfb96f7c09b7f12f674b62349a3305c40626b6077cf5c61dbb5c8cfec84cd2",
@@ -345,6 +345,12 @@
   },
   "### T162 Approach (checklist part A)": {
    "sha256": "7b6590731becad2046d58271313335d3cf962e041810732ed6eb9e677beea070",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
+  },
+  "### T138 (phase 4's S4, the research search, `ask:449-phase4-slices` Q11)": {
+   "sha256": "7b8e4e797015bc27acd5a2f1bf20c36c021c955dd1e6b767d223eb80d6dbab83",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
@@ -9535,6 +9541,112 @@
      "why": "Enforces the fix and holds FR-004's coverage floor; verification of the change itself, not added scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T138 (phase 4's S4, the research search, `ask:449-phase4-slices` Q11)",
+    "### T138 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T138-embedder",
+     "summary": "The embedder is ort =2.0.0-rc.10 with tokenizers =0.23.2 over the same Xenova/bge-m3 model_int8.onnx and tokenizer the Python used; fastembed-rs not taken.",
+     "class": "within",
+     "why": "ask:449-phase4-slices (spec-cited FR-001) rules that semantic_index 'runs the same BGE-M3 weights in Rust against the stored index'. The same weights file and tokenizer, run against the stored index, is exactly that. Which Rust runtime to use is a choice the ruling leaves open. The block's longer Q11 quote naming fastembed-rs or ort is not in the cited spec text, so the ruling's own sentence is what this rests on."
+    },
+    {
+     "id": "T138-model-local",
+     "summary": "The model is read from the mirror's .specify/model-cache/ and never downloaded. With no model present, the tool exits 1 and states the fix.",
+     "class": "within",
+     "why": "FR-002 binds outputs 'on every case its tests and its suites hold'. The differential's 174 cases include every refusal, and the block reports none differing. A missing-model run that downloads is not among the held cases the bundle shows. This decision is within only because of that clause. It does not depend on the cache happening to hold the model. If a kept test or suite case does hold the no-model path, it is bound and this becomes a new ask."
+    },
+    {
+     "id": "T138-numerics",
+     "summary": "The embedder copies the Python's numerics: fastembed's tokenizer setup, batches of 8, Level3 graph optimization, half the online cores, the CLS row and numpy's pairwise float32 norm.",
+     "class": "within",
+     "why": "These choices are how FR-002's identical outputs are reached. The block reports query vectors 68 of 68 and 41 new passage vectors bit-identical, with dated method labels."
+    },
+    {
+     "id": "T138-own-binary",
+     "summary": "rust/embed (l7r-embed) is a binary of its own, reached through l7r-gate.sh embed serve. No gate or guard crate depends on it, and the make-only guard refuses l7r-embed when run bare. Each point has a test.",
+     "class": "within",
+     "why": "This follows the pattern ask:449-T146-browser sets: its own binary, kept out of the guards' and the gate's build path. FR-005 is met by the guard covering the new binary. The browser ruling holds that crate's own lines to FR-004's full coverage and FR-008's test-time bar with one end-to-end test. That pattern binds rust/embed the same way, and this clearance rests on it. The block states 'no exemption taken'."
+    },
+    {
+     "id": "T138-claims-prune",
+     "summary": "The claims walk prunes embed.",
+     "class": "within",
+     "why": "Nothing in request.md, spec-cited.md or spec-index.md binds the claims walk's reach. A grep for 'claims walk', 'walk' and 'prune' finds nothing on it. The prune is a consequence of keeping the binary outside the gate's build and takes nothing the GM or the spec asked for. This rests only on that negative search. The browser amendment as cited says nothing about the claims walk, so 'like the browser' does not by itself carry the prune."
+    },
+    {
+     "id": "T138-onnxruntime",
+     "summary": "Microsoft's ONNX Runtime 1.31.1 release, the version the Python wheel shipped, is pinned by SHA-256 in scripts/container/onnxruntime.pin, installed by install-onnxruntime.sh into ~/.cache/l7r-onnxruntime/, and loaded at run time. setup-dev-env.sh runs the install. ort's build-time download (1.22) and the wheel's copy are not taken, and make rust-test does not need the library.",
+     "class": "within",
+     "why": "This is infrastructure for running the same model in Rust. It keeps the runtime version the Python used, which serves FR-002. It removes nothing the request or spec asks to keep."
+    },
+    {
+     "id": "T138-telemetry",
+     "summary": "ONNX Runtime's telemetry, on by default in the Linux build and writing $TMPDIR/.ses, is turned off. HEAD's Python had it on.",
+     "class": "within",
+     "why": "The .ses file is a side effect, not a verdict or output FR-002 binds. Turning it off agrees with FR-013, under which the tooling must not leave what it makes on disk. It narrows nothing that was asked."
+    },
+    {
+     "id": "T138-wiring",
+     "summary": "make semantic-index, semantic-find and research-search run the Rust (l7r-gate.sh record semantic build|find, record search) with their arguments unchanged, and the Python is deleted in the same cut.",
+     "class": "within",
+     "why": "ask:449-phase4-slices says a slice lands its Rust as a library with no production caller, its Python staying the implementation for Python importers until S11 or S12 wires the Rust in. That sentence protects Python importers. The block's census reports that no Makefile, shell, Python, agent file or doc names the four deleted files in command, import or -m form after the cut, so no Python importer is left to protect. Wiring the Rust in and deleting the Python at once satisfies FR-003 (no piece runs both) and FR-001. It does more of the request, not less, and the same ruling's S4 sentence has semantic_index 'run ... in Rust'."
+    },
+    {
+     "id": "T138-removals",
+     "summary": "archive.py and sources.py lose their last importers and are deleted, the archive's last door push retires, and requirements-semantic.* and setup-dev-env.sh's fastembed line are removed.",
+     "class": "within",
+     "why": "FR-001 places every requirements*.txt and setup-dev-env.sh's Python in phase 4, and this is phase 4's S4. ask:449-T80-order kept archive.py alive only for research_search.py and semantic_index.py. The GM's standing approval of 2026-11-10 ('Yes please delete Python files once their Rust ports land') covers the deletions. One limit on the evidence: the census greps the four deleted file names, not importers of what requirements-semantic installs. That changes no class."
+    },
+    {
+     "id": "T138-ties",
+     "summary": "Tied hits are compared as their tie group. Copies in the same group may differ in which one is printed: 191 lines in 31 cases. At find --k -3, 836 positions change order, with the largest HEAD gap 5.96e-8. A test pins the index-order tie break.",
+     "class": "within",
+     "why": "This applies FR-002's ruled case ask:449-T138-ties exactly. Which copy of an identical group is printed is not bound. Order at negative K may change below a 1e-7 gap, and 5.96e-8 is below it. Sources, spans, fingerprints, similarities, the set of hits, exit status and order at default and positive K are reported unchanged."
+    },
+    {
+     "id": "T138-norm-usage",
+     "summary": "Normalization: argparse's generated text.",
+     "class": "within",
+     "why": "FR-002's ruled case ask:449-usage-text: argparse's generated stderr text is not bound, while exit 2 and empty stdout are."
+    },
+    {
+     "id": "T138-norm-traceback",
+     "summary": "Normalization: one Python traceback (the empty-shard crash), with its kind and exit status kept.",
+     "class": "within",
+     "why": "ask:449-usage-text: 'an uncaught Python traceback's text is not bound for any port, its exit status and stdout staying held'. The block keeps the exit status."
+    },
+    {
+     "id": "T138-norm-world",
+     "summary": "Normalization: the runner's world path.",
+     "class": "within",
+     "why": "No ruling is cited for this one. It is within only if it is the per-side scratch path the shared diff-run harness gives each side, not text the two tools print differently. The block's wording ('the runner's world path') names the harness, and it is read that way here. A path that the Python itself wrote and the Rust writes differently would stay bound."
+    },
+    {
+     "id": "T138-timing",
+     "summary": "Timing and memory are recorded and not held: the verify run took 2,415.8 s, find ran 266.5 s against 251.3 s, search 323.5 s against 324.6 s, builds 59.9 s against 50.4 s, and peak memory was 1,516 MB against 1,252 MB.",
+     "class": "within",
+     "why": "No requirement holds a per-task time or memory bound on this port. FR-010 and SC-003 measure at phase end and over the suites. Every figure carries a dated one-shot method label."
+    },
+    {
+     "id": "T138-left-as-were",
+     "summary": "Shard zip times remain the write time, as the Python's were. The untracked rust/Cargo.lock leaves transitive versions floating, with ort and tokenizers pinned exactly.",
+     "class": "within",
+     "why": "The first keeps the Python's behavior. The second keeps the workspace's existing state, and the crates the embedder's outputs depend on are pinned. Neither narrows anything asked."
+    },
+    {
+     "id": "T138-e2e",
+     "summary": "One kept case in tests/hooks/test-l7r-gate.sh runs the real model through the production make paths, holding a vector bit for bit against the Python's, behind dead proxies.",
+     "class": "within",
+     "why": "This is FR-008's one end-to-end test against the real command. It enforces FR-002's identical output, the thing that was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -17043,6 +17155,110 @@
      "summary": "Guard tests green with a forked-through and an unforked-refused test that fails with the fix removed; guard line coverage complete; make land green.",
      "class": "within",
      "why": "Enforces the fix and holds FR-004's coverage floor; verification of the change itself, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T138": {
+   "section_sha256": "fdf38b9a5e3d30ce5145645609dc3bd3caddddd92ecaa570f2b53024a669557a",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T138-embedder",
+     "summary": "The embedder is ort =2.0.0-rc.10 with tokenizers =0.23.2 over the same Xenova/bge-m3 model_int8.onnx and tokenizer the Python used; fastembed-rs not taken.",
+     "class": "within",
+     "why": "ask:449-phase4-slices (spec-cited FR-001) rules that semantic_index 'runs the same BGE-M3 weights in Rust against the stored index'. The same weights file and tokenizer, run against the stored index, is exactly that. Which Rust runtime to use is a choice the ruling leaves open. The block's longer Q11 quote naming fastembed-rs or ort is not in the cited spec text, so the ruling's own sentence is what this rests on."
+    },
+    {
+     "id": "T138-model-local",
+     "summary": "The model is read from the mirror's .specify/model-cache/ and never downloaded. With no model present, the tool exits 1 and states the fix.",
+     "class": "within",
+     "why": "FR-002 binds outputs 'on every case its tests and its suites hold'. The differential's 174 cases include every refusal, and the block reports none differing. A missing-model run that downloads is not among the held cases the bundle shows. This decision is within only because of that clause. It does not depend on the cache happening to hold the model. If a kept test or suite case does hold the no-model path, it is bound and this becomes a new ask."
+    },
+    {
+     "id": "T138-numerics",
+     "summary": "The embedder copies the Python's numerics: fastembed's tokenizer setup, batches of 8, Level3 graph optimization, half the online cores, the CLS row and numpy's pairwise float32 norm.",
+     "class": "within",
+     "why": "These choices are how FR-002's identical outputs are reached. The block reports query vectors 68 of 68 and 41 new passage vectors bit-identical, with dated method labels."
+    },
+    {
+     "id": "T138-own-binary",
+     "summary": "rust/embed (l7r-embed) is a binary of its own, reached through l7r-gate.sh embed serve. No gate or guard crate depends on it, and the make-only guard refuses l7r-embed when run bare. Each point has a test.",
+     "class": "within",
+     "why": "This follows the pattern ask:449-T146-browser sets: its own binary, kept out of the guards' and the gate's build path. FR-005 is met by the guard covering the new binary. The browser ruling holds that crate's own lines to FR-004's full coverage and FR-008's test-time bar with one end-to-end test. That pattern binds rust/embed the same way, and this clearance rests on it. The block states 'no exemption taken'."
+    },
+    {
+     "id": "T138-claims-prune",
+     "summary": "The claims walk prunes embed.",
+     "class": "within",
+     "why": "Nothing in request.md, spec-cited.md or spec-index.md binds the claims walk's reach. A grep for 'claims walk', 'walk' and 'prune' finds nothing on it. The prune is a consequence of keeping the binary outside the gate's build and takes nothing the GM or the spec asked for. This rests only on that negative search. The browser amendment as cited says nothing about the claims walk, so 'like the browser' does not by itself carry the prune."
+    },
+    {
+     "id": "T138-onnxruntime",
+     "summary": "Microsoft's ONNX Runtime 1.31.1 release, the version the Python wheel shipped, is pinned by SHA-256 in scripts/container/onnxruntime.pin, installed by install-onnxruntime.sh into ~/.cache/l7r-onnxruntime/, and loaded at run time. setup-dev-env.sh runs the install. ort's build-time download (1.22) and the wheel's copy are not taken, and make rust-test does not need the library.",
+     "class": "within",
+     "why": "This is infrastructure for running the same model in Rust. It keeps the runtime version the Python used, which serves FR-002. It removes nothing the request or spec asks to keep."
+    },
+    {
+     "id": "T138-telemetry",
+     "summary": "ONNX Runtime's telemetry, on by default in the Linux build and writing $TMPDIR/.ses, is turned off. HEAD's Python had it on.",
+     "class": "within",
+     "why": "The .ses file is a side effect, not a verdict or output FR-002 binds. Turning it off agrees with FR-013, under which the tooling must not leave what it makes on disk. It narrows nothing that was asked."
+    },
+    {
+     "id": "T138-wiring",
+     "summary": "make semantic-index, semantic-find and research-search run the Rust (l7r-gate.sh record semantic build|find, record search) with their arguments unchanged, and the Python is deleted in the same cut.",
+     "class": "within",
+     "why": "ask:449-phase4-slices says a slice lands its Rust as a library with no production caller, its Python staying the implementation for Python importers until S11 or S12 wires the Rust in. That sentence protects Python importers. The block's census reports that no Makefile, shell, Python, agent file or doc names the four deleted files in command, import or -m form after the cut, so no Python importer is left to protect. Wiring the Rust in and deleting the Python at once satisfies FR-003 (no piece runs both) and FR-001. It does more of the request, not less, and the same ruling's S4 sentence has semantic_index 'run ... in Rust'."
+    },
+    {
+     "id": "T138-removals",
+     "summary": "archive.py and sources.py lose their last importers and are deleted, the archive's last door push retires, and requirements-semantic.* and setup-dev-env.sh's fastembed line are removed.",
+     "class": "within",
+     "why": "FR-001 places every requirements*.txt and setup-dev-env.sh's Python in phase 4, and this is phase 4's S4. ask:449-T80-order kept archive.py alive only for research_search.py and semantic_index.py. The GM's standing approval of 2026-11-10 ('Yes please delete Python files once their Rust ports land') covers the deletions. One limit on the evidence: the census greps the four deleted file names, not importers of what requirements-semantic installs. That changes no class."
+    },
+    {
+     "id": "T138-ties",
+     "summary": "Tied hits are compared as their tie group. Copies in the same group may differ in which one is printed: 191 lines in 31 cases. At find --k -3, 836 positions change order, with the largest HEAD gap 5.96e-8. A test pins the index-order tie break.",
+     "class": "within",
+     "why": "This applies FR-002's ruled case ask:449-T138-ties exactly. Which copy of an identical group is printed is not bound. Order at negative K may change below a 1e-7 gap, and 5.96e-8 is below it. Sources, spans, fingerprints, similarities, the set of hits, exit status and order at default and positive K are reported unchanged."
+    },
+    {
+     "id": "T138-norm-usage",
+     "summary": "Normalization: argparse's generated text.",
+     "class": "within",
+     "why": "FR-002's ruled case ask:449-usage-text: argparse's generated stderr text is not bound, while exit 2 and empty stdout are."
+    },
+    {
+     "id": "T138-norm-traceback",
+     "summary": "Normalization: one Python traceback (the empty-shard crash), with its kind and exit status kept.",
+     "class": "within",
+     "why": "ask:449-usage-text: 'an uncaught Python traceback's text is not bound for any port, its exit status and stdout staying held'. The block keeps the exit status."
+    },
+    {
+     "id": "T138-norm-world",
+     "summary": "Normalization: the runner's world path.",
+     "class": "within",
+     "why": "No ruling is cited for this one. It is within only if it is the per-side scratch path the shared diff-run harness gives each side, not text the two tools print differently. The block's wording ('the runner's world path') names the harness, and it is read that way here. A path that the Python itself wrote and the Rust writes differently would stay bound."
+    },
+    {
+     "id": "T138-timing",
+     "summary": "Timing and memory are recorded and not held: the verify run took 2,415.8 s, find ran 266.5 s against 251.3 s, search 323.5 s against 324.6 s, builds 59.9 s against 50.4 s, and peak memory was 1,516 MB against 1,252 MB.",
+     "class": "within",
+     "why": "No requirement holds a per-task time or memory bound on this port. FR-010 and SC-003 measure at phase end and over the suites. Every figure carries a dated one-shot method label."
+    },
+    {
+     "id": "T138-left-as-were",
+     "summary": "Shard zip times remain the write time, as the Python's were. The untracked rust/Cargo.lock leaves transitive versions floating, with ort and tokenizers pinned exactly.",
+     "class": "within",
+     "why": "The first keeps the Python's behavior. The second keeps the workspace's existing state, and the crates the embedder's outputs depend on are pinned. Neither narrows anything asked."
+    },
+    {
+     "id": "T138-e2e",
+     "summary": "One kept case in tests/hooks/test-l7r-gate.sh runs the real model through the production make paths, holding a vector bit for bit against the Python's, behind dead proxies.",
+     "class": "within",
+     "why": "This is FR-008's one end-to-end test against the real command. It enforces FR-002's identical output, the thing that was asked."
     }
    ],
    "verdict": "CLEAR"
