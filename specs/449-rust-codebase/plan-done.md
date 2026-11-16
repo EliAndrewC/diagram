@@ -3474,3 +3474,33 @@ censuses empty (work breakdown 8, FR-010).
 
 <!-- plan-archive: T142 to T142 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
 
+<!-- plan-archive: archived 2026-11-16 -->
+### T144 (phase 4's S1, the research record's core, `ask:449-phase4-slices`)
+
+- **Approach**: `l7r/diagram/interactive/record/`'s seventeen modules with `interactive/sources.py` and `content.py` ported as a library, the new gate crate `research` (on `core` and the guard, below `owed`, `bundle` and `record`), with no production caller: the Python stays the implementation for every Python importer until S5, S11 or S12 wires the Rust in, and is not deleted here, as the ruling's Q1 has it.
+
+   **Decisions** (`ask:449-phase4-slices` Q1, `ask:449-T81-slices`, `ask:449-T066-json-message`, FR-001c, FR-002, FR-003):
+   - One implementation (FR-003): the crate reuses what the Rust has - `units`' originals patterns and stored table, the guard's `py_text`, `pyjson`, `html_text::unescape` and `sha256`, `core`'s `read_text` - and moves into one copy what was held twice: cited-URL cleaning and the archive's URL id (`shared::cited_url`, the guard's two copies), the blocked-domain list (`shared::blocked`), `html.escape` (two private copies) and the URL's trailing-punctuation trim. Kept apart on purpose: `units::restored`, which writes "" for a missing original where `originals::restore` refuses (they port different Python), and the raw readers of `research_pointers`, `fragment_move`, `translation`, `partial_citations` and `question_size`, which refuse less than these loaders, so pointing them here would change a check's verdict on malformed input. Eleven functions nothing calls are not ported and go with their files (observed 2026-11-16, method: `git grep` of each name).
+   - The two guards that read an archive's id compute it as their Python did: `archive_first_hooks` decoded six entities and `blocked_fetch_hooks` none, where the Python they replaced (`hm_fetch.archived`) decoded every entity; both now call the shared `url_id`, every suite verdict unmoved (observed 2026-11-16, method: `make hooks-test`, the blocked-fetch and archive-first suites green), a URL holding any other entity now finding its archive row as it did under the Python.
+   - No process cache: the Python's per-file memo, its `@cache` readers and `clear_caches` are left to each caller's own measurement (`ask:449-T81-slices`); `sources::Reader` holds a loaded record and its cross-link and confusables tables for its lifetime. The API S2 to S5 inherit: `sources::Reader` for the cached free functions, notes as ordered pairs, sections as owned trees matched by id where the Python matched by identity.
+   - `make static`'s dead check counts a `pub fn` name over every `.rs` under `rust/gate/`, tests included, so a library its own tests call passes it; no caller was added for the check (observed 2026-11-16, method: `rust dead` read and run).
+   - The same outputs (FR-002, the ruling's Q1): a shim around every public function and method of the nineteen modules recorded their inputs and outputs over the Python's real runs - the record build (4,316 pages), the source-tags contract check, `check-entry-headings`, `open_questions`, `footnote_census` - and a sweep of every page, notes file, registry entry, cited and attempted URL, select term, the catalog and the numbering, with about 75 broken copies of the record for the error paths, and the six pool maps' reach into S1 (`research_questions` and `content` over every class's and kind's entry and every asset); replayed against the Rust: 378,360 calls over 118 functions, none differing, where the Python raised the Rust returning the same kind and message, `split_originals` writing 163 files byte for byte on a copied tree (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t144/shim.py`, `driver.py`, `replay/src/main.rs`, `replay.out`). Normalizations: byte offsets converted to the Python's character offsets (the refusal still printing the character offset), a library's own words in a message compared up to them (`ask:449-T066-json-message`), a `KeyError`'s quotes; 336 calls made inside a load before its record stood are covered by the load's recorded output. Divergences no real case reaches: `host` neither drops tabs nor applies NFKC as `urlsplit` does, `NaN` in JSON. The sweep found and fixed Unicode digits read as Python's `int()` reads them.
+   - Which later slice deletes each file: S5 `record/archive.py`, `blocked.py`, `site_notes.py`, `source_tags.py`; S11 `record/__init__.py`, `split`, `assemble`, `absence`, `contents`, `fragments`, `notes`, `originals`, `passages`, `questions`, `confusables`, `xref`, `store` and `interactive/sources.py`; S12 `interactive/content.py` (observed 2026-11-16, method: the phase-4 census, `census.tsv`). The checks: `make static` clean on 24 crates (`research` at 100% line coverage, 39 tests), `make rust-test` green (the guard 578), `make hooks-test` green on the 52 suites it ran, the pointer check clean (observed 2026-11-16, method: those commands).
+
+### T144 Approach (checklist part A)
+
+1. **The goal, in the world.** The research record's core has its Rust, proved on the real record, ready for the slices that wire it in.
+2. **The constraints.** FR-001c, FR-002 and FR-003, `ask:449-phase4-slices` Q1.
+3. **Where each comes from.** R: the ruling; O: the recorded-run differential and the census above.
+4. **Do they describe the world here?** Recorded from the Python's real runs over this clone's record, measured 2026-11-16 (`/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/t144/replay.out`).
+5. **The order.** First of phase 4's slices: S2 to S12 import it.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 378,360 recorded calls replayed with none differing.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No.
+
+

@@ -407,3 +407,6 @@
 - [x] T143 Phase 3, the shell libraries' inline Python (ask:449-phase4-slices) Q12: scripts/hooks/lib/guardlog.sh and clone-resolve.sh (sourced by five *-gate.sh, l7r-guard.sh and sync-with-main.sh on every run) and .specify/scripts/bash/common.sh's four sites, onto the Rust; before S1
       research: rendering
       verify: DONE. landed: the shell libraries' inline Python replaced (guardlog.sh, common.sh; clone-resolve.sh deleted): 2,558 differential cases, none differing; make static, rust-test and hooks-test green
+- [x] T144 Phase 4 S1, the record's core (ask:449-phase4-slices): interactive/record's split, assemble, absence, contents, fragments, notes, originals, passages, questions, confusables, xref, store, site_notes, source_tags, blocked, archive and __init__, with interactive/sources.py and content.py (2,721 lines), extending core::record; its own task, since S2-S12 import it
+      research: rendering
+      verify: DONE. landed: phase 4 S1, the record's core as a Rust library: 378,360 recorded calls replayed, none differing; make static, rust-test and hooks-test green
