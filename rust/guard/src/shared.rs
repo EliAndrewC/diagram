@@ -2,9 +2,11 @@
 //! heredoc and quote stripping), the escape rule (`hm_escape.py`), the session's facts read once a process, and the guard log
 //! (`guardlog.sh`), written in today's format.
 
+pub mod attempts;
 pub mod blocked;
 pub mod checks;
 pub mod cited_url;
+pub mod consulted;
 pub mod difflib;
 pub mod escape;
 pub mod html_text;

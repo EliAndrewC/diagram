@@ -40,6 +40,9 @@ pub fn record() -> TempDir {
 }
 
 /// One file written, its directory made.
+///
+/// # Panics
+/// A file the test's temporary directory cannot hold.
 pub fn put(dir: &Path, rel: &str, text: &str) {
     let path = dir.join(rel);
     std::fs::create_dir_all(path.parent().unwrap()).unwrap();

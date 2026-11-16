@@ -2,8 +2,9 @@
 //! `l7r-gate page-session` (the detached runner `page-session.sh` execs, [`runner`], `page_session_runner.py`), `l7r-gate brief-load`
 //! (the write cap's count, [`brief_load`], `brief_load.py`, which the runner asks in process), `l7r-gate coord lines|append` (`make
 //! lines`, `make append`, [`coord`], `coord.py`), `l7r-gate research-claims claim|query|sweep` (`make research-claim`, `make
-//! research-claims`, [`research_claims`], `research_claims.py`) and `l7r-gate escape take` (an escape taken outside a hook, logged as a
-//! hook's is, [`escape_log`], `escape_log.py`: the runner's write cap in process, `make reserve`'s key cap by command).
+//! research-claims`, [`research_claims`], `research_claims.py`); an escape taken outside a hook, logged as a hook's is ([`escape_log`],
+//! `escape_log.py`), which the runner's write cap and `l7r-gate record reserve`'s key cap ask in process (its command form, `escape
+//! take`, left with `reserve-prefix.py`'s own reservation, feature 449 T145).
 
 pub mod brief_load;
 pub mod coord;
@@ -16,7 +17,7 @@ use std::path::{Path, PathBuf};
 use l7r_gate_core::Reply;
 
 /// `l7r-gate <verb> ...` for the page sessions' tools, each reading this process's environment, working directory and binary: `page-session`,
-/// `brief-load`, `coord`, `research-claims`, and `escape-take` (the binary's `escape take`).
+/// `brief-load`, `coord` and `research-claims`.
 #[must_use]
 pub fn cli(verb: &str, args: &[String]) -> Reply {
     let cwd = std::env::current_dir().unwrap_or_default();
@@ -35,7 +36,7 @@ pub fn cli(verb: &str, args: &[String]) -> Reply {
                 var: &|k| std::env::var(k).ok(),
             },
         ),
-        "research-claims" => research_claims::cli(
+        _ => research_claims::cli(
             args,
             &research_claims::Env {
                 cwd,
@@ -43,7 +44,6 @@ pub fn cli(verb: &str, args: &[String]) -> Reply {
                 today: l7r_gate_core::record::bundle::today,
             },
         ),
-        _ => escape_log::cli(args, &escape_log::Env::of_process()),
     }
 }
 

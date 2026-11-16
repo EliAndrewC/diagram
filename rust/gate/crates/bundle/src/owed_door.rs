@@ -308,13 +308,7 @@ fn answer(verb: &str, args: &[Value]) -> Result<Value, String> {
             return Ok(v);
         }
     }
-    if verb == "mb.research_held" {
-        return Ok(json!(crate::record::bundle::modal::research_held(
-            &path_arg(args, 0),
-            arg(args, 1),
-            arg(args, 2)
-        )));
-    }
+    // `mb.research_held` retired with `apply_edits.py`, its one Python caller (feature 449 T145): `record apply-edits` asks it in process
     if verb == "cb.url_of" {
         return Ok(json!(crate::record::bundle::check::url_of(arg(args, 0))));
     }

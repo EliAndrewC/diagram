@@ -1,6 +1,7 @@
 //! An escape taken outside a hook, read and recorded the way the guards record theirs (feature 274). Ported whole from
 //! `scripts/pages/escape_log.py` by feature 449 T137 (`ask:449-phase3-remainder`): the page-session runner asks [`escape`] in process,
-//! and `scripts/record/reserve-prefix.py`, which stays Python, asks `l7r-gate escape take` once, where it imported the module.
+//! and so does `l7r-gate record reserve` (`make reserve`'s key cap, feature 449 T145). Its command form, `l7r-gate escape take`, left
+//! with `reserve-prefix.py`'s own reservation (T145: that file is a forwarder to `record reserve` now).
 //!
 //! WHY. The write cap on a page session (`WRITE_CAP_OK`, the runner) and the key cap on `make reserve` (`KEY_CAP_OK`) are refused outside
 //! a hook, and the guard doctrine asks that every escape state a reason of two words or more and be counted by `make audit`. So the
@@ -17,9 +18,6 @@ use l7r_guard::shared::log::civil;
 use l7r_guard::shared::py_text::strip;
 use l7r_guard::shared::pyjson::dumps;
 use serde_json::{json, Value};
-
-use crate::reply;
-use l7r_gate_core::Reply;
 
 /// What the process reads of its environment for one escape, handed in so a test runs without touching the process's own.
 pub struct Env<'a> {
@@ -121,65 +119,6 @@ fn log_at(
         "context": context.cloned().unwrap_or(Value::Null),
     });
     let _ = l7r_guard::shared::log::place(&log_dir(env), &dumps(&entry, Some(2), true), now);
-}
-
-const USAGE: &str = "usage: l7r-gate escape take --token TOKEN --guard GUARD --rule RULE [--context JSON] [--command TEXT]\n";
-
-/// `l7r-gate escape take --token T --guard G --rule R [--context JSON] [--command TEXT]`: exit 0 when `T` is set with a reason (logged),
-/// 1 when it is not set, 3 with the refusal on stderr when it is set with too little to audit (logged), 2 on a command line it cannot
-/// read. `--command` is the caller's own command line, so `make audit` names the tool that took the escape, as the Python's
-/// `" ".join(sys.argv)` did in process; without it, this command's.
-#[must_use]
-pub fn cli(args: &[String], env: &Env) -> Reply {
-    use l7r_gate_core::record::args::{parse, Spec};
-    let specs = [
-        Spec::value("--token"),
-        Spec::value("--guard"),
-        Spec::value("--rule"),
-        Spec::value("--context"),
-        Spec::value("--command"),
-    ];
-    let usage = |why: &str| {
-        reply(
-            String::new(),
-            format!("{USAGE}l7r-gate escape take: error: {why}\n"),
-            2,
-        )
-    };
-    let p = match parse(args, &specs) {
-        Ok(p) => p,
-        Err(why) => return usage(&why),
-    };
-    let (token, guard, rule) = (
-        p.text("--token", ""),
-        p.text("--guard", ""),
-        p.text("--rule", ""),
-    );
-    if token.is_empty() || guard.is_empty() || rule.is_empty() {
-        return usage("--token, --guard and --rule are required");
-    }
-    let context: Option<Value> = match p
-        .has("--context")
-        .then(|| serde_json::from_str(p.text("--context", "")))
-    {
-        Some(Ok(v)) => Some(v),
-        Some(Err(e)) => return usage(&format!("--context is not JSON: {e}")),
-        None => None,
-    };
-    let env = Env {
-        var: env.var,
-        cwd: env.cwd.clone(),
-        command: if p.has("--command") {
-            p.text("--command", "").to_owned()
-        } else {
-            env.command.clone()
-        },
-    };
-    match escape(token, guard, rule, context.as_ref(), &env) {
-        Ok(true) => reply(String::new(), String::new(), 0),
-        Ok(false) => reply(String::new(), String::new(), 1),
-        Err(why) => reply(String::new(), format!("{why}\n"), 3),
-    }
 }
 
 #[cfg(test)]

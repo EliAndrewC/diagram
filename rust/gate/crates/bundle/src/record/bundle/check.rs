@@ -345,22 +345,30 @@ pub fn with_earlier(root: &Path, out: &Path, text: &str) -> Result<String, Fail>
     Ok(format!("{text}{}", earlier::section(root, out, text)?))
 }
 
-/// A helper's output and exit: `translation-owed` is the port in this process, the rest the runner's (feature 383 D6).
+/// A helper's output and exit, each run in this process (feature 383 D6): `translation-owed`, and since feature 449 T145 the four
+/// `record::helpers`, which `scripts/bundle_door.py`'s `run` verb ran before.
 ///
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn run_script(
-    run: &mut Run,
-    name: &str,
-    args: &[String],
-    root: &Path,
-) -> Result<(i32, String), Fail> {
+pub fn run_script(name: &str, args: &[String], root: &Path) -> Result<(i32, String), Fail> {
     if name == "translation_owed" {
         let got = crate::record::translation::cli(args);
         return Ok((got.code, got.stdout + &got.stderr));
     }
-    run.door.helper(name, args, root)
+    #[cfg(test)]
+    if STUBBED.with(std::cell::Cell::get) {
+        return tests::stub_run(name, args, root);
+    }
+    crate::record::helpers::run(name, args, root)
+        .ok_or_else(|| format!("bundle-door: no helper {name}"))
+}
+
+#[cfg(test)]
+thread_local! {
+    /// The bundle tests' stand-in for the four helpers - the runner stub they were written against, which tests the assembly of a
+    /// bundle apart from what each helper says; a test turns it off to run the helpers themselves (feature 449 T145).
+    pub(crate) static STUBBED: std::cell::Cell<bool> = const { std::cell::Cell::new(true) };
 }
 
 /// What one question bundle carries.
@@ -392,7 +400,7 @@ pub fn helper_part(
     (name, args): (&str, Vec<String>),
     (file, origin, what): (&str, String, &str),
 ) -> Result<Option<i32>, Fail> {
-    let (code, text) = run_script(run, name, &args, root)?;
+    let (code, text) = run_script(name, &args, root)?;
     write(&out.join(file), &text)?;
     rows.push((file.to_owned(), origin, what.to_owned()));
     if code != 0 {

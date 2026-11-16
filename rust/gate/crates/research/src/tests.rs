@@ -22,3 +22,21 @@ fn an_error_prints_its_message_and_a_fault_becomes_one() {
         [Some(7), Some(3), Some(0), None]
     );
 }
+
+#[test]
+fn a_path_resolves_as_python_resolves_it() {
+    let d = l7r_guard::shared::tempdir::TempDir::new("research-resolve");
+    let real = std::fs::canonicalize(&d).unwrap();
+    std::fs::create_dir_all(real.join("a")).unwrap();
+    std::os::unix::fs::symlink(real.join("a"), real.join("link")).unwrap();
+    assert_eq!(
+        super::resolve(&real.join("link/./x/../y/z")),
+        real.join("a/y/z")
+    );
+    assert_eq!(
+        super::resolve(std::path::Path::new("/no/such/../path")),
+        std::path::Path::new("/no/path")
+    );
+    assert!(super::resolve(std::path::Path::new("relative")).is_absolute());
+    assert_eq!(super::resolve(&real.join("a")), real.join("a"));
+}

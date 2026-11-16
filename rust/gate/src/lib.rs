@@ -118,10 +118,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
         Some("content-ids") => content_ids(&args[1..], Path::new("."), "python3"),
         Some("log") => logs::log_cli(&args[1..], Path::new(".")),
-        // an escape taken outside a hook, logged as a hook's (`make reserve`'s key cap, feature 449 T137); the reason floor's form beside it
-        Some("escape") if args.get(1).map(String::as_str) == Some("take") => {
-            pages::cli("escape-take", &args[2..])
-        }
+        // the reason floor's form (`escape take`, an escape taken outside a hook, left with `reserve-prefix.py`'s reservation, T145)
         Some("escape") => logs::usage::escape_cli(&args[1..], &mut std::io::stdin()),
         Some("json-field") => logs::json_field(&args[1..]),
         // spec-kit's JSON reads, `common.sh`'s inline Python (feature 449 T143)
@@ -269,7 +266,6 @@ mod tests {
         for verb in ["brief-load", "coord", "research-claims"] {
             assert_eq!(ask(&[verb]).code, 2, "{verb}");
         }
-        assert_eq!(ask(&["escape", "take"]).code, 2);
         assert_eq!(ask(&["page-session", "a", "b"]).code, 1);
     }
 

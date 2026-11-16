@@ -192,40 +192,14 @@ pub fn mirror_of(root: &Path) -> std::path::PathBuf {
 }
 
 /// `flock` on the lock file at `path`, polled every 20 ms so a hung holder is a refusal rather than a hang: the open file holding it
-/// (the lock lasts as long as it does), or none when `timeout` seconds passed first. Its directory is made, the file opened `0o644`, as
-/// `claim-feature.py`'s and `reserve-prefix.py`'s `Lock` did; the one copy of both since feature 449 T135 (FR-003).
+/// (the lock lasts as long as it does), or none when `timeout` seconds passed first - the guard's `shared::tool::flock_within`, where
+/// it moved by feature 449 T145 so the attempts log the blocked-fetch guard writes in process takes the same lock (one copy, FR-003).
 ///
 /// # Errors
 ///
 /// The directory cannot be made or the file opened: what the Python's `mkdir` or `os.open` raised.
 pub fn flock_within(path: &Path, timeout: f64) -> Result<Option<std::fs::File>, Fail> {
-    use std::os::unix::fs::OpenOptionsExt as _;
-    use std::time::{Duration, Instant};
-    std::fs::create_dir_all(path.parent().unwrap_or(Path::new("."))).map_err(fail)?;
-    let file = std::fs::OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .truncate(false)
-        .mode(0o644)
-        .open(path)
-        .map_err(fail)?;
-    // `time.monotonic() + timeout`: a negative timeout a deadline already passed; NaN, or one past what an `Instant` holds (infinity), a
-    // deadline the Python's comparison never reached
-    let deadline = if timeout.is_nan() {
-        None
-    } else {
-        Duration::try_from_secs_f64(timeout.max(0.0))
-            .ok()
-            .and_then(|d| Instant::now().checked_add(d))
-    };
-    while !l7r_guard::shared::tool::flock(&file, "-n") {
-        if deadline.is_some_and(|d| Instant::now() >= d) {
-            return Ok(None);
-        }
-        std::thread::sleep(Duration::from_millis(20));
-    }
-    Ok(Some(file))
+    l7r_guard::shared::tool::flock_within(path, timeout).map_err(fail)
 }
 
 #[cfg(test)]

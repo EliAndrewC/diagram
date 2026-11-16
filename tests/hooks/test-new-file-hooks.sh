@@ -18,7 +18,8 @@ M="$T/mirror"; C="$M/.clones/q"
 G="$C/l7r/diagram/interactive/assets/glossary"; R="$C/research/sources/010-works-cited"
 mkdir -p "$G" "$R" "$M/.specify"; git -C "$C" init -q 2>/dev/null
 echo '{}' > "$G/0100-old.json"; : > "$R/0100-old-key.html"
-python3 "$HERE/../../scripts/record/reserve-prefix.py" registry reserved-key --root "$C" --mirror "$M" >/dev/null
+# the reservation through the gate's own verb (feature 449 T145: `reserve-prefix.py` is `l7r-gate record reserve` for make and the shell)
+"$HERE/../../scripts/gates/l7r-gate.sh" record reserve registry reserved-key --root "$C" --mirror "$M" >/dev/null
 call() { # call <tool> <json tool_input> -> rc in $T/rc
   jq -nc '{"session_id":"t-new-file","cwd":$ARGS.positional[2],"tool_name":$ARGS.positional[0],"tool_input":($ARGS.positional[1]|fromjson)}' --args -- "$1" "$2" "$C" \
     | "$HOOK" pretool 2>"$T/err"; echo $? > "$T/rc"

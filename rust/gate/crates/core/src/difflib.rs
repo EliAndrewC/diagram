@@ -1,8 +1,10 @@
 //! Python's `difflib.SequenceMatcher(None, a, b, autojunk=False)` over lines (feature 449 T79): the same matching blocks and opcodes, because what a
 //! change "replaced" decides what several tools owe. With no junk and no popular lines, a longest match cannot extend, so `find_longest_match`'s two extension
-//! loops have nothing to do and are left out.
+//! loops have nothing to do and are left out. Over any items that hash (feature 449 T145): `quote_verbatim`'s nearest stretch of a page and its
+//! differences match characters, and `find_longest_match` and `ratio` are its.
 
 use std::collections::HashMap;
+use std::hash::Hash;
 
 /// What an opcode does to its two ranges.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -16,18 +18,26 @@ pub enum Tag {
 /// `(tag, i1, i2, j1, j2)`.
 pub type Opcode = (Tag, usize, usize, usize, usize);
 
-struct Matcher<'a> {
-    a: &'a [&'a str],
-    b2j: HashMap<&'a str, Vec<usize>>,
+struct Matcher<'a, T> {
+    a: &'a [T],
+    b2j: HashMap<&'a T, Vec<usize>>,
 }
 
-impl Matcher<'_> {
+impl<'a, T: Eq + Hash> Matcher<'a, T> {
+    fn new(a: &'a [T], b: &'a [T]) -> Self {
+        let mut b2j: HashMap<&T, Vec<usize>> = HashMap::new();
+        for (j, item) in b.iter().enumerate() {
+            b2j.entry(item).or_default().push(j);
+        }
+        Self { a, b2j }
+    }
+
     fn longest(&self, alo: usize, ahi: usize, blo: usize, bhi: usize) -> (usize, usize, usize) {
         let (mut best_i, mut best_j, mut best_size) = (alo, blo, 0);
         let mut j2len: HashMap<usize, usize> = HashMap::new();
         for i in alo..ahi {
             let mut next: HashMap<usize, usize> = HashMap::new();
-            for &j in self.b2j.get(self.a[i]).map_or(&[][..], Vec::as_slice) {
+            for &j in self.b2j.get(&self.a[i]).map_or(&[][..], Vec::as_slice) {
                 if j < blo {
                     continue;
                 }
@@ -51,14 +61,31 @@ impl Matcher<'_> {
     }
 }
 
+/// `find_longest_match(0, len(a), 0, len(b))`: `(i, j, n)`, the earliest in `a` of the longest, then the earliest in `b`.
+#[must_use]
+pub fn longest_match<T: Eq + Hash>(a: &[T], b: &[T]) -> (usize, usize, usize) {
+    Matcher::new(a, b).longest(0, a.len(), 0, b.len())
+}
+
+/// `ratio()`: twice the matched items over the items of both, 1.0 for two empty sequences.
+#[must_use]
+#[expect(
+    clippy::cast_precision_loss,
+    reason = "a sequence's length, far inside f64's exact range"
+)]
+pub fn ratio<T: Eq + Hash>(a: &[T], b: &[T]) -> f64 {
+    let total = a.len() + b.len();
+    if total == 0 {
+        return 1.0;
+    }
+    let matched: usize = matching_blocks(a, b).iter().map(|m| m.2).sum();
+    2.0 * matched as f64 / total as f64
+}
+
 /// `get_matching_blocks`: `(i, j, n)`, adjacent blocks merged, ending in the `(len a, len b, 0)` sentinel.
 #[must_use]
-pub fn matching_blocks(left: &[&str], right: &[&str]) -> Vec<(usize, usize, usize)> {
-    let mut b2j: HashMap<&str, Vec<usize>> = HashMap::new();
-    for (j, line) in right.iter().enumerate() {
-        b2j.entry(line).or_default().push(j);
-    }
-    let matcher = Matcher { a: left, b2j };
+pub fn matching_blocks<T: Eq + Hash>(left: &[T], right: &[T]) -> Vec<(usize, usize, usize)> {
+    let matcher = Matcher::new(left, right);
     let mut queue = vec![(0, left.len(), 0, right.len())];
     let mut found = Vec::new();
     while let Some((alo, ahi, blo, bhi)) = queue.pop() {
@@ -87,7 +114,7 @@ pub fn matching_blocks(left: &[&str], right: &[&str]) -> Vec<(usize, usize, usiz
 
 /// `get_opcodes`.
 #[must_use]
-pub fn opcodes(a: &[&str], b: &[&str]) -> Vec<Opcode> {
+pub fn opcodes<T: Eq + Hash>(a: &[T], b: &[T]) -> Vec<Opcode> {
     let (mut i, mut j) = (0, 0);
     let mut out = Vec::new();
     for (ai, bj, size) in matching_blocks(a, b) {
@@ -238,7 +265,15 @@ mod tests {
             opcodes(&["a"], &["z", "a"]),
             [(Tag::Insert, 0, 0, 0, 1), (Tag::Equal, 0, 1, 1, 2)]
         );
-        assert!(opcodes(&[], &[]).is_empty());
+        assert!(opcodes::<&str>(&[], &[]).is_empty());
+        // over characters, as `quote_verbatim` reads a passage against a page (feature 449 T145)
+        let (a, b): (Vec<char>, Vec<char>) = (
+            "the dike".chars().collect(),
+            "a dike wide".chars().collect(),
+        );
+        assert_eq!(super::longest_match(&a, &b), (3, 1, 5));
+        assert!((super::ratio(&a, &b) - 10.0 / 19.0).abs() < 1e-12);
+        assert!((super::ratio::<char>(&[], &[]) - 1.0).abs() < f64::EPSILON);
     }
 
     #[test]

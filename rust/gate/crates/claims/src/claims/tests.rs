@@ -45,7 +45,6 @@ for line in sys.stdin:
         print(json.dumps({"error": "Traceback (most recent call last):\n" + type(e).__name__ + ": " + str(e)}), flush=True)
 "#;
 
-const APPLY_EDITS: &str = "def reply_of(path):\n    return path.read_text()\n";
 const CODEID: &str = "import hashlib, re, sys\nfor p in sys.argv[2:]:\n    print(hashlib.sha256(re.sub(rb' *#.*', b'', open(p, 'rb').read())).hexdigest())\n";
 
 pub const LIB: &str = "//! The probe.
@@ -97,7 +96,6 @@ pub fn fixture(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     git(&root, &["config", "user.name", "t"]);
     git(&root, &["config", "commit.gpgsign", "false"]);
     put(&root, "scripts/bundle_door.py", RUNNER);
-    put(&root, "scripts/record/apply_edits.py", APPLY_EDITS);
     put(&root, "scripts/gates/codeid.py", CODEID);
     put(&root, "rust/phases/src/lib.rs", LIB);
     put(

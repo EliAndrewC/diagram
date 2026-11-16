@@ -246,6 +246,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
+  },
+  "### T145 (phase 4's S2, T81's cut together, `ask:449-phase4-slices`)": {
+   "sha256": "11e45bc2323c975d81bc9fd2f4b475c33d40f4fcd998fe7aaac6f2efc8af1a20",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
+  },
+  "### T145 Approach (checklist part A)": {
+   "sha256": "153d0d51a8463e3ba5d9f3d5aee8a04e6ed5035ed0294d17f85b9b567945f983",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8801,6 +8813,105 @@
      "why": "Holds the coverage floor and gate that FR-001c keeps on every task; it decides nothing beyond the spec."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T145 (phase 4's S2, T81's cut together, `ask:449-phase4-slices`)",
+    "### T145 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T145-callers",
+     "summary": "The eight tools are ported, wired to every make, Rust and suite caller, and five are deleted. bundle_door's run/passages/save_cached verbs, owed_door's mb and record_door's americanize_json/moved_only retire with their callers.",
+     "class": "within",
+     "why": "This is not a narrowing: it ports and deletes more, and sooner, than the minimum. ask:449-phase4-slices' 'library with no production caller' is the shape that makes a slice straight under FR-001c, and this task keeps its review instead. The earlier rulings already put the switch at this cut: T80-order ('Rust downloads running reserve-prefix.py by path until T81 lands'), T81-slices (quote_verbatim's Rust callers 'by command until then'), T88-bundles ('each verb leaves the runner when its owner ports'), and T81-hm-record / T87 (a door is deleted with its last caller). FR-003's one writer is kept by bullet 3."
+    },
+    {
+     "id": "T145-parser-key",
+     "summary": "translation.rs's cache key becomes the sha1 of a version string plus the Rust parser's sources (include_str!). A bump of the pinned normalization crate needs a manual bump of the string.",
+     "class": "within",
+     "why": "This keeps the Python's rule that a parser edit invalidates the cache. The Python's key, which hashed the .py bytes, did not cover a library upgrade either, so the reach is unchanged."
+    },
+    {
+     "id": "T145-one-writer",
+     "summary": "sources.py, attempts.py and reserve-prefix.py become thin forwarders to the Rust writers. Their command lines, ledger writers, seed, import_saves, CachedPages and key cap are removed. attempts.write refuses the attempts log. Each shared file gets one named writer, and 'escape take' retires.",
+     "class": "within",
+     "why": "This is FR-003 and ask:449-T86-door applied as written (a name a command can carry goes by command). The refusal in attempts.write only enforces the one-writer rule. No importer passes it the attempts log (the importers' calls were read). The uncited lists keep the Python as their one writer."
+    },
+    {
+     "id": "T145-python-behavior",
+     "summary": "A CPython HTML parser port, decoder and case-fold tables generated from CPython, unicode-normalization pinned to match Python 3.14.4's NFKC, and curl as an external transport. ParseCache is not carried. An edit to the kept Python makes the same change in the Rust.",
+     "class": "within",
+     "why": "These choices exist to hold FR-002's outputs. On ParseCache, T81-slices lets each Rust caller keep or drop caching on its own measurement, its differential matching either way. The same-change clause is phase4-slices' own words."
+    },
+    {
+     "id": "T145-placement",
+     "summary": "record_prepass.py and style_prepass.py are ported in this cut, beside T80-order's six.",
+     "class": "within",
+     "why": "T88-bundles makes them T85's. T81-slices names that cluster T85, and phase4-slices folds T85 into S2/S3. Their bundle_door verbs leave with them."
+    },
+    {
+     "id": "T145-defects",
+     "summary": "Two fixes. S1's source_tags.rs now raises on a non-UTF-8 vocabulary, and translation-owed now fails on a root that is not a directory, both as the Python did.",
+     "class": "within",
+     "why": "Both restore FR-002 parity with the Python that existed before the port. Neither changes an expected verdict away from the Python."
+    },
+    {
+     "id": "T145-diff-reserve-json",
+     "summary": "FR-002 difference: reserve on a source-tags.json that is not JSON quotes the Rust parser's words inside the Python's fixed message.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is exactly ask:449-T066-json-message's class. The harness record shows exit 2 on both sides and 'reserve: source-tags.json: not JSON (' ... ')' identical, with only serde's text inside the parentheses differing."
+    },
+    {
+     "id": "T145-diff-apply-edits",
+     "summary": "FR-002 difference: make apply-edits with a missing reply has the same exit and exception kind (FileNotFoundError), and only its message text differs.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In the Python this was an uncaught exception. ask:449-usage-text says an uncaught traceback's text is not bound for any port, while exit status and stdout stay held, and the block holds both."
+    },
+    {
+     "id": "T145-norm-urlopen",
+     "summary": "Normalization (216 cases): the text inside '<urlopen error ...>' is curl's where Python gave its errno text. Exit, stderr frame, JSON report and the UNFETCHABLE verdict are the same.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T066-json-message binds verdict, exit status, location and fixed words, and lets through a library's own error text quoted inside a fixed message. curl is the transport in the role the Python's socket library had. The harness regex replaces only the text after '<urlopen error ', and the dead-host run done raw on both sides showed everything else equal, so no output the tool writes itself is hidden."
+    },
+    {
+     "id": "T145-norm-argparse-traceback",
+     "summary": "Normalization: argparse's exit-2 text and an uncaught traceback's text are compared by refusal and by exception kind.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is ask:449-usage-text. The harness's exit-2 rule is broader than the ruling, since it would also collapse a hand-written parser.error(). I checked HEAD's eight files in the harness's ref copy: none calls parser.error or exits 2 by hand, and their hand-written stderr lines start with the tool's name, which neither branch of the normalizer collapses. So it hides only unbound text."
+    },
+    {
+     "id": "T145-guardlog-command",
+     "summary": "The key-cap escape's guard-log 'command' field names 'l7r-gate record reserve' where it named reserve-prefix.py.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The Python wrote the field as ' '.join(sys.argv), its own invocation (reserve-prefix.py:59 in the harness's HEAD copy). The Rust records its own invocation by the same definition, so the field's meaning is unchanged. T135-generator's condition holds for the code that writes the entry, since the key cap is removed from the Python in this cut. Keeping 'reserve-prefix.py' would name a process that no longer writes the entry."
+    },
+    {
+     "id": "T145-norm-nondeterminism",
+     "summary": "Timestamps and the guard-log entry's file name (UTC-microsecond plus pid) are normalized.",
+     "class": "within",
+     "why": "These differ between two runs of the same side, so they are not outputs either implementation reproduces."
+    },
+    {
+     "id": "T145-timing",
+     "summary": "Timings are recorded and not held. quote-verbatim is faster, while the prepass/style sweeps (230 s vs 337 s) and the archive sweep (41 s vs 88 s) are slower.",
+     "class": "within",
+     "why": "The spec binds timing per phase (FR-010, SC-001..003), not per port, and FR-002 binds outputs. Recording the figures does not narrow a requirement."
+    },
+    {
+     "id": "T145-census",
+     "summary": "No measurements.json command runs the eight. 375's two one-shot rows that name three of them as timing keys keep their values as that day's record.",
+     "class": "within",
+     "why": "FR-001's rewrite rule covers a recorded command that runs a ported file. Those rows run 'make check-bundle', which stays, so nothing that runs Python is left unrewritten."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15796,6 +15907,103 @@
      "summary": "Exits, budget and checks (make static, rust-test, hooks-test, land); no constant moved; not performance work",
      "class": "within",
      "why": "Holds the coverage floor and gate that FR-001c keeps on every task; it decides nothing beyond the spec."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T145": {
+   "section_sha256": "7dae5b6b58a6db9936c2de4d288c7621446225f07554864ecdd2e0e11a182f60",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T145-callers",
+     "summary": "The eight tools are ported, wired to every make, Rust and suite caller, and five are deleted. bundle_door's run/passages/save_cached verbs, owed_door's mb and record_door's americanize_json/moved_only retire with their callers.",
+     "class": "within",
+     "why": "This is not a narrowing: it ports and deletes more, and sooner, than the minimum. ask:449-phase4-slices' 'library with no production caller' is the shape that makes a slice straight under FR-001c, and this task keeps its review instead. The earlier rulings already put the switch at this cut: T80-order ('Rust downloads running reserve-prefix.py by path until T81 lands'), T81-slices (quote_verbatim's Rust callers 'by command until then'), T88-bundles ('each verb leaves the runner when its owner ports'), and T81-hm-record / T87 (a door is deleted with its last caller). FR-003's one writer is kept by bullet 3."
+    },
+    {
+     "id": "T145-parser-key",
+     "summary": "translation.rs's cache key becomes the sha1 of a version string plus the Rust parser's sources (include_str!). A bump of the pinned normalization crate needs a manual bump of the string.",
+     "class": "within",
+     "why": "This keeps the Python's rule that a parser edit invalidates the cache. The Python's key, which hashed the .py bytes, did not cover a library upgrade either, so the reach is unchanged."
+    },
+    {
+     "id": "T145-one-writer",
+     "summary": "sources.py, attempts.py and reserve-prefix.py become thin forwarders to the Rust writers. Their command lines, ledger writers, seed, import_saves, CachedPages and key cap are removed. attempts.write refuses the attempts log. Each shared file gets one named writer, and 'escape take' retires.",
+     "class": "within",
+     "why": "This is FR-003 and ask:449-T86-door applied as written (a name a command can carry goes by command). The refusal in attempts.write only enforces the one-writer rule. No importer passes it the attempts log (the importers' calls were read). The uncited lists keep the Python as their one writer."
+    },
+    {
+     "id": "T145-python-behavior",
+     "summary": "A CPython HTML parser port, decoder and case-fold tables generated from CPython, unicode-normalization pinned to match Python 3.14.4's NFKC, and curl as an external transport. ParseCache is not carried. An edit to the kept Python makes the same change in the Rust.",
+     "class": "within",
+     "why": "These choices exist to hold FR-002's outputs. On ParseCache, T81-slices lets each Rust caller keep or drop caching on its own measurement, its differential matching either way. The same-change clause is phase4-slices' own words."
+    },
+    {
+     "id": "T145-placement",
+     "summary": "record_prepass.py and style_prepass.py are ported in this cut, beside T80-order's six.",
+     "class": "within",
+     "why": "T88-bundles makes them T85's. T81-slices names that cluster T85, and phase4-slices folds T85 into S2/S3. Their bundle_door verbs leave with them."
+    },
+    {
+     "id": "T145-defects",
+     "summary": "Two fixes. S1's source_tags.rs now raises on a non-UTF-8 vocabulary, and translation-owed now fails on a root that is not a directory, both as the Python did.",
+     "class": "within",
+     "why": "Both restore FR-002 parity with the Python that existed before the port. Neither changes an expected verdict away from the Python."
+    },
+    {
+     "id": "T145-diff-reserve-json",
+     "summary": "FR-002 difference: reserve on a source-tags.json that is not JSON quotes the Rust parser's words inside the Python's fixed message.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is exactly ask:449-T066-json-message's class. The harness record shows exit 2 on both sides and 'reserve: source-tags.json: not JSON (' ... ')' identical, with only serde's text inside the parentheses differing."
+    },
+    {
+     "id": "T145-diff-apply-edits",
+     "summary": "FR-002 difference: make apply-edits with a missing reply has the same exit and exception kind (FileNotFoundError), and only its message text differs.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In the Python this was an uncaught exception. ask:449-usage-text says an uncaught traceback's text is not bound for any port, while exit status and stdout stay held, and the block holds both."
+    },
+    {
+     "id": "T145-norm-urlopen",
+     "summary": "Normalization (216 cases): the text inside '<urlopen error ...>' is curl's where Python gave its errno text. Exit, stderr frame, JSON report and the UNFETCHABLE verdict are the same.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T066-json-message binds verdict, exit status, location and fixed words, and lets through a library's own error text quoted inside a fixed message. curl is the transport in the role the Python's socket library had. The harness regex replaces only the text after '<urlopen error ', and the dead-host run done raw on both sides showed everything else equal, so no output the tool writes itself is hidden."
+    },
+    {
+     "id": "T145-norm-argparse-traceback",
+     "summary": "Normalization: argparse's exit-2 text and an uncaught traceback's text are compared by refusal and by exception kind.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is ask:449-usage-text. The harness's exit-2 rule is broader than the ruling, since it would also collapse a hand-written parser.error(). I checked HEAD's eight files in the harness's ref copy: none calls parser.error or exits 2 by hand, and their hand-written stderr lines start with the tool's name, which neither branch of the normalizer collapses. So it hides only unbound text."
+    },
+    {
+     "id": "T145-guardlog-command",
+     "summary": "The key-cap escape's guard-log 'command' field names 'l7r-gate record reserve' where it named reserve-prefix.py.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The Python wrote the field as ' '.join(sys.argv), its own invocation (reserve-prefix.py:59 in the harness's HEAD copy). The Rust records its own invocation by the same definition, so the field's meaning is unchanged. T135-generator's condition holds for the code that writes the entry, since the key cap is removed from the Python in this cut. Keeping 'reserve-prefix.py' would name a process that no longer writes the entry."
+    },
+    {
+     "id": "T145-norm-nondeterminism",
+     "summary": "Timestamps and the guard-log entry's file name (UTC-microsecond plus pid) are normalized.",
+     "class": "within",
+     "why": "These differ between two runs of the same side, so they are not outputs either implementation reproduces."
+    },
+    {
+     "id": "T145-timing",
+     "summary": "Timings are recorded and not held. quote-verbatim is faster, while the prepass/style sweeps (230 s vs 337 s) and the archive sweep (41 s vs 88 s) are slower.",
+     "class": "within",
+     "why": "The spec binds timing per phase (FR-010, SC-001..003), not per port, and FR-002 binds outputs. Recording the figures does not narrow a requirement."
+    },
+    {
+     "id": "T145-census",
+     "summary": "No measurements.json command runs the eight. 375's two one-shot rows that name three of them as timing keys keep their values as that day's record.",
+     "class": "within",
+     "why": "FR-001's rewrite rule covers a recorded command that runs a ported file. Those rows run 'make check-bundle', which stays, so nothing that runs Python is left unrewritten."
     }
    ],
    "verdict": "CLEAR"

@@ -1,0 +1,294 @@
+//! The round settles (`apply_edits.Round` and `settle_round`, feature 335's round arbiter, features 375 FR-019, 385 and 399): what the
+//! settling needs from before the blocks are applied - the owed fingerprints of the reply's own checks and of the checks before them in the
+//! pop-up order, a record-format round's prepass words, the quote-check notes another check's blocks may move - and, after, each unit the
+//! blocks alone moved, settled or said to stay owed. The owed tools are the `owed` crate's, asked in process where the Python asked them
+//! through `scripts/owed_door.py`; a failure to read or to settle is reported and never stops the edits, as the Python's was.
+
+use std::collections::{BTreeMap, HashSet};
+use std::fmt::Write as _;
+use std::path::Path;
+
+use super::{apply, text, touched_questions, unapply_by_hand, words_of, Block};
+use crate::record::owed::answers;
+use crate::record::{modals, owed, units};
+use crate::Reply;
+
+/// `Round`: the fingerprints, words and quote-check notes read before the blocks.
+struct Round {
+    checks: Vec<String>,
+    earlier: Vec<String>,
+    before: BTreeMap<String, String>,
+    words: BTreeMap<String, HashSet<String>>,
+    quotes: BTreeMap<String, (String, String)>,
+    quote_owed: HashSet<String>,
+}
+
+fn fingerprints(root: &Path, checks: &[String]) -> Result<BTreeMap<String, String>, String> {
+    Ok(owed::fingerprints(root, checks)?.into_iter().collect())
+}
+
+/// `quote_notes`: every note of `questions` as its quote-check slug, with its fingerprint and quotation key, in the tree now.
+fn quote_notes(
+    root: &Path,
+    questions: &HashSet<String>,
+) -> Result<BTreeMap<String, (String, String)>, String> {
+    let rec = owed::read_at(root, None, Some(&HashSet::new()))?;
+    let mut out = BTreeMap::new();
+    for (stem, notes) in rec.notes.iter() {
+        if !questions.contains(&units::question(stem)) {
+            continue;
+        }
+        for (k, _) in notes.iter() {
+            let slug = format!("quote-check:{stem}#{k}");
+            let pair = (
+                units::fingerprint(&rec, &slug),
+                units::quotation_key(&rec, &slug),
+            );
+            out.insert(slug, pair);
+        }
+    }
+    Ok(out)
+}
+
+impl Round {
+    fn read(root: &Path, report: &str, found: &[Block]) -> Result<Self, String> {
+        let checks = owed::reply_checks(report);
+        let earlier = if checks.is_empty() {
+            Vec::new()
+        } else {
+            modals::earlier_units(&checks)
+        };
+        let all: Vec<String> = checks.iter().chain(&earlier).cloned().collect();
+        let before = if checks.is_empty() {
+            BTreeMap::new()
+        } else {
+            fingerprints(root, &all)?
+        };
+        let touched: HashSet<String> = touched_questions(found).into_iter().collect();
+        let mut sorted_touched: Vec<String> = touched.iter().cloned().collect();
+        sorted_touched.sort();
+        let words = if checks.iter().any(|c| c == "record-format") {
+            words_of(root, &sorted_touched)?
+        } else {
+            BTreeMap::new()
+        };
+        let quotes = if !checks.is_empty() && !checks.iter().any(|c| c == "quote-check") {
+            quote_notes(root, &touched)?
+        } else {
+            BTreeMap::new()
+        };
+        let quote_owed = if quotes.is_empty() {
+            HashSet::new()
+        } else {
+            fingerprints(root, &["quote-check".to_owned()])?
+                .into_keys()
+                .collect()
+        };
+        Ok(Self {
+            checks,
+            earlier,
+            before,
+            words,
+            quotes,
+            quote_owed,
+        })
+    }
+
+    fn joined(&self) -> String {
+        self.checks.join("/")
+    }
+
+    /// `settle_quotes`: each quote-check note this run's blocks moved, settled where its quotation and claim stand as before.
+    fn settle_quotes(&self, root: &Path) -> Result<Vec<String>, String> {
+        let store = answers::store(root);
+        let questions: HashSet<String> = self
+            .quotes
+            .keys()
+            .map(|s| units::question(s.split_once(':').map_or("", |p| p.1)))
+            .collect();
+        let after = quote_notes(root, &questions)?;
+        let why = format!(
+            "{}: the {} round's EDIT blocks",
+            answers::FIXED,
+            self.joined()
+        );
+        let mut out = Vec::new();
+        for (slug, (fp, key)) in &self.quotes {
+            let (fp2, key2) = after.get(slug).cloned().unwrap_or_default();
+            if fp2.is_empty() || fp2 == *fp {
+                continue;
+            }
+            if key2 != *key {
+                out.push(format!(
+                    "  {slug}: still owed - its quotation or its claim changed"
+                ));
+            } else if self.quote_owed.contains(slug) && !answers::answered(&store, slug, fp, "") {
+                out.push(format!(
+                    "  {slug}: still owed - not answered at the words before these blocks"
+                ));
+            } else {
+                let was = answers::read_answer(&store, slug);
+                let result = format!(
+                    "{why}; was: {}",
+                    text(was.get("result"), "unchanged since main")
+                );
+                answers::write_answer(&store, slug, &fp2, &result, was.get("pages"))?;
+                answers::keep_reading(&store, slug, &key2, "qkeys")?;
+                out.push(format!(
+                    "  {slug}: settled - another check's fix, outside its quotation and its claim"
+                ));
+            }
+        }
+        Ok(out)
+    }
+
+    /// `settle`: each owed unit the blocks alone moved, answered or pending; a record-format unit raising a new word stays owed.
+    fn settle(&self, root: &Path) -> Result<Vec<String>, String> {
+        let all: Vec<String> = self.checks.iter().chain(&self.earlier).cloned().collect();
+        // run only for a round that names its checks (`run`), so the Python's `if self.checks else {}` has no other side here
+        let after = fingerprints(root, &all)?;
+        let store = answers::store(root);
+        let mut out = Vec::new();
+        for (slug, fp) in &after {
+            let before = self.before.get(slug).cloned().unwrap_or_default();
+            if before.is_empty() || before == *fp {
+                continue;
+            }
+            let (check, q) = slug.split_once(':').unwrap_or((slug, ""));
+            if self.earlier.iter().any(|e| e == check) {
+                if answers::answered(&store, slug, &before, "") {
+                    answers::settle(&store, slug, &before, fp)?;
+                    out.push(format!("  {slug}: settled with its answer - the {} round's blocks alone moved it (it runs before them)", self.joined()));
+                } else {
+                    out.push(format!(
+                        "  {slug}: still owed - not answered at the words before these blocks"
+                    ));
+                }
+                continue;
+            }
+            if let (true, Some(was)) = (slug.starts_with("record-format:"), self.words.get(q)) {
+                let now = words_of(root, &[q.to_owned()])?
+                    .remove(q)
+                    .unwrap_or_default();
+                let mut unruled: Vec<&String> = now.difference(was).collect();
+                unruled.sort();
+                if !unruled.is_empty() {
+                    let shown: Vec<&str> = unruled.iter().take(8).map(|s| s.as_str()).collect();
+                    out.push(format!("  {slug}: still owed - its prepass now raises {}, which the round never ruled on", shown.join(", ")));
+                    continue;
+                }
+            }
+            let said = answers::settle(&store, slug, &before, fp)?;
+            let how = if said == "answered" {
+                "settled with its answered round"
+            } else {
+                "settles when `make record-checked` records this round"
+            };
+            out.push(format!("  {slug}: {how}"));
+        }
+        if !self.quotes.is_empty() {
+            out.extend(self.settle_quotes(root)?);
+        }
+        Ok(out)
+    }
+}
+
+/// The kind and words of a failure, as `{type(e).__name__}: {e}` named it (the words the Rust's, `ask:449-T066-json-message`).
+pub(super) fn named(e: &str) -> String {
+    if e.split_once(": ")
+        .is_some_and(|(k, _)| !k.is_empty() && k.chars().all(char::is_alphanumeric))
+    {
+        e.to_owned()
+    } else {
+        format!("ValueError: {e}")
+    }
+}
+
+/// `main` from the blocks on: the hand-applied pass, the blocks applied inside the settling, the tally.
+pub(super) fn run(
+    root: &Path,
+    report: &str,
+    found: &[Block],
+    skip: &HashSet<usize>,
+    dry: bool,
+    form: bool,
+) -> Reply {
+    let mut said = String::new();
+    let fail = |said: String, e: String| Reply {
+        stdout: said,
+        stderr: e + "\n",
+        code: 1,
+    };
+    if !dry {
+        if let Err(e) = unapply_by_hand(root, found, skip, &mut said) {
+            return fail(said, e);
+        }
+    }
+    let edits = found.iter().any(|b| matches!(b, Block::Edit(_)));
+    let tally = if dry || !edits {
+        apply(root, found, skip, dry, form, &mut said)
+    } else {
+        let rnd = if super::is_repo(root) {
+            match Round::read(root, report, found) {
+                Ok(r) => Some(r),
+                Err(e) => {
+                    let _ = writeln!(
+                        said,
+                        "apply-edits: could not read the round's units ({}) - its units stay owed",
+                        named(&e)
+                    );
+                    None
+                }
+            }
+        } else {
+            None
+        };
+        let tally = apply(root, found, skip, dry, form, &mut said);
+        if let (Ok(t), Some(rnd)) = (&tally, &rnd) {
+            if !rnd.checks.is_empty() && t.edited > 0 {
+                let lines = rnd.settle(root).unwrap_or_else(|e| {
+                    vec![format!(
+                        "  could not settle ({}) - its units stay owed",
+                        named(&e)
+                    )]
+                });
+                if !lines.is_empty() {
+                    let _ = writeln!(
+                        said,
+                        "apply-edits: the {} round's own EDITs, applied verbatim:\n{}",
+                        rnd.joined(),
+                        lines.join("\n")
+                    );
+                }
+            } else if t.edited > 0 {
+                said.push_str("apply-edits: the reply names no check, so the units it answered stay owed - put the agent's counts line (`modal-form: <name> - 2 findings`, `quote-check: ...`) at the top of the reply file and run this again; the blocks already in are settled, not applied twice\n");
+            }
+        }
+        tally
+    };
+    let t = match tally {
+        Ok(t) => t,
+        Err(e) => return fail(said, e),
+    };
+    let tail = if t.terms > 0 {
+        " - then `make glossary`"
+    } else {
+        ""
+    };
+    let dry_note = if dry {
+        " (dry run, nothing written)"
+    } else {
+        ""
+    };
+    let _ = writeln!(
+        said,
+        "apply-edits: {} block(s), {} refused{dry_note}{tail}",
+        found.len(),
+        t.refused
+    );
+    Reply {
+        stdout: said,
+        stderr: String::new(),
+        code: i32::from(t.refused > 0),
+    }
+}

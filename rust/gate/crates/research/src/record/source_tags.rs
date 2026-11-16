@@ -127,6 +127,13 @@ pub struct Section {
 }
 
 fn read_json(record_dir: &Path, name: &str) -> Result<Value> {
+    // a file that is there but not UTF-8 is the Python's `UnicodeDecodeError`, which its `except OSError` lets through - never
+    // "missing" (feature 449 T145: the differential's broken-vocabulary case under `make reserve TAGS=`)
+    if let Ok(bytes) = std::fs::read(record_dir.join(name)) {
+        if let Err(e) = String::from_utf8(bytes) {
+            return Err(Error::new("UnicodeDecodeError", e.to_string()));
+        }
+    }
     let Some(text) = crate::read(&record_dir.join(name)) else {
         let what = if name == VOCABULARY {
             "vocabulary"

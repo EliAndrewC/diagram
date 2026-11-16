@@ -1,4 +1,4 @@
-//! Which translated quotations owe a `translation-check` (from `translation_owed.py`, feature 449 T87): every (translation, original) pair now against every pair at the merge base. The pairs and the glosses are read by Python's `quote_verbatim` and `style_prepass`, both phase 4, by command (the T065 clause), only for a notes file whose parse is not already kept; a parse is kept by the content it read in `translation-pairs.json`, as the Python kept it, measured to spare the Python start and that reader on an unchanged record.
+//! Which translated quotations owe a `translation-check` (from `translation_owed.py`, feature 449 T87): every (translation, original) pair now against every pair at the merge base. The pairs and the glosses are read by the `research` crate's ports of `quote_verbatim` and `style_prepass`, in process since feature 449 T145 (by command before, the T065 clause), only for a notes file whose parse is not already kept; a parse is kept by the content it read in `translation-pairs.json`, as the Python kept it, measured to spare that reader on an unchanged record.
 
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
@@ -11,28 +11,22 @@ use serde_json::{json, Map, Value};
 use super::args::{parse, Spec};
 use super::delta::Delta;
 use super::leaves::fragments_for;
-use super::repo::{fail, python, read_universal, tree_of, Fail};
+use super::repo::{read_universal, Fail};
 use super::units::{pairs_of, restored, NOTE, ORIG_STORED};
 use crate::Reply;
 
 const RECORD: &str = "research";
 const GLOSS_KEY: &str = "a term's gloss";
-const CACHE_VERSION: &str = "rust-translation-pairs-1";
-
-const READER: &str = r"import json, sys
-sys.dont_write_bytecode = True
-tree = sys.argv[1]
-sys.path[:0] = [tree + '/scripts/record', tree + '/scripts/hooks/lib']
-import quote_verbatim as qv, style_prepass as sp
-out = []
-for it in json.load(sys.stdin):
-    found = []
-    for key, body in it['notes']:
-        for p in qv.passages(qv._strip(body)):
-            if p.get('original'):
-                found.append([key, p.get('language', ''), p['quote'], ' ... '.join([p['original'], *p.get('more', [])])])
-    out.append([found, [list(g) for g in sp.glosses(it['page']) + sp.glosses(it['text'])]])
-sys.stdout.write(json.dumps(out))";
+/// Bumped where the parse changes in a way its sources below do not show (a dependency's own update), so every kept parse is redone.
+const CACHE_VERSION: &str = "rust-translation-pairs-2";
+/// THE PARSER'S OWN TEXT (feature 449 T145): the passages and the glosses are read in process by the `research` crate's `verbatim` and
+/// `style`, so a kept parse is keyed by those modules' source as built into this binary, where it was keyed by the two `.py` files' bytes
+/// read off the tree - an edit of the parser invalidates every kept parse with no constant to remember, and the tree is not read for it.
+const PARSER_SOURCES: [&str; 3] = [
+    include_str!("../../../research/src/verbatim.rs"),
+    include_str!("../../../research/src/style.rs"),
+    include_str!("../../../research/src/pyre.rs"),
+];
 
 /// (notes file, key, language, translation, original).
 pub type Row = (String, String, String, String, String);
@@ -71,15 +65,12 @@ fn cache_path(delta: &mut Delta) -> std::path::PathBuf {
         .join("translation-pairs.json")
 }
 
-fn parser_key(tree: &Path) -> Result<String, Fail> {
+fn parser_key() -> String {
     let mut bytes = CACHE_VERSION.as_bytes().to_vec();
-    for rel in [
-        "scripts/record/quote_verbatim.py",
-        "scripts/record/style_prepass.py",
-    ] {
-        bytes.extend(std::fs::read(tree.join(rel)).map_err(|e| format!("{rel}: {e}"))?);
+    for source in PARSER_SOURCES {
+        bytes.extend(source.as_bytes());
     }
-    Ok(sha1::hex(&bytes).chars().take(12).collect())
+    sha1::hex(&bytes).chars().take(12).collect()
 }
 
 fn walk_notes(dir: &Path, rel: &str, out: &mut Vec<String>) {
@@ -140,17 +131,36 @@ fn parse_key(parser: &str, notes: &str, originals: &str, page: &str) -> String {
     sha1::hex([parser, notes, originals, page].join("\x00").as_bytes())
 }
 
-fn parse_uncached(root: &Path, items: &[Value]) -> Result<Vec<Value>, Fail> {
-    if items.is_empty() {
-        return Ok(Vec::new());
-    }
-    let tree = tree_of(root);
-    let said = python(
-        READER,
-        &[&tree.to_string_lossy()],
-        &serde_json::to_string(items).map_err(fail)?,
-    )?;
-    serde_json::from_str(&said).map_err(fail)
+/// Each notes file's translated passages and its page's and notes' glosses, `[[key, language, translation, original], ...]` then
+/// `[[characters, reading, meaning], ...]` (what `translation_owed.py`'s reader printed by command until feature 449 T145).
+fn parse_uncached(items: &[Value]) -> Vec<Value> {
+    use l7r_gate_research::{
+        style::glosses,
+        verbatim::{passages, strip_markup},
+    };
+    items
+        .iter()
+        .map(|it| {
+            let mut found = Vec::new();
+            for pair in it["notes"].as_array().into_iter().flatten() {
+                let (key, body) = (text_field(pair, 0), text_field(pair, 1));
+                for p in passages(&strip_markup(&body)) {
+                    if !p.original.is_empty() {
+                        let mut original = vec![p.original.clone()];
+                        original.extend(p.more.clone().unwrap_or_default());
+                        found.push(json!([key, p.language, p.quote, original.join(" ... ")]));
+                    }
+                }
+            }
+            let text = |k: &str| it[k].as_str().unwrap_or("").to_owned();
+            let gl: Vec<Value> = glosses(&text("page"))
+                .into_iter()
+                .chain(glosses(&text("text")))
+                .map(|(c, r, m)| json!([c, r, m]))
+                .collect();
+            json!([found, gl])
+        })
+        .collect()
 }
 
 fn load_cache(path: &Path) -> Map<String, Value> {
@@ -183,7 +193,6 @@ fn record_pairs(
     cache: &mut Map<String, Value>,
 ) -> Result<Vec<Pairs>, Fail> {
     let files = record_files(delta, rev)?;
-    let root = delta.root();
     let (mut keys, mut missing, mut items) =
         (Vec::with_capacity(files.len()), HashSet::new(), Vec::new());
     for (_, notes, originals, page) in &files {
@@ -199,10 +208,7 @@ fn record_pairs(
         }
         keys.push(key);
     }
-    let parsed = parse_uncached(
-        root,
-        &items.iter().map(|(_, v)| v.clone()).collect::<Vec<_>>(),
-    )?;
+    let parsed = parse_uncached(&items.iter().map(|(_, v)| v.clone()).collect::<Vec<_>>());
     for ((key, _), value) in items.into_iter().zip(parsed) {
         cache.insert(key, value);
     }
@@ -260,7 +266,7 @@ pub fn owed(root: &Path) -> Result<Vec<Row>, Fail> {
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn owed_in(delta: &mut Delta) -> Result<Vec<Row>, Fail> {
     let base = delta.translation_base();
-    let parser = parser_key(&tree_of(delta.root()))?;
+    let parser = parser_key();
     let path = cache_path(delta);
     let mut cache = load_cache(&path);
     let size = cache.len();
@@ -285,6 +291,23 @@ pub fn owed_in(delta: &mut Delta) -> Result<Vec<Row>, Fail> {
     Ok(rows)
 }
 
+/// FAILURE PARITY ON A ROOT THAT IS NO DIRECTORY (feature 449 T145, the coordinator's ruling on the T145 report): the Python's first
+/// `git` ran with `cwd=root`, so `subprocess` raised before anything was read - `FileNotFoundError` where nothing is there,
+/// `NotADirectoryError` on a file - exit 1, nothing on stdout. Its last line is kept; the traceback's text is not bound
+/// (`ask:449-usage-text`).
+fn no_directory(root: &Path) -> Option<String> {
+    let shown = l7r_guard::shared::py_text::repr(&root.to_string_lossy());
+    match std::fs::metadata(root) {
+        Ok(m) if m.is_dir() => None,
+        Ok(_) => Some(format!(
+            "NotADirectoryError: [Errno 20] Not a directory: PosixPath({shown})\n"
+        )),
+        Err(_) => Some(format!(
+            "FileNotFoundError: [Errno 2] No such file or directory: PosixPath({shown})\n"
+        )),
+    }
+}
+
 fn report(rows: &[Row]) -> String {
     let mut lines = vec![format!("translation-owed: {} translated quotation(s) new or changed since the merge base - each owes a translation-check", rows.len())];
     for (f, key, lang, quote, original) in rows {
@@ -307,8 +330,14 @@ pub fn cli(args: &[String]) -> Reply {
             ))
         }
     };
-    let root = std::fs::canonicalize(parsed.text("--root", "."))
-        .unwrap_or_else(|_| parsed.text("--root", ".").into());
+    let root = l7r_gate_research::resolve(Path::new(parsed.text("--root", ".")));
+    if let Some(why) = no_directory(&root) {
+        return Reply {
+            stdout: String::new(),
+            stderr: why,
+            code: 1,
+        };
+    }
     let mut rows = match owed(&root) {
         Ok(rows) => rows,
         Err(why) => {

@@ -608,13 +608,66 @@ fn a_record_with_no_commit_and_the_seams_noise() {
     let now = read_at(&rec, None, None).unwrap();
     put(&rec, "entry-noise", "");
     assert!(entry_units(&rec, &now).is_err());
+    put(&rec, "r.md", "x\r\n&lt;&lt;&lt; kept");
+    let at = |n: &str| rec.join(n).to_string_lossy().into_owned();
+    assert_eq!(
+        super::answers::reply_of(&rec, &at("r.md")).unwrap(),
+        "x\n<<< kept"
+    );
+    put(&rec, "s.md", "&lt;&lt;&lt;\n<<<");
+    assert_eq!(
+        super::answers::reply_of(&rec, &at("s.md")).unwrap(),
+        "&lt;&lt;&lt;\n<<<"
+    );
+    assert!(super::answers::reply_of(&rec, &at("none.md")).is_err());
+}
+
+#[test]
+fn a_transcript_gives_its_last_assistant_reply() {
+    use super::answers::reply_text;
+    let rec = crate::checks::scratch("owed-transcript");
+    let text = |lines: &[&str]| lines.join("\n") + "\n";
     put(
         &rec,
-        "scripts/record/apply_edits.py",
-        "print('noise')\ndef reply_of(p):\n    return ''\n",
+        "a.jsonl",
+        &text(&[
+            r#"{"type": "assistant", "message": {"content": [{"type": "text", "text": "one"}, {"type": "text", "text": " two"}]}}"#,
+            r#"{"type": "assistant", "message": {"content": [{"type": "tool_use"}]}}"#,
+            r#"{"type": "user", "message": "a string, never read"}"#,
+            r#"{"type": "assistant", "message": {"content": "not a list"}}"#,
+            r#"{"type": "assistant"}"#,
+            "not json",
+        ]),
     );
-    put(&rec, "r.md", "x");
-    assert!(super::answers::reply_of(&rec, &rec.join("r.md").to_string_lossy()).is_err());
+    assert_eq!(reply_text(&rec.join("a.jsonl")).unwrap(), "one two");
+    put(&rec, "b.output", &text(&["5"]));
+    assert!(reply_text(&rec.join("b.output")).is_err());
+    put(
+        &rec,
+        "c.jsonl",
+        &text(&[r#"{"type": "assistant", "message": [1]}"#]),
+    );
+    assert!(reply_text(&rec.join("c.jsonl")).is_err());
+    put(
+        &rec,
+        "d.jsonl",
+        &text(&[r#"{"type": "assistant", "message": {"content": [1]}}"#]),
+    );
+    assert!(reply_text(&rec.join("d.jsonl")).is_err());
+    put(
+        &rec,
+        "e.jsonl",
+        &text(&[r#"{"type": "assistant", "message": {"content": [{"type": "text", "text": 1}]}}"#]),
+    );
+    assert!(reply_text(&rec.join("e.jsonl")).is_err());
+    put(
+        &rec,
+        "f.jsonl",
+        &text(&[r#"{"type": "assistant", "message": {"content": [{"type": "text"}]}}"#]),
+    );
+    assert_eq!(reply_text(&rec.join("f.jsonl")).unwrap(), "");
+    put(&rec, ".jsonl", "&lt;&lt;&lt;");
+    assert_eq!(reply_text(&rec.join(".jsonl")).unwrap(), "<<<");
 }
 
 #[test]
@@ -732,4 +785,23 @@ fn the_door_s_reads_of_the_fingerprints_and_the_notes() {
     let rec = read_at(&root, None, None).unwrap();
     let (notes, cites) = super::notes_of(&rec);
     assert!(notes.is_object() && cites.is_object());
+}
+
+#[test]
+fn a_translated_pair_and_a_gloss_are_owed_units() {
+    let root = record("owed-translation-units");
+    put(
+        &root,
+        "research/questions/0094-trade.notes.html",
+        "<li data-note=\"t\">\u{300c}the hedge\u{300d} (translated; original: \u{300c}\u{57a3}\u{300d})</li>\n<li data-note=\"g\">\u{6728} (ki, \"tree\") here.</li>\n",
+    );
+    put(
+        &root,
+        "research/questions/zz.notes.html",
+        "<li data-note=\"x\">\u{300c}a\u{300d} (translated; original: \u{300c}\u{4e00}\u{300d})</li>\n",
+    );
+    let got = units(&root, None, None, &["translation"], "").unwrap();
+    let slugs: Vec<&str> = got.iter().map(|u| u.slug.as_str()).collect();
+    assert!(slugs.contains(&"translation-check:0094#t"));
+    assert!(slugs.contains(&"translation-check:0094#gloss"));
 }

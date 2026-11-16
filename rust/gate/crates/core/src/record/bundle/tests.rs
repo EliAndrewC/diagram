@@ -14,30 +14,7 @@ pub const RUNNER: &str = r#"import json, os, sys, pathlib
 for line in sys.stdin:
     ask = json.loads(line)
     v, a = ask["verb"], ask["args"]
-    if v == "run":
-        name, args, root = a
-        if "--boom" in args:
-            print(json.dumps({"error": "Traceback (most recent call last):\nValueError: boom"}), flush=True)
-            continue
-        code = 4 if "--fail" in args else 0
-        text = f"{name} ran {' '.join(args)}\n"
-        if name == "quote_verbatim" and "--json" in args:
-            out = args[args.index("--json") + 1]
-            data = json.loads(pathlib.Path(root, "qv.json").read_text()) if pathlib.Path(root, "qv.json").is_file() else {"footnotes": []}
-            pathlib.Path(out).write_text(json.dumps(data))
-            text = "quote-verbatim:\n  fn-1 key - OK\nkept line\n"
-        if name == "source_pages":
-            pathlib.Path(args[0]).mkdir(parents=True, exist_ok=True)
-            pathlib.Path(args[0], "MANIFEST.txt").write_text("m\n")
-            text = ("sources-consulted: earlier reads\n" if "--question" in args else "") + "pointer | file | state\nx | y | FETCHED\n"
-        print(json.dumps({"ok": [code, text]}), flush=True)
-    elif v == "passages":
-        print(json.dumps({"ok": [{"quote": "a quoted passage of twenty letters", "original": ""}, {"quote": "short", "original": "an original long enough to keep"}, {"quote": "https://example.org/a/long/link", "original": ""}, {"quote": "short"}]}), flush=True)
-    elif v == "save_cached":
-        pathlib.Path(a[1]).mkdir(parents=True, exist_ok=True)
-        pathlib.Path(a[1], "MANIFEST.txt").write_text("\n".join(a[0]) + "\n")
-        print(json.dumps({"ok": None}), flush=True)
-    elif v == "claims_py_units":
+    if v == "claims_py_units":
         def u(q, kind, claim):
             return {"path": "l7r/m.py", "qualname": q, "kind": kind, "lineno": 1, "end_lineno": 1, "claims": [claim], "inherited": False, "core": "c", "errors": [], "names": [], "blocks": [], "module_errors": []}
         print(json.dumps({"ok": [[u("Mod.ROUND_CAP", "constant", "cap - research/questions/0094-trade.html: ROUND_CAP is 12 ft"), u("other", "function", "o - GUESS: about 3 households"), u("Third", "class", "t - CONVENTION: nothing named")], []]}), flush=True)

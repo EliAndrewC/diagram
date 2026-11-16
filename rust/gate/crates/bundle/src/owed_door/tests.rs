@@ -306,6 +306,12 @@ fn the_verbs_that_read_and_write_the_repository() {
         ],
     );
     assert!(made[1].as_u64().unwrap() > 0);
+    // two translated pairs in the record's own form, read in process since feature 449 T145
+    crate::record::testkit::put(
+        &root,
+        concat!("research/questions/0094-trade.", "drawing.notes.html"),
+        "<li data-note=\"d\">\u{300c}a hedge\u{300d} (translated; original: \u{300c}\u{57a3}\u{300d})</li>\n<li data-note=\"e\">\u{300c}a wall\u{300d} (translated; original: \u{300c}\u{58c1}\u{300d})</li>\n",
+    );
     assert!(ok("to.owed", &[r.clone()]).as_array().unwrap().len() >= 2);
     assert!(answer(
         "ro.settle",
@@ -328,9 +334,7 @@ fn the_loop_answers_in_order() {
 }
 
 #[test]
-fn the_bundles_two_names_a_phase_4_caller_reads() {
-    let root = crate::record::testkit::record("owed-door-bundles");
-    let r = root.to_string_lossy().into_owned();
+fn the_bundle_name_a_phase_4_caller_reads() {
     assert_eq!(
         super::answer(
             "cb.url_of",
@@ -338,17 +342,5 @@ fn the_bundles_two_names_a_phase_4_caller_reads() {
         )
         .unwrap(),
         serde_json::json!("https://e.org/a")
-    );
-    assert_eq!(
-        super::answer(
-            "mb.research_held",
-            &[
-                serde_json::json!(r),
-                serde_json::json!("hamlet/well"),
-                serde_json::json!("x")
-            ]
-        )
-        .unwrap(),
-        serde_json::json!([])
     );
 }

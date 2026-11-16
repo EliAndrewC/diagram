@@ -46,9 +46,6 @@ pub const DRAWING: &str = "research/questions/0094-trade.drawing.html";
 pub const WELL: &str = "l7r/diagram/interactive/assets/modals/hamlet/well.md";
 
 const ENTRY_STUB: &str = "import json\nfrom pathlib import Path\n\ndef owed(root):\n    f = Path(root) / 'entry-lines.json'\n    if (Path(root) / 'entry-noise').exists():\n        print('noise')\n    if (Path(root) / 'entry-raise').exists():\n        raise ImportError('no engine here')\n    return 'stub', json.loads(f.read_text()) if f.exists() else []\n";
-const QV_STUB: &str = "import re\n\ndef _strip(body):\n    return re.sub('<[^>]+>', '', body)\n\ndef passages(text):\n    return [{'quote': q, 'original': o, 'language': 'ja', **({'more': ['x']} if o == 'more' else {})} for q, o in re.findall(r'\"([^\"]+)\" *\\u300c([^\\u300d]+)\\u300d', text)] + [{'quote': 'plain'}]\n";
-const SP_STUB: &str = "import re\n\ndef glosses(html):\n    return re.findall(r'(\\S)\\(([a-z]+), \"([^\"]+)\"\\)', html)\n";
-const AE_STUB: &str = "def reply_of(path):\n    return path.read_text()\n";
 
 /// A repository holding a small record, committed once and set as origin/main; the stubs of every Python seam under `scripts/record/`.
 pub fn record(tag: &str) -> crate::checks::TempDir {
@@ -129,9 +126,6 @@ pub fn record_at(root: &Path) -> PathBuf {
 /// The stubs of every Python seam, under `scripts/record/`.
 pub fn stubs(root: &Path) {
     put(root, "scripts/record/entry_owed.py", ENTRY_STUB);
-    put(root, "scripts/record/quote_verbatim.py", QV_STUB);
-    put(root, "scripts/record/style_prepass.py", SP_STUB);
-    put(root, "scripts/record/apply_edits.py", AE_STUB);
 }
 
 /// Every kind of edit the owed rules read, in the working tree.

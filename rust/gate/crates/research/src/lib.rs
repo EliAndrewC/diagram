@@ -13,8 +13,14 @@
 use std::fmt;
 
 pub mod content;
+pub mod pages;
+pub mod prepass;
+pub mod pyre;
 pub mod record;
+pub mod source_pages;
 pub mod sources;
+pub mod style;
+pub mod verbatim;
 
 /// A refusal, as the Python raised it: the exception's class name and its message, which every caller prints.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -51,7 +57,13 @@ pub type Result<T> = std::result::Result<T, Error>;
 /// Compiles a pattern the source spells out.
 #[must_use]
 pub(crate) fn re(pattern: &str) -> fancy_regex::Regex {
-    l7r_gate_core::record::units::re(pattern)
+    // NO BACKTRACK LIMIT IN PRACTICE (feature 449 T145): Python's `re` has none, and the regex crate's default of a million steps panicked
+    // the record-prepass of the whole registry (`SOURCES.html`, a page of about two megabytes) where an `<em>` met no `</em>` and the
+    // lazy scan to the end ran past it (observed 2026-11-16, the T145 differential's sweep); a pattern here runs to its answer as Python's did
+    fancy_regex::RegexBuilder::new(pattern)
+        .backtrack_limit(usize::MAX)
+        .build()
+        .unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static DECIMAL: std::sync::LazyLock<fancy_regex::Regex> =
@@ -59,7 +71,8 @@ static DECIMAL: std::sync::LazyLock<fancy_regex::Regex> =
 
 /// A decimal digit's value, as Python's `int()` reads any of Unicode's: the digits come in runs of ten from a zero, so a digit's value
 /// is its distance from the first digit of its run, modulo ten.
-pub(crate) fn digit_value(c: char) -> Option<u32> {
+#[must_use]
+pub fn digit_value(c: char) -> Option<u32> {
     let is_digit = |c: char| {
         DECIMAL
             .is_match(c.encode_utf8(&mut [0; 4]))
@@ -73,6 +86,40 @@ pub(crate) fn digit_value(c: char) -> Option<u32> {
         start -= 1;
     }
     Some((u32::from(c) - start) % 10)
+}
+
+/// `Path.resolve()` (`os.path.realpath`): the longest part that exists resolved through its links, the rest joined after it, `.` and
+/// `..` read first as the path's own text (feature 449 T145; the guard's `finished_run_hooks::runs::realpath` reads them the same way).
+#[must_use]
+pub fn resolve(p: &std::path::Path) -> std::path::PathBuf {
+    use std::path::{Component, PathBuf};
+    let absolute = if p.is_absolute() {
+        p.to_path_buf()
+    } else {
+        std::env::current_dir().unwrap_or_default().join(p)
+    };
+    let mut clean = PathBuf::new();
+    for c in absolute.components() {
+        // an absolute path's components hold no `.` (the standard library drops it), so a `..` is the one to read
+        if c == Component::ParentDir {
+            clean.pop();
+        } else {
+            clean.push(c.as_os_str());
+        }
+    }
+    // the root always resolves, so the longest part that exists is found
+    clean
+        .ancestors()
+        .find_map(|a| {
+            let real = std::fs::canonicalize(a).ok()?;
+            let tail = clean.strip_prefix(a).ok()?;
+            Some(if tail.as_os_str().is_empty() {
+                real
+            } else {
+                real.join(tail)
+            })
+        })
+        .unwrap_or(clean)
 }
 
 /// Python's `\s`, as a regex class body.
@@ -101,7 +148,14 @@ pub(crate) fn json(text: &str) -> std::result::Result<serde_json::Value, String>
     serde_json::from_str(text).map_err(|e| e.to_string())
 }
 
-#[cfg(test)]
-mod fixture;
+#[cfg(any(test, feature = "testkit"))]
+pub mod fixture;
+
+/// `name.endswith("." + ext)`, case and all as Python compares it: a page's or a fragment's suffix is the record's own spelling, never a
+/// user's, so a case-blind test would take a file the Python skips (feature 449 T145).
+#[must_use]
+pub fn has_ext(name: &str, ext: &str) -> bool {
+    name.rsplit_once('.').is_some_and(|(_, e)| e == ext)
+}
 #[cfg(test)]
 mod tests;

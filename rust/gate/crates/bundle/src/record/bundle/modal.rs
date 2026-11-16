@@ -373,7 +373,7 @@ pub fn prepass(root: &Path, m: &Modal) -> String {
     out.join("\n") + "\n"
 }
 
-/// The wording `modal-research` rounds fixed on the pop-up `uid` that still stands in `text` (343's border-court ruling): `apply_edits.py` refuses a modal-form EDIT that drops one.
+/// The wording `modal-research` rounds fixed on the pop-up `uid` that still stands in `text` (343's border-court ruling): `record apply-edits` (`apply_edits.rs`) refuses a modal-form EDIT that drops one.
 #[must_use]
 pub fn research_held(root: &Path, uid: &str, text: &str) -> Vec<String> {
     research_held_in(root, uid, text, &transcripts())

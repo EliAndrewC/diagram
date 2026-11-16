@@ -159,6 +159,43 @@ pub fn flock(lock: &File, mode: &str) -> bool {
     })
 }
 
+/// `flock` on the lock file at `path`, polled every 20 ms so a hung holder is a refusal rather than a hang: the open file holding it
+/// (the lock lasts as long as it does), or none when `timeout` seconds passed first. Its directory is made, the file opened `0o644`, as
+/// `claim-feature.py`'s, `reserve-prefix.py`'s and `sources.py`'s locks did; moved here from the gate's `core::record::repo` by feature
+/// 449 T145, so the attempts log the blocked-fetch guard writes in process takes the same lock (one copy, FR-003).
+///
+/// # Errors
+///
+/// The directory cannot be made or the file opened: what the Python's `mkdir` or `os.open` raised.
+pub fn flock_within(path: &Path, timeout: f64) -> std::io::Result<Option<File>> {
+    use std::os::unix::fs::OpenOptionsExt as _;
+    use std::time::Instant;
+    std::fs::create_dir_all(path.parent().unwrap_or(Path::new(".")))?;
+    let file = std::fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .truncate(false)
+        .mode(0o644)
+        .open(path)?;
+    // `time.monotonic() + timeout`: a negative timeout a deadline already passed; NaN, or one past what an `Instant` holds (infinity), a
+    // deadline the Python's comparison never reached
+    let deadline = if timeout.is_nan() {
+        None
+    } else {
+        Duration::try_from_secs_f64(timeout.max(0.0))
+            .ok()
+            .and_then(|d| Instant::now().checked_add(d))
+    };
+    while !flock(&file, "-n") {
+        if deadline.is_some_and(|d| Instant::now() >= d) {
+            return Ok(None);
+        }
+        std::thread::sleep(Duration::from_millis(20));
+    }
+    Ok(Some(file))
+}
+
 #[cfg(test)]
 mod tests {
     use std::path::Path;

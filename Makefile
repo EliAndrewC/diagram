@@ -281,7 +281,7 @@ citations:      ## [docs] the same as `make record` (feature 301: the record's s
 
 record:         ## [docs] build the record's site, research/site/, from its questions (features 258, 301, 303) - a page per question, a page per section of each half and per tag, the whole record on one page   CHECK=1: build in memory and exit 1 on any refusal, writing nothing
 	$(if $(CHECK),@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/memo_check.py" record,$(RUN).tools.record_asset)
-	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" mark-filled)
+	$(if $(CHECK),,@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources mark-filled)
 
 money-conversions: ## [docs] copy gm-assistant's money conversion table into research/assets/money-conversions.json, which the record's build converts each marked amount of money from (feature 413)   CHECK=1: write nothing, exit 1 while the copy is stale
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record money-conversions $(if $(CHECK),--check,)
@@ -653,13 +653,13 @@ quote-verbatim: ## [project] is every quoted passage on the page it cites, chara
 ##  NOTES=<n,n-m>  only these notes of each page, by the number its page shows them under
 ##  OUT=<json>     write the report the quote-check agent is handed (default: the scratch file the run names)
 	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make quote-verbatim: Q=<question number> or IN=<section or tag> is required - e.g. make quote-verbatim Q=0041\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)") $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record quote-verbatim --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)") $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
 record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a question - run BEFORE record-format   Q=0412 | IN=homesteads | Q=SOURCES
 ##  Q=<NNNN>       one or more questions, by number (both pages) or a page's file name; `SOURCES` for the registry
 ##  IN=<id>        every question of a section (its id in research/contents.json) or carrying a tag
 	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make record-prepass: Q=<question number> or IN=<section or tag> is required - e.g. make record-prepass Q=0041\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/record_prepass.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)")
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-prepass --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)")
 
 claims-owed: ## [project] every research claim of the engine or the Mode A procedures owed an impl-drift check (no index row, or its code or cited research moved since), and why
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" owed
@@ -730,7 +730,7 @@ record-checked: ## [project] record that a record check returned on the units it
 style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   Q=0412
 ##  Q=<NNNN>       the question, by number (both pages) or a page's file name
 	@if [ -z "$(Q)" ]; then printf 'make style-prepass: Q=<question number> is required - e.g. make style-prepass Q=0041\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/style_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record style-prepass --root "$$(git rev-parse --show-toplevel)" "$(Q)"
 
 question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size --report
@@ -760,7 +760,7 @@ research-claims: ## [project] the live claims on research questions, and nothing
 
 reserve: ## [project] reserve the next glossary, registry-entry or question number under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused; feature 303: a question's stub carries a tags marker to fill)   KIND=glossary|registry|question KEY=<term, key or heading id> [KEY_CAP_OK='<reason>']
 	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry|question KEY=<term, key or heading id> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/reserve-prefix.py" "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",) $(if $(TAGS),--tags "$(TAGS)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record reserve "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",) $(if $(TAGS),--tags "$(TAGS)",)
 
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"
 	@if [ -z "$(TERMS)" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
@@ -768,7 +768,7 @@ canon: ## [project] search the GM's setting canon for EVERY term of a claim in o
 
 apply-edits: ## [project] apply a quote-check or record-format report's EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)   FROM=<the agent's output_file or a saved reply> [SKIP=2,5: EDIT and GLOSSARY blocks counted together, in reply order] [DRY=1]
 	@if [ -z "$(FROM)" ]; then printf 'make apply-edits: FROM=<the output_file the agent dispatch named> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/apply_edits.py" "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record apply-edits "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
 
 page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [EFFORT=<level>] [AGENTS=<agents.json>] [WRITE_CAP_OK='<reason>']
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
@@ -809,11 +809,11 @@ source-pages: ## [project] save the full visible text of the named pointers, wit
 ##  QUESTION=<q>   the research question the pages are read for (its number, NNNN - feature 303), recorded on the sources-consulted ledger
 ##  REFRESH=1      fetch again even where the page cache holds a copy younger than seven days
 	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(or $(QUESTION),$(Q)),--question "$(or $(QUESTION),$(Q))",) $(if $(SOUGHT),--sought "$(SOUGHT)",) $(if $(REREAD),--reread "$(REREAD)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record source-pages "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(or $(QUESTION),$(Q)),--question "$(or $(QUESTION),$(Q))",) $(if $(SOUGHT),--sought "$(SOUGHT)",) $(if $(REREAD),--reread "$(REREAD)",)
 
 source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger and the attempts log - every page a research pass reads (features 288, 312)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<NNNN>] [SOUGHT=<what was looked for>]
 	@if [ -z "$(URL)" ] || [ -z "$(OUTCOME)" ]; then printf 'make source-outcome: URL=<u> OUTCOME=<cited:key|rejected:why|nothing-found|unreadable|pending> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",) $(if $(SOUGHT),--sought "$(SOUGHT)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",) $(if $(SOUGHT),--sought "$(SOUGHT)",)
 
 uncited: ## [project] the uncited pages judged once, and the kept ones written up - DO=set (count; OUT= writes the URLs) | rule | fetch [LIMIT=n] | bundle OUT=<dir> [LIMIT=n] [START=n] | apply DIRS="<bundle> ..." | score DIR=<bundle> ANSWERS=<labels.json> | draft OUT=<dir> [START=n] | install DIRS="<draft> ..." | merge KEY=<dup> INTO=<kept key> | dedupe [DRY=1] | unkeep URL=<u> REASONS=<r,r> NOTE=<why> | requeue URL=<u> | copy-verdicts | stands URL=<u> NOTE=<why> | retire-cited KEY=<k> ACCESS=<state> NOTE=<why> | report (feature 312)   DO=<step>
 	@if [ -z "$(DO)" ]; then printf 'make uncited: DO=set|rule|fetch|bundle|apply|score|draft|install|merge|dedupe|unkeep|requeue|copy-verdicts|stands|retire-cited|report is required\n' >&2; exit 2; fi
@@ -825,7 +825,7 @@ cite-uncited: ## [project] an uncited source's entry moved to the works cited, k
 
 attempts: ## [project] what a source was tried for and what came of it, and the filter's verdict on it - by URL, registry key, or question - BEFORE you read it again (feature 312)   URL=<u> | KEY=<k> | Q=<NNNN>
 	@if [ -z "$(URL)$(KEY)$(Q)" ]; then printf 'make attempts: URL=<u>, KEY=<k> or Q=<NNNN> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/attempts.py" show $(if $(URL),--url "$(URL)",$(if $(KEY),--key "$(KEY)",--q "$(Q)"))
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record attempts show $(if $(URL),--url "$(URL)",$(if $(KEY),--key "$(KEY)",--q "$(Q)"))
 
 archive: ## [project] archive ONE cited URL now into the private source archive - the served bytes, the whole page, its text - and write its manifest row (feature 309; the record build refuses a cited URL with none)   URL=<u> [KEY=<registry key not yet written>]
 	@if [ -z "$(URL)" ]; then printf 'make archive: URL=<u> is required\n' >&2; exit 2; fi
@@ -870,10 +870,10 @@ access-tags: ## [project] what can be got of each source - open, gm-full, gm-par
 
 sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
 	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" lookup $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources lookup $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",)
 
 sources-import: ## [project] ONE TIME, idempotent: seed the sources-consulted ledger from the 2026-09-29 measurement and import the /tmp/l7r-check saves into the page cache (feature 288)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" import
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources import
 
 stale-terms:    ## [project] after a value changed in a feature's spec, where does the OLD value still stand - look BEFORE a later review round   F=253 [AGAINST=<git ref>]
 ##  F=<feature>    the feature number or directory name under specs/

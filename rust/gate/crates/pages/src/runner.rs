@@ -46,7 +46,7 @@ use l7r_gate_core::Reply;
 
 const PROMPT: &str = "You are a fresh session started to do the work ONE brief describes. Read {brief} first, and do what it says, end to end and unattended. Commit in this clone as you finish each part; never run the stop-work push. When the brief's work is done, or it tells you to stop, write the one-paragraph summary it asks for and stop.";
 const TOOLS: &str = "Bash,Read,Edit,Write,Grep,Glob,Agent,WebFetch,WebSearch";
-/// New registry keys a write session may reserve (feature 274 FR-001; `reserve-prefix.py` enforces it).
+/// New registry keys a write session may reserve (feature 274 FR-001; `l7r-gate record reserve` enforces it, feature 449 T145).
 pub const KEY_CAP: u32 = 10;
 const PROMPT_FILES: [&str; 2] = [
     "scripts/container/append-system-prompt.md",

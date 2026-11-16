@@ -12,6 +12,9 @@ resolver = "2"
 [workspace.dependencies]
 fancy-regex = "0.14"
 serde = "1"
+# PINNED TO UNICODE 16.0 (feature 449 T145): `quote_verbatim`'s squeeze folds by NFC and NFKC, and 0.1.24's tables gave CPython 3.14.4's
+# `unicodedata` (16.0.0) on every code point where 0.1.26 (a later Unicode) differed on 69 (observed 2026-11-16, scratchpad t145/encprobe)
+unicode-normalization = "=0.1.24"
 # FLOATS READ AS PYTHON READS THEM (feature 449 T139, `ask:449-phase3-remainder`): serde_json's default float parse is best effort, and
 # it read 509 of 6,000 floats one place off where Python's `json.loads` reads the nearest double (observed 2026-11-13, method: the long
 # floats of `pool/hamlets/kashikawa/kashikawa.json` and 3,000 random ones through `l7r-gate json-field`, against Python's `repr`); every

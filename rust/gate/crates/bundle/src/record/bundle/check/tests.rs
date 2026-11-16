@@ -9,6 +9,61 @@ use super::*;
 use crate::record::bundle::tests::{args, scratch, state};
 use crate::record::testkit::{edit_everything, put};
 
+/// The helpers as the runner stub answered them (`core`'s `RUNNER`'s `run` verb), in this process.
+pub(crate) fn stub_run(name: &str, args: &[String], root: &Path) -> Result<(i32, String), String> {
+    // a test's own answer for every helper (or one named), as a test rewrote the runner stub to give
+    if let Ok(said) = std::fs::read_to_string(root.join("stub-answer.json")) {
+        let said: serde_json::Value = serde_json::from_str(&said).unwrap();
+        if let Some(e) = said["error"].as_str() {
+            return Err(e.to_owned());
+        }
+        let only = said["only"].as_str().is_none_or(|o| o == name);
+        let code = i32::try_from(said["code"].as_i64().unwrap_or(0)).unwrap_or(0);
+        return Ok((
+            if only { code } else { 0 },
+            said["text"].as_str().unwrap_or("").to_owned(),
+        ));
+    }
+    let mut text = format!("{name} ran {}\n", args.join(" "));
+    if name == "quote_verbatim" {
+        // the bundle always names the report's file
+        let at = args.iter().position(|a| a == "--json").unwrap();
+        let data = std::fs::read_to_string(root.join("qv.json"))
+            .unwrap_or_else(|_| "{\"footnotes\": []}".to_owned());
+        std::fs::write(&args[at + 1], data).unwrap();
+        "quote-verbatim:\n  fn-1 key - OK\nkept line\n".clone_into(&mut text);
+    }
+    if name == "source_pages" {
+        std::fs::create_dir_all(&args[0]).unwrap();
+        std::fs::write(Path::new(&args[0]).join("MANIFEST.txt"), "m\n").unwrap();
+        let ledger = if args.iter().any(|a| a == "--question") {
+            "sources-consulted: earlier reads\n"
+        } else {
+            ""
+        };
+        text = format!("{ledger}pointer | file | state\nx | y | FETCHED\n");
+    }
+    Ok((0, text))
+}
+
+#[test]
+fn the_helpers_themselves_run_when_the_stub_is_off() {
+    let root = scratch("bundle-check-real");
+    super::STUBBED.with(|s| s.set(false));
+    let (code, text) = run_script(
+        "style_prepass",
+        &args(&["9999", "--root", &root.to_string_lossy()]),
+        &root,
+    )
+    .unwrap();
+    assert_eq!(code, 2);
+    assert!(text.contains("no question is '9999'"));
+    assert!(run_script("nope", &[], &root)
+        .unwrap_err()
+        .contains("no helper nope"));
+    super::STUBBED.with(|s| s.set(true));
+}
+
 fn keys(list: &[&str]) -> HashSet<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
 }
@@ -278,7 +333,11 @@ fn the_refusals_of_a_question_bundle() {
         bundle(&root, &["0777", "--notes", "k", "--print-notes"]).code,
         2
     );
-    put(&root, "scripts/bundle_door.py", "import json, sys\nfor l in sys.stdin:\n    print(json.dumps({'ok': [5, 'helper said no']}), flush=True)\n");
+    put(
+        &root,
+        "stub-answer.json",
+        r#"{"code": 5, "text": "helper said no"}"#,
+    );
     for for_ in ["record-format", "record-style", "quote-check"] {
         let r = bundle(
             &root,
@@ -295,7 +354,11 @@ fn the_refusals_of_a_question_bundle() {
         assert_eq!(r.code, 5);
         assert!(r.stderr.contains("helper said no"));
     }
-    put(&root, "scripts/bundle_door.py", "import json, sys\nfor l in sys.stdin:\n    print(json.dumps({'error': 'Traceback (most recent call last):\\nOSError: no'}), flush=True)\n");
+    put(
+        &root,
+        "stub-answer.json",
+        r#"{"error": "Traceback (most recent call last):\nOSError: no"}"#,
+    );
     assert_eq!(
         bundle(
             &root,
@@ -317,11 +380,7 @@ fn the_refusals_of_a_question_bundle() {
         "research/questions/0094-trade.notes.html",
         "<li data-note=\"q\">\"x\"</li>",
     );
-    put(
-        &root,
-        "scripts/record/quote_verbatim.py",
-        "raise ImportError('x')\n",
-    );
+    // the translated pairs read in process (feature 449 T145): a note quoting no original owes no pair, and the bundle is built
     assert_eq!(
         bundle(
             &root,
@@ -336,7 +395,7 @@ fn the_refusals_of_a_question_bundle() {
             ]
         )
         .code,
-        1
+        0
     );
 }
 
@@ -504,7 +563,11 @@ fn the_rare_paths_of_a_question_bundle() {
         kind_rows(&root, "Well", &owed, "an audit asked").unwrap(),
         (Vec::new(), String::new())
     );
-    put(&root, "scripts/bundle_door.py", "import json, sys\nfor l in sys.stdin:\n    a = json.loads(l)['args']\n    print(json.dumps({'ok': [6 if a[0] == 'quote_verbatim' else 0, 'said']}), flush=True)\n");
+    put(
+        &root,
+        "stub-answer.json",
+        r#"{"code": 6, "only": "quote_verbatim", "text": "said"}"#,
+    );
     assert_eq!(
         bundle(
             &root,

@@ -22,7 +22,7 @@ fn quote_part(
     let (out, q) = (&e.out, e.q);
     let mut args = args;
     args.extend(["--json".to_owned(), shown(&out.join("quote-verbatim.json"))]);
-    let (code, mut text) = run_script(run, "quote_verbatim", &args, root)?;
+    let (code, mut text) = run_script("quote_verbatim", &args, root)?;
     if !e.notes.is_empty() && code == 0 {
         text = super::keys::scoped_verbatim(out, &text)?;
     }
@@ -36,7 +36,7 @@ fn quote_part(
         run.warn(&text);
         return Ok(Some(code));
     }
-    if super::keys::residue_pages(run, out)? > 0 {
+    if super::keys::residue_pages(out)? > 0 {
         rows.push(("pages/".to_owned(), "the host's page cache (feature 288)".to_owned(), "for quote-check: the saved text of each page a quotation was not found VERBATIM on - grep it before any WebFetch; its MANIFEST.txt names a page the cache did not hold".to_owned()));
     }
     Ok(None)

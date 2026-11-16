@@ -9,8 +9,8 @@ use l7r_guard::shared::pyjson;
 use serde_json::{json, Value};
 
 use super::check::{
-    dumps, excerpt, flat, fresh, manifest, notes_subset, registry_entry, report_lines, untagged,
-    url_of, with_earlier,
+    dumps, excerpt, flat, fresh, manifest, notes_subset, registry_entry, report_lines, run_script,
+    untagged, url_of, with_earlier,
 };
 use super::earlier::dispatches;
 use super::owed::{self as bo};
@@ -26,7 +26,7 @@ use crate::record::units::{re, read_notes, Unit, QUESTIONS};
 
 type Rows = Vec<(String, String, String)>;
 
-/// What a `source_pages.py` run printed before its manifest: the page's earlier reads on the ledger (feature 288).
+/// What a `record source-pages` run printed before its manifest: the page's earlier reads on the ledger (feature 288).
 fn ledger_part(saved: &str) -> &str {
     saved
         .split_once("pointer | file | state")
@@ -35,7 +35,7 @@ fn ledger_part(saved: &str) -> &str {
 }
 
 /// Every passage the record quotes from `key` - the ORIGINAL where a quote is translated - across every notes file.
-fn quoted_passages(run: &mut Run, root: &Path, key: &str) -> Result<Vec<String>, Fail> {
+fn quoted_passages(root: &Path, key: &str) -> Result<Vec<String>, Fail> {
     let li = re(&format!(
         r#"(?s)<li data-note="{}(?:-\d+)?">(.*?)</li>"#,
         fancy_regex::escape(key)
@@ -55,19 +55,12 @@ fn quoted_passages(run: &mut Run, root: &Path, key: &str) -> Result<Vec<String>,
             let body = comment
                 .replace_all(c.get(1).map_or("", |g| g.as_str()), "")
                 .into_owned();
-            let got = run.door.ask("passages", &json!([body]))?;
-            for p in got.as_array().into_iter().flatten() {
-                let text = |k: &str| {
-                    p.get(k)
-                        .and_then(Value::as_str)
-                        .unwrap_or_default()
-                        .to_owned()
-                };
-                let original = text("original");
-                out.push(if original.is_empty() {
-                    text("quote")
+            // `quote_verbatim.passages`, in process since feature 449 T145 (the runner's `passages` verb before)
+            for p in l7r_gate_research::verbatim::passages(&body) {
+                out.push(if p.original.is_empty() {
+                    p.quote
                 } else {
-                    original
+                    p.original
                 });
             }
         }
@@ -98,7 +91,7 @@ fn walk(dir: &Path, out: &mut Vec<PathBuf>) {
 }
 
 /// The cached text of every page a quotation was not found VERBATIM on, saved under `out/pages/` from the host's page cache only (feature 288 FR-010, FR-011); the count of pages named.
-pub fn residue_pages(run: &mut Run, out: &Path) -> Result<usize, Fail> {
+pub fn residue_pages(out: &Path) -> Result<usize, Fail> {
     let report = out.join("quote-verbatim.json");
     let data: Value = if report.is_file() {
         serde_json::from_str(&read_text(&report)?).map_err(fail)?
@@ -139,8 +132,8 @@ pub fn residue_pages(run: &mut Run, out: &Path) -> Result<usize, Fail> {
     if urls.is_empty() {
         return Ok(0);
     }
-    run.door
-        .ask("save_cached", &json!([urls, shown(&out.join("pages"))]))?;
+    // the residue save in process since feature 449 T145 (the runner's `save_cached` verb before)
+    crate::record::helpers::save_cached(&urls, &out.join("pages"))?;
     Ok(urls.len())
 }
 
@@ -403,7 +396,7 @@ fn key_rows(
             "--sought".to_owned(),
             format!("source-reader: the passage behind a new claim on {key}"),
         ];
-        let got = run.door.helper("source_pages", &args, root)?;
+        let got = run_script("source_pages", &args, root)?;
         let ledger = ledger_part(&got.1).to_owned();
         if !ledger.is_empty() {
             run.say(&ledger);
@@ -416,7 +409,7 @@ fn key_rows(
         } else {
             format!("{pages}.quotes.json")
         });
-        let quoted = quoted_passages(run, root, key)?;
+        let quoted = quoted_passages(root, key)?;
         write(&qfile, &pyjson::dumps(&json!(quoted), None, false))?;
         let args = [
             saved,
@@ -425,7 +418,7 @@ fn key_rows(
             shown(&qfile),
             "--no-ledger".to_owned(),
         ];
-        let got = run.door.helper("source_pages", &args, root)?;
+        let got = run_script("source_pages", &args, root)?;
         rows.push((format!("{pages}/"), url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which".to_owned()));
         got
     };

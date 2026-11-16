@@ -55,6 +55,13 @@ fn every_broken_file_is_refused_as_the_python_refused_it() {
             );
         assert_eq!(got, *want, "{rel} {text:?}");
     }
+    // a vocabulary that is there but not UTF-8 is raised, as the Python's `json.load` raised it, never "missing" (feature 449 T145)
+    let dir = record();
+    std::fs::write(dir.join("source-tags.json"), [0xff]).unwrap();
+    assert_eq!(
+        load_vocabulary(&dir).unwrap_err().kind,
+        "UnicodeDecodeError"
+    );
 }
 
 #[test]

@@ -14,7 +14,7 @@ fn each_tool_answers_from_the_process() {
     assert!(ask("page-session", &["only", "two"])
         .stderr
         .contains("ValueError"));
-    for verb in ["brief-load", "coord", "research-claims", "escape-take"] {
+    for verb in ["brief-load", "coord", "research-claims"] {
         assert_eq!(ask(verb, &[]).code, 2, "{verb}");
     }
     assert_eq!(ask("coord", &["lines", "/no/such/file", "x"]).code, 2);

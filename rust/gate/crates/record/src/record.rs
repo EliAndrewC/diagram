@@ -11,9 +11,12 @@ pub use l7r_gate_bundle::record::*;
 pub use l7r_gate_downloads::record::{access_tags, downloads};
 pub use l7r_gate_trials::record::agent_census;
 
+pub mod apply_edits;
 mod fragment_move;
 mod merge_answers;
 mod money;
+pub mod reserve;
+pub mod sources;
 mod stale_terms;
 
 const CANON_ROOTS: [&str; 2] = [
@@ -349,6 +352,15 @@ pub fn cli(args: &[String]) -> Reply {
         Some("modal-triage") => triage::cli(rest),
         Some("merge-answers") => merge_answers::cli(rest),
         Some("check-bundle") => bundle::check::cli(rest),
+        // feature 449 T145 (phase 4's S2): the eight record tools of T81's cut
+        Some("quote-verbatim") => helpers::quote_verbatim(rest, &current_dir()),
+        Some("record-prepass") => helpers::record_prepass(rest, &current_dir()),
+        Some("style-prepass") => helpers::style_prepass(rest, &current_dir()),
+        Some("source-pages") => helpers::source_pages(rest, &current_dir()),
+        Some("apply-edits") => apply_edits::cli(rest, &current_dir()),
+        Some("reserve") => reserve::cli(rest, &current_dir()),
+        Some("sources") => sources::cli(rest, &current_dir()),
+        Some("attempts") => sources::attempts_cli(rest, &current_dir()),
         Some("modal-bundle") => bundle::modal::cli(rest),
         _ => reply(
             String::new(),

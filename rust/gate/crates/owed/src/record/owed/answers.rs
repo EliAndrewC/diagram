@@ -16,7 +16,7 @@ use super::{listing, merge_base, units, units_in, zfill4, FAMILIES};
 use crate::record::args::Parsed;
 use crate::record::delta::Delta;
 use crate::record::modals;
-use crate::record::repo::{self, fail, git, python, read_universal, tree_of, utc_now, Fail};
+use crate::record::repo::{self, fail, git, read_universal, utc_now, Fail};
 use crate::record::units::{
     self as ru, pairs_of, question, re, Unit, HREF, NOTE, ORIG_STORED, ORIG_TOKEN, PASSAGE,
 };
@@ -51,13 +51,6 @@ static ROW: LazyLock<Regex> =
     LazyLock::new(|| re(r"^\s*-\s*`?([^|`]+?)`?\s*\|\s*(.+?)\s*\|\s*(.+?)\s*$"));
 static PAGE_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^page: (\S+) ([0-9a-f]{40})$"));
 static UNIT_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^unit: (.+) (\S+)$"));
-
-const REPLY_OF: &str = r"import json, sys
-from pathlib import Path
-sys.path.insert(0, sys.argv[1] + '/scripts/record')
-sys.dont_write_bytecode = True
-import apply_edits
-print(json.dumps(apply_edits.reply_of(Path(sys.argv[2]))))";
 
 /// The checks an agent's dispatch answers: `CHECK=modal-research` answers its three units.
 fn agent_checks(check: &str) -> Vec<String> {
@@ -863,16 +856,7 @@ fn run_fixed(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     })
 }
 
-/// A transcript's last reply, as `make apply-edits` reads one (`apply_edits.reply_of`, phase 4, by command).
-///
-/// # Errors
-///
-/// Where what it reads, writes or runs fails: the error says which and why.
-pub fn reply_of(root: &Path, path: &str) -> Result<String, Fail> {
-    let tree = tree_of(root);
-    let said = python(REPLY_OF, &[&tree.to_string_lossy(), path], "")?;
-    serde_json::from_str(&said).map_err(fail)
-}
+pub use super::reply::{reply_of, reply_text, unescaped};
 
 fn run_answer(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     let (check, result, bundle) = (

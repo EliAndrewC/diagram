@@ -28,7 +28,7 @@ fn a_source_bundle_end_to_end() {
         "research/sources/010-works-cited/0001-key-a.html",
         "<p>Write-up A (https://e.org/a).</p>\n",
     );
-    put(&root, "research/questions/citations/0001-key.notes.html", "<li data-note=\"key-a-2\">\"q\" <!-- \"a session note\" --></li><li data-note=\"key-ab\">x</li>");
+    put(&root, "research/questions/citations/0001-key.notes.html", "<li data-note=\"key-a-2\">\u{300c}a quoted passage of twenty letters\u{300d} - and \u{300c}short\u{300d} (translated; original: \u{300c}an original long enough to keep\u{300d}) \u{300c}https://example.org/a/long/link\u{300d} <!-- \u{300c}a session note of some length\u{300d} --></li><li data-note=\"key-ab\">x</li>");
     let base = crate::record::testkit::commit(&root, "a pointer");
     crate::record::testkit::git(&root, &["update-ref", "refs/remotes/origin/main", &base]);
     let o = root.join("out").to_string_lossy().into_owned();
@@ -106,7 +106,11 @@ fn a_source_bundle_end_to_end() {
             && text.contains("```diff\n--- at the last round\n+++ now\n")
             && text.contains("- `images/r.md`")
     );
-    put(&root, "scripts/bundle_door.py", "import json, sys\nfor l in sys.stdin:\n    print(json.dumps({'ok': [2, 'pointer | file | state\\nno']}), flush=True)\n");
+    put(
+        &root,
+        "stub-answer.json",
+        r#"{"code": 2, "text": "pointer | file | state\nno"}"#,
+    );
     let failed = bundle(
         &root,
         &[
@@ -225,12 +229,11 @@ fn the_borrowed_parts_and_their_failures() {
     let root = scratch("bundle-keys-parts");
     let out = root.join("o");
     std::fs::create_dir_all(&out).unwrap();
-    let mut run = crate::record::bundle::Run::new(&root);
-    assert_eq!(residue_pages(&mut run, &out).unwrap(), 0);
+    assert_eq!(residue_pages(&out).unwrap(), 0);
     put(&root, "o/quote-verbatim.json", &json!({"footnotes": [{"links": ["https://a"], "passages": [{"quotation": "VERBATIM"}]}, {"links": ["https://b"]}]}).to_string());
-    assert_eq!(residue_pages(&mut run, &out).unwrap(), 0);
+    assert_eq!(residue_pages(&out).unwrap(), 0);
     put(&root, "o/quote-verbatim.json", "not json");
-    assert!(residue_pages(&mut run, &out).is_err());
+    assert!(residue_pages(&out).is_err());
     assert!(scoped_verbatim(&out, "").is_err());
     put(&root, "o/quote-verbatim.json", "{}");
     assert!(scoped_verbatim(&out, "").unwrap_err().contains("KeyError"));
@@ -267,7 +270,7 @@ fn the_borrowed_parts_and_their_failures() {
         "<li data-note=\"key-a\">x</li>",
     );
     std::fs::write(root.join("research/questions/0099-bad.notes.html"), [0xff]).unwrap();
-    assert!(quoted_passages(&mut run, &root, "key-a").is_err());
+    assert!(quoted_passages(&root, "key-a").is_err());
 }
 
 #[test]

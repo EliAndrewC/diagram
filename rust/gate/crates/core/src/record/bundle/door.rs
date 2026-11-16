@@ -64,28 +64,6 @@ impl Runner {
         }
         Ok(said.get("ok").cloned().unwrap_or(Value::Null))
     }
-
-    /// `main(args)` of one of the helpers `check_bundle` ran in its own process (feature 383 D6): (its exit, stdout then stderr).
-    ///
-    /// # Errors
-    ///
-    /// Where what it reads, writes or runs fails: the error says which and why.
-    pub fn helper(
-        &mut self,
-        name: &str,
-        args: &[String],
-        root: &Path,
-    ) -> Result<(i32, String), Fail> {
-        let got = self.ask("run", &json!([name, args, root.to_string_lossy()]))?;
-        let code = got.get(0).and_then(Value::as_i64).unwrap_or(1);
-        Ok((
-            i32::try_from(code).unwrap_or(1),
-            got.get(1)
-                .and_then(Value::as_str)
-                .unwrap_or_default()
-                .to_owned(),
-        ))
-    }
 }
 
 impl Drop for Runner {

@@ -6,19 +6,18 @@
 
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
-use std::time::Duration;
 
 use fancy_regex::Regex;
 use serde_json::Value;
 
 use crate::guards::finished_run_hooks::runs::realpath;
 use crate::protocol::{Answer, Event, Guard};
+use crate::shared::attempts;
 use crate::shared::blocked::{blocked, domains, refusal, Rule};
 use crate::shared::cited_url::url_id;
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::ask_within;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -30,8 +29,6 @@ pub const GUARD: Guard = Guard {
 
 /// CONVENTION: how much of what was sought an attempt keeps (`SOUGHT_CHARS`).
 const SOUGHT_CHARS: usize = 300;
-/// CONVENTION: under the 15 s the shell guard's settings entry gave it; a hung log read costs the fetch its context and nothing else.
-const ASK_LIMIT: Duration = Duration::from_secs(10);
 
 fn re(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
@@ -52,10 +49,9 @@ static HEREDOC: LazyLock<Regex> =
 static HTTP_URL: LazyLock<Regex> = LazyLock::new(|| re(r#"(?i)https?://[^\s'"<>)]+"#));
 
 /// What this guard needs from outside the call.
-pub(crate) struct Ctx<'a> {
+pub(crate) struct Ctx {
     pub(crate) here: PathBuf,
     pub(crate) tree: PathBuf,
-    pub(crate) python: &'a str,
 }
 
 /// The list: a missing file is an empty list, and a list that cannot be trusted is None (the loader's refusal, under which every fetch
@@ -154,7 +150,8 @@ fn archived(root: &Path, url: &str) -> bool {
         .is_file()
 }
 
-/// Each URL's earlier attempts, the attempts written: `attempts.py` by path (T039 decision (c)), one process a fetch.
+/// Each URL's earlier attempts, the attempts written: `shared::attempts::seen` in process (feature 449 T145, where it ran `attempts.py` by
+/// path, T039 decision (c)); a log it cannot read answers nothing, as the Python's failure did.
 fn earlier(
     root: &Path,
     urls: &[String],
@@ -162,32 +159,21 @@ fn earlier(
     route: &str,
     ctx: &Ctx,
 ) -> Option<Vec<Value>> {
-    let tool = ctx.tree.join("scripts/record/attempts.py");
-    let (tool, at) = (tool.to_string_lossy(), root.to_string_lossy());
     let kept: String = fetch.sought.chars().take(SOUGHT_CHARS).collect();
-    let sought = format!(
-        "--sought={}",
-        if kept.is_empty() {
-            "(no prompt)"
-        } else {
-            &kept
-        }
-    );
-    let mut args = vec![
-        tool.as_ref(),
-        "seen",
-        "--root",
-        at.as_ref(),
-        sought.as_str(),
-        "--route",
+    let sought = if kept.is_empty() {
+        "(no prompt)"
+    } else {
+        &kept
+    };
+    attempts::seen(
+        root,
+        urls,
+        sought,
         route,
-    ];
-    if fetch.record {
-        args.push("--record");
-    }
-    args.push("--");
-    args.extend(urls.iter().map(String::as_str));
-    serde_json::from_str(&ask_within(root, ctx.python, &args, ASK_LIMIT).out).ok()
+        fetch.record,
+        &ctx.tree.join("research"),
+    )
+    .ok()
 }
 
 pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> {
@@ -263,15 +249,7 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     let here = std::env::current_dir().unwrap_or_default();
     let tree = std::env::var("L7R_GUARD_TREE").map_or_else(|_| here.clone(), PathBuf::from);
-    judge(
-        event,
-        session,
-        &Ctx {
-            here,
-            tree,
-            python: "python3",
-        },
-    )
+    judge(event, session, &Ctx { here, tree })
 }
 
 #[cfg(test)]

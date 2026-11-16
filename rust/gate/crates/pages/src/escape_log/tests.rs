@@ -5,7 +5,7 @@ use std::path::Path;
 
 use serde_json::{json, Value};
 
-use super::{cli, escape, log_at, Env};
+use super::{escape, log_at, Env};
 
 fn entries(dir: &Path) -> Vec<Value> {
     let mut names: Vec<_> = std::fs::read_dir(dir)
@@ -16,10 +16,6 @@ fn entries(dir: &Path) -> Vec<Value> {
         .iter()
         .map(|p| serde_json::from_str(&std::fs::read_to_string(p).unwrap()).unwrap())
         .collect()
-}
-
-fn args(words: &[&str]) -> Vec<String> {
-    words.iter().map(|w| (*w).to_owned()).collect()
 }
 
 #[test]
@@ -127,67 +123,6 @@ fn the_log_falls_back_to_home_and_never_fails() {
     assert_eq!(escape("T", "g", "r", None, &env), Ok(false));
     let own = Env::of_process();
     assert!(!own.command.is_empty() && (own.var)("PATH").is_some());
-}
-
-#[test]
-fn the_command_answers_by_its_exit() {
-    let d = l7r_gate_core::ci::fixtures::scratch("escape-cli");
-    let logs = d.join("log").to_string_lossy().into_owned();
-    let vars: HashMap<&str, String> = [
-        ("GUARD_LOG_DIR", logs.clone()),
-        ("KEY_CAP_OK", "a deliberate larger load".to_owned()),
-        ("THIN", "x".to_owned()),
-    ]
-    .into_iter()
-    .collect();
-    let var = |k: &str| vars.get(k).cloned();
-    let env = Env {
-        var: &var,
-        cwd: d.to_path_buf(),
-        command: "l7r-gate escape take".to_owned(),
-    };
-    let run = |a: &[&str]| cli(&args(a), &env);
-    let base = ["--guard", "reserve", "--rule", "key-cap"];
-    let ok = run(&[
-        &[
-            "--token",
-            "KEY_CAP_OK",
-            "--context",
-            "{\"key\": \"k\"}",
-            "--command",
-            "reserve-prefix.py a",
-        ],
-        &base[..],
-    ]
-    .concat());
-    assert_eq!((ok.code, ok.stderr.as_str()), (0, ""));
-    assert_eq!(run(&[&["--token", "UNSET"], &base[..]].concat()).code, 1);
-    let thin = run(&[&["--token", "THIN"], &base[..]].concat());
-    assert_eq!(thin.code, 3);
-    assert!(thin.stderr.starts_with("THIN needs a REASON"));
-    for bad in [
-        vec!["--bogus"],
-        vec!["--token", "T"],
-        vec![
-            "--token",
-            "T",
-            "--guard",
-            "g",
-            "--rule",
-            "r",
-            "--context",
-            "{",
-        ],
-    ] {
-        let got = run(&bad);
-        assert_eq!(got.code, 2, "{bad:?}");
-        assert!(got.stderr.starts_with("usage: l7r-gate escape take"));
-    }
-    let got = entries(Path::new(&logs));
-    let commands: Vec<&str> = got.iter().map(|e| e["command"].as_str().unwrap()).collect();
-    assert!(
-        commands.contains(&"reserve-prefix.py a") && commands.contains(&"l7r-gate escape take")
-    );
 }
 
 pub(super) fn unset_var(_: &str) -> Option<String> {

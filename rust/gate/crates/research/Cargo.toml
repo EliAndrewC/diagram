@@ -15,6 +15,11 @@ fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }
 l7r_guard = { path = "../../../guard" }
 serde_json = { workspace = true }
+unicode-normalization = { workspace = true }
+
+[features]
+# the crate's test record, for the crates whose tests read one (feature 449 T145: the `bundle` crate's helpers)
+testkit = []
 
 [dev-dependencies]
 l7r_gate_core = { path = "../core", features = ["testkit"] }
