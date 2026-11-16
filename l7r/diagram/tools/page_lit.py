@@ -156,7 +156,13 @@ def _chromium() -> Iterator[Any]:
     from playwright.sync_api import sync_playwright  # here, so the module imports where Playwright is absent
 
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        # the Chromium the browser crate drives, pinned by scripts/container/chromium.pin (feature 449 T146 retired Playwright's own
+        # download; it is the same Chrome for Testing build Playwright 1.62 fetched, so this page lights as it did)
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../scripts/container/chromium.pin"), encoding="utf-8") as fh:
+            pin = dict(line.split("=", 1) for line in fh.read().splitlines() if "=" in line and not line.startswith("#"))
+        home = os.environ.get("L7R_CHROMIUM_HOME") or os.path.expanduser("~/.cache/l7r-chromium")
+        exe = os.environ.get("L7R_CHROMIUM") or os.path.join(home, pin["CHROMIUM_VERSION"], "chrome-headless-shell-linux64/chrome-headless-shell")
+        browser = p.chromium.launch(executable_path=exe)
         try:
             yield browser
         finally:

@@ -362,6 +362,8 @@ pub fn cli(args: &[String]) -> Reply {
         Some("sources") => sources::cli(rest, &current_dir()),
         Some("attempts") => sources::attempts_cli(rest, &current_dir()),
         Some("modal-bundle") => bundle::modal::cli(rest),
+        // feature 449 T146 (phase 4's S3a): `archive.py`'s commands and the doors its Python importers forward through
+        Some("archive") => l7r_gate_archive::cli::cli(rest, &current_dir()),
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),

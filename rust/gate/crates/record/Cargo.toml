@@ -7,6 +7,7 @@ publish = false
 
 [dependencies]
 fancy-regex = { workspace = true }
+l7r_gate_archive = { path = "../archive" }
 l7r_gate_bundle = { path = "../bundle" }
 l7r_gate_core = { path = "../core" }
 l7r_gate_downloads = { path = "../downloads" }

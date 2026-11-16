@@ -121,7 +121,7 @@ fn row_state(row: &Value) -> &'static str {
     }
     let reason = row["reason"].as_str().unwrap_or("");
     if reason.starts_with("the page would not render whole") {
-        // The site served the page and its text is kept (`archive.py`, the REFUSED branch's capture): we read it; only the whole-page snapshot failed. 22 rows on
+        // The site served the page and its text is kept (the archive's capture, the REFUSED branch - `archive.py`'s, the `archive` crate's since feature 449 T146): we read it; only the whole-page snapshot failed. 22 rows on
         // 2026-10-02 (a count of the manifest by reason).
         return "open";
     }

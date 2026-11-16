@@ -1,9 +1,10 @@
 # The Rust tools as one workspace (feature 449 T001): the hamlet stages (feature 444) and the guards (feature 449 phase 1), one
 # crate a phase's tools, sharing one lockfile and the build profile below; `scripts/gates/rust_checks.py` checks each member.
 # The gate is a binary over crates (feature 449 T92, the GM 2026-11-11): `gate/crates/*`, so an edit recompiles one crate and what
-# depends on it, not all 74,199 lines.
+# depends on it, not all 74,199 lines. `browser` is the one browser crate (feature 449 T146, `ask:449-phase4-slices` Q4), its own
+# binary `l7r-browser`: no gate or guard crate depends on it, so their builds never compile it.
 [workspace]
-members = ["phases", "guard", "gate", "gate/crates/*"]
+members = ["phases", "guard", "gate", "gate/crates/*", "browser"]
 resolver = "2"
 
 # ONE FEATURE SET FOR EVERY GATE CRATE (feature 449 T92): a gate crate names an outside dependency only as `{ workspace = true }`, so

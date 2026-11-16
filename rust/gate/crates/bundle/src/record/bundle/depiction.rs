@@ -1,4 +1,4 @@
-//! What `modal-depiction` reads beyond the modal and the rules (from `modal_bundle.py`, plan D13): each drawing page its `Drawing:` lists and each candidate its kind has, the knobs its conditions name (feature 374), the engine's claims citing those pages, and the glyph's crop - a by-command Playwright start under the T065 clause, only for this check (`ask:449-T88-bundles`).
+//! What `modal-depiction` reads beyond the modal and the rules (from `modal_bundle.py`, plan D13): each drawing page its `Drawing:` lists and each candidate its kind has, the knobs its conditions name (feature 374), the engine's claims citing those pages, and the glyph's crop - the one browser crate's `l7r-browser crop`, run as a program, only for this check (`ask:449-T88-bundles`; Playwright's `glyph_crop.py` until feature 449 T146).
 
 use std::collections::HashSet;
 use std::fmt::Write as _;
@@ -45,13 +45,22 @@ static VIEWBOX: LazyLock<Regex> = LazyLock::new(|| pyre(r#"viewBox="([^"]*)""#))
 
 const LISTED: &str = "LISTED - a page the modal's Drawing: names - how our maps draw it";
 
-/// The crop, run as the Python ran it: `python3 -c` of this script with the page, the key and the output file. The script is the
-/// tracked `scripts/record/glyph_crop.py`, so both censuses count it; it moves onto the CDP crate in T85 (`ask:449-T88-bundles`).
+/// The crop: the one browser crate's `crop` (feature 449 T146, `ask:449-phase4-slices` Q4), run as a program through the tree's launcher
+/// (`scripts/gates/l7r-gate.sh browser crop <page> <key> <out>`), so the gate never compiles a browser; it ran `glyph_crop.py` by
+/// `python3 -c` until then (`ask:449-T88-bundles` Q3).
 #[cfg(not(test))]
-pub const CROP: &str = include_str!("../../../../../../../scripts/record/glyph_crop.py");
+fn crop_command(root: &Path) -> Command {
+    let mut cmd = Command::new(tree_of(root).join("scripts/gates/l7r-gate.sh"));
+    cmd.args(["browser", "crop"]);
+    cmd
+}
 /// The tests' crop: no browser - a page named `nocrop` fails, one named `slow` outlasts the timeout, any other gets an image and two kinds.
 #[cfg(test)]
-pub const CROP: &str = "import sys, time, pathlib\np, k, o = sys.argv[1:4]\nif 'slow' in p: time.sleep(5)\nif 'nocrop' in p: sys.exit(1)\npathlib.Path(o).write_bytes(b'png')\nif 'nokinds' not in p: pathlib.Path(o + '.kinds').write_text('well\\nother\\n')\n";
+fn crop_command(_root: &Path) -> Command {
+    let mut cmd = Command::new("python3");
+    cmd.args(["-c", "import sys, time, pathlib\np, k, o = sys.argv[1:4]\nif 'slow' in p: time.sleep(5)\nif 'nocrop' in p: sys.exit(1)\npathlib.Path(o).write_bytes(b'png')\nif 'nokinds' not in p: pathlib.Path(o + '.kinds').write_text('well\\nother\\n')\n"]);
+    cmd
+}
 
 /// The claims-index rows whose cited pages include any of `files`, each with its verdict (plan D13).
 fn claims_citing(root: &Path, files: &[String]) -> Result<Vec<String>, Fail> {
@@ -220,9 +229,8 @@ fn click_target(found: &[Modal], key: &str, m: &Modal) -> String {
 }
 
 /// A crop of the kind's first glyph on a pool page (plan D13): false when the browser is not there or the glyph cannot be found.
-fn glyph_crop(page: &Path, key: &str, out: &Path) -> Result<bool, Fail> {
-    let mut child = Command::new("python3")
-        .args(["-c", CROP])
+fn glyph_crop(root: &Path, page: &Path, key: &str, out: &Path) -> Result<bool, Fail> {
+    let mut child = crop_command(root)
         .arg(page)
         .arg(key)
         .arg(out)
@@ -431,7 +439,7 @@ fn glyph_part(
         .as_ref()
         .map_or_else(String::new, |p| drawn_geometry(p, &m.key));
     let cropped = match &page {
-        Some(p) => glyph_crop(p, &m.key, &crop)?,
+        Some(p) => glyph_crop(root, p, &m.key, &crop)?,
         None => false,
     };
     if let (Some(p), true) = (&page, cropped) {

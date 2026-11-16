@@ -16,7 +16,7 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 | `pages/` | page sessions: `page-session.sh` (`make page-session`, which execs the runner, `l7r-gate page-session`), `pull-queue.sh`; the runner, the write cap's count, `make lines`/`append`, the claims sheet and the escape log are `l7r-gate`'s (`rust/gate/crates/pages/`, 449 T137) |
 | `reviews/` | the review checks' tooling left in the shell and Python (`layout_carry.sh`, `size_table.py`); the census and the agent sync (`l7r-gate reviews census`, `agent-sync`, 449 T136), the snapshot (`l7r-gate reviews snapshot`, 449 T132), what is owed, the prerequisites, the verdict record and the hourly checkpoint are `l7r-gate reviews` (`rust/gate/crates/reviews/src/reviews/`, 449 T89), and so are the ledger's lint, a review's cost and the rows a pass owes (`reviews ledger-lint`, `review-cost`, `ledger-owed`, 449 T83) |
 | `measure/` | what things cost: `make inline-census` (feature 449's second census), gate cost, the ratchets, run stats, `make figures`, the guard log |
-| `container/` | the container's setup (`setup-dev-env.sh`), the system-prompt text its `claude()` wrapper loads, the page-session rules |
+| `container/` | the container's setup (`setup-dev-env.sh`; the browser crate's Chromium `install-chromium.sh`, its version `chromium.pin`, 449 T146), the system-prompt text its `claude()` wrapper loads, the page-session rules |
 
 Each guard's suite is `tests/hooks/test-<guard>.sh`, run by `make hooks-test` (a guard without one fails it); the
 suites' recorded command corpora are `tests/hooks/fixtures/`.

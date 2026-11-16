@@ -76,6 +76,11 @@ fn a_replacements_binary_is_refused_and_its_wrapper_is_not() {
     // the tools' own profile (T95)
     assert_eq!(v("~/.cache/x/tool/l7r-gate --version"), "bare-binary");
     assert_eq!(v("target/release/hamlet pool/x.spec.json"), "bare-binary");
+    // the checks' and the browser's own programs (feature 449 T93, T146; FR-005)
+    assert_eq!(v("~/.cache/x/tool/l7r-rust test --crate y"), "bare-binary");
+    assert_eq!(v("~/.cache/x/tool/l7r-browser serve"), "bare-binary");
+    assert_eq!(v("scripts/gates/l7r-gate.sh browser crop x"), "ok");
+    assert_eq!(v("ls rust/browser/src/l7r-browser-notes"), "ok");
     assert_eq!(v("hamlet x"), "bare-binary");
     assert_eq!(v("scripts/hooks/l7r-guard.sh --version"), "ok");
     assert_eq!(v("git log --grep hamlet"), "ok");

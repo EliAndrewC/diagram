@@ -1,0 +1,24 @@
+# The source archive's capture (feature 449 T146, phase 4's S3a under `ask:449-phase4-slices`): `scripts/record/archive.py` ported - one
+# fetch, one capture, the working copy of the PRIVATE archive repository, the manifest's rows, the backfill's lanes and
+# `l7r-gate record archive ...`. The browser is the one browser crate (`rust/browser/`), run as a program, never a dependency here, so
+# the gate's build never compiles it. On `core`, `research` and the guard; `record` takes it for its dispatch and `make reserve`'s
+# archiving at citation.
+[package]
+name = "l7r_gate_archive"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_gate_research = { path = "../research" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+l7r_gate_research = { path = "../research", features = ["testkit"] }
+
+[lints]
+workspace = true

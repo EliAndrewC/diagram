@@ -38,7 +38,9 @@ STAMP_DIR="${SETUP_STAMP_DIR:-$HOME/.cache}"
 STAMP="$STAMP_DIR/l7r-dev-env.stamp"
 SKILL_DIR="$REPO"
 env_key() {
-    cat "${BASH_SOURCE[0]}" "$SKILL_DIR/requirements.txt" "$SKILL_DIR/requirements-dev.txt" 2>/dev/null | sha256sum | cut -d' ' -f1
+    # the Chromium pin and its installer too (feature 449 T146): a new pinned version provisions every container again
+    cat "${BASH_SOURCE[0]}" "$SKILL_DIR/requirements.txt" "$SKILL_DIR/requirements-dev.txt" "$SKILL_DIR/scripts/container/chromium.pin" \
+        "$SKILL_DIR/scripts/container/install-chromium.sh" 2>/dev/null | sha256sum | cut -d' ' -f1
 }
 if [ "$ENSURE" = 1 ]; then
     in_container || exit 0
@@ -89,10 +91,12 @@ check_all() {
     # the profile), and the DejaVu ITALIC face matters because resvg does not synthesize oblique:
     # without it every italic map label silently renders upright.
     _t "resvg (diagram PNG renderer)"            "command -v resvg"
-    # pdftotext (poppler): the source archive reads a PDF's text with it (scripts/record/archive.py); six tooling tests
+    # pdftotext (poppler): the source archive reads a PDF's text with it (the gate's `archive` crate, feature 449 T146); six tooling tests
     # failed on a fresh container without it (feature 328, 2026-10-07).
     _t "pdftotext (poppler, the source archive)" "command -v pdftotext"
     _t "DejaVu Serif italic face"                "[ -f $ITALIC_FONT ]"
+    # the browser crate's Chromium (feature 449 T146), at the version scripts/container/chromium.pin names
+    _t "headless Chromium (the browser crate)"   ". $REPO/scripts/container/chromium.pin && \"\${L7R_CHROMIUM_HOME:-\$HOME/.cache/l7r-chromium}/\$CHROMIUM_VERSION/chrome-headless-shell-linux64/chrome-headless-shell\" --version"
     # the engine's runtime deps (feature 131: THIS repository's own lockfiles at the root, beside
     # pyproject.toml - the webapp's cherrypy set stayed in gm-assistant with the webapp).
     # shapely backs the /diagram seam-closing pass (waterfields/seams.py) - the one place the
@@ -160,9 +164,12 @@ if [ ! -x "$HOME/.cargo/bin/cargo-llvm-cov" ]; then
         | tar xz -C "$HOME/.cargo/bin"
 fi
 # maturin is no longer installed: the PyO3 doors it built went with the Python hamlet engine (feature 444 T39)
-# The headless browser the interactive-map test drives (feature 134): Playwright's own Chromium,
-# fetched into ~/.cache/ms-playwright. Idempotent; the test skips with a reason when it is absent.
-python3 -m playwright install --with-deps chromium >/dev/null
+# The headless Chromium the browser crate drives (`rust/browser/`: the source archive's fetch and the glyph crop, feature 449 T146;
+# `page_lit` launches the same binary until S7 ports it): Chrome for Testing's headless shell, pinned by
+# scripts/container/chromium.pin, downloaded and checked by install-chromium.sh with its libraries and fonts. Playwright's own install
+# (`python3 -m playwright install --with-deps chromium`) is retired with it (`ask:449-phase4-slices` Q4: one browser crate, never a
+# Playwright dependency). Idempotent.
+"$REPO/scripts/container/install-chromium.sh"
 
 # ---- the claude() wrapper ----------------------------------------------------------------------
 # WHY a system-prompt append and not a CLAUDE.md line: CLAUDE.md sits BELOW the system prompt in the

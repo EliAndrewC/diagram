@@ -464,8 +464,8 @@ pub fn reserved(
     Ok(false)
 }
 
-/// A record tool still Python (`archive.py` until S3a, `archive_ops.py` until S3b) run by path from the gate's tree in `root`, its
-/// stdout and stderr both to the caller's stderr as the Python routed them; its exit, 1 where it could not start.
+/// A record tool still Python (`archive_ops.py` until S3b) run by path from the gate's tree in `root`, its stdout and stderr both to the
+/// caller's stderr as the Python routed them; its exit, 1 where it could not start.
 pub fn python_tool(root: &Path, tool: &str, args: &[&str], err: &mut String) -> i32 {
     let at = l7r_gate_core::record::repo::tree_of(root)
         .join("scripts/record")
@@ -488,10 +488,36 @@ pub fn python_tool(root: &Path, tool: &str, args: &[&str], err: &mut String) -> 
     }
 }
 
-/// `archive_at_cite`: a source cited from now on archived as it is cited (feature 309 FR-006) - `archive.py url` on the new entry's
-/// URL, its report on stderr, its failure never blocking the reservation.
+/// `archive_at_cite`: a source cited from now on archived as it is cited (feature 309 FR-006) - the archive's `url` command on the new
+/// entry's URL, in process since feature 449 T146 (where it ran `archive.py url` by path), its report on stderr as the Python's stdout
+/// and traceback were, its failure never blocking the reservation.
 pub fn archive_at_cite(root: &Path, url: &str, key: &str, err: &mut String) -> i32 {
-    let code = python_tool(root, "archive.py", &["url", url, "--key", key], err);
+    archive_at_cite_with(
+        root,
+        url,
+        key,
+        &l7r_gate_archive::cli::start_browser,
+        &l7r_gate_archive::cli::production_store,
+        err,
+    )
+}
+
+/// [`archive_at_cite`] with the browser `start` makes and the working copy `store` (a test's stand-ins).
+pub fn archive_at_cite_with(
+    root: &Path,
+    url: &str,
+    key: &str,
+    start: &dyn Fn(&Path) -> l7r_gate_archive::Result<Box<dyn l7r_gate_archive::fetch::Client>>,
+    store: &dyn Fn(&Path) -> l7r_gate_archive::store::Archive,
+    err: &mut String,
+) -> i32 {
+    let code = match l7r_gate_archive::cli::archive_one(root, url, key, start, store, err) {
+        Ok(()) => 0,
+        Err(e) => {
+            let _ = writeln!(err, "{e}");
+            1
+        }
+    };
     if code != 0 {
         let _ = writeln!(err, "reserve: archiving {url} failed (exit {code}) - `make archive URL='{url}' KEY={key}` retries it");
     }
@@ -512,6 +538,16 @@ pub fn prefix_of_name(name: &str) -> Option<i64> {
 /// path on stdout; with `--check`, exit 0 where the path's prefix is reserved in the ledger and 1 where it is not.
 #[must_use]
 pub fn cli(args: &[String], cwd: &Path) -> crate::Reply {
+    cli_with(args, cwd, &archive_at_cite)
+}
+
+/// [`cli`] with the archiving at citation handed in (a test's stand-in: the real one starts a browser).
+#[must_use]
+pub fn cli_with(
+    args: &[String],
+    cwd: &Path,
+    archive: &dyn Fn(&Path, &str, &str, &mut String) -> i32,
+) -> crate::Reply {
     use crate::record::args::{parse_with, Spec};
     let reply = |stdout: String, stderr: String, code: i32| crate::Reply {
         stdout,
@@ -599,7 +635,7 @@ pub fn cli(args: &[String], cwd: &Path) -> crate::Reply {
         Ok(path) => {
             let mut err = String::new();
             if !url.is_empty() && kind == "registry" {
-                archive_at_cite(&root, url, key, &mut err);
+                archive(&root, url, key, &mut err);
             }
             reply(format!("{}\n", path.display()), err, 0)
         }

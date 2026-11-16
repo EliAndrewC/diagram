@@ -153,5 +153,61 @@ check "no binary, L7R_GATE_NO_BUILD -> refused" 1 $?
 [ ! -e "$TMP/cargo.calls" ]; check "no binary, L7R_GATE_NO_BUILD -> no build tried" 0 $?
 case $OUT in *"L7R_GATE_NO_BUILD builds none"*) : ;; *) echo "FAIL  the no-build refusal says why: $OUT"; FAILED=1 ;; esac
 
+# ---- the browser and the archive end to end, through the launcher (feature 449 T146, `ask:449-T80-order`: "the browser sits behind one
+# seam ... with one end-to-end test") ------------------------------------------------------------------------------------------------
+# The production wiring the crates' own tests replace - `record archive`'s real command line, its store over the archive's home, the
+# push's credential through the launcher's `github-token`, the browser started as `l7r-gate.sh browser serve` on the pinned Chromium -
+# run here as a session runs it: a page on a loopback server archived whole into a working copy cloned from a local bare repository
+# (never GitHub), the secrets file empty, the GM's folder absent. About two seconds.
+A=$TMP/archive; R=$A/repo; mkdir -p "$R/research/sources/010-works-cited" "$R/research/questions" "$A/site"; git init -q "$R"
+printf '<main>\n' > "$R/research/sources/_front.html"; printf '</main>\n' > "$R/research/sources/_tail.html"
+printf '<h2 id="works-cited">Works cited</h2>\n' > "$R/research/sources/010-works-cited.html"
+printf '{"domains": []}\n' > "$R/research/blocked-domains.json"; printf '{"patterns": []}\n' > "$R/research/banned-citations.json"
+printf '<!DOCTYPE html><html><body><p>an archived page</p></body></html>' > "$A/site/page.html"
+git init -q --bare -b main "$A/remote.git"; git clone -q "$A/remote.git" "$A/seed" 2>/dev/null
+echo seed > "$A/seed/README"; git -C "$A/seed" add -A; git -C "$A/seed" commit -qm seed; git -C "$A/seed" push -q origin HEAD:main
+mkdir -p "$A/home"; git clone -q "$A/remote.git" "$A/home/source-archive"; : > "$A/no-secrets.ini"
+# never the internet (feature 449 T146): a request past loopback - a Wayback lookup on a page that failed, say - meets a dead proxy
+# and fails at once, so the suite needs no network and sends nothing out; loopback itself is exempt
+export http_proxy=http://127.0.0.1:9 https_proxy=http://127.0.0.1:9 HTTP_PROXY=http://127.0.0.1:9 HTTPS_PROXY=http://127.0.0.1:9 \
+  all_proxy=http://127.0.0.1:9 ALL_PROXY=http://127.0.0.1:9 no_proxy=127.0.0.1,localhost NO_PROXY=127.0.0.1,localhost
+PORT=$(python3 -c 'import socket; s = socket.socket(); s.bind(("127.0.0.1", 0)); print(s.getsockname()[1])')
+(cd "$A/site" && exec python3 -m http.server "$PORT" --bind 127.0.0.1 >/dev/null 2>&1) & SRV=$!
+for _ in $(seq 50); do python3 -c "import urllib.request as u; u.urlopen('http://127.0.0.1:$PORT/page.html', timeout=1)" 2>/dev/null && break; sleep 0.1; done
+arch() { (cd "$R" && L7R_SOURCES_HOME="$A/home" DIAGRAM_SECRETS="$A/no-secrets.ini" L7R_GM_SOURCES="$A/gm" "$STAMP" record archive "$@" 2>&1); }
+OUT=$(arch url "http://127.0.0.1:$PORT/page.html" --key e2e-key); check "record archive url: a page archived end to end" 0 $?
+case $OUT in "archive: archived - http://127.0.0.1:$PORT/page.html"*"diagram-research/tree/main/"*) : ;; *) echo "FAIL  the archived line: $OUT"; FAILED=1 ;; esac
+LOG=$(git -C "$A/remote.git" log -1 --format=%s --name-only)
+case $LOG in "archived: http://127.0.0.1:$PORT/page.html"*page.mhtml*served.html*text.txt*) : ;; *) echo "FAIL  the capture pushed whole: $LOG"; FAILED=1 ;; esac
+grep -q '"route": "archive"' "$R/research/source-attempts.jsonl"; check "the attempt logged" 0 $?
+grep -q '"keys": \[' "$R"/research/archive/*/*.json; check "the manifest row written" 0 $?
+OUT=$(arch backfill --workers 1); check "record archive backfill: nothing owed, the push and the coverage" 0 $?
+case $OUT in *"0 cited URL(s) owed a copy"*"archive coverage: 0 cited URL(s)"*) : ;; *) echo "FAIL  the backfill's lines: $OUT"; FAILED=1 ;; esac
+OUT=$(arch gm-copies); check "record archive gm-copies: no table, no copies" 0 $?
+# `uncited.py`'s lane through `archive.py`'s Browser forwarder (`record archive serve`) meeting a blocked page mid-way (the round
+# arbiter's `ask:449-T146-browser`: the lane's output with the blocked page held): the page refused before any request, said as an
+# error, the browser replaced, and the lane goes on to the next page and finishes - HEAD's Playwright `Browser` printed these lines
+# (the T146 differential's case "uncited fetch, the blocked page mid-lane")
+printf '{"domains": [{"domain": "blocked.example", "reason": "a test", "approved": {"date": "2026-11-16", "words": "block it"}}]}\n' \
+  > "$R/research/blocked-domains.json"
+for n in 1 2; do printf '<!DOCTYPE html><html><body><p>%s</p></body></html>' "$(printf 'a long page %s, ' "$n" | head -c 15; printf 'words %.0s' $(seq 120))" > "$A/site/long$n.html"; done
+cat > "$A/lane.py" <<EOF
+import pathlib, sys
+sys.path.insert(0, "$HERE/../../scripts/record")
+import archive as ar, uncited as un
+b = ar.Browser()
+try:
+    print(un.fetch(pathlib.Path.cwd(), ["http://127.0.0.1:$PORT/long1.html", "https://blocked.example/x", "http://127.0.0.1:$PORT/long2.html"], b))
+finally:
+    b.close()
+EOF
+OUT=$(cd "$R" && L7R_SOURCES_HOME="$A/home" DIAGRAM_SECRETS="$A/no-secrets.ini" PYTHONDONTWRITEBYTECODE=1 python3 "$A/lane.py" 2>&1)
+check "uncited's lane through the Browser forwarder, a blocked page mid-way" 0 $?
+case $OUT in "read                   http://127.0.0.1:$PORT/long1.html
+error                  https://blocked.example/x - Blocked: an archive fetch refused: https://blocked.example/x is on the blocked list"*"
+read                   http://127.0.0.1:$PORT/long2.html
+{'read': 2, 'unreadable': 0, 'error': 1}") : ;; *) echo "FAIL  the lane's lines: $OUT"; FAILED=1 ;; esac
+kill "$SRV" 2>/dev/null; wait "$SRV" 2>/dev/null
+
 echo -----
 if [ "$FAILED" -eq 0 ]; then echo "all gate-stamp tests passed"; exit 0; else echo "SOME TESTS FAILED"; exit 1; fi

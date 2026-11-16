@@ -829,10 +829,10 @@ attempts: ## [project] what a source was tried for and what came of it, and the 
 
 archive: ## [project] archive ONE cited URL now into the private source archive - the served bytes, the whole page, its text - and write its manifest row (feature 309; the record build refuses a cited URL with none)   URL=<u> [KEY=<registry key not yet written>]
 	@if [ -z "$(URL)" ]; then printf 'make archive: URL=<u> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive.py" url "$(URL)" $(if $(KEY),--key "$(KEY)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive url "$(URL)" $(if $(KEY),--key "$(KEY)",)
 
 archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, the uncited pages feature 312's filter KEPT, and no other (features 309, 312)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
-	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),) --workers $(or $(WORKERS),4); else python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
+	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),) --workers $(or $(WORKERS),4); else "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
 
 archive-inbox: ## [project] the GM's downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass; a NEW download waits until you give its keys (feature 309)   [MATCH="<file>=<key>[,<key>] ..."] [NONE="<file> ..."]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")

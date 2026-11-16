@@ -133,30 +133,25 @@ fn the_hash_is_salted_with_the_gate_s_standard_and_keeps_a_gone_file() {
 
 #[test]
 fn only_the_browser_area_has_a_salt() {
+    // feature 449 T146: the browser area's salt is the Chromium the pin names, not the installed Playwright
     let dir = repo("salt");
-    let python = dir.join("salty");
-    std::fs::write(
-        &python,
-        "#!/bin/bash\nprintf 'playwright=1;chromium=none'\n",
-    )
-    .unwrap();
-    Command::new("chmod")
-        .arg("+x")
-        .arg(&python)
-        .status()
-        .unwrap();
-    let python = python.to_string_lossy().into_owned();
-    assert_eq!(
-        salt(area_named("browser").unwrap(), &python),
-        "playwright=1;chromium=none"
+    assert_eq!(salt(area_named("browser").unwrap(), &dir), "absent");
+    put(
+        &dir,
+        "scripts/container/chromium.pin",
+        "# the pin\nCHROMIUM_VERSION=151.0.7922.34\nCHROMIUM_SHA256=x\n",
     );
-    assert_eq!(salt(area_named("page").unwrap(), &python), "");
-    let real = salt(area_named("browser").unwrap(), "python3");
-    assert!(real == "absent" || (real.starts_with("playwright=") && real.contains(";chromium=")),);
     assert_eq!(
-        salt(area_named("browser").unwrap(), "/no/such/python"),
-        "absent"
+        salt(area_named("browser").unwrap(), &dir),
+        "chromium=151.0.7922.34"
     );
+    assert_eq!(salt(area_named("page").unwrap(), &dir), "");
+    put(
+        &dir,
+        "scripts/container/chromium.pin",
+        "# no version line\n",
+    );
+    assert_eq!(salt(area_named("browser").unwrap(), &dir), "absent");
 }
 
 #[test]

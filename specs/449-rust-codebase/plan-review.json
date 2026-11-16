@@ -258,6 +258,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
+  },
+  "### T146 (phase 4's S3a, the one browser crate, `ask:449-phase4-slices`)": {
+   "sha256": "45c56434549e4333f7878f3f31507dc446a9e0f9fdf7e53641446fed6c424025",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
+  },
+  "### T146 Approach (checklist part A)": {
+   "sha256": "89cae8a66fd32b858fb91b3689ec4651825c4254185341e05b001dcb71f58d8e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8912,6 +8924,284 @@
      "why": "FR-001's rewrite rule covers a recorded command that runs a ported file. Those rows run 'make check-bundle', which stays, so nothing that runs Python is left unrewritten."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T146 (phase 4's S3a, the one browser crate, `ask:449-phase4-slices`)",
+    "### T146 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T146-crates",
+     "summary": "archive.py's logic ported to a new gate crate `archive`; its browser a new crate rust/browser/ (l7r-browser serve and crop) outside the gate's and guard's builds, no gate or guard crate depending on it",
+     "class": "within",
+     "why": "FR-001 / ask:449-T80-order (4) as amended by ask:449-T146-browser: a client of its own in its own binary, out of the guards' and gate's build path; ask:449-phase4-slices S3a."
+    },
+    {
+     "id": "T146-cdp-client",
+     "summary": "The browser client speaks the DevTools protocol over --remote-debugging-pipe itself, launched with Playwright's switches and page setup, instead of chromiumoxide or headless_chrome",
+     "class": "within",
+     "why": "Exactly what the round arbiter ruled in ask:449-T146-browser (2026-11-16), written into FR-001 and T80-order (4): a DevTools-pipe client of its own, lighter than both named crates (9 against 92 and 118, one-shot labeled)."
+    },
+    {
+     "id": "T146-glyph-crop",
+     "summary": "scripts/record/glyph_crop.py ported to `l7r-browser crop` and deleted in this cut; depiction.rs runs it through l7r-gate.sh browser crop",
+     "class": "within",
+     "why": "ask:449-phase4-slices: S3a is archive.py and glyph_crop on the one browser crate; ask:449-T88-bundles moves modal_bundle.glyph_crop onto the CDP crate. 36 crop pairs compared, none differing."
+    },
+    {
+     "id": "T146-archive-py-remainder",
+     "summary": "archive.py cut to the reads its importers use plus forwarders for every write and the browser, until S3b and S4 delete it",
+     "class": "within",
+     "why": "FR-001 places uncited/uncited_imports/archive_ops in S3b and research_search/semantic_index in S4; half-ported reads with one writer is the ask:449-T81-slices / ask:449-T86-door pattern under FR-003."
+    },
+    {
+     "id": "T146-wired-callers",
+     "summary": "This slice wires the Rust into production callers (Makefile archive recipes, record::reserve in process, depiction.rs's crop, tree's stamp, Python writes forwarded) rather than landing a library with no production caller",
+     "class": "within",
+     "why": "ask:449-phase4-slices' default slice shape (library, Python staying the implementation) yields here to the more specific ask:449-T80-order (4), which phase4-slices itself invokes for S3a's order and which moves the Chromium install off the Python package in the same cut, with T145's precedent under ask:449-T88-bundles. It ports more, not less, of what the GM asked ('all be ported to Rust'), and the purpose of the slice shape, one wired implementation (FR-003, FR-001c), holds: each file has one live writer, the Rust, with the 13 importer cases in the differential. Nothing the request or spec asked for is narrowed."
+    },
+    {
+     "id": "T146-chromium-pin",
+     "summary": "chromium.pin pins Chrome for Testing headless shell 151.0.7922.34 by SHA-256 (the build Playwright 1.62 installed); install-chromium.sh replaces `playwright install` in setup-dev-env.sh; the Playwright package stays in requirements-dev.in until S7 ports page_lit, page_lit launching the pinned Chromium via executable_path; tree's stamp salts the browser area with the pinned version",
+     "class": "within",
+     "why": "ask:449-T80-order (4): 'the Chromium install moved off the Python package in setup-dev-env.sh in the same cut' - the install moves, the package is not required to go; page_lit is S7's (ask:449-phase3-remainder, phase4-slices) and FR-001 places setup-dev-env.sh's Python and requirements in phase 4. The salt keeps cache keys correct."
+    },
+    {
+     "id": "T146-curl-get",
+     "summary": "The plain GET runs curl, sharing the page context's cookies as Playwright's request context did",
+     "class": "within",
+     "why": "Implementation of the port, T145's fetch precedent; the 109-case differential (cookies, redirects, PDFs, binary, 404s) holds the outputs (FR-002)."
+    },
+    {
+     "id": "T146-curl-error-words",
+     "summary": "Node's words kept for the failures the Python's reports name (refused, not found, timeout, redirect cap); other fetch failures carry curl's own error text",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An FR-002 output not held byte for byte, so narrowing. ask:449-T066-json-message is a general ruled case - where a message quotes a library's own error text inside a fixed message, verdict, exit, location and fixed words match and the quoted text is the replacement's - with the spec lint as its instance, not its limit. The plan holds more than the ruling requires (the named failures keep Node's words) and lets only the quoted library text of unnamed failures change. curl is a program rather than a Rust library, but the ruling's purpose - a port cannot reproduce another fetch library's own error strings - applies unchanged. No case in the 109 surfaced such a difference."
+    },
+    {
+     "id": "T146-one-writer",
+     "summary": "The archive's working copy and manifest rows written by the Rust alone; archive.py's ensure, push, place_gm, archive_url, _lane, settle, sync_gm_copies, write_row, Browser, fetch and wayback forward to door verbs; reads, the lock and Archive's git reads stay Python; a Rust verb run by a Python caller under that lock takes no lock itself",
+     "class": "within",
+     "why": "FR-003 and ask:449-T86-door (one implementation writing each file, door verbs, no logic in the door); ask:449-T81-slices allows the reads to stay half-ported. Not re-taking the caller's lock prevents self-deadlock without opening a second writer."
+    },
+    {
+     "id": "T146-seam-e2e",
+     "summary": "One seam (Reach, cli_with) replaces store, browser and credential in the crates' tests; one kept end-to-end case in tests/hooks/test-l7r-gate.sh drives record archive url, backfill and gm-copies through the real launcher on the pinned Chromium, a local bare remote, empty secrets and a dead proxy",
+     "class": "within",
+     "why": "ask:449-T80-order (4): 'behind one seam, one end-to-end test'; FR-008 exempts the one end-to-end test from the tenth-of-a-second bar; ask:449-T146-browser's 'its one end-to-end test'."
+    },
+    {
+     "id": "T146-cfg-not-test",
+     "summary": "The production wiring that hands in the real store, browser and credential (cli, production_store, start_browser, token, Process::start) is #[cfg(not(test))], so it is outside the unit-test coverage instrument and reached only by the end-to-end case",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004 read strictly asks every line reached by a test; these lines leave the instrument's denominator, so narrowing. Legitimate because the literal alternative is impossible within the spec: an instrumented unit test reaching start_browser or Process::start would start the real Chromium and network, which FR-008's tenth-of-a-second bar forbids, while the spec's own words (T80-order (4) and ask:449-T146-browser: one seam, one end-to-end test, FR-004 'with its one end-to-end test') put these lines on that test. The ruling depends on the excluded set being only the named hand-in of real store, browser, credential and process, as the block lists; any logic behind cfg(not(test)) beyond that is not covered by this ruling. Evidence gap noted: the block's label for 'executes every line of those blocks' (run, and run with no Chromium) shows the case depends on Chromium, not line reach."
+    },
+    {
+     "id": "T146-fix-archive-find",
+     "summary": "make archive-find, dead on AttributeError since T145 cut attempts.report, restored by a forwarder",
+     "class": "within",
+     "why": "Restores behavior FR-002 bound T145 to keep; the forwarder reaches the Rust, so FR-003's one implementation holds."
+    },
+    {
+     "id": "T146-fix-archive-sources-deadlock",
+     "summary": "The Rust archive-sources deadlock (stdout lock held while lanes printed) fixed",
+     "class": "within",
+     "why": "A defect in the port itself, fixed so its outputs match the Python's (FR-002)."
+    },
+    {
+     "id": "T146-fix-entry-bodies",
+     "summary": "S1's entry_bodies read the whole registry per entry; fixed, cited from 8.7 s to 74 ms with the same output",
+     "class": "within",
+     "why": "A fix in already-ported Rust that this cut calls, holding the output; it serves the request's stated purpose (the code's inefficiency) and narrows nothing."
+    },
+    {
+     "id": "T146-fix-regex-case",
+     "summary": "fancy_regex back-references matched case-sensitively where Python ignored case; the pattern spells the cases out",
+     "class": "within",
+     "why": "A port defect fixed toward the Python's behavior (FR-002)."
+    },
+    {
+     "id": "T146-fix-chromium-tmpdir",
+     "summary": "Chromium given its own directory instead of leaving files in TMPDIR",
+     "class": "within",
+     "why": "FR-013: the tooling must not leave what it makes on disk."
+    },
+    {
+     "id": "T146-differential",
+     "summary": "HEAD's Python and Playwright against the Rust in network namespaces with recorded pages and a local bare remote, every output and file compared over 109 cases; normalizations limited to values two Python runs differ in (stamps, times, MHTML boundary, Content-IDs, Date, soft breaks, sorted server log, git log as multiset) plus traceback text and argparse text on exit 2",
+     "class": "within",
+     "why": "FR-002's comparison; normalizing run-to-run nondeterminism of the Python itself loosens nothing it binds, and traceback and argparse text are excluded by the ruled case ask:449-usage-text. T80-order (4)'s measurement on real sources stands as the replay of recorded real archive pages."
+    },
+    {
+     "id": "T146-archive-ops-find-baseline",
+     "summary": "The one differing case, archive_ops find, is held to the pre-T145 Python (b5a370293^) instead of HEAD's, which crashes on T145's defect",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from FR-002's literal baseline (HEAD's Python) with no ask behind it, so narrowing. Literal matching would require the Rust to reproduce an AttributeError crash that T145's own port introduced in breach of FR-002, defeating FR-002's purpose (the tools keep doing what they did) and the request's (a working Rust tool). FR-002's own exception, a check that refuses correct work today fixed in its port with the change named, covers it, and the block names it and shows the pre-T145 Python and the Rust agreeing on exit, stdout, stderr and attempts written across all four forms."
+    },
+    {
+     "id": "T146-uncited-blocked",
+     "summary": "The FR-002 case ask:449-T146-browser ruled on for uncited fetch with a blocked page is not taken, its premise (a Playwright crash at HEAD) shown to be a harness error; the lane's output with the blocked page mid-way held by a kept case",
+     "class": "within",
+     "why": "Declining a ruled exception and holding the full FR-002 output is the strict reading, not a narrowing."
+    },
+    {
+     "id": "T146-timing",
+     "summary": "Timings (archive pages, a 96 MB page, crops, the installer) recorded and not held",
+     "class": "within",
+     "why": "No requirement binds this task to a timing; FR-010 measures at phase ends."
+    },
+    {
+     "id": "T146-census-and-exits",
+     "summary": "No measurements.json names archive.py, glyph_crop or playwright; exits make static, rust-test, hooks-test HOOKS_ALL=1 and a gated land; ordered after S2 (T145)",
+     "class": "within",
+     "why": "FR-001's rewrite of recorded measurements in the porting commit; ask:449-phase4-slices' slice order; FR-004 coverage held by make static."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-16",
+   "blocks": [
+    "### T146 (phase 4's S3a, the one browser crate, `ask:449-phase4-slices`)",
+    "### T146 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T146-crates",
+     "summary": "archive.py's logic ported to a new gate crate `archive`; its browser a new crate rust/browser/ (l7r-browser serve and crop) outside the gate's and guard's builds, no gate or guard crate depending on it",
+     "class": "within",
+     "why": "FR-001 / ask:449-T80-order (4) as amended by ask:449-T146-browser: a client of its own in its own binary, out of the guards' and gate's build path; ask:449-phase4-slices S3a."
+    },
+    {
+     "id": "T146-cdp-client",
+     "summary": "The browser client speaks the DevTools protocol over --remote-debugging-pipe itself, launched with Playwright's switches and page setup, instead of chromiumoxide or headless_chrome",
+     "class": "within",
+     "why": "Exactly what the round arbiter ruled in ask:449-T146-browser (2026-11-16), written into FR-001 and T80-order (4): a DevTools-pipe client of its own, lighter than both named crates (9 against 92 and 118, one-shot labeled)."
+    },
+    {
+     "id": "T146-glyph-crop",
+     "summary": "scripts/record/glyph_crop.py ported to `l7r-browser crop` and deleted in this cut; depiction.rs runs it through l7r-gate.sh browser crop",
+     "class": "within",
+     "why": "ask:449-phase4-slices: S3a is archive.py and glyph_crop on the one browser crate; ask:449-T88-bundles moves modal_bundle.glyph_crop onto the CDP crate. 36 crop pairs compared, none differing."
+    },
+    {
+     "id": "T146-archive-py-remainder",
+     "summary": "archive.py cut to the reads its importers use plus forwarders for every write and the browser, until S3b and S4 delete it",
+     "class": "within",
+     "why": "FR-001 places uncited/uncited_imports/archive_ops in S3b and research_search/semantic_index in S4; half-ported reads with one writer is the ask:449-T81-slices / ask:449-T86-door pattern under FR-003."
+    },
+    {
+     "id": "T146-wired-callers",
+     "summary": "This slice wires the Rust into production callers (Makefile archive recipes, record::reserve in process, depiction.rs's crop, tree's stamp, Python writes forwarded) rather than landing a library with no production caller",
+     "class": "within",
+     "why": "ask:449-phase4-slices' default slice shape (library, Python staying the implementation) yields here to the more specific ask:449-T80-order (4), which phase4-slices itself invokes for S3a's order and which moves the Chromium install off the Python package in the same cut, with T145's precedent under ask:449-T88-bundles. It ports more, not less, of what the GM asked ('all be ported to Rust'), and the purpose of the slice shape, one wired implementation (FR-003, FR-001c), holds: each file has one live writer, the Rust, with the 13 importer cases in the differential. Nothing the request or spec asked for is narrowed."
+    },
+    {
+     "id": "T146-chromium-pin",
+     "summary": "chromium.pin pins Chrome for Testing headless shell 151.0.7922.34 by SHA-256 (the build Playwright 1.62 installed); install-chromium.sh replaces `playwright install` in setup-dev-env.sh; the Playwright package stays in requirements-dev.in until S7 ports page_lit, page_lit launching the pinned Chromium via executable_path; tree's stamp salts the browser area with the pinned version",
+     "class": "within",
+     "why": "ask:449-T80-order (4): 'the Chromium install moved off the Python package in setup-dev-env.sh in the same cut' - the install moves, the package is not required to go; page_lit is S7's (ask:449-phase3-remainder, phase4-slices) and FR-001 places setup-dev-env.sh's Python and requirements in phase 4. The salt keeps cache keys correct."
+    },
+    {
+     "id": "T146-curl-get",
+     "summary": "The plain GET runs curl, sharing the page context's cookies as Playwright's request context did",
+     "class": "within",
+     "why": "Implementation of the port, T145's fetch precedent; the 109-case differential (cookies, redirects, PDFs, binary, 404s) holds the outputs (FR-002)."
+    },
+    {
+     "id": "T146-curl-error-words",
+     "summary": "Node's words kept for the failures the Python's reports name (refused, not found, timeout, redirect cap); other fetch failures carry curl's own error text",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An FR-002 output not held byte for byte, so narrowing. ask:449-T066-json-message is a general ruled case - where a message quotes a library's own error text inside a fixed message, verdict, exit, location and fixed words match and the quoted text is the replacement's - with the spec lint as its instance, not its limit. The plan holds more than the ruling requires (the named failures keep Node's words) and lets only the quoted library text of unnamed failures change. curl is a program rather than a Rust library, but the ruling's purpose - a port cannot reproduce another fetch library's own error strings - applies unchanged. No case in the 109 surfaced such a difference."
+    },
+    {
+     "id": "T146-one-writer",
+     "summary": "The archive's working copy and manifest rows written by the Rust alone; archive.py's ensure, push, place_gm, archive_url, _lane, settle, sync_gm_copies, write_row, Browser, fetch and wayback forward to door verbs; reads, the lock and Archive's git reads stay Python; a Rust verb run by a Python caller under that lock takes no lock itself",
+     "class": "within",
+     "why": "FR-003 and ask:449-T86-door (one implementation writing each file, door verbs, no logic in the door); ask:449-T81-slices allows the reads to stay half-ported. Not re-taking the caller's lock prevents self-deadlock without opening a second writer."
+    },
+    {
+     "id": "T146-seam-e2e",
+     "summary": "One seam (Reach, cli_with) replaces store, browser and credential in the crates' tests; one kept end-to-end case in tests/hooks/test-l7r-gate.sh drives record archive url, backfill and gm-copies through the real launcher on the pinned Chromium, a local bare remote, empty secrets and a dead proxy",
+     "class": "within",
+     "why": "ask:449-T80-order (4): 'behind one seam, one end-to-end test'; FR-008 exempts the one end-to-end test from the tenth-of-a-second bar; ask:449-T146-browser's 'its one end-to-end test'."
+    },
+    {
+     "id": "T146-cfg-not-test",
+     "summary": "The production wiring that hands in the real store, browser and credential (cli, production_store, start_browser, token, Process::start) is #[cfg(not(test))], so it is outside the unit-test coverage instrument and reached only by the end-to-end case",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004 read strictly asks every line reached by a test; these lines leave the unit-test instrument's denominator, so narrowing. Legitimate on the spec's own words: ask:449-T80-order (4) and ask:449-T146-browser put the browser behind one seam with one end-to-end test, its lines owing FR-004 'with its one end-to-end test', and FR-008 bars any other test from starting the real browser and process. The ruling holds only while the excluded set is the named hand-in of real store, browser, credential and process (cli, production_store, start_browser, token, Process::start); any logic behind cfg(not(test)) beyond that is not covered. Evidence gap: the block's label for 'executes every line of those blocks' (run, and run with no Chromium) shows the case depends on Chromium, not line reach, so line reach is asserted rather than shown."
+    },
+    {
+     "id": "T146-fix-archive-find",
+     "summary": "make archive-find, dead on AttributeError since T145 cut attempts.report, restored by a forwarder",
+     "class": "within",
+     "why": "Restores behavior FR-002 bound T145 to keep; the forwarder reaches the Rust, so FR-003's one implementation holds."
+    },
+    {
+     "id": "T146-fix-archive-sources-deadlock",
+     "summary": "The Rust archive-sources deadlock (stdout lock held while lanes printed) fixed",
+     "class": "within",
+     "why": "A defect in the port itself, fixed so its outputs match the Python's (FR-002)."
+    },
+    {
+     "id": "T146-fix-entry-bodies",
+     "summary": "S1's entry_bodies read the whole registry per entry; fixed, cited from 8.7 s to 74 ms with the same output",
+     "class": "within",
+     "why": "A fix in already-ported Rust that this cut calls, holding the output; it serves the request's stated purpose (the code's inefficiency) and narrows nothing."
+    },
+    {
+     "id": "T146-fix-regex-case",
+     "summary": "fancy_regex back-references matched case-sensitively where Python ignored case; the pattern spells the cases out",
+     "class": "within",
+     "why": "A port defect fixed toward the Python's behavior (FR-002)."
+    },
+    {
+     "id": "T146-fix-chromium-tmpdir",
+     "summary": "Chromium given its own directory instead of leaving files in TMPDIR",
+     "class": "within",
+     "why": "FR-013: the tooling must not leave what it makes on disk."
+    },
+    {
+     "id": "T146-differential",
+     "summary": "HEAD's Python and Playwright against the Rust in network namespaces with recorded pages and a local bare remote, every output and file compared over 109 cases; normalizations limited to values two Python runs differ in (stamps, times, MHTML boundary, Content-IDs, Date, soft breaks, sorted server log, git log as multiset) plus traceback text and argparse text on exit 2",
+     "class": "within",
+     "why": "FR-002's comparison; normalizing run-to-run nondeterminism of the Python itself loosens nothing it binds, and traceback and argparse text are excluded by the ruled case ask:449-usage-text. T80-order (4)'s measurement on real sources stands as the replay of recorded real archive pages."
+    },
+    {
+     "id": "T146-archive-ops-find-baseline",
+     "summary": "The one differing case, archive_ops find, is held to the pre-T145 Python (b5a370293^) instead of HEAD's, which crashes on T145's defect",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from FR-002's literal baseline (HEAD's Python) with no ask behind it, so narrowing. Literal matching would require the Rust to reproduce an AttributeError crash that T145's own port introduced in breach of FR-002, which defeats FR-002's purpose (the tools keep doing what they did) and the request's (a working Rust tool). The ruling rests on that purpose alone, not on FR-002's refuses-correct-work exception, which speaks of guards and checks and of defects in the replaced Python. The block names the difference and shows the pre-T145 Python and the Rust agreeing on exit, stdout, stderr and attempts written across all four forms."
+    },
+    {
+     "id": "T146-uncited-blocked",
+     "summary": "The FR-002 case ask:449-T146-browser ruled on for uncited fetch with a blocked page is not taken, its premise (a Playwright crash at HEAD) shown to be a harness error; the lane's output with the blocked page mid-way held by a kept case",
+     "class": "within",
+     "why": "Declining a ruled exception and holding the full FR-002 output is the strict reading, not a narrowing."
+    },
+    {
+     "id": "T146-timing",
+     "summary": "Timings (archive pages, a 96 MB page, crops, the installer) recorded and not held",
+     "class": "within",
+     "why": "No requirement binds this task to a timing; FR-010 measures at phase ends."
+    },
+    {
+     "id": "T146-census-and-exits",
+     "summary": "No measurements.json names archive.py, glyph_crop or playwright; exits make static, rust-test, hooks-test HOOKS_ALL=1 and a gated land; ordered after S2 (T145)",
+     "class": "within",
+     "why": "FR-001's rewrite of recorded measurements in the porting commit; ask:449-phase4-slices' slice order; FR-004 coverage held by make static."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16004,6 +16294,143 @@
      "summary": "No measurements.json command runs the eight. 375's two one-shot rows that name three of them as timing keys keep their values as that day's record.",
      "class": "within",
      "why": "FR-001's rewrite rule covers a recorded command that runs a ported file. Those rows run 'make check-bundle', which stays, so nothing that runs Python is left unrewritten."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T146": {
+   "section_sha256": "a98f4e021064ebe39c2db8312fbba90995f5eb9afe99aaceb40e4b584638a0d2",
+   "reviewed": "2026-11-16",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T146-crates",
+     "summary": "archive.py's logic ported to a new gate crate `archive`; its browser a new crate rust/browser/ (l7r-browser serve and crop) outside the gate's and guard's builds, no gate or guard crate depending on it",
+     "class": "within",
+     "why": "FR-001 / ask:449-T80-order (4) as amended by ask:449-T146-browser: a client of its own in its own binary, out of the guards' and gate's build path; ask:449-phase4-slices S3a."
+    },
+    {
+     "id": "T146-cdp-client",
+     "summary": "The browser client speaks the DevTools protocol over --remote-debugging-pipe itself, launched with Playwright's switches and page setup, instead of chromiumoxide or headless_chrome",
+     "class": "within",
+     "why": "Exactly what the round arbiter ruled in ask:449-T146-browser (2026-11-16), written into FR-001 and T80-order (4): a DevTools-pipe client of its own, lighter than both named crates (9 against 92 and 118, one-shot labeled)."
+    },
+    {
+     "id": "T146-glyph-crop",
+     "summary": "scripts/record/glyph_crop.py ported to `l7r-browser crop` and deleted in this cut; depiction.rs runs it through l7r-gate.sh browser crop",
+     "class": "within",
+     "why": "ask:449-phase4-slices: S3a is archive.py and glyph_crop on the one browser crate; ask:449-T88-bundles moves modal_bundle.glyph_crop onto the CDP crate. 36 crop pairs compared, none differing."
+    },
+    {
+     "id": "T146-archive-py-remainder",
+     "summary": "archive.py cut to the reads its importers use plus forwarders for every write and the browser, until S3b and S4 delete it",
+     "class": "within",
+     "why": "FR-001 places uncited/uncited_imports/archive_ops in S3b and research_search/semantic_index in S4; half-ported reads with one writer is the ask:449-T81-slices / ask:449-T86-door pattern under FR-003."
+    },
+    {
+     "id": "T146-wired-callers",
+     "summary": "This slice wires the Rust into production callers (Makefile archive recipes, record::reserve in process, depiction.rs's crop, tree's stamp, Python writes forwarded) rather than landing a library with no production caller",
+     "class": "within",
+     "why": "ask:449-phase4-slices' default slice shape (library, Python staying the implementation) yields here to the more specific ask:449-T80-order (4), which phase4-slices itself invokes for S3a's order and which moves the Chromium install off the Python package in the same cut, with T145's precedent under ask:449-T88-bundles. It ports more, not less, of what the GM asked ('all be ported to Rust'), and the purpose of the slice shape, one wired implementation (FR-003, FR-001c), holds: each file has one live writer, the Rust, with the 13 importer cases in the differential. Nothing the request or spec asked for is narrowed."
+    },
+    {
+     "id": "T146-chromium-pin",
+     "summary": "chromium.pin pins Chrome for Testing headless shell 151.0.7922.34 by SHA-256 (the build Playwright 1.62 installed); install-chromium.sh replaces `playwright install` in setup-dev-env.sh; the Playwright package stays in requirements-dev.in until S7 ports page_lit, page_lit launching the pinned Chromium via executable_path; tree's stamp salts the browser area with the pinned version",
+     "class": "within",
+     "why": "ask:449-T80-order (4): 'the Chromium install moved off the Python package in setup-dev-env.sh in the same cut' - the install moves, the package is not required to go; page_lit is S7's (ask:449-phase3-remainder, phase4-slices) and FR-001 places setup-dev-env.sh's Python and requirements in phase 4. The salt keeps cache keys correct."
+    },
+    {
+     "id": "T146-curl-get",
+     "summary": "The plain GET runs curl, sharing the page context's cookies as Playwright's request context did",
+     "class": "within",
+     "why": "Implementation of the port, T145's fetch precedent; the 109-case differential (cookies, redirects, PDFs, binary, 404s) holds the outputs (FR-002)."
+    },
+    {
+     "id": "T146-curl-error-words",
+     "summary": "Node's words kept for the failures the Python's reports name (refused, not found, timeout, redirect cap); other fetch failures carry curl's own error text",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An FR-002 output not held byte for byte, so narrowing. ask:449-T066-json-message is a general ruled case - where a message quotes a library's own error text inside a fixed message, verdict, exit, location and fixed words match and the quoted text is the replacement's - with the spec lint as its instance, not its limit. The plan holds more than the ruling requires (the named failures keep Node's words) and lets only the quoted library text of unnamed failures change. curl is a program rather than a Rust library, but the ruling's purpose - a port cannot reproduce another fetch library's own error strings - applies unchanged. No case in the 109 surfaced such a difference."
+    },
+    {
+     "id": "T146-one-writer",
+     "summary": "The archive's working copy and manifest rows written by the Rust alone; archive.py's ensure, push, place_gm, archive_url, _lane, settle, sync_gm_copies, write_row, Browser, fetch and wayback forward to door verbs; reads, the lock and Archive's git reads stay Python; a Rust verb run by a Python caller under that lock takes no lock itself",
+     "class": "within",
+     "why": "FR-003 and ask:449-T86-door (one implementation writing each file, door verbs, no logic in the door); ask:449-T81-slices allows the reads to stay half-ported. Not re-taking the caller's lock prevents self-deadlock without opening a second writer."
+    },
+    {
+     "id": "T146-seam-e2e",
+     "summary": "One seam (Reach, cli_with) replaces store, browser and credential in the crates' tests; one kept end-to-end case in tests/hooks/test-l7r-gate.sh drives record archive url, backfill and gm-copies through the real launcher on the pinned Chromium, a local bare remote, empty secrets and a dead proxy",
+     "class": "within",
+     "why": "ask:449-T80-order (4): 'behind one seam, one end-to-end test'; FR-008 exempts the one end-to-end test from the tenth-of-a-second bar; ask:449-T146-browser's 'its one end-to-end test'."
+    },
+    {
+     "id": "T146-cfg-not-test",
+     "summary": "The production wiring that hands in the real store, browser and credential (cli, production_store, start_browser, token, Process::start) is #[cfg(not(test))], so it is outside the unit-test coverage instrument and reached only by the end-to-end case",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004 read strictly asks every line reached by a test; these lines leave the unit-test instrument's denominator, so narrowing. Legitimate on the spec's own words: ask:449-T80-order (4) and ask:449-T146-browser put the browser behind one seam with one end-to-end test, its lines owing FR-004 'with its one end-to-end test', and FR-008 bars any other test from starting the real browser and process. The ruling holds only while the excluded set is the named hand-in of real store, browser, credential and process (cli, production_store, start_browser, token, Process::start); any logic behind cfg(not(test)) beyond that is not covered. Evidence gap: the block's label for 'executes every line of those blocks' (run, and run with no Chromium) shows the case depends on Chromium, not line reach, so line reach is asserted rather than shown."
+    },
+    {
+     "id": "T146-fix-archive-find",
+     "summary": "make archive-find, dead on AttributeError since T145 cut attempts.report, restored by a forwarder",
+     "class": "within",
+     "why": "Restores behavior FR-002 bound T145 to keep; the forwarder reaches the Rust, so FR-003's one implementation holds."
+    },
+    {
+     "id": "T146-fix-archive-sources-deadlock",
+     "summary": "The Rust archive-sources deadlock (stdout lock held while lanes printed) fixed",
+     "class": "within",
+     "why": "A defect in the port itself, fixed so its outputs match the Python's (FR-002)."
+    },
+    {
+     "id": "T146-fix-entry-bodies",
+     "summary": "S1's entry_bodies read the whole registry per entry; fixed, cited from 8.7 s to 74 ms with the same output",
+     "class": "within",
+     "why": "A fix in already-ported Rust that this cut calls, holding the output; it serves the request's stated purpose (the code's inefficiency) and narrows nothing."
+    },
+    {
+     "id": "T146-fix-regex-case",
+     "summary": "fancy_regex back-references matched case-sensitively where Python ignored case; the pattern spells the cases out",
+     "class": "within",
+     "why": "A port defect fixed toward the Python's behavior (FR-002)."
+    },
+    {
+     "id": "T146-fix-chromium-tmpdir",
+     "summary": "Chromium given its own directory instead of leaving files in TMPDIR",
+     "class": "within",
+     "why": "FR-013: the tooling must not leave what it makes on disk."
+    },
+    {
+     "id": "T146-differential",
+     "summary": "HEAD's Python and Playwright against the Rust in network namespaces with recorded pages and a local bare remote, every output and file compared over 109 cases; normalizations limited to values two Python runs differ in (stamps, times, MHTML boundary, Content-IDs, Date, soft breaks, sorted server log, git log as multiset) plus traceback text and argparse text on exit 2",
+     "class": "within",
+     "why": "FR-002's comparison; normalizing run-to-run nondeterminism of the Python itself loosens nothing it binds, and traceback and argparse text are excluded by the ruled case ask:449-usage-text. T80-order (4)'s measurement on real sources stands as the replay of recorded real archive pages."
+    },
+    {
+     "id": "T146-archive-ops-find-baseline",
+     "summary": "The one differing case, archive_ops find, is held to the pre-T145 Python (b5a370293^) instead of HEAD's, which crashes on T145's defect",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from FR-002's literal baseline (HEAD's Python) with no ask behind it, so narrowing. Literal matching would require the Rust to reproduce an AttributeError crash that T145's own port introduced in breach of FR-002, which defeats FR-002's purpose (the tools keep doing what they did) and the request's (a working Rust tool). The ruling rests on that purpose alone, not on FR-002's refuses-correct-work exception, which speaks of guards and checks and of defects in the replaced Python. The block names the difference and shows the pre-T145 Python and the Rust agreeing on exit, stdout, stderr and attempts written across all four forms."
+    },
+    {
+     "id": "T146-uncited-blocked",
+     "summary": "The FR-002 case ask:449-T146-browser ruled on for uncited fetch with a blocked page is not taken, its premise (a Playwright crash at HEAD) shown to be a harness error; the lane's output with the blocked page mid-way held by a kept case",
+     "class": "within",
+     "why": "Declining a ruled exception and holding the full FR-002 output is the strict reading, not a narrowing."
+    },
+    {
+     "id": "T146-timing",
+     "summary": "Timings (archive pages, a 96 MB page, crops, the installer) recorded and not held",
+     "class": "within",
+     "why": "No requirement binds this task to a timing; FR-010 measures at phase ends."
+    },
+    {
+     "id": "T146-census-and-exits",
+     "summary": "No measurements.json names archive.py, glyph_crop or playwright; exits make static, rust-test, hooks-test HOOKS_ALL=1 and a gated land; ordered after S2 (T145)",
+     "class": "within",
+     "why": "FR-001's rewrite of recorded measurements in the porting commit; ask:449-phase4-slices' slice order; FR-004 coverage held by make static."
     }
    ],
    "verdict": "CLEAR"

@@ -23,6 +23,13 @@ if [ "${1:-}" = rust ]; then
   shift; BIN="$TARGET/tool/l7r-rust"; PKG=(-p l7r_gate_rustc --bin l7r-rust)
   SOURCES=("$TREE"/rust/gate/crates/core "$TREE"/rust/gate/crates/tree "$TREE"/rust/gate/crates/rustc)
 fi
+# THE BROWSER IS ITS OWN PROGRAM (feature 449 T146, `ask:449-phase4-slices` Q4): `browser <cmd>` runs `l7r-browser`, the one crate that
+# drives Chromium (`rust/browser/`), built alone from its own sources and the Chromium pin; neither `l7r-gate` nor `l7r-guard` depends
+# on it, so their builds never compile it. The gate reaches it as a program (`record archive`'s fetch, `record modal-bundle`'s crop).
+if [ "${1:-}" = browser ]; then
+  shift; BIN="$TARGET/tool/l7r-browser"; PKG=(-p l7r_browser --bin l7r-browser)
+  SOURCES=("$TREE"/rust/browser "$TREE"/scripts/container/chromium.pin)
+fi
 cargo=${L7R_GATE_CARGO:-}
 [ -n "$cargo" ] || { [ -x "$real/.cargo/bin/cargo" ] && cargo="$real/.cargo/bin/cargo" || cargo=cargo; }
 # every source the binary builds from: the guard crate's too, which both build on - before T93 a guard edit left `l7r-gate` stale

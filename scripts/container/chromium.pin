@@ -1,0 +1,7 @@
+# The one Chromium the browser crate drives (feature 449 T146, `ask:449-phase4-slices` Q4; `rust/browser/`): Chrome for Testing's
+# headless shell, the very build Playwright 1.62 installed as `chromium_headless_shell-1234` (its zip byte for byte the tree Playwright
+# unpacked, observed 2026-11-16, method: `diff -rq` of the two trees), so a page renders and crops as it did under Playwright.
+# `install-chromium.sh` downloads and checks it, the crate finds it by this version, and `l7r-gate stamp`'s browser salt names it.
+# A new version: change both lines together (the SHA-256 is the zip's, `sha256sum chrome-headless-shell-linux64.zip`).
+CHROMIUM_VERSION=151.0.7922.34
+CHROMIUM_SHA256=3cfc2bd00d1bafcf8a68dc74c9c92bb7150ddc8d26ade948a776316e1cec4f14

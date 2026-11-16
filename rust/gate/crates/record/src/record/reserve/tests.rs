@@ -1,6 +1,7 @@
 //! The prefix reservation (feature 449 T145; each refusal's words `reserve-prefix.py`'s, the T145 differential holding the rest).
 
 use std::collections::HashMap;
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use l7r_guard::shared::tempdir::TempDir;
@@ -11,6 +12,15 @@ use super::*;
 const VOCAB: &str = r#"{"period": [{"id": "premodern", "name": "P", "description": "d"}], "region": [{"id": "japan", "name": "J", "description": "d"}],
 "kind": [{"id": "primary", "name": "K", "description": "d"}], "canon": {"id": "canon", "name": "C", "description": "d"}}"#;
 const LIST: &str = r#"{"domains": [{"domain": "bad.example", "reason": "machine text", "approved": {"date": "2026-10-02", "words": "block it"}}]}"#;
+
+/// The command line with its archiving at citation a stand-in that fails as a browser that cannot start would (feature 449 T146: the
+/// real one starts Chromium); `super::cli`, the real wiring, is asked only of a refusal that stops before it.
+fn cli(args: &[String], cwd: &Path) -> crate::Reply {
+    cli_with(args, cwd, &|_, url, key, err| {
+        let _ = writeln!(err, "Error: BrowserType.launch: none\nreserve: archiving {url} failed (exit 1) - `make archive URL='{url}' KEY={key}` retries it");
+        1
+    })
+}
 
 /// A mirror with a clone under `.clones/`, its record's vocabulary and blocked list.
 fn world(tag: &str) -> (TempDir, PathBuf, PathBuf) {
@@ -346,19 +356,73 @@ fn the_command_line() {
         cli(&a(&["glossary", "x", "--root", &r, "--mirror", &m]), &root).code,
         1
     );
+    // the real command line, on a refusal before any archiving
+    assert_eq!(super::cli(&a(&["nope", "k"]), &root).code, 2);
+    // archiving at citation, in process (feature 449 T146): a browser that answers nothing marks the URL unreachable and logs the
+    // attempt; one that cannot start fails the archiving, never the reservation; the real one stops at a record it cannot read
     let mut err = String::new();
-    std::fs::create_dir_all(root.join("scripts/record")).unwrap();
-    std::fs::write(
-        root.join("scripts/record/archive.py"),
-        "import sys\nprint('archived', sys.argv[1:])\n",
-    )
-    .unwrap();
-    assert_eq!(archive_at_cite(&root, "https://e.org/c", "k", &mut err), 0);
-    assert!(err.contains("archived"));
+    let store_at = |_: &Path| {
+        let mut a = l7r_gate_archive::store::Archive::new(&mirror.join(".specify"), None);
+        a.gm = mirror.join("no-gm");
+        a
+    };
+    std::process::Command::new("git")
+        .args(["init", "-q"])
+        .arg(mirror.join(".specify/source-archive"))
+        .status()
+        .unwrap();
+    std::fs::write(root.join("research/sources/_front.html"), "<main>\n").unwrap();
+    std::fs::write(root.join("research/sources/_tail.html"), "</main>\n").unwrap();
+    let dead = |_: &Path| -> l7r_gate_archive::Result<Box<dyn l7r_gate_archive::fetch::Client>> {
+        Ok(Box::new(Dead))
+    };
     assert_eq!(
-        archive_at_cite(&root.join("no/such/dir"), "u", "k", &mut err),
+        archive_at_cite_with(&root, "https://e.org/c", "k", &dead, &store_at, &mut err),
+        0
+    );
+    assert!(err.contains("archive: unreachable - https://e.org/c (gone)"));
+    let none = |_: &Path| -> l7r_gate_archive::Result<Box<dyn l7r_gate_archive::fetch::Client>> {
+        Err(l7r_gate_archive::Error::new(
+            "Error",
+            "BrowserType.launch: none",
+        ))
+    };
+    assert_eq!(
+        archive_at_cite_with(&root, "https://e.org/c", "k", &none, &store_at, &mut err),
         1
     );
+    assert!(err.contains(
+        "Error: BrowserType.launch: none\nreserve: archiving https://e.org/c failed (exit 1)"
+    ));
+    let mut real = String::new();
+    assert_eq!(
+        archive_at_cite(&root.join("no/such/dir"), "u", "k", &mut real),
+        1
+    );
+    assert!(real.contains("reserve: archiving u failed"), "{real}");
+    assert_eq!(
+        l7r_gate_archive::fetch::Client::render(&mut Dead, "u"),
+        (String::new(), String::new())
+    );
+    // a still-Python tool run from a directory that is not there
+    let mut said = String::new();
+    assert_eq!(
+        python_tool(&root.join("no/such/dir"), "archive_ops.py", &[], &mut said),
+        1
+    );
+    assert!(!said.is_empty());
+}
+
+/// A browser to which every page is dead.
+struct Dead;
+
+impl l7r_gate_archive::fetch::Client for Dead {
+    fn get(&mut self, url: &str) -> l7r_gate_archive::fetch::Fetched {
+        l7r_gate_archive::fetch::Fetched::failed(url, "gone")
+    }
+    fn render(&mut self, _: &str) -> (String, String) {
+        (String::new(), String::new())
+    }
 }
 
 #[test]

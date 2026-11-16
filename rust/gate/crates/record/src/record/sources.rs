@@ -702,7 +702,7 @@ pub fn attempts_cli(args: &[String], cwd: &Path) -> Reply {
                 Spec::value("--outcome"),
                 Spec::value("--route"),
                 Spec::value("--key"),
-                // the door's two (feature 449 T145): `attempts.add`, a forwarder for `archive.py` and `uncited.py`, names its root and
+                // the door's two (feature 449 T145): `attempts.add`, a forwarder for `uncited.py` (and for `archive.py` until T146 ported it), names its root and
                 // reads back the line it wrote
                 Spec::value("--root"),
                 Spec::flag("--print"),

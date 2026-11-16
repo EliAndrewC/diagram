@@ -21,8 +21,8 @@ cannot be mapped kept as `old:<id>`, none as `unknown`; what was sought, where n
 was consulted originally"*).
 
 WHAT IS LEFT HERE (feature 449 T145, phase 4's S2; the plan review's FR-003 ruling, ONE LIVE WRITER per shared file): the log's
-commands are `l7r-gate record attempts ...`, the log the guard's `shared::attempts`. What stays is what `archive.py`, `uncited.py`
-and `uncited_imports.py` still import until S3a and S3b port them: `base`, `read` and `today` (reads, `ask:449-T81-slices`);
+commands are `l7r-gate record attempts ...`, the log the guard's `shared::attempts`. What stays is what `uncited.py` and
+`uncited_imports.py` still import until S3b ports them (`archive.py` left with S3a, feature 449 T146: its attempt is the Rust's own): `base`, `read` and `today` (reads, `ask:449-T81-slices`);
 `add`, the log's one write they make, a forwarder to `l7r-gate record attempts add` (`ask:449-T86-door`), so the Rust is the log's
 one writer; and `write`, for the uncited filter's own lists (`not-kept.jsonl`, the kept and misfiled lists), which only that
 Python writes - it refuses the attempts log itself. An edit of a read here makes the same change in the Rust.
@@ -83,6 +83,18 @@ def write(root: pathlib.Path, lines: list[dict], rel: pathlib.Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with src.locked(src.home(root), timeout=30.0), open(path, "a", encoding="utf-8") as fh:
         fh.writelines(json.dumps(x, ensure_ascii=False) + "\n" for x in lines)
+
+
+def report(root: pathlib.Path, *, url: str = "", key: str = "", q: str = "") -> list[str]:
+    """What was tried for a URL, a key or a question, as `make attempts` prints it: a forwarder to `l7r-gate record attempts show`,
+    run in `root` (its lines). Feature 449 T146 put it back: T145 cut `report` with the log's commands while `archive_ops.find` (`make
+    archive-find`) still called it, so every find that named a URL or a key died on an `AttributeError` (observed 2026-11-16, the T146
+    differential's `archive_ops find` case, HEAD's Python)."""
+    ask = ["--url", url] if url else ["--key", key] if key else ["--q", q]
+    done = subprocess.run([str(GATE), "record", "attempts", "show", *ask], cwd=root, capture_output=True, text=True, check=False)
+    if done.returncode:
+        raise src.raised(done.stderr)
+    return done.stdout.rstrip("\n").split("\n")
 
 
 def add(root: pathlib.Path, url: str, question: str, sought: str, outcome: str = "unknown", *, route: str = "", key: str = "") -> dict:

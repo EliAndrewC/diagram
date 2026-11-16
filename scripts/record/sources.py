@@ -22,8 +22,8 @@ NO GUARD (R1: the saving is too small for a refusal): the tooling prints what is
 
 WHAT IS LEFT HERE (feature 449 T145, phase 4's S2; the plan review's FR-003 ruling, ONE LIVE WRITER per shared file): the ledger's
 and the cache's commands are `l7r-gate record sources ...` (`rust/gate/crates/record/src/record/sources.rs`), the ledger's half the
-guard's `shared::consulted`, the cache the `research` crate's `pages`. What stays is what `archive.py`, `uncited.py` and
-`uncited_imports.py` still import until S3a and S3b port them: the READS (`norm`, `home`, `read`, `cached`, ...), which
+guard's `shared::consulted`, the cache the `research` crate's `pages`. What stays is what `archive.py` (a door since S3a, feature
+449 T146: `home`, `repo_root`, `raised`), `uncited.py` and `uncited_imports.py` still import until S3b and S4 port them: the READS (`norm`, `home`, `read`, `cached`, ...), which
 `ask:449-T81-slices` lets stay half-ported, and `put`, the cache's one write they make, a forwarder to `l7r-gate record sources
 put` (`ask:449-T86-door`), so the Rust is the cache's one writer. An edit of a read here makes the same change in the Rust.
 """

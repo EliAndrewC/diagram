@@ -1,0 +1,35 @@
+# The ONE browser crate (feature 449 T146, phase 4's S3a, the round arbiter's `ask:449-phase4-slices` Q4 and `ask:449-T80-order` step 4):
+# headless Chromium driven over the DevTools protocol, for the source archive's fetch (`archive.py`'s `Browser`, whose logic is the
+# gate's `archive` crate), the depiction bundle's glyph crop (`glyph_crop.py`) and, at S7, `page_lit`'s pixel reads - never a second
+# browser crate, never a Playwright dependency. Its own binary, `l7r-browser`, which `scripts/gates/l7r-gate.sh browser ...` builds
+# and runs: neither the gate (`l7r-gate`) nor the guard (`l7r-guard`) depends on it, so neither build ever compiles it.
+#
+# NO CDP CLIENT CRATE AND NO WEBSOCKET (a decision the ruling left open): Chromium speaks the protocol over two pipes as NUL-delimited
+# JSON (`--remote-debugging-pipe`, fds 3 and 4, the transport Playwright itself uses), so serde_json alone carries it - chromiumoxide
+# and headless_chrome would each bring an async runtime or a websocket stack the workspace has none of (46 crates in the registry
+# cache, no tokio, no tungstenite; observed 2026-11-16, method: `ls ~/.cargo/registry/cache`).
+[package]
+name = "l7r_browser"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time (the key of a kept result): the pinned Chromium's version, `include_str!`'d.
+[package.metadata.l7r]
+reads = ["scripts/container/chromium.pin"]
+
+[lib]
+name = "l7r_browser"
+
+[dependencies]
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_guard = { path = "../guard" }
+
+[[bin]]
+name = "l7r-browser"
+path = "src/main.rs"
+
+[lints]
+workspace = true

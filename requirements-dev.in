@@ -14,5 +14,5 @@ pytest-cov
 pytest-xdist
 pytest-testmon
 types-shapely
-playwright    # the browser test of the interactive map page (feature 134); `python3 -m playwright install --with-deps chromium` fetches the browser
+playwright    # `l7r.diagram.tools.page_lit` until feature 449 S7 ports it to the browser crate, on the Chromium scripts/container/install-chromium.sh pins (feature 449 T146: Playwright's own browser download is retired)
 pip-tools    # re-locks these files

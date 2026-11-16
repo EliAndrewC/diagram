@@ -79,10 +79,17 @@ pub(crate) fn entry_bodies(registry: &str, to_end: bool) -> Vec<(String, &str)> 
         let rest = &registry[head.end..];
         let start = head.end + (rest.len() - rest.trim_start_matches(is_space).len());
         let tail = &registry[start..];
-        let Some(end) = ["<h3 id=", "<h2 id=", "</main>"]
-            .iter()
-            .filter_map(|t| tail.find(t))
-            .min()
+        // THE NEAREST TERMINATOR, FOUND IN ONE PASS (feature 449 T146): the minimum of three `find`s scanned to the registry's end for
+        // `</main>` on every entry - 8.7 s of `cited` on the real registry (5.5 MB, 3,726 URLs; observed 2026-11-16, method: a timing
+        // probe over the archive crate's tests), where the first `<` that opens a terminator ends the entry and costs only its length
+        let Some(end) = tail
+            .match_indices('<')
+            .map(|(i, _)| i)
+            .find(|&i| {
+                ["<h3 id=", "<h2 id=", "</main>"]
+                    .iter()
+                    .any(|t| tail[i..].starts_with(t))
+            })
             .map(|n| start + n)
             .or(to_end.then_some(registry.len()))
         else {

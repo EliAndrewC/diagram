@@ -183,19 +183,21 @@ fn area_files(root: &Path, area: &Area) -> Result<Vec<PathBuf>, String> {
     Ok(files)
 }
 
-/// An area's non-file inputs: for `browser`, the installed Playwright and Chromium builds, since a browser upgrade is an input to a browser test.
-fn salt(area: &Area, python: &str) -> String {
+/// An area's non-file inputs: for `browser`, the Chromium the browser crate drives, since a browser upgrade is an input to a browser test -
+/// the version `scripts/container/chromium.pin` pins (feature 449 T146: the crate's one source for which Chromium it launches, where
+/// this read the installed Playwright and its `ms-playwright` builds), `absent` where the tree has no pin.
+fn salt(area: &Area, root: &Path) -> String {
     if area.name != "browser" {
         return String::new();
     }
-    let script = "import importlib.metadata as m,os,pathlib as p\ntry:\n    v=m.version('playwright')\nexcept m.PackageNotFoundError:\n    print('absent',end='');raise SystemExit\nc=p.Path(os.environ.get('PLAYWRIGHT_BROWSERS_PATH') or (p.Path.home()/'.cache'/'ms-playwright'))\nb=sorted(q.name for q in c.glob('chromium*')) if c.is_dir() else []\nprint(f\"playwright={v};chromium={','.join(b) or 'none'}\",end='')";
-    Command::new(python)
-        .args(["-c", script])
-        .output()
-        .map_or_else(
-            |_| "absent".to_owned(),
-            |o| String::from_utf8_lossy(&o.stdout).into_owned(),
-        )
+    std::fs::read_to_string(root.join("scripts/container/chromium.pin"))
+        .ok()
+        .and_then(|pin| {
+            pin.lines()
+                .find_map(|l| l.strip_prefix("CHROMIUM_VERSION="))
+                .map(|v| format!("chromium={}", v.trim()))
+        })
+        .unwrap_or_else(|| "absent".to_owned())
 }
 
 /// The content hash of `files`: each path with its semantic id, or the sha of its bytes in a raw area; a file gone is `<missing>`.
@@ -248,7 +250,7 @@ fn area_key(root: &Path, area: &Area, python: &str) -> Result<String, String> {
         &area_files(root, area)?,
         root,
         area.raw,
-        &salt(area, python),
+        &salt(area, root),
         python,
     )
 }
