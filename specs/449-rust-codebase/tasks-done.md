@@ -392,6 +392,9 @@
 - [x] T137 Phase 3, the page sessions' tools no task held (phase-3 census, 2026-11-12; routed to T81 and T83, which closed without them): page_session_runner.py, brief_load.py, escape_log.py, coord.py, research_claims.py (1,080 lines)
       research: rendering
       verify: DONE. landed: the page sessions' tools ported to Rust (pages crate): 1,727 differential cases, 1 ruled difference; make static, rust-test and hooks-test green
+- [x] T138 Phase 3, the research search no task held (phase-3 census, 2026-11-12): research_search.py and semantic_index.py (520 lines), after T85 (both import archive in process)
+      research: rendering
+      verify: DONE. landed: phase 4 S4, the research search: 174 differential cases none differing (verify run), vectors bit-identical; make static, rust-test and hooks-test green
 - [x] T139 Phase 3, the past features' measurement scripts still run and working (ask:449-phase3-remainder) Q4: 238 inventory_shares, 239 change_size, 242 inventory_census and note_census, 261's five working scripts, 430 full_reasons, 432 triage_price, ported as make figures re-runs them
       research: rendering
       verify: DONE. landed: the past features' measurement scripts ported (l7r-gate measure spec): 574 differential cases, none differing; 29 recorded commands rewritten and re-run; note_census retired
