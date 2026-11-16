@@ -235,6 +235,9 @@
 - [x] T84 The first removal under the GM's standing approval (the GM, 2026-11-10: "Yes please delete Python files once their Rust ports land."): the ported `canon.py`, `money_conversions.py`, `found.py`, `stale_terms.py`, `money_candidates.py`, `fragment_move.py`, `agent_census.py`, `access_tags.py`, `downloads.py`, `check-partial-citations.py`, `moves.py`, `hm_record.py`, `hm_house.py` and specs/251's `seeded.py` and `run_seeded.sh`, the docs renamed to their verbs; each later task removes its own ported files at its landing
       research: rendering
       verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
+- [x] T85 Phase 4, the archive cluster with `interactive/record` (`ask:449-T81-slices`, moved by its test, each carrying the T065 clause and named at the phase-3 close): `quote_verbatim`, `sources`, `attempts`, `source_pages`, `reserve-prefix`, `apply_edits`, `uncited`, `uncited_imports`, `archive_ops`, `archive`, `entry_owed`, `record_prepass`, `style_prepass` (`ask:449-T88-bundles`); Rust `downloads`' by-path run of `reserve-prefix.py` ends here
+      research: rendering
+      verify: DONE. folded into the phase-4 slices by ask:449-phase4-slices (the round arbiter, 2026-11-15): its files go to S2 (T145), S3a (T146), S3b (T147) and S6 (T149), its interactive/record to S1 (T144) and S5 (T148); its stale 'downloads runs reserve-prefix' corrected there (downloads runs archive_ops.py inbox, S3b)
 - [x] T86 Phase 3, the arbiter and checks state, with T011, T043 and T048: hm_arbiter, hm_checks, hm_fixloop, hm_planhold, hm_budget_rounds, one owner of checks-open.json, arbiter-owed.json and modal-batches.json
       research: rendering
       verify: DONE. landed in batch T86+T011+T043+T048+T84: the arbiter and checks state in Rust, three guards with it, and the first ported Python removed
@@ -359,6 +362,9 @@
 - [x] T127 Phase 3, the closing check (scripts/gates/close_check.py, phase 3 by FR-001, held by no task until T91's plan review, 2026-11-12); the gm-review port runs it by path from L7R_GATE_TREE on the one branch where the GM's box is a feature's last open box (T91), which goes when it lands
       research: rendering
       verify: DONE. landed: close_check.py ported to Rust (l7r-gate close-check): 1,645 differential cases, 2 explained; make static, rust-test and hooks-test green
+- [x] T128 Phase 4, the engine's pipeline package (l7r/diagram/pipeline/: gencache, regen, rollcache, poolmaps, pool_index, render_cache, record_build, with codeid.py going with its last Python caller), moved from phase 3 by ask:449-T90-scope beside the Mode A generators it runs; make map, make pool-index and make render-sync are planned as a whole here, and bundle_door.py's is_current verb leaves when it lands
+      research: rendering
+      verify: DONE. folded into the phase-4 slices by ask:449-phase4-slices: record_build to S5 (T148), poolmaps to S11 (T156), gencache, regen, pool_index and render_cache to S12 (T157), rollcache, pipeline/codeid and _census deleted unported there (Q8)
 - [x] T129 Phase 3, the hook libraries no task held (phase-3 census, 2026-11-12): scripts/hooks/lib/usage_log.py (85; the Makefile's  starts Python on every make), hm_escape.py (157) and hm_shape.py (594), onto the guard's shared::escape and shared::shape; hm_tree.py (520), which nothing runs, deleted
       research: rendering
       verify: DONE. landed: the hook libraries ported (usage_log, hm_escape, hm_shape; hm_tree deleted): 7,854 differential cases, none differing; make static, rust-test and hooks-test green
@@ -389,6 +395,9 @@
 - [x] T139 Phase 3, the past features' measurement scripts still run and working (ask:449-phase3-remainder) Q4: 238 inventory_shares, 239 change_size, 242 inventory_census and note_census, 261's five working scripts, 430 full_reasons, 432 triage_price, ported as make figures re-runs them
       research: rendering
       verify: DONE. landed: the past features' measurement scripts ported (l7r-gate measure spec): 574 differential cases, none differing; 29 recorded commands rewritten and re-run; note_census retired
+- [x] T140 Phase 4, the tools that reach Mode A or interactive/ (ask:449-phase3-remainder) Q1: building_programs, footnote_census, glossary_asset, notes_census, the pack_audit package, picture_diff, record_asset, source_tags_contract and scripts/gates/memo_check.py (each under the T065 clause, named at the phase-3 close), page_lit onto T85's one browser crate, tools/__init__.py, _census.py and work_counts.py with their last importer, 335's harness.py; and the pytest infrastructure's removal commit with the last kept pytest test (test_mode_a_sheets): conftest.py, the two __init__.py, _scope.py, _gate_failures.py, _heap.py, _memory.py, tooling_reuse_time.py (its three 383 commands retired)
+      research: rendering
+      verify: DONE. folded into the phase-4 slices by ask:449-phase4-slices: S5 (T148), S7 (T150), S9b (T153), S10a (T154), S10b (T155) and S11 (T156), the pytest infrastructure's removal in S11; its tooling_reuse_time.py already deleted by T133
 - [x] T141 The review-round guard's Python hop removed: review_round_hooks.rs starts python3 on an inline snippet that only runs l7r-gate.sh plan door active-task and parses its JSON, on each spec-fidelity dispatch; the guard runs the gate command itself (found by T131's plan review, 2026-11-12)
       research: rendering
       verify: DONE. landed: the review-round guard asks the gate for the active task itself, no python3 snippet; guard tests (556) and hook suites green

@@ -36,16 +36,42 @@ The 44 guard tasks are independent of one another once T005 has landed: each tou
 ## Implementation strategy
 
 MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every session with the slowest guard moved, its suite green, the call timed. Then the guards in order, each landed as it passes, so the session speeds up guard by guard.
-- [ ] T85 Phase 4, the archive cluster with `interactive/record` (`ask:449-T81-slices`, moved by its test, each carrying the T065 clause and named at the phase-3 close): `quote_verbatim`, `sources`, `attempts`, `source_pages`, `reserve-prefix`, `apply_edits`, `uncited`, `uncited_imports`, `archive_ops`, `archive`, `entry_owed`, `record_prepass`, `style_prepass` (`ask:449-T88-bundles`); Rust `downloads`' by-path run of `reserve-prefix.py` ends here
-      research: rendering
 - [ ] T122 The idle-tests suite's waits in milliseconds: its fixture waits 1 to 4 s of real time a case (the timer counts awake time in real ticks), 35.0 s alone and the full hook run's longest suite, about 20 s of it waits; a model of the run's eight slots puts the run at 28 s with the suite at 15 s, against 44 s as run (2026-11-12, /tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r5/profile.sh and the schedule model) (the GM 2026-11-12, pre-approved: "if you identify concrete targets with significant measured expected savings then go ahead and do them")
       research: rendering
       note: not landed - its plan review (BLOCKED, 2026-11-12) held it to the GM's condition: the suite alone fell from 35.0 s to about 17 s, but the full hook run did not move (52.1 s against 53.1 s and 54.1 s), so no significant saving in the loop he is speeding up; the change is kept as a patch until the run's real bound is found
-- [ ] T128 Phase 4, the engine's pipeline package (l7r/diagram/pipeline/: gencache, regen, rollcache, poolmaps, pool_index, render_cache, record_build, with codeid.py going with its last Python caller), moved from phase 3 by ask:449-T90-scope beside the Mode A generators it runs; make map, make pool-index and make render-sync are planned as a whole here, and bundle_door.py's is_current verb leaves when it lands
-      research: rendering
 - [ ] T138 Phase 3, the research search no task held (phase-3 census, 2026-11-12): research_search.py and semantic_index.py (520 lines), after T85 (both import archive in process)
       research: rendering
-- [ ] T140 Phase 4, the tools that reach Mode A or interactive/ (ask:449-phase3-remainder) Q1: building_programs, footnote_census, glossary_asset, notes_census, the pack_audit package, picture_diff, record_asset, source_tags_contract and scripts/gates/memo_check.py (each under the T065 clause, named at the phase-3 close), page_lit onto T85's one browser crate, tools/__init__.py, _census.py and work_counts.py with their last importer, 335's harness.py; and the pytest infrastructure's removal commit with the last kept pytest test (test_mode_a_sheets): conftest.py, the two __init__.py, _scope.py, _gate_failures.py, _heap.py, _memory.py, tooling_reuse_time.py (its three 383 commands retired)
+- [ ] T143 Phase 3, the shell libraries' inline Python (ask:449-phase4-slices) Q12: scripts/hooks/lib/guardlog.sh and clone-resolve.sh (sourced by five *-gate.sh, l7r-guard.sh and sync-with-main.sh on every run) and .specify/scripts/bash/common.sh's four sites, onto the Rust; before S1
+      research: rendering
+- [ ] T144 Phase 4 S1, the record's core (ask:449-phase4-slices): interactive/record's split, assemble, absence, contents, fragments, notes, originals, passages, questions, confusables, xref, store, site_notes, source_tags, blocked, archive and __init__, with interactive/sources.py and content.py (2,721 lines), extending core::record; its own task, since S2-S12 import it
+      research: rendering
+- [ ] T145 Phase 4 S2, T81's cut together (ask:449-phase4-slices), ask:449-T80-order: scripts/record/sources, attempts, reserve-prefix, quote_verbatim, source_pages, record_prepass, style_prepass, apply_edits (3,075 lines); retires owed/answers.rs REPLY_OF, owed/translation.rs READER and parser_key, bundle_door's run, passages and save_cached verbs, blocked_fetch_hooks.rs's by-path run
+      research: rendering
+- [ ] T146 Phase 4 S3a, the one browser crate (ask:449-phase4-slices) Q4: scripts/record/archive.py and glyph_crop.py over CDP (995 lines), the crate page_lit later uses; retires depiction.rs's include_str! and python3 run and the Playwright install in setup-dev-env.sh; before S3b (ask:449-T80-order's condition met by S1)
+      research: rendering
+- [ ] T147 Phase 4 S3b, the uncited cluster (ask:449-phase4-slices): scripts/record/uncited, uncited_imports, archive_ops (1,623 lines); retires downloads.rs's by-path run of archive_ops.py inbox
+      research: rendering
+- [ ] T148 Phase 4 S5, the record's site (ask:449-phase4-slices): record/site, site_pages, site_links, money, citations, glossary, glossary_source, tools/record_asset, glossary_asset, footnote_census, source_tags_contract, scripts/gates/memo_check.py, pipeline/record_build (2,164 lines); retires push.rs's memo_check and record-build runs
+      research: rendering
+- [ ] T149 Phase 4 S6, the registries and their readers (ask:449-phase4-slices) Q5: interactive/classes/*, compound_kinds/*, conditions, choices, entry_owed, check-entry-headings, open_questions (2,225 lines), the modal prose moved verbatim to one Markdown file per class and kind (the FR-002 ruled case, an old-to-new id map); owed_door, record_door and record_cache deleted (756)
+      research: rendering
+- [ ] T150 Phase 4 S7, the map page writer (ask:449-phase4-slices) Q13: interactive/page, place, raster, extents, notes, tags, sheet, dwellings, picture_diff, page_lit onto S3a's crate, the image crate for PIL and numpy (2,912 lines); interactive/__init__ deleted; what page.py writes today, the Mode A sheets' pages
+      research: rendering
+- [ ] T151 Phase 4 S8, labels (ask:449-phase4-slices) Q7: labels/* and work_counts (2,397 lines), shapely onto the geo crate, FR-002 binding what is written
+      research: rendering
+- [ ] T152 Phase 4 S9a, the Mode A model (ask:449-phase4-slices): buildings/*, compound_model, compound_parts, well_gear (1,480 lines)
+      research: rendering
+- [ ] T153 Phase 4 S9b, pack_audit's leaves (ask:449-phase4-slices): tagged, parse, grids, onmap, labels, marks_drawn, size_marks, sun, palette (1,586 lines)
+      research: rendering
+- [ ] T154 Phase 4 S10a, pack_audit's core (ask:449-phase4-slices): checks, shared, program_rules, roads, mapmatch (2,142 lines)
+      research: rendering
+- [ ] T155 Phase 4 S10b, pack_audit's registry (ask:449-phase4-slices): __init__, registry, report, __main__, notes_census, size_table, building_programs (1,123 lines); make pack-audit, notes-census, size-table and building-programs Rust
+      research: rendering
+- [ ] T156 Phase 4 S11, the Mode A top and pytest's exit (ask:449-phase4-slices) Q6, Q9: compound*, the six pool .gen.py as one Rust sheet driver with a spec file per map, 335's harness.py, poolmaps, test_mode_a_sheets as Rust tests (2,253 lines); conftest, the __init__.py files, _scope, _gate_failures, _heap, _memory, collect_cost, collect_probe, test_operations_registry deleted (443); resvg pinned as a library
+      research: rendering
+- [ ] T157 Phase 4 S12, the pipeline (ask:449-phase4-slices) Q8: gencache, regen, pool_index, render_cache (1,764 lines), gencache's key the binary, the spec and the inputs read; rollcache, pipeline/codeid, pipeline/__init__, _census and _invocation deleted (1,006); make scatter-bases' deleted script, render_cache.replate_page and sync-with-main.sh's RENDER_CACHE_MOD fixed or removed
+      research: rendering
+- [ ] T158 Phase 4 S13, the deletion close (ask:449-phase4-slices) Q10: tools/claims.py and claims_context, claims_counters, claims_scope, claims_stale, tunables, gates/codeid.py, dead_closure, bundle_door, tools/__init__, l7r/diagram/__init__ deleted (2,443 lines), the claims re-keyed by claims carry, ruff, pyproject's list and the requirements files gone; the phase-4 close
       research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
