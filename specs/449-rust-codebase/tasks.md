@@ -41,8 +41,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       note: not landed - its plan review (BLOCKED, 2026-11-12) held it to the GM's condition: the suite alone fell from 35.0 s to about 17 s, but the full hook run did not move (52.1 s against 53.1 s and 54.1 s), so no significant saving in the loop he is speeding up; the change is kept as a patch until the run's real bound is found
 - [ ] T138 Phase 3, the research search no task held (phase-3 census, 2026-11-12): research_search.py and semantic_index.py (520 lines), after T85 (both import archive in process)
       research: rendering
-- [ ] T147 Phase 4 S3b, the uncited cluster (ask:449-phase4-slices): scripts/record/uncited, uncited_imports, archive_ops (1,623 lines); retires downloads.rs's by-path run of archive_ops.py inbox
-      research: rendering
 - [ ] T148 Phase 4 S5, the record's site (ask:449-phase4-slices): record/site, site_pages, site_links, money, citations, glossary, glossary_source, tools/record_asset, glossary_asset, footnote_census, source_tags_contract, scripts/gates/memo_check.py, pipeline/record_build (2,164 lines); retires push.rs's memo_check and record-build runs
       research: rendering
       note: owed from T144's plan review (2026-11-16), where S1's library has no caller: wiring a caller that printed a KeyError's str(e) keeps its quotes; and research::host's tabs and missing NFKC, against urlsplit, need their own decision once live fetch URLs reach it beside the blocked-domain list
