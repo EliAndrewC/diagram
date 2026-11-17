@@ -59,8 +59,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T160 Compile and test speed, the GM's third approved proposal (request.md 2026-11-16), ordered last: first measure where compile and test time goes across a port task, then take any target with a significant measured saving
       research: rendering
-- [ ] T166 The claims tooling's two gaps T165 found before the engine ports: a claim carried from a deleted .py unit onto its Rust port (carry matches by code fingerprint, which a .py and a .rs unit never share; 367 .py claims), and a Rust unit's fingerprint holding the constants it reads as a Python unit's does (111 of 398 claimed Rust functions), migrated without re-owing unchanged code
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

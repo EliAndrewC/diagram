@@ -447,3 +447,6 @@
 - [x] T165 The claims tooling over Rust engine units before the engine ports (the GM 2026-11-17: port the claims tools before the map engine): the stale-figure check (claims_stale, a changed constant's old figure on a drawing page) and the counter-only clear (claims_counters) made to work on Rust units as they work on Python's, and the rest - context, fingerprints, carry, tunables - confirmed on a Rust unit end to end
       research: rendering
       verify: DONE. landed: the claims tools over Rust units: stale figures and counter-only clears firing on real rust/phases changes, the Python cases unchanged
+- [x] T166 The claims tooling's two gaps T165 found before the engine ports: a claim carried from a deleted .py unit onto its Rust port (carry matches by code fingerprint, which a .py and a .rs unit never share; 367 .py claims), and a Rust unit's fingerprint holding the constants it reads as a Python unit's does (111 of 398 claimed Rust functions), migrated without re-owing unchanged code
+      research: rendering
+      verify: DONE. landed: claims carry across a port and a Rust fingerprint holding its read constants; the migration owing nothing, a ported claim checked IN-STEP
