@@ -24,7 +24,11 @@ pub fn judges(gate: &str) -> Option<(&'static [&'static str], &'static str)> {
         "claims" => Some((
             &[
                 "l7r/",
+                // the Rust engine and the program sections, whose claims the claims tools read (feature 449 T165): a delta of
+                // `rust/phases` alone said "nothing to judge" and pushed with its owed claims unrefused
+                "rust/",
                 "docs/buildings.md",
+                "docs/building-programs.md",
                 "docs/buildings/",
                 "research/questions/",
                 "dev/claims-index.json",

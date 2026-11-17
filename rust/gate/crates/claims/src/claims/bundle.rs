@@ -16,6 +16,7 @@ use l7r_guard::shared::checks::pages::read_page;
 use l7r_guard::shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
+use super::context::{Gather, Tables, CALLEES_MAX};
 use super::index::{
     body_of, field, is, load_map, page_blocks, page_name, source_span, Cur, PageMemo, Row, INDEX,
     QUESTIONS,
@@ -28,12 +29,8 @@ use crate::record::units::{digest, re};
 /// The questions' part's answer: the numbered blocks, the snapshots, the pages read.
 type Cited = (Map<String, Value>, Map<String, Value>, PageMemo);
 
-/// The most of its own module's functions a unit carries into its bundle as context.
-const CALLEES_MAX: usize = 6;
-
 static HUNK_LINE: LazyLock<Regex> =
     LazyLock::new(|| re(r"\A@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@"));
-static CONSTANT_NAME: LazyLock<Regex> = LazyLock::new(|| re(r"\b[A-Z][A-Z0-9_]+\b"));
 static BACKTICKED: LazyLock<Regex> = LazyLock::new(|| re(r"`([A-Za-z_]\w*)"));
 /// A claim whose label names a distance, gap or standoff (`claims_context.DISTANCE`).
 static DISTANCE: LazyLock<Regex> = LazyLock::new(|| {
@@ -109,25 +106,6 @@ pub fn context_source(reader: &mut Reader, root: &Path, reference: &str) -> Resu
     Ok(got.as_str().unwrap_or_default().to_owned())
 }
 
-/// `path::NAME` of each `const` or `static` of the `.rs` file at `path` that `source` names (feature 444 T16).
-pub fn rust_constants(root: &Path, path: &str, source: &str) -> Result<Vec<String>, Fail> {
-    let named: HashSet<&str> = CONSTANT_NAME
-        .find_iter(source)
-        .flatten()
-        .map(|m| m.as_str())
-        .collect();
-    let text = read_text(&root.join(path))?;
-    let head = super::units::lstripped(source);
-    Ok(items(&text, 0, "", false)
-        .into_iter()
-        .filter(|(q, kind, _, _, _, body)| {
-            let lead: String = super::units::lstripped(body).chars().take(40).collect();
-            kind == "constant" && named.contains(q.as_str()) && !head.starts_with(&lead)
-        })
-        .map(|(q, ..)| format!("{path}::{q}"))
-        .collect())
-}
-
 fn dedupe(v: Vec<String>) -> Vec<String> {
     let mut seen = HashSet::new();
     v.into_iter().filter(|x| seen.insert(x.clone())).collect()
@@ -141,15 +119,8 @@ fn strings(v: &Value) -> Vec<String> {
         .collect()
 }
 
-/// A `.py` unit's context: its own module's functions it calls, every constant it reads, what a distance claim turns on, what a CANNOT-TELL asked.
-fn py_context(
-    reader: &mut Reader,
-    root: &Path,
-    unit: &Unit,
-    src: &str,
-    rows: &[&Row],
-    index: &Map<String, Value>,
-) -> Result<Vec<String>, Fail> {
+/// Every name a CANNOT-TELL verdict's note of `rows` puts in backticks: what a re-bundle chases.
+fn asked(rows: &[&Row], index: &Map<String, Value>) -> Vec<String> {
     let mut asked = Vec::new();
     for r in rows {
         let row = index.get(&r.key).cloned().unwrap_or(Value::Null);
@@ -162,15 +133,31 @@ fn py_context(
             );
         }
     }
+    asked
+}
+
+/// Whether a claim of `rows` names a distance, gap or standoff: its context follows two calls down.
+fn distance(rows: &[&Row]) -> bool {
+    rows.iter()
+        .any(|r| DISTANCE.is_match(&r.claim.label).unwrap_or(false))
+}
+
+/// A `.py` unit's context: its own module's functions it calls, every constant it reads, what a distance claim turns on, what a CANNOT-TELL asked.
+fn py_context(
+    reader: &mut Reader,
+    root: &Path,
+    unit: &Unit,
+    src: &str,
+    rows: &[&Row],
+    index: &Map<String, Value>,
+) -> Result<Vec<String>, Fail> {
+    let asked = asked(rows, index);
     let r = root.to_string_lossy();
     let mut out = strings(&reader.ask(
         "claims_callees",
         &json!([r, unit.path, unit.qualname, src, CALLEES_MAX]),
     )?);
-    if rows
-        .iter()
-        .any(|r| DISTANCE.is_match(&r.claim.label).unwrap_or(false))
-    {
+    if distance(rows) {
         let far = reader.ask("claims_direct", &json!([r, unit.path, unit.qualname, src]))?;
         out.extend(strings(&far));
     }
@@ -186,7 +173,7 @@ fn unit_part(
     rows: &[&Row],
     index: &Map<String, Value>,
     marked: &HashMap<String, HashSet<usize>>,
-    context: &mut Vec<String>,
+    gather: &mut Gather,
     parts: &mut Vec<String>,
 ) -> Result<(), Fail> {
     let unit = &rows[0].unit;
@@ -232,13 +219,21 @@ fn unit_part(
         mark_changed(&src, first, marked.get(&unit.path))
     ));
     if unit.path.ends_with(".rs") {
-        let mut more = std::mem::take(context);
-        more.extend(rust_constants(root, &unit.path, &src)?);
-        *context = dedupe(more);
+        // the Python's rules on a Rust item (feature 449 T165), where it carried its own file's constants alone (feature 444 T16)
+        let mut more = std::mem::take(&mut gather.refs);
+        more.extend(super::context::rust_context(
+            &mut gather.tables,
+            root,
+            unit,
+            &src,
+            distance(rows),
+            &asked(rows, index),
+        ));
+        gather.refs = dedupe(more);
     } else if unit.kind != "section" {
-        let mut more = std::mem::take(context);
+        let mut more = std::mem::take(&mut gather.refs);
         more.extend(py_context(reader, root, unit, &src, rows, index)?);
-        *context = dedupe(more);
+        gather.refs = dedupe(more);
     }
     Ok(())
 }
@@ -373,17 +368,12 @@ pub fn bundle(
     let mut cited: Vec<String> = Vec::new();
     let mut parts: Vec<String> = HEAD.iter().map(|s| (*s).to_owned()).collect();
     let marked = changed_lines(root, "origin/main");
-    let mut context = with.to_vec();
+    let mut gather = Gather {
+        refs: with.to_vec(),
+        tables: Tables::default(),
+    };
     for (_, rows) in &by_uid {
-        unit_part(
-            reader,
-            root,
-            rows,
-            &index,
-            &marked,
-            &mut context,
-            &mut parts,
-        )?;
+        unit_part(reader, root, rows, &index, &marked, &mut gather, &mut parts)?;
         for c in &rows[0].unit.claims {
             for ptr in &c.pointers {
                 let name = page_name(ptr).to_owned();
@@ -393,7 +383,7 @@ pub fn bundle(
             }
         }
     }
-    context_part(reader, root, &context, &index, &mut parts)?;
+    context_part(reader, root, &gather.refs, &index, &mut parts)?;
     for p in pages {
         let p = page_name(p).to_owned();
         if !qdir.join(&p).is_file() {

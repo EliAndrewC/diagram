@@ -28,8 +28,18 @@ use crate::record::units::re;
 /// A constant's name as a decision names it.
 static CONSTANT: LazyLock<Regex> = LazyLock::new(|| re(r"\b[A-Z][A-Z0-9_]{2,}\b"));
 static CONSTANT_WHOLE: LazyLock<Regex> = LazyLock::new(|| re(r"\A(?:\b[A-Z][A-Z0-9_]{2,}\b)\z"));
-/// What the base read needs: the engine, the procedure documents and the questions.
-pub const BASE_PATHS: [&str; 4] = ["l7r", "docs/buildings.md", "docs/buildings", QUESTIONS];
+/// What the base read needs: the engine, the procedure documents and the questions. `rust` and `docs/building-programs.md` since
+/// feature 449 T165: the Python's tuple named neither, so the merge base held no Rust unit and no program section, and a finding
+/// recorded on a Rust unit (or a program section) whose code had not changed read as INTRODUCED, where the same finding on a `.py`
+/// unit read as pre-existing; the push's claims gate judges both paths for the same reason (`cohort`'s `push::judges`).
+pub const BASE_PATHS: [&str; 6] = [
+    "l7r",
+    "rust",
+    "docs/buildings.md",
+    "docs/building-programs.md",
+    "docs/buildings",
+    QUESTIONS,
+];
 
 /// Every coverage failure: a unit with no claim own or inherited, a claim that does not parse, a pointer to no question file.
 pub fn coverage(units: &[Pair], questions: &HashSet<String>) -> Vec<String> {
@@ -260,18 +270,21 @@ pub fn report(
 
 /// The engine, procedures and questions at `base`, extracted under `into`.
 pub fn base_tree(git: &str, root: &Path, base: &str, into: &Path) -> Result<(), Fail> {
+    // which of the paths the base holds, asked of ONE `git ls-tree` (feature 449 T165, when `BASE_PATHS` grew to six: a
+    // `cat-file -e` each was a process a path); `git archive` fails whole on one missing pathspec, so only these are archived
+    let listed = Command::new(git)
+        .arg("-C")
+        .arg(root)
+        .args(["ls-tree", "--name-only", base, "--"])
+        .args(BASE_PATHS)
+        .stderr(Stdio::null())
+        .output()
+        .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
+        .unwrap_or_default();
     let present: Vec<&str> = BASE_PATHS
         .iter()
         .copied()
-        .filter(|p| {
-            Command::new(git)
-                .arg("-C")
-                .arg(root)
-                .args(["cat-file", "-e", &format!("{base}:{p}")])
-                .stderr(Stdio::null())
-                .status()
-                .is_ok_and(|s| s.success())
-        })
+        .filter(|p| listed.lines().any(|l| l == *p))
         .collect();
     if !present.is_empty() {
         let archive = Command::new(git)

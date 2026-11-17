@@ -45,6 +45,17 @@ fn the_list_and_the_inline_audit() {
     );
     put(&root, "l7r/diagram/labels/x.py", "4.5\n");
     put(&root, "l7r/diagram/other.py", "4.5\n");
+    // a crate new under `rust/` is audited, a tooling crate is not (feature 449 T165)
+    put(
+        &root,
+        "rust/mode_a/src/lib.rs",
+        "pub fn sheet() -> f64 {\n    77.5\n}\n",
+    );
+    put(
+        &root,
+        "rust/gate/src/odd.rs",
+        "pub fn odd() -> f64 {\n    66.5\n}\n",
+    );
     let mut reader = Reader::new(&root, &root);
     let cur = current(&mut reader, &root, &root.join("research/questions")).unwrap();
     let found = tunables(&cur, "", true);
@@ -68,14 +79,13 @@ fn the_list_and_the_inline_audit() {
             && shown.contains("  l7r/diagram/labels/x.py:4 big 1.23457e+06")
             && shown.contains("  rust/phases/src/lib.rs:14 reach 3.25")
             && shown.contains("  rust/phases/src/lib.rs:23 m 42")
+            && shown.contains("  rust/mode_a/src/lib.rs:2 sheet 77.5")
+            && !shown.contains("66.5")
             && !shown.contains("8888")
             && !shown.contains("other.py"),
     );
     let counted = render_inline(&inline, true);
-    assert!(
-        counted.contains("      2  l7r/diagram/labels/x.py\n")
-            || counted.contains("    2  l7r/diagram/labels/x.py"),
-    );
+    assert!(counted.contains("      2  l7r/diagram/labels/x.py\n"));
     assert!(super::inline(&mut reader, &root, &cur, "rust/")
         .unwrap()
         .iter()

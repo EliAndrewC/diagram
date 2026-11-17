@@ -159,6 +159,39 @@ fn the_rust_walk_skips_the_tooling_crates_and_targets_and_keeps_python_order() {
     assert!(rglob(Path::new("/no/such/dir"), ".rs").is_empty());
 }
 
+/// The engine's slices (S7-S12) port into new crates: one NEW under `rust/` is walked with nothing declared - its claims read, its
+/// target and a parked copy pruned - so the claims track it from its first commit (feature 449 T165).
+#[test]
+fn a_new_crate_under_rust_is_walked_with_nothing_declared() {
+    let root = crate::checks::scratch("claims-units-new-crate");
+    let claimed = "/// Research: the reach - NONE: plumbing\npub fn sheet() {}\n";
+    put(&root, "rust/mode_a/src/lib.rs", claimed);
+    put(&root, "rust/mode_a/src/sheet/walls.rs", claimed);
+    put(&root, "rust/mode_a/target/debug/build/x.rs", claimed);
+    put(&root, "rust/parked/mode_a/src/lib.rs", claimed);
+    let units = all_rust_units(&root, "").unwrap();
+    let keys: Vec<String> = units.iter().map(|(u, _)| u.key(&u.claims[0])).collect();
+    assert_eq!(
+        keys,
+        vec![
+            "rust/mode_a/src/lib.rs::sheet#the reach",
+            "rust/mode_a/src/sheet/walls.rs::sheet#the reach"
+        ]
+    );
+    for (inner, walked) in [
+        ("mode_a/src/lib.rs", true),
+        ("phases/src/lib.rs", true),
+        ("gate/crates/claims/src/claims.rs", false),
+        ("guard/src/lib.rs", false),
+        ("browser/src/lib.rs", false),
+        ("embed/src/lib.rs", false),
+        ("parked/x.rs", false),
+        ("mode_a/target/x.rs", false),
+    ] {
+        assert_eq!(super::walked(inner), walked, "{inner}");
+    }
+}
+
 #[test]
 fn a_statement_between_a_doc_and_its_item_ends_the_doc() {
     let got = items("/// a doc\nuse x;\nfn a() {}\n", 0, "", false);

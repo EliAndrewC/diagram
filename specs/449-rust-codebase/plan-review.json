@@ -390,6 +390,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T165 (the claims tools over Rust units before the engine ports; the GM 2026-11-17, request.md)": {
+   "sha256": "b3f3fb1c131f0310194d1dc3bb354e7d344ffe024437753aebc8dd3a332ba007",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T165 Approach (checklist part A)": {
+   "sha256": "3c8e1698eba770bdd291dc1ee04f0b001c249b6e7fb8560f6106d608872666ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -9930,6 +9942,64 @@
      "why": "The standing gates. They decide nothing that the spec leaves open."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T165 (the claims tools over Rust units before the engine ports; the GM 2026-11-17, request.md)",
+    "### T165 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T165-stale-rust",
+     "summary": "The stale-figure check reads a Rust const or static (impl ones included) whose own doc holds Research: and whose value or doc changed since the merge base; base literals normalized as Python writes them, 0 and 1 skipped as the Python skips them; Python path unchanged.",
+     "class": "within",
+     "why": "This is the first of the two pieces the GM was told would be made to work on Rust units before S7 and answered 'sounds good'. The reading follows the Python's own rules, and the demonstration (BEND_WIDTHS 2.5 to 3.0 names the stale page) shows it does what it is for."
+    },
+    {
+     "id": "T165-counter-clear-rust",
+     "summary": "Counter-only clear on Rust: a counter statement is a cfg(feature=counters) block or statement (gated if/for refused) or a tally/merge/counts.add call keyed kind@function whose value uses only numbers, places, .len(), integer casts, *, + and parentheses; 79 of 98 call sites fit, the other 19 owe a check as before.",
+     "class": "within",
+     "why": "The second piece the GM approved. A counter-only clear is by its nature confined to statements that cannot change behavior; the form is the definition of 'counter-only', not a carve-out. The 19 call sites that miss it are not cleared, so they owe a check exactly as they do today; nothing goes untracked, which is the purpose the GM stated ('otherwise we'll be porting code without being able to track the claims in the new Rust')."
+    },
+    {
+     "id": "T165-bundle-context",
+     "summary": "A Rust unit's claim bundle carries the context a Python unit's does (callees up to six, constants read, two call levels for a distance claim, the CANNOT-TELL chase), names resolved through items and use lines.",
+     "class": "within",
+     "why": "Not one of the two named pieces, but it is the 'equivalent Rust tool' the GM asked about: a claim on Rust that is judged with less context than one on Python is tracked less well. It widens rather than narrows, and serves the request's stated purpose."
+    },
+    {
+     "id": "T165-gaps-fixed",
+     "summary": "Merge-base read lists rust/ paths; the push's claims gate judges rust/ paths (a rust/phases-only delta no longer pushes with owed claims unchecked); tunables --inline reads every crate the claims walk reads.",
+     "class": "within",
+     "why": "Each is a place where claims on Rust were not tracked at all; fixing them is what makes 'track the claims in the new Rust' true. The push gate's added refusals are confined to owed claims on Rust units, the exact thing the GM asked to have tracked."
+    },
+    {
+     "id": "T165-engine-crate-placement",
+     "summary": "The claims walk reads every crate under rust/ but target, parked, guard, gate, browser and embed (a new crate walked with nothing declared, held by a test), so an engine slice's Rust lands in its own crate beside rust/phases, never under rust/gate/.",
+     "class": "within",
+     "why": "It ensures the ported engine is inside the claims walk, which is the request's purpose. The excluded crates are tooling, not the map engine the GM named; nothing the GM asked to have tracked is left outside."
+    },
+    {
+     "id": "T165-defer-T166",
+     "summary": "Claim carry from a deleted .py unit onto its Rust port (fingerprints never shared) and a Rust unit's fingerprint not holding the constants it reads are left for T166, both fixed before any engine slice.",
+     "class": "within",
+     "why": "The GM approved the two named pieces in a task before S7; these two further gaps were found by measurement and are scheduled before any engine slice, so the request's timing ('before the porting of the actual map engine') still holds for them. Nothing the GM approved for T165 is moved out of it. The ruling depends on T166 landing before S7, as the block commits."
+    },
+    {
+     "id": "T165-fr002-python-same",
+     "summary": "Python units' outputs unchanged through the shared runner (9 cases, none differing); the Rust cases differ only in the lines this task adds, each named.",
+     "class": "within",
+     "why": "FR-002 held as written for the Python path; the Rust differences are the requested new behavior."
+    },
+    {
+     "id": "T165-checks-exits",
+     "summary": "make static, rust-test, hooks-test HOOKS_ALL=1, claims-owed, claims-report, pointer check; red exit through make arbiter-ask.",
+     "class": "within",
+     "why": "Verification and exits for the requested behavior; no scope change."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -17781,6 +17851,62 @@
      "summary": "make static, make rust-test, make hooks-test HOOKS_ALL=1 and make land green; a claim that it cannot be done is ruled through make arbiter-ask.",
      "class": "within",
      "why": "The standing gates. They decide nothing that the spec leaves open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T165": {
+   "section_sha256": "f5e9198062efdc6133cd9c844796a7b7f6fc698e124b80f238cfc0f915f94ca0",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T165-stale-rust",
+     "summary": "The stale-figure check reads a Rust const or static (impl ones included) whose own doc holds Research: and whose value or doc changed since the merge base; base literals normalized as Python writes them, 0 and 1 skipped as the Python skips them; Python path unchanged.",
+     "class": "within",
+     "why": "This is the first of the two pieces the GM was told would be made to work on Rust units before S7 and answered 'sounds good'. The reading follows the Python's own rules, and the demonstration (BEND_WIDTHS 2.5 to 3.0 names the stale page) shows it does what it is for."
+    },
+    {
+     "id": "T165-counter-clear-rust",
+     "summary": "Counter-only clear on Rust: a counter statement is a cfg(feature=counters) block or statement (gated if/for refused) or a tally/merge/counts.add call keyed kind@function whose value uses only numbers, places, .len(), integer casts, *, + and parentheses; 79 of 98 call sites fit, the other 19 owe a check as before.",
+     "class": "within",
+     "why": "The second piece the GM approved. A counter-only clear is by its nature confined to statements that cannot change behavior; the form is the definition of 'counter-only', not a carve-out. The 19 call sites that miss it are not cleared, so they owe a check exactly as they do today; nothing goes untracked, which is the purpose the GM stated ('otherwise we'll be porting code without being able to track the claims in the new Rust')."
+    },
+    {
+     "id": "T165-bundle-context",
+     "summary": "A Rust unit's claim bundle carries the context a Python unit's does (callees up to six, constants read, two call levels for a distance claim, the CANNOT-TELL chase), names resolved through items and use lines.",
+     "class": "within",
+     "why": "Not one of the two named pieces, but it is the 'equivalent Rust tool' the GM asked about: a claim on Rust that is judged with less context than one on Python is tracked less well. It widens rather than narrows, and serves the request's stated purpose."
+    },
+    {
+     "id": "T165-gaps-fixed",
+     "summary": "Merge-base read lists rust/ paths; the push's claims gate judges rust/ paths (a rust/phases-only delta no longer pushes with owed claims unchecked); tunables --inline reads every crate the claims walk reads.",
+     "class": "within",
+     "why": "Each is a place where claims on Rust were not tracked at all; fixing them is what makes 'track the claims in the new Rust' true. The push gate's added refusals are confined to owed claims on Rust units, the exact thing the GM asked to have tracked."
+    },
+    {
+     "id": "T165-engine-crate-placement",
+     "summary": "The claims walk reads every crate under rust/ but target, parked, guard, gate, browser and embed (a new crate walked with nothing declared, held by a test), so an engine slice's Rust lands in its own crate beside rust/phases, never under rust/gate/.",
+     "class": "within",
+     "why": "It ensures the ported engine is inside the claims walk, which is the request's purpose. The excluded crates are tooling, not the map engine the GM named; nothing the GM asked to have tracked is left outside."
+    },
+    {
+     "id": "T165-defer-T166",
+     "summary": "Claim carry from a deleted .py unit onto its Rust port (fingerprints never shared) and a Rust unit's fingerprint not holding the constants it reads are left for T166, both fixed before any engine slice.",
+     "class": "within",
+     "why": "The GM approved the two named pieces in a task before S7; these two further gaps were found by measurement and are scheduled before any engine slice, so the request's timing ('before the porting of the actual map engine') still holds for them. Nothing the GM approved for T165 is moved out of it. The ruling depends on T166 landing before S7, as the block commits."
+    },
+    {
+     "id": "T165-fr002-python-same",
+     "summary": "Python units' outputs unchanged through the shared runner (9 cases, none differing); the Rust cases differ only in the lines this task adds, each named.",
+     "class": "within",
+     "why": "FR-002 held as written for the Python path; the Rust differences are the requested new behavior."
+    },
+    {
+     "id": "T165-checks-exits",
+     "summary": "make static, rust-test, hooks-test HOOKS_ALL=1, claims-owed, claims-report, pointer check; red exit through make arbiter-ask.",
+     "class": "within",
+     "why": "Verification and exits for the requested behavior; no scope change."
     }
    ],
    "verdict": "CLEAR"

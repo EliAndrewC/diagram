@@ -12,7 +12,7 @@ use serde_json::json;
 
 use super::index::Cur;
 use super::scope::Reader;
-use super::units::{items, rel, rglob};
+use super::units::{items, rel, rglob, walked};
 use crate::record::repo::{read_text, Fail};
 use crate::record::units::re;
 
@@ -20,12 +20,11 @@ use crate::record::units::re;
 const OURS: [&str; 3] = ["GUESS", "UNRESEARCHED", "CONVENTION"];
 static FIGURE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w.])\d+(?:\.\d+)?(?![\w])"));
 /// The code that draws a map, and the audit that grades a Mode A sheet (D31 (d)).
-const MAP_CODE: [&str; 5] = [
+const MAP_CODE: [&str; 4] = [
     "l7r/diagram/tools/pack_audit/",
     "l7r/diagram/labels/",
     "l7r/diagram/compound",
     "l7r/diagram/well_gear.py",
-    "rust/phases/src/",
 ];
 /// Numbers too plain to be a decision.
 const TRIVIAL: [f64; 12] = [
@@ -158,12 +157,12 @@ pub fn inline(reader: &mut Reader, root: &Path, cur: &Cur, path: &str) -> Result
             ));
         }
     }
-    for p in rglob(&root.join("rust"), ".rs") {
+    // the Rust half audits every crate the claims walk reads (feature 449 T165), where it named `rust/phases/src/`: the engine's
+    // slices port into new crates beside it, and a number one of them hard-codes is as much ours as one in `rust/phases`
+    let base = root.join("rust");
+    for p in rglob(&base, ".rs") {
         let r = rel(&p, root);
-        if p.components().any(|c| c.as_os_str() == "target")
-            || !MAP_CODE.iter().any(|m| r.starts_with(m))
-            || !r.starts_with(path)
-        {
+        if !walked(&rel(&p, &base)) || !r.starts_with(path) {
             continue;
         }
         for (f, line, v) in unstated_rust(&read_text(&p)?, text.get(&r).unwrap_or(&empty)) {

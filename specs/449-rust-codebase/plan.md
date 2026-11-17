@@ -666,3 +666,58 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T164 to T149 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 <!-- plan-archive: T164 to T164 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
+
+### T165 (the claims tools over Rust units before the engine ports; the GM 2026-11-17, request.md)
+
+- **Approach**: the claims crate (`rust/gate/crates/claims/`) gains the two pieces that worked on Python units alone: the stale-figure check over a Rust `const` or `static` carrying `Research:` (`stale.rs`) and the counter-only clear over Rust counter statements (`counters.rs`); a Rust unit's bundle carries the context a Python unit's does (`context.rs`); and three gaps the end-to-end run found are fixed - the merge-base read, the push's claims gate and `tunables --inline` reading `rust/`.
+
+   **Decisions** (the GM's words, request.md 2026-11-17; `ask:449-phase4-slices` Q10; FR-002 for the Python units' outputs; constitution XIV):
+   - Stale figures on Rust: a `const` or `static` (one in an `impl` too) whose own doc holds `Research:` and whose value or doc changed since the merge base has its base value's number literals read as Python writes them (`43_560.0` as `43560`, `0.35f64` as `0.35`), 0 and 1 left out as the Python leaves them, and the drawing pages still stating one named in `claims_stale.py`'s own line; the Python path is unchanged and still asked only when a `.py` under `l7r/` changed. A real change, `BEND_WIDTHS` 2.5 to 3.0, names the page stating 2.5, where HEAD names none (observed 2026-11-17, method: a scratch clone with the change, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t165/demo-c.log`).
+   - Counter-only clear on Rust: a counter statement is a `#[cfg(feature = "counters")]` block or statement (a gated `if` or `for` refused) or a `tally`, `merge`, aliased `tally` or `counts.add` call whose key is the counters' `kind@function` form and whose value uses only numbers, places, `.len()`, integer casts, `*`, `+` and parentheses; a claim is cleared only when its recorded code is the base's and the unit is that code plus added counter statements. Of the 98 counter call sites in `rust/phases`, 79 are of that form, the other 19 owing a check as before (observed 2026-11-17, method: the form run over every call site). A real counter gained in `sink::sink` clears its claim, where HEAD owes a code triage (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t165/demo-c2.log`).
+   - The context a Rust unit's bundle carries follows the Python rules - its own file's callees up to six, every constant it reads, two call levels for a distance claim, the CANNOT-TELL chase - names resolved through the file's items or its `use` lines; bundles grew from a median of 11.6 to 15.4 KB (observed 2026-11-17, method: every claimed Rust unit's bundle built before and after).
+   - Gaps fixed (constitution XIV): the merge-base read listed no `rust/` path, so a finding on unchanged Rust code read as introduced; the push's claims gate judged no `rust/` path, so a delta touching only `rust/phases` pushed with its owed claims unchecked, and now runs the gate, 0.65 s warm (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t165/demo-d.log`, HEAD's binary against the new); `tunables --inline` read `rust/phases` alone and now reads every crate the claims walk reads.
+   - Where the engine ports go: the claims walk reads every crate under `rust/` but `target`, `parked`, `guard`, `gate`, `browser` and `embed`, a new crate walked with nothing declared (a test holds it), so an engine slice's Rust lands in its own crate beside `rust/phases`, never under `rust/gate/`.
+   - Left for T166, measured: a claim does not carry from a deleted `.py` unit onto its Rust port, carry matching by code fingerprint, which a `.py` and a `.rs` unit never share (367 `.py` claims), and a Rust unit's fingerprint does not hold the constants it reads, as a Python unit's does (111 of 398 claimed Rust functions read one); both are fixed before any engine slice (observed 2026-11-17, method: a scratch port of two claimed constants to a new crate, and the units' reads counted).
+   - The same outputs for Python units (FR-002), through the shared runner: the Python cases' 9 cases, none differing (measured 2026-11-17 (`make diff-run ... VERIFY=1`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t165/diffrun/same-cases.diff-run/reports/diff-run-verify-20261117T070029Z.json`)); the Rust cases differ only in the new lines this task adds, each named (measured 2026-11-17 (`make diff-run ... VERIFY=1`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t165/diffrun/rust-cases.diff-run/reports/diff-run-verify-20261117T070045Z.json`)).
+   - The checks: `make static` clean, `make rust-test` clean on 31 crates, `make hooks-test HOOKS_ALL=1` green on 54 suites, `make claims-owed` owing none, `make claims-report` owing none, the pointer check clean (observed 2026-11-17, method: those commands).
+
+### T165 Approach (checklist part A)
+
+1. **The goal, in the world.** A claim on Rust engine code is tracked as one on Python code is: a changed constant names its stale pages, a counter-only change clears, a bundle carries its context.
+2. **The constraints.** The GM's words; Q10; FR-002 for the Python units.
+3. **Where each comes from.** G: the GM's request; O: the demonstrations and the differential above.
+4. **Do they describe the world here?** Run on real `rust/phases` units in a scratch clone, measured 2026-11-17 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t165/`).
+5. **The order.** After T164; before T166 and any engine slice.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The stale line and the clear firing on real Rust changes, the Python cases unchanged.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No.
+
+
+### T166 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T166 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

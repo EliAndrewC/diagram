@@ -126,6 +126,7 @@ fn a_counter_only_change_is_cleared_and_a_stale_figure_named() {
             ("helper", "function", &["help - NONE"], false),
             ("other", "function", &["other - NONE"], false),
             ("Table", "constant", &["table - NONE"], false),
+            ("modl", "module", &["modl - NONE"], false),
         ],
     );
     record_all(&root);
@@ -139,7 +140,13 @@ fn a_counter_only_change_is_cleared_and_a_stale_figure_named() {
         ix[k]["code"] = json!("old");
         ix[k]["counter_only"] = json!(only);
     }
-    ix["l7r/diagram/m.py::Table#table"]["code"] = json!("old");
+    // a module unit is never cleared by its counters (claims_counters.py's docstring): owed as before
+    for k in [
+        "l7r/diagram/m.py::Table#table",
+        "l7r/diagram/m.py::modl#modl",
+    ] {
+        ix[k]["code"] = json!("old");
+    }
     std::fs::write(root.join("dev/claims-index.json"), ix.to_string()).unwrap();
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     std::fs::write(

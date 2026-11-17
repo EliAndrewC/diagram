@@ -411,6 +411,13 @@ pub fn items(text: &str, base_line: usize, prefix: &str, in_impl: bool) -> Vec<I
     out
 }
 
+/// A Rust item's core: its comment-free tokens, hashed (the counter-only clear rebuilds a base version's by it, feature 449 T165).
+pub fn rust_core(body: &str) -> String {
+    sha(&String::from_utf8_lossy(&crate::codeid::rust_tokens(
+        body.as_bytes(),
+    )))
+}
+
 /// (the file's errors, its units) for one `.rs` source text: each item's own claims, else the `//!` module doc's, inherited.
 pub fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
     let module_doc = splitlines(source)
@@ -427,7 +434,6 @@ pub fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
     for (qual, kind, first, last, doc, body) in items(source, 0, "", false) {
         let (claims, errors) = claims_of(Some(&doc));
         let inherited = claims.is_empty() && errors.is_empty();
-        let tokens = crate::codeid::rust_tokens(body.as_bytes());
         units.push(Unit {
             path: path.to_owned(),
             qualname: qual,
@@ -440,7 +446,7 @@ pub fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
                 claims
             },
             inherited,
-            core: sha(&String::from_utf8_lossy(&tokens)),
+            core: rust_core(&body),
             errors,
             names: Vec::new(),
             blocks: Vec::new(),
@@ -480,17 +486,22 @@ pub fn rel(path: &Path, root: &Path) -> String {
         .into_owned()
 }
 
-/// Every unit of every `.rs` under `rust/` (`target/`, the parked stages and the tooling crates pruned), with its file's errors.
+/// Whether the claims walk reads a `.rs` file at `inner`, its path under `rust/`: every crate there but `target/`, the parked stages and
+/// the tooling crates - the guard, the gate, the browser program (feature 449 T146) and the embedder (T138), which hold no research
+/// claims. A crate NEW under `rust/` is walked with nothing to declare, so the engine's slices (S7-S12) port into crates beside
+/// `rust/phases` and their claims are tracked from their first commit (feature 449 T165); the stale-figure check asks this same test.
+pub fn walked(inner: &str) -> bool {
+    let parts: Vec<&str> = inner.split('/').collect();
+    !(parts.contains(&"target")
+        || ["parked", "guard", "gate", "browser", "embed"].contains(&parts[0]))
+}
+
+/// Every unit of every `.rs` under `rust/` the walk reads ([`walked`]), with its file's errors.
 pub fn all_rust_units(root: &Path, repo_prefix: &str) -> Result<Vec<Pair>, Fail> {
     let base = root.join("rust");
     let mut out = Vec::new();
     for p in rglob(&base, ".rs") {
-        let inner = rel(&p, &base);
-        let parts: Vec<&str> = inner.split('/').collect();
-        // the tooling crates hold no research claims: the guard, the gate, the browser program (feature 449 T146) and the embedder (T138)
-        if parts.contains(&"target")
-            || ["parked", "guard", "gate", "browser", "embed"].contains(&parts[0])
-        {
+        if !walked(&rel(&p, &base)) {
             continue;
         }
         let text = crate::record::repo::read_text(&p)?;

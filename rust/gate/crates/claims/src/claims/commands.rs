@@ -1,5 +1,6 @@
 //! `l7r-gate claims <command>`: each command's body (`scripts/record/claims.py`'s `main` and `claims_cli.py`'s handlers, with
-//! `claims_accept.py` and `claims_counters.clear`, ported by feature 449 T82).
+//! `claims_accept.py` and `claims_counters.clear`, ported by feature 449 T82); the counter-only clear and the stale-figure check are
+//! [`super::counters`] and [`super::stale`], which read a Rust unit natively (feature 449 T165).
 
 #![expect(
     clippy::case_sensitive_file_extension_comparisons,
@@ -16,9 +17,8 @@ use serde_json::{json, Map, Value};
 use super::bundle::bundle;
 use super::carry::{carry, classified, gate as carry_gate, record_known, Reading};
 use super::index::{
-    body_of, judged, live_rows, load_map, owed, page_blocks, rekey, rows_of, save_index,
-    save_store, truthy, Cur, Index, PageMemo, Store, CODE_TRIAGE, DEFERRED, INDEX, QUESTIONS,
-    STORE, TRIAGED,
+    judged, live_rows, load_map, owed, page_blocks, rekey, rows_of, save_index, save_store, truthy,
+    Cur, Index, PageMemo, Store, DEFERRED, INDEX, QUESTIONS, STORE, TRIAGED,
 };
 use super::report::{
     coverage, delta_form_problems, inherited_none, load_deferred, question_names, report,
@@ -35,9 +35,6 @@ use crate::record::units::digest;
 const TRIAGE_SKIP_MAX: usize = 3;
 /// Where each skipped triage is recorded (feature 430 D6).
 const SKIPS: &str = "dev/claims-triage-skips.jsonl";
-/// What a claim cleared by the counter-only rule records (feature 446, FR-003).
-const COUNTER_CLEARED: &str = "counter-only (feature 446)";
-const COUNTER_KINDS: [&str; 4] = ["function", "method", "class", "constant"];
 
 /// What a command printed: its stdout and its stderr, in order.
 #[derive(Default)]
@@ -177,106 +174,6 @@ fn codes(pairs: &[Pair]) -> HashMap<String, (String, String)> {
         .collect()
 }
 
-/// At `owed` and `triage`: every claim owed a code triage only because counter blocks were added recorded cleared (feature 446, FR-003).
-fn counters_clear(
-    reader: &mut Reader,
-    root: &Path,
-    cur: &Cur,
-    index: Index,
-    cmd: &str,
-    o: &mut Out,
-) -> Result<Index, Fail> {
-    if cmd != "owed" && cmd != "triage" {
-        return Ok(index);
-    }
-    let keys: Vec<String> = owed(
-        cur,
-        &index,
-        Some(&root.join(QUESTIONS)),
-        Some(&Store::new()),
-    )?
-    .into_iter()
-    .filter(|(_, why)| why == CODE_TRIAGE)
-    .map(|(k, _)| k)
-    .collect();
-    if keys.is_empty() {
-        return Ok(index);
-    }
-    let base = crate::record::repo::git(root, &["merge-base", "HEAD", "origin/main"]);
-    let base = l7r_guard::shared::py_text::strip(&base).to_owned();
-    if base.is_empty() {
-        return Ok(index);
-    }
-    let mut done = Vec::new();
-    for k in keys.iter().filter(|k| index.contains_key(*k)) {
-        let row = cur.get(k).unwrap_or_else(|| unreachable!());
-        let unit = &row.unit;
-        if !COUNTER_KINDS.contains(&unit.kind.as_str())
-            || unit.line_keyed()
-            || !unit.path.ends_with(".py")
-        {
-            continue;
-        }
-        let got = reader.ask(
-            "claims_counter_only",
-            &json!([
-                root.to_string_lossy(),
-                base,
-                index[k],
-                super::units::to_json(unit),
-                row.claim.line
-            ]),
-        )?;
-        if got.as_bool() == Some(true) {
-            done.push(k.clone());
-        }
-    }
-    let mut out = index;
-    for k in &done {
-        let row = cur.get(k).unwrap_or_else(|| unreachable!());
-        let mut r = out
-            .get(k)
-            .and_then(Value::as_object)
-            .cloned()
-            .unwrap_or_default();
-        r.insert("code".into(), json!(row.code));
-        r.insert("core".into(), json!(row.unit.core));
-        r.insert("body".into(), json!(body_of(root, &row.unit)?));
-        r.insert("triaged".into(), json!(crate::record::bundle::today()));
-        r.insert("cleared".into(), json!(COUNTER_CLEARED));
-        r.shift_remove("triage");
-        out.insert(k.clone(), Value::Object(r));
-    }
-    if !done.is_empty() {
-        save_index(&root.join(INDEX), &live_rows(cur, &out))?;
-        o.say(&format!("claims-{cmd}: {} claim(s) cleared without a triage - their units only gained counter blocks (feature 446, FR-003)", done.len()));
-    }
-    Ok(out)
-}
-
-/// The drawing pages still stating a changed constant's old figure (`claims_stale.stale`, Python's syntax tree): asked only when the delta changed a `.py` file under `l7r/`.
-fn stale(reader: &mut Reader, root: &Path) -> Result<Vec<String>, Fail> {
-    let base = crate::record::repo::git_out(root, &["merge-base", "HEAD", "origin/main"]);
-    let base = l7r_guard::shared::py_text::strip(&base);
-    if base.is_empty() {
-        return Ok(Vec::new());
-    }
-    let changed = crate::record::repo::git_out(root, &["diff", "--name-only", base, "--", "l7r"]);
-    if !changed
-        .split_whitespace()
-        .any(|p| p.ends_with(".py") && root.join(p).is_file())
-    {
-        return Ok(Vec::new());
-    }
-    let got = reader.ask("claims_stale", &json!([root.to_string_lossy()]))?;
-    Ok(got
-        .as_array()
-        .into_iter()
-        .flatten()
-        .map(|v| v.as_str().unwrap_or_default().to_owned())
-        .collect())
-}
-
 fn owed_cmd(
     reader: &mut Reader,
     root: &Path,
@@ -291,7 +188,7 @@ fn owed_cmd(
             "claims-form: {x} - the gate's test_claims_coverage fails on it"
         ));
     }
-    for x in stale(reader, root)? {
+    for x in super::stale::stale(reader, root)? {
         o.say(&x);
     }
     let qdir = root.join(QUESTIONS);
@@ -877,7 +774,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
     let pairs = all_units(&mut reader, root, false, true)?;
     let cur = rows_of(pairs.clone(), &root.join(QUESTIONS))?;
     let index = load_map(&root.join(INDEX))?;
-    let index = counters_clear(&mut reader, root, &cur, index, cmd, o)?;
+    let index = super::counters::counters_clear(&mut reader, root, &cur, index, cmd, o)?;
     let (qdir, store) = (root.join(QUESTIONS), load_map(&root.join(STORE))?);
     match cmd {
         "refingerprint" => {

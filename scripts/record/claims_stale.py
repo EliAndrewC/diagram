@@ -10,6 +10,9 @@ with origin/main and the working tree is CHANGED. Its OLD figures are the number
 digit of a longer one, whatever unit follows) and IS, or links, a question the constant's claim cites is named. A FLAG, never a
 refusal: a page that restates the figure in words ("six in ten") is not found - measured on 0024, which links no question the
 claim cites either - and the claims rounds still read the pages.
+
+This file reads the `.py` constants under `l7r/`; a Rust constant's rule, the same on a `const` or `static` item, is the claims
+crate's `stale.rs` (feature 449 T165).
 """
 
 from __future__ import annotations

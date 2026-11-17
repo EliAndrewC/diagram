@@ -8,7 +8,10 @@ claims triaged in 443's landings, two sent on, neither counter-only; measured 20
 Cleared only when the recorded version is the MERGE BASE's (its unit there, read through the claims tool's own dump and the
 current constant reads, fingerprints to the row's `code`) and the current unit is that version with counter blocks only added -
 every counter block of the base standing unchanged, in its place. A counter that reads an in-scope constant, a counter removed,
-moved or rewritten, a procedure section or a module unit: owed as before."""
+moved or rewritten, a procedure section or a module unit: owed as before.
+
+This file reads a `.py` unit; a Rust unit's rule (`tally`, `Counts::add`, `merge` and `#[cfg(feature = "counters")]` statements) is the
+claims crate's `counters.rs` (feature 449 T165)."""
 
 from __future__ import annotations
 

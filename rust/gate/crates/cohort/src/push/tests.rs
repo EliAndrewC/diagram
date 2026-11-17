@@ -73,6 +73,12 @@ fn each_gate_judges_every_path_its_own_constants_name() {
         covered("claims", "specs/430-x/tasks.md")
             && covered("claims", "specs/430-x/gm-review.jsonl")
     );
+    // a Rust engine crate, a new one too, and the program sections (feature 449 T165)
+    assert!(
+        covered("claims", "rust/phases/src/sink.rs")
+            && covered("claims", "rust/mode_a/src/lib.rs")
+            && covered("claims", "docs/building-programs.md")
+    );
     // what the entry-drift report reads (`l7r_gate_owed::record::entry`, feature 449 T149): the questions and the registry's modal files
     for p in [
         crate::record::units::QUESTIONS.rsplit_once('/').unwrap().0,

@@ -194,7 +194,7 @@ fn the_command_line_is_read_as_argparse_reads_it() {
     assert_eq!((got.code, got.stdout.as_str()), (0, "0\n"));
     let got = super::tunables_cli(&["--bogus".to_owned()]);
     assert_eq!(got.code, 2);
-    assert_eq!(super::read_paths().len(), 8);
+    assert_eq!(super::read_paths().len(), 10);
 }
 
 #[test]

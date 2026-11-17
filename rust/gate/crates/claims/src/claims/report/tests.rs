@@ -118,11 +118,12 @@ fn a_form_problem_in_a_changed_file_refuses_and_the_base_tree_is_read() {
     assert!(
         into.join("research/questions/0001-gap.html").is_file()
             && into.join("l7r/diagram/hamletgen").is_dir()
+            && into.join("rust/phases/src/lib.rs").is_file()
     );
     let fake = into.join("fake-git");
     crate::write_executable(
         &fake,
-        "#!/bin/sh\ncase \"$3\" in cat-file) exit 0;; esac\necho 'fatal: no' >&2\nexit 128\n",
+        "#!/bin/sh\ncase \"$3\" in ls-tree) echo l7r; exit 0;; esac\necho 'fatal: no' >&2\nexit 128\n",
     );
     let err = base_tree(&fake.to_string_lossy(), &root, "HEAD", &into).unwrap_err();
     assert_eq!(
@@ -261,4 +262,32 @@ fn each_way_a_finding_is_read_against_the_base() {
     assert!(keys(&pre2).contains(&"a.rs::resmoved#resmoved".to_owned()));
     let bad = obj(&json!({"a.rs::fine#fine": {}}));
     assert!(classify(&cur, &bad, &same_q).is_err());
+}
+
+/// A finding recorded on a Rust unit whose code the delta left alone is PRE-EXISTING, as one on a `.py` unit is: the merge base's tree
+/// holds the Rust units since feature 449 T165 (before it, `rust` was not read there, and the finding read as introduced).
+#[test]
+fn a_finding_on_unchanged_rust_code_is_pre_existing() {
+    let root = fixture("claims-report-rust-base");
+    // no `.py` file, so no runner starts (FR-008's tenth of a second)
+    std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
+    put(&root, "dev/claims-index.json", "{}");
+    commit(&root, "no rows");
+    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    let mut reader = crate::claims::scope::Reader::new(&root, &root);
+    let cur = crate::claims::index::current(&mut reader, &root, &root.join("research/questions"))
+        .unwrap();
+    let row = cur.get("rust/phases/src/lib.rs::GAP#gap").unwrap();
+    let ix = json!({"rust/phases/src/lib.rs::GAP#gap": {"verdict": "DRIFTED", "code": row.code, "core": row.unit.core, "research": row.research, "note": "off"}});
+    // what the gate classifies, asked in process (the gate's whole command line reads the carries and the switches besides)
+    let at = crate::claims::carry::Reading {
+        cur,
+        index: ix.as_object().unwrap().clone(),
+    };
+    let (_, intro, pre, _) = crate::claims::carry::classified(&mut reader, &root, &at).unwrap();
+    assert!(intro.is_empty(), "{intro:?}");
+    assert_eq!(
+        pre,
+        vec!["DRIFTED        rust/phases/src/lib.rs::GAP#gap - off"]
+    );
 }
