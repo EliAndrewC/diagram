@@ -426,6 +426,9 @@
       research: rendering
       note: owed from T144's plan review (2026-11-16), where S1's library has no caller: wiring a caller that printed a KeyError's str(e) keeps its quotes; and research::host's tabs and missing NFKC, against urlsplit, need their own decision once live fetch URLs reach it beside the blocked-domain list
       verify: DONE. landed: phase 4 S5, the record's site: the real site byte for byte, 71 differential cases with the stamp the one ruled difference; make static, rust-test, hooks-test and quick green
+- [x] T149 Phase 4 S6, the registries and their readers (ask:449-phase4-slices) Q5: interactive/classes/*, compound_kinds/*, conditions, choices, entry_owed, check-entry-headings, open_questions (2,225 lines), the modal prose moved verbatim to one Markdown file per class and kind (the FR-002 ruled case, an old-to-new id map); owed_door, record_door and record_cache deleted (756)
+      research: rendering
+      verify: DONE. landed: phase 4 S6, the registries: 45 differential cases none differing, the modal id map empty; make static, rust-test, hooks-test and quick green
 - [x] T159 The pre-review count check: make decide refuses a count (lines, cases, files ...) whose sentence carries no label, the plan review's commonest unreviewable return (request.md 2026-11-16)
       research: rendering
       verify: DONE. landed: make decide refuses an unlabeled count; plan crate tests green, coverage complete; ask:449-T159-rounds
