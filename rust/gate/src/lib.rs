@@ -4,7 +4,6 @@ use std::path::{Path, PathBuf};
 
 pub use l7r_gate_arbiter::{arbiter, checks_door};
 pub use l7r_gate_author as author;
-pub use l7r_gate_bundle::owed_door;
 pub use l7r_gate_checks::checks;
 pub use l7r_gate_ci::ci;
 pub use l7r_gate_claims::claims;
@@ -15,6 +14,7 @@ pub use l7r_gate_measure::{measure, preflight};
 pub use l7r_gate_pages as pages;
 pub use l7r_gate_plan::plan;
 pub use l7r_gate_record::record;
+pub use l7r_gate_registry as registry;
 pub use l7r_gate_reviews::reviews;
 pub use l7r_gate_rustc::rustc;
 pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
@@ -138,11 +138,9 @@ pub fn cli(args: &[String]) -> Reply {
         Some("ruff-toml") => logs::ruff_cli(&mut std::io::stdin()),
         Some("preflight") => preflight::cli(&args[1..]),
         Some("record") => record::cli(&args[1..]),
+        Some("registry") => registry::cli::cli(&args[1..]),
         Some("arbiter") => arbiter::cli(&args[1..]),
         Some("checks-close") => checks_door::close_cli(&args[1..]),
-        Some("owed-door") => {
-            owed_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout().lock())
-        }
         Some("reviews") => reviews::cli(&args[1..]),
         Some("gm-review") => reviews::gm_review::cli(&args[1..], claims::impl_check::missing_each),
         Some("speckit-todo") => speckit_todo::cli(&args[1..], Path::new(".")),
@@ -241,8 +239,9 @@ mod tests {
 
     #[test]
     fn the_doors_read_stdin_to_its_end() {
-        assert_eq!(cli(&["owed-door".to_owned()]).code, 0);
-        // the checks and claims doors left with their last callers, `review_snapshot.py` and `impl_check.py` (feature 449 T132)
+        // every door left with its last caller: `owed-door` with `entry_owed.py` (feature 449 T149), the checks and claims doors with
+        // `review_snapshot.py` and `impl_check.py` (feature 449 T132)
+        assert_eq!(cli(&["owed-door".to_owned()]).code, 2);
         assert_eq!(cli(&["checks-door".to_owned()]).code, 2);
         assert_eq!(cli(&["claims-door".to_owned()]).code, 2);
         assert_eq!(cli(&["impl-check".to_owned()]).code, 2);

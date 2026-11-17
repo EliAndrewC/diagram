@@ -234,7 +234,7 @@ fn a_question_bundle_end_to_end() {
             "--for",
             "entry-drift",
             "--kind",
-            "homestead.Well",
+            "water_and_ways.Well",
             "--not-owed-ok",
             "an audit asked",
             "--out",
@@ -244,7 +244,7 @@ fn a_question_bundle_end_to_end() {
     assert_eq!(drift.code, 0);
     assert!(std::fs::read_to_string(out.join("k/kind.txt"))
         .unwrap()
-        .starts_with("class homestead.Well  ("));
+        .starts_with("class water_and_ways.Well  ("));
     let images = root.join("imgs");
     put(&root, "imgs/p1.png", "one");
     let _im = bundle(

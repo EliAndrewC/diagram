@@ -12,11 +12,12 @@ use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
 use super::modal::Put;
-use super::{findall, py_str, pyre, relative, shown, Run};
+use super::{findall, py_str, pyre, relative, shown};
 use crate::record::modals::{self, Modal};
 use crate::record::owed::merge_base;
 use crate::record::py_lines;
 use crate::record::repo::{fail, read_text, tree_of, Fail};
+use l7r_gate_registry::conditions::{knob_table, knobs};
 
 const CLAIMS_INDEX: &str = "dev/claims-index.json";
 /// Where the pool pages a glyph is cropped from live; the hamlets are searched first.
@@ -321,7 +322,7 @@ fn rust_files(dir: &Path) -> Vec<PathBuf> {
 }
 
 /// Where the kind is drawn, for each knob the modal's conditions name (feature 374, the round arbiter's tooling fix); "" when it names none.
-fn knobs_note(run: &mut Run, tree: &Path, doc: &str) -> Result<String, Fail> {
+fn knobs_note(tree: &Path, doc: &str) -> Result<String, Fail> {
     let mut names: Vec<String> = Vec::new();
     for n in findall(&KNOB, doc, 1) {
         if !names.contains(&n) {
@@ -331,8 +332,16 @@ fn knobs_note(run: &mut Run, tree: &Path, doc: &str) -> Result<String, Fail> {
     if names.is_empty() {
         return Ok(String::new());
     }
-    let forms = run.door.ask("knobs", &json!([]))?;
-    let table = run.door.ask("knob_table", &json!([]))?;
+    // the knob registry read in process (feature 449 T149): `conditions.knobs()` and `knob_table()` were the Python door's two verbs
+    let fault = |e: l7r_gate_research::Error| format!("{}: {}", e.kind, e.message);
+    let forms = Value::Object(
+        knobs(tree)
+            .map_err(fault)?
+            .into_iter()
+            .map(|(name, f)| (name, Value::Array(f)))
+            .collect(),
+    );
+    let table = Value::Object(knob_table(tree).map_err(fault)?);
     let engine = rust_files(&tree.join("rust").join("phases").join("src"));
     let mut parts = vec![
         "# The knobs this modal's conditions name - which maps draw what it conditions\n"
@@ -497,7 +506,6 @@ fn glyph_part(
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn parts(
-    run: &mut Run,
     root: &Path,
     m: &Modal,
     put: &mut Put,
@@ -515,7 +523,7 @@ pub fn parts(
         let p = root.join(f);
         put.put(&format!("drawing/{}", file_name(&p)), &read_text(&p)?, f, "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?")?;
     }
-    let note = knobs_note(run, &tree_of(root), &m.doc)?;
+    let note = knobs_note(&tree_of(root), &m.doc)?;
     if !note.is_empty() {
         put.put("knobs.md", &note, "l7r/diagram/knobs.json", "which maps draw what the modal's conditions name: each knob's forms, typing rule and engine lines - read it before ruling on a conditional link")?;
     }

@@ -1,4 +1,4 @@
-//! A record on a scratch git repository, for the owed tools' tests: the questions, a write-up, the pop-ups and the Python seams' stubs.
+//! A record on a scratch git repository, for the owed tools' tests: the questions, a write-up and the pop-ups.
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -45,9 +45,7 @@ pub const NOTES: &str = "research/questions/0094-trade.notes.html";
 pub const DRAWING: &str = "research/questions/0094-trade.drawing.html";
 pub const WELL: &str = "l7r/diagram/interactive/assets/modals/hamlet/well.md";
 
-const ENTRY_STUB: &str = "import json\nfrom pathlib import Path\n\ndef owed(root):\n    f = Path(root) / 'entry-lines.json'\n    if (Path(root) / 'entry-noise').exists():\n        print('noise')\n    if (Path(root) / 'entry-raise').exists():\n        raise ImportError('no engine here')\n    return 'stub', json.loads(f.read_text()) if f.exists() else []\n";
-
-/// A repository holding a small record, committed once and set as origin/main; the stubs of every Python seam under `scripts/record/`.
+/// A repository holding a small record, committed once and set as origin/main.
 pub fn record(tag: &str) -> crate::checks::TempDir {
     let dir = crate::checks::scratch(tag);
     let _ = record_at(&dir);
@@ -94,12 +92,18 @@ pub fn record_at(root: &Path) -> PathBuf {
         "research/sources/010-works-cited/README.md",
         "not a write-up\n",
     );
-    put(&root, "l7r/diagram/interactive/classes/__init__.py", "");
-    put(&root, "l7r/diagram/interactive/classes/homestead.py", "class Well(Kind):\n    \"\"\"About: docstring well\"\"\"\n    key = \"well\"\n\n\nclass Barn(Kind):\n    \"\"\"About: a barn from its docstring\n    Entry: research/questions/0095-other.html\n    \"\"\"\n    key = \"barn\"\n\n\nclass Shed(Kind):\n    \"\"\"Name: no About here\"\"\"\n    key = \"shed\"\n\n\nclass Blank(Kind):\n    key = \"blank\"\n");
+    // an engine module, the one `.py` the claims walk of a scratch record reads (the class modules were it before feature 449 T149)
+    put(&root, "l7r/diagram/m.py", "ROUND_CAP = 12\n");
+    // the kinds are the registry's (feature 449 T149): a kind is a real key with its modal file, and no class carries a docstring
     put(
         &root,
-        "l7r/diagram/interactive/compound_kinds/office.py",
-        "class Well(Kind):\n    key = \"well\"\n",
+        "l7r/diagram/interactive/assets/modals/hamlet/notice-board.md",
+        "About: a notice board from its file\nEntry: research/questions/0095-other.html\n",
+    );
+    put(
+        &root,
+        "l7r/diagram/interactive/assets/modals/hamlet/wood-shed.md",
+        "Name: no About here\n",
     );
     put(&root, WELL, "Name: Well\nAbout: A well in the yard.\n\nIt is deep.\nGuesses: - a guess\n  continued\n- another\nEntry: research/questions/0094-trade.html\nDepiction: Drawn round.\nDrawing: research/questions/0094-trade.drawing.html\n");
     put(
@@ -117,15 +121,9 @@ pub fn record_at(root: &Path) -> PathBuf {
         "l7r/diagram/interactive/assets/modals/choice/plain.md",
         "No tags at all.\n",
     );
-    stubs(&root);
     let base = commit(&root, "base");
     git(&root, &["update-ref", "refs/remotes/origin/main", &base]);
     root
-}
-
-/// The stubs of every Python seam, under `scripts/record/`.
-pub fn stubs(root: &Path) {
-    put(root, "scripts/record/entry_owed.py", ENTRY_STUB);
 }
 
 /// Every kind of edit the owed rules read, in the working tree.

@@ -367,10 +367,13 @@ pub fn cli(args: &[String]) -> Reply {
         Some("agent-census") => agent_census::cli(rest, &crate::measure::home()),
         Some("access-tags") => access_tags::cli(rest, &top_level()),
         Some("downloads") => downloads::cli(rest, &top_level(), &l7r_gate_archive::cli::inbox_cli),
-        Some(verb @ ("edit-route" | "fragments" | "moved-only" | "americanize")) => {
+        Some(verb @ ("edit-route" | "moved-only" | "americanize")) => {
             leaves::cli(verb, rest, &mut std::io::stdin(), &current_dir())
         }
         Some("record-owed") => owed::cli(rest),
+        // feature 449 T149 (phase 4's S6): `entry_owed.py`'s command line and `open_questions.py`, the registry's readers
+        Some("entry-owed") => l7r_gate_owed::record::entry::cli(rest),
+        Some("open-questions") => l7r_gate_registry::open_questions::cli(rest),
         Some("modal-owed") => modals::cli(rest),
         Some("translation-owed") => translation::cli(rest),
         Some("modal-triage") => triage::cli(rest),

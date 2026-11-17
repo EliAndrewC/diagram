@@ -1,5 +1,5 @@
-//! The check bundles (feature 449 T88): `record check-bundle`, `record modal-bundle`, the earlier rounds; the round marks the arbiter's
-//! bundle reads; and `owed-door`, Python's door to the owed tools (T87).
+//! The check bundles (feature 449 T88): `record check-bundle`, `record modal-bundle`, the earlier rounds; and the round marks the arbiter's
+//! bundle reads. `owed-door`, Python's door to the owed tools (T87), left with its last caller, `entry_owed.py` (T149).
 
 /// The record's tools held here, beside those of the owed crate and the core.
 pub mod record {
@@ -15,8 +15,6 @@ pub mod arbiter {
     }
 }
 
-pub mod owed_door;
-
 #[cfg(test)]
 use l7r_gate_core::checks;
-use l7r_gate_core::{checks_door, difflib, measure, Reply};
+use l7r_gate_core::{difflib, measure, Reply};

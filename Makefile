@@ -381,7 +381,7 @@ audit:          ## [project] how the gate has actually been used - every run and
 	@printf '  conflict committed into one of these is caught by nothing - which is why the reason must be\n'
 	@printf '  argued, must open its line, and is listed here with the file that claims it.\n\n'
 	@printf '\033[1mClass entries with no research section\033[0m (feature 234 - the declared-silence form)\n'
-	@python3 -c "import sys; sys.path.insert(0, '.'); sys.path.insert(0, 'scripts'); from l7r.diagram.interactive.classes import CLASSES; import importlib.util as u; sp=u.spec_from_file_location('ceh','scripts/gates/check-entry-headings.py'); m=u.module_from_spec(sp); sp.loader.exec_module(m); rows=[(k,fc.entry) for k,fc in sorted(CLASSES.items()) if m.SILENT.search(fc.entry)]; [print(f'  {k:<22} {e}') for k,e in rows]; print(f'  {len(rows)} of {len(CLASSES)} entries name no section; the other {len(CLASSES)-len(rows)} must RESOLVE, checked at the gate and the push.')"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" registry silent --root "$$(git rev-parse --show-toplevel)"
 	@printf '  A broken heading and a deliberate silence are told apart by this FORM, never by a non-match.\n\n'
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure audit claims
 
@@ -744,7 +744,7 @@ question-sizes: ## [project] every research question over the size cap (question
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size --report
 
 open-questions: ## [project] every guess and every unfound source, read from the record and the tracked files now - the research still owed, with the map features each touches (feature 285)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/open_questions.py" --root "$$(git rev-parse --show-toplevel)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record open-questions --root "$$(git rev-parse --show-toplevel)"
 
 notes: ## [project] print the named notes of ONE question and only the blocks of its page that carry them - for editing a few notes without reading the whole file (feature 250)   Q=0041 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
 	@if [ -z "$(Q)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: Q=<question number or page file> KEYS=<key,key> are required\n' >&2; exit 2; fi

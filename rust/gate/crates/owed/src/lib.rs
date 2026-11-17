@@ -6,6 +6,7 @@
 pub mod record {
     pub use l7r_gate_core::record::*;
     pub mod delta;
+    pub mod entry;
     pub mod leaves;
     pub mod modals;
     pub mod owed;

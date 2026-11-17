@@ -5,7 +5,7 @@ use std::path::Path;
 
 pub use l7r_gate_core::checks::*;
 
-/// Does `check`, one of the four gated on their delta (three still Python, `partial-citations` in Rust since T80), read this path? Each set is that check's own, from its source and what it
+/// Does `check`, one of the four gated on their delta (two still Python, `partial-citations` in Rust since T80, `entry-headings` since T149), read this path? Each set is that check's own, from its source and what it
 /// imports. An unknown name reads everything: it runs.
 fn reads(check: &str, path: &str) -> bool {
     let python = has_ext(path, "py");
@@ -36,15 +36,13 @@ fn reads(check: &str, path: &str) -> bool {
                 ]
                 .contains(&path)
         }
-        // a class's `Entry:` is parsed from its modal text
-        "entry-headings" => {
-            own(check)
-                || under(&[
-                    "research/questions/",
-                    "l7r/diagram/interactive/assets/modals/",
-                ])
-                || (python && path.starts_with("l7r/diagram/interactive/"))
-        }
+        // a class's `Entry:` is parsed from its modal text, the registry's kinds from the Rust table and the sibling table (feature 449
+        // T149 ported it from `check-entry-headings.py`, which read the Python registry and so any Python module under `interactive/`)
+        "entry-headings" => under(&[
+            "research/questions/",
+            "l7r/diagram/interactive/assets/",
+            "rust/gate/crates/registry/",
+        ]),
         _ => true,
     }
 }

@@ -99,7 +99,7 @@ references" (the QUESTIONS we asked) -> the answer on the research page -> the s
 - **A heading is the question a reader would ask from the map**, the answer allowed in the same line. The
   bookkeeping (date, feature, task) is an HTML comment on the next line, never in the heading.
 - **An anchor is stable**: a renamed heading owes its inbound links - the class entries' `Entry:` tags
-  (`scripts/gates/check-entry-headings.py` fails the gate on one that resolves to nothing). A section deliberately not
+  (`l7r-gate check entry-headings`, `rust/gate/crates/registry/src/headings.rs`, fails the gate on one that resolves to nothing). A section deliberately not
   written is `research/contents.json#<section> (no dedicated entry - recorded as silent)`.
 - A class's explanation names the entries it was written from; that pointer is all that puts a question on a
   modal. The pointer is exactly the questions the modal's statements rest on (`dev/modals.md` M14), and

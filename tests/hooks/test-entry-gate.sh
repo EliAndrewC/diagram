@@ -42,19 +42,22 @@ edit() {
   case "$text" in *"$1"*) ;; *) printf '  FAIL edit: not in the page: %s\n' "$1"; exit 1 ;; esac
   printf '%s' "${text/"$1"/"$2"}" > "$PAGE"
 }
-answer_all() { python3 - "$ROOT" "$HERE/../../scripts/record" <<'PY'
-import pathlib, sys
-sys.path.insert(0, sys.argv[2] + "/..")  # the owed tools' door (449 T87)
-from owed_door import ro
-root = pathlib.Path(sys.argv[1])
-for u in ro.unanswered(root):
-    ro.write_answer(ro.store(root), u.slug, u.fingerprint, "0/0/0")
-PY
+# Every unit the clone owes, answered at its content through the record tools' own command (feature 449 T149: through
+# `scripts/owed_door.py`'s writer until its door left with `entry_owed.py`); a reason stands in for a bundle, its bypass record
+# in the throwaway clone, which `restore` removes.
+answer_all() {
+  local g="$HERE/../../scripts/gates/l7r-gate.sh" slug check subject q notes
+  "$g" record record-owed --root "$ROOT" --unanswered --slugs | while IFS= read -r slug; do
+    [ -n "$slug" ] || continue
+    check="${slug%%:*}"; subject="${slug#*:}"; q="${subject%%#*}"; notes=""
+    [ "$subject" != "$q" ] && notes="${subject#*#}"
+    "$g" record record-owed --root "$ROOT" --answer "$check" --result 0/0/0 --q "$q" ${notes:+--notes "$notes"} \
+      --reason "the suite answers its own edits" >/dev/null
+  done
 }
 
-# the delta this clone carries may owe units of its own, answered in the clone's real store; the throwaway store starts
-# with them answered, so every case below measures only what the suite itself changes
-answer_all
+# The throwaway clone carries no delta of its own: its origin/main is the HEAD it was cloned from, so nothing is owed before
+# the suite's edits and case 1 holds that.
 
 # 1. a tree with no record change is quiet - the guard must not fire on correct work
 ( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "no record change is quiet"

@@ -7,7 +7,7 @@
     },
     "check-entry-headings": {
       "kind": "check",
-      "what": "scripts/gates/check-entry-headings.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/crates/registry/src/headings.rs (l7r-gate check entry-headings, feature 449 T149) - a refusing check; each run recorded passed or refused"
     },
     "check-rust-tooling": {
       "kind": "check",

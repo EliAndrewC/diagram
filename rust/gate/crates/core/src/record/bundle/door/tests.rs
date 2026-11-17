@@ -10,10 +10,7 @@ use crate::record::testkit::put;
 fn a_verb_is_answered_and_a_failure_is_the_traceback() {
     let root = scratch("door");
     let mut door = Runner::new(&root);
-    assert_eq!(
-        door.ask("knobs", &json!([])).unwrap(),
-        json!({"winter_crop": ["none", "wheat"]})
-    );
+    assert_eq!(door.ask("echo", &json!(["a"])).unwrap(), json!(["a"]));
     assert!(door
         .ask("nope", &json!([]))
         .unwrap_err()
@@ -24,15 +21,15 @@ fn a_verb_is_answered_and_a_failure_is_the_traceback() {
         "import sys\nprint('not json', flush=True)\nsys.stdin.read()\n",
     );
     assert!(Runner::new(&root)
-        .ask("knobs", &json!([]))
+        .ask("echo", &json!([]))
         .unwrap_err()
-        .contains("bundle-door: knobs"));
+        .contains("bundle-door: echo"));
     put(&root, "scripts/bundle_door.py", "pass\n");
     assert!(Runner::new(&root)
-        .ask("knobs", &json!([]))
+        .ask("echo", &json!([]))
         .unwrap_err()
-        .contains("no answer to knobs"));
+        .contains("no answer to echo"));
     let missing = crate::checks::scratch("door-missing");
     let _ = RUNNER;
-    assert!(Runner::new(&missing).ask("knobs", &json!([])).is_err());
+    assert!(Runner::new(&missing).ask("echo", &json!([])).is_err());
 }

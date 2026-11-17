@@ -725,7 +725,7 @@ pub fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> Result<i
     )?;
     let mut grep_targets: Vec<String> = Vec::new();
     if for_ == DEPICTION_CHECK {
-        super::depiction::parts(run, root, &m, &mut put, &mut grep_targets)?;
+        super::depiction::parts(root, &m, &mut put, &mut grep_targets)?;
     }
     if for_ == FORM_CHECK {
         let fixed = research_held(root, &m.uid(), &m.doc);

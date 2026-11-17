@@ -2,7 +2,7 @@
 
 use super::{
     about_keys, agent_units, choice_modal, cli, depiction_owed_by, earlier_units, find,
-    fingerprints, kinds_in, modal_file, modals_at, modals_now, owed, parse_tags, Modal, RevReader,
+    fingerprints, modals_at, modals_now, owed, parse_tags, Modal, RevReader,
 };
 use crate::record::testkit::{commit, git, put, record, DRAWING, PAGE, WELL};
 
@@ -74,10 +74,6 @@ fn a_modal_says_its_uid_files_and_json() {
     assert!(choice_modal("a.md", "Name: n\n", true).is_none());
     assert!(choice_modal("a.md", "", false).is_none());
     assert!(choice_modal("a.md", "Name: n\n", false).is_some());
-    assert_eq!(
-        modal_file("x/compound_kinds/o.py", "Well"),
-        "l7r/diagram/interactive/assets/modals/sheet/well.md"
-    );
     assert!(depiction_owed_by(None, &m));
     assert!(!depiction_owed_by(Some(&m), &m));
     assert!(depiction_owed_by(
@@ -90,13 +86,6 @@ fn a_modal_says_its_uid_files_and_json() {
 }
 
 #[test]
-fn the_classes_are_read_without_python() {
-    assert!(kinds_in("x = '\n").is_err());
-    let found = kinds_in("class A:\n    key = 'a'\n").unwrap();
-    assert_eq!(found, [("A".to_owned(), "a".to_owned(), 1, String::new())]);
-}
-
-#[test]
 fn modals_now_and_at_a_revision_and_what_they_owe() {
     let root = record("modals-owed");
     let now = modals_now(&root, true).unwrap();
@@ -105,7 +94,7 @@ fn modals_now_and_at_a_revision_and_what_they_owe() {
         uids,
         [
             "hamlet/well",
-            "hamlet/barn",
+            "hamlet/notice-board",
             "sheet/well",
             "choice/bamboo--both"
         ]
@@ -113,11 +102,11 @@ fn modals_now_and_at_a_revision_and_what_they_owe() {
     assert_eq!(modals_now(&root, false).unwrap().len(), 5);
     assert_eq!(
         now[1].origin,
-        "l7r/diagram/interactive/classes/homestead.py:6"
+        "l7r/diagram/interactive/assets/modals/hamlet/notice-board.md"
     );
     assert!(
-        find(&now, "homestead.Well").is_some()
-            && find(&now, "Barn").is_some()
+        find(&now, "water_and_ways.Well").is_some()
+            && find(&now, "NoticeBoard").is_some()
             && find(&now, "sheet/well").is_some()
             && find(&now, "nope").is_none()
     );
@@ -146,7 +135,9 @@ fn modals_now_and_at_a_revision_and_what_they_owe() {
     assert!(whys
         .iter()
         .any(|w| w.starts_with("a page its Drawing: names moved")));
-    assert!(owed(&root, &base, "hamlet/barn").unwrap().is_empty());
+    assert!(owed(&root, &base, "hamlet/notice-board")
+        .unwrap()
+        .is_empty());
     put(&root, WELL, "Name: Well\nAbout: Changed.\nEntry: research/questions/0094-trade.html\nDepiction: Drawn square.\n");
     put(&root, "research/questions/0099-untracked.html", "<p>x</p>");
     let copy =
@@ -164,35 +155,75 @@ fn modals_now_and_at_a_revision_and_what_they_owe() {
         && r.1 == "its Depiction, Drawing: or Entry: changed"));
     let (form, research) = fingerprints(&root, &now[0]).unwrap();
     assert_ne!(form, research);
-    put(
-        &root,
-        "l7r/diagram/interactive/classes/broken.py",
-        "x = (\n",
-    );
+    // a modal file that is not UTF-8 cannot be read now; a revision's reader reads it as `cat-file` gives it
+    std::fs::write(root.join(WELL), b"About: \xff\n").unwrap();
     assert!(modals_now(&root, true).is_err());
     assert!(owed(&root, &base, "").is_err());
-    commit(&root, "broken module");
+    commit(&root, "an unreadable modal");
     let head = git(&root, &["rev-parse", "HEAD"]);
-    assert!(modals_at(&root, &head, true).is_err());
+    assert_eq!(modals_at(&root, &head, true).unwrap().iter().count(), 4);
 }
 
 #[test]
 fn a_revision_reader_lists_and_reads() {
     let root = record("modals-rev");
-    let mut r = RevReader::new(&root, "HEAD", &["l7r/diagram/interactive/classes/"]);
+    let mut r = RevReader::new(
+        &root,
+        "HEAD",
+        &["l7r/diagram/interactive/assets/modals/hamlet/"],
+    );
     assert_eq!(
-        r.names("l7r/diagram/interactive/classes"),
+        r.names("l7r/diagram/interactive/assets/modals/hamlet"),
         [
-            "l7r/diagram/interactive/classes/__init__.py",
-            "l7r/diagram/interactive/classes/homestead.py"
+            "l7r/diagram/interactive/assets/modals/hamlet/notice-board.md",
+            WELL,
+            "l7r/diagram/interactive/assets/modals/hamlet/wood-shed.md"
         ]
     );
+    assert!(r.read(WELL).is_some());
     assert!(r
-        .read("l7r/diagram/interactive/classes/homestead.py")
-        .is_some());
-    assert!(r.read("l7r/diagram/interactive/classes/none.py").is_none());
+        .read("l7r/diagram/interactive/assets/modals/hamlet/none.md")
+        .is_none());
     assert!(r.read(PAGE).is_some());
     assert!(r.read("nope.html").is_none());
+}
+
+#[test]
+fn every_modal_s_ids_are_listed_by_uid() {
+    let root = record("modals-ids");
+    let r = root.to_string_lossy().into_owned();
+    let said = cli(&["--root".to_owned(), r.clone(), "--ids".to_owned()]);
+    assert_eq!(said.code, 0);
+    let got: serde_json::Value = serde_json::from_str(&said.stdout).unwrap();
+    let uids: Vec<&String> = got.as_object().unwrap().keys().collect();
+    assert_eq!(
+        uids,
+        [
+            "choice/bamboo--both",
+            "hamlet/notice-board",
+            "hamlet/well",
+            "hamlet/wood-shed",
+            "sheet/well"
+        ]
+    );
+    let well = &got["hamlet/well"];
+    let m = find(&modals_now(&root, true).unwrap(), "hamlet/well")
+        .unwrap()
+        .clone();
+    assert_eq!(
+        (
+            well["cls"].as_str(),
+            well["origin"].as_str(),
+            well["fp_form"].as_str()
+        ),
+        (
+            Some("water_and_ways.Well"),
+            Some(WELL),
+            Some(fingerprints(&root, &m).unwrap().0.as_str())
+        )
+    );
+    std::fs::write(root.join(WELL), b"About: \xff\n").unwrap();
+    assert_eq!(cli(&["--root".to_owned(), r, "--ids".to_owned()]).code, 1);
 }
 
 #[test]
@@ -207,11 +238,7 @@ fn the_command_line() {
                 .contains("modal-form:hamlet/well  - its About, Guesses or Entry changed\n")
     );
     assert_eq!(cli(&["--x".to_owned()]).code, 2);
-    put(
-        &root,
-        "l7r/diagram/interactive/classes/broken.py",
-        "x = (\n",
-    );
+    std::fs::write(root.join(WELL), b"About: \xff\n").unwrap();
     assert_eq!(
         cli(&["--root".to_owned(), root.to_string_lossy().into_owned()]).code,
         1

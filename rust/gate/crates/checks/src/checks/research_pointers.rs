@@ -25,7 +25,7 @@ const REFUSAL_DATA: [&str; 8] = [
     "rust/gate/crates/checks/src/checks/research_pointers/tests.rs",
     "rust/gate/crates/checks/src/checks/research_pointers.rs",
 ];
-const FIXTURES: [&str; 22] = [
+const FIXTURES: [&str; 21] = [
     "rust/gate/crates/plan/src/plan/",
     // the claims tools' tests name records of a scratch repository (feature 449 T82)
     "rust/gate/crates/claims_base/src/claims/",
@@ -39,7 +39,6 @@ const FIXTURES: [&str; 22] = [
     "rust/gate/crates/bundle/src/record/",
     "rust/gate/crates/trials/src/record/",
     "rust/gate/crates/record/src/record/",
-    "scripts/gates/check-entry-headings.py",
     // the checks' own tests and self-tests name fixture records, in the checks' crate and the two that hold their shared readers
     "rust/gate/crates/checks/src/checks/",
     "rust/gate/crates/core/src/checks/",

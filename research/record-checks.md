@@ -1,7 +1,7 @@
 # Which record check is owed, and when it is answered
 
 **Load this file when:** a change to the record is about to be pushed and you need to know which checks it owes, how to
-record a check's answer, or why the push refused it (`entry-gate.sh`, `claims-gate.sh`, `entry_owed.py`).
+record a check's answer, or why the push refused it (`entry-gate.sh`, `claims-gate.sh`, `l7r-gate record entry-owed`).
 
 How a check is dispatched (on a bundle, `make check-bundle`) is in [`CLAUDE.md`](CLAUDE.md), "Checking"; why each rule
 holds is in [`../docs/research-record-rules.md`](../docs/research-record-rules.md).

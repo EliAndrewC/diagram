@@ -11,7 +11,9 @@ l7r_gate_archive = { path = "../archive" }
 l7r_gate_bundle = { path = "../bundle" }
 l7r_gate_core = { path = "../core" }
 l7r_gate_downloads = { path = "../downloads" }
+l7r_gate_owed = { path = "../owed" }
 l7r_gate_pages = { path = "../pages" }
+l7r_gate_registry = { path = "../registry" }
 l7r_gate_research = { path = "../research" }
 l7r_gate_semantic = { path = "../semantic" }
 l7r_gate_trials = { path = "../trials" }
@@ -21,6 +23,7 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 
 [dev-dependencies]
+l7r_gate_owed = { path = "../owed", features = ["testkit"] }
 l7r_gate_core = { path = "../core", features = ["testkit"] }
 
 [lints]

@@ -58,25 +58,6 @@ fn pass(work: &Path, gate: &str) {
     gate_cli(&["pass".to_owned(), gate.to_owned()], work);
 }
 
-fn real(rel: &str) -> String {
-    std::fs::read_to_string(
-        Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../..")
-            .join(rel),
-    )
-    .unwrap()
-}
-
-fn constant<'t>(text: &'t str, name: &str) -> &'t str {
-    text.lines()
-        .find_map(|l| l.strip_prefix(&format!("{name} = ")))
-        .unwrap()
-}
-
-fn quoted(line: &str) -> Vec<&str> {
-    line.split('"').skip(1).step_by(2).collect()
-}
-
 fn covered(gate: &str, path: &str) -> bool {
     let probe = if crate::checks::has_ext(path, "json") || crate::checks::has_ext(path, "md") {
         path.to_owned()
@@ -92,18 +73,14 @@ fn each_gate_judges_every_path_its_own_constants_name() {
         covered("claims", "specs/430-x/tasks.md")
             && covered("claims", "specs/430-x/gm-review.jsonl")
     );
+    // what the entry-drift report reads (`l7r_gate_owed::record::entry`, feature 449 T149): the questions and the registry's modal files
     for p in [
         crate::record::units::QUESTIONS.rsplit_once('/').unwrap().0,
+        "l7r/diagram/interactive/assets/modals",
         "l7r/diagram/interactive/classes",
         "l7r/diagram/interactive/compound_kinds",
     ] {
         assert!(covered("entry", p), "{p}");
-    }
-    for (path, name) in [
-        ("scripts/record/entry_owed.py", "CLASSES"),
-        ("scripts/record/entry_owed.py", "COMPOUND_KINDS"),
-    ] {
-        assert!(covered("entry", quoted(constant(&real(path), name))[0]));
     }
     for p in [
         "l7r/diagram/x/law.py",
@@ -182,7 +159,6 @@ fn the_gate_verbs_answer_and_say_how_to_use_them() {
 fn tools(tree: &Path, off: bool) -> Tools {
     Tools {
         tree: tree.to_owned(),
-        python: "bash".to_owned(),
         off,
         binary: Some(tree.join("gate-binary")),
     }
@@ -195,18 +171,27 @@ fn tree() -> l7r_guard::shared::tempdir::Held<PathBuf> {
         &root.join("scripts/gates/l7r-gate.sh"),
         "#!/usr/bin/env bash\necho gate \"$@\" >> gate.log\n[ \"$1\" != bad ]\n",
     );
-    std::fs::write(root.join("scripts/ok.py"), "echo ran >> ran.log\n").unwrap();
-    std::fs::write(root.join("scripts/no.py"), "exit 3\n").unwrap();
+    std::fs::write(
+        root.join("scripts/ok.sh"),
+        "a script whose change moves the scripts' version\n",
+    )
+    .unwrap();
+    std::fs::write(
+        root.join("gate-binary"),
+        "the binary a kept self-test is kept against\n",
+    )
+    .unwrap();
     root
 }
 
-const OK: Row = Row("ok", Tool::Py("ok.py"), &["{root}"], "unused", false, "");
-const KEPT: Row = Row("kept", Tool::Py("ok.py"), &[], "unused", true, "");
-const BAD: Row = Row("no", Tool::Py("no.py"), &[], "no refused", false, "");
+// every row is the gate's since the last Python row ported (feature 449 T149): the fixture's gate logs each run, `bad` refuses
+const OK: Row = Row("ok", Tool::Gate, &["ok", "{root}"], "unused", false, "");
+const KEPT: Row = Row("kept", Tool::Gate, &["kept"], "unused", true, "");
+const BAD: Row = Row("no", Tool::Gate, &["bad"], "no refused", false, "");
 const CLOSING: Row = Row(
     "closing",
-    Tool::Py("no.py"),
-    &[],
+    Tool::Gate,
+    &["bad"],
     "closing refused",
     false,
     "",
@@ -235,7 +220,7 @@ fn the_runner_stops_at_the_first_refusal_with_the_shell_s_line() {
     assert_eq!(got.code, 1);
     assert_eq!(got.stderr, "sync-with-main: no refused\n");
     // the rows run side by side (T115), so a self-test after the refusal ran too, but a refusal ends the run: it keeps nothing
-    assert_eq!(lines(&root.join("ran.log")), 2);
+    assert_eq!(lines(&root.join("gate.log")), 3);
     let stamps =
         std::fs::read_to_string(super::stamps_file(&root, false).unwrap()).unwrap_or_default();
     assert!(!stamps.contains("\"kept\""));
@@ -277,27 +262,23 @@ fn a_passed_self_test_is_kept_until_its_code_changes_and_a_failure_never_is() {
         run_checks(&tools(&root, false), &[KEPT], &root, &[]).code,
         0
     );
-    assert_eq!(lines(&root.join("ran.log")), 1, "kept");
+    assert_eq!(lines(&root.join("gate.log")), 1, "kept");
     git(&root, &["add", "scripts"]);
     assert_eq!(
         run_checks(&tools(&root, false), &[KEPT], &root, &[]).code,
         0
     );
-    assert_eq!(lines(&root.join("ran.log")), 2, "the index moved");
-    std::fs::write(
-        root.join("scripts/ok.py"),
-        "echo ran >> ran.log\n# changed\n",
-    )
-    .unwrap();
+    assert_eq!(lines(&root.join("gate.log")), 2, "the index moved");
+    std::fs::write(root.join("scripts/ok.sh"), "changed\n").unwrap();
     assert_eq!(
         run_checks(&tools(&root, false), &[KEPT], &root, &[]).code,
         0
     );
-    assert_eq!(lines(&root.join("ran.log")), 3, "its code changed");
+    assert_eq!(lines(&root.join("gate.log")), 3, "its code changed");
     assert_eq!(run_checks(&tools(&root, true), &[KEPT], &root, &[]).code, 0);
-    assert_eq!(lines(&root.join("ran.log")), 4, "the cache off runs it");
+    assert_eq!(lines(&root.join("gate.log")), 4, "the cache off runs it");
     assert_ne!(scripts_version(&root), "");
-    let failing = Row("kept-fails", Tool::Py("no.py"), &[], "failed", true, "");
+    let failing = Row("kept-fails", Tool::Gate, &["bad"], "failed", true, "");
     assert_eq!(
         run_checks(&tools(&root, false), &[failing], &root, &[]).code,
         1
@@ -354,8 +335,7 @@ fn a_closing_refusal_ends_the_run() {
 fn a_tool_that_cannot_start_refuses() {
     let root = tree();
     let tool = Tools {
-        tree: root.clone(),
-        python: "/no/such/python".to_owned(),
+        tree: root.join("no/such/tree"),
         off: true,
         binary: None,
     };

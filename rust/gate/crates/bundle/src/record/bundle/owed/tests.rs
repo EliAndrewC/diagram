@@ -139,14 +139,23 @@ fn the_intro_bundle_text() {
             && text.contains("--- the map elements written from it")
     );
     let other = intro_bundle_text(&root, "0095", &mut docs).unwrap();
-    assert!(other.contains("- Barn") && !other.contains("how our maps draw it"));
+    assert!(other.contains("- NoticeBoard") && !other.contains("how our maps draw it"));
     assert_eq!(intro_bundle_text(&root, "0777", &mut docs).unwrap(), "");
-    put(&root, "l7r/diagram/interactive/classes/more.py", "class Named(Kind):\n    \"\"\"Name: The named one\n    About: x\n    Entry: research/questions/0095-other.html\n    \"\"\"\n    key = \"named\"\n");
+    put(
+        &root,
+        "l7r/diagram/interactive/assets/modals/hamlet/privy.md",
+        "Name: The named one\nAbout: x\nEntry: research/questions/0095-other.html\n",
+    );
     let named = intro_bundle_text(&root, "0095", &mut None).unwrap();
     assert!(named.contains("- The named one"));
     std::fs::write(root.join("research/questions/0095-other.html"), [0xff]).unwrap();
     assert!(intro_bundle_text(&root, "0095", &mut None).is_err());
-    put(&root, "l7r/diagram/interactive/classes/bad.py", "class (\n");
+    // a modal file that cannot be read (a class module that did not lex, before feature 449 T149)
+    std::fs::write(
+        root.join("l7r/diagram/interactive/assets/modals/hamlet/privy.md"),
+        [0xff],
+    )
+    .unwrap();
     put(&root, "research/questions/0095-other.html", "<h2>x</h2>");
     assert!(intro_bundle_text(&root, "0095", &mut None).is_err());
     std::fs::write(

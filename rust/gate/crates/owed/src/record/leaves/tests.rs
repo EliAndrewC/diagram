@@ -6,8 +6,8 @@ use std::process::Command;
 use serde_json::{json, Value};
 
 use super::{
-    abspath, americanize_cli, decide, edit_route, fragments_cli, fragments_for, moved_only_cli,
-    page_dir_for, relpath,
+    abspath, americanize_cli, decide, edit_route, fragments_for, moved_only_cli, page_dir_for,
+    relpath,
 };
 
 fn git(dir: &Path, args: &[&str]) {
@@ -323,24 +323,6 @@ fn a_payload_that_is_no_object_fails_as_the_python_did_and_an_empty_input_passes
 }
 
 #[test]
-fn every_asked_question_is_answered_in_one_call() {
-    let root = tree("leaves-cli");
-    let args = ["--root".to_owned(), root.to_string_lossy().into_owned()];
-    let got = fragments_cli(
-        &args,
-        &mut "[\"0020\", \"nosuch\"]".as_bytes(),
-        Path::new("/"),
-    );
-    let found: Value = serde_json::from_str(&got.stdout).unwrap();
-    assert_eq!(found["0020"], json!(["research/questions/0020-y.html"]));
-    assert_eq!(found["nosuch"], json!([]));
-    let inside = fragments_cli(&[], &mut "[\"0020\"]".as_bytes(), &root);
-    assert!(inside.stdout.contains("0020-y.html"));
-    let bad = fragments_cli(&[], &mut "not a list".as_bytes(), &root);
-    assert_eq!((bad.code, bad.stdout.as_str()), (1, ""));
-}
-
-#[test]
 fn the_moved_names_come_back_one_a_line() {
     let dir = crate::checks::scratch("leaves-moves");
     git(&dir, &["init", "-q", "-b", "main"]);
@@ -372,10 +354,6 @@ fn the_verbs_are_reached_by_name() {
     let cwd = Path::new("/");
     assert_eq!(
         super::cli("edit-route", &[], &mut "{}".as_bytes(), cwd).code,
-        0
-    );
-    assert_eq!(
-        super::cli("fragments", &[], &mut "[]".as_bytes(), cwd).code,
         0
     );
     assert_eq!(

@@ -6,7 +6,7 @@
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 
-use super::modals::{MODALS, MODAL_DIRS};
+use super::modals::MODALS;
 use super::owed::ENTRY_READS;
 use super::repo::{cat_blobs, git};
 use super::units::{QUESTIONS, SOURCE_DIRS};
@@ -56,17 +56,10 @@ fn filtered(text: &str, specs: &[&str]) -> String {
 impl Delta {
     /// Every path a diff or untracked listing is asked about: entry-drift's reads hold the record's directories and the
     /// pop-ups' (`research/`, `l7r/diagram/interactive/`), so one listing over them answers every family.
-    pub const WATCHED: [&str; 9] = ENTRY_READS;
+    pub const WATCHED: [&str; 4] = ENTRY_READS;
 
     /// Every directory a revision's files are read from: the record's, translation's and the pop-ups'.
-    pub const LISTED: [&str; 6] = [
-        QUESTIONS,
-        SOURCE_DIRS[0],
-        SOURCE_DIRS[1],
-        MODAL_DIRS[0],
-        MODAL_DIRS[1],
-        MODALS,
-    ];
+    pub const LISTED: [&str; 4] = [QUESTIONS, SOURCE_DIRS[0], SOURCE_DIRS[1], MODALS];
 
     #[must_use]
     pub fn new(root: &Path) -> Self {

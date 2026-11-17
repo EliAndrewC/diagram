@@ -193,8 +193,6 @@ pub fn gate_cli(args: &[String], root: &Path) -> Reply {
 enum Tool {
     /// `l7r-gate <args>`.
     Gate,
-    /// A Python script under `scripts/`, until its task ports it.
-    Py(&'static str),
     /// A check asked in process, given the clone (`make-docs`, feature 449 T135, where it ran `scripts/make-docs.py`); its arguments
     /// are its command form, which make's timing runs.
     InProcess(fn(&Path) -> Reply),
@@ -215,8 +213,8 @@ const CHECKS: [Row; 23] = [
     Row("file-scale", Tool::Gate, &["check", "file-scale", "{root}"], "a Rust file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", false, ""),
     Row("make-docs", Tool::InProcess(crate::make_docs::check), &["make-docs", "{root}", "--check"], "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", false, "docs/make-targets.html"),
     Row("ledger-owed", Tool::Gate, &["reviews", "ledger-owed", "--ledger", "{root}/dev/review-ledger.md", "--refuse"], "a check's pass has no row in dev/review-ledger.md (above) - write each from its reply: make ledger-owed WRITE=\"<where you recorded what you did>\" (or add the row printed, its ?s filled); features 371, 385 FR-019", false, ""),
-    Row("entry-headings selftest", Tool::Py("gates/check-entry-headings.py"), &["--selftest"], "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing", true, "delta:entry-headings"),
-    Row("entry-headings", Tool::Py("gates/check-entry-headings.py"), &["{root}"], "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234", false, "delta:entry-headings"),
+    Row("entry-headings selftest", Tool::Gate, &["check", "entry-headings", "--selftest"], "check-entry-headings selftest failed - the guard itself is broken; fix rust/gate/crates/registry/src/headings.rs before pushing", true, "delta:entry-headings"),
+    Row("entry-headings", Tool::Gate, &["check", "entry-headings", "{root}"], "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234", false, "delta:entry-headings"),
     Row("research-pointers selftest", Tool::Gate, &["check", "research-pointers", "--selftest"], "check-research-pointers selftest failed - the guard itself is broken; fix rust/gate/crates/checks/src/checks/ before pushing", true, ""),
     Row("research-pointers", Tool::Gate, &["check", "research-pointers", "{root}"], "a pointer to the research does not resolve, or names a built page (above) - feature 301; `make fragment-move` moves a fragment with its pointers", false, ""),
     Row("partial-citations", Tool::Gate, &["check", "partial-citations", "{root}"], "a footnote cites a source no one can wholly read with no confirmed passage (above) - feature 312 FR-020; confirm the passage (quote-check) and record it in research/partial-confirmations.jsonl, or make the note an absence note", false, "delta:partial-citations"),
@@ -308,7 +306,6 @@ fn holds(root: &Path, needs: &str) -> bool {
 /// Where the tools are, for this run.
 struct Tools {
     tree: PathBuf,
-    python: String,
     off: bool,
     /// The gate binary the Rust self-tests run, this process's own: what a passed one is kept against (T109).
     binary: Option<PathBuf>,
@@ -322,17 +319,8 @@ fn row_command(tools: &Tools, row: &Row, root: &Path) -> Command {
         .iter()
         .map(|a| a.replace("{root}", &root_text))
         .collect();
-    let mut command = match row.1 {
-        Tool::Gate | Tool::InProcess(_) => {
-            Command::new(tools.tree.join("scripts/gates/l7r-gate.sh"))
-        }
-        Tool::Py(rel) => {
-            let mut c = Command::new(&tools.python);
-            c.arg(tools.tree.join("scripts").join(rel))
-                .env("PYTHONDONTWRITEBYTECODE", "1");
-            c
-        }
-    };
+    // every row is the gate's since the last Python row, `check-entry-headings.py`, ported (feature 449 T149)
+    let mut command = Command::new(tools.tree.join("scripts/gates/l7r-gate.sh"));
     command.args(&args).current_dir(root);
     command
 }
@@ -342,7 +330,6 @@ fn row_command(tools: &Tools, row: &Row, root: &Path) -> Command {
 pub fn timing_rows(tree: &Path, root: &Path) -> Vec<(String, Option<Command>)> {
     let tools = Tools {
         tree: tree.to_owned(),
-        python: "python3".to_owned(),
         off: false,
         binary: None,
     };
@@ -396,13 +383,7 @@ fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Rep
     let owed: Vec<(&Row, Option<&String>)> = rows
         .iter()
         .filter(|r| !skips.iter().any(|s| s == r.0) && holds(root, r.5))
-        .map(|row| {
-            let key = match row.1 {
-                Tool::Py(_) => Some(&version),
-                Tool::Gate | Tool::InProcess(_) => gate.as_ref(),
-            };
-            (row, key.filter(|_| row.4))
-        })
+        .map(|row| (row, gate.as_ref().filter(|_| row.4)))
         .filter(|(row, key)| !key.is_some_and(|k| stamps[row.0] == k.as_str()))
         .collect();
     // THE ROWS SIDE BY SIDE (feature 449 T115; the GM 2026-11-11): one after another they were 0.82 s of a fixture push's 1.33 s and
@@ -497,7 +478,6 @@ pub fn checks_cli(args: &[String], tree: &Path, off: bool) -> Reply {
                 run_checks(
                     &Tools {
                         tree: tree.to_owned(),
-                        python: "python3".to_owned(),
                         off,
                         binary: std::env::current_exe().ok(),
                     },

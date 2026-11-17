@@ -161,7 +161,7 @@ pub fn tree_of(root: &Path) -> std::path::PathBuf {
     std::env::var_os("L7R_GATE_TREE").map_or_else(|| root.to_path_buf(), Into::into)
 }
 
-/// The tests' tree: a scratch record carries its own stubs of the Python seams, so a test never runs the real `entry_owed` on it.
+/// The tests' tree: a scratch record is its own tree, so a test reads only what its record holds.
 #[cfg(test)]
 #[must_use]
 pub fn tree_of(root: &Path) -> std::path::PathBuf {

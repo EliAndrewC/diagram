@@ -66,7 +66,12 @@ fn the_prepass() {
     );
     let p = cli(&args(&["hamlet/well", "--prepass", "--root", &r]));
     assert!(p.stdout.contains("- Entry names no question file"));
-    put(&root, "l7r/diagram/interactive/classes/bad.py", "class (\n");
+    // a modal file that cannot be read (a class module that did not lex, before feature 449 T149)
+    std::fs::write(
+        root.join("l7r/diagram/interactive/assets/modals/hamlet/privy.md"),
+        [0xff],
+    )
+    .unwrap();
     assert_eq!(
         cli(&args(&["hamlet/well", "--prepass", "--root", &r])).code,
         1

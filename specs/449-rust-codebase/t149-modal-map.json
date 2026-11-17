@@ -1,0 +1,16 @@
+{
+ "_what": "Feature 449 T149's old-to-new map of the modals' ids and fingerprints (the round arbiter's ask:449-phase4-slices Q5: 'the commit records an old-to-new map that carries open rounds and rulings'). Every modal id and fingerprint whose value the move changed, old -> new. It is empty: feature 319 had already moved each kind's modal text out of its class docstring into one Markdown file per kind (l7r/diagram/interactive/assets/modals/<hamlet|sheet>/<slug of its key>.md), byte for byte; the files stay where they are, beside the Python registry that still reads them and the Rust registry (rust/gate/crates/registry/src/kinds.rs) that now enumerates them for modals.rs; a modal's uid is its registry and slug and no fingerprint reads where its file lives, so no id or fingerprint moved and no open round, ruling or answer needs carrying.",
+ "measured": "2026-11-16",
+ "method": "every modal's uid, class, key, file and three fingerprints (form, research, depiction) at HEAD 646ce17de, through HEAD's l7r-gate owed-door (mo.modals_now, mo.fingerprints, mo.depiction_fingerprint), against the port's `l7r-gate record modal-owed --ids`; compared byte for byte on the real record and on three changed records (a page's findings moved, a modal's prose rewritten, a question renumbered) by the differential's 'modal ids' cases",
+ "modals": 297,
+ "registries": {"hamlet": 61, "sheet": 99, "choice": 137},
+ "renamed_ids": {},
+ "renamed_fingerprints": {},
+ "carried": {
+  "answers (the record checks' store, <git common dir>/record-checks/, keyed '<check>:<uid>' and a fingerprint)": "none - no key or fingerprint moved",
+  "the check state (checks-open.json, arbiter-owed.json) and the modal batches (modal-batches.json), keyed by unit slug": "none - no slug moved",
+  "the round arbiter's rulings (specs/*/arbiter.jsonl, 'unit' fields)": "none - no ruling names a modal uid",
+  "the review ledger (dev/review-ledger.md)": "none - no row names a modal unit slug",
+  "the research claims (dev/claims-index.json, claims-deferred.json)": "none - claims are keyed by code units, and no claimed unit was deleted (the 42 claims on classes/_base.py, conditions.py and choices.py stay keyed to the Python, which stays for its Python importers)"
+ }
+}

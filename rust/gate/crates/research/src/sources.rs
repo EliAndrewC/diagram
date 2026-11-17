@@ -160,7 +160,7 @@ pub struct Question {
 }
 
 /// The QUESTIONS behind a modal (feature 180), in the order the entry names them; a path that names no fragment yields nothing (which
-/// `check-entry-headings.py` refuses at the push).
+/// `l7r-gate check entry-headings` refuses at the push).
 #[must_use]
 pub fn research_questions(entry: &str, research_dir: &Path) -> Vec<Question> {
     let mut out = Vec::new();

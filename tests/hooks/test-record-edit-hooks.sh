@@ -79,10 +79,8 @@ edit Edit "$R/sources/010-works-cited/0010-fei-1939.html" "Fei"
 edit Edit "$FIX/docs/guards.md" "anything"
 [ "$(rc)" = 0 ] && [ -z "$(rewrote_to)" ] && ok "a file outside the record passes" || no "a file outside the record passes"
 
-echo "4. the listing a check reads, through the Rust verb the Python callers reach (feature 449 T81)"
-got="$(printf '["0010"]' | "$HERE/../../scripts/gates/l7r-gate.sh" record fragments --root "$FIX" 2>/dev/null)"
-want='{"0010": ["research/questions/0010-x.html", "research/questions/0010-x.notes.html"]}'
-[ "$got" = "$want" ] && ok "l7r-gate record fragments lists a question's pages and notes" || no "record fragments" "got=$got"
+# (A case 4 drove `l7r-gate record fragments`, the verb the Python callers reached through `scripts/record_door.py`; the verb left with
+# its last caller, `entry_owed.py`, in feature 449 T149, and the listing is the owed crate's `fragments_for`, held by its own tests.)
 
 echo
 echo "record-edit-hooks: $PASS passed, $FAIL failed"

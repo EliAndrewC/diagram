@@ -1,0 +1,33 @@
+# The map's vocabulary (feature 449 T149, phase 4's S6 under `ask:449-phase4-slices` Q5): the kinds of `interactive/classes/` and
+# `compound_kinds/` as a Rust registry, each kind's modal text read from its Markdown file under `assets/modals/`, the knob conditions and
+# the title card's choices, and the two tools that read the registry (the push's entry-headings check, `make open-questions`). The
+# Python registry stays the implementation for its Python importers (the page writer S7, the Mode A sheets S9-S11, the pipeline S12),
+# frozen: an edit of it makes the same change here in the same commit, and `kinds/tests.rs` holds the two equal.
+[package]
+name = "l7r_gate_registry"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time (feature 449 T93): the registry's equality with the Python classes it mirrors, and every
+# kind's modal file present and parsed, are tests over the real tree.
+[package.metadata.l7r]
+reads = ["l7r/diagram/interactive/classes/", "l7r/diagram/interactive/compound_kinds/", "l7r/diagram/interactive/assets/"]
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../core" }
+l7r_gate_research = { path = "../research" }
+l7r_guard = { path = "../../../guard" }
+serde_json = { workspace = true }
+
+[features]
+# every kind's modal file written minimal into a scratch tree, for the crates whose tests load the whole registry (the `owed` crate's
+# entry-drift tests)
+testkit = []
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+
+[lints]
+workspace = true

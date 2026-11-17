@@ -71,9 +71,16 @@ fn each_check_answers_by_name_and_its_run_is_recorded() {
         "stale-dirs",
         "research-pointers",
         "house-style-delta",
+        // the registry's check (feature 449 T149): a tree with no engine runs its form half
+        "entry-headings",
     ] {
         assert_eq!(cli(&owned(&[name, "--selftest"]), &dir).code, 0, "{name}");
     }
+    // a tree whose registry does not load: refused, and no run recorded, as the Python raised before it recorded one (feature 449 T149)
+    let engine = repo("cli-engine");
+    std::fs::create_dir_all(engine.join("l7r")).unwrap();
+    let crashed = cli(&owned(&["entry-headings", "--selftest"]), &engine);
+    assert!(crashed.code == 1 && !engine.join(".git/tool-usage.jsonl").exists());
     assert_eq!(cli(&owned(&["question-size"]), &dir).code, 0);
     assert_eq!(cli(&owned(&["rust-tooling"]), &dir).code, 0);
     let usage = std::fs::read_to_string(dir.join(".git/tool-usage.jsonl")).unwrap();

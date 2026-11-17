@@ -1,6 +1,5 @@
-//! The record and review tooling's leaf pieces that Python still calls, each one implementation here and reached through a verb (feature 449 T81, slice 1): `hm_record.py`'s routing of an edit aimed at an assembled page and its listing of a question's fragments (`record edit-route`, `record fragments`, feature 258), `reviews/moves.py` (`record moved-only`, the Rust is `checks/moves.rs`), and `hm_house.py`'s `americanize` (`record americanize`, the Rust is the guard's). Python's door is `scripts/record_door.py`, one process a run.
+//! The record and review tooling's leaf pieces that Python still calls, each one implementation here and reached through a verb (feature 449 T81, slice 1): `hm_record.py`'s routing of an edit aimed at an assembled page (`record edit-route`, feature 258) and its listing of a question's fragments (`fragments_for`, asked in process by the entry-drift report since feature 449 T149, which retired `record fragments` and `scripts/record_door.py` with their last caller), `reviews/moves.py` (`record moved-only`, the Rust is `checks/moves.rs`), and `hm_house.py`'s `americanize` (`record americanize`, the Rust is the guard's).
 
-use std::collections::BTreeMap;
 use std::io::Read;
 use std::path::{Component, Path};
 use std::sync::LazyLock;
@@ -311,26 +310,6 @@ pub fn edit_route(stdin: &mut dyn Read, cwd: &Path) -> Reply {
     reply(one_line(&verdict) + "\n", String::new(), 0)
 }
 
-/// `record fragments [--root <dir>]`: a JSON list of questions on stdin, `{q: [files]}` on stdout, every question of a run in the one call.
-pub fn fragments_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
-    let root = Some(flag(args, "--root"))
-        .filter(|r| !r.is_empty())
-        .map_or_else(|| cwd.to_path_buf(), |r| cwd.join(r));
-    let Ok(asked) = serde_json::from_str::<Vec<String>>(&read_all(stdin)) else {
-        return reply(
-            String::new(),
-            "record fragments: stdin is a JSON list of questions\n".to_owned(),
-            1,
-        );
-    };
-    let found: BTreeMap<&str, Vec<String>> = asked
-        .iter()
-        .map(|q| (q.as_str(), fragments_for(q, &root)))
-        .collect();
-    let body = serde_json::to_value(found).unwrap_or_default();
-    reply(one_line_utf8(&body) + "\n", String::new(), 0)
-}
-
 /// `record moved-only --root <dir> --base <rev>`: the names on stdin, one a line, whose content stood at the base; the moved ones, one a line.
 pub fn moved_only_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
     let (root, base) = (flag(args, "--root"), flag(args, "--base"));
@@ -351,7 +330,6 @@ pub fn moved_only_cli(args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Repl
 pub fn cli(verb: &str, args: &[String], stdin: &mut dyn Read, cwd: &Path) -> Reply {
     match verb {
         "edit-route" => edit_route(stdin, cwd),
-        "fragments" => fragments_cli(args, stdin, cwd),
         "moved-only" => moved_only_cli(args, stdin, cwd),
         _ => americanize_cli(stdin),
     }

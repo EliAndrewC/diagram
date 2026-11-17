@@ -80,7 +80,7 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
     alone("scripts/a.py", [false, true, false, false]);
     alone("tests/a.py", [true, true, false, false]);
     alone("l7r/a.py", [true, true, false, false]);
-    alone("l7r/diagram/interactive/a.py", [true, true, false, true]);
+    alone("l7r/diagram/interactive/a.py", [true, true, false, false]);
     alone(
         "l7r/diagram/interactive/assets/modals/hamlet/x.md",
         [false, false, false, true],
@@ -110,8 +110,12 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
         [false, false, true, false],
     );
     alone(
-        "scripts/gates/check-entry-headings.py",
-        [false, true, false, true],
+        "l7r/diagram/interactive/assets/siblings.json",
+        [false, false, false, true],
+    );
+    alone(
+        "rust/gate/crates/registry/src/kinds.rs",
+        [false, false, false, true],
     );
     alone(
         "scripts/gates/check-duplicate-defs.py",

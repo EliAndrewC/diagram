@@ -4,11 +4,11 @@ pub mod answers;
 pub mod reply;
 
 use std::collections::{HashMap, HashSet};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{split, SPACE_CLASS};
+use l7r_guard::shared::py_text::split;
 use serde_json::{json, Value};
 
 pub use answers::{
@@ -19,7 +19,7 @@ pub use answers::{
 use super::args::{parse, Parsed, Spec};
 use super::delta::Delta;
 use super::modals;
-use super::repo::{fail, git, python, read_text, tree_of, Fail};
+use super::repo::{git, read_text, Fail};
 use super::translation;
 use super::units::{
     self, digest, question, re, stem_of, Keyed, Record, Unit, QUESTIONS, SOURCE_DIRS,
@@ -27,16 +27,9 @@ use super::units::{
 use crate::Reply;
 
 static SOURCE_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"^\d+-([a-z0-9-]+)\.html$"));
-static CLASS_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"^class (\w+)\("));
 
 /// The families of owed units, each computed by its own reader.
 pub const FAMILIES: [&str; 4] = ["record", "translation", "entry-drift", "modal"];
-
-const ENTRY_OWED: &str = r"import json, sys
-from pathlib import Path
-sys.path.insert(0, sys.argv[1] + '/scripts/record')
-import entry_owed
-print(json.dumps(entry_owed.owed(Path(sys.argv[2]))[1]))";
 
 fn usage(line: &str) -> Reply {
     Reply {
@@ -219,45 +212,62 @@ fn translation_units(delta: &mut Delta, now: &Record) -> Result<Vec<Unit>, Fail>
     Ok(found.iter().map(|(_, u)| u.clone()).collect())
 }
 
-/// What a run of `entry_owed.py` reads, its door processes included: every file opened under the tree during a real run
-/// on a changed question page (measured 2026-11-10 with `inotifywait -m -r -e open` over the worktree, beside Python's
-/// audit hook): the engine's `interactive` package and the package root above it, the whole research record (the
-/// `record fragments` and door verbs read the question pages, the write-ups and `research/*.json`), the scripts it loads,
-/// and the gate's own sources and wrapper, which build the binary answering its doors. A change to any of them starts it,
-/// so a change that broke what it reads fails as the Python's did (the plan review of T87).
-pub(crate) const ENTRY_READS: [&str; 9] = [
+/// What the entry-drift report reads (`entry.rs`, `entry_owed.py` ported by feature 449 T149): the record's question pages, the registry's
+/// modal files and sibling table under `l7r/diagram/interactive/`, and the gate's own sources and wrapper, which build the binary that
+/// answers it. A change to any of them starts it (the T065 clause, `ask:449-T87-entry-owed`); the Python's own scripts and doors, which
+/// it read before the port, left with it.
+pub(crate) const ENTRY_READS: [&str; 4] = [
     "l7r/diagram/interactive/",
-    "l7r/diagram/__init__.py",
     "research/",
-    "scripts/record/entry_owed.py",
-    "scripts/record/record_cache.py",
-    "scripts/record_door.py",
-    "scripts/owed_door.py",
     "scripts/gates/l7r-gate.sh",
     "rust/gate/",
 ];
 
-/// Whether `entry_owed` must run for this delta (the T065 clause, `ask:449-T87-entry-owed`): the family is asked, and a
-/// file it reads changed against the base, untracked files included, or the engine it imports is not here (the crash the
-/// Python had then).
+/// Whether the entry-drift report must run for this delta: the family is asked, and a file it reads changed against the base, untracked
+/// files included, or the tree holds no modal files - the tree with no engine, where the Python's import failed and the run with it.
 fn entry_drift_owed(delta: &mut Delta) -> bool {
     let base = delta.entry_base();
     if base.is_empty() {
         return false;
     }
     let names = delta.changed(&base, None, &ENTRY_READS) + &delta.others(&ENTRY_READS);
-    !delta
-        .root()
-        .join("l7r/diagram/interactive/classes/__init__.py")
-        .is_file()
-        || names.lines().any(|n| !n.trim().is_empty())
+    !delta.root().join(modals::MODALS).is_dir() || names.lines().any(|n| !n.trim().is_empty())
 }
 
 fn entry_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {
-    let tree = tree_of(root);
-    let (tree, top) = (tree.to_string_lossy(), root.to_string_lossy());
-    let said = python(ENTRY_OWED, &[&tree, &top], "")?;
-    let lines: Vec<String> = serde_json::from_str(&said).map_err(fail)?;
+    if !root.join(modals::MODALS).is_dir() {
+        return Err(format!(
+            "ImportError: no engine here - {} holds no {} (the import the Python made of it failed)",
+            root.display(),
+            modals::MODALS
+        ));
+    }
+    entry_units_of(root, now, entry_lines(root)?)
+}
+
+/// The entry-drift report's lines, in process (feature 449 T149).
+#[cfg(not(any(test, feature = "testkit")))]
+fn entry_lines(root: &Path) -> Result<Vec<String>, Fail> {
+    super::entry::owed(root).map(|(_, lines)| lines)
+}
+
+/// The tests' seam, as the stub of `entry_owed.py` was before the port (this crate's tests, and those of the crates above it through the
+/// `testkit` feature, whose scratch records hold a few modals and not the whole registry): a scratch record names its lines in
+/// `entry-lines.json`, or asks for the real report with `entry-real`; else none. The report itself is `entry.rs`'s, tested there on a
+/// tree holding every kind.
+#[cfg(any(test, feature = "testkit"))]
+fn entry_lines(root: &Path) -> Result<Vec<String>, Fail> {
+    if root.join("entry-real").exists() {
+        return super::entry::owed(root).map(|(_, lines)| lines);
+    }
+    match std::fs::read_to_string(root.join("entry-lines.json")) {
+        Ok(text) => serde_json::from_str(&text).map_err(|e| e.to_string()),
+        Err(_) => Ok(Vec::new()),
+    }
+}
+
+/// The entry-drift units of the report's lines: a key that is an About-form modal owes the modal checks instead, and is left out.
+fn entry_units_of(root: &Path, now: &Record, lines: Vec<String>) -> Result<Vec<Unit>, Fail> {
     let about = modals::about_keys(root)?;
     let mut out = Vec::new();
     for line in lines {
@@ -385,45 +395,25 @@ pub fn units_in(
     Ok(out)
 }
 
-/// The modal class(es) whose `key` is this one (the map's Well and the sheet's), as `make check-bundle KIND=` takes them.
-fn modal_classes(key: &str, base: &Path) -> Result<Vec<String>, Fail> {
-    let keyed = re(&format!(
-        "^[{SPACE_CLASS}]+key = ['\"]{}['\"][{SPACE_CLASS}]*$",
-        fancy_regex::escape(key)
-    ));
-    let mut paths: Vec<PathBuf> = Vec::new();
-    for sub in ["classes", "compound_kinds"] {
-        let dir = base.join(sub);
-        paths.extend(
-            std::fs::read_dir(&dir)
-                .into_iter()
-                .flatten()
-                .flatten()
-                .map(|e| e.path())
-                .filter(|p| p.extension().is_some_and(|x| x == "py")),
-        );
-    }
-    paths.sort();
-    let mut hits: Vec<(String, String)> = Vec::new();
-    for path in &paths {
-        let text = read_text(path)?;
-        let stem = path
-            .file_stem()
-            .map_or_else(String::new, |s| s.to_string_lossy().into_owned());
-        let mut cls = String::new();
-        for line in super::py_lines(&text) {
-            if let Ok(Some(c)) = CLASS_LINE.captures(line) {
-                c[1].clone_into(&mut cls);
-            } else if !cls.is_empty() && keyed.is_match(line).unwrap_or(false) {
-                hits.push((stem.clone(), cls.clone()));
-            }
-        }
-    }
+/// The modal class(es) whose `key` is this one (the map's Well and the sheet's), as `make check-bundle KIND=` takes them: the registry's
+/// kinds (feature 449 T149), in the order the lexing of `classes/*.py` then `compound_kinds/*.py` met them, `module.Class` where two match.
+fn modal_classes(key: &str) -> Vec<String> {
+    let hits: Vec<(&str, &str)> = l7r_gate_registry::kinds::REGISTRIES
+        .iter()
+        .flat_map(l7r_gate_registry::kinds::by_file)
+        .filter(|(_, k)| k.key == key)
+        .map(|(m, k)| (m, k.class))
+        .collect();
     let many = hits.len() > 1;
-    Ok(hits
-        .into_iter()
-        .map(|(m, c)| if many { format!("{m}.{c}") } else { c })
-        .collect())
+    hits.into_iter()
+        .map(|(m, c)| {
+            if many {
+                format!("{m}.{c}")
+            } else {
+                c.to_owned()
+            }
+        })
+        .collect()
 }
 
 /// Owed only by a moved page and not yet marked touched at its fingerprint.
@@ -432,15 +422,10 @@ fn triage_first(u: &Unit, triaged: &HashMap<String, String>) -> bool {
 }
 
 /// What builds the bundle for a unit.
-fn command(
-    u: &Unit,
-    now: &Record,
-    triaged: &HashMap<String, String>,
-    kinds: &Path,
-) -> Result<String, Fail> {
+fn command(u: &Unit, now: &Record, triaged: &HashMap<String, String>) -> String {
     let (q, check) = (question(u.subject()), u.check());
     if check == "source-applicability" {
-        return Ok(format!("make check-bundle KEY={}", u.subject()));
+        return format!("make check-bundle KEY={}", u.subject());
     }
     if check == "source-reader" {
         let (stem, note) = u.subject().split_once('#').unwrap_or((u.subject(), ""));
@@ -459,16 +444,16 @@ fn command(
         if keys.is_empty() {
             keys.push("<the note's key>".to_owned());
         }
-        return Ok(format!(
+        return format!(
             "{}  then  make record-checked CHECK=source-reader Q={q} NOTES={note}",
             keys.iter()
                 .map(|k| format!("make check-bundle KEY={k} WHOLE=1"))
                 .collect::<Vec<_>>()
                 .join(" ; ")
-        ));
+        );
     }
     if check.starts_with("modal-") && triage_first(u, triaged) {
-        return Ok("make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)".to_owned());
+        return "make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)".to_owned();
     }
     if check.starts_with("modal-") {
         let agent = if check == "modal-form" || check == "modal-depiction" {
@@ -476,10 +461,10 @@ fn command(
         } else {
             "modal-research"
         };
-        return Ok(format!(
+        return format!(
             "make modal-bundle KIND=\"{}\" FOR={agent}  then  make record-checked CHECK={check} BUNDLE=<its bundle> RESULT=...",
             u.subject()
-        ));
+        );
     }
     if check == "entry-drift" {
         static FOUND: LazyLock<Regex> = LazyLock::new(|| re(r"\b(\d{4})-"));
@@ -488,17 +473,17 @@ fn command(
             .ok()
             .flatten()
             .map_or_else(|| "<its section>".to_owned(), |c| c[1].to_owned());
-        let mut classes = modal_classes(u.subject(), kinds)?;
+        let mut classes = modal_classes(u.subject());
         if classes.is_empty() {
             classes.push(format!("<the class of {}>", u.subject()));
         }
-        return Ok(format!(
+        return format!(
             "{}  then  make record-checked CHECK=entry-drift KIND=\"{}\" BUNDLE=<its bundle> RESULT=<verdict>",
             classes.iter().map(|k| format!("make check-bundle Q={qq} FOR=entry-drift KIND=\"{k}\"")).collect::<Vec<_>>().join(" ; "),
             u.subject()
-        ));
+        );
     }
-    Ok(format!("make check-bundle Q={q} FOR={check}"))
+    format!("make check-bundle Q={q} FOR={check}")
 }
 
 /// {pop-up agent: [kinds]} for each agent two or more unanswered pop-ups owe; a pop-up owed only by a moved page goes to `make modal-triage` first.
@@ -538,10 +523,9 @@ fn report(
     now: &Record,
     answered_slugs: &HashSet<String>,
     triaged: &HashMap<String, String>,
-    kinds: &Path,
-) -> Result<String, Fail> {
+) -> String {
     if rows.is_empty() {
-        return Ok("record-owed: no record check is owed\n".to_owned());
+        return "record-owed: no record check is owed\n".to_owned();
     }
     let left = rows
         .iter()
@@ -561,7 +545,7 @@ fn report(
                 "  {}  - {}\n      {}",
                 u.slug,
                 u.occasion,
-                command(u, now, triaged, kinds)?
+                command(u, now, triaged)
             ));
         }
     }
@@ -574,7 +558,7 @@ fn report(
     }
     lines.push("Answer each with `make record-checked CHECK=<check> BUNDLE=<its bundle> RESULT=\"<counts>\"` when its check returns.".to_owned());
     lines.push("Apply a round's own EDITs with `make apply-edits FROM=<the agent's reply or its transcript>` - its unit then settles, owing no round to re-read its own words - the same command settles an EDIT you already applied by hand, word for word (feature 385 T21).".to_owned());
-    Ok(lines.join("\n") + "\n")
+    lines.join("\n") + "\n"
 }
 
 fn touched_of(store_dir: &Path) -> Result<HashMap<String, String>, Fail> {
@@ -676,8 +660,7 @@ pub fn listing(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
     };
     let named = touched_of(&delta.store())?;
     let now = read_at(root, between.map(|p| p.1), None)?;
-    let kinds = tree_of(root).join("l7r/diagram/interactive");
-    let text = report(&rows, &now, &done, &named, &kinds)?;
+    let text = report(&rows, &now, &done, &named);
     if between.is_none() {
         let batches: serde_json::Map<String, Value> = modal_batches(&rows, &done, &named)
             .into_iter()

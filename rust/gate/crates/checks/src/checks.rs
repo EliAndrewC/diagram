@@ -105,6 +105,15 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("run-plausible") => (run_plausible::USAGE_LOG_TOOL, run_plausible::cli(rest, root, &std::env::var("MAKEFLAGS").unwrap_or_default())),
         Some("tool-signals") => (tool_signals::USAGE_LOG_TOOL, tool_signals::cli(rest, root)),
         Some("partial-citations") => (partial_citations::USAGE_LOG_TOOL, partial_citations::cli(rest)),
+        // the registry's half of feature 234, ported with it by feature 449 T149 (`ask:449-T065-scope` placed it in phase 4)
+        Some("entry-headings") => {
+            let (said, recorded) = l7r_gate_registry::headings::cli(rest, root);
+            if !recorded {
+                // the Python raised before it recorded its run: a failed assertion or a registry that does not load records none
+                return said;
+            }
+            (l7r_gate_registry::headings::USAGE_LOG_TOOL, Outcome { stdout: said.stdout, stderr: said.stderr, code: said.code })
+        }
         Some("needs") => {
             let code = needs(rest.first().map_or("", String::as_str), root);
             return crate::Reply { stdout: String::new(), stderr: String::new(), code };

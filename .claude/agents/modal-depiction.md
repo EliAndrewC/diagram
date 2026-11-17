@@ -272,7 +272,7 @@ About, Guesses or `Entry:` text changed, owes `modal-form` and the three `modal-
 folded into `make record-owed`). Answer them with `make modal-bundle KIND=<key> FOR=modal-research` (or `FOR=modal-form`),
 the dispatch, then `make record-checked`. **The push REFUSES** (`scripts/gates/entry-gate.sh`, the record gate) until every owed unit
 is answered, or discharged with `RECORD_CHECKS_OK="<why>"`, which goes to `dev/bypass-log/` and `make audit`. A modal still
-in the old form owes `entry-drift` instead (`scripts/record/entry_owed.py`), which `ENTRY_DRIFT_OK="<what moved, and why no modal
+in the old form owes `entry-drift` instead (`l7r-gate record entry-owed`, `rust/gate/crates/owed/src/record/entry.rs`), which `ENTRY_DRIFT_OK="<what moved, and why no modal
 is now wrong>"` discharges. It is enforced on the GM's ruling: *"I don't believe that we should have any such thing as an
 unenforced doctrine. If it is unenforced, then it is not a doctrine. something should either not be considered doctrinal or
 it should be enforced."* No mechanical key separates "this page now says something different" from "this page was
@@ -281,7 +281,7 @@ maintained" - that is a judgment about meaning, so the session supplies it in wr
 **`record-format` and `quote-check` are NOT this check.** They read a research page, never a modal, so a green pass from
 either says nothing about any modal.
 
-**A renamed question owes its inbound links:** `scripts/gates/check-entry-headings.py` fails the gate and the push when a modal's
+**A renamed question owes its inbound links:** `l7r-gate check entry-headings` (`rust/gate/crates/registry/src/headings.rs`) fails the gate and the push when a modal's
 `Entry:` resolves to no question (`make fragment-move` renames one with every pointer to it). A question deliberately not
 written is named in the declared form `research/contents.json#<section> (no dedicated entry - recorded as silent)`, which `make audit`
 enumerates.

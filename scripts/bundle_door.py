@@ -1,8 +1,8 @@
 """The Rust bundles' one runner of the Python they still reach (feature 449 T88, `ask:449-T88-bundles`): the Rust-to-Python direction,
 one process a bundle run, started by the Rust only when the run needs one of its verbs. It holds no logic: each verb calls one existing
 Python function and prints its JSON. Each verb leaves when its owner ports (the helpers, `passages` and `save_cached` left with feature 449 T145, phase 4's S2, the four
-helpers now the `bundle` crate's in process; `knobs`
-and `knob_table` in phase 4, `is_current` - `l7r-gate reviews prereq check`'s, T89 - with `l7r/diagram/pipeline/` in T90; the `claims_*`
+helpers now the `bundle` crate's in process; `knobs` and `knob_table` with feature 449 T149, phase 4's S6, the registry's
+`conditions` in process; `is_current` - `l7r-gate reviews prereq check`'s, T89 - with `l7r/diagram/pipeline/` in T90; the `claims_*`
 and `tunables_unstated` verbs - the Python half of the claims tools, which reads `.py` source by CPython's own syntax tree - in phase 4
 with the Mode A code they read: `ask:449-T82-claims`, which also took `claims_rows` and `load_index` off this runner, and whose
 `gm_review_add_row` left with `scripts/gm_review.py` in T91, the Rust claims-known calling the queue's writer in process); the runner is deleted with the owner of its last verb, and named at the phase-3 close
@@ -93,18 +93,6 @@ def tunables_unstated(source: str, unit_text: dict[str, str]) -> list[list]:
     return [list(t) for t in importlib.import_module("tunables").unstated(source, unit_text)]
 
 
-def knobs() -> dict[str, list[str]]:
-    from l7r.diagram.interactive import conditions  # noqa: PLC0415 - phase 4's, reached here alone
-
-    return {k: list(v) for k, v in conditions.knobs().items()}
-
-
-def knob_table() -> dict:
-    from l7r.diagram.interactive import conditions  # noqa: PLC0415
-
-    return conditions.knob_table()
-
-
 def is_current(gen: str) -> bool:
     """`gencache.is_current(gen)`: feature 240 FR-005's question, asked only by `l7r-gate reviews prereq check` (`ask:449-T89-reviews`)."""
     from l7r.diagram.pipeline import gencache  # noqa: PLC0415 - T90's, reached here alone
@@ -112,7 +100,7 @@ def is_current(gen: str) -> bool:
     return gencache.is_current(gen)
 
 
-VERBS = {"knobs": knobs, "knob_table": knob_table, "is_current": is_current,
+VERBS = {"is_current": is_current,
          "claims_py_units": claims_py_units, "claims_module_units": claims_module_units, "claims_context_source": claims_context_source,
          "claims_callees": claims_callees, "claims_direct": claims_direct, "claims_chase": claims_chase,
          "claims_counter_only": claims_counter_only, "claims_stale": claims_stale, "claims_scope_units": claims_scope_units,

@@ -176,10 +176,10 @@
    "declared": "round-arbiter"
   },
   "### T149 Approach (checklist part A)": {
-   "sha256": "e3eeb4cbd2460a7fdab2734476a79fe7fbc06471000e7eb3bdd82d214605801c",
+   "sha256": "e8b622773cf5d5de9e26c09e857c5ad761aecc7176b08745d76c66a15535f865",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   },
   "### T150 (<why: the finding or measurement that files it>)": {
    "sha256": "eb5f23d52992a47eb1f466ff61c9340833bd98a14a9ed460ce0ede4b53b40c62",
@@ -369,6 +369,12 @@
   },
   "### T163 Approach (checklist part A)": {
    "sha256": "562d6b1ff8a9038dc38f618520f7698d4b284a957a15ba6dd4479d34e71448e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T149 (phase 4's S6, the registries and their readers, `ask:449-phase4-slices` Q5)": {
+   "sha256": "aa97bd0253d29ccb34ae6847f6179aea274f32c0c7361034e32f89b4d6425ab9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
@@ -9777,6 +9783,101 @@
      "why": "Sequencing and exit procedure decide nothing the request or spec left open in a narrowing direction."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T149 (phase 4's S6, the registries and their readers, `ask:449-phase4-slices` Q5)",
+    "### T149 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T149-approach-scope",
+     "summary": "S6 ports the registries' readers to a new gate crate `registry` and entry_owed to the owed crate; deletes entry_owed.py, open_questions.py, check-entry-headings.py, owed_door.py, record_door.py and record_cache.py.",
+     "class": "within",
+     "why": "Exactly ask:449-phase4-slices' S6 ('the registries with entry_owed, the doors owed_door, record_door and record_cache deleted'), with check-entry-headings.py placed with the registry by ask:449-T065-scope, open_questions.py by ask:449-T79-moves and record_cache.py's deletion by ask:449-T81-slices. The request is to replace the Python with Rust; this is that."
+    },
+    {
+     "id": "T149-two-registries",
+     "summary": "classes/*, compound_kinds/*, conditions.py and choices.py stay frozen and read-only for the Python importers still unported (page.py, sheet.py, buildings/types.py, the pool generators, render_cache.py), while the Rust readers use kinds.rs; a test of the real tree holds kinds.rs equal to the Python classes by name, key and order.",
+     "class": "within",
+     "why": "ask:449-phase4-slices has a slice's Python stay the implementation for Python importers until S11/S12, with an edit of the Python under it mirrored in the Rust in the same commit; ask:449-T81-slices' read-only test is the established pattern. Each reader runs one implementation (FR-003). The equality test enforces the mirroring for kinds.rs; conditions and choices rest on being frozen, which the request's own 'we are no longer changing it' supports."
+    },
+    {
+     "id": "T149-Q5-prose-not-moved",
+     "summary": "The modal prose is not moved: it stays in l7r/diagram/interactive/assets/modals/{hamlet,sheet}/<slug>.md (feature 319), rather than 'beside the Rust registry' as ask:449-phase4-slices words it; the old-to-new id map is recorded and measured empty.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged in two halves. (a) Out of Python, one Markdown file per kind: measured already true (all 160 kinds' modal_text byte-equal to the file, no class docstrings, observed 2026-11-16), so that half of the ruling is met, not narrowed. (b) The location 'beside the Rust registry': not done, and this is the narrowing. Against request.md it leaves no clause unmet - the GM asked for the Python replaced, and both FR-001 censuses count .py files and inline Python, not Markdown; FR-009 keeps the interactive page's assets outside the port, so the files' directory survives the Python's removal. The ruling's FR-002 allowance for changed ids was a license, not a requirement; the empty map (297 modals, uid, class, key, file and three fingerprints unchanged) uses none of it, so FR-002 is held strictly and no round or ruling needs carrying. Scoped to S6: this does not settle where the prose lives at the S13 close."
+    },
+    {
+     "id": "T149-callers",
+     "summary": "The push's two entry-headings rows, make audit's silences, make open-questions, record-owed's entry-drift family, the depiction bundle's knobs, modals.rs and the owed crate's modal classes are switched to the Rust; docs and agent files naming deleted files rewritten; make agent-sync rerun.",
+     "class": "within",
+     "why": "Moving every caller in the cut is what FR-003 and the doors' deletion in S6 require; the knobs leaving bundle_door is the phase-4 verb ask:449-T88-bundles placed."
+    },
+    {
+     "id": "T149-matched-differences",
+     "summary": "Where the port first differed it was made to match: the no-engine refusal reads 'ImportError:', and a crash or failed self-test of the headings check records no usage row.",
+     "class": "within",
+     "why": "FR-002: same outputs as the Python."
+    },
+    {
+     "id": "T149-claims-Q10",
+     "summary": "The 42 claims on these units sit in files that stay; none is keyed to a deleted unit; claims-owed owes none.",
+     "class": "within",
+     "why": "ask:449-phase4-slices requires a cut to land no claim keyed to a deleted unit; measured that none is."
+    },
+    {
+     "id": "T149-norm-times-commit",
+     "summary": "Differential normalizes UTC times and the world's base commit and path.",
+     "class": "within",
+     "why": "Run-dependent values, not outputs a port could hold equal; FR-002 binds the rest."
+    },
+    {
+     "id": "T149-norm-usage-text",
+     "summary": "Differential normalizes argparse's and a traceback's text.",
+     "class": "within",
+     "why": "The ruled case ask:449-usage-text, in the accepted spec."
+    },
+    {
+     "id": "T149-norm-usage-rows-sorted",
+     "summary": "The push's usage rows are sorted before comparison.",
+     "class": "within",
+     "why": "Comparison-only, and the block states HEAD writes each row from its own thread, so HEAD's row order is itself unordered (T148's finding); the rows' content stays compared."
+    },
+    {
+     "id": "T149-fr008-new-tests",
+     "summary": "Each new test under a tenth of a second (slowest 89 ms), on a four-kind fixture built once per test binary.",
+     "class": "within",
+     "why": "FR-008, met and measured."
+    },
+    {
+     "id": "T149-fr008-eleven-older",
+     "summary": "Eleven owed-crate tests written before this task run 102 to 276 ms and are fixed in their own task.",
+     "class": "within",
+     "why": "Rests on the block's statement that these tests predate this task and are not this task's tests; FR-008's obligation on this task's tests is met. The block does not show them over the bar at HEAD: this ruling does not cover a slowdown this task caused (it changes what the owed crate's modal classes read), which would be this task's FR-008 debt, not a separate task's."
+    },
+    {
+     "id": "T149-timing",
+     "summary": "Timings recorded, not held.",
+     "class": "within",
+     "why": "No requirement holds this slice to a timing."
+    },
+    {
+     "id": "T149-found-left",
+     "summary": "The entry-headings check never covered the 99 Mode A kinds; covering them would refuse more, so it is left for its own commit; a diffrun test that fails under load is left too.",
+     "class": "within",
+     "why": "FR-002 holds the port to today's verdicts and its one exception reaches a check refusing correct work, not one refusing more; constitution XIV puts the fix in its own commit. 99 is the same count as the labeled 99 sheet modals above."
+    },
+    {
+     "id": "T149-census-order-exits",
+     "summary": "Measurement census (no measurements.json runs a deleted file), the gate checks, order after T148 and T163, exits and budget.",
+     "class": "within",
+     "why": "FR-001's rule on recorded measurements, checked; the order follows the slice order."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -17497,6 +17598,99 @@
      "summary": "Order right after T148; red exit records the failure and routes any cannot-be-done claim through make arbiter-ask; budget one landing.",
      "class": "within",
      "why": "Sequencing and exit procedure decide nothing the request or spec left open in a narrowing direction."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T149": {
+   "section_sha256": "76bdf0bcc863b1dd93ca06a01b46a394d05da9d29bdf3dd7b5d11bbb4fd204fc",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T149-approach-scope",
+     "summary": "S6 ports the registries' readers to a new gate crate `registry` and entry_owed to the owed crate; deletes entry_owed.py, open_questions.py, check-entry-headings.py, owed_door.py, record_door.py and record_cache.py.",
+     "class": "within",
+     "why": "Exactly ask:449-phase4-slices' S6 ('the registries with entry_owed, the doors owed_door, record_door and record_cache deleted'), with check-entry-headings.py placed with the registry by ask:449-T065-scope, open_questions.py by ask:449-T79-moves and record_cache.py's deletion by ask:449-T81-slices. The request is to replace the Python with Rust; this is that."
+    },
+    {
+     "id": "T149-two-registries",
+     "summary": "classes/*, compound_kinds/*, conditions.py and choices.py stay frozen and read-only for the Python importers still unported (page.py, sheet.py, buildings/types.py, the pool generators, render_cache.py), while the Rust readers use kinds.rs; a test of the real tree holds kinds.rs equal to the Python classes by name, key and order.",
+     "class": "within",
+     "why": "ask:449-phase4-slices has a slice's Python stay the implementation for Python importers until S11/S12, with an edit of the Python under it mirrored in the Rust in the same commit; ask:449-T81-slices' read-only test is the established pattern. Each reader runs one implementation (FR-003). The equality test enforces the mirroring for kinds.rs; conditions and choices rest on being frozen, which the request's own 'we are no longer changing it' supports."
+    },
+    {
+     "id": "T149-Q5-prose-not-moved",
+     "summary": "The modal prose is not moved: it stays in l7r/diagram/interactive/assets/modals/{hamlet,sheet}/<slug>.md (feature 319), rather than 'beside the Rust registry' as ask:449-phase4-slices words it; the old-to-new id map is recorded and measured empty.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged in two halves. (a) Out of Python, one Markdown file per kind: measured already true (all 160 kinds' modal_text byte-equal to the file, no class docstrings, observed 2026-11-16), so that half of the ruling is met, not narrowed. (b) The location 'beside the Rust registry': not done, and this is the narrowing. Against request.md it leaves no clause unmet - the GM asked for the Python replaced, and both FR-001 censuses count .py files and inline Python, not Markdown; FR-009 keeps the interactive page's assets outside the port, so the files' directory survives the Python's removal. The ruling's FR-002 allowance for changed ids was a license, not a requirement; the empty map (297 modals, uid, class, key, file and three fingerprints unchanged) uses none of it, so FR-002 is held strictly and no round or ruling needs carrying. Scoped to S6: this does not settle where the prose lives at the S13 close."
+    },
+    {
+     "id": "T149-callers",
+     "summary": "The push's two entry-headings rows, make audit's silences, make open-questions, record-owed's entry-drift family, the depiction bundle's knobs, modals.rs and the owed crate's modal classes are switched to the Rust; docs and agent files naming deleted files rewritten; make agent-sync rerun.",
+     "class": "within",
+     "why": "Moving every caller in the cut is what FR-003 and the doors' deletion in S6 require; the knobs leaving bundle_door is the phase-4 verb ask:449-T88-bundles placed."
+    },
+    {
+     "id": "T149-matched-differences",
+     "summary": "Where the port first differed it was made to match: the no-engine refusal reads 'ImportError:', and a crash or failed self-test of the headings check records no usage row.",
+     "class": "within",
+     "why": "FR-002: same outputs as the Python."
+    },
+    {
+     "id": "T149-claims-Q10",
+     "summary": "The 42 claims on these units sit in files that stay; none is keyed to a deleted unit; claims-owed owes none.",
+     "class": "within",
+     "why": "ask:449-phase4-slices requires a cut to land no claim keyed to a deleted unit; measured that none is."
+    },
+    {
+     "id": "T149-norm-times-commit",
+     "summary": "Differential normalizes UTC times and the world's base commit and path.",
+     "class": "within",
+     "why": "Run-dependent values, not outputs a port could hold equal; FR-002 binds the rest."
+    },
+    {
+     "id": "T149-norm-usage-text",
+     "summary": "Differential normalizes argparse's and a traceback's text.",
+     "class": "within",
+     "why": "The ruled case ask:449-usage-text, in the accepted spec."
+    },
+    {
+     "id": "T149-norm-usage-rows-sorted",
+     "summary": "The push's usage rows are sorted before comparison.",
+     "class": "within",
+     "why": "Comparison-only, and the block states HEAD writes each row from its own thread, so HEAD's row order is itself unordered (T148's finding); the rows' content stays compared."
+    },
+    {
+     "id": "T149-fr008-new-tests",
+     "summary": "Each new test under a tenth of a second (slowest 89 ms), on a four-kind fixture built once per test binary.",
+     "class": "within",
+     "why": "FR-008, met and measured."
+    },
+    {
+     "id": "T149-fr008-eleven-older",
+     "summary": "Eleven owed-crate tests written before this task run 102 to 276 ms and are fixed in their own task.",
+     "class": "within",
+     "why": "Rests on the block's statement that these tests predate this task and are not this task's tests; FR-008's obligation on this task's tests is met. The block does not show them over the bar at HEAD: this ruling does not cover a slowdown this task caused (it changes what the owed crate's modal classes read), which would be this task's FR-008 debt, not a separate task's."
+    },
+    {
+     "id": "T149-timing",
+     "summary": "Timings recorded, not held.",
+     "class": "within",
+     "why": "No requirement holds this slice to a timing."
+    },
+    {
+     "id": "T149-found-left",
+     "summary": "The entry-headings check never covered the 99 Mode A kinds; covering them would refuse more, so it is left for its own commit; a diffrun test that fails under load is left too.",
+     "class": "within",
+     "why": "FR-002 holds the port to today's verdicts and its one exception reaches a check refusing correct work, not one refusing more; constitution XIV puts the fix in its own commit. 99 is the same count as the labeled 99 sheet modals above."
+    },
+    {
+     "id": "T149-census-order-exits",
+     "summary": "Measurement census (no measurements.json runs a deleted file), the gate checks, order after T148 and T163, exits and budget.",
+     "class": "within",
+     "why": "FR-001's rule on recorded measurements, checked; the order follows the slice order."
     }
    ],
    "verdict": "CLEAR"

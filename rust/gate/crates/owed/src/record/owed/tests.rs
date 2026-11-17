@@ -10,14 +10,14 @@ use super::answers::{
     store, unanswered, write_answer, Named,
 };
 use super::answers::{keep_parts, siblings_given, store_given};
-use super::{cli, entry_units, read_at, units, FAMILIES};
+use super::{cli, command, entry_units, entry_units_of, modal_classes, read_at, units, FAMILIES};
 use crate::record::delta::Delta;
 
 fn entry_base(root: &Path) -> String {
     Delta::new(root).entry_base()
 }
 use crate::record::modals;
-use crate::record::testkit::{commit, edit_everything, git, put, record, record_at, stubs, WELL};
+use crate::record::testkit::{commit, edit_everything, git, put, record, record_at, PAGE, WELL};
 
 fn run(root: &Path, args: &[&str]) -> crate::Reply {
     let mut all = vec!["--root".to_owned(), root.to_string_lossy().into_owned()];
@@ -43,7 +43,7 @@ fn the_listing_names_each_unit_and_its_command() {
     );
     edit_everything(&root);
     put(&root, WELL, "Name: Well\nAbout: Changed too.\nEntry: research/questions/0094-trade.html\nDrawing: research/questions/0094-trade.drawing.html\n");
-    put(&root, "entry-lines.json", "[\"notakind - 0094-trade.html 0094-trade.drawing.html x.html - prose at x\\n      read: a\", \"blank - 0095-other.html - prose\", \"well - 0094-trade.html - prose\", \"nodash\"]");
+    put(&root, "entry-lines.json", "[\"notakind - 0094-trade.html 0094-trade.drawing.html x.html - prose at x\\n      read: a\", \"privy - 0095-other.html - prose\", \"well - 0094-trade.html - prose\", \"nodash\"]");
     let said = run(&root, &[]);
     assert_eq!(said.code, 0);
     for want in [
@@ -54,7 +54,7 @@ fn the_listing_names_each_unit_and_its_command() {
         "make modal-bundle KIND=\"sheet/well\" FOR=modal-research",
         "make modal-triage  then",
         "make check-bundle Q=0094 FOR=entry-drift KIND=\"<the class of notakind>\"",
-        "make check-bundle Q=0095 FOR=entry-drift KIND=\"Blank\"",
+        "make check-bundle Q=0095 FOR=entry-drift KIND=\"Privy\"",
         "make check-bundle Q=<its section> FOR=entry-drift KIND=\"<the class of nodash>\"",
         "batched: make modal-bundle KIND=\"hamlet/well sheet/well\" FOR=modal-form",
         "translation-check:0094#gloss",
@@ -473,25 +473,64 @@ fn a_reader_who_quoted_their_own_passages_is_not_owed_again() {
 }
 
 #[test]
-fn the_entry_drift_seam() {
+fn the_entry_drift_units_and_their_commands() {
     let root = record("owed-entry");
     let now = read_at(&root, None, None).unwrap();
-    put(
-        &root,
-        "entry-lines.json",
-        "[\"cart yard - 0094-trade.html - prose\"]",
+    let lines: Vec<String> = [
+        "notakind - 0094-trade.html 0094-trade.drawing.html x.html - prose at x\n      read: a",
+        "privy - 0095-other.html - prose",
+        "well - 0094-trade.html - prose",
+        "nodash",
+    ]
+    .map(str::to_owned)
+    .to_vec();
+    let got = entry_units_of(&root, &now, lines).unwrap();
+    let slugs: Vec<&str> = got.iter().map(|u| u.slug.as_str()).collect();
+    // `well` is an About-form modal, owed the modal checks instead
+    assert_eq!(
+        slugs,
+        [
+            "entry-drift:notakind",
+            "entry-drift:privy",
+            "entry-drift:nodash"
+        ]
     );
-    let got = entry_units(&root, &now).unwrap();
-    assert_eq!(got[0].slug, "entry-drift:cart yard");
-    put(&root, "entry-raise", "");
-    assert!(entry_units(&root, &now).is_err());
-    put(&root, "entry-lines.json", "not json");
-    std::fs::remove_file(root.join("entry-raise")).unwrap();
-    assert!(entry_units(&root, &now).is_err());
+    let none = std::collections::HashMap::new();
+    let said: Vec<String> = got.iter().map(|u| command(u, &now, &none)).collect();
+    assert!(said[0]
+        .starts_with("make check-bundle Q=0094 FOR=entry-drift KIND=\"<the class of notakind>\""));
+    assert!(said[1].starts_with("make check-bundle Q=0095 FOR=entry-drift KIND=\"Privy\""));
+    assert!(said[2].starts_with(
+        "make check-bundle Q=<its section> FOR=entry-drift KIND=\"<the class of nodash>\""
+    ));
+    // a key both registries hold names each class by its module (feature 449 T149: the registry's kinds, as the lexing met them)
+    assert_eq!(
+        modal_classes("well"),
+        ["water_and_ways.Well", "household.Well"]
+    );
+    assert!(modal_classes("nope").is_empty());
+}
+
+#[test]
+fn the_entry_drift_report_runs_in_process() {
+    let root = record("owed-entry-run");
+    put(&root, "entry-real", "");
+    let now = read_at(&root, None, None).unwrap();
+    // nothing moved: nothing named, and the registry is not loaded
+    assert!(entry_units(&root, &now).unwrap().is_empty());
     assert!(units(&root, None, None, &["entry-drift"], "")
         .unwrap()
         .is_empty());
-    std::fs::remove_file(root.join("l7r/diagram/interactive/classes/__init__.py")).unwrap();
+    // the tests' seam: lines named, or none
+    put(&root, "entry-lines.json", "not json");
+    std::fs::remove_file(root.join("entry-real")).unwrap();
+    assert!(entry_units(&root, &now).is_err());
+    std::fs::remove_file(root.join("entry-lines.json")).unwrap();
+    assert!(entry_units(&root, &now).unwrap().is_empty());
+    // a tree with no modal files is a tree with no engine: refused, as the Python's import refused it
+    put(&root, "entry-real", "");
+    std::fs::remove_dir_all(root.join(crate::record::modals::MODALS)).unwrap();
+    assert!(entry_units(&root, &now).is_err());
     assert!(units(&root, None, None, &["entry-drift"], "").is_err());
     let fresh = crate::checks::scratch("owed-entry-empty");
     git(&fresh, &["init", "-q"]);
@@ -501,41 +540,56 @@ fn the_entry_drift_seam() {
 }
 
 #[test]
-fn a_file_entry_owed_reads_starts_it_with_no_page_changed() {
-    let root = record("owed-entry-reads");
-    put(&root, "entry-raise", "");
-    // nothing it reads changed: not started, so its failure is not seen
-    assert!(units(&root, None, None, &["entry-drift"], "")
-        .unwrap()
-        .is_empty());
-    // a registry it reads, edited in the working tree: started, and the broken engine fails as the Python's did
+fn the_entry_drift_report_loads_the_registry_when_a_page_moved() {
+    let root = record("owed-entry-moved");
+    put(&root, "entry-real", "");
+    let now = read_at(&root, None, None).unwrap();
+    // a page's findings moved: the registry loads, and the scratch tree holds only a few of its kinds' files - the Python's import error
     put(
         &root,
-        "l7r/diagram/interactive/classes/homestead.py",
-        "class Well(Kind):\n    key = \"well\"\n",
+        PAGE,
+        "<h2 id=\"t\">Trade</h2>\n<p>A new finding.</p>\n",
     );
-    assert!(units(&root, None, None, &["entry-drift"], "").is_err());
-    git(
+    assert!(entry_units(&root, &now).is_err());
+    // every kind's file, written in the working tree (no commit, FR-008): the registry loads and the report runs, and every kind it
+    // names is About-form, owed the modal checks instead
+    l7r_gate_registry::testkit::modals(&root, "research/questions/0094-trade.html");
+    put(
         &root,
-        &[
-            "checkout",
-            "--",
-            "l7r/diagram/interactive/classes/homestead.py",
-        ],
+        PAGE,
+        "<h2 id=\"t\">Trade</h2>\n<p>Another finding.</p>\n",
     );
-    // a new file in its import closure, untracked: started too
-    put(&root, "l7r/diagram/interactive/sources.py", "");
-    assert!(units(&root, None, None, &["entry-drift"], "").is_err());
-    std::fs::remove_file(root.join("l7r/diagram/interactive/sources.py")).unwrap();
-    // a file elsewhere in the record it reads (a write-up's data): started
+    assert!(entry_units(&root, &now).unwrap().is_empty());
+}
+
+#[test]
+fn a_file_entry_owed_reads_starts_it_with_no_page_changed() {
+    let root = record("owed-entry-reads");
+    let started = |root: &Path| super::entry_drift_owed(&mut Delta::new(root));
+    // nothing it reads changed: not started
+    assert!(!started(&root));
+    // a modal file of the registry, edited in the working tree: started
+    put(&root, WELL, "Name: Well\nAbout: Changed.\n");
+    assert!(started(&root));
+    git(&root, &["checkout", "--", WELL]);
+    // a new file under the engine's interactive package, untracked: started too
+    put(
+        &root,
+        "l7r/diagram/interactive/assets/siblings.json",
+        "{}\n",
+    );
+    assert!(started(&root));
+    std::fs::remove_file(root.join("l7r/diagram/interactive/assets/siblings.json")).unwrap();
+    // a file elsewhere in the record it reads: started
     put(&root, "research/tags.json", "{}\n");
-    assert!(units(&root, None, None, &["entry-drift"], "").is_err());
+    assert!(started(&root));
     std::fs::remove_file(root.join("research/tags.json")).unwrap();
     // a file it never reads, alone: not started
     put(&root, "docs/notes.md", "x\n");
-    assert!(units(&root, None, None, &["entry-drift"], "")
-        .unwrap()
-        .is_empty());
+    assert!(!started(&root));
+    // no modal files at all: the tree with no engine, started so its refusal is seen
+    std::fs::remove_dir_all(root.join(crate::record::modals::MODALS)).unwrap();
+    assert!(started(&root));
 }
 
 #[test]
@@ -589,7 +643,6 @@ fn the_store_and_its_siblings_with_the_test_variable_given() {
 fn a_record_with_no_commit_and_the_seams_noise() {
     let root = crate::checks::scratch("owed-nocommit");
     git(&root, &["init", "-q"]);
-    stubs(&root);
     put(
         &root,
         "research/questions/0094-trade.html",
@@ -605,9 +658,6 @@ fn a_record_with_no_commit_and_the_seams_noise() {
     let (done, refused) = super::answers::fixed_answer(&root, "94", "k", "x: y").unwrap();
     assert!(done.is_empty() && refused == ["quote-check:0094#k"]);
     let rec = record("owed-noise");
-    let now = read_at(&rec, None, None).unwrap();
-    put(&rec, "entry-noise", "");
-    assert!(entry_units(&rec, &now).is_err());
     put(&rec, "r.md", "x\r\n&lt;&lt;&lt; kept");
     let at = |n: &str| rec.join(n).to_string_lossy().into_owned();
     assert_eq!(
@@ -750,11 +800,18 @@ fn an_answered_listing_and_a_docstring_modal_then() {
     assert!(!run(&root, &["--slugs"]).stdout.contains("research/other"));
     let s = store(&root);
     let now = modals::modals_now(&root, true).unwrap();
-    let barn = modals::find(&now, "hamlet/barn").unwrap();
-    let slug = "modal-depiction:hamlet/barn";
-    let rec = json!({"answered": [modals::legacy_depiction_fingerprint(&root, barn).unwrap()], "utc": "2099-01-01T00:00:00Z"});
+    // a pop-up read from a class docstring (its origin a module's line; none is since feature 319, and the registry reads none since
+    // feature 449 T149): an old answer is never taken for it, there being no file to read as it stood
+    let docstring = modals::Modal {
+        origin: "l7r/diagram/interactive/classes/homestead.py:6".to_owned(),
+        ..modals::find(&now, "hamlet/notice-board").unwrap().clone()
+    };
+    let now = vec![docstring];
+    let board = &now[0];
+    let slug = "modal-depiction:hamlet/notice-board";
+    let rec = json!({"answered": [modals::legacy_depiction_fingerprint(&root, board).unwrap()], "utc": "2099-01-01T00:00:00Z"});
     std::fs::write(
-        s.join("modal-depiction%3Ahamlet%2Fbarn.json"),
+        s.join("modal-depiction%3Ahamlet%2Fnotice-board.json"),
         rec.to_string(),
     )
     .unwrap();

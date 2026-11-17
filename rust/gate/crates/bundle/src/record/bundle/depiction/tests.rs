@@ -7,6 +7,7 @@ use serde_json::json;
 use super::*;
 use crate::record::bundle::modal::{bundle, Ask};
 use crate::record::bundle::tests::scratch;
+use crate::record::bundle::Run;
 use crate::record::testkit::{commit, git, put, WELL};
 
 const POOL_PAGE: &str = "<svg viewBox=\"0 0 9 9\"><g class=\"f k\" data-k=\"well\"><rect x=\"1\" y=\"2\" width=\"3\" stroke-width=\"9\"/><circle cx=\"4\" cy=\"5\" r=\"6\"/></g><g class=\"f o\" data-k=\"o\"><rect x=\"9\"/></g></svg>";
@@ -124,6 +125,11 @@ fn no_crop_a_stale_page_and_the_failures() {
     std::fs::write(root.join("rust/phases/src/b.rs"), [0xff]).unwrap();
     assert_eq!(depiction(&root, &format!("{o}3")).0, -1);
     std::fs::remove_file(root.join("rust/phases/src/b.rs")).unwrap();
+    // the knob registry read in process (feature 449 T149): unreadable, the bundle fails as the door's traceback failed it
+    let knobs = std::fs::read_to_string(root.join("l7r/diagram/knobs.json")).unwrap();
+    put(&root, "l7r/diagram/knobs.json", "not json");
+    assert_eq!(depiction(&root, &format!("{o}5")).0, -1);
+    put(&root, "l7r/diagram/knobs.json", &knobs);
     std::fs::write(
         root.join("research/questions/0094-trade.drawing.html"),
         [0xff],

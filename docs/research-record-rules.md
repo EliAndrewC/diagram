@@ -503,7 +503,7 @@ What a map's modal says about a feature is its modal file (`interactive/assets/m
 question that closed the gap - told to update the pigsty write-up, *"if I hadn't said that ... then
 would you have done it?"*
 
-**What is owed.** `scripts/record/entry_owed.py` names every class whose section's BODY changed while its own
+**What is owed.** `l7r-gate record entry-owed` (`rust/gate/crates/owed/src/record/entry.rs`, feature 449 T149) names every class whose section's BODY changed while its own
 explanation prose did not. `make page-check` prints that list and does not block. **The push REFUSES**
 until each named pair is answered: dispatch the `entry-drift` agent at it, rewrite the prose it calls
 DRIFTED - or, where the sections moved without any FINDING moving, discharge the lot with one recorded
@@ -522,7 +522,7 @@ the changed research entry's own standing obligations and a green pass from eith
 any modal.
 
 **And a renamed heading owes its inbound links** - the rule this file already stated, now checked:
-`scripts/gates/check-entry-headings.py` fails the gate and the push when a class's `Entry:` resolves to no
+`l7r-gate check entry-headings` (`rust/gate/crates/registry/src/headings.rs`, feature 449 T149) fails the gate and the push when a class's `Entry:` resolves to no
 section. A section deliberately not written is written in the declared form
 `research/contents.json#<section> (no dedicated entry - recorded as silent)`, which `make audit` enumerates.
 

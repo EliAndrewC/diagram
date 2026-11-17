@@ -156,11 +156,8 @@ fn the_command_line() {
         .code,
         0
     );
-    put(
-        &root,
-        "l7r/diagram/interactive/classes/broken.py",
-        "x = (\n",
-    );
+    // a modal file that cannot be read fails the bundle (a class module that did not lex did, before feature 449 T149)
+    std::fs::write(root.join(crate::record::testkit::WELL), b"About: \xff\n").unwrap();
     assert_eq!(cli(&args(&["--root", &r, "bundle", "--out", &out])).code, 1);
 }
 

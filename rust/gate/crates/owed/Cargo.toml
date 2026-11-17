@@ -8,12 +8,18 @@ publish = false
 [dependencies]
 fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }
+l7r_gate_registry = { path = "../registry" }
 l7r_gate_research = { path = "../research" }
 l7r_guard = { path = "../../../guard" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 
+[features]
+# the entry-drift report's test seam (`owed.rs`'s `entry_lines`) for the crates above whose tests build a scratch record (feature 449 T149)
+testkit = []
+
 [dev-dependencies]
+l7r_gate_registry = { path = "../registry", features = ["testkit"] }
 l7r_gate_core = { path = "../core", features = ["testkit"] }
 
 [lints]

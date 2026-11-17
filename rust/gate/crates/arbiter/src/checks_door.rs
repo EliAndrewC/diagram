@@ -1,7 +1,7 @@
 //! `l7r-gate checks-close`: what `make check-closed` runs (feature 449 T86). Its file kept the name of `l7r-gate checks-door`, the Python
 //! callers' door to the check state and the arbiter (`ask:449-T86-door`), which left with its last caller, `review_snapshot.py`, when
-//! feature 449 T132 ported it (`ask:449-phase3-remainder` Q2 task B): every verb's Rust stays where the guards call it, and the door's
-//! loop, `checks_door::serve_with`, stays in `core` for `owed-door`.
+//! feature 449 T132 ported it (`ask:449-phase3-remainder` Q2 task B): every verb's Rust stays where the guards call it; the doors' loop
+//! left `core` with `owed-door`, the last door (feature 449 T149).
 
 use l7r_guard::shared::checks;
 use l7r_guard::shared::checks::handle;

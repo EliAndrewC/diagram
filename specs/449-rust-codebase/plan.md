@@ -364,28 +364,36 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** No.
 
 
-### T149 (<why: the finding or measurement that files it>)
+### T149 (phase 4's S6, the registries and their readers, `ask:449-phase4-slices` Q5)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the modal registries' readers ported to a new gate crate `registry` (the kinds table `kinds.rs`, `_base.py`'s About parser and its refusals, `conditions`, `choices`, `check-entry-headings`, `open_questions`) and the owed crate's `record/entry.rs` (`entry_owed.py`); `entry_owed.py`, `open_questions.py`, `check-entry-headings.py`, `scripts/owed_door.py`, `scripts/record_door.py` and `record_cache.py` deleted (1,501 lines of Python, observed 2026-11-16, method: `wc -l` at HEAD), with the bundle crate's `owed_door.rs` and its door loop. `classes/*`, `compound_kinds/*`, `conditions.py` and `choices.py` stay, frozen, for the Python that still imports them (`page.py` and `sheet.py` at S7, `buildings/types.py` at S9a, the pool generators at S11, `render_cache.py` at S12), read-only (`ask:449-T81-slices`); a test of the real tree holds `kinds.rs` equal to the Python classes by name, key and order.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase4-slices` Q5 and Q10, `ask:449-T81-slices`, `ask:449-usage-text`, FR-001, FR-002, FR-003, FR-004, FR-008):
+   - Q5's move is already made: feature 319 moved every modal's prose to one Markdown file per kind (`l7r/diagram/interactive/assets/modals/{hamlet,sheet}/<slug>.md`), so the prose stays where it is, beside the Python registry that reads it and the Rust one that enumerates it; moving it again would change only bound outputs (the bundles' `origin`, entry_owed's prose line, `MODALS_DIR` that `page.py` reads) and no fingerprint. For all 160 kinds the text HEAD's `_base.modal_text` returns equals the file byte for byte, no class carries a docstring, and the modal files are untouched (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t149/tools/prose_proof.py` and `git diff HEAD` of the directory). Q5's old-to-new map is `specs/449-rust-codebase/t149-modal-map.json`, measured empty: all 297 modals (61 hamlet, 99 sheet, 137 choice) keep their uid, class, key, file and three fingerprints, HEAD read through its owed door and the port through `record modal-owed --ids`, on the real record, a moved page, a rewritten prose and a renumbered page (observed 2026-11-16, method: the two listings compared byte for byte); so no round, ruling, answer or claim is keyed to a changed id and nothing is carried.
+   - The callers: the push's two entry-headings rows run `l7r-gate check entry-headings` (its self-test too) where they ran Python; `make audit`'s silences `registry silent`; `make open-questions` `record open-questions`; `record-owed`'s entry-drift family and the depiction bundle's knobs in process; `modals.rs` and the owed crate's modal classes read the registry table where they lexed or grepped the `.py` files; `record entry-owed`, `registry dump` and `modal-owed --ids` the new command forms. The docs and agent files that named the deleted files are rewritten, and `make agent-sync` regenerated the modal checks' agent files.
+   - Matched where the port first differed: the no-engine refusal reads `ImportError:`, and a crash or failed self-test of the headings check records no usage row, as the Python wrote none.
+   - The claims (Q10): the 42 claims on these units sit in `_base.py`, `conditions.py` and `choices.py`, which stay, each a claim of no research, so none is keyed to a deleted unit; `make claims-owed` owes none and `make claims-report` lists only findings already open (observed 2026-11-16, method: those commands).
+   - The same outputs (FR-002), through the shared runner: HEAD's Python against the Rust, every make target and reader on the real record and 18 fault fixtures, the push's two rows, the registry's dump over the five hamlet manifests, the modal ids: the differential's 45 cases, none differing (measured 2026-11-16 (`make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t149/cases.json VERIFY=1`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t149/cases.diff-run/reports/diff-run-verify-20261117T042010Z.json`)). Normalizations taken: UTC times, the world's base commit and path (the new world commits the port), argparse's and a traceback's text (`ask:449-usage-text`), and the push's usage rows sorted (each row its own thread at HEAD, as T148 found).
+   - Tests (FR-008): each new test runs under a tenth of a second alone, the slowest 89 ms, on a four-kind fixture built once per test binary where a test needs only a few kinds (observed 2026-11-16, method: T99's - each test run alone with `--exact`, best of three, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t149/tools/fr008.sh`). Eleven tests of the owed crate written before this task run over the bar, 102 to 276 ms (observed 2026-11-16, method: the same script), and they are fixed in their own task.
+   - Timing, recorded and not held: `make open-questions` 2.5 s in Python against 1.9 s in Rust, the push's two rows 0.72 s against 0.35 s (observed 2026-11-16, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t149/cases.diff-run/reports/diff-run-verify-20261117T042010Z.json`).
+   - Found and left for their own commits (constitution XIV): the entry-headings check never covered the 99 Mode A kinds (covering them makes it refuse more, which FR-002's exception does not reach inside a port), and one diffrun test fails under load.
+   - The census and checks: no `specs/*/measurements*.json` runs a deleted file (observed 2026-11-16, method: `git grep` in command, import and `-m` forms). `make static` clean on 31 crates, `make rust-test` clean, `make hooks-test HOOKS_ALL=1` green on 54 suites, `make quick` clean, the pointer check clean on a clone with the new files added (observed 2026-11-16, method: those commands).
 
 ### T149 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The registries' readers run in Rust, the three Python doors gone, every modal id where it was.
+2. **The constraints.** FR-001 to FR-004 and FR-008, `ask:449-phase4-slices` Q5 and Q10.
+3. **Where each comes from.** R: the rulings; O: the prose proof, the id comparison, the differential and the census above.
+4. **Do they describe the world here?** Run on copies of this clone's real record, measured 2026-11-16 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t149/cases.json`).
+5. **The order.** After S5 (T148) and T163.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and a gated `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The verify run's cases with none differing, the empty id map, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T150 (<why: the finding or measurement that files it>)

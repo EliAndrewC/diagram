@@ -6,14 +6,17 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
+use l7r_gate_registry::about::modal_rel;
+use l7r_gate_registry::kinds::{by_file, REGISTRIES};
 use l7r_guard::shared::py_text::{collapse, split, strip, SPACE_CLASS};
-use l7r_guard::suite_tools::pylex;
 use serde_json::{json, Map, Value};
 
 use super::delta::Delta;
 use super::repo::{cat_blobs, git, git_show, read_text, read_universal, Fail};
 use super::units::{digest, re, Keyed};
 
+/// The Python packages the registry mirrors (`l7r_gate_registry::kinds`), named where a modal is not found; since feature 449 T149 no
+/// reader lexes them.
 pub const MODAL_DIRS: [&str; 2] = [
     "l7r/diagram/interactive/classes",
     "l7r/diagram/interactive/compound_kinds",
@@ -211,7 +214,7 @@ pub fn stem(path: &str) -> String {
         .map_or_else(String::new, |s| s.to_string_lossy().into_owned())
 }
 
-/// A class docstring's or modal file's tags, each value its lines (`modal_owed.parse_tags`); insertion order kept.
+/// A modal file's tags, each value its lines (`modal_owed.parse_tags`); insertion order kept.
 pub fn parse_tags(doc: &str) -> Vec<(String, String)> {
     let mut out: Vec<(String, Vec<String>)> = Vec::new();
     let mut cur: Option<usize> = None;
@@ -270,59 +273,34 @@ fn join_tag(tag: &str, lines: &[String]) -> String {
     strip(&lines.join(" ")).to_owned()
 }
 
-/// The modal file (repository-relative) of the kind `key` defined in the module at `py_path`.
-#[must_use]
-pub fn modal_file(py_path: &str, key: &str) -> String {
-    let registry = if py_path.contains("compound_kinds") {
-        "sheet"
-    } else {
-        "hamlet"
-    };
-    format!("{MODALS}/{registry}/{}.md", slug_of(key))
-}
-
-/// (class name, key, line, docstring) of every class in a module's source that sets a string `key`.
-///
-/// # Errors
-///
-/// Where what it reads, writes or runs fails: the error says which and why.
-pub fn kinds_in(source: &str) -> Result<Vec<(String, String, usize, String)>, Fail> {
-    pylex::kinds(source)
-        .map(|found| {
-            found
-                .into_iter()
-                .map(|k| (k.name, k.key, k.line, k.doc))
-                .collect()
-        })
-        .ok_or_else(|| "a modal module does not parse".to_owned())
-}
-
 /// The file at `f`, or None; reads the tree now or a revision.
 pub type Reader<'a> = &'a mut dyn FnMut(&str) -> Result<Option<String>, Fail>;
 
-/// The modals of one module's source.
-fn modals_in(source: &str, path: &str, read: Reader, about_only: bool) -> Result<Vec<Modal>, Fail> {
+/// The modals of the registry's kinds (feature 449 T149, `ask:449-phase4-slices` Q5): each kind's file read through `read`, in the order
+/// this module met them when it lexed `classes/*.py` and `compound_kinds/*.py` (the modules by file name, the classes in definition
+/// order), `cls` the module and class as before. A kind with no file is skipped, as the Python's class with no docstring was; no kind
+/// carries one since feature 319, so the Rust registry (`l7r_gate_registry::kinds`) replaces the lexing and no uid or fingerprint moves
+/// (`specs/449-rust-codebase/t149-modal-map.json`, measured).
+fn kind_modals(read: Reader, about_only: bool) -> Result<Vec<Modal>, Fail> {
     let mut out = Vec::new();
-    for (cls, key, line, doc) in kinds_in(source)? {
-        let f = modal_file(path, &key);
-        let found = read(&f)?;
-        let origin = if found.is_some() {
-            f
-        } else {
-            format!("{path}:{line}")
-        };
-        let text = found.unwrap_or(doc);
-        let tags = parse_tags(&text);
-        if (about_only && !tags.iter().any(|(k, _)| k == "About")) || tags.is_empty() {
-            continue;
+    for registry in &REGISTRIES {
+        for (module, kind) in by_file(registry) {
+            let f = modal_rel(registry, kind.key);
+            let Some(text) = read(&f)? else {
+                continue;
+            };
+            let tags = parse_tags(&text);
+            if (about_only && !tags.iter().any(|(k, _)| k == "About")) || tags.is_empty() {
+                continue;
+            }
+            out.push(Modal {
+                cls: format!("{module}.{}", kind.class),
+                key: kind.key.to_owned(),
+                origin: f,
+                tags,
+                doc: text,
+            });
         }
-        out.push(Modal {
-            cls: format!("{}.{cls}", stem(path)),
-            key,
-            origin,
-            tags,
-            doc: text,
-        });
     }
     Ok(out)
 }
@@ -405,9 +383,7 @@ pub fn read_at(root: &Path, rev: &str) -> RevReader {
 }
 
 fn modal_dirs() -> Vec<&'static str> {
-    let mut dirs: Vec<&str> = MODAL_DIRS.to_vec();
-    dirs.push(MODALS);
-    dirs
+    vec![MODALS]
 }
 
 /// The files under the modal directories at `rev`, as [`RevReader`] lists them.
@@ -468,15 +444,8 @@ fn glob_sorted(dir: &Path, suffix: &str) -> Vec<String> {
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn modals_now(root: &Path, about_only: bool) -> Result<Vec<Modal>, Fail> {
-    let mut out = Vec::new();
-    for d in MODAL_DIRS {
-        for name in glob_sorted(&root.join(d), ".py") {
-            let rel = format!("{d}/{name}");
-            let text = read_text(&root.join(&rel))?;
-            let mut read = read_now(root);
-            out.extend(modals_in(&text, &rel, &mut read, about_only)?);
-        }
-    }
+    let mut read = read_now(root);
+    let mut out = kind_modals(&mut read, about_only)?;
     let choice = format!("{MODALS}/choice");
     for name in glob_sorted(&root.join(&choice), ".md") {
         let rel = format!("{choice}/{name}");
@@ -499,14 +468,9 @@ pub fn modals_at(root: &Path, rev: &str, about_only: bool) -> Result<Keyed<Modal
 /// The modals a revision's reader holds, keyed by uid.
 fn modals_of(mut read: RevReader, about_only: bool) -> Result<Keyed<Modal>, Fail> {
     let mut out = Keyed::default();
-    for d in MODAL_DIRS {
-        for name in read.names(d).into_iter().filter(|n| ends(n, ".py")) {
-            let source = read.read(&name).unwrap_or_default();
-            let mut reader = |f: &str| Ok(read.read(f));
-            for m in modals_in(&source, &name, &mut reader, about_only)? {
-                out.insert(m.uid(), m);
-            }
-        }
+    let mut reader = |f: &str| Ok(read.read(f));
+    for m in kind_modals(&mut reader, about_only)? {
+        out.insert(m.uid(), m);
     }
     for name in read
         .names(&format!("{MODALS}/choice"))
@@ -772,10 +736,35 @@ pub fn about_keys(root: &Path) -> Result<HashSet<String>, Fail> {
     Ok(modals_now(root, true)?.into_iter().map(|m| m.key).collect())
 }
 
-/// `record modal-owed [--root DIR]`: the owed units, one a line (`modal_owed.py`'s own command line).
+/// Every modal by uid, sorted, with its class, key, file and the three fingerprints its checks' answers are kept under: what a change
+/// to how the modals are enumerated must leave alone (feature 449 T149, `ask:449-phase4-slices` Q5: the move's old-to-new map is measured
+/// by it, `specs/449-rust-codebase/t149-modal-map.json`).
+///
+/// # Errors
+///
+/// Where what it reads fails: the error says which and why.
+pub fn ids(root: &Path) -> Result<Value, Fail> {
+    let mut all = modals_now(root, false)?;
+    all.sort_by_key(Modal::uid);
+    let mut out = Map::new();
+    for m in all {
+        let (form, research) = fingerprints(root, &m)?;
+        out.insert(
+            m.uid(),
+            json!({"cls": m.cls, "key": m.key, "origin": m.origin, "fp_form": form, "fp_research": research,
+                   "fp_depiction": depiction_fingerprint(root, &m)?}),
+        );
+    }
+    Ok(Value::Object(out))
+}
+
+/// `record modal-owed [--root DIR] [--ids]`: the owed units, one a line (`modal_owed.py`'s own command line); `--ids`, every modal's ids.
 #[must_use]
 pub fn cli(args: &[String]) -> crate::Reply {
-    let flags = [super::args::Spec::value("--root")];
+    let flags = [
+        super::args::Spec::value("--root"),
+        super::args::Spec::flag("--ids"),
+    ];
     let parsed = match super::args::parse(args, &flags) {
         Ok(p) => p,
         Err(complaint) => {
@@ -788,6 +777,20 @@ pub fn cli(args: &[String]) -> crate::Reply {
     };
     let given = parsed.text("--root", ".");
     let root = std::fs::canonicalize(given).unwrap_or_else(|_| given.into());
+    if parsed.on("--ids") {
+        return match ids(&root) {
+            Ok(v) => crate::Reply {
+                stdout: l7r_guard::shared::pyjson::dumps(&v, Some(1), false) + "\n",
+                stderr: String::new(),
+                code: 0,
+            },
+            Err(why) => crate::Reply {
+                stdout: String::new(),
+                stderr: why + "\n",
+                code: 1,
+            },
+        };
+    }
     match owed(&root, &super::owed::merge_base(&root), "") {
         Ok(rows) => crate::Reply {
             stdout: rows.iter().fold(String::new(), |mut out, (slug, why, _)| {

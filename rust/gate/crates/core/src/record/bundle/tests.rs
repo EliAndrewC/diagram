@@ -18,15 +18,14 @@ for line in sys.stdin:
         def u(q, kind, claim):
             return {"path": "l7r/m.py", "qualname": q, "kind": kind, "lineno": 1, "end_lineno": 1, "claims": [claim], "inherited": False, "core": "c", "errors": [], "names": [], "blocks": [], "module_errors": []}
         print(json.dumps({"ok": [[u("Mod.ROUND_CAP", "constant", "cap - research/questions/0094-trade.html: ROUND_CAP is 12 ft"), u("other", "function", "o - GUESS: about 3 households"), u("Third", "class", "t - CONVENTION: nothing named")], []]}), flush=True)
-    elif v == "knobs":
-        print(json.dumps({"ok": {"winter_crop": ["none", "wheat"]}}), flush=True)
-    elif v == "knob_table":
-        print(json.dumps({"ok": {"winter_crop": {"default": "none", "typing_rule": "def rule():\n    pass\n"}, "empty": {}}}), flush=True)
+    elif v == "echo":
+        print(json.dumps({"ok": a}), flush=True)
     else:
         print(json.dumps({"error": f"Traceback (most recent call last):\nKeyError: '{v}'"}), flush=True)
 "#;
 
-/// The testkit's record with the stub runner, the style guide and the variant index.
+/// The testkit's record with the stub runner, the style guide, the variant index, and the knob registry and choices table the modal
+/// bundles read in process (feature 449 T149, where the runner answered `knobs` and `knob_table`).
 pub fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = record(tag);
     put(&root, "scripts/bundle_door.py", RUNNER);
@@ -35,6 +34,12 @@ pub fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
         &root,
         "research/assets/glossary-variants.txt",
         "wells\twell\n",
+    );
+    put(&root, "l7r/diagram/knobs.json", "{\"knobs\": {\"winter_crop\": {\"forms\": [\"none\", \"wheat\"], \"default\": \"none\", \"typing_rule\": \"def rule():\\n    pass\\n\"}, \"empty\": {}}}\n");
+    put(
+        &root,
+        "l7r/diagram/interactive/assets/choices.json",
+        "{\"choices\": []}\n",
     );
     root
 }
