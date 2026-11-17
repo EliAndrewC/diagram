@@ -472,3 +472,6 @@
 - [x] T172 The claims walk's Rust items read raw strings (constitution XIV; found by T170's claims round): the splitter's item end takes a raw string literal's inner quote for its close, so a static after one is swallowed into the unit before it and gets no key of its own - raw and byte-raw literals read to their own close, the units the fix reshapes re-checked
       research: rendering
       verify: DONE. landed: the claims walk reads raw strings to their own close; 50 claims IN-STEP
+- [x] T173 make diff-run JOBS=n: a run's cases side by side, each in its own world (the GM 2026-11-17, request.md: no-brainer process fixes from the pilot; T170's verify run took 392.6 s, its cases' own commands 11.6 s of it, the rest a whole world built and removed for each of 210 sides one after another) - opt-in, results and the report's order unchanged
+      research: rendering
+      verify: DONE. landed: make diff-run JOBS=n: T170's verify 375.8 s serial, 151.5 s at JOBS=4, reports equal

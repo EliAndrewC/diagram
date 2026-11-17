@@ -705,29 +705,5 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T172 to T170 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 <!-- plan-archive: T172 to T172 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 
-### T173 (T170's verify run spent nearly all its time building worlds, not running its cases)
-
-- **Approach**: the shared differential runner (`rust/gate/crates/diffrun/`) runs a run's owed sides on n workers when asked - `make diff-run CASES=... JOBS=n`, the binary's `--jobs n`, default 1 - each worker in its own world (`work/<side>-<w>`, `work/<side>` when one), the main thread alone building each row and printing its line in case order, builds once before any case. Where the time went: T170's verify run took 392.6 s and its sides' own commands 11.6 s of it, the rest a whole world built and removed for each side one after another (observed 2026-11-17, method: T170's verify report's `wall_s` against the sum of its sides' `took_s`).
-
-   **Decisions** (the GM's words, request.md 2026-11-17, no-brainer process fixes pre-approved; FR-002, FR-008):
-   - Opt-in, the default unchanged: a cases file whose harness writes a fixed path outside its world would race on several workers, so JOBS is the caller's to set where the harness writes only inside `{WORLD}`, which docs/diff-run.md states. With JOBS unset a run is today's.
-   - The result is the serial run's: the report, the kept results and the printed lines in case order, an error naming a worker's world rewritten to the serial path. Proved by a test running three cases whose sides finish out of start order at JOBS=1 and JOBS=4, equal but for the clock, each worker's world its own; it and the clamp test went red under four mutations - rows in completion order, one shared world, the clamp removed, the error path not rewritten (observed 2026-11-17, method: each mutation in a scratch copy of `runner.rs` restored by `cp`, `make rust-test CRATE=rust/gate/crates/diffrun`).
-   - Measured on T170's 105 cases, VERIFY=1, whole worlds, every side rerun from a fresh state directory: JOBS=1 375.8 s, JOBS=2 220.5 s, JOBS=4 151.5 s, JOBS=6 162.2 s, JOBS=8 181.6 s, every report 105 cases none differing and equal to the serial one but for the clock (observed 2026-11-17, method: `make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t173/m<J>/cases.json VERIFY=1 JOBS=<J>` one after another on 22 cores, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t173/measure.log`). Four is the best on this host, past it the sides' own time growing, which docs/diff-run.md records.
-   - A JOBS of 0, a non-number or a missing value is refused with the fix; one above the owed sides is clamped.
-
-### T173 Approach (checklist part A)
-
-1. **The goal, in the world.** A port's verify run takes minutes less, its result unchanged.
-2. **The constraints.** FR-002 (the runner's result is the record), FR-008; the GM's pre-approval.
-3. **Where each comes from.** G: the GM's request; O: the measurements above.
-4. **Do they describe the world here?** Measured on this clone's real T170 cases, 2026-11-17 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t173/measure.log`).
-5. **The order.** After T170 and T172.
-6. **The exits.** Green: the crate's tests, `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The walls above, each report agreeing with the serial one.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** Yes - a tool's wall time, measured before and after above; no map changes.
-
+<!-- plan-archive: T173 to T170 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
+<!-- plan-archive: T173 to T173 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
