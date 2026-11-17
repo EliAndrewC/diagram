@@ -12,7 +12,7 @@ use l7r_guard::shared::html_text::unescape;
 use l7r_guard::shared::pyjson;
 use serde_json::{json, Map, Value};
 
-use super::{listing, merge_base, units, units_in, zfill4, FAMILIES};
+use super::{listing, units_in, zfill4, FAMILIES};
 use crate::record::args::Parsed;
 use crate::record::delta::Delta;
 use crate::record::modals;
@@ -561,7 +561,16 @@ pub fn quotation_keys(
     rev: Option<&str>,
     slugs: &[String],
 ) -> Result<std::collections::HashMap<String, String>, Fail> {
-    let record = super::read_at(root, rev, Some(&HashSet::new()))?;
+    quotation_keys_in(&mut Delta::new(root), rev, slugs)
+}
+
+/// [`quotation_keys`], on one computation's reads.
+fn quotation_keys_in(
+    delta: &mut Delta,
+    rev: Option<&str>,
+    slugs: &[String],
+) -> Result<std::collections::HashMap<String, String>, Fail> {
+    let record = super::read_at_in(delta, rev, Some(&HashSet::new()))?;
     Ok(slugs
         .iter()
         .filter(|s| s.starts_with("quote-check:") && !s.ends_with("#unfootnoted"))
@@ -581,8 +590,12 @@ pub fn fixed_answer(
     fixed_by: &str,
 ) -> Result<(Vec<String>, Vec<String>), Fail> {
     let wanted: HashSet<&str> = notes.split(',').filter(|k| !k.is_empty()).collect();
-    let s = store(root);
-    let owed: Vec<Unit> = unanswered(root)?
+    // one computation's reads for the owed units, the store, the merge base and the base's record (feature 449 T164): each asked of
+    // git once, where four computations asked the merge base, the git directory and the base's listing again
+    let delta = &mut Delta::new(root);
+    let s = delta.store();
+    let rows = units_in(delta, None, None, &FAMILIES, "")?;
+    let owed: Vec<Unit> = unanswered_in(delta, rows)?
         .into_iter()
         .filter(|u| {
             u.check() == "quote-check"
@@ -591,12 +604,12 @@ pub fn fixed_answer(
         })
         .collect();
     let slugs: Vec<String> = owed.iter().map(|u| u.slug.clone()).collect();
-    let now = quotation_keys(root, None, &slugs)?;
-    let base_rev = merge_base(root);
+    let now = quotation_keys_in(delta, None, &slugs)?;
+    let base_rev = delta.merge_base();
     let base = if base_rev.is_empty() {
         std::collections::HashMap::default()
     } else {
-        quotation_keys(root, Some(&base_rev), &slugs)?
+        quotation_keys_in(delta, Some(&base_rev), &slugs)?
     };
     let refused: Vec<String> = owed
         .iter()
@@ -678,21 +691,25 @@ fn answer_from_bundle(
     Ok(done)
 }
 
+/// The units answered, and the tree's owed units where they were computed to find them (none for a bundle's answer).
+type Answered = (Vec<String>, Option<Vec<Unit>>);
+
 fn answer_inner(
-    root: &Path,
+    delta: &mut Delta,
     check: &str,
     result: &str,
     bundle: &str,
     named: &Named,
-) -> Result<Vec<String>, Fail> {
-    let s = store(root);
+) -> Result<Answered, Fail> {
+    let s = delta.store();
     let checks = agent_checks(check);
     if !bundle.is_empty() {
-        return answer_from_bundle(&s, &checks, result, bundle);
+        return Ok((answer_from_bundle(&s, &checks, result, bundle)?, None));
     }
     let wanted: HashSet<&str> = named.notes.split(',').filter(|k| !k.is_empty()).collect();
     let mut done = Vec::new();
-    for u in units(root, None, None, &FAMILIES, "")? {
+    let rows = units_in(delta, None, None, &FAMILIES, "")?;
+    for u in &rows {
         if !checks.iter().any(|c| c == u.check()) {
             continue;
         }
@@ -707,7 +724,7 @@ fn answer_inner(
             done.push(u.slug.clone());
         }
     }
-    Ok(done)
+    Ok((done, Some(rows)))
 }
 
 /// Record the answer for every unit of `check` the bundle carried, or that the tree owes on the named subject, and close that check's dispatches on those subjects.
@@ -723,9 +740,17 @@ pub fn answer(
     named: &Named,
     reply: &str,
 ) -> Result<Vec<String>, Fail> {
-    let done = answer_inner(root, check, result, bundle, named)?;
+    // ONE COMPUTATION'S READS for the answer and the readings it keeps (feature 449 T164): the owed units the answer was matched
+    // against are the tree's units now - an answer record feeds no unit - so they give the readings too, where the Python computed them
+    // twice in the port, and the store is asked of git once; a bundle's answer computed none, so it computes them here
+    let delta = &mut Delta::new(root);
+    let (done, rows) = answer_inner(delta, check, result, bundle, named)?;
     if !done.is_empty() && (check == "source-reader" || check == "quote-check") {
-        let (s, now): (PathBuf, Vec<Unit>) = (store(root), units(root, None, None, &FAMILIES, "")?);
+        let s = delta.store();
+        let now: Vec<Unit> = match rows {
+            Some(rows) => rows,
+            None => units_in(delta, None, None, &FAMILIES, "")?,
+        };
         let readings: std::collections::HashMap<&str, &str> = now
             .iter()
             .filter(|u| u.check() == check)

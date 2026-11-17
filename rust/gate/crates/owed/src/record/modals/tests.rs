@@ -116,6 +116,15 @@ fn modals_now_and_at_a_revision_and_what_they_owe() {
     assert!(owed(&root, &base, "").unwrap().is_empty());
     let all_new = owed(&root, "", "").unwrap();
     assert!(all_new.iter().any(|r| r.1 == "new to the About form"));
+}
+
+/// What a pop-up owes when a page its `Entry:` or `Drawing:` names moved, or its own text changed. Split from the test above with the
+/// next, each on a record of its own (feature 449 T164: the one test took 127 ms, over FR-008's tenth of a second).
+#[test]
+fn a_moved_page_or_a_changed_text_owes_the_modal_checks() {
+    let root = record("modals-owed-moved");
+    let now = modals_now(&root, true).unwrap();
+    let base = git(&root, &["rev-parse", "HEAD"]);
     put(
         &root,
         DRAWING,
@@ -155,7 +164,13 @@ fn modals_now_and_at_a_revision_and_what_they_owe() {
         && r.1 == "its Depiction, Drawing: or Entry: changed"));
     let (form, research) = fingerprints(&root, &now[0]).unwrap();
     assert_ne!(form, research);
-    // a modal file that is not UTF-8 cannot be read now; a revision's reader reads it as `cat-file` gives it
+}
+
+/// A modal file that is not UTF-8 cannot be read now; a revision's reader reads it as `cat-file` gives it.
+#[test]
+fn a_modal_file_that_is_not_utf8_is_refused_now_and_read_at_a_revision() {
+    let root = record("modals-owed-unreadable");
+    let base = git(&root, &["rev-parse", "HEAD"]);
     std::fs::write(root.join(WELL), b"About: \xff\n").unwrap();
     assert!(modals_now(&root, true).is_err());
     assert!(owed(&root, &base, "").is_err());

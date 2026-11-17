@@ -62,9 +62,12 @@ pub fn record_at(root: &Path) -> PathBuf {
     let root = root.to_path_buf();
     std::fs::create_dir_all(&root).unwrap();
     git(&root, &["init", "-q"]);
-    git(&root, &["config", "user.email", "t@example.org"]);
-    git(&root, &["config", "user.name", "t"]);
-    git(&root, &["config", "commit.gpgsign", "false"]);
+    // the identity written into the repository's config file, not by three `git config` runs: a git process costs 2-3 ms here, and
+    // FR-008 holds each owed test to a tenth of a second (feature 449 T164)
+    let config = root.join(".git/config");
+    let mut text = std::fs::read_to_string(&config).unwrap();
+    text.push_str("[user]\n\temail = t@example.org\n\tname = t\n[commit]\n\tgpgsign = false\n");
+    std::fs::write(&config, text).unwrap();
     put(&root, PAGE, "<h2 id=\"t\">Trade</h2>\n<p class=\"intro\">Why it is asked.</p>\n<p>A short way apart.<sup class=\"fn\" data-note=\"k\"></sup> More here.</p>\n<p>An unmarked claim.</p>\n");
     put(&root, NOTES, "<ol>\n<li data-note=\"k\">\"a passage\" <a href=\"https://e.org/a\"><code>key-a</code></a></li>\n<li data-note=\"t\">\"the hedge\" \u{300c}\u{57a3}\u{6839}\u{300d} (translated)<span class=\"orig\" data-orig=\"o1\"></span></li>\n<li data-note=\"z\">no publicly readable source</li>\n</ol>\n");
     put(
@@ -122,7 +125,9 @@ pub fn record_at(root: &Path) -> PathBuf {
         "No tags at all.\n",
     );
     let base = commit(&root, "base");
-    git(&root, &["update-ref", "refs/remotes/origin/main", &base]);
+    // origin/main as a loose ref written by hand, which is all `update-ref` writes in a fresh repository of git's default `files` ref
+    // backend (feature 449 T164, as above)
+    put(&root, ".git/refs/remotes/origin/main", &format!("{base}\n"));
     root
 }
 

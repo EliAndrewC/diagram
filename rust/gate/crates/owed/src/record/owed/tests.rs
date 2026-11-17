@@ -5,9 +5,9 @@ use std::path::Path;
 use serde_json::{json, Value};
 
 use super::answers::{
-    amendment1_depiction_answered, answer, answered, bundle_less_refusal, file_outside,
-    fixed_answer, keep_reading, legacy_depiction_answered, read_answer, reply_checks, settle,
-    store, unanswered, write_answer, Named,
+    amendment1_depiction_answered, answer, answered, file_outside, keep_reading,
+    legacy_depiction_answered, read_answer, reply_checks, settle, store, unanswered, write_answer,
+    Named,
 };
 use super::answers::{keep_parts, siblings_given, store_given};
 use super::{cli, command, entry_units, entry_units_of, modal_classes, read_at, units, FAMILIES};
@@ -34,6 +34,22 @@ fn none() -> Named<'static> {
     }
 }
 
+/// The scratch record with every kind of edit the listing reads, a hamlet well's text changed and the entry-drift seam's lines: what
+/// each of the listing's tests reads, built anew by each, as the one test they were split from built it once (feature 449 T164: a test
+/// a tenth of a second, FR-008, where one record answered five listings in 160 ms).
+fn listed(tag: &str) -> crate::checks::TempDir {
+    let root = record(tag);
+    listed_edits(&root);
+    root
+}
+
+/// [`listed`]'s edits, in the working tree of `root`.
+fn listed_edits(root: &Path) {
+    edit_everything(root);
+    put(root, WELL, "Name: Well\nAbout: Changed too.\nEntry: research/questions/0094-trade.html\nDrawing: research/questions/0094-trade.drawing.html\n");
+    put(root, "entry-lines.json", "[\"notakind - 0094-trade.html 0094-trade.drawing.html x.html - prose at x\\n      read: a\", \"privy - 0095-other.html - prose\", \"well - 0094-trade.html - prose\", \"nodash\"]");
+}
+
 #[test]
 fn the_listing_names_each_unit_and_its_command() {
     let root = record("owed-listing");
@@ -41,9 +57,7 @@ fn the_listing_names_each_unit_and_its_command() {
         run(&root, &[]).stdout,
         "record-owed: no record check is owed\n"
     );
-    edit_everything(&root);
-    put(&root, WELL, "Name: Well\nAbout: Changed too.\nEntry: research/questions/0094-trade.html\nDrawing: research/questions/0094-trade.drawing.html\n");
-    put(&root, "entry-lines.json", "[\"notakind - 0094-trade.html 0094-trade.drawing.html x.html - prose at x\\n      read: a\", \"privy - 0095-other.html - prose\", \"well - 0094-trade.html - prose\", \"nodash\"]");
+    listed_edits(&root);
     let said = run(&root, &[]);
     assert_eq!(said.code, 0);
     for want in [
@@ -66,6 +80,11 @@ fn the_listing_names_each_unit_and_its_command() {
     )
     .unwrap();
     assert!(batches["batches"]["modal-form"].is_array());
+}
+
+#[test]
+fn the_listing_s_slugs_and_its_unanswered_units() {
+    let root = listed("owed-listing-slugs");
     let slugs = run(
         &root,
         &["--slugs", "--q", "94", "--skip-check", "quote-check"],
@@ -79,6 +98,11 @@ fn the_listing_names_each_unit_and_its_command() {
     assert!(run(&root, &["--unanswered"])
         .stdout
         .starts_with("record-owed: "));
+}
+
+#[test]
+fn the_listing_between_two_revisions_and_its_refusals() {
+    let root = listed("owed-listing-between");
     let base = git(&root, &["rev-parse", "HEAD"]);
     commit(&root, "edits");
     let between = run(&root, &["--between", &base, "HEAD"]);
@@ -87,248 +111,8 @@ fn the_listing_names_each_unit_and_its_command() {
     assert_eq!(cli(&["--root".to_owned(), "/proc".to_owned()]).code, 1);
 }
 
-#[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "one scratch record answered in order, each answer read back by the next"
-)]
-fn answers_are_recorded_and_refused_as_the_python_did() {
-    let root = record("owed-answers");
-    edit_everything(&root);
-    assert_eq!(run(&root, &["--answer", "record-format"]).code, 2);
-    assert!(run(
-        &root,
-        &["--answer", "record-format", "--result", "r", "--q", "94"]
-    )
-    .stderr
-    .contains("REFUSED - a record-format answer without BUNDLE="));
-    assert!(run(
-        &root,
-        &[
-            "--answer",
-            "record-format",
-            "--result",
-            "r",
-            "--q",
-            "94",
-            "--reason",
-            "x"
-        ]
-    )
-    .stderr
-    .contains("REASON needs two words"));
-    let ok = run(
-        &root,
-        &[
-            "--answer",
-            "record-format",
-            "--result",
-            "3 of 3",
-            "--q",
-            "94",
-            "--reason",
-            "a stated reason",
-        ],
-    );
-    assert!(
-        ok.code == 0
-            && ok
-                .stdout
-                .contains("record-checked: 1 unit(s) answered - record-format:0094")
-    );
-    assert!(std::fs::read_dir(root.join("dev/bypass-log"))
-        .unwrap()
-        .next()
-        .is_some());
-    assert_eq!(
-        run(
-            &root,
-            &[
-                "--answer",
-                "intro-check",
-                "--result",
-                "r",
-                "--q",
-                "1",
-                "--reason",
-                "nothing owed here"
-            ]
-        )
-        .code,
-        3
-    );
-    let sr = run(
-        &root,
-        &[
-            "--answer",
-            "source-reader",
-            "--result",
-            "READ",
-            "--q",
-            "94",
-            "--notes",
-            "n",
-            "--reply",
-            &root.join("reply.md").to_string_lossy(),
-        ],
-    );
-    assert_eq!(sr.code, 1);
-    put(&root, "reply.md", "source-reader: 1\n\u{300c}more\u{300d} \u{300c}x\u{300d}\n## OUTSIDE THE CHANGE\n- `a.html` | b | c\n- no row\n# end\n");
-    let sr = run(
-        &root,
-        &[
-            "--answer",
-            "source-reader",
-            "--result",
-            "READ",
-            "--q",
-            "94",
-            "--notes",
-            "n",
-            "--reply",
-            &root.join("reply.md").to_string_lossy(),
-        ],
-    );
-    assert!(sr.stdout.contains("filed, not fixed - a.html | b | c") && sr.code == 0);
-    let rec = read_answer(&store(&root), "source-reader:0094#n");
-    assert!(
-        rec.contains_key("passages")
-            && rec.contains_key("reply_quotes")
-            && rec.contains_key("readings")
-    );
-    let bundle = root.join("bundle");
-    std::fs::create_dir_all(&bundle).unwrap();
-    put(&root, "bundle/MANIFEST.md", &format!("unit: quote-check:0094#k ffffffffffffffff\nunit: cart yard:x 0123\nunit: record-format:0095 abc\npage: {} {}\n", "research/questions/0094-trade.html", "a".repeat(40)));
-    let qc = run(
-        &root,
-        &[
-            "--answer",
-            "quote-check",
-            "--result",
-            "V",
-            "--bundle",
-            &bundle.to_string_lossy(),
-        ],
-    );
-    assert!(qc.stdout.contains("quote-check:0094#k"));
-    assert!(read_answer(&store(&root), "quote-check:0094#k").contains_key("qkeys") || qc.code == 0);
-    assert_eq!(
-        run(
-            &root,
-            &[
-                "--answer",
-                "quote-check",
-                "--result",
-                "V",
-                "--bundle",
-                "/nonexistent/b"
-            ]
-        )
-        .code,
-        3
-    );
-    let kind = run(
-        &root,
-        &[
-            "--answer",
-            "modal-research",
-            "--result",
-            "A",
-            "--kind",
-            "sheet/well,x",
-            "--reason",
-            "the pop-up checked",
-        ],
-    );
-    assert!(kind.stdout.contains("modal-accuracy:sheet/well"));
-    let key = run(
-        &root,
-        &[
-            "--answer",
-            "source-applicability",
-            "--result",
-            "FITS",
-            "--key",
-            "key-a",
-            "--reason",
-            "the key checked",
-        ],
-    );
-    assert!(key.stdout.contains("source-applicability:key-a"));
-    assert_eq!(
-        run(
-            &root,
-            &[
-                "--answer",
-                "record-format",
-                "--fixed-by",
-                "x: y",
-                "--result",
-                "r"
-            ]
-        )
-        .code,
-        2
-    );
-    assert_eq!(
-        run(
-            &root,
-            &[
-                "--answer",
-                "quote-check",
-                "--fixed-by",
-                "x: y",
-                "--q",
-                "94",
-                "--notes",
-                "nope"
-            ]
-        )
-        .code,
-        3
-    );
-    let fixed = run(
-        &root,
-        &[
-            "--answer",
-            "quote-check",
-            "--fixed-by",
-            "source-reader: locator",
-            "--q",
-            "94",
-            "--notes",
-            "n",
-        ],
-    );
-    assert_eq!(fixed.code, 2);
-    write_answer(&store(&root), "quote-check:0094#n", "old", "r", None).unwrap();
-    let qk =
-        super::answers::quotation_keys(&root, None, &["quote-check:0094#n".to_owned()]).unwrap();
-    keep_reading(
-        &store(&root),
-        "quote-check:0094#n",
-        &qk["quote-check:0094#n"],
-        "qkeys",
-    )
-    .unwrap();
-    let fixed = run(
-        &root,
-        &[
-            "--answer",
-            "quote-check",
-            "--fixed-by",
-            "source-reader: locator",
-            "--q",
-            "94",
-            "--notes",
-            "n",
-        ],
-    );
-    assert!(fixed.code == 0 && fixed.stdout.contains("as another check's fix"));
-    assert!(bundle_less_refusal("source-reader", "n", "").is_empty());
-    let (done, refused) = fixed_answer(&root, "94", "zzz", "x").unwrap();
-    assert!(done.is_empty() && refused.is_empty());
-}
+// the answer modes, split by feature 449 T164 into tests of their own, which pushed this file past the 1,000-line bar (Principle X)
+mod answer_modes;
 
 #[test]
 fn the_store_keeps_every_answer_and_settles() {
@@ -389,9 +173,15 @@ fn an_answer_elsewhere_or_under_an_older_formula_still_answers() {
     let left = unanswered(&root).unwrap();
     assert!(!left.iter().any(|u| u.slug == "record-format:0094"));
     assert!(read_answer(&store(&root), "record-format:0094").contains_key("readings"));
-    put(&root, WELL, "Name: Well\nAbout: A well in the yard.\n\nIt is deep.\nGuesses: - a guess\n  continued\n- another\nEntry: research/questions/0094-trade.html\nDepiction: Drawn square now.\nDrawing: research/questions/0094-trade.drawing.html\n");
-    commit(&root, "the well redrawn");
-    let now = modals::modals_now(&root, true).unwrap();
+}
+
+/// A depiction answered under the formula before amendment 1, or under amendment 1's, still answers; a record of another unit, or of
+/// no time or an old one, answers neither. Split from the test above, in the same clone layout and edits (feature 449 T164: the one
+/// test took 128 ms, over FR-008's tenth of a second).
+#[test]
+fn a_depiction_answered_under_an_older_formula_still_answers() {
+    let (base, now) = well_redrawn("owed-adopt-formula");
+    let root = base.join(".clones/main");
     let well = modals::find(&now, "hamlet/well").unwrap();
     let slug = "modal-depiction:hamlet/well";
     let s = store(&root);
@@ -410,7 +200,6 @@ fn an_answer_elsewhere_or_under_an_older_formula_still_answers() {
     )
     .unwrap();
     assert!(amendment1_depiction_answered(&root, &s, slug, &now).unwrap());
-    assert!(!unanswered(&root).unwrap().iter().any(|u| u.slug == slug));
     for (other, utc) in [
         ("modal-form:hamlet/well", "x"),
         ("modal-depiction:nope", "x"),
@@ -425,6 +214,36 @@ fn an_answer_elsewhere_or_under_an_older_formula_still_answers() {
         assert!(!legacy_depiction_answered(&root, &s, other, &now).unwrap());
         assert!(!amendment1_depiction_answered(&root, &s, other, &now).unwrap());
     }
+}
+
+/// The clone layout and edits of [`an_answer_elsewhere_or_under_an_older_formula_still_answers`], the hamlet well's depiction redrawn and
+/// committed, its store made as the answers before the split made it; the pop-ups now.
+fn well_redrawn(tag: &str) -> (crate::checks::TempDir, Vec<modals::Modal>) {
+    let base = crate::checks::scratch(tag);
+    let root = record_at(&base.join(".clones/main"));
+    edit_everything(&root);
+    put(&root, WELL, "Name: Well\nAbout: A well in the yard.\n\nIt is deep.\nGuesses: - a guess\n  continued\n- another\nEntry: research/questions/0094-trade.html\nDepiction: Drawn square now.\nDrawing: research/questions/0094-trade.drawing.html\n");
+    commit(&root, "the well redrawn");
+    std::fs::create_dir_all(store(&root)).unwrap();
+    let now = modals::modals_now(&root, true).unwrap();
+    (base, now)
+}
+
+/// A depiction answered under amendment 1's formula is not listed unanswered. Split from the test above, on the same redrawn well
+/// (feature 449 T164: with it the test took 102 ms, over FR-008's tenth of a second).
+#[test]
+fn a_depiction_answered_under_amendment_1_is_not_unanswered() {
+    let (base, now) = well_redrawn("owed-adopt-unanswered");
+    let root = base.join(".clones/main");
+    let well = modals::find(&now, "hamlet/well").unwrap();
+    let slug = "modal-depiction:hamlet/well";
+    let rec = json!({"unit": slug, "answered": [modals::amendment1_depiction_fingerprint(&root, well).unwrap()], "utc": "2099-01-01T00:00:00Z"});
+    std::fs::write(
+        store(&root).join("modal-depiction%3Ahamlet%2Fwell.json"),
+        rec.to_string(),
+    )
+    .unwrap();
+    assert!(!unanswered(&root).unwrap().iter().any(|u| u.slug == slug));
 }
 
 #[test]
@@ -457,6 +276,22 @@ fn a_reader_who_quoted_their_own_passages_is_not_owed_again() {
     put(&root, "research/questions/0094-trade.notes.html", &text);
     let left = unanswered(&root).unwrap();
     assert!(left.iter().any(|u| u.slug == "quote-check:0094#n"));
+    let _ = s;
+}
+
+/// An answer that names no owed unit of its check answers none: an intro-check named by nothing, a source-reader on notes the page
+/// does not hold. Split from the test above, on the same edited notes (feature 449 T164, FR-008's tenth of a second).
+#[test]
+fn an_answer_naming_no_owed_unit_answers_none() {
+    let root = record("owed-readers-none");
+    edit_everything(&root);
+    let mut text =
+        std::fs::read_to_string(root.join("research/questions/0094-trade.notes.html")).unwrap();
+    text = text.replace(
+        "\u{300c}more\u{300d}",
+        "\u{300c}more\u{300d} \u{300c}mo\u{300d}",
+    );
+    put(&root, "research/questions/0094-trade.notes.html", &text);
     assert!(answer(&root, "intro-check", "x", "", &none(), "")
         .unwrap()
         .is_empty());
@@ -469,7 +304,6 @@ fn a_reader_who_quoted_their_own_passages_is_not_owed_again() {
     assert!(answer(&root, "source-reader", "R", "", &drawn, "")
         .unwrap()
         .is_empty());
-    let _ = s;
 }
 
 #[test]
@@ -619,13 +453,16 @@ fn a_revision_read_and_a_failing_read() {
 
 #[test]
 fn the_store_and_its_siblings_with_the_test_variable_given() {
-    let root = record("owed-env");
+    // the three trees in one scratch directory: each `TempDir` sweeps the temp directory of dead ones first, 20 ms where it holds
+    // 8,500 entries, and FR-008 holds a test to a tenth of a second (feature 449 T164)
+    let top = crate::checks::scratch("owed-env");
+    let root = record_at(&top.join("rec"));
     assert_eq!(
         store_given(&root, Some("/x/y".into())),
         std::path::PathBuf::from("/x/y")
     );
     assert!(store_given(&root, Some("".into())).ends_with(".git/record-checks"));
-    let base = crate::checks::scratch("owed-env-sib");
+    let base = top.join("sib");
     let main = record_at(&base.join(".clones/main"));
     std::fs::create_dir_all(base.join(".clones/sib/.git/record-checks")).unwrap();
     std::fs::create_dir_all(base.join(".clones/bare")).unwrap();
@@ -634,7 +471,8 @@ fn the_store_and_its_siblings_with_the_test_variable_given() {
     assert_eq!(entry_base(&main), git(&main, &["rev-parse", "HEAD"]));
     git(&main, &["update-ref", "-d", "refs/remotes/origin/main"]);
     assert_eq!(entry_base(&main), git(&main, &["rev-parse", "HEAD"]));
-    let empty = crate::checks::scratch("owed-env-empty");
+    let empty = top.join("empty");
+    std::fs::create_dir_all(&empty).unwrap();
     git(&empty, &["init", "-q"]);
     assert_eq!(entry_base(&empty), "");
 }
@@ -720,54 +558,92 @@ fn a_transcript_gives_its_last_assistant_reply() {
     assert_eq!(reply_text(&rec.join(".jsonl")).unwrap(), "<<<");
 }
 
-#[test]
-fn what_a_source_reader_read_is_kept_and_netted() {
-    let root = record("owed-parts");
-    edit_everything(&root);
-    let s = store(&root);
-    keep_parts(&s, "source-reader:0094#n", &root, "").unwrap();
+/// The source-reader answers [`what_a_source_reader_read_is_kept_and_netted`] starts from: what each kept of what it read, and the
+/// `n` note's reader netted by a quote-check answered at the note's fingerprint now. Returns the store and the `n` reader's slug.
+fn readers_kept(root: &Path) -> (std::path::PathBuf, String) {
+    let s = store(root);
+    keep_parts(&s, "source-reader:0094#n", root, "").unwrap();
     write_answer(&s, "source-reader:0094.drawing#d", "f", "r", None).unwrap();
-    keep_parts(&s, "source-reader:0094.drawing#d", &root, "").unwrap();
+    keep_parts(&s, "source-reader:0094.drawing#d", root, "").unwrap();
     write_answer(&s, "source-reader:0094#t", "f", "r", None).unwrap();
-    keep_parts(&s, "source-reader:0094#t", &root, "").unwrap();
+    keep_parts(&s, "source-reader:0094#t", root, "").unwrap();
     assert!(read_answer(&s, "source-reader:0094#t")["passages"]
         .as_array()
         .is_some_and(|a| !a.is_empty()));
     write_answer(&s, "source-reader:0094#gone", "f", "r", None).unwrap();
-    keep_parts(&s, "source-reader:0094#gone", &root, "").unwrap();
-    let rows = units(&root, None, None, &FAMILIES, "").unwrap();
+    keep_parts(&s, "source-reader:0094#gone", root, "").unwrap();
+    // the record family alone, whose units these are: the other three families' work and git reads are not this helper's (feature 449
+    // T164, FR-008)
+    let rows = units(root, None, None, &["record"], "").unwrap();
     let n = rows
         .iter()
         .find(|u| u.slug == "source-reader:0094#n")
         .unwrap()
         .clone();
     write_answer(&s, &n.slug, "older", "READ", None).unwrap();
-    keep_parts(&s, &n.slug, &root, "\u{300c}more\u{300d} \u{300c}x\u{300d}").unwrap();
+    keep_parts(&s, &n.slug, root, "\u{300c}more\u{300d} \u{300c}x\u{300d}").unwrap();
     let qn = rows
         .iter()
         .find(|u| u.slug == "quote-check:0094#n")
         .unwrap()
         .clone();
     write_answer(&s, &qn.slug, &qn.fingerprint, "V", None).unwrap();
-    assert!(!unanswered(&root).unwrap().iter().any(|u| u.slug == n.slug));
+    (s, n.slug)
+}
+
+/// The `n` note's quotation changed past what its reader quoted, and its quote-check answered again at the new fingerprint.
+fn quotation_changed(root: &Path, s: &Path) {
     let mut text =
         std::fs::read_to_string(root.join("research/questions/0094-trade.notes.html")).unwrap();
     text = text.replace(
         "\"new\" \u{300c}more\u{300d}",
         "\"new\" \u{300c}more\u{300d} \"newer\"",
     );
-    put(&root, "research/questions/0094-trade.notes.html", &text);
-    let rows = units(&root, None, None, &FAMILIES, "").unwrap();
+    put(root, "research/questions/0094-trade.notes.html", &text);
+    // the record family alone, whose units these are: the other three families' work and git reads are not this helper's (feature 449
+    // T164, FR-008)
+    let rows = units(root, None, None, &["record"], "").unwrap();
     let qn = rows
         .iter()
         .find(|u| u.slug == "quote-check:0094#n")
         .unwrap()
         .clone();
-    write_answer(&s, &qn.slug, &qn.fingerprint, "V", None).unwrap();
-    assert!(unanswered(&root).unwrap().iter().any(|u| u.slug == n.slug));
-    std::fs::remove_file(s.join("source-reader%3A0094%23n.json")).unwrap();
-    write_answer(&s, &n.slug, "older", "READ", None).unwrap();
-    assert!(unanswered(&root).unwrap().iter().any(|u| u.slug == n.slug));
+    write_answer(s, &qn.slug, &qn.fingerprint, "V", None).unwrap();
+}
+
+/// What a source-reader read is kept, and a reader whose note changed by nothing but the passages it quoted is netted: not owed.
+/// The one record this and the next two tests shared took 141 ms; each now builds the state its own assertions read (feature 449
+/// T164, FR-008's tenth of a second).
+#[test]
+fn what_a_source_reader_read_is_kept_and_netted() {
+    let root = record("owed-parts");
+    edit_everything(&root);
+    let (_, n) = readers_kept(&root);
+    assert!(!unanswered(&root).unwrap().iter().any(|u| u.slug == n));
+}
+
+/// A passage the reader never quoted, added to the note: the reader is owed again.
+#[test]
+fn a_reader_whose_note_gained_a_passage_it_never_quoted_is_owed_again() {
+    let root = record("owed-parts-gained");
+    edit_everything(&root);
+    let (s, n) = readers_kept(&root);
+    quotation_changed(&root, &s);
+    assert!(unanswered(&root).unwrap().iter().any(|u| u.slug == n));
+    // the reader's record, which the test this was split from removed next
+    assert!(s.join("source-reader%3A0094%23n.json").is_file());
+}
+
+/// A reader's answer kept nothing it read (an older answer, no passages): it is owed when its note changed.
+#[test]
+fn a_reader_that_kept_nothing_it_read_is_owed_again() {
+    let root = record("owed-parts-none");
+    edit_everything(&root);
+    let s = store(&root);
+    quotation_changed(&root, &s);
+    let n = "source-reader:0094#n";
+    write_answer(&s, n, "older", "READ", None).unwrap();
+    assert!(unanswered(&root).unwrap().iter().any(|u| u.slug == n));
 }
 
 #[test]
@@ -792,13 +668,30 @@ fn an_answered_listing_and_a_docstring_modal_then() {
     assert!(
         said.contains("still unanswered") && said.contains("  [answered] record-format:0094  - ")
     );
+}
+
+/// A notes file outside the record's questions owes nothing.
+#[test]
+fn notes_outside_the_questions_owe_nothing() {
+    let root = record("owed-listed-outside");
+    edit_everything(&root);
     put(
         &root,
         "research/other/x.notes.html",
         "<li data-note=\"a\">\"q\" \u{300c}o\u{300d}</li>",
     );
     assert!(!run(&root, &["--slugs"]).stdout.contains("research/other"));
+}
+
+/// Split, with the test above, from [`an_answered_listing_and_a_docstring_modal_then`], on the same edits (feature 449 T164: the one
+/// test took 119 ms, over FR-008's tenth of a second).
+#[test]
+fn an_old_answer_is_never_taken_for_a_docstring_modal() {
+    let root = record("owed-listed-docstring");
+    edit_everything(&root);
     let s = store(&root);
+    // the store the answer before the split had made
+    std::fs::create_dir_all(&s).unwrap();
     let now = modals::modals_now(&root, true).unwrap();
     // a pop-up read from a class docstring (its origin a module's line; none is since feature 319, and the registry reads none since
     // feature 449 T149): an old answer is never taken for it, there being no file to read as it stood

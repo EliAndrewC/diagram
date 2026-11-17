@@ -20,10 +20,10 @@ fn args(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
 }
 
-/// A tree holding the whole registry, every kind written from `entry`.
+/// A tree holding both registries, every kind written from `entry`: the check reads the Mode A kinds too (feature 449 T164).
 fn engine(tag: &str, entry: &str) -> l7r_guard::shared::tempdir::TempDir {
     let root = scratch(tag);
-    crate::testkit::hamlet(&root, entry);
+    crate::testkit::modals(&root, entry);
     root
 }
 
@@ -56,9 +56,10 @@ fn the_check_names_every_broken_entry_and_passes_a_silence() {
         &crate::testkit::modal("fallow", &silence),
     );
     let bad = broken(&root).unwrap();
+    // every kind of both registries but the one silence: 61 hamlet and 99 sheet kinds, the hamlet's by their bare key as before (feature 449 T164)
     assert_eq!(
         (bad.len(), bad[0].as_str()),
-        (60, format!("alder: Entry names {gone}").as_str())
+        (159, format!("alder: Entry names {gone}").as_str())
     );
     let said = cli_(&args(&[&root.to_string_lossy()]), &root);
     assert_eq!(said.code, 1);
@@ -69,7 +70,8 @@ fn the_check_names_every_broken_entry_and_passes_a_silence() {
         "as `research/contents.json#<section> (no dedicated entry - recorded as silent)`.\n"
     ));
     let listed = silent_listing(&root).unwrap();
-    assert_eq!(listed, format!("  fallow                 {silence}\n  1 of 61 entries name no section; the other 60 must RESOLVE, checked at the gate and the push.\n"));
+    // the hamlet's block as it was before T164, then the Mode A kinds' own (feature 449 T164)
+    assert_eq!(listed, format!("  fallow                 {silence}\n  1 of 61 entries name no section; the other 60 must RESOLVE, checked at the gate and the push.\n  0 of 99 Mode A entries name no section; the other 99 must RESOLVE, checked at the gate and the push.\n"));
     let good = engine("registry-good", &real_page());
     put(&good, &real_page(), "<h2>Q</h2>");
     assert_eq!(cli_(&args(&[&good.to_string_lossy()]), &good).code, 0);
@@ -88,6 +90,66 @@ fn the_check_names_every_broken_entry_and_passes_a_silence() {
         )
     );
     assert!(silent_listing(&good).is_err());
+}
+
+/// A Mode A kind is checked as a hamlet kind is (feature 449 T164: the Python read the hamlet's `CLASSES` alone): one sheet kind's broken
+/// `Entry:` is named `sheet/<slug>`, apart from the hamlet kind of the same key (named by its bare key, as before), and a sheet kind's
+/// declared silence passes in a block of its own.
+#[test]
+fn a_sheet_kind_is_checked_and_named_apart_from_the_hamlet_kind_of_its_key() {
+    let root = engine("registry-sheet", &real_page());
+    put(&root, &real_page(), "<h2>Q</h2>");
+    assert!(broken(&root).unwrap().is_empty());
+    let gone = format!("{Q}/{}-gone.html", "0002");
+    put(
+        &root,
+        &crate::about::modal_rel(&crate::kinds::SHEET_REGISTRY, "well"),
+        &crate::testkit::modal("well", &gone),
+    );
+    assert_eq!(
+        broken(&root).unwrap(),
+        [format!("sheet/well: Entry names {gone}")]
+    );
+    let said = cli_(&args(&[&root.to_string_lossy()]), &root);
+    assert!(said.code == 1 && said.stderr.contains("\n  sheet/well: Entry names "));
+    // the hamlet's well broken too: named by its bare key, as before T164, and first
+    put(
+        &root,
+        &crate::about::modal_rel(&crate::kinds::HAMLET_REGISTRY, "well"),
+        &crate::testkit::modal("well", &gone),
+    );
+    assert_eq!(
+        broken(&root).unwrap(),
+        [
+            format!("well: Entry names {gone}"),
+            format!("sheet/well: Entry names {gone}")
+        ]
+    );
+    put(
+        &root,
+        &crate::about::modal_rel(&crate::kinds::HAMLET_REGISTRY, "well"),
+        &crate::testkit::modal("well", &real_page()),
+    );
+    let silence = format!(
+        "research/contents.json#compounds ({} - recorded as silent)",
+        "no dedicated entry"
+    );
+    put(
+        &root,
+        &crate::about::modal_rel(&crate::kinds::SHEET_REGISTRY, "well"),
+        &crate::testkit::modal("well", &silence),
+    );
+    assert_eq!(cli_(&args(&[&root.to_string_lossy()]), &root).code, 0);
+    assert!(silent_listing(&root).unwrap().starts_with(&format!(
+        "  0 of 61 entries name no section; the other 61 must RESOLVE, checked at the gate and the push.\n  sheet/well                    {silence}\n  1 of 99 Mode A entries "
+    )));
+    // a sheet kind's file missing fails the run, as a hamlet kind's does
+    std::fs::remove_file(root.join(crate::about::modal_rel(
+        &crate::kinds::SHEET_REGISTRY,
+        "well",
+    )))
+    .unwrap();
+    assert_eq!(cli_(&args(&[&root.to_string_lossy()]), &root).code, 1);
 }
 
 #[test]

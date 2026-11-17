@@ -10,8 +10,14 @@
 //! ([`SILENT`]) and never by the absence of a match, so a broken pointer and a declared silence cannot be confused; `make audit` lists
 //! every entry taking it ([`silent_listing`]).
 //!
-//! The hamlet vocabulary only, as the Python read `CLASSES`: the Mode A kinds (`COMPOUND_CLASSES`) were never checked here, and adding
-//! them would make the check refuse more, which FR-002's fix exception does not cover (the plan review of T148) - a commit of its own.
+//! EVERY KIND, BOTH REGISTRIES (feature 449 T164): the Python read `CLASSES` alone, so the 99 Mode A kinds (`COMPOUND_CLASSES`) were
+//! never checked - a sheet's modal pointing at a renamed question went as quietly empty as a hamlet's did before feature 234. T149's
+//! port kept that gap (covering it makes the check refuse more, which FR-002's fix exception does not reach inside a port) and T164
+//! closes it in a commit of its own. ONLY WHAT IS NEW IS MARKED (T164's plan review): every line the check and `make audit`'s listing
+//! gave before stays byte for byte - a hamlet kind named by its bare key, the listing's rows at their old width and its count line -
+//! and a sheet kind is named `sheet/<slug of the key>` (`sheet/cinnabar-workshop`), which also tells apart the four keys both
+//! registries hold (`burial-ground`, `garden`, `notice-board`, `well`); the hamlet's are checked first, sorted by key, then the sheet's,
+//! and the listing gives the sheet's silences a block of their own after the hamlet's.
 //! RUN AT THE GATE AND AT THE PUSH: a research-page-only delta owes no gate, so the push holds it.
 
 use std::fmt::Write as _;
@@ -23,7 +29,8 @@ use l7r_gate_research::pyre::py;
 use l7r_gate_research::sources::entry_fragments;
 use l7r_gate_research::Result;
 
-use crate::about::{classes, FeatureClass};
+use crate::about::{classes, compound_classes, slug, FeatureClass};
+use crate::kinds::SHEET_REGISTRY;
 
 /// The name `usage_log` (the gate's `log usage`) records this check's runs under (feature 406 T03).
 pub const USAGE_LOG_TOOL: &str = "check-entry-headings";
@@ -49,18 +56,35 @@ pub fn unresolved(root: &Path, entry: &str) -> Vec<String> {
         .collect()
 }
 
-/// The hamlet vocabulary sorted by key, or None where this tree has no engine (a repository the push's fixtures build): nothing to be
-/// right or wrong about there, a no-op and not a failure.
+/// The hamlet's kinds and the sheet's, each with the name the check gives it.
+type Blocks = [Vec<(String, FeatureClass)>; 2];
+
+/// Both registries' kinds, each block named and sorted by key - the hamlet's then the sheet's - or None where this tree has no engine (a
+/// repository the push's fixtures build): nothing to be right or wrong about there, a no-op and not a failure.
 ///
 /// # Errors
-/// A kind's modal file missing or refused - the import error the Python had.
-fn loaded(root: &Path) -> Result<Option<Vec<FeatureClass>>> {
+/// A kind's modal file missing or refused - the import error the Python had; the hamlet registry's first, as it loads first.
+fn loaded(root: &Path) -> Result<Option<Blocks>> {
     if !root.join("l7r").is_dir() {
         return Ok(None);
     }
-    let mut all = classes(root)?;
-    all.sort_by(|a, b| a.key.cmp(&b.key));
-    Ok(Some(all))
+    Ok(Some(named(root)?))
+}
+
+/// The hamlet's kinds by their bare key, as the check named them before T164, and the sheet's as `sheet/<slug>`, each sorted by key.
+fn named(root: &Path) -> Result<Blocks> {
+    let block = |mut kinds: Vec<FeatureClass>, name: &dyn Fn(&str) -> String| {
+        kinds.sort_by(|a, b| a.key.cmp(&b.key));
+        kinds
+            .into_iter()
+            .map(|fc| (name(&fc.key), fc))
+            .collect::<Vec<_>>()
+    };
+    let hamlet = block(classes(root)?, &str::to_owned);
+    let sheet = block(compound_classes(root)?, &|key| {
+        format!("{}/{}", SHEET_REGISTRY.dir, slug(key))
+    });
+    Ok([hamlet, sheet])
 }
 
 /// Every class whose `Entry:` resolves to no research question and is not a declared silence.
@@ -72,13 +96,13 @@ pub fn broken(root: &Path) -> Result<Vec<String>> {
         return Ok(Vec::new());
     };
     let mut bad = Vec::new();
-    for fc in all {
+    for (name, fc) in all.into_iter().flatten() {
         if SILENT.is_match(&fc.entry).unwrap_or(false) {
             continue;
         }
         let missing = unresolved(root, &fc.entry);
         if !missing.is_empty() {
-            bad.push(format!("{}: Entry names {}", fc.key, missing.join(", ")));
+            bad.push(format!("{name}: Entry names {}", missing.join(", ")));
         }
     }
     Ok(bad)
@@ -178,28 +202,31 @@ pub fn cli(args: &[String], tool_root: &Path) -> (l7r_gate_core::Reply, bool) {
     }
 }
 
-/// What `make audit` lists of the declared silences (the Makefile's one-line Python before T149): each class taking the form, then the count.
+/// What `make audit` lists of the declared silences (the Makefile's one-line Python before T149): each hamlet class taking the form, then
+/// their count, as before T164; then the Mode A kinds' block (feature 449 T164), its rows at a width of their own (29, the longest
+/// `sheet/<slug>`, where the hamlet's 22 fits a bare key) and its own count, so no line the listing gave before changes.
 ///
 /// # Errors
 /// The registry not loading.
 pub fn silent_listing(root: &Path) -> Result<String> {
-    let mut all = classes(root)?;
-    let total = all.len();
-    all.sort_by(|a, b| a.key.cmp(&b.key));
+    let [hamlet, sheet] = named(root)?;
     let mut out = String::new();
-    let mut rows = 0;
-    for fc in all
-        .iter()
-        .filter(|fc| SILENT.is_match(&fc.entry).unwrap_or(false))
-    {
-        let _ = writeln!(out, "  {:<22} {}", fc.key, fc.entry);
-        rows += 1;
+    for (kinds, width, what) in [(&hamlet, 22, "entries"), (&sheet, 29, "Mode A entries")] {
+        let total = kinds.len();
+        let mut rows = 0;
+        for (name, fc) in kinds
+            .iter()
+            .filter(|(_, fc)| SILENT.is_match(&fc.entry).unwrap_or(false))
+        {
+            let _ = writeln!(out, "  {name:<width$} {}", fc.entry);
+            rows += 1;
+        }
+        let _ = writeln!(
+            out,
+            "  {rows} of {total} {what} name no section; the other {} must RESOLVE, checked at the gate and the push.",
+            total - rows
+        );
     }
-    let _ = writeln!(
-        out,
-        "  {rows} of {total} entries name no section; the other {} must RESOLVE, checked at the gate and the push.",
-        total - rows
-    );
     Ok(out)
 }
 

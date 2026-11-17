@@ -788,10 +788,24 @@ fn a_bare_world_compares_everything_under_it() {
         .as_str()
         .unwrap()
         .starts_with("made one <stamp> in <WORLD>"));
-    // no normalizations and no extras
+    // no normalizations and no extras, on a step whose outputs hold no clock: `hello` writes a one-second `date` stamp into the bare
+    // world, which with no `stamp` normalization differed whenever the two sides ran either side of a second's turn - 28 of 200
+    // runs of this test failed here beside 30 busy loops, none after (feature 449 T164)
     v.as_object_mut().unwrap().remove("normalizations");
     v["world"].as_object_mut().unwrap().remove("extras");
-    assert_eq!(fx.run(&v, &[]).0.code, 0);
+    v["cases"] = json!([{"name": "one", "steps": [["{CMD}", "two"]]}]);
+    let (r, _) = fx.run(&v, &[]);
+    assert_eq!(r.code, 0, "{}", r.stdout);
+    let kept: Value = serde_json::from_str(
+        &std::fs::read_to_string(fx.root().join(format!(
+            "cases.diff-run/results/{}.new.json",
+            crate::runner::case_id("one")
+        )))
+        .unwrap(),
+    )
+    .unwrap();
+    // the whole world compared, its names unranked with no normalization to rank them
+    assert_eq!(kept["result"]["files"]["out/a2/f"].as_str(), Some("two\n"));
     // a separator that can match nothing is passed over
     assert_eq!(
         crate::norm::sorted("b\na", &fancy_regex::Regex::new("\n*").unwrap()),

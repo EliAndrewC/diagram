@@ -16,17 +16,7 @@ const TRANSLATED: &str = "<li data-note=\"t\">\u{300c}the hedges\u{300d} (transl
 fn a_new_pair_or_gloss_is_owed_and_a_kept_one_is_not() {
     let root = record("translation-owed");
     assert!(owed(&root).unwrap().is_empty());
-    edit_everything(&root);
-    put(
-        &root,
-        "research/questions/0094-trade.notes.html",
-        TRANSLATED,
-    );
-    put(
-        &root,
-        "research/questions/citations/0001-x.notes.html",
-        "<li data-note=\"c\">\u{300c}skip\u{300d} (translated; original: \u{300c}me\u{300d})</li>",
-    );
+    translated(&root);
     let rows = owed(&root).unwrap();
     assert!(rows
         .iter()
@@ -48,7 +38,27 @@ fn a_new_pair_or_gloss_is_owed_and_a_kept_one_is_not() {
         .stdout
         .starts_with("translation-owed: 0 "));
     assert_eq!(cli(&args(&["--x"])).code, 2);
-    // a pair the merge base already holds is owed no more
+}
+
+/// Every edit, a translated pair and a gloss among them, and a translation under `citations/` that owes none.
+fn translated(root: &std::path::Path) {
+    edit_everything(root);
+    put(root, "research/questions/0094-trade.notes.html", TRANSLATED);
+    put(
+        root,
+        "research/questions/citations/0001-x.notes.html",
+        "<li data-note=\"c\">\u{300c}skip\u{300d} (translated; original: \u{300c}me\u{300d})</li>",
+    );
+}
+
+/// A pair the merge base already holds is owed no more, an unreadable notes file fails the listing, and with no base every pair is
+/// owed again, whatever the kept pairs say. Split from the test above on the same edits (feature 449 T164: one record listed eight
+/// times took 131 ms, over FR-008's tenth of a second).
+#[test]
+fn a_pair_the_base_holds_is_owed_no_more() {
+    let root = record("translation-kept");
+    translated(&root);
+    let rows = owed(&root).unwrap();
     let kept = commit(&root, "the pairs");
     git(&root, &["update-ref", "refs/remotes/origin/main", &kept]);
     assert!(owed(&root).unwrap().is_empty());

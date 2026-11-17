@@ -107,8 +107,9 @@ fn the_silences_are_listed_and_a_registry_that_does_not_load_refused() {
     let root = scratch("registry-silent");
     let r = root.to_string_lossy().into_owned();
     crate::testkit::modals(&root, "research/questions/x.html");
+    // the hamlet's line as before, then the Mode A kinds' own, since the check they are listed for covers both (feature 449 T164)
     let silent = cli(&args(&["silent", "--root", &r]));
-    assert_eq!((silent.code, silent.stdout.as_str()), (0, "  0 of 61 entries name no section; the other 61 must RESOLVE, checked at the gate and the push.\n"));
+    assert_eq!((silent.code, silent.stdout.as_str()), (0, "  0 of 61 entries name no section; the other 61 must RESOLVE, checked at the gate and the push.\n  0 of 99 Mode A entries name no section; the other 99 must RESOLVE, checked at the gate and the push.\n"));
     std::fs::remove_file(root.join(crate::about::modal_rel(
         &crate::kinds::HAMLET_REGISTRY,
         "byre",

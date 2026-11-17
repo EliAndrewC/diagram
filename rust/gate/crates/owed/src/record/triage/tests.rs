@@ -20,11 +20,20 @@ fn moved_pages(root: &std::path::Path) {
     put(root, PAGE, "<h2 id=\"t\">Trade</h2>\n<p class=\"intro\">Why it is asked.</p>\n<p>A short way apart.<sup class=\"fn\" data-note=\"k\"></sup> Changed.</p>\n");
 }
 
+/// A record with nothing moved owes no pop-up a triage, and no bundle is written. Split from the test below (feature 449 T164: the one
+/// test took 121 ms, over FR-008's tenth of a second).
+#[test]
+fn a_record_with_nothing_moved_owes_no_triage() {
+    let root = fixture("triage-none");
+    let out = root.join("tri");
+    assert!(bundle(&root, &out, "").unwrap().is_none());
+    assert!(!out.exists());
+}
+
 #[test]
 fn a_triage_bundles_the_moved_pages_and_records_a_reply() {
     let root = fixture("triage-flow");
     let out = root.join("tri");
-    assert!(bundle(&root, &out, "").unwrap().is_none());
     moved_pages(&root);
     let s = store(&root);
     let base = merge_base(&root);
@@ -65,10 +74,21 @@ fn a_triage_bundles_the_moved_pages_and_records_a_reply() {
         crate::record::owed::read_answer(&s, "modal-accuracy:hamlet/well").contains_key("pages")
     );
     assert!(record(&s, &units, "", None, None).unwrap().is_empty());
+    assert!(s.join("modal-triage-touched.json").is_file());
+}
+
+/// A pop-up whose pages moved and that no check has read owes only a triage, a broken record of what was touched is refused, and a
+/// bundle goes under the default root. Split from the test above, on the same moved pages and an empty store (feature 449 T164: the
+/// one test took 129 ms, over FR-008's tenth of a second).
+#[test]
+fn a_moved_pop_up_owes_only_a_triage_and_a_broken_touched_record_is_refused() {
+    let root = fixture("triage-owes");
+    moved_pages(&root);
+    let s = store(&root);
     let now = modals::modals_now(&root, true).unwrap();
     let well = modals::find(&now, "hamlet/well").unwrap();
-    std::fs::remove_file(s.join("modal-triage-touched.json")).unwrap();
-    std::fs::remove_dir_all(&s).unwrap();
+    // the store as the test above left it once it was removed: none
+    let _ = std::fs::remove_dir_all(&s);
     assert!(refusal(&root, well, "modal-research", None)
         .unwrap()
         .contains("owe(s) only a TRIAGE"));
@@ -122,6 +142,18 @@ fn the_command_line() {
         .code,
         1
     );
+}
+
+/// The command line's refusals: a bundle's data that is not its own, arguments it does not take, a root that is not there, and a
+/// modal file that cannot be read. Split from the test above, on the same bundle (feature 449 T164: the one test took 111 ms, over
+/// FR-008's tenth of a second).
+#[test]
+fn the_command_line_s_refusals() {
+    let root = fixture("triage-cli-refusals");
+    let r = root.to_string_lossy().into_owned();
+    let out = root.join("o").to_string_lossy().into_owned();
+    moved_pages(&root);
+    assert_eq!(cli(&args(&["--root", &r, "bundle", "--out", &out])).code, 0);
     put(&root, "o/triage.json", "{}");
     assert_eq!(
         cli(&args(&[
@@ -161,18 +193,24 @@ fn the_command_line() {
     assert_eq!(cli(&args(&["--root", &r, "bundle", "--out", &out])).code, 1);
 }
 
+/// A page that is not there is kept as no blob, and a bundle with no `--out` owes nothing on a record with nothing moved. Split from the
+/// test below (feature 449 T164: the one test took 94 ms, at FR-008's tenth of a second).
 #[test]
-fn the_edges_of_a_bundle() {
-    let root = fixture("triage-edges");
+fn a_missing_page_keeps_no_blob_and_a_bare_bundle_owes_nothing() {
+    let root = fixture("triage-edges-none");
     assert_eq!(super::keep(&root, "nope.html"), "");
     let r = root.to_string_lossy().into_owned();
     assert_eq!(
         cli(&args(&["--root", &r, "bundle"])).stdout,
         "modal-triage: no pop-up is owed a triage\n"
     );
+}
+
+#[test]
+fn the_edges_of_a_bundle() {
+    let root = fixture("triage-edges");
     put(&root, crate::record::testkit::WELL, "Name: Well\nAbout: A well in the yard.\n\nIt is deep.\nGuesses: - a guess\n  continued\n- another\nEntry: research/questions/0094-trade.html, research/questions/0095-other.html\nDepiction: Drawn round.\nDrawing: research/questions/0094-trade.drawing.html\n");
-    crate::record::testkit::commit(&root, "two entry pages");
-    let head = crate::record::testkit::git(&root, &["rev-parse", "HEAD"]);
+    let head = crate::record::testkit::commit(&root, "two entry pages");
     crate::record::testkit::git(&root, &["update-ref", "refs/remotes/origin/main", &head]);
     moved_pages(&root);
     let s = store(&root);

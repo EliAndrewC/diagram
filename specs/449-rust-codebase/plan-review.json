@@ -378,6 +378,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T164 (three defects T149 found, each fixed in its own commit, constitution XIV)": {
+   "sha256": "36c5a69479faeae5b0bf740540b549ea670439c920d2e2ea08fe68b994aa0144",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T164 Approach (checklist part A)": {
+   "sha256": "235e0de1377ca1530376610060b55ab95e3ddf5a626506a550aa5aea155520ef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -9878,6 +9890,46 @@
      "why": "FR-001's rule on recorded measurements, checked; the order follows the slice order."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T164 (three defects T149 found, each fixed in its own commit, constitution XIV)",
+    "### T164 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T164-1 entry-headings reads both registries",
+     "summary": "The entry-headings check, which (like the Python) read only the hamlet registry, now also reads the sheet registry; hamlet keys stay bare, sheet kinds are marked sheet/<slug>; make audit's silence listing keeps its hamlet block byte for byte and adds a second block for the 99 Mode A kinds.",
+     "class": "within",
+     "why": "A defect fix under constitution XIV in an already-ported Rust check: it narrows nothing and widens the check only to the entries it was meant to cover. Every existing line stays byte for byte (cmp-proven with the sheet additions removed), so FR-002's held outputs are kept, and FR-004's coverage is kept by the new tests."
+    },
+    {
+     "id": "T164-2 flaky diffrun test",
+     "summary": "a_bare_world_compares_everything_under_it now runs a step with no clock stamp in its output, so the two sides no longer differ across a second boundary.",
+     "class": "within",
+     "why": "A test fix that keeps what the test compares. It changes no tool output or verdict."
+    },
+    {
+     "id": "T164-3 owed crate's slow tests",
+     "summary": "Twelve tests over FR-008's bar are split, each keeping every assertion, on a shared fixture with fewer git calls; one test moves to tests/answer_modes.rs; production changes (answer() reusing units, fixed_answer() asking git once, triage writing each page once) change no output.",
+     "class": "within",
+     "why": "Carries out FR-008 for the owed crate. No assertion is dropped, and the production changes are held to identical outputs per FR-002."
+    },
+    {
+     "id": "T164-4 workspace debt deferred to T160",
+     "summary": "159 of 2,354 workspace tests run over the bar, and a temporary directory under the crowded /tmp costs about 20 ms; both are measured and assigned to T160 (compile and test speed), not fixed here.",
+     "class": "within",
+     "why": "Sequencing, not narrowing. T164's scope is T149's three defects. FR-008 still binds every tool, and the remainder goes to the compile-and-test-speed task the GM approved on 2026-11-16 ('compile and test speed last'). No case is excused from FR-008."
+    },
+    {
+     "id": "T164-5 exits and checks",
+     "summary": "make static, make rust-test, make hooks-test HOOKS_ALL=1 and make land green; a claim that it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The standing gates. They decide nothing that the spec leaves open."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -17691,6 +17743,44 @@
      "summary": "Measurement census (no measurements.json runs a deleted file), the gate checks, order after T148 and T163, exits and budget.",
      "class": "within",
      "why": "FR-001's rule on recorded measurements, checked; the order follows the slice order."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T164": {
+   "section_sha256": "5e21f5b58bda30cebdf9b91e7576ce866836e1f402a6c48ba0a5340f13b7b75d",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T164-1 entry-headings reads both registries",
+     "summary": "The entry-headings check, which (like the Python) read only the hamlet registry, now also reads the sheet registry; hamlet keys stay bare, sheet kinds are marked sheet/<slug>; make audit's silence listing keeps its hamlet block byte for byte and adds a second block for the 99 Mode A kinds.",
+     "class": "within",
+     "why": "A defect fix under constitution XIV in an already-ported Rust check: it narrows nothing and widens the check only to the entries it was meant to cover. Every existing line stays byte for byte (cmp-proven with the sheet additions removed), so FR-002's held outputs are kept, and FR-004's coverage is kept by the new tests."
+    },
+    {
+     "id": "T164-2 flaky diffrun test",
+     "summary": "a_bare_world_compares_everything_under_it now runs a step with no clock stamp in its output, so the two sides no longer differ across a second boundary.",
+     "class": "within",
+     "why": "A test fix that keeps what the test compares. It changes no tool output or verdict."
+    },
+    {
+     "id": "T164-3 owed crate's slow tests",
+     "summary": "Twelve tests over FR-008's bar are split, each keeping every assertion, on a shared fixture with fewer git calls; one test moves to tests/answer_modes.rs; production changes (answer() reusing units, fixed_answer() asking git once, triage writing each page once) change no output.",
+     "class": "within",
+     "why": "Carries out FR-008 for the owed crate. No assertion is dropped, and the production changes are held to identical outputs per FR-002."
+    },
+    {
+     "id": "T164-4 workspace debt deferred to T160",
+     "summary": "159 of 2,354 workspace tests run over the bar, and a temporary directory under the crowded /tmp costs about 20 ms; both are measured and assigned to T160 (compile and test speed), not fixed here.",
+     "class": "within",
+     "why": "Sequencing, not narrowing. T164's scope is T149's three defects. FR-008 still binds every tool, and the remainder goes to the compile-and-test-speed task the GM approved on 2026-11-16 ('compile and test speed last'). No case is excused from FR-008."
+    },
+    {
+     "id": "T164-5 exits and checks",
+     "summary": "make static, make rust-test, make hooks-test HOOKS_ALL=1 and make land green; a claim that it cannot be done is ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The standing gates. They decide nothing that the spec leaves open."
     }
    ],
    "verdict": "CLEAR"

@@ -1,6 +1,6 @@
 //! The pop-up triage (from `modal_triage.py`, feature 449 T87): a drawing or question page's edit owes a pop-up's checks only where it bears on that pop-up. `make modal-triage` writes one bundle of each moved page's changed blocks and the pop-ups naming it; `make modal-triaged` applies a triage reply, answering what the reply leaves alone and marking what it names.
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -263,6 +263,9 @@ pub fn bundle(root: &Path, out: &Path, base: &str) -> Result<Option<(PathBuf, us
     let mut by_page: ByPage = ByPage::new();
     let mut blocks = Changed::new();
     let (mut reads, mut blobs) = (Map::new(), Map::new());
+    // each page written to the object store once a bundle: the several pop-ups that read one page kept it with a `hash-object -w` each,
+    // the same blob every time (feature 449 T164)
+    let mut kept_ids: HashMap<String, String> = HashMap::new();
     for (slug, why, _fp) in &units {
         let (check, uid) = slug.split_once(':').unwrap_or((slug, ""));
         let named = |p: &String| why.contains(&name_of(p));
@@ -293,7 +296,10 @@ pub fn bundle(root: &Path, out: &Path, base: &str) -> Result<Option<(PathBuf, us
             }
             let row = blobs.entry(slug.clone()).or_insert_with(|| json!({}));
             if let Some(m) = row.as_object_mut() {
-                m.insert(path.clone(), json!(keep(root, &path)));
+                let id = kept_ids
+                    .entry(path.clone())
+                    .or_insert_with(|| keep(root, &path));
+                m.insert(path.clone(), json!(id));
             }
         }
     }
