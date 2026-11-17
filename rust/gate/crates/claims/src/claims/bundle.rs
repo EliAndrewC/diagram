@@ -417,6 +417,10 @@ pub fn bundle(
         if row.unit.line_keyed() {
             u["section"] = json!(row.unit.core);
         }
+        // the constants a Rust unit read at its check, recorded on its row (feature 449 T166)
+        if !row.unit.reads.is_empty() {
+            u["reads"] = json!(row.unit.reads);
+        }
         units.insert(k.clone(), u);
     }
     std::fs::write(

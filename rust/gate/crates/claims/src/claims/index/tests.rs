@@ -7,7 +7,7 @@ use serde_json::{json, Map, Value};
 
 use super::{
     body_of, claim_rewritten, live_rows, load_map, owed, page_blocks, relabel_answered,
-    research_fp, source_span, truthy, Cur, PageMemo, Row,
+    relabeled_only, research_fp, source_span, truthy, Cur, PageMemo, Row,
 };
 use crate::claims::grammar::parse_claim;
 use crate::claims::tests::fixture;
@@ -27,6 +27,7 @@ fn unit(path: &str, qual: &str, kind: &str, lines: (usize, usize), blocks: &[&st
         errors: Vec::new(),
         names: Vec::new(),
         blocks: blocks.iter().map(|b| (*b).to_owned()).collect(),
+        reads: String::new(),
     }
 }
 
@@ -272,6 +273,20 @@ fn a_relabel_alone_owes_nothing_and_answers_its_mislabel() {
         owed(&cur, &obj(&json!({r.key.clone(): {}})), Some(&q), None).unwrap()[0].1,
         "new"
     );
+    // a Rust unit's constant reads recorded on its row (feature 449 T166): the body the same, a value it reads changed is code
+    // changed, not a relabel; the same reads, or a row recorded before T166 with none, is the relabel it was
+    let mut reading = r.clone();
+    let mut u = (*reading.unit).clone();
+    u.reads = "now".into();
+    reading.unit = std::rc::Rc::new(u);
+    let same = json!({"code": "old", "body": body, "claim": reading.claim.normalized(), "verdict": "IN-STEP", "research": ""});
+    let mut moved = same.clone();
+    moved["reads"] = json!("then");
+    let mut kept = same.clone();
+    kept["reads"] = json!("now");
+    assert!(!relabeled_only(&moved, &reading, &root).unwrap());
+    assert!(relabeled_only(&kept, &reading, &root).unwrap());
+    assert!(relabeled_only(&same, &reading, &root).unwrap());
 }
 
 #[test]

@@ -3,7 +3,7 @@
 
 use std::path::{Path, PathBuf};
 
-use crate::record::testkit::{commit, git, put};
+use crate::record::testkit::{git, put};
 
 pub const RUNNER: &str = r#"import json, pathlib, sys
 for line in sys.stdin:
@@ -90,11 +90,19 @@ pub const BUILDINGS: &str = "# Buildings\n\n## Walls\n<!-- Research: walls - CON
 
 /// A repository with the probe's Rust, procedures, questions and Python half, committed and set as origin/main; its root.
 pub fn fixture(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    fixture_with(tag, &|_| {})
+}
+
+/// [`fixture`], `more` writing its own files into the tree before the one commit (feature 449 T166: a commit fewer a test).
+pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_guard::shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
-    git(&root, &["init", "-q", "-b", "main"]);
-    git(&root, &["config", "user.email", "t@example.org"]);
-    git(&root, &["config", "user.name", "t"]);
-    git(&root, &["config", "commit.gpgsign", "false"]);
+    // the repository `git init -b main` makes, with its three settings, written as git writes them: four processes saved (feature 449
+    // T166: each end-to-end test well within FR-008's tenth of a second)
+    put(&root, ".git/HEAD", "ref: refs/heads/main\n");
+    put(&root, ".git/config", "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n[user]\n\temail = t@example.org\n\tname = t\n[commit]\n\tgpgsign = false\n");
+    for dir in ["objects", "refs/heads", "refs/tags"] {
+        std::fs::create_dir_all(root.join(".git").join(dir)).unwrap();
+    }
     put(&root, "scripts/bundle_door.py", RUNNER);
     put(&root, "scripts/gates/codeid.py", CODEID);
     put(&root, "rust/phases/src/lib.rs", LIB);
@@ -113,8 +121,12 @@ pub fn fixture(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
         "<h2 id=\"other\">Other</h2>\n<p>It is 40 ft, drawn.</p>\n",
     );
     put(&root, "l7r/diagram/m.py", "GAP = 12\n");
-    commit(&root, "base");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    more(&root);
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "base"]);
+    // origin/main set as `git update-ref` sets it, the new branch's loose ref copied: a process saved (feature 449 T166)
+    let head = std::fs::read_to_string(root.join(".git/refs/heads/main")).unwrap();
+    put(&root, ".git/refs/remotes/origin/main", &head);
     root
 }
 
@@ -194,7 +206,7 @@ fn the_command_line_is_read_as_argparse_reads_it() {
     assert_eq!((got.code, got.stdout.as_str()), (0, "0\n"));
     let got = super::tunables_cli(&["--bogus".to_owned()]);
     assert_eq!(got.code, 2);
-    assert_eq!(super::read_paths().len(), 10);
+    assert_eq!(super::read_paths().len(), 11);
 }
 
 #[test]

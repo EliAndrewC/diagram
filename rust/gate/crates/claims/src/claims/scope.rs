@@ -175,6 +175,32 @@ impl Reader {
     }
 }
 
+/// The answer a run that asked the Python half would have kept for `skill` (its `.py` files as they stand), written straight to the kept
+/// answers under `skill/.git` with no runner started - so a test's merge-base read is answered as a cached run's is, a Python process
+/// saved (feature 449 T166: each end-to-end test within FR-008's tenth of a second).
+///
+/// # Panics
+///
+/// Where a `.py` file under `skill` cannot be read: a test's tree is broken.
+#[cfg(test)]
+pub fn keep_answer(tree: &Path, skill: &Path, every: bool, stars: bool, answer: Value) {
+    let mut reader = Reader {
+        tree: tree.to_path_buf(),
+        door: None,
+        kept: Map::new(),
+        path: Some(skill.join(".git").join("l7r-cache").join(KEPT)),
+        fresh: Vec::new(),
+        added: true,
+    };
+    let files: Vec<PathBuf> = rglob(&skill.join("l7r").join("diagram"), ".py")
+        .into_iter()
+        .filter(|p| !p.components().any(|c| c.as_os_str() == "__pycache__"))
+        .collect();
+    let key = reader.key(skill, every, stars, &files).unwrap();
+    reader.kept.insert(key.clone(), answer);
+    reader.fresh.push(key);
+}
+
 impl Drop for Reader {
     fn drop(&mut self) {
         self.save();
@@ -194,7 +220,7 @@ pub fn all_units(
 ) -> Result<Vec<Pair>, Fail> {
     let (inside, outside) = reader.py_units(skill, every, stars)?;
     let mut out = inside;
-    out.extend(all_rust_units(skill, "")?);
+    out.extend(all_rust_units(skill, "", stars)?);
     out.extend(outside);
     for (doc, tops) in PROCEDURES {
         let p = skill.join(doc);

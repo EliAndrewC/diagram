@@ -1,0 +1,4 @@
+{
+ "why": "feature 449 T166 (ask:449-phase4-slices Q10): each `.py` unit a slice's cut ports and deletes, by its `path::qualname`, mapped to the unit it became (`to`, a Rust item's `path::qualname`) and the task that ported it (`by`, `<feature> <task>`); `make claims-rekey` (which make land runs) carries each of its claims' index rows onto the port, owed a full check of the new code, and the push refuses a claim on a deleted `.py` unit this map does not carry",
+ "ports": {}
+}

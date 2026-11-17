@@ -23,6 +23,8 @@ pub mod impl_check;
 mod index;
 mod labels;
 mod pager;
+mod ports;
+mod reads;
 mod reply;
 mod report;
 pub mod scope;
@@ -42,6 +44,7 @@ pub fn read_paths() -> Vec<&'static str> {
         index::DEFERRED,
         index::STORE,
         index::QUESTIONS,
+        ports::PORTS,
     ]);
     out
 }

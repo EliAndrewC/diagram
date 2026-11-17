@@ -140,16 +140,37 @@ fn backfill(cur: &Cur, index: &mut Index, qdir: &Path, store: &mut Store) -> Res
     Ok(n)
 }
 
-/// Each row whose stored code is its claim's code under the old fingerprint carried to the new one; how many.
+/// Each row whose stored code is its claim's code under the old fingerprint carried to the new one - an UNCLAIMED row, keyed by its
+/// decision and holding its unit's core, by its unit's, and a row whose code holds the claim as it was recorded (a relabel its
+/// MISLABELED verdict prescribed, answered since), by that text (feature 449 T166) - and the keys carried.
 fn refingerprint(
     index: &mut Index,
     old: &HashMap<String, (String, String)>,
     new: &HashMap<String, (String, String)>,
-) -> usize {
-    let mut n = 0;
+) -> Vec<String> {
+    let mut n = Vec::new();
     for (key, row) in index.iter_mut() {
-        let (Some(o), Some(w)) = (old.get(key), new.get(key)) else {
+        let uid = key.rsplit_once('#').map_or(key.as_str(), |p| p.0);
+        let unclaimed = super::index::is(row, "verdict", "UNCLAIMED");
+        let pick = |m| -> Option<(String, String)> {
+            let m: &HashMap<String, (String, String)> = m;
+            m.get(key)
+                .or_else(|| m.get(uid).filter(|_| unclaimed))
+                .cloned()
+        };
+        let (Some(o), Some(w)) = (pick(old), pick(new)) else {
             continue;
+        };
+        let (o, w) = if o.0.is_empty() {
+            ((o.1.clone(), o.1), (w.1.clone(), w.1))
+        } else {
+            let said = super::index::field(row, "claim");
+            let at = |core: &str| sha(&format!("{core}\x1f{said}"));
+            if said.is_empty() || super::index::is(row, "code", &o.0) {
+                (o, w)
+            } else {
+                ((at(&o.1), o.1.clone()), (at(&w.1), w.1))
+            }
         };
         if o.0 == w.0 || row.get("code").and_then(Value::as_str) != Some(&o.0) {
             continue;
@@ -158,20 +179,23 @@ fn refingerprint(
         if row.get("core").and_then(Value::as_str) == Some(&o.1) {
             row["core"] = json!(w.1);
         }
-        n += 1;
+        n.push(key.clone());
     }
     n
 }
 
+/// key -> (code, core) for each claim of `pairs`, and uid -> ("", core) for each unit (an UNCLAIMED row's).
 fn codes(pairs: &[Pair]) -> HashMap<String, (String, String)> {
-    pairs
+    let mut out: HashMap<String, (String, String)> = pairs
         .iter()
-        .flat_map(|(u, _)| {
-            u.claims
-                .iter()
-                .map(move |c| (u.key(c), (u.code(c), u.core.clone())))
-        })
-        .collect()
+        .map(|(u, _)| (u.uid(), (String::new(), u.core.clone())))
+        .collect();
+    out.extend(pairs.iter().flat_map(|(u, _)| {
+        u.claims
+            .iter()
+            .map(move |c| (u.key(c), (u.code(c), u.core.clone())))
+    }));
+    out
 }
 
 fn owed_cmd(
@@ -780,23 +804,37 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
         "refingerprint" => {
             let mut index = index;
             let old = codes(&all_units(&mut reader, root, false, false)?);
-            let n = refingerprint(&mut index, &old, &codes(&pairs));
-            if n > 0 {
-                save_index(&root.join(INDEX), &index)?;
+            let keys = refingerprint(&mut index, &old, &codes(&pairs));
+            // each carried row of a Rust unit records the constants its code reads, as a check would have (feature 449 T166)
+            let reads: HashMap<String, &str> = pairs
+                .iter()
+                .map(|(u, _)| (u.uid(), u.reads.as_str()))
+                .collect();
+            for k in &keys {
+                let uid = k.rsplit_once('#').map_or(k.as_str(), |p| p.0);
+                if let (Some(Value::Object(row)), Some(r)) = (index.get_mut(k), reads.get(uid)) {
+                    super::reads::stamp(row, Some(r));
+                }
             }
-            o.say(&format!("claims-refingerprint: {n} claim row(s) carried to the fingerprint the star re-exports give, their code otherwise unchanged"));
+            if !keys.is_empty() {
+                save_index(&root.join(INDEX), &index)?;
+                super::reads::record_migration(root, &keys)?;
+            }
+            o.say(&format!("claims-refingerprint: {} claim row(s) carried to the current fingerprint (a `.py` unit's star re-exports, 417 T54; a Rust unit's constant reads, 449 T166), their code otherwise unchanged", keys.len()));
             Ok(0)
         }
         "rekey" => {
             let mut index = index;
             let n = rekey(&cur, &mut index);
-            if n > 0 {
+            // and across a port, by the port map (feature 449 T166, `ask:449-phase4-slices` Q10)
+            let ported = super::ports::rekey_ports(&mut reader, root, &cur, &mut index)?;
+            if n > 0 || !ported.carried.is_empty() || !ported.dropped.is_empty() {
                 save_index(&root.join(INDEX), &index)?;
             }
             o.say(&format!(
                 "claims-rekey: {n} claim row(s) carried to the file their unit moved to"
             ));
-            Ok(0)
+            Ok(super::ports::say(&ported, o))
         }
         "accept" => accept_cmd(&mut reader, root, &cur, &index, p, o),
         "owed" => owed_cmd(&mut reader, root, &pairs, &cur, &index, &store, o),

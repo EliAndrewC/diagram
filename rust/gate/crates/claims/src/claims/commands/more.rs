@@ -270,6 +270,47 @@ fn the_helpers_carry_nothing_they_cannot_name() {
         ("k".to_owned(), ("b".to_owned(), "d".to_owned())),
         ("j".to_owned(), ("a".to_owned(), "c".to_owned())),
     ]);
-    assert_eq!(refingerprint(&mut idx, &old, &new), 1);
+    assert_eq!(refingerprint(&mut idx, &old, &new), ["k"]);
     assert_eq!(idx["k"], json!({"code": "b", "core": "d"}));
+    // an UNCLAIMED row holds its unit's core as its code: carried by its unit's, where it is the old one (feature 449 T166)
+    let mut idx: Map<String, Value> = Map::new();
+    idx.insert(
+        "u#a decision".into(),
+        json!({"code": "c", "core": "c", "verdict": "UNCLAIMED"}),
+    );
+    idx.insert(
+        "v#a decision".into(),
+        json!({"code": "x", "core": "x", "verdict": "UNCLAIMED"}),
+    );
+    idx.insert("u#not unclaimed".into(), json!({"code": "c"}));
+    let unit = |core: &str| (String::new(), core.to_owned());
+    let old = HashMap::from([("u".to_owned(), unit("c")), ("v".to_owned(), unit("c"))]);
+    let new = HashMap::from([("u".to_owned(), unit("d")), ("v".to_owned(), unit("d"))]);
+    assert_eq!(refingerprint(&mut idx, &old, &new), ["u#a decision"]);
+    assert_eq!(
+        idx["u#a decision"],
+        json!({"code": "d", "core": "d", "verdict": "UNCLAIMED"})
+    );
+    // a relabel answered since its check: its code holds the claim as recorded, carried by that text
+    let at = |core: &str| crate::claims::units::sha(&format!("{core}\x1fthen said"));
+    let mut idx: Map<String, Value> = Map::new();
+    idx.insert(
+        "k#x".into(),
+        json!({"code": at("c"), "core": "c", "claim": "then said", "verdict": "MISLABELED"}),
+    );
+    idx.insert(
+        "j#x".into(),
+        json!({"code": "changed", "core": "c", "claim": "then said"}),
+    );
+    let old = HashMap::from([
+        ("k#x".to_owned(), ("now-old".to_owned(), "c".to_owned())),
+        ("j#x".to_owned(), ("now-old".to_owned(), "c".to_owned())),
+    ]);
+    let new = HashMap::from([
+        ("k#x".to_owned(), ("now-new".to_owned(), "d".to_owned())),
+        ("j#x".to_owned(), ("now-new".to_owned(), "d".to_owned())),
+    ]);
+    assert_eq!(refingerprint(&mut idx, &old, &new), ["k#x"]);
+    assert_eq!(idx["k#x"]["code"], at("d"));
+    assert_eq!(idx["j#x"]["code"], "changed");
 }

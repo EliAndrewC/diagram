@@ -34,6 +34,8 @@ pub fn judges(gate: &str) -> Option<(&'static [&'static str], &'static str)> {
                 "dev/claims-index.json",
                 "dev/claims-deferred.json",
                 "dev/claims-pages.json",
+                // the port map a slice's cut declares, which carries its claims to the Rust (feature 449 T166)
+                "dev/claims-ports.json",
                 "specs/",
             ],
             "engine code, Mode A procedure, cited page, claims record or task row",

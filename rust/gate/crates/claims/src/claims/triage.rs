@@ -570,6 +570,8 @@ pub fn triage_bundle(
         {
             u.insert("code".into(), json!(row.code));
             u.insert("core".into(), json!(row.unit.core));
+            // the constant reads the new code holds, which a cleared triage records with it (feature 449 T166)
+            u.insert("reads".into(), json!(row.unit.reads));
         }
         units.insert(k.clone(), Value::Object(u));
     }
@@ -644,6 +646,7 @@ pub fn record_triage(
                     row.insert(f.into(), v.clone());
                 }
             }
+            super::reads::stamp(&mut row, fp.get("reads").and_then(Value::as_str));
             row.shift_remove("triage");
         }
         out.insert(key.clone(), Value::Object(row));

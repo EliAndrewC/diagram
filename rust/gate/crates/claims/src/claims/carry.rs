@@ -17,7 +17,7 @@ use serde_json::{json, Map, Value};
 use super::index::{
     field, is, live_rows, load_map, owed, relabel_answered, Cur, Index, INDEX, STORE,
 };
-use super::report::{base_cores, base_tree, classify, load_deferred, open_findings, Base};
+use super::report::{base_tree, classify, load_deferred, open_findings, Base};
 use super::scope::Reader;
 use crate::record::repo::{fail, git, read_text, Fail};
 use crate::record::units::re;
@@ -487,12 +487,45 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
     let tmp = super::temp_dir("base");
     std::fs::create_dir_all(&tmp).map_err(fail)?;
     let judged = (|| -> Result<_, Fail> {
-        let cores = if mb.is_empty() {
-            HashMap::new()
+        let pairs = if mb.is_empty() {
+            Vec::new()
         } else {
             base_tree("git", root, &mb, &tmp)?;
-            base_cores(reader, &tmp)?
+            super::scope::all_units(reader, &tmp, true, true)?
         };
+        let cores: HashMap<String, String> = pairs
+            .iter()
+            .map(|(u, _)| (u.uid(), u.core.clone()))
+            .collect();
+        let texts: HashMap<String, String> = pairs
+            .iter()
+            .flat_map(|(u, _)| u.claims.iter().map(|c| (u.key(c), c.normalized())))
+            .collect();
+        let uids: HashSet<String> = cores.keys().cloned().collect();
+        // a claim on a `.py` unit the tree no longer has, carried by no move and no port, is refused (feature 449 T166, Q10); whether
+        // its unit is gone is asked of every scope's units, read only when a unit of the base's index is missing from the claimed ones
+        let now = at.cur.uids();
+        let missing = base_index.keys().any(|k| {
+            let uid = k.rsplit_once('#').map_or(k.as_str(), |p| p.0);
+            uid.contains(".py::") && uids.contains(uid) && !now.contains(uid)
+        });
+        let every: HashSet<String> = if missing {
+            super::scope::all_units(reader, root, true, true)?
+                .iter()
+                .map(|(u, _)| u.uid())
+                .collect()
+        } else {
+            HashSet::new()
+        };
+        let before = super::ports::Before {
+            index: &base_index,
+            uids: &uids,
+            texts: &texts,
+        };
+        let ports = super::ports::load(root)?;
+        let unported = super::ports::unported(&at.cur, &at.index, &before, &ports, &mut |u| {
+            !every.contains(u)
+        });
         let mut answered = HashSet::new();
         for (k, v) in &at.index {
             if let Some(row) = at.cur.get(k) {
@@ -503,7 +536,7 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
         }
         let deferred = load_deferred(&root.join(super::index::DEFERRED))?;
         let qdir = tmp.join("research").join("questions");
-        classify(
+        let judged = classify(
             &at.cur,
             &at.index,
             &Base {
@@ -513,17 +546,16 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
                 deferred: &deferred,
                 answered: &answered,
             },
-        )
+        )?;
+        Ok((judged, unported))
     })();
-    let (intro, pre, carried) = judged?;
-    Ok((
-        due.into_iter()
-            .map(|(k, why)| format!("owed ({why}): {k}"))
-            .collect(),
-        intro,
-        pre,
-        carried,
-    ))
+    let ((intro, pre, carried), unported) = judged?;
+    let mut refuse: Vec<String> = due
+        .into_iter()
+        .map(|(k, why)| format!("owed ({why}): {k}"))
+        .collect();
+    refuse.extend(unported);
+    Ok((refuse, intro, pre, carried))
 }
 
 /// (key, refusal) for every open finding `make claims-report` lists: what the gate refuses at `clean`.

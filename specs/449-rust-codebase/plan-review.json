@@ -402,6 +402,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T166 (the claims tooling's two gaps T165 measured, closed before any engine slice; the GM 2026-11-17, request.md)": {
+   "sha256": "dec033b3ee3984fe8b35658c3058f75f7d7015a614b7b68b61b64cfe31fa1f80",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T166 Approach (checklist part A)": {
+   "sha256": "f79bf0a562bf33378f0869ebd9bac9d2bc190ecf8fa4784f620bbc6eb8a9bf09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10000,6 +10012,89 @@
      "why": "Verification and exits for the requested behavior; no scope change."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T166 (the claims tooling's two gaps T165 measured, closed before any engine slice; the GM 2026-11-17, request.md)",
+    "### T166 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "port-map",
+     "summary": "One shared committed port map, dev/claims-ports.json, each entry naming the slice that wrote it; claims rekey (run by make land) reads it; the push's claims gate refuses a claimed .py unit deleted with no move and no map entry.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-17 words directly: 'otherwise well be porting code without being able to track the claims in the new Rust'. A shared map at a fixed path is a design choice; the new refusal only enforces that no claim is lost on a port."
+    },
+    {
+     "id": "carry",
+     "summary": "A mapped, deleted unit's row is re-keyed onto the same label of its Rust unit when that unit carries the claim's text, keeps verdict, note and pages with the old key under 'ported', and is owed a full 'ported' check (never a triage or counter clear); the deferred list re-keyed with it; a row whose text no Rust unit holds is left with its fix.",
+     "class": "within",
+     "why": "Carries the claim into the Rust and owes a full check of the new code, which is what the request's purpose needs. Nothing is cleared without a check. The quoted Q10 wording ('re-keyed there with claims carry', 'That cut's landing runs the claims check') was not in the bundle; judged against request.md alone, it is within. Demo log (demo-port.log) shows the three rows carried and owed 'ported'."
+    },
+    {
+     "id": "drop-pruned-tooling",
+     "summary": "A no-research claim ported into a pruned tooling crate is dropped; one citing research is refused as a new ask.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Exception-shaped, so ruled. The text of ask:449-T148-claims was not supplied, so the ruling rests on request.md alone. The GM's concern on 2026-11-17 is porting 'the actual map engine' without tracking its claims in the new Rust. This drop reaches only tooling crates already pruned from the claims system and only claims that cite no research, so no engine claim and no research-bearing claim is lost: a research-citing one is escalated rather than dropped. The request's purpose survives intact. If the cited ruling does not in fact prune these crates, this ruling falls with it."
+    },
+    {
+     "id": "demo-scratch",
+     "summary": "Demonstrated on a scratch clone: three compound.py units ported to rust/mode_a, gate refused them unported before the map, rekey carried them, a real impl-drift round found them IN-STEP plus one UNCLAIMED literal, then the gate passed.",
+     "class": "within",
+     "why": "Evidence, not a scope decision. demo-port.log is consistent with the block's account."
+    },
+    {
+     "id": "const-fingerprint",
+     "summary": "A Rust unit's code key adds NAME=<value> for each crate constant it reads, keyed by name (a moved constant owes nothing); a check records the read values on its row, so a changed value owes its readers, which closes the relabel shortcut for Rust.",
+     "class": "within",
+     "why": "Gives a changed Rust constant the same tracking a Python unit already had, which is 'being able to track the claims in the new Rust'. demo-const.log shows a changed BEND_WIDTHS owing its own claim and its four readers (drawn x2, two sink tests); arc and TANGENT_CAP, listed with recorded reads, do not read BEND_WIDTHS in the scratch course.rs, so the four is the full reader set."
+    },
+    {
+     "id": "migration-no-recheck",
+     "summary": "The 286 rows of the 112 claimed Rust units that read a constant are re-recorded under the new scheme without re-checking, so make claims-owed owes none before and after and make claims-report is identical to HEAD's.",
+     "class": "within",
+     "why": "Before T166 these rows were not owed on a constant change either, so recording today's values loses nothing the GM asked for. The counts match measure-reads.log ('every claimed unit reading one 112, rows 286')."
+    },
+    {
+     "id": "older-scheme-five",
+     "summary": "Five rows recorded under an older scheme are left as they were, their code unchanged since.",
+     "class": "within",
+     "why": "These rows keep the tracking they had before T166: a change to their own code still owes them. The constant-reader owing is this task's own improvement and is not in the GM's words, so leaving five rows out of it narrows nothing that was asked. Whether any of the five reads a constant was not shown in the bundle."
+    },
+    {
+     "id": "python-relabel-left",
+     "summary": "A .py unit's reader of a changed Python constant still passes on the relabel shortcut; the engine's Python is ported away by S12, and each port's claims are checked fresh as 'ported'.",
+     "class": "within",
+     "why": "The request is about tracking claims in the new Rust. Python units keep exactly today's behavior, which FR-002 favors, and any claim carried into the Rust gets a full check on its port."
+    },
+    {
+     "id": "fr002-outputs",
+     "summary": "Differentials: Python cases 9, one differing only in the 286 migrated rows its index carries; Rust cases 7, five differing only in the intended new lines (readers owed, unported refusals, rekey line, 'ported').",
+     "class": "within",
+     "why": "No verdict is changed beyond the new behavior. The differences are the migrated index data and the intended additions, each named."
+    },
+    {
+     "id": "fr008-tests",
+     "summary": "The five end-to-end port tests run 0.064 to 0.076 s each, the fixture writing the repository git init would make.",
+     "class": "within",
+     "why": "Each is under FR-008's tenth of a second; test-times-five.log agrees."
+    },
+    {
+     "id": "tripwires",
+     "summary": "Three stale reversal tripwires were accepted by the round arbiter before the impl-drift round ran.",
+     "class": "within",
+     "why": "Process record, not a scope decision."
+    },
+    {
+     "id": "checks-exits",
+     "summary": "Order (after T165, before S7), exits, budget and the closing checks.",
+     "class": "within",
+     "why": "Follows the GM's 'port those before the porting of the actual map engine'."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -17907,6 +18002,87 @@
      "summary": "make static, rust-test, hooks-test HOOKS_ALL=1, claims-owed, claims-report, pointer check; red exit through make arbiter-ask.",
      "class": "within",
      "why": "Verification and exits for the requested behavior; no scope change."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T166": {
+   "section_sha256": "4ba0a07df514aeb1009c6bd7badca066d37efef85ac6dd24d39c83d883e61645",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "port-map",
+     "summary": "One shared committed port map, dev/claims-ports.json, each entry naming the slice that wrote it; claims rekey (run by make land) reads it; the push's claims gate refuses a claimed .py unit deleted with no move and no map entry.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-17 words directly: 'otherwise well be porting code without being able to track the claims in the new Rust'. A shared map at a fixed path is a design choice; the new refusal only enforces that no claim is lost on a port."
+    },
+    {
+     "id": "carry",
+     "summary": "A mapped, deleted unit's row is re-keyed onto the same label of its Rust unit when that unit carries the claim's text, keeps verdict, note and pages with the old key under 'ported', and is owed a full 'ported' check (never a triage or counter clear); the deferred list re-keyed with it; a row whose text no Rust unit holds is left with its fix.",
+     "class": "within",
+     "why": "Carries the claim into the Rust and owes a full check of the new code, which is what the request's purpose needs. Nothing is cleared without a check. The quoted Q10 wording ('re-keyed there with claims carry', 'That cut's landing runs the claims check') was not in the bundle; judged against request.md alone, it is within. Demo log (demo-port.log) shows the three rows carried and owed 'ported'."
+    },
+    {
+     "id": "drop-pruned-tooling",
+     "summary": "A no-research claim ported into a pruned tooling crate is dropped; one citing research is refused as a new ask.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Exception-shaped, so ruled. The text of ask:449-T148-claims was not supplied, so the ruling rests on request.md alone. The GM's concern on 2026-11-17 is porting 'the actual map engine' without tracking its claims in the new Rust. This drop reaches only tooling crates already pruned from the claims system and only claims that cite no research, so no engine claim and no research-bearing claim is lost: a research-citing one is escalated rather than dropped. The request's purpose survives intact. If the cited ruling does not in fact prune these crates, this ruling falls with it."
+    },
+    {
+     "id": "demo-scratch",
+     "summary": "Demonstrated on a scratch clone: three compound.py units ported to rust/mode_a, gate refused them unported before the map, rekey carried them, a real impl-drift round found them IN-STEP plus one UNCLAIMED literal, then the gate passed.",
+     "class": "within",
+     "why": "Evidence, not a scope decision. demo-port.log is consistent with the block's account."
+    },
+    {
+     "id": "const-fingerprint",
+     "summary": "A Rust unit's code key adds NAME=<value> for each crate constant it reads, keyed by name (a moved constant owes nothing); a check records the read values on its row, so a changed value owes its readers, which closes the relabel shortcut for Rust.",
+     "class": "within",
+     "why": "Gives a changed Rust constant the same tracking a Python unit already had, which is 'being able to track the claims in the new Rust'. demo-const.log shows a changed BEND_WIDTHS owing its own claim and its four readers (drawn x2, two sink tests); arc and TANGENT_CAP, listed with recorded reads, do not read BEND_WIDTHS in the scratch course.rs, so the four is the full reader set."
+    },
+    {
+     "id": "migration-no-recheck",
+     "summary": "The 286 rows of the 112 claimed Rust units that read a constant are re-recorded under the new scheme without re-checking, so make claims-owed owes none before and after and make claims-report is identical to HEAD's.",
+     "class": "within",
+     "why": "Before T166 these rows were not owed on a constant change either, so recording today's values loses nothing the GM asked for. The counts match measure-reads.log ('every claimed unit reading one 112, rows 286')."
+    },
+    {
+     "id": "older-scheme-five",
+     "summary": "Five rows recorded under an older scheme are left as they were, their code unchanged since.",
+     "class": "within",
+     "why": "These rows keep the tracking they had before T166: a change to their own code still owes them. The constant-reader owing is this task's own improvement and is not in the GM's words, so leaving five rows out of it narrows nothing that was asked. Whether any of the five reads a constant was not shown in the bundle."
+    },
+    {
+     "id": "python-relabel-left",
+     "summary": "A .py unit's reader of a changed Python constant still passes on the relabel shortcut; the engine's Python is ported away by S12, and each port's claims are checked fresh as 'ported'.",
+     "class": "within",
+     "why": "The request is about tracking claims in the new Rust. Python units keep exactly today's behavior, which FR-002 favors, and any claim carried into the Rust gets a full check on its port."
+    },
+    {
+     "id": "fr002-outputs",
+     "summary": "Differentials: Python cases 9, one differing only in the 286 migrated rows its index carries; Rust cases 7, five differing only in the intended new lines (readers owed, unported refusals, rekey line, 'ported').",
+     "class": "within",
+     "why": "No verdict is changed beyond the new behavior. The differences are the migrated index data and the intended additions, each named."
+    },
+    {
+     "id": "fr008-tests",
+     "summary": "The five end-to-end port tests run 0.064 to 0.076 s each, the fixture writing the repository git init would make.",
+     "class": "within",
+     "why": "Each is under FR-008's tenth of a second; test-times-five.log agrees."
+    },
+    {
+     "id": "tripwires",
+     "summary": "Three stale reversal tripwires were accepted by the round arbiter before the impl-drift round ran.",
+     "class": "within",
+     "why": "Process record, not a scope decision."
+    },
+    {
+     "id": "checks-exits",
+     "summary": "Order (after T165, before S7), exits, budget and the closing checks.",
+     "class": "within",
+     "why": "Follows the GM's 'port those before the porting of the actual map engine'."
     }
    ],
    "verdict": "CLEAR"

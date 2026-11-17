@@ -709,10 +709,10 @@ claims-known:  ## [project] record every known drift (a DRIFTED claim naming the
 claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" backfill
 
-claims-rekey:   ## [project] carry each claim's index row to the file its unit moved to with its code intact - a file split at the 1,000-line bar (405 T58); make land runs it
+claims-rekey:   ## [project] carry each claim's index row to the file its unit moved to with its code intact - a file split at the 1,000-line bar (405 T58) - and onto its port where dev/claims-ports.json maps a deleted .py unit to the unit it became, owed a full check (449 T166); make land runs it
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" rekey
 
-claims-refingerprint: ## [project] carry each claim's index row to the fingerprint the star re-exports give, where its code is otherwise unchanged - run once, at the change (417 T54)
+claims-refingerprint: ## [project] carry each claim's index row to the current fingerprint - the star re-exports (417 T54), a Rust unit's constant reads (449 T166) - where its code is otherwise unchanged, recorded in dev/claims-refingerprint.jsonl - run once, at the change
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" refingerprint
 
 claims-backfill-sections: ## [project] re-key every procedure-section claim to its own line (feature 375), owing nothing that was not owed: run once, at the change

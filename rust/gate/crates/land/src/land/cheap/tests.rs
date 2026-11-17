@@ -135,7 +135,12 @@ fn the_first_pass_commits_its_own_records() {
         .borrow_mut()
         .insert("rekey".to_owned(), (0, String::new()));
     put(&fx.root, "dev/claims-index.json", "{}\n");
-    git(&fx.root, &["add", "dev/claims-index.json"]);
+    // the deferred list a port's rekey re-keyed is committed with the rows (feature 449 T166)
+    put(&fx.root, "dev/claims-deferred.json", "{}\n");
+    git(
+        &fx.root,
+        &["add", "dev/claims-index.json", "dev/claims-deferred.json"],
+    );
     put(&fx.root, "dev/bypass-log/2026-11/r.json", "{}\n");
     fx.answers.claims.borrow_mut().insert(
         "carry".to_owned(),
@@ -153,6 +158,11 @@ fn the_first_pass_commits_its_own_records() {
         .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
         .unwrap();
     assert!(stops.is_empty());
+    assert!(fx
+        .land
+        .dirty(&["dev/claims-deferred.json"])
+        .unwrap()
+        .is_empty());
     let subjects = fx.subjects();
     for s in [
         "the review passes' ledger rows",

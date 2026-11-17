@@ -668,26 +668,34 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T164 to T164 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 
 <!-- plan-archive: T165 to T165 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
-### T166 (<why: the finding or measurement that files it>)
+### T166 (the claims tooling's two gaps T165 measured, closed before any engine slice; the GM 2026-11-17, request.md)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: (1) a claim carries from a deleted `.py` unit onto its Rust port through a committed port map, `dev/claims-ports.json`, which `claims rekey` (run by `make land`) reads; the push's claims gate refuses a claimed `.py` unit deleted with no move and no map entry, naming the line to add (`rust/gate/crates/claims/src/claims/ports.rs`); (2) a Rust unit's fingerprint holds the values of the crate constants it reads, as a Python unit's does, and a check records those values on its row (`reads.rs`), the landed rows migrated without re-checking anything (`make claims-refingerprint`).
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase4-slices` Q10, `ask:449-T148-claims`; the GM's words, request.md 2026-11-17; FR-002 for the Python units' outputs; FR-008):
+   - The port map is one shared file, each entry naming the slice that wrote it (`by`), because the claims tools read a fixed path at every tree, the merge base's included; a later feature's port uses the same map.
+   - The carry (Q10's "re-keyed there with claims carry"): a row of a mapped unit that is gone is re-keyed onto the same label of its Rust unit when that unit carries the claim's own text (the row's, or the merge base's Python unit's for an older row that stored none), keeps its verdict, note and pages with its old key under `ported`, and is owed `ported` - a full check, never a triage or counter clear - so the landing's claims round checks the Rust code (Q10's "That cut's landing runs the claims check"); the deferred list is re-keyed with it; a no-research claim ported into a pruned tooling crate is dropped (`ask:449-T148-claims`) and one citing research is refused as a new ask.
+   - Demonstrated on a scratch clone: `DRAFT_MARGIN_FT`, `CAPTION_ROOM` and `_wall_clearance_ft` ported from `compound.py` to a new `rust/mode_a` and the Python deleted; before the map the gate refused all three as unported, with it `rekey` carried the three rows and the gate owed them as ported, and a real `impl-drift` round on the claims bundle found all three IN-STEP on the Rust code and one UNCLAIMED figure the scratch port wrote out as literals, after which none was owed and the gate passed (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t166/demo-port.log` and `demo-round-*`).
+   - The fingerprint: a unit's code key adds `NAME=<value>` for each constant of its crate it reads, resolved as T165's context resolves names, keyed by name so a moved constant owes nothing; a check records the read values on its row, so a changed value owes the reader - which also closes the relabel shortcut that let a reader whose own text is unchanged pass. Rows whose recorded fingerprint equals the old scheme's are re-recorded in the same change, one line a run in `dev/claims-refingerprint.jsonl`: 286 rows of the 112 claimed Rust units that read a constant, `make claims-owed` owing none before and none after, `make claims-report` identical to HEAD's (observed 2026-11-17, method: those commands before and after the migration). Five rows recorded under an older scheme are left as they were, their code unchanged since. A changed `BEND_WIDTHS` owes its own claim and the four that read it, where HEAD owed one (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t166/demo-const.log`).
+   - Left as it was: a `.py` unit's reader of a changed Python constant still passes on the relabel shortcut; the engine's Python is ported away by S12, and each port's claims are checked fresh as ported.
+   - The same outputs (FR-002), through the shared runner: the Python cases' 9 cases, one differing only in the 286 migrated Rust rows its index carries (measured 2026-11-17 (`make diff-run ... VERIFY=1`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t166/diffrun/same-cases-t166.diff-run/reports/diff-run-verify-20261117T075653Z.json`)); the Rust cases' 7 cases, five differing only in the intended new lines - the readers owed, the unported refusals, the rekey line and `ported` (measured 2026-11-17 (`make diff-run ... VERIFY=1`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t166/diffrun/rust-cases-t166.diff-run/reports/diff-run-verify-20261117T075723Z.json`)). The test-time trim after these runs changed only test code.
+   - Tests (FR-008): the five end-to-end port tests run 0.064 to 0.076 s each, their fixture writing the repository `git init` would make in place of four git calls (observed 2026-11-17, method: T99's, each test alone, five runs, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t166/test-times-five.log`).
+   - The three stale reversal tripwires that refused the `impl-drift` dispatch were each accepted by the round arbiter before the round ran.
+   - The checks: `make static` clean, `make rust-test` clean on 31 crates, `make hooks-test HOOKS_ALL=1` green on 54 suites, `make claims-owed` owing none, `make claims-report` identical to HEAD's, the pointer check clean (observed 2026-11-17, method: those commands).
 
 ### T166 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A claim on ported engine code follows it into Rust and is checked there, and a changed Rust constant owes the code that reads it.
+2. **The constraints.** Q10; the GM's words; FR-002 for the Python units; FR-008.
+3. **Where each comes from.** G: the GM's request; O: the demonstrations, the migration counts and the differential above.
+4. **Do they describe the world here?** Run on this clone's real index and on scratch ports, measured 2026-11-17 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t166/`).
+5. **The order.** After T165; before any engine slice (S7 on).
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** A ported claim carried and checked IN-STEP, a changed constant owing its readers, the migration owing nothing.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 

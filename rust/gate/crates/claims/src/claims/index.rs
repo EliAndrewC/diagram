@@ -428,6 +428,14 @@ pub fn relabeled_only(was: &Value, row: &Row, root: &Path) -> Result<bool, Fail>
     {
         return Ok(false);
     }
+    // a Rust unit's core holds the values of the constants it reads (feature 449 T166): where its row recorded them, a value changed
+    // since is code changed, though the unit's own text is not - before T166 this test passed any change its body did not show
+    if was
+        .get("reads")
+        .is_some_and(|r| r.as_str() != Some(&row.unit.reads))
+    {
+        return Ok(false);
+    }
     Ok(is(was, "claim", &row.claim.normalized()) || is(was, "verdict", "MISLABELED"))
 }
 
@@ -531,6 +539,10 @@ fn owed_one(
     store: &Store,
     memo: &mut PageMemo,
 ) -> Result<Option<String>, Fail> {
+    if was.get("ported").is_some() && !is(was, "code", &row.code) {
+        // carried across a port (feature 449 T166, Q10): the code changed language, so a full check of the new code, never a triage
+        return Ok(Some(super::ports::PORTED.to_owned()));
+    }
     let relabeled = |q: &Path| -> Result<bool, Fail> {
         let root = q.parent().and_then(Path::parent).unwrap_or(Path::new(""));
         relabeled_only(was, row, root)

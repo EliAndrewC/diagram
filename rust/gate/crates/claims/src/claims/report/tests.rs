@@ -28,6 +28,7 @@ fn unit(qual: &str, claims: &[&str], errors: &[&str]) -> Unit {
         errors: errors.iter().map(|e| (*e).to_owned()).collect(),
         names: Vec::new(),
         blocks: Vec::new(),
+        reads: String::new(),
     }
 }
 

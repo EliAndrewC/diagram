@@ -33,6 +33,9 @@ pub struct Unit {
     pub errors: Vec<String>,
     pub names: Vec<String>,
     pub blocks: Vec<String>,
+    /// A Rust unit's constant reads as its core holds them, fingerprinted; empty where it reads none, and for any other unit (feature 449
+    /// T166). A check records it on the row, so a changed value owes the claim though the unit's text is unchanged.
+    pub reads: String,
 }
 
 /// A unit and its module's errors, as the Python's `all_units` yields them.
@@ -107,6 +110,7 @@ pub fn from_json(v: &Value) -> Pair {
             errors: strings(v, "errors"),
             names: strings(v, "names"),
             blocks: strings(v, "blocks"),
+            reads: String::new(),
         },
         strings(v, "module_errors"),
     )
@@ -188,6 +192,7 @@ pub fn doc_units(text: &str, path: &str, tops: Option<&[&str]>) -> Vec<Unit> {
             errors,
             names: Vec::new(),
             blocks: section_blocks(&body),
+            reads: String::new(),
         });
     }
     units
@@ -418,8 +423,16 @@ pub fn rust_core(body: &str) -> String {
     )))
 }
 
-/// (the file's errors, its units) for one `.rs` source text: each item's own claims, else the `//!` module doc's, inherited.
+/// (the file's errors, its units) for one `.rs` source text: each item's own claims, else the `//!` module doc's, inherited. Each core
+/// is the item's tokens alone; [`all_rust_units`] adds the constants it reads (feature 449 T166), and is the one reader outside the tests.
+#[cfg(test)]
 pub fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
+    let (errors, units) = rust_units_with_bodies(source, path);
+    (errors, units.into_iter().map(|(u, _)| u).collect())
+}
+
+/// [`rust_units`], each unit with its item's text.
+fn rust_units_with_bodies(source: &str, path: &str) -> (Vec<String>, Vec<(Unit, String)>) {
     let module_doc = splitlines(source)
         .iter()
         .filter_map(|l| {
@@ -434,7 +447,7 @@ pub fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
     for (qual, kind, first, last, doc, body) in items(source, 0, "", false) {
         let (claims, errors) = claims_of(Some(&doc));
         let inherited = claims.is_empty() && errors.is_empty();
-        units.push(Unit {
+        let unit = Unit {
             path: path.to_owned(),
             qualname: qual,
             kind,
@@ -450,7 +463,9 @@ pub fn rust_units(source: &str, path: &str) -> (Vec<String>, Vec<Unit>) {
             errors,
             names: Vec::new(),
             blocks: Vec::new(),
-        });
+            reads: String::new(),
+        };
+        units.push((unit, body));
     }
     (mod_errors, units)
 }
@@ -496,17 +511,30 @@ pub fn walked(inner: &str) -> bool {
         || ["parked", "guard", "gate", "browser", "embed"].contains(&parts[0]))
 }
 
-/// Every unit of every `.rs` under `rust/` the walk reads ([`walked`]), with its file's errors.
-pub fn all_rust_units(root: &Path, repo_prefix: &str) -> Result<Vec<Pair>, Fail> {
+/// Every unit of every `.rs` under `rust/` the walk reads ([`walked`]), with its file's errors. With `reads`, each core holds the value of
+/// every crate constant the unit reads ([`super::reads`], feature 449 T166); without, the fingerprint before T166, which only
+/// `claims refingerprint` asks for, to carry the rows still at it.
+pub fn all_rust_units(root: &Path, repo_prefix: &str, reads: bool) -> Result<Vec<Pair>, Fail> {
     let base = root.join("rust");
     let mut out = Vec::new();
+    let mut tables = super::context::Tables::default();
     for p in rglob(&base, ".rs") {
         if !walked(&rel(&p, &base)) {
             continue;
         }
         let text = crate::record::repo::read_text(&p)?;
-        let (errors, units) = rust_units(&text, &format!("{repo_prefix}{}", rel(&p, root)));
-        out.extend(units.into_iter().map(|u| (u, errors.clone())));
+        let path = rel(&p, root);
+        let (errors, units) = rust_units_with_bodies(&text, &format!("{repo_prefix}{path}"));
+        for (mut u, body) in units {
+            if reads {
+                let vals = super::reads::values(&mut tables, root, &path, &u.qualname, &body);
+                u.core = super::reads::core(&body, &vals);
+                if !vals.is_empty() {
+                    u.reads = sha(&vals);
+                }
+            }
+            out.push((u, errors.clone()));
+        }
     }
     Ok(out)
 }

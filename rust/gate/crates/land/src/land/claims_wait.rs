@@ -11,9 +11,10 @@ use super::cheap::kept_lines;
 use super::{head, py_read, tail, Land};
 
 /// How `claims_cure` opens each refusal that waiting cannot end - so the stop names it as such, not as the wait run out.
-const CURE_OPENINGS: [&str; 2] = [
+const CURE_OPENINGS: [&str; 3] = [
     "claims-gate.sh refuses on a finding no check in flight can cure",
     "claims-gate.sh: a claim is owed a check and none is in flight",
+    "claims-gate.sh refuses on a claim whose unit was deleted unported",
 ];
 
 /// Where a claims refusal met in the preflight goes: `(false, its cure)` - a stop - when no wait can cure it ([`claims_cure`]), else
@@ -47,6 +48,19 @@ pub(super) fn claims_cure(out: &str, in_flight: &[String]) -> String {
         .copied()
         .filter(|l| l.contains("owed ("))
         .collect();
+    // a claim on a deleted `.py` unit no port carried (feature 449 T166, Q10): only the port map and a rekey cure it, never a check
+    let unported: Vec<&str> = lines
+        .iter()
+        .copied()
+        .filter(|l| l.starts_with("unported:"))
+        .collect();
+    if !unported.is_empty() {
+        return format!(
+            "{} - {}. Each line names its fix: map the unit in dev/claims-ports.json, or carry its `Research:` line onto its port, then `make claims-rekey` (ask:449-phase4-slices Q10) - then run make land again",
+            CURE_OPENINGS[2],
+            head(&unported.join(" | "), 600)
+        );
+    }
     if !introduced.is_empty() {
         let also = if owed.is_empty() {
             String::new()

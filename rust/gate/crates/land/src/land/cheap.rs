@@ -302,21 +302,26 @@ impl Land {
                 &[],
             )?;
         }
-        // A MOVED UNIT KEEPS ITS CLAIMS' ROWS (405 T58): a file split into a package at the 1,000-line bar re-keys them, owing nothing
+        // A MOVED UNIT KEEPS ITS CLAIMS' ROWS (405 T58): a file split into a package at the 1,000-line bar re-keys them, owing nothing;
+        // and a PORTED one (feature 449 T166, Q10): the rows carried onto the port the map names, the deferred list re-keyed with them
         self.claims(&["rekey"]);
-        if !self.dirty(&["dev/claims-index.json"])?.is_empty() {
-            self.run(
-                &[
-                    "git",
-                    "commit",
-                    "-q",
-                    "-m",
-                    "claim rows carried to the files their units moved to (make land, 405 T58)",
-                    "--",
-                    "dev/claims-index.json",
-                ],
-                &[],
-            )?;
+        let mut moved = Vec::new();
+        for path in ["dev/claims-index.json", "dev/claims-deferred.json"] {
+            if !self.dirty(&[path])?.is_empty() {
+                moved.push(path);
+            }
+        }
+        if !moved.is_empty() {
+            let mut cmd = vec![
+                "git",
+                "commit",
+                "-q",
+                "-m",
+                "claim rows carried to the files their units moved to, or to their ports (make land, 405 T58, 449 T166)",
+                "--",
+            ];
+            cmd.extend(moved);
+            self.run(&cmd, &[])?;
         }
         // A FINDING OUTSIDE THE CHANGE IS FILED, NOT REFUSED (feature 405 T36, D10): the carry files every carried claims finding as an
         // open task of this feature - what `make claims-carry` does by hand - and the box lands with the work

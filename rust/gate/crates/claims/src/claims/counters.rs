@@ -17,8 +17,10 @@
 //! `codeid._counter_value` holds Python's: a key in the counters' `<kind>@<function>` form (feature 444 D9), and a value that is
 //! numbers and places read, `.len()`, `as <integer type>`, `*`, `+` and parentheses - no other call, no indexing (it can panic), no `-`
 //! (an underflow panics in a debug build). A counter that needs a new local (`tests += 1`) or a new parameter is code, and owed as before.
-//! A Rust unit's core reads no constant's value (its `names` are none), so Python's "a counter reading an in-scope constant" has no Rust
-//! case.
+//! A Rust unit's core holds the value of each crate constant it reads (feature 449 T166, [`super::reads`]), so the base version's core is
+//! rebuilt from the base item's tokens and the constants THOSE tokens read, at their values now: it equals the recorded code only where
+//! no constant the unit read changed since its check, so a counter added beside a changed constant is never cleared, and a counter
+//! reading a constant the base did not (`BINS as u64`) still clears - the Python's rule.
 
 #![expect(
     clippy::case_sensitive_file_extension_comparisons,
@@ -38,7 +40,7 @@ use super::index::{
     body_of, live_rows, owed, save_index, Cur, Index, Store, CODE_TRIAGE, INDEX, QUESTIONS,
 };
 use super::scope::Reader;
-use super::units::{items, rust_core, Unit};
+use super::units::{items, Unit};
 use crate::record::repo::{git_show, read_text, Fail};
 use crate::record::units::re;
 
@@ -99,6 +101,7 @@ pub fn counters_clear(
         return Ok(index);
     }
     let mut done = Vec::new();
+    let mut tables = super::context::Tables::default();
     for k in keys.iter().filter(|k| index.contains_key(*k)) {
         let row = cur.get(k).unwrap_or_else(|| unreachable!());
         let unit = &row.unit;
@@ -120,9 +123,12 @@ pub fn counters_clear(
         } else {
             // past the line-keyed sections, a unit not of a `.py` file is a Rust item's
             let was = index[k].get("code").and_then(Value::as_str);
+            let mut reads = |body: &str| {
+                super::reads::values(&mut tables, root, &unit.path, &unit.qualname, body)
+            };
             git_show(root, &base, &unit.path).is_some_and(|old| {
                 read_text(&root.join(&unit.path))
-                    .is_ok_and(|now| counter_only(&old, &now, unit, &row.claim, was))
+                    .is_ok_and(|now| counter_only(&old, &now, unit, &row.claim, was, &mut reads))
             })
         };
         if cleared {
@@ -140,6 +146,7 @@ pub fn counters_clear(
         r.insert("code".into(), json!(row.code));
         r.insert("core".into(), json!(row.unit.core));
         r.insert("body".into(), json!(body_of(root, &row.unit)?));
+        super::reads::stamp(&mut r, Some(&row.unit.reads));
         r.insert("triaged".into(), json!(crate::record::bundle::today()));
         r.insert("cleared".into(), json!(COUNTER_CLEARED));
         r.shift_remove("triage");
@@ -153,9 +160,16 @@ pub fn counters_clear(
 }
 
 /// Is `unit`, read from the working text `now`, the base text `old`'s version - the one `was` (its recorded code) fingerprints - with
-/// counter statements only added?
+/// counter statements only added? `reads` gives an item's constant values as its core holds them ([`super::reads::values`]).
 #[must_use]
-pub fn counter_only(old: &str, now: &str, unit: &Unit, claim: &Claim, was: Option<&str>) -> bool {
+pub fn counter_only(
+    old: &str,
+    now: &str,
+    unit: &Unit,
+    claim: &Claim,
+    was: Option<&str>,
+    reads: &mut dyn FnMut(&str) -> String,
+) -> bool {
     let find = |src: &str| {
         items(src, 0, "", false)
             .into_iter()
@@ -166,7 +180,7 @@ pub fn counter_only(old: &str, now: &str, unit: &Unit, claim: &Claim, was: Optio
         return false;
     };
     let based = Unit {
-        core: rust_core(&before),
+        core: super::reads::core(&before, &reads(&before)),
         ..unit.clone()
     };
     if Some(based.code(claim).as_str()) != was {

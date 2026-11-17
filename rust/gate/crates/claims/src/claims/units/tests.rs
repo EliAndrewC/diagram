@@ -150,12 +150,12 @@ fn the_rust_walk_skips_the_tooling_crates_and_targets_and_keeps_python_order() {
         paths.iter().position(|p| p.ends_with("a/b.rs"))
             < paths.iter().position(|p| p.ends_with("a-x/c.rs"))
     );
-    let units = all_rust_units(&root, "").unwrap();
+    let units = all_rust_units(&root, "", true).unwrap();
     assert!(units
         .iter()
         .all(|(u, _)| u.path.starts_with("rust/phases/src/") && !u.path.contains("target")));
     std::fs::write(root.join("rust/phases/src/bad.rs"), [0xff_u8]).unwrap();
-    assert!(all_rust_units(&root, "").is_err());
+    assert!(all_rust_units(&root, "", true).is_err());
     assert!(rglob(Path::new("/no/such/dir"), ".rs").is_empty());
 }
 
@@ -169,7 +169,7 @@ fn a_new_crate_under_rust_is_walked_with_nothing_declared() {
     put(&root, "rust/mode_a/src/sheet/walls.rs", claimed);
     put(&root, "rust/mode_a/target/debug/build/x.rs", claimed);
     put(&root, "rust/parked/mode_a/src/lib.rs", claimed);
-    let units = all_rust_units(&root, "").unwrap();
+    let units = all_rust_units(&root, "", true).unwrap();
     let keys: Vec<String> = units.iter().map(|(u, _)| u.key(&u.claims[0])).collect();
     assert_eq!(
         keys,

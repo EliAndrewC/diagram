@@ -174,7 +174,7 @@ impl Tables {
 
     /// `path::qualname` of each function or constant `source` (an item of `path`, named `own`) uses that its crate defines: its own
     /// file's first, then the rest (`claims_context._refs`).
-    fn refs(&mut self, root: &Path, path: &str, source: &str, own: &str) -> Vec<String> {
+    pub(super) fn refs(&mut self, root: &Path, path: &str, source: &str, own: &str) -> Vec<String> {
         let own_type = own.rsplit_once('.').map(|p| p.0.to_owned());
         let (mut local, mut far) = (Vec::new(), Vec::new());
         for (name, called, qual) in named(source) {
@@ -229,7 +229,7 @@ impl Tables {
         out
     }
 
-    fn source(&mut self, root: &Path, reference: &str) -> Option<String> {
+    pub(super) fn source(&mut self, root: &Path, reference: &str) -> Option<String> {
         let (path, qual) = reference.split_once("::")?;
         self.of(root, path)
             .iter()
@@ -299,7 +299,7 @@ pub fn rust_context(
 }
 
 /// Whether `path::qualname` names a constant (its last name all capitals).
-fn constant(reference: &str) -> bool {
+pub(super) fn constant(reference: &str) -> bool {
     let qual = reference.rsplit("::").next().unwrap_or_default();
     caps(qual.rsplit('.').next().unwrap_or(qual))
 }

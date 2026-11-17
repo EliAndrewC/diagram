@@ -284,7 +284,12 @@ fn the_backfills_rekey_and_refingerprint() {
     ));
     std::fs::write(root.join("dev/claims-index.json"), ix.to_string()).unwrap();
     let got = claims(&root, &["refingerprint"]);
-    assert_eq!(got.stdout, "claims-refingerprint: 1 claim row(s) carried to the fingerprint the star re-exports give, their code otherwise unchanged\n");
+    assert_eq!(got.stdout, "claims-refingerprint: 1 claim row(s) carried to the current fingerprint (a `.py` unit's star re-exports, 417 T54; a Rust unit's constant reads, 449 T166), their code otherwise unchanged\n");
+    // the migration is recorded, one row a run that carries any (feature 449 T166)
+    let log = std::fs::read_to_string(root.join(crate::claims::reads::MIGRATIONS)).unwrap();
+    let row: Value = serde_json::from_str(log.lines().next().unwrap()).unwrap();
+    assert_eq!(row["rows"], 1);
+    assert_eq!(row["keys"][0], "l7r/diagram/m.py::TABLE#table");
     let mut cur = crate::claims::index::Cur::default();
     let mut store = serde_json::Map::new();
     let mut idx = serde_json::Map::new();

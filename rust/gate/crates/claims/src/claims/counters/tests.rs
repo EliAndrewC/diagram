@@ -4,8 +4,8 @@
 use serde_json::{json, Value};
 
 use super::counter_only;
-use crate::claims::tests::{claims, fixture};
-use crate::claims::units::{rust_units, Unit};
+use crate::claims::tests::{claims, fixture, fixture_with};
+use crate::claims::units::{all_rust_units, rust_units, Unit};
 use crate::record::testkit::{commit, git, put};
 
 const BASE: &str = "/// Research: the reach - NONE: plumbing
@@ -25,7 +25,8 @@ fn only(now: &str) -> bool {
     let u = unit(now);
     let claim = u.claims[0].clone();
     let was = unit(BASE).code(&claim);
-    counter_only(BASE, now, &u, &claim, Some(&was))
+    let mut none = |_: &str| String::new();
+    counter_only(BASE, now, &u, &claim, Some(&was), &mut none)
 }
 
 fn with(line: &str) -> String {
@@ -98,9 +99,24 @@ fn anything_else_is_code() {
     // the recorded version is not the base's; the unit gone from either side
     let u = unit(BASE);
     let claim = u.claims[0].clone();
-    assert!(!counter_only(BASE, BASE, &u, &claim, Some("another")));
-    assert!(!counter_only("pub fn other() {}\n", BASE, &u, &claim, None));
-    assert!(!counter_only(BASE, "", &u, &claim, None));
+    let mut none = |_: &str| String::new();
+    assert!(!counter_only(
+        BASE,
+        BASE,
+        &u,
+        &claim,
+        Some("another"),
+        &mut none
+    ));
+    assert!(!counter_only(
+        "pub fn other() {}\n",
+        BASE,
+        &u,
+        &claim,
+        None,
+        &mut none
+    ));
+    assert!(!counter_only(BASE, "", &u, &claim, None, &mut none));
 }
 
 fn index(root: &std::path::Path) -> Value {
@@ -124,7 +140,8 @@ fn the_clear_records_a_rust_claim() {
     commit(&root, "a counter");
     git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
     let mut idx = serde_json::Map::new();
-    for u in rust_units(&counted, path).1 {
+    // recorded as a check records them: each core holding the constants it reads (feature 449 T166)
+    for (u, _) in all_rust_units(&root, "", true).unwrap() {
         for c in &u.claims {
             idx.insert(u.key(c), json!({"code": u.code(c), "verdict": "IN-STEP"}));
         }
@@ -156,4 +173,39 @@ fn the_clear_records_a_rust_claim() {
         "{}",
         got.stdout
     );
+}
+
+/// A counter added beside a changed constant the unit reads is code (feature 449 T166): the base version's core is rebuilt with the
+/// constants' values now, which the recorded code, taken at the old value, no longer matches - so the claim is owed, not cleared.
+#[test]
+fn a_counter_beside_a_changed_constant_is_not_cleared() {
+    let root = fixture_with("claims-counters-const", &|root| {
+        std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
+    });
+    let path = "rust/phases/src/lib.rs";
+    let lib = std::fs::read_to_string(root.join(path)).unwrap();
+    let mut idx = serde_json::Map::new();
+    for (u, _) in all_rust_units(&root, "", true).unwrap() {
+        for c in &u.claims {
+            idx.insert(u.key(c), json!({"code": u.code(c), "verdict": "IN-STEP"}));
+        }
+    }
+    put(
+        &root,
+        "dev/claims-index.json",
+        &Value::Object(idx).to_string(),
+    );
+    let counted = lib.replace(
+        "    x + GAP + y\n",
+        "    tally(counts, \"read@reach\", 2);\n    x + GAP + y\n",
+    );
+    put(
+        &root,
+        path,
+        &counted.replace("GAP: f64 = 12.0", "GAP: f64 = 13.0"),
+    );
+    // the same counter with the constant as it was clears: `the_clear_records_a_rust_claim`
+    let got = claims(&root, &["owed"]).stdout;
+    assert!(!got.contains("cleared without a triage"));
+    assert!(got.contains("code triage      rust/phases/src/lib.rs::reach#reach"));
 }

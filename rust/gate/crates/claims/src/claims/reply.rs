@@ -150,12 +150,12 @@ pub fn record(
             msgs.push(format!("no verdict for `{key}` - it stays owed"));
             continue;
         };
-        out.insert(
-            key.clone(),
-            Value::Object(verdict_row(
-                key, fp, verdict, note, today, numbered, &mut msgs,
-            )),
-        );
+        let mut row = verdict_row(key, fp, verdict, note, today, numbered, &mut msgs);
+        // a row carried across a port keeps its old key, so the push reads the finding against the Python's (feature 449 T166)
+        if let Some(from) = index.get(key).and_then(|r| r.get("ported")) {
+            row.insert("ported".into(), from.clone());
+        }
+        out.insert(key.clone(), Value::Object(row));
     }
     let cores: HashMap<&str, &str> = units
         .values()
@@ -218,7 +218,7 @@ fn verdict_row(
     row.insert("verdict".into(), json!(verdict));
     row.insert("code".into(), fp["code"].clone());
     row.insert("core".into(), fp["core"].clone());
-    for f in ["body", "claim"] {
+    for f in ["body", "claim", "reads"] {
         if let Some(v) = fp.get(f) {
             row.insert(f.into(), v.clone());
         }

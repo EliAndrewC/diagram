@@ -22,6 +22,13 @@ fn what_waiting_cannot_cure_is_said_with_its_cure() {
     );
     assert_eq!(claims_cure("owed (impl-drift) y\n", &flight), "");
     assert_eq!(claims_cure("carry: x\n", &[]), "");
+    // a claim on a deleted unit no port carried waits for nothing (feature 449 T166)
+    let unported = claims_cure(
+        "unported: k - its unit is deleted\nowed (new): y\n",
+        &flight,
+    );
+    assert!(unported.starts_with("claims-gate.sh refuses on a claim whose unit was deleted unported - unported: k - its unit is deleted. Each line names its fix"));
+    assert!(claims_stop_line(&unported).contains("waiting cannot cure it"));
     assert_eq!(
         claims_route("carry: x", "said", &[]),
         (true, "said".to_owned())

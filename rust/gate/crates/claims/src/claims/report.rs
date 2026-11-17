@@ -20,7 +20,6 @@ use super::index::{
     field, is, live_rows, load_map, owed, research_fp, Cur, Index, Store, QUESTIONS,
 };
 use super::reply::{FINDINGS, VERDICTS};
-use super::scope::{all_units, Reader};
 use super::units::Pair;
 use crate::record::repo::{fail, git, Fail};
 use crate::record::units::re;
@@ -313,14 +312,6 @@ pub fn base_tree(git: &str, root: &Path, base: &str, into: &Path) -> Result<(), 
     std::fs::create_dir_all(into.join("l7r/diagram/hamletgen")).map_err(fail)
 }
 
-/// uid -> core for every unit at a tree, claimed or not: the base the push compares with.
-pub fn base_cores(reader: &mut Reader, skill: &Path) -> Result<HashMap<String, String>, Fail> {
-    Ok(all_units(reader, skill, true, true)?
-        .into_iter()
-        .map(|(u, _)| (u.uid(), u.core))
-        .collect())
-}
-
 /// What `classify` judges against: the merge base's index, cores and questions, the deferred and the answered.
 pub struct Base<'a> {
     pub index: &'a Index,
@@ -353,7 +344,12 @@ pub fn classify(cur: &Cur, index: &Index, base: &Base) -> Result<Judged, Fail> {
         {
             continue;
         }
-        let was = base.index.get(key);
+        // a row carried across a port is read against its Python key's (feature 449 T166)
+        let was = base.index.get(key).or_else(|| {
+            v.get("ported")
+                .and_then(Value::as_str)
+                .and_then(|k| base.index.get(k))
+        });
         let line = format!("{} {key} - {}", padded(verdict), field(v, "note"));
         if was
             .and_then(|w| w.get("verdict"))
