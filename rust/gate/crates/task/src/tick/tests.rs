@@ -215,6 +215,15 @@ fn a_finished_section_is_archived_at_the_tick() {
     assert!(
         usage.contains("\"tool\": \"tick-archive\", \"kind\": \"step\", \"outcome\": \"changed\"")
     );
+}
+
+/// The archive's test's failures, on a repository of their own (feature 449 T167: they read nothing the archive wrote, and the two
+/// together took over FR-008's tenth of a second).
+#[test]
+fn a_tick_outside_the_root_or_of_a_tasks_md_it_cannot_write_raises() {
+    let dir = repo("archive-fails");
+    let root = root_of(&dir);
+    let d = root.join("specs/9001-x");
     // a tick of a feature directory outside the root raises after its write, as `relative_to` did
     let elsewhere = repo("archive-elsewhere");
     let other = root_of(&elsewhere).join("specs/9001-x");

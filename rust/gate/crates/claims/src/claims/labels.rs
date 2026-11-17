@@ -29,6 +29,8 @@ static SILENT: LazyLock<Regex> = LazyLock::new(|| {
 /// A figure in feet, as an account writes it.
 static FEET: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:ft|feet|foot)\b"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 4] = [&DEPARTS, &NAMED, &SILENT, &FEET];
 
 fn states(text: &str, fig: &str) -> bool {
     let fig = fig.strip_suffix(".0").unwrap_or(fig);

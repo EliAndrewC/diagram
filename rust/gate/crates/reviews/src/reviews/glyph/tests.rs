@@ -2,7 +2,7 @@
 
 use serde_json::{json, Value};
 
-use super::super::tests::{commit, events, feature, map, put, repo, sh};
+use super::super::tests::{commit, events, feature, map, put, repo};
 use super::*;
 
 fn glyph_unit() -> Unit {
@@ -12,6 +12,21 @@ fn glyph_unit() -> Unit {
         on: "m".to_owned(),
         occasion: "x".to_owned(),
     }
+}
+
+/// Everything committed at a committer date, git started directly rather than through `sh` (feature 449 T167, FR-008).
+fn commit_at(root: &Path, msg: &str, date: &str) {
+    let run = |args: &[&str]| {
+        let done = std::process::Command::new("git")
+            .args(args)
+            .current_dir(root)
+            .env("GIT_COMMITTER_DATE", date)
+            .status()
+            .unwrap();
+        assert!(done.success(), "git {args:?}");
+    };
+    run(&["add", "-A"]);
+    run(&["commit", "-q", "-m", msg]);
 }
 
 fn clock(root: &Path) -> Value {
@@ -55,21 +70,27 @@ fn the_start_is_the_first_event_or_the_last_reopening() {
     assert_eq!(feature_start(&r, "900-x"), Some(60.0));
     put(&r, ".git/l7r-events/900-y.jsonl", "not json\n");
     assert_eq!(first_event(&r, "900-y"), None);
+}
+
+/// The reopening read from the feature's history (split from the test above, feature 449 T167: the two on one repository took 107 ms
+/// against FR-008's tenth of a second).
+#[test]
+fn a_reopening_is_the_commit_after_which_the_feature_is_open_again() {
+    let r = repo("reopen");
+    put(
+        &r,
+        ".git/l7r-events/900-x.jsonl",
+        "{\"t\": \"1970-01-01T00:01:00Z\"}\n{\"t\": 5}\n",
+    );
     // open, then closed, then reopened: the reopening is the commit after which it is open again
     put(&r, "specs/900-x/tasks.md", "- [ ] T1\n");
     commit(&r, "filed");
     put(&r, "specs/900-x/tasks.md", "- [x] T1\n");
     commit(&r, "closed");
     put(&r, "specs/900-x/tasks.md", "- [x] T1\n- [ ] T2\n");
-    sh(
-        &r,
-        "git add -A && GIT_COMMITTER_DATE='2030-01-01T00:00:00Z' git commit -q -m reopened",
-    );
+    commit_at(&r, "reopened", "2030-01-01T00:00:00Z");
     put(&r, "specs/900-x/tasks.md", "- [x] T1\n- [ ] T2\n- [ ] T3\n");
-    sh(
-        &r,
-        "git add -A && GIT_COMMITTER_DATE='2030-01-02T00:00:00Z' git commit -q -m worked",
-    );
+    commit_at(&r, "worked", "2030-01-02T00:00:00Z");
     put(
         &r,
         ".git/glyph-clock.json",
@@ -159,9 +180,12 @@ fn a_glyph_unit_is_due_on_the_hour_in_its_batch_or_at_landing() {
     assert!(glyph_due(&r, std::slice::from_ref(&u), None).0.is_empty());
 }
 
+/// The gate's answers, a unit not owed, not a glyph check, escaped or not yet due (split from the test below, feature 449 T167: each
+/// answer reads what is owed through about a dozen git calls, and the two halves on one repository took 181 ms against FR-008's tenth
+/// of a second).
 #[test]
-fn a_dispatch_on_the_hour_or_escaped_opens_a_batch() {
-    let r = repo("batch");
+fn the_gate_passes_a_unit_not_owed_another_check_or_an_escape_and_holds_one_not_due() {
+    let r = repo("gate");
     map(&r, "pool", "m", &["well"]);
     let slug = "glyph-check--well--m";
     assert_eq!(
@@ -176,6 +200,13 @@ fn a_dispatch_on_the_hour_or_escaped_opens_a_batch() {
     let (code, said) = glyph_cli(&r, slug, true, false);
     assert_eq!(code, 1);
     assert!(said.contains("due at landing"));
+}
+
+#[test]
+fn a_dispatch_on_the_hour_or_escaped_opens_a_batch() {
+    let r = repo("batch");
+    map(&r, "pool", "m", &["well"]);
+    let slug = "glyph-check--well--m";
     // no feature: a dispatch opens nothing
     assert_eq!(glyph_cli(&r, slug, false, true), (0, String::new()));
     assert!(!r.join(".git").join(CLOCK).exists());
@@ -185,8 +216,17 @@ fn a_dispatch_on_the_hour_or_escaped_opens_a_batch() {
     assert!(!r.join(".git").join(CLOCK).exists() || clock(&r)["900-x"].get("batch").is_none());
     assert_eq!(glyph_cli(&r, slug, false, true), (0, String::new()));
     assert_eq!(clock(&r)["900-x"]["batch"], json!([slug]));
+}
+
+/// On the hour the gate passes and a plain dispatch opens the batch (split from the test above, feature 449 T167).
+#[test]
+fn on_the_hour_a_plain_dispatch_opens_the_batch() {
+    let r = repo("batch-hour");
+    map(&r, "pool", "m", &["well"]);
+    let slug = "glyph-check--well--m";
+    feature(&r, "900-x", "- [ ] T1\n");
     events(&r, "900-x", &[(7200, "PreToolUse", false)]);
-    std::fs::remove_file(r.join(".git").join(CLOCK)).unwrap();
+    assert!(!r.join(".git").join(CLOCK).exists());
     assert_eq!(glyph_cli(&r, slug, true, false), (0, String::new()));
     assert_eq!(glyph_cli(&r, slug, false, false), (0, String::new()));
     assert_eq!(clock(&r)["900-x"]["batch"], json!([slug]));

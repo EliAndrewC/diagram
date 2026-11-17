@@ -39,12 +39,32 @@ fn edit(root: &Path, e: &[Value]) {
     }
 }
 
-#[test]
-fn every_case_builds_as_the_python_built_it() {
+/// The cases `cases.json` holds, every third from `first`: the 28 cases a fresh tree and a build each, about 4 ms a case, split three ways so
+/// each test stays under FR-008's tenth of a second (feature 449 T167); the three tests together build every case.
+fn cases_from(first: usize) -> Vec<(String, Value)> {
     let cases: serde_json::Map<String, Value> =
         serde_json::from_str(include_str!("cases.json")).unwrap();
     assert_eq!(cases.len(), 28);
-    for (name, case) in &cases {
+    cases.into_iter().skip(first).step_by(3).collect()
+}
+
+#[test]
+fn every_case_builds_as_the_python_built_it() {
+    builds_as_the_python_built(&cases_from(0));
+}
+
+#[test]
+fn every_case_builds_as_the_python_built_it_the_second_third() {
+    builds_as_the_python_built(&cases_from(1));
+}
+
+#[test]
+fn every_case_builds_as_the_python_built_it_the_last_third() {
+    builds_as_the_python_built(&cases_from(2));
+}
+
+fn builds_as_the_python_built(cases: &[(String, Value)]) {
+    for (name, case) in cases {
         let t = tree();
         for e in case["edits"].as_array().unwrap() {
             edit(&t, e.as_array().unwrap());

@@ -210,8 +210,8 @@ fn a_format_check_is_kept_and_a_rewrite_is_not() {
     assert_eq!(checks(&world), 3);
 }
 
-#[test]
-fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
+/// Two crates whose tests run from a built binary, `a` declaring what its tests read and `b` with counters.
+fn binary_world() -> (TempDir, Held<World>) {
     let (root, a, b) = kept_crates();
     std::fs::write(&b, "[package]\n[features]\ncounters = []\n").unwrap();
     // a declares what its tests read: its binary key carries those paths, its own sources the binary
@@ -222,20 +222,27 @@ fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
     .unwrap();
     let world = world_with(&root, BINARY_CARGO);
     test_binary(&world.target.join("exe"), "binary one");
-    // a run is a crate's `cargo test`, or its built binary run directly (feature 449 T160)
-    let runs = |w: &World| {
-        calls(w)
-            .iter()
-            .filter(|c| {
-                c.starts_with("test --quiet --manifest")
-                    || c.starts_with("test --quiet --all-features --manifest")
-                    || c.starts_with("exe exe")
-            })
-            .count()
-    };
+    (root, world)
+}
+
+/// The test runs: a crate's `cargo test`, or its built binary run directly (feature 449 T160).
+fn test_runs(w: &World) -> usize {
+    calls(w)
+        .iter()
+        .filter(|c| {
+            c.starts_with("test --quiet --manifest")
+                || c.starts_with("test --quiet --all-features --manifest")
+                || c.starts_with("exe exe")
+        })
+        .count()
+}
+
+#[test]
+fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
+    let (root, world) = binary_world();
     let first = answer(&world, "test", &[], false);
     assert_eq!(first.code, 0);
-    assert_eq!(runs(&world), 2);
+    assert_eq!(test_runs(&world), 2);
     assert!(first
         .stdout
         .contains("rust-checks: test on rust/a: test result: ok. 1 passed"));
@@ -252,7 +259,7 @@ fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
     std::fs::write(root.join("rust/a/src/lib.rs"), "//! moved\n").unwrap();
     let rebuilt = answer(&world, "test", &[], false);
     assert!(rebuilt.stdout.contains("test unchanged on rust/a"));
-    assert_eq!(runs(&world), 2);
+    assert_eq!(test_runs(&world), 2);
     // the counting build shares the plain one's result where its binary is the same (b has counters); a crate with none has no
     // counting build to run (T97)
     let counted = answer(&world, "test-counters", &[], false);
@@ -260,23 +267,32 @@ fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
     assert!(counted.stdout.contains(
         "test-counters passes over rust/a - no counters feature, so its counting build is its default one"
     ));
-    assert_eq!(runs(&world), 2);
+    assert_eq!(test_runs(&world), 2);
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second: its seven runs of the checks together took 237 ms): from the
+/// same first run, a binary that moved, a build that fails and a fresh run.
+#[test]
+fn a_moved_binary_or_a_failed_build_runs_and_a_fresh_run_runs_every_crate() {
+    let (root, world) = binary_world();
+    assert_eq!(answer(&world, "test", &[], false).code, 0);
+    assert_eq!(test_runs(&world), 2);
     // a binary that moved runs; a build that fails runs, and its failure is cargo's to tell
     test_binary(&world.target.join("exe"), "binary two");
     std::fs::write(root.join("rust/a/src/lib.rs"), "//! moved again\n").unwrap();
     assert_eq!(answer(&world, "test", &[], false).code, 0);
-    assert_eq!(runs(&world), 3);
+    assert_eq!(test_runs(&world), 3);
     std::fs::write(world.target.join("nobuild"), "").unwrap();
     std::fs::write(root.join("rust/a/src/lib.rs"), "//! and again\n").unwrap();
     assert_eq!(answer(&world, "test", &[], false).code, 0);
-    assert_eq!(runs(&world), 4);
+    assert_eq!(test_runs(&world), 4);
     // a fresh run runs every crate and builds nothing first
     let fresh = world.map(|w| World {
         no_reuse: true,
         ..w
     });
     assert_eq!(answer(&fresh, "test", &[], false).code, 0);
-    assert_eq!(runs(&fresh), 6);
+    assert_eq!(test_runs(&fresh), 6);
 }
 
 #[test]

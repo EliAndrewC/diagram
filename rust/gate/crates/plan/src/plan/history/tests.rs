@@ -29,13 +29,39 @@ fn a_block_and_a_section_are_found_however_far_back() {
     std::fs::create_dir_all(&dir).unwrap();
     let plan = dir.join("plan.md");
     let first = "## T01 a\n\nthe first\n";
-    std::fs::write(&plan, first).unwrap();
-    git(&root, &["add", "-A"]);
-    git(&root, &["commit", "-qm", "first"]);
-    for i in 0..=CHUNK + 2 {
-        std::fs::write(&plan, format!("## T01 a\n\nversion {i}\n")).unwrap();
-        git(&root, &["commit", "-qam", "next"]);
+    // the first version and CHUNK + 3 after it, more than one chunk back, committed by one `git fast-import` where 30 commits took 30
+    // processes (feature 449 T167); each a commit of plan.md on main, the working copy the last
+    let mut versions = vec![first.to_owned()];
+    versions.extend((0..=CHUNK + 2).map(|i| format!("## T01 a\n\nversion {i}\n")));
+    let mut stream = String::new();
+    for (n, text) in versions.iter().enumerate() {
+        let message = if n == 0 { "first" } else { "next" };
+        std::fmt::Write::write_fmt(
+            &mut stream,
+            format_args!(
+                "commit refs/heads/main\ncommitter t <t@t> {} +0000\ndata {}\n{message}\nM 100644 inline specs/1-x/plan.md\ndata {}\n{text}\n",
+                1_700_000_000 + n,
+                message.len(),
+                text.len()
+            ),
+        )
+        .unwrap();
     }
+    let mut import = std::process::Command::new("git")
+        .arg("-C")
+        .arg(&*root)
+        .args(["fast-import", "--quiet"])
+        .stdin(std::process::Stdio::piped())
+        .spawn()
+        .unwrap();
+    std::io::Write::write_all(&mut import.stdin.take().unwrap(), stream.as_bytes()).unwrap();
+    assert!(import.wait().unwrap().success());
+    std::fs::write(&plan, versions.last().unwrap()).unwrap();
+    git(&root, &["reset", "-q"]);
+    assert_eq!(
+        git(&root, &["rev-list", "--count", "HEAD"]),
+        (CHUNK + 4).to_string()
+    );
     let history = History::new(&plan, "HEAD");
     assert_eq!(
         history.block("## T01 a", &block_digest(first)).as_deref(),

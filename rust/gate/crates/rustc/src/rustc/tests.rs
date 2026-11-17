@@ -16,12 +16,17 @@ mod cover;
 mod kept;
 mod side;
 
+/// `dirname` and `basename` as the shell's own functions: a fake's every `$(dirname "$0")` started the program, about a millisecond each,
+/// several a fake call and a dozen fake calls a test (feature 449 T167, FR-008's tenth of a second).
+const SHELL_NAMES: &str = "dirname() { case \"$1\" in */*) printf '%s\\n' \"${1%/*}\";; *) echo .;; esac; }\nbasename() { printf '%s\\n' \"${1##*/}\"; }\n";
+
+/// The fake cargo: `sh` where it was `env bash`, two programs' start a call less (feature 449 T167), its words noted in `calls`.
 fn fake_cargo(dir: &Path, body: &str) -> String {
     let path = dir.join("cargo");
     crate::write_executable(
         &path,
         &format!(
-            "#!/usr/bin/env bash\necho \"$@\" >> \"{}/calls\"\n{body}\n",
+            "#!/bin/sh\n{SHELL_NAMES}echo \"$@\" >> \"{}/calls\"\n{body}\n",
             dir.display()
         ),
     );
@@ -59,7 +64,7 @@ fn test_binary(at: &Path, tag: &str) {
     crate::write_executable(
         at,
         &format!(
-            "#!/bin/sh\n# {tag}\necho \"exe $(basename \"$0\") $*\" >> \"$(dirname \"$0\")/calls\"\necho 'test result: ok. 1 passed'\n"
+            "#!/bin/sh\n# {tag}\n{SHELL_NAMES}echo \"exe $(basename \"$0\") $*\" >> \"$(dirname \"$0\")/calls\"\necho 'test result: ok. 1 passed'\n"
         ),
     );
 }
@@ -528,7 +533,8 @@ fn the_configured_rust_lld_is_the_active_toolchain_s() {
     assert!(lld.is_file(), "{fix}: {} is missing", lld.display());
 }
 
-/// FR-008's one end-to-end test: the real cargo over the fixture crate, every other test here standing a fake cargo in its place.
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the real cargo over the fixture crate, every other test here standing a fake
+/// cargo in its place.
 #[test]
 fn the_real_cargo_tests_a_real_crate() {
     let root = scratch("rustc-real");

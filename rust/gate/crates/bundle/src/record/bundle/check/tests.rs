@@ -154,11 +154,9 @@ fn a_registry_entry_and_a_fresh_directory() {
     .is_err());
 }
 
+/// A question's bundle and its quote-check bundles. What was one test of a bundle's every part is three on scratch records of their
+/// own - its eight bundles together were twice FR-008's tenth of a second (feature 449 T167); the name kept on the first.
 #[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "one bundle's every part, in the order it is built"
-)]
 fn a_question_bundle_end_to_end() {
     let root = scratch("bundle-check-q");
     edit_everything(&root);
@@ -176,7 +174,7 @@ fn a_question_bundle_end_to_end() {
         text.contains("| `sources/key-a.html` |")
             && text.contains("changed-block: research/questions/0094-trade.html | ")
     );
-    put(&root, "qv.json", &json!({"footnotes": [{"id": "fn-1", "key": "key-a", "readability": "OK", "links": ["https://e.org/b", "ftp://x", "https://e.org/b"], "passages": [{"quote": "a passage", "quotation": "NOT FOUND"}], "assertion": ""}, {"id": "fn-2", "class": "absence", "links": ["https://e.org/c"], "passages": [{"quote": "", "original": "x", "quotation": "VERBATIM"}], "assertion": "A short distance apart."}]}).to_string());
+    put(&root, "qv.json", &qv());
     let q = bundle(
         &root,
         &["0094", "--for", "quote-check", "--out", &format!("{o}/b")],
@@ -187,6 +185,21 @@ fn a_question_bundle_end_to_end() {
         text.contains("| `pages/` | `the host's page cache (feature 288)` |")
             && out.join("b/pages/MANIFEST.txt").is_file()
     );
+}
+
+/// The quote-verbatim report the stub's helper writes: two footnotes, one an absence.
+fn qv() -> String {
+    json!({"footnotes": [{"id": "fn-1", "key": "key-a", "readability": "OK", "links": ["https://e.org/b", "ftp://x", "https://e.org/b"], "passages": [{"quote": "a passage", "quotation": "NOT FOUND"}], "assertion": ""}, {"id": "fn-2", "class": "absence", "links": ["https://e.org/c"], "passages": [{"quote": "", "original": "x", "quotation": "VERBATIM"}], "assertion": "A short distance apart."}]}).to_string()
+}
+
+/// A quote-check bundle scoped to the notes asked.
+#[test]
+fn a_quote_check_bundle_scoped_to_its_notes() {
+    let root = scratch("bundle-check-q-scoped");
+    edit_everything(&root);
+    let out = root.join("out");
+    let o = out.to_string_lossy().into_owned();
+    put(&root, "qv.json", &qv());
     let scoped = bundle(
         &root,
         &[
@@ -204,13 +217,36 @@ fn a_question_bundle_end_to_end() {
     assert!(
         report.contains("(scoped to the 2 footnote(s)") && report.contains("  fn-2 absence - None")
     );
-    for (for_, file) in [
-        ("record-style", "style-prepass.txt"),
-        ("translation-check", "translations.txt"),
-        ("record-format", "glossary-variants.txt"),
-    ] {
+}
+
+/// The bundles of the record-style, translation and record-format checks, each with its own prepass file.
+#[test]
+fn a_question_bundle_for_each_style_check() {
+    let root = scratch("bundle-check-q-style");
+    edit_everything(&root);
+    style_bundles(
+        &root,
+        &[
+            ("record-style", "style-prepass.txt"),
+            ("translation-check", "translations.txt"),
+        ],
+    );
+}
+
+#[test]
+fn a_question_bundle_for_the_format_check() {
+    let root = scratch("bundle-check-q-format");
+    edit_everything(&root);
+    style_bundles(&root, &[("record-format", "glossary-variants.txt")]);
+}
+
+/// Each check's bundle of question 0094 escaped, with the style guide given as an extra file: each its own prepass file.
+fn style_bundles(root: &Path, checks: &[(&str, &str)]) {
+    let out = root.join("out");
+    let o = out.to_string_lossy().into_owned();
+    for (for_, file) in checks {
         let r = bundle(
-            &root,
+            root,
             &[
                 "0094",
                 "--for",
@@ -227,6 +263,15 @@ fn a_question_bundle_end_to_end() {
         assert_eq!(r.code, 0);
         assert!(out.join(for_).join(file).is_file());
     }
+}
+
+/// An entry-drift bundle names its kind, and a bundle carries the images it is given.
+#[test]
+fn a_question_bundle_with_a_kind_or_images() {
+    let root = scratch("bundle-check-q-kind");
+    edit_everything(&root);
+    let out = root.join("out");
+    let o = out.to_string_lossy().into_owned();
     let drift = bundle(
         &root,
         &[
@@ -265,10 +310,6 @@ fn a_question_bundle_end_to_end() {
 }
 
 #[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "every refusal, one after another on one record"
-)]
 fn the_refusals_of_a_question_bundle() {
     let root = scratch("bundle-check-refused");
     let o = root.join("out").to_string_lossy().into_owned();
@@ -279,6 +320,14 @@ fn the_refusals_of_a_question_bundle() {
     assert_eq!(bundle(&root, &[]).code, 2);
     assert_eq!(bundle(&root, &["--for", "bogus", "0094"]).code, 2);
     assert_eq!(bundle(&root, &["--bogus"]).code, 2);
+}
+
+/// An entry-drift bundle not owed, or of a kind that is not there, is refused: apart from the refusals above, on a scratch record of
+/// its own - the two sets together were near FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn an_entry_drift_bundle_not_owed_or_of_no_kind_is_refused() {
+    let root = scratch("bundle-check-refused-drift");
+    let o = root.join("out").to_string_lossy().into_owned();
     assert_eq!(
         bundle(
             &root,
@@ -310,6 +359,14 @@ fn the_refusals_of_a_question_bundle() {
         ],
     );
     assert!(none.stderr.contains("no modal class 'Nope'") && none.code == 2);
+}
+
+/// An out directory that is not a bundle, and the notes printed. Apart from the refusals above and the helpers' failures below, each on
+/// a scratch record of its own: the three together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_busy_out_directory_is_refused_and_the_notes_are_printed() {
+    let root = scratch("bundle-check-busy");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(&root, "out/x", "x");
     let busy = bundle(
         &root,
@@ -333,6 +390,13 @@ fn the_refusals_of_a_question_bundle() {
         bundle(&root, &["0777", "--notes", "k", "--print-notes"]).code,
         2
     );
+}
+
+/// A helper that says no or dies fails the bundle with its words, and a note quoting no original owes no translated pair.
+#[test]
+fn a_helper_that_fails_fails_the_bundle() {
+    let root = scratch("bundle-check-helpers");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(
         &root,
         "stub-answer.json",
@@ -354,6 +418,14 @@ fn the_refusals_of_a_question_bundle() {
         assert_eq!(r.code, 5);
         assert!(r.stderr.contains("helper said no"));
     }
+}
+
+/// A helper that dies fails the bundle, and a note quoting no original owes no translated pair: apart from the helpers saying no above,
+/// on a scratch record of its own - the five bundles together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_helper_that_dies_fails_the_bundle_and_a_note_with_no_original_owes_no_pair() {
+    let root = scratch("bundle-check-helpers-die");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(
         &root,
         "stub-answer.json",
@@ -465,10 +537,6 @@ fn earlier_rounds_ride_a_bundle() {
 }
 
 #[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "each rare path, one after another on one record"
-)]
 fn the_rare_paths_of_a_question_bundle() {
     let root = scratch("bundle-check-rare");
     assert!(
@@ -481,12 +549,7 @@ fn the_rare_paths_of_a_question_bundle() {
     assert!(changed_section(&bare, &["x.notes.html".to_owned()])
         .unwrap()
         .contains("(none - "));
-    put(
-        &root,
-        "research/questions/0094-trade.drawing.notes.html",
-        "<li data-note=\"k\"><a href=\"x\"><code>key-a</code></a></li>",
-    );
-    put(&root, "research/questions/0094-trade.notes.html", "<li data-note=\"k\"><a href=\"x\"><code>key-a</code></a> again <a href=\"y\"><code>key-a</code></a></li><li data-note=\"j\"><a href=\"z\"><code>key-a</code></a></li>");
+    notes_citing_key_a(&root);
     let o = root.join("out").to_string_lossy().into_owned();
     let r = bundle(
         &root,
@@ -502,6 +565,24 @@ fn the_rare_paths_of_a_question_bundle() {
         ],
     );
     assert_eq!(r.code, 0);
+}
+
+/// Question 0094's notes and its drawing's, each citing `key-a`, one note twice.
+fn notes_citing_key_a(root: &Path) {
+    put(
+        root,
+        "research/questions/0094-trade.drawing.notes.html",
+        "<li data-note=\"k\"><a href=\"x\"><code>key-a</code></a></li>",
+    );
+    put(root, "research/questions/0094-trade.notes.html", "<li data-note=\"k\"><a href=\"x\"><code>key-a</code></a> again <a href=\"y\"><code>key-a</code></a></li><li data-note=\"j\"><a href=\"z\"><code>key-a</code></a></li>");
+}
+
+/// A question that is not there, a batch of notes, and the kind rows of an entry-drift: what was one test of a question bundle's rare
+/// paths is three, each on a scratch record of its own - its bundles together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn the_rare_paths_of_an_entry_bundle_and_a_batch() {
+    let root = scratch("bundle-check-rare-batch");
+    notes_citing_key_a(&root);
     let mut run = Run::new(&root);
     let e = |q: &'static str| Entry {
         q,
@@ -563,6 +644,14 @@ fn the_rare_paths_of_a_question_bundle() {
         kind_rows(&root, "Well", &owed, "an audit asked").unwrap(),
         (Vec::new(), String::new())
     );
+}
+
+/// The quote-verbatim helper alone failing fails a quote-check bundle with its code.
+#[test]
+fn a_quote_check_bundle_whose_quote_helper_fails() {
+    let root = scratch("bundle-check-rare-quote");
+    notes_citing_key_a(&root);
+    let o = root.join("out").to_string_lossy().into_owned();
     put(
         &root,
         "stub-answer.json",

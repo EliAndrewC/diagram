@@ -420,6 +420,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T167 (FR-008's remaining debt after T160, and the ruling on the tests that read the live tree)": {
+   "sha256": "6c67f80e11d136aceeb3d23aed3a0616df7a6569b6659764104c9e8d4ec8f94f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T167 Approach (checklist part A)": {
+   "sha256": "b857d004cefeae7cda56aa593d48de8b8c3dfe8e2e07a648035d272227fafd11",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10153,6 +10165,91 @@
      "why": "The approval and the 2026-11-12 conditions are for targets with a measured saving; dropping one measured to cost time, and leaving one outside this task's subject, narrows nothing the GM asked of T160."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T167 (FR-008's remaining debt after T160, and the ruling on the tests that read the live tree)",
+    "### T167 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-ruling-five",
+     "summary": "The five live-tree tests (tree stamp self-test, task research boxes, checks research_pointers, rust_tooling detector, question_size) declared each tool's one end-to-end test, a tool being a check or verb, not a crate.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This takes five tests out from under FR-008's tenth-of-a-second bar, so it narrows what the bar holds. FR-008 itself gives each tool 'its one end-to-end test against the real command', and each of these runs the tool's real behavior over the real repository. Their cost grows with the repository (measured from 269 to 430 ms), so the bar is unreachable for them by construction, not merely awkward. In the plan's list each is the only declared test for its check or verb, so no tool gets two. Ruled on FR-008's own words. The text of ask:449-T167-realtree is not in the bundle and this ruling does not rest on it."
+    },
+    {
+     "id": "D2-file-scale",
+     "summary": "checks' file_scale live-tree test declared by analogy with the five.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the same class as D1: the test reads the whole live tree (the_repository_itself_is_under_the_bar...), and it is the only declared test for the file-scale check. It was 89 ms before and does not appear among the slow rows after, so declaring it gives it room to grow rather than excusing a present overrun. That fits the exemption FR-008 grants."
+    },
+    {
+     "id": "D3-land-replay-owing",
+     "summary": "land's replay_owing test declared land's end-to-end test because it drives the real python3 the tool runs; land's other tests kept under the bar.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a different class from D1: it runs a real external program, not the live tree. It is still literally FR-008's 'end-to-end test against the real command', it is land's only declared test, and the rest of land stays held to the bar."
+    },
+    {
+     "id": "D4-carried-markers",
+     "summary": "The markers already carried by browser crop, rustc, research fetch and ci reworded to the one marker phrase.",
+     "class": "within",
+     "why": "The wording is unified and no new test is exempted."
+    },
+    {
+     "id": "D5-r6-corpus",
+     "summary": "The guard's the_r6_corpus_replayed kept an ordinary test and brought under the bar by replaying eight commands at a time.",
+     "class": "within",
+     "why": "This holds one more test to the bar, which is stricter than FR-008 requires."
+    },
+    {
+     "id": "D6-count",
+     "summary": "Of 2,579 tests, no ordinary test is over the bar except one at the line (98 to 102 ms), called load noise; declared tests up to 724 ms.",
+     "class": "within",
+     "why": "The test at the line gets no marker and stays held to FR-008, so the plan exempts nothing here. This is a status report, not a carve-out. See the citation finding in the return."
+    },
+    {
+     "id": "D7-claims-fixtures",
+     "summary": "Claims tests write what the bundle and record commands leave instead of running them through the Python runner; three new tests run the real commands on each fixture and assert the same files.",
+     "class": "within",
+     "why": "Every assertion is kept, and the three new tests stop the fixtures from going stale. This is the method FR-008's bar calls for."
+    },
+    {
+     "id": "D8-moved-assertions",
+     "summary": "Where a subject moved, the production value is asserted separately: recycling tested every third page with 25 asserted, test-build timeouts shortened with production timeouts asserted, stand-ins for real programs with one real run kept per crate.",
+     "class": "within",
+     "why": "The assertions are kept and the production values are still pinned. This changes how the tests run, not which cases are asked for."
+    },
+    {
+     "id": "D9-production-speedups",
+     "summary": "Checks runner asks git once and lists files in one call, claims-carry reads its target once, guard sweep start reports launch in place of a 0.3 s sleep, landing fetches once; each output the same.",
+     "class": "within",
+     "why": "These serve the GM's 2026-11-12 instruction to prioritize the time the tests and the landing take, and every output stays the same."
+    },
+    {
+     "id": "D10-race-fix",
+     "summary": "Scratch-sweep tests wait until /proc shows no other holder of their files, fixing a once-in-50 race.",
+     "class": "within",
+     "why": "This fixes a flaky test inside the suite the task works on (constitution XIV). It adds no behavior."
+    },
+    {
+     "id": "D11-not-built-gate",
+     "summary": "No check is built that refuses a new test over the bar.",
+     "class": "within",
+     "why": "FR-008 and SC-003 ask for no per-test enforcement. The GM's 2026-11-11 'our tooling must enforce this' is about which commands the iteration loop runs, which FR-011 carries. Declining to build this narrows nothing that was asked."
+    },
+    {
+     "id": "D12-exits",
+     "summary": "Exits: make static, make rust-test, make hooks-test HOOKS_ALL=1 and make land green; a claim of impossibility goes to make arbiter-ask; budget one landing; after T160.",
+     "class": "within",
+     "why": "These are procedure only, and they narrow nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18191,6 +18288,89 @@
      "summary": "Not taken: building every crate in one cargo call (measured slower, 81 s, and a second artifact set) and the gate's duplicated Python tests (left to their own design).",
      "class": "within",
      "why": "The approval and the 2026-11-12 conditions are for targets with a measured saving; dropping one measured to cost time, and leaving one outside this task's subject, narrows nothing the GM asked of T160."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T167": {
+   "section_sha256": "460178623446fc942a734590d2cca0f29bf53d72744da0e16989ef0d5b57c94e",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-ruling-five",
+     "summary": "The five live-tree tests (tree stamp self-test, task research boxes, checks research_pointers, rust_tooling detector, question_size) declared each tool's one end-to-end test, a tool being a check or verb, not a crate.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This takes five tests out from under FR-008's tenth-of-a-second bar, so it narrows what the bar holds. FR-008 itself gives each tool 'its one end-to-end test against the real command', and each of these runs the tool's real behavior over the real repository. Their cost grows with the repository (measured from 269 to 430 ms), so the bar is unreachable for them by construction, not merely awkward. In the plan's list each is the only declared test for its check or verb, so no tool gets two. Ruled on FR-008's own words. The text of ask:449-T167-realtree is not in the bundle and this ruling does not rest on it."
+    },
+    {
+     "id": "D2-file-scale",
+     "summary": "checks' file_scale live-tree test declared by analogy with the five.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the same class as D1: the test reads the whole live tree (the_repository_itself_is_under_the_bar...), and it is the only declared test for the file-scale check. It was 89 ms before and does not appear among the slow rows after, so declaring it gives it room to grow rather than excusing a present overrun. That fits the exemption FR-008 grants."
+    },
+    {
+     "id": "D3-land-replay-owing",
+     "summary": "land's replay_owing test declared land's end-to-end test because it drives the real python3 the tool runs; land's other tests kept under the bar.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a different class from D1: it runs a real external program, not the live tree. It is still literally FR-008's 'end-to-end test against the real command', it is land's only declared test, and the rest of land stays held to the bar."
+    },
+    {
+     "id": "D4-carried-markers",
+     "summary": "The markers already carried by browser crop, rustc, research fetch and ci reworded to the one marker phrase.",
+     "class": "within",
+     "why": "The wording is unified and no new test is exempted."
+    },
+    {
+     "id": "D5-r6-corpus",
+     "summary": "The guard's the_r6_corpus_replayed kept an ordinary test and brought under the bar by replaying eight commands at a time.",
+     "class": "within",
+     "why": "This holds one more test to the bar, which is stricter than FR-008 requires."
+    },
+    {
+     "id": "D6-count",
+     "summary": "Of 2,579 tests, no ordinary test is over the bar except one at the line (98 to 102 ms), called load noise; declared tests up to 724 ms.",
+     "class": "within",
+     "why": "The test at the line gets no marker and stays held to FR-008, so the plan exempts nothing here. This is a status report, not a carve-out. See the citation finding in the return."
+    },
+    {
+     "id": "D7-claims-fixtures",
+     "summary": "Claims tests write what the bundle and record commands leave instead of running them through the Python runner; three new tests run the real commands on each fixture and assert the same files.",
+     "class": "within",
+     "why": "Every assertion is kept, and the three new tests stop the fixtures from going stale. This is the method FR-008's bar calls for."
+    },
+    {
+     "id": "D8-moved-assertions",
+     "summary": "Where a subject moved, the production value is asserted separately: recycling tested every third page with 25 asserted, test-build timeouts shortened with production timeouts asserted, stand-ins for real programs with one real run kept per crate.",
+     "class": "within",
+     "why": "The assertions are kept and the production values are still pinned. This changes how the tests run, not which cases are asked for."
+    },
+    {
+     "id": "D9-production-speedups",
+     "summary": "Checks runner asks git once and lists files in one call, claims-carry reads its target once, guard sweep start reports launch in place of a 0.3 s sleep, landing fetches once; each output the same.",
+     "class": "within",
+     "why": "These serve the GM's 2026-11-12 instruction to prioritize the time the tests and the landing take, and every output stays the same."
+    },
+    {
+     "id": "D10-race-fix",
+     "summary": "Scratch-sweep tests wait until /proc shows no other holder of their files, fixing a once-in-50 race.",
+     "class": "within",
+     "why": "This fixes a flaky test inside the suite the task works on (constitution XIV). It adds no behavior."
+    },
+    {
+     "id": "D11-not-built-gate",
+     "summary": "No check is built that refuses a new test over the bar.",
+     "class": "within",
+     "why": "FR-008 and SC-003 ask for no per-test enforcement. The GM's 2026-11-11 'our tooling must enforce this' is about which commands the iteration loop runs, which FR-011 carries. Declining to build this narrows nothing that was asked."
+    },
+    {
+     "id": "D12-exits",
+     "summary": "Exits: make static, make rust-test, make hooks-test HOOKS_ALL=1 and make land green; a claim of impossibility goes to make arbiter-ask; budget one landing; after T160.",
+     "class": "within",
+     "why": "These are procedure only, and they narrow nothing."
     }
    ],
    "verdict": "CLEAR"

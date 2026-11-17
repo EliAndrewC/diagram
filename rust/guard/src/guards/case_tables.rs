@@ -155,16 +155,31 @@ fn the_r6_corpus_replayed() {
     let data: Value = serde_json::from_str(&std::fs::read_to_string(file).unwrap()).unwrap();
     let (expected, rows) = (&data["expected"], data["commands"].as_array().unwrap());
     let rule = Regex::new(r#"rule "([a-z-]+)""#).unwrap();
-    let refused: Vec<(&Value, String)> = rows
-        .iter()
-        .filter_map(|row| {
-            let reply = drive("shell-check-hooks", &cmd(row["command"].as_str().unwrap()));
-            (reply.code != 0).then(|| {
-                let named = rule.captures(&reply.stderr).unwrap().unwrap();
-                (row, named.get(1).unwrap().as_str().to_owned())
+    // Each of the 239 commands still goes through the guard and its real `bash -O extglob -n`, eight at a time: one after another they
+    // took 0.39 s against FR-008's tenth of a second, the bash starts being the whole of it. An ordinary test, not the guard's one
+    // end-to-end test (feature 449 T167, `ask:449-T167-realtree` item 4): it replays a recorded corpus, not the live tree, and it is not
+    // the only test that drives the real bash - `shell_check_cases` and the parse tests of `shell_check_hooks` do too.
+    let chunk = rows.len().div_ceil(8);
+    let refused: Vec<(&Value, String)> = std::thread::scope(|s| {
+        let lanes: Vec<_> = rows
+            .chunks(chunk)
+            .map(|lane| {
+                s.spawn(|| {
+                    lane.iter()
+                        .filter_map(|row| {
+                            let reply =
+                                drive("shell-check-hooks", &cmd(row["command"].as_str().unwrap()));
+                            (reply.code != 0).then(|| {
+                                let named = rule.captures(&reply.stderr).unwrap().unwrap();
+                                (row, named.get(1).unwrap().as_str().to_owned())
+                            })
+                        })
+                        .collect::<Vec<_>>()
+                })
             })
-        })
-        .collect();
+            .collect();
+        lanes.into_iter().flat_map(|l| l.join().unwrap()).collect()
+    });
     let by_rule = |name: &str| {
         refused
             .iter()

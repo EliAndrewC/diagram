@@ -233,9 +233,40 @@ fn toplevel(root: &str) -> PathBuf {
     PathBuf::from(l7r_guard::shared::py_text::strip(&top))
 }
 
+/// THE PATTERNS COMPILED SIDE BY SIDE, ONCE A PROCESS (feature 449 T167): the crate's 48 patterns and core's took 25 ms to compile one
+/// after another, the longest 3-5 ms (observed 2026-11-17, method: each compiled in the crate's test build), and a command compiled the ones it
+/// read as it reached them, 15 ms of its first run; here each is compiled on a thread of its own while the command asks git for the
+/// tree, a pattern the command reaches first waiting on its thread as it would on its own compiling. A test of a command took over
+/// FR-008's tenth of a second with it.
+static WARM: std::sync::LazyLock<()> = std::sync::LazyLock::new(|| {
+    for set in [
+        &bundle::WARM[..],
+        &carry::WARM[..],
+        &context::WARM[..],
+        &counters::WARM[..],
+        &grammar::WARM[..],
+        &impl_check::WARM[..],
+        &index::WARM[..],
+        &labels::WARM[..],
+        &reply::WARM[..],
+        &report::WARM[..],
+        &seam::WARM[..],
+        &stale::WARM[..],
+        &triage::WARM[..],
+        &tunables::WARM[..],
+        &units::WARM[..],
+    ] {
+        for pattern in set {
+            let pattern: &'static std::sync::LazyLock<fancy_regex::Regex> = pattern;
+            std::thread::spawn(move || std::sync::LazyLock::force(pattern));
+        }
+    }
+});
+
 /// `l7r-gate claims [--root DIR] <command> [...]`.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
+    std::sync::LazyLock::force(&WARM);
     let (root, cmd, rest) = match split_top(args) {
         Ok(t) => t,
         Err(why) => return usage("l7r-gate claims", &why),

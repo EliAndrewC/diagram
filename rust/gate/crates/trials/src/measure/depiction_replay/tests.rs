@@ -35,6 +35,13 @@ fn edits_are_counted_under_both_rules_and_recorded() {
     assert_eq!(got["owed modal-depiction, amendment 1"], json!(2));
     assert_eq!(got["owed modal-depiction, amendment 6"], json!(1));
     assert_eq!(got["About-only edits (owed before, not now)"], json!(1));
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second: its seven replays took 205 ms): the replay written into a
+/// record under its key, over the record's own history.
+#[test]
+fn a_replay_is_recorded_under_its_key_and_a_record_it_cannot_write_is_refused() {
+    let root = record("depiction-record");
     let rec = root.join("rec.json");
     std::fs::write(
         &rec,

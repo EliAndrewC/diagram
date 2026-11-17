@@ -264,17 +264,25 @@ mod tests {
         assert!(low_wet && rested && flooded && gold && plain, "{maps:?}");
     }
 
-    #[test]
-    fn the_plots_drawn_apart() {
+    /// The fan's basins and their ends, read once a test: `ends_of` is pure, so the 30 calls of `states` below read the one value where
+    /// each computed its own (feature 449 T167, FR-008's tenth of a second: the test took 100 ms).
+    fn drawn() -> (Vec<Basin>, Vec<(usize, usize)>) {
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
+        let ends = ends_of(&b);
+        (b, ends)
+    }
+
+    #[test]
+    fn the_plots_drawn_apart() {
+        let (b, ends) = drawn();
         let last = b.iter().map(|x| x.row).max().unwrap();
-        let s = states(&b, 4, "f0", &ends_of(&b), false, &mut 0).0;
+        let s = states(&b, 4, "f0", &ends, false, &mut 0).0;
         let wet: Vec<_> = (0..b.len()).filter(|&i| s[i] == State::Wet).collect();
         assert!(!wet.is_empty() && wet.iter().all(|&i| b[i].row == last));
         // the flooded and the gold on some maps, not every one
         let maps: Vec<_> = (0..16)
-            .map(|seed| states(&b, seed, "f0", &ends_of(&b), false, &mut 0).0)
+            .map(|seed| states(&b, seed, "f0", &ends, false, &mut 0).0)
             .collect();
         let seasonal = |m: &Vec<State>| m.contains(&State::Flooded) || m.contains(&State::Gold);
         let some = maps.iter().filter(|m| seasonal(m)).count();
@@ -284,10 +292,16 @@ mod tests {
         assert!((b.len() / 40..b.len() / 8).contains(&flooded));
         assert!(maps.iter().any(|m| m.contains(&State::Gold)));
         assert!(!s.contains(&State::Rest), "a settled field rests none");
-        let again = states(&b, 4, "f0", &ends_of(&b), false, &mut 0).0;
+        let again = states(&b, 4, "f0", &ends, false, &mut 0).0;
         assert_eq!(s, again, "positional");
+    }
+
+    /// Split from the test above (feature 449 T167): an unsettled field's resting plots, none two sharing a bund.
+    #[test]
+    fn an_unsettled_field_rests_plots_apart() {
+        let (b, ends) = drawn();
         for seed in 0..12 {
-            let r = states(&b, seed, "f0", &ends_of(&b), true, &mut 0).0;
+            let r = states(&b, seed, "f0", &ends, true, &mut 0).0;
             let rest: Vec<_> = (0..b.len()).filter(|&i| r[i] == State::Rest).collect();
             assert!(rest.len() <= REST_PLOTS.1 as usize && !rest.is_empty());
             for (k, &i) in rest.iter().enumerate() {

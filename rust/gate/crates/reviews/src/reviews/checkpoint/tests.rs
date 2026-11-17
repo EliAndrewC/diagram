@@ -177,6 +177,16 @@ fn the_hold_names_what_the_checkpoint_owes() {
         r#"{"900-x": {"checkpoint_trigger": "hour:900-x@2"}}"#,
     );
     assert!(hold(&r, None).contains("(/tmp/l7r-check/step-back-900-x-2/MANIFEST.md)"));
+}
+
+/// The units the last checkpoint owed hold until each is answered or dispatched (split from the test above, feature 449 T167: its nine
+/// holds, each reading what is owed through git, took 127 ms against FR-008's tenth of a second).
+#[test]
+fn the_hold_names_the_units_the_last_checkpoint_owed_until_each_is_answered_or_dispatched() {
+    let r = repo("hold-units");
+    map(&r, "pool", "m", &["well"]);
+    feature(&r, "900-x", "- [ ] T1\n");
+    worked(&r, 7200);
     let t = int_of(now());
     put(&r, ".git/glyph-clock.json", &json!({"900-x": {"checkpoint_at": t, "checkpoint_units": ["settlement-review--m", "gone"], "units_since": t - 60}}).to_string());
     assert_eq!(hold(&r, None), "the last checkpoint owed 1 review unit(s) not yet dispatched: settlement-review--m - `make verify` writes one prompt per unit; dispatch each on a green gate (feature 383)");

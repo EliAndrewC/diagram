@@ -90,11 +90,24 @@ pub fn git(root: &Path, args: &[&str]) -> Option<String> {
     })
 }
 
+thread_local! {
+    /// Each root's git directory once found: one `glyph-gate` asked git for it nine times, a third of the git a glyph test started
+    /// (feature 449 T167, FR-008). A repository's git directory does not move while a command runs; a root with none is asked again, so
+    /// one made later is found.
+    static GITDIRS: std::cell::RefCell<std::collections::HashMap<PathBuf, PathBuf>> =
+        std::cell::RefCell::new(std::collections::HashMap::new());
+}
+
 /// `_gitdir`: the repository's absolute git directory.
 pub fn gitdir(root: &Path) -> Option<PathBuf> {
-    git(root, &["rev-parse", "--absolute-git-dir"])
+    if let Some(known) = GITDIRS.with(|m| m.borrow().get(root).cloned()) {
+        return Some(known);
+    }
+    let found = git(root, &["rev-parse", "--absolute-git-dir"])
         .filter(|g| !g.is_empty())
-        .map(PathBuf::from)
+        .map(PathBuf::from)?;
+    GITDIRS.with(|m| m.borrow_mut().insert(root.to_owned(), found.clone()));
+    Some(found)
 }
 
 /// `Path(text)` as pathlib reads it: `.` components and a trailing slash dropped, `.` for nothing.

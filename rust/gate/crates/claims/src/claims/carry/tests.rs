@@ -6,10 +6,10 @@ use serde_json::{json, Value};
 
 use super::{
     carry, claims_mode, file_into, key_of, new_box, open_ids, recorded_known, rows, spec_glob,
-    touches_engine,
+    target, touches_engine,
 };
-use crate::claims::tests::{claims, fixture, py_units, record_all};
-use crate::record::testkit::{commit, git, put};
+use crate::claims::tests::{claims, commit_as_origin, fixture};
+use crate::record::testkit::{git, put};
 
 fn feature(root: &Path) {
     put(root, "specs/405-claims/tasks.md", "# Tasks\n\n- [ ] T01 fix `reach` [lands-open]\n- [x] T02 done\n- [ ] T03 open one\n\n- [ ] GM review (make gm-reviewed F=405) [lands-open]\n");
@@ -93,13 +93,30 @@ fn the_switch_and_the_record() {
     assert!(recorded_known(&root).unwrap().is_empty());
 }
 
+/// The carry's tree: the claims feature and the active one committed as `origin/main` (feature 449 T167 split the test of where a carry is
+/// filed, over FR-008's tenth of a second, into three, each on a tree of its own).
+fn filing(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = fixture(tag);
+    feature(&root);
+    commit_as_origin(&root, "features");
+    root
+}
+
+/// [`filing`] with the switch at `clean`.
+fn filing_clean(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = filing(tag);
+    put(
+        &root,
+        "dev/switches.json",
+        "{\"claims\": {\"state\": \"clean\"}}",
+    );
+    root
+}
+
 #[test]
 fn a_carry_is_filed_only_where_the_switch_and_the_delta_allow() {
-    let root = fixture("claims-carry-file");
-    feature(&root);
-    commit(&root, "features");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
-    assert!(carry(&root, "405", "", &["k".into()], "")
+    let root = filing("claims-carry-file");
+    assert!(carry(&root, &target, "405", "", &["k".into()], "")
         .unwrap_err()
         .contains("the claims switch is at report"));
     put(
@@ -108,14 +125,14 @@ fn a_carry_is_filed_only_where_the_switch_and_the_delta_allow() {
         "{\"claims\": {\"state\": \"clean\"}}",
     );
     assert!(!touches_engine(&root).unwrap());
-    assert!(carry(&root, "405", "", &["k".into()], "ask:none")
+    assert!(carry(&root, &target, "405", "", &["k".into()], "ask:none")
         .unwrap_err()
         .contains("RULING=ask:none is no trigger in 405-claims/arbiter.jsonl"));
     assert_eq!(
-        carry(&root, "405", "", &[], "ask:x").unwrap(),
+        carry(&root, &target, "405", "", &[], "ask:x").unwrap(),
         "claims-carry: no carried finding is unfiled"
     );
-    assert!(carry(&root, "405", "T03", &["k".into()], "ask:x")
+    assert!(carry(&root, &target, "405", "T03", &["k".into()], "ask:x")
         .unwrap()
         .contains("1 finding(s) filed into 405-claims T03"));
     let text = std::fs::read_to_string(root.join("specs/405-claims/tasks.md")).unwrap();
@@ -131,10 +148,10 @@ fn a_carry_is_filed_only_where_the_switch_and_the_delta_allow() {
         "specs/405-claims/tasks-done.md",
         "- [x] T04 archived\n",
     );
-    assert!(carry(&root, "405", "T04", &["k".into()], "ask:x")
+    assert!(carry(&root, &target, "405", "T04", &["k".into()], "ask:x")
         .unwrap_err()
         .contains("T04 is ticked"));
-    assert!(carry(&root, "405", "", &["k2".into()], "")
+    assert!(carry(&root, &target, "405", "", &["k2".into()], "")
         .unwrap()
         .contains("filed into 405-claims T05"));
     std::fs::remove_file(root.join("specs/405-claims/tasks-done.md")).unwrap();
@@ -144,20 +161,29 @@ fn a_carry_is_filed_only_where_the_switch_and_the_delta_allow() {
         text.replace("- [ ] T05 ", "- [ ] T04 "),
     )
     .unwrap();
-    assert!(carry(&root, "406", "", &["k3".into()], "")
+    assert!(carry(&root, &target, "406", "", &["k3".into()], "")
         .unwrap()
         .contains("filed into 405-claims T05"));
-    assert!(carry(&root, "999", "", &["k".into()], "").unwrap_err().contains("filed only into the claims feature's - this delta holds no engine code (405-claims), not 999"));
+    assert!(carry(&root, &target, "999", "", &["k".into()], "").unwrap_err().contains("filed only into the claims feature's - this delta holds no engine code (405-claims), not 999"));
+}
+
+#[test]
+fn a_delta_with_engine_code_files_into_the_active_feature() {
+    let root = filing_clean("claims-carry-engine");
     put(&root, "rust/phases/src/new.rs", "pub fn x() {}\n");
     assert!(touches_engine(&root).unwrap());
-    assert!(carry(&root, "405", "", &["k".into()], "")
+    assert!(carry(&root, &target, "405", "", &["k".into()], "")
         .unwrap_err()
         .contains("filed only into the active task's (406-other), not 405"));
     put(&root, "specs/406-other/tasks.md", "- [ ] T01 open\n");
-    assert!(carry(&root, "406", "", &["k".into()], "")
+    assert!(carry(&root, &target, "406", "", &["k".into()], "")
         .unwrap()
         .contains("filed into 406-other T02"));
-    std::fs::remove_file(root.join("rust/phases/src/new.rs")).unwrap();
+}
+
+#[test]
+fn a_python_change_is_engine_code_only_where_its_code_id_moves() {
+    let root = filing_clean("claims-carry-python");
     put(&root, "l7r/diagram/m.py", "GAP = 12  # a comment\n");
     assert!(!touches_engine(&root).unwrap());
     put(&root, "l7r/diagram/m.py", "GAP = 13\n");
@@ -175,68 +201,118 @@ fn a_carry_is_filed_only_where_the_switch_and_the_delta_allow() {
     put(&root, ".specify/feature.json", "{}");
     std::fs::remove_file(root.join("l7r/diagram/added.py")).unwrap();
     put(&root, "rust/phases/src/new.rs", "pub fn x() {}\n");
-    assert!(carry(&root, "405", "", &["k".into()], "")
+    assert!(carry(&root, &target, "405", "", &["k".into()], "")
         .unwrap_err()
         .contains("(none: `make task-start F=<n> T=<Txx>` first), not 405"));
 }
 
-#[test]
-fn the_push_reads_carries_known_drifts_and_open_findings() {
-    let root = fixture("claims-carry-gate");
+// THE PUSH'S TEST IN PARTS (feature 449 T167): one test read the push through every step, gate after gate on one tree, near four tenths
+// of a second against FR-008's one; each part below builds the tree its steps read - the claims recorded on `origin/main` and `reach`
+// renamed for its task, the two findings recorded, the switch thrown, the GM's queue and box written - and asks its own steps of it.
+// The tree has no Python module: its Python half answered nothing, and its start cost 16 ms a part.
+
+const REACH: &str = "rust/phases/src/lib.rs::reach#reach";
+const GAP: &str = "rust/phases/src/lib.rs::GAP#gap";
+/// The GM's queue row `make claims-known` writes for `reach`, its `utc` a fixed one.
+const KNOWN_ROW: &str = "{\"kind\": \"known-drift\", \"claim\": \"rust/phases/src/lib.rs::reach#reach\", \"task\": \"T01\", \"finding\": \"DRIFTED        rust/phases/src/lib.rs::reach#reach - departs\", \"utc\": \"2026-11-17T00:00:00Z\"}\n";
+/// The claims feature's tasks as `make claims-known` leaves them: the GM's box added.
+const KNOWN_TASKS: &str = "# Tasks\n\n- [ ] T01 fix `reach` [lands-open]\n- [x] T02 done\n- [ ] T03 open one\n- [ ] GM review (make gm-reviewed F=405) [lands-open]\n      research: rendering\n      verify: the GM reviewed every row (make gm-review lists them)\n";
+
+/// Every claim recorded on `origin/main`, then `reach` named for the claims feature's T01 in a commit of its own.
+fn pushed(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = crate::claims::tests::fixture_rust_only(tag);
     feature(&root);
-    py_units(&root, &[], &[]);
-    record_all(&root);
-    commit(&root, "recorded");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    // the recording written as `record_all` writes it, pinned by `the_recorded_rust_units_are_what_record_all_writes`: a bundle and a
+    // record through the Python half, half of each carry test's time against FR-008's tenth of a second (feature 449 T167)
+    crate::claims::tests::write_recorded(&root, "{}", "{}");
+    commit_as_origin(&root, "recorded");
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     std::fs::write(
         root.join("rust/phases/src/lib.rs"),
         lib.replace("within GAP", "within GAP (feature 405 T01)"),
     )
     .unwrap();
-    commit(&root, "named its task");
-    let got = claims(&root, &["gate"]);
-    assert_eq!(got.code, 1);
-    assert!(got
-        .stdout
-        .contains("claims-gate: REFUSED owed (code changed): rust/phases/src/lib.rs::reach#reach"),);
-    let reach = "rust/phases/src/lib.rs::reach#reach";
+    git(&root, &["commit", "-qam", "named its task"]);
+    root
+}
+
+/// [`pushed`] with `reach` checked DRIFTED and `GAP` recorded a DRIFTED finding outside the change.
+fn drifted(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = pushed(tag);
     let o = root.join("b").to_string_lossy().into_owned();
-    claims(&root, &["bundle", "--units", reach, "--out", &o]);
+    claims(&root, &["bundle", "--units", REACH, "--out", &o]);
     let r = root.join("r.txt");
-    std::fs::write(&r, format!("VERDICT {reach} DRIFTED - departs [§]\nVERDICT rust/phases/src/lib.rs::GAP#gap DRIFTED - [outside the change] a carry [§]\n")).unwrap();
+    std::fs::write(&r, format!("VERDICT {REACH} DRIFTED - departs [§]\nVERDICT {GAP} DRIFTED - [outside the change] a carry [§]\n")).unwrap();
     claims(
         &root,
         &["record", "--bundle", &o, "--reply", &r.to_string_lossy()],
     );
-    let gap = "rust/phases/src/lib.rs::GAP#gap";
     let ix: Value =
         serde_json::from_str(&std::fs::read_to_string(root.join("dev/claims-index.json")).unwrap())
             .unwrap();
-    let mut row = ix[gap].clone();
+    let mut row = ix[GAP].clone();
     row["verdict"] = json!("DRIFTED");
     row["outside"] = json!(true);
     row["note"] = json!("a carry");
-    index_set(&root, gap, row);
-    let got = claims(&root, &["gate"]);
-    assert_eq!(got.code, 0, "{}", got.stdout);
-    assert!(got.stdout.contains("claims-gate: carry: DRIFTED        rust/phases/src/lib.rs::GAP#gap - a carry - a finding on code the change left unchanged: file it with `make claims-carry F=406`"), "{}", got.stdout);
-    assert!(got.stdout.contains("claims-gate: known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
-    let got = claims(&root, &["known"]);
-    assert_eq!(got.stdout, "claims-known: no known drift is unrecorded\n");
-    at_clean(&root, reach);
+    index_set(&root, GAP, row);
+    root
 }
 
-/// The same tree with the switch at `clean`: the known drift recorded, the carry filed, every open finding refused.
-fn at_clean(root: &Path, reach: &str) {
-    let root = root.to_path_buf();
+/// [`drifted`] with the switch at `clean`.
+fn at_clean(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = drifted(tag);
     put(
         &root,
         "dev/switches.json",
         "{\"claims\": {\"state\": \"clean\"}}",
     );
+    root
+}
+
+/// [`at_clean`] with the known drift recorded for the GM, as `make claims-known` records it.
+fn known_recorded(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = at_clean(tag);
+    put(&root, "specs/405-claims/tasks.md", KNOWN_TASKS);
+    put(&root, "specs/405-claims/gm-review.jsonl", KNOWN_ROW);
+    root
+}
+
+#[test]
+fn the_push_reads_carries_known_drifts_and_open_findings() {
+    let root = pushed("claims-carry-gate");
+    let got = claims(&root, &["gate"]);
+    assert_eq!(got.code, 1);
+    assert!(got
+        .stdout
+        .contains("claims-gate: REFUSED owed (code changed): rust/phases/src/lib.rs::reach#reach"),);
+}
+
+#[test]
+fn a_drift_the_change_names_is_known_and_one_outside_it_a_carry() {
+    let root = drifted("claims-carry-gate-drifted");
+    let got = claims(&root, &["gate"]);
+    assert_eq!(got.code, 0, "{}", got.stdout);
+    assert!(got.stdout.contains("claims-gate: carry: DRIFTED        rust/phases/src/lib.rs::GAP#gap - a carry - a finding on code the change left unchanged: file it with `make claims-carry F=406`"), "{}", got.stdout);
+    assert!(got.stdout.contains("claims-gate: known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
+}
+
+#[test]
+fn at_report_a_known_drift_is_not_recorded_for_the_gm() {
+    let root = drifted("claims-carry-gate-report");
+    let got = claims(&root, &["known"]);
+    assert_eq!(got.stdout, "claims-known: no known drift is unrecorded\n");
+}
+
+#[test]
+fn at_clean_a_known_drift_unrecorded_is_refused() {
+    let root = at_clean("claims-carry-gate-clean");
     let got = claims(&root, &["gate"]);
     assert!(got.stdout.contains("claims-gate: REFUSED known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
+}
+
+#[test]
+fn at_clean_the_known_drift_is_recorded_for_the_gm() {
+    let root = at_clean("claims-carry-gate-known");
     // the GM-review queue's one writer, in process (feature 449 T91): the row and the GM's box, the bytes HEAD's `gm_review.add_row`
     // wrote for this row and these tasks (the differential's `scratchpad/t91/diff2.py`, its `utc` aside)
     let tasks =
@@ -247,7 +323,7 @@ fn at_clean(root: &Path, reach: &str) {
         got.stdout,
         "claims-known: recorded 405-claims T01: rust/phases/src/lib.rs::reach#reach\n",
     );
-    assert!(recorded_known(&root).unwrap().contains(reach));
+    assert!(recorded_known(&root).unwrap().contains(REACH));
     let written = std::fs::read_to_string(root.join("specs/405-claims/gm-review.jsonl")).unwrap();
     let utc = written.rsplit("\"utc\": \"").next().unwrap();
     assert_eq!(
@@ -256,8 +332,13 @@ fn at_clean(root: &Path, reach: &str) {
     );
     assert_eq!(
         std::fs::read_to_string(root.join("specs/405-claims/tasks.md")).unwrap(),
-        "# Tasks\n\n- [ ] T01 fix `reach` [lands-open]\n- [x] T02 done\n- [ ] T03 open one\n- [ ] GM review (make gm-reviewed F=405) [lands-open]\n      research: rendering\n      verify: the GM reviewed every row (make gm-review lists them)\n"
+        KNOWN_TASKS
     );
+}
+
+#[test]
+fn an_unwritable_queue_fails_the_known() {
+    let root = known_recorded("claims-carry-gate-queue");
     // the queue unwritable (a link to a directory that is not there, which the reading of the recorded drifts passes over): the command
     // fails, as the Python's raise through the runner did
     let q = root.join("specs/405-claims/gm-review.jsonl");
@@ -267,16 +348,80 @@ fn at_clean(root: &Path, reach: &str) {
     let said = format!("{}{}", got.stdout, got.stderr);
     let failed = got.code != 0 && said.contains("gm-review: OSError");
     assert!(failed, "{said}");
-    std::fs::remove_file(&q).unwrap();
-    put(&root, "specs/405-claims/gm-review.jsonl", &written);
+}
+
+#[test]
+fn a_known_drift_recorded_is_pre_existing() {
+    let root = known_recorded("claims-carry-gate-pre");
     let got = claims(&root, &["gate"]);
     assert!(got
         .stdout
         .contains("claims-gate: pre-existing: known drift (405 T01): DRIFTED"),);
+}
+
+#[test]
+fn a_carry_is_filed_into_the_active_feature_only() {
+    let root = known_recorded("claims-carry-gate-carry");
     let got = claims(&root, &["carry", "--feature", "405"]);
     assert!(got
         .stderr
         .contains("filed only into the active task's (406-other), not 405"),);
+}
+
+/// The active feature with a task three and the round arbiter's trigger.
+fn active(root: &Path) {
+    put(
+        root,
+        "specs/406-other/tasks.md",
+        "- [ ] T01 open\n- [ ] T03 three\n",
+    );
+    put(
+        root,
+        "specs/406-other/arbiter.jsonl",
+        "{\"trigger\": \"ask:x\"}\n",
+    );
+}
+
+#[test]
+fn a_carry_files_the_finding_outside_the_change_into_a_task_of_its_own() {
+    let root = known_recorded("claims-carry-gate-filed");
+    active(&root);
+    let got = claims(&root, &["carry", "--feature", "406"]);
+    assert!(got.stdout.contains("1 finding(s) filed into 406-other T04"),);
+    // the bytes the next test starts from, written by the carry itself
+    assert_eq!(
+        std::fs::read_to_string(root.join("specs/406-other/tasks.md")).unwrap(),
+        CARRIED_TASKS
+    );
+    let rows = std::fs::read_to_string(root.join("specs/406-other/claims-carried.jsonl")).unwrap();
+    assert!(rows.starts_with(&CARRIED_ROW[..CARRIED_ROW.find("\"utc\"").unwrap()]));
+}
+
+/// The active feature's tasks and carried row as the carry above writes them, its `utc` a fixed one.
+const CARRIED_TASKS: &str = "- [ ] T01 open\n- [ ] T03 three\n- [ ] T04 Carried by the claims gate (385 FR-013): findings on code the change left unchanged - fix the code or the claim and re-check each: rust/phases/src/lib.rs::GAP#gap [lands-open]\n      research: rendering\n";
+const CARRIED_ROW: &str = "{\"task\": \"T04\", \"keys\": [\"rust/phases/src/lib.rs::GAP#gap\"], \"utc\": \"2026-11-17T00:00:00Z\"}\n";
+
+#[test]
+fn a_carried_finding_is_named_with_its_task_and_stays_open() {
+    let root = known_recorded("claims-carry-gate-carried");
+    active(&root);
+    put(&root, "specs/406-other/tasks.md", CARRIED_TASKS);
+    put(&root, "specs/406-other/claims-carried.jsonl", CARRIED_ROW);
+    let got = claims(&root, &["gate"]);
+    assert!(
+        got.stdout
+            .contains("claims-gate: carried (406-other T04): DRIFTED")
+            && got
+                .stdout
+                .contains("REFUSED open (DRIFTED): rust/phases/src/lib.rs::GAP#gap - a carry"),
+    );
+}
+
+/// A ruling's carry, and the recorded drifts read as the Python read them: the engine change in the working tree, nothing recorded -
+/// the carry files the keys it is given (feature 449 T167: the push's last part, on a tree of its own).
+#[test]
+fn a_ruling_s_carry_needs_its_keys_and_the_recorded_drifts_read_as_python_read_them() {
+    let root = filing_clean("claims-carry-ruling");
     put(
         &root,
         "specs/406-other/tasks.md",
@@ -287,16 +432,12 @@ fn at_clean(root: &Path, reach: &str) {
         "specs/406-other/arbiter.jsonl",
         "{\"trigger\": \"ask:x\"}\n",
     );
-    let got = claims(&root, &["carry", "--feature", "406"]);
-    assert!(got.stdout.contains("1 finding(s) filed into 406-other T04"),);
-    let got = claims(&root, &["gate"]);
-    assert!(
-        got.stdout
-            .contains("claims-gate: carried (406-other T04): DRIFTED")
-            && got
-                .stdout
-                .contains("REFUSED open (DRIFTED): rust/phases/src/lib.rs::GAP#gap - a carry"),
-    );
+    let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
+    std::fs::write(
+        root.join("rust/phases/src/lib.rs"),
+        lib.replace("within GAP", "within GAP (feature 405 T01)"),
+    )
+    .unwrap();
     let got = claims(&root, &["carry", "--feature", "406", "--keys", "a"]);
     assert_eq!((got.code, got.stderr.as_str()), (2, "claims-carry: KEYS= and RULING= go together: the findings a round-arbiter ruling carried, and that ruling's trigger\n"));
     let got = claims(

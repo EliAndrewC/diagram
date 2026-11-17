@@ -40,6 +40,8 @@ static UNCLAIMED: LazyLock<Regex> =
 static RESTS: LazyLock<Regex> = LazyLock::new(|| re(r"\[(§[^\]]*)\]\s*\z"));
 static ELIDED: LazyLock<Regex> =
     LazyLock::new(|| re(r"\b(\d{4})-[\w-]*\.\.\.?[\w-]*?((?:\.drawing)?\.html)"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 4] = [&VERDICT, &UNCLAIMED, &RESTS, &ELIDED];
 
 /// A reply line as the readers take it: stripped of whitespace, then of backticks.
 pub fn bare(raw: &str) -> &str {

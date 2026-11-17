@@ -490,11 +490,7 @@ fn no_browser(_: &Path) -> crate::Result<Box<dyn crate::fetch::Client>> {
 #[test]
 fn consulted_archives_the_kept_pages_in_lanes() {
     let w = world("ops-consulted");
-    let kept: String = ["https://k.org/1", "https://k.org/2", "https://j.org/3"]
-        .iter()
-        .map(|u| json!({"url": l7r_guard::shared::consulted::norm(u), "raw": u}).to_string() + "\n")
-        .collect();
-    l7r_gate_research::fixture::put(&w.root, KEPT, &kept);
+    kept_three(&w);
     let said = std::sync::Mutex::new(Vec::new());
     let say = |l: &str| said.lock().unwrap().push(l.to_owned());
     let store = w.store();
@@ -508,6 +504,31 @@ fn consulted_archives_the_kept_pages_in_lanes() {
     assert_eq!(lines[0], "archive: 2 kept uncited URL(s) with no copy yet, in up to 2 lane(s) (feature 312: only what the filter kept)");
     assert_eq!(lines.len(), 3);
     assert!(row_files(&w.root).len() >= 3);
+}
+
+/// Three kept pages, two of one host.
+fn kept_three(w: &World) {
+    let kept: String = ["https://k.org/1", "https://k.org/2", "https://j.org/3"]
+        .iter()
+        .map(|u| json!({"url": l7r_guard::shared::consulted::norm(u), "raw": u}).to_string() + "\n")
+        .collect();
+    l7r_gate_research::fixture::put(&w.root, KEPT, &kept);
+}
+
+/// No limit and no lane count: every kept page in one lane; and a lane whose browser will not start is the run's error. Apart from the
+/// limited run above, on a world of its own - the two runs' pushes together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn consulted_with_no_limit_takes_every_page_and_a_browser_that_will_not_start_fails_it() {
+    let w = world("ops-consulted-all");
+    kept_three(&w);
+    let said = std::sync::Mutex::new(Vec::new());
+    let say = |l: &str| said.lock().unwrap().push(l.to_owned());
+    let store = w.store();
+    let reach = Reach {
+        start: &browser,
+        say: &say,
+        store: &store,
+    };
     assert_eq!(consulted(&w.root, 0, 0, &reach).unwrap(), 0);
     // a lane whose browser will not start is the run's error
     l7r_gate_research::fixture::put(
@@ -524,7 +545,16 @@ fn consulted_archives_the_kept_pages_in_lanes() {
         consulted(&w.root, 0, 1, &reach).unwrap_err().message,
         "BrowserType.launch: none"
     );
-    // the last push refused: exit 1
+}
+
+/// The last push refused: exit 1. Apart from the test above, whose archive it never read, on a world of its own: the two together
+/// pushed past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn consulted_whose_last_push_is_refused_exits_one() {
+    let w = world("ops-consulted-refused");
+    let said = std::sync::Mutex::new(Vec::new());
+    let say = |l: &str| said.lock().unwrap().push(l.to_owned());
+    let store = w.store();
     git(
         &w.home.join("source-archive"),
         &["remote", "set-url", "origin", "/no/such.git"],
@@ -862,7 +892,19 @@ fn the_relayout_moves_the_first_captures_and_their_rows() {
     assert_eq!(w.subjects()[0], "relayout: captures sharded by the URL id's first two hex digits, the GM's copies under gm-copies/");
     // nothing to move: nothing committed, the push clean
     assert_eq!(relayout::relayout(&w.root, &store).unwrap(), 0);
-    // a refused push, after the table is written
+}
+
+/// A refused push, after the table is written, and a row with no URL: apart from the test above on a world of their own holding the
+/// capture the row names - the three relayouts' pushes together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_relayout_whose_push_is_refused_says_so_and_a_row_with_no_url_is_refused() {
+    let w = world("ops-relayout-refused");
+    let store = w.store();
+    let wc = w.home.join("source-archive");
+    std::fs::create_dir_all(wc.join("deep/a/b")).unwrap();
+    std::fs::write(wc.join("deep/a/b/c.txt"), "deep/a/b/c.txt").unwrap();
+    git(&wc, &["add", "-A"]);
+    git(&wc, &["commit", "-q", "-m", "old"]);
     git(&wc, &["remote", "set-url", "origin", "/no/such.git"]);
     put(
         &w,

@@ -17,12 +17,14 @@ use crate::escape_log;
 const STUB: &str = r#"#!/bin/sh
 echo "$L7R_PAGE_SESSION|${L7R_KEY_CAP:-}|${L7R_FEATURE_DIRECTORY:-}|$L7R_DISPATCHER|${TMUX:-}|$1 $2" >> "$STUB/calls"
 if [ -f "$STUB/stall" ]; then
-  rm -rf "$STUB/proc"; mkdir -p "$STUB/proc/$$"
-  printf 'claude\0--session-id\0%s\0' "$L7R_PAGE_SESSION" > "$STUB/proc/$$/cmdline"
   # its process entry goes when it does, as a real /proc's would: a stalled session's entry outlived it, so the watch of the next one
   # found the dead pid before the next stub had written its own, ended nothing, and that session slept its 30 s out to rc=0 - the
-  # test's failure under load (feature 449 T160, observed 2026-11-17); the TERM is raised again so the session still ends by it
+  # test's failure under load (feature 449 T160, observed 2026-11-17); the TERM is raised again so the session still ends by it. The
+  # trap is set BEFORE the entry is written: a watch that ends a session at its first check can signal it the moment the entry is
+  # there (feature 449 T167)
   trap 'rm -rf "$STUB/proc/$$"; kill $! 2>/dev/null; trap - TERM; kill -TERM $$' TERM
+  rm -rf "$STUB/proc"; mkdir -p "$STUB/proc/$$"
+  printf 'claude\0--session-id\0%s\0' "$L7R_PAGE_SESSION" > "$STUB/proc/$$/cmdline"
   sleep 30 & wait $!
 fi
 if [ -f "$STUB/fail-always" ]; then echo '{"is_error": true}'; exit 0; fi
@@ -68,12 +70,15 @@ fn environ(w: &World, path: &str) -> Vec<(String, String)> {
     .to_vec()
 }
 
+/// No wait the loop takes is real time in a test (feature 449 T167): a stall is seen at the first millisecond's check (every check is
+/// past an `after` of none) and a failure's wait is capped at none, so the 9 stalls and 44 retries cost their stub runs alone - at 50 ms
+/// of quiet and 10 ms a retry they took 479 and 505 ms against FR-008's tenth of a second. The logged waits still read "0 min".
 fn quick() -> Times {
     Times {
-        check: 0.01,
-        after: 0.05,
+        check: 0.001,
+        after: 0.0,
         returned: 60.0,
-        retry_every: 0.01,
+        retry_every: 0.0,
     }
 }
 

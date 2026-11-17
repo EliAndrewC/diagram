@@ -34,12 +34,22 @@ pub(super) fn put(root: &Path, rel: &str, text: &str) {
     std::fs::write(p, text).unwrap();
 }
 
+/// `git <args>` in `root`, which must succeed: started directly, not through `sh` (feature 449 T167, FR-008 - a shell's start is a
+/// third of a commit's cost here, and the crate's slowest tests are their git calls).
+fn git_ok(root: &Path, args: &[&str]) {
+    let o = Command::new("git")
+        .args(args)
+        .current_dir(root)
+        .output()
+        .unwrap();
+    let said = String::from_utf8_lossy(&o.stderr);
+    assert!(o.status.success(), "git {args:?}: {said}");
+}
+
 /// Commit everything in `root`.
 pub(super) fn commit(root: &Path, msg: &str) {
-    sh(
-        root,
-        &format!("git add -A && git commit -q --allow-empty -m '{msg}'"),
-    );
+    git_ok(root, &["add", "-A"]);
+    git_ok(root, &["commit", "-q", "--allow-empty", "-m", msg]);
 }
 
 /// The stubs of what the port asks by command (a feature's state is asked in process since feature 449 T118): the gate wrapper (`stamp --fresh` green while `.git/green` exists; `check spec-lint --figure-pattern` a figure with `s` or
@@ -51,7 +61,7 @@ pub(super) fn tools(root: &Path) {
         "scripts/gates/l7r-gate.sh",
         "#!/bin/sh\nd=$(dirname \"$0\")/../..\nif [ \"$1\" = check ]; then [ -f \"$d/.git/no-pattern\" ] && { echo no pattern >&2; exit 1; }; echo '(?<![\\w.])\\d[\\d,]*(?:\\.\\d+)?\\s*(?:px|s)(?![\\w-])'; exit 0; fi\n[ -f .git/green ]\n",
     );
-    sh(root, "chmod +x scripts/gates/l7r-gate.sh");
+    executable(&root.join("scripts/gates/l7r-gate.sh"));
     put(
         root,
         "scripts/hooks/finished-run-hooks.sh",
@@ -69,13 +79,27 @@ pub(super) fn tools(root: &Path) {
     );
 }
 
-/// A repository with one commit, `origin/main` at it, and the stubbed tools (untracked).
+/// `chmod +x`, in process.
+pub(super) fn executable(path: &Path) {
+    use std::os::unix::fs::PermissionsExt;
+    std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o755)).unwrap();
+}
+
+/// A repository with one commit, `origin/main` at it, and the stubbed tools (untracked): two git calls, the identity written into the
+/// repository's config and `origin/main` written as its ref file in process (feature 449 T167, FR-008: the shell and the three other
+/// git calls were six of the eight starts every test of the crate paid for its repository).
 pub(super) fn repo(name: &str) -> l7r_guard::shared::tempdir::Held<PathBuf> {
     let d = dir(name);
-    sh(
-        &d,
-        "git init -q && git config user.email t@t && git config user.name 'T Tester' && git commit -q --allow-empty -m base && git update-ref refs/remotes/origin/main HEAD",
-    );
+    git_ok(&d, &["init", "-q"]);
+    let config = d.join(".git/config");
+    let mut text = std::fs::read_to_string(&config).unwrap();
+    text.push_str("[user]\n\temail = t@t\n\tname = T Tester\n");
+    std::fs::write(&config, text).unwrap();
+    git_ok(&d, &["commit", "-q", "--allow-empty", "-m", "base"]);
+    let head = std::fs::read_to_string(d.join(".git/HEAD")).unwrap();
+    let branch = head.trim().strip_prefix("ref: ").unwrap().to_owned();
+    let id = std::fs::read_to_string(d.join(".git").join(branch)).unwrap();
+    put(&d, ".git/refs/remotes/origin/main", &id);
     put(&d, ".git/info/exclude", "scripts/\nMakefile\n");
     tools(&d);
     d

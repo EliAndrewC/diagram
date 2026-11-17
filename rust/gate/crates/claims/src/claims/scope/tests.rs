@@ -39,16 +39,56 @@ fn the_python_half_is_asked_once_for_a_tree_it_has_read() {
     let mut reader = Reader::new(&root, &root);
     assert_eq!(order(&mut reader), first);
     reader.save();
-    for i in 0..5 {
+}
+
+/// The kept file capped: four answers kept for four earlier `.py` trees, written as the reader keys them, and a fifth tree asked - the
+/// file holds four, the newest first. Feature 449 T167: the test asked the Python half for six trees one after another, a 16 ms start
+/// each, over FR-008's tenth of a second; the four kept before are written here, so one start asks the fifth.
+#[test]
+fn the_kept_answers_are_capped_at_four() {
+    let root = fixture("claims-scope-cap");
+    py_units(
+        &root,
+        &[("in", "function", &["i - NONE"], false)],
+        &[("out", "function", &["o - NONE"], false)],
+    );
+    let kept = root.join(".git/l7r-cache/claims-py-units.json");
+    let mut held = serde_json::Map::new();
+    let skill = root.to_path_buf();
+    for i in 0..4 {
         put(&root, "l7r/diagram/m.py", &format!("GAP = {i}\n"));
-        let mut r = Reader::new(&root, &root);
-        let _ = order(&mut r);
+        let earlier = Reader::new(&root, &root);
+        let files = vec![skill.join("l7r/diagram/m.py")];
+        let key = earlier.key(&skill, false, true, &files).unwrap();
+        held.insert(key, serde_json::json!([[], []]));
     }
+    put(
+        &root,
+        ".git/l7r-cache/claims-py-units.json",
+        &serde_json::Value::Object(held).to_string(),
+    );
+    put(&root, "l7r/diagram/m.py", "GAP = 4\n");
+    let mut r = Reader::new(&root, &root);
+    assert!(!all_units(&mut r, &root, false, true).unwrap().is_empty());
+    drop(r);
     let held: serde_json::Value =
         serde_json::from_str(&std::fs::read_to_string(&kept).unwrap()).unwrap();
     assert_eq!(held.as_object().unwrap().len(), 4);
+}
+
+/// The scope's last part, on a tree of its own (feature 449 T167, as above): no Python module asks nothing, and one that cannot be
+/// read fails.
+#[test]
+fn a_tree_with_no_python_module_asks_nothing_and_one_it_cannot_read_fails() {
+    let root = fixture("claims-scope-none");
     std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
-    std::fs::remove_file(root.join("l7r/py-units.json")).unwrap();
+    let order = |r: &mut Reader| {
+        all_units(r, &root, false, true)
+            .unwrap()
+            .iter()
+            .map(|(u, _)| u.uid())
+            .collect::<Vec<_>>()
+    };
     let mut reader = Reader::new(&root, &root);
     assert!(!order(&mut reader).iter().any(|u| u.starts_with("l7r/")));
     let plain = crate::checks::scratch("claims-scope-plain");

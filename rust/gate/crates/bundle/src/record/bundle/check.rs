@@ -23,7 +23,7 @@ use crate::record::args::{parse_with, Parsed, Spec};
 use crate::record::leaves::fragments_for;
 use crate::record::modals;
 use crate::record::owed::merge_base;
-use crate::record::repo::{fail, git, read_text, Fail};
+use crate::record::repo::{cat_blobs, fail, read_text, universal, Fail};
 use crate::record::units::{read_notes, Unit};
 use crate::Reply;
 
@@ -290,6 +290,18 @@ pub fn manifest(
 /// The MANIFEST's account of THE CHANGE (feature 375, FR-006): each page's blocks and notes whose words differ from the merge base.
 fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
     let base = merge_base(root);
+    // every page as it stood at the base read by one `git cat-file --batch`, where a `git show` each took a process a page - three a
+    // question bundle, against FR-008's tenth of a second in its tests (feature 449 T167); a page the base lacks reads empty, as before
+    let mut then = if base.is_empty() {
+        Vec::new()
+    } else {
+        let objects: Vec<String> = fragments
+            .iter()
+            .map(|rel| format!("{base}:{rel}"))
+            .collect();
+        cat_blobs(root, &objects)
+    }
+    .into_iter();
     let mut lines = Vec::new();
     for rel in fragments {
         let path = root.join(rel);
@@ -298,11 +310,7 @@ fn changed_section(root: &Path, fragments: &[String]) -> Result<String, Fail> {
         } else {
             String::new()
         };
-        let was = if base.is_empty() {
-            String::new()
-        } else {
-            git(root, &["show", &format!("{base}:{rel}")])
-        };
+        let was = then.next().map_or_else(String::new, |t| universal(&t));
         if rel.ends_with(".notes.html") {
             let (before, after) = (read_notes(&was, ""), read_notes(&now, ""));
             let mut keys: Vec<&String> = after.iter().map(|(k, _)| k).collect();

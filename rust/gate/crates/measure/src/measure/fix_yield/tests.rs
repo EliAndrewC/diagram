@@ -1,5 +1,6 @@
 //! A scratch repository's fixes, their commits, tools and readings, and the command line.
 
+use std::fmt::Write as _;
 use std::path::Path;
 use std::process::Command;
 
@@ -8,48 +9,89 @@ use serde_json::json;
 use super::super::tool_yield::tests::{put, repo};
 use super::*;
 
-fn git_at(r: &Path, args: &[&str]) -> String {
-    let out = Command::new("git")
-        .arg("-C")
-        .arg(r)
-        .args(args)
-        .env("GIT_AUTHOR_DATE", "2026-01-01T12:00:00Z")
-        .env("GIT_COMMITTER_DATE", "2026-01-01T12:00:00Z")
-        .env("GIT_AUTHOR_NAME", "t")
-        .env("GIT_AUTHOR_EMAIL", "t@t")
-        .env("GIT_COMMITTER_NAME", "t")
-        .env("GIT_COMMITTER_EMAIL", "t@t")
-        .output()
-        .unwrap();
-    assert!(out.status.success());
-    String::from_utf8(out.stdout).unwrap().trim().to_owned()
+/// Every file under `r` but `.git`, by its path from `r`, sorted.
+fn files_of(r: &Path, dir: &Path, out: &mut Vec<String>) {
+    for e in std::fs::read_dir(dir).unwrap().flatten() {
+        let path = e.path();
+        if path.file_name().is_some_and(|n| n == ".git") {
+            continue;
+        }
+        if e.file_type().unwrap().is_dir() {
+            files_of(r, &path, out);
+        } else {
+            out.push(path.strip_prefix(r).unwrap().display().to_string());
+        }
+    }
+    out.sort();
 }
 
-fn commit(r: &Path, message: &str) -> String {
-    git_at(r, &["add", "-A"]);
-    git_at(r, &["commit", "-q", "--allow-empty", "-m", message]);
-    git_at(r, &["rev-parse", "--short", "HEAD"])
+/// A `git fast-import` commit of every file on disk, as `git add -A && git commit` would make it at the fixture's date.
+fn commit(r: &Path, stream: &mut String, message: &str) {
+    let mut files = Vec::new();
+    files_of(r, r, &mut files);
+    let _ = write!(
+        stream,
+        "commit HEAD_REF\nmark :{}\nauthor t <t@t> 1767268800 +0000\ncommitter t <t@t> 1767268800 +0000\ndata {}\n{message}\n\ndeleteall\n",
+        stream.matches("\nmark :").count() + 1,
+        message.len() + 1
+    );
+    for f in files {
+        let text = std::fs::read(r.join(&f)).unwrap();
+        let _ = write!(stream, "M 100644 inline {f}\ndata {}\n", text.len());
+        stream.push_str(&String::from_utf8(text).unwrap());
+        stream.push('\n');
+    }
 }
 
 /// The fixture repository with its history: a base, a fix to `util.sh` naming hour 2, a landing of `lint.py` naming it, a records-only
-/// commit naming hour 3.
+/// commit naming hour 3. The five commits are made by one `git fast-import` (feature 449 T167: three git calls a commit made each test
+/// that read the history pay about 25 ms of FR-008's tenth of a second); each is the commit `git add -A && git commit` made, on the
+/// files on disk then, at the same date.
 pub fn history(r: &Path) -> String {
     repo(r);
-    git_at(r, &["init", "-q"]);
-    commit(r, "base");
+    let init = Command::new("git")
+        .arg("-C")
+        .arg(r)
+        .args(["init", "-q"])
+        .status()
+        .unwrap();
+    assert!(init.success());
+    let mut stream = String::new();
+    commit(r, &mut stream, "base");
     put(r, "scripts/util.sh", "1\n");
-    let fix = commit(r, "fix for hour:9-x@2 here");
+    commit(r, &mut stream, "fix for hour:9-x@2 here");
     put(r, "scripts/tools/lint.py", "1\n");
-    commit(r, "Tooling from clone: hour:9-x@2");
+    commit(r, &mut stream, "Tooling from clone: hour:9-x@2");
     put(r, "specs/009-x/notes.md", "1\n");
-    commit(r, "records for hour:9-x@3");
+    commit(r, &mut stream, "records for hour:9-x@3");
     put(
         r,
         "Makefile",
         "done: lint\nlint:\n\t@python3 scripts/tools/lint.py\nbuild:\n\t@sh scripts/util.sh x\n",
     );
-    commit(r, "the build recipe for hour:9-x@7");
-    fix
+    commit(r, &mut stream, "the build recipe for hour:9-x@7");
+    let head = std::fs::read_to_string(r.join(".git/HEAD")).unwrap();
+    let branch = head.trim().strip_prefix("ref: ").unwrap().to_owned();
+    let marks = r.join(".git/marks");
+    let mut import = Command::new("git")
+        .arg("-C")
+        .arg(r)
+        .args(["fast-import", "--quiet"])
+        .arg(format!("--export-marks={}", marks.display()))
+        .stdin(std::process::Stdio::piped())
+        .spawn()
+        .unwrap();
+    std::io::Write::write_all(
+        &mut import.stdin.take().unwrap(),
+        stream
+            .replace("commit HEAD_REF\n", &format!("commit {branch}\n"))
+            .as_bytes(),
+    )
+    .unwrap();
+    assert!(import.wait().unwrap().success());
+    let marked = std::fs::read_to_string(&marks).unwrap();
+    let fix = marked.lines().find_map(|l| l.strip_prefix(":2 ")).unwrap();
+    fix[..7].to_owned()
 }
 
 fn arbiter(r: &Path, fix: &str) {
@@ -89,17 +131,20 @@ fn a_fix_takes_its_settling_and_its_commits() {
     assert_eq!(two[0], fix);
     let tools = tools_of_fix(&r, &fx[0]).unwrap();
     assert!(tools.contains(&("guard".to_owned(), "foo".to_owned())));
-    let three = tools_of_fix(&r, &fx[1]).unwrap();
+    // the rest share one reading of the tree's inventory, as a report's fixes do (feature 449 T167: a reading a fix made the test
+    // 116 ms against FR-008's tenth of a second)
+    let mut slot = (None, None);
+    let three = tools_of_fix_in(&r, &fx[1], &mut slot).unwrap();
     assert!(three.contains(&("target".to_owned(), "lint".to_owned())));
     assert!(three.contains(&("guard".to_owned(), "foo".to_owned())));
     assert_eq!(candidates(&r, &fx[5]).unwrap()[0], fix);
-    assert!(tools_of_fix(&r, &fx[7])
+    assert!(tools_of_fix_in(&r, &fx[7], &mut slot)
         .unwrap()
         .contains(&("target".to_owned(), "build".to_owned())));
     let mut none = Row::new();
     none.insert("note".to_owned(), json!("make nosuch"));
     assert!(candidates(&r, &none).unwrap().is_empty());
-    assert!(tools_of_fix(&r, &none).unwrap().is_empty());
+    assert!(tools_of_fix_in(&r, &none, &mut slot).unwrap().is_empty());
     assert_eq!(
         named_files(&r, "util.sh, helper.run"),
         ["scripts/hooks/lib/helper.py", "scripts/util.sh"]
@@ -125,6 +170,16 @@ fn the_report_reads_each_fix() {
     assert!(text.contains("| hour:9-x@4 | - | - | not made (open) | - |"));
     assert!(text.contains("| hour:9-x@6 | - | - | not made (declined) | - |"));
     assert!(text.contains("| hour:9-x@3 | 2026-01-02 | 2.5 |"));
+}
+
+/// Read again 300 days on (split from the test above, feature 449 T167: its three reports took 219 ms against FR-008's tenth of a
+/// second).
+#[test]
+fn a_fix_read_later_is_doing_something_or_has_no_outcome_record() {
+    let r = crate::checks::scratch("fy-report-later");
+    let fix = history(&r);
+    arbiter(&r, &fix);
+    let made = super::super::turn_time::ts_of(&json!("2026-01-02T00:00:00Z")).unwrap();
     let later = report(
         &r,
         &r.join("specs/009-x"),
@@ -134,6 +189,14 @@ fn the_report_reads_each_fix() {
     .unwrap();
     assert!(later.contains("| hour:9-x@3 | 2026-01-02 | 2.5 | doing something |"));
     assert!(later.contains("| odd^.(x) | 2026-01-02 | - | no outcome record (no tool found in its settling commit) | - |"));
+}
+
+/// A feature with no fix ruled, and one whose settling time cannot be read (split as above).
+#[test]
+fn a_report_with_no_fix_ruled_or_a_bad_settling_time() {
+    let r = crate::checks::scratch("fy-report-none");
+    let fix = history(&r);
+    arbiter(&r, &fix);
     put(&r, "specs/010-y/arbiter.jsonl", "{}\n");
     assert_eq!(
         report(&r, &r.join("specs/010-y"), 0.0, &r).unwrap(),

@@ -47,6 +47,23 @@ impl Run<'_> {
     }
 }
 
+/// The index built in process, uncommitted: the setup of a test of what reads it, without the commit and push the command's build
+/// adds (feature 449 T167, FR-008; the command's build is `build_and_find_through_the_command_line`'s).
+fn built(w: &World) {
+    let dir = w.store().dir;
+    corpus(&dir, &w.root);
+    crate::index::build(
+        &dir,
+        &w.root,
+        &mut Fake::default(),
+        &[],
+        0,
+        (0, 0),
+        &mut |_| (),
+    )
+    .unwrap();
+}
+
 #[test]
 fn build_and_find_through_the_command_line() {
     let w = World::new("sem-cli");
@@ -89,6 +106,19 @@ fn build_and_find_through_the_command_line() {
         lines[1],
         "       Thatched roofs were replaced every twenty years by the village."
     );
+}
+
+/// Argparse's refusals, the embedder's, and a file gone (split from the test above, feature 449 T167: the two parts on one archive took
+/// 128 ms against FR-008's tenth of a second).
+#[test]
+fn build_and_find_refuse_as_argparse_did_and_name_what_failed() {
+    let w = World::new("sem-cli-refused");
+    let run = Run {
+        w: &w,
+        said: RefCell::new(Vec::new()),
+        fail: false,
+    };
+    built(&w);
     // refusals: argparse's, the embedder's, a file gone
     for (args, code) in [
         (&["build", "--limit", "x"][..], 2),
@@ -166,8 +196,19 @@ fn search_through_the_command_line() {
         run.go(true, &["--terms", "zzz"]).0.stdout,
         "research-search: 0 question(s), 1 term set(s) - 0 of 0 source(s)\n\n"
     );
-    corpus(&w.store().dir, &w.root);
-    run.go(false, &["build"]);
+}
+
+/// A search over a built index, under a key and limits, and argparse's refusals (split from the test above, feature 449 T167: the three
+/// parts on one archive took 158 ms against FR-008's tenth of a second, a third of it the measure pattern's one compile).
+#[test]
+fn a_search_over_a_built_index_through_the_command_line() {
+    let w = World::new("sem-cli-built");
+    let run = Run {
+        w: &w,
+        said: RefCell::new(Vec::new()),
+        fail: false,
+    };
+    built(&w);
     let (r, _) = run.go(
         true,
         &[
@@ -195,6 +236,18 @@ fn search_through_the_command_line() {
     ] {
         assert_eq!(run.go(true, args).0.code, 2);
     }
+}
+
+/// An embedder that fails, a page moved to its notes and a copy gone (split as above).
+#[test]
+fn a_search_whose_embedder_fails_or_whose_copy_is_gone() {
+    let w = World::new("sem-cli-gone");
+    let run = Run {
+        w: &w,
+        said: RefCell::new(Vec::new()),
+        fail: false,
+    };
+    built(&w);
     let failing = Run {
         w: &w,
         said: RefCell::new(Vec::new()),

@@ -27,6 +27,8 @@ pub static POINTER: LazyLock<Regex> =
 static POINTER_WHOLE: LazyLock<Regex> =
     LazyLock::new(|| re(r"\A(?:research/questions/(\d{4})-([a-z0-9-]+?)(\.drawing)?\.html)\z"));
 static SECTION_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"\AResearch:(.*)\z"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 3] = [&POINTER, &POINTER_WHOLE, &SECTION_HEAD];
 
 /// One claim: what is decided, what backs it, and an optional account of what the code does.
 #[derive(Clone, Debug, PartialEq, Eq)]

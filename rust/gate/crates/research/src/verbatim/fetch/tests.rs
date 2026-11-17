@@ -215,7 +215,7 @@ fn serve_once(reply: &'static [u8]) -> (String, std::thread::JoinHandle<String>)
     (url, handle)
 }
 
-/// THE ONE END-TO-END TEST of the seam (FR-008): `curl` run against a loopback listener, a page and a refusal.
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the seam's, `curl` run against a loopback listener, a page and a refusal.
 #[test]
 fn curl_fetches_and_names_a_status() {
     let (url, served) = serve_once(b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: 5\r\nConnection: close\r\n\r\nhello");

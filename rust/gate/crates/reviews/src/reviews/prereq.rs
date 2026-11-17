@@ -669,9 +669,9 @@ fn read_prompt(file: &str) -> Result<String, Reply> {
         })
 }
 
-/// `review_prereq.py`'s command line.
-pub fn cli(args: &[String]) -> Reply {
-    let specs = [
+/// The command line's options.
+fn specs() -> [Spec; 11] {
+    [
         Spec::value("--verdict"),
         Spec::value("--findings-file"),
         Spec::value("--key"),
@@ -683,8 +683,12 @@ pub fn cli(args: &[String]) -> Reply {
         Spec::value("--unit"),
         Spec::value("--finding"),
         Spec::value("--reason"),
-    ];
-    let p = match parse_with(args, &specs, 1) {
+    ]
+}
+
+/// `review_prereq.py`'s command line.
+pub fn cli(args: &[String]) -> Reply {
+    let p = match parse_with(args, &specs(), 1) {
         Ok(p) => p,
         Err(why) => return usage(&why),
     };
@@ -811,6 +815,18 @@ fn verdict_cli(clone: &Path, map: &str, p: &Parsed) -> Reply {
 }
 
 fn check_cli(clone: &Path, p: &Parsed) -> Reply {
+    let mut runner = Runner::new(clone);
+    check_asking(clone, p, &mut |gen| runner.ask("is_current", &json!([gen])))
+}
+
+/// `check` with the generation cache's answers from `ask`: the bundle runner's Python in a run, a stand-in in the tests, which start the
+/// Python only where the runner itself is what they test (feature 449 T167: eight Python starts made one test 327 ms against FR-008's
+/// tenth of a second).
+fn check_asking(
+    clone: &Path,
+    p: &Parsed,
+    ask: &mut dyn FnMut(&str) -> Result<Value, String>,
+) -> Reply {
     let prompt = match read_prompt(p.text("--prompt-file", "")) {
         Ok(t) => t,
         Err(r) => return r,
@@ -820,9 +836,8 @@ fn check_cli(clone: &Path, p: &Parsed) -> Reply {
         .split_whitespace()
         .map(str::to_owned)
         .collect();
-    let mut runner = Runner::new(clone);
     let mut failed: Option<String> = None;
-    let mut current = |gen: &str| match runner.ask("is_current", &json!([gen])) {
+    let mut current = |gen: &str| match ask(gen) {
         Ok(v) => v.as_bool().unwrap_or(false),
         Err(why) => {
             failed.get_or_insert(why);

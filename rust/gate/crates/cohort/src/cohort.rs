@@ -5,11 +5,12 @@
 //! landing record rolled on exactly the engine it lands, refuses a fixed or pinned seed that regressed against main, and prints the fresh
 //! block's failure rate, never refusing on it.
 
-use std::cell::RefCell;
+use std::cell::{OnceCell, RefCell};
 use std::collections::HashMap;
 use std::fmt::Write as _;
+use std::io::Write as _;
 use std::path::Path;
-use std::process::Command;
+use std::process::{Command, Stdio};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -63,23 +64,58 @@ pub fn is_landing_engine(path: &str) -> bool {
 /// Two versions of each file whose counters decide a commit pair.
 type Versions = Vec<(Vec<u8>, Vec<u8>)>;
 
-/// A repository and what it has been asked already: `baselines` asks an engine key once per record.
+/// A repository and what it has been asked already: `baselines` asks an engine key once per record, and each reference's commit, main's
+/// name and each pair's changed files are asked of git once a run (feature 449 T167: a `known` over three records started git 45 times, 13 of
+/// them the same few references resolved again, which held the cohort's tests over FR-008's tenth of a second). A run reads the
+/// repository and changes nothing in it, so nothing it asked can move under it.
 pub struct Repo<'a> {
     pub root: &'a Path,
     pub python: &'a str,
     keys: RefCell<HashMap<String, String>>,
+    commits: RefCell<HashMap<String, String>>,
+    main: OnceCell<&'static str>,
+    changed: RefCell<HashMap<(String, String), Option<String>>>,
     counters: RefCell<HashMap<(String, String), bool>>,
     failure: RefCell<Option<String>>,
 }
 
-fn git_bytes(root: &Path, args: &[&str]) -> Vec<u8> {
-    Command::new("git")
+/// Each of `specs` (`<commit>:<path>`) as git holds it, from one `git cat-file --batch` where a `git show` each was two processes a file
+/// (feature 449 T167); a spec git cannot name is empty, as `git show`'s output was.
+fn blobs(root: &Path, specs: &[String]) -> Vec<Vec<u8>> {
+    let input = specs.join("\n") + "\n";
+    let out = Command::new("git")
         .arg("-C")
         .arg(root)
-        .args(args)
-        .output()
+        .args(["cat-file", "--batch"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .and_then(|mut child| {
+            let stdin = child.stdin.take();
+            stdin.map_or(Ok(()), |mut s| s.write_all(input.as_bytes()))?;
+            child.wait_with_output()
+        })
         .map(|o| o.stdout)
-        .unwrap_or_default()
+        .unwrap_or_default();
+    let mut rest = out.as_slice();
+    specs
+        .iter()
+        .map(|_| {
+            // `<id> <type> <size>`, the bytes and a newline; `<spec> missing` alone where git names nothing
+            let end = rest.iter().position(|b| *b == b'\n').unwrap_or(rest.len());
+            let header = String::from_utf8_lossy(&rest[..end]).into_owned();
+            rest = rest.get(end + 1..).unwrap_or_default();
+            let size = header
+                .split(' ')
+                .nth(2)
+                .and_then(|n| n.parse::<usize>().ok());
+            size.map_or_else(Vec::new, |size| {
+                let body = rest.get(..size).unwrap_or_default().to_vec();
+                rest = rest.get(size + 1..).unwrap_or_default();
+                body
+            })
+        })
+        .collect()
 }
 
 pub fn seeds_of(rec: &Value) -> &[Value] {
@@ -97,6 +133,9 @@ impl<'a> Repo<'a> {
             root,
             python,
             keys: RefCell::new(HashMap::new()),
+            commits: RefCell::new(HashMap::new()),
+            main: OnceCell::new(),
+            changed: RefCell::new(HashMap::new()),
             counters: RefCell::new(HashMap::new()),
             failure: RefCell::new(None),
         }
@@ -107,16 +146,7 @@ impl<'a> Repo<'a> {
         let Some(reference) = reference else {
             return delta::engine_key_worktree(self.root, self.python).unwrap_or_default();
         };
-        let (_, out) = git(
-            self.root,
-            &[
-                "rev-parse",
-                "-q",
-                "--verify",
-                &format!("{reference}^{{commit}}"),
-            ],
-        );
-        let sha = out.trim().to_owned();
+        let sha = self.commit_of(reference);
         if sha.is_empty() {
             return String::new();
         }
@@ -128,11 +158,96 @@ impl<'a> Repo<'a> {
         key
     }
 
+    /// The commits `references` name, each asked of git in one `git cat-file --batch-check` and kept for [`Self::commit_of`] (feature 449
+    /// T167, where a `git rev-parse` a reference was a process each): `<id> commit <size>` where the reference names a commit, else
+    /// `<reference> missing` or `ambiguous`, kept as naming none, as `git rev-parse -q --verify` answered nothing.
+    fn resolve(&self, references: &[String]) {
+        let todo: Vec<&String> = references
+            .iter()
+            .filter(|r| !r.contains('\n') && !self.commits.borrow().contains_key(*r))
+            .collect();
+        if todo.is_empty() {
+            return;
+        }
+        let input = todo
+            .iter()
+            .map(|r| format!("{r}^{{commit}}"))
+            .collect::<Vec<_>>()
+            .join("\n")
+            + "\n";
+        let out = Command::new("git")
+            .arg("-C")
+            .arg(self.root)
+            .args(["cat-file", "--batch-check"])
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .and_then(|mut child| {
+                let stdin = child.stdin.take();
+                stdin.map_or(Ok(()), |mut s| s.write_all(input.as_bytes()))?;
+                child.wait_with_output()
+            })
+            .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
+            .unwrap_or_default();
+        let mut lines = out.lines();
+        for r in todo {
+            let line = lines.next().unwrap_or_default();
+            let mut words = line.split(' ');
+            let (id, kind) = (words.next().unwrap_or_default(), words.next());
+            let sha = if kind == Some("commit") { id } else { "" };
+            self.commits.borrow_mut().insert(r.clone(), sha.to_owned());
+        }
+    }
+
+    /// The commit `reference` names, empty where it names none.
+    fn commit_of(&self, reference: &str) -> String {
+        if let Some(sha) = self.commits.borrow().get(reference) {
+            return sha.clone();
+        }
+        let (_, out) = git(
+            self.root,
+            &[
+                "rev-parse",
+                "-q",
+                "--verify",
+                &format!("{reference}^{{commit}}"),
+            ],
+        );
+        let sha = out.trim().to_owned();
+        self.commits
+            .borrow_mut()
+            .insert(reference.to_owned(), sha.clone());
+        sha
+    }
+
+    /// `git diff --name-status --no-renames a b`'s rows, `None` where git cannot compare the two: asked once a pair, and read both for
+    /// the same bytes on the engine paths and for the counter-only pairs, where a `git diff --quiet` and this were two processes a pair.
+    fn changed(&self, a: &str, b: &str) -> Option<String> {
+        let pair = (a.to_owned(), b.to_owned());
+        if let Some(rows) = self.changed.borrow().get(&pair) {
+            return rows.clone();
+        }
+        let (ok, out) = git(self.root, &["diff", "--name-status", "--no-renames", a, b]);
+        let rows = ok.then_some(out);
+        self.changed.borrow_mut().insert(pair, rows.clone());
+        rows
+    }
+
     /// The same bytes on the engine paths, or the same engine key.
     fn same_by_key(&self, a: &str, b: &str) -> bool {
-        let mut args = vec!["diff", "--quiet", a, b, "--"];
-        args.extend(ENGINE_PATHS);
-        if git(self.root, &args).0 {
+        // no changed file at or under an engine path: `git diff --quiet a b -- l7r pool`'s answer (a name git quotes opens with `"`)
+        let same = self.changed(a, b).is_some_and(|rows| {
+            !rows
+                .lines()
+                .filter_map(|l| l.split_once('\t'))
+                .any(|(_, p)| {
+                    let p = p.strip_prefix('"').unwrap_or(p);
+                    ENGINE_PATHS
+                        .iter()
+                        .any(|e| p == *e || p.starts_with(&format!("{e}/")))
+                })
+        });
+        if same {
             return true;
         }
         let first = self.engine_key(Some(a));
@@ -150,11 +265,13 @@ impl<'a> Repo<'a> {
     }
 
     fn main_ref(&self) -> &'static str {
-        if git(self.root, &["rev-parse", "-q", "--verify", "origin/main"]).0 {
-            "origin/main"
-        } else {
-            "main"
-        }
+        self.main.get_or_init(|| {
+            if git(self.root, &["rev-parse", "-q", "--verify", "origin/main"]).0 {
+                "origin/main"
+            } else {
+                "main"
+            }
+        })
     }
 
     /// Each pair's "the same but for counter blocks", from one run of `codeid.py`, which reads the AST until phase 4
@@ -182,44 +299,75 @@ impl<'a> Repo<'a> {
         (answers.len() == pairs.len()).then_some(answers)
     }
 
-    /// `None`: not counter-only. Otherwise the `.py` versions that decide it (none: every differing engine file's bytes are equal).
-    fn counter_pairs(&self, a: &str, b: &str) -> Option<Versions> {
-        let (ok, out) = git(self.root, &["diff", "--name-status", "--no-renames", a, b]);
+    /// The engine files `a` and `b` differ in, where each is a modification; `None` where one is not, where none differs, or where git
+    /// cannot compare the two: not counter-only.
+    fn counter_rows(&self, a: &str, b: &str) -> Option<Vec<String>> {
+        let out = self.changed(a, b)?;
         let rows: Vec<(&str, &str)> = out
             .lines()
             .filter_map(|l| l.split_once('\t'))
             .filter(|(_, p)| ENGINE.is_match(p).unwrap_or(false))
             .collect();
-        if !ok || rows.is_empty() || rows.iter().any(|(status, _)| *status != "M") {
+        if rows.is_empty() || rows.iter().any(|(status, _)| *status != "M") {
             return None;
         }
-        let mut pairs = Vec::new();
-        for (_, path) in &rows {
-            let old = git_bytes(self.root, &["show", &format!("{a}:{path}")]);
-            let new = git_bytes(self.root, &["show", &format!("{b}:{path}")]);
-            if old != new && !crate::checks::has_ext(path, "py") {
-                return None;
-            }
-            pairs.extend((old != new).then_some((old, new)));
-        }
-        Some(pairs)
+        Some(rows.iter().map(|(_, p)| (*p).to_owned()).collect())
     }
 
-    /// Answer every commit pair a run will ask, in one process.
+    /// Answer every commit pair a run will ask, in one process; every version of every file they ask is read from one `git cat-file`
+    /// (feature 449 T167, where a `git show` a version was two processes a file).
     pub fn prime(&self, asks: &[(String, String)]) {
-        let mut todo: Vec<((String, String), Versions)> = Vec::new();
+        let mut open: Vec<((String, String), Vec<String>)> = Vec::new();
         for ask in asks {
-            if self.counters.borrow().contains_key(ask) || todo.iter().any(|(t, _)| t == ask) {
+            if self.counters.borrow().contains_key(ask) || open.iter().any(|(t, _)| t == ask) {
                 continue;
             }
-            match self.counter_pairs(&ask.0, &ask.1) {
+            match self.counter_rows(&ask.0, &ask.1) {
                 None => {
                     self.counters.borrow_mut().insert(ask.clone(), false);
                 }
-                Some(pairs) if pairs.is_empty() => {
-                    self.counters.borrow_mut().insert(ask.clone(), true);
+                Some(paths) => open.push((ask.clone(), paths)),
+            }
+        }
+        let specs: Vec<String> = open
+            .iter()
+            .flat_map(|((a, b), paths)| {
+                paths
+                    .iter()
+                    .flat_map(move |p| [format!("{a}:{p}"), format!("{b}:{p}")])
+            })
+            .collect();
+        let mut read = if specs.is_empty() {
+            Vec::new()
+        } else {
+            blobs(self.root, &specs)
+        }
+        .into_iter();
+        // the `.py` versions that decide each pair: none where every differing file's bytes are equal; not counter-only where a file
+        // that is not Python differs
+        let mut todo: Vec<((String, String), Versions)> = Vec::new();
+        for (ask, paths) in open {
+            let mut pairs = Some(Vec::new());
+            for path in &paths {
+                let (old, new) = (
+                    read.next().unwrap_or_default(),
+                    read.next().unwrap_or_default(),
+                );
+                if old != new && !crate::checks::has_ext(path, "py") {
+                    pairs = None;
                 }
-                Some(pairs) => todo.push((ask.clone(), pairs)),
+                if let Some(p) = pairs.as_mut() {
+                    p.extend((old != new).then_some((old, new)));
+                }
+            }
+            match pairs {
+                None => {
+                    self.counters.borrow_mut().insert(ask, false);
+                }
+                Some(p) if p.is_empty() => {
+                    self.counters.borrow_mut().insert(ask, true);
+                }
+                Some(p) => todo.push((ask, p)),
             }
         }
         if todo.is_empty() {
@@ -249,6 +397,9 @@ impl<'a> Repo<'a> {
             .iter()
             .filter(|r| truthy(&r["commit"]) && !truthy(&r["engine_diff"]))
             .collect();
+        let mut named: Vec<String> = usable.iter().map(|r| text(r, "commit")).collect();
+        named.extend([main.to_owned(), "HEAD".to_owned()]);
+        self.resolve(&named);
         let mut seen = std::collections::BTreeSet::new();
         let mut asks = Vec::new();
         for r in usable {
@@ -281,16 +432,7 @@ impl<'a> Repo<'a> {
     fn on_engine(&self, rec: &Value) -> bool {
         let commit = text(rec, "commit");
         rec.get("commit").is_some_and(truthy)
-            && git(
-                self.root,
-                &[
-                    "rev-parse",
-                    "-q",
-                    "--verify",
-                    &format!("{commit}^{{commit}}"),
-                ],
-            )
-            .0
+            && !self.commit_of(&commit).is_empty()
             && self.same_key(&commit, "HEAD")
     }
 }

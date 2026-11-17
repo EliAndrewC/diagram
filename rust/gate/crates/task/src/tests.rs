@@ -42,11 +42,31 @@ pub(crate) fn repo(tag: &str) -> TempDir {
     quiet_census();
     let dir = scratch(&format!("task-{tag}"));
     let root = dir.join("repo");
-    std::fs::create_dir_all(&root).unwrap();
-    git(&root, &["init", "-q", "-b", "main"]);
-    git(&root, &["config", "user.email", "t@t"]);
-    git(&root, &["config", "user.name", "t"]);
-    git(&root, &["config", "commit.gpgsign", "false"]);
+    let origin = dir.join("origin.git");
+    // the two repositories `git init -b main` and `git init --bare` make, with the settings and the remote `git config` and `git remote
+    // add` write, written as git writes them; the push below sets `origin/main` as the fetch did: eight of the fixture's eleven processes
+    // saved, about 25 ms of every test that builds it, and `maintenance.auto` off, the process each commit started (feature 449 T167,
+    // each test under FR-008's tenth of a second)
+    put(&root, ".git/HEAD", "ref: refs/heads/main\n");
+    put(
+        &root,
+        ".git/config",
+        &format!(
+            "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n[user]\n\temail = t@t\n\tname = t\n\
+             [commit]\n\tgpgsign = false\n[maintenance]\n\tauto = false\n[remote \"origin\"]\n\turl = {}\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n",
+            origin.display()
+        ),
+    );
+    put(&origin, "HEAD", "ref: refs/heads/main\n");
+    put(
+        &origin,
+        "config",
+        "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = true\n",
+    );
+    for sub in ["objects", "refs/heads", "refs/tags"] {
+        std::fs::create_dir_all(root.join(".git").join(sub)).unwrap();
+        std::fs::create_dir_all(origin.join(sub)).unwrap();
+    }
     put(&root, "specs/9001-x/spec.md", SPEC);
     put(&root, "specs/9001-x/tasks.md", TASKS);
     put(
@@ -68,14 +88,7 @@ pub(crate) fn repo(tag: &str) -> TempDir {
     );
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "base"]);
-    let origin = dir.join("origin.git");
-    git(&dir, &["init", "-q", "--bare", &origin.to_string_lossy()]);
-    git(
-        &root,
-        &["remote", "add", "origin", &origin.to_string_lossy()],
-    );
     git(&root, &["push", "-q", "origin", "main"]);
-    git(&root, &["fetch", "-q", "origin"]);
     dir
 }
 

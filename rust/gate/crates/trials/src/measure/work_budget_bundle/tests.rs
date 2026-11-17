@@ -516,34 +516,58 @@ fn an_audit_refuses_a_stale_report_and_a_missing_run() {
 
 #[test]
 fn an_audit_fails_where_the_python_raised() {
-    let d = scratch("wbb-raise");
-    let newest = "dev/work-budget/20261109T000000Z-z.json";
-    for (rel, text, code) in [
-        (newest, "{", 1),
-        (newest, "{\"rows\": 5, \"summary\": {\"stages\": {}}}", 1),
-        (newest, "{\"rows\": {}, \"summary\": {\"stages\": {}}}", 0),
-        (newest, "{\"rows\": [{\"households\": 1, \"stages\": {\"hem\": {}}}], \"summary\": {\"stages\": {}}}", 1),
-        (newest, "{\"rows\": [{\"seed\": 1, \"households\": 1, \"stages\": {\"hem\": [1]}}], \"summary\": {\"stages\": {}}}", 1),
-        (newest, "{\"rows\": [{\"seed\": 1, \"households\": 1, \"stages\": [\"hem\"]}], \"summary\": {\"stages\": {}}}", 1),
-        (newest, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"seed\": 9, \"ops\": [\"call@make\", \"plain\"]}}}], \"summary\": {\"stages\": {\"hem\": null}}}", 0),
-        (newest, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"ops\": [5]}}}], \"summary\": {\"stages\": {}}}", 1),
-        (newest, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"ops\": 5}}}], \"summary\": {\"stages\": {}}}", 1),
-        (newest, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"ops\": 0}}}], \"summary\": {\"stages\": {}}}", 0),
-        (newest, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"ops\": \"\"}}}], \"summary\": {\"stages\": {}}}", 0),
-        (newest, "{\"rows\": []}", 1),
-        ("dev/work-budget.json", "{}", 1),
-        ("dev/work-budget.json", "{", 1),
-        ("rust/phases/src/z.rs", "\u{ff}", 0),
-        ("l7r/diagram/labels/bad.py", "COUNTER = \"write@field_ink\"\ndef (:\n", 1),
-        ("l7r/diagram/settlement/bad.py", "def (:\n", 1),
-        ("rust/phases/src/sink/stage.rs", "pub(crate) fn stage_sink() { crate::field::x(); crate::course::y(); }\n", 0),
-    ] {
+    audits_answer(
+        "wbb-raise",
+        &[
+            (RECORD, "{", 1),
+            (RECORD, "{\"rows\": 5, \"summary\": {\"stages\": {}}}", 1),
+            (RECORD, "{\"rows\": {}, \"summary\": {\"stages\": {}}}", 0),
+            (RECORD, "{\"rows\": [{\"households\": 1, \"stages\": {\"hem\": {}}}], \"summary\": {\"stages\": {}}}", 1),
+            (RECORD, "{\"rows\": [{\"seed\": 1, \"households\": 1, \"stages\": {\"hem\": [1]}}], \"summary\": {\"stages\": {}}}", 1),
+            (RECORD, "{\"rows\": [{\"seed\": 1, \"households\": 1, \"stages\": [\"hem\"]}], \"summary\": {\"stages\": {}}}", 1),
+            (RECORD, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"seed\": 9, \"ops\": [\"call@make\", \"plain\"]}}}], \"summary\": {\"stages\": {\"hem\": null}}}", 0),
+            (RECORD, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"ops\": [5]}}}], \"summary\": {\"stages\": {}}}", 1),
+            (RECORD, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"ops\": 5}}}], \"summary\": {\"stages\": {}}}", 1),
+        ],
+    );
+}
+
+/// The newest work-budget record, each malformed one of the tables below written there.
+const RECORD: &str = "dev/work-budget/20261109T000000Z-z.json";
+
+/// Each (file, text, the audit's exit) on a fresh tree: split in three from one test, the table in two and what follows its own
+/// (feature 449 T167, FR-008's tenth of a second: its 23 audits together took about 90 ms, near the bar).
+fn audits_answer(tag: &str, table: &[(&str, &str, i32)]) {
+    let d = scratch(tag);
+    for (rel, text, code) in table {
         let _ = std::fs::remove_dir_all(&*d);
         tree(&d);
         put(&d, rel, text.as_bytes());
-        assert_eq!(run(&d, &["audit", "hem"]).code, code, "{rel}: {text}");
+        assert_eq!(run(&d, &["audit", "hem"]).code, *code, "{rel}: {text}");
     }
-    let _ = std::fs::remove_dir_all(&*d);
+}
+
+#[test]
+fn an_audit_fails_where_the_record_or_a_source_cannot_be_read() {
+    audits_answer(
+        "wbb-raise-sources",
+        &[
+            (RECORD, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"ops\": 0}}}], \"summary\": {\"stages\": {}}}", 0),
+            (RECORD, "{\"rows\": [{\"seed\": 1, \"households\": 2, \"stages\": {\"hem\": {\"ops\": \"\"}}}], \"summary\": {\"stages\": {}}}", 0),
+            (RECORD, "{\"rows\": []}", 1),
+            ("dev/work-budget.json", "{}", 1),
+            ("dev/work-budget.json", "{", 1),
+            ("rust/phases/src/z.rs", "\u{ff}", 0),
+            ("l7r/diagram/labels/bad.py", "COUNTER = \"write@field_ink\"\ndef (:\n", 1),
+            ("l7r/diagram/settlement/bad.py", "def (:\n", 1),
+            ("rust/phases/src/sink/stage.rs", "pub(crate) fn stage_sink() { crate::field::x(); crate::course::y(); }\n", 0),
+        ],
+    );
+}
+
+#[test]
+fn an_audit_fails_on_a_source_that_is_no_utf8_or_a_budget_or_rubric_it_cannot_read() {
+    let d = scratch("wbb-raise-rest");
     tree(&d);
     put(&d, "rust/phases/src/z.rs", b"\xff");
     // a Rust source that is no UTF-8

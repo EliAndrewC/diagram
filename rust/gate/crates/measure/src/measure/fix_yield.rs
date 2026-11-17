@@ -23,7 +23,7 @@ use serde_json::{json, Map, Value};
 use super::events::{git, or_s, py_str, re, truthy, Raised};
 use super::reply;
 use super::stepback_bundle::lines;
-use super::tool_yield::{collect, tools_of, Tally, Tools};
+use super::tool_yield::{collect_keeping, Inventory, Tally, Tools};
 use super::turn_time::ts_of;
 use crate::Reply;
 
@@ -72,6 +72,18 @@ pub fn fixes(rows: &[Row]) -> Vec<Row> {
     out
 }
 
+// The notes' fixed patterns, compiled once a process (feature 449 T167; why in `tool_yield.rs` beside `HOOK_FILE`).
+static NOTED_SHA: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| re(r"^\s*([0-9a-f]{7,40})\b"));
+static MAKE_WORD: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| re(r"\bmake ([a-z][\w-]+)"));
+static NAMED: std::sync::LazyLock<[fancy_regex::Regex; 2]> = std::sync::LazyLock::new(|| {
+    [
+        re(r"\b([\w-]+)\.(?:py|sh)\b"),
+        re(r"\b([a-z]\w+)\.[a-z_]\w*\(?"),
+    ]
+});
+
 /// The commits that may have made the fix, best first: the hash its settling note opens with; the commits up to its settling that
 /// name its trigger exactly (`@2` is not `@29`), the clone's own before a landing's; the commits up to then that touched the test its
 /// settling names.
@@ -82,7 +94,7 @@ pub fn fixes(rows: &[Row]) -> Vec<Row> {
 pub fn candidates(root: &Path, fix: &Row) -> Result<Vec<String>, Raised> {
     let mut out: Vec<String> = Vec::new();
     let note = or_s(fix, "note");
-    if let Some(c) = re(r"^\s*([0-9a-f]{7,40})\b").captures(&note).ok().flatten() {
+    if let Some(c) = NOTED_SHA.captures(&note).ok().flatten() {
         // `git cat-file -e <hash>^{commit}`'s question, asked as `rev-parse --verify`, which answers the same and prints the commit
         if !git(
             root,
@@ -154,8 +166,29 @@ pub fn candidates(root: &Path, fix: &Row) -> Result<Vec<String>, Raised> {
 ///
 /// # Errors
 ///
-/// As [`candidates`] and [`tools_of`].
+/// As [`candidates`] and [`super::tool_yield::tools_of`].
 pub fn tools_of_fix(root: &Path, fix: &Row) -> Result<BTreeSet<(String, String)>, Raised> {
+    tools_of_fix_in(root, fix, &mut (None, None))
+}
+
+/// The inventory in `slot`, read there first if it is empty, from the refusing checks `slot` holds where it holds them.
+fn inventory<'a>(
+    root: &Path,
+    slot: &'a mut (Option<Inventory>, Option<BTreeSet<PathBuf>>),
+) -> Result<&'a Inventory, Raised> {
+    let inv = match slot.0.take() {
+        Some(inv) => inv,
+        None => Inventory::read_with(root, slot.1.as_ref())?,
+    };
+    Ok(slot.0.insert(inv))
+}
+
+/// [`tools_of_fix`] with the tree's inventory read at most once across the calls that share `slot` (feature 449 T167).
+fn tools_of_fix_in(
+    root: &Path,
+    fix: &Row,
+    slot: &mut (Option<Inventory>, Option<BTreeSet<PathBuf>>),
+) -> Result<BTreeSet<(String, String)>, Raised> {
     for sha in candidates(root, fix)? {
         let files: Vec<String> = split(&git(root, &["show", "--name-only", "--format=", &sha])?)
             .into_iter()
@@ -166,12 +199,12 @@ pub fn tools_of_fix(root: &Path, fix: &Row) -> Result<BTreeSet<(String, String)>
             .any(|f| !RECORDS.iter().any(|r| f.starts_with(r)))
         {
             let diff = git(root, &["show", "-U0", "--format=", &sha, "--", "Makefile"])?;
-            return tools_of(root, &files, &diff);
+            return Ok(inventory(root, slot)?.tools(&files, &diff));
         }
     }
     let note = or_s(fix, "note");
     let mut made = BTreeSet::new();
-    let words: Vec<String> = re(r"\bmake ([a-z][\w-]+)")
+    let words: Vec<String> = MAKE_WORD
         .captures_iter(&note)
         .flatten()
         .map(|c| c[1].to_owned())
@@ -181,7 +214,7 @@ pub fn tools_of_fix(root: &Path, fix: &Row) -> Result<BTreeSet<(String, String)>
             made.insert(("target".to_owned(), t));
         }
     }
-    let mut out = tools_of(root, &named_files(root, &note), "")?;
+    let mut out = inventory(root, slot)?.tools(&named_files(root, &note), "");
     out.extend(made);
     Ok(out)
 }
@@ -200,9 +233,9 @@ fn walk(dir: &Path, out: &mut Vec<PathBuf>) {
 #[must_use]
 pub fn named_files(root: &Path, note: &str) -> Vec<String> {
     let mut words = BTreeSet::new();
-    for pattern in [r"\b([\w-]+)\.(?:py|sh)\b", r"\b([a-z]\w+)\.[a-z_]\w*\(?"] {
+    for pattern in NAMED.iter() {
         words.extend(
-            re(pattern)
+            pattern
                 .captures_iter(note)
                 .flatten()
                 .map(|c| c[1].to_owned()),
@@ -364,11 +397,11 @@ pub fn report(
     if fx.is_empty() {
         return Ok("(no tooling fix ruled)\n".to_owned());
     }
-    let every: Tools = collect(root, guard_log)?;
-    let mut rows = Vec::new();
+    let (every, checks): (Tools, _) = collect_keeping(root, guard_log)?;
+    let (mut rows, mut inv) = (Vec::new(), (None, Some(checks)));
     for f in &fx {
         let keys = if f.get("status").and_then(Value::as_str) == Some("done") {
-            tools_of_fix(root, f)?
+            tools_of_fix_in(root, f, &mut inv)?
         } else {
             BTreeSet::new()
         };

@@ -648,26 +648,34 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T166 to T165 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 <!-- plan-archive: T166 to T166 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 
-### T167 (<why: the finding or measurement that files it>)
+### T167 (FR-008's remaining debt after T160, and the ruling on the tests that read the live tree)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the tests still over FR-008's tenth of a second brought under it by the methods T164 and T160 used - shared fixtures built once, fewer git and process calls, a test that does two things split with its name kept on the first part, an injected clock or a poll in place of a sleep - every assertion kept; each tool's one test that reads the live tree declared its end-to-end test by name, as the round arbiter ruled.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (FR-008; `ask:449-T167-realtree`; the GM's performance rule, docs/performance-checklist.md; constitution XIV):
+   - The ruling: a test of a tool's real behavior over the whole repository is that tool's one end-to-end test (the spec's edge case and Story 3), a tool being the check or verb, not the crate. Declared, each doc comment opening with the one marker `FR-008's one end-to-end test (ask:449-T167-realtree):`: tree's stamp self-test, task's research boxes, and checks' research pointers, tooling detector and question size, the ruling's five; checks' file-scale test, which reads the live tree as they do; land's `replay_owing` test, which drives the real `python3` that tool runs, its other tests under the bar; and the markers browser, rustc, research's fetch and ci already carried, made the same words. Eleven in all, one a tool (observed 2026-11-17, method: `grep` of the marker over `rust/`): `rust/browser/src/crop/tests.rs`, `rustc/tests.rs`, `research/src/verbatim/fetch/tests.rs`, `ci/features/tests.rs`, `land/src/replay_owing/tests.rs`, `tree/src/stamp/tests.rs`, `task/src/research_boxes.rs`, and `checks/src/checks/` `research_pointers`, `rust_tooling`, `question_size` and `file_scale`.
+   - The guard's `the_r6_corpus_replayed` is an ordinary test, not an end-to-end one: it replays a recorded corpus, not the live tree, and other guard tests drive real `bash` too. Its 239 commands now replay eight at a time through real `bash`, 389 to 66 ms (observed 2026-11-17, method: each test alone, best of three, a fresh TMPDIR, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t167/ws-final.rows`).
+   - The count: of 2,400 tests 152 ran over the bar before (observed 2026-11-17, method: each test alone, best of three, a fresh TMPDIR, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t167/ws-final.rows`). Of 2,579 after the splits, the workspace pass left three ordinary tests at 100 ms or more - two claims tests and author's `claim::each_refusal_writes_nothing` (observed 2026-11-17, method: each test alone, best of three, a fresh TMPDIR, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t167/ws-final.rows`). The two claims tests were then brought under it, every claims test under the bar, the highest 94 ms (observed 2026-11-17, method: the same, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t167/claims-final.rows`). Author's `each_refusal_writes_nothing`, which this task did not touch, sits at the line, 99 ms in one pass and 102 ms in the next, load noise (observed 2026-11-17, method: the same, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t167/ws-after.rows` and `ws-final.rows`). The 23 `checks::documents` tests and two rustc tests record no time in the pass: the harness ran them without `CARGO_MANIFEST_DIR`, which they read, and timed with it set the 23 took 2 to 23 ms (observed 2026-11-17, method: the same with the variable set, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t167/ws-final.rows.fail`); none was among the slow tests before. The declared tests run up to 724 ms (observed 2026-11-17, method: each test alone, best of three, a fresh TMPDIR, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t167/ws-final.rows`).
+   - The claims tests whose setup ran the bundle and record commands through the Python runner write what those commands leave, and three new tests run the real commands on each fixture and assert the same files, so a change in the recording fails them rather than leaving the others on stale state.
+   - Where an assertion stayed but its subject moved, the test still asserts the production value apart: recycling tested every third page with the 25 asserted separately, a test build's shorter timeouts (bundle's slow page, diffrun's one-second wait, browser's crop on the fake Chromium), stand-ins for real programs with one real run kept in each crate.
+   - Production changes for speed, each output the same: the checks runner asks the git directory once a run and lists modified and new files in one call, `make claims-carry` reads its target once, the guard's sweep start reports whether it launched in place of a sleep (`0.3 s`, the test's old wait), the landing fetches once.
+   - A race fixed (constitution XIV): the scratch-sweep tests failed about once in 50 runs six at a time, a forked child briefly holding a test's open files; they now wait until `/proc` shows no other holder, none failing in 1,920 runs (observed 2026-11-17, method: the two tests six copies at once, the host's load up to 54).
+   - Not built: a check refusing a new test over the bar, which the GM's performance rule in `docs/performance-checklist.md` rules out: time is the goal of a performance change and never a gate.
+   - The checks: `make static` clean on 31 crates, `make rust-test` clean, `make hooks-test HOOKS_ALL=1` green on 54 suites (observed 2026-11-17, method: those commands, one after another after the last edit).
 
 ### T167 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every test but a tool's one end-to-end test runs under a tenth of a second.
+2. **The constraints.** FR-008; `ask:449-T167-realtree`; the performance rule.
+3. **Where each comes from.** R: the ruling; O: the workspace measured before and after.
+4. **Do they describe the world here?** Measured over the whole workspace, measured 2026-11-17 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t167/ws-final.rows`).
+5. **The order.** After T160.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The workspace re-measured with no ordinary test over the bar.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes, of the tests: (1) the time went to setup - git and process calls, real programs, sleeps - measured per test; (2) each change removes work or waits on a condition in place of a clock; (3) the saving is every ordinary test under the bar; (4) the declared tests grow with the repository, held by SC-003's suite total; (5) before and after by T99's method with the load stated; (6) no map moved.
 

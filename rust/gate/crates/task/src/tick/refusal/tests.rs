@@ -121,7 +121,6 @@ fn tooling(root: &std::path::Path, rows: &[serde_json::Value]) {
 fn a_landed_note_over_work_off_main_refuses() {
     let dir = repo("landed");
     let root = root_of(&dir);
-    let d = root.join("specs/9001-x");
     let landed = |note: &str| landed_refusal(&root, "9001-x", "T01", note).unwrap();
     assert_eq!(landed("verified"), "");
     // no run: work committed off main refuses, the feature's records and the run records do not
@@ -137,6 +136,23 @@ fn a_landed_note_over_work_off_main_refuses() {
     assert!(landed("landed").starts_with(
         "the NOTE says landed, but scripts/a.py is committed here and not on origin/main"
     ));
+}
+
+/// The fixture with `scripts/a.py` changed and committed here, not on `origin/main`: where the landed note's other tests start (feature
+/// 449 T167: each `landed` reading fetches `origin`, and the one test that read them all took over FR-008's tenth of a second).
+fn worked(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, std::path::PathBuf) {
+    let dir = repo(tag);
+    let root = root_of(&dir);
+    put(&root, "scripts/a.py", "x = 2\n");
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "work"]);
+    (dir, root)
+}
+
+#[test]
+fn a_failed_tooling_run_s_files_off_main_refuse_and_a_later_run_lands_them() {
+    let (_dir, root) = worked("landed-runs");
+    let landed = |note: &str| landed_refusal(&root, "9001-x", "T01", note).unwrap();
     // the last run failed: its files off main refuse; on main, it passes
     let row = |task: &str, outcome: &str, files: serde_json::Value| json!({"feature": "9001-x", "task": task, "outcome": outcome, "log": "/l", "files": files});
     tooling(&root, &[row("T01", "failed", json!(["scripts/a.py"]))]);
@@ -164,6 +180,12 @@ fn a_landed_note_over_work_off_main_refuses() {
         ],
     );
     assert!(landed("landed").contains("differs from origin/main"));
+}
+
+#[test]
+fn tooling_rows_python_could_not_read_raise_and_the_whole_refusal_asks_the_note_last() {
+    let (dir, root) = worked("landed-rows");
+    let row = |task: &str, outcome: &str, files: serde_json::Value| json!({"feature": "9001-x", "task": task, "outcome": outcome, "log": "/l", "files": files});
     // rows Python could not read raise
     tooling(&root, &[json!([1])]);
     assert!(landed_refusal(&root, "9001-x", "T01", "landed").is_err());
@@ -174,7 +196,6 @@ fn a_landed_note_over_work_off_main_refuses() {
     std::fs::write(root.join(".git/land-tooling.jsonl"), [0xff]).unwrap();
     assert!(landed_refusal(&root, "9001-x", "T01", "landed").is_err());
     // outside a repository: no runs, and nothing ahead to read
-    let _ = d;
     assert_eq!(landed_refusal(&dir, "9001-x", "T01", "landed").unwrap(), "");
     // the whole refusal asks it last, and only when nothing else refused
     std::fs::remove_file(root.join(".git/land-tooling.jsonl")).unwrap();

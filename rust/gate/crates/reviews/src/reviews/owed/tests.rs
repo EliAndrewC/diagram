@@ -329,13 +329,23 @@ fn undeclared_drawing_code_is_refused() {
     put(&r, "pool/hamlets/m/m.svg", "<svg/>\n");
     let refusal = check_declared(&r).unwrap();
     assert!(refusal.starts_with("drawing or placement code moved (l7r/diagram/t0.py, l7r/diagram/t1.py, l7r/diagram/t2.py, l7r/diagram/t3.py, l7r/diagram/t4.py and 3 more)"));
+}
+
+/// Committed drawing code is refused until the feature declares its occasion (split from the test above, feature 449 T167: its three
+/// repositories took 131 ms against FR-008's tenth of a second).
+#[test]
+fn committed_drawing_code_is_refused_until_an_occasion_is_declared() {
     let r2 = repo("code2");
     put(&r2, "l7r/diagram/x.py", "x\n");
     commit(&r2, "code");
     assert!(check_declared(&r2).unwrap().contains("(l7r/diagram/x.py)"));
     feature(&r2, "900-x", "- [ ] T1\n\n## Occasions\n\n- none: a test\n");
     assert_eq!(check_declared(&r2), None);
-    // code the delta only moved is no change
+}
+
+/// Code the delta only moved is no change (split as above).
+#[test]
+fn drawing_code_only_moved_is_no_change() {
     let r3 = repo("code3");
     put(&r3, "l7r/diagram/a.py", "x = 1\n");
     commit(&r3, "a");
@@ -366,6 +376,15 @@ fn the_command_line_reads_as_argparse_did() {
         "settlement-review--m\nglyph-check--well--m\n"
     );
     assert!(!out(&["--why", "--landing"]).stdout.contains("not yet due"));
+}
+
+/// `--check-declared` through the command line (split from the test above, feature 449 T167: its seventeen answers, each reading what
+/// is owed through eight git calls, took 144 ms against FR-008's tenth of a second).
+#[test]
+fn the_command_line_refuses_undeclared_code_until_an_occasion_is_declared() {
+    let r = repo("cli-declared");
+    map(&r, "pool", "m", &["well"]);
+    let out = |extra: &[&str]| cli_in(&r, extra);
     let refused = out(&["--check-declared"]);
     assert_eq!(
         (
@@ -378,7 +397,14 @@ fn the_command_line_reads_as_argparse_did() {
     );
     feature(&r, "900-x", "- [ ] T1\n\n## Occasions\n\n- none: a test\n");
     assert_eq!(out(&["--check-declared"]).code, 0);
-    std::fs::remove_file(r.join(".specify/feature.json")).unwrap();
+}
+
+/// The command line's refusals, its help, the landing mark and the glyph gate (split as above).
+#[test]
+fn the_command_line_refuses_what_argparse_refused_and_sets_the_marks() {
+    let r = repo("cli-marks");
+    map(&r, "pool", "m", &["well"]);
+    let out = |extra: &[&str]| cli_in(&r, extra);
     assert_eq!(out(&["--why", "--units"]).code, 2);
     assert_eq!(out(&["--landing-mark", "maybe"]).code, 2);
     assert_eq!(out(&["--glyph-gate"]).code, 2);

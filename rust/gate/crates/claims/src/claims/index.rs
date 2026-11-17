@@ -347,6 +347,8 @@ pub fn judged(due: &[(String, String)]) -> Vec<String> {
 
 static RESEARCH_BLOCK: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?ms)^[ \t]*(?:"""|''')?Research:.*?(?="""|'''|^[ \t]*$)"#));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 1] = [&RESEARCH_BLOCK];
 
 /// A file's text split on `\n`; None where it cannot be opened (Python's `OSError`), the failure where it is not UTF-8.
 fn lines_of(root: &Path, path: &str) -> Result<Option<Vec<String>>, Fail> {

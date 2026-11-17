@@ -356,6 +356,8 @@ fn with_codeid(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     dir
 }
 
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the live tree's own `scripts/gates/codeid.py`, run by the real `python3`
+/// through the stamp's self-test, passing on it and failing on a broken one.
 #[test]
 fn the_self_test_passes_on_the_real_id_and_fails_on_a_broken_one() {
     assert_eq!(selftest(&with_codeid("self-real"), "python3"), Ok(()));

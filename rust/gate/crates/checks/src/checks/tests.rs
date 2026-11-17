@@ -66,9 +66,17 @@ fn each_check_answers_by_name_and_its_run_is_recorded() {
     assert_eq!(cli(&[], &dir).code, 2);
     assert_eq!(cli(&owned(&["needs", "duplicate-defs"]), &dir).code, 0);
     assert_eq!(cli(&owned(&["needs"]), &dir).code, 0);
+    for name in ["file-scale", "stale-dirs"] {
+        assert_eq!(cli(&owned(&[name, "--selftest"]), &dir).code, 0, "{name}");
+    }
+}
+
+/// The self-tests that read a record, a registry or a delta of their own, by name (split from the test above, feature 449 T167:
+/// together they took 104 ms against FR-008's tenth of a second).
+#[test]
+fn the_record_registry_and_delta_checks_answer_their_self_tests_by_name() {
+    let dir = repo("cli-selftests");
     for name in [
-        "file-scale",
-        "stale-dirs",
         "research-pointers",
         "house-style-delta",
         // the registry's check (feature 449 T149): a tree with no engine runs its form half
@@ -76,6 +84,14 @@ fn each_check_answers_by_name_and_its_run_is_recorded() {
     ] {
         assert_eq!(cli(&owned(&[name, "--selftest"]), &dir).code, 0, "{name}");
     }
+}
+
+/// The remaining checks by name, and each run recorded (split from the test above, feature 449 T167: the two halves together took
+/// 104 ms against FR-008's tenth of a second); `file-scale` is asked here again so its run is recorded beside `rust-tooling`'s.
+#[test]
+fn a_tree_whose_registry_does_not_load_is_refused_and_each_run_is_recorded() {
+    let dir = repo("cli-recorded");
+    assert_eq!(cli(&owned(&["file-scale", "--selftest"]), &dir).code, 0);
     // a tree whose registry does not load: refused, and no run recorded, as the Python raised before it recorded one (feature 449 T149)
     let engine = repo("cli-engine");
     std::fs::create_dir_all(engine.join("l7r")).unwrap();

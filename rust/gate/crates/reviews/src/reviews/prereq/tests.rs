@@ -253,13 +253,33 @@ fn the_paired_gate_is_green_running_or_red() {
     assert_eq!(run_in(&r, &["gate-state"]).stdout, "green\n");
 }
 
-#[test]
-fn a_check_names_every_unmet_prerequisite() {
-    let r = repo("check");
+/// `check` as the command line runs it, the generation cache's answers the fixture's `bundle_door.py` would give - current unless
+/// `<gen>.stale` exists - asked in process: each Python start cost a test about 30 ms, eight of
+/// them 327 ms against FR-008's tenth of a second (feature 449 T167). The runner itself is asked where it is what a test tests
+/// (`the_runner_failing_or_the_figure_pattern_failing_fails_the_check`).
+fn check_in(root: &Path, a: &[&str]) -> Reply {
+    let mut all: Vec<String> = a.iter().map(|s| (*s).to_owned()).collect();
+    all.extend(["--clone".to_owned(), root.to_string_lossy().into_owned()]);
+    let p = parse_with(&all, &specs(), 1).unwrap();
+    check_asking(root, &p, &mut |gen| {
+        Ok(json!(!Path::new(&format!("{gen}.stale")).exists()))
+    })
+}
+
+/// A pool map `m` whose folder holds every render but its manifest, and the prompt file `.git/p.md`.
+fn checked(name: &str) -> (l7r_guard::shared::tempdir::Held<std::path::PathBuf>, String) {
+    let r = repo(name);
     map(&r, "pool", "m", &["well"]);
     for ext in [".svg", ".png", ".html"] {
         put(&r, &format!("pool/hamlets/m/m{ext}"), "x");
     }
+    let p = r.join(".git/p.md").to_string_lossy().into_owned();
+    (r, p)
+}
+
+#[test]
+fn a_check_names_every_unmet_prerequisite() {
+    let (r, p) = checked("check");
     put(&r, V, &json!({"verdict": "NEEDS-WORK", "engine_key": "abcdef0123456789", "strict": true, "findings": [{"id": "F1"}, {"id": "F2"}, {"id": "F3"}]}).to_string());
     put(&r, "specs/900-x/measurements.json", &json!({
         "t89-a": {"value": 42.5, "verifies": "F1", "subject": "settlement-review--m", "quantity": "q", "source": "s", "answers": "abcdef0123456789"},
@@ -274,11 +294,10 @@ fn a_check_names_every_unmet_prerequisite() {
         r#"{"accepted": [{"finding": "F2", "round": "abcdef012345", "reason": "left on purpose"}]}"#,
     );
     put(&r, ".git/p.md", "UNIT: settlement-review--m\n\nThe belt is 42.5 px wide (m:t89-a) and 1,234 px long.\n\nIt took 17 s, observed 2026-11-11, method: a stopwatch.\n\nIt costs 9 s `and 3 s named`.\n");
-    let p = r.join(".git/p.md").to_string_lossy().into_owned();
     let check = |extra: &[&str]| {
         let mut a = vec!["check", "--prompt-file", &p];
         a.extend_from_slice(extra);
-        run_in(&r, &a)
+        check_in(&r, &a)
     };
     let said = check(&["--maps", "settlement-review--m"]);
     assert_eq!(said.code, 1);
@@ -301,6 +320,18 @@ fn a_check_names_every_unmet_prerequisite() {
         stale.stdout
     );
     std::fs::remove_file(r.join("pool/hamlets/m/m.gen.py.stale")).unwrap();
+}
+
+/// A snapshot the dispatch names must be whole and of the pool's map (split from the test above, feature 449 T167: its seven checks,
+/// each reading what is owed through seven git calls, took 120 ms under load against FR-008's tenth of a second).
+#[test]
+fn a_named_snapshot_must_be_whole_and_of_the_pools_map() {
+    let (r, p) = checked("snapshot");
+    let check = |extra: &[&str]| {
+        let mut a = vec!["check", "--prompt-file", &p];
+        a.extend_from_slice(extra);
+        check_in(&r, &a)
+    };
     put(&r, ".git/p.md", "review .git/review-snapshot/m");
     assert!(check(&["--maps", "m"])
         .stdout
@@ -311,6 +342,17 @@ fn a_check_names_every_unmet_prerequisite() {
     assert!(check(&["--maps", "m"])
         .stdout
         .contains("is of an older map than the pool's"));
+}
+
+/// A map whose folder lacks a render, or that has no generator, is refused; a whole one passes (split as above).
+#[test]
+fn a_map_missing_a_render_or_a_generator_is_refused_and_a_whole_one_passes() {
+    let (r, p) = checked("whole");
+    let check = |extra: &[&str]| {
+        let mut a = vec!["check", "--prompt-file", &p];
+        a.extend_from_slice(extra);
+        check_in(&r, &a)
+    };
     put(&r, ".git/p.md", "x");
     std::fs::remove_file(r.join("pool/hamlets/m/m.png")).unwrap();
     assert!(check(&["--maps", "m"])
@@ -322,17 +364,37 @@ fn a_check_names_every_unmet_prerequisite() {
     put(&r, "pool/hamlets/m/m.png", "x");
     let clean = check(&["--maps", "m"]);
     assert_eq!((clean.code, clean.stdout.as_str()), (0, ""));
-    // a Mode A sheet has no manifest to miss; a unit names the map it is reviewed on
+}
+
+/// A Mode A sheet has no manifest to miss; a unit names the map it is reviewed on (split from the test above, feature 449 T167).
+#[test]
+fn a_sheet_is_checked_against_the_snapshot_its_unit_names() {
+    let (r, p) = checked("sheet");
     sheet(&r, "pool", "s", &["gate"]);
     put(&r, "pool/compounds/s/s.gen.py", "#\n");
     for ext in [".png", ".html"] {
         put(&r, &format!("pool/compounds/s/s{ext}"), "x");
     }
     put(&r, ".git/p.md", "x .git/review-snapshot/building-review--s");
-    assert!(check(&["--maps", "building-review--s"])
-        .stdout
-        .contains("FR-005 s: the review snapshot the dispatch names lacks .svg .png .html"));
-    // the generation cache's runner failing, and the figure pattern's, fail the check
+    assert!(check_in(
+        &r,
+        &["check", "--prompt-file", &p, "--maps", "building-review--s"]
+    )
+    .stdout
+    .contains("FR-005 s: the review snapshot the dispatch names lacks .svg .png .html"));
+}
+
+/// The generation cache's runner failing, and the figure pattern's, fail the check - through the command line and the fixture's real
+/// `bundle_door.py`, the one Python start of these tests (split from the test above, feature 449 T167).
+#[test]
+fn the_runner_failing_or_the_figure_pattern_failing_fails_the_check() {
+    let (r, p) = checked("broken");
+    put(&r, ".git/p.md", "x");
+    let check = |extra: &[&str]| {
+        let mut a = vec!["check", "--prompt-file", &p];
+        a.extend_from_slice(extra);
+        run_in(&r, &a)
+    };
     put(&r, "pool/hamlets/m/m.gen.py.broken", "");
     let broken = check(&["--maps", "m"]);
     assert_eq!((broken.code, broken.stdout.as_str()), (1, ""));

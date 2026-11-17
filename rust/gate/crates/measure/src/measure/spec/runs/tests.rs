@@ -27,10 +27,14 @@ fn git_at(dir: &Path, date: &str, args: &[&str]) -> String {
     String::from_utf8_lossy(&out.stdout).trim().to_owned()
 }
 
+/// Everything committed at `date`, and the commit's short id: read from its branch's ref file rather than asked of `rev-parse`
+/// (feature 449 T167: a third of the git calls of a test that commits nine times, against FR-008's tenth of a second).
 fn commit(dir: &Path, date: &str) -> String {
     git_at(dir, date, &["add", "-A"]);
     git_at(dir, date, &["commit", "-qm", "c", "--allow-empty"]);
-    git_at(dir, date, &["rev-parse", "--short", "HEAD"])
+    let head = std::fs::read_to_string(dir.join(".git/HEAD")).unwrap();
+    let branch = head.trim().strip_prefix("ref: ").unwrap().to_owned();
+    std::fs::read_to_string(dir.join(".git").join(branch)).unwrap()[..7].to_owned()
 }
 
 #[test]

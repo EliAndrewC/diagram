@@ -91,8 +91,8 @@ fn the_edit_applied_once_or_everywhere() {
     );
 }
 
-#[test]
-fn only_a_docstring_changed_passes_and_a_code_change_waits() {
+/// A clone holding an engine file with a docstring and the real `codeid.py`, which decides.
+fn with_codeid() -> l7r_guard::shared::tempdir::TempDir {
     let root = clone_with("l7r/diagram/a.py", "\"\"\"Doc.\"\"\"\nX = 1\n");
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
@@ -101,6 +101,12 @@ fn only_a_docstring_changed_passes_and_a_code_change_waits() {
         root.join("scripts/gates/codeid.py"),
     )
     .unwrap();
+    root
+}
+
+#[test]
+fn only_a_docstring_changed_passes_and_a_code_change_waits() {
+    let root = with_codeid();
     let path = root.join("l7r/diagram/a.py");
     assert_eq!(
         ask(
@@ -111,6 +117,14 @@ fn only_a_docstring_changed_passes_and_a_code_change_waits() {
         ),
         1
     );
+}
+
+/// The code change of [`only_a_docstring_changed_passes_and_a_code_change_waits`], a test of its own (feature 449 T167: the real
+/// `codeid.py` asked twice in one test ran over FR-008's tenth of a second).
+#[test]
+fn a_code_change_waits() {
+    let root = with_codeid();
+    let path = root.join("l7r/diagram/a.py");
     assert_eq!(
         ask(
             &root,

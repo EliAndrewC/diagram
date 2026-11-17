@@ -11,7 +11,7 @@ use super::{
 use crate::claims::grammar::parse_claim;
 use crate::claims::index::{body_of, Cur, Row};
 use crate::claims::scope::Reader;
-use crate::claims::tests::{claims, fixture, record_all};
+use crate::claims::tests::{claims, commit_as_origin, fixture, fixture_rust_only, record_all};
 use crate::claims::units::rust_units;
 use crate::record::testkit::{commit, git, put};
 
@@ -89,7 +89,30 @@ fn a_tree_with_nothing_to_read_reads_nothing() {
         canon(std::path::Path::new("/no/such/place")),
         std::path::PathBuf::new()
     );
-    let root = fixture("claims-carry-bare");
+    let root = bare("claims-carry-bare");
+    let mut reader = Reader::new(&root, &root);
+    let at = Reading {
+        cur: Cur::default(),
+        index: Map::new(),
+    };
+    let (owed, intro, pre, carried) = classified(&mut reader, &root, &at).unwrap();
+    assert!(owed.is_empty() && intro.is_empty() && pre.is_empty() && carried.is_empty());
+    let empty = crate::checks::scratch("claims-carry-empty");
+    git(&empty, &["init", "-q"]);
+    let mut bare = Reader::new(&empty, &empty);
+    assert!(classified(&mut bare, &empty, &at).unwrap().0.is_empty());
+}
+
+/// The bare tree: a claims feature all done, its carried rows read, no `origin/main`, and an active feature with nothing filed - no
+/// Python module, as its Python half answered nothing (feature 449 T167 split the test of it, over FR-008's tenth of a second, into
+/// two, each on a tree of its own).
+fn bare(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    assert!(filed(None).unwrap().is_empty());
+    assert_eq!(
+        canon(std::path::Path::new("/no/such/place")),
+        std::path::PathBuf::new()
+    );
+    let root = fixture_rust_only(tag);
     put(&root, "specs/405-claims/tasks.md", "- [x] T01 done\n");
     put(
         &root,
@@ -111,17 +134,17 @@ fn a_tree_with_nothing_to_read_reads_nothing() {
         "{\"feature_directory\": \"specs/406-x\"}",
     );
     assert!(filed(target(&root).unwrap().as_deref()).unwrap().is_empty());
+    root
+}
+
+#[test]
+fn an_index_that_is_no_table_or_no_json_raises() {
+    let root = bare("claims-carry-bare-index");
     let mut reader = Reader::new(&root, &root);
     let at = Reading {
         cur: Cur::default(),
         index: Map::new(),
     };
-    let (owed, intro, pre, carried) = classified(&mut reader, &root, &at).unwrap();
-    assert!(owed.is_empty() && intro.is_empty() && pre.is_empty() && carried.is_empty());
-    let empty = crate::checks::scratch("claims-carry-empty");
-    git(&empty, &["init", "-q"]);
-    let mut bare = Reader::new(&empty, &empty);
-    assert!(classified(&mut bare, &empty, &at).unwrap().0.is_empty());
     put(&root, "dev/claims-index.json", "[1]");
     commit(&root, "a list for an index");
     assert!(classified(&mut reader, &root, &at)
@@ -134,14 +157,14 @@ fn a_tree_with_nothing_to_read_reads_nothing() {
         .contains("JSONDecodeError"));
 }
 
-#[test]
-fn an_introduced_finding_refuses_and_an_answered_relabel_does_not() {
-    let root = fixture("claims-carry-intro");
+/// The introduced finding's tree: every claim recorded on `origin/main`, then `Thing.m` changed and checked DRIFTED, `reach` relabeled
+/// and its index row answering a MISLABELED verdict, a row of a gone unit; Python-free, its Python half answering nothing (feature 449
+/// T167 split the test of it, over FR-008's tenth of a second, into three, each on a tree of its own); the reader and the units now.
+fn introduced(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, Reader, Cur) {
+    let root = fixture_rust_only(tag);
     put(&root, "specs/405-claims/tasks.md", "- [x] T01 done\n");
-    crate::claims::tests::py_units(&root, &[], &[]);
     record_all(&root);
-    commit(&root, "recorded");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    commit_as_origin(&root, "recorded");
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     std::fs::write(
         root.join("rust/phases/src/lib.rs"),
@@ -184,10 +207,21 @@ fn an_introduced_finding_refuses_and_an_answered_relabel_does_not() {
         Value::Object(ix).to_string(),
     )
     .unwrap();
+    (root, reader, cur)
+}
+
+#[test]
+fn an_introduced_finding_refuses_and_an_answered_relabel_does_not() {
+    let (root, _, _) = introduced("claims-carry-intro");
     let got = claims(&root, &["gate"]);
     assert_eq!(got.code, 0);
     assert!(got.stdout.contains("claims-gate: introduced: DRIFTED        rust/phases/src/lib.rs::Thing.m#method guess - off"));
     assert!(!got.stdout.contains("reach#reach"));
+}
+
+#[test]
+fn at_clean_an_introduced_finding_is_refused() {
+    let (root, _, _) = introduced("claims-carry-intro-clean");
     put(
         &root,
         "dev/switches.json",
@@ -197,6 +231,16 @@ fn an_introduced_finding_refuses_and_an_answered_relabel_does_not() {
     assert!(got
         .stdout
         .contains("claims-gate: REFUSED introduced: DRIFTED"));
+}
+
+#[test]
+fn the_known_drifts_are_recorded_from_the_index_as_it_stands() {
+    let (root, mut reader, cur) = introduced("claims-carry-intro-known");
+    put(
+        &root,
+        "dev/switches.json",
+        "{\"claims\": {\"state\": \"clean\"}}",
+    );
     let at = Reading {
         cur,
         index: Map::new(),

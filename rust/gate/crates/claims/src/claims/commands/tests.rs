@@ -6,8 +6,10 @@ use std::path::Path;
 use serde_json::{json, Value};
 
 use super::{backfill_sections, path_text};
-use crate::claims::tests::{claims, fixture, py_units, record_all};
-use crate::record::testkit::{commit, git, put};
+use crate::claims::tests::{
+    claims, commit_as_origin, fixture, fixture_rust_only, py_units, record_all,
+};
+use crate::record::testkit::put;
 
 fn index(root: &Path) -> Value {
     serde_json::from_str(&std::fs::read_to_string(root.join("dev/claims-index.json")).unwrap())
@@ -20,11 +22,10 @@ fn reply(root: &Path, text: &str) -> String {
     p.to_string_lossy().into_owned()
 }
 
-#[test]
-fn what_is_owed_then_bundled_then_recorded() {
-    let root = fixture("claims-cmd-owed");
+/// The fixture's Python half: a claimed table, a helper whose account departs, and an inherited plumbing unit.
+fn owed_units(root: &Path) {
     py_units(
-        &root,
+        root,
         &[(
             "TABLE",
             "constant",
@@ -41,6 +42,12 @@ fn what_is_owed_then_bundled_then_recorded() {
             ("plumb", "function", &["plumbing - NONE"], true),
         ],
     );
+}
+
+#[test]
+fn what_is_owed_then_bundled_then_recorded() {
+    let root = fixture("claims-cmd-owed");
+    owed_units(&root);
     let got = claims(&root, &["owed"]);
     assert_eq!(got.code, 0);
     for want in [
@@ -78,6 +85,16 @@ fn what_is_owed_then_bundled_then_recorded() {
     ] {
         assert!(manifest.contains(want), "{want}\n{manifest}");
     }
+}
+
+/// The test's second half (feature 449 T167: the two took over FR-008's tenth of a second together, and the second reads only the
+/// bundle of the Python units, which it makes on a fixture of its own): the Python units bundled, the reply recorded, reported.
+#[test]
+fn a_bundle_of_python_units_is_recorded_and_reported() {
+    let root = fixture("claims-cmd-recorded");
+    owed_units(&root);
+    let out = root.join("b");
+    let o = out.to_string_lossy().into_owned();
     let got = claims(
         &root,
         &[
@@ -159,7 +176,8 @@ fn record_and_report(root: &Path, out: &Path) {
 
 #[test]
 fn a_bundle_is_refused_on_what_it_cannot_name() {
-    let root = fixture("claims-cmd-refuse");
+    // no Python unit, so no Python half to start; the second half below asks it (feature 449 T167)
+    let root = fixture_rust_only("claims-cmd-refuse");
     let got = claims(&root, &["bundle", "--units", "nope#x"]);
     assert_eq!(
         (got.code, got.stderr.as_str()),
@@ -185,6 +203,14 @@ fn a_bundle_is_refused_on_what_it_cannot_name() {
     assert!(got
         .stderr
         .contains("of these claims are not owed (first: rust/phases/src/lib.rs::GAP#gap)"));
+}
+
+/// The refusals' second half, on a tree of its own every claim of which is recorded (feature 449 T167: the two halves read nothing of
+/// each other's, and took over FR-008's tenth of a second together).
+#[test]
+fn a_re_check_is_refused_on_a_page_or_a_context_it_cannot_name() {
+    let root = fixture("claims-cmd-refuse-recheck");
+    record_all(&root);
     let o = root.join("b2").to_string_lossy().into_owned();
     let got = claims(
         &root,
@@ -238,15 +264,22 @@ fn a_bundle_is_refused_on_what_it_cannot_name() {
         .contains("claims-bundle: re-check of 1 claim(s) not owed, because: a re check"));
 }
 
-#[test]
-fn the_backfills_rekey_and_refingerprint() {
-    let root = fixture("claims-cmd-backfill");
+/// The backfills' tree: the fixture with a Python constant, every claim recorded (feature 449 T167 split the test of the backfills, the
+/// rekey and the refingerprint, over FR-008's tenth of a second, into three, each on a tree of its own or none).
+fn backfilled(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = fixture(tag);
     py_units(
         &root,
         &[("TABLE", "constant", &["table - NONE"], false)],
         &[],
     );
     record_all(&root);
+    root
+}
+
+#[test]
+fn the_backfills_rekey_and_refingerprint() {
+    let root = backfilled("claims-cmd-backfill");
     let mut ix = index(&root);
     let key = "rust/phases/src/lib.rs::GAP#gap";
     ix[key].as_object_mut().unwrap().remove("pages");
@@ -260,6 +293,11 @@ fn the_backfills_rekey_and_refingerprint() {
     );
     let got = claims(&root, &["backfill-sections"]);
     assert_eq!(got.stdout, "claims-backfill-sections: 0 section claim(s) re-keyed to their own line; none owed by it\n");
+}
+
+#[test]
+fn a_moved_unit_is_rekeyed_and_a_star_change_refingerprinted() {
+    let root = backfilled("claims-cmd-rekey");
     let src = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     let start = src.find("pub fn helper").unwrap();
     std::fs::write(
@@ -290,6 +328,10 @@ fn the_backfills_rekey_and_refingerprint() {
     let row: Value = serde_json::from_str(log.lines().next().unwrap()).unwrap();
     assert_eq!(row["rows"], 1);
     assert_eq!(row["keys"][0], "l7r/diagram/m.py::TABLE#table");
+}
+
+#[test]
+fn a_section_claim_s_old_code_is_backfilled_to_its_own_line() {
     let mut cur = crate::claims::index::Cur::default();
     let mut store = serde_json::Map::new();
     let mut idx = serde_json::Map::new();
@@ -314,11 +356,7 @@ fn the_backfills_rekey_and_refingerprint() {
 
 #[test]
 fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
-    let root = fixture("claims-cmd-triage");
-    py_units(&root, &[], &[]);
-    record_all(&root);
-    commit(&root, "recorded");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    let root = recorded("claims-cmd-triage");
     let page = root.join("research/questions/0001-gap.html");
     std::fs::write(&page, "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n<p>A third, new.</p>\n").unwrap();
     let got = claims(&root, &["triage"]);
@@ -327,6 +365,20 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
         .contains("claim(s) cleared without a triage - a page each cites moved"),);
     let got = claims(&root, &["triage-owed"]);
     assert_eq!(got.stdout, "0\n");
+}
+
+/// The triage's tree: every claim recorded on `origin/main`, Python-free (no Python unit), then two Rust claims' code and a procedure
+/// section changed (feature 449 T167 split the triage's test, over FR-008's tenth of a second, into three on a tree each).
+fn recorded(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = fixture_rust_only(tag);
+    record_all(&root);
+    commit_as_origin(&root, "recorded");
+    root
+}
+
+/// [`recorded`] with two Rust claims' code and a procedure section changed.
+fn changed(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = recorded(tag);
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     std::fs::write(
         root.join("rust/phases/src/lib.rs"),
@@ -340,11 +392,14 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
         buildings.replace("Walls stand.", "Walls stand tall."),
     )
     .unwrap();
-    let got = claims(&root, &["owed"]);
-    assert!(got.stdout.contains("code triage") && got.stdout.contains("section triage"),);
+    root
+}
+
+/// The triage bundle of [`changed`], at `t/`.
+fn triaged(root: &Path) -> String {
     let t = root.join("t");
     let to = t.to_string_lossy().into_owned();
-    let got = claims(&root, &["triage", "--out", &to]);
+    let got = claims(root, &["triage", "--out", &to]);
     assert!(got
         .stdout
         .contains("claims-triage: 4 claim(s); dispatch the `claims-triage` agent"));
@@ -353,6 +408,21 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
         manifest.contains("(a procedure section; the claims' own lines did not change)")
             && manifest.contains("```diff"),
     );
+    to
+}
+
+#[test]
+fn a_change_of_code_or_a_section_owes_a_triage_bundled_for_its_agent() {
+    let root = changed("claims-cmd-triage-owed");
+    let got = claims(&root, &["owed"]);
+    assert!(got.stdout.contains("code triage") && got.stdout.contains("section triage"),);
+    triaged(&root);
+}
+
+#[test]
+fn the_triage_s_reply_sends_on_what_it_names_and_refuses_the_rest() {
+    let root = changed("claims-cmd-triaged");
+    let to = triaged(&root);
     let r = reply(
         &root,
         "TOUCHES `docs/buildings.md::Walls#walls` - it bears\nTOUCHES nope#x - refused\n",
@@ -381,11 +451,7 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
 
 #[test]
 fn a_small_triage_goes_straight_to_impl_drift_and_a_bare_one_to_its_full_check() {
-    let root = fixture("claims-cmd-small");
-    py_units(&root, &[], &[]);
-    record_all(&root);
-    commit(&root, "recorded");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    let root = recorded("claims-cmd-small");
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     std::fs::write(
         root.join("rust/phases/src/lib.rs"),
@@ -404,6 +470,11 @@ fn a_small_triage_goes_straight_to_impl_drift_and_a_bare_one_to_its_full_check()
             .unwrap()
             .contains("\"claims\": 1")
     );
+}
+
+/// The path helper's own cases, apart from the triage they sat in (feature 449 T167): they read no tree.
+#[test]
+fn a_path_reads_as_python_s_normpath_reads_it() {
     assert_eq!(path_text("a//b/./c/"), "a/b/c");
     assert_eq!(
         (

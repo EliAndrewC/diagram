@@ -62,6 +62,8 @@ const GATE: [&str; 9] = [
 static KEY: LazyLock<Regex> = LazyLock::new(|| re(r#"\A"[a-z_]+@[A-Za-z_][A-Za-z0-9_.]*"\z"#));
 static ALIAS: LazyLock<Regex> =
     LazyLock::new(|| re(r"\b(tally|merge)\s+as\s+([A-Za-z_][A-Za-z0-9_]*)"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 2] = [&KEY, &ALIAS];
 const INT_TYPES: [&str; 12] = [
     "u8", "u16", "u32", "u64", "u128", "usize", "i8", "i16", "i32", "i64", "i128", "isize",
 ];

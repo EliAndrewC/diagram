@@ -52,7 +52,15 @@ fn ms(n: u64) -> Duration {
 }
 #[cfg(test)]
 fn ms(n: u64) -> Duration {
-    Duration::from_millis(n / 100)
+    Duration::from_millis(n / WAIT_DIVISOR.get())
+}
+
+#[cfg(test)]
+thread_local! {
+    /// The test build's divisor of the Python's waits: a hundredth for the real Chromium of the end-to-end test, which draws; none at all
+    /// on a test thread that started the fake browser (`testkit::fake_chrome`), which draws nothing and answers at once - its 25 ms after
+    /// each load were most of three tests' time against FR-008's tenth of a second (feature 449 T167).
+    pub(crate) static WAIT_DIVISOR: std::cell::Cell<u64> = const { std::cell::Cell::new(100) };
 }
 
 /// The kind's first glyph measured while shown: `[x, y, width, height]`.

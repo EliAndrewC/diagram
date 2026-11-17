@@ -79,7 +79,15 @@ pub(super) fn git(root: &Path, args: &[&str]) -> String {
     let done = Command::new("git")
         .arg("-C")
         .arg(root)
-        .args(["-c", "user.name=t", "-c", "user.email=t@t"])
+        // no automatic maintenance, which each commit otherwise starts as a process of its own (feature 449 T167)
+        .args([
+            "-c",
+            "user.name=t",
+            "-c",
+            "user.email=t@t",
+            "-c",
+            "maintenance.auto=false",
+        ])
         .args(args)
         .output()
         .unwrap();

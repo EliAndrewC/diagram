@@ -6,7 +6,7 @@ use std::path::Path;
 use serde_json::{json, Value};
 
 use super::{cli, missing_each, py_int, shown};
-use crate::claims::tests::{fixture, record_all};
+use crate::claims::tests::{fixture, fixture_rust_only, record_all};
 use crate::record::testkit::{commit, put};
 
 const SPEC: &str = "# x\n\n**Affects**: hamlet, Research Record\n";
@@ -31,9 +31,9 @@ fn feature(root: &Path, n: &str, subject: &str) -> std::path::PathBuf {
 
 #[test]
 fn a_research_feature_owes_each_question_its_claims_or_its_line() {
-    let root = fixture("impl-check");
+    // no Python unit, so no Python half to start (feature 449 T167)
+    let root = fixture_rust_only("impl-check");
     let d = feature(&root, "500", "Feature 500: the gap");
-    let r = root.to_string_lossy().into_owned();
     // every claim citing 0001 is new to the index, so owed its check
     let got = ask(&root, &["500"]);
     assert_eq!(got.code, 1, "{}{}", got.stdout, got.stderr);
@@ -52,12 +52,28 @@ fn a_research_feature_owes_each_question_its_claims_or_its_line() {
         json!(each[..1])
     );
     assert_eq!(ask(&root, &["--missing-json"]).stdout, "[]\n");
+}
+
+// The parts of the research feature's test after its first, each on a tree of its own (feature 449 T167: each reads only the index it
+// writes, and the one test took over FR-008's tenth of a second).
+
+#[test]
+fn a_research_feature_whose_claims_are_recorded_owes_nothing() {
+    let root = fixture_rust_only("impl-check-done");
+    let d = feature(&root, "500", "Feature 500: the gap");
     // each claim recorded IN-STEP: nothing owed, its verdict shown
     record_all(&root);
     let done = ask(&root, &[&d.to_string_lossy()]);
     assert_eq!(done.code, 0, "{}{}", done.stdout, done.stderr);
     assert!(done.stdout.contains("\n      IN-STEP        "));
     assert!(done.stdout.ends_with("impl-check: nothing missing\n"));
+}
+
+#[test]
+fn an_index_row_with_no_verdict_or_of_the_wrong_kind_and_a_broken_index() {
+    let root = fixture_rust_only("impl-check-index");
+    let d = feature(&root, "500", "Feature 500: the gap");
+    let r = root.to_string_lossy().into_owned();
     // an index row with no verdict is shown as none
     put(&root, "dev/claims-index.json", "{\"x\": {}}\n");
     assert_eq!(ask(&root, &["500"]).code, 1);

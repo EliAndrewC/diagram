@@ -38,6 +38,9 @@ static RUST_NUMBER: LazyLock<Regex> = LazyLock::new(|| {
 static CFG_TEST: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#\[cfg\(test\)\]"));
 static LINE_COMMENT: LazyLock<Regex> = LazyLock::new(|| re(r"//.*"));
 static STRING: LazyLock<Regex> = LazyLock::new(|| re(r#""(?:[^"\\]|\\.)*""#));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 5] =
+    [&FIGURE, &RUST_NUMBER, &CFG_TEST, &LINE_COMMENT, &STRING];
 
 /// `f"{v:g}"`: the guard's `py_text::fmt_g` since feature 449 T135, where `make set-down`'s and `make claim`'s refusals write a figure
 /// as Python's `:g` did and the crates below `claims` could not reach this copy (`ask:449-phase3-remainder`, one implementation, FR-003).

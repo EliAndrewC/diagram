@@ -125,8 +125,16 @@ fn decide(event: &Event, _: &Session) -> Vec<Answer> {
 
 /// Start a sweep, detached, when none ran within the period; says nothing.
 pub(crate) fn judge(event: &Event, c: &Config, now: SystemTime) -> Vec<Answer> {
+    start(event, c, now);
+    Vec::new()
+}
+
+/// `judge`'s work, saying whether it started the sweep: the test of a prompt within the day asks this where it slept 0.3 s to see no
+/// detached sweeper appear, a wait past FR-008's tenth of a second that proved nothing a slower start would not also pass (feature 449
+/// T167).
+fn start(event: &Event, c: &Config, now: SystemTime) -> bool {
     if c.off || !c.due(now) {
-        return Vec::new();
+        return false;
     }
     let keep = event
         .input
@@ -142,7 +150,7 @@ pub(crate) fn judge(event: &Event, c: &Config, now: SystemTime) -> Vec<Answer> {
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .status();
-    Vec::new()
+    true
 }
 
 /// `--scratch-sweep run` (the hook's: once a period), `now` (on demand: the lock, not the period) or `dry` (what either would remove),

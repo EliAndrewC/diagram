@@ -74,6 +74,13 @@ fn url_archives_one_url_and_logs_the_attempt() {
         "",
     );
     assert_eq!(r.code, 0);
+}
+
+/// A dead URL's attempt logged, and each way `url` fails: apart from the URL archived above on a world of its own, the two archives'
+/// pushes together past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn url_logs_a_dead_attempt_and_each_failure() {
+    let w = World::new("cli-url-dead");
     let (r, _, _) = run(&w, &["url", "https://e.org/dead"], &browser, "");
     assert_eq!(
         r.stdout,

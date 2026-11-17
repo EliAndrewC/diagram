@@ -154,6 +154,18 @@ pub fn lane(
     start: &Start,
     say: &(dyn Fn(&str) + Sync),
 ) -> Result<Counts> {
+    lane_every(root, urls, start, say, RECYCLE_EVERY)
+}
+
+/// [`lane`] with a fresh browser every `every` URLs: its test recycles at the third page rather than the twenty-fifth, each unreadable
+/// page's two log lines starting four processes, 26 pages of them past FR-008's tenth of a second (feature 449 T167).
+fn lane_every(
+    root: &Path,
+    urls: &[String],
+    start: &Start,
+    say: &(dyn Fn(&str) + Sync),
+    every: usize,
+) -> Result<Counts> {
     let home = consulted::home(root);
     let mut browser = Lazy::new(start, root);
     let mut counts = Counts::default();
@@ -161,7 +173,7 @@ pub fn lane(
         if no_substance(u) || !needs_fetch(&home, u)? {
             continue;
         }
-        if (i + 1) % RECYCLE_EVERY == 0 {
+        if (i + 1) % every == 0 {
             browser.recycle();
         }
         let (state, why) = match fetch_one(&mut browser, root, u) {

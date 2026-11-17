@@ -124,6 +124,22 @@ impl World {
         git(&self.clone, &["fetch", "-q", "origin"]);
     }
 
+    /// Main moves on one commit per file, `origin` following, the clone fetching once (feature 449 T167: a fetch a commit was the
+    /// test's time against FR-008's tenth of a second).
+    fn advance_all(&self, files: &[&str]) {
+        for file in files {
+            std::fs::create_dir_all(self.main.join(file).parent().unwrap()).unwrap();
+            std::fs::write(self.main.join(file), "x").unwrap();
+            git(&self.main, &["add", file]);
+            git(&self.main, &["commit", "-q", "-m", file]);
+        }
+        git(
+            &self.main,
+            &["update-ref", "refs/remotes/origin/main", "HEAD"],
+        );
+        git(&self.clone, &["fetch", "-q", "origin"]);
+    }
+
     fn claim(&self, sid: &str, clone: &Path) {
         let map = self.main.join(".clones/.session-clones");
         std::fs::create_dir_all(&map).unwrap();
@@ -409,10 +425,37 @@ fn a_dirty_clones_test_run_behind_main_is_told_why() {
     assert!(make("make quick", "Bash").is_empty());
     assert!(make("make lines", "Bash").is_empty());
     assert!(make("make quick", "Read").is_empty());
-    w.advance("l7r/x.py", false);
-    assert!(told(&make("make quick", "Bash"), "are ENGINE paths"));
-    w.advance("docs/y.md", false);
-    let got = make("make done", "Bash");
+}
+
+/// A dirty clone of its own, claimed by session `s`, main moved on by `files`; `make` runs a Bash command there.
+fn dirty_behind(tag: &str, files: &[&str]) -> World {
+    let w = World::new(tag);
+    w.claim("s", &w.clone);
+    std::fs::write(w.clone.join("wip.txt"), "x").unwrap();
+    w.advance_all(files);
+    w
+}
+
+fn make_in(w: &World, cmd: &str) -> Vec<Answer> {
+    w.run(
+        "PreToolUse",
+        json!({"session_id": "s", "tool_name": "Bash", "tool_input": {"command": cmd}}),
+    )
+}
+
+/// The second half of `a_dirty_clones_test_run_behind_main_is_told_why`, split from it and in two to keep each under FR-008's tenth
+/// of a second (feature 449 T167): the clone dirty and main one engine commit on, the run is told its paths are engine paths.
+#[test]
+fn a_dirty_clones_test_run_behind_main_is_told_its_engine_paths() {
+    let w = dirty_behind("behind-engine", &["l7r/x.py"]);
+    assert!(told(&make_in(&w, "make quick"), "are ENGINE paths"));
+}
+
+/// Main two commits on, one of them engine: `make done` is told both counts (feature 449 T167, split as above).
+#[test]
+fn a_dirty_clones_done_two_commits_behind_is_told_how_many_are_engine() {
+    let w = dirty_behind("behind-two", &["l7r/x.py", "docs/y.md"]);
+    let got = make_in(&w, "make done");
     assert!(told(&got, "main has 2 commit(s)") && told(&got, "1 changed file(s) are ENGINE"));
 }
 

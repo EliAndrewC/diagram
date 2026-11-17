@@ -83,7 +83,8 @@ fn a_long_list_is_cut_at_three_and_an_unreadable_mark_holds_nothing() {
     );
 }
 
-/// This tool's one end-to-end test (FR-008): the gate's reader asks the review gate's own, the real Python on the real script.
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the gate's reader asks the review gate's own, the real Python on the real
+/// script.
 #[test]
 fn the_merge_and_the_review_gate_read_one_verdict() {
     let dir = repo("one-verdict");

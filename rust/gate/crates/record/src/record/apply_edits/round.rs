@@ -59,11 +59,26 @@ impl Round {
             modals::earlier_units(&checks)
         };
         let all: Vec<String> = checks.iter().chain(&earlier).cloned().collect();
-        let before = if checks.is_empty() {
+        let reads_quotes = !checks.is_empty() && !checks.iter().any(|c| c == "quote-check");
+        // one reading of what is owed for the round's checks and, where the quote-check notes are read below, for quote-check too: each
+        // reading is nine git processes, and a record-format round asked twice (feature 449 T167)
+        let mut asked = all.clone();
+        if reads_quotes {
+            asked.push("quote-check".to_owned());
+        }
+        let mut owed_now = if checks.is_empty() {
             BTreeMap::new()
         } else {
-            fingerprints(root, &all)?
+            fingerprints(root, &asked)?
         };
+        // a unit's check as `Unit::check` reads its slug
+        let check_of = |slug: &str| slug.split_once(':').map_or(slug, |p| p.0).to_owned();
+        let before: BTreeMap<String, String> = owed_now
+            .iter()
+            .filter(|(slug, _)| all.contains(&check_of(slug)))
+            .map(|(k, v)| (k.clone(), v.clone()))
+            .collect();
+        owed_now.retain(|slug, _| check_of(slug) == "quote-check");
         let touched: HashSet<String> = touched_questions(found).into_iter().collect();
         let mut sorted_touched: Vec<String> = touched.iter().cloned().collect();
         sorted_touched.sort();
@@ -72,7 +87,7 @@ impl Round {
         } else {
             BTreeMap::new()
         };
-        let quotes = if !checks.is_empty() && !checks.iter().any(|c| c == "quote-check") {
+        let quotes = if reads_quotes {
             quote_notes(root, &touched)?
         } else {
             BTreeMap::new()
@@ -80,9 +95,7 @@ impl Round {
         let quote_owed = if quotes.is_empty() {
             HashSet::new()
         } else {
-            fingerprints(root, &["quote-check".to_owned()])?
-                .into_keys()
-                .collect()
+            owed_now.into_keys().collect()
         };
         Ok(Self {
             checks,
@@ -99,8 +112,7 @@ impl Round {
     }
 
     /// `settle_quotes`: each quote-check note this run's blocks moved, settled where its quotation and claim stand as before.
-    fn settle_quotes(&self, root: &Path) -> Result<Vec<String>, String> {
-        let store = answers::store(root);
+    fn settle_quotes(&self, root: &Path, store: &Path) -> Result<Vec<String>, String> {
         let questions: HashSet<String> = self
             .quotes
             .keys()
@@ -122,18 +134,18 @@ impl Round {
                 out.push(format!(
                     "  {slug}: still owed - its quotation or its claim changed"
                 ));
-            } else if self.quote_owed.contains(slug) && !answers::answered(&store, slug, fp, "") {
+            } else if self.quote_owed.contains(slug) && !answers::answered(store, slug, fp, "") {
                 out.push(format!(
                     "  {slug}: still owed - not answered at the words before these blocks"
                 ));
             } else {
-                let was = answers::read_answer(&store, slug);
+                let was = answers::read_answer(store, slug);
                 let result = format!(
                     "{why}; was: {}",
                     text(was.get("result"), "unchanged since main")
                 );
-                answers::write_answer(&store, slug, &fp2, &result, was.get("pages"))?;
-                answers::keep_reading(&store, slug, &key2, "qkeys")?;
+                answers::write_answer(store, slug, &fp2, &result, was.get("pages"))?;
+                answers::keep_reading(store, slug, &key2, "qkeys")?;
                 out.push(format!(
                     "  {slug}: settled - another check's fix, outside its quotation and its claim"
                 ));
@@ -187,7 +199,8 @@ impl Round {
             out.push(format!("  {slug}: {how}"));
         }
         if !self.quotes.is_empty() {
-            out.extend(self.settle_quotes(root)?);
+            // the store settle already found, not asked of git again (feature 449 T167)
+            out.extend(self.settle_quotes(root, &store)?);
         }
         Ok(out)
     }

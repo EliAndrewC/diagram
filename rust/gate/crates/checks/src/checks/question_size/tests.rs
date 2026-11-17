@@ -78,6 +78,8 @@ fn real() -> std::path::PathBuf {
     std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..")
 }
 
+/// FR-008's one end-to-end test (ask:449-T167-realtree): every question page of the live research record found, and the first split
+/// page under the cap; its time grows with the record, held by SC-003's suite total, not the bar.
 #[test]
 fn every_question_page_of_the_record_is_found_and_the_cap_admits_the_first_split_under_it() {
     let found = every(&real());

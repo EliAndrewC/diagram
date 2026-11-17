@@ -36,6 +36,13 @@ fn a_question_bundle_is_owed_refused_or_escaped() {
         .unwrap()
         .2;
     assert!(why.starts_with("NOT_OWED_OK needs a REASON"));
+}
+
+/// What was one test of a question bundle owed, refused or escaped is four, each on a scratch record of its own: its nine owed
+/// computations together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_question_bundle_escaped_with_a_reason_is_owed_every_check() {
+    let root = scratch("bundle-owed-q-escaped");
     let (rows, checks, _) =
         owed_for_question(&root, "0094", "all", "an audit asked", None).unwrap();
     assert_eq!(
@@ -54,6 +61,11 @@ fn a_question_bundle_is_owed_refused_or_escaped() {
             .1,
         "quote-check"
     );
+}
+
+#[test]
+fn an_edited_question_is_owed_and_another_refused() {
+    let root = scratch("bundle-owed-q-edited");
     edit_everything(&root);
     let (rows, checks, why) = owed_for_question(&root, "0094", "all", "", None).unwrap();
     assert!(why.is_empty() && !rows.is_empty() && checks.contains("quote-check"));
@@ -61,6 +73,13 @@ fn a_question_bundle_is_owed_refused_or_escaped() {
         .unwrap()
         .2;
     assert!(refused.contains("What IS owed:\n    "));
+}
+
+/// A drawing page's own units, and an entry-drift asked of rows already in hand.
+#[test]
+fn a_drawing_page_is_owed_its_own_units() {
+    let root = scratch("bundle-owed-q-page");
+    edit_everything(&root);
     let page = owed_for_question(&root, "0094-trade.drawing.html", "all", "", None)
         .unwrap()
         .0;
@@ -99,6 +118,13 @@ fn a_key_bundle_is_owed_refused_or_escaped() {
             .1,
         "source-reader"
     );
+}
+
+/// An edited write-up owes its applicability check and edited notes their reader: apart from the refusals above, on a scratch record of
+/// its own - the seven owed computations together were at FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn an_edited_key_is_owed_its_checks() {
+    let root = scratch("bundle-owed-key-edited");
     edit_everything(&root);
     let (rows, check, _) = owed_for_key(&root, "key-a", false, "", "", None).unwrap();
     assert_eq!((rows.len(), check.as_str()), (1, "source-applicability"));

@@ -200,23 +200,31 @@ fn one_unit_an_agent() {
     assert!(why.ends_with("There is no escape for this shape (feature 248 D1).\n"));
 }
 
+/// A glyph-check dispatch naming `g1`, its gate green.
+fn glyph(tag: &str, prompt: &str) -> Fixture {
+    let f = Fixture::new(
+        tag,
+        "Agent",
+        &json!({"subagent_type": "glyph-check", "prompt": prompt}),
+    );
+    f.set("named", "g1\n").set("green", "");
+    f
+}
+
 #[test]
 fn a_glyph_unit_waits_for_its_hour_unless_glyph_due_ok_says_why() {
-    let glyph = |tag: &str, prompt: &str| {
-        let f = Fixture::new(
-            tag,
-            "Agent",
-            &json!({"subagent_type": "glyph-check", "prompt": prompt}),
-        );
-        f.set("named", "g1\n").set("green", "");
-        f
-    };
     let early = glyph("glyph-early", "check g1");
     early.set("early", "");
     let why = refusal(&early.judge());
     assert!(why.contains("BLOCKED: not due: g1") && why.contains("GLYPH_DUE_OK=\"<why>\""));
     let due = glyph("glyph-due", "check g1");
     assert!(due.judge().is_empty() && due.has("glyph-g1"));
+}
+
+/// The escape and the unnamed unit, split from `a_glyph_unit_waits_for_its_hour_unless_glyph_due_ok_says_why` to keep each under
+/// FR-008's tenth of a second, each judgment starting the fake tools (feature 449 T167).
+#[test]
+fn glyph_due_ok_needs_its_reason_and_an_unnamed_unit_waits_for_no_hour() {
     let escaped = glyph("glyph-ok", r#"GLYPH_DUE_OK="the GM asked now""#);
     std::fs::create_dir_all(escaped.clone.join("dev/bypass-log")).unwrap();
     escaped.set("early", "");
@@ -319,6 +327,12 @@ fn a_review_needs_a_green_gate_unless_pair_ok() {
         ),
         (Some("KEY"), Some("KEY"))
     );
+}
+
+/// The escape and a gate with no key, split from `a_review_needs_a_green_gate_unless_pair_ok` to keep each under FR-008's tenth of a
+/// second, each judgment starting the fake tools (feature 449 T167).
+#[test]
+fn pair_ok_lets_a_review_go_and_a_gate_with_no_key_is_not_green() {
     let ok = Fixture::new("pair-ok", "Agent", &review("m1 PAIR_OK because asked"));
     ok.set("named", "m1\n");
     assert!(ok.judge().is_empty());

@@ -136,6 +136,18 @@ fn registry_kind(entry: &Value) -> Result<String, Raised> {
     Ok(m.get("kind").map_or_else(|| "step".to_owned(), py_str))
 }
 
+// The fixed patterns `tools_of` and the fix-yield readings match, compiled once a process rather than once a call (feature 449 T167:
+// a Unicode `\w` compiles in milliseconds, and a report compiled them for every fix - the fix-yield tests' in-process time against
+// FR-008's tenth of a second).
+static HOOK_FILE: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| re(r"^scripts/hooks/([\w-]+)-hooks\.sh$"));
+static AGENT_FILE: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| re(r"^\.claude/agents/([\w-]+)\.md$"));
+static HUNK: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| re(r"^@@[^@]*@@\s*([a-z][\w-]*)\s*:(?!=)"));
+static LINE_RULE: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| re(r"^[+-]([a-z][\w-]*)\s*:(?!=)"));
+
 /// The tools a change's files belong to (feature 406 D165: a fix is read by its tools): a hook and the guards whose hook names a
 /// changed helper, a refusing check, a review's agent file, a registered step by its file, a target whose recipe names a changed
 /// script, and each Makefile target a hunk of `make_diff` (`git show -U0 -- Makefile`) changed.
@@ -148,101 +160,151 @@ pub fn tools_of(
     files: &[String],
     make_diff: &str,
 ) -> Result<BTreeSet<(String, String)>, Raised> {
-    let mut out: BTreeSet<(String, String)> = BTreeSet::new();
-    let guards = hook_guards(root)?;
-    let hook_text: Vec<(String, String)> = guards
-        .iter()
-        .filter_map(|g| {
-            let p = root.join(format!("scripts/hooks/{g}-hooks.sh"));
-            p.is_file().then(|| (g.clone(), read_lossy(&p)))
-        })
-        .collect();
-    let check_rel: BTreeMap<String, String> = check_paths(root)?
-        .iter()
-        .map(|p| {
-            (
-                p.strip_prefix(root).unwrap_or(p).display().to_string(),
-                stem(p),
-            )
-        })
-        .collect();
-    let make_path = root.join("Makefile");
-    // the Python read "" for a missing Makefile and then raised in `targets`; reading it here raises the same
-    let make = read_text(&make_path)?;
-    let named: BTreeMap<String, String> = targets(root)?
-        .into_iter()
-        .map(|t| {
-            let text = recipe(&make, &t);
-            (t, text)
-        })
-        .collect();
-    let reg = registry(root)?;
-    let mut steps: Vec<(String, String, String)> = Vec::new();
-    for (name, e) in &reg {
-        let Value::Object(m) = e else {
-            return Err("AttributeError: a registry entry is no object".to_owned());
+    Ok(Inventory::read(root)?.tools(files, make_diff))
+}
+
+/// What `tools_of` reads of the tree to place a file: the hooks' text, the refusing checks, each target's recipe and the registered
+/// steps. Read once and asked for every fix of a report (feature 449 T167: each reading compiles a pattern per Makefile target, and
+/// read once a fix it was nine tenths of the fix-yield tests' time against FR-008's tenth of a second); the tree does not change while
+/// a report is made.
+pub struct Inventory {
+    hook_text: Vec<(String, String)>,
+    check_rel: BTreeMap<String, String>,
+    named: BTreeMap<String, String>,
+    steps: Vec<(String, String, String)>,
+}
+
+impl Inventory {
+    /// The inventory of the tree at `root`.
+    ///
+    /// # Errors
+    ///
+    /// As [`tools_of`].
+    pub fn read(root: &Path) -> Result<Self, Raised> {
+        Self::read_with(root, None)
+    }
+
+    /// [`Inventory::read`], the refusing checks taken from `checks` where [`collect`] already listed them: each listing compiles a
+    /// pattern per target the entry points reach (feature 449 T167).
+    pub(crate) fn read_with(
+        root: &Path,
+        checks: Option<&BTreeSet<PathBuf>>,
+    ) -> Result<Self, Raised> {
+        let guards = hook_guards(root)?;
+        let hook_text: Vec<(String, String)> = guards
+            .iter()
+            .filter_map(|g| {
+                let p = root.join(format!("scripts/hooks/{g}-hooks.sh"));
+                p.is_file().then(|| (g.clone(), read_lossy(&p)))
+            })
+            .collect();
+        let listed;
+        let checks = if let Some(c) = checks {
+            c
+        } else {
+            listed = check_paths(root)?;
+            &listed
         };
-        let what = m.get("what").map_or_else(String::new, py_str);
-        let path = what.split(' ').next().unwrap_or_default().to_owned();
-        steps.push((name.clone(), path, registry_kind(e)?));
+        let check_rel: BTreeMap<String, String> = checks
+            .iter()
+            .map(|p| {
+                (
+                    p.strip_prefix(root).unwrap_or(p).display().to_string(),
+                    stem(p),
+                )
+            })
+            .collect();
+        let make_path = root.join("Makefile");
+        // the Python read "" for a missing Makefile and then raised in `targets`; reading it here raises the same
+        let make = read_text(&make_path)?;
+        let named: BTreeMap<String, String> = targets(root)?
+            .into_iter()
+            .map(|t| {
+                let text = recipe(&make, &t);
+                (t, text)
+            })
+            .collect();
+        let reg = registry(root)?;
+        let mut steps: Vec<(String, String, String)> = Vec::new();
+        for (name, e) in &reg {
+            let Value::Object(m) = e else {
+                return Err("AttributeError: a registry entry is no object".to_owned());
+            };
+            let what = m.get("what").map_or_else(String::new, py_str);
+            let path = what.split(' ').next().unwrap_or_default().to_owned();
+            steps.push((name.clone(), path, registry_kind(e)?));
+        }
+        Ok(Self {
+            hook_text,
+            check_rel,
+            named,
+            steps,
+        })
     }
-    let hook_file = re(r"^scripts/hooks/([\w-]+)-hooks\.sh$");
-    let agent_file = re(r"^\.claude/agents/([\w-]+)\.md$");
-    for f in files {
-        if let Some(c) = hook_file.captures(f).ok().flatten() {
-            out.insert(("guard".to_owned(), c[1].to_owned()));
-        } else if f.starts_with("scripts/") {
-            // a helper a hook runs or imports: by its file name, or a lib module's stem
-            let path = Path::new(f);
-            let name = path
-                .file_name()
-                .map(|n| n.to_string_lossy().into_owned())
-                .unwrap_or_default();
-            let lib = f.starts_with("scripts/hooks/lib/");
-            let word = re(&format!(r"\b{}\b", fancy_regex::escape(&stem(path))));
-            for (g, text) in &hook_text {
-                if text.contains(&name) || (lib && word.is_match(text).unwrap_or(false)) {
-                    out.insert(("guard".to_owned(), g.clone()));
+
+    /// The tools `files` and `make_diff` belong to, as [`tools_of`] reads them.
+    #[must_use]
+    pub fn tools(&self, files: &[String], make_diff: &str) -> BTreeSet<(String, String)> {
+        let Self {
+            hook_text,
+            check_rel,
+            named,
+            steps,
+        } = self;
+        let mut out: BTreeSet<(String, String)> = BTreeSet::new();
+        for f in files {
+            if let Some(c) = HOOK_FILE.captures(f).ok().flatten() {
+                out.insert(("guard".to_owned(), c[1].to_owned()));
+            } else if f.starts_with("scripts/") {
+                // a helper a hook runs or imports: by its file name, or a lib module's stem
+                let path = Path::new(f);
+                let name = path
+                    .file_name()
+                    .map(|n| n.to_string_lossy().into_owned())
+                    .unwrap_or_default();
+                let lib = f.starts_with("scripts/hooks/lib/");
+                let word = re(&format!(r"\b{}\b", fancy_regex::escape(&stem(path))));
+                for (g, text) in hook_text {
+                    if text.contains(&name) || (lib && word.is_match(text).unwrap_or(false)) {
+                        out.insert(("guard".to_owned(), g.clone()));
+                    }
+                }
+            }
+            if let Some(c) = check_rel.get(f) {
+                out.insert(("check".to_owned(), c.clone()));
+            }
+            if let Some(c) = AGENT_FILE.captures(f).ok().flatten() {
+                out.insert(("review".to_owned(), c[1].to_owned()));
+            }
+            for (name, path, kind) in steps {
+                if path == f {
+                    out.insert((kind.clone(), name.clone()));
+                }
+            }
+            if f.starts_with("scripts/") {
+                for (t, text) in named {
+                    if text.contains(f.as_str()) {
+                        out.insert(("target".to_owned(), t.clone()));
+                    }
                 }
             }
         }
-        if let Some(c) = check_rel.get(f) {
-            out.insert(("check".to_owned(), c.clone()));
-        }
-        if let Some(c) = agent_file.captures(f).ok().flatten() {
-            out.insert(("review".to_owned(), c[1].to_owned()));
-        }
-        for (name, path, kind) in &steps {
-            if path == f {
-                out.insert((kind.clone(), name.clone()));
-            }
-        }
-        if f.starts_with("scripts/") {
-            for (t, text) in &named {
-                if text.contains(f.as_str()) {
-                    out.insert(("target".to_owned(), t.clone()));
+        for line in l7r_guard::shared::speckit::splitlines(make_diff) {
+            let m = HUNK
+                .captures(line)
+                .ok()
+                .flatten()
+                .or_else(|| LINE_RULE.captures(line).ok().flatten());
+            if let Some(m) = m {
+                if named.contains_key(&m[1]) {
+                    out.insert(("target".to_owned(), m[1].to_owned()));
                 }
             }
         }
+        out.into_iter()
+            .map(|(k, n)| (guard_kind(&k).to_owned(), n))
+            .collect()
     }
-    let hunk = re(r"^@@[^@]*@@\s*([a-z][\w-]*)\s*:(?!=)");
-    let line_rule = re(r"^[+-]([a-z][\w-]*)\s*:(?!=)");
-    for line in l7r_guard::shared::speckit::splitlines(make_diff) {
-        let m = hunk
-            .captures(line)
-            .ok()
-            .flatten()
-            .or_else(|| line_rule.captures(line).ok().flatten());
-        if let Some(m) = m {
-            if named.contains_key(&m[1]) {
-                out.insert(("target".to_owned(), m[1].to_owned()));
-            }
-        }
-    }
-    Ok(out
-        .into_iter()
-        .map(|(k, n)| (guard_kind(&k).to_owned(), n))
-        .collect())
 }
 
 /// Every tool, listed from the code, with its numbers from the records; `guard_log` is the guard log's directory.
@@ -251,6 +313,14 @@ pub fn tools_of(
 ///
 /// The inventory or a record cannot be read where the Python raised.
 pub fn collect(root: &Path, guard_log: &Path) -> Result<Tools, Raised> {
+    collect_keeping(root, guard_log).map(|(t, _)| t)
+}
+
+/// [`collect`], and the refusing checks it listed, which a report's [`Inventory`] then reads rather than lists again.
+pub(crate) fn collect_keeping(
+    root: &Path,
+    guard_log: &Path,
+) -> Result<(Tools, BTreeSet<PathBuf>), Raised> {
     let mut t = Tools::new();
     for name in hook_guards(root)? {
         t.insert(
@@ -258,8 +328,9 @@ pub fn collect(root: &Path, guard_log: &Path) -> Result<Tools, Raised> {
             Tally::new("guard", &name),
         );
     }
-    for p in check_paths(root)? {
-        let name = stem(&p);
+    let checks = check_paths(root)?;
+    for p in &checks {
+        let name = stem(p);
         t.insert(
             ("check".to_owned(), name.clone()),
             Tally::new("check", &name),
@@ -308,7 +379,7 @@ pub fn collect(root: &Path, guard_log: &Path) -> Result<Tools, Raised> {
             tool.outcome_record = false;
         }
     }
-    Ok(t)
+    Ok((t, checks))
 }
 
 /// `datetime.fromtimestamp(t, UTC).strftime("%Y-%m-%d")`: the microseconds rounded half to even first, as `CPython` rounds them.

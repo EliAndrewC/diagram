@@ -7,28 +7,31 @@ use l7r_guard::shared::tempdir::TempDir;
 
 use super::{Embed, Program};
 
-const FAKE: &str = r#"#!/usr/bin/env python3
-import json, os, struct, sys
-mode = os.path.basename(sys.argv[4])
-out = sys.stdout.buffer
-if mode == "noready":
-    sys.exit(3)
-if mode == "closed":
-    os.close(0)
-out.write(b"ready\n"); out.flush()
-for line in sys.stdin:
-    texts = json.loads(line)
-    if mode == "err":
-        out.write(b"err no model\n")
-    elif mode == "garbled":
-        out.write(b"what\n")
-    elif mode == "short":
-        out.write(b"ok 1 2\n" + struct.pack("<f", 1.0)); out.flush(); sys.exit(0)
-    elif mode == "fewer":
-        out.write(b"ok 0 2\n")
-    else:
-        out.write(("ok %d 2\n" % len(texts)).encode() + b"".join(struct.pack("<2f", len(t), 0.5) for t in texts))
-    out.flush()
+/// The stand-in embedder: `ready`, then for each line of texts a vector `[length, 0.5]` a text, or the failure its cache path's name asks
+/// for. A shell script, not Python (feature 449 T167: the test starts it seven times, and seven Python starts took 154 ms against
+/// FR-008's tenth of a second); a text's length is read from the JSON line, 1 to 3 characters, as the test's texts are.
+const FAKE: &str = r#"#!/bin/sh
+mode=${4##*/}
+[ "$mode" = noready ] && exit 3
+[ "$mode" = closed ] && exec 0<&-
+printf 'ready\n'
+while IFS= read -r line; do
+  case $mode in
+  err) printf 'err no model\n' ;;
+  garbled) printf 'what\n' ;;
+  short) printf 'ok 1 2\n\000\000\200\077'; exit 0 ;;
+  fewer) printf 'ok 0 2\n' ;;
+  *)
+    body=${line#[}; body=${body%]}; n=0; vec=''
+    while [ -n "$body" ]; do
+      item=${body%%,*}; [ "$item" = "$body" ] && body='' || body=${body#*,}
+      item=${item#\"}; item=${item%\"}
+      case ${#item} in 1) f='\000\000\200\077' ;; 2) f='\000\000\000\100' ;; 3) f='\000\000\100\100' ;; *) exit 9 ;; esac
+      vec="$vec$f\\000\\000\\000\\077"; n=$((n+1))
+    done
+    printf "ok $n 2\\n$vec" ;;
+  esac
+done
 "#;
 
 fn launcher(dir: &Path) -> PathBuf {

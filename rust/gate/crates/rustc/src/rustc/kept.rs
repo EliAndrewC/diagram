@@ -145,12 +145,20 @@ pub(super) fn content_ids(root: &Path) -> BTreeMap<String, String> {
             );
         }
     }
-    let changed = git_z(root, &["diff", "--name-only", "-z"]);
-    let others = git_z(root, &["ls-files", "--others", "--exclude-standard", "-z"]);
-    let (here, gone): (Vec<String>, Vec<String>) = changed
-        .into_iter()
-        .chain(others)
-        .partition(|p| root.join(p).is_file());
+    // the files the work tree changed or deleted and those git does not track, from one `git ls-files`: the same paths `git diff
+    // --name-only` and `git ls-files --others` gave from two (feature 449 T167, a process less a run of the checks and of their tests)
+    let (here, gone): (Vec<String>, Vec<String>) = git_z(
+        root,
+        &[
+            "ls-files",
+            "-z",
+            "--modified",
+            "--others",
+            "--exclude-standard",
+        ],
+    )
+    .into_iter()
+    .partition(|p| root.join(p).is_file());
     for path in gone {
         ids.insert(path, String::new());
     }
@@ -635,9 +643,10 @@ fn inputs<'a>(
         .collect()
 }
 
-/// Where a crate's kept result for `cmd` lives: the clone's git directory, none outside a repository.
-fn kept_path(root: &Path, cmd: &str, manifest: &Path) -> Option<PathBuf> {
-    let dir = crate::plan::git_line(root, &["rev-parse", "--absolute-git-dir"]);
+/// Where a crate's kept result for `cmd` lives: under the clone's git directory `dir`, none outside a repository (`dir` empty). The
+/// directory is the one [`Kept::read`] asked git for, once a run: asked again for each crate and check it was a `git` started two or
+/// three times a crate, a run of the runner's tests about 20 ms (feature 449 T167, FR-008's tenth of a second).
+fn kept_path(dir: &str, cmd: &str, manifest: &Path) -> Option<PathBuf> {
     (!dir.is_empty()).then(|| {
         Path::new(&dir).join("rust-checks").join(format!(
             "{cmd}-{}",
@@ -654,6 +663,8 @@ fn kept_path(root: &Path, cmd: &str, manifest: &Path) -> Option<PathBuf> {
 /// crates it builds from, which a named run does not list).
 pub(super) struct Kept {
     pub(super) reads: Reads,
+    /// The clone's git directory, empty outside a repository: where every crate's kept results live.
+    pub(super) git_dir: String,
     pub(super) ids: BTreeMap<String, String>,
     /// Each Rust file's code id, for the checks a comment cannot change (T112).
     pub(super) code: BTreeMap<String, String>,
@@ -678,16 +689,18 @@ impl Kept {
                 .collect::<Vec<_>>(),
         );
         let ids = content_ids(&world.root);
+        let git_dir = crate::plan::git_line(&world.root, &["rev-parse", "--absolute-git-dir"]);
         // only the checks a comment cannot change read the views (`BY_CODE`): a format or dead key reads the whole text (T160)
         let (code, interface, includes) = if BY_CODE.contains(&cmd) {
-            let git = crate::plan::git_line(&world.root, &["rev-parse", "--absolute-git-dir"]);
-            let cache = (!git.is_empty()).then(|| Path::new(&git).join("rust-checks/code-views"));
+            let cache =
+                (!git_dir.is_empty()).then(|| Path::new(&git_dir).join("rust-checks/code-views"));
             code_ids_kept(&world.root, &ids, cache.as_deref())
         } else {
             (BTreeMap::new(), BTreeMap::new(), Includes::new())
         };
         Kept {
             reads,
+            git_dir,
             comment_lints: comment_lints(&world.root, &ids),
             code,
             interface,
@@ -725,7 +738,7 @@ impl Verdict {
         manifest: &Path,
         inputs: Option<&Kept>,
     ) -> (Self, bool) {
-        let at = inputs.and_then(|_| kept_path(&world.root, cmd, manifest));
+        let at = inputs.and_then(|k| kept_path(&k.git_dir, cmd, manifest));
         let k = inputs.filter(|_| at.is_some());
         let key = k.map(|k| {
             verdict_key_with(
@@ -762,7 +775,7 @@ impl Verdict {
                 verdict.binary = Some(binary);
                 verdict.exes = exes;
             }
-            verdict.passed_at = kept_path(&world.root, "binary", manifest);
+            verdict.passed_at = k.and_then(|k| kept_path(&k.git_dir, "binary", manifest));
             verdict.passed = kept_lines(verdict.passed_at.as_deref());
             if verdict
                 .binary
@@ -785,7 +798,7 @@ impl Verdict {
     /// (`cfg(coverage)`), so its tests' green result is kept too - `make rust-test` then `make static` ran each owed crate's tests twice.
     /// Only the key: asking the binary key would build the plain test binary, the cost this saves.
     pub(super) fn keep_tests(world: &World, manifest: &Path, inputs: &Kept) {
-        let at = kept_path(&world.root, "test", manifest);
+        let at = kept_path(&inputs.git_dir, "test", manifest);
         let key = verdict_key_with(
             &world.root,
             manifest,

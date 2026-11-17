@@ -305,12 +305,25 @@ impl Land {
         // A MOVED UNIT KEEPS ITS CLAIMS' ROWS (405 T58): a file split into a package at the 1,000-line bar re-keys them, owing nothing;
         // and a PORTED one (feature 449 T166, Q10): the rows carried onto the port the map names, the deferred list re-keyed with them
         self.claims(&["rekey"]);
-        let mut moved = Vec::new();
-        for path in ["dev/claims-index.json", "dev/claims-deferred.json"] {
-            if !self.dirty(&[path])?.is_empty() {
-                moved.push(path);
-            }
-        }
+        // both files asked of one `git status`, each moved where a line names it, as its own status would have listed it (feature 449
+        // T167: a git process fewer a landing)
+        let paths = ["dev/claims-index.json", "dev/claims-deferred.json"];
+        // unstripped, so each line keeps its two status columns
+        let status = self
+            .run(
+                &["git", "status", "--porcelain", "--", paths[0], paths[1]],
+                &[],
+            )?
+            .1;
+        let moved: Vec<&str> = paths
+            .into_iter()
+            .filter(|path| {
+                status.lines().any(|line| {
+                    line.get(3..)
+                        .is_some_and(|named| named.split(" -> ").any(|p| p == *path))
+                })
+            })
+            .collect();
         if !moved.is_empty() {
             let mut cmd = vec![
                 "git",

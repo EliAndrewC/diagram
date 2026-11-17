@@ -215,7 +215,9 @@ impl Cdp {
             if !matches!(self.child.try_wait(), Ok(None)) {
                 return;
             }
-            std::thread::sleep(Duration::from_millis(20));
+            // a 250th of the wait a step: 20 ms of the real 5 s, as it always was, and of the tests' 300 ms 1.2 ms, where a fixed 20 ms
+            // was most of a fake browser's close and the tests close one in each (feature 449 T167)
+            std::thread::sleep(self.close_wait / 250);
         }
         let _ = self.child.kill();
         let _ = self.child.wait();

@@ -57,6 +57,23 @@ impl Client for Fake {
     }
 }
 
+/// No automatic upkeep after a commit: git starts `git maintenance run --auto` after each one, 2.5 ms of a 6 ms commit, and the tests
+/// commit often under FR-008's tenth of a second (feature 449 T167, observed 2026-11-17). A test's archive never grows to need it.
+const QUIET: &str = "[gc]\n\tauto = 0\n[maintenance]\n\tauto = false\n";
+
+/// Every file under `from` copied to the same place under `to`: a new repository's loose objects, each written once.
+fn copy_objects(from: &Path, to: &Path) {
+    for entry in std::fs::read_dir(from).unwrap().flatten() {
+        let (src, dest) = (entry.path(), to.join(entry.file_name()));
+        if src.is_dir() {
+            std::fs::create_dir_all(&dest).unwrap();
+            copy_objects(&src, &dest);
+        } else {
+            std::fs::copy(&src, &dest).unwrap();
+        }
+    }
+}
+
 /// `git` in `dir`, its output; a failure fails the test.
 ///
 /// # Panics
@@ -91,6 +108,11 @@ pub struct World {
 impl World {
     /// A new world, its working copy cloned from a bare remote with one commit.
     ///
+    /// The working copy is made as `git clone` leaves one - `origin` the remote, `main` tracking `origin/main`, the committer set - by
+    /// `git init` and its config written here, the seed committed in it and its push done by hand: four git runs where a seed clone,
+    /// its push and a second clone took twelve, about 65 ms of every test's FR-008 tenth of a second (feature 449 T167, observed
+    /// 2026-11-17). `Archive::ensure`'s own tests clone.
+    ///
     /// # Panics
     /// The world cannot be made.
     #[must_use]
@@ -103,6 +125,7 @@ impl World {
         std::fs::create_dir_all(root.join(".git")).unwrap();
         let home = dir.path().join("m/.specify");
         let remote = dir.path().join("remote.git");
+        let wc = home.join("source-archive");
         git(
             dir.path(),
             &[
@@ -114,57 +137,38 @@ impl World {
                 remote.to_str().unwrap(),
             ],
         );
-        let seed = dir.path().join("seed");
         git(
             dir.path(),
-            &[
-                "clone",
-                "-q",
-                remote.to_str().unwrap(),
-                seed.to_str().unwrap(),
-            ],
+            &["init", "-q", "-b", "main", wc.to_str().unwrap()],
         );
-        std::fs::write(seed.join("README"), "seed\n").unwrap();
-        for args in [
-            &["config", "user.name", "t"][..],
-            &["config", "user.email", "t@t"],
-            &["add", "-A"],
-            &["commit", "-q", "-m", "seed"],
-            &["push", "-q", "origin", "HEAD:main"],
-        ] {
-            git(&seed, args);
-        }
+        let config = wc.join(".git/config");
+        let text = std::fs::read_to_string(&config).unwrap();
+        let text = format!(
+            "{text}[remote \"origin\"]\n\turl = {}\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n[branch \"main\"]\n\tremote = origin\n\
+             \tmerge = refs/heads/main\n[user]\n\tname = diagram source archive\n\temail = noreply@anthropic.com\n{QUIET}",
+            remote.display()
+        );
+        std::fs::write(&config, text).unwrap();
+        std::fs::write(wc.join("README"), "seed\n").unwrap();
+        git(&wc, &["add", "-A"]);
+        git(&wc, &["commit", "-q", "-m", "seed"]);
+        // the push the seed would take, done by hand: its loose objects copied into the bare remote and both refs written - a local
+        // push is 15 ms of the bar, and the tests of pushing push for themselves
+        copy_objects(&wc.join(".git/objects"), &remote.join("objects"));
+        let head = std::fs::read_to_string(wc.join(".git/refs/heads/main")).unwrap();
+        std::fs::write(remote.join("refs/heads/main"), &head).unwrap();
+        let tracking = wc.join(".git/refs/remotes/origin");
+        std::fs::create_dir_all(&tracking).unwrap();
+        std::fs::write(tracking.join("main"), &head).unwrap();
         let gm = dir.path().join("gm");
         std::fs::create_dir_all(&gm).unwrap();
-        let world = Self {
+        Self {
             dir,
             root,
             home,
             remote,
             gm,
-        };
-        world.clone_copy();
-        world
-    }
-
-    /// The working copy cloned (again), its committer set.
-    ///
-    /// # Panics
-    /// The clone fails.
-    pub fn clone_copy(&self) {
-        let wc = self.home.join("source-archive");
-        let _ = std::fs::remove_dir_all(&wc);
-        git(
-            self.dir.path(),
-            &[
-                "clone",
-                "-q",
-                self.remote.to_str().unwrap(),
-                wc.to_str().unwrap(),
-            ],
-        );
-        git(&wc, &["config", "user.name", "diagram source archive"]);
-        git(&wc, &["config", "user.email", "noreply@anthropic.com"]);
+        }
     }
 
     /// The store over the working copy: the process's environment, the local remote, the world's GM folder.

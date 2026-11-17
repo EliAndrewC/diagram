@@ -37,6 +37,8 @@ static GM_BOX: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \[[ x]\] GM review
 static TASK_NAMED: LazyLock<Regex> = LazyLock::new(|| re(r"feature (\d{3}) (T\d+)"));
 static KNOWN_LINE: LazyLock<Regex> =
     LazyLock::new(|| re(r"\Aknown: (.*) - a known drift \((\d{3}) (T\d+[a-z]?)\) to record"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 4] = [&BOX, &GM_BOX, &TASK_NAMED, &KNOWN_LINE];
 
 fn canon(p: &Path) -> PathBuf {
     let real = std::fs::canonicalize(p);
@@ -251,9 +253,12 @@ pub fn claims_mode(root: &Path) -> String {
     }
 }
 
-/// Files `keys` into the feature being landed; what was done, or the error naming what to do instead.
+/// Files `keys` into the feature being landed; what was done, or the error naming what to do instead. `here` reads the [`target`]:
+/// `make claims-carry` hands in the one it already read to know what is filed, where reading it again cost the command a merge base,
+/// a diff and a listing of the tree (feature 449 T167).
 pub fn carry(
     root: &Path,
+    here: &dyn Fn(&Path) -> Result<Option<PathBuf>, Fail>,
     feature: &str,
     task: &str,
     keys: &[String],
@@ -263,7 +268,8 @@ pub fn carry(
         return Err("the claims switch is at report: a carried finding is a row of `make claims-report`, filed nowhere (feature 445); `make claims-clean REASON=` when the claims are closed out".to_owned());
     }
     let mut d = crate::plan::resolve_feature(feature, root);
-    let (here, active) = (target(root)?, crate::plan::active_feature(root));
+    let here = here(root)?;
+    let active = crate::plan::active_feature(root);
     if let (Some(dd), Some(h), Some(a)) = (&d, &here, &active) {
         if canon(dd) == canon(a) {
             d = Some(h.clone());

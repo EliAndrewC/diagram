@@ -28,19 +28,36 @@ pub const RESEARCH: &str = "research";
 /// HOW RARE A WORD HAS TO BE (feature 260 FR-002, measured in specs/260 R2): the cheapest cutoff that catches what this filter can.
 pub const RARE_IN_AT_MOST: usize = 2;
 
+/// THE PATTERNS COMPILED SIDE BY SIDE (feature 449 T167): each `\b` is four look-arounds over Python's Unicode `\w` ([`py`]), and the
+/// regex crate compiles each anew - these seven took 35-40 ms one after another and 12 ms side by side, the longest alone 6-10 ms
+/// (observed 2026-11-17, method: each timed in the crate's test build), which put every test of a record-format round over FR-008's tenth
+/// of a second; the patterns and their order are as they were.
 static SESSION_NOTES: LazyLock<Vec<(&str, Regex)>> = LazyLock::new(|| {
-    [
+    let patterns = [
         ("field", r"\b(?:Grounds|Evidence)\s*:"),
         ("feature number", r"\b[Ff]eature\s+\d{2,3}\b|\bF\d{3}\b"),
         ("task id", r"\bT\d{2,3}\b"),
         ("spec path", r"\bspecs/\d{3}-[\w-]+"),
-        ("make target", r"\bmake\s+(?:[a-z][a-z0-9]*(?:-[a-z0-9]+)+|quick|done|maps|map|audit|claim|tick|verify|soak)\b"),
-        ("file path", r"(?<![\w/.:-])(?:[\w.-]+/)+[\w.-]+\.(?:py|sh|json|md)\b|\b[\w-]+\.(?:py|sh)\b"),
-        ("fetch verdict", r"\b(?:SUMMARY-ONLY|UNFETCHABLE|NOT-FOUND|CONTRADICTED|NOT-READABLE|READ)\b|\bnot re-sourced\b|\bleftover\b"),
-    ]
-    .into_iter()
-    .map(|(label, p)| (label, py(p)))
-    .collect()
+        (
+            "make target",
+            r"\bmake\s+(?:[a-z][a-z0-9]*(?:-[a-z0-9]+)+|quick|done|maps|map|audit|claim|tick|verify|soak)\b",
+        ),
+        (
+            "file path",
+            r"(?<![\w/.:-])(?:[\w.-]+/)+[\w.-]+\.(?:py|sh|json|md)\b|\b[\w-]+\.(?:py|sh)\b",
+        ),
+        (
+            "fetch verdict",
+            r"\b(?:SUMMARY-ONLY|UNFETCHABLE|NOT-FOUND|CONTRADICTED|NOT-READABLE|READ)\b|\bnot re-sourced\b|\bleftover\b",
+        ),
+    ];
+    std::thread::scope(|scope| {
+        let compiling: Vec<_> = patterns
+            .into_iter()
+            .map(|(label, p)| scope.spawn(move || (label, py(p))))
+            .collect();
+        compiling.into_iter().map(|c| c.join().unwrap()).collect()
+    })
 });
 static IDENTIFIER: LazyLock<Regex> = LazyLock::new(|| py(r"^[A-Za-z_][\w.]*(?:\(\))?$"));
 static CJK: LazyLock<Regex> = LazyLock::new(|| {
@@ -432,6 +449,37 @@ impl Corpus {
     }
 }
 
+/// Every pattern the pass reads, compiled side by side once a process before the pass reads the first (feature 449 T167, as
+/// [`SESSION_NOTES`]: the look-around patterns 2-5 ms each one after another).
+static WARM: LazyLock<()> = LazyLock::new(|| {
+    std::thread::scope(|scope| {
+        scope.spawn(|| LazyLock::force(&SESSION_NOTES));
+        for pattern in [
+            &IDENTIFIER,
+            &CJK,
+            &BINOMIAL,
+            &WORD,
+            &COMMENT,
+            &TAG,
+            &SPACES,
+            &SCRIPT,
+            &HEADING,
+            &HEADING_OPEN,
+            &XREF,
+            &CODE_SPAN,
+            &LINK_OPEN,
+            &ITALIC,
+            &QUOTISH,
+            &CODE_ANY,
+            &REGISTRY_KEY,
+            &PAGE_HEADING,
+            &NOT_BARE,
+        ] {
+            scope.spawn(move || LazyLock::force(pattern));
+        }
+    });
+});
+
 /// `prepass`: per section, its heading, the candidate lines, and the rare words the model must rule on (none without a record).
 ///
 /// # Errors
@@ -441,6 +489,7 @@ pub fn prepass(
     glossary: &Map<String, Value>,
     record_dir: Option<&Path>,
 ) -> Result<Vec<Value>> {
+    LazyLock::force(&WARM);
     let known = known_terms(glossary)?;
     let corpus = record_dir.map(Corpus::read).transpose()?;
     let mut out = Vec::new();

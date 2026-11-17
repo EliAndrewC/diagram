@@ -141,7 +141,6 @@ fn a_lane_reads_rules_and_goes_on_past_a_failed_page() {
 
 #[test]
 fn a_browser_that_will_not_start_is_each_pages_error_and_the_lanes_recycle() {
-    static STARTS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
     let w = W::new("fetch-nobrowser");
     let said = Said::default();
     let got = lane(
@@ -163,14 +162,24 @@ fn a_browser_that_will_not_start_is_each_pages_error_and_the_lanes_recycle() {
         said.all()[0],
         "error                  https://a.org/x - Error: BrowserType.launch: none"
     );
-    // twenty-six pages: a fresh browser at the twenty-fifth
+}
+
+/// The recycling, split from `a_browser_that_will_not_start_is_each_pages_error_and_the_lanes_recycle` and run at every third page
+/// where the lane's is every twenty-fifth: 26 unreadable pages logged was 0.29 s against FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_lane_recycles_its_browser_every_so_many_pages() {
+    static STARTS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    let w = W::new("fetch-recycle");
+    // the lane's own period, which `lane` hands `lane_every`
+    assert_eq!(super::RECYCLE_EVERY, 25);
+    // four pages at every third: a fresh browser at the third
     let counting = |_: &Path| {
         STARTS.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
         Ok(Box::new(fake()) as Box<dyn l7r_gate_archive::fetch::Client>)
     };
-    let many: Vec<String> = (0..26).map(|i| format!("https://a.org/dead/{i}")).collect();
-    let got = lane(w.root(), &many, &counting, &quiet).unwrap();
-    assert_eq!(got.unreadable, 26);
+    let many: Vec<String> = (0..4).map(|i| format!("https://a.org/dead/{i}")).collect();
+    let got = super::lane_every(w.root(), &many, &counting, &quiet, 3).unwrap();
+    assert_eq!(got.unreadable, 4);
     assert_eq!(STARTS.load(std::sync::atomic::Ordering::SeqCst), 2);
 }
 
@@ -211,7 +220,13 @@ fn the_lanes_sum_and_a_lanes_own_failure_is_the_runs() {
         ..Default::default()
     };
     assert_eq!(live_text(&got), "");
-    // the not-kept list will not take an unreadable page's line: the lane stops
+}
+
+/// The not-kept list will not take an unreadable page's line: the lane stops (split from the test above, feature 449 T167: its two
+/// worlds took 151 ms against FR-008's tenth of a second).
+#[test]
+fn a_not_kept_list_that_takes_no_line_stops_the_lane() {
+    let start = starter(fake);
     let w = W::new("fetch-notkept");
     std::fs::create_dir_all(w.root().join(crate::NOT_KEPT)).unwrap();
     assert_eq!(

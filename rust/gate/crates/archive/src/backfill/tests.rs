@@ -42,7 +42,9 @@ fn a_lane_archives_its_urls_recycles_its_browser_and_pushes_past_the_limit() {
         Ok(Box::new(Fake::default()))
     };
     let say = |l: &str| said.lock().unwrap().push(l.to_owned());
-    let urls: Vec<String> = (0..26).map(|n| format!("https://e.org/n{n}")).collect();
+    let urls: Vec<String> = (0..=super::RECYCLE_EVERY)
+        .map(|n| format!("https://e.org/n{n}"))
+        .collect();
     let who = vec![(
         "https://e.org/n1".to_owned(),
         l7r_gate_research::record::archive::Cited {
@@ -74,7 +76,7 @@ fn a_lane_archives_its_urls_recycles_its_browser_and_pushes_past_the_limit() {
         .unwrap();
     std::fs::write(w.home.join("source-archive.unpushed"), "999999999999").unwrap();
     let rows = lane(&how, &urls, &store).unwrap();
-    assert_eq!(rows.len(), 26);
+    assert_eq!(rows.len(), super::RECYCLE_EVERY + 1);
     assert_eq!(rows[1]["keys"], serde_json::json!(["src-a"]));
     assert_eq!(*starts.lock().unwrap(), 1 + 2);
     assert!(said

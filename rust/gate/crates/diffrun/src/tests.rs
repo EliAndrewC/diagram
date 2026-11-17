@@ -9,19 +9,24 @@ use serde_json::{json, Value};
 
 use crate::{cli, Ctx};
 
+/// A side of the runner's tests. Every program it starts costs a side about 2 ms, and a test runs up to fourteen sides (feature 449 T167,
+/// FR-008's tenth of a second): `hello`'s stamp is one each side writes in the stamp's form, the two sides' different, where `date` gave
+/// the clock's (the `stamp` normalization still has two different stamps to make equal, and no second's turn can split them), and
+/// `out/` is made only where the setup did not make it.
 const SIDE: &str = r#"#!/bin/sh
 # a side of the runner's tests: one mode a step, its outputs on stdout, stderr and under out/
 mode=$1; shift
 d=""; [ -f "$ROOTDIR/new-differs" ] && [ "$SIDE_NAME" = new ] && d=" there"
+stamp=20261117T010101Z; [ "$SIDE_NAME" = new ] && stamp=20261117T020202Z
 case "$mode" in
-  hello) echo "hello$d $1"; mkdir -p out; echo "made $1 $(date -u +%Y%m%dT%H%M%SZ) in $DIFF_RUN_WORLD" > out/made.txt ;;
-  noisy) mkdir -p out; date +%s%N > out/noise.txt ;;
+  hello) echo "hello$d $1"; [ -d out ] || mkdir out; echo "made $1 $stamp in $DIFF_RUN_WORLD" > out/made.txt ;;
+  noisy) [ -d out ] || mkdir out; date +%s%N > out/noise.txt ;;
   fail) echo "no such thing$d" >&2; exit 3 ;;
   rm) rm -f out/seed.txt ;;
-  bin) mkdir -p out; printf '\377\376' > out/bin.dat ;;
-  big) mkdir -p out; seq 1 3000 > out/big.txt ;;
+  bin) [ -d out ] || mkdir out; printf '\377\376' > out/bin.dat ;;
+  big) [ -d out ] || mkdir out; seq 1 3000 > out/big.txt ;;
   two) mkdir -p out/a1 out/a2; echo one > out/a1/f; echo two > out/a2/f ;;
-  link) mkdir -p out; ln -s target out/link ;;
+  link) [ -d out ] || mkdir out; ln -s target out/link ;;
   log) echo b >> server.log; echo a >> server.log; echo s > status ;;
   lines) printf 'z\ny\nx\n' ;;
   code) [ -n "$d" ] && exit 5; exit 0 ;;
@@ -64,13 +69,14 @@ impl Fx {
         json!({
             "vars": {"OUT": "{WORLD}/out"},
             "world": {
+                // one setup command where there were two, the flaky check in the same `sh` (feature 449 T167: a program a side less)
                 "setup": [
-                    ["sh", "-c", "[ -z \"$FAILSETUP\" ] && mkdir -p {OUT} && echo seed > {OUT}/seed.txt && echo st > {WORLD}/status"],
-                    ["sh", "-c", "if [ -n \"$FLAKY\" ] && [ \"$DIFF_RUN_SIDE\" = old ]; then [ ! -e \"$ROOTDIR/flaky\" ] || exit 1; touch \"$ROOTDIR/flaky\"; fi"]
+                    ["sh", "-c", "[ -z \"$FAILSETUP\" ] && mkdir -p {OUT} && echo seed > {OUT}/seed.txt && echo st > {WORLD}/status && if [ -n \"$FLAKY\" ] && [ \"$DIFF_RUN_SIDE\" = old ]; then [ ! -e \"$ROOTDIR/flaky\" ] || exit 1; touch \"$ROOTDIR/flaky\"; fi"]
                 ],
                 "files": ["out", "server.log"],
                 "ignore": [".git"],
-                "extras": [{"name": "status", "cmd": ["cat", "{WORLD}/status"]}, {"name": "kept log", "path": "{WORLD}/server.log"}],
+                // the status read as a path, not by `cat` twice a side; the one test that reads it puts the `cmd` form back (feature 449 T167)
+                "extras": [{"name": "status", "path": "{WORLD}/status"}, {"name": "kept log", "path": "{WORLD}/server.log"}],
                 "env": {"ROOTDIR": "{ROOT}", "DROPPED": null},
                 "env_drop_prefixes": ["L7R_TEST_NEVER_"],
                 "max_text_bytes": 1000,
@@ -349,17 +355,26 @@ fn twice_reports_run_to_run_noise_and_only_reruns_one_case() {
     );
 }
 
-#[test]
-fn every_output_is_compared_and_each_normalization_taken_is_listed() {
-    let fx = Fx::new();
-    let cases = json!([
+/// The case of every kind of output, and its cases file: an extra read by a command among them.
+fn outputs(more: &[Value]) -> Value {
+    let mut cases = vec![json!(
         {"name": "outputs", "steps": [["{CMD}", "fail"], {"argv": ["{CMD}", "rm"], "compare": false}, ["{CMD}", "bin"], ["{CMD}", "big"],
                                        ["{CMD}", "two"], ["{CMD}", "link"], ["{CMD}", "log"], ["{CMD}", "lines"], ["{CMD}", "code"],
                                        {"argv": ["sh", "-c", "mkdir -p out/.git && echo x > out/.git/f"], "compare": false}],
-         "norms": ["sorted-stdout"]},
-        {"name": "files narrowed", "steps": [["{CMD}", "hello", "x"], ["sh", "-c", "echo \"[$MAKELEVEL$MAKEFLAGS]\""]], "files": ["out/made.txt"]}
+         "norms": ["sorted-stdout"]}
+    )];
+    cases.extend(more.iter().cloned());
+    let mut v = Fx::base(&Value::Array(cases));
+    v["world"]["extras"][0] = json!({"name": "status", "cmd": ["cat", "{WORLD}/status"]});
+    v
+}
+
+#[test]
+fn every_output_is_compared_and_each_normalization_taken_is_listed() {
+    let fx = Fx::new();
+    let v = outputs(&[
+        json!({"name": "files narrowed", "steps": [["{CMD}", "hello", "x"], ["sh", "-c", "echo \"[$MAKELEVEL$MAKEFLAGS]\""]], "files": ["out/made.txt"]}),
     ]);
-    let v = Fx::base(&cases);
     let (r, rep) = fx.run(&v, &[]);
     assert_eq!(r.code, 0, "{}", r.stdout);
     let taken = rep["cases"][0]["norms"].as_array().unwrap();
@@ -410,9 +425,22 @@ fn every_output_is_compared_and_each_normalization_taken_is_listed() {
     .unwrap();
     // make's variables never reach a side
     assert_eq!(kept["result"]["steps"][1][1], "[]\n");
-    // the new side differing in exit and stderr
+    // an ignored directory is not compared
+    assert!(!files
+        .as_object()
+        .unwrap()
+        .keys()
+        .any(|k| k.contains(".git")));
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second: the two together took 140 ms): the outputs case alone, its
+/// new side differing from the start, where the test above ran it the same first and then verified - the old side's result is the one
+/// the first run kept either way.
+#[test]
+fn the_new_side_differing_in_exit_and_stderr_is_said_step_by_step() {
+    let fx = Fx::new();
     fx.write("new-differs", "");
-    let (r, rep) = fx.run(&v, &["--verify"]);
+    let (r, rep) = fx.run(&outputs(&[]), &["--verify"]);
     assert_eq!(r.code, 1);
     let d = rep["cases"][0]["diffs"].as_array().unwrap();
     assert!(d[0]
@@ -420,12 +448,6 @@ fn every_output_is_compared_and_each_normalization_taken_is_listed() {
         .unwrap()
         .starts_with("step 0 stderr\n--py--\nno such thing\n\n--rs--\nno such thing there"));
     assert_eq!(d[1], "step 7 exit 0 != 5");
-    // an ignored directory is not compared
-    assert!(!files
-        .as_object()
-        .unwrap()
-        .keys()
-        .any(|k| k.contains(".git")));
 }
 
 #[test]
@@ -455,20 +477,25 @@ fn a_side_that_fails_to_run_is_reported_and_kept_nowhere() {
     assert_eq!(reruns(&rep)[2], ("killed".to_owned(), false, false));
 }
 
-/// Split from the test above (feature 449 T160): the timeout alone, the one case that waits, run once, in the test build's seconds
-/// (`run::SECOND`); the case it shared a run with took 4.3 s for its four waits of a second.
+/// Split from the test above (feature 449 T160): the timeout alone, the one case that waits, in the test build's seconds (`run::SECOND`);
+/// the case it shared a run with took 4.3 s for its four waits of a second. One side waits, at a timeout of one of those seconds (feature
+/// 449 T167, FR-008's tenth of a second: both sides waiting out three took 321 ms): the old side's `sleep` is a stand-in that returns at
+/// once, and the only other commands under the timeout are `true` and the step's own start - at two seconds a two-command `sh` setup
+/// outran it once under a load of other tests (2026-11-17), so the setup is `true` and there is no build.
 #[test]
 fn a_side_that_outruns_its_timeout_is_stopped_and_named() {
     let fx = Fx::new();
+    std::fs::create_dir_all(fx.root().join("quick")).unwrap();
+    l7r_gate_core::write_executable(&fx.root().join("quick/sleep"), "#!/bin/sh\n");
     let mut v = Fx::base(&json!([{"name": "slow", "steps": [["sleep", "5"]]}]));
-    v["world"]["timeout_s"] = json!(3);
-    // the one setup the case needs, its `sh -c` the only other command under the short timeout: at two of the test build's seconds a
-    // setup outran it once under a load of other tests (2026-11-17)
-    v["world"]["setup"] = json!([v["world"]["setup"][0].clone()]);
+    v["world"]["timeout_s"] = json!(1);
+    v["world"]["setup"] = json!([["true"]]);
+    v["sides"]["old"].as_object_mut().unwrap().remove("build");
+    v["sides"]["old"]["env"]["PATH"] = json!("{ROOT}/quick:/usr/bin:/bin");
     let (r, rep) = fx.run(&v, &[]);
     assert_eq!(r.code, 1);
     let said = rep["cases"][0]["errors"][0].as_str().unwrap_or_default();
-    assert!(said.contains("sleep 5: timed out after 3 s"), "{said}");
+    assert!(said.contains("sleep 5: timed out after 1 s"), "{said}");
 }
 
 #[test]
@@ -497,6 +524,14 @@ fn a_run_is_refused_before_anything_runs() {
     let mut v = Fx::base(&three());
     v["sides"]["new"]["build"] = json!([["/no/such/build"]]);
     assert!(fx.run(&v, &[]).0.stderr.contains("cannot start"));
+    // a bare name the side's `PATH` holds nowhere (feature 449 T167: `run::on_path` leaves it to the child's own lookup)
+    v["sides"]["new"]["build"] = json!([["no-such-build-t167"]]);
+    assert!(fx
+        .run(&v, &[])
+        .0
+        .stderr
+        .contains("no-such-build-t167: cannot start"));
+    v["sides"]["new"]["build"] = json!([["/no/such/build"]]);
     for (flags, why) in [
         (&["--verify", "--only", "one"][..], "takes no --only"),
         (&["--reason", "a b c"], "--reason goes with --all"),

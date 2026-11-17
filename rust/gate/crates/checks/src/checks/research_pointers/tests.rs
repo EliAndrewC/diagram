@@ -100,6 +100,9 @@ fn a_line_with_no_pointer_but_an_old_number_is_still_asked() {
     assert_eq!(refused.stderr.matches("docs/a.md:1:").count(), 1);
 }
 
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the check run on the live repository, every pointer in it resolving to a
+/// fragment; its time grows with the tree, held by SC-003's suite total, not the bar.
+///
 /// The whole repository's pointers, a check of the tree rather than of the code: under the coverage build it took 8.25 s against 0.27 s
 /// plain, the regular expressions it runs over every file instrumented in this crate, the whole of a core edit's longest coverage run
 /// (feature 449 T116, 2026-11-12). The fixture tests reach every line it does (`the_alternation_puts_a_longer_name_first`), so the coverage build leaves it out and

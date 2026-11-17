@@ -4,6 +4,7 @@
 use std::path::Path;
 
 use l7r_gate_core::ci::fixtures::{put, scratch};
+use l7r_guard::shared::tempdir::TempDir;
 
 use super::{cli, cli_with, get, git_dir, truthy};
 use crate::tests::{env_of, repo, root_of};
@@ -147,11 +148,18 @@ fn an_owed_part_b_holds_the_set_down_until_the_arbiter_rules() {
     assert_eq!(down(&root, &[]).code, 0);
 }
 
+/// A repository and a usage-cap directory, the session's words naming it: what the cap's tests share (feature 449 T167: one test of
+/// them took over FR-008's tenth of a second, each `set-down` asking git three times, so it is three tests, each its own repository).
+fn capped(tag: &str) -> (TempDir, std::path::PathBuf, TempDir) {
+    let dir = repo(tag);
+    let root = root_of(&dir);
+    let cap = scratch(&format!("{tag}-dir"));
+    (dir, root, cap)
+}
+
 #[test]
 fn under_the_usage_cap_the_set_down_waits_on_a_set_down_ruling() {
-    let dir = repo("set-down-cap");
-    let root = root_of(&dir);
-    let cap = scratch("set-down-cap-dir");
+    let (_dir, root, cap) = capped("set-down-cap");
     let cap_s = cap.to_string_lossy().into_owned();
     let session = [
         ("CLAUDE_CODE_SESSION_ID", "s/1"),
@@ -186,8 +194,19 @@ fn under_the_usage_cap_the_set_down_waits_on_a_set_down_ruling() {
     std::fs::remove_file(&arbiter).unwrap();
     std::fs::write(&starts, "[1]\n").unwrap();
     assert_eq!(down(&root, &session).code, 1);
-    std::fs::remove_file(&starts).unwrap();
-    // at the cap; past the week; the account's soft cap where no goal is armed, 90 where none
+}
+
+/// The cap's second part (feature 449 T167): at the cap; past the week; the account's soft cap where no goal is armed, 90 where none.
+#[test]
+fn at_the_cap_or_past_its_week_nothing_holds_and_the_account_s_cap_stands_in() {
+    let (_dir, root, cap) = capped("set-down-cap-at");
+    let cap_s = cap.to_string_lossy().into_owned();
+    let session = [
+        ("CLAUDE_CODE_SESSION_ID", "s/1"),
+        ("USAGE_CAP_DIR", cap_s.as_str()),
+    ];
+    let put_cap = |name: &str, text: &str| std::fs::write(cap.join(name), text).unwrap();
+    put_cap("budget-s_1.json", "{\"cap\": 80.0}");
     put_cap("latest-s_1.json", "{\"seven_day\": 80}");
     assert_eq!(down(&root, &session).code, 0);
     put_cap(
@@ -207,6 +226,18 @@ fn under_the_usage_cap_the_set_down_waits_on_a_set_down_ruling() {
     assert_eq!(down(&root, &session).code, 0);
     put_cap("caps.json", "{\"u-1\": \"not a dict\"}");
     assert_eq!(down(&root, &session).code, 1);
+}
+
+/// The cap's last part (feature 449 T167): a cap file that is no table, a figure that is no number, and no session at all.
+#[test]
+fn a_cap_or_a_figure_of_the_wrong_kind_and_no_session_read_as_python_read_them() {
+    let (_dir, root, cap) = capped("set-down-cap-kinds");
+    let cap_s = cap.to_string_lossy().into_owned();
+    let session = [
+        ("CLAUDE_CODE_SESSION_ID", "s/1"),
+        ("USAGE_CAP_DIR", cap_s.as_str()),
+    ];
+    let put_cap = |name: &str, text: &str| std::fs::write(cap.join(name), text).unwrap();
     put_cap("caps.json", "[1]");
     put_cap(
         "latest-s_1.json",

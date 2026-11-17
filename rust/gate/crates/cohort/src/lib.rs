@@ -17,3 +17,6 @@ use l7r_gate_tree::{checks, delta, stamp};
 
 #[cfg(test)]
 use l7r_gate_core::{ci, record, write_executable};
+
+#[cfg(test)]
+mod fixture;

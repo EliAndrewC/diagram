@@ -2,6 +2,7 @@
 
 use std::path::Path;
 
+use l7r_guard::shared::tempdir::TempDir;
 use serde_json::{json, Value};
 
 use super::known::{baselines, newly_failing, seeds_named, standing};
@@ -9,25 +10,37 @@ use super::{
     check, cli, needs_baseline, pick, port_mode, rate_line, room, rust_refusal, seeds, Repo,
 };
 use super::{int, rust_landing, text, truthy};
-use crate::ci::fixtures::{commit, git, put, python, repo};
+use crate::ci::fixtures::{commit, git, put};
+use crate::fixture::{built, short};
+
+/// `ci`'s stand-in for `python3`, the same answers from `sh` where it was `bash`, and one `sha1sum` for every file where it was a
+/// `sha1sum` and a `cut` a file (feature 449 T167: the engine key of every commit a test reads asks it, against FR-008's tenth of a
+/// second): the `.py` ids by a hash of the bytes, `--debug-free-equal`'s calls noted beside it, a verdict by `<feature>/.faithful`.
+fn python(dir: &Path) -> String {
+    let path = dir.join(".git/stand-in-python");
+    crate::write_executable(
+        &path,
+        "#!/bin/sh\ncase \"$1\" in\n *codeid.py) [ \"$2\" = --debug-free-equal ] && { echo x >> \"$0.calls\"; shift 2; while [ $# -gt 0 ]; do echo 0; shift 2; done; exit 0; }; if [ \"$2\" = --semantic ]; then shift 3; for f in \"$@\"; do printf '1\\nz'; done; else shift 2; [ $# -eq 0 ] || sha1sum \"$@\" | while read -r h _; do echo \"$h\"; done; fi;;\n *hm_arbiter.py) [ -f \"$3/.faithful\" ];;\nesac\n",
+    );
+    path.to_string_lossy().into_owned()
+}
+
+/// `ci`'s `repo`, built in two git processes: one engine file, `origin/main` at it.
+fn bare(tag: &str) -> TempDir {
+    built(tag, &[&[("l7r/diagram/m.py", "x = 1\n")]], 0).0
+}
 
 /// main's engine at the first return; a `work` commit changes it at the second.
-fn work(
-    tag: &str,
-    port: Option<&str>,
-) -> (l7r_guard::shared::tempdir::TempDir, String, String, String) {
-    let root = repo(tag);
-    if let Some(port) = port {
-        commit(
-            &root,
-            "dev/switches.json",
-            &json!({"port": {"state": port}}).to_string(),
-        );
+fn work(tag: &str, port: Option<&str>) -> (TempDir, String, String, String) {
+    let switches = port.map(|p| json!({"port": {"state": p}}).to_string());
+    let mut commits: Vec<&[(&str, &str)]> = vec![&[("l7r/diagram/m.py", "x = 1\n")]];
+    let with_port = [("dev/switches.json", switches.as_deref().unwrap_or_default())];
+    if switches.is_some() {
+        commits.push(&with_port);
     }
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
-    let base = git(&root, &["rev-parse", "--short", "HEAD"]);
-    commit(&root, "l7r/diagram/m.py", "x = 2\n");
-    let head = git(&root, &["rev-parse", "--short", "HEAD"]);
+    commits.push(&[("l7r/diagram/m.py", "x = 2\n")]);
+    let (root, ids) = built(tag, &commits, commits.len() - 2);
+    let (base, head) = (short(&ids[ids.len() - 2]), short(&ids[ids.len() - 1]));
     let py = python(&root);
     (root, base, head, py)
 }
@@ -102,15 +115,23 @@ fn which_records_count() {
     assert!(rate_line(&fixed_only).contains("after the push"));
 }
 
+/// Split from the test below (feature 449 T167, FR-008's tenth of a second): no landing record, and main's record ending the baseline owed.
 #[test]
-fn the_check_refuses_a_regression_and_passes_a_pre_existing_failure() {
-    let (root, base, head, py) = work("regress", Some("integrated"));
+fn a_landing_with_no_record_is_refused_and_main_s_record_is_its_baseline() {
+    let (root, base, _, py) = work("regress-none", Some("integrated"));
     let r = Repo::new(&root, &py);
     let (refusals, _) = check(&r);
     assert!(refusals.len() == 1 && refusals[0].contains("make cohort-landing"));
     assert!(needs_baseline(&r));
     rec(&root, "u1", &base, 1, &[], 0);
     assert!(!needs_baseline(&r));
+}
+
+#[test]
+fn the_check_refuses_a_regression_and_passes_a_pre_existing_failure() {
+    let (root, base, head, py) = work("regress", Some("integrated"));
+    let r = Repo::new(&root, &py);
+    rec(&root, "u1", &base, 1, &[], 0);
     rec(&root, "u2", &head, 1, &[5, 20_001], 48);
     let (refusals, notes) = check(&r);
     assert!(!refusals.is_empty() && refusals.iter().all(|l| l.contains("seed 5 NEWLY FAILING")));
@@ -183,7 +204,6 @@ fn the_rust_stage_gate_holds_every_engine_landing_and_the_port_switch_reads_it_a
     assert!(rust_refusal(&r)
         .unwrap()
         .starts_with("no Rust stage gate record"));
-    let key = r.engine_key(None);
     put(&root, "dev/rust-gate/failing.json", "[]\n");
     put(
         &root,
@@ -194,6 +214,23 @@ fn the_rust_stage_gate_holds_every_engine_landing_and_the_port_switch_reads_it_a
     assert!(rust_refusal(&r)
         .unwrap()
         .starts_with("no Rust stage gate record"));
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second: the three parts together took 117 ms, each answer reading
+/// the work tree's engine key): a record of the engine's failing seeds refuses the landing, a rate at the port switch's `integrated`.
+#[test]
+fn a_failing_rust_stage_record_refuses_the_landing_and_is_read_as_a_rate() {
+    let (root, _, _, py) = work("rust-failing", Some("integrated"));
+    let r = Repo::new(&root, &py);
+    commit(&root, "rust/phases/src/w.rs", "fn f() {}\n");
+    let key = r.engine_key(None);
+    put(&root, "dev/rust-gate/failing.json", "[]\n");
+    put(
+        &root,
+        "dev/rust-gate/1.json",
+        &json!({"engine": "K0", "failing": 0}).to_string(),
+    );
+    put(&root, "dev/rust-gate/2.json", "not json");
     put(
         &root,
         "dev/rust-gate/3.json",
@@ -210,6 +247,29 @@ fn the_rust_stage_gate_holds_every_engine_landing_and_the_port_switch_reads_it_a
                 .any(|n| n.contains("a Rust-stage landing, a rate"))
     );
     assert_eq!(cli(&["rust-owed".to_owned()], &root, &py).code, 0);
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second): the same failing record, read at the port switch's
+/// `rust-only` as a rate, and a passing record on the same engine ending the refusal.
+#[test]
+fn at_rust_only_a_failing_rust_stage_record_is_a_rate_and_a_passing_one_ends_the_refusal() {
+    let (root, _, _, py) = work("rust-only", Some("integrated"));
+    let r = Repo::new(&root, &py);
+    commit(&root, "rust/phases/src/w.rs", "fn f() {}\n");
+    let key = r.engine_key(None);
+    put(&root, "dev/rust-gate/failing.json", "[]\n");
+    put(
+        &root,
+        "dev/rust-gate/1.json",
+        &json!({"engine": "K0", "failing": 0}).to_string(),
+    );
+    put(&root, "dev/rust-gate/2.json", "not json");
+    put(
+        &root,
+        "dev/rust-gate/3.json",
+        &json!({"engine": key, "failing": 2}).to_string(),
+    );
+    assert!(rust_refusal(&r).unwrap().contains("2 failing seed(s)"));
     put(
         &root,
         "dev/switches.json",
@@ -242,7 +302,7 @@ fn a_malformed_port_entry_closes_to_the_committed_state() {
         "{\"port\": {\"state\": \"maybe\"}}",
     );
     assert_eq!(port_mode(&root), "integrated");
-    let bare = repo("portbare");
+    let bare = bare("portbare");
     assert_eq!(port_mode(&bare), "rust-only");
     put(&bare, "dev/switches.json", "not json");
     assert_eq!(port_mode(&bare), "rust-only");
@@ -253,14 +313,28 @@ fn say(root: &Path, py: &str, words: &[&str]) -> crate::Reply {
     cli(&owned, root, py)
 }
 
+/// Split in five (feature 449 T167, FR-008's tenth of a second: the seventeen answers together took 179 ms): the check with no record
+/// here, then with the records, the seed and key verbs, the rest, and a repository with nothing past main.
 #[test]
 fn the_command_line_answers_every_verb() {
-    let (root, base, head, py) = work("cli", Some("integrated"));
+    let (root, _, _, py) = work("cli", Some("integrated"));
     assert_eq!(say(&root, &py, &["check"]).code, 1);
     assert!(say(&root, &py, &[]).stdout.contains("REFUSED"));
+}
+
+#[test]
+fn the_command_line_check_passes_on_main_s_record_and_the_landing_s() {
+    let (root, base, head, py) = work("cli-check", Some("integrated"));
     rec(&root, "u1", &base, 1, &[], 0);
     rec(&root, "u2", &head, 1, &[], 0);
     assert_eq!(say(&root, &py, &["check"]).code, 0);
+}
+
+#[test]
+fn the_command_line_answers_the_seed_and_key_verbs() {
+    let (root, base, head, py) = work("cli-keys", Some("integrated"));
+    rec(&root, "u1", &base, 1, &[], 0);
+    rec(&root, "u2", &head, 1, &[], 0);
     assert!(say(&root, &py, &["fresh-seed"])
         .stdout
         .trim()
@@ -272,6 +346,13 @@ fn the_command_line_answers_every_verb() {
         say(&root, &py, &["engine-key", "HEAD"]).stdout,
         say(&root, &py, &["engine-key", "HEAD"]).stdout
     );
+}
+
+#[test]
+fn the_command_line_answers_the_switch_and_gate_verbs() {
+    let (root, base, head, py) = work("cli-gate", Some("integrated"));
+    rec(&root, "u1", &base, 1, &[], 0);
+    rec(&root, "u2", &head, 1, &[], 0);
     assert_eq!(say(&root, &py, &["port"]).stdout, "integrated\n");
     assert_eq!(say(&root, &py, &["counter-only"]).code, 1);
     assert_eq!(say(&root, &py, &["needs-baseline"]).code, 1);
@@ -279,7 +360,15 @@ fn the_command_line_answers_every_verb() {
     assert_eq!(say(&root, &py, &["sideways"]).code, 2);
     assert_eq!(say(&root, &py, &["names-fit", "a typo"]).code, 1);
     assert_eq!(say(&root, &py, &["names-fit", "two knots here"]).code, 0);
-    assert_eq!(say(&repo("nobase-cli"), &py, &["counter-only"]).code, 1);
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second): a repository whose `origin/main` is its HEAD has no delta
+/// that is counter-only.
+#[test]
+fn the_command_line_finds_no_counter_only_delta_with_none_past_main() {
+    let root = bare("nobase-cli");
+    let py = python(&root);
+    assert_eq!(say(&root, &py, &["counter-only"]).code, 1);
 }
 
 #[test]
@@ -426,12 +515,19 @@ fn a_cohort_with_a_newly_failing_seed_prints_what_is_owed_only_when_a_task_is_in
     let got = say(&root, &py, &["known"]);
     assert_eq!(got.code, 0, "{}", got.stderr);
     assert!(got.stdout.contains("seed 5 NEWLY FAILING"));
-    assert_eq!(say(&repo("owed-none"), &py, &["known"]).stdout, "");
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second): a repository with no cohort record prints nothing owed.
+#[test]
+fn a_repository_with_no_cohort_prints_nothing_owed() {
+    let root = bare("owed-none");
+    let py = python(&root);
+    assert_eq!(say(&root, &py, &["known"]).stdout, "");
 }
 
 #[test]
 fn the_room_table_renders_and_a_fit_failure_is_named() {
-    let root = repo("room");
+    let root = bare("room");
     put(&root, "scripts/gates/room_table.json", &json!({"rows": [{"knob": "gap", "where": "w", "value": 5, "label": "GUESS", "measures": "m", "ceiling": "c", "band": "grows"}]}).to_string());
     let out = say(&root, "python3", &["room-table"]).stdout;
     assert!(
@@ -447,7 +543,7 @@ fn the_room_table_renders_and_a_fit_failure_is_named() {
 
 #[test]
 fn the_seed_report_names_each_failure_the_span_and_the_rate() {
-    let root = repo("seeds");
+    let root = bare("seeds");
     let log = "dev/cohort-log";
     put(&root, &format!("{log}/features.json"), "{\"c1\": \"386\"}");
     put(&root, &format!("{log}/1.json"), &json!({"commit": "c1", "first_seed": 1, "seeds": [{"seed": 3, "failures": ["refused:Web[2]"]}, {"seed": 901, "failures": ["pinned_only"]}]}).to_string());
@@ -500,7 +596,7 @@ fn the_seed_report_names_each_failure_the_span_and_the_rate() {
         say(&root, "python3", &["seeds", "--record", &target]).code,
         2
     );
-    let none = repo("seeds-none");
+    let none = bare("seeds-none");
     let empty = say(
         &none,
         "python3",
@@ -564,7 +660,7 @@ fn a_seed_is_newly_failing_only_against_a_baseline_on_main() {
 
 #[test]
 fn a_cohort_with_a_newly_failing_seed_owes_part_b_and_a_fit_failure_the_room_table() {
-    let root = repo("approach");
+    let root = bare("approach");
     let py = python(&root);
     put(
         &root,
@@ -664,10 +760,21 @@ fn the_key_is_kept_a_same_text_is_equal_and_no_origin_reads_main() {
 
 #[test]
 fn a_run_with_several_differing_records_starts_codeid_once() {
-    let (root, base, head, py) = work("once", Some("integrated"));
-    commit(&root, "l7r/diagram/m.py", "x = 3\n");
-    let third = git(&root, &["rev-parse", "--short", "HEAD"]);
-    commit(&root, "l7r/diagram/m.py", "x = 4\n");
+    // the two commits after `work`'s in the one history `built` writes (feature 449 T167)
+    let switches = json!({"port": {"state": "integrated"}}).to_string();
+    let (root, ids) = built(
+        "once",
+        &[
+            &[("l7r/diagram/m.py", "x = 1\n")],
+            &[("dev/switches.json", switches.as_str())],
+            &[("l7r/diagram/m.py", "x = 2\n")],
+            &[("l7r/diagram/m.py", "x = 3\n")],
+            &[("l7r/diagram/m.py", "x = 4\n")],
+        ],
+        1,
+    );
+    let (base, head, third) = (short(&ids[1]), short(&ids[2]), short(&ids[3]));
+    let py = python(&root);
     rec(&root, "u1", &base, 1, &[], 0);
     rec(&root, "u2", &head, 1, &[], 0);
     rec(&root, "u3", &third, 1, &[], 0);

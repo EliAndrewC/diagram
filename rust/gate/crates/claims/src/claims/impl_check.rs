@@ -61,6 +61,9 @@ static NONE_LINE: LazyLock<Regex> =
 /// Case (b) says what was searched, or it is a reason without a search (spec FR-001, review round 1).
 static SEARCHED: LazyLock<Regex> = LazyLock::new(|| re(r";\s*searched:\s*\S"));
 static AFFECTS: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^\*\*Affects\*\*:?\s*(.+)$"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 5] =
+    [&FINDINGS_PAGE, &CITED, &NONE_LINE, &SEARCHED, &AFFECTS];
 
 /// Python's name of a JSON value's type, as an error names it.
 fn py_type(v: &Value) -> &'static str {

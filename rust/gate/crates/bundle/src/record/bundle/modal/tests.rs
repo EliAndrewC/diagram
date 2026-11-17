@@ -79,13 +79,9 @@ fn the_prepass() {
     assert_eq!(cli(&args(&["hamlet/well", "--root", &r])).code, 1);
 }
 
-#[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "one bundle's every part, in the order it is built"
-)]
-fn each_checks_bundle() {
-    let root = scratch("modal-bundle");
+/// The scratch record the modal bundles below are built on: the glossary's variants and three questions, two of them on water.
+fn wells(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = scratch(tag);
     put(
         &root,
         "research/assets/glossary-variants.txt",
@@ -102,6 +98,15 @@ fn each_checks_bundle() {
         "research/questions/0097-dry.html",
         "<h2>Dry</h2>\n<p>nothing</p>\n",
     );
+    root
+}
+
+/// The modal-research bundle of a hamlet pop-up. What was one test of each check's bundle is eight, each on a scratch
+/// record of its own - its ten bundles together were nearly three times FR-008's tenth of a second (feature 449 T167); the name kept on
+/// the first.
+#[test]
+fn each_checks_bundle() {
+    let root = wells("modal-bundle");
     let o = root.join("out").to_string_lossy().into_owned();
     let mut run = run_on(&root);
     assert_eq!(
@@ -127,6 +132,12 @@ fn each_checks_bundle() {
             && text.contains("owed-checks: modal-research\nunit: modal-accuracy:hamlet/well ")
             && text.contains("page: research/questions/0094-trade.html ")
     );
+}
+
+#[test]
+fn a_sheets_pop_up_has_its_research_bundle() {
+    let root = wells("modal-bundle-sheet");
+    let o = root.join("out").to_string_lossy().into_owned();
     let mut run = run_on(&root);
     assert_eq!(
         bundle(
@@ -138,12 +149,24 @@ fn each_checks_bundle() {
         .unwrap(),
         0
     );
+}
+
+/// The pop-up's research rounds, one with a reply fixing its wording, and a form round: the state the form bundles below are built on.
+fn held_rounds(root: &Path) {
     let reply = root.join("held.md");
-    put(&root, "held.md", "EDIT l7r/diagram/interactive/assets/modals/hamlet/well.md\n<<<\nold\n===\nA well in the yard.\n>>>\nEDIT x\n<<<\nold\n===\n  \n>>>\n");
+    put(root, "held.md", "EDIT l7r/diagram/interactive/assets/modals/hamlet/well.md\n<<<\nold\n===\nA well in the yard.\n>>>\nEDIT x\n<<<\nold\n===\n  \n>>>\n");
     state(
-        &root,
+        root,
         &json!({"dispatches": {"a": {"check": "modal-research", "subjects": ["modal:hamlet/well"], "t": 1, "reply": reply.to_string_lossy()}, "b": {"check": "modal-research", "subjects": ["modal:hamlet/well"], "t": 2, "aid": "none-such"}, "c": {"check": "modal-form", "subjects": ["modal:hamlet/well"], "t": 3}}}),
     );
+}
+
+/// A modal-form bundle keeps the wording the research rounds fixed.
+#[test]
+fn a_form_bundle_keeps_the_research_rounds_wording() {
+    let root = wells("modal-bundle-form");
+    let o = root.join("out").to_string_lossy().into_owned();
+    held_rounds(&root);
     let mut run = run_on(&root);
     assert_eq!(
         bundle(
@@ -160,6 +183,13 @@ fn each_checks_bundle() {
         "# Wording the research rounds fixed - keep it\n\n- 'A well in the yard.'\n"
     );
     assert!(research_held(&root, "sheet/well", "x").is_empty());
+}
+
+/// A pop-up that is not there, or an out directory that is not a bundle, is refused.
+#[test]
+fn a_missing_pop_up_or_a_busy_out_directory_is_refused() {
+    let root = wells("modal-bundle-refused");
+    let o = root.join("out").to_string_lossy().into_owned();
     let mut run = run_on(&root);
     assert_eq!(
         bundle(&mut run, &root, "Nope", &ask("modal-form", &o, "", "")).unwrap(),
@@ -177,6 +207,16 @@ fn each_checks_bundle() {
         .unwrap(),
         2
     );
+}
+
+/// Several pop-ups in one bundle for one agent, and one that is not there refused.
+#[test]
+fn several_pop_ups_bundled_for_one_agent() {
+    let root = wells("modal-bundle-several");
+    let o = root.join("out").to_string_lossy().into_owned();
+    // the earlier rounds the form bundle above reads, held here too, so the batch's own MANIFEST names its pop-ups' earlier rounds as
+    // it did when the two were one test (feature 449 T167)
+    held_rounds(&root);
     let mut run = run_on(&root);
     assert_eq!(
         bundles(
@@ -192,7 +232,18 @@ fn each_checks_bundle() {
     assert!(
         top.starts_with("# 2 pop-ups for modal-form, one agent")
             && top.contains("unit: modal-form:sheet/well ")
+            && top.contains("Earlier rounds: `01-hamlet-well`")
     );
+}
+
+/// A batch naming a pop-up that is not there is refused.
+#[test]
+fn a_batch_naming_a_pop_up_that_is_not_there_is_refused() {
+    let root = wells("modal-bundle-several-nope");
+    let o = root.join("out").to_string_lossy().into_owned();
+    // an earlier batch where this one goes, which it replaces whole, as the batch above stood there when the two were one test
+    // (feature 449 T167)
+    put(&root, "out/b/MANIFEST.md", "an earlier batch\n");
     assert_eq!(
         bundles(
             &mut run_on(&root),
@@ -203,6 +254,14 @@ fn each_checks_bundle() {
         .unwrap(),
         2
     );
+    assert!(!root.join("out/b/MANIFEST.md").exists());
+}
+
+#[test]
+fn the_command_line_bundles_the_pop_ups_it_is_given() {
+    let root = wells("modal-bundle-cli");
+    let o = root.join("out").to_string_lossy().into_owned();
+    held_rounds(&root);
     let r = root.to_string_lossy().into_owned();
     let both = cli(&args(&[
         "hamlet/well sheet/well",
@@ -212,6 +271,12 @@ fn each_checks_bundle() {
         &format!("{o}/c"),
     ]));
     assert_eq!(both.code, 0);
+}
+
+#[test]
+fn a_question_that_will_not_read_fails_the_bundle() {
+    let root = wells("modal-bundle-unread");
+    let o = root.join("out").to_string_lossy().into_owned();
     std::fs::write(root.join("research/questions/0097-dry.html"), [0xff]).unwrap();
     assert!(bundle(
         &mut run_on(&root),
@@ -270,6 +335,12 @@ fn the_order_and_the_triage_hold_a_bundle() {
     assert!(std::fs::read_to_string(root.join("out/MANIFEST.md"))
         .unwrap()
         .contains("check-order-escape: an audit asked\n"));
+}
+
+/// The triage holds a bundle without a reason: apart from the order above, on its own scratch record as it always was, the two
+/// together past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn the_triage_holds_a_bundle_without_a_reason() {
     let fresh = scratch("modal-triage-held");
     edit_everything(&fresh);
     let o = fresh.join("out").to_string_lossy().into_owned();
@@ -343,11 +414,45 @@ fn the_rare_paths_of_a_modal_bundle() {
         .cloned()
         .unwrap();
     assert_eq!(terms_of(&root, &m).unwrap(), vec!["pail", "well"]);
+}
+
+/// The record of the test above as it stood at its end, its well now of the particular form: the rest of what was one test of a modal
+/// bundle's rare paths, split in three on scratch records of their own - its five bundles together were past FR-008's tenth of a second
+/// (feature 449 T167).
+fn rare(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = scratch(tag);
+    put(
+        &root,
+        "research/questions/0096-a.html",
+        "<h2>A</h2>\n<p>a well</p>\n",
+    );
+    put(
+        &root,
+        "research/questions/0097-b.html",
+        "<h2>B</h2>\n<p>one well</p>\n",
+    );
+    put(
+        &root,
+        "research/assets/glossary-variants.txt",
+        "pail\twell\nother\tthing\n",
+    );
     put(
         &root,
         WELL,
         "Name: Well\nForm: particular\nAbout: A well.\n",
     );
+    root
+}
+
+/// A particular pop-up's research bundle, and the wording a research round fixed read from the round's transcript.
+#[test]
+fn a_particular_pop_up_and_the_wording_held_from_a_transcript() {
+    let root = rare("modal-rare-particular");
+    let o = root.join("out").to_string_lossy().into_owned();
+    // an earlier bundle where this one goes, which it replaces, as the rare paths' first bundle stood there when the two were one test
+    // (feature 449 T167)
+    put(&root, "out/MANIFEST.md", "an earlier bundle\n");
+    put(&root, "out/stale.md", "x");
     assert_eq!(
         bundle(
             &mut run_on(&root),
@@ -361,6 +466,24 @@ fn the_rare_paths_of_a_modal_bundle() {
     assert!(std::fs::read_to_string(root.join("out/candidates.md"))
         .unwrap()
         .contains(" - 0, best first"));
+    assert!(!root.join("out/stale.md").exists());
+    let plain = crate::checks::scratch("modal-held-plain");
+    assert!(research_held(&plain, "hamlet/well", "x").is_empty());
+    put(&root, "home/x/y/subagents/agent-a1.jsonl", "{\"message\": {\"content\": [{\"type\": \"text\", \"text\": \"EDIT x\\n<<<\\no\\n===\\nA well.\\n>>>\"}]}}\n");
+    state(
+        &root,
+        &json!({"dispatches": {"a": {"check": "modal-research", "subjects": ["modal:hamlet/well"], "t": 1, "aid": "a1"}}}),
+    );
+    assert_eq!(
+        research_held_in(&root, "hamlet/well", "A well.", &root.join("home")),
+        vec!["A well."]
+    );
+}
+
+/// A bundle and a batch with no out directory are named for what they hold.
+#[test]
+fn a_bundle_with_no_out_directory_is_named_for_its_pop_ups() {
+    let root = rare("modal-rare-names");
     let mut d = run_on(&root);
     assert_eq!(
         bundle(
@@ -373,6 +496,11 @@ fn the_rare_paths_of_a_modal_bundle() {
         0
     );
     assert!(d.out.contains("modal-hamlet-well-modal-form"));
+}
+
+#[test]
+fn a_batch_with_no_out_directory_is_named_for_its_check() {
+    let root = rare("modal-rare-batch-name");
     let mut b = run_on(&root);
     assert_eq!(
         bundles(
@@ -385,17 +513,6 @@ fn the_rare_paths_of_a_modal_bundle() {
         0
     );
     assert!(b.out.contains("modal-batch-modal-form"));
-    let plain = crate::checks::scratch("modal-held-plain");
-    assert!(research_held(&plain, "hamlet/well", "x").is_empty());
-    put(&root, "home/x/y/subagents/agent-a1.jsonl", "{\"message\": {\"content\": [{\"type\": \"text\", \"text\": \"EDIT x\\n<<<\\no\\n===\\nA well.\\n>>>\"}]}}\n");
-    state(
-        &root,
-        &json!({"dispatches": {"a": {"check": "modal-research", "subjects": ["modal:hamlet/well"], "t": 1, "aid": "a1"}}}),
-    );
-    assert_eq!(
-        research_held_in(&root, "hamlet/well", "A well.", &root.join("home")),
-        vec!["A well."]
-    );
 }
 
 #[test]

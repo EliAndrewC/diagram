@@ -174,7 +174,7 @@ fn the_diff_reports_both_directions() {
 fn the_command_line_names_what_it_cannot_do() {
     quiet();
     let dir = base("refusals");
-    let all = [stub("x-hooks")];
+    let all = [stub("x-hooks"), stub("gone-hooks")];
     let ask = |words: &[&str]| answer(&dir, &strings(words), &all, &dir.join("projects"), "false");
     assert!(ask(&[]).stderr.contains("name a GUARD"));
     assert!(ask(&["nope"]).stderr.contains("no guard named nope"));
@@ -202,29 +202,13 @@ fn a_baseline_is_the_guard_as_it_stood_at_the_ref() {
     git(&dir, &["add", "scripts"]);
     git(&dir, &["commit", "-q", "-m", "shell"]);
     git(&dir, &["tag", "shell"]);
-    exe(
-        &dir.join("scripts/hooks/x-hooks.sh"),
-        "cat > /dev/null; exit 2",
-    );
+    refusing(&dir);
     git(&dir, &["add", "scripts"]);
     git(&dir, &["commit", "-q", "-m", "refuses"]);
     git(&dir, &["tag", "refuses"]);
-    std::fs::create_dir_all(dir.join("rust/guard/src/guards")).unwrap();
-    std::fs::write(
-        dir.join("rust/guard/src/guards/x_hooks.rs"),
-        "// the guard\n",
-    )
-    .unwrap();
-    std::fs::write(dir.join("rust/Cargo.toml"), "[workspace]\n").unwrap();
-    git(&dir, &["add", "rust"]);
-    git(&dir, &["commit", "-q", "-m", "rust"]);
-    git(&dir, &["tag", "rust"]);
-    let cargo = exe(&dir.join("fake-cargo"), "mkdir -p \"$CARGO_TARGET_DIR/release\"; printf '#!/bin/bash\\ncat >/dev/null; echo told\\n' > \"$CARGO_TARGET_DIR/release/l7r-guard\"; chmod +x \"$CARGO_TARGET_DIR/release/l7r-guard\"");
     let all = [stub("x-hooks"), stub("gone-hooks")];
-    let ask = |words: &[&str], cargo: &str| {
-        answer(&dir, &strings(words), &all, &dir.join("projects"), cargo)
-    };
-    let shell = ask(&["x", "--against", "shell"], "false").stdout;
+    let ask = |words: &[&str]| answer(&dir, &strings(words), &all, &dir.join("projects"), "false");
+    let shell = ask(&["x", "--against", "shell"]).stdout;
     assert!(shell.contains("verdict diff against shell (its shell guard at that ref"));
     assert!(
         shell.contains("3 changed")
@@ -233,8 +217,45 @@ fn a_baseline_is_the_guard_as_it_stood_at_the_ref() {
     );
     assert!(shell.contains("[corrected -> silent] targets=[] :: one"));
     assert!(shell.contains("targets=[Some(\"/tmp/a\")]"));
-    let refuses = ask(&["x", "--against", "refuses"], "false").stdout;
+    let refuses = ask(&["x", "--against", "refuses"]).stdout;
     assert!(refuses.contains("blocked -> silent"));
+    assert!(ask(&["gone", "--against", "shell"])
+        .stderr
+        .contains("did not exist at that ref"));
+}
+
+/// The shell guard that refuses everything, the one the `refuses` and `rust` refs hold.
+fn refusing(dir: &Path) {
+    exe(
+        &dir.join("scripts/hooks/x-hooks.sh"),
+        "cat > /dev/null; exit 2",
+    );
+}
+
+/// A baseline built from a ref's Rust guard, and the refs and words that give none: split from `a_baseline_is_the_guard_as_it_stood_at_the_ref`
+/// onto a one-commit repository holding what its `rust` ref held, to keep each under FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_rust_baseline_is_built_at_the_ref_and_a_ref_with_no_guard_says_why() {
+    quiet();
+    let dir = base("baseline-rust");
+    git(&dir, &["init", "-q"]);
+    corpus(&dir, &["one", "two", "echo x > /tmp/a"]);
+    refusing(&dir);
+    std::fs::create_dir_all(dir.join("rust/guard/src/guards")).unwrap();
+    std::fs::write(
+        dir.join("rust/guard/src/guards/x_hooks.rs"),
+        "// the guard\n",
+    )
+    .unwrap();
+    std::fs::write(dir.join("rust/Cargo.toml"), "[workspace]\n").unwrap();
+    git(&dir, &["add", "scripts", "rust"]);
+    git(&dir, &["commit", "-q", "-m", "rust"]);
+    git(&dir, &["tag", "rust"]);
+    let cargo = exe(&dir.join("fake-cargo"), "mkdir -p \"$CARGO_TARGET_DIR/release\"; printf '#!/bin/bash\\ncat >/dev/null; echo told\\n' > \"$CARGO_TARGET_DIR/release/l7r-guard\"; chmod +x \"$CARGO_TARGET_DIR/release/l7r-guard\"");
+    let all = [stub("x-hooks")];
+    let ask = |words: &[&str], cargo: &str| {
+        answer(&dir, &strings(words), &all, &dir.join("projects"), cargo)
+    };
     let rust = ask(&["x", "--against", "rust"], &cargo).stdout;
     assert!(
         rust.contains("its Rust guard built from that ref") && rust.contains("blocked -> silent")
@@ -242,9 +263,6 @@ fn a_baseline_is_the_guard_as_it_stood_at_the_ref() {
     assert!(ask(&["x", "--against", "rust"], "false")
         .stderr
         .contains("would not build"));
-    assert!(ask(&["gone", "--against", "shell"], "false")
-        .stderr
-        .contains("did not exist at that ref"));
     assert!(ask(&["x", "--against", "no-such-ref"], "false")
         .stderr
         .contains("cannot read scripts/"));

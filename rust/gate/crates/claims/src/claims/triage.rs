@@ -36,6 +36,8 @@ static TOUCHES: LazyLock<Regex> = LazyLock::new(|| re(r"\ATOUCHES\s+(\S.*?)\s+-\
 pub static HUNK: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?m)^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@"));
 static QUESTION_PATH: LazyLock<Regex> = LazyLock::new(|| re(r"research/questions/[\w.-]+?\.html"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 3] = [&TOUCHES, &HUNK, &QUESTION_PATH];
 
 fn blob_map(qdir: &Path) -> Option<std::path::PathBuf> {
     let common = git(

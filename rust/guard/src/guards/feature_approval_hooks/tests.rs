@@ -41,12 +41,30 @@ fn line(words: &str) -> String {
 
 /// A repository holding feature 376 and 377, and a transcript of what the GM typed.
 fn repo(tag: &str) -> (crate::shared::tempdir::TempDir, String, String) {
+    repo_with(tag, &[])
+}
+
+/// `repo` with more specs in its first commit and `origin/main` at it: the push tests' base in one commit rather than two, to keep each
+/// under FR-008's tenth of a second (feature 449 T167).
+fn based(tag: &str, specs: &[(&str, &str)]) -> (crate::shared::tempdir::TempDir, String, String) {
+    let made = repo_with(tag, specs);
+    git(&made.1, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    made
+}
+
+fn repo_with(
+    tag: &str,
+    specs: &[(&str, &str)],
+) -> (crate::shared::tempdir::TempDir, String, String) {
     crate::shared::log::quiet();
     let d = crate::shared::tempdir::TempDir::new(&format!("guard-approval-{tag}"));
     let at = d.canonicalize().unwrap().to_string_lossy().into_owned();
     git(&at, &["init", "-q", "-b", "main"]);
     spec(&at, "376-older", "# 376\n");
     spec(&at, "377-held", "# 377\n");
+    for (feature, text) in specs {
+        spec(&at, feature, text);
+    }
     git(&at, &["add", "."]);
     git(&at, &["commit", "-q", "-m", "one"]);
     let transcript = format!("{at}/.git/t.jsonl");
@@ -197,18 +215,15 @@ fn an_issue_filed_for_the_gm_is_approved_by_his_standing_words() {
     assert!(run("git add -A", &at, &tr).is_empty());
 }
 
+const CLOSED: (&str, &str) = (
+    "300-closed",
+    "# 300\n\n**Status**: Done 2026-10-01 - measured\n",
+);
+const OPEN: (&str, &str) = ("301-open", "# 301\n\n**Status**: Filed\n");
+
 #[test]
 fn a_feature_landed_open_or_with_a_hidden_task_is_refused_at_a_push() {
-    let (_dir, at, tr) = repo("push");
-    spec(
-        &at,
-        "300-closed",
-        "# 300\n\n**Status**: Done 2026-10-01 - measured\n",
-    );
-    spec(&at, "301-open", "# 301\n\n**Status**: Filed\n");
-    git(&at, &["add", "."]);
-    git(&at, &["commit", "-q", "-m", "base"]);
-    git(&at, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    let (_dir, at, tr) = based("push", &[CLOSED, OPEN]);
     assert!(run_push(&at, &tr).is_empty());
     spec(
         &at,
@@ -223,6 +238,13 @@ fn a_feature_landed_open_or_with_a_hidden_task_is_refused_at_a_push() {
             && refused(&got, "Reopening a feature")
             && !refused(&got, "301-open")
     );
+}
+
+/// The reopening's approval, split from `a_feature_landed_open_or_with_a_hidden_task_is_refused_at_a_push` onto its own base to keep
+/// each under FR-008's tenth of a second (feature 449 T167): words the GM never wrote are refused, his own pass.
+#[test]
+fn a_reopened_feature_needs_the_gm_s_own_words_at_a_push() {
+    let (_dir, at, tr) = based("push-words", &[CLOSED, OPEN]);
     spec(
         &at,
         "300-closed",
@@ -239,13 +261,11 @@ fn a_feature_landed_open_or_with_a_hidden_task_is_refused_at_a_push() {
     assert!(run_push(&at, &tr).is_empty());
 }
 
+const SUPERSEDED: (&str, &str) = ("300-closed", "**Status:** Superseded by 400\n");
+
 #[test]
 fn a_task_hidden_under_a_closed_status_and_the_gm_review_box() {
-    let (_dir, at, tr) = repo("hidden");
-    spec(&at, "300-closed", "**Status:** Superseded by 400\n");
-    git(&at, &["add", "."]);
-    git(&at, &["commit", "-q", "-m", "base"]);
-    git(&at, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    let (_dir, at, tr) = based("hidden", &[SUPERSEDED]);
     std::fs::write(
         format!("{at}/specs/300-closed/tasks.md"),
         "- [ ] T05 hidden\n",
@@ -267,6 +287,13 @@ fn a_task_hidden_under_a_closed_status_and_the_gm_review_box() {
         &run_push(&at, &tr),
         "a task added under a closed status"
     ));
+}
+
+/// The GM review box, split from `a_task_hidden_under_a_closed_status_and_the_gm_review_box` onto its own base to keep each under
+/// FR-008's tenth of a second (feature 449 T167): the one unticked box a closed feature may carry is its review by the GM.
+#[test]
+fn the_gm_review_box_under_a_closed_status_passes_a_push() {
+    let (_dir, at, tr) = based("box", &[SUPERSEDED]);
     std::fs::write(
         format!("{at}/specs/300-closed/tasks.md"),
         "- [ ] GM review (make gm-reviewed F=300)\n",

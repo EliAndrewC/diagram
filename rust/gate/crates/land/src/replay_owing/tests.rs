@@ -13,24 +13,39 @@ const OLD_CLAIMS: &str = "QUESTIONS = 'research/questions'\n\ndef current(root):
 
 /// A history of three commits, the last two the replayed ones, its own `scripts/record/` stand-ins.
 fn history(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, PathBuf, Vec<String>) {
+    history_of(tag, 3)
+}
+
+/// The first `n` commits of `history`: a test replaying only the second needs no third, two git processes fewer (feature 449 T167;
+/// one `git fast-import` in place of the adds and commits measured slower, 15 ms against about 4 a commit).
+fn history_of(tag: &str, n: usize) -> (l7r_guard::shared::tempdir::TempDir, PathBuf, Vec<String>) {
     let dir = scratch(tag);
     let root = dir.join("repo");
     std::fs::create_dir_all(&root).unwrap();
     git(&root, &["init", "-q", "-b", "main"]);
-    git(&root, &["config", "user.email", "t@t"]);
-    git(&root, &["config", "user.name", "t"]);
+    // the committer in the config file itself, and no automatic maintenance, which each commit otherwise starts as a process of its
+    // own: four git processes fewer (feature 449 T167)
+    let config = root.join(".git/config");
+    let text = std::fs::read_to_string(&config).unwrap();
+    std::fs::write(
+        &config,
+        text + "[user]\n\temail = t@t\n\tname = t\n[maintenance]\n\tauto = false\n",
+    )
+    .unwrap();
     put(&root, "scripts/record/modal_owed.py", OLD_MODAL_OWED);
     put(&root, "scripts/record/claims.py", OLD_CLAIMS);
     put(&root, "dev/claims-index.json", "{}\n");
     let mut revs = Vec::new();
-    for (i, file) in ["first", "second", "third"].iter().enumerate() {
+    for (i, file) in ["first", "second", "third"].iter().take(n).enumerate() {
         put(&root, file, &format!("{i}\n"));
         if i == 1 {
             std::fs::remove_file(root.join("dev/claims-index.json")).unwrap();
         }
         git(&root, &["add", "-A"]);
         git(&root, &["commit", "-qm", &format!("commit {file}")]);
-        revs.push(git(&root, &["rev-parse", "HEAD"]));
+        // the commit as its branch's loose ref holds it, a fresh repository's only kind: a `rev-parse` process fewer each
+        let head = std::fs::read_to_string(root.join(".git/refs/heads/main")).unwrap();
+        revs.push(head.trim().to_owned());
     }
     (dir, root, revs)
 }
@@ -50,6 +65,9 @@ fn args(a: &[&str]) -> Vec<String> {
     a.iter().map(|s| (*s).to_owned()).collect()
 }
 
+/// FR-008's one end-to-end test (ask:449-T167-realtree): replay-owing's, under item (3) of the ruling - the real `python3` as the tool
+/// starts it over its own old-side snippets, two commits replayed, three interpreter starts a commit; every other test here stays under
+/// the tenth of a second, the one-commit replay through `lean` (feature 449 T167).
 #[test]
 fn each_commit_is_replayed_through_the_old_owing_and_the_new() {
     quiet("unused");
@@ -79,14 +97,21 @@ fn each_commit_is_replayed_through_the_old_owing_and_the_new() {
     assert!(out.join(format!("{}.index.json", &revs[2][..10])).is_file());
 }
 
+/// The same interpreter on the same snippets with `-I -S`, no site-packages or environment to read at each start: the stand-in modules
+/// import only the standard library and the snippets put `scripts/record` on the path themselves, and a start importing what they import
+/// falls from 28 ms to 14 (observed 2026-11-17, best of 15), toward FR-008's tenth of a second for a one-commit replay (feature 449 T167).
+fn lean(dir: &Path) -> String {
+    let path = dir.join("python-lean");
+    l7r_gate_core::write_executable(&path, "#!/bin/sh\nexec python3 -I -S \"$@\"\n");
+    path.to_string_lossy().into_owned()
+}
+
 #[test]
 fn a_relative_out_is_read_from_the_working_directory() {
-    let (dir, root, revs) = history("replay-relative");
-    let done = run(
-        &args(&[&revs[1], "--out", "rel"]),
-        &env(&root, &root),
-        &mut quiet,
-    );
+    let (dir, root, revs) = history_of("replay-relative", 2);
+    let mut at_root = env(&root, &root);
+    at_root.python = lean(&dir);
+    let done = run(&args(&[&revs[1], "--out", "rel"]), &at_root, &mut quiet);
     // the OLD snippet opens the index relative to its worktree, as the Python's did: a raise
     assert_eq!(done.code, 1);
     assert!(done.stderr.contains("Traceback"));

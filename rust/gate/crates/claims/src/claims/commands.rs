@@ -685,10 +685,13 @@ fn carry_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Resul
         if keys_text.is_empty() != ruling.is_empty() {
             return Ok(Err("KEYS= and RULING= go together: the findings a round-arbiter ruling carried, and that ruling's trigger".to_owned()));
         }
+        let mut here = None;
         let keys: Vec<String> = if keys_text.is_empty() {
             let at = reading(reader, root)?;
             let (_, _, _, carried) = classified(reader, root, &at)?;
-            let done = super::carry::filed(super::carry::target(root)?.as_deref())?;
+            let target = super::carry::target(root)?;
+            let done = super::carry::filed(target.as_deref())?;
+            here = Some(target);
             carried
                 .into_iter()
                 .map(|(k, _)| k)
@@ -702,8 +705,13 @@ fn carry_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Resul
                 .map(str::to_owned)
                 .collect()
         };
+        let read = |r: &Path| match &here {
+            Some(t) => Ok(t.clone()),
+            None => super::carry::target(r),
+        };
         Ok(carry(
             root,
+            &read,
             p.text("--feature", ""),
             p.text("--task", ""),
             &keys,

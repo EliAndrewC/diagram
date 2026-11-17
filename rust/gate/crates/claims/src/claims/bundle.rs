@@ -36,6 +36,8 @@ static BACKTICKED: LazyLock<Regex> = LazyLock::new(|| re(r"`([A-Za-z_]\w*)"));
 static DISTANCE: LazyLock<Regex> = LazyLock::new(|| {
     re(r"(?i)\b(?:distance|gaps?|standoff|apart|reach|clear of|off the|ft|feet)\b")
 });
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 3] = [&HUNK_LINE, &BACKTICKED, &DISTANCE];
 
 const HEAD: [&str; 5] = [
     "# Bundle for impl-drift (feature 316)\n",

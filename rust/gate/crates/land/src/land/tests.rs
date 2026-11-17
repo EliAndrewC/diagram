@@ -19,24 +19,33 @@ use crate::Reply;
 
 /// Every stub: logs `<name> <args>` to `$STUB_DIR/log`, answers from `$STUB_DIR/<key>.{out,err,rcs,rc,sh}` (the key: the line, every
 /// character but `[A-Za-z0-9._=-]` an underscore). Run as `python`, its name is the script's, or the module's after `-m`; as `ruff`
-/// with no `.out` it echoes its input.
+/// with no `.out` it echoes its input. The shell's builtins alone, no process of its own (feature 449 T167): it ran `basename`, `tr`,
+/// `cat`, `head`, `tail` and `mv`, about 6 ms a call where this takes under 1, and a landing's test calls ten or more. `emit` passes a
+/// file through as `cat` did, its last line's newline or its lack kept.
 const STUB: &str = r#"#!/bin/sh
-name=$(basename "$0")
+emit() { while IFS= read -r l; do printf '%s\n' "$l"; done; printf '%s' "$l"; }
+name=${0##*/}
 if [ "$name" = python ]; then
-  if [ "$1" = -m ]; then name="$2"; shift 2; else name=$(basename "$1"); shift; fi
+  if [ "$1" = -m ]; then name="$2"; shift 2; else name=${1##*/}; shift; fi
 fi
 if [ $# -gt 0 ]; then line="$name $*"; else line="$name"; fi
 printf '%s\n' "$line" >> "$STUB_DIR/log"
-key=$(printf '%s' "$line" | tr -c 'A-Za-z0-9._=-' '_')
+key= rest=$line
+while [ -n "$rest" ]; do
+  c=${rest%"${rest#?}"}; rest=${rest#?}
+  case $c in [A-Za-z0-9._=-]) key=$key$c;; *) key=${key}_;; esac
+done
 f="$STUB_DIR/$key"
 [ -f "$f.sh" ] && . "$f.sh"
-if [ "$name" = ruff ] && [ ! -f "$f.out" ] && [ ! -f "$f.rc" ]; then cat; exit 0; fi
-[ -f "$f.out" ] && cat "$f.out"
-[ -f "$f.err" ] && cat "$f.err" >&2
+if [ "$name" = ruff ] && [ ! -f "$f.out" ] && [ ! -f "$f.rc" ]; then emit; exit 0; fi
+[ -f "$f.out" ] && emit < "$f.out"
+[ -f "$f.err" ] && emit < "$f.err" >&2
 if [ -f "$f.rcs" ]; then
-  rc=$(head -n1 "$f.rcs"); tail -n +2 "$f.rcs" > "$f.rcs.t"; mv "$f.rcs.t" "$f.rcs"; exit "${rc:-0}"
+  { IFS= read -r rc; left=; while IFS= read -r l; do left="$left$l
+"; done; } < "$f.rcs"
+  printf '%s' "$left$l" > "$f.rcs"; exit "${rc:-0}"
 fi
-[ -f "$f.rc" ] && exit "$(cat "$f.rc")"
+if [ -f "$f.rc" ]; then read -r rc < "$f.rc"; exit "$rc"; fi
 exit 0
 "#;
 
@@ -188,70 +197,131 @@ const PLAN: &str = "# Plan\n\nThe fixture's plan, reviewed CLEAR.\n";
 const PLAN_SHA: &str = "8c79c7a920ecbecd5310903d3d791bb5aa08b592d49e976db64a1860cf4334bb";
 pub(super) const TASKS: &str = "# Tasks\n\n- [ ] T1 one\n      verify: \n- [ ] T2 two\n";
 
-/// A clone of a bare origin holding `specs/449-x/tasks.md`, the stub tools, the landing with its output captured.
+/// The stub tools every landing runs, each a hard link to the one stub `install` wrote: its name is the link's (`basename "$0"`).
+const TOOLS: [&str; 7] = [
+    "tree/scripts/gates/l7r-gate.sh",
+    "tree/scripts/gates/claims-gate.sh",
+    "tree/scripts/gates/review-gate.sh",
+    "tree/scripts/gates/plan-gate.sh",
+    "tree/scripts/sync-with-main.sh",
+    "bin/python",
+    "bin/make",
+];
+
+/// THE FIXTURE BUILT ONCE A TEST BINARY (feature 449 T167, as T164 built the owed crate's): a clone holding `specs/449-x/tasks.md` and
+/// its bare origin, and the stub tree, made by three git calls and one `install` where each landing's own took nine and seven - a
+/// third of a short landing test's time. The origin is the clone's objects and refs copied, as a local `clone --bare` lays them out,
+/// and `origin/main` its first commit; the remote is named per copy ([`fx`]), its path being the copy's. Under `make rust-test` it lives
+/// in the run's own temporary directory, removed whole with it (`beside_binary`).
+fn template() -> &'static Path {
+    static DIR: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
+    DIR.get_or_init(|| {
+        let dir = l7r_guard::shared::tempdir::beside_binary("land-template");
+        let root = dir.join("repo");
+        std::fs::create_dir_all(&root).unwrap();
+        // the repository as `git init -b main` lays out what git reads of it - its HEAD, its object and ref directories and its config -
+        // written without the process; the committer and the signing in the config itself, where three `git config` processes set them;
+        // and no automatic maintenance, which each commit and fetch otherwise starts as a `git maintenance run --auto` process of its own
+        for sub in ["objects", "refs/heads", "refs/tags"] {
+            std::fs::create_dir_all(root.join(".git").join(sub)).unwrap();
+        }
+        put(&root, ".git/HEAD", "ref: refs/heads/main\n");
+        put(
+            &root,
+            ".git/config",
+            "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tlogallrefupdates = true\n\
+             [user]\n\temail = t@t\n\tname = t\n[commit]\n\tgpgsign = false\n[maintenance]\n\tauto = false\n",
+        );
+        put(&root, "specs/449-x/tasks.md", TASKS);
+        // a plan reviewed CLEAR, so the tick's plan gate passes in process (feature 449 T131); the record's digest is the plan's sha256
+        put(&root, "specs/449-x/plan.md", PLAN);
+        put(
+            &root,
+            "specs/449-x/plan-review.json",
+            &format!(
+                "{{\"plan_sha256\": \"{PLAN_SHA}\", \"verdict\": \"CLEAR\", \"decisions\": []}}\n"
+            ),
+        );
+        put(&root, "dev/review-ledger.md", "| ledger |\n");
+        put(&root, "dev/bypass-log/.keep", "");
+        // a Makefile and its make-targets page current, so a landing's first pass does not try to regenerate and commit it each time: a
+        // git process fewer a landing (feature 449 T167); `the_first_pass_commits_its_own_records` makes it stale
+        put(&root, "Makefile", "x:   ## [tests] the fixture's target\n\techo x\n");
+        assert_eq!(l7r_gate_cohort::make_docs::write(&root).code, 0);
+        git(&root, &["add", "-A"]);
+        git(&root, &["commit", "-qm", "start"]);
+        let git_dir = root.join(".git");
+        let origin = dir.join("origin.git");
+        copy_tree(&git_dir.join("objects"), &origin.join("objects"));
+        copy_tree(&git_dir.join("refs"), &origin.join("refs"));
+        put(&origin, "HEAD", "ref: refs/heads/main\n");
+        put(
+            &origin,
+            "config",
+            "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = true\n",
+        );
+        let head = std::fs::read_to_string(git_dir.join("refs/heads/main")).unwrap();
+        put(&git_dir, "refs/remotes/origin/main", &head);
+        std::fs::create_dir_all(dir.join("stub")).unwrap();
+        for tool in TOOLS {
+            std::fs::create_dir_all(dir.join(tool).parent().unwrap()).unwrap();
+        }
+        write_executable(&dir.join(TOOLS[0]), STUB);
+        for tool in &TOOLS[1..] {
+            std::fs::hard_link(dir.join(TOOLS[0]), dir.join(tool)).unwrap();
+        }
+        dir
+    })
+}
+
+/// `from` copied to `to`: an executable hard-linked, never written, so no test's spawn can inherit it open for writing ("Text file
+/// busy", feature 449 T160's reason for `install`); every other file copied, as a test writes into its own.
+fn copy_tree(from: &Path, to: &Path) {
+    use std::os::unix::fs::PermissionsExt as _;
+    std::fs::create_dir_all(to).unwrap();
+    for e in std::fs::read_dir(from).unwrap().flatten() {
+        let (src, dest) = (e.path(), to.join(e.file_name()));
+        let meta = e.metadata().unwrap();
+        if meta.is_dir() {
+            copy_tree(&src, &dest);
+        } else if meta.permissions().mode() & 0o111 != 0 {
+            std::fs::hard_link(&src, &dest).unwrap();
+        } else {
+            std::fs::copy(&src, &dest).unwrap();
+        }
+    }
+}
+
+/// A clone of a bare origin holding `specs/449-x/tasks.md`, the stub tools, the landing with its output captured: a copy of
+/// [`template`], its remote named.
 pub(super) fn fx(tag: &str) -> Fx {
     let dir = scratch(tag);
+    copy_tree(template(), &dir);
     let origin = dir.join("origin.git");
     let root = dir.join("repo");
-    std::fs::create_dir_all(&root).unwrap();
-    git(
-        &dir,
-        &[
-            "init",
-            "-q",
-            "--bare",
-            "-b",
-            "main",
-            &origin.to_string_lossy(),
-        ],
-    );
-    git(&root, &["init", "-q", "-b", "main"]);
-    git(&root, &["config", "user.email", "t@t"]);
-    git(&root, &["config", "user.name", "t"]);
-    git(&root, &["config", "commit.gpgsign", "false"]);
-    git(
-        &root,
-        &["remote", "add", "origin", &origin.to_string_lossy()],
-    );
-    put(&root, "specs/449-x/tasks.md", TASKS);
-    // a plan reviewed CLEAR, so the tick's plan gate passes in process (feature 449 T131); the record's digest is the plan's sha256
-    put(&root, "specs/449-x/plan.md", PLAN);
-    put(
-        &root,
-        "specs/449-x/plan-review.json",
-        &format!(
-            "{{\"plan_sha256\": \"{PLAN_SHA}\", \"verdict\": \"CLEAR\", \"decisions\": []}}\n"
+    let config = root.join(".git/config");
+    let text = std::fs::read_to_string(&config).unwrap();
+    std::fs::write(
+        &config,
+        text + &format!(
+            "[remote \"origin\"]\n\turl = {}\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n[branch \"main\"]\n\tremote = origin\n\tmerge = refs/heads/main\n",
+            origin.display()
         ),
-    );
-    put(&root, "dev/review-ledger.md", "| ledger |\n");
-    put(&root, "dev/bypass-log/.keep", "");
-    git(&root, &["add", "-A"]);
-    git(&root, &["commit", "-qm", "start"]);
-    git(&root, &["push", "-q", "-u", "origin", "main"]);
+    )
+    .unwrap();
     let stub = dir.join("stub");
-    std::fs::create_dir_all(&stub).unwrap();
     let scripts = dir.join("tree/scripts");
-    for tool in [
-        "gates/l7r-gate.sh",
-        "gates/claims-gate.sh",
-        "gates/review-gate.sh",
-        "gates/plan-gate.sh",
-        "sync-with-main.sh",
-    ] {
-        std::fs::create_dir_all(scripts.join(tool).parent().unwrap()).unwrap();
-        write_executable(&scripts.join(tool), STUB);
-    }
     let bin = dir.join("bin");
-    std::fs::create_dir_all(&bin).unwrap();
-    write_executable(&bin.join("python"), STUB);
-    write_executable(&bin.join("make"), STUB);
     let answers = Rc::new(Answers::default());
     let mut land = Land::new(&root, &scripts);
     land.python = bin.join("python").to_string_lossy().into_owned();
     land.make = bin.join("make").to_string_lossy().into_owned();
     land.said = Some(RefCell::default());
+    // a clock that moves only when the wait sleeps (feature 449 T160's, every landing's since T167): a wait that runs out does so after
+    // its two polls, never after 400 real ms of a gate asked every 20 - the claims-owed landing's test spent most of its 589 ms so
+    land.clock = Rc::new(Stepped(std::cell::Cell::new(std::time::Instant::now())));
     land.claims_wait = Duration::from_millis(400);
-    land.claims_poll = Duration::from_millis(20);
+    land.claims_poll = land.claims_wait / 2;
     land.cgroup = dir.join("cgroup");
     land.memwatch = dir.join("memwatch");
     land.meminfo = dir.join("meminfo");
@@ -267,6 +337,27 @@ pub(super) fn fx(tag: &str) -> Fx {
         answers,
         land,
     }
+}
+
+/// A clock that stands still but for the sleeps it is asked for (feature 449 T160).
+pub(super) struct Stepped(pub std::cell::Cell<std::time::Instant>);
+
+impl super::Clock for Stepped {
+    fn now(&self) -> std::time::Instant {
+        self.0.get()
+    }
+    fn sleep(&self, d: Duration) {
+        self.0.set(self.0.get() + d);
+    }
+}
+
+/// The real clock the landing runs on, every fixture standing [`Stepped`] in its place (feature 449 T167).
+#[test]
+fn the_real_clock_reads_the_time_and_sleeps() {
+    use super::Clock as _;
+    let before = super::RealClock.now();
+    super::RealClock.sleep(Duration::from_millis(1));
+    assert!(super::RealClock.now() > before);
 }
 
 pub(super) const NOTE: &str = "checked";
@@ -291,7 +382,9 @@ fn a_clean_landing_ticks_pushes_once_and_says_so() {
     // the ticked task is archived at its tick, and the tick's commit carries the new file (feature 449 T142)
     let tasks = std::fs::read_to_string(fx.root.join("specs/449-x/tasks-done.md")).unwrap();
     assert!(tasks.contains("- [x] T1 one\n      verify: DONE. landed: checked\n"));
-    assert!(fx.subjects().contains("449-x: T1 ticked (make land)"));
+    // the log read once for both checks of it, nothing moving between them (feature 449 T167: a git process fewer)
+    let subjects = fx.subjects();
+    assert!(subjects.contains("449-x: T1 ticked (make land)"));
     let shown = std::process::Command::new("git")
         .args([
             "-C",
@@ -305,7 +398,7 @@ fn a_clean_landing_ticks_pushes_once_and_says_so() {
         .unwrap();
     assert!(String::from_utf8_lossy(&shown.stdout).contains("449-x: T1 ticked (make land)"));
     assert!(err.is_empty());
-    assert!(fx.subjects().contains("449-x: T1 ticked (make land)"));
+    assert!(subjects.contains("449-x: T1 ticked (make land)"));
     let log = fx.log();
     assert!(log.contains("sync-with-main.sh done"));
     assert!(log.contains("stamp --check origin/main"));
@@ -382,6 +475,15 @@ fn a_refused_tick_puts_every_tick_back_and_a_raise_ends_the_landing() {
     // ...and T1's archive, which its tick created, is gone with it (feature 449 T142)
     assert!(out.contains("tick: archived the ticked task(s) T1 to tasks-done.md"));
     assert!(!d.join("tasks-done.md").exists());
+}
+
+/// The second half of [`a_refused_tick_puts_every_tick_back_and_a_raise_ends_the_landing`], on a landing of its own (feature 449 T167:
+/// two landings in one test ran over FR-008's tenth of a second).
+#[test]
+fn a_closing_check_that_raises_ends_the_landing() {
+    let fx = fx("land-tick-raise");
+    let two = tasks(&["T1", "T2"]);
+    let d = fx.root.join("specs/449-x");
     // a closing check that raises ends the landing
     put(&d, "report.md", "# r\n");
     put(&d, "measurements.json", "5");
@@ -403,10 +505,14 @@ fn a_push_that_merged_keeps_its_ticks_and_one_that_failed_reverts_them() {
         .said()
         .1
         .contains("the pull merged other sessions' edits"));
+}
+
+/// The second half of [`a_push_that_merged_keeps_its_ticks_and_one_that_failed_reverts_them`], on a landing of its own, T1 open as a
+/// fresh landing finds it (feature 449 T167: two landings in one test ran over FR-008's tenth of a second).
+#[test]
+fn a_push_that_failed_reverts_its_ticks() {
+    let fx = fx("land-push-failed");
     fx.answer(&format!("{} done", tool("sync-with-main.sh")), "rc", "1");
-    // T1 open again, as a fresh landing finds it
-    put(&fx.root, "specs/449-x/tasks.md", TASKS);
-    git(&fx.root, &["commit", "-qam", "T1 open again"]);
     assert_eq!(land(&fx), Ok(1));
     assert!(fx
         .said()
@@ -432,6 +538,20 @@ fn an_engine_landing_starts_the_fresh_block_and_shows_the_work_budget() {
     let out = fx.said().0;
     assert!(out.contains("land: the cohort's fresh block started after the push"));
     assert!(out.contains("work budget: no standing record yet"));
+    // the fresh block's `make cohort`, started in the background, has run before the test's directory goes: it logs into it, and the
+    // second landing that once followed here no longer holds the directory while it does (feature 449 T167)
+    let ran = (0..10_000).any(|_| {
+        std::thread::sleep(Duration::from_millis(1));
+        fx.log()
+            .contains("make --no-print-directory cohort N=0 FRESH=48 JOBS=8")
+    });
+    assert!(ran, "the fresh block never ran");
+}
+
+/// The second landing of [`an_engine_landing_starts_the_fresh_block_and_shows_the_work_budget`], a test of its own (feature 449 T167:
+/// the two landings together ran over FR-008's tenth of a second).
+#[test]
+fn a_work_budget_run_that_is_no_json_fails_the_landing_after_its_push() {
     // a work-budget run that is no JSON fails the landing after its push, as the import raised
     let fx = fx_engine_with_budget("land-engine-budget", "{");
     assert!(land(&fx).is_err());

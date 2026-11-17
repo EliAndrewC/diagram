@@ -84,6 +84,8 @@ fn top() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..")
 }
 
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the live tree's every `specs/*/tasks.md`, each ticked physical task read for its
+/// research boxes.
 #[test]
 fn every_ticked_physical_task_has_its_research_boxes_ticked() {
     let specs = top().join("specs");

@@ -27,6 +27,8 @@ use crate::record::units::re;
 /// A constant's name as a decision names it.
 static CONSTANT: LazyLock<Regex> = LazyLock::new(|| re(r"\b[A-Z][A-Z0-9_]{2,}\b"));
 static CONSTANT_WHOLE: LazyLock<Regex> = LazyLock::new(|| re(r"\A(?:\b[A-Z][A-Z0-9_]{2,}\b)\z"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 2] = [&CONSTANT, &CONSTANT_WHOLE];
 /// What the base read needs: the engine, the procedure documents and the questions. `rust` and `docs/building-programs.md` since
 /// feature 449 T165: the Python's tuple named neither, so the merge base held no Rust unit and no program section, and a finding
 /// recorded on a Rust unit (or a program section) whose code had not changed read as INTRODUCED, where the same finding on a `.py`

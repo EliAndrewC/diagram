@@ -51,6 +51,8 @@ fn world(tag: &str) -> World {
     w
 }
 
+/// The inbox's lines and refusals: what was one test of every command, split into one a command - each its own world, the five
+/// commands' pushes together past FR-008's tenth of a second (feature 449 T167); the name kept on the first.
 #[test]
 fn each_command_and_its_refusals() {
     let w = world("cli-ops");
@@ -81,7 +83,11 @@ fn each_command_and_its_refusals() {
         &["remote", "set-url", "origin", &w.remote.to_string_lossy()],
     );
     assert_eq!(run(&w, &["inbox", "extra"], &browser).0.code, 2);
-    // find
+}
+
+#[test]
+fn find_and_its_refusals() {
+    let w = world("cli-ops-find");
     let (r, _) = run(&w, &["find", "--key", "src-a"], &browser);
     assert_eq!(r.code, 0);
     assert!(r
@@ -99,8 +105,12 @@ fn each_command_and_its_refusals() {
             .code,
         1
     );
-    l7r_gate_research::fixture::put(&w.research(), "blocked-domains.json", r#"{"domains": []}"#);
-    // consulted: the flags read as int, refused as argparse refused them
+}
+
+/// consulted: the flags read as int, refused as argparse refused them
+#[test]
+fn consulted_and_its_refusals() {
+    let w = world("cli-ops-consulted");
     let (r, lines) = run(
         &w,
         &["consulted", "--limit", "1", "--workers", "2"],
@@ -126,7 +136,11 @@ fn each_command_and_its_refusals() {
         (r.code, r.stderr.as_str()),
         (1, "Error: BrowserType.launch: none\n")
     );
-    // urls
+}
+
+#[test]
+fn urls_and_their_refusals() {
+    let w = world("cli-ops-urls");
     let (r, _) = run(
         &w,
         &["urls", "https://k.org/1", "https://e.org/a"],
@@ -149,7 +163,11 @@ fn each_command_and_its_refusals() {
             "l7r-gate record archive: error: the following arguments are required: urls\n"
         )
     );
-    // relayout
+}
+
+#[test]
+fn relayout_and_its_refusals() {
+    let w = world("cli-ops-relayout");
     let (r, _) = run(&w, &["relayout"], &browser);
     assert_eq!(
         (r.code, r.stdout.as_str()),

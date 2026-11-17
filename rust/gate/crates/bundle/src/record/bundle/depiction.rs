@@ -32,6 +32,29 @@ const CROP_TIMEOUT: Duration = Duration::from_secs(180);
 /// few milliseconds where Python took tens, so 150 ms is still many times a start under that load (feature 449 T160).
 #[cfg(test)]
 const CROP_TIMEOUT: Duration = Duration::from_millis(150);
+/// How often the crop is asked whether it has finished: a twentieth of a second, against its three minutes.
+#[cfg(not(test))]
+const CROP_POLL: Duration = Duration::from_millis(50);
+/// ...and every millisecond in the tests, whose fake crop is done in a few: the 50 ms step was waited out once a crop, most of five
+/// tests' time against FR-008's tenth of a second (feature 449 T167).
+#[cfg(test)]
+const CROP_POLL: Duration = Duration::from_millis(1);
+
+/// How long the crop of `page` may take.
+#[cfg(not(test))]
+fn crop_timeout(_page: &Path) -> Duration {
+    CROP_TIMEOUT
+}
+/// ...and in the tests, a page named `slow` 20 ms - the fake crop sleeps 5 s on it, so the timeout is all its test waits, and 150 ms of
+/// it alone was past FR-008's tenth of a second; every other page keeps the 150 ms a crop under load needs (feature 449 T167).
+#[cfg(test)]
+fn crop_timeout(page: &Path) -> Duration {
+    if page.to_string_lossy().contains("slow") {
+        Duration::from_millis(20)
+    } else {
+        CROP_TIMEOUT
+    }
+}
 
 static KNOB: LazyLock<Regex> = LazyLock::new(|| pyre(r"\[([a-z_]+)=[a-z_0-9|-]+\]"));
 static DRAWING_HREF: LazyLock<Regex> =
@@ -242,19 +265,19 @@ fn glyph_crop(root: &Path, page: &Path, key: &str, out: &Path) -> Result<bool, F
         .stderr(Stdio::null())
         .spawn()
         .map_err(fail)?;
-    let start = Instant::now();
+    let (start, timeout) = (Instant::now(), crop_timeout(page));
     loop {
         if let Some(status) = child.try_wait().map_err(fail)? {
             return Ok(status.success() && out.is_file());
         }
-        if start.elapsed() > CROP_TIMEOUT {
+        if start.elapsed() > timeout {
             let _ = child.kill();
             let _ = child.wait();
             return Err(format!(
                 "subprocess.TimeoutExpired: the crop of {key} timed out after 180 seconds"
             ));
         }
-        std::thread::sleep(Duration::from_millis(50));
+        std::thread::sleep(CROP_POLL);
     }
 }
 
@@ -435,6 +458,7 @@ fn file_name(p: &Path) -> String {
 fn glyph_part(
     root: &Path,
     m: &Modal,
+    now: &[Modal],
     put: &mut Put,
     grep_targets: &mut Vec<String>,
 ) -> Result<(), Fail> {
@@ -466,17 +490,12 @@ fn glyph_part(
             Vec::new()
         };
         let _ = std::fs::remove_file(&kinds_file);
-        let found = if kinds.is_empty() {
-            Vec::new()
-        } else {
-            modals::modals_now(root, true)?
-        };
         let clicks = kinds.iter().fold(String::new(), |mut acc, k| {
             let _ = write!(
                 acc,
                 "
 - `{k}` opens {}",
-                click_target(&found, k, m)
+                click_target(now, k, m)
             );
             acc
         });
@@ -502,7 +521,9 @@ fn glyph_part(
     Ok(())
 }
 
-/// What `modal-depiction` reads (plan D13), put beside the MANIFEST.
+/// What `modal-depiction` reads (plan D13), put beside the MANIFEST. `now` is the bundle's own reading of the pop-ups, which a click in
+/// the crop is told to: read again here it cost the bundle a merge base, a listing and a batch read, twice the work for the same pop-ups
+/// (feature 449 T167).
 ///
 /// # Errors
 ///
@@ -510,6 +531,7 @@ fn glyph_part(
 pub fn parts(
     root: &Path,
     m: &Modal,
+    now: &[Modal],
     put: &mut Put,
     grep_targets: &mut Vec<String>,
 ) -> Result<(), Fail> {
@@ -536,7 +558,7 @@ pub fn parts(
         rows.join("\n")
     };
     put.put("claims.md", &format!("# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n{body}\n"), CLAIMS_INDEX, "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")?;
-    glyph_part(root, m, put, grep_targets)
+    glyph_part(root, m, now, put, grep_targets)
 }
 
 #[cfg(test)]

@@ -10,7 +10,7 @@ use std::time::{Duration, SystemTime};
 use serde_json::json;
 
 use super::sweep::{plan, remove, Item};
-use super::{cli, decide, judge, size, with, Config};
+use super::{cli, decide, judge, size, start, with, Config};
 use crate::protocol::Event;
 use crate::shared::session::Session;
 use crate::shared::tempdir::TempDir;
@@ -81,6 +81,37 @@ fn hold(cwd: &Path, out: Option<&Path>) -> Child {
         .unwrap()
 }
 
+/// The child's `/proc/<pid>/<link>` names `path` already: `spawn` returns once the child has exec'd, its cwd and open files set.
+fn shows(child: &Child, link: &str, path: &Path) {
+    let at = std::fs::read_link(format!("/proc/{}/{link}", child.id())).ok();
+    assert_eq!(at, Some(std::fs::canonicalize(path).unwrap()));
+}
+
+/// Wait, up to 5 s, until no process but `holders` has its cwd or an open file under `base`.
+fn only_held_by(base: &Path, holders: &[u32]) {
+    let base = std::fs::canonicalize(base).unwrap();
+    let others = || {
+        std::fs::read_dir("/proc")
+            .unwrap()
+            .flatten()
+            .filter_map(|e| e.file_name().to_str()?.parse::<u32>().ok())
+            .filter(|pid| !holders.contains(pid))
+            .any(|pid| {
+                let fds = std::fs::read_dir(format!("/proc/{pid}/fd"))
+                    .into_iter()
+                    .flatten()
+                    .flatten();
+                std::iter::once(std::path::PathBuf::from(format!("/proc/{pid}/cwd")))
+                    .chain(fds.map(|e| e.path()))
+                    .any(|l| std::fs::read_link(l).is_ok_and(|t| t.starts_with(&base)))
+            })
+    };
+    assert!((0..5000).any(|_| {
+        std::thread::sleep(Duration::from_millis(1));
+        !others()
+    }));
+}
+
 /// The fixture every judgment is read from: one entry per rule.
 fn plant(base: &Path, c: &Config) {
     let (r, p) = (&c.root, &c.projects);
@@ -142,7 +173,14 @@ fn a_finished_sessions_scratch_goes_and_everything_live_stays() {
     plant(&base, &c);
     let mut cwd = hold(&c.root.join("-proj/cwd-held/scratchpad"), None);
     let mut fd = hold(&base, Some(&c.root.join("-proj/fd-held/tasks/out")));
-    std::thread::sleep(Duration::from_millis(200));
+    // no fixed wait, but `/proc` asked that it shows what the two hold, and that nothing else holds a file of the fixture: a process
+    // another test thread forks holds, until it execs, a copy of every file this thread had open - the planting's, a walk's - and the
+    // sweep keeps what a live process holds (observed 2026-11-17: about 1 run in 50 at six copies at once failed so, here and in
+    // `nothing_is_swept...`, which never slept). The fixed 0.2 s sleep, which hid it only for the first judgment, was this test's time
+    // against FR-008's tenth of a second (feature 449 T167).
+    shows(&cwd, "cwd", &c.root.join("-proj/cwd-held/scratchpad"));
+    shows(&fd, "fd/1", &c.root.join("-proj/fd-held/tasks/out"));
+    only_held_by(&base, &[cwd.id(), fd.id()]);
     let dry = with(&args(&["dry"]), &mut c, now());
     let gone = [
         "-not-a-dir",
@@ -151,10 +189,14 @@ fn a_finished_sessions_scratch_goes_and_everything_live_stays() {
         "old.log",
         "trials",
     ];
+    // and again before each judgment: the run before it walked the fixture, and a process another test thread forks meanwhile holds
+    // what that walk had open until it execs (feature 449 T167)
+    only_held_by(&base, &[cwd.id(), fd.id()]);
     assert_eq!(names(&plan(&c, now()), &c), gone);
     assert!(dry.stdout.contains("would remove") && dry.stdout.contains("5 entries"));
     // a dry run removes and stamps nothing
     assert!(c.root.join("trials").exists() && !c.state.join("stamp").exists());
+    only_held_by(&base, &[cwd.id(), fd.id()]);
     let swept = with(&args(&["now", "--keep", "current"]), &mut c, now());
     assert!(
         swept.stdout.contains("5 entries") && swept.stdout.contains("removed"),
@@ -213,8 +255,9 @@ fn a_day_passes_between_sweeps_and_one_sweep_holds_the_lock() {
         input: json!({"session_id": "sid"}),
     };
     assert!(judge(&e, &c, now()).is_empty());
-    assert!((0..100).any(|_| {
-        std::thread::sleep(Duration::from_millis(50));
+    // polled every 2 ms, the 5 s ceiling kept: the detached sweeper is a shell's start away (feature 449 T167)
+    assert!((0..2500).any(|_| {
+        std::thread::sleep(Duration::from_millis(2));
         std::fs::read_to_string(&marker).is_ok_and(|t| t.contains("run --keep sid"))
     }));
     std::fs::remove_file(&marker).unwrap();
@@ -222,10 +265,11 @@ fn a_day_passes_between_sweeps_and_one_sweep_holds_the_lock() {
     assert!(ran.stdout.contains("1 entries") && !c.root.join("old.log").exists());
     put(&c.root.join("old.log"), false);
     assert!(judge(&e, &c, now()).is_empty());
+    // a prompt within the day starts nothing: asked of the step itself, where the test slept 0.3 s to see no marker (feature 449 T167)
+    assert!(!start(&e, &c, now()), "within the day");
     let again = with(&args(&["run"]), &mut c, now());
     // once a day
     assert!(again.stdout.contains("within the day") && c.root.join("old.log").exists());
-    std::thread::sleep(Duration::from_millis(300));
     assert!(!marker.exists(), "a prompt within the day starts nothing");
     let tomorrow = now() + Duration::from_secs(DAY + 1);
     let held = File::create(c.state.join("lock")).unwrap();
@@ -239,6 +283,7 @@ fn a_day_passes_between_sweeps_and_one_sweep_holds_the_lock() {
         ..world("pace-off").1
     };
     assert!(judge(&e, &off, now()).is_empty());
+    assert!(!start(&e, &off, now()), "switched off, no sweep starts");
     let back = now() - Duration::from_secs(10 * DAY);
     assert!(c.due(back), "a stamp from the future is a clock set back");
 }
@@ -250,6 +295,8 @@ fn nothing_is_swept_where_the_tree_or_the_process_table_cannot_be_read() {
     // the running sessions cannot be listed: no session directory is judged, a loose entry still is
     put(&c.root.join("-proj/idle/scratchpad/a"), false);
     c.sessions = base.join("no-sessions");
+    // no process another test thread forked still holding what the planting had open (feature 449 T167; see the test above)
+    only_held_by(&base, &[]);
     assert_eq!(names(&plan(&c, now()), &c), ["old.log"]);
     c.proc = base.join("no-proc");
     assert!(plan(&c, now()).is_empty());

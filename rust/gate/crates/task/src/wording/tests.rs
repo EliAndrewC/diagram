@@ -58,6 +58,22 @@ fn a_wording_only_task_is_refused_only_for_a_change_in_what_runs() {
     assert!(ask(Some(SECTION)).contains("has no `make task-start`"));
     start(&root, &json!("2029-12-31T00:00:00Z"));
     assert_eq!(ask(Some(SECTION)), "");
+}
+
+/// A repository whose wording-only task T01 started before the commits the test makes, and its reading of the refusal (feature 449 T167:
+/// the one test that held every case took over FR-008's tenth of a second, so the commits since a start are tests of their own).
+fn started_before(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, std::path::PathBuf) {
+    let dir = repo(tag);
+    let root = root_of(&dir);
+    start(&root, &json!("2029-12-31T00:00:00Z"));
+    (dir, root)
+}
+
+#[test]
+fn a_comment_the_feature_s_records_and_a_glossary_entry_change_nothing_that_runs() {
+    let (_dir, root) = started_before("wording-calm");
+    let d = root.join("specs/9001-x");
+    let ask = |section: Option<&str>| refusal(&root, &root, &d, "T01", section).unwrap();
     // a comment, the feature's records and a glossary entry change nothing that runs
     commit_at(&root, "scripts/a.py", "x = 1 # a comment\n");
     commit_at(&root, "specs/9001-x/notes.md", "n\n");
@@ -67,6 +83,13 @@ fn a_wording_only_task_is_refused_only_for_a_change_in_what_runs() {
         "{}\n",
     );
     assert_eq!(ask(Some(SECTION)), "");
+}
+
+#[test]
+fn code_a_new_file_and_anything_else_change_what_runs_until_a_later_start() {
+    let (_dir, root) = started_before("wording-moved");
+    let d = root.join("specs/9001-x");
+    let ask = |section: Option<&str>| refusal(&root, &root, &d, "T01", section).unwrap();
     // code does, and a new file, and anything else
     commit_at(&root, "docs/x.md", "d\n");
     commit_at(&root, "scripts/a.py", "x = 2\n");

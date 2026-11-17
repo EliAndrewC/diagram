@@ -6,6 +6,7 @@
 
 use std::collections::BTreeMap;
 use std::io::Read;
+use std::os::unix::fs::PermissionsExt as _;
 use std::os::unix::process::CommandExt as _;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
@@ -82,12 +83,20 @@ fn env(
     out.into_iter().collect()
 }
 
+extern "C" {
+    fn kill(pid: i32, sig: i32) -> i32;
+}
+
+const SIGKILL: i32 = 9;
+
 fn kill_group(pid: u32) {
-    // the whole process group: a step's own children (a loopback server, a browser) die with it, so none outlives its world
-    let _ = Command::new("kill")
-        .args(["-KILL", "--", &format!("-{pid}")])
-        .stderr(Stdio::null())
-        .status();
+    // the whole process group: a step's own children (a loopback server, a browser) die with it, so none outlives its world. kill(2)
+    // itself, where a `kill` program was started twice a command - its start and the 5 ms poll beside it were most of a side's time,
+    // 230 to 540 ms a test of this crate against FR-008's tenth of a second (feature 449 T167, measured 2026-11-17)
+    if let Ok(group) = i32::try_from(pid) {
+        // SAFETY: kill(2) with a negative pid signals that process group alone; it reads and writes no memory of ours
+        unsafe { kill(-group, SIGKILL) };
+    }
 }
 
 fn reader(pipe: Option<impl Read + Send + 'static>) -> std::thread::JoinHandle<Vec<u8>> {
@@ -114,6 +123,32 @@ fn seconds(n: u64) -> Duration {
     SECOND.saturating_mul(u32::try_from(n).unwrap_or(u32::MAX))
 }
 
+/// `program` as the child's `PATH` finds it, where every directory of that `PATH` is absolute and the name has no `/`; else the name as it
+/// stands, which the child's own `execvp` then looks up as before.
+///
+/// WHY (feature 449 T167): std starts a child by `posix_spawn` only where it need not look the program up on a `PATH` of the child's own,
+/// and falls back to forking this process - a test binary of 35 MB with its threads - where it must: the runner's test of every kind of
+/// output, two sides of a dozen commands, took 134 ms with the name found here against 171 ms without (best of six runs each,
+/// interleaved, at a host load of 20, 2026-11-17), toward FR-008's tenth of a second. A name found here is the file `execvp` would
+/// have run, since the directories are searched in the same order; one found nowhere is left to `execvp`, which fails to start it.
+fn on_path(program: &str, env: &[(String, String)]) -> PathBuf {
+    let path = env
+        .iter()
+        .find(|(k, _)| k == "PATH")
+        .map_or("", |(_, v)| v.as_str());
+    let dirs: Vec<&str> = path.split(':').collect();
+    if program.contains('/') || dirs.iter().any(|d| !d.starts_with('/')) {
+        return PathBuf::from(program);
+    }
+    dirs.iter()
+        .map(|d| Path::new(d).join(program))
+        .find(|p| {
+            p.metadata()
+                .is_ok_and(|m| m.is_file() && m.permissions().mode() & 0o111 != 0)
+        })
+        .unwrap_or_else(|| PathBuf::from(program))
+}
+
 /// One command run to its end or its timeout.
 ///
 /// # Errors
@@ -125,7 +160,7 @@ pub fn command(
     env: &[(String, String)],
     timeout: Duration,
 ) -> Result<StepOut, String> {
-    let mut child = Command::new(&argv[0])
+    let mut child = Command::new(on_path(&argv[0], env))
         .args(&argv[1..])
         .current_dir(cwd)
         .env_clear()
@@ -137,23 +172,23 @@ pub fn command(
         .spawn()
         .map_err(|e| format!("{}: cannot start: {e}", argv.join(" ")))?;
     let (out, err) = (reader(child.stdout.take()), reader(child.stderr.take()));
-    let start = Instant::now();
-    let status = loop {
-        if let Ok(Some(status)) = child.try_wait() {
-            break status;
-        }
-        if start.elapsed() > timeout {
-            kill_group(child.id());
-            let _ = child.wait();
-            return Err(format!(
-                "{}: timed out after {} s",
-                argv.join(" "),
-                timeout.as_millis() / SECOND.as_millis()
-            ));
-        }
-        std::thread::sleep(Duration::from_millis(5));
+    // the end waited on, not polled: a thread waits on the child and the timeout is the channel's (feature 449 T167; the poll's 5 ms a
+    // command, beside the `kill` program's start, was most of a side's time); a wait that fails ends the command as a timeout does
+    let pid = child.id();
+    let (tx, rx) = std::sync::mpsc::channel();
+    let waiter = std::thread::spawn(move || {
+        let _ = tx.send(child.wait());
+    });
+    let Ok(Ok(status)) = rx.recv_timeout(timeout) else {
+        kill_group(pid);
+        let _ = waiter.join();
+        return Err(format!(
+            "{}: timed out after {} s",
+            argv.join(" "),
+            timeout.as_millis() / SECOND.as_millis()
+        ));
     };
-    kill_group(child.id());
+    kill_group(pid);
     let text = |h: std::thread::JoinHandle<Vec<u8>>| {
         String::from_utf8_lossy(&h.join().unwrap_or_default()).into_owned()
     };

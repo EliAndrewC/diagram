@@ -22,31 +22,18 @@ fn git(repo: &Path, args: &[&str]) -> String {
     String::from_utf8_lossy(&done.stdout).trim().to_owned()
 }
 
+/// A clone at its first commit with `origin/main` there, written by `crate::fixture::built`. The ref is set where it was pushed to a bare
+/// origin and fetched back (the push reads only `origin/main`), and the history written in one `git fast-import` where `git init`, an
+/// add, a commit, a push and a fetch started git a dozen times, most of a test's time against FR-008's tenth of a second (feature 449
+/// T167).
 fn repo() -> l7r_guard::shared::tempdir::Held<PathBuf> {
-    let tmp = scratch("push");
-    let (origin, work) = (tmp.join("origin.git"), tmp.join("work"));
-    git(
-        &tmp,
-        &["init", "-q", "--bare", &origin.display().to_string()],
+    let (dir, _) = crate::fixture::built(
+        "push",
+        &[&[("scripts/g.sh", "gate\n"), ("l7r/a.py", "x = 1\n")]],
+        0,
     );
-    git(
-        &tmp,
-        &["init", "-q", "-b", "main", &work.display().to_string()],
-    );
-    std::fs::create_dir_all(work.join("scripts")).unwrap();
-    std::fs::create_dir_all(work.join("l7r")).unwrap();
-    std::fs::write(work.join("scripts/g.sh"), "gate\n").unwrap();
-    std::fs::write(work.join("l7r/a.py"), "x = 1\n").unwrap();
-    git(&work, &["add", "-A"]);
-    git(&work, &["commit", "-qm", "base"]);
-    git(
-        &work,
-        &["remote", "add", "origin", &origin.display().to_string()],
-    );
-    git(&work, &["push", "-q", "origin", "HEAD:main"]);
-    git(&work, &["fetch", "-q", "origin"]);
-    let held = work;
-    tmp.hold(held)
+    let path = dir.to_path_buf();
+    dir.hold(path)
 }
 
 fn ask(work: &Path, gate: &str) -> String {
@@ -121,10 +108,32 @@ fn a_pass_is_served_only_for_the_same_committed_content() {
     assert_eq!(ask(&work, "claims"), "");
     pass(&work, "claims");
     assert!(ask(&work, "claims").contains("passed already"));
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second: its eleven asks and passes took 144 ms): from the same
+/// committed pass, the code moving.
+#[test]
+fn a_pass_is_not_served_once_the_code_moves() {
+    let work = repo();
+    std::fs::write(work.join("l7r/a.py"), "x = 2\n").unwrap();
+    git(&work, &["commit", "-qam", "code"]);
+    pass(&work, "claims");
+    assert!(ask(&work, "claims").contains("passed already"));
     std::fs::write(work.join("l7r/a.py"), "x = 3\n").unwrap();
     assert_eq!(ask(&work, "claims"), "");
     git(&work, &["commit", "-qam", "more code"]);
     assert_eq!(ask(&work, "claims"), "");
+}
+
+/// Split from the test above (feature 449 T167): past the same commits, the gate's own scripts moved and a pass stored again is served.
+#[test]
+fn a_pass_stored_after_the_gate_s_own_scripts_move_is_served() {
+    let work = repo();
+    std::fs::write(work.join("l7r/a.py"), "x = 2\n").unwrap();
+    git(&work, &["commit", "-qam", "code"]);
+    pass(&work, "claims");
+    std::fs::write(work.join("l7r/a.py"), "x = 3\n").unwrap();
+    git(&work, &["commit", "-qam", "more code"]);
     std::fs::write(work.join("scripts/g.sh"), "gate, changed\n").unwrap();
     git(&work, &["commit", "-qam", "the gate's own code"]);
     pass(&work, "claims");

@@ -1,5 +1,6 @@
 //! The bar, its carve-out, and the directory ceiling.
 
+use std::fmt::Write as _;
 use std::path::Path;
 
 use super::super::scratch;
@@ -167,10 +168,24 @@ fn the_ceiling_fires_past_the_limit_and_counts_each_file_in_its_own_directory() 
 fn a_crowded_directory_fails_the_check() {
     let dir = repo("crowded");
     put(&dir, "a.rs", "x = 1\n");
-    for i in 0..=super::MAX_DIR_FILES {
-        std::fs::create_dir_all(dir.join("full")).unwrap();
-        std::fs::write(dir.join("full").join(i.to_string()), "").unwrap();
-    }
+    // one past the ceiling, placed in git's index by one `update-index` rather than written as 5,001 files: the check counts what git
+    // lists, and the writes alone were most of 173 ms against FR-008's tenth of a second (feature 449 T167)
+    let entries = (0..=super::MAX_DIR_FILES).fold(String::new(), |mut all, i| {
+        let _ = writeln!(
+            all,
+            "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\tfull/{i}"
+        );
+        all
+    });
+    let mut index = std::process::Command::new("git")
+        .arg("-C")
+        .arg(&*dir)
+        .args(["update-index", "--add", "--index-info"])
+        .stdin(std::process::Stdio::piped())
+        .spawn()
+        .unwrap();
+    std::io::Write::write_all(&mut index.stdin.take().unwrap(), entries.as_bytes()).unwrap();
+    assert!(index.wait().unwrap().success());
     let refused = ask(&[&dir.display().to_string()]);
     assert_eq!(refused.code, 1);
     assert!(
@@ -182,6 +197,8 @@ fn a_crowded_directory_fails_the_check() {
     assert_eq!(ask(&["--list", &dir.display().to_string()]).code, 0);
 }
 
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the real tree's files and directories, read four times over - a test of the
+/// live tree like the ruling's five, at 89 to 99 ms when T167 measured it, its time growing with the repository (feature 449 T167).
 #[test]
 fn the_repository_itself_is_under_the_bar_and_a_relative_root_prints_relative_paths() {
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");

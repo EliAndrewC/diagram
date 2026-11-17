@@ -9,8 +9,16 @@ fn say(dir: &std::path::Path) -> Vec<String> {
     problems(dir)
 }
 
+/// One repository for every kind (feature 449 T167: a repository and two commits a kind took 230 ms against FR-008's tenth of a
+/// second). The check lists the index (`ls-files`) and reads each listed file from disk, and the inventory under `dev/` is never a
+/// reader, so `scripts/x.py` staged once is what each kind's two commits gave it: each kind is its text written there, its row added
+/// and taken away again.
 #[test]
 fn a_reader_of_each_kind_with_no_row_fails_and_a_row_clears_it() {
+    let dir = repo("reader");
+    put(&dir, "scripts/x.py", "");
+    put(&dir, INVENTORY, "");
+    commit(&dir);
     for text in [
         "import ast\n",
         "from tokenize import x\n",
@@ -21,16 +29,14 @@ fn a_reader_of_each_kind_with_no_row_fails_and_a_row_clears_it() {
         "find . -name '*.py'\n",
         "p.suffix == '.py'\n",
     ] {
-        let dir = repo("reader");
+        let _ = std::fs::remove_file(dir.join(INVENTORY));
         put(&dir, "scripts/x.py", text);
-        commit(&dir);
         assert_eq!(say(&dir).len(), 1, "{text}");
         put(
             &dir,
             INVENTORY,
             &format!("{ROW}| a | b | c | dropped | `scripts/x.py` |\n"),
         );
-        commit(&dir);
         assert_eq!(say(&dir), Vec::<String>::new(), "{text}");
     }
 }
@@ -121,6 +127,8 @@ fn no_inventory_names_nothing_and_the_command_line_says_how_to_add_a_row() {
     );
 }
 
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the check's detector over the live repository's tracked files, which must find
+/// a real reader of Python source (`scripts/gates/codeid.py`); its time grows with the tree, held by SC-003's suite total, not the bar.
 #[test]
 fn the_detector_finds_a_real_reader_on_the_real_tree() {
     let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");

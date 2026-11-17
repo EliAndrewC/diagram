@@ -424,21 +424,31 @@ fn skip_quick_runs_no_quick_and_a_regenerated_file_is_named() {
     assert!(!root.join("quick-ran").exists());
 }
 
+/// One failing step's phase, stopped and said (each its own repository and fake tools, feature 449 T167: the four in one test took
+/// 130 ms against FR-008's tenth of a second).
+fn fails_and_says(target: &str, words: &str) {
+    let root = repo(&format!("pf-fail-{target}"));
+    let t = tools(&root, target, "exit 1");
+    let (code, out) = go(&Asked { ..asked(&root) }, &t);
+    assert!(code == 1 && out.contains(words));
+    if target != "quick" {
+        assert!(out.contains("make-out") && out.contains("make-err"));
+    }
+}
+
 #[test]
 fn each_step_that_fails_stops_the_phase_and_says_so() {
-    for (target, words) in [
-        ("docs", "`make docs` failed"),
-        ("record", "the record does not build"),
-        ("quick", "`make quick` failed"),
-    ] {
-        let root = repo(&format!("pf-fail-{target}"));
-        let t = tools(&root, target, "exit 1");
-        let (code, out) = go(&Asked { ..asked(&root) }, &t);
-        assert!(code == 1 && out.contains(words));
-        if target != "quick" {
-            assert!(out.contains("make-out") && out.contains("make-err"));
-        }
-    }
+    fails_and_says("docs", "`make docs` failed");
+    fails_and_says("record", "the record does not build");
+}
+
+#[test]
+fn a_failing_quick_stops_the_phase_and_says_so() {
+    fails_and_says("quick", "`make quick` failed");
+}
+
+#[test]
+fn an_unresolved_pointer_or_no_make_stops_the_phase() {
     let root = repo("pf-fail-pointers");
     let t = tools(&root, "", "exit 1");
     crate::write_executable(

@@ -9,7 +9,7 @@ use serde_json::{json, Map, Value};
 
 use crate::record::args::{parse, Spec};
 use crate::record::modals::{choice_modal, depiction_owed_by, Modal, MODALS};
-use crate::record::repo::{git_out, read_text, tree_of};
+use crate::record::repo::{cat_blobs, git_out, read_text, tree_of, universal};
 
 /// Amendment 1's rule (FR-015), as `modal_owed.owed` held it until amendment 6.
 fn old_rule(was: &Modal, m: &Modal) -> bool {
@@ -29,51 +29,55 @@ fn same_tags(a: &Modal, b: &Modal) -> bool {
     clippy::case_sensitive_file_extension_comparisons,
     reason = "the pop-up files' names, as `str.endswith` read them"
 )]
-/// (before, after) of every pop-up file a non-merge commit changed, present on both sides, its tags moved.
+/// (before, after) of every pop-up file a non-merge commit changed, present on both sides, its tags moved. The commits and the files
+/// each changed come from one `git log --name-only` and every version from one `git cat-file --batch` (feature 449 T167), where a
+/// `git diff-tree` a commit and a `git show` a version were 111 processes for the test's three commits and seven runs, 205 ms against
+/// FR-008's tenth of a second. The log's diff is a commit's against its one parent, renames not followed, as the `diff-tree` of
+/// `<commit>^` and `<commit>` read it; a commit with no parent had no `<commit>^` to read and has none here.
 fn edits(root: &Path, since: &str, until: &str) -> Vec<(Modal, Modal)> {
-    let mut out = Vec::new();
-    for c in git_out(
+    let listed = git_out(
         root,
         &[
             "log",
             "--no-merges",
+            "--no-renames",
             &format!("--since={since}"),
-            "--format=%H",
+            "--format=%x00%H %P",
+            "--name-only",
             until,
             "--",
             MODALS,
         ],
-    )
-    .split_whitespace()
-    {
-        let parent = format!("{c}^");
-        for f in git_out(
-            root,
-            &[
-                "diff-tree",
-                "--no-commit-id",
-                "-r",
-                "--name-only",
-                &parent,
-                c,
-                "--",
-                MODALS,
-            ],
-        )
-        .split_whitespace()
-        {
-            if !f.ends_with(".md") {
-                continue;
-            }
-            let before = git_out(root, &["show", &format!("{parent}:{f}")]);
-            let after = git_out(root, &["show", &format!("{c}:{f}")]);
-            if let (Some(was), Some(m)) = (
-                choice_modal(f, &before, false),
-                choice_modal(f, &after, false),
-            ) {
-                if !same_tags(&was, &m) {
-                    out.push((was, m));
-                }
+    );
+    // (the commit, a pop-up file it changed), each commit's block `\0<commit> <parent>`, a blank line and its files
+    let changed: Vec<(&str, &str)> = listed
+        .split('\0')
+        .filter_map(|block| {
+            let mut lines = block.lines();
+            let (c, parent) = lines.next()?.split_once(' ')?;
+            (!parent.is_empty()).then(|| lines.filter(|f| f.ends_with(".md")).map(move |f| (c, f)))
+        })
+        .flatten()
+        .collect();
+    let versions: Vec<String> = changed
+        .iter()
+        .flat_map(|(c, f)| [format!("{c}^:{f}"), format!("{c}:{f}")])
+        .collect();
+    let mut read = cat_blobs(root, &versions)
+        .into_iter()
+        .map(|t| universal(&t));
+    let mut out = Vec::new();
+    for (_, f) in changed {
+        let (before, after) = (
+            read.next().unwrap_or_default(),
+            read.next().unwrap_or_default(),
+        );
+        if let (Some(was), Some(m)) = (
+            choice_modal(f, &before, false),
+            choice_modal(f, &after, false),
+        ) {
+            if !same_tags(&was, &m) {
+                out.push((was, m));
             }
         }
     }

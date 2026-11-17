@@ -34,6 +34,8 @@ static CITED: LazyLock<Regex> = LazyLock::new(|| re(r"research/questions/(\d{4})
 static SUFFIX: LazyLock<Regex> = LazyLock::new(|| re(r"(?:[iu](?:8|16|32|64|128|size)|f32|f64)\z"));
 /// A hexadecimal literal's suffix is an integer type's alone: `0x1f32` is the number 0x1f32, not 0x1 as an `f32`.
 static INT_SUFFIX: LazyLock<Regex> = LazyLock::new(|| re(r"[iu](?:8|16|32|64|128|size)\z"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 3] = [&CITED, &SUFFIX, &INT_SUFFIX];
 
 /// One drawing page: its path from the root, its file name, its text.
 pub type Page = (String, String, String);

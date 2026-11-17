@@ -648,10 +648,6 @@ mod tests {
     }
 
     #[test]
-    #[expect(
-        clippy::many_single_char_names,
-        reason = "the plane geometry's own names"
-    )]
     fn a_hamlet_s_comb_end_to_end() {
         let out = build(&inp(20, 4)).unwrap();
         assert_eq!(out.fields.len(), 1);
@@ -683,8 +679,19 @@ mod tests {
         assert_eq!(out.knobs["winter_crop"], "none");
         assert!(!out.knobs.contains_key("unused"));
         assert!(!f.water.segs.is_empty());
+    }
+
+    // Split from the test above (feature 449 T167, FR-008's tenth of a second: its eight builds together took 108 ms), a build or two a
+    // test, every assertion kept.
+
+    #[test]
+    fn several_fields_past_the_cap() {
         let past_cap = build(&inp(220, 4)).unwrap();
         assert!(past_cap.fields.len() >= 3, "several fields past the cap");
+    }
+
+    #[test]
+    fn a_barley_hamlet_draws_no_grain_and_an_unsettled_one_takes_its_resting_and_wet_plots_out() {
         let mut barley = inp(20, 5);
         barley.knobs[3].3 = Some("barley".to_owned());
         let b = build(&barley).unwrap();
@@ -700,6 +707,10 @@ mod tests {
                     + f0.rested.iter().map(|&i| f0.stats[i].2).sum::<f64>() / 43_560.0
                     + 1e-9
         );
+    }
+
+    #[test]
+    fn a_cleared_middle_and_an_open_head_are_built_as_their_knobs_say() {
         // a cleared middle hems the whole canal, its far flank carried on across the head
         let mut cleared = inp(20, 4);
         cleared.knobs[4].3 = Some("cleared".to_owned());
@@ -707,6 +718,10 @@ mod tests {
         let mut open = inp(20, 4);
         open.knobs[0].3 = Some("open".to_owned());
         assert!(build(&open).unwrap().fields[0].weir.is_none());
+    }
+
+    #[test]
+    fn an_intake_into_the_head_s_middle_forks_there_and_a_race_beside_the_corner_is_refused() {
         // the intake straight into the head's middle: the fork there, the brook still clear of the field
         let mut middle = inp(20, 4);
         middle.knobs.push((

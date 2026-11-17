@@ -232,6 +232,10 @@ static ITEM: LazyLock<Regex> = LazyLock::new(|| {
 static IMPL_FOR: LazyLock<Regex> = LazyLock::new(|| re(r"\bfor\s+([A-Za-z_][A-Za-z0-9_]*)"));
 static IMPL_OF: LazyLock<Regex> =
     LazyLock::new(|| re(r"impl\s*(?:<[^>]*>\s*)?([A-Za-z_][A-Za-z0-9_]*)"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 7] = [
+    &MARKER, &COMMENT, &HEADING, &LIST_ITEM, &ITEM, &IMPL_FOR, &IMPL_OF,
+];
 
 /// `str.splitlines(keepends=True)`.
 pub fn splitlines_keep(text: &str) -> Vec<String> {

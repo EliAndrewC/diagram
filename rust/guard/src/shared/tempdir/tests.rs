@@ -114,9 +114,11 @@ fn an_int_or_a_term_removes_the_process_s_directories() {
             .stderr(Stdio::null())
             .spawn()
             .unwrap();
-        let said = (0..400)
+        // polled every 2 ms, the ceiling still 10 s: at 25 ms the two children's four waits rounded up to 0.1 s against FR-008's tenth
+        // of a second (feature 449 T167)
+        let said = (0..5000)
             .find_map(|_| {
-                std::thread::sleep(Duration::from_millis(25));
+                std::thread::sleep(Duration::from_millis(2));
                 std::fs::read_to_string(&note)
                     .ok()
                     .filter(|t| t.contains('\n'))
@@ -130,8 +132,8 @@ fn an_int_or_a_term_removes_the_process_s_directories() {
             .status()
             .unwrap();
         assert!(sent.success());
-        let ended = (0..400).find_map(|_| {
-            std::thread::sleep(Duration::from_millis(25));
+        let ended = (0..5000).find_map(|_| {
+            std::thread::sleep(Duration::from_millis(2));
             child.try_wait().unwrap()
         });
         let _ = child.kill();

@@ -17,6 +17,8 @@ use crate::record::units::re;
 static FINDING: LazyLock<Regex> =
     LazyLock::new(|| re(r"\A\s+([A-Z][A-Z-]+)\s+(\S[^:]*?)::(\S+?)#"));
 static HUNK: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 2] = [&FINDING, &HUNK];
 
 /// The new-side line ranges a `git diff -U0` changes; a pure deletion is the line it sits after.
 pub fn changed_lines(diff: &str) -> Vec<(i64, i64)> {

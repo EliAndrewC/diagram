@@ -1,11 +1,13 @@
 //! The tests' Chromium (feature 449 T146): a small Python program that speaks the protocol on fds 3 and 4 as Chromium does, answering
 //! each command the crate sends from a table, so every path of the crate runs without a browser or a network. What a page does is read
 //! from its URL: `neterr` fails the navigation, `samedoc` has no loader, `noload` never loads, `busy` never goes idle, `nobody` has no
-//! body, `noglyph` has no glyph to measure, `throw` throws in the page, `big` measures large at once, `small` never grows.
+//! body, `noglyph` has no glyph to measure, `throw` throws in the page, `big` measures large at once, `small` never grows. Python
+//! starts isolated and without `site` (`-I -S`): 15 ms a start where a plain start took 30, and the tests start it often (feature 449
+//! T167, observed 2026-11-17).
 
 use std::path::{Path, PathBuf};
 
-const FAKE: &str = r#"#!/usr/bin/env python3
+const FAKE: &str = r#"#!/usr/bin/env -S python3 -I -S
 import base64, json, os, sys
 inp = os.fdopen(3, "rb", buffering=0)
 out = os.fdopen(4, "wb", buffering=0)
@@ -97,9 +99,11 @@ while True:
         send({"id": i, "result": r, **({"sessionId": s} if s else {})})
 "#;
 
-/// The fake browser written into `dir`, executable; its path.
+/// The fake browser written into `dir`, executable; its path. The crop's waits on this test thread are then none: the fake draws
+/// nothing, so a wait for it to settle proves nothing (feature 449 T167).
 #[must_use]
 pub fn fake_chrome(dir: &Path) -> PathBuf {
+    crate::crop::WAIT_DIVISOR.set(u64::MAX);
     let at = dir.join("fake-chrome");
     executable(&at, FAKE);
     at

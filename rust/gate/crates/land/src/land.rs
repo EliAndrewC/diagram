@@ -112,6 +112,10 @@ pub struct Land {
     arbiter_ok: bool,
     /// What the landing asks in process ([`inproc`]).
     inproc: Box<dyn inproc::Inproc>,
+    /// `origin` fetched once this landing: the delta is read up to six times a landing, each read a fetch of ~10 ms, and only the first
+    /// can move it - `origin/main...HEAD` diffs from the merge base, which a later push to origin cannot move, as the clone's own commits
+    /// are on no other session's branch (feature 449 T167: a clean landing's test spent a quarter of its time in five repeated fetches).
+    fetched: std::cell::Cell<bool>,
 }
 
 impl Land {
@@ -137,6 +141,7 @@ impl Land {
             box_open: RefCell::new(Vec::new()),
             arbiter_ok: !std::env::var("ARBITER_OK").unwrap_or_default().is_empty(),
             inproc: Box::new(inproc::Real),
+            fetched: std::cell::Cell::new(false),
         }
     }
 
@@ -228,7 +233,9 @@ impl Land {
 
     /// Every path the delta against origin/main changes.
     fn delta_names(&self) -> Result<Vec<String>, String> {
-        self.run(&["git", "fetch", "-q", "origin"], &[])?;
+        if !self.fetched.replace(true) {
+            self.run(&["git", "fetch", "-q", "origin"], &[])?;
+        }
         let out = self
             .run(&["git", "diff", "--name-only", "origin/main...HEAD"], &[])?
             .1;

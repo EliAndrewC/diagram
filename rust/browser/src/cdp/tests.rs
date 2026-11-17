@@ -48,6 +48,19 @@ fn a_command_gets_its_reply_and_the_events_wait_for_whoever_asks() {
     );
 }
 
+/// A browser that reads the command and dies before it answers: the write went through, the reply never comes (feature 449 T167, the
+/// call's second "closed" path, which the test above reached only when its sleep ran short).
+#[test]
+fn a_browser_that_dies_under_a_command_has_closed() {
+    let dir = TempDir::new("browser-cdp-dies");
+    let dies = script(dir.path(), "dies", "head -c 1 <&3 >/dev/null; exit 0");
+    let mut cdp = Cdp::launch(&dies, &[]).unwrap();
+    assert_eq!(
+        cdp.call("Browser.getVersion", json!({}), None).unwrap_err(),
+        "Browser.getVersion: the browser has closed"
+    );
+}
+
 #[test]
 fn a_browser_that_dies_or_never_starts_is_an_error() {
     let dir = TempDir::new("browser-cdp-dead");
@@ -57,14 +70,15 @@ fn a_browser_that_dies_or_never_starts_is_an_error() {
         r#"printf '{"method":"E"}\0' >&4; exit 0"#,
     );
     let mut cdp = Cdp::launch(&gone, &[]).unwrap();
-    // long enough for the script to be gone (it exits at once); 200 ms was a fifth of a second of FR-008's tenth (feature 449 T160)
-    std::thread::sleep(Duration::from_millis(20));
-    let said = cdp.call("Browser.getVersion", json!({}), None).unwrap_err();
-    assert!(said.ends_with("the browser has closed"), "{said}");
+    // the script gone before the call, waited for rather than slept on: its pipe out ended (the wait's end), so its pipe in, which a
+    // process closes first, is shut and the write fails - a fixed 20 ms sleep left which of the call's two "closed" paths ran to the
+    // host's load, and the coverage run took the other one (feature 449 T167)
     assert!(cdp
         .wait_event(Instant::now() + Duration::from_secs(1), |e| e["method"]
             == "X")
         .is_none());
+    let said = cdp.call("Browser.getVersion", json!({}), None).unwrap_err();
+    assert!(said.ends_with("the browser has closed"), "{said}");
     drop(cdp);
     let err = Cdp::launch_with(Path::new("/no/such/shell"), &gone, &[], None)
         .err()

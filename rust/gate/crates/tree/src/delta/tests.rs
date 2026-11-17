@@ -34,9 +34,14 @@ fn commit(dir: &Path) {
 fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-delta-{tag}"));
     std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();
-    git(&dir, &["init", "-q", "-b", "main"]);
-    git(&dir, &["config", "user.email", "t@t"]);
-    git(&dir, &["config", "user.name", "t"]);
+    // the repository `git init -b main` and the two settings make, written as git writes them, and `base` below as `git branch` writes
+    // it: four processes saved a test (feature 449 T167, each test under FR-008's tenth of a second)
+    put(&dir, ".git/HEAD", "ref: refs/heads/main\n");
+    // `maintenance.auto` off: each commit started `git maintenance run --auto`, a process more (feature 449 T167)
+    put(&dir, ".git/config", "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n[user]\n\temail = t@t\n\tname = t\n[commit]\n\tgpgsign = false\n[maintenance]\n\tauto = false\n");
+    for sub in ["objects", "refs/heads", "refs/tags"] {
+        std::fs::create_dir_all(dir.join(".git").join(sub)).unwrap();
+    }
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
     std::fs::copy(
         real.join("gates/codeid.py"),
@@ -46,7 +51,8 @@ fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     put(&dir, "l7r/diagram/m.py", "def f():\n    return 1\n");
     put(&dir, "docs/a.md", "a\n");
     commit(&dir);
-    git(&dir, &["branch", "base"]);
+    let head = std::fs::read_to_string(dir.join(".git/refs/heads/main")).unwrap();
+    put(&dir, ".git/refs/heads/base", &head);
     dir
 }
 
@@ -102,6 +108,13 @@ fn the_delta_is_our_commits_and_what_they_changed_in_what_runs() {
         serde_json::json!(["docs/a.md", "l7r/diagram/m.py"])
     );
     assert_eq!(wording["engine"], serde_json::json!([]),);
+}
+
+/// The second half of the delta's test, on a repository of its own (feature 449 T167: the two halves read nothing of each other's, and
+/// together they took over FR-008's tenth of a second).
+#[test]
+fn the_delta_names_each_engine_path_that_changed_and_its_base() {
+    let dir = repo("delta-engine");
     put(&dir, "l7r/diagram/m.py", "def f():\n    return 2\n");
     put(&dir, "l7r/diagram/added.py", "x = 1\n");
     put(&dir, "pool/a.json", "{}\n");
@@ -121,21 +134,49 @@ fn the_key_moves_with_what_runs_and_the_worktree_key_equals_the_tree_key() {
     put(&dir, "docs/a.md", "b\n");
     commit(&dir);
     assert_eq!(engine_key(&dir, "HEAD", "python3").unwrap(), head,);
+}
+
+/// A stand-in for `python3 codeid.py --ids <file>...` that ids a file by its lines with `#` comments and blank lines dropped: the real
+/// `codeid.py` is 30 ms a start, and the key's tests that follow ask it twice or more, over FR-008's tenth of a second (feature 449 T167);
+/// the real one is asked above and in the delta's tests, and the stamp's self-test holds it to its own rules.
+fn ids(dir: &Path) -> String {
+    let path = dir.join("ids");
+    l7r_gate_core::write_executable(
+        &path,
+        "#!/bin/sh\nshift; shift; for f in \"$@\"; do sed 's/ *#.*//;/^$/d' \"$f\" | sha256sum | cut -c1-64; done\n",
+    );
+    path.to_string_lossy().into_owned()
+}
+
+/// The second part of the key's test, on a repository of its own (feature 449 T167: it reads nothing the first part wrote).
+#[test]
+fn a_comment_alone_keeps_the_worktree_key() {
+    let dir = repo("key-comment");
+    let py = ids(&dir);
+    let head = engine_key(&dir, "HEAD", &py).unwrap();
     put(
         &dir,
         "l7r/diagram/m.py",
         "# a comment\ndef f():\n    return 1\n",
     );
-    assert_eq!(engine_key_worktree(&dir, "python3").unwrap(), head,);
+    assert_eq!(engine_key_worktree(&dir, &py).unwrap(), head,);
+}
+
+/// The last part of the key's test, on a repository of its own (feature 449 T167, as above).
+#[test]
+fn an_untracked_engine_file_moves_the_key_and_its_commit_keeps_it() {
+    let dir = repo("key-moved");
+    let py = ids(&dir);
+    let head = engine_key(&dir, "HEAD", &py).unwrap();
     put(&dir, "rust/phases/a.rs", "fn f() {} // c\n");
     put(&dir, "pool/a.json", "{}\n");
-    let moved = engine_key_worktree(&dir, "python3").unwrap();
+    let moved = engine_key_worktree(&dir, &py).unwrap();
     assert_ne!(moved, head, "an untracked engine file counts");
     commit(&dir);
-    assert_eq!(engine_key(&dir, "HEAD", "python3").unwrap(), moved);
-    assert_eq!(engine_key_worktree(&dir, "python3").unwrap(), moved,);
-    assert_eq!(engine_key(&dir, "HEAD", "python3").unwrap(), moved);
-    assert!(engine_key(&dir, "no-such-tree", "python3").is_err());
+    assert_eq!(engine_key(&dir, "HEAD", &py).unwrap(), moved);
+    assert_eq!(engine_key_worktree(&dir, &py).unwrap(), moved,);
+    assert_eq!(engine_key(&dir, "HEAD", &py).unwrap(), moved);
+    assert!(engine_key(&dir, "no-such-tree", &py).is_err());
 }
 
 #[test]

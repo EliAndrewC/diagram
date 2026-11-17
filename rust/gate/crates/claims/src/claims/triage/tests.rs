@@ -8,7 +8,10 @@ use serde_json::{json, Map, Value};
 use super::{checked_at, keep_texts, kept_text, record_triage, removed_words, triage_bundle, vet};
 use crate::claims::index::{current, load_map};
 use crate::claims::scope::Reader;
-use crate::claims::tests::{fixture, record_all};
+use crate::claims::tests::{
+    claimed_table, commit_as_origin, fixture, fixture_rust_only, fixture_with, record_all,
+    write_recorded, RECORDED_TABLE, RECORDED_TABLE_PAGES,
+};
 use crate::record::testkit::{commit, git, put};
 
 fn units_doc(qual: &str, blocks: &[&str]) -> String {
@@ -24,15 +27,13 @@ fn changed_everything() -> (
     Map<String, Value>,
     Map<String, Value>,
 ) {
-    let root = fixture("claims-triage-bundle");
-    let table = units_doc("TABLE", &["'a': 1", "'gone': 2"]);
-    put(&root, "l7r/diagram/m.py", &table);
-    put(&root, "l7r/py-units.json", &json!([[], [{"path": "l7r/diagram/m.py", "qualname": "TABLE", "kind": "constant", "lineno": 1, "end_lineno": 1,
-        "claims": ["table - NONE"], "inherited": false, "core": "core-1", "errors": [], "names": [], "blocks": ["'a': 1", "'gone': 2"], "module_errors": []}]]).to_string());
-    commit(&root, "table");
-    record_all(&root);
-    commit(&root, "recorded");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    // the claimed dictionary written into the fixture's own first commit, and the recorded index committed as `origin/main` with the
+    // loose ref copied: four git processes saved (feature 449 T167, FR-008's tenth of a second)
+    let root = fixture_with("claims-triage-bundle", &claimed_table);
+    // the recording written as `record_all` writes it, pinned by `the_recorded_state_is_what_record_all_writes`: a bundle and a record
+    // through the Python half, most of the test's time against FR-008's tenth of a second (feature 449 T167)
+    write_recorded(&root, RECORDED_TABLE, RECORDED_TABLE_PAGES);
+    commit_as_origin(&root, "recorded");
     put(&root, "l7r/diagram/m.py", &units_doc("TABLE", &["'a': 1"]));
     put(&root, "l7r/py-units.json", &json!([[], [{"path": "l7r/diagram/m.py", "qualname": "TABLE", "kind": "constant", "lineno": 1, "end_lineno": 1,
         "claims": ["table - NONE"], "inherited": false, "core": "core-2", "errors": [], "names": [], "blocks": ["'a': 1", "'new': 3"], "module_errors": []}]]).to_string());
@@ -226,10 +227,11 @@ fn recorded() -> (
     Map<String, Value>,
     Map<String, Value>,
 ) {
-    let root = fixture("claims-triage-only");
+    // no Python unit, so no Python half to start, and `origin/main` written as the fixture writes it (feature 449 T167: these tests sat at
+    // FR-008's tenth of a second)
+    let root = fixture_rust_only("claims-triage-only");
     record_all(&root);
-    commit(&root, "recorded");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    commit_as_origin(&root, "recorded");
     let mut ix = load_map(&root.join("dev/claims-index.json")).unwrap();
     ix["rust/phases/src/lib.rs::GAP#gap"]
         .as_object_mut()

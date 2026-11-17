@@ -21,7 +21,12 @@ pub const PUSH_EVERY: u64 = 200 * (1 << 20);
 /// A backfill lane starts a fresh browser this often, so a lane's memory stays bounded: the containers share a 10 GB cap, and two
 /// lanes' browsers had grown to 1.8 GB (one renderer 0.7 GB) partway through the first backfill (observed 2026-10-02 at the host's
 /// low-memory warning).
+#[cfg(not(test))]
 pub const RECYCLE_EVERY: usize = 25;
+/// ...and every third in the crate's own tests, whose lane test archived 26 URLs to reach one recycle, a push tried after each - 140 ms of
+/// git against FR-008's tenth of a second (feature 449 T167, observed 2026-11-17). The uncited crate builds against the 25.
+#[cfg(test)]
+pub const RECYCLE_EVERY: usize = 3;
 
 /// `urls` dealt into `n` lanes, every URL of one host in one lane (plan D8: never two requests to a host at once).
 #[must_use]

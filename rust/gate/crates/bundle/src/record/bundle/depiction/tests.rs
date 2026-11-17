@@ -93,12 +93,27 @@ fn no_crop_a_stale_page_and_the_failures() {
     assert!(std::fs::read_to_string(root.join("out/glyph.txt"))
         .unwrap()
         .starts_with("no crop: the kind `well` is drawn on no pool page"));
+}
+
+/// A pool page the browser could not crop is said so, and the bundle still built.
+#[test]
+fn a_page_the_browser_cannot_crop_is_said_so() {
+    let root = scratch("modal-depiction-nocrop");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(&root, "pool/hamlets/nocrop/nocrop.html", POOL_PAGE);
     let (code, _) = depiction(&root, &o);
     assert_eq!(code, 0);
     assert!(std::fs::read_to_string(root.join("out/glyph.txt"))
         .unwrap()
         .contains("the browser could not crop it from `pool/hamlets/nocrop/nocrop.html`"));
+}
+
+/// A pool page older than its drawing is refused: the bundle would crop the drawing before the edit.
+#[test]
+fn a_stale_pool_page_is_refused() {
+    let root = scratch("modal-depiction-stale");
+    let o = root.join("out").to_string_lossy().into_owned();
+    put(&root, "pool/hamlets/nocrop/nocrop.html", POOL_PAGE);
     put(&root, "pool/hamlets/nocrop/nocrop.svg", "<svg/>");
     let page = root.join("pool/hamlets/nocrop/nocrop.html");
     let old = std::time::SystemTime::now() - std::time::Duration::from_secs(60);
@@ -111,20 +126,47 @@ fn no_crop_a_stale_page_and_the_failures() {
     let (code, run) = depiction(&root, &o);
     assert_eq!(code, -1);
     assert!(run.err.contains("nocrop.html is older than nocrop.svg - its crop would show the drawing before the edit; regenerate it first: make map GEN=pool/hamlets/nocrop/nocrop.gen.py"));
-    std::fs::remove_dir_all(root.join("pool/hamlets/nocrop")).unwrap();
+}
+
+/// A crop that outlasts its timeout. What was one test of the bundle with no crop and of every failure is three - the stale page here
+/// and the failures below each on a scratch record of its own, eight bundles together past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_crop_that_outlasts_its_timeout_fails_the_bundle() {
+    let root = scratch("modal-depiction-slow");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(&root, "pool/hamlets/slow/slow.html", POOL_PAGE);
     let (code, run) = depiction(&root, &format!("{o}1"));
     assert_eq!(code, -1);
     assert!(run.err.contains("TimeoutExpired"));
-    std::fs::remove_dir_all(root.join("pool/hamlets/slow")).unwrap();
+}
+
+/// A claims index, a source, the knob registry or a drawing page that will not read fails the bundle.
+#[test]
+fn a_file_the_bundle_cannot_read_fails_it() {
+    let root = scratch("modal-depiction-fails");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(&root, "dev/claims-index.json", "not json");
     assert_eq!(depiction(&root, &format!("{o}2")).0, -1);
-    std::fs::remove_file(root.join("dev/claims-index.json")).unwrap();
+}
+
+/// A source that will not read fails the bundle, and so do the knob registry and a drawing page.
+#[test]
+fn a_source_or_registry_the_bundle_cannot_read_fails_it() {
+    let root = scratch("modal-depiction-fails-more");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(&root, WELL, "Name: Well\nAbout: [winter_crop=wheat] A well.\nDrawing: research/questions/0094-trade.drawing.html\n");
     put(&root, "rust/phases/src/b.rs", "x");
     std::fs::write(root.join("rust/phases/src/b.rs"), [0xff]).unwrap();
     assert_eq!(depiction(&root, &format!("{o}3")).0, -1);
-    std::fs::remove_file(root.join("rust/phases/src/b.rs")).unwrap();
+}
+
+/// The knob registry read in process (feature 449 T149): unreadable, the bundle fails as the door's traceback failed it; and so does a
+/// drawing page that will not read.
+#[test]
+fn a_registry_or_drawing_page_the_bundle_cannot_read_fails_it() {
+    let root = scratch("modal-depiction-fails-knobs");
+    let o = root.join("out").to_string_lossy().into_owned();
+    put(&root, WELL, "Name: Well\nAbout: [winter_crop=wheat] A well.\nDrawing: research/questions/0094-trade.drawing.html\n");
     // the knob registry read in process (feature 449 T149): unreadable, the bundle fails as the door's traceback failed it
     let knobs = std::fs::read_to_string(root.join("l7r/diagram/knobs.json")).unwrap();
     put(&root, "l7r/diagram/knobs.json", "not json");

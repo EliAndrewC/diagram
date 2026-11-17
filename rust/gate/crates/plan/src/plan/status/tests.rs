@@ -79,6 +79,21 @@ const PLAN_375: &str = "# plan\n\n**D1 - the gatehouse.** Each sheet draws its g
 
 #[test]
 fn a_verdict_survives_a_typo_and_nothing_more() {
+    // one reviewed, committed plan for every edit, each put back after it is judged: `owed` reads the tree and writes nothing, so each
+    // edit is judged against the same reviewed plan the eight fresh repositories held (feature 449 T167: their eight `git init`s,
+    // adds and commits ran over FR-008's tenth of a second)
+    let dir = feature(Some(PLAN_375), None);
+    let root = dir.parent().unwrap().parent().unwrap().to_owned();
+    git(&root, &["init", "-q", "-b", "main"]);
+    record(
+        &dir,
+        &current(&[within()], "CLEAR", PLAN_375),
+        "spec-fidelity",
+        None,
+    )
+    .unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "the reviewed plan"]);
     for (old, new, keeps) in [
         ("gatehoue", "gatehouse", true),
         ("12 ft, and", "12 ft,\n and", true),
@@ -93,18 +108,7 @@ fn a_verdict_survives_a_typo_and_nothing_more() {
         ),
         ("the gatehouse.", "the gateway.", false),
     ] {
-        let dir = feature(Some(PLAN_375), None);
-        let root = dir.parent().unwrap().parent().unwrap().to_owned();
-        git(&root, &["init", "-q", "-b", "main"]);
-        record(
-            &dir,
-            &current(&[within()], "CLEAR", PLAN_375),
-            "spec-fidelity",
-            None,
-        )
-        .unwrap();
-        git(&root, &["add", "-A"]);
-        git(&root, &["commit", "-qm", "the reviewed plan"]);
+        std::fs::write(dir.join("plan.md"), PLAN_375).unwrap();
         assert!(!std::fs::read_to_string(dir.join("plan-review.json"))
             .unwrap()
             .contains("plan_text"));

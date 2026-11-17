@@ -75,7 +75,14 @@ fn a_capture_lands_once_in_its_own_directory_and_the_counter_counts_it() {
         "0"
     );
     assert!(git(&w.remote, &["log", "--format=%s"]).starts_with("third"));
-    // a file once, a folder once, each committed with its bytes counted
+}
+
+/// A file once, a folder once, each committed with its bytes counted: apart from the captures above, whose commits and push it never
+/// read, on a world of its own - the two together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn the_gms_copy_lands_once_and_its_bytes_are_counted() {
+    let w = World::new("store-copy");
+    let store = w.store();
     std::fs::write(w.gm.join("f.pdf"), b"pdf!").unwrap();
     std::fs::create_dir_all(w.gm.join("dir/sub")).unwrap();
     std::fs::write(w.gm.join("dir/x"), b"12").unwrap();
@@ -113,7 +120,7 @@ fn a_capture_lands_once_in_its_own_directory_and_the_counter_counts_it() {
 #[test]
 fn ensure_clones_once_a_push_that_fails_says_why_and_the_lock_waits() {
     let w = World::new("store-ensure");
-    let mut store = w.store();
+    let store = w.store();
     std::fs::remove_dir_all(&store.dir).unwrap();
     store.ensure().unwrap();
     store.ensure().unwrap();
@@ -121,14 +128,18 @@ fn ensure_clones_once_a_push_that_fails_says_why_and_the_lock_waits() {
         git(&store.dir, &["config", "user.name"]).trim(),
         "diagram source archive"
     );
-    // an empty remote: the clone is put on `main`, and a push with nothing committed is no failure
-    let empty = w.dir.path().join("empty.git");
-    git(
-        w.dir.path(),
-        &["init", "-q", "--bare", empty.to_str().unwrap()],
-    );
+}
+
+/// An empty remote: the clone is put on `main`, and a push with nothing committed is no failure. What was one test of the store's
+/// clone, its push and its lock is one of each, every part on a scratch directory of its own - the four clones and the lock's wait
+/// together were twice FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn an_empty_remote_is_cloned_onto_main_and_its_push_is_no_failure() {
+    let w = l7r_guard::shared::tempdir::TempDir::new("archive-store-empty");
+    let empty = w.path().join("empty.git");
+    git(w.path(), &["init", "-q", "--bare", empty.to_str().unwrap()]);
     let mut fresh = Archive::new(
-        &w.dir.path().join("fresh"),
+        &w.path().join("fresh"),
         Some(vec![("GIT_TERMINAL_PROMPT".into(), "0".into())]),
     );
     fresh.remote = empty.to_string_lossy().into_owned();
@@ -138,13 +149,13 @@ fn ensure_clones_once_a_push_that_fails_says_why_and_the_lock_waits() {
         "main"
     );
     assert_eq!(fresh.push().unwrap(), "");
-    store.remote = w
-        .dir
-        .path()
-        .join("nowhere.git")
-        .to_string_lossy()
-        .into_owned();
-    std::fs::remove_dir_all(&store.dir).unwrap();
+}
+
+#[test]
+fn a_remote_that_is_not_there_is_not_cloned() {
+    let w = l7r_guard::shared::tempdir::TempDir::new("archive-store-nowhere");
+    let mut store = Archive::new(w.path(), None);
+    store.remote = w.path().join("nowhere.git").to_string_lossy().into_owned();
     let err = store.ensure().unwrap_err();
     assert_eq!(err.kind, "RuntimeError");
     assert!(
@@ -153,8 +164,12 @@ fn ensure_clones_once_a_push_that_fails_says_why_and_the_lock_waits() {
         "{}",
         err.message
     );
-    // a push to a remote that is gone
-    w.clone_copy();
+}
+
+/// A push to a remote that is gone, the lock held and waited for, a git that fails.
+#[test]
+fn a_push_that_fails_says_why_and_the_lock_waits() {
+    let w = World::new("store-push");
     let store = w.store();
     store
         .put("x/T", &[("f".to_owned(), b"1".to_vec())], "one")
@@ -166,9 +181,10 @@ fn ensure_clones_once_a_push_that_fails_says_why_and_the_lock_waits() {
     let why = store.push().unwrap();
     assert!(why.contains("does not appear to be a git repository") || why.starts_with("fatal"));
     let held = store.locked(1.0).unwrap();
-    let err = store.locked(0.1).unwrap_err();
+    // a hundredth of a second waited out where a tenth was, the whole of FR-008's bar (feature 449 T167)
+    let err = store.locked(0.01).unwrap_err();
     assert_eq!(
-        (err.kind, err.message.ends_with("within 0.1s")),
+        (err.kind, err.message.ends_with("within 0.01s")),
         ("TimeoutError", true)
     );
     drop(held);

@@ -240,16 +240,38 @@ fn the_single_answers_come_first_in_mains_order() {
 }
 
 /// A clone beside the tree, `origin/main` at its first commit, its session's event log written `hours` ago.
+/// A copy of `from`, file for file.
+fn copy_tree(from: &Path, to: &Path) {
+    std::fs::create_dir_all(to).unwrap();
+    for e in std::fs::read_dir(from).unwrap().flatten() {
+        let (src, dst) = (e.path(), to.join(e.file_name()));
+        if e.file_type().unwrap().is_dir() {
+            copy_tree(&src, &dst);
+        } else {
+            std::fs::copy(&src, &dst).unwrap();
+        }
+    }
+}
+
+/// A session clone beside the tree, its event log `hours` old. Every clone starts the same, so one is built with git, outside
+/// `.clones/`, and each clone is a copy of it (feature 449 T167: git started six times a clone, 24 of the test's processes, held it over
+/// FR-008's tenth of a second); the committer is written into its config where two `git config` calls set it.
 fn clone(dir: &Path, name: &str, hours: u64) -> PathBuf {
+    let built = dir.join("clone-template");
+    if !built.join(".git/HEAD").is_file() {
+        std::fs::create_dir_all(&built).unwrap();
+        git(&built, &["init", "-q", "-b", "main"]);
+        let config = built.join(".git/config");
+        let mut text = std::fs::read_to_string(&config).unwrap();
+        text.push_str("[user]\n\temail = t@t\n\tname = t\n");
+        std::fs::write(&config, text).unwrap();
+        tree(&built);
+        put(&built, "specs/4-done/tasks.md", "- [x] T1\n");
+        commit(&built, "x", "x\n");
+        git(&built, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    }
     let c = dir.join(".clones").join(name);
-    std::fs::create_dir_all(&c).unwrap();
-    git(&c, &["init", "-q", "-b", "main"]);
-    git(&c, &["config", "user.email", "t@t"]);
-    git(&c, &["config", "user.name", "t"]);
-    tree(&c);
-    put(&c, "specs/4-done/tasks.md", "- [x] T1\n");
-    commit(&c, "x", "x\n");
-    git(&c, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    copy_tree(&built, &c);
     put(&c, ".git/l7r-events/f.jsonl", "{}\n");
     let when = SystemTime::now() - Duration::from_secs(hours * 3600);
     std::fs::File::options()

@@ -55,6 +55,8 @@ pub struct Gather {
 
 static USE: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?m)^\s*(?:pub(?:\([^)]*\))?\s+)?use\s+([^;]*);"));
+/// This module's patterns, for the command's start to compile side by side ([`super::warm`], feature 449 T167).
+pub(super) static WARM: [&LazyLock<Regex>; 1] = [&USE];
 
 /// `rust/<crate>` of a repository path under `rust/`.
 fn crate_of(path: &str) -> String {

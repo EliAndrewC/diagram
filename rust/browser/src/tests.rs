@@ -25,6 +25,15 @@ fn serve_and_crop_through_the_command_line() {
     assert_eq!((reply.code, out.trim()), (0, "{\"ready\":true}"));
     let (reply, _) = run(&["serve", "--user-agent", "UA/2"], &var, "");
     assert_eq!(reply.code, 0);
+}
+
+/// The crop half of what was one test with the serve half above: four starts of the fake browser together ran at FR-008's tenth of
+/// a second, two each apart (feature 449 T167).
+#[test]
+fn crop_through_the_command_line() {
+    let dir = TempDir::new("browser-cli-crop");
+    let fake = fake_chrome(dir.path());
+    let var = var_for(&fake);
     let png = dir.path().join("g.png");
     let page = dir.path().join("big.html");
     let (reply, _) = run(

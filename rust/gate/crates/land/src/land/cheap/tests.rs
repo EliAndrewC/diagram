@@ -56,14 +56,20 @@ fn the_tick_check_is_asked_in_process_and_its_raise_is_the_landing_s() {
         .is_err());
 }
 
-#[test]
-fn the_gates_refuse_and_a_claims_refusal_is_deferred_only_where_a_wait_may_cure_it() {
-    let fx = fx("cheap-gates");
-    let d = fx.root.join("specs/449-x");
+/// A landing whose claims gate says a claim is owed and whose plan gate refuses.
+fn gates(tag: &str) -> super::super::tests::Fx {
+    let fx = fx(tag);
     let claims = tool("gates/claims-gate.sh");
     fx.answer(&claims, "rc", "1");
     fx.answer(&claims, "out", "owed (impl-drift) k\n");
     fx.answer(&tool("gates/plan-gate.sh"), "rc", "1");
+    fx
+}
+
+#[test]
+fn the_gates_refuse_and_a_claims_refusal_is_deferred_only_where_a_wait_may_cure_it() {
+    let fx = gates("cheap-gates");
+    let d = fx.root.join("specs/449-x");
     // owed, none in flight: a stop now, with its cure
     let mut later = Vec::new();
     let stops = fx
@@ -72,6 +78,15 @@ fn the_gates_refuse_and_a_claims_refusal_is_deferred_only_where_a_wait_may_cure_
         .unwrap();
     assert!(stops[0].starts_with("claims-gate.sh: a claim is owed a check and none is in flight"));
     assert_eq!(stops[1], "plan-gate.sh: ");
+}
+
+/// The owed claim with a check in flight, apart from the stop above (feature 449 T167: the four first passes in one test ran over
+/// FR-008's tenth of a second).
+#[test]
+fn an_owed_claim_with_a_check_in_flight_waits_and_an_unreadable_flight_mark_raises() {
+    let fx = gates("cheap-gates-flight");
+    let d = fx.root.join("specs/449-x");
+    let mut later = Vec::new();
     // one in flight: deferred to the wait
     fx.answers.flight.borrow_mut().push("b".to_owned());
     let stops = fx
@@ -179,6 +194,22 @@ fn the_first_pass_commits_its_own_records() {
         .0
         .contains("land: claims-carry: 1 filed into 405-engine T7"));
     assert_eq!(l7r_gate_cohort::make_docs::check(&fx.root).code, 0);
+}
+
+/// The carry of [`the_first_pass_commits_its_own_records`] that names no feature, a test of its own after the one carry that pass filed
+/// (feature 449 T167: the first pass, this carry and a second pass in one test ran over FR-008's tenth of a second).
+#[test]
+fn a_carry_that_names_no_feature_is_filed_into_this_one() {
+    let fx = fx("cheap-carry");
+    let d = fx.root.join("specs/449-x");
+    // the carry the first pass filed, into the feature it names
+    fx.answers.claims.borrow_mut().insert(
+        "carry".to_owned(),
+        (0, "claims-carry: 1 filed into 405-engine T7\n".to_owned()),
+    );
+    put(&fx.root, "specs/405-engine/tasks.md", "- [ ] T7 carried\n");
+    put(&fx.root, "specs/405-engine/claims-carried.jsonl", "{}\n");
+    fx.land.file_carries(&d).unwrap();
     // a carry that names no feature is filed into this one
     fx.answers.claims.borrow_mut().insert(
         "carry".to_owned(),
@@ -187,11 +218,24 @@ fn the_first_pass_commits_its_own_records() {
     put(&fx.root, "specs/449-x/claims-carried.jsonl", "{}\n");
     fx.land.file_carries(&d).unwrap();
     assert!(fx.subjects().matches("filed as a task").count() == 2);
+}
+
+/// The second pass of [`the_first_pass_commits_its_own_records`], after a pass that regenerated the stale page, a test of its own
+/// (feature 449 T167).
+#[test]
+fn a_second_pass_regenerates_and_commits_no_current_page() {
+    let fx = fx("cheap-second-pass");
+    let d = fx.root.join("specs/449-x");
+    put(&fx.root, "Makefile", "a:   ## [tests] a target\n\techo a\n");
+    put(&fx.root, "docs/make-targets.html", "stale\n");
+    git(&fx.root, &["add", "Makefile", "docs/make-targets.html"]);
+    fx.land.records_on_the_way(&d).unwrap();
     // the page current now: a second pass regenerates and commits nothing
     let before = fx
         .subjects()
         .matches("docs/make-targets.html regenerated")
         .count();
+    assert_eq!(before, 1, "the first pass regenerated the stale page");
     fx.land.records_on_the_way(&d).unwrap();
     assert_eq!(
         fx.subjects()

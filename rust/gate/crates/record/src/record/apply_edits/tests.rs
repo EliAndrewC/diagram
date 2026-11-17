@@ -1,21 +1,23 @@
 //! Applying a check's EDIT and GLOSSARY blocks, and the round's settling (feature 449 T145; the T145 differential holds them to
 //! `apply_edits.py` on the real record, these tests every branch on the testkit's).
 
-use std::os::unix::fs::PermissionsExt as _;
 use std::path::Path;
 
-use l7r_gate_core::record::testkit::{edit_everything, put, record, NOTES, PAGE};
+use l7r_gate_core::record::testkit::{put, record, PAGE};
 
 use super::{blocks, cli, Block};
+
+mod rare;
+mod rounds;
 
 const ONCE: &str = "<p>A short way apart.<sup class=\"fn\" data-note=\"k\"></sup> More here.</p>";
 
 /// A scratch record's own file, spelled so the pointer check does not read it as a built page of the real record.
-fn scratch(name: &str) -> String {
+pub(super) fn scratch(name: &str) -> String {
     format!("research/{name}.html")
 }
 
-fn edit(path: &str, old: &str, new: Option<&str>) -> String {
+pub(super) fn edit(path: &str, old: &str, new: Option<&str>) -> String {
     let mut s = format!("EDIT {path}\n<<<\n{old}\n===\n");
     if let Some(n) = new {
         s.push_str(n);
@@ -24,7 +26,7 @@ fn edit(path: &str, old: &str, new: Option<&str>) -> String {
     s + ">>>\n"
 }
 
-fn run(root: &Path, reply: &str, extra: &[&str]) -> l7r_gate_core::Reply {
+pub(super) fn run(root: &Path, reply: &str, extra: &[&str]) -> l7r_gate_core::Reply {
     put(root, "reply.md", reply);
     let mut args = vec![
         "reply.md".to_owned(),
@@ -35,7 +37,7 @@ fn run(root: &Path, reply: &str, extra: &[&str]) -> l7r_gate_core::Reply {
     cli(&args, root)
 }
 
-fn page(root: &Path) -> String {
+pub(super) fn page(root: &Path) -> String {
     std::fs::read_to_string(root.join(PAGE)).unwrap()
 }
 
@@ -98,6 +100,15 @@ fn each_edit_is_applied_once_or_refused() {
     assert!(refused
         .stdout
         .contains(&format!("REFUSED - no file {}", scratch("none"))));
+}
+
+// The parts of the edits' test after its first, each on a record of its own (feature 449 T167): every round with EDITs reads what is
+// owed before and after its blocks, nine git processes a reading, and the one test that held them all took over FR-008's tenth of a
+// second; each part starts from the record as the parts before it left the lines it reads.
+
+#[test]
+fn an_edit_applied_twice_is_said_already_applied() {
+    let root = record("apply-edits-again");
     let again = run(
         &root,
         &format!(
@@ -118,6 +129,11 @@ fn each_edit_is_applied_once_or_refused() {
     assert!(applied
         .stdout
         .contains("already applied to 0094-trade.html"));
+}
+
+#[test]
+fn an_edit_with_no_new_text_takes_its_line_out() {
+    let root = record("apply-edits-cut");
     let line = "<p>An unmarked claim.</p>";
     run(
         &root,
@@ -125,17 +141,34 @@ fn each_edit_is_applied_once_or_refused() {
         &[],
     );
     assert!(!page(&root).contains(line) && !page(&root).contains("\n\n"));
+}
+
+#[test]
+fn an_edit_with_no_new_text_inside_a_line_takes_the_text_out() {
+    let root = record("apply-edits-cut-inside");
     run(
         &root,
         &format!("record-format: 0094\n{}", edit(PAGE, "More here.", None)),
         &[],
     );
+    // the implicit check of the original made explicit: the text is gone
+    assert!(!page(&root).contains("More here."), "{}", page(&root));
+}
+
+#[test]
+fn an_edit_to_an_empty_new_line_leaves_the_line() {
+    let root = record("apply-edits-empty");
     run(
         &root,
         &format!("record-format: 0094\n{}", edit(PAGE, "A short", Some(""))),
         &[],
     );
     assert!(page(&root).contains("<p>\n\n way apart"), "{}", page(&root));
+}
+
+#[test]
+fn a_file_s_whole_text_edited_to_nothing_leaves_its_newline() {
+    let root = record("apply-edits-whole");
     put(&root, "solo.html", "x");
     put(&root, &scratch("solo"), "whole\n");
     run(
@@ -191,120 +224,6 @@ fn a_glossary_block_reserves_its_file() {
 }
 
 #[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "one round through every way it settles, in order"
-)]
-fn a_round_settles_and_a_reply_with_no_check_says_so() {
-    let root = record("apply-edits-round");
-    edit_everything(&root);
-    let kyakhta =
-        "<p>A short distance apart.<sup class=\"fn\" data-note=\"k\"></sup> More here, now.</p>";
-    let current = page(&root);
-    let old = current
-        .lines()
-        .find(|l| l.contains("A short distance apart"))
-        .unwrap()
-        .to_owned();
-    let none = run(
-        &root,
-        &format!(
-            "a reply with no counts line\n{}",
-            edit(PAGE, &old, Some(kyakhta))
-        ),
-        &[],
-    );
-    assert!(none
-        .stdout
-        .contains("apply-edits: the reply names no check, so the units it answered stay owed"));
-    let back = run(
-        &root,
-        &format!(
-            "quote-check: 0094 - 1 finding\n{}",
-            edit(PAGE, kyakhta, Some(&old))
-        ),
-        &[],
-    );
-    assert!(
-        back.stdout
-            .contains("apply-edits: the quote-check round's own EDITs, applied verbatim:"),
-        "{}",
-        back.stdout
-    );
-    // a record-format round reads the prepass, which needs the registry assembled; this record's has no front matter
-    let unread = run(
-        &root,
-        &format!(
-            "record-format: 0094 - 1 finding\n{}",
-            edit(PAGE, &old, Some(kyakhta))
-        ),
-        &[],
-    );
-    assert!(
-        unread
-            .stdout
-            .contains("apply-edits: could not read the round's units (RecordError: "),
-        "{}",
-        unread.stdout
-    );
-    run(
-        &root,
-        &format!("quote-check: 0094\n{}", edit(PAGE, kyakhta, Some(&old))),
-        &[],
-    );
-    std::fs::write(root.join(PAGE), current.replace(&old, kyakhta)).unwrap();
-    let hand = run(
-        &root,
-        &format!("quote-check: 0094 - 1\n{}", edit(PAGE, &old, Some(kyakhta))),
-        &[],
-    );
-    assert!(hand
-        .stdout
-        .contains("found applied by hand - settled through its reply"));
-    let notes = std::fs::read_to_string(root.join(NOTES)).unwrap();
-    let note_line = notes
-        .lines()
-        .find(|l| l.contains("data-note=\"n\""))
-        .unwrap()
-        .to_owned();
-    let moved = run(
-        &root,
-        &format!(
-            "record-format: 0094 - 1\n{}",
-            edit(NOTES, &note_line, Some(&note_line.replace("<li", "<li  ")))
-        ),
-        &[],
-    );
-    assert_eq!(moved.code, 0, "{}", moved.stdout);
-    let skipped = run(
-        &root,
-        &format!("quote-check: x\n{}", edit(PAGE, "no such", Some("x"))),
-        &["--skip", "1"],
-    );
-    assert!(skipped.stdout.contains("  1. skipped (--skip)"));
-    assert_eq!(run(&root, "quote-check: x\n", &[]).code, 2);
-    assert_eq!(
-        run(
-            &root,
-            &format!("quote-check: x\n{}", edit(PAGE, "a", Some("b"))),
-            &["--skip", "1,x"]
-        )
-        .code,
-        1
-    );
-    assert_eq!(cli(&["none.md".to_owned()], &root).code, 1);
-    assert_eq!(cli(&[], &root).code, 2);
-    assert_eq!(cli(&["r".to_owned(), "--bogus".to_owned()], &root).code, 2);
-    std::fs::remove_dir_all(root.join(".git")).unwrap();
-    let plain = run(
-        &root,
-        &format!("quote-check: 0094\n{}", edit(PAGE, kyakhta, Some(&old))),
-        &[],
-    );
-    assert!(!plain.stdout.contains("round's own EDITs"));
-}
-
-#[test]
 fn a_modal_form_edit_keeps_what_research_fixed() {
     let root = record("apply-edits-modal");
     put(
@@ -341,7 +260,7 @@ fn a_modal_form_edit_keeps_what_research_fixed() {
 }
 
 /// The registry's fragments the record-format prepass assembles (the testkit's registry has neither front nor tail).
-fn assemblable(root: &Path) {
+pub(super) fn assemblable(root: &Path) {
     put(root, "research/sources/_front.html", "<h1>Sources</h1>\n");
     put(root, "research/sources/_tail.html", "\n");
     put(
@@ -350,298 +269,4 @@ fn assemblable(root: &Path) {
         "<h3 id=\"key-a\"><code>key-a</code></h3>\n<p>Write-up A.</p>\n",
     );
     let _ = std::fs::remove_file(root.join("research/sources/010-works-cited/README.md"));
-}
-
-#[test]
-fn a_round_settles_what_its_blocks_alone_moved() {
-    use crate::record::owed::{self, answers};
-    let root = record("apply-edits-settle");
-    edit_everything(&root);
-    assemblable(&root);
-    let store = answers::store(&root);
-    let research: Vec<(String, String)> =
-        owed::fingerprints(&root, &["modal-accuracy".to_owned()]).unwrap();
-    for (slug, fp) in &research {
-        answers::write_answer(&store, slug, fp, "1 finding", None).unwrap();
-    }
-    let well = l7r_gate_core::record::testkit::WELL;
-    let depiction = run(
-        &root,
-        &format!(
-            "modal-depiction: well - 1 finding\n{}",
-            edit(well, "It is deep.", Some("It is very deep."))
-        ),
-        &[],
-    );
-    assert!(depiction.stdout.contains("modal-accuracy:hamlet/well: settled with its answer - the modal-depiction round's blocks alone moved it (it runs before them)"), "{}", depiction.stdout);
-    assert!(depiction.stdout.contains(
-        "modal-gaps:hamlet/well: still owed - not answered at the words before these blocks"
-    ));
-    let quotes: Vec<(String, String)> =
-        owed::fingerprints(&root, &["quote-check".to_owned()]).unwrap();
-    for (slug, fp) in quotes.iter().take(1) {
-        answers::write_answer(&store, slug, fp, "0 findings", None).unwrap();
-    }
-    let notes = std::fs::read_to_string(root.join(NOTES)).unwrap();
-    let blocks: String = notes
-        .lines()
-        .filter(|l| l.starts_with("<li"))
-        .map(|l| edit(NOTES, l, Some(&l.replace("</li>", " Grounds: more.</li>"))))
-        .collect();
-    let format = run(
-        &root,
-        &format!(
-            "record-format: 0094 - 2 findings\n{blocks}{}",
-            edit(PAGE, "More here.", Some("More here. Grounds: added."))
-        ),
-        &[],
-    );
-    assert!(format.stdout.contains("record-format:0094: still owed - its prepass now raises Grounds:, added, grounds, which the round never ruled on"), "{}", format.stdout);
-    assert!(format.stdout.contains(
-        "quote-check:0094#k: settled - another check's fix, outside its quotation and its claim"
-    ));
-    assert!(format.stdout.contains(
-        "quote-check:0094#n: still owed - not answered at the words before these blocks"
-    ));
-    let calm = run(
-        &root,
-        &format!(
-            "record-format: 0094 - 1\n{}",
-            edit(PAGE, "More here. Grounds: added.", Some("More here."))
-        ),
-        &[],
-    );
-    assert!(
-        calm.stdout
-            .contains("record-format:0094: settles when `make record-checked` records this round"),
-        "{}",
-        calm.stdout
-    );
-    // a round whose answer already stands at the words before its blocks settles with it
-    let kept = page(&root);
-    for (slug, fp) in owed::fingerprints(&root, &["record-format".to_owned()]).unwrap() {
-        answers::write_answer(&store, &slug, &fp, "1 finding", None).unwrap();
-    }
-    let answered = run(
-        &root,
-        &format!(
-            "record-format: 0094 - 1\n{}",
-            edit(PAGE, "More here.", Some("Here."))
-        ),
-        &[],
-    );
-    assert!(
-        answered
-            .stdout
-            .contains("record-format:0094: settled with its answered round"),
-        "{}",
-        answered.stdout
-    );
-    std::fs::write(root.join(PAGE), kept).unwrap();
-    let inside: String = std::fs::read_to_string(root.join(NOTES))
-        .unwrap()
-        .lines()
-        .filter(|l| l.contains("data-note=\"n\""))
-        .map(|l| edit(NOTES, l, Some(&l.replace("\"new\"", "\"newer\""))))
-        .collect();
-    let moved = run(&root, &format!("intro-check: 0094 - 1\n{inside}"), &[]);
-    assert!(
-        moved
-            .stdout
-            .contains("quote-check:0094#n: still owed - its quotation or its claim changed"),
-        "{}",
-        moved.stdout
-    );
-}
-
-#[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "the rarer paths of a run, one after another on one record"
-)]
-fn the_rarer_paths_of_a_run() {
-    let root = record("apply-edits-rare");
-    assemblable(&root);
-    assert_eq!(
-        super::round::named("plain words"),
-        "ValueError: plain words"
-    );
-    assert_eq!(super::round::named("KeyError: 'x'"), "KeyError: 'x'");
-    // a modal-form EDIT on a record file: no pop-up, so nothing research fixed
-    let not_modal = run(
-        &root,
-        &format!(
-            "modal-form: x - 1\n{}",
-            edit(PAGE, "More here.", Some("More, here."))
-        ),
-        &[],
-    );
-    assert!(not_modal.stdout.contains("applied to 0094-trade.html"));
-    put(
-        &root,
-        "l7r/diagram/interactive/assets/modals/classes/y.md",
-        "About: a fixed fact and more.\n",
-    );
-    super::HELD
-        .with(|h| *h.borrow_mut() = Some(vec!["a fixed fact".to_owned(), "and more".to_owned()]));
-    let y = "l7r/diagram/interactive/assets/modals/classes/y.md";
-    let dropped = run(
-        &root,
-        &format!(
-            "modal-form: y - 1\n{}",
-            edit(y, "a fixed fact and more", Some("a fixed fact"))
-        ),
-        &[],
-    );
-    assert!(
-        dropped.stdout.contains(
-            "REFUSED - a modal-form EDIT drops wording a research round fixed ('and more')"
-        ),
-        "{}",
-        dropped.stdout
-    );
-    let kept = run(
-        &root,
-        &format!("modal-form: y - 1\n{}", edit(y, "About:", Some("About -"))),
-        &[],
-    );
-    assert!(kept.stdout.contains("applied to y.md"));
-    super::HELD.with(|h| *h.borrow_mut() = None);
-    // a dry run reads and writes nothing
-    let dry = run(
-        &root,
-        &format!(
-            "quote-check: x\n{}",
-            edit(PAGE, "More, here.", Some("More here."))
-        ),
-        &["--dry-run"],
-    );
-    assert!(
-        dry.stdout.contains("applied to 0094-trade.html") && page(&root).contains("More, here.")
-    );
-    // a record-format round whose blocks raise no new word settles its unit
-    let calm = run(
-        &root,
-        &format!(
-            "record-format: 0094 - 1\nGLOSSARY quiet | | a def\n{}",
-            edit(PAGE, "More, here.", Some("More here."))
-        ),
-        &[],
-    );
-    assert!(
-        calm.stdout
-            .contains("apply-edits: 2 block(s), 0 refused - then `make glossary`"),
-        "{}",
-        calm.stdout
-    );
-    // another check's fix outside a quotation on a note nothing owed: settled, its earlier answer none
-    let note = std::fs::read_to_string(root.join(NOTES))
-        .unwrap()
-        .lines()
-        .find(|l| l.contains("data-note=\"k\""))
-        .unwrap()
-        .to_owned();
-    let fresh = run(
-        &root,
-        &format!(
-            "record-format: 0094 - 1\n{}",
-            edit(NOTES, &note, Some(&note.replace("</li>", " Also.</li>")))
-        ),
-        &[],
-    );
-    assert!(
-        fresh
-            .stdout
-            .contains("quote-check:0094#k: settled - another check's fix"),
-        "{}",
-        fresh.stdout
-    );
-    // the store cannot be written: the round cannot settle, and the edits stand
-    let store = crate::record::owed::answers::store(&root);
-    let _ = std::fs::remove_dir_all(&store);
-    std::fs::write(&store, "a file where the store goes").unwrap();
-    let unsettled = run(
-        &root,
-        &format!(
-            "quote-check: 0094 - 1\n{}",
-            edit(PAGE, "More here.", Some("More here, now."))
-        ),
-        &[],
-    );
-    assert!(unsettled.stdout.contains("could not settle ("));
-    std::fs::remove_file(&store).unwrap();
-    // a glossary term another clone holds, and a ledger that cannot be read
-    std::fs::create_dir_all(root.join(".specify")).unwrap();
-    std::fs::write(
-        root.join(".specify/prefixes.jsonl"),
-        "{\"kind\": \"glossary\", \"key\": \"held\", \"prefix\": 5, \"clone\": \"/elsewhere\"}\n",
-    )
-    .unwrap();
-    assert!(
-        run(&root, "record-format: 0094\nGLOSSARY held | | d\n", &[])
-            .stdout
-            .contains("REFUSED - 'held' is already being defined in /elsewhere")
-    );
-    std::fs::write(root.join(".specify/prefixes.jsonl"), "[1]\n").unwrap();
-    assert_eq!(
-        run(&root, "record-format: 0094\nGLOSSARY other | | d\n", &[]).code,
-        1
-    );
-    // files that cannot be read or written
-    put(&root, &scratch("bad"), "x");
-    std::fs::write(root.join(scratch("bad")), [0xff]).unwrap();
-    assert_eq!(
-        run(
-            &root,
-            &format!("quote-check: x\n{}", edit(&scratch("bad"), "a", Some("b"))),
-            &["--dry-run"]
-        )
-        .code,
-        1
-    );
-    assert_eq!(
-        run(
-            &root,
-            &format!("quote-check: x\n{}", edit(&scratch("bad"), "a", Some("b"))),
-            &[]
-        )
-        .code,
-        1
-    );
-    put(&root, &scratch("locked"), "old\n");
-    std::fs::set_permissions(
-        root.join(scratch("locked")),
-        std::fs::Permissions::from_mode(0o444),
-    )
-    .unwrap();
-    assert_eq!(
-        run(
-            &root,
-            &format!(
-                "quote-check: x\n{}",
-                edit(&scratch("locked"), "old", Some("new"))
-            ),
-            &[]
-        )
-        .code,
-        1
-    );
-    std::fs::write(root.join(scratch("locked2")), "new\n").unwrap();
-    std::fs::set_permissions(
-        root.join(scratch("locked2")),
-        std::fs::Permissions::from_mode(0o444),
-    )
-    .unwrap();
-    assert_eq!(
-        run(
-            &root,
-            &format!(
-                "quote-check: x\n{}",
-                edit(&scratch("locked2"), "old", Some("new"))
-            ),
-            &[]
-        )
-        .code,
-        1
-    );
 }

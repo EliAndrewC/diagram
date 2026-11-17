@@ -268,11 +268,17 @@ fn one_url_archived_its_capture_committed_its_gms_copies_placed_and_its_row_writ
         .unwrap()
         .starts_with("push failed: "));
     assert_eq!(again["gm_copies"], json!(["gm-copies/g.pdf"]));
-    after_a_capture(&w, &store, &mut fake);
 }
 
-/// The rest of the test above, on its world: a dead page with the page cache's text, a blocked URL, a table that will not read.
-fn after_a_capture(w: &World, store: &crate::store::Archive, fake: &mut Fake) {
+/// What was the tail of the test above, on its world: a dead page with the page cache's text, a blocked URL, a table that will not read.
+/// It reads nothing the capture above wrote, so it stands apart on a world of its own - the two together were past FR-008's tenth of a
+/// second (feature 449 T167).
+#[test]
+fn a_dead_page_keeps_the_caches_text_and_a_blocked_url_or_a_bad_table_is_refused() {
+    let world = World::new("manifest-dead");
+    let w = &world;
+    let store = &w.store();
+    let fake = &mut Fake::default();
     // unpushed, with the page cache's text kept beside a dead page
     let how = l7r_gate_research::pages::Stored {
         fetched: None,
@@ -327,10 +333,8 @@ fn after_a_capture(w: &World, store: &crate::store::Archive, fake: &mut Fake) {
     .is_err());
 }
 
-#[test]
-fn the_gms_copies_told_to_their_rows_the_held_rows_settled_and_the_coverage_reported() {
-    let w = World::new("manifest-sync");
-    let store = w.store();
+/// The three rows the copies' sync is told to: one partial, one archived, one keyed elsewhere.
+fn three_rows(w: &World) {
     write_row(&w.root, "https://e.org/a", &json!({"url": "https://e.org/a", "keys": ["src-a"], "outcome": "partial", "gm_copies": ["old"]})).unwrap();
     write_row(
         &w.root,
@@ -344,6 +348,13 @@ fn the_gms_copies_told_to_their_rows_the_held_rows_settled_and_the_coverage_repo
         &json!({"url": "https://e.org/y", "keys": ["other"], "outcome": "unreachable"}),
     )
     .unwrap();
+}
+
+#[test]
+fn the_gms_copies_told_to_their_rows_the_held_rows_settled_and_the_coverage_reported() {
+    let w = World::new("manifest-sync");
+    let store = w.store();
+    three_rows(&w);
     table(
         &w,
         &json!({"g.pdf": {"keys": ["src-a", "k2"]}, "h.pdf": {"keys": ["k2"]}, "gone.pdf": {"keys": ["other"]}}),
@@ -365,6 +376,15 @@ fn the_gms_copies_told_to_their_rows_the_held_rows_settled_and_the_coverage_repo
         "unreachable"
     );
     assert_eq!(sync_gm_copies(&w.root, &store).unwrap(), 0);
+}
+
+/// The sync's failures - a refused push, a row with no outcome, a row that will not read - apart from the test above on a world of
+/// their own holding its rows: the four syncs' pushes together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_sync_whose_push_is_refused_or_whose_row_will_not_read_fails() {
+    let w = World::new("manifest-sync-fails");
+    let store = w.store();
+    three_rows(&w);
     git(
         &store.dir,
         &["remote", "set-url", "origin", "/no/such/remote.git"],
@@ -386,11 +406,21 @@ fn the_gms_copies_told_to_their_rows_the_held_rows_settled_and_the_coverage_repo
     std::fs::write(row_path(&w.root, "https://e.org/z"), "{").unwrap();
     assert!(sync_gm_copies(&w.root, &store).is_err());
     std::fs::remove_file(row_path(&w.root, "https://e.org/z")).unwrap();
-    settled_and_reported(&w);
 }
 
-/// The rest of the test above: the held rows settled, what is owed, and the coverage table.
-fn settled_and_reported(w: &World) {
+/// What was the tail of the test above: the held rows settled, what is owed, and the coverage table. None of it runs git, so it stands
+/// apart on a world of its own holding the row the sync left standing - the two together were past FR-008's tenth of a second
+/// (feature 449 T167).
+#[test]
+fn the_held_rows_settled_and_the_coverage_reported() {
+    let world = World::new("manifest-settle");
+    let w = &world;
+    write_row(
+        &w.root,
+        "https://e.org/y",
+        &json!({"url": "https://e.org/y", "keys": ["other"], "outcome": "unreachable"}),
+    )
+    .unwrap();
     // held rows: one waiting with its outcome held, one waiting with none, one done
     write_row(&w.root, "https://e.org/a", &json!({"url": "https://e.org/a", "outcome": "pending-upload", "held": "archived", "reason": "push failed"})).unwrap();
     write_row(

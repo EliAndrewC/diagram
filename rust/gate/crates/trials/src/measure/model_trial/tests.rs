@@ -439,6 +439,20 @@ fn prepare_reads_the_commit_from_the_reflog_and_by_hand() {
     let got = cli(&words(&["prepare", &a, &b]), &t);
     assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
     assert_eq!(meta(&out)["commit"].as_str().unwrap(), head);
+}
+
+/// Split from the test above (feature 449 T167, FR-008's tenth of a second: the three prepares and the sibling clone took 122 ms): the
+/// commit given by hand, which reads no reflog, and one that names nothing.
+#[test]
+fn prepare_takes_the_commit_by_hand_and_refuses_one_that_names_nothing() {
+    let (top, t) = world("mt-at");
+    let head = git(&t.clone, &["rev-parse", "HEAD"]);
+    let tr = transcript(&top, "/diagram/.clones/judged/specs/x");
+    let mut rs = super::records_of(&tr);
+    rs[0]["timestamp"] = json!("2999-01-01T00:00:00Z");
+    rs[0]["cwd"] = json!("/diagram/.clones/judged");
+    lines(&tr, &rs);
+    let a = tr.display().to_string();
     let by_hand = top.join("case2");
     let c = by_hand.display().to_string();
     assert_eq!(

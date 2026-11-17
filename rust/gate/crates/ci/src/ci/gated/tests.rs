@@ -1,6 +1,6 @@
 //! The route and a gated push's conditions, on a real repository with a stand-in Python.
 
-use super::super::fixtures::{commit, git, python, repo};
+use super::super::fixtures::{commit, git, put, python, repo, scratch};
 use super::{cli, entry};
 use crate::state;
 
@@ -19,11 +19,36 @@ fn the_route_is_direct_with_no_engine_code_and_gated_with_it() {
     assert_eq!(ask(&dir, &py, &["status", "--route"]).stdout, "GATED\n");
 }
 
-#[test]
-fn a_gated_push_needs_a_green_local_done_of_exactly_the_merged_engine_content() {
-    let dir = repo("gated");
+/// A repository whose delta changes engine code, and its stand-in Python: [`repo`]'s, `origin/main` at its first commit, laid out with
+/// four git processes where `repo` and the commit took eight (feature 449 T167) - `git init`'s HEAD, object and ref directories and
+/// config written without the process, the committer and no automatic maintenance (a process each commit) in the config itself, and
+/// `origin/main` the first commit's loose ref copied.
+fn engine_delta(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, String) {
+    let dir = scratch(tag);
+    for sub in ["objects", "refs/heads", "refs/remotes/origin"] {
+        std::fs::create_dir_all(dir.join(".git").join(sub)).unwrap();
+    }
+    put(&dir, ".git/HEAD", "ref: refs/heads/main\n");
+    put(
+        &dir,
+        ".git/config",
+        "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tlogallrefupdates = true\n\
+         [user]\n\temail = t@t\n\tname = t\n[maintenance]\n\tauto = false\n",
+    );
+    commit(&dir, "l7r/diagram/m.py", "x = 1\n");
+    std::fs::copy(
+        dir.join(".git/refs/heads/main"),
+        dir.join(".git/refs/remotes/origin/main"),
+    )
+    .unwrap();
     let py = python(&dir);
     commit(&dir, "l7r/diagram/m.py", "x = 2\n");
+    (dir, py)
+}
+
+#[test]
+fn a_gated_push_needs_a_green_local_done_of_exactly_the_merged_engine_content() {
+    let (dir, py) = engine_delta("gated");
     let none = ask(&dir, &py, &["gated-check"]);
     assert_eq!(none.code, 1);
     assert!(
@@ -33,9 +58,23 @@ fn a_gated_push_needs_a_green_local_done_of_exactly_the_merged_engine_content() 
     assert!(ask(&dir, &py, &["status"])
         .stdout
         .contains("the last gate FAILED"));
+}
+
+/// A green local `make quick` in place of `make done`, apart from the checks above (feature 449 T167: the six checks in one test ran
+/// over FR-008's tenth of a second).
+#[test]
+fn a_green_local_quick_is_no_green_local_done() {
+    let (dir, py) = engine_delta("gated-quick");
     state::write(&dir, "green-local", "quick", false, &py).unwrap();
     let quick = ask(&dir, &py, &["gated-check"]);
     assert!(quick.stdout.contains("no green local `make done`"));
+}
+
+/// The green local `make done` of [`a_gated_push_needs_a_green_local_done_of_exactly_the_merged_engine_content`] and the code moving
+/// after it, a test of their own (feature 449 T167: the six checks in one test ran over FR-008's tenth of a second).
+#[test]
+fn a_green_local_done_pushes_until_the_code_changes() {
+    let (dir, py) = engine_delta("gated-done");
     state::write(&dir, "green-local", "done", false, &py).unwrap();
     let done = ask(&dir, &py, &["gated-check"]);
     assert_eq!(done.code, i32::from(!done.stdout.contains("verdict: PUSH")));

@@ -16,13 +16,9 @@ fn bundle(root: &Path, extra: &[&str]) -> Reply {
     crate::record::bundle::check::cli(&args(&a))
 }
 
-#[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "one bundle's every part, in the order it is built"
-)]
-fn a_source_bundle_end_to_end() {
-    let root = scratch("bundle-key");
+/// The scratch record a source bundle is built on: `key-a`'s write-up and a citation note, committed as `origin/main`.
+fn key_record(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = scratch(tag);
     put(
         &root,
         "research/sources/010-works-cited/0001-key-a.html",
@@ -31,6 +27,32 @@ fn a_source_bundle_end_to_end() {
     put(&root, "research/questions/citations/0001-key.notes.html", "<li data-note=\"key-a-2\">\u{300c}a quoted passage of twenty letters\u{300d} - and \u{300c}short\u{300d} (translated; original: \u{300c}an original long enough to keep\u{300d}) \u{300c}https://example.org/a/long/link\u{300d} <!-- \u{300c}a session note of some length\u{300d} --></li><li data-note=\"key-ab\">x</li>");
     let base = crate::record::testkit::commit(&root, "a pointer");
     crate::record::testkit::git(&root, &["update-ref", "refs/remotes/origin/main", &base]);
+    root
+}
+
+/// ...with every kind of edit since, `key-b`'s write-up, and a source-reader's earlier round returned and another running.
+fn key_record_edited(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = key_record(tag);
+    edit_everything(&root);
+    put(
+        &root,
+        "research/sources/010-works-cited/0002-key-b.html",
+        "<p>B (https://e.org/b)</p>\n",
+    );
+    let reply = root.join("r.md");
+    put(&root, "r.md", "clean\n");
+    state(
+        &root,
+        &json!({"dispatches": {"a": {"check": "source-reader", "subjects": ["q:0094"], "t": 1.5, "state": "returned", "notes": ["n"], "reply": reply.to_string_lossy()}, "b": {"check": "source-reader", "subjects": ["q:0094"], "t": 2, "state": "running"}}}),
+    );
+    root
+}
+
+/// A key's bundle refused, not owed or not there. What was one test of a source bundle end to end is five, each on a scratch record
+/// of its own - its six bundles together were past FR-008's tenth of a second (feature 449 T167); the name kept on the first.
+#[test]
+fn a_source_bundle_end_to_end() {
+    let root = key_record("bundle-key");
     let o = root.join("out").to_string_lossy().into_owned();
     assert_eq!(bundle(&root, &["--key", "key-a", "--out", &o]).code, 3);
     assert_eq!(
@@ -48,6 +70,13 @@ fn a_source_bundle_end_to_end() {
         .code,
         2
     );
+}
+
+/// A key's bundle escaped, with the quotes its notes hold.
+#[test]
+fn a_source_bundle_escaped_holds_its_quotes() {
+    let root = key_record("bundle-key-escaped");
+    let o = root.join("out").to_string_lossy().into_owned();
     let r = bundle(
         &root,
         &[
@@ -70,18 +99,13 @@ fn a_source_bundle_end_to_end() {
             "an original long enough to keep"
         ])
     );
-    edit_everything(&root);
-    put(
-        &root,
-        "research/sources/010-works-cited/0002-key-b.html",
-        "<p>B (https://e.org/b)</p>\n",
-    );
-    let reply = root.join("r.md");
-    put(&root, "r.md", "clean\n");
-    state(
-        &root,
-        &json!({"dispatches": {"a": {"check": "source-reader", "subjects": ["q:0094"], "t": 1.5, "state": "returned", "notes": ["n"], "reply": reply.to_string_lossy()}, "b": {"check": "source-reader", "subjects": ["q:0094"], "t": 2, "state": "running"}}}),
-    );
+}
+
+/// A key's whole bundle for a question: the claims to read, what changed since the last round, the images given.
+#[test]
+fn a_source_bundle_whole_for_a_question() {
+    let root = key_record_edited("bundle-key-whole");
+    let o = root.join("out").to_string_lossy().into_owned();
     let whole = bundle(
         &root,
         &[
@@ -106,6 +130,13 @@ fn a_source_bundle_end_to_end() {
             && text.contains("```diff\n--- at the last round\n+++ now\n")
             && text.contains("- `images/r.md`")
     );
+}
+
+/// A source-pages helper that fails fails the bundle with its words; below, a key whose write-up has no pointer still bundles.
+#[test]
+fn a_source_bundle_whose_helper_fails() {
+    let root = key_record_edited("bundle-key-fails");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(
         &root,
         "stub-answer.json",
@@ -124,6 +155,12 @@ fn a_source_bundle_end_to_end() {
         ],
     );
     assert!(failed.stderr.contains("pointer | file | state"));
+}
+
+#[test]
+fn a_source_bundle_whose_key_has_no_pointer() {
+    let root = key_record_edited("bundle-key-nopointer");
+    let o = root.join("out").to_string_lossy().into_owned();
     put(
         &root,
         "research/sources/010-works-cited/0003-key-n.html",
@@ -179,6 +216,14 @@ fn several_keys_and_the_intro_batch() {
     assert!(bundle(&root, &["--keys", " "])
         .stderr
         .contains("IndexError"));
+}
+
+/// The intro-check batch of several questions. What was one test with the keys' bundles above is four, each on a scratch record of its
+/// own - its nine bundles together were past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn the_intro_batch() {
+    let root = scratch("bundle-intro");
+    let o = root.join("out").to_string_lossy().into_owned();
     let intro = bundle(
         &root,
         &[
@@ -194,6 +239,12 @@ fn several_keys_and_the_intro_batch() {
     );
     assert_eq!(intro.code, 0);
     assert!(root.join("out/i/q-0095.txt").is_file());
+}
+
+#[test]
+fn an_intro_check_not_owed_or_of_no_question_is_refused() {
+    let root = scratch("bundle-intro-refused");
+    let o = root.join("out").to_string_lossy().into_owned();
     assert_eq!(
         bundle(&root, &["0094", "--for", "intro-check", "--out", &o]).code,
         3
@@ -216,6 +267,13 @@ fn several_keys_and_the_intro_batch() {
     assert!(bundle(&root, &["--for", "intro-check"])
         .stderr
         .contains("IndexError"));
+}
+
+/// One question's intro-check, owed once its intro is edited.
+#[test]
+fn an_edited_intro_is_owed_its_check() {
+    let root = scratch("bundle-intro-one");
+    let o = root.join("out").to_string_lossy().into_owned();
     edit_everything(&root);
     let one = bundle(
         &root,
@@ -320,6 +378,13 @@ fn what_changed_since_a_source_readers_last_round() {
         since_last_round(&root, &[unit("source-reader:0095#x")]).unwrap(),
         ""
     );
+}
+
+/// A bundle with no out directory is named for its keys or its questions: apart from the rounds above on a scratch record of its own,
+/// the three bundles and the rounds together past FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn a_bundle_with_no_out_directory_is_named_for_its_keys_or_questions() {
+    let root = scratch("bundle-keys-named");
     let r = root.to_string_lossy().into_owned();
     let default = crate::record::bundle::check::cli(&crate::record::bundle::tests::args(&[
         "--root",

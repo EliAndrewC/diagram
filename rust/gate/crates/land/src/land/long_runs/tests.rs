@@ -22,17 +22,30 @@ fn a_covered_delta_runs_nothing_long() {
     assert!(!fx.log().contains("make"));
 }
 
-#[test]
-fn the_rust_stage_gate_s_record_is_made_and_a_failing_seed_stops_the_landing() {
-    let fx = fx("long-rust-gate");
+/// An engine delta on a Rust-only port: the stage gate owed.
+fn rust_engine(tag: &str) -> super::super::tests::Fx {
+    let fx = fx(tag);
     fx.in_delta("rust/phases/src/a.rs", "fn a() {}\n");
     fx.answer(&gate("cohort port"), "out", "rust-only\n");
+    fx
+}
+
+#[test]
+fn the_rust_stage_gate_s_record_is_made_and_a_failing_seed_stops_the_landing() {
+    let fx = rust_engine("long-rust-gate");
     fx.answer("make --no-print-directory rust-gate", "rc", "1");
     assert_eq!(fx.land.long_runs(), Ok(1));
     assert!(fx
         .said()
         .1
         .contains("the Rust stage gate has a failing seed"));
+}
+
+/// The work-budget run after a green stage gate, apart from the failing seed above (feature 449 T167: the four second passes in one
+/// test ran over FR-008's tenth of a second).
+#[test]
+fn the_work_budget_review_s_refusal_stops_the_landing_and_its_missing_run_is_made() {
+    let fx = rust_engine("long-budget");
     fx.answer("make --no-print-directory rust-gate", "rc", "0");
     fx.answer(
         "make --no-print-directory work-budget-review ROUTE=GATED",
@@ -96,12 +109,11 @@ fn the_tooling_tests_a_delta_of_scripts_reaches_run() {
     assert_eq!(fx.land.long_runs(), Ok(0));
 }
 
-#[test]
-fn the_gates_the_stamp_names_run_and_the_cohort_beside_make_done() {
-    let fx = fx("long-named");
+/// An engine delta whose stamp names `make done` and `make hooks-test`, with no landing cohort and 8 GB free.
+fn named(tag: &str) -> super::super::tests::Fx {
+    let fx = fx(tag);
     fx.in_delta("l7r/diagram/a.py", "x = 1\n");
     fx.answer(&gate("cohort rust-owed"), "rc", "1");
-    fx.answer(&stamp(), "rcs", "1\n1\n");
     fx.answer(
         &stamp(),
         "out",
@@ -109,6 +121,13 @@ fn the_gates_the_stamp_names_run_and_the_cohort_beside_make_done() {
     );
     fx.answer(&gate("cohort check"), "rc", "1");
     std::fs::write(&fx.land.meminfo, "MemAvailable: 8192000 kB\n").unwrap();
+    fx
+}
+
+#[test]
+fn the_gates_the_stamp_names_run_and_the_cohort_beside_make_done() {
+    let fx = named("long-named");
+    fx.answer(&stamp(), "rcs", "1\n1\n");
     fx.answer(
         "make --no-print-directory cohort-landing JOBS=8",
         "sh",
@@ -121,6 +140,13 @@ fn the_gates_the_stamp_names_run_and_the_cohort_beside_make_done() {
     assert!(out.contains("make hooks-test (the changed modules"));
     assert!(out.contains("seed 7 passed the whole gate\na regression\n"));
     assert!(err.contains("the green-gate stamp still refuses"));
+}
+
+/// The cohort beside the gate refusing, and a red gate stopping it, apart from the passing run above (feature 449 T167: the three
+/// second passes in one test ran over FR-008's tenth of a second).
+#[test]
+fn a_refusing_cohort_or_a_red_gate_beside_it_stops_the_landing() {
+    let fx = named("long-named-red");
     // the cohort refuses
     fx.answer(&stamp(), "rcs", "1\n");
     fx.answer("make --no-print-directory cohort-landing JOBS=8", "rc", "1");

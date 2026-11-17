@@ -54,8 +54,8 @@ fn a_crop_fails_where_the_python_died() {
     assert_eq!((options().width, options().height), (1200, 900));
 }
 
-/// THE END-TO-END TEST (`ask:449-T80-order`: the browser behind one seam, with one end-to-end test): the pinned Chromium itself, a
-/// local page rendered and a glyph on it cropped - no network, a `file://` page.
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the browser's (`ask:449-T80-order`: the browser behind one seam, with one
+/// end-to-end test): the pinned Chromium itself, a local page rendered and a glyph on it cropped - no network, a `file://` page.
 #[test]
 fn the_real_chromium_renders_and_crops_a_local_page() {
     let dir = TempDir::new("browser-e2e");

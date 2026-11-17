@@ -45,7 +45,10 @@ for line in sys.stdin:
         print(json.dumps({"error": "Traceback (most recent call last):\n" + type(e).__name__ + ": " + str(e)}), flush=True)
 "#;
 
-const CODEID: &str = "import hashlib, re, sys\nfor p in sys.argv[2:]:\n    print(hashlib.sha256(re.sub(rb' *#.*', b'', open(p, 'rb').read())).hexdigest())\n";
+/// The stand-in `codeid.py`: a file's id the hash of its text with each line's comment and the spaces before it cut, as `re.sub(rb' *#.*',
+/// b'', text)` cut them - without `re`, whose import was a third of the stand-in's 17 ms start (feature 449 T167, FR-008's tenth of a
+/// second).
+const CODEID: &str = "import hashlib, sys\nfor p in sys.argv[2:]:\n    d = b'\\n'.join(l.split(b'#', 1)[0].rstrip(b' ') if b'#' in l else l for l in open(p, 'rb').read().split(b'\\n'))\n    print(hashlib.sha256(d).hexdigest())\n";
 
 pub const LIB: &str = "//! The probe.
 //!
@@ -99,7 +102,8 @@ pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_guard::shared::tempd
     // the repository `git init -b main` makes, with its three settings, written as git writes them: four processes saved (feature 449
     // T166: each end-to-end test well within FR-008's tenth of a second)
     put(&root, ".git/HEAD", "ref: refs/heads/main\n");
-    put(&root, ".git/config", "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n[user]\n\temail = t@example.org\n\tname = t\n[commit]\n\tgpgsign = false\n");
+    // `maintenance.auto` off: each commit started `git maintenance run --auto`, a process of 2 ms more (feature 449 T167)
+    put(&root, ".git/config", "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n[user]\n\temail = t@example.org\n\tname = t\n[commit]\n\tgpgsign = false\n[maintenance]\n\tauto = false\n");
     for dir in ["objects", "refs/heads", "refs/tags"] {
         std::fs::create_dir_all(root.join(".git").join(dir)).unwrap();
     }
@@ -128,6 +132,23 @@ pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_guard::shared::tempd
     let head = std::fs::read_to_string(root.join(".git/refs/heads/main")).unwrap();
     put(&root, ".git/refs/remotes/origin/main", &head);
     root
+}
+
+/// [`fixture`] with no Python module under `l7r/diagram/`, so no command starts the Python half: for a test whose Python half answers
+/// nothing, its 16 ms start saved (feature 449 T167, FR-008's tenth of a second); the tests that read the Python half keep the module.
+pub fn fixture_rust_only(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    fixture_with(tag, &|root| {
+        std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
+    })
+}
+
+/// Every change of the tree committed, and that commit made `origin/main` as the fixture makes it: the loose ref copied, where
+/// `commit` and `git update-ref` took two processes more (feature 449 T167, as [`fixture_with`]).
+pub fn commit_as_origin(root: &Path, msg: &str) {
+    git(root, &["add", "-A"]);
+    git(root, &["commit", "-qm", msg, "--allow-empty"]);
+    let head = std::fs::read_to_string(root.join(".git/refs/heads/main")).unwrap();
+    put(root, ".git/refs/remotes/origin/main", &head);
 }
 
 /// The Python half's answer: units of `l7r/diagram/m.py`, each `(qualname, kind, claim lines, inherited)`.
@@ -305,4 +326,134 @@ fn the_land_and_the_replay_ask_in_process() {
         .unwrap()
         .iter()
         .any(|(_, why)| why == "new"));
+}
+
+/// The fixture's six Rust and procedure units as [`record_all`] records them (their `date` the day's): written by hand, so a test whose
+/// subject comes after the recording starts no bundle, no record and no Python for it - those two commands were most of two tests'
+/// time against FR-008's tenth of a second (feature 449 T167). [`the_recorded_state_is_what_record_all_writes`] holds them to a run.
+pub const RECORDED: &str = r#"{
+"docs/buildings.md::Walls#wall height": {"body": "ba7196821a227394", "claim": "wall height - gap: 12 ft", "code": "0fe5636fcc226192", "core": "5a446aed967da80f", "note": "fine", "pages": {"0001-gap.html": "d8de3199da52b188"}, "research": "b5b0435f6efbae7e", "rests": ["0001-gap.html:920c9aa4904322d0"], "section": "5a446aed967da80f", "verdict": "IN-STEP"},
+"docs/buildings.md::Walls#walls": {"body": "ba7196821a227394", "claim": "walls - CONVENTION", "code": "2e2e47bc6b29892d", "core": "5a446aed967da80f", "note": "fine", "pages": {}, "research": "", "section": "5a446aed967da80f", "verdict": "IN-STEP"},
+"rust/phases/src/lib.rs::GAP#gap": {"body": "2441d6182c5ac3fb", "claim": "gap - gap: kept 12 ft", "code": "c012c9b9e4cb01c3", "core": "2397112476f581b8", "note": "fine", "pages": {"0001-gap.html": "d8de3199da52b188"}, "research": "b5b0435f6efbae7e", "rests": ["0001-gap.html:920c9aa4904322d0"], "verdict": "IN-STEP"},
+"rust/phases/src/lib.rs::Thing.m#method guess": {"body": "349fea7f929680fe", "claim": "method guess - GUESS: wider than the page, 40 ft", "code": "4b53c14ed8720f5e", "core": "08b04300c56f01ee", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"},
+"rust/phases/src/lib.rs::helper#plumbing": {"body": "c652902763db3643", "claim": "plumbing - NONE", "code": "0e22ead8f7212067", "core": "88d9634f1ba5eae9", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"},
+"rust/phases/src/lib.rs::reach#reach": {"body": "d55170eb8b81e067", "claim": "reach - gap: within GAP", "code": "0b7dd99fe7ba3f86", "core": "6a39a13cbbb5eb5a", "note": "fine", "pages": {"0001-gap.html": "d8de3199da52b188"}, "reads": "cda22d6495590d0e", "research": "b5b0435f6efbae7e", "rests": ["0001-gap.html:920c9aa4904322d0"], "verdict": "IN-STEP"}
+}"#;
+
+/// The page and section snapshots [`record_all`] keeps for [`RECORDED`] (`dev/claims-pages.json`).
+pub const RECORDED_PAGES: &str = r#"{"5a446aed967da80f": ["7d5a07ee41496c5d", "25080c5fca325e96", "9769715ae09a3066"], "d8de3199da52b188": ["920c9aa4904322d0", "3c34bf75e966571a"]}"#;
+
+/// The kept page blob [`record_all`] writes into the common git directory: the fixture's question page, committed with it.
+pub const RECORDED_BLOBS: &str =
+    r#"{"d8de3199da52b188": "3b949ddad95e20557cee0f406ee7ff635fd4b75d"}"#;
+
+/// The `.py` units of the counter-only fixture as [`record_all`] records them.
+pub const RECORDED_COUNTED: &str = r#"{
+"l7r/diagram/m.py::Table#table": {"body": "e96d8f4fd032f055", "claim": "table - NONE", "code": "50586ae6d9c5d118", "core": "core-Table", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"},
+"l7r/diagram/m.py::helper#help": {"body": "e96d8f4fd032f055", "claim": "help - NONE", "code": "4f70c4705b3c917b", "core": "core-helper", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"},
+"l7r/diagram/m.py::modl#modl": {"body": "e96d8f4fd032f055", "claim": "modl - NONE", "code": "6d19a47dcd6308a5", "core": "core-modl", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"},
+"l7r/diagram/m.py::other#other": {"body": "e96d8f4fd032f055", "claim": "other - NONE", "code": "9a8f943e04158d92", "core": "core-other", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"}
+}"#;
+
+/// The claimed dictionary of the triage fixture as [`record_all`] records it, and its snapshot.
+pub const RECORDED_TABLE: &str = r#"{
+"l7r/diagram/m.py::TABLE#table": {"body": "34d7a27d1912a68e", "claim": "table - NONE", "code": "16998eb84d3840b7", "core": "core-1", "note": "fine", "pages": {}, "research": "", "section": "core-1", "verdict": "IN-STEP"}
+}"#;
+pub const RECORDED_TABLE_PAGES: &str = r#"{"core-1": ["968cd8edf2fc4a0d", "8ac8985e6424ff5d"]}"#;
+
+/// The Python half's units of the counter-only fixture: four of `l7r/diagram/m.py`, each claimed `- NONE`.
+pub fn counted_units(root: &Path) {
+    py_units(
+        root,
+        &[],
+        &[
+            ("helper", "function", &["help - NONE"], false),
+            ("other", "function", &["other - NONE"], false),
+            ("Table", "constant", &["table - NONE"], false),
+            ("modl", "module", &["modl - NONE"], false),
+        ],
+    );
+}
+
+/// The triage fixture's claimed dictionary, `TABLE` of two entries, and the Python half's unit of it.
+pub fn claimed_table(root: &Path) {
+    let table = serde_json::json!([{"path": "l7r/diagram/m.py", "qualname": "TABLE", "kind": "constant", "lineno": 1, "end_lineno": 1,
+        "claims": [], "inherited": false, "core": "c", "errors": [], "names": [], "blocks": ["'a': 1", "'gone': 2"], "module_errors": []}]);
+    put(root, "l7r/diagram/m.py", &table.to_string());
+    put(root, "l7r/py-units.json", &serde_json::json!([[], [{"path": "l7r/diagram/m.py", "qualname": "TABLE", "kind": "constant", "lineno": 1,
+        "end_lineno": 1, "claims": ["table - NONE"], "inherited": false, "core": "core-1", "errors": [], "names": [], "blocks": ["'a': 1",
+        "'gone': 2"], "module_errors": []}]]).to_string());
+}
+
+/// What [`record_all`] leaves, written by hand: [`RECORDED`] and `units`, each dated today as the record dates them, and the
+/// snapshots - [`RECORDED_PAGES`] and `pages` - and the kept blob.
+pub fn write_recorded(root: &Path, units: &str, pages: &str) {
+    let today = crate::record::bundle::today();
+    let mut index: serde_json::Map<String, serde_json::Value> =
+        serde_json::from_str(RECORDED).unwrap();
+    index
+        .extend(serde_json::from_str::<serde_json::Map<String, serde_json::Value>>(units).unwrap());
+    for unit in index.values_mut() {
+        unit["date"] = serde_json::json!(today);
+    }
+    let mut store: serde_json::Map<String, serde_json::Value> =
+        serde_json::from_str(RECORDED_PAGES).unwrap();
+    store
+        .extend(serde_json::from_str::<serde_json::Map<String, serde_json::Value>>(pages).unwrap());
+    put(
+        root,
+        "dev/claims-index.json",
+        &serde_json::Value::Object(index).to_string(),
+    );
+    put(
+        root,
+        "dev/claims-pages.json",
+        &serde_json::Value::Object(store).to_string(),
+    );
+    put(root, ".git/claims-page-blobs.json", RECORDED_BLOBS);
+}
+
+/// The three files [`write_recorded`] writes, as parsed values.
+fn recorded_files(root: &Path) -> Vec<serde_json::Value> {
+    [
+        "dev/claims-index.json",
+        "dev/claims-pages.json",
+        ".git/claims-page-blobs.json",
+    ]
+    .iter()
+    .map(|f| serde_json::from_str(&std::fs::read_to_string(root.join(f)).unwrap()).unwrap())
+    .collect()
+}
+
+/// [`write_recorded`] writes what a run of [`record_all`] writes, here on the counter-only fixture and below on the triage one: the hand-written state is pinned to the
+/// commands, so a change to what they record fails here rather than leaving the two tests on a stale state (feature 449 T167).
+#[test]
+fn the_recorded_state_is_what_record_all_writes() {
+    let counted = fixture("claims-recorded-counted");
+    counted_units(&counted);
+    record_all(&counted);
+    let by_hand = fixture("claims-recorded-counted-hand");
+    write_recorded(&by_hand, RECORDED_COUNTED, "{}");
+    assert_eq!(recorded_files(&counted), recorded_files(&by_hand));
+}
+
+/// [`the_recorded_state_is_what_record_all_writes`] on the triage fixture's claimed dictionary, a test of its own to keep each under
+/// FR-008's tenth of a second (feature 449 T167).
+#[test]
+fn the_recorded_table_is_what_record_all_writes() {
+    let table = fixture_with("claims-recorded-table", &claimed_table);
+    record_all(&table);
+    let by_hand = fixture("claims-recorded-table-hand");
+    write_recorded(&by_hand, RECORDED_TABLE, RECORDED_TABLE_PAGES);
+    assert_eq!(recorded_files(&table), recorded_files(&by_hand));
+}
+
+/// The same on the fixture with no Python module, the carry tests': [`RECORDED`] alone (feature 449 T167).
+#[test]
+fn the_recorded_rust_units_are_what_record_all_writes() {
+    let rust = fixture_rust_only("claims-recorded-rust");
+    record_all(&rust);
+    let by_hand = fixture("claims-recorded-rust-hand");
+    write_recorded(&by_hand, "{}", "{}");
+    assert_eq!(recorded_files(&rust), recorded_files(&by_hand));
 }

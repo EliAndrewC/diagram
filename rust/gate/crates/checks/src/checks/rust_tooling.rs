@@ -24,17 +24,24 @@ fn pattern(text: &str) -> Regex {
     Regex::new(text).unwrap()
 }
 
+/// What marks a reader: Python's syntax tree imported, a `.py` glob or suffix test, a `.rs` one - compiled once a process, not once a
+/// call (feature 449 T167: a test asking sixteen times spent a third of its 117 ms compiling them, against FR-008's tenth of a second).
+static READS: std::sync::LazyLock<[Regex; 3]> = std::sync::LazyLock::new(|| {
+    [
+        pattern(
+            r"(?m)^\s*(?:import\s+(?:ast|tokenize|inspect|symtable)\b|from\s+(?:ast|tokenize|inspect|symtable)\s+import\b)",
+        ),
+        pattern(
+            r#"["']\*\.py["']|endswith\(\s*["']\.py["']|suffix\s*==\s*["']\.py["']|-name\s+['"]\*\.py['"]|(?<![.\w])compile\("#,
+        ),
+        pattern(
+            r#"["']\*\.rs["']|endswith\(\s*["']\.rs["']|suffix\s*==\s*["']\.rs["']|-name\s+['"]\*\.rs['"]"#,
+        ),
+    ]
+});
+
 /// The tracked files that read Python's syntax tree or `.py` or `.rs` files.
 fn readers(root: &Path, files: &[&str]) -> Vec<String> {
-    let syntax = pattern(
-        r"(?m)^\s*(?:import\s+(?:ast|tokenize|inspect|symtable)\b|from\s+(?:ast|tokenize|inspect|symtable)\s+import\b)",
-    );
-    let py = pattern(
-        r#"["']\*\.py["']|endswith\(\s*["']\.py["']|suffix\s*==\s*["']\.py["']|-name\s+['"]\*\.py['"]|(?<![.\w])compile\("#,
-    );
-    let rs = pattern(
-        r#"["']\*\.rs["']|endswith\(\s*["']\.rs["']|suffix\s*==\s*["']\.rs["']|-name\s+['"]\*\.rs['"]"#,
-    );
     files
         .iter()
         .filter(|f| {
@@ -42,11 +49,8 @@ fn readers(root: &Path, files: &[&str]) -> Vec<String> {
                 && (super::has_ext(f, "py") || super::has_ext(f, "sh"))
         })
         .filter(|f| {
-            std::fs::read_to_string(root.join(f)).is_ok_and(|t| {
-                [&syntax, &py, &rs]
-                    .iter()
-                    .any(|p| p.is_match(&t).unwrap_or(false))
-            })
+            std::fs::read_to_string(root.join(f))
+                .is_ok_and(|t| READS.iter().any(|p| p.is_match(&t).unwrap_or(false)))
         })
         .map(|f| (*f).to_owned())
         .collect()

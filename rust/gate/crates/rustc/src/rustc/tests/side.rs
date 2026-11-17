@@ -4,7 +4,7 @@ use super::*;
 
 /// A fake cargo whose `--no-run` build names two binaries a crate, its integration test first and its library's second, as cargo's JSON
 /// may; a `--doc` run is noted and passes.
-const TWO_BINARIES: &str = r#"d="$(dirname "$0")"; m="${@: -1}"; c="$(basename "$(dirname "$m")")"
+const TWO_BINARIES: &str = r#"d="$(dirname "$0")"; for m in "$@"; do :; done; c="$(basename "$(dirname "$m")")"
 case "$1 $2" in
   "test --no-run") echo '{"reason":"build-finished"}'
     echo '{"executable":"'"$d/$c"'-it","target":{"kind":["test"],"name":"it"}}'

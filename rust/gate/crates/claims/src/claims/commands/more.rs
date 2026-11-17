@@ -8,8 +8,11 @@ use serde_json::{json, Map, Value};
 
 use super::{backfill, backfill_sections, refingerprint};
 use crate::claims::index::{Cur, Row};
-use crate::claims::tests::{claims, fixture, py_units, record_all};
-use crate::record::testkit::{commit, git, put};
+use crate::claims::tests::{
+    claims, commit_as_origin, counted_units, fixture, fixture_rust_only, record_all,
+    write_recorded, RECORDED_COUNTED,
+};
+use crate::record::testkit::{git, put};
 
 fn index(root: &Path) -> Value {
     serde_json::from_str(&std::fs::read_to_string(root.join("dev/claims-index.json")).unwrap())
@@ -22,15 +25,32 @@ fn reply(root: &Path, text: &str) -> String {
     p.to_string_lossy().into_owned()
 }
 
-#[test]
-fn the_coverage_and_the_accept() {
-    let root = fixture("claims-more-cover");
+/// The fixture with its procedure's last section claimed, Python-free: the coverage's and the accept's tree (feature 449 T167 split the
+/// one test of both, over FR-008's tenth of a second, into three on a tree each; none reads what another wrote).
+fn covered(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = fixture_rust_only(tag);
     let buildings = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
     std::fs::write(
         root.join("docs/buildings.md"),
         buildings.replace("No claim here.", "<!-- Research: deep - NONE -->"),
     )
     .unwrap();
+    root
+}
+
+/// [`covered`], every claim recorded, and `GAP` turned DRIFTED.
+fn accepting(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = covered(tag);
+    record_all(&root);
+    let mut ix = index(&root);
+    ix["rust/phases/src/lib.rs::GAP#gap"]["verdict"] = json!("DRIFTED");
+    std::fs::write(root.join("dev/claims-index.json"), ix.to_string()).unwrap();
+    root
+}
+
+#[test]
+fn the_coverage_and_the_accept() {
+    let root = covered("claims-more-cover");
     let got = claims(&root, &["coverage"]);
     assert_eq!(
         (got.code, got.stdout.as_str()),
@@ -49,11 +69,11 @@ fn the_coverage_and_the_accept() {
     let got = claims(&root, &["coverage"]);
     assert_eq!(got.code, 1);
     assert!(got.stdout.starts_with("rust/phases/src/bad.rs:2 b: `broken` has no `<label> - <backing>`\nclaims-coverage: 1 problem(s). The form: a claim is one line"));
-    std::fs::remove_file(root.join("rust/phases/src/bad.rs")).unwrap();
-    record_all(&root);
-    let mut ix = index(&root);
-    ix["rust/phases/src/lib.rs::GAP#gap"]["verdict"] = json!("DRIFTED");
-    std::fs::write(root.join("dev/claims-index.json"), ix.to_string()).unwrap();
+}
+
+#[test]
+fn an_accept_records_in_step_or_keeps_a_known_drift_and_refuses_what_it_cannot_name() {
+    let root = accepting("claims-more-accept");
     let got = claims(
         &root,
         &[
@@ -81,6 +101,11 @@ fn the_coverage_and_the_accept() {
     );
     let got = claims(&root, &["accept", "--keys", " ; ", "--trigger", "t"]);
     assert_eq!(got.stderr, "claims-accept: no such claim: (none named)\n");
+}
+
+#[test]
+fn a_recorded_tree_owes_nothing_and_an_unparsable_claim_is_no_unit() {
+    let root = accepting("claims-more-recorded");
     let got = claims(&root, &["owed"]);
     assert_eq!(got.stdout, "claims-owed: no claim is owed\n");
     let got = claims(&root, &["bundle", "--units", ""]);
@@ -116,22 +141,15 @@ fn the_coverage_and_the_accept() {
     ));
 }
 
-#[test]
-fn a_counter_only_change_is_cleared_and_a_stale_figure_named() {
-    let root = fixture("claims-more-counter");
-    py_units(
-        &root,
-        &[],
-        &[
-            ("helper", "function", &["help - NONE"], false),
-            ("other", "function", &["other - NONE"], false),
-            ("Table", "constant", &["table - NONE"], false),
-            ("modl", "module", &["modl - NONE"], false),
-        ],
-    );
-    record_all(&root);
-    commit(&root, "recorded");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+/// The counter-only tree: four Python units recorded on `origin/main`, two of them changed with only their counters moved or not,
+/// the engine changed (feature 449 T167 split the test reading it into two, each on a tree of its own, over FR-008's tenth of a second).
+fn countered(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let root = fixture(tag);
+    counted_units(&root);
+    // the recording written as `record_all` writes it, pinned by `the_recorded_state_is_what_record_all_writes`: a bundle and a record
+    // through the Python half, most of the test's time against FR-008's tenth of a second (feature 449 T167)
+    write_recorded(&root, RECORDED_COUNTED, "{}");
+    commit_as_origin(&root, "recorded");
     let mut ix = index(&root);
     for (k, only) in [
         ("l7r/diagram/m.py::helper#help", true),
@@ -155,6 +173,12 @@ fn a_counter_only_change_is_cleared_and_a_stale_figure_named() {
     )
     .unwrap();
     put(&root, "l7r/diagram/m.py", "GAP = 13\n");
+    root
+}
+
+#[test]
+fn a_counter_only_change_is_cleared_and_a_stale_figure_named() {
+    let root = countered("claims-more-counter");
     let got = claims(&root, &["owed"]);
     assert!(got.stdout.starts_with("claims-owed: 1 claim(s) cleared without a triage - their units only gained counter blocks (feature 446, FR-003)\n"));
     assert!(got.stdout.contains("\nstale figure: the stub's\n"));
@@ -164,6 +188,11 @@ fn a_counter_only_change_is_cleared_and_a_stale_figure_named() {
         "counter-only (feature 446)"
     );
     assert!(ix["l7r/diagram/m.py::other#other"].get("cleared").is_none());
+}
+
+#[test]
+fn with_no_merge_base_nothing_is_cleared_and_no_figure_named() {
+    let root = countered("claims-more-counter-bare");
     git(&root, &["update-ref", "-d", "refs/remotes/origin/main"]);
     let got = claims(&root, &["owed"]);
     assert!(!got.stdout.contains("cleared") && !got.stdout.contains("stale figure"));
@@ -188,6 +217,19 @@ fn a_bundle_that_lost_its_files_fails_as_the_python_did() {
     let got = claims(&root, &["record", "--bundle", &o, "--reply", &r]);
     assert_eq!(got.code, 3);
     assert!(got.stdout.contains("claims-checked: 0 of 0 recorded"));
+}
+
+/// The second half of the lost files' test, on a tree of its own (feature 449 T167: the two read nothing of each other's, and took over
+/// FR-008's tenth of a second together).
+#[test]
+fn a_bundle_missing_its_blocks_records_and_a_triage_reply_naming_nothing_owes_the_forced() {
+    let root = fixture("claims-more-files-blocks");
+    let b = root.join("b");
+    let o = b.to_string_lossy().into_owned();
+    let r = reply(
+        &root,
+        "VERDICT rust/phases/src/lib.rs::GAP#gap IN-STEP - fine\n",
+    );
     claims(
         &root,
         &[
@@ -209,8 +251,8 @@ fn a_bundle_that_lost_its_files_fails_as_the_python_did() {
 
 #[test]
 fn a_triage_with_nothing_to_show_owes_every_claim_in_full() {
-    let root = fixture("claims-more-forced");
-    py_units(&root, &[], &[]);
+    // no Python unit, so no Python half to start (feature 449 T167)
+    let root = fixture_rust_only("claims-more-forced");
     record_all(&root);
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     let lib = lib
@@ -219,8 +261,7 @@ fn a_triage_with_nothing_to_show_owes_every_claim_in_full() {
         .replace("pub const GAP: f64 = 12.0;", "pub const GAP: f64 = 12.5;")
         .replace("    1\n}", "    2\n}");
     std::fs::write(root.join("rust/phases/src/lib.rs"), lib).unwrap();
-    commit(&root, "all at once");
-    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    commit_as_origin(&root, "all at once");
     let got = claims(&root, &["triage"]);
     assert!(got
         .stdout

@@ -2,7 +2,7 @@
 
 use l7r_gate_core::ci::fixtures::{git, put};
 
-use super::super::tests::{fx, tool};
+use super::super::tests::{fx, tool, Stepped};
 use super::{claims_cure, claims_route, claims_stop_line};
 
 fn ticks() -> Vec<String> {
@@ -88,12 +88,14 @@ fn the_wait_runs_out_naming_what_still_stands() {
         .said()
         .0
         .contains("land: waiting for the claims round before the push - claims-gate.sh: owed"));
+}
+
+/// The wait running out on a dirty tree, apart from the refusing gate above (feature 449 T167: the two waits in one test ran over
+/// FR-008's tenth of a second); the fixture's clock moves only when the wait sleeps.
+#[test]
+fn a_passing_gate_over_a_dirty_tree_waits_on_the_tree() {
+    let fx = fx("wait-dirty");
     // a passing gate over a dirty tree waits on the tree
-    std::fs::remove_file(
-        fx.stub
-            .join(format!("{}.rc", super::super::tests::key(&gate))),
-    )
-    .unwrap();
     put(&fx.root, "loose.txt", "x");
     let why = fx.land.wait_for_claims(&ticks(), None).unwrap();
     assert_eq!(why, "uncommitted changes: ?? loose.txt");
@@ -145,16 +147,4 @@ fn the_gate_s_own_lint_is_committed_and_nothing_else() {
     let mut gone = fx;
     gone.land.python = "/no/such/python".to_owned();
     assert!(gone.land.ruffed("scripts/b.py", "x").is_err());
-}
-
-/// A clock that stands still but for the sleeps it is asked for (feature 449 T160).
-struct Stepped(std::cell::Cell<std::time::Instant>);
-
-impl super::super::Clock for Stepped {
-    fn now(&self) -> std::time::Instant {
-        self.0.get()
-    }
-    fn sleep(&self, d: std::time::Duration) {
-        self.0.set(self.0.get() + d);
-    }
 }
