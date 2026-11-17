@@ -460,3 +460,6 @@
 - [x] T167 FR-008's remaining debt after T160: 151 tests over a tenth of a second (scratchpad t160/ws-after.rows), and the ruling on the real-tree tests (checks' research pointers, tooling detector and question size; task's research boxes; research's site cases; the guard's r6 corpus) that are not declared a tool's one end-to-end test
       research: rendering
       verify: DONE. landed: FR-008's debt: every ordinary test under a tenth of a second, eleven end-to-end tests declared; static, rust-test and hooks-test green
+- [x] T168 The engine pilot, piece 1 of step 1 (the GM 2026-11-17, request.md: a pilot measured by phase, then a second piece): building_programs.py and the buildings.types registry it reads, ported into a new engine crate and wired (make building-programs), the Python command deleted, types.py held in lockstep for the generators; its wall time and tokens reported by phase
+      research: rendering
+      verify: DONE. landed: the engine pilot, piece 1: building_programs and the building types in rust/mode_a, wired; 76 differential cases none differing; 80 claims IN-STEP
