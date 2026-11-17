@@ -92,3 +92,7 @@ Told the engine slices (S7-S12) would hold every pool sheet to byte-identical ou
 ## 2026-11-17, the claims tools before the engine (T165)
 
 Told the claims system already tracks Rust units natively (801 of 1,464 claims on `rust/phases`) but two of its pieces work on Python units alone - the stale-figure check and the counter-only clear - the GM, who had asked: "Do we have equivalent Rust tools for e.g. the claims tools though?  It feels like we nshould port those before the porting of the actual map engine whether or not we delete the olriginal python, right?  Since otherwise well be porting code without being able to track the claims in the new Rust." Told those two would be made to work on Rust units in a task before S7: "sounds good".
+
+## 2026-11-17, the engine slices worked deliberately (engine-plan.md)
+
+The GM, told the feature ends with the Mode A sheets drawn by Rust: "so is the idea that this feature ends with fully rendered maps produced by the Rust code?  I ask bvecause I recall running into a ton of difficulties with the process around that, and I wonder whether we might need to slow down and be more deliberate and collaborative whne we get to the point where we're rendering more and more of the maps, since we kept stepping on landmines last time". So a plan for the engine slices (S7-S13), `specs/449-rust-codebase/engine-plan.md`, goes to him to read before any engine code is ported, and each engine slice publishes a page of every pool sheet before and after.
