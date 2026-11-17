@@ -664,30 +664,5 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T163 to T148 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 
-### T164 (three defects T149 found, each fixed in its own commit, constitution XIV)
-
-- **Approach**: (1) the entry-headings check (`rust/gate/crates/registry/src/headings.rs`, a push row) read the hamlet registry alone, as the Python did, so the 99 Mode A kinds' entries were never checked; it now reads both registries, a sheet kind marked `sheet/<slug>`; (2) diffrun's `a_bare_world_compares_everything_under_it` compared a world whose step wrote a one-second clock stamp, so the two sides differed whenever they straddled a second; the test now runs a step with no clock in its output; (3) twelve tests of the owed crate ran over FR-008's tenth of a second; split where an answer reads nothing an earlier one wrote, on a shared fixture with fewer git calls, and three answers computed once where they were computed twice.
-
-   **Decisions** (constitution XIV; FR-004, FR-008; FR-002 for what the owed crate's outputs hold):
-   - The extended check, every line it and `make audit`'s silence listing gave before it kept byte for byte (after the plan review): a hamlet kind keeps its bare key, and only the new sheet kinds are marked, `sheet/<slug>`, which also tells the four keys both registries hold (`burial-ground`, `garden`, `notice-board`, `well`) apart; the listing keeps its hamlet block and its padding as they were and adds a second block for the 99 Mode A kinds. HEAD's binary and the fixed one on the real record and on a faulted copy: with the `sheet/` lines and the second block's count line taken out, every output equals HEAD's (`cmp`), the additions only sheet lines (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t164/tools/proof.sh`, outputs in `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t164/proof/`). On the real record the check passes, its self-test passes, three sheet entries declared silences and the rest resolving. A test holds a broken hamlet `well` and a broken sheet `well` named apart, and the tests go red with the sheet registry stubbed out.
-   - The flaky test: with a shim clock turning a second on every call the old test failed every run and the new one passes; alone beside 30 busy loops it failed 28 of 200 runs before and none of 200 after, and the crate's tests 20 times at 64 threads failed none (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t164/tools/loop.sh` and the `dshim/date` shim).
-   - The slow tests, each alone by T99's method (best of three, timed around the process, in a fresh TMPDIR as `make rust-test` gives a crate): at T149's parent eleven of the twelve were already over the bar, the twelfth at it, and T149 slowed none; after the fix all 81 of the owed crate's tests run under it (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t164/tools/best.sh` at `a65d3177f^`, HEAD and after). The splits keep every assertion, the two implicit ones made explicit, each test's name kept on its first part; `answers_are_recorded…` moves to `tests/answer_modes.rs` to keep `tests.rs` under 1,000 lines. The production changes - `answer()` reusing the units it already computed, `fixed_answer()` asking git once, triage writing each page to the object store once - change no output, every crate test holding the answers, readers and bundles as before.
-   - The debt measured, not fixed: across the workspace's 2,354 tests, 159 run over the bar in a fresh TMPDIR, the end-to-end tests FR-008 exempts among them (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t164/tools/workspace.sh`, each test once and each over re-measured, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t164/ws.rows`); they are T160's, the compile and test speed task. A test run outside `make rust-test` pays about 20 ms a temporary directory for the shell's `/tmp` holding 8,530 old entries (observed 2026-11-17, method: `TempDir::new` timed in `/tmp` and in a fresh TMPDIR, and `ls /tmp | wc -l`), also T160's to measure.
-   - The checks: `make static` clean on 31 crates, `make rust-test` clean, `make hooks-test HOOKS_ALL=1` green on 54 suites (observed 2026-11-17, method: those commands).
-
-### T164 Approach (checklist part A)
-
-1. **The goal, in the world.** The entry-headings check reads every kind, the runner's tests pass under load, and the owed crate's tests each run under a tenth of a second.
-2. **The constraints.** Constitution XIV; FR-004, FR-008.
-3. **Where each comes from.** O: T149's findings and the measurements above.
-4. **Do they describe the world here?** Measured on this clone, measured 2026-11-17 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t164/tools/`).
-5. **The order.** After T149, which found them.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The extended check passing on the real record, the flaky test passing under load, and the owed crate's tests under the bar.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No.
-
+<!-- plan-archive: T164 to T149 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
+<!-- plan-archive: T164 to T164 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->

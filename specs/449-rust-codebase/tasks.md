@@ -59,8 +59,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T160 Compile and test speed, the GM's third approved proposal (request.md 2026-11-16), ordered last: first measure where compile and test time goes across a port task, then take any target with a significant measured saving
       research: rendering
-- [ ] T164 Three defects T149 found, each fixed (constitution XIV): the entry-headings check never covered the 99 Mode A kinds; diffrun's a_bare_world_compares_everything_under_it fails under load; eleven owed-crate tests run over FR-008's tenth of a second
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
