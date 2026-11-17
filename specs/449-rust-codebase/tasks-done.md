@@ -469,3 +469,6 @@
 - [x] T170 The engine pilot, piece 2 of step 1 (the GM 2026-11-17, request.md: a second real piece, measured after the pilot's fixes): notes_census.py wired (make notes-census) with what it reads - pack_audit's parse.py and tagged.py (the plan's SVG parse, ten research claims) and interactive/sheet.py's SVG reader - ported into rust/mode_a, the Python they serve held in lockstep; its wall time and tokens reported by phase
       research: rendering
       verify: DONE. landed: the engine pilot's second piece: notes_census, the sheet parse and the sheet reader in rust/mode_a, 105 differential cases none differing, 176 claims IN-STEP
+- [x] T172 The claims walk's Rust items read raw strings (constitution XIV; found by T170's claims round): the splitter's item end takes a raw string literal's inner quote for its close, so a static after one is swallowed into the unit before it and gets no key of its own - raw and byte-raw literals read to their own close, the units the fix reshapes re-checked
+      research: rendering
+      verify: DONE. landed: the claims walk reads raw strings to their own close; 50 claims IN-STEP

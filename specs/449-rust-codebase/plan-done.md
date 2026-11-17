@@ -4010,3 +4010,30 @@ censuses empty (work breakdown 8, FR-010).
 
 **Performance work?** No - a port, its cost measured for the GM.
 
+<!-- plan-archive: archived 2026-11-17 -->
+### T172 (T170's claims round: units of rust/mode_a ran past the statics after a raw string)
+
+- **Approach**: the claims walk's Rust item splitter (`rust/gate/crates/claims/src/claims/units.rs`, `item_end`) reads a raw string literal (`r"..."`, `r#"..."#`, `br#"..."#`) to its own close - a quote followed by its own hashes, a backslash escaping nothing - where it read one as a plain string, so a raw pattern's first inner quote closed it and the unit ran on past the next items, which got no key. T170's impl-drift round named the units it swallowed in `parse.rs`, `labels.rs`, `shapes.rs`, `sheet.rs` and `tagged.rs`.
+
+   **Decisions** (constitution XIV; FR-001; the GM's words, request.md 2026-11-17, no-brainer process fixes pre-approved):
+   - A defect of the walk fixed where found (XIV): a unit whose span is wrong gives its claim a code hash over the wrong text and leaves the statics after it unjudged. No tradeoff: the fix only adds keys and narrows spans to what the item is; nothing it changes refuses a landing beyond the round below.
+   - Proved: a test reads statics after a raw literal with inner quotes, a byte raw literal with fewer hashes inside, a raw literal ending in a backslash, a raw identifier and an unclosed raw literal; it went red with `units.rs` stashed and green with it back (observed 2026-11-17, method: `git stash push` of the file, `make rust-test CRATE=rust/gate/crates/claims`, `git stash pop`).
+   - Its reach, measured: `make claims-owed` after the fix owes 32 new claims, every one in T170's files in `rust/mode_a`, and 18 claims of units the fix reshaped, owed in full (observed 2026-11-17, method: `make claims-owed`, `make claims-triage`). No other crate's unit moved, so nothing landed earlier is re-judged; the round runs here, one impl-drift bundle.
+
+<!-- plan-archive: archived 2026-11-17 -->
+### T172 Approach (checklist part A)
+
+1. **The goal, in the world.** Every Rust unit the claims walk keys spans its own item, so each claim is judged against its own code.
+2. **The constraints.** XIV; FR-001; the GM's pre-approval.
+3. **Where each comes from.** R: T170's impl-drift reply; O: the test and the owed count above.
+4. **Do they describe the world here?** Measured on this clone's crates, 2026-11-17 (`make claims-owed`).
+5. **The order.** After T170, whose files it re-keys.
+6. **The exits.** Green: the claims crate's tests, the claims round, `make static`, a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The owed claims recorded IN-STEP or fixed.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No - a correctness fix of the claims walk.
+
