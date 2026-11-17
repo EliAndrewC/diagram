@@ -1,6 +1,7 @@
 //! The shared differential runner (feature 449 T161, the GM 2026-11-16 and 2026-11-11): `l7r-gate diff-run <cases file> [--only NAME]
-//! [--verify] [--twice] [--all --reason "..."]`, behind `make diff-run`, which every port task's comparison uses in place of a hand-written
-//! driver loop. It runs each case on both sides, compares, records, and after a fix reruns only the sides whose key moved.
+//! [--verify] [--twice] [--all --reason "..."] [--jobs N]`, behind `make diff-run`, which every port task's comparison uses in place of a hand-written
+//! driver loop. It runs each case on both sides, compares, records, and after a fix reruns only the sides whose key moved; `--jobs N`
+//! runs the owed sides on N workers, each in its own world (feature 449 T173, `runner`'s SEVERAL WORKERS).
 //!
 //! WHY: the differential is the part of a port task's time a script can cut - T145's agent waited on its harness 53.8 min in the background
 //! and 10.1 min in the foreground of a 232 min run, every case rerun after each fix by drivers that kept no record of what a case had
@@ -25,7 +26,7 @@ use serde_json::json;
 
 use runner::Opts;
 
-const USAGE: &str = "usage: l7r-gate diff-run <cases file> [--only <case name>] [--verify] [--twice] [--all --reason \"<two words or more>\"]\n";
+const USAGE: &str = "usage: l7r-gate diff-run <cases file> [--only <case name>] [--verify] [--twice] [--all --reason \"<two words or more>\"] [--jobs <workers>]\n";
 
 fn refused(why: &str) -> Reply {
     Reply {
@@ -60,6 +61,18 @@ fn log_escape(ctx: &Ctx, event: &str, rule: &str, reason: &str, file: &str) {
     let _ = place(ctx.log_dir, &dumps(&entry, Some(2), true), now);
 }
 
+/// `--jobs`' value (feature 449 T173): a whole number of workers, 1 or more.
+fn jobs(v: Option<&String>) -> Result<usize, String> {
+    v.and_then(|n| n.parse::<usize>().ok())
+        .filter(|&n| n > 0)
+        .ok_or_else(|| {
+            format!(
+                "--jobs takes the number of workers, a whole number 1 or more, not {:?} (make diff-run CASES=... JOBS=4)",
+                v.map_or("", String::as_str)
+            )
+        })
+}
+
 fn parse(args: &[String]) -> Result<(String, Opts), String> {
     let mut opts = Opts::default();
     let mut file = None;
@@ -71,6 +84,7 @@ fn parse(args: &[String]) -> Result<(String, Opts), String> {
             "--verify" => opts.verify = true,
             "--twice" => opts.twice = true,
             "--all" => opts.all = true,
+            "--jobs" => opts.jobs = jobs(it.next())?,
             flag if flag.starts_with('-') => return Err(format!("no flag {flag}")),
             path if file.is_none() => file = Some(path.to_owned()),
             extra => return Err(format!("one cases file, not also {extra}")),

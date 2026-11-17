@@ -486,6 +486,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T173 (T170's verify run spent nearly all its time building worlds, not running its cases)": {
+   "sha256": "241a15c7239841b32796235c0377f0c646be32b5f277ab9bca1eaad7643c868e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T173 Approach (checklist part A)": {
+   "sha256": "55897ccc19fe1ba3dbfb81632c5b16430df40d80049223c361d35b1d127f45f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10664,6 +10676,40 @@
      "why": "The standard landing procedure for a claims round. It narrows nothing that was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T173 (T170's verify run spent nearly all its time building worlds, not running its cases)",
+    "### T173 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T173-opt-in",
+     "summary": "Parallel workers only when JOBS/--jobs is set; default 1, with JOBS unset a run is today's; docs/diff-run.md states JOBS is for harnesses that write only inside {WORLD}",
+     "class": "within",
+     "why": "A process fix under the GM's 2026-11-17 pre-approval of no-brainer improvements from the pilot; keeping the default unchanged is what removes the one real downside (a harness writing outside its world racing), so no tradeoff is left for the GM to judge. Narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T173-serial-result",
+     "summary": "The parallel run's report, kept results and printed lines are the serial run's, in case order, a worker's world in an error rewritten to the serial path; pinned by a JOBS=1 vs JOBS=4 test and four mutations",
+     "class": "within",
+     "why": "Holds FR-002 (the differential's result is the record) unchanged; a test that fails only when the parallel output departs from the serial one is enforcement of what was asked, not new scope."
+    },
+    {
+     "id": "T173-measured-four",
+     "summary": "Measured on T170's 105 cases at JOBS 1/2/4/6/8 (one-shot labeled, 2026-11-17); four recorded in docs/diff-run.md as best on this host; the default is not moved",
+     "class": "within",
+     "why": "A recorded measurement and a documentation note, the saving the pre-approval's no-brainer test calls for; it changes no default and no verdict."
+    },
+    {
+     "id": "T173-jobs-validation",
+     "summary": "JOBS of 0, a non-number or missing value refused with the fix; a JOBS above the owed sides clamped",
+     "class": "within",
+     "why": "Input handling of the new opt-in flag itself; touches no existing behavior or output."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19008,6 +19054,38 @@
      "summary": "Order after T170, a budget of one landing, done when the owed claims are recorded IN-STEP or fixed, red exits recorded or ruled through make arbiter-ask.",
      "class": "within",
      "why": "The standard landing procedure for a claims round. It narrows nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T173": {
+   "section_sha256": "79e1b4b03f49102c4ae7bdc852256a7fd2151cc3122939ac2803012faaf83d05",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T173-opt-in",
+     "summary": "Parallel workers only when JOBS/--jobs is set; default 1, with JOBS unset a run is today's; docs/diff-run.md states JOBS is for harnesses that write only inside {WORLD}",
+     "class": "within",
+     "why": "A process fix under the GM's 2026-11-17 pre-approval of no-brainer improvements from the pilot; keeping the default unchanged is what removes the one real downside (a harness writing outside its world racing), so no tradeoff is left for the GM to judge. Narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T173-serial-result",
+     "summary": "The parallel run's report, kept results and printed lines are the serial run's, in case order, a worker's world in an error rewritten to the serial path; pinned by a JOBS=1 vs JOBS=4 test and four mutations",
+     "class": "within",
+     "why": "Holds FR-002 (the differential's result is the record) unchanged; a test that fails only when the parallel output departs from the serial one is enforcement of what was asked, not new scope."
+    },
+    {
+     "id": "T173-measured-four",
+     "summary": "Measured on T170's 105 cases at JOBS 1/2/4/6/8 (one-shot labeled, 2026-11-17); four recorded in docs/diff-run.md as best on this host; the default is not moved",
+     "class": "within",
+     "why": "A recorded measurement and a documentation note, the saving the pre-approval's no-brainer test calls for; it changes no default and no verdict."
+    },
+    {
+     "id": "T173-jobs-validation",
+     "summary": "JOBS of 0, a non-number or missing value refused with the fix; a JOBS above the owed sides clamped",
+     "class": "within",
+     "why": "Input handling of the new opt-in flag itself; touches no existing behavior or output."
     }
    ],
    "verdict": "CLEAR"

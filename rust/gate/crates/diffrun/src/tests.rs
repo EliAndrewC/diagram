@@ -10,6 +10,7 @@ use serde_json::{json, Value};
 use crate::{cli, Ctx};
 
 mod checkout;
+mod jobs;
 
 /// A side of the runner's tests. Every program it starts costs a side about 2 ms, and a test runs up to fourteen sides (feature 449 T167,
 /// FR-008's tenth of a second): `hello`'s stamp is one each side writes in the stamp's form, the two sides' different, where `date` gave

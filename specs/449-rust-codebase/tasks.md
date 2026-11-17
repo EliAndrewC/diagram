@@ -56,6 +56,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T171 The notes census's entrance-board line and its freshness test (constitution XIV; found by T170): since feature 444 cut the tool's entrance-board branch, an entrance-seated notice board's census line reads a 250-ft farmhouse count, which feature 261 does not judge a board by - fix the line (the ways-out count ported onto the manifest, or the line left out for an entrance seat, the easier route named); restore the freshness test feature 444 dropped on a wrong label (feature 193 kept notes-census for it); regenerate the four hamlets' notes
       research: rendering
+- [ ] T173 make diff-run JOBS=n: a run's cases side by side, each in its own world (the GM 2026-11-17, request.md: no-brainer process fixes from the pilot; T170's verify run took 392.6 s, its cases' own commands 11.6 s of it, the rest a whole world built and removed for each of 210 sides one after another) - opt-in, results and the report's order unchanged
+      research: rendering
 - [x] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

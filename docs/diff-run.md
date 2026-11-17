@@ -13,11 +13,31 @@ make diff-run CASES=<cases file> ONLY="<case name>"   # one case, its new side r
 make diff-run CASES=<cases file> TWICE=1              # the old side run twice: run-to-run noise the normalizations miss
 make diff-run CASES=<cases file> VERIFY=1             # every new side rerun on whole worlds: the figures a plan cites
 make diff-run CASES=<cases file> ALL=1 REASON="..."   # every side of every case; the reason goes in the report and the guard log
+make diff-run CASES=<cases file> ... JOBS=4           # any of the above, its owed sides on 4 workers (`--jobs 4`)
 ```
 
 Exit 0 when every case is the same, 1 when one differs, fails to run or shows noise, 2 when the run is refused (a bad cases file, a
-declared path that does not exist, a failed build, `--all` without a reason). Each case's line goes to stderr as it finishes; the summary
-(the differing cases with their differences, sides rerun and kept, normalizations taken, wall time, the report's path) to stdout.
+declared path that does not exist, a failed build, `--all` without a reason, a `JOBS` that is not a whole number 1 or more). Each case's
+line goes to stderr as it finishes, in the cases' order; the summary (the differing cases with their differences, sides rerun and kept,
+normalizations taken, wall time, the report's path) to stdout.
+
+## Several workers (`JOBS=n`)
+
+Feature 449 T173: T170's verify run took 392.6 s wall for 105 cases whose sides' own commands summed to 11.6 s; the rest was each side's
+world - a whole checkout, the setup, two snapshots, the removal - about 1.8 s a side, 210 sides one after another. `JOBS=n` runs the owed
+sides (the ones not kept) on n workers, clamped to their count; the default, 1, is the run as it always was. The builds still run once,
+before any case. The kept results, the keys, the report and its case order, the printed lines and their order, and every error are a
+serial run's: the main thread builds each case's row once it and every case before it are done, and an error that names a worker's
+world names `work/<side>` as a serial run would. Measured on T170's 105 cases, every side rerun (a fresh state, `VERIFY=1`, whole worlds,
+22 cores, 2026-11-17): 375.8 s at JOBS=1, 220.5 s at 2, **151.5 s at 4**, 162.2 s at 6, 181.6 s at 8, each report's 105 cases agreeing
+with the serial one's, kept results and lines too. Past 4 the workers contend (a guess: the checkouts' writes, the host's load stayed under 10 of 22) - the sides' own commands summed 11.2 s at 1,
+17.7 s at 4, 30.0 s at 8 - so JOBS=4 is the figure to use on this host until a world costs less to build (one run each; 4 against 6 within what the load between runs could move, 4 against 8 not).
+
+**When JOBS is safe**: the runner's own worlds are distinct (`work/<side>-<worker>`), so a cases file is safe on several workers when its
+setup and steps write only inside `{WORLD}` - their guard log, their scratch, their output all under it. A harness that writes a fixed
+path outside its world (a file under `{ROOT}`, a shared cache it rebuilds, a port it listens on) has two sides writing it at once: it stays
+serial, or moves that path under `{WORLD}`. Reading outside the world (the repository, a binary built once by `build`) is safe. Each
+world is a full checkout where the file declares one (about 252 MB for this repository), so n workers hold n of them on disk at once.
 
 ## The keys
 
@@ -107,7 +127,8 @@ the side's `cmd`. Each process gets the runner's environment less make's own var
 Beside `<dir>/<stem>.json`, `<dir>/<stem>.diff-run/`: `results/<case id>.old.json` and `.new.json` (each side's kept result and its
 key; a whole world's `.old.whole.json` and `.new.whole.json` where a sparse list is declared),
 `reports/diff-run-<kind>-<UTC>.json` (`incremental`, `only`, `twice`, `verify`, `all`; only a verify run's path carries `diff-run-verify`;
-`--verify` takes no `--only`), and `work/old`, `work/new` while a side runs. The report holds the run's kind, the reason, cases total, sides
+`--verify` takes no `--only`), and `work/old`, `work/new` while a side runs (`work/old-<w>`, `work/new-<w>`, each worker's own, on a run of
+several workers). The report holds the run's kind, the reason, cases total, sides
 rerun and kept, the differing cases, the normalizations taken, the worlds (`whole` or `sparse`), the wall time, and one row a case:
 its differences, its noise, its errors,
 and each side's key, whether it reran, and its time.

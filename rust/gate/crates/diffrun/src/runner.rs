@@ -5,12 +5,20 @@
 //!   `.old.whole.json`, `.new.whole.json` where the file declares a sparse list, feature 449 T169);
 //! - `reports/diff-run-<kind>-<UTC>.json`: one report a run, `<kind>` one of `incremental`, `only`, `twice`, `verify`, `all` - only a
 //!   `--verify` run's path carries `diff-run-verify`, the path `make decide`'s lint asks a plan's differential count to cite;
-//! - `work/old`, `work/new`: a side's world while it runs, removed after.
+//! - `work/old`, `work/new`: a side's world while it runs, removed after; on a run of several workers (`--jobs`), `work/old-<w>` and
+//!   `work/new-<w>`, each worker's own.
+//!
+//! SEVERAL WORKERS (`--jobs N`, feature 449 T173): T170's verify run took 392.6 s wall for 105 cases whose sides' own commands summed to
+//! 11.6 s - the rest a side's world (a whole checkout of 27,770 files, its setup, two snapshots, its removal), about 1.8 s a side, 210
+//! sides one after another. The owed sides now run on N threads, each in its own world; the main thread alone keeps the record - it
+//! builds each case's row and prints its line once that case and every case before it are done, so the report, the lines and their
+//! order are a serial run's. A side's error names the world a serial run would have named, so no text depends on the worker.
 
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
 use std::io::Write;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use l7r_guard::shared::log::civil;
@@ -28,6 +36,8 @@ pub struct Opts {
     pub twice: bool,
     pub all: bool,
     pub reason: Option<String>,
+    /// The workers the owed sides run on (`--jobs`, feature 449 T173): 0 and 1 alike one, the run as it always was.
+    pub jobs: usize,
 }
 
 impl Opts {
@@ -127,32 +137,63 @@ fn write(path: &Path, text: &str) -> Result<(), String> {
 
 /// One side of one case: its kept result when its key stands and nothing forces it, else a fresh run, kept at once (an interrupted run
 /// keeps what it finished).
+#[derive(Default)]
 struct SideRun {
     kept: Option<Kept>,
     rerun: bool,
     error: Option<String>,
 }
 
-fn one_side(
+/// One side's run, and for `--twice`'s old side the noise between its two runs.
+#[derive(Default)]
+struct Done {
+    side: SideRun,
+    noise: Vec<String>,
+}
+
+const SIDES: [&str; 2] = ["old", "new"];
+
+/// Whether the run reruns `which` whatever its key: every side under `--all`, the old under `--twice`, the new under `--verify` and
+/// `--only`.
+fn forced(opts: &Opts, which: &str) -> bool {
+    opts.all
+        || if which == "old" {
+            opts.twice
+        } else {
+            opts.verify || opts.only.is_some()
+        }
+}
+
+/// The side's kept result where its key stands and nothing forces it; `None` where the side is owed a run.
+fn standing(
     cases: &Cases,
     case: &Case,
     (which, worlds): (&str, Worlds),
     key: &str,
     force: bool,
-) -> SideRun {
-    let path = result_path(cases, case, which, worlds);
-    if !force {
-        if let Some((was, k)) = load(&path) {
-            if was == key {
-                return SideRun {
-                    kept: Some(k),
-                    rerun: false,
-                    error: None,
-                };
-            }
-        }
+) -> Option<SideRun> {
+    if force {
+        return None;
     }
-    match fresh(cases, case, which, worlds) {
+    let (was, k) = load(&result_path(cases, case, which, worlds))?;
+    (was == key).then_some(SideRun {
+        kept: Some(k),
+        rerun: false,
+        error: None,
+    })
+}
+
+/// One owed side run fresh in `world`, kept at once (an interrupted run keeps what it finished); `--twice`'s old side run again there
+/// and the two compared.
+fn rerun(
+    cases: &Cases,
+    case: &Case,
+    (which, worlds): (&str, Worlds),
+    key: &str,
+    (twice, world): (bool, &Path),
+) -> Done {
+    let path = result_path(cases, case, which, worlds);
+    let side = match fresh(cases, case, (which, worlds), world) {
         Ok(k) => match save(&path, key, case, &k) {
             Ok(()) => SideRun {
                 kept: Some(k),
@@ -170,17 +211,45 @@ fn one_side(
             rerun: true,
             error: Some(format!("{which} side: {e}")),
         },
+    };
+    let mut noise = Vec::new();
+    if twice {
+        if let Some(first) = &side.kept {
+            match fresh(cases, case, (which, worlds), world) {
+                Ok(second) => noise = compare(first, &second, "old run 1", "old run 2"),
+                Err(e) => noise.push(format!("old side's second run: {e}")),
+            }
+        }
     }
+    Done { side, noise }
 }
 
-fn fresh(cases: &Cases, case: &Case, which: &str, worlds: Worlds) -> Result<Kept, String> {
+/// The world a side runs in: `work/<which>` on a run of one worker, as always, and `work/<which>-<w>` for worker `w` of several, so no
+/// two sides running at once share one (feature 449 T173).
+fn world(cases: &Cases, which: &str, worker: Option<usize>) -> PathBuf {
+    let name = worker.map_or_else(|| which.to_owned(), |w| format!("{which}-{w}"));
+    cases.state.join("work").join(name)
+}
+
+fn fresh(
+    cases: &Cases,
+    case: &Case,
+    (which, worlds): (&str, Worlds),
+    at: &Path,
+) -> Result<Kept, String> {
     let side = if which == "old" {
         &cases.old
     } else {
         &cases.new
     };
-    let world = cases.state.join("work").join(which);
-    let raw = crate::run::side(cases, case, side, (which, worlds), &world)?;
+    // a worker's world named as a serial run names it, in the error alone (a kept result already reads `<WORLD>`), so a side's error
+    // is the same text whatever worker ran it (feature 449 T173)
+    let raw = crate::run::side(cases, case, side, (which, worlds), at).map_err(|e| {
+        e.replace(
+            &at.display().to_string(),
+            &world(cases, which, None).display().to_string(),
+        )
+    })?;
     Ok(kept(&raw, &applying(cases, case), cases.max_text))
 }
 
@@ -201,37 +270,14 @@ fn side_row(r: &SideRun, key: &str) -> Value {
     json!({"key": key, "rerun": r.rerun, "took_s": r.kept.as_ref().map(|k| k.took_s)})
 }
 
-/// One case run and compared: its report row, and whether it is the same on both sides with no run-to-run noise.
+/// One case's two sides compared: its report row, `same` where both sides agree with no run-to-run noise.
 fn one_case(
     cases: &Cases,
     case: &Case,
     (old_key, new_key): &(String, String),
-    opts: &Opts,
-) -> (Value, bool) {
-    let worlds = opts.worlds(cases);
-    let old = one_side(
-        cases,
-        case,
-        ("old", worlds),
-        old_key,
-        opts.all || opts.twice,
-    );
-    let mut noise = Vec::new();
-    if opts.twice {
-        if let Some(first) = &old.kept {
-            match fresh(cases, case, "old", worlds) {
-                Ok(second) => noise = compare(first, &second, "old run 1", "old run 2"),
-                Err(e) => noise.push(format!("old side's second run: {e}")),
-            }
-        }
-    }
-    let new = one_side(
-        cases,
-        case,
-        ("new", worlds),
-        new_key,
-        opts.all || opts.verify || opts.only.is_some(),
-    );
+    [old, new]: [Done; 2],
+) -> Value {
+    let (noise, old, new) = (old.noise, old.side, new.side);
     let (diffs, taken) = match (&old.kept, &new.kept) {
         (Some(a), Some(b)) => (
             compare(a, b, &cases.old.label, &cases.new.label),
@@ -241,11 +287,10 @@ fn one_case(
     };
     let errors: Vec<&String> = [&old.error, &new.error].into_iter().flatten().collect();
     let same = errors.is_empty() && diffs.is_empty() && noise.is_empty();
-    let row = json!({
+    json!({
         "name": case.name, "same": same, "diffs": diffs, "norms": taken, "noise": noise, "errors": errors,
         "old": side_row(&old, old_key), "new": side_row(&new, new_key),
-    });
-    (row, same)
+    })
 }
 
 fn secs(v: &Value) -> String {
@@ -277,6 +322,78 @@ fn line(row: &Value) -> String {
             String::new()
         }
     )
+}
+
+/// Every case's row, in the cases' order, each case's line printed as soon as it and every case before it are done. The kept sides are
+/// read here; the owed ones run on `opts.jobs` workers, clamped to their count, each worker in its own world (feature 449 T173). The
+/// main thread alone writes `progress` and builds the rows, so they come out as a serial run's whichever side finishes first.
+fn run_cases(
+    cases: &Cases,
+    opts: &Opts,
+    (todo, all_keys): (&[&Case], &[(String, String)]),
+    progress: &mut dyn Write,
+) -> Vec<Value> {
+    let worlds = opts.worlds(cases);
+    let key = |i: usize, s: usize| {
+        if s == 0 {
+            &all_keys[i].0
+        } else {
+            &all_keys[i].1
+        }
+    };
+    let mut slots: Vec<[Option<Done>; 2]> = todo.iter().map(|_| [None, None]).collect();
+    let mut owed = Vec::new();
+    for (i, case) in todo.iter().enumerate() {
+        for (s, which) in SIDES.into_iter().enumerate() {
+            match standing(cases, case, (which, worlds), key(i, s), forced(opts, which)) {
+                Some(side) => {
+                    slots[i][s] = Some(Done {
+                        side,
+                        noise: Vec::new(),
+                    });
+                }
+                None => owed.push((i, s)),
+            }
+        }
+    }
+    let workers = opts.jobs.max(1).min(owed.len());
+    let next = AtomicUsize::new(0);
+    let (tx, rx) = std::sync::mpsc::channel();
+    let mut rows = Vec::with_capacity(todo.len());
+    std::thread::scope(|scope| {
+        for w in 0..workers {
+            let (tx, owed, next) = (tx.clone(), &owed, &next);
+            scope.spawn(move || {
+                while let Some(&(i, s)) = owed.get(next.fetch_add(1, Ordering::Relaxed)) {
+                    let which = SIDES[s];
+                    let at = world(cases, which, (workers > 1).then_some(w));
+                    let twice = opts.twice && s == 0;
+                    let done = rerun(cases, todo[i], (which, worlds), key(i, s), (twice, &at));
+                    // the receiver lives until every worker is done, so a send cannot fail
+                    let _ = tx.send((i, s, done));
+                }
+            });
+        }
+        drop(tx);
+        let mut emit = |slots: &mut Vec<[Option<Done>; 2]>| {
+            while let Some(slot) = slots
+                .get_mut(rows.len())
+                .filter(|slot| slot.iter().all(Option::is_some))
+            {
+                let i = rows.len();
+                let pair = std::mem::take(slot).map(Option::unwrap_or_default);
+                let row = one_case(cases, todo[i], &all_keys[i], pair);
+                let _ = writeln!(progress, "{}", line(&row));
+                rows.push(row);
+            }
+        };
+        emit(&mut slots);
+        for (i, s, done) in rx {
+            slots[i][s] = Some(done);
+            emit(&mut slots);
+        }
+    });
+    rows
 }
 
 /// The run: the report's JSON and its path, the printed summary, and whether every case was the same.
@@ -313,13 +430,13 @@ pub fn execute(
         .iter()
         .map(|c| keys(cases, c, &mut h, opts.worlds(cases)))
         .collect::<Result<_, _>>()?;
-    let (mut rows, mut all_same) = (Vec::new(), true);
+    let rows = run_cases(cases, opts, (&todo, &all_keys), progress);
+    let mut all_same = true;
     let mut norms: BTreeMap<String, usize> = BTreeMap::new();
     let (mut rerun, mut kept_n) = (0, 0);
-    for (case, k) in todo.iter().zip(&all_keys) {
-        let (row, same) = one_case(cases, case, k, opts);
-        all_same &= same;
-        for side in ["old", "new"] {
+    for row in &rows {
+        all_same &= row["same"] == true;
+        for side in SIDES {
             if row[side]["rerun"] == true {
                 rerun += 1;
             } else {
@@ -334,8 +451,6 @@ pub fn execute(
         {
             *norms.entry(n.to_owned()).or_default() += 1;
         }
-        let _ = writeln!(progress, "{}", line(&row));
-        rows.push(row);
     }
     let differing: Vec<&Value> = rows
         .iter()
