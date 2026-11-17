@@ -274,14 +274,17 @@ grep -q "make test-file FILE=tests/gate/hamletgen/test_driver.py" "$MO_OUT" 2>/d
 
 echo
 echo "5. AN ENGINE ENTRY POINT A MAKE TARGET WRAPS IS REWRITTEN INTO IT (feature 212)"
-rewritten "building programs -> make building-programs" "python3 -m l7r.diagram.tools.building_programs 2>&1 | grep -i complete" "make building-programs 2>&1 | grep -i complete"
-rewritten "building programs --check -> CHECK=1" "python3 -m l7r.diagram.tools.building_programs --check" "make building-programs CHECK=1"
+# the pool index stands in for `building_programs`, ported to Rust and deleted by feature 449 T168; the CHECK=1 form (a recipe's
+# `$(if $(X),--flag,)`) no longer has a one-line Python recipe in the Makefile, and stays tested in make_only_hooks/tests.rs's fixture
+rewritten "pool index -> make pool-index" "python3 -m l7r.diagram.pipeline.pool_index 2>&1 | grep -i complete" "make pool-index 2>&1 | grep -i complete"
+rewritten "a recipe's literal argument" "python3 -m l7r.diagram.switches show" "make switches"
+refused_because "a ported module is wrapped no more" "python3 -m l7r.diagram.tools.building_programs --check" "no make target wraps"
 rewritten "a \$(ARGS) recipe takes the rest" "python3 -m l7r.diagram.tools.pack_audit wip/x.svg" 'make pack-audit ARGS="wip/x.svg"'
 refused_because "a module nothing wraps lists what is" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "no make target wraps"
 refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make pack-audit"
-refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.tools.building_programs --nonsense" "cannot carry"
+refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.switches --nonsense" "cannot carry"
 refused_because "a multi-line recipe (REF_FIRST) does not wrap" "python3 -m l7r.diagram.hamletgen --seed 4" "no make target wraps"
-ev "python3 -m l7r.diagram.tools.building_programs" | "$HOOK" pretool 2>/dev/null | grep -q "make building-programs" \
+ev "python3 -m l7r.diagram.pipeline.pool_index" | "$HOOK" pretool 2>/dev/null | grep -q "make pool-index" \
   && { echo "  ok      the context names the module and the target"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the entry-point rewrite's context is silent"; FAIL=$((FAIL+1)); }
 

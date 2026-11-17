@@ -38,6 +38,13 @@ if [ "${1:-}" = embed ]; then
   shift; BIN="$TARGET/tool/l7r-embed"; PKG=(-p l7r_embed --bin l7r-embed)
   SOURCES=("$TREE"/rust/embed "$TREE"/scripts/container/onnxruntime.pin)
 fi
+# THE MODE A ENGINE IS ITS OWN PROGRAM (feature 449 T168, the engine port's step 1): `mode-a <cmd>` runs `l7r-mode-a` (`rust/mode_a/`),
+# built from its own sources and the gate crates it reads (the registry, and what the registry builds on); neither `l7r-gate` nor
+# `l7r-guard` depends on it, so their builds never compile the geometry and rendering crates the engine will pull.
+if [ "${1:-}" = mode-a ]; then
+  shift; BIN="$TARGET/tool/l7r-mode-a"; PKG=(-p l7r_mode_a --bin l7r-mode-a)
+  SOURCES=("$TREE"/rust/mode_a "$TREE"/rust/gate/crates/registry "$TREE"/rust/gate/crates/research "$TREE"/rust/gate/crates/core)
+fi
 cargo=${L7R_GATE_CARGO:-}
 [ -n "$cargo" ] || { [ -x "$real/.cargo/bin/cargo" ] && cargo="$real/.cargo/bin/cargo" || cargo=cargo; }
 # every source the binary builds from: the guard crate's too, which both build on - before T93 a guard edit left `l7r-gate` stale

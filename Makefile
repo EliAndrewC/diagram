@@ -267,8 +267,8 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 ##  M=<glob>  which manifests to refresh (default: every manifest in both pool trees)
 	$(RUN).tools.notes_census $(or $(wildcard $(M)),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
-building-programs: ## [docs] render each declared Mode A type's required-items table into docs/building-programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
-	$(RUN).tools.building_programs $(if $(CHECK),--check,)
+building-programs: ## [docs] render each declared Mode A type's required-items table into docs/building-programs.md from l7r/diagram/buildings/types.json (feature 254; Rust since 449 T168, `l7r-mode-a`)   CHECK=1: exit 1 if stale
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a building-programs $(if $(CHECK),--check,)
 
 glossary:       ## [docs] assemble interactive/assets/glossary.json from its per-term files, then write research/assets/glossary.js from it - the ONE glossary the map's modals and the record's pages share (features 209, 259)   CHECK=1: exit 1 if either is stale   SPLIT=1: the one-time split into per-term files
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record $(if $(CHECK),check glossary,glossary $(if $(SPLIT),--split,))

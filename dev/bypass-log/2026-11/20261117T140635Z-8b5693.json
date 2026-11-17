@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-17T14:06:35Z",
+  "target": "plan-gate push",
+  "commit": "9573334eb",
+  "why": "the changed plan blocks are task sections the tick archived to plan-done.md after their CLEAR task reviews and the open slices' empty templates; this push records the set-down, the arbiter's ruling and the GM-review row"
+}

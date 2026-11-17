@@ -203,7 +203,6 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.compound": ("compound", "expensive"),
     "l7r.diagram.tools.pack_audit": ("pack-audit", "cheap"),
     "l7r.diagram.tools.notes_census": ("notes-census", "cheap"),
-    "l7r.diagram.tools.building_programs": ("building-programs", "cheap"),  # feature 254: the Mode A catalog tables, rendered from the type declaration
     "l7r.diagram.tools.page_lit": ("page-lit", "expensive"),  # feature 231: it opens a browser on the page
     "l7r.diagram.tools.picture_diff": ("picture-diff", "cheap"),  # feature 231: two renders, and resvg for an SVG argument
 }

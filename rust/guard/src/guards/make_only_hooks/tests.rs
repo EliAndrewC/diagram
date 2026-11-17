@@ -89,6 +89,17 @@ fn a_replacements_binary_is_refused_and_its_wrapper_is_not() {
     assert_eq!(v("l7r-embed serve"), "bare-binary");
     assert_eq!(v("scripts/gates/l7r-gate.sh embed serve --cache c"), "ok");
     assert_eq!(v("ls rust/embed/src/l7r-embed.md"), "ok");
+    // the Mode A engine's program (feature 449 T168; FR-005), which `l7r-gate.sh mode-a` builds and runs
+    assert_eq!(
+        v("~/.cache/x/tool/l7r-mode-a building-programs --check"),
+        "bare-binary"
+    );
+    assert_eq!(v("l7r-mode-a --version"), "bare-binary");
+    assert_eq!(
+        v("scripts/gates/l7r-gate.sh mode-a building-programs"),
+        "ok"
+    );
+    assert_eq!(v("ls rust/mode_a/src/l7r-mode-a.md"), "ok");
     assert_eq!(v("hamlet x"), "bare-binary");
     assert_eq!(v("scripts/hooks/l7r-guard.sh --version"), "ok");
     assert_eq!(v("git log --grep hamlet"), "ok");

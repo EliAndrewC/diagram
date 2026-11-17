@@ -438,6 +438,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T168 (the engine pilot, piece 1 of step 1; the GM 2026-11-17, request.md: one small piece of the engine port done end to end and measured)": {
+   "sha256": "00fd1dd4a0080008f475082d10dc99631fe6b68baceb439509367b7d091c86e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T168 Approach (checklist part A)": {
+   "sha256": "aa59bbf64d4ab66dd84e185df5763f1a7a4a724a65f52073aa08dc6dd95ab3c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10302,6 +10314,182 @@
      "why": "Meets the GM's 'significant measured' condition by measurement, reporting the smaller hot-run saving (62 s to 53-55 s) rather than hiding it; no constraint is relaxed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T168 (the engine pilot, piece 1 of step 1; the GM 2026-11-17, request.md: one small piece of the engine port done end to end and measured)",
+    "### T168 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T168-piece",
+     "summary": "The pilot piece is building_programs.py with the buildings.types registry parse it reads.",
+     "class": "within",
+     "why": "The GM accepted 'the smallest real piece of step 1 ported end to end' (request.md 2026-11-17). Per the block's quotation of engine-plan.md, building_programs is in step 1's row, and ask:449-phase4-slices (amended by ask:449-engine-order) puts the audit first. The bundle carries the engine-plan row only as the block's quotation, so I could not check it here."
+    },
+    {
+     "id": "T168-crate",
+     "summary": "A new crate rust/mode_a (binary l7r-mode-a), run through l7r-gate.sh mode-a and depended on by no gate or guard crate. The make-only guard covers it.",
+     "class": "within",
+     "why": "FR-005 keeps make as the one entry point, and the guard covers the binary with a red-on-revert test. Where the crate lives is design, not scope. It matches the browser and embedder pattern ask:449-T146-browser set for heavy binaries."
+    },
+    {
+     "id": "T168-wire-delete",
+     "summary": "make building-programs [CHECK=1] runs the Rust, and building_programs.py is deleted in the cut.",
+     "class": "within",
+     "why": "'End to end' means wired. FR-003 says no piece runs both. The block's quotation of engine-order condition 3 says make targets call the Rust. The GM's standing approval of 2026-11-10 covers deleting ported Python. The block lists no importers of the deleted file and gives no search space. If anything still imports it in process, the cut breaks that importer, which is an implementation matter and not a narrowing."
+    },
+    {
+     "id": "T168-types-lockstep",
+     "summary": "buildings/types.py stays for its Python importers. A test holds Python load_types() equal, field by field, to the Rust parse of the real types.json, and turned red on a CLASSES edit.",
+     "class": "within",
+     "why": "I rest this on text the bundle carries. ask:449-phase4-slices keeps the Python as the implementation for Python importers until the wiring slice. Once a slice's Rust lands, an edit of the Python under it makes the same change in the Rust in the same commit. FR-003 applies per piece, and the Python consumers of types.py are not yet replaced. The test is enforcement of that rule, not added scope. The bundle carries engine-order conditions 2 and 3 only as the block's quotation, so I could not verify them here."
+    },
+    {
+     "id": "T168-norm-traceback",
+     "summary": "The differential normalizes a Python traceback's frames and compares its last line exactly.",
+     "class": "within",
+     "why": "ask:449-usage-text: an uncaught traceback's text is not bound for any port, and exit status and stdout stay held. Comparing the last line is stricter than the ruling requires."
+    },
+    {
+     "id": "T168-norm-argparse",
+     "summary": "The differential normalizes argparse's usage block and program name.",
+     "class": "within",
+     "why": "ask:449-usage-text: argparse-generated usage and error text is not bound, and exit 2 with empty stdout stays held. --help is bound only where a kept test or suite case holds it, and FR-001b deleted the Python unit tests. The tool's hand-written messages stay compared."
+    },
+    {
+     "id": "T168-norm-library",
+     "summary": "A library's own words in a JSON, UTF-8 or regex error are normalized, and the error class is compared.",
+     "class": "within",
+     "why": "ask:449-T066-json-message lets the quoted parser or library text be the Rust library's. Its wording is general, so naming check 5 as 'the instance' does not limit it to JSON. The ruling still binds verdict, exit status, location and fixed words. I read the block as normalizing only the library's quoted words, so location and the fixed words are still compared. A normalizer that strips more than that would go beyond the ruling."
+    },
+    {
+     "id": "T168-hx-fix",
+     "summary": "The differential found argparse taking -hx and -help as help, and that was fixed.",
+     "class": "within",
+     "why": "The defect was a Python-versus-Rust difference, and the final verify run of all 76 cases shows none differing with no case excluded. So the Rust was changed to match the Python. A port that departed from the Python here would be an FR-002 departure needing its own ruling, and nothing in the block says it did."
+    },
+    {
+     "id": "T168-claims",
+     "summary": "Each of the crate's seven files carries a module-level Research NONE claim, and the 80 units owe one impl-drift round at landing.",
+     "class": "within",
+     "why": "This is process the request does not narrow. No claim sat on either Python file, so no claim is dropped."
+    },
+    {
+     "id": "T168-phase-measure",
+     "summary": "The pilot's measure is time and tokens by phase, a phase being one dispatch. The port dispatch's time is split into sub-phases, and the claims round and landing are measured into the Done line.",
+     "class": "within",
+     "why": "The GM accepted 'wall time and tokens reported by phase' and asked about time and tokens, compile times and test times. All are reported: per-dispatch tokens, port sub-phase times, cold and incremental build, test and check times. Defining a phase as a dispatch is a reading of 'phase', not a reduction of it. The plan-review dispatch's time is not yet given, but exit 9 commits to a phase table in time and tokens, which the Done line completes."
+    },
+    {
+     "id": "T168-frictions",
+     "summary": "Three frictions are listed for the GM's pre-approved process improvements, and none is decided here.",
+     "class": "within",
+     "why": "The GM asked for obvious improvements from the pilot. Listing them decides nothing."
+    },
+    {
+     "id": "T168-order-exits",
+     "summary": "This is the first piece of step 1 and the second follows. The red exit sets the task down, and a cannot-be-done claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "The GM said 'proceed with a second real piece of step one ... stop after those first two'."
+    },
+    {
+     "id": "T168-no-sheet-page",
+     "summary": "The block does not publish a before/after page of every pool sheet for this piece.",
+     "class": "within",
+     "why": "In request.md this duty attaches to 'each engine slice', and it is the session's framing of the GM's concern about 'rendering more and more of the maps'. This task lands one piece of step 1's slices, not a slice. Nothing in the block waives the duty, and a slice can publish it at its own close against the pre-slice commit, so nothing is lost by not publishing per piece. Whoever closes the slice still owes it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T168 (the engine pilot, piece 1 of step 1; the GM 2026-11-17, request.md: one small piece of the engine port done end to end and measured)",
+    "### T168 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T168-piece",
+     "summary": "The pilot piece is building_programs.py with the buildings.types registry parse it reads.",
+     "class": "within",
+     "why": "The GM accepted 'the smallest real piece of step 1 ported end to end' (request.md 2026-11-17). Per the block's quotation of engine-plan.md, building_programs is in step 1's row, and ask:449-phase4-slices (amended by ask:449-engine-order) puts the audit first. The bundle carries the engine-plan row only as the block's quotation, so I could not check it here."
+    },
+    {
+     "id": "T168-crate",
+     "summary": "A new crate rust/mode_a (binary l7r-mode-a), run through l7r-gate.sh mode-a and depended on by no gate or guard crate. The make-only guard covers it.",
+     "class": "within",
+     "why": "FR-005 keeps make as the one entry point, and the guard covers the binary with a red-on-revert test. Where the crate lives is design, not scope. It matches the browser and embedder pattern ask:449-T146-browser set for heavy binaries."
+    },
+    {
+     "id": "T168-wire-delete",
+     "summary": "make building-programs [CHECK=1] runs the Rust, and building_programs.py is deleted in the cut.",
+     "class": "within",
+     "why": "'End to end' means wired. FR-003 says no piece runs both. The block's quotation of engine-order condition 3 says make targets call the Rust. The GM's standing approval of 2026-11-10 covers deleting ported Python. The block lists no importers of the deleted file and gives no search space. If anything still imports it in process, the cut breaks that importer, which is an implementation matter and not a narrowing."
+    },
+    {
+     "id": "T168-types-lockstep",
+     "summary": "buildings/types.py stays for its Python importers. A test holds Python load_types() equal, field by field, to the Rust parse of the real types.json, and turned red on a CLASSES edit.",
+     "class": "within",
+     "why": "I rest this on text the bundle carries. FR-003 applies per piece: the Python consumers of types.py (compound*, pool_index and the others) are not yet replaced, so their Python remains the implementation. FR-001's sentence amended by ask:449-engine-order says the audit lands first, wired. The bundle's same-commit lockstep sentence in ask:449-phase4-slices sits under 'Before that amendment', and the current form is engine-order condition 3, which the bundle carries only as the block's own quotation. I could not verify that quotation here. The test only enforces the lockstep rule and adds no scope."
+    },
+    {
+     "id": "T168-norm-traceback",
+     "summary": "The differential normalizes a Python traceback's frames and compares its last line exactly.",
+     "class": "within",
+     "why": "ask:449-usage-text: an uncaught traceback's text is not bound for any port, and exit status and stdout stay held. Comparing the last line is stricter than the ruling requires."
+    },
+    {
+     "id": "T168-norm-argparse",
+     "summary": "The differential normalizes argparse's usage block and program name.",
+     "class": "within",
+     "why": "ask:449-usage-text: argparse-generated usage and error text is not bound, and exit 2 with empty stdout stays held. --help is bound only where a kept test or suite case holds it, and FR-001b deleted the Python unit tests. The tool's hand-written messages stay compared."
+    },
+    {
+     "id": "T168-norm-library",
+     "summary": "A library's own words in a JSON, UTF-8 or regex error are normalized, and the error class is compared.",
+     "class": "within",
+     "why": "ask:449-T066-json-message lets the quoted parser or library text be the Rust library's. Its wording is general, so naming check 5 as 'the instance' does not limit it to JSON. The ruling still binds verdict, exit status, location and fixed words. I read the block as normalizing only the library's quoted words, so location and the fixed words are still compared. A normalizer that strips more than that would go beyond the ruling."
+    },
+    {
+     "id": "T168-hx-fix",
+     "summary": "The differential found argparse taking -hx and -help as help, and that was fixed.",
+     "class": "within",
+     "why": "The defect was a Python-versus-Rust difference, and the final verify run of all 76 cases shows none differing with no case excluded. So the Rust was changed to match the Python. A port that departed from the Python here would be an FR-002 departure needing its own ruling, and nothing in the block says it did."
+    },
+    {
+     "id": "T168-claims",
+     "summary": "Each of the crate's seven files carries a module-level Research NONE claim, and the 80 units owe one impl-drift round at landing.",
+     "class": "within",
+     "why": "This is process the request does not narrow. No claim sat on either Python file, so no claim is dropped."
+    },
+    {
+     "id": "T168-phase-measure",
+     "summary": "The pilot's measure is time and tokens by phase, a phase being one dispatch. The port dispatch's time is split into sub-phases, and the claims round and landing are measured into the Done line.",
+     "class": "within",
+     "why": "The GM accepted 'wall time and tokens reported by phase' and asked about time and tokens, compile times and test times. All are reported: per-dispatch tokens, port sub-phase times, cold and incremental build, test and check times. Defining a phase as a dispatch is a reading of 'phase', not a reduction of it. The plan-review dispatch's time is not yet given, but exit 9 commits to a phase table in time and tokens, which the Done line completes."
+    },
+    {
+     "id": "T168-frictions",
+     "summary": "Three frictions are listed for the GM's pre-approved process improvements, and none is decided here.",
+     "class": "within",
+     "why": "The GM asked for obvious improvements from the pilot. Listing them decides nothing."
+    },
+    {
+     "id": "T168-order-exits",
+     "summary": "This is the first piece of step 1 and the second follows. The red exit sets the task down, and a cannot-be-done claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "The GM said 'proceed with a second real piece of step one ... stop after those first two'."
+    },
+    {
+     "id": "T168-no-sheet-page",
+     "summary": "The block does not publish a before/after page of every pool sheet for this piece.",
+     "class": "within",
+     "why": "In request.md this duty attaches to 'each engine slice', and it is the session's framing of the GM's concern about 'rendering more and more of the maps'. This task lands one piece of step 1's slices, not a slice. Nothing in the block waives the duty, and a slice can publish it at its own close against the pre-slice commit, so nothing is lost by not publishing per piece. Whoever closes the slice still owes it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18428,6 +18616,92 @@
      "summary": "Exits: make static, make rust-test, make hooks-test HOOKS_ALL=1 and make land green; a claim of impossibility goes to make arbiter-ask; budget one landing; after T160.",
      "class": "within",
      "why": "These are procedure only, and they narrow nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T168": {
+   "section_sha256": "2148a8792fabfe6704b92bd82791bcc75d4091f4b4f766d5965f534ebee8e3e7",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T168-piece",
+     "summary": "The pilot piece is building_programs.py with the buildings.types registry parse it reads.",
+     "class": "within",
+     "why": "The GM accepted 'the smallest real piece of step 1 ported end to end' (request.md 2026-11-17). Per the block's quotation of engine-plan.md, building_programs is in step 1's row, and ask:449-phase4-slices (amended by ask:449-engine-order) puts the audit first. The bundle carries the engine-plan row only as the block's quotation, so I could not check it here."
+    },
+    {
+     "id": "T168-crate",
+     "summary": "A new crate rust/mode_a (binary l7r-mode-a), run through l7r-gate.sh mode-a and depended on by no gate or guard crate. The make-only guard covers it.",
+     "class": "within",
+     "why": "FR-005 keeps make as the one entry point, and the guard covers the binary with a red-on-revert test. Where the crate lives is design, not scope. It matches the browser and embedder pattern ask:449-T146-browser set for heavy binaries."
+    },
+    {
+     "id": "T168-wire-delete",
+     "summary": "make building-programs [CHECK=1] runs the Rust, and building_programs.py is deleted in the cut.",
+     "class": "within",
+     "why": "'End to end' means wired. FR-003 says no piece runs both. The block's quotation of engine-order condition 3 says make targets call the Rust. The GM's standing approval of 2026-11-10 covers deleting ported Python. The block lists no importers of the deleted file and gives no search space. If anything still imports it in process, the cut breaks that importer, which is an implementation matter and not a narrowing."
+    },
+    {
+     "id": "T168-types-lockstep",
+     "summary": "buildings/types.py stays for its Python importers. A test holds Python load_types() equal, field by field, to the Rust parse of the real types.json, and turned red on a CLASSES edit.",
+     "class": "within",
+     "why": "I rest this on text the bundle carries. FR-003 applies per piece: the Python consumers of types.py (compound*, pool_index and the others) are not yet replaced, so their Python remains the implementation. FR-001's sentence amended by ask:449-engine-order says the audit lands first, wired. The bundle's same-commit lockstep sentence in ask:449-phase4-slices sits under 'Before that amendment', and the current form is engine-order condition 3, which the bundle carries only as the block's own quotation. I could not verify that quotation here. The test only enforces the lockstep rule and adds no scope."
+    },
+    {
+     "id": "T168-norm-traceback",
+     "summary": "The differential normalizes a Python traceback's frames and compares its last line exactly.",
+     "class": "within",
+     "why": "ask:449-usage-text: an uncaught traceback's text is not bound for any port, and exit status and stdout stay held. Comparing the last line is stricter than the ruling requires."
+    },
+    {
+     "id": "T168-norm-argparse",
+     "summary": "The differential normalizes argparse's usage block and program name.",
+     "class": "within",
+     "why": "ask:449-usage-text: argparse-generated usage and error text is not bound, and exit 2 with empty stdout stays held. --help is bound only where a kept test or suite case holds it, and FR-001b deleted the Python unit tests. The tool's hand-written messages stay compared."
+    },
+    {
+     "id": "T168-norm-library",
+     "summary": "A library's own words in a JSON, UTF-8 or regex error are normalized, and the error class is compared.",
+     "class": "within",
+     "why": "ask:449-T066-json-message lets the quoted parser or library text be the Rust library's. Its wording is general, so naming check 5 as 'the instance' does not limit it to JSON. The ruling still binds verdict, exit status, location and fixed words. I read the block as normalizing only the library's quoted words, so location and the fixed words are still compared. A normalizer that strips more than that would go beyond the ruling."
+    },
+    {
+     "id": "T168-hx-fix",
+     "summary": "The differential found argparse taking -hx and -help as help, and that was fixed.",
+     "class": "within",
+     "why": "The defect was a Python-versus-Rust difference, and the final verify run of all 76 cases shows none differing with no case excluded. So the Rust was changed to match the Python. A port that departed from the Python here would be an FR-002 departure needing its own ruling, and nothing in the block says it did."
+    },
+    {
+     "id": "T168-claims",
+     "summary": "Each of the crate's seven files carries a module-level Research NONE claim, and the 80 units owe one impl-drift round at landing.",
+     "class": "within",
+     "why": "This is process the request does not narrow. No claim sat on either Python file, so no claim is dropped."
+    },
+    {
+     "id": "T168-phase-measure",
+     "summary": "The pilot's measure is time and tokens by phase, a phase being one dispatch. The port dispatch's time is split into sub-phases, and the claims round and landing are measured into the Done line.",
+     "class": "within",
+     "why": "The GM accepted 'wall time and tokens reported by phase' and asked about time and tokens, compile times and test times. All are reported: per-dispatch tokens, port sub-phase times, cold and incremental build, test and check times. Defining a phase as a dispatch is a reading of 'phase', not a reduction of it. The plan-review dispatch's time is not yet given, but exit 9 commits to a phase table in time and tokens, which the Done line completes."
+    },
+    {
+     "id": "T168-frictions",
+     "summary": "Three frictions are listed for the GM's pre-approved process improvements, and none is decided here.",
+     "class": "within",
+     "why": "The GM asked for obvious improvements from the pilot. Listing them decides nothing."
+    },
+    {
+     "id": "T168-order-exits",
+     "summary": "This is the first piece of step 1 and the second follows. The red exit sets the task down, and a cannot-be-done claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "The GM said 'proceed with a second real piece of step one ... stop after those first two'."
+    },
+    {
+     "id": "T168-no-sheet-page",
+     "summary": "The block does not publish a before/after page of every pool sheet for this piece.",
+     "class": "within",
+     "why": "In request.md this duty attaches to 'each engine slice', and it is the session's framing of the GM's concern about 'rendering more and more of the maps'. This task lands one piece of step 1's slices, not a slice. Nothing in the block waives the duty, and a slice can publish it at its own close against the pre-slice commit, so nothing is lost by not publishing per piece. Whoever closes the slice still owes it."
     }
    ],
    "verdict": "CLEAR"

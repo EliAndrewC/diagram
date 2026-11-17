@@ -244,5 +244,11 @@ case $OUT in 0.*"  ab/abc/20260101T000000Z/text.txt [0:48]"*"Thatched roofs were
 OUT=$(sem search --q "田の広さ" --terms "paddy"); check "record search: the meaning and the text search" 0 $?
 case $OUT in "research-search: 1 question(s), 1 term set(s) - 2 of 2 source(s)"*" 1. record 0001  [index+text]"*) : ;; *) echo "FAIL  the search's lines: $OUT"; FAILED=1 ;; esac
 
+# ---- the Mode A engine through the launcher (feature 449 T168): `l7r-gate.sh mode-a` builds and runs `l7r-mode-a`, its own program, and
+# `make building-programs CHECK=1`'s form of it finds the real page current ------------------------------------------------------------
+OUT=$("$STAMP" mode-a --version); check "mode-a: the launcher runs l7r-mode-a" 0 $?
+OUT=$(cd "$HERE/../.." && "$STAMP" mode-a building-programs --check); check "mode-a building-programs --check: the real page" 0 $?
+case $OUT in "building-programs: docs/building-programs.md is current") : ;; *) echo "FAIL  the check's line: $OUT"; FAILED=1 ;; esac
+
 echo -----
 if [ "$FAILED" -eq 0 ]; then echo "all gate-stamp tests passed"; exit 0; else echo "SOME TESTS FAILED"; exit 1; fi

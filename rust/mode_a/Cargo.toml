@@ -1,0 +1,38 @@
+# The Mode A engine (feature 449 T168, the engine port's step 1 under `ask:449-engine-order`): the building types
+# (`l7r/diagram/buildings/types.py`) and the tools that read them, starting with `make building-programs`
+# (`l7r/diagram/tools/building_programs.py`, ported and deleted by T168). Its own binary, `l7r-mode-a`, which
+# `scripts/gates/l7r-gate.sh mode-a ...` builds and runs: the engine will pull `geo` and `resvg` (steps 2-3), so neither the gate
+# (`l7r-gate`) nor the guard (`l7r-guard`) depends on this crate, and their builds never compile what it pulls. It depends on the gate's
+# `registry` crate (the Mode A kinds' guesses a program item's row prints) - that direction is the allowed one.
+[package]
+name = "l7r_mode_a"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time (the key of a kept result): the type declaration and its Python reader, which the
+# lockstep test runs, and the modal files the registry reads for a kind's guesses.
+[package.metadata.l7r]
+reads = ["l7r/diagram/buildings/", "l7r/diagram/interactive/classes/", "l7r/diagram/interactive/compound_kinds/", "l7r/diagram/interactive/assets/", "docs/building-programs.md"]
+
+[lib]
+name = "l7r_mode_a"
+
+[dependencies]
+fancy-regex = { workspace = true }
+l7r_gate_core = { path = "../gate/crates/core" }
+l7r_gate_registry = { path = "../gate/crates/registry" }
+l7r_gate_research = { path = "../gate/crates/research" }
+l7r_guard = { path = "../guard" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../gate/crates/core", features = ["testkit"] }
+l7r_gate_registry = { path = "../gate/crates/registry", features = ["testkit"] }
+
+[[bin]]
+name = "l7r-mode-a"
+path = "src/main.rs"
+
+[lints]
+workspace = true

@@ -1,0 +1,462 @@
+//! The building types' reader: the lockstep with `types.py` on the real declaration, and each refusal the Python makes (feature 449 T168).
+//!
+//! Research:
+//!     the building types' tests - NONE: fixtures and assertions, deciding nothing about a building
+
+use std::path::{Path, PathBuf};
+
+use serde_json::{json, Value};
+
+use super::{
+    by_tier, classification, hand_drawn_tiers, load_types, parse_types, tiers, Band, BuildingType,
+    Kinds, RequiredItem, CLASSES, DECLARATION, NOTHING_GUESSED, PER_STATEMENT,
+};
+
+fn real() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
+}
+
+/// The Python's parse of the real declaration, every field, as JSON - with its constants, so a change to either side's shows here.
+const DUMP: &str = r#"
+import dataclasses, json, sys
+sys.path.insert(0, sys.argv[1])
+from l7r.diagram.buildings import types as T
+def band(b):
+    return None if b is None else [None if r is None else list(r) for r in (b.w, b.h, b.area)]
+def item(i):
+    return {"id": i.id, "label": i.label.pattern if i.label else None, "band": band(i.band), "cls": i.cls, "why": i.why,
+            "optional": i.optional, "forms": [[f, band(b)] for f, b in i.forms.items()], "site": i.site, "kind": i.kind}
+out = [{"tier": t.tier, "title": t.title, "program": t.program, "hand_drawn": t.hand_drawn, "required": [item(i) for i in t.required],
+        "checks": list(t.checks), "generated_exceptions": list(t.generated_exceptions), "notes": t.notes, "map_keys": list(t.map_keys)}
+       for t in T.load_types()]
+print(json.dumps({"types": out, "classes": list(T.CLASSES), "per": T.PER_STATEMENT, "nothing": T.NOTHING_GUESSED,
+                  "declaration": T._DECLARATION, "fields": [[f.name for f in dataclasses.fields(c)] for c in (T.Band, T.RequiredItem, T.BuildingType)]}))
+"#;
+
+fn band_json(b: Option<&Band>) -> Value {
+    let r = |r: Option<(f64, f64)>| r.map_or(Value::Null, |(a, b)| json!([a, b]));
+    b.map_or(Value::Null, |b| json!([r(b.w), r(b.h), r(b.area)]))
+}
+
+fn rust_dump(types: &[BuildingType]) -> Value {
+    let item = |i: &RequiredItem| {
+        json!({"id": i.id, "label": i.label, "band": band_json(Some(&i.band)), "cls": i.cls, "why": i.why, "optional": i.optional,
+               "forms": i.forms.iter().map(|(f, b)| json!([f, band_json(b.as_ref())])).collect::<Vec<_>>(), "site": i.site,
+               "kind": i.kind})
+    };
+    let out: Vec<Value> = types
+        .iter()
+        .map(|t| {
+            json!({"tier": t.tier, "title": t.title, "program": t.program, "hand_drawn": t.hand_drawn,
+                   "required": t.required.iter().map(item).collect::<Vec<_>>(), "checks": t.checks,
+                   "generated_exceptions": t.generated_exceptions, "notes": t.notes, "map_keys": t.map_keys})
+        })
+        .collect();
+    json!({"types": out, "classes": CLASSES, "per": PER_STATEMENT, "nothing": NOTHING_GUESSED})
+}
+
+/// THE LOCKSTEP (`ask:449-engine-order` condition 3): the Python's `load_types()` on the real `types.json`, every field of every type and
+/// item, equal to this parse, and its three classes' fields the ones this port carries - an edit of `types.py` that this file did not
+/// follow fails here. The one test that runs Python: about 35 ms (observed 2026-11-17, `python3 -I` importing `types` alone).
+#[test]
+fn the_parse_is_the_python_s_on_the_real_declaration() {
+    let out = std::process::Command::new("python3")
+        .args(["-I", "-c", DUMP])
+        .arg(real())
+        .output()
+        .unwrap();
+    let failed = String::from_utf8_lossy(&out.stderr);
+    assert_eq!((out.status.success(), failed.as_ref()), (true, ""));
+    let mut python: Value = serde_json::from_slice(&out.stdout).unwrap();
+    let declaration = python["declaration"].take();
+    let fields = python["fields"].take();
+    python
+        .as_object_mut()
+        .unwrap()
+        .retain(|k, _| !["declaration", "fields"].contains(&k.as_str()));
+    assert!(declaration.as_str().unwrap().ends_with(DECLARATION));
+    assert_eq!(
+        fields,
+        json!([
+            ["w", "h", "area"],
+            ["id", "label", "band", "cls", "why", "optional", "forms", "site", "kind"],
+            [
+                "tier",
+                "title",
+                "program",
+                "hand_drawn",
+                "required",
+                "checks",
+                "generated_exceptions",
+                "notes",
+                "map_keys"
+            ]
+        ])
+    );
+    let rust = load_types(&real()).unwrap();
+    assert_eq!(python, rust_dump(&rust));
+    assert!(rust
+        .iter()
+        .any(|t| t.required.iter().any(|i| i.kind.is_some())));
+}
+
+fn a_type() -> Value {
+    json!({"tier": "t", "title": "T", "program": "p", "hand_drawn": true, "checks": ["c"],
+           "required": [{"id": "a", "label": "hall", "band_ft": {"w": [1, 2], "h": [3, 4.5]}, "class": "guess", "why": "w"}]})
+}
+
+fn refused(data: &Value) -> String {
+    let e = parse_types(data).unwrap_err();
+    format!("{}: {}", e.kind, e.message)
+}
+
+fn with(f: impl FnOnce(&mut serde_json::Map<String, Value>)) -> Value {
+    let mut t = a_type();
+    f(t.as_object_mut().unwrap());
+    json!([t])
+}
+
+fn with_item(f: impl FnOnce(&mut serde_json::Map<String, Value>)) -> Value {
+    with(|t| f(t["required"][0].as_object_mut().unwrap()))
+}
+
+#[test]
+fn a_type_is_read_with_its_defaults() {
+    let t = &parse_types(&json!([a_type()])).unwrap()[0];
+    assert_eq!(
+        (t.tier.as_str(), t.hand_drawn, t.notes.as_str()),
+        ("t", true, "")
+    );
+    assert!(t.generated_exceptions.is_empty() && t.map_keys.is_empty());
+    let i = &t.required[0];
+    assert_eq!(i.label.as_deref(), Some("hall"));
+    assert_eq!(
+        i.band,
+        Band {
+            w: Some((1.0, 2.0)),
+            h: Some((3.0, 4.5)),
+            area: None
+        }
+    );
+    assert_eq!(
+        (i.optional, i.site.as_deref(), i.kind.as_deref()),
+        (false, None, None)
+    );
+    // what `str()` and `bool()` make of the other JSON values
+    let t = &parse_types(&with(|t| {
+        t.insert("notes".into(), Value::Null);
+        t.insert("checks".into(), json!("ab"));
+        t.insert("map_keys".into(), json!({"k": 1}));
+        t.insert(
+            "generated_exceptions".into(),
+            json!([1, 2.5, true, null, [1]]),
+        );
+        t.insert("hand_drawn".into(), json!(0));
+    }))
+    .unwrap()[0];
+    assert_eq!(t.notes, "None");
+    assert_eq!(t.checks, ["a", "b"]);
+    assert_eq!(t.map_keys, ["k"]);
+    assert_eq!(t.generated_exceptions, ["1", "2.5", "True", "None", "[1]"]);
+    assert!(!t.hand_drawn);
+}
+
+#[test]
+fn an_item_reads_its_forms_site_and_kind() {
+    let data = with(|t| {
+        t["required"] = json!([
+            {"id": "k", "kind": "office hall", "band_ft": {}, "site": "a_b", "optional": 1,
+             "forms": {"x": null, "y": {"area": [1, 2]}}},
+            {"id": "f", "kind": "k", "band_ft": {}, "forms": []}
+        ]);
+    });
+    let t = &parse_types(&data).unwrap()[0];
+    let i = &t.required[0];
+    assert_eq!(
+        (i.kind.as_deref(), i.site.as_deref(), i.optional),
+        (Some("office hall"), Some("a_b"), true)
+    );
+    assert_eq!(i.label, None);
+    assert!(i.band.presence_only());
+    assert_eq!(i.forms[0], ("x".to_owned(), None));
+    assert_eq!(i.band_for(Some("x")), None);
+    assert_eq!(i.band_for(Some("y")).unwrap().area, Some((1.0, 2.0)));
+    assert_eq!(i.band_for(Some("z")), Some(i.band));
+    assert_eq!(i.band_for(None), Some(i.band));
+    assert!(t.required[1].forms.is_empty());
+}
+
+#[test]
+fn a_band_holds_a_footprint_either_way() {
+    let b = Band {
+        w: Some((10.0, 20.0)),
+        h: Some((5.0, 8.0)),
+        area: Some((60.0, 120.0)),
+    };
+    assert!(b.holds(12.0, 6.0) && b.holds(6.0, 12.0));
+    assert!(!b.holds(12.0, 12.0) && !b.holds(30.0, 3.0));
+    let area = Band {
+        area: Some((10.0, 20.0)),
+        ..Band::default()
+    };
+    assert!(area.holds(3.0, 5.0) && !area.holds(1.0, 1.0));
+    assert!(!b.presence_only() && Band::default().presence_only());
+}
+
+#[test]
+fn a_malformed_declaration_is_refused_in_the_python_s_words() {
+    assert_eq!(
+        refused(&json!([])),
+        "ValueError: types.json is a non-empty list of type objects"
+    );
+    assert_eq!(
+        refused(&json!({})),
+        "ValueError: types.json is a non-empty list of type objects"
+    );
+    let carries = "ValueError: a type object carries ['checks', 'hand_drawn', 'program', 'required', 'tier', 'title'] (and generated_exceptions, notes, map_keys), not";
+    assert_eq!(refused(&json!([3])), format!("{carries} 3"));
+    assert_eq!(
+        refused(&with(|t| {
+            t.remove("title");
+        })),
+        format!("{carries} ['checks', 'hand_drawn', 'program', 'required', 'tier']")
+    );
+    assert!(refused(&with(|t| {
+        t.insert("odd".into(), json!(1));
+    }))
+    .ends_with("'odd', 'program', 'required', 'tier', 'title']"));
+    assert_eq!(
+        refused(&with(|t| {
+            t.insert("tier".into(), json!("Bad"));
+        })),
+        "ValueError: tier 'Bad' is not lower-case kebab"
+    );
+    assert_eq!(
+        refused(&with(|t| {
+            t.insert("tier".into(), json!(""));
+        })),
+        "ValueError: tier '' is not lower-case kebab"
+    );
+    assert_eq!(
+        refused(&with(|t| {
+            t.insert("tier".into(), json!("a_b"));
+        })),
+        "ValueError: tier 'a_b' is not lower-case kebab"
+    );
+    // Python's `$` matches before a final newline
+    assert_eq!(
+        parse_types(&with(|t| {
+            t.insert("tier".into(), json!("a-1\n"));
+        }))
+        .unwrap()[0]
+            .tier,
+        "a-1\n"
+    );
+    assert_eq!(
+        refused(&with(|t| {
+            t.insert("required".into(), json!(5));
+        })),
+        "TypeError: 'int' object is not iterable"
+    );
+    assert_eq!(
+        refused(&with(|t| {
+            t.insert("checks".into(), json!(null));
+        })),
+        "TypeError: 'NoneType' object is not iterable"
+    );
+    assert_eq!(
+        refused(&with(|t| {
+            t["required"] = json!([a_type()["required"][0], a_type()["required"][0]]);
+        })),
+        "ValueError: t: required item ids repeat"
+    );
+    assert_eq!(
+        refused(&json!([a_type(), a_type()])),
+        "ValueError: a tier is declared twice"
+    );
+}
+
+#[test]
+fn a_malformed_item_is_refused_in_the_python_s_words() {
+    let carries = "ValueError: t: a required item carries id, label, band_ft, class, why - or id, kind, band_ft, whose class and why are its kind's (feature 262) - (and optional, forms, site), not";
+    assert_eq!(
+        refused(&with(|t| {
+            t["required"] = json!(["x"]);
+        })),
+        format!("{carries} 'x'")
+    );
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("kind".into(), json!("k"));
+        })),
+        format!("{carries} ['band_ft', 'class', 'id', 'kind', 'label', 'why']")
+    );
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("odd".into(), json!(1));
+        })),
+        format!("{carries} ['band_ft', 'class', 'id', 'label', 'odd', 'why']")
+    );
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("site".into(), json!(""));
+        })),
+        "ValueError: t/a: site names a correspondence class (a non-empty string), not ''"
+    );
+    assert_eq!(
+        refused(&with(|t| {
+            t["required"] = json!([{"id": 7, "kind": 3, "band_ft": {}}]);
+        })),
+        "ValueError: t/7: kind names a Mode A kind (a non-empty string), not 3"
+    );
+    assert_eq!(refused(&with_item(|i| { i.insert("class".into(), json!("odd")); })), "ValueError: t/a: class must be one of ('accurate', 'deviation', 'convention', 'guess'), not 'odd'");
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("forms".into(), json!([1]));
+        })),
+        "AttributeError: 'list' object has no attribute 'items'"
+    );
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("forms".into(), json!({"f": {"q": 1}}));
+        })),
+        "ValueError: t/a/forms/f: band_ft carries only w, h and area, not {'q': 1}"
+    );
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("band_ft".into(), json!([1]));
+        })),
+        "ValueError: t/a: band_ft carries only w, h and area, not [1]"
+    );
+    let range = "ValueError: t/a: a band range is [min, max] with min <= max, not";
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("band_ft".into(), json!({"w": [2, 1]}));
+        })),
+        format!("{range} [2, 1]")
+    );
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("band_ft".into(), json!({"h": [1, "2"]}));
+        })),
+        format!("{range} [1, '2']")
+    );
+    assert_eq!(
+        refused(&with_item(|i| {
+            i.insert("band_ft".into(), json!({"area": 5}));
+        })),
+        format!("{range} 5")
+    );
+    // a bool is an int to Python's isinstance
+    assert_eq!(
+        parse_types(&with_item(|i| {
+            i.insert("band_ft".into(), json!({"w": [false, true]}));
+        }))
+        .unwrap()[0]
+            .required[0]
+            .band
+            .w,
+        Some((0.0, 1.0))
+    );
+    let e = parse_types(&with_item(|i| {
+        i.insert("label".into(), json!("("));
+    }))
+    .unwrap_err();
+    assert_eq!(e.kind, "re.PatternError");
+}
+
+#[test]
+fn the_declaration_is_read_from_the_tree() {
+    let dir = l7r_gate_core::checks::scratch("mode-a-types");
+    let root = dir.path();
+    let e = load_types(root).unwrap_err();
+    assert_eq!(e.kind, "FileNotFoundError");
+    std::fs::create_dir_all(root.join("l7r/diagram/buildings")).unwrap();
+    std::fs::write(root.join(DECLARATION), "[").unwrap();
+    assert_eq!(
+        load_types(root).unwrap_err().kind,
+        "json.decoder.JSONDecodeError"
+    );
+    let mut b = a_type();
+    b["tier"] = json!("b");
+    b["hand_drawn"] = json!(false);
+    std::fs::write(root.join(DECLARATION), json!([a_type(), b]).to_string()).unwrap();
+    assert_eq!(
+        tiers(root).unwrap().into_iter().collect::<Vec<_>>(),
+        ["b", "t"]
+    );
+    assert_eq!(
+        hand_drawn_tiers(root)
+            .unwrap()
+            .into_iter()
+            .collect::<Vec<_>>(),
+        ["t"]
+    );
+    assert_eq!(by_tier("b", root).unwrap().unwrap().tier, "b");
+    assert_eq!(by_tier("z", root).unwrap(), None);
+    assert!(
+        tiers(&root.join("none")).is_err()
+            && hand_drawn_tiers(&root.join("none")).is_err()
+            && by_tier("b", &root.join("none")).is_err()
+    );
+}
+
+/// A scratch tree holding every kind's modal file, minimal (the registry's testkit), and the page text its package reads.
+pub(crate) fn kinds_tree(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+    let dir = l7r_gate_core::checks::scratch(tag);
+    l7r_gate_registry::testkit::modals(dir.path(), "research/questions/x.html");
+    let assets = dir.path().join("l7r/diagram/interactive/assets");
+    std::fs::write(assets.join("page-text.json"), "{}").unwrap();
+    let well = dir.path().join(l7r_gate_registry::about::modal_rel(
+        &l7r_gate_registry::kinds::SHEET_REGISTRY,
+        "well",
+    ));
+    let text = std::fs::read_to_string(&well).unwrap();
+    std::fs::write(&well, format!("{text}Guesses:\n- its depth\n- its curb\n")).unwrap();
+    dir
+}
+
+#[test]
+fn a_kind_item_is_classified_by_its_kind_s_guesses() {
+    let dir = kinds_tree("mode-a-kinds");
+    let mut kinds = Kinds::new(dir.path());
+    let item = |kind: &str| RequiredItem {
+        id: "i".into(),
+        label: None,
+        band: Band::default(),
+        cls: String::new(),
+        why: String::new(),
+        optional: false,
+        forms: Vec::new(),
+        site: None,
+        kind: Some(kind.into()),
+    };
+    assert_eq!(
+        classification(&item("well"), &mut kinds).unwrap(),
+        (PER_STATEMENT.to_owned(), "its depth its curb".to_owned())
+    );
+    assert_eq!(
+        classification(&item("main gate"), &mut kinds).unwrap().1,
+        NOTHING_GUESSED
+    );
+    assert_eq!(
+        classification(&item("t168-none"), &mut kinds)
+            .unwrap_err()
+            .message,
+        "program item 'i' names the kind 't168-none', which the Mode A registry does not know"
+    );
+    let own = RequiredItem {
+        kind: None,
+        cls: "guess".into(),
+        why: "w".into(),
+        ..item("x")
+    };
+    assert_eq!(
+        classification(&own, &mut kinds).unwrap(),
+        ("guess".to_owned(), "w".to_owned())
+    );
+    // a registry that does not load refuses every kind item, and is asked again by the next
+    let mut broken = Kinds::new(Path::new("/nonexistent/t168"));
+    assert!(classification(&item("well"), &mut broken).is_err());
+    assert!(classification(&item("well"), &mut broken).is_err());
+}
