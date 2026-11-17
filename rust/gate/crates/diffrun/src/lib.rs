@@ -8,6 +8,7 @@
 //! report are [`runner`]'s.
 
 pub mod cases;
+pub mod checkout;
 pub mod keys;
 pub mod norm;
 pub mod run;

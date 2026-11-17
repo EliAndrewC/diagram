@@ -91,6 +91,26 @@ pub enum From {
     Cmd(Vec<String>),
 }
 
+/// The world's checkout (feature 449 T169), made by the runner before `world.setup`: a clone of `repo` at `rev` into `{WORLD}/<into>`,
+/// limited to the `sparse` paths where any are named. `rev` `WORKTREE` is the repository's `HEAD` with its uncommitted changes and
+/// untracked files laid over it - the new side of a port whose work is not yet committed.
+pub struct Checkout {
+    pub repo: String,
+    pub rev: String,
+    pub into: String,
+    pub sparse: Vec<String>,
+}
+
+/// The worlds a run builds (feature 449 T169, the plan review's ruling): `Sparse` - `world.checkout.sparse` honored - for iterating
+/// (an incremental, `--only` or `--twice` run); `Whole` for a `--verify` or `--all` run, whose report is the record a plan cites. WHY: a
+/// path list too narrow fails both sides alike, which the comparison reads as agreement - a false pass in the comparison FR-002 rests on -
+/// so the record is never built on a sparse world.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum Worlds {
+    Whole,
+    Sparse,
+}
+
 /// The whole cases file.
 pub struct Cases {
     pub file: PathBuf,
@@ -98,6 +118,7 @@ pub struct Cases {
     pub state: PathBuf,
     pub vars: BTreeMap<String, String>,
     pub setup: Vec<Vec<String>>,
+    pub checkout: Option<Checkout>,
     pub cwd: String,
     pub wrap: Vec<String>,
     pub files: Vec<String>,
@@ -114,6 +135,14 @@ pub struct Cases {
     pub cases: Vec<Case>,
     /// The world's definition as written, for both keys.
     pub world_raw: Value,
+}
+
+impl Cases {
+    /// Whether the world's checkout names a sparse path list: only then do a run's worlds differ by its kind.
+    #[must_use]
+    pub fn declares_sparse(&self) -> bool {
+        self.checkout.as_ref().is_some_and(|c| !c.sparse.is_empty())
+    }
 }
 
 /// `{NAME}` filled from `vars` until nothing more changes (a variable may name another); an unknown name stays as written.
@@ -274,6 +303,47 @@ fn side(v: &Value, which: &str) -> Result<Side, String> {
     })
 }
 
+/// A path inside the world or the repository, as `checkout` takes one: relative, and never climbing out with `..`.
+fn inside(path: &str) -> bool {
+    !path.is_empty() && !path.starts_with('/') && !path.split('/').any(|p| p == "..")
+}
+
+fn checkout(v: &Value) -> Result<Checkout, String> {
+    let what = "world.checkout";
+    let text = |k: &str| {
+        v.get(k)
+            .and_then(Value::as_str)
+            .map(str::to_owned)
+            .ok_or_else(|| format!("{what}.{k}: a string - the checkout is {{\"repo\", \"rev\", \"into\", \"sparse\": [paths]}}"))
+    };
+    if !v.is_object() {
+        return Err(format!(
+            "{what}: an object {{\"repo\", \"rev\", \"into\", \"sparse\": [paths]}}"
+        ));
+    }
+    let into = text("into")?;
+    if !inside(&into) {
+        return Err(format!(
+            "{what}.into: a directory under {{WORLD}}, relative and without `..`, not {into:?}"
+        ));
+    }
+    let sparse = strings(v.get("sparse"), &format!("{what}.sparse"))?;
+    if let Some(bad) = sparse.iter().find(|p| !inside(p)) {
+        return Err(format!(
+            "{what}.sparse: each path relative to the repository, without `..`, not {bad:?}"
+        ));
+    }
+    Ok(Checkout {
+        repo: text("repo")?,
+        rev: text("rev")?,
+        into,
+        sparse: sparse
+            .iter()
+            .map(|p| p.trim_end_matches('/').to_owned())
+            .collect(),
+    })
+}
+
 fn step(v: &Value, case: &str) -> Result<Step, String> {
     let what = format!("case {case}: a step");
     let (argv, compare) = match v {
@@ -360,8 +430,9 @@ pub fn load(file: &Path) -> Result<Cases, String> {
         .map_or_else(|| base.clone(), |r| base.join(r));
     let world = &v["world"];
     let setup = argvs(world.get("setup"), "world.setup")?;
-    if setup.is_empty() {
-        return Err("world.setup: the commands that build a world into the fresh directory {WORLD}, at least one".to_owned());
+    let checkout = world.get("checkout").map(checkout).transpose()?;
+    if setup.is_empty() && checkout.is_none() {
+        return Err("world.setup: the commands that build a world into the fresh directory {WORLD}, at least one (or a `world.checkout`)".to_owned());
     }
     let norms: Vec<Norm> = match v.get("normalizations") {
         None => Vec::new(),
@@ -414,6 +485,7 @@ pub fn load(file: &Path) -> Result<Cases, String> {
         state: state_dir(&base.join(file.file_name().unwrap_or_default())),
         vars: string_map(v.get("vars"), "vars")?,
         setup,
+        checkout,
         cwd: world["cwd"].as_str().unwrap_or("{WORLD}").to_owned(),
         wrap: strings(world.get("wrap"), "world.wrap")?,
         files: if files.is_empty() {

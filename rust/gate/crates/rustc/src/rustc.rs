@@ -24,6 +24,7 @@ use crate::Reply;
 mod cover;
 mod kept;
 mod side;
+mod times;
 use cover::uncovered_each;
 #[cfg(test)]
 use kept::{content_ids, declared_reads, relative, verdict_key};
@@ -721,11 +722,19 @@ fn world_here() -> World {
 }
 
 fn dispatch(world: &World, args: &[String]) -> Reply {
+    // `test-times` (feature 449 T169) times tests and keeps no result, so it is not one of the checks `parse` reads
+    if args.first().map(String::as_str) == Some("test-times") {
+        let mut rest = args.to_vec();
+        "test".clone_into(&mut rest[0]);
+        if let Some((_, named, false)) = parse(&rest) {
+            return times::test_times(world, &named, times::BAR, times::RUNS);
+        }
+    }
     let Some((cmd, named, flag)) = parse(args) else {
         return Reply {
             stdout: String::new(),
             stderr: format!(
-                "usage: l7r-gate rust {{{}}} [--crate DIR]... [--check]\n",
+                "usage: l7r-gate rust {{{}}} [--crate DIR]... [--check]\n       l7r-gate rust test-times --crate DIR...\n",
                 COMMANDS.join(",")
             ),
             code: 2,

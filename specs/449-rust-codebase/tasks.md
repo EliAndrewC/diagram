@@ -54,6 +54,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T158 Phase 4 S13, the deletion close (ask:449-phase4-slices) Q10: tools/claims.py and claims_context, claims_counters, claims_scope, claims_stale, tunables, gates/codeid.py, dead_closure, bundle_door, tools/__init__, l7r/diagram/__init__ deleted (2,443 lines), the claims re-keyed by claims carry, ruff, pyproject's list and the requirements files gone; the phase-4 close
       research: rendering
+- [ ] T169 The engine pilot's no-brainer process fixes (the GM 2026-11-17, pre-approved): the differential's worlds sparse (T168's first run 307 s against 50 s), the claims form checked by make static before landing, the plan review's bundle carrying every arbiter ruling a block cites, and a per-test timer for FR-008
+      research: rendering
 - [x] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

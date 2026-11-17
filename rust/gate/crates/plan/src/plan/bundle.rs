@@ -419,6 +419,8 @@ pub(super) fn build(
             )
         })
         .collect();
+    // every ruling a block cites, its record's ruling, why and what (feature 449 T169): the reviewer reads nothing in the repository
+    write("rulings.md", rulings::rulings(spec_dir, &bodies));
     write(
         "spec-index.md",
         format!("# Every other requirement, its first line\n\n{index}"),
@@ -468,7 +470,7 @@ pub(super) fn build(
         format!("# Each changed block's text when last judged, with that verdict\n\n{before}"),
     );
     let manifest = out.join("MANIFEST.md");
-    let _ = std::fs::write(&manifest, format!("# Plan review bundle - {feature}, {name}\n\nA MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside\nthis MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment\nfrom the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,\ndecision and `m:` measurement the blocks name, in full; `spec-index.md` the first line of every other requirement - grep it for one the blocks\nshould have named; `earlier.md` what a changed block said when last judged, and the verdict it got.\n\nFind each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).\n\n{how}\n"));
+    let _ = std::fs::write(&manifest, format!("# Plan review bundle - {feature}, {name}\n\nA MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside\nthis MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment\nfrom the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,\ndecision and `m:` measurement the blocks name, in full; `rulings.md` the round arbiter's ruling, why and what, verbatim, for every `ask:`\nruling the blocks cite; `spec-index.md` the first line of every other requirement - grep it for one the blocks\nshould have named; `earlier.md` what a changed block said when last judged, and the verdict it got.\n\nFind each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).\n\n{how}\n"));
     Ok(manifest)
 }
 
@@ -595,6 +597,8 @@ pub(super) fn delta_prompt(
     let feature = spec_dir.file_name().unwrap_or_default().to_string_lossy();
     Ok(format!("MODE 4: PLAN REVIEW of {} changed block(s) of feature {feature}'s plan (feature 375 FR-043), on their bundle: read {} and the files beside it, and nothing in the repository.", under.len() + removed.len(), manifest.display()))
 }
+
+mod rulings;
 
 #[cfg(test)]
 mod tests;

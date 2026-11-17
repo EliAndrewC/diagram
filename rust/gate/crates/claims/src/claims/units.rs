@@ -507,8 +507,10 @@ pub fn rel(path: &Path, root: &Path) -> String {
 
 /// Whether the claims walk reads a `.rs` file at `inner`, its path under `rust/`: every crate there but `target/`, the parked stages and
 /// the tooling crates - the guard, the gate, the browser program (feature 449 T146) and the embedder (T138), which hold no research
-/// claims. A crate NEW under `rust/` is walked with nothing to declare, so the engine's slices (S7-S12) port into crates beside
-/// `rust/phases` and their claims are tracked from their first commit (feature 449 T165); the stale-figure check asks this same test.
+/// claims. A crate NEW under `rust/` is walked with no list to join, so the engine's slices (S7-S12) port into crates beside
+/// `rust/phases` and their claims are tracked from their first commit (feature 449 T165) - and every unit of it owes a claim from that
+/// commit: its own `Research:` line, or a module-level one its units inherit (`- NONE` where the file decides nothing physical), which
+/// `make static`'s form check names (`claims coverage --rust`, feature 449 T169). The stale-figure check asks this same test.
 pub fn walked(inner: &str) -> bool {
     let parts: Vec<&str> = inner.split('/').collect();
     !(parts.contains(&"target")

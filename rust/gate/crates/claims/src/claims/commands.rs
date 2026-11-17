@@ -756,7 +756,32 @@ fn gate_cmd(reader: &mut Reader, root: &Path, o: &mut Out) -> Result<i32, Fail> 
     Ok(i32::from(!refuse.is_empty()))
 }
 
+/// `claims coverage --rust`, `make static`'s form check (feature 449 T169): every unit of the crates the claims walk reads
+/// ([`super::units::walked`]) carries a well-formed claim. WHY: T168's new crate lacked a `Research:` line on every unit, and only
+/// `make claims-owed` at the landing named it - no gate before did; read from the Rust alone (no Python started), about a tenth of a
+/// second over the whole of `rust/`, so `make static` runs it over every walked crate rather than the changed ones.
+fn rust_form(root: &Path, o: &mut Out) -> Result<i32, Fail> {
+    let pairs = super::units::all_rust_units(root, "", false)?;
+    let probs = coverage(&pairs, &question_names(root));
+    if probs.is_empty() {
+        o.say("claims-form: every unit of the Rust crates the claims walk reads carries a claim");
+        return Ok(0);
+    }
+    o.say(&probs.join("\n"));
+    o.say(&format!(
+        "claims-form: {} problem(s) in the Rust crates the claims walk reads, which `make claims-owed` refuses at the landing. Fix: give \
+         each unit named a `Research:` claim (`/// Research: <label> - <backing>`), or its file a module-level one that its units inherit \
+         (`//! Research:` then `//!     <label> - NONE: <why it decides nothing physical>`). The form: {}",
+        probs.len(),
+        super::grammar::GRAMMAR
+    ));
+    Ok(1)
+}
+
 fn coverage_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Result<i32, Fail> {
+    if p.on("--rust") {
+        return rust_form(root, o);
+    }
     let path = p.text("--path", "");
     let pairs = all_units(reader, root, false, true)?;
     let probs: Vec<String> = coverage(&pairs, &question_names(root))

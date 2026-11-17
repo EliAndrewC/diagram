@@ -15,6 +15,7 @@ use l7r_guard::shared::tempdir::{Held, TempDir};
 mod cover;
 mod kept;
 mod side;
+mod times;
 
 /// `dirname` and `basename` as the shell's own functions: a fake's every `$(dirname "$0")` started the program, about a millisecond each,
 /// several a fake call and a dozen fake calls a test (feature 449 T167, FR-008's tenth of a second).

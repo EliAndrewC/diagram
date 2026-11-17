@@ -1034,11 +1034,14 @@ guard:           ## [static] {internal} refuse to run in main's tree - main is t
 
 static format test: | guard
 
+# THE CLAIMS FORM BEFORE THE LANDING (feature 449 T169): `claims coverage --rust` names a walked crate's unit with no `Research:` claim,
+# which T168 met only at `make claims-owed`, before lint; it reads the Rust alone, 0.05 s over every walked crate (measured 2026-11-17).
 static:         ## [static] the static checks: ruff's outright errors, file-scale, the Rust crates' checks (was `lint`), each crate's kept green result reused while its inputs stand (449 T93)   [FRESH=1 REASON="..."]
 	$(FRESH_ESCAPE)
 	python3 -m ruff check .
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" coverage --rust
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust lint
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust format --check
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust cover
@@ -1054,7 +1057,13 @@ rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=
 	$(FRESH_ESCAPE)
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test $(if $(CRATE),--crate "$(CRATE)",)
 
-format:          ## [static] rustfmt over the Rust phases' crates (feature 444 T17)
+# FR-008's timer (feature 449 T169): T99's method - each test alone, best of three, a fresh TMPDIR, timed around the process - which
+# T160, T164, T167 and T168 each ran by hand. It reports and never refuses: time is never a gate (the GM's performance rule).
+test-times:      ## [project] each test of a crate timed alone by T99's method (best of three, a fresh TMPDIR, around the process), those over FR-008's tenth of a second listed, a declared end-to-end test marked; reports, never refuses (449 T169)   CRATE=<dir>
+	@if [ -z "$(CRATE)" ]; then printf 'make test-times: CRATE=<crate dir> is required - e.g. make test-times CRATE=rust/mode_a\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test-times --crate "$(CRATE)"
+
+format:         ## [static] rustfmt over the Rust phases' crates (feature 444 T17)
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust format
 
 # THE PORT SWITCH (feature 444 amendment 8, FR-023; the GM 2026-11-07: "the functionality of a make done or a make land are both

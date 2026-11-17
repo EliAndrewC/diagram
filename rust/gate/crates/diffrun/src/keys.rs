@@ -16,7 +16,7 @@ use std::path::{Path, PathBuf};
 use l7r_guard::shared::sha256::hex;
 use serde_json::{json, Value};
 
-use crate::cases::{fill, Case, Cases, Print, Side};
+use crate::cases::{fill, Case, Cases, Print, Side, Worlds};
 
 /// The content hashes of one run, each path hashed once however many cases name it.
 #[derive(Default)]
@@ -148,12 +148,33 @@ pub fn applying<'c>(cases: &'c Cases, case: &Case) -> Vec<&'c crate::cases::Norm
         .collect()
 }
 
-/// The case's (old key, new key).
+/// The world's definition as a key reads it: where a sparse path list is declared, the worlds the run builds with it (feature 449
+/// T169), so no side kept from a sparse world stands in a run on whole ones, nor the reverse - and a whole world's key leaves the list
+/// out, since it builds no differently for it. A file with no sparse list keys as before.
+fn world_key(cases: &Cases, worlds: Worlds) -> Value {
+    if !cases.declares_sparse() {
+        return cases.world_raw.clone();
+    }
+    let mut world = cases.world_raw.clone();
+    if worlds == Worlds::Whole {
+        if let Some(co) = world.get_mut("checkout").and_then(Value::as_object_mut) {
+            co.remove("sparse");
+        }
+    }
+    json!({"definition": world, "worlds": if worlds == Worlds::Whole { "whole" } else { "sparse" }})
+}
+
+/// The case's (old key, new key), for a run that builds `worlds`.
 ///
 /// # Errors
 ///
 /// A declared path that does not exist, a revision git cannot name.
-pub fn keys(cases: &Cases, case: &Case, h: &mut Hasher) -> Result<(String, String), String> {
+pub fn keys(
+    cases: &Cases,
+    case: &Case,
+    h: &mut Hasher,
+    worlds: Worlds,
+) -> Result<(String, String), String> {
     let norms: Vec<&Value> = applying(cases, case).iter().map(|n| &n.raw).collect();
     let mut inputs = hashed(cases, &cases.inputs, h)?;
     if let (Value::Array(all), Value::Array(more)) = (&mut inputs, hashed(cases, &case.inputs, h)?)
@@ -162,7 +183,7 @@ pub fn keys(cases: &Cases, case: &Case, h: &mut Hasher) -> Result<(String, Strin
     }
     // `v`: the runner's own result format; a change to the runner that changes what a side's kept result holds raises it, so every
     // kept result is run again rather than compared against one the old runner wrote
-    let common = json!({"v": 1, "world": cases.world_raw, "vars": cases.vars, "case": case.raw, "norms": norms, "inputs": inputs});
+    let common = json!({"v": 1, "world": world_key(cases, worlds), "vars": cases.vars, "case": case.raw, "norms": norms, "inputs": inputs});
     let old = json!({"common": common, "side": cases.old.raw, "fingerprint": fingerprint(cases, &cases.old, h)?});
     let runs_from = match &case.sources {
         Some(sources) => json!({"sources": hashed(cases, sources, h)?}),

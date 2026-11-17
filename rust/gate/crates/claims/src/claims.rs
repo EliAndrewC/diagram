@@ -197,7 +197,7 @@ fn specs(cmd: &str) -> Option<(Vec<Spec>, &'static [&'static str])> {
             &["--feature"],
         ),
         "accept" => (vec![v("--keys"), v("--trigger")], &["--keys", "--trigger"]),
-        "coverage" => (vec![v("--path")], &[]),
+        "coverage" => (vec![v("--path"), Spec::flag("--rust")], &[]),
         _ => return None,
     })
 }

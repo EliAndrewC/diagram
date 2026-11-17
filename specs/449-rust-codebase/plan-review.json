@@ -450,6 +450,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T169 (the engine pilot's no-brainer process fixes; the GM 2026-11-17, request.md: pre-approved where clearly beneficial and without a downside)": {
+   "sha256": "135b69a381428ed58e66472eccdc168619bf4f7417f12faac999e52eaae0d715",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T169 Approach (checklist part A)": {
+   "sha256": "c6f937613df3f7541b4a597d997bf5e26fcf28d02b655bcae34fe7506502cb95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10490,6 +10502,40 @@
      "why": "In request.md this duty attaches to 'each engine slice', and it is the session's framing of the GM's concern about 'rendering more and more of the maps'. This task lands one piece of step 1's slices, not a slice. Nothing in the block waives the duty, and a slice can publish it at its own close against the pre-slice commit, so nothing is lost by not publishing per piece. Whoever closes the slice still owes it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T169 (the engine pilot's no-brainer process fixes; the GM 2026-11-17, request.md: pre-approved where clearly beneficial and without a downside)",
+    "### T169 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T169-sparse-worlds",
+     "summary": "Incremental, --only and --twice differential runs build sparse checkouts of the paths a case declares (world.checkout, WORKTREE over HEAD); --verify and --all always build whole checkouts, kept apart (.whole.json), so only a whole-world verify can be cited by a plan; a test pins that a too-narrow list passes sparse and differs in verify.",
+     "class": "within",
+     "why": "A process improvement under the GM's 2026-11-17 pre-approval ('obvious process improvements that seem like no-brainers'). The one possible downside, a too-narrow path list reading as agreement, is closed by construction: the report a plan may cite is always a whole-checkout verify, with no sparse result standing in it, and a test fails with that rule removed. Nothing the GM asked is narrowed; FR-002/FR-001c's comparison is still made on whole worlds. Figures carry observed-date and method labels."
+    },
+    {
+     "id": "T169-claims-form-at-static",
+     "summary": "make static runs the claims-form check (claims coverage --rust) over every crate the claims walk reads, refusing a unit with no claim and no module-level claim, and a claim pointer broken in an unchanged file; 0.05-0.06 s.",
+     "class": "within",
+     "why": "Moves a refusal the push already makes to before landing and widens it to pointers an edit breaks in files it did not touch, which are real defects the edit caused and the changed-files push gate would miss; the tree passes it today and it costs a twentieth of a second. It enforces the claims tracking the GM asked to have on Rust units (2026-11-17, T165) and the pilot's no-brainer fixes; no requested behavior is narrowed and no judgment-call downside is introduced."
+    },
+    {
+     "id": "T169-rulings-in-bundle",
+     "summary": "The plan review bundle carries, for each ask:<key> a changed block cites, the arbiter record's date, ruling, why and what verbatim, from the feature's own arbiter log first; a missing key is named.",
+     "class": "within",
+     "why": "Gives the plan reviewer the rulings it must check against without reading the repository; adds information, refuses nothing, narrows nothing. Pre-approved no-brainer from the pilot."
+    },
+    {
+     "id": "T169-test-timer",
+     "summary": "make test-times CRATE=<dir> times each test alone by T99's method; reports only, never refuses.",
+     "class": "within",
+     "why": "Serves FR-008 (each test under a tenth of a second) as a measurement tool, and keeping it non-refusing follows the GM's performance rule that time is never a gate. No downside beyond its build."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18702,6 +18748,38 @@
      "summary": "The block does not publish a before/after page of every pool sheet for this piece.",
      "class": "within",
      "why": "In request.md this duty attaches to 'each engine slice', and it is the session's framing of the GM's concern about 'rendering more and more of the maps'. This task lands one piece of step 1's slices, not a slice. Nothing in the block waives the duty, and a slice can publish it at its own close against the pre-slice commit, so nothing is lost by not publishing per piece. Whoever closes the slice still owes it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T169": {
+   "section_sha256": "2e32a4826114e52f38da735425981a81d94eb9a29d83f6e4cc12c276fbe48cd1",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T169-sparse-worlds",
+     "summary": "Incremental, --only and --twice differential runs build sparse checkouts of the paths a case declares (world.checkout, WORKTREE over HEAD); --verify and --all always build whole checkouts, kept apart (.whole.json), so only a whole-world verify can be cited by a plan; a test pins that a too-narrow list passes sparse and differs in verify.",
+     "class": "within",
+     "why": "A process improvement under the GM's 2026-11-17 pre-approval ('obvious process improvements that seem like no-brainers'). The one possible downside, a too-narrow path list reading as agreement, is closed by construction: the report a plan may cite is always a whole-checkout verify, with no sparse result standing in it, and a test fails with that rule removed. Nothing the GM asked is narrowed; FR-002/FR-001c's comparison is still made on whole worlds. Figures carry observed-date and method labels."
+    },
+    {
+     "id": "T169-claims-form-at-static",
+     "summary": "make static runs the claims-form check (claims coverage --rust) over every crate the claims walk reads, refusing a unit with no claim and no module-level claim, and a claim pointer broken in an unchanged file; 0.05-0.06 s.",
+     "class": "within",
+     "why": "Moves a refusal the push already makes to before landing and widens it to pointers an edit breaks in files it did not touch, which are real defects the edit caused and the changed-files push gate would miss; the tree passes it today and it costs a twentieth of a second. It enforces the claims tracking the GM asked to have on Rust units (2026-11-17, T165) and the pilot's no-brainer fixes; no requested behavior is narrowed and no judgment-call downside is introduced."
+    },
+    {
+     "id": "T169-rulings-in-bundle",
+     "summary": "The plan review bundle carries, for each ask:<key> a changed block cites, the arbiter record's date, ruling, why and what verbatim, from the feature's own arbiter log first; a missing key is named.",
+     "class": "within",
+     "why": "Gives the plan reviewer the rulings it must check against without reading the repository; adds information, refuses nothing, narrows nothing. Pre-approved no-brainer from the pilot."
+    },
+    {
+     "id": "T169-test-timer",
+     "summary": "make test-times CRATE=<dir> times each test alone by T99's method; reports only, never refuses.",
+     "class": "within",
+     "why": "Serves FR-008 (each test under a tenth of a second) as a measurement tool, and keeping it non-refusing follows the GM's performance rule that time is never a gate. No downside beyond its build."
     }
    ],
    "verdict": "CLEAR"

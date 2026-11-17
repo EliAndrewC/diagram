@@ -1,7 +1,8 @@
 //! The run (feature 449 T161): which sides of which cases rerun, the kept results, the report.
 //!
 //! THE STATE DIRECTORY, beside the cases file `<dir>/<stem>.json`, is `<dir>/<stem>.diff-run/`:
-//! - `results/<case id>.old.json`, `results/<case id>.new.json`: each side's kept result and the key it ran under;
+//! - `results/<case id>.old.json`, `results/<case id>.new.json`: each side's kept result and the key it ran under (a whole world's
+//!   `.old.whole.json`, `.new.whole.json` where the file declares a sparse list, feature 449 T169);
 //! - `reports/diff-run-<kind>-<UTC>.json`: one report a run, `<kind>` one of `incremental`, `only`, `twice`, `verify`, `all` - only a
 //!   `--verify` run's path carries `diff-run-verify`, the path `make decide`'s lint asks a plan's differential count to cite;
 //! - `work/old`, `work/new`: a side's world while it runs, removed after.
@@ -15,7 +16,7 @@ use std::time::{Instant, SystemTime, UNIX_EPOCH};
 use l7r_guard::shared::log::civil;
 use serde_json::{json, Value};
 
-use crate::cases::{Case, Cases};
+use crate::cases::{Case, Cases, Worlds};
 use crate::keys::{applying, keys, Hasher};
 use crate::norm::{compare, kept, Kept};
 
@@ -30,6 +31,17 @@ pub struct Opts {
 }
 
 impl Opts {
+    /// The worlds the run builds (feature 449 T169): whole for a `--verify` or `--all` run - the record a plan cites - and wherever no
+    /// sparse path list is declared; sparse for the runs that iterate.
+    #[must_use]
+    pub fn worlds(&self, cases: &Cases) -> Worlds {
+        if self.verify || self.all || !cases.declares_sparse() {
+            Worlds::Whole
+        } else {
+            Worlds::Sparse
+        }
+    }
+
     /// The run's kind, as the report and its path name it.
     #[must_use]
     pub fn kind(&self) -> &'static str {
@@ -77,10 +89,18 @@ pub fn case_id(name: &str) -> String {
     )
 }
 
-fn result_path(state: &Path, case: &Case, which: &str) -> PathBuf {
-    state
+/// A side's kept result: `<case id>.<side>.json`, and `<case id>.<side>.whole.json` for a whole world's where the file declares a sparse
+/// list (feature 449 T169), so a verify's old sides stand from one verify to the next while the sparse runs keep their own.
+fn result_path(cases: &Cases, case: &Case, which: &str, worlds: Worlds) -> PathBuf {
+    let whole = if worlds == Worlds::Whole && cases.declares_sparse() {
+        ".whole"
+    } else {
+        ""
+    };
+    cases
+        .state
         .join("results")
-        .join(format!("{}.{which}.json", case_id(&case.name)))
+        .join(format!("{}.{which}{whole}.json", case_id(&case.name)))
 }
 
 /// The kept result of one side and the key it ran under, if any.
@@ -113,8 +133,14 @@ struct SideRun {
     error: Option<String>,
 }
 
-fn one_side(cases: &Cases, case: &Case, which: &str, key: &str, force: bool) -> SideRun {
-    let path = result_path(&cases.state, case, which);
+fn one_side(
+    cases: &Cases,
+    case: &Case,
+    (which, worlds): (&str, Worlds),
+    key: &str,
+    force: bool,
+) -> SideRun {
+    let path = result_path(cases, case, which, worlds);
     if !force {
         if let Some((was, k)) = load(&path) {
             if was == key {
@@ -126,7 +152,7 @@ fn one_side(cases: &Cases, case: &Case, which: &str, key: &str, force: bool) -> 
             }
         }
     }
-    match fresh(cases, case, which) {
+    match fresh(cases, case, which, worlds) {
         Ok(k) => match save(&path, key, case, &k) {
             Ok(()) => SideRun {
                 kept: Some(k),
@@ -147,14 +173,14 @@ fn one_side(cases: &Cases, case: &Case, which: &str, key: &str, force: bool) -> 
     }
 }
 
-fn fresh(cases: &Cases, case: &Case, which: &str) -> Result<Kept, String> {
+fn fresh(cases: &Cases, case: &Case, which: &str, worlds: Worlds) -> Result<Kept, String> {
     let side = if which == "old" {
         &cases.old
     } else {
         &cases.new
     };
     let world = cases.state.join("work").join(which);
-    let raw = crate::run::side(cases, case, side, which, &world)?;
+    let raw = crate::run::side(cases, case, side, (which, worlds), &world)?;
     Ok(kept(&raw, &applying(cases, case), cases.max_text))
 }
 
@@ -182,11 +208,18 @@ fn one_case(
     (old_key, new_key): &(String, String),
     opts: &Opts,
 ) -> (Value, bool) {
-    let old = one_side(cases, case, "old", old_key, opts.all || opts.twice);
+    let worlds = opts.worlds(cases);
+    let old = one_side(
+        cases,
+        case,
+        ("old", worlds),
+        old_key,
+        opts.all || opts.twice,
+    );
     let mut noise = Vec::new();
     if opts.twice {
         if let Some(first) = &old.kept {
-            match fresh(cases, case, "old") {
+            match fresh(cases, case, "old", worlds) {
                 Ok(second) => noise = compare(first, &second, "old run 1", "old run 2"),
                 Err(e) => noise.push(format!("old side's second run: {e}")),
             }
@@ -195,7 +228,7 @@ fn one_case(
     let new = one_side(
         cases,
         case,
-        "new",
+        ("new", worlds),
         new_key,
         opts.all || opts.verify || opts.only.is_some(),
     );
@@ -278,7 +311,7 @@ pub fn execute(
     let mut h = Hasher::default();
     let all_keys: Vec<(String, String)> = todo
         .iter()
-        .map(|c| keys(cases, c, &mut h))
+        .map(|c| keys(cases, c, &mut h, opts.worlds(cases)))
         .collect::<Result<_, _>>()?;
     let (mut rows, mut all_same) = (Vec::new(), true);
     let mut norms: BTreeMap<String, usize> = BTreeMap::new();
@@ -312,10 +345,15 @@ pub fn execute(
     let wall = (start.elapsed().as_secs_f64() * 10.0).round() / 10.0;
     let kind = opts.kind();
     let path = report_path(&cases.state, kind, &stamp());
+    let worlds = if opts.worlds(cases) == Worlds::Whole {
+        "whole"
+    } else {
+        "sparse"
+    };
     let report = json!({
         "kind": kind, "only": opts.only, "twice": opts.twice, "reason": opts.reason, "cases_file": cases.file.display().to_string(),
         "utc": stamp(), "wall_s": wall, "cases_total": rows.len(), "sides_rerun": rerun, "sides_kept": kept_n,
-        "differing": differing, "normalizations": norms, "cases": rows,
+        "differing": differing, "normalizations": norms, "worlds": worlds, "cases": rows,
     });
     write(
         &path,
@@ -335,8 +373,13 @@ pub fn execute(
             let _ = writeln!(shown, "  {}", text.join("\n  "));
         }
     }
+    let said = match (worlds, opts.verify || opts.all) {
+        ("whole", true) => "whole, world.checkout.sparse ignored - a verify's figures are the record",
+        ("whole", false) => "whole (no sparse path list declared)",
+        _ => "sparse (world.checkout.sparse) - for iterating only; a plan cites a VERIFY=1 report, built on whole worlds",
+    };
     let summary = format!(
-        "{shown}diff-run ({kind}): {} cases, {} differing; sides rerun {rerun}, kept {kept_n}; {wall:.1} s\nnormalizations (cases taking each): {}\nreport: {}\n",
+        "{shown}diff-run ({kind}): {} cases, {} differing; sides rerun {rerun}, kept {kept_n}; {wall:.1} s\nnormalizations (cases taking each): {}\nworlds: {said}\nreport: {}\n",
         rows.len(),
         differing.len(),
         serde_json::to_string(&norms).unwrap_or_default(),

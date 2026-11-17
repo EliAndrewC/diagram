@@ -11,7 +11,7 @@ after a fix reruns only the sides whose key moved.
 make diff-run CASES=<cases file>                      # incremental: only the sides whose key moved or that have no result
 make diff-run CASES=<cases file> ONLY="<case name>"   # one case, its new side rerun
 make diff-run CASES=<cases file> TWICE=1              # the old side run twice: run-to-run noise the normalizations miss
-make diff-run CASES=<cases file> VERIFY=1             # every new side rerun against the kept old sides: the figures a plan cites
+make diff-run CASES=<cases file> VERIFY=1             # every new side rerun on whole worlds: the figures a plan cites
 make diff-run CASES=<cases file> ALL=1 REASON="..."   # every side of every case; the reason goes in the report and the guard log
 ```
 
@@ -29,6 +29,8 @@ declared path that does not exist, a failed build, `--all` without a reason). Ea
 - A declared path that does not exist refuses the run (its hash would never move). A failed setup or a timeout keeps nothing.
 - Both keys carry the runner's result format (`"v"` in `keys.rs`): a runner change that changes what a kept result holds raises it.
 - A declaration can be too narrow, so the figures a plan reports come from `VERIFY=1`, whose report path carries `diff-run-verify`.
+- Where `world.checkout.sparse` is declared, both keys also name the worlds the run builds - sparse or whole (feature 449 T169) - so no
+  side kept from a sparse world stands in a `VERIFY=1` or `ALL=1` run, whose worlds are always whole, nor the reverse.
   `make decide` refuses a sentence stating a differential's case count (`cases` with a figure, beside `differential` or `same outputs`)
   that cites no `diff-run-verify...json` path.
 
@@ -44,7 +46,8 @@ the side's `cmd`. Each process gets the runner's environment less make's own var
 {
   "vars": {"C": "{WORLD}/clone"},
   "world": {
-    "setup": [["python3", "-I", "{ROOT}/setup.py", "{WORLD}", "{REV}"]],
+    "checkout": {"repo": "/diagram/.clones/x", "rev": "{REV}", "into": "clone", "sparse": ["docs", "l7r", "scripts"]},
+    "setup": [["python3", "-I", "{ROOT}/fixtures.py", "{WORLD}"]],
     "cwd": "{C}", "wrap": ["{ROOT}/ns.sh"],
     "files": ["clone/research/archive", "home", "server.log"], "ignore": [".git"],
     "extras": [{"name": "log remote", "cmd": ["git", "-C", "{WORLD}/remote.git", "log", "--format=%s"]},
@@ -73,6 +76,18 @@ the side's `cmd`. Each process gets the runner's environment less make's own var
 }
 ```
 
+- `world.checkout` (feature 449 T169), when given, is made first: `repo` cloned (`--shared`) into `{WORLD}/<into>` at `rev`. `rev`
+  `WORKTREE` is the repository's `HEAD` with its uncommitted changes and untracked, unignored files laid over it (a port's new side before
+  it is committed). `sparse` limits the clone to the named paths - git's cone: each named directory whole, plus the files directly in the
+  root and in each named directory's ancestors - FOR ITERATING ONLY: an incremental, `ONLY=` or `TWICE=1` run builds sparse worlds, and a
+  `VERIFY=1` or `ALL=1` run ALWAYS builds whole ones, the list ignored, its report and summary saying `worlds: whole`. WHY: a list too
+  narrow for what a case reads fails both sides alike, which the comparison reads as agreement - a false pass in the comparison FR-002
+  rests on (T169's plan review) - so the figures a plan cites, a verify's, are never built on a sparse world. The cost is the verify's. On
+  T168's 76 cases: an incremental run on sparse worlds 50.0 s; the first `VERIFY=1` after it 265.6 s, both sides of every case rerun on
+  whole worlds; a second `VERIFY=1` 131.5 s, the old sides kept from the first (observed 2026-11-17, feature 449 T169, `make diff-run` on
+  T168's harness; every whole-world result equal to a whole checkout's by T168's own setup). With a checkout, `setup` may be empty; given,
+  it runs after, over the clone. A `WORKTREE` world's content is keyed only through the new side's `fingerprint` and `sources`, so declare
+  there what the cases exercise.
 - `world.setup` runs into a fresh, empty `{WORLD}` for every case and side (from `root`), so a kept result never depends on which cases ran
   before it; the world is removed after its outputs are read. What a world needs beyond that (a network namespace, a loopback server, a
   bare remote) is the setup script's and `wrap`'s, which the runner runs and, through `inputs`, keys.
@@ -89,8 +104,10 @@ the side's `cmd`. Each process gets the runner's environment less make's own var
 
 ## The state directory
 
-Beside `<dir>/<stem>.json`, `<dir>/<stem>.diff-run/`: `results/<case id>.old.json` and `.new.json` (each side's kept result and its key),
+Beside `<dir>/<stem>.json`, `<dir>/<stem>.diff-run/`: `results/<case id>.old.json` and `.new.json` (each side's kept result and its
+key; a whole world's `.old.whole.json` and `.new.whole.json` where a sparse list is declared),
 `reports/diff-run-<kind>-<UTC>.json` (`incremental`, `only`, `twice`, `verify`, `all`; only a verify run's path carries `diff-run-verify`;
 `--verify` takes no `--only`), and `work/old`, `work/new` while a side runs. The report holds the run's kind, the reason, cases total, sides
-rerun and kept, the differing cases, the normalizations taken, the wall time, and one row a case: its differences, its noise, its errors,
+rerun and kept, the differing cases, the normalizations taken, the worlds (`whole` or `sparse`), the wall time, and one row a case:
+its differences, its noise, its errors,
 and each side's key, whether it reran, and its time.

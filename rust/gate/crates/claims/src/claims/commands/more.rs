@@ -71,6 +71,48 @@ fn the_coverage_and_the_accept() {
     assert!(got.stdout.starts_with("rust/phases/src/bad.rs:2 b: `broken` has no `<label> - <backing>`\nclaims-coverage: 1 problem(s). The form: a claim is one line"));
 }
 
+/// `make static`'s form check (feature 449 T169): a new crate's unit with no claim is named, with the fix, before the landing.
+#[test]
+fn the_rust_form_check_names_a_new_crate_s_unclaimed_unit_and_the_fix() {
+    let root = covered("claims-more-form");
+    let got = claims(&root, &["coverage", "--rust"]);
+    assert_eq!(
+        (got.code, got.stdout.as_str()),
+        (
+            0,
+            "claims-form: every unit of the Rust crates the claims walk reads carries a claim\n"
+        )
+    );
+    put(
+        &root,
+        "rust/mode_x/src/lib.rs",
+        "//! A new engine crate.\n\npub fn f() {}\n",
+    );
+    // a tooling crate is not walked, so its unit owes nothing
+    put(&root, "rust/gate/src/lib.rs", "pub fn g() {}\n");
+    let got = claims(&root, &["coverage", "--rust"]);
+    assert_eq!(got.code, 1);
+    assert!(
+        got.stdout
+            .starts_with("rust/mode_x/src/lib.rs:3 f: no claim - add a `Research:` claim"),
+        "{}",
+        got.stdout
+    );
+    assert!(!got.stdout.contains("rust/gate/"));
+    assert!(got
+        .stdout
+        .contains("claims-form: 1 problem(s) in the Rust crates the claims walk reads"));
+    assert!(got
+        .stdout
+        .contains("`//!     <label> - NONE: <why it decides nothing physical>`"));
+    put(
+        &root,
+        "rust/mode_x/src/lib.rs",
+        "//! A new engine crate.\n//!\n//! Research:\n//!     the crate - NONE: decides nothing physical\n\npub fn f() {}\n",
+    );
+    assert_eq!(claims(&root, &["coverage", "--rust"]).code, 0);
+}
+
 #[test]
 fn an_accept_records_in_step_or_keeps_a_known_drift_and_refuses_what_it_cannot_name() {
     let root = accepting("claims-more-accept");

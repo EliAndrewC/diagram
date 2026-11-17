@@ -311,6 +311,11 @@ fn the_bundle_is_lean_and_shows_each_earlier_verdict() {
     assert!(read(b, "spec-cited.md").contains("FR-002 The well."));
     assert!(read(b, "spec-index.md").contains("FR-003 Unrelated"));
     assert!(read(b, "blocks.md").contains("<!-- block \"the section of T05\" sha256 "));
+    // the rulings the blocks cite ride in their own file, which the MANIFEST names (feature 449 T169)
+    assert!(read(b, "rulings.md").ends_with("(none - the blocks cite no `ask:` ruling)\n"));
+    assert!(
+        read(b, "MANIFEST.md").contains("`rulings.md` the round arbiter's ruling, why and what")
+    );
     let none = build(&dir, &out, "T06", &under(&[("T06", "x")]), &[], "h").unwrap();
     assert!(read(none.parent().unwrap(), "earlier.md").contains("every block here is new"));
 }

@@ -14,7 +14,7 @@ use std::time::{Duration, Instant};
 
 use serde_json::{Map, Value};
 
-use crate::cases::{fill, Case, Cases, From, Side};
+use crate::cases::{fill, Case, Cases, From, Side, Worlds};
 
 /// One step's raw outputs.
 pub struct StepOut {
@@ -315,13 +315,13 @@ pub fn side(
     cases: &Cases,
     case: &Case,
     side: &Side,
-    which: &str,
+    (which, worlds): (&str, Worlds),
     world: &Path,
 ) -> Result<Raw, String> {
     let _ = std::fs::remove_dir_all(world);
     let got = std::fs::create_dir_all(world)
         .map_err(|e| format!("{}: {e}", world.display()))
-        .and_then(|()| in_world(cases, case, side, which, world));
+        .and_then(|()| in_world(cases, case, side, (which, worlds), world));
     let _ = std::fs::remove_dir_all(world);
     got
 }
@@ -330,12 +330,16 @@ fn in_world(
     cases: &Cases,
     case: &Case,
     side: &Side,
-    which: &str,
+    (which, worlds): (&str, Worlds),
     world: &Path,
 ) -> Result<Raw, String> {
     let vars = vars(cases, side, which, world);
     let env = env(cases, side, Some(case), &vars);
     let timeout = seconds(cases.timeout_s);
+    // the runner's checkout first (feature 449 T169), so the setup's fixtures are laid over it
+    if let Some(co) = &cases.checkout {
+        crate::checkout::make(co, (&cases.root, world), &vars, (&env, timeout, worlds))?;
+    }
     for argv in &cases.setup {
         let argv: Vec<String> = argv.iter().map(|a| fill(a, &vars)).collect();
         let out = command(&argv, &cases.root, &env, timeout)?;
