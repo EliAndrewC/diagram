@@ -21,7 +21,7 @@ change, so long as the changes don't violate our research findings". So:
 
 FR-002 already says so ("maps MAY change where a check or a research claim allows it", the GM 2026-10-18); what binds bytes is
 `ask:449-phase4-slices`'s paragraph in the spec ("FR-002 binding what is written (SVG bytes, check verdicts)", a written difference
-from GEOS a new ask, the `resvg` binary kept if they differ). Its geo and resvg clauses are amended to the GM's rule before S7.
+from GEOS a new ask, the `resvg` binary kept if they differ). Its geo and resvg clauses are amended to the GM's rule (`ask:449-engine-order`, recorded in the spec's paragraph in this plan's commit).
 
 ## The order, changed so the checks come first
 
@@ -35,8 +35,23 @@ The slices as filed run the generator's parts (S8 labels, S9a model) before the 
 | 4 | S12 (T157) | the pipeline: gencache, regen, pool_index, render_cache (1,764 lines) | the pool rebuilt from nothing, every sheet passing |
 | 5 | S13 (T158) | the claims tools' Python half, codeid, dead_closure, bundle_door, ruff and the requirements (2,443 lines) | both censuses empty; the feature closes |
 
-The new order, and landing S8, S9a and S11 together and wired, change the order and the no-caller rule the round arbiter set in
-`ask:449-phase4-slices`, so both go to the arbiter (`make arbiter-ask`) before S7.
+The new order and the combined, wired landing of S8, S9a and S11 were ruled by the round arbiter (`ask:449-engine-order`, continue,
+2026-11-17) on six conditions: the GM reads this plan before step 1; the audit's imports settled before step 1 (below); one wired
+implementation, the Python audit code the generators still import held in lockstep with its Rust until step 3; every step a
+wired landing with its full review; step 3's split named (below); and the spec's paragraph amended in this commit.
+
+**The audit's imports (the ruling's condition 2).** `pack_audit`, `notes_census`, `size_table` and `building_programs` import from
+the engine: `buildings.types` (the building types: `BuildingType`, `RequiredItem`, `classification`, `load_types`, `by_tier`,
+`tiers`), `compound_model` (`NOTICE_BOARD_MAX_FT`, `TUB_DOOR_MAX_FT`, `TUB_MAX_GAP_FT`, `KINDS`), `compound_parts` (`board_by_a_gate`,
+`tub_by_its_door`, `tub_by_its_eaves`), `interactive.sheet` (`element_kinds`, `DEFS`, `Node`, `parse` - the drawn sheet's reading)
+and `labels.hand_sheet.start_tags` (observed 2026-11-17, method: each module's imports read). Each comes into step 1 as Rust whose
+verdicts are held exactly - the types and constants as data, the three predicates and the sheet's parse as functions - and the
+Python copies stay for the generators under the lockstep rule until step 3 deletes them.
+
+**Step 3's two landings (the ruling's condition 5).** The six generators are thin (43 to 105 lines each, observed 2026-11-17, method:
+`wc -l`), their logic in the shared compound code, so step 3 splits by building type: 3a the Rust sheet driver, the Mode A model and
+the labels drawing the country shrine (`hoshigaoka-shrine`); 3b the five magistracies and pytest's exit. Each passes every ported
+check and every carried claim IN-STEP on the sheets it draws and publishes its side-by-side page.
 
 Why the audit first: once its verdicts are proven identical on today's sheets, every later sheet change is judged by checks we
 already trust, in Rust, rather than by the code being changed. Why labels, model and generator together: their in-between values
@@ -59,7 +74,7 @@ the rule does not ask. The work stays in two landings so a review never covers t
 
 ## The GM's part
 
-1. Read this before S7; anything to change goes into it first.
+1. Read this before step 1 (the audit); anything to change goes into it first.
 2. One page per slice with every pool sheet before and after.
 3. Every visible change shows on that slice's before-and-after page, where how it looks is the GM's call; a sheet that fails a check
    or a research claim is fixed before its slice lands.
