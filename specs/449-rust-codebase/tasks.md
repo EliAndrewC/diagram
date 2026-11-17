@@ -56,6 +56,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T171 The notes census's entrance-board line and its freshness test (constitution XIV; found by T170): since feature 444 cut the tool's entrance-board branch, an entrance-seated notice board's census line reads a 250-ft farmhouse count, which feature 261 does not judge a board by - fix the line (the ways-out count ported onto the manifest, or the line left out for an entrance seat, the easier route named); restore the freshness test feature 444 dropped on a wrong label (feature 193 kept notes-census for it); regenerate the four hamlets' notes
       research: rendering
+- [ ] T172 The claims walk's Rust items read raw strings (constitution XIV; found by T170's claims round): the splitter's item end takes a raw string literal's inner quote for its close, so a static after one is swallowed into the unit before it and gets no key of its own - raw and byte-raw literals read to their own close, the units the fix reshapes re-checked
+      research: rendering
 - [x] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -296,6 +296,13 @@ fn item_end(text: &[char], start: usize) -> usize {
             at = find(at + 2, &['*', '/']).map_or(len, |k| k + 2);
             continue;
         }
+        // A raw literal (`r"..."`, `r#"..."#`, `br#"..."#`) ends at a quote followed by its own hashes, and a backslash inside
+        // escapes nothing: read as a plain string, its first inner quote closed it and the unit ran on past the next items,
+        // which then had no key (feature 449 T172, found by T170's claims round).
+        if let Some(close) = raw_literal_end(text, at) {
+            at = close;
+            continue;
+        }
         if ch == '"' {
             let mut k = at + 1;
             while k < len && text[k] != '"' {
@@ -324,6 +331,43 @@ fn item_end(text: &[char], start: usize) -> usize {
         at += 1;
     }
     len
+}
+
+/// Past the raw string literal opening at char `at` (`r`, or `br`, then hashes and a quote), or None where none opens there - an
+/// `r` ending an identifier (`for"` cannot occur, but `bar#` style tokens must not read as one) opens nothing.
+fn raw_literal_end(text: &[char], at: usize) -> Option<usize> {
+    let ident = |c: char| c.is_alphanumeric() || c == '_';
+    if at > 0 && ident(text[at - 1]) {
+        return None;
+    }
+    let mut k = at;
+    if text.get(k) == Some(&'b') {
+        k += 1;
+    }
+    if text.get(k) != Some(&'r') {
+        return None;
+    }
+    k += 1;
+    let hashes = text[k..].iter().take_while(|&&c| c == '#').count();
+    k += hashes;
+    if text.get(k) != Some(&'"') {
+        return None;
+    }
+    let mut j = k + 1;
+    while j < text.len() {
+        if text[j] == '"'
+            && text[j + 1..]
+                .iter()
+                .take(hashes)
+                .filter(|&&c| c == '#')
+                .count()
+                == hashes
+        {
+            return Some(j + 1 + hashes);
+        }
+        j += 1;
+    }
+    Some(text.len())
 }
 
 /// One Rust item: (qualname, kind, first line, last line, doc, item text).

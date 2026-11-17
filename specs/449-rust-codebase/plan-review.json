@@ -474,6 +474,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T172 (T170's claims round: units of rust/mode_a ran past the statics after a raw string)": {
+   "sha256": "050b6a6efe428ecadc1529b6963108b4a67ab4ca1b1243a4f026593905a35d5a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T172 Approach (checklist part A)": {
+   "sha256": "698030d1a1ef540c8c62f05716cc588e49f91229cf92f5ad19411c45337fb484",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10618,6 +10630,40 @@
      "why": "This matches the GM's 'stop after those first two' and the arbiter route."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T172 (T170's claims round: units of rust/mode_a ran past the statics after a raw string)",
+    "### T172 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T172-fix",
+     "summary": "Fix the claims walk's Rust item splitter (units.rs item_end) to read raw string literals (r\"..\", r#\"..\"#, br#\"..\"#) to their own close, so a unit after a raw pattern is no longer swallowed by the unit before it.",
+     "class": "within",
+     "why": "A defect in the claims tooling that surfaced in T170's claims round on the second engine piece. The GM, 2026-11-17 (request.md): 'you can also make any no-brainer fixes and improvements which shake out of that while I'm gone ... if there are real tradeoffs then you should wait for me'. The fix has no tradeoff beyond review work: it only adds keys and narrows spans to the item. It also serves the GM's 2026-11-17 request that claims be tracked on the Rust code ('otherwise well be porting code without being able to track the claims in the new Rust'). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T172-test",
+     "summary": "A claims-crate test covering statics after a raw literal with inner quotes, a byte raw literal with fewer inner hashes, a raw literal ending in a backslash, a raw identifier and an unclosed raw literal; shown red without the fix and green with it.",
+     "class": "within",
+     "why": "Enforcement of the fix itself: with the fix removed, the test has nothing left to check."
+    },
+    {
+     "id": "T172-round-scope",
+     "summary": "The fix's claims round runs in this task as one impl-drift bundle: 32 new claims and 18 reshaped claims in T170's rust/mode_a files, owed in full. Nothing landed earlier is re-judged, because make claims-owed shows that no other crate's unit moved.",
+     "class": "within",
+     "why": "Not a carve-out. The scope is what the measured owed set holds (one-shot label: observed 2026-11-17, method make claims-owed / make claims-triage), and every reshaped unit's claims are owed in full rather than exempted. A claim re-judged outside that set would have no moved unit to judge."
+    },
+    {
+     "id": "T172-exits",
+     "summary": "Order after T170, a budget of one landing, done when the owed claims are recorded IN-STEP or fixed, red exits recorded or ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The standard landing procedure for a claims round. It narrows nothing that was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18930,6 +18976,38 @@
      "summary": "Exits: green checks and a gated make land. On red, the failure is recorded and the task set down, and a cannot-be-done claim goes to make arbiter-ask. Ordered after T169 as the pilot's last piece.",
      "class": "within",
      "why": "This matches the GM's 'stop after those first two' and the arbiter route."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T172": {
+   "section_sha256": "25580e2405d6b8b5bedd3ce093f0043161515084661c7d0523ee939a719fccb5",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T172-fix",
+     "summary": "Fix the claims walk's Rust item splitter (units.rs item_end) to read raw string literals (r\"..\", r#\"..\"#, br#\"..\"#) to their own close, so a unit after a raw pattern is no longer swallowed by the unit before it.",
+     "class": "within",
+     "why": "A defect in the claims tooling that surfaced in T170's claims round on the second engine piece. The GM, 2026-11-17 (request.md): 'you can also make any no-brainer fixes and improvements which shake out of that while I'm gone ... if there are real tradeoffs then you should wait for me'. The fix has no tradeoff beyond review work: it only adds keys and narrows spans to the item. It also serves the GM's 2026-11-17 request that claims be tracked on the Rust code ('otherwise well be porting code without being able to track the claims in the new Rust'). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T172-test",
+     "summary": "A claims-crate test covering statics after a raw literal with inner quotes, a byte raw literal with fewer inner hashes, a raw literal ending in a backslash, a raw identifier and an unclosed raw literal; shown red without the fix and green with it.",
+     "class": "within",
+     "why": "Enforcement of the fix itself: with the fix removed, the test has nothing left to check."
+    },
+    {
+     "id": "T172-round-scope",
+     "summary": "The fix's claims round runs in this task as one impl-drift bundle: 32 new claims and 18 reshaped claims in T170's rust/mode_a files, owed in full. Nothing landed earlier is re-judged, because make claims-owed shows that no other crate's unit moved.",
+     "class": "within",
+     "why": "Not a carve-out. The scope is what the measured owed set holds (one-shot label: observed 2026-11-17, method make claims-owed / make claims-triage), and every reshaped unit's claims are owed in full rather than exempted. A claim re-judged outside that set would have no moved unit to judge."
+    },
+    {
+     "id": "T172-exits",
+     "summary": "Order after T170, a budget of one landing, done when the owed claims are recorded IN-STEP or fixed, red exits recorded or ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The standard landing procedure for a claims round. It narrows nothing that was asked."
     }
    ],
    "verdict": "CLEAR"

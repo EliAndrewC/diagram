@@ -197,3 +197,23 @@ fn a_statement_between_a_doc_and_its_item_ends_the_doc() {
     let got = items("/// a doc\nuse x;\nfn a() {}\n", 0, "", false);
     assert_eq!(got[0].4, "");
 }
+
+/// A raw literal's inner quotes and backslashes do not end it, so the statics after one keep their own units (feature 449 T172:
+/// read as a plain string, `r#"\sid="..."#`'s first inner quote closed it and the next statics ran into its unit).
+#[test]
+fn a_raw_string_ends_at_its_own_close() {
+    let text = "static A: &str = r#\"\\sid=\"([^\"]+)\"\"#;\nstatic B: &[u8] = br##\"a\"# \"##;\nstatic C: &str = r\"\\\";\nstatic D: u8 = 1;\nfn r#type() {}\nstatic E: &str = r#\"open";
+    let names: Vec<(String, usize, usize)> = items(text, 0, "", false)
+        .into_iter()
+        .map(|(q, _, f, l, _, _)| (q, f, l))
+        .collect();
+    let want = [
+        ("A", 1, 1),
+        ("B", 2, 2),
+        ("C", 3, 3),
+        ("D", 4, 4),
+        ("r", 5, 5),
+        ("E", 6, 6),
+    ];
+    assert_eq!(names, want.map(|(q, f, l)| (q.to_owned(), f, l)).to_vec());
+}
