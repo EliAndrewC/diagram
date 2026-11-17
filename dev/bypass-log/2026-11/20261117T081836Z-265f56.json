@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-17T08:18:36Z",
+  "target": "plan-gate push",
+  "commit": "0151cc335",
+  "why": "the changed plan blocks are task sections the tick archived to plan-done.md after their CLEAR task reviews (T138, T148, T161, T162 and the rest), and the open slices' empty templates; this push adds only engine-plan.md and request.md"
+}
