@@ -47,6 +47,24 @@ use crate::Reply;
 /// How long the landing waits for the claims round after its gate, asking every `CLAIMS_POLL_S` (405 T50, D23).
 const CLAIMS_WAIT_S: f64 = 1200.0;
 const CLAIMS_POLL_S: f64 = 15.0;
+
+/// The time and a sleep, as the claims wait reads them ([`Land`]'s `clock`).
+pub(crate) trait Clock {
+    fn now(&self) -> std::time::Instant;
+    fn sleep(&self, d: Duration);
+}
+
+/// The real clock.
+struct RealClock;
+
+impl Clock for RealClock {
+    fn now(&self) -> std::time::Instant {
+        std::time::Instant::now()
+    }
+    fn sleep(&self, d: Duration) {
+        std::thread::sleep(d);
+    }
+}
 /// `sync-with-main.sh done`'s exit when it PUSHED but the pull merged other sessions' edits into the files the push touched.
 const MERGED: i32 = 3;
 /// The name a run is recorded under in the usage log (`usage_log.exited("land", ...)` in `land.py`; feature 406), which
@@ -73,6 +91,10 @@ pub struct Land {
     /// The claims wait's bound and its poll.
     claims_wait: Duration,
     claims_poll: Duration,
+    /// The claims wait's clock: the time now, and a poll's sleep. Real but in a test of the wait running out, whose clock moves only when
+    /// it sleeps (feature 449 T160: its bound was a real 400 ms, which a busy host's first round outran - three of 17 runs at a load of
+    /// 28-37 failed before the wait had said it was waiting).
+    clock: std::rc::Rc<dyn Clock>,
     /// Where the container's memory is read (`/sys/fs/cgroup`, `~/.claude/memwatch`), and `/proc/meminfo`.
     cgroup: PathBuf,
     memwatch: PathBuf,
@@ -105,6 +127,7 @@ impl Land {
             said: None,
             claims_wait: Duration::from_secs_f64(CLAIMS_WAIT_S),
             claims_poll: Duration::from_secs_f64(CLAIMS_POLL_S),
+            clock: std::rc::Rc::new(RealClock),
             cgroup: PathBuf::from("/sys/fs/cgroup"),
             memwatch: PathBuf::from(std::env::var("HOME").unwrap_or_default())
                 .join(".claude/memwatch"),

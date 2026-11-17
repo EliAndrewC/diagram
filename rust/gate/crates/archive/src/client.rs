@@ -36,9 +36,21 @@ pub fn netloc(url: &str) -> String {
 }
 
 /// The per-host gap: how long to wait before asking `host` again.
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Polite {
     last: HashMap<String, Instant>,
+    /// The gap, `HOST_GAP`; a field as `Process::retry_wait` is, so a test of the spacing waits milliseconds where the archive waits a
+    /// second (feature 449 T160: the client's test waited out seven one-second gaps, 6.1 s, against FR-008's tenth of a second).
+    pub gap: Duration,
+}
+
+impl Default for Polite {
+    fn default() -> Self {
+        Self {
+            last: HashMap::new(),
+            gap: HOST_GAP,
+        }
+    }
 }
 
 impl Polite {
@@ -46,7 +58,7 @@ impl Polite {
     pub fn wait(&mut self, url: &str) {
         let host = netloc(url);
         if let Some(at) = self.last.get(&host) {
-            let left = HOST_GAP.saturating_sub(at.elapsed());
+            let left = self.gap.saturating_sub(at.elapsed());
             if !left.is_zero() {
                 std::thread::sleep(left);
             }

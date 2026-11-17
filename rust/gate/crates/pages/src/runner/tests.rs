@@ -16,9 +16,10 @@ pub(super) fn put(path: &Path, text: &str) {
 }
 
 pub(super) fn executable(path: &Path, text: &str) {
-    use std::os::unix::fs::PermissionsExt as _;
-    put(path, text);
-    std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o755)).unwrap();
+    // written by `install` (`core::write_executable`), never this process: a file it wrote itself can be "Text file busy" when run
+    // while another test thread's fork holds it open (feature 449 T160)
+    put(path, "");
+    l7r_gate_core::write_executable(path, text);
 }
 
 /// A clone `<mirror>/.clones/me` with the two prompt files, its record holding questions 0001-0003 (no real pointer: a scratch record).

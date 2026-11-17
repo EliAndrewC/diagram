@@ -410,43 +410,106 @@ pub(super) fn comment_lints(root: &Path, ids: &BTreeMap<String, String>) -> bool
 
 /// COMMENT-INSENSITIVE KEYS (feature 449 T112; the GM 2026-11-11): each Rust file's code id, its text without its plain comments
 /// (`code::code_text`), so a comment-only edit moves no lint, test or coverage key - a one-line comment in core had re-run all 17 gate
-/// crates' checks, 29 s of `make static` no verdict depended on (2026-11-11). Read from the work tree once a run.
+/// crates' checks, 29 s of `make static` no verdict depended on (2026-11-11). Read from the work tree once a run; a run keeps them by
+/// content (`code_ids_kept`), this the tests' form with nothing kept.
+#[cfg(test)]
 pub(super) fn code_ids(
     root: &Path,
     ids: &BTreeMap<String, String>,
 ) -> (BTreeMap<String, String>, BTreeMap<String, String>, Includes) {
-    let texts: Vec<(&String, String)> = ids
+    code_ids_kept(root, ids, None)
+}
+
+/// One Rust file's views: its code id, its interface id and the files it compiles in.
+type Views3 = (String, String, Vec<String>);
+
+/// THE VIEWS KEPT BY CONTENT (feature 449 T160): `code_ids` read and hashed all 1,000 tracked Rust files, 10 MB, on every `l7r-rust`
+/// call - 0.63-0.69 s of the 0.72-0.78 s each check spent before it ran anything, six calls a `make done` (observed 2026-11-17, a timer
+/// around each step, reverted). A file's views are a function of its path and its content, which its blob id names, so they are kept in
+/// `cache` under `<path> <blob id>` and a run reads only the files whose content moved. The cache is this binary's alone - its first line
+/// names the binary by size and time - so a change to how a view is read starts it again; it holds only the tree's current files, and is
+/// replaced whole by a rename, so two checks running at once each leave a whole one.
+pub(super) fn code_ids_kept(
+    root: &Path,
+    ids: &BTreeMap<String, String>,
+    cache: Option<&Path>,
+) -> (BTreeMap<String, String>, BTreeMap<String, String>, Includes) {
+    let stamp = this_binary();
+    let kept: BTreeMap<String, Views3> = cache
+        .and_then(|c| std::fs::read_to_string(c).ok())
+        .filter(|text| text.lines().next() == Some(stamp.as_str()))
+        .map(|text| text.lines().skip(1).filter_map(views_line).collect())
+        .unwrap_or_default();
+    let mut now: BTreeMap<String, Views3> = BTreeMap::new();
+    let (mut code, mut interface, mut includes) =
+        (BTreeMap::new(), BTreeMap::new(), Includes::new());
+    for (p, id) in ids
         .iter()
         .filter(|(p, id)| !id.is_empty() && crate::checks::has_ext(p, "rs"))
-        .filter_map(|(p, _)| Some((p, std::fs::read_to_string(root.join(p)).ok()?)))
-        .collect();
-    let view = |tag: &str, of: fn(&str) -> String| -> BTreeMap<String, String> {
-        texts
+    {
+        let at = format!("{p} {id}");
+        let views = kept.get(&at).cloned().or_else(|| {
+            let t = std::fs::read_to_string(root.join(p)).ok()?;
+            Some((
+                format!("code:{}", sha256::hex(code::code_text(&t).as_bytes())),
+                format!(
+                    "interface:{}",
+                    sha256::hex(code::interface_text(&t).as_bytes())
+                ),
+                included(p, &t),
+            ))
+        });
+        let Some(views) = views else { continue };
+        code.insert(p.clone(), views.0.clone());
+        interface.insert(p.clone(), views.1.clone());
+        if !views.2.is_empty() {
+            includes.insert(p.clone(), views.2.clone());
+        }
+        now.insert(at, views);
+    }
+    if let Some(c) = cache.filter(|_| now != kept) {
+        let body: String = now
             .iter()
-            .map(|(p, t)| {
-                (
-                    (*p).clone(),
-                    format!("{tag}:{}", sha256::hex(of(t).as_bytes())),
-                )
-            })
-            .collect()
-    };
-    let includes = texts
-        .iter()
-        .map(|(p, t)| ((*p).clone(), included(p, t)))
-        .filter(|(_, i)| !i.is_empty())
-        .collect();
-    (
-        view("code", code::code_text),
-        view("interface", code::interface_text),
-        includes,
-    )
+            .map(|(at, (c, i, inc))| format!("{at}\t{c}\t{i}\t{}\n", inc.join("\t")))
+            .collect();
+        let tmp = c.with_extension(format!("{}.tmp", std::process::id()));
+        let _ = std::fs::create_dir_all(c.parent().unwrap_or(Path::new(".")));
+        if std::fs::write(&tmp, format!("{stamp}\n{body}")).is_ok() {
+            let _ = std::fs::rename(&tmp, c);
+        }
+    }
+    (code, interface, includes)
+}
+
+/// A kept line, `<path> <blob id>\t<code id>\t<interface id>[\t<included>...]`.
+fn views_line(line: &str) -> Option<(String, Views3)> {
+    let mut parts = line.split('\t');
+    let at = parts.next()?.to_owned();
+    let code = parts.next()?.to_owned();
+    let interface = parts.next()?.to_owned();
+    let inc: Vec<String> = parts.filter(|s| !s.is_empty()).map(str::to_owned).collect();
+    Some((at, (code, interface, inc)))
+}
+
+/// This binary, named by its size and modification time: a rebuild of the checks (a change to how a view is read) is another binary.
+fn this_binary() -> String {
+    let meta = std::env::current_exe().and_then(std::fs::metadata);
+    let (len, when) = meta.map_or((0, 0), |m| {
+        let when = m
+            .modified()
+            .ok()
+            .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
+            .map_or(0, |d| d.as_nanos());
+        (m.len(), when)
+    });
+    format!("l7r-rust views {len} {when}")
 }
 
 /// The second key, asked only when the first moved (feature 449 T93): the crate's compiled test binaries and what its tests read at run
 /// time - every input but its Rust sources, which the binaries are, and all of what it declares. An edit that leaves the binaries as they
 /// were (a dependency's code the tests never reach) runs nothing, and the counting build shares the plain one's result where the
-/// binaries are the same, as for every crate with no feature of its own.
+/// binaries are the same, as for every crate with no feature of its own. The binaries come back too, in the order `cargo test` runs
+/// them, so a run that is owed runs them without asking cargo again (feature 449 T160, `side.rs`).
 fn binary_key(
     world: &World,
     cmd: &str,
@@ -454,13 +517,14 @@ fn binary_key(
     all: &[PathBuf],
     ids: &BTreeMap<String, String>,
     compiler: &str,
-) -> Option<String> {
+) -> Option<(String, Vec<String>)> {
     let mut args = vec!["test", "--no-run", "--message-format=json", "--quiet"];
     if cmd == "test-counters" {
         args.push("--all-features");
     }
     let built = cargo(world, &args, manifest, &[]);
     let exes = executables(&built.stdout);
+    let order = test_targets(&built.stdout);
     if built.code != 0 || exes.is_empty() {
         return None;
     }
@@ -474,12 +538,47 @@ fn binary_key(
             hash.extend(format!("{path} {id}\n").into_bytes());
         }
     }
-    Some(sha256::hex(&hash))
+    Some((sha256::hex(&hash), order))
 }
 
 /// Does `path` lie under a declared read (`"."` the whole tree)?
 fn under(path: &str, read: &str) -> bool {
     read == "." || path.starts_with(read)
+}
+
+/// The test binaries a `--message-format=json` build names, in the order `cargo test` runs them: the library's unit tests, then each
+/// binary's, then each integration test's, each kind by its target's name (feature 449 T160).
+pub(super) fn test_targets(stdout: &str) -> Vec<String> {
+    let mut found: Vec<(usize, String, String)> = stdout
+        .lines()
+        .filter(|l| l.starts_with('{'))
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        // a test build's artifacts only: with an integration test, cargo's build names a binary target's plain executable too
+        .filter(|v| v["profile"]["test"] != Value::Bool(false))
+        .filter_map(|v| {
+            let exe = v["executable"].as_str()?.to_owned();
+            let kind = v["target"]["kind"][0].as_str().unwrap_or_default();
+            let rank = ["lib", "bin", "test"]
+                .iter()
+                .position(|k| *k == kind)
+                .unwrap_or(3);
+            Some((
+                rank,
+                v["target"]["name"].as_str().unwrap_or_default().to_owned(),
+                exe,
+            ))
+        })
+        .collect();
+    found.sort();
+    found.dedup_by(|a, b| a.2 == b.2);
+    found.into_iter().map(|(_, _, exe)| exe).collect()
+}
+
+/// Does the crate's library hold a doctest - a doc comment's code block, which `cargo test` runs and no test binary holds (T160)? Read
+/// as `unit_tests_only` reads one: any fence counts, a `text` one too, so a doctest is never missed.
+pub(super) fn has_doctests(manifest: &Path) -> bool {
+    let src = manifest.parent().unwrap_or(Path::new(".")).join("src");
+    src.join("lib.rs").is_file() && DOC_FENCE.is_match(&rust_text(&src)).unwrap_or(true)
 }
 
 /// The executables a `--message-format=json` build names.
@@ -569,7 +668,7 @@ pub(super) struct Kept {
 }
 
 impl Kept {
-    pub(super) fn read(world: &World, reads: Reads, found: &[PathBuf]) -> Self {
+    pub(super) fn read(world: &World, cmd: &str, reads: Reads, found: &[PathBuf]) -> Self {
         let mut all = crates(&world.root, &[]);
         all.extend(
             found
@@ -579,7 +678,14 @@ impl Kept {
                 .collect::<Vec<_>>(),
         );
         let ids = content_ids(&world.root);
-        let (code, interface, includes) = code_ids(&world.root, &ids);
+        // only the checks a comment cannot change read the views (`BY_CODE`): a format or dead key reads the whole text (T160)
+        let (code, interface, includes) = if BY_CODE.contains(&cmd) {
+            let git = crate::plan::git_line(&world.root, &["rev-parse", "--absolute-git-dir"]);
+            let cache = (!git.is_empty()).then(|| Path::new(&git).join("rust-checks/code-views"));
+            code_ids_kept(&world.root, &ids, cache.as_deref())
+        } else {
+            (BTreeMap::new(), BTreeMap::new(), Includes::new())
+        };
         Kept {
             reads,
             comment_lints: comment_lints(&world.root, &ids),
@@ -606,6 +712,8 @@ pub(super) struct Verdict {
     binary: Option<String>,
     passed_at: Option<PathBuf>,
     passed: Vec<String>,
+    /// The test binaries the binary key's build named, in `cargo test`'s order: none unless that build ran and named some (T160).
+    pub(super) exes: Vec<String>,
 }
 
 impl Verdict {
@@ -639,6 +747,7 @@ impl Verdict {
             binary: None,
             passed_at: None,
             passed: Vec::new(),
+            exes: Vec::new(),
         };
         if world.no_reuse || verdict.key.is_none() {
             return (verdict, false);
@@ -647,8 +756,12 @@ impl Verdict {
             return (verdict, true);
         }
         if cmd.starts_with("test") {
-            verdict.binary =
-                k.and_then(|k| binary_key(world, cmd, manifest, &k.all, &k.ids, &k.compiler));
+            if let Some((binary, exes)) =
+                k.and_then(|k| binary_key(world, cmd, manifest, &k.all, &k.ids, &k.compiler))
+            {
+                verdict.binary = Some(binary);
+                verdict.exes = exes;
+            }
             verdict.passed_at = kept_path(&world.root, "binary", manifest);
             verdict.passed = kept_lines(verdict.passed_at.as_deref());
             if verdict

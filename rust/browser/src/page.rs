@@ -258,7 +258,10 @@ impl Browser {
                     wait.as_millis()
                 ));
             }
-            std::thread::sleep(Duration::from_millis(100));
+            // every 100 ms, never past the deadline: a short wait ends at its time (feature 449 T160)
+            std::thread::sleep(
+                Duration::from_millis(100).min(deadline.saturating_duration_since(Instant::now())),
+            );
         }
     }
 

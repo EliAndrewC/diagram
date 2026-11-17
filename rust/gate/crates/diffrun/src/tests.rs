@@ -431,13 +431,11 @@ fn every_output_is_compared_and_each_normalization_taken_is_listed() {
 #[test]
 fn a_side_that_fails_to_run_is_reported_and_kept_nowhere() {
     let fx = Fx::new();
-    let mut v = Fx::base(&json!([
+    let v = Fx::base(&json!([
         {"name": "setup fails", "steps": [["{CMD}", "hello", "a"]], "env": {"FAILSETUP": "1"}},
         {"name": "cannot start", "steps": [["/no/such/program"]]},
-        {"name": "killed", "steps": [["sh", "-c", "kill -9 $$"]]},
-        {"name": "slow", "steps": [["sleep", "5"]]}
+        {"name": "killed", "steps": [["sh", "-c", "kill -9 $$"]]}
     ]));
-    v["world"]["timeout_s"] = json!(1);
     let (r, rep) = fx.run(&v, &[]);
     assert_eq!(r.code, 1);
     let errors = |i: usize| {
@@ -450,12 +448,27 @@ fn a_side_that_fails_to_run_is_reported_and_kept_nowhere() {
     assert!(errors(1).contains("/no/such/program: cannot start"));
     // a signal's death is an exit, compared: 128 + 9
     assert_eq!(rep["cases"][2]["same"], true);
-    assert!(errors(3).contains("sleep 5: timed out after 1 s"));
     assert!(r.stdout.contains("FAIL old       -"), "{}", r.stdout);
     // nothing failed was kept: the next run runs it again
     let (_, rep) = fx.run(&v, &[]);
     assert_eq!(reruns(&rep)[0], ("setup fails".to_owned(), true, true));
     assert_eq!(reruns(&rep)[2], ("killed".to_owned(), false, false));
+}
+
+/// Split from the test above (feature 449 T160): the timeout alone, the one case that waits, run once, in the test build's seconds
+/// (`run::SECOND`); the case it shared a run with took 4.3 s for its four waits of a second.
+#[test]
+fn a_side_that_outruns_its_timeout_is_stopped_and_named() {
+    let fx = Fx::new();
+    let mut v = Fx::base(&json!([{"name": "slow", "steps": [["sleep", "5"]]}]));
+    v["world"]["timeout_s"] = json!(3);
+    // the one setup the case needs, its `sh -c` the only other command under the short timeout: at two of the test build's seconds a
+    // setup outran it once under a load of other tests (2026-11-17)
+    v["world"]["setup"] = json!([v["world"]["setup"][0].clone()]);
+    let (r, rep) = fx.run(&v, &[]);
+    assert_eq!(r.code, 1);
+    let said = rep["cases"][0]["errors"][0].as_str().unwrap_or_default();
+    assert!(said.contains("sleep 5: timed out after 3 s"), "{said}");
 }
 
 #[test]

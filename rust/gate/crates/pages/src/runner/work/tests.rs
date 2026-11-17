@@ -19,7 +19,11 @@ echo "$L7R_PAGE_SESSION|${L7R_KEY_CAP:-}|${L7R_FEATURE_DIRECTORY:-}|$L7R_DISPATC
 if [ -f "$STUB/stall" ]; then
   rm -rf "$STUB/proc"; mkdir -p "$STUB/proc/$$"
   printf 'claude\0--session-id\0%s\0' "$L7R_PAGE_SESSION" > "$STUB/proc/$$/cmdline"
-  exec sleep 30
+  # its process entry goes when it does, as a real /proc's would: a stalled session's entry outlived it, so the watch of the next one
+  # found the dead pid before the next stub had written its own, ended nothing, and that session slept its 30 s out to rc=0 - the
+  # test's failure under load (feature 449 T160, observed 2026-11-17); the TERM is raised again so the session still ends by it
+  trap 'rm -rf "$STUB/proc/$$"; kill $! 2>/dev/null; trap - TERM; kill -TERM $$' TERM
+  sleep 30 & wait $!
 fi
 if [ -f "$STUB/fail-always" ]; then echo '{"is_error": true}'; exit 0; fi
 case "$*" in *continue.md*) if [ -f "$STUB/fail-once" ]; then rm "$STUB/fail-once"; echo 'limit reached' >&2; exit 1; fi;; esac
@@ -271,9 +275,9 @@ fn a_raise_ends_the_queue_without_all_done() {
     put(&root.join("plain.sh"), "#!/bin/sh\n");
     assert!(work(&run, then(&format!("{}/plain.sh", w.root)), &at).is_err());
     executable(&root.join("bytes.sh"), "#!/bin/sh\nprintf '\\377\\n'\n");
-    assert!(work(&run, then(&format!("{}/bytes.sh", w.root)), &at)
-        .unwrap_err()
-        .starts_with("UnicodeDecodeError"));
+    // what `work` said, shown where it is not the decode error (feature 449 T160: once under load it was something else)
+    let said = work(&run, then(&format!("{}/bytes.sh", w.root)), &at).unwrap_err();
+    assert!(said.starts_with("UnicodeDecodeError"), "{said}");
     put(&root.join("raise.md"), "## Your items\n- \n");
     executable(
         &root.join("raise.sh"),

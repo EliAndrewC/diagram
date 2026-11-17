@@ -27,9 +27,11 @@ const HAMLETS: &str = "hamlets";
 #[cfg(not(test))]
 const CROP_TIMEOUT: Duration = Duration::from_secs(180);
 /// The tests' own, under the fake crop's 5 s sleep: 300 ms was outlasted by a Python start alone with the coverage runs five crates at
-/// a time, at a load of 13.8 (feature 449 T108, 2026-11-11), failing the crop of a page that was not slow.
+/// a time, at a load of 13.8 (feature 449 T108, 2026-11-11), failing the crop of a page that was not slow, so it was a second - which the
+/// slow page's test waited out whole, 1.3 s against FR-008's tenth of a second. The fake crop is a `sh` script now, which starts in a
+/// few milliseconds where Python took tens, so 150 ms is still many times a start under that load (feature 449 T160).
 #[cfg(test)]
-const CROP_TIMEOUT: Duration = Duration::from_secs(1);
+const CROP_TIMEOUT: Duration = Duration::from_millis(150);
 
 static KNOB: LazyLock<Regex> = LazyLock::new(|| pyre(r"\[([a-z_]+)=[a-z_0-9|-]+\]"));
 static DRAWING_HREF: LazyLock<Regex> =
@@ -58,8 +60,8 @@ fn crop_command(root: &Path) -> Command {
 /// The tests' crop: no browser - a page named `nocrop` fails, one named `slow` outlasts the timeout, any other gets an image and two kinds.
 #[cfg(test)]
 fn crop_command(_root: &Path) -> Command {
-    let mut cmd = Command::new("python3");
-    cmd.args(["-c", "import sys, time, pathlib\np, k, o = sys.argv[1:4]\nif 'slow' in p: time.sleep(5)\nif 'nocrop' in p: sys.exit(1)\npathlib.Path(o).write_bytes(b'png')\nif 'nokinds' not in p: pathlib.Path(o + '.kinds').write_text('well\\nother\\n')\n"]);
+    let mut cmd = Command::new("sh");
+    cmd.args(["-c", "case \"$1\" in *slow*) exec sleep 5;; *nocrop*) exit 1;; esac\nprintf png > \"$3\"\ncase \"$1\" in *nokinds*) ;; *) printf 'well\\nother\\n' > \"$3.kinds\";; esac\n", "crop"]);
     cmd
 }
 

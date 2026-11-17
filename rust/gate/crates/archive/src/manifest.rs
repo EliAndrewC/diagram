@@ -215,7 +215,11 @@ pub fn place_gm(store: &Archive, name: &str, entry: &Value) -> Result<String> {
         .filter(|v| truthy(v))
         .map_or_else(|| format!("{GM_DEST}/{name}"), py_str);
     let source = store.gm.join(name);
-    if !store.dir.join(&dest).exists() && source.exists() {
+    // NEVER A FILE OVER GITHUB'S LIMIT (feature 449 T160, found measuring the inbox's test): the inbox leaves such an entry waiting
+    // (`process_inbox`), but the GM's copies told to their rows (`sync_gm_copies`) placed it anyway - a 100 MB commit that GitHub
+    // refuses, after which every push of the archive fails - and `archive.py` did the same; it waits here too, for LFS or a split
+    if !store.dir.join(&dest).exists() && source.exists() && crate::ops::too_big(&source).is_empty()
+    {
         store.copy_in(&dest, &source)?;
         if source.is_file() && suffix_lower(&source) == ".pdf" {
             // read after it was copied, so it reads: a file that vanished between is a PDF with no text, as `pdftotext` finds one

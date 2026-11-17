@@ -221,13 +221,15 @@ fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
     )
     .unwrap();
     let world = world_with(&root, BINARY_CARGO);
-    std::fs::write(world.target.join("exe"), "binary one").unwrap();
+    test_binary(&world.target.join("exe"), "binary one");
+    // a run is a crate's `cargo test`, or its built binary run directly (feature 449 T160)
     let runs = |w: &World| {
         calls(w)
             .iter()
             .filter(|c| {
                 c.starts_with("test --quiet --manifest")
                     || c.starts_with("test --quiet --all-features --manifest")
+                    || c.starts_with("exe exe")
             })
             .count()
     };
@@ -260,7 +262,7 @@ fn a_test_run_is_kept_and_an_unchanged_binary_runs_no_test() {
     ));
     assert_eq!(runs(&world), 2);
     // a binary that moved runs; a build that fails runs, and its failure is cargo's to tell
-    std::fs::write(world.target.join("exe"), "binary two").unwrap();
+    test_binary(&world.target.join("exe"), "binary two");
     std::fs::write(root.join("rust/a/src/lib.rs"), "//! moved again\n").unwrap();
     assert_eq!(answer(&world, "test", &[], false).code, 0);
     assert_eq!(runs(&world), 3);
@@ -362,10 +364,16 @@ fn a_coverage_pass_keeps_the_tests_of_a_crate_with_unit_tests_alone() {
     let world = world_with(&root, LCOV_CARGO);
     std::fs::write(world.target.join("lcov"), "").unwrap();
     assert_eq!(answer(&world, "cover", &[], false).code, 0);
-    let ran_before = calls(&world)
-        .iter()
-        .filter(|c| c.starts_with("test --quiet"))
-        .count();
+    // a crate's tests run through `cargo test`, or from the binary the key's build named (feature 449 T160), which notes each run
+    let runs = || {
+        let direct = std::fs::read_to_string(world.target.join("runs")).unwrap_or_default();
+        let through_cargo = calls(&world)
+            .iter()
+            .filter(|c| c.starts_with("test --quiet"))
+            .count();
+        (direct.lines().count() + through_cargo, direct)
+    };
+    let (ran_before, _) = runs();
     let tests = answer(&world, "test", &[], false);
     assert!(
         tests.stdout.contains("test unchanged on rust/a"),
@@ -377,11 +385,16 @@ fn a_coverage_pass_keeps_the_tests_of_a_crate_with_unit_tests_alone() {
         "{}",
         tests.stdout
     );
-    let ran = calls(&world)
-        .iter()
-        .filter(|c| c.starts_with("test --quiet"))
-        .count();
+    let (ran, direct) = runs();
     assert_eq!(ran - ran_before, 1, "b alone ran its tests");
+    assert!(
+        direct
+            .lines()
+            .last()
+            .unwrap_or_default()
+            .ends_with("rust/b"),
+        "{direct}"
+    );
 }
 
 /// A comment-only edit moves no lint, test or coverage key, and moves format's and dead's, which read comments; a file the crate's
@@ -582,4 +595,39 @@ fn a_test_key_reads_what_the_crate_s_sources_include() {
         key("lint", Reads::Source, &one),
         key("lint", Reads::Source, &two)
     );
+}
+
+/// The code views are kept by each file's path and content (feature 449 T160): a file whose blob id stands is not read again, one that
+/// moved is, and a cache another binary wrote is not trusted.
+#[test]
+fn the_code_views_are_kept_by_content_and_read_again_where_it_moved() {
+    let (root, _, _) = two_crates();
+    let cache = root.join("views");
+    let lib = "rust/a/src/lib.rs";
+    std::fs::write(root.join(lib), "include!(\"x.rs\");\n// note\nfn f() {}\n").unwrap();
+    let ids = BTreeMap::from([(lib.to_owned(), "id1".to_owned())]);
+    let first = super::super::kept::code_ids_kept(&root, &ids, Some(&cache));
+    assert_eq!(first, super::super::kept::code_ids(&root, &ids));
+    assert_eq!(first.2[lib], ["rust/a/src/x.rs"]);
+    // the file gone, its content id standing: the kept views answer, nothing is read
+    std::fs::remove_file(root.join(lib)).unwrap();
+    assert_eq!(
+        super::super::kept::code_ids_kept(&root, &ids, Some(&cache)),
+        first
+    );
+    // another binary's cache is not read: with the file gone there is nothing to answer
+    let text = std::fs::read_to_string(&cache).unwrap();
+    std::fs::write(&cache, text.replacen("l7r-rust views", "another binary", 1)).unwrap();
+    assert!(super::super::kept::code_ids_kept(&root, &ids, Some(&cache))
+        .0
+        .is_empty());
+    // a moved content id is read again, and the cache then holds the tree's files alone
+    std::fs::write(root.join(lib), "fn g() {}\n").unwrap();
+    let moved = BTreeMap::from([(lib.to_owned(), "id2".to_owned())]);
+    let second = super::super::kept::code_ids_kept(&root, &moved, Some(&cache));
+    assert_ne!(second.0[lib], first.0[lib]);
+    assert!(second.2.is_empty());
+    let kept = std::fs::read_to_string(&cache).unwrap();
+    assert_eq!(kept.lines().count(), 2, "{kept}");
+    assert!(kept.contains("rust/a/src/lib.rs id2\t") && !kept.contains(" id1\t"));
 }

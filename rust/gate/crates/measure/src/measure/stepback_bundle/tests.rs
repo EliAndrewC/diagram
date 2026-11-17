@@ -429,5 +429,9 @@ fn the_command_line() {
     std::fs::create_dir_all(&plain).unwrap();
     let got = ask(&[&unique, "--root", plain.to_str().unwrap()]);
     assert_eq!(got.code, 0);
-    std::fs::remove_dir_all(format!("{OUT}/step-back-t120-{}-1", std::process::id())).unwrap();
+    std::fs::remove_dir_all(
+        l7r_gate_core::record::bundle::default_root()
+            .join(format!("step-back-t120-{}-1", std::process::id())),
+    )
+    .unwrap();
 }

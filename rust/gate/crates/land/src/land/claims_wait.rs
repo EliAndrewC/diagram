@@ -2,7 +2,6 @@
 //! the gate's own lint committed while it waits (the GM 2026-10-24).
 
 use std::path::Path;
-use std::time::Instant;
 
 use l7r_guard::shared::py_text::strip;
 use l7r_guard::shared::speckit::splitlines;
@@ -109,7 +108,7 @@ impl Land {
         let ticks = tasks.join(" ");
         let gate = self.script("gates/claims-gate.sh");
         let env = [("L7R_LAND_TICKS", ticks.as_str())];
-        let deadline = Instant::now() + self.claims_wait;
+        let deadline = self.clock.now() + self.claims_wait;
         let mut said = String::new();
         loop {
             let (mut rc, mut out) = self.run(&[&gate], &env)?;
@@ -140,7 +139,7 @@ impl Land {
             } else {
                 format!("claims-gate.sh: {}", tail(&kept_lines(&out), 600))
             };
-            if Instant::now() >= deadline {
+            if self.clock.now() >= deadline {
                 return Ok(why);
             }
             if why != said {
@@ -149,7 +148,7 @@ impl Land {
                 ));
                 said = why;
             }
-            std::thread::sleep(self.claims_poll);
+            self.clock.sleep(self.claims_poll);
         }
     }
 

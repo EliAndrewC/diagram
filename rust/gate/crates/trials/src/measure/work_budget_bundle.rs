@@ -39,7 +39,6 @@ pub use derivation::sizes;
 
 pub(crate) type R<T> = Result<T, String>;
 
-const OUT: &str = "/tmp/l7r-check";
 const RUBRIC: &str = "docs/work-budget-rubric.md";
 const TABLE: &str = "dev/work-budget.json";
 pub(crate) const RUNS: &str = "dev/work-budget";
@@ -551,7 +550,9 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     }
     let out = PathBuf::from(a.text("--out", ""));
     let out = if out.as_os_str().is_empty() {
-        Path::new(OUT).join(format!("work-budget-{mode}-{phase}"))
+        // the bundles' root, core's (feature 449 T160): `/tmp/l7r-check`, and in a test build the run's own directory - a test of the default
+        // OUT wrote into the real root, outside the run's TMPDIR and its leak check, and one removed that root where it was empty
+        l7r_gate_core::record::bundle::default_root().join(format!("work-budget-{mode}-{phase}"))
     } else {
         out
     };

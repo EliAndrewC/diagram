@@ -32,8 +32,6 @@ pub mod words;
 
 type Row = Map<String, Value>;
 
-const OUT: &str = "/tmp/l7r-check";
-
 /// Where a run reads the home directory's records (the transcripts, the guard log) and what time it is.
 pub struct Env {
     pub home: PathBuf,
@@ -624,7 +622,9 @@ fn run(
         .map_or("", |(_, n)| n)
         .replace('@', "-");
     let out = match p.text("--out", "") {
-        "" => Path::new(OUT).join(format!("step-back-{name}")),
+        // the bundles' root, core's (feature 449 T160): `/tmp/l7r-check`, and in a test build the run's own directory - a test of the default
+        // OUT wrote into the real root, outside the run's TMPDIR and its leak check, and one removed that root where it was empty
+        "" => l7r_gate_core::record::bundle::default_root().join(format!("step-back-{name}")),
         o => py_path(o),
     };
     let transcript = match p.text("--transcript", "") {

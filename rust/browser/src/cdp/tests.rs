@@ -20,7 +20,7 @@ fn a_command_gets_its_reply_and_the_events_wait_for_whoever_asks() {
         "Fail.me: no such method"
     );
     assert_eq!(
-        cdp.call_within("Silent.me", &json!({}), None, Duration::from_millis(100))
+        cdp.call_within("Silent.me", &json!({}), None, Duration::from_millis(10))
             .unwrap_err(),
         "Silent.me: no answer within 0s"
     );
@@ -32,7 +32,7 @@ fn a_command_gets_its_reply_and_the_events_wait_for_whoever_asks() {
     let is = |name: &'static str| move |e: &Value| e["params"]["name"] == name;
     // the first load (of loader L0) was dropped past the cap of two kept events
     assert!(cdp
-        .wait_event(Instant::now() + Duration::from_millis(50), |e| e["params"]
+        .wait_event(Instant::now() + Duration::from_millis(5), |e| e["params"]
             ["loaderId"]
             == "L0")
         .is_none());
@@ -57,7 +57,8 @@ fn a_browser_that_dies_or_never_starts_is_an_error() {
         r#"printf '{"method":"E"}\0' >&4; exit 0"#,
     );
     let mut cdp = Cdp::launch(&gone, &[]).unwrap();
-    std::thread::sleep(Duration::from_millis(200));
+    // long enough for the script to be gone (it exits at once); 200 ms was a fifth of a second of FR-008's tenth (feature 449 T160)
+    std::thread::sleep(Duration::from_millis(20));
     let said = cdp.call("Browser.getVersion", json!({}), None).unwrap_err();
     assert!(said.ends_with("the browser has closed"), "{said}");
     assert!(cdp
@@ -74,10 +75,15 @@ fn a_browser_that_dies_or_never_starts_is_an_error() {
 #[test]
 fn a_message_that_is_not_json_is_dropped_and_the_last_needs_no_terminator() {
     let dir = TempDir::new("browser-cdp-raw");
-    let talk = script(
-        dir.path(),
-        "talk",
-        r#"head -c 1 <&3 >/dev/null; printf '{"id":1,"result":{"a":1}}\0not json\0{"method":"E"}\0{"id":2,"result":{"b":2}}' >&4; sleep 2"#,
+    // it ends when its second message comes, not after a two-second sleep (feature 449 T160: 2.0 s against FR-008's tenth of a
+    // second): each bash `read -d ''` takes one NUL-ended message (dash, `script`'s shell, has no `-d`), and the stream's end then
+    // delivers the unterminated id 2
+    let talk = dir.path().join("talk");
+    crate::testkit::executable(
+        &talk,
+        r#"#!/bin/bash
+exec 0<&3; read -r -d '' _; printf '{"id":1,"result":{"a":1}}\0not json\0{"method":"E"}\0{"id":2,"result":{"b":2}}' >&4; read -r -d '' _
+"#,
     );
     let mut cdp = Cdp::launch(&talk, &[]).unwrap();
     assert_eq!(cdp.call("One", json!({}), None).unwrap(), json!({"a": 1}));
@@ -101,11 +107,14 @@ fn a_browser_that_will_not_close_is_killed() {
     let dir = TempDir::new("browser-cdp-stubborn");
     let stubborn = script(dir.path(), "stubborn", "exec sleep 30");
     let mut cdp = Cdp::launch(&stubborn, &[]).unwrap();
+    // its own short wait, where every other close waits `CLOSE_WAIT` (feature 449 T160)
+    cdp.close_wait = Duration::from_millis(20);
     let start = Instant::now();
     cdp.close();
     assert!(start.elapsed() < Duration::from_secs(5));
     // dropped once closed: nothing more to do
     drop(cdp);
-    let still = Cdp::launch(&stubborn, &[]).unwrap();
+    let mut still = Cdp::launch(&stubborn, &[]).unwrap();
+    still.close_wait = Duration::from_millis(20);
     drop(still);
 }

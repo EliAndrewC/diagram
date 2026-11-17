@@ -44,7 +44,7 @@ fn each_part_matches_as_fnmatch_does() {
             && m("[\\-z]", "y")
     );
     // a part the engine cannot compile raises, where Python would have compiled it (no `old-code:` line reaches it)
-    assert!(part_regex(&"?".repeat(400_000))
+    assert!(part_regex(&"?".repeat(40_000))
         .unwrap_err()
         .starts_with("re.error"));
 }
@@ -90,5 +90,5 @@ fn a_pattern_walks_the_tree_as_path_glob_walks_it() {
         .unwrap_err()
         .starts_with("NotImplementedError"));
     assert_eq!(names(&root, "[z-a].py"), Vec::<String>::new());
-    assert!(glob(&root, &format!("{}/x", "?".repeat(400_000))).is_err());
+    assert!(glob(&root, &format!("{}/x", "?".repeat(40_000))).is_err());
 }

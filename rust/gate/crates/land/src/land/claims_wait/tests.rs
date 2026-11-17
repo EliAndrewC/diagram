@@ -74,7 +74,10 @@ fn a_refusal_no_wait_can_cure_ends_the_wait_at_once() {
 
 #[test]
 fn the_wait_runs_out_naming_what_still_stands() {
-    let fx = fx("wait-out");
+    let mut fx = fx("wait-out");
+    // a clock that moves only when the wait sleeps (feature 449 T160): the wait runs out after its rounds, never by a busy host's time
+    fx.land.clock = std::rc::Rc::new(Stepped(std::cell::Cell::new(std::time::Instant::now())));
+    fx.land.claims_poll = fx.land.claims_wait / 2;
     let gate = tool("gates/claims-gate.sh");
     fx.answer(&gate, "rc", "1");
     fx.answer(&gate, "out", "owed (impl-drift) k\n");
@@ -142,4 +145,16 @@ fn the_gate_s_own_lint_is_committed_and_nothing_else() {
     let mut gone = fx;
     gone.land.python = "/no/such/python".to_owned();
     assert!(gone.land.ruffed("scripts/b.py", "x").is_err());
+}
+
+/// A clock that stands still but for the sleeps it is asked for (feature 449 T160).
+struct Stepped(std::cell::Cell<std::time::Instant>);
+
+impl super::super::Clock for Stepped {
+    fn now(&self) -> std::time::Instant {
+        self.0.get()
+    }
+    fn sleep(&self, d: std::time::Duration) {
+        self.0.set(self.0.get() + d);
+    }
 }

@@ -71,10 +71,11 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
     put(&dir, "pyproject.toml", "");
     assert_eq!(ran(&dir), [false, true, false, false]);
     std::fs::remove_file(dir.join("pyproject.toml")).unwrap();
+    // each path alone, read by the rule `needs` asks of every changed path (feature 449 T160): put in the tree, the 17 rows asked git
+    // three times a check, 265 git calls and 0.40 s against FR-008's tenth of a second; the tree's own paths reach the rule above and
+    // below
     let alone = |rel: &str, want: [bool; 4]| {
-        put(&dir, rel, "x = 1\n");
-        assert_eq!(ran(&dir), want);
-        std::fs::remove_file(dir.join(rel)).unwrap();
+        assert_eq!(four.map(|c| super::reads(c, rel)), want, "{rel}");
     };
     alone("tools/a.py", [false, false, false, false]);
     alone("scripts/a.py", [false, true, false, false]);

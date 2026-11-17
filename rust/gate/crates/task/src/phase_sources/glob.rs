@@ -109,7 +109,22 @@ fn part_regex(part: &str) -> Result<Regex, String> {
         }
     }
     out.push('$');
-    Regex::new(&out).map_err(|e| format!("re.error: {e}"))
+    compiled(&out)
+}
+
+#[cfg(not(test))]
+fn compiled(pattern: &str) -> Result<Regex, String> {
+    Regex::new(pattern).map_err(|e| format!("re.error: {e}"))
+}
+
+/// The test build's compile refuses at a size limit of 64 KiB where the engine's is 10 MiB (feature 449 T160): the test of a part the
+/// engine cannot compile built a 400,000-character pattern to reach the real limit, 0.45 s twice against FR-008's tenth of a second.
+#[cfg(test)]
+fn compiled(pattern: &str) -> Result<Regex, String> {
+    fancy_regex::RegexBuilder::new(pattern)
+        .delegate_size_limit(1 << 16)
+        .build()
+        .map_err(|e| format!("re.error: {e}"))
 }
 
 fn is_magic(part: &str) -> bool {

@@ -228,10 +228,6 @@ fn matches_resolve_keys_and_download_list_entries() {
 }
 
 #[test]
-#[expect(
-    clippy::too_many_lines,
-    reason = "the inbox's whole run, each branch one after another on one world"
-)]
 fn the_inbox_archives_confirms_and_removes_what_it_places() {
     let w = world("ops-inbox");
     table(
@@ -279,6 +275,17 @@ fn the_inbox_archives_confirms_and_removes_what_it_places() {
         json!({"evidence": "matched by the session at the inbox (feature 309 FR-012)", "keys": [], "download": "3", "archived": "gm-copies/none.txt"})
     );
     assert_eq!(t["huge.pdf"]["keys"], json!(["k"]));
+    // a matched entry over GitHub's limit is placed by neither the inbox nor the copies' sync (feature 449 T160)
+    assert!(!w.store().dir.join("gm-copies/huge.pdf").exists());
+    assert!(w.gm.join("huge.pdf").exists());
+}
+
+/// Split from the test above (feature 449 T160: the two took 2.5 s, most of it the over-limit copy the sync placed): the inbox's
+/// refusals, on a world of their own whose archive is cloned first, as the placing above left it.
+#[test]
+fn a_refused_push_deletes_nothing_and_a_table_entry_that_is_no_mapping_is_refused() {
+    let w = world("ops-inbox-refused");
+    std::fs::write(w.gm.join("new.txt"), "a new download").unwrap();
     // nothing placed: no lock, no push
     let mut out = String::new();
     inbox(&w.root, &w.store(), &Matched::default(), &mut out).unwrap();
@@ -290,6 +297,7 @@ fn the_inbox_archives_confirms_and_removes_what_it_places() {
         process_inbox(&w.root, &gone, &Matched::default()).unwrap(),
         (vec![], vec![])
     );
+    w.store().ensure().unwrap();
     // a refused push deletes nothing, the table written first
     git(
         &w.home.join("source-archive"),

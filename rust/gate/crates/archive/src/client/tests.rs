@@ -5,7 +5,7 @@ use std::time::{Duration, Instant};
 
 use l7r_guard::shared::tempdir::TempDir;
 
-use super::{launcher, netloc, Polite, Process};
+use super::{launcher, netloc, Polite, Process, HOST_GAP};
 use crate::fetch::Client;
 
 /// A `browser serve` that answers from the URL: `slow` 429 then 200, `boom` a failure, `fail` a render that will not, `junk` no JSON.
@@ -37,20 +37,22 @@ for line in sys.stdin:
 
 fn launcher_at(dir: &Path, body: &str) -> PathBuf {
     let at = dir.join("serve.py");
-    std::fs::write(&at, body).unwrap();
-    std::process::Command::new("chmod")
-        .arg("+x")
-        .arg(&at)
-        .status()
-        .unwrap();
+    // by `install`, never this process: one it wrote itself can be "Text file busy" when run while another test thread's fork holds it
+    // open (feature 449 T160)
+    l7r_gate_core::write_executable(&at, body);
     at
 }
+
+/// The spacing a test waits, where the archive waits `HOST_GAP` (feature 449 T160): long enough to measure, short of FR-008's bar.
+const GAP: Duration = Duration::from_millis(5);
 
 #[test]
 fn a_request_and_a_render_through_the_browser_retried_and_spaced() {
     let dir = TempDir::new("archive-client");
     let mut p = Process::start_with(&launcher_at(dir.path(), SERVE)).unwrap();
-    p.retry_wait = Duration::from_millis(10);
+    // no retry wait: the elapsed time below is the gap's alone, as 900 ms of the old run's second was beyond its 10 ms retry wait
+    p.retry_wait = Duration::ZERO;
+    p.polite.gap = GAP;
     let got = p.get("http://h/page");
     assert_eq!(
         (got.status, got.final_url.as_str(), got.body.as_slice()),
@@ -60,9 +62,10 @@ fn a_request_and_a_render_through_the_browser_retried_and_spaced() {
             &b"body of http://h/page"[..]
         )
     );
+    // the same host again waits out the gap (the archive's second, nine tenths of it measured, as before)
     let start = Instant::now();
     assert_eq!(p.get("http://h/slow").status, Some(200));
-    assert!(start.elapsed() >= Duration::from_millis(900));
+    assert!(start.elapsed() >= GAP * 9 / 10);
     assert_eq!(p.get("http://h/boom").error, "APIRequestContext.get: boom");
     assert_eq!(
         p.render("http://g/r"),
@@ -77,9 +80,21 @@ fn a_request_and_a_render_through_the_browser_retried_and_spaced() {
     );
     p.close();
     drop(p);
-    // dropped while running: closed then
+}
+
+/// Split from the test above (feature 449 T160): its own browser, so neither test starts two.
+#[test]
+fn a_browser_dropped_while_running_is_closed_then() {
+    let dir = TempDir::new("archive-client-drop");
     let running = Process::start_with(&launcher_at(dir.path(), SERVE)).unwrap();
     drop(running);
+}
+
+/// The gap the archive keeps is a second, unless a caller sets its own (feature 449 T160).
+#[test]
+fn the_gap_between_two_asks_of_a_host_is_a_second() {
+    assert_eq!(HOST_GAP, Duration::from_secs(1));
+    assert_eq!(Polite::default().gap, HOST_GAP);
 }
 
 #[test]

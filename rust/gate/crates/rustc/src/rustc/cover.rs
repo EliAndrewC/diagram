@@ -47,7 +47,7 @@ pub(super) fn workspace_only(env: &mut BTreeMap<String, String>, script: &Path) 
 }
 
 /// A crate's package name, from its manifest.
-fn package_name(manifest: &Path) -> Option<String> {
+pub(super) fn package_name(manifest: &Path) -> Option<String> {
     let text = std::fs::read_to_string(manifest).unwrap_or_default();
     re(r#"(?m)^name\s*=\s*"([^"]+)""#)
         .captures(&text)
@@ -195,7 +195,8 @@ fn build(
 /// every binary and every profile in its build directory, so in the family's one directory a crate's run moved every other crate's
 /// binary aside and cleared the last run's profiles (T92, T105), and the crates ran one after another - 17.2 s of a core edit's
 /// `make static`, one crate 8.9 s of it (2026-11-11). Each in its own, the runs share nothing. The tests run as `cargo test` runs them,
-/// from the crate's directory with cargo's variables, but directly: `cargo test` holds the build directory's lock while they run.
+/// from the crate's directory with cargo's variables, but directly. (`cargo test` was said to hold the build directory's lock while they
+/// run; two `cargo test`s' tests were seen to overlap, 19.4 s of crates' tests in an 11.1 s run - feature 449 T160, 2026-11-17.)
 fn run_one(world: &World, job: &Job, lcov: &Path, tmp: &Path, said: &mut String) -> Ran {
     let dir = job.manifest.parent().unwrap_or(Path::new("."));
     let tag = dir.file_name().unwrap_or_default().to_string_lossy();
@@ -327,13 +328,13 @@ pub(super) fn uncovered_each(
 /// HOW MANY AT ONCE (T108): a quarter of the cores, at least one. Every owed crate at once (17 after a core edit) took the load of 22
 /// cores to 31 and failed two crates' timing tests, a crop's 300 ms and a lock's 50 ms (2026-11-11); each crate's tests run on
 /// threads of their own already.
-fn side_by_side(count: usize) -> usize {
+pub(super) fn side_by_side(count: usize) -> usize {
     let cores = std::thread::available_parallelism().map_or(1, std::num::NonZero::get);
     (cores / 4).clamp(1, count.max(1))
 }
 
 /// The next job of a shared queue.
-fn next<T>(queue: &std::sync::Mutex<impl Iterator<Item = T>>) -> Option<T> {
+pub(super) fn next<T>(queue: &std::sync::Mutex<impl Iterator<Item = T>>) -> Option<T> {
     queue
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner)

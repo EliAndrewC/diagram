@@ -40,6 +40,9 @@ pub struct Cdp {
     from: Receiver<Value>,
     next: u64,
     events: VecDeque<Value>,
+    /// `CLOSE_WAIT`; a field so the test of a browser that will not close waits milliseconds (feature 449 T160: it waited out 300 ms twice,
+    /// 1.2 s against FR-008's tenth of a second), every other close - the real Chromium's in its end-to-end test among them - its own.
+    pub(crate) close_wait: Duration,
 }
 
 /// Splits the browser's output into messages and sends each on; ends when the browser closes its end.
@@ -104,6 +107,7 @@ impl Cdp {
             from,
             next: 0,
             events: VecDeque::new(),
+            close_wait: CLOSE_WAIT,
         })
     }
 
@@ -204,9 +208,9 @@ impl Cdp {
 
     /// Asks the browser to close, then waits for it (killing it after a few seconds).
     pub fn close(&mut self) {
-        let _ = self.call_within("Browser.close", &json!({}), None, CLOSE_WAIT);
+        let _ = self.call_within("Browser.close", &json!({}), None, self.close_wait);
         self.to = None;
-        let deadline = Instant::now() + CLOSE_WAIT;
+        let deadline = Instant::now() + self.close_wait;
         while Instant::now() < deadline {
             if !matches!(self.child.try_wait(), Ok(None)) {
                 return;

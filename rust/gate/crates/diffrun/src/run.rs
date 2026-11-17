@@ -100,6 +100,20 @@ fn reader(pipe: Option<impl Read + Send + 'static>) -> std::thread::JoinHandle<V
     })
 }
 
+/// THE CASES FILE'S SECOND (feature 449 T160): `timeout_s` counts in it. The test build's is 50 ms, so the runner's test of a side
+/// that outruns its timeout waits a tenth of a second where a one-second timeout, the file's least, had it wait four seconds, against
+/// FR-008's tenth of a second; the file and every run keep the second. Not 20 ms: a test's `sh -c` setup outran 20 ms with the crate's
+/// fifteen tests running at once (observed 2026-11-17, `make rust-test FRESH=1`).
+#[cfg(not(test))]
+const SECOND: Duration = Duration::from_secs(1);
+#[cfg(test)]
+const SECOND: Duration = Duration::from_millis(50);
+
+/// A timeout of `n` of the cases file's seconds.
+fn seconds(n: u64) -> Duration {
+    SECOND.saturating_mul(u32::try_from(n).unwrap_or(u32::MAX))
+}
+
 /// One command run to its end or its timeout.
 ///
 /// # Errors
@@ -134,7 +148,7 @@ pub fn command(
             return Err(format!(
                 "{}: timed out after {} s",
                 argv.join(" "),
-                timeout.as_secs()
+                timeout.as_millis() / SECOND.as_millis()
             ));
         }
         std::thread::sleep(Duration::from_millis(5));
@@ -216,7 +230,7 @@ fn snapshot(
             From::Path(p) => std::fs::read(fill(p, vars)).ok(),
             From::Cmd(argv) => {
                 let argv: Vec<String> = argv.iter().map(|a| fill(a, vars)).collect();
-                command(&argv, cwd, env, Duration::from_secs(cases.timeout_s))
+                command(&argv, cwd, env, seconds(cases.timeout_s))
                     .ok()
                     .map(|o| o.stdout.into_bytes())
             }
@@ -239,12 +253,7 @@ pub fn build(cases: &Cases, side: &Side, which: &str) -> Result<(), String> {
     let env = env(cases, side, None, &vars);
     for argv in &side.build {
         let argv: Vec<String> = argv.iter().map(|a| fill(a, &vars)).collect();
-        let out = command(
-            &argv,
-            &cases.root,
-            &env,
-            Duration::from_secs(cases.timeout_s),
-        )?;
+        let out = command(&argv, &cases.root, &env, seconds(cases.timeout_s))?;
         if out.exit != 0 {
             return Err(format!(
                 "{which} side's build `{}` exited {}:\n{}",
@@ -291,7 +300,7 @@ fn in_world(
 ) -> Result<Raw, String> {
     let vars = vars(cases, side, which, world);
     let env = env(cases, side, Some(case), &vars);
-    let timeout = Duration::from_secs(cases.timeout_s);
+    let timeout = seconds(cases.timeout_s);
     for argv in &cases.setup {
         let argv: Vec<String> = argv.iter().map(|a| fill(a, &vars)).collect();
         let out = command(&argv, &cases.root, &env, timeout)?;

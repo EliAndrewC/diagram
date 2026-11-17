@@ -308,10 +308,10 @@
    "declared": "round-arbiter"
   },
   "### T160 Approach (checklist part A)": {
-   "sha256": "5d03c60978702f82da3c9edc663551f63b6db4eac409d3caacdf60521af46740",
+   "sha256": "4c29c2b772696e94a1ccf70f9d8b2ff51b73ec9f5072050412e30943449be744",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   },
   "### T161 (<why: the finding or measurement that files it>)": {
    "sha256": "9349d6caead39b02fea65662ab19a2bd17b8c4cab178c9a570dff45a018254bd",
@@ -411,6 +411,12 @@
   },
   "### T166 Approach (checklist part A)": {
    "sha256": "f79bf0a562bf33378f0869ebd9bac9d2bc190ecf8fa4784f620bbc6eb8a9bf09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T160 (compile and test speed, the GM's third approved proposal, request.md 2026-11-16; measured first)": {
+   "sha256": "555f1a9a0a097223dc835fb8fdff567414af3d7b20d1e8469e8d6fe1f703d848",
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
@@ -10095,6 +10101,58 @@
      "why": "Follows the GM's 'port those before the porting of the actual map engine'."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T160 (compile and test speed, the GM's third approved proposal, request.md 2026-11-16; measured first)",
+    "### T160 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T160-measure-first",
+     "summary": "Measure where an unchanged tree's, an owed edit's and the slowest crates' check and test time goes before choosing targets.",
+     "class": "within",
+     "why": "The GM's 2026-11-16 approval of the third proposal (compile and test speed) and his 2026-11-12 condition of a concrete target with a measured saving; measurement first is what both ask."
+    },
+    {
+     "id": "T160-runner",
+     "summary": "The checks runner runs the owed crates' already-built test binaries directly, five at once (a crate whose binaries the build does not name keeps cargo test); code views cached by path and blob id keyed to the l7r-rust binary and skipped for format and dead; dead counts the crate family once a run.",
+     "class": "within",
+     "why": "Compile and test speed is exactly what the GM approved. Only owed crates still run, so FR-011's reuse of passed results is kept, not loosened; the cargo test fallback narrows nothing; the cache key (path, blob id, binary) invalidates on any change, so no verdict is skipped."
+    },
+    {
+     "id": "T160-slow-tests",
+     "summary": "Archive, diffrun, browser, bundle, task and tree tests brought down, every assertion kept; the remaining 151 tests over FR-008's bar and the end-to-end-test ruling deferred to T167.",
+     "class": "within",
+     "why": "Serves FR-008 and the approved test-speed proposal. No assertion is removed, and FR-008 is not narrowed: the unfinished part is handed to a named task, not excused."
+    },
+    {
+     "id": "T160-flakes",
+     "summary": "Flaky tests exposed by side-by-side running fixed at their source (an injectable clock, a stub cleaning its fake /proc entry, an unstamped perf report, fake executables written by install), not by running those crates serially.",
+     "class": "within",
+     "why": "Keeps the tests' verdicts trustworthy under the approved side-by-side runner; explicitly refuses the narrowing (serialising the runner) in favour of the fix."
+    },
+    {
+     "id": "T160-tmp",
+     "summary": "Two live /tmp leaks closed (the make-only suite's /tmp/mo.out, two tests writing into the real /tmp/l7r-check); the 8,536 older /tmp entries, costing about 20 ms a temp dir, not swept by the tooling.",
+     "class": "within",
+     "why": "Closing the leaks enforces FR-013/SC-008. Not extending the sweep removes nothing FR-013 requires: FR-013 asks for no leak and leaves the existing pile out of the tooling, and the GM's one-time 'delete those old entries' (2026-11-11) was carried out under T105; under the 2026-11-12 conditions a target under 2 s is not one this task must take."
+    },
+    {
+     "id": "T160-archive-defect",
+     "summary": "The archive's sync refuses files over GitHub's 100 MB limit before committing them (the Python committed them and every later push failed), pinned by a test that fails with the fix removed.",
+     "class": "within",
+     "why": "A defect found during the work, fixed under the standing constitution XIV rule; it narrows no requested behavior, and the verdict that diverges from the Python is a push that could never succeed."
+    },
+    {
+     "id": "T160-dropped",
+     "summary": "Not taken: building every crate in one cargo call (measured slower, 81 s, and a second artifact set) and the gate's duplicated Python tests (left to their own design).",
+     "class": "within",
+     "why": "The approval and the 2026-11-12 conditions are for targets with a measured saving; dropping one measured to cost time, and leaving one outside this task's subject, narrows nothing the GM asked of T160."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18083,6 +18141,56 @@
      "summary": "Order (after T165, before S7), exits, budget and the closing checks.",
      "class": "within",
      "why": "Follows the GM's 'port those before the porting of the actual map engine'."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T160": {
+   "section_sha256": "5aebf8a9c65d374f402dfa23c43a4a948d1c477708793167a455ee20dd8f4025",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T160-measure-first",
+     "summary": "Measure where an unchanged tree's, an owed edit's and the slowest crates' check and test time goes before choosing targets.",
+     "class": "within",
+     "why": "The GM's 2026-11-16 approval of the third proposal (compile and test speed) and his 2026-11-12 condition of a concrete target with a measured saving; measurement first is what both ask."
+    },
+    {
+     "id": "T160-runner",
+     "summary": "The checks runner runs the owed crates' already-built test binaries directly, five at once (a crate whose binaries the build does not name keeps cargo test); code views cached by path and blob id keyed to the l7r-rust binary and skipped for format and dead; dead counts the crate family once a run.",
+     "class": "within",
+     "why": "Compile and test speed is exactly what the GM approved. Only owed crates still run, so FR-011's reuse of passed results is kept, not loosened; the cargo test fallback narrows nothing; the cache key (path, blob id, binary) invalidates on any change, so no verdict is skipped."
+    },
+    {
+     "id": "T160-slow-tests",
+     "summary": "Archive, diffrun, browser, bundle, task and tree tests brought down, every assertion kept; the remaining 151 tests over FR-008's bar and the end-to-end-test ruling deferred to T167.",
+     "class": "within",
+     "why": "Serves FR-008 and the approved test-speed proposal. No assertion is removed, and FR-008 is not narrowed: the unfinished part is handed to a named task, not excused."
+    },
+    {
+     "id": "T160-flakes",
+     "summary": "Flaky tests exposed by side-by-side running fixed at their source (an injectable clock, a stub cleaning its fake /proc entry, an unstamped perf report, fake executables written by install), not by running those crates serially.",
+     "class": "within",
+     "why": "Keeps the tests' verdicts trustworthy under the approved side-by-side runner; explicitly refuses the narrowing (serialising the runner) in favour of the fix."
+    },
+    {
+     "id": "T160-tmp",
+     "summary": "Two live /tmp leaks closed (the make-only suite's /tmp/mo.out, two tests writing into the real /tmp/l7r-check); the 8,536 older /tmp entries, costing about 20 ms a temp dir, not swept by the tooling.",
+     "class": "within",
+     "why": "Closing the leaks enforces FR-013/SC-008. Not extending the sweep removes nothing FR-013 requires: FR-013 asks for no leak and leaves the existing pile out of the tooling, and the GM's one-time 'delete those old entries' (2026-11-11) was carried out under T105; under the 2026-11-12 conditions a target under 2 s is not one this task must take."
+    },
+    {
+     "id": "T160-archive-defect",
+     "summary": "The archive's sync refuses files over GitHub's 100 MB limit before committing them (the Python committed them and every later push failed), pinned by a test that fails with the fix removed.",
+     "class": "within",
+     "why": "A defect found during the work, fixed under the standing constitution XIV rule; it narrows no requested behavior, and the verdict that diverges from the Python is a push that could never succeed."
+    },
+    {
+     "id": "T160-dropped",
+     "summary": "Not taken: building every crate in one cargo call (measured slower, 81 s, and a second artifact set) and the gate's duplicated Python tests (left to their own design).",
+     "class": "within",
+     "why": "The approval and the 2026-11-12 conditions are for targets with a measured saving; dropping one measured to cost time, and leaving one outside this task's subject, narrows nothing the GM asked of T160."
     }
    ],
    "verdict": "CLEAR"

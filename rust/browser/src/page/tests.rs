@@ -76,17 +76,17 @@ fn a_navigation_that_fails_or_never_loads_and_a_page_with_no_body() {
         ""
     );
     assert_eq!(
-        b.goto(&page, "http://x/noload", Duration::from_millis(200))
+        b.goto(&page, "http://x/noload", Duration::from_millis(20))
             .unwrap_err(),
-        "page.goto: Timeout 200ms exceeded."
+        "page.goto: Timeout 20ms exceeded."
     );
     let loader = b
         .goto(&page, "http://x/busy/nobody", Duration::from_secs(5))
         .unwrap();
-    assert!(!b.wait_idle(&page, &loader, Duration::from_millis(100)));
+    assert!(!b.wait_idle(&page, &loader, Duration::from_millis(10)));
     assert_eq!(
-        b.body_text(&page, Duration::from_millis(150)).unwrap_err(),
-        "locator.innerText: Timeout 150ms exceeded."
+        b.body_text(&page, Duration::from_millis(15)).unwrap_err(),
+        "locator.innerText: Timeout 15ms exceeded."
     );
     b.goto(&page, "http://x/throw", Duration::from_secs(5))
         .unwrap();

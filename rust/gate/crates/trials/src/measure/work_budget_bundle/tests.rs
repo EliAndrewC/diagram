@@ -117,7 +117,12 @@ pub(super) fn tree(root: &Path) {
         .append(true)
         .open(root.join("dev/perf-log/20261103T000000Z-fanout-adhoc.txt"))
         .unwrap();
-    report.set_modified(SystemTime::now()).unwrap();
+    // an hour ahead, so a source a test writes after this is still older than the report: stamped `now`, a source written a clock tick
+    // later was newer, and the audit refused with "older than the engine" - 6 of 96 runs of the crate's tests eight at a time (feature
+    // 449 T160, observed 2026-11-17)
+    report
+        .set_modified(SystemTime::now() + Duration::from_secs(3600))
+        .unwrap();
 }
 
 /// The stale report: the call-chain report older than every source.
@@ -366,7 +371,7 @@ fn the_out_directory_is_replaced_and_a_file_there_fails() {
     std::fs::remove_file(d.join("out")).unwrap();
     std::os::unix::fs::symlink(d.join("l7r"), d.join("out")).unwrap();
     assert_eq!(budget(&d, BASE).code, 1);
-    // the default out directory, under /tmp/l7r-check
+    // the default out directory, under the bundles' root (the test build's own, feature 449 T160)
     put(&d, &format!("{PH}/grid.derivation.md"), BASE.as_bytes());
     let phase = format!("t134-{}", std::process::id());
     let all = [
@@ -380,11 +385,15 @@ fn the_out_directory_is_replaced_and_a_file_there_fails() {
     let default = cli(&all, Path::new("."));
     assert_eq!(
         default.stdout,
-        format!("/tmp/l7r-check/work-budget-budget-{phase}/MANIFEST.md\n")
+        format!(
+            "{}/work-budget-budget-{phase}/MANIFEST.md\n",
+            l7r_gate_core::record::bundle::default_root().display()
+        )
     );
-    std::fs::remove_dir_all(format!("/tmp/l7r-check/work-budget-budget-{phase}")).unwrap();
-    // nothing left behind: the bundles' directory goes too, where it is empty
-    let _ = std::fs::remove_dir("/tmp/l7r-check");
+    std::fs::remove_dir_all(
+        l7r_gate_core::record::bundle::default_root().join(format!("work-budget-budget-{phase}")),
+    )
+    .unwrap();
 }
 
 #[test]

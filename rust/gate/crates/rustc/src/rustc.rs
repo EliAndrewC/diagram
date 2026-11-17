@@ -23,6 +23,7 @@ use crate::Reply;
 
 mod cover;
 mod kept;
+mod side;
 use cover::uncovered_each;
 #[cfg(test)]
 use kept::{content_ids, declared_reads, relative, verdict_key};
@@ -317,22 +318,47 @@ fn rust_text(dir: &Path) -> String {
 /// other gate crates too, so the calls are counted over its family's sources (`family`), the names read from its own.
 fn dead_public(manifest: &Path) -> Vec<String> {
     let own = rust_text(&manifest.parent().unwrap_or(Path::new(".")).join("src"));
-    let rust = rust_text(&family(manifest));
+    let uses = family_words(&family(manifest));
     let names: BTreeSet<String> = PUB_FN
         .captures_iter(&own)
         .flatten()
         .map(|c| c[1].to_owned())
         .collect();
-    // One pass over the text's words, counted once: a Unicode `\b` search per name took hours on the guard crate's thousands of
-    // names, where the Python's took seconds. A word is a maximal run of `\w`, as Python's `\b` bounds one.
-    let mut uses: BTreeMap<&str, usize> = BTreeMap::new();
-    for word in rust.split(|c: char| !c.is_alphanumeric() && c != '_') {
-        *uses.entry(word).or_default() += 1;
-    }
     names
         .into_iter()
         .filter(|n| uses.get(n.as_str()) <= Some(&1))
         .collect()
+}
+
+/// Each word of a family's sources and how often it appears. One pass over the text's words, counted once: a Unicode `\b` search per
+/// name took hours on the guard crate's thousands of names, where the Python's took seconds. A word is a maximal run of `\w`, as
+/// Python's `\b` bounds one.
+///
+/// COUNTED ONCE A RUN (feature 449 T160): the dead check's key is its whole family (T100), so any gate edit re-ran it on all 27 of the
+/// gate's crates, and each counted the family's 6.5 MB again - 5.1-5.8 s of `make static` after a one-crate edit (observed 2026-11-17).
+/// The counts are kept for the process by the family and a hash of its text, so the 26 crates after the first read the text and find
+/// them, and a text that moved (a test's fixture between its steps) is counted afresh.
+fn family_words(dir: &Path) -> std::sync::Arc<BTreeMap<String, usize>> {
+    use std::hash::{Hash as _, Hasher as _};
+    type Counted = BTreeMap<(PathBuf, u64), std::sync::Arc<BTreeMap<String, usize>>>;
+    static COUNTED: std::sync::Mutex<Counted> = std::sync::Mutex::new(BTreeMap::new());
+    let rust = rust_text(dir);
+    let mut hasher = std::collections::hash_map::DefaultHasher::new();
+    rust.hash(&mut hasher);
+    let at = (dir.to_path_buf(), hasher.finish());
+    let mut counted = COUNTED
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    counted
+        .entry(at)
+        .or_insert_with(|| {
+            let mut uses: BTreeMap<String, usize> = BTreeMap::new();
+            for word in rust.split(|c: char| !c.is_alphanumeric() && c != '_') {
+                *uses.entry(word.to_owned()).or_default() += 1;
+            }
+            std::sync::Arc::new(uses)
+        })
+        .clone()
 }
 
 fn tail(text: &str) -> &str {
@@ -483,6 +509,23 @@ fn keep_green(
     }
 }
 
+/// The runs of every owed crate that go together rather than a crate at a time: the coverage (T105, T108) and the tests (feature 449
+/// T160, `side.rs`); a counting-free run (`test-no-counters`) keeps no result, and goes a crate at a time.
+fn owed_together(
+    world: &World,
+    cmd: &str,
+    asked: &[(&PathBuf, Option<(Verdict, bool)>)],
+) -> BTreeMap<PathBuf, Ran> {
+    match cmd {
+        "cover" => owed_coverage(world, asked)
+            .into_iter()
+            .map(|(m, got)| (m, cover_ran(&got)))
+            .collect(),
+        "test" | "test-counters" => side::tests_side_by_side(world, cmd, asked),
+        _ => BTreeMap::new(),
+    }
+}
+
 /// The coverage of every crate whose kept result does not stand, run together (T105, T108).
 fn owed_coverage(
     world: &World,
@@ -515,7 +558,7 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             return undeclared_refusal(world, &blind);
         }
     }
-    let inputs = reads.map(|r| Kept::read(world, r, &found));
+    let inputs = reads.map(|r| Kept::read(world, cmd, r, &found));
     let mut bad = 0;
     // every crate's kept result asked first, so the coverage the rest owe is built together (T105) and run side by side (T108)
     let asked: Vec<(&PathBuf, Option<(Verdict, bool)>)> = found
@@ -531,11 +574,7 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             (manifest, ask)
         })
         .collect();
-    let mut covered = if cmd == "cover" {
-        owed_coverage(world, &asked)
-    } else {
-        BTreeMap::new()
-    };
+    let mut together = owed_together(world, cmd, &asked);
     for (manifest, ask) in asked {
         let shown = shown(world, manifest);
         let Some((verdict, stands)) = ask else {
@@ -552,10 +591,9 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             );
             continue;
         }
-        let done = covered.remove(manifest).map_or_else(
-            || check(world, cmd, manifest, formatting_check),
-            |got| cover_ran(&got),
-        );
+        let done = together
+            .remove(manifest)
+            .unwrap_or_else(|| check(world, cmd, manifest, formatting_check));
         if cmd == "hamlet" {
             stdout.push_str(&done.stdout);
         }

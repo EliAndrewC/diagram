@@ -14,6 +14,7 @@ use l7r_guard::shared::tempdir::{Held, TempDir};
 
 mod cover;
 mod kept;
+mod side;
 
 fn fake_cargo(dir: &Path, body: &str) -> String {
     let path = dir.join("cargo");
@@ -51,6 +52,16 @@ fn uncovered(world: &World, manifest: &Path) -> BTreeMap<String, Vec<u32>> {
         .0
         .remove(&m)
         .unwrap_or_default()
+}
+
+/// A stand-in test binary at `at`: it notes its run in the fake cargo's `calls` as `exe <name>` and passes; `tag` makes another binary.
+fn test_binary(at: &Path, tag: &str) {
+    crate::write_executable(
+        at,
+        &format!(
+            "#!/bin/sh\n# {tag}\necho \"exe $(basename \"$0\") $*\" >> \"$(dirname \"$0\")/calls\"\necho 'test result: ok. 1 passed'\n"
+        ),
+    );
 }
 
 fn calls(world: &World) -> Vec<String> {
@@ -220,7 +231,7 @@ case "$1 $2" in
   "llvm-cov report") ls "$CARGO_TARGET_DIR/debug/deps" > "$d/report-saw"; out=""; while [ $# -gt 0 ]; do [ "$1" = "--output-path" ] && out="$2"; shift; done; [ -n "$out" ] && cat "$d/lcov" > "$out";;
   "test --no-run") m=""; prev=""; for a in "$@"; do [ "$prev" = --manifest-path ] && m="$a"; prev="$a"; done
     exe="$CARGO_TARGET_DIR/debug/deps/l7r_x-keep"; mkdir -p "${exe%/*}"
-    printf '#!/bin/sh\npwd > "%s/ran-in"\necho "$CARGO_MANIFEST_DIR $LLVM_PROFILE_FILE $*" >> "%s/ran-in"\n[ -f "%s/failtest" ] && { echo boom; exit 1; }\nexit 0\n' "$d" "$d" "$d" > "$exe"; chmod +x "$exe"
+    printf '#!/bin/sh\npwd > "%s/ran-in"\necho "$CARGO_MANIFEST_DIR $LLVM_PROFILE_FILE $*" >> "%s/ran-in"\necho "$CARGO_MANIFEST_DIR" >> "%s/runs"\n[ -f "%s/failtest" ] && { echo boom; exit 1; }\nexit 0\n' "$d" "$d" "$d" "$d" > "$exe"; chmod +x "$exe"
     echo '{"executable":"'"$exe"'","manifest_path":"'"$m"'"}'; echo 'not json'; echo '{"reason":"x"}';;
 esac
 exit 0"#;
@@ -704,7 +715,7 @@ fn a_manifest_declares_what_its_tests_read_and_an_undeclared_reader_is_refused()
 
 /// A cargo whose test build names one executable, `exe` beside it, and fails when `nobuild` is there; every other call passes.
 const BINARY_CARGO: &str = r#"case "$1 $2" in
-  "test --no-run") [ -f "$(dirname "$0")/nobuild" ] && exit 1; echo '{"executable":"'"$(dirname "$0")"'/exe"}';;
+  "test --no-run") [ -f "$(dirname "$0")/nobuild" ] && exit 1; echo '{"executable":"'"$(dirname "$0")"'/exe","target":{"kind":["lib"],"name":"a"}}';;
   "test --quiet") echo 'test result: ok. 1 passed';;
 esac
 exit 0"#;

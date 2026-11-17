@@ -103,8 +103,8 @@ fn a_request_follows_redirects_and_carries_the_contexts_cookies_both_ways() {
     )
     .unwrap();
     assert_eq!((got.status, got.content_type.as_str()), (404, "text/plain"));
-    // the port is closed now: a refused connection, in Node's words
-    std::thread::sleep(Duration::from_millis(100));
+    // the port is closed now: a refused connection, in Node's words (10 ms, where 100 ms was most of FR-008's bar, feature 449 T160)
+    std::thread::sleep(Duration::from_millis(10));
     let refused = TcpListener::bind("127.0.0.1:0")
         .unwrap()
         .local_addr()

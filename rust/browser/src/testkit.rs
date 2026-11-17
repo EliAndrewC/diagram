@@ -100,20 +100,32 @@ while True:
 /// The fake browser written into `dir`, executable; its path.
 #[must_use]
 pub fn fake_chrome(dir: &Path) -> PathBuf {
-    use std::os::unix::fs::PermissionsExt as _;
     let at = dir.join("fake-chrome");
-    std::fs::write(&at, FAKE).unwrap();
-    std::fs::set_permissions(&at, std::fs::Permissions::from_mode(0o755)).unwrap();
+    executable(&at, FAKE);
     at
+}
+
+/// `text` written to `at` as a program by `install`, as the gate's `core::write_executable` writes one: a file this process wrote
+/// itself stays open for writing in any child another test thread forks meanwhile, until that child's `exec`, and running it then can
+/// fail with "Text file busy". The fake browser closed before its first answer once in 12 runs with the crates' tests side by side, the
+/// shape that race leaves (feature 449 T160, observed 2026-11-17; the error itself was not seen).
+pub fn executable(at: &Path, text: &str) {
+    let draft = at.with_extension("draft");
+    std::fs::write(&draft, text).unwrap();
+    let done = std::process::Command::new("install")
+        .args(["-m", "755"])
+        .arg(&draft)
+        .arg(at)
+        .status();
+    assert!(done.unwrap().success());
+    std::fs::remove_file(&draft).unwrap();
 }
 
 /// A program at `dir/name` running `body` as a shell script.
 #[must_use]
 pub fn script(dir: &Path, name: &str, body: &str) -> PathBuf {
-    use std::os::unix::fs::PermissionsExt as _;
     let at = dir.join(name);
-    std::fs::write(&at, format!("#!/bin/sh\n{body}\n")).unwrap();
-    std::fs::set_permissions(&at, std::fs::Permissions::from_mode(0o755)).unwrap();
+    executable(&at, &format!("#!/bin/sh\n{body}\n"));
     at
 }
 
