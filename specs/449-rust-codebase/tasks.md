@@ -61,8 +61,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T160 Compile and test speed, the GM's third approved proposal (request.md 2026-11-16), ordered last: first measure where compile and test time goes across a port task, then take any target with a significant measured saving
       research: rendering
-- [ ] T163 The record check's kept pass keys today's UTC date, so a pass cannot be replayed after an archive row's seven-day pending window ends (a defect T148 found in the Python's check and, holding FR-002 in the port, left for its own commit; constitution XIV)
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

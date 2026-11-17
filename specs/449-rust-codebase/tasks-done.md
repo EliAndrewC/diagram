@@ -435,3 +435,6 @@
 - [x] T162 The clone-sync guard's launcher exemption for a forked background session: a session started with --fork-session --resume <parent> treats that parent as its dispatcher, as L7R_DISPATCHER does for a page session (found by T147's port agent, refused in its own clone)
       research: rendering
       verify: DONE. landed: the clone-sync guard's forked-session dispatcher; guard tests green, coverage complete, the test failing without the fix
+- [x] T163 The record check's kept pass keys today's UTC date, so a pass cannot be replayed after an archive row's seven-day pending window ends (a defect T148 found in the Python's check and, holding FR-002 in the port, left for its own commit; constitution XIV)
+      research: rendering
+      verify: DONE. landed: the record check's kept pass keys the date; research tests green, the test failing without the fix; make static clean
