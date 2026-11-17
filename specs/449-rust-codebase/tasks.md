@@ -57,8 +57,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T158 Phase 4 S13, the deletion close (ask:449-phase4-slices) Q10: tools/claims.py and claims_context, claims_counters, claims_scope, claims_stale, tunables, gates/codeid.py, dead_closure, bundle_door, tools/__init__, l7r/diagram/__init__ deleted (2,443 lines), the claims re-keyed by claims carry, ruff, pyproject's list and the requirements files gone; the phase-4 close
       research: rendering
-- [ ] T160 Compile and test speed, the GM's third approved proposal (request.md 2026-11-16), ordered last: first measure where compile and test time goes across a port task, then take any target with a significant measured saving
-      research: rendering
 - [ ] T167 FR-008's remaining debt after T160: 151 tests over a tenth of a second (scratchpad t160/ws-after.rows), and the ruling on the real-tree tests (checks' research pointers, tooling detector and question size; task's research boxes; research's site cases; the guard's r6 corpus) that are not declared a tool's one end-to-end test
       research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
