@@ -298,10 +298,10 @@ fn the_wait_restarts_on_a_suspend_and_ends_when_the_arming_goes() {
     c.suspend_s = 100;
     let mut t = timer_of(&c, &clone);
     assert!(t.wait_ms(2) && t.suspends == 1);
-    assert!(t.wait_awake(0));
+    assert!(t.wait_ms(0));
     std::fs::remove_file(clone.join(".git/idle-tests.json")).unwrap();
     let mut gone = timer_of(&c, &clone);
-    assert!(!gone.wait_awake(1) && !gone.alive());
+    assert!(!gone.wait_ms(1000) && !gone.alive());
 }
 
 #[test]
@@ -410,7 +410,7 @@ fn the_timer_stops_when_its_home_cannot_hold_the_lock_or_the_wait_ends_early() {
     assert!(records(&clone).is_empty());
     let (clone2, mut d) = world("early");
     armed(&clone2);
-    d.wait_s = Some(1);
+    d.wait_s = Some(1.0);
     d.give_up_s = -1;
     timer(&d, &clone2, "sess", "");
     assert!(records(&clone2).is_empty());

@@ -45,14 +45,23 @@ edit() {
 # Every unit the clone owes, answered at its content through the record tools' own command (feature 449 T149: through
 # `scripts/owed_door.py`'s writer until its door left with `entry_owed.py`); a reason stands in for a bundle, its bypass record
 # in the throwaway clone, which `restore` removes.
+# ONE ANSWER PER CHECK (feature 449 T122): each `--answer` computes the tree's owed units again, about 1 s, and one call a unit
+# was 11 calls, half the suite's 22.8 s and the full hook run's bound beside idle-tests (2026-11-17). A check's units are named
+# together - its notes on a question by `--q` and `--notes k,k`, its other subjects by `--kind s,s` - so the same units are
+# answered, and case 4 still proves every one of them is (the gate goes quiet). The three modal-research units are answered
+# as a session answers them, by one `CHECK=modal-research` (its agent's three checks): 11 calls became 3.
 answer_all() {
-  local g="$HERE/../../scripts/gates/l7r-gate.sh" slug check subject q notes
-  "$g" record record-owed --root "$ROOT" --unanswered --slugs | while IFS= read -r slug; do
-    [ -n "$slug" ] || continue
-    check="${slug%%:*}"; subject="${slug#*:}"; q="${subject%%#*}"; notes=""
-    [ "$subject" != "$q" ] && notes="${subject#*#}"
-    "$g" record record-owed --root "$ROOT" --answer "$check" --result 0/0/0 --q "$q" ${notes:+--notes "$notes"} \
-      --reason "the suite answers its own edits" >/dev/null
+  local g="$HERE/../../scripts/gates/l7r-gate.sh" check q notes kinds
+  "$g" record record-owed --root "$ROOT" --unanswered --slugs | awk '
+    { i = index($0, ":"); if (!i) next; c = substr($0, 1, i - 1); s = substr($0, i + 1); j = index(s, "#")
+      if (c == "modal-accuracy" || c == "modal-references" || c == "modal-gaps") { c = "modal-research"; if ((c, s) in seen) next; seen[c, s] = 1 }
+      if (j) { k = c "|" substr(s, 1, j - 1); sep = (k in notes) ? "," : ""; notes[k] = notes[k] sep substr(s, j + 1) }
+      else { sep = (c in kinds) ? "," : ""; kinds[c] = kinds[c] sep s } }
+    END { for (k in notes) { split(k, p, "|"); c = p[1]; print k "|" notes[k] "|" (c in done ? "" : kinds[c]); done[c] = 1 }
+          for (c in kinds) if (!(c in done)) print c "|||" kinds[c] }' |
+  while IFS='|' read -r check q notes kinds; do
+    "$g" record record-owed --root "$ROOT" --answer "$check" --result 0/0/0 ${q:+--q "$q"} ${notes:+--notes "$notes"} \
+      ${kinds:+--kind "$kinds"} --reason "the suite answers its own edits" >/dev/null
   done
 }
 

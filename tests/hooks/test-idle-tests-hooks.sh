@@ -34,7 +34,10 @@ printf '#!/bin/sh\necho "start $(date +%%s.%%N) $PWD" >> %s; sleep 0.6; echo "en
 # switches off is still wanted and still tested - so the fixture arms explicitly and every case below
 # goes on exercising the timer, the stagger, the lock and the abort. Section 11 is the one case that
 # leaves IDLE_ARM unset, and it is what proves the switch actually reaches `do_stop`.
-export IDLE_ARM=1 IDLE_FIXTURE=1 IDLE_TICK=0.2 IDLE_SUSPEND_S=100 IDLE_HOME="$HOMEDIR" IDLE_SESSIONS_DIR="$SESS" IDLE_CLOCK="$CLOCK" IDLE_RUN="$RUNNER" IDLE_GIVE_UP_S=100000 IDLE_BUSY_CMD="false"
+# THE WAITS IN FRACTIONS OF A SECOND (feature 449 T122): the timer counts awake time in its own ticks, so a wait of N whole seconds
+# was N real seconds, and the suite took 35.0 s, the full hook run's longest (2026-11-12). The seams take fractions, and a tick
+# of 0.05 s keeps a fraction exact; the ticker's simulated second a 0.1 s still drifts far under the 100 s suspend threshold.
+export IDLE_ARM=1 IDLE_FIXTURE=1 IDLE_TICK=0.05 IDLE_SUSPEND_S=100 IDLE_HOME="$HOMEDIR" IDLE_SESSIONS_DIR="$SESS" IDLE_CLOCK="$CLOCK" IDLE_RUN="$RUNNER" IDLE_GIVE_UP_S=100000 IDLE_BUSY_CMD="false"
 hook() { # hook <mode> <clone> [sid] -> RC, OUT
   OUT=$(printf '{"cwd":"%s","session_id":"%s"}' "$2" "${3:-sid-a}" | (cd "$2" && IDLE_ROOT="$2" "$HOOK" "$1" 2>&1)); RC=$?
 }
@@ -74,7 +77,7 @@ hook prompt "$CA"; sleep 0.6
 check "prompt disarms and the timer exits" '[ ! -f "$CA/.git/idle-tests.json" ] && [ ! -d /proc/$pid1 ]'
 
 # --- 4. the wait runs the tests once, records, surfaces once, does not re-arm
-export IDLE_WAIT_S=3; : > "$RUNLOG"; touch "$TMP/ticking"; ticker & TK=$!
+export IDLE_WAIT_S=0.3; : > "$RUNLOG"; touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA"
 check "record written after the wait" 'wait_for "$CA/dev/idle-log/*-sess-a.json" 8'
 sleep 0.5
@@ -98,7 +101,7 @@ hook prompt "$CA"
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
 # --- 5. a suspend restarts the full wait: the clock jumps past the threshold mid-wait
-export IDLE_WAIT_S=4; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
+export IDLE_WAIT_S=0.6; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
 # GUARD_EDIT_OK: feature 169 - THE SUSPEND CASE WAITED ON A CLOCK INSTEAD OF ON A CONDITION, and
 # went red at the gate on 2026-08-30 while passing 30/30 standalone. `wait_awake` takes its clock
@@ -127,7 +130,7 @@ check "the run started a FULL wait after the jump" 'awk "BEGIN { exit !($t_start
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
 # --- 6. one runner at a time: three sessions armed together never overlap, losers defer and still run
-export IDLE_WAIT_S=1 IDLE_DEFER_S=1; : > "$RUNLOG"
+export IDLE_WAIT_S=0.2 IDLE_DEFER_S=0.2; : > "$RUNLOG"
 for c in "$CA" "$CB" "$CC"; do rm -f "$c"/dev/idle-log/*.json; done
 touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA"; hook stop "$CB"; hook stop "$CC"
@@ -139,24 +142,24 @@ check "the losers deferred ($defs)" '[ "$defs" -ge 1 ]'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
 # --- 7. a make running in the clone defers the run (FR-006b b)
-export IDLE_WAIT_S=1 IDLE_DEFER_S=1 IDLE_BUSY_CMD="$TMP/busy.sh"; printf '#!/bin/sh\n[ -f %s/busyflag ]\n' "$TMP" > "$TMP/busy.sh"; chmod +x "$TMP/busy.sh"
+export IDLE_WAIT_S=0.2 IDLE_DEFER_S=0.2 IDLE_BUSY_CMD="$TMP/busy.sh"; printf '#!/bin/sh\n[ -f %s/busyflag ]\n' "$TMP" > "$TMP/busy.sh"; chmod +x "$TMP/busy.sh"
 : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json; touch "$TMP/busyflag"; touch "$TMP/ticking"; ticker & TK=$!
-hook stop "$CA"; sleep 1.5
+hook stop "$CA"; sleep 0.8
 check "no run while a make runs" '[ ! -s "$RUNLOG" ]'
 rm -f "$TMP/busyflag"
 check "runs once the make is gone" 'wait_for "$CA/dev/idle-log/*.json" 8'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_BUSY_CMD="false"
 
 # --- 8. the session is gone: the timer exits without running
-export IDLE_WAIT_S=2; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
+export IDLE_WAIT_S=0.3; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
-hook stop "$CA" sid-gone; sleep 1.5
+hook stop "$CA" sid-gone; sleep 1.0
 check "no run for a session that no longer exists" '[ ! -s "$RUNLOG" ] && [ ! -d /proc/$(jq -r .timer_pid \"$CA/.git/idle-tests.json\" 2>/dev/null || echo 999999) ]'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; rm -f "$CA/.git/idle-tests.json"
 
 # --- 9. a prompt during a run aborts it (D9): a slow runner, a prompt mid-run, an aborted record, no end line
-SLOW="$TMP/slow.sh"; printf '#!/bin/sh\necho "start $(date +%%s.%%N) $PWD" >> %s; sleep 5; echo "end $(date +%%s.%%N) $PWD" >> %s\n' "$RUNLOG" "$RUNLOG" > "$SLOW"; chmod +x "$SLOW"
-export IDLE_WAIT_S=1 IDLE_RUN="$SLOW"; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
+SLOW="$TMP/slow.sh"; printf '#!/bin/sh\necho "start $(date +%%s.%%N) $PWD" >> %s; sleep 3; echo "end $(date +%%s.%%N) $PWD" >> %s\n' "$RUNLOG" "$RUNLOG" > "$SLOW"; chmod +x "$SLOW"
+export IDLE_WAIT_S=0.2 IDLE_RUN="$SLOW"; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA"; wait_grep "^start" "$RUNLOG" 8; sleep 0.3
 hook prompt "$CA"; sleep 0.5
@@ -165,7 +168,7 @@ hook prompt "$CA"; sleep 0.5
 wait_for "$CA/dev/idle-log/*.json" 8
 check "the run was aborted on the prompt" '! grep -q "^end" "$RUNLOG" && [ ! -f "$CA/.git/idle-tests.running" ]'
 check "an aborted record exists and surfaces" 'grep -q "aborted" "$CA"/dev/idle-log/*.json && printf "%s" "$OUT" | grep -q "aborted on your prompt"'
-sleep 5; check "no end line ever" '! grep -q "^end" "$RUNLOG"'
+sleep 3; check "no end line ever" '! grep -q "^end" "$RUNLOG"'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_RUN="$RUNNER"
 
 # --- 10. seams are refused outside a fixture: the real tree ignores them and says so

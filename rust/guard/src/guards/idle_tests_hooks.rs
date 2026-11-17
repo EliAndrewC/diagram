@@ -58,8 +58,10 @@ pub(crate) struct Config {
     pub run: String,
     pub home: PathBuf,
     pub sessions: PathBuf,
-    pub wait_s: Option<u64>,
-    pub defer_s: Option<u64>,
+    /// A fixture's wait and deferral, in seconds and fractions of one (feature 449 T122: whole seconds held the suite's 34 cases to
+    /// real seconds of waiting, 35.0 s of it, the full hook run's longest suite, 2026-11-12).
+    pub wait_s: Option<f64>,
+    pub defer_s: Option<f64>,
     pub busy: String,
     pub arm: bool,
     pub warning: Option<String>,
@@ -470,11 +472,7 @@ impl Timer<'_> {
             && self.c.now() - self.armed.parse::<i64>().unwrap_or(0) < self.c.give_up_s
     }
 
-    /// Wait `secs` of AWAKE time; a wall jump past the ticks restarts the count (D2, D3). False: the arming is gone.
-    fn wait_awake(&mut self, secs: u64) -> bool {
-        self.wait_ms(i64::try_from(secs).unwrap_or(i64::MAX / 1000) * 1000)
-    }
-
+    /// Wait `need` milliseconds of AWAKE time; a wall jump past the ticks restarts the count (D2, D3). False: the arming is gone.
     fn wait_ms(&mut self, need: i64) -> bool {
         let tick_ms = i64::try_from(Duration::from_secs_f64(self.c.tick).as_millis())
             .unwrap_or(1)
@@ -517,7 +515,8 @@ impl Timer<'_> {
     }
 
     /// The lock taken, or None when the arming went while waiting for it: one runner at a time, never beside a make in the clone.
-    fn hold(&mut self, lock: &File, defer: u64) -> Option<()> {
+    fn hold(&mut self, lock: &File, defer_ms: i64) -> Option<()> {
+        let defer = defer_ms / 1000;
         loop {
             if !flock(lock, "-n") {
                 self.deferrals += 1;
@@ -529,7 +528,7 @@ impl Timer<'_> {
             } else {
                 return Some(());
             }
-            if !self.wait_awake(defer) {
+            if !self.wait_ms(defer_ms) {
                 return None;
             }
         }
@@ -631,6 +630,20 @@ fn failures(log: &Path) -> Vec<String> {
     out
 }
 
+/// A fixture's seconds in milliseconds (T122); Rust's float-to-integer cast saturates, so a huge or negative seam stays in range.
+#[expect(
+    clippy::cast_possible_truncation,
+    reason = "a fixture's seconds, a cast that saturates by Rust's definition"
+)]
+fn seconds_ms(seconds: f64) -> i64 {
+    (seconds * 1000.0).round() as i64
+}
+
+/// Whole minutes in milliseconds, saturating.
+fn minutes_ms(minutes: u64) -> i64 {
+    i64::try_from(minutes.saturating_mul(60_000)).unwrap_or(i64::MAX)
+}
+
 /// The detached wait: the stagger, the lock, then the run and its record.
 pub(crate) fn timer(c: &Config, clone: &Path, session: &str, sid: &str) {
     let sf = clone.join(".git/idle-tests.json");
@@ -648,9 +661,13 @@ pub(crate) fn timer(c: &Config, clone: &Path, session: &str, sid: &str) {
         suspends: 0,
         deferrals: 0,
     };
-    let wait = c.wait_s.unwrap_or_else(|| c.stagger(session) * 60);
-    let defer = c.defer_s.unwrap_or_else(|| c.deferral(session) * 60);
-    if !t.wait_awake(wait) {
+    let wait = c
+        .wait_s
+        .map_or_else(|| minutes_ms(c.stagger(session)), seconds_ms);
+    let defer = c
+        .defer_s
+        .map_or_else(|| minutes_ms(c.deferral(session)), seconds_ms);
+    if !t.wait_ms(wait) {
         return;
     }
     let _ = std::fs::create_dir_all(&c.home);

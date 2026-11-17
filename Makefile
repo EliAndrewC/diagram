@@ -320,6 +320,11 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  n=$$((n+1)); printf '%s %s %s\n' "$$b" "$$t" "$$sha" >> "$$work/todo"; \
 	done; \
 	: "THE LONGEST SUITES START FIRST (feature 449 T125): in roster order the run ended on idle-tests, 36 s started 19.6 s in; ordered by each suite's last seconds (hookrun.sh keeps them in .git/hooks-test/<suite>.s), a suite never timed first, the full run measured 52.4 s against 59.6 s (2026-11-12)"; \
+	: "THE USER-LEVEL SELF-TEST RUNS BESIDE THE SUITES (feature 449 T122): run after the fan-out it added its 3.8 s to every full run alone, against a wall of about 35 s (2026-11-17); its pass, its failure and its stamp are read after the fan-out as before"; \
+	uh="$$HOME/.claude/hooks/test-missing-program-hook.sh"; mph=""; \
+	uk=$$(cat "$$uh" "$$HOME/.claude/hooks/missing-program-hook.sh" 2>/dev/null | sha256sum | cut -c1-16); \
+	if [ -f "$$uh" ] && [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/missing-program-hook" 2>/dev/null)" = "$$uk" ]; then skipped=$$((skipped+1)); \
+	elif [ -f "$$uh" ]; then { bash "$$uh" > "$$work/missing-program-hook.log" 2>&1; echo $$? > "$$work/missing-program-hook.exit"; } < /dev/null & mph=$$!; fi; \
 	if [ -s "$$work/todo" ]; then \
 	  while read -r b rest; do printf '%s %s %s\n' "$$(cat "$$gitdir/hooks-test/$$b.s" 2>/dev/null || echo 9999)" "$$b" "$$rest"; done < "$$work/todo" | sort -s -k1,1 -rn | cut -d' ' -f2- > "$$work/todo.sorted" && mv "$$work/todo.sorted" "$$work/todo"; \
 	  mkdir -p "$$gitdir/hooks-test"; \
@@ -334,11 +339,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	    fi; \
 	  done; \
 	fi; \
-	uh="$$HOME/.claude/hooks/test-missing-program-hook.sh"; \
-	uk=$$(cat "$$uh" "$$HOME/.claude/hooks/missing-program-hook.sh" 2>/dev/null | sha256sum | cut -c1-16); \
-	if [ -f "$$uh" ] && [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/missing-program-hook" 2>/dev/null)" = "$$uk" ]; then skipped=$$((skipped+1)); \
-	elif [ -f "$$uh" ]; then \
-	  if bash "$$uh" > "$$work/missing-program-hook.log" 2>&1; then n=$$((n+1)); printf '%s' "$$uk" > "$$gitdir/hooks-test/missing-program-hook"; \
+	if [ -n "$$mph" ]; then wait "$$mph"; \
+	  if [ "$$(cat "$$work/missing-program-hook.exit" 2>/dev/null)" = 0 ]; then n=$$((n+1)); printf '%s' "$$uk" > "$$gitdir/hooks-test/missing-program-hook"; \
 	  else printf '\n\033[1mHOOK TESTS FAILED: missing-program-hook (user-level, %s)\033[0m\n' "$$uh"; sed 's/^/  /' "$$work/missing-program-hook.log"; fail="$$fail missing-program-hook"; fi; \
 	fi; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check tool-signals; then fail="$$fail check-tool-signals"; fi; \

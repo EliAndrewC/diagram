@@ -290,39 +290,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T82 to T82 moved to plan-done.md, 2026-11-11 (feature 375 FR-044) -->
 <!-- plan-archive: T83 to T83 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 <!-- plan-archive: T85 to T85 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)
+### T122 (the full hook run's wall time, the GM's pre-approval of 2026-11-12: a concrete target with a measured saving)
 
-**Not landed** (its plan review, BLOCKED 2026-11-12): the saving was the suite's alone, not the full hook run's, so it misses the GM's condition ("if you identify concrete targets with significant measured expected savings then go ahead and do them ... Otherwise you can just keep working on the port of the tooling"). The decisions below are the record of what was tried and measured.
+- **Approach**: the full hook run (`make hooks-test HOOKS_ALL=1`) cut by its three bounds together: the idle-tests suite's real-time waits in fractions of a second (the guard's fixture seams `IDLE_WAIT_S` and `IDLE_DEFER_S`, `rust/guard/src/guards/idle_tests_hooks.rs`, honored inside a fixture alone, and `tests/hooks/test-idle-tests-hooks.sh`), the entry-gate suite's fixture answering its units a check at a time (`tests/hooks/test-entry-gate.sh`), and the Makefile's missing-program self-test started beside the suites instead of after them.
 
-- **Approach**: the idle-tests guard's fixture seams `IDLE_WAIT_S` and `IDLE_DEFER_S` take fractions of a second (`seconds_ms` in `rust/guard/src/guards/idle_tests_hooks.rs`, honored only inside a fixture as before), and the suite (`tests/hooks/test-idle-tests-hooks.sh`) waits fractions of a second where it waited whole seconds.
-
-   **Decisions** (the GM's pre-approval in `request.md`, "a fifth efficiency round"; FR-002):
-   - Where the suite's time went: the full hook run's longest suite, 35.0 s alone, its cases waiting whole seconds of real time (the timer counts awake time in its own ticks, so a 3-second seam is 3 real seconds), and in a profiled full run its 35.0 s the longest while the run held no pressure on CPU, memory or I/O (stalls of 0.64 s, 17 microseconds and 0.18 s over the run, peak memory 7.75 GB of the 10 GB cap) (observed 2026-11-12, method: the suite under `bash -x` with each line's process and `EPOCHREALTIME`, the main shell's time summed by case and by `check`; `/tmp/claude-1000/-diagram/d2dc8c63-4103-4cf9-bc83-e73a2fae792a/scratchpad/r5/profile.sh`, the cgroup's `memory.current` and the `some` totals of its `cpu`, `memory` and `io` pressure files around `make hooks-test HOOKS_ALL=1`).
-   - The change: the seams parse fractions, carried in milliseconds (`seconds_ms`; the real waits stay whole minutes, `minutes_ms`, so a real deferral's message is as before), `wait_awake` folded into `wait_ms`; the suite's tick from 0.2 s to 0.05 s so a fraction stays exact, its waits from 3, 4, 2 and 1 s to 0.3, 0.6, 0.3 and 0.2 s, its two fixed 1.5 s sleeps to 0.8 s and 1.0 s, and its slow runner's 5 s, and the sleep that outlasts it, to 3 s (each a CONVENTION, the fixture's own constant, chosen to keep every case's order of events). Every case and check stays: the suspend case still asks a full wait after the jump (at least 0.35 s, the wait 0.6 s), and the ticker's simulated second a 0.1 s drifts far under the 100 s suspend threshold at the faster tick (the fixture's CONVENTION values, `IDLE_SUSPEND_S=100` in the suite).
-   - Measured the same way before and after (SC-007): the suite alone 35.0 s before and 17.3 s, 16.9 s and 17.0 s after, its 34 checks passing each time (observed 2026-11-12, method: `date +%s.%N` around `bash tests/hooks/test-idle-tests-hooks.sh`, at a load of about 3). The full hook run did not move: 52.1 s before, 53.1 s and 54.1 s after, because the other suites slowed inside it, sync-with-main from 28.3 s to 45.5 s and 46.5 s and entry-gate from 24.9 s to 37.6 s and 42.7 s (observed 2026-11-12, method: `/usr/bin/time` around `make hooks-test HOOKS_ALL=1`, its `ran` line). The run is held by something the suites share that the pressure figures do not show, not by its longest suite; the guard wrapper's build lock is not it (it is taken with `-n` and only for a build). So the saving is the suite's own, wherever it runs alone (a change to the idle-tests guard re-runs it alone), and T123's premise, a run bound by its schedule, does not hold.
-   - The checks: the guard's tests 555 green and its lines all reached, clippy pedantic clean (the fraction's cast in one function, its saturation a reasoned exception) (observed 2026-11-12, method: `l7r-gate.sh rust test`, `uncovered` and `lint` on the guard).
+   **Decisions** (the GM's pre-approval in `request.md`, "a fifth efficiency round"; FR-002 for every suite case; docs/performance-checklist.md):
+   - Why it did not land on 2026-11-12: the idle-tests change alone cut that suite from 35.0 s to about 17 s (observed 2026-11-12, method: T122's first runs, its note in tasks.md), but the full run did not move, because the next suites bounded it - entry-gate, its fixture answering eleven units with one call each where each `record-owed` call rebuilds the tree's owed units - and about 8 s ran outside any suite, the self-test serial after them (observed 2026-11-17, method: the run's own step times, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/runs.txt`). Back-to-back runs on this host also drive the CPU to 94 °C and slow the CPU-bound suites about 1.5 times, which hid the gain (observed 2026-11-17, method: the package temperature and the load logged beside each run, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/runs.txt`).
+   - The changes, every case and check kept: entry-gate's fixture answers notes a question at a time, other subjects by kind and the three modal units as one modal-research answer, as a session records them - three calls in place of eleven, the same units answered, its case 4 still proving the gate falls quiet; the self-test's pass, failure and stamp are read after the suites as before, a plain `make hooks-test` still skipping it when unchanged.
+   - Before and after, each run started cool: the full run took 43.0, 43.3 and 43.4 s before and 29.4, 28.8 and 29.0 s after (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/runs.txt`, each run started under 60 °C and a one-minute load under 3, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/full.sh`). Alone, idle-tests went from 34.8 to 17.0 s and entry-gate from 22.8 to 13.5 s (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/runs.txt`, each run started under 60 °C and a one-minute load under 3, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/full.sh`). Back to back on a hot CPU the run took about 62 s before and 53 to 55 s after (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/runs.txt`, runs started without waiting to cool), the figure a gate after builds sees.
+   - The next bound, recorded and not cut: sync-with-main, with entry-gate and l7r-gate within 4 s of it (observed 2026-11-17, method: the after runs' suite times, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/runs.txt`), so a further cut needs all three; its candidates are sync-with-main's system time, `record-owed`'s fixed cost a call, l7r-gate's real browser and model starts, and `deps --keys` serial before the suites.
+   - The checks: `make static` green, `make rust-test` green, `make hooks-test HOOKS_ALL=1` green on 54 suites (observed 2026-11-17, method: those commands, one after another after the last edit).
 
 ### T122 Approach (checklist part A)
 
-1. **The goal, in the world.** The idle-tests suite waits only as long as its cases need.
-2. **The constraints.** FR-002: every case and check held.
-3. **Where each comes from.** G: the GM's pre-approval of 2026-11-12 in `request.md`; O: the profile and the timings above.
-4. **Do they describe the world here?** Measured on this clone.
-5. **The order.** After T120.
+1. **The goal, in the world.** The full hook run waits only as long as its cases need.
+2. **The constraints.** FR-002: every case and check held; the GM's condition, a measured saving.
+3. **Where each comes from.** G: the GM's pre-approval; O: the runs above.
+4. **Do they describe the world here?** Measured on this host cool and hot, measured 2026-11-17 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t122/runs.txt`).
+5. **The order.** After T160, which found the run's bound.
 6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** The suite's time above.
-10. **Before moving a constant.** The fixture's own tick and waits, none of the guard's real ones.
+9. **Done, measured.** The full run a third faster from a cool start.
+10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** yes, tooling time, not the generator:
-1. **Where does the time go?** Real seconds of waiting the fixture asked for.
-2. **Does the change remove work, or only move it?** Removes it: the waits are shorter, the cases the same.
-3. **What do you expect it to save, and why?** The suite's waiting, measured above; not the full run's, which another bound holds.
-4. **How does the work grow?** With the cases' waits, now fractions.
-5. **What did the before and after show, and under what conditions?** Three runs alone and two full runs, on a lightly loaded host.
-6. **Did any map move?** No: no engine code changes.
+**Performance work?** Yes, of the hook suites: (1) the time went to idle-tests' real waits, entry-gate's eleven `record-owed` calls and the serial self-test, measured per suite; (2) each change removes work or waiting; (3) the expected saving was the bound's, about a third; (4) the run is bounded by its longest suite, so the next cut needs the three now level; (5) before and after started cool, and hot, the temperature and load stated; (6) no map moved.
 
 <!-- plan-archive: T123 to T123 moved to plan-done.md, 2026-11-12 (feature 375 FR-044) -->
 
