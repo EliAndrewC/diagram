@@ -1,0 +1,44 @@
+{
+  "utc": "2026-11-17T18:42:49Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 8,
+  "result": "green",
+  "commit": "77a64dfb4",
+  "mode": "incremental",
+  "selected": "",
+  "host": {
+    "load": [
+      0.96,
+      1.04
+    ],
+    "mem_avail_mb": [
+      8438,
+      8429
+    ],
+    "cpu_temp_c": [
+      70.0,
+      72.0
+    ],
+    "stall_s": {
+      "cpu": 0.2,
+      "io": 0.0,
+      "io_full": 0.0,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 11826,
+      "package": 6136
+    }
+  },
+  "phases": {
+    "preflight": 7.0,
+    "reference": 0.0,
+    "counters-inert": 0.0,
+    "static": 3.0,
+    "format": 0.0,
+    "pytest": 3.0,
+    "test-full": 4.0,
+    "seeds": 4.0
+  }
+}
