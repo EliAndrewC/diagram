@@ -422,6 +422,10 @@
 - [x] T147 Phase 4 S3b, the uncited cluster (ask:449-phase4-slices): scripts/record/uncited, uncited_imports, archive_ops (1,623 lines); retires downloads.rs's by-path run of archive_ops.py inbox
       research: rendering
       verify: DONE. landed: phase 4 S3b, the uncited cluster: 128 differential cases none differing (verify run), make static, rust-test and hooks-test green
+- [x] T148 Phase 4 S5, the record's site (ask:449-phase4-slices): record/site, site_pages, site_links, money, citations, glossary, glossary_source, tools/record_asset, glossary_asset, footnote_census, source_tags_contract, scripts/gates/memo_check.py, pipeline/record_build (2,164 lines); retires push.rs's memo_check and record-build runs
+      research: rendering
+      note: owed from T144's plan review (2026-11-16), where S1's library has no caller: wiring a caller that printed a KeyError's str(e) keeps its quotes; and research::host's tabs and missing NFKC, against urlsplit, need their own decision once live fetch URLs reach it beside the blocked-domain list
+      verify: DONE. landed: phase 4 S5, the record's site: the real site byte for byte, 71 differential cases with the stamp the one ruled difference; make static, rust-test, hooks-test and quick green
 - [x] T159 The pre-review count check: make decide refuses a count (lines, cases, files ...) whose sentence carries no label, the plan review's commonest unreviewable return (request.md 2026-11-16)
       research: rendering
       verify: DONE. landed: make decide refuses an unlabeled count; plan crate tests green, coverage complete; ask:449-T159-rounds
