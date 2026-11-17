@@ -453,3 +453,6 @@
 - [x] T166 The claims tooling's two gaps T165 found before the engine ports: a claim carried from a deleted .py unit onto its Rust port (carry matches by code fingerprint, which a .py and a .rs unit never share; 367 .py claims), and a Rust unit's fingerprint holding the constants it reads as a Python unit's does (111 of 398 claimed Rust functions), migrated without re-owing unchanged code
       research: rendering
       verify: DONE. landed: claims carry across a port and a Rust fingerprint holding its read constants; the migration owing nothing, a ported claim checked IN-STEP
+- [x] T167 FR-008's remaining debt after T160: 151 tests over a tenth of a second (scratchpad t160/ws-after.rows), and the ruling on the real-tree tests (checks' research pointers, tooling detector and question size; task's research boxes; research's site cases; the guard's r6 corpus) that are not declared a tool's one end-to-end test
+      research: rendering
+      verify: DONE. landed: FR-008's debt: every ordinary test under a tenth of a second, eleven end-to-end tests declared; static, rust-test and hooks-test green
