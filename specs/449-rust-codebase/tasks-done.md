@@ -444,3 +444,6 @@
 - [x] T164 Three defects T149 found, each fixed (constitution XIV): the entry-headings check never covered the 99 Mode A kinds; diffrun's a_bare_world_compares_everything_under_it fails under load; eleven owed-crate tests run over FR-008's tenth of a second
       research: rendering
       verify: DONE. landed: three defects T149 found, each fixed: entry-headings over both registries with old lines byte-kept, a flaky diffrun test, the owed crate's slow tests under FR-008
+- [x] T165 The claims tooling over Rust engine units before the engine ports (the GM 2026-11-17: port the claims tools before the map engine): the stale-figure check (claims_stale, a changed constant's old figure on a drawing page) and the counter-only clear (claims_counters) made to work on Rust units as they work on Python's, and the rest - context, fingerprints, carry, tunables - confirmed on a Rust unit end to end
+      research: rendering
+      verify: DONE. landed: the claims tools over Rust units: stale figures and counter-only clears firing on real rust/phases changes, the Python cases unchanged
