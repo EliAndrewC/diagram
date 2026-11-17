@@ -263,9 +263,9 @@ picture-diff:   ## [diagnostics] two renders compared: the differing share, the 
 	@if [ -z "$(A)" ] || [ -z "$(B)" ]; then printf 'make picture-diff: A=<render> B=<render> are required - e.g. make picture-diff A=main.png B=pool/hamlets/kuwabata/kuwabata.svg PAGE=pool/hamlets/kuwabata/kuwabata.html\n' >&2; exit 2; fi
 	$(RUN).tools.picture_diff "$(A)" "$(B)" $(if $(PAGE),--page "$(PAGE)",) $(if $(SVG),--svg "$(SVG)",)
 
-notes-census:   ## [diagnostics] refresh the derived counts inside each map's notes census block   M="pool/hamlets/*/*.json"
+notes-census:   ## [diagnostics] refresh the derived counts inside each map's notes census block (Rust since 449 T170, `l7r-mode-a`)   M="pool/hamlets/*/*.json"
 ##  M=<glob>  which manifests to refresh (default: every manifest in both pool trees)
-	$(RUN).tools.notes_census $(or $(wildcard $(M)),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a notes-census $(or $(wildcard $(M)),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
 building-programs: ## [docs] render each declared Mode A type's required-items table into docs/building-programs.md from l7r/diagram/buildings/types.json (feature 254; Rust since 449 T168, `l7r-mode-a`)   CHECK=1: exit 1 if stale
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a building-programs $(if $(CHECK),--check,)

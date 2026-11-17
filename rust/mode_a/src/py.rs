@@ -5,7 +5,8 @@
 //! Research:
 //!     the ported Python's failures - NONE: how an error is printed, deciding nothing about a building
 
-use l7r_gate_research::Error;
+use l7r_gate_research::{digit_value, Error};
+use l7r_guard::shared::py_text::{py_float_text, repr};
 use serde_json::Value;
 
 /// The last line of the traceback `err` would have ended a Python run with: a `KeyError`'s message is its key's `repr`.
@@ -83,9 +84,76 @@ pub fn iterate(value: &Value) -> Result<Vec<Value>, Error> {
     }
 }
 
+/// Python's `float(text)`: [`py_float_text`]'s reading, a decimal digit of any script read as its value (`float("\u{661}")` is 1.0 to
+/// Python, and the regex's `\d` takes such digits where a sheet's pattern does).
+///
+/// # Errors
+/// The `ValueError` Python raised, its message naming the text by its `repr`.
+pub fn float(text: &str) -> Result<f64, Error> {
+    // an ASCII text is read as it is: asking each character's digit value cost a pattern match per character (the parse of a pool
+    // sheet spent most of its time there, observed 2026-11-17, feature 449 T170)
+    let ascii: std::borrow::Cow<'_, str> = if text.is_ascii() {
+        text.into()
+    } else {
+        text.chars()
+            .map(|c| match digit_value(c) {
+                Some(d) if !c.is_ascii() => char::from_digit(d, 10).unwrap_or(c),
+                _ => c,
+            })
+            .collect::<String>()
+            .into()
+    };
+    py_float_text(&ascii).ok_or_else(|| {
+        Error::new(
+            "ValueError",
+            format!("could not convert string to float: {}", repr(text)),
+        )
+    })
+}
+
+/// Python's `max(a, b)`: `b` only when strictly greater, so a NaN first stays (where `f64::max` drops it).
+#[must_use]
+pub fn max(a: f64, b: f64) -> f64 {
+    if b > a {
+        b
+    } else {
+        a
+    }
+}
+
+/// Python's `min(a, b)`: `b` only when strictly less.
+#[must_use]
+pub fn min(a: f64, b: f64) -> f64 {
+    if b < a {
+        b
+    } else {
+        a
+    }
+}
+
+/// Python's `sum()` over floats (`CPython` 3.12 and later): Neumaier's compensated sum, the compensation added at the end when it is
+/// finite and not zero - a plain left fold differs from it in the last place.
+#[must_use]
+pub fn sum(values: impl IntoIterator<Item = f64>) -> f64 {
+    let (mut total, mut c) = (0.0_f64, 0.0_f64);
+    for x in values {
+        let t = total + x;
+        if total.abs() >= x.abs() {
+            c += (total - t) + x;
+        } else {
+            c += (x - t) + total;
+        }
+        total = t;
+    }
+    if c != 0.0 && c.is_finite() {
+        total += c;
+    }
+    total
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{iterate, os_error, type_name, uncaught};
+    use super::{float, iterate, max, min, os_error, sum, type_name, uncaught};
     use l7r_gate_research::Error;
     use serde_json::json;
 
@@ -126,5 +194,26 @@ mod tests {
             .map(type_name)
             .collect();
         assert_eq!(names, ["bool", "int", "float", "str", "dict"]);
+    }
+
+    #[test]
+    #[expect(clippy::float_cmp, reason = "each figure is Python's to the bit")]
+    fn a_float_a_min_a_max_and_a_sum_are_python_s() {
+        assert_eq!(float(" 1_0.5 ").unwrap(), 10.5);
+        assert_eq!(float("\u{661}\u{662}.5").unwrap(), 12.5);
+        assert_eq!(
+            uncaught(&float("1.2.3").unwrap_err()),
+            "ValueError: could not convert string to float: '1.2.3'\n"
+        );
+        assert!(max(f64::NAN, 2.0).is_nan() && min(f64::NAN, 2.0).is_nan());
+        assert_eq!(
+            (max(1.0, 2.0), min(1.0, 2.0), max(2.0, 1.0), min(2.0, 1.0)),
+            (2.0, 1.0, 2.0, 1.0)
+        );
+        // CPython's compensated sum: a left fold gives 0.6000000000000001
+        assert_eq!(sum([0.1, 0.2, 0.3]), 0.6);
+        assert_eq!(sum([1e100, 1.0, -1e100]), 1.0);
+        assert!(sum([f64::INFINITY, 1.0]).is_infinite());
+        assert_eq!(sum([]), 0.0);
     }
 }

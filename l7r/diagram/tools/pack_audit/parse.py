@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+# LOCKSTEP (feature 449 T170, `ask:449-engine-order` condition 3): this module is ported to `rust/mode_a/src/parse.rs`, which `make notes-census`
+# runs; an edit here makes the same change there in the same commit, and `make rust-test CRATE=rust/mode_a` fails until it does
+# (`parse/lockstep.rs` holds the two equal on every pool sheet).
+
 import re
 from dataclasses import dataclass, field
 

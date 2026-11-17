@@ -462,6 +462,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T170 (the engine pilot, piece 2 of step 1; the GM 2026-11-17, request.md: a second real piece, measured after the pilot's fixes)": {
+   "sha256": "5380dbf5ad8d2d9f70b7c23dab6e49aa8f58b17c0f92243c16cf7caf513314de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T170 Approach (checklist part A)": {
+   "sha256": "82adeac7017d2793c6737ee0b093f5e07cd697c7a41bf97bf45727ca2a8fa3ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10536,6 +10548,76 @@
      "why": "Serves FR-008 (each test under a tenth of a second) as a measurement tool, and keeping it non-refusing follows the GM's performance rule that time is never a gate. No downside beyond its build."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T170 (the engine pilot, piece 2 of step 1; the GM 2026-11-17, request.md: a second real piece, measured after the pilot's fixes)",
+    "### T170 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T170-piece",
+     "summary": "notes_census is ported as the second real piece of step 1, wired so that `make notes-census` runs the Rust. The Python and its _invocation.py row are deleted.",
+     "class": "within",
+     "why": "The GM (2026-11-17) asked for 'a second real piece of step one' and to stop after two. ask:449-engine-order condition 2 names notes_census among step 1's modules. Condition 3 says the make targets call the Rust once it is wired. Deleting a ported Python file falls under the GM's 2026-11-10 'Yes please delete Python files once their Rust ports land' (FR-001)."
+    },
+    {
+     "id": "T170-imports-lockstep",
+     "summary": "parse.py's SVG parse, tagged.py, PRIVY_FILL and sheet.py's SVG reader come in as Rust with outputs held exactly. The four Python originals stay for their Python importers under the lockstep rule, with a bit-for-bit lockstep test over 6 pool and 22 fixture sheets, each fixture asserted to parse.",
+     "class": "within",
+     "why": "This is exactly ask:449-engine-order conditions 2 (held exactly) and 3 (Python audit code still imported in process stays bound by lockstep until step 3). The test enforces that ruling and adds nothing to it. It names three functions in three files. PRIVY_FILL, a constant, is under the lockstep rule but no test names it. Condition 3 requires the rule, not a test, so this is not a narrowing."
+    },
+    {
+     "id": "T170-sheet-half",
+     "summary": "The census's sheet half (sheet_counts, stale_sheet_counts, stale_counts), which only a kept Python test reached, is ported with three commands so the differential can reach it. That test's check (feature 294 B15b) moves into the crate's end-to-end test.",
+     "class": "within",
+     "why": "FR-002 holds every case a piece's tests hold before its Python is deleted, and FR-001 sends a surviving test along with its piece. Porting the half rather than dropping it keeps the held case. The commands only verify that requested behavior and are not new behavior (enforcement, GM 2026-09-20)."
+    },
+    {
+     "id": "T170-claims",
+     "summary": "The ten claims on parse.py and tagged.py stay keyed to those kept .py units. The Rust copies carry each claim word for word where it is true of the Rust; where it is not, they carry a claim stating what the Rust decides. Other new units carry their module's NONE.",
+     "class": "within",
+     "why": "Q10 of ask:449-phase4-slices re-keys only in the cut that deletes the unit, and these units are not deleted. Claims on new Rust units are the ordinary claims process, not a hand rewrite of a carried claim. The block says nothing about claims on notes_census.py, which this cut does delete. Q10 requires that the cut land no claim keyed to a deleted unit. The landing's claims check enforces that, so the silence is noted but does not block."
+    },
+    {
+     "id": "T170-defect-T171",
+     "summary": "Decided here only this: the port reproduces HEAD's wrong entrance-board census line exactly, and the four hamlets' notes are left untouched. The fix is filed as T171.",
+     "class": "within",
+     "why": "FR-002 binds the port to the Python's outputs. Its one exception covers a guard or check that refuses correct work, and a wrong census line is not a refusal. This ruling covers only T170's reproduce-and-leave choice. It does not clear T171's fix, its regeneration of the notes or its restoration of the test. The GM said to go no further than two pieces and that real tradeoffs wait for him, so T171 is judged on its own."
+    },
+    {
+     "id": "T170-speed",
+     "summary": "Python's \\b patterns are written out as character classes, and ASCII numbers get a fast path, with the outputs held by fixtures.",
+     "class": "within",
+     "why": "This is an implementation detail with outputs unchanged (FR-002). It is the kind of no-brainer improvement the GM pre-approved on 2026-11-17."
+    },
+    {
+     "id": "T170-differential",
+     "summary": "A 105-case differential of HEAD's Python against the Rust found no difference. It normalizes only a traceback's frames (its last line is compared) and a library's JSON/UTF-8 wording.",
+     "class": "within",
+     "why": "ask:449-usage-text already releases an uncaught traceback's text, so comparing its last line is stricter than required. ask:449-T066-json-message releases a library's own error text inside a fixed message. Both are standing ruled cases of FR-002, and no case is excluded beyond them."
+    },
+    {
+     "id": "T170-measure",
+     "summary": "The pilot's cost is reported by phase: tokens, wall time, the test loop, differential runs and test times.",
+     "class": "within",
+     "why": "The GM asked for the pieces' wall time and tokens by phase, to judge efficiency."
+    },
+    {
+     "id": "T170-no-page",
+     "summary": "The block publishes no before/after page of the pool sheets (unstated, found by reading).",
+     "class": "within",
+     "why": "The GM's page is for seeing drawn sheets change. Condition 5 attaches it to a landing over 'every pool sheet it draws'. notes_census draws no sheet and its outputs are held identical, so leaving the page out guts nothing."
+    },
+    {
+     "id": "T170-exits",
+     "summary": "Exits: green checks and a gated make land. On red, the failure is recorded and the task set down, and a cannot-be-done claim goes to make arbiter-ask. Ordered after T169 as the pilot's last piece.",
+     "class": "within",
+     "why": "This matches the GM's 'stop after those first two' and the arbiter route."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18780,6 +18862,74 @@
      "summary": "make test-times CRATE=<dir> times each test alone by T99's method; reports only, never refuses.",
      "class": "within",
      "why": "Serves FR-008 (each test under a tenth of a second) as a measurement tool, and keeping it non-refusing follows the GM's performance rule that time is never a gate. No downside beyond its build."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T170": {
+   "section_sha256": "380d1b0bc4dc67822e4e6092fee3e201a53686433b0967840be0b0b52166a3b5",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T170-piece",
+     "summary": "notes_census is ported as the second real piece of step 1, wired so that `make notes-census` runs the Rust. The Python and its _invocation.py row are deleted.",
+     "class": "within",
+     "why": "The GM (2026-11-17) asked for 'a second real piece of step one' and to stop after two. ask:449-engine-order condition 2 names notes_census among step 1's modules. Condition 3 says the make targets call the Rust once it is wired. Deleting a ported Python file falls under the GM's 2026-11-10 'Yes please delete Python files once their Rust ports land' (FR-001)."
+    },
+    {
+     "id": "T170-imports-lockstep",
+     "summary": "parse.py's SVG parse, tagged.py, PRIVY_FILL and sheet.py's SVG reader come in as Rust with outputs held exactly. The four Python originals stay for their Python importers under the lockstep rule, with a bit-for-bit lockstep test over 6 pool and 22 fixture sheets, each fixture asserted to parse.",
+     "class": "within",
+     "why": "This is exactly ask:449-engine-order conditions 2 (held exactly) and 3 (Python audit code still imported in process stays bound by lockstep until step 3). The test enforces that ruling and adds nothing to it. It names three functions in three files. PRIVY_FILL, a constant, is under the lockstep rule but no test names it. Condition 3 requires the rule, not a test, so this is not a narrowing."
+    },
+    {
+     "id": "T170-sheet-half",
+     "summary": "The census's sheet half (sheet_counts, stale_sheet_counts, stale_counts), which only a kept Python test reached, is ported with three commands so the differential can reach it. That test's check (feature 294 B15b) moves into the crate's end-to-end test.",
+     "class": "within",
+     "why": "FR-002 holds every case a piece's tests hold before its Python is deleted, and FR-001 sends a surviving test along with its piece. Porting the half rather than dropping it keeps the held case. The commands only verify that requested behavior and are not new behavior (enforcement, GM 2026-09-20)."
+    },
+    {
+     "id": "T170-claims",
+     "summary": "The ten claims on parse.py and tagged.py stay keyed to those kept .py units. The Rust copies carry each claim word for word where it is true of the Rust; where it is not, they carry a claim stating what the Rust decides. Other new units carry their module's NONE.",
+     "class": "within",
+     "why": "Q10 of ask:449-phase4-slices re-keys only in the cut that deletes the unit, and these units are not deleted. Claims on new Rust units are the ordinary claims process, not a hand rewrite of a carried claim. The block says nothing about claims on notes_census.py, which this cut does delete. Q10 requires that the cut land no claim keyed to a deleted unit. The landing's claims check enforces that, so the silence is noted but does not block."
+    },
+    {
+     "id": "T170-defect-T171",
+     "summary": "Decided here only this: the port reproduces HEAD's wrong entrance-board census line exactly, and the four hamlets' notes are left untouched. The fix is filed as T171.",
+     "class": "within",
+     "why": "FR-002 binds the port to the Python's outputs. Its one exception covers a guard or check that refuses correct work, and a wrong census line is not a refusal. This ruling covers only T170's reproduce-and-leave choice. It does not clear T171's fix, its regeneration of the notes or its restoration of the test. The GM said to go no further than two pieces and that real tradeoffs wait for him, so T171 is judged on its own."
+    },
+    {
+     "id": "T170-speed",
+     "summary": "Python's \\b patterns are written out as character classes, and ASCII numbers get a fast path, with the outputs held by fixtures.",
+     "class": "within",
+     "why": "This is an implementation detail with outputs unchanged (FR-002). It is the kind of no-brainer improvement the GM pre-approved on 2026-11-17."
+    },
+    {
+     "id": "T170-differential",
+     "summary": "A 105-case differential of HEAD's Python against the Rust found no difference. It normalizes only a traceback's frames (its last line is compared) and a library's JSON/UTF-8 wording.",
+     "class": "within",
+     "why": "ask:449-usage-text already releases an uncaught traceback's text, so comparing its last line is stricter than required. ask:449-T066-json-message releases a library's own error text inside a fixed message. Both are standing ruled cases of FR-002, and no case is excluded beyond them."
+    },
+    {
+     "id": "T170-measure",
+     "summary": "The pilot's cost is reported by phase: tokens, wall time, the test loop, differential runs and test times.",
+     "class": "within",
+     "why": "The GM asked for the pieces' wall time and tokens by phase, to judge efficiency."
+    },
+    {
+     "id": "T170-no-page",
+     "summary": "The block publishes no before/after page of the pool sheets (unstated, found by reading).",
+     "class": "within",
+     "why": "The GM's page is for seeing drawn sheets change. Condition 5 attaches it to a landing over 'every pool sheet it draws'. notes_census draws no sheet and its outputs are held identical, so leaving the page out guts nothing."
+    },
+    {
+     "id": "T170-exits",
+     "summary": "Exits: green checks and a gated make land. On red, the failure is recorded and the task set down, and a cannot-be-done claim goes to make arbiter-ask. Ordered after T169 as the pilot's last piece.",
+     "class": "within",
+     "why": "This matches the GM's 'stop after those first two' and the arbiter route."
     }
    ],
    "verdict": "CLEAR"

@@ -22,7 +22,6 @@ import pytest
 
 from l7r.diagram.buildings import types as bt
 from l7r.diagram.pipeline import poolmaps
-from l7r.diagram.tools import notes_census
 from l7r.diagram.tools import pack_audit as pa
 from l7r.diagram.tools.pack_audit import mapmatch, onmap, size_marks
 from l7r.diagram.tools.pack_audit import registry as R
@@ -113,15 +112,8 @@ def test_the_map_record_rule_finds_the_sheets_it_is_for() -> None:
     assert mapmatch.maps_recording("ochiba-magistracy", "magistracies") == [] and mapmatch.maps_recording("hayakawa-magistracy", "magistracies") == []
 
 
-@pytest.mark.parametrize("bundle", _bundles(), ids=lambda b: b.stem)
-def test_a_sheets_notes_type_the_counts_it_draws(bundle: poolmaps.MapBundle) -> None:
-    """Feature 294 B15b (the audit's B11 row): a count of tubs, privies or wells typed in the notes' current prose agrees
-    with what the sheet draws, by B14's rule - dated history is exempt (`notes_census.stale_sheet_counts`)."""
-    svg = _sheet(bundle)
-    with open(svg, encoding="utf-8") as fh:
-        text = fh.read()
-    stale = notes_census.stale_sheet_counts(_notes(bundle), text)
-    assert not stale, f"{bundle.stem}: the notes type counts the sheet does not draw - correct them, or move them under a dated entry: {stale}"
+# Feature 294 B15b's sweep (a count of tubs, privies or wells typed in the notes' current prose agrees with what the sheet draws) moved
+# to the Mode A engine crate with the Python it called (feature 449 T170): `rust/mode_a/src/census/pool_check.rs`, `make rust-test`.
 
 
 @pytest.mark.parametrize("bundle", _bundles(), ids=lambda b: b.stem)

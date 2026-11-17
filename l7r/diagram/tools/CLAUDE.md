@@ -31,7 +31,7 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | Which classes does a page draw see-through, and is a broadleaf crown painted over a conifer? | `see_through` (feature 294 B5; the declared table is `settlement/see_through.py`) |
 | Does a marsh meet the open ground on a ruled or plumb line, where a reader sees it? | `marsh_edges` (feature 294 B2; the visible free edge from the page's id map) |
 | What does a hand-drawn Mode A sheet look like with its captions placed? | `make sheet-render SHEET=<svg> OUT=<png>` - the placer is `labels/hand_sheet.py` |
-| A map's canonical counts, in the block its `.notes.md` carries | `notes_census` - `make notes-census` |
+| A map's canonical counts, in the block its `.notes.md` carries | `make notes-census` - Rust since feature 449 T170, `rust/mode_a/src/census.rs` (the sheets' typed counts, B15b, held by its `census/pool_check.rs`) |
 | The engine's and the Mode A procedures' research CLAIMS, read from the source | `l7r-gate claims` (`rust/gate/crates/claims/src/claims.rs`, feature 449 T82) behind `make claims-owed`, `claims-bundle`, `claims-checked`, `claims-report` (feature 316); `claims` here is its `.py` half, CPython's syntax tree, asked through `scripts/bundle_door.py` |
 | The record's footnotes counted by kind - what is owed | `make footnote-census` (`l7r-gate record footnote-census`, Rust since feature 449 T148) |
 | Assemble or check the glossary from its per-term files | `make glossary` (`l7r-gate record glossary`, Rust since feature 449 T148) |

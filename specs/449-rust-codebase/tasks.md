@@ -54,6 +54,10 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T158 Phase 4 S13, the deletion close (ask:449-phase4-slices) Q10: tools/claims.py and claims_context, claims_counters, claims_scope, claims_stale, tunables, gates/codeid.py, dead_closure, bundle_door, tools/__init__, l7r/diagram/__init__ deleted (2,443 lines), the claims re-keyed by claims carry, ruff, pyproject's list and the requirements files gone; the phase-4 close
       research: rendering
+- [ ] T170 The engine pilot, piece 2 of step 1 (the GM 2026-11-17, request.md: a second real piece, measured after the pilot's fixes): notes_census.py wired (make notes-census) with what it reads - pack_audit's parse.py and tagged.py (the plan's SVG parse, ten research claims) and interactive/sheet.py's SVG reader - ported into rust/mode_a, the Python they serve held in lockstep; its wall time and tokens reported by phase
+      research: rendering
+- [ ] T171 The notes census's entrance-board line and its freshness test (constitution XIV; found by T170): since feature 444 cut the tool's entrance-board branch, an entrance-seated notice board's census line reads a 250-ft farmhouse count, which feature 261 does not judge a board by - fix the line (the ways-out count ported onto the manifest, or the line left out for an entrance seat, the easier route named); restore the freshness test feature 444 dropped on a wrong label (feature 193 kept notes-census for it); regenerate the four hamlets' notes
+      research: rendering
 - [x] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
