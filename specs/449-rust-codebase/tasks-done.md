@@ -466,3 +466,6 @@
 - [x] T169 The engine pilot's no-brainer process fixes (the GM 2026-11-17, pre-approved): the differential's worlds sparse (T168's first run 307 s against 50 s), the claims form checked by make static before landing, the plan review's bundle carrying every arbiter ruling a block cites, and a per-test timer for FR-008
       research: rendering
       verify: DONE. landed: the pilot's process fixes: sparse worlds for iterating with whole-world verifies, the claims form at make static, rulings in the plan bundle, make test-times
+- [x] T170 The engine pilot, piece 2 of step 1 (the GM 2026-11-17, request.md: a second real piece, measured after the pilot's fixes): notes_census.py wired (make notes-census) with what it reads - pack_audit's parse.py and tagged.py (the plan's SVG parse, ten research claims) and interactive/sheet.py's SVG reader - ported into rust/mode_a, the Python they serve held in lockstep; its wall time and tokens reported by phase
+      research: rendering
+      verify: DONE. landed: the engine pilot's second piece: notes_census, the sheet parse and the sheet reader in rust/mode_a, 105 differential cases none differing, 176 claims IN-STEP

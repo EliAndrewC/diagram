@@ -3979,3 +3979,34 @@ censuses empty (work breakdown 8, FR-010).
 
 **Performance work?** Yes, of the process: (1) T168's first differential spent its time checking out the whole repository, measured; (2) each fix removes work or a round; (3) the expected saving was the differential's world time and a review round, both measured; (4) the world's cost now grows with the paths a case declares; (5) before and after on the same cases; (6) no map moved.
 
+<!-- plan-archive: archived 2026-11-17 -->
+### T170 (the engine pilot, piece 2 of step 1; the GM 2026-11-17, request.md: a second real piece, measured after the pilot's fixes)
+
+- **Approach**: `l7r/diagram/tools/notes_census.py` ported into `rust/mode_a/` and wired - `make notes-census [M=...]` runs `l7r-gate.sh mode-a notes-census`, the Python deleted with its `_invocation.py` row - with what it reads: `pack_audit/parse.py` (the plan's SVG parse), `pack_audit/tagged.py`, `program_rules.py`'s `PRIVY_FILL` and `interactive/sheet.py`'s SVG reader; those four stay for the Python that imports them, under the lockstep rule.
+
+   **Decisions** (`ask:449-engine-order` conditions 2 and 3, `ask:449-phase4-slices` Q10, `ask:449-usage-text`, `ask:449-T066-json-message`, FR-001 to FR-005, FR-008; the GM's words, request.md 2026-11-17):
+   - The piece is step 1's (engine-plan.md's table names `notes_census` in step 1's row), and what it imports comes into step 1 as Rust whose outputs are held exactly (condition 2). Lockstep (condition 3): a test runs the Python's `parse_svg`, `marks` and `element_kinds` on the six pool sheets and 22 fixture sheets and holds every field, refusal and float bit for bit equal to the Rust, and it went red on a scratch mutation of each of the three Python files (observed 2026-11-17, method: each mutated in a scratch copy and restored by `cp`). Each lockstep fixture that should parse is asserted to parse, so both sides refusing cannot pass it.
+   - The sheet half of the census (`sheet_counts`, `stale_sheet_counts`, `stale_counts`), which the make target never reached and a kept Python test alone called, is ported with three commands that exist for the differential to reach it, and that test's check (feature 294 B15b) moves into the crate's declared end-to-end test.
+   - Claims (Q10): the ten claims on `parse.py` and `tagged.py` stay keyed to those `.py` units, which are not deleted. Each Rust copy carries its claim word for word where it describes the Rust, and where it does not - `marks` keeps no memo, `parse_svg` has no regex group count - a claim stating what the Rust unit decides; every other new unit carries its module's NONE. `make claims-owed` owes 175 new claims in 16 files one impl-drift round and one claim a triage (observed 2026-11-17, method: `make claims-owed`).
+   - A tool defect found and left for its own task (T171): since feature 444 cut the tool's entrance-board branch, an entrance-seated notice board's census line reads a farmhouse count within the tool's radius (`250 ft`, its constant), where the hamlets' notes carry the ways-out count the branch wrote and feature 261 judges an entrance board by its ways out; HEAD's Python writes the same line, so the port reproduces it exactly (FR-002) and the four hamlets' notes are left as they are. T171 fixes the line, regenerates the notes and restores the freshness test feature 444 dropped on a wrong label (feature 193 kept `notes-census` for it).
+   - A speed defect found and fixed: Python's `\b` in the ported patterns ran the backtracking engine at every offset. A whole parse took 48 ms against the Python's 30 ms before, and 11 ms after the `\\b` was written out as character classes, held by fixtures, and ASCII numbers given a fast path (observed 2026-11-17, method: a parse of the shrine's sheet timed before and after).
+   - The same outputs (FR-002): HEAD's Python against the Rust through the shared runner - `make notes-census` on the default list and five `M=` forms, stale, CRLF and malformed notes, 32 manifest shapes and errors, and the sheet counts on all six pool sheets and refusing fixtures, both worlds reading HEAD's notes - the differential's 105 cases, none differing (measured 2026-11-17 (`make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t170/diff/cases.json VERIFY=1`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t170/diff/cases.diff-run/reports/diff-run-verify-20261117T174802Z.json`)). Normalizations: a traceback's frames (its last line compared), a library's JSON and UTF-8 wording (`ask:449-T066-json-message`).
+   - The pilot's measure, by phase: the port agent took 472k tokens (observed 2026-11-17, method: its usage report) and about 55 minutes from reading to the final checks (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t170/phases.log`). After an edit `make rust-test CRATE=rust/mode_a` took 2.3 to 4.0 s (observed 2026-11-17, method: timed after each of 15 edits). The sparse incremental differential runs took 39 to 84 s each and the whole-world verify 392.6 s (observed 2026-11-17, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t170/phases.log`). `make test-times` found the one declared end-to-end test over the bar, at 0.481 s, and every other test under 0.06 s (observed 2026-11-17, method: `make test-times CRATE=rust/mode_a`).
+   - The checks: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick` and the pointer check green (observed 2026-11-17, method: those commands, one after another after the last edit).
+
+### T170 Approach (checklist part A)
+
+1. **The goal, in the world.** The notes census and the plan's SVG parse run in Rust, wired, and the second piece's cost is measured.
+2. **The constraints.** FR-001 to FR-005 and FR-008; `ask:449-engine-order`; Q10; the GM's words.
+3. **Where each comes from.** G: the GM's request; R: the rulings; O: the differential, the lockstep and the phase log above.
+4. **Do they describe the world here?** Run on this clone's real pool sheets and notes, measured 2026-11-17 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t170/diff/cases.json`).
+5. **The order.** After T169; the pilot's last piece.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, the claims round and a gated `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The verify run's cases with none differing, the claims round recorded, the phase table in time and tokens.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No - a port, its cost measured for the GM.
+
