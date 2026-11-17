@@ -675,30 +675,4 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T168 to T168 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 
-### T169 (the engine pilot's no-brainer process fixes; the GM 2026-11-17, request.md: pre-approved where clearly beneficial and without a downside)
-
-- **Approach**: four fixes the pilot (T168) found, each with no downside beyond its build: the shared runner builds a world as a sparse checkout of the paths a case declares (`rust/gate/crates/diffrun/src/checkout.rs`); `make static` checks the claims form of every crate the claims walk reads (`claims coverage --rust`); the plan review's bundle carries every ruling a changed block cites (`rust/gate/crates/plan/src/plan/bundle/rulings.rs`, its `rulings.md`); and `make test-times CRATE=<dir>` times each test alone by T99's method (`rust/gate/crates/rustc/src/rustc/times.rs`).
-
-   **Decisions** (the GM's words in request.md, 2026-11-17; FR-008; the GM's performance rule, docs/performance-checklist.md):
-   - Sparse worlds, for iterating only, after the plan review: a cases file's `world.checkout` names a repository, a revision (`WORKTREE` laying the uncommitted and untracked files of its paths over HEAD) and the paths to check out, and incremental, `--only` and `--twice` runs build those sparse worlds; a `--verify` or `--all` run ALWAYS builds whole checkouts, ignoring the list, both sides keyed by the kind of world and kept apart (`.whole.json`), so a too-narrow list - both sides failing alike, which reads as agreement - can pass an incremental run but never a verify, the only report a plan may cite (T161's lint), and no sparse result stands in it. A test holds it: a list too narrow for its case passes the sparse run and differs in the verify, and the test fails with the verify's rule taken out (observed 2026-11-17, method: the rule deleted and restored). On T168's cases the incremental run took 50.0 s on sparse worlds against 267.1 s on whole ones, the first verify after it 265.6 s and a second 131.5 s (observed 2026-11-17, method: each from a fresh state, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t169/demo/`), every kept result, whole and sparse, equal to a whole checkout's (observed 2026-11-17, method: the results compared). So the saving is the iterating runs', and a verify's figures stay the record.
-   - The claims form at `make static`: a unit with no claim of its own and no module-level claim is refused there, before landing, with the fix in the message; the check takes 0.05 to 0.06 s (observed 2026-11-17, method: three runs on an unchanged tree and after an edit). It reads every walked crate, so it is stricter than the push's gate, which reads changed files: an unchanged file whose claim's pointer breaks is refused at `make static` too, which the tree passes today. The comment on `walked()` now says a new crate owes a claim on every unit.
-   - Rulings in the bundle: for each `ask:<key>` a changed block cites, its record's date, ruling, why and what, verbatim, from the feature's own arbiter log first; a key with no record is named as such. On T168's section the bundle carried `ask:449-engine-order` and the other cited rulings, none missing (observed 2026-11-17, method: `make plan-delta` on a scratch clone).
-   - The timer reports and never refuses, the GM's performance rule making time never a gate; on `rust/mode_a` it agreed with T168's hand timings (observed 2026-11-17, method: both run on the crate).
-   - The checks: `make static`, `make rust-test` and `make hooks-test HOOKS_ALL=1` green (observed 2026-11-17, method: those commands, one after another after the last edit).
-
-### T169 Approach (checklist part A)
-
-1. **The goal, in the world.** The pilot's frictions cost the next port nothing.
-2. **The constraints.** The GM's pre-approval and its limit (no downside); FR-008; the performance rule.
-3. **Where each comes from.** G: the GM's words; O: T168's frictions and the measurements above.
-4. **Do they describe the world here?** Measured on T168's own harness and section, measured 2026-11-17 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t169/`).
-5. **The order.** After T168; before the pilot's second piece.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The sparse run's time, the claims form refused at `make static`, the rulings in the bundle, the timer's list.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** Yes, of the process: (1) T168's first differential spent its time checking out the whole repository, measured; (2) each fix removes work or a round; (3) the expected saving was the differential's world time and a review round, both measured; (4) the world's cost now grows with the paths a case declares; (5) before and after on the same cases; (6) no map moved.
-
+<!-- plan-archive: T169 to T169 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->

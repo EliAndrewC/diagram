@@ -463,3 +463,6 @@
 - [x] T168 The engine pilot, piece 1 of step 1 (the GM 2026-11-17, request.md: a pilot measured by phase, then a second piece): building_programs.py and the buildings.types registry it reads, ported into a new engine crate and wired (make building-programs), the Python command deleted, types.py held in lockstep for the generators; its wall time and tokens reported by phase
       research: rendering
       verify: DONE. landed: the engine pilot, piece 1: building_programs and the building types in rust/mode_a, wired; 76 differential cases none differing; 80 claims IN-STEP
+- [x] T169 The engine pilot's no-brainer process fixes (the GM 2026-11-17, pre-approved): the differential's worlds sparse (T168's first run 307 s against 50 s), the claims form checked by make static before landing, the plan review's bundle carrying every arbiter ruling a block cites, and a per-test timer for FR-008
+      research: rendering
+      verify: DONE. landed: the pilot's process fixes: sparse worlds for iterating with whole-world verifies, the claims form at make static, rulings in the plan bundle, make test-times
