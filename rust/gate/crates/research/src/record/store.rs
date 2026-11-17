@@ -3,8 +3,8 @@
 //! own notes (`page_notes`); the REGISTRY is a page of fragments - `sources/`, its front matter, its groups and their entries - assembled
 //! as feature 258 assembled every page. Nothing here guesses: a file it does not recognize is a refusal, never skipped.
 //!
-//! The Python's `MEMO` (feature 383: a per-file memo the push's record check hands in) is not ported: its one caller, `memo_check.py`, is
-//! S5's, and keeps or drops a cache on its own measurement (`ask:449-T81-slices`).
+//! The Python's `MEMO` (feature 383: a per-file memo the push's record check handed in) is not ported: its one caller, `memo_check.py`,
+//! went with S5 (feature 449 T148), whose record check keeps its whole pass instead (`tools::site::kept`, `ask:449-T81-slices`).
 
 use std::path::Path;
 use std::sync::LazyLock;

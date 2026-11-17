@@ -1,0 +1,156 @@
+{
+ "split": [
+  "ok",
+  [
+   "assets/glossary/0010-b%2Fc.json",
+   "assets/glossary/0020-a%25.json"
+  ]
+ ],
+ "names": [
+  "0010-b%2Fc.json",
+  "0020-a%25.json"
+ ],
+ "files": {
+  "0010-b%2Fc.json": "{\n \"term\": \"b/c\",\n \"def\": \"x\",\n \"variants\": [\n  \"B\",\n  \"Σίσυφος\"\n ]\n}\n",
+  "0020-a%25.json": "{\n \"term\": \"a%\",\n \"variants\": [\n  \"a\"\n ],\n \"def\": 1\n}\n"
+ },
+ "check_unindexed": [
+  "ok",
+  [
+   "../../../research/assets/glossary-variants.txt"
+  ]
+ ],
+ "write_index": [
+  "ok",
+  1
+ ],
+ "index": "a\ta%\nb\tb/c\nσίσυφος\tb/c\n",
+ "write_index_again": [
+  "ok",
+  0
+ ],
+ "write_source": [
+  "ok",
+  0
+ ],
+ "check_stale": [
+  "ok",
+  [
+   "assets/glossary.json"
+  ]
+ ],
+ "write_source_changed": [
+  "ok",
+  1
+ ],
+ "js": "// DERIVED FILE - written by `make glossary` from l7r/diagram/interactive/assets/glossary.json (features 207 and 209). Never\n// edit here: add or change a term in glossary.json and run `make glossary`; the gate fails while the two differ.\nwindow.RECORD_GLOSSARY = [\n {\n  \"term\": \"b/c\",\n  \"variants\": [\n   \"Σίσυφος\",\n   \"B\"\n  ],\n  \"def\": \"x\"\n },\n {\n  \"term\": \"a%\",\n  \"variants\": [\n   \"a\"\n  ],\n  \"def\": 1\n }\n];\n",
+ "errors": {
+  "no dir": [
+   [
+    "GlossaryError",
+    "assets/glossary/: no term files - run `make glossary SPLIT=1`"
+   ],
+   [
+    "ok",
+    []
+   ]
+  ],
+  "stray": [
+   [
+    "GlossaryError",
+    "README: not a term file. A term file is <prefix>-<term>.json, the prefix four or more digits counting by ten"
+   ],
+   [
+    "GlossaryError",
+    "README: not a term file. A term file is <prefix>-<term>.json, the prefix four or more digits counting by ten"
+   ]
+  ],
+  "prefix": [
+   [
+    "GlossaryError",
+    "assets/glossary/00010-b.json: its filename says `b` and its content says `b` - one of the two is wrong"
+   ],
+   [
+    "GlossaryError",
+    "assets/glossary/00010-b.json: its filename says `b` and its content says `b` - one of the two is wrong"
+   ]
+  ],
+  "mismatch": [
+   [
+    "GlossaryError",
+    "assets/glossary/0010-a.json: its filename says `a` and its content says `z` - one of the two is wrong"
+   ],
+   [
+    "GlossaryError",
+    "assets/glossary/0010-a.json: its filename says `a` and its content says `z` - one of the two is wrong"
+   ]
+  ],
+  "no term": [
+   [
+    "ok",
+    [
+     {
+      "variants": []
+     }
+    ]
+   ],
+   [
+    "KeyError",
+    "'term'"
+   ]
+  ],
+  "twice": [
+   [
+    "ok",
+    [
+     {
+      "term": "a",
+      "variants": []
+     },
+     {
+      "term": "a",
+      "variants": []
+     }
+    ]
+   ],
+   [
+    "GlossaryError",
+    "`a` is defined by two term files - a term has one home"
+   ]
+  ],
+  "five digits": [
+   [
+    "ok",
+    [
+     {
+      "term": "a",
+      "variants": [
+       "A"
+      ]
+     },
+     {
+      "term": "b",
+      "variants": [
+       "B"
+      ]
+     }
+    ]
+   ],
+   [
+    "ok",
+    [
+     "assets/glossary.json",
+     "../../../research/assets/glossary-variants.txt"
+    ]
+   ]
+  ]
+ },
+ "split_lossy": [
+  "GlossaryError",
+  "the split does not assemble back to the same bytes (first difference at character 1: '\"a\": {\"variants\": [\"x\"]}, \"b\": {\"variant' against '\\n \"a\": {\\n  \"variants\": [\\n   \"x\"\\n  ]\\n },\\n') - the term files in assets/glossary/ are wrong and must not be committed"
+ ],
+ "first_difference": [
+  "first difference at character 2: 'c' against 'd'",
+  "one is 2 characters and the other 3"
+ ]
+}

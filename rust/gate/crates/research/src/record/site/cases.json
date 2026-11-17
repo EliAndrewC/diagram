@@ -1,0 +1,699 @@
+{
+ "base": {
+  "edits": [],
+  "files": {
+   "all.html": "814fd30b3cd1fa4a7f64d7dcacf3ea463fd4d09e0f116ad3e5581cc9cf6e1c07",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/land.html": "2284770b9a71d4424ec7a01adad16e75d0ea435faf92f9a0ee09685614eae4ca",
+   "findings/coin.html": "d2ce2af291adf5ebc26b91c1cdfb52154588cbfb9d6f46700fd2e41d4630557d",
+   "findings/land.html": "c8fac28d4742dd195f3f9567f38f91a132a427eb4165096c12025afe9c160a45",
+   "index.html": "e9fbb28dd55dcd822778d2093233b14b6968be32cf06d5fdff6a635fa2a558cb",
+   "nav.js": "0cbb5142849db6172e2cde29ecaf3308f26a9bb809600986a3fd1dd300fb630a",
+   "q/coins.html": "0ac4ebb1a759ed1193012447b001c9faa76ceb0e3a857a9efeadfda17719782a",
+   "q/more-drawn.html": "b832be8cdf7df4cd9f8bd35cddc99d59042889ace7024fbb3a07725c487968ea",
+   "q/paddies-drawn.html": "022cca02e80b853074af7aeabbb394ee5e0299cad1db192186f2831ea0fc4fd6",
+   "q/paddies.html": "40581685759da15065b68ae5659caf773819b9daa40c9c2e7581fee1612d67dd",
+   "sources/bare.html": "eb07d20836acc58987860304057f0b99a288b73b4d1d7f90a5d0bb4a89a5675c",
+   "sources/index.html": "18852e032dfc25c3b4e8cd4116efe124bae57aac3cc1dedc8db5e6ab61c2c00a",
+   "sources/l7r-notes.html": "b754e5159d4121de9083551fd7a7d5dfaeebc2cf3dbc82ad13fd8700ea444f65",
+   "sources/src-a.html": "76e397c808f58b43298dba16375a595ef0d359fa3622e8cddc809b46b40d9dab",
+   "sources/unc-a.html": "13cd0156b87baf3082de38ad76b12646ceebbc5f4d93b56f4788b8cc3aa35cd8",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be"
+  }
+ },
+ "links bad": {
+  "edits": [
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p><a href=\"0009-missing.html\">a</a> <a href=\"#no-such-id\">b</a> <a href=\"../contents.json#no-section\">c</a> <a href=\"../SOURCES.html#no-entry\">d</a> <a href=\"nothing.html\">e</a> <a href=\"0001-paddies.html#nope\">f</a> <!-- <a href=\"0002-gone.html\">hidden</a> --></p>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (12 refusal(s)):\n  questions/0002-coins.html: `0009-missing.html` - no question page 0009-missing.html\n  questions/0002-coins.html: `#no-such-id` - no id `no-such-id` on 0002-coins.html\n  questions/0002-coins.html: `../contents.json#no-section` - no section `no-section` in the record's contents\n  questions/0002-coins.html: `../SOURCES.html#no-entry` - no id `no-entry` on the registry\n  questions/0002-coins.html: `nothing.html` - no question page nothing.html\n  questions/0002-coins.html: `0001-paddies.html#nope` - no id `nope` on 0001-paddies.html\n  questions/0002-coins.html: `0009-missing.html` - no question page 0009-missing.html\n  questions/0002-coins.html: `#no-such-id` - no id `no-such-id` on 0002-coins.html\n  questions/0002-coins.html: `../contents.json#no-section` - no section `no-section` in the record's contents\n  questions/0002-coins.html: `../SOURCES.html#no-entry` - no id `no-entry` on the registry\n  questions/0002-coins.html: `nothing.html` - no question page nothing.html\n  questions/0002-coins.html: `0001-paddies.html#nope` - no id `nope` on 0001-paddies.html"
+ },
+ "links good": {
+  "edits": [
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p><a href=\"../assets/record.css#a\">asset</a> <img alt=\"x\" src=\"../assets/x.png\"> <a href=\"../contents.json#coin\">section</a> <a href=\"../SOURCES.html#l7r-notes\">entry</a> <a href=\"../SOURCES.html\">registry</a> <a href=\"#coins\">top</a> <a href=\"0001-paddies.drawing.html\">drawn</a> <a href=\"https://example.org/x\">out</a> <a href=\"//example.org/y\">proto</a> <a  title=\"t\"\nhref=\"#coins\">nl</a> <abbr title=\"x\" href=\"#nowhere\">abbr</abbr> <a href=\"\">empty</a> see https://example.org/bare and <script>https://example.org/in</script> <style>x</style> <!--c--> <a href=\"https://x.org\">unclosed</p>\n"
+   ],
+   [
+    "research/sources/010-works-cited/0010-src-a.html",
+    "replace",
+    "<p><em>What it is:</em>",
+    "<p id=\"src-a-more\"><a href=\"SOURCES.html#unc-a\">u</a> <a href=\"SOURCES.html\">reg</a> <a href=\"contents.json#land\">land</a> <a href=\"assets/record.css\">css</a> <a href=\"#src-a\">me</a> <a href=\"questions/0002-coins.html#coins\">q</a></p>\n<p><em>What it is:</em>"
+   ]
+  ],
+  "files": {
+   "all.html": "7a60fb978c680db6ae3cf89b1a315d92ba848f97c2480d3263b4470cfefb69a2",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/land.html": "2284770b9a71d4424ec7a01adad16e75d0ea435faf92f9a0ee09685614eae4ca",
+   "findings/coin.html": "d2ce2af291adf5ebc26b91c1cdfb52154588cbfb9d6f46700fd2e41d4630557d",
+   "findings/land.html": "c8fac28d4742dd195f3f9567f38f91a132a427eb4165096c12025afe9c160a45",
+   "index.html": "e9fbb28dd55dcd822778d2093233b14b6968be32cf06d5fdff6a635fa2a558cb",
+   "nav.js": "0cbb5142849db6172e2cde29ecaf3308f26a9bb809600986a3fd1dd300fb630a",
+   "q/coins.html": "7938dd1f97a567e7ed1465f32dca19480f51b27c14745761dd335103fd30354d",
+   "q/more-drawn.html": "b832be8cdf7df4cd9f8bd35cddc99d59042889ace7024fbb3a07725c487968ea",
+   "q/paddies-drawn.html": "022cca02e80b853074af7aeabbb394ee5e0299cad1db192186f2831ea0fc4fd6",
+   "q/paddies.html": "40581685759da15065b68ae5659caf773819b9daa40c9c2e7581fee1612d67dd",
+   "sources/bare.html": "eb07d20836acc58987860304057f0b99a288b73b4d1d7f90a5d0bb4a89a5675c",
+   "sources/index.html": "18852e032dfc25c3b4e8cd4116efe124bae57aac3cc1dedc8db5e6ab61c2c00a",
+   "sources/l7r-notes.html": "b754e5159d4121de9083551fd7a7d5dfaeebc2cf3dbc82ad13fd8700ea444f65",
+   "sources/src-a.html": "5c810363f3d601298ea2e453b4397e1ec5c07765a42fe31ae16c2f2e7d58ff6f",
+   "sources/unc-a.html": "13cd0156b87baf3082de38ad76b12646ceebbc5f4d93b56f4788b8cc3aa35cd8",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be"
+  }
+ },
+ "ids": {
+  "edits": [
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p id=\"tags\">reserved</p>\n<p id=\"paddies\">taken</p>\n<p id=\"works-japan\">a section</p>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the record's ids collide:\n  the id `paddies` is used in questions/0001-paddies.html and again in questions/0002-coins.html - the single page holds both, and an id names one place\n  the id `works-japan` is used in questions/0002-coins.html and again in source-sections.json - the single page holds both, and an id names one place\n  the id `tags` (in questions/0002-coins.html) is one the site's own pages use"
+ },
+ "notes": {
+  "edits": [
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p>One.<sup class=\"fn\" data-note=\"orphan-missing\"></sup></p>\n"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.notes.html",
+    "write",
+    "<li data-note=\"lonely\"><a href=\"https://e.org/a\"><code>src-a</code></a> - \"x\"</li>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (2 refusal(s)):\n  questions/0002-coins.html: a reference names `orphan-missing`, which no note on this page defines\n  questions/0002-coins.html: a reference names `orphan-missing`, which no note on 0002-coins.html defines"
+ },
+ "notes missing": {
+  "edits": [
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p>One.<sup class=\"fn\" data-note=\"nowhere\"></sup></p>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (2 refusal(s)):\n  questions/0002-coins.html: a reference names `nowhere`, which no note on this page defines\n  questions/0002-coins.html: a reference names `nowhere`, which no note on 0002-coins.html defines"
+ },
+ "works": {
+  "edits": [
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p><sup class=\"fn\" data-note=\"c1\"></sup><sup class=\"fn\" data-note=\"c2\"></sup><sup class=\"fn\" data-note=\"c3\"></sup><sup class=\"fn\" data-note=\"c1\"></sup></p>\n"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.notes.html",
+    "write",
+    "<li data-note=\"c1\"><a href=\"../SOURCES.html#bare\"><code>bare</code></a> - \"x\"</li>\n<li data-note=\"c2\"><a href=\"https://e.org/u\"><code>unc-a</code></a> - \"x\"</li>\n<li data-note=\"c3\"><a href=\"../SOURCES.html#l7r-notes\"><code>l7r-notes</code></a> - \"x\"</li>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (3 refusal(s)):\n  questions/0002-coins.html: cites `bare`, whose registry entry has no write-up (`What it is:` and `Why it applies, and its limits:`)\n  questions/0002-coins.html: cites `l7r-notes`, whose registry entry has no write-up (`What it is:` and `Why it applies, and its limits:`)\n  questions/0002-coins.html: cites `unc-a`, an uncited source's entry - `make cite-uncited KEY=unc-a` moves it to the works cited, then give it its `Used for:` line (feature 312 FR-014)"
+ },
+ "comparative": {
+  "edits": [
+   [
+    "research/source-tags.json",
+    "replace",
+    "\"id\": \"web\"",
+    "\"id\": \"comparative\""
+   ],
+   [
+    "research/source-sections.json",
+    "replace",
+    "\"kind\": \"web\"",
+    "\"kind\": \"comparative\""
+   ],
+   [
+    "research/sources/010-works-cited/0040-bare.html",
+    "replace",
+    "kind=web",
+    "kind=comparative"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p><sup class=\"fn\" data-note=\"c1\"></sup></p>\n"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.notes.html",
+    "write",
+    "<li data-note=\"c1\"><a href=\"../SOURCES.html#bare\"><code>bare</code></a> - \"x\"</li>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (2 refusal(s)):\n  questions/0002-coins.html: cites `bare`, whose registry entry has no write-up (`What it is:` and `Why it applies, and its limits:`)\n  questions/0002-coins.html: cites `bare`, a comparative source - only a comparative money question (subject `comparative`) may cite it (research/CLAUDE.md, Comparative money sources)"
+ },
+ "comparative allowed": {
+  "edits": [
+   [
+    "research/source-tags.json",
+    "replace",
+    "\"id\": \"web\"",
+    "\"id\": \"comparative\""
+   ],
+   [
+    "research/source-sections.json",
+    "replace",
+    "\"kind\": \"web\"",
+    "\"kind\": \"comparative\""
+   ],
+   [
+    "research/sources/010-works-cited/0040-bare.html",
+    "replace",
+    "kind=web",
+    "kind=comparative"
+   ],
+   [
+    "research/tags.json",
+    "replace",
+    "\"money\": {",
+    "\"comparative\": {\"name\": \"Comparative\", \"description\": \"c\"},\n  \"money\": {"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "replace",
+    "subject=money;",
+    "subject=money,comparative;"
+   ],
+   [
+    "research/sources/010-works-cited/0040-bare.html",
+    "append",
+    "<p><em>What it is:</em> w</p>\n<p><em>Why it applies, and its limits:</em> y</p>\n"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p><sup class=\"fn\" data-note=\"c1\"></sup></p>\n"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.notes.html",
+    "write",
+    "<li data-note=\"c1\"><a href=\"../SOURCES.html#bare\"><code>bare</code></a> - \"x\"</li>\n"
+   ]
+  ],
+  "files": {
+   "all.html": "44f5dd49e355d0dcb088d7d10634e56eb08137a0def47ae847395257f1f1fb58",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/land.html": "2284770b9a71d4424ec7a01adad16e75d0ea435faf92f9a0ee09685614eae4ca",
+   "findings/coin.html": "d2ce2af291adf5ebc26b91c1cdfb52154588cbfb9d6f46700fd2e41d4630557d",
+   "findings/land.html": "c8fac28d4742dd195f3f9567f38f91a132a427eb4165096c12025afe9c160a45",
+   "index.html": "cc243afb8e21fcd40208ec578f44c9453cf12e9220a5644704e009007abc534e",
+   "nav.js": "9ecdcfa76f735d41ad48eeaf3dd1a34c018515e04919ece443644a58e912742a",
+   "q/coins.html": "d83be4448ae7835c0b7504707b20047ca23ca3e992e19e16345c44946e7cb504",
+   "q/more-drawn.html": "b832be8cdf7df4cd9f8bd35cddc99d59042889ace7024fbb3a07725c487968ea",
+   "q/paddies-drawn.html": "022cca02e80b853074af7aeabbb394ee5e0299cad1db192186f2831ea0fc4fd6",
+   "q/paddies.html": "40581685759da15065b68ae5659caf773819b9daa40c9c2e7581fee1612d67dd",
+   "sources/bare.html": "3f5a65b31b1853444d9e6a69bf7513e4ece236a56b0a6e46d84dff85f4c3447c",
+   "sources/index.html": "d764e08f1351ec7f01ecad0b5e3417bad04ee1313010e5a9a768fc80f0183433",
+   "sources/l7r-notes.html": "b754e5159d4121de9083551fd7a7d5dfaeebc2cf3dbc82ad13fd8700ea444f65",
+   "sources/src-a.html": "76e397c808f58b43298dba16375a595ef0d359fa3622e8cddc809b46b40d9dab",
+   "sources/unc-a.html": "13cd0156b87baf3082de38ad76b12646ceebbc5f4d93b56f4788b8cc3aa35cd8",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-comparative.html": "d83fe16458e2e6685558532b002f00cc0f73493cec20e64ec176da710f4f1d0e",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be"
+  }
+ },
+ "uncited canon and untagged": {
+  "edits": [
+   [
+    "research/sources/040-uncited-works/0020-canon-u.html",
+    "write",
+    "<h3 id=\"canon-u\"><code>canon-u</code></h3>\n<p>The GM's l7r.md notes.</p>\n"
+   ],
+   [
+    "research/sources/010-works-cited/0050-untagged.html",
+    "write",
+    "<h3 id=\"untagged\"><code>untagged</code></h3>\n<p>No tags.</p>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (2 refusal(s)):\n  sources/ untagged: no tags - every keyed work states `<!-- tags: period=...; region=...; kind=... -->` on its last line (source-tags.json)\n  sources/ canon-u: an uncited entry links the GM's own campaign notes - canon is never an uncited source (feature 312 FR-013)"
+ },
+ "no title": {
+  "edits": [
+   [
+    "research/sources/_front.html",
+    "replace",
+    "<h1 id=\"the-registry\">The <em>registry</em></h1>",
+    ""
+   ]
+  ],
+  "error": "RecordError",
+  "str": "sources/_front.html: no `<h1 id=...>` - the registry needs its title"
+ },
+ "no main": {
+  "edits": [
+   [
+    "research/sources/_front.html",
+    "replace",
+    "<main>\n",
+    ""
+   ]
+  ],
+  "files": {
+   "all.html": "814fd30b3cd1fa4a7f64d7dcacf3ea463fd4d09e0f116ad3e5581cc9cf6e1c07",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/land.html": "2284770b9a71d4424ec7a01adad16e75d0ea435faf92f9a0ee09685614eae4ca",
+   "findings/coin.html": "d2ce2af291adf5ebc26b91c1cdfb52154588cbfb9d6f46700fd2e41d4630557d",
+   "findings/land.html": "c8fac28d4742dd195f3f9567f38f91a132a427eb4165096c12025afe9c160a45",
+   "index.html": "e9fbb28dd55dcd822778d2093233b14b6968be32cf06d5fdff6a635fa2a558cb",
+   "nav.js": "0cbb5142849db6172e2cde29ecaf3308f26a9bb809600986a3fd1dd300fb630a",
+   "q/coins.html": "0ac4ebb1a759ed1193012447b001c9faa76ceb0e3a857a9efeadfda17719782a",
+   "q/more-drawn.html": "b832be8cdf7df4cd9f8bd35cddc99d59042889ace7024fbb3a07725c487968ea",
+   "q/paddies-drawn.html": "022cca02e80b853074af7aeabbb394ee5e0299cad1db192186f2831ea0fc4fd6",
+   "q/paddies.html": "40581685759da15065b68ae5659caf773819b9daa40c9c2e7581fee1612d67dd",
+   "sources/bare.html": "eb07d20836acc58987860304057f0b99a288b73b4d1d7f90a5d0bb4a89a5675c",
+   "sources/index.html": "18852e032dfc25c3b4e8cd4116efe124bae57aac3cc1dedc8db5e6ab61c2c00a",
+   "sources/l7r-notes.html": "b754e5159d4121de9083551fd7a7d5dfaeebc2cf3dbc82ad13fd8700ea444f65",
+   "sources/src-a.html": "76e397c808f58b43298dba16375a595ef0d359fa3622e8cddc809b46b40d9dab",
+   "sources/unc-a.html": "13cd0156b87baf3082de38ad76b12646ceebbc5f4d93b56f4788b8cc3aa35cd8",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be"
+  }
+ },
+ "vocabulary": {
+  "edits": [
+   [
+    "research/source-tags.json",
+    "write",
+    "{\"period\": []}"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "source-tags.json: holds exactly period, region, kind and canon"
+ },
+ "money good": {
+  "edits": [
+   [
+    "research/assets/money-conversions.json",
+    "replace",
+    "\"units\": {\"ryo\": {\"goods_dollars\": 100, \"goods_dollars_high\": 150, \"wage_dollars\": 50, \"rokugan_sen\": 1000}}",
+    "\"units\": {\"ryo\": {\"goods_dollars\": 100, \"goods_dollars_high\": 150, \"wage_dollars\": 50, \"rokugan_sen\": 1000}, \"mon\": {\"goods_dollars\": 1, \"goods_dollars_high\": 1.5, \"wage_dollars\": 0.5, \"rokugan_sen\": 0.25}}"
+   ],
+   [
+    "research/assets/money-eras-awaiting.json",
+    "write",
+    "{\"later\": {}}"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<div data-era=\"edo\"><p><span class=\"money\" data-amount=\"2.5\" data-coin=\"mon\">2.5 ryo</span> <span class=\"money\" data-amount=\"100.5\" data-coin=\"mon\">100.5 ryo</span> <span class=\"money\" data-amount=\"101.5\" data-coin=\"mon\">101.5 ryo</span> <span class=\"money\" data-amount=\"99.995\" data-coin=\"mon\">99.995 ryo</span> <span class=\"money\" data-amount=\"201\" data-coin=\"mon\">201 ryo</span> <span class=\"money\" data-amount=\"203\" data-coin=\"mon\">203 ryo</span> <span class=\"money\" data-amount=\"250\" data-coin=\"mon\">250 ryo</span> <span class=\"money\" data-amount=\"540\" data-coin=\"mon\">540 ryo</span> <span class=\"money\" data-amount=\"4000\" data-coin=\"mon\">4000 ryo</span> <span class=\"money\" data-amount=\"5000\" data-coin=\"mon\">5000 ryo</span> <span class=\"money\" data-amount=\"9999.5\" data-coin=\"mon\">9999.5 ryo</span> <span class=\"money\" data-amount=\"10000\" data-coin=\"mon\">10000 ryo</span> <span class=\"money\" data-amount=\"12350\" data-coin=\"mon\">12350 ryo</span> <span class=\"money\" data-amount=\"12450\" data-coin=\"mon\">12450 ryo</span> <span class=\"money\" data-amount=\"1,000\" data-coin=\"mon\">1,000 ryo</span> <span class=\"money\" data-amount=\"15-20\" data-coin=\"mon\">15-20 ryo</span> <span class=\"money\" data-amount=\"41.71\" data-coin=\"mon\">41.71 ryo</span> <span class=\"money\" data-amount=\"0.5\" data-coin=\"mon\">0.5 ryo</span> <span class=\"money\" data-amount=\"0.9\" data-coin=\"mon\">0.9 ryo</span> <span class=\"money\" data-amount=\"1.4\" data-coin=\"mon\">1.4 ryo</span> <span class=\"money\" data-amount=\"39.8\" data-coin=\"mon\">39.8 ryo</span> <span class=\"money\" data-amount=\"40.2\" data-coin=\"mon\">40.2 ryo</span> <span class=\"money\" data-amount=\"١٠٠\" data-coin=\"mon\">١٠٠ ryo</span> <span class=\"money\" data-amount=\"1000-1500\" data-coin=\"mon\">1000-1500 ryo</span> <span class=\"money\" data-amount=\"123456\" data-coin=\"mon\">123456 ryo</span> <span class=\"money\" data-amount=\"7\" data-coin=\"mon\">7 ryo</span> <span class=\"money\" data-amount=\"0.004\" data-coin=\"mon\">0.004 ryo</span> <span class=\"money\" data-amount=\"0.006\" data-coin=\"mon\">0.006 ryo</span></p><ul><li><span class=\"money\" data-amount=\"2\" data-coin=\"ryo\" data-paid=\"Kyoto 1745-54\">2 ryo</span><li data-paid=\"Osaka 1766\"><span class=\"money\" data-amount=\"3\" data-coin=\"ryo\">3 ryo</span><li><span class=\"money\" data-amount=\"4\" data-coin=\"ryo\" data-era=\"later\">4 ryo</span><br><img src=\"../assets/x.png\"/><span class=\"money\" data-amount=\"5\" data-coin=\"ryo\">5 ryo</span><li data-paid=\"Sakai 1801-1799\"><span class=\"money\" data-amount=\"6\" data-coin=\"ryo\">6 ryo</span></li></ul></div><p data-era=\"edo\" data-paid=\"Nara 1700-1\"><span class=\"money\" data-amount=\"7\" data-coin=\"ryo\">7 ryo</span></p>\n"
+   ]
+  ],
+  "files": {
+   "all.html": "5a5ec4dc22455b152d2fd1691ed678fe3b2cec97a213f674094768d32484849c",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/land.html": "2284770b9a71d4424ec7a01adad16e75d0ea435faf92f9a0ee09685614eae4ca",
+   "findings/coin.html": "d2ce2af291adf5ebc26b91c1cdfb52154588cbfb9d6f46700fd2e41d4630557d",
+   "findings/land.html": "c8fac28d4742dd195f3f9567f38f91a132a427eb4165096c12025afe9c160a45",
+   "index.html": "e9fbb28dd55dcd822778d2093233b14b6968be32cf06d5fdff6a635fa2a558cb",
+   "nav.js": "0cbb5142849db6172e2cde29ecaf3308f26a9bb809600986a3fd1dd300fb630a",
+   "q/coins.html": "8f66bb54a7d4c253a0c2e12039e8f2169201475f856789efc4f1d75581a92f0c",
+   "q/more-drawn.html": "b832be8cdf7df4cd9f8bd35cddc99d59042889ace7024fbb3a07725c487968ea",
+   "q/paddies-drawn.html": "022cca02e80b853074af7aeabbb394ee5e0299cad1db192186f2831ea0fc4fd6",
+   "q/paddies.html": "40581685759da15065b68ae5659caf773819b9daa40c9c2e7581fee1612d67dd",
+   "sources/bare.html": "eb07d20836acc58987860304057f0b99a288b73b4d1d7f90a5d0bb4a89a5675c",
+   "sources/index.html": "18852e032dfc25c3b4e8cd4116efe124bae57aac3cc1dedc8db5e6ab61c2c00a",
+   "sources/l7r-notes.html": "b754e5159d4121de9083551fd7a7d5dfaeebc2cf3dbc82ad13fd8700ea444f65",
+   "sources/src-a.html": "76e397c808f58b43298dba16375a595ef0d359fa3622e8cddc809b46b40d9dab",
+   "sources/unc-a.html": "13cd0156b87baf3082de38ad76b12646ceebbc5f4d93b56f4788b8cc3aa35cd8",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be"
+  }
+ },
+ "money bad": {
+  "edits": [
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p><span class=\"money\" data-amount=\"1\" data-coin=\"ryo\">1 ryo</span> <span class=\"money\" data-amount=\"x\" data-coin=\"ryo\" data-era=\"edo\">x ryo</span> <span class=\"money\" data-amount=\"2\" data-coin=\"ryo\" data-era=\"nowhere\">2 ryo</span> <span class=\"money\" data-amount=\"3\" data-coin=\"koku\" data-era=\"edo\">3</span> <span class=\"money\" data-amount=\"4\" data-coin=\"ryo\" data-era=\"edo\" data-paid=\"Edo\">4 ryo</span> <span class=\"money\" data-amount=\"1\" data-coin=\"ryo\">1 ryo</span></p>\n"
+   ],
+   [
+    "{QUESTIONS}/0001-paddies.notes.html",
+    "replace",
+    "</ol>",
+    "<li data-note=\"m\"><a href=\"https://e.org/a\"><code>src-a</code></a> - <span class=\"money\" data-amount=\"9\" data-coin=\"ryo\">9 ryo</span></li>\n</ol>"
+   ],
+   [
+    "{QUESTIONS}/0001-paddies.html",
+    "append",
+    "<p><sup class=\"fn\" data-note=\"m\"></sup></p>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (7 refusal(s)):\n  0002-coins.html: the amount '1 ryo' names no era - put data-era=\"<era id>\" on it or on an element around it (feature 413)\n  0002-coins.html: the amount 'x ryo' has data-amount='x' - a number, or two joined by a hyphen (\"15-20\")\n  0002-coins.html: the amount '2 ryo' names era 'nowhere', which the conversion table does not have and research/assets/money-eras-awaiting.json does not list (known: edo)\n  0002-coins.html: the amount '3' names coin 'koku', which era 'edo' has no unit for (it has: ryo)\n  0002-coins.html: the amount '4 ryo' has data-paid='Edo' with no year - write \"<place> <year>\" or \"<place> <year>-<year>\"\n  0002-coins.html: the amount '1 ryo' names no era - put data-era=\"<era id>\" on it or on an element around it (feature 413)\n  0001-paddies.html note m: the amount '9 ryo' names no era - put data-era=\"<era id>\" on it or on an element around it (feature 413)"
+ },
+ "money key": {
+  "edits": [
+   [
+    "research/assets/money-conversions.json",
+    "replace",
+    "\"goods_dollars_high\": 150, ",
+    ""
+   ],
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "append",
+    "<p><span class=\"money\" data-amount=\"1\" data-coin=\"ryo\" data-era=\"edo\">1 ryo</span></p>\n"
+   ]
+  ],
+  "error": "KeyError",
+  "str": "'goods_dollars_high'"
+ },
+ "asset": {
+  "edits": [
+   [
+    "research/assets/site.js",
+    "delete"
+   ]
+  ],
+  "error": "FileNotFoundError",
+  "str": "[Errno 2] No such file or directory: '/tmp/tmpssr9hpok/t/research/assets/site.js'"
+ },
+ "no originals": {
+  "edits": [
+   [
+    "{QUESTIONS}/0001-paddies.originals.html",
+    "delete"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (3 refusal(s)):\n  questions/0001-paddies.notes.html: a note holds an original's placeholder and 0001-paddies.originals.html is missing\n  questions/0001-paddies.html: a reference names `k`, which no note on this page defines\n  questions/0001-paddies.html: a reference names `k`, which no note on 0001-paddies.html defines"
+ },
+ "original gone": {
+  "edits": [
+   [
+    "{QUESTIONS}/0001-paddies.originals.html",
+    "write",
+    "<li data-orig=\"other#1\">x</li>\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (3 refusal(s)):\n  questions/0001-paddies.notes.html: no original stored for `k#1` - its `.originals.html` lacks `<li data-orig=\"k#1\">`\n  questions/0001-paddies.html: a reference names `k`, which no note on this page defines\n  questions/0001-paddies.html: a reference names `k`, which no note on 0001-paddies.html defines"
+ },
+ "confusables": {
+  "edits": [
+   [
+    "research/confusables.json",
+    "replace",
+    "\"b\": \"0002-coins.html#coins\", ",
+    ""
+   ]
+  ],
+  "error": "KeyError",
+  "str": "'b'"
+ },
+ "no archive": {
+  "edits": [
+   [
+    "research/archive",
+    "delete"
+   ]
+  ],
+  "files": {
+   "all.html": "2441dc734f7495efd7ad71139bd5cbab6c6642b9dd9992c9a18287c8c07b89ba",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/land.html": "2284770b9a71d4424ec7a01adad16e75d0ea435faf92f9a0ee09685614eae4ca",
+   "findings/coin.html": "d2ce2af291adf5ebc26b91c1cdfb52154588cbfb9d6f46700fd2e41d4630557d",
+   "findings/land.html": "c8fac28d4742dd195f3f9567f38f91a132a427eb4165096c12025afe9c160a45",
+   "index.html": "e9fbb28dd55dcd822778d2093233b14b6968be32cf06d5fdff6a635fa2a558cb",
+   "nav.js": "0cbb5142849db6172e2cde29ecaf3308f26a9bb809600986a3fd1dd300fb630a",
+   "q/coins.html": "0ac4ebb1a759ed1193012447b001c9faa76ceb0e3a857a9efeadfda17719782a",
+   "q/more-drawn.html": "b832be8cdf7df4cd9f8bd35cddc99d59042889ace7024fbb3a07725c487968ea",
+   "q/paddies-drawn.html": "022cca02e80b853074af7aeabbb394ee5e0299cad1db192186f2831ea0fc4fd6",
+   "q/paddies.html": "40581685759da15065b68ae5659caf773819b9daa40c9c2e7581fee1612d67dd",
+   "sources/bare.html": "eb07d20836acc58987860304057f0b99a288b73b4d1d7f90a5d0bb4a89a5675c",
+   "sources/index.html": "18852e032dfc25c3b4e8cd4116efe124bae57aac3cc1dedc8db5e6ab61c2c00a",
+   "sources/l7r-notes.html": "4a1551846331589a8aca15e15e1fdb15368ea6be883177389a250c411f18e1db",
+   "sources/src-a.html": "a934a5d3a4065dd9bdb9c4132a10a57d664ee0eb4be823f8f9d5063277e6a7ff",
+   "sources/unc-a.html": "e174bd612c885130284926764d3ee93d4253988f0955d931aa9e6524ef376c66",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be"
+  }
+ },
+ "orphan only": {
+  "edits": [
+   [
+    "{QUESTIONS}/0001-paddies.notes.html",
+    "replace",
+    "</ol>",
+    "<li data-note=\"lonely\">no source is owed: physical necessity</li>\n</ol>"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (1 refusal(s)):\n  questions/0001-paddies.notes.html: lonely - defined as a note, referenced nowhere"
+ },
+ "subsections and unused tag": {
+  "edits": [
+   [
+    "research/contents.json",
+    "replace",
+    "\"primary\": \"farming\"\n    }",
+    "\"primary\": \"money\",\n     \"level\": \"foundational\"\n    }"
+   ],
+   [
+    "research/contents.json",
+    "replace",
+    "\"title\": \"Coin\",",
+    "\"title\": \"Coin\",\n   \"awaiting\": \"nothing yet\","
+   ],
+   [
+    "research/contents.json",
+    "replace",
+    "\"primary\": \"money\",\n     \"setting\"",
+    "\"primary\": \"farming\",\n     \"level\": \"foundational\",\n     \"setting\""
+   ],
+   [
+    "research/tags.json",
+    "replace",
+    "\"money\": {",
+    "\"unused\": {\"name\": \"Unused\", \"description\": \"none yet\"},\n  \"money\": {"
+   ],
+   [
+    "{QUESTIONS}/0002-coins.html",
+    "replace",
+    "<!-- a comment --><p>",
+    "<!-- a comment --><div>"
+   ]
+  ],
+  "files": {
+   "all.html": "67ff27ca1eb9f53729cd1adb185e2a38773024f4f530f5b4b862a0dcfeabd5e7",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/fields.html": "b44a55cff7271b380b4681272456ecf06c6176298c401e778287bb057bae974c",
+   "drawing/land.html": "85c886909ba527f67a9cb839650c3f052090fb4fa4bbef40a299ebd14a28356e",
+   "findings/fields.html": "ba774454cf099ab9f47b13549dbd5357fe3e7fe3af28d7690711d646c2082453",
+   "findings/land.html": "f930440a8690e9a36e8a10899f85bbe40afab2173f47ecf7285e23fa6573228c",
+   "index.html": "955955ac9f7a9cf4dc9810e7284a5de4504a4c588b27b9e232864936ed1b174a",
+   "nav.js": "4a3d8da77a8df5ab1029772fa05d83f1b924f70263cf98923f548445b4f588fd",
+   "q/coins.html": "b00f789f88ed1c09e06575d92ebe7ad35ae4c46d009a070101c858dec91bcb49",
+   "q/more-drawn.html": "8c20f6c1f5fcca6d9fa8f1325a14f6260027e4995f132c6455c6cfd221eb7aa4",
+   "q/paddies-drawn.html": "4a1a414c393b276f4ce0614028713c1820cf3f745ccc952859c9645ed902ba66",
+   "q/paddies.html": "7d07fd9ef97324e32a493c939ab95238f90862dfba2d13093d3544a6f0b1846e",
+   "sources/bare.html": "eb07d20836acc58987860304057f0b99a288b73b4d1d7f90a5d0bb4a89a5675c",
+   "sources/index.html": "18852e032dfc25c3b4e8cd4116efe124bae57aac3cc1dedc8db5e6ab61c2c00a",
+   "sources/l7r-notes.html": "b754e5159d4121de9083551fd7a7d5dfaeebc2cf3dbc82ad13fd8700ea444f65",
+   "sources/src-a.html": "76e397c808f58b43298dba16375a595ef0d359fa3622e8cddc809b46b40d9dab",
+   "sources/unc-a.html": "13cd0156b87baf3082de38ad76b12646ceebbc5f4d93b56f4788b8cc3aa35cd8",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be",
+   "tags/subject-unused.html": "ab3c131889940cc49fb0def107997fe7f868aa8bea34efe3364dbd556bce6c16"
+  }
+ },
+ "odd group": {
+  "edits": [
+   [
+    "research/sources/050-odd.html",
+    "write",
+    "<h2 id=\"odd\" class=\"x\">Odd works</h2>\n<p>odd</p>\n"
+   ],
+   [
+    "research/sources/050-odd/0010-odd-a.html",
+    "write",
+    "<h3 id=\"odd-a\"><code>odd-a</code></h3>\n<!-- tags: period=modern; region=japan; kind=book -->\n"
+   ]
+  ],
+  "files": {
+   "all.html": "16a13d4758297b6c6f365333f191f7f33e576cc50f434e45ffc9bf15c2b8dd3b",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/land.html": "2284770b9a71d4424ec7a01adad16e75d0ea435faf92f9a0ee09685614eae4ca",
+   "findings/coin.html": "d2ce2af291adf5ebc26b91c1cdfb52154588cbfb9d6f46700fd2e41d4630557d",
+   "findings/land.html": "c8fac28d4742dd195f3f9567f38f91a132a427eb4165096c12025afe9c160a45",
+   "index.html": "6454cd72d5f0689faf9a0ffe8e529a731218b17b469dd4dde0c4ff7d8d81fc3d",
+   "nav.js": "e80726a059742c5ed8bc254b0a63844590765c58c7a5ec5f2fb11cf800c5481c",
+   "q/coins.html": "0ac4ebb1a759ed1193012447b001c9faa76ceb0e3a857a9efeadfda17719782a",
+   "q/more-drawn.html": "b832be8cdf7df4cd9f8bd35cddc99d59042889ace7024fbb3a07725c487968ea",
+   "q/paddies-drawn.html": "022cca02e80b853074af7aeabbb394ee5e0299cad1db192186f2831ea0fc4fd6",
+   "q/paddies.html": "40581685759da15065b68ae5659caf773819b9daa40c9c2e7581fee1612d67dd",
+   "sources/bare.html": "eb07d20836acc58987860304057f0b99a288b73b4d1d7f90a5d0bb4a89a5675c",
+   "sources/index.html": "e94fdea52c6638d3b821d801b24c71625078ef80b15e7a53a83cf0047f6b0895",
+   "sources/l7r-notes.html": "b754e5159d4121de9083551fd7a7d5dfaeebc2cf3dbc82ad13fd8700ea444f65",
+   "sources/odd-a.html": "09cd4d6892efb615e576865a98c6a9fb93211399c2be49761468e054b65c0bf6",
+   "sources/src-a.html": "76e397c808f58b43298dba16375a595ef0d359fa3622e8cddc809b46b40d9dab",
+   "sources/unc-a.html": "051f47367fdb39c76c0d7cd1ab63a7766a5db6580c424ed2e080d1690a5abceb",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be"
+  }
+ },
+ "entry twice": {
+  "edits": [
+   [
+    "research/sources/050-odd.html",
+    "write",
+    "<h2 id=\"odd\">Odd works</h2>\n"
+   ],
+   [
+    "research/sources/050-odd/0010-src-a.html",
+    "write",
+    "<h3 id=\"src-a\"><code>src-a</code></h3>\n<p>Again.</p>\n<!-- tags: period=modern; region=japan; kind=book -->\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (1 refusal(s)):\n  questions/0001-paddies.html: cites `src-a`, whose registry entry has no write-up (`What it is:` and `Why it applies, and its limits:`)"
+ },
+ "entry twice in a group": {
+  "edits": [
+   [
+    "research/sources/010-works-cited/0011-src-a.html",
+    "write",
+    "<h3 id=\"src-a\"><code>src-a</code></h3>\n<p>Again.</p>\n<p><em>What it is:</em> w</p>\n<p><em>Why it applies, and its limits:</em> y</p>\n<!-- tags: period=modern; region=china; kind=web -->\n"
+   ]
+  ],
+  "files": {
+   "all.html": "4255e584d44f75c5b46c88e0fe141e46346f57e154f9f9dea22dc8e74e51891b",
+   "assets/glossary.js": "c231d3730c3b76531cb550018a8fb616a105d4e0787937f259a5cc5c29659968",
+   "assets/record.css": "a06fd750de7374983daf40016564b1fb6f2168ed2c5742ccf69912e8574803c0",
+   "assets/record.js": "b9d42f62e383ad08f0a7d68208780bcff1758d42c8fb94a0a87124ca311d6b3e",
+   "assets/site.css": "12638fc594dab1c8e340d73b4440829844c48511cd69a6bd16b5af8275986982",
+   "assets/site.js": "6eeab3d8d6ec4f51ab52c52b0e4b9b91c27bff2558c241d6337bf843f38ebccd",
+   "assets/theme.js": "08069c0864602e1ef04af404bf68292757cfe872c2a0ca003f41df833436f367",
+   "drawing/land.html": "2284770b9a71d4424ec7a01adad16e75d0ea435faf92f9a0ee09685614eae4ca",
+   "findings/coin.html": "d2ce2af291adf5ebc26b91c1cdfb52154588cbfb9d6f46700fd2e41d4630557d",
+   "findings/land.html": "c8fac28d4742dd195f3f9567f38f91a132a427eb4165096c12025afe9c160a45",
+   "index.html": "c5448bbe8132dcb641351545544415ee7b746b92e13700192ef6f39cffd5ae34",
+   "nav.js": "54cd996732f681505d2c82a70e826be00b443adf65f1aecd1bc696a08643dadc",
+   "q/coins.html": "0ac4ebb1a759ed1193012447b001c9faa76ceb0e3a857a9efeadfda17719782a",
+   "q/more-drawn.html": "b832be8cdf7df4cd9f8bd35cddc99d59042889ace7024fbb3a07725c487968ea",
+   "q/paddies-drawn.html": "022cca02e80b853074af7aeabbb394ee5e0299cad1db192186f2831ea0fc4fd6",
+   "q/paddies.html": "6cb74e069b8adf3bcc92c225f34b4cead42268de6e1aaf369b4bd8da847c5aeb",
+   "sources/bare.html": "eb07d20836acc58987860304057f0b99a288b73b4d1d7f90a5d0bb4a89a5675c",
+   "sources/index.html": "e72a233be040a65cfb4cbf3e7b7e768adab7423720b2e9557688af58163422b8",
+   "sources/l7r-notes.html": "b754e5159d4121de9083551fd7a7d5dfaeebc2cf3dbc82ad13fd8700ea444f65",
+   "sources/src-a.html": "e75f58c9805606f74486552e4e9e3c1363ee96c80a9c434c5cedd5d3dc542d40",
+   "sources/unc-a.html": "13cd0156b87baf3082de38ad76b12646ceebbc5f4d93b56f4788b8cc3aa35cd8",
+   "tags/level-detail.html": "389993a35fd0f1d0322745035f07750c39ef76bfa9b185e8b98dc6a0ec4eba1b",
+   "tags/level-foundational.html": "af53ad9290545165787ae122ffe49c8d6d742d50536a3371691dfcb139c1cca4",
+   "tags/setting-countryside.html": "154bebd9a6893377b4cdf1ac6543812d4bdc95af404fdc56b83255612b9292d6",
+   "tags/setting-town.html": "bd24c27e23d9f9aa6b1914016cedf1564ba9cc2d0837671b35204d71e226e9fe",
+   "tags/subject-farming.html": "e8d4d27453759ddfdce9a219072b8716129e2ccd2378952a491daa0abafaa85e",
+   "tags/subject-money.html": "ee26144ebaf958a6d2f65a19d7a124665be71cd2c693403acbfc6f566bb5b3be"
+  }
+ },
+ "registry tail": {
+  "edits": [
+   [
+    "research/sources/_tail.html",
+    "write",
+    "\n</div>\n"
+   ]
+  ],
+  "error": "ValueError",
+  "str": "this page does not end with `</main></body></html>` and its optional citations pointer - the splitter has not been shown its shape"
+ },
+ "listed": {
+  "edits": [
+   [
+    "research/sources/010-works-cited/0060-grok.html",
+    "write",
+    "<h3 id=\"grok\"><code>grok</code></h3>\n<p>https://grokipedia.com/page/X and https://banned.example.org/p (https://e.org/unarchived)</p>\n<p><em>What it is:</em> x</p>\n<p><em>Why it applies, and its limits:</em> y</p>\n<!-- tags: period=modern; region=japan; kind=book -->\n"
+   ]
+  ],
+  "error": "RecordError",
+  "str": "the site does not build (5 refusal(s)):\n  archive: https://grokipedia.com/page/X (grok) has no archived copy - `make archive URL='https://grokipedia.com/page/X'` archives it (feature 309)\n  archive: https://banned.example.org/p (grok) has no archived copy - `make archive URL='https://banned.example.org/p'` archives it (feature 309)\n  archive: https://e.org/unarchived (grok) has no archived copy - `make archive URL='https://e.org/unarchived'` archives it (feature 309)\n  banned citation: https://grokipedia.com/page/X (grok) is on blocked-domains.json (grokipedia.com - machine text) - cite the fact from another source, or state its absence (feature 312)\n  banned citation: https://banned.example.org/p (grok) is on banned-citations.json (banned\\.example\\.org/ - forbidden) - cite the fact from another source, or state its absence (feature 312)"
+ }
+}

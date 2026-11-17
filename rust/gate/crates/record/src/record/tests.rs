@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
-use super::{canon, canon_files, cli, close_rows, found, money, py_lines};
+use super::{canon, canon_files, cli, close_rows, found, money, py_lines, site_tools};
 
 fn words(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
@@ -299,4 +299,23 @@ fn the_command_line_routes_each_verb() {
     assert_eq!(cli(&words(&["uncited", "nope"])).code, 2);
     assert_eq!(cli(&words(&["canon", "zzz-no-such-term"])).code, 0);
     assert!([0, 1].contains(&cli(&words(&["money-conversions", "--check"])).code));
+}
+
+/// Feature 449 T148: the record's site and its small tools reach the research crate's commands, each verb by its own, the uncaught
+/// exception printed as the Python named it.
+#[test]
+fn the_site_verbs_reach_the_research_crate() {
+    let d = l7r_gate_core::checks::scratch("site-verbs");
+    let run = |verb: &str, rest: &[&str]| site_tools(verb, &words(rest), &d, &d);
+    assert_eq!(run("site", &["--bogus"]).code, 2);
+    assert_eq!(run("site-stale", &[]).code, 2);
+    assert_eq!(run("check", &[]).code, 2);
+    assert_eq!(run("footnote-census", &["--bogus"]).code, 2);
+    assert_eq!(run("source-tags-contract", &["--bogus"]).code, 2);
+    let glossary = run("glossary", &[]);
+    assert_eq!(
+        (glossary.code, glossary.stderr.starts_with("OSError: ")),
+        (1, true)
+    );
+    assert_eq!(cli(&words(&["footnote-census", "--bogus"])).code, 2);
 }

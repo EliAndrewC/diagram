@@ -271,14 +271,14 @@ grep -q "make test-file FILE=tests/gate/hamletgen/test_driver.py" /tmp/mo.out 2>
 
 echo
 echo "5. AN ENGINE ENTRY POINT A MAKE TARGET WRAPS IS REWRITTEN INTO IT (feature 212)"
-rewritten "footnote census -> make footnote-census" "python3 -m l7r.diagram.tools.footnote_census 2>&1 | grep -i complete" "make footnote-census 2>&1 | grep -i complete"
-rewritten "source tags --check -> CHECK=1" "python3 -m l7r.diagram.tools.source_tags_contract --check" "make source-tags-contract CHECK=1"
+rewritten "building programs -> make building-programs" "python3 -m l7r.diagram.tools.building_programs 2>&1 | grep -i complete" "make building-programs 2>&1 | grep -i complete"
+rewritten "building programs --check -> CHECK=1" "python3 -m l7r.diagram.tools.building_programs --check" "make building-programs CHECK=1"
 rewritten "a \$(ARGS) recipe takes the rest" "python3 -m l7r.diagram.tools.pack_audit wip/x.svg" 'make pack-audit ARGS="wip/x.svg"'
 refused_because "a module nothing wraps lists what is" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "no make target wraps"
 refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make pack-audit"
-refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.tools.footnote_census --nonsense" "cannot carry"
+refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.tools.building_programs --nonsense" "cannot carry"
 refused_because "a multi-line recipe (REF_FIRST) does not wrap" "python3 -m l7r.diagram.hamletgen --seed 4" "no make target wraps"
-ev "python3 -m l7r.diagram.tools.footnote_census" | "$HOOK" pretool 2>/dev/null | grep -q "make footnote-census" \
+ev "python3 -m l7r.diagram.tools.building_programs" | "$HOOK" pretool 2>/dev/null | grep -q "make building-programs" \
   && { echo "  ok      the context names the module and the target"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the entry-point rewrite's context is silent"; FAIL=$((FAIL+1)); }
 

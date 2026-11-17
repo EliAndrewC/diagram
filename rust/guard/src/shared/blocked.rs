@@ -150,25 +150,9 @@ pub fn domains(record_dir: &Path) -> Result<Vec<Rule>, Fault> {
         .collect()
 }
 
-/// The URL's host, lower-cased; a URL written without its scheme is read as https (`blocked.host`).
-#[must_use]
-pub fn host(url: &str) -> String {
-    let u = crate::shared::py_text::strip(url);
-    let scheme = u.find("://").filter(|&at| {
-        let s = &u[..at];
-        s.chars().next().is_some_and(|c| c.is_ascii_alphabetic())
-            && s.chars()
-                .all(|c| c.is_ascii_alphanumeric() || matches!(c, '+' | '.' | '-'))
-    });
-    let rest = scheme.map_or(u, |at| &u[at + 3..]);
-    let authority = rest.split(['/', '?', '#']).next().unwrap_or("");
-    let at = authority.rsplit('@').next().unwrap_or("");
-    let name = match at.strip_prefix('[') {
-        Some(inner) => inner.split(']').next().unwrap_or(""),
-        None => at.split(':').next().unwrap_or(""),
-    };
-    name.to_lowercase().trim_matches(['.', '[', ']']).to_owned()
-}
+/// The URL's host, lower-cased; a URL written without its scheme is read as https (`blocked.host`): `urlsplit`'s, ported whole in
+/// [`super::url_host`] (feature 449 T148).
+pub use super::url_host::host;
 
 /// The rule a URL falls under: its host is the domain or a subdomain of it, never a name that merely ends with the same letters.
 #[must_use]

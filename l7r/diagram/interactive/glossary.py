@@ -10,14 +10,14 @@ explanations cite; a term here is a term the prose in `classes.py` actually uses
 
 THE ENTRIES ARE DATA - `assets/glossary.json` (feature 207): one object per term, `variants` and `def`.
 Adding a term is a page-content edit that owes `make page-check`, not the gate (see `content.py`); the
-record's derived `research/assets/glossary.js` is then rewritten by `make glossary` (feature 209).
+record's derived script `glossary.js` is written into the site by `make record` (feature 209). Since feature 449 T148
+(phase 4's S5) that script and every write of the glossary's files are the Rust's (`l7r-gate record glossary`,
+`rust/gate/crates/research/src/glossary.rs`); this module only reads, for the page writer, until S7 ports it.
 
 Research: plumbing - NONE
 """
 
 from __future__ import annotations
-
-import json
 
 from .content import content
 
@@ -27,20 +27,3 @@ GLOSSARY: dict[str, tuple[tuple[str, ...], str]] = {term: (tuple(entry["variants
 #: must not wrap Ochiba, the manor of that name (feature 265 FR-003, the record-format report's collision)
 CASED: frozenset[str] = frozenset(term for term, entry in content("glossary.json").items() if entry.get("cased"))
 
-
-def record_glossary_js() -> str:
-    """The research record's copy of this glossary, as the JavaScript asset `research/assets/glossary.js`
-    (feature 209, GM 2026-09-07: *"apply the same kind of tooltip rules to our research sections that we have
-    in our diagram HTML pages"*). ONE glossary serves both surfaces: the map inlines `glossary_for()` into each
-    page at write time, and the record's hand-authored pages - static, no build step - load this DERIVED file,
-    which `make glossary` writes from `assets/glossary.json` and `tests/interactive/test_record_format.py` proves is
-    in sync. `record.js` wraps every occurrence of a term in a page's visible text the way `page.js` wraps a
-    modal's. Variants longest first, as `glossary_for` orders them, so "head race" wins over "head"."""
-    entries = [
-        {"term": term, "variants": sorted(variants, key=len, reverse=True), "def": definition, **({"cased": True} if term in CASED else {})} for term, (variants, definition) in GLOSSARY.items()
-    ]
-    return (
-        "// DERIVED FILE - written by `make glossary` from l7r/diagram/interactive/assets/glossary.json (features 207 and 209). Never\n"
-        "// edit here: add or change a term in glossary.json and run `make glossary`; the gate fails while the two differ.\n"
-        "window.RECORD_GLOSSARY = " + json.dumps(entries, ensure_ascii=False, indent=1) + ";\n"
-    )

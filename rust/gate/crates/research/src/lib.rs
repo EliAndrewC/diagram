@@ -12,7 +12,9 @@
 
 use std::fmt;
 
+pub mod citations;
 pub mod content;
+pub mod glossary;
 pub mod pages;
 pub mod prepass;
 pub mod pyre;
@@ -20,6 +22,7 @@ pub mod record;
 pub mod source_pages;
 pub mod sources;
 pub mod style;
+pub mod tools;
 pub mod verbatim;
 
 /// A refusal, as the Python raised it: the exception's class name and its message, which every caller prints.

@@ -33,10 +33,10 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | What does a hand-drawn Mode A sheet look like with its captions placed? | `make sheet-render SHEET=<svg> OUT=<png>` - the placer is `labels/hand_sheet.py` |
 | A map's canonical counts, in the block its `.notes.md` carries | `notes_census` - `make notes-census` |
 | The engine's and the Mode A procedures' research CLAIMS, read from the source | `l7r-gate claims` (`rust/gate/crates/claims/src/claims.rs`, feature 449 T82) behind `make claims-owed`, `claims-bundle`, `claims-checked`, `claims-report` (feature 316); `claims` here is its `.py` half, CPython's syntax tree, asked through `scripts/bundle_door.py` |
-| The record's footnotes counted by kind - what is owed | `footnote_census` - `make footnote-census` |
-| Assemble or check the glossary from its per-term files | `glossary_asset` - `make glossary` |
-| Build or check the record's site from its per-entry fragments | `record_asset` - `make record` |
-| The source vocabulary derived into the `source-applicability` contract | `source_tags_contract` - `make source-tags-contract` (feature 305) |
+| The record's footnotes counted by kind - what is owed | `make footnote-census` (`l7r-gate record footnote-census`, Rust since feature 449 T148) |
+| Assemble or check the glossary from its per-term files | `make glossary` (`l7r-gate record glossary`, Rust since feature 449 T148) |
+| Build or check the record's site from its per-entry fragments | `make record` (`l7r-gate record site`, Rust since feature 449 T148) |
+| The source vocabulary derived into the `source-applicability` contract | `make source-tags-contract` (feature 305; `l7r-gate record source-tags-contract`, Rust since feature 449 T148) |
 | A performance snapshot of the reference hamlet, its bands, its profile and its review records | `perf_snapshot` (`make perf`), `perf_bands` (`make perf-report`), `perf_profile` (`make perf-profile`), `perf_review` (`make perf-explain` / `perf-review` and the rest) |
 | Which functions are called millions of times, and from which loop? | `perf_fanout` - `make perf-fanout` (feature 427): per-stage call totals and growth, the multiplier chains by anchor |
 | How long does this loop take, and where does the time go? | `make audit`, `make durations`, `scripts/measure/gatecost.py <target>`; the frozen ledger is `dev/timings.md` |

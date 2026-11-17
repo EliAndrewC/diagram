@@ -1,5 +1,5 @@
-//! `l7r/diagram/interactive/record/`'s S1 modules (feature 449 T144), one module each under the Python's name. The site, its links, its
-//! pages and the money tooltips (`site.py`, `site_links.py`, `site_pages.py`, `money.py`) are S5's.
+//! `l7r/diagram/interactive/record/`'s modules, one each under the Python's name: S1's reading half (feature 449 T144), and S5's site, its
+//! links, its pages and the money tooltips (`site.py`, `site_links.py`, `site_pages.py`, `money.py`; feature 449 T148).
 
 pub mod absence;
 pub mod archive;
@@ -7,11 +7,15 @@ pub mod blocked;
 pub mod confusables;
 pub mod contents;
 pub mod fragments;
+pub mod money;
 pub mod notes;
 pub mod originals;
 pub mod passages;
 pub mod questions;
+pub mod site;
+pub mod site_links;
 pub mod site_notes;
+pub mod site_pages;
 pub mod source_tags;
 pub mod split;
 pub mod store;

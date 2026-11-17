@@ -65,10 +65,62 @@ static ENTRY_HEAD: LazyLock<Regex> = LazyLock::new(|| {
 });
 /// The GM's own campaign notes, named on a citation line: canon, not evidence (the GM's ruling of 2026-09-07).
 static CANON_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"\bl7r\.md\b|\bbudgets\.md\b"));
-/// Where a bare URL may stand: outside every tag and comment, and outside a link's text.
-static MARKUP_PART: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?s)(<!--.*?-->|<a\b[^>]*>.*?</a>|<script\b.*?</script>|<style\b.*?</style>|<[^>]+>)")
-});
+/// The regex crate's `\w`, which the markup scan's `\b` reads (the pattern `markup_part` replaced was the regex crate's, not Python's).
+static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"^\w"));
+
+fn word_at(text: &str, at: usize) -> bool {
+    WORD.is_match(&text[at..]).unwrap_or(false)
+}
+
+/// Where a bare URL may stand: outside every tag and comment, and outside a link's text - the next markup part at or after `from`, as
+/// `(?s)(<!--.*?-->|<a\b[^>]*>.*?</a>|<script\b.*?</script>|<style\b.*?</style>|<[^>]+>)` finds it: at the first `<` where a branch
+/// matches, the first branch that does. Scanned by hand (feature 449 T148): the pattern ran on the backtracking engine and was seven
+/// tenths of the record's whole site build, every page linked through it.
+fn markup_part(text: &str, from: usize) -> Option<(usize, usize)> {
+    let mut at = from;
+    while let Some(found) = text[at..].find('<') {
+        let i = at + found;
+        let rest = &text[i..];
+        let closed =
+            |open: usize, close: &str| rest[open..].find(close).map(|e| i + open + e + close.len());
+        let bounded = |name: &str| rest.starts_with(name) && !word_at(text, i + name.len());
+        let hit = if rest.starts_with("<!--") {
+            closed(4, "-->")
+        } else {
+            None
+        }
+        .or_else(|| {
+            if !bounded("<a") {
+                return None;
+            }
+            let tag = rest[2..].find('>')? + 3;
+            closed(tag, "</a>")
+        })
+        .or_else(|| {
+            if bounded("<script") {
+                closed(7, "</script>")
+            } else {
+                None
+            }
+        })
+        .or_else(|| {
+            if bounded("<style") {
+                closed(6, "</style>")
+            } else {
+                None
+            }
+        })
+        .or_else(|| {
+            let end = rest[1..].find('>')?;
+            (end > 0).then_some(i + end + 2)
+        });
+        if let Some(end) = hit {
+            return Some((i, end));
+        }
+        at = i + 1;
+    }
+    None
+}
 
 /// The rendered text of a heading - what a reader sees.
 #[must_use]
@@ -158,10 +210,10 @@ pub fn link_target(key: &str, cite: &str, rel: &str) -> String {
 pub fn linkify(fragment: &str) -> String {
     let mut out = String::new();
     let mut at = 0;
-    for m in MARKUP_PART.find_iter(fragment).flatten() {
-        out.push_str(&link_text(&fragment[at..m.start()]));
-        out.push_str(m.as_str());
-        at = m.end();
+    while let Some((start, end)) = markup_part(fragment, at) {
+        out.push_str(&link_text(&fragment[at..start]));
+        out.push_str(&fragment[start..end]);
+        at = end;
     }
     out.push_str(&link_text(&fragment[at..]));
     out
@@ -200,13 +252,20 @@ fn line_text(fragment: &str) -> String {
     unescape(&drop_all(&TAG, &opened))
 }
 
-/// The inner HTML of the entry's `<p><em>label</em> ...</p>`, "" where it has none.
-fn labeled(body: &str, label: &str) -> String {
-    let pattern = re(&format!(
-        r"(?s)<p><em>{}</em>[{SPACE_CLASS}]*(.*?)</p>",
-        fancy_regex::escape(label)
-    ));
-    pattern
+/// The three write-ups' patterns, `<p><em>label</em> ...</p>`, compiled once: compiled a call, they were a second of the site's build
+/// over the registry's 2,900 entries (feature 449 T148).
+static LABELED: LazyLock<[Regex; 3]> = LazyLock::new(|| {
+    [WHAT_LABEL, WHY_LABEL, USED_LABEL].map(|label| {
+        re(&format!(
+            r"(?s)<p><em>{}</em>[{SPACE_CLASS}]*(.*?)</p>",
+            fancy_regex::escape(label)
+        ))
+    })
+});
+
+/// The inner HTML of the entry's write-up `which` (0 what, 1 why, 2 used), "" where it has none.
+fn labeled(body: &str, which: usize) -> String {
+    LABELED[which]
         .captures(body)
         .ok()
         .flatten()
@@ -283,9 +342,9 @@ impl Reader {
             let entry = Entry {
                 cite: collapse(&drop_all(&ANY_COMMENT, &cite)),
                 line: line_text(&cite),
-                what: labeled(body, WHAT_LABEL),
-                why: labeled(body, WHY_LABEL),
-                used: labeled(body, USED_LABEL),
+                what: labeled(body, 0),
+                why: labeled(body, 1),
+                used: labeled(body, 2),
             };
             match out.iter_mut().find(|(k, _)| *k == key) {
                 Some(slot) => slot.1 = entry,

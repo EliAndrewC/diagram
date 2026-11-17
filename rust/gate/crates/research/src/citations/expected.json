@@ -1,0 +1,132 @@
+[
+ [
+  "no source is owed: physical necessity; a drawing convention",
+  "grounds",
+  [
+   "physical necessity",
+   "a drawing convention"
+  ],
+  false
+ ],
+ [
+  "no source is owed: physical necessity, this project's decision <!-- why -->",
+  "grounds",
+  [
+   "physical necessity",
+   "this project's decision"
+  ],
+  false
+ ],
+ [
+  "no source is owed: a reason of my own",
+  "names a reason that is not one of the six: ['a reason of my own']",
+  [
+   "a reason of my own"
+  ],
+  false
+ ],
+ [
+  "no source is owed:",
+  "a grounds note names at least one of the six reasons",
+  [],
+  false
+ ],
+ [
+  "  no source is owed: measured on our own maps\n",
+  "grounds",
+  [
+   "measured on our own maps"
+  ],
+  false
+ ],
+ [
+  "no source is owed: physical necessity <a href=\"x\">x</a>",
+  "a grounds note carries no key and no link",
+  [
+   "physical necessity <a href=\"x\">x</a>"
+  ],
+  false
+ ],
+ [
+  "no source is owed: physical necessity <a class=\"fnback\" href=\"#r\">back</a>",
+  "grounds",
+  [
+   "physical necessity"
+  ],
+  false
+ ],
+ [
+  "no publicly readable source<!-- searched 2026-01-01: x --> settled 2026-02-02",
+  "absence",
+  [],
+  true
+ ],
+ [
+  "no publicly readable source (searched 2026-01-01: y)",
+  "absence",
+  [],
+  false
+ ],
+ [
+  "no publicly readable source<!-- searched 2026-01-01: x --> <code>k</code>",
+  "an absence note carries no key and no link",
+  [],
+  false
+ ],
+ [
+  "<span class=\"sep\">no publicly readable source</span><span class=\"absence-lead\">Our research</span><!-- searched 2026-01-01: x -->",
+  "absence",
+  [],
+  false
+ ],
+ [
+  "no publicly readable source",
+  null,
+  [],
+  false
+ ],
+ [
+  "<a href=\"../SOURCES.html#l7r-notes\"><code>l7r-notes</code></a> - canon",
+  "citation",
+  [],
+  false
+ ],
+ [
+  "<a href=\"../SOURCES.html#src-a\"><code>src-a</code></a> - not canon",
+  "links the key to '../SOURCES.html#src-a', which is not a page on the public internet where the quote can be read",
+  [],
+  false
+ ],
+ [
+  "<a href=\"http://x\"><code>k</code></a> x",
+  "citation",
+  [],
+  false
+ ],
+ [
+  "<a href=\"https://x\"><code>k</code></a> x",
+  "citation",
+  [],
+  false
+ ],
+ [
+  "<a href=\"ftp://x\"><code>k</code></a> x",
+  "links the key to 'ftp://x', which is not a page on the public internet where the quote can be read",
+  [],
+  false
+ ],
+ [
+  "a note of no form",
+  null,
+  [],
+  false
+ ],
+ [
+  "no source is owed: physical necessity　",
+  "grounds",
+  [
+   "physical necessity"
+  ],
+  false
+ ]
+]

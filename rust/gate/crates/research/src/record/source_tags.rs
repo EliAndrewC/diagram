@@ -3,7 +3,7 @@
 //! primary; `research/source-tags.json` holds every value with its label and its standard explanation, `research/source-sections.json`
 //! the sections in order, each with a rule over a work's primary tags. The GM's own campaign notes are canon: no tags, one fixed label.
 
-use std::collections::{BTreeSet, HashSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 use std::path::Path;
 use std::sync::LazyLock;
 
@@ -513,6 +513,9 @@ pub struct Catalog {
     /// key to its section's id.
     pub section: Vec<(String, String)>,
     pub errors: Vec<String>,
+    /// Where each key's tags and section stand in the two lists: the site asks them once a work a page, and a scan of 2,900 entries a
+    /// question made the build's registry pages quadratic (feature 449 T148, the site's port measured against the Python's dicts).
+    at: HashMap<String, usize>,
 }
 
 impl Catalog {
@@ -534,6 +537,7 @@ impl Catalog {
             tags: Vec::new(),
             section: Vec::new(),
             errors: Vec::new(),
+            at: HashMap::new(),
         };
         for (key, text) in entries {
             let at = format!("{place}/ {key}");
@@ -568,26 +572,28 @@ impl Catalog {
                 ));
                 continue;
             };
-            set(&mut cat.tags, key, tags);
-            set(&mut cat.section, key, sec);
+            if let Some(&i) = cat.at.get(key) {
+                cat.tags[i].1 = tags;
+                cat.section[i].1 = sec;
+            } else {
+                cat.at.insert(key.clone(), cat.tags.len());
+                cat.tags.push((key.clone(), tags));
+                cat.section.push((key.clone(), sec));
+            }
         }
         Ok(cat)
     }
 
-    fn tags_of(&self, key: &str) -> Option<&SourceTags> {
-        self.tags
-            .iter()
-            .rev()
-            .find(|(k, _)| k == key)
-            .and_then(|(_, t)| t.as_ref())
+    /// A key's tags; none for a canon work or a key the catalog does not hold.
+    #[must_use]
+    pub fn tags_of(&self, key: &str) -> Option<&SourceTags> {
+        self.at.get(key).and_then(|i| self.tags[*i].1.as_ref())
     }
 
-    fn section_of(&self, key: &str) -> Option<&str> {
-        self.section
-            .iter()
-            .rev()
-            .find(|(k, _)| k == key)
-            .map(|(_, s)| s.as_str())
+    /// The id of a key's section; none for a key the catalog refused or does not hold.
+    #[must_use]
+    pub fn section_of(&self, key: &str) -> Option<&str> {
+        self.at.get(key).map(|i| self.section[*i].1.as_str())
     }
 
     /// A work's labels; "" for a key with no section.
@@ -650,14 +656,6 @@ impl Catalog {
                 (!run.is_empty()).then(|| (s.clone(), run))
             })
             .collect()
-    }
-}
-
-/// `d[key] = value` on an ordered list of pairs.
-fn set<V>(pairs: &mut Vec<(String, V)>, key: &str, value: V) {
-    match pairs.iter_mut().find(|(k, _)| k == key) {
-        Some(slot) => slot.1 = value,
-        None => pairs.push((key.to_owned(), value)),
     }
 }
 

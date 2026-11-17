@@ -27,5 +27,6 @@ pub mod tempdir;
 pub mod tool;
 pub mod transcript;
 pub mod tree;
+pub mod url_host;
 pub mod usage;
 pub mod wait;

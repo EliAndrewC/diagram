@@ -244,7 +244,7 @@ confirmed`).
 
 The record is hand-authored HTML: the questions under `research/questions/`, the registry's fragments under
 `research/sources/`; a page's heading id is its anchor and its file's slug. `make record` builds the site from them
-(`record/site.py`): each page's `<head>` links the site's copy of `assets/record.css`, `site.css`, `glossary.js`,
+(`rust/gate/crates/research/src/record/site.rs`): each page's `<head>` links the site's copy of `assets/record.css`, `site.css`, `glossary.js`,
 `nav.js`, `site.js` and `record.js`. These rule files stay Markdown. The page mechanics are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md).
 

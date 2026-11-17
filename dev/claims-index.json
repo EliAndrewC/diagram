@@ -7750,16 +7750,6 @@
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/interactive/record/site_pages.py::frame#page frame": {
-  "code": "dbc09f5c7179766b",
-  "core": "a05b45e0c93105bc",
-  "date": "2026-10-10",
-  "note": "it only writes the HTML head, script and stylesheet links, and the nav shell for the record site; nothing about a hamlet or how the map draws one",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/interactive/sources.py::_loaded#record load cache": {
   "code": "012822ffd20138c9",
   "core": "492c681c909d887a",

@@ -227,14 +227,32 @@ const CHECKS: [Row; 23] = [
     Row("speckit-todo check", Tool::Gate, &["speckit-todo", "--root", "{root}", "--check"], "an open feature does not say what it affects (above): add its **Affects** line - make speckit-todo CHECK=1 re-checks", false, ""),
     Row("conflict selftest", Tool::Gate, &["check", "conflict", "--selftest"], "conflict-marker selftest failed - the guard itself is broken; fix rust/guard/src/guards/conflict_marker_hooks.rs before pushing", true, ""),
     Row("conflict", Tool::Gate, &["check", "conflict", "--tracked", "{root}"], "a tracked file still carries an unresolved merge conflict (above) - the history here is never rewritten, so resolve it before it lands, feature 241", false, ""),
-    Row("record", Tool::Py("gates/memo_check.py"), &["record"], "the record does not build cleanly (above; `make record CHECK=1` at the repository root names each refusal) - features 258 and 301", false, "research/sources"),
+    Row("record", Tool::InProcess(record_check), &["record", "check", "record"], "the record does not build cleanly (above; `make record CHECK=1` at the repository root names each refusal) - features 258 and 301", false, "research/sources"),
     Row("money-candidates", Tool::Gate, &["record", "money-candidates", "--check"], "an amount of money in the record is neither marked for the tooltip nor passed over (above) - mark it, or add `- <stem> | <amount> | <reason>` to specs/413-money-tooltip-on-the-record/backfill.md; feature 413", false, "research/sources"),
-    Row("glossary", Tool::Py("gates/memo_check.py"), &["glossary"], "the committed glossary differs from its per-term files (run `make glossary` at the repository root, then commit) - feature 259, spec FR-006", false, "research/sources"),
+    Row("glossary", Tool::InProcess(glossary_check), &["record", "check", "glossary"], "the committed glossary differs from its per-term files (run `make glossary` at the repository root, then commit) - feature 259, spec FR-006", false, "research/sources"),
     Row("gate-stamp selftest", Tool::Gate, &["stamp", "--selftest"], "gate-stamp selftest failed - the guard itself is broken; fix rust/gate/crates/tree/src/stamp.rs before pushing", true, ""),
     Row("gate-stamp", Tool::Gate, &["stamp", "--check", "origin/main"], "push refused by the green-gate guard (above)", false, ""),
     Row("gm-questions", Tool::Gate, &["gm-review", "owed-check"], "a question for the GM in this push is still owed escalation-check (above) - the one door to him (feature 432, FR-002)", false, "specs"),
     Row("closing", Tool::Gate, &["close-check", "--push", "origin/main...HEAD"], "REFUSED: a feature this push closes owes what closing owes (feature 375) - the reasons above; a case that is genuinely exempt: CLOSE_OK=\"<reason>\" (recorded)", false, ""),
 ];
+
+/// The record's build check and the glossary's, in process (feature 449 T148, phase 4's S5): `memo_check.py record|glossary` ran each as a
+/// Python process; the research crate's checks now, each run recorded in the usage log under `memo_check`'s name as before.
+fn record_check(root: &Path) -> Reply {
+    l7r_gate_research::tools::reply(l7r_gate_research::tools::memo::cli(
+        &["record".to_owned()],
+        root,
+        &l7r_gate_research::tools::program_id(),
+    ))
+}
+
+fn glossary_check(root: &Path) -> Reply {
+    l7r_gate_research::tools::reply(l7r_gate_research::tools::memo::cli(
+        &["glossary".to_owned()],
+        root,
+        &l7r_gate_research::tools::program_id(),
+    ))
+}
 
 const STAMPS: &str = "l7r-cache/selftests.json";
 

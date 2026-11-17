@@ -1,5 +1,5 @@
 {
- "_about": "Blocked domains (feature 312, FR-001): AI-generated sites, refused at every fetch route and never cited, written up, put on the ledger or the not-kept list, or archived. A category any domain can join with the GM's approval; read by l7r/diagram/interactive/record/blocked.py, which refuses an entry with no approval.",
+ "_about": "Blocked domains (feature 312, FR-001): AI-generated sites, refused at every fetch route and never cited, written up, put on the ledger or the not-kept list, or archived. A category any domain can join with the GM's approval; read by the blocked-domain list's one reader, rust/guard/src/shared/blocked.rs (the Python l7r/diagram/interactive/record/blocked.py until feature 449 T148), which refuses an entry with no approval.",
  "domains": [
   {
    "domain": "grokipedia.com",

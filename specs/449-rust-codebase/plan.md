@@ -332,28 +332,36 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T128 to T128 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
 <!-- plan-archive: T135 to T135 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
 <!-- plan-archive: T138 to T138 moved to plan-done.md, 2026-11-16 (feature 375 FR-044) -->
-### T148 (<why: the finding or measurement that files it>)
+### T148 (phase 4's S5, the record's site, `ask:449-phase4-slices`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the record site's build and its checks ported into the `research` crate and wired - S1's record library's first production caller: `interactive/record/site.py`, `site_pages.py`, `site_links.py` and `money.py`, `interactive/citations.py` and `glossary_source.py`, `tools/record_asset.py`, `glossary_asset.py`, `footnote_census.py` and `source_tags_contract.py`, and `scripts/gates/memo_check.py` (2,164 lines, observed 2026-11-16, method: `wc -l`), with `record/archive.py`, `blocked.py`, `site_notes.py` and `source_tags.py`, which lost their last importer, deleted - fifteen files; `pipeline/record_build.py` cut to a forwarder for `render_cache.py` (S12), and `interactive/glossary.py` to the `GLOSSARY` and `CASED` that `page.py` (S7) reads.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (`ask:449-phase4-slices`, `ask:449-T81-slices`, `ask:449-T135-generator`, `ask:449-T148-claims`, `ask:449-usage-text`, `ask:449-T066-json-message`, FR-001, FR-002, FR-003, FR-004, FR-008; T148's note from T144's plan review):
+   - The callers: `make record` runs `l7r-gate record site`, `make record CHECK=1` `record check record`, `make glossary` `record glossary [--split]`, `make glossary CHECK=1` `record check glossary`, `make footnote-census` and `make source-tags-contract` their `record` verbs; the push's record and glossary rows run in process where they ran `memo_check.py`, still writing its usage-log row; render-sync's staleness reaches `record site-stale` through the forwarder; the four retired rows leave `_invocation.py`'s operations, and the make-only suite's cases on them move to a recipe still wrapped.
+   - `memo_check`'s general form (`<name> --inputs ... [--code ...] [--facts ...] -- <cmd>`) ported beside its two presets, its output, exit, kept pass, memo file's path and shape and usage-log row the Python's, a `python3 -m` command run as the Python ran it in its own process; its key is this program's id with the `--code` files and the project modules they import, where the Python's hashed its interpreter and modules, so a pass the Python kept is missed once after the cut. Its usage line is HEAD's with only the tool's name the port's (`ask:449-T135-generator`).
+   - The record check's key is the Python's, no date in it: after the plan review, which held that FR-002's fix exception covers a check that refuses correct work and not one made to refuse more, the date the port first added is out, so a kept pass can outlive an archive row's seven-day pending window as it could in the Python; that behavior is the Python's, and its fix is its own commit after this cut (T163, constitution XIV).
+   - The note's two parts: no handler of the slice's Python printed a `KeyError`'s `str(e)` (its one reader, `store.py`, used `e.args[0]`, which `store.rs` matches), and an uncaught exception's line adds Python's repr quotes where a message lacks them, pinned by a test; and live fetch URLs reach the host reading - the blocked-fetch guard, the page, archive and uncited fetches, the ledgers - so the guard's `shared::url_host` ports `urlsplit` exactly (the scheme's case, the leading controls, tab, CR and LF dropped, the bracket and IP checks, the NFKC check, the fallback), matching CPython 3.14.4 on 3,844 URLs, the expected file regenerated from HEAD's own `blocked.host` and the same (observed 2026-11-16, method: `rust/guard/src/shared/url_host/cpython.jsonl` against the port). The guard's cold build went from 23.4 s to 27.0 s with `unicode-normalization` pinned, under the wrapper's limit (observed 2026-11-16, method: one cold build each, before and after).
+   - The claims (`ask:449-T148-claims`): `site_pages.py::frame`, a claim of no research on process plumbing whose code moves into a gate crate the claims walk prunes, leaves `dev/claims-index.json`, and the two deleted units leave `dev/claims-deferred.json`; no other claim names either unit and `make claims-owed` owes none after the drop (observed 2026-11-16, method: `grep` of both files and `make claims-owed`).
+   - S1's library made faster with no output changed: `linkify`'s markup scan written by hand, the write-up patterns compiled once, an index on `Catalog`; the byte-equal site is the evidence.
+   - The same outputs (FR-002), through the shared runner: HEAD's Python against the Rust, the whole real site (4,316 pages, `all.html`, `nav.js`, the assets, the glossary script) byte for byte, 16 fault fixtures on the real record, every glossary, census, contract and check command, flag and refusal including the general form's, the push's two rows over five real record deltas, and render-sync's rebuilt, fresh and rebuilt cycle: the differential's 71 cases, one differing, render-sync's `research/site/.stamp` (measured 2026-11-16 (`make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t148/cases.json VERIFY=1`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t148/cases.diff-run/reports/diff-run-verify-20261117T021539Z.json`)). The stamp hashed the Python modules the build imported, which this cut deletes, so it hashes the building binary, the key Q8 rules for the generator's cache; every page and the rebuilt and fresh verdicts are the same. Normalizations taken: UTC times and the runner's world path (two Python runs differ in them), argparse's and a traceback's text (`ask:449-usage-text`), and the tool's own name in the usage line (`ask:449-T135-generator`). The push's two rows append their usage lines in either order, seen once in an incremental run and not in the verify run: the push runs every row on its own thread at HEAD as it does here (`push.rs`'s `thread::scope`), so the order was HEAD's race too.
+   - Timing, recorded and not held: the record check fresh 2.2 s in Rust against 5.0 s in Python, kept 0.06 s against 0.2 s (observed 2026-11-16, method: `/usr/bin/time` of each after the last edit).
+   - The census: no `specs/*/measurements*.json` command runs a deleted tool, the three naming `make record` or `make glossary` running targets that stay (observed 2026-11-16, method: `git grep` of each name in command, import, `-m` and path forms). The checks: `make static` clean on 30 crates, `make rust-test` clean, `make hooks-test HOOKS_ALL=1` green on 54 suites, `make quick` clean, the pointer check clean on a clone with the new files added (observed 2026-11-16, method: those commands).
 
 ### T148 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The record site builds and checks in Rust, byte for byte the Python's site, S1's library wired.
+2. **The constraints.** FR-001 to FR-004 and FR-008, `ask:449-phase4-slices`, the task's note.
+3. **Where each comes from.** R: the rulings; O: the differential, the host's CPython table and the census above.
+4. **Do they describe the world here?** Run on copies of this clone's real record, measured 2026-11-16 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t148/cases.json`).
+5. **The order.** After S4 (T138).
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1` and a gated `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The verify run's cases with the stamp the one difference, and the census.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 ### T149 (<why: the finding or measurement that files it>)
@@ -675,4 +683,28 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 11. **Before fitting things into room.** Not a room question.
 
 **Performance work?** No.
+
+
+### T163 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T163 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

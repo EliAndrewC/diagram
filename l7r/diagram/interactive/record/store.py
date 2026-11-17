@@ -133,8 +133,8 @@ _NOTE_BODY = re.compile(r'(<li data-note="[^"]+">)(.*?)(</li>)', re.S)
 
 class Memo(Protocol):
     """Where a per-file result is kept by the content it was made from (feature 383): `fact(key_text, make)` returns the
-    value kept for that text, or makes it. The push's record check hands one in (`scripts/gates/memo_check.py --facts`);
-    every other caller keeps nothing."""
+    value kept for that text, or makes it. The push's record check handed one in (`scripts/gates/memo_check.py --facts`)
+    until feature 449 T148 moved that check to Rust; every caller keeps nothing now."""
 
     def fact(self, key_text: str, make: Callable[[], Any]) -> Any: ...  # noqa: ANN401 - the caller's own value
 

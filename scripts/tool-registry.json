@@ -75,7 +75,7 @@
     },
     "memo_check": {
       "kind": "check",
-      "what": "scripts/gates/memo_check.py - a refusing check; each run recorded passed or refused"
+      "what": "l7r-gate record check record|glossary|<name> --inputs ... -- <command> (memo_check.py, ported by feature 449 T148) - a refusing check; each run recorded passed or refused"
     },
     "one-gate": {
       "kind": "check",

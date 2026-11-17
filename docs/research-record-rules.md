@@ -531,7 +531,7 @@ section. A section deliberately not written is written in the declared form
 The GM: *"what I probably want is a single HTML file that has a table of contents at the very top ... But then it also
 gets assembled into a page structure where anything that would be a top-level table of contents entry ... will be its
 own separate parent section and then maybe each of our subsections are themselves individual pages within the larger
-section, which are linked on the left."* So `make record` builds `research/site/` (`record/site.py`): the home page,
+section, which are linked on the left."* So `make record` builds `research/site/` (`record/site.rs`): the home page,
 a page per part (each page of the record), a page per question and per registry entry, and `all.html`, the whole
 record on one page under one table of contents - the navigation drawn on the left of every page from one `nav.js`. A
 small page numbers its notes from 1 and lists, at its foot, the notes and the works it cites (*"start the footnotes
@@ -541,7 +541,7 @@ the small pages (*"the links to our research from the interactive HTML maps shou
 
 **Built, never committed.** *"We should definitely stop checking the assembled files into source control"* - and
 *"I do want these files to end up on main"*: render-sync builds the site on the main checkout when a fragment, an
-asset or the build's code changed (`pipeline/record_build.py`'s stamp), the map renders' model. Nothing in the engine,
+asset or the build's code changed (the stamp of `record/site/write.rs`, which `pipeline/record_build.py` forwards to since feature 449 T148), the map renders' model. Nothing in the engine,
 the tools or the tests reads a built page: they read the record through the in-memory assembly
 (`sources.record_text`), so a fresh clone needs no build to work.
 
@@ -632,7 +632,7 @@ What follows from it:
   asks for it or approves it (*The Complete Servant* because a player read it; the English traveling players because the
   GM raised them).
 - **Enforced where it can be.** The `comparative` kind marks the source and its label shows the reader the limits;
-  `make record` refuses it cited by a question that is not tagged `comparative` (`site.py`, `_comparative_misuse`);
+  `make record` refuses it cited by a question that is not tagged `comparative` (`record/site.rs`, `comparative_misuse`);
   `source-applicability` judges it on its own society's terms and calls its use outside a comparative question
   NOT-APPLICABLE.
 

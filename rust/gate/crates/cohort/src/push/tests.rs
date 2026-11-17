@@ -505,3 +505,30 @@ fn the_make_page_row_runs_in_process() {
         .to_string_lossy()
         .ends_with("l7r-gate.sh"));
 }
+
+/// The record's and the glossary's rows ask the research crate's checks in process (feature 449 T148, `memo_check.py`'s two presets
+/// retired): a tree with no record refuses each as the Python's check refused it, its timing form the gate's command.
+#[test]
+fn the_record_and_glossary_rows_run_in_process() {
+    let row = |name: &str| CHECKS.iter().find(|r| r.0 == name).unwrap();
+    assert!(
+        matches!(row("record").1, Tool::InProcess(_))
+            && row("record").2 == ["record", "check", "record"]
+    );
+    assert!(
+        matches!(row("glossary").1, Tool::InProcess(_))
+            && row("glossary").2 == ["record", "check", "glossary"]
+    );
+    let root = tree();
+    std::fs::create_dir_all(root.join("research/sources")).unwrap();
+    let record = super::record_check(&root);
+    assert_eq!(
+        (record.code, record.stderr.starts_with("record: ")),
+        (1, true)
+    );
+    let glossary = super::glossary_check(&root);
+    assert_eq!(
+        (glossary.code, glossary.stderr.starts_with("OSError: ")),
+        (1, true)
+    );
+}

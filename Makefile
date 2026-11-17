@@ -271,16 +271,16 @@ building-programs: ## [docs] render each declared Mode A type's required-items t
 	$(RUN).tools.building_programs $(if $(CHECK),--check,)
 
 glossary:       ## [docs] assemble interactive/assets/glossary.json from its per-term files, then write research/assets/glossary.js from it - the ONE glossary the map's modals and the record's pages share (features 209, 259)   CHECK=1: exit 1 if either is stale   SPLIT=1: the one-time split into per-term files
-	$(if $(CHECK),@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/memo_check.py" glossary,$(RUN).tools.glossary_asset $(if $(SPLIT),--split,))
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record $(if $(CHECK),check glossary,glossary $(if $(SPLIT),--split,))
 
 footnote-census: ## [docs] count the record's footnotes by kind - cited, grounds, ABSENT, settled. The ABSENT column is the backlog and the only one anybody has to act on (feature 235)
-	$(RUN).tools.footnote_census
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record footnote-census
 
 citations:      ## [docs] the same as `make record` (feature 301: the record's site carries the notes; kept as a name)   CHECK=1: as `make record CHECK=1`
 	@$(MAKE) --no-print-directory record $(if $(CHECK),CHECK=1,)
 
 record:         ## [docs] build the record's site, research/site/, from its questions (features 258, 301, 303) - a page per question, a page per section of each half and per tag, the whole record on one page   CHECK=1: build in memory and exit 1 on any refusal, writing nothing
-	$(if $(CHECK),@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/memo_check.py" record,$(RUN).tools.record_asset)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record $(if $(CHECK),check record,site)
 	$(if $(CHECK),,@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources mark-filled)
 
 money-conversions: ## [docs] copy gm-assistant's money conversion table into research/assets/money-conversions.json, which the record's build converts each marked amount of money from (feature 413)   CHECK=1: write nothing, exit 1 while the copy is stale
@@ -290,7 +290,7 @@ money-candidates: ## [docs] every amount of money in the record not yet marked f
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record money-candidates $(if $(CHECK),--check,) $(if $(ALL),--all,) $(if $(Q),--stem $(Q),) $(if $(CONTEXT),--context,)
 
 source-tags-contract: ## [docs] derive research/source-tags.json's values and explanations into the source-applicability agent's contract (feature 305) - run after editing the vocabulary; a test fails while the block is stale   CHECK=1: write nothing, exit 1 while stale
-	$(RUN).tools.source_tags_contract $(if $(CHECK),--check,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record source-tags-contract $(if $(CHECK),--check,)
 
 fragment-move:  ## [docs] rename or renumber a question - every file of its stem - and rewrite every pointer to it - the record's own links, about: markers, confusables, the Entry: lines, the code and docs (features 301, 303)   FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html
 	@test -n "$(FROM)" -a -n "$(TO)" || { echo "make fragment-move FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html" >&2; exit 2; }

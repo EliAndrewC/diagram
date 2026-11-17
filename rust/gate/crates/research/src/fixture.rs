@@ -48,3 +48,61 @@ pub fn put(dir: &Path, rel: &str, text: &str) {
     std::fs::create_dir_all(path.parent().unwrap()).unwrap();
     std::fs::write(path, text).unwrap();
 }
+
+/// What the record's site is built from beside the record (feature 449 T148): the hand-written assets, the glossary and its term files, the
+/// derived variant index, the source-applicability contract.
+pub const TREE: &[(&str, &str)] = &[
+    ("research/sources/_front.html", "<html><body><main>\n<h1 id=\"the-registry\">The <em>registry</em></h1>\n<p>Every work, and <a href=\"#works-cited\">the cited</a>.</p>\n<hr>\n"),
+    ("research/sources/010-works-cited/0010-src-a.html", "<h3 id=\"src-a\"><code>src-a</code></h3>\n<p>Src A, https://e.org/a READ <!-- READ 2026-10-01 at https://e.org/a2 --></p>\n<p><em>What it is:</em> a book</p>\n<p><em>Why it applies, and its limits:</em> it does</p>\n<p><em>Used for:</em> paddies (<a href=\"contents.json#land\">Land</a>)</p>\n<!-- tags: period=modern,premodern; region=japan; kind=book -->\n"),
+    ("research/sources/010-works-cited/0020-l7r-notes.html", "<h3 id=\"l7r-notes\"><code>l7r-notes</code></h3>\n<p>The GM's campaign notes, <code>l7r.md</code>, \"A\" (https://github.com/x/l7r.md#a) and \"B\" (https://github.com/x/l7r.md#b) (https://github.com/x/l7r.md)<!-- READ --></p>\n"),
+    ("research/sources/010-works-cited/0040-bare.html", "<h3 id=\"bare\"><code>bare</code></h3>\n<!-- tags: period=modern; region=china; kind=web -->\n"),
+    ("research/sources/040-uncited-works.html", "<h2 id=\"uncited-works\">Uncited works</h2>\n<p>Read and kept.</p>\n"),
+    ("research/sources/040-uncited-works/0010-unc-a.html", "<h3 id=\"unc-a\"><code>unc-a</code></h3>\n<p>Unc A (https://e.org/u).</p>\n<p><em>What it is:</em> a page</p>\n<p><em>Why it applies, and its limits:</em> kept</p>\n<!-- tags: period=modern; region=japan; kind=book -->\n"),
+    ("research/assets/money-conversions.json", "{\"eras\": {\"edo\": {\"place\": \"Edo\", \"years\": \"1745-1754\", \"basket_coverage\": \"rice\", \"goods_left_out\": [\"Fish\"], \"confidence\": \"good\", \"units\": {\"ryo\": {\"goods_dollars\": 100, \"goods_dollars_high\": 150, \"wage_dollars\": 50, \"rokugan_sen\": 1000}}}}}"),
+    ("{Q}/0002-coins.html", "<h2 id=\"coins\">Coins <span class=\"xref\">(see too)</span></h2>\n<!-- tags: subject=money; setting=town; level=foundational -->\n<!-- a comment --><p>Coins are <b>round</b>&amp; flat! More. <span class=\"money\" data-amount=\"3\" data-coin=\"ryo\" data-era=\"edo\">3 ryo</span> <a href=\"../assets/record.css\">css</a> <a href=\"0001-paddies.html#paddies\">p</a> <a href=\"../SOURCES.html#src-a\">a</a></p>\n"),
+    ("research/assets/record.css", "body {}\n"),
+    ("research/assets/record.js", "// record\n"),
+    ("research/assets/site.css", "nav {}\n"),
+    ("research/assets/site.js", "// site\r\n"),
+    ("research/assets/theme.js", "// theme\n"),
+    ("research/assets/glossary-variants.txt", "bund\tbund\nembankment\tbund\nochiba\tochiba\n"),
+    ("l7r/diagram/interactive/assets/glossary.json", "{\n \"bund\": {\n  \"def\": \"A low bank.\",\n  \"variants\": [\n   \"bund\",\n   \"embankment\"\n  ]\n },\n \"ochiba\": {\n  \"def\": \"Fallen leaves.\",\n  \"variants\": [\n   \"ochiba\"\n  ],\n  \"cased\": true\n }\n}\n"),
+    ("l7r/diagram/interactive/assets/glossary/0010-bund.json", "{\n \"term\": \"bund\",\n \"def\": \"A low bank.\",\n \"variants\": [\n  \"bund\",\n  \"embankment\"\n ]\n}\n"),
+    ("l7r/diagram/interactive/assets/glossary/0020-ochiba.json", "{\n \"term\": \"ochiba\",\n \"def\": \"Fallen leaves.\",\n \"variants\": [\n  \"ochiba\"\n ],\n \"cased\": true\n}\n"),
+    (".claude/agents/source-applicability.md", "# contract\n<!-- source-tags: DERIVED by make source-tags-contract from research/source-tags.json - edit the vocabulary, never here -->\nold\n<!-- /source-tags -->\nend\n"),
+];
+
+/// The record under `research/` of a tree that builds its site cleanly: the crate's record less what its lists refuse (the blocked
+/// entry, the banned section, the archive's uncovered rows), with [`TREE`] beside it.
+///
+/// # Panics
+/// A record the crate's archive reader refuses, which the fixture never is.
+pub fn tree() -> TempDir {
+    let dir = scratch("research-tree");
+    for (rel, text) in FILES {
+        if rel.starts_with("archive/")
+            || rel.ends_with("0030-grok.html")
+            || rel.ends_with("020-other.html")
+        {
+            continue;
+        }
+        put(&dir, &format!("research/{rel}"), text);
+    }
+    for (rel, text) in TREE {
+        // a question's path built from its parts, so no fixture names a question of the real record
+        put(
+            &dir,
+            &rel.replace(
+                "{Q}",
+                &format!("research/{}", crate::record::questions::QUESTIONS),
+            ),
+            text,
+        );
+    }
+    let research = dir.join("research");
+    for (url, _) in crate::record::archive::cited(&research).unwrap() {
+        let id = crate::record::archive::url_id(&url);
+        put(&research, &format!("archive/{}/{id}.json", &id[..2]), "{\"outcome\": \"archived\", \"captured\": \"2026-10-01T00:00:00Z\", \"path\": \"aa/x\"}");
+    }
+    dir
+}

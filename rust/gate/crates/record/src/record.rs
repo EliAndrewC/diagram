@@ -329,6 +329,25 @@ fn found(args: &[String]) -> Reply {
     )
 }
 
+/// The record's site and its small tools (feature 449 T148): each the research crate's command, run in the repository `tree` from `cwd`.
+fn site_tools(verb: &str, rest: &[String], cwd: &Path, tree: &Path) -> Reply {
+    use l7r_gate_research::tools;
+    tools::reply(match verb {
+        "site" => tools::site::run(rest, tree, cwd),
+        // the stamp keys the build's own code: this program, as the generation cache's key is its binary (`ask:449-phase4-slices` Q8)
+        "site-stale" => tools::site::stale(
+            rest,
+            &std::env::current_exe()
+                .and_then(std::fs::read)
+                .unwrap_or_default(),
+        ),
+        "check" => tools::memo::cli(rest, tree, &tools::program_id()),
+        "glossary" => tools::glossary::run(rest, tree, cwd),
+        "footnote-census" => tools::census::run(rest, tree),
+        _ => tools::contract::run(rest, tree),
+    })
+}
+
 /// `l7r-gate record canon | money-conversions | found ...`.
 pub fn cli(args: &[String]) -> Reply {
     let rest = args.get(1..).unwrap_or(&[]);
@@ -370,6 +389,18 @@ pub fn cli(args: &[String]) -> Reply {
         // feature 449 T138 (phase 4's S4): `semantic_index.py`'s two commands and `research_search.py`
         Some("semantic") => l7r_gate_semantic::cli::cli(rest, &current_dir()),
         Some("search") => l7r_gate_semantic::cli::search_cli(rest, &current_dir()),
+        // feature 449 T148 (phase 4's S5): the record's site and its small tools, the research crate's, and `memo_check.py`'s two checks
+        Some(
+            verb @ ("site"
+            | "site-stale"
+            | "check"
+            | "glossary"
+            | "footnote-census"
+            | "source-tags-contract"),
+        ) => {
+            let cwd = current_dir();
+            site_tools(verb, rest, &cwd, &l7r_gate_research::tools::tree_of(&cwd))
+        }
         _ => reply(
             String::new(),
             "usage: l7r-gate record canon | money-conversions | found ...\n".to_owned(),
