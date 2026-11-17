@@ -243,6 +243,7 @@ fn record_check(root: &Path) -> Reply {
         &["record".to_owned()],
         root,
         &l7r_gate_research::tools::program_id(),
+        &l7r_gate_research::record::archive::today_utc(),
     ))
 }
 
@@ -251,6 +252,7 @@ fn glossary_check(root: &Path) -> Reply {
         &["glossary".to_owned()],
         root,
         &l7r_gate_research::tools::program_id(),
+        &l7r_gate_research::record::archive::today_utc(),
     ))
 }
 

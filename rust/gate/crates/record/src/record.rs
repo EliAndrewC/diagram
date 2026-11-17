@@ -341,7 +341,12 @@ fn site_tools(verb: &str, rest: &[String], cwd: &Path, tree: &Path) -> Reply {
                 .and_then(std::fs::read)
                 .unwrap_or_default(),
         ),
-        "check" => tools::memo::cli(rest, tree, &tools::program_id()),
+        "check" => tools::memo::cli(
+            rest,
+            tree,
+            &tools::program_id(),
+            &l7r_gate_research::record::archive::today_utc(),
+        ),
         "glossary" => tools::glossary::run(rest, tree, cwd),
         "footnote-census" => tools::census::run(rest, tree),
         _ => tools::contract::run(rest, tree),

@@ -360,6 +360,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T163 (a defect T148 found in the record check, fixed in its own commit as constitution XIV asks)": {
+   "sha256": "165d841640af04231d96f73a30c6fff4d03f1da949ca227592134fd7a4a365c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
+  },
+  "### T163 Approach (checklist part A)": {
+   "sha256": "562d6b1ff8a9038dc38f618520f7698d4b284a957a15ba6dd4479d34e71448e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -9725,6 +9737,46 @@
      "why": "These are the FR-001 measurement-rewrite census and the standard exits. Nothing is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-17",
+   "blocks": [
+    "### T163 (a defect T148 found in the record check, fixed in its own commit as constitution XIV asks)",
+    "### T163 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T163-fix",
+     "summary": "Fix a defect T148 found in the record check (make record CHECK=1): its kept pass is keyed on inputs and program but its refusals read today's date (a pending-upload archive row answers for seven days), so a pass kept one day is replayed past a row's window; the key now holds today's UTC date (rust/gate/crates/research/src/tools/memo.rs), in its own commit after T148's port.",
+     "class": "within",
+     "why": "Nothing the GM asked is narrowed, and FR-002 does not reach the change: FR-002 binds a replacement's verdicts to the Python's on every case its tests and its suites hold, and the case changed here - a pass kept on one day replayed on a later one past a pending row's seven-day window - is held by none of them (the plan adds the first test of it, failing without the fix); every fresh run's verdict is unchanged. The change is also kept out of the port itself: T148's port kept the Python's key under FR-002, and this lands in its own later commit, so FR-002's one fix exception (a check refusing correct work) is not stretched to cover a check made to refuse more. The plan cites constitution XIV (a defect fixed where it is found), whose text is not in the bundle; the defect - a check passing work it would refuse when run - is in the tooling the request ports, and fixing it narrows nothing asked."
+    },
+    {
+     "id": "T163-glossary-unchanged",
+     "summary": "The glossary check's memo key, which reads no date, is left unchanged.",
+     "class": "within",
+     "why": "The defect is a date-dependent refusal replayed across days; a check that reads no date cannot have it, so leaving its key alone drops nothing the request or spec asks for."
+    },
+    {
+     "id": "T163-cost",
+     "summary": "Accept that the kept pass is rerun once a day (fresh 2.2 s vs kept 0.06 s, observed 2026-11-16, /usr/bin/time, T148).",
+     "class": "within",
+     "why": "A once-a-day 2.2 s rerun is the cost of the check being correct; it does not undo any of FR-011/FR-012's named savings and no requirement binds the record check's memo hit rate."
+    },
+    {
+     "id": "T163-checks",
+     "summary": "Verify with a research crate test that a pass kept on one day is not replayed the next, shown failing without the fix, plus make static and make land green.",
+     "class": "within",
+     "why": "A test whose only effect is to hold the fix in place is enforcement of the work, not added scope."
+    },
+    {
+     "id": "T163-order-exits",
+     "summary": "Order right after T148; red exit records the failure and routes any cannot-be-done claim through make arbiter-ask; budget one landing.",
+     "class": "within",
+     "why": "Sequencing and exit procedure decide nothing the request or spec left open in a narrowing direction."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -17407,6 +17459,44 @@
      "summary": "Timings are recorded and not held. The measurements census finds no command that runs a deleted tool. make static, rust-test, hooks-test HOOKS_ALL=1, quick and the pointer check are clean.",
      "class": "within",
      "why": "These are the FR-001 measurement-rewrite census and the standard exits. Nothing is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T163": {
+   "section_sha256": "d3046c2ee23708ca930fa107ac6569e0726bf8690687113b172f35c53f486fb2",
+   "reviewed": "2026-11-17",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T163-fix",
+     "summary": "Fix a defect T148 found in the record check (make record CHECK=1): its kept pass is keyed on inputs and program but its refusals read today's date (a pending-upload archive row answers for seven days), so a pass kept one day is replayed past a row's window; the key now holds today's UTC date (rust/gate/crates/research/src/tools/memo.rs), in its own commit after T148's port.",
+     "class": "within",
+     "why": "Nothing the GM asked is narrowed, and FR-002 does not reach the change: FR-002 binds a replacement's verdicts to the Python's on every case its tests and its suites hold, and the case changed here - a pass kept on one day replayed on a later one past a pending row's seven-day window - is held by none of them (the plan adds the first test of it, failing without the fix); every fresh run's verdict is unchanged. The change is also kept out of the port itself: T148's port kept the Python's key under FR-002, and this lands in its own later commit, so FR-002's one fix exception (a check refusing correct work) is not stretched to cover a check made to refuse more. The plan cites constitution XIV (a defect fixed where it is found), whose text is not in the bundle; the defect - a check passing work it would refuse when run - is in the tooling the request ports, and fixing it narrows nothing asked."
+    },
+    {
+     "id": "T163-glossary-unchanged",
+     "summary": "The glossary check's memo key, which reads no date, is left unchanged.",
+     "class": "within",
+     "why": "The defect is a date-dependent refusal replayed across days; a check that reads no date cannot have it, so leaving its key alone drops nothing the request or spec asks for."
+    },
+    {
+     "id": "T163-cost",
+     "summary": "Accept that the kept pass is rerun once a day (fresh 2.2 s vs kept 0.06 s, observed 2026-11-16, /usr/bin/time, T148).",
+     "class": "within",
+     "why": "A once-a-day 2.2 s rerun is the cost of the check being correct; it does not undo any of FR-011/FR-012's named savings and no requirement binds the record check's memo hit rate."
+    },
+    {
+     "id": "T163-checks",
+     "summary": "Verify with a research crate test that a pass kept on one day is not replayed the next, shown failing without the fix, plus make static and make land green.",
+     "class": "within",
+     "why": "A test whose only effect is to hold the fix in place is enforcement of the work, not added scope."
+    },
+    {
+     "id": "T163-order-exits",
+     "summary": "Order right after T148; red exit records the failure and routes any cannot-be-done claim through make arbiter-ask; budget one landing.",
+     "class": "within",
+     "why": "Sequencing and exit procedure decide nothing the request or spec left open in a narrowing direction."
     }
    ],
    "verdict": "CLEAR"

@@ -685,26 +685,28 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** No.
 
 
-### T163 (<why: the finding or measurement that files it>)
+### T163 (a defect T148 found in the record check, fixed in its own commit as constitution XIV asks)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the record check (`make record CHECK=1`, which the push's preflight and its record row run) keeps a passing result keyed on its inputs and the program, and its refusals read today's date: an archive row whose upload is pending answers for its URL for seven days. A pass kept on one day was replayed on a later one, past a row's window, letting through a record the check now refuses. The key of the record's check now holds today's UTC date (`rust/gate/crates/research/src/tools/memo.rs`); the glossary's, which reads no date, is unchanged.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+   **Decisions** (constitution XIV, a defect fixed where it is found; FR-002, which held T148's port to the Python's key so that this change is its own):
+   - Where it came from: T148's port first added the date inside the port, and its plan review held that FR-002's fix exception covers a check that refuses correct work, not one made to refuse more, so the port kept the Python's key and this task fixes the check on its own; `escalation-check` cut the question of asking first, constitution XIV deciding it (observed 2026-11-16, method: T148's plan review and the escalation check's reply).
+   - What it costs: the kept pass is rerun once a day, the check fresh taking 2.2 s where a kept pass takes 0.06 s (observed 2026-11-16, method: `/usr/bin/time` of the record check fresh and kept, T148).
+   - The checks: the research crate's tests green with a test holding that a pass kept on one day is not replayed the next, the test failing with the fix taken out, and `make static` clean (observed 2026-11-16, method: `make rust-test CRATE=rust/gate/crates/research` with and without the fix, and `make static`).
 
 ### T163 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The record check never passes a record it would refuse today.
+2. **The constraints.** Constitution XIV; FR-002 for what the port itself holds.
+3. **Where each comes from.** O: T148's reading of the check and its plan review.
+4. **Do they describe the world here?** Read from the check's own refusal and key, measured 2026-11-16 (the research crate's test).
+5. **The order.** Right after T148, whose port it fixes.
+6. **The exits.** Green: the research crate's tests, `make static` and `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The test holding a day-old pass rerun.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 

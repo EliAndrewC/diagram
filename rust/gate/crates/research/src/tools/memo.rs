@@ -17,8 +17,9 @@
 //! The kept file is the Python's, `<git common dir>/l7r-cache/memo-<name>.json`, `{"key": ..., "out": ..., "err": ...}` written as
 //! `json.dump` writes it. Its key cannot be the Python's - that hashed the interpreter's version and the Python modules' semantic ids -
 //! so it is this program's (path, inode, size, time) and the `--code` files' bytes with the project modules they import, and a pass the
-//! Python kept is a miss here once. The record's check keys no date, as the Python's did (feature 449 T148's plan review: FR-002 holds
-//! the check's verdicts, and a kept pass outliving an archive row's seven-day pending window is the Python's behavior, filed apart).
+//! Python kept is a miss here once. The record's check keys today's UTC date too (feature 449 T163, constitution XIV): its refusals read
+//! the date - a row's upload is pending for seven days - so a pass kept on one day would be replayed past a row's window, letting
+//! through a record the check now refuses; the Python's key held no date, and T148's port matched it before this fix.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
@@ -394,11 +395,11 @@ pub fn command(root: &Path, argv: &[String]) -> Run {
     Ok(said(universal(&out), universal(&err), code))
 }
 
-/// A preset's check, its pass kept by its inputs and this program.
+/// A preset's check, its pass kept by its inputs, this program and (the record's) today's date.
 ///
 /// # Errors
 /// The check's, which the Python let through.
-pub fn preset(name: &str, root: &Path, program: &str) -> Run {
+pub fn preset(name: &str, root: &Path, program: &str, today: &str) -> Run {
     let inputs: Vec<String> = PRESET_INPUTS.iter().map(|s| (*s).to_owned()).collect();
     let (module, check): (&str, fn(&Path) -> Run) = if name == "record" {
         ("record_asset", super::site::check)
@@ -414,7 +415,12 @@ pub fn preset(name: &str, root: &Path, program: &str) -> Run {
     .iter()
     .map(|s| (*s).to_owned())
     .collect();
-    Memo::new(root, name, &inputs, program, &argv, off()).run(|| check(root))
+    let code = if name == "record" {
+        format!("{program}\x1f{today}")
+    } else {
+        program.to_owned()
+    };
+    Memo::new(root, name, &inputs, &code, &argv, off()).run(|| check(root))
 }
 
 /// The general form's run: the kept pass replayed, or the facts module imported (a `-m` command's) and the command run, its pass kept -
@@ -437,15 +443,15 @@ pub fn general(root: &Path, memo: &Memo, words: &[String], facts: Option<&str>) 
     Ok(said(pre_out + &ran.stdout, pre_err + &ran.stderr, ran.code))
 }
 
-/// `record check ...` over the repository `root`, `program` this program's id: the call run and its run recorded
+/// `record check ...` over the repository `root`, `program` this program's id, `today` the UTC date: the call run and its run recorded
 /// in the usage log as `memo_check.py` recorded it.
 ///
 /// # Errors
 /// What the check let through; a run that raised records nothing.
-pub fn cli(args: &[String], root: &Path, program: &str) -> Run {
+pub fn cli(args: &[String], root: &Path, program: &str, today: &str) -> Run {
     let ran = match parse(args) {
         None => Ok(said("", USAGE, 2)),
-        Some(Call::Preset(name)) => preset(&name, root, program),
+        Some(Call::Preset(name)) => preset(&name, root, program, today),
         Some(Call::General {
             name,
             inputs,

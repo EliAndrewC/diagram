@@ -243,13 +243,13 @@ fn a_command_runs_as_memo_check_ran_it() {
 }
 
 #[test]
-fn every_call_is_recorded_and_the_record_pass_is_kept() {
+fn every_call_is_recorded_and_the_record_pass_is_kept_one_day() {
     let t = tree();
     git(&t, &["init", "-q"]);
     git(&t, &["add", "-A"]);
-    let r = cli(&[], &t, "p").unwrap();
+    let r = cli(&[], &t, "p", "2026-11-16").unwrap();
     assert_eq!((r.code, r.stderr.as_str()), (2, USAGE));
-    let pass = cli(&args(&["record"]), &t, "p").unwrap();
+    let pass = cli(&args(&["record"]), &t, "p", "2026-11-16").unwrap();
     assert_eq!(pass.stdout, "record: builds cleanly (20 page(s))\n");
     // the kept pass marked, to tell a replay from a run
     let path = t.join(".git/l7r-cache/memo-record.json");
@@ -258,21 +258,30 @@ fn every_call_is_recorded_and_the_record_pass_is_kept() {
         .replace("record: builds cleanly", "KEPT");
     std::fs::write(&path, kept).unwrap();
     assert_eq!(
-        preset("record", &t, "p").unwrap().stdout,
+        preset("record", &t, "p", "2026-11-16").unwrap().stdout,
         "KEPT (20 page(s))\n"
     );
+    // yesterday's pass is not today's: the check's refusals read the date, a row pending seven days (T163)
     assert_eq!(
-        cli(&args(&["glossary"]), &t, "p").unwrap().stdout,
+        preset("record", &t, "p", "2026-11-17").unwrap().stdout,
+        pass.stdout
+    );
+    assert_eq!(
+        cli(&args(&["glossary"]), &t, "p", "2026-11-16")
+            .unwrap()
+            .stdout,
         "glossary: in sync (2 terms)\n"
     );
     assert!(t.join(".git/l7r-cache/memo-glossary.json").is_file());
     let general = args(&[
         "n", "--inputs", "research", "--code", "x.py", "--", "sh", "-c", "exit 5",
     ]);
-    assert_eq!(cli(&general, &t, "p").unwrap().code, 5);
+    assert_eq!(cli(&general, &t, "p", "2026-11-16").unwrap().code, 5);
     std::fs::write(t.join("research/source-tags.json"), [0xff]).unwrap();
     assert_eq!(
-        cli(&args(&["record"]), &t, "p").unwrap_err().kind,
+        cli(&args(&["record"]), &t, "p", "2026-11-16")
+            .unwrap_err()
+            .kind,
         "UnicodeDecodeError"
     );
     assert_eq!(
