@@ -148,6 +148,10 @@ re-running a generator; a diagnostic that restates what it observes will lie to 
 - **Maps may ALWAYS change for speed** (GM 2026-09-30: *"They do NOT need to remain identical in output"*; 2026-10-18:
   *"anytime we are trying to make things faster, it's always okay for maps to change, so long as the changes don't violate
   our research findings"*), held to the rules and the research claims, rather than to byte-identity. A slow CHECK is INDEXED, never coarsened. Trust the A/B against HEAD, not cProfile's seconds.
+- **So may any port or change** (GM 2026-11-18, constitution XIII: *"remove any references to things needing to be bitwise
+  identical or anything like that as an exactness standard"*): an output may differ so long as everything works - tests pass,
+  callers get their job done, research claims hold - the audit checks' verdicts the one measure kept exact. The same code and
+  seed still give the same map (reproducibility is not this standard).
 - **Some slowness is bought memory** (GM 2026-10-05): read `dev/performance.md` "Time traded for memory" before
   undoing one; the RAM each undo costs goes to the GM.
 

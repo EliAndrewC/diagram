@@ -167,6 +167,7 @@ Given that feature description, do this:
       - [ ] Written for non-technical stakeholders
       - [ ] All mandatory sections completed
       - [ ] A speed feature remembers maps MAY change: its requirements hold them to the research, not to identical output - unless identity is itself what is right (a cache) (the GM, 2026-10-18)
+      - [ ] A port or any other change remembers its outputs MAY differ: its requirements hold it to working - its tests, its callers' reads, its research claims, the audit checks' verdicts - never to its bytes; reproducibility (the same code and seed, the same output) is not this standard (the GM, 2026-11-18, constitution XIII)
       
       ## Requirement Completeness
       

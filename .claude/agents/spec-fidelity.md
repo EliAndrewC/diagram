@@ -229,6 +229,28 @@ no review.
 
 ---
 
+## No exactness standard: everything works, not bitwise identical (the GM, 2026-11-18)
+
+The GM, after this project's round arbiter held a port's diagnostics to a library's exact pixels on image formats nobody
+passes: *"And whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so long as
+everything works?!?!"*, and *"remove any references to things needing to be bitwise identical or anything like that as an
+exactness standard"* (constitution XIII, "A differing output is not a regression"; feature 449 T180). A port or any change may
+give outputs that differ from what they replace - bytes, pixels, wording, usage and error text, the order of ties, a format -
+so long as EVERYTHING WORKS: its tests pass, it does its job for its callers, its research claims hold. The one measure kept
+exact is the audit checks' verdicts (pass or fail of each check on each sheet); a check that refused correct work is still
+fixed. So:
+
+- Never block, narrow or send back a port or change for differing bytes where that holds, and never ask for such a difference
+  to be ruled, declared or justified as an exception: it is the rule, not an exception to it. Judge whether everything works.
+- A requirement, plan decision or ruling that holds a port to bit-for-bit, byte-for-byte or pixel-for-pixel agreement with what
+  it replaces applies a standard the GM struck; that is the finding.
+- A differential (`make diff-run`) that shows a difference is a signal to read for whether everything still works, never by
+  itself a stop or a new ask.
+- Not this standard, and still exact: reproducibility (the same code and seed give the same output), integrity hashes, and a
+  quotation verbatim from its source.
+
+---
+
 ## FIGURES: re-run them, never adjudicate them by eye (feature 239, both modes)
 
 The GM asked whether a reviewer handed a number should stop and ask for the measurement instead, and

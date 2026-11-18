@@ -4,24 +4,28 @@ Written 2026-11-17, after S1-S6, T159-T166. What is left is the Mode A building 
 (`pool/country-shrines/hoshigaoka-shrine`, `pool/magistracies/*`: county-magistracy-example, hayakawa, ochiba, ochiba-roundtrip-test,
 ubame) and their pages, labels, audit, generators and pipeline. The five hamlets are already Rust (feature 444) and are not touched.
 
-## What "the same" means for a map (the GM, 2026-11-17)
+## What "the same" means for any port (the GM, 2026-11-17 and 2026-11-18)
 
 The GM: "the resulting maps do NOT need to be bitwise identical" (request.md), his standing rule: "it's always okay for maps to
-change, so long as the changes don't violate our research findings". So:
+change, so long as the changes don't violate our research findings", and on 2026-11-18, of every port and every change, not maps
+alone: "And whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so long as everything
+works?!?!" (T180, constitution XIII "A differing output is not a regression", FR-002). So:
 
 - **A check's verdict is bound exactly.** The audit (`pack_audit`), the size table, the notes-type and map-record checks give the
-  same verdict on the same sheet. These are judgments, not drawings, so the port of a check is held to its Python's verdicts.
-- **A drawn sheet is held to its checks and its research, not its bytes.** A ported sheet must pass every check its Python sheet
-  passed (`test_every_mode_a_sheet_passes_its_checks` and its siblings, ported) and every research claim it rests on, carried onto
-  the Rust (T166) and checked IN-STEP there. A geometry or rendering difference that keeps both is accepted: shapely against `geo`
-  (S8), the `resvg` library against the binary (S11), PIL/numpy against the image crate (S7) stop being new asks.
-- **The byte comparison stays as a signal.** Each slice's differential (`make diff-run`) still compares the written SVG, so
-  what moved is listed; a difference is shown, not a stop.
+  same verdict - pass or fail of each check - on the same sheet. These are the yardstick everything else is judged by, so the port
+  of a check is held to its Python's verdicts; a check that refused correct work is fixed instead (FR-002's exception).
+- **Everything else is held to working, not to its bytes.** A ported piece passes its tests, does its job for its callers, and keeps
+  its research claims; a drawn sheet passes every check its Python sheet passed (`test_every_mode_a_sheet_passes_its_checks` and
+  its siblings, ported) and every research claim it rests on, carried onto the Rust (T166) and checked IN-STEP there. A geometry,
+  rendering, wording or ordering difference that keeps all of that is accepted with no ask: shapely against `geo` (S8), the
+  `resvg` library against the binary (S11), PIL/numpy against the image crate (S7), a diagnostic's formats, a message's words.
+- **The byte comparison stays as a signal.** Each slice's differential (`make diff-run`) still compares the written SVG and the
+  other outputs, so what moved is listed; a difference is shown and read for whether everything still works, never a stop.
 - **Shown to the GM every slice:** a page with every pool sheet before and after, side by side, published even when nothing moved.
 
-FR-002 already says so ("maps MAY change where a check or a research claim allows it", the GM 2026-10-18); what binds bytes is
-`ask:449-phase4-slices`'s paragraph in the spec ("FR-002 binding what is written (SVG bytes, check verdicts)", a written difference
-from GEOS a new ask, the `resvg` binary kept if they differ). Its geo and resvg clauses are amended to the GM's rule (`ask:449-engine-order`, recorded in the spec's paragraph in this plan's commit).
+FR-002 says so since T180. Before it, what bound bytes was `ask:449-phase4-slices`'s paragraph in the spec ("FR-002 binding what is
+written (SVG bytes, check verdicts)", a written difference from GEOS a new ask, the `resvg` binary kept if they differ); its geo and
+resvg clauses were amended to the GM's rule (`ask:449-engine-order`, recorded in the spec's paragraph in this plan's commit).
 
 ## The order, changed so the checks come first
 
@@ -37,23 +41,26 @@ The slices as filed run the generator's parts (S8 labels, S9a model) before the 
 
 The new order and the combined, wired landing of S8, S9a and S11 were ruled by the round arbiter (`ask:449-engine-order`, continue,
 2026-11-17) on six conditions: the GM reads this plan before step 1; the audit's imports settled before step 1 (below); one wired
-implementation, the Python audit code the generators still import held in lockstep with its Rust until step 3; every step a
+implementation, the Python audit code the generators still import held in lockstep with its Rust until step 3 (restated
+by T180: a lockstep test may SHOW the two copies agree, but agreement in bytes is not required - what each copy must hold is the
+audit checks' verdicts and the research claims, and a lockstep test whose only failure is a difference that keeps both is changed
+to say so, never a reason to hold the Rust to the Python's bytes); every step a
 wired landing with its full review; step 3's split named (below); and the spec's paragraph amended in this commit.
 
 **The audit's imports (the ruling's condition 2).** `pack_audit`, `notes_census`, `size_table` and `building_programs` import from
 the engine: `buildings.types` (the building types: `BuildingType`, `RequiredItem`, `classification`, `load_types`, `by_tier`,
 `tiers`), `compound_model` (`NOTICE_BOARD_MAX_FT`, `TUB_DOOR_MAX_FT`, `TUB_MAX_GAP_FT`, `KINDS`), `compound_parts` (`board_by_a_gate`,
 `tub_by_its_door`, `tub_by_its_eaves`), `interactive.sheet` (`element_kinds`, `DEFS`, `Node`, `parse` - the drawn sheet's reading)
-and `labels.hand_sheet.start_tags` (observed 2026-11-17, method: each module's imports read). Each comes into step 1 as Rust whose
-verdicts are held exactly - the types and constants as data, the three predicates and the sheet's parse as functions - and the
-Python copies stay for the generators under the lockstep rule until step 3 deletes them.
+and `labels.hand_sheet.start_tags` (observed 2026-11-17, method: each module's imports read). Each comes into step 1 as Rust that
+gives the audit the same verdicts - the types and constants as data, the three predicates and the sheet's parse as functions - and
+the Python copies stay for the generators under the lockstep rule (as restated above) until step 3 deletes them.
 
 **Step 3's two landings (the ruling's condition 5).** The six generators are thin (43 to 105 lines each, observed 2026-11-17, method:
 `wc -l`), their logic in the shared compound code, so step 3 splits by building type: 3a the Rust sheet driver, the Mode A model and
 the labels drawing the country shrine (`hoshigaoka-shrine`); 3b the five magistracies and pytest's exit. Each passes every ported
 check and every carried claim IN-STEP on the sheets it draws and publishes its side-by-side page.
 
-Why the audit first: once its verdicts are proven identical on today's sheets, every later sheet change is judged by checks we
+Why the audit first: once its verdicts are proven the same on today's sheets, every later sheet change is judged by checks we
 already trust, in Rust, rather than by the code being changed. Why labels, model and generator together: their in-between values
 (a label's float position, a part's outline) may differ under the GM's rule, and only the drawn sheet can say whether a
 difference matters; porting them one at a time as libraries with no caller would hold in-between values to the Python's, which

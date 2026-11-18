@@ -135,6 +135,10 @@ full").
 - **Speed work may ALWAYS change maps** (the GM, 2026-10-18: *"anytime we are trying to make things faster, it's always okay
   for maps to change, so long as the changes don't violate our research findings"*): hold it to the rules and the research
   claims rather than to identical output.
+- **No port or change is held to its bytes** (the GM, 2026-11-18, constitution XIII: *"remove any references to things needing
+  to be bitwise identical or anything like that as an exactness standard"*): an output may differ so long as everything works -
+  tests pass, callers get their job done, research claims hold; only the audit checks' verdicts stay exact, and a differential
+  (`make diff-run`) is a signal, never a bar.
 - **Work budgets** (feature 443): each stage's counted operations (`make work-budget`, the record `dev/work-budget.md`) against a
   budget derived on paper (`.specify/templates/derivation.md`, judged by the `work-budget` agent; `docs/work-budget-rubric.md`); a
   first budget needs its SOUND, a change the GM's words (`make budget-change`) - but a budget is an estimate (444 FR-022, the GM

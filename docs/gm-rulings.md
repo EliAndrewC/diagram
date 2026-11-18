@@ -42,3 +42,18 @@ worry about such things. After our project has expanded and the tests become ine
 turn the idle tests back on."* A slow gate is answered by cheaper tests (selection, caching, roll speed), not by an idle
 run nobody watches; do not propose re-arming idle tests until the GM raises it. Applied: `rust/guard/src/guards/idle_tests_hooks.rs`
 (disarmed), `docs/iteration-loop.md`.
+
+## Everything works, not bitwise identical (2026-11-18)
+
+Told a round-arbiter ruling had held a port's diagnostics (feature 449 T150) to PIL's exact pixels on image formats nobody
+passes: *"And whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so long as
+everything works?!?!"*; and on the amendment: *"gotcha, thanks - yeah we should definitely amend our project guidelines and
+speckit constitution and whatever else we need to update to clarify this and remove any references to things needing to be
+bitwise identical or anything like that as an exactness standard"*. Earlier the same: *"the resulting maps do NOT need to be
+bitwise identical!  I feel like I've said this dozens of times"* (2026-11-17) and *"it's always okay for maps to change, so long
+as the changes don't violate our research findings"* (2026-10-18). For every port and every change: an output may differ from
+what it replaces so long as everything works - its tests pass, it does its job for its callers, its research claims hold; the
+audit checks' verdicts the one measure kept exact. Recorded here as well as in `specs/449-rust-codebase/request.md` because the
+reviewers and the round arbiter, who never read that file, kept reaching for the opposite. Applied: constitution XIII "A
+differing output is not a regression" (v2.35.0), 449's FR-002, `docs/efficiency-tooling.md`, `docs/diff-run.md`, and the
+`spec-fidelity`, `spec-fidelity-verify`, `round-arbiter` and `escalation-check` agent files.

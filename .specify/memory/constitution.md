@@ -1,7 +1,22 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.33.0 → 2.34.0
+Version change: 2.34.0 → 2.35.0
+
+Version 2.35.0 (amended 2026-11-18, feature 449 T180): NO EXACTNESS STANDARD FOR A PORT OR A CHANGE. Principle XIII says
+what a regression is NOT - an output that differs from what it replaces (other bytes, pixels, wording, order) while everything
+works - and Principle X clause 15's "maps may move" widens from a change made for speed to every port and every change, and from
+maps to every output. The GM, 2026-11-18, after a round-arbiter ruling held a port's diagnostics to PIL's exact pixels on image
+formats nobody passes: "And whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so
+long as everything works?!?!", and "yeah we should definitely amend our project guidelines and speckit constitution and whatever
+else we need to update to clarify this and remove any references to things needing to be bitwise identical or anything like
+that as an exactness standard" (earlier: "the resulting maps do NOT need to be bitwise identical!  I feel like I've said this
+dozens of times", 2026-11-17). Everything works means: its tests pass, it does its job for its callers, its research claims
+hold; the one measure kept exact is the audit checks' verdicts (pass or fail of each check on each sheet), a check that
+refused correct work still fixed (XIV). A byte comparison (`make diff-run`) shows what moved, a signal, never a bar.
+Reproducibility (the same code and seed give the same output), integrity hashes and verbatim quotation are not exactness
+standards and stay. Dependent templates: plan-template.md's performance bookends and XIII entry, spec-template.md's speed
+note, phase-checklist.md's rebuild step. MINOR (a principle's scope widens).
 
 Version 2.34.0 (amended 2026-11-02, feature 448): Principle X clause 5's floor EXEMPTS the engine code the Rust port replaces -
 the GM: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)." The exempt files are one record, `dev/coverage-exempt.json` (each stage's own files until its Rust lands, and
@@ -1295,7 +1310,11 @@ any single rule is reason enough to refuse "done" status.
     findings"* - a speed change MAY move maps, held to the rules and the
     research claims (the cohort, the gate, impl-drift) rather than to
     identical output; an old-against-new equivalence test is needed only
-    where an answer is kept on purpose. The GM's
+    where an answer is kept on purpose. And for EVERY port and every
+    change, not speed work alone and not maps alone (v2.35.0, GM
+    2026-11-18, feature 449 T180): an output may differ from what it
+    replaces so long as everything works - Principle XIII, "A differing
+    output is not a regression". The GM's
     words: *"We will need to take care to make sure that We do not have
     literally every item on the map checking for overlap with literally
     every other item. or anything silly like that"* - a rule that matters
@@ -1719,6 +1738,27 @@ artifact that was green and now is not, a cohort seed that passed and now
 fails, a measured rate that went down. It is defined against a **measured**
 baseline, never a remembered one: take the baseline on unmodified code (a
 detached worktree, not a stash) before judging your own numbers.
+
+**A DIFFERING OUTPUT IS NOT A REGRESSION** (added v2.35.0, GM 2026-11-18,
+feature 449 T180: *"And whyyyyy did the arbitur rule that things must match
+exactly when I keep saying they don't have to so long as everything
+works?!?!"*; and *"remove any references to things needing to be bitwise
+identical or anything like that as an exactness standard"*). A port, or any
+change, may give outputs that differ from what they replace - other bytes,
+other pixels, other wording, another order of ties, another message - so
+long as EVERYTHING WORKS: its tests pass, it does its job for its callers
+(what a caller reads, it still finds), and its research claims hold. The one
+measure kept exact is the audit checks' verdicts - pass or fail of each
+check on each sheet - because they are the yardstick "everything works" is
+judged by; a check that refused correct work is still fixed (Principle XIV),
+its expected verdict changed and named. No session, reviewer or the round
+arbiter holds a port or a change to bit-for-bit, byte-for-byte or
+pixel-for-pixel agreement, nor treats a difference as a new ask: a byte
+comparison (a differential, `make diff-run`) shows WHAT MOVED, a signal to
+read, never a bar. What stays exact is not this standard: REPRODUCIBILITY
+(the same code and the same seed give the same output - the generators'
+determinism, the cache keys, the seeds), INTEGRITY (a hash naming a file's
+content), and the research rules (a quotation verbatim from its source).
 
 **A WORKTREE BASELINE IS A STARTING POINT, NOT A VERDICT** (added 2026-08-24,
 measured during feature 127). A detached worktree is still the right way to take a
@@ -2373,4 +2413,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.34.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-02
+**Version**: 2.35.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-18

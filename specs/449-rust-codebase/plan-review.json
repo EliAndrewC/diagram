@@ -564,6 +564,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T180 (the GM 2026-11-18, request.md: no exactness standard for a port)": {
+   "sha256": "289f9bf1a006fc9b7340ae5cfadb8ed5cd1904ca4810fe901425c05dbfa95f87",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T180 Approach (checklist part A)": {
+   "sha256": "9c4a0424b68319b925440923c2afeb783a33c8449a5d4cd99df73dc19e0f75ba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -11190,6 +11202,66 @@
      "why": "The GM's 2026-11-17 requests that each engine piece's wall time and tokens be reported by phase; FR-010; the gate's own checks."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T180 (the GM 2026-11-18, request.md: no exactness standard for a port)",
+    "### T180 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T180-sweep",
+     "summary": "Amend the living guidance to the GM's rule (constitution 2.35.0, templates, the speckit-specify checklist, FR-002/phase-4/FR-012/SC-007, engine-plan.md, the CLAUDE.md files, the docs, dev/performance.md, and the four review agents' files), so that no reviewer blocks, narrows or sends back a port for differing bytes, and a requirement for byte agreement is itself the finding.",
+     "class": "within",
+     "why": "This is the request itself (2026-11-18): 'amend our project guidelines and speckit constitution and whatever else we need to update to clarify this and remove any references to things needing to be bitwise identical'. The arbiter's agent file is included, and the arbiter's ruling is what prompted the request."
+    },
+    {
+     "id": "T180-FR002-collapse",
+     "summary": "FR-002's ruled cases that excused only a byte difference are folded into the rule. The three that set a verdict or a behavior (T038 garbage stdin, T75 gatecost class, T72 coverage-exempt) are kept.",
+     "class": "within",
+     "why": "The collapsed cases each held a port to bytes until a ruling excused them, which is the 'ask/ruling for an exactness' the GM objected to. The kept three rule on what a tool DOES, not on its bytes, so the request does not reach them."
+    },
+    {
+     "id": "T180-kept-not-port-standard",
+     "summary": "Kept as not being a port's exactness standard: reproducibility (same code and seed give the same map; the cache audit; counters that must not change a map), a lossless split's integrity, a file hash naming its content, and a quotation verbatim from its source.",
+     "class": "within",
+     "why": "The GM's words carry the qualifier 'as an exactness standard', and his complaint is that 'things must match' what a port replaces. Each item here compares code with itself, or content with its own hash, or a quote with its source. None is agreement between a port and the thing it replaces."
+    },
+    {
+     "id": "T180-records-as-written",
+     "summary": "Past specs, dated records and history are left as written, and so are finished tasks' plan sections as records of what they measured.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'remove any references' literally, but the GM's words name what is to change: 'our project guidelines and speckit constitution and whatever else we need to update to clarify this'. That is the guidance a session follows. A finished feature's spec and a dated record are not guidance for a port going forward, so leaving them does not leave a byte standard in force. Rewriting them would also falsify dated records, including the GM's own verbatim words in gm-rulings.md. The purpose (no future port held to bytes) is not touched. Condition: 'past specs' means features that are finished. A live spec still governing work is guidance and falls under T180-sweep."
+    },
+    {
+     "id": "T180-verdicts-exact",
+     "summary": "The one measure kept exact is the audit checks' verdicts (each check on each sheet, each guard's verdict on each suite case), and a check that refuses correct work is still fixed in its port.",
+     "class": "within",
+     "why": "This is the GM's own condition, 'so long as everything works' (2026-11-18), with 'so long as the changes don't violate our research findings' (2026-10-18, the standing rule FR-002 quotes). The checks' verdicts are how this project decides that everything works and that the research claims hold. Keeping them is the GM's condition, not a byte standard."
+    },
+    {
+     "id": "T180-lockstep-tests",
+     "summary": "rust/mode_a's lockstep tests stay until a harmless difference makes one fail. At that point the test is changed to hold the verdicts and claims (engine-plan.md condition 3 restated: 'a test may show agreement, bytes are not required').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is live enforcement, not a record, so it cannot rest on T180-records-as-written. It passes the purpose test on its own terms. The GM's purpose is that a port is never stopped, narrowed or sent for a ruling because its bytes differ. A lockstep test that passes stops nothing. The one moment it could act as a byte standard is when a harmless difference fails it, and the decision then requires the test to be changed, not the bytes matched. Amended FR-002 also owes no ask or ruling for that. So the test never operates as the struck standard. Rewriting tests that pass now would add nothing toward 'everything works'. Condition: the amended engine-plan.md and FR-002 must say this plainly. Changing the failing test is the expected response, never a reason to chase the old bytes."
+    },
+    {
+     "id": "T180-FR001c-untouched (unlabeled)",
+     "summary": "FR-001c is left as it is: a port task is 'straight', and skips its per-task review, only when the Python-versus-Rust comparison shows no differences.",
+     "class": "within",
+     "why": "FR-001c is a trigger for a review, not a standard a port must meet. A port that differs is not refused; it gets the review, and under T180 that review may not block it for bytes. The GM explicitly approved this narrower skip rule ('yes I approve the narrower rule', 2026-11-10). Widening the skip to ports with differences would undo his narrowing, which nothing in the 2026-11-18 words asks for."
+    },
+    {
+     "id": "T180-order-and-checks",
+     "summary": "The task is done before step 3's review, which it governs. The exits are hooks-test, make static, the plan review and make land. Done is measured by a grep over the changed files.",
+     "class": "within",
+     "why": "These are sequencing and verification of what was asked. They add no behavior and narrow nothing in the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19968,6 +20040,64 @@
      "summary": "the step's cost by phase (tokens and minutes per part), claims owed counted, and make static, rust-test, hooks-test HOOKS_ALL=1, quick and the pointer check green",
      "class": "within",
      "why": "The GM's 2026-11-17 requests that each engine piece's wall time and tokens be reported by phase; FR-010; the gate's own checks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T180": {
+   "section_sha256": "d2c055e7bd75dae9bc296cec5bfff02bcb97142f64dc8a7f8154e99930189e48",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T180-sweep",
+     "summary": "Amend the living guidance to the GM's rule (constitution 2.35.0, templates, the speckit-specify checklist, FR-002/phase-4/FR-012/SC-007, engine-plan.md, the CLAUDE.md files, the docs, dev/performance.md, and the four review agents' files), so that no reviewer blocks, narrows or sends back a port for differing bytes, and a requirement for byte agreement is itself the finding.",
+     "class": "within",
+     "why": "This is the request itself (2026-11-18): 'amend our project guidelines and speckit constitution and whatever else we need to update to clarify this and remove any references to things needing to be bitwise identical'. The arbiter's agent file is included, and the arbiter's ruling is what prompted the request."
+    },
+    {
+     "id": "T180-FR002-collapse",
+     "summary": "FR-002's ruled cases that excused only a byte difference are folded into the rule. The three that set a verdict or a behavior (T038 garbage stdin, T75 gatecost class, T72 coverage-exempt) are kept.",
+     "class": "within",
+     "why": "The collapsed cases each held a port to bytes until a ruling excused them, which is the 'ask/ruling for an exactness' the GM objected to. The kept three rule on what a tool DOES, not on its bytes, so the request does not reach them."
+    },
+    {
+     "id": "T180-kept-not-port-standard",
+     "summary": "Kept as not being a port's exactness standard: reproducibility (same code and seed give the same map; the cache audit; counters that must not change a map), a lossless split's integrity, a file hash naming its content, and a quotation verbatim from its source.",
+     "class": "within",
+     "why": "The GM's words carry the qualifier 'as an exactness standard', and his complaint is that 'things must match' what a port replaces. Each item here compares code with itself, or content with its own hash, or a quote with its source. None is agreement between a port and the thing it replaces."
+    },
+    {
+     "id": "T180-records-as-written",
+     "summary": "Past specs, dated records and history are left as written, and so are finished tasks' plan sections as records of what they measured.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'remove any references' literally, but the GM's words name what is to change: 'our project guidelines and speckit constitution and whatever else we need to update to clarify this'. That is the guidance a session follows. A finished feature's spec and a dated record are not guidance for a port going forward, so leaving them does not leave a byte standard in force. Rewriting them would also falsify dated records, including the GM's own verbatim words in gm-rulings.md. The purpose (no future port held to bytes) is not touched. Condition: 'past specs' means features that are finished. A live spec still governing work is guidance and falls under T180-sweep."
+    },
+    {
+     "id": "T180-verdicts-exact",
+     "summary": "The one measure kept exact is the audit checks' verdicts (each check on each sheet, each guard's verdict on each suite case), and a check that refuses correct work is still fixed in its port.",
+     "class": "within",
+     "why": "This is the GM's own condition, 'so long as everything works' (2026-11-18), with 'so long as the changes don't violate our research findings' (2026-10-18, the standing rule FR-002 quotes). The checks' verdicts are how this project decides that everything works and that the research claims hold. Keeping them is the GM's condition, not a byte standard."
+    },
+    {
+     "id": "T180-lockstep-tests",
+     "summary": "rust/mode_a's lockstep tests stay until a harmless difference makes one fail. At that point the test is changed to hold the verdicts and claims (engine-plan.md condition 3 restated: 'a test may show agreement, bytes are not required').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is live enforcement, not a record, so it cannot rest on T180-records-as-written. It passes the purpose test on its own terms. The GM's purpose is that a port is never stopped, narrowed or sent for a ruling because its bytes differ. A lockstep test that passes stops nothing. The one moment it could act as a byte standard is when a harmless difference fails it, and the decision then requires the test to be changed, not the bytes matched. Amended FR-002 also owes no ask or ruling for that. So the test never operates as the struck standard. Rewriting tests that pass now would add nothing toward 'everything works'. Condition: the amended engine-plan.md and FR-002 must say this plainly. Changing the failing test is the expected response, never a reason to chase the old bytes."
+    },
+    {
+     "id": "T180-FR001c-untouched (unlabeled)",
+     "summary": "FR-001c is left as it is: a port task is 'straight', and skips its per-task review, only when the Python-versus-Rust comparison shows no differences.",
+     "class": "within",
+     "why": "FR-001c is a trigger for a review, not a standard a port must meet. A port that differs is not refused; it gets the review, and under T180 that review may not block it for bytes. The GM explicitly approved this narrower skip rule ('yes I approve the narrower rule', 2026-11-10). Widening the skip to ports with differences would undo his narrowing, which nothing in the 2026-11-18 words asks for."
+    },
+    {
+     "id": "T180-order-and-checks",
+     "summary": "The task is done before step 3's review, which it governs. The exits are hooks-test, make static, the plan review and make land. Done is measured by a grep over the changed files.",
+     "class": "within",
+     "why": "These are sequencing and verification of what was asked. They add no behavior and narrow nothing in the request."
     }
    ],
    "verdict": "CLEAR"

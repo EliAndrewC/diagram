@@ -282,6 +282,19 @@ The machinery in one picture, with the GM's rulings and the measurements: `docs/
   placer that decides differently is held to the rules and the research claims - the cohort, the landing cohort, the gate,
   impl-drift on the code it touched - rather than to identical output; an equivalence test is needed only where an answer is
   kept on purpose.
+- **No port or change is held to its bytes** (the GM, 2026-11-18, feature 449 T180, constitution XIII "A differing output is
+  not a regression"). After a round-arbiter ruling held a port's diagnostics to PIL's exact pixels on formats nobody passes:
+  *"And whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so long as everything
+  works?!?!"*, and *"we should definitely amend our project guidelines and speckit constitution and whatever else we need to
+  update to clarify this and remove any references to things needing to be bitwise identical or anything like that as an
+  exactness standard"*. His rule, for every port and every change, not maps alone: an output may differ from what it replaces -
+  bytes, pixels, wording, order, format - so long as everything works: its tests pass, it does its job for its callers, its
+  research claims hold. The ONE measure kept exact is the audit checks' verdicts (pass or fail of each check on each sheet),
+  the yardstick "everything works" is judged by; a check that refused correct work is still fixed (Principle XIV). A
+  differential (`make diff-run`, `docs/diff-run.md`) shows what moved, a signal to read, never a bar; a lockstep test may show
+  two copies agree, but their agreement in bytes is not what is required. Not this standard, and kept: reproducibility (the
+  same code and seed give the same map - the generators' determinism, the cache audit, `make counters-inert`), integrity (a
+  hash naming a file's content), and the research rules (a quotation verbatim from its source).
 - Python: ruff, ruff format, pyrefly, and 100% coverage owed by everything the day it lands (but the engine code the Rust port replaces, `dev/coverage-exempt.json`, feature 448), held as a
   floor on the gate (never `fail_under` in `pyproject.toml`). An inner function that is hard to test
   is lifted to module level and tested with plain inputs; dropping the test is not an option. A

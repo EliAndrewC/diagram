@@ -14,7 +14,8 @@ the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request
   the budget and exponent pinned (`make budget-set`).
 - [ ] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
   `make perf-fanout`.
-- [ ] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
+- [ ] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output form, no repair passes (S4) - its contents free to differ where the
+  rules and the research claims hold (constitution XIII, the GM 2026-11-18);
   the old implementation deleted in the same landing, with no fallback path. The old Python owes no coverage on the way out (feature
   448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away"): `dev/coverage-exempt.json` names it, so no test is added only to cover a line of it; the landing's
   `make coverage-exempt PRUNE=1` drops its entries once the stage is accepted, and the stage's thin door keeps the floor.

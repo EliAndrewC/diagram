@@ -1,11 +1,19 @@
 # `make diff-run` - the shared differential runner
 
-Load this file when: you write or run a port's differential (FR-002's same outputs), or a plan states a differential's case count.
+Load this file when: you write or run a port's differential (what moved, FR-002's signal), or a plan states a differential's case count.
 
 Feature 449 T161 (the GM's approved proposal of 2026-11-16, the differentials rerunning only what a fix touched, enforced by tooling as
 his 2026-11-11 words ask; `specs/449-rust-codebase/request.md`). Every port task's comparison runs through `l7r-gate diff-run` (crate
 `rust/gate/crates/diffrun/`), not a hand-written driver loop: it runs each case on both sides, compares, keeps each side's result, and
 after a fix reruns only the sides whose key moved.
+
+**A difference is a signal, not a bar** (feature 449 T180, the GM 2026-11-18, constitution XIII: *"remove any references to things
+needing to be bitwise identical or anything like that as an exactness standard"*). The run exits 1 when any case differs; that
+exit says something moved, which the session reads for whether everything still works - the tests pass, the callers get their
+job done, the research claims hold, the audit checks give the same verdicts. A port whose differences keep all of that lands
+with them named in its record; no difference is by itself a refusal, a new ask or a reason to copy the old side's bytes. FR-001c
+still reads a differential with no difference as one condition of a straight task (no per-task review); a task with differences
+gets its review, which judges them by the same rule.
 
 ```
 make diff-run CASES=<cases file>                      # incremental: only the sides whose key moved or that have no result
@@ -103,7 +111,7 @@ the side's `cmd`. Each process gets the runner's environment less make's own var
   root and in each named directory's ancestors - FOR ITERATING ONLY: an incremental, `ONLY=` or `TWICE=1` run builds sparse worlds, and a
   `VERIFY=1` or `ALL=1` run ALWAYS builds whole ones, the list ignored, its report and summary saying `worlds: whole`. WHY: a list too
   narrow for what a case reads fails both sides alike, which the comparison reads as agreement - a false pass in the comparison FR-002
-  rests on (T169's plan review) - so the figures a plan cites, a verify's, are never built on a sparse world. The cost is the verify's. On
+  reads (T169's plan review) - so the figures a plan cites, a verify's, are never built on a sparse world. The cost is the verify's. On
   T168's 76 cases: an incremental run on sparse worlds 50.0 s; the first `VERIFY=1` after it 265.6 s, both sides of every case rerun on
   whole worlds; a second `VERIFY=1` 131.5 s, the old sides kept from the first (observed 2026-11-17, feature 449 T169, `make diff-run` on
   T168's harness; every whole-world result equal to a whole checkout's by T168's own setup). With a checkout, `setup` may be empty; given,

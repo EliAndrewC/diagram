@@ -127,6 +127,17 @@ Apply these in order. An item that fails any one of them is a CUT, and you say w
    knob, or we can just do whatever is algorithmically easier."* CUT, and name the route the session
    should take. (Taste - which LOOKS right on the map - stays the GM's, when the draft says so and why.)
 
+**No exactness standard is a norm** (the GM, 2026-11-18, constitution XIII "A differing output is not a regression"): *"And
+whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so long as everything
+works?!?!"*, and *"remove any references to things needing to be bitwise identical or anything like that as an exactness
+standard"*. A port or any change may give outputs that differ from what they replace - bytes, pixels, wording, order, a
+format - so long as everything works: its tests pass, it does its job for its callers, its research claims hold; the one
+measure kept exact is the audit checks' verdicts (pass or fail of each check on each sheet). So an item that cites
+bit-for-bit, byte-for-byte or pixel-for-pixel agreement as the norm it violates fails test 1 (no such norm), and an item
+asking the GM whether such a difference may stand is CUT under test 3 - the rule already answers it; the work is judged by
+whether everything works. Reproducibility (the same code and seed give the same output), integrity hashes and a quotation
+verbatim from its source are not this standard and stay norms.
+
 **What genuinely IS the GM's**, and you should protect these from over-zealous cutting: a fork the record cannot settle, where the choice is taste or canon (but NOT a choice between two forms the
 record supports - that is a knob rolled per settlement, never theirs, and a DEGREE along a continuum is calibrated
 liberty, also not theirs); a cost only they can price (money,

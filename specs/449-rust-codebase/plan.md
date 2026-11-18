@@ -677,3 +677,30 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T178 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 <!-- plan-archive: T179 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 <!-- plan-archive: T179 to T179 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+
+### T180 (the GM 2026-11-18, request.md: no exactness standard for a port)
+
+- **Approach**: the living guidance amended to the GM's rule - an output may differ from what it replaces so long as everything works: its tests pass, it does its job for its callers, its research claims hold - the audit checks' verdicts the one measure kept exact and a check that refused correct work still fixed. The constitution (2.35.0: Principle XIII's "A differing output is not a regression", X's clause 15 widened), its plan, spec and phase templates and the speckit-specify checklist; spec.md's FR-002 (its byte-only ruled cases collapsed into the rule, the three that set a verdict or a behavior kept), its phase-4 paragraph, FR-012 and SC-007; engine-plan.md ("What the same means for any port", condition 3's lockstep restated: a test may show agreement, bytes are not required); the root and three subtree CLAUDE.md files; docs/efficiency-tooling.md, spec-kit-and-reviews.md, diff-run.md (a difference a signal, not a bar) and gm-rulings.md (the GM's words); dev/performance.md; and the review agents' files - spec-fidelity, spec-fidelity-verify, round-arbiter and escalation-check - which launch without CLAUDE.md, so each carries the rule and the GM's words: a reviewer never blocks, narrows or sends back a port for differing bytes, and a requirement demanding byte agreement is itself the finding.
+
+   **Decisions** (the GM's words, request.md 2026-11-18 and 2026-11-17; docs/efficiency-tooling.md, 2026-10-18):
+   - Kept, as not a port's exactness standard: reproducibility (the same code and seed give the same map; the cache audit; counters that must not change a map), a lossless split's integrity, a file hash naming its content, and the research rule that a quotation is verbatim; past specs and dated records, history, left as written.
+   - Kept exact, as the GM's "everything works" is judged by it: the audit checks' verdicts.
+   - The rule is applied from here on: finished tasks' plan sections stay as the records of what they measured, and `rust/mode_a`'s lockstep tests stay until a harmless difference makes one fail, when it is changed to hold the verdicts and claims (engine-plan.md's restated condition 3).
+   - The checks: `make hooks-test HOOKS_ALL=1` and the pointer check green (observed 2026-11-18, method: those commands after the last edit, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t180/hooks.log`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t180/pointers.log`); `make static` red only on T151's port in progress (three uncalled functions in `rust/mode_a/src/labels/`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t180/static.log`), run again green at the landing with T151's work committed. The sweep's search is `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t180/sweep-grep.txt`, its hits after the amendment `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t180/sweep-grep-after.txt`.
+
+### T180 Approach (checklist part A)
+
+1. **The goal, in the world.** No reviewer, guide or rule holds a port to its bytes; every one holds it to working.
+2. **The constraints.** The GM's words; the constitution's own amendment rules.
+3. **Where each comes from.** G: the GM's request.
+4. **Do they describe the world here?** Read on this clone's living guidance, 2026-11-18 (the sweep's grep, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t180/sweep-grep.txt`).
+5. **The order.** Before step 3's review, which it governs.
+6. **The exits.** Green: `make static`, `make hooks-test HOOKS_ALL=1`, the plan review, a `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The grep over the changed files showing only the GM's quotes, measurements and the kept reproducibility and integrity lines.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No - guidance.
+

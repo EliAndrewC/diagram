@@ -20,7 +20,9 @@ conservative raster of the blocked ground, candidates proposed from a region ins
 order of offering - and the maps move. What an optimization is held to is the RULES: every gate rule passes on the
 regenerated pool, every household is seated, the forms, kinds and acreage bands hold, and each moved map is reviewed as
 any changed map is. Byte-identity is a verification convenience where a change happens to preserve output, never a
-requirement and never a reason to reject or withdraw a lever. The one thing that is not coarsened is a CHECK that
+requirement and never a reason to reject or withdraw a lever - and since 2026-11-18 not for speed work alone: no port or change
+is held to identical output, so long as everything works (the GM: *"remove any references to things needing to be bitwise
+identical or anything like that as an exactness standard"*; constitution XIII, feature 449 T180). The one thing that is not coarsened is a CHECK that
 VERIFIES a rule (a gate test): loosening it lets defects through, which is a different matter from a placer drawing a
 lawful map differently (next sections).
 

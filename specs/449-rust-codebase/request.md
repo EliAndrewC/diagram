@@ -110,3 +110,9 @@ The GM, after the pilot's report (T168, T170 and the fixes T169, T172, T173): "p
 ## 2026-11-18, the efficiency fixes, then the port
 
 The GM, after the report on pieces 3 and 4: "It sounds like those efficiency improvements are worth making next.  Please make those, then proceed with continuing the porting."
+
+## 2026-11-18, exactness again
+
+The GM, told that a plan review held T150's diagnostics to PIL's exact pixels on image formats nobody passes, until the round arbiter ruled them declared: "And whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so long as everything works?!?!"
+
+The GM, on the amendment: "gotcha, thanks - yeah we should definitely amend our project guidelines and speckit constitution and whatever else we need to update to clarify this and remove any references to things needing to be bitwise identical or anything like that as an exactness standard"
