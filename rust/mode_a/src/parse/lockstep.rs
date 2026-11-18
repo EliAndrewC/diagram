@@ -479,7 +479,12 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     let held = measure.steps > 100 && measure.max_abs < measure.min_margin;
     assert!(held, "{measure:?}");
     let how = if out.ran { "ran" } else { "kept" };
-    eprintln!("{measure:?}; the port's half {rust_s:.2} s, the Python's {python_s:.2} s ({how}), its key {key_s:.2} s");
+    // (T150) the page writer, its Python deleted: the cases that read the live tree and the six pool pages, their outcomes held
+    let page_clock = std::time::Instant::now();
+    let writer = crate::page::held::outcomes(&paths[..pool]);
+    assert!(writer.pages == pool && writer.cases > 200 && writer.refusals > 0);
+    let page_s = page_clock.elapsed().as_secs_f64();
+    eprintln!("{measure:?}; {writer:?}; the port's half {rust_s:.2} s and its pages {page_s:.2} s, the Python's {python_s:.2} s ({how}), its key {key_s:.2} s");
 }
 
 #[test]

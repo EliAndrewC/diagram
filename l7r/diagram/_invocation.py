@@ -201,8 +201,6 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.pipeline.pool_index": ("pool-index", "expensive"),
     "l7r.diagram.labels.hand_sheet": ("sheet-render", "cheap"),  # feature 286: a hand-drawn sheet rendered with its captions placed
     "l7r.diagram.compound": ("compound", "expensive"),
-    "l7r.diagram.tools.page_lit": ("page-lit", "expensive"),  # feature 231: it opens a browser on the page
-    "l7r.diagram.tools.picture_diff": ("picture-diff", "cheap"),  # feature 231: two renders, and resvg for an SVG argument
 }
 
 

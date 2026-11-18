@@ -275,6 +275,22 @@ pub fn int(x: f64) -> Result<i64, Error> {
     Ok(t as i64)
 }
 
+/// Python's `math.floor(x)` of a float, as an index (feature 449 T150, the page's merge cells and raster tiles).
+///
+/// # Errors
+/// As [`int`]: an infinity or a NaN, as Python's.
+pub fn floor(x: f64) -> Result<i64, Error> {
+    int(x.floor())
+}
+
+/// Python's `math.ceil(x)` of a float, as an index.
+///
+/// # Errors
+/// As [`floor`].
+pub fn ceil(x: f64) -> Result<i64, Error> {
+    int(x.ceil())
+}
+
 /// Python's `a // b` of two floats: `CPython`'s `float_floor_div`, the floor of `(a - fmod(a, b)) / b` with its sign fix and its
 /// rounding of a quotient within a half of the next integer up - not `(a / b).floor()`, which an inexact quotient can carry across an
 /// integer.

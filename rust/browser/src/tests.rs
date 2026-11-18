@@ -87,3 +87,61 @@ fn a_command_line_it_cannot_run_is_refused() {
     assert_eq!(reply.code, 1);
     assert!(reply.stderr.contains("install-chromium.sh"));
 }
+
+/// The lit page through the command line (feature 449 T150): both shots written and the page's answers printed; each refusal.
+#[test]
+fn lit_through_the_command_line() {
+    let dir = TempDir::new("browser-cli-lit");
+    let fake = fake_chrome(dir.path());
+    let var = var_for(&fake);
+    let at = |n: &str| dir.path().join(n).to_string_lossy().into_owned();
+    let (reply, _) = run(
+        &["lit", &at("map.html"), "well", &at("b.png"), &at("a.png")],
+        &var,
+        "",
+    );
+    assert_eq!(
+        (reply.code, reply.stdout.as_str()),
+        (0, "{\"mode\":\"vector\",\"zoom\":1.5,\"ctm\":[2,0,0,2,10.5,-4],\"viewbox\":[0,0,10,10]}\n")
+    );
+    assert_eq!(std::fs::read(at("a.png")).unwrap(), b"\x89PNG fake");
+    let (reply, _) = run(
+        &[
+            "lit",
+            &at("zoomy.html"),
+            "well",
+            &at("b.png"),
+            &at("a.png"),
+            "--vector",
+        ],
+        &var,
+        "",
+    );
+    assert_eq!(reply.code, 0);
+    let (reply, _) = run(
+        &[
+            "lit",
+            &at("map.html"),
+            "well",
+            &at("b.png"),
+            &at("a.png"),
+            "--raster",
+        ],
+        &var,
+        "",
+    );
+    assert_eq!(reply.code, 2);
+    // (a page that fails to load is refused as any other failure: `lit::tests`; one start fewer here, FR-008's bar)
+    let (reply, _) = run(
+        &[
+            "lit",
+            &at("map.html"),
+            "well",
+            &at("no/b.png"),
+            &at("a.png"),
+        ],
+        &var,
+        "",
+    );
+    assert_eq!((reply.code, reply.stderr.contains("no/b.png")), (1, true));
+}

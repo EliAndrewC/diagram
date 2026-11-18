@@ -3,8 +3,8 @@
  "units": [
   "l7r/diagram/_invocation.py::_Ladder",
   "l7r/diagram/_invocation.py::_reason",
-  "l7r/diagram/dwellings.py::BUSINESS_KINDS",
-  "l7r/diagram/dwellings.py::HOUSEHOLD",
+  "rust/mode_a/src/dwellings.rs::BUSINESS_KINDS",
+  "rust/mode_a/src/dwellings.rs::HOUSEHOLD",
   "l7r/diagram/interactive/choices.py::not_choices",
   "l7r/diagram/interactive/classes/homestead.py::BurialGround",
   "l7r/diagram/interactive/classes/water_and_ways.py::FarmChannel",
@@ -17,11 +17,11 @@
   "l7r/diagram/interactive/page.py::_HERE",
   "l7r/diagram/interactive/page.py::_LINE",
   "l7r/diagram/interactive/page.py::_RUN",
-  "l7r/diagram/interactive/page.py::_snippet",
-  "l7r/diagram/interactive/place.py::PLACE_KEYS",
+  "rust/mode_a/src/page.rs::snippet",
+  "rust/mode_a/src/place.rs::PLACE_KEYS",
   "l7r/diagram/interactive/place.py::_CONTENT",
-  "l7r/diagram/interactive/place.py::_SIDES_WORDS",
-  "l7r/diagram/interactive/place.py::homestead_grove_default",
+  "rust/mode_a/src/place.rs::SIDES_WORDS",
+  "rust/mode_a/src/place.rs::homestead_grove_default",
   "l7r/diagram/interactive/record/absence.py::MARKER",
   "l7r/diagram/interactive/record/absence.py::_RENDERED",
   "l7r/diagram/interactive/record/absence.py::render",
@@ -219,6 +219,6 @@
   "l7r/diagram/labels/standard.py::WEIGHT_FREE"
  ],
  "keys": [
-  "l7r/diagram/interactive/place.py::dwellings_shown#town and city count no farmhouses"
+  "rust/mode_a/src/place.rs::dwellings_shown#town and city count no farmhouses"
  ]
 }

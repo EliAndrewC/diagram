@@ -1,18 +1,18 @@
 # The interactive page - how it is written fast, and the blue plot's two tint rules
 
-**Load this file when:** the page draws too many elements or a merge changed the picture (`page.py`
-`merge_primitives`), the raster looks wrong or a hover in raster mode names the wrong class (`raster.py`), or you are
+**Load this file when:** the page draws too many elements or a merge changed the picture (`rust/mode_a/src/page/merge.rs`
+`merge_primitives`), the raster looks wrong or a hover in raster mode names the wrong class (`rust/mode_a/src/raster.rs`), or you are
 editing what the `wet paddy` modal says about which plots are blue. The package index is
 [`l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md).
 
-## `page.py` - merging primitives
+## `page/merge.rs` - merging primitives (the Python `page.py` ported and deleted, feature 449 T150)
 
 `merge_primitives` gathers same-styled `<line>`/`<circle>`/`<ellipse>` into one `<path>` WHEREVER the reorder is
 invisible: an element joins an earlier bucket only if nothing it must pass overlaps it, and neither a TRANSLUCENT nor
 an OUTLINED element merges with one it overlaps (0.85 blobs stack darker than one merged fill - feature 148 R3; and a
 path paints every subpath fill before its stroke, so merged crowns show each other's outlines - feature 153 R5). A line
 has no fill and so is never outlined - getting that wrong un-merges every scatter. An extent it cannot compute counts
-as being in the way, and a circle's is tested as a circle (`extents.py`).
+as being in the way, and a circle's is tested as a circle (`merge.rs`'s `Extent`, once `extents.py`).
 
 **A merged scatter is written as ONE PATH PER 400 px CELL, not one path** (feature 199, GM 2026-09-07: Kuwabata's page
 "a lot more noticeably sluggish"): a bucket of `TILE_MIN` (200) or more members is split by the cell of each member's
@@ -21,7 +21,7 @@ whose box spans the map was replayed for every tile on every hover. Which elemen
 picture is unchanged. The measurements are `specs/199-*/research.md`; the browser guards it shipped with were retired
 with every rolled-page browser test (`interactive/CLAUDE.md`, "Verifying").
 
-## `raster.py` - the page is TWO MODES (feature 200)
+## `raster.rs` - the page is TWO MODES (feature 200; the Python `raster.py` ported and deleted, feature 449 T150)
 
 GM 2026-09-07: *"all of the above feel slow"* - hover, scroll, zoom, load, in Chrome. Below a screen scale (`RASTER_R`
 px per map px - 2 since feature 223 - against `view.s x devicePixelRatio`) the map is ONE IMAGE of the whole picture,
@@ -52,12 +52,12 @@ switches when both images are decoded.
   `DIAGRAM_SKIP_RENDER`) as `with_raster`, so a test roll writes the vector-only page (`"r": 0`) and never pays the
   picture. A page with no raster at all (resvg absent) is `r: 0` too, and never leaves vector mode. The generation
   cache treats a skip-render page as it treats a skip-render PNG.
-- **The picture is a JPEG q90 4:4:4** (feature 222), encoded in a child Python (`_PICTURE_CHILD`) so the encoder's C
-  buffers live and die there and the parent's memory rests where the roll left it. The reverse is three lines,
-  named in `raster.py` beside `PICTURE_FORMAT`.
+- **The picture is a JPEG q90 4:4:4** (feature 222). The Python encoded it in a child (`_PICTURE_CHILD`) so PIL's C
+  buffers lived and died there; since feature 449 T150 `raster/encode.rs` pastes the tiles and encodes it in process with
+  `jpeg-encoder`, one tile decoded at a time (every channel within one level of PIL's on the pool pictures).
 
 Numbers and the priced alternatives: `specs/200-raster-mode-below-the-vector/research.md` and the features named
-above; `raster.py`'s module docstring and constant comments carry the live ones.
+above; `rust/mode_a/src/raster.rs`'s module docstring and constant comments carry the live ones.
 
 ## The blue plot: TWO TINT RULES (feature 159)
 

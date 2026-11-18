@@ -26,7 +26,7 @@ tab. The class-level label, its lead sentence and the caveat (features 156, 183)
 
 `NOT_HIGHLIGHTED` is the pseudo-class for ink the GM has ruled OUT of highlighting (FR-002:
 "judgment calls to make about what things get highlighted and which things do not"). It is a
-ruling, not an omission: the census in `page.py` reports only ink that carries NO class at all, so
+ruling, not an omission: the census in the page writer (`rust/mode_a/src/page.rs`, feature 449 T150) reports only ink that carries NO class at all, so
 a `"-"` tag keeps the frame off the report while a forgotten tag still fails the gate.
 
 Research:
@@ -54,7 +54,7 @@ NOT_HIGHLIGHTED = "-"
 #: The reserved pseudo-class of the TITLE PLACARD (feature 156). Not a row of `CLASSES` - it is not a
 #: kind of feature and has no research entry of its own - but a key the census and the page both know,
 #: so the placard is highlightable, clickable, and never reported as ink nobody ruled on. Its modal is
-#: built per map by `place.py` from the manifest, the setting's canon and the map's own notes file.
+#: built per map by the place card (`rust/mode_a/src/place.rs`, feature 449 T150) from the manifest, the setting's canon and the map's own notes file.
 PLACE = "place"
 
 #: Each ruling that put a kind of ink on the not-highlighted list: (what, who, when, why).

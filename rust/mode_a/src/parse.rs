@@ -516,7 +516,7 @@ fn parse_with(text: &str, rects: &[Rect], marked: Option<&[Mark]>) -> Result<Par
 #[cfg(test)]
 mod check_fixtures;
 #[cfg(test)]
-mod fixtures;
+pub(crate) mod fixtures;
 #[cfg(test)]
 pub(crate) mod lockstep;
 #[cfg(test)]

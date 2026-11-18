@@ -43,6 +43,29 @@ geo = { version = "=0.32.0", default-features = false }
 # the overlay crate `geo`'s boolean ops run on, pinned at the version 0.32.0 resolved to (observed 2026-11-17, `rust/Cargo.lock`): its
 # integer snapping is what an area differs from GEOS's by, so a later 4.0.x could move what the lockstep measured
 i_overlay = { version = "=4.0.7", default-features = false }
+# THE PAGE'S PICTURE ENCODED IN PROCESS (feature 449 T150, the engine port's step 2): the Python pasted resvg's PNG tiles and wrote the
+# picture as a JPEG in a PIL child (`interactive/raster.py`, deleted by T150's part B); `mode_a/src/raster/encode.rs` decodes the tiles with `png` and writes the
+# JPEG with `jpeg-encoder` (quality 90, 4:4:4, its scalar path: the `simd` feature off). The renderer is the `resvg` crate below, whose PNGs
+# were the binary's byte for byte, so the id map's PNG is the Python's; the picture's pixels differ from PIL's by the encoders' rounding, measured by part A's
+# lockstep (within one level). PINNED, as roxmltree and geo are (`rust/Cargo.lock` is not tracked): 0.18.1 and 0.7.1 build on the 1.87 toolchain (their
+# declared minimums 1.73 and 1.87, read from the crates index 2026-11-18), and a later release could move the bytes or the pixels that
+# lockstep measured.
+png = { version = "=0.18.1", default-features = false }
+jpeg-encoder = { version = "=0.7.1", default-features = false, features = ["std"] }
+# THE GLOSSARY'S TERMS FOUND IN ONE PASS (feature 449 T150): the page's `glossary_for` asks whether each of the glossary's 5,396
+# variants stands as a whole word in the modals' text; one substring search per variant took 0.35 s a page (observed 2026-11-18, method:
+# the page lockstep's cases timed), one Aho-Corasick pass over the text a few milliseconds. Already in the lock as `regex`'s, at this version.
+aho-corasick = "=1.1.5"
+# THE RENDERER AS A LIBRARY (feature 449 T150, FR-001's phase-4 paragraph; `ask:449-phase4-slices` Q7 as amended by `ask:449-engine-order`):
+# the page's picture and class id map drawn by the `resvg` crate in process, pinned to the version of the binary the Python ran (`resvg
+# --version`: 0.46.0, observed 2026-11-18), its default features as the binary was built (text, system fonts, raster images), so with the
+# same fonts loaded it draws what the binary drew. Its declared minimum is the toolchain's 1.87 (the crates index, 2026-11-18).
+resvg = { version = "=0.46.0" }
+# EVERY FORMAT HEAD'S PIL READ AND WROTE THAT A PURE-RUST CRATE HANDLES (feature 449 T150): `make picture-diff` reads and `make page-lit
+# --out` writes them through the `image` crate. 0.25.9 is the last release whose minimum (1.85) the 1.87 toolchain meets, and it shares
+# `png` 0.18, `gif` 0.14 and `zune-jpeg` 0.5 with `resvg` (the crates index, 2026-11-18). AVIF, EXR, HDR and DDS are off: HEAD's PIL read
+# none of them (AVIF needs a plugin), and AVIF's encoder pulls a C toolchain.
+image = { version = "=0.25.9", default-features = false, features = ["png", "jpeg", "gif", "bmp", "tiff", "webp", "ico", "pnm", "tga", "qoi"] }
 
 # THE COVERAGE BUILD'S CFG IS EXPECTED (feature 449 T116): `cargo llvm-cov` builds with `--cfg=coverage`, and a whole-tree test leaves that
 # build by it

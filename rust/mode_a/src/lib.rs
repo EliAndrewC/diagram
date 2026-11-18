@@ -8,7 +8,12 @@
 //! `labels/hand_sheet.py`'s `start_tags`) and an XML reading ([`etree`], `ET.fromstring`'s), the Python of the first three kept likewise;
 //! and (T175, the fourth piece's libraries) the rest of the audit - its checks, registry and report ([`audit`], `pack_audit/`) and what
 //! they read of the compound engine ([`compound`]), the Python kept likewise; and (T175, the fourth piece's wiring) `make pack-audit`
-//! ([`audit::report::main`], `pack_audit/__main__.py`, deleted).
+//! ([`audit::report::main`], `pack_audit/__main__.py`, deleted); and (T150, step 2's libraries) the page writer the six sheets' pages are
+//! written by - [`page`] (`interactive/page.py` and `extents.py`), [`raster`] (`raster.py`, the `resvg` crate in process, the picture's JPEG
+//! encoded in process), [`place`], [`notes`], [`tags`], [`dwellings`] and the sheet's page half ([`sheet::page`]); and (T150, step 2's wiring) the six
+//! pool generators' pages written by `sheet-page` ([`sheet::page::cli`], their Python deleted), with the reviewer's two picture measures
+//! `picture-diff` and `page-lit` ([`diagnostics`], `tools/picture_diff.py` and `page_lit.py`, deleted) and the files the page read
+//! listed for the generation cache ([`reads`]).
 //!
 //! WHY ITS OWN CRATE AND BINARY: the engine pulls `geo` (since T175, the audit's garden sun) and will pull `resvg` (the plan's steps 2-3), and a gate or guard build that compiled
 //! them would put minutes in front of every hook and check edit; so `l7r-mode-a` is built alone by `scripts/gates/l7r-gate.sh mode-a`,
@@ -26,19 +31,27 @@ use l7r_gate_research::Error;
 pub mod audit;
 pub mod census;
 pub mod compound;
+pub mod diagnostics;
+pub mod dwellings;
 pub mod etree;
 pub mod grids;
 pub mod hand_sheet;
+pub mod notes;
+pub mod page;
 pub mod parse;
+pub mod place;
 pub mod programs;
 pub mod py;
+pub mod raster;
+pub mod reads;
 pub mod sheet;
 pub mod size_marks;
 pub mod size_table;
 pub mod tagged;
+pub mod tags;
 pub mod types;
 
-const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | --version\n";
+const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | sheet-page <map.svg> [--with-raster | --no-raster] [--stdin] | picture-diff a b [--page PAGE] [--svg SVG] [--threshold N] | page-lit <page.html> <key> [--vector] [--out OUT] | --version\n";
 
 /// The command: `building-programs [--check] [--path PATH]`, `notes-census <manifest.json> [...]` (`make notes-census`), the notes
 /// census's two checks and a sheet's counts as commands (the differential's doors onto what `tests/test_mode_a_sheets.py` once asked in
@@ -47,8 +60,24 @@ const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH]
 /// usage `ask:449-usage-text` binds).
 #[must_use]
 pub fn cli(args: &[String], tree: &Path) -> Reply {
+    cli_in(args, tree, &mut std::io::empty())
+}
+
+/// [`cli`] with the process's standard input, which `sheet-page --stdin` reads (feature 449 T150: a sheet's text with its captions
+/// placed, handed by its generator).
+#[must_use]
+pub fn cli_in(args: &[String], tree: &Path, input: &mut dyn std::io::Read) -> Reply {
     let rest = args.get(1..).unwrap_or_default();
     match (args.first().map(String::as_str), rest.len()) {
+        (Some("sheet-page"), _) => {
+            sheet::page::cli::main(rest, tree, &raster::Host::current(), input)
+        }
+        (Some("picture-diff"), _) => {
+            diagnostics::picture_diff::main(rest, &raster::Host::current())
+        }
+        (Some("page-lit"), _) => {
+            diagnostics::page_lit::main(rest, &tree.join("scripts/gates/l7r-gate.sh"))
+        }
         (Some("building-programs"), _) => programs::main(rest, tree),
         (Some("notes-census"), _) => census::main(rest),
         (Some("size-table"), _) => size_table::cli::main(rest),
@@ -125,6 +154,12 @@ mod tests {
     #[test]
     fn the_command_names_its_tools() {
         let tree = std::path::Path::new("/nonexistent");
+        // (feature 449 T150) the page and the two picture measures: each arm reached, each refusing a bare call as its own usage does
+        for tool in ["sheet-page", "picture-diff", "page-lit"] {
+            let r = cli(&[tool.to_owned()], tree);
+            let own = format!("usage: l7r-mode-a {tool} ");
+            assert_eq!((r.code, r.stderr.starts_with(&own)), (2, true));
+        }
         let r = cli(&["--version".to_owned()], tree);
         assert_eq!((r.code, r.stdout.starts_with("l7r-mode-a ")), (0, true));
         let r = cli(&[], tree);

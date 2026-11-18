@@ -253,15 +253,15 @@ sheet-render:   ## [maps] render a hand-drawn Mode A sheet with its captions pla
 	@python3 -m l7r.diagram.labels.hand_sheet "$(SHEET)" "$(OUT)"
 
 page-lit:       ## [diagnostics] light ONE class on a map's page and report which classes' pixels change   MAP=<page.html> CLASS="<key>" [VECTOR=1] [OUT=lit.png]
-##  the reviewer's page measurement (feature 231): raster mode at the opening view, VECTOR=1 past the switch
+##  the reviewer's page measurement (feature 231): raster mode at the opening view, VECTOR=1 past the switch (Rust since 449 T150, `l7r-mode-a`, the browser `l7r-browser lit`)
 	@if [ -z "$(MAP)" ] || [ -z "$(CLASS)" ]; then printf 'make page-lit: MAP=<page.html> CLASS="<class key>" are required - e.g. make page-lit MAP=pool/hamlets/kuwabata/kuwabata.html CLASS="mulberry dike"\n' >&2; exit 2; fi
-	$(RUN).tools.page_lit "$(MAP)" "$(CLASS)" $(if $(VECTOR),--vector,) $(if $(OUT),--out "$(OUT)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a page-lit "$(MAP)" "$(CLASS)" $(if $(VECTOR),--vector,) $(if $(OUT),--out "$(OUT)",)
 
 picture-diff:   ## [diagnostics] two renders compared: the differing share, the max delta, the bbox, and whose ink   A=<png|svg> B=<png|svg> [PAGE=<the new .html>]
 ##  the reviewer's picture measurement (feature 231); an SVG argument is rendered by the engine's own rasterizer,
-##  and PAGE names the rendered page whose own id map says which class each differing pixel lies on
+##  and PAGE names the rendered page whose own id map says which class each differing pixel lies on (Rust since 449 T150, `l7r-mode-a`)
 	@if [ -z "$(A)" ] || [ -z "$(B)" ]; then printf 'make picture-diff: A=<render> B=<render> are required - e.g. make picture-diff A=main.png B=pool/hamlets/kuwabata/kuwabata.svg PAGE=pool/hamlets/kuwabata/kuwabata.html\n' >&2; exit 2; fi
-	$(RUN).tools.picture_diff "$(A)" "$(B)" $(if $(PAGE),--page "$(PAGE)",) $(if $(SVG),--svg "$(SVG)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a picture-diff "$(A)" "$(B)" $(if $(PAGE),--page "$(PAGE)",) $(if $(SVG),--svg "$(SVG)",)
 
 notes-census:   ## [diagnostics] refresh the derived counts inside each map's notes census block (Rust since 449 T170, `l7r-mode-a`)   M="pool/hamlets/*/*.json"
 ##  M=<glob>  which manifests to refresh (default: every manifest in both pool trees)

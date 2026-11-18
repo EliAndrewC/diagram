@@ -6,7 +6,7 @@ One function, `record`, appends one JSON line to the file named by `L7R_ROLL_CEN
 when the variable is unset, which is every run that is not a gate. It is called from the CHOKEPOINTS, not
 from patched entry points: `hamletgen.driver.roll_scope` (every stage-running loop enters it - feature
 210's static AST test proves that), `pipeline.rollcache` (served and rolled verdicts), `settlement.finish`'s
-`render_png` and `interactive.raster.picture` (a render). The first census instrument (specs/213 census/)
+`render_png` and the page's picture (a render; Rust since feature 449 T150, `rust/mode_a/src/raster.rs`'s `Host::census_record`). The first census instrument (specs/213 census/)
 patched six functions and missed the package's re-exported `build` on its first run; a record written at
 the boundary itself cannot be short that way. The gate sets the variable and every child process inherits
 it, so a roll in a test worker, in a roll child, in a pool-sweep child or in a cohort pool child is

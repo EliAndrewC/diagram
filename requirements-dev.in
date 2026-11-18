@@ -14,5 +14,5 @@ pytest-cov
 pytest-xdist
 pytest-testmon
 types-shapely
-playwright    # `l7r.diagram.tools.page_lit` until feature 449 S7 ports it to the browser crate, on the Chromium scripts/container/install-chromium.sh pins (feature 449 T146: Playwright's own browser download is retired)
+playwright    # no importer left since feature 449 T150 ported `page_lit` to the browser crate (`l7r-browser lit`); kept until the requirements' cleanup (S13)
 pip-tools    # re-locks these files

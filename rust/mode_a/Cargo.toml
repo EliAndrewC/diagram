@@ -6,7 +6,10 @@
 # for their Python importers under the lockstep rule); and (T175) the audit's checks, registry and report, which pull `geo` for the garden's
 # sun, the engine pulling `resvg` too at steps 2-3, so neither the gate
 # (`l7r-gate`) nor the guard (`l7r-guard`) depends on this crate, and their builds never compile what it pulls. It depends on the gate's
-# `registry` crate (the Mode A kinds' guesses a program item's row prints) - that direction is the allowed one.
+# `registry` crate (the Mode A kinds' guesses a program item's row prints) - that direction is the allowed one. (T150) The page writer
+# (`interactive/page.py`, `raster.py`, `place.py`, `notes.py`) pulls `png` and `jpeg-encoder` for the picture and `aho-corasick` for the
+# glossary, and draws with the `resvg` crate (the binary the Python ran, as a library); the two picture measures read and write images
+# through the `image` crate.
 [package]
 name = "l7r_mode_a"
 version = "0.1.0"
@@ -23,12 +26,15 @@ publish = false
 # test's own fixtures, the script, the interpreter and its installed distributions - so a Rust-only edit's run reads it and a Python
 # edit's reruns it. The test's timing line (`--nocapture`) says `ran` or `kept`; deleting that file makes the Python run.
 [package.metadata.l7r]
-reads = ["l7r/diagram/", "pool/", "docs/building-programs.md", "tests/fixtures/", "legacy-hand-authored-pool/villages/hoshigaoka/", "legacy-hand-authored-pool/towns/ubame/"]
+# (T150) The page writer's held cases and the end-to-end test's pages (`src/page/held.rs`) read the question fragments its modals link (`research/questions/`) and the legacy pool's manifests and
+# notes of every tier the place card describes.
+reads = ["l7r/diagram/", "pool/", "docs/building-programs.md", "tests/fixtures/", "legacy-hand-authored-pool/", "research/questions/"]
 
 [lib]
 name = "l7r_mode_a"
 
 [dependencies]
+aho-corasick = { workspace = true }
 fancy-regex = { workspace = true }
 geo = { workspace = true }
 # not called: named so its pin (`rust/Cargo.toml`) holds the version `geo` builds on (feature 449 T175)
@@ -37,6 +43,10 @@ l7r_gate_core = { path = "../gate/crates/core" }
 l7r_gate_registry = { path = "../gate/crates/registry" }
 l7r_gate_research = { path = "../gate/crates/research" }
 l7r_guard = { path = "../guard" }
+jpeg-encoder = { workspace = true }
+png = { workspace = true }
+resvg = { workspace = true }
+image = { workspace = true }
 roxmltree = { workspace = true }
 serde_json = { workspace = true }
 

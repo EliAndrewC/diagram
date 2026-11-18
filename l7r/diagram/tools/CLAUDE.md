@@ -26,8 +26,8 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | Which engine lines does only ONE rolling test context reach? | `roll_audit` - `make roll-audit` (feature 216) |
 | How many things does each check of a roll compare against, and which compare against too many? | `overlap_census` - `make census` |
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` - `make placement-stages` |
-| I lit one class on the page - which OTHER classes' pixels changed, and by how much of each? | `page_lit` - `make page-lit` (`VECTOR=1` zooms past the raster switch, feature 245) |
-| Two renders of this map: how much differs, by how much, where, and on whose ink? | `picture_diff` - `make picture-diff` |
+| I lit one class on the page - which OTHER classes' pixels changed, and by how much of each? | `make page-lit` (`VECTOR=1` zooms past the raster switch, feature 245) - Rust since feature 449 T150, `rust/mode_a/src/diagnostics/page_lit.rs`, its browser half `rust/browser/src/lit.rs` |
+| Two renders of this map: how much differs, by how much, where, and on whose ink? | `make picture-diff` - Rust since feature 449 T150, `rust/mode_a/src/diagnostics/picture_diff.rs` (every format the `image` crate reads, held to PIL's reading; see `diagnostics/image.rs`) |
 | Which classes does a page draw see-through, and is a broadleaf crown painted over a conifer? | `see_through` (feature 294 B5; the declared table is `settlement/see_through.py`) |
 | Does a marsh meet the open ground on a ruled or plumb line, where a reader sees it? | `marsh_edges` (feature 294 B2; the visible free edge from the page's id map) |
 | What does a hand-drawn Mode A sheet look like with its captions placed? | `make sheet-render SHEET=<svg> OUT=<png>` - the placer is `labels/hand_sheet.py` |
@@ -80,6 +80,5 @@ generation, for the automated checks on our hand drawn diagrams, for everything.
 genuinely cannot be reached is argued at the point of change, like any other exclusion.
 
 For a tool whose work is a SUBPROCESS or a BROWSER: the pure half is tested directly and the driving half where it can
-be driven - `page_lit`'s attribution on arrays and its `measure` on the synthetic page the browser tests already open
-(`tests/full/interactive/page_browser/`, in a viewport small enough that the page opens in raster mode),
-`picture_diff`'s arithmetic on synthetic images and its rendering through resvg on a 40x40 document.
+be driven. The two picture measures are Rust since feature 449 T150 and are tested there: their arithmetic on synthetic
+images, the browser half on the browser crate's fake Chromium and its one end-to-end test on the real one.

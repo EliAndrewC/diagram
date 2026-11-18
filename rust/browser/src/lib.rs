@@ -1,17 +1,18 @@
 //! The one browser crate (feature 449 T146, phase 4's S3a; the round arbiter's `ask:449-phase4-slices` Q4 and `ask:449-T80-order` step
 //! 4): headless Chromium over the `DevTools` protocol, never Playwright. It serves the source archive's fetch (the gate's `archive`
 //! crate runs `l7r-browser serve` for `archive.py`'s requests and renders), the depiction bundle's glyph crop (`l7r-browser crop`, for
-//! `glyph_crop.py`), and at S7 `page_lit`'s pixel reads. Its own binary: the gate and the guard reach it as a program
+//! `glyph_crop.py`), and (feature 449 T150, S7) `page_lit`'s pixel reads (`l7r-browser lit`, which `l7r-mode-a page-lit` runs). Its own binary: the gate and the guard reach it as a program
 //! (`scripts/gates/l7r-gate.sh browser ...`) and never compile it.
 //!
 //! [`cdp`] is the pipe, [`chromium`] which binary and its switches, [`page`] a context's pages as Playwright set them up, [`get`] the
-//! context's plain request, [`url`] a URL as that request read it, [`serve`] and [`crop`] the two commands.
+//! context's plain request, [`url`] a URL as that request read it, [`serve`], [`crop`] and (feature 449 T150) [`lit`] the commands.
 
 pub mod base64;
 pub mod cdp;
 pub mod chromium;
 pub mod crop;
 pub mod get;
+pub mod lit;
 pub mod page;
 pub mod serve;
 pub mod url;
@@ -37,7 +38,7 @@ fn refuse(stderr: String, code: i32) -> Reply {
     }
 }
 
-const USAGE: &str = "usage: l7r-browser serve [--user-agent UA] [--ignore-https-errors] [--size WxH] | crop <page> <key> <out>\n";
+const USAGE: &str = "usage: l7r-browser serve [--user-agent UA] [--ignore-https-errors] [--size WxH] | crop <page> <key> <out> | lit <page> <key> <before.png> <after.png> [--vector]\n";
 
 /// `serve`'s options: the context's user agent, whether it ignores certificate errors, and its viewport (Playwright's default 1280 x
 /// 720).
@@ -109,7 +110,35 @@ pub fn cli(
                 Err(e) => refuse(format!("l7r-browser crop: {e}\n"), 1),
             }
         }
+        Some("lit") if (5..=6).contains(&args.len()) => {
+            let vector = match args.get(5).map(String::as_str) {
+                None => false,
+                Some("--vector") => true,
+                Some(_) => return refuse(USAGE.to_owned(), 2),
+            };
+            lit_command(&args[1..5], var, vector)
+        }
         _ => refuse(USAGE.to_owned(), 2),
+    }
+}
+
+/// `lit <page> <key> <before.png> <after.png> [--vector]` (feature 449 T150, `page_lit`'s browser half): the two screenshots written,
+/// and the page's mode, zoom, screen transform and viewBox printed as one JSON line.
+fn lit_command(args: &[String], var: &dyn Fn(&str) -> String, vector: bool) -> Reply {
+    let done = page::Browser::open(var, lit::options())
+        .and_then(|mut b| lit::lit(&mut b, Path::new(&args[0]), &args[1], vector))
+        .and_then(|got| {
+            for (at, png) in [(&args[2], &got.before), (&args[3], &got.after)] {
+                std::fs::write(at, png).map_err(|e| format!("{at}: {e}"))?;
+            }
+            Ok(serde_json::json!({"mode": got.mode, "zoom": got.zoom, "ctm": got.ctm, "viewbox": got.viewbox}))
+        });
+    match done {
+        Ok(v) => Reply {
+            stdout: format!("{v}\n"),
+            ..Reply::default()
+        },
+        Err(e) => refuse(format!("l7r-browser lit: {e}\n"), 1),
     }
 }
 

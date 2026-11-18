@@ -17,7 +17,9 @@ sheet's. Comments are dropped (they are the author's notes, not ink).
 
 Look here when: an element of a magistracy page lights with the wrong kind (its tag, or its nearest tagged
 ancestor's), the census names ink with no kind, or a new Mode A sheet needs a page. The registry is
-`compound/`; the page itself is `page.py`, shared with the hamlets.
+`compound/`. THE PAGE IS RUST since feature 449 T150 (the engine port's step 2): `rust/mode_a/src/sheet/page.rs` regroups the
+sheet into pieces and writes the page (`rust/mode_a/src/page.rs`), and `write_sheet_page` below is the one call the six
+pool generators make, run as `scripts/gates/l7r-gate.sh mode-a sheet-page`.
 """
 
 from __future__ import annotations
@@ -25,22 +27,25 @@ from __future__ import annotations
 # LOCKSTEP (feature 449 T170, `ask:449-engine-order` condition 3): the reader here (`Node`, `parse`, `DEFS`, `element_kinds`) is ported to `rust/mode_a/src/sheet.rs`, which `make notes-census`
 # runs; an edit here makes the same change there in the same commit, and `make rust-test CRATE=rust/mode_a` fails until it does
 # (`parse/lockstep.rs` holds the two equal on every pool sheet).
+# (T150) Its page half (`pieces`, `census`, `title_of` and the page's writing) is Rust alone, `rust/mode_a/src/sheet/page.rs`;
+# `write_sheet_page` is a call to it.
 
+import builtins
+import importlib
+import json
 import os
 import re
-from collections.abc import Iterator, Sequence
+import subprocess
+import sys
 from dataclasses import dataclass, field
 
-from .classes import NOT_HIGHLIGHTED, FeatureClass
-from .page import ink_census, unregistered_classes, write_html
-from .tags import ClsTag
+from .classes import FeatureClass
 
 #: One token of the sheet: a comment, a tag, or the text between tags.
 _TOKEN = re.compile(r"<!--.*?-->|<[^>]*>|[^<]+", re.S)
 _NAME = re.compile(r"</?\s*([A-Za-z][\w:.-]*)")
 _KIND = re.compile(r'\sdata-kind="([^"]*)"')
 _PART_OF = re.compile(r'\sdata-part-of="([^"]*)"')
-_ID = re.compile(r'\sid="[^"]*"')
 
 #: The element whose content is never ink: patterns, gradients and clip paths are referenced, not drawn.
 DEFS = "defs"
@@ -112,80 +117,6 @@ def parse(svg: str) -> Node:
     return roots[0]
 
 
-def _tag(kind: str | None) -> ClsTag:
-    return NOT_HIGHLIGHTED if kind == NOT_HIGHLIGHTED else kind
-
-
-#: One piece of the page: its drawn string, its kind, and the kinds it is a part of (feature 264).
-Piece = tuple[str, ClsTag, tuple[str, ...]]
-
-
-def _within(kind: str | None, lineage: tuple[str, ...]) -> tuple[str, ...]:
-    """The kinds a piece of `kind` is a part of: every distinct kind of its lineage but its own and the ruling."""
-    out: list[str] = []
-    for k in lineage:
-        if k not in (kind, NOT_HIGHLIGHTED) and k not in out:
-            out.append(k)
-    return tuple(out)
-
-
-def _walk(node: Node, chain: list[Node], inherited: str | None, seen_ids: set[str], lineage: tuple[str, ...] = ()) -> Iterator[Piece]:
-    """(fragment, kind, part of) for `node` in document order - whole when nothing below it is tagged otherwise,
-    else piece by piece inside copies of its ancestors. `chain` is the untagged-or-tagged ancestors being
-    re-opened; `lineage` the kinds of the tagged ones, outermost first, with any `data-part-of` among them - what
-    lights a part when the thing it is part of is lit (feature 264, spec FR-003)."""
-    if not node.name:
-        if node.text.strip():
-            yield _wrapped(node.text, chain, seen_ids), _tag(inherited), _within(inherited, lineage)
-        return
-    kind = node.kind if node.kind is not None else inherited
-    if node.name == DEFS:
-        yield _wrapped(node.source(), chain, seen_ids), NOT_HIGHLIGHTED, ()
-        return
-    own = tuple(k for k in (node.part_of, node.kind) if k is not None)
-    if node.children and node.tagged_below():
-        for child in node.children:
-            yield from _walk(child, [*chain, node], kind, seen_ids, lineage + own)
-        return
-    yield _wrapped(node.source(), chain, seen_ids), _tag(kind), _within(kind, lineage + own)
-
-
-def _wrapped(s: str, chain: Sequence[Node], seen_ids: set[str]) -> str:
-    """`s` inside copies of its ancestors' opening tags. An ancestor's `id` rides on its FIRST copy only, so the
-    page never carries an id twice because of the reader."""
-    opens: list[str] = []
-    for a in chain:
-        tag = a.open
-        m = _ID.search(tag)
-        if m:
-            if m.group(0) in seen_ids:
-                tag = tag.replace(m.group(0), "", 1)
-            else:
-                seen_ids.add(m.group(0))
-        opens.append(tag)
-    closes = "".join(a.close for a in reversed(chain))
-    return "".join(opens) + s + closes
-
-
-def pieces(svg: str) -> list[Piece]:
-    """The sheet as the page's pieces in paint order: each drawn string, its kind, and the kinds it is a part of.
-    The `<svg>` opening tag comes first and its closing last, both ruled not-highlighted - `render_page` reads the
-    viewBox from the first string and inserts its layers before the string holding `</svg>`."""
-    root = parse(svg)
-    out: list[Piece] = [(root.open, NOT_HIGHLIGHTED, ())]
-    seen: set[str] = set()
-    for child in root.children:
-        out.extend(_walk(child, [], None, seen))
-    out.append((root.close, NOT_HIGHLIGHTED, ()))
-    return out
-
-
-def flatten(svg: str) -> tuple[list[str], list[ClsTag]]:
-    """The sheet as the page's two parallel lists: the drawn strings in paint order and each one's kind."""
-    ps = pieces(svg)
-    return [p[0] for p in ps], [p[1] for p in ps]
-
-
 def element_kinds(svg: str) -> dict[int, str]:
     """The kind of every tagged-or-inheriting element, keyed by the byte offset of its opening tag - how the pack
     audit, which reads the sheet with its own regexes, learns what each label it found belongs to (feature 262,
@@ -216,36 +147,55 @@ class Census:
     unregistered: list[str]
 
 
-def census(svg: str, registry: dict[str, FeatureClass]) -> Census:
-    """The completeness facts the pool test holds every magistracy to (spec FR-006)."""
-    strings, tags = flatten(svg)
-    counts, unclassed = ink_census(strings, tags)
-    return Census(counts, unclassed, unregistered_classes(counts, registry))
+#: The tree this module is in: its launcher builds and runs the Mode A engine (`scripts/gates/l7r-gate.sh mode-a`).
+_TREE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
-def title_of(path: str) -> str:
-    """`ochiba-magistracy.svg` -> `Ochiba Magistracy` - the page's browser-tab title; the sheet's own title is drawn."""
-    return os.path.basename(path).rsplit(".", 1)[0].replace("-", " ").title()
+def _raised(kind: str, message: str) -> BaseException:
+    """The exception the Python writer raised for the engine's refusal `kind: message` - its class by name (a builtin, or a dotted
+    one such as `l7r.diagram._census.RenderedInATest`), so a generator's traceback ends on the line it ended on; a class that cannot
+    be built from a message alone is stood in for by one of the same name."""
+    module, _, name = kind.rpartition(".")
+    try:
+        cls = getattr(importlib.import_module(module) if module else builtins, name)
+        return cls(message)
+    except (ImportError, AttributeError, TypeError):
+        return type(name, (Exception,), {"__module__": module or "builtins"})(message)
 
 
 def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_raster: bool | None = None, svg: str | None = None) -> Census:
-    """`<map>.html` beside `<map>.svg`, from the sheet's own tags - and the sheet's census, for the caller to
-    report. `with_raster` defaults to the render condition every other page uses (feature 208): no picture when
-    `DIAGRAM_SKIP_RENDER=1`. The map's `<map>.notes.md` "Map notes" block is read by `write_html` from the
-    output path, as for a hamlet. `svg` is the sheet's text when it is not the file's - a hand sheet's with its captions
-    placed (feature 286, `labels.hand_sheet.placed`); the page is still written beside, and named for, `svg_path`."""
-    if with_raster is None:
-        with_raster = os.environ.get("DIAGRAM_SKIP_RENDER") != "1"
-    if svg is None:
-        with open(svg_path, encoding="utf-8") as fh:
-            svg = fh.read()
-    ps = pieces(svg)
-    strings, tags = [p[0] for p in ps], [p[1] for p in ps]
-    # THE SHEET MARKS ITSELF (GM 2026-09-27: highlighted text became unreadable). On a Mode A sheet nearly every
-    # label sits ON its own feature's fill - the building's name on the building - so the highlight painting the
-    # label gold with its fill hid it. `data-sheet` lets the stylesheet keep a sheet's lit text in the map's ink
-    # (page.css); a hamlet's captions sit beside their features and keep their gold.
-    strings[0] = strings[0].replace("<svg ", '<svg data-sheet="mode-a" ', 1)
-    write_html(svg_path[: -len(".svg")] + ".html", strings, tags, name=title_of(svg_path), with_raster=with_raster, registry=registry, within=[p[2] for p in ps])
-    counts, unclassed = ink_census(strings, tags)
-    return Census(counts, unclassed, unregistered_classes(counts, registry))
+    """`<map>.html` beside `<map>.svg`, from the sheet's own tags - and the sheet's census, for the caller to report. Written by
+    the Mode A engine (`l7r-mode-a sheet-page`, feature 449 T150): `with_raster` defaults there to the render condition every
+    other page uses (feature 208: no picture when `DIAGRAM_SKIP_RENDER=1`), and the map's `<map>.notes.md` "Map notes" block is
+    read from the output path, as for a hamlet. `svg` is the sheet's text when it is not the file's - a hand sheet's with its
+    captions placed (feature 286, `labels.hand_sheet.placed`), handed on stdin; the page is still written beside, and named for,
+    `svg_path`. `registry` is the engine's own, read from the same modal files (`compound_kinds`); every caller passes
+    `COMPOUND_CLASSES`.
+
+    THE READS ARE OPENED HERE (feature 449 T150): the generation cache learns a generator's data files by spying on `open()`
+    (`gencache.record`, spec 187 D3), which cannot see the engine's process, so each file the engine read is opened for reading
+    here - a stylesheet or question edit still re-keys the sheet."""
+    del registry  # the engine reads the same registry from the tree (`l7r_gate_registry::about::compound_classes`)
+    argv = [os.path.join(_TREE, "scripts", "gates", "l7r-gate.sh"), "mode-a", "sheet-page", svg_path]
+    if with_raster is not None:
+        argv.append("--with-raster" if with_raster else "--no-raster")
+    if svg is not None:
+        argv.append("--stdin")
+    run = subprocess.run(argv, input=(svg or "").encode("utf-8"), capture_output=True, check=False)
+    said = run.stderr.decode("utf-8", "replace")
+    try:
+        out = json.loads(run.stdout)
+    except ValueError:
+        raise RuntimeError(f"l7r-mode-a sheet-page exited {run.returncode}: {said}") from None
+    # the engine's warnings (resvg absent: the page carries no picture) reach the generator's stderr as the Python writer's did; a
+    # refusal's own last line is the exception raised below, not printed twice
+    if "error" in out:
+        kind = out["error"]["kind"]
+        at = said.rfind("\n" + kind) + 1 if not said.startswith(kind) else 0  # the refusal's text, its message of any length
+        sys.stderr.write(said[:at])
+        raise _raised(kind, out["error"]["message"])
+    sys.stderr.write(said)
+    for path in out["reads"]:
+        with open(path, "rb"):
+            pass
+    return Census(dict(out["counts"]), out["unclassed"], out["unregistered"])

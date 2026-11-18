@@ -188,10 +188,10 @@
    "declared": "round-arbiter"
   },
   "### T150 Approach (checklist part A)": {
-   "sha256": "2138959c3911462f5513ef34a44b62bd7e4aea967996766711ad9238bd070322",
+   "sha256": "39eddff6a7dead74c0c4aff3543ed02ad4a2268b1dd6258357c80386921c7e4a",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   },
   "### T151 (<why: the finding or measurement that files it>)": {
    "sha256": "4ce71f90185f4fa753c100fdbe35fd95d5f21431a6b41d54bfa5afd93f4f2c76",
@@ -555,6 +555,12 @@
   },
   "### T178 Approach (checklist part A)": {
    "sha256": "e4ca54ea2bb487243f9f3c256d6bdc425a7e6fdb80f3248d02f43435bbf1324a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T150 (step 2 of the engine port, S7, the map page writer; the GM 2026-11-18, request.md: \"proceed with continuing the porting\")": {
+   "sha256": "22dc7a8ab8d3f930aac473f6bc4fa3fa66bdf6d343ec7b94f5ce653dbb2ff22a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
@@ -11092,6 +11098,98 @@
      "why": "This measures the requested improvement by the same command before and after. The figures carry one-shot labels (date and method), so they are reviewable."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T150 (step 2 of the engine port, S7, the map page writer; the GM 2026-11-18, request.md: \"proceed with continuing the porting\")",
+    "### T150 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "scope-and-split",
+     "summary": "S7 ports the Mode A page writer (page.py, place, raster, extents, notes, tags, dwellings, sheet.py's page half) into rust/mode_a, wires write_sheet_page to it, ports picture-diff and page-lit (browser half on the one browser crate), deletes the Python with claims carried; worked as part A then part B",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q4 (one browser crate, one image crate), Q10 (claims carried in the deleting cut), Q13 (S7 ports what page.py writes today); ask:449-engine-order sets the wired landing and the order after the audit (step 1) and before step 3. The two-agent split is process, not scope."
+    },
+    {
+     "id": "resvg-library",
+     "summary": "the raster renderer is the resvg library pinned =0.46.0 in the Mode A crate, driven as the binary's main drives it, byte-identical to the binary on every render",
+     "class": "within",
+     "why": "Exactly ask:449-phase4-slices Q7 as amended by ask:449-engine-order: resvg a library pinned to the binary's version in the Mode A crate alone; the amendment would even accept a differing PNG, and none differs."
+    },
+    {
+     "id": "jpeg-encode-rust",
+     "summary": "the page picture's JPEG encode moves from PIL to Rust, same quantization tables and sampling, within one color level of PIL's",
+     "class": "within",
+     "why": "The picture is a drawn sheet's output; FR-002 and the GM's 2026-11-17 words ('the resulting maps do NOT need to be bitwise identical') hold it to its checks and research claims, not its bytes; Q4 moves PIL to one image crate. Pixels measured within one level, under picture_diff's threshold."
+    },
+    {
+     "id": "picture-always-drawn",
+     "summary": "with no binary to be missing, a page always draws its picture where HEAD warned and drew none when resvg was absent from PATH",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The missing-binary case cannot exist once the ruled change (Q7: resvg becomes a library in the Mode A crate) is made; reproducing a warning about an absent dependency that no longer exists is physically impossible, and the difference is implied by the ruling itself. Declared and shown in cases-renderer.json."
+    },
+    {
+     "id": "held-after-deletion",
+     "summary": "lockstep against live Python in part A (374 cases, 46 refusals, six pool pages, 11 mutations red); after deletion 134 self-contained cases pinned to Python answers captured before deletion, 240 live-tree cases and six pool pages checked by outcome in the end-to-end test",
+     "class": "within",
+     "why": "FR-002 binds the outputs before the Python is deleted, which the lockstep and differential do; FR-001b deletes Python tests and holds what remains by kept checks and differentials; FR-008 allows one end-to-end test. Nothing is excluded from the pre-deletion comparison."
+    },
+    {
+     "id": "differential-normalizations",
+     "summary": "differential of 135 cases, none differing, with normalizations: the picture's data:image/jpeg URI (pixels held by the measure), traceback frames and chained-cause line, a library's decode wording, argparse usage, regen wall time",
+     "class": "within",
+     "why": "Each normalization is a ruled case already in FR-002: the picture under the GM's 2026-11-17 maps rule; traceback text and argparse usage under ask:449-usage-text (which releases traceback text entirely - the block compares more than required); library decode wording under ask:449-T066-json-message; wall time is not an output. The id map's PNG and every other byte stay exact."
+    },
+    {
+     "id": "gencache-reads",
+     "summary": "the generation cache is told every file the Rust command read, so a moved stylesheet, script, questions or notes file still regenerates its page; recorded lists match HEAD's",
+     "class": "within",
+     "why": "Preserves today's cache behavior (FR-002, FR-006); ask:449-phase4-slices Q8 keys gencache on the inputs the run reads."
+    },
+    {
+     "id": "diagnostic-formats",
+     "summary": "picture-diff/page-lit documented path (A, B as PNG or SVG; PAGE= with picture and id map; OUT=<png>) bound exactly; other formats through the image crate =0.25.9, declared not bound: eleven lossless formats read exactly to PIL's pixels, JPEG and lossy WebP by the crate's decoders, page-lit --out JPEG/GIF/WebP by the crate's encoders, every other PIL-read format (TIFF LA, palette TIFF, oversize ICO) refused by name",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block matches the round arbiter's ruling ask:449-T150-diagnostic-formats (accept, 2026-11-18) and the FR-002 ruled case written from it, item by item: documented path bound, the eleven lossless formats exact, JPEG and lossy WebP declared, page-lit-out-encoders declared, TIFF LA/palette and the oversize ICO declared refusals, no C codec and no PIL quantizer or icon resize. The arbiter stands where the GM was asked (feature 379); the case is drawn by interface, as the ruling requires, not by lossless versus lossy."
+    },
+    {
+     "id": "63-kinds-fix",
+     "summary": "page_lit and picture_diff --page crashed on every page past 63 kinds (int('4,4')), Hayakawa's and Ubame's among them; the Rust reads a one- or two-channel palette key as page.js does, every case below 64 kinds unchanged, three cases now report where HEAD refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002's own exception: a check that refuses correct work today is fixed in its port (constitution XIV), the changed cases named. The refused pages are real pool sheets the diagnostics exist to inspect, so porting the refusal would defeat the tool's purpose on them; outputs on every case HEAD handled are unchanged and the three changed cases are shown in cases-63kinds.json."
+    },
+    {
+     "id": "vector-zoom-race",
+     "summary": "page-lit --vector's zoom hover could land after the clear in HEAD under load, lighting a class in the before-shot; the Rust draws two frames before the clear",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The deviation touches only a timing race: HEAD's output on that path is nondeterministic, so no test or suite case can hold it, and binding a port to reproduce a race is physically impossible. The Rust's before-shot is HEAD's output whenever the race does not fire. The raced before-shot shows a class lit when none was, which defeats the before-shot's purpose. Declared, and measured both ways (cases-race.json)."
+    },
+    {
+     "id": "defects-reproduced",
+     "summary": "three HEAD defects reproduced (a refused render left an empty page; hit_copies copies an id into a d; size_sentence multiplies a households value given as text), refusing nothing a generator writes, reported to the GM",
+     "class": "within",
+     "why": "FR-002 requires the same outputs; the XIV exception covers only refusals of correct work, which these are not, and they are not among the defects ask:449-phase4-slices names to fix in a slice. Reproducing them and reporting them is the literal requirement."
+    },
+    {
+     "id": "step-page",
+     "summary": "every pool Mode A sheet's page published before and after step 2: none byte-identical, differing only in the picture's JPEG within one color level, text and id map identical",
+     "class": "within",
+     "why": "ask:449-engine-order condition 5 and the GM's 2026-11-17 words ('each engine slice publishes a page of every pool sheet before and after'); the difference is allowed by the GM's maps rule."
+    },
+    {
+     "id": "measure-and-checks",
+     "summary": "the step's cost by phase (tokens and minutes per part), claims owed counted, and make static, rust-test, hooks-test HOOKS_ALL=1, quick and the pointer check green",
+     "class": "within",
+     "why": "The GM's 2026-11-17 requests that each engine piece's wall time and tokens be reported by phase; FR-010; the gate's own checks."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19780,6 +19878,96 @@
      "summary": "Before and after timings of make rust-test CRATE=rust/mode_a after a Rust-only edit (9.19 s to 6.85 s wall) and after a Python edit (8.0 s), each with a dated method label.",
      "class": "within",
      "why": "This measures the requested improvement by the same command before and after. The figures carry one-shot labels (date and method), so they are reviewable."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T150": {
+   "section_sha256": "a3546be39eb63b7cf5299f37bb84a3b7fe999703555efeda2441d9fede61b068",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "scope-and-split",
+     "summary": "S7 ports the Mode A page writer (page.py, place, raster, extents, notes, tags, dwellings, sheet.py's page half) into rust/mode_a, wires write_sheet_page to it, ports picture-diff and page-lit (browser half on the one browser crate), deletes the Python with claims carried; worked as part A then part B",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q4 (one browser crate, one image crate), Q10 (claims carried in the deleting cut), Q13 (S7 ports what page.py writes today); ask:449-engine-order sets the wired landing and the order after the audit (step 1) and before step 3. The two-agent split is process, not scope."
+    },
+    {
+     "id": "resvg-library",
+     "summary": "the raster renderer is the resvg library pinned =0.46.0 in the Mode A crate, driven as the binary's main drives it, byte-identical to the binary on every render",
+     "class": "within",
+     "why": "Exactly ask:449-phase4-slices Q7 as amended by ask:449-engine-order: resvg a library pinned to the binary's version in the Mode A crate alone; the amendment would even accept a differing PNG, and none differs."
+    },
+    {
+     "id": "jpeg-encode-rust",
+     "summary": "the page picture's JPEG encode moves from PIL to Rust, same quantization tables and sampling, within one color level of PIL's",
+     "class": "within",
+     "why": "The picture is a drawn sheet's output; FR-002 and the GM's 2026-11-17 words ('the resulting maps do NOT need to be bitwise identical') hold it to its checks and research claims, not its bytes; Q4 moves PIL to one image crate. Pixels measured within one level, under picture_diff's threshold."
+    },
+    {
+     "id": "picture-always-drawn",
+     "summary": "with no binary to be missing, a page always draws its picture where HEAD warned and drew none when resvg was absent from PATH",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The missing-binary case cannot exist once the ruled change (Q7: resvg becomes a library in the Mode A crate) is made; reproducing a warning about an absent dependency that no longer exists is physically impossible, and the difference is implied by the ruling itself. Declared and shown in cases-renderer.json."
+    },
+    {
+     "id": "held-after-deletion",
+     "summary": "lockstep against live Python in part A (374 cases, 46 refusals, six pool pages, 11 mutations red); after deletion 134 self-contained cases pinned to Python answers captured before deletion, 240 live-tree cases and six pool pages checked by outcome in the end-to-end test",
+     "class": "within",
+     "why": "FR-002 binds the outputs before the Python is deleted, which the lockstep and differential do; FR-001b deletes Python tests and holds what remains by kept checks and differentials; FR-008 allows one end-to-end test. Nothing is excluded from the pre-deletion comparison."
+    },
+    {
+     "id": "differential-normalizations",
+     "summary": "differential of 135 cases, none differing, with normalizations: the picture's data:image/jpeg URI (pixels held by the measure), traceback frames and chained-cause line, a library's decode wording, argparse usage, regen wall time",
+     "class": "within",
+     "why": "Each normalization is a ruled case already in FR-002: the picture under the GM's 2026-11-17 maps rule; traceback text and argparse usage under ask:449-usage-text (which releases traceback text entirely - the block compares more than required); library decode wording under ask:449-T066-json-message; wall time is not an output. The id map's PNG and every other byte stay exact."
+    },
+    {
+     "id": "gencache-reads",
+     "summary": "the generation cache is told every file the Rust command read, so a moved stylesheet, script, questions or notes file still regenerates its page; recorded lists match HEAD's",
+     "class": "within",
+     "why": "Preserves today's cache behavior (FR-002, FR-006); ask:449-phase4-slices Q8 keys gencache on the inputs the run reads."
+    },
+    {
+     "id": "diagnostic-formats",
+     "summary": "picture-diff/page-lit documented path (A, B as PNG or SVG; PAGE= with picture and id map; OUT=<png>) bound exactly; other formats through the image crate =0.25.9, declared not bound: eleven lossless formats read exactly to PIL's pixels, JPEG and lossy WebP by the crate's decoders, page-lit --out JPEG/GIF/WebP by the crate's encoders, every other PIL-read format (TIFF LA, palette TIFF, oversize ICO) refused by name",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block matches the round arbiter's ruling ask:449-T150-diagnostic-formats (accept, 2026-11-18) and the FR-002 ruled case written from it, item by item: documented path bound, the eleven lossless formats exact, JPEG and lossy WebP declared, page-lit-out-encoders declared, TIFF LA/palette and the oversize ICO declared refusals, no C codec and no PIL quantizer or icon resize. The arbiter stands where the GM was asked (feature 379); the case is drawn by interface, as the ruling requires, not by lossless versus lossy."
+    },
+    {
+     "id": "63-kinds-fix",
+     "summary": "page_lit and picture_diff --page crashed on every page past 63 kinds (int('4,4')), Hayakawa's and Ubame's among them; the Rust reads a one- or two-channel palette key as page.js does, every case below 64 kinds unchanged, three cases now report where HEAD refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002's own exception: a check that refuses correct work today is fixed in its port (constitution XIV), the changed cases named. The refused pages are real pool sheets the diagnostics exist to inspect, so porting the refusal would defeat the tool's purpose on them; outputs on every case HEAD handled are unchanged and the three changed cases are shown in cases-63kinds.json."
+    },
+    {
+     "id": "vector-zoom-race",
+     "summary": "page-lit --vector's zoom hover could land after the clear in HEAD under load, lighting a class in the before-shot; the Rust draws two frames before the clear",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The deviation touches only a timing race: HEAD's output on that path is nondeterministic, so no test or suite case can hold it, and binding a port to reproduce a race is physically impossible. The Rust's before-shot is HEAD's output whenever the race does not fire. The raced before-shot shows a class lit when none was, which defeats the before-shot's purpose. Declared, and measured both ways (cases-race.json)."
+    },
+    {
+     "id": "defects-reproduced",
+     "summary": "three HEAD defects reproduced (a refused render left an empty page; hit_copies copies an id into a d; size_sentence multiplies a households value given as text), refusing nothing a generator writes, reported to the GM",
+     "class": "within",
+     "why": "FR-002 requires the same outputs; the XIV exception covers only refusals of correct work, which these are not, and they are not among the defects ask:449-phase4-slices names to fix in a slice. Reproducing them and reporting them is the literal requirement."
+    },
+    {
+     "id": "step-page",
+     "summary": "every pool Mode A sheet's page published before and after step 2: none byte-identical, differing only in the picture's JPEG within one color level, text and id map identical",
+     "class": "within",
+     "why": "ask:449-engine-order condition 5 and the GM's 2026-11-17 words ('each engine slice publishes a page of every pool sheet before and after'); the difference is allowed by the GM's maps rule."
+    },
+    {
+     "id": "measure-and-checks",
+     "summary": "the step's cost by phase (tokens and minutes per part), claims owed counted, and make static, rust-test, hooks-test HOOKS_ALL=1, quick and the pointer check green",
+     "class": "within",
+     "why": "The GM's 2026-11-17 requests that each engine piece's wall time and tokens be reported by phase; FR-010; the gate's own checks."
     }
    ],
    "verdict": "CLEAR"

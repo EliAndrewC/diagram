@@ -3,7 +3,7 @@
 WHY: prose a reader sees - the glossary, the sibling texts, the place card's wording, the page's fixed
 phrases - used to be Python constants, which made every wording edit an ENGINE change: it re-keyed the
 gate (a dict literal is executable code, so `gate-stamp`'s docstring-stripped AST moved), chilled the
-roll cache (`page.py` imports these modules while writing a map's page, and `gencache` hashes every
+roll cache (the page writer, `page.py` until feature 449 T150 ported it to Rust, imported these modules while writing a map's page, and `gencache` hashes every
 imported module's top level), and cost the whole ten-minute suite. Feature 205 paid that for one
 glossary term. A `.json` under `assets/` is an ASSET: outside the engine key, outside the roll-cache
 key (`gencache.record` does not record a `.json` read), inside gate-stamp's `page` area and the render

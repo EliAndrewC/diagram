@@ -196,7 +196,10 @@ fn start(run: &Run) -> Child {
         .stderr(Stdio::piped())
         .spawn()
         .unwrap();
-    child.stdin.take().unwrap().write_all(run.stdin).unwrap();
+    // A CHILD THAT EXITS WITHOUT READING ITS STDIN closes the pipe first, and the write then fails with EPIPE - the keep's own test
+    // (`sh -c "exit 3"`) failed so under load (feature 449 T150, observed 2026-11-18 in `make static`'s cover run); the child's exit
+    // and stderr say what happened, so a refused write is no failure of its own
+    let _ = child.stdin.take().unwrap().write_all(run.stdin);
     child
 }
 

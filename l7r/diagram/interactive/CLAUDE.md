@@ -16,17 +16,17 @@ PNG is byte-identical by construction; the page is a second serialization of the
 
 | file | look here when |
 |---|---|
-| `tags.py` | you need the tag shapes: a `str` class, `Parts` (one string, several classes - a farmhouse and its shed), `Split` (one element, fill and stroke in different classes - a paddy and its bund), `"-"` (ruled not highlighted), `None` (nobody ruled) |
+| `rust/mode_a/src/tags.rs` (the Python `tags.py` deleted, feature 449 T150) | you need the tag shapes: a `str` class, `Parts` (one string, several classes - a farmhouse and its shed), `Split` (one element, fill and stroke in different classes - a paddy and its bund), `"-"` (ruled not highlighted), `None` (nobody ruled) |
 | [`classes/`](classes/CLAUDE.md) | you are adding a KIND of feature (a class in its family module), changing what a modal SAYS (its FILE, `assets/modals/<hamlet|sheet>/<kind>.md`, in the About form since feature 319; an edit owes `make page-check`, not the gate), or adding a sibling distinction (`siblings.py`). The vocabulary is the spec's FR-007 table; every entry is written FROM a `research/` entry; `NOT_HIGHLIGHTED_RULINGS` is the record of what was ruled out and by whom, and `NOT_HIGHLIGHTED_OVERTURNED` of what was ruled out and later let back in (`_base.py`) |
-| `notes.py` | a fact you wrote into a map's `.notes.md` is not reaching its page, or you are adding a key the block understands. The reader has no error path ON PURPOSE - see below |
-| `place.py` and `assets/place.json` | the title card says something wrong, or you are describing a new tier. The per-tier text, the crop table and the basis the card owes its reader are the JSON (feature 207); the sentence builders and the demographic constants are the module |
+| `rust/mode_a/src/notes.rs` (the Python `notes.py` deleted, feature 449 T150) | a fact you wrote into a map's `.notes.md` is not reaching its page, or you are adding a key the block understands. The reader has no error path ON PURPOSE - see below |
+| `rust/mode_a/src/place.rs` (the Python `place.py` deleted, feature 449 T150) and `assets/place.json` | the title card says something wrong, or you are describing a new tier. The per-tier text, the crop table and the basis the card owes its reader are the JSON (feature 207); the sentence builders and the demographic constants are the module |
 | `assets/glossary/NNNN-<term>.json`, one file per term (feature 259) - never the assembled `assets/glossary.json` (about 420 KB, written by `make glossary`, loaded by `glossary.py`; find a word with a grep of `research/assets/glossary-variants.txt`) | you are adding a term the explanations use, or a definition reads wrong - every occurrence of a term in a modal is a hover tooltip; a test proves each term is used and each explanation's terms are defined. A content edit owes `make page-check`, not the gate (feature 207). **It is the research record's glossary too** (feature 209, GM 2026-09-07: the same tooltip rules on the research pages): `record_glossary_js` (Rust since feature 449 T148, `rust/gate/crates/research/src/glossary.rs`) is the derived script the site carries as `assets/glossary.js`, written by `make record`, that `research/assets/record.js` wraps over every page's visible text; a term may live in the record alone, and `tests/interactive/test_record_format.py` proves the asset is in sync and every term used somewhere |
 | `content.py` and `assets/*.json` | you are wondering WHY the page's prose is JSON rather than Python constants - the why is in `content.py`'s docstring (feature 207: a wording edit must not be an engine change). `glossary.json`, `siblings.json`, `place.json`, `page-text.json`; the registry's data went into its modal files (`assets/modals/`) |
 | `rust/gate/crates/research/src/citations.rs` (Rust since feature 449 T148) | the WORKS a question's notes cite (feature 211, GM 2026-09-07; its per-page citations pages retired with the page directories, feature 303): the works block at the foot of each question's page of the site, derived from the registry's two write-ups per work (citation line; what it is; why it applies, and its limits), and the footnote classifier (`footnote_form`) `make footnote-census` reads. The site carries each question's notes at its own foot (`record/site_notes.rs`). Look here when a works list is wrong or a new key is refused for want of a write-up |
 | `sources.py` | a modal's references look wrong - they are READ FROM THE RECORD at page-write time: `research_questions()` resolves the class's `entry` - since feature 301 a list of FRAGMENT paths (`entry_fragments`) - to the questions it names, each linking its small page in the record's site (`SITE_PAGES + q/<heading id>.html`, flat whatever section the question is in - feature 303); `research_sources()` / `registry()` read the keys a question's footnotes cite and the registry. `record_text()` is THE reader of a page of the record - the registry assembled, a question's page with its cross-link and confusables written in - because nothing built is committed (every reader in the engine, the tools and the tests asks it). It also holds the ONE body of feature 190's link classifier (`citation_lines`, `not_read`, `link_target`) and `registry_entries()` |
-| `page.py` - `merge_primitives`, and `extents.py` | the page draws too many elements, or a merge changed the picture: same-styled primitives merge into one `<path>` wherever the reorder is invisible, and a big scatter is written one path per 400 px cell (feature 199). The rules and why: [`dev/interactive-page.md`](../../../dev/interactive-page.md). `extents.py` answers what the merge asks of an element's painted area (whether two touch, whether a bucket may take one) |
-| `page.py` | `wrap()` (the HTML form of one stream string), `ink_census()` (the FR-009 data: elements per class, and the unclassed ones), `explanations()` (only present classes, only present siblings), `render_page()` / `write_html()` |
-| `raster.py` | **the page is TWO MODES** (feature 200): below a screen scale the map is ONE IMAGE (resvg, the PNG's renderer) with the lit class drawn as vector above it, the pointer answered from a CLASS ID MAP; above it the vector page. Look here when the raster looks wrong, a hover in raster mode names the wrong class, a mark near the map's edge is missing (the off-map drop), or a page has no raster (`r: 0`: resvg absent, or a test roll - the raster is a RENDER, feature 208). Every rule with its GM ruling: [`dev/interactive-page.md`](../../../dev/interactive-page.md) |
+| `rust/mode_a/src/page/merge.rs` - `merge_primitives` and the extents (the Python `page.py` and `extents.py` deleted, feature 449 T150) | the page draws too many elements, or a merge changed the picture: same-styled primitives merge into one `<path>` wherever the reorder is invisible, and a big scatter is written one path per 400 px cell (feature 199). The rules and why: [`dev/interactive-page.md`](../../../dev/interactive-page.md). its `extent` answers what the merge asks of an element's painted area (whether two touch, whether a bucket may take one) |
+| `rust/mode_a/src/page.rs` and `page/` (Rust since feature 449 T150; the Mode A sheets' page writer) | `wrap()` (the HTML form of one stream string, `page/hits.rs`), `ink_census()` (the FR-009 data: elements per class, and the unclassed ones), `explanations()` (only present classes, only present siblings, `page/explain.rs`), `render_page()` / `write_html()` (`page/render.rs`) |
+| `rust/mode_a/src/raster.rs` (the Python `raster.py` deleted, feature 449 T150: the `resvg` crate in process, its PNGs the binary's byte for byte, the picture's JPEG encoded in process) | **the page is TWO MODES** (feature 200): below a screen scale the map is ONE IMAGE (resvg, the PNG's renderer) with the lit class drawn as vector above it, the pointer answered from a CLASS ID MAP; above it the vector page. Look here when the raster looks wrong, a hover in raster mode names the wrong class, a mark near the map's edge is missing (the off-map drop), or a page has no raster (`r: 0`: resvg absent, or a test roll - the raster is a RENDER, feature 208). Every rule with its GM ruling: [`dev/interactive-page.md`](../../../dev/interactive-page.md) |
 | `choices.py` | the title card's choices (feature 319): what was chosen for this settlement, each value a modal |
 | `conditions.py` | an item of a modal that depends on the settlement's knobs (feature 319, FR-015) |
 | `glossary.py`, `rust/gate/crates/research/src/glossary.rs` | the glossary the explanations use (`glossary.py`, which the page writer reads), and the Rust that writes every file of it since feature 449 T148: its one-word-per-file source assembled back (`glossary/source.rs`, feature 259, `make glossary`) and the record's script (`record_glossary_js`) - see the glossary row above |
@@ -42,19 +42,19 @@ pairs, so they are read back out of the drawing:
 
 | file | look here when |
 |---|---|
-| `sheet.py` | a magistracy page lights the wrong thing, or the census names ink with no kind. Every element or group carries `data-kind="<key>"` (the nearest one wins; `"-"` rules it out); the reader tokenizes the sheet (never an XML round trip - the page carries the sheet's own bytes) and re-opens a group's opening tag around each differently-tagged piece, so a transform or inherited fill still applies. `element_kinds` is what the pack audit reads to find a program item by its tag |
+| `sheet.py` | a magistracy page lights the wrong thing, or the census names ink with no kind. Every element or group carries `data-kind="<key>"` (the nearest one wins; `"-"` rules it out); the reader tokenizes the sheet (never an XML round trip - the page carries the sheet's own bytes) and re-opens a group's opening tag around each differently-tagged piece, so a transform or inherited fill still applies. `element_kinds` is what the pack audit reads to find a program item by its tag. The page half - the pieces, the census, the page written - is `rust/mode_a/src/sheet/page.rs` (feature 449 T150), and `write_sheet_page` here is a call to it (`l7r-gate.sh mode-a sheet-page`) |
 | [`compound_kinds/`](compound_kinds/__init__.py) | a magistracy modal says something wrong, or a new kind is drawn. The hamlet form exactly (one About-form file per kind under `assets/modals/sheet/`), a SEPARATE registry (`COMPOUND_CLASSES`, passed as `render_page(registry=)`) because a compound's well is written about a compound. Every kind is written from an existing finding; a kind no research section covers says `(no dedicated entry - recorded as silent)` and so lists no references - the gap the GM can see. The magistracies program in `buildings/types.json` names these kinds and states no class or why of its own: `programs.md` and the audit read the kind's guesses (`buildings.types.classification`) |
 
 **A part is its own kind and lights with its parent** (feature 264, GM 2026-09-27: *"individual features inside of
 buildings or other features to get their own individual highlighting"*). A hearth, a pond, a genkan, a labeled room,
-a door carries its own `data-kind` inside its parent's group; `sheet.pieces()` hands the page, beside each fragment's
+a door carries its own `data-kind` inside its parent's group; `sheet::page::pieces` (Rust, `rust/mode_a/src/sheet/page.rs`) hands the page, beside each fragment's
 kind, the kinds it is part of (its tagged ancestors, plus `data-part-of="<kind>"` on a part drawn elsewhere for paint
 order), `render_page(within=)` writes them as `data-in` AFTER `data-k` (the id map's `_GROUP` pattern reads `class`
 then `data-k`), and `page.js` files the part under its parents too, so the kitchen lights its hearth and the hearth
 lights no kitchen. A room is drawn as its own floor - the building's fill, one same-color rect per room, then the
 outline with `fill="none"` (0 px changed) - and the pack audit folds such a rect into its building
 (`pack_audit/parse.py` `rooms_folded`). The id map holds past 63 kinds on one page (green counts the rows,
-`raster.palette_rgb`), and a sheet page's id map draws text unblended (`crisp_text`, set when `within=` is given),
+`raster::palette_rgb`), and a sheet page's id map draws text unblended (`crisp_text`, set when `within=` is given),
 so a label never answers as its neighbor in the palette; hamlet id maps are untouched.
 
 Each pool magistracy's `.gen.py` calls `write_sheet_page(svg, COMPOUND_CLASSES)` after its PNG and fails if the census
@@ -73,7 +73,7 @@ M11-M13) - a guess is a bullet on the Guesses tab, a deviation (the SETTING diff
 applies, and a map drawing convention (a glyph scaled or colored for the eye - the GM's line, feature 183) is told on the
 Depiction tab with its real counterpart. Don't re-add a lead: a "This is a guess" opening on a modal that is mostly record read
 as the whole modal being a guess (the GM, 2026-10-03: *"extremely misleading"*). The title card keeps its own basis line
-(`place.BASIS_LEAD`, `x-basis`), which says where the card's claims come from.
+(`place.json`'s `basis_lead`, read by `rust/mode_a/src/place.rs`'s `place_card`; `x-basis`), which says where the card's claims come from.
 
 ## The references are QUESTIONS, not sources (feature 180)
 
@@ -144,7 +144,7 @@ the fox relics, Hayakawa's salt wards and several Ubame notes off their pages.
   (GM: "in general, the kind of thing that we want to be able to do for any kind of map feature").
 ```
 
-`### Place` feeds the title card (`place.py`; `PLACE_KEYS` is what it understands, and an
+`### Place` feeds the title card (`rust/mode_a/src/place.rs`; `PLACE_KEYS` is what it understands, and an
 unrecognized key is simply unused rather than wrong). `### Features` is keyed by CLASS KEY and
 appears in that class's modal on that map only.
 
@@ -173,7 +173,7 @@ A caption gets the class of the feature it names (`label(..., cls=...)`), which 
 needs: label and subject are one class, so hovering either lights both.
 
 `place` is a RESERVED key rather than a row of the `classes/` registry: it tags the title placard and its name,
-and its modal is built per map by `place.py` instead of being written once in the vocabulary. The
+and its modal is built per map by `rust/mode_a/src/place.rs` instead of being written once in the vocabulary. The
 census and the ruling both know it, so the placard is highlightable and is never reported as
 unruled ink. The scale bar beside it keeps `cls="-"`.
 

@@ -1,7 +1,9 @@
 //! The tests' Chromium (feature 449 T146): a small Python program that speaks the protocol on fds 3 and 4 as Chromium does, answering
 //! each command the crate sends from a table, so every path of the crate runs without a browser or a network. What a page does is read
 //! from its URL: `neterr` fails the navigation, `samedoc` has no loader, `noload` never loads, `busy` never goes idle, `nobody` has no
-//! body, `noglyph` has no glyph to measure, `throw` throws in the page, `big` measures large at once, `small` never grows. Python
+//! body, `noglyph` has no glyph to measure, `throw` throws in the page, `big` measures large at once, `small` never grows; and (feature 449
+//! T150, the lit page) `notready` never readies its raster, `readythrow` throws asking, `zoomy` reaches vector mode at the second press
+//! of the zoom key, `stuck` never does, `novb` has no viewBox. Python
 //! starts isolated and without `site` (`-I -S`): 15 ms a start where a plain start took 30, and the tests start it often (feature 449
 //! T167, observed 2026-11-17).
 
@@ -14,6 +16,7 @@ out = os.fdopen(4, "wb", buffering=0)
 url = ""
 cookies = []
 measured = 0
+presses = 0
 def send(m):
     out.write(json.dumps(m).encode() + b"\0")
 buf = b""
@@ -60,7 +63,22 @@ while True:
             r = {"data": "MHTML of " + url}
         elif meth == "Runtime.evaluate":
             e = p["expression"]
-            if "throw" in url and "document.body" in e:
+            if "rasterReady" in e and "notready" in url:
+                continue
+            if "rasterReady" in e and "readythrow" in url:
+                r = {"result": {}, "exceptionDetails": {"text": "Uncaught", "exception": {"description": "TypeError: no raster"}}}
+            elif "rasterReady" in e:
+                r = {"result": {"type": "boolean", "value": True}}
+            elif "l7rMap.mode()" in e:
+                vector = "stuck" not in url and ("zoomy" not in url or presses >= 2)
+                r = {"result": {"value": "vector" if vector else "raster"}}
+            elif "l7rMap.zoom()" in e:
+                r = {"result": {"value": 1.5}}
+            elif "getScreenCTM" in e:
+                r = {"result": {"value": [2, 0, 0, 2, 10.5, -4]}}
+            elif "getAttribute('viewBox')" in e:
+                r = {"result": {"value": None if "novb" in url else [0, 0, 10, 10]}}
+            elif "throw" in url and "document.body" in e:
                 r = {"result": {"type": "object"}, "exceptionDetails": {"text": "Uncaught", "exception": {"description": "Error: thrown"}}}
             elif "throwplain" in e:
                 r = {"result": {}, "exceptionDetails": {"text": "Uncaught plain"}}
@@ -79,6 +97,8 @@ while True:
                 r = {"result": {"value": ["zeta", "alpha"]}}
             else:
                 r = {"result": {"type": "undefined"}}
+        elif meth == "Input.dispatchKeyEvent" and p.get("key") == "=" and p["type"] == "rawKeyDown":
+            presses += 1
         elif meth == "Page.captureScreenshot":
             r = {"data": base64.b64encode(b"\x89PNG fake").decode()}
         elif meth == "Storage.getCookies":

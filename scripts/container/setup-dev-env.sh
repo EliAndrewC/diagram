@@ -172,7 +172,7 @@ if [ ! -x "$HOME/.cargo/bin/cargo-llvm-cov" ]; then
 fi
 # maturin is no longer installed: the PyO3 doors it built went with the Python hamlet engine (feature 444 T39)
 # The headless Chromium the browser crate drives (`rust/browser/`: the source archive's fetch and the glyph crop, feature 449 T146;
-# `page_lit` launches the same binary until S7 ports it): Chrome for Testing's headless shell, pinned by
+# and, since S7, `make page-lit`'s `l7r-browser lit`, T150): Chrome for Testing's headless shell, pinned by
 # scripts/container/chromium.pin, downloaded and checked by install-chromium.sh with its libraries and fonts. Playwright's own install
 # (`python3 -m playwright install --with-deps chromium`) is retired with it (`ask:449-phase4-slices` Q4: one browser crate, never a
 # Playwright dependency). Idempotent.

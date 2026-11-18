@@ -55,7 +55,8 @@ fn a_crop_fails_where_the_python_died() {
 }
 
 /// FR-008's one end-to-end test (ask:449-T167-realtree): the browser's (`ask:449-T80-order`: the browser behind one seam, with one
-/// end-to-end test): the pinned Chromium itself, a local page rendered and a glyph on it cropped - no network, a `file://` page.
+/// end-to-end test): the pinned Chromium itself, a local page rendered and a glyph on it cropped - no network, a `file://` page; and
+/// (feature 449 T150) a page lit and photographed before and after.
 #[test]
 fn the_real_chromium_renders_and_crops_a_local_page() {
     let dir = TempDir::new("browser-e2e");
@@ -86,4 +87,25 @@ fn the_real_chromium_renders_and_crops_a_local_page() {
     .unwrap();
     assert!(mhtml.starts_with("From: <Saved by Blink>"));
     assert_eq!(text, "a map");
+    // (feature 449 T150) the lit page, `page_lit`'s browser half, on a page whose map API lights its one class: the shots differ there
+    let lit_page = dir.path().join("lit.html");
+    std::fs::write(
+        &lit_page,
+        "<!DOCTYPE html><html><body style='margin:0'><svg id='map' viewBox='0 0 100 100' width='400' height='400'>\
+         <rect id='w' x='10' y='10' width='50' height='50' fill='#336'/></svg><script>window.l7rMap = {rasterReady: () => true, \
+         mode: () => 'vector', zoom: () => 1, highlight: (k) => { document.getElementById('w').setAttribute('fill', k ? '#fc0' : '#336'); }};\
+         </script></body></html>",
+    )
+    .unwrap();
+    let mut b = Browser::open(&var, crate::lit::options()).unwrap();
+    let got = crate::lit::lit(&mut b, &lit_page, "well", true).unwrap();
+    assert_eq!(
+        (got.mode, got.ctm, got.viewbox),
+        (
+            serde_json::json!("vector"),
+            serde_json::json!([4, 0, 0, 4, 0, 0]),
+            serde_json::json!([0, 0, 100, 100])
+        )
+    );
+    assert!(got.before.starts_with(b"\x89PNG") && got.before != got.after);
 }

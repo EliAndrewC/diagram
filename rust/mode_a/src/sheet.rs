@@ -1,6 +1,6 @@
 //! A Mode A sheet's reader (feature 449 T170): `l7r/diagram/interactive/sheet.py`'s tree - [`Node`], [`parse`], [`DEFS`] and
 //! [`element_kinds`] - ported for the audit's parse ([`crate::parse`]) and its tagged marks ([`crate::tagged`]); the page writing half of
-//! `sheet.py` (`pieces`, `write_sheet_page`) is the plan's step 2 (S7) and stays Python.
+//! `sheet.py` (`pieces`, `census`, `write_sheet_page`) is [`page`] (the plan's step 2, feature 449 T150).
 //!
 //! The reader TOKENIZES rather than parsing as XML (the Python's own reason: the page is a second serialization of the sheet's bytes), so a
 //! node holds slices of the sheet, never copies.
@@ -9,8 +9,8 @@
 //! audit keys a label's kind by - where the regex crate counts bytes, so every offset this crate hands out goes through [`Offsets`]. On an
 //! ASCII sheet (all six pool sheets, observed 2026-11-17, method: a grep for a byte over 0x7f) the two are the same.
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `sheet.py` stays the implementation for the Python that imports it (`pack_audit`, the
-//! pool generators' pages) until step 3; an edit of its reader makes the same change here in the same commit, and `parse/lockstep.rs`
+//! LOCKSTEP (`ask:449-engine-order` condition 3): `sheet.py`'s reader stays the implementation for the Python that imports it (`pack_audit`)
+//! until step 3 (its page half is Rust alone since T150); an edit of its reader makes the same change here in the same commit, and `parse/lockstep.rs`
 //! holds the two equal on every pool sheet.
 //!
 //! Research:
@@ -212,6 +212,8 @@ pub fn element_kinds(svg: &str) -> Result<BTreeMap<i64, String>, Error> {
     visit(&parse(svg)?, None, &mut out);
     Ok(out)
 }
+
+pub mod page;
 
 #[cfg(test)]
 mod tests;

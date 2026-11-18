@@ -221,11 +221,27 @@ impl Browser {
     /// # Errors
     /// The page's exception, or the protocol's.
     pub fn evaluate(&mut self, page: &Page, function: &str, arg: &Value) -> Result<Value, String> {
-        let got = self.page_call(
-            page,
+        self.evaluate_within(page, function, arg, crate::cdp::ANSWER)
+    }
+
+    /// [`Browser::evaluate`] answered within `wait`: a promise the page settles late (`page_lit`'s wait for its raster, a minute,
+    /// feature 449 T150).
+    ///
+    /// # Errors
+    /// The page's exception, the protocol's, or no answer within `wait`.
+    pub fn evaluate_within(
+        &mut self,
+        page: &Page,
+        function: &str,
+        arg: &Value,
+        wait: Duration,
+    ) -> Result<Value, String> {
+        let got = self.launched.cdp.call_within(
             "Runtime.evaluate",
-            json!({"expression": format!("({function})({arg})"), "returnByValue": true, "awaitPromise": true,
+            &json!({"expression": format!("({function})({arg})"), "returnByValue": true, "awaitPromise": true,
                    "userGesture": true}),
+            Some(&page.session),
+            wait,
         )?;
         if let Some(ex) = got.get("exceptionDetails") {
             let said = ex
@@ -293,6 +309,38 @@ impl Browser {
             page,
             "Input.dispatchMouseEvent",
             json!({"type": "mouseWheel", "x": x, "y": y, "modifiers": 2, "deltaX": 0, "deltaY": dy}),
+        )?;
+        self.page_call(
+            page,
+            "Input.dispatchKeyEvent",
+            json!({"type": "keyUp", "modifiers": 0, "key": "Control", "windowsVirtualKeyCode": 17, "code": "ControlLeft",
+                   "location": 1}),
+        )
+        .map(drop)
+    }
+
+    /// `page.keyboard.press("Control+=")`, the page's own zoom key: the four events Playwright sent for it, Control held through the
+    /// equals key's down and up (observed 2026-11-18 with `DEBUG=pw:protocol` on `page_lit --vector`, feature 449 T150).
+    ///
+    /// # Errors
+    /// The protocol's.
+    pub fn control_equal(&mut self, page: &Page) -> Result<(), String> {
+        self.page_call(
+            page,
+            "Input.dispatchKeyEvent",
+            json!({"type": "rawKeyDown", "modifiers": 2, "windowsVirtualKeyCode": 17, "code": "ControlLeft", "commands": [],
+                   "key": "Control", "text": "", "unmodifiedText": "", "autoRepeat": false, "location": 1, "isKeypad": false}),
+        )?;
+        self.page_call(
+            page,
+            "Input.dispatchKeyEvent",
+            json!({"type": "rawKeyDown", "modifiers": 2, "windowsVirtualKeyCode": 187, "code": "Equal", "commands": [],
+                   "key": "=", "text": "", "unmodifiedText": "", "autoRepeat": false, "location": 0, "isKeypad": false}),
+        )?;
+        self.page_call(
+            page,
+            "Input.dispatchKeyEvent",
+            json!({"type": "keyUp", "modifiers": 2, "key": "=", "windowsVirtualKeyCode": 187, "code": "Equal", "location": 0}),
         )?;
         self.page_call(
             page,
