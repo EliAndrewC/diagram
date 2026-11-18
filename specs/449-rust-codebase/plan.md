@@ -672,31 +672,4 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** No - a port, its cost measured for the GM.
 
 
-### T176 (T175's claims round: the audit's Rust units keyed one by one showed rules the Python never labeled)
-
-- **Approach**: claims text only. Each of the 61 findings `make claims-report` listed on `rust/mode_a` after T175 - a unit enforcing a placement or drawing rule under its module's NONE, a mislabeled class, one drifted wording - gets its own `Research:` claim naming the drawing page that attests it, or an honest CONVENTION, GUESS, DEVIATION or UNRESEARCHED label, mirrored word for word onto the kept Python copy; no code, constant, rule, message or verdict changes.
-
-   **Decisions** (constitution XII; the round arbiter's ruling `ask:set-down-449-pieces34`; `ask:449-phase4-slices` Q10; FR-002):
-   - Label-only, under the ruling's terms: no research pass, fetch or new question; a physical rule no page answers is labeled UNRESEARCHED and listed for the GM - three such (a lodging's own ground entrance, the middle gate's width, the height of a lantern, rack or well frame).
-   - No code moved: every changed Rust line is a doc comment, and the seven Python files' syntax trees less docstrings and strings are byte-identical before and after (observed 2026-11-18, method: `ast.dump` with docstrings and string constants removed, compared; `git diff` of the `.rs` files' changed lines).
-   - A claim that the code departs from its page says so (the notice board casting no shadow, a road refused when wider than its gate, a fence round the sanctuary alone passing, a gate width in a fix text no page gives): the claim is honest and the departure is a finding for the claims round, not changed here. `COVERAGE_TOL`'s words now say what its code does (slack above the band only); `TUB_DOOR_MAX_FT` is relabeled CONVENTION on both copies, its page (0100) recording its distance as the project's convention where the old claim called the page silent.
-   - Printed messages that cite a stale page or a figure no page gives stay as they are, bound output (FR-002), and are listed for the GM.
-   - Its measure: the agent took 330k tokens and 23 minutes (observed 2026-11-18, method: its usage report and `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t176/phases.log`). `make claims-owed` owes 148 claims - 100 new, 48 changed - in 15 files one impl-drift round (observed 2026-11-18, method: `make claims-owed`).
-   - The checks: `make static`, `make rust-test CRATE=rust/mode_a` and the pointer check green (observed 2026-11-18, method: those commands after the last edit).
-
-### T176 Approach (checklist part A)
-
-1. **The goal, in the world.** Every rule the audit enforces carries a label that says what backs it.
-2. **The constraints.** XII; the arbiter's ruling; Q10; FR-002.
-3. **Where each comes from.** R: the ruling; O: T175's claims round and the drawing pages read.
-4. **Do they describe the world here?** Read on this clone's research record, 2026-11-18.
-5. **The order.** After T175.
-6. **The exits.** Green: `make static`, the claims round recorded, a `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The owed claims recorded; the open research items listed for the GM.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No - claims text.
-
+<!-- plan-archive: T176 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
