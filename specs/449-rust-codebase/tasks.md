@@ -52,6 +52,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T176 The audit's placement rules labeled (constitution XII, found by T175's claims round): the Rust units of the audit are keyed one by one where the Python's walk keyed only a unit with its own claim, and about 40 of them carry a rule under their module's NONE - floating_doors, occluded_foreground, arch_on_approach, hall_at_an_end, sanctuary_on_axis, shrine_tree, well_clear_of_arch, privies_by_zone, fire_water_distribution, lodging_entrances, HIERARCHY, TUB_KINDS, end_meets, gate_feeds_its_road, the sun's wall and tree heights, the palette's colors and more (make claims-report): each given the page that attests it, CONVENTION, GUESS or UNRESEARCHED, a research pass where a placement question has none; the Python copies' claims to match
       research: rendering
+- [ ] T177 Six audit rules brought to their pages (constitution XIV; found by T175's and T176's claims rounds, DRIFTED): the notice board casts no shadow though 0190 measures it 10-11 ft high; a road refused when wider than its gate though 0088 draws the road at a compound's gate at its own width; arch_on_approach refuses a first arch 0220 lets move inward; gate_widths' fix text gives a width outside 0093's bands; no_precinct_enclosure's message calls a sanctuary fence a donation where 0223 draws none; lodging_entrances passes one door per joined block where 0097 and 0106 give each dwelling its own - each fixed in both the Python and the Rust copy, the pool sheets' verdicts measured before and after
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
