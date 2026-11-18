@@ -726,7 +726,9 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
     and its name inside it, like a caption beside a turned feature, takes its outline's first edge's angle (feature 449 T188: a
     turned building's roof name was set level), a quarter, half or three-quarter turn keeping it level; beside it, the caption is
     seated off the box of what it names read in that feature's own frame (`_framed`; feature 449 T189: a turned garden holding its
-    lantern and a lone turned block among its parts were named level beside, off the upright box).
+    lantern and a lone turned block among its parts were named level beside, off the upright box). A lone shape
+    carries its own outline as the subject's `ink`, which its leader ends on (feature 449 T191: a leader to a lone L-shaped house
+    was scored to its box's corner over the empty ground of its notch).
 
     Research:
         a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
@@ -743,9 +745,13 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
     # of unequal radii (feature 449 T188, T189) - and each beside seat with the same: only such a feature's caption is turned with it
     inner: list[tuple[Poly, bool]]
     beside: list[tuple[Poly, bool]]
+    # a lone shape's own outline, which its leader ends on where it is seated off a box read around it (feature 449 T191)
+    ink: tuple[Pt, ...] | None = None
     if len(own) == 1 and closed:
         squared = _squared(own[0])
-        # beside its box in its own frame - a rectangle's own outline, an L-shaped house's turned box (feature 449 T189)
+        ink = tuple(own[0].poly)
+        # beside its box in its own frame - a rectangle's own outline, an L-shaped house's turned box (feature 449 T189); its leader to
+        # its own outline, not to that box's corner over the empty ground of an L's notch (feature 449 T191)
         inner, beside = [(own[0].poly, squared)], [(_framed(own[0].poly, _turned(own[0].poly)), True) if squared else (box, False)]
     elif holder is not None and all(_box_within(s.poly, holder.poly) for s in own):
         # one outline holding the rest - a garden and the lantern in it (Ochiba's inner garden, read as a scatter, was
@@ -778,7 +784,7 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
         # irregular outline - is level
         out.append(Subject("area", tuple(poly), angle=_turned(poly) if squared else 0.0))
     for poly, squared in beside:
-        out.append(Subject("point", tuple(poly), angle=_turned(poly) if squared else 0.0))
+        out.append(Subject("point", tuple(poly), angle=_turned(poly) if squared else 0.0, ink=ink))
     return out
 
 

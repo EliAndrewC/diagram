@@ -13,6 +13,8 @@ kites named level, and a garden named beside on a road) and, after the plan revi
 radii named at its angle beside one of equal radii named level, and a circle scaled unequally named at its angle beside one drawn round and re-took every answer from its fixed Python.
 Feature 449 T189 added a tenth: a turned garden holding its lantern, a lone turned hall with its privy and a turned L-shaped house, named
 beside at their angle off their turned edge, and an L-shaped kura named inside at its angle, and re-took every answer from its fixed Python.
+Feature 449 T191 added an eleventh: a lone turned L-shaped house hemmed by sheds, its caption led out past twice the gap, its leader
+scored and drawn to the house itself, and re-took every answer from its fixed Python.
 """
 
 import json, sys, traceback
@@ -168,6 +170,18 @@ TURNED_BESIDE = sheet(
 )
 
 
+# feature 449 T191: a lone L-shaped house turned 30 degrees, hemmed by sheds with a privy at its notch, its caption led out past twice the
+# gap: its leader is scored to the house itself, so a standard seat below, on one line, is free - scored to its turned box's corner over
+# the empty notch, along the privy's edge, that seat's leader cost an obstacle, and the caption took a two-line seat of the fallback search
+LED_L = sheet(
+    '  <g data-kind="sheds" transform="rotate(30 200 150)"><rect x="163" y="113" width="74" height="20" fill="#2D2A24"/>'
+    '<rect x="163" y="162" width="24" height="20" fill="#2D2A24"/><rect x="163" y="133" width="20" height="29" fill="#2D2A24"/>'
+    '<rect x="217" y="133" width="20" height="15" fill="#2D2A24"/><rect x="215" y="160" width="12" height="12" fill="#2D2A24"/></g>\n',
+    '  <g data-kind="house" transform="rotate(30 200 150)"><polygon points="185,135 215,135 215,145 195,145 195,160 185,160" fill="#DDB87A"/>'
+    '<text x="200" y="150" font-size="8">ferry house</text></g>\n',
+)
+
+
 REFUSALS = [
     sheet('<g data-kind="x"><text x="5" y="5" font-size="6">lonely</text></g>\n'),
     sheet('<g data-kind="tub"><circle cx="50" cy="50" r="5"/><text x="80" y="80" font-size="6">tub</text></g>\n', back='<_x/>' + BACK),
@@ -187,7 +201,7 @@ REFUSALS = [
     sheet('  <g transform="rotate(x)"><rect width="1" height="1"/></g>\n'),
     "<svg",
 ]
-out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE]]
+out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE, LED_L]]
 for o in out:
     print(o.get("raises", "placed %d" % len(o.get("placed", ""))), file=sys.stderr)
 json.dump(out, open(sys.argv[1], "w"), indent=0)

@@ -61,7 +61,10 @@ LINE_STATIONS = 13
 class Subject:
     """What a caption names. `kind` is "point" (a feature beside which the caption stands - its drawn outline and its
     rotation), "line" (a polyline with its drawn half-width, the caption running along it near `hint`) or "area" (an
-    outline the caption lies inside). `civic` marks a subject that is itself a named civic building (FR-014)."""
+    outline the caption lies inside). `civic` marks a subject that is itself a named civic building (FR-014). `ink` is the
+    feature's own outline as the sheet's reader keeps it, which a lone shape's subject carries: its seats are measured off
+    `poly`, which may be a box read around it (an L-shaped house's, turned with it or upright), and its leader ends on `ink`
+    (feature 449 T191)."""
 
     kind: str
     poly: tuple[Pt, ...]
@@ -69,6 +72,7 @@ class Subject:
     half_width: float = 0.0
     hint: Pt | None = None
     civic: bool = False
+    ink: tuple[Pt, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -686,19 +690,23 @@ Research: no leader within twice the usual gap - research/questions/0242-labels-
 
 
 def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
-    """The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names,
-    trimmed a little at each end. None within `LEADERLESS_RINGS` (the preferred offset and the step out from it, out to twice
-    the usual gap) and for an area, whose name lies inside it; None too where the block touches what it names (a line that
-    bends back can hold a leader ring's block across another of its segments) - nothing is left to tie back (feature 449 T184:
-    it divided by the zero distance there).
+    """The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names -
+    the feature's own outline (`ink`) where the subject carries one, a lone shape seated off a box read around it, so a leader
+    to a lone L-shaped house ends on the house, not on its box's corner over the empty ground of its notch (feature 449 T191) -
+    trimmed a little at each end.
+    None within `LEADERLESS_RINGS` (the preferred offset and the step out from it, out to twice the usual gap) and for an
+    area, whose name lies inside it; None too where the block touches what it names (a line that bends back can hold a leader
+    ring's block across another of its segments) - nothing is left to tie back (feature 449 T184: it divided by the zero
+    distance there).
 
     Research:
-        when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature
+        when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line
+        where a leader ends - CONVENTION: from the caption block's nearest point to the nearest point of the outline the subject carries as the feature's own (`ink`: a lone shape's outline as the sheet's reader keeps it, a disc's its drawn box), else of the subject's outline - a subject of several parts is scored to its box, and the hand sheet ends its drawn leader on the parts' ink (`leader_to_ink`); 0242 ties a displaced caption to its feature with a leader line but does not say at which point, the nearest is the shortest tie, and a box's corner may stand over empty ground, as an L-shaped house's notch (feature 449 T191)
         leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world
     """
     if ring < LEADERLESS_RINGS or subject.kind == "area":
         return None
-    a, b = nearest_points(block, list(subject.poly), closed=subject.kind != "line")
+    a, b = nearest_points(block, list(subject.ink if subject.ink is not None else subject.poly), closed=subject.kind != "line")
     d = math.dist(a, b)
     if d == 0.0:
         return None  # the block touches what it names - a line bent back under a leader ring's seat - so nothing ties it back (feature 449 T184)

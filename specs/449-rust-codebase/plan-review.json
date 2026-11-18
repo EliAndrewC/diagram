@@ -690,6 +690,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T191 (step 3a's last label placer defect, T190's probe; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "c5be1df252ce5000df9eed0ee0b1472fc15c444ce332c11bd34cecc819e9defd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T191 Approach (checklist part A)": {
+   "sha256": "61473587f9d01e643af65b71ec8d121698dce98c2c44beeb699ab9a1325d6e68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12392,6 +12404,82 @@
      "why": "The standard gate; narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T191 (step 3a's last label placer defect, T190's probe; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T191 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "the cause",
+     "summary": "leader_of ran a lone shape's leader to the nearest point of its (turned) box, which for an L can be the box corner over the notch's empty ground; measured off the L at 47/54/78 of 256 ring-9 seats on HEAD",
+     "class": "within",
+     "why": "Diagnosis of a known step-3a defect the GM's 2026-11-18 rule ('fix all known bugs in each step before moving on') requires fixed; it narrows nothing."
+    },
+    {
+     "id": "the fix: Subject.ink, leader ended on the feature's own outline",
+     "summary": "Subject gains ink (a lone shape's own outline); leader_of ends the leader on ink where carried, else on the box; in both the Rust and the kept Python",
+     "class": "within",
+     "why": "Fixes the defect in every live copy, as the fix-as-we-go rule asks; outputs may change under FR-002 as amended by T180."
+    },
+    {
+     "id": "seats, association gap and referent box still read the box",
+     "summary": "Only the leader's end moves to the outline; seat measurement stays off the turned box; the alternative (hand the L over as its own outline) is priced and not taken because it moves the gap and referent box, which no finding asks for",
+     "class": "within",
+     "why": "No defect in the gap is known: measured, no pool lone shape's ring-0 seat differs by more than 0.5 px between box and outline (leftover2.log re-read: 0). Leaving untouched what no finding names keeps the change to the fix; the box is the turned box 0242 asks for, not an upright one."
+    },
+    {
+     "id": "research claims",
+     "summary": "The claim 'when a leader is drawn' trimmed to quote only 0242's page (it had said 'to the nearest point', words the page lacks); a new CONVENTION claim 'where a leader ends' records the shortest-tie choice and that a several-part subject is still scored to its box",
+     "class": "within",
+     "why": "Corrects a claim to its source and labels an unsourced choice as a convention; adds no behavior beyond the fix."
+    },
+    {
+     "id": "the Rust test and the held hemmed L",
+     "summary": "a_leader_to_a_lone_l_shaped_outline_ends_on_the_l_not_its_box, red before and green after; an eleventh held hand sheet (lone turned L hemmed by sheds, privy at its notch)",
+     "class": "within",
+     "why": "Enforcement of the fix the request requires; a check that fails only when the fix is absent serves the request."
+    },
+    {
+     "id": "held answers changed",
+     "summary": "held.json re-taken from the fixed Python; 27 earlier answers unchanged, the new sheet's answer differs from HEAD's Python because HEAD scored a leader to the box corner along the privy's edge",
+     "class": "within",
+     "why": "A verdict changing as a bug is fixed is expected under the fix-as-we-go rule and FR-002's exception for a check improved on purpose; the move is shown to be the fix's own."
+    },
+    {
+     "id": "pool reach, no re-audit",
+     "summary": "No caption on the four caption-placing sheets moves (190 captions, 33 leaders, 14 to lone shapes); Hoshigaoka and the two compound sheets regenerated; none re-audited",
+     "class": "within",
+     "why": "Nothing on the pool moved, so there is nothing to re-audit; the byte comparisons are read as a signal, not held as an exactness standard."
+    },
+    {
+     "id": "two leader-end leftovers deferred to the next task",
+     "summary": "A disc leader ending on its box rather than the drawn curve (3 pool leaders, 1.75-4.45 px) and a several-part subject scored to its box while drawn to its parts' ink (2 pool leaders, band scoring identical) are left to a next task before step 3b",
+     "class": "within",
+     "why": "The GM's rule binds the STEP ('fix all known bugs in each step before moving on to porting the next step'), not each task. Per the dispatch they are filed as T192 and ordered before step 3b, so both known defects are fixed inside step 3a; the split narrows nothing asked. Figures re-read in leftover.log and leftover3.log match the section."
+    },
+    {
+     "id": "measured non-defects",
+     "summary": "Ring-0 gap off box vs outline (0 seats over 0.5 px on the pool) and leader_blockers' exclusion of a glyph inside the subject's box (0 leaders over a notch tub at 5 places x 256 seats x 3 angles, HEAD and clone)",
+     "class": "within",
+     "why": "Measured, not assumed (notchprobe.log and leftover2.log re-read: 0); no known bug is set aside, so the step rule is not narrowed."
+    },
+    {
+     "id": "0242 drawing page bullet",
+     "summary": "Convention bullet amended for a turned ellipse of unequal radii having a direction of its own and a holding outline seated level where it has none; comment trimmed to fit the 20,000-byte cap (19,998); landed per the dispatch with make quick green",
+     "class": "within",
+     "why": "Brings the research record in line with the behavior the step already carries (Principle XII); trimming a comment to fit a size cap changes no claim, and the heading words the claim quotes are kept whole."
+    },
+    {
+     "id": "the checks",
+     "summary": "make static, make rust-test, make quick after the last edit; then plan review, claims round, gated make land",
+     "class": "within",
+     "why": "The project's standing exits; nothing added or skipped."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21972,6 +22060,80 @@
      "summary": "make static, make rust-test and make quick run in sequence after the last edit, logged in scratch.",
      "class": "within",
      "why": "The standard gate; narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T191": {
+   "section_sha256": "1c4be163d190f4fb4199a059095e03c5bea3004b395a31ae29d3e5027b61806e",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "the cause",
+     "summary": "leader_of ran a lone shape's leader to the nearest point of its (turned) box, which for an L can be the box corner over the notch's empty ground; measured off the L at 47/54/78 of 256 ring-9 seats on HEAD",
+     "class": "within",
+     "why": "Diagnosis of a known step-3a defect the GM's 2026-11-18 rule ('fix all known bugs in each step before moving on') requires fixed; it narrows nothing."
+    },
+    {
+     "id": "the fix: Subject.ink, leader ended on the feature's own outline",
+     "summary": "Subject gains ink (a lone shape's own outline); leader_of ends the leader on ink where carried, else on the box; in both the Rust and the kept Python",
+     "class": "within",
+     "why": "Fixes the defect in every live copy, as the fix-as-we-go rule asks; outputs may change under FR-002 as amended by T180."
+    },
+    {
+     "id": "seats, association gap and referent box still read the box",
+     "summary": "Only the leader's end moves to the outline; seat measurement stays off the turned box; the alternative (hand the L over as its own outline) is priced and not taken because it moves the gap and referent box, which no finding asks for",
+     "class": "within",
+     "why": "No defect in the gap is known: measured, no pool lone shape's ring-0 seat differs by more than 0.5 px between box and outline (leftover2.log re-read: 0). Leaving untouched what no finding names keeps the change to the fix; the box is the turned box 0242 asks for, not an upright one."
+    },
+    {
+     "id": "research claims",
+     "summary": "The claim 'when a leader is drawn' trimmed to quote only 0242's page (it had said 'to the nearest point', words the page lacks); a new CONVENTION claim 'where a leader ends' records the shortest-tie choice and that a several-part subject is still scored to its box",
+     "class": "within",
+     "why": "Corrects a claim to its source and labels an unsourced choice as a convention; adds no behavior beyond the fix."
+    },
+    {
+     "id": "the Rust test and the held hemmed L",
+     "summary": "a_leader_to_a_lone_l_shaped_outline_ends_on_the_l_not_its_box, red before and green after; an eleventh held hand sheet (lone turned L hemmed by sheds, privy at its notch)",
+     "class": "within",
+     "why": "Enforcement of the fix the request requires; a check that fails only when the fix is absent serves the request."
+    },
+    {
+     "id": "held answers changed",
+     "summary": "held.json re-taken from the fixed Python; 27 earlier answers unchanged, the new sheet's answer differs from HEAD's Python because HEAD scored a leader to the box corner along the privy's edge",
+     "class": "within",
+     "why": "A verdict changing as a bug is fixed is expected under the fix-as-we-go rule and FR-002's exception for a check improved on purpose; the move is shown to be the fix's own."
+    },
+    {
+     "id": "pool reach, no re-audit",
+     "summary": "No caption on the four caption-placing sheets moves (190 captions, 33 leaders, 14 to lone shapes); Hoshigaoka and the two compound sheets regenerated; none re-audited",
+     "class": "within",
+     "why": "Nothing on the pool moved, so there is nothing to re-audit; the byte comparisons are read as a signal, not held as an exactness standard."
+    },
+    {
+     "id": "two leader-end leftovers deferred to the next task",
+     "summary": "A disc leader ending on its box rather than the drawn curve (3 pool leaders, 1.75-4.45 px) and a several-part subject scored to its box while drawn to its parts' ink (2 pool leaders, band scoring identical) are left to a next task before step 3b",
+     "class": "within",
+     "why": "The GM's rule binds the STEP ('fix all known bugs in each step before moving on to porting the next step'), not each task. Per the dispatch they are filed as T192 and ordered before step 3b, so both known defects are fixed inside step 3a; the split narrows nothing asked. Figures re-read in leftover.log and leftover3.log match the section."
+    },
+    {
+     "id": "measured non-defects",
+     "summary": "Ring-0 gap off box vs outline (0 seats over 0.5 px on the pool) and leader_blockers' exclusion of a glyph inside the subject's box (0 leaders over a notch tub at 5 places x 256 seats x 3 angles, HEAD and clone)",
+     "class": "within",
+     "why": "Measured, not assumed (notchprobe.log and leftover2.log re-read: 0); no known bug is set aside, so the step rule is not narrowed."
+    },
+    {
+     "id": "0242 drawing page bullet",
+     "summary": "Convention bullet amended for a turned ellipse of unequal radii having a direction of its own and a holding outline seated level where it has none; comment trimmed to fit the 20,000-byte cap (19,998); landed per the dispatch with make quick green",
+     "class": "within",
+     "why": "Brings the research record in line with the behavior the step already carries (Principle XII); trimming a comment to fit a size cap changes no claim, and the heading words the claim quotes are kept whole."
+    },
+    {
+     "id": "the checks",
+     "summary": "make static, make rust-test, make quick after the last edit; then plan review, claims round, gated make land",
+     "class": "within",
+     "why": "The project's standing exits; nothing added or skipped."
     }
    ],
    "verdict": "CLEAR"

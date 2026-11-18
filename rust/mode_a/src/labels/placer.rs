@@ -41,7 +41,9 @@ pub enum Kind {
 }
 
 /// What a caption names (the Python's `Subject`): its kind, its drawn outline or polyline, its rotation, a line's drawn half-width, the
-/// point a line's caption runs near, and whether it is itself a named civic building (FR-014).
+/// point a line's caption runs near, whether it is itself a named civic building (FR-014), and `ink`, the feature's own outline as the
+/// sheet's reader keeps it, which a lone shape's subject carries: its seats are measured off `poly`, which may be a box read around it (an
+/// L-shaped house's, turned with it or upright), and its leader ends on `ink` (feature 449 T191).
 #[derive(Debug, Clone, PartialEq)]
 pub struct Subject {
     pub kind: Kind,
@@ -50,6 +52,7 @@ pub struct Subject {
     pub half_width: f64,
     pub hint: Option<Pt>,
     pub civic: bool,
+    pub ink: Option<Vec<Pt>>,
 }
 
 impl Subject {
@@ -63,6 +66,7 @@ impl Subject {
             half_width: 0.0,
             hint: None,
             civic: false,
+            ink: None,
         }
     }
 }
@@ -582,20 +586,23 @@ pub fn in_frame(block: &[Pt], frame: Option<Frame>) -> bool {
     !(bx0 < f.0 || by0 < f.1 || bx1 > f.2 || by1 > f.3)
 }
 
-/// The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names, trimmed a little at
-/// each end. None within [`LEADERLESS_RINGS`] and for an area, whose name lies inside it; None too where the block touches what it names
-/// (a line that bends back can hold a leader ring's block across another of its segments) - nothing is left to tie back, where the Python
-/// divided by the zero distance (feature 449 T184).
+/// The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names - the feature's own
+/// outline (`ink`) where the subject carries one, a lone shape seated off a box read around it, so a leader to a lone L-shaped house ends
+/// on the house, not on its box's corner over the empty ground of its notch (feature 449 T191) - trimmed a little at each end. None within [`LEADERLESS_RINGS`] and for
+/// an area, whose name lies inside it; None too where the block touches what it names (a line that bends back can hold a leader ring's
+/// block across another of its segments) - nothing is left to tie back, where the Python divided by the zero distance (feature 449 T184).
 ///
 /// Research:
-///     when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature
+///     when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line
+///     where a leader ends - CONVENTION: from the caption block's nearest point to the nearest point of the outline the subject carries as the feature's own (`ink`: a lone shape's outline as the sheet's reader keeps it, a disc's its drawn box), else of the subject's outline - a subject of several parts is scored to its box, and the hand sheet ends its drawn leader on the parts' ink (`leader_to_ink`); 0242 ties a displaced caption to its feature with a leader line but does not say at which point, the nearest is the shortest tie, and a box's corner may stand over empty ground, as an L-shaped house's notch (feature 449 T191)
 ///     leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world
 #[must_use]
 pub fn leader_of(ring: usize, block: &[Pt], subject: &Subject) -> Option<(Pt, Pt)> {
     if ring < LEADERLESS_RINGS || subject.kind == Kind::Area {
         return None;
     }
-    let (a, b) = nearest_points(block, &subject.poly, subject.kind != Kind::Line);
+    let to = subject.ink.as_deref().unwrap_or(&subject.poly);
+    let (a, b) = nearest_points(block, to, subject.kind != Kind::Line);
     let d = dist(a, b);
     if d == 0.0 {
         return None;

@@ -75,7 +75,7 @@ def caption_reading(text):
         rows.append({"head": caps[0].at, "x": conv(p.x), "y": conv(p.y), "angle": conv(p.angle), "lines": list(p.lines),
                      "block": conv(p.block), "ring": p.ring, "rank": p.rank, "position": p.position, "cost": conv(p.cost),
                      "leader": conv(p.leader), "raw_leader": conv(raw.get(id(p))), "per": per,
-                     "subject": {"kind": s.kind, "poly": conv(s.poly), "angle": conv(s.angle)}})
+                     "subject": {"kind": s.kind, "poly": conv(s.poly), "angle": conv(s.angle), "ink": conv(s.ink)}})
     return {"rows": rows, "placed": out, "covers": sorted(covers.values(), key=lambda c: repr(c["polys"]))}
 "#;
 
@@ -160,7 +160,10 @@ fn python_row(r: &Value, caps: &[Vec<usize>], at_of: &BTreeMap<usize, usize>) ->
         idx,
         p,
         per,
-        Subject::new(kind, pts(&s["poly"]), f(&s["angle"])),
+        Subject {
+            ink: (!s["ink"].is_null()).then(|| pts(&s["ink"])),
+            ..Subject::new(kind, pts(&s["poly"]), f(&s["angle"]))
+        },
     )
 }
 

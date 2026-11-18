@@ -199,7 +199,9 @@ fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
 /// ellipse of unequal radii) is turned with the sheet, and its name inside it, like a caption beside a turned feature, takes its outline's
 /// first edge's angle (feature 449 T188: a turned building's roof name was set level), a quarter, half or three-quarter turn keeping it
 /// level; beside it, the caption is seated off the box of what it names read in that feature's own frame ([`framed`]; feature 449 T189: a
-/// turned garden holding its lantern and a lone turned block among its parts were named level beside, off the upright box).
+/// turned garden holding its lantern and a lone turned block among its parts were named level beside, off the upright box). A lone shape
+/// carries its own outline as the subject's `ink`, which its leader ends on (feature 449 T191: a leader to a lone L-shaped
+/// house was scored to its box's corner over the empty ground of its notch).
 ///
 /// Research:
 ///     a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
@@ -240,10 +242,14 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
     // each inside seat with whether it has a direction of its own - a drawn rect, an outline whose every corner is square, an ellipse of
     // unequal radii (feature 449 T188, T189) - and each beside seat with the same: only such a feature's caption is turned with it
     let level = |poly: &Vec<Pt>| (poly.clone(), false);
+    // a lone shape's own outline, which its leader ends on where it is seated off a box read around it (feature 449 T191)
+    let mut ink = None;
     let (inner, beside): (Vec<Inside>, Vec<Inside>) = if own.len() == 1 && !closed.is_empty() {
         let one = own[0].poly.clone();
         let sq = squared(own[0]);
-        // beside its box in its own frame - a rectangle's own outline, an L-shaped house's turned box (feature 449 T189)
+        ink = Some(one.clone());
+        // beside its box in its own frame - a rectangle's own outline, an L-shaped house's turned box (feature 449 T189); its leader to
+        // its own outline, not to that box's corner over the empty ground of an L's notch (feature 449 T191)
         let by = if sq {
             (framed(&one, turned(&one)), true)
         } else {
@@ -300,7 +306,10 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
     }
     for (poly, sq) in beside {
         let angle = if sq { turned(&poly) } else { 0.0 };
-        out.push(Subject::new(Kind::Point, poly, angle));
+        out.push(Subject {
+            ink: ink.clone(),
+            ..Subject::new(Kind::Point, poly, angle)
+        });
     }
     out
 }
