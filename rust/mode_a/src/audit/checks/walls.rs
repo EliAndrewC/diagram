@@ -7,7 +7,7 @@
 
 use super::{overlap_px, sort_desc};
 use crate::grids::FTPX;
-use crate::parse::{wall_kind, ParsedPlan, Rect, WALL_STROKE};
+use crate::parse::{ParsedPlan, Rect, WALL_STROKE};
 use crate::py::{half_sum, max, min, round_to};
 
 /// The gateway zone reaches 3 ft in front of and behind the wall ink: a stone set just inside or just outside the masonry is still in
@@ -215,8 +215,7 @@ fn with_clearance(band: &Rect, clear: f64) -> Rect {
 
 /// Structures overlapping the ink of a compound wall or a court divider - grown by [`WALL_FACE_CLEAR_FT`] on its faces - by more than
 /// `min_px`, worst first. A wall is a built object with real thickness: a structure ABUTS it or the wall is drawn as segments BROKEN
-/// around a structure that IS part of it. Every band the parse keeps is inked in one of the two walls' strokes, so the Python's
-/// `WALL_KIND[band.fill]` never missed.
+/// around a structure that IS part of it.
 #[must_use]
 pub fn structures_on_walls(plan: &ParsedPlan, min_px: f64) -> Vec<StructureOnWall> {
     let mut out = Vec::new();
@@ -226,7 +225,13 @@ pub fn structures_on_walls(plan: &ParsedPlan, min_px: f64) -> Vec<StructureOnWal
         for band in &plan.wall_bands {
             let ov = overlap_px(s.x, s.y, s.x2(), s.y2(), &with_clearance(band, clear));
             if ov > min_px && worst.is_none_or(|(w, _)| ov > w) {
-                worst = Some((ov, wall_kind(&band.fill).unwrap_or_default()));
+                // every band the parse keeps is inked in one of the two walls' strokes (T182: a lookup whose miss could not run)
+                let wall = if band.fill == WALL_STROKE {
+                    "compound wall"
+                } else {
+                    "court divider"
+                };
+                worst = Some((ov, wall));
             }
         }
         if let Some((ov, wall)) = worst {
@@ -313,10 +318,14 @@ pub fn aligned_gaps(plan: &ParsedPlan) -> Vec<Gap> {
 /// Research:
 ///     its figures guessed on 0116 - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 8 (wooden gap over 8 ft is loose)
 ///     its loose gap - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 10 (a kura fire-gap over 10 ft is loose)
+///     its fire-gap floor - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 6 (a kura fire-gap under 6 ft is too tight, the bottom of the page's 6-10 ft)
 #[must_use]
 pub fn gap_tag(gap: &Gap) -> &'static str {
     if gap.kura {
-        if gap.ft <= 10.0 {
+        // FEATURE 449 T182: a kura gap under the page's 6 ft floor was tagged OK, the floor never enforced
+        if gap.ft < 6.0 {
+            "TIGHT (kura gap <6 ft)"
+        } else if gap.ft <= 10.0 {
             "fire-gap OK (kura)"
         } else {
             "LOOSE (kura gap >10 ft)"

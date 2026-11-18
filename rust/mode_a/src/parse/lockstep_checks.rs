@@ -35,7 +35,7 @@ from l7r.diagram.tools.pack_audit import mapmatch as MM, onmap as OM, labels as 
 from l7r.diagram import compound_model as CM, compound_parts as CP
 from l7r.diagram.buildings import types as BT
 from shapely.ops import unary_union
-FIXTURE_TIER = {"ochiba": "magistracies", "hayakawa": "magistracies", "ubame": "magistracies", "hoshigaoka": "country-shrines"}
+FIXTURE_TIER = {"ochiba": "magistracies", "hayakawa": "magistracies", "ubame": "magistracies", "county": "magistracies", "hoshigaoka": "country-shrines"}
 HEAVY = {"garden_sun", "perimeter_hugging", "coverage_band"}
 MAPS_RECORDING = (("hoshigaoka-shrine", "country-shrines"), ("ubame-magistracy", "magistracies"), ("ochiba-magistracy", "magistracies"),
                   ("nowhere-x", "magistracies"), ("ubame-x", "no-such-tier"), ("ubame-x", "country-shrines"),
@@ -163,13 +163,13 @@ def check_defaults():
                            "DOOR_FLUSH_TOL_PX DOOR_NEAR_PX WALL_OVERLAP_MIN_PX DOOR_ON_WALL_PX SHOE_STONE_ID DOORLESS_KINDS WALL_FACE_CLEAR_FT"),
                        (SH, "OVERLAP_SHARE COVERAGE_FLOOR COVERAGE_CEILING COVERAGE_TOL HUGGING_FLOOR CROP_MAX_MARGIN_PX CROP_TOL_PX GATE_MIN_FT "
                             "GATE_MAX_FT PARCHMENT_SHARE COVERAGE_FIX AXIS_TOL_FT EDGE_TOL_FT STALL_FT HALL_MIN_SPAN_FT "
-                            "DUPLICATE_TREE_FRACTION APPROACH_FT CLEAR_FT SHRINE_TREE_FT"),
+                            "DUPLICATE_TREE_FRACTION APPROACH_FT CLEAR_FT SHRINE_TREE_FT ARCH_COUNTS INNERMOST_FT INNERMOST_TOL_FT"),
                        (SU, "LAT_DEG DECL_DEG STEP_H LIT_SHARE SUN_BED_H HALF_SHADE_BED_H BUILDING_FT WALL_FT TREE_FT SMALL_BUILDING_FT "
-                            "SMALL_BUILDING_SQFT NOT_STANDING MIN_SUN_DEG MIN_BED_PX GARDEN_KIND"),
+                            "SMALL_BUILDING_SQFT NOT_STANDING NOTICE_BOARD_KIND NOTICE_BOARD_FT MIN_SUN_DEG MIN_BED_PX GARDEN_KIND"),
                        (RD, "ROAD_KINDS ARCH_KINDS DESTINATION_KINDS ROAD_GATE_TOL_FT"),
                        (MM, "MAP_GRAIN_PX SIZE_GRAIN_PX CLASSES POLYLINE_KEYS SHEET_WAY_KINDS SHEET_IDS MAP_TREES TIER_KEYS"),
                        (MD, "DOOR_WALL_TOL_PX"), (PL, "GRANARY_SLATS PRIVY WELL ROLES"),
-                       (PR, "LODGING ENTRANCE_KINDS JOIN_PX PRIVY_FILL COURT_KINDS ATTACHED_PX PRIVY_MIN TUB_KINDS KITCHEN_TUBS HIERARCHY "
+                       (PR, "LODGING ENTRANCE_KINDS ROW_KINDS JOIN_PX PRIVY_FILL COURT_KINDS ATTACHED_PX PRIVY_MIN RESIDENCE_PRIVIES TUB_KINDS KITCHEN_TUBS HIERARCHY "
                             "VERANDA_FT VERANDA_TOL_PX"),
                        (OM, "GRAMMAR OPT_OUT")):
         for n in names.split():
@@ -533,15 +533,17 @@ pub fn reading(path: &Path, text: &str, tree: &Path) -> Value {
 }
 
 /// The fixtures' tiers by the sheet they were cut from (the registry's fixture test's, `tests/tools/test_registry.py` before feature 449
-/// FR-001b deleted it).
-const FIXTURE_TIER: [(&str, &str); 4] = [
+/// FR-001b deleted it). FEATURE 449 T182: `county-` (the county magistracy example's two red fixtures) had no row, so their checks ran
+/// outside their tier.
+const FIXTURE_TIER: [(&str, &str); 5] = [
     ("ochiba", "magistracies"),
     ("hayakawa", "magistracies"),
     ("ubame", "magistracies"),
+    ("county", "magistracies"),
     ("hoshigaoka", "country-shrines"),
 ];
 
-fn sheet_tier(path: &Path, tree: &Path) -> Option<String> {
+pub(crate) fn sheet_tier(path: &Path, tree: &Path) -> Option<String> {
     // every sheet the lockstep names is absolute, and its tier is the name two folders up whether or not `..` is folded first
     let t = path
         .parent()
@@ -713,12 +715,14 @@ pub fn defaults(tree: &Path) -> Value {
         out.extend(part);
     }
     if let Value::Object(part) = json!({
-        "shared.arch_on_approach.edge_tol_ft": f(sh::EDGE_TOL_FT), "shared.trees_overlap.tol": f(c::WALL_OVERLAP_MIN_PX),
+        "shared.arch_on_approach.edge_tol_ft": f(sh::EDGE_TOL_FT), "shared.ARCH_COUNTS": sh::ARCH_COUNTS, "shared.INNERMOST_FT": f(sh::INNERMOST_FT),
+        "shared.INNERMOST_TOL_FT": f(sh::INNERMOST_TOL_FT), "shared.trees_overlap.tol": f(c::WALL_OVERLAP_MIN_PX),
         "shared.ink_bounds.canvas_area": f(0.0),
         "sun.LAT_DEG": f(sun::LAT_DEG), "sun.DECL_DEG": f(sun::DECL_DEG), "sun.STEP_H": f(sun::STEP_H), "sun.LIT_SHARE": f(sun::LIT_SHARE),
         "sun.SUN_BED_H": f(sun::SUN_BED_H), "sun.HALF_SHADE_BED_H": f(sun::HALF_SHADE_BED_H), "sun.BUILDING_FT": f(sun::BUILDING_FT),
         "sun.WALL_FT": f(sun::WALL_FT), "sun.TREE_FT": f(sun::TREE_FT), "sun.SMALL_BUILDING_FT": f(sun::SMALL_BUILDING_FT),
         "sun.SMALL_BUILDING_SQFT": f(sun::SMALL_BUILDING_SQFT), "sun.NOT_STANDING": sorted(&sun::NOT_STANDING),
+        "sun.NOTICE_BOARD_KIND": sun::NOTICE_BOARD_KIND, "sun.NOTICE_BOARD_FT": f(sun::NOTICE_BOARD_FT),
         "sun.MIN_SUN_DEG": f(sun::MIN_SUN_DEG), "sun.MIN_BED_PX": f(sun::MIN_BED_PX), "sun.GARDEN_KIND": sun::GARDEN_KIND,
         "sun.sun_at.lat_deg": f(sun::LAT_DEG), "sun.sun_at.decl_deg": f(sun::DECL_DEG), "sun.lit_hours.half_shade": false
     }) {
@@ -740,7 +744,7 @@ pub fn defaults(tree: &Path) -> Value {
         "marks_drawn.DOOR_WALL_TOL_PX": f(md::DOOR_WALL_TOL_PX),
         "palette.GRANARY_SLATS": pl::GRANARY_SLATS, "palette.PRIVY": pl::PRIVY, "palette.WELL": pl::WELL, "palette.ROLES": roles,
         "palette.palette_roles.roles": roles_value(),
-        "program_rules.LODGING": sorted(&pr::LODGING), "program_rules.ENTRANCE_KINDS": sorted(&pr::ENTRANCE_KINDS),
+        "program_rules.LODGING": sorted(&pr::LODGING), "program_rules.ENTRANCE_KINDS": sorted(&pr::ENTRANCE_KINDS), "program_rules.ROW_KINDS": sorted(&pr::ROW_KINDS), "program_rules.RESIDENCE_PRIVIES": pr::RESIDENCE_PRIVIES,
         "program_rules.JOIN_PX": f(pr::JOIN_PX), "program_rules.PRIVY_FILL": pr::PRIVY_FILL, "program_rules.COURT_KINDS": fs(&pr::COURT_KINDS),
         "program_rules.ATTACHED_PX": f(pr::ATTACHED_PX), "program_rules.PRIVY_MIN": pr::PRIVY_MIN, "program_rules.TUB_KINDS": fs(&pr::TUB_KINDS),
         "program_rules.KITCHEN_TUBS": pr::KITCHEN_TUBS, "program_rules.HIERARCHY": hierarchy.clone(),
@@ -749,7 +753,7 @@ pub fn defaults(tree: &Path) -> Value {
         out.extend(part);
     }
     if let Value::Object(part) = json!({
-        "program_rules.components.join_px": f(pr::JOIN_PX), "program_rules.lodging_entrances.tol": f(c::DOOR_FLUSH_TOL_PX),
+        "program_rules.components.join_px": f(pr::JOIN_PX), "program_rules.dwellings.tol": f(pr::JOIN_PX), "program_rules.lodging_entrances.tol": f(c::DOOR_FLUSH_TOL_PX),
         "program_rules.privies_by_zone.minimum": pr::PRIVY_MIN, "program_rules.size_hierarchy.pairs": hierarchy,
         "program_rules.veranda_depths.band": pair(pr::VERANDA_FT),
         "report.format_report.cell": crate::grids::CELL, "report.format_report.text": "", "report.format_report.tier": null,

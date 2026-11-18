@@ -134,6 +134,38 @@ fn a_manifest_of_the_wrong_shape_is_refused_in_the_python_s_words() {
     }
 }
 
+/// T171: an entrance board's line counts the households' ways out that pass it (feature 261 FR-015), not the farmhouses within 250 ft;
+/// a board of any other seat keeps the 250-ft count.
+#[test]
+fn an_entrance_board_is_judged_by_the_ways_out_that_pass_it() {
+    let lanes = json!([
+        {"pts": [[-200, 0], [100, 0]], "connector": true},
+        {"pts": [[100, 0], [100, 80]]},
+        {"pts": [[100, 0], [250, 0]]}
+    ]);
+    let m = json!({
+        "houses": [{"x": 110, "y": 85}, {"x": 255, "y": 10}, {"x": 900, "y": 900}],
+        "lanes": lanes, "meta": {"kosatsuba_seat": "entrance"},
+        "kosatsuba": [{"x": 100, "y": 70}, {"x": 100, "y": 5}]
+    });
+    let body = census(&m).unwrap();
+    assert_eq!(
+        body.lines().rev().take(2).collect::<Vec<_>>(),
+        [
+            "- notice board at the entrance, **(100.0, 5.0)**: **2** of 2 households' ways out pass it",
+            "- notice board at the entrance, **(100.0, 70.0)**: **1** of 2 households' ways out pass it"
+        ]
+    );
+    let center = json!({"houses": [{"x": 110, "y": 85}], "lanes": lanes, "meta": {"kosatsuba_seat": "center"},
+                        "kosatsuba": [{"x": 100, "y": 70}]});
+    assert!(census(&center)
+        .unwrap()
+        .ends_with("- notice board at **(100.0, 70.0)**, **1** of 1 farmhouses within 250 ft"));
+    let bad =
+        json!({"houses": [], "lanes": [{"pts": [[1]]}], "meta": {"kosatsuba_seat": "entrance"}});
+    assert!(census(&bad).is_err());
+}
+
 #[test]
 fn the_block_is_replaced_between_its_markers_only() {
     let m = json!({});

@@ -38,6 +38,11 @@ OUT_SVG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ochiba-round
 
 
 def ochiba_program() -> C.CompoundProgram:
+    """Ochiba's program as its sheet draws it, in feet.
+
+    Research:
+        the residence and its rooms - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0101-privies-setchin.drawing.html: Ochiba's house measured off ochiba-magistracy.svg at 3 px = 1 ft (feature 449 T182), one block of 90 x 50 ft in two rows - the family's quarters and the lord's in the north row, the guest room and the reception room in the south (garden) row, each 45 x 25 ft, the maids' room 12 x 12 ft at the family's west end - with its reception at one end, as 0091 draws the house; the reception room gives the placer the room 0101 seats the guests' privy behind, the house's second privy
+    """
     env = C.Envelope(w_ft=267.0, h_ft=200.0, divider_ft=100.0, gate_w_ft=13.3)
     # real open courts measured off the finished map
     spine = (
@@ -49,14 +54,39 @@ def ochiba_program() -> C.CompoundProgram:
     b = C.BuildingSpec
     buildings = (
         # inner (residence) court
-        b("residence (W)", "lord", 90.0, 25.0, "inner", "N", order=10, feature="residence"),
-        b("residence (E)", "lord", 93.0, 25.0, "inner", "N", order=9, feature="residence"),
+        # FEATURE 449 T182: Ochiba's house as its sheet draws it, one 90 x 50 ft block of rooms (270 x 150 px, the residence rect at
+        # (340,212)); it was two 90 and 93 x 25 ft bars with no rooms, an older Ochiba, so the placer seated no guests' privy - the
+        # reception room it is seated behind was missing - and privies_by_zone refused the house's one privy (0101 gives it two).
+        # The guest room is a room of the house here, as on the sheet, where it was a mass of its own (feature 254).
+        b(
+            "residence",
+            "lord",
+            90.0,
+            50.0,
+            "inner",
+            "N",
+            order=10,
+            feature="residence",
+            rooms=(
+                ("family quarters", 0.0, 0.0, 45.0, 25.0),
+                ("lord's quarters", 45.0, 0.0, 45.0, 25.0),
+                ("guest quarters", 0.0, 25.0, 45.0, 25.0),
+                ("reception room", 45.0, 25.0, 45.0, 25.0),
+                ("servants' quarters", 0.0, 13.0, 12.0, 12.0),
+            ),
+            # Ochiba's rear strip: the house stands 57.5 px (19.2 ft) off the north wall's face (212 against the face at 154.5),
+            # and the placer adds 1.5 ft to an inset, so 17.7 ft
+            inset_ft=17.7,
+        ),
         b("servants", "service", 65.0, 15.0, "outer", "S", order=7, feature="servants' quarters"),  # the street range, as Ochiba's since feature 374 wave 124 (0115)
         # Ochiba's two storehouses, 18 x 12 ft each, behind the house as the second rank (feature 374 batch 4: the program's
         # storehouse item, R4-6; the second rank holds stores only, W124-2)
         b("storehouse (W)", "kura", 18.0, 12.0, "inner", "N", order=8, rank=2, feature="storehouse"),
         b("storehouse (E)", "kura", 18.0, 12.0, "inner", "N", order=8, rank=2, feature="storehouse"),
-        b("kitchen", "service", 18.0, 24.0, "inner", "W", order=5, feature="kitchen"),  # feature 374 wave 113: 0091 measured kitchen, 24 ft along the wall (it was 40 x 33)
+        # Ochiba's kitchen is an ELL on the house's west end, 24 x 18 ft (72 x 54 px at (268,308), abutting the house at x 340): with
+        # the house off the wall (T182) the 24 ft kitchen on the west wall found no seat, so it is declared an ell as the sheet draws it
+        # (the placer seats it at the house's east end, the house taking the west corner)
+        b("kitchen", "service", 24.0, 18.0, "inner", "N", order=5, feature="kitchen", inset_ft=17.7, joins="residence"),
         b("Inari shrine", "shrine", 37.0, 31.0, "inner", "E", order=5, feature="compound shrine"),
         b("cinnabar workshop", "shrine", 37.0, 24.0, "inner", "E", order=4, feature="cinnabar workshop"),
         b("karo's house", "lord", 37.0, 23.0, "inner", "divider", order=3, feature="karo's house"),
@@ -72,7 +102,6 @@ def ochiba_program() -> C.CompoundProgram:
         # a room of the hall on the sheet; a mass here (feature 254). Plain wood, the palette's clerks' duty room (feature 294
         # B22 `palette_roles`: it was drawn in the service color)
         b("clerks' room", "plain", 28.0, 18.0, "outer", "W", order=3, feature="clerks' room"),
-        b("guest room", "lord", 22.0, 15.0, "inner", "E", order=2, feature="guest quarters"),  # a room of the residence on the sheet; a mass here (feature 254)
     )
     return C.CompoundProgram("Ochiba County Magistracy (placer round-trip)", env, spine, buildings, tier="magistracies", seed_name="ochiba-roundtrip-test")  # its declared type: the bands it is placed to (feature 287 H29b)
 

@@ -27,8 +27,9 @@ pub mod ink;
 
 pub use grounds::{
     arch_on_approach, hall_at_an_end, no_precinct_enclosure, one_compound_shrine,
-    sanctuary_on_axis, shrine_tree, stall_width, well_clear_of_arch, well_gear, AXIS_TOL_FT,
-    EDGE_TOL_FT, HALL_MIN_SPAN_FT, SHRINE_TREE_FT, STALL_FT,
+    sanctuary_on_axis, shrine_tree, stall_width, well_clear_of_arch, well_gear, ARCH_COUNTS,
+    AXIS_TOL_FT, EDGE_TOL_FT, HALL_MIN_SPAN_FT, INNERMOST_FT, INNERMOST_TOL_FT, SHRINE_TREE_FT,
+    STALL_FT,
 };
 pub use ink::{ink_bounds, viewbox_cropped, CROP_MAX_MARGIN_PX, CROP_TOL_PX, PARCHMENT_SHARE};
 
@@ -197,7 +198,7 @@ pub fn perimeter_hugging(plan: &ParsedPlan, floor: f64) -> Result<Vec<String>, E
 ///
 /// Research:
 ///     a wide break a structure spans - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: an opening wider than the widest gate passes where a structure spans it, a gate drawn as a building (a yamen's roofed gate of three bays, a gate range) rather than as an opening in the wall.
-///     the fix text's gate width - GUESS: the fix sentence draws a gate at passage width, about 13 ft, a figure of ours; it lies between the samurai gate's 9 to 12 ft and the yamen's guessed 18 to 24 ft (research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html), and no page gives it.
+///     the fix text's gate width - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the fix sentence draws a gate at passage width, about 6 to 12 ft, the width the page gives a Japanese magistrate's office's gate, the form the compounds follow (feature 449 T177: it gave about 13 ft, outside every width the record gives).
 #[must_use]
 pub fn gate_widths(plan: &ParsedPlan, lo_ft: f64, hi_ft: f64) -> Vec<String> {
     let mut out = Vec::new();
@@ -219,7 +220,7 @@ pub fn gate_widths(plan: &ParsedPlan, lo_ft: f64, hi_ft: f64) -> Vec<String> {
             });
             if !spanned {
                 out.push(format!(
-                    "a {} ft opening at svg({},{}) is a structure's width, not a passage's - a gate is drawn at passage width (~13 ft), or a structure stands in the break",
+                    "a {} ft opening at svg({},{}) is a structure's width, not a passage's - a gate is drawn at passage width (about 6 to 12 ft, 0093), or a structure stands in the break",
                     fixed(o.ft, 1),
                     fixed(o.x, 0),
                     fixed(o.y, 0)

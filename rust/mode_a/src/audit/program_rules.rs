@@ -19,7 +19,7 @@ use super::Sheet;
 use crate::compound::{tub_by_its_eaves, FtBox};
 use crate::grids::FTPX;
 use crate::parse::{is_structure, ParsedPlan, KURA_FILLS};
-use crate::py::{fixed, min};
+use crate::py::{fixed, half_sum, min};
 use crate::tagged::{gap, Mark};
 
 /// The kinds someone sleeps in (docs/building-programs.md, the residence and lodging rows): a composition rule from the
@@ -138,17 +138,76 @@ pub fn entrances(svg: &Sheet, plan: &ParsedPlan) -> Result<Vec<Mark>, Error> {
     Ok(out)
 }
 
+/// The row kinds a partition divides into dwellings, each entered by a door of its own (feature 449 T177: 0097's rowhouse dwellings,
+/// 0106's long-house). A residence's rooms and an undivided block - 0097's common room behind one door - keep the building's rule.
+///
+/// Research:
+///     the row-form lodgings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks and a retainers' long-house are divided into dwellings, each with a door of its own (0097, 0106), and a servants' quarters takes one of 0097's two forms, a row of dwellings each with its door or a common room behind one door, so these three kinds are the ones a dwelling wall can divide.
+pub const ROW_KINDS: [&str; 3] = ["barracks", "retainers' quarters", "servants' quarters"];
+
+/// The spans (px, along its long axis) of the dwellings a row block is divided into: the block cut at every dwelling wall - a SOLID line
+/// of its own kind inside it that runs its full depth, within `tol`. A dashed line is a sliding partition, which 0097 lets a common
+/// room's bays have behind one door, and cuts no dwelling (feature 449 T182, its claims round).
+#[must_use]
+pub fn dwellings(block: &Mark, ms: &[Mark], tol: f64) -> Vec<(f64, f64)> {
+    let along_x = block.w >= block.h;
+    let (lo, hi) = if along_x {
+        (block.x, block.x2())
+    } else {
+        (block.y, block.y2())
+    };
+    let mut cuts: Vec<f64> = Vec::new();
+    for m in ms {
+        let dashed = m
+            .paint
+            .get("stroke-dasharray")
+            .is_some_and(|d| !d.is_empty() && d != "none");
+        if m.tag != "line" || dashed || !block.kind.as_deref().is_some_and(|k| m.belongs_to(k)) {
+            continue;
+        }
+        let cut = if along_x {
+            (m.w <= tol
+                && lo < m.x
+                && m.x < hi
+                && m.y <= block.y + tol
+                && m.y2() >= block.y2() - tol)
+                .then_some(m.x)
+        } else {
+            (m.h <= tol
+                && lo < m.y
+                && m.y < hi
+                && m.x <= block.x + tol
+                && m.x2() >= block.x2() - tol)
+                .then_some(m.y)
+        };
+        if let Some(c) = cut.filter(|c| !cuts.contains(c)) {
+            cuts.push(c);
+        }
+    }
+    cuts.sort_by(f64::total_cmp);
+    let edges: Vec<f64> = std::iter::once(lo)
+        .chain(cuts)
+        .chain(std::iter::once(hi))
+        .collect();
+    edges.windows(2).map(|w| (w[0], w[1])).collect()
+}
+
 /// Every building holding a lodging kind has at least one entrance on its OUTER wall: an entrance glyph within `tol` of one of its
-/// blocks and not wholly inside any of them (the registry passes `DOOR_FLUSH_TOL_PX`, the floating-door check's flush reach).
+/// blocks and not wholly inside any of them (the registry passes `DOOR_FLUSH_TOL_PX`, the floating-door check's flush reach); and every
+/// dwelling of a divided row block has one of its own, an outer-wall entrance whose middle lies along that dwelling (feature 449 T177:
+/// one door anywhere on a joined block passed every dwelling in it).
 ///
 /// Research:
 ///     a lodging entered from the ground - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).
+///     a door to each dwelling of a row - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks, a retainers' long-house and a servants' quarters in the row form are divided into dwellings, each with a door of its own, and a row of bays walled off from one another behind one shared door is never drawn, so each dwelling a solid wall divides off is held to its own door; a block undivided, or divided only by dashed sliding partitions, is 0097's common room behind one door.
 ///     every other lodging entered from the ground - UNRESEARCHED: the guest quarters, a shrine's hall and dwelling and the monk's rooms each reach the ground by a door or genkan on their own outer wall, not only through a building they do not join; no page asks how these were entered.
+///     the karo's own house entered from the ground - GUESS research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: the karo's small house of their own on the hand-drawn plans, a guess the page records, reaches the ground by a door on its own outer wall, as the long-house gives the karo's quarters a door of their own on the court.
 ///
 /// # Errors
 /// The sheet's marks refused.
 pub fn lodging_entrances(svg: &Sheet, plan: &ParsedPlan, tol: f64) -> Result<Vec<String>, Error> {
     let doors = entrances(svg, plan)?;
+    let ms = svg.marks()?;
     let mut out = Vec::new();
     for comp in components(&structure_marks(svg)?, JOIN_PX) {
         let kinds: BTreeSet<&str> = comp
@@ -162,19 +221,53 @@ pub fn lodging_entrances(svg: &Sheet, plan: &ParsedPlan, tol: f64) -> Result<Vec
         if kinds.is_empty() {
             continue;
         }
-        if doors.iter().any(|d| {
-            comp.iter().any(|b| gap(d, b) <= tol) && !comp.iter().any(|b| inside(d, b, tol))
-        }) {
+        let outer: Vec<&Mark> = doors
+            .iter()
+            .filter(|d| {
+                comp.iter().any(|b| gap(d, b) <= tol) && !comp.iter().any(|b| inside(d, b, tol))
+            })
+            .collect();
+        if outer.is_empty() {
+            let x = min_of(comp.iter().map(|b| b.x), 0.0);
+            let y = min_of(comp.iter().map(|b| b.y), 0.0);
+            out.push(format!(
+                "the {} block at svg({},{}) has no door or genkan on its outer wall - a lodging is entered from the ground",
+                kinds.into_iter().collect::<Vec<_>>().join(" / "),
+                fixed(x, 0),
+                fixed(y, 0)
+            ));
             continue;
         }
-        let x = min_of(comp.iter().map(|b| b.x), 0.0);
-        let y = min_of(comp.iter().map(|b| b.y), 0.0);
-        out.push(format!(
-            "the {} block at svg({},{}) has no door or genkan on its outer wall - a lodging is entered from the ground",
-            kinds.into_iter().collect::<Vec<_>>().join(" / "),
-            fixed(x, 0),
-            fixed(y, 0)
-        ));
+        for b in &comp {
+            let Some(kind) = b.kind.as_deref().filter(|k| ROW_KINDS.contains(k)) else {
+                continue;
+            };
+            let spans = dwellings(b, ms, JOIN_PX);
+            let along_x = b.w >= b.h;
+            let mid = |d: &Mark| {
+                if along_x {
+                    half_sum(d.x, d.x2())
+                } else {
+                    half_sum(d.y, d.y2())
+                }
+            };
+            let bare = spans
+                .iter()
+                .filter(|(lo, hi)| {
+                    !outer
+                        .iter()
+                        .any(|d| gap(d, b) <= tol && *lo <= mid(d) && mid(d) <= *hi)
+                })
+                .count();
+            if spans.len() > 1 && bare > 0 {
+                out.push(format!(
+                    "the {kind} at svg({},{}) has {bare} of its {} dwellings with no door of its own on its outer wall - each dwelling of a row is entered by its own door",
+                    fixed(b.x, 0),
+                    fixed(b.y, 0),
+                    spans.len()
+                ));
+            }
+        }
     }
     Ok(out)
 }
@@ -195,12 +288,20 @@ pub const ATTACHED_PX: f64 = 0.5 * FTPX;
 ///     least privies on a county manor - GUESS research/questions/0101-privies-setchin.drawing.html: at least 3 privies, the low end of the project's three or four per compound; the page records the count as the project's guess.
 pub const PRIVY_MIN: usize = 3;
 
+/// The residence's own privies: the guests' and the family's (0101's drawing page).
+///
+/// Research:
+///     the residence's two privies - research/questions/0101-privies-setchin.drawing.html: a samurai residence has two privies, the guests' and the family's.
+pub const RESIDENCE_PRIVIES: usize = 2;
+
 /// (a) a privy is the residence's own - tagged a part of it, or attached to one of its blocks (research 0101); (b) every court the sheet
 /// tags has a privy, a ZONE being a court kind however many precinct rects draw it; (c) at least `minimum` in all.
 ///
 /// Research:
 ///     the residence's own privy - research/questions/0101-privies-setchin.drawing.html: a samurai residence's privies are built into the house, so a privy is tagged a part of the residence or attached to one of its blocks.
 ///     a privy in each court zone - GUESS research/questions/0101-privies-setchin.drawing.html: each inner and outer court zone the sheet tags holds a privy, the page's about one privy to each part of the compound, which it records as the project's guess; a court zone is the part of the compound its rects draw, buildings and all, not the open courtyard the page keeps every privy out of.
+///     the residence's two privies - research/questions/0101-privies-setchin.drawing.html: the house has two privies, the guests' and the family's, so a residence with fewer of its own is refused.
+///     a sheet-wide floor on the privies - GUESS research/questions/0101-privies-setchin.drawing.html: at least the claimed `minimum` privies on the sheet, the low end of the page's about three or four at a county magistrate's compound, which it records as the project's guess.
 ///
 /// # Errors
 /// The sheet's marks refused.
@@ -215,13 +316,18 @@ pub fn privies_by_zone(svg: &Sheet, minimum: usize) -> Result<Vec<String>, Error
         .filter(|m| m.belongs_to("residence") && !m.belongs_to("latrine"))
         .collect();
     let mut out = Vec::new();
-    if !house.is_empty()
-        && !privies.iter().any(|p| {
+    let owned = privies
+        .iter()
+        .filter(|p| {
             p.lineage.iter().any(|k| k == "residence")
                 || house.iter().any(|b| gap(p, b) <= ATTACHED_PX)
         })
-    {
+        .count();
+    if !house.is_empty() && owned == 0 {
         out.push("no privy is the residence's own - the family's privy is built into the house (tag it data-part-of=\"residence\" and attach it to a block)".to_owned());
+    } else if !house.is_empty() && owned < RESIDENCE_PRIVIES {
+        // FEATURE 449 T182: one of the house's two privies passed the check, where 0101 gives the house the guests' and the family's
+        out.push(format!("{owned} privy is the residence's own - the house has {RESIDENCE_PRIVIES}, the guests' and the family's (attach the other to a block)"));
     }
     for kind in COURT_KINDS {
         let ground: Vec<&Mark> = ms

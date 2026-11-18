@@ -406,6 +406,10 @@ fn fixtures() -> Vec<(String, String, Option<String>, Option<String>)> {
         map_notes("religious", "(500, 500)", "precinct"),
         manifest(MANIFEST),
     ));
+    // (T177, T182) the sheets of step 1's defect fixes
+    for (name, svg) in super::fix_fixtures::sheets() {
+        out.push((name.to_owned(), svg.to_owned(), None, None));
+    }
     out
 }
 

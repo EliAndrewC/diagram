@@ -124,3 +124,30 @@ def test_the_size_table_lists_every_tagged_kind(bundle: poolmaps.MapBundle) -> N
     with open(svg, encoding="utf-8") as fh:
         missing = size_marks.untabled_kinds(fh.read())
     assert not missing, f"{bundle.stem}: tagged kinds no size-table row carries (a kind on a caption alone): {missing} - tag the drawn element with the kind, or the caption with the kind it names"
+
+
+# --- the draft's tub seat (feature 449 T182): pinned here, the kept test file the placer's sheets are swept in -------------
+
+
+def test_a_tub_seat_by_a_door_is_tried_nearest_first_across_the_faces() -> None:
+    """The by-the-door search tried the faces N, S, E, W in turn: a door on the east face near the north-east corner took a
+    north-face seat 4.5 ft from it before the east-face seat 2.5 ft from it."""
+    from l7r.diagram.compound_model import BuildingSpec, Placed
+    from l7r.diagram.compound_parts import seats_within_reach
+
+    hut = Placed(BuildingSpec("hall", "lord", 20.0, 10.0, "inner", "N", feature="office hall"), 0.0, 0.0)
+    seats = seats_within_reach(hut, [(20.0, 2.0)])
+    assert seats[0] == ("E", 0.2), seats[:3]
+
+
+def test_a_door_kind_with_no_door_takes_no_tub_and_a_bath_takes_its_court_face() -> None:
+    """A door-kind building whose door found no seat fell to the doorless seats and took a court-face tub with no door drawn;
+    it takes none, and the bath (no door kind) keeps the court face."""
+    from l7r.diagram.compound_model import BuildingSpec, Placed
+    from l7r.diagram.compound_parts import doored_tub_seats
+
+    karo = Placed(BuildingSpec("karo's house", "lord", 37.0, 23.0, "inner", "divider", feature="karo's house"), 0.0, 0.0)
+    bath = Placed(BuildingSpec("bath", "service", 10.0, 8.0, "inner", "N"), 0.0, 0.0)
+    assert doored_tub_seats(karo, []) == []
+    assert doored_tub_seats(karo, [(18.0, 0.0)])
+    assert doored_tub_seats(bath, []) is None

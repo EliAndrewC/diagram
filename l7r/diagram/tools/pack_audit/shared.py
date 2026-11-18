@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 from .checks import WALL_OVERLAP_MIN_PX, wall_openings
 from .grids import FTPX, coverage, perimeter_hugging_pct
 from .parse import COURT_FLOORS, WALL_STROKE, ParsedPlan, Rect
-from .tagged import marks
+from .tagged import marks, path_walk
 
 # A structure may CONTAIN another (an engawa strip on a residence, a door, a room) and two blocks of
 # one building may join by a corridor that laps a few px into each - those are compositions, not
@@ -57,7 +57,6 @@ GATE_MAX_FT: float = 16.0  # wider is a structure's width, not a passage's (the 
 """Research: widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess on both 0093's and 0092's drawing pages."""
 
 _VIEWBOX_RE = re.compile(r'viewBox="\s*([\-\d.]+)\s+([\-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*"')
-_NUM_RE = re.compile(r"-?\d+(?:\.\d+)?")
 _SCALE_LABEL_RE = re.compile(r"^\d+\s*ft$")
 _SCALE_NOTE_RE = re.compile(r"3\s*px\s*=\s*1\s*ft")
 
@@ -105,33 +104,12 @@ def scale_bar_present(plan: ParsedPlan) -> list[str]:
     return missing
 
 
-_PATH_CMD_RE = re.compile(r"([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)")
-
-
 def _path_points(d: str) -> tuple[list[float], list[float]]:
-    """The ABSOLUTE points a path visits - the coordinates after an upper-case command. A relative
-    command's offsets (a lower-case `q 3 -8 -2 -14` on a steam plume) are not coordinates and are
-    skipped rather than read as ink at negative x, which is what a plain number scan did.
-
-    Research:
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG arc arguments)
-    """
-    xs: list[float] = []
-    ys: list[float] = []
-    for cmd, body in _PATH_CMD_RE.findall(d):
-        nums = [float(n) for n in _NUM_RE.findall(body)]
-        if cmd == "H":
-            xs += nums
-        elif cmd == "V":
-            ys += nums
-        elif cmd in "MLTCSQ":
-            xs += nums[0::2]
-            ys += nums[1::2]
-        elif cmd == "A":
-            for k in range(0, len(nums) - 6, 7):
-                xs.append(nums[k + 5])
-                ys.append(nums[k + 6])
-    return xs, ys
+    """Every coordinate a path gives, made absolute (`tagged.path_walk`): its ink's extent. FEATURE 449 T182: a relative
+    command's offsets were skipped, so a path drawn in relative steps (a lower-case `q 3 -8 -2 -14` on a steam plume) reached
+    no farther than its last absolute point; they are offsets from the segment's start, read as such."""
+    pts = [p for _cmd, seg in path_walk(d) for p in seg]
+    return [p[0] for p in pts], [p[1] for p in pts]
 
 
 PARCHMENT_SHARE: float = 0.9  # a rect covering this much of the viewBox is the background, not ink
@@ -269,7 +247,7 @@ def gate_widths(plan: ParsedPlan, lo_ft: float = GATE_MIN_FT, hi_ft: float = GAT
 
     Research:
         a wide break a structure spans - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: an opening wider than the widest gate passes where a structure spans it, a gate drawn as a building (a yamen's roofed gate of three bays, a gate range) rather than as an opening in the wall.
-        the fix text's gate width - GUESS: the fix sentence draws a gate at passage width, about 13 ft, a figure of ours; it lies between the samurai gate's 9 to 12 ft and the yamen's guessed 18 to 24 ft (research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html), and no page gives it.
+        the fix text's gate width - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the fix sentence draws a gate at passage width, about 6 to 12 ft, the width the page gives a Japanese magistrate's office's gate, the form the compounds follow (feature 449 T177: it gave about 13 ft, outside every width the record gives).
     """
     out: list[str] = []
     for o in wall_openings(plan):
@@ -284,7 +262,7 @@ def gate_widths(plan: ParsedPlan, lo_ft: float = GATE_MIN_FT, hi_ft: float = GAT
             )
             if not spanned:
                 out.append(
-                    f"a {o.ft:.1f} ft opening at svg({o.x:.0f},{o.y:.0f}) is a structure's width, not a passage's - a gate is drawn at passage width (~13 ft), or a structure stands in the break"
+                    f"a {o.ft:.1f} ft opening at svg({o.x:.0f},{o.y:.0f}) is a structure's width, not a passage's - a gate is drawn at passage width (about 6 to 12 ft, 0093), or a structure stands in the break"
                 )
     return out
 
@@ -381,72 +359,109 @@ def sanctuary_on_axis(plan: ParsedPlan, tol_ft: float = AXIS_TOL_FT) -> list[str
     return out
 
 
+#: The counts of arches an avenue takes (0220's drawing page: one, three or seven, a deliberate deviation of the setting's).
+ARCH_COUNTS: tuple[int, ...] = (1, 3, 7)
+"""Research: the arch count - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: a shrine's approach runs under one, three or seven arches, the counts the page records as a deliberate deviation."""
+INNERMOST_FT: float = 12.0
+"""Research: the innermost arch off the hall - CONVENTION: the innermost arch stands 12 ft off the hall's nearest face, measured to the building's outline, a map drawing convention research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html records."""
+INNERMOST_TOL_FT: float = 2.0
+"""Research: the innermost arch's tolerance - GUESS: the innermost arch passes within 2 ft of its 12 ft off the hall, the arch edge tolerance's figure; no page gives it."""
+
+
+def _box_gap(a: Rect, b: Rect) -> float:
+    """The clear distance between two rects (zero where they touch or overlap)."""
+    return math.hypot(max(a.x - b.x2, b.x - a.x2, 0.0), max(a.y - b.y2, b.y - a.y2, 0.0))
+
+
 def arch_on_approach(plan: ParsedPlan, edge_tol_ft: float = EDGE_TOL_FT) -> list[str]:
-    """The arch straddles the approach where the way enters the precinct.
+    """The arches straddle the approach, one, three or seven of them, and the first - the one farthest from the hall - stands where
+    the way enters the precinct, unless the innermost stands its 12 ft off the hall, which holds where both cannot (feature 449 T177:
+    the check judged one arch, in document order, and refused a first arch moved inward for the innermost).
 
     Research:
-        the arch over the approach at the ground's edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the approach runs under its arch, and the first arch stands where the approach enters the shrine's ground.
+        the arch over the approach at the ground's edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the approach runs under its arches, and the first arch stands where the approach enters the shrine's ground.
+        the first arch moved for the innermost - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: where the first arch and the innermost cannot both keep their places, the innermost holds and the first arch moves with the run, off the place where the approach enters the shrine's ground.
     """
-    approach, arch = _one(plan, "approach"), _one(plan, "arch")
-    if approach is None or arch is None:
+    approach, arches = _one(plan, "approach"), plan.by_id("arch")
+    if approach is None or not arches:
         return ["the sheet declares no approach / arch (mark the rects id=\"approach\", id=\"arch\")"]
-    lx, ly = _lap(approach, arch)
     out: list[str] = []
-    if lx <= 0 or ly <= 0:
+    if len(arches) not in ARCH_COUNTS:
+        out.append(f"the approach runs under {len(arches)} arches - a shrine's avenue is one, three or seven")
+    if any(min(_lap(approach, a)) <= 0 for a in arches):
         out.append("the arch does not straddle the approach - a gateway stands over the way")
+    hall = _one(plan, "hall")
+    first, innermost = arches[0], arches[0]
+    if hall is not None:
+        for a in arches[1:]:
+            if _box_gap(a, hall) > _box_gap(first, hall):
+                first = a
+            if _box_gap(a, hall) < _box_gap(innermost, hall):
+                innermost = a
     minx, miny, maxx, maxy = plan.bounds
-    gx, gy = _center(arch)
+    gx, gy = _center(first)
     tol = edge_tol_ft * FTPX
-    at_edge = min(abs(gx - minx), abs(gx - maxx), abs(gy - miny), abs(gy - maxy)) <= tol + max(arch.w, arch.h) / 2
-    if not at_edge:
+    at_edge = min(abs(gx - minx), abs(gx - maxx), abs(gy - miny), abs(gy - maxy)) <= tol + max(first.w, first.h) / 2
+    held = hall is not None and abs(_box_gap(innermost, hall) - INNERMOST_FT * FTPX) <= INNERMOST_TOL_FT * FTPX
+    if not at_edge and not held:
         out.append("the arch stands inside the precinct rather than at its edge, where the way enters")
     return out
 
 
 def well_clear_of_arch(plan: ParsedPlan) -> list[str]:
-    """The well stands beside the approach, never on it and never under the arch.
+    """The basin, and the shrine's own well, stand beside the approach, never on it and never under an arch (feature 449 T182: the
+    check judged the well alone, under the basin's claim, and the first arch alone - the basin 0222 places beside the approach was
+    judged by nothing, and the well is 0196's, a shrine's own water).
 
     Research:
-        the basin beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a shrine has its stone basin for rinsing the hands and mouth, standing beside the approach at the innermost arch, so never on the approach or under the arch.
+        the basin beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a plain stone basin for rinsing the hands and mouth stands beside the approach at the innermost torii, so the basin a sheet declares (id=basin) is never on the approach or under an arch.
+        a shrine draws its basin - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0196-communal-wells-ido.drawing.html: a village shrine has its stone basin beside the approach (0222), and the ablution well a shrine set apart from the houses keeps (0196) comes in addition, never in its place, so a sheet without its basin is refused.
+        the well off the way - research/questions/0196-communal-wells-ido.drawing.html: a shrine's own ablution well (the sheet's id=well or its well-curb fill) stands beside the hall, measured from the hall's edge, so it stands off the approach and clear of the arches.
     """
-    approach, arch = _one(plan, "approach"), _one(plan, "arch")
-    wells = plan.by_id("well") or plan.wells
-    if not wells:
-        return ["no well on the sheet (a shrine needs its purification well or basin)"]
-    if approach is None or arch is None:
+    approach, arches = _one(plan, "approach"), plan.by_id("arch")
+    basins = plan.by_id("basin")
+    wells = plan.by_id("well") or [w for w in plan.wells if w not in basins]
+    # FEATURE 449 T182 (its claims round): a well stood in for the basin; 0222 draws the basin at every village shrine, and
+    # 0196's well comes in addition
+    if not basins:
+        return ["no basin on the sheet - a village shrine has its stone basin beside the approach (mark it id=\"basin\"); a well comes in addition, never in its place"]
+    if approach is None or not arches:
         return ["the sheet declares no approach / arch (mark the rects id=\"approach\", id=\"arch\")"]
     out: list[str] = []
-    for w in wells:
-        for name, r in (("approach", approach), ("arch", arch)):
-            lx, ly = _lap(w, r)
-            if lx > WALL_OVERLAP_MIN_PX and ly > WALL_OVERLAP_MIN_PX:
-                out.append(f"the well at svg({w.x:.0f},{w.y:.0f}) stands on the {name}")
+    for what, found in (("basin", basins), ("well", wells)):
+        for w in found:
+            for name, rs in (("approach", [approach]), ("arch", arches)):
+                if any(min(_lap(w, r)) > WALL_OVERLAP_MIN_PX for r in rs):
+                    out.append(f"the {what} at svg({w.x:.0f},{w.y:.0f}) stands on the {name}")
     return out
 
 
 def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
-    """A village shrine's precinct is NOT enclosed (feature 268; research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html): its ground is marked by its arch and its wood. Every dated fence
-    the research found rings the sanctuary alone (a Taisho/Showa donation) or lines the approach, and a
-    wall is a temple's rank mark. So a fence group whose extent takes in the hall - a precinct fence - is
-    reported, as is a compound wall stroke at the sheet's edge; a fence around the sanctuary alone (a
-    richer shrine's donation, on the wealth knob) passes. `text` is kept for the registry's signature.
+    """A village shrine's precinct is NOT enclosed (feature 268; research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html): its ground is marked by its arch and its wood. So a fence group whose extent takes in the hall - a precinct fence - is
+    reported, as is one whose extent takes in the sanctuary (feature 449 T177: it passed, as a richer shrine's donation, where 0223's
+    drawing page draws none however rich the parish), and a compound wall stroke at the sheet's edge. `text` is kept for the
+    registry's signature.
 
     Research:
-        the precinct left open - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: a village shrine's precinct has no fence, wall or hedge round it, so a fence whose extent takes in the hall and a compound wall at the sheet's edge are refused; a fence round the sanctuary alone is not judged here, though the page draws none however rich the parish.
+        the precinct left open - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: a village shrine's precinct has no fence, wall or hedge round it, so a fence whose extent takes in the hall and a compound wall at the sheet's edge are refused.
+        no fence round the sanctuary - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: no fence is drawn round a village shrine's sanctuary, however rich the parish, so a fence whose extent takes in the sanctuary is refused; a fence lining the approach alone is not judged, the page saying only that none is drawn round the precinct or the sanctuary.
     """
     del text
     out: list[str] = []
-    hall = plan.by_id("hall")
-    if plan.fence_segs and hall:
+    hall, sanctuary = plan.by_id("hall"), plan.by_id("sanctuary")
+    if plan.fence_segs:
         fx0 = min(r.x for r in plan.fence_segs)
         fy0 = min(r.y for r in plan.fence_segs)
         fx1 = max(r.x + r.w for r in plan.fence_segs)
         fy1 = max(r.y + r.h for r in plan.fence_segs)
-        h = hall[0]
-        if fx0 <= h.x and fy0 <= h.y and fx1 >= h.x + h.w and fy1 >= h.y + h.h:
-            out.append(
-                "a fence rings the precinct (its extent takes in the hall) - a village shrine's ground is marked by its arch and its wood; a fence rings the sanctuary alone, and only as a richer shrine's donation"
-            )
+
+        def ringed(h: Rect) -> bool:
+            return fx0 <= h.x and fy0 <= h.y and fx1 >= h.x + h.w and fy1 >= h.y + h.h
+
+        if hall and ringed(hall[0]):
+            out.append("a fence rings the precinct (its extent takes in the hall) - a village shrine's ground is marked by its arch and its wood, with no fence round its precinct or its sanctuary")
+        elif sanctuary and ringed(sanctuary[0]):
+            out.append("a fence rings the sanctuary - no fence is drawn round a village shrine's sanctuary, however rich the parish")
     minx, miny, maxx, maxy = plan.bounds
     tol = EDGE_TOL_FT * FTPX
     for band in plan.wall_bands:

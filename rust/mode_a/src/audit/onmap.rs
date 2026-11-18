@@ -21,8 +21,10 @@ use l7r_guard::shared::py_text::repr;
 use crate::py::float;
 
 // `re.M`'s `$` is the end of any line: written out, since `pyre::py` reads `$` as the end of the text (feature 449 T175)
+/// FEATURE 449 T182: the spaces about the declaration stop at its line (`[ \t]`, not `\s`) - `\s*` took the line break after it and a
+/// blank line below, so a refused line was quoted with them and an empty one read the next line as its declaration.
 static ON_MAP_LINE: LazyLock<Regex> =
-    LazyLock::new(|| py(r"(?m)^\*\*On map\*\*:\s*(?P<rest>[^\n]*?)\s*(?=\n|\z)"));
+    LazyLock::new(|| py(r"(?m)^\*\*On map\*\*:[ \t]*(?P<rest>[^\n]*?)[ \t]*(?=\n|\z)"));
 static ON_MAP: LazyLock<Regex> = LazyLock::new(|| {
     py(
         r"^(?P<manifest>\S+)\s+-\s+(?P<key>[A-Za-z_][\w]*)\s+at\s+\(\s*(?P<x>-?\d+(?:\.\d+)?)\s*,\s*(?P<y>-?\d+(?:\.\d+)?)\s*\)\s*=\s*`?(?P<sheet_id>[A-Za-z_][\w-]*)`?$",
@@ -138,9 +140,16 @@ mod tests {
         );
         assert_eq!(parse_on_map("**On map**: none - apart").unwrap(), None);
         assert_eq!(parse_on_map("no line").unwrap(), None);
-        let e = parse_on_map("**On map**: somewhere\n").unwrap_err();
-        // the line's trailing space runs on to the line break, as Python's `re.M` match takes it
-        assert!(e.message.ends_with(": '**On map**: somewhere\\n'"));
+        // T182: the refused line is quoted without the line break after it (it was quoted with it), and an empty declaration is
+        // refused as itself, never read from the line below
+        let e = parse_on_map("**On map**: somewhere\n\n").unwrap_err();
+        assert!(
+            e.message.ends_with(": '**On map**: somewhere'"),
+            "{}",
+            e.message
+        );
+        let e = parse_on_map("**On map**:\nm.json - houses at (1, 2) = s").unwrap_err();
+        assert!(e.message.ends_with(": '**On map**:'"), "{}", e.message);
         assert!(declares("**On map**: none - x") && !declares("On map"));
         assert_eq!(notes_path("a.png"), None);
     }

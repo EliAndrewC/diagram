@@ -62,3 +62,34 @@ fn a_sheet_that_does_not_balance_is_refused() {
     .unwrap();
     assert_eq!(kinds.values().collect::<Vec<_>>(), ["-", "-", "-"]);
 }
+
+/// T182: the reader reads what `ElementTree` reads - a `>` in a quoted value, a CDATA section's tag-like run (kept as the sheet's text),
+/// a declaration's internal subset, an element named outside [A-Za-z], a `data-kind` in single quotes - each of which it refused or
+/// misread.
+#[test]
+fn the_reader_reads_every_sheet_the_xml_reader_accepts() {
+    let svg = "<!DOCTYPE svg [<!ENTITY e \"x\">]><svg><text data-kind='note' title=\"a>b\"><![CDATA[ a > <b> </c> ]]></text>\
+               <_x data-part-of = \"court\"/><g data-kind=\"hall\"><rect/></g></svg>";
+    let root = parse(svg).unwrap();
+    let text = &root.children[0];
+    assert_eq!((text.name, text.kind()), ("text", Some("note")));
+    assert_eq!(text.children[0].text, "<![CDATA[ a > <b> </c> ]]>");
+    assert_eq!(
+        (root.children[1].name, root.children[1].part_of()),
+        ("_x", Some("court"))
+    );
+    assert_eq!(
+        element_kinds(svg)
+            .unwrap()
+            .into_values()
+            .collect::<Vec<_>>(),
+        ["note", "hall", "hall"]
+    );
+    assert_eq!(
+        crate::hand_sheet::start_tags(svg)
+            .into_iter()
+            .map(|(a, _)| a)
+            .collect::<Vec<_>>(),
+        [32, 37, 105, 133, 153]
+    );
+}

@@ -29,7 +29,6 @@ from . import program_rules as pr
 from . import roads as rd
 from . import shared as s
 from . import sun
-from .grids import FTPX
 from .onmap import OnMap
 from .parse import ParsedPlan
 
@@ -232,7 +231,7 @@ CHECKS: tuple[Check, ...] = (
         lambda ctx: rd.gate_feeds_its_road(ctx.text, ctx.plan),
         True,
         "ochiba-road-wider-than-gate-red.svg",
-        "narrow the road to the gate's passage (a foot of grain at most), or widen the gate if the record calls for a wider one",
+        "narrow the lane to the side gate's passage (a foot of grain at most), or widen the gate if the record calls for a wider one",
     ),
     Check(
         "veranda_depths",
@@ -260,7 +259,7 @@ CHECKS: tuple[Check, ...] = (
         lambda ctx: pr.privies_by_zone(ctx.text),
         False,
         "ochiba-privy-detached-red.svg",
-        "attach the family's privy to the residence (data-part-of=\"residence\"), and stand one in each court - at least three in all",
+        "attach the family's and the guests' privies to the residence (data-part-of=\"residence\"), and stand one in each court - at least three in all",
     ),
     Check("coverage_band", lambda ctx: s.coverage_band(ctx.plan), False, "ochiba-coverage-red.svg", s.COVERAGE_FIX),
     Check("perimeter_hugging", lambda ctx: s.perimeter_hugging(ctx.plan), False, "ochiba-hugging-red.svg", "move the building against its wall - the center of each court stays open"),
@@ -303,13 +302,19 @@ CHECKS: tuple[Check, ...] = (
     # --- the country shrine's own, each fixture cut from the Hoshigaoka exemplar ---
     Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "hoshigaoka-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),
     Check("arch_on_approach", lambda ctx: s.arch_on_approach(ctx.plan), False, "hoshigaoka-arch-adrift-red.svg", "stand the arch over the approach where it crosses the fence"),
-    Check("well_clear_of_arch", lambda ctx: s.well_clear_of_arch(ctx.plan), False, "hoshigaoka-well-on-approach-red.svg", "move the well beside the approach, clear of the way and the arch"),
+    Check(
+        "well_clear_of_arch",
+        lambda ctx: s.well_clear_of_arch(ctx.plan),
+        False,
+        "hoshigaoka-well-on-approach-red.svg",
+        "draw the stone basin beside the approach, and keep it and any well clear of the way and the arches",
+    ),
     Check(
         "no_precinct_enclosure",
         lambda ctx: s.no_precinct_enclosure(ctx.text, ctx.plan),
         False,
         "hoshigaoka-fenced-precinct-red.svg",
-        "take the fence or wall off the precinct: its arch and its wood mark it (a fence may ring the sanctuary alone)",
+        "take the fence or wall off the precinct and the sanctuary: its arch and its wood mark it, however rich the parish",
     ),
     Check(
         "hall_at_an_end",
@@ -329,7 +334,3 @@ def checks_for(tier: str | None) -> tuple[Check, ...]:
 def run_checks(ctx: Context, tier: str | None) -> list[tuple[Check, list[str]]]:
     """Every applicable check with its findings, in registry order (an empty list = it passed)."""
     return [(ch, ch.run(ctx)) for ch in checks_for(tier)]
-
-
-def ft(px: float) -> float:
-    return px / FTPX

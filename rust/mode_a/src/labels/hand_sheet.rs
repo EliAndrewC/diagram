@@ -277,6 +277,11 @@ fn byte_offsets(src: &str) -> Vec<usize> {
 pub fn placed(src: &str) -> Result<String, Error> {
     let (shapes, view) = read_sheet(src)?;
     let tags = crate::hand_sheet::start_tags(src);
+    // FEATURE 449 T182: a caption is paired with its start tag by its index, so the two lists must be one length - an entity that expands to
+    // markup draws an element the source writes no tag for, and every later caption would be written at the wrong tag
+    if tags.len() != crate::etree::fromstring(src)?.elements().len() {
+        return Err(Error::new("ValueError", "the sheet's elements and its start tags disagree - an entity that expands to markup draws an element the source does not write; write the element out"));
+    }
     let bytes = byte_offsets(src);
     let mut edits: Vec<(usize, usize, String)> = Vec::new();
     for (caps, p, per, _) in seat(&shapes, view)? {
@@ -318,9 +323,8 @@ pub fn placed(src: &str) -> Result<String, Error> {
             if luma(Some(&ink)) > LIGHT && !on_dark((cx, cy), &shapes) {
                 DARK_INK.clone_into(&mut ink); // a light name chosen for a dark roof, set down on light ground (feature 267)
             }
-            let (a, b) = *tags
-                .get(cap.at)
-                .ok_or_else(|| Error::new("IndexError", "list index out of range"))?;
+            // every element has its start tag, checked above
+            let (a, b) = tags[cap.at];
             let tail = &src[bytes[b]..];
             let end = tail
                 .find("</text>")

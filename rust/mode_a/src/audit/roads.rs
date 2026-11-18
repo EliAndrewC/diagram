@@ -1,6 +1,7 @@
 //! Where a sheet's roads go (feature 449 T175, `pack_audit/roads.py` whole; feature 294, plan B21 and B23): a road leaves the frame or
 //! arrives somewhere ([`roads_leave_the_frame`]: a MAP DRAWING CONVENTION, the approach runs off the viewBox edge, never a stub stopping
-//! short), and a road into a gate is no wider than the gate it feeds ([`gate_feeds_its_road`], research 0093; one-sided).
+//! short), and a lane into a side gate is no wider than the gate it feeds ([`gate_feeds_its_road`], research 0088; one-sided; the road at
+//! the main gate is the road the compound stands on, at its own width, since feature 449 T177).
 //!
 //! A road is a stroked path or line tagged `road` or `footpath`, its ink width its stroke; a road drawn twice is one road.
 //!
@@ -28,7 +29,7 @@ pub const ARCH_KINDS: [&str; 1] = ["torii"];
 /// The places a way inside a precinct is walked TO (drawing convention, feature 294 escalation-check 2026-10-01).
 ///
 /// Research:
-///     a way walked to a well or clearing - CONVENTION: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; no page gives it.
+///     a way walked to a well or clearing - UNRESEARCHED: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; which places a path leads to is how the place was lived in, and no page asks it.
 pub const DESTINATION_KINDS: [&str; 2] = ["well", "precinct clearing"];
 /// A road may be this much wider than the gate it feeds: the 3 px authoring grain.
 ///
@@ -180,7 +181,8 @@ pub fn frame(svg: &str) -> Result<Option<Frame>, Error> {
 /// What the road's end at `end` meets - 'the frame', 'a gate', 'a door', 'an arch', 'a road', 'a well or clearing' - or None.
 ///
 /// Research:
-///     where a road may end - CONVENTION: a road's end meets the frame, a gate, a door, an arch, another road, a well or a clearing, never a stub stopping short in the open, a drawing rule of the building plans; no page gives it.
+///     a road running off the sheet - CONVENTION: a road's end may meet the frame, the approach running off the viewBox edge rather than stopping short, a drawing rule of the building plans; no page gives it.
+///     where a road arrives - UNRESEARCHED: a road's other end meets a gate, a door, an arch, another road, a well or a clearing, never a dead end in the open; that a way leads somewhere is how the place was laid out, and no page asks it.
 ///
 /// # Errors
 /// The viewBox or the sheet's marks refused.
@@ -253,10 +255,44 @@ pub fn roads_leave_the_frame(svg: &Sheet, plan: &ParsedPlan) -> Result<Vec<Strin
     Ok(out)
 }
 
-/// A road ending at a gate is no wider than the widest gate that end meets, plus `tol_ft`.
+fn boxes_touch(a: (f64, f64, f64, f64), b: (f64, f64, f64, f64)) -> bool {
+    a.0 <= b.2 && b.0 <= a.2 && a.1 <= b.3 && b.1 <= a.3
+}
+
+/// The widths (ft) of every side gate an end at `end` meets within `reach` px - a wall opening that is not the main gate's - or None
+/// when the end meets the main gate: its passage, or the wall opening its posts stand in (feature 449 T177).
 ///
 /// Research:
-///     a road no wider than its gate - GUESS research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: a road ending at a gate is no wider than the widest opening it meets, plus the claimed tolerance, the width feature 267's review gave the hand sheets' approach roads; the page records that no page gives the width of the road before an official's gate, and it draws the road at a compound's front gate at the width of the road the compound stands on, 15 to 24 ft on a lesser highway, wider than the gates the record gives.
+///     the road at the front gate at its own width - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: the road at a compound's front gate is the road the compound stands on, at that road's width, so an end meeting the main gate's passage, or the wall opening its posts stand in, is not held to a side gate's width
+#[must_use]
+pub fn side_gates_met(end: (f64, f64), reach: f64, plan: &ParsedPlan) -> Option<Vec<f64>> {
+    let (px, py) = end;
+    let main = gate_passage_box(plan);
+    if let Some(b) = main.filter(|_| main_gate_passage_ft(plan).is_some()) {
+        if box_distance(px, py, b) <= reach {
+            return None;
+        }
+    }
+    let mut out = Vec::new();
+    for o in wall_openings(plan) {
+        if box_distance(px, py, opening_box(&o)) > reach {
+            continue;
+        }
+        if main.is_some_and(|b| boxes_touch(opening_box(&o), b)) {
+            return None;
+        }
+        out.push(o.ft);
+    }
+    Some(out)
+}
+
+/// A road ending at a side gate is no wider than the widest side gate that end meets, plus `tol_ft`; a road at the main gate is the
+/// road the compound stands on, at its own width, and is not judged here (feature 449 T177: it was refused when wider than the main
+/// gate, against 0088's drawing page).
+///
+/// Research:
+///     a lane no wider than its side gate - GUESS research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: a lane ending at a side gate or a cart gate is no wider than the widest such opening it meets, plus the claimed tolerance; the page draws a lane to a side gate or cart gate about 6 ft where carts use it, a GUESS, and records that no page gives the width of a lane to a side gate.
+///     the road at the front gate at its own width - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: the road at a compound's front gate is the road the compound stands on, at that road's width, so a road meeting the main gate's passage, or the wall opening its posts stand in, is not held to the gate's width.
 ///
 /// # Errors
 /// The sheet's marks refused.
@@ -268,15 +304,14 @@ pub fn gate_feeds_its_road(
     let mut out = Vec::new();
     for road in roads(svg)? {
         for end in [road.pts[0], road.pts[road.pts.len() - 1]] {
-            let met = gates_met(end, road.half(), plan);
-            let w_ft = road.width / FTPX;
-            if met.is_empty() {
+            let Some(met) = side_gates_met(end, road.half(), plan).filter(|m| !m.is_empty()) else {
                 continue;
-            }
+            };
+            let w_ft = road.width / FTPX;
             let widest = max_of(met.iter().copied(), 0.0);
             if w_ft > widest + tol_ft {
                 out.push(format!(
-                    "a {} ft road meets a {} ft gate at svg({},{}) - a road is no wider than the gate it feeds",
+                    "a {} ft road meets a {} ft side gate at svg({},{}) - a lane is no wider than the side gate it feeds",
                     fixed(w_ft, 1),
                     fixed(widest, 1),
                     fixed(end.0, 0),

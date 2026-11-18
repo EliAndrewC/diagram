@@ -43,11 +43,16 @@ from dataclasses import dataclass, field
 
 from .classes import FeatureClass
 
-#: One token of the sheet: a comment, a tag, or the text between tags.
-_TOKEN = re.compile(r"<!--.*?-->|<[^>]*>|[^<]+", re.S)
-_NAME = re.compile(r"</?\s*([A-Za-z][\w:.-]*)")
-_KIND = re.compile(r'\sdata-kind="([^"]*)"')
-_PART_OF = re.compile(r'\sdata-part-of="([^"]*)"')
+#: One token of the sheet: a comment, a CDATA section, a processing instruction, a declaration (its internal subset
+#: whole), a tag (a quoted attribute value may hold a `>`), or the text between them. FEATURE 449 T182: the tag was
+#: `<[^>]*>`, so a `>` in an attribute value or a CDATA section ended a tag early and the reader refused, or misread, a
+#: sheet ElementTree accepts.
+_TOKEN = re.compile(r"""<!--.*?-->|<!\[CDATA\[.*?\]\]>|<\?.*?\?>|<!(?:[^\[>]|\[[^\]]*\])*>|<(?:"[^"]*"|'[^']*'|[^'">])*>|[^<]+""", re.S)
+#: An element's name: any run XML allows (T182: it was `[A-Za-z]` first, so an element named outside it read nameless).
+_NAME = re.compile(r"""</?\s*([^\s/>!?"'=]+)""")
+#: A tag's kind and the kind it is a part of, in either quote (T182: a single-quoted `data-kind` read untagged).
+_KIND = re.compile(r"""\sdata-kind\s*=\s*(["'])([^<]*?)\1""")
+_PART_OF = re.compile(r"""\sdata-part-of\s*=\s*(["'])([^<]*?)\1""")
 
 #: The element whose content is never ink: patterns, gradients and clip paths are referenced, not drawn.
 DEFS = "defs"
@@ -68,14 +73,14 @@ class Node:
     @property
     def kind(self) -> str | None:
         m = _KIND.search(self.open)
-        return m.group(1) if m else None
+        return m.group(2) if m else None
 
     @property
     def part_of(self) -> str | None:
         """The kind this element is a PART of though drawn outside its group - for paint order (feature 264: the
         genkan is drawn after the garden so the garden does not cover it, and is still the residence's)."""
         m = _PART_OF.search(self.open)
-        return m.group(1) if m else None
+        return m.group(2) if m else None
 
     def source(self) -> str:
         """The element's own bytes, reassembled - comments inside it are dropped, nothing else changes."""
@@ -94,6 +99,10 @@ def parse(svg: str) -> Node:
     stack: list[Node] = [Node(name="#document")]
     for m in _TOKEN.finditer(svg):
         tok = m.group(0)
+        if tok.startswith("<![CDATA["):
+            # character data, kept as the sheet's bytes like any text run (T182: its `<` and `>` no longer read as tags)
+            stack[-1].children.append(Node(text=tok))
+            continue
         if tok.startswith("<!--") or tok.startswith("<?") or tok.startswith("<!"):
             continue
         if not tok.startswith("<"):
@@ -161,7 +170,7 @@ def _raised(kind: str, message: str) -> BaseException:
     try:
         cls = getattr(importlib.import_module(module) if module else builtins, name)
         return cls(message)
-    except (ImportError, AttributeError, TypeError):
+    except ImportError, AttributeError, TypeError:
         return type(name, (Exception,), {"__module__": module or "builtins"})(message)
 
 

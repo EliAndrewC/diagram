@@ -15,8 +15,10 @@ use l7r_gate_research::pyre::py;
 
 use crate::sheet::Offsets;
 
-static TAG: LazyLock<Regex> =
-    LazyLock::new(|| py(r"(?s)<!--.*?-->|<[?!][^>]*>|</[^>]*>|<[A-Za-z][^>]*>"));
+/// FEATURE 449 T182: the sheet reader's own tokens ([`crate::sheet::TOKENS`]), so a CDATA section's tag-like run is no element, an element
+/// named outside [A-Za-z] is one, and a `>` in a quoted attribute value does not end its tag - each had shifted the index every later
+/// element is paired by.
+static TAG: LazyLock<Regex> = LazyLock::new(|| py(crate::sheet::TOKENS));
 
 /// Where each element's start tag lies in the source, in document order - the order `ET` iterates in, so a Shape's `at` is its index
 /// here. Comments, declarations and end tags are not elements. Each span is the Python's `m.span()`, in code points.
@@ -25,7 +27,10 @@ pub fn start_tags(src: &str) -> Vec<(usize, usize)> {
     let offsets = Offsets::new(src);
     TAG.find_iter(src)
         .flatten()
-        .filter(|m| !matches!(src.as_bytes()[m.start() + 1], b'!' | b'?' | b'/'))
+        .filter(|m| {
+            m.as_str().starts_with('<')
+                && !matches!(src.as_bytes()[m.start() + 1], b'!' | b'?' | b'/')
+        })
         .map(|m| (offsets.at(m.start()), offsets.at(m.end())))
         .collect()
 }
@@ -36,8 +41,8 @@ mod tests {
 
     #[test]
     fn a_start_tag_is_an_element_s_and_its_span_is_in_code_points() {
-        // a tag-like run in character data after a `>` counts, as the Python's pattern counts it (the spans are `CPython`'s)
+        // the spans are `CPython`'s, in code points; a tag-like run in a CDATA section is no element (T182: it counted, after a `>`)
         let src = "<?xml version=\"1.0\"?><!-- <a> --><svg>\u{6c34}<rect x=\"1\"/></svg><![CDATA[ a > <b> ]]>";
-        assert_eq!(start_tags(src), [(33, 38), (39, 52), (72, 75)]);
+        assert_eq!(start_tags(src), [(33, 38), (39, 52)]);
     }
 }

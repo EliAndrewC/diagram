@@ -27,10 +27,16 @@ use l7r_gate_research::Error;
 /// The element whose content is never ink: patterns, gradients and clip paths are referenced, not drawn.
 pub const DEFS: &str = "defs";
 
-static TOKEN: LazyLock<Regex> = LazyLock::new(|| py(r"(?s)<!--.*?-->|<[^>]*>|[^<]+"));
-static NAME: LazyLock<Regex> = LazyLock::new(|| py(r"</?\s*([A-Za-z][\w:.-]*)"));
-static KIND: LazyLock<Regex> = LazyLock::new(|| py(r#"\sdata-kind="([^"]*)""#));
-static PART_OF: LazyLock<Regex> = LazyLock::new(|| py(r#"\sdata-part-of="([^"]*)""#));
+/// One token of the sheet: a comment, a CDATA section, a processing instruction, a declaration (its internal subset whole), a tag (a
+/// quoted attribute value may hold a `>`), or the text between them. FEATURE 449 T182: the tag was `<[^>]*>`, so a `>` in an attribute
+/// value or a CDATA section ended a tag early and the reader refused, or misread, a sheet `ElementTree` accepts.
+pub(crate) const TOKENS: &str = r#"(?s)<!--.*?-->|<!\[CDATA\[.*?\]\]>|<\?.*?\?>|<!(?:[^\[>]|\[[^\]]*\])*>|<(?:"[^"]*"|'[^']*'|[^'">])*>|[^<]+"#;
+static TOKEN: LazyLock<Regex> = LazyLock::new(|| py(TOKENS));
+/// An element's name: any run XML allows (T182: it was `[A-Za-z]` first, so an element named outside it read nameless).
+static NAME: LazyLock<Regex> = LazyLock::new(|| py(r#"</?\s*([^\s/>!?"'=]+)"#));
+/// A tag's kind and the kind it is a part of, in either quote (T182: a single-quoted `data-kind` read untagged).
+static KIND: LazyLock<Regex> = LazyLock::new(|| py(r#"\sdata-kind\s*=\s*(["'])([^<]*?)\1"#));
+static PART_OF: LazyLock<Regex> = LazyLock::new(|| py(r#"\sdata-part-of\s*=\s*(["'])([^<]*?)\1"#));
 
 /// A byte offset of a sheet as the Python's code-point offset (`m.start()` on a `str`).
 pub struct Offsets {
@@ -78,10 +84,11 @@ pub struct Node<'a> {
 
 /// The first group of `re` in `text`, as the Python's `m.group(1) if m else None`.
 pub(crate) fn group<'t>(re: &Regex, text: &'t str) -> Option<&'t str> {
+    // the value is the last group: the quote it is written in is the first (T182)
     re.captures(text)
         .ok()
         .flatten()
-        .and_then(|c| c.get(1))
+        .and_then(|c| c.get(c.len() - 1))
         .map(|m| m.as_str())
 }
 
@@ -125,10 +132,12 @@ pub fn parse(svg: &str) -> Result<Node<'_>, Error> {
     }];
     for m in TOKEN.find_iter(svg).flatten() {
         let tok = m.as_str();
-        if tok.starts_with("<!") || tok.starts_with("<?") {
+        // character data, kept as the sheet's bytes like any text run (T182: its `<` and `>` no longer read as tags)
+        let cdata = tok.starts_with("<![CDATA[");
+        if !cdata && (tok.starts_with("<!") || tok.starts_with("<?")) {
             continue;
         }
-        if !tok.starts_with('<') {
+        if cdata || !tok.starts_with('<') {
             let text = Node {
                 text: tok,
                 start: -1,

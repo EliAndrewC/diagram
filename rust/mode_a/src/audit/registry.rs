@@ -500,7 +500,7 @@ pub const CHECKS: [Check; 43] = [
         run: |ctx| rd::gate_feeds_its_road(&ctx.svg, ctx.plan, rd::ROAD_GATE_TOL_FT),
         shared: true,
         fixture: "ochiba-road-wider-than-gate-red.svg",
-        fix: "narrow the road to the gate's passage (a foot of grain at most), or widen the gate if the record calls for a wider one",
+        fix: "narrow the lane to the side gate's passage (a foot of grain at most), or widen the gate if the record calls for a wider one",
         skipped: never,
     },
     Check {
@@ -566,7 +566,7 @@ pub const CHECKS: [Check; 43] = [
         run: |ctx| pr::privies_by_zone(&ctx.svg, pr::PRIVY_MIN),
         shared: false,
         fixture: "ochiba-privy-detached-red.svg",
-        fix: "attach the family's privy to the residence (data-part-of=\"residence\"), and stand one in each court - at least three in all",
+        fix: "attach the family's and the guests' privies to the residence (data-part-of=\"residence\"), and stand one in each court - at least three in all",
         skipped: never,
     },
     Check {
@@ -655,7 +655,7 @@ pub const CHECKS: [Check; 43] = [
         run: |ctx| Ok(s::well_clear_of_arch(ctx.plan)),
         shared: false,
         fixture: "hoshigaoka-well-on-approach-red.svg",
-        fix: "move the well beside the approach, clear of the way and the arch",
+        fix: "draw the stone basin beside the approach, and keep it and any well clear of the way and the arches",
         skipped: never,
     },
     Check {
@@ -663,7 +663,7 @@ pub const CHECKS: [Check; 43] = [
         run: |ctx| s::no_precinct_enclosure(ctx.plan),
         shared: false,
         fixture: "hoshigaoka-fenced-precinct-red.svg",
-        fix: "take the fence or wall off the precinct: its arch and its wood mark it (a fence may ring the sanctuary alone)",
+        fix: "take the fence or wall off the precinct and the sanctuary: its arch and its wood mark it, however rich the parish",
         skipped: never,
     },
     Check {

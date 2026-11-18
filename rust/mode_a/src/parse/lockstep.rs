@@ -281,6 +281,8 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     assert!(pool >= 4);
     // B15b over the same sheets (`census/pool_check.rs`): alone it was a second test over the bar
     crate::census::pool_check::every_pool_sheet_s_notes_type_the_counts_it_draws(&paths);
+    // (T171) every census block the pool's notes carry is the one `make notes-census` writes
+    crate::census::pool_check::every_census_block_is_its_manifest_s(&real());
     for (i, (_, text)) in SHEETS.iter().enumerate() {
         let p = dir.path().join(format!("fixture-{i}.svg"));
         std::fs::write(&p, text).unwrap();
@@ -496,6 +498,22 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
             .filter_map(|ch| (ch.fixture == base && !fired(ch.name)).then_some(ch.name))
             .collect();
         assert_eq!(missed, Vec::<&str>::new(), "{base}");
+        // (T182) every red fixture is run under its tier: the `county-` ones ran under none
+        // the fix rides in the compared value
+        let untiered = base.ends_with("-red.svg")
+            && super::lockstep_checks::sheet_tier(Path::new(name), &real()).is_none();
+        assert_eq!(
+            (
+                base.as_str(),
+                untiered,
+                "add its sheet's prefix to FIXTURE_TIER"
+            ),
+            (
+                base.as_str(),
+                false,
+                "add its sheet's prefix to FIXTURE_TIER"
+            )
+        );
         let reported = base.ends_with("-red.svg")
             || base.contains("-refused-")
             || checks["report"]["ok"].is_string();

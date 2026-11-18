@@ -7,15 +7,19 @@ step 3b deletes that Python; the answers stay as the record.
 
     python3 -I rust/mode_a/src/labels/hand_sheet/held_cases.py rust/mode_a/src/labels/hand_sheet/held.json
 """
+
 import json, sys, traceback
+
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[5]))  # the tree: <tree>/rust/mode_a/src/labels/<unit>/
 from l7r.diagram.labels import hand_sheet as H
 
 HEAD = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0 400 300">\n'
 BACK = '  <rect x="0" y="0" width="400" height="300" fill="#EFE3C2" data-kind="-"/>\n'
 
+
 def sheet(*body, head=HEAD, back=BACK):
     return head + back + "".join(body) + "</svg>\n"
+
 
 EVERYTHING = sheet(
     '  <text x="200" y="14" font-size="12">Plan of everything</text>\n',
@@ -44,8 +48,7 @@ EVERYTHING = sheet(
     '  <line x1="0" y1="170" x2="240" y2="170" stroke="#2D2A24" stroke-width="6" data-kind="wall"/>\n',
     '  <path d="M 10 10 L 30 10 L 30 30" fill="none" stroke="#2D2A24" stroke-width="1" data-kind="lane mark" data-leader="1"/>\n',
     '  <x:note xmlns:x="urn:example"><x:rect x="1" y="1" width="2" height="2"/></x:note>\n',
-    '  <rect x="160" y="40" width="60" height="50" fill="#E8D2A8" data-kind="stores" data-id="s1"/>\n'
-    '  <rect x="160" y="95" width="30" height="20" fill="#E8D2A8" data-kind="stores" data-id="s2"/>\n',
+    '  <rect x="160" y="40" width="60" height="50" fill="#E8D2A8" data-kind="stores" data-id="s1"/>\n  <rect x="160" y="95" width="30" height="20" fill="#E8D2A8" data-kind="stores" data-id="s2"/>\n',
     '  <text x="190" y="70" font-size="7" data-kind="stores" data-names="s1 s2">stores</text>\n',
     '  <text x="190" y="80" font-size="7" data-kind="stores" data-names="s2">second store</text>\n',
     '  <text x="10" y="295" font-size="6" data-kind="-">scale 1:100</text>\n',
@@ -60,11 +63,13 @@ STEPPED = sheet(
     '  <g data-kind="crowded"><rect x="10" y="10" width="380" height="60" fill="#2D2A24"/><text x="200" y="40" font-size="40">A VERY LONG NAME THAT FITS NOWHERE AT ALL</text></g>\n',
 )
 
+
 def run(svg):
     try:
         return {"svg": svg, "placed": H.placed(svg)}
     except Exception as e:
         return {"svg": svg, "raises": traceback.format_exception_only(type(e), e)[-1].rstrip("\n")}
+
 
 SCATTER = sheet(
     '  <g data-kind="cairns"><polygon points="50,50 60,50 55,40" fill="#7A7A7A"/><polygon points="80,60 90,60 85,50" fill="#7A7A7A"/><text x="70" y="80" font-size="7">cairns</text></g>\n',
@@ -73,6 +78,12 @@ SCATTER = sheet(
 REFUSALS = [
     sheet('<g data-kind="x"><text x="5" y="5" font-size="6">lonely</text></g>\n'),
     sheet('<g data-kind="tub"><circle cx="50" cy="50" r="5"/><text x="80" y="80" font-size="6">tub</text></g>\n', back='<_x/>' + BACK),
+    # feature 449 T182: an element an internal entity expands to has no start tag in the source: refused by name
+    sheet(
+        '<g data-kind="tub"><circle cx="50" cy="50" r="5"/><text x="80" y="80" font-size="6">tub</text></g>\n',
+        head='<!DOCTYPE svg [<!ENTITY e "<rect x=\'1\' y=\'1\' width=\'1\' height=\'1\'/>">]>' + HEAD,
+        back='&e;' + BACK,
+    ),
     sheet('<g data-kind="tub" xmlns:s="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="5"/><s:text x="80" y="80" font-size="6">tub</s:text></g>\n'),
     sheet('  <text x="5" y="5" font-size="6" data-kind="x" data-cont="1">orphan</text>\n'),
     sheet('  <text x="5" y="5" font-size="6" data-kind="x" data-names="nowhere">named</text>\n'),

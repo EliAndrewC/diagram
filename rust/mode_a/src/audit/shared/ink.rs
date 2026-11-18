@@ -35,9 +35,6 @@ const SKIP_TAGS: [&str; 6] = ["defs", "pattern", "symbol", "clipPath", "mask", "
 
 static VIEWBOX: LazyLock<Regex> =
     LazyLock::new(|| py(r#"viewBox="\s*([\-\d.]+)\s+([\-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*""#));
-static NUM: LazyLock<Regex> = LazyLock::new(|| py(r"-?\d+(?:\.\d+)?"));
-static PATH_CMD: LazyLock<Regex> =
-    LazyLock::new(|| py(r"([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)"));
 static TRANSLATE: LazyLock<Regex> =
     LazyLock::new(|| py(r"translate\(\s*(-?[\d.]+)[\s,]*(-?[\d.]+)?\s*\)"));
 static LEADING: LazyLock<Regex> = LazyLock::new(|| py(r"^\s*(-?\d+(?:\.\d+)?)"));
@@ -57,38 +54,15 @@ fn truthy(value: Option<&str>) -> Option<&str> {
     value.filter(|v| !v.is_empty())
 }
 
-/// The ABSOLUTE points a path visits - the coordinates after an upper-case command; a relative command's offsets are skipped.
-///
-/// Research:
-///     its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG arc arguments)
+/// Every coordinate a path gives, made absolute ([`crate::tagged::path_walk`]): its ink's extent. FEATURE 449 T182: a relative command's
+/// offsets were skipped, so a path drawn in relative steps reached no farther than its last absolute point; they are offsets from the
+/// segment's start, read as such.
 #[must_use]
 pub fn path_points(d: &str) -> (Vec<f64>, Vec<f64>) {
-    let (mut xs, mut ys) = (Vec::new(), Vec::new());
-    for c in PATH_CMD.captures_iter(d).flatten() {
-        let nums: Vec<f64> = NUM
-            .find_iter(&c[2])
-            .flatten()
-            .filter_map(|m| float(m.as_str()).ok())
-            .collect();
-        match &c[1] {
-            "H" => xs.extend(&nums),
-            "V" => ys.extend(&nums),
-            "M" | "L" | "T" | "C" | "S" | "Q" => {
-                xs.extend(nums.iter().step_by(2));
-                ys.extend(nums.iter().skip(1).step_by(2));
-            }
-            "A" => {
-                let mut k = 0;
-                while k + 6 < nums.len() {
-                    xs.push(nums[k + 5]);
-                    ys.push(nums[k + 6]);
-                    k += 7;
-                }
-            }
-            _ => {}
-        }
-    }
-    (xs, ys)
+    crate::tagged::path_walk(d)
+        .into_iter()
+        .flat_map(|(_, pts)| pts)
+        .unzip()
 }
 
 /// One element's ink and its children's, shifted by the translations above it; a caption's width estimated from its length.

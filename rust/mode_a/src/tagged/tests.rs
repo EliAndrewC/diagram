@@ -43,10 +43,39 @@ fn a_path_visits_its_absolute_points() {
             (7.0, 6.0),
             (7.0, 8.0),
             (9.0, 9.0),
-            (10.0, 11.0)
+            (10.0, 11.0),
+            (15.0, 16.0)
         ]
     );
     assert!(path_points("C 1").unwrap().is_empty());
+}
+
+/// T182: a relative command's pairs are offsets from the segment's start (they were skipped), a `Z` returns to the subpath's start, a
+/// repeated curve visits each segment's end, and a number with an exponent or a leading point is one number.
+#[test]
+fn a_relative_step_is_read_from_where_the_path_stands() {
+    assert_eq!(
+        path_points("M 10 10 l 5 0 0 5 h -2 v 3 c 1 1 2 2 3 3 4 4 5 5 6 6 z q 1 0 2 2 t 3 3 s 0 1 2 2 a 1 1 0 0 1 4 0 M1e1 .5").unwrap(),
+        [
+            (10.0, 10.0),
+            (15.0, 10.0),
+            (15.0, 15.0),
+            (13.0, 15.0),
+            (13.0, 18.0),
+            (16.0, 21.0),
+            (22.0, 27.0),
+            (12.0, 12.0),
+            (15.0, 15.0),
+            (17.0, 17.0),
+            (21.0, 17.0),
+            (10.0, 0.5)
+        ]
+    );
+    let (xs, ys) = crate::audit::shared::ink::path_points("M 10 10 c 1 -20 2 2 3 3");
+    assert_eq!(
+        (xs, ys),
+        (vec![10.0, 11.0, 12.0, 13.0], vec![10.0, -10.0, 12.0, 13.0])
+    );
 }
 
 #[test]
@@ -61,5 +90,17 @@ fn a_translate_moves_the_ink_and_a_bad_one_is_refused() {
     assert_eq!(
         uncaught(&bad),
         "ValueError: could not convert string to float: '1.2.3'\n"
+    );
+}
+
+/// T182: an attribute in single quotes, or spaced about its `=`, is read (it read as absent: a single-quoted `data-kind` untagged, its
+/// box at the origin).
+#[test]
+fn an_attribute_in_either_quote_is_read() {
+    let ms =
+        marks(r#"<svg><rect x='1' y = "2" width='3' height='4' data-kind='hut'/></svg>"#).unwrap();
+    assert_eq!(
+        (ms[0].x, ms[0].y, ms[0].w, ms[0].h, ms[0].kind.as_deref()),
+        (1.0, 2.0, 3.0, 4.0, Some("hut"))
     );
 }

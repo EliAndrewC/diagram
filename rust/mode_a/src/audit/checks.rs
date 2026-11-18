@@ -241,6 +241,9 @@ pub fn fire_water_adrift(plan: &ParsedPlan) -> Vec<TubAdrift> {
 
 /// The centers (px) of the doors on building `b`: each rect the sheet tags `door` or the shoe stone it declares, within
 /// [`DOOR_ON_WALL_PX`] of the footprint and of one of its edges (an inner room's door, deep inside, is no entrance).
+///
+/// Research:
+///     a stepping stone counts as a door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a reception our plans enter by a stepping stone at its veranda has its tub beside that stone, so the shoe stone a sheet declares is that building's door for its tubs.
 #[must_use]
 pub fn doors_of(plan: &ParsedPlan, b: &Rect) -> Vec<(f64, f64)> {
     let m = DOOR_ON_WALL_PX;
@@ -267,8 +270,12 @@ pub fn doors_of(plan: &ParsedPlan, b: &Rect) -> Vec<(f64, f64)> {
 
 /// Fire-water tubs that stand at a building's wall but not at its entrance (feature 372 wave 106): a tub's center stands within the
 /// engine's reach of a door of a building whose eaves hold it ([`tub_by_its_door`]). A tub whose buildings tag no door fails too; a
-/// tub at a bath (its NEAREST host, [`DOORLESS_KINDS`]) is not judged by a door; one adrift of every building is
-/// [`fire_water_adrift`]'s. Worst first.
+/// tub at a bath (its NEAREST host, or one of the hosts tied for nearest, [`DOORLESS_KINDS`]) is not judged by a door; one adrift of
+/// every building is [`fire_water_adrift`]'s. Worst first.
+///
+/// Research:
+///     a bath's tub on its yard side - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the bath our plans attach to the kitchen, entered from the house, has its tub on its yard side, so a tub whose nearest host is a bath - or a bath tied for nearest - is not judged by a door
+///     each tub beside a door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: each tub stands beside a door of its building, within the convention's reach, so every other tub stands by a door of a building whose eaves hold it
 #[must_use]
 pub fn tubs_off_their_doors(plan: &ParsedPlan) -> Vec<TubOffItsDoor> {
     let mut out = Vec::new();
@@ -284,14 +291,20 @@ pub fn tubs_off_their_doors(plan: &ParsedPlan) -> Vec<TubOffItsDoor> {
             .flat_map(|b| doors_of(plan, b))
             .map(|(dx, dy)| (dx / FTPX, dy / FTPX))
             .collect();
+        // T182: every host tied for nearest is asked, never the first in plan order - the round-trip's bath tub stood 8 px from the bath
+        // and 8 px from the house, and was judged by the house's door 52 ft away
         let Some(nearest) = first_min(hosts.iter().copied(), |b| point_rect_dist(cx, cy, b)) else {
             continue;
         };
-        if plan
-            .label_kinds
-            .get(&nearest.pos)
-            .is_some_and(|k| DOORLESS_KINDS.contains(&k.as_str()))
-        {
+        let near = point_rect_dist(cx, cy, nearest);
+        if hosts.iter().any(|b| {
+            // an exact tie, as the Python's `==` asks it
+            point_rect_dist(cx, cy, b).total_cmp(&near).is_eq()
+                && plan
+                    .label_kinds
+                    .get(&b.pos)
+                    .is_some_and(|k| DOORLESS_KINDS.contains(&k.as_str()))
+        }) {
             continue;
         }
         if !doors.is_empty() && tub_by_its_door((cx / FTPX, cy / FTPX), &doors) {
@@ -316,6 +329,10 @@ pub fn tubs_off_their_doors(plan: &ParsedPlan) -> Vec<TubOffItsDoor> {
 /// Fire-water tubs whose glyph overlaps a building footprint (or a ROOFED court, feature 267 pass 3) instead of standing clear of it.
 /// The measure is the DRAWN DISC's penetration past the nearest footprint edge, not its center's position (GM catch 2026-07-26): it
 /// rises smoothly from the first pixel of contact. Worst (deepest in) first.
+///
+/// Research:
+///     no tub inside a building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: no tub stands inside a building's outline on our plans, so a tub's disc reaching into a footprint is refused.
+///     no tub under a roofed court - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: no tub stands inside a building's outline, and a roofed court is under a roof as a building is, so a tub's disc reaching into one is refused (feature 267 pass 3).
 #[must_use]
 pub fn tubs_in_buildings(plan: &ParsedPlan, min_px: f64) -> Vec<TubInBuilding> {
     let mut out = Vec::new();
@@ -354,6 +371,9 @@ pub fn overlap_px(left: f64, top: f64, right: f64, bottom: f64, b: &Rect) -> f64
 }
 
 /// Fire-water tubs sitting ON a well: overlapping point glyphs read as one object (a rain-fed fire tub is not the drawing well).
+///
+/// Research:
+///     a tub off a well - CONVENTION: a fire-water tub's glyph never overlaps a well's, two point glyphs that would read as one object; no page gives it.
 #[must_use]
 pub fn tubs_on_wells(plan: &ParsedPlan, min_px: f64) -> Vec<TubOnWell> {
     plan.tubs

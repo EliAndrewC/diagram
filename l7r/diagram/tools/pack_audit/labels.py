@@ -32,8 +32,9 @@ def footprint(plan: ParsedPlan, kind: str) -> Rect | None:
 def matches(item: RequiredItem, labels: Sequence[Label]) -> list[Label]:
     """The sheet's labels a LABELED item's regex finds, case-insensitive, over the whole text (a kind item, feature
     262, is found by its tag and never by a label)."""
-    assert item.label is not None  # a declaration item is labeled or kinded (types.py `_item` refuses anything else)
-    return [lb for lb in labels if item.label.search(" ".join(lb.text.split()))]
+    # a declaration item is labeled or kinded (types.py `_item` refuses anything else) and its callers ask a kind first, so the label
+    # is there (feature 449 T182: the assert that said so could not fire)
+    return [lb for lb in labels if item.label.search(" ".join(lb.text.split()))]  # type: ignore[union-attr]
 
 
 def _present(item: RequiredItem, plan: ParsedPlan) -> bool:
@@ -51,8 +52,7 @@ def _how_found(item: RequiredItem) -> str:
     """How the sheet shows an item, in the words a missing-item finding uses."""
     if item.kind is not None:
         return f'an element tagged data-kind="{item.kind}"'
-    assert item.label is not None
-    return f"a label matching /{item.label.pattern}/"
+    return f"a label matching /{item.label.pattern}/"  # type: ignore[union-attr] - labeled where not kinded, as `matches` reads it
 
 
 def check_program(plan: ParsedPlan, btype: BuildingType, form: str | None, site: Mapping[str, bool] | None = None) -> list[str]:

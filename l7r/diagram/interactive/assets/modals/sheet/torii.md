@@ -15,7 +15,9 @@ ordinary shrine's approach may run under one, three or seven arches, numbers tha
 all.
 
 Guesses:
-- That a village shrine had a single arch: no count of shrines' arches was found; a shrine, unlike a small wayside shrine, had one, and numbered gates belong to great shrines.
+- That a village shrine's approach runs under one, three or seven arches: no count of shrines' arches was found; a shrine, unlike
+  a small wayside shrine, had one, an ordinary shrine's known arches before 1868 stood singly, and the three and seven are the
+  setting's numbers.
 - How far a compound shrine's arch stands before its hall, about 5 ft where the plan is tight and up to 12 ft where there is
   room: no distance from any torii to its hall was found.
 - That a row of arches before a country shrine stands 12 ft apart, its innermost 12 ft off the hall: the one small rural row

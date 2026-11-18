@@ -94,32 +94,84 @@ pub fn sanctuary_on_axis(plan: &ParsedPlan, tol_ft: f64) -> Vec<String> {
 const NO_APPROACH: &str =
     "the sheet declares no approach / arch (mark the rects id=\"approach\", id=\"arch\")";
 
-/// The arch straddles the approach where the way enters the precinct.
+/// The counts of arches an avenue takes (0220's drawing page: one, three or seven, a deliberate deviation of the setting's).
 ///
 /// Research:
-///     the arch over the approach at the ground's edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the approach runs under its arch, and the first arch stands where the approach enters the shrine's ground.
+///     the arch count - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: a shrine's approach runs under one, three or seven arches, the counts the page records as a deliberate deviation.
+pub const ARCH_COUNTS: [usize; 3] = [1, 3, 7];
+/// The innermost arch off the hall's nearest face (ft).
+///
+/// Research:
+///     the innermost arch off the hall - CONVENTION: the innermost arch stands 12 ft off the hall's nearest face, measured to the building's outline, a map drawing convention research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html records.
+pub const INNERMOST_FT: f64 = 12.0;
+/// The innermost arch's play about its distance off the hall (ft).
+///
+/// Research:
+///     the innermost arch's tolerance - GUESS: the innermost arch passes within 2 ft of its 12 ft off the hall, the arch edge tolerance's figure; no page gives it.
+pub const INNERMOST_TOL_FT: f64 = 2.0;
+
+/// The clear distance between two rects (zero where they touch or overlap).
+fn box_gap(a: &Rect, b: &Rect) -> f64 {
+    let dx = max(max(a.x - b.x2(), b.x - a.x2()), 0.0);
+    let dy = max(max(a.y - b.y2(), b.y - a.y2()), 0.0);
+    hypot(dx, dy)
+}
+
+/// The arches straddle the approach, one, three or seven of them, and the first - the one farthest from the hall - stands where the way
+/// enters the precinct, unless the innermost stands its 12 ft off the hall, which holds where both cannot (feature 449 T177: the check
+/// judged one arch, in document order, and refused a first arch moved inward for the innermost).
+///
+/// Research:
+///     the arch over the approach at the ground's edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the approach runs under its arches, and the first arch stands where the approach enters the shrine's ground.
+///     the first arch moved for the innermost - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: where the first arch and the innermost cannot both keep their places, the innermost holds and the first arch moves with the run, off the place where the approach enters the shrine's ground.
 ///
 /// # Errors
 /// A plan with no interior: the Python's `min()` of nothing in `bounds`.
 pub fn arch_on_approach(plan: &ParsedPlan, edge_tol_ft: f64) -> Result<Vec<String>, Error> {
-    let (Some(approach), Some(arch)) = (one(plan, "approach"), one(plan, "arch")) else {
+    let arches = plan.by_id("arch");
+    let (Some(approach), Some(&leading)) = (one(plan, "approach"), arches.first()) else {
         return Ok(vec![NO_APPROACH.to_owned()]);
     };
-    let (lx, ly) = lap(approach, arch);
     let mut out = Vec::new();
-    if lx <= 0.0 || ly <= 0.0 {
+    if !ARCH_COUNTS.contains(&arches.len()) {
+        out.push(format!(
+            "the approach runs under {} arches - a shrine's avenue is one, three or seven",
+            arches.len()
+        ));
+    }
+    if arches.iter().any(|a| {
+        let (lx, ly) = lap(approach, a);
+        lx <= 0.0 || ly <= 0.0
+    }) {
         out.push(
             "the arch does not straddle the approach - a gateway stands over the way".to_owned(),
         );
     }
+    let hall = one(plan, "hall");
+    let (mut first, mut innermost) = (leading, leading);
+    if let Some(h) = hall {
+        // strict comparisons, so the first of equals is kept, as the Python's loop keeps it
+        for &a in &arches[1..] {
+            if box_gap(a, h) > box_gap(first, h) {
+                first = a;
+            }
+            if box_gap(a, h) < box_gap(innermost, h) {
+                innermost = a;
+            }
+        }
+    }
     let (left, top, right, bottom) = plan.bounds()?;
-    let (gx, gy) = center(arch);
+    let (gx, gy) = center(first);
     let reach = edge_tol_ft * FTPX;
     let edge = min(
         min(min((gx - left).abs(), (gx - right).abs()), (gy - top).abs()),
         (gy - bottom).abs(),
     );
-    if edge > reach + max(arch.w, arch.h) / 2.0 {
+    let at_edge = edge <= reach + max(first.w, first.h) / 2.0;
+    let held = hall.is_some_and(|h| {
+        (box_gap(innermost, h) - INNERMOST_FT * FTPX).abs() <= INNERMOST_TOL_FT * FTPX
+    });
+    if !at_edge && !held {
         out.push(
             "the arch stands inside the precinct rather than at its edge, where the way enters"
                 .to_owned(),
@@ -128,61 +180,81 @@ pub fn arch_on_approach(plan: &ParsedPlan, edge_tol_ft: f64) -> Result<Vec<Strin
     Ok(out)
 }
 
-/// The well stands beside the approach, never on it and never under the arch.
+/// The basin, and the shrine's own well, stand beside the approach, never on it and never under an arch (feature 449 T182: the check judged
+/// the well alone, under the basin's claim, and the first arch alone - the basin 0222 places beside the approach was judged by nothing,
+/// and the well is 0196's, a shrine's own water).
 ///
 /// Research:
-///     the basin beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a shrine has its stone basin for rinsing the hands and mouth, standing beside the approach at the innermost arch, so never on the approach or under the arch.
+///     the basin beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a plain stone basin for rinsing the hands and mouth stands beside the approach at the innermost torii, so the basin a sheet declares (id=basin) is never on the approach or under an arch.
+///     a shrine draws its basin - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0196-communal-wells-ido.drawing.html: a village shrine has its stone basin beside the approach (0222), and the ablution well a shrine set apart from the houses keeps (0196) comes in addition, never in its place, so a sheet without its basin is refused.
+///     the well off the way - research/questions/0196-communal-wells-ido.drawing.html: a shrine's own ablution well (the sheet's id=well or its well-curb fill) stands beside the hall, measured from the hall's edge, so it stands off the approach and clear of the arches.
 #[must_use]
 pub fn well_clear_of_arch(plan: &ParsedPlan) -> Vec<String> {
+    let basins = plan.by_id("basin");
     let declared = plan.by_id("well");
     let wells: Vec<&Rect> = if declared.is_empty() {
-        plan.wells.iter().collect()
+        plan.wells.iter().filter(|w| !basins.contains(w)).collect()
     } else {
         declared
     };
-    if wells.is_empty() {
-        return vec![
-            "no well on the sheet (a shrine needs its purification well or basin)".to_owned(),
-        ];
+    // T182 (its claims round): a well stood in for the basin; 0222 draws the basin at every village shrine, and 0196's well comes in
+    // addition
+    if basins.is_empty() {
+        return vec!["no basin on the sheet - a village shrine has its stone basin beside the approach (mark it id=\"basin\"); a well comes in addition, never in its place".to_owned()];
     }
-    let (Some(approach), Some(arch)) = (one(plan, "approach"), one(plan, "arch")) else {
+    let arches = plan.by_id("arch");
+    let Some(approach) = one(plan, "approach").filter(|_| !arches.is_empty()) else {
         return vec![NO_APPROACH.to_owned()];
     };
+    let on = |w: &Rect, r: &Rect| {
+        let (lx, ly) = lap(w, r);
+        lx > WALL_OVERLAP_MIN_PX && ly > WALL_OVERLAP_MIN_PX
+    };
     let mut out = Vec::new();
-    for w in wells {
-        for (name, r) in [("approach", approach), ("arch", arch)] {
-            let (lx, ly) = lap(w, r);
-            if lx > WALL_OVERLAP_MIN_PX && ly > WALL_OVERLAP_MIN_PX {
-                out.push(format!(
-                    "the well at svg({},{}) stands on the {name}",
-                    fixed(w.x, 0),
-                    fixed(w.y, 0)
-                ));
+    for (what, found) in [("basin", &basins), ("well", &wells)] {
+        for w in found {
+            for (name, hit) in [
+                ("approach", on(w, approach)),
+                ("arch", arches.iter().any(|a| on(w, a))),
+            ] {
+                if hit {
+                    out.push(format!(
+                        "the {what} at svg({},{}) stands on the {name}",
+                        fixed(w.x, 0),
+                        fixed(w.y, 0)
+                    ));
+                }
             }
         }
     }
     out
 }
 
-/// A village shrine's precinct is NOT enclosed (feature 268; research 0223): a fence group whose extent takes in the hall, and a compound
-/// wall stroke at the sheet's edge, are reported; a fence around the sanctuary alone (a richer shrine's donation) passes.
+/// A village shrine's precinct is NOT enclosed (feature 268; research 0223): a fence group whose extent takes in the hall, one whose
+/// extent takes in the sanctuary (feature 449 T177: it passed, as a richer shrine's donation, where 0223's drawing page draws none
+/// however rich the parish), and a compound wall stroke at the sheet's edge, are reported.
 ///
 /// Research:
-///     the precinct left open - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: a village shrine's precinct has no fence, wall or hedge round it, so a fence whose extent takes in the hall and a compound wall at the sheet's edge are refused; a fence round the sanctuary alone is not judged here, though the page draws none however rich the parish.
+///     the precinct left open - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: a village shrine's precinct has no fence, wall or hedge round it, so a fence whose extent takes in the hall and a compound wall at the sheet's edge are refused.
+///     no fence round the sanctuary - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: no fence is drawn round a village shrine's sanctuary, however rich the parish, so a fence whose extent takes in the sanctuary is refused; a fence lining the approach alone is not judged, the page saying only that none is drawn round the precinct or the sanctuary.
 ///
 /// # Errors
 /// A plan with no interior: the Python's `min()` of nothing in `bounds`.
 pub fn no_precinct_enclosure(plan: &ParsedPlan) -> Result<Vec<String>, Error> {
     let mut out = Vec::new();
-    let hall = plan.by_id("hall");
-    if let (false, Some(h)) = (plan.fence_segs.is_empty(), hall.first()) {
+    let (hall, sanctuary) = (one(plan, "hall"), one(plan, "sanctuary"));
+    if !plan.fence_segs.is_empty() {
         let fs = &plan.fence_segs;
         let left = crate::audit::checks::min_of(fs.iter().map(|r| r.x), 0.0);
         let top = crate::audit::checks::min_of(fs.iter().map(|r| r.y), 0.0);
         let right = crate::audit::checks::max_of(fs.iter().map(|r| r.x + r.w), 0.0);
         let bottom = crate::audit::checks::max_of(fs.iter().map(|r| r.y + r.h), 0.0);
-        if left <= h.x && top <= h.y && right >= h.x + h.w && bottom >= h.y + h.h {
-            out.push("a fence rings the precinct (its extent takes in the hall) - a village shrine's ground is marked by its arch and its wood; a fence rings the sanctuary alone, and only as a richer shrine's donation".to_owned());
+        let ringed =
+            |h: &Rect| left <= h.x && top <= h.y && right >= h.x + h.w && bottom >= h.y + h.h;
+        if hall.is_some_and(ringed) {
+            out.push("a fence rings the precinct (its extent takes in the hall) - a village shrine's ground is marked by its arch and its wood, with no fence round its precinct or its sanctuary".to_owned());
+        } else if sanctuary.is_some_and(ringed) {
+            out.push("a fence rings the sanctuary - no fence is drawn round a village shrine's sanctuary, however rich the parish".to_owned());
         }
     }
     let (left, top, right, bottom) = plan.bounds()?;

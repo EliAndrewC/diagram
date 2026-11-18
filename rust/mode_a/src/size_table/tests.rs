@@ -138,10 +138,22 @@ fn what_the_python_refused_is_refused_in_its_order() {
         refusal("<g/>"),
         ("ValueError", "no <svg> element in the sheet".to_owned())
     );
-    // `<_r>` is an element to the XML reader and no start tag to the pattern: the rect's index runs past the start tags
+    // `<_r>` is an element to the XML reader and, since feature 449 T182, a start tag to the reader's tokens: the rect after it is read
+    // (its index ran past the start tags, refused as an `IndexError`)
     assert_eq!(
-        refusal(r#"<svg><_r/><rect x="1" y="1" width="1" height="1"/></svg>"#),
-        ("IndexError", "list index out of range".to_owned())
+        table(r#"<svg><_r/><rect x="1" y="1" width="1" height="1"/></svg>"#)
+            .unwrap()
+            .rects
+            .len(),
+        1
+    );
+    // an element an internal entity expands to has no start tag in the source: refused by name (it ran the rects past their tags, or,
+    // the last element no rect, paired every later rect with the wrong tag's kind)
+    assert_eq!(
+        refusal(
+            r#"<!DOCTYPE svg [<!ENTITY e "<rect x='1' y='1' width='1' height='1'/>">]><svg>&e;<rect x="2" y="2" width="1" height="1"/></svg>"#
+        ),
+        ("ValueError", "the sheet's elements and its start tags disagree - an entity that expands to markup draws an element the source does not write; write the element out".to_owned())
     );
     let nines = "9".repeat(400);
     assert_eq!(

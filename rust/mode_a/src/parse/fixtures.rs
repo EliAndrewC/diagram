@@ -61,7 +61,7 @@ const FULL: &str = r##"<?xml version="1.0"?>
 <circles cx="1" cy="1" r="9" fill="#7A8C5C"/><circle/>
 <linear x1="1" y1="1" x2="2" y2="2" stroke="#2D2A24"/>
 <g/><g stroke="#2D2A24"/><line x1="0" y1="0" x2="5" y2="0"/>
-<g̃ id="trees"><circle cx="5" cy="5" r="5"/></g>
+<g̃ id="trees"><circle cx="5" cy="5" r="5"/></g̃>
 <gid="fence"><line x1="5" y1="5" x2="5" y2="50"/></gid>
 <g id="fence"><line x1="7" y1="5" x2="7" y2="50"/></g>
 <g fill="#7A8C5C" id="trees"><circle cx="9" cy="9" r="9"/></g>

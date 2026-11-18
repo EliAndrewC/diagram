@@ -23,13 +23,15 @@ from functools import lru_cache
 
 from ...interactive.sheet import DEFS, Node, parse
 
-_ATTR = re.compile(r'([\w:-]+)="([^"]*)"')
+#: An attribute and its value, in either quote (feature 449 T182: a single-quoted attribute read as absent).
+_ATTR = re.compile(r"""([\w:-]+)\s*=\s*(["'])([^<]*?)\2""")
 _NUM = re.compile(r"-?\d+(?:\.\d+)?")
 _TRANSLATE = re.compile(r"translate\(\s*(-?[\d.]+)[\s,]*(-?[\d.]+)?\s*\)")
 _PATH_CMD = re.compile(r"([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)")
 _INNER_TAG = re.compile(r"<[^>]*>")
 #: the presentation attributes a child inherits from its group (SVG's own inheritance)
-INHERITED: tuple[str, ...] = ("fill", "stroke", "stroke-width", "font-size", "font-weight", "font-style")
+#: (feature 449 T182: "stroke-dasharray" too, SVG's own inheritance, so a check tells a dashed sliding partition from a solid wall)
+INHERITED: tuple[str, ...] = ("fill", "stroke", "stroke-width", "font-size", "font-weight", "font-style", "stroke-dasharray")
 _SKIP = {DEFS, "pattern", "symbol", "clipPath", "mask", "marker"}
 
 
@@ -79,27 +81,53 @@ class Mark:
         return self.kind == kind or kind in self.lineage
 
 
-def path_points(d: str) -> tuple[tuple[float, float], ...]:
-    """The ABSOLUTE points a path visits, in order (M, L, H, V, and the end point of every curve or arc); a relative
-    command's offsets are skipped, as `shared._path_points` skips them."""
-    out: list[tuple[float, float]] = []
-    x = y = 0.0
+#: A path's number: a sign, digits with or without a point, an exponent (feature 449 T182: `-?\d+(?:\.\d+)?` read `1e1` as two
+#: numbers and `.5` as `5`).
+_PATH_NUM = re.compile(r"[-+]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][-+]?[0-9]+)?")
+#: How many numbers one segment of each command takes.
+_PATH_STEP = {"M": 2, "L": 2, "T": 2, "H": 1, "V": 1, "C": 6, "S": 4, "Q": 4, "A": 7}
+
+
+def path_walk(d: str) -> list[tuple[str, list[tuple[float, float]]]]:
+    """Each segment of a path, in order, as its command (upper case) and its points made ABSOLUTE - every coordinate pair it gives
+    (a curve's control points and its end), an arc its end alone, a horizontal or vertical step the point it reaches. A relative
+    command's pairs are offsets from the segment's start, a `Z` returns to its subpath's start, and a command's numbers repeat it
+    segment by segment (feature 449 T182: the relative commands were skipped, and a repeated curve kept only its last end).
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG curve arguments)
+    """
+    out: list[tuple[str, list[tuple[float, float]]]] = []
+    x = y = sx = sy = 0.0
     for cmd, body in _PATH_CMD.findall(d):
-        nums = [float(n) for n in _NUM.findall(body)]
-        if cmd == "H" and nums:
-            x = nums[-1]
-            out.append((x, y))
-        elif cmd == "V" and nums:
-            y = nums[-1]
-            out.append((x, y))
-        elif cmd in "ML":
-            for i in range(0, len(nums) - 1, 2):
-                x, y = nums[i], nums[i + 1]
-                out.append((x, y))
-        elif cmd in "CSQTA" and len(nums) >= 2:
-            x, y = nums[-2], nums[-1]
-            out.append((x, y))
-    return tuple(out)
+        up, rel = cmd.upper(), cmd.islower()
+        if up == "Z":
+            x, y = sx, sy
+            continue
+        nums = [float(n) for n in _PATH_NUM.findall(body)]
+        step = _PATH_STEP[up]
+        for i in range(0, len(nums) - step + 1, step):
+            v = nums[i : i + step]
+            if up == "H":
+                x = x + v[0] if rel else v[0]
+                pts = [(x, y)]
+            elif up == "V":
+                y = y + v[0] if rel else v[0]
+                pts = [(x, y)]
+            elif up == "A":
+                pts = [(x + v[5], y + v[6]) if rel else (v[5], v[6])]
+            else:
+                pts = [(x + v[k], y + v[k + 1]) if rel else (v[k], v[k + 1]) for k in range(0, step, 2)]
+            x, y = pts[-1]
+            if up == "M" and i == 0:
+                sx, sy = x, y
+            out.append((up, pts))
+    return out
+
+
+def path_points(d: str) -> tuple[tuple[float, float], ...]:
+    """The points a path visits, in order: each segment's end, made absolute (`path_walk`)."""
+    return tuple(pts[-1] for _cmd, pts in path_walk(d))
 
 
 def _num(attrs: dict[str, str], key: str) -> float:
@@ -144,7 +172,7 @@ def marks(svg: str) -> tuple[Mark, ...]:
     def visit(node: Node, kind: str | None, lineage: tuple[str, ...], paint: dict[str, str], dx: float, dy: float) -> None:
         if not node.name or node.name in _SKIP:
             return
-        a = dict(_ATTR.findall(node.open))
+        a = {k: v for k, _q, v in _ATTR.findall(node.open)}
         own = node.kind if node.kind is not None else kind
         lineage = lineage + tuple(k for k in (node.part_of, node.kind) if k is not None)
         paint = {**paint, **{k: a[k] for k in INHERITED if k in a}}

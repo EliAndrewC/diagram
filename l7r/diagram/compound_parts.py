@@ -481,6 +481,42 @@ def round_the_corner(p: Placed, side: str, door: tuple[float, float]) -> list[tu
     return out
 
 
+def seats_within_reach(p: Placed, doors: Sequence[tuple[float, float]]) -> list[tuple[str, float]]:
+    """Every seat on `p`'s faces, every half foot, where a tub 2.5 ft out stands by one of `doors` (`tub_by_its_door`), as
+    (face, frac), the nearest to a door first across the faces: the draft's last search for a tub's seat at a building that
+    has doors (feature 449 T182: the court-face and end-face seats it fell back to stood anywhere along the building, and the
+    round-trip's karo's house's tub stood 20.8 ft off its door, which `tubs_off_their_doors` refused).
+
+    Research:
+        a tub within reach of its door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: each tub stands beside a door of its building, the water kept at the entrance, so a building with a door takes a tub only where it stands by one
+        its tub's offset - GUESS: no page gives how far a tub stands off its building's face - 2.5 (a tub's center off the face)
+        its search step - NONE: a half foot along the face, a sampling grain - 0.5
+    """
+    out: list[tuple[float, int, str, float]] = []
+    for order, side in enumerate("NSEW"):
+        nx, ny, fx, fy, length = _face(p, side)
+        for k in range(int(length / 0.5) + 1):
+            frac = min(k * 0.5 / length, 1.0)
+            tub = (fx + length * frac, fy + ny * 2.5) if ny else (fx + nx * 2.5, fy + length * frac)
+            if tub_by_its_door(tub, doors):
+                out.append((min(math.hypot(tub[0] - dx, tub[1] - dy) for dx, dy in doors), order, side, frac))
+    return [(side, frac) for _d, _o, side, frac in sorted(out)]
+
+
+def doored_tub_seats(p: Placed, doors: Sequence[tuple[float, float]]) -> list[tuple[str, float]] | None:
+    """Where a building of a door kind may take its tub: the seats within reach of a door it drew, nearest first
+    (`seats_within_reach`) - none at all when it drew no door; None for a building of no door kind (the bath), which takes
+    the court face and its ends (feature 449 T182: a door-kind building whose door found no seat fell to those and took a
+    court-face tub with no door drawn, against 0100's "Every wooden building with a tub draws its door").
+
+    Research:
+        a doored building's tub by a door or none - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: each tub stands beside a door of its building and every wooden building with a tub draws its door, so a building of a door kind takes its tub only within reach of a door it drew, or no tub
+    """
+    if p.spec.feature not in DOOR_KINDS:
+        return None
+    return seats_within_reach(p, doors) if doors else []
+
+
 def tub_by_its_door(tub: tuple[float, float], doors: Sequence[tuple[float, float]]) -> bool:
     """THE ONE PREDICATE of `tubs_off_their_doors` (feature 372 wave 106), in feet: a fire-water tub's CENTER stands within
     `TUB_DOOR_MAX_FT` of the center of one of its building's doors - research 0100's water kept at the entrance."""
@@ -551,7 +587,9 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         its figures guessed on 0105 - GUESS research/questions/0105-baths-furo.drawing.html: 20 (kitchen well as far as 20 ft out)
         its figures against 0196 - research/questions/0196-communal-wells-ido.drawing.html: 7.3 (well curb square, where the page's curb is about 4 ft square with a 4 ft apron) - a departure the code keeps until feature 417 T33
         its figures against 0196's curb - research/questions/0196-communal-wells-ido.drawing.html: 3.65 (well boxes privies keep off, the 7.3 ft curb halved) - a departure the code keeps until feature 417 T33
-        its figures guessed on 0100 - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2.6 (as above); 2.5 (as above)
+        its tub's seat box - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2.6 (the square a tub's seat holds, over the page's tub about 2.5 ft across)
+        its tub's offset - GUESS: no page gives how far a tub stands off its building's face - 2.5 (a tub's center off the face)
+        a doored building's tub by a door or none - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: each tub stands beside a door of its building and every wooden building with a tub draws its door, so a building of a door kind takes its tub only within reach of a door it drew - the nearest seat to a door first, across its faces - or no tub
         its tub count - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 (two tubs at the kitchen); 1 (one at each other wooden building)
         no tub at a kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: an earth-walled kura takes no tub
         its kitchen well - GUESS research/questions/0105-baths-furo.drawing.html: the kitchen's well past the bath, within 20 ft of the kitchen
@@ -737,10 +775,22 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             tub = next((t for side, c in doors.get(p.spec.name, []) if (t := seat(p, 2.6, beside_door_fracs(p, side, c), (2.5,), side))), None)
             corners = [corner for side, c in doors.get(p.spec.name, []) for corner in round_the_corner(p, side, c)]
             tub = tub or next((t for adj, frac in corners if (t := seat(p, 2.6, (frac,), (2.5,), adj))), None)
-            tub = tub or seat(p, 2.6, (0.15, 0.85, 0.4, 0.6, 0.05, 0.95, 0.03, 0.97), (2.5,))
-            # (the west or north end before the east or south: the example's kitchen's east end abuts the house, its
-            # west end the servants' yard)
-            tub = tub or seat(p, 2.6, toward_court, (2.5,), ends[1]) or seat(p, 2.6, toward_court, (2.5,), ends[0])
+            at_doors = [c for _side, c in doors.get(p.spec.name, [])]
+            reach = doored_tub_seats(p, at_doors)
+            if reach is not None:
+                # A BUILDING OF A DOOR KIND TAKES ITS TUB BY A DOOR OR NONE (feature 449 T182, research 0100: "Every wooden
+                # building with a tub draws its door"): any face's seat within reach of a door it drew, the nearest first
+                # across its faces - the court-face and end-face seats below stood anywhere along the building (the
+                # round-trip's karo's house: 20.8 ft off its door), and one whose door found no seat took a court-face tub
+                # with no door at all. No seat within reach seats no tub, and the sheet's checks name the building that
+                # lacks one; the rule is never loosened to place it.
+                tub = tub or next((t for f, frac in reach if (t := seat(p, 2.6, (frac,), (2.5,), f))), None)
+            else:
+                # a building with no door (the bath, entered from the house) takes the court face, then its ends
+                tub = tub or seat(p, 2.6, (0.15, 0.85, 0.4, 0.6, 0.05, 0.95, 0.03, 0.97), (2.5,))
+                # (the west or north end before the east or south: the example's kitchen's east end abuts the house, its
+                # west end the servants' yard)
+                tub = tub or seat(p, 2.6, toward_court, (2.5,), ends[1]) or seat(p, 2.6, toward_court, (2.5,), ends[0])
             # EVERY SEAT OFFERED STANDS BY ITS EAVES (feature 287, homes H29b): 2.5 ft off the face is inside the gutter's
             # reach by construction - held here by the rule's one predicate, the number the pack audit registers
             assert tub is None or tub_by_its_eaves(tub, (p.x_ft, p.y_ft, p.x2, p.y2)), "a tub seated past its eaves"

@@ -594,6 +594,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T171 (step 1's defects; the record's route (a), 0190 and 261 FR-015)": {
+   "sha256": "8080dbf770a57c825d820381a2ac6fb35479f122e7fce9bfbaf41a24c3c25408",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T171 Approach (checklist part A)": {
+   "sha256": "c97090229c98c9b353d59c8111905bb19b90fe4ceaecf889a5347e85a456b433",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T182 (step 1's defects: T174's, T175's and T176's findings)": {
+   "sha256": "4b7d96d45f34047135b97ffafe5d63601a7cf02059aa0af504ff371e65a95a8c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T182 Approach (checklist part A)": {
+   "sha256": "c74b988ea942953297aa5d43b824dd4f964845cfa97a3ed87a6305bd5a49a3e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T177 (step 1's defects; T175's and T176's claims rounds, DRIFTED)": {
+   "sha256": "ec39c1d87f4933b0265814ef820bce5fde883305fb481e03515b74b10b6bbce2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T177 Approach (checklist part A)": {
+   "sha256": "22942722ba818b7f44024df548b88ade23cf7871562ed58313e5c876198dc7e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -11396,6 +11432,220 @@
      "why": "Serves the GM's 2026-11-17 efficiency concern (report each piece's time and tokens) and the standing gate; decides nothing the spec left open beyond process."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T171 (step 1's defects; the record's route (a), 0190 and 261 FR-015)",
+    "### T171 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T171-route-a",
+     "summary": "The record's route (a): the entrance-board census line ('N of M households' ways out pass it') that feature 444's port dropped is restored by porting the count, not dropping the line.",
+     "class": "within",
+     "why": "Restores a behavior the step-1 port lost: the GM 2026-11-18 'we want to use this port to fix broken things as we find them ... we should fix all known bugs in each step before moving on to porting the next step'; FR-002 (a replaced piece does its job for its callers, its research claims hold) and 261 FR-015 (an entrance board stands where every departure passes it, which is what the line counts). Nothing asked is narrowed."
+    },
+    {
+     "id": "T171-walk-location",
+     "summary": "The households' ways-out walk is ported into the engine crate (rust/mode_a/src/census/routes.rs), rust/parked left as a reference.",
+     "class": "within",
+     "why": "Where the Rust lives is implementation; FR-001 asks the Python replaced by Rust, and this does that. No case excluded."
+    },
+    {
+     "id": "T171-freshness-test",
+     "summary": "The freshness test feature 444 dropped is restored: every pool hamlet's census block equal to what make notes-census writes, in the crate's end-to-end test.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior (a stale census block refuses a landing) and the restoration of a check the port lost; fix-as-we-go and FR-002's 'a ported check must still do its job'. Not unrequested scope."
+    },
+    {
+     "id": "T171-proof",
+     "summary": "Proved by reverting the entrance branch: the unit test and the freshness check turn red.",
+     "class": "within",
+     "why": "Shows the fix's tests catch the defect - the GM's 'a ported check is shown to work by catching what it is meant to catch'."
+    },
+    {
+     "id": "T171-order",
+     "summary": "Runs after step 3a (T151) and before step 3b, as one of step 1's defects.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule (known defects fixed before porting the next step) arrived after T151 had landed; placing step 1's defect before any further step's port is the soonest order that honors it, not a deferral."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T182 (step 1's defects: T174's, T175's and T176's findings)",
+    "### T182 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T182-approach",
+     "summary": "Fix step 1's remaining defects found by T174-T176 (sheet reader/XML forms, single-quoted attributes, gap_tag TIGHT under 0116's floor, path commands, the On-map error line, county red fixtures under the magistracies tier, privies_by_zone asking for both privies, dead registry.ft and unreachable branches removed, T176's claims given pages) in the Rust and in the kept Python alike, before step 3b.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'we want to use this port to fix broken things as we find them ... we should fix all known bugs in each step before moving on to porting the next step'. Fixing in every live copy and before the next step is exactly that; FR-002's exception covers checks fixed on purpose."
+    },
+    {
+     "id": "T182-D1-exposed-defects",
+     "summary": "A sheet a fixed check refuses is a defect fixed where it lies: ochiba-roundtrip-test's program given the residence rooms her sheet draws (so the placer seats both privies); tubs_off_their_doors asks every tied building; the Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door or none, step 3b porting that fix; every pool sheet and county-magistracy-example regenerated and passing every check.",
+     "class": "within",
+     "why": "Known bugs exposed by the fixes, fixed as found, per the same 2026-11-18 words; maps may change so long as research holds (FR-002, the standing rule quoted 2026-11-17). Making the round-trip rebuild Ochiba's actual program serves the test's job rather than narrowing it; no check is weakened or exempted."
+    },
+    {
+     "id": "T182-D2-signal",
+     "summary": "diff-run of HEAD's audit vs the fixed one on six sheets and every red/fix fixture, each difference explained by a fix.",
+     "class": "within",
+     "why": "FR-002 as amended: the differential is a signal read for whether everything works, never an exactness standard; the block uses it that way."
+    },
+    {
+     "id": "T182-D3-open-research",
+     "summary": "Where a road may end and where a precinct path leads listed for the GM as UNRESEARCHED.",
+     "class": "within",
+     "why": "Reporting open research questions does not narrow anything the GM asked; an unresearched question is not a known defect being carried forward, and the claims the block does rest on (a road's ending among them) are given pages."
+    },
+    {
+     "id": "T182-D4-measure",
+     "summary": "Report the task's tokens and wall time and the claims-owed counts.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-17/18 request to measure how the engine pieces go; reporting only."
+    },
+    {
+     "id": "T182-D5-checks-and-order",
+     "summary": "Exits: make static, rust-test, hooks-test HOOKS_ALL=1, quick, claims round, gated land; ordered after step 3a (T151) and before step 3b.",
+     "class": "within",
+     "why": "The project's standing gate; ordering step 1's defects before porting step 3b honors 'fix all known bugs in each step before moving on to porting the next step'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T177 (step 1's defects; T175's and T176's claims rounds, DRIFTED)",
+    "### T177 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T177-approach-six-rules",
+     "summary": "Six audit rules (notice-board shadow from the low end of 0190's height; main-gate road keeps its own width per 0088, only side/cart-gate lanes judged by their gate; arch_on_approach judges every arch, count 1/3/7, first arch farthest from the hall, innermost at 0220's distance; gate_widths fix text gives 0093's band; no_precinct_enclosure message without a donation per 0223; lodging_entrances asks each dwelling of a partition-split block for its own outer door per 0097/0106) are changed to say what their research pages say.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'we want to use this port to fix broken things as we find them, so it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on'. FR-002's one exception covers a check that refuses correct work or is improved on purpose, fixed in its port and changed as fixed (constitution XIV). The narrowed reach of the gate-width rule (main-gate roads no longer judged by their gate) is a check fixed to its page, which is what was asked, not a narrowing of the request; whether the pages are read rightly is the research ladder's question, not fidelity's."
+    },
+    {
+     "id": "T177-claims-restated",
+     "summary": "Each changed rule's claim is changed with it, restated to the page it cites (checklist item 10).",
+     "class": "within",
+     "why": "FR-002 owes that the research claims a check carries hold; bringing a fixed rule's claim back to its cited page keeps the claim true of the rule. Whether the page is read rightly is the research ladder's question, not fidelity's."
+    },
+    {
+     "id": "T177-both-copies",
+     "summary": "Each fix applied in the Rust and in the kept Python alike.",
+     "class": "within",
+     "why": "The fix-as-we-go rule fixes a step's known defects in every copy that still lives; FR-003 keeps the Python running until its replacement passes, so leaving the Python unfixed would carry the defect forward."
+    },
+    {
+     "id": "T177-red-when-reverted",
+     "summary": "Each fix proved by a unit test on a fixture (parse/fix_fixtures.rs) that is red when the fix is reverted (observed 2026-11-18 by scratch reverts restored with cp).",
+     "class": "within",
+     "why": "Enforcement of the requested fixes: delete the fixes and the tests have nothing left to check. Matches the checklist's 'done, measured'."
+    },
+    {
+     "id": "T177-red-fixture-moved",
+     "summary": "A red fixture whose finding the fix removed is moved so it stays red (ochiba-road-wider-than-gate-red.svg's offending road moved to the lane to the service gate).",
+     "class": "within",
+     "why": "FR-002: a ported or fixed check must still do its job, its red fixtures still failing; FR-002's exception has a fixed check's case changed as fixed in the same commit. Moving the fixture's violation onto a lane the corrected rule still judges keeps the check's refusal tested rather than dropping it; it narrows nothing the GM asked."
+    },
+    {
+     "id": "T177-pool-verdicts",
+     "summary": "No T177 change moved a pool sheet's verdict; exits require every pool sheet passing every check (observed 2026-11-18, every check on the six pool sheets before and after).",
+     "class": "within",
+     "why": "An observation plus FR-002's owed condition that a drawn output passes its checks; the GM's 'it needs to be okay to have checks pass as we make those fixes' would equally have allowed a verdict to move to pass."
+    },
+    {
+     "id": "T177-order",
+     "summary": "T177 runs after step 3a (T151) and fixes step 1's defects before step 3b's port begins.",
+     "class": "within",
+     "why": "The GM 2026-11-18 asked that each step's known bugs be fixed 'before moving on to porting the next step'; the block fixes step 1's known defects before step 3b's port begins, so no known defect is carried into the next port. The bundle names no other known defect this block leaves for later."
+    },
+    {
+     "id": "T177-exits",
+     "summary": "Green exits make static, make rust-test, make hooks-test HOOKS_ALL=1, make quick, the claims round and a gated make land; red exits record the failure and set the task down, a can't-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Standard gate exits; nothing excused or skipped."
+    },
+    {
+     "id": "T177-budget",
+     "summary": "One landing, with its siblings.",
+     "class": "within",
+     "why": "Scheduling of the landing; narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T182 (step 1's defects: T174's, T175's and T176's findings)",
+    "### T182 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T182-scope",
+     "summary": "Step 1's known defects (T174-T176 findings) fixed in the Rust and the kept Python alike, before step 3b is ported: sheet reader/start tags (CDATA, PIs, internal subset, quoted '>', any XML name, DTD-entity elements refused by name), single-quoted attributes, gap_tag TIGHT under 0116's floor, path commands, the On-map error line, county red fixtures under the magistracies tier, privies_by_zone (0101), dead code removed, T176's claims given their pages.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'we want to use this port to fix broken things as we find them ... we should fix all known bugs in each step before moving on to porting the next step'. Fixing every live copy and doing it before step 3b is that rule exactly; FR-003 still holds (the Python remains the one that runs)."
+    },
+    {
+     "id": "T182-ochiba-roundtrip",
+     "summary": "ochiba-roundtrip-test's program gains the residence rooms, rear strip and kitchen ell her sheet draws, so the placer seats both privies.",
+     "class": "within",
+     "why": "A defect the privies fix exposed, fixed where it lies; the program is brought to the sheet (measured off it), not the check loosened. FR-002's exception and fix-as-we-go cover a case's expected result changing as fixed."
+    },
+    {
+     "id": "T182-tubs-doors",
+     "summary": "tubs_off_their_doors asks every tied building (a tied bath spares the tub its door), and the Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door it drew or none, nearest door first; step 3b ports the fixed behavior.",
+     "class": "within",
+     "why": "Checks and placer fixed on purpose to the research page (0100) under constitution XIV and the GM's fix-as-we-go rule, in every copy that lives."
+    },
+    {
+     "id": "T182-shrine-basin",
+     "summary": "The shrine purification check no longer lets a well stand in for 0222's stone basin; types.json's country shrine requires the basin, ending the drift accepted as ask:417-T36; a well beside the hall still allowed (0196).",
+     "class": "within",
+     "why": "A check that passed incorrect work, made to hold the research claim it carries; FR-002 requires drawn outputs to hold their research claims and the GM asked for known bugs to be fixed. It tightens rather than narrows, and the pool sheets were regenerated and pass."
+    },
+    {
+     "id": "T182-lodging-partitions",
+     "summary": "lodging_entrances no longer splits a common room at dashed sliding partitions; the marks reader carries a line's dash and only a solid dwelling wall splits a row (0097).",
+     "class": "within",
+     "why": "A check refusing correct work fixed in place (FR-002's exception, constitution XIV, fix-as-we-go)."
+    },
+    {
+     "id": "T182-record-session",
+     "summary": "0220's drawing-page wording (innermost arch distance called a map convention where the procedure treats it as a guess) listed for a record session, not edited here.",
+     "class": "within",
+     "why": "Not a defect in step 1's code (the sheet reader and checks behave to their pages); it is a wording disagreement in the research record, routed to the session that edits records and listed openly. Nothing the GM asked of this step is dropped."
+    },
+    {
+     "id": "T182-unresearched",
+     "summary": "Where a road may end and where a precinct path leads listed for the GM as UNRESEARCHED.",
+     "class": "within",
+     "why": "Open research questions surfaced to the GM rather than guessed; not a known bug left in the step."
+    },
+    {
+     "id": "T182-diff-signal",
+     "summary": "make diff-run of HEAD's audit against the fixed one on the six sheets and every red and fix fixture, read as a signal, each difference explained by a fix.",
+     "class": "within",
+     "why": "FR-002 as amended by T180: the differential is a signal read for whether everything works, never a stop; no exactness standard is applied."
+    },
+    {
+     "id": "T182-order-exits",
+     "summary": "Order after step 3a (T151) and before step 3b; exits green on make static, rust-test, hooks-test HOOKS_ALL=1, quick, the claims round and a gated make land, red recorded and a can't-do claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Places the defect fixes before the next step's port, as the GM asked on 2026-11-18; the exits are the project's standing gates."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -20344,6 +20594,168 @@
      "summary": "Phase tokens and times reported; make static, rust-test, hooks-test HOOKS_ALL=1, quick and the pointer check green; one landing, red exits through make arbiter-ask.",
      "class": "within",
      "why": "Serves the GM's 2026-11-17 efficiency concern (report each piece's time and tokens) and the standing gate; decides nothing the spec left open beyond process."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T171": {
+   "section_sha256": "3dec6d8085f13fe55db64d443d7ba622dc978a2a134899c3371843f34772038d",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T171-route-a",
+     "summary": "The record's route (a): the entrance-board census line ('N of M households' ways out pass it') that feature 444's port dropped is restored by porting the count, not dropping the line.",
+     "class": "within",
+     "why": "Restores a behavior the step-1 port lost: the GM 2026-11-18 'we want to use this port to fix broken things as we find them ... we should fix all known bugs in each step before moving on to porting the next step'; FR-002 (a replaced piece does its job for its callers, its research claims hold) and 261 FR-015 (an entrance board stands where every departure passes it, which is what the line counts). Nothing asked is narrowed."
+    },
+    {
+     "id": "T171-walk-location",
+     "summary": "The households' ways-out walk is ported into the engine crate (rust/mode_a/src/census/routes.rs), rust/parked left as a reference.",
+     "class": "within",
+     "why": "Where the Rust lives is implementation; FR-001 asks the Python replaced by Rust, and this does that. No case excluded."
+    },
+    {
+     "id": "T171-freshness-test",
+     "summary": "The freshness test feature 444 dropped is restored: every pool hamlet's census block equal to what make notes-census writes, in the crate's end-to-end test.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior (a stale census block refuses a landing) and the restoration of a check the port lost; fix-as-we-go and FR-002's 'a ported check must still do its job'. Not unrequested scope."
+    },
+    {
+     "id": "T171-proof",
+     "summary": "Proved by reverting the entrance branch: the unit test and the freshness check turn red.",
+     "class": "within",
+     "why": "Shows the fix's tests catch the defect - the GM's 'a ported check is shown to work by catching what it is meant to catch'."
+    },
+    {
+     "id": "T171-order",
+     "summary": "Runs after step 3a (T151) and before step 3b, as one of step 1's defects.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule (known defects fixed before porting the next step) arrived after T151 had landed; placing step 1's defect before any further step's port is the soonest order that honors it, not a deferral."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T182": {
+   "section_sha256": "06dafea4c7dc9b5a124d412804568da2f4f5b7db55ff92209edc03d51ae54b2e",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T182-scope",
+     "summary": "Step 1's known defects (T174-T176 findings) fixed in the Rust and the kept Python alike, before step 3b is ported: sheet reader/start tags (CDATA, PIs, internal subset, quoted '>', any XML name, DTD-entity elements refused by name), single-quoted attributes, gap_tag TIGHT under 0116's floor, path commands, the On-map error line, county red fixtures under the magistracies tier, privies_by_zone (0101), dead code removed, T176's claims given their pages.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'we want to use this port to fix broken things as we find them ... we should fix all known bugs in each step before moving on to porting the next step'. Fixing every live copy and doing it before step 3b is that rule exactly; FR-003 still holds (the Python remains the one that runs)."
+    },
+    {
+     "id": "T182-ochiba-roundtrip",
+     "summary": "ochiba-roundtrip-test's program gains the residence rooms, rear strip and kitchen ell her sheet draws, so the placer seats both privies.",
+     "class": "within",
+     "why": "A defect the privies fix exposed, fixed where it lies; the program is brought to the sheet (measured off it), not the check loosened. FR-002's exception and fix-as-we-go cover a case's expected result changing as fixed."
+    },
+    {
+     "id": "T182-tubs-doors",
+     "summary": "tubs_off_their_doors asks every tied building (a tied bath spares the tub its door), and the Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door it drew or none, nearest door first; step 3b ports the fixed behavior.",
+     "class": "within",
+     "why": "Checks and placer fixed on purpose to the research page (0100) under constitution XIV and the GM's fix-as-we-go rule, in every copy that lives."
+    },
+    {
+     "id": "T182-shrine-basin",
+     "summary": "The shrine purification check no longer lets a well stand in for 0222's stone basin; types.json's country shrine requires the basin, ending the drift accepted as ask:417-T36; a well beside the hall still allowed (0196).",
+     "class": "within",
+     "why": "A check that passed incorrect work, made to hold the research claim it carries; FR-002 requires drawn outputs to hold their research claims and the GM asked for known bugs to be fixed. It tightens rather than narrows, and the pool sheets were regenerated and pass."
+    },
+    {
+     "id": "T182-lodging-partitions",
+     "summary": "lodging_entrances no longer splits a common room at dashed sliding partitions; the marks reader carries a line's dash and only a solid dwelling wall splits a row (0097).",
+     "class": "within",
+     "why": "A check refusing correct work fixed in place (FR-002's exception, constitution XIV, fix-as-we-go)."
+    },
+    {
+     "id": "T182-record-session",
+     "summary": "0220's drawing-page wording (innermost arch distance called a map convention where the procedure treats it as a guess) listed for a record session, not edited here.",
+     "class": "within",
+     "why": "Not a defect in step 1's code (the sheet reader and checks behave to their pages); it is a wording disagreement in the research record, routed to the session that edits records and listed openly. Nothing the GM asked of this step is dropped."
+    },
+    {
+     "id": "T182-unresearched",
+     "summary": "Where a road may end and where a precinct path leads listed for the GM as UNRESEARCHED.",
+     "class": "within",
+     "why": "Open research questions surfaced to the GM rather than guessed; not a known bug left in the step."
+    },
+    {
+     "id": "T182-diff-signal",
+     "summary": "make diff-run of HEAD's audit against the fixed one on the six sheets and every red and fix fixture, read as a signal, each difference explained by a fix.",
+     "class": "within",
+     "why": "FR-002 as amended by T180: the differential is a signal read for whether everything works, never a stop; no exactness standard is applied."
+    },
+    {
+     "id": "T182-order-exits",
+     "summary": "Order after step 3a (T151) and before step 3b; exits green on make static, rust-test, hooks-test HOOKS_ALL=1, quick, the claims round and a gated make land, red recorded and a can't-do claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Places the defect fixes before the next step's port, as the GM asked on 2026-11-18; the exits are the project's standing gates."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T177": {
+   "section_sha256": "9730a155efa3027f2614a68753e25422238299a744c74acf40510f454601f6d8",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T177-approach-six-rules",
+     "summary": "Six audit rules (notice-board shadow from the low end of 0190's height; main-gate road keeps its own width per 0088, only side/cart-gate lanes judged by their gate; arch_on_approach judges every arch, count 1/3/7, first arch farthest from the hall, innermost at 0220's distance; gate_widths fix text gives 0093's band; no_precinct_enclosure message without a donation per 0223; lodging_entrances asks each dwelling of a partition-split block for its own outer door per 0097/0106) are changed to say what their research pages say.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'we want to use this port to fix broken things as we find them, so it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on'. FR-002's one exception covers a check that refuses correct work or is improved on purpose, fixed in its port and changed as fixed (constitution XIV). The narrowed reach of the gate-width rule (main-gate roads no longer judged by their gate) is a check fixed to its page, which is what was asked, not a narrowing of the request; whether the pages are read rightly is the research ladder's question, not fidelity's."
+    },
+    {
+     "id": "T177-claims-restated",
+     "summary": "Each changed rule's claim is changed with it, restated to the page it cites (checklist item 10).",
+     "class": "within",
+     "why": "FR-002 owes that the research claims a check carries hold; bringing a fixed rule's claim back to its cited page keeps the claim true of the rule. Whether the page is read rightly is the research ladder's question, not fidelity's."
+    },
+    {
+     "id": "T177-both-copies",
+     "summary": "Each fix applied in the Rust and in the kept Python alike.",
+     "class": "within",
+     "why": "The fix-as-we-go rule fixes a step's known defects in every copy that still lives; FR-003 keeps the Python running until its replacement passes, so leaving the Python unfixed would carry the defect forward."
+    },
+    {
+     "id": "T177-red-when-reverted",
+     "summary": "Each fix proved by a unit test on a fixture (parse/fix_fixtures.rs) that is red when the fix is reverted (observed 2026-11-18 by scratch reverts restored with cp).",
+     "class": "within",
+     "why": "Enforcement of the requested fixes: delete the fixes and the tests have nothing left to check. Matches the checklist's 'done, measured'."
+    },
+    {
+     "id": "T177-red-fixture-moved",
+     "summary": "A red fixture whose finding the fix removed is moved so it stays red (ochiba-road-wider-than-gate-red.svg's offending road moved to the lane to the service gate).",
+     "class": "within",
+     "why": "FR-002: a ported or fixed check must still do its job, its red fixtures still failing; FR-002's exception has a fixed check's case changed as fixed in the same commit. Moving the fixture's violation onto a lane the corrected rule still judges keeps the check's refusal tested rather than dropping it; it narrows nothing the GM asked."
+    },
+    {
+     "id": "T177-pool-verdicts",
+     "summary": "No T177 change moved a pool sheet's verdict; exits require every pool sheet passing every check (observed 2026-11-18, every check on the six pool sheets before and after).",
+     "class": "within",
+     "why": "An observation plus FR-002's owed condition that a drawn output passes its checks; the GM's 'it needs to be okay to have checks pass as we make those fixes' would equally have allowed a verdict to move to pass."
+    },
+    {
+     "id": "T177-order",
+     "summary": "T177 runs after step 3a (T151) and fixes step 1's defects before step 3b's port begins.",
+     "class": "within",
+     "why": "The GM 2026-11-18 asked that each step's known bugs be fixed 'before moving on to porting the next step'; the block fixes step 1's known defects before step 3b's port begins, so no known defect is carried into the next port. The bundle names no other known defect this block leaves for later."
+    },
+    {
+     "id": "T177-exits",
+     "summary": "Green exits make static, make rust-test, make hooks-test HOOKS_ALL=1, make quick, the claims round and a gated make land; red exits record the failure and set the task down, a can't-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Standard gate exits; nothing excused or skipped."
+    },
+    {
+     "id": "T177-budget",
+     "summary": "One landing, with its siblings.",
+     "class": "within",
+     "why": "Scheduling of the landing; narrows nothing asked."
     }
    ],
    "verdict": "CLEAR"

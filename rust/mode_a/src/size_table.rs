@@ -215,6 +215,11 @@ pub fn table(svg_text: &str) -> Result<Table, Error> {
     let items = walk(&root)?;
     let kinds = element_kinds(svg_text)?;
     let starts: Vec<usize> = start_tags(svg_text).into_iter().map(|(a, _)| a).collect();
+    // FEATURE 449 T182: a rect is paired with its start tag by its index, so the two lists must be one length - an entity that expands to
+    // markup draws an element the source writes no tag for, and every later rect would take the wrong tag's kind
+    if starts.len() != root.elements().len() {
+        return Err(Error::new("ValueError", "the sheet's elements and its start tags disagree - an entity that expands to markup draws an element the source does not write; write the element out"));
+    }
     let (mut rects, mut strokes, mut lines) =
         (Vec::new(), Vec::<(f64, usize)>::new(), Vec::<Line>::new());
     for it in &items {
@@ -235,10 +240,8 @@ pub fn table(svg_text: &str) -> Result<Table, Error> {
                 continue;
             }
             let area_sqft = round_int(ft(w) * ft(h))?;
-            let start = starts
-                .get(it.order)
-                .ok_or_else(|| Error::new("IndexError", "list index out of range"))?;
-            let kind = i64::try_from(*start)
+            // every element has its start tag, checked above
+            let kind = i64::try_from(starts[it.order])
                 .ok()
                 .and_then(|s| kinds.get(&s))
                 .cloned()

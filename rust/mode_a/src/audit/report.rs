@@ -163,7 +163,7 @@ pub fn format_report(
 fn gaps_tubs_and_gates(plan: &ParsedPlan) -> Vec<String> {
     let mut lines = Vec::new();
     lines.push(
-        "aligned building gaps 5-30 ft (kura fire-gap OK ~10 ft; wooden >8 ft loose):".to_owned(),
+        "aligned building gaps 5-30 ft (kura fire-gap OK 6-10 ft; wooden >8 ft loose):".to_owned(),
     );
     let gaps = aligned_gaps(plan);
     if gaps.is_empty() {

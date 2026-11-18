@@ -9,7 +9,7 @@
 //! Research:
 //!     the sheets' typed counts check - NONE: a check over the pool's sheets and their notes, deciding nothing about a building
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use super::stale_sheet_counts;
 
@@ -29,3 +29,69 @@ pub(crate) fn every_pool_sheet_s_notes_type_the_counts_it_draws(sheets: &[PathBu
 }
 
 const FIX: &str = "the notes type counts the sheet does not draw - correct them, or move them under a dated entry";
+
+/// Every notes file in the pool and the frozen exhibits that carries a census block.
+fn notes_with_blocks(root: &Path) -> Vec<PathBuf> {
+    let mut out = Vec::new();
+    for tree in ["pool", "legacy-hand-authored-pool"] {
+        for tier in std::fs::read_dir(root.join(tree))
+            .into_iter()
+            .flatten()
+            .flatten()
+        {
+            for map in std::fs::read_dir(tier.path())
+                .into_iter()
+                .flatten()
+                .flatten()
+            {
+                let name = map.file_name().to_string_lossy().into_owned();
+                let notes = map.path().join(format!("{name}.notes.md"));
+                if l7r_gate_core::record::read_text(&notes).is_ok_and(|t| t.contains(super::BEGIN))
+                {
+                    out.push(notes);
+                }
+            }
+        }
+    }
+    out.sort();
+    out
+}
+
+/// THE CENSUS BLOCKS ARE FRESH (feature 152's test, `tests/test_notes_census.py`, dropped by feature 444 T39 on a wrong label and
+/// restored by feature 449 T171): every census block a notes file carries is the one `make notes-census` writes from the manifest
+/// beside it, and the five scripted hamlets each carry one - the counts a review keeps catching stale are those. Asked by the
+/// lockstep's end-to-end test, which reads the pool already: the five hamlets' manifests and their ways out cost more than a unit test's
+/// bar.
+pub(crate) fn every_census_block_is_its_manifest_s(root: &Path) {
+    let with = notes_with_blocks(root);
+    let names: Vec<String> = with
+        .iter()
+        .map(|p| p.file_name().unwrap().to_string_lossy().into_owned())
+        .collect();
+    let missing: Vec<&str> = ["inashiro", "kashikawa", "kuwabata", "mizuguchi", "sawada"]
+        .into_iter()
+        .filter(|want| !names.contains(&format!("{want}.notes.md")))
+        .collect();
+    // the hamlets with no census block ride in the compared value
+    assert_eq!(missing, Vec::<&str>::new());
+    for notes in with {
+        let text = l7r_gate_core::record::read_text(&notes).unwrap();
+        let shown = notes.display().to_string();
+        let manifest = PathBuf::from(format!("{}.json", shown.trim_end_matches(".notes.md")));
+        let m =
+            l7r_guard::shared::pyjson::loads(&l7r_gate_core::record::read_text(&manifest).unwrap())
+                .unwrap();
+        let (i, j) = (
+            text.find(super::BEGIN).unwrap(),
+            text.find(super::END).unwrap(),
+        );
+        let got = &text[i..j + super::END.len()];
+        // the fix rides in the compared value, so a failure prints it beside the notes file
+        assert_eq!(
+            (shown.as_str(), got, STALE),
+            (shown.as_str(), super::block(&m).unwrap().as_str(), STALE)
+        );
+    }
+}
+
+const STALE: &str = "the census block is stale - run `make notes-census`";

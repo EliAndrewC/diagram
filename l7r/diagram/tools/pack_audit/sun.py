@@ -55,12 +55,16 @@ SMALL_BUILDING_SQFT: float = 100.0
 # What a sheet draws that does not stand up to cast a garden's shadow: ground and water features, a building's own parts (under
 # its roof, which casts for them) and furniture below head height. Everything else the parser counts as a structure casts.
 NOT_STANDING: frozenset[str] = frozenset(
-    {"basin", "door", "engawa", "hearth", "notice board", "weapon rack", "stone lantern", "tax barge", "magistrate's dais", "clerks' seats", "well", "shrine altar", "wood-kami altar"}
+    {"basin", "door", "engawa", "hearth", "weapon rack", "stone lantern", "tax barge", "magistrate's dais", "clerks' seats", "well", "shrine altar", "wood-kami altar"}
 )
 """Research:
     ground features and a building's parts - GUESS: a basin, a tax barge on its water, and a building's door, veranda, hearth, dais, clerks' seats and altars cast no shadow of their own, the ground's being low and the parts standing under the roof that casts for them; no page gives it.
-    the notice board - research/questions/0190-notice-boards-kosatsuba.html: the board casts no shadow on a bed, although the page measures a post town's board as a frame about 10 to 11 ft high, drawn as a roofed frame 16 by 6 ft (research/questions/0190-notice-boards-kosatsuba.drawing.html).
     upright furniture - UNRESEARCHED: a weapon rack, a stone lantern and a well with its gear cast no shadow on a bed; research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html casts only buildings, walls and trees, and no page gives their heights (research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html draws a lantern as one small mark, research/questions/0165-martial-training-grounds-and-dojo.drawing.html gives a rack's footprint alone)."""
+# THE NOTICE BOARD CASTS (feature 449 T177): it stood in NOT_STANDING, casting nothing, though 0190 measures the frame about 10 to
+# 11 ft high; it casts from the least of those, as every height here is the least the record gives, whatever its drawn footprint.
+NOTICE_BOARD_KIND = "notice board"
+NOTICE_BOARD_FT: float = 10.0
+"""Research: the notice board's height - research/questions/0190-notice-boards-kosatsuba.html: the board casts its shadow from 10 ft, the least of the 10 to 11 ft the page measures for a post town's frame, drawn as a roofed frame 16 by 6 ft (research/questions/0190-notice-boards-kosatsuba.drawing.html)."""
 MIN_SUN_DEG: float = 3.0  # below this the sun is on the horizon: its shadows run off the sheet and it grows nothing
 """Research: sun floor - NONE: below 3 degrees the sun is on the horizon and its shadows run off the sheet, a computation cutoff."""
 MIN_BED_PX: float = 300.0  # a garden element smaller than this (a label box, a border tick) is not a bed
@@ -154,6 +158,7 @@ def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
     Research:
         its salts, guards and sentinels - NONE: they decide nothing about the place - 16 (circle buffer resolution)
         the bed's own ink - GUESS: a structure covering more than half the bed is read as the bed's own drawing, not as a caster, a classification of ours; no page gives it.
+        a court divider casts at the wall's height - GUESS: a court divider casts its shadow from the compound wall's 1.6 m, the divider being a wall of the compound; no page gives a divider's height.
     """
     from shapely.geometry import Point
 
@@ -165,7 +170,8 @@ def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
         if kind == GARDEN_KIND or kind in NOT_STANDING or p.intersection(bed).area > 0.5 * bed.area:
             continue
         small = r.w * r.h / (FTPX * FTPX) < SMALL_BUILDING_SQFT
-        out.append(Caster(p, SMALL_BUILDING_FT if small else BUILDING_FT, kind or "building"))
+        height = NOTICE_BOARD_FT if kind == NOTICE_BOARD_KIND else SMALL_BUILDING_FT if small else BUILDING_FT
+        out.append(Caster(p, height, kind or "building"))
     out += [Caster(_rect_poly(w), WALL_FT, "wall") for w in (*plan.wall_segs, *plan.dividers)]  # a court divider is a wall too
     out += [Caster(Point(t.x + t.w / 2, t.y + t.h / 2).buffer(t.w / 2, 16), TREE_FT, "trees", tree=True) for t in plan.trees]
     return out
@@ -199,7 +205,8 @@ def garden_sun(plan: ParsedPlan, text: str) -> list[str]:
         got = lit_hours(bed, cs, half)
         need = HALF_SHADE_BED_H if half else SUN_BED_H
         if got < need:
-            what = ", ".join(shaders(bed, cs, half)) or "nothing drawn"
+            # a bed short of its hours has a shader, so the list is never empty (feature 449 T182: its "nothing drawn" could not show)
+            what = ", ".join(shaders(bed, cs, half))
             out.append(
                 f"the {'half-shade ' if half else ''}kitchen bed at ({r.x:.0f},{r.y:.0f}), {r.w / FTPX:.0f} by {r.h / FTPX:.0f} ft, "
                 f"has {got:g} h of sun in the shoulder month and needs {need:g} (research homesteads 044) - shaded by {what}"

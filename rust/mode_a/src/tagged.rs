@@ -25,7 +25,8 @@ use l7r_guard::shared::py_text::collapse;
 use crate::py::float;
 use crate::sheet::{parse, Node, DEFS};
 
-static ATTR: LazyLock<Regex> = LazyLock::new(|| py(r#"([\w:-]+)="([^"]*)""#));
+/// An attribute and its value, in either quote (feature 449 T182: a single-quoted attribute read as absent).
+static ATTR: LazyLock<Regex> = LazyLock::new(|| py(r#"([\w:-]+)\s*=\s*(["'])([^<]*?)\2"#));
 static NUM: LazyLock<Regex> = LazyLock::new(|| py(r"-?\d+(?:\.\d+)?"));
 static TRANSLATE: LazyLock<Regex> =
     LazyLock::new(|| py(r"translate\(\s*(-?[\d.]+)[\s,]*(-?[\d.]+)?\s*\)"));
@@ -33,14 +34,16 @@ static PATH_CMD: LazyLock<Regex> =
     LazyLock::new(|| py(r"([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)"));
 static INNER_TAG: LazyLock<Regex> = LazyLock::new(|| py(r"<[^>]*>"));
 
-/// The presentation attributes a child inherits from its group (SVG's own inheritance).
-pub const INHERITED: [&str; 6] = [
+/// The presentation attributes a child inherits from its group (SVG's own inheritance); (feature 449 T182) `stroke-dasharray` too, so a
+/// check tells a dashed sliding partition from a solid wall.
+pub const INHERITED: [&str; 7] = [
     "fill",
     "stroke",
     "stroke-width",
     "font-size",
     "font-weight",
     "font-style",
+    "stroke-dasharray",
 ];
 const SKIP: [&str; 6] = [DEFS, "pattern", "symbol", "clipPath", "mask", "marker"];
 
@@ -127,7 +130,8 @@ pub fn gap(a: &Mark, b: &Mark) -> f64 {
 pub(crate) fn attrs(re: &Regex, text: &str) -> BTreeMap<String, String> {
     re.captures_iter(text)
         .flatten()
-        .map(|c| (c[1].to_owned(), c[2].to_owned()))
+        // the value is the last group: [`ATTR`]'s quote is its second (T182)
+        .map(|c| (c[1].to_owned(), c[c.len() - 1].to_owned()))
         .collect()
 }
 
@@ -136,42 +140,75 @@ fn found<'t>(re: &Regex, text: &'t str) -> Vec<&'t str> {
     re.find_iter(text).flatten().map(|m| m.as_str()).collect()
 }
 
-/// The ABSOLUTE points a path visits, in order (M, L, H, V, and the end point of every curve or arc); a relative command's offsets are
-/// skipped.
+/// A path's number: a sign, digits with or without a point, an exponent (feature 449 T182: `-?\d+(?:\.\d+)?` read `1e1` as two numbers
+/// and `.5` as `5`).
+static PATH_NUM: LazyLock<Regex> =
+    LazyLock::new(|| py(r"[-+]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][-+]?[0-9]+)?"));
+
+/// How many numbers one segment of a command takes.
+fn path_step(up: char) -> usize {
+    match up {
+        'H' | 'V' => 1,
+        'C' => 6,
+        'S' | 'Q' => 4,
+        'A' => 7,
+        _ => 2,
+    }
+}
+
+/// One segment of a path: its command (upper case) and its points, made absolute.
+pub type Segment = (char, Vec<(f64, f64)>);
+
+/// Each segment of a path, in order, as its command (upper case) and its points made ABSOLUTE - every coordinate pair it gives (a curve's
+/// control points and its end), an arc its end alone, a horizontal or vertical step the point it reaches. A relative command's pairs are
+/// offsets from the segment's start, a `Z` returns to its subpath's start, and a command's numbers repeat it segment by segment (feature
+/// 449 T182: the relative commands were skipped, and a repeated curve kept only its last end).
 ///
-/// # Errors
-/// A number the Python's `float()` refuses (none the pattern takes, but a digit of another script is read as Python reads it).
-pub fn path_points(d: &str) -> Result<Vec<(f64, f64)>, Error> {
+/// Research:
+///     its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG curve arguments)
+#[must_use]
+pub fn path_walk(d: &str) -> Vec<Segment> {
     let mut out = Vec::new();
-    let (mut x, mut y) = (0.0, 0.0);
+    let (mut x, mut y, mut sx, mut sy) = (0.0, 0.0, 0.0, 0.0);
     for c in PATH_CMD.captures_iter(d).flatten() {
-        let nums = found(&NUM, &c[2])
+        let cmd = c[1].chars().next().unwrap_or('Z');
+        let (up, rel) = (cmd.to_ascii_uppercase(), cmd.is_ascii_lowercase());
+        if up == 'Z' {
+            (x, y) = (sx, sy);
+            continue;
+        }
+        // the pattern takes only numbers `float()` reads
+        let nums: Vec<f64> = found(&PATH_NUM, &c[2])
             .into_iter()
-            .map(float)
-            .collect::<Result<Vec<f64>, Error>>()?;
-        match (&c[1], nums.last()) {
-            ("H", Some(&n)) => {
-                x = n;
-                out.push((x, y));
+            .map(|n| float(n).unwrap_or_default())
+            .collect();
+        for (i, v) in nums.chunks_exact(path_step(up)).enumerate() {
+            let at = |dx: f64, dy: f64| if rel { (x + dx, y + dy) } else { (dx, dy) };
+            let pts = match up {
+                'H' => vec![(if rel { x + v[0] } else { v[0] }, y)],
+                'V' => vec![(x, if rel { y + v[0] } else { v[0] })],
+                'A' => vec![at(v[5], v[6])],
+                _ => v.chunks_exact(2).map(|p| at(p[0], p[1])).collect(),
+            };
+            (x, y) = pts[pts.len() - 1];
+            if up == 'M' && i == 0 {
+                (sx, sy) = (x, y);
             }
-            ("V", Some(&n)) => {
-                y = n;
-                out.push((x, y));
-            }
-            ("M" | "L", _) => {
-                for pair in nums.chunks_exact(2) {
-                    (x, y) = (pair[0], pair[1]);
-                    out.push((x, y));
-                }
-            }
-            ("C" | "S" | "Q" | "T" | "A", _) if nums.len() >= 2 => {
-                (x, y) = (nums[nums.len() - 2], nums[nums.len() - 1]);
-                out.push((x, y));
-            }
-            _ => {}
+            out.push((up, pts));
         }
     }
-    Ok(out)
+    out
+}
+
+/// The points a path visits, in order: each segment's end, made absolute ([`path_walk`]).
+///
+/// # Errors
+/// None since feature 449 T182 (its pattern takes only numbers `float()` reads); the signature kept for its callers.
+pub fn path_points(d: &str) -> Result<Vec<(f64, f64)>, Error> {
+    Ok(path_walk(d)
+        .into_iter()
+        .map(|(_, pts)| pts[pts.len() - 1])
+        .collect())
 }
 
 /// `_num`: the attribute's leading number, or 0.

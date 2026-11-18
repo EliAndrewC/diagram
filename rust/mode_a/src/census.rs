@@ -25,6 +25,7 @@ use serde_json::Value;
 use crate::py::{iterate, os_error, type_name, uncaught};
 
 mod prose;
+pub mod routes;
 
 pub use prose::{
     current_prose, sheet_counts, sheet_prose, stale_counts, stale_sheet_counts, COUNTED,
@@ -231,12 +232,34 @@ pub fn census(m: &Value) -> Result<String, Error> {
         len_or_none(m, "farm_sheds")?,
         houses.len()
     ));
+    let entrance = match get(m, "meta")?.filter(|v| truthy(v)) {
+        Some(meta) => item_get(meta, "kosatsuba_seat")?.and_then(Value::as_str) == Some("entrance"),
+        None => false,
+    };
+    // the ways out are walked once, for every board (T171); only an entrance board is judged by them
+    let ways_out = if entrance {
+        Some(routes::departure_routes(&routes::lanes(m)?, &houses))
+    } else {
+        None
+    };
     for b in items(m, "kosatsuba")? {
         if !b.is_object() {
             continue;
         }
         let (bx, by) = (number(index(&b, "x")?)?, number(index(&b, "y")?)?);
-        // an entrance board's count of the ways out that pass it went with the hamlet engine (feature 444 T39)
+        // AN ENTRANCE BOARD IS JUDGED BY THE WAYS OUT, NOT BY THE HOUSES NEAR IT (feature 261 FR-015; restored by feature 449 T171
+        // after feature 444 T39 cut it with the hamlet engine): it stands where the approach meets the settlement, so a count of
+        // dwellings around it says nothing about whether it is there
+        if let Some(ways) = &ways_out {
+            let passed = ways.len() - routes::routes_missed(ways, (bx, by), routes::BAND_FT);
+            rows.push(format!(
+                "- notice board at the entrance, **({}, {})**: **{passed}** of {} households' ways out pass it",
+                fixed1(bx),
+                fixed1(by),
+                ways.len()
+            ));
+            continue;
+        }
         let near = houses
             .iter()
             .filter(|(hx, hy)| (hx - bx).hypot(hy - by) <= 250.0)

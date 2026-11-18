@@ -39,6 +39,9 @@ pub const WELL: &str = "#9C8C70";
 ///
 /// Research:
 ///     the palette's table - CONVENTION: the palette role each building kind is painted in, the Mode A palette's own rows, a kind the palette does not name assigned a role labeled GUESS beside its row; a fill says nothing of a building's real color.
+///     the tax archive drawn as a kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: an office's records storehouse is drawn as one of the earth-walled storehouses (dozo), so the tax archive's role is the kura's.
+///     a storehouse drawn as a kura - GUESS: a compound's storehouse is drawn as a sealed kura, as its records storehouse is; no page gives a general storehouse's form.
+///     the granary's two forms - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the granary is either a timber storehouse raised on posts or an earth-walled kura, each map taking one, so the slatted fill and the kura's are both its role.
 const ROLE_NAMES: [(&str, &[&str]); 25] = [
     ("residence", &["lord"]),
     ("lord's quarters", &["lord"]),

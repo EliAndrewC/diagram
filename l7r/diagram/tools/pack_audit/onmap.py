@@ -18,7 +18,9 @@ import os
 import re
 from dataclasses import dataclass
 
-_ON_MAP_LINE_RE = re.compile(r"^\*\*On map\*\*:\s*(?P<rest>[^\n]*?)\s*$", re.M)
+# FEATURE 449 T182: the spaces about the declaration stop at its line (`[ \t]`, not `\s`) - `\s*$` took the line break after it and a
+# blank line below, so a refused line was quoted with them and an empty one read the next line as its declaration
+_ON_MAP_LINE_RE = re.compile(r"^\*\*On map\*\*:[ \t]*(?P<rest>[^\n]*?)[ \t]*$", re.M)
 _ON_MAP_RE = re.compile(r"^(?P<manifest>\S+)\s+-\s+(?P<key>[A-Za-z_][\w]*)\s+at\s+\(\s*(?P<x>-?\d+(?:\.\d+)?)\s*,\s*(?P<y>-?\d+(?:\.\d+)?)\s*\)\s*=\s*`?(?P<sheet_id>[A-Za-z_][\w-]*)`?$")
 _NONE_RE = re.compile(r"^none\s+-\s+\S")
 GRAMMAR = "**On map**: <manifest path from the skill root> - <manifest key> at (<x>, <y>) = <sheet id>"

@@ -648,12 +648,18 @@ def _on_dark(pt: Pt, shapes: list[Shape]) -> bool:
     return bool(under) and _luma(min(under, key=lambda s: _area(s.poly)).element.get("fill")) < 1 - LIGHT  # type: ignore[union-attr]
 
 
+_START_TOKEN = re.compile(r"""<!--.*?-->|<!\[CDATA\[.*?\]\]>|<\?.*?\?>|<!(?:[^\[>]|\[[^\]]*\])*>|<(?:"[^"]*"|'[^']*'|[^'">])*>|[^<]+""", re.S)
+
+
 # LOCKSTEP (feature 449 T174, `ask:449-engine-order` condition 3): `start_tags` is ported to `rust/mode_a/src/hand_sheet.rs`, which `make size-table`
 # runs; an edit of it makes the same change there in the same commit (`parse/lockstep_audit.rs` holds the two equal on every pool sheet).
 def start_tags(src: str) -> list[tuple[int, int]]:
     """Where each element's start tag lies in the source, in document order - the order `ET` iterates in, so a Shape's
     `at` is its index here. Comments, declarations and end tags are not elements."""
-    return [m.span() for m in re.finditer(r"<!--.*?-->|<[?!][^>]*>|</[^>]*>|<[A-Za-z][^>]*>", src, re.S) if src[m.start() + 1] not in "!?/"]
+    # FEATURE 449 T182: the sheet reader's own tokens (`interactive.sheet._TOKEN`), so a CDATA section's tag-like run is no element,
+    # an element named outside [A-Za-z] is one, and a `>` in a quoted attribute value does not end its tag - each had shifted the
+    # index every later element is paired by
+    return [m.span() for m in _START_TOKEN.finditer(src) if m.group(0).startswith("<") and src[m.start() + 1] not in "!?/"]
 
 
 def captions_of(shapes: list[Shape]) -> list[list[int]]:
@@ -890,6 +896,10 @@ def placed(src: str) -> str:
     is a function of them alone."""
     ground, view = read_sheet(src)
     tags = start_tags(src)
+    # FEATURE 449 T182: a caption is paired with its start tag by its index, so the two lists must be one length - an entity that
+    # expands to markup draws an element the source writes no tag for, and every later caption would be written at the wrong tag
+    if len(tags) != sum(1 for _ in ET.fromstring(src).iter()):
+        raise ValueError("the sheet's elements and its start tags disagree - an entity that expands to markup draws an element the source does not write; write the element out")
     edits: list[tuple[int, int, str]] = []
     for caps, p, per in seat(src):
         head = caps[0]

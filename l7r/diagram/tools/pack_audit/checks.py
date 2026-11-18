@@ -10,7 +10,7 @@ from ...compound_model import TUB_DOOR_MAX_FT as TUB_DOOR_MAX_FT
 from ...compound_model import TUB_MAX_GAP_FT as TUB_MAX_GAP_FT
 from ...compound_parts import board_by_a_gate, tub_by_its_door, tub_by_its_eaves
 from .grids import FTPX
-from .parse import WALL_KIND, WALL_STROKE, ParsedPlan, Rect
+from .parse import WALL_STROKE, ParsedPlan, Rect
 
 # TUB_MAX_GAP_FT (3.5): a wall-hugging tub sits ~1.7-2 ft from a wall (its own radius + eaves); beyond this it is adrift
 # in the court with no roof draining into it. NOTICE_BOARD_MAX_FT (40 since feature 372 wave 104): a notice board must sit within this of a gate
@@ -115,7 +115,11 @@ DOORLESS_KINDS = frozenset({"bath"})
 def doors_of(plan: ParsedPlan, b: Rect) -> list[tuple[float, float]]:
     """The centers (px) of the doors on building `b`: each rect the sheet tags `door` (its own tags, feature 262 - a
     small dark rect may as well be a hearth) or the shoe stone it declares (SHOE_STONE_ID), lying on its outline: within DOOR_ON_WALL_PX of the footprint and of one of
-    its edges (an inner room's door, deep inside, is no entrance)."""
+    its edges (an inner room's door, deep inside, is no entrance).
+
+    Research:
+        a stepping stone counts as a door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a reception our plans enter by a stepping stone at its veranda has its tub beside that stone, so the shoe stone a sheet declares is that building's door for its tubs.
+    """
     m = DOOR_ON_WALL_PX
     return [
         (d.x + d.w / 2, d.y + d.h / 2)
@@ -134,7 +138,13 @@ def tubs_off_their_doors(plan: ParsedPlan) -> list[TubOffItsDoor]:
     standing water at a wooden building's entrance, so a tub's center stands within TUB_DOOR_MAX_FT of a door of a
     building whose eaves hold it (`tub_by_its_door`, the predicate the draft seats by). A tub whose buildings tag no door
     fails too (its door is drawn and tagged, or it cannot be judged - plan review of wave 106). A tub at a bath, entered
-    from its house (DOORLESS_KINDS), is not judged by a door; one adrift of every building is `fire_water_adrift`'s. Worst first."""
+    from its house (DOORLESS_KINDS), is not judged by a door - nor one a bath is tied for nearest; one adrift of every building is
+    `fire_water_adrift`'s. Worst first.
+
+    Research:
+        a bath's tub on its yard side - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the bath our plans attach to the kitchen, entered from the house, has its tub on its yard side, so a tub whose nearest host is a bath - or a bath tied for nearest - is not judged by a door
+        each tub beside a door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: each tub stands beside a door of its building, within the convention's reach, so every other tub stands by a door of a building whose eaves hold it
+    """
     out: list[TubOffItsDoor] = []
     for t in plan.tubs:
         cx, cy = t.x + t.w / 2, t.y + t.h / 2
@@ -143,8 +153,11 @@ def tubs_off_their_doors(plan: ParsedPlan) -> list[TubOffItsDoor]:
         if not hosts:
             continue
         # a bath's tub stands on its yard side, whatever else's eaves reach it (Ochiba's under the veranda's) - the bath
-        # NEAREST it, not any bath within reach (plan review round 2: a kitchen tub 35 ft from its door passed beside one)
-        if plan.label_kinds.get(min(hosts, key=lambda b: _point_rect_dist(cx, cy, b)).pos) in DOORLESS_KINDS:
+        # NEAREST it, not any bath within reach (plan review round 2: a kitchen tub 35 ft from its door passed beside one).
+        # FEATURE 449 T182: every host tied for nearest is asked, never the first in plan order - the round-trip's bath tub
+        # stood 8 px from the bath and 8 px from the house, and was judged by the house's door 52 ft away
+        near = min(_point_rect_dist(cx, cy, b) for b in hosts)
+        if any(plan.label_kinds.get(b.pos) in DOORLESS_KINDS for b in hosts if _point_rect_dist(cx, cy, b) == near):
             continue
         if doors and tub_by_its_door((cx / FTPX, cy / FTPX), doors):
             continue
@@ -184,6 +197,10 @@ def tubs_in_buildings(plan: ParsedPlan, min_px: float = TUB_BLDG_MIN_PX) -> list
     contact, so the check has no blind band where a real overlap scores zero. Disc geometry
     rather than the parsed square bbox because a tub set diagonally off a building CORNER
     overlaps the bbox while its round body stands clear - a bbox test would flag a good tub.
+
+    Research:
+        no tub inside a building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: no tub stands inside a building's outline on our plans, so a tub's disc reaching into a footprint is refused.
+        no tub under a roofed court - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: no tub stands inside a building's outline, and a roofed court is under a roof as a building is, so a tub's disc reaching into one is refused (feature 267 pass 3).
     """
     out: list[TubInBuilding] = []
     for t in plan.tubs:
@@ -212,7 +229,11 @@ class TubOnWell:
 def tubs_on_wells(plan: ParsedPlan, min_px: float = TUB_WELL_MIN_PX) -> list[TubOnWell]:
     """Fire-water tubs sitting ON a well. Both are small point-glyphs; overlapping ones read as
     one object and are functionally wrong (a rain-fed fire tub is not the drawing well). Any real
-    overlap is a defect - move the tub to a different eaves corner."""
+    overlap is a defect - move the tub to a different eaves corner.
+
+    Research:
+        a tub off a well - CONVENTION: a fire-water tub's glyph never overlaps a well's, two point glyphs that would read as one object; no page gives it.
+    """
     out: list[TubOnWell] = []
     for t in plan.tubs:
         if any(_overlap_px(t.x, t.y, t.x2, t.y2, w) >= min_px for w in plan.wells):
@@ -504,7 +525,8 @@ def structures_on_walls(plan: ParsedPlan, min_px: float = WALL_OVERLAP_MIN_PX) -
         for band in plan.wall_bands:
             ov = _overlap_px(s.x, s.y, s.x2, s.y2, _with_clearance(band, clear))
             if ov > min_px and (worst is None or ov > worst[0]):
-                worst = (ov, WALL_KIND[band.fill])
+                # every band the parse keeps is inked in one of the two walls' strokes (feature 449 T182: a lookup whose miss could not run)
+                worst = (ov, "compound wall" if band.fill == WALL_STROKE else "court divider")
         if worst is not None:
             out.append(StructureOnWall(s.x + s.w / 2, s.y + s.h / 2, s.w / FTPX, s.h / FTPX, worst[0] / FTPX, worst[1]))
     out.sort(key=lambda r: r.into_ft, reverse=True)
@@ -583,7 +605,11 @@ def gap_tag(gap: Gap) -> str:
     Research:
         its figures guessed on 0116 - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 8 (wooden gap over 8 ft is loose)
         its loose gap - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 10 (a kura fire-gap over 10 ft is loose)
+        its fire-gap floor - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: 6 (a kura fire-gap under 6 ft is too tight, the bottom of the page's 6-10 ft)
     """
     if gap.kura:
+        # FEATURE 449 T182: a kura gap under the page's 6 ft floor was tagged OK, the floor never enforced
+        if gap.ft < 6:
+            return "TIGHT (kura gap <6 ft)"
         return "fire-gap OK (kura)" if gap.ft <= 10 else "LOOSE (kura gap >10 ft)"
     return "tight" if gap.ft <= 8 else "LOOSE (wooden >8 ft)"

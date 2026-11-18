@@ -95,14 +95,12 @@ pub const SMALL_BUILDING_SQFT: f64 = 100.0;
 ///
 /// Research:
 ///     ground features and a building's parts - GUESS: a basin, a tax barge on its water, and a building's door, veranda, hearth, dais, clerks' seats and altars cast no shadow of their own, the ground's being low and the parts standing under the roof that casts for them; no page gives it.
-///     the notice board - research/questions/0190-notice-boards-kosatsuba.html: the board casts no shadow on a bed, although the page measures a post town's board as a frame about 10 to 11 ft high, drawn as a roofed frame 16 by 6 ft (research/questions/0190-notice-boards-kosatsuba.drawing.html).
 ///     upright furniture - UNRESEARCHED: a weapon rack, a stone lantern and a well with its gear cast no shadow on a bed; research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html casts only buildings, walls and trees, and no page gives their heights (research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html draws a lantern as one small mark, research/questions/0165-martial-training-grounds-and-dojo.drawing.html gives a rack's footprint alone).
-pub const NOT_STANDING: [&str; 13] = [
+pub const NOT_STANDING: [&str; 12] = [
     "basin",
     "door",
     "engawa",
     "hearth",
-    "notice board",
     "weapon rack",
     "stone lantern",
     "tax barge",
@@ -112,6 +110,14 @@ pub const NOT_STANDING: [&str; 13] = [
     "shrine altar",
     "wood-kami altar",
 ];
+/// The kind a notice board is drawn under.
+pub const NOTICE_BOARD_KIND: &str = "notice board";
+/// THE NOTICE BOARD CASTS (feature 449 T177): it stood in [`NOT_STANDING`], casting nothing, though 0190 measures the frame about 10 to
+/// 11 ft high; it casts from the least of those, as every height here is the least the record gives, whatever its drawn footprint.
+///
+/// Research:
+///     the notice board's height - research/questions/0190-notice-boards-kosatsuba.html: the board casts its shadow from 10 ft, the least of the 10 to 11 ft the page measures for a post town's frame, drawn as a roofed frame 16 by 6 ft (research/questions/0190-notice-boards-kosatsuba.drawing.html).
+pub const NOTICE_BOARD_FT: f64 = 10.0;
 /// Below this the sun is on the horizon: its shadows run off the sheet and it grows nothing.
 ///
 /// Research:
@@ -334,6 +340,7 @@ pub fn gardens<'p>(plan: &'p ParsedPlan, svg: &Sheet) -> Result<Vec<(&'p Rect, b
 /// Research:
 ///     its casters - NONE: the sheet's structures, walls and trees standing at the heights whose claims stand on them, deciding nothing more
 ///     the bed's own ink - GUESS: a structure covering more than half the bed is read as the bed's own drawing, not as a caster, a classification of ours; no page gives it.
+///     a court divider casts at the wall's height - GUESS: a court divider casts its shadow from the compound wall's 1.6 m, the divider being a wall of the compound; no page gives a divider's height.
 ///
 /// # Errors
 /// The sheet's reader refused it.
@@ -360,7 +367,9 @@ pub fn casters(plan: &ParsedPlan, svg: &Sheet, bed: &Bed) -> Result<Vec<Caster>,
         let small = r.w * r.h / (FTPX * FTPX) < SMALL_BUILDING_SQFT;
         out.push(Caster {
             ring: rect_ring(r),
-            height_ft: if small {
+            height_ft: if kind == Some(NOTICE_BOARD_KIND) {
+                NOTICE_BOARD_FT
+            } else if small {
                 SMALL_BUILDING_FT
             } else {
                 BUILDING_FT
@@ -431,9 +440,8 @@ pub fn garden_sun(plan: &ParsedPlan, svg: &Sheet) -> Result<Vec<String>, Error> 
         let got = lit_hours(&bed, &cs, half);
         let need = if half { HALF_SHADE_BED_H } else { SUN_BED_H };
         if got < need {
-            // `", ".join(shaders(...)) or "nothing drawn"`: a bed short of its hours has a shader, so the second never shows
-            let names = shaders(&bed, &cs, half).join(", ");
-            let what = [names.as_str(), "nothing drawn"][usize::from(names.is_empty())];
+            // a bed short of its hours has a shader, so the list is never empty (feature 449 T182: its "nothing drawn" could not show)
+            let what = shaders(&bed, &cs, half).join(", ");
             out.push(format!(
                 "the {}kitchen bed at ({},{}), {} by {} ft, has {} h of sun in the shoulder month and needs {} (research homesteads 044) - shaded by {what}",
                 if half { "half-shade " } else { "" },

@@ -48,7 +48,7 @@ def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | N
     lines += [f"    {v.w_ft:.0f} x {v.h_ft:.0f} ft = {v.area_sqft:,.0f} sqft [{v.orient}, {v.zone}] at svg({v.x:.0f},{v.y:.0f})" for v in tv]
     lines.append("per-region density (a large low-coverage tile = consolidation candidate):")
     lines += [f"    tile[r{t.row}c{t.col}]: {100 * t.coverage_pct:.0f}% built  ({t.interior_sqft:,.0f} sqft interior)" for t in region_density(plan, cell=cell)]
-    lines.append("aligned building gaps 5-30 ft (kura fire-gap OK ~10 ft; wooden >8 ft loose):")
+    lines.append("aligned building gaps 5-30 ft (kura fire-gap OK 6-10 ft; wooden >8 ft loose):")
     gaps = aligned_gaps(plan)
     if not gaps:
         lines.append("    (none in the 5-30 ft range)")

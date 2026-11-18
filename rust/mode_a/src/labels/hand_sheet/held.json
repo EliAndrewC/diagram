@@ -17,7 +17,11 @@
 },
 {
 "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0,0 400 300\">\n<_x/>  <rect x=\"0\" y=\"0\" width=\"400\" height=\"300\" fill=\"#EFE3C2\" data-kind=\"-\"/>\n<g data-kind=\"tub\"><circle cx=\"50\" cy=\"50\" r=\"5\"/><text x=\"80\" y=\"80\" font-size=\"6\">tub</text></g>\n</svg>\n",
-"raises": "IndexError: list index out of range"
+"placed": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0,0 400 300\">\n<_x/>  <rect x=\"0\" y=\"0\" width=\"400\" height=\"300\" fill=\"#EFE3C2\" data-kind=\"-\"/>\n<g data-kind=\"tub\"><circle cx=\"50\" cy=\"50\" r=\"5\"/><text x=\"50.0\" y=\"51.6\" text-anchor=\"middle\" font-size=\"6\" fill=\"#3A2E1C\">tub</text></g>\n</svg>\n"
+},
+{
+"svg": "<!DOCTYPE svg [<!ENTITY e \"<rect x='1' y='1' width='1' height='1'/>\">]><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0,0 400 300\">\n&e;  <rect x=\"0\" y=\"0\" width=\"400\" height=\"300\" fill=\"#EFE3C2\" data-kind=\"-\"/>\n<g data-kind=\"tub\"><circle cx=\"50\" cy=\"50\" r=\"5\"/><text x=\"80\" y=\"80\" font-size=\"6\">tub</text></g>\n</svg>\n",
+"raises": "ValueError: the sheet's elements and its start tags disagree - an entity that expands to markup draws an element the source does not write; write the element out"
 },
 {
 "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0,0 400 300\">\n  <rect x=\"0\" y=\"0\" width=\"400\" height=\"300\" fill=\"#EFE3C2\" data-kind=\"-\"/>\n<g data-kind=\"tub\" xmlns:s=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"5\"/><s:text x=\"80\" y=\"80\" font-size=\"6\">tub</s:text></g>\n</svg>\n",

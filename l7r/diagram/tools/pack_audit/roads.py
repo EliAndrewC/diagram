@@ -4,8 +4,9 @@ into a gate is no wider than the gate it feeds.
 - `roads_leave_the_frame` (B21): each END of every road meets the viewBox edge, a gate, a door, an arch or another
   road - never a stub stopping short in the open (docs/building-programs.md and the building-review checklist: the approach
   runs "OFF the viewBox edge ... not a stub stopping short"; a MAP DRAWING CONVENTION).
-- `gate_feeds_its_road` (B23): a road ending at a wall opening or the main gate's passage is no wider than that
-  opening plus ROAD_GATE_TOL_FT (research 0093 'The main gate and its gatekeepers (nagaya-mon)'; the feature 267
+- `gate_feeds_its_road` (B23): a road ending at a side gate (a wall opening the main gate's posts do not stand in) is no
+  wider than that opening plus ROAD_GATE_TOL_FT; a road at the main gate is the road the compound stands on, at its own
+  width (0088's drawing page, feature 449 T177) (research 0093 'The main gate and its gatekeepers (nagaya-mon)'; the feature 267
   pass 2 rulings recorded on the Hayakawa and Ubame sheets: "12 ft, matching the passage through the gate range it
   meets", "9 ft, matching the narrowed cart gate"). One-sided: a 2 ft footpath to an 8 ft river door is fine.
 
@@ -32,7 +33,7 @@ ARCH_KINDS: frozenset[str] = frozenset({"torii"})
 #: The places a way inside a precinct is walked TO (drawing convention, feature 294 escalation-check 2026-10-01): B21's
 #: grounds are an approach stopping short of the frame; a household path from the clearing to the well arrives at both.
 DESTINATION_KINDS: frozenset[str] = frozenset({"well", "precinct clearing"})
-"""Research: a way walked to a well or clearing - CONVENTION: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; no page gives it."""
+"""Research: a way walked to a well or clearing - UNRESEARCHED: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; which places a path leads to is how the place was lived in, and no page asks it."""
 #: A road may be this much wider than the gate it feeds: a GUESS - the 3 px authoring grain (1 ft at 3 px = 1 ft), so a
 #: road drawn on the grid next to an opening measured off the ink is not refused for a pixel.
 ROAD_GATE_TOL_FT: float = 1.0
@@ -124,7 +125,8 @@ def end_meets(end: tuple[float, float], road: Road, others: list[Road], svg: str
     """What the road's end at `end` meets - 'the frame', 'a gate', 'a door', 'an arch', 'a road', 'a well or clearing' - or None.
 
     Research:
-        where a road may end - CONVENTION: a road's end meets the frame, a gate, a door, an arch, another road, a well or a clearing, never a stub stopping short in the open, a drawing rule of the building plans; no page gives it.
+        a road running off the sheet - CONVENTION: a road's end may meet the frame, the approach running off the viewBox edge rather than stopping short, a drawing rule of the building plans; no page gives it.
+        where a road arrives - UNRESEARCHED: a road's other end meets a gate, a door, an arch, another road, a well or a clearing, never a dead end in the open; that a way leads somewhere is how the place was laid out, and no page asks it.
     """
     px, py = end
     frame = _frame(svg)
@@ -159,19 +161,47 @@ def roads_leave_the_frame(svg: str, plan: ParsedPlan) -> list[str]:
     return out
 
 
-def gate_feeds_its_road(svg: str, plan: ParsedPlan, tol_ft: float = ROAD_GATE_TOL_FT) -> list[str]:
-    """A road ending at a gate is no wider than the widest gate that end meets, plus `tol_ft`.
+def _boxes_touch(a: tuple[float, float, float, float], b: tuple[float, float, float, float]) -> bool:
+    return a[0] <= b[2] and b[0] <= a[2] and a[1] <= b[3] and b[1] <= a[3]
+
+
+def side_gates_met(end: tuple[float, float], reach: float, plan: ParsedPlan) -> list[float] | None:
+    """The widths (ft) of every side gate an end at `end` meets within `reach` px - a wall opening that is not the main gate's - or
+    None when the end meets the main gate: its passage, or the wall opening its posts stand in (feature 449 T177).
 
     Research:
-        a road no wider than its gate - GUESS research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: a road ending at a gate is no wider than the widest opening it meets, plus the claimed tolerance, the width feature 267's review gave the hand sheets' approach roads; the page records that no page gives the width of the road before an official's gate, and it draws the road at a compound's front gate at the width of the road the compound stands on, 15 to 24 ft on a lesser highway, wider than the gates the record gives.
+        the road at the front gate at its own width - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: the road at a compound's front gate is the road the compound stands on, at that road's width, so an end meeting the main gate's passage, or the wall opening its posts stand in, is not held to a side gate's width
+    """
+    px, py = end
+    box = gate_passage_box(plan)
+    if box is not None and main_gate_passage_ft(plan) is not None and _box_distance(px, py, *box) <= reach:
+        return None
+    out: list[float] = []
+    for o in wall_openings(plan):
+        if _box_distance(px, py, *opening_box(o)) > reach:
+            continue
+        if box is not None and _boxes_touch(opening_box(o), box):
+            return None
+        out.append(o.ft)
+    return out
+
+
+def gate_feeds_its_road(svg: str, plan: ParsedPlan, tol_ft: float = ROAD_GATE_TOL_FT) -> list[str]:
+    """A road ending at a side gate is no wider than the widest side gate that end meets, plus `tol_ft`; a road at the main gate
+    is the road the compound stands on, at its own width, and is not judged here (feature 449 T177: it was refused when wider
+    than the main gate, against 0088's drawing page).
+
+    Research:
+        a lane no wider than its side gate - GUESS research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: a lane ending at a side gate or a cart gate is no wider than the widest such opening it meets, plus the claimed tolerance; the page draws a lane to a side gate or cart gate about 6 ft where carts use it, a GUESS, and records that no page gives the width of a lane to a side gate.
+        the road at the front gate at its own width - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: the road at a compound's front gate is the road the compound stands on, at that road's width, so a road meeting the main gate's passage, or the wall opening its posts stand in, is not held to the gate's width.
     """
     out: list[str] = []
     for road in roads(svg):
         for end in (road.pts[0], road.pts[-1]):
-            met = gates_met(end, road.half, plan)
+            met = side_gates_met(end, road.half, plan)
             w_ft = road.width / FTPX
             if met and w_ft > max(met) + tol_ft:
-                out.append(f"a {w_ft:.1f} ft road meets a {max(met):.1f} ft gate at svg({end[0]:.0f},{end[1]:.0f}) - a road is no wider than the gate it feeds")
+                out.append(f"a {w_ft:.1f} ft road meets a {max(met):.1f} ft side gate at svg({end[0]:.0f},{end[1]:.0f}) - a lane is no wider than the side gate it feeds")
     return out
 
 

@@ -1,7 +1,8 @@
 """The program rules feature 294 moved out of the building-review's sweep into the registry (plan B16-B20): what the
 review used to read off every sheet by eye, asked of the sheet's own tags.
 
-- `lodging_entrances` (B16): every block someone sleeps in reaches the ground by a door on its outer wall.
+- `lodging_entrances` (B16): every block someone sleeps in reaches the ground by a door on its outer wall, and each
+  dwelling of a divided row by its own (feature 449 T177).
 - `privies_by_zone` (B17): the residence's privy is the house's own; a privy in every court; at least three.
 - `fire_water_distribution` (B18): a tub at every fire-prone wooden building, two at the kitchen, none at a kura alone.
 - `size_hierarchy` (B19): the compound's ranking of footprints - the house out-measures its kitchen, and so on.
@@ -88,24 +89,65 @@ def entrances(svg: str, plan: ParsedPlan) -> list[Mark]:
     return out
 
 
+#: The row kinds a partition divides into dwellings, each entered by a door of its own (feature 449 T177: 0097's rowhouse dwellings,
+#: 0106's long-house). A residence's rooms and an undivided block - 0097's common room behind one door - keep the building's rule.
+ROW_KINDS: frozenset[str] = frozenset({"barracks", "retainers' quarters", "servants' quarters"})
+"""Research: the row-form lodgings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks and a retainers' long-house are divided into dwellings, each with a door of its own (0097, 0106), and a servants' quarters takes one of 0097's two forms, a row of dwellings each with its door or a common room behind one door, so these three kinds are the ones a dwelling wall can divide."""
+
+
+def dwellings(block: Mark, ms: tuple[Mark, ...], tol: float = JOIN_PX) -> list[tuple[float, float]]:
+    """The spans (px, along its long axis) of the dwellings a row block is divided into: the block cut at every dwelling wall - a
+    SOLID line of its own kind inside it that runs its full depth, within `tol`. A dashed line is a sliding partition, which 0097
+    lets a common room's bays have behind one door, and cuts no dwelling (feature 449 T182, its claims round)."""
+    along_x = block.w >= block.h
+    lo, hi = (block.x, block.x2) if along_x else (block.y, block.y2)
+    cuts: set[float] = set()
+    for m in ms:
+        if m.tag != "line" or block.kind is None or not m.belongs_to(block.kind) or m.paint.get("stroke-dasharray", "none") not in ("", "none"):
+            continue
+        if along_x and m.w <= tol and lo < m.x < hi and m.y <= block.y + tol and m.y2 >= block.y2 - tol:
+            cuts.add(m.x)
+        elif not along_x and m.h <= tol and lo < m.y < hi and m.x <= block.x + tol and m.x2 >= block.x2 - tol:
+            cuts.add(m.y)
+    edges = [lo, *sorted(cuts), hi]
+    return list(zip(edges, edges[1:], strict=False))
+
+
 def lodging_entrances(svg: str, plan: ParsedPlan, tol: float = DOOR_FLUSH_TOL_PX) -> list[str]:
     """Every building holding a lodging kind has at least one entrance on its OUTER wall: an entrance glyph within `tol`
-    of one of its blocks and not wholly inside any of them (DOOR_FLUSH_TOL_PX, the floating-door check's flush reach).
+    of one of its blocks and not wholly inside any of them (DOOR_FLUSH_TOL_PX, the floating-door check's flush reach); and
+    every dwelling of a divided row block has one of its own, an outer-wall entrance whose middle lies along that dwelling
+    (feature 449 T177: one door anywhere on a joined block passed every dwelling in it).
 
     Research:
         a lodging entered from the ground - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).
+        a door to each dwelling of a row - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks, a retainers' long-house and a servants' quarters in the row form are divided into dwellings, each with a door of its own, and a row of bays walled off from one another behind one shared door is never drawn, so each dwelling a solid wall divides off is held to its own door; a block undivided, or divided only by dashed sliding partitions, is 0097's common room behind one door.
         every other lodging entered from the ground - UNRESEARCHED: the guest quarters, a shrine's hall and dwelling and the monk's rooms each reach the ground by a door or genkan on their own outer wall, not only through a building they do not join; no page asks how these were entered.
+        the karo's own house entered from the ground - GUESS research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: the karo's small house of their own on the hand-drawn plans, a guess the page records, reaches the ground by a door on its own outer wall, as the long-house gives the karo's quarters a door of their own on the court.
     """
     doors = entrances(svg, plan)
+    ms = marks(svg)
     out: list[str] = []
     for comp in components(structure_marks(svg)):
         kinds = sorted({k for b in comp for k in (b.kind or "", *b.lineage) if k in LODGING})
         if not kinds:
             continue
-        if any(any(gap(d, b) <= tol for b in comp) and not any(_inside(d, b, tol) for b in comp) for d in doors):
+        outer = [d for d in doors if any(gap(d, b) <= tol for b in comp) and not any(_inside(d, b, tol) for b in comp)]
+        if not outer:
+            x, y = min(b.x for b in comp), min(b.y for b in comp)
+            out.append(f"the {' / '.join(kinds)} block at svg({x:.0f},{y:.0f}) has no door or genkan on its outer wall - a lodging is entered from the ground")
             continue
-        x, y = min(b.x for b in comp), min(b.y for b in comp)
-        out.append(f"the {' / '.join(kinds)} block at svg({x:.0f},{y:.0f}) has no door or genkan on its outer wall - a lodging is entered from the ground")
+        for b in comp:
+            if b.kind not in ROW_KINDS:
+                continue
+            spans = dwellings(b, ms)
+            along_x = b.w >= b.h
+            mine = [d for d in outer if gap(d, b) <= tol]
+            bare = sum(1 for lo, hi in spans if not any(lo <= ((d.x + d.x2) / 2 if along_x else (d.y + d.y2) / 2) <= hi for d in mine))
+            if len(spans) > 1 and bare:
+                out.append(
+                    f"the {b.kind} at svg({b.x:.0f},{b.y:.0f}) has {bare} of its {len(spans)} dwellings with no door of its own on its outer wall - each dwelling of a row is entered by its own door"
+                )
     return out
 
 
@@ -123,6 +165,11 @@ PRIVY_MIN: int = 3
 """Research: least privies on a county manor - GUESS research/questions/0101-privies-setchin.drawing.html: at least 3 privies, the low end of the project's three or four per compound; the page records the count as the project's guess."""
 
 
+#: The residence's own privies: the guests' and the family's (0101's drawing page).
+RESIDENCE_PRIVIES: int = 2
+"""Research: the residence's two privies - research/questions/0101-privies-setchin.drawing.html: a samurai residence has two privies, the guests' and the family's."""
+
+
 def privies_by_zone(svg: str, minimum: int = PRIVY_MIN) -> list[str]:
     """(a) a privy is the residence's own - tagged a part of it, or attached to one of its blocks (research 0101:
     the privy built into the samurai house); (b) every court the sheet tags has a privy; (c) at least `minimum` in all.
@@ -130,13 +177,19 @@ def privies_by_zone(svg: str, minimum: int = PRIVY_MIN) -> list[str]:
     Research:
         the residence's own privy - research/questions/0101-privies-setchin.drawing.html: a samurai residence's privies are built into the house, so a privy is tagged a part of the residence or attached to one of its blocks.
         a privy in each court zone - GUESS research/questions/0101-privies-setchin.drawing.html: each inner and outer court zone the sheet tags holds a privy, the page's about one privy to each part of the compound, which it records as the project's guess; a court zone is the part of the compound its rects draw, buildings and all, not the open courtyard the page keeps every privy out of.
+        the residence's two privies - research/questions/0101-privies-setchin.drawing.html: the house has two privies, the guests' and the family's, so a residence with fewer of its own is refused.
+        a sheet-wide floor on the privies - GUESS research/questions/0101-privies-setchin.drawing.html: at least the claimed `minimum` privies on the sheet, the low end of the page's about three or four at a county magistrate's compound, which it records as the project's guess.
     """
     ms = marks(svg)
     privies = [m for m in ms if m.tag == "rect" and m.belongs_to("latrine") and m.fill == PRIVY_FILL]
     house = [m for m in structure_marks(svg) if m.belongs_to("residence") and not m.belongs_to("latrine")]
     out: list[str] = []
-    if house and not any("residence" in p.lineage or any(gap(p, b) <= ATTACHED_PX for b in house) for p in privies):
+    owned = [p for p in privies if "residence" in p.lineage or any(gap(p, b) <= ATTACHED_PX for b in house)]
+    if house and not owned:
         out.append("no privy is the residence's own - the family's privy is built into the house (tag it data-part-of=\"residence\" and attach it to a block)")
+    elif house and len(owned) < RESIDENCE_PRIVIES:
+        # FEATURE 449 T182: one of the house's two privies passed the check, where 0101 gives the house the guests' and the family's
+        out.append(f"{len(owned)} privy is the residence's own - the house has {RESIDENCE_PRIVIES}, the guests' and the family's (attach the other to a block)")
     # a ZONE is a court kind, however many precinct rects draw it (Hayakawa's inner court runs on into its river annex)
     for kind in COURT_KINDS:
         ground = [m for m in ms if m.ident == "precinct" and m.kind == kind]

@@ -55,10 +55,12 @@
   <!-- Outer land (surrounding countryside / town outskirts) -->
   <rect x="0" y="0" width="1200" height="900" fill="#EFE3C2" data-kind="-"/>
 
-  <!-- Imperial road approaching the south gate: the ROAD is 13.3 ft wide (a width of its own - the gate's passage is the ~8 ft yakuimon, feature 267 R26; the old comment said the road matched a 13.3 ft gate) -->
+  <!-- A lane into the service gate, 13.3 ft wide against the gate's ~6.7 ft passage (feature 449 T177: a lane to a side gate is held
+       to its gate, 0088's drawing page; the road at the main gate is the road the compound stands on, at its own width, so this
+       fixture's lane moved from the main gate to the service gate) -->
   <g data-kind="road">
-    <path d="M 600 900 L 600 750" stroke="#B89060" stroke-width="40" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 600 900 L 600 750" stroke="#9C7448" stroke-width="40" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
+    <path d="M 414 900 L 414 750" stroke="#B89060" stroke-width="40" stroke-linecap="butt" opacity="0.55"/>
+    <path d="M 414 900 L 414 750" stroke="#9C7448" stroke-width="40" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
 
   <!-- Title block (just above the compound; no redundant summary line - the
