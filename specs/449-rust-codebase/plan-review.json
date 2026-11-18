@@ -678,6 +678,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T190 (step 3a's last label placer edge cases, T189's claims round; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "9a06a72fe57dca3d255f6bc874853b259ffc5e381bf6a1d568f5b2b238191252",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T190 Approach (checklist part A)": {
+   "sha256": "9f6e4234065c4e65ac76152b212ad543a53f34e6337245d4ac3ddef2ee1b75e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12310,6 +12322,76 @@
      "why": "Verification that the requested fixes happen; enforcement of the request, not scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T190 (step 3a's last label placer edge cases, T189's claims round; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T190 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 scatter member seating unchanged (Python)",
+     "summary": "A turned scatter member with a direction of its own is already seated off its turned edge in the kept Python (_box_frame), so no seating code changes; shown by a probe at 30, 120, 200 degrees and 30 with a closing point.",
+     "class": "within",
+     "why": "The task line asks for the fix only if the seater does not already measure off the turned edge; the probe shows the Python does, so there is no bug to fix and nothing asked is withheld."
+    },
+    {
+     "id": "D1b scatter member seating unchanged (Rust)",
+     "summary": "The Rust copy's box_frame (rust/mode_a/src/labels/placer/cands.rs) is taken to be the same arithmetic by reading, so the Rust seating is not changed either.",
+     "class": "within",
+     "why": "Same task-line condition as D1, applied to the Rust copy under the lockstep rule. It narrows nothing asked, but the premise is unmeasured: the probe ran only the Python, and nothing in the bundle shows a test exercising a turned scatter member in the Rust. Recorded so the reading is visible as a reading."
+    },
+    {
+     "id": "D2 scatter member stays its own outline, comment in both copies",
+     "summary": "The scatter branch keeps handing the member's own outline (not its framed box), because the association gap and leader end then stay on the member's ink, with a comment in both copies so it is not later 'fixed'.",
+     "class": "within",
+     "why": "Keeps behavior that honors 0242's leader rule (to the nearest point of the feature) and nearness rule; a comment changes no behavior. Done in both copies per the lockstep rule."
+    },
+    {
+     "id": "D3 lone turned L's leader end left out of T190",
+     "summary": "The lone-shape branch's leader to a turned L ends at its turned box, more than 1.5 px off the L's ink at 42-80 of 256 ring-9 seats; reported, not changed in T190.",
+     "class": "within",
+     "why": "Rests on a fact outside the digested block, as the dispatch states it and unverified from the bundle: the defect is filed as T191 and ordered before step 3b (T152). On that fact the GM's 2026-11-18 rule ('fix all known bugs in each step before moving on to porting the next step') is met at the step boundary he named, and T190, opened for T189's four claims-round items, narrows nothing by not carrying it. The leader ending more than 1.5 px off the turned L's ink is a departure from 0242's leader rule ('to the nearest point of the feature') and so a known defect; the block's own grounds ('no task names it', 'not a defect any finding names', 'no pool lone shape is turned') would not have justified leaving it, and those three sentences are stale against T191. Without T191 before step 3b this would be a NOT LEGITIMATE narrowing."
+    },
+    {
+     "id": "D4 the 'turned subject's angle' claim lists the scatter member",
+     "summary": "The claim is amended to name the scatter member, read by its own outline in its own frame.",
+     "class": "within",
+     "why": "Makes a claim say what the code does; serves the claims round the GM's fix-as-we-go rule covers."
+    },
+    {
+     "id": "D5 'squared' and 'lone block's beside box' claims cite 0242's convention bullet",
+     "summary": "Those claims stop calling the page silent and rest on the bullet T189 added, quoting its phrase.",
+     "class": "within",
+     "why": "Corrects a stale citation to what the research page now records; no scope change."
+    },
+    {
+     "id": "D6 0242 holder sentence drafted, page edit left to the landing session",
+     "summary": "Because the page sits at 19,907 of 20,000 bytes, the sentence on the turned holder's beside box is drafted in scratch (19,922 bytes with the bullet's comment trimmed) and placed by the landing session.",
+     "class": "within",
+     "why": "A sequencing choice, not a dropped item: the caller reports the sentence is now on the page ('A block named among loose parts, or an outline holding the others, is seated beside the smallest box holding them all, turned to its angle.'), and it keeps the phrase the lone block's claim quotes. The trimmed text is the bullet's comment, not a research finding."
+    },
+    {
+     "id": "D7 score comments give T188's ring-1 figure as 0242 does",
+     "summary": "_score and Search::score cite T188's ring-1 measurement (13 to none, 12 more leaders, 19 moved, 3 more on ink), dropping T184's figures from another tree.",
+     "class": "within",
+     "why": "Corrects a comment's figure to the one the research page records, in both copies; labeled one-shot figures."
+    },
+    {
+     "id": "D8 no pool sheet regenerated or re-audited",
+     "summary": "No pool caption's subjects change (286 captions identical HEAD vs clone; no scatter member is an L or turned), so no sheet is redrawn or re-audited.",
+     "class": "within",
+     "why": "FR-002 asks a drawn output to pass its checks; with subjects measured identical and no seating code changed, no drawn output moves, so nothing new is owed."
+    },
+    {
+     "id": "D9 the checks",
+     "summary": "make static, make rust-test and make quick run in sequence after the last edit, logged in scratch.",
+     "class": "within",
+     "why": "The standard gate; narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21822,6 +21904,74 @@
      "summary": "make static, make rust-test, make quick after the last edit; red-before/green-after per Rust case; a Python probe failing on HEAD and passing on the clone; held.json re-taken with one sheet added.",
      "class": "within",
      "why": "Verification that the requested fixes happen; enforcement of the request, not scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T190": {
+   "section_sha256": "5962538eb72ffa3ff540cbb9db9d41dfc9f62ff302738c1cb9f5b0943551c748",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 scatter member seating unchanged (Python)",
+     "summary": "A turned scatter member with a direction of its own is already seated off its turned edge in the kept Python (_box_frame), so no seating code changes; shown by a probe at 30, 120, 200 degrees and 30 with a closing point.",
+     "class": "within",
+     "why": "The task line asks for the fix only if the seater does not already measure off the turned edge; the probe shows the Python does, so there is no bug to fix and nothing asked is withheld."
+    },
+    {
+     "id": "D1b scatter member seating unchanged (Rust)",
+     "summary": "The Rust copy's box_frame (rust/mode_a/src/labels/placer/cands.rs) is taken to be the same arithmetic by reading, so the Rust seating is not changed either.",
+     "class": "within",
+     "why": "Same task-line condition as D1, applied to the Rust copy under the lockstep rule. It narrows nothing asked, but the premise is unmeasured: the probe ran only the Python, and nothing in the bundle shows a test exercising a turned scatter member in the Rust. Recorded so the reading is visible as a reading."
+    },
+    {
+     "id": "D2 scatter member stays its own outline, comment in both copies",
+     "summary": "The scatter branch keeps handing the member's own outline (not its framed box), because the association gap and leader end then stay on the member's ink, with a comment in both copies so it is not later 'fixed'.",
+     "class": "within",
+     "why": "Keeps behavior that honors 0242's leader rule (to the nearest point of the feature) and nearness rule; a comment changes no behavior. Done in both copies per the lockstep rule."
+    },
+    {
+     "id": "D3 lone turned L's leader end left out of T190",
+     "summary": "The lone-shape branch's leader to a turned L ends at its turned box, more than 1.5 px off the L's ink at 42-80 of 256 ring-9 seats; reported, not changed in T190.",
+     "class": "within",
+     "why": "Rests on a fact outside the digested block, as the dispatch states it and unverified from the bundle: the defect is filed as T191 and ordered before step 3b (T152). On that fact the GM's 2026-11-18 rule ('fix all known bugs in each step before moving on to porting the next step') is met at the step boundary he named, and T190, opened for T189's four claims-round items, narrows nothing by not carrying it. The leader ending more than 1.5 px off the turned L's ink is a departure from 0242's leader rule ('to the nearest point of the feature') and so a known defect; the block's own grounds ('no task names it', 'not a defect any finding names', 'no pool lone shape is turned') would not have justified leaving it, and those three sentences are stale against T191. Without T191 before step 3b this would be a NOT LEGITIMATE narrowing."
+    },
+    {
+     "id": "D4 the 'turned subject's angle' claim lists the scatter member",
+     "summary": "The claim is amended to name the scatter member, read by its own outline in its own frame.",
+     "class": "within",
+     "why": "Makes a claim say what the code does; serves the claims round the GM's fix-as-we-go rule covers."
+    },
+    {
+     "id": "D5 'squared' and 'lone block's beside box' claims cite 0242's convention bullet",
+     "summary": "Those claims stop calling the page silent and rest on the bullet T189 added, quoting its phrase.",
+     "class": "within",
+     "why": "Corrects a stale citation to what the research page now records; no scope change."
+    },
+    {
+     "id": "D6 0242 holder sentence drafted, page edit left to the landing session",
+     "summary": "Because the page sits at 19,907 of 20,000 bytes, the sentence on the turned holder's beside box is drafted in scratch (19,922 bytes with the bullet's comment trimmed) and placed by the landing session.",
+     "class": "within",
+     "why": "A sequencing choice, not a dropped item: the caller reports the sentence is now on the page ('A block named among loose parts, or an outline holding the others, is seated beside the smallest box holding them all, turned to its angle.'), and it keeps the phrase the lone block's claim quotes. The trimmed text is the bullet's comment, not a research finding."
+    },
+    {
+     "id": "D7 score comments give T188's ring-1 figure as 0242 does",
+     "summary": "_score and Search::score cite T188's ring-1 measurement (13 to none, 12 more leaders, 19 moved, 3 more on ink), dropping T184's figures from another tree.",
+     "class": "within",
+     "why": "Corrects a comment's figure to the one the research page records, in both copies; labeled one-shot figures."
+    },
+    {
+     "id": "D8 no pool sheet regenerated or re-audited",
+     "summary": "No pool caption's subjects change (286 captions identical HEAD vs clone; no scatter member is an L or turned), so no sheet is redrawn or re-audited.",
+     "class": "within",
+     "why": "FR-002 asks a drawn output to pass its checks; with subjects measured identical and no seating code changed, no drawn output moves, so nothing new is owed."
+    },
+    {
+     "id": "D9 the checks",
+     "summary": "make static, make rust-test and make quick run in sequence after the last edit, logged in scratch.",
+     "class": "within",
+     "why": "The standard gate; narrows nothing."
     }
    ],
    "verdict": "CLEAR"

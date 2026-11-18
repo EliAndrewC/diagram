@@ -204,8 +204,8 @@ fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
 /// Research:
 ///     a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
 ///     an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does
-///     a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
-///     a lone block's beside box - CONVENTION: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - 0242 says the caption is seated off the turned feature's edge but not which outline a block with small parts beside it has; the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)
+///     a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame, and a scatter's member by its own outline, which the placer's seats read in that member's frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+///     a lone block's beside box - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - the page's map drawing convention (a block named among loose parts "is seated beside the smallest box holding them all"); the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)
 #[must_use]
 pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
     let pts: Vec<Pt> = own.iter().flat_map(|s| s.poly.iter().copied()).collect();
@@ -271,7 +271,10 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
         (rects, beside)
     } else {
         // a scatter of like glyphs: beside the group, else beside any one of them, largest first; a group wider than the standard's
-        // reach at the caption's size has no "beside" (Hayakawa's tubs were named outside the compound's corner)
+        // reach at the caption's size has no "beside" (Hayakawa's tubs were named outside the compound's corner). A member with a
+        // direction of its own (a turned L-shaped house) goes as its own outline at its angle: the placer's seats read its box in that
+        // frame already (`box_frame`), so its `framed` box would give the same seats, while the association gap and a leader's end,
+        // read off the outline, stay on the member's ink (feature 449 T190, measured 2026-11-18)
         let mut members = closed.clone();
         by_area_desc(&mut members);
         let spread = size > 0.0 && max(x1 - x0, y1 - y0) > REACH_EM * size;
@@ -332,7 +335,7 @@ fn framed(pts: &[Pt], angle: f64) -> Vec<Pt> {
 ///
 /// Research:
 ///     a direction of its own - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature is drawn at that feature's own angle and seated off its turned edge, and everything with no direction of its own is labeled level; a drawn rect and an outline of four square corners turn with their group, and an ellipse of unequal radii has its axes turned with it; a disc drawn round, an outline with a corner off square and a four-point kite have no direction
-///     an outline of square corners - CONVENTION: an outline of more than four corners, each square (an L-shaped house), has its edges' direction as a rectangle has - 0242 does not say whether a turned outline that is no rectangle has a direction of its own; read so because the same house drawn as two rects takes its angle through its blocks, and naming it level drawn as one outline would repeat the rect-against-outline defect T188 fixed, and because 0242 gives a quarter-turned feature its direction by its edges ("it has a level edge of its own"); the simpler route, an L kept level, was priced and not taken for that inconsistency (feature 449 T189)
+///     an outline of square corners - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: an outline of more than four corners, each square (an L-shaped house), has its edges' direction as a rectangle has - the page's map drawing convention ("A turned outline whose every corner is square has a direction of its own"), read so because the same house drawn as two rects takes its angle through its blocks, and naming it level drawn as one outline would repeat the rect-against-outline defect T188 fixed, and because 0242 gives a quarter-turned feature its direction by its edges ("it has a level edge of its own"); the simpler route, an L kept level, was priced and not taken for that inconsistency (feature 449 T189)
 fn squared(s: &Shape) -> bool {
     if s.tag == "rect" {
         return true;

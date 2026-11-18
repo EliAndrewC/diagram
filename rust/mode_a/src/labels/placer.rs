@@ -264,9 +264,10 @@ impl Search<'_> {
     /// (feature 287, labels L6): a leader carries the association itself. It is asked of the preferred offset's seats (ring 0) alone: the
     /// same bound holds for ring 1, leaderless too - its block, where ring 0's was blocked within the clearance, stands nearer the blocker
     /// than its own gap, strictly, a step out moving it no farther than the step - and asked there it refused every ring-1 seat on the pool
-    /// sheets, with its tie and without it alike (feature 449 T184, measured 2026-11-18: 13 ring-1 captions beside their subjects, 0 once
-    /// asked; T188, measured 2026-11-18: 0 under the strict test too, 19 captions moved, 3 more on ink, 12 more leaders), so ring 1 stays
-    /// unasked, a deliberate deviation from the standard's association.
+    /// sheets, with its tie and without it alike: the test as a whole took the ring-1 captions beside their subjects from 13 to none and
+    /// drew 12 more leader lines, as 0242's drawing page records it (feature 449 T188, measured 2026-11-18 on the four caption-placing
+    /// sheets, either form: 19 captions moved, 3 more on ink), so ring 1 stays unasked, a deliberate deviation from the standard's
+    /// association.
     ///
     /// Research:
     ///     association beside a point - DEVIATION research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term refuses every ring-1 seat with its tie and without it
