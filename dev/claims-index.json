@@ -9924,6 +9924,22 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/shared.py::well_gear#an indoor well unroofed": {
+  "body": "7d43a449b5da947a",
+  "claim": "an indoor well unroofed - communal-wells-ido.drawing: a well indoors takes no roof of its own, the house already roofing it.",
+  "code": "e64fc280eacdfddd",
+  "core": "db68a1a650df28c2",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
+  },
+  "research": "f166979de9325ea9",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/shared.py::well_gear#an indoor well's pulley": {
   "body": "7d43a449b5da947a",
   "claim": "an indoor well's pulley - GUESS communal-wells-ido.drawing: a well indoors hangs its pulley from the beams, which the page records as a guess, no page naming an indoor well's gear.",
@@ -9954,6 +9970,24 @@
   "rests": [
    "0196-communal-wells-ido.drawing.html:1e90c0992a2ef55f",
    "0196-communal-wells-ido.drawing.html:49e76daae7c37a24",
+   "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::well_gear#every well carries gear": {
+  "body": "7d43a449b5da947a",
+  "claim": "every well carries gear - communal-wells-ido.drawing: a well in the open is drawn with lifting gear over its curb; an indoor well carries the beam pulley, labeled on its own claim.",
+  "code": "c92b0e74cb9ed81c",
+  "core": "db68a1a650df28c2",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
+  },
+  "research": "f166979de9325ea9",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:a24e8638e374e060",
+   "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef",
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
   "verdict": "IN-STEP"
@@ -12460,6 +12494,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the sanctuary under the hall and dwelling": {
+  "body": "93aacc1b7208d23b",
+  "claim": "the sanctuary under the hall and dwelling - inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing: a sanctuary one to three bays of about 6 ft wide stays smaller than the one-roof hall and dwelling of 2,100 to 3,600 sq ft.",
+  "code": "bfb91955737192a2",
+  "core": "414644f9dfc8f793",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "2c468b27aa8873c0"
+  },
+  "research": "599b50c87629a190",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:1bd6872b5b09aa45",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:a5d29f9ebf4c3c88"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the stables under the barracks": {
   "body": "93aacc1b7208d23b",
   "claim": "the stables under the barracks - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the stable stays smaller than the barracks; the page records its place in the order as a guess.",
@@ -12473,6 +12524,24 @@
   "research": "20dff3d4f5e8a9c2",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the storehouses under the residence": {
+  "body": "93aacc1b7208d23b",
+  "claim": "the storehouses under the residence - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the tax archive and the other small storehouses stand well below the staff rowhouse, which stands below the residence, the order of the one office measured, at Takayama.",
+  "code": "571ec7506644fdb2",
+  "core": "414644f9dfc8f793",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+  },
+  "research": "20dff3d4f5e8a9c2",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:cb8826a5e182c9e9",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6266a6b5f45273e"
   ],
   "verdict": "IN-STEP"
  },
@@ -12528,6 +12597,17 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/program_rules.rs::PRIVY_FILL#a privy drawn gray": {
+  "body": "71a04242fba8a307",
+  "claim": "a privy drawn gray - CONVENTION: a privy is known on the sheet by the palette's gray, #7E726A, the map drawing convention privies-setchin.drawing records; no source gives a privy's color.",
+  "code": "16f20301addbbabd",
+  "core": "05eb588913497d0e",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::PRIVY_MIN#least privies on a county manor": {
@@ -14071,6 +14151,25 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/audit/shared/grounds.rs::hall_at_an_end#the hall at one end": {
+  "body": "0e2e20fd835a951e",
+  "claim": "the hall at one end - the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing: under one roof the villagers' hall is one end of the building and the monk's dwelling the other.",
+  "code": "c3eb8f62bb3cbc44",
+  "core": "d06b66fec13a7bbe",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b"
+  },
+  "reads": "28ef344d09c85e6f",
+  "research": "a8feb4a94cf5c3b6",
+  "rests": [
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/audit/shared/grounds.rs::indoor#the program's grounds": {
   "body": "8b65f53d250ba407",
   "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
@@ -14114,6 +14213,71 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/audit/shared/grounds.rs::one_compound_shrine#one shrine per compound": {
+  "body": "8855b524fb504c37",
+  "claim": "one shrine per compound - DEVIATION the-compounds-own-shrine-yashikigami.drawing: a compound draws one modest shrine however many a real office kept, a deliberate deviation; a second kami's own shrine, where the sheet's roll declares one, is not counted.",
+  "code": "464c5d67912875a0",
+  "core": "23d693b0ccd9d86a",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
+  },
+  "reads": "ccd8cde02f347c93",
+  "research": "433c01774fd3a16c",
+  "rests": [
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::sanctuary_on_axis#the approach on the same axis": {
+  "body": "6adfe083e60aabe2",
+  "claim": "the approach on the same axis - CONVENTION: the approach runs on the hall's and the sanctuary's axis, a map drawing convention inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing records, neither of its sources naming the approach.",
+  "code": "dadd74c9018d94a4",
+  "core": "f19df327c534b70c",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {},
+  "reads": "7fb9c300fd0245ef",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::sanctuary_on_axis#the sanctuary behind the hall": {
+  "body": "6adfe083e60aabe2",
+  "claim": "the sanctuary behind the hall - inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing: the sanctuary stands at the rear of the shrine, behind the hall on the worship hall's axis.",
+  "code": "e63d41d553e9b1e2",
+  "core": "f19df327c534b70c",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "2c468b27aa8873c0"
+  },
+  "reads": "7fb9c300fd0245ef",
+  "research": "599b50c87629a190",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:1bd6872b5b09aa45"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::shrine_tree#a tree beside the compound shrine": {
+  "body": "d376b50bd8c3676b",
+  "claim": "a tree beside the compound shrine - the-compounds-own-shrine-yashikigami.drawing: the compound's shrine stands beside a tree, where a household kept its god at an old tree; the reach carries a claim of its own.",
+  "code": "61c68f5d3d836836",
+  "core": "d5554bcb7637fa45",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
+  },
+  "reads": "e3142a4c3fe02049",
+  "research": "433c01774fd3a16c",
+  "rests": [
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/audit/shared/grounds.rs::sorted_set#the program's grounds": {
   "body": "f694f119a21f83af",
   "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
@@ -14124,6 +14288,25 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::stall_width#at least two stalls": {
+  "body": "e74d6aa861e116f5",
+  "claim": "at least two stalls - GUESS stables-umaya.drawing: a stable a few bays long is parted into at least two stalls of a stall's width; the page records the number of horses as a guess.",
+  "code": "ac95dbc72470616b",
+  "core": "ba6dbc1e32802cfc",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
+  },
+  "reads": "d78d06f81f63a8c0",
+  "research": "96ea0c83b210c787",
+  "rests": [
+   "0108-stables-umaya.drawing.html:219e638987c06796",
+   "0108-stables-umaya.drawing.html:bfffc30811fc7968",
+   "0108-stables-umaya.drawing.html:d4268b7e5b7275c7"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::well_clear_of_arch#a shrine sheet must draw a purification well or basin (refused when it has none)": {
@@ -14151,6 +14334,90 @@
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:90ba06c9955940ce"
   ],
   "verdict": "CANNOT-TELL"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::well_gear#a well roof drawn on four posts": {
+  "body": "ea290dc7ff7c6d43",
+  "claim": "a well roof drawn on four posts - CONVENTION: a well's roof is an unfilled outline on four corner posts, so it reads as a roof over the well and not as the paved apron, the map drawing convention communal-wells-ido.drawing records.",
+  "code": "907c3cf78466e769",
+  "core": "858221d8832c1529",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {},
+  "reads": "2bf4337aba415cd5",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an indoor well unroofed": {
+  "body": "ea290dc7ff7c6d43",
+  "claim": "an indoor well unroofed - communal-wells-ido.drawing: a well indoors takes no roof of its own, the house already roofing it.",
+  "code": "70b89517cc27e158",
+  "core": "858221d8832c1529",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
+  },
+  "reads": "2bf4337aba415cd5",
+  "research": "f166979de9325ea9",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an indoor well's pulley": {
+  "body": "ea290dc7ff7c6d43",
+  "claim": "an indoor well's pulley - GUESS communal-wells-ido.drawing: a well indoors hangs its pulley from the beams, which the page records as a guess, no page naming an indoor well's gear.",
+  "code": "d1ee5f50050f1729",
+  "core": "858221d8832c1529",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
+  },
+  "reads": "2bf4337aba415cd5",
+  "research": "f166979de9325ea9",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an open-air well's gear": {
+  "body": "ea290dc7ff7c6d43",
+  "claim": "an open-air well's gear - communal-wells-ido.drawing: a well in the open takes a sweep or a pulley frame, both attested, never the beam pulley.",
+  "code": "5f924fdea5f1cd9a",
+  "core": "858221d8832c1529",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
+  },
+  "reads": "2bf4337aba415cd5",
+  "research": "f166979de9325ea9",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:1e90c0992a2ef55f",
+   "0196-communal-wells-ido.drawing.html:49e76daae7c37a24",
+   "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared/grounds.rs::well_gear#every well carries gear": {
+  "body": "ea290dc7ff7c6d43",
+  "claim": "every well carries gear - communal-wells-ido.drawing: a well in the open is drawn with lifting gear over its curb; an indoor well carries the beam pulley, labeled on its own claim.",
+  "code": "e866567ac5dc1a9b",
+  "core": "858221d8832c1529",
+  "date": "2026-11-17",
+  "note": "in step with its page",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
+  },
+  "reads": "2bf4337aba415cd5",
+  "research": "f166979de9325ea9",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:a24e8638e374e060",
+   "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef",
+   "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::well_gear#its drawn sizes": {
   "body": "ea290dc7ff7c6d43",
