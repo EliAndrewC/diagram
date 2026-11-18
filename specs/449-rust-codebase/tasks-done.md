@@ -433,6 +433,9 @@
 - [x] T149 Phase 4 S6, the registries and their readers (ask:449-phase4-slices) Q5: interactive/classes/*, compound_kinds/*, conditions, choices, entry_owed, check-entry-headings, open_questions (2,225 lines), the modal prose moved verbatim to one Markdown file per class and kind (the FR-002 ruled case, an old-to-new id map); owed_door, record_door and record_cache deleted (756)
       research: rendering
       verify: DONE. landed: phase 4 S6, the registries: 45 differential cases none differing, the modal id map empty; make static, rust-test, hooks-test and quick green
+- [x] T150 Phase 4 S7, the map page writer (ask:449-phase4-slices) Q13: interactive/page, place, raster, extents, notes, tags, sheet, dwellings, picture_diff, page_lit onto S3a's crate, the image crate for PIL and numpy (2,912 lines); interactive/__init__ deleted; what page.py writes today, the Mode A sheets' pages
+      research: rendering
+      verify: DONE. landed: step 2: the page writer and its diagnostics in Rust, 135 differential cases none differing, 497 claims checked
 - [x] T153 Phase 4 S9b, pack_audit's leaves (ask:449-phase4-slices): tagged, parse, grids, onmap, labels, marks_drawn, size_marks, sun, palette (1,586 lines)
       research: rendering
       verify: DONE. done by T170 (tagged, parse), T174 (grids, size_marks) and T175 (onmap, labels, marks_drawn, sun, palette), which landed them measured: each ported into rust/mode_a and held to its Python by the lockstep, make pack-audit's 207 differential cases none differing
