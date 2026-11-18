@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-18T10:08:02Z",
+  "target": "plan-gate push",
+  "commit": "51a15312f",
+  "why": "T150's section reviewed CLEAR by spec-fidelity 2026-11-18 (round 3, 13 decisions), after the round arbiter's ask:449-T150-diagnostic-formats"
+}
