@@ -107,7 +107,11 @@ def scale_bar_present(plan: ParsedPlan) -> list[str]:
 def _path_points(d: str) -> tuple[list[float], list[float]]:
     """Every coordinate a path gives, made absolute (`tagged.path_walk`): its ink's extent. FEATURE 449 T182: a relative
     command's offsets were skipped, so a path drawn in relative steps (a lower-case `q 3 -8 -2 -14` on a steam plume) reached
-    no farther than its last absolute point; they are offsets from the segment's start, read as such."""
+    no farther than its last absolute point; they are offsets from the segment's start, read as such.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - the SVG argument counts, read by `tagged.path_walk`
+    """
     pts = [p for _cmd, seg in path_walk(d) for p in seg]
     return [p[0] for p in pts], [p[1] for p in pts]
 

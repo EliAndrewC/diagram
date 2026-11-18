@@ -12,7 +12,11 @@ A smaller house could run the other way, its formal room deepest in and the livi
 large the master's rooms were is not recorded.
 
 Guesses:
-- How much of the house the master's rooms take on the plan: no source measures them.
+- The size the plan gives the master's rooms, about 12 to 26 ft by 12 to 16 ft: a band of this project's from the master's
+  own 8-mat room in the ordinary houses measured - the district magistrate's house of 1794 at Matsushiro and the Matsue house -
+  up to a suite of two rooms like the Matsushiro house's retirement rooms, about 25 by 15 ft, applied to the generated plans;
+  the band is a guess, not a measurement.
+  The registry does not hold this band: it guides the generated plans, and no check refuses a sheet outside it.
 
 Depiction: The plan draws the master's rooms as one labeled bay standing for several rooms, a work room and a bedroom among them.
 

@@ -277,6 +277,72 @@ def _px_edges(ox: float, oy: float, x: float, y: float, w: float, h: float) -> t
     return r(ox + x * FTPX), r(oy + y * FTPX), r(ox + (x + w) * FTPX), r(oy + (y + h) * FTPX)
 
 
+Box4 = tuple[float, float, float, float]
+
+
+def _touching_groups(boxes: list[Box4]) -> list[list[int]]:
+    """The indices of `boxes` (x, y, w, h in feet) grouped where they touch or overlap, transitively."""
+    parent = list(range(len(boxes)))
+
+    def root(i: int) -> int:
+        while parent[i] != i:
+            i = parent[i]
+        return i
+
+    for i, (ax, ay, aw, ah) in enumerate(boxes):
+        for j in range(i + 1, len(boxes)):
+            bx, by, bw, bh = boxes[j]
+            if ax <= bx + bw and bx <= ax + aw and ay <= by + bh and by <= ay + ah:
+                parent[root(j)] = root(i)
+    groups: dict[int, list[int]] = {}
+    for i in range(len(boxes)):
+        groups.setdefault(root(i), []).append(i)
+    return list(groups.values())
+
+
+def _union_outline(boxes: list[Box4], ox: float, oy: float) -> list[str]:
+    """The `d` of each closed ring round the union of `boxes` (feet), in whole pixels: the edges between a covered and an
+    uncovered cell of the boxes' own grid, chained end to end - so pieces drawn as one passage show no edge inside it (feature
+    449 T182, the corridor's glyph-check: three closed rects read as three rooms). Each ring is one unbroken run back to
+    its start, never a pen-up move: the hand-sheet reader joins a path's vertices in order, and a jump between two runs
+    read as a stroke across the passage that kept its caption out of it."""
+    xs = sorted({v for x, _y, w, _h in boxes for v in (x, x + w)})
+    ys = sorted({v for _x, y, _w, h in boxes for v in (y, y + h)})
+
+    def covered(i: int, j: int) -> bool:
+        if not (0 <= i < len(xs) - 1 and 0 <= j < len(ys) - 1):
+            return False
+        cx, cy = (xs[i] + xs[i + 1]) / 2, (ys[j] + ys[j + 1]) / 2
+        return any(x <= cx <= x + w and y <= cy <= y + h for x, y, w, h in boxes)
+
+    # every unit edge of the grid between a covered and an uncovered cell, as a pair of grid vertices
+    edges: dict[tuple[int, int], list[tuple[int, int]]] = {}
+    for i in range(len(xs) - 1):
+        for j in range(len(ys)):
+            if covered(i, j - 1) != covered(i, j):
+                edges.setdefault((i, j), []).append((i + 1, j))
+                edges.setdefault((i + 1, j), []).append((i, j))
+    for i in range(len(xs)):
+        for j in range(len(ys) - 1):
+            if covered(i - 1, j) != covered(i, j):
+                edges.setdefault((i, j), []).append((i, j + 1))
+                edges.setdefault((i, j + 1), []).append((i, j))
+    rings: list[str] = []
+    while any(edges.values()):
+        start = min(v for v, nb in edges.items() if nb)
+        ring, at = [start], start
+        while edges[at]:
+            nxt = edges[at].pop(0)
+            edges[nxt].remove(at)
+            ring.append(nxt)
+            at = nxt
+        # keep only the corners: a vertex the walk goes straight through draws nothing
+        corners = [v for k, v in enumerate(ring) if k in (0, len(ring) - 1) or (ring[k - 1][0] == v[0]) != (v[0] == ring[k + 1][0])]
+        pts = [f"{math.floor(ox + xs[i] * FTPX + 0.5)} {math.floor(oy + ys[j] * FTPX + 0.5)}" for i, j in corners]
+        rings.append("M " + " L ".join(pts) + " Z")
+    return rings
+
+
 def _declared_checks(tier: str) -> tuple[str, ...]:
     """The checks the declaration lists for `tier` (none for a tier it does not declare)."""
     btype = by_tier(tier)
@@ -330,7 +396,7 @@ UNFENCED_ZONES: frozenset[str] = frozenset({"forecourt", "yard", "cart yard", "i
 #: A room's caption where its kind's name is not what the room is: the karo lodges in a BAY of the staff long-house
 #: (research 0106), which the kind `karo's house` finds, but a bay is not a house (building-review round 6); the maids lodge in
 #: a room of the house the kind `servants' quarters` finds (feature 374 batch 4, plan R4-1).
-ROOM_CAPTIONS: dict[str, str] = {"karo's house": "karo's quarters", "servants' quarters": "maids' room"}
+ROOM_CAPTIONS: dict[str, str] = {"karo's house": "karo's quarters", "servants' quarters": "maids' room", "residence corridor": "corridor"}
 ZONE_CAPTIONS: dict[str, str] = {"oshirasu": "hearing court", "yard": "outer court", "inner yard": "inner court"}
 
 
@@ -753,11 +819,29 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
         # outline on top - all inside a group of the building's kind, the hand sheets' form (feature 264)
         parts.append(f"<g{_kind_attr(p.spec.feature)}>")
         parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, "none", 0, "", p.spec.feature))
+        passages: list[tuple[Box4, str]] = []
         for rkind, rx, ry, rw, rh in p.spec.rooms:
-            parts.append(rect(p.x_ft + rx, p.y_ft + ry, rw, rh, fill, "none", 0, "", rkind))
+            # A CORRIDOR IS A PASSAGE, NOT A ROOM (feature 449 T182, the round arbiter's ask:449-T182-room-layout): drawn in
+            # the lighter board floor with a dotted edge, apart from the rooms' dashed partitions, and captioned as a corridor;
+            # its pieces keep their kind and size for the checks but are outlined and captioned below, once for each passage
+            passage = rkind == "residence corridor"
+            drawn_room = rect(p.x_ft + rx, p.y_ft + ry, rw, rh, KINDS["plain"][0] if passage else fill, "none", 0, "", rkind)
+            parts.append(drawn_room)
+            if passage:
+                passages.append(((p.x_ft + rx, p.y_ft + ry, rw, rh), drawn_room.split('data-id="', 1)[1].split('"', 1)[0]))
+                continue
             caption("area", p.x_ft + rx, p.y_ft + ry, rw, rh, ROOM_CAPTIONS.get(rkind, rkind), 8, False, "#3A2E1C", rkind)
             (x0, y0), (x1, y1) = px(p.x_ft + rx, p.y_ft + ry), px(p.x_ft + rx + rw, p.y_ft + ry + rh)
             parts.append(f'<rect x="{x0:.0f}" y="{y0:.0f}" width="{x1 - x0:.0f}" height="{y1 - y0:.0f}" fill="none" stroke="{stroke}" stroke-width="0.8" stroke-dasharray="4 3"/>')
+        # THE PIECES THAT TOUCH ARE ONE PASSAGE (feature 449 T182, the corridor's glyph-check): one dotted outline round their
+        # union, no edge inside it, and one caption seated on its largest piece and declared over it (declared over every piece, the
+        # hand-sheet placer's subject for the stepped whole had no free seat inside and set the name outside the house)
+        for group in _touching_groups([b for b, _sid in passages]):
+            boxes = [passages[k][0] for k in group]
+            ox0, oy0 = px(0.0, 0.0)
+            parts += [f'<path d="{d}" fill="none" stroke="{stroke}" stroke-width="0.8" stroke-dasharray="1 2"/>' for d in _union_outline(boxes, ox0, oy0)]
+            big = max(boxes, key=lambda b: b[2] * b[3])
+            caption("area", *big, ROOM_CAPTIONS["residence corridor"], 7, False, "#3A2E1C", "residence corridor")
         if p.spec.engawa_ft:  # the veranda, a lighter strip along the court face under the building's outline (R01)
             ex, ey, ex2, ey2 = _engawa(p)
             parts.append(rect(ex, ey, ex2 - ex, ey2 - ey, KINDS["plain"][0], stroke, 1.2, "", "engawa"))

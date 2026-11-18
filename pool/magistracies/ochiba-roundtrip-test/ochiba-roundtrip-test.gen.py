@@ -41,7 +41,8 @@ def ochiba_program() -> C.CompoundProgram:
     """Ochiba's program as its sheet draws it, in feet.
 
     Research:
-        the residence and its rooms - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0101-privies-setchin.drawing.html: Ochiba's house measured off ochiba-magistracy.svg at 3 px = 1 ft (feature 449 T182), one block of 90 x 50 ft in two rows - the family's quarters and the lord's in the north row, the guest room and the reception room in the south (garden) row, each 45 x 25 ft, the maids' room 12 x 12 ft at the family's west end - with its reception at one end, as 0091 draws the house; the reception room gives the placer the room 0101 seats the guests' privy behind, the house's second privy
+        the residence and its rooms - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0101-privies-setchin.drawing.html: Ochiba's house measured off ochiba-magistracy.svg at 3 px = 1 ft (feature 449 T182), one block of 90 x 50 ft in two rows with its reception at one end, as 0091 draws the house - the family's quarters and the lord's in the north row, the guest room and the reception room in the south (garden) row, the maids' room 12 x 12 ft at the kitchen end; the reception room gives the placer the room 0101 seats the guests' privy behind, the house's second privy
+        its rooms' sizes - GUESS: the reception room 28 x 15 ft, the lord's quarters 25 x 15 ft and the family quarters 20 x 18 ft, inside the bands of this project's round the ordinary houses measured (the kinds' Guesses), in the palace order (reception at the east end of the front row, the lord's rooms behind it, the family's beyond, the inner rooms behind), the rest captioned inner-room bays and corridors
     """
     env = C.Envelope(w_ft=267.0, h_ft=200.0, divider_ft=100.0, gate_w_ft=13.3)
     # real open courts measured off the finished map
@@ -67,12 +68,29 @@ def ochiba_program() -> C.CompoundProgram:
             "N",
             order=10,
             feature="residence",
+            # THE ROOMS AT THE ORDINARY HOUSES' SIZES, IN THE PALACE ORDER (feature 449 T182, the round arbiter's
+            # ask:449-T182-room-layout and -room-scope): the front (garden) row - the family's rooms 20 x 18 ft at the far
+            # (west) end, the guest room, the reception 28 x 15 ft at the east end; behind them a 6 ft corridor in three pieces
+            # drawn as one passage (`compound.py`), stepped 3 ft at the reception; the back row - the lord's quarters 25 x 15 ft behind the
+            # reception, and the rest captioned bays of inner rooms in two ranks - a north rank of three bays 14 ft deep, a rank
+            # of two 12 ft deep behind it, their dividing line one line at 14 ft with the lord's quarters' top - the maids'
+            # room, 14 x 12 ft (its two-line name has no seat in a 12 ft square) at the west end of that second rank's west bay,
+            # from its top edge. Each band is the kinds' Guesses (the reception <= 450 sq ft, the lord's 12-26 x 12-16, the
+            # family's 18-30 x 12-20, an inner bay 9-36 x 9-25, a corridor 3-6.5 ft wide and <= 36 ft long).
             rooms=(
-                ("family quarters", 0.0, 0.0, 45.0, 25.0),
-                ("lord's quarters", 45.0, 0.0, 45.0, 25.0),
-                ("guest quarters", 0.0, 25.0, 45.0, 25.0),
-                ("reception room", 45.0, 25.0, 45.0, 25.0),
-                ("servants' quarters", 0.0, 13.0, 12.0, 12.0),
+                ("inner rooms", 0.0, 0.0, 32.5, 14.0),
+                ("inner rooms", 32.5, 0.0, 32.5, 14.0),
+                ("inner rooms", 65.0, 0.0, 25.0, 14.0),
+                ("inner rooms", 0.0, 14.0, 32.5, 12.0),
+                ("servants' quarters", 0.0, 14.0, 14.0, 12.0),
+                ("inner rooms", 32.5, 14.0, 32.5, 12.0),
+                ("lord's quarters", 65.0, 14.0, 25.0, 15.0),
+                ("residence corridor", 0.0, 26.0, 36.0, 6.0),
+                ("residence corridor", 36.0, 26.0, 29.0, 6.0),
+                ("residence corridor", 62.0, 29.0, 28.0, 6.0),
+                ("family quarters", 0.0, 32.0, 20.0, 18.0),
+                ("guest quarters", 20.0, 32.0, 42.0, 18.0),
+                ("reception room", 62.0, 35.0, 28.0, 15.0),
             ),
             # Ochiba's rear strip: the house stands 57.5 px (19.2 ft) off the north wall's face (212 against the face at 154.5),
             # and the placer adds 1.5 ft to an inset, so 17.7 ft

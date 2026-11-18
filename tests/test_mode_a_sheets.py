@@ -151,3 +151,34 @@ def test_a_door_kind_with_no_door_takes_no_tub_and_a_bath_takes_its_court_face()
     assert doored_tub_seats(karo, []) == []
     assert doored_tub_seats(karo, [(18.0, 0.0)])
     assert doored_tub_seats(bath, []) is None
+
+
+def test_touching_corridor_pieces_are_one_passage_with_one_unbroken_outline() -> None:
+    """The round-trip's three corridor pieces were three closed dotted rects, read as three rooms (the corridor's glyph-check);
+    a stepped run's union is now one ring with no edge between the pieces and no pen-up move (the hand-sheet reader joins a
+    path's vertices in order, and a jump read as a stroke across the passage that set its caption outside the house)."""
+    from l7r.diagram.compound import _touching_groups, _union_outline
+
+    pieces = [(0.0, 26.0, 36.0, 6.0), (36.0, 26.0, 29.0, 6.0), (62.0, 29.0, 28.0, 6.0), (0.0, 60.0, 5.0, 5.0)]
+    assert sorted(map(sorted, _touching_groups(pieces))) == [[0, 1, 2], [3]]
+    assert _union_outline(pieces[:3], 0.0, 0.0) == ["M 0 78 L 195 78 L 195 87 L 270 87 L 270 105 L 186 105 L 186 96 L 0 96 L 0 78 Z"]
+    corner = _union_outline([(0.0, 0.0, 1.0, 1.0), (1.0, 1.0, 1.0, 1.0)], 0.0, 0.0)  # pieces meeting at one corner: rings, never a jump
+    assert all(d.count("M") == 1 for d in corner)
+    assert sum(d.count("L") for d in corner) == 8
+
+
+def test_the_round_trips_corridor_is_drawn_as_one_passage() -> None:
+    """The emitter, not only its helpers: the round-trip's three corridor pieces keep a fill each, tagged for the checks,
+    with no outline of their own; one dotted ring round them and one caption."""
+    import re
+
+    (bundle,) = [b for b in _bundles() if b.stem == "ochiba-roundtrip-test"]
+    with open(_sheet(bundle), encoding="utf-8") as fh:
+        svg = fh.read()
+    pieces = re.findall(r'<rect [^>]*data-kind="residence corridor"[^>]*/>', svg)
+    assert len(pieces) == 3 and all('stroke="none"' in r for r in pieces), pieces
+    dotted = re.findall(r'<(\w+) [^>]*stroke-dasharray="1 2"[^>]*>', svg)
+    assert dotted == ["path"], dotted
+    ring = re.search(r'<path d="([^"]*)"[^>]*stroke-dasharray="1 2"', svg)
+    assert ring is not None and ring.group(1).count("M") == 1, ring
+    assert len(re.findall(r">corridor</text>", svg)) == 1

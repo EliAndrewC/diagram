@@ -608,7 +608,7 @@
    "declared": "spec-fidelity"
   },
   "### T182 (step 1's defects: T174's, T175's and T176's findings)": {
-   "sha256": "4b7d96d45f34047135b97ffafe5d63601a7cf02059aa0af504ff371e65a95a8c",
+   "sha256": "0e9880b90fb50cf4ccc26796b59c05ccc10404c4f914229032914b3316f03b42",
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
@@ -11646,6 +11646,58 @@
      "why": "Places the defect fixes before the next step's port, as the GM asked on 2026-11-18; the exits are the project's standing gates."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T182 (step 1's defects: T174's, T175's and T176's findings)",
+    "### T182 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T182-D1",
+     "summary": "ochiba-roundtrip-test's program given the residence rooms, rear strip and kitchen ell her sheet draws; tubs_off_their_doors asks every tied building; Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door or none, step 3b porting the fix",
+     "class": "within",
+     "why": "Defects exposed by step 1's fixed checks, fixed before step 3b: the GM's 2026-11-18 'fix broken things as we find them ... fix all known bugs in each step before moving on'. FR-002 lets the sheet change so long as it passes its checks and holds its research claims."
+    },
+    {
+     "id": "T182-D2",
+     "summary": "Claims round's three defects fixed in every copy: well no longer stands in for 0222's basin (types.json country shrine requires the basin, ending ask:417-T36's drift; a well still allowed in addition), lodging_entrances splits only at solid walls (dash carried by the marks reader), Python placer's tub within reach of a drawn door or none; prose brought to pages",
+     "class": "within",
+     "why": "Known defects found by this step's claims round, fixed in the Rust and the kept Python as the fix-as-we-go rule asks. Nothing the GM asked for is cut back."
+    },
+    {
+     "id": "T182-D3",
+     "summary": "Room sizes (ask:449-T182-room-sizes): house size stays the GM's 2026-10-26 deviation; types.json records reception, lord's quarters and family quarters as required residence rooms with bands labeled as the project's guess round the measured houses; round-trip and county-example programs resized; Ochiba, Ubame and Hayakawa interiors re-partitioned with dashed partitions and labels only inside unchanged outlines, deliberate arrangements kept, dated notes entries",
+     "class": "within",
+     "why": "The three size audits refused the rooms against measured Edo rooms: a known defect found by the step's reviews, which the GM said must be fixed before the next step. The plan follows the arbiter's route. It adds Hayakawa beyond the two sheets the ruling names, but a magistracy sheet the new types.json rooms would refuse is a defect the fix exposes, so that is the same rule. Keeping the GM's own deviation narrows nothing the GM asked for, and nothing is held to an exactness standard."
+    },
+    {
+     "id": "T182-D4",
+     "summary": "0220's drawing page calling the innermost arch's distance a drawing convention, where the procedure treats it as a guess, listed for a record session rather than edited here",
+     "class": "within",
+     "why": "A wording mismatch in a research record, not a defect in step 1's ported code or its checks. It is listed rather than dropped, and the research records belong to the record sessions. It was judged the same way at the block's earlier CLEAR."
+    },
+    {
+     "id": "T182-D5",
+     "summary": "diff-run read as a signal on six sheets and every red and fix fixture, every difference explained by a fix",
+     "class": "within",
+     "why": "This is FR-002 as amended by T180: the differential is a signal to be read, not an exactness standard."
+    },
+    {
+     "id": "T182-D6",
+     "summary": "Where a road may end and where a precinct path leads listed for the GM as UNRESEARCHED",
+     "class": "within",
+     "why": "These are open research gaps, not known bugs. They are surfaced and labeled rather than guessed at."
+    },
+    {
+     "id": "T182-D7",
+     "summary": "Exits and checks: make static, rust-test, hooks-test HOOKS_ALL=1, quick, the claims round, a gated make land; red exit ruled through make arbiter-ask",
+     "class": "within",
+     "why": "This is how the requested fixes are verified and enforced. It adds no behavior the GM did not ask for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -20637,63 +20689,51 @@
    "verdict": "CLEAR"
   },
   "T182": {
-   "section_sha256": "06dafea4c7dc9b5a124d412804568da2f4f5b7db55ff92209edc03d51ae54b2e",
+   "section_sha256": "851fda757f989874678bc2bad93829685074e15538a08fbd94e4171c42a69629",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T182-scope",
-     "summary": "Step 1's known defects (T174-T176 findings) fixed in the Rust and the kept Python alike, before step 3b is ported: sheet reader/start tags (CDATA, PIs, internal subset, quoted '>', any XML name, DTD-entity elements refused by name), single-quoted attributes, gap_tag TIGHT under 0116's floor, path commands, the On-map error line, county red fixtures under the magistracies tier, privies_by_zone (0101), dead code removed, T176's claims given their pages.",
+     "id": "T182-D1",
+     "summary": "ochiba-roundtrip-test's program given the residence rooms, rear strip and kitchen ell her sheet draws; tubs_off_their_doors asks every tied building; Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door or none, step 3b porting the fix",
      "class": "within",
-     "why": "The GM 2026-11-18: 'we want to use this port to fix broken things as we find them ... we should fix all known bugs in each step before moving on to porting the next step'. Fixing every live copy and doing it before step 3b is that rule exactly; FR-003 still holds (the Python remains the one that runs)."
+     "why": "Defects exposed by step 1's fixed checks, fixed before step 3b: the GM's 2026-11-18 'fix broken things as we find them ... fix all known bugs in each step before moving on'. FR-002 lets the sheet change so long as it passes its checks and holds its research claims."
     },
     {
-     "id": "T182-ochiba-roundtrip",
-     "summary": "ochiba-roundtrip-test's program gains the residence rooms, rear strip and kitchen ell her sheet draws, so the placer seats both privies.",
+     "id": "T182-D2",
+     "summary": "Claims round's three defects fixed in every copy: well no longer stands in for 0222's basin (types.json country shrine requires the basin, ending ask:417-T36's drift; a well still allowed in addition), lodging_entrances splits only at solid walls (dash carried by the marks reader), Python placer's tub within reach of a drawn door or none; prose brought to pages",
      "class": "within",
-     "why": "A defect the privies fix exposed, fixed where it lies; the program is brought to the sheet (measured off it), not the check loosened. FR-002's exception and fix-as-we-go cover a case's expected result changing as fixed."
+     "why": "Known defects found by this step's claims round, fixed in the Rust and the kept Python as the fix-as-we-go rule asks. Nothing the GM asked for is cut back."
     },
     {
-     "id": "T182-tubs-doors",
-     "summary": "tubs_off_their_doors asks every tied building (a tied bath spares the tub its door), and the Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door it drew or none, nearest door first; step 3b ports the fixed behavior.",
+     "id": "T182-D3",
+     "summary": "Room sizes (ask:449-T182-room-sizes): house size stays the GM's 2026-10-26 deviation; types.json records reception, lord's quarters and family quarters as required residence rooms with bands labeled as the project's guess round the measured houses; round-trip and county-example programs resized; Ochiba, Ubame and Hayakawa interiors re-partitioned with dashed partitions and labels only inside unchanged outlines, deliberate arrangements kept, dated notes entries",
      "class": "within",
-     "why": "Checks and placer fixed on purpose to the research page (0100) under constitution XIV and the GM's fix-as-we-go rule, in every copy that lives."
+     "why": "The three size audits refused the rooms against measured Edo rooms: a known defect found by the step's reviews, which the GM said must be fixed before the next step. The plan follows the arbiter's route. It adds Hayakawa beyond the two sheets the ruling names, but a magistracy sheet the new types.json rooms would refuse is a defect the fix exposes, so that is the same rule. Keeping the GM's own deviation narrows nothing the GM asked for, and nothing is held to an exactness standard."
     },
     {
-     "id": "T182-shrine-basin",
-     "summary": "The shrine purification check no longer lets a well stand in for 0222's stone basin; types.json's country shrine requires the basin, ending the drift accepted as ask:417-T36; a well beside the hall still allowed (0196).",
+     "id": "T182-D4",
+     "summary": "0220's drawing page calling the innermost arch's distance a drawing convention, where the procedure treats it as a guess, listed for a record session rather than edited here",
      "class": "within",
-     "why": "A check that passed incorrect work, made to hold the research claim it carries; FR-002 requires drawn outputs to hold their research claims and the GM asked for known bugs to be fixed. It tightens rather than narrows, and the pool sheets were regenerated and pass."
+     "why": "A wording mismatch in a research record, not a defect in step 1's ported code or its checks. It is listed rather than dropped, and the research records belong to the record sessions. It was judged the same way at the block's earlier CLEAR."
     },
     {
-     "id": "T182-lodging-partitions",
-     "summary": "lodging_entrances no longer splits a common room at dashed sliding partitions; the marks reader carries a line's dash and only a solid dwelling wall splits a row (0097).",
+     "id": "T182-D5",
+     "summary": "diff-run read as a signal on six sheets and every red and fix fixture, every difference explained by a fix",
      "class": "within",
-     "why": "A check refusing correct work fixed in place (FR-002's exception, constitution XIV, fix-as-we-go)."
+     "why": "This is FR-002 as amended by T180: the differential is a signal to be read, not an exactness standard."
     },
     {
-     "id": "T182-record-session",
-     "summary": "0220's drawing-page wording (innermost arch distance called a map convention where the procedure treats it as a guess) listed for a record session, not edited here.",
+     "id": "T182-D6",
+     "summary": "Where a road may end and where a precinct path leads listed for the GM as UNRESEARCHED",
      "class": "within",
-     "why": "Not a defect in step 1's code (the sheet reader and checks behave to their pages); it is a wording disagreement in the research record, routed to the session that edits records and listed openly. Nothing the GM asked of this step is dropped."
+     "why": "These are open research gaps, not known bugs. They are surfaced and labeled rather than guessed at."
     },
     {
-     "id": "T182-unresearched",
-     "summary": "Where a road may end and where a precinct path leads listed for the GM as UNRESEARCHED.",
+     "id": "T182-D7",
+     "summary": "Exits and checks: make static, rust-test, hooks-test HOOKS_ALL=1, quick, the claims round, a gated make land; red exit ruled through make arbiter-ask",
      "class": "within",
-     "why": "Open research questions surfaced to the GM rather than guessed; not a known bug left in the step."
-    },
-    {
-     "id": "T182-diff-signal",
-     "summary": "make diff-run of HEAD's audit against the fixed one on the six sheets and every red and fix fixture, read as a signal, each difference explained by a fix.",
-     "class": "within",
-     "why": "FR-002 as amended by T180: the differential is a signal read for whether everything works, never a stop; no exactness standard is applied."
-    },
-    {
-     "id": "T182-order-exits",
-     "summary": "Order after step 3a (T151) and before step 3b; exits green on make static, rust-test, hooks-test HOOKS_ALL=1, quick, the claims round and a gated make land, red recorded and a can't-do claim ruled through make arbiter-ask.",
-     "class": "within",
-     "why": "Places the defect fixes before the next step's port, as the GM asked on 2026-11-18; the exits are the project's standing gates."
+     "why": "This is how the requested fixes are verified and enforced. It adds no behavior the GM did not ask for."
     }
    ],
    "verdict": "CLEAR"

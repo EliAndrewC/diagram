@@ -13,11 +13,14 @@ Like nearly every room of a samurai house, they were matted. What they held room
 recorded.
 
 Guesses:
-- The size of the bay the plan draws: how large a household's private rooms were is not recorded, so the bay takes the far end
-  of a house sized to a district magistrate's house of about 1,740 sq ft.
+- The size of the bay the plan draws for the inner rooms, about 9 to 36 ft by 9 to 25 ft and 80 to 900 sq ft, one bay standing
+  for one to four rooms: a band of this project's round the ordinary houses measured - the 6- to 15-mat rooms of the district
+  magistrate's house of 1794 at Matsushiro, and the Aizu chief retainer's house, about 8.6 mats a room - applied to the
+  generated plans; the band is a guess, not a measurement.
+  The registry does not hold this band: it guides the generated plans, and no check refuses a sheet outside it.
 
-Depiction: The plan draws the inner rooms as one labeled bay standing for several rooms, at the far end of the residence from
-the reception, beyond the master's and the family's rooms, in the palace's order. No altar room is drawn among them.
+Depiction: The plan draws the inner rooms as labeled bays, each standing for one to four rooms, at the far end of the residence
+from the reception or behind the master's and the family's rooms, in the palace's order. No altar room is drawn among them.
 
 Name: inner rooms
 Covers: the innermost bay of the residence, its floor and its label

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-18T14:50:23Z",
+  "target": "review-accept",
+  "commit": "cb26d5d50",
+  "outcome": "permitted",
+  "why": "review-accept size-audit--lord-s-quarters Q2: fixed under ask:449-T182-room-sizes: the room resized within the band now recorded in types.json and held by the registry; the new audit re-measures it"
+}

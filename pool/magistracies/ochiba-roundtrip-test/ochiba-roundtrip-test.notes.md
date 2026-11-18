@@ -56,3 +56,13 @@ inside the masonry, with its own outline swallowed by the wall stroke. The place
 the ink plus a foot and a half clear of its face (3 ft off a compound wall's centerline, 2.5 ft off the divider's; feature 374 wave 134, research 0092's "a foot or two"), and the inner-court
 garden zone moved 36 -> 38 ft so the shifted N-wall row still clears it. Checked by
 `tools/pack_audit.py` `structures_on_walls`; see docs/buildings.md "Walls and gates".
+
+2026-11-18 (feature 449 T182): the program's residence is Ochiba's as her sheet draws it - one 90 x 50 ft block of rooms (it was
+two room-less bars, 90 and 93 x 25 ft), the rear strip behind it and the kitchen as its ell - so the placer seats the house's two
+privies (0101). Its rooms at the ordinary houses' sizes, in the palace order (the round arbiter's ask:449-T182-room-layout and
+ask:449-T182-room-scope; the bands are the kinds' Guesses, applied to the generated plans): the reception 28 x 15 ft at the east
+end of the garden row, the lord's quarters 25 x 15 ft behind it, the family quarters 20 x 18 ft at the row's west end, the guest
+room 42 x 18 ft between; behind the garden row a 6 ft corridor, stepped 3 ft at the reception, drawn as a passage (a lighter floor, a dotted edge) and captioned;
+the back row captioned bays of inner rooms in two ranks - three bays 14 ft deep along the north wall side (32.7, 32.3 and 25 ft long), two 12 ft deep behind the west two (32.7 and 32.3 ft) - the maids' room 14 x 12 ft at the west end of the second rank's west bay; the corridor pieces drawn as one passage, one dotted outline round them and one caption. A door-kind building's fire-water tub is seated
+only within reach of one of its doors (compound_parts.py), so the karo's house, whose door faces the house 4 ft off, takes none (no
+check asks one there).

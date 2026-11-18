@@ -11,11 +11,15 @@ own rooms lay behind them and the family's beyond. A smaller house could run the
 past the living rooms. Either way the formal rooms sat at one end of the house, with the formal garden before them on the
 sunny south side. A house's altar room could stand beside the zashiki's alcove, or in a small room behind it.
 
-How large a zashiki was is not recorded.
+A survey of a samurai house at Matsue gives its zashiki as 10 mats with an 8-mat next room beside it, an estimate from a
+plan drawn in the Meiji era, and a dictionary of Japanese architecture gives the main room as 6 to 12 mats.
 
 Guesses:
-- The size the plan gives the reception bay: no zashiki's size is recorded, so the bay is reckoned within a house sized
-  to a district magistrate's house of 1794.
+- The size the plan gives the reception with its next room and alcove, about 18 to 36 ft by 12 to 18 ft and no more than
+  about 450 sq ft: a band of this project's round the formal pair of the ordinary houses measured - the Matsue house's
+  10-mat zashiki and 8-mat next room, the district magistrate's house of 1794 at Matsushiro and the Kuchiba house at Hagi -
+  applied to the generated plans; the band is a guess, not a measurement.
+  The registry does not hold this band: it guides the generated plans, and no check refuses a sheet outside it.
 
 Depiction: The plan draws the reception as one labeled bay at the end of the residence nearest the approach, in the palace's
 order, and never between the master's rooms and the family's. It faces the garden where the plan's buildings allow, and
