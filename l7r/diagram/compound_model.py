@@ -48,6 +48,7 @@ KINDS: dict[str, tuple[str, str]] = {
     "cell": ("#B89868", "#5C4318"),
     "dark": ("#8C6F3E", "#4A3318"),
 }
+"""Research: the palette's fills - CONVENTION: each palette role's fill and stroke, the slatted granary's pattern among them, is how a sheet shows a building's kind, not its real color."""
 COURT_FILL: dict[str, str] = {
     "forecourt": "url(#court-earth)",
     "oshirasu": "url(#oshirasu-sand)",
@@ -271,7 +272,7 @@ draft's 1 ft clearance, the near tub (2.6 ft), another foot and the far tub's ha
 ft; a short face's tub round the corner nearest its door stands ~8.6 ft off. The 10.5 ft is a CONVENTION of this project;
 the number `pack_audit`'s `tubs_off_their_doors` registers, held equal to it by sharing this name.
 
-Research: fire-water tub reach from a door - GUESS: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; 0100 puts tubs beside a door and is silent on the distance."""
+Research: fire-water tub reach from a door - CONVENTION: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html records how near counts as beside the door, within about 10 ft, as a convention of this project."""
 
 NOTICE_BOARD_MAX_FT: float = 40.0
 """How far from the main gate's opening the compound's notice board may stand (feature 287, homes H29b): the number

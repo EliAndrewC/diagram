@@ -28,7 +28,7 @@ pub const TUB_MAX_GAP_FT: f64 = 3.5;
 /// `tubs_off_their_doors` registers.
 ///
 /// Research:
-///     fire-water tub reach from a door - GUESS: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; 0100 puts tubs beside a door and is silent on the distance.
+///     fire-water tub reach from a door - CONVENTION: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html records how near counts as beside the door, within about 10 ft, as a convention of this project.
 pub const TUB_DOOR_MAX_FT: f64 = 10.5;
 
 /// How far from the main gate's opening the compound's notice board may stand (feature 287, homes H29b): the number the audit's
@@ -39,6 +39,9 @@ pub const TUB_DOOR_MAX_FT: f64 = 10.5;
 pub const NOTICE_BOARD_MAX_FT: f64 = 40.0;
 
 /// The Mode A palette: a role, and its (fill, stroke), in the declaration's order (`compound_model.KINDS`; SKILL.md's Palette table).
+///
+/// Research:
+///     the palette's fills - CONVENTION: each palette role's fill and stroke, the slatted granary's pattern among them, is how a sheet shows a building's kind, not its real color.
 pub const KINDS: [(&str, (&str, &str)); 8] = [
     ("lord", ("#DDB87A", "#5A3F1E")),
     ("service", ("#C9A57A", "#6B4F2A")),

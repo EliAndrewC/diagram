@@ -6065,6 +6065,19 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound_model.py::KINDS#the palette's fills": {
+  "body": "800a9bd638b70e1c",
+  "claim": "the palette's fills - CONVENTION: each palette role's fill and stroke, the slatted granary's pattern among them, is how a sheet shows a building's kind, not its real color.",
+  "code": "618def6db71a710e",
+  "core": "f4235e439dceef07",
+  "date": "2026-11-17",
+  "note": "fills and strokes only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "section": "f4235e439dceef07",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/compound_model.py::LATRINE_WELL_FT#privy distance from a well": {
   "body": "049b87671afd0756",
   "claim": "privy distance from a well - GUESS privies-setchin.drawing: a privy stands at least 15 ft from any well; the record holds no separation distance.",
@@ -6173,14 +6186,13 @@
  },
  "l7r/diagram/compound_model.py::TUB_DOOR_MAX_FT#fire-water tub reach from a door": {
   "body": "4d64ebde5e1a4b68",
-  "claim": "fire-water tub reach from a door - GUESS: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; 0100 puts tubs beside a door and is silent on the distance.",
-  "code": "082114fb99134113",
+  "claim": "fire-water tub reach from a door - CONVENTION: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; fire-and-the-fireproof-storehouses-dozo.drawing records how near counts as beside the door, within about 10 ft, as a convention of this project.",
+  "code": "bf86f9a7f8336729",
   "core": "0c0f6e81b0913b0e",
-  "date": "2026-10-25",
-  "note": "nothing in the bundle gives the distance",
+  "date": "2026-11-17",
+  "note": "10.5 ft is \"within about 10 ft\", recorded as a CONVENTION",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_model.py::TUB_MAX_GAP_FT#fire-water tub reach from its building": {
@@ -8554,6 +8566,25 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/checks.py::DOORLESS_KINDS#a bath's tub judged by no door": {
+  "body": "a2d001babd3f1fe9",
+  "claim": "a bath's tub judged by no door - fire-and-the-fireproof-storehouses-dozo.drawing, baths-furo.drawing: the bath our plans attach to the kitchen is entered from the house, so its fire-water tub stands on its yard side and is not held to stand beside a door.",
+  "code": "920fbbd93fe3dd5f",
+  "core": "34b74668f86f61a2",
+  "date": "2026-11-17",
+  "note": "the bath is entered from the house and its tub stands on the yard side",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc",
+   "0105-baths-furo.drawing.html": "de13b621fc93a424"
+  },
+  "research": "534f56fe6abdb898",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
+   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
+   "0105-baths-furo.drawing.html:4e80d4732a6023c3"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/checks.py::DOOR_FLUSH_TOL_PX#door flush tolerance": {
   "body": "9b9f6ab650046844",
   "claim": "door flush tolerance - NONE: a door within 1.5 px of a building edge reads as on the wall, an audit pixel tolerance.",
@@ -8678,14 +8709,13 @@
  },
  "l7r/diagram/tools/pack_audit/checks.py::aligned_gaps#its reported gap": {
   "body": "6b53710f127bf28d",
-  "claim": "its reported gap - NONE: they decide nothing about the place - 90 (upper bound on the reported gap, a report window)",
-  "code": "3f3440721964a89a",
+  "claim": "its reported gap - GUESS: no source could speak to it, a value of ours, the top of the reporting window above - 90 (upper bound on the reported gap, 30 ft: buildings farther apart are not judged for spacing)",
+  "code": "f3a7795ff078d39e",
   "core": "bae8b7c43dea3fb1",
-  "date": "2026-10-25",
-  "note": "an audit report window",
+  "date": "2026-11-17",
+  "note": "the 30 ft ceiling only bounds what the check reports; the spacing page gives no such bound",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/tools/pack_audit/checks.py::aligned_gaps#its salts, guards and sentinels": {
@@ -8707,6 +8737,17 @@
   "core": "bae8b7c43dea3fb1",
   "date": "2026-10-25",
   "note": "reporting window of our own; 0116 gives no window",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/checks.py::floating_doors#a door flush to its wall": {
+  "body": "e30f3e390de3605a",
+  "claim": "a door flush to its wall - CONVENTION: a door glyph sits flush to the wall it opens through and never floats just inside the building, the map drawing convention doorways-and-doors-to.drawing records and magistrates-compounds-jinya-and-yamen.drawing checks; the two pixel reaches carry claims of their own.",
+  "code": "6250c7d7c9c7c718",
+  "core": "09c0f61820d08462",
+  "date": "2026-11-17",
+  "note": "a door glyph sits flush, never floats inside the building",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -8745,6 +8786,17 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d"
   ],
   "triaged": "2026-10-26",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/checks.py::occluded_foreground#the foreground drawn last": {
+  "body": "2f10fdc1b0bdae20",
+  "claim": "the foreground drawn last - CONVENTION: tubs, wells and every sub-building rect are drawn above the fills, so a later shape covering one is a defect, the draw order magistrates-compounds-jinya-and-yamen.drawing records for labels and small glyphs; the covered area carries a claim of its own.",
+  "code": "7c5b0592472e975d",
+  "core": "5776f5bdf96f8e27",
+  "date": "2026-11-17",
+  "note": "small glyphs are drawn last",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/tools/pack_audit/grids.py::FTPX#feet to pixels": {
@@ -8850,6 +8902,54 @@
   "core": "233bdca142f022b6",
   "date": "2026-10-25",
   "note": "stroke half-width",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/palette.py::GRANARY_SLATS#the slatted granary's fill": {
+  "body": "062bc8347c20b1fd",
+  "claim": "the slatted granary's fill - CONVENTION: the raised timber granary, the takakura that storehouses-for-the-tax-rice.drawing draws as one of a granary's two forms, is filled with a slat pattern so it reads apart from the plastered kura; no page gives a granary's drawn fill.",
+  "code": "0a6b050b23aa1af3",
+  "core": "5cacd0d4d7b9bfc6",
+  "date": "2026-11-17",
+  "note": "a fill pattern only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/palette.py::PRIVY#the privy's gray": {
+  "body": "d8420950572658cc",
+  "claim": "the privy's gray - CONVENTION: a privy is filled gray, #7E726A, so it reads apart from the tan buildings where the household lives and works, the map drawing convention privies-setchin.drawing records; no source gives a privy's color.",
+  "code": "1f5894446ba12102",
+  "core": "2fe2f27027f7c541",
+  "date": "2026-11-17",
+  "note": "the page's gray convention",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/palette.py::ROLES#the palette's table": {
+  "body": "972439b7aa2defa7",
+  "claim": "the palette's table - CONVENTION: the palette role each building kind is painted in, the Mode A palette's own rows, a kind the palette does not name assigned a role labeled GUESS beside its row; a fill says nothing of a building's real color.",
+  "code": "492aae4343296d9b",
+  "core": "04019a92afe4b57c",
+  "date": "2026-11-17",
+  "note": "fill roles only; the granary's two fills follow its two forms",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "section": "04019a92afe4b57c",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/palette.py::WELL#the well curb's color": {
+  "body": "2792243840f76ea8",
+  "claim": "the well curb's color - CONVENTION: a well's stone curb is filled #9C8C70, the palette's stone; no page gives a curb's drawn color.",
+  "code": "c43804fa7b2fee47",
+  "core": "f20af673cf30923c",
+  "date": "2026-11-17",
+  "note": "a drawn color",
   "pages": {},
   "research": "",
   "rests": [],
@@ -8962,6 +9062,84 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/program_rules.py::HIERARCHY#the cell under the barracks": {
+  "body": "cd71c99af740b99a",
+  "claim": "the cell under the barracks - GUESS: a cell stays smaller than the barracks; no page ranks them, and the pages' sizes agree, a cell of about 12 by 10 ft, a guess on holding-cells-agariya-and-roya.drawing, against a long rowhouse 12 to 24 ft deep on staff-rowhouses-and-barracks-nagaya.drawing.",
+  "code": "00423523886542a3",
+  "core": "acd0cdfabd982bf1",
+  "date": "2026-11-17",
+  "note": "no page ranks them; the sizes agree (cell 12 by 10 ft, rowhouse 12 to 24 ft deep)",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::HIERARCHY#the kitchen and the shrine under the residence": {
+  "body": "cd71c99af740b99a",
+  "claim": "the kitchen and the shrine under the residence - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: no kitchen or shrine hall out-sizes the residence, the largest domestic building; the page records the order among them as the project's reading, a guess.",
+  "code": "7857ae843c3405e5",
+  "core": "acd0cdfabd982bf1",
+  "date": "2026-11-17",
+  "note": "the page records this order as the project's guess",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+  },
+  "research": "20dff3d4f5e8a9c2",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::HIERARCHY#the sanctuary under the hall and dwelling": {
+  "body": "cd71c99af740b99a",
+  "claim": "the sanctuary under the hall and dwelling - inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing: a sanctuary one to three bays of about 6 ft wide stays smaller than the one-roof hall and dwelling of 2,100 to 3,600 sq ft.",
+  "code": "929ef6c5bd241ba2",
+  "core": "acd0cdfabd982bf1",
+  "date": "2026-11-17",
+  "note": "a sanctuary of 1 to 3 bays of about 6 ft against a building of 2,100 to 3,600 sq ft",
+  "pages": {
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "2c468b27aa8873c0"
+  },
+  "research": "599b50c87629a190",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:1bd6872b5b09aa45",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:a5d29f9ebf4c3c88"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::HIERARCHY#the stables under the barracks": {
+  "body": "cd71c99af740b99a",
+  "claim": "the stables under the barracks - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the stable stays smaller than the barracks; the page records its place in the order as a guess.",
+  "code": "156851a9ec82bbc0",
+  "core": "acd0cdfabd982bf1",
+  "date": "2026-11-17",
+  "note": "the page records the stable's place as a guess",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+  },
+  "research": "20dff3d4f5e8a9c2",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::HIERARCHY#the storehouses under the residence": {
+  "body": "cd71c99af740b99a",
+  "claim": "the storehouses under the residence - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the tax archive and the other small storehouses stand well below the staff rowhouse, which stands below the residence, the order of the one office measured, at Takayama.",
+  "code": "0a85a6b9de1d1ff3",
+  "core": "acd0cdfabd982bf1",
+  "date": "2026-11-17",
+  "note": "Takayama's order; the granary is not in this pair",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+  },
+  "research": "20dff3d4f5e8a9c2",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:cb8826a5e182c9e9",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6266a6b5f45273e"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/program_rules.py::JOIN_PX#block join distance": {
   "body": "b826c0383f668f03",
   "claim": "block join distance - NONE: two blocks within 1 px are one building, which is integer-emit rounding.",
@@ -8993,6 +9171,17 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/program_rules.py::PRIVY_FILL#a privy drawn gray": {
+  "body": "dc117af1a13ab88a",
+  "claim": "a privy drawn gray - CONVENTION: a privy is known on the sheet by the palette's gray, #7E726A, the map drawing convention privies-setchin.drawing records; no source gives a privy's color.",
+  "code": "c5a61d478fa0f6d5",
+  "core": "2fe2f27027f7c541",
+  "date": "2026-11-17",
+  "note": "gray is a map drawing convention",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/program_rules.py::PRIVY_MIN#least privies on a county manor": {
   "body": "88ad3b1ba3d474fb",
   "claim": "least privies on a county manor - GUESS privies-setchin.drawing: at least 3 privies, the low end of the project's three or four per compound; the page records the count as the project's guess.",
@@ -9006,6 +9195,25 @@
   "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::TUB_KINDS#which wooden buildings carry a tub": {
+  "body": "7567963f1bf4b71a",
+  "claim": "which wooden buildings carry a tub - GUESS fire-and-the-fireproof-storehouses-dozo.drawing: the office hall, the residence, the barracks, the gatehouse, the compound shrine, the stables, the servants' row, the kitchen and a shrine's hall and dwelling are the major wooden buildings that each carry a tub, and the guest quarters, the karo's house and the retainers' quarters are not; the page puts a tub at each major wooden building and records that no page ranks the buildings for fire water, the ranking the project's reasoning.",
+  "code": "fe1440f414d4bace",
+  "core": "6d7c0445e424d1d1",
+  "date": "2026-11-17",
+  "note": "a tub at each major wooden building; the page records the ranking as the project's reasoning",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
+  },
+  "research": "9fd73eb86394c59a",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
   ],
   "verdict": "IN-STEP"
  },
@@ -9038,6 +9246,125 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/program_rules.py::fire_water_distribution#a tub at each wooden building": {
+  "body": "adb4f3b757d0b961",
+  "claim": "a tub at each wooden building - fire-and-the-fireproof-storehouses-dozo.drawing: one fire-water tub at each major wooden building, two at the kitchen, and none at an earth-walled storehouse (dozo), built not to burn, so a tub served by a plaster kura alone is refused.",
+  "code": "5f1037a451594614",
+  "core": "9803f1b6bb33a5e0",
+  "date": "2026-11-17",
+  "note": "one tub per building, two at the kitchen, none at a dozo",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
+  },
+  "research": "9fd73eb86394c59a",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::lodging_entrances#a lodging entered from the ground": {
+  "body": "54b945fb1748fcad",
+  "claim": "a lodging entered from the ground - staff-rowhouses-and-barracks-nagaya.drawing, the-formal-entrance-and-a-guests-arrival-genkan.drawing, the-chief-retainers-house-karo-yashiki.drawing: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).",
+  "code": "1fe3bb8015359641",
+  "core": "142a566e85a14898",
+  "date": "2026-11-17",
+  "note": "earth-floored entries, the servants' quarters' door forms, the genkan and kitchen door, and the long-house doors on the court",
+  "pages": {
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "746ec66395f459f8",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73",
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "b1c24d21e65521fd"
+  },
+  "research": "9b00f7d2e50b1b44",
+  "rests": [
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:3bd3b9974993d277",
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html:db206e8fe2334ef2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::lodging_entrances#every other lodging entered from the ground": {
+  "body": "54b945fb1748fcad",
+  "claim": "every other lodging entered from the ground - UNRESEARCHED: the guest quarters, a shrine's hall and dwelling and the monk's rooms each reach the ground by a door or genkan on their own outer wall, not only through a building they do not join; no page asks how these were entered.",
+  "code": "5881edbda9a5c30a",
+  "core": "142a566e85a14898",
+  "date": "2026-11-17",
+  "note": "no page in the bundle says how these were entered",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::lodging_entrances#the karo's house, a small house of its own on the hand plans, is held to an entrance on its outer wall, which no claim covers": {
+  "code": "142a566e85a14898",
+  "core": "142a566e85a14898",
+  "date": "2026-11-17",
+  "note": "the karo's house, a small house of its own on the hand plans, is held to an entrance on its outer wall, which no claim covers",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::privies_by_zone#a privy in each court zone": {
+  "body": "cd284851b9a1eef1",
+  "claim": "a privy in each court zone - GUESS privies-setchin.drawing: each inner and outer court zone the sheet tags holds a privy, the page's about one privy to each part of the compound, which it records as the project's guess; a court zone is the part of the compound its rects draw, buildings and all, not the open courtyard the page keeps every privy out of.",
+  "code": "4f3ffa0bd4d92c3d",
+  "core": "0be4970680f51e96",
+  "date": "2026-11-17",
+  "note": "about one privy to each part of the compound is the page's guess; the court zone is read apart from the open courtyard",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
+   "0101-privies-setchin.drawing.html:79397bdd548ce631",
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::privies_by_zone#the residence's own privy": {
+  "body": "cd284851b9a1eef1",
+  "claim": "the residence's own privy - privies-setchin.drawing: a samurai residence's privies are built into the house, so a privy is tagged a part of the residence or attached to one of its blocks.",
+  "code": "511445de25c0d291",
+  "core": "0be4970680f51e96",
+  "date": "2026-11-17",
+  "note": "the privies are built into the house",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/program_rules.py::sheet_furniture#the sheet's furniture": {
+  "body": "be03bf43837feede",
+  "claim": "the sheet's furniture - CONVENTION: the sheet's largest text is a bold title above the compound, and it draws no compass rose (north is always up) and no key box; the-map-sheet-its-title-legend-frame-and-margins.drawing records the no-compass and no-key conventions for a settlement sheet, and the title's place is the building plans' own; nothing about a building.",
+  "code": "5c9041e02131f480",
+  "core": "5a1b46823a1c9d24",
+  "date": "2026-11-17",
+  "note": "title, compass and key are purely how the sheet is shown",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/roads.py::DESTINATION_KINDS#a way walked to a well or clearing": {
+  "body": "19539eae9828c640",
+  "claim": "a way walked to a well or clearing - CONVENTION: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; no page gives it.",
+  "code": "52befc565a53bd7c",
+  "core": "26c4533af2a3b311",
+  "date": "2026-11-17",
+  "note": "a drawing-integrity rule for where a drawn way may end",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/roads.py::ROAD_GATE_TOL_FT#road wider than gate": {
   "body": "85804cf528f06b12",
   "claim": "road wider than gate - NONE: a road may be 1 ft wider than the gate it feeds, the 3 px authoring grain.",
@@ -9061,6 +9388,36 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/roads.py::end_meets#where a road may end": {
+  "body": "1a5f764d55b7e039",
+  "claim": "where a road may end - CONVENTION: a road's end meets the frame, a gate, a door, an arch, another road, a well or a clearing, never a stub stopping short in the open, a drawing rule of the building plans; no page gives it.",
+  "code": "99dc75933c87b82c",
+  "core": "95462921165b4d14",
+  "date": "2026-11-17",
+  "note": "the no-stub drawing rule",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/roads.py::gate_feeds_its_road#a road no wider than its gate": {
+  "body": "84bbf05b4b9b49b9",
+  "claim": "a road no wider than its gate - GUESS highways-and-what-lines-them-kaido.drawing: a road ending at a gate is no wider than the widest opening it meets, plus the claimed tolerance, the width feature 267's review gave the hand sheets' approach roads; the page records that no page gives the width of the road before an official's gate, and it draws the road at a compound's front gate at the width of the road the compound stands on, 15 to 24 ft on a lesser highway, wider than the gates the record gives.",
+  "code": "ab7018e993816e6f",
+  "core": "f8234ef23b0b0847",
+  "date": "2026-11-17",
+  "note": "the code refuses any road wider than its gate plus 1 ft, but the cited page draws the road at a compound's front gate at its own width, \"15 to 24 ft\" on a lesser highway or 30 ft on the Imperial road, which is wider than a 6-12 ft gate. A GUESS cannot stand against a page that answers the question: either the check exempts the road the compound stands on, or the drawing page records this as a DEVIATION",
+  "pages": {
+   "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58"
+  },
+  "research": "0f270480aae97519",
+  "rests": [
+   "0088-highways-and-what-lines-them-kaido.drawing.html:567067c7560f4325",
+   "0088-highways-and-what-lines-them-kaido.drawing.html:7336b6f855fd2b4c",
+   "0088-highways-and-what-lines-them-kaido.drawing.html:8a0b103100180964"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/tools/pack_audit/shared.py::APPROACH_FT#gateway approach depth": {
   "body": "2c124b30493dd8b6",
@@ -9184,11 +9541,11 @@
  },
  "l7r/diagram/tools/pack_audit/shared.py::GATE_MAX_FT#widest gate": {
   "body": "917bd4f9995ecec6",
-  "claim": "widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess there.",
-  "code": "20d894fed18485bc",
+  "claim": "widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess on both 0093's and 0092's drawing pages.",
+  "code": "e0e4ec0620b2d36d",
   "core": "9e8eca3422d4986f",
-  "date": "2026-10-25",
-  "note": "16 ft is above the samurai gate's 9-12 ft; a yamen's 18-24 ft gatehouse spans its opening, and no page sets the ceiling",
+  "date": "2026-11-17",
+  "note": "16 ft falls between the 12 ft Japanese gates and the 18-24 ft yamen gate, which is drawn as a structure",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -9293,6 +9650,74 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/shared.py::arch_on_approach#the arch over the approach at the ground's edge": {
+  "body": "9b7f47921e0fe8c5",
+  "claim": "the arch over the approach at the ground's edge - shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing, inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing: the approach runs under its arch, and the first arch stands where the approach enters the shrine's ground.",
+  "code": "855dedb85f948f99",
+  "core": "91e22bb397e8617a",
+  "date": "2026-11-17",
+  "note": "it refuses an arch inside the edge, but §50 says that when both cannot hold, \"the innermost holds\" and \"the first arch moves\" off the ground's entry. It also judges a single id=arch where the shrine has one, three or seven arches (§24). The check should exempt a first arch moved by the innermost's 12 ft from the hall",
+  "pages": {
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "2c468b27aa8873c0"
+  },
+  "research": "39140bd33b400053",
+  "rests": [
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:150b6599eb0096ca",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:1928dc0cc002ed2c",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3cec57c2e7969071",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:99ac4e6302c92be7"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::gate_widths#a wide break a structure spans": {
+  "body": "7eac368ed8ce1200",
+  "claim": "a wide break a structure spans - the-main-gate-and-its-gatekeepers-nagaya-mon.drawing: an opening wider than the widest gate passes where a structure spans it, a gate drawn as a building (a yamen's roofed gate of three bays, a gate range) rather than as an opening in the wall.",
+  "code": "fc8c51681a9cd7f4",
+  "core": "9b243479cfa8fe41",
+  "date": "2026-11-17",
+  "note": "the yamen's roofed three-bay gate and the gate range are both structures",
+  "pages": {
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "a8c7eafbeafe0423"
+  },
+  "research": "965653fa269e5ec4",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:778be5176a6095ec",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:958ee40f537ec741",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:d930b9e498ec74cf"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::gate_widths#the fix text's gate width": {
+  "body": "7eac368ed8ce1200",
+  "claim": "the fix text's gate width - GUESS: the fix sentence draws a gate at passage width, about 13 ft, a figure of ours; it lies between the samurai gate's 9 to 12 ft and the yamen's guessed 18 to 24 ft (compound-walls-neribei-and-tsuijibei.drawing), and no page gives it.",
+  "code": "44c676f1384175d9",
+  "core": "9b243479cfa8fe41",
+  "date": "2026-11-17",
+  "note": "the message's \"~13 ft\" is outside every gate width the record gives: 6-12 ft for a Japanese office gate, 9-12 ft for a samurai gate, 18-24 ft for a yamen gate drawn as a building. The pages do answer this, so it is not a GUESS. The text should give an attested width, such as 6-12 ft",
+  "pages": {},
+  "research": "",
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::hall_at_an_end#the hall at one end": {
+  "body": "0ae4b45785be0b68",
+  "claim": "the hall at one end - the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing: under one roof the villagers' hall is one end of the building and the monk's dwelling the other.",
+  "code": "e760c96f7308994a",
+  "core": "403d2af7ef9e8d89",
+  "date": "2026-11-17",
+  "note": "one-roof form checked; the two-building form passes",
+  "pages": {
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b"
+  },
+  "research": "a8feb4a94cf5c3b6",
+  "rests": [
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/shared.py::ink_bounds#its salts, guards and sentinels": {
   "body": "4a2d539fc498f3d0",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.55 (character width figure)",
@@ -9305,6 +9730,151 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/shared.py::no_precinct_enclosure#the precinct left open": {
+  "body": "cdd57a00f5a8f770",
+  "claim": "the precinct left open - shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing: a village shrine's precinct has no fence, wall or hedge round it, so a fence whose extent takes in the hall and a compound wall at the sheet's edge are refused; a fence round the sanctuary alone is not judged here, though the page draws none however rich the parish.",
+  "code": "2978db590a51af16",
+  "core": "d39e960a43266cc2",
+  "date": "2026-11-17",
+  "note": "the docstring has a sanctuary fence passing \"on the wealth knob\", and the refusal message says a fence rings the sanctuary \"only as a richer shrine's donation\". The page draws \"No fence ... round the sanctuary, however rich the parish\". The message and docstring should drop the donation, or the check should refuse a sanctuary fence as well",
+  "pages": {
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html": "deb271b84040f16a"
+  },
+  "research": "1c552e1d5c005cc0",
+  "rests": [
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:ae41106810024ccc",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:c7b3b890296618dc",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:de7ea278f269925d"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::one_compound_shrine#one shrine per compound": {
+  "body": "3420f6061fbfda8a",
+  "claim": "one shrine per compound - DEVIATION the-compounds-own-shrine-yashikigami.drawing: a compound draws one modest shrine however many a real office kept, a deliberate deviation; a second kami's own shrine, where the sheet's roll declares one, is not counted.",
+  "code": "5a09b69c7fb68ed5",
+  "core": "6febc85078576305",
+  "date": "2026-11-17",
+  "note": "the deviation is recorded; a rolled own shrine is attested",
+  "pages": {
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
+  },
+  "research": "433c01774fd3a16c",
+  "rests": [
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::sanctuary_on_axis#the approach on the same axis": {
+  "body": "fcaffe0d307b35eb",
+  "claim": "the approach on the same axis - CONVENTION: the approach runs on the hall's and the sanctuary's axis, a map drawing convention inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing records, neither of its sources naming the approach.",
+  "code": "d575193e015c4307",
+  "core": "bc36e272dcce0ee6",
+  "date": "2026-11-17",
+  "note": "recorded as a map drawing convention",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::sanctuary_on_axis#the sanctuary behind the hall": {
+  "body": "fcaffe0d307b35eb",
+  "claim": "the sanctuary behind the hall - inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing: the sanctuary stands at the rear of the shrine, behind the hall on the worship hall's axis.",
+  "code": "ea8c04c752e16f1f",
+  "core": "bc36e272dcce0ee6",
+  "date": "2026-11-17",
+  "note": "on the axis, farther from the arch than the hall",
+  "pages": {
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "2c468b27aa8873c0"
+  },
+  "research": "599b50c87629a190",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:1bd6872b5b09aa45"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::shrine_tree#a tree beside the compound shrine": {
+  "body": "fe69101cbdf467b0",
+  "claim": "a tree beside the compound shrine - the-compounds-own-shrine-yashikigami.drawing: the compound's shrine stands beside a tree, where a household kept its god at an old tree; the reach carries a claim of its own.",
+  "code": "58272a831de5a724",
+  "core": "759bc16d21b5d7d2",
+  "date": "2026-11-17",
+  "note": "beside a tree",
+  "pages": {
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
+  },
+  "research": "433c01774fd3a16c",
+  "rests": [
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::stall_width#at least two stalls": {
+  "body": "f20173a89247c6c9",
+  "claim": "at least two stalls - GUESS stables-umaya.drawing: a stable a few bays long is parted into at least two stalls of a stall's width; the page records the number of horses as a guess.",
+  "code": "67bea66bffe8501f",
+  "core": "ab60efa6295dd97c",
+  "date": "2026-11-17",
+  "note": "stalls about a ken wide; the count is a recorded guess",
+  "pages": {
+   "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
+  },
+  "research": "96ea0c83b210c787",
+  "rests": [
+   "0108-stables-umaya.drawing.html:219e638987c06796",
+   "0108-stables-umaya.drawing.html:bfffc30811fc7968",
+   "0108-stables-umaya.drawing.html:d4268b7e5b7275c7"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::two_court_zoning#the hearing court on the gate's side": {
+  "body": "4aaf1bcebd52588b",
+  "claim": "the hearing court on the gate's side - magistrates-compounds-jinya-and-yamen.drawing: the hearing court lies before the office hall in the outer court, so on the main gate's side of the divider; a vertical divider is not judged.",
+  "code": "aaf78b7d0dd2467f",
+  "core": "58991626605879a6",
+  "date": "2026-11-17",
+  "note": "the hearing court is in the outer court before the office hall",
+  "pages": {
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "f2539def6f4362de"
+  },
+  "research": "974e389f62dca624",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:ee1c7f022c77067e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::two_court_zoning#the middle gate's width in the message": {
+  "body": "4aaf1bcebd52588b",
+  "claim": "the middle gate's width in the message - UNRESEARCHED: the message gives the middle gate (nakamon) as about 6-8 ft, narrower than the main gate; the check holds only the narrowest gate's floor, and no page gives a middle gate's width.",
+  "code": "c991c335ff5503c6",
+  "core": "58991626605879a6",
+  "date": "2026-11-17",
+  "note": "no page gives a middle gate's width",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::two_court_zoning#two courts and the gate between": {
+  "body": "4aaf1bcebd52588b",
+  "claim": "two courts and the gate between - magistrates-compounds-jinya-and-yamen.drawing: a magistracy is two courts, the office in front and the residence behind, with a gate between them dividing the office from the home; the page records that order in a Japanese compound as a deliberate simplification.",
+  "code": "17af5fc70abda317",
+  "core": "58991626605879a6",
+  "date": "2026-11-17",
+  "note": "divider and divider gate; the simplification is recorded",
+  "pages": {
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "f2539def6f4362de"
+  },
+  "research": "974e389f62dca624",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/shared.py::viewbox_cropped#its salts, guards and sentinels": {
   "body": "3841245b0d93848a",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 5 (regex group range)",
@@ -9315,6 +9885,77 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::well_clear_of_arch#a shrine sheet must draw a purification well or basin (refused when it has none)": {
+  "code": "82740959efd8e4e7",
+  "core": "82740959efd8e4e7",
+  "date": "2026-11-17",
+  "note": "a shrine sheet must draw a purification well or basin (refused when it has none)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::well_clear_of_arch#the basin beside the approach": {
+  "body": "a150a625889fe4cc",
+  "claim": "the basin beside the approach - inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing: a shrine has its stone basin for rinsing the hands and mouth, standing beside the approach at the innermost arch, so never on the approach or under the arch.",
+  "code": "0649915c5305afdf",
+  "core": "82740959efd8e4e7",
+  "date": "2026-11-17",
+  "note": "the code judges the sheet's wells (id=well, else plan.wells), not a basin. §56 lists the shrine's parts with a stone basin and \"nothing else\". I need to know whether a shrine sheet's id=well/plan.wells is the §64 basin or a draw-well; if it is a draw-well, the claim should cite 0196's ablution well and the basin goes unjudged",
+  "pages": {
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "2c468b27aa8873c0"
+  },
+  "research": "599b50c87629a190",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:89ab2d0898e14201",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:90ba06c9955940ce"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::well_gear#a well roof drawn on four posts": {
+  "body": "7d43a449b5da947a",
+  "claim": "a well roof drawn on four posts - CONVENTION: a well's roof is an unfilled outline on four corner posts, so it reads as a roof over the well and not as the paved apron, the map drawing convention communal-wells-ido.drawing records.",
+  "code": "4aec9caa7598b32a",
+  "core": "db68a1a650df28c2",
+  "date": "2026-11-17",
+  "note": "an outline on four corner posts",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::well_gear#an indoor well's pulley": {
+  "body": "7d43a449b5da947a",
+  "claim": "an indoor well's pulley - GUESS communal-wells-ido.drawing: a well indoors hangs its pulley from the beams, which the page records as a guess, no page naming an indoor well's gear.",
+  "code": "5f02f9630efeffc3",
+  "core": "db68a1a650df28c2",
+  "date": "2026-11-17",
+  "note": "the page records it as a guess",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
+  },
+  "research": "f166979de9325ea9",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/shared.py::well_gear#an open-air well's gear": {
+  "body": "7d43a449b5da947a",
+  "claim": "an open-air well's gear - communal-wells-ido.drawing: a well in the open takes a sweep or a pulley frame, both attested, never the beam pulley.",
+  "code": "1d3d78f735134d70",
+  "core": "db68a1a650df28c2",
+  "date": "2026-11-17",
+  "note": "sweep or pulley frame",
+  "pages": {
+   "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
+  },
+  "research": "f166979de9325ea9",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:1e90c0992a2ef55f",
+   "0196-communal-wells-ido.drawing.html:49e76daae7c37a24",
+   "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/tools/pack_audit/shared.py::well_gear#its drawn sizes": {
@@ -9443,6 +10084,45 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/sun.py::NOT_STANDING#ground features and a building's parts": {
+  "body": "50b49d0edf5999cc",
+  "claim": "ground features and a building's parts - GUESS: a basin, a tax barge on its water, and a building's door, veranda, hearth, dais, clerks' seats and altars cast no shadow of their own, the ground's being low and the parts standing under the roof that casts for them; no page gives it.",
+  "code": "deb77b974ef4fcdf",
+  "core": "850f9520f473fea4",
+  "date": "2026-11-17",
+  "note": "the shadow page casts only buildings, walls and trees",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/sun.py::NOT_STANDING#the notice board": {
+  "body": "50b49d0edf5999cc",
+  "claim": "the notice board - notice-boards-kosatsuba: the board casts no shadow on a bed, although the page measures a post town's board as a frame about 10 to 11 ft high, drawn as a roofed frame 16 by 6 ft (notice-boards-kosatsuba.drawing).",
+  "code": "9c7b1acfbe0a439c",
+  "core": "850f9520f473fea4",
+  "date": "2026-11-17",
+  "note": "\"notice board\" in NOT_STANDING casts no shadow, but the cited page measures a roofed frame \"about 10 to 11 ft high, 16 to 18 ft along the road\" on a stone base. The claim's own \"although\" names the departure, and no page in the bundle records it as a deviation. Either let the board cast, or record a DEVIATION on its drawing page",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
+  },
+  "research": "050d52f3667c3d19",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:cfe6c75839678f41",
+   "0190-notice-boards-kosatsuba.html:f20c5e6c7c0b59f6"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/tools/pack_audit/sun.py::NOT_STANDING#upright furniture": {
+  "body": "50b49d0edf5999cc",
+  "claim": "upright furniture - UNRESEARCHED: a weapon rack, a stone lantern and a well with its gear cast no shadow on a bed; sunlight-and-shade-on-the-farm.drawing casts only buildings, walls and trees, and no page gives their heights (ornamental-gardens-ponds-and-stone-lanterns-teien.drawing draws a lantern as one small mark, martial-training-grounds-and-dojo.drawing gives a rack's footprint alone).",
+  "code": "c856f754eb3ede6a",
+  "core": "850f9520f473fea4",
+  "date": "2026-11-17",
+  "note": "no page in the bundle gives these heights",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/sun.py::SMALL_BUILDING_FT#small roofed thing height": {
   "body": "4bb176bd72d19b69",
   "claim": "small roofed thing height - sunlight-and-shade-on-the-farm.drawing: every building casts from the farmhouse ridge's 20 ft, with no smaller class - a roofed thing under SMALL_BUILDING_SQFT casts from 6 ft, a departure the code keeps until feature 417 T33; a roofed thing under SMALL_BUILDING_SQFT (a privy, a hokora, a covered way) casts a shadow from 6 ft, the least height a person stands under; no page gives it.",
@@ -9497,6 +10177,49 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/sun.py::TREE_FT#tree shadow height": {
+  "body": "ee46ac2cea7f888a",
+  "claim": "tree shadow height - sunlight-and-shade-on-the-farm.drawing: a tree casts its shadow from 10 m (~33 ft), a working windbreak's height, the least height the record draws a tree at.",
+  "code": "474f7803ab33d4d6",
+  "core": "340510df4e1c813c",
+  "date": "2026-11-17",
+  "note": "10 m, a working windbreak's height, the least height the record draws a tree at",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:2bb99f73e10f7d6c",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fd44c5dc36dbd09f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/sun.py::WALL_FT#wall shadow height": {
+  "body": "8b5304a2a509d829",
+  "claim": "wall shadow height - sunlight-and-shade-on-the-farm.drawing: a compound wall casts its shadow from 1.6 m (~5 ft), the surviving earth wall's height, the least height the record gives.",
+  "code": "738a75debe761405",
+  "core": "ba0fd6b6a7eba809",
+  "date": "2026-11-17",
+  "note": "1.6 m, the height of the surviving earth wall",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fd44c5dc36dbd09f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/sun.py::casters#a court divider casts at the compound wall's 1.6 m height": {
+  "code": "7e41bf02d7323d52",
+  "core": "7e41bf02d7323d52",
+  "date": "2026-11-17",
+  "note": "a court divider casts at the compound wall's 1.6 m height",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/tools/pack_audit/sun.py::casters#its salts, guards and sentinels": {
   "body": "6ae5c19cb00d93d1",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 16 (circle buffer resolution)",
@@ -9507,6 +10230,34 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/sun.py::casters#the bed's own ink": {
+  "body": "6ae5c19cb00d93d1",
+  "claim": "the bed's own ink - GUESS: a structure covering more than half the bed is read as the bed's own drawing, not as a caster, a classification of ours; no page gives it.",
+  "code": "f43a4ce1ee0915bb",
+  "core": "7e41bf02d7323d52",
+  "date": "2026-11-17",
+  "note": "a parse classification the page does not address",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/tools/pack_audit/sun.py::lit_hours#a tree's dappled light": {
+  "body": "f3f796aa28da122e",
+  "claim": "a tree's dappled light - GUESS sunlight-and-shade-on-the-farm.drawing: for a half-shade bed a tree's shadow is not counted, the bed needing hours in which nothing but a tree's leaves stands between it and the sun, the page's guess at how to count dappled light.",
+  "code": "3c8cdfc5c434cc0e",
+  "core": "88494d9232a58648",
+  "date": "2026-11-17",
+  "note": "the page's own guess at how to count dappled light",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:f9db7238571c5f77"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/tools/pack_audit/sun.py::lit_hours#its salts, guards and sentinels": {
@@ -9768,25 +10519,24 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/checks.rs::DOORLESS_KINDS#a bath's tub need not stand by a door": {
-  "code": "e68ce792fc0b361f",
-  "core": "e68ce792fc0b361f",
-  "date": "2026-11-17",
-  "note": "a bath's tub need not stand by a door",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/checks.rs::DOORLESS_KINDS#the audit's checks": {
+ "rust/mode_a/src/audit/checks.rs::DOORLESS_KINDS#a bath's tub judged by no door": {
   "body": "3b00ee93f9dd0e03",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "e018e5ff168e5521",
+  "claim": "a bath's tub judged by no door - fire-and-the-fireproof-storehouses-dozo.drawing, baths-furo.drawing: the bath our plans attach to the kitchen is entered from the house, so its fire-water tub stands on its yard side and is not held to stand beside a door.",
+  "code": "55c0598c3c51960b",
   "core": "e68ce792fc0b361f",
   "date": "2026-11-17",
-  "note": "[\"bath\"] exempts a tub whose nearest host is a bath from the tub-by-its-door rule, which is a placement decision (a bath needs no door-side tub); label it UNRESEARCHED or GUESS, not NONE",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "note": "the bath is entered from the house and its tub stands on the yard side",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc",
+   "0105-baths-furo.drawing.html": "de13b621fc93a424"
+  },
+  "research": "534f56fe6abdb898",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
+   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
+   "0105-baths-furo.drawing.html:4e80d4732a6023c3"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks.rs::DOOR_FLUSH_TOL_PX#door flush tolerance": {
   "body": "7df4baa9ff7a597a",
@@ -9812,11 +10562,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::DOOR_ON_WALL_PX#the audit's checks": {
   "body": "77601b745b7f53d9",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "db3722e0475543d4",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "dd264ce16f2ed01e",
   "core": "5a6f900059a38f69",
   "date": "2026-11-17",
-  "note": "reach for reading a door mark as on a wall, audit tolerance",
+  "note": "a reach used to match a door glyph to its building",
   "pages": {},
   "reads": "7fb9c300fd0245ef",
   "research": "",
@@ -9825,11 +10575,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::FloatingDoor#the audit's checks": {
   "body": "e3fda0c4446167ee",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "935c4b06cf2dccc0",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "f2b4c37335bab6f8",
   "core": "f74bf97e61e1d5a0",
   "date": "2026-11-17",
-  "note": "finding record",
+  "note": "a result record",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9837,11 +10587,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::MisplacedBoard#the audit's checks": {
   "body": "3f6691e5353bc6ae",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "d18737bba6db8a87",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "385116a8e9aba944",
   "core": "5e61d06c5e6e3a7b",
   "date": "2026-11-17",
-  "note": "finding record",
+  "note": "a result record",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9860,11 +10610,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::Occluded#the audit's checks": {
   "body": "d172462dd4e9ce1d",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "0940a1ae6b65c48d",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "60722052d6fbcb2c",
   "core": "b4c188f2c52b5331",
   "date": "2026-11-17",
-  "note": "finding record",
+  "note": "a result record",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9872,11 +10622,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::SHOE_STONE_ID#the audit's checks": {
   "body": "88be6c593dc5f363",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "3470cc05d86538cb",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "ddddebb2dcb3ea1e",
   "core": "56aa07d17368173b",
   "date": "2026-11-17",
-  "note": "an identifier",
+  "note": "an identifier string",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9908,11 +10658,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::TubAdrift#the audit's checks": {
   "body": "824be2b9ecafd531",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "e3e4bcdab65c8255",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "0bf6f76e39765207",
   "core": "02cc40319d99c209",
   "date": "2026-11-17",
-  "note": "finding record",
+  "note": "a result record",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9920,11 +10670,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::TubInBuilding#the audit's checks": {
   "body": "04931f3f9cf333ef",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "9a09ef8cec837cb3",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "dd9050749b6696c6",
   "core": "22af75ac301f66c3",
   "date": "2026-11-17",
-  "note": "finding record",
+  "note": "a result record",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9932,11 +10682,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::TubOffItsDoor#the audit's checks": {
   "body": "45df153d59d8825c",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "104eecd44a50f168",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "400e411c1388e8d0",
   "core": "4281d61d0466bd70",
   "date": "2026-11-17",
-  "note": "finding record",
+  "note": "a result record",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9944,36 +10694,43 @@
  },
  "rust/mode_a/src/audit/checks.rs::TubOnWell#the audit's checks": {
   "body": "3c1c949c6a00112d",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "bac716ac9e33fd70",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "0b85b52cafc3128e",
   "core": "72c858b5bd960d4b",
   "date": "2026-11-17",
-  "note": "finding record",
+  "note": "a result record",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/checks.rs::doors_of#a stepping stone (shoe-stone) counts as a building's door for its tub": {
+  "code": "fbd41a5e4034840f",
+  "core": "fbd41a5e4034840f",
+  "date": "2026-11-17",
+  "note": "a stepping stone (shoe-stone) counts as a building's door for its tub",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "rust/mode_a/src/audit/checks.rs::doors_of#the audit's checks": {
   "body": "f5935e6c64d2e1ad",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "fbbfcdf9cd30dc9c",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "93c98638d41d323a",
   "core": "fbd41a5e4034840f",
   "date": "2026-11-17",
-  "note": "reads door marks against a claimed reach",
+  "note": "this code decides a rule of its own: `d.ident == SHOE_STONE_ID` counts a stepping stone as a building's door for the tubs. That is the 0100 drawing page's \"has its tub beside that stone\", so the claim should cite research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, not NONE",
   "pages": {},
   "reads": "83dbd23162edb783",
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "rust/mode_a/src/audit/checks.rs::fire_water_adrift#the audit's checks": {
   "body": "3cbfb5c49e508a34",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "e650719c6371f592",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "cef2bbaf8e9643e9",
   "core": "4c5ccbf33275549c",
   "date": "2026-11-17",
-  "note": "applies tub_by_its_eaves, whose threshold has its own claim",
+  "note": "applies tub_by_its_eaves, which carries its own claim",
   "pages": {},
   "reads": "7fb9c300fd0245ef",
   "research": "",
@@ -9982,8 +10739,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::first_by#the audit's checks": {
   "body": "709d48db5788b39c",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "ce1c7f21bd366ff4",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "4edf0aa4da0043f3",
   "core": "38f31570538593f2",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -9994,8 +10751,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::first_index#the audit's checks": {
   "body": "50badf027cb3377a",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "6c82ed9ad96bfd3f",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "c3e103021a099df2",
   "core": "015256df5782e064",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10006,8 +10763,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::first_max#the audit's checks": {
   "body": "b3318a330e68973b",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "14fdadc7c33b4bad",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "69803c108bd56d00",
   "core": "2192ee923616216d",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10018,8 +10775,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::first_min#the audit's checks": {
   "body": "30e9335c9465b354",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "8ebb0325b08d0eb4",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "d6486209394b3681",
   "core": "becda83157f36298",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10028,30 +10785,22 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/checks.rs::floating_doors#a door sits flush to its wall, never floating inside": {
-  "code": "82c90d4ac4354319",
-  "core": "82c90d4ac4354319",
-  "date": "2026-11-17",
-  "note": "a door sits flush to its wall, never floating inside",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/checks.rs::floating_doors#the audit's checks": {
+ "rust/mode_a/src/audit/checks.rs::floating_doors#a door flush to its wall": {
   "body": "914bf91b537e4ab0",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "194cc1c816bdabd7",
+  "claim": "a door flush to its wall - CONVENTION: a door glyph sits flush to the wall it opens through and never floats just inside the building, the map drawing convention doorways-and-doors-to.drawing records and magistrates-compounds-jinya-and-yamen.drawing checks; the two pixel reaches carry claims of their own.",
+  "code": "572a3e077888bee4",
   "core": "82c90d4ac4354319",
   "date": "2026-11-17",
-  "note": "enforces the rule that a door sits flush to its wall and never floats inside the building (the two pixel thresholds are tolerances only), so the rule is unclaimed; it should cite 0090's drawing page, not NONE",
+  "note": "a door glyph sits flush, never floats inside the building",
   "pages": {},
   "reads": "6f5366daedfa8a86",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks.rs::fold#the audit's checks": {
   "body": "cd01d1f5f8ce6527",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "30223de82c7398e5",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "65b13b295e05d051",
   "core": "90d889ecbe0408ad",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10062,8 +10811,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::ft_box#the audit's checks": {
   "body": "0429a05a774fb2f7",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "49aa9238989239e5",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "828dddef495b1d9d",
   "core": "94b3cdfe9031db40",
   "date": "2026-11-17",
   "note": "unit conversion",
@@ -10075,8 +10824,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::gate_openings#the audit's checks": {
   "body": "c9c9b60fa0c296b9",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "100be44f7364b8c7",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "5e56e56b22372a1e",
   "core": "5198b0c1c091c2f4",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10087,8 +10836,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::greater#the audit's checks": {
   "body": "ba746789bdf508f8",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "e2acc865db884dc9",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "2e97a9d7b2991a0d",
   "core": "ea7e367903baa44b",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10099,8 +10848,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::less#the audit's checks": {
   "body": "686f845e4a1abffb",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "1ee5fe7b42c50e3b",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "b17e1f64455f7f2c",
   "core": "3e156e1d702fd538",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10111,11 +10860,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::main_gate_passage#the audit's checks": {
   "body": "f27f7d4b53fde8b4",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "710f6a8140d67afe",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "a23d1d5d584d4513",
   "core": "6e205add350a7894",
   "date": "2026-11-17",
-  "note": "centroid of the posts",
+  "note": "the centroid of the gate posts, geometry",
   "pages": {},
   "research": "",
   "rests": [],
@@ -10123,11 +10872,11 @@
  },
  "rust/mode_a/src/audit/checks.rs::main_gate_passage_ft#the audit's checks": {
   "body": "92c40f361a751e67",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "4ea96b8edb7137a3",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "729498db222137b8",
   "core": "289554d3c1776f53",
   "date": "2026-11-17",
-  "note": "measures the passage width and decides nothing",
+  "note": "measures the drawn passage",
   "pages": {},
   "reads": "7fb9c300fd0245ef",
   "research": "",
@@ -10136,8 +10885,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::max3#the audit's checks": {
   "body": "2faf64afb3e11c38",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "87308b5439ed90aa",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "b719571a748db738",
   "core": "8bb951b0c53c7f18",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10148,8 +10897,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::max_of#the audit's checks": {
   "body": "9c7e803fcc7f24e2",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "9b0aea4a8f54e811",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "e82d21051e3449b7",
   "core": "93a4c114623c4f17",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10160,8 +10909,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::min_of#the audit's checks": {
   "body": "4cd1fc4c20406adf",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "832332fe81776d85",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "b223c6e4d3a55f59",
   "core": "8ee2230bab632ba4",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10172,31 +10921,32 @@
  },
  "rust/mode_a/src/audit/checks.rs::notice_board_adrift#the audit's checks": {
   "body": "30d854c6fe469f28",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "cdb861c53111f903",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "a73dd90742d26218",
   "core": "d1de3810759015d2",
   "date": "2026-11-17",
-  "note": "applies board_by_a_gate, whose threshold has its own claim",
+  "note": "applies board_by_a_gate, which carries its own claim",
   "pages": {},
   "reads": "7fb9c300fd0245ef",
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/checks.rs::occluded_foreground#the audit's checks": {
+ "rust/mode_a/src/audit/checks.rs::occluded_foreground#the foreground drawn last": {
   "body": "bffb8a8edd645a6f",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "08de1a8fa11f65d4",
+  "claim": "the foreground drawn last - CONVENTION: tubs, wells and every sub-building rect are drawn above the fills, so a later shape covering one is a defect, the draw order magistrates-compounds-jinya-and-yamen.drawing records for labels and small glyphs; the covered area carries a claim of its own.",
+  "code": "4272f04a6c8eec7f",
   "core": "64c7748d0c536d19",
   "date": "2026-11-17",
-  "note": "enforces the drawing order that nothing painted later covers a tub, well or feature, which is about how the map looks; label it CONVENTION citing 0090's drawing page",
+  "note": "small glyphs are drawn last",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks.rs::overlap_px#the audit's checks": {
   "body": "cc5c44b48dbc9b8f",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "03bfba2b3fe7d807",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "88ae3bc26f3da12d",
   "core": "6d26fe8a0c88554e",
   "date": "2026-11-17",
   "note": "geometry",
@@ -10207,8 +10957,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::point_rect_dist#the audit's checks": {
   "body": "d9b6187e23110acd",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "0b9710868a831eb5",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "e1090153cdaff6da",
   "core": "f397d390142c735a",
   "date": "2026-11-17",
   "note": "geometry",
@@ -10219,8 +10969,8 @@
  },
  "rust/mode_a/src/audit/checks.rs::sort_desc#the audit's checks": {
   "body": "e14ddb9c6fc7fa2f",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "0ba63a7b5aeb3b89",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "6e55e30a4ea3c2ba",
   "core": "16f51595bf31288d",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -10229,43 +10979,58 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/checks.rs::tubs_in_buildings#the audit's checks": {
-  "body": "04ca2d6e518f98b7",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "dc54b1dcc4a7c90b",
+ "rust/mode_a/src/audit/checks.rs::tubs_in_buildings#no tub stands inside a building's outline or a roofed court": {
+  "code": "3cf2e168fcb5244b",
   "core": "3cf2e168fcb5244b",
   "date": "2026-11-17",
-  "note": "collision check against a claimed tolerance",
+  "note": "no tub stands inside a building's outline or a roofed court",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/mode_a/src/audit/checks.rs::tubs_in_buildings#the audit's checks": {
+  "body": "04ca2d6e518f98b7",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "f58e7bd6c4f3fa6e",
+  "core": "3cf2e168fcb5244b",
+  "date": "2026-11-17",
+  "note": "this code decides that no tub stands inside a building's outline or a roofed court (`buildings.iter().chain(&plan.roofed_courts)`). That is the 0100 drawing page's \"no tub stands inside a building's outline\", so the claim should cite research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html; the roofed court should be claimed as well",
   "pages": {},
   "reads": "7fb9c300fd0245ef",
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "rust/mode_a/src/audit/checks.rs::tubs_off_their_doors#the audit's checks": {
   "body": "7decbb736c12addd",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "78eb7c790ce781a8",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "16cf972ca012c51a",
   "core": "701647c1bfd67e1d",
   "date": "2026-11-17",
-  "note": "applies claimed thresholds; the bath exemption is judged on DOORLESS_KINDS",
+  "note": "applies tub_by_its_door and DOORLESS_KINDS, each claimed",
   "pages": {},
   "reads": "915dec01baeaf3b8",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/checks.rs::tubs_on_wells#the audit's checks": {
-  "body": "c5356cbeda585291",
-  "claim": "the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "d350b5b4e433c53d",
+ "rust/mode_a/src/audit/checks.rs::tubs_on_wells#a tub never overlaps a well": {
+  "code": "9398aa234d77a818",
   "core": "9398aa234d77a818",
   "date": "2026-11-17",
-  "note": "collision check against a claimed tolerance",
+  "note": "a tub never overlaps a well",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/mode_a/src/audit/checks.rs::tubs_on_wells#the audit's checks": {
+  "body": "c5356cbeda585291",
+  "claim": "the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim",
+  "code": "0a02a9c2bae1e585",
+  "core": "9398aa234d77a818",
+  "date": "2026-11-17",
+  "note": "this code decides that a tub never overlaps a well. That is at least a CONVENTION about how the glyphs are shown, not NONE",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "rust/mode_a/src/audit/checks/walls.rs::Gap#the wall's checks": {
   "body": "23121147d50d7794",
@@ -11503,54 +12268,60 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/palette.rs::GRANARY_SLATS#the palette's roles": {
+ "rust/mode_a/src/audit/palette.rs::GRANARY_SLATS#the slatted granary's fill": {
   "body": "fbd599fa0f692644",
-  "claim": "the palette's roles - NONE: a map drawing convention's table, each GUESS row labeled beside it, deciding nothing about a building",
-  "code": "88f0858fcef31953",
+  "claim": "the slatted granary's fill - CONVENTION: the raised timber granary, the takakura that storehouses-for-the-tax-rice.drawing draws as one of a granary's two forms, is filled with a slat pattern so it reads apart from the plastered kura; no page gives a granary's drawn fill.",
+  "code": "c1aa56092e93b6a9",
   "core": "1bf927f6fc5707fe",
   "date": "2026-11-17",
-  "note": "a fill pattern is a rendering decision (how the granary is shown), not \"no decision\"; the label should be CONVENTION",
+  "note": "a fill pattern, how the granary is shown",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/palette.rs::PRIVY#the palette's roles": {
+ "rust/mode_a/src/audit/palette.rs::PRIVY#the privy's gray": {
   "body": "a10044fad30129ea",
-  "claim": "the palette's roles - NONE: a map drawing convention's table, each GUESS row labeled beside it, deciding nothing about a building",
-  "code": "83c0306f9675378b",
+  "claim": "the privy's gray - CONVENTION: a privy is filled gray, #7E726A, so it reads apart from the tan buildings where the household lives and works, the map drawing convention privies-setchin.drawing records; no source gives a privy's color.",
+  "code": "2c327b482543560a",
   "core": "aa8e6297608ce8cc",
   "date": "2026-11-17",
-  "note": "\"#7E726A\" is the latrine's drawn color, a rendering decision; the label should be CONVENTION",
+  "note": "gray is a map drawing convention",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/palette.rs::ROLE_NAMES#the palette's roles": {
+ "rust/mode_a/src/audit/palette.rs::ROLE_NAMES#the palette's table": {
   "body": "fe1bf61de7a307bf",
-  "claim": "the palette's roles - NONE: a map drawing convention's table, each GUESS row labeled beside it, deciding nothing about a building",
-  "code": "cf41403480dddf6d",
+  "claim": "the palette's table - CONVENTION: the palette role each building kind is painted in, the Mode A palette's own rows, a kind the palette does not name assigned a role labeled GUESS beside its row; a fill says nothing of a building's real color.",
+  "code": "c94d9e4d3924574b",
   "core": "8bdf4540d3e5b0a6",
   "date": "2026-11-17",
-  "note": "the claim itself calls this a drawing convention's table (which color each building kind is painted), so NONE is the wrong class; it should be CONVENTION, with the per-row GUESS role assignments left as they are",
+  "note": "the \"kura\" and slatted-granary roles say how a building was built, not only its color. (\"tax archive\", [\"kura\"]) draws it earth-walled, as 0100 records; (\"storehouse\", [\"kura\"]) is a guess; (\"granary\", [GRANARY_SLATS, \"kura\"]) is a choice between two forms. Those rows need claims of their own (0100's drawing page; 0098 for the granary); CONVENTION covers the colors only",
   "pages": {},
   "reads": "3579f36806c37ce1",
   "research": "",
-  "rests": [],
   "verdict": "MISLABELED"
  },
- "rust/mode_a/src/audit/palette.rs::WELL#the palette's roles": {
+ "rust/mode_a/src/audit/palette.rs::ROLE_NAMES#the tax archive and the storehouse drawn as plastered kura; the granary takes either the slatted form or the kura form": {
+  "code": "8bdf4540d3e5b0a6",
+  "core": "8bdf4540d3e5b0a6",
+  "date": "2026-11-17",
+  "note": "the tax archive and the storehouse drawn as plastered kura; the granary takes either the slatted form or the kura form",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/mode_a/src/audit/palette.rs::WELL#the well curb's color": {
   "body": "492d5ddb146e98c7",
-  "claim": "the palette's roles - NONE: a map drawing convention's table, each GUESS row labeled beside it, deciding nothing about a building",
-  "code": "1ce698a1473f13c6",
+  "claim": "the well curb's color - CONVENTION: a well's stone curb is filled #9C8C70, the palette's stone; no page gives a curb's drawn color.",
+  "code": "6bed828dac5b3f7f",
   "core": "2803d9ff797355df",
   "date": "2026-11-17",
-  "note": "\"#9C8C70\" is the well curb's drawn color, a rendering decision; the label should be CONVENTION",
+  "note": "a color",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/palette.rs::main_fill#the palette's roles": {
   "body": "1da094382b6569fc",
@@ -11662,25 +12433,48 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the building size ranking (which building is smaller than which)": {
-  "code": "414644f9dfc8f793",
-  "core": "414644f9dfc8f793",
-  "date": "2026-11-17",
-  "note": "the building size ranking (which building is smaller than which)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the program rules": {
+ "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the cell under the barracks": {
   "body": "93aacc1b7208d23b",
-  "claim": "the program rules - NONE: a sheet's tags read against the rules whose claims stand on each figure, deciding nothing more",
-  "code": "25a9ec066c42569b",
+  "claim": "the cell under the barracks - GUESS: a cell stays smaller than the barracks; no page ranks them, and the pages' sizes agree, a cell of about 12 by 10 ft, a guess on holding-cells-agariya-and-roya.drawing, against a long rowhouse 12 to 24 ft deep on staff-rowhouses-and-barracks-nagaya.drawing.",
+  "code": "0d4bbeb0c380bf52",
   "core": "414644f9dfc8f793",
   "date": "2026-11-17",
-  "note": "the pairs decide which building is smaller than which (kitchen, tax archive, storehouse, compound shrine below the residence; stables and cell below the barracks; sanctuary below the hall and dwelling), a physical ranking under an inherited NONE; it needs its own claim citing the question that ranks them, or UNRESEARCHED (no bundled question bears on it)",
+  "note": "a 12x10 ft cell against a rowhouse 12-24 ft deep; no page ranks them",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the kitchen and the shrine under the residence": {
+  "body": "93aacc1b7208d23b",
+  "claim": "the kitchen and the shrine under the residence - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: no kitchen or shrine hall out-sizes the residence, the largest domestic building; the page records the order among them as the project's reading, a guess.",
+  "code": "d0facf83d638cf9b",
+  "core": "414644f9dfc8f793",
+  "date": "2026-11-17",
+  "note": "recorded as a guess",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+  },
+  "research": "20dff3d4f5e8a9c2",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the stables under the barracks": {
+  "body": "93aacc1b7208d23b",
+  "claim": "the stables under the barracks - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the stable stays smaller than the barracks; the page records its place in the order as a guess.",
+  "code": "7fc3751dd5a5fa89",
+  "core": "414644f9dfc8f793",
+  "date": "2026-11-17",
+  "note": "recorded as a guess",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+  },
+  "research": "20dff3d4f5e8a9c2",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::JOIN_PX#block join distance": {
   "body": "e3ce2ddd159da813",
@@ -11736,25 +12530,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/program_rules.rs::PRIVY_FILL#a privy is drawn gray": {
-  "code": "05eb588913497d0e",
-  "core": "05eb588913497d0e",
-  "date": "2026-11-17",
-  "note": "a privy is drawn gray",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/program_rules.rs::PRIVY_FILL#the program rules": {
-  "body": "71a04242fba8a307",
-  "claim": "the program rules - NONE: a sheet's tags read against the rules whose claims stand on each figure, deciding nothing more",
-  "code": "e8a386da406a4953",
-  "core": "05eb588913497d0e",
-  "date": "2026-11-17",
-  "note": "decides the privy's gray drawing color, a drawing convention the page records; should be CONVENTION 0101-privies-setchin.drawing.html",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
  "rust/mode_a/src/audit/program_rules.rs::PRIVY_MIN#least privies on a county manor": {
   "body": "fcfe6013ce1ccab3",
   "claim": "least privies on a county manor - GUESS privies-setchin.drawing: at least 3 privies, the low end of the project's three or four per compound; the page records the count as the project's guess.",
@@ -11771,24 +12546,24 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/program_rules.rs::TUB_KINDS#the program rules": {
+ "rust/mode_a/src/audit/program_rules.rs::TUB_KINDS#which wooden buildings carry a tub": {
   "body": "5d139321b5f062aa",
-  "claim": "the program rules - NONE: a sheet's tags read against the rules whose claims stand on each figure, deciding nothing more",
-  "code": "4b0a7384f97626f5",
+  "claim": "which wooden buildings carry a tub - GUESS fire-and-the-fireproof-storehouses-dozo.drawing: the office hall, the residence, the barracks, the gatehouse, the compound shrine, the stables, the servants' row, the kitchen and a shrine's hall and dwelling are the major wooden buildings that each carry a tub, and the guest quarters, the karo's house and the retainers' quarters are not; the page puts a tub at each major wooden building and records that no page ranks the buildings for fire water, the ranking the project's reasoning.",
+  "code": "1cc907b79b814cc8",
   "core": "d6edb6acb281f0c8",
   "date": "2026-11-17",
-  "note": "the list decides which buildings count as \"major wooden\" buildings that each need a tub, a physical decision under an inherited NONE; should cite 0100-fire-and-the-fireproof-storehouses-dozo.drawing.html (\"one at each major wooden building\")",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "rust/mode_a/src/audit/program_rules.rs::TUB_KINDS#which buildings carry a fire-water tub": {
-  "code": "d6edb6acb281f0c8",
-  "core": "d6edb6acb281f0c8",
-  "date": "2026-11-17",
-  "note": "which buildings carry a fire-water tub",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the ranking is recorded as the project's",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
+  },
+  "research": "9fd73eb86394c59a",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::VERANDA_FT#veranda depth band": {
   "body": "254a13b0d51c6ba3",
@@ -11843,25 +12618,25 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/program_rules.rs::fire_water_distribution#one tub per wooden building, none at a kura alone": {
-  "code": "f74452e3c37d6cdd",
-  "core": "f74452e3c37d6cdd",
-  "date": "2026-11-17",
-  "note": "one tub per wooden building, none at a kura alone",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/program_rules.rs::fire_water_distribution#the program rules": {
+ "rust/mode_a/src/audit/program_rules.rs::fire_water_distribution#a tub at each wooden building": {
   "body": "57b481284c80a449",
-  "claim": "the program rules - NONE: a sheet's tags read against the rules whose claims stand on each figure, deciding nothing more",
-  "code": "5db138c98845a145",
+  "claim": "a tub at each wooden building - fire-and-the-fireproof-storehouses-dozo.drawing: one fire-water tub at each major wooden building, two at the kitchen, and none at an earth-walled storehouse (dozo), built not to burn, so a tub served by a plaster kura alone is refused.",
+  "code": "6db4d7dc014ca9e0",
   "core": "f74452e3c37d6cdd",
   "date": "2026-11-17",
-  "note": "the function decides one tub at every wooden building (want = 1), KITCHEN_TUBS at the kitchen, and no tub at a plaster kura alone, all physical rules under an inherited NONE; should cite 0100-fire-and-the-fireproof-storehouses-dozo.drawing.html",
-  "pages": {},
+  "note": "one per building, two at the kitchen, none at a kura alone",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
+  },
   "reads": "7e3d580c66002cad",
-  "research": "",
-  "verdict": "MISLABELED"
+  "research": "9fd73eb86394c59a",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::inside#the program rules": {
   "body": "37a24c351f18e0cc",
@@ -11888,26 +12663,39 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/program_rules.rs::lodging_entrances#every lodging is entered by a ground door on its outer wall": {
-  "code": "82a6c4cf1143ac29",
-  "core": "82a6c4cf1143ac29",
-  "date": "2026-11-17",
-  "note": "every lodging is entered by a ground door on its outer wall",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/program_rules.rs::lodging_entrances#the program rules": {
+ "rust/mode_a/src/audit/program_rules.rs::lodging_entrances#a lodging entered from the ground": {
   "body": "122d86c6031fed19",
-  "claim": "the program rules - NONE: a sheet's tags read against the rules whose claims stand on each figure, deciding nothing more",
-  "code": "5a9fba4f06986158",
+  "claim": "a lodging entered from the ground - staff-rowhouses-and-barracks-nagaya.drawing, the-formal-entrance-and-a-guests-arrival-genkan.drawing, the-chief-retainers-house-karo-yashiki.drawing: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).",
+  "code": "4adb6872ba25e08c",
   "core": "82a6c4cf1143ac29",
   "date": "2026-11-17",
-  "note": "the function requires every lodging block to have a door or genkan on its outer wall (\"a lodging is entered from the ground\"), a physical rule under an inherited NONE; should be UNRESEARCHED unless a question answers it (no bundled question does)",
+  "note": "the code passes a joined block that has one door anywhere on its outer wall. The claim gives \"each barracks dwelling\" its entry and \"a door to each dwelling\", and the pages never draw \"bays walled off ... behind one shared door\". Either the claim is narrowed to one door per block, or the check counts doors per dwelling",
+  "pages": {
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "746ec66395f459f8",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73",
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "b1c24d21e65521fd"
+  },
+  "reads": "00fca2f217afda7d",
+  "research": "9b00f7d2e50b1b44",
+  "rests": [
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:cc913a3b926b0d35",
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html:db206e8fe2334ef2"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "rust/mode_a/src/audit/program_rules.rs::lodging_entrances#every other lodging entered from the ground": {
+  "body": "122d86c6031fed19",
+  "claim": "every other lodging entered from the ground - UNRESEARCHED: the guest quarters, a shrine's hall and dwelling and the monk's rooms each reach the ground by a door or genkan on their own outer wall, not only through a building they do not join; no page asks how these were entered.",
+  "code": "177a4cfbd829be56",
+  "core": "82a6c4cf1143ac29",
+  "date": "2026-11-17",
+  "note": "no page asks how these were entered",
   "pages": {},
   "reads": "00fca2f217afda7d",
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::mark_ft_box#the program rules": {
   "body": "269c311e84c1e75c",
@@ -11922,33 +12710,48 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/program_rules.rs::privies_by_zone#a privy in each inner and outer court zone": {
-  "code": "92cb5e726e9f0cc4",
-  "core": "92cb5e726e9f0cc4",
-  "date": "2026-11-17",
-  "note": "a privy in each inner and outer court zone",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/program_rules.rs::privies_by_zone#the program rules": {
+ "rust/mode_a/src/audit/program_rules.rs::privies_by_zone#a privy in each court zone": {
   "body": "a7caf33eb795749b",
-  "claim": "the program rules - NONE: a sheet's tags read against the rules whose claims stand on each figure, deciding nothing more",
-  "code": "6224865eaa4fe30d",
+  "claim": "a privy in each court zone - GUESS privies-setchin.drawing: each inner and outer court zone the sheet tags holds a privy, the page's about one privy to each part of the compound, which it records as the project's guess; a court zone is the part of the compound its rects draw, buildings and all, not the open courtyard the page keeps every privy out of.",
+  "code": "d40d9c17b3ba3c45",
   "core": "92cb5e726e9f0cc4",
   "date": "2026-11-17",
-  "note": "the function decides that the residence has its own attached privy and that each inner or outer court zone holds a privy (\"one stands in each functional zone\"), physical rules under an inherited NONE; should cite 0101-privies-setchin.drawing.html, and the court-zone rule must be squared with \"No privy stands in a courtyard\"",
-  "pages": {},
+  "note": "recorded as a guess; a court zone is not a courtyard",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
   "reads": "16b88e854d1fe743",
-  "research": "",
-  "verdict": "MISLABELED"
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
+   "0101-privies-setchin.drawing.html:79397bdd548ce631"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/program_rules.rs::privies_by_zone#the residence has its own attached privy": {
+ "rust/mode_a/src/audit/program_rules.rs::privies_by_zone#a sheet-wide floor on the number of privies (`minimum`, \"about three or four\")": {
   "code": "92cb5e726e9f0cc4",
   "core": "92cb5e726e9f0cc4",
   "date": "2026-11-17",
-  "note": "the residence has its own attached privy",
+  "note": "a sheet-wide floor on the number of privies (`minimum`, \"about three or four\")",
   "research": "",
   "verdict": "UNCLAIMED"
+ },
+ "rust/mode_a/src/audit/program_rules.rs::privies_by_zone#the residence's own privy": {
+  "body": "a7caf33eb795749b",
+  "claim": "the residence's own privy - privies-setchin.drawing: a samurai residence's privies are built into the house, so a privy is tagged a part of the residence or attached to one of its blocks.",
+  "code": "234432798e0e8eca",
+  "core": "92cb5e726e9f0cc4",
+  "date": "2026-11-17",
+  "note": "built into the house",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
+  "reads": "16b88e854d1fe743",
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::root#the program rules": {
   "body": "79629f0c4c2511f7",
@@ -11962,26 +12765,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/program_rules.rs::sheet_furniture#a bold title above the compound, no compass rose, no key box": {
-  "code": "7d0b508bc84ea6f7",
-  "core": "7d0b508bc84ea6f7",
-  "date": "2026-11-17",
-  "note": "a bold title above the compound, no compass rose, no key box",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/program_rules.rs::sheet_furniture#the program rules": {
+ "rust/mode_a/src/audit/program_rules.rs::sheet_furniture#the sheet's furniture": {
   "body": "d922ff1b580538b8",
-  "claim": "the program rules - NONE: a sheet's tags read against the rules whose claims stand on each figure, deciding nothing more",
-  "code": "6b67317a4a318c8b",
+  "claim": "the sheet's furniture - CONVENTION: the sheet's largest text is a bold title above the compound, and it draws no compass rose (north is always up) and no key box; the-map-sheet-its-title-legend-frame-and-margins.drawing records the no-compass and no-key conventions for a settlement sheet, and the title's place is the building plans' own; nothing about a building.",
+  "code": "83510c21e33f7409",
   "core": "7d0b508bc84ea6f7",
   "date": "2026-11-17",
-  "note": "the function decides how the sheet is presented (the largest text is a bold title above the compound, there is no compass rose and no key box), drawing conventions under NONE; should be CONVENTION",
+  "note": "title, no compass, no key: sheet furniture only",
   "pages": {},
   "reads": "ff051f61190c9277",
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::size_hierarchy#the program rules": {
   "body": "f213f481a461fb22",
@@ -12475,13 +13270,13 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/roads.rs::DESTINATION_KINDS#the roads": {
+ "rust/mode_a/src/audit/roads.rs::DESTINATION_KINDS#a way walked to a well or clearing": {
   "body": "13a1579ed974eb82",
-  "claim": "the roads - NONE: a sheet's tagged ways measured against the conventions and the tolerance whose claim stands on it, deciding nothing more",
-  "code": "b50ff05f7b056ae8",
+  "claim": "a way walked to a well or clearing - CONVENTION: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; no page gives it.",
+  "code": "51cab4fa3b22fcb9",
   "core": "7fd08f5c29273dd5",
   "date": "2026-11-17",
-  "note": "this decides that a road may end in the open at a well or a precinct clearing, a placement rule about where ways lead; it should be UNRESEARCHED (or cite the roads question that attests it)",
+  "note": "which places a path leads to is a fact about how the place was lived in, not how it is shown. It should be UNRESEARCHED (or a GUESS), not CONVENTION",
   "pages": {},
   "research": "",
   "rests": [],
@@ -12583,13 +13378,13 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/roads.rs::end_meets#the roads": {
+ "rust/mode_a/src/audit/roads.rs::end_meets#where a road may end": {
   "body": "d630f38375587642",
-  "claim": "the roads - NONE: a sheet's tagged ways measured against the conventions and the tolerance whose claim stands on it, deciding nothing more",
-  "code": "abbe5f13e985efb6",
+  "claim": "where a road may end - CONVENTION: a road's end meets the frame, a gate, a door, an arch, another road, a well or a clearing, never a stub stopping short in the open, a drawing rule of the building plans; no page gives it.",
+  "code": "67897f79c8c0fa49",
   "core": "e7a57af53442d84c",
   "date": "2026-11-17",
-  "note": "this decides the only things a road may end at (the frame, a gate, a door, an arch, another road, a well or clearing), a physical rule that ways always lead somewhere; it should be UNRESEARCHED or cite a roads question, not NONE",
+  "note": "only the frame end is a drawing convention. That a road ends at a gate, a door, an arch, another road, a well or a clearing, never a dead end in the open, is a claim about how the place was laid out. It should be UNRESEARCHED or a GUESS, with the frame claimed apart as CONVENTION",
   "pages": {},
   "reads": "d4a18b2839e30c6a",
   "research": "",
@@ -12609,18 +13404,24 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/roads.rs::gate_feeds_its_road#the roads": {
+ "rust/mode_a/src/audit/roads.rs::gate_feeds_its_road#a road no wider than its gate": {
   "body": "c8b1242a7e5feab7",
-  "claim": "the roads - NONE: a sheet's tagged ways measured against the conventions and the tolerance whose claim stands on it, deciding nothing more",
-  "code": "b24a91c81e1cb465",
+  "claim": "a road no wider than its gate - GUESS highways-and-what-lines-them-kaido.drawing: a road ending at a gate is no wider than the widest opening it meets, plus the claimed tolerance, the width feature 267's review gave the hand sheets' approach roads; the page records that no page gives the width of the road before an official's gate, and it draws the road at a compound's front gate at the width of the road the compound stands on, 15 to 24 ft on a lesser highway, wider than the gates the record gives.",
+  "code": "ee525294ed95b3ab",
   "core": "14bfb9bb33c5d962",
   "date": "2026-11-17",
-  "note": "\"a road is no wider than the gate it feeds\" (w_ft > widest + tol_ft) is a physical rule about road and gate widths, not plumbing; it should be UNRESEARCHED or cite the question that attests it",
-  "pages": {},
+  "note": "`w_ft > widest + tol_ft` refuses a road wider than the gate it meets. The cited page draws \"the road at a compound's front gate\" as \"the road the compound stands on, at that road's width\": 30 ft, or 15 to 24 ft, both wider than any gate. The claim names the conflict but no deviation is recorded. The rule should be limited to approach lanes, or the departure recorded",
+  "pages": {
+   "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58"
+  },
   "reads": "7fb9c300fd0245ef",
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "research": "0f270480aae97519",
+  "rests": [
+   "0088-highways-and-what-lines-them-kaido.drawing.html:567067c7560f4325",
+   "0088-highways-and-what-lines-them-kaido.drawing.html:7336b6f855fd2b4c",
+   "0088-highways-and-what-lines-them-kaido.drawing.html:8a0b103100180964"
+  ],
+  "verdict": "DRIFTED"
  },
  "rust/mode_a/src/audit/roads.rs::gate_passage_box#the roads": {
   "body": "39b637cf8fc0aa3e",
@@ -12778,15 +13579,14 @@
  },
  "rust/mode_a/src/audit/shared.rs::COVERAGE_TOL#coverage tolerance": {
   "body": "194d79eb5fae74b3",
-  "claim": "coverage tolerance - GUESS: two points either side of the band, for the page's \"about\" 30-42%; no page gives the slack.",
-  "code": "b8f7800f873f18b7",
+  "claim": "coverage tolerance - GUESS: two points above the band's ceiling only, for the page's \"about\" 30-42%, the floor of 30% held exactly; no page gives the slack.",
+  "code": "7abd00b4ad1f4231",
   "core": "8f0581be7080a6d2",
   "date": "2026-11-17",
-  "note": "the claim says the slack is \"two points either side of the band\", but coverage_band tests `floor <= cov && cov <= ceiling + tol`, so the slack applies only above 42% and none below 30%. Either the claim should say \"above the ceiling only\" or the code should test `floor - tol <= cov`",
-  "outside": true,
+  "note": "no page gives the slack around \"about 30-42%\"",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared.rs::DUPLICATE_TREE_FRACTION#the shared checks": {
   "body": "f8520d27bad790a8",
@@ -12814,11 +13614,11 @@
  },
  "rust/mode_a/src/audit/shared.rs::GATE_MAX_FT#widest gate": {
   "body": "465236ed8efb618e",
-  "claim": "widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess there.",
-  "code": "ab06fad425927f5d",
+  "claim": "widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess on both 0093's and 0092's drawing pages.",
+  "code": "009a08f6bd5c9e6b",
   "core": "62073223efbefc38",
   "date": "2026-11-17",
-  "note": "16 ft ceiling; no page sets a widest gate; gatehouses spanned by a structure are exempt",
+  "note": "Japanese gates are 6 to 12 ft, a yamen's 18 to 24 ft is a guess, and no page sets a widest gate",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -12932,14 +13732,31 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/shared.rs::gate_widths#the shared checks": {
+ "rust/mode_a/src/audit/shared.rs::gate_widths#a wide break a structure spans": {
   "body": "66d0faa21c81d1de",
-  "claim": "the shared checks - NONE: a sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "9a7085f028ea6c38",
+  "claim": "a wide break a structure spans - the-main-gate-and-its-gatekeepers-nagaya-mon.drawing: an opening wider than the widest gate passes where a structure spans it, a gate drawn as a building (a yamen's roofed gate of three bays, a gate range) rather than as an opening in the wall.",
+  "code": "76320014532c055c",
   "core": "fb048c8f02e0be28",
   "date": "2026-11-17",
-  "note": "\"deciding nothing more\" is untrue here. Its fix text tells the drawer \"a gate is drawn at passage width (~13 ft)\", a figure no claim carries and outside the page's 9-12 ft samurai gate and 18-24 ft yamen gate. It also exempts an over-wide break that a structure spans. Each needs its own claim (the 13 ft should be a GUESS, or be moved into 9-12 ft)",
-  "outside": true,
+  "note": "a gate range, or a yamen's roofed gate of three bays, is a building spanning the break",
+  "pages": {
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "a8c7eafbeafe0423"
+  },
+  "reads": "194c5bf8da79b169",
+  "research": "965653fa269e5ec4",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:778be5176a6095ec",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:d930b9e498ec74cf"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared.rs::gate_widths#the fix text's gate width": {
+  "body": "66d0faa21c81d1de",
+  "claim": "the fix text's gate width - GUESS: the fix sentence draws a gate at passage width, about 13 ft, a figure of ours; it lies between the samurai gate's 9 to 12 ft and the yamen's guessed 18 to 24 ft (compound-walls-neribei-and-tsuijibei.drawing), and no page gives it.",
+  "code": "cf9ad321d3668706",
+  "core": "fb048c8f02e0be28",
+  "date": "2026-11-17",
+  "note": "\"passage width (~13 ft)\" is not a guess the record is silent on. The 0093 drawing page gives a Japanese magistrate's gate (the form our compounds follow) as \"about 6 to 12 ft\", the nagaya-mon's opening as about 12 ft, and the 9 to 12 ft samurai gate, so 13 ft falls outside every Japanese width. The claim should cite 0093 and the message give at most ~12 ft",
   "pages": {},
   "reads": "194c5bf8da79b169",
   "research": "",
@@ -13034,18 +13851,55 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/shared.rs::two_court_zoning#the shared checks": {
+ "rust/mode_a/src/audit/shared.rs::two_court_zoning#the hearing court on the gate's side": {
   "body": "d9ecc88482137ca5",
-  "claim": "the shared checks - NONE: a sheet measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "126364b5d4a02e5e",
+  "claim": "the hearing court on the gate's side - magistrates-compounds-jinya-and-yamen.drawing: the hearing court lies before the office hall in the outer court, so on the main gate's side of the divider; a vertical divider is not judged.",
+  "code": "8a5a050d6e05350a",
   "core": "fa037185e79fcd0b",
   "date": "2026-11-17",
-  "note": "\"deciding nothing more\" is untrue here. It requires a court divider, and it requires the hearing court (oshirasu) to lie on the main gate's side of the divider, a placement rule. Its text gives the nakamon as \"~6-8 ft, narrower than the main gate\". Neither has a claim, and neither cited page states them. They need GUESS or UNRESEARCHED claims, or a question that answers them",
-  "outside": true,
+  "note": "the outer court with the office hall lies at the gate, the hearing court before the hall",
+  "pages": {
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "f2539def6f4362de"
+  },
+  "reads": "ad0eec1def848918",
+  "research": "974e389f62dca624",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared.rs::two_court_zoning#the middle gate's width in the message": {
+  "body": "d9ecc88482137ca5",
+  "claim": "the middle gate's width in the message - UNRESEARCHED: the message gives the middle gate (nakamon) as about 6-8 ft, narrower than the main gate; the check holds only the narrowest gate's floor, and no page gives a middle gate's width.",
+  "code": "eae22bee5d50577c",
+  "core": "fa037185e79fcd0b",
+  "date": "2026-11-17",
+  "note": "no page in the bundle gives a middle gate's width",
   "pages": {},
   "reads": "ad0eec1def848918",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/shared.rs::two_court_zoning#two courts and the gate between": {
+  "body": "d9ecc88482137ca5",
+  "claim": "two courts and the gate between - magistrates-compounds-jinya-and-yamen.drawing: a magistracy is two courts, the office in front and the residence behind, with a gate between them dividing the office from the home; the page records that order in a Japanese compound as a deliberate simplification.",
+  "code": "533b201839aabd3b",
+  "core": "fa037185e79fcd0b",
+  "date": "2026-11-17",
+  "note": "two courts with a gate between them, a deliberate simplification",
+  "pages": {
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "f2539def6f4362de"
+  },
+  "reads": "ad0eec1def848918",
+  "research": "974e389f62dca624",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::AXIS_TOL_FT#shrine axis tolerance": {
   "body": "a8ab515d333825cb",
@@ -13073,11 +13927,11 @@
  },
  "rust/mode_a/src/audit/shared/grounds.rs::GEAR#the program's grounds": {
   "body": "5b46674f0d12ec61",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "d68824781d837841",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "a9fda3e0900c572b",
   "core": "3abdb5cfd689c459",
   "date": "2026-11-17",
-  "note": "a regex reading the gear tags",
+  "note": "a tag pattern",
   "pages": {},
   "research": "",
   "rests": [],
@@ -13097,8 +13951,8 @@
  },
  "rust/mode_a/src/audit/shared/grounds.rs::NO_APPROACH#the program's grounds": {
   "body": "149a0956a46f390a",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "aaaedadfe6f59131",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "9e7346bea3304bf1",
   "core": "56708a5024912eaa",
   "date": "2026-11-17",
   "note": "a message",
@@ -13109,11 +13963,11 @@
  },
  "rust/mode_a/src/audit/shared/grounds.rs::OUTLINE#the program's grounds": {
   "body": "a258a0c8386532dd",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "21915a9ad09dce2b",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "44eb554d05b8e681",
   "core": "64b32b4cc1482234",
   "date": "2026-11-17",
-  "note": "a regex",
+  "note": "a tag pattern",
   "pages": {},
   "research": "",
   "rests": [],
@@ -13121,11 +13975,11 @@
  },
  "rust/mode_a/src/audit/shared/grounds.rs::ROOF#the program's grounds": {
   "body": "0a769e038726b8a4",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "b46b2cdbd8c57da4",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "310447e2473b3fc4",
   "core": "a132db9611677e5b",
   "date": "2026-11-17",
-  "note": "a regex",
+  "note": "a tag pattern",
   "pages": {},
   "research": "",
   "rests": [],
@@ -13133,11 +13987,11 @@
  },
  "rust/mode_a/src/audit/shared/grounds.rs::SHRINE_GROUP#the program's grounds": {
   "body": "7858d887aae6ad24",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "65815b10e51019d5",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "08969ec2e6c7da12",
   "core": "6dd45404216048ee",
   "date": "2026-11-17",
-  "note": "a regex",
+  "note": "a tag pattern",
   "pages": {},
   "research": "",
   "rests": [],
@@ -13171,31 +14025,32 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/shared/grounds.rs::arch_on_approach#the arch straddles the approach at the precinct's edge": {
-  "code": "390be81caebd4b77",
-  "core": "390be81caebd4b77",
-  "date": "2026-11-17",
-  "note": "the arch straddles the approach at the precinct's edge",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::arch_on_approach#the program's grounds": {
+ "rust/mode_a/src/audit/shared/grounds.rs::arch_on_approach#the arch over the approach at the ground's edge": {
   "body": "01e3973a19ee2f26",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "e02038d9f85d1c09",
+  "claim": "the arch over the approach at the ground's edge - shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing, inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing: the approach runs under its arch, and the first arch stands where the approach enters the shrine's ground.",
+  "code": "9a9e32c49ad9171a",
   "core": "390be81caebd4b77",
   "date": "2026-11-17",
-  "note": "decides that the arch straddles the approach and stands at the precinct's edge, which are placement rules; label it with the research or GUESS, not NONE",
-  "pages": {},
+  "note": "the same as the Python twin: it refuses an arch off the edge where §50 moves the first arch for the innermost, and it judges one id=arch where the count is one, three or seven",
+  "pages": {
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "2c468b27aa8873c0"
+  },
   "reads": "5ba0e9b18b53763b",
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "research": "39140bd33b400053",
+  "rests": [
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:150b6599eb0096ca",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:1928dc0cc002ed2c",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3cec57c2e7969071",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:99ac4e6302c92be7"
+  ],
+  "verdict": "DRIFTED"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::center#the program's grounds": {
   "body": "a5eaeefe501dd04e",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "1f72cff08a2d5355",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "491bd91def9934ed",
   "core": "cffe45806a9f0372",
   "date": "2026-11-17",
   "note": "geometry",
@@ -13206,8 +14061,8 @@
  },
  "rust/mode_a/src/audit/shared/grounds.rs::dwelling_spans#the program's grounds": {
   "body": "6d9e30959b6e6d3e",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "557554865f5103cf",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "41b5ca5dc5473c56",
   "core": "77e34b22ad8b0c14",
   "date": "2026-11-17",
   "note": "geometry",
@@ -13216,139 +14071,53 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/shared/grounds.rs::hall_at_an_end#the hall at one end of the building, the dwelling at the other": {
-  "code": "d06b66fec13a7bbe",
-  "core": "d06b66fec13a7bbe",
-  "date": "2026-11-17",
-  "note": "the hall at one end of the building, the dwelling at the other",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::hall_at_an_end#the program's grounds": {
-  "body": "0e2e20fd835a951e",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "10aacb018635a295",
-  "core": "d06b66fec13a7bbe",
-  "date": "2026-11-17",
-  "note": "refuses a hall that stands between the dwelling's rooms (the hall must be one end of the building and the dwelling the other), which is a layout rule; not NONE",
-  "pages": {},
-  "reads": "28ef344d09c85e6f",
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
- },
  "rust/mode_a/src/audit/shared/grounds.rs::indoor#the program's grounds": {
   "body": "8b65f53d250ba407",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "f3a37e237fdf7892",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "0fbed81301cf5ba6",
   "core": "29c736814d1f4e5a",
   "date": "2026-11-17",
-  "note": "a containment predicate",
+  "note": "a point-in-building lookup",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/shared/grounds.rs::no_precinct_enclosure#a village shrine's precinct neither fenced nor walled": {
-  "code": "b9523d0538560b45",
-  "core": "b9523d0538560b45",
-  "date": "2026-11-17",
-  "note": "a village shrine's precinct neither fenced nor walled",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::no_precinct_enclosure#the program's grounds": {
+ "rust/mode_a/src/audit/shared/grounds.rs::no_precinct_enclosure#the precinct left open": {
   "body": "f7feedf090bc3fc6",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "2258d9f43523889f",
+  "claim": "the precinct left open - shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing: a village shrine's precinct has no fence, wall or hedge round it, so a fence whose extent takes in the hall and a compound wall at the sheet's edge are refused; a fence round the sanctuary alone is not judged here, though the page draws none however rich the parish.",
+  "code": "d7e38eb787c26b93",
   "core": "b9523d0538560b45",
   "date": "2026-11-17",
-  "note": "decides that a village shrine's precinct has neither a fence ringing it nor a wall, which is a choice of form; not NONE",
-  "pages": {},
+  "note": "its refusal message gives a sanctuary fence \"only as a richer shrine's donation\", where the page draws none \"however rich the parish\"",
+  "pages": {
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html": "deb271b84040f16a"
+  },
   "reads": "edc6efc809d1ddb1",
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "research": "1c552e1d5c005cc0",
+  "rests": [
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:ae41106810024ccc",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:c7b3b890296618dc",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:de7ea278f269925d"
+  ],
+  "verdict": "DRIFTED"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::one#the program's grounds": {
   "body": "c9646cd2e7188aaf",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "80394c7e788964b5",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "98d30570efaa8ef8",
   "core": "af143154ad464154",
   "date": "2026-11-17",
-  "note": "lookup",
+  "note": "a lookup",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/shared/grounds.rs::one_compound_shrine#one main shrine per compound": {
-  "code": "23d693b0ccd9d86a",
-  "core": "23d693b0ccd9d86a",
-  "date": "2026-11-17",
-  "note": "one main shrine per compound",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::one_compound_shrine#the program's grounds": {
-  "body": "8855b524fb504c37",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "1668fad2b555820a",
-  "core": "23d693b0ccd9d86a",
-  "date": "2026-11-17",
-  "note": "decides that a compound draws at most one main shrine, which is a count; not NONE",
-  "pages": {},
-  "reads": "ccd8cde02f347c93",
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::sanctuary_on_axis#the program's grounds": {
-  "body": "6adfe083e60aabe2",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "1201315731eef7c0",
-  "core": "f19df327c534b70c",
-  "date": "2026-11-17",
-  "note": "decides that the sanctuary stands behind the hall on the approach axis, which is an ordering and placement rule (only the 3 ft tolerance is claimed); not NONE",
-  "pages": {},
-  "reads": "7fb9c300fd0245ef",
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::sanctuary_on_axis#the sanctuary behind the hall on the approach axis": {
-  "code": "f19df327c534b70c",
-  "core": "f19df327c534b70c",
-  "date": "2026-11-17",
-  "note": "the sanctuary behind the hall on the approach axis",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::shrine_tree#a sacred tree beside the compound shrine": {
-  "code": "d5554bcb7637fa45",
-  "core": "d5554bcb7637fa45",
-  "date": "2026-11-17",
-  "note": "a sacred tree beside the compound shrine",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::shrine_tree#the program's grounds": {
-  "body": "d376b50bd8c3676b",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "cf13d27b5c895de6",
-  "core": "d5554bcb7637fa45",
-  "date": "2026-11-17",
-  "note": "decides that every compound shrine has a sacred tree beside it (only the 15 ft reach is claimed); not NONE",
-  "pages": {},
-  "reads": "e3142a4c3fe02049",
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
- },
  "rust/mode_a/src/audit/shared/grounds.rs::sorted_set#the program's grounds": {
   "body": "f694f119a21f83af",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "1a56db63b426c183",
+  "claim": "the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim",
+  "code": "196c625adfcf2db2",
   "core": "50dffe3a8900ed28",
   "date": "2026-11-17",
   "note": "plumbing",
@@ -13357,86 +14126,31 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/shared/grounds.rs::stall_width#a stable parted into at least two stalls": {
-  "code": "ba6dbc1e32802cfc",
-  "core": "ba6dbc1e32802cfc",
-  "date": "2026-11-17",
-  "note": "a stable parted into at least two stalls",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::stall_width#the program's grounds": {
-  "body": "e74d6aa861e116f5",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "2d432f1e73fecb97",
-  "core": "ba6dbc1e32802cfc",
-  "date": "2026-11-17",
-  "note": "`stalls >= 2` decides that a stable is parted into at least two stalls, a count the claim does not carry; cite 0108's drawing page (\"a few bays long\")",
-  "pages": {},
-  "reads": "d78d06f81f63a8c0",
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::well_clear_of_arch#a shrine has a purification well, clear of the approach and the arch": {
+ "rust/mode_a/src/audit/shared/grounds.rs::well_clear_of_arch#a shrine sheet must draw a purification well or basin (refused when it has none)": {
   "code": "d39e1532b29a13be",
   "core": "d39e1532b29a13be",
   "date": "2026-11-17",
-  "note": "a shrine has a purification well, clear of the approach and the arch",
+  "note": "a shrine sheet must draw a purification well or basin (refused when it has none)",
   "research": "",
   "verdict": "UNCLAIMED"
  },
- "rust/mode_a/src/audit/shared/grounds.rs::well_clear_of_arch#the program's grounds": {
+ "rust/mode_a/src/audit/shared/grounds.rs::well_clear_of_arch#the basin beside the approach": {
   "body": "77329d6d6636544c",
-  "claim": "the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more",
-  "code": "d434c3a852a3af74",
+  "claim": "the basin beside the approach - inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing: a shrine has its stone basin for rinsing the hands and mouth, standing beside the approach at the innermost arch, so never on the approach or under the arch.",
+  "code": "793cd6de5a311f16",
   "core": "d39e1532b29a13be",
   "date": "2026-11-17",
-  "note": "decides that a shrine has a purification well and that the well stands clear of the approach and the arch, which are placement and presence rules; not NONE",
-  "pages": {},
+  "note": "the same as the Python twin: it judges the sheet's wells, not the §64 basin; I need to know what id=well/plan.wells is on a shrine sheet",
+  "pages": {
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "2c468b27aa8873c0"
+  },
   "reads": "695b57c45630223a",
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::well_gear#a well roof is an outline on four posts": {
-  "code": "858221d8832c1529",
-  "core": "858221d8832c1529",
-  "date": "2026-11-17",
-  "note": "a well roof is an outline on four posts",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an indoor well hangs its pulley from the beams": {
-  "code": "858221d8832c1529",
-  "core": "858221d8832c1529",
-  "date": "2026-11-17",
-  "note": "an indoor well hangs its pulley from the beams",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an indoor well has no roof of its own": {
-  "code": "858221d8832c1529",
-  "core": "858221d8832c1529",
-  "date": "2026-11-17",
-  "note": "an indoor well has no roof of its own",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an open-air well's gear is a sweep or a pulley frame": {
-  "code": "858221d8832c1529",
-  "core": "858221d8832c1529",
-  "date": "2026-11-17",
-  "note": "an open-air well's gear is a sweep or a pulley frame",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/mode_a/src/audit/shared/grounds.rs::well_gear#every well carries lifting gear": {
-  "code": "858221d8832c1529",
-  "core": "858221d8832c1529",
-  "date": "2026-11-17",
-  "note": "every well carries lifting gear",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "research": "599b50c87629a190",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:89ab2d0898e14201",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:90ba06c9955940ce"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::well_gear#its drawn sizes": {
   "body": "ea290dc7ff7c6d43",
@@ -13827,16 +14541,45 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/sun.rs::NOT_STANDING#the garden's sun": {
+ "rust/mode_a/src/audit/sun.rs::NOT_STANDING#ground features and a building's parts": {
   "body": "3a86588be05dda11",
-  "claim": "the garden's sun - NONE: the sun walked and the shadows cast by the figures whose claims stand on each, deciding nothing more",
-  "code": "ae9d449a70161536",
+  "claim": "ground features and a building's parts - GUESS: a basin, a tax barge on its water, and a building's door, veranda, hearth, dais, clerks' seats and altars cast no shadow of their own, the ground's being low and the parts standing under the roof that casts for them; no page gives it.",
+  "code": "25706417a9ed87dd",
   "core": "9a2c277e3292c4c1",
   "date": "2026-11-17",
-  "note": "this decides which drawn things cast no shadow on a bed (a stone lantern, a notice board and a weapon rack stand upright), a physical decision the page does not make (it casts only buildings, walls and trees); it should be UNRESEARCHED or GUESS",
+  "note": "no page gives their shadows; the check casts only buildings, walls and trees",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/sun.rs::NOT_STANDING#the notice board": {
+  "body": "3a86588be05dda11",
+  "claim": "the notice board - notice-boards-kosatsuba: the board casts no shadow on a bed, although the page measures a post town's board as a frame about 10 to 11 ft high, drawn as a roofed frame 16 by 6 ft (notice-boards-kosatsuba.drawing).",
+  "code": "b7b982186c25becf",
+  "core": "9a2c277e3292c4c1",
+  "date": "2026-11-17",
+  "note": "the code casts no shadow from the board, but the cited page measures it as a roofed frame \"about 10 to 11 ft high, 16 to 18 ft along the road and 5 to 6 ft deep\". It should cast at that height, or the omission should be recorded as a DEVIATION on 0190's drawing page",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "ad5a4db1fa8b0087"
+  },
+  "research": "050d52f3667c3d19",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:cfe6c75839678f41",
+   "0190-notice-boards-kosatsuba.html:e269fd5699db63b5",
+   "0190-notice-boards-kosatsuba.html:f20c5e6c7c0b59f6"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "rust/mode_a/src/audit/sun.rs::NOT_STANDING#upright furniture": {
+  "body": "3a86588be05dda11",
+  "claim": "upright furniture - UNRESEARCHED: a weapon rack, a stone lantern and a well with its gear cast no shadow on a bed; sunlight-and-shade-on-the-farm.drawing casts only buildings, walls and trees, and no page gives their heights (ornamental-gardens-ponds-and-stone-lanterns-teien.drawing draws a lantern as one small mark, martial-training-grounds-and-dojo.drawing gives a rack's footprint alone).",
+  "code": "83ed0cc619ded028",
+  "core": "9a2c277e3292c4c1",
+  "date": "2026-11-17",
+  "note": "no cited page gives these heights",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/sun.rs::SMALL_BUILDING_FT#small roofed thing height": {
   "body": "7fe96bf29abcdd3d",
@@ -13898,27 +14641,39 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/sun.rs::TREE_FT#the garden's sun": {
+ "rust/mode_a/src/audit/sun.rs::TREE_FT#tree shadow height": {
   "body": "82d35ef39d9ce97a",
-  "claim": "the garden's sun - NONE: the sun walked and the shadows cast by the figures whose claims stand on each, deciding nothing more",
-  "code": "55ca91f77c76f9fb",
+  "claim": "tree shadow height - sunlight-and-shade-on-the-farm.drawing: a tree casts its shadow from 10 m (~33 ft), a working windbreak's height, the least height the record draws a tree at.",
+  "code": "480d9e09701fded3",
   "core": "acc5b1c9dc190d24",
   "date": "2026-11-17",
-  "note": "10 m is a physical shadow height (\"a tree at the 10 m (~33 ft) of a working windbreak\"); the claim should cite 0038's drawing page, not NONE",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "10 m",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:2bb99f73e10f7d6c",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fd44c5dc36dbd09f"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/sun.rs::WALL_FT#the garden's sun": {
+ "rust/mode_a/src/audit/sun.rs::WALL_FT#wall shadow height": {
   "body": "7bc6fe82e36f8f0f",
-  "claim": "the garden's sun - NONE: the sun walked and the shadows cast by the figures whose claims stand on each, deciding nothing more",
-  "code": "39e89a8964fd1319",
+  "claim": "wall shadow height - sunlight-and-shade-on-the-farm.drawing: a compound wall casts its shadow from 1.6 m (~5 ft), the surviving earth wall's height, the least height the record gives.",
+  "code": "928eeedcbf77a17c",
   "core": "3fe7207bd54f014f",
   "date": "2026-11-17",
-  "note": "1.6 m is a physical wall height (\"a compound wall at the 1.6 m (~5 ft)\"); the claim should cite 0038's drawing page, not NONE",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "1.6 m",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fd44c5dc36dbd09f"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/sun.rs::box_area#the garden's sun": {
   "body": "3efbbf050601cbca",
@@ -13956,14 +14711,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/sun.rs::casters#a structure covering more than half the bed (over > 0.5 * bed.area()) casts no shadow on it": {
-  "code": "ba285c825485fc0a",
-  "core": "ba285c825485fc0a",
-  "date": "2026-11-17",
-  "note": "a structure covering more than half the bed (over > 0.5 * bed.area()) casts no shadow on it",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/mode_a/src/audit/sun.rs::casters#its casters": {
   "body": "b7e58718ad8aae36",
   "claim": "its casters - NONE: the sheet's structures, walls and trees standing at the heights whose claims stand on them, deciding nothing more",
@@ -13974,6 +14721,19 @@
   "pages": {},
   "reads": "e89fdebf5645ce79",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/audit/sun.rs::casters#the bed's own ink": {
+  "body": "b7e58718ad8aae36",
+  "claim": "the bed's own ink - GUESS: a structure covering more than half the bed is read as the bed's own drawing, not as a caster, a classification of ours; no page gives it.",
+  "code": "1ee22b9533d2b6a8",
+  "core": "ba285c825485fc0a",
+  "date": "2026-11-17",
+  "note": "a classification no page gives",
+  "pages": {},
+  "reads": "e89fdebf5645ce79",
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/sun.rs::circle_ring#its salts, guards and sentinels": {
@@ -14039,17 +14799,23 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/sun.rs::lit_areas#the garden's sun": {
+ "rust/mode_a/src/audit/sun.rs::lit_areas#a tree's dappled light": {
   "body": "18e57a1ad40125e6",
-  "claim": "the garden's sun - NONE: the sun walked and the shadows cast by the figures whose claims stand on each, deciding nothing more",
-  "code": "c2857511ec82c444",
+  "claim": "a tree's dappled light - GUESS sunlight-and-shade-on-the-farm.drawing: for a half-shade bed a tree's shadow is not counted, the bed needing hours in which nothing but a tree's leaves stands between it and the sun, the page's guess at how to count dappled light.",
+  "code": "1df6123d9d29fe97",
   "core": "90e4e85d1277c99f",
   "date": "2026-11-17",
-  "note": "`.filter(|c| !(half_shade && c.tree))` decides that a tree's shade does not count against a half-shade bed, which is the page's rule (\"nothing but a tree's leaves stands between it and the sun\"); the claim should cite 0038's drawing page as a GUESS, not NONE",
-  "pages": {},
+  "note": "trees are left out for a half-shade bed",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
   "reads": "92a473c45e16f282",
-  "research": "",
-  "verdict": "MISLABELED"
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:518902ab7cde51b3",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:f9db7238571c5f77"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/sun.rs::lit_hours#its lit hours": {
   "body": "006b7e7a3506c386",
@@ -14818,17 +15584,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/compound.rs::KINDS#the compound engine's audit rules": {
+ "rust/mode_a/src/compound.rs::KINDS#the palette's fills": {
   "body": "ae96f9593b7d4203",
-  "claim": "the compound engine's audit rules - NONE: the engine's distances and predicates held as the audit reads them, deciding nothing here that the claims on each do not",
-  "code": "71e4f63574022511",
+  "claim": "the palette's fills - CONVENTION: each palette role's fill and stroke, the slatted granary's pattern among them, is how a sheet shows a building's kind, not its real color.",
+  "code": "cc6120fd46d4082d",
   "core": "bb2e2170b9e70057",
   "date": "2026-11-17",
-  "note": "each building role's fill and stroke colors (including the takakura slat pattern) are how the map shows a building; label it CONVENTION, not NONE",
+  "note": "fills and strokes, how a kind is shown",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound.rs::NOTICE_BOARD_MAX_FT#board by the gate": {
   "body": "d7e18468083e805e",
@@ -14848,11 +15614,11 @@
  },
  "rust/mode_a/src/compound.rs::TUB_DOOR_MAX_FT#fire-water tub reach from a door": {
   "body": "190825335768ce92",
-  "claim": "fire-water tub reach from a door - GUESS: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; 0100 puts tubs beside a door and is silent on the distance.",
-  "code": "9a8112e91b7b44e1",
+  "claim": "fire-water tub reach from a door - CONVENTION: a tub's center stands within 10.5 ft of a door of its building, a figure fixed by the kitchen's two tubs beside a 6 ft door; fire-and-the-fireproof-storehouses-dozo.drawing records how near counts as beside the door, within about 10 ft, as a convention of this project.",
+  "code": "7b80ed2344679658",
   "core": "a9e6f6af788fb1a8",
   "date": "2026-11-17",
-  "note": "the bundle's material is silent on the distance",
+  "note": "the page's own CONVENTION of \"within about 10 ft\"",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"

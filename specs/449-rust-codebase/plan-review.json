@@ -522,6 +522,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T176 (T175's claims round: the audit's Rust units keyed one by one showed rules the Python never labeled)": {
+   "sha256": "b1fd51dfd3c07868da218091364569a5990152dc931ff8761b6aa31af5d47011",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T176 Approach (checklist part A)": {
+   "sha256": "5f4816871e467be8a165c88f0cf31bf749705330eb41004b99d60b0f1c7b1cc0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10924,6 +10936,46 @@
      "why": "The project's standing gate and FR-001c's kept checks; a wired landing keeps its full review (ask:449-engine-order condition 4)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T176 (T175's claims round: the audit's Rust units keyed one by one showed rules the Python never labeled)",
+    "### T176 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T176-D1",
+     "summary": "Label-only under ask:set-down-449-pieces34: no research pass, fetch or new question; a physical rule no page answers is labeled UNRESEARCHED and listed for the GM (three named).",
+     "class": "within",
+     "why": "The ruling's item (3) is exactly this: each rule gets the page that attests it 'or an honest CONVENTION, GUESS or UNRESEARCHED label'; item (4) forbids starting a research pass that could change a rule, a verdict or a map, or that spends money, and requires it be listed as an open item. The GM's 2026-11-17 bound ('proceed with the next 2 engine pieces and then we'll measure') and 'tough judgment calls wait for me' are honored. Nothing the request or the ruling asked for is dropped."
+    },
+    {
+     "id": "T176-D2",
+     "summary": "No code moved: every changed Rust line is a doc comment; the seven Python files' ASTs less docstrings/strings byte-identical; each claim mirrored word for word onto the kept Python copy.",
+     "class": "within",
+     "why": "The ruling makes T176 label-only and says 'the Python copies' claims matched'; ask:449-phase4-slices Q1 freezes landed slices' Python so any edit makes the same change in the Rust in the same commit, and Q10 keeps claims keyed to .py units until the cut - mirroring onto both copies satisfies both. The AST comparison is enforcement of the label-only scope, not added scope."
+    },
+    {
+     "id": "T176-D3",
+     "summary": "A claim whose code departs from its page says so (DEVIATION, e.g. the notice board's shadow, road wider than its gate, sanctuary-only fence, a fix-text gate width); the departure is recorded, not fixed here. COVERAGE_TOL's words corrected to what its code does; TUB_DOOR_MAX_FT relabeled CONVENTION on both copies per page 0100.",
+     "class": "within",
+     "why": "Fixing a departure changes a rule or a check's verdict, which the ruling's items (3)-(4) put outside T176 and the GM's two-piece bound puts outside this sitting; an honest label that says the code departs is the ruling's 'honest label' applied, and DEVIATION is the truthful class for that case. Correcting a claim's wording to the code and relabeling a constant whose page records a convention are the label corrections the ruling orders (as with HIERARCHY and TUB_KINDS)."
+    },
+    {
+     "id": "T176-D4",
+     "summary": "Printed messages citing a stale page or a figure no page gives stay as they are (bound output, FR-002) and are listed for the GM.",
+     "class": "within",
+     "why": "FR-002 binds a tool's own words byte for byte to the Python's (ask:449-usage-text: a tool's own words stay bound), and the ruling scopes T176 to labels; changing a message is neither. Listing them for the GM keeps the matter in the report the ruling asks for rather than dropping it."
+    },
+    {
+     "id": "T176-D5",
+     "summary": "Scope: all 61 findings make claims-report listed on rust/mode_a after T175 (NONE-module rules, a mislabeled class, one drifted wording), against the ruling's '~40 rules'.",
+     "class": "within",
+     "why": "The ruling's goal is that every rule the audit enforces carries a label saying what backs it; '~40' is the arbiter's approximation, and covering every finding of the same report is that instruction carried out, not new behavior. No code, rule or output is added."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19486,6 +19538,44 @@
      "summary": "Exits: make static, rust-test, hooks-test HOOKS_ALL=1, quick, the pointer check, the claims round and a gated make land; red recorded and set down, a can't-be-done claim through make arbiter-ask.",
      "class": "within",
      "why": "The project's standing gate and FR-001c's kept checks; a wired landing keeps its full review (ask:449-engine-order condition 4)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T176": {
+   "section_sha256": "f694d3586db1307da53f738d7c2849658d7dadf82b2f5b0e9e8b847c3c9d269f",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T176-D1",
+     "summary": "Label-only under ask:set-down-449-pieces34: no research pass, fetch or new question; a physical rule no page answers is labeled UNRESEARCHED and listed for the GM (three named).",
+     "class": "within",
+     "why": "The ruling's item (3) is exactly this: each rule gets the page that attests it 'or an honest CONVENTION, GUESS or UNRESEARCHED label'; item (4) forbids starting a research pass that could change a rule, a verdict or a map, or that spends money, and requires it be listed as an open item. The GM's 2026-11-17 bound ('proceed with the next 2 engine pieces and then we'll measure') and 'tough judgment calls wait for me' are honored. Nothing the request or the ruling asked for is dropped."
+    },
+    {
+     "id": "T176-D2",
+     "summary": "No code moved: every changed Rust line is a doc comment; the seven Python files' ASTs less docstrings/strings byte-identical; each claim mirrored word for word onto the kept Python copy.",
+     "class": "within",
+     "why": "The ruling makes T176 label-only and says 'the Python copies' claims matched'; ask:449-phase4-slices Q1 freezes landed slices' Python so any edit makes the same change in the Rust in the same commit, and Q10 keeps claims keyed to .py units until the cut - mirroring onto both copies satisfies both. The AST comparison is enforcement of the label-only scope, not added scope."
+    },
+    {
+     "id": "T176-D3",
+     "summary": "A claim whose code departs from its page says so (DEVIATION, e.g. the notice board's shadow, road wider than its gate, sanctuary-only fence, a fix-text gate width); the departure is recorded, not fixed here. COVERAGE_TOL's words corrected to what its code does; TUB_DOOR_MAX_FT relabeled CONVENTION on both copies per page 0100.",
+     "class": "within",
+     "why": "Fixing a departure changes a rule or a check's verdict, which the ruling's items (3)-(4) put outside T176 and the GM's two-piece bound puts outside this sitting; an honest label that says the code departs is the ruling's 'honest label' applied, and DEVIATION is the truthful class for that case. Correcting a claim's wording to the code and relabeling a constant whose page records a convention are the label corrections the ruling orders (as with HIERARCHY and TUB_KINDS)."
+    },
+    {
+     "id": "T176-D4",
+     "summary": "Printed messages citing a stale page or a figure no page gives stay as they are (bound output, FR-002) and are listed for the GM.",
+     "class": "within",
+     "why": "FR-002 binds a tool's own words byte for byte to the Python's (ask:449-usage-text: a tool's own words stay bound), and the ruling scopes T176 to labels; changing a message is neither. Listing them for the GM keeps the matter in the report the ruling asks for rather than dropping it."
+    },
+    {
+     "id": "T176-D5",
+     "summary": "Scope: all 61 findings make claims-report listed on rust/mode_a after T175 (NONE-module rules, a mislabeled class, one drifted wording), against the ruling's '~40 rules'.",
+     "class": "within",
+     "why": "The ruling's goal is that every rule the audit enforces carries a label saying what backs it; '~40' is the arbiter's approximation, and covering every finding of the same report is that instruction carried out, not new behavior. No code, rule or output is added."
     }
    ],
    "verdict": "CLEAR"

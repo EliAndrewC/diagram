@@ -19,14 +19,26 @@ use crate::py::fixed;
 use crate::tagged::Mark;
 
 /// The slatted granary's pattern.
+///
+/// Research:
+///     the slatted granary's fill - CONVENTION: the raised timber granary, the takakura that research/questions/0098-storehouses-for-the-tax-rice.drawing.html draws as one of a granary's two forms, is filled with a slat pattern so it reads apart from the plastered kura; no page gives a granary's drawn fill.
 pub const GRANARY_SLATS: &str = "url(#granary-slats)";
 /// SKILL.md: Latrines / utility.
+///
+/// Research:
+///     the privy's gray - CONVENTION: a privy is filled gray, #7E726A, so it reads apart from the tan buildings where the household lives and works, the map drawing convention research/questions/0101-privies-setchin.drawing.html records; no source gives a privy's color.
 pub const PRIVY: &str = "#7E726A";
 /// SKILL.md: Well stone curb.
+///
+/// Research:
+///     the well curb's color - CONVENTION: a well's stone curb is filled #9C8C70, the palette's stone; no page gives a curb's drawn color.
 pub const WELL: &str = "#9C8C70";
 
 /// kind -> the roles (palette keys, or a fill) it may be painted in, in the table's order; rows with no comment are the SKILL.md
 /// palette's own words.
+///
+/// Research:
+///     the palette's table - CONVENTION: the palette role each building kind is painted in, the Mode A palette's own rows, a kind the palette does not name assigned a role labeled GUESS beside its row; a fill says nothing of a building's real color.
 const ROLE_NAMES: [(&str, &[&str]); 25] = [
     ("residence", &["lord"]),
     ("lord's quarters", &["lord"]),

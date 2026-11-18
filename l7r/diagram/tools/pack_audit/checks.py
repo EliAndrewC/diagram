@@ -109,6 +109,7 @@ DOOR_ON_WALL_PX = 4.0 * FTPX
 SHOE_STONE_ID = "shoe-stone"
 # A bath is entered from the house it abuts (no outside door): its tub stands on its yard side, judged by no door
 DOORLESS_KINDS = frozenset({"bath"})
+"""Research: a bath's tub judged by no door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0105-baths-furo.drawing.html: the bath our plans attach to the kitchen is entered from the house, so its fire-water tub stands on its yard side and is not held to stand beside a door."""
 
 
 def doors_of(plan: ParsedPlan, b: Rect) -> list[tuple[float, float]]:
@@ -248,6 +249,9 @@ def occluded_foreground(plan: ParsedPlan, min_px: float = OCCLUSION_MIN_PX) -> l
     writes it after the drawing; whether it is buried is the placer's to get right and its unit
     tests' to hold, not a check's (the GM: "There is no point in having an automated check run
     against an automated process"). What is still drawn by hand is still checked here.
+
+    Research:
+        the foreground drawn last - CONVENTION: tubs, wells and every sub-building rect are drawn above the fills, so a later shape covering one is a defect, the draw order research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html records for labels and small glyphs; the covered area carries a claim of its own.
     """
     occluders = plan.fills + plan.glyphs
     out: list[Occluded] = []
@@ -434,7 +438,11 @@ class FloatingDoor:
 def floating_doors(plan: ParsedPlan) -> list[FloatingDoor]:
     """A door is an opening in a WALL, so its glyph must sit on a building edge, not adrift in the
     interior. Flag a small dark door-rect fully contained in a building whose nearest edge is close
-    (it is clearly meant to be that wall's door) but not flush - leaving white space to the wall."""
+    (it is clearly meant to be that wall's door) but not flush - leaving white space to the wall.
+
+    Research:
+        a door flush to its wall - CONVENTION: a door glyph sits flush to the wall it opens through and never floats just inside the building, the map drawing convention research/questions/0117-doorways-and-doors-to.drawing.html records and research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html checks; the two pixel reaches carry claims of their own.
+    """
     out: list[FloatingDoor] = []
     for d in plan.door_rects:
         for b in plan.buildings:
@@ -527,7 +535,7 @@ def aligned_gaps(plan: ParsedPlan) -> list[Gap]:
     Research:
         its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 30 (reporting window: 10 ft shared edge, gaps from 5 ft)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 15 (dedupe radius)
-        its reported gap - NONE: they decide nothing about the place - 90 (upper bound on the reported gap, a report window)
+        its reported gap - GUESS: no source could speak to it, a value of ours, the top of the reporting window above - 90 (upper bound on the reported gap, 30 ft: buildings farther apart are not judged for spacing)
     """
     b = plan.buildings
     raw: list[Gap] = []

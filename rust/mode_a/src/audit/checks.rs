@@ -10,7 +10,7 @@
 //! change here in the same commit, and `parse/lockstep_checks.rs` holds every record of every function equal on every sheet it reads.
 //!
 //! Research:
-//!     the audit's checks - NONE: the geometry of a parsed sheet measured against the thresholds whose claims stand on each, deciding nothing more
+//!     the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim
 
 use crate::compound::{board_by_a_gate, tub_by_its_door, tub_by_its_eaves, FtBox};
 use crate::grids::FTPX;
@@ -56,6 +56,9 @@ pub const DOOR_ON_WALL_PX: f64 = 4.0 * FTPX;
 /// The reception's way in: a stone the sheet DECLARES (`id="shoe-stone"`) is that building's entrance (R07, research 0104, wave 106).
 pub const SHOE_STONE_ID: &str = "shoe-stone";
 /// A bath is entered from the house it abuts (no outside door): its tub stands on its yard side, judged by no door.
+///
+/// Research:
+///     a bath's tub judged by no door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0105-baths-furo.drawing.html: the bath our plans attach to the kitchen is entered from the house, so its fire-water tub stands on its yard side and is not held to stand beside a door.
 pub const DOORLESS_KINDS: [&str; 1] = ["bath"];
 
 /// A fire-water tub sitting too far from any building to be gutter-fed: its center (px) and its distance to the nearest building (ft).
@@ -369,6 +372,9 @@ pub fn tubs_on_wells(plan: &ParsedPlan, min_px: f64) -> Vec<TubOnWell> {
 
 /// Foreground items (tubs, wells, every sub-building rect) painted OVER by any rect or glyph drawn LATER in the SVG; a later shape
 /// wholly inside the item is its own detailing. Captions are not checked (feature 286: the placer seats them).
+///
+/// Research:
+///     the foreground drawn last - CONVENTION: tubs, wells and every sub-building rect are drawn above the fills, so a later shape covering one is a defect, the draw order research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html records for labels and small glyphs; the covered area carries a claim of its own.
 #[must_use]
 pub fn occluded_foreground(plan: &ParsedPlan, min_px: f64) -> Vec<Occluded> {
     let occluders: Vec<&Rect> = plan.fills.iter().chain(&plan.glyphs).collect();
@@ -482,6 +488,9 @@ pub fn notice_board_adrift(plan: &ParsedPlan) -> Vec<MisplacedBoard> {
 
 /// A small dark door-rect fully inside a building whose nearest edge is close (it is meant to be that wall's door) but not flush; the
 /// first building that holds it is the one judged.
+///
+/// Research:
+///     a door flush to its wall - CONVENTION: a door glyph sits flush to the wall it opens through and never floats just inside the building, the map drawing convention research/questions/0117-doorways-and-doors-to.drawing.html records and research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html checks; the two pixel reaches carry claims of their own.
 #[must_use]
 pub fn floating_doors(plan: &ParsedPlan) -> Vec<FloatingDoor> {
     let mut out = Vec::new();

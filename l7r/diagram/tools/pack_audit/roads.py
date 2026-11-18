@@ -32,6 +32,7 @@ ARCH_KINDS: frozenset[str] = frozenset({"torii"})
 #: The places a way inside a precinct is walked TO (drawing convention, feature 294 escalation-check 2026-10-01): B21's
 #: grounds are an approach stopping short of the frame; a household path from the clearing to the well arrives at both.
 DESTINATION_KINDS: frozenset[str] = frozenset({"well", "precinct clearing"})
+"""Research: a way walked to a well or clearing - CONVENTION: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; no page gives it."""
 #: A road may be this much wider than the gate it feeds: a GUESS - the 3 px authoring grain (1 ft at 3 px = 1 ft), so a
 #: road drawn on the grid next to an opening measured off the ink is not refused for a pixel.
 ROAD_GATE_TOL_FT: float = 1.0
@@ -120,7 +121,11 @@ def _frame(svg: str) -> tuple[float, float, float, float] | None:
 
 
 def end_meets(end: tuple[float, float], road: Road, others: list[Road], svg: str, plan: ParsedPlan) -> str | None:
-    """What the road's end at `end` meets - 'the frame', 'a gate', 'a door', 'an arch', 'a road', 'a well or clearing' - or None."""
+    """What the road's end at `end` meets - 'the frame', 'a gate', 'a door', 'an arch', 'a road', 'a well or clearing' - or None.
+
+    Research:
+        where a road may end - CONVENTION: a road's end meets the frame, a gate, a door, an arch, another road, a well or a clearing, never a stub stopping short in the open, a drawing rule of the building plans; no page gives it.
+    """
     px, py = end
     frame = _frame(svg)
     if frame is not None:
@@ -155,7 +160,11 @@ def roads_leave_the_frame(svg: str, plan: ParsedPlan) -> list[str]:
 
 
 def gate_feeds_its_road(svg: str, plan: ParsedPlan, tol_ft: float = ROAD_GATE_TOL_FT) -> list[str]:
-    """A road ending at a gate is no wider than the widest gate that end meets, plus `tol_ft`."""
+    """A road ending at a gate is no wider than the widest gate that end meets, plus `tol_ft`.
+
+    Research:
+        a road no wider than its gate - GUESS research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: a road ending at a gate is no wider than the widest opening it meets, plus the claimed tolerance, the width feature 267's review gave the hand sheets' approach roads; the page records that no page gives the width of the road before an official's gate, and it draws the road at a compound's front gate at the width of the road the compound stands on, 15 to 24 ft on a lesser highway, wider than the gates the record gives.
+    """
     out: list[str] = []
     for road in roads(svg):
         for end in (road.pts[0], road.pts[-1]):

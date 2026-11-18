@@ -141,6 +141,10 @@ pub fn entrances(svg: &Sheet, plan: &ParsedPlan) -> Result<Vec<Mark>, Error> {
 /// Every building holding a lodging kind has at least one entrance on its OUTER wall: an entrance glyph within `tol` of one of its
 /// blocks and not wholly inside any of them (the registry passes `DOOR_FLUSH_TOL_PX`, the floating-door check's flush reach).
 ///
+/// Research:
+///     a lodging entered from the ground - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).
+///     every other lodging entered from the ground - UNRESEARCHED: the guest quarters, a shrine's hall and dwelling and the monk's rooms each reach the ground by a door or genkan on their own outer wall, not only through a building they do not join; no page asks how these were entered.
+///
 /// # Errors
 /// The sheet's marks refused.
 pub fn lodging_entrances(svg: &Sheet, plan: &ParsedPlan, tol: f64) -> Result<Vec<String>, Error> {
@@ -176,6 +180,9 @@ pub fn lodging_entrances(svg: &Sheet, plan: &ParsedPlan, tol: f64) -> Result<Vec
 }
 
 /// The palette's latrine / utility fill (SKILL.md, Palette).
+///
+/// Research:
+///     a privy drawn gray - CONVENTION: a privy is known on the sheet by the palette's gray, #7E726A, the map drawing convention research/questions/0101-privies-setchin.drawing.html records; no source gives a privy's color.
 pub const PRIVY_FILL: &str = "#7E726A";
 /// The court kinds a zone is drawn as.
 pub const COURT_KINDS: [&str; 2] = ["inner court", "outer court"];
@@ -190,6 +197,10 @@ pub const PRIVY_MIN: usize = 3;
 
 /// (a) a privy is the residence's own - tagged a part of it, or attached to one of its blocks (research 0101); (b) every court the sheet
 /// tags has a privy, a ZONE being a court kind however many precinct rects draw it; (c) at least `minimum` in all.
+///
+/// Research:
+///     the residence's own privy - research/questions/0101-privies-setchin.drawing.html: a samurai residence's privies are built into the house, so a privy is tagged a part of the residence or attached to one of its blocks.
+///     a privy in each court zone - GUESS research/questions/0101-privies-setchin.drawing.html: each inner and outer court zone the sheet tags holds a privy, the page's about one privy to each part of the compound, which it records as the project's guess; a court zone is the part of the compound its rects draw, buildings and all, not the open courtyard the page keeps every privy out of.
 ///
 /// # Errors
 /// The sheet's marks refused.
@@ -245,6 +256,9 @@ pub fn privies_by_zone(svg: &Sheet, minimum: usize) -> Result<Vec<String>, Error
 /// The fire-prone wooden buildings a tub must stand by - DECIDED AND RECORDED in `program_rules.py` (feature 294, the scout's note on
 /// B18): the buildings docs/building-programs.md names for the tubs and the generator seats one at; guest quarters, the karo's house and
 /// the retainers' quarters are NOT on it, the record naming them nowhere for a tub (GUESS).
+///
+/// Research:
+///     which wooden buildings carry a tub - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the office hall, the residence, the barracks, the gatehouse, the compound shrine, the stables, the servants' row, the kitchen and a shrine's hall and dwelling are the major wooden buildings that each carry a tub, and the guest quarters, the karo's house and the retainers' quarters are not; the page puts a tub at each major wooden building and records that no page ranks the buildings for fire water, the ranking the project's reasoning.
 pub const TUB_KINDS: [&str; 9] = [
     "office hall",
     "residence",
@@ -268,6 +282,9 @@ fn mark_ft_box(m: &Mark) -> FtBox {
 
 /// A tub by the eaves of every listed wooden building the sheet draws (the engine's [`tub_by_its_eaves`]), two at the kitchen, and no
 /// tub served by a plaster kura alone (docs/building-programs.md: "none at the plaster kura").
+///
+/// Research:
+///     a tub at each wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: one fire-water tub at each major wooden building, two at the kitchen, and none at an earth-walled storehouse (dozo), built not to burn, so a tub served by a plaster kura alone is refused.
 ///
 /// # Errors
 /// The sheet's marks refused.
@@ -332,6 +349,13 @@ pub fn fire_water_distribution(svg: &Sheet, plan: &ParsedPlan) -> Result<Vec<Str
 /// (smaller, larger): the compound's size HIERARCHY, the building-review checklist's pairs - the house out-measures its kitchen, its
 /// document storehouse and storehouse, and its shrine (docs/building-programs.md's own reading; the tax archive pair READ from 0116, the
 /// rest GUESS); the stables and the cell under the barracks (GUESS); the sanctuary under the hall (docs/building-programs.md).
+///
+/// Research:
+///     the storehouses under the residence - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the tax archive and the other small storehouses stand well below the staff rowhouse, which stands below the residence, the order of the one office measured, at Takayama.
+///     the kitchen and the shrine under the residence - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: no kitchen or shrine hall out-sizes the residence, the largest domestic building; the page records the order among them as the project's reading, a guess.
+///     the stables under the barracks - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the stable stays smaller than the barracks; the page records its place in the order as a guess.
+///     the cell under the barracks - GUESS: a cell stays smaller than the barracks; no page ranks them, and the pages' sizes agree, a cell of about 12 by 10 ft, a guess on research/questions/0096-holding-cells-agariya-and-roya.drawing.html, against a long rowhouse 12 to 24 ft deep on research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html.
+///     the sanctuary under the hall and dwelling - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a sanctuary one to three bays of about 6 ft wide stays smaller than the one-roof hall and dwelling of 2,100 to 3,600 sq ft.
 pub const HIERARCHY: [(&str, &str); 7] = [
     ("kitchen", "residence"),
     ("tax archive", "residence"),
@@ -371,6 +395,9 @@ static FURNITURE_ATTR: LazyLock<Regex> =
 /// SKILL.md 'Title block' and 'Orientation' (map drawing conventions): a title - the sheet's largest bold text, placed, its baseline above
 /// the precinct's top edge (its SIZE varies by sheet and is not held); no compass rose (north-at-top is invariant, GM 2026-07); no key
 /// box - by text, and by an id or a kind on ANY element (attributes, never comments).
+///
+/// Research:
+///     the sheet's furniture - CONVENTION: the sheet's largest text is a bold title above the compound, and it draws no compass rose (north is always up) and no key box; research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html records the no-compass and no-key conventions for a settlement sheet, and the title's place is the building plans' own; nothing about a building.
 ///
 /// # Errors
 /// The sheet's marks refused.

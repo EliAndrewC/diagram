@@ -26,6 +26,9 @@ pub const ROAD_KINDS: [&str; 2] = ["road", "footpath"];
 /// The kinds an arch is drawn under (a shrine's way ends at its torii).
 pub const ARCH_KINDS: [&str; 1] = ["torii"];
 /// The places a way inside a precinct is walked TO (drawing convention, feature 294 escalation-check 2026-10-01).
+///
+/// Research:
+///     a way walked to a well or clearing - CONVENTION: a way inside a precinct may end at a well or a precinct clearing, the places it is walked to, as a road may end at a gate or a door; no page gives it.
 pub const DESTINATION_KINDS: [&str; 2] = ["well", "precinct clearing"];
 /// A road may be this much wider than the gate it feeds: the 3 px authoring grain.
 ///
@@ -176,6 +179,9 @@ pub fn frame(svg: &str) -> Result<Option<Frame>, Error> {
 
 /// What the road's end at `end` meets - 'the frame', 'a gate', 'a door', 'an arch', 'a road', 'a well or clearing' - or None.
 ///
+/// Research:
+///     where a road may end - CONVENTION: a road's end meets the frame, a gate, a door, an arch, another road, a well or a clearing, never a stub stopping short in the open, a drawing rule of the building plans; no page gives it.
+///
 /// # Errors
 /// The viewBox or the sheet's marks refused.
 pub fn end_meets(
@@ -248,6 +254,9 @@ pub fn roads_leave_the_frame(svg: &Sheet, plan: &ParsedPlan) -> Result<Vec<Strin
 }
 
 /// A road ending at a gate is no wider than the widest gate that end meets, plus `tol_ft`.
+///
+/// Research:
+///     a road no wider than its gate - GUESS research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: a road ending at a gate is no wider than the widest opening it meets, plus the claimed tolerance, the width feature 267's review gave the hand sheets' approach roads; the page records that no page gives the width of the road before an official's gate, and it draws the road at a compound's front gate at the width of the road the compound stands on, 15 to 24 ft on a lesser highway, wider than the gates the record gives.
 ///
 /// # Errors
 /// The sheet's marks refused.

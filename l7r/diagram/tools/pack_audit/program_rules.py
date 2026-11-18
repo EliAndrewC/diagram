@@ -90,7 +90,12 @@ def entrances(svg: str, plan: ParsedPlan) -> list[Mark]:
 
 def lodging_entrances(svg: str, plan: ParsedPlan, tol: float = DOOR_FLUSH_TOL_PX) -> list[str]:
     """Every building holding a lodging kind has at least one entrance on its OUTER wall: an entrance glyph within `tol`
-    of one of its blocks and not wholly inside any of them (DOOR_FLUSH_TOL_PX, the floating-door check's flush reach)."""
+    of one of its blocks and not wholly inside any of them (DOOR_FLUSH_TOL_PX, the floating-door check's flush reach).
+
+    Research:
+        a lodging entered from the ground - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).
+        every other lodging entered from the ground - UNRESEARCHED: the guest quarters, a shrine's hall and dwelling and the monk's rooms each reach the ground by a door or genkan on their own outer wall, not only through a building they do not join; no page asks how these were entered.
+    """
     doors = entrances(svg, plan)
     out: list[str] = []
     for comp in components(structure_marks(svg)):
@@ -107,6 +112,7 @@ def lodging_entrances(svg: str, plan: ParsedPlan, tol: float = DOOR_FLUSH_TOL_PX
 # --- B17 privies_by_zone ----------------------------------------------------------------------------------------------
 
 PRIVY_FILL = "#7E726A"  # the palette's latrine / utility fill (SKILL.md, Palette)
+"""Research: a privy drawn gray - CONVENTION: a privy is known on the sheet by the palette's gray, #7E726A, the map drawing convention research/questions/0101-privies-setchin.drawing.html records; no source gives a privy's color."""
 COURT_KINDS: tuple[str, ...] = ("inner court", "outer court")
 #: A privy within this of a residence block is attached to the house (0.5 ft: flush, with integer-emit rounding).
 ATTACHED_PX: float = 0.5 * FTPX
@@ -119,7 +125,12 @@ PRIVY_MIN: int = 3
 
 def privies_by_zone(svg: str, minimum: int = PRIVY_MIN) -> list[str]:
     """(a) a privy is the residence's own - tagged a part of it, or attached to one of its blocks (research 0101:
-    the privy built into the samurai house); (b) every court the sheet tags has a privy; (c) at least `minimum` in all."""
+    the privy built into the samurai house); (b) every court the sheet tags has a privy; (c) at least `minimum` in all.
+
+    Research:
+        the residence's own privy - research/questions/0101-privies-setchin.drawing.html: a samurai residence's privies are built into the house, so a privy is tagged a part of the residence or attached to one of its blocks.
+        a privy in each court zone - GUESS research/questions/0101-privies-setchin.drawing.html: each inner and outer court zone the sheet tags holds a privy, the page's about one privy to each part of the compound, which it records as the project's guess; a court zone is the part of the compound its rects draw, buildings and all, not the open courtyard the page keeps every privy out of.
+    """
     ms = marks(svg)
     privies = [m for m in ms if m.tag == "rect" and m.belongs_to("latrine") and m.fill == PRIVY_FILL]
     house = [m for m in structure_marks(svg) if m.belongs_to("residence") and not m.belongs_to("latrine")]
@@ -157,6 +168,7 @@ TUB_KINDS: tuple[str, ...] = (
     "kitchen",
     "hall and dwelling",
 )
+"""Research: which wooden buildings carry a tub - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the office hall, the residence, the barracks, the gatehouse, the compound shrine, the stables, the servants' row, the kitchen and a shrine's hall and dwelling are the major wooden buildings that each carry a tub, and the guest quarters, the karo's house and the retainers' quarters are not; the page puts a tub at each major wooden building and records that no page ranks the buildings for fire water, the ranking the project's reasoning."""
 #: The kitchen's tubs: "weighted to the kitchen (2)" (docs/building-programs.md; the record's reasoning, not a page's words).
 KITCHEN_TUBS: int = 2
 """Research: kitchen tub count - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the kitchen gets two fire-water tubs, one at each major wooden building and two at the kitchen, whose fire burns all day."""
@@ -169,7 +181,11 @@ def _ft_box(m: Mark) -> tuple[float, float, float, float]:
 def fire_water_distribution(svg: str, plan: ParsedPlan) -> list[str]:
     """A tub by the eaves of every listed wooden building the sheet draws (the engine's `tub_by_its_eaves`, the one
     predicate `fire_water_adrift` holds), two at the kitchen, and no tub served by a plaster kura alone (buildings/
-    programs.md: "none at the plaster kura")."""
+    programs.md: "none at the plaster kura").
+
+    Research:
+        a tub at each wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: one fire-water tub at each major wooden building, two at the kitchen, and none at an earth-walled storehouse (dozo), built not to burn, so a tub served by a plaster kura alone is refused.
+    """
     blocks = structure_marks(svg)
     wooden = [b for b in blocks if b.fill not in KURA_FILLS]
     kura = [b for b in blocks if b.fill in KURA_FILLS]
@@ -207,6 +223,12 @@ HIERARCHY: tuple[tuple[str, str], ...] = (
     ("cell", "barracks"),
     ("sanctuary", "hall and dwelling"),
 )
+"""Research:
+    the storehouses under the residence - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the tax archive and the other small storehouses stand well below the staff rowhouse, which stands below the residence, the order of the one office measured, at Takayama.
+    the kitchen and the shrine under the residence - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: no kitchen or shrine hall out-sizes the residence, the largest domestic building; the page records the order among them as the project's reading, a guess.
+    the stables under the barracks - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the stable stays smaller than the barracks; the page records its place in the order as a guess.
+    the cell under the barracks - GUESS: a cell stays smaller than the barracks; no page ranks them, and the pages' sizes agree, a cell of about 12 by 10 ft, a guess on research/questions/0096-holding-cells-agariya-and-roya.drawing.html, against a long rowhouse 12 to 24 ft deep on research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html.
+    the sanctuary under the hall and dwelling - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a sanctuary one to three bays of about 6 ft wide stays smaller than the one-roof hall and dwelling of 2,100 to 3,600 sq ft."""
 
 
 def size_hierarchy(plan: ParsedPlan, pairs: tuple[tuple[str, str], ...] = HIERARCHY) -> list[str]:
@@ -234,7 +256,11 @@ def sheet_furniture(svg: str) -> list[str]:
     """SKILL.md 'Title block' and 'Orientation' (map drawing conventions): a title - the sheet's largest bold text,
     placed, its baseline above the precinct's top edge (its SIZE varies by sheet and is not held: 30 on the hand
     manors, 18 on the shrine, 20 on the drafts); no compass rose (north-at-top is invariant, GM 2026-07); no key
-    box."""
+    box.
+
+    Research:
+        the sheet's furniture - CONVENTION: the sheet's largest text is a bold title above the compound, and it draws no compass rose (north is always up) and no key box; research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html records the no-compass and no-key conventions for a settlement sheet, and the title's place is the building plans' own; nothing about a building.
+    """
     ms = marks(svg)
     texts = [m for m in ms if m.tag == "text" and m.placed and m.text]
     top = min((m.y for m in ms if m.ident == "precinct"), default=None)

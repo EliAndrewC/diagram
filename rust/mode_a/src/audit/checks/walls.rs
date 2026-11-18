@@ -257,7 +257,7 @@ fn blocked(buildings: &[Rect], i: usize, j: usize, x: (f64, f64), y: (f64, f64))
 /// Research:
 ///     its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N13, 2026-10-25) - 30 (reporting window: 10 ft shared edge, gaps from 5 ft)
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 15 (dedupe radius)
-///     its reported gap - NONE: they decide nothing about the place - 90 (upper bound on the reported gap, a report window)
+///     its reported gap - GUESS: no source could speak to it, a value of ours, the top of the reporting window above - 90 (upper bound on the reported gap, 30 ft: buildings farther apart are not judged for spacing)
 #[must_use]
 pub fn aligned_gaps(plan: &ParsedPlan) -> Vec<Gap> {
     let b = &plan.buildings;

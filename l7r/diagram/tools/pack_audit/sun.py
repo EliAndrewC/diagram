@@ -45,7 +45,9 @@ HALF_SHADE_BED_H: float = 3.0  # half-shade crops do with 3 to 4 (homesteads 044
 BUILDING_FT: float = 20.0  # the farmhouse ridge the record casts a building's shadow from (homesteads 043) - a least height
 """Research: building shadow height - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a building casts its shadow from the farmhouse ridge, about 20 ft, the least height the record gives."""
 WALL_FT: float = 1.6 / 0.3048  # the surviving earth wall's 1.6 m (buildings 490)
+"""Research: wall shadow height - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a compound wall casts its shadow from 1.6 m (~5 ft), the surviving earth wall's height, the least height the record gives."""
 TREE_FT: float = 10.0 / 0.3048  # a working, pruned belt's 10 m (0038); an untended stand is 15-28 m
+"""Research: tree shadow height - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a tree casts its shadow from 10 m (~33 ft), a working windbreak's height, the least height the record draws a tree at."""
 SMALL_BUILDING_FT: float = 6.0  # a roofed thing under SMALL_BUILDING_SQFT - a privy, a hokora, a covered way - at the least height a person stands under (a guess)
 """Research: small roofed thing height - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every building casts from the farmhouse ridge's 20 ft, with no smaller class - a roofed thing under SMALL_BUILDING_SQFT casts from 6 ft, a departure the code keeps until feature 417 T33; a roofed thing under SMALL_BUILDING_SQFT (a privy, a hokora, a covered way) casts a shadow from 6 ft, the least height a person stands under; no page gives it."""
 SMALL_BUILDING_SQFT: float = 100.0
@@ -55,6 +57,10 @@ SMALL_BUILDING_SQFT: float = 100.0
 NOT_STANDING: frozenset[str] = frozenset(
     {"basin", "door", "engawa", "hearth", "notice board", "weapon rack", "stone lantern", "tax barge", "magistrate's dais", "clerks' seats", "well", "shrine altar", "wood-kami altar"}
 )
+"""Research:
+    ground features and a building's parts - GUESS: a basin, a tax barge on its water, and a building's door, veranda, hearth, dais, clerks' seats and altars cast no shadow of their own, the ground's being low and the parts standing under the roof that casts for them; no page gives it.
+    the notice board - research/questions/0190-notice-boards-kosatsuba.html: the board casts no shadow on a bed, although the page measures a post town's board as a frame about 10 to 11 ft high, drawn as a roofed frame 16 by 6 ft (research/questions/0190-notice-boards-kosatsuba.drawing.html).
+    upright furniture - UNRESEARCHED: a weapon rack, a stone lantern and a well with its gear cast no shadow on a bed; research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html casts only buildings, walls and trees, and no page gives their heights (research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html draws a lantern as one small mark, research/questions/0165-martial-training-grounds-and-dojo.drawing.html gives a rack's footprint alone)."""
 MIN_SUN_DEG: float = 3.0  # below this the sun is on the horizon: its shadows run off the sheet and it grows nothing
 """Research: sun floor - NONE: below 3 degrees the sun is on the horizon and its shadows run off the sheet, a computation cutoff."""
 MIN_BED_PX: float = 300.0  # a garden element smaller than this (a label box, a border tick) is not a bed
@@ -103,6 +109,7 @@ def lit_hours(bed: Polygon, casters: list[Caster], half_shade: bool = False) -> 
 
     Research:
         its salts, guards and sentinels - NONE: they decide nothing about the place - 24 (hours in a day)
+        a tree's dappled light - GUESS research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: for a half-shade bed a tree's shadow is not counted, the bed needing hours in which nothing but a tree's leaves stands between it and the sun, the page's guess at how to count dappled light.
     """
     from shapely.ops import unary_union
 
@@ -146,6 +153,7 @@ def casters(plan: ParsedPlan, text: str, bed: Polygon) -> list[Caster]:
 
     Research:
         its salts, guards and sentinels - NONE: they decide nothing about the place - 16 (circle buffer resolution)
+        the bed's own ink - GUESS: a structure covering more than half the bed is read as the bed's own drawing, not as a caster, a classification of ours; no page gives it.
     """
     from shapely.geometry import Point
 

@@ -20,8 +20,11 @@ from .tagged import Mark, marks
 
 LORD, SERVICE, PLAIN, KURA, SHRINE, CELL, DARK = (KINDS[k][0] for k in ("lord", "service", "plain", "kura", "shrine", "cell", "dark"))
 GRANARY_SLATS = "url(#granary-slats)"
+"""Research: the slatted granary's fill - CONVENTION: the raised timber granary, the takakura that research/questions/0098-storehouses-for-the-tax-rice.drawing.html draws as one of a granary's two forms, is filled with a slat pattern so it reads apart from the plastered kura; no page gives a granary's drawn fill."""
 PRIVY = "#7E726A"  # SKILL.md: Latrines / utility
+"""Research: the privy's gray - CONVENTION: a privy is filled gray, #7E726A, so it reads apart from the tan buildings where the household lives and works, the map drawing convention research/questions/0101-privies-setchin.drawing.html records; no source gives a privy's color."""
 WELL = "#9C8C70"  # SKILL.md: Well stone curb
+"""Research: the well curb's color - CONVENTION: a well's stone curb is filled #9C8C70, the palette's stone; no page gives a curb's drawn color."""
 
 #: kind -> the fills it may be painted in. Rows with no comment are the SKILL.md palette's own words.
 ROLES: dict[str, frozenset[str]] = {
@@ -53,6 +56,7 @@ ROLES: dict[str, frozenset[str]] = {
     "latrine": frozenset({PRIVY}),
     "well": frozenset({WELL}),  # the curb; a roof over it is an unfilled outline on posts (feature 374 wave 135, 0196)
 }
+"""Research: the palette's table - CONVENTION: the palette role each building kind is painted in, the Mode A palette's own rows, a kind the palette does not name assigned a role labeled GUESS beside its row; a fill says nothing of a building's real color."""
 
 
 def _room(r: Mark, structures: list[Mark]) -> bool:

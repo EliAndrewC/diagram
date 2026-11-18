@@ -3,7 +3,7 @@
 //! [`hall_at_an_end`] - and the compound's tagged ones: [`one_compound_shrine`], [`stall_width`], [`shrine_tree`], [`well_gear`].
 //!
 //! Research:
-//!     the program's grounds - NONE: declared and tagged features measured against the thresholds whose claims stand on each, deciding nothing more
+//!     the program's grounds - NONE: lookups, geometry and the tag patterns the checks read by, deciding nothing; each check of the shrine's and the compound's grounds carries its own claim
 
 use std::sync::LazyLock;
 
@@ -39,6 +39,10 @@ fn center(r: &Rect) -> (f64, f64) {
 }
 
 /// The sanctuary stands on the approach's axis, BEHIND the hall (farther from the arch than the hall).
+///
+/// Research:
+///     the sanctuary behind the hall - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the sanctuary stands at the rear of the shrine, behind the hall on the worship hall's axis.
+///     the approach on the same axis - CONVENTION: the approach runs on the hall's and the sanctuary's axis, a map drawing convention research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html records, neither of its sources naming the approach.
 #[must_use]
 pub fn sanctuary_on_axis(plan: &ParsedPlan, tol_ft: f64) -> Vec<String> {
     let named = ["hall", "sanctuary", "approach", "arch"].map(|k| (k, one(plan, k)));
@@ -92,6 +96,9 @@ const NO_APPROACH: &str =
 
 /// The arch straddles the approach where the way enters the precinct.
 ///
+/// Research:
+///     the arch over the approach at the ground's edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the approach runs under its arch, and the first arch stands where the approach enters the shrine's ground.
+///
 /// # Errors
 /// A plan with no interior: the Python's `min()` of nothing in `bounds`.
 pub fn arch_on_approach(plan: &ParsedPlan, edge_tol_ft: f64) -> Result<Vec<String>, Error> {
@@ -122,6 +129,9 @@ pub fn arch_on_approach(plan: &ParsedPlan, edge_tol_ft: f64) -> Result<Vec<Strin
 }
 
 /// The well stands beside the approach, never on it and never under the arch.
+///
+/// Research:
+///     the basin beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a shrine has its stone basin for rinsing the hands and mouth, standing beside the approach at the innermost arch, so never on the approach or under the arch.
 #[must_use]
 pub fn well_clear_of_arch(plan: &ParsedPlan) -> Vec<String> {
     let declared = plan.by_id("well");
@@ -156,6 +166,9 @@ pub fn well_clear_of_arch(plan: &ParsedPlan) -> Vec<String> {
 
 /// A village shrine's precinct is NOT enclosed (feature 268; research 0223): a fence group whose extent takes in the hall, and a compound
 /// wall stroke at the sheet's edge, are reported; a fence around the sanctuary alone (a richer shrine's donation) passes.
+///
+/// Research:
+///     the precinct left open - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: a village shrine's precinct has no fence, wall or hedge round it, so a fence whose extent takes in the hall and a compound wall at the sheet's edge are refused; a fence round the sanctuary alone is not judged here, though the page draws none however rich the parish.
 ///
 /// # Errors
 /// A plan with no interior: the Python's `min()` of nothing in `bounds`.
@@ -197,6 +210,9 @@ static SHRINE_GROUP: LazyLock<Regex> =
 
 /// A compound draws ONE modest shrine (0218's drawing page, a deliberate deviation); a second kami's own shrine, where the sheet's roll
 /// says so, declares `data-form="own shrine"` and is not counted (feature 374 wave 123).
+///
+/// Research:
+///     one shrine per compound - DEVIATION research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: a compound draws one modest shrine however many a real office kept, a deliberate deviation; a second kami's own shrine, where the sheet's roll declares one, is not counted.
 #[must_use]
 pub fn one_compound_shrine(text: &str) -> Vec<String> {
     let main = SHRINE_GROUP
@@ -231,6 +247,9 @@ fn sorted_set(values: impl IntoIterator<Item = f64>) -> Vec<f64> {
 
 /// A warrior's stall was one bay wide, a ken (0108's drawing page; feature 374 wave 126): in each stable (its outlined rect), the
 /// partitions drawn across one of its axes part it into spans, and along one axis at least two must be a stall's width.
+///
+/// Research:
+///     at least two stalls - GUESS research/questions/0108-stables-umaya.drawing.html: a stable a few bays long is parted into at least two stalls of a stall's width; the page records the number of horses as a guess.
 ///
 /// # Errors
 /// The sheet's marks refused.
@@ -342,6 +361,9 @@ fn dwelling_spans(found: &[Mark], hall: &Rect, along_x: bool) -> Vec<(f64, f64)>
 /// Under one roof the villagers' hall is one END of the building and the monk's dwelling the other (0221's drawing page): the hall is the
 /// longest stretch no dwelling part covers, and the dwelling's parts on BOTH sides of it put the hall in the middle.
 ///
+/// Research:
+///     the hall at one end - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: under one roof the villagers' hall is one end of the building and the monk's dwelling the other.
+///
 /// # Errors
 /// The sheet's marks refused.
 pub fn hall_at_an_end(svg: &Sheet, plan: &ParsedPlan) -> Result<Vec<String>, Error> {
@@ -395,6 +417,9 @@ pub const SHRINE_TREE_FT: f64 = 15.0;
 
 /// The compound shrine stands beside its tree: a `sacred tree` crown that is a part of the `compound shrine`, its trunk within
 /// [`SHRINE_TREE_FT`] of the hall (the shrine's largest rect).
+///
+/// Research:
+///     a tree beside the compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: the compound's shrine stands beside a tree, where a household kept its god at an old tree; the reach carries a claim of its own.
 ///
 /// # Errors
 /// The sheet's marks refused.
@@ -458,6 +483,11 @@ fn indoor(cx: f64, cy: f64, found: &[Mark]) -> bool {
 ///
 /// Research:
 ///     its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 15 (smallest curb marker read as a well (px))
+///     every well carries gear - research/questions/0196-communal-wells-ido.drawing.html: a well in the open is drawn with lifting gear over its curb; an indoor well carries the beam pulley, labeled on its own claim.
+///     an open-air well's gear - research/questions/0196-communal-wells-ido.drawing.html: a well in the open takes a sweep or a pulley frame, both attested, never the beam pulley.
+///     an indoor well's pulley - GUESS research/questions/0196-communal-wells-ido.drawing.html: a well indoors hangs its pulley from the beams, which the page records as a guess, no page naming an indoor well's gear.
+///     an indoor well unroofed - research/questions/0196-communal-wells-ido.drawing.html: a well indoors takes no roof of its own, the house already roofing it.
+///     a well roof drawn on four posts - CONVENTION: a well's roof is an unfilled outline on four corner posts, so it reads as a roof over the well and not as the paved apron, the map drawing convention research/questions/0196-communal-wells-ido.drawing.html records.
 ///
 /// # Errors
 /// A `data-at` number `float()` refuses, or the sheet's marks refused.

@@ -52,7 +52,7 @@ pub const COVERAGE_CEILING: f64 = 0.42;
 /// Two points over the ceiling, for a rule written with a tilde.
 ///
 /// Research:
-///     coverage tolerance - GUESS: two points either side of the band, for the page's "about" 30-42%; no page gives the slack.
+///     coverage tolerance - GUESS: two points above the band's ceiling only, for the page's "about" 30-42%, the floor of 30% held exactly; no page gives the slack.
 pub const COVERAGE_TOL: f64 = 0.02;
 /// The hugging floor is DERIVED, not typed from a source: one building pulled into a court's center under the lowest shipped sheet.
 ///
@@ -67,7 +67,7 @@ pub const GATE_MIN_FT: f64 = 5.0;
 /// Wider is a structure's width, not a passage's (the gate lesson of 2026-07), unless a structure spans it.
 ///
 /// Research:
-///     widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess there.
+///     widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess on both 0093's and 0092's drawing pages.
 pub const GATE_MAX_FT: f64 = 16.0;
 
 static SCALE_LABEL: LazyLock<Regex> = LazyLock::new(|| py(r"^\d+\s*ft$"));
@@ -194,6 +194,10 @@ pub fn perimeter_hugging(plan: &ParsedPlan, floor: f64) -> Result<Vec<String>, E
 }
 
 /// Every opening in the compound wall is a passable gate, or a break a structure stands in.
+///
+/// Research:
+///     a wide break a structure spans - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: an opening wider than the widest gate passes where a structure spans it, a gate drawn as a building (a yamen's roofed gate of three bays, a gate range) rather than as an opening in the wall.
+///     the fix text's gate width - GUESS: the fix sentence draws a gate at passage width, about 13 ft, a figure of ours; it lies between the samurai gate's 9 to 12 ft and the yamen's guessed 18 to 24 ft (research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html), and no page gives it.
 #[must_use]
 pub fn gate_widths(plan: &ParsedPlan, lo_ft: f64, hi_ft: f64) -> Vec<String> {
     let mut out = Vec::new();
@@ -265,6 +269,11 @@ pub fn divider_gates_ft(plan: &ParsedPlan) -> Result<Vec<f64>, Error> {
 
 /// A divider wall splits the compound, the divider has its own gate (the nakamon, feature 267 pass 3), and the sanded hearing court lies
 /// on the main gate's side of it.
+///
+/// Research:
+///     two courts and the gate between - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: a magistracy is two courts, the office in front and the residence behind, with a gate between them dividing the office from the home; the page records that order in a Japanese compound as a deliberate simplification.
+///     the hearing court on the gate's side - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the hearing court lies before the office hall in the outer court, so on the main gate's side of the divider; a vertical divider is not judged.
+///     the middle gate's width in the message - UNRESEARCHED: the message gives the middle gate (nakamon) as about 6-8 ft, narrower than the main gate; the check holds only the narrowest gate's floor, and no page gives a middle gate's width.
 ///
 /// # Errors
 /// [`divider_gates_ft`]'s refusal.

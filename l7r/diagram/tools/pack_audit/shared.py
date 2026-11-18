@@ -39,7 +39,7 @@ COVERAGE_FLOOR: float = 0.30
 COVERAGE_CEILING: float = 0.42
 """Research: building coverage ceiling - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the top of the 30-42% coverage range, 42%, is the project's estimate from plans, which the page records as a guess."""
 COVERAGE_TOL: float = 0.02
-"""Research: coverage tolerance - GUESS: two points either side of the band, for the page's "about" 30-42%; no page gives the slack."""
+"""Research: coverage tolerance - GUESS: two points above the band's ceiling only, for the page's "about" 30-42%, the floor of 30% held exactly; no page gives the slack."""
 # The hugging floor is DERIVED, not typed from a source: the five pool sheets measure 51-58% of
 # building footprint within 25 ft of a wall (m:hugging-floor, feature 254), and one building pulled
 # into the center of a court costs about six points, so the floor sits one such building under the
@@ -54,7 +54,7 @@ CROP_TOL_PX: float = 5.0
 GATE_MIN_FT: float = 5.0  # narrower is not a passage anyone drives or walks through
 """Research: narrowest gate - GUESS: a wall opening under 5 ft is not a passage anyone drives or walks through; the record's gates run 6 to 12 ft (0093) and no page gives the audit's floor."""
 GATE_MAX_FT: float = 16.0  # wider is a structure's width, not a passage's (the gate lesson of 2026-07), unless a structure spans it
-"""Research: widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess there."""
+"""Research: widest gate - GUESS: a wall opening over 16 ft is a structure's width, not a passage's; no page sets a widest gate; the record's Japanese gates run 6 to 12 ft (0093) and a yamen's 18-24 ft is a guess on both 0093's and 0092's drawing pages."""
 
 _VIEWBOX_RE = re.compile(r'viewBox="\s*([\-\d.]+)\s+([\-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*"')
 _NUM_RE = re.compile(r"-?\d+(?:\.\d+)?")
@@ -265,7 +265,12 @@ def perimeter_hugging(plan: ParsedPlan, floor: float = HUGGING_FLOOR) -> list[st
 
 
 def gate_widths(plan: ParsedPlan, lo_ft: float = GATE_MIN_FT, hi_ft: float = GATE_MAX_FT) -> list[str]:
-    """Every opening in the compound wall is a passable gate, or a break a structure stands in."""
+    """Every opening in the compound wall is a passable gate, or a break a structure stands in.
+
+    Research:
+        a wide break a structure spans - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: an opening wider than the widest gate passes where a structure spans it, a gate drawn as a building (a yamen's roofed gate of three bays, a gate range) rather than as an opening in the wall.
+        the fix text's gate width - GUESS: the fix sentence draws a gate at passage width, about 13 ft, a figure of ours; it lies between the samurai gate's 9 to 12 ft and the yamen's guessed 18 to 24 ft (research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html), and no page gives it.
+    """
     out: list[str] = []
     for o in wall_openings(plan):
         if o.ft < lo_ft:
@@ -301,7 +306,13 @@ def divider_gates_ft(plan: ParsedPlan) -> list[float]:
 
 def two_court_zoning(plan: ParsedPlan) -> list[str]:
     """A divider wall splits the compound, the divider has its own gate, and the sanded hearing court lies on the gate's
-    side of it."""
+    side of it.
+
+    Research:
+        two courts and the gate between - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: a magistracy is two courts, the office in front and the residence behind, with a gate between them dividing the office from the home; the page records that order in a Japanese compound as a deliberate simplification.
+        the hearing court on the gate's side - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the hearing court lies before the office hall in the outer court, so on the main gate's side of the divider; a vertical divider is not judged.
+        the middle gate's width in the message - UNRESEARCHED: the message gives the middle gate (nakamon) as about 6-8 ft, narrower than the main gate; the check holds only the narrowest gate's floor, and no page gives a middle gate's width.
+    """
     if not plan.dividers:
         return ["no court divider - a magistracy is an outer (public) court at the gate and an inner (private) court behind a divider"]
     # THE DIVIDER HAS A GATE (feature 267 pass 3, the building-review's catch on the placer's draft, which drew the
@@ -344,7 +355,12 @@ def _center(r: Rect) -> tuple[float, float]:
 
 
 def sanctuary_on_axis(plan: ParsedPlan, tol_ft: float = AXIS_TOL_FT) -> list[str]:
-    """The sanctuary stands on the approach's axis, BEHIND the hall (farther from the arch than the hall)."""
+    """The sanctuary stands on the approach's axis, BEHIND the hall (farther from the arch than the hall).
+
+    Research:
+        the sanctuary behind the hall - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the sanctuary stands at the rear of the shrine, behind the hall on the worship hall's axis.
+        the approach on the same axis - CONVENTION: the approach runs on the hall's and the sanctuary's axis, a map drawing convention research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html records, neither of its sources naming the approach.
+    """
     hall, sanctuary, approach, arch = (_one(plan, k) for k in ("hall", "sanctuary", "approach", "arch"))
     missing = [k for k, v in (("hall", hall), ("sanctuary", sanctuary), ("approach", approach), ("arch", arch)) if v is None]
     if missing:
@@ -366,7 +382,11 @@ def sanctuary_on_axis(plan: ParsedPlan, tol_ft: float = AXIS_TOL_FT) -> list[str
 
 
 def arch_on_approach(plan: ParsedPlan, edge_tol_ft: float = EDGE_TOL_FT) -> list[str]:
-    """The arch straddles the approach where the way enters the precinct."""
+    """The arch straddles the approach where the way enters the precinct.
+
+    Research:
+        the arch over the approach at the ground's edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the approach runs under its arch, and the first arch stands where the approach enters the shrine's ground.
+    """
     approach, arch = _one(plan, "approach"), _one(plan, "arch")
     if approach is None or arch is None:
         return ["the sheet declares no approach / arch (mark the rects id=\"approach\", id=\"arch\")"]
@@ -384,7 +404,11 @@ def arch_on_approach(plan: ParsedPlan, edge_tol_ft: float = EDGE_TOL_FT) -> list
 
 
 def well_clear_of_arch(plan: ParsedPlan) -> list[str]:
-    """The well stands beside the approach, never on it and never under the arch."""
+    """The well stands beside the approach, never on it and never under the arch.
+
+    Research:
+        the basin beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a shrine has its stone basin for rinsing the hands and mouth, standing beside the approach at the innermost arch, so never on the approach or under the arch.
+    """
     approach, arch = _one(plan, "approach"), _one(plan, "arch")
     wells = plan.by_id("well") or plan.wells
     if not wells:
@@ -405,7 +429,11 @@ def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
     the research found rings the sanctuary alone (a Taisho/Showa donation) or lines the approach, and a
     wall is a temple's rank mark. So a fence group whose extent takes in the hall - a precinct fence - is
     reported, as is a compound wall stroke at the sheet's edge; a fence around the sanctuary alone (a
-    richer shrine's donation, on the wealth knob) passes. `text` is kept for the registry's signature."""
+    richer shrine's donation, on the wealth knob) passes. `text` is kept for the registry's signature.
+
+    Research:
+        the precinct left open - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: a village shrine's precinct has no fence, wall or hedge round it, so a fence whose extent takes in the hall and a compound wall at the sheet's edge are refused; a fence round the sanctuary alone is not judged here, though the page draws none however rich the parish.
+    """
     del text
     out: list[str] = []
     hall = plan.by_id("hall")
@@ -436,7 +464,11 @@ def one_compound_shrine(text: str) -> list[str]:
     research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html). A second kami is enshrined in that hall, or
     keeps a shrine of its own inside the precinct where the sheet's roll of its form says so - that shrine's group declares
     `data-form="own shrine"` and is not counted (feature 374 wave 123: Hayakawa's river kami, which rolls one hall, had a
-    shrine of its own). A shrine is a group tagged `compound shrine`; its arch, tagged a part of it, is not one."""
+    shrine of its own). A shrine is a group tagged `compound shrine`; its arch, tagged a part of it, is not one.
+
+    Research:
+        one shrine per compound - DEVIATION research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: a compound draws one modest shrine however many a real office kept, a deliberate deviation; a second kami's own shrine, where the sheet's roll declares one, is not counted.
+    """
     groups = re.findall(r'<g data-kind="compound shrine"([^>]*)>', text)
     main = [g for g in groups if 'data-form="own shrine"' not in g]
     return (
@@ -455,7 +487,11 @@ def stall_width(text: str) -> list[str]:
     research/questions/0108-stables-umaya.drawing.html; feature 374 wave 126: the sheets drew three stalls 9.3-9.7 ft wide).
     In each stable, the partitions drawn across one of its axes part it into spans; along one axis at least two must be a
     stall's width (the stalls stand three bays long, the passage and the grooms' room in its depth). A stable with no
-    partition draws no stalls at all."""
+    partition draws no stalls at all.
+
+    Research:
+        at least two stalls - GUESS research/questions/0108-stables-umaya.drawing.html: a stable a few bays long is parted into at least two stalls of a stall's width; the page records the number of horses as a guess.
+    """
     found = marks(text)
     out = []
     # the stable's body is its outlined rect; a floor drawn inside it (the passage's earth) carries no stroke
@@ -498,7 +534,11 @@ def hall_at_an_end(text: str, plan: ParsedPlan) -> list[str]:
     "the monk's dwelling is one end of the worship hall's own building"; research/questions/0221-the-country-monk-who-keeps-a-
     village-shrine-and-their-dwelling-kuri.drawing.html). The hall is the longest stretch of the building no dwelling part
     covers; the dwelling's parts on BOTH sides of it put the hall in the middle. A sheet drawing the two-buildings form
-    tags no part of the hall's building, and passes."""
+    tags no part of the hall's building, and passes.
+
+    Research:
+        the hall at one end - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: under one roof the villagers' hall is one end of the building and the monk's dwelling the other.
+    """
     hall = _one(plan, "hall")
     if hall is None:
         return []  # sanctuary_on_axis names a sheet that declares no hall
@@ -620,7 +660,11 @@ SHRINE_TREE_FT: float = 15.0
 
 def shrine_tree(text: str) -> list[str]:
     """The compound shrine stands beside its tree: a `sacred tree` crown that is a part of the `compound shrine`, its trunk
-    within SHRINE_TREE_FT of the hall (the shrine's largest rect)."""
+    within SHRINE_TREE_FT of the hall (the shrine's largest rect).
+
+    Research:
+        a tree beside the compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: the compound's shrine stands beside a tree, where a household kept its god at an old tree; the reach carries a claim of its own.
+    """
     found = marks(text)
     halls = [m for m in found if m.tag == "rect" and m.kind == "compound shrine" and "sacred tree" not in m.lineage]
     if not halls:
@@ -661,6 +705,11 @@ def well_gear(text: str) -> list[str]:
 
     Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 15 (smallest curb marker read as a well (px))
+        every well carries gear - research/questions/0196-communal-wells-ido.drawing.html: a well in the open is drawn with lifting gear over its curb; an indoor well carries the beam pulley, labeled on its own claim.
+        an open-air well's gear - research/questions/0196-communal-wells-ido.drawing.html: a well in the open takes a sweep or a pulley frame, both attested, never the beam pulley.
+        an indoor well's pulley - GUESS research/questions/0196-communal-wells-ido.drawing.html: a well indoors hangs its pulley from the beams, which the page records as a guess, no page naming an indoor well's gear.
+        an indoor well unroofed - research/questions/0196-communal-wells-ido.drawing.html: a well indoors takes no roof of its own, the house already roofing it.
+        a well roof drawn on four posts - CONVENTION: a well's roof is an unfilled outline on four corner posts, so it reads as a roof over the well and not as the paved apron, the map drawing convention research/questions/0196-communal-wells-ido.drawing.html records.
     """
     from .parse import WELL_FILL
 
