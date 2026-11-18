@@ -697,54 +697,6 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T178 (T175's edit cycles: the crate's end-to-end lockstep reran the Python's readings on every run)
-
-- **Approach**: `rust/mode_a`'s one end-to-end test (`parse/lockstep.rs`) takes the kept Python's output from a keep (`parse/lockstep_keep.rs`, in the clone's `.git/rust-tests/mode_a-lockstep`, written to a side file and renamed) whose key is a sha256 over everything the Python half reads, and reruns the Python only when the key moves; the comparison, its assertions and its fixtures are unchanged.
-
-   **Decisions** (the GM's words, request.md 2026-11-18; FR-002, FR-008, FR-013):
-   - The key is measured, not guessed: the Python half's file opens and listings were logged, and it reads more than the dump's inputs - every modal file and asset under `l7r/`, the listings of `pool/` and `legacy-hand-authored-pool/` - so the key takes the whole `l7r/` tree but its `__pycache__` bytecode, which Python builds wholly from the keyed `.py` sources, every name and byte of `pool/`, `tests/fixtures/` and `legacy-hand-authored-pool/`, renders included (one run's log showed none read, but other inputs could make the Python read one, and the 19 renders, 55 MB, hash in about 0.13 s, observed 2026-11-18, method: `sha256sum` over them), the test's own temp files with their path placeholdered, every path handed in, the script and its stdin, and the interpreter's identity with every installed distribution's version (observed 2026-11-18, method: the Python half run under an open and listing log, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t178/`). An interpreter that cannot name itself keeps nothing; a missing, unreadable or stale keep reruns the Python.
-   - Proved: the key moves with each kind of input, a render among them, and not with a bytecode cache, `docs/` or `rust/`; a stale keep is not read; a Python edit still turns the lockstep red - each test went red under its mutation, restored by `cp` (observed 2026-11-18, method: scratch mutations, `make rust-test CRATE=rust/mode_a`), and coverage is 100% with and without a keep.
-   - Measured: after a Rust-only edit `make rust-test CRATE=rust/mode_a` took 9.19 s wall before and 6.85 s after, its test binary 5.5 s and 2.7 to 2.9 s, and 8.0 s after a Python edit, the Python rerunning (observed 2026-11-18, method: best of three each, the load 0.8 to 6; `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t178/phases.log`).
-
-### T178 Approach (checklist part A)
-
-1. **The goal, in the world.** A Rust-only edit's test cycle skips the Python's readings while they cannot have moved.
-2. **The constraints.** FR-002, FR-008, FR-013; the GM's go.
-3. **Where each comes from.** G: the GM's request; O: the measurements above.
-4. **Do they describe the world here?** Measured on this clone, 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t178/phases.log`).
-5. **The order.** After T176; before the port goes on.
-6. **The exits.** Green: the keep's tests, `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing, with its sibling.
-9. **Done, measured.** The before and after figures above.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** Yes - a test cycle's wall time, measured before and after above; no map changes.
-
-
-### T179 (T174's and T175's verify runs: most of each run built and removed whole worlds)
-
-- **Approach**: the shared differential runner keeps each worker's whole world for the run, made once per side, and between cases resets it to the side's revision (`rust/gate/crates/diffrun/src/reuse.rs`): the world outside the checkout emptied, the checkout's `.git` put back from a copy taken at its making with each file's time, `git read-tree -u --reset HEAD`, `git clean -ffdx`, the working tree laid over again for `WORKTREE`, every path's mode put back, the setup run again; a fresh world instead when the repository's HEAD or refs moved, the checkout's declaration or a `GIT_` variable changed, or a step fails; `--fresh-worlds` keeps the old way. Sparse worlds stay fresh.
-
-   **Decisions** (the GM's words, request.md 2026-11-18; FR-002; T169's plan review: a world unlike a fresh one makes two sides agree falsely):
-   - Where a side's time went, measured first: the whole checkout 1.25 to 1.33 s and the removal 0.27 to 0.30 s of each side, the clone, overlay, setup and snapshots under 0.05 s each (observed 2026-11-18, method: one real world of T175's harness timed by step, best of three). A reset costs 0.1 to 0.2 s (observed 2026-11-18, method: the same world reset and timed, best of three).
-   - The review's risk answered by tests: a reset world equals a fresh one in every path, byte and mode, the index, HEAD, refs, stash and `git status`, after cases that overwrite, delete, add untracked and ignored files, change modes and the index, commit, branch, tag, stash and configure; every reset step dropped, `reset --hard` for `read-tree`, a case's own index kept, moved refs ignored or the index time lost turned a test red (observed 2026-11-18, method: scratch mutations restored by `cp`, `make rust-test CRATE=rust/gate/crates/diffrun`). Reuse is on by default because they hold; file times are not compared and differ, untouched files keeping the first checkout's.
-   - Measured, verify runs with four workers from an empty state, the same binary alternating: T174's 113 cases 152.4 s fresh and 51.0 s reused, T175's 207 cases 376.1 s and 164.5 s, every report row agreeing with the harness's earlier verify and all 640 kept results byte for byte the fresh worlds' but their time field (observed 2026-11-18, method: `scripts/gates/l7r-gate.sh diff-run <copy of each harness> --verify --jobs 4` with and without `--fresh-worlds`, the load 0.8 to 5, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t178/phases.log`).
-
-### T179 Approach (checklist part A)
-
-1. **The goal, in the world.** A port's verify run takes a third to a half of its time, its result unchanged.
-2. **The constraints.** FR-002, FR-008, FR-013; the GM's go.
-3. **Where each comes from.** G: the GM's request; O: the measurements above.
-4. **Do they describe the world here?** Measured on this clone, 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t178/phases.log`).
-5. **The order.** After T176; before the port goes on.
-6. **The exits.** Green: the reuse's equality tests, `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing, with its sibling.
-9. **Done, measured.** The before and after figures above.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** Yes - a tool's wall time, measured before and after above; no map changes.
-
+<!-- plan-archive: T178 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+<!-- plan-archive: T179 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+<!-- plan-archive: T179 to T179 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
