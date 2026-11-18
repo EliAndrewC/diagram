@@ -9,6 +9,10 @@ earlier file stays (measured 2026-11-18, part B of T151: the placer's tests gree
 this one's).
 
     python3 -I rust/mode_a/src/labels/placer/held_cases.py rust/mode_a/src/labels/placer/held.json 449 60
+
+Feature 449 T184 re-took the answers of the stored scenes, the scenes themselves unchanged, after its fixes to the Python placer:
+
+    python3 -I rust/mode_a/src/labels/placer/held_cases.py --reanswer rust/mode_a/src/labels/placer/held.json
 """
 import json, random, sys
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[5]))  # the tree: <tree>/rust/mode_a/src/labels/<unit>/
@@ -76,6 +80,51 @@ def placement_json(p):
         return None
     return {"x": F(p.x), "y": F(p.y), "angle": F(p.angle), "lines": list(p.lines), "block": P(p.block), "ring": p.ring, "rank": p.rank, "position": p.position,
             "cost": F(p.cost), "leader": None if p.leader is None else P(p.leader)}
+
+def reanswer(path):
+    """Feature 449 T184: the stored scenes of `held.json` answered again by the tree's placer from their own inputs - the scenes kept,
+    each answer and refusal re-taken - so a fix to the Python is held by the same sixty scenes the Rust is (the revision that rolled them
+    was not kept, and a re-roll loses coverage). Prints each case whose answer moved."""
+    from dataclasses import replace
+    from l7r.diagram.labels import Subject as S
+
+    def num(v):
+        return float(v[2:]) if isinstance(v, str) else v
+
+    def obstacle(a):
+        at = 4 if a[0] == "c" else 6
+        weight, group, flags, keep = a[at], a[at + 1], a[at + 2], a[at + 3]
+        base = circle_obstacle(*a[1:4], weight, group) if a[0] == "c" else Obstacle(tuple(rect(*a[1:6])), weight, group)
+        return replace(base, named="n" in flags, inner="i" in flags, soft="s" in flags, keep=keep)
+
+    held = json.load(open(path))
+    moved = []
+    for k, c in enumerate(held["cases"]):
+        idx = ObstacleIndex([obstacle(a) for a in c["obstacles"]], [Way(tuple(tuple(p) for p in w[0]), w[1], soft=w[2]) for w in c["ways"]])
+        lead = None if c["leader_obstacles"] is None else ObstacleIndex([obstacle(a) for a in c["leader_obstacles"]])
+        sj = c["subject"]
+        poly = tuple(rect(*sj["rect"])) if "rect" in sj else tuple(tuple(p) for p in sj["poly"])
+        sub = S(sj["kind"], poly, angle=num(sj["angle"]), half_width=sj["half_width"], hint=None if sj["hint"] is None else tuple(sj["hint"]), civic=sj["civic"])
+        if "rect" in sj:
+            SUBJ[id(sub)] = sj["rect"]
+        accept = (lambda p: p.rank != 0) if c["refuse_rank0"] else None
+        frame = None if c["frame"] is None else tuple(c["frame"])
+        try:
+            p = place(c["text"], c["size"], sub, idx, frame, lines=c["lines"], char_w=c["char_w"], leader_index=lead, line_sizes=c["line_sizes"],
+                      extended=c["extended"], strict=c["strict"], max_ring=c["max_ring"], accept=accept)
+            answer, raises = placement_json(p), None
+        except (ZeroDivisionError, ValueError, AssertionError) as e:
+            answer, raises = None, f"{type(e).__name__}: {e}"
+        if (answer, raises) != (c["answer"], c["raises"]):
+            moved.append(k)
+        c["answer"], c["raises"] = answer, raises
+    json.dump(held, open(path, "w"), separators=(",", ":"))
+    print("moved", len(moved), moved, file=sys.stderr)
+
+
+if sys.argv[1] == "--reanswer":
+    reanswer(sys.argv[2])
+    sys.exit(0)
 
 rng = random.Random(int(sys.argv[2]))
 cases, queries = [], []

@@ -8,8 +8,8 @@ use std::rc::Rc;
 use serde_json::{json, Map, Value};
 
 use super::{
-    carry, carry_deferred, fate, load, save_deferred, say, unported, Before, Fate, Port, Ports,
-    Rekeyed, PORTS,
+    carry, carry_deferred, fate, load, save_deferred, say, unported, Before, Fate, Map as PortMap,
+    Port, Ports, Rekeyed, Retired, PORTS,
 };
 use crate::claims::commands::Out;
 use crate::claims::grammar::parse_claim;
@@ -83,14 +83,14 @@ fn ports() -> Ports {
 #[test]
 fn the_map_is_read_with_its_form_held() {
     let root = crate::checks::scratch("claims-ports-load");
-    assert!(load(&root).unwrap().is_empty());
+    assert_eq!(load(&root).unwrap(), PortMap::default());
     put(&root, PORTS, "{\"why\": \"w\", \"ports\": {\"l7r/diagram/m.py::SPAN\": {\"to\": \"rust/mode_a/src/lib.rs::SPAN\", \"by\": \"449 T999\"}}}");
     assert_eq!(
-        load(&root).unwrap()["l7r/diagram/m.py::SPAN"],
+        load(&root).unwrap().ports["l7r/diagram/m.py::SPAN"],
         port("rust/mode_a/src/lib.rs::SPAN")
     );
     put(&root, PORTS, "{\"why\": \"w\"}");
-    assert!(load(&root).unwrap().is_empty());
+    assert_eq!(load(&root).unwrap(), PortMap::default());
     for bad in [
         "{\"ports\": {\"docs/x.md::A\": {\"to\": \"r::A\", \"by\": \"t\"}}}",
         "{\"ports\": {\"m.py::A\": {\"to\": \"nothing\", \"by\": \"t\"}}}",
@@ -171,7 +171,7 @@ fn the_carry_rekeys_drops_and_leaves_each_row() {
     idx.shift_remove("rust/mode_a/src/lib.rs::SPAN#span");
     let mut asked = Vec::new();
     let span = norm(&span_line());
-    let done = carry(&cur, &mut idx, &ports(), &mut |k: &str| {
+    let done = carry(&cur, &mut idx, &PortMap::from(ports()), &mut |k: &str| {
         asked.push(k.to_owned());
         Some(span.clone())
     });
@@ -215,7 +215,7 @@ fn the_carry_rekeys_drops_and_leaves_each_row() {
     }
     // a row the port's own check already wrote stands, and the old one goes
     let mut idx = index();
-    let done = carry(&cur, &mut idx, &ports(), &mut |_: &str| {
+    let done = carry(&cur, &mut idx, &PortMap::from(ports()), &mut |_: &str| {
         Some(norm(&span_line()))
     });
     assert_eq!(done.carried.len(), 2);
@@ -234,6 +234,7 @@ fn what_rekey_says_and_its_exit() {
         carried: vec!["a".into()],
         dropped: vec![],
         stuck: vec!["unported: b - why".into()],
+        ..Rekeyed::default()
     };
     assert_eq!(say(&done, &mut o), 1);
     assert_eq!(o.out, "claims-rekey: 1 claim row(s) carried to their port (dev/claims-ports.json), each owed a full check of its new code (ported); 0 dropped, a claim of NONE research ported into a tooling crate (ask:449-T148-claims)\nclaims-rekey: unported: b - why\n");
@@ -244,14 +245,18 @@ fn the_deferred_list_follows_its_units() {
     let root = crate::checks::scratch("claims-ports-deferred");
     let mut d = json!({"why": "w", "units": ["l7r/diagram/m.py::SPAN", "l7r/diagram/m.py::tool", "l7r/diagram/x.py::f"],
         "keys": ["l7r/diagram/m.py::helper#helper"]});
-    assert!(carry_deferred(&mut d, &ports(), &cur()));
+    assert!(carry_deferred(&mut d, &PortMap::from(ports()), &cur()));
     assert_eq!(
         d,
         json!({"why": "w", "units": ["rust/mode_a/src/lib.rs::SPAN", "l7r/diagram/x.py::f"],
         "keys": ["rust/mode_a/src/lib.rs::helper#helper"]})
     );
-    assert!(!carry_deferred(&mut d, &ports(), &cur()));
-    assert!(!carry_deferred(&mut json!({"why": "w"}), &ports(), &cur()));
+    assert!(!carry_deferred(&mut d, &PortMap::from(ports()), &cur()));
+    assert!(!carry_deferred(
+        &mut json!({"why": "w"}),
+        &PortMap::from(ports()),
+        &cur()
+    ));
     std::fs::create_dir_all(root.join("dev")).unwrap();
     save_deferred(&root, &d).unwrap();
     // written as the list is kept: `json.dumps(indent=1)`, its keys in their order
@@ -276,7 +281,7 @@ fn the_push_refuses_a_claim_on_a_deleted_unit_no_port_carried() {
         uids: &uids,
         texts: &texts,
     };
-    let unmapped = Ports::new();
+    let unmapped = PortMap::default();
     let mut all_gone = |_: &str| true;
     let got = unported(&cur, &base, &before, &unmapped, &mut all_gone);
     // every claimed row of a deleted `.py` unit, its UNCLAIMED row and the Rust row aside
@@ -285,7 +290,7 @@ fn the_push_refuses_a_claim_on_a_deleted_unit_no_port_carried() {
     // a unit still in another scope is not deleted
     assert!(unported(&cur, &base, &before, &unmapped, &mut |_: &str| false).is_empty());
     // mapped, not yet carried: rekey; carried or dropped: nothing; stuck: its fix; unmapped: the map's
-    let got = unported(&cur, &base, &before, &ports(), &mut all_gone);
+    let got = unported(&cur, &base, &before, &PortMap::from(ports()), &mut all_gone);
     assert_eq!(got.len(), 5, "{got:?}");
     for line in &got[..3] {
         assert!(line.ends_with("its port is mapped but its row not yet carried: `make claims-rekey` (make land runs it)"));
@@ -293,17 +298,24 @@ fn the_push_refuses_a_claim_on_a_deleted_unit_no_port_carried() {
     assert!(got[3].contains("carries no claim `lost`"));
     assert!(got[4].starts_with("unported: l7r/diagram/m.py::kept#kept - its unit"));
     let mut now = index();
-    let done = carry(&cur, &mut now, &ports(), &mut |_: &str| {
+    let done = carry(&cur, &mut now, &PortMap::from(ports()), &mut |_: &str| {
         Some(norm(&span_line()))
     });
     assert_eq!(done.carried.len(), 2);
-    let got = unported(&cur, &now, &before, &ports(), &mut all_gone);
+    let got = unported(&cur, &now, &before, &PortMap::from(ports()), &mut all_gone);
     assert_eq!(got.len(), 2, "{got:?}");
     // a carried row a record already pruned leaves its port's claim owed as new: no carry is left to run
     let mut pruned: Map<String, Value> = now.clone();
     pruned.shift_remove("rust/mode_a/src/lib.rs::helper#helper");
     assert_eq!(
-        unported(&cur, &pruned, &before, &ports(), &mut all_gone).len(),
+        unported(
+            &cur,
+            &pruned,
+            &before,
+            &PortMap::from(ports()),
+            &mut all_gone
+        )
+        .len(),
         2
     );
 }
@@ -329,4 +341,250 @@ fn the_round_records_a_carried_claim_keeping_its_old_key() {
         (Some("l7r/diagram/m.py::SPAN#span"), Some("rs"))
     );
     assert!(new["x.rs::f#f"].get("ported").is_none());
+}
+
+// A retired unit (feature 449 T184, `ask:449-T184-elongated-retired`, `ask:449-T184-elongated-retired-2`): a `.py` unit deleted because
+// the research overruled its rule, the claims round's finding against it named under `finding`.
+
+const OLD: &str = "l7r/diagram/m.py::OLD";
+const OLD_KEY: &str = "l7r/diagram/m.py::OLD#old ratio";
+/// The finding against the rule: a twin's claim of the same label.
+const FINDING: &str = "rust/mode_a/src/old.rs::subjects#old ratio";
+
+fn retired_map() -> PortMap {
+    PortMap {
+        ports: ports(),
+        retired: [(
+            OLD.to_owned(),
+            Retired {
+                by: "449 T999".to_owned(),
+                page: page(),
+                why: "the page overrules it".to_owned(),
+                finding: FINDING.to_owned(),
+            },
+        )]
+        .into(),
+    }
+}
+
+/// The merge base's rows of the retired unit, its own claim IN-STEP beside an UNCLAIMED decision on it, and its finding's row at
+/// `finding` reading `verdict` (none where `finding` is `None`).
+fn retired_base(finding: Option<&str>, verdict: &str) -> Index {
+    let mut base = json!({
+        OLD_KEY: {"verdict": "IN-STEP", "code": "py", "claim": norm("old ratio - CONVENTION: 3 to 1")},
+        "l7r/diagram/m.py::OLD#a decision": {"verdict": "UNCLAIMED", "code": "py"},
+    })
+    .as_object()
+    .unwrap()
+    .clone();
+    if let Some(key) = finding {
+        base.insert(key.to_owned(), json!({"verdict": verdict, "code": "rs"}));
+    }
+    base
+}
+
+fn base_uids(base: &Index) -> HashSet<String> {
+    base.keys()
+        .map(|k| k.rsplit_once('#').unwrap().0.to_owned())
+        .collect()
+}
+
+#[test]
+fn a_retired_entry_is_read_with_its_form_held() {
+    let root = crate::checks::scratch("claims-ports-retired-load");
+    put(&root, &page(), "<p>the page</p>");
+    let entry = |uid: &str, page: &str| {
+        json!({"why": "w", "ports": {"l7r/diagram/m.py::SPAN": {"to": "rust/mode_a/src/lib.rs::SPAN", "by": "449 T999"}},
+            "retired": {uid: {"by": "449 T999", "page": page, "why": "the page overrules it", "finding": FINDING}}})
+        .to_string()
+    };
+    put(&root, PORTS, &entry(OLD, &page()));
+    let map = load(&root).unwrap();
+    assert_eq!(map.ports.len(), 1);
+    assert_eq!(map.retired, retired_map().retired);
+    // RED: the page is no file in the tree
+    put(
+        &root,
+        PORTS,
+        &entry(OLD, "research/questions/0999-none.html"),
+    );
+    let why = load(&root).unwrap_err();
+    assert!(why.contains(
+        "names the page research/questions/0999-none.html, which is no file in the tree"
+    ));
+    // RED: the unit is also under `ports`
+    put(&root, PORTS, &entry("l7r/diagram/m.py::SPAN", &page()));
+    let why = load(&root).unwrap_err();
+    assert!(why.contains("is both retired and under `ports`"));
+    // the form: a `.py` unit, a task, a page under research/questions/, a reason, a finding
+    for bad in [
+        json!({"retired": {"docs/x.md::A": {"by": "t", "page": page(), "why": "w", "finding": FINDING}}}),
+        json!({"retired": {OLD: {"by": " ", "page": page(), "why": "w", "finding": FINDING}}}),
+        json!({"retired": {OLD: {"by": "t", "page": page(), "why": "", "finding": FINDING}}}),
+        json!({"retired": {OLD: {"by": "t", "page": "docs/x.html", "why": "w", "finding": FINDING}}}),
+        json!({"retired": {OLD: {"by": "t", "page": "research/questions/0001-gap.md", "why": "w", "finding": FINDING}}}),
+        json!({"retired": {OLD: {"by": "t", "page": "research/questions/../x.html", "why": "w", "finding": FINDING}}}),
+        json!({"retired": {OLD: "a page"}}),
+        // RED: no `finding`, or one that is no `<path>::<qualname>#<label>` key
+        json!({"retired": {OLD: {"by": "t", "page": page(), "why": "w"}}}),
+        json!({"retired": {OLD: {"by": "t", "page": page(), "why": "w", "finding": "rust/x.rs::f"}}}),
+        json!({"retired": {OLD: {"by": "t", "page": page(), "why": "w", "finding": "x#label"}}}),
+        json!({"retired": {OLD: {"by": "t", "page": page(), "why": "w", "finding": "::f#label"}}}),
+        json!({"retired": {OLD: {"by": "t", "page": page(), "why": "w", "finding": "rust/x.rs::#label"}}}),
+        json!({"retired": {OLD: {"by": "t", "page": page(), "why": "w", "finding": "rust/x.rs::f#"}}}),
+    ] {
+        put(&root, PORTS, &bad.to_string());
+        assert!(load(&root)
+            .unwrap_err()
+            .contains("is not of the form \"<path>.py::<qualname>\": {\"by\": \"<feature> <task>\", \"page\": \"research/questions/<file>.html\", \"why\": \"<one line>\", \"finding\": \"<path>::<qualname>#<label>\"}"));
+    }
+}
+
+#[test]
+fn a_retired_unit_still_in_the_tree_is_refused() {
+    // RED: its claim still in the tree (a unit of `cur`), with no merge-base row at all
+    let mut cur = cur();
+    let (unit, _) = crate::claims::units::from_json(
+        &json!({"path": "l7r/diagram/m.py", "qualname": "OLD", "kind": "function", "claims": ["old ratio - CONVENTION: 3 to 1"], "core": "c"}),
+    );
+    let unit = Rc::new(unit);
+    for c in &unit.claims {
+        cur.insert(Row {
+            key: unit.key(c),
+            code: unit.code(c),
+            unit: unit.clone(),
+            claim: c.clone(),
+            research: String::new(),
+        });
+    }
+    let base = retired_base(Some(FINDING), "MISLABELED");
+    let uids = base_uids(&base);
+    let texts = HashMap::new();
+    let before = Before {
+        index: &base,
+        uids: &uids,
+        texts: &texts,
+    };
+    // `gone` is asked only of a retired unit whose claims the tree no longer holds
+    let mut asked = Vec::new();
+    let mut gone = |u: &str| {
+        asked.push(u.to_owned());
+        u != OLD
+    };
+    let still = "unported: l7r/diagram/m.py::OLD - retired but still present: dev/claims-ports.json's `retired` names a unit deleted because the research overruled its rule; delete the unit, or take it out of `retired`";
+    let got = unported(&cur, &base, &before, &retired_map(), &mut gone);
+    assert_eq!(got, [still]);
+    let empty = Index::new();
+    let nobase = Before {
+        index: &empty,
+        uids: &uids,
+        texts: &texts,
+    };
+    assert_eq!(
+        unported(&cur, &base, &nobase, &retired_map(), &mut gone),
+        [still]
+    );
+    // RED: its claims gone, the unit itself still in another scope
+    let got = unported(&self::cur(), &base, &before, &retired_map(), &mut gone);
+    assert_eq!(got, [still]);
+    assert_eq!(asked, [OLD]);
+}
+
+/// What the push says of the retired claim, its unit gone and `map` read, on the merge base `base`.
+fn retired_push(base: &Index, map: &PortMap) -> Vec<String> {
+    let uids = base_uids(base);
+    let texts = HashMap::new();
+    let before = Before {
+        index: base,
+        uids: &uids,
+        texts: &texts,
+    };
+    unported(&cur(), &Index::new(), &before, map, &mut |_: &str| true)
+}
+
+fn new_ask(finding: &str, why: &str) -> Vec<String> {
+    vec![format!("unported: {OLD_KEY} - dev/claims-ports.json retires its unit (449 T999, {}), but its `finding` {finding} {why}: retire only a claim whose claims round found the research against it: name that finding's key under `finding`; else a new ask (`make arbiter-ask`) (ask:449-T184-elongated-retired-2)", page())]
+}
+
+#[test]
+fn a_retirement_whose_finding_is_not_in_the_merge_base_is_a_new_ask() {
+    // RED: the finding names no row of the merge base's index
+    assert_eq!(
+        retired_push(&retired_base(None, ""), &retired_map()),
+        new_ask(FINDING, "is no key of the merge base's index")
+    );
+}
+
+#[test]
+fn a_retirement_whose_finding_reads_in_step_is_a_new_ask() {
+    // RED: the finding's row reads IN-STEP, or holds no verdict
+    assert_eq!(
+        retired_push(&retired_base(Some(FINDING), "IN-STEP"), &retired_map()),
+        new_ask(FINDING, "reads IN-STEP at the merge base")
+    );
+    assert_eq!(
+        retired_push(&retired_base(Some(FINDING), ""), &retired_map()),
+        new_ask(FINDING, "reads no verdict at the merge base")
+    );
+}
+
+#[test]
+fn a_retirement_whose_finding_names_another_label_is_a_new_ask() {
+    // RED: the finding is a DRIFTED row of the merge base, but of another claim than the retired one
+    let other = "rust/mode_a/src/old.rs::subjects#another rule";
+    let mut map = retired_map();
+    map.retired.get_mut(OLD).unwrap().finding = other.to_owned();
+    assert_eq!(
+        retired_push(&retired_base(Some(other), "DRIFTED"), &map),
+        new_ask(other, "names the label `another rule`, not `old ratio`")
+    );
+}
+
+#[test]
+fn a_retired_claim_in_step_whose_finding_is_mislabeled_passes_and_its_row_drops() {
+    // the retired unit's own row reads IN-STEP; its finding, the same label on the twin, MISLABELED
+    let cur = cur();
+    let base = retired_base(Some(FINDING), "MISLABELED");
+    let uids = base_uids(&base);
+    let texts = HashMap::new();
+    let before = Before {
+        index: &base,
+        uids: &uids,
+        texts: &texts,
+    };
+    let mut gone = |_: &str| true;
+    // its row still in the index: `make claims-rekey`
+    let mut now = base.clone();
+    assert_eq!(
+        unported(&cur, &now, &before, &retired_map(), &mut gone),
+        [format!("unported: {OLD_KEY} - its unit is retired ({}) but its row not yet dropped: `make claims-rekey` (make land runs it)", page())]
+    );
+    // the carry drops the claim's row and keeps the UNCLAIMED one, a ported unit's row carried beside it as before
+    now.insert(
+        "l7r/diagram/m.py::SPAN#span".to_owned(),
+        json!({"verdict": "IN-STEP", "code": "py"}),
+    );
+    let done = carry(&cur, &mut now, &retired_map(), &mut |_: &str| {
+        Some(norm(&span_line()))
+    });
+    assert_eq!(done.retired, [OLD_KEY]);
+    assert_eq!(done.retired_pages, [page()].into());
+    assert_eq!(done.carried, ["l7r/diagram/m.py::SPAN#span"]);
+    assert!(done.stuck.is_empty());
+    assert!(!now.contains_key(OLD_KEY));
+    assert!(now.contains_key("l7r/diagram/m.py::OLD#a decision"));
+    // and the push lets it go
+    assert!(unported(&cur, &now, &before, &retired_map(), &mut gone).is_empty());
+    // what rekey says of it
+    let mut o = Out::default();
+    assert_eq!(say(&done, &mut o), 0);
+    assert_eq!(o.out, format!("claims-rekey: 1 claim row(s) carried to their port (dev/claims-ports.json), each owed a full check of its new code (ported); 0 dropped, a claim of NONE research ported into a tooling crate (ask:449-T148-claims)\nclaims-rekey: 1 claim row(s) of a retired unit dropped (dev/claims-ports.json's `retired`), its rule overruled by {} (ask:449-T184-elongated-retired)\n", page()));
+    // the deferred list drops its unit and its keys, and a unit still claimed keeps them
+    let mut d = json!({"why": "w", "units": [OLD, "l7r/diagram/x.py::f"], "keys": [OLD_KEY]});
+    assert!(carry_deferred(&mut d, &retired_map(), &cur));
+    assert_eq!(
+        d,
+        json!({"why": "w", "units": ["l7r/diagram/x.py::f"], "keys": []})
+    );
+    assert!(!carry_deferred(&mut d, &retired_map(), &cur));
 }

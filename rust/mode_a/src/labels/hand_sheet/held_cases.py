@@ -75,6 +75,21 @@ SCATTER = sheet(
     '  <g data-kind="cairns"><polygon points="50,50 60,50 55,40" fill="#7A7A7A"/><polygon points="80,60 90,60 85,50" fill="#7A7A7A"/><text x="70" y="80" font-size="7">cairns</text></g>\n',
 )
 
+# feature 449 T184: a caption of two texts on a field of stones where no seat is free goes back to its declared lines, where it had kept
+# a cheaper wrap (0242: "if nothing clears, it goes back to one line")
+STRANDED = sheet(
+    '  <g data-kind="stones">' + "".join(f'<circle cx="{x}" cy="{y}" r="2" fill="#7A7A7A"/>' for x in range(4, 200, 24) for y in range(4, 150, 24)) + '</g>\n',
+    '  <g data-kind="hut"><rect x="80" y="60" width="40" height="30" fill="#C9A57A"/><text x="100" y="75" font-size="12">old hut of the ferry keeper</text>'
+    '<text x="100" y="85" font-size="8" data-cont="1">and his three sons</text></g>\n',
+    head='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0 200 150">\n',
+    back='  <rect x="0" y="0" width="200" height="150" fill="#EFE3C2" data-kind="-"/>\n',
+)
+
+# feature 449 T184: a caption beside a feature turned a quarter turn is level (0242), where it stood on end at the outline's 90 degrees
+QUARTER = sheet(
+    '  <g data-kind="shrine" transform="rotate(90 200 150)"><rect x="190" y="144" width="20" height="12" fill="#C9A57A"/><text x="200" y="150" font-size="8">wayside shrine</text></g>\n',
+)
+
 REFUSALS = [
     sheet('<g data-kind="x"><text x="5" y="5" font-size="6">lonely</text></g>\n'),
     sheet('<g data-kind="tub"><circle cx="50" cy="50" r="5"/><text x="80" y="80" font-size="6">tub</text></g>\n', back='<_x/>' + BACK),
@@ -94,7 +109,7 @@ REFUSALS = [
     sheet('  <g transform="rotate(x)"><rect width="1" height="1"/></g>\n'),
     "<svg",
 ]
-out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, *REFUSALS]]
+out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS]]
 for o in out:
     print(o.get("raises", "placed %d" % len(o.get("placed", ""))), file=sys.stderr)
 json.dump(out, open(sys.argv[1], "w"), indent=0)

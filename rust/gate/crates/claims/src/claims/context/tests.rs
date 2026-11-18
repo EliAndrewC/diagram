@@ -196,3 +196,50 @@ fn a_bare_name_resolves_only_where_the_file_defines_or_imports_it() {
         vec!["rust/eng/src/lib.rs::helper", "rust/eng/src/lib.rs::WIDTH"]
     );
 }
+
+#[test]
+fn a_method_is_read_where_the_tokens_tell_its_receiver_s_type() {
+    // feature 449 T184: `self.m(` is its own type's, `T::f(..).m(` is `T`'s; a value's method, a call by a function's path, an
+    // unbalanced or bare parenthesis and a lower-case path tell no type
+    let got = named("fn f(&self) { self.lay(); T::new(1, (2)).cost(); T::new(1, (2)).cost(); g(x).m(); a::b(x).n(); (a).z(); v.w(); }");
+    let names: Vec<(&str, bool, Option<&str>)> = got
+        .iter()
+        .map(|(n, c, q)| (n.as_str(), *c, q.as_deref()))
+        .collect();
+    assert_eq!(
+        names,
+        vec![
+            ("lay", true, Some("Self")),
+            ("T", false, None),
+            ("new", true, Some("T")),
+            ("cost", true, Some("T")),
+            ("g", true, None),
+            ("b", true, Some("a")),
+        ]
+    );
+    assert!(named(").q();").is_empty() && named("(a).z();").is_empty());
+    // resolved: a constructor's method and a method on `self`, each its type's
+    let root = tree("claims-context-receiver");
+    let mut t = Tables::default();
+    assert_eq!(
+        t.refs(
+            &root,
+            "rust/eng/src/lib.rs",
+            "pub fn z() {\n    Brook::new().lay();\n}",
+            "z"
+        ),
+        vec![
+            "rust/eng/src/lib.rs::Brook.new",
+            "rust/eng/src/lib.rs::Brook.lay"
+        ]
+    );
+    assert_eq!(
+        t.refs(
+            &root,
+            "rust/eng/src/lib.rs",
+            "pub fn again(&self) {\n    self.lay();\n}",
+            "Brook.again"
+        ),
+        vec!["rust/eng/src/lib.rs::Brook.lay"]
+    );
+}

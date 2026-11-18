@@ -12,10 +12,12 @@
 //! THE NAMES, read from the item's tokens: a call by a bare name (`drawn(`), by a path (`crate::course::drawn(`, `Brook::new(`,
 //! `Self::lay(`), and a constant read (an all-capitals name). A name resolves in the unit's own file first; else a path, or a bare name a
 //! `use` of the file brings in (a glob `use super::*;` too), resolves to the one item of its crate (`rust/<crate>/`, test files left
-//! out) that defines it - the path's or the `use`'s module choosing among several, a type naming its method (`Brook.new`). A bare
-//! name the file neither defines nor imports (a closure's, a local's), a name no item of the crate defines (the standard library's,
-//! another crate's) and a method called on a value (`x.lay(`, whose type the tokens cannot tell) are not followed: the Python's
-//! bare-name rule leaves `obj.f()` out too.
+//! out) that defines it - the path's or the `use`'s module choosing among several, a type naming its method (`Brook.new`). A method
+//! whose receiver's type the tokens tell is followed as that type's (feature 449 T184, past the Python's bare-name rule): `self.lay(` its
+//! own type's, and `Brook::new(..).lay(` the type's whose path call made the value - so `caption_clears_ways`' bundle carries the
+//! index's `cost` and `score`. A bare name the file neither defines nor imports (a closure's, a local's), a name no item of the crate
+//! defines (the standard library's, another crate's) and a method called on any other value (`x.lay(`, whose type the tokens cannot
+//! tell) are not followed.
 
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
@@ -256,6 +258,16 @@ fn named(source: &str) -> Vec<(String, bool, Option<String>)> {
         let before = i.checked_sub(1).map_or("", at);
         // a `.` before a name is a field or a method, but `..` is a range or a struct's rest: `0..BINS` reads `BINS`
         let field = before == "." && (i < 2 || at(i - 2) != ".");
+        if field && ident(tok) && at(i + 1) == "(" {
+            // a method whose receiver's type the tokens tell (feature 449 T184): `self.m(` is its own type's, and `T::f(..).m(` is `T`'s,
+            // as a constructor's value is - so `ObstacleIndex::new(..).cost(` reads the index's cost
+            if let Some(owner) = receiver(&t, i - 1) {
+                if seen.insert(((*tok).to_owned(), true, Some(owner.clone()))) {
+                    out.push(((*tok).to_owned(), true, Some(owner)));
+                }
+            }
+            continue;
+        }
         if !ident(tok) || before == "fn" || field {
             continue;
         }
@@ -270,6 +282,38 @@ fn named(source: &str) -> Vec<(String, bool, Option<String>)> {
         }
     }
     out
+}
+
+/// The type whose method a `.` at token `dot` calls, where the tokens tell it: `Self` for `self.`, and `T` for a call by a type's path
+/// just before it (`T::f(..).`, `T` capitalized); else None - a value's type the tokens cannot tell.
+fn receiver(t: &[&str], dot: usize) -> Option<String> {
+    let at = |k: usize| t.get(k).copied().unwrap_or_default();
+    let prev = dot.checked_sub(1).map_or("", at);
+    if prev == "self" {
+        return Some("Self".to_owned());
+    }
+    if prev != ")" {
+        return None;
+    }
+    // back to the `(` that opens the call
+    let mut depth = 0_usize;
+    let mut k = dot - 1;
+    loop {
+        match at(k) {
+            ")" => depth += 1,
+            "(" => {
+                depth -= 1;
+                if depth == 0 {
+                    break;
+                }
+            }
+            _ => {}
+        }
+        k = k.checked_sub(1)?;
+    }
+    let ty = k.checked_sub(4).map(at)?;
+    (ident(at(k - 1)) && at(k - 2) == ":" && at(k - 3) == ":" && ty.starts_with(char::is_uppercase))
+        .then(|| ty.to_owned())
 }
 
 /// The context a Rust unit's bundle carries (`bundle.py_context`'s rules): the first bundle's; when a claim's label names a distance,

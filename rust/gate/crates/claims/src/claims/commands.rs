@@ -861,7 +861,11 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
             let n = rekey(&cur, &mut index);
             // and across a port, by the port map (feature 449 T166, `ask:449-phase4-slices` Q10)
             let ported = super::ports::rekey_ports(&mut reader, root, &cur, &mut index)?;
-            if n > 0 || !ported.carried.is_empty() || !ported.dropped.is_empty() {
+            if n > 0
+                || !ported.carried.is_empty()
+                || !ported.dropped.is_empty()
+                || !ported.retired.is_empty()
+            {
                 save_index(&root.join(INDEX), &index)?;
             }
             o.say(&format!(

@@ -3,7 +3,7 @@
 //! (research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html). [`place`] takes what a caption NAMES - a point
 //! feature's drawn footprint, a line, or an area - and returns where the words go, at what angle, on how many lines, and whether a leader
 //! line ties them back. The standard, in the order it decides: NEARER FIRST, the RANKED POSITIONS within a ring, FREE SPACE WINS, and a
-//! LEADER for a caption no longer directly beside its feature. The candidates are [`cands`]'.
+//! LEADER for a caption past twice the usual gap, no longer directly beside its feature. The candidates are [`cands`]'.
 //!
 //! The Python's arithmetic in its order, its candidates in its order and its ties broken as it broke them, so a caption lands where the
 //! Python's did wherever the sheet's own geometry is the same (`parse/lockstep_labels.rs` measures the four caption-placing sheets).
@@ -19,6 +19,8 @@ use super::geom::{
     bbox, centroid, dist, inside, most, nearest_points, poly_gap, rect, seg_closest, BBox, Poly, Pt,
 };
 use super::obstacles::{Asker, ObstacleIndex, Way};
+#[cfg(doc)]
+use super::standard::WAY_NOTCH;
 use super::standard::{CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, CLEAR_EM, WEIGHT_OBSTACLE};
 use crate::py::{half_sum, hypot, max, min};
 use crate::work_counts::count;
@@ -130,6 +132,16 @@ pub fn nudge_reach() -> f64 {
 /// Research: no leader within twice the usual gap - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: it may go as far as twice the usual gap with nothing more
 pub const LEADERLESS_RINGS: usize = 2;
 
+/// A line subject of fewer than two points refused by name (feature 449 T184; the Python raised its walk's `AssertionError`, or `min()`'s
+/// `ValueError` given a hint): a line of one point has no bearing for its caption to run along.
+pub const ONE_POINT_LINE: &str =
+    "a line subject needs two points: a line of one has no bearing to run along - name it a point";
+
+/// A caption of no size refused by name (feature 449 T184; the Python looped forever, its leader rings never passing the hug): a size
+/// of zero, less, or no number has no block to seat.
+pub const NO_SIZE: &str =
+    "a caption of no size cannot be seated: give its text a font-size above 0";
+
 /// The box of what a caption names, as its record carries it: a point subject's UNROTATED box - its extents in its own frame, about its
 /// center - an area's box, or for a LINE the drawn way's width across from where the caption landed.
 ///
@@ -199,9 +211,12 @@ pub fn hug_gap(block: &[Pt], r: BBox) -> f64 {
 }
 
 /// THE ONE PREDICATE of `captions_clear_the_ways_they_stand_on` (feature 287, labels L5): no way comes within its drawn half-width plus
-/// the notch of the block, segment against polygon.
+/// [`WAY_NOTCH`] of the block, segment against polygon - the index's own way term ([`ObstacleIndex::score`]), so a curved tread's middle
+/// crossing an edge between the block's corners is not missed.
 ///
-/// Research: ways crossed - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption clears every way by its half-width and the notch
+/// Research:
+///     a caption clear of every way - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a way the block comes within its drawn half-width of is a way crossed
+///     the way notch - CONVENTION: the clearance runs 2 ft past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread
 #[must_use]
 pub fn caption_clears_ways(block: &[Pt], ways: &[Way]) -> bool {
     let who = Asker {
@@ -246,12 +261,15 @@ impl Search<'_> {
 
     /// A seat's weight and whether it overlaps: what the block covers (with the association term for a point subject's seat beside it), an
     /// area's name spilling out of the area, and what its leader passes over. THE ASSOCIATION TERM IS ASKED OF A SEAT WITH NO LEADER
-    /// (feature 287, labels L6): a leader carries the association itself.
+    /// (feature 287, labels L6): a leader carries the association itself. It is asked of the preferred offset's seats (ring 0) alone: the
+    /// same bound holds for ring 1, leaderless too - its block, where ring 0's was blocked, stands within its own gap of the blocker, a tie
+    /// counting - and asked there it refused every ring-1 seat on the pool sheets (feature 449 T184, measured 2026-11-18: 13 ring-1
+    /// captions beside their subjects, 0 once asked; 16 captions moved, 4 more on ink, 9 more leaders), so ring 1 stays unasked.
     ///
     /// Research:
-    ///     association beside a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat with no leader
+    ///     association beside a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term with its tie refuses every ring-1 seat
     ///     an area's name inside it - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: spilling out costs an obstacle
-    fn score(&self, c: &Cand, block: &[Pt]) -> Result<(f64, bool), Error> {
+    fn score(&self, c: &Cand, block: &[Pt]) -> (f64, bool) {
         let og = (self.subject.kind == Kind::Point && c.ring == 0)
             .then(|| poly_gap(block, &self.subject.poly));
         let (mut cost, mut hard) = self.index.score(block, self.clear, self.who(), og);
@@ -259,28 +277,22 @@ impl Search<'_> {
             (cost, hard) = (cost + WEIGHT_OBSTACLE, true); // an area's name lies inside the area
         }
         if let Some(li) = self.leader_index {
-            let (lc, lh) = leader_score(c, block, self.subject, li, self.clear, self.who())?;
+            let (lc, lh) = leader_score(c, block, self.subject, li, self.clear, self.who());
             (cost, hard) = (cost + lc, hard || lh);
         }
-        Ok((cost, hard))
+        (cost, hard)
     }
 
     /// The least-cost seat, or the cheapest one within [`NUDGE_PX`] of it in the caption's own frame - never a seat off the frame, never
     /// one that spills an area's name outside the area, and with `soft_only` never one that overlaps.
     ///
     /// Research: the nudge - NONE: a whole-pixel search round the least-cost seat for a cheaper one, a search bound
-    fn nudge(
-        &self,
-        cost: f64,
-        cand: &Cand,
-        block: Poly,
-        soft_only: bool,
-    ) -> Result<(f64, Cand, Poly), Error> {
+    fn nudge(&self, cost: f64, cand: &Cand, block: Poly, soft_only: bool) -> (f64, Cand, Poly) {
         let mut best = (cost, cand.clone(), block);
         for dx in -NUDGE_PX..=NUDGE_PX {
             for dy in -NUDGE_PX..=NUDGE_PX {
                 if best.0 == 0.0 {
-                    return Ok(best);
+                    return best;
                 }
                 let c = Cand {
                     center: (cand.center.0 + f64::from(dx), cand.center.1 + f64::from(dy)),
@@ -290,31 +302,25 @@ impl Search<'_> {
                 if !in_frame(&b, self.frame) || self.spills(&b) {
                     continue;
                 }
-                let (k, hard) = self.score(&c, &b)?;
+                let (k, hard) = self.score(&c, &b);
                 if k < best.0 && !(soft_only && hard) {
                     best = (k, c, b);
                 }
             }
         }
-        Ok(best)
+        best
     }
 
     /// A strict search's answer once no candidate was free: the least-cost seat nudged free, or None - THE SAME ANSWER AS MEASURING EVERY
     /// SEAT (feature 287): a seat blocked beyond a nudge's reach can be neither free nor nudged free.
     ///
     /// Research: a strict seat - NONE: the least-cost seat nudged free or none, the same answer as measuring every seat
-    fn strict_seat(
-        &self,
-        best: Option<Seat>,
-        deep: Vec<(usize, Cand, Poly)>,
-    ) -> Result<Option<Placement>, Error> {
+    fn strict_seat(&self, best: Option<Seat>, deep: Vec<(usize, Cand, Poly)>) -> Option<Placement> {
         count("candidate@_strict_seat", 1);
-        let Some(mut best) = best else {
-            return Ok(None);
-        };
+        let mut best = best?;
         let orders: Vec<usize> = deep.iter().map(|d| d.0).collect();
         for (order, cand, block) in deep {
-            let cost = self.score(&cand, &block)?.0;
+            let cost = self.score(&cand, &block).0;
             // Python's `(cost, order) < best[:2]`
             if cost
                 .partial_cmp(&best.0)
@@ -325,12 +331,10 @@ impl Search<'_> {
             }
         }
         if orders.contains(&best.1) {
-            return Ok(None);
+            return None;
         }
-        let (cost, cand, block) = self.nudge(best.0, &best.2, best.3, false)?;
-        (cost == 0.0)
-            .then(|| placement(&cand, block, cost, self.subject))
-            .transpose()
+        let (cost, cand, block) = self.nudge(best.0, &best.2, best.3, false);
+        (cost == 0.0).then(|| placement(&cand, block, cost, self.subject))
     }
 }
 
@@ -348,11 +352,10 @@ impl Search<'_> {
 ///     no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box
 ///     no seat in the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)
 ///     the hug - CONVENTION: no seat past the hug from what it names
-///     caption clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); half the caption's letter height (`CLEAR_EM`) kept off other ink - 0242 sets that gap only from the caption's own feature, as its calibration
+///     caption clearance - GUESS research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half the caption's letter height (`CLEAR_EM`) kept off other ink, the figure the page records as our calibration, not a finding, for the gap off a caption's own feature (feature 417 T36 pass P7, 2026-10-25)
 ///
 /// # Errors
-/// The Python's `ZeroDivisionError` where a leader seat's block touches what it names ([`leader_of`]); its refusal of a line subject of
-/// one point.
+/// A line subject of fewer than two points ([`ONE_POINT_LINE`]) and a caption of no size ([`NO_SIZE`]), each refused by name.
 #[expect(
     clippy::too_many_lines,
     reason = "the Python's one search, its stages and its answers in its order"
@@ -365,13 +368,10 @@ pub fn place(
     ask: &Ask<'_>,
 ) -> Result<Option<Placement>, Error> {
     if subject.kind == Kind::Line && subject.poly.len() < 2 {
-        // the Python's own refusals of a line with no segment: `min()` over no segment where a hint is given, else its walk's assertion
-        let (kind, why) = if subject.hint.is_some() {
-            ("ValueError", "min() iterable argument is empty")
-        } else {
-            ("AssertionError", "unreachable: the last segment returns")
-        };
-        return Err(Error::new(kind, why));
+        return Err(Error::new("ValueError", ONE_POINT_LINE));
+    }
+    if size.is_nan() || size <= 0.0 {
+        return Err(Error::new("ValueError", NO_SIZE));
     }
     let s = Search {
         text,
@@ -464,9 +464,9 @@ pub fn place(
                 deep.push((here, cand, block));
                 continue;
             }
-            let (cost, hard) = s.score(&cand, &block)?;
+            let (cost, hard) = s.score(&cand, &block);
             if cost == 0.0 {
-                let free = placement(&cand, block, cost, subject)?;
+                let free = placement(&cand, block, cost, subject);
                 if ask.accept.is_none_or(|ok| ok(&free)) {
                     return Ok(Some(free));
                 }
@@ -481,10 +481,10 @@ pub fn place(
         }
     }
     if ask.strict {
-        let got = s.strict_seat(best, deep)?;
+        let got = s.strict_seat(best, deep);
         return Ok(got.filter(|g| ask.accept.is_none_or(|ok| ok(g))));
     }
-    settle(&s, best, soft, outside).map(Some)
+    Ok(Some(settle(&s, best, soft, outside)))
 }
 
 /// A non-strict search's answer once no candidate was free: the least-cost seat nudged when that frees it or carries it off every overlap
@@ -500,26 +500,25 @@ fn settle(
     best: Option<Seat>,
     soft: Option<Seat>,
     outside: Option<(Cand, Poly)>,
-) -> Result<Placement, Error> {
+) -> Placement {
     if let Some((cost, _, cand, block)) = best.clone() {
-        let (cost, cand, block) = s.nudge(cost, &cand, block, false)?;
-        if (cost == 0.0 || !s.score(&cand, &block)?.1)
-            && soft.as_ref().is_none_or(|sf| cost <= sf.0)
+        let (cost, cand, block) = s.nudge(cost, &cand, block, false);
+        if (cost == 0.0 || !s.score(&cand, &block).1) && soft.as_ref().is_none_or(|sf| cost <= sf.0)
         {
             return placement(&cand, block, cost, s.subject);
         }
     }
     if let Some((cost, _, cand, block)) = soft {
-        let (cost, cand, block) = s.nudge(cost, &cand, block, true)?;
+        let (cost, cand, block) = s.nudge(cost, &cand, block, true);
         return placement(&cand, block, cost, s.subject);
     }
     if let Some((cost, _, cand, block)) = best {
-        let (cost, cand, block) = s.nudge(cost, &cand, block, false)?;
+        let (cost, cand, block) = s.nudge(cost, &cand, block, false);
         return placement(&cand, block, cost, s.subject);
     }
     let (cand, block) = outside.expect("the standard offers a seat beside every subject");
     let (cand, block) = moved_inward(&cand, &block, s.frame);
-    let cost = s.score(&cand, &block)?.0;
+    let cost = s.score(&cand, &block).0;
     placement(&cand, block, cost, s.subject)
 }
 
@@ -562,38 +561,36 @@ pub fn in_frame(block: &[Pt], frame: Option<Frame>) -> bool {
 }
 
 /// The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names, trimmed a little at
-/// each end. None within [`LEADERLESS_RINGS`] and for an area, whose name lies inside it.
+/// each end. None within [`LEADERLESS_RINGS`] and for an area, whose name lies inside it; None too where the block touches what it names
+/// (a line that bends back can hold a leader ring's block across another of its segments) - nothing is left to tie back, where the Python
+/// divided by the zero distance (feature 449 T184).
 ///
-/// Research: when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature
-///
-/// # Errors
-/// The Python's `ZeroDivisionError` where the block touches what it names: a line subject that bends back on itself can hold a leader
-/// ring's block across another of its segments (observed 2026-11-18, feature 449 T151's held cases; no caller names a line, so no sheet
-/// meets it - reported, reproduced).
-pub fn leader_of(ring: usize, block: &[Pt], subject: &Subject) -> Result<Option<(Pt, Pt)>, Error> {
+/// Research:
+///     when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature
+///     leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world
+#[must_use]
+pub fn leader_of(ring: usize, block: &[Pt], subject: &Subject) -> Option<(Pt, Pt)> {
     if ring < LEADERLESS_RINGS || subject.kind == Kind::Area {
-        return Ok(None);
+        return None;
     }
     let (a, b) = nearest_points(block, &subject.poly, subject.kind != Kind::Line);
     let d = dist(a, b);
     if d == 0.0 {
-        return Err(Error::new("ZeroDivisionError", "division by zero"));
+        return None;
     }
     let trim = min(1.0, d / 4.0);
     let (ux, uy) = ((b.0 - a.0) / d, (b.1 - a.1) / d);
-    Ok(Some((
+    Some((
         (a.0 + ux * trim, a.1 + uy * trim),
         (b.0 - ux * trim, b.1 - uy * trim),
-    )))
+    ))
 }
 
 /// What a seat's leader line passes over or ends against, of the things `index` holds, and whether that is an overlap: a leader through
 /// another caption, or ending on a tub beside the feature it names, reads as naming the wrong thing (feature 283).
 ///
 /// Research: leader keeps clear - CONVENTION: a leader through a caption or ending on a small glyph counts as covering it
-///
-/// # Errors
-/// [`leader_of`]'s.
+#[must_use]
 pub fn leader_score(
     c: &Cand,
     block: &[Pt],
@@ -601,13 +598,13 @@ pub fn leader_score(
     index: &ObstacleIndex,
     clear: f64,
     who: Asker<'_>,
-) -> Result<(f64, bool), Error> {
-    let Some(((ax, ay), (bx, by))) = leader_of(c.ring, block, subject)? else {
-        return Ok((0.0, false));
+) -> (f64, bool) {
+    let Some(((ax, ay), (bx, by))) = leader_of(c.ring, block, subject) else {
+        return (0.0, false);
     };
     let len = dist((ax, ay), (bx, by));
     if len < 1e-6 {
-        return Ok((0.0, false));
+        return (0.0, false);
     }
     let band = rect(
         half_sum(ax, bx),
@@ -616,16 +613,14 @@ pub fn leader_score(
         0.5,
         (by - ay).atan2(bx - ax).to_degrees(),
     );
-    Ok(index.score(&band, clear, who, None))
+    index.score(&band, clear, who, None)
 }
 
 /// What a drawn caption's block covers by the placer's own measure, and whether any of it is an overlap - a seat's score asked again of
 /// a finished placement (the port's comparison, feature 449 T151).
 ///
 /// Research: a seat's standing - NONE: the placer's own score asked of a finished seat, deciding nothing
-///
-/// # Errors
-/// [`leader_of`]'s.
+#[must_use]
 pub fn judge(
     text: &str,
     size: f64,
@@ -633,7 +628,7 @@ pub fn judge(
     index: &ObstacleIndex,
     leader_index: Option<&ObstacleIndex>,
     p: &Placement,
-) -> Result<(f64, bool), Error> {
+) -> (f64, bool) {
     let s = Search {
         text,
         subject,
@@ -655,19 +650,19 @@ pub fn judge(
     s.score(&c, &p.block)
 }
 
-fn placement(c: &Cand, block: Poly, cost: f64, subject: &Subject) -> Result<Placement, Error> {
-    Ok(Placement {
+fn placement(c: &Cand, block: Poly, cost: f64, subject: &Subject) -> Placement {
+    Placement {
         x: c.center.0,
         y: c.center.1 + CENTER_ABOVE_BASELINE_EM * c.size,
         angle: c.angle,
         lines: c.lines.clone(),
-        leader: leader_of(c.ring, &block, subject)?,
+        leader: leader_of(c.ring, &block, subject),
         block,
         ring: c.ring,
         rank: c.rank,
         position: c.position,
         cost,
-    })
+    }
 }
 
 #[cfg(test)]

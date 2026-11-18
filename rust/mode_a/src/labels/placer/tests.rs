@@ -2,7 +2,8 @@
 //! flag, ways soft and hard, a point, an area or a line subject, frames wide and tight, fixed lines and their sizes, strict and not, the
 //! ring capped and not, a strict caller refusing the first rank - each seated by the Python's `place` and its index asked four questions
 //! (`score`, `blocked`, `nearer_than`, `stands_nearest`, `caption_clears_ways`), its answers captured in `held.json` (generated
-//! 2026-11-18 by a revision of `held_cases.py` beside it that was not kept, seed 449, `CPython` 3.14.4). Every answer here is the Python's to the bit.
+//! 2026-11-18 by a revision of `held_cases.py` beside it that was not kept, seed 449, `CPython` 3.14.4; its answers re-taken from the same
+//! scenes by that script's `--reanswer` after feature 449 T184's fixes to the Python). Every answer here is the Python's to the bit.
 //!
 //! Research:
 //!     its tests - NONE: the port held to the Python's answers, deciding nothing about a building
@@ -114,7 +115,7 @@ fn written(p: &Placement) -> Value {
 #[test]
 fn every_held_scene_is_seated_as_the_python_seated_it() {
     let held: Value = serde_json::from_str(HELD).unwrap();
-    let (mut strict_none, mut leaders, mut raised) = (0, 0, 0);
+    let (mut strict_none, mut leaders) = (0, 0);
     for (k, c) in held["cases"].as_array().unwrap().iter().enumerate() {
         let idx = index(&c["obstacles"], &c["ways"]);
         let lead = c["leader_obstacles"]
@@ -151,22 +152,17 @@ fn every_held_scene_is_seated_as_the_python_seated_it() {
             &idx,
             &ask,
         );
-        match got {
-            Err(e) => {
-                raised += 1;
-                let got = format!("{}: {}", e.kind, e.message);
-                assert_eq!(c["raises"], got, "{k}");
-            }
-            Ok(p) => {
-                strict_none += usize::from(p.is_none());
-                leaders += usize::from(p.as_ref().is_some_and(|p| p.leader.is_some()));
-                let got = p.as_ref().map_or(Value::Null, written);
-                assert_eq!(got, c["answer"], "{k}");
-            }
-        }
+        // none is refused since feature 449 T184: case 15's leader seat on its own bent line was the Python's division by zero, and is
+        // now seated
+        let p = got.expect("no held scene is refused");
+        assert!(c["raises"].is_null(), "{k}");
+        strict_none += usize::from(p.is_none());
+        leaders += usize::from(p.as_ref().is_some_and(|p| p.leader.is_some()));
+        let got = p.as_ref().map_or(Value::Null, written);
+        assert_eq!(got, c["answer"], "{k}");
     }
-    // the scenes reach every answer: a strict search's none, a leader, the Python's own division by zero
-    assert_eq!((strict_none > 5, leaders > 3, raised), (true, true, 1));
+    // the scenes reach every answer: a strict search's none and a leader
+    assert!(strict_none > 5 && leaders > 3);
 }
 
 #[test]
@@ -243,32 +239,52 @@ fn the_hug_and_the_inward_move_measure_as_the_python_s() {
     assert_eq!((moved.center, b[0]), ((10.0, 50.0), (0.0, 48.0)));
     assert_eq!(moved_inward(&cand, &block, None).0, cand);
     // within twice the usual gap, or for an area, no leader
-    assert_eq!(leader_of(1, &block, &line).unwrap(), None);
-    assert_eq!(leader_of(5, &block, &area).unwrap(), None);
+    assert_eq!(leader_of(1, &block, &line), None);
+    assert_eq!(leader_of(5, &block, &area), None);
 }
 
 #[test]
-fn a_line_of_one_point_and_a_leader_of_no_length_answer_as_the_python_s() {
-    // Python: place(..., Subject("line", ((0, 0),))) raises AssertionError, and with a hint ValueError
+fn a_line_of_one_point_and_a_caption_of_no_size_are_refused_by_name() {
+    // feature 449 T184: the Python raised its own walk's AssertionError, or `min()`'s ValueError with a hint, on a line of one point, and
+    // looped forever on a caption of no size (its leader rings never passed the hug); both sides now refuse each by name
     let one = Subject::new(Kind::Line, vec![(0.0, 0.0)], 0.0);
-    let e = place("x", 8.0, &one, &ObstacleIndex::default(), &Ask::default()).unwrap_err();
-    assert_eq!(
-        (e.kind, e.message.as_str()),
-        ("AssertionError", "unreachable: the last segment returns")
-    );
     let hinted = Subject {
         hint: Some((1.0, 1.0)),
-        ..one
+        ..one.clone()
     };
-    let e = place(
-        "x",
-        8.0,
-        &hinted,
-        &ObstacleIndex::default(),
-        &Ask::default(),
-    )
-    .unwrap_err();
-    assert_eq!(e.kind, "ValueError");
+    let none = Subject::new(Kind::Line, Vec::new(), 0.0);
+    for sub in [&one, &hinted, &none] {
+        let e = place("x", 8.0, sub, &ObstacleIndex::default(), &Ask::default()).unwrap_err();
+        assert_eq!(
+            (e.kind, e.message.as_str()),
+            ("ValueError", super::ONE_POINT_LINE)
+        );
+    }
+    let point = Subject::new(Kind::Point, rect(10.0, 10.0, 2.0, 2.0, 0.0), 0.0);
+    for size in [0.0, -1.0, f64::NAN] {
+        let e = place(
+            "x",
+            size,
+            &point,
+            &ObstacleIndex::default(),
+            &Ask::default(),
+        )
+        .unwrap_err();
+        assert_eq!((e.kind, e.message.as_str()), ("ValueError", super::NO_SIZE));
+    }
+}
+
+#[test]
+fn a_leader_s_block_touching_its_line_draws_no_leader() {
+    // feature 449 T184: a line that bends back can hold a leader ring's block across another of its segments; the block touches what it
+    // names, so no leader ties it back (the Python divided by the zero distance)
+    let line = Subject::new(Kind::Line, vec![(0.0, 0.0), (40.0, 0.0), (0.0, 1.0)], 0.0);
+    let block = rect(20.0, 0.0, 4.0, 2.0, 0.0);
+    assert_eq!(leader_of(5, &block, &line), None);
+}
+
+#[test]
+fn a_leader_of_no_length_crosses_nothing() {
     // Python: leader_score(_Cand(2, ...), a block 1e-7 off its subject, ...) == (0.0, False) - a leader too short to cross anything
     let sub = Subject::new(
         Kind::Point,
@@ -297,7 +313,7 @@ fn a_line_of_one_point_and_a_leader_of_no_length_answer_as_the_python_s() {
         civic: false,
     };
     assert_eq!(
-        super::leader_score(&c, &block, &sub, &ObstacleIndex::default(), 4.0, who).unwrap(),
+        super::leader_score(&c, &block, &sub, &ObstacleIndex::default(), 4.0, who),
         (0.0, false)
     );
 }

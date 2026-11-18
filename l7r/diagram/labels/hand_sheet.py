@@ -77,11 +77,6 @@ WEIGHT_TEXT = 10 * WEIGHT_OBSTACLE
 least cost, and at one weight for all ink it chose a seat on Ubame's border name over one on the parley room's own
 mats - words on words are the one overlap a reader cannot see past."""
 
-ELONGATED = 3.0
-"""Research: elongated area ratio - CONVENTION: an area 3 times taller than wide has its name run along it; a calibration (the river band is ~7x)."""
-
-"""How much taller than wide an area is before its name runs along it (a calibration: the river band is ~7x)."""
-
 Affine = tuple[float, float, float, float, float, float]
 IDENTITY: Affine = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
 """Research: identity transform - NONE: the identity affine matrix."""
@@ -301,6 +296,10 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
 
     for c in root:
         walk(c, IDENTITY, "", 1.0, False, 0)
+    # a coordinate that is no finite number is refused here, as the Rust port refuses it: the placer's grid cannot file it (feature 449
+    # T184 - an infinity overflowed and a NaN raised later, in other words)
+    if any(not (math.isfinite(x) and math.isfinite(y)) for s in shapes for x, y in s.poly):
+        raise ValueError("a drawn coordinate is no finite number")
     return shapes, view
 
 
@@ -446,10 +445,13 @@ def _band(a: Pt, b: Pt, half: float) -> Poly:
 def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     """A leader ends on the drawn thing it names, not on the box around its parts: a barge moored by lines and three
     pines are boxed with empty water or ground in the box's corner, and a leader to the corner named nothing (feature
-    283 - the tax barge's and the old pines' leaders ended 5-6 ft short).
+    283 - the tax barge's and the old pines' leaders ended 5-6 ft short). A leader whose start already lies on the ink it
+    names ties nothing back - the caption touches its subject - so it is dropped (feature 449 T184: it divided by the zero
+    distance there).
 
     Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)
+        leader end trim - CONVENTION: a leader stops short of the ink it ends on by a quarter of its length, at most 1 px, so its end does not touch the ink; a drawn size on the sheet, not in the world
     """
     from shapely.geometry import LineString, Point, Polygon
     from shapely.ops import nearest_points, unary_union
@@ -462,6 +464,8 @@ def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
         return p
     tip = nearest_points(ink, a)[0]
     d = a.distance(tip)
+    if d == 0.0:
+        return replace(p, leader=None)
     trim = min(1.0, d / 4)
     ux, uy = (tip.x - a.x) / d, (tip.y - a.y) / d
     return replace(p, leader=(p.leader[0], (tip.x - ux * trim, tip.y - uy * trim)))
@@ -471,13 +475,13 @@ BLOCK_PX = 2000.0
 """A part big enough to be a block of a building (about 220 sq ft): a notice board's legs, a sanctuary's steps or a mat
 are parts of one thing, not blocks that can stand in echelon.
 
-Research: block part size - NONE: a part of 2000 px2 (about 220 sq ft) or more counts as a block of a building to the caption placer, not a sub-part."""
+Research: block part size - CONVENTION: a part of 2000 px2 (about 220 sq ft) or more counts as a block of a building to the caption placer, not a sub-part - a calibration of the placer, which changes where a caption is seated"""
 STEPPED = 0.85
 """How much of its box a multi-part subject must fill to be named against the box: under it the parts leave an empty
 corner (Hayakawa's residence, two blocks in echelon), and a caption and its leader set against the box land in that
 corner, on nothing (feature 283 - RESIDENCE's leader ended 4 ft short of the house, under INNER COURT).
 
-Research: stepped subject fill - NONE: a multi-part subject filling under 0.85 of its box is named against its parts, not the box, a caption-placer test."""
+Research: stepped subject fill - CONVENTION: a multi-part subject filling under 0.85 of its box is named against its parts, not the box - a calibration of the placer, which changes where a caption is seated"""
 
 
 def _box_within(a: Poly, b: Poly) -> bool:
@@ -549,7 +553,7 @@ WALL_HALF_PX = 2.0
 """A dark stroke this wide (half-width, px) or wider is a wall to a leader: the sheets' walls and court dividers are 6-9
 px strokes; a partition, a rope or a hatching line is 1 px or less.
 
-Research: wall stroke test - NONE: a dark stroke 2 px or more in half-width is a wall to a leader; sheet walls are 6-9 px, partitions 1 px or less."""
+Research: wall stroke test - CONVENTION: a dark stroke 2 px or more in half-width is a wall a leader may not cross; sheet walls are 6-9 px, partitions 1 px or less - a calibration of the placer, which changes how a leader is drawn"""
 
 
 #: Width per character, in ems, of a hand sheet's captions by their face (feature 267). The standard's 0.55 holds for the
@@ -715,7 +719,15 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
     building, largest first - then BESIDE: the box, or each block of a stepped building, largest first (Hayakawa's
     RESIDENCE had no free seat within reach of its larger block while the other had one). A scatter of glyphs and lines
     (three pines, a moored barge) has no inside, and is named beside the group, else beside any one of its glyphs - only
-    beside a glyph where the group spreads wider than the standard's reach at the caption's `size`."""
+    beside a glyph where the group spreads wider than the standard's reach at the caption's `size`. An area's name is
+    level, however long and narrow the area (feature 449 T184: an area three times taller than wide was named along its
+    length, where 0242 keeps an area's caption level); a caption beside a turned feature takes its outline's first edge's
+    angle, a quarter, half or three-quarter turn keeping it level.
+
+    Research:
+        an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area is level
+        a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption beside a turned feature takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+    """
     x0, y0, x1, y1 = bbox([p for s in own for p in s.poly])
     box = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
     closed = [s for s in own if not s.line and len(s.poly) >= 3]
@@ -741,11 +753,11 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
         inner, beside = [], ([] if spread else [box]) + members if len(closed) > 1 else [box]
     out: list[Subject] = []
     for poly in inner:
-        a0, b0, a1, b1 = bbox(poly)
-        # an elongated area is named ALONG its length, as a map names a river band (feature 267)
-        out.append(Subject("area", tuple(poly), angle=90.0 if (b1 - b0) > ELONGATED * max(a1 - a0, 1e-9) else 0.0))
+        out.append(Subject("area", tuple(poly), angle=0.0))
     for poly in beside:
         ang = math.degrees(math.atan2(poly[1][1] - poly[0][1], poly[1][0] - poly[0][0])) if len(poly) == 4 else 0.0
+        if abs(ang - 90.0 * round(ang / 90.0)) < 1e-6:
+            ang = 0.0  # a quarter, half or three-quarter turn keeps a level caption (0242), within a turned edge's float slack
         out.append(Subject("point", tuple(poly), angle=ang))
     return out
 
@@ -764,7 +776,13 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
     first, Hayakawa's RESIDENCE, placed last, found every seat taken; and a glyph named before the ground it stands in
     took the ground's inside (Hayakawa's weapon rack and striking posts, whose practice ground's name went into the
     empty tally office beside it). Then `repair`: a greedy order still strands a caption now and then, so each caption
-    left covering ink is tried with one neighbor lifted, and the pair is kept where the two together cover less."""
+    left covering ink is tried with one neighbor lifted, and the pair is kept where the two together cover less. A caption
+    of several texts is tried in each of its `wraps`, the first free one winning; where none clears it goes back to its
+    declared lines, the cheapest seat of those (feature 449 T184: it kept the cheapest of all its wraps).
+
+    Research:
+        a stranded several-text caption's wrap - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a wrap is taken only where it clears; if nothing clears, the caption goes back to its declared lines
+    """
     shapes, view = read_sheet(src)
     caps_of = captions_of(shapes)
     skip = {i for idx in caps_of for i in idx}
@@ -811,11 +829,13 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
             lead = leader_blockers(shapes, skip, held, sub, own)
             # a one-text caption is wrapped by the placer itself; a caption of several texts is tried in each of its
             # `wraps`, each line measured at its own size
-            for per in wraps(caps) if len(caps) > 1 else [best_per]:
+            for w, per in enumerate(wraps(caps) if len(caps) > 1 else [best_per]):
                 lines = _as_head(caps, cw, per) if len(caps) > 1 else None
                 sizes = [c.size for c, ls in zip(caps, per, strict=True) for _ in ls] if len(caps) > 1 else None
                 p = place(text, head.size, sub, index, view, lines=lines, char_w=cw, leader_index=lead, line_sizes=sizes, extended=not quick)
-                if best is None or p.cost < best.cost:
+                # a wrap is taken only where it clears; with none clearing, the caption goes back to its declared lines (0242,
+                # feature 449 T184: it kept the cheapest of all its wraps)
+                if (w == 0 or p.cost == 0.0) and (best is None or p.cost < best.cost):
                     best, best_per = p, per
                 if p.cost == 0.0:
                     break
@@ -887,6 +907,18 @@ def fits_inside(caps: list[Shape], own: list[Shape]) -> bool:
     return w + gap <= x1 - x0 and h + gap <= y1 - y0
 
 
+def element_end(src: str, a: int, b: int) -> int:
+    """Where the element whose start tag spans `a:b` ends: past its own end tag, found by the start tag's own name - `</text>`,
+    or `</s:text>` for a caption written with a prefix bound to the SVG namespace (feature 449 T184: `src.index("</text>")`
+    refused a prefixed caption, or wrote it over through the next caption's end). A sheet the XML reader read whole never
+    lacks the end tag; its absence is refused by name."""
+    name = re.match(r"[^\s/>]*", src[a + 1 : b]).group(0)  # type: ignore[union-attr]
+    m = re.compile(rf"</{re.escape(name)}[ \t\r\n]*>").search(src, b)
+    if m is None:
+        raise ValueError(f"the caption's <{name}> has no end tag")
+    return m.end()
+
+
 _STYLE = ("font-style", "font-weight", "letter-spacing", "paint-order", "stroke", "stroke-width")
 
 
@@ -921,7 +953,7 @@ def placed(src: str) -> str:
                 ink = DARK_INK  # a light name chosen for a dark roof, set down on light ground (feature 267)
             # a text carrying its OWN tag keeps it (it is its own group); one taking its tag from a group stays untagged
             a, b = tags[cap.at]
-            end = src.index("</text>", b) + len("</text>")
+            end = element_end(src, a, b)
             news.append((a, end, caption_svg(at, cap.size, style, ink, cap.kind if el.get("data-kind") else "")))
         if p.leader is not None:
             inv = _inverse(head.frame)
@@ -937,7 +969,10 @@ def placed(src: str) -> str:
 
 def render(src: str, png: str) -> None:
     """Render a sheet's placed text to `png` with resvg, as every sheet's gen does - from a temporary file beside the
-    picture, removed after."""
+    picture, removed after.
+
+    Research: the sheets' face and width - CONVENTION: every sheet's picture is drawn 2400 px wide, its serif lettering in `DejaVu Serif` - a display choice of the sheets, not of the world
+    """
     import subprocess
     import tempfile
 

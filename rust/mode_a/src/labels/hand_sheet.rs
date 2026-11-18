@@ -91,19 +91,14 @@ pub const DARK: f64 = 0.3;
 /// Research: another caption's weight - CONVENTION: covering another caption weighs ten obstacles, the overlap a reader cannot see past
 pub const WEIGHT_TEXT: f64 = 10.0 * WEIGHT_OBSTACLE;
 
-/// How much taller than wide an area is before its name runs along it.
-///
-/// Research: elongated area ratio - CONVENTION: an area 3 times taller than wide has its name run along it; a calibration (the river band is ~7x).
-pub const ELONGATED: f64 = 3.0;
-
 /// A part big enough to be a block of a building (about 220 sq ft).
 ///
-/// Research: block part size - NONE: a part of 2000 px2 (about 220 sq ft) or more counts as a block of a building to the caption placer, not a sub-part.
+/// Research: block part size - CONVENTION: a part of 2000 px2 (about 220 sq ft) or more counts as a block of a building to the caption placer, not a sub-part - a calibration of the placer, which changes where a caption is seated
 pub const BLOCK_PX: f64 = 2000.0;
 
 /// How much of its box a multi-part subject must fill to be named against the box (feature 283).
 ///
-/// Research: stepped subject fill - NONE: a multi-part subject filling under 0.85 of its box is named against its parts, not the box, a caption-placer test.
+/// Research: stepped subject fill - CONVENTION: a multi-part subject filling under 0.85 of its box is named against its parts, not the box - a calibration of the placer, which changes where a caption is seated
 pub const STEPPED: f64 = 0.85;
 
 /// The largest drawn thing a leader may not end against, in px (a well's curb is 24 x 24).
@@ -113,7 +108,7 @@ pub const GLYPH_MAX_PX: f64 = 600.0;
 
 /// A dark stroke this wide (half-width, px) or wider is a wall to a leader.
 ///
-/// Research: wall stroke test - NONE: a dark stroke 2 px or more in half-width is a wall to a leader; sheet walls are 6-9 px, partitions 1 px or less.
+/// Research: wall stroke test - CONVENTION: a dark stroke 2 px or more in half-width is a wall a leader may not cross; sheet walls are 6-9 px, partitions 1 px or less - a calibration of the placer, which changes how a leader is drawn
 pub const WALL_HALF_PX: f64 = 2.0;
 
 /// Width per character of a hand sheet's ALL-CAPS captions (feature 267).
@@ -267,6 +262,28 @@ fn byte_offsets(src: &str) -> Vec<usize> {
         .collect()
 }
 
+/// Where the element whose start tag spans `a..b` (bytes) ends: past its own end tag, found by the start tag's own name - `</text>`, or
+/// `</s:text>` for a caption written with a prefix bound to the SVG namespace (feature 449 T184: the Python looked for `</text>` alone,
+/// and so refused a prefixed caption, or wrote it over through the next caption's end).
+///
+/// # Errors
+/// No end tag of that name after it, which a sheet the XML reader read whole never lacks.
+fn element_end(src: &str, a: usize, b: usize) -> Result<usize, Error> {
+    let name: String = src[a + 1..b]
+        .chars()
+        .take_while(|c| !c.is_whitespace() && !matches!(c, '/' | '>'))
+        .collect();
+    let close = Regex::new(&format!(r"</{}[ \t\r\n]*>", fancy_regex::escape(&name)))
+        .expect("an escaped name");
+    match close.find_from_pos(src, b) {
+        Ok(Some(m)) => Ok(m.end()),
+        _ => Err(Error::new(
+            "ValueError",
+            format!("the caption's <{name}> has no end tag"),
+        )),
+    }
+}
+
 /// The sheet with every caption written where the placer put it, and its leader drawn after it (feature 286, plan D5): what a sheet's
 /// picture and page are rendered from. The tracked sheet is the drawing and the declarations; this is a function of them alone.
 ///
@@ -325,12 +342,7 @@ pub fn placed(src: &str) -> Result<String, Error> {
             }
             // every element has its start tag, checked above
             let (a, b) = tags[cap.at];
-            let tail = &src[bytes[b]..];
-            let end = tail
-                .find("</text>")
-                .ok_or_else(|| Error::new("ValueError", "substring not found"))?
-                + bytes[b]
-                + "</text>".len();
+            let end = element_end(src, bytes[a], bytes[b])?;
             // a text carrying its OWN tag keeps it (it is its own group); one taking its tag from a group stays untagged
             let kind = if cap.get("data-kind").is_some_and(|k| !k.is_empty()) {
                 cap.kind.as_str()
@@ -373,6 +385,8 @@ pub fn placed(src: &str) -> Result<String, Error> {
 }
 
 /// The arguments every sheet's picture is drawn with (`resvg --width 2400 --serif-family "DejaVu Serif"`).
+///
+/// Research: the sheets' face and width - CONVENTION: every sheet's picture is drawn 2400 px wide, its serif lettering in `DejaVu Serif` - a display choice of the sheets, not of the world
 #[must_use]
 pub fn render_args() -> Vec<String> {
     ["--width", "2400", "--serif-family", "DejaVu Serif"]

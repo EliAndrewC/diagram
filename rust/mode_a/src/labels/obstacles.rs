@@ -49,7 +49,7 @@ pub const GROUP_WORDS: [(&str, &[&str]); 4] = [
 
 /// Does a caption's lower-cased text `words` name the caption `group` (its own word, or one of [`GROUP_WORDS`])?
 ///
-/// Research: plumbing - NONE
+/// Research: a caption's wording names its group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a caption's own wording says which groups of buildings it may cover - a group named by its own word where no list of words is given for it (a flophouse caption the flophouses, a ministry's name the ministries), else by one of its words
 #[must_use]
 pub fn names_group(group: Option<&str>, words: &str) -> bool {
     let Some(group) = group.filter(|g| !g.is_empty()) else {

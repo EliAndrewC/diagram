@@ -23,9 +23,7 @@ use super::super::placer::{
 };
 use super::super::standard::{chars, CENTER_ABOVE_BASELINE_EM, CLEAR_EM, PITCH_EM, REACH_EM};
 use super::classify::{band, classify, leader_blockers, leader_to_ink, Seen};
-use super::{
-    char_w_of, luma, Shape, BLOCK_PX, ELONGATED, GROUND_KINDS, LIGHT, REPAIR, STEPPED, WEIGHT_TEXT,
-};
+use super::{char_w_of, luma, Shape, BLOCK_PX, GROUND_KINDS, LIGHT, REPAIR, STEPPED, WEIGHT_TEXT};
 use crate::py::{hypot, max, min, round_int, sum};
 
 /// A caption seated: its placement, its texts' lines as placed, and the subject it was seated against (which the Python kept only in its
@@ -177,7 +175,7 @@ pub fn union_area(polys: &[&[Pt]]) -> f64 {
 
 /// Do the closed parts fill `box_` ([`STEPPED`] of it) - one thing whose box is its outline, not blocks in echelon?
 ///
-/// Research: stepped subject fill - NONE: a multi-part subject filling under 0.85 of its box is named against its parts, not the box, a caption-placer test.
+/// Research: stepped subject fill - CONVENTION: a multi-part subject filling under 0.85 of its box is named against its parts, not the box - a calibration of the placer, which changes where a caption is seated
 fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
     let closed: Vec<&[Pt]> = own
         .iter()
@@ -190,11 +188,14 @@ fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
 /// The subjects a caption is tried against, in order (feature 286, plan D2): INSIDE first - the one closed shape it names, or the box of
 /// parts that fill it, or each block of a stepped building, largest first - then BESIDE: the box, or each block. A scatter of glyphs and
 /// lines has no inside, and is named beside the group, else beside any one of its glyphs - only beside a glyph where the group spreads
-/// wider than the standard's reach at the caption's `size`. An elongated area is named along its length.
+/// wider than the standard's reach at the caption's `size`. An area's name is level, however long and narrow the area (feature 449 T184:
+/// an area three times taller than wide was named along its length, where 0242 keeps an area's caption level); a caption beside a
+/// turned feature takes its outline's first edge's angle, a quarter, half or three-quarter turn keeping it level.
 ///
 /// Research:
 ///     a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
-///     elongated area ratio - CONVENTION: an area 3 times taller than wide has its name run along it; a calibration (the river band is ~7x).
+///     an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area is level
+///     a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption beside a turned feature takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
 #[must_use]
 pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
     let pts: Vec<Pt> = own.iter().flat_map(|s| s.poly.iter().copied()).collect();
@@ -267,26 +268,33 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
     };
     let mut out = Vec::new();
     for poly in inner {
-        let (a0, b0, a1, b1) = bbox(&poly);
-        // an elongated area is named ALONG its length, as a map names a river band (feature 267)
-        let angle = if (b1 - b0) > ELONGATED * max(a1 - a0, 1e-9) {
-            90.0
-        } else {
-            0.0
-        };
-        out.push(Subject::new(Kind::Area, poly, angle));
+        out.push(Subject::new(Kind::Area, poly, 0.0));
     }
     for poly in beside {
         let angle = if poly.len() == 4 {
-            (poly[1].1 - poly[0].1)
-                .atan2(poly[1].0 - poly[0].0)
-                .to_degrees()
+            turned(
+                (poly[1].1 - poly[0].1)
+                    .atan2(poly[1].0 - poly[0].0)
+                    .to_degrees(),
+            )
         } else {
             0.0
         };
         out.push(Subject::new(Kind::Point, poly, angle));
     }
     out
+}
+
+/// A turned feature's angle as its caption takes it: level where the turn is a quarter, a half or three quarters (within a millionth
+/// of a degree, the float slack of a turned outline's edge), else the angle itself.
+///
+/// Research: a quarter turn keeps a level caption - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+fn turned(angle: f64) -> f64 {
+    if (angle - 90.0 * (angle / 90.0).round()).abs() < 1e-6 {
+        0.0
+    } else {
+        angle
+    }
 }
 
 /// Could a caption's block stand inside the box of what it names, within the box less the standard's gap on every side? The ORDER's
@@ -405,7 +413,13 @@ impl Sheet<'_> {
     /// One caption placed against the others' placements, each with its caption's size: tried against each of its subjects in turn, the
     /// first free seat winning, else the least cost; `quick` tries the standard's seats only.
     ///
-    /// Research: a ground's name stays in its ground - CONVENTION: a ground's name stays inside its ground unless every seat there covers another name (feature 286; Imhof - an area is named inside it)
+    /// A caption of several texts is tried in each of its [`wraps`], the first free one winning; where none clears it goes back to its
+    /// declared lines, the cheapest seat of those (feature 449 T184: it kept the cheapest of all its wraps, where 0242 sends a caption
+    /// that clears nowhere back to one line).
+    ///
+    /// Research:
+    ///     a ground's name stays in its ground - CONVENTION: a ground's name stays inside its ground unless every seat there covers another name (feature 286; Imhof - an area is named inside it)
+    ///     a stranded several-text caption's wrap - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a wrap is taken only where it clears; if nothing clears, the caption goes back to its declared lines
     fn one(
         &self,
         idx: &[usize],
@@ -432,7 +446,7 @@ impl Sheet<'_> {
             } else {
                 vec![best_per.clone()]
             };
-            for per in tries {
+            for (w, per) in tries.into_iter().enumerate() {
                 let lines = (caps.len() > 1).then(|| as_head(&caps, cw, &per));
                 let sizes: Option<Vec<f64>> = (caps.len() > 1).then(|| {
                     caps.iter()
@@ -452,7 +466,8 @@ impl Sheet<'_> {
                 let p = place(&text, head.size, &sub, &index, &ask)?
                     .expect("a search that is not strict always seats");
                 let free = p.cost == 0.0;
-                if best.as_ref().is_none_or(|b| p.cost < b.0.cost) {
+                // a wrap is taken only where it clears; with none clearing, the caption goes back to its declared lines (0242)
+                if (w == 0 || free) && best.as_ref().is_none_or(|b| p.cost < b.0.cost) {
                     (best, best_per) = (Some((p, sub.clone())), per);
                 }
                 if free {
@@ -473,7 +488,7 @@ impl Sheet<'_> {
             }
         }
         let (best, sub) = best.expect("every caption has a subject");
-        Ok((leader_to_ink(best, &own)?, best_per, sub))
+        Ok((leader_to_ink(best, &own), best_per, sub))
     }
 
     /// A caption's two indexes against one of its subjects (the `k`th): what its block may not cover - the sheet classified for it, the
@@ -655,7 +670,7 @@ pub fn standing(
             .flat_map(|&c| shapes[c].lines.iter().map(String::as_str))
             .collect::<Vec<_>>()
             .join(" ");
-        let (cost, overlap) = judge(&text, head.size, sub, &index, Some(&lead), p)?;
+        let (cost, overlap) = judge(&text, head.size, sub, &index, Some(&lead), p);
         let point = sub.kind == Kind::Point;
         out.push(Standing {
             off_sheet: !in_frame(&p.block, Some(view)),

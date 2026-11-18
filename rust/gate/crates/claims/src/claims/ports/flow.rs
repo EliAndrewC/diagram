@@ -268,3 +268,51 @@ fn a_tree_with_no_commit_has_no_base_to_read() {
     let mut reader = crate::claims::scope::Reader::new(&root, &root);
     assert!(super::base_texts(&mut reader, &root).unwrap().is_empty());
 }
+
+/// The map retiring both deleted units (feature 449 T184, `ask:449-T184-elongated-retired`, `ask:449-T184-elongated-retired-2`), with
+/// no port, each naming its own claim's row as the finding against it.
+fn retire(root: &std::path::Path) {
+    let page = ["research", "questions", "0001-gap.html"].join("/");
+    let entry = |finding: &str| json!({"by": "449 T999", "page": page, "why": "the page overrules its rule", "finding": finding});
+    put(
+        root,
+        PORTS,
+        &json!({"why": "w", "retired": {"l7r/diagram/m.py::SPAN": entry(SPAN), "l7r/diagram/m.py::helper": entry("l7r/diagram/m.py::helper#helper")}})
+            .to_string(),
+    );
+}
+
+#[test]
+fn a_retired_claim_found_drifted_is_dropped_by_rekey_and_lands() {
+    let root = cut("claims-ports-retired", &|_, rows| {
+        for k in [SPAN, "l7r/diagram/m.py::helper#helper"] {
+            rows[k]["verdict"] = json!("DRIFTED");
+        }
+    });
+    retire(&root);
+    assert!(push(&root).0.iter().any(|l| l
+        .starts_with(&format!("unported: {SPAN} - its unit is retired"))
+        && l.ends_with("`make claims-rekey` (make land runs it)")));
+    let got = claims(&root, &["rekey"]);
+    assert_eq!(got.code, 0, "{}", got.stdout);
+    assert!(got.stdout.contains("claims-rekey: 2 claim row(s) of a retired unit dropped (dev/claims-ports.json's `retired`), its rule overruled by research/questions/0001-gap.html"), "{}", got.stdout);
+    let ix = index(&root);
+    assert!(ix.get(SPAN).is_none() && ix.get("l7r/diagram/m.py::helper#helper").is_none());
+    assert_eq!(
+        std::fs::read_to_string(root.join("dev/claims-deferred.json")).unwrap(),
+        "{\n \"why\": \"w\",\n \"units\": []\n}\n"
+    );
+    assert!(!push(&root).0.iter().any(|l| l.starts_with("unported")));
+}
+
+#[test]
+fn a_retired_claim_found_in_step_is_refused_at_the_push() {
+    let root = cut("claims-ports-retired-instep", &|_, _| {});
+    retire(&root);
+    assert_eq!(claims(&root, &["rekey"]).code, 0);
+    let refuse = push(&root).0;
+    assert!(refuse.iter().any(|l| l.starts_with(&format!(
+        "unported: {SPAN} - dev/claims-ports.json retires its unit"
+    )) && l
+        .contains("reads IN-STEP at the merge base: retire only a claim whose claims round found the research against it")),);
+}

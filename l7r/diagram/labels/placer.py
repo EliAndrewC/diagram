@@ -13,8 +13,9 @@ leader line ties them back. The standard, in the order it decides:
 3. FREE SPACE WINS: the first candidate that covers nothing is taken. When nothing in reach is free, the fallback
    slides and then the leader rings out to the hug are searched; a caption is never dropped (the GM: "we'll treat
    labels as mandatory"), and with no free seat it goes down where it covers the least (0242) - never in a key (0241).
-4. A caption not at the preferred offset is no longer directly beside its feature, so a LEADER line joins it back
-   (QGIS callouts, Esri's leader, PSU: "labels that do not fit on or directly adjacent to their respective feature").
+4. A caption may move out a step at a time to twice the usual gap with nothing more; past twice the usual gap it is no
+   longer directly beside its feature, so a LEADER line joins it back (QGIS callouts, Esri's leader, PSU: "labels that do
+   not fit on or directly adjacent to their respective feature").
 
 Research: caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds
 """
@@ -144,6 +145,8 @@ def outer_rings(size: float) -> list[tuple[int, float]]:
     """
     k = len(rings(size))
     out: list[tuple[int, float]] = []
+    if not size > 0:
+        return out  # a caption of no size has no ring past the reach: the loop below would never pass the hug (feature 449 T184)
     while (PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size <= HUG_RING:
         out.append((k, (PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size))
         k += 1
@@ -363,11 +366,24 @@ def hug_gap(block: Poly | tuple[Pt, ...], ref: tuple[float, float, float, float]
 def caption_clears_ways(block: Poly | tuple[Pt, ...], ways: list[Way]) -> bool:
     """THE ONE PREDICATE of `captions_clear_the_ways_they_stand_on` (feature 287, labels L5): no way comes within its drawn
     half-width plus `WAY_NOTCH` of the block, segment against polygon - the index's own way term, so a curved tread's
-    middle crossing an edge between the block's corners is not missed."""
+    middle crossing an edge between the block's corners is not missed.
+
+    Research:
+        a caption clear of every way - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a way the block comes within its drawn half-width of is a way crossed
+        the way notch - CONVENTION: the clearance runs 2 ft past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread
+    """
     return ObstacleIndex(ways=ways).cost(list(block), 0.0) == 0.0
 
 
 Frame = tuple[float, float, float, float]
+
+ONE_POINT_LINE = "a line subject needs two points: a line of one has no bearing to run along - name it a point"
+"""A line subject of fewer than two points refused by name (feature 449 T184; before it, the walk's `AssertionError`, or `min()`'s
+`ValueError` given a hint): a line of one point has no bearing for its caption to run along."""
+
+NO_SIZE = "a caption of no size cannot be seated: give its text a font-size above 0"
+"""A caption of no size refused by name (feature 449 T184; before it, `outer_rings` looped forever, its rings never passing the hug): a
+size of zero, less, or no number has no block to seat."""
 
 
 @overload
@@ -456,8 +472,12 @@ def place(
         no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box
         no seat in the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)
         the hug - CONVENTION: no seat past the hug from what it names
-        caption clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); half the caption's letter height (`CLEAR_EM`) kept off other ink - 0242 sets that gap only from the caption's own feature, as its calibration
+        caption clearance - GUESS research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half the caption's letter height (`CLEAR_EM`) kept off other ink, the figure the page records as our calibration, not a finding, for the gap off a caption's own feature (feature 417 T36 pass P7, 2026-10-25)
     """
+    if subject.kind == "line" and len(subject.poly) < 2:
+        raise ValueError(ONE_POINT_LINE)
+    if not size > 0:
+        raise ValueError(NO_SIZE)
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
     point = subject.kind == "point"
@@ -585,9 +605,13 @@ def _score(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear:
     gap plus the ring's step of it - under `clear + (g_k - g_0) = g_k`, its own gap - so every leader seat would be
     refused and a caption with a leader could only go in the key. A leader carries the association itself (QGIS's
     callouts, Esri's leaders: the line ties the words to their feature), so the term holds where the words alone must.
+    It is asked of the preferred offset's seats (ring 0) alone: the same bound holds for ring 1, leaderless too - its block,
+    where ring 0's was blocked, stands within its own gap of the blocker, a tie counting - and asked there it refused every
+    ring-1 seat on the pool sheets (feature 449 T184, measured 2026-11-18: 13 ring-1 captions beside their subjects, 0 once
+    asked; 16 captions moved, 4 more on ink, 9 more leaders), so ring 1 stays unasked.
 
     Research:
-        association beside a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat with no leader
+        association beside a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term with its tie refuses every ring-1 seat
         an area's name inside it - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: spilling out costs an obstacle
     """
     og = poly_gap(block, list(subject.poly)) if subject.kind == "point" and c.ring == 0 else None
@@ -641,14 +665,20 @@ Research: no leader within twice the usual gap - research/questions/0242-labels-
 def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
     """The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names,
     trimmed a little at each end. None within `LEADERLESS_RINGS` (the preferred offset and the step out from it, out to twice
-    the usual gap) and for an area, whose name lies inside it.
+    the usual gap) and for an area, whose name lies inside it; None too where the block touches what it names (a line that
+    bends back can hold a leader ring's block across another of its segments) - nothing is left to tie back (feature 449 T184:
+    it divided by the zero distance there).
 
-    Research: when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature
+    Research:
+        when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature
+        leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world
     """
     if ring < LEADERLESS_RINGS or subject.kind == "area":
         return None
     a, b = nearest_points(block, list(subject.poly), closed=subject.kind != "line")
     d = math.dist(a, b)
+    if d == 0.0:
+        return None  # the block touches what it names - a line bent back under a leader ring's seat - so nothing ties it back (feature 449 T184)
     trim = min(1.0, d / 4)
     ux, uy = (b[0] - a[0]) / d, (b[1] - a[1]) / d
     return ((a[0] + ux * trim, a[1] + uy * trim), (b[0] - ux * trim, b[1] - uy * trim))

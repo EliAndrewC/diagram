@@ -4358,33 +4358,32 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "6c742887c856568e",
+  "section": "275cc76fa1f364fd",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#caption placement": {
-  "body": "6dbe2d10b04a134f",
+  "body": "6c324af4780f2ec8",
   "claim": "caption placement - labels-on-maps-cartographic-label-placement.drawing: captions declared, placed by the one placer",
   "code": "b856a31e89c19693",
-  "core": "6c742887c856568e",
+  "core": "275cc76fa1f364fd",
   "date": "2026-11-18",
-  "note": "the added prose says the placer draws a leader \"only when it cannot stand directly beside it\", but the page lets a caption move out to twice the usual gap \"with nothing more\" and ties it with a leader only beyond that. The doc should say a leader is drawn only past twice the usual gap. The rest (on itself, else at the first free ranked place, turned with its feature) is in step",
+  "note": "the paragraph states the placer's rule as 0242 gives it: inside when it fits, else beside at the first free ranked seat, turned, out to twice the gap, then a leader",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:5fdeb07b90c0385f",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac73349d36514544",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:b450303bef4265a6",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bde210da1f30868f",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
-  "section": "6c742887c856568e",
-  "verdict": "DRIFTED"
+  "section": "275cc76fa1f364fd",
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#main gate passage width": {
   "code": "b068ed1e684f469d",
@@ -4399,7 +4398,7 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
   ],
-  "section": "6c742887c856568e",
+  "section": "275cc76fa1f364fd",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
@@ -4421,7 +4420,7 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c19494ded892d93e",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c1eb54b975cd5790"
   ],
-  "section": "6c742887c856568e",
+  "section": "275cc76fa1f364fd",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
@@ -4443,7 +4442,7 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:f7b4c512f3d44a49",
    "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html:954095005dac4440"
   ],
-  "section": "6c742887c856568e",
+  "section": "275cc76fa1f364fd",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
@@ -4455,7 +4454,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "6c742887c856568e",
+  "section": "275cc76fa1f364fd",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
@@ -4467,7 +4466,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "6c742887c856568e",
+  "section": "275cc76fa1f364fd",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
@@ -4485,7 +4484,7 @@
    "0196-communal-wells-ido.drawing.html:6ae8258e9425fcd7",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
-  "section": "6c742887c856568e",
+  "section": "275cc76fa1f364fd",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
@@ -4501,7 +4500,7 @@
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:958c57a30d9cdb53"
   ],
-  "section": "6c742887c856568e",
+  "section": "275cc76fa1f364fd",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
@@ -7731,11 +7730,11 @@
  },
  "l7r/diagram/labels/hand_sheet.py::BLOCK_PX#block part size": {
   "body": "0becfdeeaaa4d1ac",
-  "claim": "block part size - NONE: a part of 2000 px2 (about 220 sq ft) or more counts as a block of a building to the caption placer, not a sub-part.",
-  "code": "f36e1e75715c0c61",
+  "claim": "block part size - CONVENTION: a part of 2000 px2 (about 220 sq ft) or more counts as a block of a building to the caption placer, not a sub-part - a calibration of the placer, which changes where a caption is seated",
+  "code": "6ac3049f8e6815ab",
   "core": "647d52ade7176a76",
-  "date": "2026-10-25",
-  "note": "caption-placer test",
+  "date": "2026-11-18",
+  "note": "a placer calibration on the sheet; 2000 px2 at 3 px/ft is about 222 sq ft",
   "pages": {},
   "research": "",
   "rests": [],
@@ -7772,18 +7771,6 @@
   "core": "c37f8cc5fea40757",
   "date": "2026-10-25",
   "note": "legibility threshold",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/labels/hand_sheet.py::ELONGATED#elongated area ratio": {
-  "body": "c82aa7c2beca77f1",
-  "claim": "elongated area ratio - CONVENTION: an area 3 times taller than wide has its name run along it; a calibration (the river band is ~7x).",
-  "code": "1b913f13a4ba989b",
-  "core": "7a33414bed51de7b",
-  "date": "2026-10-25",
-  "note": "label calibration",
   "pages": {},
   "research": "",
   "rests": [],
@@ -7839,11 +7826,11 @@
  },
  "l7r/diagram/labels/hand_sheet.py::STEPPED#stepped subject fill": {
   "body": "6819586e5ebc3024",
-  "claim": "stepped subject fill - NONE: a multi-part subject filling under 0.85 of its box is named against its parts, not the box, a caption-placer test.",
-  "code": "050b419123a1b5d4",
+  "claim": "stepped subject fill - CONVENTION: a multi-part subject filling under 0.85 of its box is named against its parts, not the box - a calibration of the placer, which changes where a caption is seated",
+  "code": "c371a6441dfe6c16",
   "core": "13a60bd68a444539",
-  "date": "2026-10-25",
-  "note": "placer test",
+  "date": "2026-11-18",
+  "note": "a placer calibration; 0242 does not fix a figure",
   "pages": {},
   "research": "",
   "rests": [],
@@ -7851,11 +7838,11 @@
  },
  "l7r/diagram/labels/hand_sheet.py::WALL_HALF_PX#wall stroke test": {
   "body": "6d4d3a84126128f3",
-  "claim": "wall stroke test - NONE: a dark stroke 2 px or more in half-width is a wall to a leader; sheet walls are 6-9 px, partitions 1 px or less.",
-  "code": "e5aa6a69766f7078",
+  "claim": "wall stroke test - CONVENTION: a dark stroke 2 px or more in half-width is a wall a leader may not cross; sheet walls are 6-9 px, partitions 1 px or less - a calibration of the placer, which changes how a leader is drawn",
+  "code": "47af486de4559ef0",
   "core": "6f1b8dc9cc6bf543",
-  "date": "2026-10-25",
-  "note": "stroke classifier",
+  "date": "2026-11-18",
+  "note": "a calibration of how leaders are drawn",
   "pages": {},
   "research": "",
   "rests": [],
@@ -7900,14 +7887,115 @@
  "l7r/diagram/labels/hand_sheet.py::leader_to_ink#its drawn sizes": {
   "body": "b80a26e3609a4ea2",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)",
-  "code": "f8095bd12e994e16",
-  "core": "09a2b052e8686384",
+  "code": "302bbb846f33acea",
+  "core": "6bc9bf4c97b9bf61",
   "date": "2026-10-25",
   "note": "leader-tip tolerance on the sheet",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/hand_sheet.py::leader_to_ink#leader end trim": {
+  "body": "97076cf7a80c4963",
+  "claim": "leader end trim - CONVENTION: a leader stops short of the ink it ends on by a quarter of its length, at most 1 px, so its end does not touch the ink; a drawn size on the sheet, not in the world",
+  "code": "b10598360af9df23",
+  "core": "6bc9bf4c97b9bf61",
+  "date": "2026-11-18",
+  "note": "trim = min(1.0, d / 4) at the ink end",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/hand_sheet.py::render#the sheets' face and width": {
+  "body": "0a2858fe9b1020de",
+  "claim": "the sheets' face and width - CONVENTION: every sheet's picture is drawn 2400 px wide, its serif lettering in `DejaVu Serif` - a display choice of the sheets, not of the world",
+  "code": "328c401d7abeab51",
+  "core": "0ad66ee0cf288c3f",
+  "date": "2026-11-18",
+  "note": "resvg --width 2400 --serif-family DejaVu Serif",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/hand_sheet.py::seat#a ground's name stays inside its ground unless every seat there covers another name (`best.cost < WEIGHT_TEXT` break)": {
+  "code": "b6ff4b8b93f5faa6",
+  "core": "b6ff4b8b93f5faa6",
+  "date": "2026-11-18",
+  "note": "a ground's name stays inside its ground unless every seat there covers another name (`best.cost < WEIGHT_TEXT` break)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/labels/hand_sheet.py::seat#a stranded several-text caption's wrap": {
+  "body": "8f12be5ecb115c5d",
+  "claim": "a stranded several-text caption's wrap - labels-on-maps-cartographic-label-placement.drawing: a wrap is taken only where it clears; if nothing clears, the caption goes back to its declared lines",
+  "code": "e8ee7d8f5172c774",
+  "core": "b6ff4b8b93f5faa6",
+  "date": "2026-11-18",
+  "note": "takes the first wrap that is free, else the cheapest seat of wrap 0 (the declared lines), as \"if nothing clears, it goes back to one line\"",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:4c681af25f85b4a3",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bed3685aa0240a93",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/hand_sheet.py::seat#placing order: open-ground names first, then names that must stand beside, then those inside, then glyphs in a named ground": {
+  "code": "b6ff4b8b93f5faa6",
+  "core": "b6ff4b8b93f5faa6",
+  "date": "2026-11-18",
+  "note": "placing order: open-ground names first, then names that must stand beside, then those inside, then glyphs in a named ground",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/labels/hand_sheet.py::subjects#a turned subject's angle": {
+  "body": "f40cf82decd1e2d7",
+  "claim": "a turned subject's angle - labels-on-maps-cartographic-label-placement.drawing: a caption beside a turned feature takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption",
+  "code": "a96b7cc61ce569b9",
+  "core": "739ab8bf6fdf10ff",
+  "date": "2026-11-18",
+  "note": "a beside seat takes the angle of the outline's first edge; multiples of 90 degrees are set level",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac73349d36514544",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bde210da1f30868f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/hand_sheet.py::subjects#an area's caption level": {
+  "body": "f40cf82decd1e2d7",
+  "claim": "an area's caption level - labels-on-maps-cartographic-label-placement.drawing: a caption naming an area is level",
+  "code": "160f6ebad0dcd117",
+  "core": "739ab8bf6fdf10ff",
+  "date": "2026-11-18",
+  "note": "`Subject(\"area\", tuple(poly), angle=0.0)` also levels the seat inside a single turned rect (inner = [own[0].poly]): a turned building's roof name is an area caption (§27), yet 0242 has \"a caption naming a turned feature is drawn at that feature's own angle\" and \"takes its feature's own angle, exactly\"; the level rule holds only for an area with \"no direction of its own\"",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:4a8ace9667a8cbcf",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac73349d36514544",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bde210da1f30868f",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/labels/obstacles.py::CIVIC_GROUPS#named civic buildings": {
   "code": "8e0cc4b5002df5ab",
@@ -8026,15 +8114,28 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/labels/obstacles.py::names_group#plumbing": {
-  "code": "b5352db00534a54b",
+ "l7r/diagram/labels/obstacles.py::names_group#a caption's wording names its group": {
+  "body": "4d56c1cd7fb48eeb",
+  "claim": "a caption's wording names its group - what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing: a caption's own wording says which groups of buildings it may cover - a group named by its own word where no list of words is given for it (a flophouse caption the flophouses, a ministry's name the ministries), else by one of its words",
+  "code": "28a3bed634fec023",
   "core": "5374db3e1fab15dc",
-  "date": "2026-10-07",
-  "note": "word matching only; the groups are decided in GROUP_WORDS",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "date": "2026-11-18",
+  "note": "`any(w in words ...)` matches substrings, not words: \"magistrate\" contains \"gate\", so a magistrate's caption may cover the gate group's guard-houses, where 0243 has \"A caption's own wording says which groups ... it may cover\"; match whole words, or the claim must say substring",
+  "pages": {
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html": "992902d5f8170994"
+  },
+  "research": "9e4dafe248294ff1",
+  "rests": [
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:1add67f15e6ee3ba",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:2393260fd3f4de06",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:3b5a2455fcb19ab6",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:436529fe4697b783",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:5c6c093f4296aa0c",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:629c7e0297b53a78",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:980ba3997f32f09c",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:d23fb231816ac274"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/labels/obstacles.py::stands_nearest#association": {
   "code": "727a2c56c5911142",
@@ -8175,13 +8276,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_score#association beside a point": {
-  "body": "50a1d93e25b1da33",
-  "claim": "association beside a point - labels-on-maps-cartographic-label-placement.drawing: asked of a seat with no leader",
-  "code": "d22f7ab348b570cd",
+  "body": "d30d7da51711f3d1",
+  "claim": "association beside a point - labels-on-maps-cartographic-label-placement.drawing: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term with its tie refuses every ring-1 seat",
+  "code": "e0d1076dd0ef44b5",
   "core": "52d51e2c0bfd471c",
-  "date": "2026-11-07",
-  "note": "the claim says the term is asked of \"a seat with no leader\", but the code asks it only of `c.ring == 0`. Ring 1 (1 em, twice the gap) is also leaderless (LEADERLESS_RINGS: \"rings 0 and 1\"; the page ties a leader only to a caption \"more than twice the usual gap\"), so a ring-1 seat skips the association test. The test should cover every ring under LEADERLESS_RINGS, or the claim should say ring 0 only",
-  "outside": true,
+  "date": "2026-11-18",
+  "note": "`c.ring == 0` exempts the leaderless ring-1 seats from the association test, but 0242 holds every caption to \"plainly the name of this feature and no other\", and §40's ring out to twice the gap carries no leader to do the tying; no block limits the test to the preferred offset. To clear it: give ring 1 an association test that can pass, record the exemption on 0242's drawing page as a DEVIATION, or name the filed task that fixes it",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
@@ -8193,11 +8293,54 @@
   ],
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/labels/placer.py::caption_clears_ways#a caption clear of every way": {
+  "body": "ad14255d0c0eeaff",
+  "claim": "a caption clear of every way - labels-on-maps-cartographic-label-placement.drawing: a way the block comes within its drawn half-width of is a way crossed",
+  "code": "c8dd89a3aa9a0b38",
+  "core": "80179f99886ccded",
+  "date": "2026-11-18",
+  "note": "a way counts as crossed when the caption is within its drawn half-width (plus the notch, claimed separately)",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/placer.py::caption_clears_ways#the way notch": {
+  "body": "ad14255d0c0eeaff",
+  "claim": "the way notch - CONVENTION: the clearance runs 2 ft past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread",
+  "code": "3c81851cb7590fc2",
+  "core": "80179f99886ccded",
+  "date": "2026-11-18",
+  "note": "WAY_NOTCH is 2.0 sheet units, which is 2 ft only where one unit is one foot; I need the unit of the ways this predicate is asked of (at 3 px = 1 ft on a hand sheet it is 2/3 ft)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "CANNOT-TELL"
+ },
+ "l7r/diagram/labels/placer.py::leader_of#leader end trim": {
+  "body": "9480d8835cfae385",
+  "claim": "leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world",
+  "code": "9ce633a0f40ee2f6",
+  "core": "8ff18a30b5c3117c",
+  "date": "2026-11-18",
+  "note": "both ends trimmed by min(1.0, d / 4)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/labels/placer.py::leader_of#when a leader is drawn": {
-  "code": "596a8de85c81d193",
-  "core": "ab3949f447a0a815",
-  "date": "2026-10-07",
-  "note": "a leader from ring 2 out, to the nearest point; none for an area",
+  "body": "9480d8835cfae385",
+  "claim": "when a leader is drawn - labels-on-maps-cartographic-label-placement.drawing: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature",
+  "code": "25372cdd3b8f12ed",
+  "core": "8ff18a30b5c3117c",
+  "date": "2026-11-18",
+  "note": "no leader below LEADERLESS_RINGS or for an area; otherwise a leader to the nearest point, none when the caption touches its feature",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
@@ -8205,6 +8348,7 @@
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
   "verdict": "IN-STEP"
@@ -8231,8 +8375,8 @@
  "l7r/diagram/labels/placer.py::outer_rings#leader rings": {
   "body": "781eb52daabf7ea4",
   "claim": "leader rings - labels-on-maps-cartographic-label-placement.drawing: past the reach out to the hug, each seat tied back by a leader",
-  "code": "51c923b4cab754cd",
-  "core": "abbfda4ce6d42020",
+  "code": "9e9a53943bf43b34",
+  "core": "085e81e892a14b96",
   "date": "2026-11-07",
   "note": "rings from the reach out to HUG_RING, each seat tied back by a leader",
   "pages": {
@@ -8242,24 +8386,30 @@
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#caption clearance": {
-  "body": "00e22086e5066903",
-  "claim": "caption clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); half the caption's letter height (`CLEAR_EM`) kept off other ink - 0242 sets that gap only from the caption's own feature, as its calibration",
-  "code": "14d7e730a31b41fd",
-  "core": "d96ca008324c903f",
-  "date": "2026-10-25",
-  "note": "`CLEAR_EM` = `PREFERRED_OFFSET_EM` = 0.5, so `clear` is half the letter height, as the claim says. 0242 fixes that gap only from the caption's own feature, and calls it \"our calibration, not a finding\". It sets no margin to keep off other ink, so GUESS is the right label",
-  "pages": {},
-  "research": "",
+  "body": "f2f6c22d569f623a",
+  "claim": "caption clearance - GUESS labels-on-maps-cartographic-label-placement.drawing: half the caption's letter height (`CLEAR_EM`) kept off other ink, the figure the page records as our calibration, not a finding, for the gap off a caption's own feature (feature 417 T36 pass P7, 2026-10-25)",
+  "code": "b329e79014c2bad7",
+  "core": "b3b16a6a7a1e8a50",
+  "date": "2026-11-18",
+  "note": "clear = CLEAR_EM * size; 0242 records half the letter height as \"our calibration, not a finding\"",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#free space wins": {
   "body": "00e22086e5066903",
   "claim": "free space wins - labels-on-maps-cartographic-label-placement.drawing: the first seat covering nothing is taken",
-  "code": "4f254d30a1d69959",
-  "core": "75a2f77865b7cfa9",
+  "code": "83f37ae050eb5ce4",
+  "core": "b3b16a6a7a1e8a50",
   "date": "2026-11-07",
   "note": "the first candidate costing 0 is returned, in ring then rank order",
   "pages": {
@@ -8271,13 +8421,14 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#never clipped": {
   "body": "00e22086e5066903",
   "claim": "never clipped - labels-on-maps-cartographic-label-placement.drawing: a seat leaving the picture is never a candidate",
-  "code": "b9f5d161710c8213",
-  "core": "75a2f77865b7cfa9",
+  "code": "1e589804b40c9835",
+  "core": "b3b16a6a7a1e8a50",
   "date": "2026-11-07",
   "note": "a block outside the frame is skipped; only a subject with no seat in frame at all is moved inward",
   "pages": {
@@ -8287,13 +8438,14 @@
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#never left off": {
   "body": "00e22086e5066903",
   "claim": "never left off - labels-on-maps-cartographic-label-placement.drawing: with no free seat, the seat covering the least - soft ink first, then whatever it covers",
-  "code": "5c4f536f19d17502",
-  "core": "75a2f77865b7cfa9",
+  "code": "2d36ab0f17906bbc",
+  "core": "b3b16a6a7a1e8a50",
   "date": "2026-11-07",
   "note": "with no free seat: the nudged least-cost seat, soft-only seats first, then the least-cost hard seat; ties go to the earlier seat",
   "pages": {
@@ -8306,13 +8458,14 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d5144d3952ff38ab"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#no key": {
   "body": "00e22086e5066903",
   "claim": "no key - the-map-sheet-its-title-legend-frame-and-margins.drawing: there is no key box",
-  "code": "fdd9f3440354837e",
-  "core": "75a2f77865b7cfa9",
+  "code": "fba547ce09807d90",
+  "core": "b3b16a6a7a1e8a50",
   "date": "2026-11-07",
   "note": "every non-strict path returns a seat on the map, never a key",
   "pages": {
@@ -8323,29 +8476,32 @@
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:342306f8c160905d",
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:eaf008caefe19e0b"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#no seat in the frame": {
   "body": "00e22086e5066903",
   "claim": "no seat in the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)",
-  "code": "7f3b463ea3fa4dde",
-  "core": "d96ca008324c903f",
+  "code": "3f0a0111c8f5509f",
+  "core": "b3b16a6a7a1e8a50",
   "date": "2026-10-25",
   "note": "the mechanism is ours; it meets never clipped and never left off",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#the hug": {
   "body": "00e22086e5066903",
   "claim": "the hug - CONVENTION: no seat past the hug from what it names",
-  "code": "f28cb20f60f542d7",
-  "core": "75a2f77865b7cfa9",
+  "code": "4f19b22cea450720",
+  "core": "b3b16a6a7a1e8a50",
   "date": "2026-11-07",
   "note": "a cap on how far a caption may sit from what it names, a convention",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::rings#nearer first": {
@@ -19549,17 +19705,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/hand_sheet.rs::ELONGATED#elongated area ratio": {
-  "body": "e5d4215f0cce1f44",
-  "claim": "elongated area ratio - CONVENTION: an area 3 times taller than wide has its name run along it; a calibration (the river band is ~7x).",
-  "code": "b83bb0f96fd9ff5a",
-  "core": "5d9f45d4bba0540c",
-  "date": "2026-11-18",
-  "note": "placer calibration",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "rust/mode_a/src/labels/hand_sheet.rs::GLYPH_MAX_PX#leader-end glyph size": {
   "body": "aabffa7db93df7e3",
   "claim": "leader-end glyph size - CONVENTION: a drawn thing up to 600 px2 (a well curb is 24 x 24) is a glyph a leader may not end against, so a caption's leader names the building.",
@@ -19749,6 +19894,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/labels/hand_sheet.rs::element_end#the hand sheet's captions": {
+  "body": "ccdb28d2ee8ea89c",
+  "claim": "the hand sheet's captions - NONE: a sheet read, its captions' subjects found from their declarations and the placer asked, the rules each decision rests on claimed where it is made",
+  "code": "99ef8557517163a2",
+  "core": "4b426ce9b89e1bce",
+  "date": "2026-11-18",
+  "note": "finds an end tag by its own name, parsing only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/labels/hand_sheet.rs::luma#its salts, guards and sentinels": {
   "body": "dd1c6d28348613f0",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.114 (Rec.601 luma weight (blue)); 16 (hex base); 0.299 (Rec.601 luma weight (red)); 0.587 (Rec.601 luma weight (green))",
@@ -19776,8 +19933,8 @@
  "rust/mode_a/src/labels/hand_sheet.rs::placed#a caption written where it is seated": {
   "body": "c294efd940329b9e",
   "claim": "a caption written where it is seated - CONVENTION: each caption written in its own text's parent frame where the placer seats it, its own face kept, a light name on light ground in the sheets' dark ink, and its leader drawn after it (feature 286, plan D5)",
-  "code": "a9cd4958a46bda3b",
-  "core": "0efee12877a4de40",
+  "code": "b9b95c57c366db2d",
+  "core": "30442c78b8ba3f34",
   "date": "2026-11-18",
   "note": "writes out what the placer seated, keeping each caption's own face",
   "pages": {},
@@ -19798,17 +19955,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/hand_sheet.rs::render_args#the hand sheet's captions": {
+ "rust/mode_a/src/labels/hand_sheet.rs::render_args#the sheets' face and width": {
   "body": "e231c961e9c08f9f",
-  "claim": "the hand sheet's captions - NONE: a sheet read, its captions' subjects found from their declarations and the placer asked, the rules each decision rests on claimed where it is made",
-  "code": "39c7c0556643be96",
+  "claim": "the sheets' face and width - CONVENTION: every sheet's picture is drawn 2400 px wide, its serif lettering in `DejaVu Serif` - a display choice of the sheets, not of the world",
+  "code": "6027d1a4c69040ce",
   "core": "e3be652dc27e0030",
   "date": "2026-11-18",
-  "note": "picks the face every sheet's lettering is drawn in (\"DejaVu Serif\"), a display choice. Should be CONVENTION",
+  "note": "2400 px and DejaVu Serif",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/classify.rs::Ink#the sheet's ink as obstacles": {
   "body": "dfbb0fed96c8efcc",
@@ -19909,22 +20066,27 @@
  "rust/mode_a/src/labels/hand_sheet/classify.rs::leader_to_ink#its drawn sizes": {
   "body": "375e1e042bb6c8b5",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)",
-  "code": "d1203add1b75828b",
-  "core": "aa102b52a0f15e06",
+  "code": "a5a2b06384daac6e",
+  "core": "baf99869554b93b0",
   "date": "2026-11-18",
   "note": "1.5 is a sheet-space tolerance",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/hand_sheet/classify.rs::leader_to_ink#leader stops short of the ink by min(1, d/4) px (leader end trim, a drawn size)": {
-  "code": "aa102b52a0f15e06",
-  "core": "aa102b52a0f15e06",
+ "rust/mode_a/src/labels/hand_sheet/classify.rs::leader_to_ink#leader end trim": {
+  "body": "c198d1b22a57fad5",
+  "claim": "leader end trim - CONVENTION: a leader stops short of the ink it ends on by a quarter of its length, at most 1 px, so its end does not touch the ink; a drawn size on the sheet, not in the world",
+  "code": "6e27770758e71452",
+  "core": "baf99869554b93b0",
   "date": "2026-11-18",
-  "note": "leader stops short of the ink by min(1, d/4) px (leader end trim, a drawn size)",
+  "note": "trim = min(1.0, d / 4.0) at the ink end",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/classify.rs::ring_bands#the sheet's ink as obstacles": {
   "body": "2604cdbd91b78d35",
@@ -20341,25 +20503,36 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::Sheet.one#a ground's name stays in its ground": {
-  "body": "6cb7283f4f6fefb2",
+  "body": "9a708005f11905f5",
   "claim": "a ground's name stays in its ground - CONVENTION: a ground's name stays inside its ground unless every seat there covers another name (feature 286; Imhof - an area is named inside it)",
-  "code": "d9ce936ce62a55e1",
-  "core": "c31cb31241273812",
+  "code": "958fd17f78a0b997",
+  "core": "f22935928d9db6a2",
   "date": "2026-11-18",
-  "note": "stops at an inside area seat of a ground kind costing under WEIGHT_TEXT",
+  "note": "this is a caption-seat rule that 0242 states (\"a feature large enough to hold its name is named on itself\", an area caption \"set inside the area it names\"); it should cite 0242's drawing page, not CONVENTION",
+  "outside": true,
   "pages": {},
   "reads": "2d6f4e060f716f8b",
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
- "rust/mode_a/src/labels/hand_sheet/seat.rs::Sheet.one#a several-text caption keeps its cheapest wrap when none clears (0242 §32: \"if nothing clears, it goes back to one line\")": {
-  "code": "c31cb31241273812",
-  "core": "c31cb31241273812",
+ "rust/mode_a/src/labels/hand_sheet/seat.rs::Sheet.one#a stranded several-text caption's wrap": {
+  "body": "9a708005f11905f5",
+  "claim": "a stranded several-text caption's wrap - labels-on-maps-cartographic-label-placement.drawing: a wrap is taken only where it clears; if nothing clears, the caption goes back to its declared lines",
+  "code": "ed61c0179a2e7524",
+  "core": "f22935928d9db6a2",
   "date": "2026-11-18",
-  "note": "a several-text caption keeps its cheapest wrap when none clears (0242 §32: \"if nothing clears, it goes back to one line\")",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "`(w == 0 || free)` keeps wrap 0 (the declared lines) unless a later wrap is free",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "reads": "2d6f4e060f716f8b",
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:4c681af25f85b4a3",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bed3685aa0240a93",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::Sheet.order#the order captions are set": {
   "body": "2d22442659808ad4",
@@ -20583,49 +20756,87 @@
  "rust/mode_a/src/labels/hand_sheet/seat.rs::standing#a seat's standing": {
   "body": "5397d60f2c28e85a",
   "claim": "a seat's standing - NONE: the placer's own rules asked again of a finished sheet, deciding nothing",
-  "code": "576deda3f917b180",
-  "core": "01a5bc90aa8fcfb3",
+  "code": "9a963f9f286b8465",
+  "core": "b01debfc976cafa3",
   "date": "2026-11-18",
   "note": "re-judges finished seats and decides nothing",
   "pages": {},
   "reads": "315f37ea7fda6240",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
- },
- "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#a beside subject's angle taken from its outline's first edge (the caption turns with a turned feature, 0242 §23/§28)": {
-  "code": "54f48a571b94b6c6",
-  "core": "54f48a571b94b6c6",
-  "date": "2026-11-18",
-  "note": "a beside subject's angle taken from its outline's first edge (the caption turns with a turned feature, 0242 §23/§28)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#a caption's subjects": {
   "body": "72bd186c465247be",
   "claim": "a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)",
-  "code": "52d5218af79303b4",
-  "core": "54f48a571b94b6c6",
+  "code": "d9af8fde372df22c",
+  "core": "42faf619dde8a682",
   "date": "2026-11-18",
   "note": "area subjects pushed before point subjects, blocks largest first, scatter beside its glyphs",
   "pages": {},
-  "reads": "17085ade3784ae01",
+  "reads": "13473eb649c7c75b",
   "research": "",
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#elongated area ratio": {
-  "body": "72bd186c465247be",
-  "claim": "elongated area ratio - CONVENTION: an area 3 times taller than wide has its name run along it; a calibration (the river band is ~7x).",
-  "code": "3e3ff5af73fd0aca",
-  "core": "54f48a571b94b6c6",
+ "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#a turned subject's angle": {
+  "body": "c42989d8d8037f7b",
+  "claim": "a turned subject's angle - labels-on-maps-cartographic-label-placement.drawing: a caption beside a turned feature takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption",
+  "code": "2c18dc70128173ca",
+  "core": "42faf619dde8a682",
   "date": "2026-11-18",
-  "note": "0242 rules a caption's angle (\"a caption naming an area ... is level\"), yet the code turns an area taller than ELONGATED*width to 90 deg; the claim should cite 0242 as a DEVIATION recorded on the drawing page, or cite the road-follows-its-line rule for a band, not CONVENTION",
-  "outside": true,
-  "pages": {},
-  "reads": "17085ade3784ae01",
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the first edge's angle through `turned`",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "reads": "13473eb649c7c75b",
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac73349d36514544",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bde210da1f30868f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#an area's caption level": {
+  "body": "c42989d8d8037f7b",
+  "claim": "an area's caption level - labels-on-maps-cartographic-label-placement.drawing: a caption naming an area is level",
+  "code": "8bd1bf65beb43a88",
+  "core": "42faf619dde8a682",
+  "date": "2026-11-18",
+  "note": "`Subject::new(Kind::Area, poly, 0.0)` levels a turned rect's inside seat (its test pins (Area, 0.0) beside (Point, 30.0) for a 30-degree rect), where 0242 has \"a caption naming a turned feature is drawn at that feature's own angle\"; level is for areas with \"no direction of its own\"",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "reads": "13473eb649c7c75b",
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:4a8ace9667a8cbcf",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac73349d36514544",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bde210da1f30868f",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "rust/mode_a/src/labels/hand_sheet/seat.rs::turned#a quarter turn keeps a level caption": {
+  "body": "1bebd723db572a3b",
+  "claim": "a quarter turn keeps a level caption - labels-on-maps-cartographic-label-placement.drawing: a feature turned a quarter, a half or three quarters of a turn keeps a level caption",
+  "code": "2c6ad0205759305e",
+  "core": "29d733e3046d14ea",
+  "date": "2026-11-18",
+  "note": "multiples of 90 degrees go to 0",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::union_area#the hand sheet's seating plumbing": {
   "body": "6d964449254aaba6",
@@ -20669,6 +20880,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/labels/hand_sheet/tests.rs::a_caption_in_a_prefixed_text_element_is_written_over_its_whole_element#its tests": {
+  "body": "f3114fcf6d42e643",
+  "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
+  "code": "d49cc606854e9312",
+  "core": "2bf32806c1b34d7a",
+  "date": "2026-11-18",
+  "note": "a test, decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/labels/hand_sheet/tests.rs::a_court_s_ink_weighs_as_the_python_weighed_it#its tests": {
   "body": "ebaf521e4080a882",
   "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
@@ -20696,25 +20919,27 @@
  "rust/mode_a/src/labels/hand_sheet/tests.rs::a_leader_ends_on_the_ink_it_names#its tests": {
   "body": "1d04bd1de5fb737c",
   "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
-  "code": "f0621ea7838cba02",
-  "core": "bb077880b653b33f",
+  "code": "dd55fa6616834b54",
+  "core": "a2f19d2cd9ef982a",
   "date": "2026-11-18",
   "note": "parity test",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/tests.rs::a_leader_is_carried_onto_the_ink_and_trimmed_as_the_python_s#its tests": {
   "body": "4d300f5918503baa",
   "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
-  "code": "a8f4da116eb6385f",
-  "core": "6a301e230a3bc7f9",
+  "code": "deef90fcc6521c4c",
+  "core": "6d8ab291058ebac8",
   "date": "2026-11-18",
   "note": "parity test",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/tests.rs::a_placed_sheet_renders_as_the_binary_drew_it#its tests": {
@@ -20736,6 +20961,18 @@
   "core": "ccee6a27e91db8d3",
   "date": "2026-11-18",
   "note": "parity test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/tests.rs::an_area_s_name_is_level_and_a_quarter_turned_feature_s_too#its tests": {
+  "body": "3b7ce8e547e132a4",
+  "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
+  "code": "54e38736969362a5",
+  "core": "f448871dd6988f68",
+  "date": "2026-11-18",
+  "note": "a test, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -20777,38 +21014,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/layout.rs::combinations#line cut": {
+ "rust/mode_a/src/labels/layout.rs::combinations#the cut points": {
   "body": "4fb24154c173e0c9",
-  "claim": "line cut - labels-on-maps-cartographic-label-placement.drawing: between words, the shortest longest line, ties to even lengths, no word of three letters or fewer alone",
-  "code": "49f5043932023303",
+  "claim": "the cut points - NONE: every way to cut a run of words into lines, enumerated; the cut the caption takes is [`cut`]'s",
+  "code": "f2b2d6bc31f21bcf",
   "core": "ce129ce773a80e2b",
   "date": "2026-11-18",
-  "note": "enumerates cuts between words only",
-  "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
-  },
-  "research": "0a880fd17413bbf6",
-  "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:888e5f99b2749c97"
-  ],
+  "note": "enumeration only",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
- },
- "rust/mode_a/src/labels/layout.rs::combinations#wrap order": {
-  "body": "4fb24154c173e0c9",
-  "claim": "wrap order - labels-on-maps-cartographic-label-placement.drawing: one line, then two, then three",
-  "code": "84057ffd1cb570fa",
-  "core": "ce129ce773a80e2b",
-  "date": "2026-11-18",
-  "note": "combinations decides no order of one, two and three lines (layouts does); the inherited wrap-order claim does not belong on this unit, and line cut alone (or NONE) should cover it",
-  "outside": true,
-  "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
-  },
-  "research": "0a880fd17413bbf6",
-  "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
-  ],
-  "verdict": "MISLABELED"
  },
  "rust/mode_a/src/labels/layout.rs::cut#line cut": {
   "body": "3cc1387403b57d85",
@@ -21208,18 +21424,29 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/obstacles.rs::names_group#plumbing": {
+ "rust/mode_a/src/labels/obstacles.rs::names_group#a caption's wording names its group": {
   "body": "8ea0e65eff710da7",
-  "claim": "plumbing - NONE",
-  "code": "190b16b98010a86c",
+  "claim": "a caption's wording names its group - what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing: a caption's own wording says which groups of buildings it may cover - a group named by its own word where no list of words is given for it (a flophouse caption the flophouses, a ministry's name the ministries), else by one of its words",
+  "code": "467769c5d190cf3d",
   "core": "ee6d0b1b2f140b6d",
   "date": "2026-11-18",
-  "note": "it decides which building groups a caption's words may cover, including the fallback where a group counts as named when its own name appears in the caption (flophouse, ministry); should cite 0243.drawing for that rule, not NONE",
-  "outside": true,
-  "pages": {},
+  "note": "`words.contains(w)` / `words.contains(group)` match substrings: \"magistrate\" names the gate group by containing \"gate\", where 0243 has \"A caption's own wording says which groups ... it may cover\"; match whole words",
+  "pages": {
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html": "992902d5f8170994"
+  },
   "reads": "31ebb03c3789e34c",
-  "research": "",
-  "verdict": "MISLABELED"
+  "research": "9e4dafe248294ff1",
+  "rests": [
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:1add67f15e6ee3ba",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:2393260fd3f4de06",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:3b5a2455fcb19ab6",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:436529fe4697b783",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:5c6c093f4296aa0c",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:629c7e0297b53a78",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:980ba3997f32f09c",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:d23fb231816ac274"
+  ],
+  "verdict": "DRIFTED"
  },
  "rust/mode_a/src/labels/obstacles.rs::part_of#an obstacle that is its caption's subject": {
   "body": "7d565c9e04609681",
@@ -21350,6 +21577,30 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/labels/placer.rs::NO_SIZE#caption search plumbing": {
+  "body": "cc98158a233023fc",
+  "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
+  "code": "9c247159dec2dd40",
+  "core": "4d62e0772ca150a3",
+  "date": "2026-11-18",
+  "note": "an error message",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/placer.rs::ONE_POINT_LINE#caption search plumbing": {
+  "body": "1d8c0be7679c97fe",
+  "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
+  "code": "768958d15a16f926",
+  "core": "38f0d09db80d3602",
+  "date": "2026-11-18",
+  "note": "an error message",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/labels/placer.rs::Placement#caption search plumbing": {
   "body": "116c76b0225dae82",
   "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
@@ -21389,21 +21640,22 @@
  "rust/mode_a/src/labels/placer.rs::Search.nudge#the nudge": {
   "body": "368355c56336111f",
   "claim": "the nudge - NONE: a whole-pixel search round the least-cost seat for a cheaper one, a search bound",
-  "code": "89c7360ce4e0ab5f",
-  "core": "4258d691996c2f1f",
+  "code": "09ee312cc29005ed",
+  "core": "d81480b00ec06fd2",
   "date": "2026-11-18",
   "note": "a search bound",
   "pages": {},
   "reads": "c875f177ff12e582",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::Search.score#an area's name inside it": {
   "body": "2455d3c9a33b0a44",
   "claim": "an area's name inside it - labels-on-maps-cartographic-label-placement.drawing: spilling out costs an obstacle",
-  "code": "54e4fb2dbd1103f1",
-  "core": "906b74336dfe90c8",
+  "code": "ea4279687a93f63f",
+  "core": "812d6beaf322be73",
   "date": "2026-11-18",
   "note": "a block spilling out of its area adds WEIGHT_OBSTACLE and counts as hard",
   "pages": {
@@ -21416,15 +21668,16 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::Search.score#association beside a point": {
-  "body": "2455d3c9a33b0a44",
-  "claim": "association beside a point - labels-on-maps-cartographic-label-placement.drawing: asked of a seat with no leader",
-  "code": "268917436111b796",
-  "core": "906b74336dfe90c8",
+  "body": "8c7c40bbc46ab374",
+  "claim": "association beside a point - labels-on-maps-cartographic-label-placement.drawing: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term with its tie refuses every ring-1 seat",
+  "code": "1133ab1d185521ff",
+  "core": "812d6beaf322be73",
   "date": "2026-11-18",
-  "note": "the claim says the association gap is asked of a seat with no leader, but the code asks it only when `c.ring == 0`. Ring 1 (twice the gap) also has no leader (LEADERLESS_RINGS = 2), so either the claim should say \"the first ring only\" or the code should test `c.ring < LEADERLESS_RINGS`",
+  "note": "`c.ring == 0` exempts leaderless ring-1 seats from the association test, against \"plainly the name of this feature and no other\"; §40's ring to twice the gap has no leader. To clear it: an association test ring 1 can pass, a DEVIATION recorded on 0242's drawing page, or a named filed task",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
@@ -21452,13 +21705,14 @@
  "rust/mode_a/src/labels/placer.rs::Search.strict_seat#a strict seat": {
   "body": "2224877c4989748a",
   "claim": "a strict seat - NONE: the least-cost seat nudged free or none, the same answer as measuring every seat",
-  "code": "e41c6775ad249e1c",
-  "core": "6b9e49d19bcd7f63",
+  "code": "1e40107125a1b84b",
+  "core": "ab24ef15c150a504",
   "date": "2026-11-18",
   "note": "a search shortcut",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::Search.who#caption search plumbing": {
@@ -21509,22 +21763,33 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/placer.rs::caption_clears_ways#ways crossed": {
+ "rust/mode_a/src/labels/placer.rs::caption_clears_ways#a caption clear of every way": {
   "body": "c00599e90eb94d50",
-  "claim": "ways crossed - labels-on-maps-cartographic-label-placement.drawing: a caption clears every way by its half-width and the notch",
-  "code": "3b287e599425aa48",
+  "claim": "a caption clear of every way - labels-on-maps-cartographic-label-placement.drawing: a way the block comes within its drawn half-width of is a way crossed",
+  "code": "28b89d7a9b10f3e0",
   "core": "ab83c4ceb1ff201b",
   "date": "2026-11-18",
-  "note": "the clearance by half-width and \"the notch\" happens in ObstacleIndex::cost, which the bundle does not show, and the page does not mention a notch. I would need ObstacleIndex's way-cost code to judge it",
+  "note": "a way within half-width plus notch counts as crossed",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
   "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:79466d587ee45226",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/placer.rs::caption_clears_ways#the way notch": {
+  "body": "c00599e90eb94d50",
+  "claim": "the way notch - CONVENTION: the clearance runs 2 ft past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread",
+  "code": "f36bf5fd815d7e23",
+  "core": "ab83c4ceb1ff201b",
+  "date": "2026-11-18",
+  "note": "WAY_NOTCH = 2.0 sheet units; \"2 ft\" holds only at one unit to the foot, and I need the unit of the ways this predicate is asked of",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "CANNOT-TELL"
  },
  "rust/mode_a/src/labels/placer.rs::hug_gap#the hug": {
@@ -21559,23 +21824,37 @@
  "rust/mode_a/src/labels/placer.rs::judge#a seat's standing": {
   "body": "2e14a6c3f62b0942",
   "claim": "a seat's standing - NONE: the placer's own score asked of a finished seat, deciding nothing",
-  "code": "0af2903ca8d6b4fa",
-  "core": "124fe72c588b9be9",
+  "code": "634e2f51134ee230",
+  "core": "7a55b1c79187de6b",
   "date": "2026-11-18",
   "note": "reuses score, decides nothing",
   "pages": {},
   "reads": "af7429bd57eb6cee",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/placer.rs::leader_of#leader end trim": {
+  "body": "f37e1c19c378d7a8",
+  "claim": "leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world",
+  "code": "6c95a755d6e00134",
+  "core": "b0982b917a5d6b52",
+  "date": "2026-11-18",
+  "note": "both ends trimmed by min(1.0, d / 4.0)",
+  "pages": {},
+  "reads": "0d4cd64b989dbf58",
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::leader_of#when a leader is drawn": {
-  "body": "361383a9468c98a9",
+  "body": "f37e1c19c378d7a8",
   "claim": "when a leader is drawn - labels-on-maps-cartographic-label-placement.drawing: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature",
-  "code": "c746b450d24ba9af",
-  "core": "4d555cc4fb5f8a63",
+  "code": "c3ebf717150f935b",
+  "core": "b0982b917a5d6b52",
   "date": "2026-11-18",
-  "note": "ring >= 2, drawn to the nearest point of a point or line subject",
+  "note": "no leader below LEADERLESS_RINGS (2) or for an area; otherwise to the nearest point; none at zero distance",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
@@ -21584,20 +21863,22 @@
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::leader_score#leader keeps clear": {
   "body": "a99304eb18f8acc5",
   "claim": "leader keeps clear - CONVENTION: a leader through a caption or ending on a small glyph counts as covering it",
-  "code": "1079f65930e9d4e7",
-  "core": "ef952e42cf7ccc5b",
+  "code": "6aba950cd3b8c5b6",
+  "core": "f678afb3a57d8dd2",
   "date": "2026-11-18",
   "note": "a 1 px band scored as cover, a drawing matter",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::moved_inward#moved inward": {
@@ -21625,65 +21906,72 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#caption clearance": {
-  "body": "0bf262a033dc2449",
-  "claim": "caption clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); half the caption's letter height (`CLEAR_EM`) kept off other ink - 0242 sets that gap only from the caption's own feature, as its calibration",
-  "code": "ee0eebf1e1b1caca",
-  "core": "13913cdb004d3643",
+  "body": "30cc45fcf810da59",
+  "claim": "caption clearance - GUESS labels-on-maps-cartographic-label-placement.drawing: half the caption's letter height (`CLEAR_EM`) kept off other ink, the figure the page records as our calibration, not a finding, for the gap off a caption's own feature (feature 417 T36 pass P7, 2026-10-25)",
+  "code": "b5f4662607466c59",
+  "core": "b8e7fec282b5a201",
   "date": "2026-11-18",
-  "note": "the page sets half the letter height only from the caption's own feature, as calibration; the gap kept off other ink is unanswered",
-  "pages": {},
-  "reads": "29d1d8fdc0a5e4ef",
-  "research": "",
+  "note": "clear: CLEAR_EM * size, the calibration 0242 records",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
+  },
+  "reads": "296452795aa790e9",
+  "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#free space wins": {
   "body": "0bf262a033dc2449",
   "claim": "free space wins - labels-on-maps-cartographic-label-placement.drawing: the first seat covering nothing is taken",
-  "code": "f7bc8d32a024467f",
-  "core": "13913cdb004d3643",
+  "code": "b3d56ad8b21ccde2",
+  "core": "b8e7fec282b5a201",
   "date": "2026-11-18",
   "note": "the first seat at cost 0 is returned, in ranked and ring order",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
-  "reads": "29d1d8fdc0a5e4ef",
+  "reads": "296452795aa790e9",
   "research": "0a880fd17413bbf6",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#never clipped": {
   "body": "0bf262a033dc2449",
   "claim": "never clipped - labels-on-maps-cartographic-label-placement.drawing: a seat leaving the picture is never a candidate",
-  "code": "da5b586c585ad140",
-  "core": "13913cdb004d3643",
+  "code": "166944bb1fd19a28",
+  "core": "b8e7fec282b5a201",
   "date": "2026-11-18",
   "note": "seats leaving the frame are set aside and never scored",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
-  "reads": "29d1d8fdc0a5e4ef",
+  "reads": "296452795aa790e9",
   "research": "0a880fd17413bbf6",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#never left off": {
   "body": "0bf262a033dc2449",
   "claim": "never left off - labels-on-maps-cartographic-label-placement.drawing: with no free seat, the seat covering the least - soft ink first, then whatever it covers",
-  "code": "cdbe83b3866738eb",
-  "core": "13913cdb004d3643",
+  "code": "a90c5a2cfbf68ff5",
+  "core": "b8e7fec282b5a201",
   "date": "2026-11-18",
   "note": "least-cost best and soft seats are kept for settle; the earlier seat wins ties",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
-  "reads": "29d1d8fdc0a5e4ef",
+  "reads": "296452795aa790e9",
   "research": "0a880fd17413bbf6",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
@@ -21692,62 +21980,67 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d5144d3952ff38ab",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ea1f05ca8ceac76d"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#no key": {
   "body": "0bf262a033dc2449",
   "claim": "no key - the-map-sheet-its-title-legend-frame-and-margins.drawing: there is no key box",
-  "code": "984ea9534e55d8ea",
-  "core": "13913cdb004d3643",
+  "code": "5ce64ae515560f30",
+  "core": "b8e7fec282b5a201",
   "date": "2026-11-18",
   "note": "no key box is reserved or placed",
   "pages": {
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html": "74f2ed75d6b79cce"
   },
-  "reads": "29d1d8fdc0a5e4ef",
+  "reads": "296452795aa790e9",
   "research": "0507e505d7cb52bb",
   "rests": [
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:342306f8c160905d",
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:eaf008caefe19e0b"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#no seat in the frame": {
   "body": "0bf262a033dc2449",
   "claim": "no seat in the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)",
-  "code": "7111f98d820c4f4b",
-  "core": "13913cdb004d3643",
+  "code": "f5f8ea87dcb00aa5",
+  "core": "b8e7fec282b5a201",
   "date": "2026-11-18",
   "note": "the first outside seat is recorded for settle; the page is silent on a fixed frame",
   "pages": {},
-  "reads": "29d1d8fdc0a5e4ef",
+  "reads": "296452795aa790e9",
   "research": "",
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#the hug": {
   "body": "0bf262a033dc2449",
   "claim": "the hug - CONVENTION: no seat past the hug from what it names",
-  "code": "5ae1d164b224fc68",
-  "core": "13913cdb004d3643",
+  "code": "3a9df619d15e72c0",
+  "core": "b8e7fec282b5a201",
   "date": "2026-11-18",
   "note": "non-area seats past HUG_RING are skipped",
   "pages": {},
-  "reads": "29d1d8fdc0a5e4ef",
+  "reads": "296452795aa790e9",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::placement#caption search plumbing": {
   "body": "243bcfbe53a0fb74",
   "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
-  "code": "b8728ff5554974b5",
-  "core": "3fb89d25eb2e1650",
+  "code": "ced22c9c3af8d0ab",
+  "core": "7e5929f7137b9870",
   "date": "2026-11-18",
   "note": "baseline conversion and record",
   "pages": {},
   "reads": "4849332098aef83d",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::record_box#caption search plumbing": {
@@ -21777,8 +22070,8 @@
  "rust/mode_a/src/labels/placer.rs::settle#never left off": {
   "body": "c3a55d7002a614c4",
   "claim": "never left off - labels-on-maps-cartographic-label-placement.drawing: with no free seat, the seat covering the least - soft ink first, then whatever it covers",
-  "code": "1bc7783815497189",
-  "core": "b96d34e647e90a37",
+  "code": "006d22c1d0102508",
+  "core": "c4aeae1ca2317297",
   "date": "2026-11-18",
   "note": "always returns a seat: free or not hard first, then soft, then best",
   "pages": {
@@ -21791,17 +22084,19 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ea1f05ca8ceac76d"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::settle#no seat in the frame": {
   "body": "c3a55d7002a614c4",
   "claim": "no seat in the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)",
-  "code": "26aecffb06e327df",
-  "core": "b96d34e647e90a37",
+  "code": "dba3f65b82863128",
+  "core": "c4aeae1ca2317297",
   "date": "2026-11-18",
   "note": "the outside seat is moved inward and scored",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/cands.rs::AREA_SEATS#caption search plumbing": {
@@ -22152,14 +22447,39 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/placer/tests.rs::a_line_of_one_point_and_a_leader_of_no_length_answer_as_the_python_s#its tests": {
-  "body": "1457c8ebe597dd05",
+ "rust/mode_a/src/labels/placer/tests.rs::a_leader_of_no_length_crosses_nothing#its tests": {
+  "body": "b39621684507fd32",
   "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
-  "code": "f2f4c18052ad15b8",
-  "core": "183fbd77461943b5",
+  "code": "924f8ed4c9389eb7",
+  "core": "63ca586c6b00934c",
   "date": "2026-11-18",
-  "note": "a test",
+  "note": "a test, decides nothing",
   "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/placer/tests.rs::a_leader_s_block_touching_its_line_draws_no_leader#its tests": {
+  "body": "ee5afada3ae76793",
+  "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
+  "code": "60d3e328361a2a28",
+  "core": "2cf90264404d498d",
+  "date": "2026-11-18",
+  "note": "a test, decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/placer/tests.rs::a_line_of_one_point_and_a_caption_of_no_size_are_refused_by_name#its tests": {
+  "body": "580acc881d93e5fc",
+  "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
+  "code": "c53b5adfd367b824",
+  "core": "5ebd1151e6f16198",
+  "date": "2026-11-18",
+  "note": "a test, decides nothing",
+  "pages": {},
+  "reads": "23b2eda70dc8b2fc",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -22179,13 +22499,14 @@
  "rust/mode_a/src/labels/placer/tests.rs::every_held_scene_is_seated_as_the_python_seated_it#its tests": {
   "body": "b59a0435f2145e1a",
   "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
-  "code": "8fef4e0fe6178ecb",
-  "core": "1917a39d127d14c6",
+  "code": "d6561cc19b4325ec",
+  "core": "dd33723a2812151e",
   "date": "2026-11-18",
   "note": "a test",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/tests.rs::index#its tests": {
@@ -22263,13 +22584,14 @@
  "rust/mode_a/src/labels/placer/tests.rs::the_hug_and_the_inward_move_measure_as_the_python_s#its tests": {
   "body": "1e64deec89d354cd",
   "claim": "its tests - NONE: the port held to the Python's answers, deciding nothing about a building",
-  "code": "61bdbb99da0838a1",
-  "core": "7ec224963ee494c2",
+  "code": "3073cf61a0c75278",
+  "core": "913854aed56e2ada",
   "date": "2026-11-18",
   "note": "a test",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/tests.rs::written#its tests": {
@@ -27377,14 +27699,15 @@
  "rust/mode_a/src/parse/lockstep_labels.rs::compare#the labels' comparison": {
   "body": "16a19edd9f707353",
   "claim": "the labels' comparison - NONE: the Python and the port compared, deciding nothing about a building",
-  "code": "ca6f261f9bbc1860",
-  "core": "fcaf20238e4839a9",
+  "code": "d3efb96402664aed",
+  "core": "42fff5e112e46b47",
   "date": "2026-11-18",
   "note": "comparison",
   "pages": {},
   "reads": "c34d4cd2e1eecd01",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/lockstep_labels.rs::f#the labels' comparison": {

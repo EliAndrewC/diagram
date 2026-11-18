@@ -20,8 +20,15 @@
 //!
 //! THE REFUSAL ([`unported`], at the push's claims gate): a claim of the merge base on a `.py` unit the tree no longer has, carried by no
 //! move and no port, is refused with the fix - so no claim is dropped by a record that prunes rows of units gone.
+//!
+//! A RETIRED UNIT (feature 449 T184, `ask:449-T184-elongated-retired`, `ask:449-T184-elongated-retired-2`): a `.py` unit deleted because
+//! the research overruled its rule has no port to go to, so the map's `retired` names it with the task that removed it (`by`), the
+//! research page that overrules it (`page`, a file in the tree), why, and the claims round's finding against it (`finding`, a claim key
+//! of the same label). The push lets its claims go only where the unit is gone and the merge base's row of that `finding` reads DRIFTED
+//! or MISLABELED - the evidence an ask would read; the unit's own rows may read any verdict, and anything else is a new ask. `claims
+//! rekey` drops its rows and its deferred entries.
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::path::Path;
 
 use serde_json::{json, Value};
@@ -46,15 +53,53 @@ pub struct Port {
 /// `.py` uid -> its port.
 pub type Ports = BTreeMap<String, Port>;
 
+/// One `retired` entry: a `.py` unit deleted, not ported, because the research overruled its rule (`ask:449-T184-elongated-retired`).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Retired {
+    pub by: String,
+    /// The research page that overrules the unit's rule, `research/questions/<file>.html`.
+    pub page: String,
+    pub why: String,
+    /// The key (`<path>::<qualname>#<label>`) of the claims round's finding that the research is against the rule.
+    pub finding: String,
+}
+
+/// `.py` uid -> its retirement.
+pub type Retirements = BTreeMap<String, Retired>;
+
+/// The whole map: its ports and its retired units.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct Map {
+    pub ports: Ports,
+    pub retired: Retirements,
+}
+
+impl From<Ports> for Map {
+    fn from(ports: Ports) -> Self {
+        Self {
+            ports,
+            retired: Retirements::new(),
+        }
+    }
+}
+
+/// The verdicts of a retirement's `finding` row at the merge base that let its claims go: the claims round found the research against the
+/// rule, DRIFTED or MISLABELED, read off that row alone - never the retired unit's own rows, which may read any verdict
+/// (`ask:449-T184-elongated-retired`, `ask:449-T184-elongated-retired-2`; any other verdict is a new ask).
+pub const RETIRABLE: &[&str] = &["DRIFTED", "MISLABELED"];
+
 /// The map at `root` (none where there is no file); a malformed entry is an error naming the form.
 ///
 /// # Errors
 ///
-/// Where the file is not JSON, or an entry is not `"<path>.py::<qualname>": {"to": "<path>::<qualname>", "by": "<feature> <task>"}`.
-pub fn load(root: &Path) -> Result<Ports, Fail> {
+/// Where the file is not JSON, or an entry is not `"<path>.py::<qualname>": {"to": "<path>::<qualname>", "by": "<feature> <task>"}`,
+/// or a `retired` entry is not `"<path>.py::<qualname>": {"by": ..., "page": "research/questions/<file>.html", "why": ..., "finding":
+/// "<path>::<qualname>#<label>"}`, names a
+/// page the tree does not hold, or retires a unit `ports` also maps.
+pub fn load(root: &Path) -> Result<Map, Fail> {
     let path = root.join(PORTS);
     if !path.is_file() {
-        return Ok(Ports::new());
+        return Ok(Map::default());
     }
     let doc: Value = serde_json::from_str(&read_text(&path)?)
         .map_err(|e| format!("json.decoder.JSONDecodeError: {PORTS}: {e}"))?;
@@ -74,6 +119,57 @@ pub fn load(root: &Path) -> Result<Ports, Fail> {
             Port {
                 to: to.to_owned(),
                 by: by.to_owned(),
+            },
+        );
+    }
+    let retired = load_retired(root, &doc, &out)?;
+    Ok(Map {
+        ports: out,
+        retired,
+    })
+}
+
+/// The map's `retired` entries, each held to its form, its page a file at `root` and its unit mapped by no port.
+fn load_retired(root: &Path, doc: &Value, ports: &Ports) -> Result<Retirements, Fail> {
+    let mut out = Retirements::new();
+    let empty = serde_json::Map::new();
+    for (uid, v) in doc
+        .get("retired")
+        .and_then(Value::as_object)
+        .unwrap_or(&empty)
+    {
+        let (by, page, why) = (field(v, "by"), field(v, "page"), field(v, "why"));
+        let finding = field(v, "finding");
+        let found = finding.split_once("::").is_some_and(|(path, rest)| {
+            !path.is_empty()
+                && rest
+                    .split_once('#')
+                    .is_some_and(|(q, l)| !q.is_empty() && !l.is_empty())
+        });
+        let paged = page.starts_with("research/questions/")
+            && Path::new(page).extension().is_some_and(|e| e == "html")
+            && !page.contains("..");
+        if !uid.contains(".py::")
+            || by.trim().is_empty()
+            || why.trim().is_empty()
+            || !paged
+            || !found
+        {
+            return Err(format!("{PORTS}: the retired entry `{uid}` is not of the form \"<path>.py::<qualname>\": {{\"by\": \"<feature> <task>\", \"page\": \"research/questions/<file>.html\", \"why\": \"<one line>\", \"finding\": \"<path>::<qualname>#<label>\"}} (`finding` the key of the claims round's DRIFTED or MISLABELED finding against its rule)"));
+        }
+        if !root.join(page).is_file() {
+            return Err(format!("{PORTS}: the retired entry `{uid}` names the page {page}, which is no file in the tree: name the research page that overrules its rule (`ls research/questions/`)"));
+        }
+        if ports.contains_key(uid) {
+            return Err(format!("{PORTS}: `{uid}` is both retired and under `ports`: a unit is ported or retired, never both - keep the one that is true"));
+        }
+        out.insert(
+            uid.clone(),
+            Retired {
+                by: by.to_owned(),
+                page: page.to_owned(),
+                why: why.to_owned(),
+                finding: finding.to_owned(),
             },
         );
     }
@@ -124,20 +220,23 @@ pub fn fate(key: &str, port: &Port, cur: &Cur, text: Option<&str>) -> Fate {
     }
 }
 
-/// What `claims rekey` did with the ports: the keys carried, the keys dropped, and the rows left with their fix.
+/// What `claims rekey` did with the ports: the keys carried, the keys dropped, the rows left with their fix, and the keys of a retired
+/// unit dropped with the pages that overrule them.
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct Rekeyed {
     pub carried: Vec<String>,
     pub dropped: Vec<String>,
     pub stuck: Vec<String>,
+    pub retired: Vec<String>,
+    pub retired_pages: BTreeSet<String>,
 }
 
-/// Each claim row on a mapped unit gone from `cur` carried onto its port, or dropped, or left with its fix; `text_of` gives a key's
-/// claim text from the merge base, for a row that does not hold it.
+/// Each claim row on a mapped unit gone from `cur` carried onto its port, or dropped, or left with its fix, and each on a retired unit
+/// gone dropped; `text_of` gives a key's claim text from the merge base, for a row that does not hold it.
 pub fn carry(
     cur: &Cur,
     index: &mut Index,
-    ports: &Ports,
+    map: &Map,
     text_of: &mut dyn FnMut(&str) -> Option<String>,
 ) -> Rekeyed {
     let uids = cur.uids();
@@ -145,10 +244,18 @@ pub fn carry(
     let keys: Vec<String> = index.keys().cloned().collect();
     for key in keys {
         let uid = uid_of(&key);
-        let Some(port) = ports.get(uid) else { continue };
         if uids.contains(uid) || is(&index[&key], "verdict", "UNCLAIMED") {
             continue;
         }
+        if let Some(gone) = map.retired.get(uid) {
+            index.shift_remove(&key);
+            out.retired_pages.insert(gone.page.clone());
+            out.retired.push(key);
+            continue;
+        }
+        let Some(port) = map.ports.get(uid) else {
+            continue;
+        };
         let held = field(&index[&key], "claim").to_owned();
         let text = if held.is_empty() {
             text_of(&key)
@@ -176,8 +283,8 @@ pub fn carry(
 }
 
 /// The deferred list (`dev/claims-deferred.json`'s `units` and `keys`) re-keyed with its units' ports: a unit to its port, a key to its
-/// port's same label, one ported into a tooling crate dropped; whether it changed.
-pub fn carry_deferred(deferred: &mut Value, ports: &Ports, cur: &Cur) -> bool {
+/// port's same label, one ported into a tooling crate or retired dropped; whether it changed.
+pub fn carry_deferred(deferred: &mut Value, map: &Map, cur: &Cur) -> bool {
     let uids = cur.uids();
     let mut changed = false;
     for part in ["units", "keys"] {
@@ -188,7 +295,11 @@ pub fn carry_deferred(deferred: &mut Value, ports: &Ports, cur: &Cur) -> bool {
         for v in list.drain(..) {
             let entry = v.as_str().unwrap_or_default().to_owned();
             let uid = uid_of(&entry);
-            match ports.get(uid).filter(|_| !uids.contains(uid)) {
+            if map.retired.contains_key(uid) && !uids.contains(uid) {
+                changed = true;
+                continue;
+            }
+            match map.ports.get(uid).filter(|_| !uids.contains(uid)) {
                 None => kept.push(v),
                 Some(port) => {
                     changed = true;
@@ -225,26 +336,26 @@ pub fn rekey_ports(
     cur: &Cur,
     index: &mut Index,
 ) -> Result<Rekeyed, Fail> {
-    let ports = load(root)?;
-    if ports.is_empty() {
+    let map = load(root)?;
+    if map.ports.is_empty() && map.retired.is_empty() {
         return Ok(Rekeyed::default());
     }
     // the merge base is read only for a row to carry that does not hold its claim's text
     let uids = cur.uids();
     let unheld = index.iter().any(|(k, v)| {
         let uid = uid_of(k);
-        ports.contains_key(uid) && !uids.contains(uid) && field(v, "claim").is_empty()
+        map.ports.contains_key(uid) && !uids.contains(uid) && field(v, "claim").is_empty()
     });
     let texts = if unheld {
         base_texts(reader, root)?
     } else {
         HashMap::new()
     };
-    let done = carry(cur, index, &ports, &mut |k: &str| texts.get(k).cloned());
+    let done = carry(cur, index, &map, &mut |k: &str| texts.get(k).cloned());
     let path = root.join(super::index::DEFERRED);
     if path.is_file() {
         let mut deferred = Value::Object(super::index::load_map(&path)?);
-        if carry_deferred(&mut deferred, &ports, cur) {
+        if carry_deferred(&mut deferred, &map, cur) {
             save_deferred(root, &deferred)?;
         }
     }
@@ -255,6 +366,10 @@ pub fn rekey_ports(
 pub fn say(done: &Rekeyed, o: &mut super::commands::Out) -> i32 {
     if !done.carried.is_empty() || !done.dropped.is_empty() {
         o.say(&format!("claims-rekey: {} claim row(s) carried to their port ({PORTS}), each owed a full check of its new code ({PORTED}); {} dropped, a claim of NONE research ported into a tooling crate (ask:449-T148-claims)", done.carried.len(), done.dropped.len()));
+    }
+    if !done.retired.is_empty() {
+        let pages: Vec<&str> = done.retired_pages.iter().map(String::as_str).collect();
+        o.say(&format!("claims-rekey: {} claim row(s) of a retired unit dropped ({PORTS}'s `retired`), its rule overruled by {} (ask:449-T184-elongated-retired)", done.retired.len(), pages.join(", ")));
     }
     for why in &done.stuck {
         o.say(&format!("claims-rekey: {why}"));
@@ -296,12 +411,14 @@ pub struct Before<'a> {
 }
 
 /// The refusal for each claim of the merge base on a `.py` unit this tree no longer has (`gone` decides, the units of every scope)
-/// that no move and no port carried; `index` the tree's.
+/// that no move, no port and no retirement carried; `index` the tree's. A retired unit is refused while it is still in the tree, and its
+/// claim where its `finding` is not a merge-base row of the same label the claims round found DRIFTED or MISLABELED
+/// (`ask:449-T184-elongated-retired-2`).
 pub fn unported(
     cur: &Cur,
     index: &Index,
     before: &Before,
-    ports: &Ports,
+    map: &Map,
     gone: &mut dyn FnMut(&str) -> bool,
 ) -> Vec<String> {
     let uids = cur.uids();
@@ -309,8 +426,32 @@ pub fn unported(
         .into_values()
         .collect();
     let mut out = Vec::new();
+    // a retired unit still in the tree: `gone` is asked only where its claims are not (it answers for every scope's units)
+    let mut present: BTreeSet<&str> = map
+        .retired
+        .keys()
+        .map(String::as_str)
+        .filter(|u| uids.contains(*u))
+        .collect();
     for (key, was) in before.index {
         let uid = uid_of(key);
+        if let Some(gone_by) = map.retired.get(uid) {
+            if present.contains(uid)
+                || is(was, "verdict", "UNCLAIMED")
+                || !before.uids.contains(uid)
+                || moved.contains(key)
+            {
+                continue;
+            }
+            if !gone(uid) {
+                present.insert(map.retired.get_key_value(uid).map_or(uid, |p| p.0.as_str()));
+                continue;
+            }
+            if let Some(why) = retired_refusal(key, gone_by, before.index, index) {
+                out.push(why);
+            }
+            continue;
+        }
         if !uid.contains(".py::")
             || is(was, "verdict", "UNCLAIMED")
             || !before.uids.contains(uid)
@@ -320,8 +461,8 @@ pub fn unported(
         {
             continue;
         }
-        let Some(port) = ports.get(uid) else {
-            out.push(format!("unported: {key} - its unit {uid} is deleted, and {PORTS} maps it to no unit: if it was ported, add `\"{uid}\": {{\"to\": \"rust/<crate>/src/<file>.rs::<item>\", \"by\": \"<feature> <task>\"}}` under its `ports` and run `make claims-rekey`; a claim the map cannot carry is a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-phase4-slices Q10)"));
+        let Some(port) = map.ports.get(uid) else {
+            out.push(format!("unported: {key} - its unit {uid} is deleted, and {PORTS} maps it to no unit: if it was ported, add `\"{uid}\": {{\"to\": \"rust/<crate>/src/<file>.rs::<item>\", \"by\": \"<feature> <task>\"}}` under its `ports` and run `make claims-rekey`; if the research overruled its rule, name it under `retired` with the `finding` key whose claims round found it DRIFTED or MISLABELED (`{{\"by\": \"<feature> <task>\", \"page\": \"research/questions/<file>.html\", \"why\": \"<one line>\", \"finding\": \"<path>::<qualname>#<label>\"}}`, ask:449-T184-elongated-retired-2); a claim the map cannot carry is a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-phase4-slices Q10)"));
             continue;
         };
         let held = field(was, "claim");
@@ -339,7 +480,36 @@ pub fn unported(
             Fate::Stuck(why) => out.push(why),
         }
     }
+    for uid in present {
+        out.push(format!("unported: {uid} - retired but still present: {PORTS}'s `retired` names a unit deleted because the research overruled its rule; delete the unit, or take it out of `retired`"));
+    }
     out
+}
+
+/// The refusal, if any, of the merge-base claim `key`, whose unit `gone_by` retired and the tree no longer has: a new ask where its
+/// `finding` is not in the merge base's index (`base`), reads no verdict of [`RETIRABLE`] or names another label; else `make
+/// claims-rekey` while its row stands in the tree's `index`, and none once it is dropped (`ask:449-T184-elongated-retired-2`).
+fn retired_refusal(key: &str, gone_by: &Retired, base: &Index, index: &Index) -> Option<String> {
+    let label = |k: &str| k.rsplit_once('#').map_or("", |p| p.1).to_owned();
+    let why = match base.get(&gone_by.finding) {
+        None => Some("is no key of the merge base's index".to_owned()),
+        Some(row) if !RETIRABLE.contains(&field(row, "verdict")) => Some(format!(
+            "reads {} at the merge base",
+            Some(field(row, "verdict"))
+                .filter(|v| !v.is_empty())
+                .unwrap_or("no verdict")
+        )),
+        Some(_) if label(&gone_by.finding) != label(key) => Some(format!(
+            "names the label `{}`, not `{}`",
+            label(&gone_by.finding),
+            label(key)
+        )),
+        Some(_) => None,
+    };
+    if let Some(why) = why {
+        return Some(format!("unported: {key} - {PORTS} retires its unit ({}, {}), but its `finding` {} {why}: retire only a claim whose claims round found the research against it: name that finding's key under `finding`; else a new ask (`make arbiter-ask`) (ask:449-T184-elongated-retired-2)", gone_by.by, gone_by.page, gone_by.finding));
+    }
+    index.contains_key(key).then(|| format!("unported: {key} - its unit is retired ({}) but its row not yet dropped: `make claims-rekey` (make land runs it)", gone_by.page))
 }
 
 #[cfg(test)]

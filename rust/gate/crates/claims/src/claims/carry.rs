@@ -528,8 +528,8 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
             uids: &uids,
             texts: &texts,
         };
-        let ports = super::ports::load(root)?;
-        let unported = super::ports::unported(&at.cur, &at.index, &before, &ports, &mut |u| {
+        let map = super::ports::load(root)?;
+        let unported = super::ports::unported(&at.cur, &at.index, &before, &map, &mut |u| {
             !every.contains(u)
         });
         let mut answered = HashSet::new();

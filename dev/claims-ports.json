@@ -1,5 +1,13 @@
 {
- "why": "feature 449 T166 (ask:449-phase4-slices Q10): each `.py` unit a slice's cut ports and deletes, by its `path::qualname`, mapped to the unit it became (`to`, a Rust item's `path::qualname`) and the task that ported it (`by`, `<feature> <task>`); `make claims-rekey` (which make land runs) carries each of its claims' index rows onto the port, owed a full check of the new code, and the push refuses a claim on a deleted `.py` unit this map does not carry",
+ "why": "feature 449 T166 (ask:449-phase4-slices Q10): each `.py` unit a slice's cut ports and deletes, by its `path::qualname`, mapped to the unit it became (`to`, a Rust item's `path::qualname`) and the task that ported it (`by`, `<feature> <task>`); `make claims-rekey` (which make land runs) carries each of its claims' index rows onto the port, owed a full check of the new code, and the push refuses a claim on a deleted `.py` unit this map does not carry. Under `retired` (feature 449 T184, ask:449-T184-elongated-retired and ask:449-T184-elongated-retired-2), each `.py` unit deleted and not ported because the research overruled its rule, with the task that removed it (`by`), the research page that overrules it (`page`, `research/questions/<file>.html`, a file in the tree), why (`why`, one line) and the claims round's finding against its rule (`finding`, `<path>::<qualname>#<label>`): the push lets its claims go only where the unit is gone and the merge base's row of its `finding` (a key of the same label) reads DRIFTED or MISLABELED (any other verdict is a new ask, `make arbiter-ask`; ask:449-T184-elongated-retired-2), and `make claims-rekey` drops their index rows and deferred entries",
+ "retired": {
+  "l7r/diagram/labels/hand_sheet.py::ELONGATED": {
+   "by": "449 T184",
+   "page": "research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html",
+   "why": "its rule turned a tall area's caption 90 degrees; 0242 keeps an area's caption level - retired by T184, not ported",
+   "finding": "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#elongated area ratio"
+  }
+ },
  "ports": {
   "l7r/diagram/dwellings.py::BUSINESS_KINDS": {
    "to": "rust/mode_a/src/dwellings.rs::BUSINESS_KINDS",

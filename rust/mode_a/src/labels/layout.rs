@@ -10,6 +10,8 @@
 use l7r_guard::shared::py_text::split;
 
 /// The cut points `itertools.combinations(range(1, n_words), k)` yields, in its (lexicographic) order.
+///
+/// Research: the cut points - NONE: every way to cut a run of words into lines, enumerated; the cut the caption takes is [`cut`]'s
 fn combinations(n_words: usize, k: usize) -> Vec<Vec<usize>> {
     fn go(from: usize, end: usize, k: usize, head: &mut Vec<usize>, out: &mut Vec<Vec<usize>>) {
         if k == 0 {

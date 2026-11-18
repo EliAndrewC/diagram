@@ -374,8 +374,7 @@ pub fn compare(path: &Path, ours: &Ours, python: &Value) -> (Value, Found) {
                 ..r.1.clone()
             },
             &parts,
-        )
-        .expect("a pool leader's tip");
+        );
         if let (Some(a), Some(b)) = (ink.leader, r.1.leader) {
             tips.0 += 1;
             tips.1 = tips.1.max(dist(a.1, b.1));

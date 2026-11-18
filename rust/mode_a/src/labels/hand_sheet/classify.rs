@@ -6,8 +6,6 @@
 
 use std::collections::BTreeSet;
 
-use l7r_gate_research::Error;
-
 use super::super::geom::{bbox, dist, inside, open_edges, ring_edges, seg_closest, Pt};
 use super::super::obstacles::{Obstacle, ObstacleIndex, Way};
 use super::super::placer::{Placement, Subject};
@@ -334,14 +332,16 @@ impl Ink<'_> {
 /// cap stands up to `r (1 - cos(pi / 64))` from GEOS's (0.12% of the half-width; measured on the pool sheets by
 /// `parse/lockstep_labels.rs`).
 ///
+/// A leader whose start already lies on the ink it names ties nothing back - the caption touches its subject - so it is dropped (feature
+/// 449 T184; the Python divided by the zero distance there).
+///
 /// Research:
 ///     its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)
-///
-/// # Errors
-/// Python's `ZeroDivisionError` where the leader's start lies on the ink itself, as the Python divided by the zero distance there.
-pub fn leader_to_ink(p: Placement, parts: &[&Shape]) -> Result<Placement, Error> {
+///     leader end trim - CONVENTION: a leader stops short of the ink it ends on by a quarter of its length, at most 1 px, so its end does not touch the ink; a drawn size on the sheet, not in the world
+#[must_use]
+pub fn leader_to_ink(p: Placement, parts: &[&Shape]) -> Placement {
     let Some((start, end)) = p.leader else {
-        return Ok(p);
+        return p;
     };
     let ink: Vec<Ink<'_>> = parts
         .iter()
@@ -363,17 +363,17 @@ pub fn leader_to_ink(p: Placement, parts: &[&Shape]) -> Result<Placement, Error>
             )
     };
     if ink.is_empty() || nearest(end).0 < 1.5 {
-        return Ok(p);
+        return p;
     }
     let tip = nearest(start).1;
     let d = dist(start, tip);
     if d == 0.0 {
-        return Err(Error::new("ZeroDivisionError", "division by zero"));
+        return Placement { leader: None, ..p };
     }
     let trim = min(1.0, d / 4.0);
     let (ux, uy) = ((tip.0 - start.0) / d, (tip.1 - start.1) / d);
-    Ok(Placement {
+    Placement {
         leader: Some((start, (tip.0 - ux * trim, tip.1 - uy * trim))),
         ..p
-    })
+    }
 }

@@ -642,6 +642,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T184 (step 3a's known defects, T151's part A and claims round; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "232e2206aca3bb98bf48aebecf61000597a34750fad6aa75a19528d5ba919a24",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T184 Approach (checklist part A)": {
+   "sha256": "a9cc651da1f832116ddef574ea7ae1674f25ba17f420b86322e0d9b34046e2ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -11889,6 +11901,124 @@
      "why": "Honors 'fix all known bugs in each step before moving on to porting the next step' going forward (step 3a preceded the GM's rule); exits verify the drawn outputs still pass their checks per FR-002."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T184 (step 3a's known defects, T151's part A and claims round; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T184 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1a leader_of zero distance",
+     "summary": "A leader whose block touches the subject it names draws no leader (zero distance = no leader), in placer.rs and placer.py; held case 15, the Python's one refusal, now seated.",
+     "class": "within",
+     "why": "A defect found in step 3a (a division by zero distance), fixed in both living copies before step 3b, as the GM's 2026-11-18 'fix all known bugs in each step before moving on to porting the next step' asks. A refusal turning into a placement as a bug is fixed is expected under FR-002 and the fix-as-we-go rule."
+    },
+    {
+     "id": "D1b leader_to_ink zero distance",
+     "summary": "The same division in leader_to_ink (classify.rs, hand_sheet.py) fixed by dropping the leader; its test, which pinned the division, now pins the drop; the search's Results narrow to place's two refusals.",
+     "class": "within",
+     "why": "The same defect's second copy. Changing the test's expected result is FR-002's named exception for a check fixed on purpose: changed as fixed, named here. The narrowed Result types follow from functions that can no longer fail and remove no behavior a caller uses."
+    },
+    {
+     "id": "D2a one-point line refused by name",
+     "summary": "A line subject of fewer than two points is refused by name (ONE_POINT_LINE) on both sides, in place of the Python's AssertionError or ValueError.",
+     "class": "within",
+     "why": "The Python already refused this input, through an incidental exception. Naming the refusal is a defect fix and drops nothing a caller had. The matching wording on both sides is a choice, and nothing in the block makes Python/Rust equality a gate."
+    },
+    {
+     "id": "D2b caption of no size refused; outer_rings(<=0) returns none",
+     "summary": "A caption of no size is refused by name (NO_SIZE). This ends the Python's unbounded loop in outer_rings (measured to 7.5 GB in 10 s), and the Rust, which used to seat such a caption, now refuses it.",
+     "class": "within",
+     "why": "Taken apart from D2a because it removes something the Rust did. The Python hung on this input, a defect the GM's words require fixed before step 3b. Nothing in request.md or the spec asks for a zero-size caption to be seated. The block observes that the code-defect fixes moved no pool sheet and that every pool sheet's pack-audit and size-table exit 0 after, so no caller loses anything. 'Algorithmically easier' is not the ground here: the ground is that no input the tooling meets is lost."
+    },
+    {
+     "id": "D3 prefixed <s:text> caption placed",
+     "summary": "element_end finds the end tag by the start tag's own name in hand_sheet.rs and hand_sheet.py. A prefixed caption is placed rather than refused or allowed to corrupt the sheet; an element with no end tag is refused by name.",
+     "class": "within",
+     "why": "A defect fix in both living copies. The part this leaves unfinished, the caption written back as a plain <text> in no namespace, is ruled separately as D13b."
+    },
+    {
+     "id": "D4 non-finite coordinate refused at read_sheet",
+     "summary": "The Python refuses a drawn coordinate that is not a finite number at read_sheet, with the Rust's message, in place of a later OverflowError or ValueError.",
+     "class": "within",
+     "why": "A defect fix: a bad input is now refused where it is read, by name. Using the Rust's words is a wording choice, and differing words would equally be allowed under FR-002. It is not an exactness standard."
+    },
+    {
+     "id": "D5 underscore tag: no new work",
+     "summary": "T182 already fixed this. The block observes HEAD placing four probed shapes and held.json case 4 covering <_x/>, and adds no test.",
+     "class": "within",
+     "why": "The block observes the defect already fixed before this step closes (held case 4 already covers it), so no known defect is carried and there is nothing to narrow."
+    },
+    {
+     "id": "D6 association gap on ring 0 alone; claim rewritten",
+     "summary": "The association-gap term stays on ring 0 and its claim is rewritten to say so, citing 0242 for ring 0 and stating why ring 1 is not asked. Whether ring 1 should carry a tie-free association term is reported as an open design question, not ruled.",
+     "class": "within",
+     "why": "Neither request.md nor any spec requirement asks anything about ring 1's association. The defect T151's claims round found was a claim that misstated what the code does, and the rewrite makes the claim true, so that defect is resolved rather than carried into step 3b. The measurement (literal application emptied ring 1, left 4 more captions covering ink and drew 9 more leaders) is not offered as a legitimating ground, and none is needed. The open question proposes a new scoring term, a design idea, not a known bug. The block cites 0242 for ring 0 and that citation is taken as the block gives it: research accuracy is the claims round's to check, not this review's. If the claims round finds that 0242 requires association on every leaderless ring, this becomes a known defect, and the fix-as-we-go rule would require it fixed before step 3b."
+    },
+    {
+     "id": "D7a area captions level; ELONGATED deleted",
+     "summary": "An area's caption is level, as 0242's drawing page rules ('a caption naming an area ... is level'). ELONGATED and its claim are deleted in both copies, and subjects' level-area claim replaces it. The claims gate's 'unported' refusal is the landing's to put to the round arbiter.",
+     "class": "within",
+     "why": "Brings the code into line with the research it rests on (the 0242 quote is taken as the block gives it), in both living copies: a defect fix, not a narrowing. Retiring a constant whose rule the research overrules is fixing it, and FR-002 allows the maps to move. This verdict does not stand in for the arbiter ask the claims gate requires at landing; that ask is still owed."
+    },
+    {
+     "id": "D7b quarter-turned feature's caption level",
+     "summary": "A caption beside a feature turned a quarter, half or three quarters of a turn is level, as 0242 says. A held quarter-turned shrine is added, regenerated from the fixed Python.",
+     "class": "within",
+     "why": "A defect fix against 0242's rule as quoted, in both copies, with a held case that enforces it. The added case only enforces the requested fix, so it is not unrequested scope."
+    },
+    {
+     "id": "D8 stranded several-text caption returns to declared lines",
+     "summary": "When no wrap clears, a several-text caption returns to its declared lines (0242: 'if nothing clears, it goes back to one line'). A held two-text case is added and shown red with the rule reverted on each side.",
+     "class": "within",
+     "why": "A defect fix against 0242 as quoted, in both copies, enforced by a held case. The sheets that moved (Hayakawa, Ubame, the county example) are allowed under FR-002: their checks exit 0 before and after, as the block observes."
+    },
+    {
+     "id": "D9 claims given their own line or class",
+     "summary": "names_group cites 0243. BLOCK_PX, STEPPED and WALL_HALF_PX become CONVENTION, as do the render face and width and the leader end trim. Turned subjects and the stranded wrap cite 0242. combinations carries its own NONE. caption_clears_ways is split. place's clearance becomes GUESS on 0242.",
+     "class": "within",
+     "why": "Makes each claim say what the code does and what it rests on, which is part of step 3a's known defects from its claims round. No value changes (item 10: the constants keep their values), and no behavior is narrowed."
+    },
+    {
+     "id": "D10 claims bundle follows method calls",
+     "summary": "In context.rs, a method called on self is read as its own type's, and one called on a type's path-call result as that type's. This applies to every Rust method's bundle (self. callees count toward the cap of six). No fingerprint moved, and claims-owed owes only units this task changed.",
+     "class": "within",
+     "why": "A defect in the claims tooling, found while judging this step's caption_clears_ways and fixed as it was found, as the GM's 'use this port to fix broken things as we find them' asks. The rule is general because the defect was. The block observes that it moved no fingerprint and owes nothing outside this task's units, so it adds no new behavior the GM did not ask for, and its test was shown red with the rule off."
+    },
+    {
+     "id": "D11 docs say a leader only past twice the gap",
+     "summary": "docs/buildings.md and the placer's module docs in both copies now say what 0242 says.",
+     "class": "within",
+     "why": "Documentation corrected to the rule. A known inaccuracy is fixed, nothing is narrowed."
+    },
+    {
+     "id": "D12 sheets that moved, and how they are held",
+     "summary": "Hayakawa, Ubame and the county example move through D7a and D8 alone, regenerated by make map with manifests unchanged. Every pool sheet's pack-audit and size-table exit 0 before and after. The Rust and Python placed texts are equal on the four caption-placing sheets.",
+     "class": "within",
+     "why": "FR-002: a drawn output must pass its checks and hold its research claims, and these do. The cmp equality and the parse lockstep are cited as evidence that both living copies carry the fixes, and the re-answer's byte equality on HEAD shows the instrument is reproducible, which stays exact. None of these is among the exits in Approach item 6, so the block makes no Python/Rust byte equality a landing gate. The lockstep rule's T180 text is not in this bundle, so this ruling covers only what the block shows."
+    },
+    {
+     "id": "D13a one-text placer keeps a wrap when nothing clears -> T188",
+     "summary": "A newly found defect ('sanctuary of Bishamon' drawn on two lines while covering 2,000) is filed as T188, to be fixed in the Rust and the kept Python, each with a test that fails first, and ordered before step 3b's first port (T152).",
+     "class": "within",
+     "why": "The GM asked that all known bugs in a step be fixed before porting the next step. A separate task ordered before T152 meets that, and the defect is not carried into step 3b. This rests on the block's statement that T188 is filed and ordered before T152; tasks.md is not in the bundle."
+    },
+    {
+     "id": "D13b prefixed caption written back in no namespace -> T188",
+     "summary": "D3's prefixed-caption fix is incomplete: the caption is written back as a plain <text>, in no namespace, on a sheet that binds SVG only to a prefix. The rest goes to T188, before T152.",
+     "class": "within",
+     "why": "Ruled apart from D13a because it is this block's own fix left incomplete, and D3's 'is placed' does not fully hold on such a sheet until T188 lands. The deferral is in bounds only because T188 is ordered before step 3b's first port, which honors 'fix all known bugs in each step before moving on to porting the next step'. This ruling rests on that stated ordering, which this bundle cannot show. If T188 is not completed before T152, this is a known defect carried into step 3b."
+    },
+    {
+     "id": "D14 checks and exits",
+     "summary": "make static, rust-test and quick are run in sequence after the last edit, plus pack-audit and size-table on the six pool sheets, the plan review, the claims round and a gated make land. On red, the failure is recorded, and a claim that something cannot be done goes through make arbiter-ask.",
+     "class": "within",
+     "why": "Checks that enforce the requested fixes. They add no behavior and hold no exactness standard."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21112,6 +21242,122 @@
      "summary": "T183 placed after T150 and T151, before step 3b; exits make static/rust-test/quick, pack-audit and size-table on the six pool sheets, page-check, plan review, gated land; ICO test 0.089 s under FR-008",
      "class": "within",
      "why": "Honors 'fix all known bugs in each step before moving on to porting the next step' going forward (step 3a preceded the GM's rule); exits verify the drawn outputs still pass their checks per FR-002."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T184": {
+   "section_sha256": "041842b43ff7af6c5cdb8683384af1dcd31f7d09a9f11579953e2c43326b3378",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1a leader_of zero distance",
+     "summary": "A leader whose block touches the subject it names draws no leader (zero distance = no leader), in placer.rs and placer.py; held case 15, the Python's one refusal, now seated.",
+     "class": "within",
+     "why": "A defect found in step 3a (a division by zero distance), fixed in both living copies before step 3b, as the GM's 2026-11-18 'fix all known bugs in each step before moving on to porting the next step' asks. A refusal turning into a placement as a bug is fixed is expected under FR-002 and the fix-as-we-go rule."
+    },
+    {
+     "id": "D1b leader_to_ink zero distance",
+     "summary": "The same division in leader_to_ink (classify.rs, hand_sheet.py) fixed by dropping the leader; its test, which pinned the division, now pins the drop; the search's Results narrow to place's two refusals.",
+     "class": "within",
+     "why": "The same defect's second copy. Changing the test's expected result is FR-002's named exception for a check fixed on purpose: changed as fixed, named here. The narrowed Result types follow from functions that can no longer fail and remove no behavior a caller uses."
+    },
+    {
+     "id": "D2a one-point line refused by name",
+     "summary": "A line subject of fewer than two points is refused by name (ONE_POINT_LINE) on both sides, in place of the Python's AssertionError or ValueError.",
+     "class": "within",
+     "why": "The Python already refused this input, through an incidental exception. Naming the refusal is a defect fix and drops nothing a caller had. The matching wording on both sides is a choice, and nothing in the block makes Python/Rust equality a gate."
+    },
+    {
+     "id": "D2b caption of no size refused; outer_rings(<=0) returns none",
+     "summary": "A caption of no size is refused by name (NO_SIZE). This ends the Python's unbounded loop in outer_rings (measured to 7.5 GB in 10 s), and the Rust, which used to seat such a caption, now refuses it.",
+     "class": "within",
+     "why": "Taken apart from D2a because it removes something the Rust did. The Python hung on this input, a defect the GM's words require fixed before step 3b. Nothing in request.md or the spec asks for a zero-size caption to be seated. The block observes that the code-defect fixes moved no pool sheet and that every pool sheet's pack-audit and size-table exit 0 after, so no caller loses anything. 'Algorithmically easier' is not the ground here: the ground is that no input the tooling meets is lost."
+    },
+    {
+     "id": "D3 prefixed <s:text> caption placed",
+     "summary": "element_end finds the end tag by the start tag's own name in hand_sheet.rs and hand_sheet.py. A prefixed caption is placed rather than refused or allowed to corrupt the sheet; an element with no end tag is refused by name.",
+     "class": "within",
+     "why": "A defect fix in both living copies. The part this leaves unfinished, the caption written back as a plain <text> in no namespace, is ruled separately as D13b."
+    },
+    {
+     "id": "D4 non-finite coordinate refused at read_sheet",
+     "summary": "The Python refuses a drawn coordinate that is not a finite number at read_sheet, with the Rust's message, in place of a later OverflowError or ValueError.",
+     "class": "within",
+     "why": "A defect fix: a bad input is now refused where it is read, by name. Using the Rust's words is a wording choice, and differing words would equally be allowed under FR-002. It is not an exactness standard."
+    },
+    {
+     "id": "D5 underscore tag: no new work",
+     "summary": "T182 already fixed this. The block observes HEAD placing four probed shapes and held.json case 4 covering <_x/>, and adds no test.",
+     "class": "within",
+     "why": "The block observes the defect already fixed before this step closes (held case 4 already covers it), so no known defect is carried and there is nothing to narrow."
+    },
+    {
+     "id": "D6 association gap on ring 0 alone; claim rewritten",
+     "summary": "The association-gap term stays on ring 0 and its claim is rewritten to say so, citing 0242 for ring 0 and stating why ring 1 is not asked. Whether ring 1 should carry a tie-free association term is reported as an open design question, not ruled.",
+     "class": "within",
+     "why": "Neither request.md nor any spec requirement asks anything about ring 1's association. The defect T151's claims round found was a claim that misstated what the code does, and the rewrite makes the claim true, so that defect is resolved rather than carried into step 3b. The measurement (literal application emptied ring 1, left 4 more captions covering ink and drew 9 more leaders) is not offered as a legitimating ground, and none is needed. The open question proposes a new scoring term, a design idea, not a known bug. The block cites 0242 for ring 0 and that citation is taken as the block gives it: research accuracy is the claims round's to check, not this review's. If the claims round finds that 0242 requires association on every leaderless ring, this becomes a known defect, and the fix-as-we-go rule would require it fixed before step 3b."
+    },
+    {
+     "id": "D7a area captions level; ELONGATED deleted",
+     "summary": "An area's caption is level, as 0242's drawing page rules ('a caption naming an area ... is level'). ELONGATED and its claim are deleted in both copies, and subjects' level-area claim replaces it. The claims gate's 'unported' refusal is the landing's to put to the round arbiter.",
+     "class": "within",
+     "why": "Brings the code into line with the research it rests on (the 0242 quote is taken as the block gives it), in both living copies: a defect fix, not a narrowing. Retiring a constant whose rule the research overrules is fixing it, and FR-002 allows the maps to move. This verdict does not stand in for the arbiter ask the claims gate requires at landing; that ask is still owed."
+    },
+    {
+     "id": "D7b quarter-turned feature's caption level",
+     "summary": "A caption beside a feature turned a quarter, half or three quarters of a turn is level, as 0242 says. A held quarter-turned shrine is added, regenerated from the fixed Python.",
+     "class": "within",
+     "why": "A defect fix against 0242's rule as quoted, in both copies, with a held case that enforces it. The added case only enforces the requested fix, so it is not unrequested scope."
+    },
+    {
+     "id": "D8 stranded several-text caption returns to declared lines",
+     "summary": "When no wrap clears, a several-text caption returns to its declared lines (0242: 'if nothing clears, it goes back to one line'). A held two-text case is added and shown red with the rule reverted on each side.",
+     "class": "within",
+     "why": "A defect fix against 0242 as quoted, in both copies, enforced by a held case. The sheets that moved (Hayakawa, Ubame, the county example) are allowed under FR-002: their checks exit 0 before and after, as the block observes."
+    },
+    {
+     "id": "D9 claims given their own line or class",
+     "summary": "names_group cites 0243. BLOCK_PX, STEPPED and WALL_HALF_PX become CONVENTION, as do the render face and width and the leader end trim. Turned subjects and the stranded wrap cite 0242. combinations carries its own NONE. caption_clears_ways is split. place's clearance becomes GUESS on 0242.",
+     "class": "within",
+     "why": "Makes each claim say what the code does and what it rests on, which is part of step 3a's known defects from its claims round. No value changes (item 10: the constants keep their values), and no behavior is narrowed."
+    },
+    {
+     "id": "D10 claims bundle follows method calls",
+     "summary": "In context.rs, a method called on self is read as its own type's, and one called on a type's path-call result as that type's. This applies to every Rust method's bundle (self. callees count toward the cap of six). No fingerprint moved, and claims-owed owes only units this task changed.",
+     "class": "within",
+     "why": "A defect in the claims tooling, found while judging this step's caption_clears_ways and fixed as it was found, as the GM's 'use this port to fix broken things as we find them' asks. The rule is general because the defect was. The block observes that it moved no fingerprint and owes nothing outside this task's units, so it adds no new behavior the GM did not ask for, and its test was shown red with the rule off."
+    },
+    {
+     "id": "D11 docs say a leader only past twice the gap",
+     "summary": "docs/buildings.md and the placer's module docs in both copies now say what 0242 says.",
+     "class": "within",
+     "why": "Documentation corrected to the rule. A known inaccuracy is fixed, nothing is narrowed."
+    },
+    {
+     "id": "D12 sheets that moved, and how they are held",
+     "summary": "Hayakawa, Ubame and the county example move through D7a and D8 alone, regenerated by make map with manifests unchanged. Every pool sheet's pack-audit and size-table exit 0 before and after. The Rust and Python placed texts are equal on the four caption-placing sheets.",
+     "class": "within",
+     "why": "FR-002: a drawn output must pass its checks and hold its research claims, and these do. The cmp equality and the parse lockstep are cited as evidence that both living copies carry the fixes, and the re-answer's byte equality on HEAD shows the instrument is reproducible, which stays exact. None of these is among the exits in Approach item 6, so the block makes no Python/Rust byte equality a landing gate. The lockstep rule's T180 text is not in this bundle, so this ruling covers only what the block shows."
+    },
+    {
+     "id": "D13a one-text placer keeps a wrap when nothing clears -> T188",
+     "summary": "A newly found defect ('sanctuary of Bishamon' drawn on two lines while covering 2,000) is filed as T188, to be fixed in the Rust and the kept Python, each with a test that fails first, and ordered before step 3b's first port (T152).",
+     "class": "within",
+     "why": "The GM asked that all known bugs in a step be fixed before porting the next step. A separate task ordered before T152 meets that, and the defect is not carried into step 3b. This rests on the block's statement that T188 is filed and ordered before T152; tasks.md is not in the bundle."
+    },
+    {
+     "id": "D13b prefixed caption written back in no namespace -> T188",
+     "summary": "D3's prefixed-caption fix is incomplete: the caption is written back as a plain <text>, in no namespace, on a sheet that binds SVG only to a prefix. The rest goes to T188, before T152.",
+     "class": "within",
+     "why": "Ruled apart from D13a because it is this block's own fix left incomplete, and D3's 'is placed' does not fully hold on such a sheet until T188 lands. The deferral is in bounds only because T188 is ordered before step 3b's first port, which honors 'fix all known bugs in each step before moving on to porting the next step'. This ruling rests on that stated ordering, which this bundle cannot show. If T188 is not completed before T152, this is a known defect carried into step 3b."
+    },
+    {
+     "id": "D14 checks and exits",
+     "summary": "make static, rust-test and quick are run in sequence after the last edit, plus pack-audit and size-table on the six pool sheets, the plan review, the claims round and a gated make land. On red, the failure is recorded, and a claim that something cannot be done goes through make arbiter-ask.",
+     "class": "within",
+     "why": "Checks that enforce the requested fixes. They add no behavior and hold no exactness standard."
     }
    ],
    "verdict": "CLEAR"

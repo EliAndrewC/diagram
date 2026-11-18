@@ -46,7 +46,8 @@ Research: a funerary caption covers the funerary structures - research/questions
 def names_group(group: str | None, words: str) -> bool:
     """Does a caption's lower-cased text `words` name the caption `group` (its own word, or one of `GROUP_WORDS`)?
 
-    Research: plumbing - NONE"""
+    Research: a caption's wording names its group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a caption's own wording says which groups of buildings it may cover - a group named by its own word where no list of words is given for it (a flophouse caption the flophouses, a ministry's name the ministries), else by one of its words
+    """
     return bool(group) and any(w in words for w in GROUP_WORDS.get(group or "", (group or "",)))
 
 
