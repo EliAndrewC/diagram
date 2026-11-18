@@ -19,6 +19,7 @@ use l7r_gate_research::Error;
 use l7r_guard::shared::py_text::strip;
 
 use super::super::geom::{bbox, rect, Pt};
+use super::super::placer::Cap;
 use super::super::standard::{block_half, CENTER_ABOVE_BASELINE_EM, PITCH_EM};
 use super::{char_w_of, luma, Attrs, Shape, BUSY_FILLS, DARK};
 use crate::etree::Element;
@@ -201,7 +202,7 @@ pub fn path_points(d: &str) -> Result<Vec<Pt>, Error> {
 }
 
 /// What a walk inherits from the elements around: the matrix, the kind and its group, the stroke's width and whether one is drawn, the
-/// (stroke, fill), the texture mark and the `data-id`s.
+/// (stroke, fill), the texture mark, the `data-id`s and the stroke's cap.
 #[derive(Clone)]
 struct Inherited {
     m: Affine,
@@ -212,6 +213,7 @@ struct Inherited {
     ink: (String, String),
     texture: bool,
     ids: BTreeSet<String>,
+    cap: Cap,
 }
 
 /// The tag as the Python compared it: `el.tag.replace("{SVG}", "")` - an SVG or unprefixed element by its name, any other namespace's
@@ -253,6 +255,7 @@ pub fn read_sheet(src: &str) -> Result<(Vec<Shape>, View), Error> {
         ink: (String::new(), String::new()),
         texture: false,
         ids: BTreeSet::new(),
+        cap: Cap::Butt,
     };
     let mut at = 1; // the root is element 0 of `root.iter()`
     for c in &root.children {
@@ -294,6 +297,10 @@ fn inherit(el: &Element, up: &Inherited, here: usize) -> Result<Inherited, Error
             .map_or_else(|| up.ink.1.clone(), str::to_owned),
     );
     h.texture = up.texture || el.get("data-texture") == Some("1");
+    if let Some(cap) = el.get("stroke-linecap") {
+        // inherited as SVG inherits it (feature 449 T193)
+        h.cap = Cap::of(cap);
+    }
     Ok(h)
 }
 
@@ -374,6 +381,7 @@ fn walk(
                 line: true,
                 leader: el.get("data-leader") == Some("1"),
                 dark: luma(Some(&h.ink.0)) < DARK,
+                cap: h.cap,
                 ..base
             });
         } else {

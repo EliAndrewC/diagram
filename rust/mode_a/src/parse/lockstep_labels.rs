@@ -22,7 +22,7 @@ use crate::labels::geom::{dist, Pt};
 use crate::labels::hand_sheet::read::View;
 use crate::labels::hand_sheet::seat::{captions_of, standing, union_area, SeatedCaption, Standing};
 use crate::labels::hand_sheet::{leader_to_ink, placed, read_sheet, seat, Shape, STEPPED};
-use crate::labels::placer::{InkPart, Kind, Placement, Subject};
+use crate::labels::placer::{Cap, InkPart, Kind, Placement, Subject};
 
 /// The pool sheets whose captions the hand sheet's placer seats (the generators that call `placed`, observed 2026-11-18, method: each
 /// pool generator's imports read).
@@ -76,7 +76,7 @@ def caption_reading(text):
                      "block": conv(p.block), "ring": p.ring, "rank": p.rank, "position": p.position, "cost": conv(p.cost),
                      "leader": conv(p.leader), "raw_leader": conv(raw.get(id(p))), "per": per,
                      "subject": {"kind": s.kind, "poly": conv(s.poly), "angle": conv(s.angle),
-                                 "ink": [{"pts": conv(i.pts), "line": i.line, "half": conv(i.half)} for i in s.ink]}})
+                                 "ink": [{"pts": conv(i.pts), "line": i.line, "half": conv(i.half), "cap": i.cap} for i in s.ink]}})
     return {"rows": rows, "placed": out, "covers": sorted(covers.values(), key=lambda c: repr(c["polys"]))}
 "#;
 
@@ -170,6 +170,7 @@ fn python_row(r: &Value, caps: &[Vec<usize>], at_of: &BTreeMap<usize, usize>) ->
                     pts: pts(&i["pts"]),
                     line: i["line"].as_bool().unwrap_or(false),
                     half: f(&i["half"]),
+                    cap: Cap::of(i["cap"].as_str().unwrap_or_default()),
                 })
                 .collect(),
             ..Subject::new(kind, pts(&s["poly"]), f(&s["angle"]))

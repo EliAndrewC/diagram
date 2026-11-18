@@ -18,6 +18,10 @@ scored and drawn to the house itself, and re-took every answer from its fixed Py
 Feature 449 T192 added a twelfth: a lone well, two striking posts, a weapon rack of three rails and a moored barge, each penned by dark
 sheds with a gap below, their captions led out past twice the gap, each leader scored and drawn to the drawn ink - a disc's curve, not
 its box, and several parts' own ink, not their box - and re-took every answer from its fixed Python.
+Feature 449 T193 added a thirteenth: a 9 px wall with its cap unsaid and one square-capped on its group, each penned with a gap beyond its
+east end, and a house outlined in a 4 px stroke penned with a gap below, their captions led out past twice the gap, each leader scored and
+drawn to the ink as the sheet draws it - a stroke's flat or square end, an outline drawn out by its stroke - and re-took every answer from
+its fixed Python.
 """
 
 import json, sys, traceback
@@ -209,6 +213,28 @@ LED_PARTS = sheet(
 )
 
 
+# feature 449 T193: a 9 px wall with its cap unsaid (SVG's butt) and one square-capped on its group, each penned by dark sheds with a gap
+# beyond its east end, and a house outlined in a 4 px stroke penned with a gap below, their captions led out past twice the gap: each
+# leader is scored and drawn to the ink as the sheet draws it - the wall's flat or square end, where a round cap was read past either,
+# and the house's outline drawn out by its stroke, where it ended on the bare outline inside the stroke
+def pen_east(x, y, w, h):
+    # dark sheds 6 px thick round a w x h yard at (x, y), 4 px off it, with a 10 px gap in the middle of the east side
+    x0, y0, x1, y1 = x - 10, y - 10, x + w + 4, y + h + 4
+    mid = y + h / 2
+    return (f'<rect x="{x0}" y="{y0}" width="{x1 - x0 + 6}" height="6" fill="#2D2A24"/><rect x="{x0}" y="{y1}" width="{x1 - x0 + 6}" height="6" fill="#2D2A24"/>'
+            f'<rect x="{x0}" y="{y0 + 6}" width="6" height="{y1 - y0 - 6}" fill="#2D2A24"/><rect x="{x1}" y="{y0 + 6}" width="6" height="{mid - 5 - y0 - 6}" fill="#2D2A24"/>'
+            f'<rect x="{x1}" y="{mid + 5}" width="6" height="{y1 - mid - 5}" fill="#2D2A24"/>')
+
+
+LED_CAPS = sheet(
+    '  <g data-kind="sheds">' + pen_east(40, 40, 40, 20) + pen_east(40, 140, 40, 20) + pen(240, 40, 24, 16) + '</g>\n',
+    '  <g data-kind="fox wall" stroke="#4A3318" stroke-width="9"><line x1="40" y1="50" x2="80" y2="50"/><text x="60" y="50" font-size="8" stroke="none">fox wall</text></g>\n',
+    '  <g data-kind="east wall" stroke="#4A3318" stroke-width="9" stroke-linecap="square"><line x1="40" y1="150" x2="76" y2="150"/>'
+    '<text x="60" y="150" font-size="8" stroke="none">east wall</text></g>\n',
+    '  <g data-kind="kura"><rect x="240" y="40" width="24" height="16" fill="#DDB87A" stroke="#5A3F1E" stroke-width="4"/><text x="252" y="50" font-size="8">old kura of the toll</text></g>\n',
+)
+
+
 REFUSALS = [
     sheet('<g data-kind="x"><text x="5" y="5" font-size="6">lonely</text></g>\n'),
     sheet('<g data-kind="tub"><circle cx="50" cy="50" r="5"/><text x="80" y="80" font-size="6">tub</text></g>\n', back='<_x/>' + BACK),
@@ -228,7 +254,7 @@ REFUSALS = [
     sheet('  <g transform="rotate(x)"><rect width="1" height="1"/></g>\n'),
     "<svg",
 ]
-out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE, LED_L, LED_PARTS]]
+out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE, LED_L, LED_PARTS, LED_CAPS]]
 for o in out:
     print(o.get("raises", "placed %d" % len(o.get("placed", ""))), file=sys.stderr)
 json.dump(out, open(sys.argv[1], "w"), indent=0)

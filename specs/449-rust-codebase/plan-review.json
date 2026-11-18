@@ -714,6 +714,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T193 (step 3a's last known leader defects, T192's leftover finding and its impl-drift's 4 DRIFTED; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "0dc963571886e37103b0cd24048a58f0508587380fd03621041b355ec31354c0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T193 Approach (checklist part A)": {
+   "sha256": "73cdcde540525b982f015cbdb150ba13de5498700092d0d905ba1ebac126f153",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12569,6 +12581,82 @@
      "why": "Records the convention the fix rests on so its claims cite a page; historical accuracy is the research ladder's, not this review's. The page stays under its cap."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T193 (step 3a's last known leader defects, T192's leftover finding and its impl-drift's 4 DRIFTED; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T193 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "item-1-cap",
+     "summary": "The reader keeps stroke-linecap (inherited, square/round, else SVG's butt); stroke_band draws a stroke as SVG does at its ends; leader_to_ink and nearest_ink measure by that band, in the Rust and the kept Python alike.",
+     "class": "within",
+     "why": "A known step-3a defect (leaders stopping short of or past a butt end, a block within the half-width drawing no leader) fixed in every living copy before step 3b, exactly what the GM asked on 2026-11-18 ('fix all known bugs in each step before moving on'). The pool reach (no caption moved) and the moved held answer are outputs changing as fixed, which FR-002 permits."
+    },
+    {
+     "id": "item-2-part-chosen",
+     "summary": "nearest_ink chooses the part whose drawn edge is nearest (a stroke by its band, a closed outline drawn out by its own stroke half-width) and ends on its nearest drawn point; leader_to_ink draws an outline out by its stroke; of three measured forms the third is kept.",
+     "class": "within",
+     "why": "Brings the code to research page 0242's rule, 'it ends at the nearest drawn point', answering impl-drift's 4 DRIFTED; the rejected forms were rejected because they put leaders on the wrong ink (the dashed passage line), not to narrow anything. 28 hand-sheet and 10 compound leader ends move, no caption: changes as fixed under FR-002 and constitution XIV."
+    },
+    {
+     "id": "item-2-drawn-as",
+     "summary": "A block of a stepped building, or a scatter's member, carries the ink of every closed part drawn with its box (drawn_as/_drawn_as), so a block drawn as a fill plus a stroked outline ends on the outline's stroke.",
+     "class": "within",
+     "why": "Part of ending at the nearest drawn point: Hayakawa's RESIDENCE leader ended inside the outline's stroke. A defect of this step, fixed in both copies."
+    },
+    {
+     "id": "tie-order",
+     "summary": "An exact tie keeps T192's order (an outline before a stroke, then the wider), recorded as a CONVENTION claim 'a tie between parts'; measured that the first two orders decide no pool leader.",
+     "class": "within",
+     "why": "Keeps an existing convention for a case the research rule leaves open; narrows nothing the GM asked for. FR-002 lists 'the order of ties' among outputs that may differ, so no exactness standard is applied."
+    },
+    {
+     "id": "claims-and-page",
+     "summary": "The claims cite 0242's drawing page in both copies; 'a stroke's drawn band' is a new CONVENTION claim; the research page itself is not edited because it already says what the code does.",
+     "class": "within",
+     "why": "Bookkeeping that ties the fix to its research ground; no scope change. The 0242 tie-order sentence the dispatch places in T194 is not a decision of this block."
+    },
+    {
+     "id": "held-cases",
+     "summary": "held.json re-taken from the fixed Python with a thirteenth sheet (LED_CAPS); one of 29 earlier answers (the tax barge) moves seat; the placer's held.json re-answered unchanged.",
+     "class": "within",
+     "why": "Tests that enforce the requested fix (red on HEAD, green on the clone) serve the request; an expected result that changes because a bug is fixed is changed as fixed (FR-002's exception, SC-004)."
+    },
+    {
+     "id": "parallel-edge-not-a-defect",
+     "summary": "The held walls' captions take rank 18 over rank 2 because rank 2's leader, run from the block's corner to a flat end parallel to it, grazes the pen's gap; the block rules a corner-to-parallel-edge leader 'no defect', and no pool leader ended past a stroke's end on HEAD.",
+     "class": "within",
+     "why": "Checked against the block's own rule and 0242: such a leader still ends on the drawn ink at the nearest drawn point, the same geometry any building edge gives, so it is not a known bug being carried past the step. It is behavior of the scorer on a test sheet, and the GM's fix-as-we-go clause is not narrowed by it."
+    },
+    {
+     "id": "pool-regen-and-audits",
+     "summary": "All six pool sheets regenerated by make map, manifests unchanged; pack-audit and size-table exit 0 on every sheet and both copies' placed text; size tables differ only in moved leaders' rows.",
+     "class": "within",
+     "why": "The checks must pass and the research claims hold; they do. 'Every pack-audit report HEAD's' is a measured reach, not a standard the work is held to: the block itself accepts moved leaders and a moved held answer, so no exactness standard is applied."
+    },
+    {
+     "id": "found-and-left-curves",
+     "summary": "The reader keeps a path's curves only by their end points (Hoshigaoka's arc-drawn rope ring read as a 10 px line doubled back); left to a drafted task, fixed red-first in both copies before step 3b.",
+     "class": "within",
+     "why": "The GM's boundary is 'before moving on to porting the next step', not 'in this task': the drafted line says before step 3b and both copies. The dispatch says it is filed as T194, ordered before step 3b; that ordering was supplied by the dispatch and not verified, as the bundle forbids reading the repository. Had it been carried into step 3b it would be NOT LEGITIMATE."
+    },
+    {
+     "id": "found-and-left-dashes",
+     "summary": "No stroke's stroke-dasharray is read, so a leader to a dashed stroke may end in a gap; left to the same drafted task, before step 3b, both copies.",
+     "class": "within",
+     "why": "Same boundary and same filing as the curves gap (T194 before step 3b, per the dispatch, not verified here). Not carried into the next step."
+    },
+    {
+     "id": "found-and-left-linejoin",
+     "summary": "stroke-linejoin is unread, so a bend's or stroked corner's outside is drawn round where SVG's miter reaches further (1.86 px at a 9 px right angle); measured that no pool leader so ends; left to a drafted task before step 3b, both copies.",
+     "class": "within",
+     "why": "Same boundary: filed as T194, ordered before step 3b, per the dispatch (not verified here); the drafted line names both copies and a red-first test. Not carried into the next step."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22298,6 +22386,80 @@
      "summary": "Research page 0242's leader bullet gains the sentence that a leader ending at the drawn feature's nearest point is a map drawing convention no source fixes; the claims cite it.",
      "class": "within",
      "why": "Records the convention the fix rests on so its claims cite a page; historical accuracy is the research ladder's, not this review's. The page stays under its cap."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T193": {
+   "section_sha256": "aec8006f7b98c1afc820d0d07678c4c1f8617d12dfc9baa9f73254a0ddb8f8c2",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "item-1-cap",
+     "summary": "The reader keeps stroke-linecap (inherited, square/round, else SVG's butt); stroke_band draws a stroke as SVG does at its ends; leader_to_ink and nearest_ink measure by that band, in the Rust and the kept Python alike.",
+     "class": "within",
+     "why": "A known step-3a defect (leaders stopping short of or past a butt end, a block within the half-width drawing no leader) fixed in every living copy before step 3b, exactly what the GM asked on 2026-11-18 ('fix all known bugs in each step before moving on'). The pool reach (no caption moved) and the moved held answer are outputs changing as fixed, which FR-002 permits."
+    },
+    {
+     "id": "item-2-part-chosen",
+     "summary": "nearest_ink chooses the part whose drawn edge is nearest (a stroke by its band, a closed outline drawn out by its own stroke half-width) and ends on its nearest drawn point; leader_to_ink draws an outline out by its stroke; of three measured forms the third is kept.",
+     "class": "within",
+     "why": "Brings the code to research page 0242's rule, 'it ends at the nearest drawn point', answering impl-drift's 4 DRIFTED; the rejected forms were rejected because they put leaders on the wrong ink (the dashed passage line), not to narrow anything. 28 hand-sheet and 10 compound leader ends move, no caption: changes as fixed under FR-002 and constitution XIV."
+    },
+    {
+     "id": "item-2-drawn-as",
+     "summary": "A block of a stepped building, or a scatter's member, carries the ink of every closed part drawn with its box (drawn_as/_drawn_as), so a block drawn as a fill plus a stroked outline ends on the outline's stroke.",
+     "class": "within",
+     "why": "Part of ending at the nearest drawn point: Hayakawa's RESIDENCE leader ended inside the outline's stroke. A defect of this step, fixed in both copies."
+    },
+    {
+     "id": "tie-order",
+     "summary": "An exact tie keeps T192's order (an outline before a stroke, then the wider), recorded as a CONVENTION claim 'a tie between parts'; measured that the first two orders decide no pool leader.",
+     "class": "within",
+     "why": "Keeps an existing convention for a case the research rule leaves open; narrows nothing the GM asked for. FR-002 lists 'the order of ties' among outputs that may differ, so no exactness standard is applied."
+    },
+    {
+     "id": "claims-and-page",
+     "summary": "The claims cite 0242's drawing page in both copies; 'a stroke's drawn band' is a new CONVENTION claim; the research page itself is not edited because it already says what the code does.",
+     "class": "within",
+     "why": "Bookkeeping that ties the fix to its research ground; no scope change. The 0242 tie-order sentence the dispatch places in T194 is not a decision of this block."
+    },
+    {
+     "id": "held-cases",
+     "summary": "held.json re-taken from the fixed Python with a thirteenth sheet (LED_CAPS); one of 29 earlier answers (the tax barge) moves seat; the placer's held.json re-answered unchanged.",
+     "class": "within",
+     "why": "Tests that enforce the requested fix (red on HEAD, green on the clone) serve the request; an expected result that changes because a bug is fixed is changed as fixed (FR-002's exception, SC-004)."
+    },
+    {
+     "id": "parallel-edge-not-a-defect",
+     "summary": "The held walls' captions take rank 18 over rank 2 because rank 2's leader, run from the block's corner to a flat end parallel to it, grazes the pen's gap; the block rules a corner-to-parallel-edge leader 'no defect', and no pool leader ended past a stroke's end on HEAD.",
+     "class": "within",
+     "why": "Checked against the block's own rule and 0242: such a leader still ends on the drawn ink at the nearest drawn point, the same geometry any building edge gives, so it is not a known bug being carried past the step. It is behavior of the scorer on a test sheet, and the GM's fix-as-we-go clause is not narrowed by it."
+    },
+    {
+     "id": "pool-regen-and-audits",
+     "summary": "All six pool sheets regenerated by make map, manifests unchanged; pack-audit and size-table exit 0 on every sheet and both copies' placed text; size tables differ only in moved leaders' rows.",
+     "class": "within",
+     "why": "The checks must pass and the research claims hold; they do. 'Every pack-audit report HEAD's' is a measured reach, not a standard the work is held to: the block itself accepts moved leaders and a moved held answer, so no exactness standard is applied."
+    },
+    {
+     "id": "found-and-left-curves",
+     "summary": "The reader keeps a path's curves only by their end points (Hoshigaoka's arc-drawn rope ring read as a 10 px line doubled back); left to a drafted task, fixed red-first in both copies before step 3b.",
+     "class": "within",
+     "why": "The GM's boundary is 'before moving on to porting the next step', not 'in this task': the drafted line says before step 3b and both copies. The dispatch says it is filed as T194, ordered before step 3b; that ordering was supplied by the dispatch and not verified, as the bundle forbids reading the repository. Had it been carried into step 3b it would be NOT LEGITIMATE."
+    },
+    {
+     "id": "found-and-left-dashes",
+     "summary": "No stroke's stroke-dasharray is read, so a leader to a dashed stroke may end in a gap; left to the same drafted task, before step 3b, both copies.",
+     "class": "within",
+     "why": "Same boundary and same filing as the curves gap (T194 before step 3b, per the dispatch, not verified here). Not carried into the next step."
+    },
+    {
+     "id": "found-and-left-linejoin",
+     "summary": "stroke-linejoin is unread, so a bend's or stroked corner's outside is drawn round where SVG's miter reaches further (1.86 px at a 9 px right angle); measured that no pool leader so ends; left to a drafted task before step 3b, both copies.",
+     "class": "within",
+     "why": "Same boundary: filed as T194, ordered before step 3b, per the dispatch (not verified here); the drafted line names both copies and a red-first test. Not carried into the next step."
     }
    ],
    "verdict": "CLEAR"

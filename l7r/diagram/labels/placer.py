@@ -59,12 +59,15 @@ LINE_STATIONS = 13
 
 @dataclass(frozen=True)
 class InkPart:
-    """One drawn part of what a caption names, as its leader ends on it: a closed outline (a disc's drawn curve, not its box), or, `line`,
-    a stroke's polyline and the half-width (`half`) at whose edge the leader stops (feature 449 T192)."""
+    """One drawn part of what a caption names, as its leader ends on it: a closed outline (a disc's drawn curve, not its box) and the
+    half-width (`half`) of the stroke drawn on it, 0 where it has none; or, `line`, a stroke's polyline, the half-width at whose edge the
+    leader stops and the stroke's `cap` - its SVG `stroke-linecap`, "butt" (SVG's default, the stroke ending flat at its end point),
+    "square" (drawn on past it by the half-width) or "round" (feature 449 T192, T193)."""
 
     pts: tuple[Pt, ...]
     line: bool = False
     half: float = 0.0
+    cap: str = "butt"
 
 
 @dataclass(frozen=True)
@@ -712,7 +715,7 @@ def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
 
     Research:
         when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line
-        where a leader ends - CONVENTION: from the caption block's nearest point to the nearest point of the feature's drawn parts the subject carries (`ink`: a closed part's outline, a disc's its drawn curve; a stroke's edge, the nearest point of its line drawn back toward the block by its half-width, the part chosen by its line, an exact tie going to an outline before a stroke and to the wider stroke), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws; 0242 ties a displaced caption to its feature with a leader line but does not say at which point, the nearest is the shortest tie, and a box's corner may stand over empty ground, as an L-shaped house's notch or the gap beside a disc or among a scatter (feature 449 T191, T192)
+        where a leader ends - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `_nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)
         leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world
     """
     if ring < LEADERLESS_RINGS or subject.kind == "area":
@@ -727,30 +730,88 @@ def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
 
 
 def _nearest_ink(block: Poly, ink: tuple[InkPart, ...]) -> tuple[Pt, Pt]:
-    """The nearest pair of points, one on the block and one on the drawn parts: the part whose outline, or whose stroke's line, stands
-    nearest the block - on an exact tie a closed outline before a stroke, then the wider stroke, then the first in their order - and on
-    a stroke its line's nearest point drawn back toward the block by its half-width - the edge of the round-capped band `leader_to_ink`
-    ends on - or the block's own point where the block reaches the stroke (feature 449 T192).
+    """The nearest pair of points, one on the block and one on the drawn parts: the part whose drawn edge stands nearest the block, and
+    on it the nearest drawn point (feature 449 T193) - a closed outline's own stroke drawn out from it by its half-width (`half`, the
+    sheet's `stroke-width` on it, 0 unstroked), a stroke's band as SVG draws it (`band_nearest`: its edge, and past its end the end its
+    cap draws) - the ink `leader_to_ink` ends on - or the block's own point twice where the block reaches the ink. On an exact tie a
+    closed outline before a stroke, then the wider, then the first in their order.
 
-    Two forms tried and not kept (feature 449 T192, measured 2026-11-18 on the four caption-placing pool sheets): the part chosen by its
-    stroke's edge, the line's distance less the half-width, let a partition's end on a building's edge take the leader by half a pixel -
-    Ochiba's SERVANTS' QUARTERS went from ring 4 to ring 20, its ring-4 leader led over a tub (scratchpad t192/why1.log, why2.log); each
-    stroke as the band of its width, chosen by the band's edge, let the 1 px stroke between that building's blocks take it, its leader
-    95.58 px over, under the latrine, which went from ring 0 to ring 3 (t192/reach-band.log).
+    Chosen by the stroke's line instead (feature 449 T192), a leader to a stroke drawn along a stroked building's edge ended on the
+    building's outline, inside its own drawn stroke. Two forms of the edge rule were priced by T192 and not kept, each the rule here less
+    a part of the ink it reads (measured 2026-11-18 on the four caption-placing pool sheets, scratchpad t193/variants.log): with round
+    caps assumed and the outline's own stroke left out, a 1 px partition's cap, half a pixel past Ochiba's SERVANTS' QUARTERS' outline
+    where its butt end draws nothing, took the leader and the caption went from ring 4 to ring 20 (t192/why1.log, why2.log); with the
+    caps read but the outline's stroke left out, the 0.8 px dashed roof edge across its passage, 0.4 px past the outline where the
+    outline's 1.5 px stroke reaches 0.75, took it 95.58 px over, under the latrine, which went from ring 0 to ring 3 (t192/reach-band.log,
+    t193/variants.log). With both read, no pool caption moves, and 28 of the 33 leaders its 190 captions draw end 0.3 to 1.25 px
+    shorter, on the drawn stroke (t193/reach-new.log).
 
-    Research: which part a leader ends on - CONVENTION: the part nearest the block by its outline or its stroke's line; on an exact tie a closed outline before a stroke (a stroke drawn along a building's edge, a partition or a gallery, is the building's) and the wider stroke before the narrower (a wall before the dashed line drawn on it), so the leader stops at the outermost drawn ink; 0242 does not say at which point a leader ends (feature 449 T192)
+    Research:
+        which part a leader ends on - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; the part chosen by its drawn edge, an outline's own stroke and a stroke's cap read as the sheet draws them, their bends and corners measured round (feature 449 T193)
+        a tie between parts - CONVENTION: two parts whose drawn edges stand exactly as near go to a closed outline before a stroke, then the wider, then the first in the sheet's order - a fixed order where the page's rule leaves a choice; the first two decide no pool leader's part, the sheet's order the one of two equal parts equally near, as two posts (feature 449 T192, T193)
     """
     best: tuple[float, tuple[bool, float], Pt, Pt] | None = None
     for part in ink:
-        a, b = nearest_points(block, list(part.pts), closed=not part.line)
-        d = math.dist(a, b)
+        if part.line:
+            a, b = band_nearest(block, part)
+            d = math.dist(a, b)
+        else:
+            a, b = nearest_points(block, list(part.pts))
+            d = math.dist(a, b)
+            if d <= part.half:
+                b, d = a, 0.0
+            elif part.half:
+                b, d = (b[0] + (a[0] - b[0]) * part.half / d, b[1] + (a[1] - b[1]) * part.half / d), d - part.half
         tie = (part.line, -part.half)
         if best is None or (d, tie) < best[:2]:
-            if part.line:
-                b = a if d <= part.half else (b[0] + (a[0] - b[0]) * part.half / d, b[1] + (a[1] - b[1]) * part.half / d)
             best = (d, tie, a, b)
     assert best is not None
     return best[2], best[3]
+
+
+def stroke_band(part: InkPart) -> tuple[list[Poly], list[Pt]]:
+    """A stroke's drawn band as SVG draws it (feature 449 T193): each segment's rectangle at the half-width, a disc of the half-width at
+    each bend, and at each end its cap - nothing for "butt" (SVG's default: the stroke ends flat at its end point), the end segment's
+    rectangle drawn on past it by the half-width for "square", a disc for "round". The rectangles and the discs' centers; a stroke of no
+    length is one disc, so it keeps an end to lead to.
+
+    Research: a stroke's drawn band - CONVENTION: a stroke's ink measured as the band SVG draws, its `stroke-linecap` read (butt unless the sheet says square or round), but every bend measured round where SVG's default `stroke-linejoin` draws a miter, whose point on a bend's outside the band leaves out; 0242 has a leader end at the nearest drawn point, and this is where a stroke's points are read (feature 449 T193)
+    """
+    segs = [(a, b) for a, b in zip(part.pts, part.pts[1:], strict=False) if a != b]
+    if not segs:
+        return [], [part.pts[0]]
+    h, last = part.half, len(segs) - 1
+    rects: list[Poly] = []
+    for k, (a, b) in enumerate(segs):
+        d = math.dist(a, b)
+        ux, uy = (b[0] - a[0]) / d, (b[1] - a[1]) / d
+        e0 = h if k == 0 and part.cap == "square" else 0.0
+        e1 = h if k == last and part.cap == "square" else 0.0
+        a, b = (a[0] - ux * e0, a[1] - uy * e0), (b[0] + ux * e1, b[1] + uy * e1)
+        nx, ny = -uy * h, ux * h
+        rects.append([(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)])
+    discs = [b for _, b in segs[:-1]] + ([segs[0][0], segs[-1][1]] if part.cap == "round" else [])
+    return rects, discs
+
+
+def band_nearest(block: Poly, part: InkPart) -> tuple[Pt, Pt]:
+    """The nearest pair of points, one on the block and one on a stroke's drawn band (`stroke_band`), the block's own point twice where
+    the block reaches the band (feature 449 T193): a leader to a stroke ends at its edge, and past its end on the end its cap draws."""
+    rects, discs = stroke_band(part)
+    best: tuple[float, Pt, Pt] | None = None
+    for r in rects:
+        a, b = nearest_points(block, r)
+        d = math.dist(a, b)
+        if best is None or d < best[0]:
+            best = (d, a, b)
+    for c in discs:
+        a, _ = nearest_points(block, [c], closed=False)
+        dc = math.dist(a, c)
+        d = max(0.0, dc - part.half)
+        if best is None or d < best[0]:
+            best = (d, a, a if d == 0.0 else (c[0] + (a[0] - c[0]) * part.half / dc, c[1] + (a[1] - c[1]) * part.half / dc))
+    assert best is not None
+    return (best[1], best[1]) if best[0] == 0.0 else (best[1], best[2])
 
 
 def leader_cost(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear: float, own: Poly | None, text: str) -> float:

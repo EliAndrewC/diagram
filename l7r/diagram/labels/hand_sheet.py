@@ -30,6 +30,7 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 from collections.abc import Callable
+from typing import Any
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
@@ -160,6 +161,7 @@ class Shape:
     ids: frozenset[str] = frozenset()  # the element's `data-id` and every one around it - what a caption's `data-names` names
     names: tuple[str, ...] = ()  # a caption's `data-names`: the `data-id`s of the drawn things it names (feature 286)
     cont: bool = False  # a caption line marked `data-cont="1"`: the next line of the caption before it (feature 286)
+    cap: str = "butt"  # a stroke's `stroke-linecap`, inherited as SVG inherits it: "butt" (SVG's default), "square" or "round" (feature 449 T193)
 
 
 def _path_points(d: str) -> list[Pt]:
@@ -207,6 +209,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
         ink: tuple[str, str] = ("", ""),
         texture: bool = False,
         ids: frozenset[str] = frozenset(),
+        cap: str = "butt",
     ) -> None:
         parent = m
         if el.get("data-id"):
@@ -220,6 +223,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
             stroked = el.get("stroke") != "none"
         ink = (el.get("stroke", ink[0]), el.get("fill", ink[1]))  # (stroke, fill), inherited as SVG inherits them
         texture = texture or el.get("data-texture") == "1"
+        cap = el.get("stroke-linecap", cap)  # inherited as SVG inherits it (feature 449 T193)
 
         tag = el.tag.replace(SVG, "")
         pts: list[Pt] = []
@@ -268,6 +272,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
                         texture=texture,
                         at=order[id(el)],
                         ids=ids,
+                        cap=cap if cap in ("square", "round") else "butt",
                     )
                 )
             else:
@@ -292,7 +297,7 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
                     )
                 )
         for c in el:
-            walk(c, m, kind, stroke_w, stroked, group, within, ink, texture, ids)
+            walk(c, m, kind, stroke_w, stroked, group, within, ink, texture, ids, cap)
 
     for c in root:
         walk(c, IDENTITY, "", 1.0, False, 0)
@@ -442,11 +447,26 @@ def _band(a: Pt, b: Pt, half: float) -> Poly:
     return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
 
 
+_CAP_STYLE = {"butt": "flat", "square": "square", "round": "round"}
+"""SVG's `stroke-linecap` values by shapely's names for them (feature 449 T193)."""
+
+
+def _drawn_area(s: Shape) -> Any:
+    """A closed part's drawn ink as shapely holds it: its outline (`drawn_ink`), drawn out by its own stroke's half-width where it has one
+    (feature 449 T193)."""
+    from shapely.geometry import Polygon
+
+    area = Polygon(drawn_ink(s).pts)
+    return area.buffer(s.edge) if s.edge else area
+
+
 def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     """A leader ends on the drawn thing it names, not on the box around its parts: a barge moored by lines and three
     pines are boxed with empty water or ground in the box's corner, and a leader to the corner named nothing (feature
     283 - the tax barge's and the old pines' leaders ended 5-6 ft short). A disc's ink is its drawn curve (`drawn_ink`), not the box
-    the reader keeps as its outline (feature 449 T192: three pool leaders ended 1.75 to 4.45 px off the curve). A leader whose start
+    the reader keeps as its outline (feature 449 T192: three pool leaders ended 1.75 to 4.45 px off the curve); a stroke's is its band as
+    the sheet draws it, its `stroke-linecap` read, and a closed part's its outline drawn out by its own stroke (feature 449 T193: a leader
+    past a butt end stopped up to the half-width short of the ink, and one to a stroked building inside its stroke). A leader whose start
     already lies on the ink it names ties nothing back - the caption touches its subject - so it is dropped (feature 449 T184: it
     divided by the zero distance there). The placer's own leader ends on the same ink (`Subject.ink`, feature 449 T192), so this leaves
     every leader a hand sheet's subject scores as it was scored.
@@ -455,13 +475,15 @@ def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)
         leader end trim - CONVENTION: a leader stops short of the ink it ends on by a quarter of its length, at most 1 px, so its end does not touch the ink; a drawn size on the sheet, not in the world
     """
-    from shapely.geometry import LineString, Point, Polygon
+    from shapely.geometry import LineString, Point
     from shapely.ops import nearest_points, unary_union
 
     if p.leader is None or not parts:
         return p
     a = Point(p.leader[0])
-    ink = unary_union([LineString(s.poly).buffer(max(s.half, 0.5)) if s.line else Polygon(drawn_ink(s).pts) for s in parts if len(s.poly) >= (2 if s.line else 3)])
+    ink = unary_union(
+        [LineString(s.poly).buffer(max(s.half, 0.5), cap_style=_CAP_STYLE[s.cap]) if s.line else _drawn_area(s) for s in parts if len(s.poly) >= (2 if s.line else 3)]
+    )
     if ink.is_empty or ink.distance(Point(p.leader[1])) < 1.5:
         return p
     tip = nearest_points(ink, a)[0]
@@ -480,24 +502,31 @@ DISC_SAG_PX = 0.05
 Research: a disc's sampled curve - CONVENTION: a disc's drawn curve sampled finely enough that no chord stands more than 0.05 px inside it - a drawn size on the sheet, not in the world; the sample count is the least whose chord sag R(1 - cos(pi / n)) is within it, R bounding the curve's half-axes (the pool's largest disc half-axis is 45 px, 80 samples at the bound)"""
 
 
+def _drawn_as(part: Shape, own: list[Shape]) -> tuple[InkPart, ...]:
+    """The drawn ink of one closed part as the sheet draws it: its own and that of every other closed part of `own` sharing its box -
+    a fill and the outline stroked over it as two elements (Hayakawa's RESIDENCE's blocks), which draw one block (feature 449 T193: a
+    leader read off the fill alone ended inside the outline's stroke)."""
+    return tuple(drawn_ink(s) for s in own if s is part or (not s.line and len(s.poly) >= 3 and _same_box(s.poly, part.poly)))
+
+
 def drawn_ink(s: Shape) -> InkPart:
-    """A drawn part as a leader ends on it (feature 449 T192): a stroke's polyline at its half-width, at least half a pixel (the band
-    `leader_to_ink` buffers); a disc's drawn curve - the image of the unit circle in the drawn box the reader keeps as its outline, its
-    center plus cos t of one half-side plus sin t of the other, so a turned or unequally scaled disc is drawn as it is - sampled in
-    `_disc_samples` points; any other shape its outline.
+    """A drawn part as a leader ends on it (feature 449 T192, T193): a stroke's polyline at its half-width, at least half a pixel, and its
+    cap (the band `leader_to_ink` buffers); a disc's drawn curve - the image of the unit circle in the drawn box the reader keeps as its
+    outline, its center plus cos t of one half-side plus sin t of the other, so a turned or unequally scaled disc is drawn as it is -
+    sampled in `_disc_samples` points; any other shape its outline; a closed part with the half-width of the stroke drawn on it (`edge`).
 
     Research: its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.5 (a stroke's least half-width, the band `leader_to_ink` buffers)
     """
     if s.line:
-        return InkPart(tuple(s.poly), line=True, half=max(s.half, 0.5))
+        return InkPart(tuple(s.poly), line=True, half=max(s.half, 0.5), cap=s.cap)
     if s.tag not in ("circle", "ellipse") or len(s.poly) != 4:
-        return InkPart(tuple(s.poly))
+        return InkPart(tuple(s.poly), half=s.edge)
     p0, p1, p2, p3 = s.poly
     c = ((p0[0] + p2[0]) / 2, (p0[1] + p2[1]) / 2)
     u, v = ((p1[0] - p0[0]) / 2, (p1[1] - p0[1]) / 2), ((p3[0] - p0[0]) / 2, (p3[1] - p0[1]) / 2)
     n = _disc_samples(math.hypot(math.hypot(*u), math.hypot(*v)))
     ts = [2 * math.pi * k / n for k in range(n)]
-    return InkPart(tuple((c[0] + math.cos(t) * u[0] + math.sin(t) * v[0], c[1] + math.cos(t) * u[1] + math.sin(t) * v[1]) for t in ts))
+    return InkPart(tuple((c[0] + math.cos(t) * u[0] + math.sin(t) * v[0], c[1] + math.cos(t) * u[1] + math.sin(t) * v[1]) for t in ts), half=s.edge)
 
 
 def _disc_samples(r: float) -> int:
@@ -766,7 +795,7 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
     seated off the box of what it names read in that feature's own frame (`_framed`; feature 449 T189: a turned garden holding its
     lantern and a lone turned block among its parts were named level beside, off the upright box). Each subject beside carries the
     drawn ink of what it is read off as its `ink` (`drawn_ink`), which its leader ends on: a subject read off one part - a lone shape,
-    a scatter's member, a block of a stepped building - that part's, and a subject read off a box of several parts every part's
+    a scatter's member, a block of a stepped building - that part's and that of every closed part drawn over it with its box (`_drawn_as`; T193: a fill and its stroked outline drawn as two elements), and a subject read off a box of several parts every part's
     (feature 449 T191: a leader to a lone L-shaped house was scored to its box's corner over the empty ground of its notch; T192: a
     leader to a disc ended on its drawn box, and one to several parts was scored to their box while `leader_to_ink` drew it to their ink).
 
@@ -775,7 +804,7 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
         an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does
         a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame, and a scatter's member by its own outline, which the placer's seats read in that member's frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
         a lone block's beside box - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - the page's map drawing convention (a block named among loose parts "is seated beside the smallest box holding them all"); the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)
-        which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part, a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 ties a caption to its feature but not at which point (feature 449 T191, T192)
+        which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part and every closed part drawn over it with its box (a fill and its stroked outline drawn as two elements draw one block), a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 has the leader end at the nearest drawn point, and the ink is where that point is read (feature 449 T191, T192, T193)
     """
     x0, y0, x1, y1 = bbox([p for s in own for p in s.poly])
     box = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
@@ -808,7 +837,7 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
         # a lone block among small parts is named beside the box of them all read in the block's own frame (feature 449 T189: a
         # lone turned block was named level beside, off the upright box)
         lone = [(_framed([p for s in own for p in s.poly], _turned(blocks[0].poly)), True, every)]
-        inner, beside = [(b.poly, True) for b in blocks], [(b.poly, True, (drawn_ink(b),)) for b in blocks] if len(blocks) >= 2 else lone
+        inner, beside = [(b.poly, True) for b in blocks], [(b.poly, True, _drawn_as(b, own)) for b in blocks] if len(blocks) >= 2 else lone
     else:
         # a scatter of like glyphs - three pines, the fire-water tubs: beside the group, else beside any one of them,
         # largest first (Ochiba's tubs stand all over the compound, and round the box of them all no seat was free).
@@ -817,7 +846,7 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
         # A member with a direction of its own (a turned L-shaped house) goes as its own outline at its angle: the placer's seats
         # read its box in that frame already (placer `_box_frame`), so its `_framed` box would give the same seats, while the
         # association gap and a leader's end, read off the outline, stay on the member's ink (feature 449 T190, measured 2026-11-18)
-        members = [(s.poly, _squared(s), (drawn_ink(s),)) for s in sorted(closed, key=lambda s: -_area(s.poly))]
+        members = [(s.poly, _squared(s), _drawn_as(s, own)) for s in sorted(closed, key=lambda s: -_area(s.poly))]
         spread = size > 0 and max(x1 - x0, y1 - y0) > REACH_EM * size
         inner, beside = [], ([] if spread else [(box, False, every)]) + members if len(closed) > 1 else [(box, False, every)]
     out: list[Subject] = []

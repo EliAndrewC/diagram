@@ -236,7 +236,7 @@ fn a_drawn_part_s_ink_is_its_curve_its_stroke_or_its_outline() {
     // (a 45 px circle, its half-sides bounding R at 45 * sqrt 2), 8 for a disc under the sag - a stroke its line at its half-width (at least
     // half a pixel), any other shape, or a disc drawn with other than its four box corners, its outline as read
     use super::classify::{disc_samples, drawn_ink};
-    use crate::labels::placer::{leader_of, InkPart, Subject};
+    use crate::labels::placer::{leader_of, Cap, InkPart, Subject};
     assert_eq!(
         (
             disc_samples(45.0 * 2.0_f64.sqrt()),
@@ -273,7 +273,8 @@ fn a_drawn_part_s_ink_is_its_curve_its_stroke_or_its_outline() {
         InkPart {
             pts: rope.poly.clone(),
             line: true,
-            half: 0.5
+            half: 0.5,
+            cap: Cap::Butt,
         }
     );
     // a drawn leader ending within a stroke's band is left as it is: the placer's own leader to a stroke ends at its edge, short by its trim
@@ -299,6 +300,7 @@ fn a_drawn_part_s_ink_is_its_curve_its_stroke_or_its_outline() {
             pts: vec![(0.0, 0.0), (0.0, 100.0)],
             line: true,
             half: 4.5,
+            cap: Cap::Butt,
         }],
         ..Subject::new(
             Kind::Point,
@@ -310,27 +312,34 @@ fn a_drawn_part_s_ink_is_its_curve_its_stroke_or_its_outline() {
     assert_eq!(leader_of(9, &near, &border), None);
     let far = crate::labels::geom::rect(40.0, 50.0, 20.0, 5.0, 0.0);
     assert_eq!(
-        leader_of(9, &far, &border),
+        leader_of(9, &far, &border).map(|(a, b)| (to_billionth(a), to_billionth(b))),
         Some(((19.0, 45.0), (5.5, 45.0)))
     );
 }
 
+/// A point to a billionth: the band's corners are its line's points plus and less its half-width, a rounding off the drawn figure.
+fn to_billionth(p: (f64, f64)) -> (f64, f64) {
+    ((p.0 * 1e9).round() / 1e9, (p.1 * 1e9).round() / 1e9)
+}
+
 #[test]
-fn on_a_tie_a_leader_ends_on_the_outline_then_the_wider_stroke() {
-    // feature 449 T192: a part is chosen by its outline or its stroke's line, so a stroke drawn along a building's edge ties the building
-    // (Ochiba's SERVANTS' QUARTERS) and two strokes on one line tie (Ubame's fox border on its east wall)
-    use crate::labels::placer::{leader_of, InkPart, Subject};
+fn a_leader_ends_on_the_nearest_drawn_edge_an_exact_tie_on_the_outline_then_the_wider_stroke() {
+    // feature 449 T192, T193: a part is chosen by its drawn edge - a stroke's band, an outline drawn out by its own stroke - so a stroke
+    // drawn along a bare building's edge takes the leader by its half-width and a stroked outline takes it back (Ochiba's SERVANTS'
+    // QUARTERS); on an exact tie, a closed outline before a stroke, and the wider of two strokes, whatever their order
+    use crate::labels::placer::{leader_of, Cap, InkPart, Subject};
     let far = crate::labels::geom::rect(40.0, 50.0, 20.0, 5.0, 0.0);
-    // on an exact tie, a closed outline before a stroke drawn along its edge, and the wider of two strokes on one line, whatever their order
-    let stroke = |half: f64| InkPart {
-        pts: vec![(0.0, 0.0), (0.0, 100.0)],
+    let stroke = |x: f64, y0: f64, y1: f64, half: f64| InkPart {
+        pts: vec![(x, y0), (x, y1)],
         line: true,
         half,
+        cap: Cap::Butt,
     };
-    let house = InkPart {
-        pts: vec![(-10.0, 0.0), (0.0, 0.0), (0.0, 100.0), (-10.0, 100.0)],
+    let house = |half: f64| InkPart {
+        pts: vec![(-10.0, 45.0), (0.0, 45.0), (0.0, 55.0), (-10.0, 55.0)],
         line: false,
-        half: 0.0,
+        half,
+        cap: Cap::Butt,
     };
     let led_to = |ink: Vec<InkPart>| {
         let sub = Subject {
@@ -341,10 +350,90 @@ fn on_a_tie_a_leader_ends_on_the_outline_then_the_wider_stroke() {
                 0.0,
             )
         };
-        leader_of(9, &far, &sub).map(|l| l.1)
+        leader_of(9, &far, &sub).map(|l| to_billionth(l.1))
     };
-    assert_eq!(led_to(vec![stroke(0.5), house.clone()]), Some((1.0, 45.0)));
-    assert_eq!(led_to(vec![house, stroke(0.5)]), Some((1.0, 45.0)));
-    assert_eq!(led_to(vec![stroke(1.3), stroke(4.5)]), Some((5.5, 45.0)));
-    assert_eq!(led_to(vec![stroke(4.5), stroke(1.3)]), Some((5.5, 45.0)));
+    // the nearer drawn edge: a 1 px stroke on a bare outline's edge, then the outline's own 1.5 px stroke over it
+    let edge = stroke(0.0, 0.0, 100.0, 0.5);
+    assert_eq!(led_to(vec![house(0.0), edge.clone()]), Some((1.5, 45.0)));
+    assert_eq!(led_to(vec![edge.clone(), house(0.75)]), Some((1.75, 45.0)));
+    // exact ties 20 px off, ending apart: the outline's (0, 45) before a stroke's (0, 47), the 9 px stroke's (0, 51) before the 2.5 px one's (0, 47)
+    let (thin, wide) = (stroke(-0.5, 47.0, 53.0, 0.5), stroke(-4.5, 49.0, 51.0, 4.5));
+    assert_eq!(led_to(vec![thin.clone(), house(0.0)]), Some((1.0, 45.0)));
+    assert_eq!(led_to(vec![house(0.0), thin]), Some((1.0, 45.0)));
+    let mid = stroke(-1.25, 47.0, 53.0, 1.25);
+    assert_eq!(led_to(vec![mid.clone(), wide.clone()]), Some((1.0, 51.0)));
+    assert_eq!(led_to(vec![wide, mid]), Some((1.0, 51.0)));
+}
+
+#[test]
+fn a_stroke_s_band_and_a_part_s_drawn_edge() {
+    // feature 449 T193: a stroke of no length is one disc; a bend is a disc and each end its cap; a leader's start within a part's own
+    // stroke lies on its ink, and draws no leader
+    use super::classify::drawn_ink;
+    use crate::labels::placer::{band_nearest, stroke_band, Cap, InkPart};
+    let part = |pts: Vec<(f64, f64)>, cap: Cap| InkPart {
+        pts,
+        line: true,
+        half: 1.0,
+        cap,
+    };
+    assert_eq!(
+        stroke_band(&part(vec![(5.0, 5.0), (5.0, 5.0)], Cap::Butt)),
+        (Vec::new(), vec![(5.0, 5.0)])
+    );
+    let (rects, discs) = stroke_band(&part(
+        vec![(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)],
+        Cap::Round,
+    ));
+    assert_eq!(rects.len(), 2);
+    assert_eq!(discs, vec![(10.0, 0.0), (0.0, 0.0), (10.0, 10.0)]);
+    // a block reaching a round end past the stroke's rectangle touches it: the block's own point twice
+    let (a, b) = band_nearest(
+        &crate::labels::geom::rect(11.5, 0.0, 1.0, 0.2, 0.0),
+        &part(vec![(0.0, 0.0), (10.0, 0.0)], Cap::Round),
+    );
+    assert_eq!(a, b);
+    let (square, _) = stroke_band(&part(vec![(0.0, 0.0), (10.0, 0.0)], Cap::Square));
+    assert_eq!(
+        square,
+        vec![vec![(-1.0, 1.0), (11.0, 1.0), (11.0, -1.0), (-1.0, -1.0)]]
+    );
+    assert_eq!(
+        (
+            Cap::of("square"),
+            Cap::of("round"),
+            Cap::of("butt"),
+            Cap::of("inherit")
+        ),
+        (Cap::Square, Cap::Round, Cap::Butt, Cap::Butt)
+    );
+    let shed = super::Shape {
+        edge: 2.0,
+        ..drawn(
+            "rect",
+            vec![(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)],
+        )
+    };
+    assert_eq!(drawn_ink(&shed).half.to_bits(), 2.0_f64.to_bits());
+    let led = |start: (f64, f64)| Placement {
+        x: 0.0,
+        y: 0.0,
+        angle: 0.0,
+        lines: vec!["a".to_owned()],
+        block: Vec::new(),
+        ring: 9,
+        rank: 0,
+        position: "above",
+        cost: 0.0,
+        leader: Some((start, (30.0, 30.0))),
+    };
+    // from 1 px off the outline, inside its 2 px stroke: on the ink; from 20 px off, to the stroke's edge 2 px out, short by its trim
+    assert_eq!(
+        super::leader_to_ink(led((11.0, 5.0)), &[&shed]).leader,
+        None
+    );
+    assert_eq!(
+        super::leader_to_ink(led((30.0, 5.0)), &[&shed]).leader,
+        Some(((30.0, 5.0), (13.0, 5.0)))
+    );
 }

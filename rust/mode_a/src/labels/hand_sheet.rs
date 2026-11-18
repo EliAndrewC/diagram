@@ -27,7 +27,7 @@ use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
 
 use super::geom::{inside, Pt};
-use super::placer::Placement;
+use super::placer::{Cap, Placement};
 use super::standard::{CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, WEIGHT_OBSTACLE};
 use super::svg::{caption_svg, leader_svg};
 
@@ -183,6 +183,8 @@ pub struct Shape {
     pub ids: BTreeSet<String>,
     pub names: Vec<String>,
     pub cont: bool,
+    /// A stroke's `stroke-linecap`, inherited as SVG inherits it (feature 449 T193).
+    pub cap: Cap,
 }
 
 impl Shape {
@@ -434,6 +436,8 @@ pub fn render(src: &str, png: &std::path::Path) -> Result<(), Error> {
     std::fs::write(png, bytes).map_err(|e| crate::py::os_error(&e, &png.to_string_lossy()))
 }
 
+#[cfg(test)]
+mod ink_tests;
 #[cfg(test)]
 mod leader_tests;
 #[cfg(test)]

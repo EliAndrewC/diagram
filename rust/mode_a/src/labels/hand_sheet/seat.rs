@@ -25,7 +25,7 @@ use super::super::placer::{
 use super::super::standard::{
     chars, CENTER_ABOVE_BASELINE_EM, CLEAR_EM, PITCH_EM, REACH_EM, WEIGHT_OBSTACLE,
 };
-use super::classify::{band, classify, drawn_ink, leader_blockers, leader_to_ink, Seen};
+use super::classify::{band, classify, drawn_ink, leader_blockers, leader_to_ink, same_box, Seen};
 use super::{char_w_of, luma, Shape, BLOCK_PX, GROUND_KINDS, LIGHT, REPAIR, STEPPED, WEIGHT_TEXT};
 use crate::py::{hypot, max, min, round_int, sum};
 
@@ -194,6 +194,19 @@ fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
     !closed.is_empty() && union_area(&closed) >= STEPPED * area(box_)
 }
 
+/// The drawn ink of one closed part as the sheet draws it (the Python's `_drawn_as`): its own and that of every other closed part of `own`
+/// sharing its box - a fill and the outline stroked over it as two elements (Hayakawa's RESIDENCE's blocks), which draw one block (feature
+/// 449 T193: a leader read off the fill alone ended inside the outline's stroke).
+fn drawn_as(part: &Shape, own: &[&Shape]) -> Vec<InkPart> {
+    own.iter()
+        .filter(|s| {
+            std::ptr::eq(**s, part)
+                || (!s.line && s.poly.len() >= 3 && same_box(&s.poly, &part.poly))
+        })
+        .map(|s| drawn_ink(s))
+        .collect()
+}
+
 /// The subjects a caption is tried against, in order (feature 286, plan D2): INSIDE first - the one closed shape it names, or the box of
 /// parts that fill it, or each block of a stepped building, largest first - then BESIDE: the box, or each block. A scatter of glyphs and
 /// lines has no inside, and is named beside the group, else beside any one of its glyphs - only beside a glyph where the group spreads
@@ -205,7 +218,7 @@ fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
 /// level; beside it, the caption is seated off the box of what it names read in that feature's own frame ([`framed`]; feature 449 T189: a
 /// turned garden holding its lantern and a lone turned block among its parts were named level beside, off the upright box). Each subject
 /// beside carries the drawn ink of what it is read off as its `ink` ([`drawn_ink`]), which its leader ends on: a subject read off one part -
-/// a lone shape, a scatter's member, a block of a stepped building - that part's, and a subject read off a box of several parts every
+/// a lone shape, a scatter's member, a block of a stepped building - that part's and that of every closed part drawn over it with its box ([`drawn_as`]; T193: a fill and its stroked outline drawn as two elements), and a subject read off a box of several parts every
 /// part's (feature 449 T191: a leader to a lone L-shaped house was scored to its box's corner over the empty ground of its notch; T192: a
 /// leader to a disc ended on its drawn box, and one to several parts was scored to their box while `leader_to_ink` drew it to their ink).
 ///
@@ -214,7 +227,7 @@ fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
 ///     an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does
 ///     a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame, and a scatter's member by its own outline, which the placer's seats read in that member's frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
 ///     a lone block's beside box - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - the page's map drawing convention (a block named among loose parts "is seated beside the smallest box holding them all"); the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)
-///     which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part, a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 ties a caption to its feature but not at which point (feature 449 T191, T192)
+///     which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part and every closed part drawn over it with its box (a fill and its stroked outline drawn as two elements draw one block), a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 has the leader end at the nearest drawn point, and the ink is where that point is read (feature 449 T191, T192, T193)
 #[must_use]
 pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
     let pts: Vec<Pt> = own.iter().flat_map(|s| s.poly.iter().copied()).collect();
@@ -282,7 +295,7 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
         let beside = if blocks.len() >= 2 {
             blocks
                 .iter()
-                .map(|b| (b.poly.clone(), true, vec![drawn_ink(b)]))
+                .map(|b| (b.poly.clone(), true, drawn_as(b, own)))
                 .collect()
         } else {
             vec![(framed(&pts, turned(&blocks[0].poly)), true, every.clone())]
@@ -306,7 +319,7 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
             b.extend(
                 members
                     .iter()
-                    .map(|s| (s.poly.clone(), squared(s), vec![drawn_ink(s)])),
+                    .map(|s| (s.poly.clone(), squared(s), drawn_as(s, own))),
             );
             b
         } else {

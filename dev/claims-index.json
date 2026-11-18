@@ -7990,33 +7990,32 @@
  "l7r/diagram/labels/hand_sheet.py::drawn_ink#its drawn sizes": {
   "body": "5a197967552dbb13",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.5 (a stroke's least half-width, the band `leader_to_ink` buffers)",
-  "code": "313bfb123370f8ee",
-  "core": "9faa350b4f013409",
+  "code": "d0df442adc2e9303",
+  "core": "d3aa848809506057",
   "date": "2026-11-18",
   "note": "a least half-width on the sheet",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/labels/hand_sheet.py::leader_to_ink#its drawn sizes": {
-  "body": "b80a26e3609a4ea2",
-  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)",
-  "code": "7468021a874d9867",
-  "core": "1f29e3062450da2b",
-  "date": "2026-10-25",
-  "note": "leader-tip tolerance on the sheet",
   "pages": {},
   "research": "",
   "rests": [],
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/labels/hand_sheet.py::leader_to_ink#its drawn sizes": {
+  "body": "47d2c47d1987adda",
+  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)",
+  "code": "0952ce897022750b",
+  "core": "fd7d90c31598b85a",
+  "date": "2026-11-18",
+  "note": "1.5 px \"already touching\" tolerance is a drawn size on the sheet",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/labels/hand_sheet.py::leader_to_ink#leader end trim": {
   "body": "97076cf7a80c4963",
   "claim": "leader end trim - CONVENTION: a leader stops short of the ink it ends on by a quarter of its length, at most 1 px, so its end does not touch the ink; a drawn size on the sheet, not in the world",
-  "code": "425e5a25803e98ca",
-  "core": "1f29e3062450da2b",
+  "code": "d027a6a81ebace50",
+  "core": "fd7d90c31598b85a",
   "date": "2026-11-18",
   "note": "trim = min(1.0, d / 4) at the ink end",
   "pages": {},
@@ -8092,8 +8091,8 @@
  "l7r/diagram/labels/hand_sheet.py::subjects#a caption's subjects": {
   "body": "db8a4476d109cf24",
   "claim": "a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)",
-  "code": "18be03cb3759a92b",
-  "core": "510e24dcbeeddce0",
+  "code": "a0b768a95ba07633",
+  "core": "411023fb07def90c",
   "date": "2026-11-18",
   "note": "inside first, then beside",
   "pages": {},
@@ -8104,8 +8103,8 @@
  "l7r/diagram/labels/hand_sheet.py::subjects#a lone block's beside box": {
   "body": "f4b7c7172ef5ed58",
   "claim": "a lone block's beside box - labels-on-maps-cartographic-label-placement.drawing: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - the page's map drawing convention (a block named among loose parts \"is seated beside the smallest box holding them all\"); the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)",
-  "code": "517b7af2bd3a94b5",
-  "core": "510e24dcbeeddce0",
+  "code": "74247af9ed7862ba",
+  "core": "411023fb07def90c",
   "date": "2026-11-18",
   "note": "a lone block is named beside the framed box of all its parts at the block's angle, which is the page's \"smallest box holding them all, turned to that block's ... angle\"",
   "pages": {
@@ -8116,14 +8115,15 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::subjects#a turned subject's angle": {
   "body": "6bf7c512b16409ea",
   "claim": "a turned subject's angle - labels-on-maps-cartographic-label-placement.drawing: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame, and a scatter's member by its own outline, which the placer's seats read in that member's frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "24f15dc470050aee",
-  "core": "510e24dcbeeddce0",
+  "code": "48e9a249960b6655",
+  "core": "411023fb07def90c",
   "date": "2026-11-18",
   "note": "inside and beside seats take `_turned`, beside boxes are `_framed` in the feature's frame, quarter turns stay level",
   "pages": {
@@ -8144,8 +8144,8 @@
   "body": "6bf7c512b16409ea",
   "claim": "an area's caption level - labels-on-maps-cartographic-label-placement.drawing: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "9f3b41426437a728",
-  "core": "510e24dcbeeddce0",
+  "code": "8dbb60bc2586ba84",
+  "core": "411023fb07def90c",
   "date": "2026-11-18",
   "note": "a box of parts, a covering box and an unsquared outline are level; a rect, a square-cornered outline and an unequal ellipse take their angle",
   "pages": {
@@ -8161,12 +8161,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::subjects#which subjects carry ink": {
-  "body": "f4b7c7172ef5ed58",
-  "claim": "which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part, a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 ties a caption to its feature but not at which point (feature 449 T191, T192)",
-  "code": "4bb3c7ed99802913",
-  "core": "510e24dcbeeddce0",
+  "body": "1ed4a406473f82f8",
+  "claim": "which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part and every closed part drawn over it with its box (a fill and its stroked outline drawn as two elements draw one block), a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 has the leader end at the nearest drawn point, and the ink is where that point is read (feature 449 T191, T192, T193)",
+  "code": "97ea94753f4a75f0",
+  "core": "411023fb07def90c",
   "date": "2026-11-18",
-  "note": "each beside subject carries its own part, or every part, which is the disc curve, stroke or part that §41 names; inside subjects carry none",
+  "note": "beside subjects carry `every` or `_drawn_as` as the claim says; inside subjects carry none",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -8444,16 +8444,32 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/labels/placer.py::_nearest_ink#which part a leader ends on": {
-  "body": "e412ae224a7c01bf",
-  "claim": "which part a leader ends on - CONVENTION: the part nearest the block by its outline or its stroke's line; on an exact tie a closed outline before a stroke (a stroke drawn along a building's edge, a partition or a gallery, is the building's) and the wider stroke before the narrower (a wall before the dashed line drawn on it), so the leader stops at the outermost drawn ink; 0242 does not say at which point a leader ends (feature 449 T192)",
-  "code": "7e0c39fc3ef5d828",
-  "core": "80bd136217c8ff89",
+ "l7r/diagram/labels/placer.py::_nearest_ink#a tie between parts": {
+  "body": "51223347658f572f",
+  "claim": "a tie between parts - CONVENTION: two parts whose drawn edges stand exactly as near go to a closed outline before a stroke, then the wider, then the first in the sheet's order - a fixed order where the page's rule leaves a choice; the first two decide no pool leader's part, the sheet's order the one of two equal parts equally near, as two posts (feature 449 T192, T193)",
+  "code": "a492818d615909fe",
+  "core": "9bd27f5a44e8d6e3",
   "date": "2026-11-18",
-  "note": "§41 records \"it ends at the drawn feature's nearest point - ... a stroke's edge\", but the code picks the part by line distance (`d = math.dist(a, b)` on `part.pts`, `(d, tie) < best[:2]`), so a stroke whose edge is nearer than an outline (or than another stroke) loses. On an exact tie the end is the outline under the stroke (the test's (1.0, 45.0) beside a 0.5 half-width stroke), not \"the outermost drawn ink\" the claim says. Either record the choice by line and the tie order on 0242's drawing page as a deviation, or change the code",
+  "note": "`(d, (line, -half))` with strict `<` gives outline, then wider, then first; page leaves the order open (filed T194)",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/placer.py::_nearest_ink#which part a leader ends on": {
+  "body": "51223347658f572f",
+  "claim": "which part a leader ends on - labels-on-maps-cartographic-label-placement.drawing: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; the part chosen by its drawn edge, an outline's own stroke and a stroke's cap read as the sheet draws them, their bends and corners measured round (feature 449 T193)",
+  "code": "c0f38162fe0edb79",
+  "core": "9bd27f5a44e8d6e3",
+  "date": "2026-11-18",
+  "note": "part chosen by its drawn edge: stroke band with caps, outline drawn out by its half, bends round as stated",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "882efefe13db897f"
+  },
+  "research": "f693f7a54a9b35d3",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:64021411c0f9e4ba"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_point_cands#seats round a point": {
   "body": "723f43ed8a7ad0f6",
@@ -8579,14 +8595,20 @@
  },
  "l7r/diagram/labels/placer.py::leader_of#where a leader ends": {
   "body": "af6c23c003258566",
-  "claim": "where a leader ends - CONVENTION: from the caption block's nearest point to the nearest point of the feature's drawn parts the subject carries (`ink`: a closed part's outline, a disc's its drawn curve; a stroke's edge, the nearest point of its line drawn back toward the block by its half-width, the part chosen by its line, an exact tie going to an outline before a stroke and to the wider stroke), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws; 0242 ties a displaced caption to its feature with a leader line but does not say at which point, the nearest is the shortest tie, and a box's corner may stand over empty ground, as an L-shaped house's notch or the gap beside a disc or among a scatter (feature 449 T191, T192)",
-  "code": "16165cbe161c1d27",
+  "claim": "where a leader ends - labels-on-maps-cartographic-label-placement.drawing: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `_nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)",
+  "code": "e29391b0fe33c551",
   "core": "410718dd1de78f85",
   "date": "2026-11-18",
-  "note": "it ends through `_nearest_ink`, which chooses the part by its stroke's line (an outline winning an exact tie), where §41 records \"it ends at the drawn feature's nearest point - ... a stroke's edge\". Where a stroke's edge stands nearer than the part chosen, the leader ends off the nearest drawn ink. Record the choice by line on the page, or end at the nearest edge",
-  "pages": {},
-  "research": "",
-  "verdict": "DRIFTED"
+  "note": "ends on `_nearest_ink` of the subject's ink, else on its outline; same ink `leader_to_ink` draws to",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "882efefe13db897f"
+  },
+  "research": "f693f7a54a9b35d3",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:64021411c0f9e4ba"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::leader_score#leader keeps clear": {
   "code": "b9ca94453476371e",
@@ -8780,6 +8802,17 @@
   ],
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/placer.py::stroke_band#a stroke's drawn band": {
+  "body": "b9b1cac1199b360d",
+  "claim": "a stroke's drawn band - CONVENTION: a stroke's ink measured as the band SVG draws, its `stroke-linecap` read (butt unless the sheet says square or round), but every bend measured round where SVG's default `stroke-linejoin` draws a miter, whose point on a bend's outside the band leaves out; 0242 has a leader end at the nearest drawn point, and this is where a stroke's points are read (feature 449 T193)",
+  "code": "c30dd2e820b96377",
+  "core": "79f76f2740172646",
+  "date": "2026-11-18",
+  "note": "zero-length stroke returns `[], [part.pts[0]]` (a disc of the half-width) whatever its cap, but a butt stroke of no length draws nothing in SVG; the claim says \"the band SVG draws, its stroke-linecap read\". The claim should name the zero-length disc as its own convention, or the code should draw only what the cap draws",
+  "pages": {},
+  "research": "",
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/labels/standard.py::CENTER_ABOVE_BASELINE_EM#block center above the baseline": {
   "code": "5024283acb5810cd",
@@ -20109,13 +20142,14 @@
  "rust/mode_a/src/labels/hand_sheet.rs::Shape#the hand sheet's captions": {
   "body": "179e7b238b21a3be",
   "claim": "the hand sheet's captions - NONE: a sheet read, its captions' subjects found from their declarations and the placer asked, the rules each decision rests on claimed where it is made",
-  "code": "27c496df27f49125",
-  "core": "49ecf8ec4f1dd6cc",
+  "code": "a50cb39ce3a48db4",
+  "core": "c65ce8d0b4e9d4f6",
   "date": "2026-11-18",
   "note": "data struct",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet.rs::Shape.get#the hand sheet's captions": {
@@ -20311,30 +20345,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/hand_sheet/classify.rs::Ink#the sheet's ink as obstacles": {
-  "body": "dfbb0fed96c8efcc",
-  "claim": "the sheet's ink as obstacles - NONE: the shapes filed by kind and paint, each weight's rule claimed where it is set",
-  "code": "8323a4cfc3153d8a",
-  "core": "d9db0b5a3a0c94c3",
-  "date": "2026-11-18",
-  "note": "enum",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/labels/hand_sheet/classify.rs::Ink.nearest#the sheet's ink as obstacles": {
-  "body": "8271370b9bd33e5e",
-  "claim": "the sheet's ink as obstacles - NONE: the shapes filed by kind and paint, each weight's rule claimed where it is set",
-  "code": "cddb95c525bf2907",
-  "core": "58bda44113e9c778",
-  "date": "2026-11-18",
-  "note": "geometry",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "rust/mode_a/src/labels/hand_sheet/classify.rs::Seen#the sheet's ink as obstacles": {
   "body": "093c143f6ec05dbc",
   "claim": "the sheet's ink as obstacles - NONE: the shapes filed by kind and paint, each weight's rule claimed where it is set",
@@ -20387,14 +20397,26 @@
  "rust/mode_a/src/labels/hand_sheet/classify.rs::drawn_ink#its drawn sizes": {
   "body": "45bf6acfaf594cc6",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.5 (a stroke's least half-width, the band `leader_to_ink` buffers)",
-  "code": "59314f5280bf8fce",
-  "core": "f9519bc03c572587",
+  "code": "4066b996bfd9ebab",
+  "core": "10273ed6d890ce70",
   "date": "2026-11-18",
   "note": "a least half-width on the sheet",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/classify.rs::ink_nearest#the sheet's ink as obstacles": {
+  "body": "0af6014878594efb",
+  "claim": "the sheet's ink as obstacles - NONE: the shapes filed by kind and paint, each weight's rule claimed where it is set",
+  "code": "5cd6a712904fa35f",
+  "core": "51c9f0b69640bfdd",
+  "date": "2026-11-18",
+  "note": "this decides where a drawn leader ends (stroke band with its cap, closed outline drawn out by `part.half`, inside counts as on the ink), not obstacle filing; it should carry the 0242 drawing-page claim \"which part a leader ends on\" as on `nearest_ink`",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
  },
  "rust/mode_a/src/labels/hand_sheet/classify.rs::is_background#the background": {
   "body": "dceacd40ac94d6b9",
@@ -20433,23 +20455,21 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/classify.rs::leader_to_ink#its drawn sizes": {
-  "body": "375e1e042bb6c8b5",
+  "body": "5567dd860e47852c",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)",
-  "code": "ee96c2c9e867012a",
-  "core": "1550c284e8f93a84",
+  "code": "e63d3b0cdb9b3d39",
+  "core": "1e005cccb466732e",
   "date": "2026-11-18",
-  "note": "1.5 is a sheet-space tolerance",
+  "note": "1.5 px tolerance is a drawn size",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/classify.rs::leader_to_ink#leader end trim": {
   "body": "c198d1b22a57fad5",
   "claim": "leader end trim - CONVENTION: a leader stops short of the ink it ends on by a quarter of its length, at most 1 px, so its end does not touch the ink; a drawn size on the sheet, not in the world",
-  "code": "5a6e2614cf9cd0b9",
-  "core": "1550c284e8f93a84",
+  "code": "da7ea21a64ffa0e8",
+  "core": "1e005cccb466732e",
   "date": "2026-11-18",
   "note": "trim = min(1.0, d / 4.0) at the ink end",
   "pages": {},
@@ -20473,13 +20493,14 @@
  "rust/mode_a/src/labels/hand_sheet/classify.rs::same_box#the subject's own outline": {
   "body": "96976ca7e2997dff",
   "claim": "the subject's own outline - CONVENTION: a shape whose box is the subject's within 1 unit is the subject itself, not ink inside it",
-  "code": "262e29eaaa46e35c",
-  "core": "502178ae05d163e7",
+  "code": "a10f3de885ba3f8c",
+  "core": "a0856191d173bd5a",
   "date": "2026-11-18",
   "note": "geometric tolerance",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/classify.rs::soft_index#soft ink": {
@@ -20492,6 +20513,102 @@
   "pages": {},
   "reads": "c53aff1340be2d85",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::CapCase#its tests": {
+  "body": "d4e686d34ecc60d4",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "b3fc5881014eae42",
+  "core": "70d982bdb6ea22bd",
+  "date": "2026-11-18",
+  "note": "test type alias",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::EdgeCase#its tests": {
+  "body": "43e6d1a58979914e",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "066f2a59f181c5db",
+  "core": "2948000d52fe720e",
+  "date": "2026-11-18",
+  "note": "test type alias",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::Led#its tests": {
+  "body": "67deb1453ea1e40e",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "264f59f5aea7b40b",
+  "core": "a9a99bedcc95e39f",
+  "date": "2026-11-18",
+  "note": "test type alias",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::a_leader_ends_on_the_nearest_drawn_edge#its tests": {
+  "body": "e510ffc9b6eb00dd",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "e5e11f51b824c885",
+  "core": "3d2bd8c6563e96f3",
+  "date": "2026-11-18",
+  "note": "test; decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::a_leader_past_a_stroke_s_end_ends_on_the_end_its_cap_draws#its tests": {
+  "body": "65aeaa6cd68359e7",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "85655bd94deeb6d6",
+  "core": "2a7c6fb9a98ed6de",
+  "date": "2026-11-18",
+  "note": "test; decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::led_about#its tests": {
+  "body": "97485583552fb6e4",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "13b55f39ef1d1842",
+  "core": "2ae9a9b1e1993120",
+  "date": "2026-11-18",
+  "note": "test harness",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::off_box#its tests": {
+  "body": "59635e5aadb9266d",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "e319044837f85490",
+  "core": "478128ef1ba450b5",
+  "date": "2026-11-18",
+  "note": "test measure",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::read#its tests": {
+  "body": "cf425aa0a1406236",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "3aa34dcb820b86c7",
+  "core": "20aaa055c00956f7",
+  "date": "2026-11-18",
+  "note": "test helper",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/leader_tests.rs::Led#its tests": {
@@ -20509,10 +20626,23 @@
  "rust/mode_a/src/labels/hand_sheet/leader_tests.rs::a_drawn_part_s_ink_is_its_curve_its_stroke_or_its_outline#its tests": {
   "body": "0967add2b4601c11",
   "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
-  "code": "8d308e7a42e861a3",
-  "core": "4ff5546c599c5fd2",
+  "code": "470f848c88f46c9e",
+  "core": "580c6958d8e625fc",
   "date": "2026-11-18",
   "note": "test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "triaged": "2026-11-18",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/hand_sheet/leader_tests.rs::a_leader_ends_on_the_nearest_drawn_edge_an_exact_tie_on_the_outline_then_the_wider_stroke#its tests": {
+  "body": "de6e90bd769e256c",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "9a87365a2bf3f9ca",
+  "core": "60a812979963b3c2",
+  "date": "2026-11-18",
+  "note": "test; decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -20554,6 +20684,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/labels/hand_sheet/leader_tests.rs::a_stroke_s_band_and_a_part_s_drawn_edge#its tests": {
+  "body": "e808f2a828d49ff7",
+  "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
+  "code": "aa0d78531a7642fd",
+  "core": "e2830060e08ec7c0",
+  "date": "2026-11-18",
+  "note": "test; decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/labels/hand_sheet/leader_tests.rs::disc_box#its tests": {
   "body": "e686cc1abf8e660d",
   "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
@@ -20590,13 +20732,13 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/hand_sheet/leader_tests.rs::on_a_tie_a_leader_ends_on_the_outline_then_the_wider_stroke#its tests": {
-  "body": "ebd3ff8debd07883",
+ "rust/mode_a/src/labels/hand_sheet/leader_tests.rs::to_billionth#its tests": {
+  "body": "ad9d31d78f10f5a4",
   "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
-  "code": "52ee9f3bd8a248ca",
-  "core": "8fee367c2a4e2e3a",
+  "code": "62590a564750c8b8",
+  "core": "c3ffb31d7a18314f",
   "date": "2026-11-18",
-  "note": "test",
+  "note": "rounding helper",
   "pages": {},
   "research": "",
   "rests": [],
@@ -20629,13 +20771,14 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::Inherited#the sheet's reading": {
   "body": "c2b57ce20c8bf003",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "7f5630bd835470dd",
-  "core": "a86cffb8130a1e52",
+  "code": "26a379376c3721fb",
+  "core": "004b020a09821528",
   "date": "2026-11-18",
   "note": "struct",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::NUMBER#the sheet's reading": {
@@ -20773,13 +20916,14 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::inherit#the sheet's reading": {
   "body": "664ac48631c0e49b",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "f1718c0e564e6a5c",
-  "core": "2094bfdee02ca648",
+  "code": "06659025f4876d93",
+  "core": "9267f3cd60f5d07b",
   "date": "2026-11-18",
   "note": "SVG inheritance",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::inverse#the sheet's reading": {
@@ -20847,14 +20991,15 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::read_sheet#the sheet's reading": {
   "body": "be034288c794ccc0",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "4a7d47c6c9d89e53",
-  "core": "fee8f62f152cd7a5",
+  "code": "7431fc9723316ff4",
+  "core": "3bce4242597a9ecb",
   "date": "2026-11-18",
   "note": "parsing",
   "pages": {},
   "reads": "8de22f068123dee0",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::split#the sheet's reading": {
@@ -20898,14 +21043,15 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::walk#the sheet's reading": {
   "body": "860f7faa31828ff2",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "b91e0cf84c84c8bf",
-  "core": "5af935f01a16e726",
+  "code": "be8ece0ca9b91694",
+  "core": "be01b2bfcc2c2807",
   "date": "2026-11-18",
   "note": "reads SVG geometry as drawn",
   "pages": {},
   "reads": "fca5a9c7dd4bacf4",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::Beside#the hand sheet's seating plumbing": {
@@ -21191,6 +21337,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/labels/hand_sheet/seat.rs::drawn_as#the hand sheet's seating plumbing": {
+  "body": "33705487d4786a55",
+  "claim": "the hand sheet's seating plumbing - NONE: captions grouped, ordered and tried against their subjects, each rule claimed where it is decided",
+  "code": "f4989f671cf8b9e0",
+  "core": "39a2a955acfc3997",
+  "date": "2026-11-18",
+  "note": "helper; its rule is claimed at `subjects` (\"which subjects carry ink\")",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::fits_inside#a caption that fits inside": {
   "body": "b9f39c586b6491f4",
   "claim": "a caption that fits inside - NONE: its widest line and its lines' height at their own faces against the box less the gap, an ordering test",
@@ -21371,8 +21529,8 @@
  "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#a caption's subjects": {
   "body": "6554853abb6f8c7b",
   "claim": "a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)",
-  "code": "1f4bd5398ffe2f3e",
-  "core": "ddf3ba1c8622c780",
+  "code": "908a6c73137eba22",
+  "core": "526afb20e8acecfb",
   "date": "2026-11-18",
   "note": "same order as the Python",
   "pages": {},
@@ -21384,8 +21542,8 @@
  "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#a lone block's beside box": {
   "body": "0799e0d45a031902",
   "claim": "a lone block's beside box - labels-on-maps-cartographic-label-placement.drawing: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - the page's map drawing convention (a block named among loose parts \"is seated beside the smallest box holding them all\"); the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)",
-  "code": "5342daac955e774c",
-  "core": "ddf3ba1c8622c780",
+  "code": "7956aef83afb7dc3",
+  "core": "526afb20e8acecfb",
   "date": "2026-11-18",
   "note": "the same as the Python: framed(&pts, turned(blocks[0])), squared, carrying every part's ink",
   "pages": {
@@ -21397,14 +21555,15 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#a turned subject's angle": {
   "body": "7e5461fab35bd4c7",
   "claim": "a turned subject's angle - labels-on-maps-cartographic-label-placement.drawing: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame, and a scatter's member by its own outline, which the placer's seats read in that member's frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "def6d88cac2b17ee",
-  "core": "ddf3ba1c8622c780",
+  "code": "9da1991cac442dc2",
+  "core": "526afb20e8acecfb",
   "date": "2026-11-18",
   "note": "`framed`/`turned` per branch, matching the Python, quarter turns level",
   "pages": {
@@ -21426,8 +21585,8 @@
   "body": "7e5461fab35bd4c7",
   "claim": "an area's caption level - labels-on-maps-cartographic-label-placement.drawing: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "bebfe059fbd4ef6a",
-  "core": "ddf3ba1c8622c780",
+  "code": "0d4284c533632c37",
+  "core": "526afb20e8acecfb",
   "date": "2026-11-18",
   "note": "level for a box of parts and unsquared shapes, angled for squared ones",
   "pages": {
@@ -21444,12 +21603,12 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#which subjects carry ink": {
-  "body": "0799e0d45a031902",
-  "claim": "which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part, a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 ties a caption to its feature but not at which point (feature 449 T191, T192)",
-  "code": "c9acf77d432008c6",
-  "core": "ddf3ba1c8622c780",
+  "body": "addb614531253895",
+  "claim": "which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part and every closed part drawn over it with its box (a fill and its stroked outline drawn as two elements draw one block), a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 has the leader end at the nearest drawn point, and the ink is where that point is read (feature 449 T191, T192, T193)",
+  "code": "8465e3258d69aacc",
+  "core": "526afb20e8acecfb",
   "date": "2026-11-18",
-  "note": "the same as the Python; each beside subject carries its part or parts",
+  "note": "matches the Python: blocks and members by `drawn_as`, boxes by `every`, inside subjects none",
   "pages": {},
   "reads": "13473eb649c7c75b",
   "research": "",
@@ -22316,6 +22475,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/labels/placer.rs::Cap#caption search plumbing": {
+  "body": "2595eda32bf17da7",
+  "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
+  "code": "7fc4bf42ec491bfc",
+  "core": "eecf39c516a4902c",
+  "date": "2026-11-18",
+  "note": "enum",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/placer.rs::Cap.of#caption search plumbing": {
+  "body": "b9154aa3c8ea7d3d",
+  "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
+  "code": "b68a5ecd0afadae8",
+  "core": "d6b381e0bedaba18",
+  "date": "2026-11-18",
+  "note": "reads the attribute, defaulting to SVG's butt as SVG does",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/labels/placer.rs::Frame#caption search plumbing": {
   "body": "efd77c4a06deccd7",
   "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
@@ -22331,13 +22514,14 @@
  "rust/mode_a/src/labels/placer.rs::InkPart#caption search plumbing": {
   "body": "3b27a0fbf1c1c797",
   "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
-  "code": "93d1e8bc8e0fef89",
-  "core": "01fd7e82600297e7",
+  "code": "1c7b0ef2eeab0326",
+  "core": "abfb0fcfc802c4f2",
   "date": "2026-11-18",
   "note": "a data record",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::Kind#caption search plumbing": {
@@ -22561,6 +22745,18 @@
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/labels/placer.rs::band_nearest#caption search plumbing": {
+  "body": "95325bec77b3052e",
+  "claim": "caption search plumbing - NONE: candidate bookkeeping, geometry and search bounds",
+  "code": "8a6f68d64bdbe70a",
+  "core": "f51bb3ab1cb4a1c2",
+  "date": "2026-11-18",
+  "note": "nearest-point geometry over `stroke_band`",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/labels/placer.rs::caption_clears_ways#a caption clear of every way": {
   "body": "c00599e90eb94d50",
   "claim": "a caption clear of every way - labels-on-maps-cartographic-label-placement.drawing: a way the block comes within its drawn half-width of is a way crossed",
@@ -22672,15 +22868,21 @@
  },
  "rust/mode_a/src/labels/placer.rs::leader_of#where a leader ends": {
   "body": "46b0b6a36c6974a1",
-  "claim": "where a leader ends - CONVENTION: from the caption block's nearest point to the nearest point of the feature's drawn parts the subject carries (`ink`: a closed part's outline, a disc's its drawn curve; a stroke's edge, the nearest point of its line drawn back toward the block by its half-width, the part chosen by its line, an exact tie going to an outline before a stroke and to the wider stroke), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws; 0242 ties a displaced caption to its feature with a leader line but does not say at which point, the nearest is the shortest tie, and a box's corner may stand over empty ground, as an L-shaped house's notch or the gap beside a disc or among a scatter (feature 449 T191, T192)",
-  "code": "4e6324246db041f1",
+  "claim": "where a leader ends - labels-on-maps-cartographic-label-placement.drawing: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)",
+  "code": "c086e172b399e576",
   "core": "4ce6a14255e9d9a9",
   "date": "2026-11-18",
-  "note": "it ends through `nearest_ink`, which chooses the part by its stroke's line (an outline winning an exact tie), where §41 records \"it ends at the drawn feature's nearest point - ... a stroke's edge\". Record the choice by line on the page, or end at the nearest edge",
-  "pages": {},
+  "note": "same as the Python",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "882efefe13db897f"
+  },
   "reads": "0d4cd64b989dbf58",
-  "research": "",
-  "verdict": "DRIFTED"
+  "research": "f693f7a54a9b35d3",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:64021411c0f9e4ba"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::leader_score#leader keeps clear": {
   "body": "a99304eb18f8acc5",
@@ -22706,16 +22908,32 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/labels/placer.rs::nearest_ink#which part a leader ends on": {
-  "body": "fdd3db8b7b9c05a4",
-  "claim": "which part a leader ends on - CONVENTION: the part nearest the block by its outline or its stroke's line; on an exact tie a closed outline before a stroke (a stroke drawn along a building's edge, a partition or a gallery, is the building's) and the wider stroke before the narrower (a wall before the dashed line drawn on it), so the leader stops at the outermost drawn ink; 0242 does not say at which point a leader ends (feature 449 T192)",
-  "code": "5cf34234f4e7e7e2",
-  "core": "5d57362365aa7e2a",
+ "rust/mode_a/src/labels/placer.rs::nearest_ink#a tie between parts": {
+  "body": "bedbb3af0ba7a841",
+  "claim": "a tie between parts - CONVENTION: two parts whose drawn edges stand exactly as near go to a closed outline before a stroke, then the wider, then the first in the sheet's order - a fixed order where the page's rule leaves a choice; the first two decide no pool leader's part, the sheet's order the one of two equal parts equally near, as two posts (feature 449 T192, T193)",
+  "code": "b68153b7cabfb158",
+  "core": "70e362353113c4b9",
   "date": "2026-11-18",
-  "note": "`d = dist(a, b)` on `part.pts`, with `d < best.0 || tie`, picks the part by its stroke's line, not by the nearest drawn ink §41 records (\"the drawn feature's nearest point - ... a stroke's edge\"). On an outline/stroke tie the end is the outline under the stroke, not \"the outermost drawn ink\" the claim says. Record it on the page as a deviation, or change the code",
+  "note": "tie test matches the Python order: outline before stroke, then wider, then first",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/placer.rs::nearest_ink#which part a leader ends on": {
+  "body": "bedbb3af0ba7a841",
+  "claim": "which part a leader ends on - labels-on-maps-cartographic-label-placement.drawing: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; the part chosen by its drawn edge, an outline's own stroke and a stroke's cap read as the sheet draws them, their bends and corners measured round (feature 449 T193)",
+  "code": "8fa703b9e1918172",
+  "core": "70e362353113c4b9",
+  "date": "2026-11-18",
+  "note": "same as the Python",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "882efefe13db897f"
+  },
+  "research": "f693f7a54a9b35d3",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:64021411c0f9e4ba"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::nudge_reach#caption search plumbing": {
   "body": "4e1bc282de21dfd0",
@@ -22944,6 +23162,17 @@
   "research": "",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/labels/placer.rs::stroke_band#a stroke's drawn band": {
+  "body": "d9e868c59398b6ae",
+  "claim": "a stroke's drawn band - CONVENTION: a stroke's ink measured as the band SVG draws, its `stroke-linecap` read (butt unless the sheet says square or round), but every bend measured round where SVG's default `stroke-linejoin` draws a miter, whose point on a bend's outside the band leaves out; 0242 has a leader end at the nearest drawn point, and this is where a stroke's points are read (feature 449 T193)",
+  "code": "a55534b89b2bfbd4",
+  "core": "2d38133318b27536",
+  "date": "2026-11-18",
+  "note": "same as the Python: a zero-length stroke returns one disc whatever its cap, where a butt stroke of no length draws nothing; the claim or the code should say so",
+  "pages": {},
+  "research": "",
+  "verdict": "DRIFTED"
  },
  "rust/mode_a/src/labels/placer/cands.rs::AREA_SEATS#caption search plumbing": {
   "body": "f822a4e5a73e0bd4",
@@ -27669,12 +27898,12 @@
  "rust/mode_a/src/parse/lockstep.rs::the_parse_is_the_python_s_on_every_pool_sheet_and_fixture#the parse's lockstep": {
   "body": "6c5ab88dd73cfddb",
   "claim": "the parse's lockstep - NONE: the Python and the port compared, deciding nothing about a building",
-  "code": "4df2624d4e150b3e",
-  "core": "290c93e03a9bf32f",
+  "code": "f5c1747fb4a2c998",
+  "core": "c86dd3ce5d5fd760",
   "date": "2026-11-18",
-  "note": "test plumbing",
+  "note": "lockstep test",
   "pages": {},
-  "reads": "e7b8d5c709f6bcde",
+  "reads": "f295d7c74477615a",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -28531,8 +28760,8 @@
  "rust/mode_a/src/parse/lockstep_labels.rs::PYTHON#the labels' comparison": {
   "body": "81a665d4bd4ad4e1",
   "claim": "the labels' comparison - NONE: the Python and the port compared, deciding nothing about a building",
-  "code": "f21eae47c371c362",
-  "core": "0ce482b963e7fd72",
+  "code": "ece9d2f9da206606",
+  "core": "2f7d8e30e04d8008",
   "date": "2026-11-18",
   "note": "a Python harness",
   "pages": {},
@@ -28655,8 +28884,8 @@
  "rust/mode_a/src/parse/lockstep_labels.rs::python_row#the labels' comparison": {
   "body": "820b87af3b9ec88a",
   "claim": "the labels' comparison - NONE: the Python and the port compared, deciding nothing about a building",
-  "code": "501bc1d0bf2aa6a6",
-  "core": "a7c9937b495e0dda",
+  "code": "af250428cd941a31",
+  "core": "f5a1e08c7dfaa185",
   "date": "2026-11-18",
   "note": "parsing",
   "pages": {},

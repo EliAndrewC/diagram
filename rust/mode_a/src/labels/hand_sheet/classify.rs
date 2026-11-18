@@ -8,7 +8,7 @@ use std::collections::BTreeSet;
 
 use super::super::geom::{bbox, dist, inside, open_edges, ring_edges, seg_closest, Pt};
 use super::super::obstacles::{Obstacle, ObstacleIndex, Way};
-use super::super::placer::{InkPart, Placement, Subject};
+use super::super::placer::{band_nearest, Cap, InkPart, Placement, Subject};
 use super::super::standard::{WEIGHT_OBSTACLE, WEIGHT_WAY};
 use super::seat::{area, box_within};
 use super::{
@@ -45,7 +45,7 @@ fn is_background(s: &Shape, view: (f64, f64, f64, f64)) -> bool {
 /// Do two outlines share a box (within 1 unit) - a shape that IS the subject rather than a part inside it?
 ///
 /// Research: the subject's own outline - CONVENTION: a shape whose box is the subject's within 1 unit is the subject itself, not ink inside it
-fn same_box(a: &[Pt], b: &[Pt]) -> bool {
+pub(super) fn same_box(a: &[Pt], b: &[Pt]) -> bool {
     let (p, q) = (bbox(a), bbox(b));
     [(p.0, q.0), (p.1, q.1), (p.2, q.2), (p.3, q.3)]
         .iter()
@@ -274,66 +274,51 @@ pub fn leader_blockers(
     soft_index(out, Vec::new())
 }
 
-/// One part of the ink a leader ends on: a closed shape, or a stroked line with its half-width.
-enum Ink<'a> {
-    Area(&'a [Pt]),
-    Stroke(&'a [Pt], f64),
-}
-
-impl Ink<'_> {
-    /// The distance from `p` to this ink, and the ink's point nearest `p` (`p` itself where it lies on the ink).
-    fn nearest(&self, p: Pt) -> (f64, Pt) {
-        match *self {
-            Ink::Area(poly) => {
-                if inside(p.0, p.1, poly) {
-                    return (0.0, p);
-                }
-                ring_edges(poly).map(|(a, b)| seg_closest(p, a, b)).fold(
-                    (f64::INFINITY, p),
-                    |best, q| {
-                        let d = dist(p, q);
-                        if d < best.0 {
-                            (d, q)
-                        } else {
-                            best
-                        }
-                    },
-                )
+/// The distance from `p` to one drawn part as a leader ends on it, and the part's point nearest `p` (`p` itself where it lies on the ink):
+/// a closed part's outline drawn out by its own stroke's half-width, a stroke's band as the sheet draws it, its cap read
+/// ([`band_nearest`], feature 449 T193).
+fn ink_nearest(part: &InkPart, p: Pt) -> (f64, Pt) {
+    if part.line {
+        let (a, b) = band_nearest(&[p], part);
+        return (dist(a, b), b);
+    }
+    if inside(p.0, p.1, &part.pts) {
+        return (0.0, p);
+    }
+    let (d, q) = ring_edges(&part.pts)
+        .map(|(a, b)| seg_closest(p, a, b))
+        .fold((f64::INFINITY, p), |best, q| {
+            let d = dist(p, q);
+            if d < best.0 {
+                (d, q)
+            } else {
+                best
             }
-            Ink::Stroke(pts, r) => {
-                let (d, q) = open_edges(pts).map(|(a, b)| seg_closest(p, a, b)).fold(
-                    (f64::INFINITY, p),
-                    |best, q| {
-                        let d = dist(p, q);
-                        if d < best.0 {
-                            (d, q)
-                        } else {
-                            best
-                        }
-                    },
-                );
-                if d <= r {
-                    (0.0, p)
-                } else {
-                    (
-                        d - r,
-                        (q.0 + (p.0 - q.0) * (r / d), q.1 + (p.1 - q.1) * (r / d)),
-                    )
-                }
-            }
-        }
+        });
+    if d <= part.half {
+        (0.0, p)
+    } else {
+        (
+            d - part.half,
+            (
+                q.0 + (p.0 - q.0) * (part.half / d),
+                q.1 + (p.1 - q.1) * (part.half / d),
+            ),
+        )
     }
 }
 
 /// A leader ends on the drawn thing it names, not on the box around its parts (feature 283 - the tax barge's and the old pines' leaders
-/// ended 5-6 ft short). The Python measured the union of the parts with shapely, each stroke buffered to a polygon whose round caps GEOS
-/// draws as chords; here the distance to the union is the least distance to a part - the same wherever the leader's start lies outside
-/// every part, as a caption's block beside its subject does - and a stroke is measured as the exact round-capped band, so a tip near a
-/// cap stands up to `r (1 - cos(pi / 64))` from GEOS's (0.12% of the half-width; measured on the pool sheets by
-/// `parse/lockstep_labels.rs`).
+/// ended 5-6 ft short). The Python measured the union of the parts with shapely, each stroke buffered to a polygon with its cap and a
+/// stroked outline drawn out by its stroke, GEOS drawing each round end, bend and corner as chords; here the distance to the union is the
+/// least distance to a part - the same wherever the leader's start lies outside every part, as a caption's block beside its subject
+/// does - and each part is measured exactly ([`ink_nearest`]), so a tip near a round end, bend or corner stands up to `r (1 - cos(pi /
+/// 64))` from GEOS's (0.12% of the half-width; measured on the pool sheets by `parse/lockstep_labels.rs`).
 ///
 /// A disc's ink is its drawn curve ([`drawn_ink`]), not the box the reader keeps as its outline (feature 449 T192: three pool leaders ended
-/// 1.75 to 4.45 px off the curve). A leader whose start already lies on the ink it names ties nothing back - the caption touches its
+/// 1.75 to 4.45 px off the curve); a stroke's is its band as the sheet draws it, its `stroke-linecap` read, and a closed part's its outline
+/// drawn out by its own stroke (feature 449 T193: a leader past a butt end stopped up to the half-width short of the ink, and one to a
+/// stroked building inside its stroke). A leader whose start already lies on the ink it names ties nothing back - the caption touches its
 /// subject - so it is dropped (feature 449 T184; the Python divided by the zero distance there). The placer's own leader ends on the same
 /// ink (`Subject::ink`, feature 449 T192), so this leaves every leader a hand sheet's subject scores as it was scored.
 ///
@@ -345,24 +330,14 @@ pub fn leader_to_ink(p: Placement, parts: &[&Shape]) -> Placement {
     let Some((start, end)) = p.leader else {
         return p;
     };
-    let drawn: Vec<(&Shape, InkPart)> = parts
+    let ink: Vec<InkPart> = parts
         .iter()
         .filter(|s| s.poly.len() >= if s.line { 2 } else { 3 })
-        .map(|s| (*s, drawn_ink(s)))
-        .collect();
-    let ink: Vec<Ink<'_>> = drawn
-        .iter()
-        .map(|(s, d)| {
-            if s.line {
-                Ink::Stroke(&s.poly, max(s.half, 0.5))
-            } else {
-                Ink::Area(&d.pts)
-            }
-        })
+        .map(|s| drawn_ink(s))
         .collect();
     let nearest = |q: Pt| {
         ink.iter()
-            .map(|i| i.nearest(q))
+            .map(|i| ink_nearest(i, q))
             .fold(
                 (f64::INFINITY, q),
                 |best, n| if n.0 < best.0 { n } else { best },
@@ -384,10 +359,11 @@ pub fn leader_to_ink(p: Placement, parts: &[&Shape]) -> Placement {
     }
 }
 
-/// A drawn part as a leader ends on it (feature 449 T192, the Python's `drawn_ink`): a stroke's polyline at its half-width, at least half a
-/// pixel (the band [`leader_to_ink`] measures); a disc's drawn curve - the image of the unit circle in the drawn box the reader keeps as its
-/// outline, its center plus cos t of one half-side plus sin t of the other, so a turned or unequally scaled disc is drawn as it is - sampled
-/// in [`disc_samples`] points; any other shape its outline.
+/// A drawn part as a leader ends on it (feature 449 T192, T193, the Python's `drawn_ink`): a stroke's polyline at its half-width, at least
+/// half a pixel, and its cap (the band [`leader_to_ink`] measures); a disc's drawn curve - the image of the unit circle in the drawn box the
+/// reader keeps as its outline, its center plus cos t of one half-side plus sin t of the other, so a turned or unequally scaled disc is
+/// drawn as it is - sampled in [`disc_samples`] points; any other shape its outline; a closed part with the half-width of the stroke drawn
+/// on it (`edge`).
 ///
 /// Research: its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.5 (a stroke's least half-width, the band `leader_to_ink` buffers)
 #[must_use]
@@ -401,12 +377,14 @@ pub fn drawn_ink(s: &Shape) -> InkPart {
             pts: s.poly.clone(),
             line: true,
             half: max(s.half, 0.5),
+            cap: s.cap,
         };
     }
     let outline = |pts: Vec<Pt>| InkPart {
         pts,
         line: false,
-        half: 0.0,
+        half: s.edge,
+        cap: Cap::Butt,
     };
     let [p0, p1, p2, p3] = s.poly[..] else {
         return outline(s.poly.clone());
