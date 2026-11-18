@@ -502,3 +502,6 @@
 - [x] T179 make diff-run's whole worlds reused (the GM 2026-11-18, request.md: the efficiency fixes): a verify run builds and removes a whole checkout for every case side; each worker's whole world made once a run per side and reset between cases to the revision's tree, held equal to a fresh world by a test
       research: rendering
       verify: DONE. landed in batch T178+T179: the lockstep's Python half kept and diff-run's whole worlds reused, measured before and after
+- [x] T180 No exactness standard for a port (the GM 2026-11-18, request.md: "amend our project guidelines and speckit constitution and whatever else we need to update to clarify this and remove any references to things needing to be bitwise identical or anything like that as an exactness standard"): a port's outputs may differ from what they replace so long as everything works - its tests pass, it does its job, its research claims hold - the audit checks' verdicts the one measure kept exact; the constitution, spec.md's FR-002 and its ruled cases, engine-plan.md, docs/, dev/ guides and the CLAUDE.md files amended, every bitwise or byte-for-byte exactness standard removed
+      research: rendering
+      verify: DONE. landed: no exactness standard for a port: the constitution, FR-002, the engine plan, the guides and the review agents amended to the GM's rule

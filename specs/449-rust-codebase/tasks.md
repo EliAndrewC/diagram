@@ -50,8 +50,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T177 Six audit rules brought to their pages (constitution XIV; found by T175's and T176's claims rounds, DRIFTED): the notice board casts no shadow though 0190 measures it 10-11 ft high; a road refused when wider than its gate though 0088 draws the road at a compound's gate at its own width; arch_on_approach refuses a first arch 0220 lets move inward; gate_widths' fix text gives a width outside 0093's bands; no_precinct_enclosure's message calls a sanctuary fence a donation where 0223 draws none; lodging_entrances passes one door per joined block where 0097 and 0106 give each dwelling its own - each fixed in both the Python and the Rust copy, the pool sheets' verdicts measured before and after
       research: rendering
-- [ ] T180 No exactness standard for a port (the GM 2026-11-18, request.md: "amend our project guidelines and speckit constitution and whatever else we need to update to clarify this and remove any references to things needing to be bitwise identical or anything like that as an exactness standard"): a port's outputs may differ from what they replace so long as everything works - its tests pass, it does its job, its research claims hold - the audit checks' verdicts the one measure kept exact; the constitution, spec.md's FR-002 and its ruled cases, engine-plan.md, docs/, dev/ guides and the CLAUDE.md files amended, every bitwise or byte-for-byte exactness standard removed
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
