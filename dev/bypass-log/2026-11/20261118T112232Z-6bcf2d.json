@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-18T11:22:32Z",
+  "target": "plan-gate push",
+  "commit": "d01eeb5ce",
+  "why": "T180's section reviewed CLEAR by spec-fidelity 2026-11-18 (8 decisions), since corrected only in the evidence lines that review flagged"
+}
