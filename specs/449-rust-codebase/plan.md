@@ -563,39 +563,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T169 to T169 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 
 <!-- plan-archive: T170 to T170 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
-### T171 (step 1's defects; the record's route (a), 0190 and 261 FR-015)
-
-- **Approach**: the notes census's entrance-board line restored: `rust/mode_a/src/census/routes.rs` walks each household's way out over the manifest's `lanes` and `houses`, and an entrance-seated board's line reads "**N** of M households' ways out pass it" again; the freshness test feature 444 dropped is restored (`census/pool_check.rs`: every pool hamlet's census block equal to what `make notes-census` writes, in the crate's end-to-end test); `make notes-census` rewrites no file, the four entrance hamlets' notes already holding the lines the port now writes (observed 2026-11-18, method: `make notes-census`, `git diff` of the notes; `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`).
-
-   **Decisions** (the GM's words, request.md 2026-11-18; 0190, 261 FR-015):
-   - The record's route: a board at the entrance is judged by the ways out that pass it, so the count is ported, not the line dropped; the walk is ported into the engine crate, `rust/parked` left a reference.
-   - Proved: reverting the entrance branch turns the unit test and the freshness check red (observed 2026-11-18, method: a scratch revert restored by `cp`).
-
-### T171 Approach (checklist part A)
-
-1. **The goal, in the world.** An entrance board's census line counts the ways out that pass it, and a stale census block refuses a landing.
-2. **The constraints.** FR-002 as amended (T180, T181); constitution XIV; the GM's fix-as-we-go rule.
-3. **Where each comes from.** G: the GM's words; R: the research pages each fix cites; O: the fixes' tests and the signal.
-4. **Do they describe the world here?** Run on this clone's pool sheets and fixtures, 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`).
-5. **The order.** After step 3a (T151); step 1's defects, before step 3b.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick`, the claims round and a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing, with its siblings.
-9. **Done, measured.** Each fix's test red without it; every pool sheet passing every check.
-10. **Before moving a constant.** Each changed rule's claim restated to its page.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No - defects fixed.
-
-
-<!-- plan-archive: T172 to T170 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
-<!-- plan-archive: T172 to T172 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
-
-<!-- plan-archive: T173 to T170 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
-<!-- plan-archive: T173 to T173 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
-
-<!-- plan-archive: T174 to T174 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-
+<!-- plan-archive: T171 to T171 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 ### T175 (the engine's piece 4, the audit's rest, step 1's close; the GM 2026-11-17, request.md: "proceed with the next 2 engine pieces and then we'll measure how well those went")
 
 - **Approach**: the rest of `l7r/diagram/tools/pack_audit/` - onmap, labels, marks_drawn, sun, palette, program_rules, roads, mapmatch, shared, checks, registry and report - ported into `rust/mode_a/src/audit/`, with what they read of the engine (`compound.rs`: `compound_model`'s three distances and `KINDS`, `compound_parts`' three predicates), and `make pack-audit` wired to it (`l7r-gate.sh mode-a pack-audit`); `__main__.py` deleted with its `_invocation.py` row. Every other `pack_audit` module stays for compound.py and tests/test_mode_a_sheets.py under the lockstep rule. Worked by two agents in turn: part A the libraries, part B the wiring and the differential.
@@ -628,35 +596,8 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 
 <!-- plan-archive: T176 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-### T177 (step 1's defects; T175's and T176's claims rounds, DRIFTED)
-
-- **Approach**: six audit rules brought to the pages they cite, in the Rust and the kept Python alike: the notice board casts a shadow from the low end of the height 0190 measures; a road at the main gate keeps its own width (0088), only lanes into side and cart gates judged by their gate; `arch_on_approach` judges every arch, their count one, three or seven, the first arch the farthest from the hall, and lets it stand inside the edge where the innermost stands at 0220's distance off the hall; `gate_widths`' fix text gives 0093's band of gate widths; `no_precinct_enclosure` refuses a fence round the sanctuary, its message without a donation (0223); `lodging_entrances` asks each dwelling of a block split by full-depth partitions for its own outer door (0097, 0106), an undivided block keeping one.
-
-   **Decisions** (the GM's words, request.md 2026-11-18; the pages cited):
-   - Each rule changed to its page and its claim with it; each fix proved by a unit test on a fixture (`parse/fix_fixtures.rs`) red when the fix is reverted (observed 2026-11-18, method: scratch reverts restored by `cp`).
-   - A red fixture whose finding the fix removed is moved to keep its red (`ochiba-road-wider-than-gate-red.svg`'s lane to the service gate); no T177 change moved a pool sheet's verdict (observed 2026-11-18, method: every check on the six pool sheets before and after).
-
-### T177 Approach (checklist part A)
-
-1. **The goal, in the world.** Six audit rules say what their research pages say.
-2. **The constraints.** FR-002 as amended (T180, T181); constitution XIV; the GM's fix-as-we-go rule.
-3. **Where each comes from.** G: the GM's words; R: the research pages each fix cites; O: the fixes' tests and the signal.
-4. **Do they describe the world here?** Run on this clone's pool sheets and fixtures, 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`).
-5. **The order.** After step 3a (T151); step 1's defects, before step 3b.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick`, the claims round and a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing, with its siblings.
-9. **Done, measured.** Each fix's test red without it; every pool sheet passing every check.
-10. **Before moving a constant.** Each changed rule's claim restated to its page.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No - defects fixed.
-
-
-<!-- plan-archive: T178 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-<!-- plan-archive: T179 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-<!-- plan-archive: T179 to T179 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-
+<!-- plan-archive: T177 to T176 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+<!-- plan-archive: T177 to T177 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 ### T180 (the GM 2026-11-18, request.md: no exactness standard for a port)
 
 - **Approach**: the living guidance amended to the GM's rule - an output may differ from what it replaces so long as everything works: its tests pass, it does its job for its callers, its research claims hold - the audit checks' verdicts the one measure kept exact and a check that refused correct work still fixed. The constitution (2.35.0: Principle XIII's "A differing output is not a regression", X's clause 15 widened), its plan, spec and phase templates and the speckit-specify checklist; spec.md's FR-002 (its byte-only ruled cases collapsed into the rule, the three that set a verdict or a behavior kept), its phase-4 paragraph, FR-012 and SC-007; engine-plan.md ("What the same means for any port", condition 3's lockstep restated: a test may show agreement, bytes are not required); the root and three subtree CLAUDE.md files; docs/efficiency-tooling.md, spec-kit-and-reviews.md, diff-run.md (a difference a signal, not a bar) and gm-rulings.md (the GM's words); dev/performance.md; and the review agents' files - spec-fidelity, spec-fidelity-verify, round-arbiter and escalation-check - which launch without CLAUDE.md, so each carries the rule and the GM's words: a reviewer never blocks, narrows or sends back a port for differing bytes, and a requirement demanding byte agreement is itself the finding.
