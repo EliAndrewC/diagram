@@ -478,3 +478,6 @@
 - [x] T174 The engine's piece 3 (the GM 2026-11-17, request.md: the next two pieces, measured): make size-table wired to Rust - scripts/reviews/size_table.py with what it reads, pack_audit's size_marks.py and grids.py and labels/hand_sheet.py's start_tags, ported into rust/mode_a, the Python they serve held in lockstep; its wall time and tokens reported by phase
       research: rendering
       verify: DONE. landed: the engine's piece 3: make size-table in Rust, 113 differential cases none differing, 138 claims IN-STEP
+- [x] T175 The engine's piece 4 (the GM 2026-11-17, request.md: the next two pieces, measured): the rest of the audit - pack_audit's onmap, labels, marks_drawn, sun, palette, program_rules, roads, mapmatch, shared, checks, registry, report and its command, with compound_parts' three predicates and compound_model's constants they read - ported into rust/mode_a and make pack-audit wired to it; the Python the generators and tests still import held in lockstep; step 1 closed; its wall time and tokens reported by phase
+      research: rendering
+      verify: DONE. landed: the engine's piece 4: the whole audit in Rust, make pack-audit wired, 207 differential cases none differing, step 1 closed
