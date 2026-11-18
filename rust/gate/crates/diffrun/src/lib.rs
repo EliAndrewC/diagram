@@ -12,6 +12,7 @@ pub mod cases;
 pub mod checkout;
 pub mod keys;
 pub mod norm;
+pub mod reuse;
 pub mod run;
 pub mod runner;
 
@@ -26,7 +27,7 @@ use serde_json::json;
 
 use runner::Opts;
 
-const USAGE: &str = "usage: l7r-gate diff-run <cases file> [--only <case name>] [--verify] [--twice] [--all --reason \"<two words or more>\"] [--jobs <workers>]\n";
+const USAGE: &str = "usage: l7r-gate diff-run <cases file> [--only <case name>] [--verify] [--twice] [--all --reason \"<two words or more>\"] [--jobs <workers>] [--fresh-worlds]\n";
 
 fn refused(why: &str) -> Reply {
     Reply {
@@ -85,6 +86,7 @@ fn parse(args: &[String]) -> Result<(String, Opts), String> {
             "--twice" => opts.twice = true,
             "--all" => opts.all = true,
             "--jobs" => opts.jobs = jobs(it.next())?,
+            "--fresh-worlds" => opts.fresh_worlds = true,
             flag if flag.starts_with('-') => return Err(format!("no flag {flag}")),
             path if file.is_none() => file = Some(path.to_owned()),
             extra => return Err(format!("one cases file, not also {extra}")),

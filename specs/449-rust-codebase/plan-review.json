@@ -534,6 +534,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T179 (T174's and T175's verify runs: most of each run built and removed whole worlds)": {
+   "sha256": "5de767f44ba3a520cdbf2129c3252e6864673f097341ea51a9ba82b186c0b47c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T179 Approach (checklist part A)": {
+   "sha256": "c1054e67e578d13c8a5e1c5b878222993e7c2fbb65bd7e2d7639c636fe9be748",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T178 (T175's edit cycles: the crate's end-to-end lockstep reran the Python's readings on every run)": {
+   "sha256": "7635e04e2dc0cb78aa4c8dc734b84057411647e1c84e2be1147cec354fdadfa7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T178 Approach (checklist part A)": {
+   "sha256": "e4ca54ea2bb487243f9f3c256d6bdc425a7e6fdb80f3248d02f43435bbf1324a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10976,6 +11000,98 @@
      "why": "The ruling's goal is that every rule the audit enforces carries a label saying what backs it; '~40' is the arbiter's approximation, and covering every finding of the same report is that instruction carried out, not new behavior. No code, rule or output is added."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T179 (T174's and T175's verify runs: most of each run built and removed whole worlds)",
+    "### T179 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T179-reuse",
+     "summary": "The shared differential runner keeps each worker's world for the run, one per side, and resets it to the side's revision between cases (outside emptied, .git restored from the copy taken at its making, read-tree -u --reset HEAD, clean -ffdx, WORKTREE laid over again, modes restored, setup rerun).",
+     "class": "within",
+     "why": "The GM, 2026-11-18: 'those efficiency improvements are worth making next. Please make those, then proceed with continuing the porting', on the standing 2026-11-12 condition of a concrete target with a measured saving (the tests' and landing's time first). Target measured before: the checkout 1.25-1.33 s and removal 0.27-0.30 s of each side, against a 0.1-0.2 s reset. After: 152.4 s to 51.0 s and 376.1 s to 164.5 s. FR-002's bar is kept on the instrument: all 640 kept results byte for byte the fresh worlds' except their time field, and every report row agrees with the earlier verify."
+    },
+    {
+     "id": "T179-fallback",
+     "summary": "A fresh world is made instead when the repository's HEAD or refs moved, the checkout's declaration or a GIT_ variable changed, or a reset step fails.",
+     "class": "within",
+     "why": "This guards the reuse's correctness, so a reused world never stands in for a revision it does not hold. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T179-default-on",
+     "summary": "Reuse is the default. --fresh-worlds keeps the old way.",
+     "class": "within",
+     "why": "A speed-up to the verify runs, which is what the 2026-11-18 request asks for. The old behavior stays reachable. The default rests on equality tests in which dropping any reset step, swapping read-tree for reset --hard, keeping a case's index, ignoring moved refs or losing the index time turns a test red."
+    },
+    {
+     "id": "T179-file-times",
+     "summary": "A reset world's file times are not compared with a fresh world's and do differ: untouched files keep the first checkout's time.",
+     "class": "within",
+     "why": "A fresh world never fixed file times either, since each checkout stamps its own arbitrary time, so no kept case's verdict can rest on their absolute values. The measured run shows no kept case depends on the relative times the reuse changes: 640 results are byte for byte the fresh worlds'. This is a limit of the speed-up's equality, stated openly. It does not narrow FR-002's requirement that a port's outputs match the Python's. --fresh-worlds remains for any case later found to read file times."
+    },
+    {
+     "id": "T179-sparse-fresh",
+     "summary": "Sparse worlds stay fresh and are not reused.",
+     "class": "within",
+     "why": "The optimisation is simply not applied to one world kind, which keeps that kind's existing behavior. The request names no world kind to be reused, and the measured goal (a third to a half of a port's verify time) is met without them. Nothing the GM asked for is carved out."
+    },
+    {
+     "id": "T179-order",
+     "summary": "After T176 and before the port continues. One landing, with its sibling.",
+     "class": "within",
+     "why": "Matches the 2026-11-18 order: 'make those, then proceed with continuing the porting'."
+    },
+    {
+     "id": "T179-exits",
+     "summary": "Green exit: the equality tests, make static, make rust-test, make hooks-test HOOKS_ALL=1 and a gated make land. Red exit: recorded and set down, with a claim of impossibility ruled through make arbiter-ask. Constraints named: FR-002, FR-008, FR-013.",
+     "class": "within",
+     "why": "These are the standing gates, plus the requirements the change touches (the tests' time bar, and temporary worlds removed). The red exit sends any claim of impossibility to the arbiter rather than letting the session rule on its own case."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T178 (T175's edit cycles: the crate's end-to-end lockstep reran the Python's readings on every run)",
+    "### T178 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T178-keep",
+     "summary": "The mode_a end-to-end lockstep reuses the kept Python's output from a keep keyed by a sha256 over everything the Python half reads, rerunning the Python only when the key moves; the comparison, assertions and fixtures unchanged.",
+     "class": "within",
+     "why": "The GM 2026-11-18 asked for the efficiency improvements to be made before the port continues, and 2026-11-11 said reusing 'the results of tests which have already run so that we don't have to run them again, is exactly what we should be doing'. The Rust output is still compared against the Python's output for identical inputs, so FR-002's bar is untouched, and FR-008's one exempt end-to-end test keeps its place. (The bundle does not quote the pieces-3-and-4 report, so it cannot show whether this item was on its list; the 2026-11-11 words cover it independently.)"
+    },
+    {
+     "id": "T178-key-scope",
+     "summary": "The key covers the whole l7r/ tree except __pycache__, every name and byte of pool/, tests/fixtures/ and legacy-hand-authored-pool/ including renders, the test's temp files with their path placeholdered, every path passed in, the script and stdin, and the interpreter's identity with every installed distribution's version; docs/ and rust/ are not keyed.",
+     "class": "within",
+     "why": "The scope comes from a logged run of the Python half's opens and listings, measured rather than assumed, and is wider than what that log showed (renders are keyed even though the run read none). The two exclusions take nothing away. Bytecode is built wholly from the keyed .py sources. docs/ and rust/ are not Python inputs, so a Rust-only edit is exactly the case the request wants skipped. This decision only sets the cache's key; it narrows no requirement."
+    },
+    {
+     "id": "T178-fail-safe",
+     "summary": "An interpreter that cannot name itself keeps nothing; a missing, unreadable or stale keep reruns the Python; the keep is written to a side file and renamed into .git/rust-tests/.",
+     "class": "within",
+     "why": "Every doubtful case falls back to today's behavior, rerunning the Python. The keep is one file that is overwritten, not a temp directory left behind, so FR-013 is not touched."
+    },
+    {
+     "id": "T178-proofs",
+     "summary": "Mutation tests show the key moves with each input kind and not with bytecode, docs/ or rust/; a stale keep is not read; a Python edit still turns the lockstep red; coverage is 100% with and without a keep.",
+     "class": "within",
+     "why": "These tests only enforce that the requested saving does not loosen the lockstep, and they keep FR-004's floor. That is enforcement of the request, not added scope."
+    },
+    {
+     "id": "T178-measure",
+     "summary": "Before and after timings of make rust-test CRATE=rust/mode_a after a Rust-only edit (9.19 s to 6.85 s wall) and after a Python edit (8.0 s), each with a dated method label.",
+     "class": "within",
+     "why": "This measures the requested improvement by the same command before and after. The figures carry one-shot labels (date and method), so they are reviewable."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19576,6 +19692,94 @@
      "summary": "Scope: all 61 findings make claims-report listed on rust/mode_a after T175 (NONE-module rules, a mislabeled class, one drifted wording), against the ruling's '~40 rules'.",
      "class": "within",
      "why": "The ruling's goal is that every rule the audit enforces carries a label saying what backs it; '~40' is the arbiter's approximation, and covering every finding of the same report is that instruction carried out, not new behavior. No code, rule or output is added."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T179": {
+   "section_sha256": "73e7cc1c282a44dda7272326e26a094433a84db8cc4ef1c23e7e066c862d3c52",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T179-reuse",
+     "summary": "The shared differential runner keeps each worker's world for the run, one per side, and resets it to the side's revision between cases (outside emptied, .git restored from the copy taken at its making, read-tree -u --reset HEAD, clean -ffdx, WORKTREE laid over again, modes restored, setup rerun).",
+     "class": "within",
+     "why": "The GM, 2026-11-18: 'those efficiency improvements are worth making next. Please make those, then proceed with continuing the porting', on the standing 2026-11-12 condition of a concrete target with a measured saving (the tests' and landing's time first). Target measured before: the checkout 1.25-1.33 s and removal 0.27-0.30 s of each side, against a 0.1-0.2 s reset. After: 152.4 s to 51.0 s and 376.1 s to 164.5 s. FR-002's bar is kept on the instrument: all 640 kept results byte for byte the fresh worlds' except their time field, and every report row agrees with the earlier verify."
+    },
+    {
+     "id": "T179-fallback",
+     "summary": "A fresh world is made instead when the repository's HEAD or refs moved, the checkout's declaration or a GIT_ variable changed, or a reset step fails.",
+     "class": "within",
+     "why": "This guards the reuse's correctness, so a reused world never stands in for a revision it does not hold. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T179-default-on",
+     "summary": "Reuse is the default. --fresh-worlds keeps the old way.",
+     "class": "within",
+     "why": "A speed-up to the verify runs, which is what the 2026-11-18 request asks for. The old behavior stays reachable. The default rests on equality tests in which dropping any reset step, swapping read-tree for reset --hard, keeping a case's index, ignoring moved refs or losing the index time turns a test red."
+    },
+    {
+     "id": "T179-file-times",
+     "summary": "A reset world's file times are not compared with a fresh world's and do differ: untouched files keep the first checkout's time.",
+     "class": "within",
+     "why": "A fresh world never fixed file times either, since each checkout stamps its own arbitrary time, so no kept case's verdict can rest on their absolute values. The measured run shows no kept case depends on the relative times the reuse changes: 640 results are byte for byte the fresh worlds'. This is a limit of the speed-up's equality, stated openly. It does not narrow FR-002's requirement that a port's outputs match the Python's. --fresh-worlds remains for any case later found to read file times."
+    },
+    {
+     "id": "T179-sparse-fresh",
+     "summary": "Sparse worlds stay fresh and are not reused.",
+     "class": "within",
+     "why": "The optimisation is simply not applied to one world kind, which keeps that kind's existing behavior. The request names no world kind to be reused, and the measured goal (a third to a half of a port's verify time) is met without them. Nothing the GM asked for is carved out."
+    },
+    {
+     "id": "T179-order",
+     "summary": "After T176 and before the port continues. One landing, with its sibling.",
+     "class": "within",
+     "why": "Matches the 2026-11-18 order: 'make those, then proceed with continuing the porting'."
+    },
+    {
+     "id": "T179-exits",
+     "summary": "Green exit: the equality tests, make static, make rust-test, make hooks-test HOOKS_ALL=1 and a gated make land. Red exit: recorded and set down, with a claim of impossibility ruled through make arbiter-ask. Constraints named: FR-002, FR-008, FR-013.",
+     "class": "within",
+     "why": "These are the standing gates, plus the requirements the change touches (the tests' time bar, and temporary worlds removed). The red exit sends any claim of impossibility to the arbiter rather than letting the session rule on its own case."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T178": {
+   "section_sha256": "8d81ea12e83671aad8345c44bedf724a58626ebb2af11f9a408bd6693abf0028",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T178-keep",
+     "summary": "The mode_a end-to-end lockstep reuses the kept Python's output from a keep keyed by a sha256 over everything the Python half reads, rerunning the Python only when the key moves; the comparison, assertions and fixtures unchanged.",
+     "class": "within",
+     "why": "The GM 2026-11-18 asked for the efficiency improvements to be made before the port continues, and 2026-11-11 said reusing 'the results of tests which have already run so that we don't have to run them again, is exactly what we should be doing'. The Rust output is still compared against the Python's output for identical inputs, so FR-002's bar is untouched, and FR-008's one exempt end-to-end test keeps its place. (The bundle does not quote the pieces-3-and-4 report, so it cannot show whether this item was on its list; the 2026-11-11 words cover it independently.)"
+    },
+    {
+     "id": "T178-key-scope",
+     "summary": "The key covers the whole l7r/ tree except __pycache__, every name and byte of pool/, tests/fixtures/ and legacy-hand-authored-pool/ including renders, the test's temp files with their path placeholdered, every path passed in, the script and stdin, and the interpreter's identity with every installed distribution's version; docs/ and rust/ are not keyed.",
+     "class": "within",
+     "why": "The scope comes from a logged run of the Python half's opens and listings, measured rather than assumed, and is wider than what that log showed (renders are keyed even though the run read none). The two exclusions take nothing away. Bytecode is built wholly from the keyed .py sources. docs/ and rust/ are not Python inputs, so a Rust-only edit is exactly the case the request wants skipped. This decision only sets the cache's key; it narrows no requirement."
+    },
+    {
+     "id": "T178-fail-safe",
+     "summary": "An interpreter that cannot name itself keeps nothing; a missing, unreadable or stale keep reruns the Python; the keep is written to a side file and renamed into .git/rust-tests/.",
+     "class": "within",
+     "why": "Every doubtful case falls back to today's behavior, rerunning the Python. The keep is one file that is overwritten, not a temp directory left behind, so FR-013 is not touched."
+    },
+    {
+     "id": "T178-proofs",
+     "summary": "Mutation tests show the key moves with each input kind and not with bytecode, docs/ or rust/; a stale keep is not read; a Python edit still turns the lockstep red; coverage is 100% with and without a keep.",
+     "class": "within",
+     "why": "These tests only enforce that the requested saving does not loosen the lockstep, and they keep FR-004's floor. That is enforcement of the request, not added scope."
+    },
+    {
+     "id": "T178-measure",
+     "summary": "Before and after timings of make rust-test CRATE=rust/mode_a after a Rust-only edit (9.19 s to 6.85 s wall) and after a Python edit (8.0 s), each with a dated method label.",
+     "class": "within",
+     "why": "This measures the requested improvement by the same command before and after. The figures carry one-shot labels (date and method), so they are reviewable."
     }
    ],
    "verdict": "CLEAR"

@@ -18,6 +18,10 @@ publish = false
 # parse's lockstep and the notes' counts read, and the Python engine whole - `pack_audit`'s parse imports its package, which imports
 # `interactive` and `buildings`, so an edit of any of them can move what the lockstep's Python reads. (T175) The audit's red fixtures and
 # their notes, and the settlement manifests a sheet's map declaration names, which the checks' lockstep reads.
+# (T178) The lockstep's Python half is kept (`src/parse/lockstep_keep.rs`) in the clone's `.git/rust-tests/mode_a-lockstep`, keyed over
+# all it reads - the whole `l7r/` tree but bytecode, `pool/`, `tests/fixtures/`, `legacy-hand-authored-pool/` (a render by name alone), the
+# test's own fixtures, the script, the interpreter and its installed distributions - so a Rust-only edit's run reads it and a Python
+# edit's reruns it. The test's timing line (`--nocapture`) says `ran` or `kept`; deleting that file makes the Python run.
 [package.metadata.l7r]
 reads = ["l7r/diagram/", "pool/", "docs/building-programs.md", "tests/fixtures/", "legacy-hand-authored-pool/villages/hoshigaoka/", "legacy-hand-authored-pool/towns/ubame/"]
 

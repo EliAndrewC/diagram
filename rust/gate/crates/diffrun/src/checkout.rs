@@ -25,15 +25,15 @@ use crate::run::command;
 /// The revision that stands for the repository's working tree.
 pub const WORKTREE: &str = "WORKTREE";
 
-struct Git<'a> {
-    env: &'a [(String, String)],
-    timeout: Duration,
-    root: &'a Path,
+pub(crate) struct Git<'a> {
+    pub(crate) env: &'a [(String, String)],
+    pub(crate) timeout: Duration,
+    pub(crate) root: &'a Path,
 }
 
 impl Git<'_> {
     /// `git <args>`'s stdout; a git that exits non-zero is the checkout's failure, its stderr's tail with it.
-    fn run(&self, args: &[&str]) -> Result<String, String> {
+    pub(crate) fn run(&self, args: &[&str]) -> Result<String, String> {
         let mut words = vec!["git".to_owned()];
         words.extend(args.iter().map(|a| (*a).to_owned()));
         let out = command(&words, self.root, self.env, self.timeout)?;
@@ -80,7 +80,7 @@ fn lay(src: &Path, laid: &Path) -> std::io::Result<()> {
 }
 
 /// The working tree's changes and untracked files inside the cone, each laid over the checkout ([`lay`]).
-fn overlay(git: &Git, repo: &str, dest: &Path, sparse: &[String]) -> Result<(), String> {
+pub(crate) fn overlay(git: &Git, repo: &str, dest: &Path, sparse: &[String]) -> Result<(), String> {
     let changed = git.run(&[
         "-C",
         repo,

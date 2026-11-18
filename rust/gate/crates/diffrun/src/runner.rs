@@ -6,7 +6,8 @@
 //! - `reports/diff-run-<kind>-<UTC>.json`: one report a run, `<kind>` one of `incremental`, `only`, `twice`, `verify`, `all` - only a
 //!   `--verify` run's path carries `diff-run-verify`, the path `make decide`'s lint asks a plan's differential count to cite;
 //! - `work/old`, `work/new`: a side's world while it runs, removed after; on a run of several workers (`--jobs`), `work/old-<w>` and
-//!   `work/new-<w>`, each worker's own.
+//!   `work/new-<w>`, each worker's own. A whole world's checkout is kept for the run instead, beside it its `.git` copy
+//!   (`work/<side>[-<w>].git`), and reset between the worker's cases (feature 449 T179, `reuse.rs`); both removed when the worker is done.
 //!
 //! SEVERAL WORKERS (`--jobs N`, feature 449 T173): T170's verify run took 392.6 s wall for 105 cases whose sides' own commands summed to
 //! 11.6 s - the rest a side's world (a whole checkout of 27,770 files, its setup, two snapshots, its removal), about 1.8 s a side, 210
@@ -27,9 +28,14 @@ use serde_json::{json, Value};
 use crate::cases::{Case, Cases, Worlds};
 use crate::keys::{applying, keys, Hasher};
 use crate::norm::{compare, kept, Kept};
+use crate::reuse::Held;
 
 /// What the command line asked for.
 #[derive(Default)]
+#[expect(
+    clippy::struct_excessive_bools,
+    reason = "each a switch of the command line, read once"
+)]
 pub struct Opts {
     pub only: Option<String>,
     pub verify: bool,
@@ -38,6 +44,8 @@ pub struct Opts {
     pub reason: Option<String>,
     /// The workers the owed sides run on (`--jobs`, feature 449 T173): 0 and 1 alike one, the run as it always was.
     pub jobs: usize,
+    /// Every whole world made fresh for its side, none reset and reused (`--fresh-worlds`, feature 449 T179: the run as it was before).
+    pub fresh_worlds: bool,
 }
 
 impl Opts {
@@ -191,9 +199,10 @@ fn rerun(
     (which, worlds): (&str, Worlds),
     key: &str,
     (twice, world): (bool, &Path),
+    mut held: Option<&mut Option<Held>>,
 ) -> Done {
     let path = result_path(cases, case, which, worlds);
-    let side = match fresh(cases, case, (which, worlds), world) {
+    let side = match fresh(cases, case, (which, worlds), world, held.as_deref_mut()) {
         Ok(k) => match save(&path, key, case, &k) {
             Ok(()) => SideRun {
                 kept: Some(k),
@@ -215,7 +224,7 @@ fn rerun(
     let mut noise = Vec::new();
     if twice {
         if let Some(first) = &side.kept {
-            match fresh(cases, case, (which, worlds), world) {
+            match fresh(cases, case, (which, worlds), world, held) {
                 Ok(second) => noise = compare(first, &second, "old run 1", "old run 2"),
                 Err(e) => noise.push(format!("old side's second run: {e}")),
             }
@@ -236,6 +245,7 @@ fn fresh(
     case: &Case,
     (which, worlds): (&str, Worlds),
     at: &Path,
+    held: Option<&mut Option<Held>>,
 ) -> Result<Kept, String> {
     let side = if which == "old" {
         &cases.old
@@ -244,7 +254,7 @@ fn fresh(
     };
     // a worker's world named as a serial run names it, in the error alone (a kept result already reads `<WORLD>`), so a side's error
     // is the same text whatever worker ran it (feature 449 T173)
-    let raw = crate::run::side(cases, case, side, (which, worlds), at).map_err(|e| {
+    let raw = crate::run::side(cases, case, side, (which, worlds), at, held).map_err(|e| {
         e.replace(
             &at.display().to_string(),
             &world(cases, which, None).display().to_string(),
@@ -364,14 +374,25 @@ fn run_cases(
         for w in 0..workers {
             let (tx, owed, next) = (tx.clone(), &owed, &next);
             scope.spawn(move || {
+                // each side's whole world, kept from one case to the next and removed when the worker is done (T179, `reuse.rs`)
+                let mut held: [Option<Held>; 2] = [None, None];
                 while let Some(&(i, s)) = owed.get(next.fetch_add(1, Ordering::Relaxed)) {
                     let which = SIDES[s];
                     let at = world(cases, which, (workers > 1).then_some(w));
                     let twice = opts.twice && s == 0;
-                    let done = rerun(cases, todo[i], (which, worlds), key(i, s), (twice, &at));
+                    let slot = (!opts.fresh_worlds).then_some(&mut held[s]);
+                    let done = rerun(
+                        cases,
+                        todo[i],
+                        (which, worlds),
+                        key(i, s),
+                        (twice, &at),
+                        slot,
+                    );
                     // the receiver lives until every worker is done, so a send cannot fail
                     let _ = tx.send((i, s, done));
                 }
+                held.into_iter().for_each(crate::reuse::release);
             });
         }
         drop(tx);

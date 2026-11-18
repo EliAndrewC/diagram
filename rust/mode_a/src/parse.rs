@@ -524,4 +524,6 @@ mod lockstep_audit;
 #[cfg(test)]
 mod lockstep_checks;
 #[cfg(test)]
+mod lockstep_keep;
+#[cfg(test)]
 mod tests;

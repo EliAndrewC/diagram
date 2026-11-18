@@ -7,12 +7,14 @@
 //! Research:
 //!     the parse's lockstep - NONE: the Python and the port compared, deciding nothing about a building
 
+use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 
 use l7r_guard::shared::pyjson::py_float;
 use serde_json::{json, Value};
 
 use super::fixtures::SHEETS;
+use super::lockstep_keep as keep;
 use super::{
     is_structure, parse_svg, wall_kind, Label, ParsedPlan, Rect, BUILDING_FILLS, BUILDING_PATTERNS,
     CAPS_RATIO, CHAR_W_BOLD, CHAR_W_BOLD_MIXED, CHAR_W_FRAC, COURT_FLOORS, DARK_FILLS,
@@ -301,29 +303,61 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     let given = json!({"labels": labels, "main": [[], [roundtrip], [roundtrip, "no-such-sheet.svg"], [refused]]});
     let given_at = dir.path().join("given.json");
     std::fs::write(&given_at, given.to_string()).unwrap();
-    let mut child = std::process::Command::new("python3")
-        .args([
-            "-I",
-            "-c",
-            &format!(
-                "{DUMP_HEAD}{}{}{DUMP_TAIL}",
-                super::lockstep_audit::PYTHON,
-                super::lockstep_checks::PYTHON
-            ),
-        ])
-        .arg(real())
-        .arg(&given_at)
-        .stdin(std::process::Stdio::piped())
-        .stdout(std::process::Stdio::piped())
-        .stderr(std::process::Stdio::piped())
-        .spawn()
-        .unwrap();
-    std::io::Write::write_all(
-        child.stdin.as_mut().unwrap(),
-        json!(names).to_string().as_bytes(),
-    )
-    .unwrap();
-    drop(child.stdin.take());
+    let script = format!(
+        "{DUMP_HEAD}{}{}{DUMP_TAIL}",
+        super::lockstep_audit::PYTHON,
+        super::lockstep_checks::PYTHON
+    );
+    let stdin = json!(names).to_string();
+    // (T178) the Python's output kept by a key over everything it reads, and the Python run only when that key moves
+    // (`lockstep_keep.rs`); every handed path is keyed where it stands, `given`'s strings with the sheets
+    let mut handed = names.clone();
+    handed.extend(
+        given["main"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .flat_map(|a| {
+                a.as_array()
+                    .into_iter()
+                    .flatten()
+                    .filter_map(Value::as_str)
+                    .map(str::to_owned)
+            }),
+    );
+    let keying = std::time::Instant::now();
+    let (python_id, cwd) = (keep::identity("python3"), std::env::current_dir().unwrap());
+    let given_text = given.to_string();
+    let keyed = [
+        script.as_str(),
+        python_id.as_deref().unwrap_or_default(),
+        &stdin,
+        &given_text,
+    ];
+    let key = keep::key(&keep::Inputs {
+        tree: &real(),
+        dir: dir.path(),
+        cwd: &cwd,
+        texts: &keyed,
+        paths: &handed,
+    });
+    // no keep where the interpreter could not say what it is
+    let at = python_id.and_then(|_| keep::place(&real()));
+    let key_s = keying.elapsed().as_secs_f64();
+    let tree = real();
+    let args = [
+        OsStr::new("-I"),
+        OsStr::new("-c"),
+        OsStr::new(&script),
+        tree.as_os_str(),
+        given_at.as_os_str(),
+    ];
+    let run = keep::Run {
+        program: "python3",
+        args: &args,
+        stdin: stdin.as_bytes(),
+    };
+    let half = keep::begin(at.as_deref(), &key, dir.path(), &run);
     // the port's half while the Python's runs
     let clock = std::time::Instant::now();
     let texts: Vec<String> = paths
@@ -357,10 +391,10 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     });
     let ours = consts(&given);
     let rust_s = clock.elapsed().as_secs_f64();
-    let out = child.wait_with_output().unwrap();
+    let out = keep::end(half, at.as_deref(), &key, dir.path());
     let python_s = clock.elapsed().as_secs_f64();
-    let failed = String::from_utf8_lossy(&out.stderr);
-    assert_eq!((out.status.success(), failed.as_ref()), (true, ""));
+    let failed = out.stderr.as_str();
+    assert_eq!((out.ok, failed), (true, ""));
     let mut python: Value = serde_json::from_slice(&out.stdout).unwrap();
     let consts_differ = first_difference(&python["consts"], &ours, "consts");
     assert_eq!(consts_differ, "");
@@ -444,7 +478,8 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     // from its threshold, so no verdict can turn on it; the figures, and the two halves' times, are this task's record (`--nocapture`)
     let held = measure.steps > 100 && measure.max_abs < measure.min_margin;
     assert!(held, "{measure:?}");
-    eprintln!("{measure:?}; the port's half {rust_s:.2} s, the Python's {python_s:.2} s");
+    let how = if out.ran { "ran" } else { "kept" };
+    eprintln!("{measure:?}; the port's half {rust_s:.2} s, the Python's {python_s:.2} s ({how}), its key {key_s:.2} s");
 }
 
 #[test]

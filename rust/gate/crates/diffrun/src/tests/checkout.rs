@@ -37,7 +37,7 @@ fn git(repo: &Path, args: &[&str]) -> String {
 }
 
 /// A repository of a root file and four directories, committed, with its working tree changed in and out of the cone `a`, `c/sub`.
-fn repo(fx: &Fx) -> (std::path::PathBuf, String) {
+pub(super) fn repo(fx: &Fx) -> (std::path::PathBuf, String) {
     for (name, text) in [
         ("repo/top.txt", "top\n"),
         ("repo/a/x.txt", "x\n"),

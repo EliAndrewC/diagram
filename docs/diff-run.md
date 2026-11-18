@@ -37,7 +37,8 @@ with the serial one's, kept results and lines too. Past 4 the workers contend (a
 setup and steps write only inside `{WORLD}` - their guard log, their scratch, their output all under it. A harness that writes a fixed
 path outside its world (a file under `{ROOT}`, a shared cache it rebuilds, a port it listens on) has two sides writing it at once: it stays
 serial, or moves that path under `{WORLD}`. Reading outside the world (the repository, a binary built once by `build`) is safe. Each
-world is a full checkout where the file declares one (about 252 MB for this repository), so n workers hold n of them on disk at once.
+world is a full checkout where the file declares one (about 252 MB for this repository); since T179 each worker keeps one a side for
+the run with its `.git` copy, so n workers hold 2n of them on disk at once.
 
 ## The keys
 
@@ -109,7 +110,18 @@ the side's `cmd`. Each process gets the runner's environment less make's own var
   it runs after, over the clone. A `WORKTREE` world's content is keyed only through the new side's `fingerprint` and `sources`, so declare
   there what the cases exercise.
 - `world.setup` runs into a fresh, empty `{WORLD}` for every case and side (from `root`), so a kept result never depends on which cases ran
-  before it; the world is removed after its outputs are read. What a world needs beyond that (a network namespace, a loopback server, a
+  before it; the world is removed after its outputs are read. A WHOLE world's checkout is the one thing kept between cases (feature 449
+  T179, `reuse.rs`): each worker makes it once a run for each side and, before each later case, resets it to what a fresh one is - the
+  world outside the checkout emptied, the checkout's `.git` put back from a copy taken when it was made (its index with its time), `git
+  read-tree -u --reset HEAD`, `git clean -ffdx`, the working tree laid again for `WORKTREE`, every path's mode put back - then runs the
+  setup again; it is removed at the run's end. A test holds a reset world equal to a fresh one (every path, its bytes and mode, the
+  index, HEAD, refs and `git status`) after cases that write, delete, add untracked and ignored files, change modes and kinds, stage,
+  commit, stash and write under `.git/`. A moved ref of the repository, a changed checkout or `GIT_` variable, or a reset step that fails
+  makes the world anew; sparse worlds are always fresh. `--fresh-worlds` (on `l7r-gate diff-run`) turns the reuse off.
+  WHY: a whole world's checkout of 27,770 files took 1.25-1.33 s and its removal 0.27-0.30 s of a side's 1.6 s; a reset 0.1-0.2 s.
+  Measured on T174's and T175's harnesses (`VERIFY=1 JOBS=4` from an empty state, one binary, fresh and reused alternating, the host's
+  load 0.8-5 of 22 cores, 2026-11-18): T174's 113 cases 152.4 s fresh, 51.0 s reused; T175's 207 cases 376.1 s fresh, 164.5 s reused -
+  every report's rows the same as the run's earlier verify. What a world needs beyond that (a network namespace, a loopback server, a
   bare remote) is the setup script's and `wrap`'s, which the runner runs and, through `inputs`, keys.
 - Compared: each step's exit, stdout and stderr (a step with `"compare": false` runs unrecorded), every file under `files` (default the
   whole world; `ignore` names directories skipped) that the steps created, changed or deleted, and each `extras` entry (a file anywhere,
@@ -128,7 +140,7 @@ Beside `<dir>/<stem>.json`, `<dir>/<stem>.diff-run/`: `results/<case id>.old.jso
 key; a whole world's `.old.whole.json` and `.new.whole.json` where a sparse list is declared),
 `reports/diff-run-<kind>-<UTC>.json` (`incremental`, `only`, `twice`, `verify`, `all`; only a verify run's path carries `diff-run-verify`;
 `--verify` takes no `--only`), and `work/old`, `work/new` while a side runs (`work/old-<w>`, `work/new-<w>`, each worker's own, on a run of
-several workers). The report holds the run's kind, the reason, cases total, sides
+several workers; a whole world's checkout, with its `.git` copy `work/<side>[-<w>].git`, for the whole run, T179). The report holds the run's kind, the reason, cases total, sides
 rerun and kept, the differing cases, the normalizations taken, the worlds (`whole` or `sparse`), the wall time, and one row a case:
 its differences, its noise, its errors,
 and each side's key, whether it reran, and its time.

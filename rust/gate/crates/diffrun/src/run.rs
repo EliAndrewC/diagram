@@ -2,7 +2,9 @@
 //!
 //! WHY A FRESH WORLD A CASE AND SIDE: a kept result is reused on a later day against the other side's fresh run, so each case must start
 //! from the same world whichever cases ran before it - T146's harness reset one world between cases by hand; here the setup builds it
-//! anew into an empty directory, and the directory is removed after the side's outputs are read.
+//! anew into an empty directory, and the directory is removed after the side's outputs are read. A whole world's checkout is the
+//! exception since feature 449 T179: a worker makes it once a run and resets it between cases to what a fresh one is, a test holding
+//! the two equal (`reuse.rs`).
 
 use std::collections::BTreeMap;
 use std::io::Read;
@@ -15,6 +17,7 @@ use std::time::{Duration, Instant};
 use serde_json::{Map, Value};
 
 use crate::cases::{fill, Case, Cases, From, Side, Worlds};
+use crate::reuse::Held;
 
 /// One step's raw outputs.
 pub struct StepOut {
@@ -306,7 +309,8 @@ fn tail(text: &str) -> String {
     lines[lines.len().saturating_sub(20)..].join("\n")
 }
 
-/// One side of `case`, run in a fresh `world`, which is removed after.
+/// One side of `case`, run in a fresh `world`, which is removed after - or, with `held` and a whole world's checkout (feature 449
+/// T179, `reuse.rs`), in the worker's world reset to what a fresh one is, kept for its next case while `held` holds it.
 ///
 /// # Errors
 ///
@@ -317,11 +321,19 @@ pub fn side(
     side: &Side,
     (which, worlds): (&str, Worlds),
     world: &Path,
+    held: Option<&mut Option<Held>>,
 ) -> Result<Raw, String> {
+    if let Some(slot) = held.filter(|_| worlds == Worlds::Whole && cases.checkout.is_some()) {
+        let got = in_world(cases, case, side, (which, worlds), world, Some(&mut *slot));
+        if slot.is_none() {
+            let _ = std::fs::remove_dir_all(world);
+        }
+        return got;
+    }
     let _ = std::fs::remove_dir_all(world);
     let got = std::fs::create_dir_all(world)
         .map_err(|e| format!("{}: {e}", world.display()))
-        .and_then(|()| in_world(cases, case, side, (which, worlds), world));
+        .and_then(|()| in_world(cases, case, side, (which, worlds), world, None));
     let _ = std::fs::remove_dir_all(world);
     got
 }
@@ -332,13 +344,21 @@ fn in_world(
     side: &Side,
     (which, worlds): (&str, Worlds),
     world: &Path,
+    held: Option<&mut Option<Held>>,
 ) -> Result<Raw, String> {
     let vars = vars(cases, side, which, world);
     let env = env(cases, side, Some(case), &vars);
     let timeout = seconds(cases.timeout_s);
     // the runner's checkout first (feature 449 T169), so the setup's fixtures are laid over it
     if let Some(co) = &cases.checkout {
-        crate::checkout::make(co, (&cases.root, world), &vars, (&env, timeout, worlds))?;
+        match held {
+            Some(slot) => {
+                crate::reuse::ready(co, (&cases.root, world), &vars, (&env, timeout), slot)?;
+            }
+            None => {
+                crate::checkout::make(co, (&cases.root, world), &vars, (&env, timeout, worlds))?;
+            }
+        }
     }
     for argv in &cases.setup {
         let argv: Vec<String> = argv.iter().map(|a| fill(a, &vars)).collect();
