@@ -106,3 +106,7 @@ The GM, told how the first piece and its fixes went and that the second was runn
 ## 2026-11-17, the engine's next two pieces
 
 The GM, after the pilot's report (T168, T170 and the fixes T169, T172, T173): "proceed with the next 2 engine pieces and then we'll measure how well those went"
+
+## 2026-11-18, the efficiency fixes, then the port
+
+The GM, after the report on pieces 3 and 4: "It sounds like those efficiency improvements are worth making next.  Please make those, then proceed with continuing the porting."

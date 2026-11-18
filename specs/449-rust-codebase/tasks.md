@@ -52,6 +52,10 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T177 Six audit rules brought to their pages (constitution XIV; found by T175's and T176's claims rounds, DRIFTED): the notice board casts no shadow though 0190 measures it 10-11 ft high; a road refused when wider than its gate though 0088 draws the road at a compound's gate at its own width; arch_on_approach refuses a first arch 0220 lets move inward; gate_widths' fix text gives a width outside 0093's bands; no_precinct_enclosure's message calls a sanctuary fence a donation where 0223 draws none; lodging_entrances passes one door per joined block where 0097 and 0106 give each dwelling its own - each fixed in both the Python and the Rust copy, the pool sheets' verdicts measured before and after
       research: rendering
+- [ ] T178 The lockstep's Python half kept (the GM 2026-11-18, request.md: the efficiency fixes): rust/mode_a's one end-to-end test runs the Python's readings of every sheet and fixture each time, 7.9 s, so an edit cycle took 15 s in T175; its Python half's output kept by a key over everything it reads (the Python sources, the sheets, fixtures, manifests, types.json and the dump script), rerun only when the key moves
+      research: rendering
+- [ ] T179 make diff-run's whole worlds reused (the GM 2026-11-18, request.md: the efficiency fixes): a verify run builds and removes a whole checkout for every case side; each worker's whole world made once a run per side and reset between cases to the revision's tree, held equal to a fresh world by a test
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
