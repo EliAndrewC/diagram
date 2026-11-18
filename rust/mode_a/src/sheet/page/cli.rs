@@ -211,8 +211,8 @@ mod tests {
             .starts_with("{\"error\":{\"kind\":\"FileNotFoundError\""));
         let r = run(&[&svg, "--stdin"], "<svg><g></svg>");
         assert_eq!((r.code, r.stderr.starts_with("ValueError: ")), (1, true));
-        // a render the guard refuses leaves the page empty, the file opened before the render as the Python opened it; a page with
-        // nowhere to go is refused before any render
+        // a render the guard refuses leaves no page where there was none (FIXED, feature 449 T183: the Python's open-before-render
+        // left it empty); a page with nowhere to go is refused before any render
         let big = tree.join("big.svg").to_string_lossy().into_owned();
         let wide = "<svg viewBox=\"0 0 900 900\" width=\"900\" height=\"900\"><rect data-kind=\"well\"/></svg>";
         let r = run(&[&big, "--with-raster", "--stdin"], wide);
@@ -222,7 +222,7 @@ mod tests {
             "{}",
             r.stderr
         );
-        assert_eq!(std::fs::read(tree.join("big.html")).unwrap(), b"");
+        assert!(!tree.join("big.html").exists());
         let nowhere = tree.join("no/dir/s.svg").to_string_lossy().into_owned();
         let r = run(&[&nowhere, "--with-raster", "--stdin"], wide);
         assert!(r.stderr.starts_with("FileNotFoundError: "), "{}", r.stderr);

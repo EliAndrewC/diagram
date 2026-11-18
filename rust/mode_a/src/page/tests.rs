@@ -68,3 +68,31 @@ fn a_page_is_written_beside_its_map_with_its_notes() {
         super::write_html(&real(), &host, &dir.path().join("no/such.html"), page("N")).unwrap_err();
     assert_eq!(e.kind, "FileNotFoundError");
 }
+
+/// FIXED (feature 449 T183, T150's finding): the page's file was opened, and so emptied, before its render, so a render that refused
+/// left an empty page where the last good one had been. A refused render now leaves the path as it found it - the last page, or none -
+/// and a path that cannot be written is still refused before any render.
+#[test]
+fn a_refused_render_leaves_the_page_as_it_was() {
+    let dir = l7r_guard::shared::tempdir::TempDir::new("page-refused");
+    // strings and tags of different lengths: refused before any drawing, as any refused render is
+    let page = || Page {
+        strings: vec!["<svg>".into(), "</svg>".into()],
+        tags: vec![ClsTag::key("-")],
+        name: "R",
+        meta: None,
+        manifest: None,
+        notes: crate::notes::MapNotes::default(),
+        with_raster: false,
+        registry: &[],
+        within: None,
+    };
+    let host = crate::raster::Host::default();
+    let kept = dir.path().join("kept.html");
+    std::fs::write(&kept, "the last page").unwrap();
+    super::write_html(&real(), &host, &kept, page()).unwrap_err();
+    assert_eq!(std::fs::read_to_string(&kept).unwrap(), "the last page");
+    let fresh = dir.path().join("fresh.html");
+    super::write_html(&real(), &host, &fresh, page()).unwrap_err();
+    assert!(!fresh.exists());
+}

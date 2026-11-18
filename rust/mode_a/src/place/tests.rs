@@ -64,3 +64,41 @@ fn a_count_takes_the_length_python_measures() {
         "TypeError"
     );
 }
+
+/// FIXED (feature 449 T183, T150's finding): a households value given as text was multiplied as Python multiplies a string - `"12"`
+/// five times over, a population of 1,212,121,212 - and never equaled the drawn count. It is read as the number it names, as `int()`
+/// reads it, and refused in `int()`'s words when it names none.
+#[test]
+fn a_households_text_is_read_as_its_number() {
+    let meta = |v: serde_json::Value| json!({ "households": v }).as_object().unwrap().clone();
+    let k = kind(false);
+    assert_eq!(
+        size_sentence(&k, &meta(json!("12")), 66).unwrap(),
+        "66 dwellings, about 12 households, population ~60"
+    );
+    assert_eq!(
+        size_sentence(&k, &meta(json!(" 66 ")), 66).unwrap(),
+        "66 dwellings, population ~330"
+    );
+    assert_eq!(
+        size_sentence(&k, &meta(json!(66)), 66).unwrap(),
+        "66 dwellings, population ~330"
+    );
+    assert_eq!(
+        size_sentence(&k, &meta(json!("0")), 3).unwrap(),
+        "3 dwellings"
+    );
+    // an empty text is no households, as the Python's truth test read it
+    assert_eq!(
+        size_sentence(&k, &meta(json!("")), 3).unwrap(),
+        "3 dwellings"
+    );
+    let e = size_sentence(&k, &meta(json!("about 12")), 3).unwrap_err();
+    assert_eq!(
+        (e.kind, e.message.as_str()),
+        (
+            "ValueError",
+            "invalid literal for int() with base 10: 'about 12'"
+        )
+    );
+}

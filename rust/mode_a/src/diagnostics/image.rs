@@ -97,6 +97,11 @@ fn other(bytes: &[u8], path: &str) -> Result<Rgb, Error> {
             return rgb(png, path);
         }
     }
+    if format == image::ImageFormat::Tiff {
+        if let Some(read) = tiff_past_the_crate(bytes)? {
+            return Ok(read);
+        }
+    }
     let decoded = image::load_from_memory_with_format(bytes, format)
         .map_err(|e| Error::new("OSError", format!("{format:?} file does not decode: {e}")))?;
     let (width, height) = (decoded.width() as usize, decoded.height() as usize);
@@ -113,6 +118,105 @@ fn other(bytes: &[u8], path: &str) -> Result<Rgb, Error> {
         height,
         data,
     })
+}
+
+/// The TIFF forms PIL read that the `image` crate refuses, read as PIL read them (FIXED, feature 449 T183, T150's finding: both were
+/// refused): gray with an unassociated alpha (`LA`), its gray replicated and its alpha dropped; and an 8-bit palette (`P`), its indices
+/// decoded by the `tiff` crate - the `image` crate's own decoder - as gray from a copy whose first image says it is gray, each looked up
+/// in the color map at its high byte, as PIL's `b // 256` read it. Any other palette form (PIL's `P;1` to `P;4`, `PA`) is refused naming
+/// it; every other TIFF is the `image` crate's (`None`).
+fn tiff_past_the_crate(bytes: &[u8]) -> Result<Option<Rgb>, Error> {
+    use tiff::tags::Tag;
+    let broken =
+        |e: tiff::TiffError| Error::new("OSError", format!("Tiff file does not decode: {e}"));
+    let mut d = tiff::decoder::Decoder::new(std::io::Cursor::new(bytes)).map_err(broken)?;
+    let (w, h) = d.dimensions().map_err(broken)?;
+    let (width, height) = (w as usize, h as usize);
+    let photometric = d
+        .find_tag_unsigned::<u16>(Tag::PhotometricInterpretation)
+        .map_err(broken)?;
+    let extra = d
+        .find_tag_unsigned_vec::<u16>(Tag::ExtraSamples)
+        .map_err(broken)?;
+    let gray_alpha = matches!(
+        d.colortype(),
+        Ok(tiff::ColorType::Multiband {
+            bit_depth: 8,
+            num_samples: 2
+        })
+    );
+    if photometric == Some(1) && gray_alpha && extra.as_deref() == Some(&[2]) {
+        let mut la = vec![0; width * height * 2];
+        d.read_image_bytes(&mut la).map_err(broken)?;
+        let data = la.chunks(2).flat_map(|px| [px[0]; 3]).collect();
+        return Ok(Some(Rgb {
+            width,
+            height,
+            data,
+        }));
+    }
+    if photometric != Some(3) {
+        return Ok(None);
+    }
+    let bits = d
+        .find_tag_unsigned_vec::<u16>(Tag::BitsPerSample)
+        .map_err(broken)?;
+    if bits.as_deref() != Some(&[8]) {
+        return Err(Error::new(
+            "OSError",
+            format!(
+                "a TIFF palette image of {:?} bits a sample is not read here: PIL's 8-bit palette (`P`) is the one palette form read",
+                bits.unwrap_or_default()
+            ),
+        ));
+    }
+    let map = d.get_tag_u16_vec(Tag::ColorMap).map_err(broken)?;
+    let plane = map.len() / 3;
+    // never `None` on a palette the decoder has read; an empty copy would be the decoder's refusal
+    let gray = said_gray(bytes).unwrap_or_default();
+    let mut indices = vec![0; width * height];
+    tiff::decoder::Decoder::new(std::io::Cursor::new(gray))
+        .and_then(|mut g| g.read_image_bytes(&mut indices))
+        .map_err(broken)?;
+    let at = |i: usize| map.get(i).map_or(0, |v| v.to_be_bytes()[0]);
+    let data = indices
+        .iter()
+        .flat_map(|&i| [0, plane, 2 * plane].map(|p| at(p + usize::from(i))))
+        .collect();
+    Ok(Some(Rgb {
+        width,
+        height,
+        data,
+    }))
+}
+
+/// A copy of a classic TIFF (a 4-byte offset, a 2-byte count, 12-byte entries; the one form the `image` crate identifies) whose first
+/// image's photometric interpretation says gray (1), so the `tiff` crate decodes a palette's indices as gray levels, in either byte order;
+/// `None` where the file names no photometric interpretation, which a palette the decoder has read always does.
+fn said_gray(bytes: &[u8]) -> Option<Vec<u8>> {
+    // `MM` big-endian, `II` little: the decoder has already read the header
+    let big = bytes.first() == Some(&b'M');
+    let read = |at: usize, width: usize| -> Option<usize> {
+        let b = bytes.get(at..at + width)?;
+        let mut v = [0u8; 4];
+        let v = if big {
+            v[4 - width..].copy_from_slice(b);
+            u32::from_be_bytes(v)
+        } else {
+            v[..width].copy_from_slice(b);
+            u32::from_le_bytes(v)
+        };
+        usize::try_from(v).ok()
+    };
+    // the first directory's offset at byte 4; a tag's value after its tag, type and count
+    let ifd = read(4, 4)?;
+    let at = (0..read(ifd, 2)?)
+        .map(|i| ifd + 2 + 12 * i)
+        .find(|&e| read(e, 2) == Some(262))?
+        + 8;
+    let mut out = bytes.to_vec();
+    out[at..at + 2].copy_from_slice(&if big { [0, 1] } else { [1, 0] });
+    Some(out)
 }
 
 /// The largest image of an icon when it is a PNG (PIL's `IcoFile` takes the largest size, then the deepest): read as any PNG is here -

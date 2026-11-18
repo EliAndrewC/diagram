@@ -345,11 +345,28 @@ pub fn write_html(tree: &Path, host: &Host, path: &Path, mut p: Page<'_>) -> Res
     if let Some(base) = text.strip_suffix(".html") {
         p.notes = crate::notes::read_map_notes(Path::new(&format!("{base}.notes.md")));
     }
-    // THE FILE IS OPENED BEFORE THE PAGE IS RENDERED, as the Python's `with open(path, "w")` around its render opened it (feature 449
-    // T150's differential): an unwritable path refuses before any render, and a render that refuses leaves the page empty - the
-    // Python's quirk, kept, as the generators' callers have only ever seen it
+    // THE FILE IS OPENED BEFORE THE PAGE IS RENDERED, as the Python's `with open(path, "w")` opened it (feature 449 T150's differential),
+    // so an unwritable path refuses before any render - but NOT EMPTIED until the page is in hand (FIXED, feature 449 T183, T150's
+    // finding: the Python's open emptied it, and a render that refused left an empty page where the last good one had been). A refused
+    // render leaves the path as it found it: the last page, or no file where there was none
     let io = |e: std::io::Error| crate::py::os_error(&e, &text);
-    let mut file = std::fs::File::create(path).map_err(io)?;
-    let page = render_page(tree, host, &p)?;
+    let existed = path.exists();
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(false)
+        .open(path)
+        .map_err(io)?;
+    let page = match render_page(tree, host, &p) {
+        Ok(page) => page,
+        Err(e) => {
+            drop(file);
+            if !existed {
+                let _ = std::fs::remove_file(path);
+            }
+            return Err(e);
+        }
+    };
+    file.set_len(0).map_err(io)?;
     std::io::Write::write_all(&mut file, page.as_bytes()).map_err(io)
 }

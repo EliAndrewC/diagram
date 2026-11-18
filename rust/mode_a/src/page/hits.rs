@@ -101,7 +101,10 @@ pub const HIT_DEFAULT: (f64, f64, f64) = (4.0, 6.0, 3.0);
 static STROKE_W: LazyLock<Regex> = LazyLock::new(|| py(r#"stroke-width="([\d.]+)""#));
 static GROUP_W: LazyLock<Regex> = LazyLock::new(|| py(r#"<g [^>]*stroke-width="([\d.]+)""#));
 static STROKED: LazyLock<Regex> = LazyLock::new(|| py(r"<(line|path|polygon|polyline) ([^>]*?)/>"));
-static GEOM: LazyLock<Regex> = LazyLock::new(|| py(r#"(?:points|d|x1|y1|x2|y2)="[^"]*""#));
+// AN ATTRIBUTE MATCHED AT ITS OWN NAME (FIXED, feature 449 T183, T150's finding): without the boundary `d="a"` was taken out of `id="a"`
+// (or `grid="a"`), and a copy of a path carrying an id had two `d`s
+static GEOM: LazyLock<Regex> =
+    LazyLock::new(|| py(r#"(?<![\w:.-])(?:points|d|x1|y1|x2|y2)="[^"]*""#));
 static BEAD: LazyLock<Regex> =
     LazyLock::new(|| py(r#"<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([-\d.]+)"[^>]*/>"#));
 pub(super) static ATTR_STROKE: LazyLock<Regex> = LazyLock::new(|| py(r#"\sstroke="[^"]*""#));
@@ -118,7 +121,7 @@ pub fn widen(key: &str) -> Option<(f64, f64, f64)> {
 /// # Errors
 /// A stroke width or radius the Python's `float()` refused (`[\d.]+` takes `1.2.3`).
 ///
-/// Research: the thin marks' hit copies - CONVENTION: a stroked mark's invisible copy its factor times its drawn width with a floor, a bead's its radius times its factor; a filled shape takes the pointer over its own body
+/// Research: the thin marks' hit copies - CONVENTION: a stroked mark's invisible copy its factor times its drawn width with a floor, a bead's its radius times its factor, never under half the floor; a filled shape takes the pointer over its own body
 pub fn hit_copies(s: &str, (factor, floor, bead): (f64, f64, f64)) -> Result<String, Error> {
     let width = |w: f64| max(factor * w, floor);
     let mut out = String::new();

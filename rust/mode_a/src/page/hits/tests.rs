@@ -28,3 +28,19 @@ fn a_group_opens_with_its_slug_and_its_escaped_key() {
         .starts_with("<g class=\"f f-copse planted\""));
     assert_eq!(wrap("<rect/>", &ClsTag::Unruled).unwrap(), "<rect/>");
 }
+
+/// FIXED (feature 449 T183, T150's finding): the geometry's pattern took `d="a"` out of `id="a"`, so a copy of a mark carrying an id
+/// gained a `d` - a path two of them, a line a `d` it never had. An attribute is matched only at its own name.
+#[test]
+fn a_copy_takes_no_d_out_of_an_id() {
+    let copies = super::hit_copies(
+        "<path id=\"p\" d=\"M0,0L5,5\" stroke=\"#000\"/><line x1=\"0\" y1=\"0\" x2=\"9\" y2=\"9\" data-id=\"a\" grid=\"x\"/>",
+        super::HIT_DEFAULT,
+    )
+    .unwrap();
+    assert_eq!(
+        copies,
+        "<path d=\"M0,0L5,5\" fill=\"none\" class=\"hit\" style=\"pointer-events: stroke; stroke-width: 6.0px\"/>\
+         <line x1=\"0\" y1=\"0\" x2=\"9\" y2=\"9\" fill=\"none\" class=\"hit\" style=\"pointer-events: stroke; stroke-width: 6.0px\"/>"
+    );
+}

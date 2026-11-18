@@ -244,6 +244,37 @@ pub fn shoot(launcher: &Path, page: &str, key: &str, vector: bool) -> Result<Sho
     })
 }
 
+/// The sides of the icons PIL wrote (`IcoImagePlugin._save`'s default `sizes`), each square.
+const ICON_SIDES: [u32; 7] = [16, 24, 32, 48, 64, 128, 256];
+
+/// The size PIL's `thumbnail` gives a `w` x `h` image fitted in a `side` square: the long side the square's, the short one whichever of its
+/// floor and ceiling keeps the aspect closer (the floor on a tie, never below 1), in exact integers where PIL compared floats.
+fn thumbnail(w: u32, h: u32, side: u32) -> (u32, u32) {
+    let (w, h, s) = (u64::from(w), u64::from(h), u64::from(side));
+    let fit = |n: u64| u32::try_from(n.max(1)).unwrap_or(side);
+    if h >= w {
+        // PIL's key |w/h - n/s|, over the common denominator h*s
+        let (lo, off) = (s * w / h, |n: u64| (w * s).abs_diff(n * h));
+        (fit(if off(lo + 1) < off(lo) { lo + 1 } else { lo }), side)
+    } else {
+        // PIL's key |w/h - s/n|, its denominators h*n cross-multiplied; a zero the closest, as PIL's key put it
+        let (lo, off) = (s * h / w, |n: u64| (w * n).abs_diff(s * h));
+        let ceil_closer = lo > 0 && off(lo + 1) * lo < off(lo) * (lo + 1);
+        (side, fit(if ceil_closer { lo + 1 } else { lo }))
+    }
+}
+
+/// One of PIL's frames of an icon: the shot fitted in a `side` square by PIL's `thumbnail` size, resampled by the `image` crate's
+/// Lanczos3 (PIL's LANCZOS is the same three-lobed kernel; its pixels differ by the two filters' rounding, measured in the tests).
+fn icon_frame(
+    image: &image::RgbImage,
+    side: u32,
+) -> image::ImageResult<image::codecs::ico::IcoFrame<'static>> {
+    let (fw, fh) = thumbnail(image.width(), image.height(), side);
+    let frame = image::imageops::resize(image, fw, fh, image::imageops::FilterType::Lanczos3);
+    image::codecs::ico::IcoFrame::as_png(frame.as_raw(), fw, fh, image::ExtendedColorType::Rgb8)
+}
+
 /// The lit shot saved where `--out` names (PIL's `after.save(out)`): the format chosen by the name's extension, as PIL chose it - a PNG
 /// as the screenshot's own bytes (the same pixels PIL's re-encode held), any other format the `image` crate writes encoded from the
 /// screenshot's pixels (feature 449 T150; a lossy or quantizing format's pixels are its encoder's, not PIL's - measured in the task's
@@ -304,6 +335,24 @@ pub fn save(out: &str, png: &[u8]) -> Result<(), Error> {
             h,
             image::ExtendedColorType::Rgb8,
         ),
+        // AN ICON PAST 256 PX A SIDE SHRUNK AS PIL SHRANK IT (FIXED, feature 449 T183, T150's finding: the encoder refused it): a frame for
+        // each of PIL's sizes that fits the shot; a shot no size fits, of which PIL wrote an icon with no image, refused naming the format
+        image::ImageFormat::Ico if w > 256 || h > 256 => {
+            let sides: Vec<u32> = ICON_SIDES.into_iter().filter(|s| *s <= w.min(h)).collect();
+            if sides.is_empty() {
+                return Err(Error::new(
+                    "OSError",
+                    format!("cannot write {out}: an ICO's smallest image is 16 x 16 px and the lit shot is {w} x {h} px, so no size of PIL's fits it"),
+                ));
+            }
+            sides
+                .into_iter()
+                .map(|side| icon_frame(&image, side))
+                .collect::<image::ImageResult<Vec<_>>>()
+                .and_then(|frames| {
+                    image::codecs::ico::IcoEncoder::new(&mut buf).encode_images(&frames)
+                })
+        }
         _ => image::DynamicImage::ImageRgb8(image).write_to(&mut buf, format),
     };
     written.map_err(|e| Error::new("OSError", format!("cannot write {out}: {e}")))?;

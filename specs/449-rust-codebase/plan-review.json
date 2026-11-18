@@ -630,6 +630,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T183 (T150's four reported defects of step 2; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "c31dac1b409ed9b05ae7a12eaaa0e272ee7dad0479c534f95d9d63a714eda021",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T183 Approach (checklist part A)": {
+   "sha256": "774630eab0bf9f9072139e6237e23dd2929e1e6d3ec8715addbaf6cfdbfeac1a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -11801,6 +11813,82 @@
      "why": "Matches the GM's order: fix step 1's known bugs before porting the next step."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T183 (T150's four reported defects of step 2; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T183 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T183-hit-copies",
+     "summary": "hit_copies' geometry-name pattern gets a leading boundary so no d is taken out of id/grid/data-kind; the two python.json pinned answers holding the stray d are edited, dated in the file",
+     "class": "within",
+     "why": "A reported step-2 defect fixed as the GM asked (2026-11-18: fix all known bugs in each step before the next); SC-004 and FR-002 let a pinned expectation change as fixed, named. Red-before/green-after test cited."
+    },
+    {
+     "id": "T183-households-number",
+     "summary": "size_sentence reads a text households as the number it names (int()), an empty one as no households; that number serves both the population and the comparison",
+     "class": "within",
+     "why": "Fixes the reported defect (string multiplication, 1,212,121,212); keeps the Python's own reading of an empty value. Nothing narrowed."
+    },
+    {
+     "id": "T183-households-malformed",
+     "summary": "A households text naming no number is refused in int()'s words, even where population is given",
+     "class": "within",
+     "why": "A new refusal, but only of a malformed record that previously printed 'about <text> households' - a broken output, fixed as the GM's 2026-11-18 words allow; the block observes every pool hamlet's households is an integer, so no caller's working input is refused (FR-002: it does its job for its callers)."
+    },
+    {
+     "id": "T183-refused-render-page",
+     "summary": "The page file is opened without truncation, emptied only once the page is rendered; a refused render leaves the last page or removes a file it created; an unwritable path still refused before rendering; the cli test pinning the empty page changed",
+     "class": "within",
+     "why": "Fixes the reported defect, keeps the existing early refusal, and changes the pinned case as fixed (SC-004)."
+    },
+    {
+     "id": "T183-tiff-la-p",
+     "summary": "TIFF LA and 8-bit P read via the tiff crate (pinned =0.10.3, already in the lock); test counts PIL's lossless files decoded exact, 31 before, 33 after",
+     "class": "within",
+     "why": "Fixes the formats T150 reported as refused. Counting lossless decodes against PIL is not the struck exactness standard: a lossless file has one correct decode and matching it is the decoder doing its job; nothing is refused for differing from PIL, and the ICO decision below accepts pixel differences."
+    },
+    {
+     "id": "T183-tiff-other-palettes",
+     "summary": "P;1 to P;4 and PA palette TIFFs stay refused, naming their bits",
+     "class": "within",
+     "why": "FR-002 as amended by T180 collapses ask:449-T150-diagnostic-formats into the rule: the documented path (PNG/SVG, PAGE=, OUT=<png>) is the diagnostics' job and 'another format is read or refused as the image crate can'. A refusal off that path is a permitted difference, not a known bug and not an exception owing a ruling."
+    },
+    {
+     "id": "T183-ico-shrink",
+     "summary": "An ICO larger than 256 px is written as PIL's frames at PIL's thumbnail sizes, resampled by image's Lanczos3; frame sizes match PIL, pixels differ by up to 19 levels (measured)",
+     "class": "within",
+     "why": "Fixes the reported refusal; the pixel difference is exactly what FR-002 allows (outputs may differ, no ruling owed)."
+    },
+    {
+     "id": "T183-ico-no-fit",
+     "summary": "A shot no icon size fits (e.g. 300 x 1) is refused naming the format, where PIL wrote an empty 6-byte icon",
+     "class": "within",
+     "why": "Off the documented path and an empty icon is not a working output; FR-002's diagnostic-formats clause permits a format to be read or refused as the crate can."
+    },
+    {
+     "id": "T183-bigtiff",
+     "summary": "BigTIFF (not identified by image's format guess, PIL reads it) found and not fixed in T183; reported to the caller for its own task",
+     "class": "within",
+     "why": "Same class as the two refusals above: a non-documented format refused as the image crate can, which FR-002 (T180) makes a permitted difference rather than a known defect, so leaving it does not carry a known bug into step 3b against the GM's 2026-11-18 rule. Blocking on it would re-impose the PIL-exactness the GM struck. If the caller nonetheless files it as a defect, the GM's rule puts that task before step 3b."
+    },
+    {
+     "id": "T183-rust-only",
+     "summary": "Fixes made in rust/mode_a only; no kept Python carries the affected functions (grep observed 2026-11-18)",
+     "class": "within",
+     "why": "The lockstep rule asks the fix in every copy that still lives; the stated, unfiltered grep shows no Python copy remains."
+    },
+    {
+     "id": "T183-order-exits",
+     "summary": "T183 placed after T150 and T151, before step 3b; exits make static/rust-test/quick, pack-audit and size-table on the six pool sheets, page-check, plan review, gated land; ICO test 0.089 s under FR-008",
+     "class": "within",
+     "why": "Honors 'fix all known bugs in each step before moving on to porting the next step' going forward (step 3a preceded the GM's rule); exits verify the drawn outputs still pass their checks per FR-002."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -20950,6 +21038,80 @@
      "summary": "One landing, with its siblings.",
      "class": "within",
      "why": "Scheduling of the landing; narrows nothing asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T183": {
+   "section_sha256": "b8e155b7a53174cfd924783e809a489eb105ef07cb43aebda6e1cedcb0f6795d",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T183-hit-copies",
+     "summary": "hit_copies' geometry-name pattern gets a leading boundary so no d is taken out of id/grid/data-kind; the two python.json pinned answers holding the stray d are edited, dated in the file",
+     "class": "within",
+     "why": "A reported step-2 defect fixed as the GM asked (2026-11-18: fix all known bugs in each step before the next); SC-004 and FR-002 let a pinned expectation change as fixed, named. Red-before/green-after test cited."
+    },
+    {
+     "id": "T183-households-number",
+     "summary": "size_sentence reads a text households as the number it names (int()), an empty one as no households; that number serves both the population and the comparison",
+     "class": "within",
+     "why": "Fixes the reported defect (string multiplication, 1,212,121,212); keeps the Python's own reading of an empty value. Nothing narrowed."
+    },
+    {
+     "id": "T183-households-malformed",
+     "summary": "A households text naming no number is refused in int()'s words, even where population is given",
+     "class": "within",
+     "why": "A new refusal, but only of a malformed record that previously printed 'about <text> households' - a broken output, fixed as the GM's 2026-11-18 words allow; the block observes every pool hamlet's households is an integer, so no caller's working input is refused (FR-002: it does its job for its callers)."
+    },
+    {
+     "id": "T183-refused-render-page",
+     "summary": "The page file is opened without truncation, emptied only once the page is rendered; a refused render leaves the last page or removes a file it created; an unwritable path still refused before rendering; the cli test pinning the empty page changed",
+     "class": "within",
+     "why": "Fixes the reported defect, keeps the existing early refusal, and changes the pinned case as fixed (SC-004)."
+    },
+    {
+     "id": "T183-tiff-la-p",
+     "summary": "TIFF LA and 8-bit P read via the tiff crate (pinned =0.10.3, already in the lock); test counts PIL's lossless files decoded exact, 31 before, 33 after",
+     "class": "within",
+     "why": "Fixes the formats T150 reported as refused. Counting lossless decodes against PIL is not the struck exactness standard: a lossless file has one correct decode and matching it is the decoder doing its job; nothing is refused for differing from PIL, and the ICO decision below accepts pixel differences."
+    },
+    {
+     "id": "T183-tiff-other-palettes",
+     "summary": "P;1 to P;4 and PA palette TIFFs stay refused, naming their bits",
+     "class": "within",
+     "why": "FR-002 as amended by T180 collapses ask:449-T150-diagnostic-formats into the rule: the documented path (PNG/SVG, PAGE=, OUT=<png>) is the diagnostics' job and 'another format is read or refused as the image crate can'. A refusal off that path is a permitted difference, not a known bug and not an exception owing a ruling."
+    },
+    {
+     "id": "T183-ico-shrink",
+     "summary": "An ICO larger than 256 px is written as PIL's frames at PIL's thumbnail sizes, resampled by image's Lanczos3; frame sizes match PIL, pixels differ by up to 19 levels (measured)",
+     "class": "within",
+     "why": "Fixes the reported refusal; the pixel difference is exactly what FR-002 allows (outputs may differ, no ruling owed)."
+    },
+    {
+     "id": "T183-ico-no-fit",
+     "summary": "A shot no icon size fits (e.g. 300 x 1) is refused naming the format, where PIL wrote an empty 6-byte icon",
+     "class": "within",
+     "why": "Off the documented path and an empty icon is not a working output; FR-002's diagnostic-formats clause permits a format to be read or refused as the crate can."
+    },
+    {
+     "id": "T183-bigtiff",
+     "summary": "BigTIFF (not identified by image's format guess, PIL reads it) found and not fixed in T183; reported to the caller for its own task",
+     "class": "within",
+     "why": "Same class as the two refusals above: a non-documented format refused as the image crate can, which FR-002 (T180) makes a permitted difference rather than a known defect, so leaving it does not carry a known bug into step 3b against the GM's 2026-11-18 rule. Blocking on it would re-impose the PIL-exactness the GM struck. If the caller nonetheless files it as a defect, the GM's rule puts that task before step 3b."
+    },
+    {
+     "id": "T183-rust-only",
+     "summary": "Fixes made in rust/mode_a only; no kept Python carries the affected functions (grep observed 2026-11-18)",
+     "class": "within",
+     "why": "The lockstep rule asks the fix in every copy that still lives; the stated, unfiltered grep shows no Python copy remains."
+    },
+    {
+     "id": "T183-order-exits",
+     "summary": "T183 placed after T150 and T151, before step 3b; exits make static/rust-test/quick, pack-audit and size-table on the six pool sheets, page-check, plan review, gated land; ICO test 0.089 s under FR-008",
+     "class": "within",
+     "why": "Honors 'fix all known bugs in each step before moving on to porting the next step' going forward (step 3a preceded the GM's rule); exits verify the drawn outputs still pass their checks per FR-002."
     }
    ],
    "verdict": "CLEAR"

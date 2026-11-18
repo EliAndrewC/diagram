@@ -47,6 +47,7 @@ jpeg-encoder = { workspace = true }
 png = { workspace = true }
 resvg = { workspace = true }
 image = { workspace = true }
+tiff = { workspace = true }
 roxmltree = { workspace = true }
 serde_json = { workspace = true }
 

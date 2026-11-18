@@ -314,18 +314,118 @@ fn the_lit_shot_is_saved_in_the_format_its_name_asks() {
         "{}",
         r.stderr
     );
-    // an icon past 256 px a side: the encoder's refusal (PIL thumbnailed it into an icon's sizes)
-    let big = png_of(
-        300,
+}
+
+/// The 16 x 14 frame PIL 12.3.0 wrote of [`gradient`]'s 300 x 260 shot, as RGB (a scratch probe, 2026-11-18, feature 449 T183).
+const PIL_ICO_16: &str = "Z1kpmYQpZoApl2Qpa4IpkocpcEIpjV0pdYgph3ope2YpgYQpgYIpfDcphG4pgYIpoWWTbIeTk3eTanaTl3eTZouTnFGTYmmTn4aTX3aTonaTXHmTo4mTW0iTpHeTVoGTp26vXIOvo32vXYKvoXyvYIWvnWCvZG+vmYOvaH6vlIGvbnyvj4Svc1qvjXivZICvcXk4hYE4eX44iYg4dHw4joQ4bm44lHk4aX84mIA4ZYc4nXo4YYU4oGk4Xn84pnw4TH6zp4GzWYmzpYyzWoizpIGzW3qzo32zXYKzoIqzYIyznYazZIGzmXizZn+zpoGzgYeIiIKId4WIho+IfISIgIOIgoWIeoWIiIKIdIiIjo6IboKIk4OIaYaIloSIaoKIrYtEXX5EonJEXHhEpHJEW39EpY5EWolEpXxEWnJEpXdEW3REo4FEXZBEooVEUnxElZPHaHjHln3Ha23HkX7HcHnHjJnHdo/HhnfHfHrHgG/Hgn3HenzHiJzHeIjHfnjHWY9emXxeZoZemnNeY4lennheX5xeoYxeXH9epINeW3VepYleWnhepqNeWINes4NeWZNkoYdkX4hkn39kYopkm4RkZqBkl5Jka4hkkoVkcH9kjIxkdoNkh6VkeYtkj4tkmpDEc3HEi37EcYzEkXzEbG/ElqDEZ43EmnDEY4LEnorEX3nEoXLEXKjEooHEWXXEq40+Wng+pnY+WpA+pHQ+XHc+ops+Xo4+n3U+Yns+m40+ZnM+l3o+aqE+lYU+W3Y+fIGKfIeKgoKKgImKfIOKhoSKdouKi4SKcYeKkYKKbIiKloWKZ4GKmo+KZIGKmomKTmu4o364XYi4o3y4XIi4pH24W2S4pG24XIG4o4a4XX24oYe4X3q4n2C4X3O4rn+4";
+
+/// How far the smallest frame's pixels differ from PIL's at most: the `image` crate's Lanczos3 against PIL's LANCZOS, 1 level on this shot
+/// (measured 2026-11-18, feature 449 T183: every frame of four shots against PIL's, `scratchpad/t183/ico-measure.json`; the 256 px frame
+/// of this deliberately aliasing gradient 19 levels at most, 0.86% of its samples past 3, a 1280 x 800 one's 4 levels).
+const ICO_LEVELS: u8 = 1;
+
+/// A `w` x `h` RGB shot whose every pixel differs from its neighbors, as the PIL probe drew it.
+fn gradient(w: u32, h: u32) -> Vec<u8> {
+    let mut data = Vec::new();
+    for y in 0..h {
+        for x in 0..w {
+            data.extend(
+                [(x * 7 + y * 3) % 256, (x * x + y) % 256, (y * 5) % 256]
+                    .map(|v| u8::try_from(v).unwrap()),
+            );
+        }
+    }
+    png_of(
+        w,
+        h,
+        png::ColorType::Rgb,
+        png::BitDepth::Eight,
+        &data,
+        None,
+        None,
+    )
+}
+
+/// An icon's frames as its directory lists them: (width, height, the frame's bytes).
+fn frames(ico: &[u8]) -> Vec<(u32, u32, Vec<u8>)> {
+    let n = usize::from(u16::from_le_bytes([ico[4], ico[5]]));
+    (0..n)
+        .map(|i| {
+            let e = &ico[6 + 16 * i..22 + 16 * i];
+            let side = |b: u8| if b == 0 { 256 } else { u32::from(b) };
+            let len = u32::from_le_bytes([e[8], e[9], e[10], e[11]]) as usize;
+            let at = u32::from_le_bytes([e[12], e[13], e[14], e[15]]) as usize;
+            (side(e[0]), side(e[1]), ico[at..at + len].to_vec())
+        })
+        .collect()
+}
+
+/// FIXED (feature 449 T183, T150's finding): a shot past an icon's 256 px was refused by the encoder where PIL's `IcoImagePlugin`
+/// shrank it. It is written as PIL wrote it - a frame for each of PIL's sizes that fits the shot, each a Lanczos thumbnail keeping
+/// the shot's aspect at PIL's rounding - its pixels the `image` crate's Lanczos3, not PIL's; and a shot no size fits, of which PIL
+/// wrote an icon with no image in it, is refused naming the format.
+#[test]
+fn an_icon_past_256_px_is_shrunk_into_pil_s_sizes() {
+    let dir = l7r_guard::shared::tempdir::TempDir::new("lit-ico");
+    let at = |n: &str| dir.path().join(n).to_string_lossy().into_owned();
+    super::save(&at("big.ico"), &gradient(300, 260)).unwrap();
+    let got = frames(&std::fs::read(at("big.ico")).unwrap());
+    let sizes: Vec<(u32, u32)> = got.iter().map(|(w, h, _)| (*w, *h)).collect();
+    assert_eq!(
+        sizes,
+        [
+            (16, 14),
+            (24, 21),
+            (32, 28),
+            (48, 42),
+            (64, 55),
+            (128, 111),
+            (256, 222)
+        ]
+    );
+    let small = crate::diagnostics::image::rgb(&got[0].2, "f").unwrap();
+    let pil = crate::diagnostics::image::b64decode(PIL_ICO_16).unwrap();
+    let worst = small
+        .data
+        .iter()
+        .zip(&pil)
+        .map(|(a, b)| a.abs_diff(*b))
+        .max();
+    assert_eq!((small.data.len(), worst), (pil.len(), Some(ICO_LEVELS)));
+    // the other way up, and a strip only the smallest size fits
+    super::save(&at("tall.ico"), &gradient(260, 300)).unwrap();
+    assert_eq!(frames(&std::fs::read(at("tall.ico")).unwrap())[6].0, 222);
+    super::save(&at("strip.ico"), &gradient(1000, 20)).unwrap();
+    let strip = frames(&std::fs::read(at("strip.ico")).unwrap());
+    assert_eq!(
+        strip.iter().map(|(w, h, _)| (*w, *h)).collect::<Vec<_>>(),
+        [(16, 1)]
+    );
+    // an encoder's own refusal stands in its words: a JPEG past 65,535 px a side (the ICO case that once reached it is now written)
+    let wide = png_of(
+        65_536,
         1,
         png::ColorType::Rgb,
         png::BitDepth::Eight,
-        &[0; 900],
+        &vec![0; 3 * 65_536],
         None,
         None,
     );
+    let e = super::save(&at("wide.jpg"), &wide).unwrap_err();
     assert_eq!(
-        super::save(&at("big.ico"), &big).unwrap_err().kind,
-        "OSError"
+        (
+            e.kind,
+            e.message
+                .starts_with(&format!("cannot write {}: ", at("wide.jpg")))
+        ),
+        ("OSError", true)
+    );
+    let e = super::save(&at("line.ico"), &gradient(300, 1)).unwrap_err();
+    assert_eq!(
+        (e.kind, e.message),
+        (
+            "OSError",
+            format!("cannot write {}: an ICO's smallest image is 16 x 16 px and the lit shot is 300 x 1 px, so no size of PIL's fits it", at("line.ico"))
+        )
     );
 }

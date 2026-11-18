@@ -17639,13 +17639,14 @@
  "rust/mode_a/src/diagnostics/image.rs::other#the diagnostics' images": {
   "body": "1e0c91bf6973eb9d",
   "claim": "the diagnostics' images - NONE: decoding, no map decision",
-  "code": "2242f5d42fe8b4a5",
-  "core": "78a5273ccb6c2ea4",
+  "code": "83c11d79dc05cac2",
+  "core": "22bdbfb14237536d",
   "date": "2026-11-18",
   "note": "image format decoding, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/diagnostics/image.rs::palette_key_of#the diagnostics' images": {
@@ -17672,6 +17673,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/diagnostics/image.rs::said_gray#the diagnostics' images": {
+  "body": "0ee4b398cbbed4e7",
+  "claim": "the diagnostics' images - NONE: decoding, no map decision",
+  "code": "91fa43f4b15fda55",
+  "core": "ae1f5c5eb159ef40",
+  "date": "2026-11-18",
+  "note": "TIFF header patching, decoding only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/image.rs::tiff_past_the_crate#the diagnostics' images": {
+  "body": "39b4080886c55440",
+  "claim": "the diagnostics' images - NONE: decoding, no map decision",
+  "code": "e3ae8885e57c8b43",
+  "core": "ff84c819ce88ae27",
+  "date": "2026-11-18",
+  "note": "TIFF decoding, no map decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/diagnostics/image/tests.rs::a_page_s_id_map_decodes_and_a_row_past_the_first_refuses#the diagnostics' tests": {
   "body": "932c45db9cdc860b",
   "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
@@ -17679,6 +17704,18 @@
   "core": "ebe325d30341a3bb",
   "date": "2026-11-18",
   "note": "test fixture and assertions",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/image/tests.rs::a_palette_tiff_reads_in_either_order_and_another_palette_form_is_refused#the diagnostics' tests": {
+  "body": "60ca9ddd891c1cf0",
+  "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
+  "code": "6d676374a212a992",
+  "core": "c52ba015fa91dd4c",
+  "date": "2026-11-18",
+  "note": "fixtures and assertions",
   "pages": {},
   "research": "",
   "rests": [],
@@ -17699,13 +17736,14 @@
  "rust/mode_a/src/diagnostics/image/tests.rs::every_format_reads_as_pil_reads_it#the diagnostics' tests": {
   "body": "e78b70ee681b16ef",
   "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
-  "code": "38880c137407b521",
-  "core": "f78f1d3f7ff302cb",
+  "code": "6f0f49e7437cbddc",
+  "core": "822fd51c13da1580",
   "date": "2026-11-18",
   "note": "format-parity test",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/diagnostics/image/tests.rs::every_png_form_reads_as_pil_converts_it#the diagnostics' tests": {
@@ -17715,6 +17753,18 @@
   "core": "844adba8d56b3666",
   "date": "2026-11-18",
   "note": "PNG conversion test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/image/tests.rs::palette_tiff#the diagnostics' tests": {
+  "body": "4567e547f3bb6329",
+  "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
+  "code": "e02d140dc7d67620",
+  "core": "5206cb82385e341e",
+  "date": "2026-11-18",
+  "note": "fixture builder",
   "pages": {},
   "research": "",
   "rests": [],
@@ -17751,6 +17801,18 @@
   "core": "4e68984c761fda40",
   "date": "2026-11-18",
   "note": "CLI help text",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/page_lit.rs::ICON_SIDES#the page measure": {
+  "body": "3141fa3a2a767868",
+  "claim": "the page measure - NONE: a measurement for a reviewer, no map decision",
+  "code": "dfe5bcc5d6198312",
+  "core": "18b4ba74228e1edb",
+  "date": "2026-11-18",
+  "note": "ICO frame sizes for a reviewer's file, not read off the map",
   "pages": {},
   "research": "",
   "rests": [],
@@ -17813,6 +17875,18 @@
   "note": "reviewer pixel attribution, no map decision",
   "pages": {},
   "reads": "35a5aad9c2bb9036",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/page_lit.rs::icon_frame#the page measure": {
+  "body": "e99cbda42d31967d",
+  "claim": "the page measure - NONE: a measurement for a reviewer, no map decision",
+  "code": "c012a7b7c742ea6b",
+  "core": "2ccf705ccc69acc1",
+  "date": "2026-11-18",
+  "note": "resampling for an ICO frame, plumbing",
+  "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -17881,13 +17955,15 @@
  "rust/mode_a/src/diagnostics/page_lit.rs::save#the page measure": {
   "body": "c09062404a59d377",
   "claim": "the page measure - NONE: a measurement for a reviewer, no map decision",
-  "code": "299d7c2fdcb6032d",
-  "core": "223510491db850b6",
+  "code": "1851a07173c68e25",
+  "core": "264dd5a97f9f1bc6",
   "date": "2026-11-18",
   "note": "screenshot file encoding",
   "pages": {},
+  "reads": "3f523fbccad50832",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/diagnostics/page_lit.rs::shoot#the page measure": {
@@ -17902,6 +17978,54 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/diagnostics/page_lit.rs::thumbnail#the page measure": {
+  "body": "4e01f49cb5386cd6",
+  "claim": "the page measure - NONE: a measurement for a reviewer, no map decision",
+  "code": "6836f26b69286e8f",
+  "core": "8355601dec8dcef0",
+  "date": "2026-11-18",
+  "note": "matches PIL's aspect-fit arithmetic, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/page_lit/tests.rs::ICO_LEVELS#the diagnostics' tests": {
+  "body": "2a41c72aee251750",
+  "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
+  "code": "2f6f00ffcc285267",
+  "core": "8b09c82554f056ae",
+  "date": "2026-11-18",
+  "note": "test tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/page_lit/tests.rs::PIL_ICO_16#the diagnostics' tests": {
+  "body": "136ddb3847a479aa",
+  "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
+  "code": "d5ff3fd52d12cd29",
+  "core": "0ff5a2e9bc75f661",
+  "date": "2026-11-18",
+  "note": "reference fixture",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/page_lit/tests.rs::an_icon_past_256_px_is_shrunk_into_pil_s_sizes#the diagnostics' tests": {
+  "body": "e41808a16acbaf00",
+  "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
+  "code": "0dfddac9ccf2edce",
+  "core": "7daad2a7a139ccea",
+  "date": "2026-11-18",
+  "note": "fixtures and assertions",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/diagnostics/page_lit/tests.rs::each_screen_pixel_is_answered_by_the_id_map_under_it#the diagnostics' tests": {
   "body": "29c0aa2aa474e48e",
   "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
@@ -17909,6 +18033,30 @@
   "core": "45fbfd08afd98185",
   "date": "2026-11-18",
   "note": "test assertions",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/page_lit/tests.rs::frames#the diagnostics' tests": {
+  "body": "414178a5fa438789",
+  "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
+  "code": "33892a6b7b645025",
+  "core": "c5c1663e4cddd29a",
+  "date": "2026-11-18",
+  "note": "ICO directory parsing in a test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/diagnostics/page_lit/tests.rs::gradient#the diagnostics' tests": {
+  "body": "2250ec52a04f9b7a",
+  "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
+  "code": "d52dfb8ceb00f93f",
+  "core": "4706d6156622c29f",
+  "date": "2026-11-18",
+  "note": "synthetic image fixture",
   "pages": {},
   "research": "",
   "rests": [],
@@ -17953,13 +18101,14 @@
  "rust/mode_a/src/diagnostics/page_lit/tests.rs::the_lit_shot_is_saved_in_the_format_its_name_asks#the diagnostics' tests": {
   "body": "46912c69b03d68da",
   "claim": "the diagnostics' tests - NONE: fixtures and assertions, no map decision",
-  "code": "30bc33a1d4b2930d",
-  "core": "3e55905daa7323b6",
+  "code": "1ca29e88ff0986e8",
+  "core": "feb3e9f617287aac",
   "date": "2026-11-18",
   "note": "test assertions",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/diagnostics/page_lit/tests.rs::the_report_puts_the_most_changed_first#the diagnostics' tests": {
@@ -23953,12 +24102,12 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page/hits.rs::GEOM#the page's hit geometry": {
-  "body": "6c05daefe5d6b789",
+  "body": "984e9f893bb7f5cc",
   "claim": "the page's hit geometry - NONE: invisible copies and regions that only move the pointer, each sizing a CONVENTION claimed beside it",
-  "code": "dd0be4177c71341d",
-  "core": "b69131370f58a635",
+  "code": "64bcb7dc344c6b1c",
+  "core": "22d29ac734f6afcb",
   "date": "2026-11-18",
-  "note": "regex",
+  "note": "attribute regex; the lookbehind only stops an id's d from matching, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -24086,13 +24235,13 @@
  },
  "rust/mode_a/src/page/hits.rs::hit_copies#the thin marks' hit copies": {
   "body": "d6f02c4e7cfee649",
-  "claim": "the thin marks' hit copies - CONVENTION: a stroked mark's invisible copy its factor times its drawn width with a floor, a bead's its radius times its factor; a filled shape takes the pointer over its own body",
-  "code": "517afb558c531b1a",
-  "core": "97f9fe4c6cc9fe0c",
+  "claim": "the thin marks' hit copies - CONVENTION: a stroked mark's invisible copy its factor times its drawn width with a floor, a bead's its radius times its factor, never under half the floor; a filled shape takes the pointer over its own body",
+  "code": "c87b406e3eb3d752",
+  "core": "5db0106245fe59cd",
   "date": "2026-11-18",
-  "note": "invisible pointer copies",
+  "note": "the invisible hit width is the factor times the drawn width with a floor, a bead's is its radius times bead, never under half the floor, and filled polygons and polylines (and filled paths with no stroke) are skipped; how the pointer is caught, not a fact about the place",
   "pages": {},
-  "reads": "272ca1f02e478b2c",
+  "reads": "768da86273ce96a9",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -24221,6 +24370,19 @@
   "note": "group wrapping, split fill and stroke",
   "pages": {},
   "reads": "1d70ea7053b95dc6",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/page/hits/tests.rs::a_copy_takes_no_d_out_of_an_id#the hit geometry's tests": {
+  "body": "930c394c50069bb7",
+  "claim": "the hit geometry's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "a598990ff3d6575e",
+  "core": "7398f910311d04be",
+  "date": "2026-11-18",
+  "note": "fixtures and assertions",
+  "pages": {},
+  "reads": "04cce2214c5a7516",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -24827,12 +24989,12 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page/render.rs::write_html#the page's assembly": {
-  "body": "5716ea8fd3f7b0d9",
+  "body": "e40e2deadf23b595",
   "claim": "the page's assembly - NONE: the page's parts put together in their order, each part's decisions claimed where it is made",
-  "code": "1c81b846479ca4f4",
-  "core": "1a9da693a8fe900c",
+  "code": "f69da5b8ab8cdedf",
+  "core": "140f992365147461",
   "date": "2026-11-18",
-  "note": "file I/O order",
+  "note": "file open, truncate and write order; I/O only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -24845,6 +25007,18 @@
   "core": "b0a38a2bcd8e0489",
   "date": "2026-11-18",
   "note": "test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/page/tests.rs::a_refused_render_leaves_the_page_as_it_was#the page writer's tests": {
+  "body": "5b4c4915bb259243",
+  "claim": "the page writer's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "f0a834e32e2acf42",
+  "core": "fbf1d8b82662bd3c",
+  "date": "2026-11-18",
+  "note": "fixtures and assertions",
   "pages": {},
   "research": "",
   "rests": [],
@@ -27729,6 +27903,19 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/place.rs::PER_HOUSEHOLD_F64#card plumbing": {
+  "body": "814ed0e9e0b49913",
+  "claim": "card plumbing - NONE: wording, joining and assembly; what the card states is read from the map, the notes and the record, each rule claimed beside its unit",
+  "code": "a71147704773f6e7",
+  "core": "8476cf9382edb066",
+  "date": "2026-11-18",
+  "note": "an f64 copy of PER_HOUSEHOLD so it can multiply a float; the figure of five is claimed on PER_HOUSEHOLD",
+  "pages": {},
+  "reads": "8407b5835a672aed",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/place.rs::PLACE_KEYS#the place keys": {
   "body": "973b03ab1b06a8e0",
   "claim": "the place keys - NONE: the notes' keys the card reads",
@@ -28128,35 +28315,37 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/place.rs::size_sentence#households named beside farmhouses": {
-  "body": "601efc3d1427ceb6",
+  "body": "e401c45011cf11ab",
   "claim": "households named beside farmhouses - households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing: stated only where the drawn count differs from the declared households",
-  "code": "247ea560ee0634e5",
-  "core": "c353d33663776114",
+  "code": "6818d1bfd848796e",
+  "core": "9ec1d2c679da3389",
   "date": "2026-11-18",
-  "note": "named only where drawn houses and declared households differ",
+  "note": "both are named only when the declared households are truthy, houses are drawn, the two counts differ and the kind does not exclude farms; this matches \"Where drawn houses and declared households differ, the map's card states both\"",
   "pages": {
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html": "ff11639478e7f7db"
   },
   "ported": "l7r/diagram/interactive/place.py::size_sentence#households named beside farmhouses",
-  "reads": "8407b5835a672aed",
+  "reads": "c7f794a5de665464",
   "research": "cb688155e12ac9a6",
   "rests": [
-   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:8749bcad9f6113d9"
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:8749bcad9f6113d9",
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:9226b86443fe089b",
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:bd540db0adedd113"
   ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/place.rs::size_sentence#population from households": {
-  "body": "601efc3d1427ceb6",
+  "body": "e401c45011cf11ab",
   "claim": "population from households - households-how-many-live-in-a-house-and-under-how-many-roofs-ie: five to a DECLARED household (the meta households, not the drawn houses) where the tier records no figure of its own",
-  "code": "ab5091e9b9f0de9a",
-  "core": "c353d33663776114",
+  "code": "76c5b9373691f92c",
+  "core": "9ec1d2c679da3389",
   "date": "2026-11-18",
-  "note": "five times the declared households, after the tier's and the map's own figure",
+  "note": "PER_HOUSEHOLD times the declared households (text now read as int), used only when there is no tier default and no meta population; §25's 70 households giving ~350 confirms it counts declared households, not drawn houses",
   "pages": {
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "7cbffb429dad0f61"
   },
   "ported": "l7r/diagram/interactive/place.py::size_sentence#population from households",
-  "reads": "8407b5835a672aed",
+  "reads": "c7f794a5de665464",
   "research": "d5ebcdade018841c",
   "rests": [
    "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:294c03d4ddf75ac7",
@@ -28216,6 +28405,18 @@
   "core": "1da516d569bca5a2",
   "date": "2026-11-18",
   "note": "test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/place/tests.rs::a_households_text_is_read_as_its_number#the place card's tests": {
+  "body": "38ab42842eafbd93",
+  "claim": "the place card's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "4b7e2f6b82d60c05",
+  "core": "636772c1f1fa6dc3",
+  "date": "2026-11-18",
+  "note": "fixtures and assertions",
   "pages": {},
   "research": "",
   "rests": [],

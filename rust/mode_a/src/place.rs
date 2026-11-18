@@ -24,6 +24,9 @@ use crate::page::value::items;
 ///
 /// Research: inhabitants per household - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: five
 pub const PER_HOUSEHOLD: i64 = HOUSEHOLD;
+/// [`PER_HOUSEHOLD`] as a float, for a households value Python multiplied as one - the one figure, written once.
+#[allow(clippy::cast_precision_loss, reason = "five, exact in an f64")]
+const PER_HOUSEHOLD_F64: f64 = PER_HOUSEHOLD as f64;
 
 /// `l7r.md`'s median-domain table, for the one ranking the card is allowed to make - of TIERS - interpolated into the hamlet's text
 /// rather than typed into it (settlement-review round 7).
@@ -313,20 +316,25 @@ fn population_int(v: &Value) -> Result<i64, Error> {
 ///         stated only where the drawn count differs from the declared households
 ///
 /// # Errors
-/// A population no integer can be read from (the Python's `int()`).
+/// A population, or a households value given as text, no integer can be read from (the Python's `int()`).
 pub fn size_sentence(kind: &Kind, meta: &Map<String, Value>, houses: i64) -> Result<String, Error> {
     let mut parts = Vec::new();
     if houses != 0 {
         parts.push(format!("{houses} {}", kind.houses_noun));
     }
     let households = meta.get("households").cloned().unwrap_or(Value::Null);
-    // `PER_HOUSEHOLD * households` as Python multiplies: an int by an int, a float by a float, a string repeated
-    let from_households = || match &households {
+    // A HOUSEHOLDS VALUE GIVEN AS TEXT IS THE NUMBER IT NAMES, read as `int()` reads it (FIXED, feature 449 T183, T150's finding): the
+    // Python multiplied the text, `"12"` five times over a population of 1,212,121,212, and never found it equal to the drawn count
+    let counted = match &households {
+        Value::String(s) if !s.is_empty() => json!(population_int(&households)?),
+        h => h.clone(),
+    };
+    // `PER_HOUSEHOLD * households` as Python multiplies: an int by an int, a float by a float
+    let from_households = || match &counted {
         h if !truthy(h) => Value::Null,
-        Value::String(s) => Value::String(s.repeat(5)),
         Value::Bool(_) => json!(PER_HOUSEHOLD),
         h => h.as_i64().map_or_else(
-            || number(h).map_or(Value::Null, |n| json!(5.0 * n)),
+            || number(h).map_or(Value::Null, |n| json!(PER_HOUSEHOLD_F64 * n)),
             |i| json!(PER_HOUSEHOLD * i),
         ),
     };
@@ -343,12 +351,12 @@ pub fn size_sentence(kind: &Kind, meta: &Map<String, Value>, houses: i64) -> Res
             clippy::cast_precision_loss,
             reason = "a count of drawn houses, far inside f64's exact integers"
         )]
-        let differs = number(&households)
+        let differs = number(&counted)
             .is_none_or(|h| h.partial_cmp(&(houses as f64)) != Some(std::cmp::Ordering::Equal));
-        if truthy(&households) && houses != 0 && differs && !kind.excludes_farms {
+        if truthy(&counted) && houses != 0 && differs && !kind.excludes_farms {
             parts.push(format!(
                 "about {} households, population ~{p}",
-                py_str(&households)
+                py_str(&counted)
             ));
         } else {
             parts.push(format!("population ~{p}"));

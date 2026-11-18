@@ -66,6 +66,10 @@ resvg = { version = "=0.46.0" }
 # `png` 0.18, `gif` 0.14 and `zune-jpeg` 0.5 with `resvg` (the crates index, 2026-11-18). AVIF, EXR, HDR and DDS are off: HEAD's PIL read
 # none of them (AVIF needs a plugin), and AVIF's encoder pulls a C toolchain.
 image = { version = "=0.25.9", default-features = false, features = ["png", "jpeg", "gif", "bmp", "tiff", "webp", "ico", "pnm", "tga", "qoi"] }
+# THE TWO TIFF FORMS THE `image` CRATE REFUSES (feature 449 T183, T150's finding): `make picture-diff` reads PIL's gray-with-alpha (`LA`)
+# and 8-bit palette (`P`) TIFFs through the `tiff` decoder the `image` crate itself runs on (`mode_a/src/diagnostics/image.rs`). Already in
+# the lock as `image`'s, at this version, so naming it builds nothing new.
+tiff = { version = "=0.10.3", default-features = false }
 
 # THE COVERAGE BUILD'S CFG IS EXPECTED (feature 449 T116): `cargo llvm-cov` builds with `--cfg=coverage`, and a whole-tree test leaves that
 # build by it
