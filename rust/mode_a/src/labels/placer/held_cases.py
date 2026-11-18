@@ -13,6 +13,8 @@ this one's).
 Feature 449 T184 re-took the answers of the stored scenes, the scenes themselves unchanged, after its fixes to the Python placer:
 
     python3 -I rust/mode_a/src/labels/placer/held_cases.py --reanswer rust/mode_a/src/labels/placer/held.json
+
+and feature 449 T188 again, the same way, after its own (four scenes' captions back on one line).
 """
 import json, random, sys
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[5]))  # the tree: <tree>/rust/mode_a/src/labels/<unit>/

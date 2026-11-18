@@ -719,47 +719,104 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
     building, largest first - then BESIDE: the box, or each block of a stepped building, largest first (Hayakawa's
     RESIDENCE had no free seat within reach of its larger block while the other had one). A scatter of glyphs and lines
     (three pines, a moored barge) has no inside, and is named beside the group, else beside any one of its glyphs - only
-    beside a glyph where the group spreads wider than the standard's reach at the caption's `size`. An area's name is
-    level, however long and narrow the area (feature 449 T184: an area three times taller than wide was named along its
-    length, where 0242 keeps an area's caption level); a caption beside a turned feature takes its outline's first edge's
-    angle, a quarter, half or three-quarter turn keeping it level.
+    beside a glyph where the group spreads wider than the standard's reach at the caption's `size`. An area with no direction
+    of its own - a box of parts, an outline - is named level, however long and narrow (feature 449 T184: an area three times
+    taller than wide was named along its length, where 0242 keeps an area's caption level); a rectangle - a drawn rect, or an
+    outline of four square corners (`_rectangular`) - is turned with the sheet, and its name inside it, like a caption beside a
+    turned feature, takes its outline's first edge's angle (feature 449 T188: a turned building's roof name was set level), a
+    quarter, half or three-quarter turn keeping it level.
 
     Research:
-        an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area is level
-        a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption beside a turned feature takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+        a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
+        an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an irregular outline) is level; a rectangle's name inside it, a drawn rect or an outline of four square corners, takes the rectangle's own angle, as a turned feature's caption does
+        a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
     """
     x0, y0, x1, y1 = bbox([p for s in own for p in s.poly])
     box = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
     closed = [s for s in own if not s.line and len(s.poly) >= 3]
     blocks = sorted((s.poly for s in own if s.tag == "rect" and _area(s.poly) >= BLOCK_PX), key=lambda q: -_area(q))
     holder = max(closed, key=lambda s: _area(s.poly), default=None)
+    # each inside seat with whether it is a rectangle - a drawn rect, or an outline of four square corners - which has a direction of
+    # its own (feature 449 T188)
+    # and each beside seat with the same: only a rectangle's caption is turned with it
+    inner: list[tuple[Poly, bool]]
+    beside: list[tuple[Poly, bool]]
     if len(own) == 1 and closed:
-        inner, beside = [own[0].poly], [own[0].poly if own[0].tag == "rect" else box]
+        squared = _squared(own[0])
+        inner, beside = [(own[0].poly, squared)], [(own[0].poly, True) if squared else (box, False)]
     elif holder is not None and all(_box_within(s.poly, holder.poly) for s in own):
         # one outline holding the rest - a garden and the lantern in it (Ochiba's inner garden, read as a scatter, was
         # named from outside with a leader across the kitchen)
-        inner, beside = [holder.poly], [box]
+        inner, beside = [(holder.poly, _squared(holder))], [(box, False)]
     elif _covers(own, box):
-        inner, beside = [box], [box]
+        inner, beside = [(box, False)], [(box, False)]
     elif blocks:
-        inner, beside = blocks, blocks if len(blocks) >= 2 else [box]
+        inner, beside = [(b, True) for b in blocks], [(b, True) for b in blocks] if len(blocks) >= 2 else [(box, False)]
     else:
         # a scatter of like glyphs - three pines, the fire-water tubs: beside the group, else beside any one of them,
         # largest first (Ochiba's tubs stand all over the compound, and round the box of them all no seat was free).
         # A group wider than the standard's reach at the caption's size has no "beside": a seat by its box is by none
         # of its glyphs (Hayakawa's tubs were named outside the compound's corner)
-        members = [s.poly for s in sorted(closed, key=lambda s: -_area(s.poly))]
+        members = [(s.poly, _squared(s)) for s in sorted(closed, key=lambda s: -_area(s.poly))]
         spread = size > 0 and max(x1 - x0, y1 - y0) > REACH_EM * size
-        inner, beside = [], ([] if spread else [box]) + members if len(closed) > 1 else [box]
+        inner, beside = [], ([] if spread else [(box, False)]) + members if len(closed) > 1 else [(box, False)]
     out: list[Subject] = []
-    for poly in inner:
-        out.append(Subject("area", tuple(poly), angle=0.0))
-    for poly in beside:
-        ang = math.degrees(math.atan2(poly[1][1] - poly[0][1], poly[1][0] - poly[0][0])) if len(poly) == 4 else 0.0
-        if abs(ang - 90.0 * round(ang / 90.0)) < 1e-6:
-            ang = 0.0  # a quarter, half or three-quarter turn keeps a level caption (0242), within a turned edge's float slack
-        out.append(Subject("point", tuple(poly), angle=ang))
+    for poly, squared in inner:
+        # a rectangle's name inside it takes the rectangle's own angle; an area with no direction of its own - a box of parts, an
+        # irregular outline - is level
+        out.append(Subject("area", tuple(poly), angle=_turned(poly) if squared else 0.0))
+    for poly, squared in beside:
+        out.append(Subject("point", tuple(poly), angle=_turned(poly) if squared else 0.0))
     return out
+
+
+def _squared(s: Shape) -> bool:
+    """Has this drawn shape a direction of its own, its first edge's: a `<rect>`, an outline `_rectangular` passes, or an ellipse of
+    unequal radii, whose axes a turned group turns - a circle alike, which an unequal scale draws as an ellipse - never a disc drawn
+    round, whose turned square box has no direction (the T188 claims round: a disc in a turned group, and a scatter's four-point kite, were
+    named at an angle; the plan review's round 3: an ellipse of unequal radii in a turned group was named level, and a circle scaled
+    unequally too). The radii are the drawn box's sides, which the reader keeps as the disc's outline."""
+    if s.tag == "rect":
+        return True
+    if not _rectangular(s.poly):
+        return False
+    if s.tag in ("circle", "ellipse"):
+        across, down = math.dist(s.poly[0], s.poly[1]), math.dist(s.poly[1], s.poly[2])
+        return abs(across - down) > 1e-6 * max(across, down)  # equal radii, within a turned outline's float slack, are a circle
+    return True
+
+
+SQUARE_TOL = math.sin(math.radians(1.0))
+"""How far from square a corner may stand and the outline still be a rectangle: within a degree, the cosine of the corner's angle under
+the sine of one degree (feature 449 T188).
+
+Research: a square corner - CONVENTION: a corner within 1 degree of square, so a turned rectangle drawn by hand to a tenth of a pixel is one"""
+
+
+def _rectangular(poly: Poly) -> bool:
+    """Is this outline a rectangle - four corners, each square within `SQUARE_TOL`, a closing point repeating the first dropped - so
+    that it has a direction of its own, its first edge's, however it was drawn (feature 449 T188: a turned rectangle drawn as a polygon
+    was named level where the same `<rect>` took its angle)?"""
+    pts = list(poly[:-1]) if len(poly) == 5 and poly[0] == poly[-1] else list(poly)
+    if len(pts) != 4:
+        return False
+    for k in range(4):
+        a, b, c = pts[k - 1], pts[k], pts[(k + 1) % 4]
+        u, v = (a[0] - b[0], a[1] - b[1]), (c[0] - b[0], c[1] - b[1])
+        nu, nv = math.hypot(*u), math.hypot(*v)
+        if not nu or not nv or abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv) > SQUARE_TOL:
+            return False
+    return True
+
+
+def _turned(poly: Poly) -> float:
+    """A turned feature's angle as its caption takes it: its outline's first edge's, level where the turn is a quarter, a half or three
+    quarters (within a millionth of a degree, the float slack of a turned outline's edge).
+
+    Research: a quarter turn keeps a level caption - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+    """
+    ang = math.degrees(math.atan2(poly[1][1] - poly[0][1], poly[1][0] - poly[0][0]))
+    return 0.0 if abs(ang - 90.0 * round(ang / 90.0)) < 1e-6 else ang
 
 
 def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
@@ -778,10 +835,15 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
     empty tally office beside it). Then `repair`: a greedy order still strands a caption now and then, so each caption
     left covering ink is tried with one neighbor lifted, and the pair is kept where the two together cover less. A caption
     of several texts is tried in each of its `wraps`, the first free one winning; where none clears it goes back to its
-    declared lines, the cheapest seat of those (feature 449 T184: it kept the cheapest of all its wraps).
+    declared lines, the cheapest seat of those (feature 449 T184: it kept the cheapest of all its wraps). A ground's name stays in its
+    ground unless every seat there covers another name; an inside seat that covers a building gives way to a seat beside that covers
+    no building - free, or on soft ink or a lane alone - and to nothing else (feature 449 T188: the break kept it over a free seat, and
+    then over a seat on a lane alone).
 
     Research:
         a stranded several-text caption's wrap - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a wrap is taken only where it clears; if nothing clears, the caption goes back to its declared lines
+        a ground's name stays in its ground - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a ground's name is set inside the ground it names, as an area caption is, unless every seat there covers another name; an inside seat covering a building - read off its cost, a drawn obstacle's or more, the placement carrying no more - is kept only while no seat beside covers no building - a free seat, or one on soft ink or a lane alone, under a drawn obstacle's cost - as a building is never covered while any other choice exists
+        the order captions are set - CONVENTION: open ground's names first, then the names that must stand beside their subject, then those that fit inside it, then the glyphs standing in a named ground, each tier in document order - the major area names before the small ones fill in around them, as a cartographer sets them (feature 286)
     """
     shapes, view = read_sheet(src)
     caps_of = captions_of(shapes)
@@ -814,6 +876,7 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
         best: Placement | None = None
         best_per = [list(c.lines) for c in caps]
         held = [(caps, p) for p, _size in others]
+        kept_inside = False  # a ground's name holding an inside seat that covers a building, which only a seat covering no building may replace
         for k, sub in enumerate(subjects(own, head.size)):
             # each caption's own index: the ground drawn after it is an obstacle to IT (see `classify`), and every
             # caption placed is one, with its leader
@@ -835,7 +898,7 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
                 p = place(text, head.size, sub, index, view, lines=lines, char_w=cw, leader_index=lead, line_sizes=sizes, extended=not quick)
                 # a wrap is taken only where it clears; with none clearing, the caption goes back to its declared lines (0242,
                 # feature 449 T184: it kept the cheapest of all its wraps)
-                if (w == 0 or p.cost == 0.0) and (best is None or p.cost < best.cost):
+                if (p.cost == 0.0 or (w == 0 and (not kept_inside or p.cost < WEIGHT_OBSTACLE))) and (best is None or p.cost < best.cost):
                     best, best_per = p, per
                 if p.cost == 0.0:
                     break
@@ -844,8 +907,12 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
             if head.kind in GROUND_KINDS and sub.kind == "area" and best is not None and best.position == "inside" and best.cost < WEIGHT_TEXT:
                 # a ground's name stays in its ground unless every seat there covers another name: led out from beyond
                 # the wall, Ubame's OUTER COURT named the gate range it crossed (feature 286; Imhof - an area is named
-                # inside it). A building too small for its name still goes beside it.
-                break
+                # inside it). A building too small for its name still goes beside it. An inside seat covering a building (a
+                # cost of a drawn obstacle or more) is kept only while no seat beside covers no building: 0242 covers a building
+                # only where no other choice exists (feature 449 T188: the break kept it over a free seat on a later subject)
+                if best.cost < WEIGHT_OBSTACLE:
+                    break
+                kept_inside = True
         assert best is not None
         return leader_to_ink(best, own), best_per
 
@@ -912,11 +979,30 @@ def element_end(src: str, a: int, b: int) -> int:
     or `</s:text>` for a caption written with a prefix bound to the SVG namespace (feature 449 T184: `src.index("</text>")`
     refused a prefixed caption, or wrote it over through the next caption's end). A sheet the XML reader read whole never
     lacks the end tag; its absence is refused by name."""
-    name = re.match(r"[^\s/>]*", src[a + 1 : b]).group(0)  # type: ignore[union-attr]
+    name = _tag_name(src, a, b)
     m = re.compile(rf"</{re.escape(name)}[ \t\r\n]*>").search(src, b)
     if m is None:
         raise ValueError(f"the caption's <{name}> has no end tag")
     return m.end()
+
+
+def _tag_name(src: str, a: int, b: int) -> str:
+    """The name the start tag spanning `a:b` is written under - `text`, or `s:text` with a prefix."""
+    return re.match(r"[^\s/>]*", src[a + 1 : b]).group(0)  # type: ignore[union-attr]
+
+
+def _prefix(src: str, a: int, b: int) -> str:
+    """The namespace prefix the start tag spanning `a:b` is written with, its colon kept (`s:`), or the empty string."""
+    name = _tag_name(src, a, b)
+    return name[: name.index(":") + 1] if ":" in name else ""
+
+
+def in_prefix(svg: str, prefix: str) -> str:
+    """A written caption or leader (`caption_svg`, `leader_svg`) under the prefix its own element was written with: a caption declared as
+    `<s:text>` on a sheet binding SVG only to `s` is written back as `<s:text>`, its lines `<s:tspan>` and its leader `<s:line>` (feature
+    449 T188: written as a plain `<text>`, it fell into no namespace and was drawn by no renderer). The writer's own text escapes every
+    `<` it carries, so each `<` opens one of its three elements."""
+    return re.sub(r"<(/?)(text|tspan|line)\b", rf"<\g<1>{prefix}\g<2>", svg) if prefix else svg
 
 
 _STYLE = ("font-style", "font-weight", "letter-spacing", "paint-order", "stroke", "stroke-width")
@@ -954,12 +1040,13 @@ def placed(src: str) -> str:
             # a text carrying its OWN tag keeps it (it is its own group); one taking its tag from a group stays untagged
             a, b = tags[cap.at]
             end = element_end(src, a, b)
-            news.append((a, end, caption_svg(at, cap.size, style, ink, cap.kind if el.get("data-kind") else "")))
+            prefix = _prefix(src, a, b)
+            news.append((a, end, in_prefix(caption_svg(at, cap.size, style, ink, cap.kind if el.get("data-kind") else ""), prefix)))
         if p.leader is not None:
             inv = _inverse(head.frame)
             local = replace(p, leader=(_apply(inv, p.leader[0]), _apply(inv, p.leader[1])))
             a, end, new = news[-1]
-            news[-1] = (a, end, new + "\n    " + leader_svg(local, head.size, fill, head.kind if _self_tagged(head) else "", mark=True))
+            news[-1] = (a, end, new + "\n    " + in_prefix(leader_svg(local, head.size, fill, head.kind if _self_tagged(head) else "", mark=True), prefix))
         edits += news
     out = src
     for a, end, new in sorted(edits, reverse=True):

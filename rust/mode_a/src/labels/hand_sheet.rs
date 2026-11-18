@@ -269,10 +269,7 @@ fn byte_offsets(src: &str) -> Vec<usize> {
 /// # Errors
 /// No end tag of that name after it, which a sheet the XML reader read whole never lacks.
 fn element_end(src: &str, a: usize, b: usize) -> Result<usize, Error> {
-    let name: String = src[a + 1..b]
-        .chars()
-        .take_while(|c| !c.is_whitespace() && !matches!(c, '/' | '>'))
-        .collect();
+    let name = tag_name(src, a, b);
     let close = Regex::new(&format!(r"</{}[ \t\r\n]*>", fancy_regex::escape(&name)))
         .expect("an escaped name");
     match close.find_from_pos(src, b) {
@@ -282,6 +279,27 @@ fn element_end(src: &str, a: usize, b: usize) -> Result<usize, Error> {
             format!("the caption's <{name}> has no end tag"),
         )),
     }
+}
+
+/// The name the start tag spanning `a..b` (bytes) is written under - `text`, or `s:text` with a prefix.
+fn tag_name(src: &str, a: usize, b: usize) -> String {
+    src[a + 1..b]
+        .chars()
+        .take_while(|c| !c.is_whitespace() && !matches!(c, '/' | '>'))
+        .collect()
+}
+
+/// A written caption or leader ([`caption_svg`], [`leader_svg`]) under the prefix its own element was written with, its colon kept (`s:`):
+/// a caption declared as `<s:text>` on a sheet binding SVG only to `s` is written back as `<s:text>`, its lines `<s:tspan>` and its leader
+/// `<s:line>` (feature 449 T188: written as a plain `<text>`, it fell into no namespace and was drawn by no renderer). The writer's own text
+/// escapes every `<` it carries, so each `<` opens one of its three elements.
+fn in_prefix(svg: &str, prefix: &str) -> String {
+    if prefix.is_empty() {
+        return svg.to_owned();
+    }
+    let open = Regex::new(r"<(/?)(text|tspan|line)\b").expect("a fixed pattern");
+    open.replace_all(svg, format!("<${{1}}{prefix}${{2}}").as_str())
+        .into_owned()
 }
 
 /// The sheet with every caption written where the placer put it, and its leader drawn after it (feature 286, plan D5): what a sheet's
@@ -312,6 +330,8 @@ pub fn placed(src: &str) -> Result<String, Error> {
         let counts: Vec<usize> = per.iter().map(Vec::len).collect();
         let centers = seat::line_centers(&p, &sizes, &counts);
         let mut news: Vec<(usize, usize, String)> = Vec::new();
+        // the prefix the caption's texts are written with: its last text's, under which its leader is written too
+        let mut prefix = String::new();
         for ((&ci, cap_lines), &(cx, cy)) in caps.iter().zip(&per).zip(&centers) {
             let cap = &shapes[ci];
             let style = STYLE.iter().fold(String::new(), |mut out, a| {
@@ -343,6 +363,10 @@ pub fn placed(src: &str) -> Result<String, Error> {
             // every element has its start tag, checked above
             let (a, b) = tags[cap.at];
             let end = element_end(src, bytes[a], bytes[b])?;
+            let name = tag_name(src, bytes[a], bytes[b]);
+            name.find(':')
+                .map_or("", |k| &name[..=k])
+                .clone_into(&mut prefix);
             // a text carrying its OWN tag keeps it (it is its own group); one taking its tag from a group stays untagged
             let kind = if cap.get("data-kind").is_some_and(|k| !k.is_empty()) {
                 cap.kind.as_str()
@@ -352,7 +376,7 @@ pub fn placed(src: &str) -> Result<String, Error> {
             news.push((
                 bytes[a],
                 end,
-                caption_svg(&at, cap.size, &style, &ink, kind, ""),
+                in_prefix(&caption_svg(&at, cap.size, &style, &ink, kind, ""), &prefix),
             ));
         }
         if let Some((l0, l1)) = p.leader {
@@ -370,7 +394,7 @@ pub fn placed(src: &str) -> Result<String, Error> {
                 last.2 = format!(
                     "{}\n    {}",
                     last.2,
-                    leader_svg(&local, head.size, &fill, kind, true)
+                    in_prefix(&leader_svg(&local, head.size, &fill, kind, true), &prefix)
                 );
             }
         }

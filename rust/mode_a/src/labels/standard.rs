@@ -70,8 +70,9 @@ pub const WEIGHT_FREE: f64 = 0.0;
 pub const CLEAR_EM: f64 = PREFERRED_OFFSET_EM;
 
 /// A way is crossed when the block comes within its drawn half-width plus this notch: a halo on a tread reads as a bite out of the path.
+/// The figure is in sheet units: 2 ft where a unit is a foot, 2/3 ft on a hand sheet drawn at 3 px to the foot (feature 449 T188).
 ///
-/// Research: way notch - CONVENTION: 2 ft past a way's half-width, where a halo would bite the tread
+/// Research: way notch - CONVENTION: 2 sheet units past a way's half-width, where a halo would bite the tread - 2 ft where a unit is a foot (the gate's `NOTCH_CLEARANCE`), 2/3 ft on a hand sheet at 3 px to the foot
 pub const WAY_NOTCH: f64 = 2.0;
 
 /// Research: character width - CONVENTION: 0.55 em

@@ -21,7 +21,9 @@ use super::super::obstacles::{Obstacle, ObstacleIndex};
 use super::super::placer::{
     hug_gap, in_frame, judge, place, referent_box, Ask, Kind, Placement, Subject, LEADERLESS_RINGS,
 };
-use super::super::standard::{chars, CENTER_ABOVE_BASELINE_EM, CLEAR_EM, PITCH_EM, REACH_EM};
+use super::super::standard::{
+    chars, CENTER_ABOVE_BASELINE_EM, CLEAR_EM, PITCH_EM, REACH_EM, WEIGHT_OBSTACLE,
+};
 use super::classify::{band, classify, leader_blockers, leader_to_ink, Seen};
 use super::{char_w_of, luma, Shape, BLOCK_PX, GROUND_KINDS, LIGHT, REPAIR, STEPPED, WEIGHT_TEXT};
 use crate::py::{hypot, max, min, round_int, sum};
@@ -32,6 +34,9 @@ pub type Seated = (Placement, Vec<Vec<String>>, Subject);
 
 /// A caption seated with its texts' indices.
 pub type SeatedCaption = (Vec<usize>, Placement, Vec<Vec<String>>, Subject);
+
+/// An inside seat's outline and whether it is a drawn rect, which has a direction of its own.
+type Inside = (Vec<Pt>, bool);
 
 /// A box's area.
 #[must_use]
@@ -188,14 +193,16 @@ fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
 /// The subjects a caption is tried against, in order (feature 286, plan D2): INSIDE first - the one closed shape it names, or the box of
 /// parts that fill it, or each block of a stepped building, largest first - then BESIDE: the box, or each block. A scatter of glyphs and
 /// lines has no inside, and is named beside the group, else beside any one of its glyphs - only beside a glyph where the group spreads
-/// wider than the standard's reach at the caption's `size`. An area's name is level, however long and narrow the area (feature 449 T184:
-/// an area three times taller than wide was named along its length, where 0242 keeps an area's caption level); a caption beside a
-/// turned feature takes its outline's first edge's angle, a quarter, half or three-quarter turn keeping it level.
+/// wider than the standard's reach at the caption's `size`. An area with no direction of its own - a box of parts, an outline - is named
+/// level, however long and narrow (feature 449 T184: an area three times taller than wide was named along its length, where 0242 keeps an
+/// area's caption level); a rectangle - a drawn rect, or an outline of four square corners ([`rectangular`]) - is turned with the sheet,
+/// and its name inside it, like a caption beside a turned feature, takes its outline's first edge's angle (feature 449 T188: a turned
+/// building's roof name was set level), a quarter, half or three-quarter turn keeping it level.
 ///
 /// Research:
 ///     a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
-///     an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area is level
-///     a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption beside a turned feature takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+///     an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an irregular outline) is level; a rectangle's name inside it, a drawn rect or an outline of four square corners, takes the rectangle's own angle, as a turned feature's caption does
+///     a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
 #[must_use]
 pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
     let pts: Vec<Pt> = own.iter().flat_map(|s| s.poly.iter().copied()).collect();
@@ -227,26 +234,32 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
             Some(b) if area(&s.poly) <= area(&b.poly) => Some(b),
             _ => Some(s),
         });
-    let (inner, beside): (Vec<Vec<Pt>>, Vec<Vec<Pt>>) = if own.len() == 1 && !closed.is_empty() {
+    // each inside seat with whether it is a rectangle - a drawn rect, or an outline of four square corners - which has a direction of its
+    // own (feature 449 T188),
+    // and each beside seat with the same: only a rectangle's caption is turned with it
+    let level = |poly: &Vec<Pt>| (poly.clone(), false);
+    let (inner, beside): (Vec<Inside>, Vec<Inside>) = if own.len() == 1 && !closed.is_empty() {
         let one = own[0].poly.clone();
-        let by = if own[0].tag == "rect" {
-            one.clone()
+        let sq = squared(own[0]);
+        let by = if sq {
+            (one.clone(), true)
         } else {
-            box_.clone()
+            level(&box_)
         };
-        (vec![one], vec![by])
+        (vec![(one, sq)], vec![by])
     } else if let Some(h) = holder.filter(|h| own.iter().all(|s| box_within(&s.poly, &h.poly))) {
         // one outline holding the rest - a garden and the lantern in it (Ochiba's inner garden)
-        (vec![h.poly.clone()], vec![box_.clone()])
+        (vec![(h.poly.clone(), squared(h))], vec![level(&box_)])
     } else if covers(own, &box_) {
-        (vec![box_.clone()], vec![box_.clone()])
+        (vec![level(&box_)], vec![level(&box_)])
     } else if !blocks.is_empty() {
-        let beside = if blocks.len() >= 2 {
-            blocks.clone()
+        let rects: Vec<Inside> = blocks.into_iter().map(|b| (b, true)).collect();
+        let beside = if rects.len() >= 2 {
+            rects.clone()
         } else {
-            vec![box_.clone()]
+            vec![level(&box_)]
         };
-        (blocks, beside)
+        (rects, beside)
     } else {
         // a scatter of like glyphs: beside the group, else beside any one of them, largest first; a group wider than the standard's
         // reach at the caption's size has no "beside" (Hayakawa's tubs were named outside the compound's corner)
@@ -257,39 +270,87 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
             let mut b = if spread {
                 Vec::new()
             } else {
-                vec![box_.clone()]
+                vec![level(&box_)]
             };
-            b.extend(members.iter().map(|s| s.poly.clone()));
+            b.extend(members.iter().map(|s| (s.poly.clone(), squared(s))));
             b
         } else {
-            vec![box_.clone()]
+            vec![level(&box_)]
         };
         (Vec::new(), beside)
     };
     let mut out = Vec::new();
-    for poly in inner {
-        out.push(Subject::new(Kind::Area, poly, 0.0));
+    for (poly, sq) in inner {
+        // a rectangle's name inside it takes the rectangle's own angle; an area with no direction of its own - a box of parts, an
+        // irregular outline - is level
+        let angle = if sq { turned(&poly) } else { 0.0 };
+        out.push(Subject::new(Kind::Area, poly, angle));
     }
-    for poly in beside {
-        let angle = if poly.len() == 4 {
-            turned(
-                (poly[1].1 - poly[0].1)
-                    .atan2(poly[1].0 - poly[0].0)
-                    .to_degrees(),
-            )
-        } else {
-            0.0
-        };
+    for (poly, sq) in beside {
+        let angle = if sq { turned(&poly) } else { 0.0 };
         out.push(Subject::new(Kind::Point, poly, angle));
     }
     out
 }
 
-/// A turned feature's angle as its caption takes it: level where the turn is a quarter, a half or three quarters (within a millionth
-/// of a degree, the float slack of a turned outline's edge), else the angle itself.
+/// Has this drawn shape a direction of its own, its first edge's: a `<rect>`, an outline [`rectangular`] passes, or an ellipse of unequal
+/// radii, whose axes a turned group turns - a circle alike, which an unequal scale draws as an ellipse - never a disc drawn round, whose
+/// turned square box has no direction (the T188 claims round: a disc in a turned group, and a scatter's four-point kite, were named at an
+/// angle; the plan review's round 3: an ellipse of unequal radii in a turned group was named level, and a circle scaled unequally too). The
+/// radii are the drawn box's sides, which the reader keeps as the disc's outline.
+fn squared(s: &Shape) -> bool {
+    if s.tag == "rect" {
+        return true;
+    }
+    if !rectangular(&s.poly) {
+        return false;
+    }
+    if matches!(s.tag.as_str(), "circle" | "ellipse") {
+        // equal radii, within a turned outline's float slack, are a circle
+        let (across, down) = (dist(s.poly[0], s.poly[1]), dist(s.poly[1], s.poly[2]));
+        return (across - down).abs() > 1e-6 * max(across, down);
+    }
+    true
+}
+
+/// How far from square a corner may stand and the outline still be a rectangle: within a degree, the cosine of the corner's angle under
+/// the sine of one degree (feature 449 T188).
+///
+/// Research: a square corner - CONVENTION: a corner within 1 degree of square, so a turned rectangle drawn by hand to a tenth of a pixel is one
+fn square_tol() -> f64 {
+    1.0_f64.to_radians().sin()
+}
+
+/// Is this outline a rectangle - four corners, each square within [`square_tol`], a closing point repeating the first dropped - so that it
+/// has a direction of its own, its first edge's, however it was drawn (feature 449 T188: a turned rectangle drawn as a polygon was named
+/// level where the same `<rect>` took its angle)?
+fn rectangular(poly: &[Pt]) -> bool {
+    let pts = if poly.len() == 5 && poly[0] == poly[4] {
+        &poly[..4]
+    } else {
+        poly
+    };
+    if pts.len() != 4 {
+        return false;
+    }
+    // each corner: the edges to the corner before and the corner after it, square where their cosine is under the tolerance
+    (0..4).all(|k| {
+        let (before, at, after) = (pts[(k + 3) % 4], pts[k], pts[(k + 1) % 4]);
+        let back = (before.0 - at.0, before.1 - at.1);
+        let on = (after.0 - at.0, after.1 - at.1);
+        let (lb, lo) = (hypot(back.0, back.1), hypot(on.0, on.1));
+        lb != 0.0 && lo != 0.0 && (back.0 * on.0 + back.1 * on.1).abs() / (lb * lo) <= square_tol()
+    })
+}
+
+/// A turned feature's angle as its caption takes it: its outline's first edge's, level where the turn is a quarter, a half or three
+/// quarters (within a millionth of a degree, the float slack of a turned outline's edge).
 ///
 /// Research: a quarter turn keeps a level caption - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a feature turned a quarter, a half or three quarters of a turn keeps a level caption
-fn turned(angle: f64) -> f64 {
+fn turned(poly: &[Pt]) -> f64 {
+    let angle = (poly[1].1 - poly[0].1)
+        .atan2(poly[1].0 - poly[0].0)
+        .to_degrees();
     if (angle - 90.0 * (angle / 90.0).round()).abs() < 1e-6 {
         0.0
     } else {
@@ -415,10 +476,12 @@ impl Sheet<'_> {
     ///
     /// A caption of several texts is tried in each of its [`wraps`], the first free one winning; where none clears it goes back to its
     /// declared lines, the cheapest seat of those (feature 449 T184: it kept the cheapest of all its wraps, where 0242 sends a caption
-    /// that clears nowhere back to one line).
+    /// that clears nowhere back to one line). A ground's name stays in its ground unless every seat there covers another name; an inside
+    /// seat that covers a building gives way to a seat beside that covers no building - free, or on soft ink or a lane alone - and to
+    /// nothing else (feature 449 T188: the break kept it over a free seat, and then over a seat on a lane alone).
     ///
     /// Research:
-    ///     a ground's name stays in its ground - CONVENTION: a ground's name stays inside its ground unless every seat there covers another name (feature 286; Imhof - an area is named inside it)
+    ///     a ground's name stays in its ground - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a ground's name is set inside the ground it names, as an area caption is, unless every seat there covers another name; an inside seat covering a building - read off its cost, a drawn obstacle's or more, the placement carrying no more - is kept only while no seat beside covers no building - a free seat, or one on soft ink or a lane alone, under a drawn obstacle's cost - as a building is never covered while any other choice exists
     ///     a stranded several-text caption's wrap - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a wrap is taken only where it clears; if nothing clears, the caption goes back to its declared lines
     fn one(
         &self,
@@ -438,6 +501,8 @@ impl Sheet<'_> {
         let light = luma(head.get("fill")) > LIGHT;
         let mut best: Option<(Placement, Subject)> = None;
         let mut best_per: Vec<Vec<String>> = caps.iter().map(|c| c.lines.clone()).collect();
+        // a ground's name holding an inside seat that covers a building, which only a seat covering no building may replace
+        let mut kept_inside = false;
         for (k, sub) in subjects(&own, head.size).into_iter().enumerate() {
             let (index, lead) = self.context(idx[0], k, &sub, others, light);
             // a one-text caption is wrapped by the placer itself; a caption of several texts is tried in each of its wraps
@@ -467,7 +532,10 @@ impl Sheet<'_> {
                     .expect("a search that is not strict always seats");
                 let free = p.cost == 0.0;
                 // a wrap is taken only where it clears; with none clearing, the caption goes back to its declared lines (0242)
-                if (w == 0 || free) && best.as_ref().is_none_or(|b| p.cost < b.0.cost) {
+                // (and a ground's name keeping an inside seat over a building takes nothing after it but a seat covering no building)
+                if (free || (w == 0 && (!kept_inside || p.cost < WEIGHT_OBSTACLE)))
+                    && best.as_ref().is_none_or(|b| p.cost < b.0.cost)
+                {
                     (best, best_per) = (Some((p, sub.clone())), per);
                 }
                 if free {
@@ -483,8 +551,12 @@ impl Sheet<'_> {
                 && b.position == "inside"
                 && b.cost < WEIGHT_TEXT
             {
-                // a ground's name stays in its ground unless every seat there covers another name (feature 286)
-                break;
+                // a ground's name stays in its ground unless every seat there covers another name (feature 286); an inside seat covering a
+                // building (a drawn obstacle's cost or more) is kept only while no seat beside covers no building (0242, feature 449 T188)
+                if b.cost < WEIGHT_OBSTACLE {
+                    break;
+                }
+                kept_inside = true;
             }
         }
         let (best, sub) = best.expect("every caption has a subject");

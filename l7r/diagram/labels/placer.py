@@ -12,7 +12,8 @@ leader line ties them back. The standard, in the order it decides:
    before more (the GM's wrap rule).
 3. FREE SPACE WINS: the first candidate that covers nothing is taken. When nothing in reach is free, the fallback
    slides and then the leader rings out to the hug are searched; a caption is never dropped (the GM: "we'll treat
-   labels as mandatory"), and with no free seat it goes down where it covers the least (0242) - never in a key (0241).
+   labels as mandatory"), and with no free seat it goes down where it covers the least (0242) - on one line, if the placer
+   wraps it ("if nothing clears, it goes back to one line") - never in a key (0241).
 4. A caption may move out a step at a time to twice the usual gap with nothing more; past twice the usual gap it is no
    longer directly beside its feature, so a LEADER line joins it back (QGIS callouts, Esri's leader, PSU: "labels that do
    not fit on or directly adjacent to their respective feature").
@@ -370,7 +371,7 @@ def caption_clears_ways(block: Poly | tuple[Pt, ...], ways: list[Way]) -> bool:
 
     Research:
         a caption clear of every way - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a way the block comes within its drawn half-width of is a way crossed
-        the way notch - CONVENTION: the clearance runs 2 ft past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread
+        the way notch - CONVENTION: the clearance runs 2 sheet units past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread - 2 ft where a unit is a foot, 2/3 ft on a hand sheet at 3 px to the foot
     """
     return ObstacleIndex(ways=ways).cost(list(block), 0.0) == 0.0
 
@@ -451,8 +452,14 @@ def place(
     WHEN NO STANDARD SEAT IS FREE (features 286, 287): the fallback search (`_extended_cands`), then the leader rings past
     the reach out to the hug (`_leader_cands`). A seat covering only `soft` ink (a hand sheet's) is then taken at the
     least cost; a caption whose every seat overlaps goes down where it covers the least (0242), and one with no seat in the
-    frame at all takes the first seat beside it moved inward until it fits (0241). Never dropped, never in a key (0241), never past the hug
+    frame at all takes the first seat beside it moved inward until it fits (a GUESS: 0241's caption moved inward is the crop's, not a
+    fixed frame's). Never dropped, never in a key (0241), never past the hug
     (`HUG_PX`).
+
+    A caption the placer wraps (no fixed `lines`) takes a wrap only where it clears: with no free seat, it goes back to one line, the
+    least-cost and softest seats measured among its one-line seats alone (0242: "if nothing clears, it goes back to one line"; feature
+    449 T188 - the least cost of every layout kept the shrine's "sanctuary of Bishamon" on two lines); its wraps' seats are asked only
+    where no one-line seat stands in the frame at all, rather than clip a line.
 
     `strict=True` returns None instead of anything but a free seat (feature 287: the notice board's siter and the
     generated Mode A sheets ask it, and choose the SUBJECT or the program instead). The retired least-cost seat's last
@@ -468,11 +475,12 @@ def place(
     Research:
         free space wins - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: the first seat covering nothing is taken
         never clipped - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a seat leaving the picture is never a candidate
-        never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers
+        never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers - among its one-line seats where the placer wraps it
         no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box
         no seat in the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)
         the hug - CONVENTION: no seat past the hug from what it names
         caption clearance - GUESS research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half the caption's letter height (`CLEAR_EM`) kept off other ink, the figure the page records as our calibration, not a finding, for the gap off a caption's own feature (feature 417 T36 pass P7, 2026-10-25)
+        a stranded caption's one line - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a wrap is taken only where it clears; if nothing clears, the caption goes back to one line, its wraps asked only where no one-line seat stands in the frame
     """
     if subject.kind == "line" and len(subject.poly) < 2:
         raise ValueError(ONE_POINT_LINE)
@@ -492,6 +500,10 @@ def place(
     more = itertools.chain(_extended_cands(text, size, subject, lines, char_w, line_sizes, near), leaders) if extended else iter(())
     deep: list[tuple[int, _Cand, Poly]] = []  # strict: the seats no nudge can free, measured only if one might be the best
     outside: tuple[_Cand, Poly] | None = None  # the first seat beside the subject that leaves the frame, for a frame that holds none
+    # a wrap is taken only where it clears: with none free, the caption goes back to one line (0242), its wraps' seats kept apart and
+    # asked only where no one-line seat stands in the frame (feature 449 T188: the least cost of every layout kept a wrap)
+    one_line = tuple(lines) if lines else tuple(layouts(text)[0])
+    wrapped: list[tuple[float, int, _Cand, Poly] | None] = [None, None]  # the wraps' least-cost and softest seats
     for order, cand in enumerate(itertools.chain(_cands(text, size, subject, lines, char_w, line_sizes, near), more)):
         block = rect(cand.center[0], cand.center[1], cand.half[0], cand.half[1], cand.angle)
         # the hug is held with the nudge's room to spare, so no nudge can carry a seat past it (labels L10)
@@ -509,13 +521,21 @@ def place(
             if accept is None or accept(free):
                 return free
             continue
-        if best is None or cost < best[0]:
-            best = (cost, order, cand, block)
-        if not hard and (soft is None or cost < soft[0]):
-            soft = (cost, order, cand, block)
+        if strict or cand.lines == one_line:
+            if best is None or cost < best[0]:
+                best = (cost, order, cand, block)
+            if not hard and (soft is None or cost < soft[0]):
+                soft = (cost, order, cand, block)
+            continue
+        if wrapped[0] is None or cost < wrapped[0][0]:
+            wrapped[0] = (cost, order, cand, block)
+        if not hard and (wrapped[1] is None or cost < wrapped[1][0]):
+            wrapped[1] = (cost, order, cand, block)
     if strict:
         got = _strict_seat(best, deep, subject, index, clear, own, text, frame, leader_index)
         return got if got is None or accept is None or accept(got) else None
+    if best is None:
+        best, soft = wrapped  # no one-line seat stands in the frame: a wrap that does, rather than a clipped line
     if best is not None:
         # a nudge may yet free the least-cost seat, or carry it off every overlap (feature 286's band between grid points)
         cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
@@ -530,8 +550,8 @@ def place(
         # exception keeping feature 287's key for an all-hard seat ruled NOT LEGITIMATE - 0241: "There is no key box")
         cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
         return _placement(cand, block, cost, subject)
-    # ...AND WITH NO SEAT INSIDE THE FRAME AT ALL, the first seat beside it MOVED INWARD until it fits (0241's caption that would
-    # cross the frame, moved inward): never left off and never clipped (0242)
+    # ...AND WITH NO SEAT INSIDE THE FRAME AT ALL, the first seat beside it MOVED INWARD until it fits (a GUESS, `moved_inward`: 0241's
+    # caption moved inward is the crop's, not a fixed frame's): never left off and never clipped (0242)
     assert outside is not None, "the standard offers a seat beside every subject"
     cand, block = moved_inward(outside[0], outside[1], frame)
     return _placement(cand, block, _score(cand, block, subject, index, clear, own, text, leader_index)[0], subject)
@@ -606,12 +626,14 @@ def _score(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear:
     refused and a caption with a leader could only go in the key. A leader carries the association itself (QGIS's
     callouts, Esri's leaders: the line ties the words to their feature), so the term holds where the words alone must.
     It is asked of the preferred offset's seats (ring 0) alone: the same bound holds for ring 1, leaderless too - its block,
-    where ring 0's was blocked, stands within its own gap of the blocker, a tie counting - and asked there it refused every
-    ring-1 seat on the pool sheets (feature 449 T184, measured 2026-11-18: 13 ring-1 captions beside their subjects, 0 once
-    asked; 16 captions moved, 4 more on ink, 9 more leaders), so ring 1 stays unasked.
+    where ring 0's was blocked within the clearance, stands nearer the blocker than its own gap, strictly, since a step out
+    moves it no farther than the step - and asked there it refused every ring-1 seat on the pool sheets, with its tie and
+    without it alike (feature 449 T184, measured 2026-11-18: 13 ring-1 captions beside their subjects, 0 once asked; T188,
+    measured 2026-11-18: 0 under the strict test too, 19 captions moved, 3 more on ink, 12 more leaders), so ring 1 stays
+    unasked, a deliberate deviation from the standard's association.
 
     Research:
-        association beside a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term with its tie refuses every ring-1 seat
+        association beside a point - DEVIATION research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term refuses every ring-1 seat with its tie and without it
         an area's name inside it - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: spilling out costs an obstacle
     """
     og = poly_gap(block, list(subject.poly)) if subject.kind == "point" and c.ring == 0 else None

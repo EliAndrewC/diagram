@@ -51,8 +51,9 @@ PREFERRED_OFFSET_EM = 0.5
 # seat further out, then ring by ring outward. The step and the reach are CALIBRATIONS (plan P2): half an em a ring,
 # out to eight ems - 64 ft for a hamlet board's 8 pt caption, past the 53 px the old standoff ladder reached and well
 # inside the gate's hug cap. A caption is never dropped (the GM, 2026-09-27: "we'll treat labels as mandatory"), and
-# it never overlaps (feature 287, D10): past the reach it takes a leader to a free seat out to the hug, and failing
-# that it goes in the sheet's key. The least-cost overlapping seat is retired.
+# past the reach it takes a leader to a free seat out to the hug (feature 287, D10). Failing that it still goes down,
+# where it covers the least (0242: "A caption the map calls for is never left off"), never in a key (0241: "There is no
+# key box"); feature 287's key and its retired least-cost seat are gone (feature 328 wave 49, feature 449 T188).
 RING_STEP_EM = 0.5
 """Research: nearer first - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: further seats a half em a ring outward"""
 REACH_EM = 8.0
@@ -89,9 +90,10 @@ CLEAR_EM = PREFERRED_OFFSET_EM
 """Research: association - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption as near a neighbor as its subject counts as covering it"""
 
 # A way is crossed when the block comes within its drawn half-width plus this notch: the caption's halo paints out
-# what is under it, and a halo on a tread reads as a bite out of the path (the gate's NOTCH_CLEARANCE, 2 ft).
+# what is under it, and a halo on a tread reads as a bite out of the path (the gate's NOTCH_CLEARANCE, 2 ft). The figure is in
+# sheet units: 2 ft where a unit is a foot, 2/3 ft on a hand sheet drawn at 3 px to the foot (feature 449 T188).
 WAY_NOTCH = 2.0
-"""Research: way notch - CONVENTION: 2 ft past a way's half-width, where a halo would bite the tread"""
+"""Research: way notch - CONVENTION: 2 sheet units past a way's half-width, where a halo would bite the tread - 2 ft where a unit is a foot (the gate's `NOTCH_CLEARANCE`), 2/3 ft on a hand sheet at 3 px to the foot"""
 
 # THE TEXT METRICS `label()` draws with - one source for the placer, the settlement engine and the tools: a line is
 # 0.55 em a character wide, one line 1.05 em tall, lines 1.15 em apart, and the block's center 0.275 em above the

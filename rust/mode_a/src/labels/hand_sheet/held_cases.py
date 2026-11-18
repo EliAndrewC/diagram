@@ -6,6 +6,11 @@ written by this script from the tree's `l7r/diagram/labels/`, and the Rust hand 
 step 3b deletes that Python; the answers stay as the record.
 
     python3 -I rust/mode_a/src/labels/hand_sheet/held_cases.py rust/mode_a/src/labels/hand_sheet/held.json
+
+Feature 449 T188 added eight sheets after the refusals (a one-text caption stranded, a sheet binding SVG to a prefix alone, a garden
+named on its hall, beside it, or on its hall's surface, a turned rectangle drawn as a polygon, a disc in a turned group and a scatter of
+kites named level, and a garden named beside on a road) and, after the plan review's round 3, a ninth: a turned ellipse of unequal
+radii named at its angle beside one of equal radii named level, and a circle scaled unequally named at its angle beside one drawn round and re-took every answer from its fixed Python.
 """
 
 import json, sys, traceback
@@ -90,6 +95,62 @@ QUARTER = sheet(
     '  <g data-kind="shrine" transform="rotate(90 200 150)"><rect x="190" y="144" width="20" height="12" fill="#C9A57A"/><text x="200" y="150" font-size="8">wayside shrine</text></g>\n',
 )
 
+# feature 449 T188: a one-text caption on a field of stones where no seat is free goes back to one line (0242), where it kept a wrap
+ONE_LINE = sheet(
+    '  <g data-kind="stones">' + "".join(f'<circle cx="{x}" cy="{y}" r="2" fill="#7A7A7A"/>' for x in range(4, 200, 24) for y in range(4, 150, 24)) + '</g>\n',
+    '  <g data-kind="hut"><rect x="80" y="60" width="40" height="30" fill="#C9A57A"/><text x="100" y="75" font-size="10">old hut of the ferry keeper</text></g>\n',
+    head='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0 200 150">\n',
+    back='  <rect x="0" y="0" width="200" height="150" fill="#EFE3C2" data-kind="-"/>\n',
+)
+
+# feature 449 T188: a sheet binding SVG to a prefix alone - its captions, their lines and their leaders written under the prefix, where a
+# plain `<text>` fell into no namespace
+PREFIXED = (
+    '<s:svg xmlns:s="http://www.w3.org/2000/svg" viewBox="0 0 400 300">\n  <s:rect x="0" y="0" width="400" height="300" fill="#EFE3C2" data-kind="-"/>\n'
+    '  <s:rect x="0" y="0" width="170" height="300" fill="#2D2A24" data-kind="-"/><s:rect x="230" y="0" width="170" height="300" fill="#2D2A24" data-kind="-"/>\n'
+    '  <s:g data-kind="hut"><s:rect x="185" y="140" width="30" height="20" fill="#C9A57A"/><s:text x="200" y="150" font-size="8">old hut of the ferry keeper</s:text></s:g>\n'
+    '  <s:g data-kind="well"><s:circle cx="150" cy="60" r="4" fill="#5C7A8C"/><s:text x="150" y="60" font-size="7">well</s:text>'
+    '<s:text x="150" y="68" font-size="6" data-cont="1">dug 1102</s:text></s:g>\n</s:svg>\n'
+)
+
+# feature 449 T188: a garden whose every inside seat covers the hall in it is named beside the garden where a seat there is free (0242: a
+# building "is never covered while any other choice exists"), and keeps its ground where none is, or where it lies on the hall's roof
+# marked as surface, light ink
+def ground(x, y, w, h, surface=""):
+    return sheet(
+        f'  <g data-kind="garden"><rect x="{x}" y="{y}" width="{w}" height="{h}" fill="#BFD0A0"/><rect x="{x + 2}" y="{y + 2}" width="{w - 4}" height="{h - 4}" fill="#C9A57A"{surface}/>'
+        '<text x="200" y="150" font-size="10">inner garden</text></g>\n'
+    )
+
+
+# feature 449 T188 (the plan review): a rectangle turned 30 degrees and drawn as a polygon, to a tenth of a pixel, is named inside it at
+# its own angle, as the same <rect> is; a closing point repeating its first changes nothing
+TURNED_OUTLINE = sheet(
+    '  <g data-kind="granary"><polygon points="175.4,112.7 244.6,152.7 224.6,187.3 155.4,147.3" fill="#C9A57A"/><text x="200" y="150" font-size="8">granary</text></g>\n',
+    '  <g data-kind="shed"><polygon points="55.4,192.7 124.6,232.7 104.6,267.3 35.4,227.3 55.4,192.7" fill="#C9A57A"/><text x="80" y="230" font-size="8">shed</text></g>\n',
+)
+
+
+# the T188 claims round: a well (a disc) in a turned group, and a scatter of kites (four points, no rectangle), are named level; a road
+# under the whole sheet leaves a garden's name a seat beside on the road alone, taken over the inside seat on its hall and the road
+LEVEL_THINGS = sheet(
+    '  <g data-kind="well" transform="rotate(30 100 100)"><circle cx="100" cy="100" r="6" fill="#5C7A8C"/><text x="100" y="100" font-size="7">well</text></g>\n',
+    '  <g data-kind="cairns"><polygon points="250,200 270,205 270,215 247,210" fill="#7A7A7A"/><polygon points="290,200 310,205 310,215 287,210" fill="#7A7A7A"/>'
+    '<text x="280" y="190" font-size="7">cairns</text></g>\n',
+)
+ROAD = ground(140, 110, 120, 80).replace('<g data-kind="garden">', '<line x1="0" y1="150" x2="400" y2="150" stroke="#B8A27A" stroke-width="800" data-kind="road"/><g data-kind="garden">', 1)
+
+# the T188 plan review, round 3: an ellipse of unequal radii in a turned group has its axes turned with the group and is named at its
+# angle; one of equal radii is a circle and stays level
+TURNED_ELLIPSE = sheet(
+    '  <g data-kind="pond" transform="rotate(30 120 150)"><ellipse cx="120" cy="150" rx="60" ry="25" fill="#9FBFD4"/><text x="120" y="150" font-size="8">pond</text></g>\n',
+    '  <g data-kind="basin" transform="rotate(30 300 150)"><ellipse cx="300" cy="150" rx="30" ry="30" fill="#9FBFD4"/><text x="300" y="150" font-size="8">basin</text></g>\n',
+    # a circle scaled unequally in a turned group is drawn as an ellipse and is named at the group's angle; one drawn round stays level
+    '  <g data-kind="tub" transform="rotate(30 120 250) translate(120 250) scale(2,1)"><circle cx="0" cy="0" r="15" fill="#9FBFD4"/><text x="0" y="0" font-size="6">tub</text></g>\n',
+    '  <g data-kind="drum" transform="rotate(30 300 250)"><circle cx="300" cy="250" r="20" fill="#9FBFD4"/><text x="300" y="250" font-size="8">drum</text></g>\n',
+)
+
+
 REFUSALS = [
     sheet('<g data-kind="x"><text x="5" y="5" font-size="6">lonely</text></g>\n'),
     sheet('<g data-kind="tub"><circle cx="50" cy="50" r="5"/><text x="80" y="80" font-size="6">tub</text></g>\n', back='<_x/>' + BACK),
@@ -109,7 +170,7 @@ REFUSALS = [
     sheet('  <g transform="rotate(x)"><rect width="1" height="1"/></g>\n'),
     "<svg",
 ]
-out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS]]
+out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE]]
 for o in out:
     print(o.get("raises", "placed %d" % len(o.get("placed", ""))), file=sys.stderr)
 json.dump(out, open(sys.argv[1], "w"), indent=0)

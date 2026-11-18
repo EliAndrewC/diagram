@@ -654,6 +654,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T188 (step 3a's remaining known defects, T184's report and claims round; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "212c994328133124723b63359d987193e02253d1f6160369c5b264ee8b235a74",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T188 Approach (checklist part A)": {
+   "sha256": "08ce8e1db63d15f22897eb9af8d52ee920b848e48392a96b530f53a5be59a154",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12019,6 +12031,221 @@
      "why": "Checks that enforce the requested fixes. They add no behavior and hold no exactness standard."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T188 (step 3a's remaining known defects, T184's report and claims round; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T188 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "one-line",
+     "summary": "A wrapped caption with no clearing seat goes back to one line; with no free seat the least-cost and softest seats are measured among one-line seats alone; wraps still taken where free; wrap seats asked only where no one-line seat stands in the frame",
+     "class": "within",
+     "why": "Fixes a known step-3a defect against 0242's 'if nothing clears, it goes back to one line', in both copies, as the GM's 2026-11-18 'fix all known bugs in each step' asks; red test before the fix."
+    },
+    {
+     "id": "prefix",
+     "summary": "A caption written as <s:text> is written back under its own prefix (text, tspan, line)",
+     "class": "within",
+     "why": "Known defect (unnamespaced elements no renderer draws) fixed in both copies; T184's test re-pinned to the fixed behavior, as FR-002's fix-as-found exception allows."
+    },
+    {
+     "id": "turned-rect",
+     "summary": "A rectangle's inside name takes its own angle (rect or four-corner outline square within SQUARE_TOL, a CONVENTION); boxes of parts and irregular outlines stay level",
+     "class": "within",
+     "why": "0242: 'a caption naming a turned feature is drawn at that feature's own angle'. Leaving a box of parts or an irregular outline level is not a carve-out: they have no single angle for the rule to give them. The pool reach was measured: no caption moves."
+    },
+    {
+     "id": "group-words",
+     "summary": "Group naming by whole words and plurals (s, es, ies); the estates group takes 'samurai' alone",
+     "class": "within",
+     "why": "Fixes the substring defect. Dropping 'estate' follows 0243, which gives the houses and estates 'a samurai caption' only. It is a correction toward the research, not a narrowing of the request."
+    },
+    {
+     "id": "ground-off-building",
+     "summary": "A ground's name whose inside seat covers a building gives way to a free seat beside; light ink, lanes and nested ground keep the break",
+     "class": "within",
+     "why": "0242: a building 'is never covered while any other choice exists'. Implements the page's rule; the kept break for light ink keeps the reason it was recorded for (Ubame's OUTER COURT)."
+    },
+    {
+     "id": "ring1-association",
+     "summary": "Ring 1 gets no nearness test; its association claim is relabelled DEVIATION and recorded on 0242's drawing page (ask:449-T188-ring1-association)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a step-3a claim as a recorded DEVIATION rather than a fix, so it narrows 'fix all known bugs'. It holds on the impossibility ground. The nearness test is the placer's own reading of 0242's aim, which the page never states. 0242 does state the ring bullet: a step out to twice the gap 'with nothing more'. Applying both makes ring 1 unusable by construction: a blocker within a ring-0 seat's clearance stands strictly nearer the ring-1 seat than its own gap. That is a bound, and the strict variant was measured too (13 ring-1 captions to 0, 3 more on ink, 12 more leaders). That would defeat the ring rule and the page's first aim of easy reading. The round arbiter ruled the specific bullet governs, and the claim now says what the code does. A ring-1 caption that reads as a neighbor's name stays a sheet finding to fix or file. So the label is honest, and no defect is knowingly carried into step 3b."
+    },
+    {
+     "id": "way-notch-unit",
+     "summary": "WAY_NOTCH's claim and caption_clears_ways state the unit (2 sheet units), a CONVENTION, value unchanged",
+     "class": "within",
+     "why": "Makes the claim say what the code does (Approach goal); no behavior change."
+    },
+    {
+     "id": "sheet-one-claim",
+     "summary": "Sheet.one's ground rule cites 0242; Python seat carries the same claim; the placing order is labeled CONVENTION in both copies",
+     "class": "within",
+     "why": "Claims relabelled to their true source; 0242 states the inside rule but no order among captions."
+    },
+    {
+     "id": "half-turn",
+     "summary": "Upside-down beside seats are already turned upright downstream; nothing changed",
+     "class": "within",
+     "why": "Probed on HEAD and the clone: no defect, so nothing changed."
+    },
+    {
+     "id": "moved-sheets",
+     "summary": "The shrine and Hayakawa move through the one-line rule; Hayakawa goes from 6 to 7 captions on ink and from 18,500 to 19,500, with INNER COURT on a building. Accepted rather than keeping HEAD's cheapest-wrap rule",
+     "class": "narrowing",
+     "why": "Narrowing, because the block's proof that 0242's building rule holds is conditional. INNER COURT's seats were measured with the pines held on their one-line seat, and the block itself names another layout: INNER COURT free, with the pines covering two captions at 20,000. In that layout no building is covered. So 'the building is covered because no other choice exists' overstates what was measured. The block shows only that INNER COURT has no other choice once the pines are placed. Ruled on the request's purpose. The remaining alternatives are HEAD's cheapest-wrap rule, which is itself an exception to 0242's 'goes back to one line' and so keeps the very defect the GM asked fixed, and the 20,000 layout, where one caption is drawn over two others. That defeats the page's first job, easy reading, far worse than a court's name over a building. The 10,000 against 1,000 weights that choose between them are the placer's standing ones, not new in T188. Maps may change under FR-002, and pack-audit and size-table exit 0. The block should say 'no other choice once the pines are seated' rather than 'no other choice exists'. That is a wording correction for its claims round, not a reason to block.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "one-text-declared-breaks",
+     "summary": "A one-text caption's declared line breaks are not read by the placer; a stranded one goes back to one line (Ebisu note)",
+     "class": "within",
+     "why": "Within on the case the block decides: a STRANDED one-text caption goes back to one line, which is 0242's 'goes back to one line' as written, and that is what moves the Ebisu note. The wider fact, that the placer never reads a one-text caption's declared breaks, is behavior T188 does not change. No claim states otherwise and no report names it a defect, so it carves nothing out of 'fix all known bugs'. T184's several-text ruling stands untouched. If a sheet's check later finds a declared break wrongly re-wrapped, that is a finding on that sheet."
+    },
+    {
+     "id": "python-lockstep",
+     "summary": "Each fix made in the kept Python too, held by a nine-case probe on HEAD and the clone and by the crate's held cases (regenerated, five sheets added, the placer's re-answered)",
+     "class": "within",
+     "why": "The GM asks for fixes in every copy that still lives. The lockstep and the regenerated held cases only enforce that."
+    },
+    {
+     "id": "exits",
+     "summary": "Exits: static, rust-test, quick, pack-audit and size-table on the six pool sheets, the plan review, the claims round and a gated land; red is recorded and ruled through arbiter-ask",
+     "class": "within",
+     "why": "These are verification of what was asked; nothing is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T188 (step 3a's remaining known defects, T184's report and claims round; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T188 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "one-line-fallback",
+     "summary": "A wrapped caption with no free seat goes back to one line: with no free seat, least-cost and softest seats are measured among one-line seats alone, in placer.rs and placer.py.",
+     "class": "within",
+     "why": "Fixes a known step-3a defect against 0242's quoted rule ('if nothing clears, it goes back to one line'), in both live copies, as the GM's 2026-11-18 'fix all known bugs in each step' asks."
+    },
+    {
+     "id": "one-line-fallback-scope",
+     "summary": "Wrap seats are asked only where no one-line seat stands in the frame at all; the strict search, which answers only a free seat, is left as it was.",
+     "class": "within",
+     "why": "The rule governs a caption that clears nowhere; a strict search never answers a non-free seat so the rule has nothing to act on there, and asking wraps only when no one-line seat fits follows 0242 never clipping a caption. Nothing the request or 0242 asks is withheld."
+    },
+    {
+     "id": "prefixed-caption",
+     "summary": "A caption written as <s:text> is written back with its tspans and leader under the start tag's own prefix (hand_sheet.rs, hand_sheet.py); T184's test repinned.",
+     "class": "within",
+     "why": "Known defect (undrawn captions on a prefix-only sheet) fixed in both copies with a red-first test; changing the pinned expectation of a fixed case is FR-002's named exception for a fix."
+    },
+    {
+     "id": "turned-rectangle",
+     "summary": "A rectangle's inside and beside name takes its first edge's angle (drawn rect, or an outline of four square corners within SQUARE_TOL, a closing point dropped; ellipse of unequal radii in a turned group and a scaled circle too).",
+     "class": "within",
+     "why": "Applies 0242's quoted 'a caption naming a turned feature is drawn at that feature's own angle'; the claims-round leaks and plan-review round 3's ellipse ruling are carried into both copies with red-first tests."
+    },
+    {
+     "id": "level-box-of-parts",
+     "summary": "A box of parts stays level.",
+     "class": "within",
+     "why": "0242's test is 'that feature's own angle'; a feature read only as the box of several parts has no outline of its own to give a direction, so level is the rule applied, not a carve-out. Asserted rather than demonstrated in the block, but no known defect is shown and no pool outline is turned off the axes (observed)."
+    },
+    {
+     "id": "level-irregular-outline",
+     "summary": "An irregular outline stays level.",
+     "class": "within",
+     "why": "An outline that is not rectangular has no single edge direction to be 'its own angle'; pinned by the irregular-quadrilateral test case."
+    },
+    {
+     "id": "level-round-shapes",
+     "summary": "A circle drawn round and an ellipse of equal radii stay level, even in a turned group.",
+     "class": "within",
+     "why": "A shape invariant under rotation has no direction of its own; the cases that do (unequal radii, a circle scaled unequally) take the angle, each red-first."
+    },
+    {
+     "id": "level-kite",
+     "summary": "A scatter's four-point member that is not a rectangle (a kite) has its beside caption level; only <rect> or a rectangular non-round outline takes the angle.",
+     "class": "within",
+     "why": "Fixes the claims round's leak (14.04-degree tilt) so the angle comes only from a feature with a direction of its own, per 0242; red-first in both copies."
+    },
+    {
+     "id": "whole-word-groups",
+     "summary": "A caption names a group by whole words (runs of letters), a group's word or its plural in s/es/ies.",
+     "class": "within",
+     "why": "Known substring defect ('irrigated' naming the gate group; 'ministries' missing) fixed in both copies with a red-first test."
+    },
+    {
+     "id": "estates-word",
+     "summary": "GROUP_WORDS' estates group loses 'estate' and takes 'samurai' alone.",
+     "class": "within",
+     "why": "Aligns the constant with 0243, which gives the samurai houses and estates 'a samurai caption' only; it removes a false match ('merchant estate') the defect report named. No hand sheet obstacle carries a group, so no sheet moves (observed)."
+    },
+    {
+     "id": "ground-off-building",
+     "summary": "A ground's name whose inside seat covers a building gives way to any beside seat covering no building; the break holds as before on light ink, lanes and nested ground.",
+     "class": "within",
+     "why": "Applies 0242's quoted 'a house or any other building ... is never covered while any other choice exists'; the claims round's widening (a beside seat on a lane alone) is the rule in full, not narrower, in both copies with red-first tests."
+    },
+    {
+     "id": "building-read-off-cost",
+     "summary": "Because a Placement carries only its cost, a seat covering a building is identified as one costing a drawn obstacle's weight or more.",
+     "class": "within",
+     "why": "An implementation reading of 'covers a building' through the placer's standing weights; it does not exclude any case the rule covers, and the test pins beside-where-free, inside-where-nothing-free and inside-on-light-ink."
+    },
+    {
+     "id": "ring1-association",
+     "summary": "Ring 1 gets no nearness test; the association claim on placer.py _score and placer.rs Search.score is relabeled DEVIATION and the deviation recorded as a bullet on 0242's drawing page, citing ask:449-T188-ring1-association.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block does what the arbiter's 'what' requires: the DEVIATION bullet and relabeled claim stand in both copies, no further ring-1 test is built, and the block cites ask:449-T188-ring1-association rather than a session choice. On the merits it passes MODE 1: the exemption is implied by 0242's own ring bullet (a step out to twice the gap 'with nothing more'), the nearness test is the placer's reading rather than a stated rule, and applying it literally empties ring 1 by construction (13 to 0 ring-1 captions, 3 more on ink, 12 more leaders, measured, matching the ruling), defeating the page's legibility purpose. The known defect - a claim saying what the code does not do - is fixed by the relabel, so none is carried into step 3b; a ring-1 caption found to read as a neighbor's name stays a per-sheet finding, as the ruling says."
+    },
+    {
+     "id": "claims-and-comments",
+     "summary": "WAY_NOTCH and caption_clears_ways state their unit (CONVENTION); Sheet.one cites 0242; Python seat/subjects and placing order carry the claims their Rust twins carry; standard.py's 'sheet's key' note and place's 0241 credit corrected to GUESS, in both copies.",
+     "class": "within",
+     "why": "The goal is that every claim on step 3a's labels says what the code does; these make claims and comments true in both copies, changing no behavior; WAY_NOTCH keeps its value."
+    },
+    {
+     "id": "half-turn",
+     "summary": "Upside-down beside seats: nothing changed, every candidate generator already takes upright(subject.angle).",
+     "class": "within",
+     "why": "Investigated with a probe on HEAD and the clone and found no defect; nothing owed."
+    },
+    {
+     "id": "accepted-map-moves",
+     "summary": "The one-line rule moves captions on the shrine and Hayakawa: INNER COURT now covers a building (Hayakawa 6 to 7 captions on ink, 18,500 to 19,500); HEAD's rule (stranded caption keeps the cheapest wrap) is priced and not built.",
+     "class": "within",
+     "why": "The block applies 0242's 'goes back to one line' literally and declines the carve-out (keeping a wrap); the narrowing would be the opposite choice. Maps may change so long as research holds (FR-002, the GM). On the building rule: given the other captions' final seats, INNER COURT's search measures 0 free seats and 0 on light ink alone (observed), and the alternative pairing put the pines on two captions, which the placer's standing weights rank worse; that weighting is not decided by this block. Checks pass, Rust and Python placed texts are equal."
+    },
+    {
+     "id": "ebisu-declared-breaks",
+     "summary": "Found and ruled no defect: a one-text caption's declared line breaks are not read by the placer, so a stranded one goes back to one line; a several-text caption returns to its declared lines (T184).",
+     "class": "within",
+     "why": "Follows 0242's quoted 'goes back to one line' literally rather than carving out declared breaks; it narrows nothing asked."
+    },
+    {
+     "id": "held-cases-and-lockstep",
+     "summary": "held.json regenerated from the fixed Python with five sheets added; the placer's held cases re-answered from stored scenes; the parse lockstep holds Python and Rust equal on the four caption-placing sheets.",
+     "class": "within",
+     "why": "Enforcement of the requested fixes in every live copy (FR-002 lockstep as T180 restated it); changed expectations follow the fixes, as FR-002 allows."
+    },
+    {
+     "id": "exits",
+     "summary": "Exits: make static, rust-test, quick, pack-audit and size-table on the six pool sheets, plan review, claims round, gated make land; before T152.",
+     "class": "within",
+     "why": "The order and checks the GM's 'fix all known bugs in each step before moving on' requires."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21358,6 +21585,129 @@
      "summary": "make static, rust-test and quick are run in sequence after the last edit, plus pack-audit and size-table on the six pool sheets, the plan review, the claims round and a gated make land. On red, the failure is recorded, and a claim that something cannot be done goes through make arbiter-ask.",
      "class": "within",
      "why": "Checks that enforce the requested fixes. They add no behavior and hold no exactness standard."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T188": {
+   "section_sha256": "169aa816ac733538bc38b6f1f607687ef67c5a6e3c5685353686a12777464166",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "one-line-fallback",
+     "summary": "A wrapped caption with no free seat goes back to one line: with no free seat, least-cost and softest seats are measured among one-line seats alone, in placer.rs and placer.py.",
+     "class": "within",
+     "why": "Fixes a known step-3a defect against 0242's quoted rule ('if nothing clears, it goes back to one line'), in both live copies, as the GM's 2026-11-18 'fix all known bugs in each step' asks."
+    },
+    {
+     "id": "one-line-fallback-scope",
+     "summary": "Wrap seats are asked only where no one-line seat stands in the frame at all; the strict search, which answers only a free seat, is left as it was.",
+     "class": "within",
+     "why": "The rule governs a caption that clears nowhere; a strict search never answers a non-free seat so the rule has nothing to act on there, and asking wraps only when no one-line seat fits follows 0242 never clipping a caption. Nothing the request or 0242 asks is withheld."
+    },
+    {
+     "id": "prefixed-caption",
+     "summary": "A caption written as <s:text> is written back with its tspans and leader under the start tag's own prefix (hand_sheet.rs, hand_sheet.py); T184's test repinned.",
+     "class": "within",
+     "why": "Known defect (undrawn captions on a prefix-only sheet) fixed in both copies with a red-first test; changing the pinned expectation of a fixed case is FR-002's named exception for a fix."
+    },
+    {
+     "id": "turned-rectangle",
+     "summary": "A rectangle's inside and beside name takes its first edge's angle (drawn rect, or an outline of four square corners within SQUARE_TOL, a closing point dropped; ellipse of unequal radii in a turned group and a scaled circle too).",
+     "class": "within",
+     "why": "Applies 0242's quoted 'a caption naming a turned feature is drawn at that feature's own angle'; the claims-round leaks and plan-review round 3's ellipse ruling are carried into both copies with red-first tests."
+    },
+    {
+     "id": "level-box-of-parts",
+     "summary": "A box of parts stays level.",
+     "class": "within",
+     "why": "0242's test is 'that feature's own angle'; a feature read only as the box of several parts has no outline of its own to give a direction, so level is the rule applied, not a carve-out. Asserted rather than demonstrated in the block, but no known defect is shown and no pool outline is turned off the axes (observed)."
+    },
+    {
+     "id": "level-irregular-outline",
+     "summary": "An irregular outline stays level.",
+     "class": "within",
+     "why": "An outline that is not rectangular has no single edge direction to be 'its own angle'; pinned by the irregular-quadrilateral test case."
+    },
+    {
+     "id": "level-round-shapes",
+     "summary": "A circle drawn round and an ellipse of equal radii stay level, even in a turned group.",
+     "class": "within",
+     "why": "A shape invariant under rotation has no direction of its own; the cases that do (unequal radii, a circle scaled unequally) take the angle, each red-first."
+    },
+    {
+     "id": "level-kite",
+     "summary": "A scatter's four-point member that is not a rectangle (a kite) has its beside caption level; only <rect> or a rectangular non-round outline takes the angle.",
+     "class": "within",
+     "why": "Fixes the claims round's leak (14.04-degree tilt) so the angle comes only from a feature with a direction of its own, per 0242; red-first in both copies."
+    },
+    {
+     "id": "whole-word-groups",
+     "summary": "A caption names a group by whole words (runs of letters), a group's word or its plural in s/es/ies.",
+     "class": "within",
+     "why": "Known substring defect ('irrigated' naming the gate group; 'ministries' missing) fixed in both copies with a red-first test."
+    },
+    {
+     "id": "estates-word",
+     "summary": "GROUP_WORDS' estates group loses 'estate' and takes 'samurai' alone.",
+     "class": "within",
+     "why": "Aligns the constant with 0243, which gives the samurai houses and estates 'a samurai caption' only; it removes a false match ('merchant estate') the defect report named. No hand sheet obstacle carries a group, so no sheet moves (observed)."
+    },
+    {
+     "id": "ground-off-building",
+     "summary": "A ground's name whose inside seat covers a building gives way to any beside seat covering no building; the break holds as before on light ink, lanes and nested ground.",
+     "class": "within",
+     "why": "Applies 0242's quoted 'a house or any other building ... is never covered while any other choice exists'; the claims round's widening (a beside seat on a lane alone) is the rule in full, not narrower, in both copies with red-first tests."
+    },
+    {
+     "id": "building-read-off-cost",
+     "summary": "Because a Placement carries only its cost, a seat covering a building is identified as one costing a drawn obstacle's weight or more.",
+     "class": "within",
+     "why": "An implementation reading of 'covers a building' through the placer's standing weights; it does not exclude any case the rule covers, and the test pins beside-where-free, inside-where-nothing-free and inside-on-light-ink."
+    },
+    {
+     "id": "ring1-association",
+     "summary": "Ring 1 gets no nearness test; the association claim on placer.py _score and placer.rs Search.score is relabeled DEVIATION and the deviation recorded as a bullet on 0242's drawing page, citing ask:449-T188-ring1-association.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block does what the arbiter's 'what' requires: the DEVIATION bullet and relabeled claim stand in both copies, no further ring-1 test is built, and the block cites ask:449-T188-ring1-association rather than a session choice. On the merits it passes MODE 1: the exemption is implied by 0242's own ring bullet (a step out to twice the gap 'with nothing more'), the nearness test is the placer's reading rather than a stated rule, and applying it literally empties ring 1 by construction (13 to 0 ring-1 captions, 3 more on ink, 12 more leaders, measured, matching the ruling), defeating the page's legibility purpose. The known defect - a claim saying what the code does not do - is fixed by the relabel, so none is carried into step 3b; a ring-1 caption found to read as a neighbor's name stays a per-sheet finding, as the ruling says."
+    },
+    {
+     "id": "claims-and-comments",
+     "summary": "WAY_NOTCH and caption_clears_ways state their unit (CONVENTION); Sheet.one cites 0242; Python seat/subjects and placing order carry the claims their Rust twins carry; standard.py's 'sheet's key' note and place's 0241 credit corrected to GUESS, in both copies.",
+     "class": "within",
+     "why": "The goal is that every claim on step 3a's labels says what the code does; these make claims and comments true in both copies, changing no behavior; WAY_NOTCH keeps its value."
+    },
+    {
+     "id": "half-turn",
+     "summary": "Upside-down beside seats: nothing changed, every candidate generator already takes upright(subject.angle).",
+     "class": "within",
+     "why": "Investigated with a probe on HEAD and the clone and found no defect; nothing owed."
+    },
+    {
+     "id": "accepted-map-moves",
+     "summary": "The one-line rule moves captions on the shrine and Hayakawa: INNER COURT now covers a building (Hayakawa 6 to 7 captions on ink, 18,500 to 19,500); HEAD's rule (stranded caption keeps the cheapest wrap) is priced and not built.",
+     "class": "within",
+     "why": "The block applies 0242's 'goes back to one line' literally and declines the carve-out (keeping a wrap); the narrowing would be the opposite choice. Maps may change so long as research holds (FR-002, the GM). On the building rule: given the other captions' final seats, INNER COURT's search measures 0 free seats and 0 on light ink alone (observed), and the alternative pairing put the pines on two captions, which the placer's standing weights rank worse; that weighting is not decided by this block. Checks pass, Rust and Python placed texts are equal."
+    },
+    {
+     "id": "ebisu-declared-breaks",
+     "summary": "Found and ruled no defect: a one-text caption's declared line breaks are not read by the placer, so a stranded one goes back to one line; a several-text caption returns to its declared lines (T184).",
+     "class": "within",
+     "why": "Follows 0242's quoted 'goes back to one line' literally rather than carving out declared breaks; it narrows nothing asked."
+    },
+    {
+     "id": "held-cases-and-lockstep",
+     "summary": "held.json regenerated from the fixed Python with five sheets added; the placer's held cases re-answered from stored scenes; the parse lockstep holds Python and Rust equal on the four caption-placing sheets.",
+     "class": "within",
+     "why": "Enforcement of the requested fixes in every live copy (FR-002 lockstep as T180 restated it); changed expectations follow the fixes, as FR-002 allows."
+    },
+    {
+     "id": "exits",
+     "summary": "Exits: make static, rust-test, quick, pack-audit and size-table on the six pool sheets, plan review, claims round, gated make land; before T152.",
+     "class": "within",
+     "why": "The order and checks the GM's 'fix all known bugs in each step before moving on' requires."
     }
    ],
    "verdict": "CLEAR"

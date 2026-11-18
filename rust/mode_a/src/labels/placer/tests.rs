@@ -3,7 +3,8 @@
 //! ring capped and not, a strict caller refusing the first rank - each seated by the Python's `place` and its index asked four questions
 //! (`score`, `blocked`, `nearer_than`, `stands_nearest`, `caption_clears_ways`), its answers captured in `held.json` (generated
 //! 2026-11-18 by a revision of `held_cases.py` beside it that was not kept, seed 449, `CPython` 3.14.4; its answers re-taken from the same
-//! scenes by that script's `--reanswer` after feature 449 T184's fixes to the Python). Every answer here is the Python's to the bit.
+//! scenes by that script's `--reanswer` after feature 449 T184's fixes to the Python, and again after T188's, four scenes' captions then back
+//! on one line). Every answer here is the Python's to the bit.
 //!
 //! Research:
 //!     its tests - NONE: the port held to the Python's answers, deciding nothing about a building
@@ -332,4 +333,36 @@ fn a_caller_that_refuses_a_free_seat_is_given_the_next() {
         .unwrap()
         .unwrap();
     assert_eq!((p.rank, p.position, p.x, p.y), (1, "below", 100.0, 115.4));
+}
+
+#[test]
+#[expect(clippy::float_cmp, reason = "a cost summed from whole weights")]
+fn a_caption_no_wrap_clears_goes_back_to_one_line() {
+    // feature 449 T188, research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: "if nothing clears, it goes back
+    // to one line" - every seat in this barn covers its floor's ink, and a line spills out of it too; the least cost of every layout kept
+    // three lines (the shrine's "sanctuary of Bishamon" on two)
+    let barn = Subject::new(
+        Kind::Area,
+        vec![(0.0, 0.0), (80.0, 0.0), (80.0, 80.0), (0.0, 80.0)],
+        0.0,
+    );
+    let floor = ObstacleIndex::new(
+        vec![Obstacle {
+            inner: true,
+            ..Obstacle::new(barn.poly.clone(), 250.0)
+        }],
+        Vec::new(),
+    );
+    let text = "the old granary of the east";
+    let p = place(text, 10.0, &barn, &floor, &Ask::default())
+        .unwrap()
+        .unwrap();
+    assert_eq!((p.lines, p.cost), (vec![text.to_owned()], 1250.0));
+    // a wrap is asked only where no one-line seat stands in the frame at all, rather than clip the line
+    let tight = Ask {
+        frame: Some((0.0, 0.0, 80.0, 80.0)),
+        ..Ask::default()
+    };
+    let q = place(text, 10.0, &barn, &floor, &tight).unwrap().unwrap();
+    assert!(q.lines.len() > 1 && super::in_frame(&q.block, tight.frame) && q.cost == 250.0);
 }

@@ -25,7 +25,8 @@ use crate::work_counts::count;
 /// Research: named civic buildings - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: ministry, governor and temple keep full weight against another civic caption
 pub const CIVIC_GROUPS: [&str; 3] = ["ministry", "governor", "temple"];
 
-/// The words that name a caption group, where a group is named by more than its own word (feature 328 wave 5).
+/// The words that name a caption group, where a group is named by more than its own word (feature 328 wave 5): the samurai houses and
+/// estates the samurai caption's alone, so a merchant's estate's name covers none of them (feature 449 T188).
 ///
 /// Research: a funerary caption covers the funerary structures - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a graveyard, cremation, mausoleum or ossuary caption may cover any of the funerary structures, and a samurai caption the samurai houses and estates
 ///     a shrine caption may cover the temples - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: 0243 §11
@@ -42,23 +43,47 @@ pub const GROUP_WORDS: [(&str, &[&str]); 4] = [
             "ossuary",
         ],
     ),
-    ("estate", &["estate", "samurai"]),
+    ("estate", &["samurai"]),
     ("temple", &["temple", "shrine"]),
     ("gate", &["gate", "guard", "inspection"]),
 ];
 
-/// Does a caption's lower-cased text `words` name the caption `group` (its own word, or one of [`GROUP_WORDS`])?
+/// Does a caption's lower-cased text `words` name the caption `group` (its own word, or one of [`GROUP_WORDS`])? A word is named WHOLE
+/// ([`caption_words`]): irrigated fields name no gate, though their letters hold one, and the ministries name the ministry, which no
+/// substring of theirs did (feature 449 T188: the words were matched as substrings).
 ///
-/// Research: a caption's wording names its group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a caption's own wording says which groups of buildings it may cover - a group named by its own word where no list of words is given for it (a flophouse caption the flophouses, a ministry's name the ministries), else by one of its words
+/// Research: a caption's wording names its group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a caption's own wording says which groups of buildings it may cover - a group named by its own word, whole, where no list of words is given for it (a flophouse caption the flophouses, a ministry's name the ministries), else by one of its words, whole
 #[must_use]
 pub fn names_group(group: Option<&str>, words: &str) -> bool {
     let Some(group) = group.filter(|g| !g.is_empty()) else {
         return false;
     };
-    match GROUP_WORDS.iter().find(|(g, _)| *g == group) {
-        Some((_, ws)) => ws.iter().any(|w| words.contains(w)),
-        None => words.contains(group),
-    }
+    let own = [group];
+    let ws: &[&str] = GROUP_WORDS
+        .iter()
+        .find(|(g, _)| *g == group)
+        .map_or(&own, |(_, ws)| ws);
+    let said = caption_words(words);
+    ws.iter().any(|w| {
+        let plural = w
+            .strip_suffix('y')
+            .map_or_else(|| (*w).to_owned(), |stem| format!("{stem}ies"));
+        [(*w).to_owned(), format!("{w}s"), format!("{w}es"), plural]
+            .iter()
+            .any(|form| said.contains(form.as_str()))
+    })
+}
+
+/// A caption's words, whole: its runs of letters, any other character a break (`guard-house` is `guard` and `house`, `temple's` `temple`
+/// and `s`). A group's word is named by itself or its plural - `s`, `es`, a `y` turned `ies` (`ministries`).
+///
+/// Research: a caption's words - CONVENTION: a word is a run of letters, named by itself or its plural, as 0243's examples speak of a flophouse caption and the flophouses
+#[must_use]
+pub fn caption_words(words: &str) -> HashSet<&str> {
+    words
+        .split(|c: char| !c.is_ascii_lowercase())
+        .filter(|w| !w.is_empty())
+        .collect()
 }
 
 /// How much farther than a caption's own subject a neighbor may stand and still claim the caption (labels L6, the ASSOCIATION): a tie

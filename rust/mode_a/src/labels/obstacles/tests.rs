@@ -36,6 +36,22 @@ fn the_leaves_answer_as_the_python_s() {
             && names_group(Some("grove"), "old grove")
             && !names_group(Some("grove"), "pines")
     );
+    // feature 449 T188, 0243 ("a caption's own wording says which groups of buildings it may cover"): a word is named whole, by itself or
+    // its plural - irrigated fields name no gate and a merchant's estate no samurai estate, the estates the samurai caption's alone; and a
+    // plural in `ies` names its group, which no substring of it did
+    assert!(
+        !names_group(Some("gate"), "irrigated fields")
+            && !names_group(Some("estate"), "merchant estate")
+            && !names_group(Some("temple"), "templeton yard")
+    );
+    assert!(
+        names_group(Some("gate"), "north gates")
+            && names_group(Some("gate"), "guard-house")
+            && names_group(Some("estate"), "samurai estates")
+            && names_group(Some("ministry"), "the ministries")
+            && names_group(Some("temple"), "shrine's hall")
+            && names_group(Some("flophouse"), "flophouses")
+    );
     // an index copied is added to without touching the one it came from
     let base = ObstacleIndex::new(vec![Obstacle::new(SQ.to_vec(), 1000.0)], Vec::new());
     let mut more = base.clone();

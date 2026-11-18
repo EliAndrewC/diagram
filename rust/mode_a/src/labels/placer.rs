@@ -216,7 +216,7 @@ pub fn hug_gap(block: &[Pt], r: BBox) -> f64 {
 ///
 /// Research:
 ///     a caption clear of every way - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a way the block comes within its drawn half-width of is a way crossed
-///     the way notch - CONVENTION: the clearance runs 2 ft past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread
+///     the way notch - CONVENTION: the clearance runs 2 sheet units past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread - 2 ft where a unit is a foot, 2/3 ft on a hand sheet at 3 px to the foot
 #[must_use]
 pub fn caption_clears_ways(block: &[Pt], ways: &[Way]) -> bool {
     let who = Asker {
@@ -262,12 +262,14 @@ impl Search<'_> {
     /// A seat's weight and whether it overlaps: what the block covers (with the association term for a point subject's seat beside it), an
     /// area's name spilling out of the area, and what its leader passes over. THE ASSOCIATION TERM IS ASKED OF A SEAT WITH NO LEADER
     /// (feature 287, labels L6): a leader carries the association itself. It is asked of the preferred offset's seats (ring 0) alone: the
-    /// same bound holds for ring 1, leaderless too - its block, where ring 0's was blocked, stands within its own gap of the blocker, a tie
-    /// counting - and asked there it refused every ring-1 seat on the pool sheets (feature 449 T184, measured 2026-11-18: 13 ring-1
-    /// captions beside their subjects, 0 once asked; 16 captions moved, 4 more on ink, 9 more leaders), so ring 1 stays unasked.
+    /// same bound holds for ring 1, leaderless too - its block, where ring 0's was blocked within the clearance, stands nearer the blocker
+    /// than its own gap, strictly, a step out moving it no farther than the step - and asked there it refused every ring-1 seat on the pool
+    /// sheets, with its tie and without it alike (feature 449 T184, measured 2026-11-18: 13 ring-1 captions beside their subjects, 0 once
+    /// asked; T188, measured 2026-11-18: 0 under the strict test too, 19 captions moved, 3 more on ink, 12 more leaders), so ring 1 stays
+    /// unasked, a deliberate deviation from the standard's association.
     ///
     /// Research:
-    ///     association beside a point - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term with its tie refuses every ring-1 seat
+    ///     association beside a point - DEVIATION research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: asked of a seat at the preferred offset (ring 0) alone; ring 1, leaderless too, is not asked, where the term refuses every ring-1 seat with its tie and without it
     ///     an area's name inside it - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: spilling out costs an obstacle
     fn score(&self, c: &Cand, block: &[Pt]) -> (f64, bool) {
         let og = (self.subject.kind == Kind::Point && c.ring == 0)
@@ -342,17 +344,23 @@ impl Search<'_> {
 /// candidate, because a clipped caption cannot be read. WHEN NO STANDARD SEAT IS FREE (features 286, 287): the fallback search, then the
 /// leader rings past the reach out to the hug. A seat covering only `soft` ink is then taken at the least cost; a caption whose every seat
 /// overlaps goes down where it covers the least (0242), and one with no seat in the frame at all takes the first seat beside it moved
-/// inward until it fits (0241). Never dropped, never in a key, never past the hug. `ask.strict` returns None instead of anything but a
-/// free seat; `ask.accept` is asked of every free candidate and of the strict search's nudged seat.
+/// inward until it fits (a GUESS: 0241's caption moved inward is the crop's, not a fixed frame's). Never dropped, never in a key, never past
+/// the hug. A caption the placer wraps (no fixed lines) takes a
+/// wrap only where it clears: with no free seat it goes back to one line, its least-cost and softest seats measured among its one-line
+/// seats alone (0242: "if nothing clears, it goes back to one line"; feature 449 T188 - the least cost of every layout kept the shrine's
+/// "sanctuary of Bishamon" on two lines), its wraps' seats asked only where no one-line seat stands in the frame at all. `ask.strict`
+/// returns None instead of anything but a free seat; `ask.accept` is asked of every free candidate and of the strict search's nudged
+/// seat.
 ///
 /// Research:
 ///     free space wins - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: the first seat covering nothing is taken
 ///     never clipped - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a seat leaving the picture is never a candidate
-///     never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers
+///     never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers - among its one-line seats where the placer wraps it
 ///     no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box
 ///     no seat in the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)
 ///     the hug - CONVENTION: no seat past the hug from what it names
 ///     caption clearance - GUESS research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half the caption's letter height (`CLEAR_EM`) kept off other ink, the figure the page records as our calibration, not a finding, for the gap off a caption's own feature (feature 417 T36 pass P7, 2026-10-25)
+///     a stranded caption's one line - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a wrap is taken only where it clears; if nothing clears, the caption goes back to one line, its wraps asked only where no one-line seat stands in the frame
 ///
 /// # Errors
 /// A line subject of fewer than two points ([`ONE_POINT_LINE`]) and a caption of no size ([`NO_SIZE`]), each refused by name.
@@ -442,6 +450,10 @@ pub fn place(
         },
     ];
     let (mut best, mut soft): (Option<Seat>, Option<Seat>) = (None, None);
+    // a wrap is taken only where it clears: with none free, the caption goes back to one line (0242), its wraps' least-cost and softest
+    // seats kept apart and asked only where no one-line seat stands in the frame (feature 449 T188: the least cost of every layout kept a
+    // wrap); a strict search answers only a free seat, so it measures every layout as one
+    let (mut wrapped, mut wrapped_soft): (Option<Seat>, Option<Seat>) = (None, None);
     let mut deep = Vec::new(); // strict: the seats no nudge can free, measured only if one might be the best
     let mut outside: Option<(Cand, Poly)> = None; // the first seat beside the subject that leaves the frame
     let mut order = 0;
@@ -472,11 +484,16 @@ pub fn place(
                 }
                 continue;
             }
-            if best.as_ref().is_none_or(|b| cost < b.0) {
-                best = Some((cost, here, cand.clone(), block.clone()));
+            let (least, softest) = if ask.strict || cand.lines == lays[0] {
+                (&mut best, &mut soft)
+            } else {
+                (&mut wrapped, &mut wrapped_soft)
+            };
+            if least.as_ref().is_none_or(|b| cost < b.0) {
+                *least = Some((cost, here, cand.clone(), block.clone()));
             }
-            if !hard && soft.as_ref().is_none_or(|b| cost < b.0) {
-                soft = Some((cost, here, cand, block));
+            if !hard && softest.as_ref().is_none_or(|b| cost < b.0) {
+                *softest = Some((cost, here, cand, block));
             }
         }
     }
@@ -484,16 +501,20 @@ pub fn place(
         let got = s.strict_seat(best, deep);
         return Ok(got.filter(|g| ask.accept.is_none_or(|ok| ok(g))));
     }
+    if best.is_none() {
+        // no one-line seat stands in the frame: a wrap that does, rather than a clipped line
+        (best, soft) = (wrapped, wrapped_soft);
+    }
     Ok(Some(settle(&s, best, soft, outside)))
 }
 
 /// A non-strict search's answer once no candidate was free: the least-cost seat nudged when that frees it or carries it off every overlap
 /// and costs no more than the softest; else the softest seat nudged over soft ink only; else, WITH NO FREE GROUND AT ALL, the seat covering
 /// the least (feature 328 wave 49, 0242's drawing page: "On a sheet with no free ground at all, the caption still goes down, where it
-/// covers the least"); and WITH NO SEAT INSIDE THE FRAME AT ALL, the first seat beside it moved inward (0241).
+/// covers the least"); and WITH NO SEAT INSIDE THE FRAME AT ALL, the first seat beside it moved inward (a GUESS, [`moved_inward`]).
 ///
 /// Research:
-///     never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers
+///     never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers - among its one-line seats where the placer wraps it
 ///     no seat in the frame - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)
 fn settle(
     s: &Search<'_>,

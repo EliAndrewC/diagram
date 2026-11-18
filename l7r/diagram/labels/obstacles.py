@@ -10,6 +10,7 @@ Research: obstacle index - NONE: indexing and exact geometry
 from __future__ import annotations
 
 import math
+import re
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -30,13 +31,14 @@ Research: named civic buildings - research/questions/0243-what-labels-may-cover-
 
 GROUP_WORDS = {
     "funerary": ("funerary", "cemetery", "graveyard", "cremation", "mausoleum", "ossuary"),
-    "estate": ("estate", "samurai"),
+    "estate": ("samurai",),
     "temple": ("temple", "shrine"),
     "gate": ("gate", "guard", "inspection"),
 }
 """The words that name a caption group, where a group is named by more than its own word (feature 328 wave 5): a caption
 naming a graveyard, a cremation ground, a mausoleum or an ossuary may cover any of the funerary structures; a samurai caption
-may cover the samurai houses and estates; a shrine's the temples; a guard-house or inspection caption the gate's posts (0243).
+may cover the samurai houses and estates - the samurai caption alone, so a merchant's estate's name does not (feature 449 T188); a
+shrine's the temples; a guard-house or inspection caption the gate's posts (0243).
 
 Research: a funerary caption covers the funerary structures - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a graveyard, cremation, mausoleum or ossuary caption may cover any of the funerary structures, and a samurai caption the samurai houses and estates
     a shrine caption may cover the temples - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: 0243 §11
@@ -44,11 +46,25 @@ Research: a funerary caption covers the funerary structures - research/questions
 
 
 def names_group(group: str | None, words: str) -> bool:
-    """Does a caption's lower-cased text `words` name the caption `group` (its own word, or one of `GROUP_WORDS`)?
+    """Does a caption's lower-cased text `words` name the caption `group` (its own word, or one of `GROUP_WORDS`)? A word is named
+    WHOLE (`caption_words`): irrigated fields name no gate, though their letters hold one, and the ministries name the
+    ministry, which no substring of theirs did (feature 449 T188: the words were matched as substrings).
 
-    Research: a caption's wording names its group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a caption's own wording says which groups of buildings it may cover - a group named by its own word where no list of words is given for it (a flophouse caption the flophouses, a ministry's name the ministries), else by one of its words
+    Research: a caption's wording names its group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a caption's own wording says which groups of buildings it may cover - a group named by its own word, whole, where no list of words is given for it (a flophouse caption the flophouses, a ministry's name the ministries), else by one of its words, whole
     """
-    return bool(group) and any(w in words for w in GROUP_WORDS.get(group or "", (group or "",)))
+    if not group:
+        return False
+    said = caption_words(words)
+    return any(said & {w, w + "s", w + "es", w[:-1] + "ies" if w.endswith("y") else w} for w in GROUP_WORDS.get(group, (group,)))
+
+
+def caption_words(words: str) -> set[str]:
+    """A caption's words, whole: its runs of letters, any other character a break (`guard-house` is `guard` and `house`, `temple's`
+    `temple` and `s`). A group's word is named by itself or its plural - `s`, `es`, a `y` turned `ies` (`ministries`).
+
+    Research: a caption's words - CONVENTION: a word is a run of letters, named by itself or its plural, as 0243's examples speak of a flophouse caption and the flophouses
+    """
+    return set(re.findall(r"[a-z]+", words))
 
 
 ASSOCIATION_TIE = 1e-6
