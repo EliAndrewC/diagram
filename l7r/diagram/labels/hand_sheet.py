@@ -33,7 +33,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
-from l7r.diagram.labels import Obstacle, ObstacleIndex, Placement, Subject, Way, place
+from l7r.diagram.labels import InkPart, Obstacle, ObstacleIndex, Placement, Subject, Way, place
 from l7r.diagram.labels.geom import Poly, Pt, bbox, inside, rect
 from l7r.diagram.labels.layout import layouts
 from l7r.diagram.labels.standard import CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, CLEAR_EM, PITCH_EM, REACH_EM, WEIGHT_OBSTACLE, WEIGHT_WAY, block_half
@@ -445,9 +445,11 @@ def _band(a: Pt, b: Pt, half: float) -> Poly:
 def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     """A leader ends on the drawn thing it names, not on the box around its parts: a barge moored by lines and three
     pines are boxed with empty water or ground in the box's corner, and a leader to the corner named nothing (feature
-    283 - the tax barge's and the old pines' leaders ended 5-6 ft short). A leader whose start already lies on the ink it
-    names ties nothing back - the caption touches its subject - so it is dropped (feature 449 T184: it divided by the zero
-    distance there).
+    283 - the tax barge's and the old pines' leaders ended 5-6 ft short). A disc's ink is its drawn curve (`drawn_ink`), not the box
+    the reader keeps as its outline (feature 449 T192: three pool leaders ended 1.75 to 4.45 px off the curve). A leader whose start
+    already lies on the ink it names ties nothing back - the caption touches its subject - so it is dropped (feature 449 T184: it
+    divided by the zero distance there). The placer's own leader ends on the same ink (`Subject.ink`, feature 449 T192), so this leaves
+    every leader a hand sheet's subject scores as it was scored.
 
     Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)
@@ -459,7 +461,7 @@ def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     if p.leader is None or not parts:
         return p
     a = Point(p.leader[0])
-    ink = unary_union([LineString(s.poly).buffer(max(s.half, 0.5)) if s.line else Polygon(s.poly) for s in parts if len(s.poly) >= (2 if s.line else 3)])
+    ink = unary_union([LineString(s.poly).buffer(max(s.half, 0.5)) if s.line else Polygon(drawn_ink(s).pts) for s in parts if len(s.poly) >= (2 if s.line else 3)])
     if ink.is_empty or ink.distance(Point(p.leader[1])) < 1.5:
         return p
     tip = nearest_points(ink, a)[0]
@@ -469,6 +471,42 @@ def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     trim = min(1.0, d / 4)
     ux, uy = (tip.x - a.x) / d, (tip.y - a.y) / d
     return replace(p, leader=(p.leader[0], (tip.x - ux * trim, tip.y - uy * trim)))
+
+
+DISC_SAG_PX = 0.05
+"""How far a disc's drawn curve, sampled as a polygon, may stand inside the true curve (px): a leader's end on it lands within its
+1 px trim and this of the curve (feature 449 T192).
+
+Research: a disc's sampled curve - CONVENTION: a disc's drawn curve sampled finely enough that no chord stands more than 0.05 px inside it - a drawn size on the sheet, not in the world; the sample count is the least whose chord sag R(1 - cos(pi / n)) is within it, R bounding the curve's half-axes (the pool's largest disc half-axis is 45 px, 80 samples at the bound)"""
+
+
+def drawn_ink(s: Shape) -> InkPart:
+    """A drawn part as a leader ends on it (feature 449 T192): a stroke's polyline at its half-width, at least half a pixel (the band
+    `leader_to_ink` buffers); a disc's drawn curve - the image of the unit circle in the drawn box the reader keeps as its outline, its
+    center plus cos t of one half-side plus sin t of the other, so a turned or unequally scaled disc is drawn as it is - sampled in
+    `_disc_samples` points; any other shape its outline.
+
+    Research: its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.5 (a stroke's least half-width, the band `leader_to_ink` buffers)
+    """
+    if s.line:
+        return InkPart(tuple(s.poly), line=True, half=max(s.half, 0.5))
+    if s.tag not in ("circle", "ellipse") or len(s.poly) != 4:
+        return InkPart(tuple(s.poly))
+    p0, p1, p2, p3 = s.poly
+    c = ((p0[0] + p2[0]) / 2, (p0[1] + p2[1]) / 2)
+    u, v = ((p1[0] - p0[0]) / 2, (p1[1] - p0[1]) / 2), ((p3[0] - p0[0]) / 2, (p3[1] - p0[1]) / 2)
+    n = _disc_samples(math.hypot(math.hypot(*u), math.hypot(*v)))
+    ts = [2 * math.pi * k / n for k in range(n)]
+    return InkPart(tuple((c[0] + math.cos(t) * u[0] + math.sin(t) * v[0], c[1] + math.cos(t) * u[1] + math.sin(t) * v[1]) for t in ts))
+
+
+def _disc_samples(r: float) -> int:
+    """The least number of points sampling a curve whose half-axes `r` bounds with no chord more than `DISC_SAG_PX` inside it -
+    R(1 - cos(pi / n)) - at least 8 (a disc smaller than the sag).
+
+    Research: its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (the least samples of a disc's curve)
+    """
+    return 8 if r <= DISC_SAG_PX else max(8, math.ceil(math.pi / math.acos(1 - DISC_SAG_PX / r)))
 
 
 BLOCK_PX = 2000.0
@@ -726,47 +764,51 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
     and its name inside it, like a caption beside a turned feature, takes its outline's first edge's angle (feature 449 T188: a
     turned building's roof name was set level), a quarter, half or three-quarter turn keeping it level; beside it, the caption is
     seated off the box of what it names read in that feature's own frame (`_framed`; feature 449 T189: a turned garden holding its
-    lantern and a lone turned block among its parts were named level beside, off the upright box). A lone shape
-    carries its own outline as the subject's `ink`, which its leader ends on (feature 449 T191: a leader to a lone L-shaped house
-    was scored to its box's corner over the empty ground of its notch).
+    lantern and a lone turned block among its parts were named level beside, off the upright box). Each subject beside carries the
+    drawn ink of what it is read off as its `ink` (`drawn_ink`), which its leader ends on: a subject read off one part - a lone shape,
+    a scatter's member, a block of a stepped building - that part's, and a subject read off a box of several parts every part's
+    (feature 449 T191: a leader to a lone L-shaped house was scored to its box's corner over the empty ground of its notch; T192: a
+    leader to a disc ended on its drawn box, and one to several parts was scored to their box while `leader_to_ink` drew it to their ink).
 
     Research:
         a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
         an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does
         a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame, and a scatter's member by its own outline, which the placer's seats read in that member's frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
         a lone block's beside box - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - the page's map drawing convention (a block named among loose parts "is seated beside the smallest box holding them all"); the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)
+        which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part, a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 ties a caption to its feature but not at which point (feature 449 T191, T192)
     """
     x0, y0, x1, y1 = bbox([p for s in own for p in s.poly])
     box = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
     closed = [s for s in own if not s.line and len(s.poly) >= 3]
-    blocks = sorted((s.poly for s in own if s.tag == "rect" and _area(s.poly) >= BLOCK_PX), key=lambda q: -_area(q))
+    blocks = sorted((s for s in own if s.tag == "rect" and _area(s.poly) >= BLOCK_PX), key=lambda q: -_area(q.poly))
     holder = max(closed, key=lambda s: _area(s.poly), default=None)
+    # every part's drawn ink, which the leader of a subject read off a box of several parts ends on (feature 449 T192)
+    every = tuple(drawn_ink(s) for s in own)
     # each inside seat with whether it has a direction of its own - a drawn rect, an outline whose every corner is square, an ellipse
-    # of unequal radii (feature 449 T188, T189) - and each beside seat with the same: only such a feature's caption is turned with it
+    # of unequal radii (feature 449 T188, T189) - and each beside seat with the same and the drawn ink its leader ends on: only such a
+    # feature's caption is turned with it
     inner: list[tuple[Poly, bool]]
-    beside: list[tuple[Poly, bool]]
-    # a lone shape's own outline, which its leader ends on where it is seated off a box read around it (feature 449 T191)
-    ink: tuple[Pt, ...] | None = None
+    beside: list[tuple[Poly, bool, tuple[InkPart, ...]]]
     if len(own) == 1 and closed:
         squared = _squared(own[0])
-        ink = tuple(own[0].poly)
         # beside its box in its own frame - a rectangle's own outline, an L-shaped house's turned box (feature 449 T189); its leader to
-        # its own outline, not to that box's corner over the empty ground of an L's notch (feature 449 T191)
-        inner, beside = [(own[0].poly, squared)], [(_framed(own[0].poly, _turned(own[0].poly)), True) if squared else (box, False)]
+        # its own drawn outline, not to that box's corner over the empty ground of an L's notch (feature 449 T191) or beside a disc's
+        # curve (T192)
+        inner, beside = [(own[0].poly, squared)], [(_framed(own[0].poly, _turned(own[0].poly)), True, every) if squared else (box, False, every)]
     elif holder is not None and all(_box_within(s.poly, holder.poly) for s in own):
         # one outline holding the rest - a garden and the lantern in it (Ochiba's inner garden, read as a scatter, was
         # named from outside with a leader across the kitchen) - named beside the box of them all read in the holder's own
         # frame where it has a direction of its own (feature 449 T189: a turned garden was named level beside, off the upright box)
         squared = _squared(holder)
         frame = _turned(holder.poly) if squared else 0.0
-        inner, beside = [(holder.poly, squared)], [(_framed([p for s in own for p in s.poly], frame), squared)]
+        inner, beside = [(holder.poly, squared)], [(_framed([p for s in own for p in s.poly], frame), squared, every)]
     elif _covers(own, box):
-        inner, beside = [(box, False)], [(box, False)]
+        inner, beside = [(box, False)], [(box, False, every)]
     elif blocks:
         # a lone block among small parts is named beside the box of them all read in the block's own frame (feature 449 T189: a
         # lone turned block was named level beside, off the upright box)
-        lone = [(_framed([p for s in own for p in s.poly], _turned(blocks[0])), True)]
-        inner, beside = [(b, True) for b in blocks], [(b, True) for b in blocks] if len(blocks) >= 2 else lone
+        lone = [(_framed([p for s in own for p in s.poly], _turned(blocks[0].poly)), True, every)]
+        inner, beside = [(b.poly, True) for b in blocks], [(b.poly, True, (drawn_ink(b),)) for b in blocks] if len(blocks) >= 2 else lone
     else:
         # a scatter of like glyphs - three pines, the fire-water tubs: beside the group, else beside any one of them,
         # largest first (Ochiba's tubs stand all over the compound, and round the box of them all no seat was free).
@@ -775,15 +817,15 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
         # A member with a direction of its own (a turned L-shaped house) goes as its own outline at its angle: the placer's seats
         # read its box in that frame already (placer `_box_frame`), so its `_framed` box would give the same seats, while the
         # association gap and a leader's end, read off the outline, stay on the member's ink (feature 449 T190, measured 2026-11-18)
-        members = [(s.poly, _squared(s)) for s in sorted(closed, key=lambda s: -_area(s.poly))]
+        members = [(s.poly, _squared(s), (drawn_ink(s),)) for s in sorted(closed, key=lambda s: -_area(s.poly))]
         spread = size > 0 and max(x1 - x0, y1 - y0) > REACH_EM * size
-        inner, beside = [], ([] if spread else [(box, False)]) + members if len(closed) > 1 else [(box, False)]
+        inner, beside = [], ([] if spread else [(box, False, every)]) + members if len(closed) > 1 else [(box, False, every)]
     out: list[Subject] = []
     for poly, squared in inner:
         # a rectangle's name inside it takes the rectangle's own angle; an area with no direction of its own - a box of parts, an
         # irregular outline - is level
         out.append(Subject("area", tuple(poly), angle=_turned(poly) if squared else 0.0))
-    for poly, squared in beside:
+    for poly, squared, ink in beside:
         out.append(Subject("point", tuple(poly), angle=_turned(poly) if squared else 0.0, ink=ink))
     return out
 

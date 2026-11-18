@@ -702,6 +702,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T192 (step 3a's last known label placer defects, T191's leftover probe and its impl-drift's UNCLAIMED; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "dc1a4e07db36b0287b3fc793d404ddba95baf84804906351d130e07f6d528c23",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T192 Approach (checklist part A)": {
+   "sha256": "5e48f21c966328fc703a833ebe342c2bc6bdde1420b20dd5b248cee0150eb05b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12480,6 +12492,83 @@
      "why": "The project's standing exits; nothing added or skipped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T192 (step 3a's last known label placer defects, T191's leftover probe and its impl-drift's UNCLAIMED; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T192 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "scope-both-copies",
+     "summary": "Fix the disc-ink and several-parts-ink leader defects in the Rust placer/hand sheet AND the kept Python placer.py/hand_sheet.py.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'we want to use this port to fix broken things as we find them ... fix all known bugs in each step before moving on to porting the next step'. The kept Python still draws the pool sheets (FR-003), so fixing Rust alone would leave the bug live; the 2026-11-10 'no longer changing it' words concern deleting tests, and the later fix-as-we-go words govern a known defect."
+    },
+    {
+     "id": "the-fix",
+     "summary": "InkPart/Subject.ink/drawn_ink/nearest_ink: a disc's ink is its drawn curve, a several-part subject carries every part's ink, leader_of scores to that ink and leader_to_ink measures a disc by its curve, so the drawn leader is the scored one.",
+     "class": "within",
+     "why": "Design of the fix for the two named defects; no requested behavior is narrowed. The red-before/green-after Rust tests and probes show the defect gone."
+    },
+    {
+     "id": "disc-sampling",
+     "summary": "DISC_SAG_PX = 0.05 px sag bound, at least 8 samples, claimed as a CONVENTION.",
+     "class": "within",
+     "why": "An implementation constant for the fix, claimed; settles nothing the request or spec left open in a narrower direction."
+    },
+    {
+     "id": "stroke-choice-and-tie",
+     "summary": "A stroke is chosen by its line's distance, end drawn back by the half-width; on a tie an outline before a stroke and the wider stroke before the narrower; two alternative forms priced and rejected.",
+     "class": "within",
+     "why": "A design choice within the fix, claimed as a CONVENTION in both copies; pinned on both orders by tests. Not a narrowing of anything asked."
+    },
+    {
+     "id": "claims-and-standing",
+     "summary": "New/changed CONVENTION claims (which subjects carry ink, which part a leader ends on, where a leader ends); Rust's standing finds a seat's subject by kind, outline and angle rather than by sampled-float ink.",
+     "class": "within",
+     "why": "Claims follow the changed behavior. The standing change loosens a float match between copies, which is in the direction of the GM's 2026-11-18 rule against exactness standards."
+    },
+    {
+     "id": "tests-and-file-split",
+     "summary": "Four new Rust tests, red before the fix, in leader_tests.rs split from tests.rs past the 1,000-line bar.",
+     "class": "within",
+     "why": "Enforcement of the fix the GM asked for (fix known bugs); the split is constitution X housekeeping."
+    },
+    {
+     "id": "held-fixtures-retaken",
+     "summary": "Hand sheet held.json re-taken from the fixed Python with a twelfth sheet; one earlier answer (the prefixed sheet's well) moved and is named; placer held.json re-answered, none moved.",
+     "class": "within",
+     "why": "FR-002's clause for a check or behavior fixed on purpose: its expected result changes as fixed, named. The GM 2026-11-18: 'it needs to be okay to have checks pass as we make those fixes'."
+    },
+    {
+     "id": "pool-outputs-moved",
+     "summary": "On the pool, one seat (Ubame's fire-water tubs) and five leaders move; four pages differ from HEAD's render; pack-audit and size-table exit 0 on all six sheets.",
+     "class": "within",
+     "why": "FR-002 and the GM 2026-11-17/18: maps may change so long as everything works; the sheets pass their checks. Not an exception to be ruled."
+    },
+    {
+     "id": "no-exactness-bar",
+     "summary": "The exits (approach items 6 and 9) rest on red/green runs, probes and the audits passing; 'byte for byte', 'manifest unchanged', 'report is HEAD's' and 'placed text is the same' are labeled observations, not bars.",
+     "class": "within",
+     "why": "No requirement in the block holds a port or change to bitwise agreement, which the GM struck on 2026-11-18."
+    },
+    {
+     "id": "stroke-cap-left-to-T193",
+     "summary": "A known defect (a leader past a stroke's end ends on a round cap the sheet may not draw, up to half-width short of a flat end's ink) is left out of T192 and drafted as its own task, before step 3b.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T192's own scope leaves a known defect, so it is classed narrowing, but the GM's words set the unit as the step: 'fix all known bugs in each step before moving on to porting the next step'. The block's drafted task line says 'fixed with a test red first, before step 3b', in both copies, and the dispatch states it is filed as T193 ordered before step 3b (not verified here: the bundle forbids reading the repository). The purpose - no known defect carried into the next step - is untouched. No pool leader currently ends so (caps.py)."
+    },
+    {
+     "id": "0242-drawing-page",
+     "summary": "Research page 0242's leader bullet gains the sentence that a leader ending at the drawn feature's nearest point is a map drawing convention no source fixes; the claims cite it.",
+     "class": "within",
+     "why": "Records the convention the fix rests on so its claims cite a page; historical accuracy is the research ladder's, not this review's. The page stays under its cap."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22134,6 +22223,81 @@
      "summary": "make static, make rust-test, make quick after the last edit; then plan review, claims round, gated make land",
      "class": "within",
      "why": "The project's standing exits; nothing added or skipped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T192": {
+   "section_sha256": "dfbae82460881a74dc55d157d2c9148d86b1555b379065b2e6f465d267c13ae8",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "scope-both-copies",
+     "summary": "Fix the disc-ink and several-parts-ink leader defects in the Rust placer/hand sheet AND the kept Python placer.py/hand_sheet.py.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'we want to use this port to fix broken things as we find them ... fix all known bugs in each step before moving on to porting the next step'. The kept Python still draws the pool sheets (FR-003), so fixing Rust alone would leave the bug live; the 2026-11-10 'no longer changing it' words concern deleting tests, and the later fix-as-we-go words govern a known defect."
+    },
+    {
+     "id": "the-fix",
+     "summary": "InkPart/Subject.ink/drawn_ink/nearest_ink: a disc's ink is its drawn curve, a several-part subject carries every part's ink, leader_of scores to that ink and leader_to_ink measures a disc by its curve, so the drawn leader is the scored one.",
+     "class": "within",
+     "why": "Design of the fix for the two named defects; no requested behavior is narrowed. The red-before/green-after Rust tests and probes show the defect gone."
+    },
+    {
+     "id": "disc-sampling",
+     "summary": "DISC_SAG_PX = 0.05 px sag bound, at least 8 samples, claimed as a CONVENTION.",
+     "class": "within",
+     "why": "An implementation constant for the fix, claimed; settles nothing the request or spec left open in a narrower direction."
+    },
+    {
+     "id": "stroke-choice-and-tie",
+     "summary": "A stroke is chosen by its line's distance, end drawn back by the half-width; on a tie an outline before a stroke and the wider stroke before the narrower; two alternative forms priced and rejected.",
+     "class": "within",
+     "why": "A design choice within the fix, claimed as a CONVENTION in both copies; pinned on both orders by tests. Not a narrowing of anything asked."
+    },
+    {
+     "id": "claims-and-standing",
+     "summary": "New/changed CONVENTION claims (which subjects carry ink, which part a leader ends on, where a leader ends); Rust's standing finds a seat's subject by kind, outline and angle rather than by sampled-float ink.",
+     "class": "within",
+     "why": "Claims follow the changed behavior. The standing change loosens a float match between copies, which is in the direction of the GM's 2026-11-18 rule against exactness standards."
+    },
+    {
+     "id": "tests-and-file-split",
+     "summary": "Four new Rust tests, red before the fix, in leader_tests.rs split from tests.rs past the 1,000-line bar.",
+     "class": "within",
+     "why": "Enforcement of the fix the GM asked for (fix known bugs); the split is constitution X housekeeping."
+    },
+    {
+     "id": "held-fixtures-retaken",
+     "summary": "Hand sheet held.json re-taken from the fixed Python with a twelfth sheet; one earlier answer (the prefixed sheet's well) moved and is named; placer held.json re-answered, none moved.",
+     "class": "within",
+     "why": "FR-002's clause for a check or behavior fixed on purpose: its expected result changes as fixed, named. The GM 2026-11-18: 'it needs to be okay to have checks pass as we make those fixes'."
+    },
+    {
+     "id": "pool-outputs-moved",
+     "summary": "On the pool, one seat (Ubame's fire-water tubs) and five leaders move; four pages differ from HEAD's render; pack-audit and size-table exit 0 on all six sheets.",
+     "class": "within",
+     "why": "FR-002 and the GM 2026-11-17/18: maps may change so long as everything works; the sheets pass their checks. Not an exception to be ruled."
+    },
+    {
+     "id": "no-exactness-bar",
+     "summary": "The exits (approach items 6 and 9) rest on red/green runs, probes and the audits passing; 'byte for byte', 'manifest unchanged', 'report is HEAD's' and 'placed text is the same' are labeled observations, not bars.",
+     "class": "within",
+     "why": "No requirement in the block holds a port or change to bitwise agreement, which the GM struck on 2026-11-18."
+    },
+    {
+     "id": "stroke-cap-left-to-T193",
+     "summary": "A known defect (a leader past a stroke's end ends on a round cap the sheet may not draw, up to half-width short of a flat end's ink) is left out of T192 and drafted as its own task, before step 3b.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T192's own scope leaves a known defect, so it is classed narrowing, but the GM's words set the unit as the step: 'fix all known bugs in each step before moving on to porting the next step'. The block's drafted task line says 'fixed with a test red first, before step 3b', in both copies, and the dispatch states it is filed as T193 ordered before step 3b (not verified here: the bundle forbids reading the repository). The purpose - no known defect carried into the next step - is untouched. No pool leader currently ends so (caps.py)."
+    },
+    {
+     "id": "0242-drawing-page",
+     "summary": "Research page 0242's leader bullet gains the sentence that a leader ending at the drawn feature's nearest point is a map drawing convention no source fixes; the claims cite it.",
+     "class": "within",
+     "why": "Records the convention the fix rests on so its claims cite a page; historical accuracy is the research ladder's, not this review's. The page stays under its cap."
     }
    ],
    "verdict": "CLEAR"

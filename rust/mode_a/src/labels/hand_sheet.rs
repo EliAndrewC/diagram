@@ -91,6 +91,12 @@ pub const DARK: f64 = 0.3;
 /// Research: another caption's weight - CONVENTION: covering another caption weighs ten obstacles, the overlap a reader cannot see past
 pub const WEIGHT_TEXT: f64 = 10.0 * WEIGHT_OBSTACLE;
 
+/// How far a disc's drawn curve, sampled as a polygon, may stand inside the true curve (px): a leader's end on it lands within its 1 px trim
+/// and this of the curve (feature 449 T192).
+///
+/// Research: a disc's sampled curve - CONVENTION: a disc's drawn curve sampled finely enough that no chord stands more than 0.05 px inside it - a drawn size on the sheet, not in the world; the sample count is the least whose chord sag R(1 - cos(pi / n)) is within it, R bounding the curve's half-axes (the pool's largest disc half-axis is 45 px, 80 samples at the bound)
+pub const DISC_SAG_PX: f64 = 0.05;
+
 /// A part big enough to be a block of a building (about 220 sq ft).
 ///
 /// Research: block part size - CONVENTION: a part of 2000 px2 (about 220 sq ft) or more counts as a block of a building to the caption placer, not a sub-part - a calibration of the placer, which changes where a caption is seated
@@ -428,5 +434,7 @@ pub fn render(src: &str, png: &std::path::Path) -> Result<(), Error> {
     std::fs::write(png, bytes).map_err(|e| crate::py::os_error(&e, &png.to_string_lossy()))
 }
 
+#[cfg(test)]
+mod leader_tests;
 #[cfg(test)]
 mod tests;

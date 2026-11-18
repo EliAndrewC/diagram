@@ -15,6 +15,9 @@ Feature 449 T189 added a tenth: a turned garden holding its lantern, a lone turn
 beside at their angle off their turned edge, and an L-shaped kura named inside at its angle, and re-took every answer from its fixed Python.
 Feature 449 T191 added an eleventh: a lone turned L-shaped house hemmed by sheds, its caption led out past twice the gap, its leader
 scored and drawn to the house itself, and re-took every answer from its fixed Python.
+Feature 449 T192 added a twelfth: a lone well, two striking posts, a weapon rack of three rails and a moored barge, each penned by dark
+sheds with a gap below, their captions led out past twice the gap, each leader scored and drawn to the drawn ink - a disc's curve, not
+its box, and several parts' own ink, not their box - and re-took every answer from its fixed Python.
 """
 
 import json, sys, traceback
@@ -182,6 +185,30 @@ LED_L = sheet(
 )
 
 
+# feature 449 T192: a lone well, two striking posts, a weapon rack of three rails and a moored barge, each penned by dark sheds with a gap
+# below, their captions led out past twice the gap: each leader is scored and drawn to the drawn ink - the well's curve, where it was scored
+# to the well's box and its seat below, led to the box's corner across the shed, was passed over; the parts' own ink, where they were
+# scored to their box and drawn to the ink
+def pen(x, y, w, h):
+    # dark sheds 6 px thick round a w x h yard at (x, y), 4 px off it, with a 10 px gap in the middle of the lower side
+    x0, y0, x1, y1 = x - 10, y - 10, x + w + 4, y + h + 4
+    mid = x + w / 2
+    return (f'<rect x="{x0}" y="{y0}" width="{x1 - x0 + 6}" height="6" fill="#2D2A24"/><rect x="{x0}" y="{y0 + 6}" width="6" height="{y1 - y0}" fill="#2D2A24"/>'
+            f'<rect x="{x1}" y="{y0 + 6}" width="6" height="{y1 - y0}" fill="#2D2A24"/><rect x="{x0}" y="{y1}" width="{mid - 5 - x0}" height="6" fill="#2D2A24"/>'
+            f'<rect x="{mid + 5}" y="{y1}" width="{x1 + 6 - mid - 5}" height="6" fill="#2D2A24"/>')
+
+
+LED_PARTS = sheet(
+    '  <g data-kind="sheds">' + pen(46, 46, 18, 18) + pen(242, 42, 26, 23) + pen(40, 180, 40, 28) + pen(236, 185, 36, 25) + '</g>\n',
+    '  <g data-kind="well"><circle cx="55" cy="55" r="9" fill="#5C7A8C"/><text x="55" y="55" font-size="8">well of the old shrine</text></g>\n',
+    '  <g data-kind="striking posts"><circle cx="245" cy="45" r="3" fill="#6B5A3A"/><circle cx="265" cy="62" r="3" fill="#6B5A3A"/><text x="255" y="55" font-size="8">striking posts</text></g>\n',
+    '  <g data-kind="weapon rack"><rect x="40" y="180" width="24" height="4" fill="#6B5A3A"/><rect x="40" y="192" width="24" height="4" fill="#6B5A3A"/>'
+    '<rect x="56" y="204" width="24" height="4" fill="#6B5A3A"/><text x="55" y="195" font-size="8">weapon rack</text></g>\n',
+    '  <g data-kind="barge"><rect x="236" y="185" width="22" height="9" fill="#8C6F3E"/><line x1="258" y1="190" x2="272" y2="210" stroke="#4A3318" stroke-width="1.5"/>'
+    '<text x="255" y="195" font-size="8">tax barge of the river</text></g>\n',
+)
+
+
 REFUSALS = [
     sheet('<g data-kind="x"><text x="5" y="5" font-size="6">lonely</text></g>\n'),
     sheet('<g data-kind="tub"><circle cx="50" cy="50" r="5"/><text x="80" y="80" font-size="6">tub</text></g>\n', back='<_x/>' + BACK),
@@ -201,7 +228,7 @@ REFUSALS = [
     sheet('  <g transform="rotate(x)"><rect width="1" height="1"/></g>\n'),
     "<svg",
 ]
-out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE, LED_L]]
+out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE, LED_L, LED_PARTS]]
 for o in out:
     print(o.get("raises", "placed %d" % len(o.get("placed", ""))), file=sys.stderr)
 json.dump(out, open(sys.argv[1], "w"), indent=0)

@@ -534,13 +534,13 @@ fn a_ground_s_name_covering_a_building_inside_gives_way_to_a_free_seat_beside() 
 }
 
 /// A point `(u, v)` of a frame turned 30 degrees, for the turned features' tests (feature 449 T189).
-fn at30(u: f64, v: f64) -> (f64, f64) {
+pub(super) fn at30(u: f64, v: f64) -> (f64, f64) {
     let (s, c) = (30.0_f64.to_radians().sin(), 30.0_f64.to_radians().cos());
     (u * c - v * s, u * s + v * c)
 }
 
 /// A shape drawn as `tag` along `poly`.
-fn drawn(tag: &str, poly: Vec<(f64, f64)>) -> super::Shape {
+pub(super) fn drawn(tag: &str, poly: Vec<(f64, f64)>) -> super::Shape {
     super::Shape {
         tag: tag.to_owned(),
         poly,
@@ -719,59 +719,5 @@ fn an_outline_whose_every_corner_is_square_has_a_direction_of_its_own() {
             .map(|x| (x.0, x.1))
             .collect();
         assert_eq!(angles, [(Kind::Area, 0.0), (Kind::Point, 0.0)]);
-    }
-}
-
-#[test]
-fn a_leader_to_a_lone_l_shaped_outline_ends_on_the_l_not_its_box() {
-    // feature 449 T191, research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the
-    // usual gap from its feature "is tied to it by a thin leader line" - a lone L-shaped house is seated off its box (turned with it, or
-    // upright where it is level), and its leader ended at that box's nearest point, on the empty ground of the L's notch (T190's probe:
-    // 42 to 80 of 256 ring-9 seats more than 1.5 px off the L's ink)
-    use crate::labels::geom::{dist, nearest_points, rect};
-    use crate::labels::placer::leader_of;
-    let corners = [
-        (0.0, 0.0),
-        (60.0, 0.0),
-        (60.0, 20.0),
-        (20.0, 20.0),
-        (20.0, 50.0),
-        (0.0, 50.0),
-    ];
-    // turned 30 degrees, level, and turned with a closing point repeating the first
-    for (turn, closing) in [
-        (at30 as fn(f64, f64) -> (f64, f64), false),
-        (|u, v| (u, v), false),
-        (at30, true),
-    ] {
-        let ell: Vec<(f64, f64)> = corners.iter().map(|&(u, v)| turn(u, v)).collect();
-        let mut drawn_poly = ell.clone();
-        drawn_poly.extend(closing.then_some(ell[0]));
-        let shape = drawn("polygon", drawn_poly);
-        let beside = subjects(&[&shape], 9.0).remove(1);
-        assert_eq!(beside.kind, Kind::Point);
-        // sixteen caption blocks round the L, 70 px from its box's middle, each tied back by a leader that runs from the block's nearest
-        // point to the L to the L's own outline, short of each by its trim of at most 1 px: the blocks whose leader does not
-        let mut off = Vec::new();
-        for k in 0..16 {
-            let a = f64::from(k) * std::f64::consts::PI / 8.0;
-            let (mx, my) = turn(30.0, 25.0);
-            let block = rect(
-                mx + 70.0 * a.cos(),
-                my + 70.0 * a.sin(),
-                20.0,
-                5.0,
-                beside.angle,
-            );
-            let (start, end) =
-                leader_of(9, &block, &beside).expect("a ring-9 seat clear of the L draws a leader");
-            let (from, to) = nearest_points(&block, &ell, true);
-            let on_ink = nearest_points(&[end], &ell, true);
-            let tied = dist(on_ink.0, on_ink.1) <= 1.0 + 1e-9
-                && dist(start, from) <= 1.0 + 1e-9
-                && dist(end, to) <= 1.0 + 1e-9;
-            off.extend((!tied).then_some(k));
-        }
-        assert_eq!(off, Vec::<i32>::new());
     }
 }

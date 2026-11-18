@@ -40,10 +40,20 @@ pub enum Kind {
     Area,
 }
 
+/// One drawn part of what a caption names, as its leader ends on it (the Python's `InkPart`): a closed outline (a disc's drawn curve, not
+/// its box), or, `line`, a stroke's polyline and the half-width (`half`) at whose edge the leader stops (feature 449 T192).
+#[derive(Debug, Clone, PartialEq)]
+pub struct InkPart {
+    pub pts: Vec<Pt>,
+    pub line: bool,
+    pub half: f64,
+}
+
 /// What a caption names (the Python's `Subject`): its kind, its drawn outline or polyline, its rotation, a line's drawn half-width, the
-/// point a line's caption runs near, whether it is itself a named civic building (FR-014), and `ink`, the feature's own outline as the
-/// sheet's reader keeps it, which a lone shape's subject carries: its seats are measured off `poly`, which may be a box read around it (an
-/// L-shaped house's, turned with it or upright), and its leader ends on `ink` (feature 449 T191).
+/// point a line's caption runs near, whether it is itself a named civic building (FR-014), and `ink`, the feature's drawn parts, which a
+/// hand sheet's subject beside its feature carries: its seats are measured off `poly`, which may be a box read around them (an L-shaped
+/// house's, turned with it or upright; a scatter's; a disc's drawn box), and its leader ends on `ink` (feature 449 T191, T192); empty, the
+/// leader ends on `poly`.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Subject {
     pub kind: Kind,
@@ -52,7 +62,7 @@ pub struct Subject {
     pub half_width: f64,
     pub hint: Option<Pt>,
     pub civic: bool,
-    pub ink: Option<Vec<Pt>>,
+    pub ink: Vec<InkPart>,
 }
 
 impl Subject {
@@ -66,7 +76,7 @@ impl Subject {
             half_width: 0.0,
             hint: None,
             civic: false,
-            ink: None,
+            ink: Vec::new(),
         }
     }
 }
@@ -586,23 +596,28 @@ pub fn in_frame(block: &[Pt], frame: Option<Frame>) -> bool {
     !(bx0 < f.0 || by0 < f.1 || bx1 > f.2 || by1 > f.3)
 }
 
-/// The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names - the feature's own
-/// outline (`ink`) where the subject carries one, a lone shape seated off a box read around it, so a leader to a lone L-shaped house ends
-/// on the house, not on its box's corner over the empty ground of its notch (feature 449 T191) - trimmed a little at each end. None within [`LEADERLESS_RINGS`] and for
-/// an area, whose name lies inside it; None too where the block touches what it names (a line that bends back can hold a leader ring's
-/// block across another of its segments) - nothing is left to tie back, where the Python divided by the zero distance (feature 449 T184).
+/// The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names - the feature's drawn
+/// parts (`ink`) where the subject carries them, a subject seated off a box read around them, so a leader to a lone L-shaped house ends on
+/// the house, not on its box's corner over the empty ground of its notch (feature 449 T191), and a leader to a disc or to a scatter of
+/// parts ends on the drawn ink the hand sheet draws it to, not on a box's corner (feature 449 T192) - trimmed a little at each end. None
+/// within [`LEADERLESS_RINGS`] and for an area, whose name lies inside it; None too where the block touches what it names (a line that
+/// bends back can hold a leader ring's block across another of its segments) - nothing is left to tie back, where the Python divided by
+/// the zero distance (feature 449 T184).
 ///
 /// Research:
 ///     when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line
-///     where a leader ends - CONVENTION: from the caption block's nearest point to the nearest point of the outline the subject carries as the feature's own (`ink`: a lone shape's outline as the sheet's reader keeps it, a disc's its drawn box), else of the subject's outline - a subject of several parts is scored to its box, and the hand sheet ends its drawn leader on the parts' ink (`leader_to_ink`); 0242 ties a displaced caption to its feature with a leader line but does not say at which point, the nearest is the shortest tie, and a box's corner may stand over empty ground, as an L-shaped house's notch (feature 449 T191)
+///     where a leader ends - CONVENTION: from the caption block's nearest point to the nearest point of the feature's drawn parts the subject carries (`ink`: a closed part's outline, a disc's its drawn curve; a stroke's edge, the nearest point of its line drawn back toward the block by its half-width, the part chosen by its line, an exact tie going to an outline before a stroke and to the wider stroke), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws; 0242 ties a displaced caption to its feature with a leader line but does not say at which point, the nearest is the shortest tie, and a box's corner may stand over empty ground, as an L-shaped house's notch or the gap beside a disc or among a scatter (feature 449 T191, T192)
 ///     leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world
 #[must_use]
 pub fn leader_of(ring: usize, block: &[Pt], subject: &Subject) -> Option<(Pt, Pt)> {
     if ring < LEADERLESS_RINGS || subject.kind == Kind::Area {
         return None;
     }
-    let to = subject.ink.as_deref().unwrap_or(&subject.poly);
-    let (a, b) = nearest_points(block, to, subject.kind != Kind::Line);
+    let (a, b) = if subject.ink.is_empty() {
+        nearest_points(block, &subject.poly, subject.kind != Kind::Line)
+    } else {
+        nearest_ink(block, &subject.ink)
+    };
     let d = dist(a, b);
     if d == 0.0 {
         return None;
@@ -613,6 +628,48 @@ pub fn leader_of(ring: usize, block: &[Pt], subject: &Subject) -> Option<(Pt, Pt
         (a.0 + ux * trim, a.1 + uy * trim),
         (b.0 - ux * trim, b.1 - uy * trim),
     ))
+}
+
+/// The nearest pair of points, one on the block and one on the drawn parts (the Python's `_nearest_ink`): the part whose outline, or whose
+/// stroke's line, stands nearest the block - on an exact tie a closed outline before a stroke, then the wider stroke, then the first in
+/// their order - and on a stroke its line's nearest point drawn back toward the block by its half-width - the edge of the round-capped band
+/// [`leader_to_ink`](super::hand_sheet::leader_to_ink) ends on - or the block's own point where the block reaches the stroke (feature 449
+/// T192).
+///
+/// Two forms tried and not kept (feature 449 T192, measured 2026-11-18 on the four caption-placing pool sheets): the part chosen by its
+/// stroke's edge, the line's distance less the half-width, let a partition's end on a building's edge take the leader by half a pixel -
+/// Ochiba's SERVANTS' QUARTERS went from ring 4 to ring 20, its ring-4 leader led over a tub (scratchpad t192/why1.log, why2.log); each
+/// stroke as the band of its width, chosen by the band's edge, let the 1 px stroke between that building's blocks take it, its leader 95.58
+/// px over, under the latrine, which went from ring 0 to ring 3 (t192/reach-band.log).
+///
+/// Research: which part a leader ends on - CONVENTION: the part nearest the block by its outline or its stroke's line; on an exact tie a closed outline before a stroke (a stroke drawn along a building's edge, a partition or a gallery, is the building's) and the wider stroke before the narrower (a wall before the dashed line drawn on it), so the leader stops at the outermost drawn ink; 0242 does not say at which point a leader ends (feature 449 T192)
+#[expect(
+    clippy::float_cmp,
+    reason = "an exact tie: two parts sharing the coordinate nearest the block"
+)]
+fn nearest_ink(block: &[Pt], ink: &[InkPart]) -> (Pt, Pt) {
+    let mut best = (f64::INFINITY, true, 0.0, block[0], block[0]);
+    for part in ink {
+        let (a, b) = nearest_points(block, &part.pts, !part.line);
+        let d = dist(a, b);
+        // on a tie, an outline before a stroke, then the wider stroke - Python's `(d, (line, -half)) < best`
+        let tie =
+            d == best.0 && ((!part.line && best.1) || (part.line == best.1 && part.half > best.2));
+        if d < best.0 || tie {
+            let b = if !part.line {
+                b
+            } else if d <= part.half {
+                a
+            } else {
+                (
+                    b.0 + (a.0 - b.0) * part.half / d,
+                    b.1 + (a.1 - b.1) * part.half / d,
+                )
+            };
+            best = (d, part.line, part.half, a, b);
+        }
+    }
+    (best.3, best.4)
 }
 
 /// What a seat's leader line passes over or ends against, of the things `index` holds, and whether that is an overlap: a leader through

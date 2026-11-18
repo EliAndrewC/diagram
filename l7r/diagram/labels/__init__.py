@@ -12,6 +12,7 @@ from .obstacles import Obstacle as Obstacle
 from .obstacles import ObstacleIndex as ObstacleIndex
 from .obstacles import Way as Way
 from .obstacles import circle_obstacle as circle_obstacle
+from .placer import InkPart as InkPart
 from .placer import Placement as Placement
 from .placer import Subject as Subject
 from .placer import caption_clears_ways as caption_clears_ways

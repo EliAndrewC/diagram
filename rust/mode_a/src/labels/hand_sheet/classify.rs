@@ -8,14 +8,14 @@ use std::collections::BTreeSet;
 
 use super::super::geom::{bbox, dist, inside, open_edges, ring_edges, seg_closest, Pt};
 use super::super::obstacles::{Obstacle, ObstacleIndex, Way};
-use super::super::placer::{Placement, Subject};
+use super::super::placer::{InkPart, Placement, Subject};
 use super::super::standard::{WEIGHT_OBSTACLE, WEIGHT_WAY};
 use super::seat::{area, box_within};
 use super::{
-    Shape, GLYPH_MAX_PX, GROUND_KINDS, WALL_HALF_PX, WAY_KINDS, WEIGHT_DARK, WEIGHT_INNER,
-    WEIGHT_TEXT,
+    Shape, DISC_SAG_PX, GLYPH_MAX_PX, GROUND_KINDS, WALL_HALF_PX, WAY_KINDS, WEIGHT_DARK,
+    WEIGHT_INNER, WEIGHT_TEXT,
 };
-use crate::py::{hypot, max, min};
+use crate::py::{half_sum, hypot, max, min};
 
 /// What one caption's classification is asked for: the captions being placed (not obstacles to themselves), the caption's own index (ink
 /// painted after it hides it), its kind, its subject's outline, whether that subject is an area, whether its dark fill takes no name, and
@@ -332,8 +332,10 @@ impl Ink<'_> {
 /// cap stands up to `r (1 - cos(pi / 64))` from GEOS's (0.12% of the half-width; measured on the pool sheets by
 /// `parse/lockstep_labels.rs`).
 ///
-/// A leader whose start already lies on the ink it names ties nothing back - the caption touches its subject - so it is dropped (feature
-/// 449 T184; the Python divided by the zero distance there).
+/// A disc's ink is its drawn curve ([`drawn_ink`]), not the box the reader keeps as its outline (feature 449 T192: three pool leaders ended
+/// 1.75 to 4.45 px off the curve). A leader whose start already lies on the ink it names ties nothing back - the caption touches its
+/// subject - so it is dropped (feature 449 T184; the Python divided by the zero distance there). The placer's own leader ends on the same
+/// ink (`Subject::ink`, feature 449 T192), so this leaves every leader a hand sheet's subject scores as it was scored.
 ///
 /// Research:
 ///     its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)
@@ -343,14 +345,18 @@ pub fn leader_to_ink(p: Placement, parts: &[&Shape]) -> Placement {
     let Some((start, end)) = p.leader else {
         return p;
     };
-    let ink: Vec<Ink<'_>> = parts
+    let drawn: Vec<(&Shape, InkPart)> = parts
         .iter()
         .filter(|s| s.poly.len() >= if s.line { 2 } else { 3 })
-        .map(|s| {
+        .map(|s| (*s, drawn_ink(s)))
+        .collect();
+    let ink: Vec<Ink<'_>> = drawn
+        .iter()
+        .map(|(s, d)| {
             if s.line {
                 Ink::Stroke(&s.poly, max(s.half, 0.5))
             } else {
-                Ink::Area(&s.poly)
+                Ink::Area(&d.pts)
             }
         })
         .collect();
@@ -376,4 +382,72 @@ pub fn leader_to_ink(p: Placement, parts: &[&Shape]) -> Placement {
         leader: Some((start, (tip.0 - ux * trim, tip.1 - uy * trim))),
         ..p
     }
+}
+
+/// A drawn part as a leader ends on it (feature 449 T192, the Python's `drawn_ink`): a stroke's polyline at its half-width, at least half a
+/// pixel (the band [`leader_to_ink`] measures); a disc's drawn curve - the image of the unit circle in the drawn box the reader keeps as its
+/// outline, its center plus cos t of one half-side plus sin t of the other, so a turned or unequally scaled disc is drawn as it is - sampled
+/// in [`disc_samples`] points; any other shape its outline.
+///
+/// Research: its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.5 (a stroke's least half-width, the band `leader_to_ink` buffers)
+#[must_use]
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the Python's names, kept so each line reads against its original (c, u, v, n, t)"
+)]
+pub fn drawn_ink(s: &Shape) -> InkPart {
+    if s.line {
+        return InkPart {
+            pts: s.poly.clone(),
+            line: true,
+            half: max(s.half, 0.5),
+        };
+    }
+    let outline = |pts: Vec<Pt>| InkPart {
+        pts,
+        line: false,
+        half: 0.0,
+    };
+    let [p0, p1, p2, p3] = s.poly[..] else {
+        return outline(s.poly.clone());
+    };
+    if s.tag != "circle" && s.tag != "ellipse" {
+        return outline(s.poly.clone());
+    }
+    let c = (half_sum(p0.0, p2.0), half_sum(p0.1, p2.1));
+    let (u, v) = (
+        ((p1.0 - p0.0) / 2.0, (p1.1 - p0.1) / 2.0),
+        ((p3.0 - p0.0) / 2.0, (p3.1 - p0.1) / 2.0),
+    );
+    let n = disc_samples(hypot(hypot(u.0, u.1), hypot(v.0, v.1)));
+    outline(
+        (0..n)
+            .map(|k| {
+                #[expect(clippy::cast_precision_loss, reason = "a sample count, far under 2^52")]
+                let t = 2.0 * std::f64::consts::PI * k as f64 / n as f64;
+                (
+                    c.0 + t.cos() * u.0 + t.sin() * v.0,
+                    c.1 + t.cos() * u.1 + t.sin() * v.1,
+                )
+            })
+            .collect(),
+    )
+}
+
+/// The least number of points sampling a curve whose half-axes `r` bounds with no chord more than [`DISC_SAG_PX`] inside it -
+/// R(1 - cos(pi / n)) - at least 8 (a disc smaller than the sag).
+///
+/// Research: its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (the least samples of a disc's curve)
+#[must_use]
+pub fn disc_samples(r: f64) -> usize {
+    if r <= DISC_SAG_PX {
+        return 8;
+    }
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "a positive whole count, under a few thousand for any drawn disc"
+    )]
+    let n = (std::f64::consts::PI / (1.0 - DISC_SAG_PX / r).acos()).ceil() as usize;
+    n.max(8)
 }

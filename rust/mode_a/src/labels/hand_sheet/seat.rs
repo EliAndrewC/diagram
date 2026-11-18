@@ -19,12 +19,13 @@ use super::super::geom::{bbox, dist, BBox, Pt};
 use super::super::layout::layouts;
 use super::super::obstacles::{Obstacle, ObstacleIndex};
 use super::super::placer::{
-    hug_gap, in_frame, judge, place, referent_box, Ask, Kind, Placement, Subject, LEADERLESS_RINGS,
+    hug_gap, in_frame, judge, place, referent_box, Ask, InkPart, Kind, Placement, Subject,
+    LEADERLESS_RINGS,
 };
 use super::super::standard::{
     chars, CENTER_ABOVE_BASELINE_EM, CLEAR_EM, PITCH_EM, REACH_EM, WEIGHT_OBSTACLE,
 };
-use super::classify::{band, classify, leader_blockers, leader_to_ink, Seen};
+use super::classify::{band, classify, drawn_ink, leader_blockers, leader_to_ink, Seen};
 use super::{char_w_of, luma, Shape, BLOCK_PX, GROUND_KINDS, LIGHT, REPAIR, STEPPED, WEIGHT_TEXT};
 use crate::py::{hypot, max, min, round_int, sum};
 
@@ -37,6 +38,9 @@ pub type SeatedCaption = (Vec<usize>, Placement, Vec<Vec<String>>, Subject);
 
 /// A seat's outline and whether it has a direction of its own ([`squared`]), which its caption takes.
 type Inside = (Vec<Pt>, bool);
+
+/// A seat beside: its outline, whether it has a direction of its own, and the drawn parts its leader ends on ([`drawn_ink`]).
+type Beside = (Vec<Pt>, bool, Vec<InkPart>);
 
 /// A box's area.
 #[must_use]
@@ -199,15 +203,18 @@ fn covers(own: &[&Shape], box_: &[Pt]) -> bool {
 /// ellipse of unequal radii) is turned with the sheet, and its name inside it, like a caption beside a turned feature, takes its outline's
 /// first edge's angle (feature 449 T188: a turned building's roof name was set level), a quarter, half or three-quarter turn keeping it
 /// level; beside it, the caption is seated off the box of what it names read in that feature's own frame ([`framed`]; feature 449 T189: a
-/// turned garden holding its lantern and a lone turned block among its parts were named level beside, off the upright box). A lone shape
-/// carries its own outline as the subject's `ink`, which its leader ends on (feature 449 T191: a leader to a lone L-shaped
-/// house was scored to its box's corner over the empty ground of its notch).
+/// turned garden holding its lantern and a lone turned block among its parts were named level beside, off the upright box). Each subject
+/// beside carries the drawn ink of what it is read off as its `ink` ([`drawn_ink`]), which its leader ends on: a subject read off one part -
+/// a lone shape, a scatter's member, a block of a stepped building - that part's, and a subject read off a box of several parts every
+/// part's (feature 449 T191: a leader to a lone L-shaped house was scored to its box's corner over the empty ground of its notch; T192: a
+/// leader to a disc ended on its drawn box, and one to several parts was scored to their box while `leader_to_ink` drew it to their ink).
 ///
 /// Research:
 ///     a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
 ///     an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does
 ///     a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame, and a scatter's member by its own outline, which the placer's seats read in that member's frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
 ///     a lone block's beside box - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - the page's map drawing convention (a block named among loose parts "is seated beside the smallest box holding them all"); the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)
+///     which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part, a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 ties a caption to its feature but not at which point (feature 449 T191, T192)
 #[must_use]
 pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
     let pts: Vec<Pt> = own.iter().flat_map(|s| s.poly.iter().copied()).collect();
@@ -231,7 +238,6 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
         .filter(|s| s.tag == "rect" && area(&s.poly) >= BLOCK_PX)
         .collect();
     by_area_desc(&mut blocks);
-    let blocks: Vec<Vec<Pt>> = blocks.iter().map(|s| s.poly.clone()).collect();
     let holder = closed
         .iter()
         .copied()
@@ -239,19 +245,20 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
             Some(b) if area(&s.poly) <= area(&b.poly) => Some(b),
             _ => Some(s),
         });
+    // every part's drawn ink, which the leader of a subject read off a box of several parts ends on (feature 449 T192)
+    let every: Vec<InkPart> = own.iter().map(|s| drawn_ink(s)).collect();
     // each inside seat with whether it has a direction of its own - a drawn rect, an outline whose every corner is square, an ellipse of
-    // unequal radii (feature 449 T188, T189) - and each beside seat with the same: only such a feature's caption is turned with it
-    let level = |poly: &Vec<Pt>| (poly.clone(), false);
-    // a lone shape's own outline, which its leader ends on where it is seated off a box read around it (feature 449 T191)
-    let mut ink = None;
-    let (inner, beside): (Vec<Inside>, Vec<Inside>) = if own.len() == 1 && !closed.is_empty() {
+    // unequal radii (feature 449 T188, T189) - and each beside seat with the same and the drawn ink its leader ends on: only such a
+    // feature's caption is turned with it
+    let level = |poly: &Vec<Pt>| (poly.clone(), false, every.clone());
+    let (inner, beside): (Vec<Inside>, Vec<Beside>) = if own.len() == 1 && !closed.is_empty() {
         let one = own[0].poly.clone();
         let sq = squared(own[0]);
-        ink = Some(one.clone());
         // beside its box in its own frame - a rectangle's own outline, an L-shaped house's turned box (feature 449 T189); its leader to
-        // its own outline, not to that box's corner over the empty ground of an L's notch (feature 449 T191)
+        // its own drawn outline, not to that box's corner over the empty ground of an L's notch (feature 449 T191) or beside a disc's
+        // curve (T192)
         let by = if sq {
-            (framed(&one, turned(&one)), true)
+            (framed(&one, turned(&one)), true, every.clone())
         } else {
             level(&box_)
         };
@@ -262,17 +269,23 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
         // upright box)
         let sq = squared(h);
         let frame = if sq { turned(&h.poly) } else { 0.0 };
-        (vec![(h.poly.clone(), sq)], vec![(framed(&pts, frame), sq)])
+        (
+            vec![(h.poly.clone(), sq)],
+            vec![(framed(&pts, frame), sq, every.clone())],
+        )
     } else if covers(own, &box_) {
-        (vec![level(&box_)], vec![level(&box_)])
+        (vec![(box_.clone(), false)], vec![level(&box_)])
     } else if !blocks.is_empty() {
-        let rects: Vec<Inside> = blocks.into_iter().map(|b| (b, true)).collect();
+        let rects: Vec<Inside> = blocks.iter().map(|b| (b.poly.clone(), true)).collect();
         // a lone block among small parts is named beside the box of them all read in the block's own frame (feature 449 T189: a lone
         // turned block was named level beside, off the upright box)
-        let beside = if rects.len() >= 2 {
-            rects.clone()
+        let beside = if blocks.len() >= 2 {
+            blocks
+                .iter()
+                .map(|b| (b.poly.clone(), true, vec![drawn_ink(b)]))
+                .collect()
         } else {
-            vec![(framed(&pts, turned(&rects[0].0)), true)]
+            vec![(framed(&pts, turned(&blocks[0].poly)), true, every.clone())]
         };
         (rects, beside)
     } else {
@@ -290,7 +303,11 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
             } else {
                 vec![level(&box_)]
             };
-            b.extend(members.iter().map(|s| (s.poly.clone(), squared(s))));
+            b.extend(
+                members
+                    .iter()
+                    .map(|s| (s.poly.clone(), squared(s), vec![drawn_ink(s)])),
+            );
             b
         } else {
             vec![level(&box_)]
@@ -304,10 +321,10 @@ pub fn subjects(own: &[&Shape], size: f64) -> Vec<Subject> {
         let angle = if sq { turned(&poly) } else { 0.0 };
         out.push(Subject::new(Kind::Area, poly, angle));
     }
-    for (poly, sq) in beside {
+    for (poly, sq, ink) in beside {
         let angle = if sq { turned(&poly) } else { 0.0 };
         out.push(Subject {
-            ink: ink.clone(),
+            ink,
             ..Subject::new(Kind::Point, poly, angle)
         });
     }
@@ -790,9 +807,13 @@ pub fn standing(
             .filter(|(j, _)| *j != i)
             .map(|(_, r)| (r.1.clone(), shapes[r.0[0]].size))
             .collect();
+        // the subject found by what it is seated off - its kind, outline and angle - not by its ink, a disc's sampled curve, which the
+        // Python's floats may give a bit apart (feature 449 T192)
         let k = subjects(&sheet.own(idx[0]), head.size)
             .iter()
-            .position(|s| s == sub)
+            .position(|s| {
+                s.kind == sub.kind && s.poly == sub.poly && s.angle.to_bits() == sub.angle.to_bits()
+            })
             .unwrap_or(usize::MAX);
         let (index, lead) = sheet.context(idx[0], k, sub, &others, luma(head.get("fill")) > LIGHT);
         let text = idx
