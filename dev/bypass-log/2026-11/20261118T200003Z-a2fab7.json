@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-18T20:00:03Z",
+  "target": "plan-gate push",
+  "commit": "03e169485",
+  "why": "T189's section reviewed CLEAR by spec-fidelity on 2026-11-18 and unchanged since; T190's template appended after it moved its end"
+}
