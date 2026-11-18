@@ -433,6 +433,15 @@
 - [x] T149 Phase 4 S6, the registries and their readers (ask:449-phase4-slices) Q5: interactive/classes/*, compound_kinds/*, conditions, choices, entry_owed, check-entry-headings, open_questions (2,225 lines), the modal prose moved verbatim to one Markdown file per class and kind (the FR-002 ruled case, an old-to-new id map); owed_door, record_door and record_cache deleted (756)
       research: rendering
       verify: DONE. landed: phase 4 S6, the registries: 45 differential cases none differing, the modal id map empty; make static, rust-test, hooks-test and quick green
+- [x] T153 Phase 4 S9b, pack_audit's leaves (ask:449-phase4-slices): tagged, parse, grids, onmap, labels, marks_drawn, size_marks, sun, palette (1,586 lines)
+      research: rendering
+      verify: DONE. done by T170 (tagged, parse), T174 (grids, size_marks) and T175 (onmap, labels, marks_drawn, sun, palette), which landed them measured: each ported into rust/mode_a and held to its Python by the lockstep, make pack-audit's 207 differential cases none differing
+- [x] T154 Phase 4 S10a, pack_audit's core (ask:449-phase4-slices): checks, shared, program_rules, roads, mapmatch (2,142 lines)
+      research: rendering
+      verify: DONE. done by T175, which landed it measured: checks, shared, program_rules, roads and mapmatch ported into rust/mode_a/src/audit and held to their Python by the lockstep, make pack-audit's 207 differential cases none differing
+- [x] T155 Phase 4 S10b, pack_audit's registry (ask:449-phase4-slices): __init__, registry, report, __main__, notes_census, size_table, building_programs (1,123 lines); make pack-audit, notes-census, size-table and building-programs Rust
+      research: rendering
+      verify: DONE. done by T168 (building_programs), T170 (notes_census), T174 (size_table) and T175 (__init__, registry, report, __main__ deleted), which landed them measured: make pack-audit, notes-census, size-table and building-programs run the Rust, each held by its differential with none differing
 - [x] T159 The pre-review count check: make decide refuses a count (lines, cases, files ...) whose sentence carries no label, the plan review's commonest unreviewable return (request.md 2026-11-16)
       research: rendering
       verify: DONE. landed: make decide refuses an unlabeled count; plan crate tests green, coverage complete; ask:449-T159-rounds
