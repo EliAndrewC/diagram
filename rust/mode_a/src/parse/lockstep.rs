@@ -17,9 +17,10 @@ use super::{
     is_structure, parse_svg, wall_kind, Label, ParsedPlan, Rect, BUILDING_FILLS, BUILDING_PATTERNS,
     CAPS_RATIO, CHAR_W_BOLD, CHAR_W_BOLD_MIXED, CHAR_W_FRAC, COURT_FLOORS, DARK_FILLS,
     DIVIDER_STROKE, DOOR_MAX_AREA_PX, FIRE_WATER_FILL, FURNITURE_MAX_AREA_PX, INTERIOR_FILL,
-    MIN_BLDG_AREA_PX, MIN_TREE_R_PX, OPEN_PATTERNS, PRECINCT_ID, ROOF_STROKES, TREE_FILL,
-    UTILITY_FILLS, WALL_STROKE, WELL_FILL,
+    KURA_FILLS, MIN_BLDG_AREA_PX, MIN_TREE_R_PX, OPEN_PATTERNS, PRECINCT_ID, ROOF_STROKES,
+    TREE_FILL, UTILITY_FILLS, WALL_STROKE, WELL_FILL,
 };
+use crate::audit::registry::CHECKS;
 use crate::census::PRIVY_FILL;
 use crate::py::uncaught;
 use crate::sheet::{element_kinds, DEFS};
@@ -55,21 +56,48 @@ def attempt(fn):
         return {"err": traceback.format_exception_only(type(e), e)[-1].rstrip("\n")}
 "#;
 
-/// The loop over the sheets and the constants, after the audit's half (`lockstep_audit.rs`, feature 449 T174) is defined.
+/// The work for each sheet and the constants, after the audit's halves (`lockstep_audit.rs`, feature 449 T174; `lockstep_checks.rs`,
+/// T175) are defined. A sheet's work runs in one of four children FORKED from this interpreter, so it starts and imports once: the
+/// Python half took 15.1 s with one child and 8.5 to 10.1 s with four, the machine's load at 4 to 6 (observed 2026-11-17, method: the
+/// test's own timing line, run with `--nocapture`); a garden's shadows are a task of their own, the longest, started first.
 const DUMP_TAIL: &str = r#"
-out = {}
-for path in json.load(sys.stdin):
+def one(task):
+    path, part = task
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
     T.marks.cache_clear()
-    out[path] = {"parse": attempt(lambda: P.parse_svg(text)), "marks": attempt(lambda: T.marks(text)),
-                 "kinds": attempt(lambda: S.element_kinds(text)),
-                 "audit": audit(text, os.path.basename(path).startswith("fixture-"))}
+    if part == "sun":
+        try:
+            plan = P.parse_svg(text)
+        except Exception:
+            return json.dumps(None)
+        return json.dumps(ok(lambda: sun_reading(plan, text)))
+    base = os.path.basename(path)
+    out = {"parse": attempt(lambda: P.parse_svg(text)), "marks": attempt(lambda: T.marks(text)),
+           "kinds": attempt(lambda: S.element_kinds(text))}
+    if not base.endswith("-red.svg") and "-check-" not in base:
+        out["audit"] = audit(text, base.startswith("fixture-"))
+    if not base.startswith("fixture-"):
+        out["checks"] = checks_reading(path, text)
+    return json.dumps(out)
+paths = json.load(sys.stdin)
+import multiprocessing
+tasks = [[p, "sun"] for p in paths if sun_wanted(p)] + [[p, "sheet"] for p in paths]
+with multiprocessing.get_context("fork").Pool(4) as pool:
+    done = [json.loads(d) for d in pool.map(one, tasks, chunksize=1)]
+out = {p: d for (p, part), d in zip(tasks, done) if part == "sheet"}
+for (p, part), d in zip(tasks, done):
+    if part == "sun" and "records" in out[p].get("checks", {}):
+        out[p]["checks"]["records"]["sun"] = d
+for p in paths:
+    out[p].get("checks", {}).get("records", {}).setdefault("sun", None)
 names = ("INTERIOR_FILL BUILDING_FILLS BUILDING_PATTERNS COURT_FLOORS ROOF_STROKES OPEN_PATTERNS MIN_BLDG_AREA_PX PRECINCT_ID "
          "DIVIDER_STROKE FIRE_WATER_FILL TREE_FILL MIN_TREE_R_PX CHAR_W_FRAC CHAR_W_BOLD CHAR_W_BOLD_MIXED CAPS_RATIO WELL_FILL "
-         "WALL_STROKE DARK_FILLS FURNITURE_MAX_AREA_PX DOOR_MAX_AREA_PX UTILITY_FILLS STRUCTURE_FILLS WALL_KIND").split()
+         "WALL_STROKE DARK_FILLS FURNITURE_MAX_AREA_PX DOOR_MAX_AREA_PX UTILITY_FILLS STRUCTURE_FILLS WALL_KIND KURA_FILLS").split()
 consts = {n: conv(getattr(P, n)) for n in names}
-consts.update(INHERITED=conv(T.INHERITED), SKIP=conv(T._SKIP), DEFS=S.DEFS, PRIVY_FILL=R.PRIVY_FILL, GRIDS=grid_defaults())
+given = json.load(open(sys.argv[2], encoding="utf-8"))
+consts.update(INHERITED=conv(T.INHERITED), SKIP=conv(T._SKIP), DEFS=S.DEFS, PRIVY_FILL=R.PRIVY_FILL, GRIDS=grid_defaults(),
+              CHECKS=check_defaults(), LABELS=labels_reading(given["labels"]), MAIN=main_reading(given["main"]))
 print(json.dumps({"sheets": out, "consts": consts}))
 "#;
 
@@ -83,11 +111,11 @@ fn sorted_strings<'a>(items: impl IntoIterator<Item = &'a str>) -> Value {
     json!(v)
 }
 
-fn rect(r: &Rect) -> Value {
+pub(super) fn rect(r: &Rect) -> Value {
     json!({"x": f(r.x), "y": f(r.y), "w": f(r.w), "h": f(r.h), "fill": r.fill, "pos": r.pos, "ident": r.ident})
 }
 
-fn label(l: &Label) -> Value {
+pub(super) fn label(l: &Label) -> Value {
     json!({"x": f(l.x), "y": f(l.y), "w": f(l.w), "h": f(l.h), "text": l.text, "pos": l.pos})
 }
 
@@ -105,7 +133,7 @@ fn plan(p: &ParsedPlan) -> Value {
     })
 }
 
-fn mark(m: &Mark) -> Value {
+pub(super) fn mark(m: &Mark) -> Value {
     json!({
         "tag": m.tag, "kind": m.kind, "lineage": m.lineage, "x": f(m.x), "y": f(m.y), "w": f(m.w), "h": f(m.h), "pos": m.pos,
         "paint": m.paint.iter().map(|(k, v)| json!([k, v])).collect::<Vec<_>>(),
@@ -121,16 +149,27 @@ fn attempt<T>(r: Result<T, l7r_gate_research::Error>, show: impl FnOnce(T) -> Va
     }
 }
 
-fn rust_reading(text: &str, fixture: bool) -> Value {
-    json!({
+/// This port's reading of one sheet, as `one(path)` reads it.
+fn rust_reading(path: &Path, text: &str) -> Value {
+    let base = path
+        .file_name()
+        .map(|n| n.to_string_lossy().into_owned())
+        .unwrap_or_default();
+    let mut out = json!({
         "parse": attempt(parse_svg(text), |p| plan(&p)),
         "marks": attempt(marks(text), |ms| json!(ms.iter().map(mark).collect::<Vec<_>>())),
         "kinds": attempt(element_kinds(text), |k| json!(k.iter().map(|(p, v)| json!([p, v])).collect::<Vec<_>>())),
-        "audit": super::lockstep_audit::reading(text, fixture),
-    })
+    });
+    if !base.ends_with("-red.svg") && !base.contains("-check-") {
+        out["audit"] = super::lockstep_audit::reading(text, base.starts_with("fixture-"));
+    }
+    if !base.starts_with("fixture-") {
+        out["checks"] = super::lockstep_checks::reading(path, text, &real());
+    }
+    out
 }
 
-fn consts() -> Value {
+fn consts(given: &Value) -> Value {
     let mut structures: Vec<&str> = BUILDING_FILLS
         .iter()
         .chain(&BUILDING_PATTERNS)
@@ -154,7 +193,9 @@ fn consts() -> Value {
         "WALL_STROKE": WALL_STROKE, "DARK_FILLS": sorted_strings(DARK_FILLS), "FURNITURE_MAX_AREA_PX": f(FURNITURE_MAX_AREA_PX),
         "DOOR_MAX_AREA_PX": f(DOOR_MAX_AREA_PX), "UTILITY_FILLS": sorted_strings(UTILITY_FILLS), "STRUCTURE_FILLS": structures,
         "WALL_KIND": kinds, "INHERITED": INHERITED, "SKIP": ["clipPath", "defs", "marker", "mask", "pattern", "symbol"], "DEFS": DEFS,
-        "PRIVY_FILL": PRIVY_FILL, "GRIDS": super::lockstep_audit::defaults(),
+        "PRIVY_FILL": PRIVY_FILL, "GRIDS": super::lockstep_audit::defaults(), "KURA_FILLS": sorted_strings(KURA_FILLS),
+        "CHECKS": super::lockstep_checks::defaults(&real()), "LABELS": super::lockstep_checks::labels_reading(&real()),
+        "MAIN": super::lockstep_checks::main_reading(&given["main"], &real()),
     })
 }
 
@@ -207,13 +248,32 @@ fn pool_sheets() -> Vec<PathBuf> {
     out
 }
 
-/// FR-008's one end-to-end test (ask:449-T167-realtree): the Python's parse of the six pool sheets and the fixtures in one interpreter,
-/// held equal to this port's, and the sheets' typed counts held to what they draw; its time is in this task's record (`make test-times`).
+/// The red fixtures under `tests/fixtures/`, each the sheet a registered check FIRES on (feature 254 FR-005), its notes beside it.
+fn red_fixtures() -> Vec<PathBuf> {
+    let mut out: Vec<PathBuf> = std::fs::read_dir(real().join("tests/fixtures"))
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.to_string_lossy().ends_with("-red.svg"))
+        .collect();
+    out.sort();
+    out
+}
+
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the Python's parse, grid measures and (T175) checks, registry and report of the
+/// six pool sheets, the red fixtures and the fixtures in one interpreter, held equal to this port's, and the sheets' typed counts held to
+/// what they draw; its time is in this task's record (`make test-times`). The port's half is read while the Python's runs.
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "the one end-to-end test: its sheets, its two halves and every assertion on them"
+)]
 fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-lockstep");
     let mut paths = pool_sheets();
-    assert!(paths.len() >= 4);
+    let pool = paths.len();
+    assert!(pool >= 4);
     // B15b over the same sheets (`census/pool_check.rs`): alone it was a second test over the bar
     crate::census::pool_check::every_pool_sheet_s_notes_type_the_counts_it_draws(&paths);
     for (i, (_, text)) in SHEETS.iter().enumerate() {
@@ -221,17 +281,38 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
         std::fs::write(&p, text).unwrap();
         paths.push(p);
     }
+    let reds = red_fixtures();
+    assert!(reds.len() >= 40);
+    paths.extend(reds);
+    paths.extend(super::check_fixtures::write(dir.path()));
     let names: Vec<String> = paths
         .iter()
         .map(|p| p.to_string_lossy().into_owned())
         .collect();
+    // (T175) the labeled items' declaration and sheet, and the command's runs: none, a sheet named through `..`, a sheet and then a
+    // file that is not there, a sheet whose report refuses
+    let labels = dir.path().join("labels.json");
+    std::fs::write(&labels, super::lockstep_checks::LABELS).unwrap();
+    let roundtrip = "./../../pool/magistracies/ubame-magistracy/../ochiba-roundtrip-test/ochiba-roundtrip-test.svg";
+    let refused = names
+        .iter()
+        .find(|n| n.ends_with("plain-check-refused-viewbox.svg"))
+        .unwrap();
+    let given = json!({"labels": labels, "main": [[], [roundtrip], [roundtrip, "no-such-sheet.svg"], [refused]]});
+    let given_at = dir.path().join("given.json");
+    std::fs::write(&given_at, given.to_string()).unwrap();
     let mut child = std::process::Command::new("python3")
         .args([
             "-I",
             "-c",
-            &format!("{DUMP_HEAD}{}{DUMP_TAIL}", super::lockstep_audit::PYTHON),
+            &format!(
+                "{DUMP_HEAD}{}{}{DUMP_TAIL}",
+                super::lockstep_audit::PYTHON,
+                super::lockstep_checks::PYTHON
+            ),
         ])
         .arg(real())
+        .arg(&given_at)
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
         .stderr(std::process::Stdio::piped())
@@ -242,39 +323,128 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
         json!(names).to_string().as_bytes(),
     )
     .unwrap();
+    drop(child.stdin.take());
+    // the port's half while the Python's runs
+    let clock = std::time::Instant::now();
+    let texts: Vec<String> = paths
+        .iter()
+        .map(|p| l7r_gate_core::record::read_text(p).unwrap())
+        .collect();
+    // in four threads, each every fourth sheet so the long pool sheets spread; with each sheet its gardens' unshaded areas, measured below
+    let (rust, areas): (Vec<Value>, Vec<Vec<f64>>) = std::thread::scope(|scope| {
+        let (paths, texts) = (&paths, &texts);
+        let threads: Vec<_> = (0..4)
+            .map(|k| {
+                scope.spawn(move || {
+                    let mine = paths
+                        .iter()
+                        .zip(texts)
+                        .enumerate()
+                        .filter(|(i, _)| i % 4 == k);
+                    mine.map(|(i, (p, t))| {
+                        (i, rust_reading(p, t), super::lockstep_checks::sun_areas(t))
+                    })
+                    .collect::<Vec<_>>()
+                })
+            })
+            .collect();
+        let mut all: Vec<_> = threads
+            .into_iter()
+            .flat_map(|t| t.join().unwrap())
+            .collect();
+        all.sort_by_key(|(i, _, _)| *i);
+        all.into_iter().map(|(_, r, a)| (r, a)).unzip()
+    });
+    let ours = consts(&given);
+    let rust_s = clock.elapsed().as_secs_f64();
     let out = child.wait_with_output().unwrap();
+    let python_s = clock.elapsed().as_secs_f64();
     let failed = String::from_utf8_lossy(&out.stderr);
     assert_eq!((out.status.success(), failed.as_ref()), (true, ""));
-    let python: Value = serde_json::from_slice(&out.stdout).unwrap();
-    assert_eq!(python["consts"], consts());
+    let mut python: Value = serde_json::from_slice(&out.stdout).unwrap();
+    let consts_differ = first_difference(&python["consts"], &ours, "consts");
+    assert_eq!(consts_differ, "");
+    let fixtures = pool..pool + SHEETS.len();
     // the fixture with every form on it, and the one with text of more than one byte before its ink, parse on both sides: an error
     // there would compare equal and prove nothing
-    for fixture in &names[names.len() - SHEETS.len()..][..2] {
+    for fixture in &names[fixtures.clone()][..2] {
         assert!(python["sheets"][fixture]["parse"]["ok"].is_object());
     }
     // and (T174) the grid measures' fixture and the sized marks' measure on both sides, a refusal there proving nothing either
     for (i, (name, _)) in SHEETS.iter().enumerate() {
         if name.starts_with("measured:") {
-            let audit = &python["sheets"][&names[names.len() - SHEETS.len() + i]]["audit"];
+            let audit = &python["sheets"][&names[pool + i]]["audit"];
             let measured = [&audit["vacant_more"], &audit["mark_rows"]];
             assert_eq!(measured.map(|m| m["ok"].is_array()), [true; 2], "{name}");
         }
     }
-    let fixtures = names.len() - SHEETS.len();
-    // every pool sheet is measured on both sides, not refused alike
-    for name in &names[..fixtures] {
-        let audit = &python["sheets"][name]["audit"];
+    // the two readings compared first, so a Python edit the port did not follow reads as the place they part
+    let mut measure = super::lockstep_checks::SunMeasure::default();
+    for (i, name) in names.iter().enumerate() {
+        let sheet = &mut python["sheets"][name];
+        if let Some(beds) = sheet
+            .pointer_mut("/checks/records/sun/ok")
+            .and_then(Value::as_array_mut)
+        {
+            super::lockstep_checks::sun_measure(
+                &mut measure,
+                &Value::Array(beds.clone()),
+                &areas[i],
+            );
+            beds.iter_mut()
+                .filter_map(Value::as_object_mut)
+                .for_each(|bed| drop(bed.remove("areas")));
+        }
+        assert_eq!(first_difference(sheet, &rust[i], name), "");
+    }
+    // every pool sheet is measured on both sides, not refused alike, and (T175) reported, and passes every check of its tier (the
+    // registry's pool test, feature 254 FR-005)
+    for name in &names[..pool] {
+        let sheet = &python["sheets"][name];
         let measured = [
-            audit["grids2"]["ok"].is_object(),
-            audit["vacant"]["ok"].is_array(),
+            sheet["audit"]["grids2"]["ok"].is_object(),
+            sheet["audit"]["vacant"]["ok"].is_array(),
+            sheet["checks"]["report"]["ok"].is_string(),
         ];
-        assert_eq!(measured, [true; 2], "{name}");
+        assert_eq!(measured, [true; 3], "{name}");
+        let report = sheet["checks"]["report"]["ok"].as_str().unwrap_or_default();
+        let fails: Vec<&str> = CHECKS
+            .iter()
+            .map(|ch| ch.name)
+            .filter(|n| report.contains(&format!("    {}: ", n.to_uppercase())))
+            .collect();
+        assert_eq!(fails, Vec::<&str>::new(), "{name}");
     }
-    for (i, (name, path)) in names.iter().zip(&paths).enumerate() {
-        let text = l7r_gate_core::record::read_text(path).unwrap();
-        let rust = rust_reading(&text, i >= fixtures);
-        assert_eq!(first_difference(&python["sheets"][name], &rust, name), "");
+    // (T175) every red fixture fires its check on both sides, and every check fixture that should be reported is
+    for name in &names[fixtures.end..] {
+        let checks = &python["sheets"][name]["checks"];
+        let base = Path::new(name)
+            .file_name()
+            .unwrap()
+            .to_string_lossy()
+            .into_owned();
+        let fired = |check: &str| {
+            checks["checks"]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .any(|c| c[0] == check && c[1]["ok"].as_array().is_some_and(|f| !f.is_empty()))
+        };
+        let missed: Vec<&str> = CHECKS
+            .iter()
+            .filter_map(|ch| (ch.fixture == base && !fired(ch.name)).then_some(ch.name))
+            .collect();
+        assert_eq!(missed, Vec::<&str>::new(), "{base}");
+        let reported = base.ends_with("-red.svg")
+            || base.contains("-refused-")
+            || checks["report"]["ok"].is_string();
+        assert!(reported, "{base}");
     }
+    // the unshaded area `geo` computes against GEOS's: its largest difference stays under the least distance of any half hour's area
+    // from its threshold, so no verdict can turn on it; the figures, and the two halves' times, are this task's record (`--nocapture`)
+    let held = measure.steps > 100 && measure.max_abs < measure.min_margin;
+    assert!(held, "{measure:?}");
+    eprintln!("{measure:?}; the port's half {rust_s:.2} s, the Python's {python_s:.2} s");
 }
 
 #[test]

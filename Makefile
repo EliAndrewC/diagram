@@ -236,9 +236,9 @@ render-sync:    ## [maps] {internal} regenerate MAIN's renders (called by sync-w
 
 # ---- cheap: they read a recorded artifact ----
 
-pack-audit:     ## [diagnostics] empty space and geometry in a HAND-DRAWN Mode A compound SVG   ARGS=<in.svg>
+pack-audit:     ## [diagnostics] empty space and geometry in a HAND-DRAWN Mode A compound SVG (Rust since 449 T175, `l7r-mode-a`)   ARGS=<in.svg>
 ##  ARGS=<in.svg>  the Mode A compound SVG to measure
-	$(RUN).tools.pack_audit $(ARGS)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a pack-audit $(ARGS)
 
 scatter-bases:  ## [diagnostics] where a map's ground-cover scatter stands: base points per family, parsed from its SVG   MAP=pool/hamlets/sawada [BOX=x0,y0,x1,y1]
 ##  MAP=<pool map>      the map's folder, its stem, or its .svg

@@ -33,6 +33,16 @@ serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
 # PINNED (feature 449 T174): `rust/Cargo.lock` is not tracked, and `mode_a/src/etree.rs` rests on this version's refusals and on where it
 # places an unknown entity's error, so a later 0.20.x resolved by another clone could move what the size table accepts
 roxmltree = "=0.20.0"
+# A PURE-RUST GEOMETRY FOR WHAT PYTHON ASKED OF SHAPELY (feature 449 T175): the audit's garden sun (`mode_a/src/audit/sun.rs`,
+# `pack_audit/sun.py`) unions each half hour's shadows and takes the bed's unshaded area; `geo`'s boolean ops (over `i_overlay`) do it
+# with no C library. PINNED, as roxmltree is (`rust/Cargo.lock` is not tracked), and its overlay crate with it (`mode_a/Cargo.toml`):
+# 0.33 asks rustc 1.88 and the toolchain is 1.87; the default features (a triangulator, a mesher, rayon's threads) are off, the sun
+# asking none of them. Where its float area differs from GEOS's, the lit verdict it feeds is held exactly by the crate's lockstep
+# (`mode_a/src/parse/lockstep_checks.rs`), the difference measured there.
+geo = { version = "=0.32.0", default-features = false }
+# the overlay crate `geo`'s boolean ops run on, pinned at the version 0.32.0 resolved to (observed 2026-11-17, `rust/Cargo.lock`): its
+# integer snapping is what an area differs from GEOS's by, so a later 4.0.x could move what the lockstep measured
+i_overlay = { version = "=4.0.7", default-features = false }
 
 # THE COVERAGE BUILD'S CFG IS EXPECTED (feature 449 T116): `cargo llvm-cov` builds with `--cfg=coverage`, and a whole-tree test leaves that
 # build by it

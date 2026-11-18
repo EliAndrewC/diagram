@@ -2,8 +2,12 @@
 //! line is `<class>: <message>` and exit 1, so the port prints that line and exits 1 - the frames above it name Python files that no
 //! longer exist. The differential (FR-002) compares the line byte for byte, the frames stripped.
 //!
+//! And what the ported Python computed and printed with its own built-ins (T170, T174, T175): `float()`, `min`, `max`, `sum`, `round`,
+//! `int`, `//`, `%`, `** 0.5`, `math.hypot`, a fixed, grouped or `g` format - each as `CPython` reckons it, to the bit, so a port's figure
+//! and its printing are the Python's (the locksteps hold them so).
+//!
 //! Research:
-//!     the ported Python's failures - NONE: how an error is printed, deciding nothing about a building
+//!     the ported Python's failures and arithmetic - NONE: how an error is printed, and Python's float arithmetic, rounding and formatting reproduced to the bit, deciding nothing about a building
 
 use l7r_gate_research::{digit_value, Error};
 use l7r_guard::shared::py_text::{py_float_text, repr};
@@ -159,6 +163,67 @@ pub fn fmt_g(v: f64) -> String {
         "nan".to_owned()
     } else {
         l7r_guard::shared::py_text::fmt_g(v)
+    }
+}
+
+/// Python's `f"{v:.{places}f}"`: Rust's fixed formatting (the exact binary value rounded half to even, a negative zero signed), a NaN
+/// named as Python names it (feature 449 T175, every figure the audit's findings print).
+#[must_use]
+pub fn fixed(v: f64, places: usize) -> String {
+    if v.is_nan() {
+        "nan".to_owned()
+    } else {
+        format!("{v:.places$}")
+    }
+}
+
+/// Python's `f"{v:,.0f}"`: [`fixed`] at no places, its integer digits grouped by threes with commas (the report's square feet).
+#[must_use]
+pub fn grouped(v: f64) -> String {
+    let text = fixed(v, 0);
+    let (sign, digits) = text
+        .strip_prefix('-')
+        .map_or(("", text.as_str()), |d| ("-", d));
+    if !digits.bytes().all(|b| b.is_ascii_digit()) {
+        return text;
+    }
+    let mut out = String::new();
+    for (i, c) in digits.chars().enumerate() {
+        if i > 0 && (digits.len() - i) % 3 == 0 {
+            out.push(',');
+        }
+        out.push(c);
+    }
+    format!("{sign}{out}")
+}
+
+/// Python's `(a + b) / 2` of two floats: the sum rounded, then halved - not `f64::midpoint`, which halves first where the sum would
+/// overflow and so parts from it at the range's ends (feature 449 T175, the audit's middles of gaps and openings).
+#[must_use]
+#[expect(clippy::manual_midpoint, reason = "Python's arithmetic, in its order")]
+pub fn half_sum(a: f64, b: f64) -> f64 {
+    (a + b) / 2.0
+}
+
+/// Python's `x ** 0.5` of a float: libm's `pow`, which differs from a square root in the last place about once in a thousand (observed
+/// 2026-11-17, method: 6,970 floats through `CPython` 3.14.4, six differing, scratchpad `t175/a/pow_half_probe.py`) - the exponent passed through
+/// `black_box` so the compiler cannot fold the call into `sqrt` (LLVM does for a constant 0.5). A negative base is no figure the audit
+/// squares, and reads NaN where Python made a complex number.
+#[must_use]
+pub fn pow_half(x: f64) -> f64 {
+    x.powf(std::hint::black_box(0.5))
+}
+
+/// Python's `a % b` of two floats: the remainder with the divisor's sign (`CPython`'s `float_rem`), a zero signed as the divisor.
+#[must_use]
+pub fn modulo(a: f64, b: f64) -> f64 {
+    let m = a % b;
+    if m == 0.0 {
+        0.0_f64.copysign(b)
+    } else if (b < 0.0) != (m < 0.0) {
+        m + b
+    } else {
+        m
     }
 }
 
@@ -318,8 +383,8 @@ fn frexp_exp(x: f64) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::{
-        float, floordiv, fmt_g, frexp_exp, hypot, int, iterate, max, min, os_error, pow2,
-        round_int, round_to, sum, type_name, uncaught,
+        fixed, float, floordiv, fmt_g, frexp_exp, grouped, half_sum, hypot, int, iterate, max, min,
+        modulo, os_error, pow2, pow_half, round_int, round_to, sum, type_name, uncaught,
     };
     use l7r_gate_research::Error;
     use serde_json::json;
@@ -442,5 +507,44 @@ mod tests {
         );
         // the largest a 2^1024 scale reaches: `CPython`'s figure
         assert_eq!(hypot(1.5e-308, 1e-308), 1.802_775_637_731_994_5e-308);
+    }
+
+    #[test]
+    #[expect(clippy::float_cmp, reason = "each figure is Python's to the bit")]
+    fn the_audit_s_figures_are_printed_and_reckoned_as_python_s() {
+        assert_eq!(
+            [
+                fixed(f64::NAN, 1),
+                fixed(-0.04, 1),
+                fixed(2.5, 0),
+                fixed(f64::INFINITY, 1)
+            ],
+            ["nan", "-0.0", "2", "inf"]
+        );
+        assert_eq!(
+            [
+                grouped(1_234_567.4),
+                grouped(-1_234.0),
+                grouped(999.0),
+                grouped(f64::NAN)
+            ],
+            ["1,234,567", "-1,234", "999", "nan"]
+        );
+        assert_eq!(
+            (pow_half(4.0), pow_half(0.0), half_sum(1.0, 2.0)),
+            (2.0, 0.0, 1.5)
+        );
+        // `CPython`'s `float_rem`: the divisor's sign, a zero signed as the divisor
+        assert_eq!(
+            [
+                modulo(-1.0, 360.0),
+                modulo(1.0, -360.0),
+                modulo(725.0, 360.0)
+            ],
+            [359.0, -359.0, 5.0]
+        );
+        assert!(
+            modulo(-360.0, 360.0).is_sign_positive() && modulo(360.0, -360.0).is_sign_negative()
+        );
     }
 }

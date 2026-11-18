@@ -26,7 +26,8 @@ connected-component count is degenerate, and a high open % is expected, not a
 defect. Coverage + top-N vacant RECTANGLES + per-region density + aligned gaps
 are the actionable set.
 
-Usage:  python3 -m l7r.diagram.tools.pack_audit pool/<subject>.svg [more.svg ...]
+Usage:  make pack-audit ARGS="pool/<subject>.svg [more.svg ...]"  (the command is Rust since feature 449 T175,
+`rust/mode_a/src/audit/report.rs`; this package stays for its Python importers under the lockstep rule)
 """
 
 from __future__ import annotations

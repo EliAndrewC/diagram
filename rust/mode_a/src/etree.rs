@@ -36,6 +36,9 @@ pub struct Element {
     pub tag: String,
     pub attrib: BTreeMap<String, String>,
     pub children: Vec<Element>,
+    /// `"".join(el.itertext())`: every text node within it, entities decoded, in document order (feature 449 T175, the audit's ink
+    /// bounds read a caption's length by it); a comment is no text, as `ElementTree` drops comments
+    pub itertext: String,
 }
 
 impl Element {
@@ -112,10 +115,16 @@ fn element(node: roxmltree::Node<'_, '_>) -> Result<Element, Error> {
         .filter(roxmltree::Node::is_element)
         .map(element)
         .collect::<Result<_, _>>()?;
+    let itertext = node
+        .descendants()
+        .filter(roxmltree::Node::is_text)
+        .filter_map(|t| t.text())
+        .collect();
     Ok(Element {
         tag: node.tag_name().name().to_owned(),
         attrib,
         children,
+        itertext,
     })
 }
 

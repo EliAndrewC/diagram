@@ -3,7 +3,8 @@
 # (`l7r/diagram/tools/building_programs.py`, ported and deleted by T168). Its own binary, `l7r-mode-a`, which
 # `scripts/gates/l7r-gate.sh mode-a ...` builds and runs; and `make notes-census` (`tools/notes_census.py`, ported and deleted by T170)
 # with the sheet's reader, tagged marks and parse it reads (`interactive/sheet.py`, `pack_audit/tagged.py`, `pack_audit/parse.py`, kept
-# for their Python importers under the lockstep rule): the engine will pull `geo` and `resvg` (steps 2-3), so neither the gate
+# for their Python importers under the lockstep rule); and (T175) the audit's checks, registry and report, which pull `geo` for the garden's
+# sun, the engine pulling `resvg` too at steps 2-3, so neither the gate
 # (`l7r-gate`) nor the guard (`l7r-guard`) depends on this crate, and their builds never compile what it pulls. It depends on the gate's
 # `registry` crate (the Mode A kinds' guesses a program item's row prints) - that direction is the allowed one.
 [package]
@@ -15,15 +16,19 @@ publish = false
 # What the tests read of the tree at run time (the key of a kept result): the type declaration and its Python reader, which the
 # lockstep test runs, and the modal files the registry reads for a kind's guesses; and (T170) the pool's sheets and notes, which the
 # parse's lockstep and the notes' counts read, and the Python engine whole - `pack_audit`'s parse imports its package, which imports
-# `interactive` and `buildings`, so an edit of any of them can move what the lockstep's Python reads.
+# `interactive` and `buildings`, so an edit of any of them can move what the lockstep's Python reads. (T175) The audit's red fixtures and
+# their notes, and the settlement manifests a sheet's map declaration names, which the checks' lockstep reads.
 [package.metadata.l7r]
-reads = ["l7r/diagram/", "pool/", "docs/building-programs.md"]
+reads = ["l7r/diagram/", "pool/", "docs/building-programs.md", "tests/fixtures/", "legacy-hand-authored-pool/villages/hoshigaoka/", "legacy-hand-authored-pool/towns/ubame/"]
 
 [lib]
 name = "l7r_mode_a"
 
 [dependencies]
 fancy-regex = { workspace = true }
+geo = { workspace = true }
+# not called: named so its pin (`rust/Cargo.toml`) holds the version `geo` builds on (feature 449 T175)
+i_overlay = { workspace = true }
 l7r_gate_core = { path = "../gate/crates/core" }
 l7r_gate_registry = { path = "../gate/crates/registry" }
 l7r_gate_research = { path = "../gate/crates/research" }

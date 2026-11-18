@@ -104,6 +104,8 @@ pub const FURNITURE_MAX_AREA_PX: f64 = MIN_BLDG_AREA_PX;
 /// Research:
 ///     door glyph area ceiling - NONE: a dark rect over 250 px2 is a hearth or block, not a door, a parser classification.
 pub const DOOR_MAX_AREA_PX: f64 = 250.0;
+/// The fireproof plaster kura's fill: a fire-gap beside it IS correct (feature 449 T175, the audit's gaps and tubs read it).
+pub const KURA_FILLS: [&str; 1] = ["#F2EFE4"];
 /// Privies, sheds and well curbs: built things with no area floor.
 pub const UTILITY_FILLS: [&str; 2] = ["#7E726A", WELL_FILL];
 
@@ -161,6 +163,24 @@ impl Rect {
     pub fn area_px(&self) -> f64 {
         self.w * self.h
     }
+
+    /// Its right edge (feature 449 T175: the audit's checks measure edges).
+    #[must_use]
+    pub fn x2(&self) -> f64 {
+        self.x + self.w
+    }
+
+    /// Its bottom edge.
+    #[must_use]
+    pub fn y2(&self) -> f64 {
+        self.y + self.h
+    }
+
+    /// Filled as a plaster kura.
+    #[must_use]
+    pub fn is_kura(&self) -> bool {
+        KURA_FILLS.contains(&self.fill.as_str())
+    }
 }
 
 /// A text label with an ESTIMATED box (px) and its draw-order offset.
@@ -201,6 +221,16 @@ pub struct ParsedPlan {
 }
 
 impl ParsedPlan {
+    /// The rects the sheet marked `id="<ident>"`, in draw order: its fills, then its interior (feature 449 T175).
+    #[must_use]
+    pub fn by_id(&self, ident: &str) -> Vec<&Rect> {
+        self.fills
+            .iter()
+            .chain(&self.interior)
+            .filter(|r| r.ident == ident)
+            .collect()
+    }
+
     /// The walled interior's extent, `(minx, miny, maxx, maxy)` - the Python's `bounds` property, which the grid measures size their
     /// grids by (ported with them, feature 449 T174).
     ///
@@ -484,10 +514,14 @@ fn parse_with(text: &str, rects: &[Rect], marked: Option<&[Mark]>) -> Result<Par
 }
 
 #[cfg(test)]
+mod check_fixtures;
+#[cfg(test)]
 mod fixtures;
 #[cfg(test)]
 pub(crate) mod lockstep;
 #[cfg(test)]
 mod lockstep_audit;
+#[cfg(test)]
+mod lockstep_checks;
 #[cfg(test)]
 mod tests;

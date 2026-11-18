@@ -83,11 +83,44 @@ impl Mark {
         }
     }
 
+    /// The inherited font size's leading number, or 0 (the Python's `font_size`, which the title-block check reads, feature 449 T175).
+    ///
+    /// # Errors
+    /// A number the Python's `float()` refuses (none the pattern takes).
+    pub fn font_size(&self) -> Result<f64, Error> {
+        let text = self.paint.get("font-size").map_or("", String::as_str);
+        match NUM.find(text).ok().flatten().filter(|m| m.start() == 0) {
+            Some(m) => float(m.as_str()),
+            None => Ok(0.0),
+        }
+    }
+
+    /// Its right edge.
+    #[must_use]
+    pub fn x2(&self) -> f64 {
+        self.x + self.w
+    }
+
+    /// Its bottom edge.
+    #[must_use]
+    pub fn y2(&self) -> f64 {
+        self.y + self.h
+    }
+
     /// The mark is `kind` or a part of it - drawn inside its group, or tagged `data-part-of` it.
     #[must_use]
     pub fn belongs_to(&self, kind: &str) -> bool {
         self.kind.as_deref() == Some(kind) || self.lineage.iter().any(|k| k == kind)
     }
+}
+
+/// The clear distance between two marks' boxes, px (zero when they touch or overlap): the Python's `gap`, `** 0.5` as libm's `pow`
+/// (feature 449 T175, the program rules' joins and reaches).
+#[must_use]
+pub fn gap(a: &Mark, b: &Mark) -> f64 {
+    let dx = crate::py::max(crate::py::max(b.x - a.x2(), a.x - b.x2()), 0.0);
+    let dy = crate::py::max(crate::py::max(b.y - a.y2(), a.y - b.y2()), 0.0);
+    crate::py::pow_half(dx * dx + dy * dy)
 }
 
 /// Every `name="value"` of a tag, the last of a repeated name kept (a Python `dict` of `findall`).

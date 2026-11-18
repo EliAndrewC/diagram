@@ -397,6 +397,12 @@ impl<'a> Kinds<'a> {
         }
     }
 
+    /// The tree its modal files are read from (feature 449 T175: the audit keeps one registry a tree).
+    #[must_use]
+    pub fn tree(&self) -> &Path {
+        self.tree
+    }
+
     /// The registry, loaded as the Python's import of `compound_kinds` loaded it: the hamlet vocabulary's package first (its
     /// `page-text.json` rulings, then its classes), then the Mode A kinds; a failure is not kept, so the next ask fails again.
     fn registry(&mut self) -> Result<&HashMap<String, Vec<String>>, Error> {

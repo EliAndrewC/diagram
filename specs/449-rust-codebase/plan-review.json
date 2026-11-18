@@ -510,6 +510,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T175 (the engine's piece 4, the audit's rest, step 1's close; the GM 2026-11-17, request.md: \"proceed with the next 2 engine pieces and then we'll measure how well those went\")": {
+   "sha256": "b112977b3a549d98d9517c25c329d0b2fa66c2e74e96264900e23f0404e88fbe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T175 Approach (checklist part A)": {
+   "sha256": "99ea61d9b86976f559daa11fb8857d30cc0dffb05be0c9879be261df9c5991e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10822,6 +10834,96 @@
      "why": "The GM 2026-11-17: 'each engine slice publishes a page of every pool sheet before and after'; ask:449-engine-order condition 5 has each landing publish its side-by-side page on the sheets it draws. size-table reads sheets and draws none, so this piece changes no drawn sheet and has no page of its own. The page stays owed by step 1's (the audit slice's) landing, and this piece neither waives nor discharges it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T175 (the engine's piece 4, the audit's rest, step 1's close; the GM 2026-11-17, request.md: \"proceed with the next 2 engine pieces and then we'll measure how well those went\")",
+    "### T175 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T175-scope",
+     "summary": "The rest of pack_audit (onmap ... report) and what it reads of compound_model/compound_parts ported into rust/mode_a/src/audit/, make pack-audit wired to the Rust, __main__.py deleted with its _invocation.py row, every other pack_audit module kept for compound.py and test_mode_a_sheets.py under the lockstep rule, as the fourth engine piece closing step 1.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'proceed with the next 2 engine pieces' (T174, T175). ask:449-engine-order: the audit lands first, wired, verdicts held exactly (step 1 'wired at once'), condition 2 brings the model's imports into step 1 as Rust, condition 3 one wired implementation with kept Python under lockstep. FR-003 and FR-005 carry the deletion and make wiring."
+    },
+    {
+     "id": "T175-two-agents",
+     "summary": "Worked by two agents in turn, part A the libraries, part B the wiring and the differential.",
+     "class": "within",
+     "why": "Process only; narrows nothing the GM asked."
+    },
+    {
+     "id": "T175-lockstep",
+     "summary": "One end-to-end lockstep test runs every check's records, all 43 checks, the report and report.main in one interpreter against the Rust on the pool sheets and the red, check and parse fixtures; a mutation per group turned it red.",
+     "class": "within",
+     "why": "Enforces ask:449-engine-order condition 3 and FR-002 (verdicts held exactly); it is verification of what was asked, not new scope."
+    },
+    {
+     "id": "T175-geometry",
+     "summary": "sun.py's shapely calls reproduced exactly where they are convex hulls, box overlaps and GEOS's 64-point circle; only the bed's unshaded area goes through the geo crate (pinned), its largest difference from GEOS 1.99e-4 px2 against a nearest threshold margin of 25.3 px2, the test asserting the difference stays under the margin.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'the resulting maps do NOT need to be bitwise identical'; ask:449-phase4-slices Q7 as amended by ask:449-engine-order: a check's verdict is bound exactly and a written difference from GEOS that keeps the verdicts is accepted, no new ask. Verdicts are held (the differential's 207 cases, none differing) and the test guards the margin."
+    },
+    {
+     "id": "T175-claims",
+     "summary": "Claims on the kept .py units stay keyed to them; each Rust copy carries its claim word for word or a claim stating what the Rust unit decides where a memo, regex range or figure moved; other new units carry NONE; py.rs's module claim widened.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q10 keeps claims keyed to .py units until the cut that deletes them; those units are kept here, and new Rust units owe their own claims. Nothing is re-keyed by hand. The landing's claims check still holds Q10 for the deleted __main__.py."
+    },
+    {
+     "id": "T175-outputs",
+     "summary": "The differential: HEAD's make pack-audit against the Rust over 207 cases (pool sheets, fixtures, notes and manifest forms, file refusals, argument forms, directly and through make), none differing; the runner's world-path normalization for each side's own world.",
+     "class": "within",
+     "why": "FR-002, same verdicts and outputs before the Python is deleted. The world-path normalization only maps each side's scratch directory; it releases no output."
+    },
+    {
+     "id": "T175-normalizations",
+     "summary": "A traceback's frames, and an uncaught JSONDecodeError or UnicodeDecodeError message compared by its class, are not compared byte for byte; exit status and stdout stay bound.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows FR-002's 'same outputs' for these crash cases, but exactly by the accepted spec's ruled case ask:449-usage-text ('an uncaught Python traceback's text is not bound for any port, its exit status and stdout staying held'). The decode errors are uncaught, so their messages are part of that traceback text; the frames name Python files this cut stops running, which a Rust port cannot reproduce. FR-002's purpose, the verdicts and outputs a caller acts on, is untouched: exit and stdout are held."
+    },
+    {
+     "id": "T175-usage-line",
+     "summary": "The usage line both sides print still names python3 -m ...pack_audit, kept as bound output as T170 kept its own.",
+     "class": "within",
+     "why": "It keeps more bound, not less, so it narrows nothing the GM asked. Whether FR-002's ask:449-T135-generator case (a message naming a generator the same cut deletes names the port instead) reaches it is a question of spec consistency, not a narrowing."
+    },
+    {
+     "id": "T175-page",
+     "summary": "The step's page: step 1 draws nothing, and every pool Mode A sheet before step 1 and now is byte-identical, 6 of 6.",
+     "class": "within",
+     "why": "The GM 2026-11-17: each engine slice publishes a page of every pool sheet before and after; ask:449-engine-order condition 5."
+    },
+    {
+     "id": "T175-defects-reproduced",
+     "summary": "HEAD's Python defects reproduced, not fixed: three branches that cannot run, the On-map error quoting the line break after the bad line, the county-* red fixtures carrying no tier; reported to the GM.",
+     "class": "within",
+     "why": "FR-002 binds the same verdicts and outputs. Its fix exception covers only a check that refuses correct work today, and none of these refuses anything. ask:449-phase4-slices' defects to fix are other, named ones. Reproducing is what FR-002 asks."
+    },
+    {
+     "id": "T175-registry-ft",
+     "summary": "registry.ft, which has no caller, is not ported.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows 'every Python replaced by Rust' by one function, but FR-002 binds verdicts and outputs, and a function with no caller yields none on any case. The lockstep test over every check's records and the whole report, and the 207-case differential with none differing, would show a difference if any path reached it. The Python registry.py stays under lockstep for compound.py, so nothing that runs loses it. The request's purpose, a Rust codebase that behaves as the Python did, is untouched."
+    },
+    {
+     "id": "T175-measure",
+     "summary": "The piece's measure by phase: tokens and minutes per agent, the lockstep's and the other tests' times, an edit cycle's time, the verify runs' times.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'and then we'll measure how well those went'."
+    },
+    {
+     "id": "T175-checks-exits",
+     "summary": "Exits: make static, rust-test, hooks-test HOOKS_ALL=1, quick, the pointer check, the claims round and a gated make land; red recorded and set down, a can't-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "The project's standing gate and FR-001c's kept checks; a wired landing keeps its full review (ask:449-engine-order condition 4)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19296,6 +19398,94 @@
      "summary": "The block plans one landing with no before/after page of the pool sheets.",
      "class": "within",
      "why": "The GM 2026-11-17: 'each engine slice publishes a page of every pool sheet before and after'; ask:449-engine-order condition 5 has each landing publish its side-by-side page on the sheets it draws. size-table reads sheets and draws none, so this piece changes no drawn sheet and has no page of its own. The page stays owed by step 1's (the audit slice's) landing, and this piece neither waives nor discharges it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T175": {
+   "section_sha256": "2eaf14d184c9228aed243b24948527a543f038a31f33155a25d96ee0d2aa21e0",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T175-scope",
+     "summary": "The rest of pack_audit (onmap ... report) and what it reads of compound_model/compound_parts ported into rust/mode_a/src/audit/, make pack-audit wired to the Rust, __main__.py deleted with its _invocation.py row, every other pack_audit module kept for compound.py and test_mode_a_sheets.py under the lockstep rule, as the fourth engine piece closing step 1.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'proceed with the next 2 engine pieces' (T174, T175). ask:449-engine-order: the audit lands first, wired, verdicts held exactly (step 1 'wired at once'), condition 2 brings the model's imports into step 1 as Rust, condition 3 one wired implementation with kept Python under lockstep. FR-003 and FR-005 carry the deletion and make wiring."
+    },
+    {
+     "id": "T175-two-agents",
+     "summary": "Worked by two agents in turn, part A the libraries, part B the wiring and the differential.",
+     "class": "within",
+     "why": "Process only; narrows nothing the GM asked."
+    },
+    {
+     "id": "T175-lockstep",
+     "summary": "One end-to-end lockstep test runs every check's records, all 43 checks, the report and report.main in one interpreter against the Rust on the pool sheets and the red, check and parse fixtures; a mutation per group turned it red.",
+     "class": "within",
+     "why": "Enforces ask:449-engine-order condition 3 and FR-002 (verdicts held exactly); it is verification of what was asked, not new scope."
+    },
+    {
+     "id": "T175-geometry",
+     "summary": "sun.py's shapely calls reproduced exactly where they are convex hulls, box overlaps and GEOS's 64-point circle; only the bed's unshaded area goes through the geo crate (pinned), its largest difference from GEOS 1.99e-4 px2 against a nearest threshold margin of 25.3 px2, the test asserting the difference stays under the margin.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'the resulting maps do NOT need to be bitwise identical'; ask:449-phase4-slices Q7 as amended by ask:449-engine-order: a check's verdict is bound exactly and a written difference from GEOS that keeps the verdicts is accepted, no new ask. Verdicts are held (the differential's 207 cases, none differing) and the test guards the margin."
+    },
+    {
+     "id": "T175-claims",
+     "summary": "Claims on the kept .py units stay keyed to them; each Rust copy carries its claim word for word or a claim stating what the Rust unit decides where a memo, regex range or figure moved; other new units carry NONE; py.rs's module claim widened.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q10 keeps claims keyed to .py units until the cut that deletes them; those units are kept here, and new Rust units owe their own claims. Nothing is re-keyed by hand. The landing's claims check still holds Q10 for the deleted __main__.py."
+    },
+    {
+     "id": "T175-outputs",
+     "summary": "The differential: HEAD's make pack-audit against the Rust over 207 cases (pool sheets, fixtures, notes and manifest forms, file refusals, argument forms, directly and through make), none differing; the runner's world-path normalization for each side's own world.",
+     "class": "within",
+     "why": "FR-002, same verdicts and outputs before the Python is deleted. The world-path normalization only maps each side's scratch directory; it releases no output."
+    },
+    {
+     "id": "T175-normalizations",
+     "summary": "A traceback's frames, and an uncaught JSONDecodeError or UnicodeDecodeError message compared by its class, are not compared byte for byte; exit status and stdout stay bound.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows FR-002's 'same outputs' for these crash cases, but exactly by the accepted spec's ruled case ask:449-usage-text ('an uncaught Python traceback's text is not bound for any port, its exit status and stdout staying held'). The decode errors are uncaught, so their messages are part of that traceback text; the frames name Python files this cut stops running, which a Rust port cannot reproduce. FR-002's purpose, the verdicts and outputs a caller acts on, is untouched: exit and stdout are held."
+    },
+    {
+     "id": "T175-usage-line",
+     "summary": "The usage line both sides print still names python3 -m ...pack_audit, kept as bound output as T170 kept its own.",
+     "class": "within",
+     "why": "It keeps more bound, not less, so it narrows nothing the GM asked. Whether FR-002's ask:449-T135-generator case (a message naming a generator the same cut deletes names the port instead) reaches it is a question of spec consistency, not a narrowing."
+    },
+    {
+     "id": "T175-page",
+     "summary": "The step's page: step 1 draws nothing, and every pool Mode A sheet before step 1 and now is byte-identical, 6 of 6.",
+     "class": "within",
+     "why": "The GM 2026-11-17: each engine slice publishes a page of every pool sheet before and after; ask:449-engine-order condition 5."
+    },
+    {
+     "id": "T175-defects-reproduced",
+     "summary": "HEAD's Python defects reproduced, not fixed: three branches that cannot run, the On-map error quoting the line break after the bad line, the county-* red fixtures carrying no tier; reported to the GM.",
+     "class": "within",
+     "why": "FR-002 binds the same verdicts and outputs. Its fix exception covers only a check that refuses correct work today, and none of these refuses anything. ask:449-phase4-slices' defects to fix are other, named ones. Reproducing is what FR-002 asks."
+    },
+    {
+     "id": "T175-registry-ft",
+     "summary": "registry.ft, which has no caller, is not ported.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows 'every Python replaced by Rust' by one function, but FR-002 binds verdicts and outputs, and a function with no caller yields none on any case. The lockstep test over every check's records and the whole report, and the 207-case differential with none differing, would show a difference if any path reached it. The Python registry.py stays under lockstep for compound.py, so nothing that runs loses it. The request's purpose, a Rust codebase that behaves as the Python did, is untouched."
+    },
+    {
+     "id": "T175-measure",
+     "summary": "The piece's measure by phase: tokens and minutes per agent, the lockstep's and the other tests' times, an edit cycle's time, the verify runs' times.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'and then we'll measure how well those went'."
+    },
+    {
+     "id": "T175-checks-exits",
+     "summary": "Exits: make static, rust-test, hooks-test HOOKS_ALL=1, quick, the pointer check, the claims round and a gated make land; red recorded and set down, a can't-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "The project's standing gate and FR-001c's kept checks; a wired landing keeps its full review (ask:449-engine-order condition 4)."
     }
    ],
    "verdict": "CLEAR"

@@ -709,3 +709,58 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T173 to T173 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 
 <!-- plan-archive: T174 to T174 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+
+### T175 (the engine's piece 4, the audit's rest, step 1's close; the GM 2026-11-17, request.md: "proceed with the next 2 engine pieces and then we'll measure how well those went")
+
+- **Approach**: the rest of `l7r/diagram/tools/pack_audit/` - onmap, labels, marks_drawn, sun, palette, program_rules, roads, mapmatch, shared, checks, registry and report - ported into `rust/mode_a/src/audit/`, with what they read of the engine (`compound.rs`: `compound_model`'s three distances and `KINDS`, `compound_parts`' three predicates), and `make pack-audit` wired to it (`l7r-gate.sh mode-a pack-audit`); `__main__.py` deleted with its `_invocation.py` row. Every other `pack_audit` module stays for compound.py and tests/test_mode_a_sheets.py under the lockstep rule. Worked by two agents in turn: part A the libraries, part B the wiring and the differential.
+
+   **Decisions** (`ask:449-engine-order` conditions 2, 3 and 5, `ask:449-phase4-slices` Q10, `ask:449-usage-text`, FR-001 to FR-005, FR-008; the GM's words, request.md 2026-11-17):
+   - The piece closes step 1 (engine-plan.md step 1's row: the audit held to its verdicts on today's Python-drawn sheets exactly, wired at once). Lockstep (condition 3): the crate's one end-to-end test runs every check's records, all 43 checks' findings and refusals, the whole report and `report.main` in one Python interpreter against the Rust, floats bit for bit, on the six pool sheets, 44 red fixtures, 46 check fixtures and 25 parse fixtures, each check firing on its red fixture and each pool sheet passing its tier's checks; a scratch mutation of a module of each group turned it red (observed 2026-11-18, method: each mutated in a scratch copy restored by `cp`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/a/mutate/results.txt` and, for `sun.py`, whose first mutation changed nothing, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/a/mutate/results-sun.txt`).
+   - Geometry (engine-plan.md: a check's verdict is bound exactly): `sun.py`'s shapely calls are reproduced exactly where they are hulls of convex casters, box overlaps and GEOS's 64-point circle, and only the bed's unshaded area goes through the `geo` crate's union and difference (pinned `=0.32.0`, with `i_overlay` `=4.0.7`). Its largest difference from GEOS over every red fixture's half-hour steps is 1.99e-4 px2 against a nearest margin to a threshold of 25.3 px2, so no verdict can turn on it, and the test asserts the difference stays under the margin (observed 2026-11-18, method: both computed on 882 half-hour steps, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/a/phases.log` line 14; the landed test measures the garden's red fixture's 210 steps).
+   - Claims (Q10): the claims on the kept `.py` units stay keyed to them; each Rust copy carries its claim word for word where it describes the Rust, or a claim stating what the Rust unit decides where a memo, a regex range or a figure moved; every other new unit carries its module's NONE; `py.rs`'s module claim is widened to its arithmetic, as two claims rounds asked. `make claims-owed` owes 434 new claims in 25 files one impl-drift round and 11 a triage (observed 2026-11-18, method: `make claims-owed`).
+   - The same outputs (FR-002): HEAD's `make pack-audit` against the Rust on each pool sheet, all of them in one call, every fixture sheet where it lies and under its tier with its notes, 17 notes and manifest forms, 12 file refusals and the argument forms, directly and through make - the differential's 207 cases, none differing, every pool case exiting 0 with its full report on both sides (measured 2026-11-18 (`make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/b/diff/cases.json VERIFY=1 JOBS=4`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/b/diff/cases.diff-run/reports/diff-run-verify-20261118T033436Z.json`)). Normalizations: a traceback's frames, and an uncaught `JSONDecodeError` or `UnicodeDecodeError` message compared by its class, under `ask:449-usage-text`'s clause leaving an uncaught traceback's text unbound while the exit and stdout stay bound. The usage line both sides print still names `python3 -m ...pack_audit`: it is bound output, kept as T170 kept its own.
+   - The step's page (condition 5, engine-plan.md's page shown to the GM every slice): step 1 draws nothing, and every pool Mode A sheet before step 1 and now is byte-identical, 6 of 6 (observed 2026-11-18, method: each sheet at `9573334eb`, the parent of T168's first commit, the two untracked ones regenerated there, compared with the working tree; `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/b/page/step1-sheets.html`).
+   - Defects of HEAD's Python reproduced, not fixed, each refusing nothing: `registry.ft` has no caller and is not ported; three branches cannot run; the On-map error quotes the line break after the bad line; the `county-*` red fixtures carry no tier. Reported to the GM.
+   - The piece's measure, by phase: part A's agent took 706k tokens and 88 minutes, part B's 231k tokens and 37 minutes (observed 2026-11-18, method: their usage reports and `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/a/phases.log`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/b/phases.log`). The end-to-end lockstep takes 7.9 s and every other test at or under 0.056 s (observed 2026-11-18, method: `make test-times CRATE=rust/mode_a`). An edit cycle's `make rust-test CRATE=rust/mode_a` took 13 to 16 s (observed 2026-11-18, method: the phase logs' cycle times). The verify runs took 511.1 s with every side rerun and 203.4 s with the old sides kept (observed 2026-11-18, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/b/phases.log`).
+   - The checks: `make static` and `make rust-test` fresh, `make hooks-test HOOKS_ALL=1`, `make quick` and the pointer check green (observed 2026-11-18, method: those commands, one after another after the last edit).
+
+### T175 Approach (checklist part A)
+
+1. **The goal, in the world.** The whole audit runs in Rust, wired, step 1 closed, and the piece's cost measured.
+2. **The constraints.** FR-001 to FR-005 and FR-008; `ask:449-engine-order`; Q10; the GM's words.
+3. **Where each comes from.** G: the GM's request; R: the rulings; O: the differential, the lockstep, the geometry's measure and the phase logs above.
+4. **Do they describe the world here?** Run on this clone's pool sheets and fixtures, measured 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t175/b/diff/cases.json`).
+5. **The order.** After T174; the step's last piece.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, the claims round and a gated `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The verify run's cases with none differing, the claims round recorded, the phase table in time and tokens.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No - a port, its cost measured for the GM.
+
+
+### T176 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T176 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

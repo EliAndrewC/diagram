@@ -279,9 +279,11 @@ echo "5. AN ENGINE ENTRY POINT A MAKE TARGET WRAPS IS REWRITTEN INTO IT (feature
 rewritten "pool index -> make pool-index" "python3 -m l7r.diagram.pipeline.pool_index 2>&1 | grep -i complete" "make pool-index 2>&1 | grep -i complete"
 rewritten "a recipe's literal argument" "python3 -m l7r.diagram.switches show" "make switches"
 refused_because "a ported module is wrapped no more" "python3 -m l7r.diagram.tools.building_programs --check" "no make target wraps"
-rewritten "a \$(ARGS) recipe takes the rest" "python3 -m l7r.diagram.tools.pack_audit wip/x.svg" 'make pack-audit ARGS="wip/x.svg"'
+# the compound draft stands in for `pack_audit`, whose recipe runs the Rust since feature 449 T175 (its `__main__.py` deleted)
+refused_because "the ported audit is wrapped no more" "python3 -m l7r.diagram.tools.pack_audit wip/x.svg" "no make target wraps"
+rewritten "a \$(ARGS) recipe takes the rest" "python3 -m l7r.diagram.compound wip/x.svg" 'make compound ARGS="wip/x.svg"'
 refused_because "a module nothing wraps lists what is" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "no make target wraps"
-refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make pack-audit"
+refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make compound"
 refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.switches --nonsense" "cannot carry"
 refused_because "a multi-line recipe (REF_FIRST) does not wrap" "python3 -m l7r.diagram.hamletgen --seed 4" "no make target wraps"
 ev "python3 -m l7r.diagram.pipeline.pool_index" | "$HOOK" pretool 2>/dev/null | grep -q "make pool-index" \

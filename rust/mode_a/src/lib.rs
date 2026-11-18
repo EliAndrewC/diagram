@@ -5,9 +5,12 @@
 //! `pack_audit/parse.py`), the Python of those three kept for its importers under the lockstep rule; and (T174, the third piece) `make
 //! size-table` ([`size_table`], `scripts/reviews/size_table.py`, deleted) with what it reads - the sized marks ([`size_marks`],
 //! `pack_audit/size_marks.py`), the grid measures whole ([`grids`], `pack_audit/grids.py`), the start tags ([`hand_sheet`],
-//! `labels/hand_sheet.py`'s `start_tags`) and an XML reading ([`etree`], `ET.fromstring`'s), the Python of the first three kept likewise.
+//! `labels/hand_sheet.py`'s `start_tags`) and an XML reading ([`etree`], `ET.fromstring`'s), the Python of the first three kept likewise;
+//! and (T175, the fourth piece's libraries) the rest of the audit - its checks, registry and report ([`audit`], `pack_audit/`) and what
+//! they read of the compound engine ([`compound`]), the Python kept likewise; and (T175, the fourth piece's wiring) `make pack-audit`
+//! ([`audit::report::main`], `pack_audit/__main__.py`, deleted).
 //!
-//! WHY ITS OWN CRATE AND BINARY: the engine will pull `geo` and `resvg` (the plan's steps 2-3), and a gate or guard build that compiled
+//! WHY ITS OWN CRATE AND BINARY: the engine pulls `geo` (since T175, the audit's garden sun) and will pull `resvg` (the plan's steps 2-3), and a gate or guard build that compiled
 //! them would put minutes in front of every hook and check edit; so `l7r-mode-a` is built alone by `scripts/gates/l7r-gate.sh mode-a`,
 //! as the browser and the embedder are, and nothing of the gate depends on it.
 //!
@@ -20,7 +23,9 @@ use std::path::Path;
 use l7r_gate_core::Reply;
 use l7r_gate_research::Error;
 
+pub mod audit;
 pub mod census;
+pub mod compound;
 pub mod etree;
 pub mod grids;
 pub mod hand_sheet;
@@ -33,12 +38,13 @@ pub mod size_table;
 pub mod tagged;
 pub mod types;
 
-const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | --version\n";
+const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | --version\n";
 
 /// The command: `building-programs [--check] [--path PATH]`, `notes-census <manifest.json> [...]` (`make notes-census`), the notes
 /// census's two checks and a sheet's counts as commands (the differential's doors onto what `tests/test_mode_a_sheets.py` once asked in
 /// process, feature 449 T170), `size-table <plan> [--json JSON]` (`make size-table`, T174), or `--version` (the differential's cheap build
-/// probe).
+/// probe), or `pack-audit <compound.svg> [...]` (`make pack-audit`, T175: the report of each sheet, its usage line the Python's own words, a
+/// usage `ask:449-usage-text` binds).
 #[must_use]
 pub fn cli(args: &[String], tree: &Path) -> Reply {
     let rest = args.get(1..).unwrap_or_default();
@@ -46,6 +52,7 @@ pub fn cli(args: &[String], tree: &Path) -> Reply {
         (Some("building-programs"), _) => programs::main(rest, tree),
         (Some("notes-census"), _) => census::main(rest),
         (Some("size-table"), _) => size_table::cli::main(rest),
+        (Some("pack-audit"), _) => audit::report::main(rest, tree),
         (Some("sheet-counts"), 1) => door(|| {
             let counts = census::sheet_counts(&read(&rest[0])?)?;
             Ok(counts.iter().fold(String::new(), |mut out, (k, v)| {
@@ -181,5 +188,19 @@ mod tests {
         );
         assert_eq!(run(&["sheet-counts"]).code, 2);
         assert_eq!(run(&["notes-census"]).code, 2);
+        // the audit's arm (feature 449 T175): its own usage line, not the command's, so a missing arm reads red here
+        let r = run(&["pack-audit"]);
+        assert_eq!(
+            (r.code, r.stderr.as_str()),
+            (
+                2,
+                "usage: python3 -m l7r.diagram.tools.pack_audit <compound.svg> [more.svg ...]\n"
+            )
+        );
+        let r = run(&["pack-audit", &at("none.svg")]);
+        assert_eq!(
+            (r.code, r.stderr.starts_with("FileNotFoundError: ")),
+            (1, true)
+        );
     }
 }
