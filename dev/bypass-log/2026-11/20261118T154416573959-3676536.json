@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-18T15:44:16Z",
+  "target": "review-accept",
+  "commit": "1f4b950b5",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--residence-corridor--ochiba-roundtrip-test F1: fixed in compound.py's emitter: a residence's touching corridor pieces draw as one passage, one dotted outline with no interior edge, tested in tests/test_mode_a_sheets.py; this round reads it"
+}
