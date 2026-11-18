@@ -200,6 +200,28 @@ pub struct ParsedPlan {
     pub roofed_courts: Vec<Rect>,
 }
 
+impl ParsedPlan {
+    /// The walled interior's extent, `(minx, miny, maxx, maxy)` - the Python's `bounds` property, which the grid measures size their
+    /// grids by (ported with them, feature 449 T174).
+    ///
+    /// # Errors
+    /// No interior: the Python's `min()` of nothing.
+    pub fn bounds(&self) -> Result<(f64, f64, f64, f64), Error> {
+        let Some(first) = self.interior.first() else {
+            return Err(Error::new("ValueError", "min() iterable argument is empty"));
+        };
+        let start = (first.x, first.y, first.x + first.w, first.y + first.h);
+        Ok(self.interior[1..].iter().fold(start, |(a, b, c, d), r| {
+            (
+                min(a, r.x),
+                min(b, r.y),
+                max(c, r.x + r.w),
+                max(d, r.y + r.h),
+            )
+        }))
+    }
+}
+
 static ID: LazyLock<Regex> = LazyLock::new(|| py(r#"\sid="([^"]+)""#));
 static CIRCLE: LazyLock<Regex> =
     LazyLock::new(|| py(r#"<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)""#));
@@ -465,5 +487,7 @@ fn parse_with(text: &str, rects: &[Rect], marked: Option<&[Mark]>) -> Result<Par
 mod fixtures;
 #[cfg(test)]
 pub(crate) mod lockstep;
+#[cfg(test)]
+mod lockstep_audit;
 #[cfg(test)]
 mod tests;

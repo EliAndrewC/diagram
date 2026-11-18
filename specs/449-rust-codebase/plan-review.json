@@ -498,6 +498,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
+  },
+  "### T174 (the engine's piece 3; the GM 2026-11-17, request.md: \"proceed with the next 2 engine pieces and then we'll measure how well those went\")": {
+   "sha256": "bdde90426ae5b54954ae6c2c42758e09683bab2f64bfda9969b76b80bbd78a1e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T174 Approach (checklist part A)": {
+   "sha256": "90aeeffdb0a2ce32f0034b6433db4e4f26caeb176596097008a756a453bd0e07",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10710,6 +10722,106 @@
      "why": "Input handling of the new opt-in flag itself; touches no existing behavior or output."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T174 (the engine's piece 3; the GM 2026-11-17, request.md: \"proceed with the next 2 engine pieces and then we'll measure how well those went\")",
+    "### T174 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-piece-wired",
+     "summary": "Piece 3 of step 1 is make size-table: size_table.py ported into rust/mode_a, the make target calling the Rust at once, size_table.py deleted.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'proceed with the next 2 engine pieces'. ask:449-engine-order names size_table among step 1's modules (condition 2) and condition 3 requires the make targets to call the Rust once step 1 wires it; FR-003 holds with one implementation running for make size-table."
+    },
+    {
+     "id": "D2-leaves-lockstep",
+     "summary": "size_marks.py, grids.py whole and hand_sheet.start_tags come into Rust with verdicts held exactly; the three Python files stay for their Python importers under the lockstep rule.",
+     "class": "within",
+     "why": "ask:449-engine-order condition 2: each import of size_table from labels or Mode A code 'comes into step 1 as Rust whose verdicts are held exactly'; condition 3 keeps Python still imported in-process bound by lockstep. grids.py whole is an audit leaf of step 1 itself, not scope beyond the GM's 'next 2 engine pieces'."
+    },
+    {
+     "id": "D3-roxmltree",
+     "summary": "The plan is read as ElementTree reads it, over the roxmltree crate, pinned in the workspace.",
+     "class": "within",
+     "why": "An implementation choice under FR-002, which binds outputs; the differential and the XML accept/refuse fixtures hold the reading to ElementTree's."
+    },
+    {
+     "id": "D4-lockstep-test",
+     "summary": "The crate's one end-to-end test runs the Python grids, size_marks and start_tags on the six pool sheets and fixtures, every field, refusal and float bit for bit, and each constant against the Python defaults; shown red on a scratch mutation of each file.",
+     "class": "within",
+     "why": "Enforcement of condition 3's lockstep and FR-002; FR-008 allows one end-to-end test. A check that only fails when the requested equality is absent serves the request."
+    },
+    {
+     "id": "D5-claims",
+     "summary": "Claims on grids.py stay keyed to it; Rust copies sit word for word on named constants holding the Python defaults; every other new unit carries a claim (137 owed in 17 files).",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q10: claims stay keyed to .py units until the cut that deletes them; grids.py is not deleted. Copies on the Rust add tracking (the GM's T165 words: track claims in the new Rust) and narrow nothing."
+    },
+    {
+     "id": "D6-differential",
+     "summary": "HEAD's Python against the Rust on every pool sheet, direct, --json and through make, and fixtures for every form, XML accept/refuse form, flag, path and refusal: 113 cases, none differing.",
+     "class": "within",
+     "why": "FR-002 and SC-004: same verdicts and outputs on the cases held, before the Python is deleted."
+    },
+    {
+     "id": "D7-norm-traceback",
+     "summary": "A traceback's frames are normalized away.",
+     "class": "within",
+     "why": "ask:449-usage-text: an uncaught Python traceback's text is not bound for any port, exit status and stdout held (T77-bad-since is popup_rounds only and is not the carrier here)."
+    },
+    {
+     "id": "D8-norm-argparse",
+     "summary": "argparse's usage block is normalized away.",
+     "class": "within",
+     "why": "ask:449-usage-text: argparse-generated usage and error text on a malformed invocation is not bound; exit 2 and empty stdout held, and the differential covers every flag."
+    },
+    {
+     "id": "D9-norm-decode",
+     "summary": "A library's decode wording is normalized.",
+     "class": "within",
+     "why": "Either an uncaught exception (ask:449-usage-text: status and stdout held) or library text quoted in a fixed message (ask:449-T066-json-message: verdict, status, location and fixed words held, the quoted text the Rust library's). The differential compares everything else and shows no difference."
+    },
+    {
+     "id": "D10-norm-parseerror",
+     "summary": "ElementTree's ParseError compared by class; expat's wording with its line and column not compared.",
+     "class": "within",
+     "why": "Expat's message, line and column included, is the library's own text, as serde_json's 'line 1 column 1' was in T066's own instance, where the path was the held location and the parser's position text was released. Uncaught, it falls under ask:449-usage-text with status and stdout held; the class is still compared, which is stricter than either ruling requires."
+    },
+    {
+     "id": "D11-defects-misreads",
+     "summary": "Three misreads of HEAD's Python (CDATA '>' shifting paired kinds, a non-[A-Za-z] element name overrunning the start-tag list, a single-quoted data-kind reading untagged) reproduced, not fixed, and reported to the GM.",
+     "class": "within",
+     "why": "FR-002's default binds a tool's outputs as they are; none is a refusal, so the 'refuses correct work' exception does not reach them, and ask:449-phase4-slices' named defects do not include them."
+    },
+    {
+     "id": "D12-defect-tokenizer-refusal",
+     "summary": "A sheet ElementTree accepts can still be refused by the tokenizer; reproduced, not fixed.",
+     "class": "within",
+     "why": "FR-002's exception fixes a check that refuses CORRECT WORK today. Basis: the block's premise that no generator writes such a sheet, so no correct work is refused and FR-002's default holds. If a generator is ever found to write one, the exception applies and this must be fixed in the port."
+    },
+    {
+     "id": "D13-measure",
+     "summary": "The piece's cost reported by phase: tokens, wall time, rust-test, differential and verify runs, test times.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'then we'll measure how well those went'; and the pilot's terms, wall time and tokens by phase."
+    },
+    {
+     "id": "D14-checks-exits",
+     "summary": "Green on make static, rust-test, hooks-test HOOKS_ALL=1, quick, the claims round and a gated make land; red sets the task down, a cannot-be-done claim ruled by the arbiter; ordered after T170 and T173, before the audit's remaining piece; one landing.",
+     "class": "within",
+     "why": "ask:449-engine-order condition 4 keeps the wired landing's full review and gate; the order follows the GM's 'next 2 engine pieces'."
+    },
+    {
+     "id": "D15-no-page-this-piece",
+     "summary": "The block plans one landing with no before/after page of the pool sheets.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'each engine slice publishes a page of every pool sheet before and after'; ask:449-engine-order condition 5 has each landing publish its side-by-side page on the sheets it draws. size-table reads sheets and draws none, so this piece changes no drawn sheet and has no page of its own. The page stays owed by step 1's (the audit slice's) landing, and this piece neither waives nor discharges it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19086,6 +19198,104 @@
      "summary": "JOBS of 0, a non-number or missing value refused with the fix; a JOBS above the owed sides clamped",
      "class": "within",
      "why": "Input handling of the new opt-in flag itself; touches no existing behavior or output."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T174": {
+   "section_sha256": "97836b370da58d5f068ee23c6dbef75eec9e647e55dbf307ac3f34324d2bd252",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-piece-wired",
+     "summary": "Piece 3 of step 1 is make size-table: size_table.py ported into rust/mode_a, the make target calling the Rust at once, size_table.py deleted.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'proceed with the next 2 engine pieces'. ask:449-engine-order names size_table among step 1's modules (condition 2) and condition 3 requires the make targets to call the Rust once step 1 wires it; FR-003 holds with one implementation running for make size-table."
+    },
+    {
+     "id": "D2-leaves-lockstep",
+     "summary": "size_marks.py, grids.py whole and hand_sheet.start_tags come into Rust with verdicts held exactly; the three Python files stay for their Python importers under the lockstep rule.",
+     "class": "within",
+     "why": "ask:449-engine-order condition 2: each import of size_table from labels or Mode A code 'comes into step 1 as Rust whose verdicts are held exactly'; condition 3 keeps Python still imported in-process bound by lockstep. grids.py whole is an audit leaf of step 1 itself, not scope beyond the GM's 'next 2 engine pieces'."
+    },
+    {
+     "id": "D3-roxmltree",
+     "summary": "The plan is read as ElementTree reads it, over the roxmltree crate, pinned in the workspace.",
+     "class": "within",
+     "why": "An implementation choice under FR-002, which binds outputs; the differential and the XML accept/refuse fixtures hold the reading to ElementTree's."
+    },
+    {
+     "id": "D4-lockstep-test",
+     "summary": "The crate's one end-to-end test runs the Python grids, size_marks and start_tags on the six pool sheets and fixtures, every field, refusal and float bit for bit, and each constant against the Python defaults; shown red on a scratch mutation of each file.",
+     "class": "within",
+     "why": "Enforcement of condition 3's lockstep and FR-002; FR-008 allows one end-to-end test. A check that only fails when the requested equality is absent serves the request."
+    },
+    {
+     "id": "D5-claims",
+     "summary": "Claims on grids.py stay keyed to it; Rust copies sit word for word on named constants holding the Python defaults; every other new unit carries a claim (137 owed in 17 files).",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q10: claims stay keyed to .py units until the cut that deletes them; grids.py is not deleted. Copies on the Rust add tracking (the GM's T165 words: track claims in the new Rust) and narrow nothing."
+    },
+    {
+     "id": "D6-differential",
+     "summary": "HEAD's Python against the Rust on every pool sheet, direct, --json and through make, and fixtures for every form, XML accept/refuse form, flag, path and refusal: 113 cases, none differing.",
+     "class": "within",
+     "why": "FR-002 and SC-004: same verdicts and outputs on the cases held, before the Python is deleted."
+    },
+    {
+     "id": "D7-norm-traceback",
+     "summary": "A traceback's frames are normalized away.",
+     "class": "within",
+     "why": "ask:449-usage-text: an uncaught Python traceback's text is not bound for any port, exit status and stdout held (T77-bad-since is popup_rounds only and is not the carrier here)."
+    },
+    {
+     "id": "D8-norm-argparse",
+     "summary": "argparse's usage block is normalized away.",
+     "class": "within",
+     "why": "ask:449-usage-text: argparse-generated usage and error text on a malformed invocation is not bound; exit 2 and empty stdout held, and the differential covers every flag."
+    },
+    {
+     "id": "D9-norm-decode",
+     "summary": "A library's decode wording is normalized.",
+     "class": "within",
+     "why": "Either an uncaught exception (ask:449-usage-text: status and stdout held) or library text quoted in a fixed message (ask:449-T066-json-message: verdict, status, location and fixed words held, the quoted text the Rust library's). The differential compares everything else and shows no difference."
+    },
+    {
+     "id": "D10-norm-parseerror",
+     "summary": "ElementTree's ParseError compared by class; expat's wording with its line and column not compared.",
+     "class": "within",
+     "why": "Expat's message, line and column included, is the library's own text, as serde_json's 'line 1 column 1' was in T066's own instance, where the path was the held location and the parser's position text was released. Uncaught, it falls under ask:449-usage-text with status and stdout held; the class is still compared, which is stricter than either ruling requires."
+    },
+    {
+     "id": "D11-defects-misreads",
+     "summary": "Three misreads of HEAD's Python (CDATA '>' shifting paired kinds, a non-[A-Za-z] element name overrunning the start-tag list, a single-quoted data-kind reading untagged) reproduced, not fixed, and reported to the GM.",
+     "class": "within",
+     "why": "FR-002's default binds a tool's outputs as they are; none is a refusal, so the 'refuses correct work' exception does not reach them, and ask:449-phase4-slices' named defects do not include them."
+    },
+    {
+     "id": "D12-defect-tokenizer-refusal",
+     "summary": "A sheet ElementTree accepts can still be refused by the tokenizer; reproduced, not fixed.",
+     "class": "within",
+     "why": "FR-002's exception fixes a check that refuses CORRECT WORK today. Basis: the block's premise that no generator writes such a sheet, so no correct work is refused and FR-002's default holds. If a generator is ever found to write one, the exception applies and this must be fixed in the port."
+    },
+    {
+     "id": "D13-measure",
+     "summary": "The piece's cost reported by phase: tokens, wall time, rust-test, differential and verify runs, test times.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'then we'll measure how well those went'; and the pilot's terms, wall time and tokens by phase."
+    },
+    {
+     "id": "D14-checks-exits",
+     "summary": "Green on make static, rust-test, hooks-test HOOKS_ALL=1, quick, the claims round and a gated make land; red sets the task down, a cannot-be-done claim ruled by the arbiter; ordered after T170 and T173, before the audit's remaining piece; one landing.",
+     "class": "within",
+     "why": "ask:449-engine-order condition 4 keeps the wired landing's full review and gate; the order follows the GM's 'next 2 engine pieces'."
+    },
+    {
+     "id": "D15-no-page-this-piece",
+     "summary": "The block plans one landing with no before/after page of the pool sheets.",
+     "class": "within",
+     "why": "The GM 2026-11-17: 'each engine slice publishes a page of every pool sheet before and after'; ask:449-engine-order condition 5 has each landing publish its side-by-side page on the sheets it draws. size-table reads sheets and draws none, so this piece changes no drawn sheet and has no page of its own. The page stays owed by step 1's (the audit slice's) landing, and this piece neither waives nor discharges it."
     }
    ],
    "verdict": "CLEAR"

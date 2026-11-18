@@ -1,7 +1,8 @@
 //! THE LOCKSTEP (`ask:449-engine-order` condition 3, feature 449 T170): the Python's `parse_svg`, `marks` and `element_kinds` on every
 //! pool sheet of a Mode A tier and on the fixture sheets (`fixtures.rs`), each field of each record and each refusal equal to this
 //! port's, with the constants both read - so an edit of `parse.py`, `tagged.py` or `sheet.py`'s reader that the Rust did not follow fails
-//! here. A float is compared as its `repr`, bit for bit.
+//! here. A float is compared as its `repr`, bit for bit. Since T174 the same interpreter runs the audit's grid measures, sized marks and
+//! start tags on the same sheets (`lockstep_audit.rs`).
 //!
 //! Research:
 //!     the parse's lockstep - NONE: the Python and the port compared, deciding nothing about a building
@@ -30,8 +31,8 @@ fn real() -> PathBuf {
 
 /// The Python's reading of each sheet named on stdin (a JSON list of paths), every dataclass by its own fields, so a field added there
 /// shows here; and the constants this port carries.
-const DUMP: &str = r#"
-import dataclasses, json, sys, traceback
+const DUMP_HEAD: &str = r#"
+import dataclasses, json, os, sys, traceback
 sys.path.insert(0, sys.argv[1])
 from l7r.diagram.tools.pack_audit import parse as P, program_rules as R, tagged as T
 from l7r.diagram.interactive import sheet as S
@@ -52,18 +53,23 @@ def attempt(fn):
         return {"ok": conv(fn())}
     except Exception as e:
         return {"err": traceback.format_exception_only(type(e), e)[-1].rstrip("\n")}
+"#;
+
+/// The loop over the sheets and the constants, after the audit's half (`lockstep_audit.rs`, feature 449 T174) is defined.
+const DUMP_TAIL: &str = r#"
 out = {}
 for path in json.load(sys.stdin):
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
     T.marks.cache_clear()
     out[path] = {"parse": attempt(lambda: P.parse_svg(text)), "marks": attempt(lambda: T.marks(text)),
-                 "kinds": attempt(lambda: S.element_kinds(text))}
+                 "kinds": attempt(lambda: S.element_kinds(text)),
+                 "audit": audit(text, os.path.basename(path).startswith("fixture-"))}
 names = ("INTERIOR_FILL BUILDING_FILLS BUILDING_PATTERNS COURT_FLOORS ROOF_STROKES OPEN_PATTERNS MIN_BLDG_AREA_PX PRECINCT_ID "
          "DIVIDER_STROKE FIRE_WATER_FILL TREE_FILL MIN_TREE_R_PX CHAR_W_FRAC CHAR_W_BOLD CHAR_W_BOLD_MIXED CAPS_RATIO WELL_FILL "
          "WALL_STROKE DARK_FILLS FURNITURE_MAX_AREA_PX DOOR_MAX_AREA_PX UTILITY_FILLS STRUCTURE_FILLS WALL_KIND").split()
 consts = {n: conv(getattr(P, n)) for n in names}
-consts.update(INHERITED=conv(T.INHERITED), SKIP=conv(T._SKIP), DEFS=S.DEFS, PRIVY_FILL=R.PRIVY_FILL)
+consts.update(INHERITED=conv(T.INHERITED), SKIP=conv(T._SKIP), DEFS=S.DEFS, PRIVY_FILL=R.PRIVY_FILL, GRIDS=grid_defaults())
 print(json.dumps({"sheets": out, "consts": consts}))
 "#;
 
@@ -115,11 +121,12 @@ fn attempt<T>(r: Result<T, l7r_gate_research::Error>, show: impl FnOnce(T) -> Va
     }
 }
 
-fn rust_reading(text: &str) -> Value {
+fn rust_reading(text: &str, fixture: bool) -> Value {
     json!({
         "parse": attempt(parse_svg(text), |p| plan(&p)),
         "marks": attempt(marks(text), |ms| json!(ms.iter().map(mark).collect::<Vec<_>>())),
         "kinds": attempt(element_kinds(text), |k| json!(k.iter().map(|(p, v)| json!([p, v])).collect::<Vec<_>>())),
+        "audit": super::lockstep_audit::reading(text, fixture),
     })
 }
 
@@ -147,8 +154,35 @@ fn consts() -> Value {
         "WALL_STROKE": WALL_STROKE, "DARK_FILLS": sorted_strings(DARK_FILLS), "FURNITURE_MAX_AREA_PX": f(FURNITURE_MAX_AREA_PX),
         "DOOR_MAX_AREA_PX": f(DOOR_MAX_AREA_PX), "UTILITY_FILLS": sorted_strings(UTILITY_FILLS), "STRUCTURE_FILLS": structures,
         "WALL_KIND": kinds, "INHERITED": INHERITED, "SKIP": ["clipPath", "defs", "marker", "mask", "pattern", "symbol"], "DEFS": DEFS,
-        "PRIVY_FILL": PRIVY_FILL,
+        "PRIVY_FILL": PRIVY_FILL, "GRIDS": super::lockstep_audit::defaults(),
     })
+}
+
+/// Where two readings first part, by key path, with the two values there, or nothing where they agree (a whole sheet's reading is
+/// megabytes, too long to read in a failed assertion, feature 449 T174).
+fn first_difference(python: &Value, rust: &Value, at: &str) -> String {
+    match (python, rust) {
+        (Value::Object(a), Value::Object(b)) => {
+            let keys: std::collections::BTreeSet<&String> = a.keys().chain(b.keys()).collect();
+            keys.into_iter()
+                .find(|k| a.get(*k) != b.get(*k))
+                .map_or_else(String::new, |k| {
+                    first_difference(
+                        a.get(k).unwrap_or(&Value::Null),
+                        b.get(k).unwrap_or(&Value::Null),
+                        &format!("{at}/{k}"),
+                    )
+                })
+        }
+        (Value::Array(a), Value::Array(b)) if a.len() == b.len() => a
+            .iter()
+            .zip(b)
+            .position(|(x, y)| x != y)
+            .map_or_else(String::new, |i| {
+                first_difference(&a[i], &b[i], &format!("{at}/{i}"))
+            }),
+        _ => format!("at {at}: python {python} - rust {rust}"),
+    }
 }
 
 /// Every pool sheet of a declared Mode A tier, on disk (a generated exception's sheet where it has been drawn).
@@ -192,7 +226,11 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
         .map(|p| p.to_string_lossy().into_owned())
         .collect();
     let mut child = std::process::Command::new("python3")
-        .args(["-I", "-c", DUMP])
+        .args([
+            "-I",
+            "-c",
+            &format!("{DUMP_HEAD}{}{DUMP_TAIL}", super::lockstep_audit::PYTHON),
+        ])
         .arg(real())
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
@@ -214,8 +252,43 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     for fixture in &names[names.len() - SHEETS.len()..][..2] {
         assert!(python["sheets"][fixture]["parse"]["ok"].is_object());
     }
-    for (name, path) in names.iter().zip(&paths) {
-        let text = l7r_gate_core::record::read_text(path).unwrap();
-        assert_eq!(python["sheets"][name], rust_reading(&text), "{name}");
+    // and (T174) the grid measures' fixture and the sized marks' measure on both sides, a refusal there proving nothing either
+    for (i, (name, _)) in SHEETS.iter().enumerate() {
+        if name.starts_with("measured:") {
+            let audit = &python["sheets"][&names[names.len() - SHEETS.len() + i]]["audit"];
+            let measured = [&audit["vacant_more"], &audit["mark_rows"]];
+            assert_eq!(measured.map(|m| m["ok"].is_array()), [true; 2], "{name}");
+        }
     }
+    let fixtures = names.len() - SHEETS.len();
+    // every pool sheet is measured on both sides, not refused alike
+    for name in &names[..fixtures] {
+        let audit = &python["sheets"][name]["audit"];
+        let measured = [
+            audit["grids2"]["ok"].is_object(),
+            audit["vacant"]["ok"].is_array(),
+        ];
+        assert_eq!(measured, [true; 2], "{name}");
+    }
+    for (i, (name, path)) in names.iter().zip(&paths).enumerate() {
+        let text = l7r_gate_core::record::read_text(path).unwrap();
+        let rust = rust_reading(&text, i >= fixtures);
+        assert_eq!(first_difference(&python["sheets"][name], &rust, name), "");
+    }
+}
+
+#[test]
+fn where_two_readings_part_is_named() {
+    let a = json!({"x": [1, {"y": 2}], "z": 1});
+    assert_eq!(first_difference(&a, &a.clone(), "s"), "");
+    let b = json!({"x": [1, {"y": 3}], "z": 1});
+    assert_eq!(
+        first_difference(&a, &b, "s"),
+        "at s/x/1/y: python 2 - rust 3"
+    );
+    let c = json!({"x": [1]});
+    assert_eq!(
+        first_difference(&a, &c, "s"),
+        "at s/x: python [1,{\"y\":2}] - rust [1]"
+    );
 }

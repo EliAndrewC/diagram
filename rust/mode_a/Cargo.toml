@@ -28,6 +28,7 @@ l7r_gate_core = { path = "../gate/crates/core" }
 l7r_gate_registry = { path = "../gate/crates/registry" }
 l7r_gate_research = { path = "../gate/crates/research" }
 l7r_guard = { path = "../guard" }
+roxmltree = { workspace = true }
 serde_json = { workspace = true }
 
 [dev-dependencies]

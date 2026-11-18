@@ -76,7 +76,7 @@ const FULL: &str = r##"<?xml version="1.0"?>
 "##;
 
 /// The fixtures: a name and a sheet each.
-pub const SHEETS: [(&str, &str); 22] = [
+pub const SHEETS: [(&str, &str); 25] = [
     ("full", FULL),
     (
         "non-ascii before the ink",
@@ -105,4 +105,38 @@ pub const SHEETS: [(&str, &str); 22] = [
     ("a bad tub", "<svg><rect id=\"precinct\" x=\"0\" y=\"0\" width=\"9\" height=\"9\" fill=\"#fff\"/><g fill=\"#8FB0C6\"><circle cx=\"..\" cy=\"1\" r=\"1\"/></g></svg>"),
     ("a bad ellipse", "<svg><rect id=\"precinct\" x=\"0\" y=\"0\" width=\"9\" height=\"9\" fill=\"#fff\"/><ellipse cx=\"1\" cy=\"1\" rx=\".\" ry=\"1\"/></svg>"),
     ("a bad fence line", "<svg><rect id=\"precinct\" x=\"0\" y=\"0\" width=\"9\" height=\"9\" fill=\"#fff\"/><g id=\"fence\"><line x1=\"-\" y1=\"1\" x2=\"2\" y2=\"2\"/></g></svg>"),
+    // T174: the grid measures on fractional bounds (a float floor division that is not exact), every mask painted; the sized marks of
+    // every tag, kind and lineage; and an interior that paints no cell (the Python's division by zero)
+    ("measured: the grid measures", GRIDS),
+    ("measured: the sized marks", MARKS),
+    ("a precinct drawn backwards", "<svg><rect id=\"precinct\" x=\"20\" y=\"20\" width=\"-5\" height=\"9\" fill=\"url(#court-earth)\"/><rect x=\"0\" y=\"0\" width=\"30\" height=\"30\" fill=\"#DDB87A\"/></svg>"),
 ];
+
+/// The grid measures' sheet (feature 449 T174): a precinct on fractional pixels, two buildings, an open feature, a tree glyph, a divider.
+const GRIDS: &str = r##"<svg xmlns="http://www.w3.org/2000/svg">
+<rect id="precinct" x="10.5" y="7.25" width="301.3" height="200.9" fill="url(#court-earth)"/>
+<rect x="12" y="9" width="60" height="40" fill="#DDB87A" data-kind="hall"/>
+<rect x="250.7" y="150.1" width="55" height="50" fill="#C9A57A"/>
+<rect x="120" y="100" width="40" height="30" fill="url(#garden-stipple)"/>
+<rect x="290" y="9.5" width="20" height="60.3" fill="#DDB87A"/>
+<circle cx="200" cy="40" r="8" fill="#7A8C5C"/>
+<g stroke="#3F3A30" stroke-width="3"><line x1="10.5" y1="120" x2="311" y2="120"/><line x1="160.2" y1="120" x2="160.2" y2="207"/></g>
+</svg>"##;
+
+/// The sized marks' sheet (feature 449 T174): each mark tag, a stroke width inherited with a unit, curves and diagonals (`math.hypot`),
+/// a part's lineage, a not-highlighted mark, an untagged one, a caption's kind and a rect with no area.
+const MARKS: &str = r#"<svg>
+<rect id="precinct" x="0" y="0" width="300" height="300" fill="url(#court-earth)"/>
+<g data-kind="road" stroke-width="4.5px"><path d="M 10 10 L 40 50 C 1 2 3 4 70 90 Q 5 5 100 33.3"/><polyline points="0,0 3,4 6,8.5"/></g>
+<circle cx="50" cy="50" r="7.3" data-kind="tree"/>
+<ellipse cx="80" cy="20" rx="4" ry="2.5" data-kind="tub" stroke-width="0.7"/>
+<line x1="1" y1="1" x2="4.4" y2="5.1" data-kind="pole"/>
+<polygon points="10,10 20,10 15,18" data-kind="arch" data-part-of="gate"/>
+<g data-kind="landing"><rect x="5" y="5" width="9" height="9" data-kind="steps"/><circle cx="1" cy="1" r="1" data-kind="barge"/></g>
+<circle cx="1" cy="1" r="1" data-kind="-"/>
+<circle cx="2" cy="2" r="1"/>
+<text x="1" y="1" data-kind="alcove">alcove</text>
+<rect x="1" y="1" width="0" height="4" data-kind="flat"/>
+<g data-kind="shrine"><text x="5" y="5">x</text></g>
+<g transform="translate(5.5 2)"><line x1="0" y1="0" x2="0.1" y2="0.2" data-kind="peg"/></g>
+</svg>"#;

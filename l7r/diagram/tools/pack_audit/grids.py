@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+# LOCKSTEP (feature 449 T174, `ask:449-engine-order` condition 3): this module is ported to `rust/mode_a/src/grids.rs`, which `make size-table`
+# builds on; an edit here makes the same change there in the same commit, and `make rust-test CRATE=rust/mode_a` fails until it does
+# (`parse/lockstep_audit.rs` holds the two equal on every pool sheet).
+
 from dataclasses import dataclass
 
 from .parse import ParsedPlan, Rect

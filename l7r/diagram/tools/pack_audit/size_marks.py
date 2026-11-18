@@ -1,7 +1,7 @@
 """The sized marks a rect table misses (feature 294, plan B15c; the audit's Z5 row): every circle, ellipse, path, line,
 polyline and polygon of a Mode A sheet, in feet, named by its `data-kind` tag - and the kinds no row names.
 
-WHY. `make size-table` (`scripts/reviews/size_table.py`) hands `size-audit` every drawn RECT in feet, and the audit's first
+WHY. `make size-table` (`rust/mode_a/src/size_table.rs` since feature 449 T174) hands `size-audit` every drawn RECT in feet, and the audit's first
 method was to enumerate every sized feature from that table. A tree crown, a tub, a road, an arch, a stepping stone is
 drawn as a circle or a stroke, so it was not in the table, and the agent measured it by hand or not at all. This lists
 them from the same tags (`interactive.sheet.element_kinds`, read through `tagged.marks`), and `untabled_kinds` names a
@@ -9,6 +9,10 @@ tagged kind that neither a rect nor a mark row carries - a kind drawn only as a 
 """
 
 from __future__ import annotations
+
+# LOCKSTEP (feature 449 T174, `ask:449-engine-order` condition 3): this module is ported to `rust/mode_a/src/size_marks.rs`, which `make size-table`
+# runs; an edit here makes the same change there in the same commit, and `make rust-test CRATE=rust/mode_a` fails until it does
+# (`parse/lockstep_audit.rs` holds the two equal on every pool sheet).
 
 import math
 from dataclasses import dataclass

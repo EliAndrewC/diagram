@@ -153,7 +153,7 @@ def ink_bounds(text: str, plan: ParsedPlan, canvas_area: float = 0.0) -> tuple[f
     """The bounding box of everything DRAWN: rects, text, lines, circles, ellipses and the absolute points of
     every path, each shifted by the `translate(...)` of its ancestors; definitions (patterns, symbols,
     markers) draw nothing where they stand and are skipped, and a rect covering most of the canvas is the
-    parchment background, not ink. The same walk as `scripts/reviews/size_table.py`'s, for the same reason: a glyph
+    parchment background, not ink. The same walk as the size table's (`rust/mode_a/src/size_table.rs`), for the same reason: a glyph
     authored in local coordinates inside a translated group is ink where the group puts it, not at the origin.
 
     Research:

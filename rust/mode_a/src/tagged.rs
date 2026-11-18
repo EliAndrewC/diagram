@@ -71,6 +71,18 @@ impl Mark {
         self.paint.get("fill").map_or("", String::as_str)
     }
 
+    /// The inherited stroke width's leading number, or 0 (the Python's `stroke_width`, which the size marks read, feature 449 T174).
+    ///
+    /// # Errors
+    /// A number the Python's `float()` refuses (none the pattern takes).
+    pub fn stroke_width(&self) -> Result<f64, Error> {
+        let text = self.paint.get("stroke-width").map_or("", String::as_str);
+        match NUM.find(text).ok().flatten().filter(|m| m.start() == 0) {
+            Some(m) => float(m.as_str()),
+            None => Ok(0.0),
+        }
+    }
+
     /// The mark is `kind` or a part of it - drawn inside its group, or tagged `data-part-of` it.
     #[must_use]
     pub fn belongs_to(&self, kind: &str) -> bool {

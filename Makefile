@@ -892,10 +892,10 @@ stale-terms:    ## [project] after a value changed in a feature's spec, where do
 	@if [ -z "$(F)" ]; then printf 'make stale-terms: F=<feature> is required - e.g. make stale-terms F=253\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record stale-terms "$(F)" --clone "$$(git rev-parse --show-toplevel)" $(if $(AGAINST),--against "$(AGAINST)",); test $$? -le 1
 
-size-table:     ## [project] every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit   PLAN=pool/<subject>.svg
+size-table:     ## [project] every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit (Rust since 449 T174, `l7r-mode-a`)   PLAN=pool/<subject>.svg
 ##  PLAN=<svg>     the plan's SVG, relative to the skill directory or absolute
 	@if [ -z "$(PLAN)" ]; then printf 'make size-table: PLAN=<plan svg> is required - e.g. make size-table PLAN=pool/<tier>/<name>/<name>.svg\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/size_table.py" "$(abspath $(PLAN))"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a size-table "$(abspath $(PLAN))"
 
 review-accept:  ## [project] record a review finding as deliberately LEFT, with a reason - logged like an escape   MAP=<map> FINDING=<id> REASON="..."
 ##  MAP=<map>        the pool map whose last settlement-review verdict raised the finding

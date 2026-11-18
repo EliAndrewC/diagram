@@ -24,6 +24,15 @@ unicode-normalization = "=0.1.24"
 # floats of `pool/hamlets/kashikawa/kashikawa.json` and 3,000 random ones through `l7r-gate json-field`, against Python's `repr`); every
 # port compared against its Python reads JSON, so `float_roundtrip` is on for all of them. The guard names the same set.
 serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+# AN XML PARSER FOR WHAT PYTHON READ WITH `xml.etree` (feature 449 T174): `make size-table`'s Python read the plan with `ET.fromstring`, which
+# decodes entities and character references in an attribute, takes single quotes and refuses a sheet that is not well formed; the crate's
+# own tokenizer (`mode_a/src/sheet.rs`, `interactive/sheet.py`'s) does none of that, so a plan that differs from it there would read
+# otherwise. roxmltree has no dependencies; its accept-or-refuse matched expat's on 28 of 30 probed forms, the other two
+# (`xmlns:p=""`, an undefined entity in an attribute under an external DTD) followed in `mode_a/src/etree.rs` (observed 2026-11-17,
+# method: the same forms through CPython 3.14.4's `ET.fromstring` and roxmltree 0.20.0, scratchpad t174/xmlprobe).
+# PINNED (feature 449 T174): `rust/Cargo.lock` is not tracked, and `mode_a/src/etree.rs` rests on this version's refusals and on where it
+# places an unknown entity's error, so a later 0.20.x resolved by another clone could move what the size table accepts
+roxmltree = "=0.20.0"
 
 # THE COVERAGE BUILD'S CFG IS EXPECTED (feature 449 T116): `cargo llvm-cov` builds with `--cfg=coverage`, and a whole-tree test leaves that
 # build by it

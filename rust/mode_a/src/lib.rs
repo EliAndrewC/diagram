@@ -2,7 +2,10 @@
 //! ([`types`], `l7r/diagram/buildings/types.py`) and `make building-programs` ([`programs`], `tools/building_programs.py`, deleted); and
 //! (T170, the second piece) `make notes-census` ([`census`], `tools/notes_census.py`, deleted) with what it reads of a sheet - the reader
 //! ([`sheet`], `interactive/sheet.py`'s), the tagged marks ([`tagged`], `pack_audit/tagged.py`) and the audit's parse ([`parse`],
-//! `pack_audit/parse.py`), the Python of those three kept for its importers under the lockstep rule.
+//! `pack_audit/parse.py`), the Python of those three kept for its importers under the lockstep rule; and (T174, the third piece) `make
+//! size-table` ([`size_table`], `scripts/reviews/size_table.py`, deleted) with what it reads - the sized marks ([`size_marks`],
+//! `pack_audit/size_marks.py`), the grid measures whole ([`grids`], `pack_audit/grids.py`), the start tags ([`hand_sheet`],
+//! `labels/hand_sheet.py`'s `start_tags`) and an XML reading ([`etree`], `ET.fromstring`'s), the Python of the first three kept likewise.
 //!
 //! WHY ITS OWN CRATE AND BINARY: the engine will pull `geo` and `resvg` (the plan's steps 2-3), and a gate or guard build that compiled
 //! them would put minutes in front of every hook and check edit; so `l7r-mode-a` is built alone by `scripts/gates/l7r-gate.sh mode-a`,
@@ -18,24 +21,31 @@ use l7r_gate_core::Reply;
 use l7r_gate_research::Error;
 
 pub mod census;
+pub mod etree;
+pub mod grids;
+pub mod hand_sheet;
 pub mod parse;
 pub mod programs;
 pub mod py;
 pub mod sheet;
+pub mod size_marks;
+pub mod size_table;
 pub mod tagged;
 pub mod types;
 
-const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | --version\n";
+const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | --version\n";
 
 /// The command: `building-programs [--check] [--path PATH]`, `notes-census <manifest.json> [...]` (`make notes-census`), the notes
 /// census's two checks and a sheet's counts as commands (the differential's doors onto what `tests/test_mode_a_sheets.py` once asked in
-/// process, feature 449 T170), or `--version` (the differential's cheap build probe).
+/// process, feature 449 T170), `size-table <plan> [--json JSON]` (`make size-table`, T174), or `--version` (the differential's cheap build
+/// probe).
 #[must_use]
 pub fn cli(args: &[String], tree: &Path) -> Reply {
     let rest = args.get(1..).unwrap_or_default();
     match (args.first().map(String::as_str), rest.len()) {
         (Some("building-programs"), _) => programs::main(rest, tree),
         (Some("notes-census"), _) => census::main(rest),
+        (Some("size-table"), _) => size_table::cli::main(rest),
         (Some("sheet-counts"), 1) => door(|| {
             let counts = census::sheet_counts(&read(&rest[0])?)?;
             Ok(counts.iter().fold(String::new(), |mut out, (k, v)| {

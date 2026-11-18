@@ -151,9 +151,176 @@ pub fn sum(values: impl IntoIterator<Item = f64>) -> f64 {
     total
 }
 
+/// Python's `f"{v:g}"`: [`l7r_guard::shared::py_text::fmt_g`], a NaN named as Python names it (feature 449 T174, the size table's pixel
+/// positions).
+#[must_use]
+pub fn fmt_g(v: f64) -> String {
+    if v.is_nan() {
+        "nan".to_owned()
+    } else {
+        l7r_guard::shared::py_text::fmt_g(v)
+    }
+}
+
+/// Python's `round(x, n)`: the exact binary value rounded half to even at `n` places (Rust's fixed formatting rounds the same way), read
+/// back as the nearest float, as `CPython`'s correctly rounded `round` returns it (feature 449 T174, the size table's feet).
+#[must_use]
+pub fn round_to(x: f64, n: usize) -> f64 {
+    format!("{x:.n$}").parse().unwrap_or(x)
+}
+
+/// The `OverflowError` or `ValueError` Python's `int()` and `round()` raise on a float with no integer.
+fn no_integer(x: f64) -> Error {
+    if x.is_nan() {
+        Error::new("ValueError", "cannot convert float NaN to integer")
+    } else {
+        Error::new("OverflowError", "cannot convert float infinity to integer")
+    }
+}
+
+/// Python's `round(x)`: the nearest integer, half to even, held as the float it equals (an integer beyond `i64` stays exact).
+///
+/// # Errors
+/// An infinity or a NaN, as Python's.
+pub fn round_int(x: f64) -> Result<f64, Error> {
+    if x.is_finite() {
+        Ok(x.round_ties_even())
+    } else {
+        Err(no_integer(x))
+    }
+}
+
+/// Python's `int(x)` of a float, as an index: toward zero.
+///
+/// # Errors
+/// An infinity or a NaN, as Python's; a whole number past `i64`, which Python held and then could not allocate a grid of
+/// (its `MemoryError`).
+#[expect(
+    clippy::cast_possible_truncation,
+    reason = "the value is whole and inside i64's range, checked first"
+)]
+pub fn int(x: f64) -> Result<i64, Error> {
+    if !x.is_finite() {
+        return Err(no_integer(x));
+    }
+    let t = x.trunc();
+    if t.abs() >= 9.2e18 {
+        return Err(Error::new("MemoryError", ""));
+    }
+    Ok(t as i64)
+}
+
+/// Python's `a // b` of two floats: `CPython`'s `float_floor_div`, the floor of `(a - fmod(a, b)) / b` with its sign fix and its
+/// rounding of a quotient within a half of the next integer up - not `(a / b).floor()`, which an inexact quotient can carry across an
+/// integer.
+///
+/// # Errors
+/// `b` zero: Python's `ZeroDivisionError`.
+pub fn floordiv(a: f64, b: f64) -> Result<f64, Error> {
+    if b == 0.0 {
+        return Err(Error::new("ZeroDivisionError", "division by zero"));
+    }
+    let m = a % b;
+    let mut div = (a - m) / b;
+    if m != 0.0 && ((b < 0.0) != (m < 0.0)) {
+        div -= 1.0;
+    }
+    if div == 0.0 {
+        return Ok(0.0_f64.copysign(a / b));
+    }
+    let mut floor = div.floor();
+    if div - floor > 0.5 {
+        floor += 1.0;
+    }
+    Ok(floor)
+}
+
+/// Python's `math.hypot(x, y)`: `CPython`'s `vector_norm` (3.10 on), a scaled sum of squares carried in double length and one Newton
+/// correction - not libm's `hypot`, which can differ from it in the last place.
+#[must_use]
+pub fn hypot(x: f64, y: f64) -> f64 {
+    let v = [x.abs(), y.abs()];
+    // `CPython`'s running largest from 0.0: a NaN never takes its place, so an infinity beside one is found
+    let max = v.iter().fold(0.0, |m, &x| if x > m { x } else { m });
+    if max.is_infinite() {
+        return max;
+    }
+    if v[0].is_nan() || v[1].is_nan() {
+        return f64::NAN;
+    }
+    if max == 0.0 {
+        return max;
+    }
+    norm(v, max)
+}
+
+/// `vector_norm` over two finite magnitudes, `max` the larger and not zero.
+fn norm(mut v: [f64; 2], max: f64) -> f64 {
+    let max_e = frexp_exp(max);
+    if max_e < -1023 {
+        // a subnormal largest: scaled up by the least normal first, as `CPython` does
+        for x in &mut v {
+            *x /= f64::MIN_POSITIVE;
+        }
+        return f64::MIN_POSITIVE * norm(v, max / f64::MIN_POSITIVE);
+    }
+    let scale = pow2(-max_e);
+    let (mut csum, mut frac1, mut frac2) = (1.0_f64, 0.0_f64, 0.0_f64);
+    for magnitude in v {
+        let scaled = magnitude * scale;
+        let (square, square_lo) = (scaled * scaled, scaled.mul_add(scaled, -(scaled * scaled)));
+        let (total, lost) = fast_sum(csum, square);
+        csum = total;
+        frac1 += square_lo;
+        frac2 += lost;
+    }
+    let mut root = (csum - 1.0 + (frac1 + frac2)).sqrt();
+    let (square, square_lo) = (-root * root, (-root).mul_add(root, root * root));
+    let (total, lost) = fast_sum(csum, square);
+    csum = total;
+    frac1 += square_lo;
+    frac2 += lost;
+    let residual = csum - 1.0 + (frac1 + frac2);
+    root += residual / (2.0 * root);
+    root / scale
+}
+
+/// `ldexp(1.0, e)` for `e` in -1074..=1023, exact (`powi` reaches 2^-1024 through an overflowing 2^1024).
+fn pow2(e: i32) -> f64 {
+    let bits = if e >= -1022 {
+        u64::try_from(e + 1023).unwrap_or(0) << 52
+    } else {
+        1_u64 << u32::try_from(e + 1074).unwrap_or(0)
+    };
+    f64::from_bits(bits)
+}
+
+/// Dekker's fast two-sum: the rounded sum and what rounding dropped (`|a| >= |b|`).
+fn fast_sum(a: f64, b: f64) -> (f64, f64) {
+    let x = a + b;
+    let z = x - a;
+    (x, b - z)
+}
+
+/// `frexp(x)`'s exponent: `x = m * 2^e` with `0.5 <= |m| < 1` (a subnormal's below -1022).
+fn frexp_exp(x: f64) -> i32 {
+    let bits = x.to_bits();
+    let biased = i32::try_from((bits >> 52) & 0x7ff).unwrap_or(0);
+    if biased == 0 {
+        // subnormal: the exponent its leading bit gives
+        let mantissa = bits & ((1_u64 << 52) - 1);
+        let lead = 63 - i32::try_from(mantissa.leading_zeros()).unwrap_or(63);
+        return lead - 1073;
+    }
+    biased - 1022
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{float, iterate, max, min, os_error, sum, type_name, uncaught};
+    use super::{
+        float, floordiv, fmt_g, frexp_exp, hypot, int, iterate, max, min, os_error, pow2,
+        round_int, round_to, sum, type_name, uncaught,
+    };
     use l7r_gate_research::Error;
     use serde_json::json;
 
@@ -210,10 +377,70 @@ mod tests {
             (max(1.0, 2.0), min(1.0, 2.0), max(2.0, 1.0), min(2.0, 1.0)),
             (2.0, 1.0, 2.0, 1.0)
         );
-        // CPython's compensated sum: a left fold gives 0.6000000000000001
+        // `CPython`'s compensated sum: a left fold gives 0.6000000000000001
         assert_eq!(sum([0.1, 0.2, 0.3]), 0.6);
         assert_eq!(sum([1e100, 1.0, -1e100]), 1.0);
         assert!(sum([f64::INFINITY, 1.0]).is_infinite());
         assert_eq!(sum([]), 0.0);
+    }
+
+    #[test]
+    #[expect(clippy::float_cmp, reason = "each figure is Python's to the bit")]
+    fn round_int_floordiv_and_hypot_are_python_s() {
+        assert_eq!(
+            (round_to(0.25, 1), round_to(-0.04, 1), round_to(2.675, 2)),
+            (0.2, -0.0, 2.67)
+        );
+        assert!(round_to(-0.04, 1).is_sign_negative());
+        assert_eq!(
+            (round_int(2.5).unwrap(), round_int(-3.5).unwrap()),
+            (2.0, -4.0)
+        );
+        assert_eq!(round_int(1e300).unwrap(), 1e300);
+        let e = |r: Result<f64, l7r_gate_research::Error>| uncaught(&r.unwrap_err());
+        assert_eq!(
+            e(round_int(f64::INFINITY)),
+            "OverflowError: cannot convert float infinity to integer\n"
+        );
+        assert_eq!(
+            e(round_int(f64::NAN)),
+            "ValueError: cannot convert float NaN to integer\n"
+        );
+        assert_eq!((int(-2.7).unwrap(), int(2.7).unwrap()), (-2, 2));
+        assert_eq!(int(f64::NAN).unwrap_err().kind, "ValueError");
+        assert_eq!(int(1e30).unwrap_err().kind, "MemoryError");
+        // `CPython`'s `//`: 0.3 // 0.1 is 2.0 where (0.3 / 0.1).floor() is also 2.0 but 1 // 0.1 is 9.0 where (1 / 0.1).floor() is 10.0
+        assert_eq!(floordiv(1.0, 0.1).unwrap(), 9.0);
+        // a quotient a hair under an integer rounds up to it, as `CPython` rounds it
+        assert_eq!(floordiv(18.230_687_000_260_787, 0.1).unwrap(), 182.0);
+        assert_eq!(floordiv(-7.0, 2.0).unwrap(), -4.0);
+        assert_eq!(floordiv(7.0, -2.0).unwrap(), -4.0);
+        assert!(floordiv(-0.0, 2.0).unwrap().is_sign_negative());
+        assert!(floordiv(f64::INFINITY, 2.0).unwrap().is_nan());
+        assert_eq!(
+            e(floordiv(1.0, 0.0)),
+            "ZeroDivisionError: division by zero\n"
+        );
+        // the figures are `CPython` 3.14.4's `math.hypot`
+        assert_eq!(hypot(3.0, 4.0), 5.0);
+        assert_eq!(hypot(-1e308, 1e308), 1.414_213_562_373_095_1e308);
+        assert_eq!(hypot(3e-320, 4e-320), 5e-320);
+        assert_eq!(hypot(0.0, -0.0), 0.0);
+        assert!(hypot(f64::NAN, 1.0).is_nan());
+        assert_eq!(hypot(f64::NAN, f64::NEG_INFINITY), f64::INFINITY);
+        assert_eq!(
+            (frexp_exp(1.0), frexp_exp(0.75), frexp_exp(5e-324)),
+            (1, 0, -1073)
+        );
+        assert_eq!(
+            [fmt_g(f64::NAN), fmt_g(-0.0), fmt_g(1_234_567.0), fmt_g(0.5)],
+            ["nan", "-0", "1.23457e+06", "0.5"]
+        );
+        assert_eq!(
+            (pow2(-1024), pow2(1023), pow2(0)),
+            (2.0_f64.powi(-1023) / 2.0, 2.0_f64.powi(1023), 1.0)
+        );
+        // the largest a 2^1024 scale reaches: `CPython`'s figure
+        assert_eq!(hypot(1.5e-308, 1e-308), 1.802_775_637_731_994_5e-308);
     }
 }
