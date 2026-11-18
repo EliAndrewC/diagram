@@ -200,10 +200,10 @@
    "declared": "round-arbiter"
   },
   "### T151 Approach (checklist part A)": {
-   "sha256": "9a545aad0c0c4ed62d4841bc76da6ef2516bd7344110f77c87244a77681a2789",
+   "sha256": "c05bfb137073c94565a65004a00161bb875836bbc67012cf945e3793cff90b15",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   },
   "### T152 (<why: the finding or measurement that files it>)": {
    "sha256": "c0af6ae7e3eb1a9b4c5d4c19cd52f8f7c8b45884de95ac28c57db38fee5369c6",
@@ -573,6 +573,24 @@
   },
   "### T180 Approach (checklist part A)": {
    "sha256": "9c4a0424b68319b925440923c2afeb783a33c8449a5d4cd99df73dc19e0f75ba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T181 (the GM 2026-11-18, request.md: \"surely you mean the audit checks must pass\", and fixing as we go)": {
+   "sha256": "d81b77de278ad127da6b32f57e83d1c39738c3ba08d0339a87b1d532fa9ee5cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T181 Approach (checklist part A)": {
+   "sha256": "3728de0a57badff66c4b53007cd697df9037eb6a276d06abfaea8f10589ebef5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T151 (step 3a of the engine port, S8 and the country shrine; the GM 2026-11-18, request.md: \"proceed with continuing the porting\")": {
+   "sha256": "b290caf2f15ce248e98af8eaf1c149e2d7305d7fccd3c3d35716864f8a1ea2ed",
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
@@ -11262,6 +11280,122 @@
      "why": "These are sequencing and verification of what was asked. They add no behavior and narrow nothing in the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T181 (the GM 2026-11-18, request.md: \"surely you mean the audit checks must pass\", and fixing as we go)",
+    "### T181 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T181-approach-restatement",
+     "summary": "T180's one kept measure, 'the audit checks' verdicts kept exact', restated: a drawn output (map, sheet, page) must pass its checks and hold its research claims with nothing of its bytes, pixels or positions owed; a ported check must still do its job (red fixtures still fail, sheets it passed still pass).",
+     "class": "within",
+     "why": "This is the GM's own correction of T180's wording, 2026-11-18: 'surely you mean \"the audit checks must pass\" right?!'. It drops the exactness phrasing he objected to, and it matches FR-002 as amended in spec-cited.md."
+    },
+    {
+     "id": "T181-approach-fix-as-we-go",
+     "summary": "The GM's fix-as-we-go rule goes in beside it: a check's verdicts changing as a bug is fixed are expected, never a regression, and each step's known defects are fixed, in every copy that still lives, before the next step's port begins.",
+     "class": "within",
+     "why": "The GM, 2026-11-18: 'it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on to porting the next step'. 'In every copy that still lives' carries out 'all known bugs' and does not narrow it."
+    },
+    {
+     "id": "T181-files",
+     "summary": "The files reworded: constitution 2.35.1 (wording patch), its plan and spec templates, the speckit-specify checklist, spec.md FR-002/FR-012/SC-004/SC-007/phase-4 paragraph, engine-plan.md, root and l7r/diagram CLAUDE.md, docs/diff-run.md, spec-kit-and-reviews.md, efficiency-tooling.md, gm-rulings.md (his two new lines), and the four review agents' files.",
+     "class": "within",
+     "why": "The GM asked to 'amend our project guidelines and speckit constitution and whatever else we need to update'. The wording being corrected is T180's, so T180's files are the search space. spec-index.md holds no other requirement with verdict, exactness or identical wording that the list misses."
+    },
+    {
+     "id": "T181-decision-check-shown-to-work",
+     "summary": "A ported check is shown to work by catching what it is meant to catch (the audit's lockstep and red fixtures); a check fixed on purpose changes as fixed (constitution XIV), as in T150 and T177.",
+     "class": "within",
+     "why": "This is 'everything works' applied to a check, plus the GM's fix-as-we-go words. It is not an exactness standard."
+    },
+    {
+     "id": "T181-decision-rust-gate-claude-md-deferred",
+     "summary": "rust/gate/CLAUDE.md, under another agent's port at the time, is reworded at this task's landing with that port's work in.",
+     "class": "within",
+     "why": "This only orders the work. The file is still reworded within this task, so nothing the GM asked to change is left out."
+    },
+    {
+     "id": "T181-checks-and-exits",
+     "summary": "Green exits: make static, make hooks-test HOOKS_ALL=1, the pointer check, the plan review, a make land. Done measured as a grep of T180's files for 'kept exact' and 'verdicts' finding only the restated rule and history.",
+     "class": "within",
+     "why": "These are verification of the requested rewording and serve the request. They do not narrow it."
+    },
+    {
+     "id": "T181-order",
+     "summary": "After T180; before step 3b and the defect tasks T171, T177, T182-T184.",
+     "class": "within",
+     "why": "This puts the rule in place before the next port step and its defect fixes, which follows 'fix all known bugs in each step before moving on to porting the next step'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T151 (step 3a of the engine port, S8 and the country shrine; the GM 2026-11-18, request.md: \"proceed with continuing the porting\")",
+    "### T151 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "approach-scope",
+     "summary": "Step 3a ports labels/ and work_counts.py into rust/mode_a/src/labels/, shapely's two calls on geo, and draws the country shrine by Rust (l7r-mode-a hand-sheet, PNG via the resvg library) called from sheet.py's draw_hand_sheet, reporting read files to the generation cache.",
+     "class": "within",
+     "why": "S8 plus the shrine is step 3's first wired landing under ask:449-engine-order (S8, S9a, S11 in two wired landings); geo and the resvg library are Q7 as amended to the GM's 2026-11-17 rule; work_counts.py goes with its last importer (ask:449-phase3-remainder). The GM's 2026-11-18 'proceed with continuing the porting' asks for it."
+    },
+    {
+     "id": "magistracies-keep-python-labels",
+     "summary": "The three caption-placing magistracies keep the Python labels until step 3b.",
+     "class": "within",
+     "why": "Condition 5 of ask:449-engine-order splits step 3 into two named landings; the Python labels stay the one wired implementation for those generators until 3b, so FR-003 holds (no sheet runs both). Not a carve-out from what was asked: the rest of the port is the next landing, not dropped."
+    },
+    {
+     "id": "bar-amended-fr002",
+     "summary": "The bar is amended FR-002: the Rust-drawn shrine passes every check its Python sheet passed and holds its claims; pack-audit, size-table and the notes' counts observed to give the same results.",
+     "class": "within",
+     "why": "Exactly FR-002 as amended by T180 and the GM's 2026-11-18 'the audit checks must pass'; no byte, pixel or position standard is imposed."
+    },
+    {
+     "id": "labels-comparison-and-e2e-test",
+     "summary": "Observed: all 190 captions placed and the placed text the same as the Python's, geo agreeing on all 19 union-area verdicts; the crate's end-to-end test allows an ink overlap only where the Python's seat of the same caption overlaps.",
+     "class": "within",
+     "why": "The equality is reported as an observation, not held as a bar. The end-to-end test is a no-new-overlap test (a caption seated differently but clear of ink passes), so it checks that the labels do their job rather than imposing an exactness standard the GM struck."
+    },
+    {
+     "id": "signal-and-step-page",
+     "summary": "The differential run as a signal (9 cases, none differing) and the before/after pages of the shrine and every pool Mode A sheet published.",
+     "class": "within",
+     "why": "The GM's 2026-11-17 words (each engine slice publishes a page of every pool sheet before and after) and engine-order condition 5; the differential is read as FR-002's signal, not a stop. Report re-read: cases_total 9, differing []."
+    },
+    {
+     "id": "house-style-loop-fix-and-T185",
+     "summary": "The make quick house-style delta check's infinite loop on a regex step-limit error fixed with a test; the same error-skipping pattern at other call sites (152 by the recorded search) filed as T185, fixed before step 3b.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'use this port to fix broken things as we find them... fix all known bugs in each step before moving on to porting the next step'. One fixed in-step, the rest filed and ordered before any further porting."
+    },
+    {
+     "id": "python-defects-T184",
+     "summary": "Python label defects reproduced in the Rust (none met by a pool sheet), filed as T184 to fix before step 3b in every live copy; a zero-size caption that loops in Python gets no outer rings in Rust.",
+     "class": "within",
+     "why": "Fix-as-we-go as written into ask:449-phase4-slices: each step's known defects fixed before the next step's port begins, in every copy that still lives. T184 precedes 3b, the next port, so nothing is dropped or carved out."
+    },
+    {
+     "id": "claims-Q10",
+     "summary": "The 61 claims on labels/ stay keyed to the kept .py units, each Rust copy carrying its claim; the owed claims round (309 in 23 files) run before landing.",
+     "class": "within",
+     "why": "Q10 of ask:449-phase4-slices: claims stay keyed to .py units until the cut that deletes those units; the .py units are kept until 3b."
+    },
+    {
+     "id": "measure-checks-exits",
+     "summary": "Phase tokens and times reported; make static, rust-test, hooks-test HOOKS_ALL=1, quick and the pointer check green; one landing, red exits through make arbiter-ask.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-17 efficiency concern (report each piece's time and tokens) and the standing gate; decides nothing the spec left open beyond process."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -20098,6 +20232,118 @@
      "summary": "The task is done before step 3's review, which it governs. The exits are hooks-test, make static, the plan review and make land. Done is measured by a grep over the changed files.",
      "class": "within",
      "why": "These are sequencing and verification of what was asked. They add no behavior and narrow nothing in the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T181": {
+   "section_sha256": "afc5ac90b2ae31ff29ab9a91fa48905d85039d99d4faca21adb2a6725f59891a",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T181-approach-restatement",
+     "summary": "T180's one kept measure, 'the audit checks' verdicts kept exact', restated: a drawn output (map, sheet, page) must pass its checks and hold its research claims with nothing of its bytes, pixels or positions owed; a ported check must still do its job (red fixtures still fail, sheets it passed still pass).",
+     "class": "within",
+     "why": "This is the GM's own correction of T180's wording, 2026-11-18: 'surely you mean \"the audit checks must pass\" right?!'. It drops the exactness phrasing he objected to, and it matches FR-002 as amended in spec-cited.md."
+    },
+    {
+     "id": "T181-approach-fix-as-we-go",
+     "summary": "The GM's fix-as-we-go rule goes in beside it: a check's verdicts changing as a bug is fixed are expected, never a regression, and each step's known defects are fixed, in every copy that still lives, before the next step's port begins.",
+     "class": "within",
+     "why": "The GM, 2026-11-18: 'it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on to porting the next step'. 'In every copy that still lives' carries out 'all known bugs' and does not narrow it."
+    },
+    {
+     "id": "T181-files",
+     "summary": "The files reworded: constitution 2.35.1 (wording patch), its plan and spec templates, the speckit-specify checklist, spec.md FR-002/FR-012/SC-004/SC-007/phase-4 paragraph, engine-plan.md, root and l7r/diagram CLAUDE.md, docs/diff-run.md, spec-kit-and-reviews.md, efficiency-tooling.md, gm-rulings.md (his two new lines), and the four review agents' files.",
+     "class": "within",
+     "why": "The GM asked to 'amend our project guidelines and speckit constitution and whatever else we need to update'. The wording being corrected is T180's, so T180's files are the search space. spec-index.md holds no other requirement with verdict, exactness or identical wording that the list misses."
+    },
+    {
+     "id": "T181-decision-check-shown-to-work",
+     "summary": "A ported check is shown to work by catching what it is meant to catch (the audit's lockstep and red fixtures); a check fixed on purpose changes as fixed (constitution XIV), as in T150 and T177.",
+     "class": "within",
+     "why": "This is 'everything works' applied to a check, plus the GM's fix-as-we-go words. It is not an exactness standard."
+    },
+    {
+     "id": "T181-decision-rust-gate-claude-md-deferred",
+     "summary": "rust/gate/CLAUDE.md, under another agent's port at the time, is reworded at this task's landing with that port's work in.",
+     "class": "within",
+     "why": "This only orders the work. The file is still reworded within this task, so nothing the GM asked to change is left out."
+    },
+    {
+     "id": "T181-checks-and-exits",
+     "summary": "Green exits: make static, make hooks-test HOOKS_ALL=1, the pointer check, the plan review, a make land. Done measured as a grep of T180's files for 'kept exact' and 'verdicts' finding only the restated rule and history.",
+     "class": "within",
+     "why": "These are verification of the requested rewording and serve the request. They do not narrow it."
+    },
+    {
+     "id": "T181-order",
+     "summary": "After T180; before step 3b and the defect tasks T171, T177, T182-T184.",
+     "class": "within",
+     "why": "This puts the rule in place before the next port step and its defect fixes, which follows 'fix all known bugs in each step before moving on to porting the next step'."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T151": {
+   "section_sha256": "687c72a3f69c8f3fdad3ff1f5af618565f4721c1a01e24bf32c7abb14c466206",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach-scope",
+     "summary": "Step 3a ports labels/ and work_counts.py into rust/mode_a/src/labels/, shapely's two calls on geo, and draws the country shrine by Rust (l7r-mode-a hand-sheet, PNG via the resvg library) called from sheet.py's draw_hand_sheet, reporting read files to the generation cache.",
+     "class": "within",
+     "why": "S8 plus the shrine is step 3's first wired landing under ask:449-engine-order (S8, S9a, S11 in two wired landings); geo and the resvg library are Q7 as amended to the GM's 2026-11-17 rule; work_counts.py goes with its last importer (ask:449-phase3-remainder). The GM's 2026-11-18 'proceed with continuing the porting' asks for it."
+    },
+    {
+     "id": "magistracies-keep-python-labels",
+     "summary": "The three caption-placing magistracies keep the Python labels until step 3b.",
+     "class": "within",
+     "why": "Condition 5 of ask:449-engine-order splits step 3 into two named landings; the Python labels stay the one wired implementation for those generators until 3b, so FR-003 holds (no sheet runs both). Not a carve-out from what was asked: the rest of the port is the next landing, not dropped."
+    },
+    {
+     "id": "bar-amended-fr002",
+     "summary": "The bar is amended FR-002: the Rust-drawn shrine passes every check its Python sheet passed and holds its claims; pack-audit, size-table and the notes' counts observed to give the same results.",
+     "class": "within",
+     "why": "Exactly FR-002 as amended by T180 and the GM's 2026-11-18 'the audit checks must pass'; no byte, pixel or position standard is imposed."
+    },
+    {
+     "id": "labels-comparison-and-e2e-test",
+     "summary": "Observed: all 190 captions placed and the placed text the same as the Python's, geo agreeing on all 19 union-area verdicts; the crate's end-to-end test allows an ink overlap only where the Python's seat of the same caption overlaps.",
+     "class": "within",
+     "why": "The equality is reported as an observation, not held as a bar. The end-to-end test is a no-new-overlap test (a caption seated differently but clear of ink passes), so it checks that the labels do their job rather than imposing an exactness standard the GM struck."
+    },
+    {
+     "id": "signal-and-step-page",
+     "summary": "The differential run as a signal (9 cases, none differing) and the before/after pages of the shrine and every pool Mode A sheet published.",
+     "class": "within",
+     "why": "The GM's 2026-11-17 words (each engine slice publishes a page of every pool sheet before and after) and engine-order condition 5; the differential is read as FR-002's signal, not a stop. Report re-read: cases_total 9, differing []."
+    },
+    {
+     "id": "house-style-loop-fix-and-T185",
+     "summary": "The make quick house-style delta check's infinite loop on a regex step-limit error fixed with a test; the same error-skipping pattern at other call sites (152 by the recorded search) filed as T185, fixed before step 3b.",
+     "class": "within",
+     "why": "The GM 2026-11-18: 'use this port to fix broken things as we find them... fix all known bugs in each step before moving on to porting the next step'. One fixed in-step, the rest filed and ordered before any further porting."
+    },
+    {
+     "id": "python-defects-T184",
+     "summary": "Python label defects reproduced in the Rust (none met by a pool sheet), filed as T184 to fix before step 3b in every live copy; a zero-size caption that loops in Python gets no outer rings in Rust.",
+     "class": "within",
+     "why": "Fix-as-we-go as written into ask:449-phase4-slices: each step's known defects fixed before the next step's port begins, in every copy that still lives. T184 precedes 3b, the next port, so nothing is dropped or carved out."
+    },
+    {
+     "id": "claims-Q10",
+     "summary": "The 61 claims on labels/ stay keyed to the kept .py units, each Rust copy carrying its claim; the owed claims round (309 in 23 files) run before landing.",
+     "class": "within",
+     "why": "Q10 of ask:449-phase4-slices: claims stay keyed to .py units until the cut that deletes those units; the .py units are kept until 3b."
+    },
+    {
+     "id": "measure-checks-exits",
+     "summary": "Phase tokens and times reported; make static, rust-test, hooks-test HOOKS_ALL=1, quick and the pointer check green; one landing, red exits through make arbiter-ask.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-17 efficiency concern (report each piece's time and tokens) and the standing gate; decides nothing the spec left open beyond process."
     }
    ],
    "verdict": "CLEAR"

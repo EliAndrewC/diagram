@@ -10,7 +10,7 @@ after a fix reruns only the sides whose key moved.
 **A difference is a signal, not a bar** (feature 449 T180, the GM 2026-11-18, constitution XIII: *"remove any references to things
 needing to be bitwise identical or anything like that as an exactness standard"*). The run exits 1 when any case differs; that
 exit says something moved, which the session reads for whether everything still works - the tests pass, the callers get their
-job done, the research claims hold, the audit checks give the same verdicts. A port whose differences keep all of that lands
+job done, the research claims hold, the drawn outputs pass their checks and a ported check still does its job (its red fixtures fail, the sheets it passed pass). A port whose differences keep all of that lands
 with them named in its record; no difference is by itself a refusal, a new ask or a reason to copy the old side's bytes. FR-001c
 still reads a differential with no difference as one condition of a straight task (no per-task review); a task with differences
 gets its review, which judges them by the same rule.

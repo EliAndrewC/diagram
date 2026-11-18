@@ -29,6 +29,17 @@ pub fn asset(tree: &Path, name: &str) {
     note(&tree.join(crate::page::ASSETS).join(name));
 }
 
+/// Held by a test whose command takes the log: the tests run side by side in one process, and one run's [`take`] drained another's notes
+/// (feature 449 T151: the hand sheet's test lost its sheet so, the sheet-page command's test taking the log meanwhile).
+#[cfg(test)]
+pub static TAKERS: Mutex<()> = Mutex::new(());
+
+/// [`TAKERS`] held for the caller's run.
+#[cfg(test)]
+pub fn taker() -> std::sync::MutexGuard<'static, ()> {
+    TAKERS.lock().unwrap_or_else(PoisonError::into_inner)
+}
+
 /// Every file noted so far, in order, the log emptied.
 #[must_use]
 pub fn take() -> Vec<PathBuf> {

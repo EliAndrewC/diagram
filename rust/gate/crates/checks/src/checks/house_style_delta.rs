@@ -18,6 +18,17 @@ fn pattern(text: &str) -> Regex {
     Regex::new(text).unwrap()
 }
 
+/// A pattern whose search has no step limit. WHY (feature 449 T151): `fancy_regex` 0.14 runs any pattern with a word boundary (`\b`)
+/// in its own backtracking VM (`Assertion::is_hard`), which gives up a search past a million steps with an `Err` that its `find_iter`
+/// then repeats without advancing, so `.flatten()` over it never ended - a one-line JSON of 157 KB hung `make quick` past ten minutes
+/// (40 KB ran in 0.1 s; 60 KB never ended). The scan's patterns run unbounded, and an `Err` ends a scan rather than spinning.
+fn unbounded(text: &str) -> Regex {
+    fancy_regex::RegexBuilder::new(text)
+        .backtrack_limit(usize::MAX)
+        .build()
+        .unwrap()
+}
+
 fn british() -> Vec<&'static str> {
     WORDS
         .lines()
@@ -47,9 +58,9 @@ fn exempt_spans(text: &str, path: &str) -> Vec<(usize, usize)> {
     if super::has_ext(path, "md") || super::has_ext(path, "html") || super::has_ext(path, "txt") {
         body += "|\"[^\"\n]*\"";
     }
-    pattern(&format!("(?si){body}"))
+    unbounded(&format!("(?si){body}"))
         .find_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| (m.start(), m.end()))
         .collect()
 }
@@ -139,9 +150,14 @@ fn inside_a_name(text: &str, start: usize, end: usize) -> bool {
         && pattern(r"^[A-Z][\w'-]*").is_match(after).unwrap_or(false)
 }
 
+/// Any British spelling of the guard's table, as a whole word in any case.
+fn words() -> Regex {
+    unbounded(&format!(r"(?i)\b({})\b", british().join("|")))
+}
+
 /// Every British spelling this change wrote, as `path:line: word`.
 fn findings(root: &Path) -> Vec<String> {
-    let words = pattern(&format!(r"(?i)\b({})\b", british().join("|")));
+    let words = words();
     let base_text = git_text(root, &["merge-base", "HEAD", "origin/main"]);
     let base = if base_text.trim().is_empty() {
         "HEAD"
@@ -165,7 +181,7 @@ fn findings(root: &Path) -> Vec<String> {
             at += text.len() + 1;
         }
         for (n, text) in lines.iter().filter(|(_, t)| !removed.contains(t.trim())) {
-            for hit in words.find_iter(text).flatten() {
+            for hit in words.find_iter(text).map_while(Result::ok) {
                 let start = offsets.get(n.wrapping_sub(1)).copied().unwrap_or(0) + hit.start();
                 let exempt: &Vec<(usize, usize)> = spans.get_or_init(|| exempt_spans(&body, path));
                 if exempt.iter().any(|(a, b)| *a <= start && start < *b) {

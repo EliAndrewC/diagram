@@ -52,8 +52,8 @@ A change made for speed may move maps - ALWAYS (the GM, 2026-10-18: *"anytime we
 always okay for maps to change, so long as the changes don't violate our research findings"*). Hold it to the rules and the
 research claims (the cohort, the gate, impl-drift) rather than to identical output; an equivalence test is needed only where an
 answer is kept on purpose. So may any port or change (constitution XIII, the GM 2026-11-18): its outputs may differ so long as
-everything works - its tests pass, it does its job for its callers, its research claims hold - the audit checks' verdicts the
-one measure kept exact.
+everything works - its tests pass, it does its job for its callers, its research claims hold; a drawn output must pass its checks,
+and a ported check must still do its job (its red fixtures still fail, the sheets it passed still pass), never matching bytes.
 
 | | label | total | median | worst | notes |
 |---|---|---|---|---|---|
@@ -192,7 +192,7 @@ approval before /speckit-tasks may run.
     excuses. Exits: fix, revert, or an explicit GM waiver.
   - **A differing output is not a regression** (v2.35.0): name what the
     plan holds a port or change to - its tests, its callers' reads, its
-    research claims, the audit checks' verdicts - never its bytes.
+    research claims, its checks passing (a ported check still doing its job) - never its bytes.
   - Where a re-roll destroys per-seed comparison, the pass RATE must not drop
     AND each newly-failing check must be individually diagnosed in the plan's
     closing notes.

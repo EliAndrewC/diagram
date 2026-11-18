@@ -1,7 +1,7 @@
 //! What this change wrote, and what it did not.
 
 use super::super::tests::{based, commit, put, repo};
-use super::{british, cli, exempt_path, findings, inside_a_name};
+use super::{british, cli, exempt_path, findings, inside_a_name, words};
 
 fn base(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let dir = repo(tag);
@@ -147,4 +147,17 @@ fn a_staged_move_is_nothing_this_change_wrote_and_no_base_reads_the_worktree() {
     commit(&none);
     put(&none, "b.md", "a line of colour text here\n");
     assert_eq!(findings(&none).len(), 1);
+}
+
+#[test]
+fn a_line_past_the_regex_engine_s_backtrack_limit_is_scanned_to_its_end() {
+    // feature 449 T151: a 157 KB one-line JSON hung the scan (fancy_regex's error at its step limit, repeated without advancing); on a
+    // 60 KB line, its one British word at the very end, the words' search finds the word - an error there would end the scan with none
+    let line = format!("{{\"x\": \"{}colour\"}}", "a b ".repeat(15_000));
+    let hits: Vec<String> = words()
+        .find_iter(&line)
+        .map_while(Result::ok)
+        .map(|m| m.as_str().to_owned())
+        .collect();
+    assert_eq!(hits, ["colour"]);
 }

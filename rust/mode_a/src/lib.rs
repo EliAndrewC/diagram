@@ -13,7 +13,8 @@
 //! encoded in process), [`place`], [`notes`], [`tags`], [`dwellings`] and the sheet's page half ([`sheet::page`]); and (T150, step 2's wiring) the six
 //! pool generators' pages written by `sheet-page` ([`sheet::page::cli`], their Python deleted), with the reviewer's two picture measures
 //! `picture-diff` and `page-lit` ([`diagnostics`], `tools/picture_diff.py` and `page_lit.py`, deleted) and the files the page read
-//! listed for the generation cache ([`reads`]).
+//! listed for the generation cache ([`reads`]); and (T151, step 3a) the caption placer ([`labels`], `l7r/diagram/labels/`) and the
+//! country shrine drawn whole by `hand-sheet` ([`sheet::hand`]), its generator a call to it.
 //!
 //! WHY ITS OWN CRATE AND BINARY: the engine pulls `geo` (since T175, the audit's garden sun) and will pull `resvg` (the plan's steps 2-3), and a gate or guard build that compiled
 //! them would put minutes in front of every hook and check edit; so `l7r-mode-a` is built alone by `scripts/gates/l7r-gate.sh mode-a`,
@@ -36,6 +37,7 @@ pub mod dwellings;
 pub mod etree;
 pub mod grids;
 pub mod hand_sheet;
+pub mod labels;
 pub mod notes;
 pub mod page;
 pub mod parse;
@@ -50,8 +52,9 @@ pub mod size_table;
 pub mod tagged;
 pub mod tags;
 pub mod types;
+pub mod work_counts;
 
-const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | sheet-page <map.svg> [--with-raster | --no-raster] [--stdin] | picture-diff a b [--page PAGE] [--svg SVG] [--threshold N] | page-lit <page.html> <key> [--vector] [--out OUT] | --version\n";
+const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | sheet-page <map.svg> [--with-raster | --no-raster] [--stdin] | hand-sheet <map.svg> [--placed OUT] | picture-diff a b [--page PAGE] [--svg SVG] [--threshold N] | page-lit <page.html> <key> [--vector] [--out OUT] | --version\n";
 
 /// The command: `building-programs [--check] [--path PATH]`, `notes-census <manifest.json> [...]` (`make notes-census`), the notes
 /// census's two checks and a sheet's counts as commands (the differential's doors onto what `tests/test_mode_a_sheets.py` once asked in
@@ -72,6 +75,7 @@ pub fn cli_in(args: &[String], tree: &Path, input: &mut dyn std::io::Read) -> Re
         (Some("sheet-page"), _) => {
             sheet::page::cli::main(rest, tree, &raster::Host::current(), input)
         }
+        (Some("hand-sheet"), _) => sheet::hand::main(rest, tree, &raster::Host::current()),
         (Some("picture-diff"), _) => {
             diagnostics::picture_diff::main(rest, &raster::Host::current())
         }
@@ -155,7 +159,8 @@ mod tests {
     fn the_command_names_its_tools() {
         let tree = std::path::Path::new("/nonexistent");
         // (feature 449 T150) the page and the two picture measures: each arm reached, each refusing a bare call as its own usage does
-        for tool in ["sheet-page", "picture-diff", "page-lit"] {
+        // (T151) and the hand sheet driver
+        for tool in ["sheet-page", "picture-diff", "page-lit", "hand-sheet"] {
             let r = cli(&[tool.to_owned()], tree);
             let own = format!("usage: l7r-mode-a {tool} ");
             assert_eq!((r.code, r.stderr.starts_with(&own)), (2, true));

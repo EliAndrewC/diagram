@@ -53,7 +53,16 @@ bitwise identical or anything like that as an exactness standard"*. Earlier the 
 bitwise identical!  I feel like I've said this dozens of times"* (2026-11-17) and *"it's always okay for maps to change, so long
 as the changes don't violate our research findings"* (2026-10-18). For every port and every change: an output may differ from
 what it replaces so long as everything works - its tests pass, it does its job for its callers, its research claims hold; the
-audit checks' verdicts the one measure kept exact. Recorded here as well as in `specs/449-rust-codebase/request.md` because the
+drawn outputs must pass their checks and hold their research claims, and a ported check must still do its job (T181, below). Recorded here as well as in `specs/449-rust-codebase/request.md` because the
 reviewers and the round arbiter, who never read that file, kept reaching for the opposite. Applied: constitution XIII "A
-differing output is not a regression" (v2.35.0), 449's FR-002, `docs/efficiency-tooling.md`, `docs/diff-run.md`, and the
+differing output is not a regression" (v2.35.0, reworded 2.35.1), 449's FR-002, `docs/efficiency-tooling.md`, `docs/diff-run.md`, and the
 `spec-fidelity`, `spec-fidelity-verify`, `round-arbiter` and `escalation-check` agent files.
+
+The same day, on T180's own wording ("the audit checks' verdicts the one measure kept exact"): *"When you say "the audit checks pass/fail must match exactly", then surely you mean "the audit checks must pass" right?!"*. Yes: nothing is
+kept exact. Two things are owed, neither an exactness standard: a drawn output - a map, a sheet, a page - must pass its checks and
+hold its research claims, and nothing about its bytes, pixels or positions must match what it replaces; and a check that is ported
+must still do its job - its red fixtures still fail and the sheets it passed still pass, which is how a port of a check is shown to
+work - while a check fixed or improved on purpose (constitution XIV; FR-002's exception for a check that refuses correct work) changes
+as fixed. Applied by feature 449 T181: constitution 2.35.1 and the same files as above.
+
+And on fixing as the port goes: *"gotcha; yeah we want to use this port to fix broken things as we find them, so it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on to porting the next step"*. So a check's verdicts change as a bug is fixed - a sheet a buggy check refused now passing, or an engine bug fixed changing a map - and that is expected, never a regression; a ported check is shown to work by catching what it is meant to catch; and each step's known defects (found by the port, its claims rounds or its reviews) are fixed before the next step's port begins, in every copy that still lives (the Rust and any kept Python).

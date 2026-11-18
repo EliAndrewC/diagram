@@ -39,6 +39,12 @@ pub struct Element {
     /// `"".join(el.itertext())`: every text node within it, entities decoded, in document order (feature 449 T175, the audit's ink
     /// bounds read a caption's length by it); a comment is no text, as `ElementTree` drops comments
     pub itertext: String,
+    /// The tag's namespace URI, empty for none: `ElementTree` keys a tag `{uri}name`, and the hand sheet's reader finds a caption's
+    /// `<tspan>`s by the SVG namespace's key alone (feature 449 T151)
+    pub ns: String,
+    /// `el.text`: the text before its first child element, entities decoded, a comment's two sides joined as `ElementTree`'s builder
+    /// joins them (feature 449 T151, a caption's line); empty where `ElementTree` holds None
+    pub text: String,
 }
 
 impl Element {
@@ -120,11 +126,19 @@ fn element(node: roxmltree::Node<'_, '_>) -> Result<Element, Error> {
         .filter(roxmltree::Node::is_text)
         .filter_map(|t| t.text())
         .collect();
+    let text = node
+        .children()
+        .take_while(|c| !c.is_element())
+        .filter(roxmltree::Node::is_text)
+        .filter_map(|t| t.text())
+        .collect();
     Ok(Element {
         tag: node.tag_name().name().to_owned(),
         attrib,
         children,
         itertext,
+        ns: node.tag_name().namespace().unwrap_or_default().to_owned(),
+        text,
     })
 }
 

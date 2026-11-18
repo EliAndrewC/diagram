@@ -119,7 +119,7 @@
   so long as the changes don't violate our research findings." Its criteria are the time (measured, before and after) and
   the rules holding (the cohort, the gate, the research claims); identical maps are not required. Nor are identical outputs
   of any port or change (constitution XIII, the GM 2026-11-18): a criterion holds what works - the tests, the callers' reads,
-  the research claims, the audit checks' verdicts - never bytes.
+  the research claims, the checks passing (a ported check still doing its job) - never bytes.
 -->
 
 - **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under `2 minutes`"]

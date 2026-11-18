@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.34.0 → 2.35.0
+Version change: 2.35.0 → 2.35.1
+
+Version 2.35.1 (amended 2026-11-18, feature 449 T181): WORDING ONLY, no principle changes. 2.35.0 kept "the audit checks' verdicts" as "the one
+measure kept exact"; the GM, 2026-11-18: "When you say "the audit checks pass/fail must match exactly", then surely you mean "the audit checks must pass" right?!" Restated as two things owed, neither an exactness standard: (1) a drawn output - a map,
+a sheet, a page - must pass its checks and hold its research claims, and nothing about its bytes, pixels or positions must match what it
+replaces; (2) a check that is ported must still do its job - its red fixtures still fail and the sheets it passed still pass, which is how
+a port of a check is shown to work - and a check fixed or improved on purpose (XIV) changes as fixed. Also written in (the GM, 2026-11-18: "gotcha; yeah we want to use this port to fix broken things as we find them, so it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on to porting the next step"): a check's verdicts change as a bug is fixed - a sheet a buggy check refused now passing, or an engine bug fixed changing a map - expected, never a regression; a ported check is shown to work by catching what it is meant to catch; each step's known defects are fixed, in every copy that still lives, before the next step's port. PATCH (wording that clarifies).
 
 Version 2.35.0 (amended 2026-11-18, feature 449 T180): NO EXACTNESS STANDARD FOR A PORT OR A CHANGE. Principle XIII says
 what a regression is NOT - an output that differs from what it replaces (other bytes, pixels, wording, order) while everything
@@ -12,8 +18,8 @@ long as everything works?!?!", and "yeah we should definitely amend our project 
 else we need to update to clarify this and remove any references to things needing to be bitwise identical or anything like
 that as an exactness standard" (earlier: "the resulting maps do NOT need to be bitwise identical!  I feel like I've said this
 dozens of times", 2026-11-17). Everything works means: its tests pass, it does its job for its callers, its research claims
-hold; the one measure kept exact is the audit checks' verdicts (pass or fail of each check on each sheet), a check that
-refused correct work still fixed (XIV). A byte comparison (`make diff-run`) shows what moved, a signal, never a bar.
+hold (2.35.1 restates what the checks owe: a drawn output must pass them and hold its research claims, a ported check must still do
+its job, a check fixed on purpose changes as fixed (XIV); no verdict is "kept exact"). A byte comparison (`make diff-run`) shows what moved, a signal, never a bar.
 Reproducibility (the same code and seed give the same output), integrity hashes and verbatim quotation are not exactness
 standards and stay. Dependent templates: plan-template.md's performance bookends and XIII entry, spec-template.md's speed
 note, phase-checklist.md's rebuild step. MINOR (a principle's scope widens).
@@ -1747,11 +1753,21 @@ identical or anything like that as an exactness standard"*). A port, or any
 change, may give outputs that differ from what they replace - other bytes,
 other pixels, other wording, another order of ties, another message - so
 long as EVERYTHING WORKS: its tests pass, it does its job for its callers
-(what a caller reads, it still finds), and its research claims hold. The one
-measure kept exact is the audit checks' verdicts - pass or fail of each
-check on each sheet - because they are the yardstick "everything works" is
-judged by; a check that refused correct work is still fixed (Principle XIV),
-its expected verdict changed and named. No session, reviewer or the round
+(what a caller reads, it still finds), and its research claims hold. Two
+things are owed, neither an exactness standard (the GM, on T180's wording:
+*"When you say "the audit checks pass/fail must match exactly", then surely you mean "the audit checks must pass" right?!"*): a drawn output - a
+map, a sheet, a page - must pass its checks and hold its research claims,
+and nothing about its bytes, pixels or positions must match what it
+replaces; and a check that is ported must still do its job - its red
+fixtures still fail and the sheets it passed still pass, which is how a port
+of a check is shown to work. A check fixed or improved on purpose (Principle
+XIV; a check that refused correct work) changes as fixed, its expected
+result changed and named. A check's verdicts changing as a bug is fixed (a
+sheet a buggy check refused now passing, an engine bug fixed changing a map) is
+expected, never a regression; a ported check is shown to work by catching what
+it is meant to catch; and each step's known defects are fixed, in every copy
+that still lives, before the next step's port (the GM, 2026-11-18: "we should
+fix all known bugs in each step before moving on to porting the next step"). No session, reviewer or the round
 arbiter holds a port or a change to bit-for-bit, byte-for-byte or
 pixel-for-pixel agreement, nor treats a difference as a new ask: a byte
 comparison (a differential, `make diff-run`) shows WHAT MOVED, a signal to

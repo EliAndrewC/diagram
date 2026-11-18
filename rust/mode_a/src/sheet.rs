@@ -1,6 +1,7 @@
 //! A Mode A sheet's reader (feature 449 T170): `l7r/diagram/interactive/sheet.py`'s tree - [`Node`], [`parse`], [`DEFS`] and
 //! [`element_kinds`] - ported for the audit's parse ([`crate::parse`]) and its tagged marks ([`crate::tagged`]); the page writing half of
-//! `sheet.py` (`pieces`, `census`, `write_sheet_page`) is [`page`] (the plan's step 2, feature 449 T150).
+//! `sheet.py` (`pieces`, `census`, `write_sheet_page`) is [`page`] (the plan's step 2, feature 449 T150); and [`hand`] draws a hand sheet
+//! whole - captions, picture and page - the one command its generator runs (T151, step 3a).
 //!
 //! The reader TOKENIZES rather than parsing as XML (the Python's own reason: the page is a second serialization of the sheet's bytes), so a
 //! node holds slices of the sheet, never copies.
@@ -213,6 +214,7 @@ pub fn element_kinds(svg: &str) -> Result<BTreeMap<i64, String>, Error> {
     Ok(out)
 }
 
+pub mod hand;
 pub mod page;
 
 #[cfg(test)]

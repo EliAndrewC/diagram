@@ -116,9 +116,12 @@ passes: *"And whyyyyy did the arbitur rule that things must match exactly when I
 everything works?!?!"*, and *"remove any references to things needing to be bitwise identical or anything like that as an
 exactness standard"* (constitution XIII, "A differing output is not a regression"; feature 449 T180). A port or any change may
 give outputs that differ from what they replace - bytes, pixels, wording, usage and error text, the order of ties, a format -
-so long as EVERYTHING WORKS: its tests pass, it does its job for its callers, its research claims hold. The one measure kept
-exact is the audit checks' verdicts (pass or fail of each check on each sheet); a check that refused correct work is still
-fixed. So:
+so long as EVERYTHING WORKS: its tests pass, it does its job for its callers, its research claims hold. Two things are owed,
+and neither is an exactness standard (the GM, 2026-11-18, on T180's wording: *"When you say "the audit checks pass/fail must match exactly", then surely you mean "the audit checks must pass" right?!"*): (1) a drawn output - a map, a sheet, a page
+- must pass its checks and hold its research claims, and nothing about its bytes, pixels or positions must match what it
+replaces; (2) a check that is ported must still do its job - its red fixtures still fail and the sheets it passed still pass,
+which is how a port of a check is shown to work - and a check fixed or improved on purpose (Principle XIV; FR-002's exception
+for a check that refuses correct work) changes as fixed. So:
 
 - Never block, narrow or send back a port or change for differing bytes where that holds, and never ask for such a difference
   to be ruled, declared or justified as an exception: it is the rule, not an exception to it. Judge whether everything works.
@@ -128,6 +131,8 @@ fixed. So:
   itself a stop or a new ask.
 - Not this standard, and still exact: reproducibility (the same code and seed give the same output), integrity hashes, and a
   quotation verbatim from its source.
+
+FIX AS WE GO (the GM, 2026-11-18: *"gotcha; yeah we want to use this port to fix broken things as we find them, so it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on to porting the next step"*): a check's verdicts changing as a bug is fixed - a sheet a buggy check refused now passing, or an engine bug fixed changing a map - is expected, never a regression, and a ported check is shown to work by catching what it is meant to catch. Each step's known defects (found by the port, its claims rounds or its reviews) are fixed before the next step's port begins, in every copy that still lives (the Rust and any kept Python): a plan that carries a known defect into the next step is the finding.
 
 ## FIGURES: re-run them, never adjudicate them by eye
 

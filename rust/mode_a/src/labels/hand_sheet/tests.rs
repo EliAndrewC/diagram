@@ -1,0 +1,341 @@
+//! The hand sheet held to the Python's answers (feature 449 T151): two sheets drawn to reach every branch of the reader, the
+//! classification and the seating - every transform form, every path command, ways stroked and filled, nested and bordered ground, a busy
+//! bed, texture, named grounds, a caption over its gloss in a translated group, a light name on a dark roof turned about a point, a
+//! scatter, a stepped building, a building its parts fill, an elongated area, a foreign namespace, a caption that fits nowhere - and the
+//! refusals, each `placed` by the Python (`held.json`, generated 2026-11-18 by `held_cases.py` beside it, `CPython`
+//! 3.14.4). The placed text is the Python's byte for byte; a refusal its last traceback line (an XML refusal by its class, its words the
+//! library's, `ask:449-T066-json-message`).
+//!
+//! Research:
+//!     its tests - NONE: the port held to the Python's answers, deciding nothing about a building
+
+use serde_json::Value;
+
+use super::read::{parse_transform, path_points, IDENTITY};
+use super::seat::{captions_of, declared_parts, fits_inside, line_centers, subjects, wraps};
+use super::{char_w_of, luma, placed, read_sheet, render, Attrs};
+use crate::labels::placer::{Kind, Placement};
+use crate::py::uncaught;
+
+const HELD: &str = include_str!("held.json");
+
+#[test]
+fn every_held_sheet_is_placed_as_the_python_placed_it() {
+    let held: Value = serde_json::from_str(HELD).unwrap();
+    // an XML refusal compared by its class, its words the library's
+    let class = |line: String| {
+        if line.starts_with("xml.etree") {
+            line.split(':').next().unwrap().to_owned()
+        } else {
+            line
+        }
+    };
+    for (k, case) in held.as_array().unwrap().iter().enumerate() {
+        let got = placed(case["svg"].as_str().unwrap())
+            .unwrap_or_else(|e| class(uncaught(&e).trim_end().to_owned()));
+        let want = case["placed"].as_str().map_or_else(
+            || class(case["raises"].as_str().unwrap().to_owned()),
+            str::to_owned,
+        );
+        assert_eq!(got, want, "sheet {k}");
+    }
+}
+
+#[test]
+#[expect(clippy::float_cmp, reason = "each figure is Python's to the bit")]
+fn a_fill_s_luma_and_a_face_s_width_are_the_python_s() {
+    // Python: _luma("#fff") == 0.9999999999999999, _luma(" #4A3318 ") == 0.2148980392156863 (its six digits, not "#4A3" and a tail),
+    // _luma("url(#x)") == _luma(None) == 0.5
+    assert_eq!(luma(Some("#fff")), 0.999_999_999_999_999_9);
+    assert_eq!(luma(Some(" #4A3318 ")), 0.214_898_039_215_686_3);
+    assert_eq!(
+        (luma(Some("url(#x)")), luma(None), luma(Some("#12345"))),
+        (0.5, 0.5, 0.5)
+    );
+    let bold: Attrs = [("font-weight", "bold"), ("letter-spacing", "2")]
+        .map(|(k, v)| (k.to_owned(), v.to_owned()))
+        .into();
+    assert_eq!(char_w_of(None, "shrine", 10.0), 0.55);
+    assert_eq!(char_w_of(Some(&Attrs::new()), "INARI SHRINE", 10.0), 0.70);
+    assert_eq!(
+        char_w_of(Some(&bold), "INARI SHRINE", 10.0),
+        0.70 + 0.04 + 0.2
+    );
+    assert_eq!(char_w_of(Some(&bold), "12", 0.0), 0.55 + 0.04);
+}
+
+#[test]
+fn the_reader_s_pieces_read_as_the_python_s() {
+    // Python: parse_transform("rotate(90 10 0) skewX(3)") == (6.123233995736766e-17, 1.0, -1.0, 6.123233995736766e-17, 10.0, -10.0)
+    let r = parse_transform(Some("rotate(90 10 0) skewX(3)")).unwrap();
+    assert_eq!(
+        r,
+        (
+            6.123_233_995_736_766e-17,
+            1.0,
+            -1.0,
+            6.123_233_995_736_766e-17,
+            10.0,
+            -10.0
+        )
+    );
+    assert_eq!(parse_transform(None).unwrap(), IDENTITY);
+    assert_eq!(
+        uncaught(&parse_transform(Some("matrix(1 2)")).unwrap_err()),
+        "IndexError: list index out of range\n"
+    );
+    // Python: _path_points("M1 2 Z m 1e1 1") == [(1.0, 2.0), (11.0, 3.0)]
+    assert_eq!(
+        path_points("M1 2 Z m 1e1 1").unwrap(),
+        [(1.0, 2.0), (11.0, 3.0)]
+    );
+    // a coordinate that is no finite number is refused where the Python spun or raised later
+    let e = read_sheet(r#"<svg viewBox="0 0 9 9"><rect x="inf" width="1" height="1"/></svg>"#)
+        .unwrap_err();
+    assert_eq!(e.kind, "ValueError");
+    // an unnamespaced sheet reads its tags, but its caption's `<tspan>`s are not the SVG's (the Python's `{SVG}tspan`)
+    let (shapes, view) = read_sheet(r#"<svg viewBox="0 0 9 9"><text font-size="4" data-kind="k">a<tspan>b</tspan></text></svg>"#).unwrap();
+    assert_eq!(
+        (shapes[0].lines.clone(), view),
+        (vec!["a".to_owned()], (0.0, 0.0, 9.0, 9.0))
+    );
+}
+
+#[test]
+fn the_seating_s_pieces_decide_as_the_python_s() {
+    let held: Value = serde_json::from_str(HELD).unwrap();
+    let (shapes, _) = read_sheet(held[1]["svg"].as_str().unwrap()).unwrap();
+    let caps = captions_of(&shapes).unwrap();
+    let parts = |i: usize| declared_parts(&shapes[caps[i][0]], &shapes, true).unwrap();
+    let own = |i: usize| parts(i).into_iter().map(|j| &shapes[j]).collect::<Vec<_>>();
+    // Python: [s.kind for s in subjects(...)] - the stepped hall by its blocks, the shed its parts fill, the garden holding its lantern,
+    // the well's one closed shape
+    let kinds = |i: usize| {
+        subjects(&own(i), 9.0)
+            .iter()
+            .map(|s| s.kind)
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(kinds(0), [Kind::Area, Kind::Area, Kind::Point, Kind::Point]);
+    assert_eq!(kinds(1), [Kind::Area, Kind::Point]);
+    assert_eq!(kinds(2), [Kind::Area, Kind::Point]);
+    assert_eq!(kinds(3), [Kind::Area, Kind::Point]);
+    let heads: Vec<&super::Shape> = caps[4].iter().map(|&i| &shapes[i]).collect();
+    assert!(!fits_inside(&heads, (10.0, 10.0, 390.0, 70.0)));
+    assert_eq!(wraps(&heads).len(), 3);
+    let p = Placement {
+        x: 0.0,
+        y: 0.0,
+        angle: 90.0,
+        lines: Vec::new(),
+        block: Vec::new(),
+        ring: 0,
+        rank: 0,
+        position: "inside",
+        cost: 0.0,
+        leader: None,
+    };
+    // Python: _line_centers(p, [10.0, 5.0], [1, 2]) == [(5.75, -2.7500000000000004), (-5.75, -2.7499999999999996)]
+    assert_eq!(
+        line_centers(&p, &[10.0, 5.0], &[1, 2]),
+        [
+            (5.75, -2.750_000_000_000_000_4),
+            (-5.75, -2.749_999_999_999_999_6)
+        ]
+    );
+}
+
+#[test]
+fn a_placed_sheet_renders_as_the_binary_drew_it() {
+    let dir = l7r_guard::shared::tempdir::TempDir::new("labels-render");
+    let svg = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20"><rect width="40" height="20" fill="#EFE3C2"/></svg>"##;
+    let png = dir.path().join("sheet.png");
+    render(svg, &png).unwrap();
+    // drawn at the sheets' 2400 px width
+    assert_eq!(
+        &std::fs::read(&png).unwrap()[16..24],
+        &[0, 0, 9, 96, 0, 0, 4, 176]
+    );
+    let e = render(svg, &dir.path().join("none/sheet.png")).unwrap_err();
+    assert_eq!(e.kind, "FileNotFoundError");
+}
+
+#[test]
+fn a_leader_ends_on_the_ink_it_names() {
+    // Python: leader_to_ink, its end already inside a part, leaves it; its start inside one divides by zero
+    let part = super::Shape {
+        tag: "rect".to_owned(),
+        poly: vec![(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)],
+        ..super::Shape::default()
+    };
+    let p = Placement {
+        x: 0.0,
+        y: 0.0,
+        angle: 0.0,
+        lines: vec!["a".to_owned()],
+        block: Vec::new(),
+        ring: 2,
+        rank: 0,
+        position: "above",
+        cost: 0.0,
+        leader: Some(((20.0, 5.0), (5.0, 5.0))),
+    };
+    assert_eq!(
+        super::leader_to_ink(p.clone(), &[&part]).unwrap().leader,
+        p.leader
+    );
+    let inside = Placement {
+        leader: Some(((5.0, 5.0), (30.0, 5.0))),
+        ..p
+    };
+    assert_eq!(
+        super::leader_to_ink(inside, &[&part]).unwrap_err().kind,
+        "ZeroDivisionError"
+    );
+}
+
+#[test]
+fn a_court_s_ink_weighs_as_the_python_weighed_it() {
+    // Python: classify(..., subject=the court, area=True, named={"inner court"}) - a garden and its pines nested in the court light and
+    // soft, a shed in it in full, pines painted after the caption as much as a caption
+    let src = concat!(
+        r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect x="0" y="0" width="400" height="300" fill="#EFE3C2" data-kind="-"/>"##,
+        r##"<rect x="200" y="200" width="150" height="80" data-kind="inner court" data-id="court" fill="#D9C28E"/>"##,
+        r##"<rect x="210" y="210" width="40" height="30" data-kind="garden" fill="#BFD0A0"/>"##,
+        r##"<rect x="260" y="210" width="40" height="30" data-kind="garden pines" fill="#4A6B3A"/>"##,
+        r##"<rect x="300" y="250" width="20" height="20" data-kind="shed" fill="#C9A57A"/>"##,
+        r##"<text x="300" y="260" font-size="9" data-kind="inner court" data-names="court">court</text>"##,
+        r##"<rect x="20" y="20" width="30" height="30" data-kind="garden pines" fill="#4A6B3A"/></svg>"##
+    );
+    let (shapes, view) = read_sheet(src).unwrap();
+    let at = shapes.iter().position(|s| s.tag == "text").unwrap();
+    let own: Vec<&super::Shape> = declared_parts(&shapes[at], &shapes, true)
+        .unwrap()
+        .into_iter()
+        .map(|i| &shapes[i])
+        .collect();
+    let sub = subjects(&own, 9.0).remove(0);
+    let skip = std::collections::BTreeSet::from([at]);
+    let named = std::collections::BTreeSet::from(["inner court".to_owned()]);
+    let seen = super::classify::Seen {
+        skip: &skip,
+        after: Some(at),
+        kind: "inner court",
+        subject: Some(&sub.poly),
+        area: true,
+        dark_inside: false,
+        named: &named,
+    };
+    let index = super::classify(&shapes, view, &seen);
+    let got: Vec<(f64, bool, bool)> = index
+        .obstacles
+        .iter()
+        .map(|o| (o.weight, o.inner, o.soft))
+        .collect();
+    assert_eq!(
+        got,
+        [
+            (250.0, true, true),
+            (250.0, true, true),
+            (1000.0, true, true),
+            (10000.0, false, false)
+        ]
+    );
+}
+
+#[test]
+fn a_stranded_caption_lifts_only_its_near_neighbor_and_keeps_a_pair_only_where_it_covers_less() {
+    // Python: repair over four seats with a recording `one` - the stranded caption 1 (cost 1000) lifts its neighbor 2, 22 px off and
+    // within 2 ems (16 px) plus its own 10 px; caption 3, 52 px off, and the stranded 4's far neighbors are never lifted; the pair, 500 and
+    // 2000, is no better than 1000 and 0, so nothing moves: calls [(1, True, 2), (2, False, 3)]
+    use super::seat::{repair, Seated};
+    let seat = |x: f64, cost: f64| -> Seated {
+        let p = Placement {
+            x,
+            y: 0.0,
+            angle: 0.0,
+            lines: vec!["a".to_owned()],
+            block: vec![
+                (x - 5.0, -2.0),
+                (x + 5.0, -2.0),
+                (x + 5.0, 2.0),
+                (x - 5.0, 2.0),
+            ],
+            ring: 0,
+            rank: 0,
+            position: "above",
+            cost,
+            leader: None,
+        };
+        (
+            p,
+            Vec::new(),
+            crate::labels::placer::Subject::new(Kind::Point, Vec::new(), 0.0),
+        )
+    };
+    let mut done = vec![
+        (1, seat(0.0, 1000.0)),
+        (2, seat(30.0, 0.0)),
+        (3, seat(60.0, 0.0)),
+        (4, seat(100.0, 250.0)),
+    ];
+    let boxes = [(1, -3.0), (2, 27.0), (3, 57.0), (4, 97.0)]
+        .map(|(k, x)| (k, (x, -3.0, x + 6.0, 3.0)))
+        .into();
+    let sizes = [(1, 8.0), (2, 8.0), (3, 8.0), (4, 8.0)].into();
+    let calls = std::cell::RefCell::new(Vec::new());
+    let one = |k: usize, rest: &[(Placement, f64)], quick: bool| {
+        calls.borrow_mut().push((k, quick, rest.len()));
+        Ok(match k {
+            1 => seat(0.0, if rest.len() == 1 { 0.0 } else { 500.0 }),
+            _ => seat(30.0, 2000.0),
+        })
+    };
+    repair(&mut done, &boxes, &sizes, &one).unwrap();
+    assert_eq!(calls.into_inner(), [(1, true, 2), (2, false, 3)]);
+    assert_eq!(
+        done.iter().map(|d| d.1 .0.cost).collect::<Vec<_>>(),
+        [1000.0, 0.0, 0.0, 250.0]
+    );
+}
+
+#[test]
+fn a_leader_is_carried_onto_the_ink_and_trimmed_as_the_python_s() {
+    // Python: leader_to_ink to a rect from (20, 5) ending (12, 5) -> ((20, 5), (11, 5)); to a 2 px stroke at x 30 -> ((20, 5), (27, 5))
+    let part = super::Shape {
+        tag: "rect".to_owned(),
+        poly: vec![(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)],
+        ..super::Shape::default()
+    };
+    let stroke = super::Shape {
+        tag: "line".to_owned(),
+        poly: vec![(30.0, 0.0), (30.0, 10.0)],
+        half: 2.0,
+        line: true,
+        ..super::Shape::default()
+    };
+    let p = Placement {
+        x: 0.0,
+        y: 0.0,
+        angle: 0.0,
+        lines: vec!["a".to_owned()],
+        block: Vec::new(),
+        ring: 2,
+        rank: 0,
+        position: "above",
+        cost: 0.0,
+        leader: Some(((20.0, 5.0), (12.0, 5.0))),
+    };
+    assert_eq!(
+        super::leader_to_ink(p.clone(), &[&part]).unwrap().leader,
+        Some(((20.0, 5.0), (11.0, 5.0)))
+    );
+    let q = Placement {
+        leader: Some(((20.0, 5.0), (25.0, 5.0))),
+        ..p
+    };
+    assert_eq!(
+        super::leader_to_ink(q, &[&stroke]).unwrap().leader,
+        Some(((20.0, 5.0), (27.0, 5.0)))
+    );
+}

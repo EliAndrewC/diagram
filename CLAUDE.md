@@ -137,8 +137,8 @@ full").
   claims rather than to identical output.
 - **No port or change is held to its bytes** (the GM, 2026-11-18, constitution XIII: *"remove any references to things needing
   to be bitwise identical or anything like that as an exactness standard"*): an output may differ so long as everything works -
-  tests pass, callers get their job done, research claims hold; only the audit checks' verdicts stay exact, and a differential
-  (`make diff-run`) is a signal, never a bar.
+  tests pass, callers get their job done, research claims hold; a drawn output must pass its checks and hold its research claims, a ported check must still do its job (its red fixtures still fail, the sheets it passed still pass, a check fixed on purpose changing as fixed),
+  and a differential (`make diff-run`) is a signal, never a bar; a check's verdicts changing as a bug is fixed is expected, and a step's known bugs are fixed, in every copy that lives, before the next step's port (the GM, 2026-11-18, on T180's wording: *"surely you mean "the audit checks must pass" right?!"*).
 - **Work budgets** (feature 443): each stage's counted operations (`make work-budget`, the record `dev/work-budget.md`) against a
   budget derived on paper (`.specify/templates/derivation.md`, judged by the `work-budget` agent; `docs/work-budget-rubric.md`); a
   first budget needs its SOUND, a change the GM's words (`make budget-change`) - but a budget is an estimate (444 FR-022, the GM

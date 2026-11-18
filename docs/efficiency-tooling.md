@@ -289,8 +289,9 @@ The machinery in one picture, with the GM's rulings and the measurements: `docs/
   update to clarify this and remove any references to things needing to be bitwise identical or anything like that as an
   exactness standard"*. His rule, for every port and every change, not maps alone: an output may differ from what it replaces -
   bytes, pixels, wording, order, format - so long as everything works: its tests pass, it does its job for its callers, its
-  research claims hold. The ONE measure kept exact is the audit checks' verdicts (pass or fail of each check on each sheet),
-  the yardstick "everything works" is judged by; a check that refused correct work is still fixed (Principle XIV). A
+  research claims hold. Two things are owed, neither an exactness standard: a drawn output must pass its checks and hold its
+  research claims (nothing about its bytes, pixels or positions must match), and a ported check must still do its job - its red
+  fixtures still fail and the sheets it passed still pass; a check fixed on purpose (Principle XIV) changes as fixed. A
   differential (`make diff-run`, `docs/diff-run.md`) shows what moved, a signal to read, never a bar; a lockstep test may show
   two copies agree, but their agreement in bytes is not what is required. Not this standard, and kept: reproducibility (the
   same code and seed give the same map - the generators' determinism, the cache audit, `make counters-inert`), integrity (a

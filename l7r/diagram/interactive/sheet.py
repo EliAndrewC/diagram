@@ -18,8 +18,10 @@ sheet's. Comments are dropped (they are the author's notes, not ink).
 Look here when: an element of a magistracy page lights with the wrong kind (its tag, or its nearest tagged
 ancestor's), the census names ink with no kind, or a new Mode A sheet needs a page. The registry is
 `compound/`. THE PAGE IS RUST since feature 449 T150 (the engine port's step 2): `rust/mode_a/src/sheet/page.rs` regroups the
-sheet into pieces and writes the page (`rust/mode_a/src/page.rs`), and `write_sheet_page` below is the one call the six
-pool generators make, run as `scripts/gates/l7r-gate.sh mode-a sheet-page`.
+sheet into pieces and writes the page (`rust/mode_a/src/page.rs`), and `write_sheet_page` below is the one call the
+magistracies' generators make, run as `scripts/gates/l7r-gate.sh mode-a sheet-page`. THE COUNTRY SHRINE IS DRAWN WHOLE BY RUST since
+feature 449 T151 (step 3a): its generator calls `draw_hand_sheet`, run as `l7r-gate.sh mode-a hand-sheet`
+(`rust/mode_a/src/sheet/hand.rs`), which places the captions, renders the picture and writes the page.
 """
 
 from __future__ import annotations
@@ -163,30 +165,20 @@ def _raised(kind: str, message: str) -> BaseException:
         return type(name, (Exception,), {"__module__": module or "builtins"})(message)
 
 
-def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_raster: bool | None = None, svg: str | None = None) -> Census:
-    """`<map>.html` beside `<map>.svg`, from the sheet's own tags - and the sheet's census, for the caller to report. Written by
-    the Mode A engine (`l7r-mode-a sheet-page`, feature 449 T150): `with_raster` defaults there to the render condition every
-    other page uses (feature 208: no picture when `DIAGRAM_SKIP_RENDER=1`), and the map's `<map>.notes.md` "Map notes" block is
-    read from the output path, as for a hamlet. `svg` is the sheet's text when it is not the file's - a hand sheet's with its
-    captions placed (feature 286, `labels.hand_sheet.placed`), handed on stdin; the page is still written beside, and named for,
-    `svg_path`. `registry` is the engine's own, read from the same modal files (`compound_kinds`); every caller passes
-    `COMPOUND_CLASSES`.
+def _engine(argv: list[str], text: str | None = None) -> tuple[dict, int]:
+    """`l7r-mode-a <argv>` run, `text` on its stdin: its JSON reply and its exit, its stderr passed on to the generator's. A refusal
+    (`{"error": ...}`) is raised as the exception the Python raised (`_raised`), its traceback's last line not printed twice.
 
     THE READS ARE OPENED HERE (feature 449 T150): the generation cache learns a generator's data files by spying on `open()`
     (`gencache.record`, spec 187 D3), which cannot see the engine's process, so each file the engine read is opened for reading
-    here - a stylesheet or question edit still re-keys the sheet."""
-    del registry  # the engine reads the same registry from the tree (`l7r_gate_registry::about::compound_classes`)
-    argv = [os.path.join(_TREE, "scripts", "gates", "l7r-gate.sh"), "mode-a", "sheet-page", svg_path]
-    if with_raster is not None:
-        argv.append("--with-raster" if with_raster else "--no-raster")
-    if svg is not None:
-        argv.append("--stdin")
-    run = subprocess.run(argv, input=(svg or "").encode("utf-8"), capture_output=True, check=False)
+    here - a sheet, stylesheet or question edit still re-keys the map."""
+    full = [os.path.join(_TREE, "scripts", "gates", "l7r-gate.sh"), "mode-a", *argv]
+    run = subprocess.run(full, input=(text or "").encode("utf-8"), capture_output=True, check=False)
     said = run.stderr.decode("utf-8", "replace")
     try:
         out = json.loads(run.stdout)
     except ValueError:
-        raise RuntimeError(f"l7r-mode-a sheet-page exited {run.returncode}: {said}") from None
+        raise RuntimeError(f"l7r-mode-a {argv[0]} exited {run.returncode}: {said}") from None
     # the engine's warnings (resvg absent: the page carries no picture) reach the generator's stderr as the Python writer's did; a
     # refusal's own last line is the exception raised below, not printed twice
     if "error" in out:
@@ -198,4 +190,31 @@ def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_rast
     for path in out["reads"]:
         with open(path, "rb"):
             pass
+    return out, run.returncode
+
+
+def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_raster: bool | None = None, svg: str | None = None) -> Census:
+    """`<map>.html` beside `<map>.svg`, from the sheet's own tags - and the sheet's census, for the caller to report. Written by
+    the Mode A engine (`l7r-mode-a sheet-page`, feature 449 T150): `with_raster` defaults there to the render condition every
+    other page uses (feature 208: no picture when `DIAGRAM_SKIP_RENDER=1`), and the map's `<map>.notes.md` "Map notes" block is
+    read from the output path, as for a hamlet. `svg` is the sheet's text when it is not the file's - a hand sheet's with its
+    captions placed (feature 286, `labels.hand_sheet.placed`), handed on stdin; the page is still written beside, and named for,
+    `svg_path`. `registry` is the engine's own, read from the same modal files (`compound_kinds`); every caller passes
+    `COMPOUND_CLASSES`."""
+    del registry  # the engine reads the same registry from the tree (`l7r_gate_registry::about::compound_classes`)
+    argv = ["sheet-page", svg_path]
+    if with_raster is not None:
+        argv.append("--with-raster" if with_raster else "--no-raster")
+    if svg is not None:
+        argv.append("--stdin")
+    out, _ = _engine(argv, svg)
     return Census(dict(out["counts"]), out["unclassed"], out["unregistered"])
+
+
+def draw_hand_sheet(svg_path: str) -> int:
+    """A hand-drawn sheet drawn whole by the Mode A engine (`l7r-mode-a hand-sheet`, feature 449 T151, the engine port's step 3a): its
+    captions placed by the one placer (feature 286), its picture rendered from the placed text unless `DIAGRAM_SKIP_RENDER=1`, its page
+    written beside it (feature 277), and its census judged - the engine prints the sheet's untagged ink and unknown kinds and exits 1, as
+    the generator did. The generator's exit is returned; the tracked sheet is never touched."""
+    _, code = _engine(["hand-sheet", svg_path])
+    return code

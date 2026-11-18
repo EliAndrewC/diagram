@@ -29,7 +29,7 @@ last efficient stage parked in `rust/parked/`), and the stage-by-stage reference
 |---|---|---|
 | [`pipeline/`](pipeline/CLAUDE.md) | how a map is regenerated, cached, rendered and indexed | the cache behaves oddly, or you change how generation is DRIVEN |
 | [`interactive/`](interactive/CLAUDE.md) | the interactive HTML page: the feature-class vocabulary, the modals, the page writer, the record's build | you add a KIND of feature, change what a modal says, or the map-vocabulary gate test fired |
-| [`labels/`](labels/__init__.py) | THE ONE CAPTION PLACER (feature 266), used by the settlement engine, `compound.py` and the hand-drawn sheets (`labels/hand_sheet.py`) | you add a captioned feature (name its SUBJECT and call the placer; never pick a seat), or a caption sits wrong |
+| [`labels/`](labels/__init__.py) | THE ONE CAPTION PLACER (feature 266), used by the settlement engine, `compound.py` and the hand-drawn sheets (`labels/hand_sheet.py`); ported to `rust/mode_a/src/labels/`, which draws the country shrine since feature 449 T151, the Python kept for the rest until step 3b | you add a captioned feature (name its SUBJECT and call the placer; never pick a seat), or a caption sits wrong |
 | [`buildings/`](buildings/__init__.py) | the Mode A building TYPES, declared once in `types.json` (feature 254) | you add or change a building type or its program |
 | `compound.py`, `compound_model.py`, `compound_parts.py`, `compound_view.py` | the Mode A compound program and perimeter-first placer; its vocabulary (units, palettes, program types); what it seats around the masses; the one view its captions are seated by (feature 340: the draft read as the hand-sheet placer reads a hand sheet) | you change a compound plan's draft |
 | `rust/mode_a/src/dwellings.rs` (the Python `dwellings.py` deleted with the page writer it served, feature 449 T150) | what counts as a DWELLING, in one leaf module with no imports of its own | a count of houses or households disagrees between two readers |
@@ -150,7 +150,7 @@ re-running a generator; a diagnostic that restates what it observes will lie to 
   our research findings"*), held to the rules and the research claims, rather than to byte-identity. A slow CHECK is INDEXED, never coarsened. Trust the A/B against HEAD, not cProfile's seconds.
 - **So may any port or change** (GM 2026-11-18, constitution XIII: *"remove any references to things needing to be bitwise
   identical or anything like that as an exactness standard"*): an output may differ so long as everything works - tests pass,
-  callers get their job done, research claims hold - the audit checks' verdicts the one measure kept exact. The same code and
+  callers get their job done, research claims hold - a drawn output must pass its checks, a ported check must still do its job (red fixtures fail, good sheets pass). The same code and
   seed still give the same map (reproducibility is not this standard).
 - **Some slowness is bought memory** (GM 2026-10-05): read `dev/performance.md` "Time traded for memory" before
   undoing one; the RAM each undo costs goes to the GM.

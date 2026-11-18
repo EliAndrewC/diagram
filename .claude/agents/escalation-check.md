@@ -131,12 +131,16 @@ Apply these in order. An item that fails any one of them is a CUT, and you say w
 whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so long as everything
 works?!?!"*, and *"remove any references to things needing to be bitwise identical or anything like that as an exactness
 standard"*. A port or any change may give outputs that differ from what they replace - bytes, pixels, wording, order, a
-format - so long as everything works: its tests pass, it does its job for its callers, its research claims hold; the one
-measure kept exact is the audit checks' verdicts (pass or fail of each check on each sheet). So an item that cites
+format - so long as everything works: its tests pass, it does its job for its callers, its research claims hold. A drawn output (a map, a sheet, a page) must
+pass its checks and hold its research claims, and nothing about its bytes, pixels or positions must match what it replaces; a
+ported check must still do its job (its red fixtures still fail, the sheets it passed still pass), and a check fixed on purpose
+changes as fixed - never an exactness standard (the GM, on T180's wording: *"When you say "the audit checks pass/fail must match exactly", then surely you mean "the audit checks must pass" right?!"*). So an item that cites
 bit-for-bit, byte-for-byte or pixel-for-pixel agreement as the norm it violates fails test 1 (no such norm), and an item
 asking the GM whether such a difference may stand is CUT under test 3 - the rule already answers it; the work is judged by
 whether everything works. Reproducibility (the same code and seed give the same output), integrity hashes and a quotation
 verbatim from its source are not this standard and stay norms.
+
+FIX AS WE GO (the GM, 2026-11-18: *"gotcha; yeah we want to use this port to fix broken things as we find them, so it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on to porting the next step"*): a check's verdicts changing as a bug is fixed - a sheet a buggy check refused now passing, or an engine bug fixed changing a map - is expected, never a regression, and a ported check is shown to work by catching what it is meant to catch. Each step's known defects (found by the port, its claims rounds or its reviews) are fixed before the next step's port begins, in every copy that still lives (the Rust and any kept Python): a plan that carries a known defect into the next step is the finding.
 
 **What genuinely IS the GM's**, and you should protect these from over-zealous cutting: a fork the record cannot settle, where the choice is taste or canon (but NOT a choice between two forms the
 record supports - that is a knob rolled per settlement, never theirs, and a DEGREE along a continuum is calibrated

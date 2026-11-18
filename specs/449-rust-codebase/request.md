@@ -116,3 +116,7 @@ The GM, after the report on pieces 3 and 4: "It sounds like those efficiency imp
 The GM, told that a plan review held T150's diagnostics to PIL's exact pixels on image formats nobody passes, until the round arbiter ruled them declared: "And whyyyyy did the arbitur rule that things must match exactly when I keep saying they don't have to so long as everything works?!?!"
 
 The GM, on the amendment: "gotcha, thanks - yeah we should definitely amend our project guidelines and speckit constitution and whatever else we need to update to clarify this and remove any references to things needing to be bitwise identical or anything like that as an exactness standard"
+
+The GM, on T180's wording: "When you say "the audit checks pass/fail must match exactly", then surely you mean "the audit checks must pass" right?!"
+
+The GM, on fixing as we go: "gotcha; yeah we want to use this port to fix broken things as we find them, so it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on to porting the next step"

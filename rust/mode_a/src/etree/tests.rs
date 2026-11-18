@@ -88,3 +88,23 @@ fn the_reading_s_helpers_find_their_place() {
     assert_eq!(start_tag(b"<a b='c", 0, 99), (7, false));
     assert!(!in_attribute("<!-- x", 5));
 }
+
+#[test]
+fn an_element_keeps_its_namespace_and_its_own_text_as_element_tree_does() {
+    // `el.text` is the text before the first child, a comment's two sides joined; `{uri}name` keys a tag by its namespace (feature 449
+    // T151, a caption's line and its `<tspan>`s)
+    let el = fromstring(r#"<svg xmlns="http://www.w3.org/2000/svg"><text>a<!-- c -->b<tspan>c</tspan>d</text><p:x xmlns:p="urn:p"/></svg>"#).unwrap();
+    let text = &el.children[0];
+    assert_eq!(
+        (
+            text.text.as_str(),
+            text.ns.as_str(),
+            text.children[0].text.as_str()
+        ),
+        ("ab", "http://www.w3.org/2000/svg", "c")
+    );
+    assert_eq!(
+        (el.children[1].ns.as_str(), el.children[1].text.as_str()),
+        ("urn:p", "")
+    );
+}
