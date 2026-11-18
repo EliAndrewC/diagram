@@ -359,37 +359,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T149 to T149 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 <!-- plan-archive: T150 to T150 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-### T151 (step 3a of the engine port, S8 and the country shrine; the GM 2026-11-18, request.md: "proceed with continuing the porting")
-
-- **Approach**: the labels - `l7r/diagram/labels/` (hand_sheet, placer, obstacles, geom, standard, svg, layout) and `work_counts.py` - ported into `rust/mode_a/src/labels/`, shapely's two calls on the `geo` crate, and the country shrine (`pool/country-shrines/hoshigaoka-shrine`) drawn by Rust: a command, `l7r-mode-a hand-sheet`, reads the sheet, places its captions, renders the PNG with the `resvg` library, writes the page and prints the census, and the shrine's generator calls it through `sheet.py`'s `draw_hand_sheet`, every file the command read reported for the generation cache. The three magistracies that place captions keep the Python labels until step 3b (engine-plan.md, step 3's two landings). Worked by two agents in turn: part A the library, part B the shrine.
-
-   **Decisions** (`ask:449-engine-order` condition 5, `ask:449-phase4-slices` Q7 and Q10, FR-001 to FR-005, FR-008, FR-002 as amended by T180; the GM's words, request.md 2026-11-17 and 2026-11-18):
-   - The bar is the amended FR-002: the shrine drawn by Rust passes every check its Python sheet passed and holds its claims. It does: `make pack-audit`, `make size-table` and the notes' typed counts give the same results on the Rust-placed text as on the Python's (observed 2026-11-18, method: each run on the tracked sheet, the Python-placed and the Rust-placed text, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/b/checks/`).
-   - The labels place every caption where the Python does - all 190 captions of the four caption-placing sheets, and the placed text, identical - shapely's union-area test agreeing in all 19 verdicts on `geo` (its largest area difference 7.5e-5 px2 against a nearest margin of 58.4) and the leader-tip call computed exactly, every pool tip within 0.01 px (observed 2026-11-18, method: both sides on the four sheets, `.git/rust-tests/mode_a-labels.json`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/a/report.md`). Four captions overlap ink on both sides alike, the Python's own unseated captions, none on a building; the crate's end-to-end test allows an overlap only where the Python's seat of the same caption overlaps.
-   - The signal (docs/diff-run.md): HEAD's Python against the Rust, the shrine through `make map`, its generator rendered and with rendering skipped, the five magistracies' generators through the refactored `write_sheet_page`, and a missing sheet - the differential's 9 cases, none differing (measured 2026-11-18 (`make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/b/diff/cases.json VERIFY=1 JOBS=4`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/b/diff/cases.diff-run/reports/diff-run-verify-20261118T121313Z.json`)); the step page `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/b/step3a-shrine.html`, the shrine's PNG, page and placed text identical before and after, and `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/step3a-sheets.html`, every pool Mode A sheet: the shrine's before and after, and each magistracy's page and picture as its generator wrote them through the refactored `write_sheet_page`, the differential running each generator on both sides with none differing.
-   - A defect fixed (constitution XIV): `make quick`'s house-style delta check looped forever when its regex gave up past the step limit on a long line, part A's one-line held cases making it hang; the check's patterns now run without a step limit and an error ends the scan, held by a test the limit restored turns red (`rust/gate/crates/checks/src/checks/house_style_delta.rs`). The same skipping of a regex's error stands at other call sites - 152 found by the recorded search, those whose pattern needs the backtracking engine the ones that can hang (observed 2026-11-18, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/loop-search.txt` run over `rust/`) - filed as T185, a step defect fixed before step 3b.
-   - Defects of the Python reproduced, refusing nothing a pool sheet meets, filed as T184 to fix before step 3b: a leader's block on a line subject that bends back divides by zero; a one-point line subject raises; a tag starting with an underscore and a prefixed caption text element raise; a zero-size caption loops forever in the Python (the Rust gives it no outer rings); a non-finite coordinate is refused in other words.
-   - Claims (Q10): the claims on the labels - 61, keyed to `l7r/diagram/labels/` (observed 2026-11-18, method: `dev/claims-index.json`'s keys counted) - stay keyed to the kept `.py` units, each Rust copy carrying its claim; every rule-bearing unit carries its own. `make claims-owed` owes 309 claims in 23 files one impl-drift round and 15 a triage (observed 2026-11-18, method: `make claims-owed`).
-   - The step's measure: part A's agent took 614k tokens and 72 minutes, part B's 340k tokens and 51 minutes (observed 2026-11-18, method: their usage reports and `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/a/phases.log`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/b/phases.log`).
-   - The checks: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick` and the pointer check green (observed 2026-11-18, method: those commands, one after another after the last edit, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/b/report.md`).
-
-### T151 Approach (checklist part A)
-
-1. **The goal, in the world.** The country shrine is drawn by Rust, passing its checks, and the labels the magistracies will use are ported.
-2. **The constraints.** FR-001 to FR-005 and FR-008; FR-002 as amended; `ask:449-engine-order`; Q7, Q10; the GM's words.
-3. **Where each comes from.** G: the GM's request; R: the rulings; O: the comparison, the checks, the signal and the phase logs above.
-4. **Do they describe the world here?** Run on this clone's four caption-placing pool sheets, measured 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t151/b/diff/cases.json`).
-5. **The order.** After step 2 (T150); before the steps' defect tasks and step 3b.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, the claims round and a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The shrine's checks passing, the signal shown, the claims round recorded, the phase table.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No - a port, its cost measured.
-
-
+<!-- plan-archive: T151 to T151 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 ### T152 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -712,32 +682,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** No - guidance.
 
 
-### T181 (the GM 2026-11-18, request.md: "surely you mean the audit checks must pass", and fixing as we go)
-
-- **Approach**: wording, in the files T180 amended: its one kept measure, phrased as "the audit checks' verdicts kept exact", restated as the GM means it - a drawn output (a map, a sheet, a page) must pass its checks and hold its research claims, nothing of its bytes, pixels or positions owed; a ported check must still do its job, its red fixtures still failing and the sheets it passed still passing - and the GM's fix-as-we-go rule written in beside it: a check's verdicts changing as a bug is fixed are expected, never a regression, and each step's known defects are fixed, in every copy that still lives, before the next step's port begins. The constitution 2.35.1 (a wording patch), its plan and spec templates, the speckit-specify checklist, spec.md's FR-002, FR-012, SC-004, SC-007 and phase-4 paragraph, engine-plan.md, the root and `l7r/diagram/` CLAUDE.md files, docs/diff-run.md, spec-kit-and-reviews.md, efficiency-tooling.md and gm-rulings.md (the GM's two new lines), and the four review agents' files, which launch without CLAUDE.md, each with his words.
-
-   **Decisions** (the GM's words, request.md 2026-11-18):
-   - A ported check is shown to work by catching what it is meant to catch, which is what the audit's lockstep and red fixtures did; a check fixed on purpose changes as fixed (constitution XIV), as the 63-kinds fix did in T150 and T177 will.
-   - `rust/gate/CLAUDE.md`, under an agent's port at the time, is reworded at this task's landing with the port's work in.
-   - The checks: `make hooks-test HOOKS_ALL=1` and the pointer check green (observed 2026-11-18, method: those commands after the last edit, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t181/hooks-test.log`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t181/pointers.log`).
-
-### T181 Approach (checklist part A)
-
-1. **The goal, in the world.** No guide or reviewer reads "verdicts kept exact" as a standard; each says a drawn output must pass its checks, a ported check must still do its job, and known defects are fixed step by step.
-2. **The constraints.** The GM's words; the constitution's own amendment rules.
-3. **Where each comes from.** G: the GM's request.
-4. **Do they describe the world here?** Read on the files T180 changed, 2026-11-18.
-5. **The order.** After T180; before step 3b and the defect tasks T171, T177, T182 to T184.
-6. **The exits.** Green: `make static`, `make hooks-test HOOKS_ALL=1`, the plan review, a `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** A grep of T180's files for "kept exact" and "verdicts" finding only the restated rule and the history.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No - guidance.
-
-
+<!-- plan-archive: T181 to T181 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 ### T182 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

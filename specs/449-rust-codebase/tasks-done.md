@@ -436,6 +436,9 @@
 - [x] T150 Phase 4 S7, the map page writer (ask:449-phase4-slices) Q13: interactive/page, place, raster, extents, notes, tags, sheet, dwellings, picture_diff, page_lit onto S3a's crate, the image crate for PIL and numpy (2,912 lines); interactive/__init__ deleted; what page.py writes today, the Mode A sheets' pages
       research: rendering
       verify: DONE. landed: step 2: the page writer and its diagnostics in Rust, 135 differential cases none differing, 497 claims checked
+- [x] T151 Phase 4 S8, labels (ask:449-phase4-slices) Q7: labels/* and work_counts (2,397 lines), shapely onto the geo crate, FR-002 binding what is written
+      research: rendering
+      verify: DONE. landed in batch T151+T181: step 3a: the labels in Rust and the shrine drawn by Rust, its checks as before, 310 claims checked; and T180's measure reworded to the GM's must-pass sense
 - [x] T153 Phase 4 S9b, pack_audit's leaves (ask:449-phase4-slices): tagged, parse, grids, onmap, labels, marks_drawn, size_marks, sun, palette (1,586 lines)
       research: rendering
       verify: DONE. done by T170 (tagged, parse), T174 (grids, size_marks) and T175 (onmap, labels, marks_drawn, sun, palette), which landed them measured: each ported into rust/mode_a and held to its Python by the lockstep, make pack-audit's 207 differential cases none differing
@@ -505,3 +508,6 @@
 - [x] T180 No exactness standard for a port (the GM 2026-11-18, request.md: "amend our project guidelines and speckit constitution and whatever else we need to update to clarify this and remove any references to things needing to be bitwise identical or anything like that as an exactness standard"): a port's outputs may differ from what they replace so long as everything works - its tests pass, it does its job, its research claims hold - the audit checks' verdicts the one measure kept exact; the constitution, spec.md's FR-002 and its ruled cases, engine-plan.md, docs/, dev/ guides and the CLAUDE.md files amended, every bitwise or byte-for-byte exactness standard removed
       research: rendering
       verify: DONE. landed: no exactness standard for a port: the constitution, FR-002, the engine plan, the guides and the review agents amended to the GM's rule
+- [x] T181 T180's kept measure reworded to the GM's sense (the GM 2026-11-18, request.md: "surely you mean the audit checks must pass"): a drawn output must pass its checks and hold its research claims; a ported check must still do its job - its red fixtures still fail, its good sheets still pass, a check fixed on purpose changing as fixed - never "verdicts kept exact" as a standard; wherever T180 wrote it
+      research: rendering
+      verify: DONE. landed in batch T151+T181: step 3a: the labels in Rust and the shrine drawn by Rust, its checks as before, 310 claims checked; and T180's measure reworded to the GM's must-pass sense
