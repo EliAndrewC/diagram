@@ -16,11 +16,9 @@ rooms were most likely laid with mats.
 How many rooms the family had, and how large, is not recorded.
 
 Guesses:
-- The size the plan gives the family's rooms, about 18 to 30 ft by 12 to 20 ft and 240 to 550 sq ft: a band of this
-  project's round the family's living rooms in the ordinary houses measured - the 15-mat living room and the wife's 6-mat room
-  of the district magistrate's house of 1794 at Matsushiro, and the Matsue house's - applied to the generated plans; the band
-  is a guess, not a measurement.
-  The registry does not hold this band: it guides the generated plans, and no check refuses a sheet outside it.
+- The size the plan gives the family's rooms, about 18 to 30 ft by 12 to 20 ft and 240 to 550 sq ft: how large the rooms were is not recorded, so this is a band of this
+  project's for a family room and the wife's room together, applied to the generated plans; the band is a guess, not a
+  measurement.
 
 Depiction: The plan draws the family's rooms as one labeled bay standing for several rooms, beyond the master's rooms toward
 the private end of the residence. The residence stands behind the office in every compound, the Chinese order, though at

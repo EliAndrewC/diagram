@@ -22,6 +22,26 @@ fn the_keys_cited_are_found_once_each_in_order() {
 }
 
 #[test]
+fn a_sibling_cited_in_short_form_is_written_out_whole() {
+    let bodies = [
+        "Under `ask:449-T182-room-sizes`, `-room-layout`, `-review-close` and `-x`.",
+        "`-lone` with no key before it, then `ask:9-a` and `-a-b` too long, and `ask:449-T1-x`, `-y`.",
+    ];
+    assert_eq!(
+        cited(&bodies),
+        [
+            "ask:449-T182-room-sizes",
+            "ask:449-T182-room-layout",
+            "ask:449-T182-review-close",
+            "ask:449-T182-room-x",
+            "ask:9-a",
+            "ask:449-T1-x",
+            "ask:449-T1-y"
+        ]
+    );
+}
+
+#[test]
 fn each_cited_ruling_rides_whole_from_the_feature_s_log_or_another_s_or_is_named_missing() {
     let root = scratch("plan-rulings");
     let own = root.join("specs/999-x");

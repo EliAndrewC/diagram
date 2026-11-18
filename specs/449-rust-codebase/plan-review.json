@@ -608,7 +608,7 @@
    "declared": "spec-fidelity"
   },
   "### T182 (step 1's defects: T174's, T175's and T176's findings)": {
-   "sha256": "0e9880b90fb50cf4ccc26796b59c05ccc10404c4f914229032914b3316f03b42",
+   "sha256": "8a7417618bf641bc44fb0f0b42e0a034c80af79c1074f38dcd54595588e20d61",
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
@@ -11698,6 +11698,109 @@
      "why": "This is how the requested fixes are verified and enforced. It adds no behavior the GM did not ask for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T182 (step 1's defects: T174's, T175's and T176's findings)",
+    "### T182 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "ochiba-roundtrip-test's program given the residence's rooms, rear strip and kitchen ell so the fixed privies_by_zone check passes it; tubs_off_their_doors asks every tied building; the Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door or none, step 3b porting it with the fix",
+     "class": "within",
+     "why": "Defects exposed by a fixed check and fixed where they lie, in every copy: the GM 2026-11-18, 'we want to use this port to fix broken things as we find them ... fix all known bugs in each step before moving on to porting the next step'; FR-002's exception for a check fixed on purpose."
+    },
+    {
+     "id": "D2a",
+     "summary": "the shrine purification check refuses a sheet without 0222's stone basin; types.json's country shrine requires the basin, a well beside the hall still allowed (0196); this ends the drift ask:417-T36 accepted",
+     "class": "within",
+     "why": "A claims-round defect fixed to its research page (fix-as-we-go). ask:417-T36 has no record in the bundle, but the decision does not rest on it: it ends that accepted drift and returns to 0222, so the missing record decides nothing here."
+    },
+    {
+     "id": "D2b",
+     "summary": "lodging_entrances: the marks reader carries a line's dash; only a solid dwelling wall splits a row (0097)",
+     "class": "within",
+     "why": "A claims-round defect fixed in every copy (fix-as-we-go)."
+    },
+    {
+     "id": "D2c",
+     "summary": "Python placer: a doored building whose door finds no seat takes a tub within reach of a door it drew or none, nearest door first (0100); claims and building-program prose brought to their pages",
+     "class": "within",
+     "why": "A claims-round defect fixed in every copy that still lives, and claims restated to their pages (fix-as-we-go)."
+    },
+    {
+     "id": "D3a",
+     "summary": "the round-trip sheet's residence rooms resized to the audits' anchors in palace order, inner rooms in the back row, every piece captioned, per -room-layout and -room-scope",
+     "class": "within",
+     "why": "The review-found defect (each room a quarter of the house) on the step-1 test sheet itself, fixed before step 3b (fix-as-we-go). Aside: this supersedes D1's 'rooms her sheet draws (measured off her sheet)', so checklist item 1's 'rebuilds Ochiba's actual program' is stale wording now; no fidelity consequence."
+    },
+    {
+     "id": "D3b",
+     "summary": "compound.py draws a residence's touching corridor pieces as one passage",
+     "class": "within",
+     "why": "Fixes the glyph-check's reading defect (one passage read as three boxed pieces) that -review-close names; a defect found by this step's reviews, fixed."
+    },
+    {
+     "id": "D3c",
+     "summary": "the room work narrowed to the generated round-trip sheet: the hand-drawn interiors of Ochiba, Ubame, Hayakawa and the county example reverted to HEAD with no refit row and no GM question (ask:449-T182-room-scope, narrowing ask:449-T182-room-sizes)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on the rulings' text, now carried. The ground is not that refitting broke deliberate composition (awkward, not impossible, and existing behavior the GM did not ask to keep). It is that the standard these sheets miss is not a 'known bug' or a research finding in the GM's words. -room-layout records the bands as 'the project's guess around a few measured houses (labeled as such, with no claim behind them)', and -room-scope repeats that. The GM's measure for a map is 'so long as the changes don't violate our research findings' and FR-002 'must pass its checks and hold its research claims'. Every one of these sheets passes every check, and none is held to a claim the bands carry. -room-sizes' 'correcting a sheet to match the research needs no permission' rested on three measured houses. A room two to eight times the largest of three measured rooms lies outside a small sample. It does not contradict a recorded research finding, and -room-scope expressly narrows -room-sizes on that ground. The ruling holds for each sheet separately: Ochiba and Ubame (deliberate items named), Hayakawa (none named, but it misses the same guess band and nothing else), and the county example. The county example is regenerated from its program, and the block says the bands apply to generated plans, but no review found its rooms defective. The findings that started the work concern the round-trip sheet (-room-scope), so no known defect of the county example is carried. Purpose test: the GM's rule exists so step 3b is not ported on top of known breakage. The round-trip sheet, the placer's own test and the one sheet these findings were made on, is fixed (D3a), so the purpose is met. The arbiter's ruling carried this route. The GM's words, not the ruling, are what make it legitimate."
+    },
+    {
+     "id": "D3d",
+     "summary": "the three required room items -room-sizes put in types.json reverted to HEAD",
+     "class": "within",
+     "why": "Those items were the arbiter's own addition under -room-sizes, never in the GM's request or the spec; removing them narrows nothing the GM asked. Wording note: the block's 'types.json at HEAD' is looser than -room-scope (which reverts only the three room items) and than D2a (which changes types.json for the basin); not a fidelity defect."
+    },
+    {
+     "id": "D3e",
+     "summary": "the bands recorded on the room kinds' pages as the project's GUESS for generated plans, held by no check, the check filed to T187; band-only review findings (band edges, the corridor's 36 ft run, the guest room's missing band) filed as T187 rows rather than fixed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A check that would hold a GUESS band is new behavior the GM did not ask for; filing it is not carrying a defect. The findings filed are, by -room-layout's and -review-close's terms, asks to tighten or widen a GUESS band (or give one where none exists). On the D3c ground they are not known bugs or research violations. Every finding of a room outside its recorded band, an uncaptioned piece or a broken palace order is fixed in place under -room-layout, so no defect of the round-trip sheet is deferred."
+    },
+    {
+     "id": "D3f",
+     "summary": "the ten review units on the round-trip's rooms closed under -room-layout's last-round rule and -review-close",
+     "class": "within",
+     "why": "Process for closing this step's reviews on the fixed sheet. Under -review-close the corridor's glyph-check gets one reading, and every material finding is fixed. Nothing the GM asked is dropped. Wording note: 'Every review unit ... closed on a PASS' is looser than -review-close, which closes the corridor's size audit by a size-table measurement plus review-accept and allows review-accept fallbacks; not blocking."
+    },
+    {
+     "id": "D4",
+     "summary": "0220's drawing page calling the innermost arch's distance a map convention while the procedure treats it as a guess: listed for a record session, not edited here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a label on a research page. It changes no check, no sheet and no port code of step 1, so it is not a bug of the step in the GM's sense. Research-record wording belongs to the record sessions (Principle XII). The item is listed, not dropped, so the GM's rule is not gutted."
+    },
+    {
+     "id": "D5",
+     "summary": "diff-run signal on the six sheets and every red and fix fixture, every difference explained by a fix",
+     "class": "within",
+     "why": "FR-002: the differential is a signal read for whether everything works, which is what is done."
+    },
+    {
+     "id": "D6",
+     "summary": "where a road may end and where a path inside a precinct leads, listed for the GM as UNRESEARCHED",
+     "class": "within",
+     "why": "Open research items surfaced to the GM, not decided by the session."
+    },
+    {
+     "id": "D7",
+     "summary": "the task's measure (tokens, minutes, claims owed)",
+     "class": "within",
+     "why": "A report; decides nothing."
+    },
+    {
+     "id": "D8",
+     "summary": "exits: make static, rust-test, hooks-test, quick, the claims round and a gated make land; order after T151 and before step 3b",
+     "class": "within",
+     "why": "Matches the GM's order: fix step 1's known bugs before porting the next step."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -20689,51 +20792,102 @@
    "verdict": "CLEAR"
   },
   "T182": {
-   "section_sha256": "851fda757f989874678bc2bad93829685074e15538a08fbd94e4171c42a69629",
+   "section_sha256": "a1992a79c42bc4dc222acfbf0631f55e4ca854102be5678a82cbd0be7a7826f3",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T182-D1",
-     "summary": "ochiba-roundtrip-test's program given the residence rooms, rear strip and kitchen ell her sheet draws; tubs_off_their_doors asks every tied building; Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door or none, step 3b porting the fix",
+     "id": "D1",
+     "summary": "ochiba-roundtrip-test's program given the residence's rooms, rear strip and kitchen ell so the fixed privies_by_zone check passes it; tubs_off_their_doors asks every tied building; the Python placer seats a doored building's tub within TUB_DOOR_MAX_FT of a door or none, step 3b porting it with the fix",
      "class": "within",
-     "why": "Defects exposed by step 1's fixed checks, fixed before step 3b: the GM's 2026-11-18 'fix broken things as we find them ... fix all known bugs in each step before moving on'. FR-002 lets the sheet change so long as it passes its checks and holds its research claims."
+     "why": "Defects exposed by a fixed check and fixed where they lie, in every copy: the GM 2026-11-18, 'we want to use this port to fix broken things as we find them ... fix all known bugs in each step before moving on to porting the next step'; FR-002's exception for a check fixed on purpose."
     },
     {
-     "id": "T182-D2",
-     "summary": "Claims round's three defects fixed in every copy: well no longer stands in for 0222's basin (types.json country shrine requires the basin, ending ask:417-T36's drift; a well still allowed in addition), lodging_entrances splits only at solid walls (dash carried by the marks reader), Python placer's tub within reach of a drawn door or none; prose brought to pages",
+     "id": "D2a",
+     "summary": "the shrine purification check refuses a sheet without 0222's stone basin; types.json's country shrine requires the basin, a well beside the hall still allowed (0196); this ends the drift ask:417-T36 accepted",
      "class": "within",
-     "why": "Known defects found by this step's claims round, fixed in the Rust and the kept Python as the fix-as-we-go rule asks. Nothing the GM asked for is cut back."
+     "why": "A claims-round defect fixed to its research page (fix-as-we-go). ask:417-T36 has no record in the bundle, but the decision does not rest on it: it ends that accepted drift and returns to 0222, so the missing record decides nothing here."
     },
     {
-     "id": "T182-D3",
-     "summary": "Room sizes (ask:449-T182-room-sizes): house size stays the GM's 2026-10-26 deviation; types.json records reception, lord's quarters and family quarters as required residence rooms with bands labeled as the project's guess round the measured houses; round-trip and county-example programs resized; Ochiba, Ubame and Hayakawa interiors re-partitioned with dashed partitions and labels only inside unchanged outlines, deliberate arrangements kept, dated notes entries",
+     "id": "D2b",
+     "summary": "lodging_entrances: the marks reader carries a line's dash; only a solid dwelling wall splits a row (0097)",
      "class": "within",
-     "why": "The three size audits refused the rooms against measured Edo rooms: a known defect found by the step's reviews, which the GM said must be fixed before the next step. The plan follows the arbiter's route. It adds Hayakawa beyond the two sheets the ruling names, but a magistracy sheet the new types.json rooms would refuse is a defect the fix exposes, so that is the same rule. Keeping the GM's own deviation narrows nothing the GM asked for, and nothing is held to an exactness standard."
+     "why": "A claims-round defect fixed in every copy (fix-as-we-go)."
     },
     {
-     "id": "T182-D4",
-     "summary": "0220's drawing page calling the innermost arch's distance a drawing convention, where the procedure treats it as a guess, listed for a record session rather than edited here",
+     "id": "D2c",
+     "summary": "Python placer: a doored building whose door finds no seat takes a tub within reach of a door it drew or none, nearest door first (0100); claims and building-program prose brought to their pages",
      "class": "within",
-     "why": "A wording mismatch in a research record, not a defect in step 1's ported code or its checks. It is listed rather than dropped, and the research records belong to the record sessions. It was judged the same way at the block's earlier CLEAR."
+     "why": "A claims-round defect fixed in every copy that still lives, and claims restated to their pages (fix-as-we-go)."
     },
     {
-     "id": "T182-D5",
-     "summary": "diff-run read as a signal on six sheets and every red and fix fixture, every difference explained by a fix",
+     "id": "D3a",
+     "summary": "the round-trip sheet's residence rooms resized to the audits' anchors in palace order, inner rooms in the back row, every piece captioned, per -room-layout and -room-scope",
      "class": "within",
-     "why": "This is FR-002 as amended by T180: the differential is a signal to be read, not an exactness standard."
+     "why": "The review-found defect (each room a quarter of the house) on the step-1 test sheet itself, fixed before step 3b (fix-as-we-go). Aside: this supersedes D1's 'rooms her sheet draws (measured off her sheet)', so checklist item 1's 'rebuilds Ochiba's actual program' is stale wording now; no fidelity consequence."
     },
     {
-     "id": "T182-D6",
-     "summary": "Where a road may end and where a precinct path leads listed for the GM as UNRESEARCHED",
+     "id": "D3b",
+     "summary": "compound.py draws a residence's touching corridor pieces as one passage",
      "class": "within",
-     "why": "These are open research gaps, not known bugs. They are surfaced and labeled rather than guessed at."
+     "why": "Fixes the glyph-check's reading defect (one passage read as three boxed pieces) that -review-close names; a defect found by this step's reviews, fixed."
     },
     {
-     "id": "T182-D7",
-     "summary": "Exits and checks: make static, rust-test, hooks-test HOOKS_ALL=1, quick, the claims round, a gated make land; red exit ruled through make arbiter-ask",
+     "id": "D3c",
+     "summary": "the room work narrowed to the generated round-trip sheet: the hand-drawn interiors of Ochiba, Ubame, Hayakawa and the county example reverted to HEAD with no refit row and no GM question (ask:449-T182-room-scope, narrowing ask:449-T182-room-sizes)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on the rulings' text, now carried. The ground is not that refitting broke deliberate composition (awkward, not impossible, and existing behavior the GM did not ask to keep). It is that the standard these sheets miss is not a 'known bug' or a research finding in the GM's words. -room-layout records the bands as 'the project's guess around a few measured houses (labeled as such, with no claim behind them)', and -room-scope repeats that. The GM's measure for a map is 'so long as the changes don't violate our research findings' and FR-002 'must pass its checks and hold its research claims'. Every one of these sheets passes every check, and none is held to a claim the bands carry. -room-sizes' 'correcting a sheet to match the research needs no permission' rested on three measured houses. A room two to eight times the largest of three measured rooms lies outside a small sample. It does not contradict a recorded research finding, and -room-scope expressly narrows -room-sizes on that ground. The ruling holds for each sheet separately: Ochiba and Ubame (deliberate items named), Hayakawa (none named, but it misses the same guess band and nothing else), and the county example. The county example is regenerated from its program, and the block says the bands apply to generated plans, but no review found its rooms defective. The findings that started the work concern the round-trip sheet (-room-scope), so no known defect of the county example is carried. Purpose test: the GM's rule exists so step 3b is not ported on top of known breakage. The round-trip sheet, the placer's own test and the one sheet these findings were made on, is fixed (D3a), so the purpose is met. The arbiter's ruling carried this route. The GM's words, not the ruling, are what make it legitimate."
+    },
+    {
+     "id": "D3d",
+     "summary": "the three required room items -room-sizes put in types.json reverted to HEAD",
      "class": "within",
-     "why": "This is how the requested fixes are verified and enforced. It adds no behavior the GM did not ask for."
+     "why": "Those items were the arbiter's own addition under -room-sizes, never in the GM's request or the spec; removing them narrows nothing the GM asked. Wording note: the block's 'types.json at HEAD' is looser than -room-scope (which reverts only the three room items) and than D2a (which changes types.json for the basin); not a fidelity defect."
+    },
+    {
+     "id": "D3e",
+     "summary": "the bands recorded on the room kinds' pages as the project's GUESS for generated plans, held by no check, the check filed to T187; band-only review findings (band edges, the corridor's 36 ft run, the guest room's missing band) filed as T187 rows rather than fixed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A check that would hold a GUESS band is new behavior the GM did not ask for; filing it is not carrying a defect. The findings filed are, by -room-layout's and -review-close's terms, asks to tighten or widen a GUESS band (or give one where none exists). On the D3c ground they are not known bugs or research violations. Every finding of a room outside its recorded band, an uncaptioned piece or a broken palace order is fixed in place under -room-layout, so no defect of the round-trip sheet is deferred."
+    },
+    {
+     "id": "D3f",
+     "summary": "the ten review units on the round-trip's rooms closed under -room-layout's last-round rule and -review-close",
+     "class": "within",
+     "why": "Process for closing this step's reviews on the fixed sheet. Under -review-close the corridor's glyph-check gets one reading, and every material finding is fixed. Nothing the GM asked is dropped. Wording note: 'Every review unit ... closed on a PASS' is looser than -review-close, which closes the corridor's size audit by a size-table measurement plus review-accept and allows review-accept fallbacks; not blocking."
+    },
+    {
+     "id": "D4",
+     "summary": "0220's drawing page calling the innermost arch's distance a map convention while the procedure treats it as a guess: listed for a record session, not edited here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a label on a research page. It changes no check, no sheet and no port code of step 1, so it is not a bug of the step in the GM's sense. Research-record wording belongs to the record sessions (Principle XII). The item is listed, not dropped, so the GM's rule is not gutted."
+    },
+    {
+     "id": "D5",
+     "summary": "diff-run signal on the six sheets and every red and fix fixture, every difference explained by a fix",
+     "class": "within",
+     "why": "FR-002: the differential is a signal read for whether everything works, which is what is done."
+    },
+    {
+     "id": "D6",
+     "summary": "where a road may end and where a path inside a precinct leads, listed for the GM as UNRESEARCHED",
+     "class": "within",
+     "why": "Open research items surfaced to the GM, not decided by the session."
+    },
+    {
+     "id": "D7",
+     "summary": "the task's measure (tokens, minutes, claims owed)",
+     "class": "within",
+     "why": "A report; decides nothing."
+    },
+    {
+     "id": "D8",
+     "summary": "exits: make static, rust-test, hooks-test, quick, the claims round and a gated make land; order after T151 and before step 3b",
+     "class": "within",
+     "why": "Matches the GM's order: fix step 1's known bugs before porting the next step."
     }
    ],
    "verdict": "CLEAR"

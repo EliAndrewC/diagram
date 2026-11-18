@@ -14,23 +14,50 @@ use serde_json::{Map, Value};
 
 use super::super::sections::re;
 
-/// A ruling's key as the plans cite it: `ask:` and its name (`ask:449-engine-order`, `ask:set-down-449-efficiency-round-2`), a trailing
-/// `'s` or punctuation left out.
-static ASK: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?<![\w:-])(ask:[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?)"));
-
 /// The fields a ruling's record carries into the bundle, in this order: when it was ruled, the ruling, its why and its what - the brief's
 /// "its why and what, verbatim" (feature 449 T169). The question asked and the rest stay in the log: on T168's bundle `asked` alone was
 /// 12.6 KB of the 33.6 KB the records' fields took (observed 2026-11-17, method: the bytes of each field's lines in `rulings.md`).
 const FIELDS: [&str; 4] = ["utc", "ruling", "why", "what"];
 
-/// Each `ask:` key the blocks cite, in their order, each once.
+/// A ruling's key as the plans cite it - `ask:` and its name (`ask:449-engine-order`, `ask:set-down-449-efficiency-round-2`), a trailing
+/// `'s` or punctuation left out - or a sibling cited in short form after one: `` `ask:449-T182-room-sizes`, `-room-layout`, `-room-scope` `` - the short form
+/// a backticked `-name` that replaces as many of the last full key's trailing segments as it has. WHY: T182's section cited three of its
+/// four rulings so, the bundle carried only the full one, and its review came back BLOCKED on a narrowing the missing ruling settled
+/// (observed 2026-11-18, method: the review's reply and its bundle's `rulings.md`).
+static ASK_OR_SIBLING: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?<![\w:-])(ask:[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?)|`-([A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)`",
+    )
+});
+
+/// The sibling a short form names: the last full key with its trailing segments, as many as the short form has, replaced by it; none
+/// when the short form has as many segments as the key's name or more.
+fn sibling(full: &str, short: &str) -> Option<String> {
+    let n = short.split('-').count();
+    let parts: Vec<&str> = full.split('-').collect();
+    (parts.len() > n).then(|| format!("{}-{short}", parts[..parts.len() - n].join("-")))
+}
+
+/// Each `ask:` key the blocks cite, in their order, each once - a sibling in short form written out whole.
 pub(super) fn cited(bodies: &[&str]) -> Vec<String> {
     let mut keys: Vec<String> = Vec::new();
     for body in bodies {
-        for c in ASK.captures_iter(body).flatten() {
-            if !keys.iter().any(|k| *k == c[1]) {
-                keys.push(c[1].to_owned());
+        let mut last: Option<String> = None;
+        for c in ASK_OR_SIBLING.captures_iter(body).flatten() {
+            let key = if let Some(full) = c.get(1) {
+                last = Some(full.as_str().to_owned());
+                full.as_str().to_owned()
+            } else if let Some(k) = last
+                .as_deref()
+                .zip(c.get(2))
+                .and_then(|(f, short)| sibling(f, short.as_str()))
+            {
+                k
+            } else {
+                continue;
+            };
+            if !keys.contains(&key) {
+                keys.push(key);
             }
         }
     }

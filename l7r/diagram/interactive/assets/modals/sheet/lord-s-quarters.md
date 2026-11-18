@@ -4,7 +4,7 @@ beyond, where who came and went was strictly limited.
 
 A samurai house was matted in nearly every room but its kitchen. At a house in Matsue lived in by turns by retainers of about
 500 to 1,000 koku, the master's living room was finished playfully, in contrast to the zashiki where guests were received,
-which was built for formality. A chief retainer's great house at Aizu, as rebuilt after its loss to fire in the civil war of 1868-69, fell
+which was built for formality. A chief retainer's great house at Aizu fell
 into four groups of rooms: the reception suite for the lord, the retainers' office and guard rooms, the family's rooms, and the
 rooms of the maids and servants.
 
@@ -12,11 +12,8 @@ A smaller house could run the other way, its formal room deepest in and the livi
 large the master's rooms were is not recorded.
 
 Guesses:
-- The size the plan gives the master's rooms, about 12 to 26 ft by 12 to 16 ft: a band of this project's from the master's
-  own 8-mat room in the ordinary houses measured - the district magistrate's house of 1794 at Matsushiro and the Matsue house -
-  up to a suite of two rooms like the Matsushiro house's retirement rooms, about 25 by 15 ft, applied to the generated plans;
-  the band is a guess, not a measurement.
-  The registry does not hold this band: it guides the generated plans, and no check refuses a sheet outside it.
+- The size the plan gives the master's rooms, about 12 to 26 ft by 12 to 16 ft: how large the master's rooms were is not recorded, so this is a band of this project's from one room up to a suite
+  of two, applied to the generated plans; the band is a guess, not a measurement.
 
 Depiction: The plan draws the master's rooms as one labeled bay standing for several rooms, a work room and a bedroom among them.
 
