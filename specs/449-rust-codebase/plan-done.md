@@ -4346,3 +4346,101 @@ censuses empty (work breakdown 8, FR-010).
 **Performance work?** No - guidance.
 
 
+<!-- plan-archive: archived 2026-11-18 -->
+### T171 (step 1's defects; the record's route (a), 0190 and 261 FR-015)
+
+- **Approach**: the notes census's entrance-board line restored: `rust/mode_a/src/census/routes.rs` walks each household's way out over the manifest's `lanes` and `houses`, and an entrance-seated board's line reads "**N** of M households' ways out pass it" again; the freshness test feature 444 dropped is restored (`census/pool_check.rs`: every pool hamlet's census block equal to what `make notes-census` writes, in the crate's end-to-end test); `make notes-census` rewrites no file, the four entrance hamlets' notes already holding the lines the port now writes (observed 2026-11-18, method: `make notes-census`, `git diff` of the notes; `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`).
+
+   **Decisions** (the GM's words, request.md 2026-11-18; 0190, 261 FR-015):
+   - The record's route: a board at the entrance is judged by the ways out that pass it, so the count is ported, not the line dropped; the walk is ported into the engine crate, `rust/parked` left a reference.
+   - Proved: reverting the entrance branch turns the unit test and the freshness check red (observed 2026-11-18, method: a scratch revert restored by `cp`).
+
+### T171 Approach (checklist part A)
+
+1. **The goal, in the world.** An entrance board's census line counts the ways out that pass it, and a stale census block refuses a landing.
+2. **The constraints.** FR-002 as amended (T180, T181); constitution XIV; the GM's fix-as-we-go rule.
+3. **Where each comes from.** G: the GM's words; R: the research pages each fix cites; O: the fixes' tests and the signal.
+4. **Do they describe the world here?** Run on this clone's pool sheets and fixtures, 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`).
+5. **The order.** After step 3a (T151); step 1's defects, before step 3b.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick`, the claims round and a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing, with its siblings.
+9. **Done, measured.** Each fix's test red without it; every pool sheet passing every check.
+10. **Before moving a constant.** Each changed rule's claim restated to its page.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No - defects fixed.
+
+
+<!-- plan-archive: T172 to T170 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
+<!-- plan-archive: T172 to T172 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
+
+<!-- plan-archive: T173 to T170 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
+<!-- plan-archive: T173 to T173 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
+
+<!-- plan-archive: T174 to T174 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+
+<!-- plan-archive: archived 2026-11-18 -->
+### T177 (step 1's defects; T175's and T176's claims rounds, DRIFTED)
+
+- **Approach**: six audit rules brought to the pages they cite, in the Rust and the kept Python alike: the notice board casts a shadow from the low end of the height 0190 measures; a road at the main gate keeps its own width (0088), only lanes into side and cart gates judged by their gate; `arch_on_approach` judges every arch, their count one, three or seven, the first arch the farthest from the hall, and lets it stand inside the edge where the innermost stands at 0220's distance off the hall; `gate_widths`' fix text gives 0093's band of gate widths; `no_precinct_enclosure` refuses a fence round the sanctuary, its message without a donation (0223); `lodging_entrances` asks each dwelling of a block split by full-depth partitions for its own outer door (0097, 0106), an undivided block keeping one.
+
+   **Decisions** (the GM's words, request.md 2026-11-18; the pages cited):
+   - Each rule changed to its page and its claim with it; each fix proved by a unit test on a fixture (`parse/fix_fixtures.rs`) red when the fix is reverted (observed 2026-11-18, method: scratch reverts restored by `cp`).
+   - A red fixture whose finding the fix removed is moved to keep its red (`ochiba-road-wider-than-gate-red.svg`'s lane to the service gate); no T177 change moved a pool sheet's verdict (observed 2026-11-18, method: every check on the six pool sheets before and after).
+
+<!-- plan-archive: archived 2026-11-18 -->
+### T177 Approach (checklist part A)
+
+1. **The goal, in the world.** Six audit rules say what their research pages say.
+2. **The constraints.** FR-002 as amended (T180, T181); constitution XIV; the GM's fix-as-we-go rule.
+3. **Where each comes from.** G: the GM's words; R: the research pages each fix cites; O: the fixes' tests and the signal.
+4. **Do they describe the world here?** Run on this clone's pool sheets and fixtures, 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`).
+5. **The order.** After step 3a (T151); step 1's defects, before step 3b.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick`, the claims round and a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing, with its siblings.
+9. **Done, measured.** Each fix's test red without it; every pool sheet passing every check.
+10. **Before moving a constant.** Each changed rule's claim restated to its page.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No - defects fixed.
+
+
+<!-- plan-archive: T178 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+<!-- plan-archive: T179 to T175 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+<!-- plan-archive: T179 to T179 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
+
+<!-- plan-archive: archived 2026-11-18 -->
+### T182 (step 1's defects: T174's, T175's and T176's findings)
+
+- **Approach**: step 1's remaining defects fixed in the Rust and the kept Python alike: the sheet reader and its start tags read CDATA, processing instructions, an internal subset, a `>` in a quoted attribute and any XML name, and refuse by name a sheet whose element comes from a DTD entity, with no start tag to pair; `data-kind`, `data-part-of` and plain attributes read in single quotes; `gap_tag` tags a kura gap under 0116's floor TIGHT; path reading takes relative commands, `Z`, repeated segments and exponents; the On-map error quotes its line alone; the county red fixtures run under the magistracies tier, every red fixture asserted to carry one; `privies_by_zone` asks the residence for its two privies, the guests' and the family's (0101); `registry.ft` and three unreachable branches removed; T176's second-round claims given their pages (the shoe-stone door, no tub inside a building, a tub off a well, the kura roles, a road's ending), 0222's basin and 0196's well found not to conflict and the check judging both.
+
+   **Decisions** (the GM's words, request.md 2026-11-18; constitution XIV; FR-002 as amended):
+   - A sheet a fixed check refuses is a defect the fix exposed, fixed where it lies: `ochiba-roundtrip-test`, which rebuilds Ochiba from her program, lacked her residence's rooms, so its placer seated one privy; its program now gives the residence the rooms her sheet draws (measured off her sheet at its scale), its rear strip and its kitchen ell. The regenerated sheet showed two more defects, fixed: `tubs_off_their_doors` judged a tub tied between two buildings by plan order - every tied building is now asked, a tied bath sparing the tub its door (0100) - and the Python placer seated a tub without its door's reach, now seating a doored building's tub within `TUB_DOOR_MAX_FT` of a door or none (0100), step 3b porting it with this fix. Every pool sheet, `county-magistracy-example` regenerated too, passes every check (observed 2026-11-18, method: `make pack-audit`, `make size-table` and the census checks on the six sheets).
+   - The claims round on these fixes found three more defects, fixed in every copy: the shrine's purification check let a well stand in for the stone basin 0222 draws at every village shrine - a sheet without its basin is now refused, and the country shrine's required item in `types.json` is the basin, ending the drift ask:417-T36 accepted, a well beside the hall still allowed in addition (0196); `lodging_entrances` split a common room at its sliding partitions - the marks reader now carries a line's dash, and only a solid dwelling wall splits a row, a dashed partition standing behind one door (0097); and the Python placer let a doored building whose door found no seat take a court-face tub - it now takes a tub within reach of a door it drew or none, trying the nearest door first across its faces (0100). Their claims and the building programs' prose (the outermost arch's exception a DEVIATION on 0220's drawing page, the one, three or seven arches, 0223's fences along an approach) were brought to the pages. Each fix has a test that fails without it (observed 2026-11-18, method: scratch reverts restored by `cp`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`, follow-up 3).
+   - The round-trip's new rooms owed their reviews, and the round arbiter ruled their route (`ask:449-T182-room-sizes`, `-room-layout`, `-room-scope`, `-review-close`): size audits found each room a quarter of Ochiba's house, two to eight times measured Edo rooms (Yokota 1794, Matsue, Kuchiba); pressing the audits' bands onto the hand-drawn sheets broke what their notes record as deliberate (Ochiba's pond, Ubame's room order and roji stone, the county example's outline), so the work was narrowed to the generated round-trip sheet - the hand sheets and `types.json` at HEAD, the bands recorded on the room kinds' own pages as the project's GUESS for generated plans (no check holds them, filed to T187), the round-trip's rooms sized to the audits' anchors in palace order with captioned inner rooms and corridors, and `compound.py` drawing a residence's touching corridor pieces as one passage. Every review unit on those rooms closed on a PASS - the glyph checks and size audits of the reception, the lord's and the family's quarters, the inner rooms and the corridor - under the arbiter's last-round rulings (observed 2026-11-18, method: `.git/review-verdicts/`, `specs/449-rust-codebase/arbiter.jsonl`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`, follow-ups 6 to 8).
+   - Listed for a record session, not edited here: 0220's drawing page calls the innermost arch's distance off the hall a map drawing convention, where the procedure treats it as a guess.
+   - The signal (docs/diff-run.md): HEAD's audit against the fixed one on the six sheets and every red and fix fixture, every difference explained by one of the fixes above (measured 2026-11-18 (`make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/diff/cases.json VERIFY=1 JOBS=4`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/diff/cases.diff-run/reports/diff-run-verify-20261118T135914Z.json`)).
+   - Open research items listed for the GM: where a road may end and where a path inside a precinct leads, labeled UNRESEARCHED.
+   - The tasks' measure: the agent took 721k tokens and 80 minutes over three rounds (observed 2026-11-18, method: its usage reports and `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/phases.log`). `make claims-owed` owes 145 claims one impl-drift round and 132 a triage (observed 2026-11-18, method: `make claims-owed`).
+   - The checks: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick` and the pointer check green (observed 2026-11-18, method: those commands, one after another after the last edit, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`).
+
+<!-- plan-archive: archived 2026-11-18 -->
+### T182 Approach (checklist part A)
+
+1. **The goal, in the world.** Step 1 carries no known defect: every pool sheet passes every check, and the round-trip rebuilds Ochiba's actual program.
+2. **The constraints.** FR-002 as amended (T180, T181); constitution XIV; the GM's fix-as-we-go rule.
+3. **Where each comes from.** G: the GM's words; R: the research pages each fix cites; O: the fixes' tests and the signal.
+4. **Do they describe the world here?** Run on this clone's pool sheets and fixtures, 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t182/report.md`).
+5. **The order.** After step 3a (T151); step 1's defects, before step 3b.
+6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick`, the claims round and a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing, with its siblings.
+9. **Done, measured.** Each fix's test red without it; every pool sheet passing every check.
+10. **Before moving a constant.** Each changed rule's claim restated to its page.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** No - defects fixed.
+
+
