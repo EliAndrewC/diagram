@@ -74,13 +74,26 @@ fn on_main(root: &Path, path: &str) -> bool {
     })
 }
 
+/// A test that proves a fix: a file under `tests/`, or a Rust crate's own tests under `rust/` - a `tests.rs` or a file in a `tests/`
+/// directory. WHY the second: feature 449 moved the tooling into Rust crates, each tested from its own `src/`, and deleted the Python
+/// tests (FR-001b), so the round arbiter's fix to `rust/gate/crates/claims/src/claims/ports.rs` had no `tests/` file to name
+/// (ask:449-T184-elongated-retired-2, observed 2026-11-18).
 fn is_test_file(root: &Path, test: &str) -> bool {
     if test.is_empty() {
         return false;
     }
-    let tests = checks::resolved(&root.join("tests"));
     let t = checks::resolved(&root.join(test));
-    t.is_file() && t.ancestors().skip(1).any(|p| p == tests)
+    if !t.is_file() {
+        return false;
+    }
+    let tests = checks::resolved(&root.join("tests"));
+    let rust = checks::resolved(&root.join("rust"));
+    let rust_test = t.ancestors().skip(1).any(|p| p == rust)
+        && (t.file_name().is_some_and(|n| n == "tests.rs")
+            || t.ancestors()
+                .skip(1)
+                .any(|p| p.file_name().is_some_and(|n| n == "tests")));
+    t.ancestors().skip(1).any(|p| p == tests) || rust_test
 }
 
 /// `hm_arbiter.settle_fix`: close an open tooling fix in the feature that holds it; a declined one becomes a question for the GM.
@@ -116,7 +129,7 @@ pub(super) fn settle_fix(
     if status == "done" {
         if !is_test_file(root, test) {
             return Err(Stop::Refused(format!(
-                "TEST={} is not a file under tests/ - a fix is done with the test that proves it",
+                "TEST={} is not a file under tests/ or a Rust crate's tests - a fix is done with the test that proves it",
                 if test.is_empty() { "<none>" } else { test }
             )));
         }

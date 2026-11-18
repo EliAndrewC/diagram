@@ -164,7 +164,7 @@ fn fixes_are_settled_and_nits_answered() {
     assert!(
         notest
             .stderr
-            .contains("TEST=tests/none.sh is not a file under tests/"),
+            .contains("TEST=tests/none.sh is not a file under tests/ or a Rust crate's tests"),
         "{}",
         notest.stderr
     );
@@ -173,6 +173,24 @@ fn fixes_are_settled_and_nits_answered() {
         .contains("TEST=<none>"));
     std::fs::create_dir_all(root.join("tests")).unwrap();
     std::fs::write(root.join("tests/t.sh"), "x").unwrap();
+    // a Rust crate's own tests prove a fix too (ask:449-T184-elongated-retired-2); a crate's other source does not
+    for (path, taken) in [
+        ("rust/c/src/m/tests.rs", true),
+        ("rust/c/src/m/tests/flow.rs", true),
+        ("rust/c/src/m.rs", false),
+        ("other/tests.rs", false),
+    ] {
+        let p = root.join(path);
+        std::fs::create_dir_all(p.parent().unwrap()).unwrap();
+        std::fs::write(&p, "x").unwrap();
+        let out = run(&root, &["fix", "done", "ask:f1", "a note here", path]);
+        assert_eq!(
+            out.stderr.contains("is not on main as it is here"),
+            taken,
+            "{path}: {}",
+            out.stderr
+        );
+    }
     let not_main = run(
         &root,
         &["fix", "done", "ask:f1", "a note here", "tests/t.sh"],
