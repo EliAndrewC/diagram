@@ -708,31 +708,4 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T173 to T170 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 <!-- plan-archive: T173 to T173 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 
-### T174 (the engine's piece 3; the GM 2026-11-17, request.md: "proceed with the next 2 engine pieces and then we'll measure how well those went")
-
-- **Approach**: `make size-table` wired to Rust - `scripts/reviews/size_table.py` ported into `rust/mode_a/` (`l7r-gate.sh mode-a size-table`) and deleted - with what it reads that was not yet Rust: `pack_audit/size_marks.py`, `pack_audit/grids.py` whole (a leaf the audit's core reads next) and `labels/hand_sheet.py`'s `start_tags`; those three stay for their Python importers under the lockstep rule. The plan is read as `ElementTree` reads it, over the `roxmltree` crate, pinned in the workspace.
-
-   **Decisions** (`ask:449-engine-order` conditions 2 and 3, `ask:449-phase4-slices` Q10, `ask:449-usage-text`, `ask:449-T066-json-message`, `ask:449-T77-bad-since`, FR-001 to FR-005, FR-008; the GM's words, request.md 2026-11-17):
-   - The piece is step 1's (engine-plan.md's table names `size_table` and the audit's leaves in step 1's row), wired at once. Lockstep (condition 3): the crate's one end-to-end test runs the Python's `grids`, `size_marks` and `start_tags` on the six pool sheets and the fixtures, every field, refusal and float bit for bit, and each constant against the Python's defaults; it went red on a scratch mutation of each of the three Python files (observed 2026-11-17, method: each mutated in a scratch copy and restored by `cp`).
-   - Claims (Q10): the claims on `grids.py` stay keyed to it. Their Rust copies sit word for word on named constants holding the Python's defaults, since the Rust functions take those figures as arguments, as the Python's do; every other new unit carries a claim. `make claims-owed` owes 137 new claims in 17 files one impl-drift round and 6 a triage (observed 2026-11-17, method: `make claims-owed`).
-   - The same outputs (FR-002): HEAD's Python against the Rust, `make size-table` on every pool sheet, directly, with `--json` and through make, and fixtures for every rect, stroke, transform and mark form, the XML forms `ElementTree` accepts and refuses, and every flag, path and refusal - the differential's 113 cases, none differing (measured 2026-11-18 (`make diff-run CASES=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t174/diff/cases.json VERIFY=1 JOBS=4`, `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t174/diff/cases.diff-run/reports/diff-run-verify-20261118T011748Z.json`)). Normalizations: a traceback's frames, argparse's usage block (`ask:449-usage-text`), a library's decode wording, and `ElementTree`'s `ParseError` compared by its class, its message (expat's own wording with its line and column) a library's text no Rust parser writes (`ask:449-T066-json-message`).
-   - Defects of HEAD's Python reproduced, not fixed (FR-002 binds a tool's output; each is a sheet no generator writes): a `>` inside CDATA before a tag-like run shifts the kinds paired by index, and an element named outside `[A-Za-z]` overruns the start-tag list; a single-quoted `data-kind` reads untagged; a sheet `ElementTree` accepts can still be refused by the tokenizer. Reported to the GM.
-   - The piece's measure, by phase: the port agent took 451k tokens (observed 2026-11-18, method: its usage report) and 56 minutes from reading to the final checks (observed 2026-11-18, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t174/phases.log`). A code edit's `make rust-test CRATE=rust/mode_a` took 4.8 s, the sparse incremental differential runs 42.2 s and 45.3 s, the first whole-world verify 276.5 s and the last 117.4 s (observed 2026-11-18, method: `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t174/phases.log`). `make test-times` found the declared end-to-end test at 2.14 s and every other test at or under 0.056 s (observed 2026-11-18, method: `make test-times CRATE=rust/mode_a`).
-   - The checks: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, `make quick` and the pointer check green (observed 2026-11-18, method: those commands, one after another after the last edit).
-
-### T174 Approach (checklist part A)
-
-1. **The goal, in the world.** `make size-table` runs in Rust, wired, and the piece's cost is measured.
-2. **The constraints.** FR-001 to FR-005 and FR-008; `ask:449-engine-order`; Q10; the GM's words.
-3. **Where each comes from.** G: the GM's request; R: the rulings; O: the differential, the lockstep and the phase log above.
-4. **Do they describe the world here?** Run on this clone's real pool sheets, measured 2026-11-18 (`/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t174/diff/cases.json`).
-5. **The order.** After T170 and T173; before the audit's remaining piece.
-6. **The exits.** Green: `make static`, `make rust-test`, `make hooks-test HOOKS_ALL=1`, the claims round and a gated `make land` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The verify run's cases with none differing, the claims round recorded, the phase table in time and tokens.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-**Performance work?** No - a port, its cost measured for the GM.
-
+<!-- plan-archive: T174 to T174 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->

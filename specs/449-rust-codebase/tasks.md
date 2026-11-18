@@ -56,8 +56,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T171 The notes census's entrance-board line and its freshness test (constitution XIV; found by T170): since feature 444 cut the tool's entrance-board branch, an entrance-seated notice board's census line reads a 250-ft farmhouse count, which feature 261 does not judge a board by - fix the line (the ways-out count ported onto the manifest, or the line left out for an entrance seat, the easier route named); restore the freshness test feature 444 dropped on a wrong label (feature 193 kept notes-census for it); regenerate the four hamlets' notes ROUTES (round arbiter, ask:set-down-449-pilot, 2026-11-17; the GM's to choose): (a) the ways-out count ported onto the manifest - keeps the fact in the four hamlets' notes; the count's Rust is `rust/parked/src/law/routes.rs`'s `departure_routes` over the manifest's `lanes` and `houses`, engine-side work; or (b) the line left out for an entrance-seated board - simpler, drops the fact.
       research: rendering
-- [ ] T174 The engine's piece 3 (the GM 2026-11-17, request.md: the next two pieces, measured): make size-table wired to Rust - scripts/reviews/size_table.py with what it reads, pack_audit's size_marks.py and grids.py and labels/hand_sheet.py's start_tags, ported into rust/mode_a, the Python they serve held in lockstep; its wall time and tokens reported by phase
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
