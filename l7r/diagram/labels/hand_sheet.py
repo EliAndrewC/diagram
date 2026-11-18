@@ -720,38 +720,47 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
     RESIDENCE had no free seat within reach of its larger block while the other had one). A scatter of glyphs and lines
     (three pines, a moored barge) has no inside, and is named beside the group, else beside any one of its glyphs - only
     beside a glyph where the group spreads wider than the standard's reach at the caption's `size`. An area with no direction
-    of its own - a box of parts, an outline - is named level, however long and narrow (feature 449 T184: an area three times
-    taller than wide was named along its length, where 0242 keeps an area's caption level); a rectangle - a drawn rect, or an
-    outline of four square corners (`_rectangular`) - is turned with the sheet, and its name inside it, like a caption beside a
-    turned feature, takes its outline's first edge's angle (feature 449 T188: a turned building's roof name was set level), a
-    quarter, half or three-quarter turn keeping it level.
+    of its own - a box of parts, an irregular outline - is named level, however long and narrow (feature 449 T184: an area three
+    times taller than wide was named along its length, where 0242 keeps an area's caption level); a feature with a direction of its
+    own (`_squared`: a drawn rect, an outline whose every corner is square, an ellipse of unequal radii) is turned with the sheet,
+    and its name inside it, like a caption beside a turned feature, takes its outline's first edge's angle (feature 449 T188: a
+    turned building's roof name was set level), a quarter, half or three-quarter turn keeping it level; beside it, the caption is
+    seated off the box of what it names read in that feature's own frame (`_framed`; feature 449 T189: a turned garden holding its
+    lantern and a lone turned block among its parts were named level beside, off the upright box).
 
     Research:
         a caption's subjects - CONVENTION: inside what it names first, then beside it; a stepped building by its blocks, largest first; a scatter beside its glyphs (feature 286, plan D2)
-        an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an irregular outline) is level; a rectangle's name inside it, a drawn rect or an outline of four square corners, takes the rectangle's own angle, as a turned feature's caption does
-        a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+        an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does
+        a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+        a lone block's beside box - CONVENTION: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - 0242 says the caption is seated off the turned feature's edge but not which outline a block with small parts beside it has; the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)
     """
     x0, y0, x1, y1 = bbox([p for s in own for p in s.poly])
     box = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
     closed = [s for s in own if not s.line and len(s.poly) >= 3]
     blocks = sorted((s.poly for s in own if s.tag == "rect" and _area(s.poly) >= BLOCK_PX), key=lambda q: -_area(q))
     holder = max(closed, key=lambda s: _area(s.poly), default=None)
-    # each inside seat with whether it is a rectangle - a drawn rect, or an outline of four square corners - which has a direction of
-    # its own (feature 449 T188)
-    # and each beside seat with the same: only a rectangle's caption is turned with it
+    # each inside seat with whether it has a direction of its own - a drawn rect, an outline whose every corner is square, an ellipse
+    # of unequal radii (feature 449 T188, T189) - and each beside seat with the same: only such a feature's caption is turned with it
     inner: list[tuple[Poly, bool]]
     beside: list[tuple[Poly, bool]]
     if len(own) == 1 and closed:
         squared = _squared(own[0])
-        inner, beside = [(own[0].poly, squared)], [(own[0].poly, True) if squared else (box, False)]
+        # beside its box in its own frame - a rectangle's own outline, an L-shaped house's turned box (feature 449 T189)
+        inner, beside = [(own[0].poly, squared)], [(_framed(own[0].poly, _turned(own[0].poly)), True) if squared else (box, False)]
     elif holder is not None and all(_box_within(s.poly, holder.poly) for s in own):
         # one outline holding the rest - a garden and the lantern in it (Ochiba's inner garden, read as a scatter, was
-        # named from outside with a leader across the kitchen)
-        inner, beside = [(holder.poly, _squared(holder))], [(box, False)]
+        # named from outside with a leader across the kitchen) - named beside the box of them all read in the holder's own
+        # frame where it has a direction of its own (feature 449 T189: a turned garden was named level beside, off the upright box)
+        squared = _squared(holder)
+        frame = _turned(holder.poly) if squared else 0.0
+        inner, beside = [(holder.poly, squared)], [(_framed([p for s in own for p in s.poly], frame), squared)]
     elif _covers(own, box):
         inner, beside = [(box, False)], [(box, False)]
     elif blocks:
-        inner, beside = [(b, True) for b in blocks], [(b, True) for b in blocks] if len(blocks) >= 2 else [(box, False)]
+        # a lone block among small parts is named beside the box of them all read in the block's own frame (feature 449 T189: a
+        # lone turned block was named level beside, off the upright box)
+        lone = [(_framed([p for s in own for p in s.poly], _turned(blocks[0])), True)]
+        inner, beside = [(b, True) for b in blocks], [(b, True) for b in blocks] if len(blocks) >= 2 else lone
     else:
         # a scatter of like glyphs - three pines, the fire-water tubs: beside the group, else beside any one of them,
         # largest first (Ochiba's tubs stand all over the compound, and round the box of them all no seat was free).
@@ -771,19 +780,39 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
 
 
 def _squared(s: Shape) -> bool:
-    """Has this drawn shape a direction of its own, its first edge's: a `<rect>`, an outline `_rectangular` passes, or an ellipse of
+    """Has this drawn shape a direction of its own, its first edge's: a `<rect>`, an outline `_square_cornered` passes, or an ellipse of
     unequal radii, whose axes a turned group turns - a circle alike, which an unequal scale draws as an ellipse - never a disc drawn
     round, whose turned square box has no direction (the T188 claims round: a disc in a turned group, and a scatter's four-point kite, were
     named at an angle; the plan review's round 3: an ellipse of unequal radii in a turned group was named level, and a circle scaled
-    unequally too). The radii are the drawn box's sides, which the reader keeps as the disc's outline."""
+    unequally too). The radii are the drawn box's sides, which the reader keeps as the disc's outline. An outline of more corners, each
+    square (an L-shaped house), has its edges' direction too (feature 449 T189: a turned L-shaped house drawn as one outline was named
+    level, where the same house drawn as two rects took its angle).
+
+    Research:
+        a direction of its own - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature is drawn at that feature's own angle and seated off its turned edge, and everything with no direction of its own is labeled level; a drawn rect and an outline of four square corners turn with their group, and an ellipse of unequal radii has its axes turned with it; a disc drawn round, an outline with a corner off square and a four-point kite have no direction
+        an outline of square corners - CONVENTION: an outline of more than four corners, each square (an L-shaped house), has its edges' direction as a rectangle has - 0242 does not say whether a turned outline that is no rectangle has a direction of its own; read so because the same house drawn as two rects takes its angle through its blocks, and naming it level drawn as one outline would repeat the rect-against-outline defect T188 fixed, and because 0242 gives a quarter-turned feature its direction by its edges ("it has a level edge of its own"); the simpler route, an L kept level, was priced and not taken for that inconsistency (feature 449 T189)
+    """
     if s.tag == "rect":
         return True
-    if not _rectangular(s.poly):
-        return False
     if s.tag in ("circle", "ellipse"):
+        if not _rectangular(s.poly):
+            return False
         across, down = math.dist(s.poly[0], s.poly[1]), math.dist(s.poly[1], s.poly[2])
         return abs(across - down) > 1e-6 * max(across, down)  # equal radii, within a turned outline's float slack, are a circle
-    return True
+    return _square_cornered(s.poly)
+
+
+def _framed(pts: Poly, angle: float) -> list[Pt]:
+    """The box of `pts` read in the frame turned `angle` degrees, its first edge along the frame's first axis - the upright box
+    itself where the angle is level - so that a caption beside a turned feature is seated off its turned edge (feature 449 T189)."""
+    if angle == 0.0:
+        x0, y0, x1, y1 = bbox(pts)
+        return [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+    s, c = math.sin(math.radians(angle)), math.cos(math.radians(angle))
+    along = [p[0] * c + p[1] * s for p in pts]
+    across = [p[1] * c - p[0] * s for p in pts]
+    u0, u1, v0, v1 = min(along), max(along), min(across), max(across)
+    return [(u * c - v * s, u * s + v * c) for u, v in ((u0, v0), (u1, v0), (u1, v1), (u0, v1))]
 
 
 SQUARE_TOL = math.sin(math.radians(1.0))
@@ -797,11 +826,19 @@ def _rectangular(poly: Poly) -> bool:
     """Is this outline a rectangle - four corners, each square within `SQUARE_TOL`, a closing point repeating the first dropped - so
     that it has a direction of its own, its first edge's, however it was drawn (feature 449 T188: a turned rectangle drawn as a polygon
     was named level where the same `<rect>` took its angle)?"""
-    pts = list(poly[:-1]) if len(poly) == 5 and poly[0] == poly[-1] else list(poly)
-    if len(pts) != 4:
+    return len(poly) - (len(poly) > 1 and poly[0] == poly[-1]) == 4 and _square_cornered(poly)
+
+
+def _square_cornered(poly: Poly) -> bool:
+    """Is every corner of this outline square within `SQUARE_TOL` - four corners or more, a closing point repeating the first dropped -
+    a rectangle or an L- or T-shaped house, whose edges all run along one turned frame and give it a direction of its own (feature 449
+    T189: a turned L-shaped house drawn as one outline was named level, where the same house drawn as two rects took its angle)?"""
+    pts = list(poly[:-1]) if len(poly) > 1 and poly[0] == poly[-1] else list(poly)
+    n = len(pts)
+    if n < 4:
         return False
-    for k in range(4):
-        a, b, c = pts[k - 1], pts[k], pts[(k + 1) % 4]
+    for k in range(n):
+        a, b, c = pts[k - 1], pts[k], pts[(k + 1) % n]
         u, v = (a[0] - b[0], a[1] - b[1]), (c[0] - b[0], c[1] - b[1])
         nu, nv = math.hypot(*u), math.hypot(*v)
         if not nu or not nv or abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv) > SQUARE_TOL:
@@ -813,7 +850,9 @@ def _turned(poly: Poly) -> float:
     """A turned feature's angle as its caption takes it: its outline's first edge's, level where the turn is a quarter, a half or three
     quarters (within a millionth of a degree, the float slack of a turned outline's edge).
 
-    Research: a quarter turn keeps a level caption - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+    Research:
+        a quarter turn keeps a level caption - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a feature turned a quarter, a half or three quarters of a turn keeps a level caption
+        which edge gives the angle - CONVENTION: the outline's first edge, where a square-cornered outline has two perpendicular edges and 0242 does not say which a caption runs along (feature 449 T189)
     """
     ang = math.degrees(math.atan2(poly[1][1] - poly[0][1], poly[1][0] - poly[0][0]))
     return 0.0 if abs(ang - 90.0 * round(ang / 90.0)) < 1e-6 else ang

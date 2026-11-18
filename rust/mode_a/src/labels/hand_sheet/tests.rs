@@ -532,3 +532,192 @@ fn a_ground_s_name_covering_a_building_inside_gives_way_to_a_free_seat_beside() 
     );
     assert_eq!(position(&road), ("above", 500.0));
 }
+
+/// A point `(u, v)` of a frame turned 30 degrees, for the turned features' tests (feature 449 T189).
+fn at30(u: f64, v: f64) -> (f64, f64) {
+    let (s, c) = (30.0_f64.to_radians().sin(), 30.0_f64.to_radians().cos());
+    (u * c - v * s, u * s + v * c)
+}
+
+/// A shape drawn as `tag` along `poly`.
+fn drawn(tag: &str, poly: Vec<(f64, f64)>) -> super::Shape {
+    super::Shape {
+        tag: tag.to_owned(),
+        poly,
+        ..super::Shape::default()
+    }
+}
+
+/// Points to a millionth.
+fn to_millionth(p: &[(f64, f64)]) -> Vec<(f64, f64)> {
+    p.iter()
+        .map(|&(x, y)| ((x * 1e6).round() / 1e6, (y * 1e6).round() / 1e6))
+        .collect()
+}
+
+/// A subject as a test reads it: its kind, its angle and its outline.
+type Seen30 = (Kind, f64, Vec<(f64, f64)>);
+
+/// Each subject of `own`: its kind, its angle and its outline, to a millionth.
+fn seats_of(own: &[&super::Shape]) -> Vec<Seen30> {
+    subjects(own, 9.0)
+        .iter()
+        .map(|x| (x.kind, (x.angle * 1e6).round() / 1e6, to_millionth(&x.poly)))
+        .collect()
+}
+
+#[test]
+fn a_turned_holder_and_a_lone_turned_block_are_named_beside_off_their_turned_edge() {
+    // feature 449 T189, research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: "a caption naming a turned
+    // feature is drawn at that feature's own angle and seated off its turned edge", "not off an upright box around it" - a turned garden
+    // holding its lantern, and a lone turned block among its small parts, were named at their angle inside but level beside, off the
+    // upright box of their parts
+    let at = at30;
+    // a garden turned 30 degrees, 80 by 50, its lantern inside it: beside it off its own turned outline, at its angle
+    let garden = drawn(
+        "rect",
+        vec![at(0.0, 0.0), at(80.0, 0.0), at(80.0, 50.0), at(0.0, 50.0)],
+    );
+    let lantern = drawn(
+        "rect",
+        vec![
+            at(30.0, 20.0),
+            at(36.0, 20.0),
+            at(36.0, 26.0),
+            at(30.0, 26.0),
+        ],
+    );
+    let framed = to_millionth(&garden.poly);
+    assert_eq!(
+        seats_of(&[&garden, &lantern]),
+        [
+            (Kind::Area, 30.0, framed.clone()),
+            (Kind::Point, 30.0, framed.clone())
+        ]
+    );
+    // the same garden level: beside it off its box, as before
+    let level_garden = drawn(
+        "rect",
+        vec![(0.0, 0.0), (80.0, 0.0), (80.0, 50.0), (0.0, 50.0)],
+    );
+    let level_lantern = drawn(
+        "rect",
+        vec![(30.0, 20.0), (36.0, 20.0), (36.0, 26.0), (30.0, 26.0)],
+    );
+    let box_ = vec![(0.0, 0.0), (80.0, 0.0), (80.0, 50.0), (0.0, 50.0)];
+    assert_eq!(
+        seats_of(&[&level_garden, &level_lantern]),
+        [
+            (Kind::Area, 0.0, box_.clone()),
+            (Kind::Point, 0.0, box_.clone())
+        ]
+    );
+    // a hall turned 30 degrees, 80 by 50 (a block), and a privy 6 by 6 standing off its corner, in the hall's frame: inside the hall at its
+    // angle, beside the box of the two read in the hall's turned frame
+    let privy = drawn(
+        "rect",
+        vec![
+            at(86.0, 54.0),
+            at(92.0, 54.0),
+            at(92.0, 60.0),
+            at(86.0, 60.0),
+        ],
+    );
+    assert_eq!(
+        seats_of(&[&garden, &privy]),
+        [
+            (Kind::Area, 30.0, framed),
+            (
+                Kind::Point,
+                30.0,
+                to_millionth(&[at(0.0, 0.0), at(92.0, 0.0), at(92.0, 60.0), at(0.0, 60.0)])
+            )
+        ]
+    );
+    // level, the same pair is named beside the box of its parts, as before
+    let level_privy = drawn(
+        "rect",
+        vec![(86.0, 54.0), (92.0, 54.0), (92.0, 60.0), (86.0, 60.0)],
+    );
+    assert_eq!(
+        seats_of(&[&level_garden, &level_privy]),
+        [
+            (Kind::Area, 0.0, box_),
+            (
+                Kind::Point,
+                0.0,
+                vec![(0.0, 0.0), (92.0, 0.0), (92.0, 60.0), (0.0, 60.0)]
+            )
+        ]
+    );
+}
+
+#[test]
+fn an_outline_whose_every_corner_is_square_has_a_direction_of_its_own() {
+    // feature 449 T189, research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a quarter-turned feature "has a
+    // level edge of its own" - a feature's edges give its direction, an L-shaped house's as a rectangle's; drawn as one outline, a turned L
+    // was named level where the same house drawn as two rects took its angle
+    let at = at30;
+    let corners = [
+        (0.0, 0.0),
+        (60.0, 0.0),
+        (60.0, 20.0),
+        (20.0, 20.0),
+        (20.0, 50.0),
+        (0.0, 50.0),
+    ];
+    let ell: Vec<(f64, f64)> = corners.iter().map(|&(u, v)| at(u, v)).collect();
+    // turned 30 degrees, with and without a closing point: at its angle inside and beside, beside off its box in its own frame
+    let l_box = to_millionth(&[at(0.0, 0.0), at(60.0, 0.0), at(60.0, 50.0), at(0.0, 50.0)]);
+    assert_eq!(
+        seats_of(&[&drawn("polygon", ell.clone())]),
+        [
+            (Kind::Area, 30.0, to_millionth(&ell)),
+            (Kind::Point, 30.0, l_box.clone())
+        ]
+    );
+    let mut closed = ell.clone();
+    closed.push(ell[0]);
+    assert_eq!(
+        seats_of(&[&drawn("polygon", closed)])[1],
+        (Kind::Point, 30.0, l_box)
+    );
+    // level, the L is named level beside its box, as before
+    assert_eq!(
+        seats_of(&[&drawn("polygon", corners.to_vec())]),
+        [
+            (Kind::Area, 0.0, corners.to_vec()),
+            (
+                Kind::Point,
+                0.0,
+                vec![(0.0, 0.0), (60.0, 0.0), (60.0, 50.0), (0.0, 50.0)]
+            )
+        ]
+    );
+    // an outline with a corner off square (a pond's bank) has no direction of its own, and a triangle has too few corners: level
+    let bank: Vec<(f64, f64)> = [
+        (0.0, 0.0),
+        (60.0, 0.0),
+        (60.0, 20.0),
+        (25.0, 22.0),
+        (20.0, 50.0),
+        (0.0, 50.0),
+    ]
+    .iter()
+    .map(|&(u, v)| at(u, v))
+    .collect();
+    let triangle = vec![at(0.0, 0.0), at(60.0, 0.0), at(0.0, 50.0)];
+    // and a disc under a skew, its drawn box no rectangle, has none either
+    let skewed = vec![(0.0, 0.0), (40.0, 0.0), (50.0, 20.0), (10.0, 20.0)];
+    for (tag, poly) in [
+        ("polygon", bank),
+        ("polygon", triangle),
+        ("ellipse", skewed),
+    ] {
+        let angles: Vec<(Kind, f64)> = seats_of(&[&drawn(tag, poly)])
+            .into_iter()
+            .map(|x| (x.0, x.1))
+            .collect();
+        assert_eq!(angles, [(Kind::Area, 0.0), (Kind::Point, 0.0)]);
+    }
+}

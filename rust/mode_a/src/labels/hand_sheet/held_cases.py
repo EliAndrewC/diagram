@@ -11,6 +11,8 @@ Feature 449 T188 added eight sheets after the refusals (a one-text caption stran
 named on its hall, beside it, or on its hall's surface, a turned rectangle drawn as a polygon, a disc in a turned group and a scatter of
 kites named level, and a garden named beside on a road) and, after the plan review's round 3, a ninth: a turned ellipse of unequal
 radii named at its angle beside one of equal radii named level, and a circle scaled unequally named at its angle beside one drawn round and re-took every answer from its fixed Python.
+Feature 449 T189 added a tenth: a turned garden holding its lantern, a lone turned hall with its privy and a turned L-shaped house, named
+beside at their angle off their turned edge, and an L-shaped kura named inside at its angle, and re-took every answer from its fixed Python.
 """
 
 import json, sys, traceback
@@ -150,6 +152,21 @@ TURNED_ELLIPSE = sheet(
     '  <g data-kind="drum" transform="rotate(30 300 250)"><circle cx="300" cy="250" r="20" fill="#9FBFD4"/><text x="300" y="250" font-size="8">drum</text></g>\n',
 )
 
+# feature 449 T189: a turned garden holding its lantern, a lone turned hall with its privy, and a turned L-shaped house drawn as one outline,
+# each too long a name to stand inside, are named beside at their angle off their turned edge (0242: "seated off its turned edge", "not
+# off an upright box around it"), where the garden and the hall were named level beside the upright box and the house level throughout;
+# a second L-shaped house holds its short name inside at its angle
+TURNED_BESIDE = sheet(
+    '  <g data-kind="garden" transform="rotate(30 90 70)"><rect x="60" y="55" width="60" height="30" fill="#BFD0A0"/><rect x="86" y="66" width="6" height="6" fill="#7A7A7A"/>'
+    '<text x="90" y="70" font-size="8">garden of the moon-viewing lantern</text></g>\n',
+    '  <g data-kind="hall" transform="rotate(30 300 70)"><rect x="275" y="50" width="50" height="40" fill="#C9A57A"/><rect x="329" y="94" width="6" height="6" fill="#C9A57A"/>'
+    '<text x="300" y="70" font-size="10">great hall of the ancestral spirits</text></g>\n',
+    '  <g data-kind="house" transform="rotate(30 90 210)"><polygon points="60,190 120,190 120,205 80,205 80,230 60,230" fill="#C9A57A"/>'
+    '<text x="90" y="210" font-size="8">house of the river warden</text></g>\n',
+    '  <g data-kind="kura" transform="rotate(30 300 210)"><polygon points="250,180 350,180 350,210 290,210 290,240 250,240 250,180" fill="#D9C28E"/>'
+    '<text x="300" y="200" font-size="7">kura</text></g>\n',
+)
+
 
 REFUSALS = [
     sheet('<g data-kind="x"><text x="5" y="5" font-size="6">lonely</text></g>\n'),
@@ -170,7 +187,7 @@ REFUSALS = [
     sheet('  <g transform="rotate(x)"><rect width="1" height="1"/></g>\n'),
     "<svg",
 ]
-out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE]]
+out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE]]
 for o in out:
     print(o.get("raises", "placed %d" % len(o.get("placed", ""))), file=sys.stderr)
 json.dump(out, open(sys.argv[1], "w"), indent=0)

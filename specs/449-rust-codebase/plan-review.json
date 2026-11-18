@@ -666,6 +666,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T189 (step 3a's last known defects, T188's claims rounds; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "507c6c4e90cf42bb055d84a81ced6e21a41591ca19ca26e81e4ca4591d189af2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
+  },
+  "### T189 Approach (checklist part A)": {
+   "sha256": "92051cd78d7254917fd47c74bcf5b512c0971c7076f64767307a51d6884cbab2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12246,6 +12258,58 @@
      "why": "The order and checks the GM's 'fix all known bugs in each step before moving on' requires."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-18",
+   "blocks": [
+    "### T189 (step 3a's last known defects, T188's claims rounds; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T189 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T189-1 turned holder and lone block seated off their turned edge",
+     "summary": "The beside seat of a turned holder, and of a lone turned block, is the box of the named parts read in a frame turned to the feature's angle (framed), at level the upright box as before; a lone block's beside box is the box of all its parts in the block's frame (CONVENTION, now on 0242's drawing page), the block's own outline priced and not taken.",
+     "class": "within",
+     "why": "Fixes a known defect found by T188's claims rounds, which is what the GM asked for before the next step ('in general we should fix all known bugs in each step before moving on to porting the next step'), in the Rust and the kept Python alike. The chosen box is seated off a turned edge at the feature's angle, as 0242 requires ('not off an upright box around it'), so the defect is fixed rather than narrowed; choosing the parts' box over the block alone is a design choice where the page is silent, recorded as a CONVENTION, and narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T189-2 an all-square-cornered outline has a direction",
+     "summary": "square_cornered passes any outline of four or more corners each square within SQUARE_TOL (closing point dropped), so a turned L-shaped house drawn as one outline is named at its angle inside and beside; a disc still needs a rectangle of unequal sides; a corner off square, a kite, a triangle stay level. CONVENTION recorded on 0242.",
+     "class": "within",
+     "why": "Fixes the known defect that the same house was named two ways by how it was drawn (two rects turned, one polygon level). Extends the fix to the case found; keeping the L level was priced and refused because it would leave the defect. Nothing asked is narrowed."
+    },
+    {
+     "id": "T189-3 a turned outline's caption runs along its first edge",
+     "summary": "Which of an L's perpendicular edges gives the caption's direction: the outline's first edge, as for a rectangle (CONVENTION on turned, recorded on 0242).",
+     "class": "within",
+     "why": "A tie-break where the research page is silent, consistent with existing rectangle behavior; no clause of the request or spec is narrowed."
+    },
+    {
+     "id": "T189-4 claims corrected in both copies",
+     "summary": "squared gains its own claims; 'an area's caption level' and 'a turned subject's angle' restated to what the code does; stale comments corrected.",
+     "class": "within",
+     "why": "Keeps the claims saying what the code does, part of a fix under FR-002's 'the research claims it carries hold'."
+    },
+    {
+     "id": "T189-5 pool reach: no caption moves",
+     "summary": "Over the six pool sheets 286 captions' subjects compared HEAD vs clone, none differing; none turned among holder, lone shape or lone block; no sheet regenerated.",
+     "class": "within",
+     "why": "A measurement, not a narrowing; re-read from reach-head.txt (9+50+63+52+46+66=286, branch totals 217/40/4/1/4/20, five square-cornered non-rectangles all level) and it matches. No exactness standard is applied: the reach is measured to know what moves, not held to bytes."
+    },
+    {
+     "id": "T189-6 nothing found left unfixed before step 3b",
+     "summary": "Every defect the claims rounds found is fixed before T152.",
+     "class": "within",
+     "why": "Is the GM's 2026-11-18 instruction itself."
+    },
+    {
+     "id": "T189-7 the checks",
+     "summary": "make static, make rust-test, make quick after the last edit; red-before/green-after per Rust case; a Python probe failing on HEAD and passing on the clone; held.json re-taken with one sheet added.",
+     "class": "within",
+     "why": "Verification that the requested fixes happen; enforcement of the request, not scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21708,6 +21772,56 @@
      "summary": "Exits: make static, rust-test, quick, pack-audit and size-table on the six pool sheets, plan review, claims round, gated make land; before T152.",
      "class": "within",
      "why": "The order and checks the GM's 'fix all known bugs in each step before moving on' requires."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T189": {
+   "section_sha256": "030390d7ae283140500f253f929c04d63b5c549d7a9c75cdb3ea1000175bba0e",
+   "reviewed": "2026-11-18",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T189-1 turned holder and lone block seated off their turned edge",
+     "summary": "The beside seat of a turned holder, and of a lone turned block, is the box of the named parts read in a frame turned to the feature's angle (framed), at level the upright box as before; a lone block's beside box is the box of all its parts in the block's frame (CONVENTION, now on 0242's drawing page), the block's own outline priced and not taken.",
+     "class": "within",
+     "why": "Fixes a known defect found by T188's claims rounds, which is what the GM asked for before the next step ('in general we should fix all known bugs in each step before moving on to porting the next step'), in the Rust and the kept Python alike. The chosen box is seated off a turned edge at the feature's angle, as 0242 requires ('not off an upright box around it'), so the defect is fixed rather than narrowed; choosing the parts' box over the block alone is a design choice where the page is silent, recorded as a CONVENTION, and narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T189-2 an all-square-cornered outline has a direction",
+     "summary": "square_cornered passes any outline of four or more corners each square within SQUARE_TOL (closing point dropped), so a turned L-shaped house drawn as one outline is named at its angle inside and beside; a disc still needs a rectangle of unequal sides; a corner off square, a kite, a triangle stay level. CONVENTION recorded on 0242.",
+     "class": "within",
+     "why": "Fixes the known defect that the same house was named two ways by how it was drawn (two rects turned, one polygon level). Extends the fix to the case found; keeping the L level was priced and refused because it would leave the defect. Nothing asked is narrowed."
+    },
+    {
+     "id": "T189-3 a turned outline's caption runs along its first edge",
+     "summary": "Which of an L's perpendicular edges gives the caption's direction: the outline's first edge, as for a rectangle (CONVENTION on turned, recorded on 0242).",
+     "class": "within",
+     "why": "A tie-break where the research page is silent, consistent with existing rectangle behavior; no clause of the request or spec is narrowed."
+    },
+    {
+     "id": "T189-4 claims corrected in both copies",
+     "summary": "squared gains its own claims; 'an area's caption level' and 'a turned subject's angle' restated to what the code does; stale comments corrected.",
+     "class": "within",
+     "why": "Keeps the claims saying what the code does, part of a fix under FR-002's 'the research claims it carries hold'."
+    },
+    {
+     "id": "T189-5 pool reach: no caption moves",
+     "summary": "Over the six pool sheets 286 captions' subjects compared HEAD vs clone, none differing; none turned among holder, lone shape or lone block; no sheet regenerated.",
+     "class": "within",
+     "why": "A measurement, not a narrowing; re-read from reach-head.txt (9+50+63+52+46+66=286, branch totals 217/40/4/1/4/20, five square-cornered non-rectangles all level) and it matches. No exactness standard is applied: the reach is measured to know what moves, not held to bytes."
+    },
+    {
+     "id": "T189-6 nothing found left unfixed before step 3b",
+     "summary": "Every defect the claims rounds found is fixed before T152.",
+     "class": "within",
+     "why": "Is the GM's 2026-11-18 instruction itself."
+    },
+    {
+     "id": "T189-7 the checks",
+     "summary": "make static, make rust-test, make quick after the last edit; red-before/green-after per Rust case; a Python probe failing on HEAD and passing on the clone; held.json re-taken with one sheet added.",
+     "class": "within",
+     "why": "Verification that the requested fixes happen; enforcement of the request, not scope."
     }
    ],
    "verdict": "CLEAR"
