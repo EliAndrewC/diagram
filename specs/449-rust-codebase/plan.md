@@ -712,34 +712,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T198 (the GM, 2026-11-19: "if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible")
-
-- **Approach**: two measurements, kept apart. (1) A derivation of an efficient placer written from 0242 and 0330 alone, blind to the code and its counts (`derivations/T198-placer.md`, its scripts beside it in `derivations/T198-placer-scripts/`): 97,983 counted operations over the six pool sheets, about 343 a caption, judged SOUND by the `work-budget` agent on its second round (the first found the sweep's chunk UNDERIVED; the chunk is now one grid cell, eight schedules measured within 1.14x). (2) Counters on the Rust placer behind a `counters` feature of `rust/mode_a` (compiled out by default, placement unchanged: the four placed sheets byte-identical with and without), run on the four sheets the Rust places: 100x to 4,400x the budget per sheet, 704x over the four, and 104x to 825x leaving out the vertex-edge pairs inside each shape distance (measured 2026-11-19 (`l7r-mode-a caption-counts` from the counting build, the totals summed by kind less the `held` gauge, against the derivation's per-sheet Totals)). Wall time is 2.8 s for the four against the kept Python's 25-26 s (measured 2026-11-19 (best of 3, release build)). Far over by the derivation's own rule (more than 2x), so the placer is rebuilt from the derivation as phase tasks with `phase_source_hooks` on, the GM told (T198's text).
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| counters on the placer | n/a (measurement) | gated `count` statements, `counted.rs` | none | none |
-
-### T198 Approach (checklist part A)
-
-1. **The goal, in the world.** The GM knows whether the step-3a placer does orders of magnitude more work than its job needs, and it is rebuilt if it does.
-2. **The constraints.** The GM's 2026-10-30 and 2026-11-19 words; feature 443/444's derivation form and rubric; 0242 and 0330 as the placer's contract.
-3. **Where each comes from.** G: request.md, 2026-11-19; R: 0242 and 0330's drawing pages; O: the two measurements above.
-4. **Do they describe the world here?** The derivation reads the six sheets' own captions and shapes (286 captions, measured 2026-11-19 (its inventory script over the SVGs)); the counts are the Rust placer's own on the same sheets.
-5. **The order.** After T195, before T199's landing and T152.
-6. **The exits.** Green: both measurements recorded, the verdict to the GM. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** Yes, and it is the finding: the Rust rebuilds its obstacle indexes on every placement, re-measures every ink part for every leader-ring candidate, and its repair pass on Hayakawa makes 307 placements for one kept improvement in 71 (measured 2026-11-19 (counters and callgrind)).
-8. **The budget.** One landing (the counters and the derivation); the rebuild is its own phase tasks.
-9. **Done, measured.** The counts table and the SOUND verdict, recorded here.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Nothing a reader of the map sees: the placement is unchanged; the counters compile out.
-
-**Found and left?** `dist()` calls a Python-exact `hypot` whose fused multiply-adds run in software without hardware FMA: about half the placer's instructions (measured 2026-11-19 (callgrind)). Not a defect (no output is wrong) and moot under the rebuild.
-
-**Performance work?** no - a measurement; the rebuild that follows is.
-
-
+<!-- plan-archive: T198 to T198 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 ### T199 (the GM, 2026-11-19: steps 1, 2 and 3a were ported, not rebuilt, and carried the Python's mistakes)
 
 - **Approach**: the GM's 2026-10-30 rule (specs/444-work-budget-program/request.md: "we are not trying to re-implement the same algorithms") is written into the three places a later plan reads: `engine-plan.md` gains the section `## Rebuilt from a derivation, not ported` (an algorithm rebuilt from a SOUND derivation as phase tasks with `old-code:` naming the Python and any Rust port; plumbing ported only after a read for a search or scan growing faster than its input; steps 1 and 2 kept on their merits; lockstep tests deleted with their Python); `spec.md`'s phase-4 paragraph gains the same rule in one sentence; this section records why. The finding behind it: no line of `engine-plan.md`, `spec.md` or `plan.md` cited the 10-30 rule or `phase_source_hooks` before this task (observed 2026-11-19, method: grep of the three files for "re-implement", "derivation" and "phase_source"), so the guard never applied to steps 1-3a.
