@@ -20,9 +20,9 @@ const FANOUT: &str = "dev/perf-log";
 static KNOB: LazyLock<Regex> =
     LazyLock::new(|| py_re(r#"Knob\(\s*"([a-z0-9_]+)"\s*,\s*\[([^\]]*)\]"#));
 static QUOTED: LazyLock<Regex> = LazyLock::new(|| py_re(r#""([a-z0-9_]+)""#));
-// a backticked dotted name or path splits
+// a backticked dotted name, `::` path or path splits
 static IDENT: LazyLock<Regex> =
-    LazyLock::new(|| py_re(r"`([A-Za-z_][\w./]*)`|\b([A-Za-z]\w*_\w*|[A-Z][a-z0-9]+[A-Z]\w*)\b"));
+    LazyLock::new(|| py_re(r"`([A-Za-z_][\w./:]*)`|\b([A-Za-z]\w*_\w*|[A-Z][a-z0-9]+[A-Z]\w*)\b"));
 static DOCUMENT: LazyLock<Regex> = LazyLock::new(|| py_re(r"\.(txt|md|json|html)$"));
 static CRATE_PATH: LazyLock<Regex> = LazyLock::new(|| py_re(r"\bcrate::([a-z_][a-z0-9_]*)::"));
 
@@ -627,7 +627,8 @@ impl<'a> Code<'a> {
     /// unencumbered by the bad implementation chopices of our previous implementation"): a derivation names no module, function,
     /// method, class or module- or class-level name of today's code - 110 of them had carried today's design into 20 of the 23
     /// derivations - other than a knob's name or form and a manifest key. A figure only today's code holds is a knob the derivation
-    /// names as one, in its own words.
+    /// names as one, in its own words. A name counts only when shaped as code (`code_shaped`, T200): a lone lowercase word is
+    /// English first, and refusing it refused derivations written in plain words.
     pub(super) fn code_name_problems(&mut self, text: &str) -> R<Vec<String>> {
         let (defined_names, allowed) = self.code_names()?;
         let mut names = BTreeSet::new();
@@ -637,11 +638,7 @@ impl<'a> Code<'a> {
             if matches(&DOCUMENT, r) {
                 continue;
             }
-            names.extend(
-                r.split(['.', '/'])
-                    .filter(|w| !w.is_empty())
-                    .map(str::to_owned),
-            );
+            names.extend(code_shaped(self.root, r));
         }
         let found: Vec<&String> = names
             .iter()
@@ -658,6 +655,29 @@ impl<'a> Code<'a> {
             if found.len() > 12 { " ..." } else { "" }
         )])
     }
+}
+
+/// The names of a matched reference a derivation could only have learned from the code (feature 449 T200): every name of a `.`,
+/// `::` or `/` path into it (`Shape.area`, `crate::labels::placer`, `labels/placer`); of a lone name or a path into the repository
+/// (`research/questions/`, its first directory one of the tree's, `l7r/` aside), only the names shaped as code - an underscore or a
+/// capital (`leader_score`, `ObstacleIndex`, `Placer`). A lowercase word is English before it is code: T198's derivation was refused
+/// for `write` (a counter's name) and `research/`, which `l7r/` happens to define too.
+fn code_shaped(root: &Path, r: &str) -> Vec<String> {
+    let parts: Vec<&str> = r
+        .split("::")
+        .flat_map(|p| p.split(['.', '/']))
+        .filter(|w| !w.is_empty())
+        .collect();
+    let repository = r.contains('/')
+        && parts
+            .first()
+            .is_some_and(|top| *top != "l7r" && root.join(top).is_dir());
+    let into_code = parts.len() > 1 && !repository;
+    parts
+        .into_iter()
+        .filter(|w| into_code || w.contains('_') || w.chars().any(char::is_uppercase))
+        .map(str::to_owned)
+        .collect()
 }
 
 /// Every key of a manifest's mappings, nested ones too, a list's first fifty items read.

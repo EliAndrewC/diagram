@@ -283,10 +283,12 @@ fn a_derivation_holding_todays_code_is_refused() {
     assert!(names.stderr.contains(
         "today's code's names (5): AREA_UNIT, edge_count, fill_out, labels, placer - write"
     ),);
-    let many = refused("`fill_out` `area` `Shape` `helper` `make` `deep_fn` `mixin_method` `other_mixin` `stage_top` `stage_water` `Placer` `run` `geom` `util`\n");
+    let many = refused("`fill_out` `AREA_UNIT` `Shape` `COUNTER` `broken_seed` `deep_fn` `mixin_method` `other_mixin` `stage_top` `stage_water` `Placer` `cyc_a` `cyc_b` edge_count\n");
     assert!(
         many.stderr.contains("today's code's names (14): ")
-            && many.stderr.contains("run, stage_top ... - write"),
+            && many
+                .stderr
+                .contains("mixin_method, other_mixin ... - write"),
     );
     assert_eq!(refused("the `grid_size` knob, big_one, manifest_key, nested_key, listed_key, hem, stray_key, `placer.py.txt`\n").code, 0);
     put(&d, "dev/work-budget.json", b"{\"stages\": [\"fill_out\"]}");
@@ -311,6 +313,51 @@ fn a_derivation_holding_todays_code_is_refused() {
     put(&d, "l7r/z.py", b"\xff");
     // a source that is no UTF-8 is Python's UnicodeDecodeError
     assert_eq!(refused("").code, 1,);
+}
+
+/// Feature 449 T200: a derivation in plain words passes though the code happens to define the same words - T198's `research/` and
+/// `write` (a counter's name) were refused - while a name only the code could have taught it, one with an underscore or a
+/// capital or a `.`, `::` or `/` path into the code, is still refused.
+#[test]
+fn a_derivation_in_plain_words_passes_and_one_naming_the_code_is_refused() {
+    let d = scratch("wbb-plain-words");
+    tree(&d);
+    put(
+        &d,
+        "l7r/diagram/record.py",
+        "research = 1\nquestions = 2\ndef write(page): pass\ndef leader_score(): pass\nclass ObstacleIndex:\n    pass\n"
+            .as_bytes(),
+    );
+    put(&d, "research/questions/q.html", b"");
+    let words = budget(
+        &d,
+        &(BASE.to_owned()
+            + "(`research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html`)\n\
+               - `write`: one caption field written: center x, center y, anchor, angle, lines, leader.\n\
+               Each assumption is labeled as in `research/` and names the rule it reads; the pages under `research/questions/` \
+               hold the research, and the placer may write each caption once, `area` and `run` being plain words too.\n"),
+    );
+    assert_eq!(words.code, 0, "{words:?}");
+    let named = budget(
+        &d,
+        &(BASE.to_owned()
+            + "it ranks by `leader_score` over an ObstacleIndex, then `Shape.area`, `crate::labels::placer` and `Placer`\n"),
+    );
+    assert_eq!(named.code, 1);
+    assert!(
+        named.stderr.contains(
+            "today's code's names (7): ObstacleIndex, Placer, Shape, area, labels, leader_score, placer - write"
+        ),
+    );
+    let bare = budget(&d, &(BASE.to_owned() + "it ranks by leader_score\n"));
+    assert!(bare
+        .stderr
+        .contains("today's code's names (1): leader_score - write"));
+    // a path into the code is not a repository path: every one of its names counts
+    let module = budget(&d, &(BASE.to_owned() + "see `diagram/record`\n"));
+    assert!(module
+        .stderr
+        .contains("today's code's names (2): diagram, record - write"));
 }
 
 #[test]
