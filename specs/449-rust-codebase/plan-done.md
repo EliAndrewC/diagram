@@ -5146,3 +5146,33 @@ censuses empty (work breakdown 8, FR-010).
 **Performance work?** no
 
 
+<!-- plan-archive: archived 2026-11-19 -->
+### T202 (T198 found the step-3a placer far over its SOUND derived budget; the GM 2026-11-19: "if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible")
+
+- **Approach**: today's Rust placer does 704x the per-pool-sheet budget `placer` that T201 set from the T198 derivation, over the four hand sheets it places, each sheet past twice its figure (measured 2026-11-19 (`make budget-sheets PHASE=placer` on the totals of `l7r-mode-a caption-counts` from mode_a's counting build)). So the hand sheets' caption placer is rebuilt from `derivations/T198-placer.md`, judged SOUND and budgeted per pool sheet (T201), as a phase task: `make task-start` arms `phase_source_hooks` over the `old-code:` globs (the Python labels package and the Rust placer, obstacle index, geometry, layout, standard weights, the hand-sheet module root, its seat search and its tests), so the rebuild is written from the derivation and 0242/0330's drawing pages alone. The new module lives under `rust/mode_a/src/` beside the old, takes what the sheet reader gives (`hand_sheet/read.rs` and `classify.rs`, which read the drawn shapes and stay readable, being the input, not the search), and returns what `crate::labels::hand_sheet::placed` returns today, so `rust/mode_a/src/sheet/hand.rs` switches one import. `render`, which lives in the old module root, stays imported from there while the new placer is written and checked; only at the deletion step, after the new placer is written and the four hand sheets pass, is it moved out through one `make phase-read` of that file with its reason logged. When the four hand sheets pass, the old Rust placer and its lockstep tests are deleted in the same landing; the Python labels package stays for `compound.py`'s two generated sheets until step 3b rebuilds them.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the rebuilt placer | its own tests, each a rule of 0242 or 0330 | the new module | the four hand sheets (captions may move) | none |
+
+<!-- plan-archive: archived 2026-11-19 -->
+### T202 Approach (checklist part A)
+
+1. **The goal, in the world.** The four hand sheets are captioned as 0242 and 0330 require, by a placer doing the work its job needs and no more: within twice each sheet's budget.
+2. **The constraints.** 0242 and 0330's drawing pages (a caption on its feature where it fits, else beside it at the ranked places stepping outward; never covering a building while any other choice exists; a leader past twice the gap, ending where 0330 says; wraps and angles as stated); FR-002 as restated by T180 (no byte standard: the sheets pass their checks and hold their claims); the budget `placer` set by T201; constitution XIV.
+3. **Where each comes from.** G: the GM, 2026-10-30 and 2026-11-19 (request.md); R: 0242 and 0330's drawing pages; O: T198's counts and the SOUND derivation.
+4. **Do they describe the world here?** Yes: the derivation sized itself on the six pool sheets' own captions and shapes (286 captions, measured 2026-11-19 (its inventory script over the SVGs)).
+5. **The order.** After T201, before T152 (step 3b), which rebuilds the compound sheets' placement with the model.
+6. **The exits.** Green: each hand sheet passes `make pack-audit` and the census, its captions hold 0242 and 0330's rules (the claims round and a placement check per rule), `make budget-sheets` reads every hand sheet within twice its budget, the old placer and its lockstep tests deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The finding that files the task: today's placer rebuilds its indexes per placement and re-measures every ink part per candidate (T198).
+8. **The budget.** One landing; if the four sheets cannot all pass in one, the landing carries the module and its tests, with the switch in `sheet/hand.rs` the second.
+9. **Done, measured.** `make budget-sheets PHASE=placer` on the counting build's `caption-counts`, each hand sheet within twice its figure; the four sheets' checks green.
+10. **Before moving a constant.** The derivation's GUESS figures (glyph width, the sweep's reach, the 1.5g start) are knobs named in the module with the derivation's reason beside each.
+11. **Before fitting things into room.** n/a: a caption with no clean seat in reach takes the seat that covers least, as the derivation says, and is named in the run's report.
+12. **Before any fix.** A caption that moves and still holds every rule is not a defect (XIV); a caption that breaks a rule, or a sheet a check refuses, is fixed in the new placer before landing.
+
+**Found and left?** none yet
+
+**Performance work?** yes - the rebuild exists to bring the placer within its derived budget; its answers are the derivation itself (`derivations/T198-placer.md`, judged SOUND twice) and the budget recorded by T201.
+
+
