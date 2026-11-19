@@ -51,6 +51,8 @@ const AREAS: [Area; 4] = [
             "scripts/*.txt",
             "tests/hooks/*.sh",
             "tests/hooks/*.py",
+            // the suites drive make targets, so a Makefile-only edit owes the hooks run (feature 449 T186)
+            "Makefile",
         ],
         raw: false,
         skip_only: false,

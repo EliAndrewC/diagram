@@ -3,6 +3,19 @@
 # Comments go above a target as `#` lines. A recipe's `: "..."` string is shell, so a backtick or $$( in it RUNS.
 # A .PHONY name with no rule still exits 0: retire a target's .PHONY entry with its rule.
 
+# FREE TEXT REACHES A RECIPE THROUGH THE ENVIRONMENT, NEVER THROUGH A QUOTED SHELL WORD (feature 449 T186): `--units "$(UNITS)"`
+# put a claim key holding `well` in backticks inside a double-quoted shell word, so the shell ran `well` and the bundle refused.
+# Each name below is made a simple variable holding its text as given (make no longer expands a $ in it) and exported, and a
+# recipe reads it as "$$NAME", which the shell expands once and never reads again. A list (URLS, MATCH, ...) is split by the shell
+# with globbing off (`set -f`, then an unquoted $$NAME or a loop over it), one argument a word as before, so a `?` or `*` in a URL
+# stays itself. A recipe naming one as $(NAME) outside an $(if ...) test fails tests/hooks/test-make-only-hooks.sh section 6; a
+# path, a number, an id or an enum stays $(NAME) (the plan's T186 list).
+FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD NOTE WHY WORDS TITLE MSG FINDING OLD NEW RESULT \
+	FIXED_BY OUTCOME SOUGHT SOURCE STATUS WRITE LINE Q Q_JA Q_ZH Q_KO QUESTION TERMS K MARK URL REVIEW APPROVED REREAD \
+	ARBITER_OK PREFLIGHT_OK REF_WHY SET_DOWN_OK HOLD_OK MISSING_OK COVER_OK NOT_OWED_OK PLAN_REVIEW_OK KEY_CAP_OK WRITE_CAP_OK \
+	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES
+$(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
+
 .PHONY: modal-bundle modal-prepass done docs static format test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep perf-gate hooks-test explain citations fragment-move \
 	 switches _switch \
 	 map cohort cohort-landing hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
@@ -26,16 +39,16 @@ work-budget-bundle: ## [performance] the work-budget agent's bundle: MODE=budget
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" work-budget-bundle "$(MODE)" "$(PHASE)" $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(BUDGET),--budget "$(BUDGET)",)
 
 budget-set:     ## [performance] a stage's FIRST work budget, only from a SOUND work-budget MODE BUDGET verdict; refused on a stage already budgeted; the budget is per thing x the derivation's own items at each size (features 443, 444)   PHASE=<stage> PER_THING=<ops> EXPONENT=<e> ITEMS_AT_20=<n> ITEMS_AT_40=<n> ITEMS_AT_80=<n> DERIVATION=<file> VERDICT=<verdict file> | ARBITER=ask:<id> SPREAD="<low>-<high> at <households>" (the round arbiter's accept, feature 444 FR-013) [REASON="<why above today's count at 40>"] [GROWTH_REASON="<why its n is bounded>": past rubric S6's 1.15 from 20 to 80] [LOWER=1: re-pin a budgeted stage, no higher at any size] [RAISE=1: raise a budgeted stage on a SOUND re-derivation naming the work its first missed (444 FR-022) - past twice its first at 40 with SECOND=<an independent MODE BUDGET's SOUND>, never past 10 times it]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change set "$(PHASE)" "$(PER_THING)" "$(EXPONENT)" "$(DERIVATION)" "$(VERDICT)" $(if $(ARBITER),--arbiter "$(ARBITER)",) $(if $(SPREAD),--spread "$(SPREAD)",) $(if $(ITEMS_AT_10),--items-at-10 "$(ITEMS_AT_10)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(REASON),--reason "$(REASON)",) $(if $(GROWTH_REASON),--growth-reason "$(GROWTH_REASON)",) $(if $(LOWER),--lower,) $(if $(RAISE),--raise,) $(if $(SECOND),--second "$(SECOND)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change set "$(PHASE)" "$(PER_THING)" "$(EXPONENT)" "$(DERIVATION)" "$(VERDICT)" $(if $(ARBITER),--arbiter "$(ARBITER)",) $(if $(SPREAD),--spread "$$SPREAD",) $(if $(ITEMS_AT_10),--items-at-10 "$(ITEMS_AT_10)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(REASON),--reason "$$REASON",) $(if $(GROWTH_REASON),--growth-reason "$$GROWTH_REASON",) $(if $(LOWER),--lower,) $(if $(RAISE),--raise,) $(if $(SECOND),--second "$(SECOND)",)
 
 budget-change:  ## [performance] change a budgeted stage's figure with the GM's own words, checked against the session by budget-change-hooks.sh and logged in dev/work-budget-changes.jsonl (feature 443)   PHASE=<stage> TO=<ops per thing> [EXPONENT=<e>] [DERIVATION=<file> VERDICT=<SOUND verdict>: re-point it, 444 FR-015] WORDS="<the GM's words>"
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change change "$(PHASE)" "$(TO)" $(if $(EXPONENT),--exponent "$(EXPONENT)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(VERDICT),--verdict "$(VERDICT)",) --words "$(WORDS)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change change "$(PHASE)" "$(TO)" $(if $(EXPONENT),--exponent "$(EXPONENT)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(VERDICT),--verdict "$(VERDICT)",) --words "$$WORDS"
 
 budget-accept:  ## [performance] accept a rebuilt phase: its MODE AUDIT verdict WITHIN and its counted operations at 40 and 80 households in the newest work-budget run at most its budget (LEEWAY: at most twice it, 444 FR-022), recorded as the figures the push's ratchet holds (feature 444 FR-005)   PHASE=<stage> AUDIT=<MODE AUDIT verdict file> [ARBITER=<the round arbiter's accept, when the audit's last round was not WITHIN>]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change accept "$(PHASE)" "$(AUDIT)" $(if $(ARBITER),--arbiter "$(ARBITER)",)
 
 budget-program: ## [performance] set the whole roll's work budget with the GM's own words, checked and logged as budget-change is (feature 443; 444 FR-002)   OPS_AT_40=<ops> EXPONENT=<e> WORDS="<the GM's words>"
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change program "$(OPS_AT_40)" "$(EXPONENT)" --words "$(WORDS)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change program "$(OPS_AT_40)" "$(EXPONENT)" --words "$$WORDS"
 
 counters-inert: ## [performance] the work counters change no map: every Rust test passes in the counting build as in the default one, its counters compiled out (features 443, 444; the GM 2026-11-07: "We should probably run with counters compiled out by default")   [FRESH=1 REASON="..."]
 	$(FRESH_ESCAPE)
@@ -46,7 +59,7 @@ counters-inert: ## [performance] the work counters change no map: every Rust tes
 # should be doing"): a crate's test, cover, lint and dead run again only when its sources, the crates it builds from, or what its tests
 # declare they read moved (`rust/gate/crates/rustc/src/rustc.rs`). Every crate fresh is an escape that states its reason and is recorded
 # (`FRESH=1 REASON="..."`), or `make done FULL=1`'s own logged path; `INCREMENTAL=0` and `FULL` on these targets once turned reuse off silently.
-FRESH_ESCAPE = $(if $(FRESH),$(LOGESCAPE) FRESH "$(REASON)",@:)
+FRESH_ESCAPE = $(if $(FRESH),$(LOGESCAPE) FRESH "$$REASON",@:)
 static rust-test counters-inert: export L7R_RUST_FRESH := $(if $(FRESH),1,$(L7R_RUST_FRESH))
 done: export L7R_RUST_FRESH := $(if $(FULL),1,)
 
@@ -56,9 +69,9 @@ STATE = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state writ
 # A run too fast to have worked is not stamped green (`l7r-gate check run-plausible`): make runs $(MAKE)
 # sub-invocations even under -n, so a dry run once wrote a green record the push honored.
 done:            ## [tests] tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded   FULL=1 INCREMENTAL=0
-	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$(ARBITER_OK)",@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter gate-held || exit 1)
+	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$$ARBITER_OK",@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter gate-held || exit 1)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lock acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
-	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$(PREFLIGHT_OK)",@:)
+	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$$PREFLIGHT_OK",@:)
 	@$(if $(PREFLIGHT_OK),:,if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done >/dev/null 2>&1; then :; else tp=$$(date +%s); "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true; fi)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done; then \
@@ -68,7 +81,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; $(COMMIT_RUN_RECORD) already-verified; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
-	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
+	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit || exit 1;,) \
 	T0=$$(date +%s); fail=""; \
 	rm -f "$$(git rev-parse --absolute-git-dir)/roll-cache-class"; \
 	G=$$(git rev-parse --absolute-git-dir); $(RUNSTATS) start "$$G" 2>/dev/null || true; export L7R_GATE_FAILURES="$$G/gate-failures"; \
@@ -81,7 +94,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	par=$(if $(filter rust-only,$(PORT)),yes,); \
 	if [ -n "$$par" ]; then ( statics; printf '%s' "$$fail" > "$$G/static-fail" ) > "$$G/static.log" 2>&1 & spid=$$!; else statics; fi; \
 	if [ -z "$$par" ] && [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
-	tr=$$(date +%s); $(if $(filter rust-only,$(PORT)),printf '\nreference step SKIPPED - the port switch stands at rust-only (feature 444 FR-023): make done rolls no map\n';,$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };)) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
+	tr=$$(date +%s); $(if $(filter rust-only,$(PORT)),printf '\nreference step SKIPPED - the port switch stands at rust-only (feature 444 FR-023): make done rolls no map\n';,$(if $(REF_OK),$(LOGESCAPE) REF_OK "$$REF_WHY"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $$REF_WHY"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };)) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
 	for phase in hooks-test counters-inert test-full $(if $(FULL),perf-gate,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && "$$root/scripts/gates/l7r-gate.sh" stamp --fresh hooks; then \
@@ -120,20 +133,20 @@ switches:       ## [project] the iteration switches: claims and port, with reaso
 	@$(SWITCH) show
 claims-report-only: ## [project] CLAIMS AT REPORT - a claims finding refuses no landing and files no task; it is checked and listed by make claims-report (feature 445; the shipped state)   REASON="..."
 ##  REASON=<text>  why claims go to report - recorded with who and when
-	@$(MAKE) --no-print-directory _switch AXIS=claims STATE=report MSG="claims at report" REASON="$(REASON)"
+	@$(MAKE) --no-print-directory _switch AXIS=claims STATE=report MSG="claims at report"
 claims-clean:   ## [project] CLAIMS CLEAN - a landing refuses while make claims-report lists any open finding, so a finding is fixed where it is noticed (feature 445)   REASON="..."
 ##  REASON=<text>  why claims go clean - recorded with who and when
-	@$(MAKE) --no-print-directory _switch AXIS=claims STATE=clean MSG="claims clean" REASON="$(REASON)"
+	@$(MAKE) --no-print-directory _switch AXIS=claims STATE=clean MSG="claims clean"
 port-integrated: ## [project] PORT INTEGRATED - make done rolls the map-rolling tests, the reference map and the floors, and make land the landing cohort, as before feature 444 amendment 8; thrown when the last stage is Rust (FR-023)   REASON="..."
 ##  REASON=<text>  why the port goes integrated - recorded with who and when
-	@$(MAKE) --no-print-directory _switch AXIS=port STATE=integrated MSG="port integrated" REASON="$(REASON)"
+	@$(MAKE) --no-print-directory _switch AXIS=port STATE=integrated MSG="port integrated"
 port-rust-only: ## [project] PORT RUST-ONLY - the default while any stage is Python: no landing waits on the Python stages after the Rust front, make done rolls no map, make land lands on the Rust stage gate alone (feature 444 FR-023)   REASON="..."
 ##  REASON=<text>  why the port goes rust-only - recorded with who and when
-	@$(MAKE) --no-print-directory _switch AXIS=port STATE=rust-only MSG="port rust-only" REASON="$(REASON)"
+	@$(MAKE) --no-print-directory _switch AXIS=port STATE=rust-only MSG="port rust-only"
 _switch:
-	@[ -n "$(REASON)" ] || { printf '\n\033[1mREFUSED: a reason is required\033[0m - a reason someone will READ is a decision you have to defend.\n  make <target> REASON="..."\n\n'; exit 1; }
-	@$(SWITCH) set $(AXIS) $(STATE) --why "$(REASON)"
-	@git add dev/switches.json && git commit -q -m "chore: $(MSG) - $(REASON)" && printf '\ncommitted: %s - %s\n' "$(MSG)" "$(REASON)"
+	@[ -n "$$REASON" ] || { printf '\n\033[1mREFUSED: a reason is required\033[0m - a reason someone will READ is a decision you have to defend.\n  make <target> REASON="..."\n\n'; exit 1; }
+	@$(SWITCH) set $(AXIS) $(STATE) --why "$$REASON"
+	@git add dev/switches.json && git commit -q -m "chore: $$MSG - $$REASON" && printf '\ncommitted: %s - %s\n' "$$MSG" "$$REASON"
 
 # ---- expensive: they generate ----
 verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
@@ -254,8 +267,8 @@ sheet-render:   ## [maps] render a hand-drawn Mode A sheet with its captions pla
 
 page-lit:       ## [diagnostics] light ONE class on a map's page and report which classes' pixels change   MAP=<page.html> CLASS="<key>" [VECTOR=1] [OUT=lit.png]
 ##  the reviewer's page measurement (feature 231): raster mode at the opening view, VECTOR=1 past the switch (Rust since 449 T150, `l7r-mode-a`, the browser `l7r-browser lit`)
-	@if [ -z "$(MAP)" ] || [ -z "$(CLASS)" ]; then printf 'make page-lit: MAP=<page.html> CLASS="<class key>" are required - e.g. make page-lit MAP=pool/hamlets/kuwabata/kuwabata.html CLASS="mulberry dike"\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a page-lit "$(MAP)" "$(CLASS)" $(if $(VECTOR),--vector,) $(if $(OUT),--out "$(OUT)",)
+	@if [ -z "$(MAP)" ] || [ -z "$$CLASS" ]; then printf 'make page-lit: MAP=<page.html> CLASS="<class key>" are required - e.g. make page-lit MAP=pool/hamlets/kuwabata/kuwabata.html CLASS="mulberry dike"\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a page-lit "$(MAP)" "$$CLASS" $(if $(VECTOR),--vector,) $(if $(OUT),--out "$(OUT)",)
 
 picture-diff:   ## [diagnostics] two renders compared: the differing share, the max delta, the bbox, and whose ink   A=<png|svg> B=<png|svg> [PAGE=<the new .html>]
 ##  the reviewer's picture measurement (feature 231); an SVG argument is rendered by the engine's own rasterizer,
@@ -287,7 +300,7 @@ money-conversions: ## [docs] copy gm-assistant's money conversion table into res
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record money-conversions $(if $(CHECK),--check,)
 
 money-candidates: ## [docs] every amount of money in the record not yet marked for the conversion tooltip, those within 25 years of a built era first; each is marked or passed over with its reason in specs/413-money-tooltip-on-the-record/backfill.md (feature 413)   CHECK=1: exit 1 while one is neither
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record money-candidates $(if $(CHECK),--check,) $(if $(ALL),--all,) $(if $(Q),--stem $(Q),) $(if $(CONTEXT),--context,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record money-candidates $(if $(CHECK),--check,) $(if $(ALL),--all,) $(if $(Q),--stem "$$Q",) $(if $(CONTEXT),--context,)
 
 source-tags-contract: ## [docs] derive research/source-tags.json's values and explanations into the source-applicability agent's contract (feature 305) - run after editing the vocabulary; a test fails while the block is stale   CHECK=1: write nothing, exit 1 while stale
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record source-tags-contract $(if $(CHECK),--check,)
@@ -434,7 +447,7 @@ fix-yield:      ## [project] did each tooling fix save what it was meant to: its
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure fix-yield "$(F)" --root "$$(git rev-parse --show-toplevel)"
 
 tool-yield:     ## [project] every tool measured: how often it runs, how often it changed something, its misfires and what the record cannot see yet (feature 406)   [KIND=guard|target|check|step|review]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure tool-yield --root "$$(git rev-parse --show-toplevel)" $(if $(KIND),--kind $(KIND))
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure tool-yield --root "$$(git rev-parse --show-toplevel)" $(if $(KIND),--kind "$$KIND")
 
 where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115)   F=<feature> [SINCE=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
@@ -443,13 +456,13 @@ where-time:     ## [project] where a feature's time went, by task: the time by b
 set-down: export SET_DOWN_WHY = $(WHY)
 set-down:       ## [project] set a feature's work down, so a turn may end with tasks open (feature 385 T70); refused while an open task's part B has no arbiter ruling since (405), or while the 7-day usage is under the weekly soft cap (a goal's, where one is still armed) unless the arbiter ruled a set-down ask (GM 2026-10-23, 10-24): F=385 WHY="awaiting the GM on the cohort trend" [SET_DOWN_OK="<reason>"]
 	@if [ -z "$(F)" ]; then printf 'make set-down: F=<feature> is required\n' >&2; exit 2; fi
-	$(if $(SET_DOWN_OK),$(LOGESCAPE) SET_DOWN_OK "$(SET_DOWN_OK)",@:)
-	@SET_DOWN_OK="$(SET_DOWN_OK)" "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" set-down "$(F)"
+	$(if $(SET_DOWN_OK),$(LOGESCAPE) SET_DOWN_OK "$$SET_DOWN_OK",@:)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" set-down "$(F)"
 
 found-list:     ## [project] a feature's open findings (found.jsonl), numbered - what is not yet filed as a task or settled (405 T29)   F=405
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record found list --feature "$$(ls -d specs/$(F)-* | head -1)"
 found-close:    ## [project] close found.jsonl rows: FILED as a task, or SETTLED with a reason (405 T29)   F=405 ROWS=3,7 TASK=T61 | WHY="..."
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record found close --feature "$$(ls -d specs/$(F)-* | head -1)" --rows "$(ROWS)" $(if $(TASK),--task "$(TASK)",) $(if $(WHY),--why "$(WHY)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record found close --feature "$$(ls -d specs/$(F)-* | head -1)" --rows "$(ROWS)" $(if $(TASK),--task "$(TASK)",) $(if $(WHY),--why "$$WHY",)
 
 task-add: export TASK_TITLE = $(TITLE)
 task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical] [PERF=1: a performance task, docs/performance-checklist.md's questions appended]
@@ -481,26 +494,26 @@ plan-archive:   ## [project] move a plan's finished sections (every task ticked,
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan archive "$(F)"
 
 check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>" [AGENT=<id> a check you stopped yourself, closed though not silent]
-	@if [ -z "$(SUBJECT)" ] || [ -z "$(REASON)" ]; then printf 'make check-closed: SUBJECT=<q:NNNN or modal:<registry>/<slug>> and REASON="<why>" are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh checks-close "$(SUBJECT)" "$(REASON)" $(if $(AGENT),"$(AGENT)",)
+	@if [ -z "$$SUBJECT" ] || [ -z "$$REASON" ]; then printf 'make check-closed: SUBJECT=<q:NNNN or modal:<registry>/<slug>> and REASON="<why>" are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh checks-close "$$SUBJECT" "$$REASON" $(if $(AGENT),"$(AGENT)",)
 
 arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
 	@if [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named>, or BATCH=1 for every owed round trigger at once\n' >&2; exit 2; fi
-	$(if $(MISSING_OK),$(LOGESCAPE) MISSING_OK "$(MISSING_OK)",@:)
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter bundle $(if $(BATCH),--batch $(if $(TRIGGERS),--triggers "$(TRIGGERS)",),"$(TRIGGER)") --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$(MISSING_OK)",)
+	$(if $(MISSING_OK),$(LOGESCAPE) MISSING_OK "$$MISSING_OK",@:)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter bundle $(if $(BATCH),--batch $(if $(TRIGGERS),--triggers "$(TRIGGERS)",),"$(TRIGGER)") --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$$MISSING_OK",)
 
 arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter  (or BATCH=1 FILE=<json> for a batch)
 	@if [ -z "$(FILE)" ] || { [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; }; then printf 'make arbiter-ruled: FILE= and TRIGGER= (or BATCH=1) are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter $(if $(BATCH),ruled-batch,ruled "$(TRIGGER)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
 arbiter-nit:  ## [project] answer an accepted unit again after the wording fix its ruling asked for   TRIGGER=<id> OLD="<words>" NEW="<words>"
-	@if [ -z "$(TRIGGER)" ] || [ -z "$(OLD)" ] || [ -z "$(NEW)" ]; then printf 'make arbiter-nit: TRIGGER=, OLD= and NEW= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter nit "$(TRIGGER)" "$(OLD)" "$(NEW)"
+	@if [ -z "$(TRIGGER)" ] || [ -z "$$OLD" ] || [ -z "$$NEW" ]; then printf 'make arbiter-nit: TRIGGER=, OLD= and NEW= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter nit "$(TRIGGER)" "$$OLD" "$$NEW"
 
 arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379); LAND= lands its files first, TICK= ticks the task after   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=tests/... [LAND="<the fix's files>"] [F=<feature> TICK=<Txx>]
-	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
+	@if [ -z "$(ID)" ] || [ -z "$$NOTE" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
 	@if [ -n "$(TICK)" ] && [ -z "$(F)" ]; then printf 'make arbiter-fix-done: TICK= ticks a task of F=<feature> - name the feature\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && $(if $(LAND),scripts/land-tooling.sh $(LAND) $(TEST) && git fetch -q origin &&,) ARBITER_FIX_ENGINE="$(ENGINE)" scripts/gates/l7r-gate.sh arbiter fix done "$(ID)" "$(NOTE)" "$(TEST)"$(if $(TICK), && $(MAKE) --no-print-directory tick F="$(F)" T="$(TICK)" NOTE="$(NOTE)",)
+	@cd "$$(git rev-parse --show-toplevel)" && $(if $(LAND),set -f && scripts/land-tooling.sh $$LAND $(TEST) && set +f && git fetch -q origin &&,) ARBITER_FIX_ENGINE="$(ENGINE)" scripts/gates/l7r-gate.sh arbiter fix done "$(ID)" "$$NOTE" "$(TEST)"$(if $(TICK), && $(MAKE) --no-print-directory tick F="$(F)" T="$(TICK)",)
 
 use-feature:  ## [project] make F the clone's active feature for the hooks (.specify/feature.json) - instead of writing the file by hand (the round arbiter on hour:396@1)   F=<feature number>
 	@if [ -z "$(F)" ]; then printf 'make use-feature: F=<feature number> is required - e.g. make use-feature F=396\n' >&2; exit 2; fi
@@ -512,20 +525,20 @@ step-back:  ## [project] the feature's hourly checkpoint: open it and build the 
 arbiter-ask: export ARBITER_WHY = $(WHY)
 arbiter-ask: export ARBITER_REVIEW = $(REVIEW)
 arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choice of route) to the round arbiter before the GM (feature 379)   SUBJECT=<short id> WHY="<the question>" [FILES="<the measurements it cites>"] [REVIEW=spec|plan|claims:<key>;<key>: an accept then stands as that review's verdict, 409; claims' since 2026-10-24]
-	@if [ -z "$(SUBJECT)" ] || [ -z "$$ARBITER_WHY" ]; then printf 'make arbiter-ask: SUBJECT= and WHY= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter bundle --check-ask "$$ARBITER_WHY" --evidence "$(FILES)" && scripts/gates/l7r-gate.sh arbiter ask "$(SUBJECT)" "$$ARBITER_WHY" "$$ARBITER_REVIEW" && scripts/gates/l7r-gate.sh arbiter bundle "ask:$(SUBJECT)" --root "$$(pwd)" --evidence "$(FILES)"
+	@if [ -z "$$SUBJECT" ] || [ -z "$$ARBITER_WHY" ]; then printf 'make arbiter-ask: SUBJECT= and WHY= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter bundle --check-ask "$$ARBITER_WHY" --evidence "$(FILES)" && scripts/gates/l7r-gate.sh arbiter ask "$$SUBJECT" "$$ARBITER_WHY" "$$ARBITER_REVIEW" && scripts/gates/l7r-gate.sh arbiter bundle "ask:$$SUBJECT" --root "$$(pwd)" --evidence "$(FILES)"
 
 land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
 	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)
 
 arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, never filed - a question for the GM owed escalation-check (features 379, 432)   ID=<trigger> REASON="<why>"
-	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter fix declined "$(ID)" "$(REASON)"
+	@if [ -z "$(ID)" ] || [ -z "$$REASON" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter fix declined "$(ID)" "$$REASON"
 
 step-back-off:  ## [project] suspend the hourly step-back, not remove it: the hour comes due for nothing until step-back-on; the tripwire rulings stay (feature 405 T43)   REASON="..."
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh reviews checkpoint switch off --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back suspended - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh reviews checkpoint switch off --why "$$REASON" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back suspended - $$REASON" -- dev/step-back.json && echo "committed dev/step-back.json"
 step-back-on:   ## [project] resume the hourly step-back (feature 405 T43)   REASON="..."
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh reviews checkpoint switch on --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back resumed - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh reviews checkpoint switch on --why "$$REASON" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back resumed - $$REASON" -- dev/step-back.json && echo "committed dev/step-back.json"
 # THE LANDING (feature 449 T121, `ask:449-T83-scope`): `l7r-gate land`, the Rust port of `scripts/land.py`, the same in `make land`,
 # `make land-batch` and `make land-stop`. The commit deleting `land.py` was the last the Python landed, run from its saved copy.
 LAND_RUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" land
@@ -534,7 +547,7 @@ land: export LAND_BOXES = $(BOXES)
 land: export COVER_OK := $(COVER_OK)
 land:           ## [project] land one task or several and tick them: every cheap refusal first and together (the changed modules' coverage among them), then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446), the push, the ticks (feature 405 T33)   F=405 T="T12 [T13]" NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes] [COVER_OK="<reason>"]
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
-	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$(COVER_OK)",@:)
+	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$$COVER_OK",@:)
 	@$(LAND_RUN) "$(F)" "$(T)"
 
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
@@ -552,13 +565,13 @@ land-batch:     ## [project] the same command as make land (feature 385 T117's n
 	@$(LAND_RUN) "$(F)" "$(T)"
 
 phase-read:     ## [project] let ONE of a started phase task's held old-code files be read for ten minutes (to replace the stage's thin Python function, say), the reason logged - the phase-source guard's escape for the Read tool (feature 444)   FILE=<path> WHY="<reason>"
-	@if [ -z "$(FILE)" ] || [ -z "$(WHY)" ]; then printf 'make phase-read: FILE=<path> and WHY="<reason>" are required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" phase-read allow "$(FILE)" "$(WHY)"
+	@if [ -z "$(FILE)" ] || [ -z "$$WHY" ]; then printf 'make phase-read: FILE=<path> and WHY="<reason>" are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" phase-read allow "$(FILE)" "$$WHY"
 
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
-	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$(HOLD_OK)",@:)
-	@HOLD_OK="$(HOLD_OK)" "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-start "$(F)" "$(T)"
+	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$$HOLD_OK",@:)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-start "$(F)" "$(T)"
 
 decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
@@ -571,7 +584,7 @@ decide:         ## [project] the spec-fidelity dispatch that rules on one task's
 # each in its own world (feature 449 T173: T170's verify spent 381 of its 392.6 s building and removing worlds, one after another).
 diff-run:       ## [project] run a differential's cases on both sides, rerunning only what a fix touched (feature 449 T161; docs/diff-run.md)   CASES=<cases file> [ONLY=<case name>] [VERIFY=1] [TWICE=1] [ALL=1 REASON="..."] [JOBS=n]
 	@if [ -z "$(CASES)" ]; then printf 'make diff-run: CASES=<cases file> is required (docs/diff-run.md has the format)\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" diff-run "$(CASES)" $(if $(ONLY),--only "$(ONLY)",) $(if $(VERIFY),--verify,) $(if $(TWICE),--twice,) $(if $(ALL),--all --reason "$(REASON)",) $(if $(JOBS),--jobs "$(JOBS)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" diff-run "$(CASES)" $(if $(ONLY),--only "$(ONLY)",) $(if $(VERIFY),--verify,) $(if $(TWICE),--twice,) $(if $(ALL),--all --reason "$$REASON",) $(if $(JOBS),--jobs "$(JOBS)",)
 
 section-sha:    ## [project] {internal} the digest of one task's plan section, which a decision preflight records   F=375 T=T13
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan section-sha "$(F)" "$(T)"
@@ -626,16 +639,16 @@ gm-review:      ## [project] what waits on the GM: the questions escalation-chec
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review $(if $(EXPLAIN),explain $(F) $(ROW),list $(F))
 
 gm-question:    ## [project] put a question to the GM: written OWED escalation-check, it reaches him only once kept (feature 432)   F=<NNN> Q="<the question>" SOURCE="<what raised it>"
-	@if [ -z "$(F)" ] || [ -z "$(Q)" ] || [ -z "$(SOURCE)" ]; then printf 'make gm-question: F=, Q= and SOURCE= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review question "$(F)" "$(Q)" "$(SOURCE)"
+	@if [ -z "$(F)" ] || [ -z "$$Q" ] || [ -z "$$SOURCE" ]; then printf 'make gm-question: F=, Q= and SOURCE= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review question "$(F)" "$$Q" "$$SOURCE"
 
 gm-escalated:   ## [project] record escalation-check's verdict on an owed question: KEEP holds it for the GM (name it in the turn's final message), CUT closes it with the reason (feature 432)   F=<NNN> ROW=<n> VERDICT=KEEP|CUT REASON="<escalation-check's reason>" [SUPERSEDED_BY=<a later question row>: CUT a kept question the GM has not reviewed, its premise overturned]
-	@if [ -z "$(F)" ] || [ -z "$(ROW)" ] || [ -z "$(VERDICT)" ] || [ -z "$(REASON)" ]; then printf 'make gm-escalated: F=, ROW=, VERDICT= and REASON= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review escalated "$(F)" "$(ROW)" "$(VERDICT)" "$(REASON)" "$(SUPERSEDED_BY)"
+	@if [ -z "$(F)" ] || [ -z "$(ROW)" ] || [ -z "$(VERDICT)" ] || [ -z "$$REASON" ]; then printf 'make gm-escalated: F=, ROW=, VERDICT= and REASON= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review escalated "$(F)" "$(ROW)" "$(VERDICT)" "$$REASON" "$(SUPERSEDED_BY)"
 
 accept:         ## [project] accept a finding with a reason - the work goes on, and the GM may overturn it after landing (feature 375)   F=375 FINDING="<what>" REASON="<why it can stand>"
-	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review accept "$(F)" "$(FINDING)" "$(REASON)"
+	@if [ -z "$(F)" ] || [ -z "$$FINDING" ] || [ -z "$$REASON" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review accept "$(F)" "$$FINDING" "$$REASON"
 
 gm-reviewed: export GM_WORDS = $(WORDS)
 gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375); ROW=<n> marks that one row alone; WORDS= his words when a session marks a row he discussed   F=375 [OVERTURN=<n> TO=<NNN> | ROW=<n>] [WORDS="<the GM's words>"]
@@ -663,20 +676,20 @@ quote-verbatim: ## [project] is every quoted passage on the page it cites, chara
 ##  IN=<id>        every question of a section (its id in research/contents.json) or carrying a tag
 ##  NOTES=<n,n-m>  only these notes of each page, by the number its page shows them under
 ##  OUT=<json>     write the report the quote-check agent is handed (default: the scratch file the run names)
-	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make quote-verbatim: Q=<question number> or IN=<section or tag> is required - e.g. make quote-verbatim Q=0041\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record quote-verbatim --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)") $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+	@if [ -z "$$Q" ] && [ -z "$(IN)" ]; then printf 'make quote-verbatim: Q=<question number> or IN=<section or tag> is required - e.g. make quote-verbatim Q=0041\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record quote-verbatim --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$$Q",--in "$(IN)") $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
 record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a question - run BEFORE record-format   Q=0412 | IN=homesteads | Q=SOURCES
 ##  Q=<NNNN>       one or more questions, by number (both pages) or a page's file name; `SOURCES` for the registry
 ##  IN=<id>        every question of a section (its id in research/contents.json) or carrying a tag
-	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make record-prepass: Q=<question number> or IN=<section or tag> is required - e.g. make record-prepass Q=0041\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-prepass --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)")
+	@if [ -z "$$Q" ] && [ -z "$(IN)" ]; then printf 'make record-prepass: Q=<question number> or IN=<section or tag> is required - e.g. make record-prepass Q=0041\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-prepass --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$$Q",--in "$(IN)")
 
 claims-owed: ## [project] every research claim of the engine or the Mode A procedures owed an impl-drift check (no index row, or its code or cited research moved since), and why
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" owed
 
 claims-bundle: ## [project] the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed   MODULE=<file> | OWED=1 | UNITS="<key>,<key>"   [OUT=<dir>] [REASON="<why>" for claims not owed] [WITH="<path>::<qualname>,..." context] [PAGES="<question file>,..."]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$(UNITS)",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$(REASON)",) $(if $(WITH),--with "$(WITH)",) $(if $(PAGES),--pages "$(PAGES)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$$UNITS",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$$REASON",) $(if $(WITH),--with "$$WITH",) $(if $(PAGES),--pages "$(PAGES)",)
 
 claims-checked: ## [project] record an impl-drift reply into the claims index, at the fingerprints its bundle read   BUNDLE=<dir> REPLY=<file holding the agent's reply>
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-checked: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
@@ -704,7 +717,7 @@ claims-triaged: ## [project] record a triage reply: a claim it names (TOUCHES) i
 
 claims-carry: ## [project] file every carried claims finding (a page edit's, on unchanged code) as an open task of the active feature, so the push lands (feature 385 FR-013)   F=<feature> [T=<open task to file into>] [KEYS="<k>;<k>" RULING=<arbiter trigger>: findings a ruling carried]
 	@if [ -z "$(F)" ]; then printf 'make claims-carry: F=<feature> is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" carry --feature "$(F)" $(if $(T),--task "$(T)",) $(if $(KEYS),--keys "$(KEYS)",) $(if $(RULING),--ruling "$(RULING)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" carry --feature "$(F)" $(if $(T),--task "$(T)",) $(if $(KEYS),--keys "$$KEYS",) $(if $(RULING),--ruling "$(RULING)",)
 
 claims-known:  ## [project] record every known drift (a DRIFTED claim naming the open task that fixes it) for the GM, in its task's feature's gm-review.jsonl, so the push lands it - make land runs it (feature 430 T06)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" known
@@ -722,26 +735,26 @@ claims-backfill-sections: ## [project] re-key every procedure-section claim to i
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" backfill-sections
 
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record translation-owed --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record translation-owed --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$$Q",)
 
 record-owed: ## [project] every record check this delta owes (intro-check, record-format, source-reader, quote-check, source-applicability, translation-check, entry-drift), with the command that answers each   [Q=0412] [UNANSWERED=1] [BETWEEN="<a> <b>"]
 ##  Q=<NNNN>        only that question's units
 ##  UNANSWERED=1    only the units with no current answer record (what the push refuses)
 ##  BETWEEN="a b"   the units revision b owes against revision a (a replay; no entry-drift)
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-owed --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",) $(if $(UNANSWERED),--unanswered,) $(if $(BETWEEN),--between $(BETWEEN),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-owed --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$$Q",) $(if $(UNANSWERED),--unanswered,) $(if $(BETWEEN),--between $(BETWEEN),)
 
 record-checked: ## [project] record that a record check returned on the units it read - what answers an owed unit at the push   CHECK=<check> RESULT="<counts>" (BUNDLE=<dir> | Q=<NNNN> NOTES=<k,k> for source-reader | ... REASON="<why>")
 ##  BUNDLE=<dir>    the bundle the check read: its units, at the content it read
 ##  Q= NOTES= KEY= KIND=  the units the tree owes on that subject, at today's content - source-reader on named notes, or any check with REASON= (written to dev/bypass-log/)
 ##  REPLY=<file>    the check's reply: its OUTSIDE THE CHANGE findings are filed as open rows of the feature (feature 375)
 ##  FIXED_BY="<check>: <its finding>"  CHECK=quote-check Q= NOTES=: a fix made by hand for ANOTHER check's finding, outside the quotation and its claim - the tool verifies both unchanged, else refuses (feature 399); no RESULT needed
-	@if [ -z "$(CHECK)" ] || { [ -z "$(RESULT)" ] && [ -z "$(FIXED_BY)" ]; }; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-owed --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(FIXED_BY),--fixed-by "$(FIXED_BY)",) $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",) $(if $(REPLY),--reply "$(abspath $(REPLY))",)
+	@if [ -z "$(CHECK)" ] || { [ -z "$$RESULT" ] && [ -z "$$FIXED_BY" ]; }; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record record-owed --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$$RESULT" $(if $(FIXED_BY),--fixed-by "$$FIXED_BY",) $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$$Q",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$$KEY",) $(if $(KIND),--kind "$$KIND",) $(if $(REASON),--reason "$$REASON",) $(if $(REPLY),--reply "$(abspath $(REPLY))",)
 
 style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   Q=0412
 ##  Q=<NNNN>       the question, by number (both pages) or a page's file name
-	@if [ -z "$(Q)" ]; then printf 'make style-prepass: Q=<question number> is required - e.g. make style-prepass Q=0041\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record style-prepass --root "$$(git rev-parse --show-toplevel)" "$(Q)"
+	@if [ -z "$$Q" ]; then printf 'make style-prepass: Q=<question number> is required - e.g. make style-prepass Q=0041\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record style-prepass --root "$$(git rev-parse --show-toplevel)" "$$Q"
 
 question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size --report
@@ -750,11 +763,11 @@ open-questions: ## [project] every guess and every unfound source, read from the
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record open-questions --root "$$(git rev-parse --show-toplevel)"
 
 notes: ## [project] print the named notes of ONE question and only the blocks of its page that carry them - for editing a few notes without reading the whole file (feature 250)   Q=0041 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
-	@if [ -z "$(Q)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: Q=<question number or page file> KEYS=<key,key> are required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record check-bundle --root "$$(git rev-parse --show-toplevel)" "$(Q)" --notes "$(KEYS)" --print-notes
+	@if [ -z "$$Q" ] || [ -z "$$KEYS" ]; then printf 'make notes: Q=<question number or page file> KEYS=<key,key> are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record check-bundle --root "$$(git rev-parse --show-toplevel)" "$$Q" --notes "$$KEYS" --print-notes
 
 lines: ## [project] print ONLY a coordination file's matching lines - the claims file, a handoff, a checks report - numbered, with how many were shown of how many; never read one whole (feature 274)   FILE=<file> KEY=<regex>
-	@if [ -z "$(FILE)" ] || [ -z "$(KEY)" ]; then printf 'make lines: FILE=<file> KEY=<regex> are required - e.g. make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="^- 269"\n' >&2; exit 2; fi
+	@if [ -z "$(FILE)" ] || [ -z "$$KEY" ]; then printf 'make lines: FILE=<file> KEY=<regex> are required - e.g. make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="^- 269"\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coord lines "$(FILE)" "$$KEY"
 
 append: ## [project] append ONE line to a coordination file without reading or printing it (feature 274)   FILE=<file> LINE="<text>"
@@ -762,20 +775,20 @@ append: ## [project] append ONE line to a coordination file without reading or p
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coord append "$(FILE)"
 
 research-claim: ## [project] claim research questions for this clone, refused when another session holds one; STATUS=done releases (feature 376)   Q="0060 0246" FEATURE=<n> [STATUS="in progress"] [RELEASE=<owner> WHY="<reason>"]
-	@if [ -z "$(Q)" ] || [ -z "$(FEATURE)" ]; then printf 'make research-claim: Q="<question numbers>" FEATURE=<n> are required - e.g. make research-claim Q="0060 0246" FEATURE=376\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" research-claims claim "$(Q)" --feature "$(FEATURE)" $(if $(STATUS),--status "$(STATUS)",) $(if $(RELEASE),--release "$(RELEASE)" --why "$$WHY",)
+	@if [ -z "$$Q" ] || [ -z "$(FEATURE)" ]; then printf 'make research-claim: Q="<question numbers>" FEATURE=<n> are required - e.g. make research-claim Q="0060 0246" FEATURE=376\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" research-claims claim "$$Q" --feature "$(FEATURE)" $(if $(STATUS),--status "$$STATUS",) $(if $(RELEASE),--release "$(RELEASE)" --why "$$WHY",)
 
 research-claims: ## [project] the live claims on research questions, and nothing else of the sheet (feature 376)   Q="0060 0246"
-	@if [ -z "$(Q)" ]; then printf 'make research-claims: Q="<question numbers>" is required - e.g. make research-claims Q="0060 0246"\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" research-claims query "$(Q)"
+	@if [ -z "$$Q" ]; then printf 'make research-claims: Q="<question numbers>" is required - e.g. make research-claims Q="0060 0246"\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" research-claims query "$$Q"
 
 reserve: ## [project] reserve the next glossary, registry-entry or question number under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused; feature 303: a question's stub carries a tags marker to fill)   KIND=glossary|registry|question KEY=<term, key or heading id> [KEY_CAP_OK='<reason>']
-	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry|question KEY=<term, key or heading id> are required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record reserve "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",) $(if $(TAGS),--tags "$(TAGS)",)
+	@if [ -z "$$KIND" ] || [ -z "$$KEY" ]; then printf 'make reserve: KIND=glossary|registry|question KEY=<term, key or heading id> are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record reserve "$$KIND" "$$KEY" $(if $(URL),--url "$$URL",) $(if $(TAGS),--tags "$(TAGS)",)
 
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"
-	@if [ -z "$(TERMS)" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record canon "$(TERMS)"
+	@if [ -z "$$TERMS" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record canon "$$TERMS"
 
 apply-edits: ## [project] apply a quote-check or record-format report's EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)   FROM=<the agent's output_file or a saved reply> [SKIP=2,5: EDIT and GLOSSARY blocks counted together, in reply order] [DRY=1]
 	@if [ -z "$(FROM)" ]; then printf 'make apply-edits: FROM=<the output_file the agent dispatch named> is required\n' >&2; exit 2; fi
@@ -786,8 +799,8 @@ page-session: ## [project] start ONE page's work in a FRESH headless session, de
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/pages/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)" "$(EFFORT)" "$(AGENTS)"
 
 modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319; refused while a check before it in the order (form, research, depiction) is owed - feature 375 amendment 3   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>] [CHECK_ORDER_OK="<why>"]
-	@if [ -z "$(KIND)" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-bundle "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$(REASON)",)
+	@if [ -z "$$KIND" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-bundle "$$KIND" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$$REASON",)
 
 modal-triage: ## [project] the triage bundle for every pop-up owed only because a page it names moved: the changed blocks beside the kinds naming them, for the modal-triage agent (feature 375; its own agent since 383 amendment 6)   [OUT=<dir>]
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-triage --root . bundle $(if $(OUT),--out "$(OUT)",)
@@ -797,8 +810,8 @@ modal-triaged: ## [project] record a pop-up triage reply: a kind it names (TOUCH
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-triage --root . record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
 modal-prepass: ## [project] the mechanical half of the modal checks for one About-form modal - word band, barred phrases, guesses, Entry files - feature 319   KIND=<class or key>
-	@if [ -z "$(KIND)" ]; then printf 'make modal-prepass: KIND=<class name or key> is required - e.g. make modal-prepass KIND=Farmhouse\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-bundle "$(KIND)" --prepass
+	@if [ -z "$$KIND" ]; then printf 'make modal-prepass: KIND=<class name or key> is required - e.g. make modal-prepass KIND=Farmhouse\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh record modal-bundle "$$KIND" --prepass
 
 check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   Q=0087 | KEY=edo-enwiki
 ##  Q=<NNNN>         one question (both pages; a page's file name for one): pages, notes, prepass, quote-verbatim, cited registry entries, the variant index
@@ -811,59 +824,61 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  IMAGES="<file|dir> ..."  with KEY= or Q=: a scanned source's page images, copied into images/ and listed by name (feature 395)
 ##  FOR=intro-check [QS="<n> <n> ..."]  the intro-check bundle, one question or a batch
 ##  KEYS="<k> <k> ..."  several sources in one source-applicability bundle (the uncited write-ups, feature 312)
-	@if [ -z "$(KEY)" ] && [ -z "$(KEYS)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, KEYS="<k> <k>", or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record check-bundle --root "$$(git rev-parse --show-toplevel)" $(if $(KEYS),--keys "$(KEYS)",) $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",) $(if $(IMAGES),--images $(IMAGES),)
+	@if [ -z "$$KEY" ] && [ -z "$$KEYS" ] && [ -z "$$Q" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, KEYS="<k> <k>", or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
+	@set -f; "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record check-bundle --root "$$(git rev-parse --show-toplevel)" $(if $(KEYS),--keys "$$KEYS",) $(if $(KEY),--key "$$KEY",$(if $(Q),"$$Q",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $$EXTRA,) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$$KIND",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$$QUESTION",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$$NOT_OWED_OK",) $(if $(NEW),--new "$$NEW",) $(if $(IMAGES),--images $$IMAGES,)
 
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
 ##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)
 ##  URL=<u>        one pointer; URLS="<u1> <u2>" for several - make keeps only the LAST of a repeated URL=
 ##  QUESTION=<q>   the research question the pages are read for (its number, NNNN - feature 303), recorded on the sources-consulted ledger
 ##  REFRESH=1      fetch again even where the page cache holds a copy younger than seven days
-	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record source-pages "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(or $(QUESTION),$(Q)),--question "$(or $(QUESTION),$(Q))",) $(if $(SOUGHT),--sought "$(SOUGHT)",) $(if $(REREAD),--reread "$(REREAD)",)
+	@if [ -z "$(OUT)" ] || [ -z "$$URL$$URLS" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
+	@set -f; "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record source-pages "$(abspath $(OUT))" $(if $(URL),"$$URL",) $$URLS $(if $(or $(QUESTION),$(Q)),--question "$${QUESTION:-$$Q}",) $(if $(SOUGHT),--sought "$$SOUGHT",) $(if $(REREAD),--reread "$$REREAD",)
 
 source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger and the attempts log - every page a research pass reads (features 288, 312)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<NNNN>] [SOUGHT=<what was looked for>]
-	@if [ -z "$(URL)" ] || [ -z "$(OUTCOME)" ]; then printf 'make source-outcome: URL=<u> OUTCOME=<cited:key|rejected:why|nothing-found|unreadable|pending> are required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",) $(if $(SOUGHT),--sought "$(SOUGHT)",)
+	@if [ -z "$$URL" ] || [ -z "$$OUTCOME" ]; then printf 'make source-outcome: URL=<u> OUTCOME=<cited:key|rejected:why|nothing-found|unreadable|pending> are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources outcome "$$URL" "$$OUTCOME" $(if $(QUESTION),--question "$$QUESTION",) $(if $(SOUGHT),--sought "$$SOUGHT",)
 
 uncited: ## [project] the uncited pages judged once, and the kept ones written up - DO=set (count; OUT= writes the URLs) | rule | fetch [LIMIT=n] | bundle OUT=<dir> [LIMIT=n] [START=n] | apply DIRS="<bundle> ..." | score DIR=<bundle> ANSWERS=<labels.json> | draft OUT=<dir> [START=n] | install DIRS="<draft> ..." | merge KEY=<dup> INTO=<kept key> | dedupe [DRY=1] | unkeep URL=<u> REASONS=<r,r> NOTE=<why> | requeue URL=<u> | copy-verdicts | stands URL=<u> NOTE=<why> | retire-cited KEY=<k> ACCESS=<state> NOTE=<why> | report (feature 312)   DO=<step>
 	@if [ -z "$(DO)" ]; then printf 'make uncited: DO=set|rule|fetch|bundle|apply|score|draft|install|merge|dedupe|unkeep|requeue|copy-verdicts|stands|retire-cited|report is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record uncited $(DO) $(if $(filter set,$(DO)),$(if $(OUT),--write "$(abspath $(OUT))",),) $(if $(filter bundle draft,$(DO)),"$(abspath $(OUT))" $(if $(START),--start $(START),),) $(if $(filter fetch bundle,$(DO)),$(if $(LIMIT),--limit $(LIMIT),),) $(if $(filter apply install,$(DO)),$(DIRS),) $(if $(filter score,$(DO)),"$(DIR)" "$(ANSWERS)",) $(if $(filter merge,$(DO)),"$(KEY)" "$(INTO)",) $(if $(filter dedupe,$(DO)),$(if $(DRY),--dry,),) $(if $(filter unkeep,$(DO)),"$(URL)" "$(REASONS)" "$(NOTE)",) $(if $(filter requeue,$(DO)),"$(URL)",) $(if $(filter stands,$(DO)),"$(URL)" "$(NOTE)",) $(if $(filter retire-cited,$(DO)),"$(KEY)" "$(ACCESS)" "$(NOTE)",)
+	@set -f; "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record uncited $(DO) $(if $(filter set,$(DO)),$(if $(OUT),--write "$(abspath $(OUT))",),) $(if $(filter bundle draft,$(DO)),"$(abspath $(OUT))" $(if $(START),--start $(START),),) $(if $(filter fetch bundle,$(DO)),$(if $(LIMIT),--limit $(LIMIT),),) $(if $(filter apply install,$(DO)),$$DIRS,) $(if $(filter score,$(DO)),"$(DIR)" "$(ANSWERS)",) $(if $(filter merge,$(DO)),"$$KEY" "$(INTO)",) $(if $(filter dedupe,$(DO)),$(if $(DRY),--dry,),) $(if $(filter unkeep,$(DO)),"$$URL" "$(REASONS)" "$$NOTE",) $(if $(filter requeue,$(DO)),"$$URL",) $(if $(filter stands,$(DO)),"$$URL" "$$NOTE",) $(if $(filter retire-cited,$(DO)),"$$KEY" "$(ACCESS)" "$$NOTE",)
 
 cite-uncited: ## [project] an uncited source's entry moved to the works cited, keeping its number, when a footnote first cites it - then write its Used for: line (feature 312)   KEY=<registry key>
-	@if [ -z "$(KEY)" ]; then printf 'make cite-uncited: KEY=<the uncited entry'"'"'s key> is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record uncited cite "$(KEY)"
+	@if [ -z "$$KEY" ]; then printf 'make cite-uncited: KEY=<the uncited entry'"'"'s key> is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record uncited cite "$$KEY"
 
 attempts: ## [project] what a source was tried for and what came of it, and the filter's verdict on it - by URL, registry key, or question - BEFORE you read it again (feature 312)   URL=<u> | KEY=<k> | Q=<NNNN>
-	@if [ -z "$(URL)$(KEY)$(Q)" ]; then printf 'make attempts: URL=<u>, KEY=<k> or Q=<NNNN> is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record attempts show $(if $(URL),--url "$(URL)",$(if $(KEY),--key "$(KEY)",--q "$(Q)"))
+	@if [ -z "$$URL$$KEY$$Q" ]; then printf 'make attempts: URL=<u>, KEY=<k> or Q=<NNNN> is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record attempts show $(if $(URL),--url "$$URL",$(if $(KEY),--key "$$KEY",--q "$$Q"))
 
 archive: ## [project] archive ONE cited URL now into the private source archive - the served bytes, the whole page, its text - and write its manifest row (feature 309; the record build refuses a cited URL with none)   URL=<u> [KEY=<registry key not yet written>]
-	@if [ -z "$(URL)" ]; then printf 'make archive: URL=<u> is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive url "$(URL)" $(if $(KEY),--key "$(KEY)",)
+	@if [ -z "$$URL" ]; then printf 'make archive: URL=<u> is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive url "$$URL" $(if $(KEY),--key "$$KEY",)
 
 archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, the uncited pages feature 312's filter KEPT, and no other (features 309, 312)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
 	@if [ -n "$(CONSULTED)" ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive consulted $(if $(LIMIT),--limit $(LIMIT),) --workers $(or $(WORKERS),4); else "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
 
 archive-inbox: ## [project] the GM's downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass; a NEW download waits until you give its keys (feature 309)   [MATCH="<file>=<key>[,<key>] ..."] [NONE="<file> ..."]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")
+	@set -f; set --; for m in $$MATCH; do set -- "$$@" --match "$$m"; done; for n in $$NONE; do set -- "$$@" --none "$$n"; done; \
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive inbox "$$@"
 
 semantic-index: ## [project] build or update the semantic index of the record and the archive - only new or changed passages embedded, its shards committed to the archive and pushed (feature 447; BGE-M3, run locally, half the cores; Rust since 449 T138)   [SHARD=<s>] [LIMIT=<n>]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record semantic build $(foreach s,$(SHARD),--shard "$(s)") $(if $(LIMIT),--limit "$(LIMIT)",)
+	@set -f; set --; for s in $$SHARD; do set -- "$$@" --shard "$$s"; done; \
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record semantic build "$$@" $(if $(LIMIT),--limit "$(LIMIT)",)
 
 semantic-find: ## [project] the passages of the record and the archive nearest a question by meaning, in any language - each with its file, place and opening words; beside archive-find, never in its place (feature 447)   Q="<question>" [K=<n>]
-	@if [ -z "$(Q)" ]; then printf 'make semantic-find: Q="<question>" is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record semantic find "$(Q)" $(if $(K),--k "$(K)",)
+	@if [ -z "$$Q" ]; then printf 'make semantic-find: Q="<question>" is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record semantic find "$$Q" $(if $(K),--k "$$K",)
 
 research-search: ## [project] THE local search before the web: the meaning search (a question per language) and the text search (term sets, every term required) over the record and the archive in one call, merged by source, each printed once with its best passage and what found it; a call prints a batch and counts the rest, and under KEY= the next call prints the next batch, never one already shown (feature 447 amendment 3)   Q="<english>" [Q_JA="<日本語>"] [Q_ZH="<中文>"] [Q_KO="<한국어>"] [TERMS="a|b;c|d"] [KEY=<question key>] [LIMIT=<archive sources, 15>] [RECORD_LIMIT=<pages, 5>]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record search $(if $(Q),--q "$(Q)",) $(if $(Q_JA),--q "$(Q_JA)",) $(if $(Q_ZH),--q "$(Q_ZH)",) $(if $(Q_KO),--q "$(Q_KO)",) $(if $(TERMS),--terms "$(TERMS)",) $(if $(KEY),--key "$(KEY)",) $(if $(LIMIT),--limit "$(LIMIT)",) $(if $(RECORD_LIMIT),--record-limit "$(RECORD_LIMIT)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record search $(if $(Q),--q "$$Q",) $(if $(Q_JA),--q "$$Q_JA",) $(if $(Q_ZH),--q "$$Q_ZH",) $(if $(Q_KO),--q "$$Q_KO",) $(if $(TERMS),--terms "$$TERMS",) $(if $(KEY),--key "$$KEY",) $(if $(LIMIT),--limit "$(LIMIT)",) $(if $(RECORD_LIMIT),--record-limit "$(RECORD_LIMIT)",)
 
 archive-find: ## [project] does the archive already hold it? by URL, registry key, or words in the archived text - names each copy's local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)   URL=<u> | KEY=<k> | TERMS="a|b" (every term required; one term per call to try alternatives)
-	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
+	@if [ -z "$$URL$$KEY$$TERMS" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record archive find $(if $(URL),--url "$$URL",) $(if $(KEY),--key "$$KEY",) $(if $(TERMS),--terms "$$TERMS",)
 
 downloads-ingest: ## [project] on the GM's word "ingest": the marks in the GM's copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP="<ids>"] [DROP="<ids>"] [MARK="<id>=<downloaded|partial|paywalled|not-found> ..."]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads ingest --keep "$(KEEP)" --drop "$(DROP)" --mark "$(MARK)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads ingest --keep "$(KEEP)" --drop "$(DROP)" --mark "$$MARK"
 
 downloads-sync: ## [project] on the GM's word "sync": the GM's copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads sync
@@ -876,12 +891,12 @@ download-add: ## [project] append a source only the GM can fetch at the end of t
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record downloads add "$(FILE)"
 
 access-tags: ## [project] what can be got of each source - open, gm-full, gm-partial, paywalled, bot-refused, down, gone, never-read - derived from the archive, the registry and the GM's marks (feature 313)   [KEY=<key|download:ID>] [JSON=1] | SET=<state> KEY= DATE=<YYYY-MM-DD> REASON="<what it rests on>"
-	@if [ -n "$(SET)" ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record access-tags set "$(KEY)" "$(SET)" "$(DATE)" "$(REASON)"; \
-	else "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record access-tags report $(if $(KEY),--key "$(KEY)",) $(if $(JSON),--json,); fi
+	@if [ -n "$(SET)" ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record access-tags set "$$KEY" "$(SET)" "$(DATE)" "$$REASON"; \
+	else "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record access-tags report $(if $(KEY),--key "$$KEY",) $(if $(JSON),--json,); fi
 
 sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
-	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources lookup $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",)
+	@if [ -z "$$URL$$KEY" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources lookup $(if $(URL),--url "$$URL",) $(if $(KEY),--key "$$KEY",)
 
 sources-import: ## [project] ONE TIME, idempotent: seed the sources-consulted ledger from the 2026-09-29 measurement and import the /tmp/l7r-check saves into the page cache (feature 288)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources import
@@ -901,16 +916,16 @@ review-accept:  ## [project] record a review finding as deliberately LEFT, with 
 ##  MAP=<map>        the pool map whose last settlement-review verdict raised the finding
 ##  FINDING=<id>     the finding's id, as that verdict record names it
 ##  REASON="..."     why it is left; at least two words and eight characters
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$(FINDING)" --reason "$(REASON)" && $(LOGBYPASS) permitted "review-accept $(MAP) $(FINDING): $(REASON)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$$FINDING" --reason "$$REASON" && $(LOGBYPASS) permitted "review-accept $(MAP) $${FINDING}: $$REASON"
 
 review-paired-gate:  ## [project] the settlement-review's paired gate - green, running or red (exit 1 on red)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq gate-state --clone "$$(git rev-parse --show-toplevel)"
 
 ledger-owed:     ## [project] every check pass logged in this clone with no row in the review ledger, each with the row to add (feature 371); WRITE= writes them from each reply   [WRITE="<where you recorded what you did>"]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews ledger-owed --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)" $(if $(CLAUDE_CODE_SESSION_ID),--session "$(CLAUDE_CODE_SESSION_ID)",),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews ledger-owed --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$$WRITE" $(if $(CLAUDE_CODE_SESSION_ID),--session "$(CLAUDE_CODE_SESSION_ID)",),)
 
 dispatch-dropped: ## [project] record that a dispatch a guard refused is no longer wanted, so the turn may end (feature 385 T22)   TYPE=<agent type> BUNDLE=<path> WHY="<reason>"
-	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" dropped drop --root "$$(git rev-parse --show-toplevel)" --type "$(TYPE)" --bundle "$(BUNDLE)" --why "$(WHY)"
+	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" dropped drop --root "$$(git rev-parse --show-toplevel)" --type "$(TYPE)" --bundle "$(BUNDLE)" --why "$$WHY"
 
 review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
 ##  AGENT=<id>  the agent id the Agent tool's result names
@@ -930,13 +945,13 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 ##  K=<expr>      a pytest `-k` expression - a SUBSET, which owes a whole-file run before the gate
 	@if [ -z "$(strip $(FILE))" ]; then echo "test-file: no FILE given - run \`make test-file FILE=tests/<path>\` (the variable is FILE, not F); \`make test-full\` runs every test" >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/format-changed.sh"
-	@python3 -m pytest -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
+	@python3 -m pytest -q --no-cov $(if $(K),-k "$$K",) $(FILE) && $(STATE) green-local test-file
 
 dead-closure:   ## [diagnostics] what a deletion leaves dead and which deleted name a file still calls (frozen exhibits included), against BASE (feature 388)   [BASE=HEAD]
 	@python3 scripts/measure/dead_closure.py --base "$(or $(BASE),HEAD)"
 
 parts-sweep:     ## [tests] run each split guard suite at 1, 2, 3 and 8 parts and report any count whose result differs - after a suite's cases change; never in the gate   [SUITES="test-pair-hooks.sh ..."]
-	@bash tests/hooks/parts_sweep.sh $(SUITES)
+	@set -f; bash tests/hooks/parts_sweep.sh $$SUITES
 
 subagent-cache:  ## [project] what subagents write to the prompt cache fresh, per agent type, and the repeated text in their bundles (feature 383 amendment 6)   [SINCE=YYYY-MM-DD]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure subagent-cache $(if $(SINCE),--since $(SINCE),)
@@ -951,7 +966,7 @@ durations:       ## [tests] where the suite's time goes - run when a target feel
 ##  FULL=1        also profile `tests/full/` (default: it is ignored, so this is the quick tree only)
 ##  MARK=<expr>   a pytest `-m` marker expression, e.g. `tooling` (default: `not rolls_map`)
 ##  N=<rows>      how many of the slowest rows to print (default: 12)
-	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(FULL),,--ignore=tests/full) $(if $(MARK),-m "$(MARK)",-m "not rolls_map") --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
+	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(FULL),,--ignore=tests/full) $(if $(MARK),-m "$$MARK",-m "not rolls_map") --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
 
 # Timed with date +%s, not $$SECONDS: make's shell is sh, where SECONDS is unset.
 # The ratchet and the budget judge warm, selective runs only; raise the budget only with a measurement.
@@ -969,7 +984,7 @@ quick:           ## [tests] tier 2: lint and the kept Python tests that roll no 
 	@$(STATE) green-local quick
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)
-	@why="$(REF_WHY)"; \
+	@why="$$REF_WHY"; \
 	if [ -n "$$why" ] && [ ! -t 0 ]; then \
 	  printf "\n\033[1mREFUSED: a FULL run with REF_WHY set, with nothing attached to answer for it.\033[0m\n\n"; \
 	  printf "The prompt below exists because its default answer is NO. Passing REF_WHY on the\n"; \

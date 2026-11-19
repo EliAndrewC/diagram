@@ -118,6 +118,17 @@ fn an_area_holds_tracked_and_new_files_and_not_its_exclusions_or_what_is_ignored
 }
 
 #[test]
+fn the_hooks_area_holds_the_makefile_the_suites_drive() {
+    let dir = repo("hooks-make");
+    put(&dir, "Makefile", "land:\n");
+    put(&dir, "scripts/a.sh", "echo\n");
+    put(&dir, "rust/Makefile.rs", "fn f() {}\n");
+    commit(&dir);
+    let files = area_files(&dir, area_named("hooks").unwrap()).unwrap();
+    assert_eq!(listing(&files, &dir), "Makefile\nscripts/a.sh\n");
+}
+
+#[test]
 fn the_hash_is_salted_with_the_gate_s_standard_and_keeps_a_gone_file() {
     let dir = repo("hash");
     let gone = [dir.join("gone.txt")];

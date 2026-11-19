@@ -128,7 +128,7 @@ pub struct Tree {
 }
 
 impl Tree {
-    /// The index over `scripts/` and `tests/hooks/` at `root`: every basename is unique across both, so a name identifies one file.
+    /// The index over `scripts/`, `tests/hooks/` and the root `Makefile` at `root`: every basename is unique across them, so a name identifies one file.
     #[must_use]
     pub fn at(root: &Path) -> Self {
         let root = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
@@ -147,6 +147,12 @@ impl Tree {
             &mut files,
         );
         files.retain(|p| !p.components().any(|c| c.as_os_str() == "__pycache__"));
+        // the root Makefile too: a suite that drives make targets names it in its code, and a Makefile-only edit left that suite fresh and
+        // unrun (feature 449 T186: the make-only suite's free-text cases, red on the old Makefile, went unrun by `make hooks-test`)
+        let makefile = root.join("Makefile");
+        if makefile.is_file() {
+            files.push(makefile);
+        }
         files.sort();
         let name_of = |p: &PathBuf| {
             p.file_name()

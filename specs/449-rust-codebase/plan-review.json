@@ -750,6 +750,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T186 (T182's claims round: `make claims-bundle UNITS=` ran a backtick in a claim key as a command; constitution XIV; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "0cd636cbe6e3c60023286cc9ab6229311e40c763d77162fa0268e1b435803f84",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T186 Approach (checklist part A)": {
+   "sha256": "dd0d98b28a3f87679b3a2289eb2e8bc2f732238ddd20d2b7673cf1e2bd1d49df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12827,6 +12839,85 @@
      "why": "The order is exactly the GM's 'fix all known bugs in each step before moving on to porting the next step'. The task changes tooling regex scans, no drawn output, so no differential or pool manifest is touched; and it fixes wrong answers and hangs, a defect, rather than claiming a speed saving under the 2026-11-12 pre-approval's conditions."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T186 (T182's claims round: `make claims-bundle UNITS=` ran a backtick in a claim key as a command; constitution XIV; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T186 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "mechanism",
+     "summary": "A FREE_TEXT list; each named value becomes a simple variable holding its text as given (override NAME := $(value NAME)), exported, read in recipes as \"$$NAME\".",
+     "class": "within",
+     "why": "This is the fix of the known bug T182's claims round found (a backtick in a claim key run as a command), and of the same bug's second form it measured (make expanding a $ in NOTE). The GM 2026-11-18: 'in general we should fix all known bugs in each step before moving on'."
+    },
+    {
+     "id": "flags-stay",
+     "summary": "l7r-gate's flags unchanged (--units \"$$UNITS\"); sub-makes stop re-passing free text on their command lines; SET_DOWN_OK/HOLD_OK prefixes dropped as the exported variable is the one read.",
+     "class": "within",
+     "why": "Keeps every caller of the gate's flags as it is; the sub-make change is the same fix applied to the places that re-quoted the value. Nothing narrowed."
+    },
+    {
+     "id": "converted-59",
+     "summary": "The 59 free-text names on FREE_TEXT and every quoted use, required-argument check and longer word holding one rewritten across the listed recipes.",
+     "class": "within",
+     "why": "Applies the fix to every site of the same known bug rather than the one target that surfaced it, which is what 'fix all known bugs' asks. It removes no behavior a caller relies on: the values now arrive as typed."
+    },
+    {
+     "id": "left-paths",
+     "summary": "Paths (FILE, FILES, OUT, ... TRANSCRIPT, IN) left as $(NAME).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's words are 'fix all known bugs'. A known bug here is a value a target is meant to take that today's form runs or mangles; the plan converted URLs and patterns on exactly that format ground (RFC 3986 allows $, patterns carry * and ?). A path in this tree holds no shell syntax (the block's survey, part A item 4) and the bundle shows no path value mangled, so leaving paths is not leaving a known bug. Non-blocking note: FILES and PAGES are list-shaped; if a caller passes one holding a $ or backtick, it moves to FREE_TEXT like the other lists."
+    },
+    {
+     "id": "left-numbers-enums-flags",
+     "summary": "Numbers (F, ROW, ... BOX), enums (MODE, MODEL, ... AS) and flags (FULL, BATCH, CONSULTED, HOOKS_ALL, ENGINE) left as $(NAME).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A number, an enum from a closed set or a boolean flag cannot carry a valid value holding shell syntax, so no known bug is left; the request ('fix all known bugs') is met."
+    },
+    {
+     "id": "left-ids",
+     "summary": "Ids (T, TASK, ... NAME, RELEASE, INTO, TAGS, AFFECTS, KEEP, DROP, ONLY, COMMIT, BASE, AGAINST, REVS, SINCE, UNTIL, DATE) left as $(NAME).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Task ids, slugs, git revisions and dates have formats that hold no $, backtick or $( (git rev syntax such as HEAD^ or @{1} is unharmed by make or by a quoted shell word), and the bundle shows no id value mangled; so no known bug is left and 'fix all known bugs' is met. Non-blocking note: the list-shaped ids (AGENTS, TRIGGERS, TAGS, REVS, AFFECTS, KEEP, DROP, ONLY) and NAME are the ones to move to FREE_TEXT if any is ever found carrying free text."
+    },
+    {
+     "id": "word-lists",
+     "summary": "URLS, MATCH, NONE, SHARD, EXTRA, IMAGES, DIRS, LAND and SUITES on FREE_TEXT, split by the shell (unquoted $$NAME, or a set -- loop adding a flag per word) instead of make's $(foreach).",
+     "class": "within",
+     "why": "Closes the two known bugs the block names in these lists (make expanding a $ in a URL, a backtick running inside the quotes) while keeping one argument a word as before. This is the item the previous round blocked, now fixed as asked."
+    },
+    {
+     "id": "globbing-off",
+     "summary": "set -f before splitting the word lists; a pattern in EXTRA or IMAGES is no longer expanded by the recipe's shell, a directory naming the same files.",
+     "class": "within",
+     "why": "For URLs and MATCH/NONE/SHARD patterns it is part of the fix (a ? in a URL globbed to a fixture file, the test's case). For EXTRA/IMAGES it is a behavior difference the fix does not strictly need, but under the no-exactness rule it is a finding only if something stops working, and the bundle shows no caller passing check-bundle a pattern, with a directory giving the same files. A caller in the tree that hands EXTRA or IMAGES a glob would change this ruling."
+    },
+    {
+     "id": "section-6-test",
+     "summary": "tests/hooks/test-make-only-hooks.sh section 6: the real Makefile against a stub gate, hostile values through a flag, TICK_NOTE, a required-argument check, a sub-make, URLS and MATCH; plus a scan failing any recipe line handing a FREE_TEXT name to the shell as $(NAME); red on HEAD's Makefile, green on this one.",
+     "class": "within",
+     "why": "Enforcement of the requested fix: delete the fix and the test has nothing left to check. Verification, not new behavior (GM 2026-09-20)."
+    },
+    {
+     "id": "makefile-in-deps-and-stamp",
+     "summary": "The suites' deps index holds the root Makefile as a shared helper, and the hooks stamp area holds Makefile, each with a test.",
+     "class": "within",
+     "why": "Without it a Makefile-only edit leaves the make-only suite skipped, so the requested fix's test would not run on the change it guards; it only makes the enforcement of what was asked actually run. Not unrequested scope."
+    },
+    {
+     "id": "real-gate-and-checks",
+     "summary": "The filed command re-run on the real gate (the country-shrine key with backticks), then hooks-test HOOKS_ALL=1, static and quick green.",
+     "class": "within",
+     "why": "Shows the filed bug fixed and everything working; no decision beyond the spec."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22772,6 +22863,83 @@
      "summary": "Ordered after T194 and before step 3b's first port; 'Performance work? No - a defect fixed'; differentials and pool manifests n/a (tooling).",
      "class": "within",
      "why": "The order is exactly the GM's 'fix all known bugs in each step before moving on to porting the next step'. The task changes tooling regex scans, no drawn output, so no differential or pool manifest is touched; and it fixes wrong answers and hangs, a defect, rather than claiming a speed saving under the 2026-11-12 pre-approval's conditions."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T186": {
+   "section_sha256": "a895198b849fc6e63f18b115e44450ff169e718c458c19332eff50ceb604087c",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "mechanism",
+     "summary": "A FREE_TEXT list; each named value becomes a simple variable holding its text as given (override NAME := $(value NAME)), exported, read in recipes as \"$$NAME\".",
+     "class": "within",
+     "why": "This is the fix of the known bug T182's claims round found (a backtick in a claim key run as a command), and of the same bug's second form it measured (make expanding a $ in NOTE). The GM 2026-11-18: 'in general we should fix all known bugs in each step before moving on'."
+    },
+    {
+     "id": "flags-stay",
+     "summary": "l7r-gate's flags unchanged (--units \"$$UNITS\"); sub-makes stop re-passing free text on their command lines; SET_DOWN_OK/HOLD_OK prefixes dropped as the exported variable is the one read.",
+     "class": "within",
+     "why": "Keeps every caller of the gate's flags as it is; the sub-make change is the same fix applied to the places that re-quoted the value. Nothing narrowed."
+    },
+    {
+     "id": "converted-59",
+     "summary": "The 59 free-text names on FREE_TEXT and every quoted use, required-argument check and longer word holding one rewritten across the listed recipes.",
+     "class": "within",
+     "why": "Applies the fix to every site of the same known bug rather than the one target that surfaced it, which is what 'fix all known bugs' asks. It removes no behavior a caller relies on: the values now arrive as typed."
+    },
+    {
+     "id": "left-paths",
+     "summary": "Paths (FILE, FILES, OUT, ... TRANSCRIPT, IN) left as $(NAME).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's words are 'fix all known bugs'. A known bug here is a value a target is meant to take that today's form runs or mangles; the plan converted URLs and patterns on exactly that format ground (RFC 3986 allows $, patterns carry * and ?). A path in this tree holds no shell syntax (the block's survey, part A item 4) and the bundle shows no path value mangled, so leaving paths is not leaving a known bug. Non-blocking note: FILES and PAGES are list-shaped; if a caller passes one holding a $ or backtick, it moves to FREE_TEXT like the other lists."
+    },
+    {
+     "id": "left-numbers-enums-flags",
+     "summary": "Numbers (F, ROW, ... BOX), enums (MODE, MODEL, ... AS) and flags (FULL, BATCH, CONSULTED, HOOKS_ALL, ENGINE) left as $(NAME).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A number, an enum from a closed set or a boolean flag cannot carry a valid value holding shell syntax, so no known bug is left; the request ('fix all known bugs') is met."
+    },
+    {
+     "id": "left-ids",
+     "summary": "Ids (T, TASK, ... NAME, RELEASE, INTO, TAGS, AFFECTS, KEEP, DROP, ONLY, COMMIT, BASE, AGAINST, REVS, SINCE, UNTIL, DATE) left as $(NAME).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Task ids, slugs, git revisions and dates have formats that hold no $, backtick or $( (git rev syntax such as HEAD^ or @{1} is unharmed by make or by a quoted shell word), and the bundle shows no id value mangled; so no known bug is left and 'fix all known bugs' is met. Non-blocking note: the list-shaped ids (AGENTS, TRIGGERS, TAGS, REVS, AFFECTS, KEEP, DROP, ONLY) and NAME are the ones to move to FREE_TEXT if any is ever found carrying free text."
+    },
+    {
+     "id": "word-lists",
+     "summary": "URLS, MATCH, NONE, SHARD, EXTRA, IMAGES, DIRS, LAND and SUITES on FREE_TEXT, split by the shell (unquoted $$NAME, or a set -- loop adding a flag per word) instead of make's $(foreach).",
+     "class": "within",
+     "why": "Closes the two known bugs the block names in these lists (make expanding a $ in a URL, a backtick running inside the quotes) while keeping one argument a word as before. This is the item the previous round blocked, now fixed as asked."
+    },
+    {
+     "id": "globbing-off",
+     "summary": "set -f before splitting the word lists; a pattern in EXTRA or IMAGES is no longer expanded by the recipe's shell, a directory naming the same files.",
+     "class": "within",
+     "why": "For URLs and MATCH/NONE/SHARD patterns it is part of the fix (a ? in a URL globbed to a fixture file, the test's case). For EXTRA/IMAGES it is a behavior difference the fix does not strictly need, but under the no-exactness rule it is a finding only if something stops working, and the bundle shows no caller passing check-bundle a pattern, with a directory giving the same files. A caller in the tree that hands EXTRA or IMAGES a glob would change this ruling."
+    },
+    {
+     "id": "section-6-test",
+     "summary": "tests/hooks/test-make-only-hooks.sh section 6: the real Makefile against a stub gate, hostile values through a flag, TICK_NOTE, a required-argument check, a sub-make, URLS and MATCH; plus a scan failing any recipe line handing a FREE_TEXT name to the shell as $(NAME); red on HEAD's Makefile, green on this one.",
+     "class": "within",
+     "why": "Enforcement of the requested fix: delete the fix and the test has nothing left to check. Verification, not new behavior (GM 2026-09-20)."
+    },
+    {
+     "id": "makefile-in-deps-and-stamp",
+     "summary": "The suites' deps index holds the root Makefile as a shared helper, and the hooks stamp area holds Makefile, each with a test.",
+     "class": "within",
+     "why": "Without it a Makefile-only edit leaves the make-only suite skipped, so the requested fix's test would not run on the change it guards; it only makes the enforcement of what was asked actually run. Not unrequested scope."
+    },
+    {
+     "id": "real-gate-and-checks",
+     "summary": "The filed command re-run on the real gate (the country-shrine key with backticks), then hooks-test HOOKS_ALL=1, static and quick green.",
+     "class": "within",
+     "why": "Shows the filed bug fixed and everything working; no decision beyond the spec."
     }
    ],
    "verdict": "CLEAR"

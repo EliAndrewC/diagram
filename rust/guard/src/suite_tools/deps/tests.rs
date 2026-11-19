@@ -54,6 +54,12 @@ fn tree(tag: &str) -> crate::shared::tempdir::TempDir {
         ("scripts/hooks/dup-hooks.sh", "echo forwarder\n"),
         ("rust/Cargo.toml", "[workspace]\n"),
         ("rust/guard/src/a.rs", "fn a() {}\n"),
+        ("Makefile", "land:\n\techo\n"),
+        (
+            "tests/hooks/test-make-hooks.sh",
+            "make -f \"$ROOT/Makefile\" land\n",
+        ),
+        ("scripts/hooks/make-hooks.sh", "echo\n"),
     ] {
         put(&root, file, text);
     }
@@ -120,6 +126,18 @@ fn the_key_moves_with_a_transitive_dependency_and_not_with_a_comment_free_strang
     assert_eq!(Tree::at(&root).key_for("a-hooks.sh"), before);
     put(&root, "scripts/hooks/lib/hm_shape.py", "X = 2\n");
     assert_ne!(Tree::at(&root).key_for("a-hooks.sh"), before);
+}
+
+#[test]
+fn a_suite_that_names_the_makefile_goes_stale_when_the_makefile_changes() {
+    let root = tree("makefile");
+    let (make, other) = (
+        Tree::at(&root).key_for("make-hooks.sh"),
+        Tree::at(&root).key_for("a-hooks.sh"),
+    );
+    put(&root, "Makefile", "land:\n\techo changed\n");
+    assert_ne!(Tree::at(&root).key_for("make-hooks.sh"), make);
+    assert_eq!(Tree::at(&root).key_for("a-hooks.sh"), other);
 }
 
 #[test]

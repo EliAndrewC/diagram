@@ -120,3 +120,11 @@ The GM, on the amendment: "gotcha, thanks - yeah we should definitely amend our 
 The GM, on T180's wording: "When you say "the audit checks pass/fail must match exactly", then surely you mean "the audit checks must pass" right?!"
 
 The GM, on fixing as we go: "gotcha; yeah we want to use this port to fix broken things as we find them, so it needs to be okay to have checks pass as we make those fixes; in general we should fix all known bugs in each step before moving on to porting the next step"
+
+## 2026-11-19, the tolerance rule, and not fixing what is not wrong
+
+The GM, on the session's account of step 3a's sub-pixel tail and its rule that a drift which moves no caption and contradicts no research finding is fixed by restating the claim:
+
+> Yes that tolerance rule seems good.  And not only that: what changes can we make to our project guidelines to make this kind of thing more obvious?  Like, I feel like I keep having to come back and say, over and over again, "don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine".
+
+The GM, on T196's plan: "sounds good, we'll give that a try and see what happens - hopefully we can arrange things so that they are noticed and caught before I come back and have to point them out next time - that is not the only measure of success but it is an important one.  thanks!"

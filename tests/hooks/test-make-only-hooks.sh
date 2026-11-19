@@ -291,5 +291,65 @@ ev "python3 -m l7r.diagram.pipeline.pool_index" | "$HOOK" pretool 2>/dev/null | 
   || { echo "  FAIL    the entry-point rewrite's context is silent"; FAIL=$((FAIL+1)); }
 
 echo
+echo "6. FREE TEXT REACHES A RECIPE'S TOOL UNCHANGED, THE SHELL NEVER READING IT (feature 449 T186)"
+# `make claims-bundle UNITS="...the required item is \`well\`"` ran `well`: the recipe put $(UNITS) inside a double-quoted shell
+# word. The real Makefile (MAKEFILE_UNDER_TEST= runs this section on another copy, which is how its red was shown) is driven in a
+# throwaway repository whose gate is a stub that writes the arguments and environment it was handed, one a line.
+MK=${MAKEFILE_UNDER_TEST:-$HERE/../../Makefile}
+FX="$GUARD_LOG_ROOT/make-fixture"; mkdir -p "$FX/scripts/gates" "$FX/dev"; cp "$MK" "$FX/Makefile"; echo '{}' > "$FX/dev/switches.json"
+cat > "$FX/scripts/gates/l7r-gate.sh" <<'STUB'
+#!/usr/bin/env bash
+case "${1:-} ${2:-}" in "log "*|"switches show"|"switches idle"|"switches state") exit 0 ;; "switches set") printf '%s\n' "$@" > dev/switches.json ;; esac
+{ printf '%s\n' "$@"; printf 'TICK_NOTE=%s\n' "${TICK_NOTE-}"; } > "$(git rev-parse --show-toplevel)/.argv"
+STUB
+chmod +x "$FX/scripts/gates/l7r-gate.sh"
+mkdir -p "$FX/http:/a.example"; touch "$FX/http:/a.example/p1"  # what http://a.example/p? and p* would glob to, were globbing on
+export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t
+git -C "$FX" init -q && git -C "$FX" add -A && git -C "$FX" commit -qm fixture
+# a backtick and a $( that would each create a file if the shell read them, a $ make or the shell would expand, both quotes
+V='a`touch ran1`b $(touch ran2) $HOME $$x ${y} "dq" '"'"'sq'"'"' \z'
+arrives() { # label expected-lines (consecutive, one argument a line) target VAR=value...
+  local label=$1 want=$2; shift 2
+  rm -f "$FX/.argv" "$FX/ran1" "$FX/ran2"
+  ( cd "$FX" && make --no-print-directory "$@" ) >/dev/null 2>&1
+  if [ -f "$FX/.argv" ] && [[ $'\n'"$(cat "$FX/.argv")"$'\n' == *$'\n'"$want"$'\n'* ]] && [ ! -e "$FX/ran1" ] && [ ! -e "$FX/ran2" ]; then
+    echo "  ok      $label"; PASS=$((PASS+1))
+  else echo "  FAIL    $label: the value did not arrive unchanged$([ -e "$FX/ran1" ] || [ -e "$FX/ran2" ] && echo ', and the shell RAN part of it') - the recipe must read it as \"\$\$NAME\", the name in FREE_TEXT"; FAIL=$((FAIL+1)); fi
+}
+arrives "a flag's value: make claims-bundle UNITS=" "$V" claims-bundle UNITS="$V"
+arrives "an environment variable the gate reads: make tick NOTE= (TICK_NOTE)" "TICK_NOTE=$V" tick F=449 T=T1 NOTE="$V"
+arrives "a required argument's check and two values: make check-closed SUBJECT= REASON=" "$V" check-closed SUBJECT="$V" REASON="$V"
+arrives "through a sub-make: make claims-clean REASON= (the switch's --why)" "$V" claims-clean REASON="$V"
+[ "$(git -C "$FX" log -1 --format=%s)" = "chore: claims clean - $V" ] && [ ! -e "$FX/ran1" ] \
+  && { echo "  ok      ...and inside a longer word: the switch's commit message"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the switch's commit message is not \"chore: claims clean - <the reason>\""; FAIL=$((FAIL+1)); }
+# A list is split by the shell, one argument a word, with globbing off: the first URL would glob to http:/a.example/p1. A word
+# holds no space, so its backtick and $( create their file by a bare redirection.
+U1='http://a.example/p?'; U2='http://a.example/`>ran1`*?q=$z&r=$(>ran2)'
+arrives "a list of URLs, split unglobbed: make source-pages URLS=" "$U1"$'\n'"$U2"$'\n'"--question" source-pages OUT=out URLS="$U1 $U2" Q=0001
+M1='a$b.pdf=k1'; M2='c`>ran1`d*.pdf=k2,k3'
+arrives "a list made into flags: make archive-inbox MATCH= (--match per word)" "--match"$'\n'"$M1"$'\n'"--match"$'\n'"$M2" archive-inbox MATCH="$M1 $M2"
+# Every target, not only these: no recipe names a FREE_TEXT variable as $(NAME) outside an $(if ...) test, where make alone reads it.
+hits=$(awk '
+  /^FREE_TEXT[ \t]*:?=/ { inlist = 1; sub(/^FREE_TEXT[ \t]*:?=/, "") }
+  inlist { n = split($0, w, /[ \t\\]+/); for (i = 1; i <= n; i++) if (w[i] != "") { free[w[i]] = 1; nfree++ }; if ($0 !~ /\\$/) inlist = 0; next }
+  !/^\t/ && !/^[A-Z_][A-Z0-9_]*[ \t]*[:?+]?=/ { next }
+  { s = $0; depth = 0
+    for (i = 1; i <= length(s); i++) { c = substr(s, i, 1)
+      if (c == "$" && substr(s, i + 1, 1) == "$") { i++; continue }
+      if (c == "$" && substr(s, i + 1, 1) == "(") {
+        if (match(substr(s, i + 2), /^[A-Z_][A-Z0-9_]*\)/)) {
+          name = substr(s, i + 2, RLENGTH - 1); ok = 0; for (d = 1; d <= depth; d++) if (cond[d]) ok = 1
+          if ((name in free) && !ok) print NR ": $(" name ")"
+          i += RLENGTH + 1; continue }
+        depth++; cond[depth] = (substr(s, i + 2, 3) == "if "); i++; continue }
+      if (c == "(") { depth++; cond[depth] = 0; continue }
+      if (c == ")" && depth > 0) { depth--; continue }
+      if (c == "," && depth > 0 && cond[depth]) cond[depth] = 0 } }
+  END { if (nfree < 8) print "no FREE_TEXT list of the free-text variables at the top of the Makefile" }' "$MK")
+[ -z "$hits" ] && { echo "  ok      no recipe hands a FREE_TEXT variable to the shell as \$(NAME)"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    a free-text variable reaches the shell through make - write it \"\$\$NAME\" (a list: set -f, then \$\$NAME unquoted or a loop over it; FREE_TEXT exports it):"; printf '%s\n' "$hits" | sed 's/^/          Makefile:/'; FAIL=$((FAIL+1)); }
+
+echo
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]
