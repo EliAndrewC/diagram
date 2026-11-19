@@ -221,6 +221,26 @@ fn a_reply_s_lines_are_vetted_and_its_outside_rows_filed() {
     assert!(warned.is_empty());
 }
 
+/// A DRIFTED line is recorded only with its fix named, the claim or the code (constitution XIV v2.36.0, feature 449 T196): a drift
+/// with no visible effect is fixed by restating the claim, so the check must say which side moves.
+#[test]
+fn a_drifted_line_without_its_fix_is_refused_with_the_form() {
+    let root = fixture("claims-triage-fix");
+    let units = json!({"a::b#c": {}, "a::d#e": {}, "a::f#g": {}})
+        .as_object()
+        .unwrap()
+        .clone();
+    let (mut said, mut warned) = (String::new(), String::new());
+    let reply = "VERDICT a::b#c DRIFTED - ends 0.4 px short [§2]\nVERDICT a::d#e DRIFTED - ends 0.4 px short; fix: claim; effect: none [§2]\nVERDICT a::f#g DRIFTED - [outside the change] the wrong form drawn; fix: code; effect: a thatched roof drawn tiled [§1]\n";
+    let (kept, bad) = vet(reply, &units, &root, &mut said, &mut warned).unwrap();
+    assert_eq!(bad.len(), 1, "{bad:?}");
+    assert!(bad[0].starts_with("a DRIFTED note names no fix (`fix: claim` or `fix: code`"));
+    assert!(bad[0].ends_with("VERDICT a::b#c DRIFTED - ends 0.4 px short [§2]"));
+    assert!(!kept.contains("a::b#c") && kept.contains("a::d#e") && kept.contains("a::f#g"));
+    assert!(warned.contains("REFUSED line - a DRIFTED note names no fix"));
+    assert!(warned.contains("a DRIFTED note's `fix: claim` or `fix: code`"));
+}
+
 /// The fixture recorded and committed as origin/main, the index's GAP row resting on no block: (root, index, store).
 fn recorded() -> (
     l7r_guard::shared::tempdir::TempDir,

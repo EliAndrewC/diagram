@@ -9,7 +9,7 @@ use serde_json::json;
 use super::super::tests::{git, repo};
 use super::{
     best, future_refusal, future_stamps, in_flight, owe, owed_entries, parse_utc, part_items,
-    refusal, ruled, unanswered,
+    refusal, ruled, split_items, unanswered,
 };
 
 const CHECKLIST: &str = "# Checklist\n\n## A. At task start\n\n1. **The goal.** x\n2. **The constraints.** y\n3. **Where from.** z\n\n## B. When the work resists\n\n1. **What refuses.** a\n2. **Again.** b\n\n## C. Habits\n\n1. **Edit once.** c\n";
@@ -194,26 +194,66 @@ fn a_part_b_stamped_after_the_clock_is_refused() {
 }
 
 #[test]
-fn part_a_holds_the_constant_and_the_arithmetic_items() {
+fn part_a_holds_the_constant_the_arithmetic_and_the_before_any_fix_items() {
     let text = std::fs::read_to_string(
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../docs/approach-checklist.md"),
     )
     .unwrap();
     let items = part_items(&text, "A");
-    assert_eq!(items, (1..12).collect::<Vec<u32>>());
+    assert_eq!(items, (1..13).collect::<Vec<u32>>());
+    // item 12, what a reader of the map would see differently before any fix (feature 449 T196, constitution XIV v2.36.0)
     assert!(
         text.contains("**Before moving a constant.**")
             && text.contains("**Before fitting things into room.**")
+            && text.contains("**Before any fix.**")
     );
     let old: String = (1..10).map(|n| format!("{n}. **x.** answered\n")).collect();
-    assert_eq!(unanswered(&old, &items), [10, 11]);
+    assert_eq!(unanswered(&old, &items), [10, 11, 12]);
+    assert_eq!(split_items(&text, "A"), ((1..12).collect(), vec![12]));
+}
+
+/// Item 12, asked where written (feature 449 T196): a section written before it passes without it, and one that writes its line
+/// answers it - on the real checklist, so its marker is read where the gate reads it.
+#[test]
+fn item_12_is_owed_only_by_a_section_that_writes_it() {
+    let (root, dir) = feature();
+    let real = std::fs::read_to_string(
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../docs/approach-checklist.md"),
+    )
+    .unwrap();
+    std::fs::write(root.join("docs/approach-checklist.md"), &real).unwrap();
+    let eleven: String = (1..12).map(|n| format!("{n}. **x.** answered\n")).collect();
+    let section = |t: &str, twelve: &str| {
+        format!("### {t} Approach (checklist part A)\n\n{eleven}{twelve}\n")
+    };
+    let plan = [
+        section("T01", ""),
+        section(
+            "T02",
+            "12. **Before any fix.** <what a reader of the map would see differently>\n",
+        ),
+        section("T03", "12.\n"),
+        section("T04", "12. **Before any fix.** None: tooling.\n"),
+        section("T05", "12. **Before any fix.**\n"),
+    ]
+    .concat();
+    std::fs::write(dir.join("plan.md"), plan).unwrap();
+    assert_eq!(refusal(&dir, &root, "T01"), None);
+    for t in ["T02", "T03", "T05"] {
+        assert!(why(&dir, &root, t).contains("item(s) 12 unanswered"), "{t}");
+    }
+    assert_eq!(refusal(&dir, &root, "T04"), None);
+    assert!(why(&dir, &root, "T09").contains("(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)"));
 }
 
 #[test]
 fn the_most_complete_block_counts() {
     let plan = "### T01 Approach\n\n1. a\n\n### T01 Approach\n\n1. a\n2. b\n";
-    assert_eq!(best(plan, "T01", "A", &[1, 2, 3], None), (true, vec![3]));
-    assert_eq!(best(plan, "T09", "A", &[1], None), (false, vec![1]));
+    assert_eq!(
+        best(plan, "T01", "A", (&[1, 2, 3], &[]), None),
+        (true, vec![3])
+    );
+    assert_eq!(best(plan, "T09", "A", (&[1], &[]), None), (false, vec![1]));
 }
 
 #[test]

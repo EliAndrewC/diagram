@@ -691,6 +691,15 @@ pub fn clear_page_moves(
     Ok((out, memo.snapshots()))
 }
 
+/// The form a DRIFTED note names its fix in (constitution XIV v2.36.0, feature 449 T196): the claim restated where the behavior is
+/// fine, the code only for a wrong outcome.
+pub const FIX_FORM: &str = "`fix: claim` or `fix: code`, then `effect: <what a reader of the map would see differently, the finding contradicted, the check or tool that answers wrongly, or none>`, before the `[§...]`";
+
+/// Does a DRIFTED note say which side moves, the claim or the code?
+fn names_fix(note: &str) -> bool {
+    note.contains("fix: claim") || note.contains("fix: code")
+}
+
 /// The reply without its VERDICT lines that cannot be recorded as written, and those lines; the outside-the-change rows filed; what was said.
 pub fn vet(
     reply: &str,
@@ -717,6 +726,9 @@ pub fn vet(
                 }
                 Some(_) if !gone.is_empty() => {
                     format!("no such question file: {}", gone.join(", "))
+                }
+                Some(m) if &m[2] == "DRIFTED" && !names_fix(&m[3]) => {
+                    format!("a DRIFTED note names no fix ({FIX_FORM})")
                 }
                 Some(_) => String::new(),
             };
@@ -747,7 +759,7 @@ pub fn vet(
         let _ = writeln!(warned, "claims-checked: REFUSED line - {b}");
     }
     if !bad.is_empty() {
-        warned.push_str("claims-checked: correct each refused line in the reply file (the claim's path as the bundle names it; a verdict of IN-STEP, DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL; a pointer to a question file that exists) and run it again - the lines it recorded stay recorded\n");
+        let _ = writeln!(warned, "claims-checked: correct each refused line in the reply file (the claim's path as the bundle names it; a verdict of IN-STEP, DRIFTED, NEEDS-RESEARCH, MISLABELED or CANNOT-TELL; a pointer to a question file that exists; a DRIFTED note's {FIX_FORM}) and run it again - the lines it recorded stay recorded");
     }
     Ok((keep.join("\n"), bad))
 }

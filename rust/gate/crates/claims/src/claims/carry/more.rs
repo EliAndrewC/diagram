@@ -188,7 +188,7 @@ fn introduced(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, Reader, Cur) {
     let r = root.join("r.txt");
     std::fs::write(
         &r,
-        "VERDICT rust/phases/src/lib.rs::Thing.m#method guess DRIFTED - off\n",
+        "VERDICT rust/phases/src/lib.rs::Thing.m#method guess DRIFTED - off; fix: code; effect: a finding contradicted\n",
     )
     .unwrap();
     claims(

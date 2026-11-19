@@ -69,10 +69,18 @@ for THIS unit exactly as if it were written on it.
   range, a form fixed where the question attests several, a form drawn that the question does not attest, an order or placement
   the question contradicts, a DEVIATION the drawing page does not record. Name the code (a line or expression) and the finding
   (quote a short phrase of the question) that disagree.
+  **Every DRIFTED note names its FIX and its EFFECT** (constitution XIV v2.36.0, feature 449 T196): `fix: claim` (restate the
+  claim's wording) or `fix: code`, and `effect:` - what a reader of the map would see differently, or which research finding is
+  contradicted, or which check or tool answers wrongly. A DEFECT is a wrong outcome - a map that reads wrong, a finding
+  contradicted, a check that passes bad work or refuses good work, a tool that crashes or answers wrongly - never a difference
+  from what was expected, from the Python or from a CONVENTION's own wording, nor a gap no reader of the map would see. Where the
+  effect is none and no finding is contradicted, the fix is `fix: claim` (the tolerance rule; the GM, 2026-11-19:
+  *"don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine"*). The mismatch is still DRIFTED: the fix
+  says which side moves. `make claims-checked` refuses a DRIFTED line without `fix: claim` or `fix: code`.
   **A FILED DEPARTURE is judged once, never relabeled** (round arbiter, ask:417-T49-claims, 2026-10-26): a claim that states
   how its code departs from the cited page and names the open task that carries the fix (`a departure the code keeps until
   feature NNN Tnn`) is a known defect already filed. Judge only whether the departure it states is what the code does: if it is,
-  the verdict is DRIFTED with the note `known (NNN Tnn): <the departure>`, and you ask for no other label - not a DEVIATION
+  the verdict is DRIFTED with the note `known (NNN Tnn): <the departure>; fix: code; effect: <its effect>`, and you ask for no other label - not a DEVIATION
   recorded on the drawing page, not a GUESS, not NEEDS-RESEARCH or MISLABELED. If the stated departure misdescribes the code, it
   is DRIFTED with what it misstates. (Three rounds on one bund claim each asked a different label for one filed departure.)
 - **NEEDS-RESEARCH** - the code makes a physical decision, the claim cites a question, and the question does not bear on that
@@ -115,10 +123,15 @@ each on its own line, with no backticks needed:
   `[outside the change]`, e.g. `VERDICT <key> DRIFTED - [outside the change] <note> [§4]`. It is filed as a task of the feature
   rather than held against the landing (feature 405 T36). Anything the change made, or could have made, untrue takes no tag; a
   unit with no marked line takes none.
+- A DRIFTED note runs, in this order: `[outside the change]` if it applies, what is wrong, `fix: claim` or `fix: code`,
+  `effect: <what a reader of the map would see differently, the finding contradicted, the check or tool that answers wrongly, or
+  none>`, then the blocks - e.g.
+  `VERDICT <key> DRIFTED - the leader ends 0.4 px short of the drawn point the claim names; fix: claim; effect: none [§2]`.
 - One VERDICT line for EVERY key in the bundle - a key with no line stays owed. An IN-STEP note is a few words; a finding's note
   says what is wrong and what the claim or the code should be, in one line.
 - Anything you notice OUTSIDE the owed keys - another claim's wording, a page's own gap, code the bundle shows beside the claim -
-  goes under an `OUTSIDE THE CHANGE` heading as `- <file> | <unit or block> | <finding>` lines, never in a closing paragraph: the
+  goes under an `OUTSIDE THE CHANGE` heading as `- <file> | <unit or block> | <finding, with its effect>` lines - a line with no
+  effect a reader of the map would see and no finding it breaks is not a defect and is not written - never in a closing paragraph: the
   session files each line as an open row when it records your reply, and a note in prose is lost (the round arbiter on hour 32).
 - Nothing else is needed: no restated code, no reasoning for a pass. Every character stays in the session's context.
 

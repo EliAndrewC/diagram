@@ -60,6 +60,8 @@ Constitution XII. One line each here; the full text of every rule, with its feat
   silent on a choice, take a knob or the algorithmically easier route and say which (GM 2026-10-25; `escalation-check` tests 4-5).
 - A `GUESS`, `UNRESEARCHED` or `CONVENTION` value, and a number no claim states, is a goal and a knob, never a target to defend:
   `make tunables` (GM 2026-10-25, feature 417 T28).
+- **A defect is a wrong outcome, not a difference** (constitution XIV, v2.36.0; GM 2026-11-19): a claim the code does not
+  literally match where the behavior is fine is fixed by restating the claim, not the code.
 - The ARCHIVE before the web: `make archive-inbox`, then `make archive-find`. Every cited page is archived in the PRIVATE
   `EliAndrewC/diagram-research`; never link or copy it anywhere public.
 - Geography resolves China first, Japan as tiebreaker; the GM's canon overrides both.
@@ -138,7 +140,7 @@ full").
 - **No port or change is held to its bytes** (the GM, 2026-11-18, constitution XIII: *"remove any references to things needing
   to be bitwise identical or anything like that as an exactness standard"*): an output may differ so long as everything works -
   tests pass, callers get their job done, research claims hold; a drawn output must pass its checks and hold its research claims, a ported check must still do its job (its red fixtures still fail, the sheets it passed still pass, a check fixed on purpose changing as fixed),
-  and a differential (`make diff-run`) is a signal, never a bar; a check's verdicts changing as a bug is fixed is expected, and a step's known bugs are fixed, in every copy that lives, before the next step's port (the GM, 2026-11-18, on T180's wording: *"surely you mean "the audit checks must pass" right?!"*).
+  and a differential (`make diff-run`) is a signal, never a bar; a check's verdicts changing as a bug is fixed is expected, and a step's known bugs (defects, constitution XIV: wrong outcomes, never differences) are fixed, in every copy that lives, before the next step's port (the GM, 2026-11-18, on T180's wording: *"surely you mean "the audit checks must pass" right?!"*).
 - **Work budgets** (feature 443): each stage's counted operations (`make work-budget`, the record `dev/work-budget.md`) against a
   budget derived on paper (`.specify/templates/derivation.md`, judged by the `work-budget` agent; `docs/work-budget-rubric.md`); a
   first budget needs its SOUND, a change the GM's words (`make budget-change`) - but a budget is an estimate (444 FR-022, the GM

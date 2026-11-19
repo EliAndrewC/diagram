@@ -124,7 +124,7 @@ fn record_and_report(root: &Path, out: &Path) {
         units["l7r/diagram/m.py::TABLE#table"]["uid"],
         "l7r/diagram/m.py::TABLE"
     );
-    let r = reply(&root, "VERDICT `l7r/diagram/m.py::TABLE#table` DRIFTED - [outside the change] see research/questions/0001-...-gap.html [§1, §9]\nVERDICT l7r/diagram/m.py::helper#help - IN-STEP: fine [§]\nVERDICT nope#x IN-STEP - x\nVERDICT broken\nVERDICT l7r/diagram/m.py::helper#help IN-STEP - research/questions/0099-none.html\nUNCLAIMED l7r/diagram/m.py::TABLE - a decision\nUNCLAIMED no.py::x - refused\n");
+    let r = reply(&root, "VERDICT `l7r/diagram/m.py::TABLE#table` DRIFTED - [outside the change] see research/questions/0001-...-gap.html; fix: code; effect: a finding contradicted [§1, §9]\nVERDICT l7r/diagram/m.py::helper#help - IN-STEP: fine [§]\nVERDICT nope#x IN-STEP - x\nVERDICT broken\nVERDICT l7r/diagram/m.py::helper#help IN-STEP - research/questions/0099-none.html\nUNCLAIMED l7r/diagram/m.py::TABLE - a decision\nUNCLAIMED no.py::x - refused\n");
     let got = claims(&root, &["record", "--bundle", &o, "--reply", &r]);
     assert_eq!(got.code, 3, "{}", got.stderr);
     assert!(got.stdout.contains("claims-checked: UNCLAIMED l7r/diagram/m.py::TABLE - a decision: write a claim for it, then check it"), "{}", got.stdout);

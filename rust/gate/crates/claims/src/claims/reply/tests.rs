@@ -17,6 +17,21 @@ fn a_reply_is_read_in_each_form() {
     );
     assert_eq!(v["d::e#f"].0, "DRIFTED");
     assert_eq!(u, vec![("a::b".to_owned(), "a choice".to_owned())]);
+    // a DRIFTED note carries its fix and effect inside the note, between the outside tag and the rests (feature 449 T196)
+    let (v, _) = parse_reply(
+        "VERDICT g::h#i DRIFTED - [outside the change] 0.4 px short; fix: claim; effect: none [§2]",
+    );
+    assert_eq!(
+        v["g::h#i"],
+        (
+            "DRIFTED".to_owned(),
+            "[outside the change] 0.4 px short; fix: claim; effect: none [§2]".to_owned()
+        )
+    );
+    assert_eq!(
+        rests_of(&outside_tag(&v["g::h#i"].1).1, &Map::new()).0,
+        "0.4 px short; fix: claim; effect: none"
+    );
     assert_eq!(
         outside_tag("  [outside the change] x "),
         (true, "x".to_owned())

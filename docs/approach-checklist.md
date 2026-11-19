@@ -61,6 +61,12 @@ Answer each in writing in the task's plan section. One line each is enough where
 11. **Before fitting things into room.** Write the capacity arithmetic - how many, how wide, against how much room - before
    rolling anything - or n/a. (*T06's 20-minute experiment was households x farmstead width against the margin's length,
    two minutes on paper* - step-back, 2026-10-18.)
+12. **Before any fix.** (asked where written) What would a reader of the map see differently - or which research finding, check or tool does it put
+   right? If nothing, it is not a defect (constitution XIV, v2.36.0): a claim the code does not literally match, where the
+   behavior is fine, is fixed by restating the claim, and a found-and-left item is filed only with its visible effect or the
+   finding it breaks. Asked where written: a section that writes a `12.` line answers it, and one written before this item was
+   added passes without it (the gate reads the marker; feature 449 T196). (*T188-T194 fixed a chain of sub-pixel "defects" in code that no reader of the map would see*; the GM,
+   2026-11-19: *"don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine"*.)
 
 ## B. When the work resists
 

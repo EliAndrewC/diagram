@@ -134,6 +134,11 @@ never comes. The only exception is a fix that would be an architectural change (
 new subsystem, a placement engine rewritten); defer that WITH its measurement, its mechanism and an
 implementation sketch, which is a deliverable rather than a shrug.
 
+A finding is a defect only where it is a WRONG OUTCOME - a map that reads wrong, a research finding contradicted, a check or tool
+that answers wrongly - never a difference from what was expected, from the Python or from a convention's wording (constitution
+XIV v2.36.0, feature 449 T196). Before any fix, name what a reader of the map would see differently; a found-and-left item is
+filed only with that effect or the finding it breaks.
+
 Do not reach for Principle XIII's "pre-existing failures stay ledgered" here. That clause is about
 what BLOCKS a push, not about what you owe a defect you have seen.
 
@@ -157,4 +162,5 @@ stays a no-op for a session whose settings predate the change.
 `impl-drift` judges the engine's and the Mode A procedures' research claims against the questions they cite. It is not a map
 review: it is owed when `make claims-owed` names a claim (new, its code changed, or its question's findings moved), and the push
 (`scripts/gates/claims-gate.sh`) holds it. One bundle per file or per batch (`make claims-bundle MODULE=<file>`), the reply recorded
-with `make claims-checked BUNDLE=<dir> REPLY=<file>`, a row of the ledger's measured table per pass as for any check.
+with `make claims-checked BUNDLE=<dir> REPLY=<file>`, a row of the ledger's measured table per pass as for any check. A DRIFTED line
+names its fix, `fix: claim` or `fix: code`, with its effect; `claims-checked` refuses one without it (feature 449 T196).

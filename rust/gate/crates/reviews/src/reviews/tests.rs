@@ -56,12 +56,14 @@ pub(super) fn commit(root: &Path, msg: &str) {
 /// `px`), the finished-run probe (`.git/live`'s lines), the bundle runner (`is_current`: current unless `<gen>.stale` exists), and
 /// the engine key.
 pub(super) fn tools(root: &Path) {
-    put(
-        root,
-        "scripts/gates/l7r-gate.sh",
+    // written by `install`, another process, never by this one: a script this process writes while another test thread forks is
+    // held open by that child until its exec, and running it then fails `Text file busy`, which `gate_state` reads as a red gate
+    // (feature 449 T196: `a_verdict_record_is_the_reviews_last_act` red in one `make static` of three)
+    std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
+    l7r_gate_core::write_executable(
+        &root.join("scripts/gates/l7r-gate.sh"),
         "#!/bin/sh\nd=$(dirname \"$0\")/../..\nif [ \"$1\" = check ]; then [ -f \"$d/.git/no-pattern\" ] && { echo no pattern >&2; exit 1; }; echo '(?<![\\w.])\\d[\\d,]*(?:\\.\\d+)?\\s*(?:px|s)(?![\\w-])'; exit 0; fi\n[ -f .git/green ]\n",
     );
-    executable(&root.join("scripts/gates/l7r-gate.sh"));
     put(
         root,
         "scripts/hooks/finished-run-hooks.sh",
@@ -77,12 +79,6 @@ pub(super) fn tools(root: &Path) {
         "Makefile",
         "engine-key:\n\t@cat .git/key 2>/dev/null || true\n",
     );
-}
-
-/// `chmod +x`, in process.
-pub(super) fn executable(path: &Path) {
-    use std::os::unix::fs::PermissionsExt;
-    std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o755)).unwrap();
 }
 
 /// A repository with one commit, `origin/main` at it, and the stubbed tools (untracked): two git calls, the identity written into the

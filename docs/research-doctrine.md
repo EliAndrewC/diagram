@@ -382,7 +382,8 @@ auto-loads when a session edits the record; the archive and the download list ar
   question whose findings it changed is cited (its findings page, not only its drawing page) by a `Research:` claim of
   the code that decides it, checked by
   `impl-drift`, or, where no code decides it, recorded as implemented nowhere with what was searched (`implementation-check.md`). A DRIFTED claim is a result shown by `make
-  claims-report`; the code is fixed only if the feature's spec asks. `make impl-check F=<n>` says what is owed, and the
+  claims-report`, its note naming `fix: claim` or `fix: code`; a drift with no visible effect and no finding contradicted is
+  fixed by restating the claim (the tolerance rule, constitution XIV v2.36.0); the code is fixed only if the feature's spec asks. `make impl-check F=<n>` says what is owed, and the
   closing check refuses until it reports nothing.
 - Every rendering decision is recorded in one of four classes - historically accurate, deliberate
   deviation, map drawing convention, guess - in `research/` (the finding), the operative doc (the

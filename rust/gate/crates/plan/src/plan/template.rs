@@ -30,6 +30,9 @@ pub const TEMPLATE: &str = concat!(r#"### {T} (<why: the finding or measurement 
 9. **Done, measured.** <the measurement that says it is done>
 10. **Before moving a constant.** <n/a, or the claim it moves>
 11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
 
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 "#);

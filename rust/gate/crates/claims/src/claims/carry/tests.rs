@@ -214,7 +214,7 @@ fn a_python_change_is_engine_code_only_where_its_code_id_moves() {
 const REACH: &str = "rust/phases/src/lib.rs::reach#reach";
 const GAP: &str = "rust/phases/src/lib.rs::GAP#gap";
 /// The GM's queue row `make claims-known` writes for `reach`, its `utc` a fixed one.
-const KNOWN_ROW: &str = "{\"kind\": \"known-drift\", \"claim\": \"rust/phases/src/lib.rs::reach#reach\", \"task\": \"T01\", \"finding\": \"DRIFTED        rust/phases/src/lib.rs::reach#reach - departs\", \"utc\": \"2026-11-17T00:00:00Z\"}\n";
+const KNOWN_ROW: &str = "{\"kind\": \"known-drift\", \"claim\": \"rust/phases/src/lib.rs::reach#reach\", \"task\": \"T01\", \"finding\": \"DRIFTED        rust/phases/src/lib.rs::reach#reach - departs; fix: code\", \"utc\": \"2026-11-17T00:00:00Z\"}\n";
 /// The claims feature's tasks as `make claims-known` leaves them: the GM's box added.
 const KNOWN_TASKS: &str = "# Tasks\n\n- [ ] T01 fix `reach` [lands-open]\n- [x] T02 done\n- [ ] T03 open one\n- [ ] GM review (make gm-reviewed F=405) [lands-open]\n      research: rendering\n      verify: the GM reviewed every row (make gm-review lists them)\n";
 
@@ -242,7 +242,7 @@ fn drifted(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     let o = root.join("b").to_string_lossy().into_owned();
     claims(&root, &["bundle", "--units", REACH, "--out", &o]);
     let r = root.join("r.txt");
-    std::fs::write(&r, format!("VERDICT {REACH} DRIFTED - departs [§]\nVERDICT {GAP} DRIFTED - [outside the change] a carry [§]\n")).unwrap();
+    std::fs::write(&r, format!("VERDICT {REACH} DRIFTED - departs; fix: code [§]\nVERDICT {GAP} DRIFTED - [outside the change] a carry; fix: code [§]\n")).unwrap();
     claims(
         &root,
         &["record", "--bundle", &o, "--reply", &r.to_string_lossy()],
@@ -293,7 +293,7 @@ fn a_drift_the_change_names_is_known_and_one_outside_it_a_carry() {
     let got = claims(&root, &["gate"]);
     assert_eq!(got.code, 0, "{}", got.stdout);
     assert!(got.stdout.contains("claims-gate: carry: DRIFTED        rust/phases/src/lib.rs::GAP#gap - a carry - a finding on code the change left unchanged: file it with `make claims-carry F=406`"), "{}", got.stdout);
-    assert!(got.stdout.contains("claims-gate: known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
+    assert!(got.stdout.contains("claims-gate: known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs; fix: code - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
 }
 
 #[test]
@@ -307,7 +307,7 @@ fn at_report_a_known_drift_is_not_recorded_for_the_gm() {
 fn at_clean_a_known_drift_unrecorded_is_refused() {
     let root = at_clean("claims-carry-gate-clean");
     let got = claims(&root, &["gate"]);
-    assert!(got.stdout.contains("claims-gate: REFUSED known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
+    assert!(got.stdout.contains("claims-gate: REFUSED known: DRIFTED        rust/phases/src/lib.rs::reach#reach - departs; fix: code - a known drift (405 T01) to record for the GM"), "{}", got.stdout);
 }
 
 #[test]
@@ -328,7 +328,7 @@ fn at_clean_the_known_drift_is_recorded_for_the_gm() {
     let utc = written.rsplit("\"utc\": \"").next().unwrap();
     assert_eq!(
         written.replace(utc, "<utc>\"}\n"),
-        "{\"kind\": \"known-drift\", \"claim\": \"rust/phases/src/lib.rs::reach#reach\", \"task\": \"T01\", \"finding\": \"DRIFTED        rust/phases/src/lib.rs::reach#reach - departs\", \"utc\": \"<utc>\"}\n"
+        "{\"kind\": \"known-drift\", \"claim\": \"rust/phases/src/lib.rs::reach#reach\", \"task\": \"T01\", \"finding\": \"DRIFTED        rust/phases/src/lib.rs::reach#reach - departs; fix: code\", \"utc\": \"<utc>\"}\n"
     );
     assert_eq!(
         std::fs::read_to_string(root.join("specs/405-claims/tasks.md")).unwrap(),

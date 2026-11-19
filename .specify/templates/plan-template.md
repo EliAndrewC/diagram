@@ -197,6 +197,16 @@ approval before /speckit-tasks may run.
     AND each newly-failing check must be individually diagnosed in the plan's
     closing notes.
 
+- **XIV. Fix Defects Where You Find Them**: a defect (v2.36.0) is a wrong
+  outcome - a map that reads wrong, a research finding contradicted, a check
+  that passes bad work or refuses good work, a tool that crashes, hangs or
+  answers wrongly - never a difference from what was expected, from the
+  Python or from a convention's wording. Before any fix, name what a reader
+  of the map would see differently; a claim the code does not literally
+  match where the behavior is fine is fixed by restating the claim. A
+  found-and-left item is filed only with its visible effect or the research
+  finding it breaks.
+
 - **XIX. Placed Right, Never Repaired**: Does the feature
   place, move or remove anything on a map? If yes, the plan MUST name, for
   each rule the placement keeps, the ONE predicate its placer asks of every

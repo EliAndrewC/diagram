@@ -26,6 +26,11 @@ static ITEM: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^(\d+)\.\s+\S"));
 static STAMPED_HEAD: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?im)^#{3,4}\s+T\d+\w*\s+(?:part B|Approach)\b.*$"));
 static NEXT_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#{2,4}\s"));
+/// A checklist item marked asked where written: owed only by a section that writes its line (feature 449 T196, item 12 - a new item
+/// must not refuse the sections written before it, 58 open on 2026-11-19).
+static ASKED: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^(\d+)\.\s.*\(asked where written\)"));
+static WRITTEN: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^(\d+)\.(.*)$"));
+static BOLD_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"\A\s*\*\*[^*]*\*\*"));
 
 fn heads(part: &str) -> &str {
     if part == "A" {
@@ -79,12 +84,48 @@ fn numbers(text: &str) -> Vec<u32> {
         .collect()
 }
 
-fn part_items(list: &str, part: &str) -> Vec<u32> {
+fn part_text<'a>(list: &'a str, part: &str) -> &'a str {
     re(&format!(r"(?ms)^## {part}\..*?(?=^## |\z)"))
         .find(list)
         .ok()
         .flatten()
-        .map_or_else(Vec::new, |m| numbers(m.as_str()))
+        .map_or("", |m| m.as_str())
+}
+
+fn part_items(list: &str, part: &str) -> Vec<u32> {
+    numbers(part_text(list, part))
+}
+
+/// (the items every section of `part` owes, the items asked only where a section writes them).
+fn split_items(list: &str, part: &str) -> (Vec<u32>, Vec<u32>) {
+    let asked: Vec<u32> = ASKED
+        .captures_iter(part_text(list, part))
+        .map_while(Result::ok)
+        .map(|c| c[1].parse().unwrap_or(0))
+        .collect();
+    let owed = part_items(list, part)
+        .into_iter()
+        .filter(|n| !asked.contains(n))
+        .collect();
+    (owed, asked)
+}
+
+/// The asked-where-written items a section writes but leaves empty: nothing after the number and its bold heading, or only a
+/// `<...>` placeholder.
+fn left_empty(body: &str, asked: &[u32]) -> Vec<u32> {
+    WRITTEN
+        .captures_iter(body)
+        .map_while(Result::ok)
+        .filter_map(|c| {
+            let n: u32 = c[1].parse().unwrap_or(0);
+            let rest = c[2].to_owned();
+            let answer = BOLD_HEAD.replace(&rest, "");
+            let answer = answer.trim();
+            (asked.contains(&n)
+                && (answer.is_empty() || (answer.starts_with('<') && answer.ends_with('>'))))
+            .then_some(n)
+        })
+        .collect()
 }
 
 fn task_blocks(plan: &str, task: &str, part: &str) -> Vec<(String, String)> {
@@ -133,12 +174,23 @@ pub(super) fn future_refusal(plan: &str, now: Option<&str>) -> Option<String> {
     Some(format!("stamped after the clock ({}Z): {} - stamp a part B with the time it is written (feature 385 T50)", clock.chars().take(16).collect::<String>(), ahead.join("; ")))
 }
 
-/// (a block exists, the items the most complete block stamped at or after `since` leaves unanswered).
-fn best(plan: &str, task: &str, part: &str, items: &[u32], since: Option<i64>) -> (bool, Vec<u32>) {
+/// (a block exists, the items the most complete block stamped at or after `since` leaves unanswered): every one of `items`, and
+/// each of `asked` the block writes but leaves empty.
+fn best(
+    plan: &str,
+    task: &str,
+    part: &str,
+    (items, asked): (&[u32], &[u32]),
+    since: Option<i64>,
+) -> (bool, Vec<u32>) {
     let found: Vec<Vec<u32>> = task_blocks(plan, task, part)
         .iter()
         .filter(|(h, _)| since.is_none_or(|s| parse_utc(h).is_some_and(|t| t >= s)))
-        .map(|(_, b)| unanswered(b, items))
+        .map(|(_, b)| {
+            let mut left = unanswered(b, items);
+            left.extend(left_empty(b, asked));
+            left
+        })
         .collect();
     let exists = !found.is_empty();
     (
@@ -205,9 +257,9 @@ pub(super) fn refusal(spec_dir: &Path, root: &Path, task: &str) -> Option<String
         return Some(ahead);
     }
     let lines = std::fs::read_to_string(path).unwrap_or_default();
-    let items = part_items(&lines, "A");
+    let (items, asked) = split_items(&lines, "A");
     let name = spec_dir.file_name().unwrap_or_default().to_string_lossy();
-    let (exists, missing) = best(&text, task, "A", &items, None);
+    let (exists, missing) = best(&text, task, "A", (&items, &asked), None);
     if !exists {
         return Some(format!("{task} has no `### {task} Approach` block in {name}/plan.md - answer every item of the checklist's part A ({}) before it is ticked (feature 385 D8)", joined(&items)));
     }
@@ -226,11 +278,12 @@ pub(super) fn refusal(spec_dir: &Path, root: &Path, task: &str) -> Option<String
             .filter(|p| !p.is_empty())
             .unwrap_or("B");
         let utc = row["utc"].as_str().unwrap_or("None");
+        let (owed, asked) = split_items(&lines, part);
         let (exists, missing) = best(
             &text,
             task,
             part,
-            &part_items(&lines, part),
+            (&owed, &asked),
             parse_utc(&minute_of(utc)),
         );
         if !exists || !missing.is_empty() {

@@ -762,6 +762,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T196 (the GM 2026-11-19, request.md: a defect is a wrong outcome, not a difference)": {
+   "sha256": "fe06d33cc6cb9c10a34c8bc2ecefe16acadfd6783c2d818cdb18109a8c6dfa90",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T196 Approach (checklist part A)": {
+   "sha256": "ea11756512f1efda54e0487cafcc3ceed8dd214783840c259b40bf632c083fdb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12918,6 +12930,78 @@
      "why": "Shows the filed bug fixed and everything working; no decision beyond the spec."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T196 (the GM 2026-11-19, request.md: a defect is a wrong outcome, not a difference)",
+    "### T196 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T196-approach-defect-definition",
+     "summary": "Constitution XIV defines a defect as a wrong outcome (map reads wrong, research finding contradicted, check passes bad/refuses good work, tool crashes/hangs/refuses valid input/answers wrongly) and what is not one; XIII's 'each step's known defects' points at it; a claim the code does not literally match where behavior is fine is fixed by restating the claim (the tolerance rule).",
+     "class": "within",
+     "why": "The GM approved 'that tolerance rule' and asked what guideline changes would make 'don't spend a lot of time fixing things which are not actually wrong' obvious (request.md 2026-11-19); the definition restates his own words (works, in line with research, maps look fine) and gives his 2026-11-18 'fix all known bugs' its object."
+    },
+    {
+     "id": "T196-constitution-version",
+     "summary": "Constitution to 2.36.0 (MINOR) and its stale 2.35.0 footer corrected with it.",
+     "class": "within",
+     "why": "The amendment is the guideline change asked for; the version bump and footer correction are the constitution's own amendment bookkeeping."
+    },
+    {
+     "id": "T196-guidance-placements",
+     "summary": "One line each in root and research/ CLAUDE.md; the four review agents carry the definition beside FIX AS WE GO; plan template gains a XIV entry; checklist item 12 'Before any fix' and a 'Found and left?' line in make task-add's section; docs/gm-rulings.md records the GM's words.",
+     "class": "within",
+     "why": "Each is a place a session or reviewer reads before acting; the GM asked for project-guideline changes so the thing is 'noticed and caught before I come back'. Placing the definition in agents that launch without CLAUDE.md is what makes reviewers catch it."
+    },
+    {
+     "id": "T196-impl-drift-fix-and-refusal",
+     "summary": "impl-drift names each DRIFTED verdict's fix (fix: claim / fix: code) and effect inside the note, verdict line form unchanged; make claims-checked refuses a DRIFTED line with no fix, in triage::vet.",
+     "class": "within",
+     "why": "Enforcement of the request: its only effect is to force each drift to be classed claim-vs-code at the point it is judged, which is the 'noticed and caught' the GM asked for; it refuses nothing beyond a DRIFTED line lacking the fix the request makes necessary."
+    },
+    {
+     "id": "T196-refusal-reads-fix-only",
+     "summary": "The refusal checks fix: claim|code only; effect: is asked by the agent file and shown in the refusal's form but not refused when missing.",
+     "class": "within",
+     "why": "The GM asked for nothing about an effect field; a refusal narrower than the agent's ask narrows the session's own mechanism, not the request, and avoids refusing good replies on free text."
+    },
+    {
+     "id": "T196-claims-accept-bypasses-vet",
+     "summary": "claims-accept writes its DRIFTED lines through reply::record, not vet, so an arbiter-accepted drift whose note predates the rule is not refused.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This carves a case out of the new refusal. Purpose test: the request is that sessions stop spending time 'fixing' things that are not wrong. An already-accepted known drift's pre-rule note is not wrong; refusing it would force sessions to rewrite correct, already-adjudicated records, the exact waste the GM asked to end, and by the definition he approved a check that refuses good work is a defect. Literal application defeats the request's stated purpose. One case, one class (arbiter-accepted lines); new filed departures still carry fix: code per the next decision, so the refusal's purpose is not gutted."
+    },
+    {
+     "id": "T196-filed-departure-note-form",
+     "summary": "A filed departure's note becomes 'known (NNN Tnn): <departure>; fix: code; effect: <effect>'; nothing parses the 'known (' prefix (observed 2026-11-19, grep).",
+     "class": "within",
+     "why": "Brings filed departures under the same fix/effect naming; changes no parsed form."
+    },
+    {
+     "id": "T196-item-12-asked-where-written",
+     "summary": "Checklist item 12 is marked '(asked where written)': a section with no 12. line passes the approach gate, one that writes it must answer it (empty or <...> placeholder refused); items 1-11 owed as before; make task-add still writes 12 and spec-fidelity reads it. Required, it would refuse the tick of 58 open tasks whose sections predate it (observed 2026-11-19, shell loop).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the reach of the plan's own enforcement device, not anything the GM worded. Purpose test: requiring 12 retroactively would refuse ticks of 58 pre-existing, already-reviewed sections whose work is not wrong and force edits (and per-block plan re-reviews) to fix sections that are not wrong - defeating the request's purpose concretely, and a check refusing good work is a defect under the definition the GM approved. Every new section written by make task-add carries 12, the agents and constitution carry the definition, and the fix/effect refusal stands, so the request's catch-it-before-the-GM purpose is not gutted. Residual reach noted in the aside: a new section hand-written without 12 also passes."
+    },
+    {
+     "id": "T196-order",
+     "summary": "Lands before step 3b's port, whose claims rounds it governs.",
+     "class": "within",
+     "why": "The GM wants the next instance caught before he points it out; landing before the next claims rounds is the earliest point that serves that."
+    },
+    {
+     "id": "T196-found-flaky-test-fixed",
+     "summary": "reviews::prereq test a_verdict_record_is_the_reviews_last_act failed 1 of 3 make static runs (Text file busy on an in-process-written stub); stub now written via l7r_gate_core::write_executable.",
+     "class": "within",
+     "why": "A check that intermittently refuses good work is a defect under the definition this task installs and the GM's 2026-11-18 'fix broken things as we find them'; fixed in the step where found, not carried forward."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22940,6 +23024,76 @@
      "summary": "The filed command re-run on the real gate (the country-shrine key with backticks), then hooks-test HOOKS_ALL=1, static and quick green.",
      "class": "within",
      "why": "Shows the filed bug fixed and everything working; no decision beyond the spec."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T196": {
+   "section_sha256": "c7926352864e74b78e003b3de186aba72e70b32a3321af45472c33b069aa545f",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T196-approach-defect-definition",
+     "summary": "Constitution XIV defines a defect as a wrong outcome (map reads wrong, research finding contradicted, check passes bad/refuses good work, tool crashes/hangs/refuses valid input/answers wrongly) and what is not one; XIII's 'each step's known defects' points at it; a claim the code does not literally match where behavior is fine is fixed by restating the claim (the tolerance rule).",
+     "class": "within",
+     "why": "The GM approved 'that tolerance rule' and asked what guideline changes would make 'don't spend a lot of time fixing things which are not actually wrong' obvious (request.md 2026-11-19); the definition restates his own words (works, in line with research, maps look fine) and gives his 2026-11-18 'fix all known bugs' its object."
+    },
+    {
+     "id": "T196-constitution-version",
+     "summary": "Constitution to 2.36.0 (MINOR) and its stale 2.35.0 footer corrected with it.",
+     "class": "within",
+     "why": "The amendment is the guideline change asked for; the version bump and footer correction are the constitution's own amendment bookkeeping."
+    },
+    {
+     "id": "T196-guidance-placements",
+     "summary": "One line each in root and research/ CLAUDE.md; the four review agents carry the definition beside FIX AS WE GO; plan template gains a XIV entry; checklist item 12 'Before any fix' and a 'Found and left?' line in make task-add's section; docs/gm-rulings.md records the GM's words.",
+     "class": "within",
+     "why": "Each is a place a session or reviewer reads before acting; the GM asked for project-guideline changes so the thing is 'noticed and caught before I come back'. Placing the definition in agents that launch without CLAUDE.md is what makes reviewers catch it."
+    },
+    {
+     "id": "T196-impl-drift-fix-and-refusal",
+     "summary": "impl-drift names each DRIFTED verdict's fix (fix: claim / fix: code) and effect inside the note, verdict line form unchanged; make claims-checked refuses a DRIFTED line with no fix, in triage::vet.",
+     "class": "within",
+     "why": "Enforcement of the request: its only effect is to force each drift to be classed claim-vs-code at the point it is judged, which is the 'noticed and caught' the GM asked for; it refuses nothing beyond a DRIFTED line lacking the fix the request makes necessary."
+    },
+    {
+     "id": "T196-refusal-reads-fix-only",
+     "summary": "The refusal checks fix: claim|code only; effect: is asked by the agent file and shown in the refusal's form but not refused when missing.",
+     "class": "within",
+     "why": "The GM asked for nothing about an effect field; a refusal narrower than the agent's ask narrows the session's own mechanism, not the request, and avoids refusing good replies on free text."
+    },
+    {
+     "id": "T196-claims-accept-bypasses-vet",
+     "summary": "claims-accept writes its DRIFTED lines through reply::record, not vet, so an arbiter-accepted drift whose note predates the rule is not refused.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This carves a case out of the new refusal. Purpose test: the request is that sessions stop spending time 'fixing' things that are not wrong. An already-accepted known drift's pre-rule note is not wrong; refusing it would force sessions to rewrite correct, already-adjudicated records, the exact waste the GM asked to end, and by the definition he approved a check that refuses good work is a defect. Literal application defeats the request's stated purpose. One case, one class (arbiter-accepted lines); new filed departures still carry fix: code per the next decision, so the refusal's purpose is not gutted."
+    },
+    {
+     "id": "T196-filed-departure-note-form",
+     "summary": "A filed departure's note becomes 'known (NNN Tnn): <departure>; fix: code; effect: <effect>'; nothing parses the 'known (' prefix (observed 2026-11-19, grep).",
+     "class": "within",
+     "why": "Brings filed departures under the same fix/effect naming; changes no parsed form."
+    },
+    {
+     "id": "T196-item-12-asked-where-written",
+     "summary": "Checklist item 12 is marked '(asked where written)': a section with no 12. line passes the approach gate, one that writes it must answer it (empty or <...> placeholder refused); items 1-11 owed as before; make task-add still writes 12 and spec-fidelity reads it. Required, it would refuse the tick of 58 open tasks whose sections predate it (observed 2026-11-19, shell loop).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the reach of the plan's own enforcement device, not anything the GM worded. Purpose test: requiring 12 retroactively would refuse ticks of 58 pre-existing, already-reviewed sections whose work is not wrong and force edits (and per-block plan re-reviews) to fix sections that are not wrong - defeating the request's purpose concretely, and a check refusing good work is a defect under the definition the GM approved. Every new section written by make task-add carries 12, the agents and constitution carry the definition, and the fix/effect refusal stands, so the request's catch-it-before-the-GM purpose is not gutted. Residual reach noted in the aside: a new section hand-written without 12 also passes."
+    },
+    {
+     "id": "T196-order",
+     "summary": "Lands before step 3b's port, whose claims rounds it governs.",
+     "class": "within",
+     "why": "The GM wants the next instance caught before he points it out; landing before the next claims rounds is the earliest point that serves that."
+    },
+    {
+     "id": "T196-found-flaky-test-fixed",
+     "summary": "reviews::prereq test a_verdict_record_is_the_reviews_last_act failed 1 of 3 make static runs (Text file busy on an in-process-written stub); stub now written via l7r_gate_core::write_executable.",
+     "class": "within",
+     "why": "A check that intermittently refuses good work is a defect under the definition this task installs and the GM's 2026-11-18 'fix broken things as we find them'; fixed in the step where found, not carried forward."
     }
    ],
    "verdict": "CLEAR"

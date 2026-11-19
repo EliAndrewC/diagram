@@ -56,7 +56,10 @@ what the question decides, its `Research:` claim cites the question's findings p
 not re-owed by a changed finding) - added if missing - and `impl-drift` records the
 verdict (`make claims-owed`, `claims-bundle`, `claims-checked`). Where no code implements it yet, the feature's
 `implementation-check.md` says `- NNNN: no code implements it - <why>; searched: <what>` (only where no code decides it). A DRIFTED verdict is the result the GM asked to see
-in `make claims-report`; the code is fixed only where the feature's spec asks. `make impl-check F=<n>` lists what is
+in `make claims-report`; it names its fix, `fix: claim` or `fix: code`, and its effect. A claim the code does not literally
+match, where the behavior is fine (nothing a reader of the map would see, no finding contradicted), is fixed by RESTATING THE
+CLAIM, never the code (the tolerance rule, constitution XIV v2.36.0, GM 2026-11-19); a `fix: code` drift is a defect, fixed
+where the feature's spec asks or as constitution XIV says. `make impl-check F=<n>` lists what is
 owed, and no feature of this type closes until it reports nothing missing.
 
 ## Comparative money sources (GM 2026-10-18, feature 391)

@@ -1,7 +1,14 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.35.0 → 2.35.1
+Version change: 2.35.1 → 2.36.0
+
+Version 2.36.0 (amended 2026-11-19, feature 449 T196): A DEFECT IS A WRONG OUTCOME, NOT A DIFFERENCE. Principle XIV defines what
+it fixes, and XIII's "each step's known defects" means that: a map that reads wrong (to a reader at fit zoom or on the page), a
+research finding contradicted, a check that passes bad work or refuses good work, a tool that crashes, hangs, refuses valid input
+or answers wrongly. NOT a defect: a difference from what was expected, from the Python, from a convention's own wording, or a gap no
+reader of the map would see. A claim the code does not literally match, where the behavior is fine, is fixed by restating the claim,
+not the code (the tolerance rule). The GM, 2026-11-19: "Yes that tolerance rule seems good.  And not only that: what changes can we make to our project guidelines to make this kind of thing more obvious?  Like, I feel like I keep having to come back and say, over and over again, "don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine"." Dependent: impl-drift's `fix:` field (`make claims-checked` refuses a DRIFTED note without one), spec-fidelity's and the arbiter's rulings, the plan template's XIV entry, the approach checklist's item 12. MINOR (a principle's meaning sharpened).
 
 Version 2.35.1 (amended 2026-11-18, feature 449 T181): WORDING ONLY, no principle changes. 2.35.0 kept "the audit checks' verdicts" as "the one
 measure kept exact"; the GM, 2026-11-18: "When you say "the audit checks pass/fail must match exactly", then surely you mean "the audit checks must pass" right?!" Restated as two things owed, neither an exactness standard: (1) a drawn output - a map,
@@ -1765,9 +1772,10 @@ XIV; a check that refused correct work) changes as fixed, its expected
 result changed and named. A check's verdicts changing as a bug is fixed (a
 sheet a buggy check refused now passing, an engine bug fixed changing a map) is
 expected, never a regression; a ported check is shown to work by catching what
-it is meant to catch; and each step's known defects are fixed, in every copy
-that still lives, before the next step's port (the GM, 2026-11-18: "we should
-fix all known bugs in each step before moving on to porting the next step"). No session, reviewer or the round
+it is meant to catch; and each step's known defects (a defect as Principle XIV defines it: a wrong
+outcome, never a difference) are fixed, in every copy that still lives, before
+the next step's port (the GM, 2026-11-18: "we should fix all known bugs in each
+step before moving on to porting the next step"). No session, reviewer or the round
 arbiter holds a port or a change to bit-for-bit, byte-for-byte or
 pixel-for-pixel agreement, nor treats a difference as a new ask: a byte
 comparison (a differential, `make diff-run`) shows WHAT MOVED, a signal to
@@ -1865,6 +1873,19 @@ that piece of work, whether or not it has anything to do with the feature. Not
 filed, not deferred to "its own pass", not handed to a future session - fixed,
 in the same change, with the same verification every other fix gets.
 
+**WHAT A DEFECT IS** (added v2.36.0, feature 449 T196). A defect is a WRONG
+OUTCOME: a map that reads wrong (to a reader at fit zoom or on the page), a
+research finding contradicted, a check that passes bad work or refuses good
+work, a tool that crashes, hangs, refuses valid input or answers wrongly. It is
+NOT a difference from what was expected, from the Python, or from a
+convention's own wording, nor a gap no reader of the map would see; "fix all
+known bugs" means defects. A research claim the code does not literally match,
+where the behavior is fine, is fixed by restating the claim, never the code
+(the tolerance rule). Before any fix, ask what a reader of the map would see
+differently; if nothing, and no finding or check is wrong, it is not a defect.
+The GM, 2026-11-19:
+*"don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine"*.
+
 **The one exception** is a defect whose fix would be a complete overhaul or a
 giant architectural change: a stage reordering, a new subsystem, a rewrite of a
 placement engine. Those are deferred - and deferring one is a real deliverable,
@@ -1895,8 +1916,9 @@ the review subagents (`settlement-review`, `building-review`, `backstory-review`
 `frontend-review`), which are pointed at a DELTA and reliably find things
 outside it - that is a feature of an independent reviewer, not scope creep by
 it. A finding outside the delta is still yours. The same applies to a defect a
-diagnostic surfaces, a number that looks wrong while measuring something else,
-and a comment that turns out to describe code that no longer exists.
+diagnostic surfaces and a number that proves wrong while measuring something
+else. A comment that describes code that no longer exists is corrected as words,
+the same rule as restating a claim.
 
 This principle is NON-NEGOTIABLE because the alternative is invisible: a
 skipped fix costs nothing today, shows up as "the generator has always been a
@@ -2429,4 +2451,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.35.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-18
+**Version**: 2.36.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-19
