@@ -870,6 +870,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T207 (the GM, 2026-11-19, on make where-time's idle hours: \"Is that time where nothing was happening?!\")": {
+   "sha256": "81ed7aca9f1b635326e9cbde05480a741869a7338f3119fab9acd16c886f13bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T207 Approach (checklist part A)": {
+   "sha256": "c469b5dfd303331421cd3d6b779425080215d8bda8152d535c36b517987b4bf2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13607,6 +13619,52 @@
      "why": "The producer's own exclusion and the grep family's flags are honoured, so every good command has a route (exclude at the producer or the search); readers such as cat, head and sed carry no exclusion of their own to honor. No wrong outcome is shown and no old code can be read through it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T207 (the GM, 2026-11-19, on make where-time's idle hours: \"Is that time where nothing was happening?!\")",
+    "### T207 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T207-writer",
+     "summary": "The event-log writer writes nothing for a payload naming no hook event (event_log_hooks.rs).",
+     "class": "within",
+     "why": "The GM asked whether the report's idle hours were time where nothing happened; the measured answer is that they were a phantom session made of blank lines the writer emitted. A time report that books 379 idle minutes that were not idle answers wrongly - a defect under XIV, and 'fix broken things as we find them' (GM 2026-11-18) covers fixing its source. No working behavior is removed: a line naming no event carries nothing a reader uses."
+    },
+    {
+     "id": "T207-reader",
+     "summary": "The reader skips any line naming no event (events.rs), so blank lines already in this log and in clones not yet pulled are not counted as a session.",
+     "class": "within",
+     "why": "Same defect, the other end: without it the 367 lines already logged, and those other clones write until they pull, keep producing the wrong idle figure the GM asked about."
+    },
+    {
+     "id": "T207-since",
+     "summary": "SINCE keeps the last task started before the cut, so the window's first stretch is booked to the task in hand rather than to '-'.",
+     "class": "within",
+     "why": "A second wrong answer in the same report found while answering the GM's question (time booked to no task when a task was in hand); a tool answering wrongly is a defect, fixed as found. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T207-no-watchdog",
+     "summary": "No watchdog change: the session's own earlier reading of a 5.5-hour stall on 11-17 was wrong (the gap followed the session's final report with the GM away); the task line was rewritten to what was found.",
+     "class": "within",
+     "why": "The stall and its fix were the session's own framing when filing, not the GM's words - request.md's 2026-11-19 section asks only 'Is that time where nothing was happening?!'. Dropping a fix for a fault the evidence shows did not occur leaves no defect unfixed and narrows nothing the GM asked."
+    },
+    {
+     "id": "T207-left",
+     "summary": "Left: other clones keep writing blank lines until they pull (the reader ignores them); the 'carried' booking rule (681 of 733 minutes) is left because it was not measured booking anything wrongly.",
+     "class": "within",
+     "why": "Neither is a defect left: the first is harmless once the reader skips the lines; the second is a difference nobody has shown to be a wrong outcome, which under constitution XIV v2.36.0 is not something 'fix all known bugs' reaches."
+    },
+    {
+     "id": "T207-order",
+     "summary": "Sequenced after T204 and before T205/T206, whose savings are measured with this report.",
+     "class": "within",
+     "why": "Ordering only; serves the GM's 'sooner rather than later' for T205/T206 by making their measurement true."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -24152,6 +24210,50 @@
      "summary": "Left: a non-grep reader's own arguments never count as an exclusion (errs toward refusing).",
      "class": "within",
      "why": "The producer's own exclusion and the grep family's flags are honoured, so every good command has a route (exclude at the producer or the search); readers such as cat, head and sed carry no exclusion of their own to honor. No wrong outcome is shown and no old code can be read through it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T207": {
+   "section_sha256": "bfdf1113773460e20be0220d5206564a8e8f74c88e937800ec05d0bb6258aca1",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T207-writer",
+     "summary": "The event-log writer writes nothing for a payload naming no hook event (event_log_hooks.rs).",
+     "class": "within",
+     "why": "The GM asked whether the report's idle hours were time where nothing happened; the measured answer is that they were a phantom session made of blank lines the writer emitted. A time report that books 379 idle minutes that were not idle answers wrongly - a defect under XIV, and 'fix broken things as we find them' (GM 2026-11-18) covers fixing its source. No working behavior is removed: a line naming no event carries nothing a reader uses."
+    },
+    {
+     "id": "T207-reader",
+     "summary": "The reader skips any line naming no event (events.rs), so blank lines already in this log and in clones not yet pulled are not counted as a session.",
+     "class": "within",
+     "why": "Same defect, the other end: without it the 367 lines already logged, and those other clones write until they pull, keep producing the wrong idle figure the GM asked about."
+    },
+    {
+     "id": "T207-since",
+     "summary": "SINCE keeps the last task started before the cut, so the window's first stretch is booked to the task in hand rather than to '-'.",
+     "class": "within",
+     "why": "A second wrong answer in the same report found while answering the GM's question (time booked to no task when a task was in hand); a tool answering wrongly is a defect, fixed as found. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T207-no-watchdog",
+     "summary": "No watchdog change: the session's own earlier reading of a 5.5-hour stall on 11-17 was wrong (the gap followed the session's final report with the GM away); the task line was rewritten to what was found.",
+     "class": "within",
+     "why": "The stall and its fix were the session's own framing when filing, not the GM's words - request.md's 2026-11-19 section asks only 'Is that time where nothing was happening?!'. Dropping a fix for a fault the evidence shows did not occur leaves no defect unfixed and narrows nothing the GM asked."
+    },
+    {
+     "id": "T207-left",
+     "summary": "Left: other clones keep writing blank lines until they pull (the reader ignores them); the 'carried' booking rule (681 of 733 minutes) is left because it was not measured booking anything wrongly.",
+     "class": "within",
+     "why": "Neither is a defect left: the first is harmless once the reader skips the lines; the second is a difference nobody has shown to be a wrong outcome, which under constitution XIV v2.36.0 is not something 'fix all known bugs' reaches."
+    },
+    {
+     "id": "T207-order",
+     "summary": "Sequenced after T204 and before T205/T206, whose savings are measured with this report.",
+     "class": "within",
+     "why": "Ordering only; serves the GM's 'sooner rather than later' for T205/T206 by making their measurement true."
     }
    ],
    "verdict": "CLEAR"

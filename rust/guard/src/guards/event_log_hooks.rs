@@ -536,6 +536,11 @@ pub(crate) fn append(
     here: &Path,
     env: &dyn Fn(&str) -> Option<String>,
 ) -> Option<PathBuf> {
+    // A PAYLOAD NAMING NO HOOK EVENT IS NO HOOK'S (T207): a test's empty input (and on 11-08 `--self-check`'s fixed one) wrote
+    // `{"sid": "", "ev": ""}` rows into the clone's real log on every `make static` and `make rust-test`, which `make where-time` booked as idle
+    if text_of(payload.get("hook_event_name")).is_empty() {
+        return None;
+    }
     let cwd = payload
         .get("cwd")
         .and_then(Value::as_str)

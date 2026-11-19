@@ -477,7 +477,8 @@ pub fn tick_windows(ticks: &[(f64, String)], since: f64) -> Vec<(f64, f64, Strin
         .collect()
 }
 
-/// The task starts of the feature (`<git common dir>/task-starts.jsonl`), at or after `since`, in time order.
+/// The task starts of the feature (`<git common dir>/task-starts.jsonl`), in time order: those at or after `since`, and the last one
+/// before it - the task at hand when the window opens (T207: cutting it booked the window's first stretch to `-`).
 fn starts(root: &Path, name: &str, since: &str) -> Result<Vec<(f64, String)>, Raised> {
     let common = git(
         root,
@@ -486,7 +487,8 @@ fn starts(root: &Path, name: &str, since: &str) -> Result<Vec<(f64, String)>, Ra
     let common = strip(&common);
     let path = Path::new(if common.is_empty() { "." } else { common }).join("task-starts.jsonl");
     let text = super::events::text_if_file(&path)?;
-    let mut out = Vec::new();
+    let mut out: Vec<(f64, String)> = Vec::new();
+    let mut last_before: Option<(f64, String)> = None;
     for x in py_lines(&text).into_iter().filter(|x| !strip(x).is_empty()) {
         let r: Value = serde_json::from_str(x).map_err(|e| format!("JSONDecodeError: {e}"))?;
         let r = r
@@ -499,11 +501,20 @@ fn starts(root: &Path, name: &str, since: &str) -> Result<Vec<(f64, String)>, Ra
             Value::String(u) => Ok(u.as_str()),
             _ => Err("TypeError: a task start's time is no text".to_owned()),
         };
+        let start = (ts(utc()?)?, py_str(need(r, "task")?));
+        // before SINCE by the same text comparison the events are cut by (`load_events`), so the window opens on one instant
         if !since.is_empty() && utc()? < since {
+            if last_before
+                .as_ref()
+                .is_none_or(|b| cmp_f(start.0, b.0).is_ge())
+            {
+                last_before = Some(start);
+            }
             continue;
         }
-        out.push((ts(utc()?)?, py_str(need(r, "task")?)));
+        out.push(start);
     }
+    out.extend(last_before);
     out.sort_by(|a, b| cmp_f(a.0, b.0).then(a.1.cmp(&b.1)));
     Ok(out)
 }

@@ -214,7 +214,7 @@ fn the_line_goes_to_the_features_log_in_the_clones_git_dir() {
     let to = d.join("events");
     let env = |k: &str| (k == "L7R_EVENTS_DIR").then(|| to.to_string_lossy().into_owned());
     assert_eq!(
-        append(&json!({}), "T", &d, &env).unwrap(),
+        append(&json!({"hook_event_name": "Stop"}), "T", &d, &env).unwrap(),
         to.join("999-a.jsonl")
     );
     assert!(now_stamp(UNIX_EPOCH + Duration::from_millis(1_500)) == "1970-01-01T00:00:01.500Z");
@@ -272,7 +272,7 @@ fn the_feature_and_the_git_dir_are_read_as_the_tool_reads_them() {
     assert!(super::decide(
         &crate::protocol::Event {
             name: "Stop".into(),
-            input: json!({"cwd": "/"})
+            input: json!({"hook_event_name": "Stop", "cwd": "/"})
         },
         &crate::shared::session::Session::from_input(&json!({}))
     )
@@ -315,7 +315,7 @@ fn the_edges_of_a_value_and_a_path() {
     );
     assert_eq!(start["task"], "T3");
     assert!(append(
-        &json!({"cwd": "/nonexistent/deeper"}),
+        &json!({"hook_event_name": "Stop", "cwd": "/nonexistent/deeper"}),
         "T",
         Path::new("/"),
         &none
@@ -323,9 +323,14 @@ fn the_edges_of_a_value_and_a_path() {
     .is_none());
     let d = clone("edges");
     std::fs::remove_file(d.join(".specify/feature.json")).unwrap();
-    assert!(append(&json!({"cwd": d.to_string_lossy()}), "T", &d, &none)
-        .unwrap()
-        .ends_with("_unassigned.jsonl"));
+    assert!(append(
+        &json!({"hook_event_name": "Stop", "cwd": d.to_string_lossy()}),
+        "T",
+        &d,
+        &none
+    )
+    .unwrap()
+    .ends_with("_unassigned.jsonl"));
     let wt = d.join("wt");
     std::fs::create_dir_all(&wt).unwrap();
     std::fs::write(wt.join(".git"), "gitdir: missing/dir\n").unwrap();
@@ -340,7 +345,7 @@ fn the_edges_of_a_value_and_a_path() {
     let outcome = super::decide(
         &crate::protocol::Event {
             name: "Stop".into(),
-            input: json!({"cwd": d.to_string_lossy()}),
+            input: json!({"hook_event_name": "Stop", "cwd": d.to_string_lossy()}),
         },
         &crate::shared::session::Session::from_input(&json!({})),
     );
@@ -370,4 +375,22 @@ fn a_features_log_is_named_for_it() {
         super::log_path_in(&root, "f", &none),
         root.join(".git/l7r-events/f.jsonl")
     );
+}
+
+/// T207: a payload that names no hook event is no hook's - the measure crate's test of an empty input (`l7r-gate measure event-log hook`
+/// given nothing) wrote a `{"sid": "", "ev": ""}` row into the clone's real log on every `make static` and `make rust-test` of that crate,
+/// 348 of them 2026-11-12 to 11-19 (18 more on 11-08 carried `--self-check`'s `"tool": "Bash"`), and `make where-time` read them as a
+/// session whose gaps were 379 minutes of "idle".
+#[test]
+fn a_payload_naming_no_event_writes_no_line() {
+    let d = clone("no-event");
+    let cwd = d.to_string_lossy().into_owned();
+    for payload in [
+        json!({"cwd": cwd}),
+        json!({"cwd": cwd, "hook_event_name": ""}),
+        json!({"cwd": cwd, "tool_name": "Bash", "tool_input": {"command": "true"}}),
+    ] {
+        assert!(append(&payload, "T", &d, &none).is_none(), "{payload}");
+    }
+    assert!(!d.join(".git/l7r-events").exists());
 }

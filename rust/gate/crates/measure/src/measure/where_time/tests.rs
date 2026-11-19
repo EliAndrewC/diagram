@@ -269,3 +269,130 @@ fn the_command_line_books_by_start_or_by_tick() {
         0
     );
 }
+
+/// T207: a row naming no event - `{"t", "sid": "", "ev": ""}`, which a test's empty payload (and on 11-08 the self-check) wrote into the
+/// clone's real log until T207 - is no session. Read as one, its rows' gaps on 2026-11-19 (03:53-06:16 and 06:41-10:36) were the 143 and
+/// 236 "idle" minutes booked to T187 and T201 while the one real session worked without a break; this is that day's shape.
+#[test]
+fn a_row_naming_no_event_is_no_session() {
+    let d = crate::checks::scratch("measure-where-blank");
+    let mut text = String::new();
+    for m in (0..=240).step_by(10) {
+        let t = format!("2026-11-19T{:02}:{:02}:00Z", 3 + m / 60, m % 60);
+        let _ = writeln!(
+            text,
+            "{}",
+            json!({"t": t, "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": format!("b{m}"), "cat": "other tool"})
+        );
+    }
+    for blank in [
+        json!({"t": "2026-11-19T03:53:41.707Z", "sid": "", "ev": ""}),
+        json!({"t": "2026-11-19T06:16:33.648Z", "sid": "", "ev": ""}),
+        json!({"t": "2026-11-19T06:20:00.000Z", "sid": "", "ev": "", "tool": "Bash", "id": "", "cat": "other tool"}),
+    ] {
+        let _ = writeln!(text, "{blank}");
+    }
+    let log = d.join("449-x.jsonl");
+    std::fs::write(&log, text).unwrap();
+    let events = load_events(&[log], &[], "2026-11-19", "").unwrap();
+    let t = tables(&events, &[(0.0, "T187".to_owned())], None, "449").unwrap();
+    let idle: f64 = t.time.iter().map(|(_, c)| c.get(&"idle".to_owned())).sum();
+    let all: f64 = t.time.iter().map(|(_, c)| total(c)).sum();
+    assert_eq!(format!("{idle} {}", all / 60.0), "0 240");
+    assert!(events.iter().all(|e| s(e, "sid") == "s"));
+}
+
+/// T207: SINCE cut the task starts before it, so the stretch from SINCE to the first start after it went to `-` (88 minutes on
+/// 2026-11-19, while T194, started 11-18 22:40, was the task at hand); the mark at an instant is the same with SINCE as without.
+#[test]
+fn since_keeps_the_task_active_when_it_opens() {
+    let d = tree("measure-where-since-mark");
+    let root = d.display().to_string();
+    put(
+        &d,
+        ".git/l7r-events/901-s.jsonl",
+        &format!(
+            "{}\n{}\n{}\n",
+            json!({"t": at("09:00:00"), "sid": "q", "ev": "UserPromptSubmit", "gm": true}),
+            json!({"t": at("09:10:00"), "sid": "q", "ev": "PreToolUse", "tool": "Bash", "id": "q1", "cat": "other tool"}),
+            json!({"t": at("09:20:00"), "sid": "q", "ev": "Stop"})
+        ),
+    );
+    put(
+        &d,
+        ".git/task-starts.jsonl",
+        &format!(
+            "{}\n{}\n{}\n",
+            json!({"feature": "901-s", "task": "T04", "utc": at("06:00:00")}),
+            json!({"feature": "901-s", "task": "T05", "utc": at("07:00:00")}),
+            json!({"feature": "901-s", "task": "T06", "utc": at("09:05:00")})
+        ),
+    );
+    let projects = d.join("home");
+    let none = Path::new("/nonexistent");
+    for since in [String::new(), at("08:00:00")] {
+        let mut a = args(&["901", "--root", &root]);
+        if !since.is_empty() {
+            a.extend(args(&["--since", &since]));
+        }
+        let got = cli(&a, &projects, none).stdout;
+        let rows: Vec<&str> = got.lines().filter_map(|l| l.split(" | ").next()).collect();
+        assert_eq!(rows[2..5], ["| T05", "| T06", "| all"], "{got}");
+    }
+}
+
+/// T207: a date-only SINCE cuts the task starts by the text comparison that cuts the events. Read as a time instead it is the machine's
+/// local midnight - 05:00 UTC in this `America/New_York` container - and the 2026-11-19 report lost T194's and three more tasks' starts
+/// and booked 37 minutes to `-`; this case goes red that way only on a machine west of UTC.
+#[test]
+fn a_date_only_since_cuts_the_starts_as_it_cuts_the_events() {
+    let d = tree("measure-where-since-date");
+    let root = d.display().to_string();
+    let t = |hms: &str| format!("2026-11-01T{hms}Z");
+    put(
+        &d,
+        ".git/l7r-events/901-s.jsonl",
+        &format!(
+            "{}\n{}\n{}\n",
+            json!({"t": t("00:30:00"), "sid": "q", "ev": "UserPromptSubmit", "gm": true}),
+            json!({"t": t("00:40:00"), "sid": "q", "ev": "PreToolUse", "tool": "Bash", "id": "q1", "cat": "other tool"}),
+            json!({"t": t("00:50:00"), "sid": "q", "ev": "Stop"})
+        ),
+    );
+    put(
+        &d,
+        ".git/task-starts.jsonl",
+        &format!(
+            "{}\n{}\n",
+            json!({"feature": "901-s", "task": "T04", "utc": "2026-10-31T22:00:00Z"}),
+            json!({"feature": "901-s", "task": "T05", "utc": t("00:35:00")})
+        ),
+    );
+    let a = args(&["901", "--root", &root, "--since", "2026-11-01"]);
+    let got = cli(&a, &d.join("home"), Path::new("/nonexistent")).stdout;
+    let rows: Vec<&str> = got.lines().filter_map(|l| l.split(" | ").next()).collect();
+    assert_eq!(rows[2..5], ["| T04", "| T05", "| all"], "{got}");
+}
+
+/// T207's pin, not a red test: 2026-11-17's 5.5 hours were the GM away, not a stall. The turn ended at 18:48:10 with its final report
+/// (no background agent pending: the transcript's `turn_duration` has no `pendingBackgroundAgentCount`); the `SubagentStop` at 18:51:12 is
+/// untyped with no `SubagentStart` - the harness's own away-summary agent (23 ms from the transcript's `away_summary`) - and the next
+/// prompt is the GM's at 00:24:14.
+#[test]
+fn the_seventeenth_was_the_gm_away() {
+    let e = evs(&[
+        json!({"t": "2026-11-17T18:47:41.389Z", "sid": "c", "ev": "PreToolUse", "tool": "Bash", "id": "x", "cat": "other tool"}),
+        json!({"t": "2026-11-17T18:47:47.404Z", "sid": "c", "ev": "PostToolUse", "tool": "Bash", "id": "x"}),
+        json!({"t": "2026-11-17T18:48:10.534Z", "sid": "c", "ev": "Stop"}),
+        json!({"t": "2026-11-17T18:51:12.528Z", "sid": "c", "ev": "SubagentStop", "agent": "", "aid": "aa885370bae495493"}),
+        json!({"t": "2026-11-18T00:24:14.265Z", "sid": "c", "ev": "UserPromptSubmit", "gm": true}),
+    ]);
+    let t = tables(&e, &[], None, "449").unwrap();
+    let c = row(&t.time, "-").unwrap();
+    assert_eq!(format!("{}", c.get(&"idle".to_owned())), "0");
+    assert_eq!(
+        format!("{:.2}", c.get(&GM_AWAY.to_owned()) / 60.0),
+        "336.06"
+    );
+    assert!(t.agents.is_empty());
+}

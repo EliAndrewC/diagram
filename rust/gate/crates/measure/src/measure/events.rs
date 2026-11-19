@@ -435,7 +435,11 @@ pub fn load_events(
     let mut out: Vec<Event> = Vec::new();
     for e in rows {
         let t = or_s(&e, "t");
+        // A ROW NAMING NO EVENT IS NO EVENT (T207): `{"sid": "", "ev": ""}` rows, which a test's empty payload (and on 11-08 the
+        // guard's self-check) wrote into the clone's real log until the writer refused them, read as a session of their own whose gaps were
+        // booked "idle" (379 of 2026-11-19's minutes); the logs written before still hold them
         if t.is_empty()
+            || or_s(&e, "ev").is_empty()
             || (!since.is_empty() && t.as_str() < since)
             || (!until.is_empty() && t.as_str() > until)
         {
