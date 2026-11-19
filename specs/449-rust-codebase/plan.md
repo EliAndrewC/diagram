@@ -963,29 +963,31 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T227 (<why: the finding or measurement that files it>)
+### T227 (T220: a guard file seemed to be rewritten through a shell heredoc without the guard firing)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured first. The two files T220 rewrote are not guard files and never were (the list is `guard_file_hooks::held`: any `Makefile`, `scripts/**/*-hooks.sh`, `.claude/settings.json`, `tests/rolls.py`, `dev/switches.json`, `dev/work-budget.json`), so that pass was right. But a matrix of the shell's write forms against the six held files missed 87 of 156 (measured 2026-11-19 (the matrix test against HEAD's guard)): every form for the two `dev/` files, `sed -E -i`, `sed --in-place`, `perl -pi`, `cp`, `mv`, `install` and `>|` for every file, and a `cd` then a relative name. The make-only guard's shell-write rule now resolves each command's write targets through the shared shell walk (following its own `cd`s, the event's working directory for relative names) and checks each against `held()`, with the text patterns kept for what the walk cannot see; the walk learns `perl -i`, `sed --in-place=`, a quoted script with a space, `rsync`'s destination, `dd of=` and `truncate`'s files. Over the whole matrix, 141 of 210 forms missed before and 0 of 210 after (measured 2026-11-19 (the matrix test against HEAD's guard and against this one, six held files by 35 forms)). The escape and its recording are unchanged; the refusal names `make guard-edit`. Each new match proven by deleting it and watching its test go red.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| every shell write of a held file refused | the matrix test, the make-only suite's T227 checks, the corpus row moved with its old verdict kept | `make_only_hooks.rs`, `guard_file_hooks.rs`, `shared/tree.rs` | none | none |
 
 ### T227 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A file the guards hold cannot be rewritten from the shell without a permit or an escape on the record.
+2. **The constraints.** The root CLAUDE.md's guard rules (match invocations, not mentions; an escape of two words or more, recorded; the refusal names the compliant command); constitution XIV.
+3. **Where each comes from.** O: T220's finding and this task's matrix.
+4. **Do they describe the world here?** Yes: the matrix ran against the six held files as they stand (measured 2026-11-19, as above).
+5. **The order.** After T220, before T221 (T220's plan review).
+6. **The exits.** Green: the matrix red on HEAD and green now, `make rust-test CRATE=rust/guard`, `make hooks-test`, `make static` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 0 of 210 forms missed.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** A held file written from the shell without a permit: a guard passing the bad. Two false refusals the walk fixes (a `cd` into `tests/hooks` then a new suite; a scratch `settings.json`): the corpus row moves to permit, its old verdict kept.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** `make guard-edit` refuses `dev/work-budget.json` while the refusals point to it: added to T225, which lands before T221 (2026-11-19). Not detected, because a guard reading the command before it runs cannot know them: names fed through `xargs`, and a target written through a variable the command does not set - recorded in `docs/guards.md`. Whether the guards' own sources should be held is a policy question for the GM, through escalation-check.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
+
 

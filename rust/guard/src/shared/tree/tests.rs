@@ -166,6 +166,28 @@ fn the_walk_reads_each_tool_and_its_paths() {
         1
     );
     assert_eq!(walk("sed -i -f prog /tmp/f", None, &m, h).targets.len(), 0);
+    // T227: `perl -i` and `sed --in-place=SUFFIX` rewrite a file in place too
+    for (cmd, n) in [
+        ("perl -pi -e s/a/b/ /tmp/f", 1),
+        ("perl -i.bak -pe s/a/b/ /tmp/f /tmp/g", 2),
+        ("perl -Ilib -e 1 /tmp/f", 0),
+        ("perl -Mstrict -pe s/a/b/ /tmp/f", 0),
+        ("perl --version /tmp/f", 0),
+        ("sed --in-place=.bak s/a/b/ /tmp/f", 1),
+        // a script quoted around a space is blanked to '' and is still the script, or -e's argument
+        ("sed -i 's/a b/c/' /tmp/f", 1),
+        ("sed -i -e 's/a b/c/' /tmp/f", 1),
+        ("perl -pi -e 's/a b/c/' /tmp/f", 1),
+        // rsync's destination, dd's of= and truncate's files, its -s and -r values aside
+        ("rsync -a /tmp/src /tmp/f", 1),
+        ("dd if=/tmp/src of=/tmp/f bs=1M", 1),
+        ("dd if=/tmp/src", 0),
+        ("truncate -s 0 /tmp/f /tmp/g", 2),
+        ("truncate -r /tmp/ref /tmp/f", 1),
+        ("truncate --size=0 /tmp/f", 1),
+    ] {
+        assert_eq!(walk(cmd, None, &m, h).targets.len(), n, "{cmd}");
+    }
     assert_eq!(
         walk("cp a b /tmp/dest -- ''", None, &m, h).targets[0]
             .path

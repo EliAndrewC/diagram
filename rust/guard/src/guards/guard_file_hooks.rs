@@ -39,7 +39,7 @@ fn hit(pattern: &Regex, text: &str) -> bool {
 
 static READ_GUARD: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r"(/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/tests/rolls\.py)$",
+        r"(/scripts/(?:hooks/)?[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/tests/rolls\.py)$",
     )
 });
 static SUITE: LazyLock<Regex> = LazyLock::new(|| re(r"/tests/hooks/test-[\w-]+-hooks\.sh$"));
@@ -196,8 +196,8 @@ pub(crate) fn recipe_hazards(text: &str) -> Vec<String> {
     out
 }
 
-/// Whether the file is one this guard holds.
-fn held(file: &str) -> bool {
+/// Whether the file is one this guard holds - THE guard file list, which `make_only_hooks` reads for a write from the shell too (T227).
+pub(crate) fn held(file: &str) -> bool {
     let guarded = file.ends_with("/Makefile")
         || hit(&HOOK_SCRIPT, file)
         || file.ends_with("/.claude/settings.json")

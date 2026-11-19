@@ -259,6 +259,7 @@ fn each_refusal_names_what_to_run() {
         ("python3 -m l7r.diagram.none", "no make target wraps"),
         ("REF_OK=1 make x", "answer the prompt"),
         ("sed -i s/a/b/ Makefile", "a marker INSIDE the text written"),
+        ("cd dev && cp /tmp/x switches.json", "make guard-edit FILE="),
     ] {
         assert!(refused(&run(cmd, &d, "sh"), words), "{cmd}");
     }
@@ -272,6 +273,31 @@ fn each_refusal_names_what_to_run() {
     ));
     assert!(run("make land-tooling FILES=a.py", &d, &fake(&d, "exit 0")).is_empty());
     assert!(run("ls", &d, "sh").is_empty());
+}
+
+/// A write is resolved from where the command starts: the event's `cwd`, else the guard's own directory (T227).
+#[test]
+fn a_relative_write_is_resolved_from_where_the_command_starts() {
+    let d = world("here");
+    let at = |cwd: &str, here: &Path| {
+        let e = Event {
+            name: "PreToolUse".to_owned(),
+            input: json!({"tool_name": "Bash", "cwd": cwd, "tool_input": {"command": "cat > settings.json < /tmp/x"}}),
+        };
+        let ctx = Ctx {
+            tree: d.to_path_buf(),
+            here: here.to_path_buf(),
+            python: "sh",
+        };
+        refused(
+            &judge(&e, &Session::from_input(&e.input), &ctx),
+            "GUARD FILE",
+        )
+    };
+    let claude = d.join(".claude");
+    assert!(at(&claude.to_string_lossy(), &d));
+    assert!(at("", &claude));
+    assert!(!at("", &d));
 }
 
 #[test]
@@ -442,4 +468,103 @@ fn the_storing_target_is_a_plain_word_and_the_terminator_is_as_bash_reads_it() {
         v(&format!("cat > /tmp/x <<-'EOF'\na\n\tEOF\n{body}\nEOF")),
         "guard-write"
     );
+}
+
+/// The guard files `guard_file_hooks::held` names, each as (path, a directory a session `cd`s into, the name it then writes).
+const HELD: [(&str, &str, &str); 6] = [
+    ("Makefile", "/diagram/.clones/s", "Makefile"),
+    ("scripts/hooks/a-hooks.sh", "scripts/hooks", "a-hooks.sh"),
+    (".claude/settings.json", ".claude", "settings.json"),
+    ("tests/rolls.py", "tests", "rolls.py"),
+    ("dev/switches.json", "dev", "switches.json"),
+    ("dev/work-budget.json", "dev", "work-budget.json"),
+];
+
+/// Every form a session writes a file with from the shell (T227, measured on 2026-11-19), `{F}` the guard file, `{D}` and `{B}`
+/// its directory and name; the seventh is T220's own, which rewrote two files through a `python3 -` heredoc.
+const WRITE_FORMS: [&str; 35] = [
+    "cat > {F} <<'EOF'\nx\nEOF",
+    "cat <<'EOF' > {F}\nx\nEOF",
+    "cat <<EOF >{F}\nx\nEOF",
+    "tee {F} <<'EOF'\nx\nEOF",
+    "tee {F} >/dev/null <<'EOF'\nx\nEOF",
+    "tee -a {F} < /tmp/x",
+    "cd /x && python3 - <<'EOF'\np='{F}'; s=open(p).read()\nopen(p,'w').write(s)\nEOF",
+    "python3 - <<'EOF'\nfrom pathlib import Path\nPath('{F}').write_text('x')\nEOF",
+    "python3 -c \"open('{F}','w').write('x')\"",
+    "sed -i 's/a/b/' {F}",
+    "sed -i.bak -e 's/a/b/' {F}",
+    "sed -E -i 's/a/b/' {F}",
+    "sed --in-place 's/a/b/' {F}",
+    "perl -pi -e 's/a/b/' {F}",
+    "cp /tmp/x {F}",
+    "mv /tmp/x {F}",
+    "install -m 755 /tmp/x {F}",
+    "echo x >> {F}",
+    "printf x >{F}",
+    "echo x >| {F}",
+    "echo x &> {F}",
+    "cd {D} && cat > {B} <<'EOF'\nx\nEOF",
+    "cd {D} && echo x > {B}",
+    "cd {D}; sed -i s/a/b/ {B}",
+    "cd {D} && cp /tmp/x {B}",
+    "cat > /diagram/.clones/s/{F} <<'EOF'\nx\nEOF",
+    "sed -i 's/old text/new/' {F}",
+    "sed -i -e 's|a b|c|' {F}",
+    "perl -pi -e 's/a b/c/' {F}",
+    "for f in x; do sed -i s/a/b/ {F}; done",
+    "find . -name x -exec sed -i s/a/b/ {F} \\;",
+    "rsync -a /tmp/x {F}",
+    "dd if=/tmp/x of={F} bs=1M",
+    "truncate -s 0 {F}",
+    "cd {D} && truncate --size=0 {B}",
+];
+
+/// A guard file WRITTEN from the shell is refused in every form a session uses, and every miss is listed at once (T227).
+#[test]
+fn every_shell_write_of_a_guard_file_is_refused() {
+    let verdicts: Vec<(String, String)> = HELD
+        .iter()
+        .flat_map(|(file, dir, base)| {
+            WRITE_FORMS.iter().map(move |f| {
+                f.replace("{F}", file)
+                    .replace("{D}", dir)
+                    .replace("{B}", base)
+            })
+        })
+        .map(|cmd| (v(&cmd), cmd))
+        .collect();
+    let missed: Vec<&(String, String)> = verdicts
+        .iter()
+        .filter(|(got, _)| got != "guard-write")
+        .collect();
+    assert_eq!(missed, Vec::<&(String, String)>::new());
+}
+
+/// A guard file READ, named in stored text, or a file that is not a guard written, is left alone - review-gate.sh and its suite
+/// among them: neither is on the guard list (`guard_file_hooks::held`), so T220's heredoc writing them was correctly let through.
+#[test]
+fn a_guard_file_read_or_mentioned_and_a_non_guard_written_are_left_alone() {
+    for cmd in [
+        "cp Makefile /tmp/x",
+        "cp scripts/hooks/a-hooks.sh /tmp/x",
+        "grep -n x Makefile > /tmp/out",
+        "sed -n 1,5p Makefile",
+        "cat .claude/settings.json | head",
+        "diff dev/switches.json /tmp/x > /tmp/d",
+        "cat > /tmp/notes <<'EOF'\nMakefile dev/switches.json\nEOF",
+        "sed -i s/a/b/ tests/hooks/test-a-hooks.sh",
+        "python3 - <<'EOF'\nprint(open('Makefile').read())\nEOF",
+        "cd dev && cat switches.json > /tmp/x",
+        "chmod +x scripts/hooks/a-hooks.sh",
+        "echo 'sed -i s/a/b/ Makefile'",
+        "make guard-edit FILE=Makefile WHY=\"a reason here\"",
+        "cd /x && python3 - <<'EOF'\np='scripts/gates/review-gate.sh'; s=open(p).read()\nopen(p,'w').write(s)\nEOF",
+        "cd /x && python3 - <<'EOF'\np='tests/hooks/test-review-gate.sh'; s=open(p).read()\nopen(p,'w').write(s)\nEOF",
+        "cat > scripts/gates/review-gate.sh <<'EOF'\nx\nEOF",
+        "cd .claude && cat > settings.local.json <<'EOF'\nx\nEOF",
+        "cd tests/hooks && cat > test-a-hooks.sh <<'EOF'\nx\nEOF",
+    ] {
+        assert_eq!(v(cmd), "ok", "{cmd}");
+    }
 }

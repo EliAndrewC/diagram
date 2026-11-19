@@ -158,6 +158,24 @@ check "writing the roster's TEST is ordinary"    ok      "cat >> tests/test_roll
 x = 1
 EOF"
 check "READING the roster is not writing"        ok      "grep -n Roll tests/rolls.py"
+# feature 449 T227 - a write is resolved through the command's own cd against THE guard list (guard_file_hooks::held), so the forms
+# a pattern over the text missed are refused: cp, mv, install, perl -i, sed with -i not first, a cd into the file's directory, dev/*.json
+check "T220's form: python3 - rewriting a hook by a bound name" blocked "cd /x && python3 - <<'EOF'
+p='scripts/hooks/a-hooks.sh'; s=open(p).read()
+open(p,'w').write(s)
+EOF"
+check "cp over the roster"                       blocked "cp /tmp/x tests/rolls.py"
+check "a cd, then a heredoc into the switches"   blocked "cd dev && cat > switches.json <<'EOF'
+{}
+EOF"
+check "perl -pi over the Makefile"               blocked "perl -pi -e 's/a/b/' Makefile"
+check "sed -E -i over settings.json"             blocked "sed -E -i 's/a/b/' .claude/settings.json"
+check "a cd into the suites is still a suite"    ok      "cd tests/hooks && cat > test-a-hooks.sh <<'EOF'
+x
+EOF"
+check "review-gate.sh is no guard file"          ok      "cat > scripts/gates/review-gate.sh <<'EOF'
+x
+EOF"
 # GUARD_EDIT_OK: feature 169 - two live false positives, both matched against the RAW command.
 # The first REFUSED A COMMAND THAT WROTE NOTHING: an arrow in printed prose reads as a redirect.
 check "an arrow in prose is not a redirect"   ok      "printf '5 mirror cd+write -> scripts/hooks/main-tree-hooks.sh (new)\n'"

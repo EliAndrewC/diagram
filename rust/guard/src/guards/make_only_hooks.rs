@@ -12,6 +12,7 @@ use std::time::Duration;
 use fancy_regex::Regex;
 use serde_json::{json, Value};
 
+use crate::guards::guard_file_hooks::held;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, used, Escape};
 use crate::shared::log;
@@ -20,6 +21,7 @@ use crate::shared::session::Session;
 use crate::shared::shape::{strip_heredocs, strip_quotes};
 use crate::shared::state::field;
 use crate::shared::tool::ask_within;
+use crate::shared::tree::{walk, Walk};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -31,7 +33,19 @@ pub const GUARD: Guard = Guard {
 
 /// CONVENTION: the landing lint's limit, as `hm_make.py` gave `ruff`.
 const LINT_LIMIT: Duration = Duration::from_secs(60);
-const GUARD_FILE: &str = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py)";
+const GUARD_FILE: &str = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py|dev/(?:switches|work-budget)\.json)";
+/// The names a command must hold before its writes are resolved: each guard file's last part, so a `cd` into its directory still
+/// names it (T227: `cd dev && cat > switches.json` held none of the old list, which had `tests/rolls.py` and no `dev/` file).
+const GUARD_NAMES: [&str; 6] = [
+    "Makefile",
+    "-hooks.sh",
+    "settings.json",
+    "rolls.py",
+    "switches.json",
+    "work-budget.json",
+];
+/// The tools that change a file's mode, times or directory but never its text: a guard file `chmod +x`ed is not rewritten.
+const NOT_TEXT: [&str; 5] = ["chmod", "chown", "touch", "mkdir", "rmdir"];
 const SUITE_NAME: &str = "<a-suite>";
 
 fn re(pattern: &str) -> Regex {
@@ -108,11 +122,13 @@ lazy!(RUN_LINE, r"^\$\(RUN\)\.([\w.]+)\s*(.*)$");
 lazy!(LABEL_MODULE, r"-m\s+(l7r\.diagram\.[\w.]+)");
 lazy!(LABEL_TARGET, r"\bmake\s+([a-z][\w-]*(?:\s+[A-Z_]+=\S*)*)");
 
+/// The patterns over the text, for what the shell walk cannot see (a write inside `find -exec`, a loop's body); a name ends at a
+/// space, the end, or a separator - `do sed -i s/a/b/ Makefile; done` once passed for its `;` (T227).
 static SHELL_WRITES: LazyLock<[Regex; 3]> = LazyLock::new(|| {
     [
-        re(&format!(r"(?<![-\w])>>?\s*{GUARD_FILE}(?:\s|$)")),
-        re(&format!(r"sed\s+-i\b[^;|&]*?{GUARD_FILE}(?:\s|$)")),
-        re(&format!(r"tee\s+(?:-a\s+)?{GUARD_FILE}(?:\s|$)")),
+        re(&format!(r"(?<![-\w])>>?\s*{GUARD_FILE}(?:[\s;&|)]|$)")),
+        re(&format!(r"sed\s+-i\b[^;|&]*?{GUARD_FILE}(?:[\s;&|)]|$)")),
+        re(&format!(r"tee\s+(?:-a\s+)?{GUARD_FILE}(?:[\s;&|)]|$)")),
     ]
 });
 static PY_WRITES: LazyLock<[Regex; 2]> = LazyLock::new(|| {
@@ -207,8 +223,38 @@ fn without_stored_text(cmd: &str) -> String {
     format!("{}{}", &cmd[..start], &cmd[end..])
 }
 
-/// The verdict: `ok`, the rule broken, or `make-dup-var:<name>`.
+/// The verdict of a command whose working directory is not known: its relative paths are read from `/`, so a path's own parts
+/// (`dev/switches.json`, `cd dev && ... switches.json`) still name the file. The tests' and the refusal corpus's entry; a live call
+/// knows its directory and goes through `classify_at`.
+#[cfg(test)]
 pub(crate) fn classify(cmd: &str) -> String {
+    classify_at(cmd, "/")
+}
+
+/// What the shell walk makes of a command's writes - a redirect, `sed -i`, `perl -i`, `tee`, `cp`, `mv`, `install`, through its own
+/// `cd`s - judged by THE guard file list (`guard_file_hooks::held`): (a write lands on a guard file, a write named like one lands
+/// on a file that is not one). The walk reads a command at its head, so the patterns over the text still judge what it cannot see
+/// (`find -exec sed -i`); the second answer is what lets it overrule them - a `settings.json` in a scratch directory, a suite
+/// written after a `cd` into `tests/hooks` (T227).
+fn walked_write(cmd: &str, here: &str) -> (bool, bool) {
+    let home = std::env::var("HOME").unwrap_or_default();
+    let Walk { targets, .. } = walk(cmd, Some(here), "", &home);
+    let text_tool = |seg: &str| {
+        let head = seg.split_whitespace().next().unwrap_or_default();
+        seg.contains('>') || !NOT_TEXT.contains(&head.rsplit('/').next().unwrap_or(head))
+    };
+    let paths = || {
+        targets
+            .iter()
+            .filter_map(|t| t.path.as_deref().map(|p| (p, t)))
+    };
+    let on_guard = paths().any(|(p, t)| held(p) && text_tool(&t.segment));
+    let cleared = paths().any(|(p, _)| !held(p) && GUARD_NAMES.iter().any(|n| p.ends_with(n)));
+    (on_guard, cleared)
+}
+
+/// The verdict: `ok`, the rule broken, or `make-dup-var:<name>`; `here` is where the command starts.
+pub(crate) fn classify_at(cmd: &str, here: &str) -> String {
     if cmd.is_empty() {
         return "ok".to_owned();
     }
@@ -246,23 +292,14 @@ pub(crate) fn classify(cmd: &str) -> String {
     {
         return "inline-override".to_owned();
     }
-    let writes = cmd.contains('>')
-        || cmd.contains("sed")
-        || cmd.contains("tee")
-        || cmd.contains("write_text")
-        || cmd.contains("open(");
-    let guard_named = ["Makefile", "-hooks.sh", "settings.json", "tests/rolls.py"]
-        .iter()
-        .any(|n| cmd.contains(n));
-    if writes && guard_named {
+    if GUARD_NAMES.iter().any(|n| cmd.contains(n)) {
         let (c, raw) = (
             replace_suites(&clean),
             replace_suites(&without_stored_text(cmd)),
         );
-        if SHELL_WRITES.iter().any(|p| hit(p, &c))
-            || PY_WRITES.iter().any(|p| hit(p, &raw))
-            || write_via_name(&raw)
-        {
+        let (on_guard, cleared) = walked_write(cmd, here);
+        let shell = on_guard || (!cleared && SHELL_WRITES.iter().any(|p| hit(p, &c)));
+        if shell || PY_WRITES.iter().any(|p| hit(p, &raw)) || write_via_name(&raw) {
             return "guard-write".to_owned();
         }
     }
@@ -577,8 +614,12 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
     let null = Value::Null;
     let input = event.input.get("tool_input").unwrap_or(&null);
     let cmd = field(input, "command");
-    let verdict = classify(cmd);
     let given = field(&event.input, "cwd");
+    let verdict = if given.is_empty() {
+        classify_at(cmd, &ctx.here.to_string_lossy())
+    } else {
+        classify_at(cmd, given)
+    };
     let shown: String = cmd.chars().take(200).collect();
     let fire =
         |what: &str, rule: &str| log::fire("make-only", what, &shown, rule, &event.input, session);
@@ -638,7 +679,7 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
             Err(why) => refuse(&verdict, &format!("an engine entry point run outside make - {why}."), "make <target>   (make help lists the operations)"),
         },
         "inline-override" => refuse(&verdict, "an override supplied on the command line, which skips the prompt whose default answer is CANCEL. That prompt is the whole mechanism: it exists to be answered, not pre-empted.", "make <target>   without the override, and answer the prompt if it appears"),
-        "guard-write" => refuse(&verdict, "a GUARD FILE written from a shell command. Layer 3 only sees the Edit and Write tools, so this route slips past it - the same ungated-sibling shape this feature exists to close.", "the Edit tool, or the same command ending in a trailing comment:  <command>  # GUARD_EDIT_OK: <reason>  - a marker INSIDE the text written does not count, since a guard file's text already holds old ones (GUARD_EDIT_OK: the round arbiter's fix on hour:383@4)"),
+        "guard-write" => refuse(&verdict, "a GUARD FILE written from a shell command. Layer 3 only sees the Edit and Write tools, so this route slips past it - the same ungated-sibling shape this feature exists to close.", "make guard-edit FILE=<the guard file> WHY=\"<reason>\", then the Edit tool; or the same command ending in a trailing comment:  <command>  # GUARD_EDIT_OK: <reason>  - a marker INSIDE the text written does not count, since a guard file's text already holds old ones (GUARD_EDIT_OK: the round arbiter's fix on hour:383@4)"),
         _ => Vec::new(),
     }
 }

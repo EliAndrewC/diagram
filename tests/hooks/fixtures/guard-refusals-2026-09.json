@@ -912,8 +912,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "refuse",
-   "because": "guard-write"
+   "verdict": "permit",
+   "because": "feature 449 T227 - the write is resolved through the command's own cd: this settings.json lands in a scratchpad probe directory, not .claude/, so it is no guard file (the old pattern refused any settings.json)",
+   "was": {
+    "verdict": "refuse",
+    "because": "guard-write"
+   }
   }
  },
  {

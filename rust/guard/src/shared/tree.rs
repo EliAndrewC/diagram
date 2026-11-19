@@ -40,7 +40,8 @@ const GIT_WRITES: [&str; 17] = [
 const FILE_TOOLS_ALL: [&str; 12] = [
     "vim", "vi", "nano", "emacs", "tee", "touch", "mkdir", "rmdir", "rm", "mv", "chmod", "chown",
 ];
-const FILE_TOOLS_LAST: [&str; 3] = ["cp", "ln", "install"];
+/// The tools whose LAST argument is what they write: `rsync`'s destination as `cp`'s (T227).
+const FILE_TOOLS_LAST: [&str; 4] = ["cp", "ln", "install", "rsync"];
 const WRAPPERS: [&str; 9] = [
     "sudo", "nohup", "setsid", "env", "command", "exec", "time", "nice", "builtin",
 ];
@@ -386,14 +387,17 @@ fn git_write(toks: &[&str], env: &Env, home: &str, eff: Option<&str>) -> Option<
 
 /// The paths a file tool writes (`_tool_paths`): `sed`'s files past its script, the last argument of a copy, else every argument.
 fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
+    let blank = |t: &str| matches!(t, "''" | "\"\"");
     let args: Vec<&str> = toks[1..]
         .iter()
         .copied()
-        .filter(|t| !matches!(*t, "''" | "\"\"" | "--") && !t.contains("<<"))
+        .filter(|t| *t != "--" && !t.contains("<<"))
         .collect();
     if tool == "sed" {
         let (mut keep, mut skip_next) = (Vec::new(), false);
         let mut script_seen = args.contains(&"-e") || args.contains(&"--expression");
+        // a quoted script that held a space or a shell character reaches here blanked to '': it is still the script (or the
+        // argument of -e), never a path - dropped before this loop, it made the file the script (T227)
         for t in args {
             if skip_next {
                 skip_next = false;
@@ -402,13 +406,24 @@ fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
             } else if t.starts_with('-') {
             } else if !script_seen {
                 script_seen = true; // the first bare argument is the sed script, not a file
-            } else {
+            } else if !blank(t) {
                 keep.push(t);
             }
         }
         return keep;
     }
-    let args: Vec<&str> = args.into_iter().filter(|t| !t.starts_with('-')).collect();
+    // `truncate -s 0 F` and `-r REF F` empty or resize F: the size and the reference file are its options' values, not files written (T227)
+    let mut value_next = false;
+    let args: Vec<&str> = args
+        .into_iter()
+        .filter(|t| {
+            let value = std::mem::replace(
+                &mut value_next,
+                tool == "truncate" && matches!(*t, "-s" | "-r"),
+            );
+            !value && !t.starts_with('-') && !blank(t)
+        })
+        .collect();
     if FILE_TOOLS_LAST.contains(&tool) {
         return args.last().copied().into_iter().collect();
     }
@@ -431,6 +446,17 @@ fn path_write(p: &str, env: &Env, home: &str, eff: Option<&str>) -> Write {
     }
 }
 
+/// Whether a perl switch cluster edits in place (`-i`, `-pi`, `-i.bak`, `-pi.orig`): the switches before its `i` take no argument, so
+/// `-Ilib` (an include path) and `-Mstrict` (a module) are not one (T227: `perl -pi -e` rewrote a file the walk never saw).
+fn perl_in_place(token: &str) -> bool {
+    let Some(cluster) = token.strip_prefix('-').filter(|c| !c.starts_with('-')) else {
+        return false;
+    };
+    cluster
+        .trim_start_matches(|c| "pnlaswWtTcuU0".contains(c))
+        .starts_with('i')
+}
+
 /// Every write in one segment (`_writes_in`).
 fn writes_in(seg: &str, env: &Env, home: &str, eff: Option<&str>) -> Vec<Write> {
     let mut found_writes = Vec::new();
@@ -441,17 +467,29 @@ fn writes_in(seg: &str, env: &Env, home: &str, eff: Option<&str>) -> Vec<Write> 
             found_writes.extend(git_write(&toks, env, home, eff));
         } else if base == "make" || (found(&PYTHON, base) && toks.get(1) == Some(&"-c")) {
             found_writes.push((eff.map(str::to_owned), "shell"));
-        } else if base == "sed"
+        } else if (base == "sed"
             && toks[1..]
                 .iter()
-                .any(|t| t.starts_with("-i") || *t == "--in-place")
+                .any(|t| t.starts_with("-i") || t.starts_with("--in-place")))
+            || (base == "perl" && toks[1..].iter().any(|t| perl_in_place(t)))
         {
             found_writes.extend(
                 tool_paths("sed", &toks)
                     .into_iter()
                     .map(|p| path_write(p, env, home, eff)),
             );
-        } else if FILE_TOOLS_ALL.contains(&base) || FILE_TOOLS_LAST.contains(&base) {
+        } else if base == "dd" {
+            // `dd of=F` writes F, named in its operand (T227)
+            found_writes.extend(
+                toks[1..]
+                    .iter()
+                    .filter_map(|t| t.strip_prefix("of="))
+                    .map(|p| path_write(p, env, home, eff)),
+            );
+        } else if FILE_TOOLS_ALL.contains(&base)
+            || FILE_TOOLS_LAST.contains(&base)
+            || base == "truncate"
+        {
             found_writes.extend(
                 tool_paths(base, &toks)
                     .into_iter()

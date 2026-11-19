@@ -139,6 +139,10 @@ fn a_read_of_a_guard_is_told_for_free() {
     assert!(
         matches!(&read(&p(&d, "scripts/a-hooks.sh"))[..], [Answer::Notice(t)] if t.contains("This is a GUARD file"))
     );
+    // T227: the shell guards live in scripts/hooks/ since feature 429, and a Read of one was told nothing
+    assert!(
+        matches!(&read(&p(&d, "scripts/hooks/a-hooks.sh"))[..], [Answer::Notice(t)] if t.contains("This is a GUARD file"))
+    );
     assert!(read(&p(&d, "notes.md")).is_empty());
     assert!(read(&p(&d, "specs/x/Makefile")).is_empty());
     assert_eq!(read_context("/r/scripts/tests/hooks/test-a-hooks.sh"), None);

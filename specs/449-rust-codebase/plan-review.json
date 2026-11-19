@@ -1062,6 +1062,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T227 (T220: a guard file seemed to be rewritten through a shell heredoc without the guard firing)": {
+   "sha256": "f4f241cf473deab5737f84c69bac91170123d5cf9fccba2345aedc07c43f8601",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T227 Approach (checklist part A)": {
+   "sha256": "f94b8e21d411cb38a7e62b5c78196a6a425142139f43d2e8f7237693333ea8c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14974,6 +14986,60 @@
      "why": "These are verification that enforces what the step asks for. They narrow nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T227 (T220: a guard file seemed to be rewritten through a shell heredoc without the guard firing)",
+    "### T227 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T227-walk",
+     "summary": "The make-only guard's shell-write rule resolves each command's write targets through the shared shell walk (its own cds, the event's working directory for relative names) and checks each against held(), keeping the text patterns for what the walk cannot see",
+     "class": "within",
+     "why": "T220 found the guard passing shell writes of held files (87 of 156, then 141 of 210 forms missed, dated and methoded): a check passing bad work is a defect, and the GM 2026-11-18 asked that known bugs be fixed in each step before the next. The change only makes the existing refusal reach the files it already holds; it adds no new held file and no new refusal class."
+    },
+    {
+     "id": "T227-walk-forms",
+     "summary": "The walk learns perl -i, sed --in-place=, a quoted script with a space, rsync's destination, dd of= and truncate's files, each red first",
+     "class": "within",
+     "why": "Each is a write form the matrix showed passing a held-file write; covering it is the same defect fix. Measured 0 of 210 missed after."
+    },
+    {
+     "id": "T227-false-refusals",
+     "summary": "Two false refusals the walk fixes (a cd into tests/hooks then a new suite; a scratch settings.json) move to permit in the corpus, their old verdicts kept",
+     "class": "within",
+     "why": "A guard refusing correct work is fixed in its port and its case's expected result changed as fixed (FR-002's exception, constitution XIV); the block does not cite FR-002 by id but does what it says."
+    },
+    {
+     "id": "T227-not-seen-xargs",
+     "summary": "Names fed through xargs are not detected, recorded in docs/guards.md",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Scoped to the block's own stated reason: names the guard cannot know before the command runs (produced at run time by find, ls, a file's contents). A guard reading the command text before execution physically cannot know them, and refusing every xargs-fed write instead would refuse correct work and break the cited rule to match invocations, not mentions. This ruling does not cover a held name spelled literally in the command text and piped into xargs; such a name is visible before the command runs and falls outside the exception as worded."
+    },
+    {
+     "id": "T227-not-seen-variable",
+     "summary": "A target written through a variable the command does not set is not detected, recorded in docs/guards.md",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Scoped to names whose value the guard cannot know before the command runs: the variable's value is not in the command and shell state does not persist between calls. It does not cover a held name spelled literally after a variable (e.g. a literal Makefile or .claude/settings.json suffix), which is visible in the text and outside the exception as worded."
+    },
+    {
+     "id": "T227-guard-edit-defect",
+     "summary": "make guard-edit refusing dev/work-budget.json while the refusals point to it is added to T225, which lands before T221",
+     "class": "within",
+     "why": "A known defect (a tool refusing valid input) carried to a task ordered to land before the next step (T221), so it is fixed before moving on as the GM asked 2026-11-18. Verified from the block's own statement only; T225's line is not in the bundle."
+    },
+    {
+     "id": "T227-guard-sources",
+     "summary": "Whether the guards' own sources should be held is left to the GM through escalation-check",
+     "class": "within",
+     "why": "Holding more files would be new refusing behavior nobody asked for; leaving it as a question narrows nothing the GM asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -26386,6 +26452,58 @@
      "summary": "Exits and done-measure: the crate and consumer tests (exact counts on a fixture tree, every real folder classified), make quick/static/counters-inert/hooks-test green, and `make pool-index` writing 30 maps.",
      "class": "within",
      "why": "These are verification that enforces what the step asks for. They narrow nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T227": {
+   "section_sha256": "8c48c2bf396e8f22dae7eef7d501c1a77c2ded3a0a502a39dfbccea305d411d6",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T227-walk",
+     "summary": "The make-only guard's shell-write rule resolves each command's write targets through the shared shell walk (its own cds, the event's working directory for relative names) and checks each against held(), keeping the text patterns for what the walk cannot see",
+     "class": "within",
+     "why": "T220 found the guard passing shell writes of held files (87 of 156, then 141 of 210 forms missed, dated and methoded): a check passing bad work is a defect, and the GM 2026-11-18 asked that known bugs be fixed in each step before the next. The change only makes the existing refusal reach the files it already holds; it adds no new held file and no new refusal class."
+    },
+    {
+     "id": "T227-walk-forms",
+     "summary": "The walk learns perl -i, sed --in-place=, a quoted script with a space, rsync's destination, dd of= and truncate's files, each red first",
+     "class": "within",
+     "why": "Each is a write form the matrix showed passing a held-file write; covering it is the same defect fix. Measured 0 of 210 missed after."
+    },
+    {
+     "id": "T227-false-refusals",
+     "summary": "Two false refusals the walk fixes (a cd into tests/hooks then a new suite; a scratch settings.json) move to permit in the corpus, their old verdicts kept",
+     "class": "within",
+     "why": "A guard refusing correct work is fixed in its port and its case's expected result changed as fixed (FR-002's exception, constitution XIV); the block does not cite FR-002 by id but does what it says."
+    },
+    {
+     "id": "T227-not-seen-xargs",
+     "summary": "Names fed through xargs are not detected, recorded in docs/guards.md",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Scoped to the block's own stated reason: names the guard cannot know before the command runs (produced at run time by find, ls, a file's contents). A guard reading the command text before execution physically cannot know them, and refusing every xargs-fed write instead would refuse correct work and break the cited rule to match invocations, not mentions. This ruling does not cover a held name spelled literally in the command text and piped into xargs; such a name is visible before the command runs and falls outside the exception as worded."
+    },
+    {
+     "id": "T227-not-seen-variable",
+     "summary": "A target written through a variable the command does not set is not detected, recorded in docs/guards.md",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Scoped to names whose value the guard cannot know before the command runs: the variable's value is not in the command and shell state does not persist between calls. It does not cover a held name spelled literally after a variable (e.g. a literal Makefile or .claude/settings.json suffix), which is visible in the text and outside the exception as worded."
+    },
+    {
+     "id": "T227-guard-edit-defect",
+     "summary": "make guard-edit refusing dev/work-budget.json while the refusals point to it is added to T225, which lands before T221",
+     "class": "within",
+     "why": "A known defect (a tool refusing valid input) carried to a task ordered to land before the next step (T221), so it is fixed before moving on as the GM asked 2026-11-18. Verified from the block's own statement only; T225's line is not in the bundle."
+    },
+    {
+     "id": "T227-guard-sources",
+     "summary": "Whether the guards' own sources should be held is left to the GM through escalation-check",
+     "class": "within",
+     "why": "Holding more files would be new refusing behavior nobody asked for; leaving it as a question narrows nothing the GM asked."
     }
    ],
    "verdict": "CLEAR"
