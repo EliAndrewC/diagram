@@ -610,6 +610,25 @@
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
+ "docs/building-programs.md::Country shrine (a village district's shrine)#no fence along the approach": {
+  "body": "f489ce1df11459c6",
+  "claim": "no fence along the approach - GUESS shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing: the one fence from before 1868 found at an ordinary shrine, Yasuda Hachiman's late-Edo stone fence, lines its approach, and no count says how many village shrines had one, so the procedure draws none and no check judges one",
+  "code": "a841a03a8807335f",
+  "core": "ba9bda921f074047",
+  "date": "2026-11-18",
+  "note": "the claim now names 0223's drawing page as the record of its GUESS, but that page records no such guess: its only mention of a fence lining the approach (§64, Yasuda Hachiman) is evidence that the precinct is drawn open, and no block says an approach fence is left undrawn or calls that a guess (the drawing page's own rule says \"evidence of one form without evidence it was the rule makes a knob\" (§71), and 0223 §55 gives one such form: the one pre-1868 fence found at an ordinary shrine \"lines its approach\"); fix: claim (the GUESS holds only once 0223's drawing page has a block recording \"no fence along the approach\" as a guess, or as a knob; until then the claim's backing points at a page that is silent on it); effect: none on the map, but `make claims` accepts a GUESS whose named drawing page does not record it",
+  "pages": {
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html": "deb271b84040f16a"
+  },
+  "research": "1c552e1d5c005cc0",
+  "rests": [
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:ae41106810024ccc",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:c7b3b890296618dc",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html:f9a2fc2d49d690a0"
+  ],
+  "section": "ba9bda921f074047",
+  "verdict": "DRIFTED"
+ },
  "docs/building-programs.md::Country shrine (a village district's shrine)#no office building": {
   "body": "b469f19425ab88de",
   "claim": "no office building - the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri: registers in the monk's writing room",
@@ -825,14 +844,6 @@
   "section": "ba9bda921f074047",
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
- },
- "docs/building-programs.md::Country shrine (a village district's shrine)#sanctuary size band 4-20 by 4-12 ft, a tolerance past the measured 6-18 ft wide and ~6 ft deep": {
-  "code": "ba9bda921f074047",
-  "core": "ba9bda921f074047",
-  "date": "2026-11-18",
-  "note": "sanctuary size band 4-20 by 4-12 ft, a tolerance past the measured 6-18 ft wide and ~6 ft deep",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#sanctuary the smallest building of the shrine proper": {
   "body": "b1a670b23bf35418",
