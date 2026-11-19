@@ -608,3 +608,6 @@
 - [x] T210 T156a - dead measurement tooling (T156's first landing, no engine code): scripts/measure/collect_cost.py, collect_probe.py and make collect-cost deleted; tests/test_operations_registry.py deleted unported (ask:449-phase4-slices Q9); specs/335-*/harness.py and make spec-harness retired (its caption_moves is dead since T152; a port would have to be rebuilt per engine-plan.md, retiring is the easier route the record leaves open), make figures listing its 7 measurements as not re-measured
       research: rendering
       verify: DONE. landed: dead measurement tooling retired; T156 split
+- [x] T211 T156b - the Rust pool sweep (T156's second landing): every pool sheet through its tier's checks, the red fixtures on the Rust verdicts, the size table's coverage, the on-map declaration and maps_recording, the declared tiers, the round-trip's corridor - written fresh as Rust tests (hand sheets read from their svg, generated sheets composed in process from their spec); census/pool_check's calls moved out of the lockstep test; tests/test_mode_a_sheets.py and tests/_sheets.py deleted (its staleness check missed Rust generator edits - a defect retired with it); suite_tools/deps/tests.rs re-pointed
+      research: rendering
+      verify: DONE. landed: the pool sweep is Rust; the Python sweep deleted
