@@ -37,10 +37,13 @@ from pathlib import Path
 from l7r.diagram.labels import InkPart, Obstacle, ObstacleIndex, Placement, Subject, Way, place
 from l7r.diagram.labels.geom import Poly, Pt, bbox, inside, rect
 from l7r.diagram.labels.layout import layouts
+from l7r.diagram.labels.placer import _nearest_ink
 from l7r.diagram.labels.standard import CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, CLEAR_EM, PITCH_EM, REACH_EM, WEIGHT_OBSTACLE, WEIGHT_WAY, block_half
 from l7r.diagram.labels.svg import caption_svg, leader_svg
 
 SVG = "{http://www.w3.org/2000/svg}"
+JOINS = ("miter", "round", "bevel", "miter-clip", "arcs")
+"""The `stroke-linejoin` values SVG knows (SVG 2 adds the last two, which draw a miter within the limit); any other is ignored."""
 
 WAY_KINDS = frozenset({"road", "river", "revetment"})
 """The kinds a caption may cross at a way's weight (plan P4, observed 2026-09-27, method: the tag census of the six
@@ -162,32 +165,161 @@ class Shape:
     names: tuple[str, ...] = ()  # a caption's `data-names`: the `data-id`s of the drawn things it names (feature 286)
     cont: bool = False  # a caption line marked `data-cont="1"`: the next line of the caption before it (feature 286)
     cap: str = "butt"  # a stroke's `stroke-linecap`, inherited as SVG inherits it: "butt" (SVG's default), "square" or "round" (feature 449 T193)
+    join: str = "miter"  # a stroke's `stroke-linejoin`, inherited: "miter" (SVG's default, and its SVG 2 forms), "round" or "bevel" (T194)
+    miter: float = 4.0  # a stroke's `stroke-miterlimit`, inherited (SVG's default 4): a sharper corner's miter is drawn as a bevel (T194)
+    closed: bool = False  # a stroke a path's `Z` closed: drawn with a join at its start, no caps (T194)
+    dash: tuple[float, ...] = ()  # a stroke's `stroke-dasharray` in sheet px, an even count (empty: solid), inherited (T194)
+    offset: float = 0.0  # a stroke's `stroke-dashoffset` in sheet px, inherited (T194)
 
 
-def _path_points(d: str) -> list[Pt]:
-    """A path's vertices - absolute and relative move, line, horizontal and vertical steps, and the end points of
-    curves; enough for the handful of paths the sheets draw (roads and banks).
+def _path_points(d: str, tol: float) -> list[tuple[list[Pt], bool]]:
+    """A path's subpaths as SVG draws them, each its points and whether a `Z` closed it: absolute and relative move, line, horizontal
+    and vertical steps, and every curve - cubic and quadratic Beziers, their smooth forms reflecting the control point before, and
+    elliptical arcs - flattened finely enough that no chord stands more than `tol` inside it. A move starts a new subpath, and a step
+    after a `Z` starts one at the closed subpath's start (feature 449 T194: a curve was kept by its end points alone, so Hoshigaoka's
+    sacred-tree rope, a ring drawn in two arcs, was read as a 10 px line doubled back, and a second move was joined to the first by a
+    segment nobody drew).
 
     Research:
         its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (SVG C-command argument count); 7 (SVG A-command argument count)
     """
+    subs: list[tuple[list[Pt], bool]] = []
     pts: list[Pt] = []
-    x = y = 0.0
+    closed = False
+    x = y = sx = sy = 0.0
+    ctrl: Pt | None = None  # the last cubic's second control point, or the last quadratic's control point, which S and T reflect
+    last = ""
     for cmd, args in re.findall(r"([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)", d):
+        up, rel = cmd.upper(), cmd.islower()
+        if up == "Z":
+            if pts:
+                closed = True
+            x, y, last = sx, sy, "Z"
+            continue
         v = [float(n) for n in re.findall(r"-?\d*\.?\d+(?:e-?\d+)?", args)]
-        step = {"M": 2, "L": 2, "T": 2, "H": 1, "V": 1, "C": 6, "S": 4, "Q": 4, "A": 7}.get(cmd.upper(), 0)
-        for i in range(0, len(v) - step + 1, step) if step else ():
-            chunk = v[i : i + step]
-            rel = cmd.islower()
-            if cmd.upper() == "H":
-                x = x + chunk[0] if rel else chunk[0]
-            elif cmd.upper() == "V":
-                y = y + chunk[0] if rel else chunk[0]
+        step = {"M": 2, "L": 2, "T": 2, "H": 1, "V": 1, "C": 6, "S": 4, "Q": 4, "A": 7}[up]
+        for i in range(0, len(v) - step + 1, step):
+            c = v[i : i + step]
+            ox, oy = (x, y) if rel else (0.0, 0.0)
+            if (up == "M" and i == 0) or closed:
+                # a move, or a step after a `Z`, starts a new subpath (at the closed one's start)
+                if pts:
+                    subs.append((pts, closed))
+                pts, closed = [], False
+                if up == "M" and i == 0:
+                    x, y = ox + c[0], oy + c[1]
+                    sx, sy, pts, last = x, y, [(x, y)], "M"
+                    continue
+                pts = [(x, y)]
+            if not pts:
+                pts = [(x, y)]
+            p0 = (x, y)
+            if up == "H":
+                x = ox + c[0]
+                pts.append((x, y))
+            elif up == "V":
+                y = oy + c[0]
+                pts.append((x, y))
+            elif up in ("M", "L"):
+                x, y = ox + c[0], oy + c[1]
+                pts.append((x, y))
+            elif up in ("C", "S"):
+                c1 = (ox + c[0], oy + c[1]) if up == "C" else (2 * x - ctrl[0], 2 * y - ctrl[1]) if ctrl is not None and last in ("C", "S") else p0
+                c2, e = (ox + c[-4], oy + c[-3]), (ox + c[-2], oy + c[-1])
+                pts.extend(_bezier((p0, c1, c2, e), tol))
+                (x, y), ctrl = e, c2
+            elif up in ("Q", "T"):
+                q = (ox + c[0], oy + c[1]) if up == "Q" else (2 * x - ctrl[0], 2 * y - ctrl[1]) if ctrl is not None and last in ("Q", "T") else p0
+                e = (ox + c[-2], oy + c[-1])
+                pts.extend(_bezier((p0, q, e), tol))
+                (x, y), ctrl = e, q
             else:
-                ex, ey = chunk[-2], chunk[-1]
-                x, y = (x + ex, y + ey) if rel else (ex, ey)
-            pts.append((x, y))
-    return pts
+                e = (ox + c[5], oy + c[6])
+                pts.extend(_arc(p0, c[0], c[1], c[2], c[3] != 0.0, c[4] != 0.0, e, tol))
+                x, y = e
+            last = up
+    if pts:
+        subs.append((pts, closed))
+    return subs
+
+
+def _dasharray(v: str | None, up: tuple[float, ...]) -> tuple[float, ...]:
+    """A `stroke-dasharray` as SVG reads it: `none`, or lengths of no sum, solid (empty); an odd count repeated to an even one; a value
+    SVG does not read - a negative or no number, a percentage - ignored, so the inherited pattern `up` stands."""
+    if v is None:
+        return up
+    if v.strip() == "none":
+        return ()
+    try:
+        vals = [float(x) for x in re.split(r"[\s,]+", v.strip()) if x]
+    except ValueError:
+        return up
+    if not vals or any(x < 0 for x in vals):
+        return up
+    if sum(vals) == 0.0:
+        return ()
+    return tuple(vals * 2 if len(vals) % 2 else vals)
+
+
+def _bezier(cp: tuple[Pt, ...], tol: float) -> list[Pt]:
+    """A cubic or quadratic Bezier's points after its start, in the fewest equal steps of its parameter whose chords stand within `tol`
+    of the curve: Wang's bound, n(n - 1) / 8 times the largest second difference of the control points, over the square of the steps."""
+    deg = len(cp) - 1
+    dd = max(math.hypot(cp[k][0] - 2 * cp[k + 1][0] + cp[k + 2][0], cp[k][1] - 2 * cp[k + 1][1] + cp[k + 2][1]) for k in range(deg - 1))
+    n = max(1, math.ceil(math.sqrt(deg * (deg - 1) / 8 * dd / tol)))
+    out: list[Pt] = []
+    for k in range(1, n + 1):
+        t = k / n
+        w = [math.comb(deg, j) * t**j * (1 - t) ** (deg - j) for j in range(deg + 1)]
+        out.append((sum(wj * p[0] for wj, p in zip(w, cp, strict=True)), sum(wj * p[1] for wj, p in zip(w, cp, strict=True))))
+    out[-1] = cp[-1]
+    return out
+
+
+def _arc(p0: Pt, rx: float, ry: float, rot: float, large: bool, sweep: bool, e: Pt, tol: float) -> list[Pt]:
+    """An elliptical arc's points after its start, as SVG draws it (SVG 1.1 appendix F.6): none where it ends where it starts, a
+    straight step where a radius is 0, its radii scaled up where they cannot reach the end, and its center found from its flags;
+    flattened in equal steps of its angle whose chords stand within `tol` of the curve, R(1 - cos(half a step)), R its larger radius."""
+    if p0 == e:
+        return []
+    rx, ry = abs(rx), abs(ry)
+    if rx == 0.0 or ry == 0.0:
+        return [e]
+    phi = math.radians(rot)
+    cp, sp = math.cos(phi), math.sin(phi)
+    dx, dy = (p0[0] - e[0]) / 2, (p0[1] - e[1]) / 2
+    x1, y1 = cp * dx + sp * dy, -sp * dx + cp * dy
+    lam = x1 * x1 / (rx * rx) + y1 * y1 / (ry * ry)
+    if lam > 1.0:
+        rx, ry = rx * math.sqrt(lam), ry * math.sqrt(lam)
+    num = rx * rx * ry * ry - rx * rx * y1 * y1 - ry * ry * x1 * x1
+    co = math.sqrt(max(0.0, num / (rx * rx * y1 * y1 + ry * ry * x1 * x1)))
+    if large == sweep:
+        co = -co
+    cx1, cy1 = co * rx * y1 / ry, -co * ry * x1 / rx
+    cx, cy = cp * cx1 - sp * cy1 + (p0[0] + e[0]) / 2, sp * cx1 + cp * cy1 + (p0[1] + e[1]) / 2
+    ux, uy, vx, vy = (x1 - cx1) / rx, (y1 - cy1) / ry, (-x1 - cx1) / rx, (-y1 - cy1) / ry
+    t1 = math.atan2(uy, ux)
+    dt = math.atan2(ux * vy - uy * vx, ux * vx + uy * vy)
+    if sweep and dt < 0:
+        dt += 2 * math.pi
+    elif not sweep and dt > 0:
+        dt -= 2 * math.pi
+    r = max(rx, ry)
+    n = max(1, math.ceil(abs(dt) / (2 * math.acos(max(-1.0, 1 - tol / r)))))
+    out = []
+    for k in range(1, n + 1):
+        t = t1 + dt * k / n
+        out.append((cx + rx * math.cos(t) * cp - ry * math.sin(t) * sp, cy + rx * math.cos(t) * sp + ry * math.sin(t) * cp))
+    out[-1] = e
+    return out
+
+
+def _stretch(m: Affine) -> float:
+    """How far `m` stretches a unit length at most - its linear part's largest singular value."""
+    a, b, c, dd = m[0], m[1], m[2], m[3]
+    s = a * a + b * b + c * c + dd * dd
+    return math.sqrt((s + math.sqrt(max(0.0, s * s - 4 * (a * dd - b * c) ** 2))) / 2)
 
 
 def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]]:
@@ -210,6 +342,10 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
         texture: bool = False,
         ids: frozenset[str] = frozenset(),
         cap: str = "butt",
+        join: str = "miter",
+        miter: float = 4.0,
+        dash: tuple[float, ...] = (),
+        offset: float = 0.0,
     ) -> None:
         parent = m
         if el.get("data-id"):
@@ -223,10 +359,18 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
             stroked = el.get("stroke") != "none"
         ink = (el.get("stroke", ink[0]), el.get("fill", ink[1]))  # (stroke, fill), inherited as SVG inherits them
         texture = texture or el.get("data-texture") == "1"
-        cap = el.get("stroke-linecap", cap)  # inherited as SVG inherits it (feature 449 T193)
+        # a stroke's cap, join and miter limit, inherited as SVG inherits them, a value SVG does not know ignored, as SVG ignores it, so the
+        # one inherited stands (feature 449 T193, T194)
+        cap = el.get("stroke-linecap", cap) if el.get("stroke-linecap") in ("butt", "square", "round") else cap
+        join = el.get("stroke-linejoin", join) if el.get("stroke-linejoin") in JOINS else join
+        limit = _f(el, "stroke-miterlimit", 0.0)
+        miter = limit if limit >= 1.0 else miter
+        dash = _dasharray(el.get("stroke-dasharray"), dash)
+        offset = _f(el, "stroke-dashoffset", offset)
 
         tag = el.tag.replace(SVG, "")
         pts: list[Pt] = []
+        subs: list[tuple[list[Pt], bool]] | None = None
         line = False
         if tag == "rect":
             x, y, w, h = _f(el, "x"), _f(el, "y"), _f(el, "width"), _f(el, "height")
@@ -238,13 +382,17 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
         elif tag in ("polygon", "polyline"):
             v = [float(n) for n in re.findall(r"-?\d*\.?\d+", el.get("points", ""))]
             pts = list(zip(v[0::2], v[1::2], strict=False))
-            line = tag == "polyline" and el.get("fill", "none") == "none"
+            # a polyline is a stroke unless a fill is set on it or inherited, as SVG fills it (feature 449 T194)
+            line = tag == "polyline" and ink[1] in ("", "none")
         elif tag == "line":
             pts = [(_f(el, "x1"), _f(el, "y1")), (_f(el, "x2"), _f(el, "y2"))]
             line = True
         elif tag == "path":
-            pts = _path_points(el.get("d", ""))
-            line = stroked and el.get("fill", "") == "none"
+            # each subpath its own shape, as SVG strokes each alone, flattened within the drawn sag on the sheet (feature 449 T194)
+            subs = _path_points(el.get("d", ""), DISC_SAG_PX / max(_stretch(m), 1e-9))
+            # a stroke where its fill, its own or inherited, is none (feature 449 T194: a group's `fill="none"` was not read, and its
+            # strokes read as boxes)
+            line = stroked and ink[1] == "none"
         elif tag == "text":
             t = _text_shape(el, m, kind)
             t.frame = parent
@@ -254,14 +402,16 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
             t.names, t.cont = tuple((el.get("data-names") or "").split()), el.get("data-cont") == "1"
             shapes.append(t)
             return
-        if len(pts) >= 2:
+        for pts, closed in subs if subs is not None else [(pts, False)]:
+            if len(pts) < 2:
+                continue
             tp = [_apply(m, p) for p in pts]
             if line:
                 shapes.append(
                     Shape(
                         tag,
                         kind,
-                        tp,
+                        tp + [tp[0]] if closed and tp[-1] != tp[0] else tp,
                         stroke_w / 2,
                         True,
                         element=el,
@@ -272,7 +422,13 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
                         texture=texture,
                         at=order[id(el)],
                         ids=ids,
-                        cap=cap if cap in ("square", "round") else "butt",
+                        cap=cap,
+                        join="round" if join == "round" else "bevel" if join == "bevel" else "miter",
+                        miter=miter,
+                        closed=closed,
+                        # the pattern in sheet px: its lengths scaled as the element's own are (exact for a turn and an even scale)
+                        dash=tuple(v * math.sqrt(abs(m[0] * m[3] - m[1] * m[2])) for v in dash),
+                        offset=offset * math.sqrt(abs(m[0] * m[3] - m[1] * m[2])),
                     )
                 )
             else:
@@ -294,10 +450,12 @@ def read_sheet(src: str) -> tuple[list[Shape], tuple[float, float, float, float]
                         busy=ink[1] in BUSY_FILLS,
                         at=order[id(el)],
                         ids=ids,
+                        join="round" if join == "round" else "bevel" if join == "bevel" else "miter",
+                        miter=miter,
                     )
                 )
         for c in el:
-            walk(c, m, kind, stroke_w, stroked, group, within, ink, texture, ids, cap)
+            walk(c, m, kind, stroke_w, stroked, group, within, ink, texture, ids, cap, join, miter, dash, offset)
 
     for c in root:
         walk(c, IDENTITY, "", 1.0, False, 0)
@@ -447,52 +605,36 @@ def _band(a: Pt, b: Pt, half: float) -> Poly:
     return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
 
 
-_CAP_STYLE = {"butt": "flat", "square": "square", "round": "round"}
-"""SVG's `stroke-linecap` values by shapely's names for them (feature 449 T193)."""
-
-
-def _drawn_area(s: Shape) -> Any:
-    """A closed part's drawn ink as shapely holds it: its outline (`drawn_ink`), drawn out by its own stroke's half-width where it has one
-    (feature 449 T193)."""
-    from shapely.geometry import Polygon
-
-    area = Polygon(drawn_ink(s).pts)
-    return area.buffer(s.edge) if s.edge else area
-
-
 def leader_to_ink(p: Placement, parts: list[Shape]) -> Placement:
     """A leader ends on the drawn thing it names, not on the box around its parts: a barge moored by lines and three
     pines are boxed with empty water or ground in the box's corner, and a leader to the corner named nothing (feature
     283 - the tax barge's and the old pines' leaders ended 5-6 ft short). A disc's ink is its drawn curve (`drawn_ink`), not the box
     the reader keeps as its outline (feature 449 T192: three pool leaders ended 1.75 to 4.45 px off the curve); a stroke's is its band as
     the sheet draws it, its `stroke-linecap` read, and a closed part's its outline drawn out by its own stroke (feature 449 T193: a leader
-    past a butt end stopped up to the half-width short of the ink, and one to a stroked building inside its stroke). A leader whose start
-    already lies on the ink it names ties nothing back - the caption touches its subject - so it is dropped (feature 449 T184: it
-    divided by the zero distance there). The placer's own leader ends on the same ink (`Subject.ink`, feature 449 T192), so this leaves
-    every leader a hand sheet's subject scores as it was scored.
+    past a butt end stopped up to the half-width short of the ink, and one to a stroked building inside its stroke), their corners joined
+    as the sheet joins them (T194). The tip is the placer's own (`_nearest_ink` from the leader's start, its exact measure where shapely
+    drew each round end and corner as chords, feature 449 T194), so this leaves every leader a hand sheet's subject scores as it was
+    scored (`Subject.ink`, feature 449 T192). A leader whose start already lies on the ink it names ties nothing back - the caption
+    touches its subject - so it is dropped (feature 449 T184: it divided by the zero distance there); one to parts that draw no ink is
+    left as it was scored.
 
     Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)
         leader end trim - CONVENTION: a leader stops short of the ink it ends on by a quarter of its length, at most 1 px, so its end does not touch the ink; a drawn size on the sheet, not in the world
     """
-    from shapely.geometry import LineString, Point
-    from shapely.ops import nearest_points, unary_union
-
     if p.leader is None or not parts:
         return p
-    a = Point(p.leader[0])
-    ink = unary_union(
-        [LineString(s.poly).buffer(max(s.half, 0.5), cap_style=_CAP_STYLE[s.cap]) if s.line else _drawn_area(s) for s in parts if len(s.poly) >= (2 if s.line else 3)]
-    )
-    if ink.is_empty or ink.distance(Point(p.leader[1])) < 1.5:
+    ink = tuple(drawn_ink(s) for s in parts if len(s.poly) >= (2 if s.line else 3))
+    at_end = _nearest_ink([p.leader[1]], ink)
+    if at_end is None or math.dist(*at_end) < 1.5:
         return p
-    tip = nearest_points(ink, a)[0]
-    d = a.distance(tip)
+    a, tip = _nearest_ink([p.leader[0]], ink) or at_end
+    d = math.dist(a, tip)
     if d == 0.0:
         return replace(p, leader=None)
     trim = min(1.0, d / 4)
-    ux, uy = (tip.x - a.x) / d, (tip.y - a.y) / d
-    return replace(p, leader=(p.leader[0], (tip.x - ux * trim, tip.y - uy * trim)))
+    ux, uy = (tip[0] - a[0]) / d, (tip[1] - a[1]) / d
+    return replace(p, leader=(p.leader[0], (tip[0] - ux * trim, tip[1] - uy * trim)))
 
 
 DISC_SAG_PX = 0.05
@@ -518,15 +660,15 @@ def drawn_ink(s: Shape) -> InkPart:
     Research: its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.5 (a stroke's least half-width, the band `leader_to_ink` buffers)
     """
     if s.line:
-        return InkPart(tuple(s.poly), line=True, half=max(s.half, 0.5), cap=s.cap)
+        return InkPart(tuple(s.poly), line=True, half=max(s.half, 0.5), cap=s.cap, join=s.join, miter=s.miter, closed=s.closed, dash=s.dash, offset=s.offset)
     if s.tag not in ("circle", "ellipse") or len(s.poly) != 4:
-        return InkPart(tuple(s.poly), half=s.edge)
+        return InkPart(tuple(s.poly), half=s.edge, join=s.join, miter=s.miter)
     p0, p1, p2, p3 = s.poly
     c = ((p0[0] + p2[0]) / 2, (p0[1] + p2[1]) / 2)
     u, v = ((p1[0] - p0[0]) / 2, (p1[1] - p0[1]) / 2), ((p3[0] - p0[0]) / 2, (p3[1] - p0[1]) / 2)
     n = _disc_samples(math.hypot(math.hypot(*u), math.hypot(*v)))
     ts = [2 * math.pi * k / n for k in range(n)]
-    return InkPart(tuple((c[0] + math.cos(t) * u[0] + math.sin(t) * v[0], c[1] + math.cos(t) * u[1] + math.sin(t) * v[1]) for t in ts), half=s.edge)
+    return InkPart(tuple((c[0] + math.cos(t) * u[0] + math.sin(t) * v[0], c[1] + math.cos(t) * u[1] + math.sin(t) * v[1]) for t in ts), half=s.edge, join=s.join, miter=s.miter)
 
 
 def _disc_samples(r: float) -> int:
@@ -795,7 +937,7 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
     seated off the box of what it names read in that feature's own frame (`_framed`; feature 449 T189: a turned garden holding its
     lantern and a lone turned block among its parts were named level beside, off the upright box). Each subject beside carries the
     drawn ink of what it is read off as its `ink` (`drawn_ink`), which its leader ends on: a subject read off one part - a lone shape,
-    a scatter's member, a block of a stepped building - that part's and that of every closed part drawn over it with its box (`_drawn_as`; T193: a fill and its stroked outline drawn as two elements), and a subject read off a box of several parts every part's
+    a scatter's member, a block of a stepped building - that part's and that of every closed part drawn with its box (`_drawn_as`; T193: a fill and its stroked outline drawn as two elements), and a subject read off a box of several parts every part's
     (feature 449 T191: a leader to a lone L-shaped house was scored to its box's corner over the empty ground of its notch; T192: a
     leader to a disc ended on its drawn box, and one to several parts was scored to their box while `leader_to_ink` drew it to their ink).
 
@@ -804,7 +946,7 @@ def subjects(own: list[Shape], size: float = 0.0) -> list[Subject]:
         an area's caption level - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming an area with no direction of its own (a box of parts, an outline with a corner off square, a disc drawn round) is level; the name inside a feature that has a direction of its own - a drawn rect, an outline whose every corner is square (a rectangle, an L-shaped house) or an ellipse of unequal radii, which a turned group turns - takes the feature's own angle, as a turned feature's caption does
         a turned subject's angle - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption naming a turned feature, beside it or inside it, takes its own angle, read off its outline's first edge, and beside it is seated off its turned edge, not off an upright box around it - a lone shape's box, a holder's box of what it holds or a lone block's box of its parts, each read in the feature's own frame, and a scatter's member by its own outline, which the placer's seats read in that member's frame; a feature turned a quarter, a half or three quarters of a turn keeps a level caption
         a lone block's beside box - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a lone block among smaller parts is named beside the box of all its parts read in the block's own frame, not off the block alone - the page's map drawing convention (a block named among loose parts "is seated beside the smallest box holding them all"); the caption names every part, and at level this box is the upright box the caption had (feature 449 T189)
-        which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part and every closed part drawn over it with its box (a fill and its stroked outline drawn as two elements draw one block), a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 has the leader end at the nearest drawn point, and the ink is where that point is read (feature 449 T191, T192, T193)
+        which subjects carry ink - CONVENTION: every subject beside carries the drawn parts it is read off as the ink its leader ends on - a subject read off one part (a lone shape, a scatter's member, a block of a stepped building) that part and every closed part drawn with its box (a fill and its stroked outline drawn as two elements draw one block), a subject read off a box of several parts every part - so the leader the placer weighs is the one `leader_to_ink` draws; an inside subject carries none, an area's name taking no leader; 0242 has the leader end at the nearest drawn point, and the ink is where that point is read (feature 449 T191, T192, T193)
     """
     x0, y0, x1, y1 = bbox([p for s in own for p in s.poly])
     box = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]

@@ -13,8 +13,8 @@ use crate::labels::placer::{leader_of, Kind, Placement};
 
 /// Sixteen caption blocks `r` px round `center`, at each beside subject's angle, each leader as `leader_of` scores it at ring 9 and as
 /// `leader_to_ink` draws it: (subject, block, scored, drawn).
-type Led = (usize, i32, Option<(Pt, Pt)>, Option<(Pt, Pt)>);
-fn led_about(own: &[&Shape], center: Pt, r: f64) -> Vec<Led> {
+pub(super) type Led = (usize, i32, Option<(Pt, Pt)>, Option<(Pt, Pt)>);
+pub(super) fn led_about(own: &[&Shape], center: Pt, r: f64) -> Vec<Led> {
     let mut out = Vec::new();
     for (j, sub) in subjects(own, 9.0)
         .iter()
@@ -49,9 +49,9 @@ fn led_about(own: &[&Shape], center: Pt, r: f64) -> Vec<Led> {
     out
 }
 
-/// How far `p` stands off a level box `(x0, y0, x1, y1)` drawn out by `grow` - its corners round, as the band rounds a bend (the claimed
-/// convention, `stroke_band`) - 0 on it: the test's own measure, not the placer's.
-fn off_box(p: Pt, (x0, y0, x1, y1): (f64, f64, f64, f64), grow: f64) -> f64 {
+/// How far `p` stands off a level box `(x0, y0, x1, y1)` drawn out by `grow` - its corners round - 0 on it: the test's own measure, not
+/// the placer's. A box drawn out by a stroke with SVG's default miter joins is the box grown with square corners (feature 449 T194).
+pub(super) fn off_box(p: Pt, (x0, y0, x1, y1): (f64, f64, f64, f64), grow: f64) -> f64 {
     let dx = (x0 - p.0).max(p.0 - x1).max(0.0);
     let dy = (y0 - p.1).max(p.1 - y1).max(0.0);
     (dx.hypot(dy) - grow).max(0.0)
@@ -64,7 +64,7 @@ type CapCase<'a> = (&'a str, String, &'a dyn Fn(Pt) -> f64, Pt);
 type EdgeCase<'a> = (&'a str, &'a String, &'a dyn Fn(usize, Pt) -> f64, Pt, f64);
 
 /// The sheet's line shapes, or its every shape.
-fn read(src: &str, lines_only: bool) -> Vec<Shape> {
+pub(super) fn read(src: &str, lines_only: bool) -> Vec<Shape> {
     read_sheet(src)
         .unwrap()
         .0
@@ -75,7 +75,7 @@ fn read(src: &str, lines_only: bool) -> Vec<Shape> {
 
 #[test]
 fn a_leader_past_a_stroke_s_end_ends_on_the_end_its_cap_draws() {
-    // feature 449 T193, research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a leader "ends at the nearest
+    // feature 449 T193, research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a leader "ends at the nearest
     // drawn point - ... a stroke's edge" - the reader kept no `stroke-linecap`, so a leader led past a stroke's end ended on a round cap,
     // where SVG's default butt end draws nothing: past a 9 px wall's end it stopped up to 4.5 px short of the ink (T192's finding), and a
     // block within the half-width of a butt end, clear of the ink, read as touching it and drew no leader
@@ -89,11 +89,9 @@ fn a_leader_past_a_stroke_s_end_ends_on_the_end_its_cap_draws() {
     let flat = |p: Pt| off_box(p, (0.0, -4.5, 100.0, 4.5), 0.0);
     let square = |p: Pt| off_box(p, (-4.5, -4.5, 104.5, 4.5), 0.0);
     let round = |p: Pt| (dist(p, seg_closest(p, (0.0, 0.0), (100.0, 0.0))) - 4.5).max(0.0);
-    // two flat-ended runs and the bend drawn round between them
+    // two flat-ended runs and the bend mitered between them, as SVG's default join draws it (feature 449 T194; T193 measured it round)
     let bent = |p: Pt| {
-        off_box(p, (0.0, -3.0, 100.0, 3.0), 0.0)
-            .min(off_box(p, (97.0, 0.0, 103.0, 60.0), 0.0))
-            .min((dist(p, (100.0, 0.0)) - 3.0).max(0.0))
+        off_box(p, (0.0, -3.0, 103.0, 3.0), 0.0).min(off_box(p, (97.0, -3.0, 103.0, 60.0), 0.0))
     };
     let cases: [CapCase<'_>; 6] = [
         (
@@ -124,12 +122,13 @@ fn a_leader_past_a_stroke_s_end_ends_on_the_end_its_cap_draws() {
             (100.0, 0.0),
         ),
         (
-            "a wall of a cap SVG does not know, drawn butt",
+            // feature 449 T194: SVG ignores a value it does not know, so its group's square cap stands (T193 drew it butt)
+            "a wall of a cap SVG does not know, its group's square standing",
             sheet(
                 r#"stroke-width="9" stroke-linecap="square""#,
                 &wall.replace("/>", r#" stroke-linecap="bevel"/>"#),
             ),
-            &flat,
+            &square,
             (100.0, 0.0),
         ),
         (
@@ -173,7 +172,7 @@ fn a_leader_past_a_stroke_s_end_ends_on_the_end_its_cap_draws() {
 
 #[test]
 fn a_leader_ends_on_the_nearest_drawn_edge() {
-    // feature 449 T193, research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a leader "ends at the nearest
+    // feature 449 T193, research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a leader "ends at the nearest
     // drawn point - ... a stroke's edge" - the part was chosen by its stroke's line, and a closed part read bare of its own stroke, so a
     // leader to a house with a 9 px wall drawn along its edge ended on the house's outline under the wall's ink, and one to a heavily
     // outlined house inside its outline's stroke; and Ochiba's servants' range, whose 1 px partitions end flat on its 1.5 px outline and
@@ -199,18 +198,21 @@ fn a_leader_ends_on_the_nearest_drawn_edge() {
         r##"<line x1="48" y1="0" x2="68" y2="0" stroke="#4A3318" stroke-width="0.8" stroke-dasharray="4 3"/>"##,
     ));
     // each sheet's drawn ink, the test's own measure: the walled house's wall band and bare house, the outlined house drawn out by 2, the
-    // range's two blocks drawn out by 0.75, its partitions and its dashed edge as flat-ended bands
+    // range's two blocks drawn out by 0.75, each with its corners mitered square (feature 449 T194), its partitions as flat-ended bands and
+    // its dashed edge as its 4 px dashes (T194: its 3 px gaps are not ink)
     let off_walled = |_: usize, p: Pt| {
         off_box(p, (0.0, 0.0, 60.0, 40.0), 0.0).min(off_box(p, (-20.0, -3.5, 80.0, 5.5), 0.0))
     };
-    let off_outlined = |_: usize, p: Pt| off_box(p, (0.0, 0.0, 60.0, 40.0), 2.0);
+    let off_outlined = |_: usize, p: Pt| off_box(p, (-2.0, -2.0, 62.0, 42.0), 0.0);
     let off_range = |_: usize, p: Pt| {
         [
-            off_box(p, (0.0, 0.0, 48.0, 45.0), 0.75),
-            off_box(p, (68.0, 0.0, 212.0, 45.0), 0.75),
+            off_box(p, (-0.75, -0.75, 48.75, 45.75), 0.0),
+            off_box(p, (67.25, -0.75, 212.75, 45.75), 0.0),
             off_box(p, (115.5, 0.0, 116.5, 45.0), 0.0),
             off_box(p, (163.5, 0.0, 164.5, 45.0), 0.0),
-            off_box(p, (48.0, -0.4, 68.0, 0.4), 0.0),
+            off_box(p, (48.0, -0.4, 52.0, 0.4), 0.0),
+            off_box(p, (55.0, -0.4, 59.0, 0.4), 0.0),
+            off_box(p, (62.0, -0.4, 66.0, 0.4), 0.0),
         ]
         .into_iter()
         .fold(f64::INFINITY, f64::min)
@@ -224,9 +226,9 @@ fn a_leader_ends_on_the_nearest_drawn_edge() {
     // a block's leader measured to its own block: the subjects beside are the west block's fill and outline (4, 5), then the east's
     let off_stepped = |j: usize, p: Pt| {
         if j <= 5 {
-            off_box(p, (0.0, 0.0, 60.0, 40.0), 1.25)
+            off_box(p, (-1.25, -1.25, 61.25, 41.25), 0.0)
         } else {
-            off_box(p, (40.0, 40.0, 90.0, 80.0), 1.25)
+            off_box(p, (38.75, 38.75, 91.25, 81.25), 0.0)
         }
     };
     let cases: [EdgeCase<'_>; 4] = [

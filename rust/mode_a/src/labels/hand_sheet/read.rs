@@ -19,10 +19,11 @@ use l7r_gate_research::Error;
 use l7r_guard::shared::py_text::strip;
 
 use super::super::geom::{bbox, rect, Pt};
-use super::super::placer::Cap;
+use super::super::placer::{Cap, Join};
 use super::super::standard::{block_half, CENTER_ABOVE_BASELINE_EM, PITCH_EM};
-use super::{char_w_of, luma, Attrs, Shape, BUSY_FILLS, DARK};
+use super::{char_w_of, luma, Attrs, Shape, BUSY_FILLS, DARK, DISC_SAG_PX};
 use crate::etree::Element;
+use crate::py::{hypot, max};
 
 /// The SVG namespace, `ElementTree`'s `{...}` key of a tag.
 pub const SVG_NS: &str = "http://www.w3.org/2000/svg";
@@ -160,45 +161,283 @@ pub fn attr_f(attrs: &Attrs, name: &str, default: f64) -> f64 {
         .map_or(default, |v| crate::py::float(v).unwrap_or(default))
 }
 
-/// A path's vertices - absolute and relative move, line, horizontal and vertical steps, and the end points of curves; enough for the
-/// handful of paths the sheets draw (roads and banks).
+/// A path's subpaths as SVG draws them (the Python's `_path_points`), each its points and whether a `Z` closed it: absolute and relative
+/// move, line, horizontal and vertical steps, and every curve - cubic and quadratic Beziers, their smooth forms reflecting the control
+/// point before, and elliptical arcs - flattened finely enough that no chord stands more than `tol` inside it. A move starts a new
+/// subpath, and a step after a `Z` starts one at the closed subpath's start (feature 449 T194: a curve was kept by its end points alone, so
+/// Hoshigaoka's sacred-tree rope, a ring drawn in two arcs, was read as a 10 px line doubled back, and a second move was joined to the
+/// first by a segment nobody drew).
 ///
 /// Research:
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (SVG C-command argument count); 7 (SVG A-command argument count)
 ///
 /// # Errors
 /// None the patterns let through: a number they match is always one.
-pub fn path_points(d: &str) -> Result<Vec<Pt>, Error> {
-    let mut pts = Vec::new();
-    let (mut x, mut y) = (0.0, 0.0);
+pub fn path_points(d: &str, tol: f64) -> Result<Vec<(Vec<Pt>, bool)>, Error> {
+    let mut subs = Vec::new();
+    let mut pts: Vec<Pt> = Vec::new();
+    let mut closed = false;
+    let (mut x, mut y, mut sx, mut sy) = (0.0, 0.0, 0.0, 0.0);
+    // the last cubic's second control point, or the last quadratic's control point, which S and T reflect
+    let mut ctrl: Option<Pt> = None;
+    let mut last = ' ';
     for c in PATH_STEP.captures_iter(d).flatten() {
         let cmd = c[1].chars().next().unwrap_or('Z');
+        let up = cmd.to_ascii_uppercase();
+        if up == 'Z' {
+            closed = closed || !pts.is_empty();
+            (x, y, last) = (sx, sy, 'Z');
+            continue;
+        }
         let v = numbers(&PATH_NUMBER, &c[2])?;
-        let step = match cmd.to_ascii_uppercase() {
+        let step = match up {
             'M' | 'L' | 'T' => 2,
             'H' | 'V' => 1,
             'C' => 6,
             'S' | 'Q' => 4,
-            'A' => 7,
-            _ => continue,
+            _ => 7,
         };
         let rel = cmd.is_ascii_lowercase();
-        let mut i = 0;
-        while i + step <= v.len() {
-            let chunk = &v[i..i + step];
-            match cmd.to_ascii_uppercase() {
-                'H' => x = if rel { x + chunk[0] } else { chunk[0] },
-                'V' => y = if rel { y + chunk[0] } else { chunk[0] },
+        for (i, ch) in v.chunks_exact(step).enumerate() {
+            let (ox, oy) = if rel { (x, y) } else { (0.0, 0.0) };
+            let moved = up == 'M' && i == 0;
+            if moved || closed {
+                // a move, or a step after a `Z`, starts a new subpath (at the closed one's start)
+                if !pts.is_empty() {
+                    subs.push((std::mem::take(&mut pts), closed));
+                }
+                closed = false;
+                if moved {
+                    (x, y) = (ox + ch[0], oy + ch[1]);
+                    (sx, sy, last) = (x, y, 'M');
+                    pts = vec![(x, y)];
+                    continue;
+                }
+                pts = vec![(x, y)];
+            }
+            if pts.is_empty() {
+                pts.push((x, y));
+            }
+            let p0 = (x, y);
+            let reflect = |of: &[char]| match ctrl {
+                Some(q) if of.contains(&last) => (2.0 * x - q.0, 2.0 * y - q.1),
+                _ => p0,
+            };
+            match up {
+                'H' => {
+                    x = ox + ch[0];
+                    pts.push((x, y));
+                }
+                'V' => {
+                    y = oy + ch[0];
+                    pts.push((x, y));
+                }
+                'M' | 'L' => {
+                    (x, y) = (ox + ch[0], oy + ch[1]);
+                    pts.push((x, y));
+                }
+                'C' | 'S' => {
+                    let c1 = if up == 'C' {
+                        (ox + ch[0], oy + ch[1])
+                    } else {
+                        reflect(&['C', 'S'])
+                    };
+                    let (c2, e) = (
+                        (ox + ch[step - 4], oy + ch[step - 3]),
+                        (ox + ch[step - 2], oy + ch[step - 1]),
+                    );
+                    pts.extend(bezier(&[p0, c1, c2, e], tol));
+                    ((x, y), ctrl) = (e, Some(c2));
+                }
+                'Q' | 'T' => {
+                    let q = if up == 'Q' {
+                        (ox + ch[0], oy + ch[1])
+                    } else {
+                        reflect(&['Q', 'T'])
+                    };
+                    let e = (ox + ch[step - 2], oy + ch[step - 1]);
+                    pts.extend(bezier(&[p0, q, e], tol));
+                    ((x, y), ctrl) = (e, Some(q));
+                }
                 _ => {
-                    let (ex, ey) = (chunk[step - 2], chunk[step - 1]);
-                    (x, y) = if rel { (x + ex, y + ey) } else { (ex, ey) };
+                    let e = (ox + ch[5], oy + ch[6]);
+                    let flags = (ch[3] != 0.0, ch[4] != 0.0);
+                    pts.extend(arc(p0, (ch[0], ch[1], ch[2]), flags, e, tol));
+                    (x, y) = e;
                 }
             }
-            pts.push((x, y));
-            i += step;
+            last = up;
         }
     }
-    Ok(pts)
+    if !pts.is_empty() {
+        subs.push((pts, closed));
+    }
+    Ok(subs)
+}
+
+/// A cubic or quadratic Bezier's points after its start (the Python's `_bezier`), in the fewest equal steps of its parameter whose chords
+/// stand within `tol` of the curve: Wang's bound, n(n - 1) / 8 times the largest second difference of the control points, over the
+/// square of the steps.
+fn bezier(cp: &[Pt], tol: f64) -> Vec<Pt> {
+    let deg = cp.len() - 1;
+    let dd = (0..deg - 1)
+        .map(|k| {
+            hypot(
+                cp[k].0 - 2.0 * cp[k + 1].0 + cp[k + 2].0,
+                cp[k].1 - 2.0 * cp[k + 1].1 + cp[k + 2].1,
+            )
+        })
+        .fold(f64::NEG_INFINITY, max);
+    #[expect(clippy::cast_precision_loss, reason = "a curve's degree, 2 or 3")]
+    let n = steps((deg * (deg - 1)) as f64 / 8.0 * dd / tol);
+    let mut out: Vec<Pt> = (1..=n)
+        .map(|k| {
+            #[expect(clippy::cast_precision_loss, reason = "a step count, far under 2^52")]
+            let t = k as f64 / n as f64;
+            let w: Vec<f64> = (0..=deg)
+                .map(|j| binom(deg, j) * t.powi(pow(j)) * (1.0 - t).powi(pow(deg - j)))
+                .collect();
+            (
+                w.iter().zip(cp).map(|(wj, p)| wj * p.0).sum(),
+                w.iter().zip(cp).map(|(wj, p)| wj * p.1).sum(),
+            )
+        })
+        .collect();
+    if let Some(end) = out.last_mut() {
+        *end = cp[deg];
+    }
+    out
+}
+
+/// `max(1, ceil(sqrt(x)))`: the steps Wang's bound asks for.
+fn steps(x: f64) -> usize {
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "a positive whole count of a drawn curve's steps"
+    )]
+    let n = x.sqrt().ceil() as usize;
+    n.max(1)
+}
+
+/// `math.comb(n, k)` for a Bezier's degree, 2 or 3.
+fn binom(n: usize, k: usize) -> f64 {
+    match (n, k) {
+        (3, 1 | 2) => 3.0,
+        (2, 1) => 2.0,
+        _ => 1.0,
+    }
+}
+
+/// A power's exponent as `powi` takes it (a Bezier's degree is at most 3).
+fn pow(j: usize) -> i32 {
+    i32::try_from(j).unwrap_or(i32::MAX)
+}
+
+/// An elliptical arc's points after its start, as SVG draws it (the Python's `_arc`, SVG 1.1 appendix F.6): none where it ends where it
+/// starts, a straight step where a radius is 0, its radii scaled up where they cannot reach the end, and its center found from its flags
+/// (`large`, `sweep`); flattened in equal steps of its angle whose chords stand within `tol` of the curve, R(1 - cos(half a step)), R its
+/// larger radius. `radii` is `(rx, ry, rotation in degrees)`.
+fn arc(p0: Pt, radii: (f64, f64, f64), (large, sweep): (bool, bool), e: Pt, tol: f64) -> Vec<Pt> {
+    if p0 == e {
+        return Vec::new();
+    }
+    let (mut rx, mut ry) = (radii.0.abs(), radii.1.abs());
+    if rx == 0.0 || ry == 0.0 {
+        return vec![e];
+    }
+    let phi = radii.2.to_radians();
+    let (cp, sp) = (phi.cos(), phi.sin());
+    let (dx, dy) = ((p0.0 - e.0) / 2.0, (p0.1 - e.1) / 2.0);
+    let (x1, y1) = (cp * dx + sp * dy, -sp * dx + cp * dy);
+    let lam = x1 * x1 / (rx * rx) + y1 * y1 / (ry * ry);
+    if lam > 1.0 {
+        (rx, ry) = (rx * lam.sqrt(), ry * lam.sqrt());
+    }
+    let num = rx * rx * ry * ry - rx * rx * y1 * y1 - ry * ry * x1 * x1;
+    let mut co = max(0.0, num / (rx * rx * y1 * y1 + ry * ry * x1 * x1)).sqrt();
+    if large == sweep {
+        co = -co;
+    }
+    // the center in the arc's own frame, then on the sheet
+    let own = (co * rx * y1 / ry, -co * ry * x1 / rx);
+    let (cx, cy) = (
+        cp * own.0 - sp * own.1 + f64::midpoint(p0.0, e.0),
+        sp * own.0 + cp * own.1 + f64::midpoint(p0.1, e.1),
+    );
+    let (ux, uy, vx, vy) = (
+        (x1 - own.0) / rx,
+        (y1 - own.1) / ry,
+        (-x1 - own.0) / rx,
+        (-y1 - own.1) / ry,
+    );
+    let t1 = uy.atan2(ux);
+    let mut dt = (ux * vy - uy * vx).atan2(ux * vx + uy * vy);
+    if sweep && dt < 0.0 {
+        dt += 2.0 * std::f64::consts::PI;
+    } else if !sweep && dt > 0.0 {
+        dt -= 2.0 * std::f64::consts::PI;
+    }
+    let r = max(rx, ry);
+    let step = 2.0 * max(-1.0, 1.0 - tol / r).acos();
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "a positive whole count of an arc's steps"
+    )]
+    let n = ((dt.abs() / step).ceil() as usize).max(1);
+    let mut out: Vec<Pt> = (1..=n)
+        .map(|k| {
+            #[expect(clippy::cast_precision_loss, reason = "a step count, far under 2^52")]
+            let t = t1 + dt * k as f64 / n as f64;
+            (
+                cx + rx * t.cos() * cp - ry * t.sin() * sp,
+                cy + rx * t.cos() * sp + ry * t.sin() * cp,
+            )
+        })
+        .collect();
+    if let Some(end) = out.last_mut() {
+        *end = e;
+    }
+    out
+}
+
+/// How far `m` stretches a unit length at most (the Python's `_stretch`) - its linear part's largest singular value.
+#[must_use]
+pub fn stretch(m: Affine) -> f64 {
+    let (a, b, c, d) = (m.0, m.1, m.2, m.3);
+    let s = a * a + b * b + c * c + d * d;
+    let det = a * d - b * c;
+    f64::midpoint(s, max(0.0, s * s - 4.0 * det * det).sqrt()).sqrt()
+}
+
+/// A `stroke-dasharray` as SVG reads it (the Python's `_dasharray`): `none`, or lengths of no sum, solid (empty); an odd count repeated to
+/// an even one; a value SVG does not read - a negative or no number, a percentage - ignored, so the inherited pattern `up` stands.
+fn dasharray(v: Option<&str>, up: &[f64]) -> Vec<f64> {
+    let Some(v) = v else {
+        return up.to_vec();
+    };
+    if strip(v) == "none" {
+        return Vec::new();
+    }
+    let vals: Result<Vec<f64>, _> = split(&SEPARATORS, strip(v))
+        .into_iter()
+        .filter(|x| !x.is_empty())
+        .map(crate::py::float)
+        .collect();
+    let Ok(vals) = vals else {
+        return up.to_vec();
+    };
+    if vals.is_empty() || vals.iter().any(|&x| x < 0.0) {
+        return up.to_vec();
+    }
+    if vals.iter().sum::<f64>() == 0.0 {
+        return Vec::new();
+    }
+    if vals.len() % 2 == 1 {
+        return [vals.as_slice(), vals.as_slice()].concat();
+    }
+    vals
 }
 
 /// What a walk inherits from the elements around: the matrix, the kind and its group, the stroke's width and whether one is drawn, the
@@ -214,6 +453,10 @@ struct Inherited {
     texture: bool,
     ids: BTreeSet<String>,
     cap: Cap,
+    join: Join,
+    miter: f64,
+    dash: Vec<f64>,
+    offset: f64,
 }
 
 /// The tag as the Python compared it: `el.tag.replace("{SVG}", "")` - an SVG or unprefixed element by its name, any other namespace's
@@ -256,6 +499,10 @@ pub fn read_sheet(src: &str) -> Result<(Vec<Shape>, View), Error> {
         texture: false,
         ids: BTreeSet::new(),
         cap: Cap::Butt,
+        join: Join::Miter,
+        miter: 4.0,
+        dash: Vec::new(),
+        offset: 0.0,
     };
     let mut at = 1; // the root is element 0 of `root.iter()`
     for c in &root.children {
@@ -297,10 +544,20 @@ fn inherit(el: &Element, up: &Inherited, here: usize) -> Result<Inherited, Error
             .map_or_else(|| up.ink.1.clone(), str::to_owned),
     );
     h.texture = up.texture || el.get("data-texture") == Some("1");
-    if let Some(cap) = el.get("stroke-linecap") {
-        // inherited as SVG inherits it (feature 449 T193)
-        h.cap = Cap::of(cap);
+    // a stroke's cap, join and miter limit, inherited as SVG inherits them, a value SVG does not know ignored, as SVG ignores it, so the one
+    // inherited stands (feature 449 T193, T194)
+    if let Some(cap) = el.get("stroke-linecap").and_then(Cap::of) {
+        h.cap = cap;
     }
+    if let Some(join) = el.get("stroke-linejoin").and_then(Join::of) {
+        h.join = join;
+    }
+    let limit = attr_f(attrs, "stroke-miterlimit", 0.0);
+    if limit >= 1.0 {
+        h.miter = limit;
+    }
+    h.dash = dasharray(el.get("stroke-dasharray"), &up.dash);
+    h.offset = attr_f(attrs, "stroke-dashoffset", up.offset);
     Ok(h)
 }
 
@@ -316,11 +573,14 @@ fn walk(
     let h = inherit(el, up, here)?;
     let tag = tag_of(el);
     let f = |name: &str| attr_f(attrs, name, 0.0);
-    let (pts, line): (Vec<Pt>, bool) = match tag.as_str() {
+    let (subs, line): (Vec<(Vec<Pt>, bool)>, bool) = match tag.as_str() {
         "rect" => {
             let (x, y, w, hh) = (f("x"), f("y"), f("width"), f("height"));
             (
-                vec![(x, y), (x + w, y), (x + w, y + hh), (x, y + hh)],
+                vec![(
+                    vec![(x, y), (x + w, y), (x + w, y + hh), (x, y + hh)],
+                    false,
+                )],
                 false,
             )
         }
@@ -332,27 +592,39 @@ fn walk(
                 (f("rx"), f("ry"))
             };
             (
-                vec![
-                    (cx - rx, cy - ry),
-                    (cx + rx, cy - ry),
-                    (cx + rx, cy + ry),
-                    (cx - rx, cy + ry),
-                ],
+                vec![(
+                    vec![
+                        (cx - rx, cy - ry),
+                        (cx + rx, cy - ry),
+                        (cx + rx, cy + ry),
+                        (cx - rx, cy + ry),
+                    ],
+                    false,
+                )],
                 false,
             )
         }
         "polygon" | "polyline" => {
             let v = numbers(&NUMBER, el.get("points").unwrap_or_default())?;
             let pts = v.chunks_exact(2).map(|p| (p[0], p[1])).collect();
+            // a polyline is a stroke unless a fill is set on it or inherited, as SVG fills it (feature 449 T194)
             (
-                pts,
-                tag == "polyline" && el.get("fill").unwrap_or("none") == "none",
+                vec![(pts, false)],
+                tag == "polyline" && (h.ink.1.is_empty() || h.ink.1 == "none"),
             )
         }
-        "line" => (vec![(f("x1"), f("y1")), (f("x2"), f("y2"))], true),
+        "line" => (
+            vec![(vec![(f("x1"), f("y1")), (f("x2"), f("y2"))], false)],
+            true,
+        ),
+        // each subpath its own shape, as SVG strokes each alone, flattened within the drawn sag on the sheet; a stroke where its fill, its
+        // own or inherited, is none (feature 449 T194: a group's `fill="none"` was not read, and its strokes read as boxes)
         "path" => (
-            path_points(el.get("d").unwrap_or_default())?,
-            h.stroked && el.get("fill").unwrap_or_default() == "none",
+            path_points(
+                el.get("d").unwrap_or_default(),
+                DISC_SAG_PX / max(stretch(h.m), 1e-9),
+            )?,
+            h.stroked && h.ink.1 == "none",
         ),
         "text" => {
             shapes.push(text_shape(el, &h, up.m, here));
@@ -361,10 +633,33 @@ fn walk(
         }
         _ => (Vec::new(), false),
     };
-    if pts.len() >= 2 {
-        let tp: Vec<Pt> = pts.iter().map(|&p| apply(h.m, p)).collect();
+    push_shapes(el, &h, &tag, here, (subs, line), shapes);
+    for c in &el.children {
+        walk(c, &h, at, shapes)?;
+    }
+    Ok(())
+}
+
+/// Each subpath of a drawn element, read as `line` or not, as a Shape: a stroke its polyline (closed back to its start where a `Z` closed it)
+/// with its paint; a closed shape its outline, or its box where it has fewer than three points.
+fn push_shapes(
+    el: &Element,
+    h: &Inherited,
+    tag: &str,
+    here: usize,
+    (subs, line): (Vec<(Vec<Pt>, bool)>, bool),
+    shapes: &mut Vec<Shape>,
+) {
+    // the pattern in sheet px: its lengths scaled as the element's own are (exact for a turn and an even scale)
+    let attrs = &el.attrib;
+    let scale = (h.m.0 * h.m.3 - h.m.1 * h.m.2).abs().sqrt();
+    for (pts, closed) in subs {
+        if pts.len() < 2 {
+            continue;
+        }
+        let mut tp: Vec<Pt> = pts.iter().map(|&p| apply(h.m, p)).collect();
         let base = Shape {
-            tag: tag.clone(),
+            tag: tag.to_owned(),
             kind: h.kind.clone(),
             attrs: Some(attrs.clone()),
             group: h.group,
@@ -375,6 +670,9 @@ fn walk(
             ..Shape::default()
         };
         if line {
+            if closed && tp.first() != tp.last() {
+                tp.push(tp[0]);
+            }
             shapes.push(Shape {
                 poly: tp,
                 half: h.stroke_w / 2.0,
@@ -382,6 +680,11 @@ fn walk(
                 leader: el.get("data-leader") == Some("1"),
                 dark: luma(Some(&h.ink.0)) < DARK,
                 cap: h.cap,
+                join: h.join,
+                miter: h.miter,
+                closed,
+                dash: h.dash.iter().map(|v| v * scale).collect(),
+                offset: h.offset * scale,
                 ..base
             });
         } else {
@@ -397,14 +700,12 @@ fn walk(
                 filled: h.ink.1 != "none",
                 dark: luma(Some(&h.ink.1)) < DARK,
                 busy: BUSY_FILLS.contains(&h.ink.1.as_str()),
+                join: h.join,
+                miter: h.miter,
                 ..base
             });
         }
     }
-    for c in &el.children {
-        walk(c, &h, at, shapes)?;
-    }
-    Ok(())
 }
 
 /// A caption's `<text>` as a shape: its lines (its `<tspan>`s', else its own text), its block measured at its face, centered as `label()`

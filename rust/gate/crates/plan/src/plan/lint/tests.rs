@@ -265,3 +265,53 @@ fn a_differential_count_cites_the_runners_verify_report() {
         assert_eq!(uncited_differential(fine), "", "{fine}");
     }
 }
+
+/// A plan's files past a megabyte (feature 449, found 2026-11-18): `fancy_regex` gives up a word-boundary pattern's search past a million
+/// steps, about one a character on an unanchored search, and the `.flatten()` over the error it repeats without advancing here would
+/// spin `make plan-delta` without end once a plan.md and plan-done.md together pass 1,000,000 bytes, as 449's did (its twin in
+/// `bundle.rs` spun `make decide`). The scan reads to the end, bounded here so that the test cannot spin.
+#[test]
+fn an_approach_block_past_a_megabyte_of_plan_done_is_found() {
+    let dir = scratch("approach-past-limit");
+    std::fs::write(dir.join("tasks.md"), "- [ ] T01 a\n- [ ] T02 b\n").unwrap();
+    let filler = "plain words of a finished section\n".repeat(40_000);
+    std::fs::write(
+        dir.join("plan-done.md"),
+        format!("{filler}{}", approach("T02", RED)),
+    )
+    .unwrap();
+    let plan = format!(
+        "# Plan\n\n**Approach checklist**: docs/approach-checklist.md\n\n{}",
+        approach("T01", RED)
+    );
+    let at = dir.path().to_path_buf();
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _scan = std::thread::spawn(move || tx.send(tasks_without_approach(&at, &plan)));
+    let owed = rx
+        .recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the scan spun past its bound");
+    assert_eq!(owed, Vec::<String>::new());
+}
+
+/// The label's three lookaheads are tried at the sentence's start alone: tried at every position, each running to the sentence's end,
+/// an unlabeled sentence cost its length squared in steps (a 20,000-character one past the engine's million), which the lifted step limit
+/// would have turned from an error into a crawl.
+#[test]
+fn the_label_search_is_linear_in_its_sentence() {
+    let long = format!("{}12 lines.", "word ".repeat(4_000));
+    let bounded = fancy_regex::RegexBuilder::new(super::LABEL.as_str())
+        .backtrack_limit(1_000_000)
+        .build()
+        .unwrap();
+    assert_eq!(bounded.is_match(&long).ok(), Some(false));
+    assert_eq!(
+        bounded
+            .is_match(&format!("{long} measured 2026-11-18 (wc -l)"))
+            .ok(),
+        Some(true)
+    );
+    assert_eq!(
+        bounded.is_match(&format!("{long} m:t194.lines")).ok(),
+        Some(true)
+    );
+}

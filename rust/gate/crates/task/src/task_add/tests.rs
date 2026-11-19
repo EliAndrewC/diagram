@@ -167,3 +167,35 @@ fn each_refusal_and_raise() {
     assert_eq!(cli(&words(&["9001"]), &root, "t").code, 1);
     assert_eq!(crate::cli("task-add", &words(&[]), &root).code, 2);
 }
+
+/// Files past a megabyte (feature 449, found 2026-11-18): `fancy_regex` gives up a word-boundary pattern's search past a million steps,
+/// about one a character on an unanchored search; the id's `.flatten()` over the error it repeats without advancing spun `make task-add`
+/// without end on 449's 1.1 MB of tasks and plans; and a tasks.md or plan.md past a megabyte would put the box after the GM's and the
+/// section after the close, their one search failed. The id is read to the end, bounded here so that the test cannot spin.
+#[test]
+fn the_next_id_and_the_anchors_are_read_past_a_megabyte() {
+    let dir = l7r_guard::shared::tempdir::TempDir::new("task-add-past-limit");
+    let d = dir.path().to_path_buf();
+    std::fs::write(d.join("tasks.md"), "- [ ] T01 a\n").unwrap();
+    let filler = "plain words of a finished section\n".repeat(40_000);
+    std::fs::write(
+        d.join("plan-done.md"),
+        format!("{filler}## T41 the last archived\n"),
+    )
+    .unwrap();
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _scan = std::thread::spawn(move || tx.send(next_id(&d)));
+    let id = rx
+        .recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the id's scan spun past its bound");
+    assert_eq!(id.unwrap(), "T42");
+    let done = "- [x] T01 a\n".repeat(100_000);
+    assert!(
+        add_box(&format!("{done}- [ ] GM review\n"), "T02", "b", false)
+            .ends_with("- [ ] T02 b\n      research: rendering\n- [ ] GM review\n")
+    );
+    assert!(
+        add_section(&format!("{filler}## T03 - the close\n"), "T02", "x")
+            .ends_with("x\n\n## T03 - the close\n")
+    );
+}

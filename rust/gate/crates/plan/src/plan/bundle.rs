@@ -77,7 +77,7 @@ fn expand_ranges(text: &str) -> String {
 fn paragraphs(text: &str, pattern: &Regex) -> Map<String, Value> {
     let starts: Vec<(usize, String)> = pattern
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| (c.get(0).map_or(0, |g| g.start()), c[1].to_owned()))
         .collect();
     let mut out = Map::new();

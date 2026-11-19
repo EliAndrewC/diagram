@@ -92,8 +92,21 @@ const GUARDED: [&str; 74] = [
 /// How many words a typo-scale edit may change in the whole plan.
 const TYPO_WORDS: usize = 3;
 
+/// Every plan pattern, its search given no step limit. WHY (feature 449, found 2026-11-18, the class T151 and T185 name): `fancy_regex`
+/// 0.14 runs a pattern with a word boundary or a lookaround in its own backtracking VM, which gives up a search past a million steps -
+/// about one a character on an unanchored search - with an `Err` its iterators repeat without advancing. Once 449's plan.md and
+/// plan-done.md together passed 1,000,000 bytes, the `.flatten()` over that error in `bundle.rs`'s `paragraphs` (`DECISION` over both
+/// files) spun `make decide` without end (measured 2026-11-18 on a scratch copy under `timeout 20`, probes around `decide`'s three calls:
+/// 10 KB of prose added to plan-done.md spun in `task_prompt`, plan-done.md emptied answered in 0.5 s), the same loop in
+/// `tasks_without_approach` waited for `make plan-delta`, and every single search past the limit quietly read as no match. Run with no
+/// limit, each plan and task pattern scanned 449's 1.1 MB of tasks and plans in at most 171 ms (measured 2026-11-18, a scratch harness
+/// over `fancy_regex` 0.14, each pattern's `find_iter` to the end; the label's lookaheads anchored first, `LABEL` in `lint.rs`), so the
+/// search runs to its end. The VM's stack limit still errs on a greedy span near a megabyte, which is why the scans end on an error.
 pub(super) fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    fancy_regex::RegexBuilder::new(pattern)
+        .backtrack_limit(usize::MAX)
+        .build()
+        .unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"[A-Za-z0-9]+"));

@@ -27,6 +27,11 @@ use crate::work_counts::count;
 use l7r_gate_research::Error;
 
 pub mod cands;
+pub mod ink;
+
+pub use ink::{
+    band_nearest, dashes, join, nearest_ink, outline_corners, part_nearest, stroke_band, CORNER_EPS,
+};
 
 use cands::{area_cands, extended_cands, lays_of, line_cands, point_cands, Gen};
 pub use cands::{outer_rings, rings, sized_half, Cand, HUG_RING, NUDGE_PX};
@@ -51,27 +56,80 @@ pub enum Cap {
 }
 
 impl Cap {
-    /// The cap a `stroke-linecap` value draws: "square" or "round", any other value SVG's default, butt (the Python's reader keeps
-    /// "butt" for any other word).
+    /// The cap a `stroke-linecap` value draws: "butt", "square" or "round"; None for a value SVG does not know, which SVG ignores, so the
+    /// cap inherited stands (feature 449 T194; T193 drew such a stroke butt).
     #[must_use]
-    pub fn of(value: &str) -> Self {
+    pub fn of(value: &str) -> Option<Self> {
         match value {
-            "square" => Self::Square,
-            "round" => Self::Round,
-            _ => Self::Butt,
+            "butt" => Some(Self::Butt),
+            "square" => Some(Self::Square),
+            "round" => Some(Self::Round),
+            _ => None,
+        }
+    }
+}
+
+/// How a stroke's corners are drawn (the Python's `join` string, SVG's `stroke-linejoin`, feature 449 T194): the two outer edges drawn on
+/// until they meet (`miter`, SVG's default, a bevel past the miter limit), a disc of the half-width (`round`), or the two outer corners
+/// joined straight (`bevel`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Join {
+    #[default]
+    Miter,
+    Round,
+    Bevel,
+}
+
+impl Join {
+    /// The join a `stroke-linejoin` value draws: "miter", and SVG 2's "miter-clip" and "arcs", which draw a miter within the limit, a
+    /// miter; "round" and "bevel" themselves; None for a value SVG does not know, which SVG ignores, so the join inherited stands.
+    #[must_use]
+    pub fn of(value: &str) -> Option<Self> {
+        match value {
+            "miter" | "miter-clip" | "arcs" => Some(Self::Miter),
+            "round" => Some(Self::Round),
+            "bevel" => Some(Self::Bevel),
+            _ => None,
         }
     }
 }
 
 /// One drawn part of what a caption names, as its leader ends on it (the Python's `InkPart`): a closed outline (a disc's drawn curve, not
 /// its box) and the half-width (`half`) of the stroke drawn on it, 0 where it has none; or, `line`, a stroke's polyline, the half-width
-/// at whose edge the leader stops and the stroke's `cap` (feature 449 T192, T193).
+/// at whose edge the leader stops and the stroke's `cap` (feature 449 T192, T193). A stroke's corners, and a closed outline's stroke's,
+/// are drawn by its `join`, a miter beveled past `miter` half-widths from the corner; a stroke a path's `Z` closed (`closed`) has a join at
+/// its start and no caps; a dashed stroke draws only its dashes (`dash`, its `stroke-dasharray` in sheet px, an even count, and `offset`,
+/// its `stroke-dashoffset`), each a stroke of its own with the stroke's caps (feature 449 T194).
 #[derive(Debug, Clone, PartialEq)]
 pub struct InkPart {
     pub pts: Vec<Pt>,
     pub line: bool,
     pub half: f64,
     pub cap: Cap,
+    pub join: Join,
+    pub miter: f64,
+    pub closed: bool,
+    pub dash: Vec<f64>,
+    pub offset: f64,
+}
+
+impl Default for InkPart {
+    /// No points, a closed outline unstroked: SVG's defaults, a butt cap, a miter join and a miter limit of 4, solid.
+    ///
+    /// Research: its drawn sizes - NONE: SVG's default `stroke-miterlimit`, 4
+    fn default() -> Self {
+        Self {
+            pts: Vec::new(),
+            line: false,
+            half: 0.0,
+            cap: Cap::Butt,
+            join: Join::Miter,
+            miter: 4.0,
+            closed: false,
+            dash: Vec::new(),
+            offset: 0.0,
+        }
+    }
 }
 
 /// What a caption names (the Python's `Subject`): its kind, its drawn outline or polyline, its rotation, a line's drawn half-width, the
@@ -630,19 +688,17 @@ pub fn in_frame(block: &[Pt], frame: Option<Frame>) -> bool {
 /// the zero distance (feature 449 T184).
 ///
 /// Research:
-///     when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line
-///     where a leader ends - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)
+///     when a leader is drawn - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line
+///     where a leader ends - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap, joins and dashes read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)
 ///     leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world
 #[must_use]
 pub fn leader_of(ring: usize, block: &[Pt], subject: &Subject) -> Option<(Pt, Pt)> {
     if ring < LEADERLESS_RINGS || subject.kind == Kind::Area {
         return None;
     }
-    let (a, b) = if subject.ink.is_empty() {
-        nearest_points(block, &subject.poly, subject.kind != Kind::Line)
-    } else {
-        nearest_ink(block, &subject.ink)
-    };
+    // a subject whose parts draw no ink (a stroke of no length ending flat) is led to its outline
+    let (a, b) = nearest_ink(block, &subject.ink)
+        .unwrap_or_else(|| nearest_points(block, &subject.poly, subject.kind != Kind::Line));
     let d = dist(a, b);
     if d == 0.0 {
         return None;
@@ -653,150 +709,6 @@ pub fn leader_of(ring: usize, block: &[Pt], subject: &Subject) -> Option<(Pt, Pt
         (a.0 + ux * trim, a.1 + uy * trim),
         (b.0 - ux * trim, b.1 - uy * trim),
     ))
-}
-
-/// The nearest pair of points, one on the block and one on the drawn parts (the Python's `_nearest_ink`): the part whose drawn edge
-/// stands nearest the block, and on it the nearest drawn point (feature 449 T193) - a closed outline's own stroke drawn out from it by its
-/// half-width (`half`, 0 unstroked), a stroke's band as SVG draws it ([`band_nearest`]: its edge, and past its end the end its cap draws) -
-/// the ink [`leader_to_ink`](super::hand_sheet::leader_to_ink) ends on - or the block's own point twice where the block reaches the ink.
-/// On an exact tie a closed outline before a stroke, then the wider, then the first in their order.
-///
-/// Chosen by the stroke's line instead (feature 449 T192), a leader to a stroke drawn along a stroked building's edge ended on the
-/// building's outline, inside its own drawn stroke. Two forms of the edge rule were priced by T192 and not kept, each the rule here less a
-/// part of the ink it reads (measured 2026-11-18 on the four caption-placing pool sheets, scratchpad t193/variants.log): with round caps
-/// assumed and the outline's own stroke left out, a 1 px partition's cap, half a pixel past Ochiba's SERVANTS' QUARTERS' outline where its
-/// butt end draws nothing, took the leader and the caption went from ring 4 to ring 20 (t192/why1.log, why2.log); with the caps read but
-/// the outline's stroke left out, the 0.8 px dashed roof edge across its passage, 0.4 px past the outline where the outline's 1.5 px
-/// stroke reaches 0.75, took it 95.58 px over, under the latrine, which went from ring 0 to ring 3 (t192/reach-band.log,
-/// t193/variants.log). With both read, no pool caption moves, and 28 of the 33 leaders its 190 captions draw end 0.3 to 1.25 px
-/// shorter, on the drawn stroke (t193/reach-new.log).
-///
-/// Research:
-///     which part a leader ends on - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; the part chosen by its drawn edge, an outline's own stroke and a stroke's cap read as the sheet draws them, their bends and corners measured round (feature 449 T193)
-///     a tie between parts - CONVENTION: two parts whose drawn edges stand exactly as near go to a closed outline before a stroke, then the wider, then the first in the sheet's order - a fixed order where the page's rule leaves a choice; the first two decide no pool leader's part, the sheet's order the one of two equal parts equally near, as two posts (feature 449 T192, T193)
-#[expect(
-    clippy::float_cmp,
-    reason = "an exact tie: two parts whose drawn edges stand exactly as near the block"
-)]
-fn nearest_ink(block: &[Pt], ink: &[InkPart]) -> (Pt, Pt) {
-    let mut best = (f64::INFINITY, true, 0.0, block[0], block[0]);
-    for part in ink {
-        let (a, b, d) = if part.line {
-            let (a, b) = band_nearest(block, part);
-            (a, b, dist(a, b))
-        } else {
-            let (a, b) = nearest_points(block, &part.pts, true);
-            let d = dist(a, b);
-            if d <= part.half {
-                (a, a, 0.0)
-            } else if part.half != 0.0 {
-                (
-                    a,
-                    (
-                        b.0 + (a.0 - b.0) * part.half / d,
-                        b.1 + (a.1 - b.1) * part.half / d,
-                    ),
-                    d - part.half,
-                )
-            } else {
-                (a, b, d)
-            }
-        };
-        // on a tie, an outline before a stroke, then the wider - Python's `(d, (line, -half)) < best`
-        let tie =
-            d == best.0 && ((!part.line && best.1) || (part.line == best.1 && part.half > best.2));
-        if d < best.0 || tie {
-            best = (d, part.line, part.half, a, b);
-        }
-    }
-    (best.3, best.4)
-}
-
-/// A stroke's drawn band as SVG draws it (the Python's `stroke_band`, feature 449 T193): each segment's rectangle at the half-width, a disc
-/// of the half-width at each bend, and at each end its cap - nothing for butt (SVG's default: the stroke ends flat at its end point), the
-/// end segment's rectangle drawn on past it by the half-width for square, a disc for round. The rectangles and the discs' centers; a
-/// stroke of no length is one disc, so it keeps an end to lead to.
-///
-/// Research: a stroke's drawn band - CONVENTION: a stroke's ink measured as the band SVG draws, its `stroke-linecap` read (butt unless the sheet says square or round), but every bend measured round where SVG's default `stroke-linejoin` draws a miter, whose point on a bend's outside the band leaves out; 0242 has a leader end at the nearest drawn point, and this is where a stroke's points are read (feature 449 T193)
-#[must_use]
-pub fn stroke_band(part: &InkPart) -> (Vec<Poly>, Vec<Pt>) {
-    let segs: Vec<(Pt, Pt)> = part
-        .pts
-        .windows(2)
-        .map(|w| (w[0], w[1]))
-        .filter(|(a, b)| a != b)
-        .collect();
-    let (Some(&first), Some(&end)) = (segs.first(), segs.last()) else {
-        return (Vec::new(), vec![part.pts[0]]);
-    };
-    let (h, last, square) = (part.half, segs.len() - 1, part.cap == Cap::Square);
-    let rects = segs
-        .iter()
-        .enumerate()
-        .map(|(k, &(a, b))| {
-            let d = dist(a, b);
-            let (ux, uy) = ((b.0 - a.0) / d, (b.1 - a.1) / d);
-            let e0 = if k == 0 && square { h } else { 0.0 };
-            let e1 = if k == last && square { h } else { 0.0 };
-            let (a, b) = (
-                (a.0 - ux * e0, a.1 - uy * e0),
-                (b.0 + ux * e1, b.1 + uy * e1),
-            );
-            let (nx, ny) = (-uy * h, ux * h);
-            vec![
-                (a.0 + nx, a.1 + ny),
-                (b.0 + nx, b.1 + ny),
-                (b.0 - nx, b.1 - ny),
-                (a.0 - nx, a.1 - ny),
-            ]
-        })
-        .collect();
-    let mut discs: Vec<Pt> = segs[..last].iter().map(|&(_, b)| b).collect();
-    if part.cap == Cap::Round {
-        discs.extend([first.0, end.1]);
-    }
-    (rects, discs)
-}
-
-/// The nearest pair of points, one on the block and one on a stroke's drawn band ([`stroke_band`]), the block's own point twice where the
-/// block reaches the band (the Python's `band_nearest`, feature 449 T193): a leader to a stroke ends at its edge, and past its end on the
-/// end its cap draws.
-///
-/// # Panics
-/// Never: a stroke draws a rectangle for each segment of length, or a disc where it has none ([`stroke_band`]).
-#[must_use]
-pub fn band_nearest(block: &[Pt], part: &InkPart) -> (Pt, Pt) {
-    let (rects, discs) = stroke_band(part);
-    let mut best: Option<(f64, Pt, Pt)> = None;
-    for r in &rects {
-        let (a, b) = nearest_points(block, r, true);
-        let d = dist(a, b);
-        if best.is_none_or(|x| d < x.0) {
-            best = Some((d, a, b));
-        }
-    }
-    for &c in &discs {
-        let (a, _) = nearest_points(block, &[c], false);
-        let dc = dist(a, c);
-        let d = max(0.0, dc - part.half);
-        if best.is_none_or(|x| d < x.0) {
-            let b = if d == 0.0 {
-                a
-            } else {
-                (
-                    c.0 + (a.0 - c.0) * part.half / dc,
-                    c.1 + (a.1 - c.1) * part.half / dc,
-                )
-            };
-            best = Some((d, a, b));
-        }
-    }
-    let (d, a, b) = best.expect("a stroke draws a rectangle or a disc");
-    if d == 0.0 {
-        (a, a)
-    } else {
-        (a, b)
-    }
 }
 
 /// What a seat's leader line passes over or ends against, of the things `index` holds, and whether that is an overlap: a leader through

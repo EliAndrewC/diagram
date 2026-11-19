@@ -89,10 +89,11 @@ fn the_reader_s_pieces_read_as_the_python_s() {
         uncaught(&parse_transform(Some("matrix(1 2)")).unwrap_err()),
         "IndexError: list index out of range\n"
     );
-    // Python: _path_points("M1 2 Z m 1e1 1") == [(1.0, 2.0), (11.0, 3.0)]
+    // Python: _path_points("M1 2 Z m 1e1 1", 0.05) == [([(1.0, 2.0)], True), ([(11.0, 3.0)], False)] - a `Z` closes its subpath and a
+    // move after it starts another, relative to the closed one's start (feature 449 T194)
     assert_eq!(
-        path_points("M1 2 Z m 1e1 1").unwrap(),
-        [(1.0, 2.0), (11.0, 3.0)]
+        path_points("M1 2 Z m 1e1 1", 0.05).unwrap(),
+        [(vec![(1.0, 2.0)], true), (vec![(11.0, 3.0)], false)]
     );
     // a coordinate that is no finite number is refused where the Python spun or raised later
     let e = read_sheet(r#"<svg viewBox="0 0 9 9"><rect x="inf" width="1" height="1"/></svg>"#)

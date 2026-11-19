@@ -513,3 +513,25 @@ fn the_bundle_is_lean_and_each_block_set_has_its_own_directory() {
     assert_ne!(first, second);
     assert!(read(&first, "blocks.md").contains("two to a lane"));
 }
+
+/// A decision past a megabyte of plan (feature 449, found 2026-11-18): the decisions are read from plan.md and plan-done.md together, and
+/// once 449's two passed 1,000,000 bytes `fancy_regex` gave up `DECISION`'s search (a lookahead runs it in the backtracking VM, about
+/// one step a character) with an error the `.flatten()` here repeated without advancing - `make decide F=449 T=T194` spun without end in
+/// `task_prompt` (measured 2026-11-18 on a scratch copy, probes around `decide`'s three calls, 10 KB of prose added to plan-done.md). The
+/// scan reads to the end, bounded here so that the test cannot spin.
+#[test]
+fn a_decision_past_a_megabyte_of_plan_is_read() {
+    let text = format!(
+        "- **D1** - the first.\n\n{}- **D2** - the last.\n",
+        "plain words of a finished section\n".repeat(40_000)
+    );
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _scan = std::thread::spawn(move || tx.send(paragraphs(&text, &DECISION)));
+    let found = rx
+        .recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the decisions' scan spun past its bound");
+    assert_eq!(
+        found.keys().map(String::as_str).collect::<Vec<_>>(),
+        ["D1", "D2"]
+    );
+}

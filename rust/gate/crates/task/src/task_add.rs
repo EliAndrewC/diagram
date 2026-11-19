@@ -22,14 +22,11 @@ use fancy_regex::Regex;
 use l7r_gate_plan::plan::template::{PERFORMANCE, RED_EXIT, TEMPLATE};
 use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
 
+use crate::tick::text::re;
 use crate::tick::{repo_root, spec_dir};
 use crate::{raised, read_strict, reply, write_file, Reply};
 
 const PHYSICAL: &str = "      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited\n";
-
-fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
-}
 
 // Python's `\s` (its whitespace) and `\d` read as ASCII digits, which every task id is
 static ID: LazyLock<Regex> = LazyLock::new(|| {
@@ -57,7 +54,7 @@ fn next_id(d: &Path) -> Result<String, String> {
     }
     let top = ID
         .captures_iter(&text)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|c| c[1].parse::<u128>().ok())
         .max()
         .unwrap_or(0);

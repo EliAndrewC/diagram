@@ -27,7 +27,7 @@ use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
 
 use super::geom::{inside, Pt};
-use super::placer::{Cap, Placement};
+use super::placer::{Cap, Join, Placement};
 use super::standard::{CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, WEIGHT_OBSTACLE};
 use super::svg::{caption_svg, leader_svg};
 
@@ -156,7 +156,7 @@ const STYLE: [&str; 6] = [
 /// for a `<text>` the caption it carries - its words, size, lines, its parent's matrix, its place in the document, its declared names and
 /// whether it continues the caption before. `attrs` are its element's attributes. (The Python's `angle`, `center` and `within` were
 /// written and never read, and are not carried.)
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 #[expect(
     clippy::struct_excessive_bools,
     reason = "the Python's `Shape`, field for field"
@@ -185,6 +185,53 @@ pub struct Shape {
     pub cont: bool,
     /// A stroke's `stroke-linecap`, inherited as SVG inherits it (feature 449 T193).
     pub cap: Cap,
+    /// A stroke's `stroke-linejoin`, inherited (feature 449 T194).
+    pub join: Join,
+    /// A stroke's `stroke-miterlimit`, inherited (SVG's default 4): a sharper corner's miter is drawn as a bevel (T194).
+    pub miter: f64,
+    /// A stroke a path's `Z` closed: drawn with a join at its start, no caps (T194).
+    pub closed: bool,
+    /// A stroke's `stroke-dasharray` in sheet px, an even count (empty: solid), inherited (T194).
+    pub dash: Vec<f64>,
+    /// A stroke's `stroke-dashoffset` in sheet px, inherited (T194).
+    pub offset: f64,
+}
+
+impl Default for Shape {
+    /// The Python's `Shape` defaults: nothing drawn, SVG's stroke defaults (a butt cap, a miter join, a miter limit of 4, solid).
+    ///
+    /// Research: its drawn sizes - NONE: SVG's default `stroke-miterlimit`, 4
+    fn default() -> Self {
+        Self {
+            tag: String::new(),
+            kind: String::new(),
+            poly: Vec::new(),
+            half: 0.0,
+            line: false,
+            text: String::new(),
+            size: 0.0,
+            attrs: None,
+            leader: false,
+            lines: Vec::new(),
+            group: 0,
+            frame: (0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+            edge: 0.0,
+            texture: false,
+            filled: false,
+            busy: false,
+            dark: false,
+            at: 0,
+            ids: BTreeSet::new(),
+            names: Vec::new(),
+            cont: false,
+            cap: Cap::Butt,
+            join: Join::Miter,
+            miter: 4.0,
+            closed: false,
+            dash: Vec::new(),
+            offset: 0.0,
+        }
+    }
 }
 
 impl Shape {
@@ -440,5 +487,7 @@ pub fn render(src: &str, png: &std::path::Path) -> Result<(), Error> {
 mod ink_tests;
 #[cfg(test)]
 mod leader_tests;
+#[cfg(test)]
+mod stroke_tests;
 #[cfg(test)]
 mod tests;

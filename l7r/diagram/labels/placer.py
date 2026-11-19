@@ -23,6 +23,7 @@ Research: caption search plumbing - NONE: candidate bookkeeping, geometry and se
 
 from __future__ import annotations
 
+import functools
 import itertools
 import math
 from collections.abc import Callable, Iterator
@@ -62,12 +63,21 @@ class InkPart:
     """One drawn part of what a caption names, as its leader ends on it: a closed outline (a disc's drawn curve, not its box) and the
     half-width (`half`) of the stroke drawn on it, 0 where it has none; or, `line`, a stroke's polyline, the half-width at whose edge the
     leader stops and the stroke's `cap` - its SVG `stroke-linecap`, "butt" (SVG's default, the stroke ending flat at its end point),
-    "square" (drawn on past it by the half-width) or "round" (feature 449 T192, T193)."""
+    "square" (drawn on past it by the half-width) or "round" (feature 449 T192, T193). A stroke's corners, and a closed outline's stroke's,
+    are drawn by its `join` - its SVG `stroke-linejoin`, "miter" (SVG's default: the two edges drawn on until they meet, a bevel where
+    that point stands more than `miter` half-widths from the corner), "round" or "bevel" - and a stroke a path's `Z` closed (`closed`)
+    has a join at its start and no caps; a dashed stroke draws only its dashes (`dash`, its SVG `stroke-dasharray` in sheet px, an even
+    count, and `offset`, its `stroke-dashoffset`), each a stroke of its own with the stroke's caps (feature 449 T194)."""
 
     pts: tuple[Pt, ...]
     line: bool = False
     half: float = 0.0
     cap: str = "butt"
+    join: str = "miter"
+    miter: float = 4.0
+    closed: bool = False
+    dash: tuple[float, ...] = ()
+    offset: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -333,7 +343,7 @@ def _leader_cands(text: str, size: float, subject: Subject, lines: list[str] | N
     positions and the fallback's slides on the rings past the reach, out to the hug (`outer_rings`), every seat tied back
     by its leader. An area's name lies inside it, so it adds nothing for an area.
 
-    Research: leader search - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a displaced caption tied to its feature by a leader line
+    Research: leader search - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a displaced caption tied to its feature by a leader line
     """
     outer = outer_rings(size)
     if not outer or subject.kind == "area":
@@ -714,13 +724,15 @@ def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
     distance there).
 
     Research:
-        when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line
-        where a leader ends - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `_nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)
+        when a leader is drawn - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line
+        where a leader ends - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `_nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap, joins and dashes read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)
         leader end trim - CONVENTION: a leader stops short of the words and of the feature by a quarter of its length, at most 1 px, so neither end touches the ink it joins; a drawn size on the sheet, not in the world
     """
     if ring < LEADERLESS_RINGS or subject.kind == "area":
         return None
-    a, b = _nearest_ink(block, subject.ink) if subject.ink else nearest_points(block, list(subject.poly), closed=subject.kind != "line")
+    near = _nearest_ink(block, subject.ink) if subject.ink else None
+    # a subject whose parts draw no ink (a stroke of no length ending flat) is led to its outline
+    a, b = near if near is not None else nearest_points(block, list(subject.poly), closed=subject.kind != "line")
     d = math.dist(a, b)
     if d == 0.0:
         return None  # the block touches what it names - a line bent back under a leader ring's seat - so nothing ties it back (feature 449 T184)
@@ -729,12 +741,13 @@ def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
     return ((a[0] + ux * trim, a[1] + uy * trim), (b[0] - ux * trim, b[1] - uy * trim))
 
 
-def _nearest_ink(block: Poly, ink: tuple[InkPart, ...]) -> tuple[Pt, Pt]:
+def _nearest_ink(block: Poly, ink: tuple[InkPart, ...]) -> tuple[Pt, Pt] | None:
     """The nearest pair of points, one on the block and one on the drawn parts: the part whose drawn edge stands nearest the block, and
-    on it the nearest drawn point (feature 449 T193) - a closed outline's own stroke drawn out from it by its half-width (`half`, the
-    sheet's `stroke-width` on it, 0 unstroked), a stroke's band as SVG draws it (`band_nearest`: its edge, and past its end the end its
-    cap draws) - the ink `leader_to_ink` ends on - or the block's own point twice where the block reaches the ink. On an exact tie a
-    closed outline before a stroke, then the wider, then the first in their order.
+    on it the nearest drawn point (feature 449 T193) - a closed outline, inside it on it, and its own stroke drawn about it at its
+    half-width (`half`, the sheet's `stroke-width` on it, 0 unstroked) with its corners joined as SVG joins them, a stroke's band as SVG
+    draws it (`band_nearest`: its edge, its corners' joins, and past its end the end its cap draws) - the ink `leader_to_ink` ends on -
+    or the block's own point twice where the block reaches the ink; None where no part draws any ink (a stroke of no length ending
+    flat). On an exact tie a closed outline before a stroke, then the wider, then the first in their order.
 
     Chosen by the stroke's line instead (feature 449 T192), a leader to a stroke drawn along a stroked building's edge ended on the
     building's outline, inside its own drawn stroke. Two forms of the edge rule were priced by T192 and not kept, each the rule here less
@@ -747,59 +760,204 @@ def _nearest_ink(block: Poly, ink: tuple[InkPart, ...]) -> tuple[Pt, Pt]:
     shorter, on the drawn stroke (t193/reach-new.log).
 
     Research:
-        which part a leader ends on - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; the part chosen by its drawn edge, an outline's own stroke and a stroke's cap read as the sheet draws them, their bends and corners measured round (feature 449 T193)
-        a tie between parts - CONVENTION: two parts whose drawn edges stand exactly as near go to a closed outline before a stroke, then the wider, then the first in the sheet's order - a fixed order where the page's rule leaves a choice; the first two decide no pool leader's part, the sheet's order the one of two equal parts equally near, as two posts (feature 449 T192, T193)
+        which part a leader ends on - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; the part chosen by its drawn edge, an outline's own stroke and a stroke's cap and joins read as the sheet draws them (feature 449 T193, T194)
+        a tie between parts - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: where two drawn parts stand exactly as near, the leader goes to a closed outline before a stroke, and to the wider of two strokes; between two like parts equally near, the one drawn first - the page's map drawing convention; the first two decide no pool leader's part, the sheet's order the one of two equal parts equally near, as two posts (feature 449 T192, T193, T194)
     """
     best: tuple[float, tuple[bool, float], Pt, Pt] | None = None
     for part in ink:
-        if part.line:
-            a, b = band_nearest(block, part)
-            d = math.dist(a, b)
-        else:
-            a, b = nearest_points(block, list(part.pts))
-            d = math.dist(a, b)
-            if d <= part.half:
-                b, d = a, 0.0
-            elif part.half:
-                b, d = (b[0] + (a[0] - b[0]) * part.half / d, b[1] + (a[1] - b[1]) * part.half / d), d - part.half
+        near = _part_nearest(block, part)
+        if near is None:
+            continue
+        a, b = near
+        d = math.dist(a, b)
         tie = (part.line, -part.half)
         if best is None or (d, tie) < best[:2]:
             best = (d, tie, a, b)
-    assert best is not None
-    return best[2], best[3]
+    return None if best is None else (best[2], best[3])
+
+
+def _part_nearest(block: Poly, part: InkPart) -> tuple[Pt, Pt] | None:
+    """The nearest pair of points, one on the block and one on one drawn part (`_nearest_ink`); None where it draws no ink. A closed
+    outline is measured as before (feature 449 T193) - inside it on it, else its outline drawn out round by its stroke's half-width -
+    and then each corner's miter point, which SVG draws past that round corner, is tried (`_outline_corners`); where a corner bevels,
+    which draws less than the round corner, the outline's whole band is measured (`band_nearest`). The round measure first keeps the
+    point it chose among equally near ones - a block's edge parallel to the outline's - where a corner's miter is not nearer.
+
+    Research: a closed outline's drawn edge - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a leader ends on the ink as it is drawn, on a corner's point; the outline measured round by its stroke and each corner's miter point then tried, its whole band where a corner bevels, so the round measure keeps the point it chose among equally near ones (feature 449 T194)
+    """
+    if part.line:
+        return band_nearest(block, part)
+    a, b = nearest_points(block, list(part.pts))
+    if a == b or not part.half:
+        return a, b
+    beveled, corners = _outline_corners(part)
+    if beveled:
+        return band_nearest(block, part)
+    d = math.dist(a, b)
+    if d <= part.half:
+        return a, a
+    best = (d - part.half, a, (b[0] + (a[0] - b[0]) * part.half / d, b[1] + (a[1] - b[1]) * part.half / d))
+    bx0, by0, bx1, by1 = bbox(block)
+    for poly in corners:
+        cx0, cy0, cx1, cy1 = bbox(poly)
+        if math.hypot(max(0.0, cx0 - bx1, bx0 - cx1), max(0.0, cy0 - by1, by0 - cy1)) >= best[0]:
+            continue
+        a2, b2 = nearest_points(block, poly)
+        d2 = math.dist(a2, b2)
+        if d2 < best[0] - CORNER_EPS:
+            best = (d2, a2, b2)
+    return (best[1], best[1]) if best[0] == 0.0 else (best[1], best[2])
+
+
+CORNER_EPS = 1e-9
+"""How much nearer than the round measure a corner's miter must stand to take a leader (px): a corner level with the outline's drawn
+edge - a block's edge parallel to it - is as near, and only a rounding apart; it keeps the round measure's point (feature 449 T194: the
+Ebisu shrine's leader, led to an altar's corner by a rounding, crossed a roof edge).
+
+Research: its salts, guards and sentinels - NONE: a rounding guard, deciding nothing about the place"""
+
+
+@functools.lru_cache(maxsize=4096)
+def _outline_corners(part: InkPart) -> tuple[bool, tuple[Poly, ...]]:
+    """A closed outline's stroke's corners as SVG joins them (`_join`): whether any bevels, and each miter's polygon."""
+    pts = part.pts
+    n = len(pts)
+    segs = [(pts[k], pts[(k + 1) % n]) for k in range(n) if pts[k] != pts[(k + 1) % n]]
+    dirs = [((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b)) for a, b in segs]
+    corners: list[Poly] = []
+    beveled = False
+    for k in range(len(segs)):
+        poly, _ = _join(segs[k][0], dirs[k - 1], dirs[k], part.half, part.join, part.miter)
+        if poly is not None and len(poly) == 3:
+            beveled = beveled or poly[1] != poly[2]
+        elif poly is not None:
+            corners.append(tuple(poly))
+    return beveled, tuple(corners)
+
+
+def _join(p: Pt, u1: Pt, u2: Pt, h: float, join: str, miter: float) -> tuple[Poly | None, Pt | None]:
+    """What SVG draws at a corner of a stroke of half-width `h` where it turns from direction `u1` to `u2` (unit vectors), beyond the
+    two segments' own rectangles: nothing where it runs straight on; a disc of the half-width for a round join; for a miter the two
+    outer edges drawn on until they meet - a point `h / sin(half the angle between the segments)` from the corner - and a bevel
+    joining the two outer corners where that ratio passes the miter limit, as SVG 1.1 draws it (11.4). The polygon, or the disc's center.
+
+    Research: a stroke's corner - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: its corners drawn square to their point, or cut off where they are very sharp, or rounded where the sheet rounds them - SVG 1.1's miter, its bevel past `stroke-miterlimit`, a round join's disc (feature 449 T194)
+    """
+    cross = u1[0] * u2[1] - u1[1] * u2[0]
+    dot = u1[0] * u2[0] + u1[1] * u2[1]
+    if cross == 0.0 and dot > 0.0:
+        return None, None
+    if join == "round":
+        return None, p
+    s = -h if cross > 0.0 else h  # the outer side: away from the turn
+    o1, o2 = (p[0] - u1[1] * s, p[1] + u1[0] * s), (p[0] - u2[1] * s, p[1] + u2[0] * s)
+    ratio = 1.0 / math.sqrt(max(0.0, (1.0 + dot) / 2.0)) if dot > -1.0 else math.inf
+    if join == "bevel" or ratio > miter:
+        return [p, o1, o2], None
+    w = math.hypot(u1[0] - u2[0], u1[1] - u2[1])
+    tip = (p[0] + (u1[0] - u2[0]) / w * h * ratio, p[1] + (u1[1] - u2[1]) / w * h * ratio)
+    return [p, o1, tip, o2], None
 
 
 def stroke_band(part: InkPart) -> tuple[list[Poly], list[Pt]]:
-    """A stroke's drawn band as SVG draws it (feature 449 T193): each segment's rectangle at the half-width, a disc of the half-width at
-    each bend, and at each end its cap - nothing for "butt" (SVG's default: the stroke ends flat at its end point), the end segment's
-    rectangle drawn on past it by the half-width for "square", a disc for "round". The rectangles and the discs' centers; a stroke of no
-    length is one disc, so it keeps an end to lead to.
+    """A stroke's drawn band as SVG draws it (feature 449 T193, T194): each segment's rectangle at the half-width, at each corner its
+    join (`_join`: a miter, its bevel past the miter limit, a round join's disc), and at each end its cap - nothing for "butt" (SVG's
+    default: the stroke ends flat at its end point), the end segment's rectangle drawn on past it by the half-width for "square", a disc
+    for "round". A closed outline's stroke, or a stroke a path's `Z` closed, runs all the way round, a join at every corner and no cap.
+    The polygons and the discs' centers; a stroke of no length draws its cap alone - nothing for butt, a disc for round, a level square
+    for square (SVG 2, 13.5.5).
 
-    Research: a stroke's drawn band - CONVENTION: a stroke's ink measured as the band SVG draws, its `stroke-linecap` read (butt unless the sheet says square or round), but every bend measured round where SVG's default `stroke-linejoin` draws a miter, whose point on a bend's outside the band leaves out; 0242 has a leader end at the nearest drawn point, and this is where a stroke's points are read (feature 449 T193)
+    Research: a stroke's drawn band - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a leader ends on the ink as it is drawn: on a corner's point, on a line's end, and never in a dashed line's gap - the page's map drawing convention; a stroke's band as SVG draws it, its `stroke-linecap`, `stroke-linejoin`, `stroke-miterlimit` and `stroke-dasharray` read (SVG's defaults butt, miter, 4 and solid unless the sheet says otherwise) (feature 449 T193, T194)
     """
-    segs = [(a, b) for a, b in zip(part.pts, part.pts[1:], strict=False) if a != b]
+    if part.line and part.dash:
+        polys: list[Poly] = []
+        discs: list[Pt] = []
+        for piece in _dashes(part):
+            p2, d2 = stroke_band(replace(part, pts=piece, closed=False, dash=()))
+            polys += p2
+            discs += d2
+        return polys, discs
+    ring = not part.line or part.closed
+    pts = list(part.pts[:-1] if part.line and part.closed and len(part.pts) > 1 and part.pts[0] == part.pts[-1] else part.pts)
+    segs = [(a, b) for a, b in zip(pts, pts[1:] + (pts[:1] if ring else []), strict=False) if a != b]
+    h = part.half
     if not segs:
-        return [], [part.pts[0]]
-    h, last = part.half, len(segs) - 1
-    rects: list[Poly] = []
+        p = pts[0]
+        if ring or part.cap == "butt":
+            return [], []
+        if part.cap == "round":
+            return [], [p]
+        return [[(p[0] - h, p[1] - h), (p[0] + h, p[1] - h), (p[0] + h, p[1] + h), (p[0] - h, p[1] + h)]], []
+    last = len(segs) - 1
+    polys: list[Poly] = []
+    discs: list[Pt] = []
+    dirs: list[Pt] = []
     for k, (a, b) in enumerate(segs):
         d = math.dist(a, b)
         ux, uy = (b[0] - a[0]) / d, (b[1] - a[1]) / d
-        e0 = h if k == 0 and part.cap == "square" else 0.0
-        e1 = h if k == last and part.cap == "square" else 0.0
+        dirs.append((ux, uy))
+        e0 = h if k == 0 and not ring and part.cap == "square" else 0.0
+        e1 = h if k == last and not ring and part.cap == "square" else 0.0
         a, b = (a[0] - ux * e0, a[1] - uy * e0), (b[0] + ux * e1, b[1] + uy * e1)
         nx, ny = -uy * h, ux * h
-        rects.append([(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)])
-    discs = [b for _, b in segs[:-1]] + ([segs[0][0], segs[-1][1]] if part.cap == "round" else [])
-    return rects, discs
+        polys.append([(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)])
+    for k in range(1 if not ring else 0, len(segs)):
+        poly, disc = _join(segs[k][0], dirs[k - 1], dirs[k], h, part.join, part.miter)
+        if poly is not None:
+            polys.append(poly)
+        if disc is not None:
+            discs.append(disc)
+    if not ring and part.cap == "round":
+        discs += [segs[0][0], segs[-1][1]]
+    return polys, discs
 
 
-def band_nearest(block: Poly, part: InkPart) -> tuple[Pt, Pt]:
+def _dashes(part: InkPart) -> list[tuple[Pt, ...]]:
+    """A dashed stroke's dashes, each the run of its polyline a dash covers (SVG 1.1, 11.4): the pattern laid along the stroke from its
+    start, `offset` into it, and round again from its start where a path's `Z` closed it; a dash of no length is its one point, which
+    draws only a round or square cap.
+
+    Research: a dashed stroke's dashes - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: never in a dashed line's gap - the pattern laid from the stroke's start and its `stroke-dashoffset`, each dash a stroke of its own with the stroke's caps (feature 449 T194)
+    """
+    pts = list(part.pts)
+    period = sum(part.dash)
+    k, into = 0, part.offset % period
+    while into >= part.dash[k]:
+        into -= part.dash[k]
+        k = (k + 1) % len(part.dash)
+    out: list[tuple[Pt, ...]] = []
+    cur: list[Pt] | None = [pts[0]] if k % 2 == 0 else None
+    left = part.dash[k] - into
+    for a, b in zip(pts, pts[1:], strict=False):
+        seg = math.dist(a, b)
+        at = 0.0
+        while seg - at >= left:
+            at += left
+            t = at / seg if seg else 0.0
+            p = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+            if cur is not None:
+                cur.append(p)
+                out.append(tuple(cur))
+                cur = None
+            else:
+                cur = [p]
+            k = (k + 1) % len(part.dash)
+            left = part.dash[k]
+        left -= seg - at
+        if cur is not None and cur[-1] != b:
+            cur.append(b)
+    if cur is not None:
+        out.append(tuple(cur))
+    return out
+
+
+def band_nearest(block: Poly, part: InkPart) -> tuple[Pt, Pt] | None:
     """The nearest pair of points, one on the block and one on a stroke's drawn band (`stroke_band`), the block's own point twice where
-    the block reaches the band (feature 449 T193): a leader to a stroke ends at its edge, and past its end on the end its cap draws."""
-    rects, discs = stroke_band(part)
+    the block reaches the band (feature 449 T193): a leader to a stroke ends at its edge, at a corner on the join SVG draws, and past its
+    end on the end its cap draws; None where the stroke draws nothing (one of no length ending flat)."""
+    polys, discs = stroke_band(part)
     best: tuple[float, Pt, Pt] | None = None
-    for r in rects:
+    for r in polys:
         a, b = nearest_points(block, r)
         d = math.dist(a, b)
         if best is None or d < best[0]:
@@ -810,7 +968,8 @@ def band_nearest(block: Poly, part: InkPart) -> tuple[Pt, Pt]:
         d = max(0.0, dc - part.half)
         if best is None or d < best[0]:
             best = (d, a, a if d == 0.0 else (c[0] + (a[0] - c[0]) * part.half / dc, c[1] + (a[1] - c[1]) * part.half / dc))
-    assert best is not None
+    if best is None:
+        return None
     return (best[1], best[1]) if best[0] == 0.0 else (best[1], best[2])
 
 

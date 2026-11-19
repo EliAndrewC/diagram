@@ -22,6 +22,14 @@ Feature 449 T193 added a thirteenth: a 9 px wall with its cap unsaid and one squ
 east end, and a house outlined in a 4 px stroke penned with a gap below, their captions led out past twice the gap, each leader scored and
 drawn to the ink as the sheet draws it - a stroke's flat or square end, an outline drawn out by its stroke - and re-took every answer from
 its fixed Python.
+Feature 449 T194 added a fourteenth: a rope ring drawn in two dashed arcs, a well's roof drawn as a dashed square whose `Z` draws its upper
+side, and two raked lines, each a quadratic curve, in one path of two subpaths under a group's `fill="none"`, each penned with a gap
+below, their captions led out past twice the gap, each leader scored and drawn to the ink as the sheet draws it - the ring's curve, not a
+line doubled back between its arcs' end points, the upper side the `Z` draws, the curves, not a box read round a path with no fill of its own -
+and re-took every answer from its fixed Python; and a fifteenth: a wall dashed 20 on and 20 off from 10 px into its pattern, its east end in a gap, a 9 px
+wall bent to a 60 degree V pointing down at its opening, and a 6 px dot of no length ending flat, each penned with a gap below, each
+leader scored and drawn to the ink as the sheet draws it - a dash's end, not the gap; the V's mitered point; the dot's place, which a
+butt dot draws nothing at - and re-took every answer from its fixed Python.
 """
 
 import json, sys, traceback
@@ -235,6 +243,35 @@ LED_CAPS = sheet(
 )
 
 
+# feature 449 T194: a rope ring drawn in two dashed arcs, a well's roof drawn as a dashed square whose `Z` draws its upper side, and two raked
+# lines, two quadratic curves in one path of two subpaths under a group's `fill="none"`, each penned by dark sheds with a gap below, their
+# captions led out past twice the gap: each leader is scored and drawn to the ink as the sheet draws it - the ring's curve, where the reader
+# kept a 10 px line doubled back; the upper side, which the reader left undrawn; the curves, where it read a box round the path
+LED_CURVES = sheet(
+    '  <g data-kind="sheds">' + pen(46, 46, 18, 18) + pen(242, 42, 26, 23) + pen(40, 180, 40, 28) + '</g>\n',
+    '  <g data-kind="sacred rope"><path d="M 50 55 a 5 5 0 1 0 10 0 a 5 5 0 1 0 -10 0" fill="none" stroke="#4A3318" stroke-width="2" stroke-dasharray="2 1.5"/>'
+    '<text x="55" y="55" font-size="8">rope of the old tree</text></g>\n',
+    '  <g data-kind="well"><path d="M 244 43 v 20 h 22 v -20 z" fill="none" stroke="#6B5836" stroke-width="1.1" stroke-dasharray="3 2"/>'
+    '<text x="255" y="55" font-size="8">well of the toll house</text></g>\n',
+    '  <g data-kind="raked gravel" stroke="#4A3318" stroke-width="1.4" fill="none"><path d="M 42 190 q 18 -8 36 0 M 42 204 q 18 -8 36 0"/>'
+    '<text x="60" y="195" font-size="8" fill="#2D2A24" stroke="none">raked gravel of the court</text></g>\n',
+)
+
+
+# feature 449 T194: a wall dashed 20 on and 20 off from 10 px into its pattern, its east end in a gap, a 9 px wall bent to a 60 degree V pointing down at its
+# opening (SVG's default miter, 9 px past the corner), and a 6 px dot of no length ending flat, each penned by dark sheds with a gap below,
+# their captions led out past twice the gap: the reader drew no dash, measured the V's corner round and drew the dot as a disc
+LED_STROKES = sheet(
+    '  <g data-kind="sheds">' + pen(40, 40, 60, 24) + pen(240, 40, 36, 40) + pen(52, 180, 16, 16) + '</g>\n',
+    '  <g data-kind="dashed fence" stroke="#4A3318" stroke-width="6" stroke-dasharray="20 20" stroke-dashoffset="10"><line x1="40" y1="52" x2="100" y2="52"/>'
+    '<text x="70" y="52" font-size="8" stroke="none">fence of the old toll</text></g>\n',
+    '  <g data-kind="bent wall" stroke="#4A3318" stroke-width="9" fill="none"><polyline points="240,44 258,75.18 276,44"/>'
+    '<text x="258" y="60" font-size="8" stroke="none">wall of the shrine yard</text></g>\n',
+    '  <g data-kind="post" stroke="#4A3318" stroke-width="6"><line x1="60" y1="188" x2="60" y2="188"/>'
+    '<text x="60" y="188" font-size="8" stroke="none">post of the gate</text></g>\n',
+)
+
+
 REFUSALS = [
     sheet('<g data-kind="x"><text x="5" y="5" font-size="6">lonely</text></g>\n'),
     sheet('<g data-kind="tub"><circle cx="50" cy="50" r="5"/><text x="80" y="80" font-size="6">tub</text></g>\n', back='<_x/>' + BACK),
@@ -254,7 +291,7 @@ REFUSALS = [
     sheet('  <g transform="rotate(x)"><rect width="1" height="1"/></g>\n'),
     "<svg",
 ]
-out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE, LED_L, LED_PARTS, LED_CAPS]]
+out = [run(s) for s in [EVERYTHING, STEPPED, SCATTER, STRANDED, QUARTER, *REFUSALS, ONE_LINE, PREFIXED, ground(140, 110, 120, 80), ground(1, 1, 398, 298), ground(140, 110, 120, 80, ' data-texture="1"'), TURNED_OUTLINE, LEVEL_THINGS, ROAD, TURNED_ELLIPSE, TURNED_BESIDE, LED_L, LED_PARTS, LED_CAPS, LED_CURVES, LED_STROKES]]
 for o in out:
     print(o.get("raises", "placed %d" % len(o.get("placed", ""))), file=sys.stderr)
 json.dump(out, open(sys.argv[1], "w"), indent=0)

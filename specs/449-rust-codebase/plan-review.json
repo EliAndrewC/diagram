@@ -726,6 +726,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
+  },
+  "### T194 (step 3a's last reader and leader gaps, T193's leftover findings and its impl-drift's 2 DRIFTED, 1 MISLABELED and 3 outside the change; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "1c7d6296ccb51aef37ba12cbccf090fd73c475d11ddd6a73dd6d5e10876792ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T194 Approach (checklist part A)": {
+   "sha256": "2d328cbd35682fe5f546a7c97ff064636022ced2e53da4069929a8dae9be55e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12657,6 +12669,88 @@
      "why": "Same boundary: filed as T194, ordered before step 3b, per the dispatch (not verified here); the drafted line names both copies and a red-first test. Not carried into the next step."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T194 (step 3a's last reader and leader gaps, T193's leftover findings and its impl-drift's 2 DRIFTED, 1 MISLABELED and 3 outside the change; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T194 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "item1-path",
+     "summary": "path_points (both copies) returns each subpath and its Z; Beziers flattened by Wang's bound, smooth forms reflected, arcs per SVG 1.1 F.6; sag DISC_SAG_PX (convention 0.05 px) divided by the element's largest stretch",
+     "class": "within",
+     "why": "Fixes a known step-3a reader defect (a leader not ending on the ink as SVG draws it) in this step, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'); the sag reuses an existing convention, no constant moves."
+    },
+    {
+     "id": "item1-beside-curves",
+     "summary": "each subpath its own shape, Z closes its stroke with a join and no cap, path/polyline fill read as inherited; an unknown cap/join/limit ignored so the inherited one stands, replacing T193's unknown-cap-as-butt",
+     "class": "within",
+     "why": "Each is a measured reader defect (phantom joining segment, missing closing side, fill read without inheritance, T193's unknown cap) fixed in the step it was found, per the GM's fix-as-we-go rule; the changed maps fall under FR-002 (outputs may differ so long as everything works)."
+    },
+    {
+     "id": "item1-dashes",
+     "summary": "dashes drawn (each dash its own stroke with caps, from stroke-dashoffset, scaled), chosen after measuring that a drawn pool leader ends on a dashed stroke and that drawing them moves no pool caption",
+     "class": "within",
+     "why": "Implements 0242/0330's rule that a leader ends on the nearest drawn point; a gap is not ink. Widens correctness, narrows nothing the GM asked for."
+    },
+    {
+     "id": "item2-joins-corner-eps",
+     "summary": "stroke-linejoin/miterlimit read and inherited, joins drawn per SVG 1.1 (miter, bevel past the limit, round disc); closed outlines measured round then each miter tried; CORNER_EPS a 1e-9 px rounding guard keeping the round point when a miter point is nearer only by rounding",
+     "class": "within",
+     "why": "A drawn-ink fix in this step; CORNER_EPS is a rounding tie-guard that decides nothing about place, introduced to stop a leader crossing a roof edge on a rounding artifact, not a carve-out from any requested behavior."
+    },
+    {
+     "id": "item3-impl-drift",
+     "summary": "a zero-length stroke draws nothing for butt, a disc for round, a square for square (SVG 2 13.5.5); nearest_ink answers None where nothing is drawn; ink_nearest deleted and leader_to_ink measures with nearest_ink so the scored and drawn leader agree",
+     "class": "within",
+     "why": "Resolves T193's impl-drift findings (DRIFTED, MISLABELED) in this step, as fix-as-we-go asks; one measure for scored and drawn removes a divergence rather than narrowing anything."
+    },
+    {
+     "id": "claims-and-record",
+     "summary": "the leader claims re-cite 0330; 0242's leader bullet moved word for word to new page 0330 with its note, 0330 adding the tie order, corners and dashes; QGIS archive record names 0330's notes",
+     "class": "within",
+     "why": "Keeps the research claims the fixed code carries on a page, as FR-002 requires the claims to hold; the split follows the record's size rule and moves text verbatim. No request clause is narrowed."
+    },
+    {
+     "id": "rust-tests",
+     "summary": "new stroke_tests.rs from markup through HEAD's APIs, red on HEAD with T193's cap test, green on the clone",
+     "class": "within",
+     "why": "Enforcement of the requested fixes (a test that fails only when the fix is absent); serves the fix-as-we-go request."
+    },
+    {
+     "id": "python-kept-lockstep",
+     "summary": "the kept Python placer/hand_sheet fixed alike; held.json re-taken with two more sheets, its 30 earlier answers unchanged; placer's held.json re-answered, none of 60 moved",
+     "class": "within",
+     "why": "The GM asked known bugs be fixed in every live copy; the kept Python still runs (FR-003) and is fixed in lockstep. The Rust/Python agreement is reported as an observation, not held as an exactness standard."
+    },
+    {
+     "id": "pool-reach",
+     "summary": "of 190 pool captions, 5 seats and 8 leaders move, each laid to its change; Hayakawa's caption cost 20,500 for 19,500; leader ends move 0.0015 to 0.31 px; compound sheets' well captions move",
+     "class": "within",
+     "why": "FR-002 (T180) and the GM 2026-11-18: maps may change so long as everything works; every audit exits 0 and each move is traced to a fix. A fix changing a map is expected, never a regression."
+    },
+    {
+     "id": "python-slower",
+     "summary": "the kept Python seats the four sheets in 25.9 s against 20.4 s on HEAD, one run each, recorded only",
+     "class": "within",
+     "why": "No requirement binds the kept Python's speed (it is being deleted under FR-001); recording it rather than acting narrows no request clause."
+    },
+    {
+     "id": "found-and-left-T195",
+     "summary": "a filled path's hole read as filled, a dashed closed outline measured solid, an unfilled closed part's inside counted as ink, the audit's path walk keeping an arc by its end point, and 0242's next split: left to T195, filed and ordered before step 3b",
+     "class": "within",
+     "why": "The GM's rule is per step: 'fix all known bugs in each step before moving on to porting the next step'. T195 is filed and ordered before step 3b's first port, so every known step-3a defect (and the step-2 audit crop found now) is fixed before the next step; splitting the work across tasks within the step narrows nothing the GM asked."
+    },
+    {
+     "id": "plan-lint-spin",
+     "summary": "make decide/task-add spin from fancy_regex's step limit fixed in the plan and task crates with this task, tests red on the old code; the rest of the class left to T185, also before step 3b",
+     "class": "within",
+     "why": "A known tooling bug fixed as found, its remainder filed before the next step, consistent with the GM's fix-as-we-go rule and the 2026-11-16/18 efficiency instructions."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22460,6 +22554,86 @@
      "summary": "stroke-linejoin is unread, so a bend's or stroked corner's outside is drawn round where SVG's miter reaches further (1.86 px at a 9 px right angle); measured that no pool leader so ends; left to a drafted task before step 3b, both copies.",
      "class": "within",
      "why": "Same boundary: filed as T194, ordered before step 3b, per the dispatch (not verified here); the drafted line names both copies and a red-first test. Not carried into the next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T194": {
+   "section_sha256": "a94ce803ca46d2c28dd3ad1eee7906cba4a6938e9f2b9d2446dbdda3bbedc025",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "item1-path",
+     "summary": "path_points (both copies) returns each subpath and its Z; Beziers flattened by Wang's bound, smooth forms reflected, arcs per SVG 1.1 F.6; sag DISC_SAG_PX (convention 0.05 px) divided by the element's largest stretch",
+     "class": "within",
+     "why": "Fixes a known step-3a reader defect (a leader not ending on the ink as SVG draws it) in this step, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'); the sag reuses an existing convention, no constant moves."
+    },
+    {
+     "id": "item1-beside-curves",
+     "summary": "each subpath its own shape, Z closes its stroke with a join and no cap, path/polyline fill read as inherited; an unknown cap/join/limit ignored so the inherited one stands, replacing T193's unknown-cap-as-butt",
+     "class": "within",
+     "why": "Each is a measured reader defect (phantom joining segment, missing closing side, fill read without inheritance, T193's unknown cap) fixed in the step it was found, per the GM's fix-as-we-go rule; the changed maps fall under FR-002 (outputs may differ so long as everything works)."
+    },
+    {
+     "id": "item1-dashes",
+     "summary": "dashes drawn (each dash its own stroke with caps, from stroke-dashoffset, scaled), chosen after measuring that a drawn pool leader ends on a dashed stroke and that drawing them moves no pool caption",
+     "class": "within",
+     "why": "Implements 0242/0330's rule that a leader ends on the nearest drawn point; a gap is not ink. Widens correctness, narrows nothing the GM asked for."
+    },
+    {
+     "id": "item2-joins-corner-eps",
+     "summary": "stroke-linejoin/miterlimit read and inherited, joins drawn per SVG 1.1 (miter, bevel past the limit, round disc); closed outlines measured round then each miter tried; CORNER_EPS a 1e-9 px rounding guard keeping the round point when a miter point is nearer only by rounding",
+     "class": "within",
+     "why": "A drawn-ink fix in this step; CORNER_EPS is a rounding tie-guard that decides nothing about place, introduced to stop a leader crossing a roof edge on a rounding artifact, not a carve-out from any requested behavior."
+    },
+    {
+     "id": "item3-impl-drift",
+     "summary": "a zero-length stroke draws nothing for butt, a disc for round, a square for square (SVG 2 13.5.5); nearest_ink answers None where nothing is drawn; ink_nearest deleted and leader_to_ink measures with nearest_ink so the scored and drawn leader agree",
+     "class": "within",
+     "why": "Resolves T193's impl-drift findings (DRIFTED, MISLABELED) in this step, as fix-as-we-go asks; one measure for scored and drawn removes a divergence rather than narrowing anything."
+    },
+    {
+     "id": "claims-and-record",
+     "summary": "the leader claims re-cite 0330; 0242's leader bullet moved word for word to new page 0330 with its note, 0330 adding the tie order, corners and dashes; QGIS archive record names 0330's notes",
+     "class": "within",
+     "why": "Keeps the research claims the fixed code carries on a page, as FR-002 requires the claims to hold; the split follows the record's size rule and moves text verbatim. No request clause is narrowed."
+    },
+    {
+     "id": "rust-tests",
+     "summary": "new stroke_tests.rs from markup through HEAD's APIs, red on HEAD with T193's cap test, green on the clone",
+     "class": "within",
+     "why": "Enforcement of the requested fixes (a test that fails only when the fix is absent); serves the fix-as-we-go request."
+    },
+    {
+     "id": "python-kept-lockstep",
+     "summary": "the kept Python placer/hand_sheet fixed alike; held.json re-taken with two more sheets, its 30 earlier answers unchanged; placer's held.json re-answered, none of 60 moved",
+     "class": "within",
+     "why": "The GM asked known bugs be fixed in every live copy; the kept Python still runs (FR-003) and is fixed in lockstep. The Rust/Python agreement is reported as an observation, not held as an exactness standard."
+    },
+    {
+     "id": "pool-reach",
+     "summary": "of 190 pool captions, 5 seats and 8 leaders move, each laid to its change; Hayakawa's caption cost 20,500 for 19,500; leader ends move 0.0015 to 0.31 px; compound sheets' well captions move",
+     "class": "within",
+     "why": "FR-002 (T180) and the GM 2026-11-18: maps may change so long as everything works; every audit exits 0 and each move is traced to a fix. A fix changing a map is expected, never a regression."
+    },
+    {
+     "id": "python-slower",
+     "summary": "the kept Python seats the four sheets in 25.9 s against 20.4 s on HEAD, one run each, recorded only",
+     "class": "within",
+     "why": "No requirement binds the kept Python's speed (it is being deleted under FR-001); recording it rather than acting narrows no request clause."
+    },
+    {
+     "id": "found-and-left-T195",
+     "summary": "a filled path's hole read as filled, a dashed closed outline measured solid, an unfilled closed part's inside counted as ink, the audit's path walk keeping an arc by its end point, and 0242's next split: left to T195, filed and ordered before step 3b",
+     "class": "within",
+     "why": "The GM's rule is per step: 'fix all known bugs in each step before moving on to porting the next step'. T195 is filed and ordered before step 3b's first port, so every known step-3a defect (and the step-2 audit crop found now) is fixed before the next step; splitting the work across tasks within the step narrows nothing the GM asked."
+    },
+    {
+     "id": "plan-lint-spin",
+     "summary": "make decide/task-add spin from fancy_regex's step limit fixed in the plan and task crates with this task, tests red on the old code; the rest of the class left to T185, also before step 3b",
+     "class": "within",
+     "why": "A known tooling bug fixed as found, its remainder filed before the next step, consistent with the GM's fix-as-we-go rule and the 2026-11-16/18 efficiency instructions."
     }
    ],
    "verdict": "CLEAR"

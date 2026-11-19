@@ -6,9 +6,9 @@
 
 use std::collections::BTreeSet;
 
-use super::super::geom::{bbox, dist, inside, open_edges, ring_edges, seg_closest, Pt};
+use super::super::geom::{bbox, dist, open_edges, ring_edges, Pt};
 use super::super::obstacles::{Obstacle, ObstacleIndex, Way};
-use super::super::placer::{band_nearest, Cap, InkPart, Placement, Subject};
+use super::super::placer::{nearest_ink, InkPart, Placement, Subject};
 use super::super::standard::{WEIGHT_OBSTACLE, WEIGHT_WAY};
 use super::seat::{area, box_within};
 use super::{
@@ -274,53 +274,16 @@ pub fn leader_blockers(
     soft_index(out, Vec::new())
 }
 
-/// The distance from `p` to one drawn part as a leader ends on it, and the part's point nearest `p` (`p` itself where it lies on the ink):
-/// a closed part's outline drawn out by its own stroke's half-width, a stroke's band as the sheet draws it, its cap read
-/// ([`band_nearest`], feature 449 T193).
-fn ink_nearest(part: &InkPart, p: Pt) -> (f64, Pt) {
-    if part.line {
-        let (a, b) = band_nearest(&[p], part);
-        return (dist(a, b), b);
-    }
-    if inside(p.0, p.1, &part.pts) {
-        return (0.0, p);
-    }
-    let (d, q) = ring_edges(&part.pts)
-        .map(|(a, b)| seg_closest(p, a, b))
-        .fold((f64::INFINITY, p), |best, q| {
-            let d = dist(p, q);
-            if d < best.0 {
-                (d, q)
-            } else {
-                best
-            }
-        });
-    if d <= part.half {
-        (0.0, p)
-    } else {
-        (
-            d - part.half,
-            (
-                q.0 + (p.0 - q.0) * (part.half / d),
-                q.1 + (p.1 - q.1) * (part.half / d),
-            ),
-        )
-    }
-}
-
 /// A leader ends on the drawn thing it names, not on the box around its parts (feature 283 - the tax barge's and the old pines' leaders
-/// ended 5-6 ft short). The Python measured the union of the parts with shapely, each stroke buffered to a polygon with its cap and a
-/// stroked outline drawn out by its stroke, GEOS drawing each round end, bend and corner as chords; here the distance to the union is the
-/// least distance to a part - the same wherever the leader's start lies outside every part, as a caption's block beside its subject
-/// does - and each part is measured exactly ([`ink_nearest`]), so a tip near a round end, bend or corner stands up to `r (1 - cos(pi /
-/// 64))` from GEOS's (0.12% of the half-width; measured on the pool sheets by `parse/lockstep_labels.rs`).
-///
-/// A disc's ink is its drawn curve ([`drawn_ink`]), not the box the reader keeps as its outline (feature 449 T192: three pool leaders ended
-/// 1.75 to 4.45 px off the curve); a stroke's is its band as the sheet draws it, its `stroke-linecap` read, and a closed part's its outline
-/// drawn out by its own stroke (feature 449 T193: a leader past a butt end stopped up to the half-width short of the ink, and one to a
-/// stroked building inside its stroke). A leader whose start already lies on the ink it names ties nothing back - the caption touches its
-/// subject - so it is dropped (feature 449 T184; the Python divided by the zero distance there). The placer's own leader ends on the same
-/// ink (`Subject::ink`, feature 449 T192), so this leaves every leader a hand sheet's subject scores as it was scored.
+/// ended 5-6 ft short). A disc's ink is its drawn curve ([`drawn_ink`]), not the box the reader keeps as its outline (feature 449 T192:
+/// three pool leaders ended 1.75 to 4.45 px off the curve); a stroke's is its band as the sheet draws it, its `stroke-linecap` read, and a
+/// closed part's its outline drawn out by its own stroke (feature 449 T193: a leader past a butt end stopped up to the half-width short of
+/// the ink, and one to a stroked building inside its stroke), their corners joined as the sheet joins them (T194). The tip is the
+/// placer's own ([`nearest_ink`] from the leader's start; T194: this measured each part again with its own `ink_nearest`, the Python
+/// with shapely's union, which drew each round end and corner as chords), so this leaves every leader a hand sheet's subject scores as it
+/// was scored (`Subject::ink`, feature 449 T192). A leader whose start already lies on the ink it names ties nothing back - the caption
+/// touches its subject - so it is dropped (feature 449 T184; the Python divided by the zero distance there); one to parts that draw no
+/// ink is left as it was scored.
 ///
 /// Research:
 ///     its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1.5 (leader already touching ink, left alone)
@@ -335,24 +298,19 @@ pub fn leader_to_ink(p: Placement, parts: &[&Shape]) -> Placement {
         .filter(|s| s.poly.len() >= if s.line { 2 } else { 3 })
         .map(|s| drawn_ink(s))
         .collect();
-    let nearest = |q: Pt| {
-        ink.iter()
-            .map(|i| ink_nearest(i, q))
-            .fold(
-                (f64::INFINITY, q),
-                |best, n| if n.0 < best.0 { n } else { best },
-            )
+    let Some(at_end) = nearest_ink(&[end], &ink) else {
+        return p;
     };
-    if ink.is_empty() || nearest(end).0 < 1.5 {
+    if dist(at_end.0, at_end.1) < 1.5 {
         return p;
     }
-    let tip = nearest(start).1;
-    let d = dist(start, tip);
+    let (a, tip) = nearest_ink(&[start], &ink).unwrap_or(at_end);
+    let d = dist(a, tip);
     if d == 0.0 {
         return Placement { leader: None, ..p };
     }
     let trim = min(1.0, d / 4.0);
-    let (ux, uy) = ((tip.0 - start.0) / d, (tip.1 - start.1) / d);
+    let (ux, uy) = ((tip.0 - a.0) / d, (tip.1 - a.1) / d);
     Placement {
         leader: Some((start, (tip.0 - ux * trim, tip.1 - uy * trim))),
         ..p
@@ -378,13 +336,19 @@ pub fn drawn_ink(s: &Shape) -> InkPart {
             line: true,
             half: max(s.half, 0.5),
             cap: s.cap,
+            join: s.join,
+            miter: s.miter,
+            closed: s.closed,
+            dash: s.dash.clone(),
+            offset: s.offset,
         };
     }
     let outline = |pts: Vec<Pt>| InkPart {
         pts,
-        line: false,
         half: s.edge,
-        cap: Cap::Butt,
+        join: s.join,
+        miter: s.miter,
+        ..InkPart::default()
     };
     let [p0, p1, p2, p3] = s.poly[..] else {
         return outline(s.poly.clone());

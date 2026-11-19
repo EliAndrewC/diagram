@@ -27,8 +27,13 @@ static NAMED: LazyLock<Regex> = LazyLock::new(|| {
         r"(?i)\b(?:round|rounds|seed|seeds|hour|amendment|item|items|change|wave|batch|step|task|feature|proposal|part|tier|version|line|group)\s+\d+(?:\s*(?:-|and|to)\s*\d+)?\b",
     )
 });
-static LABEL: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?is)(?=.*\bmeasured\b)(?=.*\b20\d\d-\d\d-\d\d\b)(?=.*\()|\bm:[\w.-]+"));
+/// A sentence's label: a measurement's word, date and method anywhere in it, or an `m:` key. The lookaheads are tried at the start alone
+/// (`\A`), which answers as trying them everywhere did - each sees to the end - where every position, each running to the end, cost an
+/// unlabeled sentence about half its length squared in steps (feature 449, 2026-11-18: past a million near 1,400 characters by that
+/// arithmetic; a 20,000-character one erred at the old limit, measured by `the_label_search_is_linear_in_its_sentence`).
+static LABEL: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"(?is)\A(?=.*\bmeasured\b)(?=.*\b20\d\d-\d\d-\d\d\b)(?=.*\()|\bm:[\w.-]+")
+});
 static COMMAND_SPAN: LazyLock<Regex> = LazyLock::new(|| re(r"/|::|=|\bmake "));
 static SPLIT4: LazyLock<Regex> = LazyLock::new(|| re(r"(?<=\.)\s+|\n(?=\S)"));
 static LEAD4: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*4\."));
@@ -55,7 +60,7 @@ fn folded(text: &str) -> String {
     let lower = text.to_lowercase();
     let words: Vec<&str> = WORD
         .find_iter(&lower)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str())
         .collect();
     format!(" {} ", words.join(" "))
@@ -64,7 +69,7 @@ fn folded(text: &str) -> String {
 fn split_on<'t>(pattern: &Regex, text: &'t str) -> Vec<&'t str> {
     let mut out = Vec::new();
     let mut at = 0;
-    for gap in pattern.find_iter(text).flatten() {
+    for gap in pattern.find_iter(text).map_while(Result::ok) {
         out.push(&text[at..gap.start()]);
         at = gap.end();
     }
@@ -79,7 +84,7 @@ fn gm_quotes(section: &str) -> Vec<String> {
         .into_owned();
     let bytes = masked.as_bytes();
     let mut out: Vec<String> = Vec::new();
-    for m in GM.find_iter(&masked).flatten() {
+    for m in GM.find_iter(&masked).map_while(Result::ok) {
         let line_start = masked[..m.start()].rfind('\n').map_or(0, |p| p + 1);
         if masked[line_start..m.start()].matches('"').count() % 2 == 1 {
             continue;
@@ -234,7 +239,7 @@ fn sentences_outside_spans<'t>(pattern: &Regex, text: &'t str) -> Vec<&'t str> {
         .into_owned();
     let mut out = Vec::new();
     let mut at = 0;
-    for gap in pattern.find_iter(&masked).flatten() {
+    for gap in pattern.find_iter(&masked).map_while(Result::ok) {
         out.push(&text[at..gap.start()]);
         at = gap.end();
     }
@@ -266,7 +271,7 @@ fn uncited_differential(section: &str) -> String {
 
 /// The task whose approach block's item 6 routes no red result through `make arbiter-ask` (D35's wording), or "".
 fn missing_red_exit(section: &str) -> String {
-    for c in APPROACH_HEAD.captures_iter(section).flatten() {
+    for c in APPROACH_HEAD.captures_iter(section).map_while(Result::ok) {
         let rest = &section[c.get(0).map_or(0, |g| g.end())..];
         let block = NEXT_23
             .find(rest)
@@ -296,12 +301,12 @@ fn tasks_without_approach(spec_dir: &Path, plan: &str) -> Vec<String> {
     let tasks = std::fs::read_to_string(spec_dir.join("tasks.md")).unwrap_or_default();
     let have: Vec<String> = APPROACH_HEAD
         .captures_iter(&joined)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     OPEN_TASK
         .captures_iter(&tasks)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .filter(|t| !have.contains(t))
         .collect()
