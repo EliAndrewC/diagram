@@ -42,8 +42,8 @@ pairs, so they are read back out of the drawing:
 
 | file | look here when |
 |---|---|
-| `sheet.py` | a magistracy page lights the wrong thing, or the census names ink with no kind. Every element or group carries `data-kind="<key>"` (the nearest one wins; `"-"` rules it out); the reader tokenizes the sheet (never an XML round trip - the page carries the sheet's own bytes) and re-opens a group's opening tag around each differently-tagged piece, so a transform or inherited fill still applies. `element_kinds` is what the pack audit reads to find a program item by its tag. The page half - the pieces, the census, the page written - is `rust/mode_a/src/sheet/page.rs` (feature 449 T150), and `write_sheet_page` here is a call to it (`l7r-gate.sh mode-a sheet-page`) |
-| [`compound_kinds/`](compound_kinds/__init__.py) | a magistracy modal says something wrong, or a new kind is drawn. The hamlet form exactly (one About-form file per kind under `assets/modals/sheet/`), a SEPARATE registry (`COMPOUND_CLASSES`, passed as `render_page(registry=)`) because a compound's well is written about a compound. Every kind is written from an existing finding; a kind no research section covers says `(no dedicated entry - recorded as silent)` and so lists no references - the gap the GM can see. The magistracies program in `buildings/types.json` names these kinds and states no class or why of its own: `programs.md` and the audit read the kind's guesses (`buildings.types.classification`) |
+| `rust/mode_a/src/sheet.rs`, `sheet/page.rs` (`sheet.py` here is only the generators' two calls into it, `draw_hand_sheet` and `draw_compound_sheet`; its Python reader and `write_sheet_page` deleted, feature 449 T212) | a magistracy page lights the wrong thing, or the census names ink with no kind. Every element or group carries `data-kind="<key>"` (the nearest one wins; `"-"` rules it out); the reader tokenizes the sheet (never an XML round trip - the page carries the sheet's own bytes) and re-opens a group's opening tag around each differently-tagged piece, so a transform or inherited fill still applies. `element_kinds` is what the audit reads to find a program item by its tag. The page half - the pieces, the census, the page written - is `sheet/page.rs` (feature 449 T150) |
+| [`compound_kinds/`](compound_kinds/__init__.py) | a magistracy modal says something wrong, or a new kind is drawn. The hamlet form exactly (one About-form file per kind under `assets/modals/sheet/`), a SEPARATE registry (`COMPOUND_CLASSES`, passed as `render_page(registry=)`) because a compound's well is written about a compound. Every kind is written from an existing finding; a kind no research section covers says `(no dedicated entry - recorded as silent)` and so lists no references - the gap the GM can see. The magistracies program in `buildings/types.json` names these kinds and states no class or why of its own: `programs.md` and the audit read the kind's guesses (`classification`, `rust/mode_a/src/types.rs`) |
 
 **A part is its own kind and lights with its parent** (feature 264, GM 2026-09-27: *"individual features inside of
 buildings or other features to get their own individual highlighting"*). A hearth, a pond, a genkan, a labeled room,
@@ -53,11 +53,11 @@ order), `render_page(within=)` writes them as `data-in` AFTER `data-k` (the id m
 then `data-k`), and `page.js` files the part under its parents too, so the kitchen lights its hearth and the hearth
 lights no kitchen. A room is drawn as its own floor - the building's fill, one same-color rect per room, then the
 outline with `fill="none"` (0 px changed) - and the pack audit folds such a rect into its building
-(`pack_audit/parse.py` `rooms_folded`). The id map holds past 63 kinds on one page (green counts the rows,
+(`rust/mode_a/src/parse.rs` `rooms_folded`). The id map holds past 63 kinds on one page (green counts the rows,
 `raster::palette_rgb`), and a sheet page's id map draws text unblended (`crisp_text`, set when `within=` is given),
 so a label never answers as its neighbor in the palette; hamlet id maps are untouched.
 
-Each pool magistracy's `.gen.py` calls `write_sheet_page(svg, COMPOUND_CLASSES)` after its PNG and fails if the census
+Each pool sheet's `.gen.py` calls `draw_hand_sheet` (or `draw_compound_sheet`), which writes its page and fails if the census
 is not clean; the placer's `emit_svg` writes the kinds itself (`BuildingSpec.feature`). A map's own facts go in its
 notes' "Map notes / Features" block keyed by kind, as for a hamlet. `tests/interactive/test_compound_kinds.py` holds
 every sheet complete, the registry closed over the five maps, and the GM's two examples (the threshold stones say

@@ -19,8 +19,8 @@ use super::{get, items, len, BEGIN, END};
 use crate::parse::{parse_marked, WELL_FILL};
 use crate::tagged::marks;
 
-/// The palette's latrine and utility fill (`pack_audit/program_rules.py`'s `PRIVY_FILL`, which stays there for the Python's checks under
-/// the lockstep rule): a privy is a latrine-tagged rect in it.
+/// The palette's latrine and utility fill (the audit's [`crate::audit::program_rules::PRIVY_FILL`] too): a privy is a latrine-tagged
+/// rect in it.
 pub const PRIVY_FILL: &str = "#7E726A";
 
 /// The number words a count may be typed in, zero to twenty.

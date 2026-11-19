@@ -1,4 +1,6 @@
-"""A hand-drawn sheet as an interactive page: the SVG's own `data-kind` tags are the class side list (feature 262).
+"""A Mode A sheet drawn whole by the Rust engine: the pool generators' one call into it (feature 449 T150-T152).
+
+The page it writes is a hand-drawn sheet as an interactive page, the SVG's own `data-kind` tags the class side list (feature 262).
 
 The GM, 2026-09-26, asking for clickable magistracy maps: *"the main important thing is that the labels and the
 features on the building diagram for each magistracy have a common source, such that changing that source in one
@@ -8,154 +10,23 @@ element or group carries `data-kind="<key>"` - the nearest one wins - and `data-
 ruling. The label drawn inside a feature's group is that feature's ink, so relabeling a building is one edit to the
 sheet and nothing else; what a KIND is lives once, in `compound/`'s registry.
 
-THE READER KEEPS THE SHEET'S BYTES. It tokenizes rather than parsing as XML, because an XML round trip rewrites
-attributes, namespaces and entities, and the page is meant to be a second serialization of the same drawing. A
-subtree with no differently-tagged descendant is one fragment, verbatim. A group that holds a differently-tagged
-descendant is descended into, and each piece is emitted inside COPIES of its ancestors' opening tags, so a
-`transform` or an inherited `fill` still applies; the pieces stay in document order, so the paint order is the
-sheet's. Comments are dropped (they are the author's notes, not ink).
-
-Look here when: an element of a magistracy page lights with the wrong kind (its tag, or its nearest tagged
-ancestor's), the census names ink with no kind, or a new Mode A sheet needs a page. The registry is
-`compound/`. THE PAGE IS RUST since feature 449 T150 (the engine port's step 2): `rust/mode_a/src/sheet/page.rs` regroups the
-sheet into pieces and writes the page (`rust/mode_a/src/page.rs`), and `write_sheet_page` below is the one call the
-magistracies' generators make, run as `scripts/gates/l7r-gate.sh mode-a sheet-page`. THE COUNTRY SHRINE IS DRAWN WHOLE BY RUST since
-feature 449 T151 (step 3a): its generator calls `draw_hand_sheet`, run as `l7r-gate.sh mode-a hand-sheet`
-(`rust/mode_a/src/sheet/hand.rs`), which places the captions, renders the picture and writes the page.
+Look here when: a pool generator's call to the Mode A engine fails. THE SHEET IS RUST: its reader is
+`rust/mode_a/src/sheet.rs`, its page `rust/mode_a/src/sheet/page.rs` (feature 449 T150), a hand sheet drawn whole by
+`draw_hand_sheet` (`l7r-gate.sh mode-a hand-sheet`, `rust/mode_a/src/sheet/hand.rs`, T151) and a generated one by
+`draw_compound_sheet` (`l7r-gate.sh mode-a compound`, T152). This module is only those two calls, which the pool's `.gen.py`
+files make; the Python reader (`parse`, `Node`, `element_kinds`) and `write_sheet_page` went with the Python audit, their last
+importer (T212). T157 rebuilds the pipeline that runs the generators and drops this module.
 """
 
-from __future__ import annotations
 
-# LOCKSTEP (feature 449 T170, `ask:449-engine-order` condition 3): the reader here (`Node`, `parse`, `DEFS`, `element_kinds`) is ported to `rust/mode_a/src/sheet.rs`, which `make notes-census`
-# runs; an edit here makes the same change there in the same commit, and `make rust-test CRATE=rust/mode_a` fails until it does
-# (`parse/lockstep.rs` holds the two equal on every pool sheet).
-# (T150) Its page half (`pieces`, `census`, `title_of` and the page's writing) is Rust alone, `rust/mode_a/src/sheet/page.rs`;
-# `write_sheet_page` is a call to it.
+from __future__ import annotations
 
 import builtins
 import importlib
 import json
 import os
-import re
 import subprocess
 import sys
-from dataclasses import dataclass, field
-
-from .classes import FeatureClass
-
-#: One token of the sheet: a comment, a CDATA section, a processing instruction, a declaration (its internal subset
-#: whole), a tag (a quoted attribute value may hold a `>`), or the text between them. FEATURE 449 T182: the tag was
-#: `<[^>]*>`, so a `>` in an attribute value or a CDATA section ended a tag early and the reader refused, or misread, a
-#: sheet ElementTree accepts.
-_TOKEN = re.compile(r"""<!--.*?-->|<!\[CDATA\[.*?\]\]>|<\?.*?\?>|<!(?:[^\[>]|\[[^\]]*\])*>|<(?:"[^"]*"|'[^']*'|[^'">])*>|[^<]+""", re.S)
-#: An element's name: any run XML allows (T182: it was `[A-Za-z]` first, so an element named outside it read nameless).
-_NAME = re.compile(r"""</?\s*([^\s/>!?"'=]+)""")
-#: A tag's kind and the kind it is a part of, in either quote (T182: a single-quoted `data-kind` read untagged).
-_KIND = re.compile(r"""\sdata-kind\s*=\s*(["'])([^<]*?)\1""")
-_PART_OF = re.compile(r"""\sdata-part-of\s*=\s*(["'])([^<]*?)\1""")
-
-#: The element whose content is never ink: patterns, gradients and clip paths are referenced, not drawn.
-DEFS = "defs"
-
-
-@dataclass
-class Node:
-    """One element of the sheet: its opening tag verbatim, its children, its closing tag verbatim (empty for a
-    self-closing element). `text` holds a text or whitespace run instead, and then there is no element."""
-
-    open: str = ""
-    name: str = ""
-    children: list[Node] = field(default_factory=list)
-    close: str = ""
-    text: str = ""
-    start: int = -1  # the byte offset of the opening tag in the sheet - what the pack audit's labels are keyed by
-
-    @property
-    def kind(self) -> str | None:
-        m = _KIND.search(self.open)
-        return m.group(2) if m else None
-
-    @property
-    def part_of(self) -> str | None:
-        """The kind this element is a PART of though drawn outside its group - for paint order (feature 264: the
-        genkan is drawn after the garden so the garden does not cover it, and is still the residence's)."""
-        m = _PART_OF.search(self.open)
-        return m.group(2) if m else None
-
-    def source(self) -> str:
-        """The element's own bytes, reassembled - comments inside it are dropped, nothing else changes."""
-        if not self.name:
-            return self.text
-        return self.open + "".join(c.source() for c in self.children) + self.close
-
-    def tagged_below(self) -> bool:
-        """Whether any descendant carries a kind of its own - the one reason to descend rather than emit whole."""
-        return any(c.name and (c.kind is not None or c.tagged_below()) for c in self.children)
-
-
-def parse(svg: str) -> Node:
-    """The sheet as a tree rooted at its `<svg>` element. Whatever precedes the root (an XML declaration, a
-    comment) is not part of the drawing; a sheet with no `<svg>` element, or one that never closes it, is refused."""
-    stack: list[Node] = [Node(name="#document")]
-    for m in _TOKEN.finditer(svg):
-        tok = m.group(0)
-        if tok.startswith("<![CDATA["):
-            # character data, kept as the sheet's bytes like any text run (T182: its `<` and `>` no longer read as tags)
-            stack[-1].children.append(Node(text=tok))
-            continue
-        if tok.startswith("<!--") or tok.startswith("<?") or tok.startswith("<!"):
-            continue
-        if not tok.startswith("<"):
-            stack[-1].children.append(Node(text=tok))
-            continue
-        nm = _NAME.match(tok)
-        name = nm.group(1) if nm else ""
-        if tok.startswith("</"):
-            if len(stack) < 2 or stack[-1].name != name:
-                raise ValueError(f"unbalanced </{name}> in the sheet (open: {stack[-1].name})")
-            stack[-1].close = tok
-            stack.pop()
-            continue
-        node = Node(open=tok, name=name, start=m.start())
-        stack[-1].children.append(node)
-        if not tok.endswith("/>"):
-            stack.append(node)
-    if len(stack) != 1:
-        raise ValueError(f"the sheet ends inside <{stack[-1].name}>")
-    roots = [c for c in stack[0].children if c.name == "svg"]
-    if not roots:
-        raise ValueError("no <svg> element in the sheet")
-    return roots[0]
-
-
-def element_kinds(svg: str) -> dict[int, str]:
-    """The kind of every tagged-or-inheriting element, keyed by the byte offset of its opening tag - how the pack
-    audit, which reads the sheet with its own regexes, learns what each label it found belongs to (feature 262,
-    FR-003a: the audit finds a program item by its tag, not by a pattern over its label). Untagged elements are
-    absent; `<defs>` content is absent."""
-    out: dict[int, str] = {}
-
-    def visit(node: Node, inherited: str | None) -> None:
-        if not node.name or node.name == DEFS:
-            return
-        kind = node.kind if node.kind is not None else inherited
-        if kind is not None:
-            out[node.start] = kind
-        for c in node.children:
-            visit(c, kind)
-
-    visit(parse(svg), None)
-    return out
-
-
-@dataclass(frozen=True)
-class Census:
-    """What a sheet's tags amount to: drawn elements per kind, the ink with no kind (capped, as the hamlet census
-    is), and the kinds the registry does not know."""
-
-    counts: dict[str, int]
-    unclassed: list[str]
-    unregistered: list[str]
 
 
 #: The tree this module is in: its launcher builds and runs the Mode A engine (`scripts/gates/l7r-gate.sh mode-a`).
@@ -210,24 +81,6 @@ def draw_compound_sheet(spec_path: str) -> int:
     a wall, a rule that cannot hold) is raised as the engine's exception. The generator's exit is returned."""
     _, code = _engine(["compound", spec_path])
     return code
-
-
-def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_raster: bool | None = None, svg: str | None = None) -> Census:
-    """`<map>.html` beside `<map>.svg`, from the sheet's own tags - and the sheet's census, for the caller to report. Written by
-    the Mode A engine (`l7r-mode-a sheet-page`, feature 449 T150): `with_raster` defaults there to the render condition every
-    other page uses (feature 208: no picture when `DIAGRAM_SKIP_RENDER=1`), and the map's `<map>.notes.md` "Map notes" block is
-    read from the output path, as for a hamlet. `svg` is the sheet's text when it is not the file's - a hand sheet's with its
-    captions placed (feature 286, the placer `rust/mode_a/src/caption_place.rs`), handed on stdin; the page is still written beside, and named for,
-    `svg_path`. `registry` is the engine's own, read from the same modal files (`compound_kinds`); every caller passes
-    `COMPOUND_CLASSES`."""
-    del registry  # the engine reads the same registry from the tree (`l7r_gate_registry::about::compound_classes`)
-    argv = ["sheet-page", svg_path]
-    if with_raster is not None:
-        argv.append("--with-raster" if with_raster else "--no-raster")
-    if svg is not None:
-        argv.append("--stdin")
-    out, _ = _engine(argv, svg)
-    return Census(dict(out["counts"]), out["unclassed"], out["unregistered"])
 
 
 def draw_hand_sheet(svg_path: str) -> int:

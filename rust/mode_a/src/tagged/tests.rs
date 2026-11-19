@@ -1,5 +1,4 @@
-//! The tagged marks (feature 449 T170): what a mark belongs to, a path's points, a translate and the refusals; the lockstep
-//! (`parse/lockstep.rs`) holds every mark of every pool sheet against the Python's.
+//! The tagged marks (feature 449 T170): what a mark belongs to, a path's points, a translate and the refusals.
 //!
 //! Research:
 //!     the tagged marks' tests - NONE: fixtures and assertions, deciding nothing about a building
@@ -172,4 +171,12 @@ fn an_attribute_in_either_quote_is_read() {
         (ms[0].x, ms[0].y, ms[0].w, ms[0].h, ms[0].kind.as_deref()),
         (1.0, 2.0, 3.0, 4.0, Some("hut"))
     );
+}
+
+#[test]
+fn a_caption_s_font_size_is_its_leading_number_and_a_mark_with_no_points_is_none() {
+    let svg = r#"<svg><g font-size="12px"><text x="1" y="2">a</text></g><text x="1" y="2">b</text><polygon data-kind="x" points=""/></svg>"#;
+    let ms = marks(svg).unwrap();
+    let sizes: Vec<f64> = ms.iter().map(|m| m.font_size().unwrap()).collect();
+    assert_eq!(sizes, [12.0, 0.0]);
 }

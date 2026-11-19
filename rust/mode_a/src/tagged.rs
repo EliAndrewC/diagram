@@ -8,8 +8,7 @@
 //! THE PYTHON'S MEMO IS NOT CARRIED: `marks` there is an `lru_cache` of 16 because two readers of one sheet each asked it; here the census
 //! reads the marks once and hands them to the parse ([`crate::parse::parse_with`]), so no cache is needed and none decides anything.
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `tagged.py` stays for `pack_audit`'s Python checks until step 3; an edit of it makes the
-//! same change here in the same commit, and `parse/lockstep.rs` holds the two equal on every pool sheet.
+//! THE PYTHON IS DELETED: `tagged.py` went with the Python audit, its lockstep retired with it (feature 449 T212; `specs/449-rust-codebase/engine-plan.md`: lockstep tests retire with their Python): this module's own tests pin its behavior, and the pool sweep (`crate::pool_sweep`) puts every pool sheet and red fixture through it.
 //!
 //! Research:
 //!     the tagged marks - NONE: a sheet's elements read with their tags and paint, deciding nothing about a building

@@ -36,7 +36,7 @@ Three findings drove it, in order of weight:
    (`l7r/diagram/interactive/`, with a Mode A kind registry beside the Mode B classes), the render
    cache and pool index (`l7r/diagram/pipeline/`), and the sheet-follows-its-map rule (a Mode A
    sheet of a place a settlement map draws is checked against that map's manifest -
-   `tools/pack_audit/mapmatch.py`, feature 257). A split would put that infrastructure in a third
+   `rust/mode_a/src/audit/mapmatch.rs`, feature 257). A split would put that infrastructure in a third
    package both depend on; it would not separate the two.
 2. **The documentary split already exists.** `docs/usage.md` is the shared usage document (scale
    ladder, labeling, rendering, pool layout, the `make` ladder); `docs/buildings.md` holds the
@@ -45,7 +45,7 @@ Three findings drove it, in order of weight:
    working on" - is one word per request, and a second package would cost the same word.
 3. **The asymmetry argues AGAINST splitting.** Mode B is a parametric engine with a scripted hamlet
    generator, a frozen legacy pool, CodeBuild, perf bookends and the gate. Mode A is a handful of
-   hand-drawn sheets, one draft placer, one geometry audit (`tools/pack_audit/`) and its review
+   hand-drawn sheets, one draft placer, one geometry audit (`rust/mode_a/src/audit/`) and its review
    agents (`building-review`, `size-audit`). A separate buildings project would be a small one owning
    a large repository's process (spec-kit for every engine change, the gate, the switches). Today
    Mode A borrows that machinery without having to carry it.
@@ -54,7 +54,7 @@ Three findings drove it, in order of weight:
 
 Adding estates (or temples, keeps, battlefields) the way magistracies are done means, per type: a
 declaration in `l7r/diagram/buildings/types.json` and its program in `docs/building-programs.md`,
-a few checks in `tools/pack_audit/` and rows in `size-audit`'s anchor table, a pool directory with
+a few checks in `rust/mode_a/src/audit/` and rows in `size-audit`'s anchor table, a pool directory with
 its `.svg` and `.notes.md`, and the same review agents before it ships ([`docs/buildings.md`](buildings.md),
 "Adding a building type"). That grows `buildings/` without touching the boundary. And every new
 Mode A type is ALSO a feature a settlement map may draw (a city estate stands on a provincial-city

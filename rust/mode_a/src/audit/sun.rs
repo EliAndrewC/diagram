@@ -11,8 +11,8 @@
 //! footprint, the shifted footprint and that hull comes to. So a shadow is its [`hull`], its `intersects` read exactly on the hull's
 //! input points (`geo`'s robust predicates), and a caster's overlap with the bed and the bed's area are the products GEOS's shoelace
 //! gives an axis-aligned box, exactly. Only the bed's unshaded area is an overlay - `geo`'s union and difference, over `i_overlay` - and
-//! it decides one comparison, at least half the bed lit; `parse/lockstep_checks.rs` holds that verdict, every half hour, equal to the
-//! Python's and measures how far the area itself lies from GEOS's against how far the verdict lies from its threshold.
+//! it decides one comparison, at least half the bed lit; the port's lockstep (feature 449 T175, deleted with the Python by T212) held that
+//! verdict, every half hour, equal to the Python's, the area's distance from GEOS's under the verdict's least distance from its threshold.
 //!
 //! Research:
 //!     the garden's sun - NONE: the sun walked and the shadows cast by the figures whose claims stand on each, deciding nothing more
@@ -264,7 +264,7 @@ pub fn daylight() -> Vec<(f64, f64)> {
 }
 
 /// Each daylight half hour's unshaded area of the bed, with the threshold it is held to (`LIT_SHARE * bed.area`): what
-/// [`lit_hours`] counts, and what the lockstep measures against GEOS's.
+/// [`lit_hours`] counts.
 ///
 /// Research:
 ///     a tree's dappled light - GUESS research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: for a half-shade bed a tree's shadow is not counted, the bed needing hours in which nothing but a tree's leaves stands between it and the sun, the page's guess at how to count dappled light.
@@ -455,4 +455,30 @@ pub fn garden_sun(plan: &ParsedPlan, svg: &Sheet) -> Result<Vec<String>, Error> 
         }
     }
     Ok(out)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{rect_ring, shaders, Bed, Caster};
+    use crate::parse::Rect;
+
+    /// A half-shade bed is shaded by what stands, never by a tree (feature 283: a bed sown for half shade wants the trees' shade).
+    #[test]
+    fn a_tree_shades_a_sun_bed_and_not_a_half_shade_one() {
+        let r = Rect::new(0.0, 0.0, 30.0, 30.0, "", 0);
+        let bed = Bed::new(&r);
+        let caster = |what: &str, tree| Caster {
+            ring: rect_ring(&r),
+            height_ft: 20.0,
+            what: what.to_owned(),
+            tree,
+        };
+        let cs = [
+            caster("tree", true),
+            caster("hall", false),
+            caster("hall", false),
+        ];
+        assert_eq!(shaders(&bed, &cs, false), ["hall (2)", "tree"]);
+        assert_eq!(shaders(&bed, &cs, true), ["hall (2)"]);
+    }
 }

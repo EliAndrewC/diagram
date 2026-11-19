@@ -3,8 +3,7 @@
 //! `make size-table` prints), and the tagged kinds no row names ([`untabled_kinds`], feature 294 B15c). A tree crown, a tub, a road, an
 //! arch is drawn as a circle or a stroke, so the rect table alone left `size-audit` to measure it by hand.
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `size_marks.py` stays until T212 deletes it (its B15c sweep is `crate::pool_sweep`'s since T211); an
-//! edit of it makes the same change here in the same commit, and `parse/lockstep.rs` holds the two equal on every pool sheet.
+//! THE PYTHON IS DELETED: `size_marks.py` went with the Python audit, its lockstep retired with it (feature 449 T212; `specs/449-rust-codebase/engine-plan.md`: lockstep tests retire with their Python): this module's own tests pin its behavior, and the pool sweep (`crate::pool_sweep`) puts every pool sheet and red fixture through it (its B15c sweep among them).
 //!
 //! Research:
 //!     the size marks - NONE: a sheet's tagged marks measured in feet, deciding nothing about a building

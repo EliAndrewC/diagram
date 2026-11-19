@@ -318,6 +318,23 @@ fn with_kinds<T>(tree: &Path, f: impl FnOnce(&mut Kinds<'static>) -> T) -> T {
     f(&mut cache[i])
 }
 
+/// A check's further red fixtures, beside the one its registry row names: each a failure mode that row's fixture does not draw, found
+/// unnamed by T211 and wired by T212 (feature 449) to the check each was cut for - its git history and the Python test that read it.
+/// The pool sweep (`crate::pool_sweep`) holds each check to firing on each, under the tier of the sheet it was cut from.
+#[cfg(test)]
+pub(crate) const MORE_FIXTURES: &[(&str, &str)] = &[
+    // the second Ubame tub fix (the GM, 2026-07-26): one tub of 19 hanging 0.8 px into the house across a 9 px alley, its center
+    // outside - the residue a center test left once the gross case (`ubame-tubs-inside-red.svg`) was fixed
+    ("tubs_in_buildings", "ubame-tub-straddle-red.svg"),
+    // Hayakawa's frozen layout round (2026-07): its notice board far from every gate and its kura door 2 px inside its wall, the
+    // second sheet beside `ochiba-layout-red.svg` that the Python test held both checks to
+    ("notice_board_adrift", "hayakawa-layout-red.svg"),
+    ("floating_doors", "hayakawa-layout-red.svg"),
+    // the country shrine's precinct ringed by a compound wall (feature 254's fixture for `fence_not_wall`, which feature 268 replaced in
+    // its registry row by this check, a fence refused as well as a wall): the wall, beside `hoshigaoka-fenced-precinct-red.svg`'s fence
+    ("no_precinct_enclosure", "hoshigaoka-walled-red.svg"),
+];
+
 /// Every registered check, in the order the report prints them.
 pub const CHECKS: [Check; 43] = [
     // --- the shared layer: pure geometry, every sheet ---

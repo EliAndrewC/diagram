@@ -1,6 +1,5 @@
-//! The sheets of step 1's defect fixes (feature 449 T177, T182): each draws the form a fixed rule now judges as its page says, run
-//! through the Python and this port alike by the checks' lockstep (`check_fixtures.rs` adds them), and held here to the verdict the fix
-//! gives - each test fails on the rule as it stood before its fix.
+//! The sheets of step 1's defect fixes (feature 449 T177, T182): each draws the form a fixed rule now judges as its page says, held here
+//! to the verdict the fix gives - each test fails on the rule as it stood before its fix; `check_fixtures.rs` reports each too.
 //!
 //! Research:
 //!     the defect fixes' sheets - NONE: test sheets, deciding nothing about a building

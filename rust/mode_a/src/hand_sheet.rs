@@ -1,9 +1,8 @@
 //! What the size table reads of `l7r/diagram/labels/hand_sheet.py` (feature 449 T174): [`start_tags`], one function; the rest of that
 //! module (the hand sheet's caption placer) is the plan's step 3 (S8) and stays Python.
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `hand_sheet.py` stays for its Python importers (the pool generators' pages, `make
-//! sheet-render`) until step 3; an edit of its `start_tags` makes the same change here in the same commit, and `parse/lockstep.rs` holds
-//! the two equal on every pool sheet.
+//! THE PYTHON IS DELETED: `hand_sheet.py` went with T152, and the lockstep that held this to it with the Python audit (T212); this
+//! module's own tests pin it.
 //!
 //! Research:
 //!     the hand sheet's start tags - NONE: where each element's start tag lies in a sheet's text, deciding nothing about a building

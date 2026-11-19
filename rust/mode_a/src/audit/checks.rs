@@ -6,8 +6,7 @@
 //! The tub's and the board's rules are the engine's (`crate::compound`): the draft seats by the same predicates, so a generated sheet
 //! cannot seat what this audit would flag (feature 287, homes H29b).
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `checks.py` stays for the generators' Python until step 3; an edit of it makes the same
-//! change here in the same commit, and `parse/lockstep_checks.rs` holds every record of every function equal on every sheet it reads.
+//! THE PYTHON IS DELETED: `checks.py` went with the Python audit, its lockstep retired with it (feature 449 T212; `specs/449-rust-codebase/engine-plan.md`: lockstep tests retire with their Python): this module's own tests pin its behavior, and the pool sweep (`crate::pool_sweep`) puts every pool sheet and red fixture through it.
 //!
 //! Research:
 //!     the audit's checks - NONE: result records, lookups, geometry and checks applying thresholds whose claims stand on each; a check that decides a rule of its own carries its own claim

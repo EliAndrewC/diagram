@@ -48,8 +48,8 @@ import html
 import json
 import os
 
-from ..buildings.types import load_types
-from ..buildings.types import tiers as building_tiers
+from ..buildings import load_types
+from ..buildings import tiers as building_tiers
 from . import poolmaps
 
 SKILL_DIR = os.path.abspath(

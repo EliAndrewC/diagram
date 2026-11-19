@@ -2,10 +2,9 @@
 //! Python (feature 254, D1), read, shaped and validated here; a malformed file is refused naming the field, each refusal the Python's
 //! `ValueError` (or `TypeError`, `AttributeError`) word for word, since a refusal is a check's output and FR-002 binds it exactly.
 //!
-//! LOCKSTEP (the round arbiter's `ask:449-engine-order` condition 3): `types.py` stays the implementation for the Python that still
-//! imports it (the compound generators, `pool_index`, `poolmaps`, `pack_audit`'s labels and `mapmatch`, `compound_kinds`) until step 3
-//! deletes it; an edit of it makes the same change here in the same commit, and `types/tests.rs` holds this parse equal to the Python's on
-//! the real `types.json`.
+//! THE PYTHON IS DELETED (feature 449 T212): `types.py` went with the Python audit, its last full importer, and the lockstep in
+//! `types/tests.rs` with it; the Python pipeline reads only each type's tier and title, straight from the JSON (`l7r/diagram/buildings/`),
+//! until T157 rebuilds it. This is the one reader that validates the declaration.
 //!
 //! A KIND ITEM STATES NO CLASS OR WHY OF ITS OWN (feature 262, FR-003a): its kind's registry entry says what it is, so
 //! [`classification`] reads the kind's guesses from the Mode A registry (the gate's `registry` crate, the modal files), loaded the first

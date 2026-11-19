@@ -54,6 +54,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T215 make map with no GEN defaults to pool/hamlets/inashiro/inashiro.gen.py, which no longer exists (the hamlets are spec.json since feature 444) - a tool answering wrongly; the default points at a map that exists, or GEN is required with the refusal naming the forms (2026-11-19)
       research: rendering
+- [ ] T216 A make static coverage pass under-reported: during T212 (2026-11-19) the first coverage run after the lockstep tests were deleted reported 5 uncovered lines in rust/mode_a, and the next run named hundreds (report.rs, mapmatch, labels.rs, walls.rs) with no code change between - a check passing the bad (constitution XIV); find why (a stale profile, a cached result keyed too narrowly, a crate's coverage reused across a deletion) and fix it so the first run after a deletion reports what the deletion uncovered, with a test or a replay red on the old behavior
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

@@ -790,31 +790,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** no
 
 
-### T212 (<why: the finding or measurement that files it>)
+### T212 (T156's scoping, 2026-11-19: the Python audit and its lockstep lose their last reader once the pool sweep is Rust)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: with T211's Rust pool sweep landed, the Python audit (`l7r/diagram/tools/pack_audit/`), `interactive/sheet.py`'s reader half and `buildings/types.py` have no test left to serve; each remaining importer is re-pointed at the Rust or keeps the least Python it needs until T157 rebuilds the pipeline, and what nothing imports is deleted. The lockstep tests that held step 1's Rust audit to the Python's answers (`rust/mode_a/src/parse/lockstep*.rs` and the types lockstep) are deleted with their Python (engine-plan.md); the Rust sweep now holds the audit to its job. The three red fixtures no registry row named are wired to the check each was drawn for, or deleted. The deleted units' claims are carried to the Rust units that took their text, or go by the map's other outcomes.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the Python audit and its lockstep retired | the Rust pool sweep (T211) | none | none | none |
 
 ### T212 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** One audit, the Rust one, with no Python copy and no test holding it to one.
+2. **The constraints.** FR-001 and FR-003 (one implementation); engine-plan.md (lockstep tests retire with their Python); `ask:449-phase4-slices` Q10 (claims re-keyed in the cut that deletes their units); the arbiter's `ask:449-T152-rebuilt-claims`.
+3. **Where each comes from.** G: the GM, 2026-11-10 (spec.md records his approval to delete Python files once their Rust ports land) and 2026-11-19; R: the arbiter's rulings; O: T156's scoping.
+4. **Do they describe the world here?** Yes: T211 removed the audit's last test reader (observed 2026-11-19, method: the importers grepped after T211 landed).
+5. **The order.** After T211, before T213.
+6. **The exits.** Green: no importer of the deleted packages left, the lockstep gone, the sweep green, no claim stranded, `make static` and a `make map` of each sheet kind green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** A grep for each deleted module finds no importer; `claims gate` reports no stranded claim.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Three red fixtures nothing tested: wired or deleted, so the registry tests what it holds.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** none yet
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T213 (<why: the finding or measurement that files it>)
@@ -879,6 +880,33 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 |---|---|---|---|---|
 
 ### T215 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T216 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T216 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -5,9 +5,8 @@
 //! Every count and figure is the Python's: a cell index is `int(float // int)` as `CPython` computes a float floor division
 //! ([`crate::py::floordiv`]), a share is the Python's int-by-int division, and an area its `round()`, half to even.
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `grids.py` stays for `pack_audit`'s Python checks and report until step 3; an edit of it
-//! makes the same change here in the same commit, and `parse/lockstep.rs` holds the two equal on every pool sheet. Its claims stay keyed
-//! to the `.py` units (`ask:449-phase4-slices` Q10); each copy here carries the same claim.
+//! THE PYTHON IS DELETED: `grids.py` went with the Python audit, its lockstep retired with it (feature 449 T212; `specs/449-rust-codebase/engine-plan.md`: lockstep tests retire with their Python): this module's own tests pin its behavior, and the pool sweep (`crate::pool_sweep`) puts every pool sheet and red fixture through it. Its claims were carried here by
+//! `dev/claims-ports.json` (`ask:449-phase4-slices` Q10).
 //!
 //! Research:
 //!     the grid measures - NONE: a sheet's rects counted on a grid of cells, deciding nothing about a building
@@ -24,8 +23,7 @@ use crate::py::{floordiv, int, round_int};
 pub const FTPX: f64 = 3.0;
 
 // THE PYTHON'S DEFAULT ARGUMENTS, as constants (feature 449 T174): Rust has no default arguments, so each figure `grids.py`'s signatures
-// default to lives here - where its claim can stand beside it, and where an edit of a default there is made in the same commit (the
-// lockstep compares each to the Python's signature, `parse/lockstep_audit.rs`). A caller passes them as the Python's caller took them.
+// default to lived here - where its claim can stand beside it. A caller passes them as the Python's caller took them.
 
 /// The grid's cell, px (every measure's `cell=2`).
 pub const CELL: usize = 2;

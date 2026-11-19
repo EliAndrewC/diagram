@@ -1,5 +1,5 @@
 {
- "why": "feature 449 T166 (ask:449-phase4-slices Q10): each `.py` unit a slice's cut ports and deletes, by its `path::qualname`, mapped to the unit it became (`to`, a Rust item's `path::qualname`) and the task that ported it (`by`, `<feature> <task>`); `make claims-rekey` (which make land runs) carries each of its claims' index rows onto the port, owed a full check of the new code, and the push refuses a claim on a deleted `.py` unit this map does not carry. Under `retired` (feature 449 T184, ask:449-T184-elongated-retired and ask:449-T184-elongated-retired-2), each `.py` unit deleted and not ported because the research overruled its rule, with the task that removed it (`by`), the research page that overrules it (`page`, `research/questions/<file>.html`, a file in the tree), why (`why`, one line) and the claims round's finding against its rule (`finding`, `<path>::<qualname>#<label>`): the push lets its claims go only where the unit is gone and the merge base's row of its `finding` (a key of the same label) reads DRIFTED or MISLABELED (any other verdict is a new ask, `make arbiter-ask`; ask:449-T184-elongated-retired-2), and `make claims-rekey` drops their index rows and deferred entries. Under `rebuilt` (feature 449 T152, ask:449-T152-rebuilt-claims), each `.py` FILE a phase task deleted after rebuilding its job in Rust from a derivation judged SOUND, blind to the old code ('An algorithm is rebuilt, never ported'), with that task (`by`, `<feature> <task>`, whose block names the file on its `old-code:` line, literally or by a glob), the Rust module or directory doing the file's job now (`as`, a path or a list of paths in the tree) and the task's derivation (`derivation`, its block's `derivation:` line, a file in the tree): a unit with its own `ports` or `retired` entry is handled there and `rebuilt` covers the file's other units; the push refuses a rebuilt file still in the tree, and lets its units' claims go only once nothing under `as` is owed (`make claims-owed`), the rebuilt code's own `Research:` lines each checked fresh - no old claim is matched to the new code; `make claims-rekey` drops their index rows and deferred entries",
+ "why": "feature 449 T166 (ask:449-phase4-slices Q10): each `.py` unit a slice's cut ports and deletes, by its `path::qualname`, mapped to the unit it became (`to`, a Rust item's `path::qualname`) and the task that ported it (`by`, `<feature> <task>`); `make claims-rekey` (which make land runs) carries each of its claims' index rows onto the port, owed a full check of the new code, and the push refuses a claim on a deleted `.py` unit this map does not carry. Under `retired` (feature 449 T184, ask:449-T184-elongated-retired and ask:449-T184-elongated-retired-2), each `.py` unit deleted and not ported because the research overruled its rule, with the task that removed it (`by`), the research page that overrules it (`page`, `research/questions/<file>.html`, a file in the tree), why (`why`, one line) and the claims round's finding against its rule (`finding`, `<path>::<qualname>#<label>`): the push lets its claims go only where the unit is gone and the merge base's row of its `finding` (a key of the same label) reads DRIFTED or MISLABELED (any other verdict is a new ask, `make arbiter-ask`; ask:449-T184-elongated-retired-2), and `make claims-rekey` drops their index rows and deferred entries. Under `rebuilt` (feature 449 T152, ask:449-T152-rebuilt-claims), each `.py` FILE a phase task deleted after rebuilding its job in Rust from a derivation judged SOUND, blind to the old code ('An algorithm is rebuilt, never ported'), with that task (`by`, `<feature> <task>`, whose block names the file on its `old-code:` line, literally or by a glob), the Rust module or directory doing the file's job now (`as`, a path or a list of paths in the tree) and the task's derivation (`derivation`, its block's `derivation:` line, a file in the tree): a unit with its own `ports` or `retired` entry is handled there and `rebuilt` covers the file's other units; the push refuses a rebuilt file still in the tree, and lets its units' claims go only once nothing under `as` is owed (`make claims-owed`), the rebuilt code's own `Research:` lines each checked fresh - no old claim is matched to the new code; `make claims-rekey` drops their index rows and deferred entries Three more outcomes of a port (feature 449 T212, ask:449-T212-stranded-claims), each gated exactly so: (A) an entry marked `\"relabeled\": true` lets a claim its port does not carry word for word go, dropped and not carried, only where the merge base's row of that Python claim reads MISLABELED and a target carries a claim of the same label with a checked row; (B) an entry's `to` may be a list, a split unit's claims each carried to the one target whose unit carries its own text; (C) a claim of NONE research whose unit is gone and whose file a port's cut deleted is dropped only when every other claim of that file is carried or dropped by these rules. Anything else - a Python row not MISLABELED, a claim text on no listed target, a stranded claim citing research - is a new ask.",
  "retired": {
   "l7r/diagram/labels/hand_sheet.py::ELONGATED": {
    "by": "449 T184",
@@ -198,6 +198,502 @@
   "l7r/diagram/labels/standard.py::PITCH_EM": {
    "to": "rust/mode_a/src/labels/hand_sheet.rs::PITCH_EM",
    "by": "449 T151"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::DOORLESS_KINDS": {
+   "to": "rust/mode_a/src/audit/checks.rs::DOORLESS_KINDS",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::DOOR_FLUSH_TOL_PX": {
+   "to": "rust/mode_a/src/audit/checks.rs::DOOR_FLUSH_TOL_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::DOOR_NEAR_PX": {
+   "to": "rust/mode_a/src/audit/checks.rs::DOOR_NEAR_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::OCCLUSION_MIN_PX": {
+   "to": "rust/mode_a/src/audit/checks.rs::OCCLUSION_MIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::OPENING_MAX_PX": {
+   "to": "rust/mode_a/src/audit/checks/walls.rs::OPENING_MAX_PX",
+   "by": "449 T212",
+   "relabeled": true
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::PASSAGE_CLEAR_MIN_PX": {
+   "to": "rust/mode_a/src/audit/checks/walls.rs::PASSAGE_CLEAR_MIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::PASSAGE_DEPTH_PX": {
+   "to": "rust/mode_a/src/audit/checks/walls.rs::PASSAGE_DEPTH_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::TUB_BLDG_MIN_PX": {
+   "to": "rust/mode_a/src/audit/checks.rs::TUB_BLDG_MIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::TUB_WELL_MIN_PX": {
+   "to": "rust/mode_a/src/audit/checks.rs::TUB_WELL_MIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::WALL_FACE_CLEAR_FT": {
+   "to": "rust/mode_a/src/audit/checks/walls.rs::WALL_FACE_CLEAR_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::WALL_OVERLAP_MIN_PX": {
+   "to": "rust/mode_a/src/audit/checks/walls.rs::WALL_OVERLAP_MIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::aligned_gaps": {
+   "to": "rust/mode_a/src/audit/checks/walls.rs::aligned_gaps",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::doors_of": {
+   "to": "rust/mode_a/src/audit/checks.rs::doors_of",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::floating_doors": {
+   "to": "rust/mode_a/src/audit/checks.rs::floating_doors",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::gap_tag": {
+   "to": "rust/mode_a/src/audit/checks/walls.rs::gap_tag",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::occluded_foreground": {
+   "to": "rust/mode_a/src/audit/checks.rs::occluded_foreground",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::tubs_in_buildings": {
+   "to": "rust/mode_a/src/audit/checks.rs::tubs_in_buildings",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::tubs_off_their_doors": {
+   "to": "rust/mode_a/src/audit/checks.rs::tubs_off_their_doors",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/checks.py::tubs_on_wells": {
+   "to": "rust/mode_a/src/audit/checks.rs::tubs_on_wells",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/curves.py::DISC_SAG_PX": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::DISC_SAG_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/engine.py::KINDS": {
+   "to": "rust/mode_a/src/compound.rs::KINDS",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/engine.py::NOTICE_BOARD_MAX_FT": {
+   "to": "rust/mode_a/src/compound.rs::NOTICE_BOARD_MAX_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/engine.py::TUB_DOOR_MAX_FT": {
+   "to": "rust/mode_a/src/compound.rs::TUB_DOOR_MAX_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/engine.py::TUB_MAX_GAP_FT": {
+   "to": "rust/mode_a/src/compound.rs::TUB_MAX_GAP_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/grids.py::FTPX": {
+   "to": "rust/mode_a/src/grids.rs::FTPX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/grids.py::perimeter_hugging_pct": {
+   "to": "rust/mode_a/src/grids.rs::HUG_DEPTH_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/grids.py::top_vacant_rects": {
+   "to": [
+    "rust/mode_a/src/grids.rs::VACANT_MIN_SQFT",
+    "rust/mode_a/src/grids.rs::VACANT_DEPTH_FT"
+   ],
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/mapmatch.py::MAP_GRAIN_PX": {
+   "to": "rust/mode_a/src/audit/mapmatch.rs::MAP_GRAIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/mapmatch.py::SIZE_GRAIN_PX": {
+   "to": "rust/mode_a/src/audit/mapmatch.rs::SIZE_GRAIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/mapmatch.py::Transform.frame": {
+   "to": "rust/mode_a/src/audit/mapmatch.rs::Transform.frame",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/mapmatch.py::load_map": {
+   "to": "rust/mode_a/src/audit/mapmatch/features.rs::load_map",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/marks_drawn.py::DOOR_WALL_TOL_PX": {
+   "to": "rust/mode_a/src/audit/marks_drawn.rs::DOOR_WALL_TOL_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/palette.py::GRANARY_SLATS": {
+   "to": "rust/mode_a/src/audit/palette.rs::GRANARY_SLATS",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/palette.py::PRIVY": {
+   "to": "rust/mode_a/src/audit/palette.rs::PRIVY",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/palette.py::ROLES": {
+   "to": "rust/mode_a/src/audit/palette.rs::ROLE_NAMES",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/palette.py::WELL": {
+   "to": "rust/mode_a/src/audit/palette.rs::WELL",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::CAPS_RATIO": {
+   "to": "rust/mode_a/src/parse.rs::CAPS_RATIO",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::CHAR_W_BOLD": {
+   "to": "rust/mode_a/src/parse.rs::CHAR_W_BOLD",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::CHAR_W_BOLD_MIXED": {
+   "to": "rust/mode_a/src/parse.rs::CHAR_W_BOLD_MIXED",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::CHAR_W_FRAC": {
+   "to": "rust/mode_a/src/parse.rs::CHAR_W_FRAC",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::DOOR_MAX_AREA_PX": {
+   "to": "rust/mode_a/src/parse.rs::DOOR_MAX_AREA_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::MIN_BLDG_AREA_PX": {
+   "to": "rust/mode_a/src/parse.rs::MIN_BLDG_AREA_PX",
+   "by": "449 T212",
+   "relabeled": true
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::MIN_TREE_R_PX": {
+   "to": "rust/mode_a/src/parse.rs::MIN_TREE_R_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::_parse_labels": {
+   "to": "rust/mode_a/src/parse/labels.rs::parse_labels",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/parse.py::parse_svg": {
+   "to": "rust/mode_a/src/parse.rs::parse_svg",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::COMMON_ROOM_KIND": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::COMMON_ROOM_KIND",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::HIERARCHY": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::HIERARCHY",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::JOIN_PX": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::JOIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::KITCHEN_TUBS": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::KITCHEN_TUBS",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::PRIVY_FILL": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::PRIVY_FILL",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::PRIVY_MIN": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::PRIVY_MIN",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::RESIDENCE_PRIVIES": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::RESIDENCE_PRIVIES",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::ROW_KINDS": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::ROW_KINDS",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::TUB_KINDS": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::TUB_KINDS",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::VERANDA_FT": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::VERANDA_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::VERANDA_TOL_PX": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::VERANDA_TOL_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::fire_water_distribution": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::fire_water_distribution",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::lodging_entrances": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::lodging_entrances",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::privies_by_zone": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::privies_by_zone",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/program_rules.py::sheet_furniture": {
+   "to": "rust/mode_a/src/audit/program_rules.rs::sheet_furniture",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/roads.py::DESTINATION_KINDS": {
+   "to": "rust/mode_a/src/audit/roads.rs::DESTINATION_KINDS",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/roads.py::ROAD_GATE_TOL_FT": {
+   "to": "rust/mode_a/src/audit/roads.rs::ROAD_GATE_TOL_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/roads.py::_frame": {
+   "to": "rust/mode_a/src/audit/roads.rs::frame",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/roads.py::end_meets": {
+   "to": "rust/mode_a/src/audit/roads.rs::end_meets",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/roads.py::gate_feeds_its_road": {
+   "to": "rust/mode_a/src/audit/roads.rs::gate_feeds_its_road",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/roads.py::side_gates_met": {
+   "to": "rust/mode_a/src/audit/roads.rs::side_gates_met",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::APPROACH_FT": {
+   "to": "rust/mode_a/src/audit/shared.rs::APPROACH_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::ARCH_COUNTS": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::ARCH_COUNTS",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::AXIS_TOL_FT": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::AXIS_TOL_FT",
+   "by": "449 T212",
+   "relabeled": true
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::CLEAR_FT": {
+   "to": "rust/mode_a/src/audit/shared.rs::CLEAR_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::COVERAGE_CEILING": {
+   "to": "rust/mode_a/src/audit/shared.rs::COVERAGE_CEILING",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::COVERAGE_FLOOR": {
+   "to": "rust/mode_a/src/audit/shared.rs::COVERAGE_FLOOR",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::COVERAGE_TOL": {
+   "to": "rust/mode_a/src/audit/shared.rs::COVERAGE_TOL",
+   "by": "449 T212",
+   "relabeled": true
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::CROP_MAX_MARGIN_PX": {
+   "to": "rust/mode_a/src/audit/shared/ink.rs::CROP_MAX_MARGIN_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::CROP_TOL_PX": {
+   "to": "rust/mode_a/src/audit/shared/ink.rs::CROP_TOL_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::EDGE_TOL_FT": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::EDGE_TOL_FT",
+   "by": "449 T212",
+   "relabeled": true
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::GATE_MAX_FT": {
+   "to": "rust/mode_a/src/audit/shared.rs::GATE_MAX_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::GATE_MIN_FT": {
+   "to": "rust/mode_a/src/audit/shared.rs::GATE_MIN_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::HALL_MIN_SPAN_FT": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::HALL_MIN_SPAN_FT",
+   "by": "449 T212",
+   "relabeled": true
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::HUGGING_FLOOR": {
+   "to": "rust/mode_a/src/audit/shared.rs::HUGGING_FLOOR",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::INNERMOST_FT": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::INNERMOST_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::INNERMOST_TOL_FT": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::INNERMOST_TOL_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::OVERLAP_SHARE": {
+   "to": "rust/mode_a/src/audit/shared.rs::OVERLAP_SHARE",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::PARCHMENT_SHARE": {
+   "to": "rust/mode_a/src/audit/shared/ink.rs::PARCHMENT_SHARE",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::SHRINE_TREE_FT": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::SHRINE_TREE_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::STALL_FT": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::STALL_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::_path_points": {
+   "to": "rust/mode_a/src/audit/shared/ink.rs::path_points",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::arch_on_approach": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::arch_on_approach",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::gate_widths": {
+   "to": "rust/mode_a/src/audit/shared.rs::gate_widths",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::hall_at_an_end": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::hall_at_an_end",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::ink_bounds": {
+   "to": "rust/mode_a/src/audit/shared/ink.rs::visit",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::no_precinct_enclosure": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::no_precinct_enclosure",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::one_compound_shrine": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::one_compound_shrine",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::sanctuary_on_axis": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::sanctuary_on_axis",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::shrine_tree": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::shrine_tree",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::stall_width": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::stall_width",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::two_court_zoning": {
+   "to": "rust/mode_a/src/audit/shared.rs::two_court_zoning",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::viewbox_cropped": {
+   "to": "rust/mode_a/src/audit/shared/ink.rs::viewbox_cropped",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::well_clear_of_arch": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::well_clear_of_arch",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/shared.py::well_gear": {
+   "to": "rust/mode_a/src/audit/shared/grounds.rs::well_gear",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::BUILDING_FT": {
+   "to": "rust/mode_a/src/audit/sun.rs::BUILDING_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::DECL_DEG": {
+   "to": "rust/mode_a/src/audit/sun.rs::DECL_DEG",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::HALF_SHADE_BED_H": {
+   "to": "rust/mode_a/src/audit/sun.rs::HALF_SHADE_BED_H",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::LAT_DEG": {
+   "to": "rust/mode_a/src/audit/sun.rs::LAT_DEG",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::LIT_SHARE": {
+   "to": "rust/mode_a/src/audit/sun.rs::LIT_SHARE",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::MIN_BED_PX": {
+   "to": "rust/mode_a/src/audit/sun.rs::MIN_BED_PX",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::MIN_SUN_DEG": {
+   "to": "rust/mode_a/src/audit/sun.rs::MIN_SUN_DEG",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::NOTICE_BOARD_FT": {
+   "to": "rust/mode_a/src/audit/sun.rs::NOTICE_BOARD_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::NOT_STANDING": {
+   "to": "rust/mode_a/src/audit/sun.rs::NOT_STANDING",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::SMALL_BUILDING_FT": {
+   "to": "rust/mode_a/src/audit/sun.rs::SMALL_BUILDING_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::SMALL_BUILDING_SQFT": {
+   "to": "rust/mode_a/src/audit/sun.rs::SMALL_BUILDING_SQFT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::STEP_H": {
+   "to": "rust/mode_a/src/audit/sun.rs::STEP_H",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::SUN_BED_H": {
+   "to": "rust/mode_a/src/audit/sun.rs::SUN_BED_H",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::TREE_FT": {
+   "to": "rust/mode_a/src/audit/sun.rs::TREE_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::WALL_FT": {
+   "to": "rust/mode_a/src/audit/sun.rs::WALL_FT",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::casters": {
+   "to": "rust/mode_a/src/audit/sun.rs::casters",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::lit_hours": {
+   "to": [
+    "rust/mode_a/src/audit/sun.rs::lit_areas",
+    "rust/mode_a/src/audit/sun.rs::daylight"
+   ],
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::shaders": {
+   "to": "rust/mode_a/src/audit/sun.rs::daylight",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/sun.py::sun_at": {
+   "to": "rust/mode_a/src/audit/sun.rs::sun_at",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/tagged.py::marks": {
+   "to": "rust/mode_a/src/tagged.rs::marks",
+   "by": "449 T212"
+  },
+  "l7r/diagram/tools/pack_audit/tagged.py::path_walk": {
+   "to": "rust/mode_a/src/tagged.rs::path_walk",
+   "by": "449 T212"
   }
  }
 }

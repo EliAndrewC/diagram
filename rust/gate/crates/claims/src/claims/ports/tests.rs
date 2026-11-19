@@ -56,6 +56,7 @@ fn port(to: &str) -> Port {
     Port {
         to: to.to_owned(),
         by: "449 T999".to_owned(),
+        ..Port::default()
     }
 }
 
@@ -175,8 +176,12 @@ fn the_carry_rekeys_drops_and_leaves_each_row() {
         asked.push(k.to_owned());
         Some(span.clone())
     });
-    // the row without its text read it from the base; its verdict, note and pages kept, its old key recorded
-    assert_eq!(asked, ["l7r/diagram/m.py::SPAN#span"]);
+    // the rows without their text read it from the base - the unmapped `kept` too, which rule C reads (its research holds the file, so
+    // the NONE claim `lost` stays stuck); its verdict, note and pages kept, its old key recorded
+    assert_eq!(
+        asked,
+        ["l7r/diagram/m.py::SPAN#span", "l7r/diagram/m.py::kept#kept"]
+    );
     assert_eq!(
         done.carried,
         [
@@ -593,4 +598,316 @@ fn a_retired_claim_in_step_whose_finding_is_mislabeled_passes_and_its_row_drops(
         json!({"why": "w", "units": ["l7r/diagram/x.py::f"], "keys": []})
     );
     assert!(!carry_deferred(&mut d, &retired_map(), &cur));
+}
+
+// Three more outcomes of a port (feature 449 T212, `ask:449-T212-stranded-claims`): a relabeled claim (A), a split unit (B) and a NONE
+// claim left behind in a file a port's cut deleted (C).
+
+const FIXED: &str = "rust/mode_a/src/lib.rs::FIXED#ratio";
+const RATIO: &str = "l7r/diagram/n.py::RATIO#ratio";
+
+/// The ports: a constant carrying a corrected claim (A), and the three units of the first source (B, C).
+fn cur_of(extra: &[(&str, &str)]) -> Cur {
+    let mut cur = cur();
+    let fixed = "/// Research: ratio - GUESS: no page gives it; the sanctuary may stray 3 ft\npub const FIXED: f64 = 3.0;\n";
+    let mut sources = vec![(fixed.to_owned(), "rust/mode_a/src/lib.rs".to_owned())];
+    sources.extend(
+        extra
+            .iter()
+            .map(|(src, at)| ((*src).to_owned(), (*at).to_owned())),
+    );
+    for (src, at) in sources {
+        for u in rust_units(&src, &at).1 {
+            let u = Rc::new(u);
+            for c in &u.claims {
+                cur.insert(Row {
+                    key: u.key(c),
+                    code: u.code(c),
+                    unit: u.clone(),
+                    claim: c.clone(),
+                    research: String::new(),
+                });
+            }
+        }
+    }
+    cur
+}
+
+fn relabeled(to: &str) -> Port {
+    Port {
+        relabeled: true,
+        ..port(to)
+    }
+}
+
+/// The Python row MISLABELED at the merge base, and its correction checked on its port.
+fn relabel_index(verdict: &str, checked: bool) -> Index {
+    let mut idx = json!({
+        RATIO: {"verdict": verdict, "code": "py", "claim": norm("ratio - NONE: an audit tolerance")},
+    })
+    .as_object()
+    .unwrap()
+    .clone();
+    if checked {
+        idx.insert(
+            FIXED.to_owned(),
+            json!({"verdict": "IN-STEP", "code": "rs"}),
+        );
+    }
+    idx
+}
+
+#[test]
+fn a_relabeled_claim_goes_only_mislabeled_with_its_correction_checked() {
+    let cur = cur_of(&[]);
+    let text = norm("ratio - NONE: an audit tolerance");
+    let at = |p: &Port, idx: &Index, verdict: &str| {
+        format!(
+            "{:?}",
+            super::settle(RATIO, p, &cur, idx, verdict, Some(&text))
+        )
+    };
+    let fixed = relabeled("rust/mode_a/src/lib.rs::FIXED");
+    assert_eq!(
+        at(&fixed, &relabel_index("MISLABELED", true), "MISLABELED"),
+        format!("{:?}", Fate::Relabeled(FIXED.to_owned()))
+    );
+    // each gate: no flag, a verdict not MISLABELED, the correction unchecked, no target carrying the label
+    let plain = port("rust/mode_a/src/lib.rs::FIXED");
+    assert!(at(&plain, &relabel_index("MISLABELED", true), "MISLABELED")
+        .contains("carries the label `ratio` but reads"));
+    assert!(at(&fixed, &relabel_index("IN-STEP", true), "IN-STEP")
+        .contains("reads IN-STEP, where only MISLABELED lets it go: a new ask"));
+    assert!(at(&fixed, &relabel_index("MISLABELED", true), "").contains("reads no verdict"));
+    assert!(
+        at(&fixed, &relabel_index("MISLABELED", false), "MISLABELED")
+            .contains("has no checked row")
+    );
+    let elsewhere = relabeled("rust/mode_a/src/lib.rs::helper");
+    assert!(
+        at(&elsewhere, &relabel_index("MISLABELED", true), "MISLABELED")
+            .contains("carries a claim `ratio`: a new ask")
+    );
+    // a relabeled port that carries the claim word for word carries it
+    let span = relabeled("rust/mode_a/src/lib.rs::SPAN");
+    assert_eq!(
+        super::settle(
+            SPAN,
+            &span,
+            &cur,
+            &Index::new(),
+            "IN-STEP",
+            Some(&norm(&span_line()))
+        ),
+        Fate::Carried(NEW_SPAN.to_owned())
+    );
+    // rekey drops the row, not carried, the correction's own row untouched; the push refuses it until then, and not after
+    let map = PortMap::from(Ports::from([("l7r/diagram/n.py::RATIO".to_owned(), fixed)]));
+    let base = relabel_index("MISLABELED", true);
+    let uids: HashSet<String> = HashSet::from(["l7r/diagram/n.py::RATIO".to_owned()]);
+    let texts = HashMap::new();
+    let before = Before {
+        index: &base,
+        uids: &uids,
+        texts: &texts,
+        owed: &[],
+    };
+    let got = unported(&cur, &base, &before, &map, &mut |_: &str| true);
+    assert_eq!(got.len(), 1);
+    assert!(got[0].ends_with("its row not yet carried: `make claims-rekey` (make land runs it)"));
+    let mut idx = base.clone();
+    let done = carry(&cur, &mut idx, &map, &mut base_text);
+    assert_eq!(
+        (done.relabeled.as_slice(), done.carried.len()),
+        ([RATIO.to_owned()].as_slice(), 0)
+    );
+    assert_eq!(
+        idx,
+        relabel_index("MISLABELED", true)
+            .into_iter()
+            .filter(|(k, _)| k == FIXED)
+            .collect()
+    );
+    assert!(unported(&cur, &idx, &before, &map, &mut |_: &str| true).is_empty());
+    let mut o = Out::default();
+    assert_eq!(say(&done, &mut o), 0);
+    assert!(o
+        .out
+        .contains("1 claim row(s) of a `relabeled` port dropped, not carried"));
+}
+
+#[test]
+fn a_split_unit_s_claims_go_each_to_the_target_carrying_its_text() {
+    let root = crate::checks::scratch("claims-ports-split");
+    put(&root, PORTS, "{\"ports\": {\"l7r/diagram/m.py::both\": {\"to\": [\"rust/mode_a/src/lib.rs::SPAN\", \"rust/mode_a/src/lib.rs::helper\"], \"by\": \"449 T999\", \"relabeled\": false}}}");
+    let both = load(&root).unwrap().ports["l7r/diagram/m.py::both"].clone();
+    assert_eq!(
+        (both.targets(), both.relabeled),
+        (
+            vec![
+                "rust/mode_a/src/lib.rs::SPAN",
+                "rust/mode_a/src/lib.rs::helper"
+            ],
+            false
+        )
+    );
+    for bad in [
+        "{\"ports\": {\"m.py::A\": {\"to\": [], \"by\": \"t\"}}}",
+        "{\"ports\": {\"m.py::A\": {\"to\": [\"r::A\", \"nothing\"], \"by\": \"t\"}}}",
+        "{\"ports\": {\"m.py::A\": {\"to\": \"r::A\", \"by\": \"t\", \"relabeled\": \"yes\"}}}",
+    ] {
+        put(&root, PORTS, bad);
+        assert!(load(&root).unwrap_err().contains("(or a list of them)"));
+    }
+    let cur = cur();
+    let at = |k: &str, line: &str| fate(k, &both, &cur, Some(&norm(line)));
+    assert_eq!(
+        at("l7r/diagram/m.py::both#span", &span_line()),
+        Fate::Carried(NEW_SPAN.to_owned())
+    );
+    assert_eq!(
+        at("l7r/diagram/m.py::both#helper", HELPER),
+        Fate::Carried(NEW_HELPER.to_owned())
+    );
+    let why = format!("{:?}", at("l7r/diagram/m.py::both#lost", "lost - NONE: x"));
+    assert!(why.contains("is on none of its targets (rust/mode_a/src/lib.rs::SPAN, rust/mode_a/src/lib.rs::helper): a new ask"));
+}
+
+const HELPER: &str = "helper - NONE: plumbing";
+const NEW_SPAN: &str = "rust/mode_a/src/lib.rs::SPAN#span";
+const NEW_HELPER: &str = "rust/mode_a/src/lib.rs::helper#helper";
+const SPAN: &str = "l7r/diagram/m.py::SPAN#span";
+
+/// The rows of a deleted file `c.py`: one claim carried, a NONE claim its port does not carry, a NONE claim on an unmapped unit, and
+/// (`cited`) a claim citing research on an unmapped unit.
+fn left_behind(cited: bool) -> Index {
+    let mut idx = json!({
+        "l7r/diagram/c.py::SPAN#span": {"verdict": "IN-STEP", "code": "py", "claim": norm(&span_line())},
+        "l7r/diagram/c.py::rx#its salts": {"verdict": "IN-STEP", "code": "py", "claim": norm("its salts - NONE: 5 (regex group range)")},
+        "l7r/diagram/c.py::memo#its cache size": {"verdict": "IN-STEP", "code": "py"},
+        "l7r/diagram/d.py::memo#its cache size": {"verdict": "IN-STEP", "code": "py", "claim": norm("its cache size - NONE: 8")},
+    })
+    .as_object()
+    .unwrap()
+    .clone();
+    if cited {
+        idx.insert("l7r/diagram/c.py::cited#cited".to_owned(), json!({"verdict": "IN-STEP", "code": "py", "claim": norm(&span_line().replace("span", "cited"))}));
+    }
+    idx
+}
+
+/// The merge base's text of a row recorded before the index held it: `c.py`'s unmapped `memo`.
+fn base_text(key: &str) -> Option<String> {
+    key.ends_with("c.py::memo#its cache size")
+        .then(|| norm("its cache size - NONE: 8"))
+}
+
+fn cut() -> PortMap {
+    PortMap::from(Ports::from([
+        (
+            "l7r/diagram/c.py::SPAN".to_owned(),
+            port("rust/mode_a/src/lib.rs::SPAN"),
+        ),
+        (
+            "l7r/diagram/c.py::rx".to_owned(),
+            port("rust/mode_a/src/lib.rs::helper"),
+        ),
+    ]))
+}
+
+#[test]
+fn a_none_claim_left_behind_goes_only_with_its_whole_file() {
+    let cur = cur_of(&[]);
+    let (rx, memo) = (
+        "l7r/diagram/c.py::rx#its salts",
+        "l7r/diagram/c.py::memo#its cache size",
+    );
+    // every other claim of the deleted file carried: its two NONE claims go, ported or not; `d.py`, in no port's cut, keeps its own
+    let mut idx = left_behind(false);
+    let done = carry(&cur, &mut idx, &cut(), &mut base_text);
+    assert_eq!(
+        (done.carried.len(), done.orphaned.clone(), done.stuck.len()),
+        (1, vec![rx.to_owned(), memo.to_owned()], 0)
+    );
+    assert_eq!(
+        idx.keys().cloned().collect::<Vec<_>>(),
+        ["l7r/diagram/d.py::memo#its cache size", NEW_SPAN]
+    );
+    let mut o = Out::default();
+    assert_eq!(say(&done, &mut o), 0);
+    assert!(o.out.contains(
+        "2 claim row(s) of NONE research dropped, left on no unit in a file a port's cut deleted"
+    ));
+    // a claim citing research left behind holds the whole file: nothing of it goes, the NONE claim's port left stuck
+    let mut idx = left_behind(true);
+    let done = carry(&cur, &mut idx, &cut(), &mut base_text);
+    assert_eq!(
+        (done.carried.len(), done.orphaned.len(), done.stuck.len()),
+        (1, 0, 1)
+    );
+    assert!(idx.contains_key(rx) && idx.contains_key(memo));
+    // a NONE claim its port's target carries under its own label is a relabel, A's and not C's: unflagged it stays stuck, and holds
+    // the file's other NONE claims
+    let mut idx = left_behind(false);
+    idx.insert(
+        "l7r/diagram/c.py::RATIO#ratio".to_owned(),
+        json!({"verdict": "MISLABELED", "code": "py", "claim": norm("ratio - NONE: an audit tolerance")}),
+    );
+    let mut relabel = cut();
+    relabel.ports.insert(
+        "l7r/diagram/c.py::RATIO".to_owned(),
+        port("rust/mode_a/src/lib.rs::FIXED"),
+    );
+    let done = carry(&cur, &mut idx, &relabel, &mut base_text);
+    assert_eq!((done.orphaned.len(), done.stuck.len()), (0, 2), "{done:?}");
+    // a file still in the tree is no deleted file
+    let still = cur_of(&[(
+        "/// Research: kept - NONE: x\npub fn kept() {}\n",
+        "l7r/diagram/c.py",
+    )]);
+    let mut idx = left_behind(false);
+    assert!(carry(&still, &mut idx, &cut(), &mut base_text)
+        .orphaned
+        .is_empty());
+    // the push: refused until rekey drops them, then not; a file held by research refuses each claim left behind
+    let base = left_behind(false);
+    let uids: HashSet<String> = base
+        .keys()
+        .map(|k| k.rsplit_once('#').unwrap().0.to_owned())
+        .collect();
+    // the merge base's text of the row the index holds none for
+    let texts = HashMap::from([(memo.to_owned(), base_text(memo).unwrap())]);
+    let before = Before {
+        index: &base,
+        uids: &uids,
+        texts: &texts,
+        owed: &[],
+    };
+    let got = unported(&cur, &base, &before, &cut(), &mut |_: &str| true);
+    assert_eq!(got.len(), 4, "{got:?}");
+    assert!(got[..3]
+        .iter()
+        .all(|l| l.ends_with("`make claims-rekey` (make land runs it)")));
+    assert!(got[3].starts_with("unported: l7r/diagram/d.py::memo#its cache size - its unit"));
+    let mut now = base.clone();
+    carry(&cur, &mut now, &cut(), &mut base_text);
+    assert_eq!(
+        unported(&cur, &now, &before, &cut(), &mut |_: &str| true).len(),
+        1
+    );
+    let held = left_behind(true);
+    let uids: HashSet<String> = held
+        .keys()
+        .map(|k| k.rsplit_once('#').unwrap().0.to_owned())
+        .collect();
+    let before = Before {
+        index: &held,
+        uids: &uids,
+        texts: &texts,
+        owed: &[],
+    };
+    let got = unported(&cur, &held, &before, &cut(), &mut |_: &str| true);
+    assert_eq!(got.len(), 5, "{got:?}");
+    assert!(got.iter().any(|l| l
+        .contains("rx#its salts - rust/mode_a/src/lib.rs::helper carries no claim `its salts`")));
 }

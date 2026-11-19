@@ -1,5 +1,5 @@
 //! The hand sheet driver (feature 449 T151): a small sheet drawn whole - placed, rendered or not, its page written, its census judged -
-//! and each refusal; the real country shrine drawn by it is the crate's end-to-end test's (`parse/lockstep.rs`).
+//! and each refusal; the real country shrine drawn by it is the crate's end-to-end test's (`pool_sweep.rs`).
 //!
 //! Research: the hand sheet driver's tests - NONE: fixtures and assertions, deciding nothing about a building
 

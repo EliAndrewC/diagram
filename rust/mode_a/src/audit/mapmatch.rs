@@ -778,4 +778,16 @@ mod tests {
             .unwrap();
         assert_eq!(refused.unwrap_err().kind, "PermissionError");
     }
+
+    /// A place recorded under one tier's keys and not another's: the shrine's village records its religious ground, no manor.
+    #[test]
+    fn a_place_is_recorded_only_under_the_keys_its_map_fills() {
+        let tree = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let village = "legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.json";
+        let asked = [
+            super::maps_recording("hoshigaoka-shrine", "country-shrines", &tree).unwrap(),
+            super::maps_recording("hoshigaoka-x", "magistracies", &tree).unwrap(),
+        ];
+        assert_eq!(asked, [vec![village.to_owned()], Vec::new()]);
+    }
 }

@@ -1,14 +1,13 @@
 //! A Mode A sheet read into the audit's geometry (feature 449 T170): `l7r/diagram/tools/pack_audit/parse.py`'s [`parse_svg`] and its
 //! records ([`Rect`], [`Label`], [`ParsedPlan`]) ported, the fill, stroke and pattern vocabulary with them. The notes census counts a
-//! sheet's fire-water tubs by it ([`crate::census`]); the rest of the audit (`pack_audit`'s checks) is the plan's step 1 to come.
+//! sheet's fire-water tubs by it ([`crate::census`]), and the audit's checks read it ([`crate::audit`]).
 //!
 //! Every number and refusal is the Python's: a float is read as `float()` reads it ([`crate::py::float`]), a `min`, `max` or `sum` as
 //! Python's, an offset as the Python's code-point offset ([`crate::sheet::Offsets`]), and a malformed sheet is refused with the
 //! exception the Python raised, in the order it raised them (FR-002 binds a check's verdict exactly, `engine-plan.md`).
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `parse.py` stays the implementation for `pack_audit`'s Python checks, the generators and
-//! the page until step 3; an edit of it makes the same change here in the same commit, and `parse/lockstep.rs` holds the two equal on
-//! every pool sheet. Its claims stay keyed to the `.py` units (`ask:449-phase4-slices` Q10); each copy here carries the same claim.
+//! THE PYTHON IS DELETED: `parse.py` went with the Python audit, its lockstep retired with it (feature 449 T212; `specs/449-rust-codebase/engine-plan.md`: lockstep tests retire with their Python): this module's own tests pin its behavior, and the pool sweep (`crate::pool_sweep`) puts every pool sheet and red fixture through it. Its claims were carried here by
+//! `dev/claims-ports.json` (`ask:449-phase4-slices` Q10).
 //!
 //! Research:
 //!     the sheet's parse - NONE: a sheet's drawing read into rects and labels by its palette, deciding nothing about a building
@@ -519,13 +518,5 @@ mod check_fixtures;
 pub(crate) mod fix_fixtures;
 #[cfg(test)]
 pub(crate) mod fixtures;
-#[cfg(test)]
-pub(crate) mod lockstep;
-#[cfg(test)]
-mod lockstep_audit;
-#[cfg(test)]
-mod lockstep_checks;
-#[cfg(test)]
-mod lockstep_keep;
 #[cfg(test)]
 mod tests;

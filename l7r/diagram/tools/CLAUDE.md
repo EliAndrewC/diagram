@@ -15,7 +15,7 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | You are asking | Reach for |
 |---|---|
 | Who put this thing here? What refused to put anything here? | `why_placed` - `make why-placed GEN=... AT=x,y` / `REFUSED=x,y` |
-| Is there too much empty space in this Mode A compound? Does its SVG break a geometric rule? | `pack_audit` - `make pack-audit` (its own [index](pack_audit/CLAUDE.md)) - Rust since feature 449 T175, `rust/mode_a/src/audit/report.rs`; the Python modules stay for their importers under the lockstep rule |
+| Is there too much empty space in this Mode A compound? Does its SVG break a geometric rule? | `make pack-audit` - Rust since feature 449 T175, `rust/mode_a/src/audit/` (its index is `audit.rs`'s module doc: which module holds which check, and where a new one is registered); the Python package deleted by T212 |
 | What does each declared Mode A type require, as a table? | `make building-programs` (writes `docs/building-programs.md` between markers) - Rust since feature 449 T168, `rust/mode_a/src/programs.rs` |
 | Is drawn ground cover standing somewhere the engine's keep-outs should have stopped it? | `scatter_audit` (held by `tests/tools/test_scatter_audit.py`); `make scatter-bases` lists a map's scatter bases |
 | Does using the generation cache ever change what a map looks like? | `cache_audit` - `make cache-audit` |
@@ -53,7 +53,7 @@ field off the highway. A tool that re-derives a rule will eventually disagree wi
 wrong thing with total confidence. To ask where a feature may go, use `open_seat` and `why_placed`, which read the
 placer's own refusals rather than a second opinion about them.
 
-`pack_audit` and `scatter_audit` are the exception that proves the rule: Mode A has no manifest and scatter is
+The Mode A audit (`make pack-audit`, Rust) and `scatter_audit` are the exception that proves the rule: Mode A has no manifest and scatter is
 draw-time ink, so both parse the rendered SVG. They are the source of truth for their own questions rather than a
 restatement of someone else's.
 

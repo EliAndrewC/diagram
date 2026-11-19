@@ -172,3 +172,6 @@ pub fn check_bands(
     }
     Ok(out)
 }
+
+#[cfg(test)]
+mod tests;

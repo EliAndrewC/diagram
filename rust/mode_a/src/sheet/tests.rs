@@ -1,5 +1,4 @@
-//! The sheet's reader (feature 449 T170): the tree, its offsets, its kinds and its refusals; the lockstep (`parse/lockstep.rs`) holds
-//! the same against the Python on every pool sheet.
+//! The sheet's reader (feature 449 T170): the tree, its offsets, its kinds and its refusals.
 //!
 //! Research:
 //!     the sheet reader's tests - NONE: fixtures and assertions, deciding nothing about a building

@@ -41,7 +41,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-from ..buildings.types import tiers as building_tiers
+from ..buildings import tiers as building_tiers
 
 # Scripted-generation engine modules. A gen that imports one of these is a LIVE scripted map; add
 # each new engine (a future village/town generator) here and its maps join the sweep automatically.

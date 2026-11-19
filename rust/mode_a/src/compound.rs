@@ -3,10 +3,8 @@
 //! fire-water tub and a notice board by and the audit holds every sheet to (feature 287, homes H29b). Nothing more of either module:
 //! the rest is the drafting engine, the plan's step 3.
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `compound_model.py` and `compound_parts.py` stay for the generators until step 3; an edit
-//! of what is here makes the same change here in the same commit, and `parse/lockstep_checks.rs` holds the two equal (each constant, and
-//! each predicate on every tub, board and opening of every sheet the lockstep reads). The claims stay keyed to the `.py` units
-//! (`ask:449-phase4-slices` Q10); each copy here carries the same claim.
+//! THE PYTHON IS DELETED: `compound_model.py` and `compound_parts.py` went with T152's rebuild, and the audit's copy of what is here
+//! (`pack_audit/engine.py`) with the Python audit, its lockstep retired with it (feature 449 T212; `specs/449-rust-codebase/engine-plan.md`: lockstep tests retire with their Python): this module's own tests pin its behavior, and the pool sweep (`crate::pool_sweep`) puts every pool sheet and red fixture through it. Its claims were carried here by `dev/claims-ports.json`.
 //!
 //! THE GENERATOR (feature 449 T152): the Mode A compound generator rebuilt in Rust from its derivation
 //! (`specs/449-rust-codebase/derivations/T208-compound.md`, judged SOUND and budgeted per pool sheet), never ported - its submodules below,

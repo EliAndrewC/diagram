@@ -36,6 +36,19 @@
 //! own `ports` or `retired` entry is handled there; `rebuilt` covers the file's other units. The push refuses a rebuilt file still in
 //! the tree and lets the old claims go only once nothing under `as` is owed; `claims rekey` drops their rows and deferred entries.
 //! No old claim is matched to the new code: its own `Research:` lines, each checked fresh, are the bar ([`rebuilt`]).
+//!
+//! THREE MORE OUTCOMES OF A PORT (feature 449 T212, the round arbiter's `ask:449-T212-stranded-claims`), each gated exactly so:
+//! - A RELABELED claim ([`settle`]): a ports entry marked `"relabeled": true` lets a claim its port does not carry word for word go -
+//!   dropped, not carried - only where the merge base's row of that Python claim reads MISLABELED and a target carries a claim of the
+//!   same label with a checked row: the port wrote the claims round's correction, and the corrected line was itself checked.
+//! - A SPLIT unit ([`fate`]): a ports entry's `to` may be a list - a Python unit whose claims went to several Rust items - and each claim
+//!   is carried to the one target whose unit carries its own text.
+//! - A NONE claim LEFT BEHIND ([`orphans`]): a claim of NONE research whose unit is gone and whose file a port's cut deleted (no unit of
+//!   the file in the tree, a ports entry on one of its units) is dropped only when every other claim of that file is carried or dropped
+//!   by these rules - the Python's own literals (a regex group, a memo's size) that no port has. One citing research is never dropped,
+//!   nor one a target of its port carries under its own label (a relabel, rule A's under A's gate); either holds its whole file.
+//!
+//! Anything else is still a new ask: a Python row not MISLABELED, a claim text on no listed target, a stranded claim citing research.
 
 pub mod rebuilt;
 
@@ -54,11 +67,24 @@ pub const PORTS: &str = "dev/claims-ports.json";
 /// Why a carried row is owed: its code changed language, so its check is a full one (Q10: "That cut's landing runs the claims check").
 pub const PORTED: &str = "ported";
 
-/// One entry of the map: the unit a `.py` unit became, and the task that ported it.
-#[derive(Clone, Debug, PartialEq, Eq)]
+/// One entry of the map: the unit a `.py` unit became (`to`, the first of a list `to` names, the rest in `also`), the task that ported
+/// it, and whether its port wrote a claims round's correction of a claim's label (`relabeled`, `ask:449-T212-stranded-claims`).
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Port {
     pub to: String,
     pub by: String,
+    pub also: Vec<String>,
+    pub relabeled: bool,
+}
+
+impl Port {
+    /// Every unit the entry names, `to` first.
+    #[must_use]
+    pub fn targets(&self) -> Vec<&str> {
+        std::iter::once(self.to.as_str())
+            .chain(self.also.iter().map(String::as_str))
+            .collect()
+    }
 }
 
 /// `.py` uid -> its port.
@@ -124,15 +150,33 @@ pub fn load(root: &Path) -> Result<Map, Fail> {
         .and_then(Value::as_object)
         .unwrap_or(&empty)
     {
-        let (to, by) = (field(v, "to"), field(v, "by"));
-        if !from.contains(".py::") || !to.contains("::") || by.trim().is_empty() {
-            return Err(format!("{PORTS}: the entry `{from}` is not of the form \"<path>.py::<qualname>\": {{\"to\": \"<path>::<qualname>\", \"by\": \"<feature> <task>\"}}"));
-        }
+        let by = field(v, "by");
+        // `to` one unit or a list of them (a split unit, `ask:449-T212-stranded-claims`)
+        let to: Vec<&str> = match v.get("to") {
+            Some(Value::Array(list)) => list
+                .iter()
+                .map(|t| t.as_str().unwrap_or_default())
+                .collect(),
+            _ => vec![field(v, "to")],
+        };
+        let relabeled = match v.get("relabeled") {
+            None => Some(false),
+            Some(flag) => flag.as_bool(),
+        };
+        let formed = from.contains(".py::")
+            && !to.is_empty()
+            && to.iter().all(|t| t.contains("::"))
+            && !by.trim().is_empty();
+        let (Some(relabeled), true) = (relabeled, formed) else {
+            return Err(format!("{PORTS}: the entry `{from}` is not of the form \"<path>.py::<qualname>\": {{\"to\": \"<path>::<qualname>\" (or a list of them), \"by\": \"<feature> <task>\"}} (and \"relabeled\": true where its port corrected a MISLABELED claim)"));
+        };
         out.insert(
             from.clone(),
             Port {
-                to: to.to_owned(),
+                to: to[0].to_owned(),
                 by: by.to_owned(),
+                also: to[1..].iter().map(|t| (*t).to_owned()).collect(),
+                relabeled,
             },
         );
     }
@@ -193,12 +237,15 @@ fn load_retired(root: &Path, doc: &Value, ports: &Ports) -> Result<Retirements, 
 }
 
 /// What becomes of one claim's row on a mapped unit gone from the tree.
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Fate {
     /// Re-keyed to this key.
     Carried(String),
     /// Dropped: a claim of NONE research whose code is now tooling (`ask:449-T148-claims`).
     Dropped,
+    /// Dropped, not carried: a MISLABELED claim its `relabeled` port corrected, the corrected claim's checked key here
+    /// (`ask:449-T212-stranded-claims`).
+    Relabeled(String),
     /// Left as it stands, and why, with the fix.
     Stuck(String),
 }
@@ -228,12 +275,109 @@ pub fn fate(key: &str, port: &Port, cur: &Cur, text: Option<&str>) -> Fate {
         }
         return Fate::Stuck(format!("unported: {key} - mapped to {}, a tooling crate the claims walk prunes, and it cites research: a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-T148-claims drops only a claim of NONE research)", port.to));
     }
+    // a split unit's claim goes to the one target carrying its own text (`ask:449-T212-stranded-claims`)
+    let mut carrying = port
+        .targets()
+        .into_iter()
+        .map(|t| format!("{t}#{label}"))
+        .filter(|k| cur.get(k).is_some_and(|row| row.claim.normalized() == text));
+    if let Some(at) = carrying.next() {
+        return Fate::Carried(at);
+    }
+    if !port.also.is_empty() {
+        return Fate::Stuck(format!("unported: {key} - its claim's text (`{text}`) is on none of its targets ({}): a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-T212-stranded-claims)", port.targets().join(", ")));
+    }
     match cur.get(&new) {
-        Some(row) if row.claim.normalized() == text => Fate::Carried(new),
         Some(row) => Fate::Stuck(format!("unported: {key} - {} carries the label `{label}` but reads `{}`, where the Python's claim reads `{text}`: carry the `Research:` line over as it stands, then `make claims-rekey`", port.to, row.claim.normalized())),
         None if cur.uids().contains(&port.to) => Fate::Stuck(format!("unported: {key} - {} carries no claim `{label}`: carry the Python's `Research:` line onto it as it stands (`/// Research: {text}`), then `make claims-rekey`", port.to)),
         None => Fate::Stuck(format!("unported: {key} - {PORTS} maps its unit to {}, which is no unit the claims walk reads: name the port's `path::qualname` there, then `make claims-rekey`", port.to)),
     }
+}
+
+/// [`fate`], and where it leaves a claim stuck on a port marked `relabeled`, rule A (`ask:449-T212-stranded-claims`): the claim goes, not
+/// carried, only where `verdict` - the merge base's row of it - reads MISLABELED and one of its targets carries a claim of its label
+/// whose row in `index` is checked; else the stuck claim names which of the three failed.
+#[must_use]
+pub fn settle(
+    key: &str,
+    port: &Port,
+    cur: &Cur,
+    index: &Index,
+    verdict: &str,
+    text: Option<&str>,
+) -> Fate {
+    let found = fate(key, port, cur, text);
+    if !port.relabeled || !matches!(found, Fate::Stuck(_)) {
+        return found;
+    }
+    let label = key.rsplit_once('#').map_or("", |p| p.1);
+    let ask = "a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-T212-stranded-claims)";
+    let Some(at) = port
+        .targets()
+        .into_iter()
+        .map(|t| format!("{t}#{label}"))
+        .find(|k| cur.get(k).is_some())
+    else {
+        return Fate::Stuck(format!("unported: {key} - its port is marked `relabeled`, but none of its targets ({}) carries a claim `{label}`: {ask}", port.targets().join(", ")));
+    };
+    if verdict != "MISLABELED" {
+        let read = Some(verdict)
+            .filter(|v| !v.is_empty())
+            .unwrap_or("no verdict");
+        return Fate::Stuck(format!("unported: {key} - its port is marked `relabeled`, but the merge base's row of it reads {read}, where only MISLABELED lets it go: {ask}"));
+    }
+    if index
+        .get(&at)
+        .is_none_or(|row| field(row, "verdict").is_empty())
+    {
+        return Fate::Stuck(format!("unported: {key} - its port is marked `relabeled`, but {at} has no checked row: check it in the claims round (`make claims-owed`), then `make claims-rekey`"));
+    }
+    Fate::Relabeled(at)
+}
+
+/// One claim of a gone `.py` unit as the two passes read it: its key, what its port made of it (None: no port names its unit) and its
+/// claim's text where it can be read.
+pub type Settled = (String, Option<Fate>, Option<String>);
+
+/// Rule C (`ask:449-T212-stranded-claims`): the keys of the claims of NONE research left on no unit - stuck, or on no port - whose file
+/// a port's cut deleted (no unit of it in `cur`, a ports entry on one of its units), where every other claim of the file in `settled`
+/// is carried or dropped. A claim one of its port's targets carries under its own label is no claim left on no unit - its label went
+/// with the port, so it is rule A's to let go, under A's gate, or a new ask - and like a claim citing research it holds its whole file.
+#[must_use]
+pub fn orphans(settled: &[Settled], cur: &Cur, map: &Map) -> HashSet<String> {
+    let file_of = |k: &str| k.split_once("::").map_or(k, |p| p.0).to_owned();
+    let in_tree: HashSet<String> = cur.uids().iter().map(|u| file_of(u)).collect();
+    let ported: HashSet<String> = map.ports.keys().map(|u| file_of(u)).collect();
+    let candidate = |(k, _, t): &Settled| {
+        let label = k.rsplit_once('#').map_or("", |p| p.1);
+        let labeled = map.ports.get(uid_of(k)).is_some_and(|p| {
+            p.targets()
+                .into_iter()
+                .any(|to| cur.get(&format!("{to}#{label}")).is_some())
+        });
+        let none = t
+            .as_deref()
+            .is_some_and(|t| parse_claim(t).is_ok_and(|c| c.backing == "NONE"));
+        none && !labeled
+    };
+    let left = |(_, f, _): &Settled| matches!(f, None | Some(Fate::Stuck(_)));
+    let held: HashSet<String> = settled
+        .iter()
+        .filter(|s| left(s) && !candidate(s))
+        .map(|(k, _, _)| file_of(k))
+        .collect();
+    settled
+        .iter()
+        .filter(|s| {
+            let file = file_of(&s.0);
+            left(s)
+                && candidate(s)
+                && ported.contains(&file)
+                && !in_tree.contains(&file)
+                && !held.contains(&file)
+        })
+        .map(|(k, _, _)| k.clone())
+        .collect()
 }
 
 /// What `claims rekey` did with the ports: the keys carried, the keys dropped, the rows left with their fix, the keys of a retired
@@ -247,11 +391,15 @@ pub struct Rekeyed {
     pub retired_pages: BTreeSet<String>,
     pub rebuilt: Vec<String>,
     pub rebuilt_derivations: BTreeSet<String>,
+    /// Rule A's keys, dropped (`ask:449-T212-stranded-claims`).
+    pub relabeled: Vec<String>,
+    /// Rule C's keys, dropped.
+    pub orphaned: Vec<String>,
 }
 
 /// Each claim row on a mapped unit gone from `cur` carried onto its port, or dropped, or left with its fix, and each on a retired unit
-/// or on a unit of a rebuilt file (one no longer in the tree) gone dropped; `text_of` gives a key's claim text from the merge base, for
-/// a row that does not hold it.
+/// or on a unit of a rebuilt file (one no longer in the tree) gone dropped, and rule C's NONE claims left behind dropped ([`orphans`]);
+/// `text_of` gives a key's claim text from the merge base, for a row that does not hold it.
 pub fn carry(
     cur: &Cur,
     index: &mut Index,
@@ -259,7 +407,9 @@ pub fn carry(
     text_of: &mut dyn FnMut(&str) -> Option<String>,
 ) -> Rekeyed {
     let uids = cur.uids();
+    let ported: HashSet<&str> = map.ports.keys().map(|u| file_part(u)).collect();
     let mut out = Rekeyed::default();
+    let mut settled: Vec<Settled> = Vec::new();
     let keys: Vec<String> = index.keys().cloned().collect();
     for key in keys {
         let uid = uid_of(&key);
@@ -272,22 +422,39 @@ pub fn carry(
             out.retired.push(key);
             continue;
         }
-        let Some(port) = map.ports.get(uid) else {
+        let port = map.ports.get(uid);
+        if port.is_none() {
             if let Some(rb) = rebuilt::of(&map.rebuilt, uid).filter(|rb| !rb.present) {
                 index.shift_remove(&key);
                 out.rebuilt_derivations.insert(rb.derivation.clone());
                 out.rebuilt.push(key);
+                continue;
             }
-            continue;
-        };
+            // an unmapped unit is rule C's business only in a file a port's cut deleted
+            if !uid.contains(".py::") || !ported.contains(file_part(uid)) {
+                continue;
+            }
+        }
         let held = field(&index[&key], "claim").to_owned();
         let text = if held.is_empty() {
             text_of(&key)
         } else {
             Some(held)
         };
-        match fate(&key, port, cur, text.as_deref()) {
-            Fate::Carried(new) => {
+        let verdict = field(&index[&key], "verdict").to_owned();
+        let found = port.map(|p| settle(&key, p, cur, index, &verdict, text.as_deref()));
+        settled.push((key, found, text));
+    }
+    let orphaned = orphans(&settled, cur, map);
+    for (key, found, _) in settled {
+        if orphaned.contains(&key) {
+            index.shift_remove(&key);
+            out.orphaned.push(key);
+            continue;
+        }
+        match found {
+            None => {}
+            Some(Fate::Carried(new)) => {
                 let mut row = index.shift_remove(&key).unwrap_or_default();
                 // a row the port's own check already wrote stands: it judged the new code
                 if !index.contains_key(&new) {
@@ -296,14 +463,23 @@ pub fn carry(
                 }
                 out.carried.push(key);
             }
-            Fate::Dropped => {
+            Some(Fate::Dropped) => {
                 index.shift_remove(&key);
                 out.dropped.push(key);
             }
-            Fate::Stuck(why) => out.stuck.push(why),
+            Some(Fate::Relabeled(_)) => {
+                index.shift_remove(&key);
+                out.relabeled.push(key);
+            }
+            Some(Fate::Stuck(why)) => out.stuck.push(why),
         }
     }
     out
+}
+
+/// A key's or uid's file: what precedes its `::`.
+fn file_part(key: &str) -> &str {
+    key.split_once("::").map_or(key, |p| p.0)
 }
 
 /// The deferred list (`dev/claims-deferred.json`'s `units` and `keys`) re-keyed with its units' ports: a unit to its port, a key to its
@@ -370,7 +546,10 @@ pub fn rekey_ports(
     let uids = cur.uids();
     let unheld = index.iter().any(|(k, v)| {
         let uid = uid_of(k);
-        map.ports.contains_key(uid) && !uids.contains(uid) && field(v, "claim").is_empty()
+        let in_cut = map.ports.keys().any(|u| file_part(u) == file_part(uid));
+        (map.ports.contains_key(uid) || in_cut)
+            && !uids.contains(uid)
+            && field(v, "claim").is_empty()
     });
     let texts = if unheld {
         base_texts(reader, root)?
@@ -392,6 +571,12 @@ pub fn rekey_ports(
 pub fn say(done: &Rekeyed, o: &mut super::commands::Out) -> i32 {
     if !done.carried.is_empty() || !done.dropped.is_empty() {
         o.say(&format!("claims-rekey: {} claim row(s) carried to their port ({PORTS}), each owed a full check of its new code ({PORTED}); {} dropped, a claim of NONE research ported into a tooling crate (ask:449-T148-claims)", done.carried.len(), done.dropped.len()));
+    }
+    if !done.relabeled.is_empty() {
+        o.say(&format!("claims-rekey: {} claim row(s) of a `relabeled` port dropped, not carried: each MISLABELED at the merge base, its corrected claim checked on its port (ask:449-T212-stranded-claims)", done.relabeled.len()));
+    }
+    if !done.orphaned.is_empty() {
+        o.say(&format!("claims-rekey: {} claim row(s) of NONE research dropped, left on no unit in a file a port's cut deleted whose every other claim was carried or dropped (ask:449-T212-stranded-claims)", done.orphaned.len()));
     }
     if !done.retired.is_empty() {
         let pages: Vec<&str> = done.retired_pages.iter().map(String::as_str).collect();
@@ -462,7 +647,9 @@ pub fn unported(
     let moved: HashSet<String> = super::index::moved(cur, before.index)
         .into_values()
         .collect();
-    let mut out = Vec::new();
+    // each refusal in the merge base's order: a line already written, or a claim of a gone unit settled in two passes (rule C reads
+    // the whole file first, `ask:449-T212-stranded-claims`)
+    let mut lines: Vec<Result<String, Settled>> = Vec::new();
     let mut stranded: BTreeMap<String, Vec<String>> = BTreeMap::new();
     // a retired unit still in the tree: `gone` is asked only where its claims are not (it answers for every scope's units)
     let mut present: BTreeSet<&str> = map
@@ -486,7 +673,7 @@ pub fn unported(
                 continue;
             }
             if let Some(why) = retired_refusal(key, gone_by, before.index, index) {
-                out.push(why);
+                lines.push(Ok(why));
             }
             continue;
         }
@@ -499,6 +686,12 @@ pub fn unported(
         {
             continue;
         }
+        let held = field(was, "claim");
+        let text = if held.is_empty() {
+            before.texts.get(key).cloned()
+        } else {
+            Some(held.to_owned())
+        };
         let Some(port) = map.ports.get(uid) else {
             if rebuilt::of(&map.rebuilt, uid).is_some() {
                 let file = uid.split_once("::").map_or(uid, |p| p.0);
@@ -508,22 +701,41 @@ pub fn unported(
                     .push(key.clone());
                 continue;
             }
-            out.push(format!("unported: {key} - its unit {uid} is deleted, and {PORTS} maps it to no unit: if it was ported, add `\"{uid}\": {{\"to\": \"rust/<crate>/src/<file>.rs::<item>\", \"by\": \"<feature> <task>\"}}` under its `ports` and run `make claims-rekey`; if the research overruled its rule, name it under `retired` with the `finding` key whose claims round found it DRIFTED or MISLABELED (`{{\"by\": \"<feature> <task>\", \"page\": \"research/questions/<file>.html\", \"why\": \"<one line>\", \"finding\": \"<path>::<qualname>#<label>\"}}`, ask:449-T184-elongated-retired-2); if a phase task deleted its file after rebuilding its job from a derivation, name the file under `rebuilt` (`\"<path>.py\": {{\"by\": \"<feature> <task>\", \"as\": \"<the Rust module doing its job now>\", \"derivation\": \"<the task's derivation>\"}}`, the file on that task's `old-code:` line, ask:449-T152-rebuilt-claims); a claim the map cannot carry is a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-phase4-slices Q10)"));
+            lines.push(Err((key.clone(), None, text)));
             continue;
         };
-        let held = field(was, "claim");
-        let text = if held.is_empty() {
-            before.texts.get(key).map(String::as_str)
-        } else {
-            Some(held)
+        let found = settle(
+            key,
+            port,
+            cur,
+            index,
+            field(was, "verdict"),
+            text.as_deref(),
+        );
+        lines.push(Err((key.clone(), Some(found), text)));
+    }
+    let settled: Vec<Settled> = lines.iter().filter_map(|l| l.clone().err()).collect();
+    let orphaned = orphans(&settled, cur, map);
+    let mut out = Vec::new();
+    for line in lines {
+        let (key, found, _) = match line {
+            Ok(why) => {
+                out.push(why);
+                continue;
+            }
+            Err(claim) => claim,
         };
+        let uid = uid_of(&key);
         let rekey = format!("unported: {key} - its port is mapped but its row not yet carried: `make claims-rekey` (make land runs it)");
-        match fate(key, port, cur, text) {
-            // the old row still in the index is what `rekey` carries; one already gone (a record pruned it) leaves the port's claim
-            // owed as new, which the claims round checks in full - no carry is left to run
-            Fate::Carried(_) | Fate::Dropped if index.contains_key(key) => out.push(rekey),
-            Fate::Carried(_) | Fate::Dropped => {}
-            Fate::Stuck(why) => out.push(why),
+        match found {
+            // the old row still in the index is what `rekey` carries or drops; one already gone (a record pruned it, or rekey dropped
+            // it) leaves nothing to run - a carried claim's port owed as new, which the claims round checks in full
+            _ if orphaned.contains(&key) && index.contains_key(&key) => out.push(rekey),
+            _ if orphaned.contains(&key) => {}
+            Some(Fate::Carried(_) | Fate::Dropped | Fate::Relabeled(_)) if index.contains_key(&key) => out.push(rekey),
+            Some(Fate::Carried(_) | Fate::Dropped | Fate::Relabeled(_)) => {}
+            Some(Fate::Stuck(why)) => out.push(why),
+            None => out.push(format!("unported: {key} - its unit {uid} is deleted, and {PORTS} maps it to no unit: if it was ported, add `\"{uid}\": {{\"to\": \"rust/<crate>/src/<file>.rs::<item>\", \"by\": \"<feature> <task>\"}}` under its `ports` and run `make claims-rekey`; if the research overruled its rule, name it under `retired` with the `finding` key whose claims round found it DRIFTED or MISLABELED (`{{\"by\": \"<feature> <task>\", \"page\": \"research/questions/<file>.html\", \"why\": \"<one line>\", \"finding\": \"<path>::<qualname>#<label>\"}}`, ask:449-T184-elongated-retired-2); if a phase task deleted its file after rebuilding its job from a derivation, name the file under `rebuilt` (`\"<path>.py\": {{\"by\": \"<feature> <task>\", \"as\": \"<the Rust module doing its job now>\", \"derivation\": \"<the task's derivation>\"}}`, the file on that task's `old-code:` line, ask:449-T152-rebuilt-claims); a claim the map cannot carry is a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-phase4-slices Q10)")),
         }
     }
     for uid in present {

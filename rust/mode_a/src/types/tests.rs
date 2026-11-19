@@ -1,4 +1,5 @@
-//! The building types' reader: the lockstep with `types.py` on the real declaration, and each refusal the Python makes (feature 449 T168).
+//! The building types' reader: the real declaration read, and each refusal in the words `types.py` gave (feature 449 T168; the lockstep
+//! with `types.py` deleted with it, T212).
 //!
 //! Research:
 //!     the building types' tests - NONE: fixtures and assertions, deciding nothing about a building
@@ -8,94 +9,22 @@ use std::path::{Path, PathBuf};
 use serde_json::{json, Value};
 
 use super::{
-    by_tier, classification, hand_drawn_tiers, load_types, parse_types, tiers, Band, BuildingType,
-    Kinds, RequiredItem, CLASSES, DECLARATION, NOTHING_GUESSED, PER_STATEMENT,
+    by_tier, classification, hand_drawn_tiers, load_types, parse_types, tiers, Band, Kinds,
+    RequiredItem, DECLARATION, NOTHING_GUESSED, PER_STATEMENT,
 };
 
 fn real() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
-/// The Python's parse of the real declaration, every field, as JSON - with its constants, so a change to either side's shows here.
-const DUMP: &str = r#"
-import dataclasses, json, sys
-sys.path.insert(0, sys.argv[1])
-from l7r.diagram.buildings import types as T
-def band(b):
-    return None if b is None else [None if r is None else list(r) for r in (b.w, b.h, b.area)]
-def item(i):
-    return {"id": i.id, "label": i.label.pattern if i.label else None, "band": band(i.band), "cls": i.cls, "why": i.why,
-            "optional": i.optional, "forms": [[f, band(b)] for f, b in i.forms.items()], "site": i.site, "kind": i.kind}
-out = [{"tier": t.tier, "title": t.title, "program": t.program, "hand_drawn": t.hand_drawn, "required": [item(i) for i in t.required],
-        "checks": list(t.checks), "generated_exceptions": list(t.generated_exceptions), "notes": t.notes, "map_keys": list(t.map_keys)}
-       for t in T.load_types()]
-print(json.dumps({"types": out, "classes": list(T.CLASSES), "per": T.PER_STATEMENT, "nothing": T.NOTHING_GUESSED,
-                  "declaration": T._DECLARATION, "fields": [[f.name for f in dataclasses.fields(c)] for c in (T.Band, T.RequiredItem, T.BuildingType)]}))
-"#;
-
-fn band_json(b: Option<&Band>) -> Value {
-    let r = |r: Option<(f64, f64)>| r.map_or(Value::Null, |(a, b)| json!([a, b]));
-    b.map_or(Value::Null, |b| json!([r(b.w), r(b.h), r(b.area)]))
-}
-
-fn rust_dump(types: &[BuildingType]) -> Value {
-    let item = |i: &RequiredItem| {
-        json!({"id": i.id, "label": i.label, "band": band_json(Some(&i.band)), "cls": i.cls, "why": i.why, "optional": i.optional,
-               "forms": i.forms.iter().map(|(f, b)| json!([f, band_json(b.as_ref())])).collect::<Vec<_>>(), "site": i.site,
-               "kind": i.kind})
-    };
-    let out: Vec<Value> = types
-        .iter()
-        .map(|t| {
-            json!({"tier": t.tier, "title": t.title, "program": t.program, "hand_drawn": t.hand_drawn,
-                   "required": t.required.iter().map(item).collect::<Vec<_>>(), "checks": t.checks,
-                   "generated_exceptions": t.generated_exceptions, "notes": t.notes, "map_keys": t.map_keys})
-        })
-        .collect();
-    json!({"types": out, "classes": CLASSES, "per": PER_STATEMENT, "nothing": NOTHING_GUESSED})
-}
-
-/// THE LOCKSTEP (`ask:449-engine-order` condition 3): the Python's `load_types()` on the real `types.json`, every field of every type and
-/// item, equal to this parse, and its three classes' fields the ones this port carries - an edit of `types.py` that this file did not
-/// follow fails here. The one test that runs Python: about 35 ms (observed 2026-11-17, `python3 -I` importing `types` alone).
+/// The real declaration reads, every type's tier unique, and its items name the kinds the sheets are tagged with (the lockstep with
+/// `types.py` this replaced went with the Python, feature 449 T212).
 #[test]
-fn the_parse_is_the_python_s_on_the_real_declaration() {
-    let out = std::process::Command::new("python3")
-        .args(["-I", "-c", DUMP])
-        .arg(real())
-        .output()
-        .unwrap();
-    let failed = String::from_utf8_lossy(&out.stderr);
-    assert_eq!((out.status.success(), failed.as_ref()), (true, ""));
-    let mut python: Value = serde_json::from_slice(&out.stdout).unwrap();
-    let declaration = python["declaration"].take();
-    let fields = python["fields"].take();
-    python
-        .as_object_mut()
-        .unwrap()
-        .retain(|k, _| !["declaration", "fields"].contains(&k.as_str()));
-    assert!(declaration.as_str().unwrap().ends_with(DECLARATION));
-    assert_eq!(
-        fields,
-        json!([
-            ["w", "h", "area"],
-            ["id", "label", "band", "cls", "why", "optional", "forms", "site", "kind"],
-            [
-                "tier",
-                "title",
-                "program",
-                "hand_drawn",
-                "required",
-                "checks",
-                "generated_exceptions",
-                "notes",
-                "map_keys"
-            ]
-        ])
-    );
-    let rust = load_types(&real()).unwrap();
-    assert_eq!(python, rust_dump(&rust));
-    assert!(rust
+fn the_real_declaration_reads() {
+    let types = load_types(&real()).unwrap();
+    let tiers: std::collections::BTreeSet<&str> = types.iter().map(|t| t.tier.as_str()).collect();
+    assert!(!types.is_empty() && tiers.len() == types.len());
+    assert!(types
         .iter()
         .any(|t| t.required.iter().any(|i| i.kind.is_some())));
 }

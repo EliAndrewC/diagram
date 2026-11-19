@@ -1,6 +1,6 @@
-//! The sheets the lockstep runs beside the pool's (feature 449 T170): each a form the pool's six sheets do not draw - a rotated or
-//! wrapped caption, a rectilinear path, a translated glyph, a non-ASCII text before the ink (the offsets), and every refusal - run
-//! through the Python and this port alike, so no expected value here is derived by hand.
+//! Sheets of forms the pool's six sheets do not draw (feature 449 T170) - a rotated or wrapped caption, a rectilinear path, a translated
+//! glyph, a non-ASCII text before the ink (the offsets), and every refusal - which the page writer's held cases read (`page/held.rs`);
+//! the parse's lockstep that ran them through the Python too went with it (T212).
 //!
 //! Research:
 //!     the lockstep's fixture sheets - NONE: test sheets, deciding nothing about a building

@@ -117,3 +117,16 @@ fn what_the_python_refused_is_refused() {
         "ValueError: cannot convert float NaN to integer\n"
     );
 }
+
+#[test]
+fn a_tile_with_no_cell_inside_is_bare() {
+    let plan = parse_svg(SHEET).unwrap();
+    // more rows than the grid has: a row of tiles holds no cell, and reads 0
+    let tiles = region_density(&plan, 30, 1, 2).unwrap();
+    let empty: Vec<(f64, i64)> = tiles
+        .iter()
+        .filter(|t| t.interior_sqft == 0)
+        .map(|t| (t.coverage_pct, t.interior_sqft))
+        .collect();
+    assert!(!empty.is_empty() && empty.iter().all(|e| *e == (0.0, 0)));
+}

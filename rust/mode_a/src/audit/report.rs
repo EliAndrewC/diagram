@@ -349,9 +349,7 @@ pub fn main(args: &[String], tree: &Path) -> Reply {
     if args.is_empty() {
         return Reply {
             stdout: String::new(),
-            stderr:
-                "usage: python3 -m l7r.diagram.tools.pack_audit <compound.svg> [more.svg ...]\n"
-                    .to_owned(),
+            stderr: "usage: make pack-audit ARGS=<compound.svg>\n".to_owned(),
             code: 2,
         };
     }

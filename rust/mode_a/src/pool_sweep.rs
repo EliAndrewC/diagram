@@ -6,8 +6,9 @@
 //! its place. A failure names the sheet, the check and the compliant fix, in that order; each rides in the compared
 //! value, so a failure prints it and a pass reaches every line.
 //!
-//! The sweep also asks the census's pool checks (`census/pool_check.rs`, moved here from the parse's lockstep so T212 can delete it):
-//! the notes' typed counts against the sheets held here, and every census block against its manifest.
+//! The sweep also asks the census's pool checks (`census/pool_check.rs`, moved here from the parse's lockstep, which T212 deleted),
+//! the notes' typed counts against the sheets held here, and every census block against its manifest; and the crate's end-to-end test,
+//! from the same lockstep: the pool's pages and the country shrine drawn whole.
 //!
 //! Research:
 //!     the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building
@@ -185,11 +186,11 @@ fn fixture_tier(fixture: &str) -> String {
     found.into_iter().next().unwrap().to_owned()
 }
 
-/// Whether `ch`'s fixture's tier owes it, and whether it FIRES on that fixture.
-fn fires(tree: &Path, ch: &Check) -> (bool, Result<bool, Error>) {
-    let svg = tree.join("tests/fixtures").join(ch.fixture);
+/// Whether the tier of the red fixture `fixture` owes `ch`, and whether `ch` FIRES on it.
+fn fires(tree: &Path, ch: &Check, fixture: &str) -> (bool, Result<bool, Error>) {
+    let svg = tree.join("tests/fixtures").join(fixture);
     let text = l7r_gate_core::record::read_text(&svg).unwrap();
-    let tier = fixture_tier(ch.fixture);
+    let tier = fixture_tier(fixture);
     let owed = checks_for(Some(&tier), tree)
         .unwrap()
         .iter()
@@ -203,20 +204,53 @@ fn fires(tree: &Path, ch: &Check) -> (bool, Result<bool, Error>) {
 /// A check's name, its red fixture, whether that fixture's tier owes it and whether it fired there.
 type Fired<'a> = (&'a str, &'a str, (bool, Result<bool, Error>));
 
-/// Every registered check FIRES on its red fixture under `tests/fixtures/`, read under the tier of the pool sheet it was cut from, and
-/// that tier owes the check.
+/// Every check's red fixtures: its registry row's, then the registry's `MORE_FIXTURES`.
+fn red_fixtures() -> Vec<(&'static Check, &'static str)> {
+    let more = crate::audit::registry::MORE_FIXTURES
+        .iter()
+        .map(|(name, fixture)| {
+            let ch = CHECKS.iter().find(|c| c.name == *name);
+            assert!(ch.is_some(), "{name}: no registered check of that name");
+            (ch.unwrap(), *fixture)
+        });
+    CHECKS
+        .iter()
+        .map(|ch| (ch, ch.fixture))
+        .chain(more)
+        .collect()
+}
+
+/// Every registered check FIRES on each of its red fixtures under `tests/fixtures/`, read under the tier of the pool sheet it was cut
+/// from, and that tier owes the check.
 #[test]
 fn every_check_fires_on_its_red_fixture() {
     let tree = tree();
-    let got: Vec<Fired<'_>> = CHECKS
+    let reds = red_fixtures();
+    let got: Vec<Fired<'_>> = reds
         .iter()
-        .map(|ch| (ch.name, ch.fixture, fires(&tree, ch)))
+        .map(|(ch, fixture)| (ch.name, *fixture, fires(&tree, ch, fixture)))
         .collect();
-    let want: Vec<Fired<'_>> = CHECKS
+    let want: Vec<Fired<'_>> = reds
         .iter()
-        .map(|ch| (ch.name, ch.fixture, (true, Ok(true))))
+        .map(|(ch, fixture)| (ch.name, *fixture, (true, Ok(true))))
         .collect();
     assert_eq!(got, want);
+}
+
+/// Every `-red.svg` under `tests/fixtures/` is a red fixture of some check (T211 found three no row named; a fixture nothing runs proves
+/// nothing).
+#[test]
+fn every_red_fixture_is_some_check_s() {
+    const FIX: &str = "name it as a check's red fixture (its registry row, or the registry's `MORE_FIXTURES`), or delete it";
+    let named: BTreeSet<&str> = red_fixtures().into_iter().map(|(_, f)| f).collect();
+    let mut orphans: Vec<String> = std::fs::read_dir(tree().join("tests/fixtures"))
+        .unwrap()
+        .flatten()
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        .filter(|n| n.ends_with("-red.svg") && !named.contains(n.as_str()))
+        .collect();
+    orphans.sort();
+    assert_eq!((orphans, FIX), (Vec::<String>::new(), FIX));
 }
 
 const UNTABLED: &str = "tagged kinds no size-table row carries (a kind on a caption alone) - tag the drawn element with the kind, or the caption with the kind it names";
@@ -335,4 +369,49 @@ fn the_pool_notes_type_what_their_sheets_draw_and_their_census_blocks_are_fresh(
         .collect();
     crate::census::pool_check::every_pool_sheet_s_notes_type_the_counts_it_draws(&sheets);
     crate::census::pool_check::every_census_block_is_its_manifest_s(&tree());
+}
+
+/// FR-008's one end-to-end test (ask:449-T167-realtree): the page writer's cases that read the live tree, and each pool sheet on disk
+/// with its page written, picture and id map drawn and census clean (`page::held::outcomes`, T150); and the country shrine drawn whole by
+/// the command its generator runs (T151), a copy beside this test's world so the pool is untouched, the picture skipped - its census
+/// clean, its placed text the placer's, the tracked sheet among the reads the generation cache is told of. The parse's lockstep held it
+/// until T212 deleted that test with its Python.
+#[test]
+fn the_pages_and_the_country_shrine_are_drawn_end_to_end() {
+    let tree = tree();
+    let on_disk: Vec<PathBuf> = pool()
+        .iter()
+        .filter(|s| s.svg.is_file())
+        .map(|s| s.svg.clone())
+        .collect();
+    assert!(on_disk.len() >= 4);
+    let writer = crate::page::held::outcomes(&on_disk);
+    let held = (writer.pages, writer.cases > 200, writer.refusals > 0);
+    assert_eq!(held, (on_disk.len(), true, true));
+    let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-end-to-end");
+    let shrine = dir.path().join("hoshigaoka-shrine.svg");
+    let tracked = tree.join("pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg");
+    std::fs::copy(&tracked, &shrine).unwrap();
+    let skip = crate::raster::Host {
+        vars: vec![("DIAGRAM_SKIP_RENDER".into(), "1".into())],
+        ..Default::default()
+    };
+    let drawn_to = dir.path().join("shrine-placed.svg");
+    let args = [&shrine, &drawn_to].map(|p| p.to_string_lossy().into_owned());
+    let words = [args[0].clone(), "--placed".to_owned(), args[1].clone()];
+    let r = {
+        let _log = crate::reads::taker();
+        crate::sheet::hand::main(&words, &tree, &skip)
+    };
+    assert_eq!((r.code, r.stderr.as_str()), (0, ""));
+    assert!(r.stdout.contains(&format!("\"{}\"", args[0])));
+    assert!(
+        r.stdout.contains("/modals/sheet/torii.md\""),
+        "{}",
+        r.stdout
+    );
+    let drawn = std::fs::read_to_string(&drawn_to).unwrap();
+    let text = std::fs::read_to_string(&tracked).unwrap();
+    assert_eq!(drawn, crate::caption_place::placed(&text).unwrap());
+    assert!(dir.path().join("hoshigaoka-shrine.html").is_file());
 }

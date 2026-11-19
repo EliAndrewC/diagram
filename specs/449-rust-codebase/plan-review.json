@@ -960,6 +960,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T212 (T156's scoping, 2026-11-19: the Python audit and its lockstep lose their last reader once the pool sweep is Rust)": {
+   "sha256": "2897925baefbed0fc9cc6dee879a02b5fc134399532fdc5f038f749af2da31e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T212 Approach (checklist part A)": {
+   "sha256": "b8200d618e7f3c941400c1cc912beacdb0a91192d7fc80fef832d768e8474629",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14274,6 +14286,58 @@
      "why": "It orders tasks inside the feature's approved scope and decides nothing the request settles."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T212 (T156's scoping, 2026-11-19: the Python audit and its lockstep lose their last reader once the pool sweep is Rust)",
+    "### T212 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T212-1 delete the Python audit, sheet.py's reader half and buildings/types.py",
+     "summary": "With T211's Rust pool sweep landed, the Python audit (l7r/diagram/tools/pack_audit/), interactive/sheet.py's reader half and buildings/types.py are deleted where nothing imports them.",
+     "class": "within",
+     "why": "FR-001 puts the pack_audit package and Mode A (buildings/, interactive/) in phase 4 for replacement by Rust; FR-002 requires the replaced piece to work before its Python is deleted, which the Rust audit under T211's Rust sweep supplies (the audit lands first, wired, ask:449-engine-order); the GM's standing approval of 2026-11-10 ('Yes please delete Python files once their Rust ports land') covers the deletion. FR-001b's kept sweep of the hand-drawn sheets is the T211 sweep now in Rust, so no kept test is lost."
+    },
+    {
+     "id": "T212-2 remaining importers re-pointed, or keep the least Python they need until T157",
+     "summary": "Each remaining importer is re-pointed at the Rust, or keeps the least Python it needs until T157 rebuilds the pipeline.",
+     "class": "within",
+     "why": "A deferral inside FR-001's phase order (the pipeline is a later slice, S12/T157), and FR-003's rule that Python stays the one that runs until its replacement passes. It is within only as a remnant that is not a second running audit: the block's own goal ('One audit, the Rust one, with no Python copy') rules out a pipeline importer still running the Python audit beside the wired Rust one, which would break FR-003's 'no piece runs both'. Read that way, nothing is carved out."
+    },
+    {
+     "id": "T212-3 the lockstep tests deleted with their Python",
+     "summary": "rust/mode_a/src/parse/lockstep*.rs and the types lockstep, which held step 1's Rust audit to the Python's answers, are deleted with their Python; the Rust sweep holds the audit to its job.",
+     "class": "within",
+     "why": "FR-001's own text ('a lockstep test holding Rust to the Python's answers is deleted with that Python (engine-plan.md)') and the GM's 2026-11-19 approval of the plan ('lockstep tests retired as the Python goes', request.md). Holding Rust to the Python's answers would also be an exactness standard the GM struck (FR-002, 2026-11-18). The audit's job stays held by the Rust sweep and its red fixtures under FR-002."
+    },
+    {
+     "id": "T212-4a the unwired red fixtures wired to their checks",
+     "summary": "Red fixtures no registry row named are wired to the check each was drawn for.",
+     "class": "within",
+     "why": "Enforcement of FR-002 (a ported check shows it works by its red fixtures still failing) and of the GM's 2026-11-18 FIX AS WE GO; a check whose only effect is to make the requested thing happen serves the request."
+    },
+    {
+     "id": "T212-4b an unwired red fixture deleted instead",
+     "summary": "The alternative branch: a red fixture no registry row names may be deleted rather than wired.",
+     "class": "within",
+     "why": "These fixtures were never suite cases (no registry row named them), so FR-002's 'each suite case that must refuse still fails' loses nothing enforced today, and deleting an unread file carves nothing out of the request. The boundary that keeps it within: a fixture that, once wired, the Rust check fails to refuse is a check passing bad work - a DEFECT under constitution XIV - owed a fix under FIX AS WE GO before the next step, never a deletion; deletion is for a fixture whose check no longer exists or that does not depict what it was drawn for. The block decides no defect left ('Found and left? none yet') and its red exit sets the task down, so it does not choose the other reading."
+    },
+    {
+     "id": "T212-5 claims carried, or go by the map's other outcomes",
+     "summary": "The deleted units' claims are carried to the Rust units that took their text, or go by claims-ports.json's other outcomes; exit: no claim stranded.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q10 as amended: claims re-keyed by claims carry in the cut that deletes the units, none landed keyed to a deleted unit, the only other outcomes retired (research overruled) and rebuilt (file on a phase task's old-code: line, SOUND derivation), each with conditions ports.rs enforces; ask:449-T152-rebuilt-claims condition (2) says the step-1 audit's Rust keeps its own rows and the Python copies of those rows go with their files. The block adds no new outcome and states the exit 'no claim stranded', with a claim that cannot be carried ruled through make arbiter-ask."
+    },
+    {
+     "id": "T212-6 order, exits and budget",
+     "summary": "After T211, before T213; green exit: no importer of the deleted packages, the lockstep gone, the sweep green, no claim stranded, make static and a make map of each sheet kind green; one landing.",
+     "class": "within",
+     "why": "Sequencing and verification of the requested removal; nothing narrowed, no unrequested scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25246,6 +25310,56 @@
      "summary": "After T210, before T212 (lockstep deletion) and T213",
      "class": "within",
      "why": "It orders tasks inside the feature's approved scope and decides nothing the request settles."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T212": {
+   "section_sha256": "47518ca6e5d5c894c029639dae45463a8f19a2b09a9f761c315c8f3441564c1c",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T212-1 delete the Python audit, sheet.py's reader half and buildings/types.py",
+     "summary": "With T211's Rust pool sweep landed, the Python audit (l7r/diagram/tools/pack_audit/), interactive/sheet.py's reader half and buildings/types.py are deleted where nothing imports them.",
+     "class": "within",
+     "why": "FR-001 puts the pack_audit package and Mode A (buildings/, interactive/) in phase 4 for replacement by Rust; FR-002 requires the replaced piece to work before its Python is deleted, which the Rust audit under T211's Rust sweep supplies (the audit lands first, wired, ask:449-engine-order); the GM's standing approval of 2026-11-10 ('Yes please delete Python files once their Rust ports land') covers the deletion. FR-001b's kept sweep of the hand-drawn sheets is the T211 sweep now in Rust, so no kept test is lost."
+    },
+    {
+     "id": "T212-2 remaining importers re-pointed, or keep the least Python they need until T157",
+     "summary": "Each remaining importer is re-pointed at the Rust, or keeps the least Python it needs until T157 rebuilds the pipeline.",
+     "class": "within",
+     "why": "A deferral inside FR-001's phase order (the pipeline is a later slice, S12/T157), and FR-003's rule that Python stays the one that runs until its replacement passes. It is within only as a remnant that is not a second running audit: the block's own goal ('One audit, the Rust one, with no Python copy') rules out a pipeline importer still running the Python audit beside the wired Rust one, which would break FR-003's 'no piece runs both'. Read that way, nothing is carved out."
+    },
+    {
+     "id": "T212-3 the lockstep tests deleted with their Python",
+     "summary": "rust/mode_a/src/parse/lockstep*.rs and the types lockstep, which held step 1's Rust audit to the Python's answers, are deleted with their Python; the Rust sweep holds the audit to its job.",
+     "class": "within",
+     "why": "FR-001's own text ('a lockstep test holding Rust to the Python's answers is deleted with that Python (engine-plan.md)') and the GM's 2026-11-19 approval of the plan ('lockstep tests retired as the Python goes', request.md). Holding Rust to the Python's answers would also be an exactness standard the GM struck (FR-002, 2026-11-18). The audit's job stays held by the Rust sweep and its red fixtures under FR-002."
+    },
+    {
+     "id": "T212-4a the unwired red fixtures wired to their checks",
+     "summary": "Red fixtures no registry row named are wired to the check each was drawn for.",
+     "class": "within",
+     "why": "Enforcement of FR-002 (a ported check shows it works by its red fixtures still failing) and of the GM's 2026-11-18 FIX AS WE GO; a check whose only effect is to make the requested thing happen serves the request."
+    },
+    {
+     "id": "T212-4b an unwired red fixture deleted instead",
+     "summary": "The alternative branch: a red fixture no registry row names may be deleted rather than wired.",
+     "class": "within",
+     "why": "These fixtures were never suite cases (no registry row named them), so FR-002's 'each suite case that must refuse still fails' loses nothing enforced today, and deleting an unread file carves nothing out of the request. The boundary that keeps it within: a fixture that, once wired, the Rust check fails to refuse is a check passing bad work - a DEFECT under constitution XIV - owed a fix under FIX AS WE GO before the next step, never a deletion; deletion is for a fixture whose check no longer exists or that does not depict what it was drawn for. The block decides no defect left ('Found and left? none yet') and its red exit sets the task down, so it does not choose the other reading."
+    },
+    {
+     "id": "T212-5 claims carried, or go by the map's other outcomes",
+     "summary": "The deleted units' claims are carried to the Rust units that took their text, or go by claims-ports.json's other outcomes; exit: no claim stranded.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q10 as amended: claims re-keyed by claims carry in the cut that deletes the units, none landed keyed to a deleted unit, the only other outcomes retired (research overruled) and rebuilt (file on a phase task's old-code: line, SOUND derivation), each with conditions ports.rs enforces; ask:449-T152-rebuilt-claims condition (2) says the step-1 audit's Rust keeps its own rows and the Python copies of those rows go with their files. The block adds no new outcome and states the exit 'no claim stranded', with a claim that cannot be carried ruled through make arbiter-ask."
+    },
+    {
+     "id": "T212-6 order, exits and budget",
+     "summary": "After T211, before T213; green exit: no importer of the deleted packages, the lockstep gone, the sweep green, no claim stranded, make static and a make map of each sheet kind green; one landing.",
+     "class": "within",
+     "why": "Sequencing and verification of the requested removal; nothing narrowed, no unrequested scope."
     }
    ],
    "verdict": "CLEAR"

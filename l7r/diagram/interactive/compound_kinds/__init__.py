@@ -13,7 +13,7 @@ The hamlet registry is untouched (spec FR-011).
 EVERY WRITE-UP IS WRITTEN FROM THE EXISTING RECORD (spec FR-005, the GM: *"for now, I only want to tie into
 existing research findings that already exist"*). A `buildings/types.json` program item folded into a kind states
 nothing of its own (FR-003a): the audit and `programs.md` read the kind's guesses from here
-(`buildings.types.classification`). A kind no research section covers names no question in its `Entry:`, so the
+(`classification`, `rust/mode_a/src/types.rs`). A kind no research section covers names no question in its `Entry:`, so the
 page's missing references show the gap.
 
 Look here when: a magistracy modal says something wrong (the kind's modal file), a new kind of thing is drawn

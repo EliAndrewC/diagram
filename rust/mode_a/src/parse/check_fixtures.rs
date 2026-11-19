@@ -1,8 +1,12 @@
-//! The sheets the checks' lockstep runs beside the pool's and the red fixtures (feature 449 T175): each a form those do not draw - a map
-//! declaration's every manifest shape and refusal, a check's other branch, a report's empty sections - written with its notes and
-//! manifest into the test's own directory and run through the Python and this port alike, so no expected value here is derived by hand.
-//! A sheet's name gives its tier as the red fixtures' do (`ochiba-` a magistracy, `hoshigaoka-` a country shrine, `plain-` none); one
-//! named `-refused-` is one the report refuses on both sides.
+//! The audit's sheets beyond the pool's and the red fixtures (feature 449 T175): each a form those do not draw - a map declaration's
+//! every manifest shape and refusal, a check's other branch, a report's empty sections - written with its notes and manifest into the
+//! test's own directory. A sheet's name gives its tier as the red fixtures' do (`ochiba-` a magistracy, `hoshigaoka-` a country shrine,
+//! `plain-` none); one named `-refused-` is one the report refuses. The checks' lockstep ran them through the Python too, holding every
+//! verdict to the Python's; since it went with the Python (feature 449 T212) [`every_sheet_is_reported_and_every_check_runs_on_it`]
+//! holds the outcome alone - each report written or refused as its name says, a red fixture's report naming its check - and
+//! [`each_fixture_fires_the_checks_it_was_drawn_for`] each fixture's stated intent ([`DRAWN_FOR`]). A check's verdict on a passing
+//! branch here is held by no test since: its own unit tests (`fix_fixtures.rs`, the `mapmatch`, `onmap`, `roads` modules) and the pool
+//! sweep's sheets and red fixtures are what pin verdicts.
 //!
 //! Research:
 //!     the checks' fixture sheets - NONE: test sheets, deciding nothing about a building
@@ -431,4 +435,290 @@ pub fn write(dir: &Path) -> Vec<PathBuf> {
         out.push(path);
     }
     out
+}
+
+/// The tier a sheet is read under: the pool folder two up where it is a declared tier, else its name's place, as the red fixtures'.
+fn tier_of(path: &Path, tree: &Path) -> Option<String> {
+    let declared = crate::types::tiers(tree).unwrap();
+    let up = path
+        .parent()
+        .and_then(Path::parent)
+        .and_then(Path::file_name)
+        .map(|n| n.to_string_lossy().into_owned());
+    if let Some(t) = up.filter(|t| declared.contains(t)) {
+        return Some(t);
+    }
+    let base = path.file_name().unwrap().to_string_lossy().into_owned();
+    match base.split('-').next().unwrap_or_default() {
+        "ochiba" | "hayakawa" | "ubame" | "county" => Some("magistracies".to_owned()),
+        "hoshigaoka" => Some("country-shrines".to_owned()),
+        _ => None,
+    }
+}
+
+/// The report of the sheet at `path`, as `make pack-audit` writes it under the sheet's tier.
+fn report(path: &Path, tree: &Path) -> Result<String, l7r_gate_research::Error> {
+    let shown = path.to_string_lossy();
+    let text = l7r_gate_core::record::read_text(path).unwrap();
+    let plan = crate::parse::parse_svg(&text)?;
+    let tier = tier_of(path, tree);
+    let btype = match &tier {
+        Some(t) => crate::types::by_tier(t, tree)?,
+        None => None,
+    };
+    let form = crate::audit::report::read_form(&shown)?;
+    let on_map = crate::audit::onmap::read_on_map(&shown)?;
+    crate::audit::report::format_report(
+        &plan,
+        crate::grids::CELL,
+        &text,
+        tier.as_deref(),
+        btype.as_ref(),
+        form.as_deref(),
+        on_map.as_ref(),
+        tree,
+    )
+}
+
+/// Every pool sheet on disk, red fixture and check fixture REPORTED under its tier - written, or refused where its name says - and
+/// every registered check run alone on each check fixture under the shared layer and both tiers; a red fixture's report names its own
+/// check (`registry.rs`); the pool sweep holds a pool sheet's verdicts. The outcome alone: no expected figure here is the Python's.
+#[test]
+fn every_sheet_is_reported_and_every_check_runs_on_it() {
+    use crate::audit::registry::{Context, CHECKS};
+    let tree = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-check-fixtures");
+    let fixtures = write(dir.path());
+    let mut reds: Vec<PathBuf> = std::fs::read_dir(tree.join("tests/fixtures"))
+        .unwrap()
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.to_string_lossy().ends_with("-red.svg"))
+        .collect();
+    reds.sort();
+    let mut pool: Vec<PathBuf> = Vec::new();
+    for tier in crate::types::tiers(&tree).unwrap() {
+        for e in std::fs::read_dir(tree.join("pool").join(&tier))
+            .into_iter()
+            .flatten()
+            .flatten()
+        {
+            let stem = e.file_name().to_string_lossy().into_owned();
+            let svg = e.path().join(format!("{stem}.svg"));
+            if svg.is_file() {
+                pool.push(svg);
+            }
+        }
+    }
+    pool.sort();
+    assert!(pool.len() >= 4 && reds.len() >= 40 && fixtures.len() >= 30);
+    let reported = |path: &PathBuf| {
+        let name = path.file_name().unwrap().to_string_lossy().into_owned();
+        let got = report(path, &tree);
+        // a red fixture's own checks its report leaves out
+        let missed: Vec<&str> = got.as_ref().map_or_else(
+            |_| Vec::new(),
+            |text| {
+                let unreported = |n: &str| !text.contains(&format!("    {}: ", n.to_uppercase()));
+                CHECKS
+                    .iter()
+                    .filter_map(|ch| (ch.fixture == name && unreported(ch.name)).then_some(ch.name))
+                    .collect()
+            },
+        );
+        (got.is_ok(), missed, name)
+    };
+    let sheets: Vec<&PathBuf> = pool.iter().chain(&reds).chain(&fixtures).collect();
+    let got: Vec<(bool, Vec<&str>, String)> = sheets.iter().map(|p| reported(p)).collect();
+    let want: Vec<(bool, Vec<&str>, String)> = got
+        .iter()
+        .map(|(_, _, name)| (!name.contains("-refused-"), Vec::new(), name.clone()))
+        .collect();
+    assert_eq!(got, want);
+    // every check alone on each check fixture the parse and the map declaration read, under each tier and none, a refusal an outcome too
+    let types = crate::types::load_types(&tree).unwrap();
+    let read: Vec<(
+        String,
+        crate::parse::ParsedPlan,
+        Option<String>,
+        Option<crate::audit::onmap::OnMap>,
+    )> = fixtures
+        .iter()
+        .filter_map(|path| {
+            let (text, shown) = (
+                l7r_gate_core::record::read_text(path).unwrap(),
+                path.to_string_lossy(),
+            );
+            let plan = crate::parse::parse_svg(&text).ok()?;
+            let on_map = crate::audit::onmap::read_on_map(&shown).ok()?;
+            Some((
+                text,
+                plan,
+                crate::audit::report::read_form(&shown).unwrap(),
+                on_map,
+            ))
+        })
+        .collect();
+    let mut ran = 0_usize;
+    for (text, plan, form, on_map) in &read {
+        for btype in std::iter::once(None).chain(types.iter().map(Some)) {
+            let ctx = Context::new(plan, text, btype, form.as_deref(), on_map.as_ref(), &tree);
+            ran += CHECKS
+                .iter()
+                .map(|ch| {
+                    usize::from((ch.run)(&ctx).is_ok()) + usize::from((ch.skipped)(&ctx).is_some())
+                })
+                .sum::<usize>();
+        }
+    }
+    // most checks answer on most sheets; a refusal is an outcome too, but not every one
+    assert!(read.len() + 3 >= fixtures.len() && ran > 1000);
+}
+
+/// `make pack-audit`'s command over real paths: a pool sheet named through `..` reported under its tier (the folder two up), and a
+/// sheet that is not there ending the run with the Python's exception after what was printed, a sheet in no tier's folder reported
+/// under the shared layer alone; a shared check names no tier.
+#[test]
+fn the_command_reports_each_sheet_named_and_stops_at_one_missing() {
+    let tree = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let sheet = tree
+        .join("pool/magistracies/ochiba-magistracy/../ubame-magistracy/ubame-magistracy.svg")
+        .to_string_lossy()
+        .into_owned();
+    let r = crate::audit::report::main(std::slice::from_ref(&sheet), &tree);
+    assert_eq!((r.code, r.stderr.as_str()), (0, ""));
+    assert!(r.stdout.starts_with("=== ubame-magistracy.svg ===\n"));
+    assert!(r.stdout.contains("CHECKS (shared layer + magistracies):"));
+    let r = crate::audit::report::main(&[sheet, "no-such-sheet.svg".to_owned()], &tree);
+    assert_eq!(
+        (r.code, r.stderr.starts_with("FileNotFoundError: ")),
+        (1, true)
+    );
+    assert!(r.stdout.starts_with("=== ubame-magistracy.svg ===\n"));
+    // a sheet in no tier's folder (a red fixture) reported under the shared layer alone
+    let red = tree.join("tests/fixtures/ochiba-overlap-red.svg");
+    let r = crate::audit::report::main(&[red.to_string_lossy().into_owned()], &tree);
+    assert_eq!(
+        (r.code, r.stdout.contains("CHECKS (shared layer only):")),
+        (0, true)
+    );
+    let shared = crate::audit::registry::CHECKS
+        .iter()
+        .find(|c| c.shared)
+        .unwrap();
+    assert_eq!(shared.types(&tree).unwrap(), None);
+}
+
+/// What each fixture is drawn to show, as its doc comment says, run under the tier named: each check named FIRES on it. A fixture's
+/// intent, not a dump of what fired: a check it was not drawn for may fire too, and a passing branch (`plain-check-vertical`) is held
+/// by the run above alone.
+const DRAWN_FOR: [(&str, &str, &[&str]); 8] = [
+    // an opening too narrow, one too wide, one a building spans; the hearing court beyond the divider from the main gate; a door off
+    // its wall; tubs adrift and by a kura alone; no privy; the sheet's furniture
+    (
+        "ochiba-check-yard.svg",
+        "magistracies",
+        &[
+            "gate_widths",
+            "structures_on_walls",
+            "two_court_zoning",
+            "doors_off_their_walls",
+            "fire_water_adrift",
+            "fire_water_distribution",
+            "privies_by_zone",
+            "sheet_furniture",
+        ],
+    ),
+    // steps past the revetment, a torii as a silhouette, a road ending at an arch and a well, a stable's stalls, the well's gear in
+    // each wrong form, two compound shrines and a crown of none
+    (
+        "ochiba-check-grounds.svg",
+        "magistracies",
+        &[
+            "steps_past_revetment",
+            "arch_in_plan",
+            "roads_leave_the_frame",
+            "stall_width",
+            "well_gear",
+            "one_compound_shrine",
+            "shrine_tree",
+        ],
+    ),
+    // the country shrine's features out of place
+    (
+        "hoshigaoka-check-shrine.svg",
+        "country-shrines",
+        &[
+            "sanctuary_on_axis",
+            "arch_on_approach",
+            "well_clear_of_arch",
+            "no_precinct_enclosure",
+            "hall_at_an_end",
+            "trees_overlap",
+        ],
+    ),
+    (
+        "hoshigaoka-check-upright.svg",
+        "country-shrines",
+        &["sanctuary_on_axis"],
+    ),
+    (
+        "hoshigaoka-check-map.svg",
+        "country-shrines",
+        &["matches_map"],
+    ),
+    // the zoning's other refusals: a divider unbroken, no hearing court, no gate in the wall
+    (
+        "plain-check-unbroken.svg",
+        "magistracies",
+        &["two_court_zoning"],
+    ),
+    (
+        "plain-check-nocourt.svg",
+        "magistracies",
+        &["two_court_zoning"],
+    ),
+    (
+        "plain-check-nogate.svg",
+        "magistracies",
+        &["two_court_zoning"],
+    ),
+];
+
+#[test]
+fn each_fixture_fires_the_checks_it_was_drawn_for() {
+    use crate::audit::registry::{Context, CHECKS};
+    let tree = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-drawn-for");
+    let written = write(dir.path());
+    let fired =
+        |&(fixture, tier, checks): &(&'static str, &'static str, &'static [&'static str])| {
+            let path = written.iter().find(|p| p.ends_with(fixture)).unwrap();
+            let (text, shown) = (
+                l7r_gate_core::record::read_text(path).unwrap(),
+                path.to_string_lossy(),
+            );
+            let plan = crate::parse::parse_svg(&text).unwrap();
+            let btype = crate::types::by_tier(tier, &tree).unwrap();
+            let form = crate::audit::report::read_form(&shown).unwrap();
+            let on_map = crate::audit::onmap::read_on_map(&shown).unwrap();
+            let ctx = Context::new(
+                &plan,
+                &text,
+                btype.as_ref(),
+                form.as_deref(),
+                on_map.as_ref(),
+                &tree,
+            );
+            checks
+                .iter()
+                .map(|name| {
+                    let ch = CHECKS.iter().find(|c| c.name == *name).unwrap();
+                    (fixture, *name, (ch.run)(&ctx).map(|f| !f.is_empty()))
+                })
+                .collect::<Vec<_>>()
+        };
+    let got: Vec<_> = DRAWN_FOR.iter().flat_map(fired).collect();
+    let want: Vec<_> = got.iter().map(|(f, n, _)| (*f, *n, Ok(true))).collect();
+    assert_eq!(got, want);
 }

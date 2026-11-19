@@ -10,9 +10,8 @@
 //! audit keys a label's kind by - where the regex crate counts bytes, so every offset this crate hands out goes through [`Offsets`]. On an
 //! ASCII sheet (all six pool sheets, observed 2026-11-17, method: a grep for a byte over 0x7f) the two are the same.
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): `sheet.py`'s reader stays the implementation for the Python that imports it (`pack_audit`)
-//! until step 3 (its page half is Rust alone since T150); an edit of its reader makes the same change here in the same commit, and `parse/lockstep.rs`
-//! holds the two equal on every pool sheet.
+//! THE PYTHON IS DELETED: `sheet.py`'s reader went with the Python audit, its last importer, its lockstep retired with it (feature 449 T212; `specs/449-rust-codebase/engine-plan.md`: lockstep tests retire with their Python): this module's own tests pin its behavior, and the pool sweep (`crate::pool_sweep`) puts every pool sheet and red fixture through it;
+//! `sheet.py` keeps only the generators' two calls into this crate (`draw_hand_sheet`, `draw_compound_sheet`).
 //!
 //! Research:
 //!     the sheet's reader - NONE: a tokenizer and a tree, deciding nothing about a building

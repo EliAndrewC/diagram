@@ -2,7 +2,7 @@
 //! Python it called): a count of tubs, privies or wells typed in a pool sheet's notes' current prose agrees with what the sheet draws -
 //! dated history exempt, and a count of a part. Asked by the Rust pool sweep (`crate::pool_sweep`, feature 449 T211) with the sheets it
 //! holds - a hand sheet as tracked, a generated one composed from its spec in process, so neither is read stale - and with the pool's
-//! census blocks (moved there from the parse's lockstep, which T212 deletes).
+//! census blocks (moved there from the parse's lockstep, deleted by T212).
 //!
 //! Research:
 //!     the sheets' typed counts check - NONE: a check over the pool's sheets and their notes, deciding nothing about a building

@@ -374,6 +374,7 @@ fn a_unit_with_its_own_port_is_carried_there_not_dropped() {
         Port {
             to: "rust/mode_a/src/m.rs::f".to_owned(),
             by: "9001 T00".to_owned(),
+            ..Port::default()
         },
     )]
     .into();

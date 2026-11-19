@@ -2,12 +2,12 @@
 //! ([`types`], `l7r/diagram/buildings/types.py`) and `make building-programs` ([`programs`], `tools/building_programs.py`, deleted); and
 //! (T170, the second piece) `make notes-census` ([`census`], `tools/notes_census.py`, deleted) with what it reads of a sheet - the reader
 //! ([`sheet`], `interactive/sheet.py`'s), the tagged marks ([`tagged`], `pack_audit/tagged.py`) and the audit's parse ([`parse`],
-//! `pack_audit/parse.py`), the Python of those three kept for its importers under the lockstep rule; and (T174, the third piece) `make
+//! `pack_audit/parse.py`); and (T174, the third piece) `make
 //! size-table` ([`size_table`], `scripts/reviews/size_table.py`, deleted) with what it reads - the sized marks ([`size_marks`],
 //! `pack_audit/size_marks.py`), the grid measures whole ([`grids`], `pack_audit/grids.py`), the start tags ([`hand_sheet`],
-//! `labels/hand_sheet.py`'s `start_tags`) and an XML reading ([`etree`], `ET.fromstring`'s), the Python of the first three kept likewise;
-//! and (T175, the fourth piece's libraries) the rest of the audit - its checks, registry and report ([`audit`], `pack_audit/`) and what
-//! they read of the compound engine ([`compound`]), the Python kept likewise; and (T175, the fourth piece's wiring) `make pack-audit`
+//! `labels/hand_sheet.py`'s `start_tags`) and an XML reading ([`etree`], `ET.fromstring`'s); and (T175, the fourth piece's libraries)
+//! the rest of the audit - its checks, registry and report ([`audit`], `pack_audit/`) and what they read of the compound engine
+//! ([`compound`]); and (T175, the fourth piece's wiring) `make pack-audit`
 //! ([`audit::report::main`], `pack_audit/__main__.py`, deleted); and (T150, step 2's libraries) the page writer the six sheets' pages are
 //! written by - [`page`] (`interactive/page.py` and `extents.py`), [`raster`] (`raster.py`, the `resvg` crate in process, the picture's JPEG
 //! encoded in process), [`place`], [`notes`], [`tags`], [`dwellings`] and the sheet's page half ([`sheet::page`]); and (T150, step 2's wiring) the six
@@ -15,6 +15,10 @@
 //! `picture-diff` and `page-lit` ([`diagnostics`], `tools/picture_diff.py` and `page_lit.py`, deleted) and the files the page read
 //! listed for the generation cache ([`reads`]); and (T151, step 3a) the hand sheet's reader ([`labels`], `l7r/diagram/labels/`'s; its
 //! placer rebuilt from its derivation by T202, [`caption_place`]) and the country shrine drawn whole by `hand-sheet` ([`sheet::hand`]), its generator a call to it.
+//!
+//! Each piece's Python was kept for its Python importers, held to the port by a lockstep test, until nothing imported it: `types.py`,
+//! the audit (`pack_audit/`) and `sheet.py`'s reader were deleted with their locksteps by T212 (`specs/449-rust-codebase/engine-plan.md`:
+//! lockstep tests retire with their Python), and the crate's own tests and the pool sweep ([`pool_sweep`]) hold it since.
 //!
 //! WHY ITS OWN CRATE AND BINARY: the engine pulls `geo` (since T175, the audit's garden sun) and will pull `resvg` (the plan's steps 2-3), and a gate or guard build that compiled
 //! them would put minutes in front of every hook and check edit; so `l7r-mode-a` is built alone by `scripts/gates/l7r-gate.sh mode-a`,
@@ -277,10 +281,7 @@ mod tests {
         let r = run(&["pack-audit"]);
         assert_eq!(
             (r.code, r.stderr.as_str()),
-            (
-                2,
-                "usage: python3 -m l7r.diagram.tools.pack_audit <compound.svg> [more.svg ...]\n"
-            )
+            (2, "usage: make pack-audit ARGS=<compound.svg>\n")
         );
         let r = run(&["pack-audit", &at("none.svg")]);
         assert_eq!(
