@@ -909,34 +909,8 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T223 to T218 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T224 to T223 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T224 to T224 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T225 (T223: guards, gate messages and docs told a reader to run make targets that no longer exist)
-
-- **Approach**: every instruction to run `make <name>` checked against the Makefile's rules, by script, over the guards' and gate's message strings, the agent files, `docs/`, `dev/*.md`, the CLAUDE.md files and the `.specify` templates; history (specs, run logs, fixtures, a line saying a command was retired) left as written. Each live instance re-pointed at the command that does the job now, or the instruction removed with any code that ran it: pair_hooks' gate pattern matches `make done` only; measure_hooks' `make perf` reminder and `make test-full` detection removed, its cadence keyed on `make done` and `make done FULL=1`; the work-budget bundle's `make perf-fanout` refusal removed (nothing writes that report now); the cohort note and the land's `make rust-gate` call (unreachable at rust-only) removed; the guard-file refusals for `dev/work-budget.json` name `make budget-change`, its one writer (T227's finding); the round-arbiter's agent file, `l7r/diagram/tools/CLAUDE.md`, `docs/efficiency-tooling.md`, `docs/guards.md`, `docs/session-clones.md`, `docs/spec-kit-and-reviews.md`, `dev/lessons.md` and the `.specify` templates re-pointed (the templates' box titles kept, so existing checklists still satisfy `make land`). A check in the make-only suite refuses any `make <name>` in a guard or gate message or an agent file that names no rule, red first: 14 instances on HEAD (measured 2026-11-19 (the check against an archive of HEAD)), none now.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| every instruction names a command that runs | the make-only suite's section 7 check, the measure, pair and guard-file tests | the messages, the removed `rust_gate_run` | none | none |
-
-### T225 Approach (checklist part A)
-
-1. **The goal, in the world.** A refusal or a doc that tells a reader to run a command names one that runs and does the job.
-2. **The constraints.** The house rule that tips live in error output and name the concrete fix; constitution XIV; T227's plan review (this lands before T221).
-3. **Where each comes from.** O: T223's and T227's findings, and this task's scan.
-4. **Do they describe the world here?** Yes: the check found 14 instances on HEAD (measured 2026-11-19, as above).
-5. **The order.** After T227, before T221.
-6. **The exits.** Green: the check red on HEAD and green now, `make quick`, `make static`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing.
-9. **Done, measured.** The check passes on the tree.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Each tip sent a reader to a command that does not run: a wrong outcome.
-
-**Found and left?** The constitution names six dead commands (`make maps`, `make full-hamlet-sweep`, `make roll-audit`, `make perf-ab`, `make perf SCALING=1`, `make perf-report`); an amendment is its own process, put to the GM through escalation-check. `dev/rust-tooling.md` is an inventory a gate reads, its Python-era rows history. The check cannot see a name assembled from pieces (pair_hooks' was one, fixed by hand).
-
-**Performance work?** no
-
-
+<!-- plan-archive: T225 to T223 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
+<!-- plan-archive: T225 to T225 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 ### T226 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
