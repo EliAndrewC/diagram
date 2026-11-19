@@ -5236,3 +5236,32 @@ censuses empty (work breakdown 8, FR-010).
 **Performance work?** no
 
 
+<!-- plan-archive: archived 2026-11-19 -->
+### T205 (the GM, 2026-11-12: "you should prioritize the performance bits of the tests and landing"; 2026-11-19: "Yes those two efficiency improvements both seem worth doing sooner rather than later")
+
+- **Approach**: `make hooks-test` profiled suite by suite, then its repeated setup cut, every case kept. Most system CPU went to the two launchers rescanning their Rust sources (about 1,400 and 2,000 files) on every call, each check a line in the suite's read log - 1.26M lines from sync-with-main alone (observed 2026-11-19, method: the suites' read logs counted). `make hooks-test` now builds and checks both binaries once before its fan-out and passes their paths down, a call using exactly that binary skipping the scan and writing its source folders to the read log, expanded once per suite (the same 1,793 paths for review-gate and pair-hooks as the old scan). Two sync-with-main cases waited on an orphaned `sleep` holding a lock (killed now with its parent); entry-gate's long case runs in its own clone beside the others; the suites' freshness keys hash the Rust sources once, not about 50 times. The full run went from 50.4-52.6 s to 41.1-41.8 s wall and from ~277 s to ~219 s system CPU, old and new files alternated back to back three rounds each (measured 2026-11-19 (`make hooks-test HOOKS_ALL=1`, A/B)). Found on the way and fixed: a semantic-crate test failed once because the embedder's empty answer was reported as `answered ""` - it now says the embedder stopped, with a fake-embedder `quit` mode testing it.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the launchers' fresh-binary skip | cases in `test-l7r-guard.sh`, `test-l7r-gate.sh`, `test-parts.sh` | `L7R_GATE_FRESH`, `L7R_GUARD_FRESH` | none | none |
+
+### T205 Approach (checklist part A)
+
+1. **The goal, in the world.** The hook suites a landing runs finish sooner, so each guard or tooling change costs less wall time.
+2. **The constraints.** Every case and assertion kept; a guard's suite still goes stale when its sources change (feature 379); memory near its 10 GB cap (observed 2026-11-19, method: the memwatch notices) (no wider fan-out).
+3. **Where each comes from.** G: the GM, 2026-11-12 and 2026-11-19 (request.md); O: the profile above.
+4. **Do they describe the world here?** Yes: the read logs and per-suite times are this checkout's (measured 2026-11-19 (the suites' read logs and `time` per suite)).
+5. **The order.** After T207, before T206 and T152.
+6. **The exits.** Green: every suite green, the A/B saving shown, `make static` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The finding: a scan of every Rust source on every launcher call.
+8. **The budget.** One landing.
+9. **Done, measured.** The A/B above: about 20% wall and 21% system CPU off the full run (measured 2026-11-19, as above).
+10. **Before moving a constant.** n/a (`PARTS_MAX` kept, set after a memory incident).
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** The flaky semantic test's message answered wrongly (a stopped embedder reported as an empty answer): a defect under XIV, fixed.
+
+**Found and left?** entry-gate stays the longest suite because record-owed itself takes about 2 s a call (observed 2026-11-19, method: entry-gate's nine calls timed); speeding that is its own Rust task, not filed until measured to matter. The model and browser parts of l7r-gate use about 1.2 GB together (observed 2026-11-19, method: their peak resident size) and stay serial for memory.
+
+**Performance work?** yes - its answers are the profile and the A/B measurement above.
+
+
