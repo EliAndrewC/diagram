@@ -50,6 +50,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T200 make work-budget-bundle MODE=budget refuses a derivation for naming today's code on plain English words: T198's placer derivation was refused for 'research' and 'write' (the code-name list holds common words, so a derivation written in ordinary prose cannot pass) - a check refusing good work, a defect under constitution XIV; the name match restricted to identifiers a derivation could only have learned from the code (snake_case or CamelCase names, function and module names), with a test red on the old check (2026-11-19)
       research: rendering
+- [ ] T201 The derivation template and make work-budget-bundle take a Mode A stage, for the step-3a placer's rebuild (T198: 704x its SOUND budget): the template's checks are the hamlet stages' - Totals at 20/40/80 households, every figure in ft, the scopes 'per item / over the run / once', each Indexes bullet a grid in ft - so T198-placer.md (Totals per pool sheet, px on a 3 px = 1 ft sheet, per-query scopes) is refused for its form, not its substance; the template gains a Mode A form (sizes the six pool sheets, px with the sheet's scale, per-query scopes) and budget-set takes per-sheet figures, with tests that the T198 derivation bundles and a hamlet derivation still refused for the same gaps (2026-11-19)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
