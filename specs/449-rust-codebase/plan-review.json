@@ -1026,6 +1026,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T219 (T157's scoping, 2026-11-19: the generation key re-hashed every engine source per map, and the walk keyed a map on its .gen.py)": {
+   "sha256": "91f2b8617626b9b1e3dd7ed48ebcc3e883dc0818d460521edea19fa86b57363b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T219 Approach (checklist part A)": {
+   "sha256": "adbf2b4bf4950ec4883419c5782217ab2e830461248df7f61d1c99ad1d8010ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14598,6 +14610,46 @@
      "why": "The 2026-11-19 rule (constitution XIV v2.36.0) says a defect is a wrong outcome, and wording that misleads no check or map is not one. Leaving it for a later task is within what was asked and needs no ruling. If a stale name ever made a guard refuse or pass wrongly, it would be a defect, and the block states that none does."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T219 (T157's scoping, 2026-11-19: the generation key re-hashed every engine source per map, and the walk keyed a map on its .gen.py)",
+    "### T219 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T219-derivation",
+     "summary": "Rebuild the pipeline's walk and generation key from a derivation written blind to l7r/diagram/pipeline/, in feature 443/444's pool-sheet form with the two trees as its sheets (the stage has no households).",
+     "class": "within",
+     "why": "The GM's 2026-11-19 words (rebuild from derivations, not port the Python's mistakes) and the 2026-10-30 rule carried by T199 (not re-implementing the old, inefficient algorithms) ask for exactly this; using the two trees as sheets adapts the form to a stage without households and excludes nothing."
+    },
+    {
+     "id": "T219-shared-read-table",
+     "summary": "Per-entry read records replaced by one shared table of distinct reads (path, stat, digest, maps that read it), with the ordering that removes an affected map's entry before its row takes a new digest, and a table lock.",
+     "class": "within",
+     "why": "A design detail inside the derivation, adopted on the work-budget agent's first-round LOOSE finding; it serves the goal of work in proportion to what changed and keeps no map served stale. Nothing asked for is dropped."
+    },
+    {
+     "id": "T219-budget",
+     "summary": "Set the pipeline's work budget from the SOUND derivation (2,064 counted operations for a warm unchanged run) with make budget-set PHASE=pipeline.",
+     "class": "within",
+     "why": "The budget is the enforcement of the GM's efficiency rule for the rewrite; it serves the request and restricts nothing it asked for."
+    },
+    {
+     "id": "T219-order-and-split",
+     "summary": "T219 lands only the derivation and the budget; the rebuild is T220-T222 as phase tasks with the guard on, after T218 and T223.",
+     "class": "within",
+     "why": "Sequencing: derivation before rebuild is the order the GM's 2026-11-19 plan approval names; no part of the work is dropped, only placed in following tasks of the same step."
+    },
+    {
+     "id": "T219-found-and-left",
+     "summary": "Two found defects (the Mode A page writer reporting only files it found, leaving a later-created looked-for file's sheet cached stale; a read first recorded on a miss hashed after the engine read it) left to T221, written onto its line.",
+     "class": "within",
+     "why": "Both are defects (a stale sheet served is a wrong outcome), and the GM's 2026-11-18 rule is that each step's known defects are fixed before the next step's port begins. T221 is part of this same rebuild (T220-T222), so the defects are fixed within the step, not carried into the next one; T219 itself changes no code that could fix them."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25816,6 +25868,44 @@
      "summary": "Stale command names in guards, gate messages and docs are filed as T225 (wording only).",
      "class": "within",
      "why": "The 2026-11-19 rule (constitution XIV v2.36.0) says a defect is a wrong outcome, and wording that misleads no check or map is not one. Leaving it for a later task is within what was asked and needs no ruling. If a stale name ever made a guard refuse or pass wrongly, it would be a defect, and the block states that none does."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T219": {
+   "section_sha256": "3c7c8f7efb0f52e565639af52a538bdc912d320c46450f2a2aed06b93ceec437",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T219-derivation",
+     "summary": "Rebuild the pipeline's walk and generation key from a derivation written blind to l7r/diagram/pipeline/, in feature 443/444's pool-sheet form with the two trees as its sheets (the stage has no households).",
+     "class": "within",
+     "why": "The GM's 2026-11-19 words (rebuild from derivations, not port the Python's mistakes) and the 2026-10-30 rule carried by T199 (not re-implementing the old, inefficient algorithms) ask for exactly this; using the two trees as sheets adapts the form to a stage without households and excludes nothing."
+    },
+    {
+     "id": "T219-shared-read-table",
+     "summary": "Per-entry read records replaced by one shared table of distinct reads (path, stat, digest, maps that read it), with the ordering that removes an affected map's entry before its row takes a new digest, and a table lock.",
+     "class": "within",
+     "why": "A design detail inside the derivation, adopted on the work-budget agent's first-round LOOSE finding; it serves the goal of work in proportion to what changed and keeps no map served stale. Nothing asked for is dropped."
+    },
+    {
+     "id": "T219-budget",
+     "summary": "Set the pipeline's work budget from the SOUND derivation (2,064 counted operations for a warm unchanged run) with make budget-set PHASE=pipeline.",
+     "class": "within",
+     "why": "The budget is the enforcement of the GM's efficiency rule for the rewrite; it serves the request and restricts nothing it asked for."
+    },
+    {
+     "id": "T219-order-and-split",
+     "summary": "T219 lands only the derivation and the budget; the rebuild is T220-T222 as phase tasks with the guard on, after T218 and T223.",
+     "class": "within",
+     "why": "Sequencing: derivation before rebuild is the order the GM's 2026-11-19 plan approval names; no part of the work is dropped, only placed in following tasks of the same step."
+    },
+    {
+     "id": "T219-found-and-left",
+     "summary": "Two found defects (the Mode A page writer reporting only files it found, leaving a later-created looked-for file's sheet cached stale; a read first recorded on a miss hashed after the engine read it) left to T221, written onto its line.",
+     "class": "within",
+     "why": "Both are defects (a stale sheet served is a wrong outcome), and the GM's 2026-11-18 rule is that each step's known defects are fixed before the next step's port begins. T221 is part of this same rebuild (T220-T222), so the defects are fixed within the step, not carried into the next one; T219 itself changes no code that could fix them."
     }
    ],
    "verdict": "CLEAR"

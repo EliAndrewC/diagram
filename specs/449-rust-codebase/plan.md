@@ -823,31 +823,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** no
 
 
-### T219 (<why: the finding or measurement that files it>)
+### T219 (T157's scoping, 2026-11-19: the generation key re-hashed every engine source per map, and the walk keyed a map on its .gen.py)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a derivation of the pipeline's walk and generation key written blind to `l7r/diagram/pipeline/` (`derivations/T219-pipeline.md`), in the pool-sheet form with the two trees as its sheets (the stage has no households): a warm run where nothing changed costs 2,064 counted operations (1,894 for `pool`, 170 for the legacy tree), about 172 a live map, judged SOUND by the `work-budget` agent on its second round (measured 2026-11-19 (the derivation's Totals)). The first round found the per-entry read records LOOSE (4,215 of a 6,061 run, measured 2026-11-19 (the first derivation's Totals)) and ruled a shared table of distinct reads, one row a path with its stat, digest and the maps that read it, which the derivation now uses, with the ordering that keeps no map served stale (an affected map's entry removed before its row takes a new digest) and a table lock. The budget is set (`make budget-set PHASE=pipeline`). The rebuild is T220-T222, phase tasks with the guard on.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the derivation and the budget | n/a (measurement) | the derivation, its verdicts, `dev/work-budget.json`'s rows | none | none |
 
 ### T219 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** Regenerating the pool does work in proportion to what changed, and the pool index lists every map.
+2. **The constraints.** The GM's 2026-10-30 and 2026-11-19 words; engine-plan.md's section on rebuilding from a derivation; feature 443/444's derivation form and rubric.
+3. **Where each comes from.** G: request.md; O: T157's scoping and the derivation's measured bounds.
+4. **Do they describe the world here?** Yes: the derivation's bounds are the pool as it stands (30 maps, 11 live, 297 distinct reads, measured 2026-11-19 (the derivation's own scripts over the tree and the cache's recorded reads)).
+5. **The order.** After T218 and T223, before T220-T222.
+6. **The exits.** Green: SOUND recorded and the budget set. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Yes, and it is the finding: today's key reads and hashes every engine source for every map (T157's scoping, observed 2026-11-19).
+8. **The budget.** One landing; the rebuild is its own phase tasks.
+9. **Done, measured.** SOUND on verdict 2, and `budget-set` printed the per-tree budgets above.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Nothing a reader of a map sees: a derivation and a budget.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** The Mode A page writer reports only the files it found, so a looked-for file created later leaves its sheet cached and stale; and a read first recorded on a miss is hashed after the engine read it, so a file changed in between could later be served stale. Both are owed by T221, written onto its line (2026-11-19).
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a derivation; the rebuild that follows is.
 
 
 ### T220 (<why: the finding or measurement that files it>)

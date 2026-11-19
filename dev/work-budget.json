@@ -414,6 +414,22 @@
     }
    },
    "all_sheets": 4546.0
+  },
+  "pipeline": {
+   "status": "budgeted",
+   "derivation": "specs/449-rust-codebase/derivations/T219-pipeline.md",
+   "verdict": "specs/449-rust-codebase/derivations/T219-pipeline.md.verdict-2.txt",
+   "sheets": {
+    "pool": {
+     "budget": 1894.0,
+     "items": 11.0
+    },
+    "legacy-hand-authored-pool": {
+     "budget": 170.0,
+     "items": 19.0
+    }
+   },
+   "all_sheets": 2064.0
   }
  }
 }
