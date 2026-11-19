@@ -41,7 +41,8 @@ re-implementing the Python code's mistakes", request.md). From here:
 - **An algorithm is rebuilt, never ported.** A step whose code searches, places or scores (step 3b's Mode A model - the buildings,
   the compound and its parts; the step-3a caption placer if T198 finds it far over its budget) is worked as feature 444's stages
   were: a derivation written from the research record and the step's contract, blind to the old code, judged SOUND by the
-  `work-budget` agent; then phase tasks (`phase: <stage>` and an `old-code:` line naming BOTH the Python and any Rust port of it),
+  `work-budget` agent; then phase tasks (`phase: <stage>`, an `old-code:` line naming BOTH the Python and any Rust port of it, and a `derivation:` line naming
+  the SOUND derivation, which the guard's refusal names - T204),
   `make task-start` arming `phase_source_hooks` so a read of the old code is refused while each runs; the landing held to its
   budget by its counters.
 - **Plumbing may be ported**, after a check that it holds no such algorithm: step 4's pipeline (caching, regeneration, the pool

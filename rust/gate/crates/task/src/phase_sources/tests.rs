@@ -103,7 +103,7 @@ fn the_state_is_written_for_a_phase_task_and_cleared_for_another() {
     assert!(line.contains("1 file(s)"));
     assert_eq!(
         std::fs::read_to_string(&state).unwrap(),
-        "{\n \"feature\": \"9001-x\",\n \"task\": \"T01\",\n \"phase\": \"nothing_here\",\n \"files\": [\n  \"scripts/a.py\"\n ],\n \"allow\": []\n}\n"
+        "{\n \"feature\": \"9001-x\",\n \"task\": \"T01\",\n \"phase\": \"nothing_here\",\n \"derivation\": \"\",\n \"files\": [\n  \"scripts/a.py\"\n ],\n \"allow\": []\n}\n"
     );
     assert_eq!(record(&root, "9001-x", "T02", "").unwrap(), "");
     assert!(!state.exists());
@@ -126,4 +126,40 @@ fn a_path_resolves_as_path_resolve_resolves_it() {
         resolved(&dir.join("link/scripts/../none/x")),
         real.join("none/x")
     );
+}
+
+#[test]
+fn the_state_keeps_the_derivation_the_block_cites() {
+    // T204: the guard named specs/<feature>/phases/<stage>_greenfield.derivation.md, which T202's task never had - its derivation
+    // was specs/449-rust-codebase/derivations/T198-placer.md, cited in its block
+    let dir = repo("phase-derivation");
+    let root = root_of(&dir);
+    let state = root.join(".git/phase-sources.json");
+    let derivation = || {
+        let kept: serde_json::Value =
+            serde_json::from_str(&std::fs::read_to_string(&state).unwrap()).unwrap();
+        kept["derivation"].as_str().unwrap().to_owned()
+    };
+    // a `derivation:` line, as written
+    record(
+        &root,
+        "9001-x",
+        "T01",
+        "- [ ] T01 x\n  phase: water\n  derivation: specs/9001-x/derivations/T01-water.md \n",
+    )
+    .unwrap();
+    assert_eq!(derivation(), "specs/9001-x/derivations/T01-water.md");
+    // none: the first derivation the block's prose cites that is in the checkout
+    put(&root, "specs/9001-x/derivations/T00-water.md", "d\n");
+    record(
+        &root,
+        "9001-x",
+        "T01",
+        "- [ ] T01 x from its derivation (specs/9001-x/derivations/gone.md, then specs/9001-x/derivations/T00-water.md, budgeted)\n  phase: water\n",
+    )
+    .unwrap();
+    assert_eq!(derivation(), "specs/9001-x/derivations/T00-water.md");
+    // none cited, none recorded
+    record(&root, "9001-x", "T01", "- [ ] T01 x\n  phase: water\n").unwrap();
+    assert_eq!(derivation(), "");
 }

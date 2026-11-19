@@ -138,3 +138,7 @@ The GM, on whether anything must be ripped out: "Okay, yeesh. Blah. Glad that I 
 The GM, on the plan (steps 1 and 2 kept; the step-3a placer measured against a derived work budget before step 3b; step 3b rebuilt from a derivation as phase tasks; lockstep tests retired as the Python goes): "okay, please proceed on that basis then, but if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible"
 
 The GM's rule for the rewrite, 2026-10-30, recorded in feature 444's request.md and carried here by T199 because this feature's engine plan dropped it: "I cannot emphasize enough that a big part of the goal for the rewrite is that we are not trying to re-implement the same algorithms, because the old algorithms were computationally inefficient and resulted in orders of magnitude more operations being performed than needed to be performed."
+
+## 2026-11-19, efficiency: the hook suites and the claims re-checks (T205, T206), and the idle time (T207)
+
+The GM, on T205 and T206: "Yes those two efficiency improvements both seem worth doing sooner rather than later." On the time report's idle hours: "And that's sooooo much idle time!  Is that time where nothing was happening?!"

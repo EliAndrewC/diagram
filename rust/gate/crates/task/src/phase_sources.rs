@@ -12,6 +12,9 @@
 //! THE OLD CODE: the stage's Python and every module defining a function its counters name in the newest `make work-budget` run (the
 //! work budget's `stage_sources`, asked in process where the Python ran `work-budget-bundle --sources`), and any path or glob the task
 //! block names on an `old-code:` line, matched as `Path.glob` matches it.
+//!
+//! THE DERIVATION (T204): the block's `derivation:` line, else the first derivation its prose cites that is in the checkout, kept in
+//! the state as `derivation` for the guard's refusal to name ('' for none, and the guard then names none).
 
 pub(crate) mod glob;
 
@@ -44,6 +47,34 @@ static OLD_CODE: LazyLock<Regex> = LazyLock::new(|| {
         r"(?m)^[{SPACE_CLASS}]*old-code:[{SPACE_CLASS}]*(.+)$"
     ))
 });
+
+static DERIVATION: LazyLock<Regex> = LazyLock::new(|| {
+    re(&format!(
+        r"(?m)^[{SPACE_CLASS}]*derivation:[{SPACE_CLASS}]*(\S+)[{SPACE_CLASS}]*$"
+    ))
+});
+/// A derivation the block's prose cites: a path under `specs/` with `derivation` in it, ending `.md`.
+static CITED: LazyLock<Regex> = LazyLock::new(|| re(r"specs/[\w./-]*derivation[\w./-]*\.md"));
+
+/// The derivation the phase task's refusal names (T204: the guard named `phases/<stage>_greenfield.derivation.md`, which T202 never
+/// had): the block's `derivation:` line as written, else the first derivation its prose cites that is in the checkout, else ''.
+fn derivation_of(root: &Path, block: &str) -> String {
+    if let Some(line) = DERIVATION
+        .captures(block)
+        .ok()
+        .flatten()
+        .and_then(|c| c.get(1))
+    {
+        return line.as_str().to_owned();
+    }
+    CITED
+        .find_iter(block)
+        .map_while(Result::ok)
+        .map(|m| m.as_str())
+        .find(|p| root.join(p).is_file())
+        .unwrap_or_default()
+        .to_owned()
+}
 
 /// `Path(<common dir>) / STATE`, the common directory read from `root`.
 fn state_path(root: &Path) -> PathBuf {
@@ -108,8 +139,8 @@ pub(crate) fn record(root: &Path, feature: &str, task: &str, block: &str) -> Rai
         return Ok(String::new());
     }
     let files = sources(root, &phase, &extra)?;
-    let state =
-        json!({"feature": feature, "task": task, "phase": phase, "files": files, "allow": []});
+    let derivation = derivation_of(root, block);
+    let state = json!({"feature": feature, "task": task, "phase": phase, "derivation": derivation, "files": files, "allow": []});
     crate::write_file(
         &path,
         format!("{}\n", dumps(&state, Some(1), true)).as_bytes(),

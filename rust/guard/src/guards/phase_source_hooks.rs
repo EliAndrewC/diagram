@@ -1,8 +1,13 @@
 //! `phase-source-hooks` (feature 444; ported from the shell of the same name and `lib/hm_phase_source.py`, feature 449 T046): A STAGE BEING REBUILT
 //! IS WRITTEN FROM ITS DERIVATION, NEVER READ FROM ITS OLD CODE (the GM, 2026-10-30: "we are not trying to re-implement the same algorithms, because
 //! the old algorithms were computationally inefficient"). While `make task-start` holds a phase task's old modules, a read of one is refused: a Read,
-//! a Grep or Glob aimed at it or its directory, a shell command naming it with a read verb. A mention is not a read. `PHASE_SOURCE_OK` with a reason
-//! is the escape.
+//! a Glob aimed at it or its directory, a shell command naming it with a read verb, and (T204) a search - the Grep tool, a shell grep, rg, ag, git
+//! grep or a find running one - whose path reaches it and whose flags do not leave it out (`search.rs`). A mention is not a read, nor is `make
+//! phase-read` or a git listing of names and counts (T204). The refusal names the derivation the task recorded (its block's `derivation:` line, or
+//! the derivation its prose cites), only where that file is in the checkout, never an invented path (T204). `PHASE_SOURCE_OK` with a reason is the
+//! escape.
+
+mod search;
 
 use std::path::Path;
 use std::sync::LazyLock;
@@ -142,8 +147,15 @@ fn held_in_command(cmd: &str, files: &[&str]) -> Option<String> {
         .map(|f| (*f).to_owned())
 }
 
-/// The held file this call reads, with the state, or None.
-pub(crate) fn verdict(event: &Event, cwd: &str, now: &str) -> Option<(String, Value)> {
+/// What this call reads of the held code: one file, or the files a search reaches.
+#[derive(Debug)]
+enum Hit {
+    Read(String),
+    Search(search::Found),
+}
+
+/// What this call reads of the held code, with the state and the checkout, or None. A file `make phase-read` let through is not held.
+fn verdict(event: &Event, cwd: &str, now: &str) -> Option<(Hit, Value, String)> {
     let (top, state) = state_for(cwd)?;
     let input = event.input.get("tool_input")?;
     let files: Vec<&str> = state
@@ -151,15 +163,50 @@ pub(crate) fn verdict(event: &Event, cwd: &str, now: &str) -> Option<(String, Va
         .as_array()?
         .iter()
         .filter_map(Value::as_str)
+        .filter(|f| !allowed(&state, f, now))
         .collect();
     let hit = match event.tool() {
-        "Read" => held_path(&top, field(input, "file_path"), cwd, &files, false),
-        "Grep" | "Glob" => Some(field(input, "path"))
+        "Read" => held_path(&top, field(input, "file_path"), cwd, &files, false).map(Hit::Read),
+        "Glob" => Some(field(input, "path"))
             .filter(|p| !p.is_empty())
-            .and_then(|p| held_path(&top, p, cwd, &files, true)),
-        _ => held_in_command(field(input, "command"), &files),
+            .and_then(|p| held_path(&top, p, cwd, &files, true))
+            .map(Hit::Read),
+        "Grep" => search::grep_tool(input, cwd, &top, &files).map(Hit::Search),
+        _ => match search::shell(field(input, "command"), cwd, &top, &files) {
+            Err(found) => Some(Hit::Search(found)),
+            Ok(rest) => held_in_command(&rest, &files).map(Hit::Read),
+        },
     }?;
-    (!allowed(&state, &hit, now)).then_some((hit, state))
+    Some((hit, state, top))
+}
+
+/// Where to write the stage from: the derivation the task recorded, or feature 444's `phases/<stage>_greenfield.derivation.md`, only
+/// where the file is in the checkout - otherwise where to look, never an invented path (T204: T202's refusal named a `phases/` file
+/// that never existed, where its derivation was `derivations/T198-placer.md`).
+fn derivation_line(top: &str, state: &Value) -> String {
+    let (phase, feature, task) = (
+        field(state, "phase"),
+        field(state, "feature"),
+        field(state, "task"),
+    );
+    let named = field(state, "derivation");
+    let greenfield = format!("specs/{feature}/phases/{phase}_greenfield.derivation.md");
+    if let Some(path) = [named, greenfield.as_str()]
+        .into_iter()
+        .find(|p| !p.is_empty() && Path::new(top).join(p).is_file())
+    {
+        return format!("Write it from:  {path}  (its Contract and Minimal algorithm)");
+    }
+    let missing = if named.is_empty() {
+        String::new()
+    } else {
+        format!(" ({named}, which is not in the checkout)")
+    };
+    format!(
+        "Write it from its derivation - {task}'s block names no derivation in the checkout{missing}: look in its block in\n\
+specs/{feature}/tasks.md and its section of specs/{feature}/plan.md (a `derivation: <path>` line on the block is what\n\
+`make task-start` records for this message)"
+    )
 }
 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
@@ -181,7 +228,7 @@ pub(crate) fn judge(
     let base = Some(field(&event.input, "cwd"))
         .filter(|c| !c.is_empty())
         .unwrap_or(here);
-    let Some((file, state)) = verdict(event, base, now) else {
+    let Some((hit, state, top)) = verdict(event, base, now) else {
         return Vec::new();
     };
     let (phase, feature, task) = (
@@ -233,9 +280,30 @@ pub(crate) fn judge(
         &event.input,
         session,
     );
+    let write_from = derivation_line(&top, &state);
+    let (head, file) = match &hit {
+        Hit::Read(file) => (
+            format!("BLOCKED: {file} is the old code of `{phase}`, and {feature} {task} rebuilds that stage from its derivation, not from today's code."),
+            file.clone(),
+        ),
+        Hit::Search(found) => {
+            let shown = found.files.iter().take(6).cloned().collect::<Vec<_>>().join(", ");
+            let more = found.files.len().saturating_sub(6);
+            let more = if more > 0 { format!(" and {more} more") } else { String::new() };
+            (
+                format!(
+                    "BLOCKED: this search over {} prints lines of {shown}{more} - the old code of `{phase}`, which {feature} {task} rebuilds\n\
+from its derivation, not from today's code.\n\n\
+Search without them:  {}\n\
+   (or a narrower path that holds none of them)",
+                    found.root, found.fix
+                ),
+                found.files[0].clone(),
+            )
+        }
+    };
     vec![Answer::Refuse(format!(
-        "BLOCKED: {file} is the old code of `{phase}`, and {feature} {task} rebuilds that stage from its derivation, not from today's code.\n\n\
-Write it from:  specs/{feature}/phases/{phase}_greenfield.derivation.md  (its Contract and Minimal algorithm)\n\n\
+        "{head}\n\n{write_from}\n\n\
 The GM, 2026-10-30: \"we are not trying to re-implement the same algorithms, because the old algorithms were\n\
 computationally inefficient.\" To replace the stage's thin Python function or delete the old module, open that one\n\
 file for ten minutes:  make phase-read FILE={file} WHY=\"<why>\"   (a shell read: PHASE_SOURCE_OK=\"<why>\")"

@@ -748,14 +748,97 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T204 (<why: the finding or measurement that files it>)
+### T204 (T202: the phase-source guard let a search print the old code, refused its own prescribed command, and named a derivation that does not exist)
+
+- **Approach**: three defects of `phase_source_hooks` found while T202 rebuilt the placer, each a check passing the bad or refusing the good (constitution XIV), each fixed red first. (1) A search over a parent directory of held files (the Grep tool, grep and its kin, rg, ag, git grep, find with grep) is judged by the held files it reaches and refused unless its own flags leave every one out; the refusal names the flags that do, per tool, measured against each tool's real exclude rules (GNU grep's base-name `--exclude`, ripgrep's last-match globs, ag's lack of `**`). (2) `make phase-read` is never a read, piped or not; `git status` and `git diff`/`git log` with a listing flag (`--stat`, `--name-only` and kin) print no content and pass, while a patch flag still reads. (3) `make task-start` records the block's `derivation:` line, or the first derivation path its prose cites that exists, and the refusal names it only if the file exists; otherwise it names none and says where to look. Red on HEAD: four guard unit tests and nine of the replay suite's then 26 cases (observed 2026-11-19, method: the new tests run against HEAD's guard).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the guard's search, listing and derivation rules | guard unit tests, `tests/hooks/test-phase-source-hooks.sh` | `phase_source_hooks/search*` | none | none |
+
+### T204 Approach (checklist part A)
+
+1. **The goal, in the world.** A stage being rebuilt cannot be read from its old code by any search, and the guard's own advice works.
+2. **The constraints.** The GM, 2026-10-30 (444's request.md): the rebuild is written from the derivation, never the old code; feature 444's guard contract; constitution XIV.
+3. **Where each comes from.** O: T202's lapses (two greps printed old lines; the prescribed command refused; a derivation path invented).
+4. **Do they describe the world here?** Yes: each defect was met during T202 and is pinned by a test red on HEAD.
+5. **The order.** After T202, before T152 (step 3b), whose rebuild leans on this guard.
+6. **The exits.** Green: the tests red on HEAD and green now, `make static` and `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** The replay suite's 44 cases and the guard's 619 unit tests green (observed 2026-11-19, method: `bash tests/hooks/test-phase-source-hooks.sh` and `make rust-test CRATE=rust/guard`).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Each defect changed what a rebuild could see or do: a search printed old code (the GM's blindness broken), the advice refused (a session pushed to an escape), a path invented (a session sent to a file that is not there).
+
+**Found and left?** Found and fixed in this task after the plan review's two rounds: a reader fed by any producer read held files and passed - `find`, `ls -R`, `git ls-files`, `tree` feeding `xargs <reader>` or `$(...)`, and a shell glob into a held directory (`cat <held dir>/*`) (observed 2026-11-19, method: twelve such forms run against the built guard, each rc 0). A reader's glob arguments are now resolved against the checkout as bash would, and a reader fed by a producer is judged by what that producer can list (per lister: find, ls, git ls-files, tree, fd, locate, echo; an unknown producer by everything under the cwd), refused unless the producer's own exclusion leaves the held files out; red first (the replay suite 7 of 44 red on the earlier build), all twelve forms refused on the final build (observed 2026-11-19, method: the same twelve forms re-run, each rc 2). Its cost, accepted: while a phase task runs, a reader fed by a producer the guard does not know is refused when a held file lies under the cwd, the refusal naming the narrower form. Left: heredoc bodies are read as commands (errs toward refusing), and a non-grep reader's own arguments never count as an exclusion (errs toward refusing); neither lets old code be read.
+
+**Performance work?** no
+
+
+
+### T205 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T204 Approach (checklist part A)
+### T205 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T206 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T206 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T207 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T207 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

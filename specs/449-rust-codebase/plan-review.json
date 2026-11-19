@@ -858,6 +858,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T204 (T202: the phase-source guard let a search print the old code, refused its own prescribed command, and named a derivation that does not exist)": {
+   "sha256": "fa016e366db4b61807af30ecda83fd7d74336a74c5bfa4d0b0f0ea8ecfa574a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T204 Approach (checklist part A)": {
+   "sha256": "17e57352b3c3239c18b3f16f34b2f4a31a6d993f8a9fd31d1e34177ba7be50e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13502,6 +13514,99 @@
      "why": "Sequencing only. The old placer keeps running until the switch, so no piece runs both (FR-003), and the green exit is unchanged."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T204 (T202: the phase-source guard let a search print the old code, refused its own prescribed command, and named a derivation that does not exist)",
+    "### T204 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T204-1 search over a parent directory",
+     "summary": "A search (Grep tool, grep and kin, rg, ag, git grep, find with grep) over a parent directory of held files is judged by the held files it reaches and refused unless its own flags exclude every one; the refusal names the per-tool exclude flags, measured against each tool's real exclude rules.",
+     "class": "within",
+     "why": "Closes a hole through which a search printed old code during T202. It makes the guard do what the GM's 2026-11-19 words ask ('we had actual tooling in place to stop you from even being able to see the Python code') and what feature 444's guard contract carries; a check that passed bad work is a defect under constitution XIV and the GM's 2026-11-18 'fix all known bugs in each step before moving on'. This is enforcement of the request, not new scope."
+    },
+    {
+     "id": "T204-2 phase-read and listing-only git commands",
+     "summary": "`make phase-read` is never counted as a read, piped or not; `git status` and `git diff`/`git log` with listing flags only (--stat, --name-only and kin) pass; a patch flag still reads.",
+     "class": "within",
+     "why": "The guard refused its own prescribed command and commands that print no file content. That is a check refusing correct work, which FR-002's exception and constitution XIV fix in place. Patch output stays refused, so no old code becomes visible and the blindness the GM asked for is unchanged."
+    },
+    {
+     "id": "T204-3 the derivation the refusal names",
+     "summary": "`make task-start` records the block's `derivation:` line, or failing that the first cited derivation path that exists; the refusal names it only if the file exists, otherwise it names none and says where to look.",
+     "class": "within",
+     "why": "The refusal named a path that does not exist, sending a session to a file that is not there. The fix makes the guard's advice point to the derivation the GM's rule says the rebuild is written from. It is a defect fix with no change of scope."
+    },
+    {
+     "id": "T204-4 found and left: indirection and base-name exclude",
+     "summary": "Indirection the guard cannot follow (`find | sort | xargs grep`, `cat $(find ...)`) is still judged by the existing whole-command rule; GNU grep's base-name exclude can also hide a new file of the same name, so the refusal also offers a narrower path. Both are recorded in the guard's doc.",
+     "class": "within",
+     "why": "Neither is a wrong outcome as constitution XIV v2.36.0 defines one. The plan states that indirection still falls to the conservative whole-command rule and that old code cannot be read silently. The base-name exclude can only over-hide, never leak, and the refusal offers a narrower path for it. Nothing the GM's blindness rule depends on is left broken. That holds on the plan's claim about the whole-command rule, which this bundle does not let me check against code; the tests red on HEAD are where it is enforced."
+    },
+    {
+     "id": "T204-5 order and exits",
+     "summary": "Runs after T202 and before T152 (step 3b), whose rebuild depends on this guard; done when the new tests that are red on HEAD go green and make static / make hooks-test are green.",
+     "class": "within",
+     "why": "Follows the GM's 2026-11-18 rule that each step's known defects are fixed before the next step's port, and the 2026-11-19 plan under which step 3b is rebuilt from a derivation behind the phase-source guard."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T204 (T202: the phase-source guard let a search print the old code, refused its own prescribed command, and named a derivation that does not exist)",
+    "### T204 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T204-1",
+     "summary": "A search over a parent directory of held files (Grep tool, grep and kin, rg, ag, git grep, find with grep) is judged by the held files it reaches and refused unless its own flags leave every one out; the refusal names the working exclude flags per tool, measured against each tool's real exclude rules.",
+     "class": "within",
+     "why": "Fixes a check that passed bad work (two greps printed old lines during T202), constitution XIV and FR-002's exception for a guard improved on purpose; it serves the GM's 2026-11-19 request that the rebuild be written blind to the Python (feature 444's phase-source guard). The per-tool flags make the refusal actionable, nothing beyond the guard's existing purpose."
+    },
+    {
+     "id": "T204-2",
+     "summary": "make phase-read is never a read, piped or not; git status, and git diff/git log with a listing flag (--stat, --name-only and kin), pass; a patch flag still reads.",
+     "class": "within",
+     "why": "The only decision that loosens the guard, and it loosens it only where nothing of a held file's content is printed: the guard's own prescribed command and listing-only git calls. Fixes a check that refused good work (T202's prescribed command refused, pushing a session to an escape); a patch flag, which does print content, is still refused, so blindness is untouched."
+    },
+    {
+     "id": "T204-3",
+     "summary": "make task-start records the block's derivation: line, or the first derivation path its prose cites that exists; the refusal names it only if the file exists, otherwise names none and says where to look.",
+     "class": "within",
+     "why": "Fixes a guard message that named a derivation that does not exist (a wrong outcome: a session sent to a missing file). Changes no refusal, only what the refusal points at."
+    },
+    {
+     "id": "T204-4",
+     "summary": "A reader fed by a producer (find, ls -R, git ls-files, tree, fd, locate, echo into xargs or $(...)) or given a shell glob into a held directory is judged by what the producer can list or the glob resolves to, refused unless the producer's own exclusion leaves held files out.",
+     "class": "within",
+     "why": "Answers the previous round's BLOCKED item (5a) on its own terms: the rule is now stated by mechanism (any producer, with an unknown-producer fallback), not by the find token, and the forms named then (ls -R, git ls-files, tree feeding xargs or $(...), a glob into the held directory) are among the twelve the plan records as rc 0 before and rc 2 after. Closes a check passing bad work."
+    },
+    {
+     "id": "T204-4-cost",
+     "summary": "Accepted cost: while a phase task runs, a reader fed by a producer the guard does not know is refused when a held file lies under the cwd, the refusal naming the narrower form.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This does refuse some good work, and no ruling in the bundle accepts it, so it is ruled here. It passes on impossibility: a static guard judging a command before it runs cannot know what an arbitrary program will print, so the only alternatives are to pass unknown producers, which reopens exactly the hole 5a found and defeats the GM's 2026-11-19 request that the rebuild be done without seeing the Python, or to refuse them. The refusal names a working narrower form, so no good command is left without a route, and the reach is bounded to phase tasks with a held file under the cwd."
+    },
+    {
+     "id": "T204-5-heredoc",
+     "summary": "Left: heredoc bodies are read as commands (errs toward refusing).",
+     "class": "within",
+     "why": "An over-approximation with no wrong outcome shown: it refuses only when a heredoc body line itself parses as a reader over held files while a phase task runs, and the plan records no routine command (a commit message heredoc included) that met it. Under constitution XIV v2.36.0 a difference that produces no wrong outcome is not a defect, and it never lets old code be read. If T152 or a later phase task meets a real refusal of good work from it, that is a defect then and is fixed before the step moves on."
+    },
+    {
+     "id": "T204-6-reader-args",
+     "summary": "Left: a non-grep reader's own arguments never count as an exclusion (errs toward refusing).",
+     "class": "within",
+     "why": "The producer's own exclusion and the grep family's flags are honoured, so every good command has a route (exclude at the producer or the search); readers such as cat, head and sed carry no exclusion of their own to honor. No wrong outcome is shown and no old code can be read through it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23996,6 +24101,57 @@
      "summary": "Budget fallback: if the four sheets cannot all pass in one landing, the module and its tests land first and the switch in sheet/hand.rs second",
      "class": "within",
      "why": "Sequencing only. The old placer keeps running until the switch, so no piece runs both (FR-003), and the green exit is unchanged."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T204": {
+   "section_sha256": "f60e2af9f62d19ed33eca252df52d70f4bbb59cf39f74e05f827cc3e25dbe4ab",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T204-1",
+     "summary": "A search over a parent directory of held files (Grep tool, grep and kin, rg, ag, git grep, find with grep) is judged by the held files it reaches and refused unless its own flags leave every one out; the refusal names the working exclude flags per tool, measured against each tool's real exclude rules.",
+     "class": "within",
+     "why": "Fixes a check that passed bad work (two greps printed old lines during T202), constitution XIV and FR-002's exception for a guard improved on purpose; it serves the GM's 2026-11-19 request that the rebuild be written blind to the Python (feature 444's phase-source guard). The per-tool flags make the refusal actionable, nothing beyond the guard's existing purpose."
+    },
+    {
+     "id": "T204-2",
+     "summary": "make phase-read is never a read, piped or not; git status, and git diff/git log with a listing flag (--stat, --name-only and kin), pass; a patch flag still reads.",
+     "class": "within",
+     "why": "The only decision that loosens the guard, and it loosens it only where nothing of a held file's content is printed: the guard's own prescribed command and listing-only git calls. Fixes a check that refused good work (T202's prescribed command refused, pushing a session to an escape); a patch flag, which does print content, is still refused, so blindness is untouched."
+    },
+    {
+     "id": "T204-3",
+     "summary": "make task-start records the block's derivation: line, or the first derivation path its prose cites that exists; the refusal names it only if the file exists, otherwise names none and says where to look.",
+     "class": "within",
+     "why": "Fixes a guard message that named a derivation that does not exist (a wrong outcome: a session sent to a missing file). Changes no refusal, only what the refusal points at."
+    },
+    {
+     "id": "T204-4",
+     "summary": "A reader fed by a producer (find, ls -R, git ls-files, tree, fd, locate, echo into xargs or $(...)) or given a shell glob into a held directory is judged by what the producer can list or the glob resolves to, refused unless the producer's own exclusion leaves held files out.",
+     "class": "within",
+     "why": "Answers the previous round's BLOCKED item (5a) on its own terms: the rule is now stated by mechanism (any producer, with an unknown-producer fallback), not by the find token, and the forms named then (ls -R, git ls-files, tree feeding xargs or $(...), a glob into the held directory) are among the twelve the plan records as rc 0 before and rc 2 after. Closes a check passing bad work."
+    },
+    {
+     "id": "T204-4-cost",
+     "summary": "Accepted cost: while a phase task runs, a reader fed by a producer the guard does not know is refused when a held file lies under the cwd, the refusal naming the narrower form.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This does refuse some good work, and no ruling in the bundle accepts it, so it is ruled here. It passes on impossibility: a static guard judging a command before it runs cannot know what an arbitrary program will print, so the only alternatives are to pass unknown producers, which reopens exactly the hole 5a found and defeats the GM's 2026-11-19 request that the rebuild be done without seeing the Python, or to refuse them. The refusal names a working narrower form, so no good command is left without a route, and the reach is bounded to phase tasks with a held file under the cwd."
+    },
+    {
+     "id": "T204-5-heredoc",
+     "summary": "Left: heredoc bodies are read as commands (errs toward refusing).",
+     "class": "within",
+     "why": "An over-approximation with no wrong outcome shown: it refuses only when a heredoc body line itself parses as a reader over held files while a phase task runs, and the plan records no routine command (a commit message heredoc included) that met it. Under constitution XIV v2.36.0 a difference that produces no wrong outcome is not a defect, and it never lets old code be read. If T152 or a later phase task meets a real refusal of good work from it, that is a defect then and is fixed before the step moves on."
+    },
+    {
+     "id": "T204-6-reader-args",
+     "summary": "Left: a non-grep reader's own arguments never count as an exclusion (errs toward refusing).",
+     "class": "within",
+     "why": "The producer's own exclusion and the grep family's flags are honoured, so every good command has a route (exclude at the producer or the search); readers such as cat, head and sed carry no exclusion of their own to honor. No wrong outcome is shown and no old code can be read through it."
     }
    ],
    "verdict": "CLEAR"
