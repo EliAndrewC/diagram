@@ -8404,17 +8404,19 @@
  "l7r/diagram/labels/placer.py::_dashes#a dashed stroke's dashes": {
   "body": "0b4a70e5a93e9f17",
   "claim": "a dashed stroke's dashes - how-a-leader-line-ties-a-caption-to-its-feature.drawing: never in a dashed line's gap - the pattern laid from the stroke's start and its `stroke-dashoffset`, each dash a stroke of its own with the stroke's caps (feature 449 T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a293ca2680dbf642",
   "core": "cdf7f332a060511a",
   "date": "2026-11-18",
   "note": "dashes alone, laid from the start and the offset",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_extended_cands#fallback seats": {
@@ -8431,34 +8433,38 @@
  "l7r/diagram/labels/placer.py::_join#a stroke's corner": {
   "body": "0f57b802840b1990",
   "claim": "a stroke's corner - how-a-leader-line-ties-a-caption-to-its-feature.drawing: its corners drawn square to their point, or cut off where they are very sharp, or rounded where the sheet rounds them - SVG 1.1's miter, its bevel past `stroke-miterlimit`, a round join's disc (feature 449 T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "097b91e7b117715c",
   "core": "8ea72f4ef9016afb",
   "date": "2026-11-18",
   "note": "miter to its point, bevel past the limit, round disc",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_leader_cands#leader search": {
   "body": "cdfc577ad059c583",
   "claim": "leader search - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a displaced caption tied to its feature by a leader line",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "77b3952e6459ab23",
   "core": "6a70814918cd86b5",
   "date": "2026-11-18",
   "note": "displaced seats tied back by a leader",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba",
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:af73003f19d2bcd1"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_line_cands#a line's caption": {
@@ -8498,47 +8504,51 @@
   "code": "79d7de4cbc2180e4",
   "core": "d4bf716eed3e6f60",
   "date": "2026-11-18",
-  "note": "an outline before a stroke, then the wider, then the first drawn",
+  "note": "the tie order `(d, (part.line, -part.half))` puts an outline before a stroke, then the wider stroke, and because the comparison is a strict `<` the first part drawn wins among like parts; §3 still sets that order and still calls it a map drawing convention, and the dropped sentence held up nothing the claim states",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:a613975a33a7cc77"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:094a571aefe85254"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_nearest_ink#which part a leader ends on": {
   "body": "7642730845a74fd4",
   "claim": "which part a leader ends on - how-a-leader-line-ties-a-caption-to-its-feature.drawing: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; the part chosen by its drawn edge, an outline's own stroke and a stroke's cap and joins read as the sheet draws them (feature 449 T193, T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8e5f38c5532a2879",
   "core": "d4bf716eed3e6f60",
   "date": "2026-11-18",
   "note": "the part chosen by its drawn edge, the nearest drawn point on it",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406",
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_part_nearest#a closed outline's drawn edge": {
   "body": "35c74ca420c5b6a9",
   "claim": "a closed outline's drawn edge - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends on the ink as it is drawn, on a corner's point; the outline measured round by its stroke and each corner's miter point then tried, its whole band where a corner bevels, so the round measure keeps the point it chose among equally near ones (feature 449 T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "48eda4bb8ac1ea0f",
   "core": "6d486d0a0b48cc75",
   "date": "2026-11-18",
   "note": "the round measure, then the miter points, the whole band where a corner bevels",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_point_cands#seats round a point": {
@@ -8648,34 +8658,38 @@
  "l7r/diagram/labels/placer.py::leader_of#when a leader is drawn": {
   "body": "73902edf0fb78473",
   "claim": "when a leader is drawn - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a caption more than twice the usual gap from its feature is tied to it by a thin leader line",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4925d02b69abdf38",
   "core": "4c8ed4de95e615e2",
   "date": "2026-11-18",
   "note": "none within LEADERLESS_RINGS (twice the gap)",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::leader_of#where a leader ends": {
   "body": "73902edf0fb78473",
   "claim": "where a leader ends - how-a-leader-line-ties-a-caption-to-its-feature.drawing: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `_nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap, joins and dashes read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "781de8eb5a31f123",
   "core": "4c8ed4de95e615e2",
   "date": "2026-11-18",
   "note": "nearest drawn ink, else the outline",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406",
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::leader_score#leader keeps clear": {
@@ -8874,17 +8888,19 @@
  "l7r/diagram/labels/placer.py::stroke_band#a stroke's drawn band": {
   "body": "d03db6eaefba1b55",
   "claim": "a stroke's drawn band - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends on the ink as it is drawn: on a corner's point, on a line's end, and never in a dashed line's gap - the page's map drawing convention; a stroke's band as SVG draws it, its `stroke-linecap`, `stroke-linejoin`, `stroke-miterlimit` and `stroke-dasharray` read (SVG's defaults butt, miter, 4 and solid unless the sheet says otherwise) (feature 449 T193, T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5f7ec1ff75b91be5",
   "core": "875071a61caa5bb5",
   "date": "2026-11-18",
   "note": "a stroke of no length with a square cap is drawn as a square level on the sheet (line 422), after the reader has mapped its points through the group's turn; whether SVG draws that cap level or turned in a turned group, and so whether this is \"squared off ... as drawn\", needs SVG 2 13.5.5's orientation rule for a zero-length subpath's cap, which the bundle does not hold; the rest of the band (caps, joins, closed rings, dashes) matches",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-18",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/labels/standard.py::CENTER_ABOVE_BASELINE_EM#block center above the baseline": {
@@ -23203,36 +23219,40 @@
  "rust/mode_a/src/labels/placer.rs::leader_of#when a leader is drawn": {
   "body": "b01c59e8f7593ce2",
   "claim": "when a leader is drawn - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a caption more than twice the usual gap from its feature is tied to it by a thin leader line",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "45a42d6e7395aa73",
   "core": "27d653affcb55ae1",
   "date": "2026-11-18",
   "note": "none within twice the gap",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
   "reads": "0d4cd64b989dbf58",
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::leader_of#where a leader ends": {
   "body": "b01c59e8f7593ce2",
   "claim": "where a leader ends - how-a-leader-line-ties-a-caption-to-its-feature.drawing: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; from the caption block's nearest point to the nearest drawn point of the feature's parts the subject carries (`ink`, `nearest_ink`: a closed part's outline drawn out by its own stroke, a disc's its drawn curve; a stroke's band as the sheet draws it, its cap, joins and dashes read), else of the subject's outline - the leader the hand sheet draws (`leader_to_ink`), so the placer weighs the leader it draws (feature 449 T191, T192, T193)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "06bd4fb41b880df1",
   "core": "27d653affcb55ae1",
   "date": "2026-11-18",
   "note": "nearest drawn ink, else the outline",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
   "reads": "0d4cd64b989dbf58",
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406",
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::leader_score#leader keeps clear": {
@@ -23846,33 +23866,37 @@
  "rust/mode_a/src/labels/placer/ink.rs::dashes#a dashed stroke's dashes": {
   "body": "0dd621a095f0d9f4",
   "claim": "a dashed stroke's dashes - how-a-leader-line-ties-a-caption-to-its-feature.drawing: never in a dashed line's gap - the pattern laid from the stroke's start and its `stroke-dashoffset`, each dash a stroke of its own with the stroke's caps (feature 449 T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "dfb804dbfd11aa38",
   "core": "de284529198d7ff1",
   "date": "2026-11-18",
   "note": "dashes alone, from the start and the offset",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/ink.rs::join#a stroke's corner": {
   "body": "5cb42d70319ad422",
   "claim": "a stroke's corner - how-a-leader-line-ties-a-caption-to-its-feature.drawing: its corners drawn square to their point, or cut off where they are very sharp, or rounded where the sheet rounds them - SVG 1.1's miter, its bevel past `stroke-miterlimit`, a round join's disc (feature 449 T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8f8af6c309477075",
   "core": "ff42f19652b79bfe",
   "date": "2026-11-18",
   "note": "miter, bevel past the limit, round disc",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/ink.rs::nearest_ink#a tie between parts": {
@@ -23881,31 +23905,33 @@
   "code": "b65149a53799cb14",
   "core": "521a49c35139978b",
   "date": "2026-11-18",
-  "note": "an outline first, then the wider, then the first drawn",
+  "note": "`(!part.line && bl) || (part.line == bl && part.half > bh)` under `d == bd` also puts an outline before a stroke, then the wider stroke, and the strict comparisons keep the first part drawn; this matches Python's tuple order and §3",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:a613975a33a7cc77"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:094a571aefe85254"
   ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/ink.rs::nearest_ink#which part a leader ends on": {
   "body": "02af0ed351c632a5",
   "claim": "which part a leader ends on - how-a-leader-line-ties-a-caption-to-its-feature.drawing: it ends at the nearest drawn point - a disc's curve, a stroke's edge, a scattered part - not a box that may hold bare ground; the part chosen by its drawn edge, an outline's own stroke and a stroke's cap and joins read as the sheet draws them (feature 449 T193, T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "afb3d5b9cdf1c542",
   "core": "521a49c35139978b",
   "date": "2026-11-18",
   "note": "by drawn edge, the nearest drawn point",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406",
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:64021411c0f9e4ba"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/ink.rs::outline_corners#caption search plumbing": {
@@ -23923,34 +23949,38 @@
  "rust/mode_a/src/labels/placer/ink.rs::part_nearest#a closed outline's drawn edge": {
   "body": "83adcf42b8d70024",
   "claim": "a closed outline's drawn edge - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends on the ink as it is drawn, on a corner's point; the outline measured round by its stroke and each corner's miter point then tried, its whole band where a corner bevels, so the round measure keeps the point it chose among equally near ones (feature 449 T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f09b512b49a0e975",
   "core": "a56a01420714e3dc",
   "date": "2026-11-18",
   "note": "the round measure, then the miter points, the band where a corner bevels",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
   "reads": "437f217000b430d8",
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/ink.rs::stroke_band#a stroke's drawn band": {
   "body": "a1cfd94abbd366ff",
   "claim": "a stroke's drawn band - how-a-leader-line-ties-a-caption-to-its-feature.drawing: a leader ends on the ink as it is drawn: on a corner's point, on a line's end, and never in a dashed line's gap - the page's map drawing convention; a stroke's band as SVG draws it, its `stroke-linecap`, `stroke-linejoin`, `stroke-miterlimit` and `stroke-dasharray` read (SVG's defaults butt, miter, 4 and solid unless the sheet says otherwise) (feature 449 T193, T194)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a55a5dd0bc730d42",
   "core": "1a4567bf692a1ad1",
   "date": "2026-11-18",
   "note": "as its Python twin: a stroke of no length with a square cap is drawn as a level square in sheet coordinates; to judge it against \"squared off ... as drawn\" in a turned group needs SVG 2 13.5.5's orientation rule for a zero-length cap, which is not in the bundle; the rest matches",
   "pages": {
-   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "a3a18809803352e3"
+   "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html": "04389f4034c1c71e"
   },
-  "research": "f89dddeff5a54745",
+  "research": "8934043f3fa21e6c",
   "rests": [
    "0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html:2df3dc7b0c949406"
   ],
+  "triaged": "2026-11-18",
   "verdict": "CANNOT-TELL"
  },
  "rust/mode_a/src/labels/placer/ink.rs::unit#caption search plumbing": {
