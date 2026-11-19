@@ -714,31 +714,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T198 to T198 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T199 to T199 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T200 (<why: the finding or measurement that files it>)
+### T200 (T198: `make work-budget-bundle` refused a derivation written in plain English)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `code_name_problems` (`rust/gate/crates/trials/src/measure/work_budget_bundle/code.rs`) matched every name of the stage's code against a derivation's prose, so the words "research" and "write", which are also function names, refused T198's derivation (observed 2026-11-19, method: the command's refusal). A reference now counts only when it is code-shaped (`code_shaped`): a `.`, `::` or `/` path into the code, or a lone name with an underscore or a capital letter; a path under a top-level directory that is not code (`research/`) counts only its code-shaped parts. Red on HEAD with five names refused, among them area, research and write (observed 2026-11-19, method: the new test run at HEAD).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the code-name match | `a_derivation_in_plain_words_passes_and_one_naming_the_code_is_refused` | `code_shaped` | none | none |
 
 ### T200 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** A derivation written in plain words is bundled; one that names the stage's code is refused.
+2. **The constraints.** Feature 443's FR-015 (a MODE BUDGET bundle holds no code); constitution XIV (a check refusing good work is a defect).
+3. **Where each comes from.** O: T198's refusal; G: the GM, 2026-10-30, the blindness the check serves.
+4. **Do they describe the world here?** Yes: the refused words were ordinary English in the derivation's prose.
+5. **The order.** After T198, before T201 and the placer's rebuild.
+6. **The exits.** Green: the test red on HEAD and green now, `make static` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (its code landed with T199's push; this ticks it).
+9. **Done, measured.** The T198 derivation no longer draws a code-name refusal (its remaining refusals are the template's form, T201).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** The check refused good work: a defect under XIV. Its cost, accepted: a lone lowercase function name in backticks now passes; `phase_source_hooks` still keeps the old code unreadable while a stage is rebuilt, so a derivation can only name it from memory.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** The template's checks are the hamlet stages' and refuse a Mode A derivation's form: filed as T201.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T201 (<why: the finding or measurement that files it>)

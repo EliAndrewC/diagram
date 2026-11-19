@@ -822,6 +822,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T200 (T198: `make work-budget-bundle` refused a derivation written in plain English)": {
+   "sha256": "639e361db37fdc048be9df778c3f29bc3b93c0c32e0e4622490157e58e4fdeec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T200 Approach (checklist part A)": {
+   "sha256": "9602b1a5c93bac851e32af0390c3d4158a9e04da0ec45b8d1311e9a64db0f788",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13289,6 +13301,47 @@
      "why": "Matches the approved sequence (step 3a measured before step 3b) and leaves out nothing the request asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T200 (T198: `make work-budget-bundle` refused a derivation written in plain English)",
+    "### T200 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T200-code-shaped",
+     "summary": "A reference to the stage's code counts only when code-shaped: a ., :: or / path, or a lone name with an underscore or a capital letter; plain lowercase words such as research, write and area no longer refuse a derivation.",
+     "class": "within",
+     "why": "Fixes a check that refused good work (T198's plain-English derivation refused on ordinary words). That is a defect under constitution XIV and FR-002's exception for a check that refuses correct work, and the GM's 2026-11-18 fix-as-we-go rule (fix known bugs in each step before moving on) covers fixing it. The check keeps its job: the new test pins that a derivation naming the code is still refused."
+    },
+    {
+     "id": "T200-non-code-dir",
+     "summary": "A path under a top-level directory that is not code (research/) counts only its code-shaped parts.",
+     "class": "within",
+     "why": "This is the same defect fix. A research/ path is not the stage's code, and refusing it would refuse good work. Code-shaped parts are still counted."
+    },
+    {
+     "id": "T200-accepted-cost",
+     "summary": "Accepted cost: a lone lowercase function name in backticks now passes the code-name check; phase_source_hooks still keeps the old code unreadable during a rebuild.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows how far the blindness check reaches, and the blindness is what the GM asked for on 2026-11-19 (tooling so the session cannot see the Python, rebuilt from derivations). The narrowing is legitimate because a lone lowercase single word cannot be told apart from an English word, and backticks are ordinary term-marking in this project's prose. Refusing such words is exactly the defect that stopped a plain-words derivation, so applying the rule literally defeats its purpose of letting derivations be written in plain words. One English word carries no algorithm, so the bundle still holds no code (443 FR-015). Everything with real code shape (paths, multi-word identifiers, capitalised names) is still refused. The main guarantee, phase_source_hooks keeping the code unreadable, is untouched."
+    },
+    {
+     "id": "T200-found-left-T201",
+     "summary": "The template's hamlet-stage form checks, which refuse a Mode A derivation's form, are filed as T201 and ordered before the placer's rebuild.",
+     "class": "within",
+     "why": "The known defect is filed and ordered ahead of the next step's work (the placer's rebuild) instead of being carried past it, which is the 2026-11-18 rule."
+    },
+    {
+     "id": "T200-budget-order",
+     "summary": "One landing: the code landed with T199's push and this ticks it. Ordered after T198 and before T201.",
+     "class": "within",
+     "why": "This is sequencing and bookkeeping. It narrows nothing that was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23612,6 +23665,45 @@
      "summary": "Ordered after T195 and before T199's landing and T152; one landing for the counters and the derivation, the rebuild as separate phase tasks; red exit sets the task down with any cannot-be-done claim ruled through make arbiter-ask",
      "class": "within",
      "why": "Matches the approved sequence (step 3a measured before step 3b) and leaves out nothing the request asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T200": {
+   "section_sha256": "527f48bd66396c5fd4480212107a3e1c8c68a0d43f26b48fd9e9ad39e8992f83",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T200-code-shaped",
+     "summary": "A reference to the stage's code counts only when code-shaped: a ., :: or / path, or a lone name with an underscore or a capital letter; plain lowercase words such as research, write and area no longer refuse a derivation.",
+     "class": "within",
+     "why": "Fixes a check that refused good work (T198's plain-English derivation refused on ordinary words). That is a defect under constitution XIV and FR-002's exception for a check that refuses correct work, and the GM's 2026-11-18 fix-as-we-go rule (fix known bugs in each step before moving on) covers fixing it. The check keeps its job: the new test pins that a derivation naming the code is still refused."
+    },
+    {
+     "id": "T200-non-code-dir",
+     "summary": "A path under a top-level directory that is not code (research/) counts only its code-shaped parts.",
+     "class": "within",
+     "why": "This is the same defect fix. A research/ path is not the stage's code, and refusing it would refuse good work. Code-shaped parts are still counted."
+    },
+    {
+     "id": "T200-accepted-cost",
+     "summary": "Accepted cost: a lone lowercase function name in backticks now passes the code-name check; phase_source_hooks still keeps the old code unreadable during a rebuild.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows how far the blindness check reaches, and the blindness is what the GM asked for on 2026-11-19 (tooling so the session cannot see the Python, rebuilt from derivations). The narrowing is legitimate because a lone lowercase single word cannot be told apart from an English word, and backticks are ordinary term-marking in this project's prose. Refusing such words is exactly the defect that stopped a plain-words derivation, so applying the rule literally defeats its purpose of letting derivations be written in plain words. One English word carries no algorithm, so the bundle still holds no code (443 FR-015). Everything with real code shape (paths, multi-word identifiers, capitalised names) is still refused. The main guarantee, phase_source_hooks keeping the code unreadable, is untouched."
+    },
+    {
+     "id": "T200-found-left-T201",
+     "summary": "The template's hamlet-stage form checks, which refuse a Mode A derivation's form, are filed as T201 and ordered before the placer's rebuild.",
+     "class": "within",
+     "why": "The known defect is filed and ordered ahead of the next step's work (the placer's rebuild) instead of being carried past it, which is the 2026-11-18 rule."
+    },
+    {
+     "id": "T200-budget-order",
+     "summary": "One landing: the code landed with T199's push and this ticks it. Ordered after T198 and before T201.",
+     "class": "within",
+     "why": "This is sequencing and bookkeeping. It narrows nothing that was asked."
     }
    ],
    "verdict": "CLEAR"
