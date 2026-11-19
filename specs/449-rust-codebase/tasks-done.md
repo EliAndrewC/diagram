@@ -454,6 +454,9 @@
 - [x] T155 Phase 4 S10b, pack_audit's registry (ask:449-phase4-slices): __init__, registry, report, __main__, notes_census, size_table, building_programs (1,123 lines); make pack-audit, notes-census, size-table and building-programs Rust
       research: rendering
       verify: DONE. done by T168 (building_programs), T170 (notes_census), T174 (size_table) and T175 (__init__, registry, report, __main__ deleted), which landed them measured: make pack-audit, notes-census, size-table and building-programs run the Rust, each held by its differential with none differing
+- [x] T156 Phase 4 S11, the Mode A top and pytest's exit (ask:449-phase4-slices) Q6, Q9 - split by its scoping of 2026-11-19 into four landings: T210 (dead measurement tooling), T211 (the Rust pool sweep), T212 (the Python audit and its lockstep retired), T213 (pytest's exit); compound* went to T152, resvg is a library since T150, and the six .gen.py's one Rust sheet driver with a spec file per map is folded into T157, whose pipeline finds maps by their .gen.py; T156 is ticked when T210-T213 are
+      research: rendering
+      verify: DONE. landed in batch T156+T214: T156 done through T210-T213; T214 done by T213
 - [x] T159 The pre-review count check: make decide refuses a count (lines, cases, files ...) whose sentence carries no label, the plan review's commonest unreviewable return (request.md 2026-11-16)
       research: rendering
       verify: DONE. landed: make decide refuses an unlabeled count; plan crate tests green, coverage complete; ask:449-T159-rounds
@@ -617,3 +620,6 @@
 - [x] T213 T156d - pytest's exit (T156's fourth landing): tests/conftest.py, tests/__init__.py, tests/tooling/__init__.py, tests/_scope.py, _gate_failures.py, _heap.py and l7r/diagram/_memory.py deleted; pytest removed from make quick, test, test-full, test-file, durations, soak and done; pyproject's pytest block and stale entries removed; the Rust that names pytest files (tree hashing and state, land long_runs, suite_tools deps, make_only_hooks' pytest branch, measure gate_costs) and tests/CLAUDE.md, l7r/diagram/CLAUDE.md updated
       research: rendering
       verify: DONE. landed: pytest's exit
+- [x] T214 Done by T213 (2026-11-19): the make-only guard's pytest branch, the one that refused a mention, was deleted with pytest; rust/guard/src/guards/make_only_hooks/tests.rs::a_pytest_command_or_mention_is_left_alone pins that a mention passes. make_only_hooks refuses a mention of pytest as an invocation: T156's scoping (2026-11-19) was refused a read-only python3 -I -c whose string literal held the word pytest - a check refusing good work (constitution XIV); the guard matches an invocation, not a word in a quoted string, with a test red on the old guard
+      research: rendering
+      verify: DONE. landed in batch T156+T214: T156 done through T210-T213; T214 done by T213
