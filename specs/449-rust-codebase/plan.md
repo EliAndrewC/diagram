@@ -360,33 +360,34 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T149 to T149 moved to plan-done.md, 2026-11-17 (feature 375 FR-044) -->
 <!-- plan-archive: T150 to T150 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 <!-- plan-archive: T151 to T151 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-### T152 (<why: the finding or measurement that files it>)
+### T152 (T199: step 3b rebuilt from a derivation, not ported - the GM, 2026-10-30 and 2026-11-19; T208's derivation SOUND and budgeted)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the Mode A compound generator is rebuilt in Rust from `derivations/T208-compound.md` (budget `compound`: 2,400 operations on county-magistracy-example, 2,146 on ochiba-roundtrip-test, set by T208), as a phase task: `make task-start` arms `phase_source_hooks` over the `old-code:` line (compound.py, compound_example.py, compound_model.py, compound_parts.py, compound_view.py, well_gear.py and the Python labels package), so it is written from the derivation, docs/buildings.md, docs/building-programs.md, types.json and the research pages they cite. Each sheet's PROGRAM becomes data, one spec file per map (`ask:449-phase4-slices`: one Rust sheet driver with a spec file per map): ochiba-roundtrip-test's program moves out of its `.gen.py` as it is declared there; county-magistracy-example's is built from docs/building-programs.md's county magistrate's manor program and its knobs, since the old builder is old code. The generator lives under `rust/mode_a/src/compound/`; captions go through T202's `caption_place`; the step-1 audit's Rust (the building types, the compound constants and part predicates it ported as data) stays readable as plumbing and is reused. The two `.gen.py` keep the pool's wiring and call `l7r-mode-a compound <spec>`. When both sheets pass, the old Python and its lockstep tests are deleted in the same landing; a page of every pool sheet before and after is published for the GM (engine-plan.md).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the rebuilt compound generator | its own tests, each a rule of docs/buildings.md or a cited page | `rust/mode_a/src/compound/` | the two generated sheets (may move under FR-002) | none |
 
 ### T152 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+1. **The goal, in the world.** The two generated compound sheets are composed as docs/buildings.md requires - office front, residence rear, buildings ringing the walls in tiers, the named court spine open, the parts by their rules - by a generator doing the work its job needs: within twice each sheet's budget.
+2. **The constraints.** docs/buildings.md's composition rules and the pages they cite; docs/building-programs.md's programs; FR-002 as restated by T180 (no byte standard: each sheet passes its checks - `make pack-audit`, the census, the size table - and holds its research claims); the budget `compound`; constitution XIV.
+3. **Where each comes from.** G: request.md, 2026-10-30 and 2026-11-19; R: docs/buildings.md and the pages it cites; O: T208's SOUND derivation.
+4. **Do they describe the world here?** Yes: the derivation sized itself on the two sheets' own things seated, 69 and 65 (measured 2026-11-19 (its count script over each SVG)).
+5. **The order.** After T208; before T156 (the rest of the Mode A top and pytest's exit) and T157.
+6. **The exits.** Green: both sheets drawn by Rust pass their checks and hold their claims, the claims round in step, `make budget-sheets PHASE=compound` within twice each sheet's figure, the old Python and its lockstep tests deleted, the side-by-side page published. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The task exists for it: the old generator is replaced without being read.
+8. **The budget.** One landing; if both sheets cannot pass together, the module and its tests land first, the switch of the two `.gen.py` second.
+9. **Done, measured.** `make budget-sheets PHASE=compound` on the counting build's counts, each sheet within twice its figure; both sheets' checks green.
+10. **Before moving a constant.** The derivation's GUESS figures (the grid cell, the slack's sources) and every size the docs give as a band are knobs named in the module with their reason beside each.
+11. **Before fitting things into room.** Room first (the GM, 2026-10-12): a building that will not fit its wall row is reported, and the envelope or the program's knob moved before anything is squeezed.
+12. **Before any fix.** A building or part that moves and still holds every rule is not a defect (XIV); one that breaks a rule, or a sheet a check refuses, is fixed in the new generator before landing.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Found and left?** none yet
+
+**Performance work?** yes - the rebuild exists to bring the generator within its derived budget; its answers are the derivation (`derivations/T208-compound.md`, SOUND) and the budget set by T208.
 
 
-<!-- plan-archive: T153 to T153 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-<!-- plan-archive: T154 to T154 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
-<!-- plan-archive: T155 to T155 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 ### T156 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

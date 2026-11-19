@@ -212,10 +212,10 @@
    "declared": "round-arbiter"
   },
   "### T152 Approach (checklist part A)": {
-   "sha256": "096035d84d86e5d6184a8dc7fb492ecd1568eea19e995497916dc971cc591c96",
+   "sha256": "6264820aa05ce9586d47c1f6fd7fdb44cf6722f03625b83a38c34601d793b440",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   },
   "### T153 (<why: the finding or measurement that files it>)": {
    "sha256": "af4a5108dee352474c4bfd0877c35b8a1392fe590f2eeecd8c5b058b12767074",
@@ -915,6 +915,12 @@
   },
   "### T208 Approach (checklist part A)": {
    "sha256": "85a161b553eba44249ef267dee0ba153dca096e9e914ae3456fd0e0004d088a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T152 (T199: step 3b rebuilt from a derivation, not ported - the GM, 2026-10-30 and 2026-11-19; T208's derivation SOUND and budgeted)": {
+   "sha256": "2c83e04cd4f6f93978bfe9450789f0638cbd31fb6061ab1b7f281afcf35fbafe",
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
@@ -13857,6 +13863,70 @@
      "why": "Sequencing the derivation before the phase task it governs is what the 2026-11-19 approval describes; the red exit routes a narrowing to the arbiter rather than taking it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T152 (T199: step 3b rebuilt from a derivation, not ported - the GM, 2026-10-30 and 2026-11-19; T208's derivation SOUND and budgeted)",
+    "### T152 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T152-rebuild",
+     "summary": "Step 3b's compound generator is rebuilt in Rust from derivations/T208-compound.md as a phase task, phase_source_hooks armed over the old-code line (compound*.py, well_gear.py, the Python labels package), written from the derivation, docs/buildings.md, docs/building-programs.md, types.json and the cited research pages.",
+     "class": "within",
+     "why": "The GM, 2026-11-19: 'step 3b rebuilt from a derivation as phase tasks' approved ('okay, please proceed on that basis'); the 2026-10-30 rule 'we are not trying to re-implement the same algorithms'; the GM's recollection of 'tooling in place to stop you from even being able to see the Python code' is what phase_source_hooks restores."
+    },
+    {
+     "id": "T152-budget",
+     "summary": "Done is measured by make budget-sheets PHASE=compound against T208's budget (2,400 ops county-magistracy-example, 2,146 ochiba-roundtrip-test), each sheet within twice its figure.",
+     "class": "within",
+     "why": "Serves the 2026-10-30 purpose (orders of magnitude fewer operations) and the 2026-11-19 plan's 'measured against a derived work budget'; the factor of two is a tolerance on a derived bound, not a carve-out of a rule the GM stated, and it cannot admit the orders-of-magnitude excess the rule exists to stop."
+    },
+    {
+     "id": "T152-program-data",
+     "summary": "Each sheet's program becomes data, one spec file per map, under one Rust sheet driver; ochiba's program moves out of its .gen.py as declared; county-magistracy-example's is built from docs/building-programs.md's county magistrate's manor program because the old builder is old code.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q6 (one Rust sheet driver plus a spec file per map); building county-magistracy's program from the docs rather than the old builder follows the 2026-11-19 rule; any change to that sheet is allowed under FR-002 (maps may change so long as checks pass and research holds)."
+    },
+    {
+     "id": "T152-placement-reuse",
+     "summary": "The generator lives under rust/mode_a/src/compound/; captions go through T202's caption_place; the step-1 audit's Rust (building types, compound constants and part predicates as data) stays readable and is reused.",
+     "class": "within",
+     "why": "The GM's 2026-11-19 plan keeps steps 1 and 2 ('steps 1 and 2 kept'), so reusing their Rust is what was approved; placement is design, not scope."
+    },
+    {
+     "id": "T152-wiring-deletion",
+     "summary": "The two .gen.py keep the pool's wiring and call l7r-mode-a compound <spec>; when both sheets pass, the old Python and its lockstep tests are deleted in the same landing and a before/after page of every pool sheet is published.",
+     "class": "within",
+     "why": "FR-001 (every Python file replaced), FR-003 (Python runs until its replacement passes), the 2026-11-19 plan ('lockstep tests retired as the Python goes'), the 2026-11-17 request that each engine slice publish a page of every pool sheet before and after."
+    },
+    {
+     "id": "T152-exits",
+     "summary": "Green: both Rust-drawn sheets pass their checks (make pack-audit, the census, the size table) and hold their claims, budget met, Python deleted, page published. Red: failure recorded, task set down, a claim it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "FR-002 as restated by T180 (checks pass, research claims hold, no byte standard), matching the GM's 2026-11-17/18 words; the red exit narrows nothing."
+    },
+    {
+     "id": "T152-split-landing",
+     "summary": "If both sheets cannot pass together, the module and its tests land first and the switch of the two .gen.py second.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q1 allows a slice's Rust to land as a library with no production caller while its Python stays the implementation; FR-003 holds until the switch."
+    },
+    {
+     "id": "T152-order",
+     "summary": "After T208; before T156 (the rest of the Mode A top and pytest's exit) and T157.",
+     "class": "within",
+     "why": "Sequencing only; the derivation must exist before a phase task written from it."
+    },
+    {
+     "id": "T152-knobs-room-fixes",
+     "summary": "The derivation's GUESS figures and every docs band are named knobs with reasons; room first (a building that will not fit is reported and the envelope or program knob moved before anything is squeezed); a building that moves and holds every rule is not a defect, one that breaks a rule or a sheet a check refuses is fixed before landing.",
+     "class": "within",
+     "why": "Constitution XIV v2.36.0 and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), the GM 2026-11-18 ('fix all known bugs in each step before moving on'), and the GM's 2026-10-12 room-first rule; nothing is left unfixed that is a defect."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -24596,6 +24666,68 @@
      "summary": "After T206, before T152; red exit records what failed and sends a cannot-be-done claim to make arbiter-ask; done is the SOUND verdict recorded and make budget-set run.",
      "class": "within",
      "why": "Sequencing the derivation before the phase task it governs is what the 2026-11-19 approval describes; the red exit routes a narrowing to the arbiter rather than taking it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T152": {
+   "section_sha256": "effd2d13890982c4835f3f10a9a257682d1c50062cebe5fa77ac57b51d4a97ea",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T152-rebuild",
+     "summary": "Step 3b's compound generator is rebuilt in Rust from derivations/T208-compound.md as a phase task, phase_source_hooks armed over the old-code line (compound*.py, well_gear.py, the Python labels package), written from the derivation, docs/buildings.md, docs/building-programs.md, types.json and the cited research pages.",
+     "class": "within",
+     "why": "The GM, 2026-11-19: 'step 3b rebuilt from a derivation as phase tasks' approved ('okay, please proceed on that basis'); the 2026-10-30 rule 'we are not trying to re-implement the same algorithms'; the GM's recollection of 'tooling in place to stop you from even being able to see the Python code' is what phase_source_hooks restores."
+    },
+    {
+     "id": "T152-budget",
+     "summary": "Done is measured by make budget-sheets PHASE=compound against T208's budget (2,400 ops county-magistracy-example, 2,146 ochiba-roundtrip-test), each sheet within twice its figure.",
+     "class": "within",
+     "why": "Serves the 2026-10-30 purpose (orders of magnitude fewer operations) and the 2026-11-19 plan's 'measured against a derived work budget'; the factor of two is a tolerance on a derived bound, not a carve-out of a rule the GM stated, and it cannot admit the orders-of-magnitude excess the rule exists to stop."
+    },
+    {
+     "id": "T152-program-data",
+     "summary": "Each sheet's program becomes data, one spec file per map, under one Rust sheet driver; ochiba's program moves out of its .gen.py as declared; county-magistracy-example's is built from docs/building-programs.md's county magistrate's manor program because the old builder is old code.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q6 (one Rust sheet driver plus a spec file per map); building county-magistracy's program from the docs rather than the old builder follows the 2026-11-19 rule; any change to that sheet is allowed under FR-002 (maps may change so long as checks pass and research holds)."
+    },
+    {
+     "id": "T152-placement-reuse",
+     "summary": "The generator lives under rust/mode_a/src/compound/; captions go through T202's caption_place; the step-1 audit's Rust (building types, compound constants and part predicates as data) stays readable and is reused.",
+     "class": "within",
+     "why": "The GM's 2026-11-19 plan keeps steps 1 and 2 ('steps 1 and 2 kept'), so reusing their Rust is what was approved; placement is design, not scope."
+    },
+    {
+     "id": "T152-wiring-deletion",
+     "summary": "The two .gen.py keep the pool's wiring and call l7r-mode-a compound <spec>; when both sheets pass, the old Python and its lockstep tests are deleted in the same landing and a before/after page of every pool sheet is published.",
+     "class": "within",
+     "why": "FR-001 (every Python file replaced), FR-003 (Python runs until its replacement passes), the 2026-11-19 plan ('lockstep tests retired as the Python goes'), the 2026-11-17 request that each engine slice publish a page of every pool sheet before and after."
+    },
+    {
+     "id": "T152-exits",
+     "summary": "Green: both Rust-drawn sheets pass their checks (make pack-audit, the census, the size table) and hold their claims, budget met, Python deleted, page published. Red: failure recorded, task set down, a claim it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "FR-002 as restated by T180 (checks pass, research claims hold, no byte standard), matching the GM's 2026-11-17/18 words; the red exit narrows nothing."
+    },
+    {
+     "id": "T152-split-landing",
+     "summary": "If both sheets cannot pass together, the module and its tests land first and the switch of the two .gen.py second.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q1 allows a slice's Rust to land as a library with no production caller while its Python stays the implementation; FR-003 holds until the switch."
+    },
+    {
+     "id": "T152-order",
+     "summary": "After T208; before T156 (the rest of the Mode A top and pytest's exit) and T157.",
+     "class": "within",
+     "why": "Sequencing only; the derivation must exist before a phase task written from it."
+    },
+    {
+     "id": "T152-knobs-room-fixes",
+     "summary": "The derivation's GUESS figures and every docs band are named knobs with reasons; room first (a building that will not fit is reported and the envelope or program knob moved before anything is squeezed); a building that moves and holds every rule is not a defect, one that breaks a rule or a sheet a check refuses is fixed before landing.",
+     "class": "within",
+     "why": "Constitution XIV v2.36.0 and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), the GM 2026-11-18 ('fix all known bugs in each step before moving on'), and the GM's 2026-10-12 room-first rule; nothing is left unfixed that is a defect."
     }
    ],
    "verdict": "CLEAR"
