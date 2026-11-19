@@ -54,8 +54,10 @@ grep -q "make quick" "$HOOK_ERR" && { echo "  ok    the message names the cheap 
 # is almost always asking "which lines does this test reach?", and `make quick` does not answer that - so a
 # message that names only the cheap loop sends it back to the expensive call (GM 2026-08-29: *"Does the make
 # cov-file get suggested automatically when you are warned about running make test-full too often"* - it did
-# not). A guard that blocks a legitimate question without giving the route is one that gets worked around.
-grep -q "make cov-file" "$HOOK_ERR" && { echo "  ok    the message names the targeted coverage probe"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make cov-file"; FAIL=$((FAIL+1)); }
+# not). A guard that blocks a legitimate question without giving the route is one that gets worked around. `make cov-file` left
+# with pytest (449 T213); the lines no test reaches are `make static`'s, its cover step listing them file by file (449 T218).
+grep -q "make static" "$HOOK_ERR" && { echo "  ok    the message names the command that lists the lines no test reaches"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make static"; FAIL=$((FAIL+1)); }
+grep -q "make cov-file" "$HOOK_ERR" && { echo "  FAIL  the message names make cov-file, deleted with pytest"; FAIL=$((FAIL+1)); } || { echo "  ok    ...and no deleted target"; PASS=$((PASS+1)); }
 run "$(bash_ev 'make test-full')"; check "re-issuing goes through (blocks once, no deadlock)" ok $?
 teardown
 
@@ -123,7 +125,8 @@ setup
 FIRST=$("$HOOK" pretool <<<"$(bash_ev 'make test-full')" 2>/dev/null)
 printf '%s' "$FIRST" | grep -q '"additionalContext"' && { echo "  ok    the first run carries a reminder"; PASS=$((PASS+1)); } || { echo "  FAIL  no reminder on the first run"; FAIL=$((FAIL+1)); }
 printf '%s' "$FIRST" | jq empty 2>/dev/null && { echo "  ok    ...as valid JSON on stdout"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder is not valid JSON"; FAIL=$((FAIL+1)); }
-printf '%s' "$FIRST" | grep -q 'make cov-file' && { echo "  ok    ...naming the command that answers the usual question"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make cov-file"; FAIL=$((FAIL+1)); }
+printf '%s' "$FIRST" | grep -q 'make static' && { echo "  ok    ...naming the command that answers the usual question"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make static"; FAIL=$((FAIL+1)); }
+printf '%s' "$FIRST" | grep -q 'make cov-file' && { echo "  FAIL  the reminder names make cov-file, deleted with pytest"; FAIL=$((FAIL+1)); } || { echo "  ok    ...and no deleted target"; PASS=$((PASS+1)); }
 SECOND=$("$HOOK" pretool <<<"$(bash_ev 'make test-full')" 2>/dev/null || true)
 printf '%s' "$SECOND" | grep -q '"additionalContext"' && { echo "  FAIL  the reminder repeated on the blocked run"; FAIL=$((FAIL+1)); } || { echo "  ok    it is not repeated - a reminder that repeats is skimmed"; PASS=$((PASS+1)); }
 CHEAP=$("$HOOK" pretool <<<"$(bash_ev 'make quick')" 2>/dev/null)

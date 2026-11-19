@@ -45,13 +45,11 @@ expensive one is serving a stale map. `gencache` and `regen` exclude themselves 
 matched by basename) because the cache cannot be its own input, and `render_cache` excludes itself
 for the same reason.
 
-## Before you trust a cache change, audit it
+## Before you trust a cache change
 
-`make cache-audit` (~10 min) perturbs a random numeric literal inside a `settlement/`
-function, sweeps the pool with the cache and again with `--no-cache`, and demands byte-identical
-artifacts. It never looks at the key, so it cannot share the key's blind spots. Since the gate
-TRUSTS the cache (feature 026), this is the empirical backstop for the key itself - which makes
-running it after a change here more important, not less.
+Nothing audits the cache now: `make cache-audit` (a perturbed engine literal, the pool swept cached and fresh, identical
+artifacts demanded) was deleted with the Python hamlet engine (feature 444 T39, ea5638968); `dev/cache.md` says what that
+leaves, until feature 449 T221 rebuilds the cache in Rust.
 
 What the key covers, the soundness argument and the concurrency cases are `gencache.py`'s own docstring; THE TRAP
 (a miss rebuilds the entry against the tree as it is, so a trial of "does an edit to X invalidate?" needs the

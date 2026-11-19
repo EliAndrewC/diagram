@@ -14,10 +14,13 @@ use serde_json::json;
 use crate::codeid::{self, stated, Cache};
 
 /// (directory, accepted endings). `tests/` is deliberately absent (GM 2026-08-25, feature 132 FR-024); the frozen tree stays so the merge route is what it was before feature 161 moved the hand-authored maps.
+/// A live pool `.svg` is engine (449 T218): the hand-drawn sheets are source the pool sweep (`rust/mode_a/src/pool_sweep.rs`) judges,
+/// and an edit to one landed DIRECT with no sweep while only `.gen.py` and `.json` (a `.compound.json` among them) counted. A render
+/// is gitignored, so it never reaches a delta or `ls-files -co --exclude-standard`: the ending alone names the tracked sheets.
 const ENGINE_DIRS: [(&str, &[&str]); 4] = [
     ("l7r/", &[".py"]),
     ("rust/", &[".rs", "Cargo.toml", "Cargo.lock"]),
-    ("pool/", &[".gen.py", ".json"]),
+    ("pool/", &[".gen.py", ".json", ".svg"]),
     ("legacy-hand-authored-pool/", &[".gen.py", ".json"]),
 ];
 

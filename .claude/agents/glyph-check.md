@@ -70,7 +70,8 @@ Find every instance of the element on the map first (the manifest's records, the
      departure pass it). Read the drawing, not the intent: an element that drifted past the built frontage to where there was
      room has failed its objective.
    - "X stands inside Y" (scrub in the marsh, trees on a paddy): count it, do not eyeball it - the PNG you see is downscaled.
-     Take the element's bases from the SVG (`make scatter-bases MAP=<map> [BOX=...]` for scatter), map each onto the PNG,
+     Take the element's bases from the SVG's own marks (no tool parses them since `make scatter-bases` left with the Python
+     engine in 444 T39), map each onto the PNG,
      classify the ground under it by PIXEL COLOR, and report the count. Any count above a handful is needs-work.
 5. A glyph drawn off scale or off color so that it reads is a map drawing CONVENTION (`research/contents.json#map-conventions`), not a defect.
 

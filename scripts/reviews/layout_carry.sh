@@ -5,7 +5,7 @@
 # fast-forward moves TRACKED files only: every gitignored artifact a clone or the mirror had built there - the roll
 # cache `.gencache/`, the renders beside each pool map, the built record site, testmon's database, coverage data -
 # stays behind at the old place, where nothing reads it. Left there, the first gate after the move runs cold (the roll
-# cache alone is about two minutes, `sync-with-main.sh` seed_roll_cache), and 600 MB sits in a directory a session
+# cache alone was about two minutes when the move was made), and 600 MB sits in a directory a session
 # might read as live.
 #
 # WHAT. Only when the tree is on the new layout (`l7r/` tracked at the root) and the old directory still exists: every

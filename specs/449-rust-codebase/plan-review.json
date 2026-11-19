@@ -1002,6 +1002,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T218 (T157's scoping, 2026-11-19: the pipeline's tooling named deleted scripts and missing targets, and an open question on the land route)": {
+   "sha256": "1ee397da4d358edf83102465f1b48bf5fd1744d4630f043fcbf199a62eacc8c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T218 Approach (checklist part A)": {
+   "sha256": "dd33db7781256b36e740a366c50cae519d0a80f93b1a320d2773602e77be0291",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14470,6 +14482,52 @@
      "why": "Sequencing and procedure only; it neither narrows nor widens the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T218 (T157's scoping, 2026-11-19: the pipeline's tooling named deleted scripts and missing targets, and an open question on the land route)",
+    "### T218 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T218-dead-tooling",
+     "summary": "Remove or re-point the tooling that names deleted scripts or missing targets: make scatter-bases and the two agent files naming its deleted script, cache-audit in .PHONY with no rule, make done FULL=1's perf-gate with no rule (passed by running nothing), measure_hooks' tips naming the deleted make cov-file, sync-with-main.sh's unused variable and its seeding of a dead roll store into every new clone.",
+     "class": "within",
+     "why": "Each is a tool that runs nothing, runs a deleted script or answers wrongly - a defect under constitution XIV as the GM's 2026-11-19 wording bounds it (a check passing by running nothing, a tool answering wrongly) - left behind by FR-001's port and deletions; the GM's 2026-11-18 'we should fix all known bugs in each step before moving on to porting the next step' asks for exactly this. The unused variable is a one-line cleanup in the same script, adds no behavior and narrows nothing."
+    },
+    {
+     "id": "T218-make-map-no-gen",
+     "summary": "make map with no GEN, which defaulted to a file that no longer exists, is refused with a message naming its forms rather than given a new default.",
+     "class": "within",
+     "why": "A default that points at a missing file is a tool failing on its own default; refusing with the valid forms fixes the wrong outcome without inventing a default the GM never chose. Nothing a caller relied on is removed: the old default could not run."
+    },
+    {
+     "id": "T218-red-first-suite",
+     "summary": "A new section of the make-only suite (no recipe runs a missing script, every phase make done runs has a rule, make map without GEN refused naming its forms), plus tree and cohort tests, written red first.",
+     "class": "within",
+     "why": "Tests whose only effect is to make the fixes above happen and stay fixed; delete the fixes and the checks have nothing left to check. Enforcement of what was asked, not scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T218-svg-route",
+     "summary": "The open land-route question, measured (observed 2026-11-19, l7r-gate delta engine-paths on the Ubame sheet's path): an edit to a tracked hand-sheet/pool svg was not counted as engine, so it landed DIRECT with no make done and no pool sweep; a tracked pool svg now counts as engine in the tree crate (delta.rs) and the landing's cohort list (cohort.rs), red first.",
+     "class": "within",
+     "why": "A measured defect - a sheet edit skipping the checks and T211's pool sweep that exist to judge it, i.e. the gate passing work it never checked. It widens the gate to the exact class of file the sweep exists for and no further (pool svgs only; the notes-only edit is not swept in here), so it narrows nothing and adds no behavior beyond making an existing check reach the file it was meant to check."
+    },
+    {
+     "id": "T218-found-and-left",
+     "summary": "More .PHONY names with no rule that pass by running nothing (perf-review on every push among them), a dead cache-audit guard, and a notes-only edit skipping the sweep: found during the task and filed as their own task (2026-11-19) rather than fixed in T218.",
+     "class": "within",
+     "why": "Not a decision to leave defects unfixed: they are recorded and scheduled as a task, which is how work is split, and this task is T157's tooling cleanup, not a port step. The GM's rule is that known defects are fixed 'in each step before moving on to porting the next step'; that rule binds at the next port step's start, so the filed task must land before any next engine/port step begins - a plan that let it slip past that boundary would be the finding, and this section does not do so."
+    },
+    {
+     "id": "T218-order-and-exits",
+     "summary": "First of T157's landings, before T219; one gated landing; exits green on the suites red-then-green, make quick, make static, make hooks-test; red recorded and set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and process the spec leaves open; nothing asked is narrowed and no exception is taken."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25588,6 +25646,50 @@
      "summary": "Ordered after T213; budget is the tick alone; exits are green (test in place) or red (recorded, set down, impossibility claim to make arbiter-ask).",
      "class": "within",
      "why": "Sequencing and procedure only; it neither narrows nor widens the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T218": {
+   "section_sha256": "6f40e19d7425486cb1adc0a443d1dbcea67fac31e6d5ef41f81e62a631069761",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T218-dead-tooling",
+     "summary": "Remove or re-point the tooling that names deleted scripts or missing targets: make scatter-bases and the two agent files naming its deleted script, cache-audit in .PHONY with no rule, make done FULL=1's perf-gate with no rule (passed by running nothing), measure_hooks' tips naming the deleted make cov-file, sync-with-main.sh's unused variable and its seeding of a dead roll store into every new clone.",
+     "class": "within",
+     "why": "Each is a tool that runs nothing, runs a deleted script or answers wrongly - a defect under constitution XIV as the GM's 2026-11-19 wording bounds it (a check passing by running nothing, a tool answering wrongly) - left behind by FR-001's port and deletions; the GM's 2026-11-18 'we should fix all known bugs in each step before moving on to porting the next step' asks for exactly this. The unused variable is a one-line cleanup in the same script, adds no behavior and narrows nothing."
+    },
+    {
+     "id": "T218-make-map-no-gen",
+     "summary": "make map with no GEN, which defaulted to a file that no longer exists, is refused with a message naming its forms rather than given a new default.",
+     "class": "within",
+     "why": "A default that points at a missing file is a tool failing on its own default; refusing with the valid forms fixes the wrong outcome without inventing a default the GM never chose. Nothing a caller relied on is removed: the old default could not run."
+    },
+    {
+     "id": "T218-red-first-suite",
+     "summary": "A new section of the make-only suite (no recipe runs a missing script, every phase make done runs has a rule, make map without GEN refused naming its forms), plus tree and cohort tests, written red first.",
+     "class": "within",
+     "why": "Tests whose only effect is to make the fixes above happen and stay fixed; delete the fixes and the checks have nothing left to check. Enforcement of what was asked, not scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T218-svg-route",
+     "summary": "The open land-route question, measured (observed 2026-11-19, l7r-gate delta engine-paths on the Ubame sheet's path): an edit to a tracked hand-sheet/pool svg was not counted as engine, so it landed DIRECT with no make done and no pool sweep; a tracked pool svg now counts as engine in the tree crate (delta.rs) and the landing's cohort list (cohort.rs), red first.",
+     "class": "within",
+     "why": "A measured defect - a sheet edit skipping the checks and T211's pool sweep that exist to judge it, i.e. the gate passing work it never checked. It widens the gate to the exact class of file the sweep exists for and no further (pool svgs only; the notes-only edit is not swept in here), so it narrows nothing and adds no behavior beyond making an existing check reach the file it was meant to check."
+    },
+    {
+     "id": "T218-found-and-left",
+     "summary": "More .PHONY names with no rule that pass by running nothing (perf-review on every push among them), a dead cache-audit guard, and a notes-only edit skipping the sweep: found during the task and filed as their own task (2026-11-19) rather than fixed in T218.",
+     "class": "within",
+     "why": "Not a decision to leave defects unfixed: they are recorded and scheduled as a task, which is how work is split, and this task is T157's tooling cleanup, not a port step. The GM's rule is that known defects are fixed 'in each step before moving on to porting the next step'; that rule binds at the next port step's start, so the filed task must land before any next engine/port step begins - a plan that let it slip past that boundary would be the finding, and this section does not do so."
+    },
+    {
+     "id": "T218-order-and-exits",
+     "summary": "First of T157's landings, before T219; one gated landing; exits green on the suites red-then-green, make quick, make static, make hooks-test; red recorded and set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and process the spec leaves open; nothing asked is narrowed and no exception is taken."
     }
    ],
    "verdict": "CLEAR"

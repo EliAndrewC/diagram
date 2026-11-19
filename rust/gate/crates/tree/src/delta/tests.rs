@@ -63,6 +63,10 @@ fn every_path_kind_is_pinned() {
         "l7r/diagram/pipeline/gencache.py",
         "pool/hamlets/i/i.gen.py",
         "pool/hamlets/i/i.json",
+        // a hand-drawn sheet the pool sweep judges, and a generated sheet's program (449 T218: an edit to either landed DIRECT,
+        // judged by no sweep, while only .gen.py and .json counted)
+        "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+        "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.compound.json",
         "legacy-hand-authored-pool/x.gen.py",
         "rust/phases/src/field.rs",
         "rust/phases/Cargo.toml",

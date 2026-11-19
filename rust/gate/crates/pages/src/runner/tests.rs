@@ -302,10 +302,12 @@ fn the_queue_is_started_detached_with_its_own_command_line() {
         ),
     );
     detach("setsid", &exe, &root, &["a".to_owned(), "b c".to_owned()]).unwrap();
-    let started = std::time::Instant::now();
-    while !seen.is_file() && started.elapsed() < std::time::Duration::from_secs(10) {
+    // Waited for in a closure that always runs at least once: a `while` body the detached child outran went unreached, and the
+    // crate's coverage failed on its two lines by timing alone (449 T218, `make static` 2026-11-19).
+    let _ = (0..500).find(|_| {
         std::thread::sleep(std::time::Duration::from_millis(20));
-    }
+        seen.is_file()
+    });
     std::thread::sleep(std::time::Duration::from_millis(50));
     assert_eq!(
         std::fs::read_to_string(&seen).unwrap(),

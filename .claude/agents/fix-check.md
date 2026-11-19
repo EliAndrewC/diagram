@@ -27,7 +27,8 @@ write NOT-REVIEWABLE and stop. Re-run it immediately before your verdict.
    there, or no - before any crop, count or profile. A measured profile proves a mechanism did what it was designed to do; it
    is not the thing under review. If the answer is "yes, still", the verdict is needs-work whatever the numbers say.
 2. **The PNG is downscaled; the GM looks at full size.** A complaint of the form "X appears inside Y" is answered by a
-   manifest-free PIXEL COUNT: X's bases from the SVG (`make scatter-bases MAP=<map>`), mapped onto the PNG, the ground under
+   manifest-free PIXEL COUNT: X's bases read from the SVG's own marks (no tool parses them since `make scatter-bases` left with
+   the Python engine in 444 T39), mapped onto the PNG, the ground under
    each classified by its pixel color (Y's own fill, not Y's recorded polygon). Report the count in your first paragraph. (The
    validated case, Inashiro 2026-08-26: a reviewer passed a round-2 fix by its depth profile; the GM reloaded the PNG and saw
    pines in the reeds along 1,600 px of seam; the pixel count was what fired.)

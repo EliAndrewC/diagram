@@ -17,8 +17,6 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | Who put this thing here? What refused to put anything here? | `why_placed` - `make why-placed GEN=... AT=x,y` / `REFUSED=x,y` |
 | Is there too much empty space in this Mode A compound? Does its SVG break a geometric rule? | `make pack-audit` - Rust since feature 449 T175, `rust/mode_a/src/audit/` (its index is `audit.rs`'s module doc: which module holds which check, and where a new one is registered); the Python package deleted by T212 |
 | What does each declared Mode A type require, as a table? | `make building-programs` (writes `docs/building-programs.md` between markers) - Rust since feature 449 T168, `rust/mode_a/src/programs.rs` |
-| Is drawn ground cover standing somewhere the engine's keep-outs should have stopped it? | `scatter_audit` (held by `tests/tools/test_scatter_audit.py`); `make scatter-bases` lists a map's scatter bases |
-| Does using the generation cache ever change what a map looks like? | `cache_audit` - `make cache-audit` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` - `make cohort N=... [SEED=...]` |
 | Will the gated push take this engine - 48 seeds on it, none regressed, and the fresh block's rate? | `make cohort-landing` (feature 386; the gate is `l7r-gate cohort check`, `scripts/gates/cohort-gate.sh`), the trend `make cohort-seeds` |
 | Regenerate and check the pool, choosing the scope from how the last run went | `mapcheck` - `make maps` |

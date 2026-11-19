@@ -317,5 +317,27 @@ hits=$(awk '
   || { echo "  FAIL    a free-text variable reaches the shell through make - write it \"\$\$NAME\" (a list: set -f, then \$\$NAME unquoted or a loop over it; FREE_TEXT exports it):"; printf '%s\n' "$hits" | sed 's/^/          Makefile:/'; FAIL=$((FAIL+1)); }
 
 echo
+echo "7. WHAT A RECIPE RUNS EXISTS (feature 449 T218)"
+# `make scatter-bases` ran scripts/reviews/scatter_bases.py, deleted in ea5638968; `make done FULL=1` ran `make perf-gate`, which no
+# rule bears - and a .PHONY name with no rule answers "Nothing to be done" with exit 0, a phase that passes having run nothing;
+# `make map` with no GEN rolled pool/hamlets/inashiro/inashiro.gen.py, gone since the hamlets became spec.json (feature 444).
+# A recipe line naming a script the tree lacks (comments, `: "..."` notes and `##` help are prose, not run):
+gone=$(awk '/^\t/ && !/^\t[ \t]*(#|@?:[ \t])/' "$MK" | grep -oE 'scripts/[A-Za-z0-9_/.-]+\.(py|sh)' | sort -u \
+  | while read -r p; do [ -e "$HERE/../../$p" ] || echo "$p"; done)
+[ -z "$gone" ] && { echo "  ok      no recipe runs a script the tree lacks"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    a recipe runs a script the tree lacks - delete the target, or point it at what does the job now:"; printf '          %s\n' $gone; FAIL=$((FAIL+1)); }
+# Every phase `make done` runs (its `for phase in` lists, the FULL and PORT ones included) has a rule:
+lists=$(grep -E 'for phase in ' "$MK" | sed -E 's/.*for phase in (.*); do.*/\1/')
+phases=$( { printf '%s\n' "$lists" | tr ' ' '\n' | grep -E '^[a-z][a-z0-9-]+$'; printf '%s\n' "$lists" | grep -oE ',[a-z][a-z0-9-]+,\)' | tr -d ',)'; } | sort -u)
+ruleless=$(for t in $phases; do grep -qE "^$t[ ]*:([^=]|\$)" "$MK" || echo "$t"; done)
+[ -n "$phases" ] && [ -z "$ruleless" ] && { echo "  ok      every phase make done runs has a rule ($(echo $phases))"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    make done runs a phase no rule bears (a .PHONY name with no rule passes having run nothing) - remove the call, or point it at the target that does the job: ${ruleless:-no phase list found}"; FAIL=$((FAIL+1)); }
+# `make map` with no GEN is refused, naming the forms it takes, before anything runs:
+out=$( cd "$FX" && make --no-print-directory map 2>&1 ); rc=$?
+[ "$rc" = 2 ] && [[ $out == *"GEN=pool/<tier>/<map>/<map>.gen.py"* ]] && [[ $out == *"make hamlet SPEC="* ]] \
+  && { echo "  ok      make map with no GEN is refused, naming the .gen.py form and make hamlet for a hamlet"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    make map with no GEN (exit $rc) did not refuse naming its forms: $(printf '%s' "$out" | head -3)"; FAIL=$((FAIL+1)); }
+
+echo
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]

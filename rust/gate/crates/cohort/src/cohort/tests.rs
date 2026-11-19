@@ -821,6 +821,7 @@ fn the_landing_engine_is_codeid_s_list() {
         "l7r/diagram/a.py",
         "pool/x.gen.py",
         "pool/m.json",
+        "pool/magistracies/m/m.svg",
         "rust/gate/src/lib.rs",
         "rust/Cargo.toml",
         "rust/gate/Cargo.lock",

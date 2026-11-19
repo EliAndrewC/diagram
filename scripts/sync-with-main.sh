@@ -58,7 +58,6 @@ POOL=pool
 # The FROZEN tree is checked alongside it: render-sync must never rewrite an exhibit, and the
 # dirty-pool warning below is what would say so (feature 161).
 LEGACY_POOL=legacy-hand-authored-pool
-RENDER_CACHE_MOD=l7r.diagram.pipeline.render_cache   # run as a MODULE from the root: it imports its package siblings relatively
 
 case "$ROOT" in
   "$MAIN") die "this is MAIN, not a clone - the procedure runs from a session clone (CLAUDE.md 'Session clones')" ;;
@@ -177,36 +176,9 @@ It belongs to whoever made it - do NOT reset it unless it is yours, because the 
 # fast-forward -> render-sync in the mirror -> [clean clone only] merge into the clone. The prompt
 # hook runs the mirror half on EVERY turn, dirty clone or not - mid-task work is sacred, the mirror
 # is not anyone's work - and the clone half only when the clone is clean.
-# A NEW CLONE BORROWS A SIBLING'S ROLL CACHE (feature 167, GM 2026-08-30).
-#
-# A clone that has never rolled pays about two minutes re-rolling maps another clone on this machine
-# has already rolled from identical source: 30 s for the reference settlement and 122 s for the
-# map-rolling gate tests, against 1 s and 21 s warm. Feature 167 made the cache portable (its
-# dependency records are root-relative now), so the remaining piece is getting one.
-#
-# FROM A SIBLING, NOT FROM MAIN, and that is forced rather than preferred: main has no `.gencache` and
-# cannot build one, because building one means running the tests and main is never a workspace.
-#
-# It cannot make a clone wrong. Every seeded entry faces exactly the same key check as one the clone
-# built itself - engine module hashes, the recorded functions' sources, the interpreter, the renderer,
-# the dependency state - so a seed at the wrong commit, or from a tree that differs by one function,
-# simply misses and re-rolls. That is why the sibling's HEAD is checked but nothing is trusted.
-seed_roll_cache() {
-  local cache="$ROOT/.gencache"
-  [ -d "$cache" ] && return 0                      # already has one: the common case, costs one test
-  local head sib_head sib
-  head="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null)" || return 0
-  for sib in "$(dirname "$ROOT")"/*/; do
-    [ "${sib%/}" = "$ROOT" ] && continue
-    [ -d "$sib/.gencache" ] || continue
-    sib_head="$(git -C "$sib" rev-parse HEAD 2>/dev/null)" || continue
-    [ "$sib_head" = "$head" ] || continue
-    mkdir -p "$(dirname "$cache")" 2>/dev/null || return 0   # the skill dir exists in any real clone; a fixture may not have it
-    cp -a "$sib/.gencache" "$cache" 2>/dev/null || return 0
-    echo "sync-with-main: seeded the roll cache from $(basename "${sib%/}") (same commit) - a cold clone pays ~2 min re-rolling maps"
-    return 0
-  done
-}
+# A NEW CLONE NO LONGER BORROWS A SIBLING'S ROLL CACHE (feature 449 T218): feature 167's seed_roll_cache copied a sibling's
+# whole `.gencache` into a clone with none, to spare it re-rolling the Python hamlets; their roll store (`.gencache/rolls`) has
+# not been written since that engine was deleted (2026-11-07), so the copy only spread a dead store, 6.0 GB in one clone.
 
 # A CLONE WHOSE HISTORY SHARES NO COMMIT WITH MAIN'S IS REFUSED (feature 301 FR-019; GUARD_EDIT_OK: a new refusal of a
 # state that cannot occur until a history rewrite, nothing loosened). The scrub of 2026-10 rewrote main's history to drop
@@ -234,7 +206,6 @@ sync_in() { # [--mirror-only] [--background-render]
   else
     echo "sync-with-main: NOTE - the mirror lock stayed busy for ${SYNC_LOCK_WAIT}s (a push or a render-sync holds it), so the mirror was not refreshed this turn; the next message retries"
   fi
-  seed_roll_cache
   if [ -n "$mirror_only" ]; then clone_index_refresh; echo "sync-with-main: mirror refreshed from GitHub main (clone left alone - mid-task)"; return 0; fi
   # merge.directoryRenames: a file a clone added under a directory main renamed follows the rename instead of
   # stopping the merge (feature 329 moved the whole project; research.md R5 measured both outcomes). The global git

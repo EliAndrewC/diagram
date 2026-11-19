@@ -305,38 +305,28 @@ OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: [local] timing band 3 (
 expect_out "timing band 3 (information only)"
 expect_out "every accepted stage within its figures"
 
-# GUARD_EDIT_OK: feature 167 - A NEW CLONE BORROWS A SIBLING ROLL CACHE (GM 2026-08-30). Measured:
-# a clone that has never rolled pays 30 s for the reference settlement and 122 s for the map-rolling
-# gate tests; seeded from a sibling at the same commit those become 5 s and 28 s. The seeding may
-# never make a clone WRONG, so the vectors below pin what it must not do as firmly as what it does.
-echo "== the roll cache is seeded from a sibling at the same commit =="
-D=$(topology seed167)
+# GUARD_EDIT_OK: feature 449 T218 - THE ROLL CACHE IS NO LONGER SEEDED FROM A SIBLING. Feature 167 (GM 2026-08-30) copied a
+# sibling's whole `.gencache` into a clone with none, to spare it re-rolling the Python hamlets; their roll store
+# (`.gencache/rolls`, 6.0 GB in one clone) has not been written since the Python engine was deleted on 2026-11-07, so the copy
+# only duplicated a dead store into every new clone. The vectors pin that sync-in copies nothing and touches a clone's own cache.
+echo "== a sibling's roll cache is NOT copied into a clone (449 T218) =="
+D=$(topology seed218)
 SIB="$D/main/.clones/sib"; git clone -q "$D/github.git" "$SIB"
 mkdir -p "$SIB/.gencache/rolls/abc"
 echo '{"key":"k","subject":"s","deps":{"functions":[],"files":[]}}' > "$SIB/.gencache/rolls/abc/meta.json"
 
 OUT=$(syncmain "$D" sync-in); check "sync-in succeeds" 0 $?
-[ -d "$D/main/.clones/c/.gencache/rolls/abc" ] \
-  && { echo "  ok    a clone with no cache is seeded from the sibling"; PASS=$((PASS+1)); } \
-  || { echo "FAIL  the clone was not seeded"; FAIL=$((FAIL+1)); }
-expect_out "seeded the roll cache"
+[ -e "$D/main/.clones/c/.gencache" ] \
+  && { echo "FAIL  a sibling's cache was copied into the clone - the dead roll store is seeded again"; FAIL=$((FAIL+1)); } \
+  || { echo "  ok    a clone with no cache is left without one"; PASS=$((PASS+1)); }
+case "$OUT" in *"seeded the roll cache"*) echo "FAIL  sync-in still says it seeded the roll cache"; FAIL=$((FAIL+1)) ;; *) PASS=$((PASS+1)) ;; esac
 
-# ...and it must NOT overwrite a cache the clone already has - that one is keyed to work in progress
-echo 'MINE' > "$D/main/.clones/c/.gencache/mine.txt"
+# ...and a clone's own cache is left as it is
+mkdir -p "$D/main/.clones/c/.gencache"; echo 'MINE' > "$D/main/.clones/c/.gencache/mine.txt"
 OUT=$(syncmain "$D" sync-in)
-[ -f "$D/main/.clones/c/.gencache/mine.txt" ] \
-  && { echo "  ok    an existing cache is left alone"; PASS=$((PASS+1)); } \
-  || { echo "FAIL  the seeding clobbered an existing cache"; FAIL=$((FAIL+1)); }
-
-# ...and a sibling at a DIFFERENT commit is not taken: the clone starts cold instead
-D2=$(topology seed167b)
-SIB2="$D2/main/.clones/sib"; git clone -q "$D2/github.git" "$SIB2"
-mkdir -p "$SIB2/.gencache/rolls/xyz"
-( cd "$SIB2" && echo drift > drift.txt && git add -A && git -c user.email=t@t -c user.name=t commit -qm drift )
-OUT=$(syncmain "$D2" sync-in)
-[ -d "$D2/main/.clones/c/.gencache" ] \
-  && { echo "FAIL  seeded from a sibling at a different commit"; FAIL=$((FAIL+1)); } \
-  || { echo "  ok    a sibling at another commit is refused - the clone starts cold"; PASS=$((PASS+1)); }
+[ "$(cat "$D/main/.clones/c/.gencache/mine.txt" 2>/dev/null)" = MINE ] && [ ! -e "$D/main/.clones/c/.gencache/rolls" ] \
+  && { echo "  ok    a clone's own cache is left alone, nothing added"; PASS=$((PASS+1)); } \
+  || { echo "FAIL  sync-in changed a clone's own cache"; FAIL=$((FAIL+1)); }
 }
 
 case_16() {  # 2 s measured 2026-10-11

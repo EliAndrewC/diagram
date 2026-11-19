@@ -184,7 +184,7 @@ page (wrap, census, self-containment, present-only data); and `tests/full/intera
 the browser test (Playwright + Chromium): a hand-built SYNTHETIC map of one element per class, opened from
 `file://`, over which every behavior ruling is proved - hover, click, the modal's text against the
 registry, zoom and scroll, the hit boxes, the glossary, the sibling links.
-`make map GEN=pool/hamlets/inashiro/inashiro.gen.py` writes the real page; open it in a browser.
+`make map GEN=pool/<tier>/<map>/<map>.gen.py` writes a Mode A sheet's real page (a hamlet's, `make hamlet SPEC=`); open it in a browser.
 
 **NO BROWSER TEST LOADS A ROLLED PAGE, AND NONE TIMES ANYTHING (GM 2026-09-07).** The rolled-page tests were retired
 the day the container crashed twice under the gate (they ran the package to 3.9 GiB against an 8 GiB cap). The GM:

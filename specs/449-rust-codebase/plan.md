@@ -795,31 +795,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T218 (<why: the finding or measurement that files it>)
+### T218 (T157's scoping, 2026-11-19: the pipeline's tooling named deleted scripts and missing targets, and an open question on the land route)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make scatter-bases` ran a deleted script and two agent files named it; `cache-audit` sat in `.PHONY` with no rule; `sync-with-main.sh` carried an unused variable and seeded a dead roll store into every new clone; `make map` with no GEN defaulted to a file that no longer exists (T215); `make done FULL=1` called a `perf-gate` with no rule, which passed by running nothing, and measure_hooks' tips named a deleted `make cov-file` (T217). Each is removed or re-pointed, red first where behavior changes (a new section of the make-only suite: no recipe runs a missing script, every phase `make done` runs has a rule, `make map` without GEN refused naming its forms). The open question was measured and was a defect: an edit to a tracked hand-sheet svg was not counted as engine, so it landed DIRECT with no `make done` and no pool sweep (observed 2026-11-19, method: `l7r-gate delta engine-paths` on the Ubame sheet's path); a tracked pool svg now counts as engine, in the tree crate and the landing's cohort list, red first.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the tooling fixes and the svg route | the make-only suite's section 7, the tree and cohort tests, the measure suite | `delta.rs`, `cohort.rs` | none | none |
 
 ### T218 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** Every make target named runs something real, and an edit to a hand-drawn sheet is judged by the pool sweep before it lands.
+2. **The constraints.** Constitution XIV (a check passing the bad, a tool answering wrongly); T211's pool sweep.
+3. **Where each comes from.** O: T157's scoping and this task's measurement.
+4. **Do they describe the world here?** Yes: each was observed on the tree (observed 2026-11-19, method: the scoping's reads and the delta command above).
+5. **The order.** First of T157's landings, before T219.
+6. **The exits.** Green: the suites red first then green, `make quick`, `make static`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (gated: it changes Rust).
+9. **Done, measured.** The svg path now listed by `delta engine-paths`; `make map` without GEN refused.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Each changed item answered wrongly or ran nothing; the svg route let a sheet edit skip its checks.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** More `.PHONY` names with no rule that pass by running nothing (perf-review on every push among them), a dead cache-audit guard, and a notes-only edit skipping the sweep: filed as their own task (2026-11-19).
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T219 (<why: the finding or measurement that files it>)
@@ -911,6 +912,33 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 |---|---|---|---|---|
 
 ### T222 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T223 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T223 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

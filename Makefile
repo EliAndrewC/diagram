@@ -16,9 +16,9 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: modal-bundle modal-prepass done docs static format guard perf perf-report maps _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep perf-gate hooks-test explain citations fragment-move \
+.PHONY: modal-bundle modal-prepass done docs static format guard perf perf-report maps _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep hooks-test explain citations fragment-move \
 	 switches _switch \
-	 map cohort cohort-landing hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
+	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
 	 notes-census glossary page-lit picture-diff \
 	 ci-status gated-check \
@@ -98,7 +98,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	if [ -n "$$par" ]; then ( statics; printf '%s' "$$fail" > "$$G/static-fail" ) > "$$G/static.log" 2>&1 & spid=$$!; else statics; fi; \
 	if [ -z "$$par" ] && [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
 	tr=$$(date +%s); $(if $(filter rust-only,$(PORT)),printf '\nreference step SKIPPED - the port switch stands at rust-only (feature 444 FR-023): make done rolls no map\n';,$(if $(REF_OK),$(LOGESCAPE) REF_OK "$$REF_WHY"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $$REF_WHY"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };)) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
-	for phase in hooks-test counters-inert $(if $(FULL),perf-gate,); do \
+	for phase in hooks-test counters-inert; do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && "$$root/scripts/gates/l7r-gate.sh" stamp --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
@@ -124,7 +124,6 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	$(if $(FULL),printf '\n\033[1mgate green (FULL - plus the perf bookends)\033[0m\n',printf '\n\033[1mgate green\033[0m (the whole suite and every pool map; `FULL=1` adds only the perf bookends)\n')
 
 COHORT_FRESH = 4
-REF_FIRST = @:  # no reference hamlet is rolled: the Python hamlet engine is deleted (feature 444 T39, FR-024)
 
 # RUN carries make's @ prefix, so a $(RUN) line must start its recipe line, never follow a `\` continuation.
 RUN = @python3 -m l7r.diagram
@@ -182,24 +181,24 @@ verify-wait:    ## [tests] wait for the gate `make verify` started, on ITS OWN l
 	@bash "$$(git rev-parse --show-toplevel)/scripts/gates/verify_wait.sh"
 
 map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
-map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]
-##  GEN=<gen path>  which generator to re-run (default: `pool/hamlets/inashiro/inashiro.gen.py`)
+map:            ## [maps] regenerate ONE pool sheet's gen and gate it (a hamlet: make hamlet)   GEN=pool/<tier>/<map>/<map>.gen.py [PROFILE=1: where the roll spent its time]
+##  GEN=<gen path>  which generator to re-run - required: a pool sheet's `pool/<tier>/<map>/<map>.gen.py`; a hamlet is a spec.json, rolled by `make hamlet SPEC=`
 ##  PROFILE=1       also print where the roll spent its time, stage by stage
 ##  REGEN_FROZEN=1  re-render a FROZEN legacy exhibit anyway - only on the GM's say-so (regen's --frozen-ok)
-	$(if $(filter pool/hamlets/inashiro/inashiro.gen.py,$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)),,$(REF_FIRST))
-	$(RUN).pipeline.regen $(if $(REGEN_FROZEN),--frozen-ok,) $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
-	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
+	@if [ -z "$(GEN)" ]; then printf 'make map: GEN=pool/<tier>/<map>/<map>.gen.py is required - a pool sheet'\''s generator, e.g. make map GEN=pool/magistracies/ubame-magistracy/ubame-magistracy.gen.py; a hamlet is a spec.json, rolled by make hamlet SPEC=pool/hamlets/<name>/<name>.spec.json (the old default, inashiro.gen.py, is gone since feature 444; 449 T221 replaces this target)\n' >&2; exit 2; fi
+	$(RUN).pipeline.regen $(if $(REGEN_FROZEN),--frozen-ok,) $(GEN)
+	@g="$(GEN)"; s="$${g%.gen.py}"; \
 	if [ -f "$$s.json" ] && { [ ! -f "$$s.png" ] || [ ! -f "$$s.html" ]; }; then \
 	  echo "map: the cached entry carries no render (a gate filed it with rendering skipped) - rolling it uncached to draw one"; \
 	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
 	fi
-	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
+	@g="$(GEN)"; s="$${g%.gen.py}"; \
 	if [ -f "$$s.html" ] && [ -n "$$(find l7r/diagram/interactive/assets -type f -newer "$$s.html" -print -quit)" ]; then \
 	  echo "map: a modal or page asset changed since the page was written - rolling it uncached to write the page again"; \
 	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
 	fi
 	@$(MAKE) --no-print-directory pool-index-if-stale
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --only "$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --only "$(GEN)"
 
 maps-moved:     ## [maps] which pool manifests differ from HEAD - the comparison a wave records, never a scratch copy (feature 429)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --root "$$(git rev-parse --show-toplevel)"
@@ -256,12 +255,6 @@ render-sync:    ## [maps] {internal} regenerate MAIN's renders (called by sync-w
 pack-audit:     ## [diagnostics] empty space and geometry in a HAND-DRAWN Mode A compound SVG (Rust since 449 T175, `l7r-mode-a`)   ARGS=<in.svg>
 ##  ARGS=<in.svg>  the Mode A compound SVG to measure
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a pack-audit $(ARGS)
-
-scatter-bases:  ## [diagnostics] where a map's ground-cover scatter stands: base points per family, parsed from its SVG   MAP=pool/hamlets/sawada [BOX=x0,y0,x1,y1]
-##  MAP=<pool map>      the map's folder, its stem, or its .svg
-##  BOX=x0,y0,x1,y1     also list the bases inside this world-coordinate window
-	@if [ -z "$(MAP)" ]; then printf 'make scatter-bases: MAP=<pool map> is required - e.g. make scatter-bases MAP=pool/hamlets/sawada BOX=600,1600,1300,2000\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/scatter_bases.py" "$(MAP)" $(if $(BOX),--box "$(BOX)",)
 
 sheet-render:   ## [maps] render a hand-drawn Mode A sheet with its captions placed by the ONE placer (feature 286; Rust since 449 T152, `l7r-mode-a`)   SHEET=<svg> OUT=<png>
 ##  SHEET=<svg>         the hand-drawn sheet (its drawing and its captions' declarations)

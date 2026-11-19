@@ -333,8 +333,8 @@ fn streak(_event: &Event, s: &Seams, log: &dyn Fn(&str, &str)) -> Vec<Answer> {
 refused unless an engine edit or a git commit comes between - a test edit deliberately does not reset it, because writing one test \
 and re-measuring is the loop this guard exists to stop (measured on feature 146: about an hour of re-deriving a coverage worklist \
 the session already had). Work from the list instead: write the whole batch, run `make quick` or `make rust-test CRATE=...` between \
-edits, and ask `make cov-file FILE=... MOD=...` which lines one test file actually reaches - it is the only command here that \
-answers that, and the commonest wrong answer is that the test covered the guard ABOVE the branch it was aimed at."
+edits, and ask `make static` which lines no test reaches - its cover step lists them file by file, each crate's run again only when \
+its inputs moved - and the commonest wrong answer is that the test covered the guard ABOVE the branch it was aimed at."
     ))]
 }
 
@@ -344,7 +344,7 @@ snapshot belongs to the batch's one pair (LABEL=<feature>-start / -end, feature 
 
 const STREAK_REFUSAL: &str = "BLOCKED: that is the second EXPENSIVE measurement in a row with no engine change and no commit between.
 
-This is the expensive one; `make quick`, `make rust-test CRATE=` and `make cov-file` are the cheap loop and are
+This is the expensive one; `make quick`, `make rust-test CRATE=` and `make static` are the cheap loop and are
 never blocked, however often they run. Measured on feature 146: 20 test-full runs, about an hour, almost all
 of it re-deriving a coverage worklist the session already had written down.
 (GUARD_EDIT_OK: feature 162 - the durations that used to be quoted here are gone rather than restated. A
@@ -353,8 +353,8 @@ and `l7r-gate measure gatecost` answer from the run log instead.)
 
 Do this instead:
  - ASKING WHICH LINES A TEST REACHES? That is what the third run is usually for, and this is the slowest way
-   to be told. `make cov-file FILE=tests/... MOD=l7r/diagram/...` answers it in seconds, for one test file,
-   and it is the only command here that answers it at all. It catches the commonest mistake this guard sees:
+   to be told. `make static` lists, file by file, the lines no test reaches (its cover step, each crate run
+   again only when its inputs moved; `make rust-test CRATE=<dir>` runs one crate's tests). It catches the commonest mistake this guard sees:
    a test that covers the guard ABOVE the branch it was aimed at (measured twice on feature 146, at ten
    minutes an answer).
  - You already know what the measurement will say. Work from the LIST, not from the run: write the whole

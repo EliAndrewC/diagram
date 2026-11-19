@@ -48,9 +48,10 @@ fn counter_dir() -> l7r_guard::shared::tempdir::TempDir {
 /// The paths whose bytes unchanged mean the same engine at once.
 pub const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
 
-/// The landing's own list of engine files (`codeid.ENGINE`, which stays in Python until phase 4).
+/// The landing's own list of engine files (`codeid.ENGINE`, which stays in Python until phase 4), `delta::is_engine`'s paths: a live
+/// pool `.svg` among them since 449 T218, so a hand-sheet edit `make land` lands is prepared for the GATED push its route now is.
 static ENGINE: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")
+    l7r_guard::shared::regex::build(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json|pool/.*\.svg|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
