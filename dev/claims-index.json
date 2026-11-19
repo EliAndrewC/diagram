@@ -21014,6 +21014,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/labels/hand_sheet/counted.rs::report#the placer's counted work": {
+  "body": "071ec3ca2306ed88",
+  "claim": "the placer's counted work - NONE: it counts, and decides nothing about the place",
+  "code": "6483a23b34dd52a8",
+  "core": "5859e0dc466786c8",
+  "date": "2026-11-19",
+  "note": "reports seat timing, op counts and caption fields as JSON; decides nothing about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/labels/hand_sheet/ink_tests.rs::CapCase#its tests": {
   "body": "d4e686d34ecc60d4",
   "claim": "its tests - NONE: the placer's leaders measured against the drawn ink, deciding nothing about a building",
@@ -35945,6 +35957,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/work_counts.rs::SCOPES#plumbing": {
+  "body": "90240f539a123c37",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "84dd41d4d89d64e5",
+  "core": "8960799dea9c0e8f",
+  "date": "2026-11-19",
+  "note": "per-thread store for the counter scopes; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/work_counts.rs::Scopes#plumbing": {
+  "body": "e5d9816f17f4f9da",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "158bad4c65f36b9a",
+  "core": "c1f9d87378123d72",
+  "date": "2026-11-19",
+  "note": "type alias for the counter store; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/work_counts.rs::by_kind#plumbing": {
   "body": "77bd70201b79168e",
   "claim": "plumbing - NONE: it counts, and decides nothing about the place",
@@ -35953,6 +35989,19 @@
   "date": "2026-11-18",
   "note": "counting",
   "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/work_counts.rs::by_scope#plumbing": {
+  "body": "a85c738fc460d233",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "a052147a100c87f2",
+  "core": "7a623fcabac6cf16",
+  "date": "2026-11-19",
+  "note": "clones the per-scope counts; plumbing",
+  "pages": {},
+  "reads": "ad8cbe903a178373",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -35996,6 +36045,19 @@
   "research": "",
   "rests": [],
   "triaged": "2026-11-19",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/work_counts.rs::scope#plumbing": {
+  "body": "0616834cf6e7e1b1",
+  "claim": "plumbing - NONE: it counts, and decides nothing about the place",
+  "code": "caabb0b1b1ea6c5a",
+  "core": "4a47823db783ebee",
+  "date": "2026-11-19",
+  "note": "finds or adds a named scope and makes it the current one; plumbing",
+  "pages": {},
+  "reads": "ad8cbe903a178373",
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/bin/hamlet.rs::budget#the driver's command": {
