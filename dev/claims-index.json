@@ -13027,13 +13027,14 @@
  "rust/mode_a/src/caption_place/captions.rs::Caption#the declared captions": {
   "body": "a2a990491c2885c7",
   "claim": "the declared captions - NONE: the sheet's declarations read as the sheet states them (docs/buildings.md, feature 340), deciding nothing about where a caption stands",
-  "code": "897666d9d81cf492",
-  "core": "a6e21ad6c03d295e",
+  "code": "d16a1f32b7233796",
+  "core": "40ee00c877e75c8f",
   "date": "2026-11-19",
   "note": "a data record with no decision in it",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/captions.rs::Caption.cuttable#what may be cut": {
@@ -13152,21 +13153,22 @@
  "rust/mode_a/src/caption_place/captions.rs::declared#a holder before loose parts": {
   "body": "297d4d0c14cb1fca",
   "claim": "a holder before loose parts - CONVENTION: where one outline holds the rest (`holder`) the caption is named on that outline, else beside the box of all its parts, and its parts are not tried one by one; only where none holds them are they loose parts (`members`)",
-  "code": "f13e73a27b3fbcda",
-  "core": "c7c3a45d5c6b4b33",
+  "code": "c9b9dddafdefe0a7",
+  "core": "0b671498cf80f17d",
   "date": "2026-11-19",
   "note": "on the holder, else beside the box of all parts; members only where there is no holder",
   "pages": {},
   "reads": "72c97b840ef3d4af",
   "research": "",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/captions.rs::declared#open ground": {
   "body": "297d4d0c14cb1fca",
   "claim": "open ground - labels-on-maps-cartographic-label-placement.drawing: fields, scrub, groves and open ground are not in the way at all - a caption is marked as naming open ground when any of its parts is a ground kind (`GROUND_KINDS`), the mark the placer's stance reads",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "66741b7efdaaebe7",
-  "core": "c7c3a45d5c6b4b33",
+  "code": "59f1e5de51e12024",
+  "core": "0b671498cf80f17d",
   "date": "2026-11-19",
   "note": "any ground-kind part marks the caption as ground",
   "pages": {
@@ -13181,22 +13183,56 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/captions.rs::declared#the usual gap": {
-  "body": "297d4d0c14cb1fca",
+  "body": "d835087ca6ed32b4",
   "claim": "the usual gap - labels-on-maps-cartographic-label-placement.drawing: half the height of the caption's lettering (its head line's letter size), the page's calibration",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "1fe1585618755ce5",
-  "core": "c7c3a45d5c6b4b33",
+  "code": "a90460845bdfdaf5",
+  "core": "0b671498cf80f17d",
   "date": "2026-11-19",
-  "note": "gap = head size / 2",
+  "note": "gap is half the head line's letter size, the page's calibration",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
   },
   "reads": "72c97b840ef3d4af",
   "research": "7ba60ad54a01502e",
   "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800"
   ],
-  "triaged": "2026-11-19",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/captions.rs::drawn_box#the drawn edge": {
+  "body": "34f50d4a1d29164e",
+  "claim": "the drawn edge - labels-on-maps-cartographic-label-placement.drawing: \"The gap is measured from the edge of the feature as it is drawn\" - a stroked outline's or line's drawn edge is its stroke's outer edge, so the places beside it stand the usual gap off that edge, the edge the nearness test measures its own outline's stroke at (feature 449 T209: seated off the fill box, every place directly above, below or beside a stroked building stood half a stroke too near its own outline and was refused, the caption falling to a diagonal)",
+  "code": "36de2377961a28fa",
+  "core": "e327adbd06abd52c",
+  "date": "2026-11-19",
+  "note": "each part's turned box is grown by its stroke's outer reach, so the gap stands off the drawn edge in the turned frame",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
+  },
+  "research": "7ba60ad54a01502e",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/captions.rs::drawn_half#a part's drawn reach": {
+  "body": "e0e132703680a311",
+  "claim": "a part's drawn reach - labels-on-maps-cartographic-label-placement.drawing: \"The gap is measured from the edge of the feature as it is drawn\" - a stroked line's drawn edge is its stroke's outer edge, its half-width off its center line, as a stroked outline's is its stroke's outer edge (feature 449 T209's impl-drift: measured off a way's center line, a way wider than the usual gap had its name on its own ink)",
+  "code": "1a7d4bdc8ddfed56",
+  "core": "ed5eceed9d714f28",
+  "date": "2026-11-19",
+  "note": "a line uses its half-width and an outline uses its stroke's edge, so the gap is measured off the drawn edge",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
+  },
+  "research": "7ba60ad54a01502e",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/captions.rs::drawn_width#the declared captions": {
@@ -13598,6 +13634,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/caption_place/geom.rs::length_inside#the placer's geometry": {
+  "body": "52140de9239dd011",
+  "claim": "the placer's geometry - NONE: points, boxes and outlines measured, deciding nothing about where a caption stands",
+  "code": "3233e6c35e2ddd1a",
+  "core": "efb3d64f78340044",
+  "date": "2026-11-19",
+  "note": "the length of a segment inside a polygon; pure geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/caption_place/geom.rs::nearest_on#the placer's geometry": {
   "body": "cdc4342e7a753d9b",
   "claim": "the placer's geometry - NONE: points, boxes and outlines measured, deciding nothing about where a caption stands",
@@ -13775,13 +13823,14 @@
  "rust/mode_a/src/caption_place/index.rs::Index#the grid": {
   "body": "c34d788caae8a4d0",
   "claim": "the grid - NONE: an index over the drawn shapes, deciding nothing about where a caption stands; what is filed, and at what weight, is claimed at [`Index::build`]",
-  "code": "4bc94e354f233467",
-  "core": "f0a3b489830e3c85",
+  "code": "90c6d6aaf4cfd44c",
+  "core": "3e2dd33d92519ee7",
   "date": "2026-11-19",
   "note": "an index structure",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/index.rs::Index.build#a ground's border": {
@@ -13929,13 +13978,14 @@
  "rust/mode_a/src/caption_place/index.rs::Index.file#the grid": {
   "body": "b42e1db5b344fa75",
   "claim": "the grid - NONE: an index over the drawn shapes, deciding nothing about where a caption stands; what is filed, and at what weight, is claimed at [`Index::build`]",
-  "code": "b7409d75ea3163f1",
-  "core": "2237b7c374420046",
+  "code": "7bc4e30f6d2d1207",
+  "core": "d0980d4911c7dbaa",
   "date": "2026-11-19",
   "note": "files an entry into the grid cells",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/index.rs::Index.file_text#the grid": {
@@ -13967,14 +14017,15 @@
  "rust/mode_a/src/caption_place/index.rs::Index.new#the grid": {
   "body": "38a4bd1a65826fdc",
   "claim": "the grid - NONE: an index over the drawn shapes, deciding nothing about where a caption stands; what is filed, and at what weight, is claimed at [`Index::build`]",
-  "code": "b56b1a2d50fbd447",
-  "core": "8e3ab1e45ff5aa67",
+  "code": "35ac55f1b3187bc4",
+  "core": "5da3ede7abfc90f2",
   "date": "2026-11-19",
   "note": "sizes the grid",
   "pages": {},
   "reads": "e0e82869ef7cfeea",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/index.rs::Index.query#the grid": {
@@ -14715,26 +14766,6 @@
   "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/search.rs::Placer.beyond#the caption's seat": {
-  "body": "171fd2ea68a12f14",
-  "claim": "the caption's seat - labels-on-maps-cartographic-label-placement.drawing: on its feature where it fits, else beside it at the ranked places stepping outward, the nearer free place winning; covering least where nothing is free",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "ef8bbbbf08504248",
-  "core": "661151659eb4aa23",
-  "date": "2026-11-19",
-  "note": "the same eight places swept outward from the edge",
-  "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
-  },
-  "reads": "4bc60b4de0471567",
-  "research": "7ba60ad54a01502e",
-  "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
-  ],
-  "triaged": "2026-11-19",
-  "verdict": "IN-STEP"
- },
  "rust/mode_a/src/caption_place/search.rs::Placer.clamped#no place in view": {
   "body": "e907d62eea69b6f7",
   "claim": "no place in view - CONVENTION: a caption none of whose ranked places lies on the sheet is set on its feature's middle, moved the least that keeps its block on the sheet - 0242 never takes a place off the edge and never leaves a caption off, and is silent on where it goes when both bind; its own feature's middle is the place that most plainly names it",
@@ -14746,24 +14777,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/search.rs::Placer.covered#the caption's seat": {
-  "body": "e9f5ccd8a4c1510b",
-  "claim": "the caption's seat - labels-on-maps-cartographic-label-placement.drawing: on its feature where it fits, else beside it at the ranked places stepping outward, the nearer free place winning; covering least where nothing is free",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "970895cf0ad65052",
-  "core": "afbd4a1313d27213",
+ "rust/mode_a/src/caption_place/search.rs::Placer.covered#a feature counted once": {
+  "body": "dc8508d838bacd74",
+  "claim": "a feature counted once - labels-on-maps-cartographic-label-placement.drawing: a road or stream crossed counts as half a building, and \"crossing one is better than crossing two\" - what is weighed is the features covered, so the drawn elements of one tagged feature (a road's bed and the dashed texture over it, a board's footing, frame and rail) count as that feature once, and an untagged shape as itself (feature 449 T209: one road drawn as two paths weighed a whole building, and a bounty board's name was led across the notice board beside it rather than set across that road)",
+  "code": "45dc365ac362b187",
+  "core": "c53e955022cf3284",
   "date": "2026-11-19",
-  "note": "summed weight of what it covers, each shape once",
+  "note": "each tagged group (or untagged shape) is weighed once per place, so a two-path road counts as one half-building crossing",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
   },
   "research": "7ba60ad54a01502e",
   "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00a270a965f4531"
   ],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer.free_in_row#the caption's seat": {
@@ -14872,17 +14900,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/search.rs::Placer.intervals#a wall ahead": {
-  "body": "9401ed58452ebfa2",
-  "claim": "a wall ahead - CONVENTION: no swept place lies past a wall standing between the feature and it, unless the wall runs through the feature's middle (a gate in the wall, which has a side each way); 0242 and 0330 say nothing of walls, and a caption beyond one names the wrong court",
-  "code": "8abe38c32e8cf268",
-  "core": "bfa08b8cb19d00ff",
-  "date": "2026-11-19",
-  "note": "a placement convention drawn from \"plainly the name of this feature\"; the page says nothing of walls",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "rust/mode_a/src/caption_place/search.rs::Placer.met_box#an outline's part in the strip": {
   "body": "534fbde2e30ed271",
   "claim": "an outline's part in the strip - NONE: an exact reading of the outline's extent within the strip, in the caption's own frame, deciding nothing; read by its box, a garden reaching round a house blocked every place beside it, and a slanting leader the whole granary it crossed a corner of (observed 2026-11-19), and on a turned frame every outline's box covered places beside it its ink does not reach",
@@ -14927,28 +14944,73 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/search.rs::Placer.search#the caption's seat": {
-  "body": "aada1a211ed5aee7",
-  "claim": "the caption's seat - labels-on-maps-cartographic-label-placement.drawing: on its feature where it fits, else beside it at the ranked places stepping outward, the nearer free place winning; covering least where nothing is free",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "f7e2e542685d54a3",
-  "core": "b21b25859ae7ebf3",
+ "rust/mode_a/src/caption_place/search.rs::Placer.search#a leader's seat at equal cover": {
+  "body": "32c8976e8a9a5150",
+  "claim": "a leader's seat at equal cover - CONVENTION: between the leader-crossing seat and a place at the usual gap that covers a building or more, the leader's seat is kept, its words over nothing; 0242's order ranks places at the gap and a step out, and says nothing of a leader across a building set against words over one (observed 2026-11-19 on the pool sheets: two latrines and an altar kept on their leaders rather than written over a building, while a bounty board's name, its only free seats led across the notice board, was set on the road above its board)",
+  "code": "95709637e2574966",
+  "core": "98964d4e51c1222b",
   "date": "2026-11-19",
-  "note": "on it, ranked places at the gap, cuts, sweep with a leader past twice the gap, then the least cover by rank",
+  "note": "`cheaper` needs a cover strictly below one building, so at equal or greater cover the leader's seat is kept; this fits 0242's rule that a building is never covered while another choice exists, and 0242 does not cover a leader across a building",
+  "pages": {},
+  "reads": "b953bb7d76318549",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search.rs::Placer.search#a leader's seat not free": {
+  "body": "32c8976e8a9a5150",
+  "claim": "a leader's seat not free - CONVENTION: a swept seat whose leader would cross another building (`leader_crosses`, the leader convention) is not free ground - its leader lies across that building as words over it would - so where the only seats left within reach are such seats, no free ground is left",
+  "code": "b02c3d96645bbf63",
+  "core": "98964d4e51c1222b",
+  "date": "2026-11-19",
+  "note": "a crossing seat comes back from `beyond` only when no clear seat is within reach, and it is weighed against cover rather than taken as free ground; this is a leader-line drawing convention the record does not address",
+  "pages": {},
+  "reads": "b953bb7d76318549",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search.rs::Placer.search#covering least": {
+  "body": "32c8976e8a9a5150",
+  "claim": "covering least - labels-on-maps-cartographic-label-placement.drawing: failing empty ground, the place that covers the least and lies highest in the order, a road or stream counting half a building - the places at the usual gap, and the nearest leader-crossing seat weighed as one building covered, whatever its leader crosses",
+  "code": "f5f7462edf33f334",
+  "core": "98964d4e51c1222b",
+  "date": "2026-11-19",
+  "note": "the crossing seat weighs one building (`Weight::Block`); any place at the usual gap covering less goes to the minimum cover with the rank breaking ties, and roads weigh half",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
   },
-  "reads": "54e5eb11222efdc8",
+  "reads": "b953bb7d76318549",
+  "research": "7ba60ad54a01502e",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:aa4e29df260bd640",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00a270a965f4531"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search.rs::Placer.search#the caption's seat": {
+  "body": "32c8976e8a9a5150",
+  "claim": "the caption's seat - labels-on-maps-cartographic-label-placement.drawing: on its feature where it fits, else beside it at the ranked places stepping outward, the nearer free place winning; only when no free ground is left does it cover something",
+  "code": "e842f7bb2871fd37",
+  "core": "98964d4e51c1222b",
+  "date": "2026-11-19",
+  "note": "the name goes on its feature first, then the ranked places at the gap off the drawn edge, then cuts, then the sweep further out, and covers something only as the last resort",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
+  },
+  "reads": "b953bb7d76318549",
   "research": "7ba60ad54a01502e",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:5fdeb07b90c0385f",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:aa4e29df260bd640",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d529c47037844a9e"
   ],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/search.rs::Placer.seat#a leader filed": {
@@ -15080,45 +15142,6 @@
   "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/caption_place/search.rs::Placer.sweep#the caption's seat": {
-  "body": "f97a9f42d29afdeb",
-  "claim": "the caption's seat - labels-on-maps-cartographic-label-placement.drawing: on its feature where it fits, else beside it at the ranked places stepping outward, the nearer free place winning; covering least where nothing is free",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "90eb486dfb780329",
-  "core": "1f9f0aede8246e0a",
-  "date": "2026-11-19",
-  "note": "nearest free offset across ranks wins, ties to the higher rank",
-  "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
-  },
-  "reads": "cd160b250997ccea",
-  "research": "7ba60ad54a01502e",
-  "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
-  ],
-  "triaged": "2026-11-19",
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/caption_place/search.rs::Placer.view_span#the caption's seat": {
-  "body": "b339661f3ed601fc",
-  "claim": "the caption's seat - labels-on-maps-cartographic-label-placement.drawing: on its feature where it fits, else beside it at the ranked places stepping outward, the nearer free place winning; covering least where nothing is free",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "5ef7e5d74de12d63",
-  "core": "bc3500bfca8690f1",
-  "date": "2026-11-19",
-  "note": "offsets kept within the picture",
-  "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
-  },
-  "reads": "c6e4f4dd5672cea4",
-  "research": "7ba60ad54a01502e",
-  "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
-  ],
-  "triaged": "2026-11-19",
-  "verdict": "IN-STEP"
- },
  "rust/mode_a/src/caption_place/search.rs::RANKS#the ranked places": {
   "body": "8739ac8d18737b89",
   "claim": "the ranked places - labels-on-maps-cartographic-label-placement.drawing: directly above, directly below, to its right, upper right, lower right, to its left, upper left, lower left (the readers' study)",
@@ -15180,24 +15203,6 @@
   },
   "research": "7ba60ad54a01502e",
   "rests": [],
-  "triaged": "2026-11-19",
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/caption_place/search.rs::Sweep#the caption's seat": {
-  "body": "09bf752546f6a8b3",
-  "claim": "the caption's seat - labels-on-maps-cartographic-label-placement.drawing: on its feature where it fits, else beside it at the ranked places stepping outward, the nearer free place winning; covering least where nothing is free",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "8ac5c0744c43f210",
-  "core": "d17ac05a4e3135d9",
-  "date": "2026-11-19",
-  "note": "sweep parameters",
-  "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
-  },
-  "research": "7ba60ad54a01502e",
-  "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
-  ],
   "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
@@ -15300,6 +15305,134 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
   "triaged": "2026-11-19",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::ALONG_MIN_PX#along an edge": {
+  "body": "38e726a48f635922",
+  "claim": "along an edge - CONVENTION: a leader within a stroke's width of a building's or wall's drawn edge (at least 1 px, a hairline's band either side as the index files one) for more than a usual gap cannot be told from the edge, and is refused as one crossing it (the coordinator's ruling 2026-11-19: a pool sheet's latrine leader run down the stables' wall line read as part of the stables)",
+  "code": "f6913e640d603fe5",
+  "core": "ca79991bb3c1e311",
+  "date": "2026-11-19",
+  "note": "a band of twice the edge's half-stroke, at least 1 px, refused past one gap; how a leader reads, which the page leaves to 0330",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::CLIP_ALLOWED_GAPS#a corner clipped": {
+  "body": "89d436d9cb3d2d64",
+  "claim": "a corner clipped - GUESS: twice the usual gap; no page sizes it - a leader clipping a building's corner still reads as passing beside it, one run through it reads as tying the name to it (the coordinator's ruling 2026-11-19: a pool sheet's latrine leader clipping the gatehouse's corner read fine, and refused it was led along the stables' wall instead)",
+  "code": "59dea5cb63211cc7",
+  "core": "78873b8dd98be3b0",
+  "date": "2026-11-19",
+  "note": "twice the usual gap inside a building is allowed; the page is silent on what a leader crosses",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Placer.beyond#the sweep's module": {
+  "body": "957ffec3d4a94b65",
+  "claim": "the sweep's module - NONE: the third step split from `search.rs` at the file-size bar, deciding nothing itself; its rules are claimed where they are decided",
+  "code": "22b83e53adce76e4",
+  "core": "df456b01c4ee1630",
+  "date": "2026-11-19",
+  "note": "assembles the sweep from constants claimed elsewhere; chooses no seat",
+  "pages": {},
+  "reads": "4bf0118966e66239",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Placer.intervals#a wall ahead": {
+  "body": "9401ed58452ebfa2",
+  "claim": "a wall ahead - CONVENTION: no swept place lies past a wall standing between the feature and it, unless the wall runs through the feature's middle (a gate in the wall, which has a side each way); 0242 and 0330 say nothing of walls, and a caption beyond one names the wrong court",
+  "code": "8abe38c32e8cf268",
+  "core": "bfa08b8cb19d00ff",
+  "date": "2026-11-19",
+  "note": "no place is taken past a wall unless the wall runs through the feature's middle; the page is silent on walls",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Placer.leader_crosses#a leader kept off other features": {
+  "body": "48d2b8a74cd4eba2",
+  "claim": "a leader kept off other features - CONVENTION: 0330 fixes where a leader ends and says nothing of what it crosses; a leader run across another building reads as tying the name to that one (observed 2026-11-19 on a pool sheet: with T209's fix the bounty board's name was swept beside the notice board, its leader across the notice board's roof), so a swept seat whose leader would cross one is refused while a seat whose leader crosses none is within reach; ground, ways and named areas are crossed as a caption may lie on them, and another caption's letters too (refusing a leader across them sent a pool sheet's \"Fox Clan lands\" across the border it names)",
+  "code": "046c37ee7e13f3f3",
+  "core": "5cd1bb2ec0f1cbc3",
+  "date": "2026-11-19",
+  "note": "it checks buildings only (weight Block): a run through one longer than the clipped-corner allowance, or along its drawn edge for more than a gap; ground, ways, named areas and captions are passed",
+  "pages": {},
+  "reads": "cfe233496c45e80b",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Placer.sweep#a leader kept off other features": {
+  "body": "c9ec69d813b1593f",
+  "claim": "a leader kept off other features - CONVENTION: past twice the gap, where a leader is drawn, a direction whose nearest free seat's leader would cross another building (`leader_crosses`) is given up rather than swept on - the algorithmically easier route, the record silent: a seat further out the same way is led back past the same building - and the first such seat is kept, returned only where no seat within reach is led clear, for `search` to weigh against covering least",
+  "code": "69a4cf78200b6f61",
+  "core": "d99f909a7cf22be3",
+  "date": "2026-11-19",
+  "note": "past `s.lead`, a direction whose seat's leader crosses a building is closed (`walls[rank] = NEG_INFINITY`); the first such seat, which is the nearest, is kept and returned only when no clear seat is found",
+  "pages": {},
+  "reads": "fc02ad44d930289a",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Placer.sweep#the caption's seat": {
+  "body": "c9ec69d813b1593f",
+  "claim": "the caption's seat - labels-on-maps-cartographic-label-placement.drawing: when every place at the usual gap is taken, the same ranked places are tried a step further out, and the nearer free place always wins - ties going to the higher rank; never a place off the edge of the picture (the view's span), nor one past a wall (`intervals`' claim)",
+  "code": "42e3dc4ed66e557c",
+  "core": "d99f909a7cf22be3",
+  "date": "2026-11-19",
+  "note": "it steps outward chunk by chunk and `nearest_first` takes the nearest seat with the lower rank winning ties; it stays within the view's spans and stops at walls",
+  "pages": {
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
+  },
+  "reads": "fc02ad44d930289a",
+  "research": "7ba60ad54a01502e",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Placer.view_span#the sweep's module": {
+  "body": "b339661f3ed601fc",
+  "claim": "the sweep's module - NONE: the third step split from `search.rs` at the file-size bar, deciding nothing itself; its rules are claimed where they are decided",
+  "code": "d4f8521479f3ac35",
+  "core": "bc3500bfca8690f1",
+  "date": "2026-11-19",
+  "note": "computes the offsets that keep a block inside the view; the choice is made in sweep",
+  "pages": {},
+  "reads": "c6e4f4dd5672cea4",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::Sweep#the sweep's module": {
+  "body": "1393eac9a42b6508",
+  "claim": "the sweep's module - NONE: the third step split from `search.rs` at the file-size bar, deciding nothing itself; its rules are claimed where they are decided",
+  "code": "465949048f940f39",
+  "core": "d35d4bb8210d2699",
+  "date": "2026-11-19",
+  "note": "a parameter record",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/search/sweep.rs::nearest_first#the sweep's module": {
+  "body": "1266745281df069a",
+  "claim": "the sweep's module - NONE: the third step split from `search.rs` at the file-size bar, deciding nothing itself; its rules are claimed where they are decided",
+  "code": "448243a89c3172a8",
+  "core": "3c6cfa69bfbec8b3",
+  "date": "2026-11-19",
+  "note": "picks the least offset, lower index on ties; it implements the order claimed elsewhere",
+  "pages": {},
+  "reads": "c6e4f4dd5672cea4",
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/caption_place/tests.rs::a_blocks_corners_hold_its_center#the placer's rule tests": {
@@ -16075,6 +16208,102 @@
   "claim": "the angle tests - NONE: tests of the angle rules claimed where the placer decides them, deciding nothing themselves",
   "code": "260c16c6933476e1",
   "core": "08cc812fa5864bac",
+  "date": "2026-11-19",
+  "note": "a test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/drawn_edge.rs::a_roads_name_stands_off_its_drawn_edge#the drawn-edge tests": {
+  "body": "4722486a862b3a06",
+  "claim": "the drawn-edge tests - NONE: tests of the gap rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "d959c8a2e9c1c35b",
+  "core": "2a1f6ed364aeaba3",
+  "date": "2026-11-19",
+  "note": "this is a test and decides nothing itself",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/drawn_edge.rs::a_stroked_building_is_named_above_it_off_its_drawn_edge#the drawn-edge tests": {
+  "body": "959e436f09f9b235",
+  "claim": "the drawn-edge tests - NONE: tests of the gap rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "ceab03c77c955b41",
+  "core": "eeb6608e159be2ac",
+  "date": "2026-11-19",
+  "note": "a test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/drawn_edge.rs::a_turned_stroked_building_is_named_above_it_off_its_drawn_edge#the drawn-edge tests": {
+  "body": "225aacb5b23b5cad",
+  "claim": "the drawn-edge tests - NONE: tests of the gap rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "dd5cae75e556297c",
+  "core": "4bda795039826ae7",
+  "date": "2026-11-19",
+  "note": "a test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/drawn_edge.rs::storehouse#the drawn-edge tests": {
+  "body": "c0f14b1293a6ca45",
+  "claim": "the drawn-edge tests - NONE: tests of the gap rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "0575b531c33d173d",
+  "core": "60356029ceb82258",
+  "date": "2026-11-19",
+  "note": "a test fixture",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/leader_cross.rs::a_leader_across_a_building_weighs_more_than_a_road_covered#the leader-crossing tests": {
+  "body": "fa46337fe83d62b2",
+  "claim": "the leader-crossing tests - NONE: tests of the leader rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "c11002166d2ad6b6",
+  "core": "69c282b844e75a09",
+  "date": "2026-11-19",
+  "note": "a test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/leader_cross.rs::a_swept_seat_whose_leader_crosses_a_building_is_refused#the leader-crossing tests": {
+  "body": "a56ef4b0e0703d93",
+  "claim": "the leader-crossing tests - NONE: tests of the leader rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "05d422abef7fbc4a",
+  "core": "d447528a5bec0b74",
+  "date": "2026-11-19",
+  "note": "a test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/leader_cross.rs::crosses_box#the leader-crossing tests": {
+  "body": "c47064fdcee6cbd0",
+  "claim": "the leader-crossing tests - NONE: tests of the leader rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "5fd5d17265f1686e",
+  "core": "efed164380c0ffc1",
+  "date": "2026-11-19",
+  "note": "a test helper",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/caption_place/tests/one_feature.rs::a_road_drawn_as_two_paths_is_crossed_once#the one-feature tests": {
+  "body": "d05663b4d4d63d2e",
+  "claim": "the one-feature tests - NONE: tests of the cover rule claimed where the placer decides it, deciding nothing themselves",
+  "code": "a6cbca89e26c51df",
+  "core": "9904e2eb8a3894e4",
   "date": "2026-11-19",
   "note": "a test",
   "pages": {},
@@ -18850,7 +19079,7 @@
   "code": "22bcc2651dcd209b",
   "core": "6bced60128cb83c5",
   "date": "2026-11-19",
-  "note": "the claim casts \"a building at the farmhouse ridge's 20 ft\". The code casts every built box under SMALL_BUILDING_SQFT (100 sq ft) - the 10 x 8 ft bath (80 sq ft) and the 5 ft privies - at SMALL_BUILDING_FT's 6 ft, a height 0038 does not give. The walls at 5 ft, the tree at 33 ft and the six hours all match; fix: claim (name the small roofed thing's 6 ft, the audit's rule, whose own claim is open as DRIFTED); effect: none of its own - the generator and the audit cast alike",
+  "note": "the code refuses any garden under six full-sun hours; buildings cast at 20 ft, walls at about 5.25 ft and the tree at about 32.8 ft; small roofed things carry their own GUESS line",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
@@ -18858,11 +19087,14 @@
   "reads": "2115b33d058a1636",
   "research": "9d4ec9a570c81514",
   "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:518902ab7cde51b3",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:9d94fecaff4060d0",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:fd44c5dc36dbd09f",
-   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d"
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d",
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:e5e747ae6a1e52b8"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/fixtures.rs::hatch#the collection hatch": {
   "body": "bddf371590faed60",
@@ -20268,22 +20500,22 @@
  "rust/mode_a/src/compound/layout.rs::Layout.middle_gate#the middle gate beside the office hall": {
   "body": "4f7abf6b87ebd8c1",
   "claim": "the middle gate beside the office hall - DEVIATION magistrates-compounds-jinya-and-yamen.drawing: the docs seat the divider's gate behind the office hall (a GUESS: no page places a jin'ya's middle gate); the hall backs the divider with only the clear ground between, so the gate opens at the first stretch beside it whose approach is clear on both sides, the hall still the privacy baffle between the hearing court and the house",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4fd1127b55af34c1",
   "core": "6e36e8fa84cb6d5e",
   "date": "2026-11-19",
-  "note": "this is labeled a DEVIATION, but the drawing page does not record it: the page says \"Our plans set the gate in the wall between the two courts behind the office hall\". The code's nearest() from the hall's middle opens the gate at the first clear stretch beside the hall instead; fix: claim (restate it as a GUESS that contradicts the page's \"behind the office hall\" until 0090.drawing records the gate beside the hall as this project's choice); effect: the map's middle gate stands beside the office hall while the drawing page says it stands behind it",
+  "note": "0090's drawing page now records this DEVIATION; the code takes the nearest stretch of the divider beside the hall whose approach is clear",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
   },
   "reads": "e2f0f577d76293aa",
   "research": "14af46724f504a44",
   "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:679531b3552eb3f3"
   ],
-  "triaged": "2026-11-19",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.new#named court spine": {
   "body": "9386c78b069e9c8c",

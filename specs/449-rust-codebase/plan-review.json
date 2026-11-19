@@ -924,6 +924,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T209 (T152: the caption placer measured nearness to a feature's stroke edge but seated at the gap from its fill box, so places beside a stroked building were refused)": {
+   "sha256": "f694c541517bfcabb755478c41b959873df5a87e40f216223293870863bc8787",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T209 Approach (checklist part A)": {
+   "sha256": "873ccfac57099cb01855cc71f1effc59d238ee6030e25689e75caa5b26c91f42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14011,6 +14023,134 @@
      "why": "The GM, 2026-11-18: 'fix all known bugs in each step before moving on to porting the next step'. T209 is ordered before T156 or any next step's port, so the defect is fixed before the next step, as the rule asks. No wrong outcome ships on the sheets this task draws. The hand sheets' carrying it predates this task (since T202), and T209 fixes all six. This answers the previous round's item (2)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T209 (T152: the caption placer measured nearness to a feature's stroke edge but seated at the gap from its fill box, so places beside a stroked building were refused)",
+    "### T209 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T209-drawn-edge",
+     "summary": "Places beside a feature are measured from its drawn box (each closed outline's box grown by half its stroke), the edge the nearness test already used.",
+     "class": "within",
+     "why": "0242's gap is measured from the feature as drawn; places beside a stroked building were refused, a broken research finding (a defect under XIV v2.36.0). Fixing a known defect before the next step is what the GM asked on 2026-11-18 ('fix all known bugs in each step')."
+    },
+    {
+     "id": "T209-road-stroke-out",
+     "summary": "A road's own stroke is left out of the drawn box (a DEVIATION).",
+     "class": "within",
+     "why": "Its stroke never refused a place, so leaving it as it is leaves no wrong outcome; the GM's 2026-11-19 rule says a difference that works is not a defect and is not to be 'fixed'. Narrows nothing asked."
+    },
+    {
+     "id": "T209-leader-cross",
+     "summary": "A swept seat is refused when its leader crosses another feature's building or fixture by more than twice the usual gap inside the ink (a GUESS knob, named).",
+     "class": "within",
+     "why": "Fixes the observed defect on Ubame (the bounty board's leader across the notice board's roof, a map that reads wrong). The threshold is a named GUESS knob (item 10), not a narrowing."
+    },
+    {
+     "id": "T209-leader-along-edge",
+     "summary": "A swept seat is refused when its leader runs along a building's or wall's drawn edge (a CONVENTION).",
+     "class": "within",
+     "why": "Same defect class: a leader on an edge cannot be told from it, so the map would read wrong. Serves fix-as-we-go."
+    },
+    {
+     "id": "T209-crossing-weight",
+     "summary": "When no clean seat is in reach, a crossing leader weighs as one building covered.",
+     "class": "within",
+     "why": "A fallback ordering for the case the refusal cannot satisfy; it does not leave a known defect unfixed (the one case it governs on the sheets, the latrines, was looked at and reads right)."
+    },
+    {
+     "id": "T209-road-once",
+     "summary": "A road drawn as two paths is counted once when covered.",
+     "class": "within",
+     "why": "0242: crossing one is better than crossing two; counting one road twice contradicted it. A defect fix."
+    },
+    {
+     "id": "T209-order",
+     "summary": "After T152, before T156 or any next step's port.",
+     "class": "within",
+     "why": "Exactly the GM's 2026-11-18 order: fix each step's known bugs before porting the next."
+    },
+    {
+     "id": "T209-borderline-crowdings-left",
+     "summary": "Hayakawa's gate/range beside forecourt and Ochiba's weapon rack under striking posts left as they are, recorded as reading right.",
+     "class": "within",
+     "why": "Recorded as borderline crowdings that still read; under XIV v2.36.0 and the GM's 2026-11-19 words a placement that reads right is not a defect, and leaving it is within, not a narrowing."
+    },
+    {
+     "id": "T209-latrines-left",
+     "summary": "The county latrines left as at HEAD, their leaders passing over a neighbor's roof; looked at (observed 2026-11-19, before-and-after crop) and recorded as reading right, distinguished from the bounty board (whose name sat beside another board and read as naming it).",
+     "class": "within",
+     "why": "Answers the previous BLOCKED by route (a): the latrines were observed, with a dated one-shot method, and read right - each name beside its own latrine, its leader ending on it - so no wrong outcome is left. The block squares this with item 12: the bounty board's defect was a misreading of which board was named, which the latrines do not have. Under the GM's 2026-11-19 definition what is left is not a defect, so no known bug is carried forward."
+    },
+    {
+     "id": "T209-python-copy",
+     "summary": "No Python copy of the placer remains to fix (T152 deleted it).",
+     "class": "within",
+     "why": "Fix-as-we-go reaches every copy that still lives; with none, nothing is left unfixed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T209 (T152: the caption placer measured nearness to a feature's stroke edge but seated at the gap from its fill box, so places beside a stroked building were refused)",
+    "### T209 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T209-drawn-edge",
+     "summary": "The ranked places beside a feature are measured from its drawn box (closed outline's box, a road's or stream's line, grown by half its stroke), the edge the nearness test already used, instead of the fill box.",
+     "class": "within",
+     "why": "Fixes a wrong outcome found in step 3a (places beside a stroked building refused, against 0242's gap 'from the edge of the feature as it is drawn'); the GM 2026-11-18: fix all known bugs in each step before moving on. Narrows nothing."
+    },
+    {
+     "id": "T209-way-caption-gap",
+     "summary": "A way's caption, measured off its center line before, now stands the usual gap off its drawn stroke too; five captions move 0.7-4.7 px (labeled observation), none reading worse.",
+     "class": "within",
+     "why": "Applies 0242's drawn-edge gap uniformly, the same edge as the first decision; captions move under FR-002's rule (no byte or position standard), each looked at. It leaves no defect and narrows no part of the request."
+    },
+    {
+     "id": "T209-leader-cross",
+     "summary": "A swept seat is refused when its leader really crosses another feature's building or fixture (more ink than twice the usual gap, a named GUESS knob) or runs along a building's or wall's drawn edge (a CONVENTION).",
+     "class": "within",
+     "why": "Fixes the bounty-board defect (a leader across another board's roof read as naming it), a map that reads wrong; the threshold is a named guess with its reason, not an exception to anything the GM asked."
+    },
+    {
+     "id": "T209-cross-fallback",
+     "summary": "When no clean seat is in reach, a crossing leader weighs as one building covered rather than being refused outright.",
+     "class": "within",
+     "why": "A fallback ordering inside the placer's own search so a caption still finds a seat; it carves no case out of a GM rule and leaves no known defect (the latrines it governs were looked at and read right)."
+    },
+    {
+     "id": "T209-road-once",
+     "summary": "A road drawn as two paths is counted once when covered.",
+     "class": "within",
+     "why": "Follows 0242 (crossing one is better than crossing two); a correctness fix inside the step."
+    },
+    {
+     "id": "T209-found-and-left",
+     "summary": "Two borderline crowdings (Hayakawa gate/range beside forecourt, Ochiba weapon rack under striking posts) and the county latrines' leader over a neighbor's roof are left as they are, each looked at and reading right.",
+     "class": "within",
+     "why": "Constitution XIV v2.36.0 / the GM 2026-11-19: a defect is a wrong outcome; things that read right are not defects, and leaving them is not a narrowing of 'fix all known bugs in each step'. The latrines are distinguished from the bounty board by what the reader sees (each name beside its own latrine), observed with a labeled method."
+    },
+    {
+     "id": "T209-order",
+     "summary": "Lands after T152 and before T156 or any next step's port; no Python copy of the placer remains to fix.",
+     "class": "within",
+     "why": "Exactly the GM's 2026-11-18 order: fix each step's known defects before porting the next step, in every copy that still lives."
+    },
+    {
+     "id": "T209-budget",
+     "summary": "Exit criteria: tests red first, every sheet's audit green and read right, the placer within twice its derived budget on every hand sheet (Hayakawa 1.8x, labeled measurement).",
+     "class": "within",
+     "why": "Holds the step-3a placer to the derived work budget the GM's 2026-11-19 plan set ('if the 3a step is horribly inefficient...'); no exactness standard is applied."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -24832,6 +24972,62 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "The GM, 2026-11-18: 'fix all known bugs in each step before moving on to porting the next step'. T209 is ordered before T156 or any next step's port, so the defect is fixed before the next step, as the rule asks. No wrong outcome ships on the sheets this task draws. The hand sheets' carrying it predates this task (since T202), and T209 fixes all six. This answers the previous round's item (2)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T209": {
+   "section_sha256": "48a572ff7f6a018a4af2273d638774194a57c71de22f84ea3a47653105d6215c",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T209-drawn-edge",
+     "summary": "The ranked places beside a feature are measured from its drawn box (closed outline's box, a road's or stream's line, grown by half its stroke), the edge the nearness test already used, instead of the fill box.",
+     "class": "within",
+     "why": "Fixes a wrong outcome found in step 3a (places beside a stroked building refused, against 0242's gap 'from the edge of the feature as it is drawn'); the GM 2026-11-18: fix all known bugs in each step before moving on. Narrows nothing."
+    },
+    {
+     "id": "T209-way-caption-gap",
+     "summary": "A way's caption, measured off its center line before, now stands the usual gap off its drawn stroke too; five captions move 0.7-4.7 px (labeled observation), none reading worse.",
+     "class": "within",
+     "why": "Applies 0242's drawn-edge gap uniformly, the same edge as the first decision; captions move under FR-002's rule (no byte or position standard), each looked at. It leaves no defect and narrows no part of the request."
+    },
+    {
+     "id": "T209-leader-cross",
+     "summary": "A swept seat is refused when its leader really crosses another feature's building or fixture (more ink than twice the usual gap, a named GUESS knob) or runs along a building's or wall's drawn edge (a CONVENTION).",
+     "class": "within",
+     "why": "Fixes the bounty-board defect (a leader across another board's roof read as naming it), a map that reads wrong; the threshold is a named guess with its reason, not an exception to anything the GM asked."
+    },
+    {
+     "id": "T209-cross-fallback",
+     "summary": "When no clean seat is in reach, a crossing leader weighs as one building covered rather than being refused outright.",
+     "class": "within",
+     "why": "A fallback ordering inside the placer's own search so a caption still finds a seat; it carves no case out of a GM rule and leaves no known defect (the latrines it governs were looked at and read right)."
+    },
+    {
+     "id": "T209-road-once",
+     "summary": "A road drawn as two paths is counted once when covered.",
+     "class": "within",
+     "why": "Follows 0242 (crossing one is better than crossing two); a correctness fix inside the step."
+    },
+    {
+     "id": "T209-found-and-left",
+     "summary": "Two borderline crowdings (Hayakawa gate/range beside forecourt, Ochiba weapon rack under striking posts) and the county latrines' leader over a neighbor's roof are left as they are, each looked at and reading right.",
+     "class": "within",
+     "why": "Constitution XIV v2.36.0 / the GM 2026-11-19: a defect is a wrong outcome; things that read right are not defects, and leaving them is not a narrowing of 'fix all known bugs in each step'. The latrines are distinguished from the bounty board by what the reader sees (each name beside its own latrine), observed with a labeled method."
+    },
+    {
+     "id": "T209-order",
+     "summary": "Lands after T152 and before T156 or any next step's port; no Python copy of the placer remains to fix.",
+     "class": "within",
+     "why": "Exactly the GM's 2026-11-18 order: fix each step's known defects before porting the next step, in every copy that still lives."
+    },
+    {
+     "id": "T209-budget",
+     "summary": "Exit criteria: tests red first, every sheet's audit green and read right, the placer within twice its derived budget on every hand sheet (Hayakawa 1.8x, labeled measurement).",
+     "class": "within",
+     "why": "Holds the step-3a placer to the derived work budget the GM's 2026-11-19 plan set ('if the 3a step is horribly inefficient...'); no exactness standard is applied."
     }
    ],
    "verdict": "CLEAR"

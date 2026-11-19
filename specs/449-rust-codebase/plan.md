@@ -731,29 +731,31 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T208 to T199 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T208 to T208 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 
-### T209 (<why: the finding or measurement that files it>)
+### T209 (T152: the caption placer measured nearness to a feature's stroke edge but seated at the gap from its fill box, so places beside a stroked building were refused)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: 0242's gap is measured "from the edge of the feature as it is drawn", so the places beside a feature are now measured from its drawn box (each closed outline's box, and each road's or stream's line, grown by half its stroke), the edge the nearness test already used; a way's caption, measured off its center line before, now stands the usual gap off its stroke too, which moved five captions a few pixels - Ubame's THE FOX BORDER, "Fox Clan lands" and "Kitsune Mori, 15 miles east" about 4.7 px out of the east wall's ink, Hoshigaoka's "sacred tree" 1 px, Hayakawa's "woodshed" 0.7 px - none reading worse (observed 2026-11-19, method: each sheet's placed text compared before and after, and before-and-after crops of the five). Seating directly beside a building exposed a second defect on Ubame - the bounty board's name pushed to a swept seat whose leader ran across the notice board's roof - so a swept seat is now refused when its leader really crosses another feature's building or fixture (more of it inside the ink than twice the usual gap, a GUESS: a clipped corner still reads as passing beside) or runs along a building's or wall's drawn edge (a CONVENTION: a leader on an edge cannot be told from it); a crossing leader weighs as one building covered when no clean seat is in reach; and a road drawn as two paths is counted once when covered (0242: crossing one is better than crossing two). Red first: the stroked storehouse (Gap(3) where the first ranked place is free), the hemmed-in well, the clipped corner and the edge run, the road drawn twice, a road's name off its drawn edge, a tie order. On the six sheets about 32 hand-sheet captions moved to a nearer ranked place (measured 2026-11-19 (`caption-counts` seats at HEAD and after, by sheet)); each sheet was looked at and reads right, the county latrines as at HEAD. The placer stays within twice its budget on every hand sheet (Hayakawa 1.8x, the most) (measured 2026-11-19 (`make budget-sheets PHASE=placer` on the counting build)).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the drawn edge, the leader's path | `tests/drawn_edge.rs`, `tests/leader_cross.rs`, `tests/one_feature.rs`, `search/sweep.rs` tests | `caption_place/search/sweep.rs`, `captions.rs` | the six pool sheets (captions moved) | none |
 
 ### T209 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A caption takes the first free ranked place at the usual gap from its feature's drawn edge, and no leader runs through or along another building.
+2. **The constraints.** 0242's ranked places and gap; 0330's leader; FR-002 (no byte standard); the budget `placer`; constitution XIV.
+3. **Where each comes from.** R: 0242 and 0330's drawing pages; O: T152's finding and the six sheets looked at.
+4. **Do they describe the world here?** Yes: the moved captions are the hand sheets' and the generated sheets' own (measured 2026-11-19, as above).
+5. **The order.** After T152, before T156 or any next step's port.
+6. **The exits.** Green: the tests red first, every sheet's audit green and read right, the budget within twice. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The six sheets regenerated and looked at; the budget table above.
+10. **Before moving a constant.** The clip allowance is a GUESS knob named with its reason.
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Places beside a stroked building were refused, against 0242's ranked places (a research finding broken); the bounty board's leader crossed another building (a map that reads wrong). Both defects, both fixed.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** Two borderline crowdings that still read: Hayakawa's "gate / range" beside "forecourt", Ochiba's "weapon rack" a line under "striking posts". The county latrines were looked at (observed 2026-11-19, method: the before-and-after crop of the two latrines) and read right: each name sits beside its own latrine and its leader ends on it, the leader passing over a neighbor's roof as a line passes over, unlike the bounty board, whose name sat beside another board and so read as naming it (item 12's wrong reading); so this is not a defect. No Python copy of the placer remains to fix (T152 deleted it).
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
+
 

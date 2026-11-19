@@ -98,6 +98,8 @@ pub struct Index {
     pub ground: Vec<bool>,
     /// Does each shape draw ink (a fill, a stroke)? An outline drawn with neither only marks out an area, and hides nothing.
     pub visible: Vec<bool>,
+    /// The widest stroke half-width a filed body carries: how far past an entry's box its drawn edge can reach.
+    pub widest_edge: f64,
     /// Is each shape of a kind some caption names (a well's gear, though no caption names the gear itself)?
     pub kind_named: Vec<bool>,
 }
@@ -225,6 +227,7 @@ impl Index {
             ground: Vec::new(),
             kind_named: Vec::new(),
             visible: Vec::new(),
+            widest_edge: 0.0,
         }
     }
 
@@ -259,6 +262,7 @@ impl Index {
         }
         count("index_insert@file", ((c1 - c0 + 1) * (r1 - r0 + 1)) as u64);
         let convex = convex(&poly);
+        self.widest_edge = self.widest_edge.max(edge);
         self.entries.push(Entry {
             shape,
             poly,

@@ -12,6 +12,9 @@ use super::{placed, seat, Caption};
 use crate::labels::hand_sheet::read_sheet;
 
 mod angles;
+mod drawn_edge;
+mod leader_cross;
+mod one_feature;
 
 /// A sheet of `body` over a view `w` x `h`.
 fn sheet(w: u32, h: u32, body: &str) -> String {

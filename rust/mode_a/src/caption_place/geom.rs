@@ -111,6 +111,38 @@ pub fn inside(p: Pt, poly: &[Pt]) -> bool {
     odd && ring(poly).all(|(a, b)| seg_dist(p, a, b) > EPS)
 }
 
+/// How much of segment `ab` lies inside a closed outline: the stretches between its crossings with the outline's edges whose middles lie
+/// inside, summed (a stretch on an edge itself is not inside).
+#[must_use]
+pub fn length_inside(a: Pt, b: Pt, poly: &[Pt]) -> f64 {
+    let len = dist(a, b);
+    if len <= 0.0 || poly.len() < 3 {
+        return 0.0;
+    }
+    let r = (b.0 - a.0, b.1 - a.1);
+    let mut ts = vec![0.0, 1.0];
+    for (c, d) in ring(poly) {
+        let s = (d.0 - c.0, d.1 - c.1);
+        let den = r.0 * s.1 - r.1 * s.0;
+        if den.abs() < 1e-12 {
+            continue;
+        }
+        let q = (c.0 - a.0, c.1 - a.1);
+        let (t, u) = ((q.0 * s.1 - q.1 * s.0) / den, (q.0 * r.1 - q.1 * r.0) / den);
+        if (0.0..=1.0).contains(&t) && (0.0..=1.0).contains(&u) {
+            ts.push(t);
+        }
+    }
+    ts.sort_by(f64::total_cmp);
+    ts.windows(2)
+        .filter(|w| {
+            let m = f64::midpoint(w[0], w[1]);
+            inside((a.0 + m * r.0, a.1 + m * r.1), poly)
+        })
+        .map(|w| (w[1] - w[0]) * len)
+        .sum()
+}
+
 /// Is the closed outline convex (every turn the same way)?
 #[must_use]
 pub fn convex(poly: &[Pt]) -> bool {
@@ -273,6 +305,18 @@ pub fn quad_gap(quad: &[Pt; 4], poly: &[Pt], poly_convex: bool) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// The length of a segment inside an outline: through it, from inside it, clear of it, along its edge, and of a point.
+    #[test]
+    fn a_segments_length_inside_an_outline() {
+        let sq = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)];
+        assert!((length_inside((-5.0, 5.0), (15.0, 5.0), &sq) - 10.0).abs() < 1e-9);
+        assert!((length_inside((5.0, 5.0), (5.0, 20.0), &sq) - 5.0).abs() < 1e-9);
+        assert!(length_inside((-5.0, 20.0), (15.0, 20.0), &sq).abs() < 1e-12);
+        assert!(length_inside((0.0, -5.0), (0.0, 15.0), &sq).abs() < 1e-12);
+        assert!(length_inside((5.0, 5.0), (5.0, 5.0), &sq).abs() < 1e-12);
+        assert!(length_inside((5.0, 5.0), (6.0, 5.0), &sq[..2]).abs() < 1e-12);
+    }
 
     #[test]
     fn boxes_meet_only_past_a_touch_and_hold_whole() {

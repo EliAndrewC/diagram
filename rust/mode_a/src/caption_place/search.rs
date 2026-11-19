@@ -3,9 +3,9 @@
 //!
 //! 1. on its feature, where the block fits the feature's box: over the middle, and failing that the nearest free place to the middle
 //!    inside the box, swept outward in the ranked directions;
-//! 2. the usual gap: the eight ranked places half the letter height off the feature's box, the first clean one that stands nearer its own
-//!    feature than any other;
-//! 3. past the usual gap: a sweep outward from 1.5 gaps per ranked direction, all eight a grid cell at a time, each direction's first
+//! 2. the usual gap: the eight ranked places half the letter height off the feature's drawn box (out to its outline's stroke), the first
+//!    clean one that stands nearer its own feature than any other;
+//! 3. past the usual gap: a sweep outward from 1.5 gaps off that drawn box per ranked direction, all eight a grid cell at a time, each direction's first
 //!    free offset read off the intervals its obstacles cover; the nearest wins, rank breaking ties, and a leader past twice the gap;
 //! 4. no clean place within reach: the place that covers least, the highest ranked among equals (cuts into two then three lines are
 //!    tried at the usual gap, where one line clears none of its places).
@@ -19,13 +19,15 @@
     reason = "geometry's points, boxes and sizes as the derivation names them: a, b, c, d, p, q, w, h"
 )]
 
-use super::captions::{Caption, PITCH_EM};
+use super::captions::{drawn_half, Caption, PITCH_EM};
 use super::geom::{bbox, block, grow, holds, quad_gap, turn, Bx, Pt, EPS};
 use super::index::{band, covers, near, Index, Met, Own, Stance, Weight};
 use super::leader::leader;
 use super::wrap::cut;
 use super::Shape;
 use crate::work_counts::count;
+
+mod sweep;
 
 /// The eight places beside a feature, in the order readers ranked them: above, below, right, upper right, lower right, left, upper left,
 /// lower left (as `(x, y)` steps in the feature's frame, y down).
@@ -188,26 +190,20 @@ impl Frame {
     }
 }
 
-/// One sweep asked: the block, each direction's start center (offset 0) and the offsets it may take, where to start and how far to go.
-struct Sweep {
-    wh: (f64, f64),
-    starts: [Pt; 8],
-    spans: [(f64, f64); 8],
-    from: f64,
-    reach: f64,
-}
-
 impl Placer<'_> {
     fn in_view(&self, quad: &[Pt; 4]) -> bool {
         holds(self.ix.view, bbox(quad))
     }
 
-    /// What a block covers, in buildings (0: clean) - every entry its box meets tested against its true outline, each drawn shape
-    /// counted once.
+    /// What a block covers, in buildings (0: clean) - every entry its box meets tested against its true outline, each feature counted
+    /// once.
+    ///
+    /// Research: a feature counted once - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a road or stream crossed counts as half a building, and "crossing one is better than crossing two" - what is weighed is the features covered, so the drawn elements of one tagged feature (a road's bed and the dashed texture over it, a board's footing, frame and rail) count as that feature once, and an untagged shape as itself (feature 449 T209: one road drawn as two paths weighed a whole building, and a bounty board's name was led across the notice board beside it rather than set across that road)
     fn covered(&mut self, quad: &[Pt; 4], own: &Own<'_>) -> f64 {
         let b = bbox(quad);
         let found = self.ix.query(b, "covered");
-        let mut hit: Vec<Option<usize>> = Vec::new();
+        // each feature once: its tagged group's, or an untagged shape's own
+        let mut hit: Vec<(bool, usize)> = Vec::new();
         let mut total = 0.0;
         for id in found {
             let e = &self.ix.entries[id as usize];
@@ -215,10 +211,14 @@ impl Placer<'_> {
                 continue;
             }
             let stance = own.stance(&self.ix, e);
+            let feature = e.shape.map(|i| match self.shapes[i].group {
+                0 => (false, i),
+                g => (true, g),
+            });
             if covers(quad, e, stance, (own.region, own.stack))
-                && (e.shape.is_none() || !hit.contains(&e.shape))
+                && feature.is_none_or(|f| !hit.contains(&f))
             {
-                hit.push(e.shape);
+                hit.extend(feature);
                 total += e.weight.of();
             }
         }
@@ -508,165 +508,6 @@ impl Placer<'_> {
         None
     }
 
-    /// The offsets along `r` from `c0` at which the block stays wholly on the sheet.
-    fn view_span(&self, fr: &Frame, c0: Pt, (w, h): (f64, f64), r: (i8, i8)) -> (f64, f64) {
-        let u = turn((f64::from(r.0), f64::from(r.1)), fr.angle);
-        let v = self.ix.view;
-        let (mut lo, mut hi) = (f64::NEG_INFINITY, f64::INFINITY);
-        for corner in [
-            (-w / 2.0, -h / 2.0),
-            (w / 2.0, -h / 2.0),
-            (w / 2.0, h / 2.0),
-            (-w / 2.0, h / 2.0),
-        ] {
-            let p = turn((c0.0 + corner.0, c0.1 + corner.1), fr.angle);
-            for (x, ux, a, b) in [(p.0, u.0, v.0, v.2), (p.1, u.1, v.1, v.3)] {
-                if ux.abs() < 1e-12 {
-                    if x < a - EPS || x > b + EPS {
-                        return (1.0, 0.0);
-                    }
-                } else {
-                    let (d1, d2) = ((a - x) / ux, (b - x) / ux);
-                    lo = lo.max(d1.min(d2));
-                    hi = hi.min(d1.max(d2));
-                }
-            }
-        }
-        (lo, hi)
-    }
-
-    /// The obstacles' intervals along one direction over one chunk `[d0, d1]` (`sweep_interval`, one an obstacle's box).
-    ///
-    /// Research: a wall ahead - CONVENTION: no swept place lies past a wall standing between the feature and it, unless the wall runs through the feature's middle (a gate in the wall, which has a side each way); 0242 and 0330 say nothing of walls, and a caption beyond one names the wrong court
-    fn intervals(
-        &mut self,
-        fr: &Frame,
-        own: &Own<'_>,
-        (c0, wh, r): (Pt, (f64, f64), (i8, i8)),
-        (d0, d1, from): (f64, f64, f64),
-    ) -> (Vec<(f64, f64)>, f64) {
-        let (a, b) = (
-            (c0.0 + d0 * f64::from(r.0), c0.1 + d0 * f64::from(r.1)),
-            (c0.0 + d1 * f64::from(r.0), c0.1 + d1 * f64::from(r.1)),
-        );
-        let local = (
-            a.0.min(b.0) - wh.0 / 2.0,
-            a.1.min(b.1) - wh.1 / 2.0,
-            a.0.max(b.0) + wh.0 / 2.0,
-            a.1.max(b.1) + wh.1 / 2.0,
-        );
-        let strip = fr.sheet(local);
-        let mut fresh = Vec::new();
-        let mut wall = f64::INFINITY;
-        for id in self.ix.query(strip, "sweep") {
-            let e = &self.ix.entries[id as usize];
-            if !near(strip, e) || own.stance(&self.ix, e) == Stance::Skip {
-                continue;
-            }
-            let o = Self::met_box(fr, &e.poly, e.convex, local);
-            count("sweep_interval@sweep", 1);
-            let iv = interval(c0, wh, r, o);
-            // a wall reaching past where the sweep starts lies between the feature and every place past it - unless it runs through the
-            // feature itself (a gate in the wall), which has a side each way
-            let through = own.fbox_sheet.is_some_and(|fb| {
-                let m = mid(fb);
-                e.bx.0 <= m.0 && m.0 <= e.bx.2 && e.bx.1 <= m.1 && m.1 <= e.bx.3
-            });
-            if let Some((lo, _)) = iv.filter(|w| e.wall && !through && w.1 > from) {
-                wall = wall.min(lo.max(from));
-            }
-            fresh.extend(iv);
-        }
-        (fresh, wall)
-    }
-
-    /// A sweep: per direction, the intervals its obstacles cover, a chunk at a time, stopped at the first chunk where any direction is
-    /// free; the nearest free offset wins, rank breaking ties. `(center in the frame, offset, rank)`.
-    fn sweep(&mut self, s: &Sweep, fr: &Frame, own: &Own<'_>) -> Option<(Pt, f64, usize)> {
-        let mut kept: Vec<Vec<(f64, f64)>> = vec![Vec::new(); RANKS.len()];
-        // per direction, the nearest offset at which a wall ahead begins: no place past it
-        let mut walls = [f64::INFINITY; 8];
-        let mut d0 = s.from;
-        while d0 <= s.reach {
-            let d1 = d0 + CHUNK_PX;
-            let mut best: Option<(f64, usize)> = None;
-            for (rank, &r) in RANKS.iter().enumerate() {
-                let (lo_ok, hi_ok) = s.spans[rank];
-                if lo_ok > hi_ok || hi_ok < d0 || lo_ok > d1 || walls[rank] < d0 {
-                    continue;
-                }
-                let (fresh, wall) =
-                    self.intervals(fr, own, (s.starts[rank], s.wh, r), (d0, d1, s.from));
-                walls[rank] = walls[rank].min(wall);
-                let list = &mut kept[rank];
-                list.retain(|iv| iv.1 > d0);
-                let n = fresh.len();
-                if n > 0 {
-                    #[expect(
-                        clippy::cast_possible_truncation,
-                        clippy::cast_sign_loss,
-                        clippy::cast_precision_loss,
-                        reason = "a small sort's comparisons"
-                    )]
-                    let sorting =
-                        (n as f64 * (n as f64 + 1.0).log2().ceil().max(1.0)) as u64 + n as u64;
-                    count("sweep_compare@sweep", sorting);
-                    list.extend(fresh);
-                    list.sort_by(|x, y| x.0.total_cmp(&y.0));
-                }
-                let mut d = d0.max(lo_ok);
-                for &(lo, hi) in list.iter() {
-                    count("sweep_compare@sweep", 1);
-                    if hi <= d {
-                        continue;
-                    }
-                    if lo < d {
-                        d = hi;
-                    } else {
-                        break;
-                    }
-                }
-                count("seat@sweep", 1);
-                if d <= d1
-                    && d <= hi_ok
-                    && d <= walls[rank]
-                    && best.is_none_or(|bst| d < bst.0 - EPS)
-                {
-                    best = Some((d, rank));
-                }
-            }
-            if let Some((d, rank)) = best {
-                let (c0, r) = (s.starts[rank], RANKS[rank]);
-                return Some((
-                    (c0.0 + d * f64::from(r.0), c0.1 + d * f64::from(r.1)),
-                    d,
-                    rank,
-                ));
-            }
-            d0 = d1;
-        }
-        None
-    }
-
-    /// The third step, past the usual gap: the sweep outward from the feature's box.
-    fn beyond(&mut self, cap: &Caption, fr: &Frame, own: &Own<'_>) -> Option<(Pt, f64, usize)> {
-        let wh = (cap.w, cap.h);
-        let mut starts = [(0.0, 0.0); 8];
-        let mut spans = [(0.0, 0.0); 8];
-        for (k, &r) in RANKS.iter().enumerate() {
-            starts[k] = seat_center(fr.fb, wh, r, 0.0);
-            spans[k] = self.view_span(fr, starts[k], wh, r);
-        }
-        let sweep = Sweep {
-            wh,
-            starts,
-            spans,
-            from: SWEEP_START_GAPS * cap.gap,
-            reach: SWEEP_REACH_GAPS * cap.gap,
-        };
-        self.sweep(&sweep, fr, own)
-    }
-
     /// One caption seated, its block and leader filed so no later caption covers them.
     ///
     /// Research:
@@ -731,6 +572,14 @@ impl Placer<'_> {
         seat
     }
 
+    /// One caption's seat in 0242's order: on its feature, beside it at the usual gap, a step further out, and failing free ground the
+    /// place that covers least.
+    ///
+    /// Research:
+    ///     the caption's seat - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: on its feature where it fits, else beside it at the ranked places stepping outward, the nearer free place winning; only when no free ground is left does it cover something
+    ///     a leader's seat not free - CONVENTION: a swept seat whose leader would cross another building (`leader_crosses`, the leader convention) is not free ground - its leader lies across that building as words over it would - so where the only seats left within reach are such seats, no free ground is left
+    ///     covering least - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: failing empty ground, the place that covers the least and lies highest in the order, a road or stream counting half a building - the places at the usual gap, and the nearest leader-crossing seat weighed as one building covered, whatever its leader crosses
+    ///     a leader's seat at equal cover - CONVENTION: between the leader-crossing seat and a place at the usual gap that covers a building or more, the leader's seat is kept, its words over nothing; 0242's order ranks places at the gap and a step out, and says nothing of a leader across a building set against words over one (observed 2026-11-19 on the pool sheets: two latrines and an altar kept on their leaders rather than written over a building, while a bounty board's name, its only free seats led across the notice board, was set on the road above its board)
     fn search(&mut self, cap: &Caption, fr: &Frame, own: &Own<'_>) -> Seat {
         let done = |c: Pt, (w, h, cut): Layout, how: How| Seat {
             center: turn(c, fr.angle),
@@ -756,14 +605,15 @@ impl Placer<'_> {
                 scored.push((cover, 0, m));
             }
         }
-        // beside the feature - or, its parts loose, beside the parts nearest the middle of them all, then swept from the nearest
+        // beside the feature - or, its parts loose, beside the parts nearest the middle of them all, then swept from the nearest - each
+        // off its drawn edge, its outline's stroke included, as the nearness test measures it
         let beside: Vec<(Bx, Option<Bx>)> = if cap.members.is_empty() {
-            vec![(fr.fb, cap.fsheet)]
+            vec![(cap.dbox.unwrap_or(fr.fb), cap.fsheet)]
         } else {
             cap.members
                 .iter()
                 .take(MEMBERS_TRIED)
-                .map(|&(_, lb, sb)| (lb, Some(sb)))
+                .map(|&(p, lb, sb)| (grow(lb, drawn_half(&self.shapes[p])), Some(sb)))
                 .collect()
         };
         for &(fb, sb) in &beside {
@@ -810,8 +660,12 @@ impl Placer<'_> {
             fbox_sheet: beside[0].1,
             ..*own
         };
-        if let Some((c, d, rank)) = self.beyond(cap, &frm, &ownm) {
-            return done(c, (cap.w, cap.h, None), How::Swept(d, rank));
+        if let Some((c, d, rank, crossed)) = self.beyond(cap, &frm, &ownm) {
+            // a seat led across another building is not free: it weighs that building, and a place at the usual gap covering less wins
+            let cheaper = crossed && scored.iter().any(|sc| sc.0 < Weight::Block.of() - EPS);
+            if !cheaper {
+                return done(c, (cap.w, cap.h, None), How::Swept(d, rank));
+            }
         }
         // 4. the last resort: where it covers least, highest ranked, on one line (cuts having been tried at the usual gap)
         let (cover, _, c) = scored

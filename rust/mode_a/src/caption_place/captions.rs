@@ -49,6 +49,9 @@ pub struct Caption {
     pub fbox: Option<Bx>,
     /// The feature's box on the sheet.
     pub fsheet: Option<Bx>,
+    /// The feature's drawn box in its own frame ([`drawn_box`]): `fbox` out to each closed outline's stroke, the edge the places beside
+    /// it stand the usual gap off.
+    pub dbox: Option<Bx>,
     pub w: f64,
     pub h: f64,
     /// The usual gap: half the caption's letter height.
@@ -210,6 +213,7 @@ pub fn declared(shapes: &[Shape]) -> Vec<Caption> {
                         .collect::<Vec<_>>(),
                 )
             });
+            let dbox = (!parts.is_empty()).then(|| drawn_box(shapes, &parts, angle));
             let (w, h) = block_of(&elems);
             let gap = elems[0].size / 2.0;
             let ground = parts
@@ -228,6 +232,7 @@ pub fn declared(shapes: &[Shape]) -> Vec<Caption> {
                 angle,
                 fbox,
                 fsheet,
+                dbox,
                 w,
                 h,
                 gap,
@@ -240,6 +245,42 @@ pub fn declared(shapes: &[Shape]) -> Vec<Caption> {
             }
         })
         .collect()
+}
+
+/// How far a part's ink reaches past its outline or line: a stroke's half-width (`half`) for a road, a stream or any stroked line, a
+/// closed outline's stroke half-width (`edge`).
+///
+/// Research: a part's drawn reach - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: "The gap is measured from the edge of the feature as it is drawn" - a stroked line's drawn edge is its stroke's outer edge, its half-width off its center line, as a stroked outline's is its stroke's outer edge (feature 449 T209's impl-drift: measured off a way's center line, a way wider than the usual gap had its name on its own ink)
+#[must_use]
+pub fn drawn_half(s: &Shape) -> f64 {
+    if s.line {
+        s.half.max(0.0)
+    } else {
+        s.edge.max(0.0)
+    }
+}
+
+/// A feature's drawn box in its frame turned by `angle`: each part's box out by [`drawn_half`], all of them together - the edge of the
+/// feature as it is drawn, which the usual gap is measured from.
+///
+/// Research: the drawn edge - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: "The gap is measured from the edge of the feature as it is drawn" - a stroked outline's or line's drawn edge is its stroke's outer edge, so the places beside it stand the usual gap off that edge, the edge the nearness test measures its own outline's stroke at (feature 449 T209: seated off the fill box, every place directly above, below or beside a stroked building stood half a stroke too near its own outline and was refused, the caption falling to a diagonal)
+#[must_use]
+pub fn drawn_box(shapes: &[Shape], parts: &[usize], angle: f64) -> Bx {
+    let boxes: Vec<Pt> = parts
+        .iter()
+        .flat_map(|&p| {
+            let b = bbox(
+                &shapes[p]
+                    .poly
+                    .iter()
+                    .map(|&q| turn(q, -angle))
+                    .collect::<Vec<_>>(),
+            );
+            let d = drawn_half(&shapes[p]);
+            [(b.0 - d, b.1 - d), (b.2 + d, b.3 + d)]
+        })
+        .collect();
+    bbox(&boxes)
 }
 
 /// A loose feature's outlines, nearest the middle of them all first: each part's box in the feature's frame and on the sheet (none for
