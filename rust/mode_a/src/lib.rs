@@ -106,6 +106,11 @@ pub fn cli_in(args: &[String], tree: &Path, input: &mut dyn std::io::Read) -> Re
                 .map_err(|e| Error::new("json.decoder.JSONDecodeError", e.to_string()))?;
             Ok(lines(&census::stale_counts(&notes(&rest[0])?, &m)?))
         }),
+        // the placer's counted work per caption, in the counting build alone (feature 449 T198)
+        #[cfg(feature = "counters")]
+        (Some("caption-counts"), 1) => {
+            door(|| labels::hand_sheet::counted::report(&read(&rest[0])?))
+        }
         (Some("--version"), _) => {
             reply(format!("l7r-mode-a {}\n", env!("CARGO_PKG_VERSION")), "", 0)
         }

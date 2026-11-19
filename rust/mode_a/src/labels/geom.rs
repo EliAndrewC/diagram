@@ -98,6 +98,8 @@ pub fn area_centroid(poly: &[Pt]) -> Pt {
 #[must_use]
 pub fn inside(x: f64, y: f64, poly: &[Pt]) -> bool {
     let mut hit = false;
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("pt_test@inside", 1);
     for ((x0, y0), (x1, y1)) in ring_edges(poly) {
         if (y0 > y) != (y1 > y) && x < x0 + (y - y0) * (x1 - x0) / (y1 - y0) {
             hit = !hit;
@@ -199,6 +201,8 @@ pub fn poly_gap(p: &[Pt], q: &[Pt]) -> f64 {
 /// An outline of no vertex, which the Python's assertion refused too.
 #[must_use]
 pub fn nearest_points(p: &[Pt], q: &[Pt], closed: bool) -> (Pt, Pt) {
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("dist@nearest_points", 1);
     let qe: Vec<(Pt, Pt)> = if closed {
         ring_edges(q).collect()
     } else {
@@ -217,12 +221,19 @@ pub fn nearest_points(p: &[Pt], q: &[Pt], closed: bool) -> (Pt, Pt) {
         }
         for (a, b) in ring_edges(p) {
             for &(c, d) in &qe {
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("seg_test@nearest_points.cross", 1);
                 if segments_cross(a, b, c, d) {
                     return (a, a);
                 }
             }
         }
     }
+    #[cfg(feature = "counters")]
+    crate::work_counts::count(
+        "seg_test@nearest_points",
+        (p.len() * qe.len() + q.len() * p.len()) as u64,
+    );
     let mut best: Option<(f64, Pt, Pt)> = None;
     for &v in p {
         for &(c, d) in &qe {
@@ -249,6 +260,8 @@ pub fn nearest_points(p: &[Pt], q: &[Pt], closed: bool) -> (Pt, Pt) {
 /// The gap between a polygon and a segment: 0 when the segment touches or enters it.
 #[must_use]
 pub fn poly_seg_gap(poly: &[Pt], a: Pt, b: Pt) -> f64 {
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("dist@poly_seg_gap", 1);
     if inside(a.0, a.1, poly) || inside(b.0, b.1, poly) {
         return 0.0;
     }

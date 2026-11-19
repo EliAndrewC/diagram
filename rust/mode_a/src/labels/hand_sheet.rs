@@ -32,6 +32,8 @@ use super::standard::{CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, WEIGHT_OBSTACLE};
 use super::svg::{caption_svg, leader_svg};
 
 pub mod classify;
+#[cfg(feature = "counters")]
+pub mod counted;
 pub mod read;
 pub mod seat;
 

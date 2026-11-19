@@ -186,6 +186,8 @@ impl ObstacleIndex {
     /// File an obstacle in every cell its box, grown by its own `keep`, covers.
     pub fn add(&mut self, o: Obstacle) {
         let i = self.obstacles.len();
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("build@ObstacleIndex.add", 1);
         let b = bbox(&o.poly);
         self.boxes.push(b);
         self.level.push(level_rect(&o.poly));
@@ -199,6 +201,8 @@ impl ObstacleIndex {
     /// File each segment of a way in every cell its box, grown by the way's half-width and the notch, covers.
     pub fn add_way(&mut self, w: Way) {
         let wid = self.ways.len();
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("build@ObstacleIndex.add_way", 1);
         let reach = w.half_width + WAY_NOTCH;
         for pair in w.pts.windows(2) {
             let (a, b) = (pair[0], pair[1]);
@@ -257,11 +261,19 @@ impl ObstacleIndex {
         let own_lim = own_gap.map_or(f64::NEG_INFINITY, |g| g + ASSOCIATION_TIE);
         let reach = max(clear, own_lim);
         let cs = cells((x0 - reach, y0 - reach, x1 + reach, y1 + reach));
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("index_query@ObstacleIndex.score", 1);
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("held@ObstacleIndex.score", self.obstacles.len() as u64);
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("cell@ObstacleIndex.score", cs.len() as u64);
         let mut seen = HashSet::new();
         let words = who.text.to_lowercase();
         let (mut total, mut hard) = (0.0, false);
         for c in &cs {
             for &i in self.ob.get(c).into_iter().flatten() {
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("index_examined@ObstacleIndex.score", 1);
                 if !seen.insert(i) {
                     continue;
                 }
@@ -276,6 +288,8 @@ impl ObstacleIndex {
                 {
                     continue;
                 }
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("exact@ObstacleIndex.score", 1);
                 // a disc is measured as a disc; two level rectangles are their boxes (feature 286)
                 let gap = match o.circle {
                     Some(circle) => circle_gap(block, circle),
@@ -300,6 +314,8 @@ impl ObstacleIndex {
         let mut n_crossed = 0_u32;
         for c in &cs {
             for &(wid, sid, a, b) in self.segs.get(c).into_iter().flatten() {
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("index_examined@ObstacleIndex.score.ways", 1);
                 if crossed.contains(&wid) || !measured.insert(sid) {
                     continue;
                 }
@@ -307,6 +323,8 @@ impl ObstacleIndex {
                 if box_gap(bb, self.seg_boxes[sid]) >= need {
                     continue;
                 }
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("exact@ObstacleIndex.score.ways", 1);
                 if poly_seg_gap(block, a, b) < need {
                     crossed.insert(wid);
                     n_crossed += 1;
@@ -326,12 +344,16 @@ impl ObstacleIndex {
         let bb = bbox(block);
         let (x0, y0, x1, y1) = bb;
         let lim = gap + ASSOCIATION_TIE;
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("index_query@ObstacleIndex.nearer_than", 1);
         let mut seen = HashSet::new();
         for c in cells((x0 - lim, y0 - lim, x1 + lim, y1 + lim)) {
             for &i in self.ob.get(&c).into_iter().flatten() {
                 if !seen.insert(i) {
                     continue;
                 }
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("index_examined@ObstacleIndex.nearer_than", 1);
                 if box_gap(bb, self.boxes[i]) > lim {
                     continue; // the boxes' gap bounds the outlines' from below
                 }
@@ -364,8 +386,14 @@ impl ObstacleIndex {
         let (cx, cy) = (crate::py::half_sum(x0, x1), crate::py::half_sum(y0, y1)); // a rectangle's center is its box's
         let inner = crate::py::min(dist(block[0], block[1]), dist(block[1], block[2])) / 2.0; // the block is a rectangle (`rect`)
         let words = who.text.to_lowercase();
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("held@ObstacleIndex.blocked", self.obstacles.len() as u64);
         for c in cells((x0 - clear, y0 - clear, x1 + clear, y1 + clear)) {
+            #[cfg(feature = "counters")]
+            crate::work_counts::count("cell@ObstacleIndex.blocked", 1);
             for &i in self.ob.get(&c).into_iter().flatten() {
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("index_examined@ObstacleIndex.blocked", 1);
                 let o = &self.obstacles[i];
                 let need = max(clear, o.keep) - 1e-6;
                 let bg = box_gap(bb, self.boxes[i]);
@@ -388,6 +416,8 @@ impl ObstacleIndex {
                     }
                     continue;
                 }
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("exact@ObstacleIndex.blocked", 1);
                 let gap = if self.level[i] && level_rect(block) {
                     bg
                 } else {
@@ -406,6 +436,8 @@ impl ObstacleIndex {
                 }
             }
             for &(wid, sid, a, b) in self.segs.get(&c).into_iter().flatten() {
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("index_examined@ObstacleIndex.blocked.ways", 1);
                 let need = self.ways[wid].half_width + WAY_NOTCH;
                 if box_gap(bb, self.seg_boxes[sid]) >= need {
                     continue;
@@ -434,6 +466,8 @@ pub fn stands_nearest(block: &[Pt], subject: &[Pt], index: &ObstacleIndex) -> bo
 #[must_use]
 pub fn circle_gap(block: &[Pt], circle: (f64, f64, f64)) -> f64 {
     let (x, y, r) = circle;
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("dist@circle_gap", 1);
     if inside(x, y, block) {
         return 0.0;
     }

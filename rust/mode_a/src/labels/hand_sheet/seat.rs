@@ -577,6 +577,8 @@ impl Sheet<'_> {
         others: &[(Placement, f64)],
         quick: bool,
     ) -> Result<Seated, Error> {
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("call@Sheet.one", 1);
         let caps: Vec<&Shape> = idx.iter().map(|&i| &self.shapes[i]).collect();
         let head = caps[0];
         let own = self.own(idx[0]);
@@ -664,6 +666,8 @@ impl Sheet<'_> {
         others: &[(Placement, f64)],
         light: bool,
     ) -> (ObstacleIndex, ObstacleIndex) {
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("build@Sheet.context", 1);
         let head = &self.shapes[head_at];
         let mut index = self
             .bases
@@ -762,6 +766,8 @@ pub fn seat(shapes: &[Shape], view: BBox) -> Result<Vec<SeatedCaption>, Error> {
             .iter()
             .map(|(k, (p, _, _))| (p.clone(), shapes[*k].size))
             .collect();
+        #[cfg(feature = "counters")]
+        crate::work_counts::scope(&format!("greedy {}", idx[0]));
         done.push((idx[0], sheet.one(idx, &others, false)?));
     }
     let by_head: HashMap<usize, &Vec<usize>> = caps_of.iter().map(|idx| (idx[0], idx)).collect();
@@ -940,6 +946,10 @@ pub fn repair(
         if done[ai].1 .0.cost == 0.0 {
             continue;
         }
+        #[cfg(feature = "counters")]
+        crate::work_counts::scope(&format!("repair {a}"));
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("repair@repair.stranded", 1);
         let block = done[ai].1 .0.block.clone();
         let reach = REPAIR * sizes[&a] + max(dist(block[0], block[1]), dist(block[1], block[2]));
         let own_box = corners(boxes[&a]);
@@ -947,7 +957,12 @@ pub fn repair(
             .filter(|&bi| bi != ai && box_gap(&done[bi].1 .0.block, &own_box) <= reach)
             .collect();
         for bi in near {
+            #[cfg(feature = "counters")]
+            crate::work_counts::count("repair@repair.lift", 1);
             if let Some((pa, pb)) = lift(done, ai, bi, sizes, one)? {
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("repair@repair.kept", 1);
+
                 (done[ai].1, done[bi].1) = (pa, pb);
                 break;
             }

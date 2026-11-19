@@ -36,6 +36,8 @@ use crate::py::{hypot, max};
 )]
 #[must_use]
 pub fn nearest_ink(block: &[Pt], ink: &[InkPart]) -> Option<(Pt, Pt)> {
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("call@nearest_ink", 1);
     let mut best: Option<(f64, bool, f64, Pt, Pt)> = None;
     for part in ink {
         let Some((a, b)) = part_nearest(block, part) else {
@@ -80,6 +82,8 @@ pub fn part_nearest(block: &[Pt], part: &InkPart) -> Option<(Pt, Pt)> {
     if part.line {
         return band_nearest(block, part);
     }
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("dist@part_nearest", 1);
     let (a, b) = nearest_points(block, &part.pts, true);
     if a == b || part.half == 0.0 {
         return Some((a, b));
@@ -134,6 +138,8 @@ pub fn outline_corners(part: &InkPart) -> (bool, Vec<Poly>) {
         .filter(|(a, b)| a != b)
         .collect();
     let dirs: Vec<Pt> = segs.iter().map(|&(a, b)| unit(a, b)).collect();
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("build@outline_corners", 1);
     let mut corners = Vec::new();
     let mut beveled = false;
     for k in 0..segs.len() {
@@ -215,6 +221,8 @@ pub fn stroke_band(part: &InkPart) -> (Vec<Poly>, Vec<Pt>) {
         }
         return (polys, discs);
     }
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("build@stroke_band", 1);
     let ring = !part.line || part.closed;
     let mut pts = part.pts.clone();
     if part.line && part.closed && pts.len() > 1 && pts.first() == pts.last() {
@@ -330,6 +338,8 @@ pub fn dashes(part: &InkPart) -> Vec<Vec<Pt>> {
 #[must_use]
 pub fn band_nearest(block: &[Pt], part: &InkPart) -> Option<(Pt, Pt)> {
     let (polys, discs) = stroke_band(part);
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("dist@band_nearest", (polys.len() + discs.len()) as u64);
     let mut best: Option<(f64, Pt, Pt)> = None;
     for r in &polys {
         let (a, b) = nearest_points(block, r, true);

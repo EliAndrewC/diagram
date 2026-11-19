@@ -316,6 +316,8 @@ pub fn hug_gap(block: &[Pt], r: BBox) -> f64 {
 ///     the way notch - CONVENTION: the clearance runs 2 sheet units past a way's half-width (`WAY_NOTCH`), where a caption's halo would bite the tread - 2 ft where a unit is a foot, 2/3 ft on a hand sheet at 3 px to the foot
 #[must_use]
 pub fn caption_clears_ways(block: &[Pt], ways: &[Way]) -> bool {
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("build@caption_clears_ways", 1);
     let who = Asker {
         subject: None,
         text: "",
@@ -389,6 +391,8 @@ impl Search<'_> {
     /// Research: the nudge - NONE: a whole-pixel search round the least-cost seat for a cheaper one, a search bound
     fn nudge(&self, cost: f64, cand: &Cand, block: Poly, soft_only: bool) -> (f64, Cand, Poly) {
         let mut best = (cost, cand.clone(), block);
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("call@Search.nudge", 1);
         for dx in -NUDGE_PX..=NUDGE_PX {
             for dy in -NUDGE_PX..=NUDGE_PX {
                 if best.0 == 0.0 {
@@ -402,6 +406,8 @@ impl Search<'_> {
                 if !in_frame(&b, self.frame) || self.spills(&b) {
                     continue;
                 }
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("seat@Search.nudge", 1);
                 let (k, hard) = self.score(&c, &b);
                 if k < best.0 && !(soft_only && hard) {
                     best = (k, c, b);
@@ -420,6 +426,8 @@ impl Search<'_> {
         let mut best = best?;
         let orders: Vec<usize> = deep.iter().map(|d| d.0).collect();
         for (order, cand, block) in deep {
+            #[cfg(feature = "counters")]
+            crate::work_counts::count("seat@Search.strict_seat", 1);
             let cost = self.score(&cand, &block).0;
             // Python's `(cost, order) < best[:2]`
             if cost
@@ -487,6 +495,8 @@ pub fn place(
         frame: ask.frame,
         leader_index: ask.leader_index,
     };
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("call@place", 1);
     let lines = ask.lines.filter(|l| !l.is_empty());
     let lays = lays_of(text, lines);
     let sizes = if lines.is_some() {
@@ -556,7 +566,11 @@ pub fn place(
     let mut outside: Option<(Cand, Poly)> = None; // the first seat beside the subject that leaves the frame
     let mut order = 0;
     for stage in stages {
+        #[cfg(feature = "counters")]
+        crate::work_counts::count("stage@place", 1);
         for cand in stage() {
+            #[cfg(feature = "counters")]
+            crate::work_counts::count("candidate@place", 1);
             let here = order;
             order += 1;
             let block = Search::block(&cand);
@@ -564,16 +578,24 @@ pub fn place(
             if subject.kind != Kind::Area
                 && hug_gap(&block, r.unwrap_or_else(|| referent_box(subject, &block))) > *HUG_RING
             {
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("skip@place.hug", 1);
                 continue;
             }
             if !in_frame(&block, ask.frame) {
                 outside = outside.or(Some((cand, block)));
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("skip@place.frame", 1);
                 continue;
             }
             if ask.strict && index.blocked(&block, s.clear, nudge_reach(), s.who()) {
                 deep.push((here, cand, block));
+                #[cfg(feature = "counters")]
+                crate::work_counts::count("skip@place.deep", 1);
                 continue;
             }
+            #[cfg(feature = "counters")]
+            crate::work_counts::count("seat@place", 1);
             let (cost, hard) = s.score(&cand, &block);
             if cost == 0.0 {
                 let free = placement(&cand, block, cost, subject);
@@ -620,6 +642,8 @@ fn settle(
     soft: Option<Seat>,
     outside: Option<(Cand, Poly)>,
 ) -> Placement {
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("call@settle", 1);
     if let Some((cost, _, cand, block)) = best.clone() {
         let (cost, cand, block) = s.nudge(cost, &cand, block, false);
         if (cost == 0.0 || !s.score(&cand, &block).1) && soft.as_ref().is_none_or(|sf| cost <= sf.0)
@@ -699,6 +723,8 @@ pub fn leader_of(ring: usize, block: &[Pt], subject: &Subject) -> Option<(Pt, Pt
     // a subject whose parts draw no ink (a stroke of no length ending flat) is led to its outline
     let (a, b) = nearest_ink(block, &subject.ink)
         .unwrap_or_else(|| nearest_points(block, &subject.poly, subject.kind != Kind::Line));
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("leader@leader_of", 1);
     let d = dist(a, b);
     if d == 0.0 {
         return None;
@@ -731,6 +757,8 @@ pub fn leader_score(
     if len < 1e-6 {
         return (0.0, false);
     }
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("leader@leader_score", 1);
     let band = rect(
         half_sum(ax, bx),
         half_sum(ay, by),
@@ -772,6 +800,8 @@ pub fn judge(
         half: (0.0, 0.0),
         size,
     };
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("seat@judge", 1);
     s.score(&c, &p.block)
 }
 

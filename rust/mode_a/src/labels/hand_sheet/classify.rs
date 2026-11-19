@@ -81,6 +81,8 @@ fn ring_bands(poly: &[Pt], half: f64) -> impl Iterator<Item = Vec<Pt>> + '_ {
 ///     what a hand sheet's caption may cover - CONVENTION: open ground and the background free, ways at a way's weight, nested ground and texture light, dark ink and anything painted over a caption at a caption's or dark ink's weight, every other drawn thing an obstacle (features 266 P4, 267, 283, 286)
 #[must_use]
 pub fn classify(shapes: &[Shape], view: (f64, f64, f64, f64), w: &Seen<'_>) -> ObstacleIndex {
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("build@classify", 1);
     let mut obstacles: Vec<Obstacle> = Vec::new();
     let mut ways: Vec<Way> = Vec::new();
     let inner_ob = |poly: Vec<Pt>, weight: f64| Obstacle {
@@ -215,6 +217,8 @@ pub fn leader_blockers(
     sub: &Subject,
     own_parts: &[usize],
 ) -> ObstacleIndex {
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("build@leader_blockers", 1);
     let own = &sub.poly;
     let mine = |i: usize| own_parts.contains(&i);
     let mut out: Vec<Obstacle> = shapes

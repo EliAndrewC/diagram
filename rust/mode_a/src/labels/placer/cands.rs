@@ -199,6 +199,8 @@ pub(super) fn point_cands(g: &Gen<'_>, subject: &Subject) -> Vec<Cand> {
             }
         }
     }
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("built@point_cands", out.len() as u64);
     out
 }
 
@@ -280,6 +282,8 @@ pub(super) fn line_cands(g: &Gen<'_>, subject: &Subject) -> Vec<Cand> {
             }
         }
     }
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("built@line_cands", out.len() as u64);
     out
 }
 
@@ -336,6 +340,8 @@ pub(super) fn area_cands(g: &Gen<'_>, subject: &Subject) -> Vec<Cand> {
             });
         }
     }
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("built@area_cands", out.len() as u64);
     out
 }
 
@@ -421,6 +427,8 @@ pub(super) fn extended_cands(g: &Gen<'_>, subject: &Subject) -> Vec<Cand> {
             }
         }
     }
+    #[cfg(feature = "counters")]
+    crate::work_counts::count("built@extended_cands", out.len() as u64);
     out
 }
 

@@ -33,6 +33,11 @@ reads = ["l7r/diagram/", "pool/", "docs/building-programs.md", "tests/fixtures/"
 [lib]
 name = "l7r_mode_a"
 
+# The work counters (feature 449 T198, as `rust/phases`' D9, 444 FR-012): compiled out unless asked for, so no drawing build counts;
+# `make counters-inert` runs the crate's tests with them, and `l7r-mode-a caption-counts` exists only in a build with them.
+[features]
+counters = []
+
 [dependencies]
 aho-corasick = { workspace = true }
 fancy-regex = { workspace = true }
