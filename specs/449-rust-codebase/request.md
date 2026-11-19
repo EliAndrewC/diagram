@@ -128,3 +128,11 @@ The GM, on the session's account of step 3a's sub-pixel tail and its rule that a
 > Yes that tolerance rule seems good.  And not only that: what changes can we make to our project guidelines to make this kind of thing more obvious?  Like, I feel like I keep having to come back and say, over and over again, "don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine".
 
 The GM, on T196's plan: "sounds good, we'll give that a try and see what happens - hopefully we can arrange things so that they are noticed and caught before I come back and have to point them out next time - that is not the only measure of success but it is an important one.  thanks!"
+
+## 2026-11-19, rebuilding from derivations, not porting the Python's mistakes
+
+The GM, on learning that steps 1, 2 and 3a were ported directly from the Python, not rebuilt from derivations under feature 444's phase-source guard: "Wait. I thought we talked about this, and we found that when we tried to port the Python code directly, we just ended up re-implementing the Python code's mistakes. At one point, we had actual tooling in place to stop you from even being able to see the Python code when writing the Rust code. So what happened there?"
+
+The GM, on whether anything must be ripped out: "Okay, yeesh. Blah. Glad that I caught this eventually, I suppose, though it's a shame that we wasted so much time and tokens. Have we already done stuff that we need to rip out of the Rust code? Like, basically, do we need to rethink how we do the Rust implementation in order to get away from the Python mistakes?"
+
+The GM, on the plan (steps 1 and 2 kept; the step-3a placer measured against a derived work budget before step 3b; step 3b rebuilt from a derivation as phase tasks; lockstep tests retired as the Python goes): "okay, please proceed on that basis then, but if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible"

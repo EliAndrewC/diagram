@@ -277,8 +277,8 @@ pub fn path_points(d: &str, tol: f64) -> Result<Vec<(Vec<Pt>, bool)>, Error> {
 
 /// A cubic or quadratic Bezier's points after its start (the Python's `_bezier`), in the fewest equal steps of its parameter whose chords
 /// stand within `tol` of the curve: Wang's bound, n(n - 1) / 8 times the largest second difference of the control points, over the
-/// square of the steps.
-fn bezier(cp: &[Pt], tol: f64) -> Vec<Pt> {
+/// square of the steps. The audit's path walk reads a curve by it too ([`crate::tagged::path_walk`], feature 449 T195).
+pub(crate) fn bezier(cp: &[Pt], tol: f64) -> Vec<Pt> {
     let deg = cp.len() - 1;
     let dd = (0..deg - 1)
         .map(|k| {
@@ -295,11 +295,14 @@ fn bezier(cp: &[Pt], tol: f64) -> Vec<Pt> {
             #[expect(clippy::cast_precision_loss, reason = "a step count, far under 2^52")]
             let t = k as f64 / n as f64;
             let w: Vec<f64> = (0..=deg)
-                .map(|j| binom(deg, j) * t.powi(pow(j)) * (1.0 - t).powi(pow(deg - j)))
+                // `t ** j` as the Python raises it, the C library's `pow` (feature 449 T195: `powi` multiplies, a rounding off it)
+                .map(|j| binom(deg, j) * t.powf(pow(j)) * (1.0 - t).powf(pow(deg - j)))
                 .collect();
+            // summed as the Python's `sum()` sums, compensated (feature 449 T195: a left fold parted from it by a rounding, which the
+            // audit's lockstep test caught - agreeing was cheaper than restating that test; bytes are not a bar, T180)
             (
-                w.iter().zip(cp).map(|(wj, p)| wj * p.0).sum(),
-                w.iter().zip(cp).map(|(wj, p)| wj * p.1).sum(),
+                crate::py::sum(w.iter().zip(cp).map(|(wj, p)| wj * p.0)),
+                crate::py::sum(w.iter().zip(cp).map(|(wj, p)| wj * p.1)),
             )
         })
         .collect();
@@ -329,16 +332,25 @@ fn binom(n: usize, k: usize) -> f64 {
     }
 }
 
-/// A power's exponent as `powi` takes it (a Bezier's degree is at most 3).
-fn pow(j: usize) -> i32 {
-    i32::try_from(j).unwrap_or(i32::MAX)
+/// A power's exponent as `powf` takes it (a Bezier's degree is at most 3).
+fn pow(j: usize) -> f64 {
+    #[expect(clippy::cast_precision_loss, reason = "a curve's degree, at most 3")]
+    let e = j as f64;
+    e
 }
 
 /// An elliptical arc's points after its start, as SVG draws it (the Python's `_arc`, SVG 1.1 appendix F.6): none where it ends where it
 /// starts, a straight step where a radius is 0, its radii scaled up where they cannot reach the end, and its center found from its flags
 /// (`large`, `sweep`); flattened in equal steps of its angle whose chords stand within `tol` of the curve, R(1 - cos(half a step)), R its
-/// larger radius. `radii` is `(rx, ry, rotation in degrees)`.
-fn arc(p0: Pt, radii: (f64, f64, f64), (large, sweep): (bool, bool), e: Pt, tol: f64) -> Vec<Pt> {
+/// larger radius. `radii` is `(rx, ry, rotation in degrees)`. The audit's path walk reads an arc by it too ([`crate::tagged::path_walk`],
+/// feature 449 T195).
+pub(crate) fn arc(
+    p0: Pt,
+    radii: (f64, f64, f64),
+    (large, sweep): (bool, bool),
+    e: Pt,
+    tol: f64,
+) -> Vec<Pt> {
     if p0 == e {
         return Vec::new();
     }
@@ -618,7 +630,11 @@ fn walk(
             true,
         ),
         // each subpath its own shape, as SVG strokes each alone, flattened within the drawn sag on the sheet; a stroke where its fill, its
-        // own or inherited, is none (feature 449 T194: a group's `fill="none"` was not read, and its strokes read as boxes)
+        // own or inherited, is none (feature 449 T194: a group's `fill="none"` was not read, and its strokes read as boxes). A filled path's
+        // hole - a subpath inside another under its fill rule, which SVG leaves bare - is read as a filled part of its own, inside the one
+        // around it, which is read filled to its edge: Hoshigaoka's shrine grove holds one, 9 points wholly inside its first subpath, and
+        // dropping it moves no pool caption or leader (feature 449 T195, observed 2026-11-19, method: the four caption-placing sheets'
+        // seats with it dropped, scratchpad t195/var-hole.log)
         "path" => (
             path_points(
                 el.get("d").unwrap_or_default(),

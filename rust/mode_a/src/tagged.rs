@@ -22,6 +22,8 @@ use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
 use l7r_guard::shared::py_text::collapse;
 
+use crate::labels::hand_sheet::read::{arc, bezier};
+use crate::labels::hand_sheet::DISC_SAG_PX;
 use crate::py::float;
 use crate::sheet::{parse, Node, DEFS};
 
@@ -162,22 +164,29 @@ fn path_step(up: char) -> usize {
 /// One segment of a path: its command (upper case) and its points, made absolute.
 pub type Segment = (char, Vec<(f64, f64)>);
 
-/// Each segment of a path, in order, as its command (upper case) and its points made ABSOLUTE - every coordinate pair it gives (a curve's
-/// control points and its end), an arc its end alone, a horizontal or vertical step the point it reaches. A relative command's pairs are
-/// offsets from the segment's start, a `Z` returns to its subpath's start, and a command's numbers repeat it segment by segment (feature
-/// 449 T182: the relative commands were skipped, and a repeated curve kept only its last end).
+/// Each segment of a path, in order, as its command (upper case) and its points made ABSOLUTE - a line, move, horizontal or vertical step
+/// the point it reaches; a curve - a cubic or quadratic Bezier, its smooth form reflecting the control point before, or an elliptical arc -
+/// its drawn curve's points after its start, flattened as the hand-sheet reader flattens it, its end the last (an arc its end alone where
+/// it draws nothing, ending where it starts). A relative command's pairs are offsets from the segment's start, a `Z` returns to its
+/// subpath's start, and a command's numbers repeat it segment by segment (feature 449 T182: the relative commands were skipped, and a
+/// repeated curve kept only its last end; T195: a curve was kept by its control points and its end, an arc by its end alone, so
+/// Hoshigaoka's rope ring was a 10 by 0 px mark, Ubame's three raked curves 0 ft high where they bow 1 ft, and the crop's ink missed an
+/// arc's bulge and stood out to a control point the curve never reaches).
 ///
 /// Research:
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG curve arguments)
+///     a curve's drawn points - CONVENTION: flattened as the hand-sheet reader flattens a curve, no chord more than `DISC_SAG_PX` (0.05 px) inside it - a drawn size on the sheet, not in the world (feature 449 T195)
 #[must_use]
 pub fn path_walk(d: &str) -> Vec<Segment> {
     let mut out = Vec::new();
     let (mut x, mut y, mut sx, mut sy) = (0.0, 0.0, 0.0, 0.0);
+    // the last cubic's second control point, or the last quadratic's control point, which S and T reflect, and the command before
+    let (mut ctrl, mut last) = ((0.0, 0.0), ' ');
     for c in PATH_CMD.captures_iter(d).map_while(Result::ok) {
         let cmd = c[1].chars().next().unwrap_or('Z');
         let (up, rel) = (cmd.to_ascii_uppercase(), cmd.is_ascii_lowercase());
         if up == 'Z' {
-            (x, y) = (sx, sy);
+            (x, y, last) = (sx, sy, 'Z');
             continue;
         }
         // the pattern takes only numbers `float()` reads
@@ -187,12 +196,60 @@ pub fn path_walk(d: &str) -> Vec<Segment> {
             .collect();
         for (i, v) in nums.chunks_exact(path_step(up)).enumerate() {
             let at = |dx: f64, dy: f64| if rel { (x + dx, y + dy) } else { (dx, dy) };
+            let p0 = (x, y);
+            // the control point a smooth curve reflects, where the curve before is of its kind; else its start
+            let reflect = |kinds: [char; 2]| {
+                if kinds.contains(&last) {
+                    (2.0 * x - ctrl.0, 2.0 * y - ctrl.1)
+                } else {
+                    p0
+                }
+            };
+            // each curve its drawn points, flattened as the hand-sheet reader flattens it, its end the last (feature 449 T195)
             let pts = match up {
                 'H' => vec![(if rel { x + v[0] } else { v[0] }, y)],
                 'V' => vec![(x, if rel { y + v[0] } else { v[0] })],
-                'A' => vec![at(v[5], v[6])],
-                _ => v.chunks_exact(2).map(|p| at(p[0], p[1])).collect(),
+                'C' | 'S' => {
+                    let c1 = if up == 'C' {
+                        at(v[0], v[1])
+                    } else {
+                        reflect(['C', 'S'])
+                    };
+                    let (c2, end) = (
+                        at(v[v.len() - 4], v[v.len() - 3]),
+                        at(v[v.len() - 2], v[v.len() - 1]),
+                    );
+                    ctrl = c2;
+                    bezier(&[p0, c1, c2, end], DISC_SAG_PX)
+                }
+                'Q' | 'T' => {
+                    let quad = if up == 'Q' {
+                        at(v[0], v[1])
+                    } else {
+                        reflect(['Q', 'T'])
+                    };
+                    let end = at(v[v.len() - 2], v[v.len() - 1]);
+                    ctrl = quad;
+                    bezier(&[p0, quad, end], DISC_SAG_PX)
+                }
+                'A' => {
+                    let end = at(v[5], v[6]);
+                    let pts = arc(
+                        p0,
+                        (v[0], v[1], v[2]),
+                        (v[3] != 0.0, v[4] != 0.0),
+                        end,
+                        DISC_SAG_PX,
+                    );
+                    if pts.is_empty() {
+                        vec![end]
+                    } else {
+                        pts
+                    }
+                }
+                _ => vec![at(v[0], v[1])],
             };
+            last = up;
             (x, y) = pts[pts.len() - 1];
             if up == 'M' && i == 0 {
                 (sx, sy) = (x, y);
@@ -203,15 +260,13 @@ pub fn path_walk(d: &str) -> Vec<Segment> {
     out
 }
 
-/// The points a path visits, in order: each segment's end, made absolute ([`path_walk`]).
+/// The points a path visits, in order, made absolute ([`path_walk`]): each step's end and a curve's drawn points (feature 449 T195: each
+/// segment's end alone, a curve's bow was not read).
 ///
 /// # Errors
 /// None since feature 449 T182 (its pattern takes only numbers `float()` reads); the signature kept for its callers.
 pub fn path_points(d: &str) -> Result<Vec<(f64, f64)>, Error> {
-    Ok(path_walk(d)
-        .into_iter()
-        .map(|(_, pts)| pts[pts.len() - 1])
-        .collect())
+    Ok(path_walk(d).into_iter().flat_map(|(_, pts)| pts).collect())
 }
 
 /// `_num`: the attribute's leading number, or 0.

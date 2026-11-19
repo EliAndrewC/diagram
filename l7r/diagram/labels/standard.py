@@ -79,7 +79,7 @@ HUG_PX = 120.0
 WEIGHT_OBSTACLE = 1000.0
 """Research: an obstacle's weight - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption covers nothing while another choice exists"""
 WEIGHT_WAY = 500.0
-"""Research: a way crossed - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half an obstacle, so crossing one beats crossing two"""
+"""Research: a way crossed - GUESS research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half an obstacle, so crossing one beats crossing two - the figure the page records as our calibration, not a finding; three ways crossed outweigh one building, which the page never covers while another choice exists, and no pool caption meets it: of the 16 captions costing an obstacle or more, none had in any of its searches a seat crossing only ways with a leader crossing nothing (feature 449 T195, observed 2026-11-19, method: every seat of every search of those captions on the four caption-placing sheets, scratchpad t195/ways2.py, ways2-summary.log; Hoshigaoka draws no way, and the compound sheets take free seats alone)"""
 WEIGHT_FREE = 0.0
 """Research: free ground - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: fields, scrub, groves and open ground are available space"""
 

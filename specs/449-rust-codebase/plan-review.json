@@ -786,6 +786,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T195 (step 3a's last reader gaps from T194 and T187's way weight, each measured on the pool before any fix; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "4a68ba23609867b893e7a454ccd2b3add5ba0eb32a12a8d4db17603c89090c8e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T195 Approach (checklist part A)": {
+   "sha256": "904917bc2ab5e86ec9e7fa14a67bc7426e78e9eb0def9451b9cc4985506904f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13102,6 +13114,70 @@
      "why": "Used as a measurement of reach, not held as an exactness standard; nothing is refused or required on bytes."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T195 (step 3a's last reader gaps from T194 and T187's way weight, each measured on the pool before any fix; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T195 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "item-1-hole",
+     "summary": "A filled path's evenodd hole read as a filled part is classed not a defect; only the reader's comment is restated, in both copies.",
+     "class": "within",
+     "why": "No caption or leader of 190 moves with the hole dropped; under the GM's 2026-11-19 words and XIV's 'What a defect is' a difference no reader sees is restated, not fixed."
+    },
+    {
+     "id": "item-2-unfilled-ink",
+     "summary": "An unfilled closed part's inside read as ink is classed not a defect; _part_nearest/part_nearest comments restated in both copies, the cruder alternative recorded as moving three captions where nothing was wrong.",
+     "class": "within",
+     "why": "Measured to move nothing a reader sees; restating the comment is what the 2026-11-19 request asks."
+    },
+    {
+     "id": "item-3-curve-walk",
+     "summary": "The audit path walk reading curves by control points and arcs by endpoints is a defect (size table answered wrongly); fixed in both the Rust and the kept Python, tests red first.",
+     "class": "within",
+     "why": "A tool answering wrongly is a defect; the GM 2026-11-18 asked that each step's known bugs be fixed before the next step, in every copy that still lives. Fixed, not left."
+    },
+    {
+     "id": "item-3-lockstep",
+     "summary": "The Rust bezier made to sum and raise as Python does, keeping the audit's lockstep test green rather than restating it.",
+     "class": "within",
+     "why": "Matching is not demanded as a standard here (the block cites T180 that byte agreement is not required) and is chosen as the cheaper route; it changes no outcome and leaves no defect. Lockstep tests remain while the Python lives, per the GM's 2026-11-19 plan words."
+    },
+    {
+     "id": "item-4-way-weight",
+     "summary": "WEIGHT_WAY=500 kept; its claim labeled GUESS and recorded on 0242 as the project's calibration, noting three ways outweigh a building and that no pool caption meets that case.",
+     "class": "within",
+     "why": "Every seat of every search of the 16 costly captions measured: none crosses only ways; no map reads wrong and no finding is contradicted on any sheet, so the claim is restated per the 2026-11-19 rule rather than the code changed."
+    },
+    {
+     "id": "item-5-subjects-claim",
+     "summary": "The 'which subjects carry ink' claim re-pointed to 0330 and 0242's place rule linked to 0330, per T194's MISLABELED ruling.",
+     "class": "within",
+     "why": "A wording fix to a mislabeled claim; no behavior change."
+    },
+    {
+     "id": "item-6-0242-not-split",
+     "summary": "0242's drawing page kept whole; both drafts fit under its 20,000-byte cap by tightening a comment.",
+     "class": "within",
+     "why": "Measured to fit (19,992); the cap is honored, nothing narrowed."
+    },
+    {
+     "id": "found-and-left-precinct",
+     "summary": "Hoshigaoka's undrawn precinct rect weighing 1,000 as an obstacle is seen, measured and left unfiled as not a defect.",
+     "class": "within",
+     "why": "The sheet as drawn reads right; removing the weight would move the hall's name off its own building against 0242. Under XIV's definition a gap no reader sees is not a defect, so leaving it is not leaving a known bug."
+    },
+    {
+     "id": "order-before-3b",
+     "summary": "T195 runs after T194 and before step 3b's first port (T152).",
+     "class": "within",
+     "why": "Carries out 'fix all known bugs in each step before moving on to porting the next step'."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23280,6 +23356,68 @@
      "summary": "the county example regenerating to the same .svg is used as evidence its edits are words only",
      "class": "within",
      "why": "Used as a measurement of reach, not held as an exactness standard; nothing is refused or required on bytes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T195": {
+   "section_sha256": "d4724956bf1be6b8fe2e4f869df817e6e5ef3945f411ec93fd29ea183a2d0748",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "item-1-hole",
+     "summary": "A filled path's evenodd hole read as a filled part is classed not a defect; only the reader's comment is restated, in both copies.",
+     "class": "within",
+     "why": "No caption or leader of 190 moves with the hole dropped; under the GM's 2026-11-19 words and XIV's 'What a defect is' a difference no reader sees is restated, not fixed."
+    },
+    {
+     "id": "item-2-unfilled-ink",
+     "summary": "An unfilled closed part's inside read as ink is classed not a defect; _part_nearest/part_nearest comments restated in both copies, the cruder alternative recorded as moving three captions where nothing was wrong.",
+     "class": "within",
+     "why": "Measured to move nothing a reader sees; restating the comment is what the 2026-11-19 request asks."
+    },
+    {
+     "id": "item-3-curve-walk",
+     "summary": "The audit path walk reading curves by control points and arcs by endpoints is a defect (size table answered wrongly); fixed in both the Rust and the kept Python, tests red first.",
+     "class": "within",
+     "why": "A tool answering wrongly is a defect; the GM 2026-11-18 asked that each step's known bugs be fixed before the next step, in every copy that still lives. Fixed, not left."
+    },
+    {
+     "id": "item-3-lockstep",
+     "summary": "The Rust bezier made to sum and raise as Python does, keeping the audit's lockstep test green rather than restating it.",
+     "class": "within",
+     "why": "Matching is not demanded as a standard here (the block cites T180 that byte agreement is not required) and is chosen as the cheaper route; it changes no outcome and leaves no defect. Lockstep tests remain while the Python lives, per the GM's 2026-11-19 plan words."
+    },
+    {
+     "id": "item-4-way-weight",
+     "summary": "WEIGHT_WAY=500 kept; its claim labeled GUESS and recorded on 0242 as the project's calibration, noting three ways outweigh a building and that no pool caption meets that case.",
+     "class": "within",
+     "why": "Every seat of every search of the 16 costly captions measured: none crosses only ways; no map reads wrong and no finding is contradicted on any sheet, so the claim is restated per the 2026-11-19 rule rather than the code changed."
+    },
+    {
+     "id": "item-5-subjects-claim",
+     "summary": "The 'which subjects carry ink' claim re-pointed to 0330 and 0242's place rule linked to 0330, per T194's MISLABELED ruling.",
+     "class": "within",
+     "why": "A wording fix to a mislabeled claim; no behavior change."
+    },
+    {
+     "id": "item-6-0242-not-split",
+     "summary": "0242's drawing page kept whole; both drafts fit under its 20,000-byte cap by tightening a comment.",
+     "class": "within",
+     "why": "Measured to fit (19,992); the cap is honored, nothing narrowed."
+    },
+    {
+     "id": "found-and-left-precinct",
+     "summary": "Hoshigaoka's undrawn precinct rect weighing 1,000 as an obstacle is seen, measured and left unfiled as not a defect.",
+     "class": "within",
+     "why": "The sheet as drawn reads right; removing the weight would move the hall's name off its own building against 0242. Under XIV's definition a gap no reader sees is not a defect, so leaving it is not leaving a known bug."
+    },
+    {
+     "id": "order-before-3b",
+     "summary": "T195 runs after T194 and before step 3b's first port (T152).",
+     "class": "within",
+     "why": "Carries out 'fix all known bugs in each step before moving on to porting the next step'."
     }
    ],
    "verdict": "CLEAR"

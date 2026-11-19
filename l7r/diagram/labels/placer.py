@@ -783,6 +783,13 @@ def _part_nearest(block: Poly, part: InkPart) -> tuple[Pt, Pt] | None:
     which draws less than the round corner, the outline's whole band is measured (`band_nearest`). The round measure first keeps the
     point it chose among equally near ones - a block's edge parallel to the outline's - where a corner's miter is not nearer.
 
+    Inside a closed outline is on it whether or not it is filled: an unfilled outline no filled part of its box fills draws only its
+    stroke, and a leader whose start it holds is read as touching. Read as its stroke alone, it moves no pool caption or leader; read so
+    for every unfilled outline, as well as those a fill of their box draws filled (Hayakawa's RESIDENCE, its fill and its stroked outline
+    two elements), the stroke band's measure moved three Hayakawa captions - RESIDENCE, family privy and INNER COURT - where nothing was
+    drawn wrong, so neither form is taken (feature 449 T195, observed 2026-11-19, method: the four caption-placing sheets' seats with
+    each form, scratchpad t195/var-ink2.log, var-ink.log).
+
     Research: a closed outline's drawn edge - research/questions/0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html: a leader ends on the ink as it is drawn, on a corner's point; the outline measured round by its stroke and each corner's miter point then tried, its whole band where a corner bevels, so the round measure keeps the point it chose among equally near ones (feature 449 T194)
     """
     if part.line:

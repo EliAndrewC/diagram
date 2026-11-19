@@ -683,28 +683,56 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** No - a defect fixed.
 
 
-### T195 (<why: the finding or measurement that files it>)
+### T195 (step 3a's last reader gaps from T194 and T187's way weight, each measured on the pool before any fix; the GM 2026-11-18, request.md: "in general we should fix all known bugs in each step before moving on to porting the next step")
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each item was measured first on the six pool sheets, then classed under constitution XIV's "What a defect is" (2.36.0, T196). The GM 2026-11-19, request.md: "don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine". One item is a defect. The audit's path walk read a curve by its control points and an arc by its end alone, so the size table answered wrongly. It is fixed in `rust/mode_a/src/tagged.rs` and the kept `l7r/diagram/tools/pack_audit/tagged.py`, each now reading a curve by the hand-sheet reader's own flattening. The other items move nothing a reader sees and contradict no finding. Their code comments and claims are restated in both copies. Every probe and log below is under `/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t195/`, written `t195/` here. The new Rust tests failed on HEAD's code (measured 2026-11-19 (`make rust-test CRATE=rust/mode_a` on a detached worktree of HEAD with the new test file, `t195/red.log`, `t195/red2.log`)) and pass on the clone (measured 2026-11-19 (`make rust-test CRATE=rust/mode_a`, `t195/rust-test5.log`)).
+
+   **Decisions** (constitution XIV's "What a defect is". The lockstep rule as T180 restated it, `rust/gate/CLAUDE.md`. Research pages 0242 and 0330. The GM's words above):
+   - Item 1, a filled path's hole. Hoshigaoka's shrine grove, under `fill-rule="evenodd"`, holds a 9-point subpath wholly inside its first, read as a filled part of its own (observed 2026-11-18, method: `t194/grove.py`, `t194/grove.log`). With it dropped, no pool caption or leader moves (observed 2026-11-19, method: `t195/variant2.py hole` against `t195/reach.py`, `t195/var-hole.log`). Not a defect. The reader's comment says so in both copies (`hand_sheet.py`'s `read_sheet`, `read.rs`).
+   - Item 2, an unfilled closed part's inside read as ink. Read as its stroke alone where no filled part of its box fills it, no pool caption or leader moves (observed 2026-11-19, method: `t195/variant2.py ink2`, `t195/var-ink2.log`). Read so for every unfilled outline, the stroke band's measure also took the outlines a fill of their box fills, and moved Hayakawa's RESIDENCE, family privy and INNER COURT where nothing was drawn wrong (observed 2026-11-19, method: `t195/variant2.py ink`, `t195/var-ink.log`). Not a defect. `_part_nearest` and `part_nearest` say so in both copies, with why neither form is taken. The pool's unfilled closed parts are listed in `t195/unfilled-census.log`.
+   - Item 3, the path walk's curves. Hoshigaoka's sacred-tree rope, a 5 px ring drawn in two arcs, was a 3.3 by 0.0 ft mark with a run of 6.7 ft in the size table (measured 2026-11-19 (`make size-table`, `t195/before/checks/hoshigaoka-shrine.size.txt`)). Ubame's three raked curves, bowed 1 ft, read 0.0 ft high (observed 2026-11-19, method: `t195/beziers.py`, `t195/beziers.log`). No pool sheet's crop verdict moves either way, the rope standing inside the other ink (observed 2026-11-19, method: `t195/arcs.py`, `t195/arcs.log`). A tool answering wrongly is a defect. So the walk reads each curve by its drawn points, flattened by the hand-sheet reader's own `bezier` and `arc` (`read.rs`, `hand_sheet.py`) within `DISC_SAG_PX`, and `path_points` visits every drawn point. The crop's ink now reaches an arc's bulge and no longer stands out to a Bezier's control point.
+   - Item 3, the lockstep. The Rust `bezier` parted from the Python's by a rounding on Hayakawa's altar wave and on a fixture, which the audit's lockstep test caught (observed 2026-11-19, method: `make rust-test CRATE=rust/mode_a`, `t195/rust-test2.log`, `t195/rust-test3.log`). It now sums as Python's `sum()` does (`crate::py::sum`) and raises as Python's `**` does (`powf`), the cheaper way to keep that test green than restating it (T180: agreement in bytes is not required), and the two agree (`t195/rust-test5.log`).
+   - Item 3, after. Seven size-table rows moved, the curved paths' alone, and every pack-audit report is unchanged (measured 2026-11-19 (`t195/checks.sh` before and after, `t195/checks-diff-final.log`)). The rope reads 3.3 by 3.3 ft with a run of 10.4, Ubame's three rakes 1.0 ft high, Hayakawa's altar wave 0.8 ft high and its bath steam 0.6 ft wide, and Ochiba's bath steam 5.0 ft wide (measured 2026-11-19 (`make size-table`, `t195/new/checks/`)).
+   - Item 4, the way weight. On the four caption-placing sheets, 16 of 190 captions cost an obstacle or more, a block's or a leader's: a building's own outline, a wall's stroke, a ground's edge, a fixture, Hoshigaoka's undrawn precinct (observed 2026-11-19, method: `t195/ways.py`, `t195/ways-summary.log`). In none of their searches, full or a repair's quick one, does a seat stand that crosses only ways with a leader crossing nothing (observed 2026-11-19, method: every seat of every search of those 16 captions, `t195/ways2.py`, `t195/ways2-summary.log`). Their building-free seats each lead across a wall, a caption or a fixture, Ubame's stables' at 1,000 across the kennel. Hoshigaoka draws no road, river or revetment, and its four rows are masked by the precinct's weight (Found and left, below). The two compound sheets take free seats alone (`compound.py`, `strict=True`), so no cost is traded there. Not a defect, and the scoring stays. The claim "a way crossed" (`standard.py`, `standard.rs`) is labeled GUESS on 0242's drawing page, as "caption clearance" is, and says the 500 is the project's calibration, that three ways outweigh one building, and that no pool caption meets it. It lands with the page sentence drafted below, which records the calibration.
+   - Item 5, the subjects claim. "which subjects carry ink" names 0330's drawing page where it said 0242 (`hand_sheet.py`'s `subjects`, `seat.rs`), as T194's impl-drift ruled it MISLABELED. The link on 0242's place rule is drafted below.
+   - Item 6, 0242's size. The drawing page is 19,841 bytes (measured 2026-11-19 (`wc -c`)). Both drafts, its weight comment tightened, bring it to 19,992 under the 20,000 cap (observed 2026-11-19, method: the drafts applied to a scratch copy, `t195/0242-draft.html`, `t195/0242-draft.diff`, `wc -c`). It is not split.
+   - Drafted for 0242's drawing page, 71 bytes, its visible sentence 84 and the comment 13 shorter (observed 2026-11-19, method: `wc -c` on a scratch copy with it alone, `t195/0242-calibration-only.html`, `t195/0242-bytes.log`), after the footnote of the bullet "A caption's place is scored by what it covers ...": "A road or stream crossed counts as half a building: our calibration, not a finding." Its comment becomes "WEIGHT_OBSTACLE = 1000 (caption, subject, built, fixture), WEIGHT_WAY = 500, ground 0; three ways outweigh a building, met on no sheet (449 T195); scale and free-space-first rule Esri's".
+   - Drafted for 0242's place rule, 80 bytes (observed 2026-11-19, method: `wc -c` on a scratch copy with it alone, `t195/0242-link-only.html`, `t195/0242-bytes.log`): "tied to its feature by a thin leader line" links "a thin leader line" to `0330-how-a-leader-line-ties-a-caption-to-its-feature.drawing.html`.
+   - The sheets. All six regenerated by `make map`, each manifest unchanged against HEAD. Rust and Python place the four hand sheets the same, and no caption or leader of 190 moves (observed 2026-11-19, method: `t195/regen.sh`, `t195/regen.log`, `t195/reachdiff-final.log`).
+   - The checks: `make static`, `make rust-test` and `make quick`, run one after another after the last edit (measured 2026-11-19 (`make static`, `t195/static.log`), (`make rust-test`, `t195/rust-test.log`), (`make quick`, `t195/quick.log`)).
+
+| item | class | evidence | change |
+|---|---|---|---|
+| 1, a filled path's hole | not a defect | no caption of 190 moves (observed 2026-11-19, method: `t195/var-hole.log`) | the reader's comment, both copies |
+| 2, an unfilled outline's inside as ink | not a defect | none moves, the cruder rule moves three (observed 2026-11-19, method: `t195/var-ink2.log`, `t195/var-ink.log`) | `_part_nearest` / `part_nearest`'s comment, both copies |
+| 3, the walk's curves | defect: the size table answered wrongly | `t195/checks-diff-final.log`, `t195/beziers.log` | the walk reads each curve's drawn points, both copies, tests red first |
+| 4, the way weight | not a defect | no seat crossing only ways in any search of a costly caption (observed 2026-11-19, method: `t195/ways2-summary.log`) | the claim "a way crossed", both copies; a page sentence drafted |
+| 5, 0242's place rule and the subjects claim | wording | T194's impl-drift, MISLABELED | the claim names 0330, both copies; a page link drafted |
+| 6, 0242's size | not split | both drafts fit under the cap (observed 2026-11-19, method: `wc -c`, `t195/0242-draft.html`) | none |
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the walk reads a curve's drawn points | `a_curve_is_read_by_its_drawn_points`, `an_arc_is_read_by_its_drawn_curve`, red without it | n/a (Mode A audit) | none (size table: seven curved paths' rows) | n/a |
+| the Rust `bezier` sums and raises as the Python | the audit's lockstep, red without it | n/a (Mode A audit) | none | n/a |
 
 ### T195 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every reader and audit of step 3a answers rightly on the pool's sheets before step 3b, and every gap that answers nothing wrongly is said in words where it lives, in the Rust and the kept Python alike.
+2. **The constraints.** Constitution XIV's "What a defect is". The lockstep rule as T180 restated it. Research pages 0242 and 0330, and 0242's 20,000-byte cap. The GM's words above.
+3. **Where each comes from.** G: the GM's 2026-11-18 and 2026-11-19 requests. R: 0242's "a house or any other building ... is never covered while any other choice exists" and its place rule, 0330's "it ends at the nearest drawn point". O: the variants, the seat census and the size tables above.
+4. **Do they describe the world here?** Run on this clone's crate, its kept Python and its six pool sheets (observed 2026-11-19, method: `t195/variant2.py`, `t195/ways.py`, `t195/arcs.py`, `t195/beziers.py`, `t195/checks.sh`).
+5. **The order.** After T194. Before step 3b's first port (T152).
+6. **The exits.** Green: `make static`, `make rust-test`, `make quick`, the plan review, the claims round and a gated `make land`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The new Rust tests red on HEAD's code and green on the clone, the lockstep green, no caption moved, and every audit exit 0 (`t195/red.log`, `t195/red2.log`, `t195/rust-test5.log`, `t195/reachdiff-final.log`, `t195/regen.log`).
+10. **Before moving a constant.** n/a: no constant moves. `WEIGHT_WAY`'s claim is restated, its value kept.
+11. **Before fitting things into room.** 0242's room was measured first: both drafts fit by tightening its weight comment, so it is not split.
+12. **Before any fix.** Item 3: a reader of the size table saw the rope's ring as a straight line and three bowed rakes as straight, a tool answering wrongly (measured 2026-11-19 (`make size-table`, `t195/before/checks/`)). Items 1, 2 and 4: nothing a reader of the map sees differs and no finding is contradicted, so the claim or comment is restated. Item 5: wording.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Found and left?** None filed. Seen and measured: Hoshigaoka's undrawn precinct rect (`data-kind="-"`, `fill="none"`, no stroke) weighs 1,000 against every seat beside a feature inside it, so the basin's and the privy's seats cost 1,000 on open ground. Without that weight alone, the hall's name leaves its own building for a seat above it with a leader, against 0242's "a feature large enough to hold its name is named on itself", since its inside seat is charged 1,000 for the hall's own rect. The sanctuary's name moves above it, and the sacred tree's from right to above (observed 2026-11-19, method: `t195/variant2.py obstacle-dash`, `t195/var-obstacle-dash.log`). The sheet as drawn reads right, so it is not a defect.
+
+**Performance work?** No - a defect fixed and claims restated.
 
 
 <!-- plan-archive: T196 to T196 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
@@ -717,6 +745,60 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 |---|---|---|---|---|
 
 ### T197 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T198 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T198 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T199 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T199 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

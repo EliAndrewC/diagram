@@ -4609,9 +4609,9 @@
   "date": "2026-11-18",
   "note": "inside when it fits, else the ranked seats beside, out to twice the gap, a leader only past that, placed last",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
@@ -4623,7 +4623,7 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
   "section": "275cc76fa1f364fd",
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#main gate passage width": {
@@ -8195,15 +8195,15 @@
   "date": "2026-11-18",
   "note": "a rect, a four-square-cornered outline and an ellipse of unequal radii turn; a round disc and a kite are level",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:4a8ace9667a8cbcf",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:5708f5e1606e4b32",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::_squared#an outline of square corners": {
@@ -8215,14 +8215,14 @@
   "date": "2026-11-18",
   "note": "`_square_cornered` accepts n>=4 outlines with every corner square, the page's convention for an L-shaped house",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::_text_shape#its drawn sizes": {
@@ -8246,13 +8246,13 @@
   "date": "2026-11-18",
   "note": "a quarter, half or three-quarter turn gives 0.0",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::_turned#which edge gives the angle": {
@@ -8325,16 +8325,16 @@
   "date": "2026-11-18",
   "note": "inside seat under WEIGHT_OBSTACLE breaks; inside seat on a building gives way only to a later seat under WEIGHT_OBSTACLE (free, soft ink, a lane), as claimed",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ea1f05ca8ceac76d"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::seat#a stranded several-text caption's wrap": {
@@ -8346,15 +8346,15 @@
   "date": "2026-11-18",
   "note": "a non-free seat is taken only at w == 0, the declared lines",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:4c681af25f85b4a3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:bed3685aa0240a93",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::seat#the order captions are set": {
@@ -8389,14 +8389,14 @@
   "date": "2026-11-18",
   "note": "a lone block is named beside the framed box of all its parts at the block's angle, which is the page's \"smallest box holding them all, turned to that block's ... angle\"",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::subjects#a turned subject's angle": {
@@ -8408,9 +8408,9 @@
   "date": "2026-11-18",
   "note": "inside and beside seats take `_turned`, beside boxes are `_framed` in the feature's frame, quarter turns stay level",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:5708f5e1606e4b32",
@@ -8418,7 +8418,7 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::subjects#an area's caption level": {
@@ -8430,15 +8430,15 @@
   "date": "2026-11-18",
   "note": "a box of parts, a covering box and an unsquared outline are level; a rect, a square-cornered outline and an unequal ellipse take their angle",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:4a8ace9667a8cbcf",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:5708f5e1606e4b32",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/hand_sheet.py::subjects#which subjects carry ink": {
@@ -8525,13 +8525,13 @@
   "date": "2026-11-07",
   "note": "a neighbor at or inside the subject's own gap counts as covered; a calibrated way to keep a caption \"plainly the name of this feature and no other\"",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/obstacles.py::ObstacleIndex.score#ways crossed": {
@@ -8543,14 +8543,14 @@
   "date": "2026-11-07",
   "note": "WEIGHT_WAY for each way crossed, so one crossing is cheaper than two",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/obstacles.py::ObstacleIndex.score#what a caption may cover": {
@@ -8619,14 +8619,14 @@
   "date": "2026-11-18",
   "note": "strict nearer-than-any-other test, a tie going to the neighbor",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9c77086992f3d973"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::CORNER_EPS#its salts, guards and sentinels": {
@@ -8650,14 +8650,14 @@
   "date": "2026-11-18",
   "note": "evaluates to 2: rings 0 and 1, out to twice the gap",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_area_cands#an area's caption": {
@@ -8669,14 +8669,14 @@
   "date": "2026-11-07",
   "note": "the centroid first, then grid points inside the area by distance from it",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:5fdeb07b90c0385f",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_dashes#a dashed stroke's dashes": {
@@ -8754,14 +8754,14 @@
   "date": "2026-11-07",
   "note": "at the segment's bearing, made upright, above before below",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a243ba9567e199c6"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_line_cands#stations along the line": {
@@ -8838,16 +8838,16 @@
   "date": "2026-11-07",
   "note": "POSITIONS in the readers' order, set in the turned frame, the gap measured off the subject's box edge in that frame",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_score#an area's name inside it": {
@@ -8859,14 +8859,14 @@
   "date": "2026-11-07",
   "note": "a block spilling out of its area adds WEIGHT_OBSTACLE and counts as hard",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::_score#association beside a point": {
@@ -8878,15 +8878,15 @@
   "date": "2026-11-18",
   "note": "ring 0 alone is asked, the deviation §43 records",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9c77086992f3d973"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::caption_clears_ways#a caption clear of every way": {
@@ -8898,14 +8898,14 @@
   "date": "2026-11-18",
   "note": "a way counts as crossed when the caption is within its drawn half-width (plus the notch, claimed separately)",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::caption_clears_ways#the way notch": {
@@ -8998,14 +8998,14 @@
   "date": "2026-11-18",
   "note": "past the reach out to the hug",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#a stranded caption's one line": {
@@ -9017,15 +9017,15 @@
   "date": "2026-11-18",
   "note": "wrap seats are kept apart and used only when no one-line seat stands in the frame",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:4c681af25f85b4a3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:bed3685aa0240a93",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#caption clearance": {
@@ -9037,13 +9037,13 @@
   "date": "2026-11-18",
   "note": "clear = CLEAR_EM * size; 0242 records half the letter height as \"our calibration, not a finding\"",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#free space wins": {
@@ -9055,15 +9055,15 @@
   "date": "2026-11-07",
   "note": "the first candidate costing 0 is returned, in ring then rank order",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#never clipped": {
@@ -9075,13 +9075,13 @@
   "date": "2026-11-18",
   "note": "out-of-frame blocks are skipped",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#never left off": {
@@ -9093,15 +9093,15 @@
   "date": "2026-11-18",
   "note": "least-cost one-line seat, the soft seat first",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#no key": {
@@ -9155,14 +9155,14 @@
   "date": "2026-11-07",
   "note": "the preferred offset, then 0.5 em steps out to REACH_EM, capped at HUG_RING; the step size is a calibration",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::stroke_band#a stroke's drawn band": {
@@ -9208,16 +9208,16 @@
   "date": "2026-11-18",
   "note": "clearance equals the preferred offset, which is a ring-0 caption's gap from its subject; a calibration, and §20 waives the test a step out",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9c77086992f3d973",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/standard.py::HUG_PX#the hug": {
@@ -9253,15 +9253,15 @@
   "date": "2026-11-18",
   "note": "the order matches the readers' study ranking exactly",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:fd7851294e463316"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/standard.py::PREFERRED_OFFSET_EM#the gap from a feature": {
@@ -9273,14 +9273,14 @@
   "date": "2026-11-18",
   "note": "0.5 em measured from the drawn edge, the page's own calibration",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/standard.py::REACH_EM#how far the ringed search runs": {
@@ -9302,14 +9302,14 @@
   "date": "2026-11-18",
   "note": "the page attests steps outward with the nearer one winning but gives no step size; half an em is a calibration within that",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/standard.py::WAY_NOTCH#way notch": {
@@ -9327,54 +9327,58 @@
  "l7r/diagram/labels/standard.py::WEIGHT_FREE#free ground": {
   "body": "6a3327dd170e8247",
   "claim": "free ground - labels-on-maps-cartographic-label-placement.drawing: fields, scrub, groves and open ground are available space",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a74d465618147618",
   "core": "cebcf669e4894abd",
   "date": "2026-11-18",
   "note": "0.0 is the \"available space\" end of the scale the page applies to fields, scrub, groves and open ground",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ea1f05ca8ceac76d"
   ],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/standard.py::WEIGHT_OBSTACLE#an obstacle's weight": {
   "body": "0a1a0ed077db834d",
   "claim": "an obstacle's weight - labels-on-maps-cartographic-label-placement.drawing: a caption covers nothing while another choice exists",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "824fd5e16845b66b",
   "core": "8cca4a165c71f2d5",
   "date": "2026-11-18",
   "note": "1000 is the obstacle end of the mapping programs' scale; the page says a caption covers something only when no empty ground is left, and then the least important thing",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/standard.py::WEIGHT_WAY#a way crossed": {
   "body": "5a7dea84424d12e4",
-  "claim": "a way crossed - labels-on-maps-cartographic-label-placement.drawing: half an obstacle, so crossing one beats crossing two",
-  "code": "3511d1ce2919a640",
+  "claim": "a way crossed - GUESS labels-on-maps-cartographic-label-placement.drawing: half an obstacle, so crossing one beats crossing two - the figure the page records as our calibration, not a finding; three ways crossed outweigh one building, which the page never covers while another choice exists, and no pool caption meets it: of the 16 captions costing an obstacle or more, none had in any of its searches a seat crossing only ways with a leader crossing nothing (feature 449 T195, observed 2026-11-19, method: every seat of every search of those captions on the four caption-placing sheets, scratchpad t195/ways2.py, ways2-summary.log; Hoshigaoka draws no way, and the compound sheets take free seats alone)",
+  "code": "8cd3052438b2dcb5",
   "core": "6e8fab7e1b6230d6",
-  "date": "2026-11-18",
-  "note": "any positive weight below an obstacle's satisfies \"crossing one is better than crossing two\", but the page does not record 500 as a calibration. Also, with 500 against 1000, two lanes cost the same as one house and three lanes cost more. If obstacle and way weights are simply added, the placer would cover a house rather than cross three lanes. That breaks \"a house or any other building ... is never covered while any other choice exists\". To tell, I need the scoring code: is a hard obstacle ruled out before weights are added, or added to the sum? And how is a tie between two lanes and one roof broken?",
+  "date": "2026-11-19",
+  "note": "500 is half an obstacle, the figure the page records as \"our calibration, not a finding\"; each way adds its own weight, so crossing one beats crossing two; the claim states the edge case where three ways outweigh a building, and gives its evidence that no caption ever meets it",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:6368fdfe26167a7b",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00a270a965f4531"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/standard.py::upright#never upside down": {
   "body": "1f1dbe22b83f6652",
@@ -9385,13 +9389,13 @@
   "date": "2026-11-18",
   "note": "folds into (-90, 90], a half turn only",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/svg.py::leader_svg#its drawn sizes": {
@@ -11627,13 +11631,25 @@
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/pack_audit/tagged.py::path_walk#a curve's drawn points": {
+  "body": "dff91b31e003f651",
+  "claim": "a curve's drawn points - CONVENTION: flattened as the hand-sheet reader flattens a curve, no chord more than `DISC_SAG_PX` (0.05 px) inside it - a drawn size on the sheet, not in the world (feature 449 T195)",
+  "code": "5fb7007fbd01f874",
+  "core": "0dcdf8573d18d798",
+  "date": "2026-11-19",
+  "note": "curves and arcs are flattened to DISC_SAG_PX, a size on the sheet that the audit reads, not a fact about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/pack_audit/tagged.py::path_walk#its salts, guards and sentinels": {
-  "body": "d8dddb736eda349b",
+  "body": "dff91b31e003f651",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG curve arguments)",
-  "code": "d98fc1a423fd673b",
-  "core": "907ba35453a4cef0",
-  "date": "2026-11-18",
-  "note": "SVG argument counts",
+  "code": "a68f0b09edbbe735",
+  "core": "0dcdf8573d18d798",
+  "date": "2026-11-19",
+  "note": "the 7 and 6 are how many numbers an SVG arc and curve take, which is parsing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -21373,13 +21389,14 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::arc#the sheet's reading": {
   "body": "d6dd3ff9b8cfdb1e",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "f99375abe1bf8bb4",
-  "core": "a862b0e9e4a62abc",
+  "code": "d82262de1cc230cc",
+  "core": "543061c63690e2c6",
   "date": "2026-11-18",
   "note": "SVG arc flattening",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::attr_f#the sheet's reading": {
@@ -21397,13 +21414,14 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::bezier#the sheet's reading": {
   "body": "b45345c48d20a971",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "88ab7efaf1cf6c23",
-  "core": "452e4db57abcac5d",
+  "code": "9ac65d88b0657c7f",
+  "core": "fa5812b86d69583e",
   "date": "2026-11-18",
   "note": "curve flattening",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::binom#the sheet's reading": {
@@ -21524,13 +21542,14 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::pow#the sheet's reading": {
   "body": "7ced2bd679588bf1",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "93f35ec5256c4dc8",
-  "core": "ffee89ab529af9d4",
+  "code": "aadf518251c1a77e",
+  "core": "8c587ad2d970cb57",
   "date": "2026-11-18",
   "note": "arithmetic",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::push_shapes#the sheet's reading": {
@@ -21742,17 +21761,17 @@
   "date": "2026-11-18",
   "note": "same rule as the Python: break under WEIGHT_OBSTACLE, kept_inside gives way only to a seat under WEIGHT_OBSTACLE",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "6255d63f110579dd",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ea1f05ca8ceac76d"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::Sheet.one#a stranded several-text caption's wrap": {
@@ -21764,16 +21783,16 @@
   "date": "2026-11-18",
   "note": "a non-free seat is taken only at w == 0, the declared lines",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "6255d63f110579dd",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:4c681af25f85b4a3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:bed3685aa0240a93",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::Sheet.order#the order captions are set": {
@@ -22065,15 +22084,15 @@
   "date": "2026-11-18",
   "note": "same as the Python: rect, square-cornered outline, unequal ellipse; round disc and kite level",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:4a8ace9667a8cbcf",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:5708f5e1606e4b32",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::squared#an outline of square corners": {
@@ -22085,14 +22104,14 @@
   "date": "2026-11-18",
   "note": "`square_cornered` takes n>=4 outlines with all corners square",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::standing#a seat's standing": {
@@ -22131,15 +22150,15 @@
   "date": "2026-11-18",
   "note": "the same as the Python: framed(&pts, turned(blocks[0])), squared, carrying every part's ink",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "13473eb649c7c75b",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#a turned subject's angle": {
@@ -22151,10 +22170,10 @@
   "date": "2026-11-18",
   "note": "`framed`/`turned` per branch, matching the Python, quarter turns level",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "13473eb649c7c75b",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:5708f5e1606e4b32",
@@ -22162,7 +22181,7 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#an area's caption level": {
@@ -22174,16 +22193,16 @@
   "date": "2026-11-18",
   "note": "level for a box of parts and unsquared shapes, angled for squared ones",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "13473eb649c7c75b",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:4a8ace9667a8cbcf",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:5708f5e1606e4b32",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a30922be20751500"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#which subjects carry ink": {
@@ -22207,13 +22226,13 @@
   "date": "2026-11-18",
   "note": "multiples of 90 degrees go to 0",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac6762c9e6b883a9"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/seat.rs::turned#which edge gives the angle": {
@@ -22248,15 +22267,15 @@
   "date": "2026-11-18",
   "note": "depth 0..3 over layouts, one line first, deduplicated",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:888e5f99b2749c97",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ca572a14c9ac8461",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/stroke_tests.rs::Case#its tests": {
@@ -22682,15 +22701,15 @@
   "date": "2026-11-18",
   "note": "shortest longest line, then smallest spread, lines of 3 chars or fewer refused when words > lines",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:888e5f99b2749c97",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:bed3685aa0240a93",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ca572a14c9ac8461"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/layout.rs::layouts#wrap order": {
@@ -22702,13 +22721,13 @@
   "date": "2026-11-18",
   "note": "one line, then 2, then 3",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/obstacles.rs::ASSOCIATION_TIE#obstacle index": {
@@ -22920,14 +22939,14 @@
   "date": "2026-11-18",
   "note": "a neighbor as near as or nearer than the subject counts; ties go to the neighbor (`g <= gap + ASSOCIATION_TIE`)",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "22f406efb0971695",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/obstacles.rs::ObstacleIndex.new#obstacle index": {
@@ -22951,15 +22970,15 @@
   "date": "2026-11-18",
   "note": "a neighbor within own_gap+tie whose center is outside the subject counts as covered",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "43e9c217d6112e04",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/obstacles.rs::ObstacleIndex.score#ways crossed": {
@@ -22971,14 +22990,14 @@
   "date": "2026-11-18",
   "note": "each crossed way adds WEIGHT_WAY once, so crossing one costs less than crossing two",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "43e9c217d6112e04",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/obstacles.rs::ObstacleIndex.score#what a caption may cover": {
@@ -23134,13 +23153,13 @@
   "date": "2026-11-18",
   "note": "nothing else stands as near as the subject",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/obstacles/tests.rs::SQ#its tests": {
@@ -23310,14 +23329,14 @@
   "date": "2026-11-18",
   "note": "2: rings 0 and 1",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::NO_SIZE#caption search plumbing": {
@@ -23403,16 +23422,16 @@
   "date": "2026-11-18",
   "note": "a block spilling out of its area adds WEIGHT_OBSTACLE and counts as hard",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "c3eeb7724c9ee4fb",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::Search.score#association beside a point": {
@@ -23424,16 +23443,16 @@
   "date": "2026-11-18",
   "note": "ring 0 alone, as §43 records",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "c3eeb7724c9ee4fb",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9c77086992f3d973"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::Search.spills#caption search plumbing": {
@@ -23520,14 +23539,14 @@
   "date": "2026-11-18",
   "note": "a way within half-width plus notch counts as crossed",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::caption_clears_ways#the way notch": {
@@ -23563,14 +23582,14 @@
   "date": "2026-11-18",
   "note": "a block crossing the frame is refused",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::judge#a seat's standing": {
@@ -23686,16 +23705,16 @@
   "date": "2026-11-18",
   "note": "`lays[0]` seats kept apart from the wraps; wraps used only when no one-line seat is in the frame",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "296452795aa790e9",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:4c681af25f85b4a3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:bed3685aa0240a93",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#caption clearance": {
@@ -23707,14 +23726,14 @@
   "date": "2026-11-18",
   "note": "clear: CLEAR_EM * size, the calibration 0242 records",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "296452795aa790e9",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#free space wins": {
@@ -23726,16 +23745,16 @@
   "date": "2026-11-18",
   "note": "the first seat at cost 0 is returned, in ranked and ring order",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "296452795aa790e9",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#never clipped": {
@@ -23747,14 +23766,14 @@
   "date": "2026-11-18",
   "note": "in_frame skip",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "296452795aa790e9",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#never left off": {
@@ -23766,16 +23785,16 @@
   "date": "2026-11-18",
   "note": "one-line least-cost seat, soft first",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "296452795aa790e9",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:da65bcf7215af274"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::place#no key": {
@@ -23870,14 +23889,14 @@
   "date": "2026-11-18",
   "note": "soft seat, then least cost, then moved inward",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer.rs::settle#no seat in the frame": {
@@ -23998,15 +24017,15 @@
   "date": "2026-11-18",
   "note": "the centroid first, then grid points inside the area by distance",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "bc5ec5b6b566ae25",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/cands.rs::at#caption search plumbing": {
@@ -24103,16 +24122,16 @@
   "date": "2026-11-18",
   "note": "at the segment's bearing, turned upright, above before below, gap from the drawn half-width",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "9dd2a75bd287f2cb",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a243ba9567e199c6",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/cands.rs::line_cands#stations along the line": {
@@ -24137,15 +24156,15 @@
   "date": "2026-11-18",
   "note": "past the reach out to the hug",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "3325fa4b0992ced4",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/cands.rs::point_cands#seats round a point": {
@@ -24157,16 +24176,16 @@
   "date": "2026-11-18",
   "note": "the eight places in the readers' order, in the turned frame, gap from the drawn box edge",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "7b705e93bb603407",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:3b92e92cc94abe28",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/cands.rs::ringed#caption search plumbing": {
@@ -24190,15 +24209,15 @@
   "date": "2026-11-18",
   "note": "half an em, then a half-em step each ring out to the reach, capped at the hug, nearer first",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "651f307d7992ac17",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/placer/cands.rs::sized_half#a caption's block by its lines' own sizes": {
@@ -24610,16 +24629,16 @@
   "date": "2026-11-18",
   "note": "clearance equals the half-letter-height gap, so a neighbor as near as the subject reads as named",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
   "reads": "83931fbfa76fd24f",
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/standard.rs::HUG_PX#the hug": {
@@ -24667,14 +24686,14 @@
   "date": "2026-11-18",
   "note": "the readers' study order, in y-down offsets",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/standard.rs::PREFERRED_OFFSET_EM#the gap from a feature": {
@@ -24686,14 +24705,14 @@
   "date": "2026-11-18",
   "note": "half the letter height, the page's own calibration",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/standard.rs::REACH_EM#how far the ringed search runs": {
@@ -24716,13 +24735,13 @@
   "date": "2026-11-18",
   "note": "half-em steps, so two rings reach twice the gap",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/standard.rs::WAY_NOTCH#way notch": {
@@ -24746,13 +24765,13 @@
   "date": "2026-11-18",
   "note": "available space costs 0",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:ea1f05ca8ceac76d"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/standard.rs::WEIGHT_OBSTACLE#an obstacle's weight": {
@@ -24764,31 +24783,31 @@
   "date": "2026-11-18",
   "note": "covered only when no other choice exists",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/standard.rs::WEIGHT_WAY#a way crossed": {
   "body": "90546429d1bce2ec",
-  "claim": "a way crossed - labels-on-maps-cartographic-label-placement.drawing: half an obstacle, so crossing one beats crossing two",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "38961196bdbc7a4e",
+  "claim": "a way crossed - GUESS labels-on-maps-cartographic-label-placement.drawing: half an obstacle, so crossing one beats crossing two - the figure the page records as our calibration, not a finding; three ways crossed outweigh one building, which the page never covers while another choice exists, and no pool caption meets it: of the 16 captions costing an obstacle or more, none had in any of its searches a seat crossing only ways with a leader crossing nothing (feature 449 T195, observed 2026-11-19, method: every seat of every search of those captions on the four caption-placing sheets, scratchpad t195/ways2.py, ways2-summary.log; Hoshigaoka draws no way, and the compound sheets take free seats alone)",
+  "code": "ae85bd3d97136c73",
   "core": "698b1eb7f89e22f8",
-  "date": "2026-11-18",
-  "note": "half an obstacle, so crossing one beats crossing two",
+  "date": "2026-11-19",
+  "note": "the same 500.0 as the Python, the same calibration the page records",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00a270a965f4531"
   ],
-  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/standard.rs::block_half#caption block size": {
@@ -24838,13 +24857,13 @@
   "date": "2026-11-18",
   "note": "a half turn into (-90, 90]",
   "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "55df2570b221903d"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "476e84a32ac92202"
   },
-  "research": "0a77cca25cfc5030",
+  "research": "a671dce01f4529fb",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/svg.rs::caption_svg#the caption's SVG": {
@@ -34982,14 +35001,14 @@
  "rust/mode_a/src/tagged.rs::path_points#the tagged marks": {
   "body": "b4dd6ac39f04fd9e",
   "claim": "the tagged marks - NONE: a sheet's elements read with their tags and paint, deciding nothing about a building",
-  "code": "e2b686d1053687de",
-  "core": "a0f4192d5e27a870",
+  "code": "c55b3c51c3799bea",
+  "core": "68f539c203878bdc",
   "date": "2026-11-17",
   "note": "path vertex extraction",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/tagged.rs::path_step#the tagged marks": {
@@ -35004,18 +35023,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/tagged.rs::path_walk#its salts, guards and sentinels": {
-  "body": "a1f2c5012cf7235e",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG curve arguments)",
-  "code": "28cf313575d5f671",
-  "core": "3dc029469d59a421",
-  "date": "2026-11-18",
-  "note": "SVG argument counts",
+ "rust/mode_a/src/tagged.rs::path_walk#a curve's drawn points": {
+  "body": "84b4c32fa047a8f9",
+  "claim": "a curve's drawn points - CONVENTION: flattened as the hand-sheet reader flattens a curve, no chord more than `DISC_SAG_PX` (0.05 px) inside it - a drawn size on the sheet, not in the world (feature 449 T195)",
+  "code": "bf4a4c52db5d387b",
+  "core": "216a8d6c4a990aba",
+  "date": "2026-11-19",
+  "note": "flattens to DISC_SAG_PX as the Python does; smooth curves reflect the control point before them as the Python does",
   "pages": {},
-  "reads": "33cfd5ce5106b6f1",
+  "reads": "5fa14f6b4db10727",
   "research": "",
   "rests": [],
-  "triaged": "2026-11-18",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/tagged.rs::path_walk#its salts, guards and sentinels": {
+  "body": "84b4c32fa047a8f9",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG curve arguments)",
+  "code": "405ced9c282fa14c",
+  "core": "216a8d6c4a990aba",
+  "date": "2026-11-19",
+  "note": "the argument counts in path_step are parsing only",
+  "pages": {},
+  "reads": "5fa14f6b4db10727",
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/tagged.rs::spread#the tagged marks": {
@@ -35043,6 +35074,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/tagged/tests.rs::a_curve_is_read_by_its_drawn_points#the tagged marks' tests": {
+  "body": "d289234b32aaa853",
+  "claim": "the tagged marks' tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "00e3f78808e6aaca",
+  "core": "0c142a1c8af250f0",
+  "date": "2026-11-19",
+  "note": "test fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/tagged/tests.rs::a_mark_belongs_to_its_kind_and_its_lineage#the tagged marks' tests": {
   "body": "88ffbd2131447655",
   "claim": "the tagged marks' tests - NONE: fixtures and assertions, deciding nothing about a building",
@@ -35058,26 +35101,27 @@
  "rust/mode_a/src/tagged/tests.rs::a_path_visits_its_absolute_points#the tagged marks' tests": {
   "body": "6d87fbfa969140d2",
   "claim": "the tagged marks' tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "0ba9d6383418cd7d",
-  "core": "ea86f79564d21e76",
+  "code": "379ec4c46c0b118b",
+  "core": "981ee68843d079dd",
   "date": "2026-11-17",
   "note": "test",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/tagged/tests.rs::a_relative_step_is_read_from_where_the_path_stands#the tagged marks' tests": {
   "body": "ec223a9e8144c210",
   "claim": "the tagged marks' tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "6528ce739e32f588",
-  "core": "d035c7dedc3cfd30",
+  "code": "e7e3cb7b18ab2ca4",
+  "core": "bdf54eb7429e9102",
   "date": "2026-11-18",
   "note": "a parser test",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/tagged/tests.rs::a_translate_moves_the_ink_and_a_bad_one_is_refused#the tagged marks' tests": {
@@ -35087,6 +35131,18 @@
   "core": "b6e164789838d2d7",
   "date": "2026-11-17",
   "note": "test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/tagged/tests.rs::an_arc_is_read_by_its_drawn_curve#the tagged marks' tests": {
+  "body": "68841bec53d57646",
+  "claim": "the tagged marks' tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "15bdf4248538c194",
+  "core": "ae3278174baa8fe5",
+  "date": "2026-11-19",
+  "note": "test fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],
