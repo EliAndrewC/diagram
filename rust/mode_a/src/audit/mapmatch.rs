@@ -790,4 +790,15 @@ mod tests {
         ];
         assert_eq!(asked, [vec![village.to_owned()], Vec::new()]);
     }
+
+    /// A tier with no map keys records no place, and reads no map to say so (T220).
+    #[test]
+    fn a_tier_with_no_keys_records_no_place() {
+        let tree = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        assert!(
+            super::maps_recording("hoshigaoka-shrine", "no-such-tier", &tree)
+                .unwrap()
+                .is_empty()
+        );
+    }
 }
