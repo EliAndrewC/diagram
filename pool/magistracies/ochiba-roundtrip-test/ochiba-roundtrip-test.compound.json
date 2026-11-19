@@ -1,0 +1,73 @@
+{
+  "name": "ochiba-roundtrip-test",
+  "title": "Ochiba County Magistracy (placer round-trip)",
+  "subtitle": "(perimeter-first composed draft - refine by hand)",
+  "about": "Ochiba's program as her hand sheet draws it, in feet: its envelope, its court spine and its building masses measured off pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg at 3 px = 1 ft (feature 008), moved here from ochiba_program() in the sheet's .gen.py by feature 449 T152.",
+  "research": [
+    "the residence and its rooms - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0101-privies-setchin.drawing.html: Ochiba's house measured off ochiba-magistracy.svg at 3 px = 1 ft (feature 449 T182), one block of 90 x 50 ft in two rows with its reception at one end, as 0091 draws the house - the family's quarters and the lord's in the north row, the guest room and the reception room in the south (garden) row, the maids' room 14 x 12 ft at the kitchen end; the reception room gives the guests' privy its seat behind it, the house's second privy",
+    "its rooms' sizes - GUESS: the reception room 28 x 15 ft, the lord's quarters 25 x 15 ft and the family quarters 20 x 18 ft, inside the bands of this project's round the ordinary houses measured (the kinds' Guesses), in the palace order (reception at the east end of the front row, the lord's rooms behind it, the family's beyond, the inner rooms behind), the rest captioned inner-room bays and corridors",
+    "its storehouses behind the house - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the household's storehouses stand behind the house, in its rear strip on the north wall as Ochiba's sheet draws them (feature 449 T187)",
+    "its lodgings' dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: 16.5 (the barracks' two dwellings); 17 (the long-house's three dwellings); 34 (the same) - each inside 0097's bays of about 12 to 18 ft, a door to each, as Ochiba's sheet draws them (feature 449 T187)",
+    "its doors at each dwelling's middle - GUESS: no page seats a dwelling's door along its face (feature 449 T187) - 0.25 (the barracks' court-face door); 0.5 (the barracks' end door, the long-house's middle door); 1 / 6 and 5 / 6 (the long-house's end doors, at its end dwellings' middles)"
+  ],
+  "envelope": {"w": 267, "h": 200, "divider": 100},
+  "gates": [
+    {"kind": "main gate", "wall": "S", "at": 133.5, "width": 13.3}
+  ],
+  "middle_gate": 6,
+  "zones": [
+    {"kind": "garden", "caption": "garden", "x": 107, "y": 53, "w": 97, "h": 45},
+    {"kind": "hearing court", "caption": "hearing court", "x": 73, "y": 139, "w": 120, "h": 35, "floor": "white gravel"},
+    {"kind": "outer court", "caption": "forecourt", "x": 95, "y": 180, "w": 76, "h": 17},
+    {"kind": "practice ground", "caption": "practice ground", "x": 200, "y": 104, "w": 30, "h": 30},
+    {"kind": "inner court", "caption": "inner court", "x": 3, "y": 73, "w": 64, "h": 24},
+    {"kind": "inner court", "caption": "service yard", "x": 119, "y": 3, "w": 106, "h": 48}
+  ],
+  "buildings": [
+    {"name": "residence", "kind": "residence", "role": "lord", "w": 90, "h": 50, "court": "inner", "wall": "N", "order": 10, "inset": 17.7,
+     "rooms": [
+       {"kind": "inner rooms", "caption": "inner rooms", "x": 0, "y": 0, "w": 32.5, "h": 14},
+       {"kind": "inner rooms", "caption": "inner rooms", "x": 32.5, "y": 0, "w": 32.5, "h": 14},
+       {"kind": "inner rooms", "caption": "inner rooms", "x": 65, "y": 0, "w": 25, "h": 14},
+       {"kind": "inner rooms", "caption": "inner rooms", "x": 0, "y": 14, "w": 32.5, "h": 12},
+       {"kind": "servants' quarters", "caption": "maids' room", "x": 0, "y": 14, "w": 14, "h": 12},
+       {"kind": "inner rooms", "caption": "inner rooms", "x": 32.5, "y": 14, "w": 32.5, "h": 12},
+       {"kind": "lord's quarters", "caption": "lord's quarters", "x": 65, "y": 14, "w": 25, "h": 15},
+       {"kind": "residence corridor", "caption": "corridor", "x": 0, "y": 26, "w": 36, "h": 6, "style": "passage"},
+       {"kind": "residence corridor", "x": 36, "y": 26, "w": 29, "h": 6, "style": "passage"},
+       {"kind": "residence corridor", "x": 62, "y": 29, "w": 28, "h": 6, "style": "passage"},
+       {"kind": "family quarters", "caption": "family quarters", "x": 0, "y": 32, "w": 20, "h": 18},
+       {"kind": "guest quarters", "caption": "guest quarters", "x": 20, "y": 32, "w": 42, "h": 18},
+       {"kind": "reception room", "caption": "reception room", "x": 62, "y": 35, "w": 28, "h": 15}
+     ]},
+    {"name": "servants", "kind": "servants' quarters", "role": "service", "w": 65, "h": 15, "court": "outer", "wall": "S", "order": 7},
+    {"name": "storehouse (W)", "kind": "storehouse", "role": "kura", "w": 18, "h": 12, "court": "inner", "wall": "N", "order": 8},
+    {"name": "storehouse (E)", "kind": "storehouse", "role": "kura", "w": 18, "h": 12, "court": "inner", "wall": "N", "order": 8},
+    {"name": "kitchen", "kind": "kitchen", "role": "service", "w": 24, "h": 18, "court": "inner", "wall": "N", "order": 5, "inset": 17.7, "joins": "residence",
+     "doors": [{"face": "S", "at": 0.75}]},
+    {"name": "Inari shrine", "kind": "compound shrine", "role": "shrine", "w": 37, "h": 31, "court": "inner", "wall": "E", "order": 5},
+    {"name": "cinnabar workshop", "kind": "cinnabar workshop", "role": "shrine", "w": 37, "h": 24, "court": "inner", "wall": "E", "order": 4},
+    {"name": "karo's house", "kind": "karo's house", "role": "lord", "w": 37, "h": 23, "court": "inner", "wall": "divider", "order": 3},
+    {"name": "office hall", "kind": "office hall", "role": "lord", "w": 120, "h": 28, "court": "outer", "wall": "divider", "order": 10},
+    {"name": "tax archive", "kind": "tax archive", "role": "kura", "w": 24, "h": 18, "court": "outer", "wall": "W", "order": 6},
+    {"name": "senior retainers", "kind": "retainers' quarters", "role": "service", "w": 51, "h": 17, "court": "outer", "wall": "W", "order": 4,
+     "bays": [17, 34], "doors": [{"face": "S", "at": 0.16666666666666666}, {"face": "S", "at": 0.5}, {"face": "S", "at": 0.8333333333333334}]},
+    {"name": "granary", "kind": "granary", "role": "kura", "w": 50, "h": 26, "court": "outer", "wall": "E", "order": 6},
+    {"name": "barracks", "kind": "barracks", "role": "service", "w": 24, "h": 33, "court": "outer", "wall": "E", "order": 7,
+     "bays": [16.5], "doors": [{"face": "W", "at": 0.25}, {"face": "S", "at": 0.5}]},
+    {"name": "cell", "kind": "cell", "role": "cell", "w": 18, "h": 15, "court": "outer", "wall": "E", "order": 1, "interior": "cell"},
+    {"name": "gatehouse", "kind": "gatehouse", "role": "dark", "w": 40, "h": 14, "court": "outer", "wall": "S", "order": 8},
+    {"name": "stables", "kind": "stables", "role": "service", "w": 18, "h": 24, "court": "outer", "wall": "S", "order": 5, "interior": "stables",
+     "doors": [{"face": "E", "at": 0.5}]},
+    {"name": "clerks' room", "kind": "clerks' room", "role": "plain", "w": 28, "h": 18, "court": "outer", "wall": "W", "order": 3}
+  ],
+  "parts": {
+    "bath": {"w": 10, "h": 8},
+    "wells": ["kitchen", "garden", "stables"],
+    "privies": ["stables", "barracks", "servants"],
+    "rack_by": "barracks",
+    "posts": 2,
+    "board": true
+  },
+  "knobs": []
+}

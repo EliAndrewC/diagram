@@ -475,6 +475,8 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
         Some(&root.join("research").join("questions")),
         Some(&store),
     )?;
+    // a rebuilt file's old claims wait on what is owed under its `as` paths (ask:449-T152-rebuilt-claims)
+    let owed_keys: Vec<String> = due.iter().map(|(k, _)| k.clone()).collect();
     let mut mb =
         l7r_guard::shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"]))
             .to_owned();
@@ -527,6 +529,7 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
             index: &base_index,
             uids: &uids,
             texts: &texts,
+            owed: &owed_keys,
         };
         let map = super::ports::load(root)?;
         let unported = super::ports::unported(&at.cur, &at.index, &before, &map, &mut |u| {

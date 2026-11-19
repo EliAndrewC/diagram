@@ -1,0 +1,85 @@
+{
+  "name": "county-magistracy-example",
+  "title": "County Magistracy (placer worked example)",
+  "subtitle": "(perimeter-first composed draft - refine by hand)",
+  "about": "A generic county magistracy declared in feet from docs/building-programs.md's county magistrate's manor program and its knobs (feature 449 T152: the program the old builder held, rebuilt from the program's prose and the sheet's notes, never read from the old code); each size inside its band of the type's declaration, each knob recorded in the sheet's notes and re-rolled from the seed here.",
+  "research": [
+    "the house at the record's size - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the residence 56 x 24 ft with its veranda, the kitchen 20 x 18 and the bath 10 x 8, about 50 tsubo, the 150-koku district magistrate's house the plan is measured against",
+    "its rooms in the palace order's lesser form - GUESS: the reception room at the east end the full depth, the master's rooms beside it on the garden row, the family's beyond, the inner rooms and the maids' room behind (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html); the room sizes the kinds' guesses",
+    "the lodgings' dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: the barracks in four dwellings of about 17.5 ft, the senior retainers' long-house in the karo's bay of 14 ft and four dwellings of about 17 ft, the servants' row in four of 15 ft, a door to each",
+    "the sizes in their bands - GUESS: the office hall 113 x 38, the tax archive 18 x 24, the granary 50 x 27, the barracks 23 x 70, the long-house 24 x 82, the servants' row 60 x 15, the stables 18 x 24, the storehouses 19 x 16 and 18 x 12 (each wide enough to hold its two-line name), the gatehouse 40 x 12, the guest house 40 x 42, the shrine 18 x 14 and the cell 12 x 10, each inside its band of the type's declaration (l7r/diagram/buildings/types.json)",
+    "the start along the north wall - GUESS: the house's search starts 102 ft along the north wall, so the kitchen ell, the rear yard and the vegetable garden stand west of it and the garden before it, the program's start knob (the derivation's slack: no rule fixes the start end)"
+  ],
+  "envelope": {"w": 270, "h": 200, "divider": 90},
+  "gates": [
+    {"kind": "main gate", "wall": "S", "at": 140, "width": 7},
+    {"kind": "side gate", "wall": "W", "at": 50, "width": 6},
+    {"kind": "side gate", "wall": "S", "at": 221, "width": 6}
+  ],
+  "middle_gate": 6,
+  "zones": [
+    {"kind": "garden", "caption": "garden", "x": 102, "y": 35.67, "w": 124, "h": 46.33},
+    {"kind": "vegetable garden", "caption": "vegetable garden", "x": 14, "y": 40, "w": 36, "h": 30},
+    {"kind": "inner court", "caption": "service yard", "x": 54, "y": 25, "w": 26, "h": 62},
+    {"kind": "rear yard", "caption": "rear yard", "x": 52, "y": 3, "w": 30, "h": 22},
+    {"kind": "hearing court", "caption": "hearing court", "x": 82, "y": 131, "w": 80, "h": 26, "floor": "white gravel"},
+    {"kind": "outer court", "caption": "outer court", "x": 162, "y": 131, "w": 43, "h": 35},
+    {"kind": "outer court", "caption": "outer court", "x": 27.5, "y": 131, "w": 54.5, "h": 39},
+    {"kind": "outer court", "caption": "forecourt", "x": 146, "y": 166, "w": 54, "h": 31},
+    {"kind": "practice ground", "caption": "practice ground", "x": 205, "y": 131, "w": 33, "h": 39},
+    {"kind": "cart yard", "caption": "cart yard", "x": 214, "y": 175, "w": 24, "h": 22}
+  ],
+  "buildings": [
+    {"name": "residence", "kind": "residence", "role": "lord", "w": 56, "h": 24, "court": "inner", "wall": "N", "order": 10, "inset": 8.67, "near": 102,
+     "doors": [{"face": "N", "at": 0.3}],
+     "rooms": [
+       {"kind": "servants' quarters", "caption": "maids' room", "x": 0, "y": 0, "w": 10, "h": 10},
+       {"kind": "inner rooms", "caption": "inner rooms", "x": 10, "y": 0, "w": 26, "h": 10},
+       {"kind": "family quarters", "caption": "family quarters", "x": 0, "y": 10, "w": 18, "h": 10},
+       {"kind": "lord's quarters", "caption": "lord's quarters", "x": 18, "y": 10, "w": 18, "h": 10},
+       {"kind": "reception room", "caption": "reception room", "x": 36, "y": 0, "w": 20, "h": 20},
+       {"kind": "engawa", "x": 0, "y": 20, "w": 56, "h": 4, "style": "engawa"}
+     ]},
+    {"name": "kitchen", "kind": "kitchen", "role": "service", "w": 20, "h": 18, "court": "inner", "wall": "N", "order": 5, "inset": 8.67, "joins": "residence", "end": "W",
+     "doors": [{"face": "W", "at": 0.5}]},
+    {"name": "storehouse (W)", "caption": "storehouse\n(W)", "kind": "storehouse", "role": "kura", "w": 19, "h": 16, "court": "inner", "wall": "N", "order": 8},
+    {"name": "storehouse (E)", "caption": "storehouse\n(E)", "kind": "storehouse", "role": "kura", "w": 18, "h": 12, "court": "inner", "wall": "N", "order": 8},
+    {"name": "shrine", "kind": "compound shrine", "role": "shrine", "w": 18, "h": 14, "court": "inner", "wall": "E", "order": 6},
+    {"name": "guest house", "kind": "guest quarters", "role": "lord", "w": 40, "h": 42, "court": "inner", "wall": "E", "order": 5},
+    {"name": "office hall", "kind": "office hall", "role": "lord", "w": 113, "h": 38, "court": "outer", "wall": "divider", "order": 10,
+     "doors": [{"face": "E", "at": 0.8}, {"face": "W", "at": 0.8}],
+     "rooms": [
+       {"kind": "clerks' room", "caption": "clerks' room", "x": 0, "y": 0, "w": 30, "h": 20},
+       {"kind": "day office", "caption": "day office", "x": 30, "y": 0, "w": 42, "h": 20},
+       {"kind": "official study", "caption": "official study", "x": 72, "y": 0, "w": 41, "h": 20},
+       {"kind": "magistrate's dais", "caption": "magistrate's dais", "x": 41.5, "y": 28, "w": 30, "h": 10, "style": "dais"},
+       {"kind": "clerks' seats", "caption": "clerk", "x": 31.5, "y": 33, "w": 8, "h": 5, "style": "seat"},
+       {"kind": "clerks' seats", "caption": "clerk", "x": 73.5, "y": 33, "w": 8, "h": 5, "style": "seat"}
+     ]},
+    {"name": "tax archive", "kind": "tax archive", "role": "kura", "w": 18, "h": 24, "court": "outer", "wall": "divider", "order": 6},
+    {"name": "senior retainers' quarters", "kind": "retainers' quarters", "role": "service", "w": 24, "h": 82, "court": "outer", "wall": "W", "order": 6,
+     "bays": [14, 31, 48, 65],
+     "rooms": [{"kind": "karo's house", "caption": "karo's quarters", "x": 0, "y": 0, "w": 24, "h": 14}]},
+    {"name": "granary", "kind": "granary", "role": "kura", "w": 50, "h": 27, "court": "outer", "wall": "E", "order": 6},
+    {"name": "barracks", "kind": "barracks", "role": "service", "w": 23, "h": 70, "court": "outer", "wall": "E", "order": 5, "bays": [17.5, 35, 52.5]},
+    {"name": "gatehouse", "kind": "gatehouse", "role": "dark", "w": 40, "h": 12, "court": "outer", "wall": "S", "order": 8, "beside": "main gate"},
+    {"name": "servants' row", "kind": "servants' quarters", "role": "service", "w": 60, "h": 15, "court": "outer", "wall": "S", "order": 7, "bays": [15, 30, 45]},
+    {"name": "stables", "kind": "stables", "role": "service", "w": 18, "h": 24, "court": "outer", "wall": "S", "order": 6, "interior": "stables"},
+    {"name": "cell", "kind": "cell", "role": "cell", "w": 12, "h": 10, "court": "outer", "wall": "S", "order": 1, "interior": "cell"}
+  ],
+  "parts": {
+    "bath": {"w": 10, "h": 8},
+    "wells": ["kitchen", "garden", "stables"],
+    "privies": ["servants' row", "stables", "barracks"],
+    "rack_by": "barracks",
+    "posts": 2,
+    "roji": true,
+    "board": true
+  },
+  "knobs": [
+    {"key": "granary form", "options": ["raised timber storehouse", "earth-walled kura"], "value": "earth-walled kura"},
+    {"key": "main gate form", "options": ["one-bay gate", "gate range"], "value": "one-bay gate"},
+    {"key": "servants' quarters form", "options": ["common room under one door", "a door to each dwelling"], "value": "a door to each dwelling"},
+    {"key": "vegetable garden site", "options": ["west of the residence", "on a parcel of its own"], "value": "west of the residence"}
+  ]
+}

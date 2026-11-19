@@ -55,7 +55,7 @@ pub mod tags;
 pub mod types;
 pub mod work_counts;
 
-const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | sheet-page <map.svg> [--with-raster | --no-raster] [--stdin] | hand-sheet <map.svg> [--placed OUT] | picture-diff a b [--page PAGE] [--svg SVG] [--threshold N] | page-lit <page.html> <key> [--vector] [--out OUT] | --version\n";
+const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | sheet-page <map.svg> [--with-raster | --no-raster] [--stdin] | hand-sheet <map.svg> [--placed OUT] | compound <map.compound.json> | sheet-render <map.svg> <out.png> | picture-diff a b [--page PAGE] [--svg SVG] [--threshold N] | page-lit <page.html> <key> [--vector] [--out OUT] | --version\n";
 
 /// The command: `building-programs [--check] [--path PATH]`, `notes-census <manifest.json> [...]` (`make notes-census`), the notes
 /// census's two checks and a sheet's counts as commands (the differential's doors onto what `tests/test_mode_a_sheets.py` once asked in
@@ -77,6 +77,14 @@ pub fn cli_in(args: &[String], tree: &Path, input: &mut dyn std::io::Read) -> Re
             sheet::page::cli::main(rest, tree, &raster::Host::current(), input)
         }
         (Some("hand-sheet"), _) => sheet::hand::main(rest, tree, &raster::Host::current()),
+        // a hand sheet's picture with its captions placed, to look at (`make sheet-render`; the Python's deleted by feature 449 T152)
+        (Some("sheet-render"), 2) => door(|| {
+            let text = caption_place::placed(&read(&rest[0])?)?;
+            labels::hand_sheet::render(&text, Path::new(&rest[1]))?;
+            Ok(String::new())
+        }),
+        // a generated compound sheet drawn whole from its spec (feature 449 T152)
+        (Some("compound"), _) => compound::cli::main(rest, tree, &raster::Host::current()),
         (Some("picture-diff"), _) => {
             diagnostics::picture_diff::main(rest, &raster::Host::current())
         }
@@ -112,6 +120,9 @@ pub fn cli_in(args: &[String], tree: &Path, input: &mut dyn std::io::Read) -> Re
         (Some("caption-counts"), 1) => {
             door(|| labels::hand_sheet::counted::report(&read(&rest[0])?))
         }
+        // the compound generator's counted work on one program, in the counting build alone (feature 449 T152)
+        #[cfg(feature = "counters")]
+        (Some("compound-counts"), 1) => door(|| compound::cli::counts(tree, &rest[0])),
         (Some("--version"), _) => {
             reply(format!("l7r-mode-a {}\n", env!("CARGO_PKG_VERSION")), "", 0)
         }
@@ -166,7 +177,13 @@ mod tests {
         let tree = std::path::Path::new("/nonexistent");
         // (feature 449 T150) the page and the two picture measures: each arm reached, each refusing a bare call as its own usage does
         // (T151) and the hand sheet driver
-        for tool in ["sheet-page", "picture-diff", "page-lit", "hand-sheet"] {
+        for tool in [
+            "sheet-page",
+            "picture-diff",
+            "page-lit",
+            "hand-sheet",
+            "compound",
+        ] {
             let r = cli(&[tool.to_owned()], tree);
             let own = format!("usage: l7r-mode-a {tool} ");
             assert_eq!((r.code, r.stderr.starts_with(&own)), (2, true));
@@ -180,6 +197,26 @@ mod tests {
         );
         let r = cli(&["building-programs".to_owned(), "--x".to_owned()], tree);
         assert_eq!(r.code, 2);
+    }
+
+    /// `sheet-render`: a hand sheet's picture with its captions placed (feature 449 T152, `make sheet-render`), and its refusal.
+    #[test]
+    fn a_hand_sheet_renders_with_its_captions_placed() {
+        let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-sheet-render");
+        let at = |name: &str| dir.path().join(name).to_string_lossy().into_owned();
+        let svg = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20"><rect x="0" y="0" width="40" height="20" fill="#EFE3C2" data-kind="-"/><rect x="5" y="5" width="30" height="10" fill="#DDB87A" data-kind="well" data-id="w"/><text font-size="3" data-kind="well" data-names="w">well</text></svg>"##;
+        std::fs::write(at("s.svg"), svg).unwrap();
+        let tree = std::path::Path::new("/nonexistent");
+        let r = cli(&["sheet-render".to_owned(), at("s.svg"), at("s.png")], tree);
+        assert_eq!((r.code, dir.path().join("s.png").exists()), (0, true));
+        let r = cli(
+            &["sheet-render".to_owned(), at("none.svg"), at("n.png")],
+            tree,
+        );
+        assert_eq!(
+            (r.code, r.stderr.starts_with("FileNotFoundError: ")),
+            (1, true)
+        );
     }
 
     #[test]

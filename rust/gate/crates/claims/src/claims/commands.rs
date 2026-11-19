@@ -865,6 +865,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
                 || !ported.carried.is_empty()
                 || !ported.dropped.is_empty()
                 || !ported.retired.is_empty()
+                || !ported.rebuilt.is_empty()
             {
                 save_index(&root.join(INDEX), &index)?;
             }

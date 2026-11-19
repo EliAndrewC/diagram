@@ -280,6 +280,7 @@ fn the_push_refuses_a_claim_on_a_deleted_unit_no_port_carried() {
         index: &base,
         uids: &uids,
         texts: &texts,
+        owed: &[],
     };
     let unmapped = PortMap::default();
     let mut all_gone = |_: &str| true;
@@ -364,6 +365,7 @@ fn retired_map() -> PortMap {
             },
         )]
         .into(),
+        ..PortMap::default()
     }
 }
 
@@ -464,6 +466,7 @@ fn a_retired_unit_still_in_the_tree_is_refused() {
         index: &base,
         uids: &uids,
         texts: &texts,
+        owed: &[],
     };
     // `gone` is asked only of a retired unit whose claims the tree no longer holds
     let mut asked = Vec::new();
@@ -479,6 +482,7 @@ fn a_retired_unit_still_in_the_tree_is_refused() {
         index: &empty,
         uids: &uids,
         texts: &texts,
+        owed: &[],
     };
     assert_eq!(
         unported(&cur, &base, &nobase, &retired_map(), &mut gone),
@@ -498,6 +502,7 @@ fn retired_push(base: &Index, map: &PortMap) -> Vec<String> {
         index: base,
         uids: &uids,
         texts: &texts,
+        owed: &[],
     };
     unported(&cur(), &Index::new(), &before, map, &mut |_: &str| true)
 }
@@ -551,6 +556,7 @@ fn a_retired_claim_in_step_whose_finding_is_mislabeled_passes_and_its_row_drops(
         index: &base,
         uids: &uids,
         texts: &texts,
+        owed: &[],
     };
     let mut gone = |_: &str| true;
     // its row still in the index: `make claims-rekey`

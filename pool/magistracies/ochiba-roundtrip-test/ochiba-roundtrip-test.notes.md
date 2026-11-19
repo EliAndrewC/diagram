@@ -4,12 +4,13 @@
 
 This is NOT a replacement for `ochiba-magistracy.svg`. It is the OUTPUT of feeding the
 EXISTING hand-authored Ochiba's real program (envelope, court-spine, and building masses
-measured off the finished map at 3 px = 1 ft) back through the perimeter-first placer
-([`../compound.py`](../../../l7r/diagram/compound.py), feature 008), to test whether the placer composes
-Ochiba the way the GM hand-composed it.
+measured off the finished map at 3 px = 1 ft) back through the perimeter-first compound generator
+(feature 008; rebuilt in Rust from its derivation by feature 449 T152, `rust/mode_a/src/compound/`), to test whether
+the generator composes Ochiba the way the GM hand-composed it.
 
-Regenerate: `python3 pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py` (from the skill dir). The program lives
-in [`ochiba-roundtrip-test.gen.py`](ochiba-roundtrip-test.gen.py) as `ochiba_program()`.
+Regenerate: `make map GEN=pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py`. The program lives
+in [`ochiba-roundtrip-test.compound.json`](ochiba-roundtrip-test.compound.json) (it was `ochiba_program()` in the gen until
+feature 449 T152), its research claims with it.
 
 Garden pavilions and point features (bath, wells, latrines, porch, privy, fire-tubs) are NOT
 massed perimeter buildings - they are hand-placed in the final map regardless - so they are
@@ -77,3 +78,17 @@ were drawn undivided behind one door, which `lodging_entrances` now refuses. The
 placer cannot seat the house with the kitchen first (measured: the house then finds no seat), and no page places a kitchen's end -
 and the guests' privy stands on the rear face behind the reception's span, as 0101's drawing page places it. The room bands are
 a guide for a generated plan's rooms that no check holds.
+
+2026-11-19 (feature 449 T152): drawn by the compound generator rebuilt in Rust from its derivation
+(`specs/449-rust-codebase/derivations/T208-compound.md`), the program moved into the spec file. What the program needed, room first
+(the GM, 2026-10-12), each a knob of the program, never a squeeze: the barracks' order 4 -> 7, so the north end of the east column is
+the barracks' and the granary flows below it (with the granary seated first, pushed below the practice ground's band, the barracks'
+33 ft found no room in the column); the kitchen's door at 0.75 of its court face, so the bath has its service side by the house; and the ground before the family
+rooms, between the house and the divider west of the karo's house, named `inner court` (about 64 x 24 ft that the void rule of
+0116's drawing page refuses unnamed), and the ground north of the garden between the kitchen and the shrine column named `service
+yard` (106 x 48 ft, as Ochiba's own sheet names the kitchen's work ground), the central open ground the old sheet left unnamed. The hearing court's floor is white gravel, the floor knob's first form (0099's drawing page: white gravel or river cobbles, each plan taking one), as Ochiba's own sheet captions it. The gatehouse stands in the south-west corner, as before: the program's forecourt holds the ground
+beside the gate (docs/buildings.md puts a gatehouse beside the gate - the forecourt zone, measured off Ochiba's sheet, is the program's).
+The shrine's tree stands in the ground held past the shrine's south end as the shrine is seated, the cinnabar workshop below it. The
+water depth, each well's gear and roof rolled by the docs' formula (`random.Random(zlib.crc32(b"<sheet>:<knob>"))`), the wells numbered
+kitchen, garden, stables: water depth deep; well gear 1 pulley frame, well roof 1 roof; well gear 2 sweep, well roof 2 roof; well gear 3
+sweep, well roof 3 open.

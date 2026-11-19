@@ -126,45 +126,8 @@ def test_the_size_table_lists_every_tagged_kind(bundle: poolmaps.MapBundle) -> N
     assert not missing, f"{bundle.stem}: tagged kinds no size-table row carries (a kind on a caption alone): {missing} - tag the drawn element with the kind, or the caption with the kind it names"
 
 
-# --- the draft's tub seat (feature 449 T182): pinned here, the kept test file the placer's sheets are swept in -------------
-
-
-def test_a_tub_seat_by_a_door_is_tried_nearest_first_across_the_faces() -> None:
-    """The by-the-door search tried the faces N, S, E, W in turn: a door on the east face near the north-east corner took a
-    north-face seat 4.5 ft from it before the east-face seat 2.5 ft from it."""
-    from l7r.diagram.compound_model import BuildingSpec, Placed
-    from l7r.diagram.compound_parts import seats_within_reach
-
-    hut = Placed(BuildingSpec("hall", "lord", 20.0, 10.0, "inner", "N", feature="office hall"), 0.0, 0.0)
-    seats = seats_within_reach(hut, [(20.0, 2.0)])
-    assert seats[0] == ("E", 0.2), seats[:3]
-
-
-def test_a_door_kind_with_no_door_takes_no_tub_and_a_bath_takes_its_court_face() -> None:
-    """A door-kind building whose door found no seat fell to the doorless seats and took a court-face tub with no door drawn;
-    it takes none, and the bath (no door kind) keeps the court face."""
-    from l7r.diagram.compound_model import BuildingSpec, Placed
-    from l7r.diagram.compound_parts import doored_tub_seats
-
-    karo = Placed(BuildingSpec("karo's house", "lord", 37.0, 23.0, "inner", "divider", feature="karo's house"), 0.0, 0.0)
-    bath = Placed(BuildingSpec("bath", "service", 10.0, 8.0, "inner", "N"), 0.0, 0.0)
-    assert doored_tub_seats(karo, []) == []
-    assert doored_tub_seats(karo, [(18.0, 0.0)])
-    assert doored_tub_seats(bath, []) is None
-
-
-def test_touching_corridor_pieces_are_one_passage_with_one_unbroken_outline() -> None:
-    """The round-trip's three corridor pieces were three closed dotted rects, read as three rooms (the corridor's glyph-check);
-    a stepped run's union is now one ring with no edge between the pieces and no pen-up move (the hand-sheet reader joins a
-    path's vertices in order, and a jump read as a stroke across the passage that set its caption outside the house)."""
-    from l7r.diagram.compound import _touching_groups, _union_outline
-
-    pieces = [(0.0, 26.0, 36.0, 6.0), (36.0, 26.0, 29.0, 6.0), (62.0, 29.0, 28.0, 6.0), (0.0, 60.0, 5.0, 5.0)]
-    assert sorted(map(sorted, _touching_groups(pieces))) == [[0, 1, 2], [3]]
-    assert _union_outline(pieces[:3], 0.0, 0.0) == ["M 0 78 L 195 78 L 195 87 L 270 87 L 270 105 L 186 105 L 186 96 L 0 96 L 0 78 Z"]
-    corner = _union_outline([(0.0, 0.0, 1.0, 1.0), (1.0, 1.0, 1.0, 1.0)], 0.0, 0.0)  # pieces meeting at one corner: rings, never a jump
-    assert all(d.count("M") == 1 for d in corner)
-    assert sum(d.count("L") for d in corner) == 8
+# --- the generated round-trip's corridor, drawn by the compound generator (feature 449 T152: the old engine's three tests of its tub seat
+# and corridor outline went with it; the Rust generator's own tests hold those rules, `rust/mode_a/src/compound/gen_tests*.rs`) ----------
 
 
 def test_the_round_trips_corridor_is_drawn_as_one_passage() -> None:

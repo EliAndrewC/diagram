@@ -51,6 +51,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T203 make decide's figure lint skips a task section's heading: T202's heading carried '704x its SOUND derived budget' with no measured label, decide passed it, and spec-fidelity returned NOT-REVIEWABLE for it (a review round spent on what the lint exists to catch - a check passing the bad, constitution XIV); the lint reads the section's heading line as it reads the Approach, with a test red on the old lint (2026-11-19)
       research: rendering
+- [ ] T209 The caption placer's nearness test measures to the outer edge of a feature's outline stroke while it seats a caption at the usual gap from the feature's fill box, so every place directly above, below or beside a stroked building is refused by about 1 px and the caption falls to a diagonal seat (found by T152 on county-magistracy-example's storehouses, 2026-11-19) - contrary to 0242's ranked places, a research finding the code breaks (constitution XIV); fixed in rust/mode_a/src/caption_place with a test red first; the fix moves 38 captions on the four hand sheets (12 Hayakawa, 9 Ochiba, 14 Ubame, 3 Hoshigaoka - T152's measurement), each sheet looked at after and its checks green; before T156
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

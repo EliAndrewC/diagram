@@ -2,7 +2,7 @@
 service buildings' color, a kura with the sealed storehouse's, and so on.
 
 THE TABLE IS A MAP DRAWING CONVENTION (plan D11): `SKILL.md`'s Palette table names a role per element; its machine form
-is `compound_model.KINDS` (role -> fill), and nothing mapped a KIND to its role until this table. A kind the palette
+is `engine.KINDS` (role -> fill; the old engine's until feature 449 T152), and nothing mapped a KIND to its role until this table. A kind the palette
 names is taken from it; a kind it does not name is assigned the role every sheet that draws it already paints it in,
 and is labeled GUESS beside its row. A kind not in the table is not checked (a garden, a court, a pond - ground, not a
 built role).
@@ -14,7 +14,7 @@ the building it stands in, and is not judged. A kind whose every rect is a room 
 
 from __future__ import annotations
 
-from ...compound_model import KINDS
+from .engine import KINDS
 from .parse import STRUCTURE_FILLS
 from .tagged import Mark, marks
 

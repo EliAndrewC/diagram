@@ -62,7 +62,7 @@ The slices as filed run the generator's parts (S8 labels, S9a model) before the 
 |---|---|---|---|
 | 1 | S9b, S10a, S10b (T153-T155) | the audit: `pack_audit`'s leaves, core and registry, `notes_census`, `size_table`, `building_programs` (4,851 lines) | its red fixtures still fail and today's Python-drawn sheets still pass; wired at once (make targets) |
 | 2 | S7 (T150) | the sheet's page writer, `page_lit`, `picture_diff`, the image crate (2,912 lines) | the six sheets' pages; pixel reads within the checks' tolerance |
-| 3 | S8 + S9a + S11 together, in two landings | labels (shapely onto `geo`), the Mode A model, the top and the six `.gen.py` as one Rust sheet driver with a spec per map (6,130 lines); pytest's last tests as Rust tests | every pool sheet drawn by Rust passes every ported check and every carried claim IN-STEP; side-by-side page |
+| 3 | S8 + S9a + S11 together, in two landings | labels (shapely onto `geo`), the Mode A model, the top and the six `.gen.py` as one Rust sheet driver with a spec per map (6,130 lines); pytest's last tests as Rust tests | every pool sheet drawn by Rust passes every ported check and every claim of the rebuilt code IN-STEP; side-by-side page |
 | 4 | S12 (T157) | the pipeline: gencache, regen, pool_index, render_cache (1,764 lines) | the pool rebuilt from nothing, every sheet passing |
 | 5 | S13 (T158) | the claims tools' Python half, codeid, dead_closure, bundle_door, ruff and the requirements (2,443 lines) | both censuses empty; the feature closes |
 
@@ -85,7 +85,7 @@ the Python copies stay for the generators under the lockstep rule (as restated a
 **Step 3's two landings (the ruling's condition 5).** The six generators are thin (43 to 105 lines each, observed 2026-11-17, method:
 `wc -l`), their logic in the shared compound code, so step 3 splits by building type: 3a the Rust sheet driver, the Mode A model and
 the labels drawing the country shrine (`hoshigaoka-shrine`); 3b the five magistracies and pytest's exit. Each passes every ported
-check and every carried claim IN-STEP on the sheets it draws and publishes its side-by-side page.
+check and every claim of the rebuilt code IN-STEP on the sheets it draws and publishes its side-by-side page.
 
 Why the audit first: once its checks are shown to do their job on today's sheets (red fixtures fail, good sheets pass), every later sheet change is judged by checks we
 already trust, in Rust, rather than by the code being changed. Why labels, model and generator together: their in-between values
@@ -103,7 +103,8 @@ the rule does not ask. The work stays in two landings so a review never covers t
 - **Claims:** 290 of the 367 `.py` claims sit in the drawing code (compound_example 65, labels 61, interactive 59, compound_parts 58,
   compound 17, compound_model 16, well_gear 11, dwellings 3), the other 77 in `tools/` (steps 1 and 5). Each slice maps its units
   in `dev/claims-ports.json`, and each carried claim gets a fresh check at its landing (T166), run as waves of the claims checker;
-  step 3 carries most of them.
+  step 3's code is rebuilt, not ported, so its files go under the map's `rebuilt` (`ask:449-T152-rebuilt-claims`) and every claim of
+  the rebuilt code is checked IN-STEP at its landing, no old claim matched to the new code.
 - **Tests (FR-008):** every new test under a tenth of a second; drawing a whole sheet is a slice's one end-to-end test.
 
 ## The GM's part

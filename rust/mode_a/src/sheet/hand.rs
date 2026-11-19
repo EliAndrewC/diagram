@@ -47,7 +47,7 @@ pub fn main(args: &[String], tree: &Path, host: &Host) -> Reply {
 /// The sheets' registry, every kind's modal file noted as read: the generator imported `COMPOUND_CLASSES`, whose reading of those files
 /// the generation cache saw, so an edit of one re-keyed the sheet; with the registry read here, the cache is told of them (feature 449
 /// T151: the shrine's recorded files at HEAD measured against the wired tree's, the 99 sheet modals the one gap).
-fn sheet_registry(tree: &Path) -> Result<Vec<FeatureClass>, Error> {
+pub(crate) fn sheet_registry(tree: &Path) -> Result<Vec<FeatureClass>, Error> {
     use l7r_gate_registry::about::{compound_classes, modal_rel};
     use l7r_gate_registry::kinds::SHEET_REGISTRY;
     let classes = compound_classes(tree)?;
@@ -58,10 +58,10 @@ fn sheet_registry(tree: &Path) -> Result<Vec<FeatureClass>, Error> {
 }
 
 /// The registry's reader, handed in: a test's tree holds no modal files.
-type Registry = dyn Fn(&Path) -> Result<Vec<FeatureClass>, Error>;
+pub(crate) type Registry = dyn Fn(&Path) -> Result<Vec<FeatureClass>, Error>;
 
 /// `['a', 'b']`: a list of strings as Python's `print` showed the generator's census.
-fn py_list(items: &[String]) -> String {
+pub(crate) fn py_list(items: &[String]) -> String {
     let shown: Vec<String> = items
         .iter()
         .map(|s| l7r_guard::shared::py_text::repr(s))

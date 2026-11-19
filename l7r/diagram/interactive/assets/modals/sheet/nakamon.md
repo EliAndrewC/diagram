@@ -11,9 +11,9 @@ How wide such a gate was and how it was built are not recorded.
 Guesses:
 - That the gate was guarded: no account of a middle gate says so, so it is taken from a compound's main gate, which was kept by gatekeepers.
 - Its width, about 6 to 8 ft between its posts: no gate between a compound's courts is measured, so it is reckoned from a gate of one bay, which ran about 6 to 9 ft across.
-- Its place in the dividing wall behind the office hall: a Chinese yamen set its residence gate there, but where the middle gate of a Japanese intendant's office stood is not recorded.
+- Its place in the dividing wall behind or beside the office hall: a Chinese yamen set its residence gate behind the office, but where the middle gate of a Japanese intendant's office stood is not recorded.
 
-Depiction: The plan draws the gate as a pair of posts in the wall between the outer and inner courts, each a dark block thicker than the wall so the gate reads; how the real posts were built is not recorded. Every plan sets the office in front and the residence behind, the Chinese order, as a simplification: at the one Japanese intendant's office still standing, the residence stood beside the office, not behind it.
+Depiction: The plan draws the gate as a pair of posts in the wall between the outer and inner courts, each a dark block thicker than the wall so the gate reads; how the real posts were built is not recorded. Every plan sets the office in front and the residence behind, the Chinese order, as a simplification: at the one Japanese intendant's office still standing, the residence stood beside the office, not behind it. The gate opens in that wall behind the office hall where there is ground behind the hall for it and its approach; where the hall stands almost against the wall, it opens at the first stretch beside the hall that is clear on both sides, and the hall still stands between the hearing court and the house.
 
 Name: nakamon
 Covers: the posts of the household door in the court divider

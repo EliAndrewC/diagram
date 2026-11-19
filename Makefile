@@ -243,9 +243,10 @@ pool-index-if-stale: ## [maps] {internal} rebuild the pool index only when a man
 	  $(MAKE) --no-print-directory pool-index ARGS=; \
 	fi
 
-compound:       ## [maps] compose a DRAFT Mode A compound plan from a feet-based program - a starting point the GM then refines by hand
-##  ARGS=<out.svg>  where to write the composed draft
-	$(RUN).compound $(ARGS)
+compound:       ## [maps] compose a Mode A compound sheet from its feet-based program, drawn whole by the compound generator (Rust since 449 T152, `l7r-mode-a`) - a starting point the GM then refines by hand   SPEC=<map>.compound.json
+##  SPEC=<map>.compound.json  the program; the sheet, its picture and its page are written beside it as <map>.svg, .png, .html
+	@if [ -z "$(SPEC)" ]; then printf 'make compound: SPEC=<map>.compound.json is required - e.g. make compound SPEC=pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a compound "$(SPEC)"
 
 render-sync:    ## [maps] {internal} regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
 	$(RUN).pipeline.render_cache $(ARGS)
@@ -262,11 +263,11 @@ scatter-bases:  ## [diagnostics] where a map's ground-cover scatter stands: base
 	@if [ -z "$(MAP)" ]; then printf 'make scatter-bases: MAP=<pool map> is required - e.g. make scatter-bases MAP=pool/hamlets/sawada BOX=600,1600,1300,2000\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/scatter_bases.py" "$(MAP)" $(if $(BOX),--box "$(BOX)",)
 
-sheet-render:   ## [maps] render a hand-drawn Mode A sheet with its captions placed by the ONE placer (feature 286)   SHEET=<svg> OUT=<png>
+sheet-render:   ## [maps] render a hand-drawn Mode A sheet with its captions placed by the ONE placer (feature 286; Rust since 449 T152, `l7r-mode-a`)   SHEET=<svg> OUT=<png>
 ##  SHEET=<svg>         the hand-drawn sheet (its drawing and its captions' declarations)
 ##  OUT=<png>           the picture to write
 	@if [ -z "$(SHEET)" ] || [ -z "$(OUT)" ]; then printf 'make sheet-render: SHEET=<svg> and OUT=<png> are required - e.g. make sheet-render SHEET=pool/<tier>/<map>/<map>.svg OUT=/tmp/<map>.png\n' >&2; exit 2; fi
-	@python3 -m l7r.diagram.labels.hand_sheet "$(SHEET)" "$(OUT)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a sheet-render "$(SHEET)" "$(OUT)"
 
 page-lit:       ## [diagnostics] light ONE class on a map's page and report which classes' pixels change   MAP=<page.html> CLASS="<key>" [VECTOR=1] [OUT=lit.png]
 ##  the reviewer's page measurement (feature 231): raster mode at the opening view, VECTOR=1 past the switch (Rust since 449 T150, `l7r-mode-a`, the browser `l7r-browser lit`)
@@ -730,7 +731,7 @@ claims-known:  ## [project] record every known drift (a DRIFTED claim naming the
 claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" backfill
 
-claims-rekey:   ## [project] carry each claim's index row to the file its unit moved to with its code intact - a file split at the 1,000-line bar (405 T58) - and onto its port where dev/claims-ports.json maps a deleted .py unit to the unit it became, owed a full check (449 T166), and drops the rows of a deleted .py unit its `retired` map names (449 T184); make land runs it
+claims-rekey:   ## [project] carry each claim's index row to the file its unit moved to with its code intact - a file split at the 1,000-line bar (405 T58) - and onto its port where dev/claims-ports.json maps a deleted .py unit to the unit it became, owed a full check (449 T166), and drops the rows of a deleted .py unit its `retired` map names (449 T184) or of a deleted .py file its `rebuilt` map names (449 T152); make land runs it
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" rekey
 
 claims-refingerprint: ## [project] carry each claim's index row to the current fingerprint - the star re-exports (417 T54), a Rust unit's constant reads (449 T166) - where its code is otherwise unchanged, recorded in dev/claims-refingerprint.jsonl - run once, at the change

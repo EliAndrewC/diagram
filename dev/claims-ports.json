@@ -1,11 +1,101 @@
 {
- "why": "feature 449 T166 (ask:449-phase4-slices Q10): each `.py` unit a slice's cut ports and deletes, by its `path::qualname`, mapped to the unit it became (`to`, a Rust item's `path::qualname`) and the task that ported it (`by`, `<feature> <task>`); `make claims-rekey` (which make land runs) carries each of its claims' index rows onto the port, owed a full check of the new code, and the push refuses a claim on a deleted `.py` unit this map does not carry. Under `retired` (feature 449 T184, ask:449-T184-elongated-retired and ask:449-T184-elongated-retired-2), each `.py` unit deleted and not ported because the research overruled its rule, with the task that removed it (`by`), the research page that overrules it (`page`, `research/questions/<file>.html`, a file in the tree), why (`why`, one line) and the claims round's finding against its rule (`finding`, `<path>::<qualname>#<label>`): the push lets its claims go only where the unit is gone and the merge base's row of its `finding` (a key of the same label) reads DRIFTED or MISLABELED (any other verdict is a new ask, `make arbiter-ask`; ask:449-T184-elongated-retired-2), and `make claims-rekey` drops their index rows and deferred entries",
+ "why": "feature 449 T166 (ask:449-phase4-slices Q10): each `.py` unit a slice's cut ports and deletes, by its `path::qualname`, mapped to the unit it became (`to`, a Rust item's `path::qualname`) and the task that ported it (`by`, `<feature> <task>`); `make claims-rekey` (which make land runs) carries each of its claims' index rows onto the port, owed a full check of the new code, and the push refuses a claim on a deleted `.py` unit this map does not carry. Under `retired` (feature 449 T184, ask:449-T184-elongated-retired and ask:449-T184-elongated-retired-2), each `.py` unit deleted and not ported because the research overruled its rule, with the task that removed it (`by`), the research page that overrules it (`page`, `research/questions/<file>.html`, a file in the tree), why (`why`, one line) and the claims round's finding against its rule (`finding`, `<path>::<qualname>#<label>`): the push lets its claims go only where the unit is gone and the merge base's row of its `finding` (a key of the same label) reads DRIFTED or MISLABELED (any other verdict is a new ask, `make arbiter-ask`; ask:449-T184-elongated-retired-2), and `make claims-rekey` drops their index rows and deferred entries. Under `rebuilt` (feature 449 T152, ask:449-T152-rebuilt-claims), each `.py` FILE a phase task deleted after rebuilding its job in Rust from a derivation judged SOUND, blind to the old code ('An algorithm is rebuilt, never ported'), with that task (`by`, `<feature> <task>`, whose block names the file on its `old-code:` line, literally or by a glob), the Rust module or directory doing the file's job now (`as`, a path or a list of paths in the tree) and the task's derivation (`derivation`, its block's `derivation:` line, a file in the tree): a unit with its own `ports` or `retired` entry is handled there and `rebuilt` covers the file's other units; the push refuses a rebuilt file still in the tree, and lets its units' claims go only once nothing under `as` is owed (`make claims-owed`), the rebuilt code's own `Research:` lines each checked fresh - no old claim is matched to the new code; `make claims-rekey` drops their index rows and deferred entries",
  "retired": {
   "l7r/diagram/labels/hand_sheet.py::ELONGATED": {
    "by": "449 T184",
    "page": "research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html",
    "why": "its rule turned a tall area's caption 90 degrees; 0242 keeps an area's caption level - retired by T184, not ported",
    "finding": "rust/mode_a/src/labels/hand_sheet/seat.rs::subjects#elongated area ratio"
+  }
+ },
+ "rebuilt": {
+  "l7r/diagram/compound.py": {
+   "by": "449 T152",
+   "as": [
+    "rust/mode_a/src/compound.rs",
+    "rust/mode_a/src/compound/"
+   ],
+   "derivation": "specs/449-rust-codebase/derivations/T208-compound.md"
+  },
+  "l7r/diagram/compound_example.py": {
+   "by": "449 T152",
+   "as": [
+    "rust/mode_a/src/compound.rs",
+    "rust/mode_a/src/compound/"
+   ],
+   "derivation": "specs/449-rust-codebase/derivations/T208-compound.md"
+  },
+  "l7r/diagram/compound_model.py": {
+   "by": "449 T152",
+   "as": [
+    "rust/mode_a/src/compound.rs",
+    "rust/mode_a/src/compound/"
+   ],
+   "derivation": "specs/449-rust-codebase/derivations/T208-compound.md"
+  },
+  "l7r/diagram/compound_parts.py": {
+   "by": "449 T152",
+   "as": [
+    "rust/mode_a/src/compound.rs",
+    "rust/mode_a/src/compound/"
+   ],
+   "derivation": "specs/449-rust-codebase/derivations/T208-compound.md"
+  },
+  "l7r/diagram/compound_view.py": {
+   "by": "449 T152",
+   "as": [
+    "rust/mode_a/src/compound.rs",
+    "rust/mode_a/src/compound/"
+   ],
+   "derivation": "specs/449-rust-codebase/derivations/T208-compound.md"
+  },
+  "l7r/diagram/well_gear.py": {
+   "by": "449 T152",
+   "as": [
+    "rust/mode_a/src/compound.rs",
+    "rust/mode_a/src/compound/"
+   ],
+   "derivation": "specs/449-rust-codebase/derivations/T208-compound.md"
+  },
+  "l7r/diagram/labels/__init__.py": {
+   "by": "449 T202",
+   "as": "rust/mode_a/src/caption_place/",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md"
+  },
+  "l7r/diagram/labels/geom.py": {
+   "by": "449 T202",
+   "as": "rust/mode_a/src/caption_place/",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md"
+  },
+  "l7r/diagram/labels/hand_sheet.py": {
+   "by": "449 T202",
+   "as": "rust/mode_a/src/caption_place/",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md"
+  },
+  "l7r/diagram/labels/layout.py": {
+   "by": "449 T202",
+   "as": "rust/mode_a/src/caption_place/",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md"
+  },
+  "l7r/diagram/labels/obstacles.py": {
+   "by": "449 T202",
+   "as": "rust/mode_a/src/caption_place/",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md"
+  },
+  "l7r/diagram/labels/placer.py": {
+   "by": "449 T202",
+   "as": "rust/mode_a/src/caption_place/",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md"
+  },
+  "l7r/diagram/labels/standard.py": {
+   "by": "449 T202",
+   "as": "rust/mode_a/src/caption_place/",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md"
+  },
+  "l7r/diagram/labels/svg.py": {
+   "by": "449 T202",
+   "as": "rust/mode_a/src/caption_place/",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md"
   }
  },
  "ports": {
@@ -68,6 +158,46 @@
   "l7r/diagram/interactive/place.py::windbreak_default": {
    "to": "rust/mode_a/src/place.rs::windbreak_default",
    "by": "449 T150"
+  },
+  "l7r/diagram/labels/hand_sheet.py::BOLD_W_EM": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::BOLD_W_EM",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/hand_sheet.py::CAPS_W_EM": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::CAPS_W_EM",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/hand_sheet.py::DARK": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::DARK",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/hand_sheet.py::DISC_SAG_PX": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::DISC_SAG_PX",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/hand_sheet.py::IDENTITY": {
+   "to": "rust/mode_a/src/labels/hand_sheet/read.rs::IDENTITY",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/hand_sheet.py::render": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::render_args",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/standard.py::CENTER_ABOVE_BASELINE_EM": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::CENTER_ABOVE_BASELINE_EM",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/standard.py::CHAR_W_EM": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::CHAR_W_EM",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/standard.py::LINE_H_EM": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::LINE_H_EM",
+   "by": "449 T151"
+  },
+  "l7r/diagram/labels/standard.py::PITCH_EM": {
+   "to": "rust/mode_a/src/labels/hand_sheet.rs::PITCH_EM",
+   "by": "449 T151"
   }
  }
 }

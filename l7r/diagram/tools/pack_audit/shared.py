@@ -701,7 +701,7 @@ def shrine_tree(text: str) -> list[str]:
 
 # A WELL'S LIFTING GEAR (feature 374 wave 135): research/questions/0196-communal-wells-ido.drawing.html draws every well with
 # "a well-sweep or a pulley frame over it"; a sheet's well carries its gear as a group tagged a part of the well, its
-# `data-gear` the form rolled (`l7r/diagram/well_gear.py`) and its `data-at` the curb's center. An open-air well's gear and
+# `data-gear` the form rolled (the compound generator's `roll`, `rust/mode_a/src/compound/roll.rs`) and its `data-at` the curb's center. An open-air well's gear and
 # roof are the page's; an indoor well (its curb inside a building) takes a pulley hung from the building's beams and no roof
 # of its own (plan W135-2, the batch 6 reviews: a sweep cannot work under a roof).
 _GEAR_RE = re.compile(r'<g data-kind="well" data-gear="(sweep|pulley frame|beam pulley)" data-at="([\d.]+),([\d.]+)"')

@@ -43,7 +43,7 @@ fn the_list_and_the_inline_audit() {
             ("plain", "function", &["plain - UNRESEARCHED"], false),
         ],
     );
-    put(&root, "l7r/diagram/labels/x.py", "4.5\n");
+    put(&root, "l7r/diagram/tools/pack_audit/x.py", "4.5\n");
     put(&root, "l7r/diagram/other.py", "4.5\n");
     // a crate new under `rust/` is audited, a tooling crate is not (feature 449 T165)
     put(
@@ -75,8 +75,8 @@ fn the_list_and_the_inline_audit() {
     let inline = super::inline(&mut reader, &root, &cur, "").unwrap();
     let shown = render_inline(&inline, false);
     assert!(
-        shown.contains("  l7r/diagram/labels/x.py:3 fn 4.5")
-            && shown.contains("  l7r/diagram/labels/x.py:4 big 1.23457e+06")
+        shown.contains("  l7r/diagram/tools/pack_audit/x.py:3 fn 4.5")
+            && shown.contains("  l7r/diagram/tools/pack_audit/x.py:4 big 1.23457e+06")
             && shown.contains("  rust/phases/src/lib.rs:14 reach 3.25")
             && shown.contains("  rust/phases/src/lib.rs:23 m 42")
             && shown.contains("  rust/mode_a/src/lib.rs:2 sheet 77.5")
@@ -85,7 +85,7 @@ fn the_list_and_the_inline_audit() {
             && !shown.contains("other.py"),
     );
     let counted = render_inline(&inline, true);
-    assert!(counted.contains("      2  l7r/diagram/labels/x.py\n"));
+    assert!(counted.contains("      2  l7r/diagram/tools/pack_audit/x.py\n"));
     assert!(super::inline(&mut reader, &root, &cur, "rust/")
         .unwrap()
         .iter()

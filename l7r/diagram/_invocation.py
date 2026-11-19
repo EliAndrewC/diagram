@@ -199,8 +199,6 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.pipeline.regen": ("map", "expensive"),
     "l7r.diagram.pipeline.render_cache": ("render-sync", "expensive"),
     "l7r.diagram.pipeline.pool_index": ("pool-index", "expensive"),
-    "l7r.diagram.labels.hand_sheet": ("sheet-render", "cheap"),  # feature 286: a hand-drawn sheet rendered with its captions placed
-    "l7r.diagram.compound": ("compound", "expensive"),
 }
 
 

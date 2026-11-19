@@ -8,10 +8,177 @@
 //! each predicate on every tub, board and opening of every sheet the lockstep reads). The claims stay keyed to the `.py` units
 //! (`ask:449-phase4-slices` Q10); each copy here carries the same claim.
 //!
+//! THE GENERATOR (feature 449 T152): the Mode A compound generator rebuilt in Rust from its derivation
+//! (`specs/449-rust-codebase/derivations/T208-compound.md`, judged SOUND and budgeted per pool sheet), never ported - its submodules below,
+//! written from the derivation, docs/buildings.md, docs/building-programs.md and the pages they cite: the program read from its spec file
+//! ([`spec`]), the grid ([`grid`]) and the span search ([`span`]), the buildings and doors seated ([`layout`]), the open ground's sweep
+//! ([`ground`]), the parts ([`parts`], [`fixtures`]), the sheet written with its captions declared ([`emit`], [`emit_parts`]) and the command
+//! ([`cli`]). The distances and predicates above them are the audit's, and the generator seats by the same ones.
+//!
 //! Research:
 //!     the compound engine's audit rules - NONE: the engine's distances and predicates held as the audit reads them, deciding nothing here that the claims on each do not
 
+pub mod cli;
+pub mod emit;
+pub mod emit_parts;
+pub mod fixtures;
+pub mod grid;
+pub mod ground;
+pub mod layout;
+pub mod parts;
+pub mod roll;
+pub mod span;
+pub mod spec;
+
+use l7r_gate_research::Error;
+
 use crate::py::pow_half;
+use crate::types::Band;
+
+/// One counted operation of the generator (the crate's `counters` feature; nothing in a drawing build).
+pub(crate) fn count(key: &str, n: u64) {
+    crate::work_counts::count(key, n);
+}
+
+/// One counted operation keyed `<kind>@<f>`, the key built only in the counting build: a drawing build formats nothing.
+pub(crate) fn count_at(kind: &str, f: &str, n: u64) {
+    #[cfg(feature = "counters")]
+    crate::work_counts::count(&format!("{kind}@{f}"), n);
+    #[cfg(not(feature = "counters"))]
+    let _ = (kind, f, n);
+}
+
+/// The size sweep's pairs the generator holds before it writes: the audit's, and the checklist's stores and records under the rowhouse and the
+/// bath under the house.
+///
+/// Research:
+///     size hierarchy - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the residence the largest domestic building and the small storehouses well below the rowhouse - the generator holds, beside the audit's seven pairs, three more as strictly smaller in area: the bath under the residence, a storehouse and the tax archive under the barracks; the office hall, residence and rowhouse order is held only as far as the audit's seven pairs hold it
+pub const RANKS: [(&str, &str); 3] = [
+    ("bath", "residence"),
+    ("storehouse", "barracks"),
+    ("tax archive", "barracks"),
+];
+
+/// The knobs the program records, each re-rolled from the sheet's seed by the docs' formula and held to the form recorded.
+///
+/// # Errors
+/// A recorded form the roll does not give.
+///
+/// Research: several attested forms a knob - CANON: the root CLAUDE.md's research rule (the GM's): several attested forms are a knob rolled from the map's seed, never a choice
+pub fn knobs(p: &spec::Program) -> Result<Vec<(String, String)>, Error> {
+    let mut out = Vec::new();
+    for k in &p.knobs {
+        let got = roll::choice(&p.name, &k.key, &k.options)
+            .cloned()
+            .unwrap_or_default();
+        count("rule_check@compound_knob", 1);
+        if got != k.value {
+            return Err(Error::new(
+                "ValueError",
+                format!(
+                    "the knob {:?} records {:?}, but the sheet's seed rolls {got:?}",
+                    k.key, k.value
+                ),
+            ));
+        }
+        out.push((k.key.clone(), got));
+    }
+    Ok(out)
+}
+
+/// The compound composed: the knobs held, the spine and gates filed, the buildings and doors seated, the open ground asked, the parts
+/// seated, and the size sweep and the privies' zones held.
+///
+/// # Errors
+/// The program refused where a rule cannot hold - never repaired.
+pub fn generate(
+    p: &spec::Program,
+    bands: &[(String, Band)],
+) -> Result<(layout::Layout, parts::Seated), Error> {
+    let rolled = knobs(p)?;
+    let mut l = layout::Layout::new(p);
+    l.seat_all(p, bands)?;
+    l.seat_doors(p)?;
+    ground::open_ground(p, &l)?;
+    let mut s = parts::Seated {
+        rolls: rolled,
+        ..parts::Seated::default()
+    };
+    fixtures::roji(p, &mut l, &mut s)?;
+    parts::bath(p, &mut l, &mut s)?;
+    parts::wells(p, &mut l, &mut s)?;
+    parts::tubs(p, &mut l, &mut s)?;
+    fixtures::privies(p, &mut l, &mut s)?;
+    fixtures::board(p, &mut l, &mut s);
+    fixtures::tree(p, &mut l, &mut s)?;
+    fixtures::practice(p, &mut l, &mut s)?;
+    fixtures::garden_sun(p, &l, &s)?;
+    composition(p, &l, &s)?;
+    Ok((l, s))
+}
+
+/// The size sweep's pairs and a privy in each court.
+///
+/// Research: a privy in each court zone - GUESS research/questions/0101-privies-setchin.drawing.html: about one privy to each part of the compound, the project's guess
+fn composition(p: &spec::Program, l: &layout::Layout, s: &parts::Seated) -> Result<(), Error> {
+    let area = |kind: &str| -> Option<f64> {
+        let mut best: Option<f64> = None;
+        for (i, b) in p.buildings.iter().enumerate() {
+            if b.kind == kind && l.seats[i].is_some() {
+                best = Some(best.map_or(b.w * b.h, |a: f64| a.max(b.w * b.h)));
+            }
+        }
+        if kind == "bath" {
+            return s.bath.map(|b| (b.2 - b.0) * (b.3 - b.1));
+        }
+        best
+    };
+    for (small, big) in crate::audit::program_rules::HIERARCHY
+        .iter()
+        .chain(RANKS.iter())
+    {
+        count("rule_check@compound_ranks", 1);
+        if let (Some(a), Some(b)) = (area(small), area(big)) {
+            if a >= b {
+                return Err(Error::new(
+                    "ValueError",
+                    format!(
+                        "the {small} ({a:.0} sq ft) is not smaller than the {big} ({b:.0} sq ft)"
+                    ),
+                ));
+            }
+        }
+    }
+    for (y0, y1) in [(0.0, p.divider), (p.divider, p.h)] {
+        count("rule_check@compound_privies", 1);
+        let held = s.privies.iter().any(|pr| {
+            let cy = f64::midpoint(pr.bx.1, pr.bx.3);
+            y0 <= cy && cy <= y1
+        });
+        if !held && !s.privies.is_empty() {
+            return Err(Error::new(
+                "ValueError",
+                "a court with no privy - one stands in each zone (0101)".to_owned(),
+            ));
+        }
+    }
+    Ok(())
+}
+
+/// The sheet written from the composed compound: its text with every caption declared.
+///
+/// Research:
+///     the drawing order - CONVENTION: the grounds, the buildings, then the walls and gates over them (research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html), then the small glyphs (research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: small glyphs drawn last), then the captions (research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html)
+#[must_use]
+pub fn sheet(p: &spec::Program, l: &layout::Layout, s: &parts::Seated) -> String {
+    let mut svg = emit::Svg::new();
+    emit::head(&mut svg, p);
+    emit::grounds(&mut svg, p);
+    emit::buildings(&mut svg, p, l);
+    emit::frame(&mut svg, p, l);
+    emit_parts::parts(&mut svg, s);
+    svg.finish()
+}
 
 /// A box in feet: `(x, y, x2, y2)`, the engine's `Box`.
 pub type FtBox = (f64, f64, f64, f64);
@@ -98,6 +265,13 @@ pub fn board_by_a_gate(board: FtBox, openings: &[(f64, f64)]) -> bool {
 }
 
 #[cfg(test)]
+mod gen_tests;
+#[cfg(test)]
+mod gen_tests_parts;
+#[cfg(test)]
+mod gen_tests_seat;
+
+#[cfg(test)]
 mod tests {
     use super::{board_by_a_gate, fill, gap, tub_by_its_door, tub_by_its_eaves};
 
@@ -110,6 +284,7 @@ mod tests {
         assert!(!tub_by_its_eaves((0.0, 3.6), (0.0, 0.0, 0.0, 0.0)));
         assert!(tub_by_its_door((0.0, 0.0), &[(30.0, 0.0), (10.5, 0.0)]));
         assert!(!tub_by_its_door((0.0, 0.0), &[]));
+        // the audit's 40 ft, a departure from 0090's ~15 ft kept until feature 417 T33
         assert!(board_by_a_gate((40.0, 0.0, 41.0, 1.0), &[(0.0, 0.0)]));
         assert!(!board_by_a_gate((40.1, 0.0, 41.0, 1.0), &[(0.0, 0.0)]));
         assert_eq!((fill("kura"), fill("nothing")), ("#F2EFE4", ""));

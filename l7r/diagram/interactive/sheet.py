@@ -202,12 +202,22 @@ def _engine(argv: list[str], text: str | None = None) -> tuple[dict, int]:
     return out, run.returncode
 
 
+def draw_compound_sheet(spec_path: str) -> int:
+    """A generated compound sheet drawn whole by the Mode A engine (`l7r-mode-a compound`, feature 449 T152): its program read from
+    `<map>.compound.json`, composed by the compound generator rebuilt in Rust from its derivation, its captions placed by the one placer,
+    the placed sheet written beside it as `<map>.svg`, its picture rendered unless `DIAGRAM_SKIP_RENDER=1`, its page written and its
+    census judged - the engine prints the sheet's untagged ink and unknown kinds and exits 1. A program the generator refuses (no room on
+    a wall, a rule that cannot hold) is raised as the engine's exception. The generator's exit is returned."""
+    _, code = _engine(["compound", spec_path])
+    return code
+
+
 def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_raster: bool | None = None, svg: str | None = None) -> Census:
     """`<map>.html` beside `<map>.svg`, from the sheet's own tags - and the sheet's census, for the caller to report. Written by
     the Mode A engine (`l7r-mode-a sheet-page`, feature 449 T150): `with_raster` defaults there to the render condition every
     other page uses (feature 208: no picture when `DIAGRAM_SKIP_RENDER=1`), and the map's `<map>.notes.md` "Map notes" block is
     read from the output path, as for a hamlet. `svg` is the sheet's text when it is not the file's - a hand sheet's with its
-    captions placed (feature 286, `labels.hand_sheet.placed`), handed on stdin; the page is still written beside, and named for,
+    captions placed (feature 286, the placer `rust/mode_a/src/caption_place.rs`), handed on stdin; the page is still written beside, and named for,
     `svg_path`. `registry` is the engine's own, read from the same modal files (`compound_kinds`); every caller passes
     `COMPOUND_CLASSES`."""
     del registry  # the engine reads the same registry from the tree (`l7r_gate_registry::about::compound_classes`)

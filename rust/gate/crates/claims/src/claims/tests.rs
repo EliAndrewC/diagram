@@ -290,7 +290,7 @@ fn the_inline_audit_runs_from_the_command_line() {
     assert!(got
         .stdout
         .starts_with("tunables --inline: 3 number(s) in 1 file(s)"));
-    put(&root, "l7r/diagram/labels/x.py", "4.5\n");
+    put(&root, "l7r/diagram/tools/pack_audit/x.py", "4.5\n");
     put(&root, "scripts/bundle_door.py", "import sys\nsys.exit(1)\n");
     assert_eq!(
         super::tunables_cli(&["--root".to_owned(), r, "--inline".to_owned()]).code,

@@ -1,7 +1,7 @@
 # `pipeline/` - how a pool map gets regenerated, cached, rendered and indexed
 
 The BUILD side of the project. The other three sides are the drawing engines (`settlement/`,
-`waterfields/`, `hamletgen/`, `compound.py`) and the by-hand
+`waterfields/`, `hamletgen/`, the Rust compound generator `rust/mode_a/src/compound/`) and the by-hand
 diagnostics ([`../tools/`](../tools/CLAUDE.md)). Drive it through `make` at the repository root:
 
     make map GEN=pool/hamlets/sawada/sawada.gen.py    # one map: regenerated, or CACHED when nothing it depends on changed

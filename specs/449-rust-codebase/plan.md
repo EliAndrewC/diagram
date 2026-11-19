@@ -383,7 +383,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 11. **Before fitting things into room.** Room first (the GM, 2026-10-12): a building that will not fit its wall row is reported, and the envelope or the program's knob moved before anything is squeezed.
 12. **Before any fix.** A building or part that moves and still holds every rule is not a defect (XIV); one that breaks a rule, or a sheet a check refuses, is fixed in the new generator before landing.
 
-**Found and left?** none yet
+**Found and left?** Found and fixed in this task: the unnamed-void check passed any free region that touched a named ground, so the county's open ground between the hall and the practice ground passed unnamed; it now looks at each court's center past the audit's own perimeter band along its walls, red first, and both sheets' central grounds are named (`outer court` on the county, `service yard` on the round-trip). The claims rounds found three wrong outcomes, each fixed red first: the kitchen garden's sun rule (now the six-hour autumn rule with the walls' shadows), the hearing court's floor (read from the program, white gravel or river cobbles, as 0099 makes it), and the main gate's posts (drawn inside the wall's ink, now standing past it); the small glyphs are drawn after the walls, so a privy's collection hatch shows. The middle gate opens beside the office hall, which stands almost against the divider: every rule of docs/buildings.md and 0090 still holds and both sheets read right (the hall still stands between the hearing court and the house); what differs is only the gate's place against the page's own GUESS of "behind the office hall", so it is not a defect (XIV), and the page and the gate's pop-up now say where the gate opens on each kind of plan (the pop-up's form, research and depiction checks clean). Room first changed two programs, each recorded in its notes (the round-trip's barracks order and kitchen door; the county's gate passage and residence start). Claims on the deleted Python have no port by design: the round arbiter's `ask:449-T152-rebuilt-claims` (continue) added a `rebuilt` outcome to `dev/claims-ports.json`, tied to the phase task's `old-code:` and `derivation:` lines, the spec and engine plan restated to match. Left: the notice board's 40 ft limit against 0090's "within about 15 ft" stays as it was, open under feature 417 T33 (the three hand-drawn magistracies' boards stand across the road from their gates, 20 to 32 ft off, measured 2026-11-19 (the audit at 15 ft)); the caption placer's stroke-edge nearness defect found here is filed as T209, and T209 lands before T156 or any next step's port begins; on the two rebuilt sheets it puts no caption off its feature (the storehouse captions it pushed onto a diagonal were reseated by the spec's sizes, and both sheets were looked at), and the four hand sheets carry it since T202, which T209 fixes for all six.
 
 **Performance work?** yes - the rebuild exists to bring the generator within its derived budget; its answers are the derivation (`derivations/T208-compound.md`, SOUND) and the budget set by T208.
 
@@ -756,3 +756,30 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T208 to T199 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T208 to T208 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
+
+### T209 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T209 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

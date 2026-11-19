@@ -206,17 +206,7 @@
   "l7r/diagram/interactive/sources.py::registry_keys",
   "l7r/diagram/interactive/sources.py::research_sources",
   "l7r/diagram/interactive/sources.py::section_sources",
-  "l7r/diagram/interactive/sources.py::urls_of",
-  "l7r/diagram/labels/obstacles.py::ObstacleIndex.cost",
-  "l7r/diagram/labels/placer.py::LINE_STATIONS",
-  "l7r/diagram/labels/placer.py::_Cand",
-  "l7r/diagram/labels/placer.py::_line_cands",
-  "l7r/diagram/labels/placer.py::_strict_seat",
-  "l7r/diagram/labels/placer.py::caption_clears_ways",
-  "l7r/diagram/labels/placer.py::leader_cost",
-  "l7r/diagram/labels/placer.py::moved_inward",
-  "l7r/diagram/labels/standard.py::HUG_PX",
-  "l7r/diagram/labels/standard.py::WEIGHT_FREE"
+  "l7r/diagram/interactive/sources.py::urls_of"
  ],
  "keys": [
   "rust/mode_a/src/place.rs::dwellings_shown#town and city count no farmhouses"

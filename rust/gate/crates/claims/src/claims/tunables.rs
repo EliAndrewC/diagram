@@ -20,11 +20,10 @@ use crate::record::units::re;
 const OURS: [&str; 3] = ["GUESS", "UNRESEARCHED", "CONVENTION"];
 static FIGURE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w.])\d+(?:\.\d+)?(?![\w])"));
 /// The code that draws a map, and the audit that grades a Mode A sheet (D31 (d)).
-const MAP_CODE: [&str; 4] = [
+const MAP_CODE: [&str; 2] = [
     "l7r/diagram/tools/pack_audit/",
-    "l7r/diagram/labels/",
-    "l7r/diagram/compound",
-    "l7r/diagram/well_gear.py",
+    // the Mode A engine: the compound generator, the caption placer, the audit (feature 449 T152 deleted their Python)
+    "rust/mode_a/src/",
 ];
 /// Numbers too plain to be a decision.
 const TRIVIAL: [f64; 12] = [

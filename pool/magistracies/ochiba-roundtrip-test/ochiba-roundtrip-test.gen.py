@@ -1,176 +1,40 @@
 #!/usr/bin/env python3
 """ochiba-roundtrip-test.gen.py - round-trip TEST of the perimeter-first placer (feature 008).
 
-Encode the EXISTING hand-authored Ochiba magistracy (pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg) as a
-feet-first CompoundProgram - its real envelope, its real court-spine, and its real building
-masses measured off the finished SVG at 3 px = 1 ft - then run it through compound.place()
-and compound.emit_svg(). The point is not to replace Ochiba but to see whether the placer,
-given Ochiba's ACTUAL program, composes it the way the GM hand-composed it, and to surface
-exactly where the two diverge (that divergence is the finding of the test).
+Encode the EXISTING hand-authored Ochiba magistracy (pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg) as a feet-first
+compound program - its real envelope, its real court-spine, and its real building masses measured off the finished SVG at 3 px = 1 ft -
+then compose it with the compound generator, to see whether the generator, given Ochiba's ACTUAL program, composes it the way the GM
+hand-composed it, and to surface exactly where the two diverge (that divergence is the finding of the test).
 
-Garden pavilions and point features (bath, wells, latrines, privy, fire-tubs, the notice board) are
-NOT massed perimeter buildings - the placer arranges the wall-ranging masses and the emitter seats
-the point features against them (feature 254: a draft in the pool is swept by the gate with the
-whole program, so it carries the whole program).
+The program is data since feature 449 T152: `ochiba-roundtrip-test.compound.json` beside this file (it was `ochiba_program()` here),
+with the research claims its docstring carried. Garden pavilions and point features (bath, wells, latrines, fire-tubs, the notice board)
+are NOT massed perimeter buildings - the generator seats them against the masses (feature 254: a draft in the pool is swept by the gate
+with the whole program, so it carries the whole program).
 
-Run:  python3 pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py   (from the skill dir)
+DRAWN BY THE MODE A ENGINE (feature 449 T152): `l7r-mode-a compound <spec>` composes the sheet, places its captions, writes the svg,
+renders the png unless `DIAGRAM_SKIP_RENDER=1`, writes the page and judges the census (`rust/mode_a/src/compound/`, rebuilt from its
+derivation, `specs/449-rust-codebase/derivations/T208-compound.md`).
+
+Run:  make map GEN=pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py
 """
 
 from __future__ import annotations
 
 import os
-import subprocess
 import sys
 
 sys.path.insert(
     0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 )  # <tree>/<tier>/<map>/ - one level deeper since feature 161 gave every map its own folder
 
-from l7r.diagram import compound as C  # noqa: E402
-from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES  # noqa: E402
-from l7r.diagram.interactive.sheet import write_sheet_page  # noqa: E402
+from l7r.diagram.interactive.sheet import draw_compound_sheet  # noqa: E402
 
-# cwd-INDEPENDENT output path (fixed 2026-07-21): the old cwd-relative "pool/..." wrote a stray
-# file at the pool ROOT when run from the skill dir and crashed when run from this dir - anchor
-# to __file__ like every Mode B gen, so the render-sync regen (which runs each gen from its own
-# directory) and any hand run land the outputs HERE, beside the gen.
-OUT_SVG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ochiba-roundtrip-test.svg")
-
-
-def ochiba_program() -> C.CompoundProgram:
-    """Ochiba's program as its sheet draws it, in feet.
-
-    Research:
-        the residence and its rooms - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0101-privies-setchin.drawing.html: Ochiba's house measured off ochiba-magistracy.svg at 3 px = 1 ft (feature 449 T182), one block of 90 x 50 ft in two rows with its reception at one end, as 0091 draws the house - the family's quarters and the lord's in the north row, the guest room and the reception room in the south (garden) row, the maids' room 12 x 12 ft at the kitchen end; the reception room gives the placer the room 0101 seats the guests' privy behind, the house's second privy
-        its rooms' sizes - GUESS: the reception room 28 x 15 ft, the lord's quarters 25 x 15 ft and the family quarters 20 x 18 ft, inside the bands of this project's round the ordinary houses measured (the kinds' Guesses), in the palace order (reception at the east end of the front row, the lord's rooms behind it, the family's beyond, the inner rooms behind), the rest captioned inner-room bays and corridors
-        its storehouses behind the house - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the household's storehouses stand behind the house, in its rear strip on the north wall as Ochiba's sheet draws them (feature 449 T187)
-        its lodgings' dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: 16.5 (the barracks' two dwellings); 17 (the long-house's three dwellings); 34 (the same) - each inside 0097's bays of about 12 to 18 ft, a door to each, as Ochiba's sheet draws them (feature 449 T187)
-        its doors at each dwelling's middle - GUESS: no page seats a dwelling's door along its face (feature 449 T187) - 0.25 (the barracks' court-face door); 0.5 (the barracks' end door, the long-house's middle door); 1 / 6 and 5 / 6 (the long-house's end doors, at its end dwellings' middles)
-    """
-    env = C.Envelope(w_ft=267.0, h_ft=200.0, divider_ft=100.0, gate_w_ft=13.3)
-    # real open courts measured off the finished map
-    spine = (
-        C.CourtZone("garden", 107.0, 53.0, 97.0, 45.0),  # inner garden (center of inner court)
-        C.CourtZone("oshirasu", 73.0, 139.0, 120.0, 35.0),  # the sanded hearing court
-        C.CourtZone("forecourt", 95.0, 180.0, 76.0, 17.0),  # just inside the main gate
-        C.CourtZone("practice ground", 200.0, 104.0, 30.0, 30.0),  # beside the E-wall barracks, as on the sheet (feature 254: the whole program)
-    )
-    b = C.BuildingSpec
-    buildings = (
-        # inner (residence) court
-        # FEATURE 449 T182: Ochiba's house as its sheet draws it, one 90 x 50 ft block of rooms (270 x 150 px, the residence rect at
-        # (340,212)); it was two 90 and 93 x 25 ft bars with no rooms, an older Ochiba, so the placer seated no guests' privy - the
-        # reception room it is seated behind was missing - and privies_by_zone refused the house's one privy (0101 gives it two).
-        # The guest room is a room of the house here, as on the sheet, where it was a mass of its own (feature 254).
-        b(
-            "residence",
-            "lord",
-            90.0,
-            50.0,
-            "inner",
-            "N",
-            order=10,
-            feature="residence",
-            # THE ROOMS AT THE ORDINARY HOUSES' SIZES, IN THE PALACE ORDER (feature 449 T182, the round arbiter's
-            # ask:449-T182-room-layout and -room-scope): the front (garden) row - the family's rooms 20 x 18 ft at the far
-            # (west) end, the guest room, the reception 28 x 15 ft at the east end; behind them a 6 ft corridor in three pieces
-            # drawn as one passage (`compound.py`), stepped 3 ft at the reception; the back row - the lord's quarters 25 x 15 ft behind the
-            # reception, and the rest captioned bays of inner rooms in two ranks - a north rank of three bays 14 ft deep, a rank
-            # of two 12 ft deep behind it, their dividing line one line at 14 ft with the lord's quarters' top - the maids'
-            # room, 14 x 12 ft (its two-line name has no seat in a 12 ft square) at the west end of that second rank's west bay,
-            # from its top edge. Each band is the kinds' Guesses (the reception <= 450 sq ft, the lord's 12-26 x 12-16, the
-            # family's 18-30 x 12-20, an inner bay 9-36 x 9-25, a corridor 3-6.5 ft wide and <= 36 ft long).
-            rooms=(
-                ("inner rooms", 0.0, 0.0, 32.5, 14.0),
-                ("inner rooms", 32.5, 0.0, 32.5, 14.0),
-                ("inner rooms", 65.0, 0.0, 25.0, 14.0),
-                ("inner rooms", 0.0, 14.0, 32.5, 12.0),
-                ("servants' quarters", 0.0, 14.0, 14.0, 12.0),
-                ("inner rooms", 32.5, 14.0, 32.5, 12.0),
-                ("lord's quarters", 65.0, 14.0, 25.0, 15.0),
-                ("residence corridor", 0.0, 26.0, 36.0, 6.0),
-                ("residence corridor", 36.0, 26.0, 29.0, 6.0),
-                ("residence corridor", 62.0, 29.0, 28.0, 6.0),
-                ("family quarters", 0.0, 32.0, 20.0, 18.0),
-                ("guest quarters", 20.0, 32.0, 42.0, 18.0),
-                ("reception room", 62.0, 35.0, 28.0, 15.0),
-            ),
-            # Ochiba's rear strip: the house stands 57.5 px (19.2 ft) off the north wall's face (212 against the face at 154.5),
-            # and the placer adds 1.5 ft to an inset, so 17.7 ft
-            inset_ft=17.7,
-        ),
-        b("servants", "service", 65.0, 15.0, "outer", "S", order=7, feature="servants' quarters"),  # the street range, as Ochiba's since feature 374 wave 124 (0115)
-        # Ochiba's two storehouses, 18 x 12 ft each, behind the house in its rear strip on the north wall, as her sheet draws
-        # them (feature 374 batch 4: the program's storehouse item, R4-6; research/questions/0091-samurai-residences-and-their-
-        # rooms-buke-yashiki.drawing.html: "The household's storehouses stand behind the house"). Feature 449 T187: they were
-        # the north wall's second rank, which stood behind the house while it stood on the wall; with the house off the wall
-        # (T182) that rank stood before it, the storehouses' backs to the reception, so they are the wall's first rank again.
-        b("storehouse (W)", "kura", 18.0, 12.0, "inner", "N", order=8, feature="storehouse"),
-        b("storehouse (E)", "kura", 18.0, 12.0, "inner", "N", order=8, feature="storehouse"),
-        # Ochiba's kitchen is an ELL on the house's west end, 24 x 18 ft (72 x 54 px at (268,308), abutting the house at x 340): with
-        # the house off the wall (T182) the 24 ft kitchen on the west wall found no seat, so it is declared an ell as the sheet draws it
-        # (the placer seats it at the house's east end, the house taking the west corner)
-        b("kitchen", "service", 24.0, 18.0, "inner", "N", order=5, feature="kitchen", inset_ft=17.7, joins="residence"),
-        b("Inari shrine", "shrine", 37.0, 31.0, "inner", "E", order=5, feature="compound shrine"),
-        b("cinnabar workshop", "shrine", 37.0, 24.0, "inner", "E", order=4, feature="cinnabar workshop"),
-        b("karo's house", "lord", 37.0, 23.0, "inner", "divider", order=3, feature="karo's house"),
-        # outer (administrative) court
-        b("office hall", "lord", 120.0, 28.0, "outer", "divider", order=10, feature="office hall"),
-        b("tax archive", "kura", 24.0, 18.0, "outer", "W", order=6, feature="tax archive"),  # feature 372 wave 105: 0100's ceiling, as Ochiba's sheet
-        # Ochiba's three dwellings of 17 ft, a door to each on the south face, as her sheet draws them (feature 449 T187:
-        # research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html and 0106's - the long-house is divided into
-        # dwellings, each with a door of its own; it was drawn one undivided hall behind one door)
-        b(
-            "senior retainers",
-            "service",
-            51.0,
-            17.0,
-            "outer",
-            "W",
-            order=4,
-            feature="retainers' quarters",
-            door_face="S",
-            extra_doors=("S", "S"),
-            door_fracs=(1 / 6, 0.5, 5 / 6),
-            bays=(17.0, 34.0),
-        ),
-        b("granary", "kura", 50.0, 26.0, "outer", "E", order=6, feature="granary"),
-        # Ochiba's 24 x 33 ft (feature 335), 0097: never deeper than ~24 ft; her two dwellings of 16.5 ft, a door to each - the
-        # north one's on its court face, the south one's on its south end, the garrison privy standing before the court face
-        # there (feature 449 T187, 0097: "The barracks is divided into dwellings"; it was drawn undivided)
-        b("barracks", "service", 24.0, 33.0, "outer", "E", order=4, feature="barracks", extra_doors=("S",), door_fracs=(0.25, 0.5), bays=(16.5,)),
-        b("cell", "cell", 18.0, 15.0, "outer", "E", order=1, feature="cell"),
-        b("gatehouse", "dark", 40.0, 14.0, "outer", "S", order=8, feature="gatehouse"),
-        b("stables", "service", 18.0, 24.0, "outer", "S", order=5, feature="stables", door_face="E", door_fracs=(0.5,)),  # Ochiba's since feature 374 wave 126 (0108)
-        # a room of the hall on the sheet; a mass here (feature 254). Plain wood, the palette's clerks' duty room (feature 294
-        # B22 `palette_roles`: it was drawn in the service color)
-        b("clerks' room", "plain", 28.0, 18.0, "outer", "W", order=3, feature="clerks' room"),
-    )
-    return C.CompoundProgram("Ochiba County Magistracy (placer round-trip)", env, spine, buildings, tier="magistracies", seed_name="ochiba-roundtrip-test")  # its declared type: the bands it is placed to (feature 287 H29b)
+SPEC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ochiba-roundtrip-test.compound.json")
 
 
 def main() -> int:
-    program = ochiba_program()
-    result = C.place(program)
-    with open(OUT_SVG, "w", encoding="utf-8") as fh:
-        fh.write(C.emit_svg(program, result))
-    print(f"wrote {OUT_SVG}: {len(result.placed)} placed, {len(result.overflow)} overflow")
-    for p in sorted(result.placed, key=lambda p: (p.spec.court, p.spec.wall, p.x_ft, p.y_ft)):
-        print(f"  placed  {p.spec.name:22s} {p.spec.court:5s} {p.spec.wall:7s} @ ({p.x_ft:.0f},{p.y_ft:.0f})")
-    for s in result.overflow:
-        print(f"  OVERFLOW {s.name:21s} {s.court:5s} {s.wall:7s} ({s.w_ft:.0f}x{s.h_ft:.0f} ft)")
-    if os.environ.get("DIAGRAM_SKIP_RENDER") != "1":
-        subprocess.run(
-            ["resvg", "--width", "2400", "--serif-family", "DejaVu Serif", OUT_SVG, OUT_SVG[:-4] + ".png"],
-            check=True,
-        )
-    # the interactive page (feature 262): the emitter wrote each element's kind, so the page reads the draft as it
-    # reads a hand-drawn sheet
-    census = write_sheet_page(OUT_SVG, COMPOUND_CLASSES)
-    if census.unclassed or census.unregistered:
-        print(f"{os.path.basename(OUT_SVG)}: untagged ink {census.unclassed}; unknown kinds {census.unregistered}", file=sys.stderr)
-        return 1
-    return 0
+    # the sheet drawn whole - composed, captions placed, picture, page and census - and the generator's exit the engine's (feature 449 T152)
+    return draw_compound_sheet(SPEC)
 
 
 if __name__ == "__main__":

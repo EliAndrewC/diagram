@@ -1,18 +1,19 @@
 # county-magistracy-example - design notes (placer worked example)
 
 This is NOT a hand-authored map. It is the worked-example OUTPUT of the perimeter-first
-placer ([`../compound.py`](../../../l7r/diagram/compound.py), feature 008): `county_magistracy_program()`
-declares a generic county magistracy entirely in FEET (envelope, the reserved court-spine,
-and buildings sized in feet with wall tags), and `place()` + `emit_svg()` compose it.
+compound generator (feature 008; rebuilt in Rust from its derivation by feature 449 T152, `rust/mode_a/src/compound/`):
+[`county-magistracy-example.compound.json`](county-magistracy-example.compound.json) declares a generic county magistracy
+entirely in FEET (envelope, the reserved court-spine, and buildings sized in feet with wall tags), and the generator composes it.
 
 **Program type**: magistrate's manor (county magistracy) - the generic worked example.
 
-Regenerate: `make map GEN=pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py` (from the skill dir).
+Regenerate: `make map GEN=pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py`.
 
 ## Knob settings
 
-The forms the draft takes where the research gives more than one (feature 267 outcomes; each is set in
-`county_magistracy_program()` with its reason at the point of change):
+The forms the draft takes where the research gives more than one (feature 267 outcomes; each was set in the old builder's
+`county_magistracy_program()` with its reason at the point of change, and is the spec file's since feature 449 T152 - the four rolled
+knobs re-rolled from the seed by the generator and held to the forms recorded here):
 
 - **R01 veranda**: the garden face alone (the first of the two forms), 4 ft wide (pass 6; 5 ft before) - an `engawa` strip inside the
   residence's south face (research 0102: 3-6 ft).
@@ -309,6 +310,31 @@ Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check p
   guests' way in (no genkan).
 
 Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
+
+2026-11-19 (feature 449 T152): the program rebuilt as data, `county-magistracy-example.compound.json`, from docs/building-programs.md's
+county magistrate's manor program, these notes' knobs and particulars and the sizes the sheet drew (the old builder's program is old
+code, unread), and drawn by the compound generator rebuilt in Rust from its derivation
+(`specs/449-rust-codebase/derivations/T208-compound.md`). The four rolled knobs above are re-rolled by the docs' formula on every draw
+and held to the forms recorded (granary form earth-walled kura; main gate form one-bay gate; servants' quarters form a door to each
+dwelling; vegetable garden site west of the residence). Where the composition moved, each a knob of the program: the office hall
+centered between the outer court's columns (65.5 to 178.5 ft), the hearing court centered under it (82 to 162 ft), the middle gate in
+the divider just east of the hall (180 to 190 ft with its posts; the DEVIATION recorded above, the first stretch beside the hall whose
+approach is clear on both sides), and the tax archive on the divider east of the middle gate (190 to 208 ft); the main gate's passage at 140 ft with the gatehouse west of it, the servants' row and the stables
+west of that, the cell by the south service gate; the practice ground below the hall's band, beside the barracks; the house's search
+started 102 ft along the north wall (the program's start knob), so the kitchen ell, the rear yard and the vegetable garden stand west of
+it; the shrine in the north-east corner with its tree in the ground held south of it, the guest house below. Figures above this entry
+that it supersedes: the tree's held ground is 23.5 ft past the shrine's south end (it was 17), its crown 3.5 ft off the hall (2) and its
+trunk 13.5 ft off (12); the cell stands just WEST of the service gate (east); the hall spans 65.5 to 178.5 ft (about 33 to 146); the
+forecourt is 54 x 31 ft east of the main gate, the practice ground 33 x 39 ft below the hall's band, the cart yard 24 x 22 ft before the
+service gate, and the main gate's passage stands at 140 ft (135). The open ground of the outer court's center is named `outer
+court` on both sides of the hearing court - east of it to the practice ground (43 x 35 ft, the ground the old sheet named so) and west
+of it before the senior retainers' long-house (54.5 x 39 ft): the generator refuses an unnamed central void (docs/buildings.md,
+Composition; 0116's drawing page), counting the free ground past a 25 ft perimeter band once every building and named ground is taken
+out. The storehouses are 19 x 16 and 18 x 12 ft (they were 16 x 19 and 12 x 18), each wide enough to hold its two-line name
+(`storehouse` / `(W)`, `(E)`) on itself, and the rear yard 30 x 22 ft between them and the kitchen (it was 37 x 22, from 38 ft). The guest house takes no
+fire-water tub (its door faces the garden, which keeps its ground; docs/building-programs.md names no tub for a guest house). The
+water depth, each well's gear and roof rolled by the docs' formula, the wells numbered kitchen, garden, stables: water depth shallow;
+well gear 1 sweep, well roof 1 roof; well gear 2 pulley frame, well roof 2 open; well gear 3 sweep, well roof 3 open.
 
 ## Review log
 

@@ -1,51 +1,34 @@
 #!/usr/bin/env python3
-"""county-magistracy-example.gen.py - render the placer's built-in generic worked example.
+"""county-magistracy-example.gen.py - the generic county magistracy, drawn by the compound generator.
 
-The program itself lives in compound.py (`county_magistracy_program()`) - a generic county
-magistracy declared entirely in feet, kept as the placer's worked example alongside the
-ochiba-roundtrip-test. This gen is just the pool wiring for it: render-sync regenerates
-every `pool/*/*.gen.py` from its own directory, so wrapping the program in a gen keeps the
-gitignored png fresh in main. Before this gen existed the png was a one-off hand render and
-silently went stale (caught 2026-07-24).
+The program is data: `county-magistracy-example.compound.json` beside this file, a generic county magistracy declared in feet from
+docs/building-programs.md's county magistrate's manor program and its knobs (feature 449 T152, which rebuilt the generator in Rust
+from its derivation, `specs/449-rust-codebase/derivations/T208-compound.md`, and moved the program out of the old Python builder). This
+gen is the pool wiring for it: render-sync regenerates every `pool/*/*.gen.py` from its own directory, so wrapping the program in a gen
+keeps the gitignored svg, png and page fresh in main. Before this gen existed the png was a one-off hand render and silently went stale
+(caught 2026-07-24).
 
-Run:  python3 pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py   (from the skill dir)
+DRAWN BY THE MODE A ENGINE (feature 449 T152): `l7r-mode-a compound <spec>` composes the sheet, places its captions, writes the svg,
+renders the png unless `DIAGRAM_SKIP_RENDER=1`, writes the page and judges the census (`rust/mode_a/src/compound/`).
+
+Run:  make map GEN=pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py
 """
 
 from __future__ import annotations
 
 import os
-import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))  # <tree>/<tier>/<map>/ - one level deeper since feature 161 gave every map its own folder
 
-from l7r.diagram import compound as C  # noqa: E402
-from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES  # noqa: E402
-from l7r.diagram.interactive.sheet import write_sheet_page  # noqa: E402
+from l7r.diagram.interactive.sheet import draw_compound_sheet  # noqa: E402
 
-OUT_SVG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "county-magistracy-example.svg")
+SPEC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "county-magistracy-example.compound.json")
 
 
 def main() -> int:
-    program = C.county_magistracy_program()
-    result = C.place(program)
-    with open(OUT_SVG, "w", encoding="utf-8") as fh:
-        fh.write(C.emit_svg(program, result))
-    print(f"wrote {OUT_SVG}: {len(result.placed)} placed, {len(result.overflow)} overflow")
-    for s in result.overflow:
-        print(f"  OVERFLOW {s.name:21s} {s.court:5s} {s.wall:7s} ({s.w_ft:.0f}x{s.h_ft:.0f} ft)")
-    if os.environ.get("DIAGRAM_SKIP_RENDER") != "1":
-        subprocess.run(
-            ["resvg", "--width", "2400", "--serif-family", "DejaVu Serif", OUT_SVG, OUT_SVG[:-4] + ".png"],
-            check=True,
-        )
-    # the interactive page (feature 262): the emitter wrote each element's kind, so the page reads the draft as it
-    # reads a hand-drawn sheet
-    census = write_sheet_page(OUT_SVG, COMPOUND_CLASSES)
-    if census.unclassed or census.unregistered:
-        print(f"{os.path.basename(OUT_SVG)}: untagged ink {census.unclassed}; unknown kinds {census.unregistered}", file=sys.stderr)
-        return 1
-    return 0
+    # the sheet drawn whole - composed, captions placed, picture, page and census - and the generator's exit the engine's (feature 449 T152)
+    return draw_compound_sheet(SPEC)
 
 
 if __name__ == "__main__":

@@ -622,7 +622,7 @@ pub const CHECKS: [Check; 43] = [
         run: |ctx| s::well_gear(&ctx.svg),
         shared: true,
         fixture: "ochiba-well-without-gear-red.svg",
-        fix: "draw the well's lifting gear over the curb as l7r/diagram/well_gear.py's gear_svg does - an open-air well its rolled sweep or pulley frame and any roof as an unfilled outline on four posts, an indoor well the beam pulley and no roof (<g data-kind=\"well\" data-gear=... data-at=\"cx,cy\">)",
+        fix: "draw the well's lifting gear over the curb as the compound generator draws it (rust/mode_a/src/compound/emit_parts.rs) - an open-air well its rolled sweep or pulley frame and any roof as an unfilled outline on four posts, an indoor well the beam pulley and no roof (<g data-kind=\"well\" data-gear=... data-at=\"cx,cy\">)",
         skipped: never,
     },
     Check {

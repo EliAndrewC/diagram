@@ -22,8 +22,8 @@ from dataclasses import dataclass, field
 from functools import lru_cache
 
 from ...interactive.sheet import DEFS, Node, parse
-from ...labels.hand_sheet import DISC_SAG_PX
-from ...labels.hand_sheet import _arc, _bezier  # the reader's own flattening of a curve, which the walk reads a curve by (feature 449 T195)
+from .curves import DISC_SAG_PX
+from .curves import _arc, _bezier  # the reader's own flattening of a curve, which the walk reads a curve by (feature 449 T195; moved by T152)
 
 #: An attribute and its value, in either quote (feature 449 T182: a single-quoted attribute read as absent).
 _ATTR = re.compile(r"""([\w:-]+)\s*=\s*(["'])([^<]*?)\2""")

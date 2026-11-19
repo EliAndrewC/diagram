@@ -5,10 +5,10 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from ...compound_model import NOTICE_BOARD_MAX_FT as NOTICE_BOARD_MAX_FT
-from ...compound_model import TUB_DOOR_MAX_FT as TUB_DOOR_MAX_FT
-from ...compound_model import TUB_MAX_GAP_FT as TUB_MAX_GAP_FT
-from ...compound_parts import board_by_a_gate, tub_by_its_door, tub_by_its_eaves
+from .engine import NOTICE_BOARD_MAX_FT as NOTICE_BOARD_MAX_FT
+from .engine import TUB_DOOR_MAX_FT as TUB_DOOR_MAX_FT
+from .engine import TUB_MAX_GAP_FT as TUB_MAX_GAP_FT
+from .engine import board_by_a_gate, tub_by_its_door, tub_by_its_eaves
 from .grids import FTPX
 from .parse import WALL_STROKE, ParsedPlan, Rect
 

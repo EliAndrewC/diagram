@@ -27,8 +27,8 @@ publish = false
 # edit's reruns it. The test's timing line (`--nocapture`) says `ran` or `kept`; deleting that file makes the Python run.
 [package.metadata.l7r]
 # (T150) The page writer's held cases and the end-to-end test's pages (`src/page/held.rs`) read the question fragments its modals link (`research/questions/`) and the legacy pool's manifests and
-# notes of every tier the place card describes.
-reads = ["l7r/diagram/", "pool/", "docs/building-programs.md", "tests/fixtures/", "legacy-hand-authored-pool/", "research/questions/"]
+# notes of every tier the place card describes. (T152) The compound generator's counting test reads each pool sheet's budget (`dev/work-budget.json`).
+reads = ["l7r/diagram/", "pool/", "docs/building-programs.md", "dev/work-budget.json", "tests/fixtures/", "legacy-hand-authored-pool/", "research/questions/"]
 
 [lib]
 name = "l7r_mode_a"

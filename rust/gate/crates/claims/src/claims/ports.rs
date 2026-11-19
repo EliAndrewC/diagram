@@ -27,6 +27,17 @@
 //! of the same label). The push lets its claims go only where the unit is gone and the merge base's row of that `finding` reads DRIFTED
 //! or MISLABELED - the evidence an ask would read; the unit's own rows may read any verdict, and anything else is a new ask. `claims
 //! rekey` drops its rows and its deferred entries.
+//!
+//! A REBUILT FILE (feature 449 T152, `ask:449-T152-rebuilt-claims`): a third outcome beside a port and a retirement, so "a claim that
+//! carry cannot map" names it before it becomes a new ask. A `.py` file a phase task deleted after rebuilding its job from a SOUND
+//! derivation, blind to the old code ("An algorithm is rebuilt, never ported"), has no port by design and was not overruled by
+//! research; the map's `rebuilt` names the FILE with that task (`by`), the Rust module or directory doing its job now (`as`) and the
+//! task's derivation - the file on the task's `old-code:` line, the derivation its `derivation:` line and in the tree. A unit with its
+//! own `ports` or `retired` entry is handled there; `rebuilt` covers the file's other units. The push refuses a rebuilt file still in
+//! the tree and lets the old claims go only once nothing under `as` is owed; `claims rekey` drops their rows and deferred entries.
+//! No old claim is matched to the new code: its own `Research:` lines, each checked fresh, are the bar ([`rebuilt`]).
+
+pub mod rebuilt;
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::path::Path;
@@ -67,11 +78,12 @@ pub struct Retired {
 /// `.py` uid -> its retirement.
 pub type Retirements = BTreeMap<String, Retired>;
 
-/// The whole map: its ports and its retired units.
+/// The whole map: its ports, its retired units and its rebuilt files.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Map {
     pub ports: Ports,
     pub retired: Retirements,
+    pub rebuilt: rebuilt::Rebuilds,
 }
 
 impl From<Ports> for Map {
@@ -79,6 +91,7 @@ impl From<Ports> for Map {
         Self {
             ports,
             retired: Retirements::new(),
+            rebuilt: rebuilt::Rebuilds::new(),
         }
     }
 }
@@ -95,7 +108,8 @@ pub const RETIRABLE: &[&str] = &["DRIFTED", "MISLABELED"];
 /// Where the file is not JSON, or an entry is not `"<path>.py::<qualname>": {"to": "<path>::<qualname>", "by": "<feature> <task>"}`,
 /// or a `retired` entry is not `"<path>.py::<qualname>": {"by": ..., "page": "research/questions/<file>.html", "why": ..., "finding":
 /// "<path>::<qualname>#<label>"}`, names a
-/// page the tree does not hold, or retires a unit `ports` also maps.
+/// page the tree does not hold, or retires a unit `ports` also maps; or a `rebuilt` entry is not of its form or not tied to its phase
+/// task ([`rebuilt`]).
 pub fn load(root: &Path) -> Result<Map, Fail> {
     let path = root.join(PORTS);
     if !path.is_file() {
@@ -123,9 +137,11 @@ pub fn load(root: &Path) -> Result<Map, Fail> {
         );
     }
     let retired = load_retired(root, &doc, &out)?;
+    let rebuilt = rebuilt::load_rebuilt(root, &doc)?;
     Ok(Map {
         ports: out,
         retired,
+        rebuilt,
     })
 }
 
@@ -220,8 +236,8 @@ pub fn fate(key: &str, port: &Port, cur: &Cur, text: Option<&str>) -> Fate {
     }
 }
 
-/// What `claims rekey` did with the ports: the keys carried, the keys dropped, the rows left with their fix, and the keys of a retired
-/// unit dropped with the pages that overrule them.
+/// What `claims rekey` did with the ports: the keys carried, the keys dropped, the rows left with their fix, the keys of a retired
+/// unit dropped with the pages that overrule them, and the keys of a rebuilt file's units dropped with the derivations rebuilt from.
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct Rekeyed {
     pub carried: Vec<String>,
@@ -229,10 +245,13 @@ pub struct Rekeyed {
     pub stuck: Vec<String>,
     pub retired: Vec<String>,
     pub retired_pages: BTreeSet<String>,
+    pub rebuilt: Vec<String>,
+    pub rebuilt_derivations: BTreeSet<String>,
 }
 
 /// Each claim row on a mapped unit gone from `cur` carried onto its port, or dropped, or left with its fix, and each on a retired unit
-/// gone dropped; `text_of` gives a key's claim text from the merge base, for a row that does not hold it.
+/// or on a unit of a rebuilt file (one no longer in the tree) gone dropped; `text_of` gives a key's claim text from the merge base, for
+/// a row that does not hold it.
 pub fn carry(
     cur: &Cur,
     index: &mut Index,
@@ -254,6 +273,11 @@ pub fn carry(
             continue;
         }
         let Some(port) = map.ports.get(uid) else {
+            if let Some(rb) = rebuilt::of(&map.rebuilt, uid).filter(|rb| !rb.present) {
+                index.shift_remove(&key);
+                out.rebuilt_derivations.insert(rb.derivation.clone());
+                out.rebuilt.push(key);
+            }
             continue;
         };
         let held = field(&index[&key], "claim").to_owned();
@@ -283,7 +307,7 @@ pub fn carry(
 }
 
 /// The deferred list (`dev/claims-deferred.json`'s `units` and `keys`) re-keyed with its units' ports: a unit to its port, a key to its
-/// port's same label, one ported into a tooling crate or retired dropped; whether it changed.
+/// port's same label, one ported into a tooling crate, retired or of a rebuilt file dropped; whether it changed.
 pub fn carry_deferred(deferred: &mut Value, map: &Map, cur: &Cur) -> bool {
     let uids = cur.uids();
     let mut changed = false;
@@ -295,7 +319,9 @@ pub fn carry_deferred(deferred: &mut Value, map: &Map, cur: &Cur) -> bool {
         for v in list.drain(..) {
             let entry = v.as_str().unwrap_or_default().to_owned();
             let uid = uid_of(&entry);
-            if map.retired.contains_key(uid) && !uids.contains(uid) {
+            let rebuilt = !map.ports.contains_key(uid)
+                && rebuilt::of(&map.rebuilt, uid).is_some_and(|rb| !rb.present);
+            if (map.retired.contains_key(uid) || rebuilt) && !uids.contains(uid) {
                 changed = true;
                 continue;
             }
@@ -337,7 +363,7 @@ pub fn rekey_ports(
     index: &mut Index,
 ) -> Result<Rekeyed, Fail> {
     let map = load(root)?;
-    if map.ports.is_empty() && map.retired.is_empty() {
+    if map.ports.is_empty() && map.retired.is_empty() && map.rebuilt.is_empty() {
         return Ok(Rekeyed::default());
     }
     // the merge base is read only for a row to carry that does not hold its claim's text
@@ -371,6 +397,14 @@ pub fn say(done: &Rekeyed, o: &mut super::commands::Out) -> i32 {
         let pages: Vec<&str> = done.retired_pages.iter().map(String::as_str).collect();
         o.say(&format!("claims-rekey: {} claim row(s) of a retired unit dropped ({PORTS}'s `retired`), its rule overruled by {} (ask:449-T184-elongated-retired)", done.retired.len(), pages.join(", ")));
     }
+    if !done.rebuilt.is_empty() {
+        let derivations: Vec<&str> = done
+            .rebuilt_derivations
+            .iter()
+            .map(String::as_str)
+            .collect();
+        o.say(&format!("claims-rekey: {} claim row(s) of a rebuilt file dropped ({PORTS}'s `rebuilt`), its job rebuilt from {}, the rebuilt code's own claims each checked fresh (ask:449-T152-rebuilt-claims)", done.rebuilt.len(), derivations.join(", ")));
+    }
     for why in &done.stuck {
         o.say(&format!("claims-rekey: {why}"));
     }
@@ -401,19 +435,22 @@ fn base_texts(
         .collect())
 }
 
-/// What the push's claims gate reads of the merge base for [`unported`].
+/// What the push's claims gate reads of the merge base for [`unported`], and the claims the tree owes.
 pub struct Before<'a> {
     pub index: &'a Index,
     /// Every unit's uid at the merge base (its claims or none).
     pub uids: &'a HashSet<String>,
     /// key -> its claim's normalized line, for every claim at the merge base.
     pub texts: &'a HashMap<String, String>,
+    /// The keys the tree owes a check (`make claims-owed`): a rebuilt file's old claims wait on those under its `as` paths.
+    pub owed: &'a [String],
 }
 
 /// The refusal for each claim of the merge base on a `.py` unit this tree no longer has (`gone` decides, the units of every scope)
-/// that no move, no port and no retirement carried; `index` the tree's. A retired unit is refused while it is still in the tree, and its
-/// claim where its `finding` is not a merge-base row of the same label the claims round found DRIFTED or MISLABELED
-/// (`ask:449-T184-elongated-retired-2`).
+/// that no move, no port, no retirement and no rebuild carried; `index` the tree's. A retired unit is refused while it is still in the
+/// tree, and its claim where its `finding` is not a merge-base row of the same label the claims round found DRIFTED or MISLABELED
+/// (`ask:449-T184-elongated-retired-2`); a rebuilt file while it is still in the tree, and its units' claims while a claim under its
+/// `as` paths is owed ([`rebuilt::refusals`], `ask:449-T152-rebuilt-claims`).
 pub fn unported(
     cur: &Cur,
     index: &Index,
@@ -426,6 +463,7 @@ pub fn unported(
         .into_values()
         .collect();
     let mut out = Vec::new();
+    let mut stranded: BTreeMap<String, Vec<String>> = BTreeMap::new();
     // a retired unit still in the tree: `gone` is asked only where its claims are not (it answers for every scope's units)
     let mut present: BTreeSet<&str> = map
         .retired
@@ -462,7 +500,15 @@ pub fn unported(
             continue;
         }
         let Some(port) = map.ports.get(uid) else {
-            out.push(format!("unported: {key} - its unit {uid} is deleted, and {PORTS} maps it to no unit: if it was ported, add `\"{uid}\": {{\"to\": \"rust/<crate>/src/<file>.rs::<item>\", \"by\": \"<feature> <task>\"}}` under its `ports` and run `make claims-rekey`; if the research overruled its rule, name it under `retired` with the `finding` key whose claims round found it DRIFTED or MISLABELED (`{{\"by\": \"<feature> <task>\", \"page\": \"research/questions/<file>.html\", \"why\": \"<one line>\", \"finding\": \"<path>::<qualname>#<label>\"}}`, ask:449-T184-elongated-retired-2); a claim the map cannot carry is a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-phase4-slices Q10)"));
+            if rebuilt::of(&map.rebuilt, uid).is_some() {
+                let file = uid.split_once("::").map_or(uid, |p| p.0);
+                stranded
+                    .entry(file.to_owned())
+                    .or_default()
+                    .push(key.clone());
+                continue;
+            }
+            out.push(format!("unported: {key} - its unit {uid} is deleted, and {PORTS} maps it to no unit: if it was ported, add `\"{uid}\": {{\"to\": \"rust/<crate>/src/<file>.rs::<item>\", \"by\": \"<feature> <task>\"}}` under its `ports` and run `make claims-rekey`; if the research overruled its rule, name it under `retired` with the `finding` key whose claims round found it DRIFTED or MISLABELED (`{{\"by\": \"<feature> <task>\", \"page\": \"research/questions/<file>.html\", \"why\": \"<one line>\", \"finding\": \"<path>::<qualname>#<label>\"}}`, ask:449-T184-elongated-retired-2); if a phase task deleted its file after rebuilding its job from a derivation, name the file under `rebuilt` (`\"<path>.py\": {{\"by\": \"<feature> <task>\", \"as\": \"<the Rust module doing its job now>\", \"derivation\": \"<the task's derivation>\"}}`, the file on that task's `old-code:` line, ask:449-T152-rebuilt-claims); a claim the map cannot carry is a new ask (`make arbiter-ask`), never a hand rewrite (ask:449-phase4-slices Q10)"));
             continue;
         };
         let held = field(was, "claim");
@@ -483,6 +529,12 @@ pub fn unported(
     for uid in present {
         out.push(format!("unported: {uid} - retired but still present: {PORTS}'s `retired` names a unit deleted because the research overruled its rule; delete the unit, or take it out of `retired`"));
     }
+    out.extend(rebuilt::refusals(
+        &map.rebuilt,
+        &stranded,
+        before.owed,
+        &|k| index.contains_key(k),
+    ));
     out
 }
 

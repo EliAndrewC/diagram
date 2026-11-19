@@ -1,7 +1,7 @@
 //! THE CHECKS' LOCKSTEP (`ask:449-engine-order` condition 3, feature 449 T175): the Python audit's checks, registry, report and the engine
 //! predicates they call, on the same sheets the parse's lockstep reads and in the same interpreter (`parse/lockstep.rs`), held equal to
 //! this port's - every record each check function returns field by field, every check's findings or refusal under the sheet's tier, and
-//! the whole report, so an edit of `pack_audit`'s Python (or of `compound_model`'s distances and `compound_parts`' predicates) that the
+//! the whole report, so an edit of `pack_audit`'s Python (or of `engine`'s distances and predicates, the old engine's until feature 449 T152) that the
 //! Rust did not follow fails there. A float is compared as its `repr`, bit for bit.
 //!
 //! What is read where (the Python half's cost kept down, observed 2026-11-17, method: each check timed over the pool and the red
@@ -32,7 +32,7 @@ use crate::py::uncaught;
 pub const PYTHON: &str = r#"
 from l7r.diagram.tools.pack_audit import checks as C, registry as RG, report as RP, shared as SH, sun as SU, roads as RD
 from l7r.diagram.tools.pack_audit import mapmatch as MM, onmap as OM, labels as LB, marks_drawn as MD, palette as PL, program_rules as PR
-from l7r.diagram import compound_model as CM, compound_parts as CP
+from l7r.diagram.tools.pack_audit import engine as CM, engine as CP
 from l7r.diagram.buildings import types as BT
 from shapely.ops import unary_union
 FIXTURE_TIER = {"ochiba": "magistracies", "hayakawa": "magistracies", "ubame": "magistracies", "county": "magistracies", "hoshigaoka": "country-shrines"}
@@ -679,8 +679,8 @@ pub fn defaults(tree: &Path) -> Value {
     // in parts: one `json!` of every key passes the macro's recursion limit
     let mut out = serde_json::Map::new();
     if let Value::Object(part) = json!({
-        "compound_model.TUB_MAX_GAP_FT": f(TUB_MAX_GAP_FT), "compound_model.TUB_DOOR_MAX_FT": f(TUB_DOOR_MAX_FT),
-        "compound_model.NOTICE_BOARD_MAX_FT": f(NOTICE_BOARD_MAX_FT), "compound_model.KINDS": kinds,
+        "engine.TUB_MAX_GAP_FT": f(TUB_MAX_GAP_FT), "engine.TUB_DOOR_MAX_FT": f(TUB_DOOR_MAX_FT),
+        "engine.NOTICE_BOARD_MAX_FT": f(NOTICE_BOARD_MAX_FT), "engine.KINDS": kinds,
         "checks.TUB_WELL_MIN_PX": f(c::TUB_WELL_MIN_PX), "checks.TUB_BLDG_MIN_PX": f(c::TUB_BLDG_MIN_PX),
         "checks.OCCLUSION_MIN_PX": f(c::OCCLUSION_MIN_PX), "checks.PASSAGE_DEPTH_PX": f(c::PASSAGE_DEPTH_PX),
         "checks.PASSAGE_CLEAR_MIN_PX": f(c::PASSAGE_CLEAR_MIN_PX), "checks.OPENING_MAX_PX": f(c::OPENING_MAX_PX),

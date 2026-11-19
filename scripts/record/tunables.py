@@ -57,9 +57,7 @@ def tunables(rows: Mapping[str, Any], path: str = "", figures_only: bool = True)
 #: `interactive/`, choose what is rolled or reported, or time a run - never whether a map passes.
 MAP_CODE = (
     "l7r/diagram/tools/pack_audit/",
-    "l7r/diagram/labels/",
-    "l7r/diagram/compound",
-    "l7r/diagram/well_gear.py",
+    "rust/mode_a/src/",  # the Mode A engine: the compound generator, the caption placer, the audit (feature 449 T152 deleted their Python)
     "rust/phases/src/",  # the hamlet stages, Rust since the Python engine's deletion (feature 444 T40); `rust/parked/` is claimed by nothing
 )
 #: Numbers too plain to be a decision: identities, halves, right and straight angles, and the epsilons of float tests.

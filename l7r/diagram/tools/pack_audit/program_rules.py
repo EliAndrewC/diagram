@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import re
 
-from ...compound_parts import tub_by_its_eaves
+from .engine import tub_by_its_eaves
 from .checks import DOOR_FLUSH_TOL_PX
 from .grids import FTPX
 from .labels import footprint

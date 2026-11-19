@@ -1,5 +1,5 @@
 //! THE AUDIT'S LOCKSTEP (`ask:449-engine-order` condition 3, feature 449 T174): the Python's grid measures (`grids.py` whole), sized marks
-//! (`size_marks.py` whole) and start tags (`hand_sheet.py`'s `start_tags`) on the same sheets the parse's lockstep reads, in the same
+//! (`size_marks.py` whole) on the same sheets (the start tags' Python deleted with the labels package by feature 449 T152; the Rust `crate::hand_sheet::start_tags` the one reader) the parse's lockstep reads, in the same
 //! interpreter (`parse/lockstep.rs`), each figure and refusal equal to this port's - so an edit of those Python files that the Rust did
 //! not follow fails there. A float is compared as its `repr`, bit for bit; a mask as one string of 0 and 1 a row.
 //!
@@ -20,14 +20,12 @@ use crate::grids::{
     RegionTile, VacantRect, CELL, DENSITY_TILES, FTPX, HUG_DEPTH_FT, VACANT_DEPTH_FT,
     VACANT_MIN_SQFT, VACANT_N,
 };
-use crate::hand_sheet::start_tags;
 use crate::py::uncaught;
 use crate::size_marks::{mark_rows, render, untabled_kinds, MarkRow};
 
 /// The Python half: `audit(text, every)` defined for the parse lockstep's script, which calls it for each sheet (`every` for a fixture).
 pub const PYTHON: &str = r#"
 from l7r.diagram.tools.pack_audit import grids as G, size_marks as M
-from l7r.diagram.labels import hand_sheet as H
 def ok(fn):
     # `attempt` without `conv`: what `fn` returns is already JSON (a dict `conv` would write as sorted pairs)
     try:
@@ -46,7 +44,7 @@ def grid_defaults():
                 out[f"{fn.__name__}.{p.name}"] = conv(p.default)
     return out
 def audit(text, every):
-    out = {"start_tags": attempt(lambda: H.start_tags(text)), "mark_rows": attempt(lambda: M.mark_rows(text)),
+    out = {"mark_rows": attempt(lambda: M.mark_rows(text)),
            "untabled": attempt(lambda: M.untabled_kinds(text)), "render": attempt(lambda: M.render(M.mark_rows(text)))}
     try:
         plan = P.parse_svg(text)
@@ -130,10 +128,6 @@ pub fn defaults() -> Value {
 /// This port's reading of one sheet, as `audit(text, every)` reads it.
 pub fn reading(text: &str, every: bool) -> Value {
     let mut out = Map::new();
-    out.insert(
-        "start_tags".into(),
-        json!({"ok": start_tags(text).iter().map(|(a, b)| json!([a, b])).collect::<Vec<_>>()}),
-    );
     out.insert(
         "mark_rows".into(),
         attempt(mark_rows(text), |rs| {

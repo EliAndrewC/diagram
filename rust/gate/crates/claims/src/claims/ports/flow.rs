@@ -316,3 +316,45 @@ fn a_retired_claim_found_in_step_is_refused_at_the_push() {
     )) && l
         .contains("reads IN-STEP at the merge base: retire only a claim whose claims round found the research against it")),);
 }
+
+/// The map naming the deleted `m.py` rebuilt (feature 449 T152, `ask:449-T152-rebuilt-claims`) by the phase task `449 T999`, whose
+/// block names it on its `old-code:` line, as the module `rust/mode_a/src/lib.rs`, from its derivation.
+fn rebuild(root: &std::path::Path) {
+    let derivation = "specs/449-x/derivations/T999-m.md";
+    put(root, derivation, "# the derivation\n");
+    put(root, "specs/449-x/tasks.md", &format!("# Tasks\n\n- [ ] T999 phase: m - rebuilt\n      derivation: {derivation}\n      old-code: l7r/diagram/*.py\n"));
+    put(
+        root,
+        PORTS,
+        &json!({"why": "w", "rebuilt": {"l7r/diagram/m.py": {"by": "449 T999", "as": "rust/mode_a/src/lib.rs", "derivation": derivation}}})
+            .to_string(),
+    );
+}
+
+#[test]
+fn a_rebuilt_files_claims_go_once_its_module_is_checked_and_rekey_drops_them() {
+    let root = cut("claims-ports-rebuilt", &|_, _| {});
+    rebuild(&root);
+    // the rebuilt module's own claims new, so owed: the old claims wait on them
+    let refuse = push(&root).0;
+    assert!(refuse.iter().any(|l| l.starts_with("unported: 2 claim(s) of l7r/diagram/m.py, rebuilt by 449 T999 as rust/mode_a/src/lib.rs - 2 claim(s) of the rebuilt code still owed")), "{refuse:?}");
+    // the round checks the rebuilt module; the old rows still stand
+    let mut rows = index(&root).as_object().unwrap().clone();
+    rows.extend(recorded(&root, false));
+    put(
+        &root,
+        "dev/claims-index.json",
+        &Value::Object(rows).to_string(),
+    );
+    let refuse = push(&root).0;
+    assert_eq!(refuse, ["unported: 2 claim row(s) of l7r/diagram/m.py, rebuilt by 449 T999 (specs/449-x/derivations/T999-m.md), not yet dropped: `make claims-rekey` (make land runs it)"]);
+    let got = claims(&root, &["rekey"]);
+    assert_eq!(got.code, 0, "{}", got.stdout);
+    assert!(got.stdout.contains("claims-rekey: 2 claim row(s) of a rebuilt file dropped (dev/claims-ports.json's `rebuilt`), its job rebuilt from specs/449-x/derivations/T999-m.md"), "{}", got.stdout);
+    assert!(index(&root).get(SPAN).is_none());
+    assert_eq!(
+        std::fs::read_to_string(root.join("dev/claims-deferred.json")).unwrap(),
+        "{\n \"why\": \"w\",\n \"units\": []\n}\n"
+    );
+    assert_eq!(push(&root), (Vec::new(), Vec::new(), Vec::new()));
+}
