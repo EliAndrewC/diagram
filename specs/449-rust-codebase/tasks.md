@@ -48,8 +48,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T203 make decide's figure lint skips a task section's heading: T202's heading carried '704x its SOUND derived budget' with no measured label, decide passed it, and spec-fidelity returned NOT-REVIEWABLE for it (a review round spent on what the lint exists to catch - a check passing the bad, constitution XIV); the lint reads the section's heading line as it reads the Approach, with a test red on the old lint (2026-11-19)
       research: rendering
-- [ ] T206 A claims re-check owes only the claims a change can bear on, measured first (the GM 2026-11-12: "if you identify concrete targets with significant measured expected savings then go ahead"): T202's three impl-drift rounds re-judged 259, 55 and 21 claims, most IN-STEP and unchanged in their cited code and blocks; first measure, over feature 449's claims rounds, how many re-owed claims had neither their unit's code nor their cited blocks changed since their last IN-STEP; if that share is large, narrow claims-owed to claims whose unit or cited block changed (every claim citing a changed file or block still owed), with tests that a claim citing a changed block is still owed (2026-11-19)
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
