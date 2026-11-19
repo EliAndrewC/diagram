@@ -64,8 +64,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T226 A counted stage far under its budget (found by T224, 2026-11-19): waterward.polder counts 1,392 at 10 households against an accepted 28,232 (0.05x) with only three counters firing, so either the rebuild is that much cheaper or its counters miss work and the push's hold on it means nothing - a work-budget MODE AUDIT of the stage against its derivation, any uncounted work counted (red first), and the accepted figures re-read; dev/work-budget.md's stale run figures (hem at 40 households moved from 15,438 to 17,591) refreshed from make work-budget WRITE=1; and the waterward stage counted (T224 prints it uncounted because the review's reference roll has a pond, so no waterward runs): a reference roll on which it runs added to the review; lands before T158, the step's close (T224's plan review, 2026-11-19)
       research: rendering
-- [ ] T227 A guard file edited by a shell heredoc without the guard firing (found by T220, 2026-11-19): scripts/gates/review-gate.sh and tests/hooks/test-review-gate.sh were rewritten through a Bash heredoc and the guard-file edit guard did not refuse it (both carried GUARD_EDIT_OK markers, so nothing wrong landed, but an edit with no permit would have gone through the same way) - the guard's matching of shell writes to guarded files measured and widened to the heredoc and redirect forms, red first; lands before T221 begins (T220's plan review, 2026-11-19)
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
