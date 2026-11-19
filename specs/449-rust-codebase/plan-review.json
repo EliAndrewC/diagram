@@ -846,6 +846,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T202 (T198 found the step-3a placer far over its SOUND derived budget; the GM 2026-11-19: \"if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible\")": {
+   "sha256": "56bf5570fe14ab4e3eea7dcf800718f48da3b55a33f12e9e5ed8736da84e173f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T202 Approach (checklist part A)": {
+   "sha256": "d415c56bae13045496e7f2102b607ac84e039886dd9f80fbca2566273a04a351",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13414,6 +13426,82 @@
      "why": "Matches the GM's 2026-11-19 order: the budget is set before the step-3a rebuild and step 3b, which are held to it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T202 (T198 found the step-3a placer far over its SOUND derived budget; the GM 2026-11-19: \"if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible\")",
+    "### T202 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Rebuild the four hand sheets' caption placer from derivations/T198-placer.md as a phase task, phase_source_hooks armed over the old-code globs (Python labels package, Rust placer, obstacle index, geometry, layout, standard weights, the hand-sheet module root, its seat search and tests)",
+     "class": "within",
+     "why": "The GM, 2026-11-19: 'if the 3a step is horribly inefficient then we might need to rip it out and restart tomake it not terrible'; the condition is measured (704x the T201 budget, labeled one-shot), and the 2026-10-30 rule carried by T199 forbids re-implementing the old algorithms, which the phase guard enforces."
+    },
+    {
+     "id": "D2",
+     "summary": "hand_sheet/read.rs and classify.rs stay readable as the placer's input, not part of the search",
+     "class": "within",
+     "why": "What the GM asked to rip out is the step-3a placer measured against its derived budget; the sheet reader is the placer's input, not the search the budget measures. The exits' budget check would still catch any cost the reader adds to the placer phase."
+    },
+    {
+     "id": "D3",
+     "summary": "The new module lives beside the old and returns what labels::hand_sheet::placed returns today, so sheet/hand.rs switches one import",
+     "class": "within",
+     "why": "Keeping the interface to callers is FR-002's 'does its job for its callers'; it fixes the output shape, not the algorithm, so it does not carry the old search into the rebuild."
+    },
+    {
+     "id": "D4",
+     "summary": "render stays imported from the old module root while the new placer is written and checked; it is moved out by one logged make phase-read of that file only at the deletion step, after the new placer is written and the four hand sheets pass",
+     "class": "within",
+     "why": "The earlier BLOCKED verdict was on reading the old module root before the rebuild, which would put the old placer's code in front of the session writing the new one. The block now reads it only after the new placer is written and checked, so the rebuild is still written from the derivation and 0242/0330 alone, as the 2026-11-19 and 2026-10-30 rules require. The read is one logged phase-read, not a carve-out from the guard. render draws the placed captions and is not the placement search, and moving it unchanged leaves that search rebuilt."
+    },
+    {
+     "id": "D5",
+     "summary": "When the four hand sheets pass, the old Rust placer and its lockstep tests are deleted in the same landing; the Python labels package stays for compound.py's two generated sheets until step 3b",
+     "class": "within",
+     "why": "FR-003 keeps a piece's Python running until its replacement passes; the GM's 2026-11-19 plan retires lockstep tests as what they compare goes, and the compound sheets are step 3b's (T152)."
+    },
+    {
+     "id": "D6",
+     "summary": "Order: after T201, before T152 (step 3b)",
+     "class": "within",
+     "why": "The GM's 2026-11-19 plan: the step-3a placer measured against a derived budget before step 3b."
+    },
+    {
+     "id": "D7",
+     "summary": "Exits: pack-audit and census per hand sheet, a placement check per 0242/0330 rule and the claims round, budget-sheets within twice each sheet's T201 budget; red exit records the failure and takes a cannot-be-done claim to make arbiter-ask",
+     "class": "within",
+     "why": "Enforcement of what was asked ('make it not terrible', the derived budget, FR-002's 'passes its checks and holds its claims'); the twice-budget figure is T201's, already set; the arbiter stands where the GM was asked (feature 379)."
+    },
+    {
+     "id": "D8",
+     "summary": "Pool manifests: the four hand sheets' captions may move; a caption that moves and holds every rule is not a defect",
+     "class": "within",
+     "why": "FR-002 as amended by T180 and constitution XIV v2.36.0 (the GM 2026-11-18 and 2026-11-19): differing output is not a regression, and only a wrong outcome is a defect."
+    },
+    {
+     "id": "D9",
+     "summary": "A caption with no clean seat in reach takes the seat that covers least, as the derivation says, and is named in the run's report",
+     "class": "within",
+     "why": "0242's rule is never to cover a building while any other choice exists; when no other choice exists, taking the least-cover seat follows that rule rather than excepting from it, and the case is named in the report."
+    },
+    {
+     "id": "D10",
+     "summary": "The derivation's GUESS figures (glyph width, sweep reach, 1.5g start) are named knobs in the module with the derivation's reason beside each",
+     "class": "within",
+     "why": "Implementation hygiene inside the derivation; narrows nothing asked."
+    },
+    {
+     "id": "D11",
+     "summary": "Budget fallback: if the four sheets cannot all pass in one landing, the module and its tests land first and the switch in sheet/hand.rs second",
+     "class": "within",
+     "why": "Sequencing only. The old placer keeps running until the switch, so no piece runs both (FR-003), and the green exit is unchanged."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23834,6 +23922,80 @@
      "summary": "After T200, before the placer's rebuild.",
      "class": "within",
      "why": "Matches the GM's 2026-11-19 order: the budget is set before the step-3a rebuild and step 3b, which are held to it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T202": {
+   "section_sha256": "41a313895e7c27d013940b3c05302e21e18e1a304abe4e50a6166f905a44b1c5",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Rebuild the four hand sheets' caption placer from derivations/T198-placer.md as a phase task, phase_source_hooks armed over the old-code globs (Python labels package, Rust placer, obstacle index, geometry, layout, standard weights, the hand-sheet module root, its seat search and tests)",
+     "class": "within",
+     "why": "The GM, 2026-11-19: 'if the 3a step is horribly inefficient then we might need to rip it out and restart tomake it not terrible'; the condition is measured (704x the T201 budget, labeled one-shot), and the 2026-10-30 rule carried by T199 forbids re-implementing the old algorithms, which the phase guard enforces."
+    },
+    {
+     "id": "D2",
+     "summary": "hand_sheet/read.rs and classify.rs stay readable as the placer's input, not part of the search",
+     "class": "within",
+     "why": "What the GM asked to rip out is the step-3a placer measured against its derived budget; the sheet reader is the placer's input, not the search the budget measures. The exits' budget check would still catch any cost the reader adds to the placer phase."
+    },
+    {
+     "id": "D3",
+     "summary": "The new module lives beside the old and returns what labels::hand_sheet::placed returns today, so sheet/hand.rs switches one import",
+     "class": "within",
+     "why": "Keeping the interface to callers is FR-002's 'does its job for its callers'; it fixes the output shape, not the algorithm, so it does not carry the old search into the rebuild."
+    },
+    {
+     "id": "D4",
+     "summary": "render stays imported from the old module root while the new placer is written and checked; it is moved out by one logged make phase-read of that file only at the deletion step, after the new placer is written and the four hand sheets pass",
+     "class": "within",
+     "why": "The earlier BLOCKED verdict was on reading the old module root before the rebuild, which would put the old placer's code in front of the session writing the new one. The block now reads it only after the new placer is written and checked, so the rebuild is still written from the derivation and 0242/0330 alone, as the 2026-11-19 and 2026-10-30 rules require. The read is one logged phase-read, not a carve-out from the guard. render draws the placed captions and is not the placement search, and moving it unchanged leaves that search rebuilt."
+    },
+    {
+     "id": "D5",
+     "summary": "When the four hand sheets pass, the old Rust placer and its lockstep tests are deleted in the same landing; the Python labels package stays for compound.py's two generated sheets until step 3b",
+     "class": "within",
+     "why": "FR-003 keeps a piece's Python running until its replacement passes; the GM's 2026-11-19 plan retires lockstep tests as what they compare goes, and the compound sheets are step 3b's (T152)."
+    },
+    {
+     "id": "D6",
+     "summary": "Order: after T201, before T152 (step 3b)",
+     "class": "within",
+     "why": "The GM's 2026-11-19 plan: the step-3a placer measured against a derived budget before step 3b."
+    },
+    {
+     "id": "D7",
+     "summary": "Exits: pack-audit and census per hand sheet, a placement check per 0242/0330 rule and the claims round, budget-sheets within twice each sheet's T201 budget; red exit records the failure and takes a cannot-be-done claim to make arbiter-ask",
+     "class": "within",
+     "why": "Enforcement of what was asked ('make it not terrible', the derived budget, FR-002's 'passes its checks and holds its claims'); the twice-budget figure is T201's, already set; the arbiter stands where the GM was asked (feature 379)."
+    },
+    {
+     "id": "D8",
+     "summary": "Pool manifests: the four hand sheets' captions may move; a caption that moves and holds every rule is not a defect",
+     "class": "within",
+     "why": "FR-002 as amended by T180 and constitution XIV v2.36.0 (the GM 2026-11-18 and 2026-11-19): differing output is not a regression, and only a wrong outcome is a defect."
+    },
+    {
+     "id": "D9",
+     "summary": "A caption with no clean seat in reach takes the seat that covers least, as the derivation says, and is named in the run's report",
+     "class": "within",
+     "why": "0242's rule is never to cover a building while any other choice exists; when no other choice exists, taking the least-cover seat follows that rule rather than excepting from it, and the case is named in the report."
+    },
+    {
+     "id": "D10",
+     "summary": "The derivation's GUESS figures (glyph width, sweep reach, 1.5g start) are named knobs in the module with the derivation's reason beside each",
+     "class": "within",
+     "why": "Implementation hygiene inside the derivation; narrows nothing asked."
+    },
+    {
+     "id": "D11",
+     "summary": "Budget fallback: if the four sheets cannot all pass in one landing, the module and its tests land first and the switch in sheet/hand.rs second",
+     "class": "within",
+     "why": "Sequencing only. The old placer keeps running until the switch, so no piece runs both (FR-003), and the green exit is unchanged."
     }
    ],
    "verdict": "CLEAR"
