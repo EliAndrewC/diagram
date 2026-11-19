@@ -88,7 +88,12 @@ impl Program {
 /// One answer: `rows` vectors of `dim` read from `from` after its `ok` line.
 fn answer(from: &mut dyn BufRead) -> Result<Vec<Vec<f32>>> {
     let mut head = String::new();
-    let _ = from.read_line(&mut head);
+    // AN EMBEDDER GONE BEFORE IT ANSWERED IS SAID SO (found beside feature 449 T205): the test of an embedder that closed its input
+    // failed once under a loaded `make static` cover run (2026-11-19) and passed alone - the texts' line was taken and the output then
+    // ended, the one other way such an embedder can go; read as an answer that was "answered \"\"", now it is "stopped"
+    if from.read_line(&mut head).unwrap_or(0) == 0 {
+        return Err(Error("the embedder stopped before it answered".to_owned()));
+    }
     let words: Vec<&str> = head.trim_end().splitn(3, ' ').collect();
     let (rows, dim) = match words.as_slice() {
         ["ok", rows, dim] => (

@@ -58,5 +58,17 @@ for _ in $(seq 100); do [ -n "$(ls -A "$H/tmp2")" ] && break; timeout 0.05 tail 
 kill -TERM "$pid"; wait "$pid"
 check "a TERM of the runner leaves nothing" '[ -z "$(ls -A "$H/tmp2")" ]'
 
+# GUARD_EDIT_OK: feature 449 T205 - hookrun.sh expands a launcher's `c-tree` lines (its sources' roots, written where the run's fresh
+# binary skipped the walk) into every path under them, as the walk's reads were recorded: a directory listed and stat'ed, a file
+# stat'ed, a missing root stat'ed - so `trace stamp` still ties the suite to the sources (rust/Cargo.lock, ignored by git, among them,
+# which keeps such a suite untraced and on its `deps` key, as the walk did)
+S="$H/src"; mkdir -p "$S/sub"; : > "$S/sub/a.rs"
+printf '#!/bin/sh\nprintf "tree.sh\\tc-tree\\t%%s\\n" "%s" "%s" "%s" >> "$L7R_TEST_DEP_LOG"\n' "$S" "$S" "$H/gone.toml" > "$H/tree.sh"; chmod +x "$H/tree.sh"
+TMPDIR="$H/tmp" HOOKS_SHIM=/dev/null HOOKS_ROOT="$H" bash "$H/hookrun.sh" "$H/w" "$H/g" tree.sh tree.sh sha
+want=$(printf 'tree.sh\tc-dir\t%s\n' "$S" "$S/sub"; printf 'tree.sh\tc-file\t%s\n' "$S" "$S/sub" "$S/sub/a.rs" "$H/gone.toml")
+# (only the lines of those paths: under make hooks-test this suite runs beneath the read recorder, which adds the fake suite's own reads)
+got=$(grep -v "$(printf '\tc-tree\t')" "$H/w/tree.sh.reads" | grep -E "$(printf '\t')($S|$H/gone.toml)" | sort)
+check "a c-tree root expands to every path under it, once" '[ "$got" = "$(printf "%s\n" "$want" | sort)" ]'
+
 echo "parts: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

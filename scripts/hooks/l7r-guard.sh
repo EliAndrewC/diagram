@@ -76,7 +76,19 @@ build() {
   ) 9> "$TARGET/guard.lock"
 }
 
-if stale; then mkdir -p "$TARGET" && build; fi
+# GUARD_EDIT_OK: feature 449 T205 - THE RUN'S FRESH BINARY, as `l7r-gate.sh`'s: `make hooks-test` asks once, before its fan-out,
+# which good binary is fresh (L7R_GUARD_PRINT_FRESH=1 prints it, below) and exports it as L7R_GUARD_FRESH; a call whose $GOOD is
+# that binary skips the walk of rust/guard (about 2,000 paths a call, 266,643 lines of sync-with-main's read log on 2026-11-19).
+# Under the read recorder the walk tied a suite to the guard's sources, so the call writes those roots to its log as `c-tree`
+# lines, which tests/hooks/hookrun.sh expands to every path under them before `trace stamp`. Another target walks as before.
+if [ -n "${L7R_GUARD_FRESH:-}" ] && [ "$L7R_GUARD_FRESH" = "$GOOD" ] && [ -x "$GOOD" ]; then
+  if [ -n "${L7R_TEST_DEP_LOG:-}" ]; then
+    for p in "${SOURCES[@]}"; do printf '%s\tc-tree\t%s\n' "${L7R_TEST_DEP_FILE:-}" "$p"; done >> "$L7R_TEST_DEP_LOG"
+  fi
+elif stale; then mkdir -p "$TARGET" && build; fi
+# L7R_GUARD_PRINT_FRESH=1 (T205): the good binary, built above when stale, printed where no source is newer than it (exit 1 where
+# one is: a failed build, a build past its limit, none ever built)
+if [ -n "${L7R_GUARD_PRINT_FRESH:-}" ]; then { [ -x "$GOOD" ] && ! newer "$GOOD"; } || exit 1; printf '%s\n' "$GOOD"; exit 0; fi
 if [ -x "$GOOD" ]; then
   export L7R_GUARD_TREE="$TREE"  # the tree a decider asks its tools in (T006: the tools stay theirs until phase 3)
   exec "$GOOD" "$@"

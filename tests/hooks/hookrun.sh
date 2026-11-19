@@ -65,6 +65,16 @@ fi
 awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$GUARD.s"
 # feature 449 T125: kept beside the suite's stamp, pass or fail, so the next run starts the longest suites first
 mkdir -p "$GITDIR/hooks-test" && cp "$WORK/$GUARD.s" "$GITDIR/hooks-test/$GUARD.s"
+# GUARD_EDIT_OK: feature 449 T205 - THE LAUNCHERS' SOURCES, EXPANDED ONCE: a launcher given the run's fresh binary
+# (L7R_GATE_FRESH, L7R_GUARD_FRESH) skips the walk of its Rust sources and writes their roots here as `c-tree` lines instead; each
+# root becomes every path under it - a directory listed and stat'ed, a file stat'ed, a missing one stat'ed - as the walk read them, so
+# `trace stamp` keeps the suite tied to those sources exactly as before, from one walk a suite where there was one a call
+if [ "$rc" -eq 0 ] && [ -n "${HOOKS_SHIM:-}" ] && grep -q "$(printf '\tc-tree\t')" "$WORK/$GUARD.reads" 2>/dev/null; then
+  grep "$(printf '\tc-tree\t')" "$WORK/$GUARD.reads" | cut -f3 | sort -u | while IFS= read -r p; do
+    if [ -e "$p" ]; then find "$p" -type d -printf "%p\n" | sed "s|^|$GUARD\tc-dir\t|"; find "$p" -printf "%p\n" | sed "s|^|$GUARD\tc-file\t|"
+    else printf '%s\tc-file\t%s\n' "$GUARD" "$p"; fi
+  done >> "$WORK/$GUARD.reads"
+fi
 if [ "$rc" -eq 0 ]; then
   mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD"
   [ -n "${HOOKS_SHIM:-}" ] && "$HERE/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1

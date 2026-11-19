@@ -153,6 +153,23 @@ check "no binary, L7R_GATE_NO_BUILD -> refused" 1 $?
 [ ! -e "$TMP/cargo.calls" ]; check "no binary, L7R_GATE_NO_BUILD -> no build tried" 0 $?
 case $OUT in *"L7R_GATE_NO_BUILD builds none"*) : ;; *) echo "FAIL  the no-build refusal says why: $OUT"; FAILED=1 ;; esac
 
+# ---- the run's fresh binary (feature 449 T205): `make hooks-test` names the fresh binary once (L7R_GATE_PRINT_FRESH=1) and exports it as
+# L7R_GATE_FRESH; a call whose binary is that one skips the walk of its sources - no build though they are newer - and writes their roots
+# to the read recorder's log as `c-tree` lines; any other binary walks and builds as before ------------------------------------------------
+FT="$TMP/fresh-target"; mkdir -p "$FT/tool"; printf '#!/usr/bin/env bash\necho "stub $*"\n' > "$FT/tool/l7r-gate"; chmod +x "$FT/tool/l7r-gate"
+OUT=$(L7R_GATE_TARGET="$FT" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_PRINT_FRESH=1 "$STAMP" 2>&1); check "print-fresh: a fresh binary is named" 0 $?
+[ "$OUT" = "$FT/tool/l7r-gate" ]; check "print-fresh: ...by its path ($OUT)" 0 $?
+touch -d '2000-01-01' "$FT/tool/l7r-gate"; rm -f "$TMP/cargo.calls"
+OUT=$(L7R_GATE_TARGET="$FT" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_FRESH="$FT/tool/l7r-gate" L7R_TEST_DEP_LOG="$TMP/dep.log" L7R_TEST_DEP_FILE=s.sh "$STAMP" a b 2>&1)
+check "fresh: the named binary runs" 0 $?
+[ "$OUT" = "stub a b" ] && [ ! -e "$TMP/cargo.calls" ]; check "fresh: no walk, no build, though the sources are newer ($OUT)" 0 $?
+TOPDIR=$(cd "$HERE/../.." && pwd)
+[ "$(grep "$(printf '\tc-tree\t')" "$TMP/dep.log")" = "$(printf 's.sh\tc-tree\t%s\n' "$TOPDIR/rust/gate" "$TOPDIR/rust/guard" "$TOPDIR/rust/Cargo.toml" "$TOPDIR/rust/Cargo.lock" "$TOPDIR/.cargo/config.toml")" ]
+check "fresh: the sources' roots in the recorder's log" 0 $?
+OUT=$(L7R_GATE_TARGET="$FT" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_FRESH="$TMP/elsewhere/l7r-gate" "$STAMP" a b 2>&1); check "another binary: walked, and the stale one built (the fake cargo fails)" 1 $?
+[ -s "$TMP/cargo.calls" ]; check "another binary: the build was tried" 0 $?
+OUT=$(L7R_GATE_TARGET="$FT" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_PRINT_FRESH=1 "$STAMP" 2>&1); check "print-fresh: a stale binary whose build failed is not named" 1 $?
+
 # ---- the browser and the archive end to end, through the launcher (feature 449 T146, `ask:449-T80-order`: "the browser sits behind one
 # seam ... with one end-to-end test") ------------------------------------------------------------------------------------------------
 # The production wiring the crates' own tests replace - `record archive`'s real command line, its store over the archive's home, the

@@ -20,6 +20,7 @@ while IFS= read -r line; do
   err) printf 'err no model\n' ;;
   garbled) printf 'what\n' ;;
   short) printf 'ok 1 2\n\000\000\200\077'; exit 0 ;;
+  quit) exit 0 ;;
   fewer) printf 'ok 0 2\n' ;;
   *)
     body=${line#[}; body=${body%]}; n=0; vec=''
@@ -64,6 +65,7 @@ fn the_program_answers_in_order_and_refuses_in_words() {
     };
     assert!(said("noready").contains("did not start"));
     assert!(said("closed").contains("the embedder stopped"));
+    assert!(said("quit").contains("the embedder stopped before it answered"));
     assert!(said("err").contains("refused: no model"));
     assert!(said("garbled").contains("answered \"what\""));
     assert!(said("short").contains("cut short"));

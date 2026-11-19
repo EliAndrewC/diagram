@@ -8,7 +8,7 @@
 //! `sync-with-main.sh` alone is held to the whole tree: its suite resolves script paths at run time from trees its fixtures build, an edge no static reader
 //! follows. A suite that reads the whole scripts directory derives to it by its own code (`globs_tree`), matched as the code writes it, not as prose describes it.
 
-use std::cell::RefCell;
+use std::cell::{OnceCell, RefCell};
 use std::collections::{BTreeSet, HashMap, HashSet};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -125,6 +125,9 @@ pub struct Tree {
     shared: Vec<String>,
     imports: Regex,
     texts: RefCell<HashMap<String, Rc<str>>>,
+    /// The Rust sources `RUST_GUARD` names, listed once a run, and their bytes' digest, hashed once (feature 449 T205).
+    rust_files: OnceCell<Vec<PathBuf>>,
+    rust_digest: OnceCell<String>,
 }
 
 impl Tree {
@@ -202,6 +205,8 @@ impl Tree {
             shared,
             imports,
             texts: RefCell::new(HashMap::new()),
+            rust_files: OnceCell::new(),
+            rust_digest: OnceCell::new(),
         }
     }
 
@@ -280,28 +285,53 @@ impl Tree {
             .collect()
     }
 
-    fn rust_inputs(&self, guard: &str) -> Vec<PathBuf> {
+    fn drives_rust(&self, guard: &str) -> bool {
         let words = format!("{}{}", self.text(guard), self.text(&suite_of(guard)));
-        if !words.contains("l7r-guard") && !words.contains("l7r-gate") {
-            return Vec::new();
-        }
-        let mut found: Vec<PathBuf> = RUST_GUARD
-            .iter()
-            .flat_map(|r| {
-                let at = self.root.join(r);
-                if at.is_file() {
-                    vec![at]
-                } else {
-                    every_file(&at)
-                }
-            })
-            .filter(|q| q.is_file())
-            .collect();
-        found.sort();
-        found
+        words.contains("l7r-guard") || words.contains("l7r-gate")
     }
 
-    /// The suite's key: its dependencies' bytes in `deps_for` order, a missing one skipped, then the Rust sources; sha256's first 16 hex digits.
+    fn rust_files(&self) -> &[PathBuf] {
+        self.rust_files.get_or_init(|| {
+            let mut found: Vec<PathBuf> = RUST_GUARD
+                .iter()
+                .flat_map(|r| {
+                    let at = self.root.join(r);
+                    if at.is_file() {
+                        vec![at]
+                    } else {
+                        every_file(&at)
+                    }
+                })
+                .filter(|q| q.is_file())
+                .collect();
+            found.sort();
+            found
+        })
+    }
+
+    fn rust_inputs(&self, guard: &str) -> Vec<PathBuf> {
+        if self.drives_rust(guard) {
+            self.rust_files().to_vec()
+        } else {
+            Vec::new()
+        }
+    }
+
+    /// THE RUST SOURCES HASHED ONCE A RUN (feature 449 T205): every suite that drives a binary hashed the same 13 MB of sources into
+    /// its own key, about 50 times, 2.55 s of `make hooks-test`'s start before any suite ran (2026-11-19); their digest stands in for
+    /// their bytes, so any byte of them still moves every such key.
+    fn rust_digest(&self) -> &str {
+        self.rust_digest.get_or_init(|| {
+            let mut data = Vec::new();
+            for path in self.rust_files() {
+                data.extend(std::fs::read(path).unwrap_or_default());
+            }
+            sha256::hex(&data)
+        })
+    }
+
+    /// The suite's key: its dependencies' bytes in `deps_for` order, a missing one skipped, then the Rust sources' digest where it
+    /// drives a binary; sha256's first 16 hex digits.
     #[must_use]
     pub fn key_for(&self, guard: &str) -> String {
         let mut data = Vec::new();
@@ -310,8 +340,8 @@ impl Tree {
                 data.extend(std::fs::read(path).unwrap_or_default());
             }
         }
-        for path in self.rust_inputs(guard) {
-            data.extend(std::fs::read(path).unwrap_or_default());
+        if self.drives_rust(guard) {
+            data.extend(self.rust_digest().as_bytes());
         }
         sha256::hex(&data)[..16].to_owned()
     }

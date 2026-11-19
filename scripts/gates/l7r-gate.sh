@@ -60,7 +60,20 @@ stale() {
 # after a gate-crate edit, which T93 took out of that loop; a stale binary writes the same line. With no binary it builds as before.
 # L7R_GATE_NO_BUILD=1 builds none even where there is no binary, and exits 1 (feature 449 T143): `guard_log` runs `log guard` from
 # `l7r-guard.sh`'s no-binary path, inside a hook's timeout, where a build of the gate from nothing is the wait a hook must never take.
-if [ -n "${L7R_GATE_STALE_OK:-}" ] && [ -x "$BIN" ]; then
+# GUARD_EDIT_OK: feature 449 T205 - THE RUN'S FRESH BINARY: `make hooks-test` asks once, before its fan-out, which binary is fresh
+# (L7R_GATE_PRINT_FRESH=1 prints it, below) and exports it as L7R_GATE_FRESH; a call whose $BIN is that binary skips the walk of
+# its sources. The walk was most of the suites' system time: sync-with-main's run called this launcher 689 times, each walk
+# about 1,400 paths, every path a line of the read recorder's log (975,624 of its 1,260,877 lines, 2026-11-19). Under the
+# recorder the walk is also what ties a suite to the Rust sources, so the call writes those roots to its log as `c-tree`
+# lines, which tests/hooks/hookrun.sh expands to every path under them before `trace stamp`, as the walk recorded them.
+# Another binary - a variant (rust, browser, embed, mode-a) or another target - walks as before.
+if [ -n "${L7R_GATE_FRESH:-}" ] && [ "$L7R_GATE_FRESH" = "$BIN" ] && [ -x "$BIN" ]; then
+  if [ -n "${L7R_TEST_DEP_LOG:-}" ]; then
+    for p in "${SOURCES[@]}" "$TREE/rust/guard" "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml"; do
+      printf '%s\tc-tree\t%s\n' "${L7R_TEST_DEP_FILE:-}" "$p"
+    done >> "$L7R_TEST_DEP_LOG"
+  fi
+elif [ -n "${L7R_GATE_STALE_OK:-}" ] && [ -x "$BIN" ]; then
   :
 elif [ -n "${L7R_GATE_NO_BUILD:-}" ] && [ ! -x "$BIN" ]; then
   echo "l7r-gate: not built, and L7R_GATE_NO_BUILD builds none" >&2; exit 1
@@ -72,5 +85,8 @@ elif stale; then
   ( cd "$TREE" && RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" ) || { echo "l7r-gate: the build failed - fix what cargo names above" >&2; exit 1; }
   touch "$BIN"  # cargo leaves an up-to-date binary's time alone, and a source newer than it would ask again on every call
 fi
+# GUARD_EDIT_OK: feature 449 T205 - L7R_GATE_PRINT_FRESH=1: the binary, built above when stale, printed where it is now fresh
+# (exit 1 where it is not: a failed build, or STALE_OK's stale binary), for `make hooks-test` to export as L7R_GATE_FRESH
+if [ -n "${L7R_GATE_PRINT_FRESH:-}" ]; then stale && exit 1; printf '%s\n' "$BIN"; exit 0; fi
 export L7R_GATE_TREE="$TREE"  # where the binary finds codeid.py: a fixture repository it runs in has none
 exec "$BIN" "$@"

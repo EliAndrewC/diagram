@@ -12,31 +12,27 @@ GATE="$HERE/../../scripts/gates/entry-gate.sh"
 # swept into a commit by a `git commit -a` made while hooks-test ran). The suite edits a real question page to drive
 # the guard; it now edits that page in a local clone of HEAD, whose origin/main is HEAD, so the delta the guard sees is
 # exactly the suite's own edits. The guard's scripts still come from HERE - the working copy under test.
-ROOT="$(mktemp -d)/clone"
-git clone -q "$REAL" "$ROOT" || { echo "test-entry-gate: could not clone $REAL"; exit 1; }
-PAGE="$ROOT/research/questions/0094-rooms-for-a-parley-across-a-border.html"
-BL="$ROOT/dev/bypass-log"
-# ISOLATE THE CENSUS (feature 169) AND THE ANSWERS (feature 311): a suite that drives a recording guard writes into
-# throwaway stores, or its fixtures land in the live guard census and the clone's own answer records.
-GUARD_LOG_DIR="$(mktemp -d)"; export GUARD_LOG_DIR
-RECORD_CHECKS_DIR="$(mktemp -d)"; export RECORD_CHECKS_DIR
-
-pass=0; fail=0
-ok() { if [ "$1" = "$2" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL %s: got %s want %s\n' "$3" "$1" "$2"; fi; }
-
-BAK="$(mktemp)"; cp "$PAGE" "$BAK"
-BL_BEFORE="$(find "$BL" -name '*.json' | wc -l)"
-restore() {
-  cp "$BAK" "$PAGE"; rm -f "$BAK"
-  rm -rf "$GUARD_LOG_DIR" "$RECORD_CHECKS_DIR"
-  # any bypass-log entry this suite created goes too, however it exited - the log is a record of real
-  # bypasses and a test's fixtures have no business in it
-  while [ "$(find "$BL" -name '*.json' | wc -l)" -gt "$BL_BEFORE" ]; do
-    rm -f "$(find "$BL" -name '*.json' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)"   # GUARD_EDIT_OK: 2026-10-02 - no SIGPIPE'd ls across month folders
-  done
-  rm -rf "$(dirname "$ROOT")"   # the throwaway clone (feature 329)
+# TWO CLONES, SIDE BY SIDE (feature 449 T205): each record gate here computes the tree's owed units, about 1.5-2 s, nine of them, and
+# one after another they made this suite the full hook run's longest (53.7 s and 36.0 s in two runs, 20.6 s alone, 2026-11-19). Case 4
+# answers and re-stales the units, six of the nine; the other cases need only an edited page. So case 4 runs in a clone of its own,
+# dealt beside the rest by tests/hooks/parts.sh (`run_parts`, PARTS_MAX-capped like every split suite), each clone the case's own:
+# its page, its bypass log, its guard log and its answers' store, all removed with it.
+T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
+PASS=0; FAIL=0
+ok() { if [ "$1" = "$2" ]; then PASS=$((PASS+1)); else FAIL=$((FAIL+1)); printf '  FAIL %s: got %s want %s\n' "$3" "$1" "$2"; fi; }
+# fixture: a fresh clone in its own directory under the part's $T, the page and its pristine copy, and throwaway stores - a suite that
+# drives a recording guard writes into them, or its fixtures land in the live guard census (feature 169) and the clone's own answer
+# records (feature 311)
+fixture() {
+  local d; d=$(mktemp -d -p "$T")
+  ROOT="$d/clone"
+  git clone -q "$REAL" "$ROOT" || { echo "test-entry-gate: could not clone $REAL"; exit 1; }
+  PAGE="$ROOT/research/questions/0094-rooms-for-a-parley-across-a-border.html"
+  BL="$ROOT/dev/bypass-log"
+  BAK="$d/page.bak"; cp "$PAGE" "$BAK"
+  GUARD_LOG_DIR="$d/guard-log"; RECORD_CHECKS_DIR="$d/checks"; mkdir -p "$GUARD_LOG_DIR" "$RECORD_CHECKS_DIR"
+  export GUARD_LOG_DIR RECORD_CHECKS_DIR
 }
-trap restore EXIT
 edit() {
   local text; text="$(cat "$PAGE"; printf x)"; text="${text%x}"
   case "$text" in *"$1"*) ;; *) printf '  FAIL edit: not in the page: %s\n' "$1"; exit 1 ;; esac
@@ -44,7 +40,7 @@ edit() {
 }
 # Every unit the clone owes, answered at its content through the record tools' own command (feature 449 T149: through
 # `scripts/owed_door.py`'s writer until its door left with `entry_owed.py`); a reason stands in for a bundle, its bypass record
-# in the throwaway clone, which `restore` removes.
+# in the throwaway clone, which goes with it.
 # ONE ANSWER PER CHECK (feature 449 T122): each `--answer` computes the tree's owed units again, about 1 s, and one call a unit
 # was 11 calls, half the suite's 22.8 s and the full hook run's bound beside idle-tests (2026-11-17). A check's units are named
 # together - its notes on a question by `--q` and `--notes k,k`, its other subjects by `--kind s,s` - so the same units are
@@ -68,6 +64,9 @@ answer_all() {
 # The throwaway clone carries no delta of its own: its origin/main is the HEAD it was cloned from, so nothing is owed before
 # the suite's edits and case 1 holds that.
 
+case_main() {  # cases 1-3 and 5-8, one clone; 3 record gates, about 5 s alone (2026-11-19)
+fixture
+
 # 1. a tree with no record change is quiet - the guard must not fire on correct work
 ( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "no record change is quiet"
 
@@ -82,11 +81,8 @@ out="$( cd "$ROOT" && "$GATE" 2>&1 )"; ok $? 1 "an owed unit with no answer refu
 case "$out" in *"quote-check:0094#kyakhta-trade-enwiki"*"make check-bundle Q=0094 FOR=quote-check"*) r=0 ;; *) r=1 ;; esac
 ok "$r" 0 "the refusal names the unit and its bundle command"
 
-# 4. answered at this content: quiet; the words move again: the answer is stale and it refuses again
-answer_all
-( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "answered units ship"
-edit "a short distance apart." "a short walk apart."
-( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 1 "a stale answer refuses"
+# (case 4, the answers, is case_answers, in a clone of its own; the units case 3 left owed stand unanswered here, as case 4 leaves
+# them stale in its clone - owed either way, which is what 5-7 drive)
 
 # 5. the escapes must SAY WHY - a bare token is refused, not honored (feature 170's rule)
 ( cd "$ROOT" && RECORD_CHECKS_OK=x "$GATE" >/dev/null 2>&1 ); ok $? 1 "a bare RECORD_CHECKS_OK is refused"
@@ -105,6 +101,25 @@ grep -rlq --include='*.json' "a probe sentence, no check owed" "$BL"; ok $? 0 "t
 # 8. restoring the page goes quiet again - the guard tracks the tree, not a latch
 cp "$BAK" "$PAGE"
 ( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "quiet again once the page is restored"
+}
 
-printf 'test-entry-gate: %d passed, %d failed\n' "$pass" "$fail"
-[ "$fail" -eq 0 ]
+case_answers() {  # case 4, its own clone; 6 record gates, about 10 s alone (2026-11-19)
+fixture
+# case 3's reword, the state case 4 answers
+edit "a short way apart." "a short distance apart."
+
+# 4. answered at this content: quiet; the words move again: the answer is stale and it refuses again
+answer_all
+( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "answered units ship"
+edit "a short distance apart." "a short walk apart."
+( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 1 "a stale answer refuses"
+}
+
+CASES=(case_answers case_main)
+declare -A WEIGHT=([case_answers]=10 [case_main]=5)  # seconds, each alone, measured 2026-11-19
+# shellcheck source=/dev/null
+source "$HERE/parts.sh"
+run_parts 2
+
+printf 'test-entry-gate: %d passed, %d failed\n' "$PASS" "$FAIL"
+[ "$FAIL" -eq 0 ]

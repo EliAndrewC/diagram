@@ -882,6 +882,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T205 (the GM, 2026-11-12: \"you should prioritize the performance bits of the tests and landing\"; 2026-11-19: \"Yes those two efficiency improvements both seem worth doing sooner rather than later\")": {
+   "sha256": "ed1f75b3101a5a15aafe41c7f2c611158a76595957777ecf0ebf19137668f750",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T205 Approach (checklist part A)": {
+   "sha256": "854195854e8e0a5cb6c96a05f5e05669ba627d1420c247d3efbae5205b91fb0b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13665,6 +13677,70 @@
      "why": "Ordering only; serves the GM's 'sooner rather than later' for T205/T206 by making their measurement true."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T205 (the GM, 2026-11-12: \"you should prioritize the performance bits of the tests and landing\"; 2026-11-19: \"Yes those two efficiency improvements both seem worth doing sooner rather than later\")",
+    "### T205 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T205-1 build once, launchers skip the scan",
+     "summary": "make hooks-test builds and checks both binaries once before its fan-out and passes their paths down (L7R_GATE_FRESH, L7R_GUARD_FRESH); a call using exactly that binary skips the per-call rescan of the Rust sources and writes its source folders to the read log, expanded once per suite to the same paths the old scan read",
+     "class": "within",
+     "why": "The hook-suite speedup the GM approved on 2026-11-19 ('Yes those two efficiency improvements both seem worth doing sooner rather than later') under the 2026-11-12 priority on the tests' and the landing's time. Every case is kept and the suite still goes stale when its sources change (the read log holds the same paths), so it cuts time without dropping a job; pinned by cases in three suites."
+    },
+    {
+     "id": "T205-2 orphaned sleep killed with its parent",
+     "summary": "two sync-with-main cases no longer wait on an orphaned sleep that holds a lock",
+     "class": "within",
+     "why": "Removes a wait inside the hook suites, the thing the GM asked to speed up; no case changed."
+    },
+    {
+     "id": "T205-3 entry-gate's long case in its own clone",
+     "summary": "entry-gate's long case runs in its own clone alongside the others instead of serially",
+     "class": "within",
+     "why": "Same request; the case and its assertions are kept, and parallelism is not widened past the memory constraint the block names."
+    },
+    {
+     "id": "T205-4 freshness keys hash sources once",
+     "summary": "the suites' freshness keys hash the Rust sources once rather than about 50 times",
+     "class": "within",
+     "why": "Same request; staleness on a source change is kept (feature 379 constraint)."
+    },
+    {
+     "id": "T205-5 semantic-crate empty-answer message fixed",
+     "summary": "a stopped embedder was reported as answered \"\"; it now says the embedder stopped, tested with a fake-embedder quit mode",
+     "class": "within",
+     "why": "A tool answering wrongly is a defect under constitution XIV v2.36.0, and the GM's 2026-11-18 'we want to use this port to fix broken things as we find them' covers fixing it; it is a small fix found during this task, not new behavior."
+    },
+    {
+     "id": "T205-6 record-owed's 2 s per call left",
+     "summary": "entry-gate stays the longest suite; speeding record-owed is left to a later Rust task, not filed until measured to matter",
+     "class": "within",
+     "why": "What the GM approved was these specific improvements, under the 2026-11-12 condition of a concrete target with a measured saving. A slow call that answers correctly is not a defect, so leaving it narrows nothing that was asked."
+    },
+    {
+     "id": "T205-7 model and browser parts stay serial; PARTS_MAX kept",
+     "summary": "the l7r-gate model and browser parts (about 1.2 GB together) stay serial and PARTS_MAX is unchanged, because memory is near its cap",
+     "class": "within",
+     "why": "Nothing in the request asks for a wider fan-out. Keeping the memory-incident limit is a constraint that bounds how the speedup is done, not a cut to what was asked."
+    },
+    {
+     "id": "T205-8 order: after T207, before T206 and T152",
+     "summary": "T205 runs right after T207 and ahead of T206 and the remaining port work",
+     "class": "within",
+     "why": "Matches 'sooner rather than later' and the 2026-11-12 priority of test and landing time over the ports."
+    },
+    {
+     "id": "T205-9 exits",
+     "summary": "green means every suite green, the A/B saving shown and make static green; red means the failure is recorded and a cannot-be-done claim is ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Ordinary exits for the work that was asked; nothing is excluded."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -24254,6 +24330,68 @@
      "summary": "Sequenced after T204 and before T205/T206, whose savings are measured with this report.",
      "class": "within",
      "why": "Ordering only; serves the GM's 'sooner rather than later' for T205/T206 by making their measurement true."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T205": {
+   "section_sha256": "8098f23890287e42e685b935d47a58619021ca40c09aeb2d5e6713facef75d09",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T205-1 build once, launchers skip the scan",
+     "summary": "make hooks-test builds and checks both binaries once before its fan-out and passes their paths down (L7R_GATE_FRESH, L7R_GUARD_FRESH); a call using exactly that binary skips the per-call rescan of the Rust sources and writes its source folders to the read log, expanded once per suite to the same paths the old scan read",
+     "class": "within",
+     "why": "The hook-suite speedup the GM approved on 2026-11-19 ('Yes those two efficiency improvements both seem worth doing sooner rather than later') under the 2026-11-12 priority on the tests' and the landing's time. Every case is kept and the suite still goes stale when its sources change (the read log holds the same paths), so it cuts time without dropping a job; pinned by cases in three suites."
+    },
+    {
+     "id": "T205-2 orphaned sleep killed with its parent",
+     "summary": "two sync-with-main cases no longer wait on an orphaned sleep that holds a lock",
+     "class": "within",
+     "why": "Removes a wait inside the hook suites, the thing the GM asked to speed up; no case changed."
+    },
+    {
+     "id": "T205-3 entry-gate's long case in its own clone",
+     "summary": "entry-gate's long case runs in its own clone alongside the others instead of serially",
+     "class": "within",
+     "why": "Same request; the case and its assertions are kept, and parallelism is not widened past the memory constraint the block names."
+    },
+    {
+     "id": "T205-4 freshness keys hash sources once",
+     "summary": "the suites' freshness keys hash the Rust sources once rather than about 50 times",
+     "class": "within",
+     "why": "Same request; staleness on a source change is kept (feature 379 constraint)."
+    },
+    {
+     "id": "T205-5 semantic-crate empty-answer message fixed",
+     "summary": "a stopped embedder was reported as answered \"\"; it now says the embedder stopped, tested with a fake-embedder quit mode",
+     "class": "within",
+     "why": "A tool answering wrongly is a defect under constitution XIV v2.36.0, and the GM's 2026-11-18 'we want to use this port to fix broken things as we find them' covers fixing it; it is a small fix found during this task, not new behavior."
+    },
+    {
+     "id": "T205-6 record-owed's 2 s per call left",
+     "summary": "entry-gate stays the longest suite; speeding record-owed is left to a later Rust task, not filed until measured to matter",
+     "class": "within",
+     "why": "What the GM approved was these specific improvements, under the 2026-11-12 condition of a concrete target with a measured saving. A slow call that answers correctly is not a defect, so leaving it narrows nothing that was asked."
+    },
+    {
+     "id": "T205-7 model and browser parts stay serial; PARTS_MAX kept",
+     "summary": "the l7r-gate model and browser parts (about 1.2 GB together) stay serial and PARTS_MAX is unchanged, because memory is near its cap",
+     "class": "within",
+     "why": "Nothing in the request asks for a wider fan-out. Keeping the memory-incident limit is a constraint that bounds how the speedup is done, not a cut to what was asked."
+    },
+    {
+     "id": "T205-8 order: after T207, before T206 and T152",
+     "summary": "T205 runs right after T207 and ahead of T206 and the remaining port work",
+     "class": "within",
+     "why": "Matches 'sooner rather than later' and the 2026-11-12 priority of test and landing time over the ports."
+    },
+    {
+     "id": "T205-9 exits",
+     "summary": "green means every suite green, the A/B saving shown and make static green; red means the failure is recorded and a cannot-be-done claim is ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Ordinary exits for the work that was asked; nothing is excluded."
     }
    ],
    "verdict": "CLEAR"

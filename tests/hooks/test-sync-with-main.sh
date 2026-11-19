@@ -392,7 +392,9 @@ OUT=$(cd "$D/main/.clones/c" && SYNC_LOCK_WAIT=1 CLONE_MAIN="$D/main" CLONE_GITH
 expect_out "mirror lock stayed busy"
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$mirror_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the mirror moved without the lock"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  the clone did not merge while the mirror was busy"; FAIL=$((FAIL+1)); }
-kill "$HOLDER" 2>/dev/null; wait "$HOLDER" 2>/dev/null
+# GUARD_EDIT_OK: feature 449 T205 - the holder's `sleep` goes with it - killed alone, `flock` left its child holding the lock, and the case below
+# waited out the rest of the 6 s for it (4.9 s of this case's 7.4 s, measured 2026-11-19)
+pkill -P "$HOLDER" 2>/dev/null; kill "$HOLDER" 2>/dev/null; wait "$HOLDER" 2>/dev/null
 # a hand commit in the mirror still stops the hook's path, as it stops the synchronous one
 ( cd "$D/main" && echo rogue > rogue && git add -A && git commit -qm "committed in main by hand" )
 OUT=$(syncmain "$D" sync-in --background-render); check "a mirror commit -> refused on the hook's path" 1 $?
@@ -588,14 +590,14 @@ OUT=$(syncmain "$D" push); check "STAYS QUIET: rust-only, no landing cohort -> t
 case_28() {  # 3 s
 echo "X. sync-in with the mirror lock held: no lock taken when the mirror is at the tip; the bounded wait when main moved (feature 442)"
 D=$(topology bh)
-mkdir -p "$D/main/.clones"; ( flock "$D/main/.clones/.sync.lock" sleep 20 ) & holder=$!; lock_held "$D/main/.clones/.sync.lock"
+mkdir -p "$D/main/.clones"; flock "$D/main/.clones/.sync.lock" sleep 20 & holder=$!; lock_held "$D/main/.clones/.sync.lock"
 start=$(date +%s); OUT=$(SYNC_LOCK_WAIT=15 syncmain "$D" sync-in); rc=$?; took=$(( $(date +%s) - start ))
 check "sync-in, the mirror at the tip, the lock held" 0 $rc
 [ "$took" -lt 5 ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited ${took}s for a lock it did not need (the mirror at the tip)"; FAIL=$((FAIL+1)); }
 case "$OUT" in *"mirror lock stayed busy"*) echo "FAIL  sync-in asked for the lock with the mirror at the tip"; FAIL=$((FAIL+1)) ;; *) PASS=$((PASS+1)) ;; esac
 ( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
 start=$(date +%s); OUT=$(SYNC_LOCK_WAIT=1 syncmain "$D" sync-in); rc=$?; took=$(( $(date +%s) - start ))
-kill "$holder" 2>/dev/null; wait "$holder" 2>/dev/null
+pkill -P "$holder" 2>/dev/null; kill "$holder" 2>/dev/null; wait "$holder" 2>/dev/null  # T205: and its `sleep 20`, which outlived the case
 check "sync-in, main moved, the lock held" 0 $rc
 [ "$took" -lt 10 ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited ${took}s behind a held lock (bounded at 1 s)"; FAIL=$((FAIL+1)); }
 expect_out "mirror lock stayed busy"
@@ -610,7 +612,7 @@ expect_out "mirror lock stayed busy"
 # 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
 CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_11d case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28)
-declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=6 [case_11b]=7 [case_11c]=7 [case_11d]=13 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3 [case_27]=6 [case_27b]=6 [case_28]=3)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=1 [case_09]=1 [case_10]=1 [case_11]=1 [case_11b]=1 [case_11c]=2 [case_11d]=3 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=2 [case_16]=1 [case_17]=2 [case_18]=1 [case_19]=1 [case_20]=1 [case_21]=2 [case_22]=1 [case_23]=1 [case_24]=1 [case_25]=1 [case_26]=1 [case_27]=1 [case_27b]=1 [case_28]=1)  # seconds, each case alone less the suite's start and template (about 0.85 s), measured 2026-11-19 (feature 449 T205; case_17 6.6 s before its lock holder was killed whole)
 # SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives (feature 383 amendment 3, plan D27); the
 # runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
 [ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES

@@ -121,6 +121,23 @@ grep -q "rust-lld from /no/such/gcc-ld.*has no ld.lld.*rustc --print sysroot" "$
 rm -rf "$T/.cargo"; touch_sources
 check "lld back: built again" "$(run ok v7)" "v7 PreToolUse"
 
+# 6d. THE RUN'S FRESH BINARY (feature 449 T205): L7R_GUARD_PRINT_FRESH=1 names the good binary where no source is newer, and a call
+# given that name in L7R_GUARD_FRESH runs it without walking the sources - no build though they changed - writing their roots to the
+# read recorder's log as `c-tree` lines; any other name walks and builds as before
+GOOD="$W/target/l7r-guard.good"
+check "print-fresh: the fresh binary named" "$(L7R_GUARD_PRINT_FRESH=1 run ok v7)" "$GOOD"
+touch_sources
+L7R_GUARD_PRINT_FRESH=1 run broken v8 >/dev/null 2>&1; check "print-fresh: a stale binary whose build failed is not named" "$?" 1
+check "print-fresh: ...after one build tried" "$(calls)" 8
+touch_sources
+out=$(L7R_GUARD_FRESH="$GOOD" L7R_TEST_DEP_LOG="$W/dep.log" L7R_TEST_DEP_FILE=s.sh run ok v9)
+check "fresh: the named binary runs" "$out" "v7 PreToolUse"
+check "fresh: no walk, no build, though the sources changed" "$(calls)" 8
+check "fresh: the sources' roots in the recorder's log" "$(grep "$(printf '\tc-tree\t')" "$W/dep.log")" "$(printf 's.sh\tc-tree\t%s\n' "$T/rust/guard" "$T/rust/Cargo.toml" "$T/rust/Cargo.lock" "$T/.cargo/config.toml")"
+out=$(L7R_GUARD_FRESH="$W/elsewhere/l7r-guard.good" run ok v9)
+check "another name: walked and built as before" "$out" "v9 PreToolUse"
+check "another name: one more build" "$(calls)" 9
+
 # 7. the real crate, built by the real cargo into the clone's own target, answers through the wrapper
 CARGO_BIN=$( [ -x "$HOME/.cargo/bin/cargo" ] && echo "$HOME/.cargo/bin/cargo" || command -v cargo)
 if [ -n "$CARGO_BIN" ]; then
@@ -133,7 +150,8 @@ if [ -n "$CARGO_BIN" ]; then
   t0=${EPOCHREALTIME/,/.}
   # the build's own limit (45 s) is case 1's subject; here a cold target on a loaded machine outran it (2026-11-10 54.9 s, 2026-11-11
   # 60.0 s, both landings), so this case gives the real build room and judges only what it answers
-  out=$(L7R_GUARD_BUILD_SECS=600 L7R_GUARD_TARGET="$RT" L7R_GUARD_CARGO="$CARGO_BIN" "$R/scripts/hooks/l7r-guard.sh" --version < /dev/null 2>&1)
+  # (env -u L7R_GUARD_FRESH, T205: make hooks-test names this binary fresh, and this case walks and builds as a session's hook does)
+  out=$(env -u L7R_GUARD_FRESH L7R_GUARD_BUILD_SECS=600 L7R_GUARD_TARGET="$RT" L7R_GUARD_CARGO="$CARGO_BIN" "$R/scripts/hooks/l7r-guard.sh" --version < /dev/null 2>&1)
   case "$out" in "l7r-guard "*) ok ;; *) bad "real build: --version [$out]" ;; esac
   [ -x "$RT/l7r-guard.good" ] && ok || bad "real build: the self-checked binary kept"
   # the self-check touches nothing: run in a clone with a feature, it writes no event log there (T012)
