@@ -1,5 +1,6 @@
 //! The green-gate stamps (feature 449 T063 slice 2, from `scripts/gates/gate-stamp.py`): each area's key is a hash of what its gate ran over, kept under the git directory when the gate goes green, and the
-//! push refuses an area whose code changed with no matching stamp. The keys equal the Python's byte for byte, so a stamp kept before the switch still verifies.
+//! push refuses an area whose code changed with no matching stamp. The keys equaled the Python's byte for byte at the port; the diagram area
+//! has since grown to every engine path (feature 449 T224), so a stamp kept before that verifies nothing.
 
 use std::io::Read;
 use std::path::{Path, PathBuf};
@@ -38,7 +39,19 @@ const AREAS: [Area; 4] = [
     Area {
         name: "diagram",
         root: "",
-        patterns: &["*.py", "rust/*.rs", "rust/*Cargo.toml", "rust/*Cargo.lock"],
+        // every path `delta::is_engine` names (the pool's `.json`, `.svg` and `.notes.md` too, feature 449 T224): a pool-only change
+        // routed GATED left this key unmoved, so `make land` skipped the `make done` the push then refused it for; a parity test
+        // (`every_engine_path_is_in_the_diagram_area`) holds the two lists together
+        patterns: &[
+            "*.py",
+            "rust/*.rs",
+            "rust/*Cargo.toml",
+            "rust/*Cargo.lock",
+            "pool/*.json",
+            "pool/*.svg",
+            "pool/*.notes.md",
+            "legacy-hand-authored-pool/*.json",
+        ],
         raw: false,
         skip_only: false,
     },

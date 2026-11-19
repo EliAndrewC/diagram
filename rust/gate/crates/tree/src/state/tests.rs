@@ -134,10 +134,21 @@ fn only_a_green_gate_on_exactly_this_content_is_reused() {
     write(&dir, GREEN, "done", &py).unwrap();
     assert!(why(&dir).0 && why(&dir).1.starts_with("already verified"));
     put(&dir, "pool/a.json", "{}\n");
-    assert!(why(&dir).1.contains("a pool gen or manifest changed"));
+    assert!(why(&dir)
+        .1
+        .contains("the engine code it tested (Python, Rust, the pool's sources) changed"));
     write(&dir, GREEN, "done", &py).unwrap();
     put(&dir, "b.py", "y = 1\n");
-    assert!(why(&dir).1.contains("the skill's Python changed"));
+    assert!(why(&dir).1.contains("the engine code it tested"));
+    // a record from before the engine key was kept vouches for nothing (the diagram area now holds every engine path, T224, so a
+    // record whose hash stands differs only here)
+    write(&dir, GREEN, "done", &py).unwrap();
+    let file = state_file(&dir);
+    let mut kept: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&file).unwrap()).unwrap();
+    kept["engine_key"] = "".into();
+    std::fs::write(&file, kept.to_string()).unwrap();
+    assert!(why(&dir).1.contains("it recorded no engine key"));
 }
 
 #[test]

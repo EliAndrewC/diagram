@@ -176,10 +176,10 @@ fn already_verified(root: &Path, python: &str) -> Result<(bool, String), String>
         ));
     }
     if st.hash != current_hash(root, python)? {
-        return Ok((false, format!("`make done` was green at {at} ({sha}), but the skill's Python changed since - that run vouched for different code")));
+        return Ok((false, format!("`make done` was green at {at} ({sha}), but the engine code it tested (Python, Rust, the pool's sources) changed since - that run vouched for different code")));
     }
     if st.engine_key.is_empty() || st.engine_key != delta::engine_key_worktree(root, python)? {
-        return Ok((false, format!("`make done` was green at {at} ({sha}), but a pool gen or manifest changed since - that run vouched for different content")));
+        return Ok((false, format!("`make done` was green at {at} ({sha}), but it recorded no engine key, or the engine content changed since - that run vouched for different content")));
     }
     Ok((true, format!("already verified: `make done` was green at {at} ({sha}) against exactly this engine content - nothing it exercises has changed (docs, the Makefile, config and scripts/ do not count)")))
 }

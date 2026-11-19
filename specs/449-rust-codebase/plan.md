@@ -933,14 +933,42 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 
 <!-- plan-archive: T223 to T218 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T224 (<why: the finding or measurement that files it>)
+### T224 (T223: the push's work-budget review printed suspended and exited 0 while stages were accepted, and the green-gate stamp missed pool-only changes)
+
+- **Approach**: `make work-budget-review` was a `printf` left when feature 444 deleted the Python review, waiting on a Rust driver (444 T42) that now counts the stages (observed 2026-11-19, method: `make work-budget` over the Rust driver). It is now `l7r-gate measure work-budget-review`: each accepted hamlet stage held at its sizes against its accepted figure and twice its budget, the two holds the deleted Python made; each Mode A pool-sheet stage held to twice its budget per sheet; a stage nothing counts printed with its reason (waterward, whose reference roll has a pond; `pipeline`, UNCOUNTED until T220-T222), never passed silently; an accepted stage missing from a run refused with the fix named. Counts are kept by the files they read, so a push where nothing moved costs about 0.3 s (measured 2026-11-19 (two runs back to back)). `make land`'s fallback that ran the count without writing it is removed. The green-gate stamp's diagram area covers pool `.json`, `.svg` and `.notes.md` (and the legacy tree's `.json`), held equal to the delta's engine list by a test. Red first: a tree with a stage accepted far under its count, which the old recipe passed; the stamp's two tests.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the review holds each stage; the stamp covers the pool | the measure crate's review tests, the tree crate's stamp tests | `work_budget_review.rs`, `stamp.rs`, the counting entry points | none | none |
+
+### T224 Approach (checklist part A)
+
+1. **The goal, in the world.** No push lands a stage doing more work than its budget allows, and a pool-only change is gated before it lands.
+2. **The constraints.** Feature 443/444's budget rules (FR-022's leeway); constitution XIV; T223's plan review (this lands before T220).
+3. **Where each comes from.** O: T223's finding; R: T223's plan review.
+4. **Do they describe the world here?** Yes: the old recipe passed a tree with a stage over its figure (observed 2026-11-19, method: the red-first fixture).
+5. **The order.** After T219, before T220.
+6. **The exits.** Green: the tests red first then green, `make quick`, `make static`, `make hooks-test` and the gated `make done` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (gated).
+9. **Done, measured.** `make work-budget-review ROUTE=GATED` lists every stage with its ratio and exits 0; a second run reads its kept counts.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** The review passed every push unchecked: a defect.
+
+**Found and left?** The polder waterward stage counts about one twentieth of its accepted figure with three counters firing, so its counters may miss work: filed as T226 (2026-11-19), with the stale run figures in `dev/work-budget.md`. The pipeline stage's counters are owed by T220, written onto its line.
+
+**Performance work?** no
+
+
+### T225 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T224 Approach (checklist part A)
+### T225 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -960,14 +988,14 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T225 (<why: the finding or measurement that files it>)
+### T226 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T225 Approach (checklist part A)
+### T226 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

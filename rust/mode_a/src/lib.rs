@@ -123,9 +123,17 @@ pub fn cli_in(args: &[String], tree: &Path, input: &mut dyn std::io::Read) -> Re
         }),
         // the placer's counted work per caption, in the counting build alone (feature 449 T198)
         #[cfg(feature = "counters")]
-        (Some("caption-counts"), 1) => {
-            door(|| labels::hand_sheet::counted::report(&read(&rest[0])?))
-        }
+        // and on a generated compound sheet (a `.compound.json`), its program composed first and its captions seated as `compound` seats
+        // them, so the placer's budget is counted on all six of its sheets (feature 449 T224)
+        (Some("caption-counts"), 1) => door(|| {
+            let sheet = if rest[0].ends_with(compound::cli::SUFFIX) {
+                let (program, bands) = compound::cli::load(tree, &rest[0])?;
+                compound::cli::compose(&program, &bands)?.0
+            } else {
+                read(&rest[0])?
+            };
+            labels::hand_sheet::counted::report(&sheet)
+        }),
         // the compound generator's counted work on one program, in the counting build alone (feature 449 T152)
         #[cfg(feature = "counters")]
         (Some("compound-counts"), 1) => door(|| compound::cli::counts(tree, &rest[0])),

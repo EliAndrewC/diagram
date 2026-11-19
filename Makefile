@@ -32,8 +32,8 @@ work-budget:    ## [performance] the counted work of the reference hamlet per st
 rust-tooling:   ## [tests] every check, hook, gate and make target that reads Python's syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check rust-tooling
 
-work-budget-review: ## [performance] the push's ratchet: on a push carrying engine code, every ACCEPTED stage held to its accepted figure and its budget at 40 and 80 households, from a work-budget run at the pushed engine; no arbiter accept clears it (feature 443)   ROUTE=<GATED|GATED-LOCAL|DIRECT>
-	@printf 'work-budget-review: suspended - no Python roll to count, and the Rust driver that will count the stages through the cut is T42 (feature 444 T39, FR-024: the gates that presume a whole hamlet switched off)\n'
+work-budget-review: ## [performance] the push's ratchet: on a push carrying engine code, every ACCEPTED hamlet stage held to its accepted figure and twice its budget at 40 and 80 households (a form at its own sizes), every pool-sheet stage to twice its budget on each sheet, re-counted only where what it reads moved; a stage nothing counts is printed, never passed silently; no arbiter accept clears it (features 443, 444 FR-022, 449 T224)   ROUTE=<GATED|GATED-LOCAL|DIRECT>
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure work-budget-review "$(ROUTE)"
 
 work-budget-bundle: ## [performance] the work-budget agent's bundle: MODE=budget a stage's derivation (refused holding code or today's counts), MODE=audit the landed code against its counters (feature 443)   MODE=budget|audit PHASE=<stage> [DERIVATION=<file>] [BUDGET=<file>]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" work-budget-bundle "$(MODE)" "$(PHASE)" $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(BUDGET),--budget "$(BUDGET)",)

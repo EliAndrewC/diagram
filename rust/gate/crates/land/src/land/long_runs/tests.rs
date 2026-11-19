@@ -37,10 +37,10 @@ fn the_rust_stage_gate_s_record_is_made_and_a_failing_seed_stops_the_landing() {
         .contains("the Rust stage gate has a failing seed"));
 }
 
-/// The work-budget run after a green stage gate, apart from the failing seed above (feature 449 T167: the four second passes in one
-/// test ran over FR-008's tenth of a second).
+/// The work-budget review after a green stage gate, apart from the failing seed above (feature 449 T167: the four second passes in one
+/// test ran over FR-008's tenth of a second); it counts for itself (T224), so its refusal stops the landing and nothing is run for it.
 #[test]
-fn the_work_budget_review_s_refusal_stops_the_landing_and_its_missing_run_is_made() {
+fn the_work_budget_review_s_refusal_stops_the_landing() {
     let fx = rust_engine("long-budget");
     fx.answer("make --no-print-directory rust-gate", "rc", "0");
     fx.answer(
@@ -60,18 +60,10 @@ fn the_work_budget_review_s_refusal_stops_the_landing_and_its_missing_run_is_mad
         .contains("the work-budget review refuses this engine - nothing landed:\nstage seat"));
     fx.answer(
         "make --no-print-directory work-budget-review ROUTE=GATED",
-        "out",
-        "no work-budget run at the pushed engine\n",
+        "rc",
+        "0",
     );
-    fx.answer("make --no-print-directory work-budget", "rc", "1");
-    assert_eq!(fx.land.long_runs(), Ok(1));
-    assert!(fx.said().1.contains("make work-budget failed"));
-    fx.answer("make --no-print-directory work-budget", "rc", "0");
     assert_eq!(fx.land.long_runs(), Ok(0));
-    assert!(fx
-        .said()
-        .0
-        .contains("land: no work-budget run at this engine - make work-budget"));
 }
 
 #[test]

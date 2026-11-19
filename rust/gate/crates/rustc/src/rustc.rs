@@ -50,6 +50,8 @@ pub struct World {
     target_override: Option<String>,
     no_reuse: bool,
     hamlet_features: String,
+    hamlet_bin: String,
+    hamlet_dev: bool,
     hamlet_args: String,
     hamlet_spec: String,
     cover_work: Option<PathBuf>,
@@ -395,11 +397,18 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
             cargo_in(world, &args, manifest, &[], Some(tmp))
         }),
         "hamlet" => {
-            let mut args = vec!["run", "--release", "--quiet"];
+            // `HAMLET_BIN` runs another of the crate's binaries, `HAMLET_DEV` it in the dev profile (feature 449 T224: the work-budget
+            // review's Mode A counts, `l7r-mode-a` with its counters, whose dev build shares the test builds' dependencies - 19 s
+            // where a release build of its geometry and rendering crates starts from nothing)
+            let mut args = vec!["run"];
+            if !world.hamlet_dev {
+                args.push("--release");
+            }
+            args.push("--quiet");
             if !world.hamlet_features.is_empty() {
                 args.extend(["--features", world.hamlet_features.as_str()]);
             }
-            args.extend(["--bin", "hamlet"]);
+            args.extend(["--bin", world.hamlet_bin.as_str()]);
             let after: Vec<&str> = if world.hamlet_args.is_empty() {
                 vec![world.hamlet_spec.as_str()]
             } else {
@@ -714,6 +723,10 @@ fn world_here() -> World {
         // logged path (feature 449 T93): `INCREMENTAL=0` and `FULL` turned reuse off silently
         no_reuse: !var("L7R_RUST_FRESH").is_empty(),
         hamlet_features: var("HAMLET_FEATURES"),
+        hamlet_bin: Some(var("HAMLET_BIN"))
+            .filter(|b| !b.is_empty())
+            .unwrap_or_else(|| "hamlet".to_owned()),
+        hamlet_dev: !var("HAMLET_DEV").is_empty(),
         hamlet_args: var("HAMLET_ARGS"),
         hamlet_spec: var("HAMLET_SPEC"),
         cover_work: std::env::var_os("L7R_RUST_COVER_WORK").map(PathBuf::from),

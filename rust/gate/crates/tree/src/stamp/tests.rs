@@ -117,6 +117,62 @@ fn an_area_holds_tracked_and_new_files_and_not_its_exclusions_or_what_is_ignored
     assert_eq!(listing(&[PathBuf::from("/elsewhere/x")], &dir), "",);
 }
 
+/// Every engine path (`delta::is_engine`, the one list) is in the diagram area, so a change the push routes GATED owes the `make done`
+/// that stamps it, and `make land` runs it (feature 449 T224: a pool-only `.json`, `.svg` or `.notes.md` change passed the stamp, so
+/// the landing skipped `make done` and the push refused it on `merged-engine-green`).
+#[test]
+fn every_engine_path_is_in_the_diagram_area() {
+    let dir = repo("engine-parity");
+    let diagram = area_named("diagram").unwrap();
+    let excluded = exclusions(diagram, &dir);
+    // each engine path outside the area's patterns (none may be)
+    let outside: Vec<String> = crate::delta::ENGINE_DIRS
+        .iter()
+        .flat_map(|(prefix, ends)| {
+            ends.iter()
+                .map(move |end| format!("{prefix}tier/map/map{end}"))
+        })
+        .filter(|path| {
+            !(crate::delta::is_engine(path)
+                && !excluded.iter().any(|e| path.starts_with(e))
+                && diagram.patterns.iter().any(|p| matches(path, p)))
+        })
+        .collect();
+    assert_eq!(outside, Vec::<String>::new());
+}
+
+#[test]
+fn a_pool_only_change_owes_make_done_at_the_push() {
+    let dir = repo("pool-only");
+    let python = fake_python(&dir);
+    put(&dir, ".gitignore", "fake-python\n*.png\n");
+    put(&dir, "pool/t/m/m.compound.json", "{}\n");
+    commit(&dir);
+    git(&dir, &["branch", "base"]);
+    for (rel, text) in [
+        ("pool/t/m/m.compound.json", "{\"a\": 1}\n"),
+        ("pool/t/m/m.svg", "<svg/>\n"),
+        ("pool/t/m/m.notes.md", "notes\n"),
+        ("legacy-hand-authored-pool/x/x.json", "{}\n"),
+    ] {
+        put(&dir, rel, text);
+    }
+    put(&dir, "pool/t/m/m.png", "ignored render\n");
+    commit(&dir);
+    let refused = call(&dir, &python, &["--check", "base"]);
+    assert!(
+        refused
+            .stderr
+            .contains("diagram: no green gate has been recorded at all (make done stamps it)"),
+        "{}",
+        refused.stderr
+    );
+    assert_eq!(
+        call(&dir, &python, &["--list", "diagram"]).stdout,
+        "legacy-hand-authored-pool/x/x.json\npool/t/m/m.compound.json\npool/t/m/m.notes.md\npool/t/m/m.svg\n"
+    );
+}
+
 #[test]
 fn the_hooks_area_holds_the_makefile_the_suites_drive() {
     let dir = repo("hooks-make");

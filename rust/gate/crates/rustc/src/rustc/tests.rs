@@ -43,6 +43,8 @@ fn world_with(root: &Path, body: &str) -> Held<World> {
         target_override: None,
         no_reuse: false,
         hamlet_features: String::new(),
+        hamlet_bin: "hamlet".to_owned(),
+        hamlet_dev: false,
         hamlet_args: String::new(),
         hamlet_spec: "spec.json".to_owned(),
         cover_work: None,
@@ -185,9 +187,20 @@ fn a_hamlet_run_takes_its_features_and_arguments_and_a_target_directory_can_be_n
     let done = check(&world, "hamlet", &a, false);
     assert_eq!(done.stdout.trim(), "/t");
     assert!(
-        calls(&world)[0].contains("--features counters --bin hamlet")
+        calls(&world)[0].starts_with("run --release --quiet --features counters --bin hamlet")
             && calls(&world)[0].ends_with("-- --budget x")
     );
+    // another binary of the crate, in the dev profile (feature 449 T224: the review's Mode A counts)
+    let other = world.map(|w| World {
+        hamlet_bin: "l7r-mode-a".to_owned(),
+        hamlet_dev: true,
+        ..w
+    });
+    check(&other, "hamlet", &a, false);
+    assert!(calls(&other)
+        .last()
+        .unwrap()
+        .starts_with("run --quiet --features counters --bin l7r-mode-a"));
 }
 
 #[test]
@@ -554,6 +567,8 @@ fn the_real_cargo_tests_a_real_crate() {
         target_override: None,
         no_reuse: true,
         hamlet_features: String::new(),
+        hamlet_bin: "hamlet".to_owned(),
+        hamlet_dev: false,
         hamlet_args: String::new(),
         hamlet_spec: "spec.json".to_owned(),
         cover_work: None,

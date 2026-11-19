@@ -22742,17 +22742,16 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/lib.rs::cli_in#the Mode A engine's command": {
-  "body": "625694346cb4e0c7",
+  "body": "2192672b113b567f",
   "claim": "the Mode A engine's command - NONE: dispatch to its tools, deciding nothing about a building",
-  "code": "6cc8bdf6e1246067",
-  "core": "420a61770e48c982",
+  "code": "d2f80bfb629ed3f1",
+  "core": "d6605f4f670c98d3",
   "date": "2026-11-19",
-  "note": "the new caption-counts arm only sends a file to the counts report in the counting build, and decides nothing about a building",
+  "note": "the new `caption-counts` arm only picks between loading a compound program and reading a sheet, then passes it to the counting report; it decides nothing about a building",
   "pages": {},
-  "reads": "52aeebce1436e58a",
+  "reads": "a7ff36bb6a2d5fba",
   "research": "",
   "rests": [],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/lib.rs::door#the Mode A engine's command": {
@@ -32920,12 +32919,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/bin/hamlet.rs::budget#the driver's command": {
-  "body": "ace393b9a2dd895f",
+  "body": "683f54d4d8987860",
   "claim": "the driver's command - NONE: plumbing",
-  "code": "41362a2ec5e61f7a",
-  "core": "08149d27970e7b71",
-  "date": "2026-11-07",
-  "note": "CLI pricing loop over fixed test specs; plumbing",
+  "code": "0b1f7cda355f6437",
+  "core": "4a2144e49d4db6e7",
+  "date": "2026-11-19",
+  "note": "its spec values (sizes 10/20, seeds, polder_grid, pond, nucleated) set up the work-budget count only; no map a reader sees is drawn from them",
   "pages": {},
   "research": "",
   "rests": [],
@@ -32944,12 +32943,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/bin/hamlet.rs::main#the driver's command": {
-  "body": "62c84e2bb1447074",
+  "body": "d7e447d8c8cec8d5",
   "claim": "the driver's command - NONE: plumbing",
-  "code": "6ae4cb3050dbf020",
-  "core": "a5280ab83f386010",
-  "date": "2026-11-07",
-  "note": "argument dispatch and file I/O; plumbing",
+  "code": "2f7e9c24caa6d7b5",
+  "core": "e4c888662b48cd7e",
+  "date": "2026-11-19",
+  "note": "it passes the optional form argument on to `budget`; plumbing",
   "pages": {},
   "research": "",
   "rests": [],

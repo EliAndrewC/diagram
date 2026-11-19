@@ -55,24 +55,36 @@ fn cohort(first: i64, count: i64, archetype: Option<&str>) {
 /// `hamlet --budget`: the reference hamlet (the deleted `work_budget.py`'s Inashiro) rolled on its seeds at each size, each stage's
 /// counted operations printed one `seed size stage ops` line a roll and stage, then its counters one `... key n` line each, for `make work-budget` to set against
 /// `dev/work-budget.json` (feature 443; the GM 2026-11-07: "focus entirely on our Rust code"). Built with the counters on.
-fn budget() {
-    for size in [10, 20, 40, 80] {
+///
+/// `hamlet --budget polder`: the same seeds as a grid polder (`field_archetype` `polder_grid`, the spec the polder's audits rolled,
+/// feature 444 T29) at 10 and 20 households, the sizes its forms are budgeted at (`dev/work-budget.json`'s `sizes`), each stage named
+/// `<stage>.polder` so its counts never join the comb's: the push's review holds `waterward.polder` by them (feature 449 T224).
+fn budget(form: Option<&str>) {
+    let (sizes, archetype, suffix): (&[u32], &str, &str) = match form {
+        Some("polder") => (
+            &[10, 20],
+            r#", "field_archetype": "polder_grid""#,
+            ".polder",
+        ),
+        _ => (&[10, 20, 40, 80], "", ""),
+    };
+    for &size in sizes {
         for seed in [4, 25, 39, 47] {
             // THE BUDGET'S SIZES PAST A HAMLET'S (feature 443): the derivations price 40 and 80 households to read each stage's
             // growth, so the spec is the 10-household one with its households set past the reader's bound
             let mut spec = l7r_phases::driver::spec::parse(&format!(
-                r#"{{"name": "Inashiro", "seed": {seed}, "households": 10, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}}"#
+                r#"{{"name": "Inashiro", "seed": {seed}, "households": 10, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"{archetype}}}"#
             ))
             .unwrap_or_default();
             spec.households = size;
             let rolled = l7r_phases::driver::roll(&spec);
             for (stage, counts) in rolled.map(|r| r.by_stage).unwrap_or_default() {
                 println!(
-                    "{seed}\t{size}\t{stage}\t{}",
+                    "{seed}\t{size}\t{stage}{suffix}\t{}",
                     l7r_phases::driver::ops(&counts)
                 );
                 for (key, n) in counts {
-                    println!("{seed}\t{size}\t{stage}\t{key}\t{n}");
+                    println!("{seed}\t{size}\t{stage}{suffix}\t{key}\t{n}");
                 }
             }
         }
@@ -150,7 +162,7 @@ fn main() {
         return;
     }
     if args.get(1).map(String::as_str) == Some("--budget") {
-        budget();
+        budget(args.get(2).map(String::as_str));
         return;
     }
     let Some(spec_path) = std::env::args().nth(1) else {

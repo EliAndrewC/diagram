@@ -24,6 +24,7 @@ pub mod tool_yield;
 pub mod turn_time;
 pub mod wave_report;
 pub mod where_time;
+pub mod work_budget_review;
 
 pub use l7r_gate_tree::measure::*;
 pub use l7r_gate_trials::measure::popup_rounds;
@@ -46,6 +47,8 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("maps-moved") => maps_moved::cli(rest, root),
         Some("popup-rounds") => popup_rounds::cli(rest),
         Some("work-budget") => work_budget::cli(rest, root),
+        // the push's ratchet on it (feature 443 FR-006; 449 T224)
+        Some("work-budget-review") => work_budget_review::cli(rest, root),
         Some("push-check-times") => push_check_times::cli(rest, root, root),
         Some("depiction-replay") => depiction_replay::cli(rest, root),
         Some("model-trial") => model_trial::cli(rest, &model_trial::live(&home(), root)),

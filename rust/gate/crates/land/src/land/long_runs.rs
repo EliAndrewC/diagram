@@ -25,8 +25,6 @@ static NAMED_GATE: LazyLock<Regex> = LazyLock::new(|| re(r"\(make ([\w-]+) again
 /// suite's conftest and scope helper left the list with pytest (T213).
 static GATE_MACHINERY: LazyLock<Regex> =
     LazyLock::new(|| re(r"^(rust/gate/crates/land/.*|scripts/gates/.*|Makefile)$"));
-/// `work_budget.review`'s refusal for a run never made.
-const MISSING_RUN: &str = "no work-budget run at the pushed engine";
 
 fn re(pattern: &str) -> Regex {
     l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
@@ -290,10 +288,10 @@ impl Land {
         })
     }
 
-    /// THE WORK-BUDGET RUN THE PUSH WILL ASK FOR, MADE HERE (feature 444 T20, D1): on an engine delta the push's `make
-    /// work-budget-review` refuses a push with no run at its engine, and T17's and T19's landings each lost a gate to it. Asked first, as
-    /// the push asks it; where its one refusal is that missing run, `make work-budget` is run and committed. Any other refusal - an
-    /// accepted stage over its figure - stops the landing as before: only the GM's words raise a figure.
+    /// THE WORK-BUDGET REVIEW THE PUSH WILL RUN, ASKED HERE FIRST (feature 444 T20, D1): on an engine delta the push's `make
+    /// work-budget-review` holds every accepted stage to its figure, so a landing over one stops here rather than at the push. The
+    /// review counts for itself, kept by what each count reads (feature 449 T224), so there is no missing run to make: where
+    /// T20 ran `make work-budget` and committed it, a refusal now is a stage over its figure, which only the GM's words raise.
     fn budget_run(&self) -> Result<String, String> {
         if !self.engine_delta()? {
             return Ok(String::new());
@@ -310,31 +308,10 @@ impl Land {
         if rc == 0 {
             return Ok(String::new());
         }
-        if !out.contains(MISSING_RUN) {
-            return Ok(format!(
-                "land: the work-budget review refuses this engine - nothing landed:\n{}",
-                strip(&out)
-            ));
-        }
-        self.say("land: no work-budget run at this engine - make work-budget");
-        if self.make("work-budget")? != 0 {
-            return Ok("land: make work-budget failed - nothing landed (above)".to_owned());
-        }
-        self.run(
-            &["git", "add", "--", "dev/work-budget.md", "dev/work-budget"],
-            &[],
-        )?;
-        self.run(
-            &[
-                "git",
-                "commit",
-                "-q",
-                "-m",
-                "the work-budget run at the landing's engine (make land)",
-            ],
-            &[],
-        )?;
-        Ok(String::new())
+        Ok(format!(
+            "land: the work-budget review refuses this engine - nothing landed:\n{}",
+            strip(&out)
+        ))
     }
 }
 

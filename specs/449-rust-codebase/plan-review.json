@@ -1038,6 +1038,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T224 (T223: the push's work-budget review printed suspended and exited 0 while stages were accepted, and the green-gate stamp missed pool-only changes)": {
+   "sha256": "97651ab222b7db631df77355e7aa1c16aa82c90bc66409eb26c59dab1736d4b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T224 Approach (checklist part A)": {
+   "sha256": "2345d3c298c244b709f20f6ac2b456114c0c262c16174df03fd8f7d633c7491a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14650,6 +14662,84 @@
      "why": "Both are defects (a stale sheet served is a wrong outcome), and the GM's 2026-11-18 rule is that each step's known defects are fixed before the next step's port begins. T221 is part of this same rebuild (T220-T222), so the defects are fixed within the step, not carried into the next one; T219 itself changes no code that could fix them."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T224 (T223: the push's work-budget review printed suspended and exited 0 while stages were accepted, and the green-gate stamp missed pool-only changes)",
+    "### T224 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T224-1 review made real",
+     "summary": "make work-budget-review stops being a printf that printed suspended and exited 0; it becomes l7r-gate measure work-budget-review, holding each accepted hamlet stage at its sizes against its accepted figure and twice its budget (the two holds the deleted Python made)",
+     "class": "within",
+     "why": "Restores the job the deleted Python review did (FR-002: a replaced piece does its job for its callers; a ported check still does its job). A review that passes every push is a check passing bad work, a defect under the GM's 2026-11-18 'fix broken things as we find them'; it also serves the 2026-11-19 plan that step 3a be measured against a derived work budget."
+    },
+    {
+     "id": "T224-2 pool-sheet stages held",
+     "summary": "each Mode A pool-sheet stage held to twice its budget per sheet",
+     "class": "within",
+     "why": "Applies the existing feature 443/444 budget rule (FR-022's leeway) to stages the Rust driver now counts; enforcement of the work budget the GM's 2026-11-19 plan and 2026-10-30 efficiency rule rest on. It narrows nothing; whether 2x is the right leeway is a design matter, not fidelity."
+    },
+    {
+     "id": "T224-3a pipeline printed UNCOUNTED",
+     "summary": "the pipeline stage, which nothing counts yet, is printed UNCOUNTED with its reason rather than held, until T220-T222 supply its counters",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Holding a stage against its budget is physically impossible without a count; the counters are owed by named tasks T220-T222, the next in order, and the stage is printed with its reason, never passed silently, so the review's purpose (no stage lands over budget unnoticed) is not gutted."
+    },
+    {
+     "id": "T224-3b waterward printed uncounted",
+     "summary": "the waterward stage, 'whose reference roll has a pond', is printed with that reason rather than held",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same physical impossibility as 3a: the block states nothing counts this stage on its reference roll, and the review cannot hold what has no count; it is printed with its reason, never passed silently. Unlike 3a the block names no owner for this reason; the bundle does not say whether the missing count is a counter defect. If it is, the GM's 2026-11-18 rule ('fix all known bugs in each step before moving on to porting the next step') requires it settled (T226 or its own task) before the next step's port begins."
+    },
+    {
+     "id": "T224-4 missing accepted stage refused",
+     "summary": "an accepted stage missing from a run is refused with the fix named",
+     "class": "within",
+     "why": "Keeps the review from passing a stage by its absence; enforcement of the review's own job."
+    },
+    {
+     "id": "T224-5 counts kept by the files they read",
+     "summary": "counts cached keyed on the files they read, so an unmoved push costs about 0.3 s",
+     "class": "within",
+     "why": "Efficiency of the tooling the GM repeatedly asked for (2026-11-11, 2026-11-19); the count reruns whenever any file it reads moves, so no case is skipped."
+    },
+    {
+     "id": "T224-6 make land fallback removed",
+     "summary": "make land's fallback that ran the count without writing it is removed",
+     "class": "within",
+     "why": "Removes a path that ran the count with no effect; the block's goal is that no push lands a stage over budget, and removing an unchecked route widens rather than narrows the hold."
+    },
+    {
+     "id": "T224-7 stamp covers pool files",
+     "summary": "the green-gate stamp's diagram area covers pool .json, .svg and .notes.md (and the legacy tree's .json), held equal to the delta's engine list by a test",
+     "class": "within",
+     "why": "Fixes a gate that let pool-only changes through ungated (a check passing unchecked work, 2026-11-18 fix-as-we-go); the test only fails when the stamp's area drifts from the engine list, enforcement of the fix."
+    },
+    {
+     "id": "T224-8 order",
+     "summary": "lands after T219 and before T220",
+     "class": "within",
+     "why": "Sequencing; puts the budget review in force before the pipeline stage's counters (T220) and the step-3b work they feed."
+    },
+    {
+     "id": "T224-9 classed a defect",
+     "summary": "checklist item 12: the old recipe passed every push unchecked, a defect",
+     "class": "within",
+     "why": "A check that passes bad work is a defect under constitution XIV v2.36.0 / the GM 2026-11-19; the red-first fixture (a stage accepted far under its count, which the old recipe passed) shows the wrong outcome."
+    },
+    {
+     "id": "T224-10 found and left",
+     "summary": "polder waterward counting ~1/20 of its accepted figure, counters possibly missing work, filed as T226; pipeline counters owed by T220",
+     "class": "within",
+     "why": "Neither is part of T224's subject (the review and the stamp); the waterward counters are a suspected, unconfirmed engine-counter defect, filed rather than carried silently, and the pipeline counters are already T220's. Per the GM's 2026-11-18 rule T226 must be settled before the next step's port begins; the block gives it no position, which does not block this task but is owed by the step's close."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25906,6 +25996,82 @@
      "summary": "Two found defects (the Mode A page writer reporting only files it found, leaving a later-created looked-for file's sheet cached stale; a read first recorded on a miss hashed after the engine read it) left to T221, written onto its line.",
      "class": "within",
      "why": "Both are defects (a stale sheet served is a wrong outcome), and the GM's 2026-11-18 rule is that each step's known defects are fixed before the next step's port begins. T221 is part of this same rebuild (T220-T222), so the defects are fixed within the step, not carried into the next one; T219 itself changes no code that could fix them."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T224": {
+   "section_sha256": "38602b3201b4ee768e72877d4896f3e8b99ff02bdbc777614bd462b2949e8cfa",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T224-1 review made real",
+     "summary": "make work-budget-review stops being a printf that printed suspended and exited 0; it becomes l7r-gate measure work-budget-review, holding each accepted hamlet stage at its sizes against its accepted figure and twice its budget (the two holds the deleted Python made)",
+     "class": "within",
+     "why": "Restores the job the deleted Python review did (FR-002: a replaced piece does its job for its callers; a ported check still does its job). A review that passes every push is a check passing bad work, a defect under the GM's 2026-11-18 'fix broken things as we find them'; it also serves the 2026-11-19 plan that step 3a be measured against a derived work budget."
+    },
+    {
+     "id": "T224-2 pool-sheet stages held",
+     "summary": "each Mode A pool-sheet stage held to twice its budget per sheet",
+     "class": "within",
+     "why": "Applies the existing feature 443/444 budget rule (FR-022's leeway) to stages the Rust driver now counts; enforcement of the work budget the GM's 2026-11-19 plan and 2026-10-30 efficiency rule rest on. It narrows nothing; whether 2x is the right leeway is a design matter, not fidelity."
+    },
+    {
+     "id": "T224-3a pipeline printed UNCOUNTED",
+     "summary": "the pipeline stage, which nothing counts yet, is printed UNCOUNTED with its reason rather than held, until T220-T222 supply its counters",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Holding a stage against its budget is physically impossible without a count; the counters are owed by named tasks T220-T222, the next in order, and the stage is printed with its reason, never passed silently, so the review's purpose (no stage lands over budget unnoticed) is not gutted."
+    },
+    {
+     "id": "T224-3b waterward printed uncounted",
+     "summary": "the waterward stage, 'whose reference roll has a pond', is printed with that reason rather than held",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same physical impossibility as 3a: the block states nothing counts this stage on its reference roll, and the review cannot hold what has no count; it is printed with its reason, never passed silently. Unlike 3a the block names no owner for this reason; the bundle does not say whether the missing count is a counter defect. If it is, the GM's 2026-11-18 rule ('fix all known bugs in each step before moving on to porting the next step') requires it settled (T226 or its own task) before the next step's port begins."
+    },
+    {
+     "id": "T224-4 missing accepted stage refused",
+     "summary": "an accepted stage missing from a run is refused with the fix named",
+     "class": "within",
+     "why": "Keeps the review from passing a stage by its absence; enforcement of the review's own job."
+    },
+    {
+     "id": "T224-5 counts kept by the files they read",
+     "summary": "counts cached keyed on the files they read, so an unmoved push costs about 0.3 s",
+     "class": "within",
+     "why": "Efficiency of the tooling the GM repeatedly asked for (2026-11-11, 2026-11-19); the count reruns whenever any file it reads moves, so no case is skipped."
+    },
+    {
+     "id": "T224-6 make land fallback removed",
+     "summary": "make land's fallback that ran the count without writing it is removed",
+     "class": "within",
+     "why": "Removes a path that ran the count with no effect; the block's goal is that no push lands a stage over budget, and removing an unchecked route widens rather than narrows the hold."
+    },
+    {
+     "id": "T224-7 stamp covers pool files",
+     "summary": "the green-gate stamp's diagram area covers pool .json, .svg and .notes.md (and the legacy tree's .json), held equal to the delta's engine list by a test",
+     "class": "within",
+     "why": "Fixes a gate that let pool-only changes through ungated (a check passing unchecked work, 2026-11-18 fix-as-we-go); the test only fails when the stamp's area drifts from the engine list, enforcement of the fix."
+    },
+    {
+     "id": "T224-8 order",
+     "summary": "lands after T219 and before T220",
+     "class": "within",
+     "why": "Sequencing; puts the budget review in force before the pipeline stage's counters (T220) and the step-3b work they feed."
+    },
+    {
+     "id": "T224-9 classed a defect",
+     "summary": "checklist item 12: the old recipe passed every push unchecked, a defect",
+     "class": "within",
+     "why": "A check that passes bad work is a defect under constitution XIV v2.36.0 / the GM 2026-11-19; the red-first fixture (a stage accepted far under its count, which the old recipe passed) shows the wrong outcome."
+    },
+    {
+     "id": "T224-10 found and left",
+     "summary": "polder waterward counting ~1/20 of its accepted figure, counters possibly missing work, filed as T226; pipeline counters owed by T220",
+     "class": "within",
+     "why": "Neither is part of T224's subject (the review and the stamp); the waterward counters are a suspected, unconfirmed engine-counter defect, filed rather than carried silently, and the pipeline counters are already T220's. Per the GM's 2026-11-18 rule T226 must be settled before the next step's port begins; the block gives it no position, which does not block this task but is owed by the step's close."
     }
    ],
    "verdict": "CLEAR"

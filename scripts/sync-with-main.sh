@@ -394,13 +394,14 @@ push_cmd() {
   # (CI_WORK_BUDGET_REVIEW, CI_ROUTE, CI_MERGE) are read only when that Makefile is absent.
   # (The Python call counts' review, `make perf-review` of feature 427 T03, ran here until feature 449 T223: its rule went with the
   # Python engine it counted (feature 444 T39), and a .PHONY name with no rule answered exit 0, so every push passed a review that
-  # read nothing. The work budget's ratchet below is its successor - its own recipe suspended until feature 444 T42 counts the
-  # stages through the Rust driver.)
-  # THE WORK BUDGET'S RATCHET (feature 443 FR-006, plan D7): an ACCEPTED stage's counted operations may not grow past its accepted
-  # figure or its budget; nothing to hold while no stage is accepted, or on a push with no engine code. No round-arbiter accept
-  # clears it - the GM's words through `make budget-change` do. CI_WORK_BUDGET_REVIEW is its fixture seam.
+  # read nothing. The work budget's ratchet below is its successor; its recipe printed "suspended" and passed every push until
+  # feature 449 T224 had it count the stages through the Rust driver and l7r-mode-a's counting build.)
+  # THE WORK BUDGET'S RATCHET (feature 443 FR-006, plan D7; 444 FR-022; 449 T224): an ACCEPTED hamlet stage's counted operations may
+  # not grow past its accepted figure or twice its budget, nor a pool-sheet stage's past twice its budget on any sheet; a stage
+  # nothing counts is printed, never passed silently; nothing to hold on a push with no engine code. No round-arbiter accept clears
+  # it - the GM's words through `make budget-change` do. CI_WORK_BUDGET_REVIEW is its fixture seam.
   if [ -n "$seams" ] && [ -n "${CI_WORK_BUDGET_REVIEW:-}" ]; then bash -c "$CI_WORK_BUDGET_REVIEW"; elif [ -f "$ROOT/Makefile" ]; then ( cd "$ROOT" && make --no-print-directory work-budget-review ROUTE="$route" ); else true; fi \
-    || die "make work-budget-review refused (or failed to run) - an accepted stage's work above grew past its figure; only the GM's words through make budget-change raise it (feature 443)"
+    || die "make work-budget-review refused (or failed to run) - a held stage's work above grew past its figure, or a counting run failed (its reason above); make the stage do less work, or only the GM's words through make budget-change raise it (feature 443)"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
   # is inspected against the LATEST GitHub main (fetched above). DIRECT: no diagram engine code in
   # our own commits - a locked pull+push, free. GATED: engine code - it lands only when `make gated-check`'s conditions hold, a green

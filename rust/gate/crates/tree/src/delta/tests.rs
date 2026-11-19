@@ -3,7 +3,7 @@
 use std::path::Path;
 use std::process::Command;
 
-use super::{cat_blobs, cli, compute, engine_key, engine_key_worktree, is_engine};
+use super::{cat_blobs, cli, compute, engine_key, engine_key_worktree, is_engine, worktree_key};
 
 fn git(dir: &Path, args: &[&str]) -> String {
     let done = Command::new("git")
@@ -184,6 +184,26 @@ fn an_untracked_engine_file_moves_the_key_and_its_commit_keeps_it() {
     assert_eq!(engine_key_worktree(&dir, &py).unwrap(), moved,);
     assert_eq!(engine_key(&dir, "HEAD", &py).unwrap(), moved);
     assert!(engine_key(&dir, "no-such-tree", &py).is_err());
+}
+
+/// A tool's own key (feature 449 T224, the work-budget review's kept counts): it moves with a file under its paths, never with one
+/// outside them.
+#[test]
+fn a_key_over_some_paths_moves_with_them_alone() {
+    let dir = repo("key-some");
+    let py = ids(&dir);
+    let key = |d: &Path| {
+        worktree_key(d, &py, &["rust/phases/", "pool/"], &|p| {
+            Path::new(p).extension().is_none_or(|e| e != "md")
+        })
+        .unwrap()
+    };
+    let before = key(&dir);
+    put(&dir, "rust/mode_a/b.rs", "fn g() {}\n");
+    put(&dir, "pool/t/a.notes.md", "kept out\n");
+    assert_eq!(key(&dir), before);
+    put(&dir, "pool/t/a.json", "{}\n");
+    assert_ne!(key(&dir), before);
 }
 
 #[test]

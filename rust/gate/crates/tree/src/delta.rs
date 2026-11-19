@@ -22,7 +22,7 @@ use crate::codeid::{self, stated, Cache};
 /// sheet's typed counts and `**On map**:` declaration, a hamlet's census block (`rust/mode_a/src/census/pool_check.rs`) - so a notes-only
 /// edit that broke one landed DIRECT, judged by no sweep. Every pool tier's notes are read, so the whole of `pool/` counts, not the Mode A
 /// tiers alone; the frozen exhibits' notes stay documentation, read by no check while none carries a census block.
-const ENGINE_DIRS: [(&str, &[&str]); 4] = [
+pub(crate) const ENGINE_DIRS: [(&str, &[&str]); 4] = [
     ("l7r/", &[".py"]),
     ("rust/", &[".rs", "Cargo.toml", "Cargo.lock"]),
     ("pool/", &[".gen.py", ".json", ".svg", ".notes.md"]),
@@ -389,10 +389,28 @@ pub fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, Strin
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn engine_key_worktree(root: &Path, python: &str) -> Result<String, String> {
-    let listed = git(root, &["ls-files", "-co", "--exclude-standard"])?;
+    worktree_key(root, python, &[], &is_engine)
+}
+
+/// `engine_key_worktree` over the working tree's files under `pathspecs` (all of it when none) that `keep` takes: the key of what one
+/// tool reads, so its kept result moves only with that (the work-budget review's counts, feature 449 T224). `keep` is a `dyn`, not
+/// generic: one instantiation, so the coverage of its closures is one function's, not each caller's.
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn worktree_key(
+    root: &Path,
+    python: &str,
+    pathspecs: &[&str],
+    keep: &dyn Fn(&str) -> bool,
+) -> Result<String, String> {
+    let mut args = vec!["ls-files", "-co", "--exclude-standard", "--"];
+    args.extend(pathspecs);
+    let listed = git(root, &args)?;
     let mut paths: Vec<&str> = listed
         .lines()
-        .filter(|p| !p.trim().is_empty() && is_engine(p) && root.join(p).is_file())
+        .filter(|p| !p.trim().is_empty() && keep(p) && root.join(p).is_file())
         .collect();
     paths.sort_unstable();
     if paths.is_empty() {
