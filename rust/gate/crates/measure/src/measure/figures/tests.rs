@@ -38,6 +38,20 @@ fn a_figure_that_rolls_the_deleted_engine_is_listed_and_never_run() {
 }
 
 #[test]
+fn a_figure_of_the_retired_spec_harness_is_listed_and_never_run() {
+    let root = crate::checks::scratch("figures-harness");
+    let ran = root.join("ran");
+    let d = feature(
+        &root,
+        "1-a",
+        &json!({"h": {"command": format!("touch {} make spec-harness SPEC=specs/335-x OUT=/tmp/h.json", ran.display()), "value": 1}}),
+    );
+    let (failures, _, skipped) = rerun(&d, &root);
+    assert!(!ran.exists() && failures.is_empty() && skipped.len() == 1);
+    assert!(skipped[0].contains("retired spec harness"));
+}
+
+#[test]
 fn a_moved_count_fails_and_a_timing_is_reported() {
     let recorded = json!({"n": {"value": 560}, "t": {"value": 100.0, "varies": true}, "near": {"value": 100.0, "varies": 0.25}, "same": {"value": 1}, "gone": {"value": 1}, "zero": {"value": 0.0, "varies": true}, "text": {"value": "a", "varies": 0.5}, "off": {"value": 1, "varies": false}});
     let fresh = json!({"n": {"value": 561}, "t": {"value": 130.0, "load": 2}, "near": {"value": 120.0}, "same": {"value": 1.0}, "zero": {"value": 1.0}, "text": {"value": [1]}, "off": {"value": 2}});

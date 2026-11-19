@@ -936,6 +936,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T210 (T156's scoping, 2026-11-19: the measurement tooling pytest's exit leaves dead)": {
+   "sha256": "17a29724bfe29f4577ae1e295fe7e861aab10ce17ec5e6e63a843eca3c5ff8e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T210 Approach (checklist part A)": {
+   "sha256": "daaadb90788e4d2004bd01c7650a74d0330bba3f29dd9cfbf42062ed7fa0b715",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14151,6 +14163,47 @@
      "why": "Holds the step-3a placer to the derived work budget the GM's 2026-11-19 plan set ('if the 3a step is horribly inefficient...'); no exactness standard is applied."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T210 (T156's scoping, 2026-11-19: the measurement tooling pytest's exit leaves dead)",
+    "### T210 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T210-split",
+     "summary": "T156 split into four landings (T210 dead tooling, T211 Rust pool sweep, T212 Python audit and lockstep retired, T213 pytest's exit); T210 first, before T211, no engine code",
+     "class": "within",
+     "why": "Sequencing of work the spec already owes (FR-001, FR-001b); it changes no requirement's reach."
+    },
+    {
+     "id": "T210-collect",
+     "summary": "scripts/measure/collect_cost.py and collect_probe.py, and their make target, deleted unported",
+     "class": "within",
+     "why": "Their only subject is pytest's collection time; FR-001b deletes pytest and its infrastructure, and the GM 2026-11-09 ('I don't think we need to port the past feature harnesses if those are not still used') and 2026-11-10 (delete the Python tests and what only serves them) cover tooling whose subject is gone."
+    },
+    {
+     "id": "T210-opsreg",
+     "summary": "tests/test_operations_registry.py deleted unported",
+     "class": "within",
+     "why": "Exactly ask:449-phase4-slices Q9 (deleted with the pytest infrastructure, its subject _invocation.OPERATIONS deleted unported); also FR-001b, whose kept group does not include a test whose subject does not outlive the Python."
+    },
+    {
+     "id": "T210-harness335",
+     "summary": "feature 335's harness.py retired rather than ported; make figures lists its measurements as not re-measured, recorded values kept",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows FR-001's 'every Python file replaced by Rust' for one file, but the exception is already in the GM's own words, 2026-11-09: 'I don't think we need to port the past feature harnesses if those are not still used.' It is a past feature's harness; its caption half cannot run (it imports modules T152 deleted, observed 2026-11-19 by its imports read against the tree) and its door/step/arch half measures the Python audit that T212 retires, so nothing live uses it. Keeping the recorded values while marking them not re-measured is honest disclosure, not a hidden carve-out, and leaves no wrong outcome (no map, check or tool behaves wrongly). The rebuild-cost argument in the block is not what makes it legitimate; the GM's words are."
+    },
+    {
+     "id": "T210-exits",
+     "summary": "Done when the files and targets are gone, no reference left (a grep per deleted name finds none outside history), make quick, make figures and make hooks-test green; red recorded and set down, an impossibility claim through make arbiter-ask",
+     "class": "within",
+     "why": "Enforcement that the requested deletion actually happens; it adds no behavior."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25028,6 +25081,45 @@
      "summary": "Exit criteria: tests red first, every sheet's audit green and read right, the placer within twice its derived budget on every hand sheet (Hayakawa 1.8x, labeled measurement).",
      "class": "within",
      "why": "Holds the step-3a placer to the derived work budget the GM's 2026-11-19 plan set ('if the 3a step is horribly inefficient...'); no exactness standard is applied."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T210": {
+   "section_sha256": "076c6b531fc525826690be119269e65e999aea1378a253d31a8813e693539621",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T210-split",
+     "summary": "T156 split into four landings (T210 dead tooling, T211 Rust pool sweep, T212 Python audit and lockstep retired, T213 pytest's exit); T210 first, before T211, no engine code",
+     "class": "within",
+     "why": "Sequencing of work the spec already owes (FR-001, FR-001b); it changes no requirement's reach."
+    },
+    {
+     "id": "T210-collect",
+     "summary": "scripts/measure/collect_cost.py and collect_probe.py, and their make target, deleted unported",
+     "class": "within",
+     "why": "Their only subject is pytest's collection time; FR-001b deletes pytest and its infrastructure, and the GM 2026-11-09 ('I don't think we need to port the past feature harnesses if those are not still used') and 2026-11-10 (delete the Python tests and what only serves them) cover tooling whose subject is gone."
+    },
+    {
+     "id": "T210-opsreg",
+     "summary": "tests/test_operations_registry.py deleted unported",
+     "class": "within",
+     "why": "Exactly ask:449-phase4-slices Q9 (deleted with the pytest infrastructure, its subject _invocation.OPERATIONS deleted unported); also FR-001b, whose kept group does not include a test whose subject does not outlive the Python."
+    },
+    {
+     "id": "T210-harness335",
+     "summary": "feature 335's harness.py retired rather than ported; make figures lists its measurements as not re-measured, recorded values kept",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows FR-001's 'every Python file replaced by Rust' for one file, but the exception is already in the GM's own words, 2026-11-09: 'I don't think we need to port the past feature harnesses if those are not still used.' It is a past feature's harness; its caption half cannot run (it imports modules T152 deleted, observed 2026-11-19 by its imports read against the tree) and its door/step/arch half measures the Python audit that T212 retires, so nothing live uses it. Keeping the recorded values while marking them not re-measured is honest disclosure, not a hidden carve-out, and leaves no wrong outcome (no map, check or tool behaves wrongly). The rebuild-cost argument in the block is not what makes it legitimate; the GM's words are."
+    },
+    {
+     "id": "T210-exits",
+     "summary": "Done when the files and targets are gone, no reference left (a grep per deleted name finds none outside history), make quick, make figures and make hooks-test green; red recorded and set down, an impossibility claim through make arbiter-ask",
+     "class": "within",
+     "why": "Enforcement that the requested deletion actually happens; it adds no behavior."
     }
    ],
    "verdict": "CLEAR"

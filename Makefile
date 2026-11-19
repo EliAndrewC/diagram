@@ -605,14 +605,6 @@ figures:        ## [project] re-run every recorded measurement and report what m
 ##  a moved COUNT fails; a timing outside its band is reported and never fails; the file is restored after
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure figures $(SPEC)
 
-spec-harness:   ## [project] run a feature's measurement harness (its harness.py) as a test node   SPEC=specs/NNN-slug OUT=<json>
-##  SPEC=<dir>   the feature directory holding `harness.py`
-##  OUT=<json>   where the harness writes its figures (default: the harness's own default)
-	@root=$$(git rev-parse --show-toplevel); src="$$root/$(SPEC)/harness.py"; [ -f "$$src" ] || { echo "spec-harness: no harness.py in $(SPEC)" >&2; exit 2; }; \
-	cp "$$src" tests/test_zz_spec_harness_tmp.py; \
-	HARNESS_OUT="$(OUT)" python3 -m pytest -q -p no:cacheprovider --no-cov -p no:randomly tests/test_zz_spec_harness_tmp.py; ec=$$?; \
-	rm -f tests/test_zz_spec_harness_tmp.py; exit $$ec
-
 trial-review:   ## [project] a trial's ONE review: its brief, request and research bundled, and the dispatch printed - check each figure against its recorded output, re-run only what is missing (feature 442)   F=<trial number>
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" trial-review "$(F)"
 
@@ -964,9 +956,6 @@ subagent-cache:  ## [project] what subagents write to the prompt cache fresh, pe
 
 wave-report:     ## [project] a workflow wave's cost - each agent's first-request cache read and write, the main session's wakes - against the last hand-launched wave (feature 383 amendment 7)   [WF=<.../workflows/wf_*>]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure wave-report $(if $(WF),--run $(WF),)
-
-collect-cost:    ## [tests] where a run's time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)   TREE=quick|tooling
-	@python3 scripts/measure/collect_cost.py --tree $(or $(TREE),quick) $(if $(JSON),--json $(JSON),)
 
 durations:       ## [tests] where the suite's time goes - run when a target feels slow
 ##  FULL=1        also profile `tests/full/` (default: it is ignored, so this is the quick tree only)

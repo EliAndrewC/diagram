@@ -134,9 +134,10 @@ impl Embed for Program {
         let running = self.start()?;
         let line = serde_json::to_string(texts).unwrap_or_default();
         let to = &mut running.to;
-        writeln!(to, "{line}")
-            .and_then(|()| to.flush())
-            .map_err(|e| Error(format!("the embedder stopped: {e}")))?;
+        // A WRITE TO AN EMBEDDER ALREADY GONE IS NOT ITS OWN ERROR (feature 449 T210): whether the write or the read meets the
+        // stopped program first is a race, so the write's failure is let through and `answer` reads the ended output and says
+        // "stopped" - one path every run takes, where a write-only branch was reached only when the race went that way
+        let _ = writeln!(to, "{line}").and_then(|()| to.flush());
         let got = answer(&mut running.from)?;
         if got.len() != texts.len() {
             return Err(Error(format!(

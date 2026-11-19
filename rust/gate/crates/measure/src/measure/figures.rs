@@ -3,7 +3,7 @@
 //! For each distinct `command` in a feature's `measurements.json` the command is re-run once, the values it writes are compared with the
 //! recorded ones, and the ORIGINAL file is restored: this reports, it never records. A moved COUNT fails; a TIMING outside its band is
 //! reported and never fails, a timing being a property of the machine as well as the code. A command with a `<placeholder>`, one reaching
-//! the deleted Python hamlet engine and one written as prose are listed as not re-measured and never run.
+//! the deleted Python hamlet engine, one running the retired `make spec-harness` and one written as prose are listed as not re-measured and never run.
 
 use std::collections::BTreeSet;
 use std::fmt::Write as _;
@@ -19,6 +19,10 @@ use super::reply;
 const DEFAULT_BAND: f64 = 0.10;
 static PLACEHOLDER: LazyLock<Regex> = LazyLock::new(|| {
     l7r_guard::shared::regex::build(r"<[A-Za-z][^<>]*>").unwrap_or_else(|e| unreachable!("{e}"))
+});
+static RETIRED_HARNESS: LazyLock<Regex> = LazyLock::new(|| {
+    l7r_guard::shared::regex::build(r"\bmake spec-harness\b")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
 static DELETED_ENGINE: LazyLock<Regex> = LazyLock::new(|| {
     l7r_guard::shared::regex::build(r"\bl7r[./]diagram[./](hamletgen|settlement|sitegen|waterfields|overlap|citybudget)\b|\btests/(hamletgen|settlement|sitegen|waterfields|overlap|citybudget)\b")
@@ -176,6 +180,12 @@ fn refused(command: &str) -> Option<String> {
         return Some(not_measured(
             command,
             "names a <placeholder> - a one-shot's description, not run",
+        ));
+    }
+    if RETIRED_HARNESS.is_match(command).unwrap_or(false) {
+        return Some(not_measured(
+            command,
+            "runs a retired spec harness (`make spec-harness`, feature 449 T210) - a frozen figure, not run",
         ));
     }
     DELETED_ENGINE.is_match(command).unwrap_or(false).then(|| {

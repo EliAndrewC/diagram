@@ -64,8 +64,8 @@ needed afterwards retired. What changed in what the gate tests:
   each test's cost). A finished-map test is KEPT for exactly one reason, named beside it in R8: a property no single
   placer owns (a stage contract, the pool's declared content, determinism), or a rule not yet guaranteed whose reason
   is recorded (the board caption at plan D12's terminal, the GM's question).
-- **The end-to-end proof is not a gate test.** The acceptance sweep (`specs/287-placer-guarantees/sweep/harness.py`, run
-  by `make spec-harness`) rolls the pool and cohort 1-48, plain and under feature 284's two levers as probes, and asks
+- **The end-to-end proof is not a gate test.** The acceptance sweep (`specs/287-placer-guarantees/sweep/harness.py`, once run
+  by the since-retired `make spec-harness`) rolls the pool and cohort 1-48, plain and under feature 284's two levers as probes, and asks
   every predicate above - and each retired test's body as the baseline ran it - of every finished map. Run it again when
   a change could move many maps at once.
 

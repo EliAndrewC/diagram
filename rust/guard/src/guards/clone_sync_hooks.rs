@@ -37,7 +37,7 @@ pub const GUARD: Guard = Guard {
 const USAGE_LOG_TOOL: &str = "clone-sync-merge";
 
 /// The make targets that run tests, whose clone a behind-main notice is for.
-const BEHIND_TEST_TARGETS: [&str; 22] = [
+const BEHIND_TEST_TARGETS: [&str; 21] = [
     "quick",
     "test",
     "test-file",
@@ -55,7 +55,6 @@ const BEHIND_TEST_TARGETS: [&str; 22] = [
     "perf-gate",
     "cov-file",
     "durations",
-    "collect-cost",
     "parts-sweep",
     "tooling",
     "page-check",
