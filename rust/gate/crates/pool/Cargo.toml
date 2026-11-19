@@ -1,0 +1,37 @@
+# The pool walk (feature 449 T220, phase `pipeline`, rebuilt from `specs/449-rust-codebase/derivations/T219-pipeline.md`): every map
+# folder of the two pool trees listed once and classified once, and `pool/index.html` written from it. One crate the gate's crates and
+# the Mode A engine (`rust/mode_a`) both depend on by path: it names no other crate but `serde_json`, so neither pulls the other's
+# dependencies through it.
+[package]
+name = "l7r_gate_pool"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time (feature 449 T93): the real-tree test walks both pool trees and the building types
+# declaration, whose tiers tell a hand sheet. A change there runs it again.
+[package.metadata.l7r]
+reads = ["pool/", "legacy-hand-authored-pool/", "l7r/diagram/buildings/types.json"]
+
+[lib]
+name = "l7r_gate_pool"
+
+# The work counters (the derivation's counted kinds, as `rust/phases`' and `rust/mode_a`'s `counters`): compiled out unless asked for,
+# so no walk a consumer runs counts; `l7r-pool counts <tree>` exists only in a build with them (the work-budget review's counting run).
+[features]
+counters = []
+
+[dependencies]
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_guard = { path = "../../../guard" }
+
+# the counting run's program (`l7r-gate.sh rust hamlet --crate rust/gate/crates/pool` with `HAMLET_BIN=l7r-pool`), and the walk and
+# index as commands; the gate reaches the same commands in process as `l7r-gate pool ...`
+[[bin]]
+name = "l7r-pool"
+path = "src/main.rs"
+
+[lints]
+workspace = true

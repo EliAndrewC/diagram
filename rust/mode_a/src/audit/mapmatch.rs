@@ -647,49 +647,49 @@ pub fn site_classes(
     ))
 }
 
-/// The trees a settlement manifest lives in, from the skill root.
-pub const MAP_TREES: [&str; 2] = ["pool", "legacy-hand-authored-pool"];
-
 /// The manifests (paths from `root`) that record a subject of the sheet's tier at the sheet's PLACE - the name convention
 /// `<place>-<type>` (`ubame-magistracy` -> `ubame`), matched to a map folder `<tree>/<tier>/<place>/<place>.json` whose tier key
-/// (`map_keys`, `types.json`) is a non-empty list. The name convention is a GUESS (the scout's, feature 294).
+/// (`map_keys`, `types.json`) is a non-empty list. The name convention is a GUESS (the scout's, feature 294). The folders are the one pool
+/// walk's (feature 449 T220), each folder's manifest asked of its listing, the live pool first, then by tier.
 ///
 /// # Errors
-/// The declaration or a manifest cannot be read.
+/// The declaration or a manifest cannot be read, or a pool directory is there but cannot be listed (a partial pool is never read as the
+/// whole).
 pub fn maps_recording(stem: &str, tier: &str, root: &Path) -> Result<Vec<String>, Error> {
     let place = stem.split('-').next().unwrap_or_default();
     let keys = crate::types::by_tier(tier, root)?
         .map(|t| t.map_keys)
         .unwrap_or_default();
+    let pool = l7r_gate_pool::walk(root);
+    if let Some(u) = pool.unlisted.first() {
+        return Err(crate::py::os_error(
+            &std::io::Error::from_raw_os_error(u.code),
+            &u.dir.to_string_lossy(),
+        ));
+    }
     let mut out = Vec::new();
-    for tree in MAP_TREES {
-        let base = root.join(tree);
-        if !base.is_dir() {
-            continue;
+    for m in pool
+        .maps
+        .iter()
+        .filter(|m| m.name == place && m.has(".json"))
+    {
+        let rel = format!("{}/{place}.json", m.rel());
+        let path = root.join(&rel);
+        // the map read once, not once a tier key (impl-drift's note on T220, 2026-11-19), and only when there is a key to ask
+        let mut recorded = false;
+        let m = if keys.is_empty() {
+            Value::Null
+        } else {
+            load_map(&path)?
+        };
+        for k in &keys {
+            if matches!(get(&m, k)?, Some(Value::Array(items)) if !items.is_empty()) {
+                recorded = true;
+                break;
+            }
         }
-        let mut tiers: Vec<String> = std::fs::read_dir(&base)
-            .map_err(|e| crate::py::os_error(&e, &base.to_string_lossy()))?
-            .flatten()
-            .map(|e| e.file_name().to_string_lossy().into_owned())
-            .collect();
-        tiers.sort();
-        for map_tier in tiers {
-            let rel = format!("{tree}/{map_tier}/{place}/{place}.json");
-            let path = root.join(&rel);
-            if !path.is_file() {
-                continue;
-            }
-            let mut recorded = false;
-            for k in &keys {
-                let m = load_map(&path)?;
-                if matches!(get(&m, k)?, Some(Value::Array(items)) if !items.is_empty()) {
-                    recorded = true;
-                    break;
-                }
-            }
-            if recorded {
-                out.push(rel);
-            }
+        if recorded {
+            out.push(rel);
         }
     }
     Ok(out)

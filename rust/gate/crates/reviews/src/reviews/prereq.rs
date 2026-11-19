@@ -17,13 +17,14 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
-use super::owed::{owed, pool_map_names, TREES};
+use super::owed::{owed, pool_map_names};
 use super::{py_path, reply};
 use crate::cohort::truthy;
 use crate::record::args::{parse_with, Parsed, Spec};
 use crate::record::bundle::door::Runner;
 use crate::record::bundle::{head, py_repr, py_str};
 use crate::Reply;
+use l7r_gate_pool::{walk, Walk, LIVE};
 
 const VERDICTS: [&str; 3] = ["PASS", "NEEDS-WORK", "NOT-REVIEWABLE"];
 const ARTIFACTS: [&str; 4] = [".json", ".svg", ".png", ".html"];
@@ -200,23 +201,11 @@ fn has_findings(clone: &Path, name: &str) -> bool {
         .is_some_and(|v| get(&v, "verdict") != Some(&json!(NR)) && is(&v, "findings"))
 }
 
-/// The pool generator of a map: the first `pool/*/<name>/<name>.gen.py`.
-fn gen_of(skill: &Path, name: &str) -> Option<PathBuf> {
-    let pool = skill.join("pool");
-    let mut hits: Vec<PathBuf> = std::fs::read_dir(&pool)
-        .map(|rd| {
-            rd.filter_map(Result::ok)
-                .map(|e| {
-                    pool.join(e.file_name())
-                        .join(name)
-                        .join(format!("{name}.gen.py"))
-                })
-                .filter(|p| p.exists())
-                .collect()
-        })
-        .unwrap_or_default();
-    hits.sort();
-    hits.into_iter().next()
+/// The pool generator of a map: the first live-pool folder named `name` whose listing holds `<name>.gen.py`, from the one pool walk
+/// (feature 449 T220).
+fn gen_of<'a>(pool: &'a Walk, name: &str) -> Option<&'a l7r_gate_pool::Map> {
+    pool.in_tree(LIVE)
+        .find(|m| m.name == name && m.has(".gen.py"))
 }
 
 /// The generation cache's key comparison for a generator's path.
@@ -236,12 +225,14 @@ fn stale_maps(
 ) -> Vec<String> {
     let mut out = Vec::new();
     let snapshots = skill.join(".git").join("review-snapshot");
+    let pool = walk(skill);
     for name in names {
-        let Some(gen) = gen_of(skill, name) else {
+        let Some(map) = gen_of(&pool, name) else {
             out.push(format!("{name}: no pool generator by that name"));
             continue;
         };
-        let parent = gen.parent().unwrap_or(skill).to_path_buf();
+        let gen = map.file(".gen.py");
+        let parent = map.dir.clone();
         let snap = snapshot_of.get(name).unwrap_or(name);
         let in_snapshot = prompt.contains(&format!("review-snapshot/{snap}"));
         let at = if in_snapshot {
@@ -250,7 +241,7 @@ fn stale_maps(
             parent.clone()
         };
         let file = |dir: &Path, ext: &str| dir.join(format!("{name}{ext}"));
-        let sheet = !file(&parent, ".json").exists() && file(&parent, ".svg").is_file();
+        let sheet = !map.has(".json") && map.has(".svg");
         let missing: Vec<&str> = ARTIFACTS
             .iter()
             .copied()
@@ -541,30 +532,14 @@ fn unit_sheet(clone: &Path, unit: &str) -> String {
         .unwrap_or_default()
 }
 
-fn dirs_in(dir: &Path) -> Vec<String> {
-    std::fs::read_dir(dir)
-        .map(|rd| {
-            rd.filter_map(Result::ok)
-                .map(|e| e.file_name().to_string_lossy().into_owned())
-                .collect()
-        })
-        .unwrap_or_default()
-}
-
 /// A hash of what a review of `sheet` read: its drawing and its notes, wherever its folder is in the pool trees; "" with none.
 #[must_use]
 pub fn content_key(clone: &Path, sheet: &str) -> String {
     if sheet.is_empty() {
         return String::new();
     }
-    let folder = TREES.iter().find_map(|tree| {
-        let base = clone.join(tree);
-        dirs_in(&base)
-            .into_iter()
-            .map(|c| base.join(c).join(sheet))
-            .find(|d| d.is_dir())
-    });
-    let Some(folder) = folder else {
+    let pool = walk(clone);
+    let Some(folder) = pool.folder(sheet).map(|m| &m.dir) else {
         return String::new();
     };
     let mut data = Vec::new();

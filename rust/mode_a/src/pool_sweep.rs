@@ -40,11 +40,13 @@ struct Pooled {
 const NO_SVG: &str =
     "no svg and not a declared generated exception - draw it, or declare it generated";
 
-/// Every folder under each declared tier's pool folder, its sheet read or composed once for every test here.
+/// Every folder under each declared tier's pool folder, from the one pool walk (feature 449 T220), its sheet read or composed once for
+/// every test here.
 fn pool() -> &'static [Pooled] {
     static POOL: OnceLock<Vec<Pooled>> = OnceLock::new();
     POOL.get_or_init(|| {
         let tree = tree();
+        let walked = l7r_gate_pool::walk(&tree);
         let mut out = Vec::new();
         for tier in tiers(&tree).unwrap() {
             let generated = by_tier(&tier, &tree)
@@ -52,19 +54,14 @@ fn pool() -> &'static [Pooled] {
                 .map(|t| t.generated_exceptions)
                 .unwrap_or_default();
             // a declared tier with no folder yet has no sheet
-            let mut dirs: Vec<PathBuf> = std::fs::read_dir(tree.join("pool").join(&tier))
-                .into_iter()
-                .flatten()
-                .flatten()
-                .map(|e| e.path())
-                .filter(|p| p.is_dir())
-                .collect();
-            dirs.sort();
-            for dir in dirs {
-                let stem = dir.file_name().unwrap().to_string_lossy().into_owned();
-                let svg = dir.join(format!("{stem}.svg"));
+            for map in walked
+                .in_tree(l7r_gate_pool::LIVE)
+                .filter(|m| m.tier == tier)
+            {
+                let stem = map.name.clone();
+                let svg = map.file(".svg");
                 let composed = generated.contains(&stem);
-                let spec = dir.join(format!("{stem}.compound.json"));
+                let spec = map.file(".compound.json");
                 let text = if composed {
                     compose(&tree, &spec).unwrap()
                 } else {
@@ -320,10 +317,13 @@ fn the_map_record_rule_finds_the_sheets_it_is_for() {
 fn the_sweep_covers_every_declared_tier_that_has_a_folder() {
     let tree = tree();
     let swept: BTreeSet<&str> = pool().iter().map(|s| s.tier.as_str()).collect();
+    let walked = l7r_gate_pool::walk(&tree);
     let unswept: Vec<String> = tiers(&tree)
         .unwrap()
         .into_iter()
-        .filter(|t| tree.join("pool").join(t).is_dir() && !swept.contains(t.as_str()))
+        .filter(|t| {
+            walked.in_tree(l7r_gate_pool::LIVE).any(|m| &m.tier == t) && !swept.contains(t.as_str())
+        })
         .collect();
     assert_eq!(unswept, Vec::<String>::new());
     assert!(swept.contains("magistracies") && swept.contains("country-shrines"));

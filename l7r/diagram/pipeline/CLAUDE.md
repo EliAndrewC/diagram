@@ -13,8 +13,8 @@ diagnostics ([`../tools/`](../tools/CLAUDE.md)). Drive it through `make` at the 
 | `regen` | the ITERATION path: regenerate a map, or skip it when nothing it depends on changed | no - a driver |
 | `rollcache` | the ROLL cache the gate tests ride (feature 135): `obtain` serves a keyed roll or produces and records it. **ONE ROLL PER SPEC** (feature 213, GM 2026-09-07): `hamlet()`, `report()` and `report_deps()` are three views of one `roll:<spec>` subject, produced in a child process (`_in_child("module:function", arg)` runs any module-level producer by name), shared across the run's workers behind a per-subject lock so the first wave waits instead of each rolling (`_share_lock`), and bounded to `L7R_ROLL_SLOTS` concurrent children (`_roll_slot`); the reference and Kuwabata are read from the POOL (`tests/gate/_pool.py`). A covered child starts coverage itself and switches to the requester's coverage context for the roll alone (`gencache.child_coverage`), because the incremental gate selects tests by those contexts and a roll under no context would select no roller. The roll census (`_census.py`, `ci/rollverdict.py`, the roster `tests/rolls.py`) proves at every gate that no spec rolls twice. `keyed_to(..., child=...)` is the same child for a patched roll | yes |
 | `render_cache` | main's renders: a content-hash short-circuit so main regenerates its own renders from its own tip after the stop-work push | yes |
-| `poolmaps` | the SINGLE source of truth for WHICH MAPS EXIST, in which tree, of which kind - `bundles()` for the walk, `classify()` for the kind | yes |
-| `pool_index` | writes `pool/index.html`, the browsable index over the whole pool | yes |
+| `poolmaps` | the Python pool listing, kept for the Python left in this package until T221 and T222 delete it; every Rust consumer asks the one pool walk, `rust/gate/crates/pool` (feature 449 T220) | yes |
+| `pool_index` | the Python index writer, no longer what `make pool-index` runs: the Rust pool walk (`rust/gate/crates/pool`, feature 449 T220) writes `pool/index.html` now, every map of both trees; kept only because `render_cache` imports it, and deleted with it (T222) | yes |
 | `record_build` | the record's site on the main checkout (feature 301): render-sync builds `research/site/` only when its STAMP - the record's files, the glossary's JSON and the building program - differs; a forwarder to `l7r-gate record site-stale` since feature 449 T148, kept for `render_cache` until S12 | no - a forwarder |
 
 ## The two engine-tree walks must stay in step
@@ -56,6 +56,11 @@ What the key covers, the soundness argument and the concurrency cases are `genca
 baseline re-established - run until `CACHED` - before each trial) is [`dev/cache.md`](../../../dev/cache.md).
 
 ## `poolmaps.bundles()` - ask, do not glob (feature 161)
+
+**In Rust the one walk is `l7r_gate_pool::walk`** (`rust/gate/crates/pool`, feature 449 T220, rebuilt from
+`specs/449-rust-codebase/derivations/T219-pipeline.md`): each pool directory listed once, each map folder classified once (a hamlet,
+a generated compound, a hand sheet, a frozen exhibit, or reported), its entry names kept so a consumer asks `Map::has` of the listing;
+the shell asks it as `l7r-gate pool find <map> [<suffix>]`. What follows is the Python's rule, for the Python left here.
 
 The pool is two trees, each `<tree>/<tier>/<map>/`: `pool/` for what is LIVE (scripted settlements
 plus the Mode A compound plans that are hand-authored by design) and `legacy-hand-authored-pool/`

@@ -101,8 +101,16 @@ pub(super) fn repo(name: &str) -> l7r_guard::shared::tempdir::Held<PathBuf> {
     d
 }
 
-/// A map folder: its manifest with these ink classes, and its generator.
+/// A map folder: its manifest with these ink classes, and its generator; in the live pool its spec too, which makes it a hamlet to the
+/// pool walk (feature 449 T220; a legacy folder with its manifest alone is a frozen exhibit).
 pub(super) fn map(root: &Path, tree: &str, name: &str, classes: &[&str]) {
+    if tree == "pool" {
+        put(
+            root,
+            &format!("{tree}/hamlets/{name}/{name}.spec.json"),
+            "{}",
+        );
+    }
     let census: serde_json::Map<String, serde_json::Value> = classes
         .iter()
         .map(|c| ((*c).to_owned(), json!(1)))
@@ -119,8 +127,14 @@ pub(super) fn map(root: &Path, tree: &str, name: &str, classes: &[&str]) {
     );
 }
 
-/// A Mode A sheet: its SVG tagging these kinds.
+/// A Mode A sheet: its SVG tagging these kinds, in a tier the building types declaration declares (the pool walk tells a hand sheet by
+/// it, feature 449 T220).
 pub(super) fn sheet(root: &Path, tree: &str, name: &str, kinds: &[&str]) {
+    put(
+        root,
+        l7r_gate_pool::DECLARATION,
+        r#"[{"tier": "compounds"}]"#,
+    );
     let tags = kinds.iter().fold(String::new(), |mut t, k| {
         let _ = std::fmt::Write::write_fmt(&mut t, format_args!("<g data-kind=\"{k}\"/>"));
         t

@@ -21,8 +21,9 @@ use crate::record::bundle::py_repr;
 use crate::record::repo::cat_blobs;
 use crate::Reply;
 
-/// Both pool trees, the live one first.
-pub const TREES: [&str; 2] = ["pool", "legacy-hand-authored-pool"];
+pub use l7r_gate_pool::TREES;
+use l7r_gate_pool::{walk, Kind, Map, LEGACY};
+
 /// The checks an occasion can owe, in the order a session dispatches them.
 const CHECKS: [&str; 5] = [
     "settlement-review",
@@ -126,12 +127,27 @@ fn head8(text: &str) -> &str {
     crate::record::bundle::head(text, 8)
 }
 
-/// A map or sheet folder: `<tree>/<category>/<name>`.
+/// A map or sheet folder: `<tree>/<category>/<name>`, as the pool walk found and classified it (feature 449 T220: its files asked of the
+/// walk's listing, never stat-ed again).
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Folder {
     pub path: PathBuf,
     pub name: String,
-    tree: usize,
+    tree: &'static str,
+    kind: Kind,
+    files: Vec<String>,
+}
+
+impl From<Map> for Folder {
+    fn from(m: Map) -> Self {
+        Self {
+            path: m.dir,
+            name: m.name,
+            tree: m.tree,
+            kind: m.kind,
+            files: m.files,
+        }
+    }
 }
 
 impl Folder {
@@ -140,57 +156,31 @@ impl Folder {
     }
 
     fn has(&self, ext: &str) -> bool {
-        self.file(ext).is_file()
+        self.files.contains(&format!("{}{ext}", self.name))
     }
 
-    /// A Mode A sheet: an SVG (or its generator) and no manifest.
+    /// A Mode A sheet: a generated compound or a hand sheet, by the walk's precedence.
     #[must_use]
     pub fn is_sheet(&self) -> bool {
-        !self.has(".json") && (self.has(".svg") || self.has(".gen.py"))
+        self.kind.is_sheet()
     }
 
     /// A hand-drawn Mode B map awaiting conversion owes no review: a legacy folder that is no Mode A sheet.
     fn exempt(&self) -> bool {
-        self.tree == 1 && !self.is_sheet()
+        self.tree == LEGACY && !self.is_sheet()
     }
 
+    /// A folder the walk could classify: a hamlet, a sheet or a frozen exhibit (one it reported is no map).
     fn drawn(&self) -> bool {
-        self.has(".json") || self.has(".svg") || self.has(".gen.py")
+        self.kind != Kind::Report
     }
 }
 
-fn names_in(dir: &Path) -> Vec<String> {
-    std::fs::read_dir(dir)
-        .map(|rd| {
-            rd.filter_map(Result::ok)
-                .map(|e| e.file_name().to_string_lossy().into_owned())
-                .collect()
-        })
-        .unwrap_or_default()
-}
-
-/// `_folders`: every map or sheet folder (pathlib's `glob("*/*")`, hidden names included), the live pool first, then by path.
+/// Every map or sheet folder, from the one pool walk (feature 449 T220): the live pool first, then by tier and name, hidden names
+/// included.
 #[must_use]
 pub fn folders(root: &Path) -> Vec<Folder> {
-    let mut out = Vec::new();
-    for (tree, name) in TREES.iter().enumerate() {
-        let base = root.join(name);
-        let mut here: Vec<(String, String)> = Vec::new();
-        for category in names_in(&base) {
-            for entry in names_in(&base.join(&category)) {
-                if base.join(&category).join(&entry).is_dir() {
-                    here.push((category.clone(), entry));
-                }
-            }
-        }
-        here.sort();
-        out.extend(here.into_iter().map(|(c, n)| Folder {
-            path: base.join(c).join(&n),
-            name: n,
-            tree,
-        }));
-    }
-    out
+    walk(root).maps.into_iter().map(Folder::from).collect()
 }
 
 /// Every map or sheet folder's name, of both pool trees (feature 248 FR-001).
@@ -348,11 +338,12 @@ impl Legends {
     }
 }
 
-/// `legends`: each non-exempt folder's elements now.
+/// `legends`: each non-exempt folder's elements now; a folder the pool walk could not classify is no map and draws nothing
+/// (feature 449 T220).
 #[must_use]
 pub fn legends(all: &[Folder]) -> Legends {
     let mut out = Legends::default();
-    for d in all.iter().filter(|d| !d.exempt()) {
+    for d in all.iter().filter(|d| !d.exempt() && d.drawn()) {
         if let Some(set) = legend_of(d) {
             out.put(&d.name, set);
         }

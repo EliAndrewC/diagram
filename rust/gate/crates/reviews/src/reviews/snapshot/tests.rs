@@ -211,8 +211,9 @@ fn the_stale_renders_are_the_generators_whose_render_is_older() {
         .starts_with("OSError"));
     // `*` matches a dot folder, and the first in sorted order wins
     put(&root, "pool/.h/a/x", "");
-    assert_eq!(map_dir(&root, "a"), Some(root.join("pool/.h/a")));
-    assert_eq!(map_dir(&root, "zz"), None::<PathBuf>);
+    let pool = l7r_gate_pool::walk(&root);
+    assert_eq!(map_dir(&pool, "a"), Some(root.join("pool/.h/a")));
+    assert_eq!(map_dir(&pool, "zz"), None::<PathBuf>);
 }
 
 #[test]

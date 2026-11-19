@@ -102,7 +102,7 @@ Finished diagrams live in **two trees**, each `<tree>/<tier>/<map>/` - one folde
 - **`legacy-hand-authored-pool/<tier>/<map>/`** - the FROZEN hand-authored Mode B exhibits (GM 2026-08-16): never regenerated, never re-gated. A map leaves this tree only by being CONVERTED to scripted generation, when its folder moves into `pool/`
 - scratch output (a trial render, `hamletgen --out`) goes to the session's scratchpad, never into the repository; the top-level `wip/` was retired on 2026-10-08
 
-`pool/index.html` (`make pool-index`) covers both trees on one page. Each map is a set of files sharing the map's name, inside its own folder (e.g. `pool/hamlets/inashiro/inashiro.*`):
+`pool/index.html` (`make pool-index`, written by the Rust pool walk) lists every map of both trees on one page, grouped by tree and tier, each linking its rendered page where it has one. Each map is a set of files sharing the map's name, inside its own folder (e.g. `pool/hamlets/inashiro/inashiro.*`):
 
 - `<subject>.svg` - the drawing. **Mode A: this IS the source** (hand-authored, tracked). **Mode B: this is DERIVED** from the `.gen.py` + `.json`.
 - `<subject>.png`, `<subject>.html` - the raster and the interactive page (always derived, never tracked - feature 178)

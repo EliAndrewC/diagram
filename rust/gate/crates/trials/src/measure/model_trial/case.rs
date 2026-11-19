@@ -332,27 +332,19 @@ impl Trial {
     }
 }
 
-/// Draw map or sheet `name` in a checkout (renders are not tracked); its folder, or none.
+/// Draw map or sheet `name` in a checkout (renders are not tracked); its folder, or none. Its generator is asked of the checkout's one
+/// pool walk (feature 449 T220): the first live-pool folder of that name whose listing holds `<name>.gen.py`.
 fn render(tree: &Path, name: &str) -> Option<PathBuf> {
-    let file = format!("{name}.gen.py");
-    let mut found: Vec<PathBuf> = std::fs::read_dir(tree.join("pool"))
-        .ok()?
-        .flatten()
-        .map(|kind| kind.path().join(name).join(&file))
-        .filter(|p| p.is_file())
-        .collect();
-    found.sort();
-    let generator = found.first()?;
-    let rel = generator
-        .strip_prefix(tree)
-        .unwrap_or(generator)
-        .display()
-        .to_string();
+    let pool = l7r_gate_pool::walk(tree);
+    let map = pool
+        .in_tree(l7r_gate_pool::LIVE)
+        .find(|m| m.name == name && m.has(".gen.py"))?;
+    let rel = format!("{}/{name}.gen.py", map.rel());
     let _ = Command::new("make")
         .args(["--no-print-directory", "map", &format!("GEN={rel}")])
         .current_dir(tree)
         .output();
-    generator.parent().map(Path::to_owned)
+    Some(map.dir.clone())
 }
 
 /// A file's text as the recorded agent read it whole (its Read result, line numbers stripped), or "".

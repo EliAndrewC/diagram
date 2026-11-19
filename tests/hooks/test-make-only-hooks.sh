@@ -239,9 +239,11 @@ refused_because() { # label, command, the text the refusal must carry
 }
 echo
 echo "5. AN ENGINE ENTRY POINT A MAKE TARGET WRAPS IS REWRITTEN INTO IT (feature 212)"
-# the pool index stands in for `building_programs`, ported to Rust and deleted by feature 449 T168; the CHECK=1 form (a recipe's
-# `$(if $(X),--flag,)`) no longer has a one-line Python recipe in the Makefile, and stays tested in make_only_hooks/tests.rs's fixture
-rewritten "pool index -> make pool-index" "python3 -m l7r.diagram.pipeline.pool_index 2>&1 | grep -i complete" "make pool-index 2>&1 | grep -i complete"
+# the render sync stands in for `building_programs`, ported to Rust and deleted by feature 449 T168, and for the pool index, whose
+# recipe runs the Rust pool walk since feature 449 T220 (GUARD_EDIT_OK: the stand-in moved, nothing loosened); the CHECK=1 form (a
+# recipe's `$(if $(X),--flag,)`) no longer has a one-line Python recipe in the Makefile, and stays tested in make_only_hooks/tests.rs's fixture
+rewritten "render sync -> make render-sync" "python3 -m l7r.diagram.pipeline.render_cache 2>&1 | grep -i complete" "make render-sync 2>&1 | grep -i complete"
+refused_because "the Rust pool index wraps the Python one no more" "python3 -m l7r.diagram.pipeline.pool_index" "no make target wraps"
 rewritten "a recipe's literal argument" "python3 -m l7r.diagram.switches show" "make switches"
 refused_because "a ported module is wrapped no more" "python3 -m l7r.diagram.tools.building_programs --check" "no make target wraps"
 # the compound draft stands in for `pack_audit`, whose recipe runs the Rust since feature 449 T175 (its `__main__.py` deleted)
@@ -252,7 +254,7 @@ refused_because "a module nothing wraps lists what is" "python3 -m l7r.diagram.t
 refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make render-sync"
 refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.switches --nonsense" "cannot carry"
 refused_because "a multi-line recipe (REF_FIRST) does not wrap" "python3 -m l7r.diagram.hamletgen --seed 4" "no make target wraps"
-ev "python3 -m l7r.diagram.pipeline.pool_index" | "$HOOK" pretool 2>/dev/null | grep -q "make pool-index" \
+ev "python3 -m l7r.diagram.pipeline.render_cache" | "$HOOK" pretool 2>/dev/null | grep -q "make render-sync" \
   && { echo "  ok      the context names the module and the target"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the entry-point rewrite's context is silent"; FAIL=$((FAIL+1)); }
 

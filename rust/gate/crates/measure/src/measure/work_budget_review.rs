@@ -18,7 +18,7 @@
 
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::process::Command;
 
 use serde_json::Value;
@@ -26,6 +26,7 @@ use serde_json::Value;
 use super::commas;
 use super::work_budget::{budget_at, parse};
 use crate::codeid::common_git_dir;
+use l7r_gate_pool::{walk, Walk, LIVE, TREES};
 use l7r_gate_tree::delta::worktree_key;
 
 /// The sizes an accepted stage is held at, where its entry names none (443 FR-006).
@@ -46,20 +47,82 @@ const NOT_ON_REFERENCE: [(&str, &str); 1] = [(
     "the reference roll is a comb with a pond, where no waterward runs (accepted at 0); its one form that runs, the polder's, is held as waterward.polder",
 )];
 
-/// The pool-sheet stages a counting command reaches, and the command (`l7r-mode-a`'s counting build). A counter in a crate outside
-/// `MODE_A_READS` extends those reads, or its counts are kept past a change to its code.
-const SHEET_COUNTERS: [(&str, &str); 2] = [
-    ("placer", "caption-counts"),
-    ("compound", "compound-counts"),
+/// What a counting command is handed for each sheet a stage is budgeted on.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Source {
+    /// The sheet's file in the live pool: its program where it is generated, else its hand-drawn svg.
+    Sheet,
+    /// The sheet is a pool tree, named as it is (the pipeline's "sheets" are the two trees, T219's derivation).
+    Tree,
+}
+
+/// One counted pool-sheet stage: its command, the crate and binary that run it (its counting build), what its counts read (the key of a
+/// kept count) and what it is handed.
+struct Counter {
+    stage: &'static str,
+    command: &'static str,
+    krate: &'static str,
+    bin: &'static str,
+    group: &'static str,
+    source: Source,
+}
+
+/// The pool-sheet stages a counting command reaches, and the command. A counter in a crate outside its group's reads (`MODE_A_READS`,
+/// `PIPELINE_READS`) extends those reads, or its counts are kept past a change to its code.
+const SHEET_COUNTERS: [Counter; 3] = [
+    Counter {
+        stage: "placer",
+        command: "caption-counts",
+        krate: "rust/mode_a",
+        bin: "l7r-mode-a",
+        group: "mode-a",
+        source: Source::Sheet,
+    },
+    Counter {
+        stage: "compound",
+        command: "compound-counts",
+        krate: "rust/mode_a",
+        bin: "l7r-mode-a",
+        group: "mode-a",
+        source: Source::Sheet,
+    },
+    // the pool walk and its index (feature 449 T220): `l7r-pool counts <tree>`
+    Counter {
+        stage: "pipeline",
+        command: "counts",
+        krate: "rust/gate/crates/pool",
+        bin: "l7r-pool",
+        group: "pipeline",
+        source: Source::Tree,
+    },
+];
+
+/// A counted stage whose counter reaches only part of its derivation's kinds, with what it leaves out: printed beside its counts, so a
+/// count far under its budget is read as the part it is.
+const PARTLY_COUNTED: [(&str, &str); 1] = [(
+    "pipeline",
+    "the walk's and the index's kinds alone (T220); the generation key's, the read table's and the cache's are counted when T221 builds them",
+)];
+
+/// What the pool walk's counts read: its crate, the workspace's manifests, both pool trees and the building types declaration. The
+/// trees' renders are ignored files no key of the tree sees, so the walk's listing is asked too (`asked_sheets`).
+const PIPELINE_READS: [&str; 6] = [
+    "rust/gate/crates/pool/",
+    "rust/Cargo.toml",
+    "rust/Cargo.lock",
+    "pool/",
+    "legacy-hand-authored-pool/",
+    "l7r/diagram/buildings/types.json",
 ];
 
 /// What the hamlet driver's counts read: its crate and the workspace's manifests.
 const HAMLET_READS: [&str; 3] = ["rust/phases/", "rust/Cargo.toml", "rust/Cargo.lock"];
 
 /// What `l7r-mode-a`'s counts read: its crate, the crates it builds on by path, the manifests, the pool sheets and the building types.
-const MODE_A_READS: [&str; 9] = [
+const MODE_A_READS: [&str; 10] = [
     "rust/mode_a/",
     "rust/gate/crates/core/",
+    "rust/gate/crates/pool/",
     "rust/gate/crates/registry/",
     "rust/gate/crates/research/",
     "rust/guard/",
@@ -68,6 +131,15 @@ const MODE_A_READS: [&str; 9] = [
     "pool/",
     "l7r/diagram/buildings/",
 ];
+
+/// What a group's counts read.
+fn group_reads(group: &str) -> &'static [&'static str] {
+    if group == "pipeline" {
+        &PIPELINE_READS
+    } else {
+        &MODE_A_READS
+    }
+}
 
 /// Bumped when what a kept count holds changes, so an older one is never read as this one.
 const KEPT_FORM: &str = "1";
@@ -143,63 +215,67 @@ fn hamlet_counts(root: &Path) -> Result<String, String> {
     Ok(both)
 }
 
-/// The file a sheet is counted from: its program where it is generated, else its hand-drawn svg; None where the pool holds neither.
-fn sheet_source(root: &Path, sheet: &str) -> Option<String> {
-    let mut tiers: Vec<PathBuf> = std::fs::read_dir(root.join("pool"))
-        .into_iter()
-        .flatten()
-        .flatten()
-        .map(|e| e.path())
-        .collect();
-    tiers.sort();
+/// The file a sheet is counted from: its program where it is generated, else its hand-drawn svg, from the one pool walk (feature 449
+/// T220); None where the live pool holds neither.
+fn sheet_source(pool: &Walk, sheet: &str) -> Option<String> {
     [".compound.json", ".svg"].iter().find_map(|end| {
-        tiers.iter().find_map(|tier| {
-            let file = tier.join(sheet).join(format!("{sheet}{end}"));
-            file.is_file().then(|| {
-                file.strip_prefix(root)
-                    .unwrap_or(&file)
-                    .to_string_lossy()
-                    .into_owned()
-            })
-        })
+        pool.in_tree(LIVE)
+            .find(|m| m.name == sheet && m.has(end))
+            .map(|m| format!("{}/{sheet}{end}", m.rel()))
     })
 }
 
-/// What the sheet counts are asked for: each counted stage's command and sheets.
-fn asked_sheets(sheets: &Value) -> String {
-    SHEET_COUNTERS
+/// What a group's sheet counts are asked for: each counted stage's command and sheets; the pipeline's, the walk's listing too (its
+/// count moves with the folders' entries, renders included, which the tree's key does not see).
+fn asked_sheets(root: &Path, sheets: &Value, group: &str) -> String {
+    let mut asked: Vec<String> = SHEET_COUNTERS
         .iter()
-        .map(|(stage, command)| {
+        .filter(|c| c.group == group)
+        .map(|c| {
             let named: Vec<&str> = sheets
-                .get(stage)
+                .get(c.stage)
                 .and_then(|s| s.get("sheets"))
                 .and_then(Value::as_object)
                 .map(|m| m.keys().map(String::as_str).collect())
                 .unwrap_or_default();
-            format!("{stage} {command} {}", named.join(" "))
+            format!("{} {} {}", c.stage, c.command, named.join(" "))
         })
-        .collect::<Vec<_>>()
-        .join("\n")
+        .collect();
+    if group == "pipeline" {
+        asked.extend(
+            walk(root)
+                .maps
+                .iter()
+                .map(|m| format!("{}\0{}", m.rel(), m.files.join("\0"))),
+        );
+    }
+    asked.join("\n")
 }
 
-/// Each counted pool-sheet stage's total on each of its sheets, one `stage sheet total` line each; a sheet with no source is
+/// Each counted pool-sheet stage of `group`, its total on each of its sheets, one `stage sheet total` line each; a sheet with no source is
 /// `stage sheet -`.
-fn sheet_counts(root: &Path, sheets: &Value) -> Result<String, String> {
+fn sheet_counts(root: &Path, sheets: &Value, group: &str) -> Result<String, String> {
     let mut out = String::new();
-    for (stage, command) in SHEET_COUNTERS {
-        let Some(Value::Object(by_sheet)) = sheets.get(stage).and_then(|s| s.get("sheets")) else {
+    let pool = walk(root);
+    for c in SHEET_COUNTERS.iter().filter(|c| c.group == group) {
+        let Some(Value::Object(by_sheet)) = sheets.get(c.stage).and_then(|s| s.get("sheets"))
+        else {
             continue;
         };
         for sheet in by_sheet.keys() {
-            let Some(source) = sheet_source(root, sheet) else {
-                let _ = writeln!(out, "{stage}\t{sheet}\t-");
+            let source = match c.source {
+                Source::Sheet => sheet_source(&pool, sheet),
+                Source::Tree => TREES.contains(&sheet.as_str()).then(|| sheet.clone()),
+            };
+            let Some(source) = source else {
+                let _ = writeln!(out, "{}\t{sheet}\t-", c.stage);
                 continue;
             };
             let said = wrapped(
                 root,
-                "rust/mode_a",
-                &format!("{command} {source}"),
-                &[("HAMLET_BIN", "l7r-mode-a"), ("HAMLET_DEV", "1")],
+                c.krate,
+                &format!("{} {source}", c.command),
+                &[("HAMLET_BIN", c.bin), ("HAMLET_DEV", "1")],
             )?;
             // the report is the one JSON line; the wrapper adds its own `rust-checks:` line after it
             let total = said
@@ -212,11 +288,13 @@ fn sheet_counts(root: &Path, sheets: &Value) -> Result<String, String> {
                 })
                 .ok_or_else(|| {
                     format!(
-                        "work-budget-review: `l7r-mode-a {command} {source}` printed no total:\n{}",
+                        "work-budget-review: `{} {} {source}` printed no total:\n{}",
+                        c.bin,
+                        c.command,
                         said.chars().take(400).collect::<String>()
                     )
                 })?;
-            let _ = writeln!(out, "{stage}\t{sheet}\t{total}");
+            let _ = writeln!(out, "{}\t{sheet}\t{total}", c.stage);
         }
     }
     Ok(out)
@@ -312,13 +390,13 @@ fn hold_sheets(sheets: &Value, counted: &str, held: &mut Held) {
     }
     for (stage, st) in sheets.as_object().into_iter().flatten() {
         let by_sheet = st.get("sheets").and_then(Value::as_object);
-        if !SHEET_COUNTERS.iter().any(|(s, _)| s == stage) {
+        let Some(by) = SHEET_COUNTERS.iter().find(|c| c.stage == stage.as_str()) else {
             held.lines.push(format!(
                 "  UNCOUNTED {stage}: budgeted per sheet ({}), but nothing counts it - its code is not built or has no counter; the landing that builds it adds its counting command to SHEET_COUNTERS (work_budget_review.rs)",
                 by_sheet.map_or(0, serde_json::Map::len)
             ));
             continue;
-        }
+        };
         let mut cells = Vec::new();
         for (sheet, b) in by_sheet.into_iter().flatten() {
             let budget = b.get("budget").and_then(Value::as_f64).unwrap_or(0.0);
@@ -339,12 +417,22 @@ fn hold_sheets(sheets: &Value, counted: &str, held: &mut Held) {
                         whole(budget)
                     ));
                 }
+                _ if by.source == Source::Tree => held.refused.push(format!(
+                    "{stage} on {sheet}: no count - no pool tree is named {sheet} (the trees are {}; its budget in dev/work-budget.json names it)",
+                    TREES.join(" and ")
+                )),
                 _ => held.refused.push(format!(
                     "{stage} on {sheet}: no count - the pool holds no {sheet}.compound.json or {sheet}.svg to count it from (a sheet renamed? its budget in dev/work-budget.json names it)"
                 )),
             }
         }
-        held.lines.push(format!("  {stage}: {}", cells.join("; ")));
+        let part = PARTLY_COUNTED
+            .iter()
+            .find(|(s, _)| *s == stage.as_str())
+            .map(|(_, what)| format!(" - counted: {what}"))
+            .unwrap_or_default();
+        held.lines
+            .push(format!("  {stage}: {}{part}", cells.join("; ")));
     }
 }
 
@@ -428,13 +516,19 @@ fn review(route: &str, root: &Path) -> Result<(i32, String), String> {
         hold_hamlet(&table["stages"], &means(&text)?, &mut held);
     }
     if sheets {
-        let asked = asked_sheets(&table["sheet_stages"]);
-        let (text, kept) = kept_or_run(root, "mode-a", &MODE_A_READS, &asked, || {
-            sheet_counts(root, &table["sheet_stages"])
-        })?;
+        let mut text = String::new();
+        let mut all_kept = true;
+        for group in ["mode-a", "pipeline"] {
+            let asked = asked_sheets(root, &table["sheet_stages"], group);
+            let (counted, kept) = kept_or_run(root, group, group_reads(group), &asked, || {
+                sheet_counts(root, &table["sheet_stages"], group)
+            })?;
+            text += &counted;
+            all_kept &= kept;
+        }
         how.push(format!(
             "the pool-sheet stages {}",
-            if kept {
+            if all_kept {
                 "kept (their code and sheets unmoved)"
             } else {
                 "re-counted"

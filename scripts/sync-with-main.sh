@@ -225,8 +225,9 @@ sync_in() { # [--mirror-only] [--background-render]
 # THE CLONE GETS ITS OWN POOL INDEX (GM 2026-08-27). pool/index.html is derived and gitignored, and
 # render-sync writes only main's - so a clone had none, and the GM could not use it as an index of
 # that clone's work in progress. Refreshed on BOTH sync-in branches (a dirty, mid-task clone is
-# exactly where a WIP index matters) through the skill's `pool-index-if-stale`, whose `find -newer`
-# check makes a no-change turn cost milliseconds. Never fatal: a broken index must not stop a sync.
+# exactly where a WIP index matters) through the skill's `pool-index-if-stale`, the Rust pool walk's index (feature 449 T220,
+# GUARD_EDIT_OK: a comment brought up to date, nothing loosened), which rewrites the page only when it differs, so a no-change
+# turn writes nothing. Never fatal: a broken index must not stop a sync.
 clone_index_refresh() {
   [ -f "$ROOT/Makefile" ] || return 0
   ( cd "$ROOT" && make --no-print-directory pool-index-if-stale ) \

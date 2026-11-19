@@ -95,7 +95,8 @@ fn new_maps_and_sheets_are_occasions_and_their_elements_too() {
     sh(&r, "git update-ref refs/remotes/origin/main HEAD");
     map(&r, "pool", "fresh", &["well", "kiln"]);
     sheet(&r, "pool", "hall", &["engawa", "well"]);
-    put(&r, "pool/compounds/genonly/genonly.gen.py", "#\n");
+    // a generated compound with no svg drawn yet is a sheet by its program (the pool walk's precedence, feature 449 T220)
+    put(&r, "pool/compounds/genonly/genonly.compound.json", "{}");
     put(&r, "pool/hamlets/empty/readme.txt", "x");
     // a legacy hand-drawn map owes nothing; a legacy sheet keeps its review
     map(&r, "legacy-hand-authored-pool", "handmap", &["tannery"]);
@@ -147,7 +148,7 @@ fn an_element_new_to_a_standing_map_is_owed_and_a_moved_folder_is_not_new() {
     );
     assert_eq!(units[1].occasion, "'shrine' is new to m");
     // renamed by the delta: no new map, its legend the one it had
-    sh(&r, "git checkout -q -- pool && git mv pool/hamlets/m pool/hamlets/moved && git mv pool/hamlets/moved/m.json pool/hamlets/moved/moved.json && git mv pool/hamlets/moved/m.gen.py pool/hamlets/moved/moved.gen.py");
+    sh(&r, "git checkout -q -- pool && git mv pool/hamlets/m pool/hamlets/moved && git mv pool/hamlets/moved/m.json pool/hamlets/moved/moved.json && git mv pool/hamlets/moved/m.gen.py pool/hamlets/moved/moved.gen.py && git mv pool/hamlets/moved/m.spec.json pool/hamlets/moved/moved.spec.json");
     commit(&r, "rename");
     assert!(owed_slugs(&r).is_empty(), "{:?}", owed_slugs(&r));
 }
@@ -460,7 +461,24 @@ fn a_folder_of_one_name_in_both_trees_keeps_its_first_place() {
 fn a_map_in_a_repository_with_no_commits_is_new_to_the_pool() {
     let root = super::super::tests::dir("unborn-map");
     sh(&root, "git init -q");
+    put(&root, "pool/hamlets/m/m.spec.json", "{}");
     put(&root, "pool/hamlets/m/m.json", "{}");
     let (_, units, _) = super::owed(&root, true);
     assert_eq!(slugs(&units), ["settlement-review--m"]);
+}
+
+/// A live folder the pool walk could not classify (a manifest with no spec) is no map: its elements are in no legend (feature 449 T220).
+#[test]
+fn an_unclassified_folder_draws_nothing() {
+    let r = repo("unclassified");
+    put(
+        &r,
+        "pool/hamlets/stray/stray.json",
+        r#"{"ink_classes": {"kiln": 1}}"#,
+    );
+    map(&r, "pool", "m", &["well"]);
+    let tree = Tree::read(&r);
+    assert!(tree.legends.get("stray").is_none());
+    assert_eq!(tree.legends.first_drawing("kiln"), "");
+    assert_eq!(tree.legends.first_drawing("well"), "m");
 }

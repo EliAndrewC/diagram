@@ -242,13 +242,16 @@ placement-stages: ## [maps] the stage-by-stage walk-through page - FROZEN (featu
 placement-stages-if-classes: ## [maps] {internal} a no-op since the walk-through page froze (feature 444 amendment 11); sync-in still calls it
 	@:
 
-pool-index:     ## [maps] rebuild the pool index
-	$(RUN).pipeline.pool_index $(ARGS)
+pool-index:     ## [maps] write the pool index, pool/index.html: every map of both trees, grouped by tree and tier, from the Rust pool walk (449 T220); rewritten only when it differs, and a folder the walk cannot classify named
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" pool index
 
-pool-index-if-stale: ## [maps] {internal} rebuild the pool index only when a manifest, render or notes file is newer
-	@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \( -name '*.json' -o -name '*.png' -o -name '*.notes.md' \) -print -quit 2>/dev/null)" ]; then \
-	  $(MAKE) --no-print-directory pool-index ARGS=; \
-	fi
+# THE WALK IS THE STALENESS CHECK (feature 449 T220): the index is composed from one listing of each pool directory and written only when
+# it differs from the page on disk, so this is the same command as pool-index, quiet; the name stays because sync-with-main.sh calls it.
+# It runs the gate binary there is, stale or not (L7R_GATE_STALE_OK): sync-in runs on every prompt, and a merge that moved a gate source
+# would otherwise rebuild l7r-gate there (tens of seconds) for an index; 0.02 s with the binary built (measured 2026-11-19). A stale
+# binary older than the `pool` verb fails, and only then is the gate built.
+pool-index-if-stale: ## [maps] {internal} the pool index, written only when it differs (sync-in calls it)
+	@g="$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh"; L7R_GATE_STALE_OK=1 "$$g" pool index >/dev/null 2>&1 || "$$g" pool index >/dev/null
 
 compound:       ## [maps] compose a Mode A compound sheet from its feet-based program, drawn whole by the compound generator (Rust since 449 T152, `l7r-mode-a`) - a starting point the GM then refines by hand   SPEC=<map>.compound.json
 ##  SPEC=<map>.compound.json  the program; the sheet, its picture and its page are written beside it as <map>.svg, .png, .html

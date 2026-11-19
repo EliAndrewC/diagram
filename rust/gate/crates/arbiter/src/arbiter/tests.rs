@@ -436,6 +436,8 @@ fn the_rulings_tools_are_asked_by_path() {
     let before = rows(&root).len();
     let map = root.join("pool/hamlets/m");
     std::fs::create_dir_all(&map).unwrap();
+    // a hamlet to the pool walk by its spec (feature 449 T220)
+    std::fs::write(map.join("m.spec.json"), "{}").unwrap();
     std::fs::write(map.join("m.json"), "{}").unwrap();
     std::fs::write(map.join("m.svg"), "<svg/>").unwrap();
     let unit = "settlement-review|settlement-review--m";

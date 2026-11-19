@@ -496,20 +496,13 @@ fn every_sheet_is_reported_and_every_check_runs_on_it() {
         .filter(|p| p.to_string_lossy().ends_with("-red.svg"))
         .collect();
     reds.sort();
-    let mut pool: Vec<PathBuf> = Vec::new();
-    for tier in crate::types::tiers(&tree).unwrap() {
-        for e in std::fs::read_dir(tree.join("pool").join(&tier))
-            .into_iter()
-            .flatten()
-            .flatten()
-        {
-            let stem = e.file_name().to_string_lossy().into_owned();
-            let svg = e.path().join(format!("{stem}.svg"));
-            if svg.is_file() {
-                pool.push(svg);
-            }
-        }
-    }
+    // each declared tier's sheets with an svg on disk, from the one pool walk (feature 449 T220)
+    let tiers = crate::types::tiers(&tree).unwrap();
+    let mut pool: Vec<PathBuf> = l7r_gate_pool::walk(&tree)
+        .in_tree(l7r_gate_pool::LIVE)
+        .filter(|m| tiers.contains(&m.tier) && m.has(".svg"))
+        .map(|m| m.file(".svg"))
+        .collect();
     pool.sort();
     assert!(pool.len() >= 4 && reds.len() >= 40 && fixtures.len() >= 30);
     let reported = |path: &PathBuf| {

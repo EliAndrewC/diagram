@@ -26,38 +26,22 @@
 use std::path::{Path, PathBuf};
 use std::time::UNIX_EPOCH;
 
+use l7r_gate_pool::{walk, Walk};
 use l7r_guard::shared::py_text::repr;
 
 use super::owed::{owed, Unit};
 use super::reply;
 use crate::Reply;
 
-const TREES: [&str; 2] = ["pool", "legacy-hand-authored-pool"];
 /// What a reviewer reads of a map or sheet, in the order it is listed.
 const SUFFIXES: [&str; 5] = [".json", ".svg", ".png", ".html", ".notes.md"];
 const NO_CLONE: &str = "not in the clone's pool";
 const NO_MAIN: &str = "unavailable (no mirror, or main has no such map)";
 
-/// The folder of map or sheet `name` under either pool tree of `tree_root`: the first of `sorted(glob("*/<name>"))` that is a
-/// directory (`*` matching a dot folder too, as `pathlib` does).
-fn map_dir(tree_root: &Path, name: &str) -> Option<PathBuf> {
-    for tree in TREES {
-        let mut kinds: Vec<String> = std::fs::read_dir(tree_root.join(tree))
-            .into_iter()
-            .flatten()
-            .flatten()
-            .map(|e| e.file_name().to_string_lossy().into_owned())
-            .collect();
-        kinds.sort();
-        if let Some(d) = kinds
-            .iter()
-            .map(|k| tree_root.join(tree).join(k).join(name))
-            .find(|d| d.is_dir())
-        {
-            return Some(d);
-        }
-    }
-    None
+/// The folder of map or sheet `name` in a tree's pool walk (feature 449 T220): the first folder of that name, the live pool first, a
+/// dot folder too.
+fn map_dir(pool: &Walk, name: &str) -> Option<PathBuf> {
+    pool.folder(name).map(|m| m.dir.clone())
 }
 
 /// What each check is asked, per its contract (`.claude/agents/<check>.md`); `None` for a check with no prompt, where the Python's
@@ -180,9 +164,10 @@ fn rel(p: &Path, root: &Path) -> String {
 /// refuses, naming `make sheet-render` (spec-fidelity, T26 round 1: "every unit").
 fn stale_renders(root: &Path, units: &[&Unit]) -> Result<Vec<String>, String> {
     let mut out: Vec<String> = Vec::new();
+    let pool = walk(root);
     for unit in units {
         let Some(src) = (!unit.on.is_empty())
-            .then(|| map_dir(root, &unit.on))
+            .then(|| map_dir(&pool, &unit.on))
             .flatten()
         else {
             continue;
@@ -243,6 +228,7 @@ fn snapshot(
     key: &str,
 ) -> Result<Vec<String>, String> {
     let mut out = Vec::new();
+    let pools = [walk(root), mirror.map(walk).unwrap_or_default()];
     for unit in units {
         let slug = unit.slug();
         let dest = root.join(".git").join("review-snapshot").join(&slug);
@@ -258,10 +244,13 @@ fn snapshot(
             main_missing: Vec::new(),
             dispatch: None,
         };
-        for (side, tree) in [("clone", Some(root)), ("main", mirror)] {
+        for ((side, tree), pool) in [("clone", Some(root)), ("main", mirror)]
+            .into_iter()
+            .zip(&pools)
+        {
             let src = tree
                 .filter(|_| !unit.on.is_empty())
-                .and_then(|t| map_dir(t, &unit.on));
+                .and_then(|_| map_dir(pool, &unit.on));
             let mut lack: Vec<&'static str> = Vec::new();
             let target = dest.join(side);
             if let Some(src) = &src {

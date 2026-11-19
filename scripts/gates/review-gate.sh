@@ -164,7 +164,8 @@ port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo int
 if [ "$port" = "rust-only" ] && [ -n "$owed_units" ]; then
   kept=""
   for unit in $owed_units; do
-    if [ -d "$ROOT/pool/hamlets/${unit##*--}" ]; then
+    # GUARD_EDIT_OK: feature 449 T220 - a hamlet is what the one pool walk classifies as one (its spec), not a folder name's tier
+    if [ "$("$RG_HERE/l7r-gate.sh" pool find "${unit##*--}" 2>/dev/null | cut -f1)" = hamlet ]; then
       printf 'review-gate: %s waits for the port switch thrown back to integrated (FR-023) - no hamlet map is rolled at rust-only\n' "$unit"
     else
       kept="$kept $unit"
@@ -178,8 +179,9 @@ fi
 # unit sits on (`make map` answers CACHED when the render is current), then ask again.
 if [ -n "$owed_units" ]; then
   for on in $("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' '{print $4}' | sort -u); do
-    g="$(find "$ROOT/pool" -path "*/$on/$on.gen.py" 2>/dev/null | head -1)"
-    [ -n "$g" ] && ( cd "$ROOT" && make -s map GEN="${g#"$ROOT"/}" >/dev/null 2>&1 )
+    # GUARD_EDIT_OK: feature 449 T220 - the unit's generator asked of the one pool walk's listing, not a find over the pool
+    g="$("$RG_HERE/l7r-gate.sh" pool find "$on" .gen.py 2>/dev/null)"
+    [ -n "$g" ] && ( cd "$ROOT" && make -s map GEN="$g" >/dev/null 2>&1 )
   done
   owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/dev/null || true)"
 fi

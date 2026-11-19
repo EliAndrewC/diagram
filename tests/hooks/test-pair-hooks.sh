@@ -47,7 +47,9 @@ printf 'import os\n\ndef is_current(gen):\n    return not os.path.exists(gen + "
 # PYTHONPATH, and a regular `l7r.diagram` anywhere on the path wins over a namespace portion, so a stub without
 # `__init__.py` was shadowed by the real generation cache and 14 cases went red that passed when run by hand.
 : > "$SKILL/l7r/diagram/__init__.py"; : > "$SKILL/l7r/diagram/pipeline/__init__.py"
-moved()   { mkdir -p "$MAPDIR_F"; printf '{"meta":{"name":"testmap"}}' > "$MAPDIR_F/testmap.json"; printf '# testmap\n' > "$MAPDIR_F/testmap.notes.md"; for ext in gen.py svg png html; do : > "$MAPDIR_F/testmap.$ext"; done; }
+# GUARD_EDIT_OK: feature 449 T220 - each map folder carries its spec, which makes it a hamlet to the one pool walk (a manifest alone is
+# no map in the live pool)
+moved()   { mkdir -p "$MAPDIR_F"; printf '{"meta":{"name":"testmap"}}' > "$MAPDIR_F/testmap.json"; printf '# testmap\n' > "$MAPDIR_F/testmap.notes.md"; for ext in gen.py svg png html spec.json; do : > "$MAPDIR_F/testmap.$ext"; done; }
 unmoved() { rm -rf "$SKILL/pool"; }
 moved
 
@@ -78,7 +80,7 @@ refused_for() { # label, payload, text the refusal must carry
   if [ "$rc" -eq 2 ] && printf '%s' "$out" | grep -q -- "$3"; then ok; else bad "$1 (rc=$rc: $out)"; fi
 }
 green() { touch "$CLONE/.git/stub-gate-green"; }
-moved_two() { moved; mkdir -p "$MAPDIR_G"; printf '{"meta":{"name":"othermap"}}' > "$MAPDIR_G/othermap.json"; printf '# othermap\n' > "$MAPDIR_G/othermap.notes.md"; for ext in gen.py svg png html; do : > "$MAPDIR_G/othermap.$ext"; done; }
+moved_two() { moved; mkdir -p "$MAPDIR_G"; printf '{"meta":{"name":"othermap"}}' > "$MAPDIR_G/othermap.json"; printf '# othermap\n' > "$MAPDIR_G/othermap.notes.md"; for ext in gen.py svg png html spec.json; do : > "$MAPDIR_G/othermap.$ext"; done; }
 snap_of() { mkdir -p "$CLONE/.git/review-snapshot/settlement-review--$1/clone"; cp "$SKILL/pool/hamlets/$1/$1".* "$CLONE/.git/review-snapshot/settlement-review--$1/clone/"; }
 note_says() { ( cd "$MIRROR" && printf '%s' "$1" | CLONE_MAIN="$MIRROR" "$HOOK" "${2:-pretool}" 2>&1 ); }
 
@@ -314,7 +316,10 @@ TWO_SNAP=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"read 
 refused_for "...two snapshot directories count as two maps" "$TWO_SNAP" "one unit per agent"
 TWO_ESC=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review testmap and othermap PAIR_OK: the gate is beside this"}')
 refused_for "...and there is no escape for the shape" "$TWO_ESC" "no escape"
+# GUARD_EDIT_OK: feature 449 T220 - each folder carries its spec, which makes it a hamlet to the one pool walk (a manifest alone is no
+# map in the live pool), so the two are still maps the dispatch names
 unmoved; mkdir -p "$SKILL/pool/hamlets/legacya" "$SKILL/pool/hamlets/legacyb"; printf '{}' > "$SKILL/pool/hamlets/legacya/legacya.json"; printf '{}' > "$SKILL/pool/hamlets/legacyb/legacyb.json"
+printf '{}' > "$SKILL/pool/hamlets/legacya/legacya.spec.json"; printf '{}' > "$SKILL/pool/hamlets/legacyb/legacyb.spec.json"
 ( cd "$CLONE" && git add -A >/dev/null 2>&1 && git -c user.email=t@t -c user.name=t commit -qm maps >/dev/null 2>&1 && git update-ref refs/remotes/origin/main HEAD )
 TWO_UNOWED=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"spot-check legacya and legacyb"}')
 refused_for "...and two maps NOBODY owes are refused the same way (a spot check serializes too)" "$TWO_UNOWED" "one unit per agent"
@@ -445,6 +450,7 @@ reset_prereq
 local gm="$SKILL/pool/hamlets/glyphmap" early esc out
 mkdir -p "$gm"
 printf '{"meta":{"name":"glyphmap"},"ink_classes":{"farmhouse":2}}' > "$gm/glyphmap.json"; printf '# glyphmap\n' > "$gm/glyphmap.notes.md"
+printf '{}' > "$gm/glyphmap.spec.json"   # GUARD_EDIT_OK: feature 449 T220 - a hamlet to the one pool walk by its spec
 ( cd "$CLONE" && git add -A pool/hamlets/glyphmap >/dev/null 2>&1 && git -c user.email=t@t -c user.name=t commit -qm glyphmap >/dev/null 2>&1 && git update-ref refs/remotes/origin/main HEAD )
 printf '{"meta":{"name":"glyphmap"},"ink_classes":{"farmhouse":2,"kiln":1}}' > "$gm/glyphmap.json"
 mkdir -p "$CLONE/specs/999-g" "$CLONE/.specify" "$CLONE/.git/l7r-events"

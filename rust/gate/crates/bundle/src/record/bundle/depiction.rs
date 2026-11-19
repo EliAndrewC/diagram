@@ -21,7 +21,7 @@ use l7r_gate_registry::conditions::{knob_table, knobs};
 
 const CLAIMS_INDEX: &str = "dev/claims-index.json";
 /// Where the pool pages a glyph is cropped from live; the hamlets are searched first.
-const POOL: &str = "pool";
+const POOL: &str = l7r_gate_pool::LIVE;
 const HAMLETS: &str = "hamlets";
 /// How long the crop may take before the Python's `subprocess.TimeoutExpired`.
 #[cfg(not(test))]
@@ -128,39 +128,26 @@ fn pool_page_with(root: &Path, key: &str, sheet: bool) -> Option<PathBuf> {
         format!("data-k=\"{key}\""),
         format!("data-k=\"{}\"", html_escape(key)),
     ];
-    let mut trees: Vec<PathBuf> = std::fs::read_dir(root.join(POOL))
-        .into_iter()
-        .flatten()
-        .flatten()
-        .map(|e| e.path())
-        .filter(|p| p.is_dir())
-        .collect();
+    // the live pool's folders from the one pool walk (feature 449 T220), each folder's pages asked of its listing
+    let pool = l7r_gate_pool::walk(root);
+    let mut tiers: Vec<&str> = pool.in_tree(POOL).map(|m| m.tier.as_str()).collect();
+    tiers.dedup();
+    tiers.sort_by_key(|t| (*t != HAMLETS, *t));
     let name = |p: &Path| {
         p.file_name()
             .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
     };
-    trees.sort_by_key(|p| (name(p) != HAMLETS, name(p)));
-    for d in trees.iter().filter(|t| !(sheet && name(t) == HAMLETS)) {
-        let mut pages: Vec<PathBuf> = Vec::new();
-        for sub in std::fs::read_dir(d)
-            .into_iter()
-            .flatten()
-            .flatten()
-            .map(|e| e.path())
-            .filter(|p| p.is_dir())
-        {
-            if name(&sub).ends_with("-test") {
-                continue;
-            }
-            pages.extend(
-                std::fs::read_dir(&sub)
-                    .into_iter()
-                    .flatten()
-                    .flatten()
-                    .map(|e| e.path())
-                    .filter(|p| p.extension().is_some_and(|x| x == "html")),
-            );
-        }
+    for tier in tiers.into_iter().filter(|t| !(sheet && *t == HAMLETS)) {
+        let mut pages: Vec<PathBuf> = pool
+            .in_tree(POOL)
+            .filter(|m| m.tier == tier && !m.name.ends_with("-test"))
+            .flat_map(|m| {
+                m.files
+                    .iter()
+                    .filter(|f| Path::new(f).extension().is_some_and(|x| x == "html"))
+                    .map(|f| m.dir.join(f))
+            })
+            .collect();
         let parent = |p: &Path| p.parent().map(name).unwrap_or_default();
         pages.sort_by(|a, b| {
             (parent(a).ends_with("-example"), name(a))

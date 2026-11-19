@@ -43,7 +43,8 @@ fi
 # `l7r-guard` depends on it, so their builds never compile the geometry and rendering crates the engine will pull.
 if [ "${1:-}" = mode-a ]; then
   shift; BIN="$TARGET/tool/l7r-mode-a"; PKG=(-p l7r_mode_a --bin l7r-mode-a)
-  SOURCES=("$TREE"/rust/mode_a "$TREE"/rust/gate/crates/registry "$TREE"/rust/gate/crates/research "$TREE"/rust/gate/crates/core)
+  # GUARD_EDIT_OK: feature 449 T220 - the pool walk's crate, which the engine's pool sweep and audit build on
+  SOURCES=("$TREE"/rust/mode_a "$TREE"/rust/gate/crates/registry "$TREE"/rust/gate/crates/research "$TREE"/rust/gate/crates/core "$TREE"/rust/gate/crates/pool)
 fi
 cargo=${L7R_GATE_CARGO:-}
 [ -n "$cargo" ] || { [ -x "$real/.cargo/bin/cargo" ] && cargo="$real/.cargo/bin/cargo" || cargo=cargo; }

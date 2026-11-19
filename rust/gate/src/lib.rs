@@ -181,6 +181,15 @@ pub fn cli(args: &[String]) -> Reply {
         }
         // the shared differential runner (feature 449 T161): `--all`'s escape recorded in the guard log every escape writes to
         Some("diff-run") => diff_run(&args[1..]),
+        // the pool walk and its index (feature 449 T220): `make pool-index`, and the review gate's `find`
+        Some("pool") => {
+            let (stdout, stderr, code) = l7r_gate_pool::cli(&args[1..], &top());
+            Reply {
+                stdout,
+                stderr,
+                code,
+            }
+        }
         Some("make-docs") => {
             make_docs::cli(&args[1..], &std::env::current_dir().unwrap_or_default())
         }
@@ -247,6 +256,9 @@ mod tests {
         assert_eq!(cli(&["claims".to_owned()]).code, 2);
         assert_eq!(cli(&["tunables".to_owned(), "--bogus".to_owned()]).code, 2);
         assert_eq!(cli(&["reviews".to_owned()]).code, 2);
+        assert!(cli(&["pool".to_owned()])
+            .stderr
+            .starts_with("usage: pool index"));
         assert_eq!(cli(&["tick".to_owned()]).code, 2);
         assert_eq!(
             cli(&["speckit-todo".to_owned(), "--bogus".to_owned()]).code,

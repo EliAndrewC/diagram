@@ -41,6 +41,7 @@ geo = { workspace = true }
 # not called: named so its pin (`rust/Cargo.toml`) holds the version `geo` builds on (feature 449 T175)
 i_overlay = { workspace = true }
 l7r_gate_core = { path = "../gate/crates/core" }
+l7r_gate_pool = { path = "../gate/crates/pool" }
 l7r_gate_registry = { path = "../gate/crates/registry" }
 l7r_gate_research = { path = "../gate/crates/research" }
 l7r_guard = { path = "../guard" }

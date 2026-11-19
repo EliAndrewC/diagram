@@ -1050,6 +1050,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T220 (T219's SOUND derivation: the pool walk is rebuilt from it, and the index listed 6 of the pool's 30 maps)": {
+   "sha256": "2fa07a77d615d964a43245b31c4713adeb23dc2aa43692b9ecef94ec9cfc1d09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T220 Approach (checklist part A)": {
+   "sha256": "dbe70afc5ab3ae5f1a915313fa67d0fc938df7d3f5c3b33085522833c51b5af7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14740,6 +14752,228 @@
      "why": "Neither is part of T224's subject (the review and the stamp); the waterward counters are a suspected, unconfirmed engine-counter defect, filed rather than carried silently, and the pipeline counters are already T220's. Per the GM's 2026-11-18 rule T226 must be settled before the next step's port begins; the block gives it no position, which does not block this task but is owed by the step's close."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T220 (T219's SOUND derivation: the pool walk is rebuilt from it, and the index listed 6 of the pool's 30 maps)",
+    "### T220 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-walk-rebuilt-from-derivation",
+     "summary": "The pool walk is rebuilt from derivations/T219-pipeline.md with the phase guard on, in a new gate crate `pool` depending on nothing of the gate or mode_a; each folder listed once, each entry classified once; no git index read, as the derivation priced.",
+     "class": "within",
+     "why": "This is what the GM asked for on 2026-11-19 (rebuild from derivations, not port the Python's mistakes, under the phase-source guard) and on 2026-10-30 (no re-implementing the old inefficient algorithms). It narrows nothing."
+    },
+    {
+     "id": "D2-every-consumer-moved",
+     "summary": "Every consumer that walked the pool on its own (reviews owed, prereq, snapshot, measure probe, work-budget review, model_trial, review-gate.sh via `l7r-gate pool find`, mode_a's sweeps and checks, the arbiter's sheet edits, the depiction bundle's pool page) moves onto the one walk in this landing.",
+     "class": "within",
+     "why": "Serves FR-001 (the Python and its duplicate walks replaced) and the 2026-10-30 efficiency rule (one walk, not many). Nothing is excluded."
+    },
+    {
+     "id": "D3-index-written-by-rust-lists-all-30",
+     "summary": "pool/index.html is written by Rust from the walk, grouped by tree and tier, and lists all 30 maps where the old one listed 6.",
+     "class": "within",
+     "why": "A port of the index under FR-001, and the 6-of-30 listing is a wrong outcome (a defect), which the GM's 2026-11-18 fix-as-we-go rule says to fix within the step. A differing index is allowed under FR-002."
+    },
+    {
+     "id": "D4-what-counts-as-a-map-follows-the-derivation",
+     "summary": "Classification follows the derivation: a folder with only a .gen.py is no longer a sheet, a live folder with a manifest and no spec is no longer a map, and a spec-only hamlet now is one.",
+     "class": "within",
+     "why": "A behavior change that comes from rebuilding from the derivation, which the GM asked for on 2026-11-19. FR-002 allows outputs to differ as long as each consumer still does its job, and the block holds the consumers' tests to that. No case the GM asked to keep is dropped."
+    },
+    {
+     "id": "D5-counters-for-pool-and-legacy-kinds-rest-to-T221",
+     "summary": "The walk counts, behind a `counters` feature, under the derivation's kind names: pool 332 and legacy 170 (measured 2026-11-19). The rest of the pool's 1,894 (the T219 budget) belongs to T221.",
+     "class": "within",
+     "why": "The derivation's work is split across tasks, and the counts outside this task's kinds are assigned to T221 rather than dropped. This is sequencing, not a narrowing of the request."
+    },
+    {
+     "id": "D6-old-index-python-deletion-moves-to-T222",
+     "summary": "The old index's Python is still imported by render_cache.py, which renders main until T222, so deleting it moves to T222 and T222's line says so.",
+     "class": "within",
+     "why": "FR-003 keeps a piece's Python as the one that runs until its replacement passes, and a module that a live renderer still imports cannot be deleted before that renderer is ported. The deletion FR-001 requires is still owed and is assigned to a named task."
+    },
+    {
+     "id": "D7-guard-heredoc-bypass-filed-as-T227",
+     "summary": "This work found that a guard file rewritten through a shell heredoc does not trip the guard-file edit guard. It is filed as T227 and not fixed in T220.",
+     "class": "within",
+     "why": "It is a defect in the already-ported hook guards, not in the pool walk this task rebuilds, so fixing it here would add unrequested scope to T220. Filing it as its own task is how a found defect gets fixed, not how one gets left. The fix-as-we-go rule still requires T227 to land before the next engine step's port begins."
+    },
+    {
+     "id": "D8-order",
+     "summary": "Order: after T224, before T221 and T222.",
+     "class": "within",
+     "why": "Sequencing only. It decides nothing the request or the spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T220 (T219's SOUND derivation: the pool walk is rebuilt from it, and the index listed 6 of the pool's 30 maps)",
+    "### T220 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The pool walk is rebuilt from T219's derivation in a new gate crate `pool` with the phase guard on: each tree, tier and map folder listed once, each entry classified once, no git index read.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-19 instruction to rebuild from derivations rather than port the Python's mistakes, under the 2026-10-30 rule against re-implementing the old algorithms. It is held to the derivation's budget."
+    },
+    {
+     "id": "D2",
+     "summary": "Every consumer that walked the pool on its own moves onto the one walk in this landing: reviews owed, measure probe, trials, review-gate.sh, mode_a's sweep/census/recorded-map/fixture checks, arbiter sheet edits and the depiction bundle.",
+     "class": "within",
+     "why": "One walk for every consumer is how the rebuilt walk replaces the per-tool re-walks that the efficiency rule targets. It drops no consumer and no case."
+    },
+    {
+     "id": "D3",
+     "summary": "pool/index.html is written by Rust from the walk, grouped by tree and tier, and lists all 30 maps where the old index listed 6 (the six Mode A sheets).",
+     "class": "within",
+     "why": "An index that hides 24 of 30 maps from its reader is a wrong outcome, so it is a defect under constitution XIV and the GM's 2026-11-18 rule to fix as we go. Listing all 30 widens; nothing is narrowed. Both figures carry one-shot labels."
+    },
+    {
+     "id": "D4a",
+     "summary": "A folder with only a .gen.py (no spec, compound or svg) is no longer classified as a sheet.",
+     "class": "within",
+     "why": "The class comes from the derivation, not from the Python. It was measured on 2026-11-19 by testing every folder of both trees, and no real folder falls in it, so the sweep, census and reviews owed reach every map they reached before. A difference from the Python that loses no real map is not a defect and narrows nothing, and a .gen.py-only sheet is Python that FR-001 removes anyway."
+    },
+    {
+     "id": "D4b",
+     "summary": "A live folder with a manifest and no spec or compound is no longer a map.",
+     "class": "within",
+     "why": "The same one-shot measurement on 2026-11-19 tested every folder of both trees for a manifest with no spec or compound and found none, and the walk reports no unclassified real folder. No map any check reached drops out, so this is the derivation's definition, not a narrowing of what is swept."
+    },
+    {
+     "id": "D4c",
+     "summary": "A spec-only hamlet is now counted as a map.",
+     "class": "within",
+     "why": "This widens what the checks reach, under the derivation's definition. No ruling is owed."
+    },
+    {
+     "id": "D5",
+     "summary": "The walk counts under the derivation's kind names behind a `counters` feature. This landing counts pool 332 and legacy 170, and the rest of the derivation's 1,894 pool budget is T221's.",
+     "class": "within",
+     "why": "The derivation's budget is split across tasks, not dropped: the remainder is assigned to T221 by name. The 332 and 170 carry one-shot labels, and 1,894 is cited as T219's derived budget rather than an observation."
+    },
+    {
+     "id": "D6",
+     "summary": "One writer per tree until T222 (FR-003): on main, render-sync's Python alone writes pool/index.html, because render_cache.py imports the old index and renders main; in a clone, the Rust writer alone writes it through sync-in.",
+     "class": "within",
+     "why": "FR-003 is the spec's guard against a piece's two implementations deciding the same output. With one writer per tree, no tree's index has two writers. The Python on main is kept because a not-yet-ported piece (render_cache.py) imports it, which is what FR-003's first clause requires. The main half is observed from render-sync's log (a one-shot label). The clone half (sync-in only) is asserted rather than measured, and the walk's tests and T222 should keep that true. Nothing in the GM's request forbids a staged cut-over."
+    },
+    {
+     "id": "D7",
+     "summary": "Main's pool/index.html keeps listing 6 of 30 maps, through the kept Python, until T222 moves main onto the Rust, and T221 comes before T222.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 rule is per step: fix all known bugs in each step before porting the next step, in every copy that still lives. T220, T221 and T222 are one step, the rebuild of the pool walk from T219's single derivation. The block assigns T221 'the rest of the pool's 1,894' of that same derivation's budget, and T222 moves main onto the Rust writer and deletes the old index. The defect is therefore closed inside the step that found it, before any next step's port begins. T227 is ordered ahead of T221 for a different reason: it is a guard defect that every later landing passes through, not part of this derivation's step. If T221 or T222 were re-scoped out of T219's derivation, this would become a known defect carried into another step, and the kept Python would then have to be fixed first."
+    },
+    {
+     "id": "D8",
+     "summary": "Deleting the old index's Python moves from T220 to T222.",
+     "class": "within",
+     "why": "It is still imported by render_cache.py, which renders main until T222, so deleting it now would break a live consumer that FR-002 says must keep working. FR-001's removal is deferred to a named task, not dropped. The bundle does not carry T222's line, so this was judged on the block's own statement."
+    },
+    {
+     "id": "D9",
+     "summary": "The heredoc guard-file bypass found during T220 is filed as T227, which lands before T221 begins. Order: after T224, then T227, then T221 and T222.",
+     "class": "within",
+     "why": "A guard that passes a guard-file rewrite is a defect, a check passing bad work. Ordering its fix before the next task's work begins satisfies the GM's fix-as-we-go rule. The bundle does not carry T227's line, so this was judged on the block's items 5 and 'Found and left?'."
+    },
+    {
+     "id": "D10",
+     "summary": "Exits and done-measure: the crate and consumer tests (exact counts on a fixture tree, every real folder classified), make quick/static/counters-inert/hooks-test green, and `make pool-index` writing 30 maps.",
+     "class": "within",
+     "why": "These are verification that enforces what the step asks for. They narrow nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T220 (T219's SOUND derivation: the pool walk is rebuilt from it, and the index listed 6 of the pool's 30 maps)",
+    "### T220 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The pool walk is rebuilt from T219's derivation in a new gate crate `pool` with the phase guard on: each tree, tier and map folder listed once, each entry classified once, no git index read.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-19 instruction to rebuild from derivations rather than port the Python's mistakes, under the 2026-10-30 rule against re-implementing the old algorithms. It is held to the derivation's budget."
+    },
+    {
+     "id": "D2",
+     "summary": "Every consumer that walked the pool on its own moves onto the one walk in this landing: reviews owed, measure probe, trials, review-gate.sh, mode_a's sweep/census/recorded-map/fixture checks, arbiter sheet edits and the depiction bundle.",
+     "class": "within",
+     "why": "One walk for every consumer is how the rebuilt walk replaces the per-tool re-walks that the efficiency rule targets. It drops no consumer and no case."
+    },
+    {
+     "id": "D3",
+     "summary": "pool/index.html is written by Rust from the walk, grouped by tree and tier, and lists all 30 maps where the old index listed 6 (the six Mode A sheets).",
+     "class": "within",
+     "why": "An index that hides 24 of 30 maps from its reader is a wrong outcome, so it is a defect under constitution XIV and the GM's 2026-11-18 rule to fix as we go. Listing all 30 widens; nothing is narrowed. Both figures carry one-shot labels."
+    },
+    {
+     "id": "D4a",
+     "summary": "A folder with only a .gen.py (no spec, compound or svg) is no longer classified as a sheet.",
+     "class": "within",
+     "why": "The class comes from the derivation, not from the Python. It was measured on 2026-11-19 by testing every folder of both trees, and no real folder falls in it, so the sweep, census and reviews owed reach every map they reached before. A difference from the Python that loses no real map is not a defect and narrows nothing, and a .gen.py-only sheet is Python that FR-001 removes anyway."
+    },
+    {
+     "id": "D4b",
+     "summary": "A live folder with a manifest and no spec or compound is no longer a map.",
+     "class": "within",
+     "why": "The same one-shot measurement on 2026-11-19 tested every folder of both trees for a manifest with no spec or compound and found none, and the walk reports no unclassified real folder. No map any check reached drops out, so this is the derivation's definition, not a narrowing of what is swept."
+    },
+    {
+     "id": "D4c",
+     "summary": "A spec-only hamlet is now counted as a map.",
+     "class": "within",
+     "why": "This widens what the checks reach, under the derivation's definition. No ruling is owed."
+    },
+    {
+     "id": "D5",
+     "summary": "The walk counts under the derivation's kind names behind a `counters` feature. This landing counts pool 332 and legacy 170, and the rest of the derivation's 1,894 pool budget is T221's.",
+     "class": "within",
+     "why": "The derivation's budget is split across tasks, not dropped: the remainder is assigned to T221 by name. The 332 and 170 carry one-shot labels, and 1,894 is cited as T219's derived budget rather than an observation."
+    },
+    {
+     "id": "D6",
+     "summary": "One writer per tree until T222 (FR-003): on main, render-sync's Python alone writes pool/index.html, because render_cache.py imports the old index and renders main; in a clone, the Rust writer alone writes it through sync-in.",
+     "class": "within",
+     "why": "FR-003 is the spec's guard against a piece's two implementations deciding the same output. With one writer per tree, no tree's index has two writers. The Python on main is kept because a not-yet-ported piece (render_cache.py) imports it, which is what FR-003's first clause requires. The main half is observed from render-sync's log (a one-shot label). The clone half (sync-in only) is asserted rather than measured, and the walk's tests and T222 should keep that true. Nothing in the GM's request forbids a staged cut-over."
+    },
+    {
+     "id": "D7",
+     "summary": "Main's pool/index.html keeps listing 6 of 30 maps, through the kept Python, until T222 moves main onto the Rust, and T221 comes before T222.",
+     "class": "within",
+     "why": "The GM's rule (2026-11-18) is per step: 'fix all known bugs in each step before moving on to porting the next step'. In request.md a 'step' is a unit of the port's plan (steps 1, 2, 3a, 3b), with pieces and phase tasks inside it, so a step is not a single task. T220, T221 and T222 are tasks of one rebuild from T219's single derivation: T221 holds 'the rest of the pool's 1,894' of that derivation's budget, and T222 moves main onto the Rust writer and deletes the old index. The defect is therefore closed inside the step that found it, before any next step's port begins. Ordering T227 before T221 is stricter than a per-step rule needs, and it narrows nothing. If T221 or T222 were later moved out of T219's derivation, the kept Python's index would owe the fix first."
+    },
+    {
+     "id": "D8",
+     "summary": "Deleting the old index's Python moves from T220 to T222.",
+     "class": "within",
+     "why": "It is still imported by render_cache.py, which renders main until T222, so deleting it now would break a live consumer that FR-002 says must keep working. FR-001's removal is deferred to a named task, not dropped. The bundle does not carry T222's line, so this was judged on the block's own statement."
+    },
+    {
+     "id": "D9",
+     "summary": "The heredoc guard-file bypass found during T220 is filed as T227, which lands before T221 begins. Order: after T224, then T227, then T221 and T222.",
+     "class": "within",
+     "why": "A guard that passes a guard-file rewrite is a defect, a check passing bad work. Ordering its fix before the next task's work begins satisfies the GM's fix-as-we-go rule. The bundle does not carry T227's line, so this was judged on the block's items 5 and 'Found and left?'."
+    },
+    {
+     "id": "D10",
+     "summary": "Exits and done-measure: the crate and consumer tests (exact counts on a fixture tree, every real folder classified), make quick/static/counters-inert/hooks-test green, and `make pool-index` writing 30 maps.",
+     "class": "within",
+     "why": "These are verification that enforces what the step asks for. They narrow nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -26072,6 +26306,86 @@
      "summary": "polder waterward counting ~1/20 of its accepted figure, counters possibly missing work, filed as T226; pipeline counters owed by T220",
      "class": "within",
      "why": "Neither is part of T224's subject (the review and the stamp); the waterward counters are a suspected, unconfirmed engine-counter defect, filed rather than carried silently, and the pipeline counters are already T220's. Per the GM's 2026-11-18 rule T226 must be settled before the next step's port begins; the block gives it no position, which does not block this task but is owed by the step's close."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T220": {
+   "section_sha256": "0feba4756e9a9f6836c183ac264e80ba2879296c3582612b1aa98574159c3a09",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The pool walk is rebuilt from T219's derivation in a new gate crate `pool` with the phase guard on: each tree, tier and map folder listed once, each entry classified once, no git index read.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-19 instruction to rebuild from derivations rather than port the Python's mistakes, under the 2026-10-30 rule against re-implementing the old algorithms. It is held to the derivation's budget."
+    },
+    {
+     "id": "D2",
+     "summary": "Every consumer that walked the pool on its own moves onto the one walk in this landing: reviews owed, measure probe, trials, review-gate.sh, mode_a's sweep/census/recorded-map/fixture checks, arbiter sheet edits and the depiction bundle.",
+     "class": "within",
+     "why": "One walk for every consumer is how the rebuilt walk replaces the per-tool re-walks that the efficiency rule targets. It drops no consumer and no case."
+    },
+    {
+     "id": "D3",
+     "summary": "pool/index.html is written by Rust from the walk, grouped by tree and tier, and lists all 30 maps where the old index listed 6 (the six Mode A sheets).",
+     "class": "within",
+     "why": "An index that hides 24 of 30 maps from its reader is a wrong outcome, so it is a defect under constitution XIV and the GM's 2026-11-18 rule to fix as we go. Listing all 30 widens; nothing is narrowed. Both figures carry one-shot labels."
+    },
+    {
+     "id": "D4a",
+     "summary": "A folder with only a .gen.py (no spec, compound or svg) is no longer classified as a sheet.",
+     "class": "within",
+     "why": "The class comes from the derivation, not from the Python. It was measured on 2026-11-19 by testing every folder of both trees, and no real folder falls in it, so the sweep, census and reviews owed reach every map they reached before. A difference from the Python that loses no real map is not a defect and narrows nothing, and a .gen.py-only sheet is Python that FR-001 removes anyway."
+    },
+    {
+     "id": "D4b",
+     "summary": "A live folder with a manifest and no spec or compound is no longer a map.",
+     "class": "within",
+     "why": "The same one-shot measurement on 2026-11-19 tested every folder of both trees for a manifest with no spec or compound and found none, and the walk reports no unclassified real folder. No map any check reached drops out, so this is the derivation's definition, not a narrowing of what is swept."
+    },
+    {
+     "id": "D4c",
+     "summary": "A spec-only hamlet is now counted as a map.",
+     "class": "within",
+     "why": "This widens what the checks reach, under the derivation's definition. No ruling is owed."
+    },
+    {
+     "id": "D5",
+     "summary": "The walk counts under the derivation's kind names behind a `counters` feature. This landing counts pool 332 and legacy 170, and the rest of the derivation's 1,894 pool budget is T221's.",
+     "class": "within",
+     "why": "The derivation's budget is split across tasks, not dropped: the remainder is assigned to T221 by name. The 332 and 170 carry one-shot labels, and 1,894 is cited as T219's derived budget rather than an observation."
+    },
+    {
+     "id": "D6",
+     "summary": "One writer per tree until T222 (FR-003): on main, render-sync's Python alone writes pool/index.html, because render_cache.py imports the old index and renders main; in a clone, the Rust writer alone writes it through sync-in.",
+     "class": "within",
+     "why": "FR-003 is the spec's guard against a piece's two implementations deciding the same output. With one writer per tree, no tree's index has two writers. The Python on main is kept because a not-yet-ported piece (render_cache.py) imports it, which is what FR-003's first clause requires. The main half is observed from render-sync's log (a one-shot label). The clone half (sync-in only) is asserted rather than measured, and the walk's tests and T222 should keep that true. Nothing in the GM's request forbids a staged cut-over."
+    },
+    {
+     "id": "D7",
+     "summary": "Main's pool/index.html keeps listing 6 of 30 maps, through the kept Python, until T222 moves main onto the Rust, and T221 comes before T222.",
+     "class": "within",
+     "why": "The GM's rule (2026-11-18) is per step: 'fix all known bugs in each step before moving on to porting the next step'. In request.md a 'step' is a unit of the port's plan (steps 1, 2, 3a, 3b), with pieces and phase tasks inside it, so a step is not a single task. T220, T221 and T222 are tasks of one rebuild from T219's single derivation: T221 holds 'the rest of the pool's 1,894' of that derivation's budget, and T222 moves main onto the Rust writer and deletes the old index. The defect is therefore closed inside the step that found it, before any next step's port begins. Ordering T227 before T221 is stricter than a per-step rule needs, and it narrows nothing. If T221 or T222 were later moved out of T219's derivation, the kept Python's index would owe the fix first."
+    },
+    {
+     "id": "D8",
+     "summary": "Deleting the old index's Python moves from T220 to T222.",
+     "class": "within",
+     "why": "It is still imported by render_cache.py, which renders main until T222, so deleting it now would break a live consumer that FR-002 says must keep working. FR-001's removal is deferred to a named task, not dropped. The bundle does not carry T222's line, so this was judged on the block's own statement."
+    },
+    {
+     "id": "D9",
+     "summary": "The heredoc guard-file bypass found during T220 is filed as T227, which lands before T221 begins. Order: after T224, then T227, then T221 and T222.",
+     "class": "within",
+     "why": "A guard that passes a guard-file rewrite is a defect, a check passing bad work. Ordering its fix before the next task's work begins satisfies the GM's fix-as-we-go rule. The bundle does not carry T227's line, so this was judged on the block's items 5 and 'Found and left?'."
+    },
+    {
+     "id": "D10",
+     "summary": "Exits and done-measure: the crate and consumer tests (exact counts on a fixture tree, every real folder classified), make quick/static/counters-inert/hooks-test green, and `make pool-index` writing 30 maps.",
+     "class": "within",
+     "why": "These are verification that enforces what the step asks for. They narrow nothing."
     }
    ],
    "verdict": "CLEAR"

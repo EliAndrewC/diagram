@@ -51,7 +51,7 @@ fn world(
     std::fs::write(root.join("dev/work-budget.json"), table.to_string()).unwrap();
     let quote = |t: &str| t.replace('\t', "\\t").replace('\n', "\\n");
     let script = format!(
-        "#!/bin/sh\n[ \"$1 $2 $3\" = \"rust hamlet --crate\" ] && [ \"$HAMLET_FEATURES\" = counters ] || exit 9\necho \"$HAMLET_ARGS\" >> \"$0.calls\"\ncase \"$HAMLET_ARGS\" in\n  '--budget') printf '{}' ;;\n  '--budget polder') printf '{}' ;;\n  *-counts*) [ \"$HAMLET_BIN $HAMLET_DEV\" = 'l7r-mode-a 1' ] || exit 8; {totals} ;;\n  *) exit 7 ;;\nesac\n",
+        "#!/bin/sh\n[ \"$1 $2 $3\" = \"rust hamlet --crate\" ] && [ \"$HAMLET_FEATURES\" = counters ] || exit 9\necho \"$HAMLET_ARGS\" >> \"$0.calls\"\ncase \"$HAMLET_ARGS\" in\n  '--budget') printf '{}' ;;\n  '--budget polder') printf '{}' ;;\n  *-counts*) [ \"$HAMLET_BIN $HAMLET_DEV\" = 'l7r-mode-a 1' ] || exit 8; {totals} ;;\n  'counts pool') [ \"$HAMLET_BIN $HAMLET_DEV ${{4##*/rust/}}\" = 'l7r-pool 1 gate/crates/pool' ] || exit 6; echo '{{\"total\": 30}}' ;;\n  'counts legacy-hand-authored-pool') echo '{{\"total\": 12}}' ;;\n  *) exit 7 ;;\nesac\n",
         quote(comb),
         quote(polder)
     );
@@ -91,7 +91,7 @@ fn table() -> Value {
         "sheet_stages": {
             "placer": {"status": "budgeted", "sheets": {"hand": {"budget": 100.0}, "made": {"budget": 50.0}}},
             "compound": {"status": "budgeted", "sheets": {"made": {"budget": 40.0}}},
-            "pipeline": {"status": "budgeted", "sheets": {"pool": {"budget": 10.0}, "legacy": {"budget": 5.0}}}
+            "pipeline": {"status": "budgeted", "sheets": {"pool": {"budget": 20.0}, "legacy-hand-authored-pool": {"budget": 12.0}}}
         }
     })
 }
@@ -156,11 +156,14 @@ fn every_held_stage_within_passes_printing_its_counts_and_what_it_could_not_coun
     assert!(out.contains("  waterward: not counted - the reference roll is a comb with a pond"));
     assert!(out.contains("  placer: hand 90 (0.90x its budget 100); made 40 (0.80x its budget 50)"));
     assert!(out.contains("  compound: made 30 (0.75x its budget 40)"));
-    assert!(out.contains("  UNCOUNTED pipeline: budgeted per sheet (2), but nothing counts it"));
+    // T220, red first: the pipeline was printed `UNCOUNTED pipeline: budgeted per sheet (2), but nothing counts it` until the pool walk
+    // was built; now each tree is counted by `l7r-pool counts <tree>`, the part it counts named
+    assert!(out.contains("  pipeline: pool 30 (1.50x its budget 20); legacy-hand-authored-pool 12 (1.00x its budget 12) - counted: the walk's and the index's kinds alone (T220)"));
+    assert!(!out.contains("UNCOUNTED"));
     assert!(!out.contains("seat"), "a stage only budgeted is not held");
     // the counts are kept: the same code is not counted again, and a move of what a run reads re-counts that run alone
     let before = calls(&root);
-    assert_eq!(before.lines().count(), 5, "{before}");
+    assert_eq!(before.lines().count(), 7, "{before}");
     let again = route(&root, "GATED");
     assert!(again.stdout.contains("(the hamlet stages kept (their code unmoved), the pool-sheet stages kept (their code and sheets unmoved))"));
     assert_eq!(calls(&root), before);
@@ -169,7 +172,7 @@ fn every_held_stage_within_passes_printing_its_counts_and_what_it_could_not_coun
     assert!(moved
         .stdout
         .contains("the hamlet stages re-counted, the pool-sheet stages kept"));
-    assert_eq!(calls(&root).lines().count(), 7);
+    assert_eq!(calls(&root).lines().count(), 9);
     // a sheet added to the table is counted, not read from the counts kept before it
     let mut t = table();
     t["sheet_stages"]["compound"]["sheets"]["hand"] = json!({"budget": 1000.0});
@@ -322,4 +325,36 @@ fn a_size_where_a_seed_did_not_roll_says_how_many_rolled() {
 fn a_ratio_to_no_budget_is_a_dash() {
     assert_eq!(super::ratio(5, 0.0), "-");
     assert_eq!(super::ratio(5, 4.0), "1.25x");
+}
+
+/// The pipeline (feature 449 T220): held to twice its budget on each tree; a sheet the table names that is no pool tree is refused with
+/// the trees named; and its count, which moves with the folders' entries, is counted again when a render appears, though no tracked
+/// file moved.
+#[test]
+fn the_pipeline_is_held_per_tree_and_recounted_when_a_folder_gains_a_render() {
+    let mut t = table();
+    t["sheet_stages"]["pipeline"]["sheets"] =
+        json!({"pool": {"budget": 10.0}, "pool-typo": {"budget": 5.0}});
+    // a stage budgeted per sheet that no counter reaches is printed UNCOUNTED, never passed in silence
+    t["sheet_stages"]["render"] =
+        json!({"status": "budgeted", "sheets": {"pool": {"budget": 1.0}}});
+    let root = world("wbr-pipeline", &t, &comb(110), &polder(), &totals(1, 1, 1));
+    let got = route(&root, "GATED");
+    assert_eq!(got.code, 1);
+    assert!(got
+        .stderr
+        .contains("pipeline on pool: 30 counted operations, past twice its budget (20)"));
+    assert!(got.stderr.contains("pipeline on pool-typo: no count - no pool tree is named pool-typo (the trees are pool and legacy-hand-authored-pool;"));
+    assert!(got
+        .stderr
+        .contains("  UNCOUNTED render: budgeted per sheet (1), but nothing counts it"));
+    let counted = |root: &Path| calls(root).lines().filter(|l| *l == "counts pool").count();
+    assert_eq!(counted(&root), 1);
+    let _ = route(&root, "GATED");
+    // kept while nothing moved
+    assert_eq!(counted(&root), 1);
+    std::fs::write(root.join("pool/magistracies/hand/hand.png"), "png").unwrap();
+    let _ = route(&root, "GATED");
+    // a render the tree's key does not see re-counts it
+    assert_eq!(counted(&root), 2);
 }

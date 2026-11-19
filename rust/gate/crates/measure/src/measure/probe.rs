@@ -335,21 +335,13 @@ impl Probe<'_> {
         Ok((landing, fresh))
     }
 
-    /// Each live hamlet regenerated in `wt`, its manifest's changed fields against HEAD's committed one.
+    /// Each live hamlet with a generator, regenerated in `wt`, its manifest's changed fields against HEAD's committed one: the hamlets
+    /// from the one pool walk (feature 449 T220), each folder's generator asked of its listing.
     fn pool_changes(&self, wt: &Path) -> Vec<String> {
-        let mut gens: Vec<PathBuf> = std::fs::read_dir(wt.join("pool/hamlets"))
-            .into_iter()
-            .flatten()
-            .flatten()
-            .flat_map(|d| {
-                std::fs::read_dir(d.path())
-                    .into_iter()
-                    .flatten()
-                    .flatten()
-                    .map(|e| e.path())
-                    .collect::<Vec<_>>()
-            })
-            .filter(|p| p.to_string_lossy().ends_with(".gen.py"))
+        let mut gens: Vec<PathBuf> = l7r_gate_pool::walk(wt)
+            .in_tree(l7r_gate_pool::LIVE)
+            .filter(|m| m.kind == l7r_gate_pool::Kind::Hamlet && m.has(".gen.py"))
+            .map(|m| m.file(".gen.py"))
             .collect();
         gens.sort();
         gens.iter()

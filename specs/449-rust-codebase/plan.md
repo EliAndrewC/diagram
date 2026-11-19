@@ -851,31 +851,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** no - a derivation; the rebuild that follows is.
 
 
-### T220 (<why: the finding or measurement that files it>)
+### T220 (T219's SOUND derivation: the pool walk is rebuilt from it, and the index listed 6 of the pool's 30 maps)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the walk rebuilt from `derivations/T219-pipeline.md` with the phase guard on, in a new gate crate `pool` that depends on nothing of the gate or mode_a: each tree, tier and map folder listed once and each entry classified once - a `.spec.json` hamlet, a `.compound.json` sheet, an `.svg` in a tier `types.json` declares (a hand sheet), a legacy `.json` exhibit, anything else reported - with each folder's names kept so no consumer lists it again; no git index read, as the derivation priced. Every consumer that walked the pool on its own moved onto it in this landing (reviews owed, prereq and snapshot; measure probe and the work-budget review; trials model_trial; `review-gate.sh` through `l7r-gate pool find`; mode_a's pool sweep, census check, recorded-map check and fixture check; arbiter's sheet edits; the depiction bundle's pool page). `pool/index.html` is written by Rust from the walk, grouped by tree and tier, and lists all 30 maps (measured 2026-11-19 (`make pool-index`)) where the old listed 6 (observed 2026-11-19, method: the links of the old `pool/index.html`, the six Mode A sheets). The walk counts under the derivation's kind names behind a `counters` feature: pool 332, legacy 170 (measured 2026-11-19 (`make work-budget-review ROUTE=GATED`)), the derivation's own figures for these kinds; the rest of the pool's 1,894 is T221's. The old index's Python is still imported by `render_cache.py`, which renders main until T222, so its deletion moves to T222 (T222's line says so). One writer a tree until then (FR-003): on main render-sync's Python alone writes `pool/index.html` (observed 2026-11-19, method: its log's `index refreshed (pool/index.html)` on each run; nothing on main runs the Rust writer), in a clone the Rust writer alone, through sync-in; T222 moves main onto the Rust.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the walk and the index, every consumer on it | the pool crate's tests (exact counts on a fixture tree, every real folder classified), the consumers' tests | the `pool` crate, each consumer's walk | none | none |
 
 ### T220 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** Every tool sees the same maps in the pool, found by one walk that costs what its derivation says, and the index lists them all.
+2. **The constraints.** The GM's 2026-10-30 and 2026-11-19 words; the derivation's contract and budget; the phase guard.
+3. **Where each comes from.** G: request.md; O: T157's scoping; the derivation.
+4. **Do they describe the world here?** Yes: the walk's counts equal the derivation's for its kinds (measured 2026-11-19, as above), and every real folder classifies with none reported.
+5. **The order.** After T224; then T227; then T221 and T222.
+6. **The exits.** Green: the tests, `make quick`, `make static`, `make counters-inert`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none: each folder listed once, each entry classified once.
+8. **The budget.** Pool 1,894, legacy 170 (T219); this landing counts 332 and 170.
+9. **Done, measured.** `make pool-index` writes 30 maps; the review's pipeline line counted.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** The index listed 6 of 30 maps: a defect. What counts as a map changes with the derivation: a folder with only a `.gen.py` is no longer a sheet, a live folder with a manifest and no spec no longer a map, a spec-only hamlet now one; no real folder falls in either dropped class (observed 2026-11-19, method: every folder of both trees tested for a `.gen.py` with no spec, compound or svg, and for a manifest with no spec or compound: none), and the walk classifies every real folder with none reported, so the sweep, the census and reviews owed reach every map they reached.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** A guard file rewritten through a shell heredoc did not trip the guard-file edit guard: filed as T227 (2026-11-19), which lands before T221 begins (T227's line says so), so no known guard defect carries into the next phase. The old index's deletion moved to T222.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a rebuild from a derivation, held to its budget.
 
 
 ### T221 (<why: the finding or measurement that files it>)
@@ -970,6 +971,33 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 |---|---|---|---|---|
 
 ### T226 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T227 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T227 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

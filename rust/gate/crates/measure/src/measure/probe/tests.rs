@@ -89,6 +89,7 @@ fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     git(&root, &["config", "user.name", "t"]);
     std::fs::create_dir_all(root.join("pool/hamlets/a")).unwrap();
     std::fs::write(root.join("pool/hamlets/a/a.gen.py"), "x\n").unwrap();
+    std::fs::write(root.join("pool/hamlets/a/a.spec.json"), "{}\n").unwrap();
     std::fs::write(root.join("pool/hamlets/a/a.json"), "{\"lanes\": 1}\n").unwrap();
     std::fs::write(root.join("pool/hamlets/a/notes.txt"), "x\n").unwrap();
     git(&root, &["add", "-A"]);

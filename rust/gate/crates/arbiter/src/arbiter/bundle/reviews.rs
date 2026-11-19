@@ -311,13 +311,11 @@ fn sheet_edits(root: &Path, out: &Path, rec: &Path, name: &str) -> Result<(), Fa
         .ok()
         .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
         .map_or(0, |d| d.as_secs() as i64);
-    let sheet: Vec<String> = std::fs::read_dir(root.join("pool"))
-        .into_iter()
-        .flatten()
-        .flatten()
-        .map(|t| t.path().join(name))
-        .filter(|p| p.is_dir())
-        .map(|p| relative(&p, root))
+    // the sheet's folders, from the one pool walk (feature 449 T220)
+    let sheet: Vec<String> = l7r_gate_pool::walk(root)
+        .in_tree(l7r_gate_pool::LIVE)
+        .filter(|m| m.name == name)
+        .map(l7r_gate_pool::Map::rel)
         .collect();
     let edits = if sheet.is_empty() {
         String::new()

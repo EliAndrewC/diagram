@@ -30,7 +30,8 @@ mkrepo() {
   # asks `l7r-gate reviews owed` (449 T89), which needs an origin/main to diff against; both are fixture state, like the map itself
   printf 'engine-key:\n\t@printf k\n' > Makefile
   # GUARD_EDIT_OK: feature 294 - the map carries its ink census, the record the occasions are read from
-  [ "${2:-}" = withmap ] && { echo '{"v":1,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
+  # GUARD_EDIT_OK: feature 449 T220 - the spec makes the folder a hamlet to the one pool walk; a manifest alone is no map in the live pool
+  [ "${2:-}" = withmap ] && { echo '{}' > "$POOL/m.spec.json"; echo '{"v":1,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
   # GUARD_EDIT_OK: feature 444 FR-023 - the cases below are the integrated port's; case_4 throws the switch to rust-only
   mkdir -p dev; echo '{"port": {"state": "integrated"}}' > dev/switches.json
   git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work

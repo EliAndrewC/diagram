@@ -6644,18 +6644,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/audit/mapmatch.rs::MAP_TREES#the map match": {
-  "body": "0bfa3213942ac0d3",
-  "claim": "the map match - NONE: a sheet laid on its declared map within the grains whose claims stand on them, deciding nothing more",
-  "code": "cc624526de7dba1c",
-  "core": "e159bd98c0b4c8fb",
-  "date": "2026-11-17",
-  "note": "directories searched",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "rust/mode_a/src/audit/mapmatch.rs::SHEET_IDS#the map match": {
   "body": "ceb672a5f49b5ed6",
   "claim": "the map match - NONE: a sheet laid on its declared map within the grains whose claims stand on them, deciding nothing more",
@@ -6842,14 +6830,13 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/mapmatch.rs::maps_recording#the map match": {
-  "body": "7949f544a9460378",
+  "body": "9f3effcbb354ea95",
   "claim": "the map match - NONE: a sheet laid on its declared map within the grains whose claims stand on them, deciding nothing more",
-  "code": "4d65bfc98702fc70",
-  "core": "9eb6a7c693df251d",
-  "date": "2026-11-17",
-  "note": "file search",
+  "code": "ab67bf0e33bade4e",
+  "core": "fb576d2fe38c2ec8",
+  "date": "2026-11-19",
+  "note": "plumbing that finds which map JSONs record a non-empty value under the tier's keys; the map is read once and not at all when there are no keys; decides nothing physical",
   "pages": {},
-  "reads": "7f47a86626d9da64",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -14646,14 +14633,15 @@
  "rust/mode_a/src/census/pool_check.rs::notes_with_blocks#the sheets' typed counts check": {
   "body": "3da03f6e6c2a3f57",
   "claim": "the sheets' typed counts check - NONE: a check over the pool's sheets and their notes, deciding nothing about a building",
-  "code": "23afff7357a18216",
-  "core": "12f9d78f7d5a9775",
+  "code": "c8036cf23cce4683",
+  "core": "5ae90b5d8bb26605",
   "date": "2026-11-18",
   "note": "file walking",
   "pages": {},
   "reads": "3e1f3f5055d8898a",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/census/prose.rs::BLOCKS#the typed counts": {
@@ -26063,14 +26051,15 @@
  "rust/mode_a/src/parse/check_fixtures.rs::every_sheet_is_reported_and_every_check_runs_on_it#the checks' fixture sheets": {
   "body": "dd3396e79bd2a968",
   "claim": "the checks' fixture sheets - NONE: test sheets, deciding nothing about a building",
-  "code": "c6fd3557420627fc",
-  "core": "ca0b97d087c6f017",
+  "code": "66cfc7403eabcd77",
+  "core": "24a569013406d393",
   "date": "2026-11-19",
   "note": "sweep assertions; its minimum counts are test thresholds, not facts about a place",
   "pages": {},
   "reads": "0fa51f991676c2cd",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/check_fixtures.rs::fixtures#the checks' fixture sheets": {
@@ -27653,14 +27642,15 @@
  "rust/mode_a/src/pool_sweep.rs::pool#the Mode A pool sweep": {
   "body": "727dbd6943ce395e",
   "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
-  "code": "772c4d2578c4e466",
-  "core": "56d618195a125a51",
+  "code": "0ca7119d5f7c8be9",
+  "core": "ca414fad543b803c",
   "date": "2026-11-19",
   "note": "lists and loads the sheets (I/O), composing the declared generated ones",
   "pages": {},
   "reads": "10bf7225477586b9",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/pool_sweep.rs::red_fixtures#the Mode A pool sweep": {
@@ -27727,13 +27717,14 @@
  "rust/mode_a/src/pool_sweep.rs::the_sweep_covers_every_declared_tier_that_has_a_folder#the Mode A pool sweep": {
   "body": "2e31b0e263066ccc",
   "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
-  "code": "1ba5b3450ae1fa78",
-  "core": "182c51ad5bd7f737",
+  "code": "34eb4ad7c868ee12",
+  "core": "b4e4a1bb1bf7cb81",
   "date": "2026-11-19",
   "note": "tier coverage test",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/pool_sweep.rs::tree#the Mode A pool sweep": {

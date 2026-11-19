@@ -30,27 +30,15 @@ const FIX: &str = "the notes type counts the sheet does not draw - correct them,
 
 /// Every notes file in the pool and the frozen exhibits that carries a census block.
 fn notes_with_blocks(root: &Path) -> Vec<PathBuf> {
-    let mut out = Vec::new();
-    for tree in ["pool", "legacy-hand-authored-pool"] {
-        for tier in std::fs::read_dir(root.join(tree))
-            .into_iter()
-            .flatten()
-            .flatten()
-        {
-            for map in std::fs::read_dir(tier.path())
-                .into_iter()
-                .flatten()
-                .flatten()
-            {
-                let name = map.file_name().to_string_lossy().into_owned();
-                let notes = map.path().join(format!("{name}.notes.md"));
-                if l7r_gate_core::record::read_text(&notes).is_ok_and(|t| t.contains(super::BEGIN))
-                {
-                    out.push(notes);
-                }
-            }
-        }
-    }
+    // every map folder of both trees, from the one pool walk (feature 449 T220)
+    let mut out: Vec<PathBuf> = l7r_gate_pool::walk(root)
+        .maps
+        .iter()
+        .map(|m| m.file(".notes.md"))
+        .filter(|notes| {
+            l7r_gate_core::record::read_text(notes).is_ok_and(|t| t.contains(super::BEGIN))
+        })
+        .collect();
     out.sort();
     out
 }
