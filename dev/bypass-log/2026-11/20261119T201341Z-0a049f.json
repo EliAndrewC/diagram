@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-19T20:13:41Z",
+  "target": "plan-gate push",
+  "commit": "9a01e6587",
+  "why": "T223 reviewed CLEAR by spec-fidelity on 2026-11-19 (round 2); later templates are unworked"
+}
