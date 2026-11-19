@@ -185,7 +185,7 @@ fn refused(command: &str) -> Option<String> {
     if RETIRED_HARNESS.is_match(command).unwrap_or(false) {
         return Some(not_measured(
             command,
-            "runs a retired spec harness (`make spec-harness`, feature 449 T210) - a frozen figure, not run",
+            "runs a retired spec harness (feature 449 T210) - a frozen figure, not run",
         ));
     }
     DELETED_ENGINE.is_match(command).unwrap_or(false).then(|| {

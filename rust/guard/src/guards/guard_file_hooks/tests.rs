@@ -60,7 +60,10 @@ fn a_guard_is_refused_with_no_marker_and_passes_with_a_reason() {
     ));
     assert!(refused(&edit(&p(&d, "tests/rolls.py"), "x"), "GUARD"));
     assert!(refused(&edit(&p(&d, "dev/switches.json"), "x"), "GUARD"));
-    assert!(refused(&edit(&p(&d, "dev/work-budget.json"), "x"), "GUARD"));
+    // the work budgets take no permit (`make guard-edit` refuses the file): the refusal names their writer (feature 449 T225)
+    let budget = edit(&p(&d, "dev/work-budget.json"), "x");
+    assert!(refused(&budget, "make budget-change PHASE="));
+    assert!(!matches!(&budget[..], [Answer::Refuse(t)] if t.contains("make guard-edit FILE=")));
     assert!(edit(&hook, "GUARD_EDIT_OK: it fired on correct work").is_empty());
     assert!(refused(&edit(&hook, "GUARD_EDIT_OK"), "with no reason"));
     assert!(edit(&p(&d, "tests/hooks/test-a-hooks.sh"), "x").is_empty());
@@ -134,7 +137,7 @@ fn a_read_of_a_guard_is_told_for_free() {
         matches!(&read(&p(&d, "Makefile"))[..], [Answer::Notice(t)] if t.contains("root Makefile"))
     );
     assert!(
-        matches!(&read(&p(&d, "tests/rolls.py"))[..], [Answer::Notice(t)] if t.contains("make roll-audit"))
+        matches!(&read(&p(&d, "tests/rolls.py"))[..], [Answer::Notice(t)] if t.contains("constitution VI") && !t.contains("roll-audit"))
     );
     assert!(
         matches!(&read(&p(&d, "scripts/a-hooks.sh"))[..], [Answer::Notice(t)] if t.contains("This is a GUARD file"))

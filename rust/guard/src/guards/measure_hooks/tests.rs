@@ -48,17 +48,18 @@ fn record(d: &Path, name: &str, target: &str, start: &str, seconds: &Value, resu
 fn the_second_expensive_measurement_is_refused_once() {
     let (root, s) = tree("streak");
     assert!(
-        matches!(&run(&bash("make test-full", &root), &s)[..], [Answer::Notice(n)] if n.contains("median of 70 s"))
+        matches!(&run(&bash("make done FULL=1", &root), &s)[..], [Answer::Notice(n)] if n.contains("median of 70 s"))
     );
     assert!(
         matches!(&run(&bash("make done FULL=1", &root), &s)[..], [Answer::Refuse(r)] if r.contains("second EXPENSIVE"))
     );
+    // the refusal reset the count, so the next run is a first again
     assert!(matches!(
-        &run(&bash("make -C x test-full", &root), &s)[..],
+        &run(&bash("make done FULL=1", &root), &s)[..],
         [Answer::Notice(_)]
     ));
     let wide = Seams { budget: 3, ..s };
-    assert!(run(&bash("make test-full", &root), &wide).is_empty());
+    assert!(run(&bash("make done FULL=1", &root), &wide).is_empty());
 }
 
 #[test]
@@ -69,7 +70,7 @@ fn the_reminder_carries_no_median_when_the_tool_answers_none() {
         "#!/bin/sh\nexit 1\n",
     );
     assert!(
-        matches!(&run(&bash("make test-full", &root), &s)[..], [Answer::Notice(n)] if !n.contains("median"))
+        matches!(&run(&bash("make done FULL=1", &root), &s)[..], [Answer::Notice(n)] if !n.contains("median"))
     );
 }
 
@@ -109,12 +110,12 @@ fn measure_ok_stands_aside_with_a_reason_and_refuses_without() {
     let (root, s) = tree("escape");
     std::fs::write(&s.streak, "1").unwrap();
     assert!(run(
-        &bash("make test-full  # MEASURE_OK: the record needs it", &root),
+        &bash("make done FULL=1  # MEASURE_OK: the record needs it", &root),
         &s
     )
     .is_empty());
     assert!(
-        matches!(&run(&bash("make test-full  # MEASURE_OK", &root), &s)[..], [Answer::Refuse(r)] if r.contains("MEASURE_OK with no reason"))
+        matches!(&run(&bash("make done FULL=1  # MEASURE_OK", &root), &s)[..], [Answer::Refuse(r)] if r.contains("MEASURE_OK with no reason"))
     );
 }
 
@@ -152,7 +153,7 @@ fn a_red_gate_an_old_one_and_no_record_let_the_gate_run() {
     record(
         &root,
         "r.json",
-        "test-full",
+        "done",
         "1970-01-12T13:00:00Z",
         &json!("60"),
         "red",
@@ -185,17 +186,12 @@ fn a_red_gate_an_old_one_and_no_record_let_the_gate_run() {
 }
 
 #[test]
-fn perf_outside_a_timing_pair_is_reminded() {
+fn a_command_with_no_rule_is_not_a_measurement() {
+    // `make perf` and `make test-full` left the Makefile (feature 449 T213, T223): the guard neither reminds nor counts them (T225)
     let (root, s) = tree("perf");
-    assert!(
-        matches!(&run(&bash("make perf", &root), &s)[..], [Answer::Notice(n)] if n.contains("timing pair"))
-    );
-    assert!(matches!(
-        &run(&bash("make perf SEED=4", &root), &s)[..],
-        [Answer::Notice(_)]
-    ));
-    assert!(run(&bash("make perf LABEL=449-start", &root), &s).is_empty());
-    assert!(run(&bash("make perf LABEL=449-end", &root), &s).is_empty());
+    assert!(run(&bash("make perf", &root), &s).is_empty());
+    assert!(run(&bash("make test-full", &root), &s).is_empty());
+    assert!(run(&bash("make test-full", &root), &s).is_empty());
     assert!(run(&bash("ls", &root), &s).is_empty());
     assert!(run(&bash("", &root), &s).is_empty());
     let no_cwd = Event {

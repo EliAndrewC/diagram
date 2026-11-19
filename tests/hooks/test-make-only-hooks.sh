@@ -364,6 +364,44 @@ rules=$(awk '!/^[\t#.]/ && /^[^=]*[^:=]:([^=]|$)/ { s = $0; sub(/[ \t]*##.*/, ""
 ruleless=$(comm -23 <(printf '%s\n' $phony) <(printf '%s\n' $rules) | tr '\n' ' ')
 [ -n "$phony" ] && [ -z "$ruleless" ] && { echo "  ok      every .PHONY name has a rule ($(printf '%s\n' $phony | wc -l | tr -d ' ') names)"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    a .PHONY name has no rule, so make answers 'Nothing to be done' with exit 0 and its caller passes having run nothing - give it the rule that does its job now, or remove the name from .PHONY with every call to it: ${ruleless:-no .PHONY list found}"; FAIL=$((FAIL+1)); }
+# Every `make <name>` a guard or gate message tells the reader to run, and every one in an agent's instructions, names a rule (feature
+# 449 T225). T223 removed the Python engine's targets, and their names lived on in tips: `make maps` in the pair guard, `make perf` in
+# the measure guard's reminder, `make perf-fanout` in the work-budget bundle's refusal, `make rust-gate` in the cohort's note - each a
+# message sending a session to a command that answers "No rule to make target". Read from the text, as the checks above: the Rust
+# sources of rust/guard and rust/gate (a `tests.rs`, a `tests/` directory, a `#[cfg(test)]` tail and a `//` comment are not messages)
+# and .claude/agents/*.md (a line that says the command is retired or gone, and a DORMANT agent whose banner says so of every
+# command it names, are records). A glob (`make claims-*`) and English (`make sure`) are not names.
+dead_make_names() {   # dead_make_names ROOT: "file:line: make NAME" for each name ROOT's Makefile has no rule for
+  local r=$1 rl
+  rl=$(awk '!/^[\t#.]/ && /^[^=]*[^:=]:([^=]|$)/ { s = $0; sub(/[ \t]*##.*/, "", s); i = index(s, ":")
+    if (substr(s, i + 1) ~ /=/) next; n = split(substr(s, 1, i - 1), w, /[ \t]+/); for (j = 1; j <= n; j++) if (w[j] != "") print w[j] }' "$r/Makefile" | sort -u)
+  {
+    ( cd "$r" && find rust/guard/src rust/gate/crates -name '*.rs' ! -name tests.rs ! -path '*/tests/*' ! -path '*/target/*' | sort ) | while read -r f; do
+      awk -v F="$f" '/^[ \t]*#\[cfg\(test\)\]/ { exit } /^[ \t]*\/\// { next } { print F ":" NR ": " $0 }' "$r/$f"
+    done
+    ( cd "$r" && ls .claude/agents/*.md ) | while read -r f; do
+      head -3 "$r/$f" | grep -qE '^description: DORMANT' && continue
+      grep -nEiv '(left with|retired|gone|deleted|dormant|removed|went with|no longer|has no rule|does not exist)' "$r/$f" | sed "s|^|$f:|"
+    done
+  } | grep -oE "^[^:]+:[0-9]+:|([\`\"']|run:? |then |try )make( +(-[A-Za-z-]+|[A-Z_]+=[^ ]*))* +[a-z][a-z0-9-]*([^a-z0-9*<-]|$)" \
+    | awk '/^[^ ]+:[0-9]+:$/ { loc = $0; next } { n = split($0, w, " "); t = w[n]; sub(/[^a-z0-9-]+$/, "", t); print loc " make " t }' \
+    | grep -vE ' make (the|other|target|sure|it|this|that|them|each|one|any|no|up)$' \
+    | while read -r loc m t; do grep -qxF -- "$t" <<<"$rl" || echo "$loc make $t"; done
+}
+dead=$(dead_make_names "$HERE/../..")
+[ -z "$dead" ] && { echo "  ok      every make NAME a guard or gate message or an agent file tells the reader to run has a rule"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    a message names a make target with no rule - re-point it at the command that does the job now, or remove the instruction (a line saying it was retired is a record, and passes):"; printf '          %s\n' "$dead"; FAIL=$((FAIL+1)); }
+# ...and it fires: a scratch tree whose Makefile has one rule and whose sources name a dead target in a message, a doc comment, a test
+# module and an agent line (only the message and the agent line count), beside a live one and a retired one
+S="$GUARD_LOG_ROOT/dead-names"; mkdir -p "$S/rust/guard/src" "$S/rust/gate/crates/x/src" "$S/.claude/agents"
+printf 'live: ## a rule\n\t@true\n' > "$S/Makefile"
+printf '%s\n' 'const A: &str = "run `make dead-one` now";' '/// a doc comment naming `make dead-two`' 'const B: &str = "use `make live`";' \
+  '#[cfg(test)]' 'const T: &str = "`make dead-three`";' > "$S/rust/guard/src/a.rs"
+printf '%s\n' 'const C: &str = "make sure and `make claims-*`";' > "$S/rust/gate/crates/x/src/b.rs"
+printf '%s\n' 'Run `make dead-four` first.' '`make dead-five` left with the Python engine.' > "$S/.claude/agents/a.md"
+got=$(dead_make_names "$S" | sed 's/^[^ ]* //' | tr '\n' ' ')
+[ "$got" = "make dead-one make dead-four " ] && { echo "  ok      the check fires on a message and an agent line, and passes a comment, a test tail, a retired line, a glob and English"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the dead-name check answered '$got' on its scratch tree (want: make dead-one make dead-four)"; FAIL=$((FAIL+1)); }
 # `make map` with no GEN is refused, naming the forms it takes, before anything runs:
 out=$( cd "$FX" && make --no-print-directory map 2>&1 ); rc=$?
 [ "$rc" = 2 ] && [[ $out == *"GEN=pool/<tier>/<map>/<map>.gen.py"* ]] && [[ $out == *"make hamlet SPEC="* ]] \

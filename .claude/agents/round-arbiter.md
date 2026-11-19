@@ -78,10 +78,10 @@ previously coming to me"*), so two more kinds of trigger reach you:
   timings refuse nothing (the GM, 2026-10-26: "completely stop using timings as a gate on anything"); the counts are what is
   watched, and the GM expects you to "be able to handle [this] without me". `accept` when the increase is the cost of a rule the
   feature adds and is commensurate with it, or when an uncomparable pair's change is the versions' alone; `continue` means
-  optimize first (`make perf-fanout` names the chains that grew); send it to the GM, by saying so in `what`, when you judge the
+  optimize first (`make work-budget` names the stages whose counted work grew); send it to the GM, by saying so in `what`, when you judge the
   increase too large for what it buys - a stage's calls doubled, or a total up by a quarter, is the scale that asks. Your accept is
   bound to that `-end` commit: a new `-end` needs a new ruling.
-- a BAND-3 PERFORMANCE INCREASE (`ask:perf-band3-<environment>-<binding>`, from `make perf-arbiter`), asked only in an
+- a BAND-3 PERFORMANCE INCREASE (`ask:perf-band3-<environment>-<binding>`, from the Python engine's `perf-arbiter`, which left with it: no such ask arrives now, and this entry is kept for an old one), asked only in an
   investigation since feature 375 amendment 5 made the bands a flag, and feature 427 their timings information only: read `perf-report.txt` beside the MANIFEST and the band-2 audit in `dev/perf-log/`.
   `accept` lets the increase land - only when it is NECESSARY, COMMENSURATE with what it buys, and has NO GOOD WAY AROUND IT
   (the band-2 standard, held to its strictest); `continue` means keep optimizing; `process-fault` means the measurement or the

@@ -46,13 +46,6 @@ impl Land {
     pub(super) fn long_runs(&self) -> Result<i32, String> {
         let gate = self.gate();
         let stamp = [gate.as_str(), "stamp", "--check", "origin/main"];
-        // THE RUST STAGE GATE'S RECORD FIRST (feature 444 T21's landing): the landing cohort's own check asks for it, so made after the
-        // cohort it refused a cohort that had passed 54 of 54 - it rolls in seconds and nothing the gate does moves the engine it keys
-        let why = self.rust_gate_run()?;
-        if !why.is_empty() {
-            self.warn(&why);
-            return Ok(1);
-        }
         let (rc, out) = self.run(&stamp, &[])?;
         let names = self.delta_names()?;
         let machinery = gate_machinery(&names);
@@ -259,33 +252,6 @@ impl Land {
             self.run(&["git", "commit", "-q", "-m", &message], &[])?;
         }
         Ok(())
-    }
-
-    /// THE RUST STAGE GATE'S RECORD, MADE HERE (feature 444 amendment 5, D6): the push refuses an engine landing with no `make rust-gate`
-    /// record on its engine with no failing seed (`l7r-gate cohort rust-owed`); where it is owed, land rolls it and commits
-    /// `dev/rust-gate/`. A failing seed stops the landing: no Rust stage may end with a failing check (FR-019).
-    fn rust_gate_run(&self) -> Result<String, String> {
-        if !self.engine_delta()? || self.run(&[&self.gate(), "cohort", "rust-owed"], &[])?.0 != 0 {
-            return Ok(String::new());
-        }
-        self.say("land: no Rust stage gate record on this engine - make rust-gate");
-        let failed = self.make("rust-gate")?;
-        self.run(&["git", "add", "--", "dev/rust-gate"], &[])?;
-        self.run(
-            &[
-                "git",
-                "commit",
-                "-q",
-                "-m",
-                "the Rust stage gate's record at the landing's engine (make land)",
-            ],
-            &[],
-        )?;
-        Ok(if failed == 0 {
-            String::new()
-        } else {
-            "land: the Rust stage gate has a failing seed - nothing landed (above); no Rust stage may end with a failing check".to_owned()
-        })
     }
 
     /// THE WORK-BUDGET REVIEW THE PUSH WILL RUN, ASKED HERE FIRST (feature 444 T20, D1): on an engine delta the push's `make

@@ -38,8 +38,8 @@
 
 **Single-artifact target** (REQUIRED for any generator change, constitution VI): [the ONE named
 artifact this is proven on before any sweep - e.g. `pool/hamlets/inashiro.gen.py`. State its
-rebuild time. `make maps` enforces the order itself: after a failure it runs the reference map alone
-and stops at the first problem, and only widens to the tier once that map is clean. If the feature adds a knob, name one artifact per knob
+rebuild time. Iterate on it alone (`make map GEN=<path>`) and widen to the pool only once it is clean (`make cohort` for a hamlet cohort,
+`make rust-test CRATE=rust/mode_a` for the pool sheets). If the feature adds a knob, name one artifact per knob
 VALUE.]
 
 **Every step is two steps.** Each phase below must separate "working on the reference settlement"
@@ -55,15 +55,13 @@ answer is kept on purpose. So may any port or change (constitution XIII, the GM 
 everything works - its tests pass, it does its job for its callers, its research claims hold; a drawn output must pass its checks,
 and a ported check must still do its job (its red fixtures still fail, the sheets it passed still pass), never matching bytes.
 
-| | label | total | median | worst | notes |
-|---|---|---|---|---|---|
-| before | `<NNN>-start` | | | | taken on UNMODIFIED code, before the first edit |
-| after | `<NNN>-end` | | | | taken before the push |
+| | counted work | notes |
+|---|---|---|
+| before | `make work-budget` (a Mode A stage: `make budget-sheets`) | taken on UNMODIFIED code, before the first edit |
+| after | the same command | taken before the push |
 
-`make perf LABEL=<NNN>-start` -> work -> `make perf LABEL=<NNN>-end` -> `make perf-report
-AGAINST=<NNN>-start`. Any seed more than 5% slower is diagnosed here, in writing, with the number -
-fixed, or accepted with a reason. Also read the existing trend before starting: if it has drifted
-since the last feature, say so and deal with that first.
+A stage's counted operations rising past its budget is diagnosed here, in writing, with the number - fixed, or accepted with a
+reason (the work budget's rules, feature 443). A timing is recorded as evidence, never a gate (feature 427 T03).
 
 ## Constitution Check
 
@@ -101,7 +99,7 @@ approval before /speckit-tasks may run.
   steps each task will run before being marked complete - `make done` for
   Python, the review checks a map's delta owes (`make verify` names them - feature 294's occasions),
   spot-check of delegated work. Every generator step is TWO steps (reference
-  settlement, then pool - `make maps`), both as tasks.
+  settlement, `make map GEN=<path>`, then pool - `make cohort`), both as tasks.
 
 - **VII. De-Localized Generation by Default**: If the feature generates pool
   content, the plan MUST default to generic / reusable framing (clan-level

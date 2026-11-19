@@ -45,12 +45,12 @@ check() { # label expected(ok|blocked) rc
 # second". Nothing else about the state machine changed and every other vector below is untouched.
 echo "1. THE MOTIVATING CASE: measure, write one test, measure"
 setup
-run "$(bash_ev 'make test-full')"; check "the first measurement is allowed" ok $?
+run "$(bash_ev 'make done FULL=1')"; check "the first measurement is allowed" ok $?
 run "$(edit_ev '/diagram/tests/settlement/test_geom.py')"
-run "$(bash_ev 'make test-full')"; check "the SECOND is BLOCKED" blocked $?
+run "$(bash_ev 'make done FULL=1')"; check "the SECOND is BLOCKED" blocked $?
 grep -q "Measure ONCE" "$HOOK_ERR" && { echo "  ok    the message says what to do instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
 grep -q "make quick" "$HOOK_ERR" && { echo "  ok    the message names the cheap loop"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make quick"; FAIL=$((FAIL+1)); }
-# ...AND THE COMMAND THAT ANSWERS THE BLOCKED QUESTION. A session reaching for `make test-full` a third time
+# ...AND THE COMMAND THAT ANSWERS THE BLOCKED QUESTION. A session reaching for `make done FULL=1` a third time
 # is almost always asking "which lines does this test reach?", and `make quick` does not answer that - so a
 # message that names only the cheap loop sends it back to the expensive call (GM 2026-08-29: *"Does the make
 # cov-file get suggested automatically when you are warned about running make test-full too often"* - it did
@@ -58,21 +58,21 @@ grep -q "make quick" "$HOOK_ERR" && { echo "  ok    the message names the cheap 
 # with pytest (449 T213); the lines no test reaches are `make static`'s, its cover step listing them file by file (449 T218).
 grep -q "make static" "$HOOK_ERR" && { echo "  ok    the message names the command that lists the lines no test reaches"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make static"; FAIL=$((FAIL+1)); }
 grep -q "make cov-file" "$HOOK_ERR" && { echo "  FAIL  the message names make cov-file, deleted with pytest"; FAIL=$((FAIL+1)); } || { echo "  ok    ...and no deleted target"; PASS=$((PASS+1)); }
-run "$(bash_ev 'make test-full')"; check "re-issuing goes through (blocks once, no deadlock)" ok $?
+run "$(bash_ev 'make done FULL=1')"; check "re-issuing goes through (blocks once, no deadlock)" ok $?
 teardown
 
 echo "2. an ENGINE edit resets it - the numbers really are stale now"
 setup
-run "$(bash_ev 'make test-full')"; run "$(bash_ev 'make test-full')"
+run "$(bash_ev 'make done FULL=1')"; run "$(bash_ev 'make done FULL=1')"
 run "$(edit_ev '/diagram/l7r/diagram/hamletgen/ways.py')"
-run "$(bash_ev 'make test-full')"; check "allowed after an engine edit" ok $?
+run "$(bash_ev 'make done FULL=1')"; check "allowed after an engine edit" ok $?
 teardown
 
 echo "3. a COMMIT resets it - a landed batch is the unit this rule is about"
 setup
-run "$(bash_ev 'make test-full')"; run "$(bash_ev 'make test-full')"
+run "$(bash_ev 'make done FULL=1')"; run "$(bash_ev 'make done FULL=1')"
 run "$(bash_ev 'git commit -q -m \"a batch of tests\"')"
-run "$(bash_ev 'make test-full')"; check "allowed after a commit" ok $?
+run "$(bash_ev 'make done FULL=1')"; check "allowed after a commit" ok $?
 teardown
 
 echo "4. the CHEAP loop is never blocked, however often it runs"
@@ -86,9 +86,9 @@ teardown
 
 echo "5. the ESCAPE works, and is checked BEFORE the count"
 setup
-run "$(bash_ev 'make test-full')"; run "$(bash_ev 'make test-full')"
-run "$(bash_ev 'make test-full  # MEASURE_OK: re-run after fixing the red this very measurement found')"; check "MEASURE_OK passes at the budget" ok $?
-run "$(bash_ev 'make test-full')"; check "...and it reset the count, so the next one is fine too" ok $?
+run "$(bash_ev 'make done FULL=1')"; run "$(bash_ev 'make done FULL=1')"
+run "$(bash_ev 'make done FULL=1  # MEASURE_OK: re-run after fixing the red this very measurement found')"; check "MEASURE_OK passes at the budget" ok $?
+run "$(bash_ev 'make done FULL=1')"; check "...and it reset the count, so the next one is fine too" ok $?
 teardown
 
 # GUARD_EDIT_OK: feature 162 - both sequences lose one run, for the same reason as section 1: at a
@@ -107,14 +107,14 @@ teardown
 # slot, which would have refused the next genuine run.
 echo "7. a MENTION is not a run (feature 164)"
 setup
-run "$(bash_ev 'grep -rn \"make test-full\" docs/')"
-run "$(bash_ev 'grep -rn \"make test-full\" docs/')"
-run "$(bash_ev 'grep -rn \"make test-full\" docs/')"; check "three quoted mentions, none of them counted" ok $?
+run "$(bash_ev 'grep -rn \"make done FULL=1\" docs/')"
+run "$(bash_ev 'grep -rn \"make done FULL=1\" docs/')"
+run "$(bash_ev 'grep -rn \"make done FULL=1\" docs/')"; check "three quoted mentions, none of them counted" ok $?
 run "$(bash_ev 'python3 - <<PY
 print(\"the gate is make done FULL=1 and it is expensive\")
 PY')"; check "a heredoc naming the full gate is prose, not a run" ok $?
-run "$(bash_ev 'make test-full')"; check "...and a REAL measurement still counts as the first" ok $?
-run "$(bash_ev 'make test-full')"; check "...with the second still blocked" blocked $?
+run "$(bash_ev 'make done FULL=1')"; check "...and a REAL measurement still counts as the first" ok $?
+run "$(bash_ev 'make done FULL=1')"; check "...with the second still blocked" blocked $?
 teardown
 
 # GUARD_EDIT_OK: feature 162 - two NEW behaviors, both non-blocking: the reminder that arrives on the
@@ -122,12 +122,12 @@ teardown
 # guard worth what it costs" a total. Neither refuses anything that was not refused before.
 echo "9. the REMINDER arrives on the FIRST successful measurement, not at the first failure"
 setup
-FIRST=$("$HOOK" pretool <<<"$(bash_ev 'make test-full')" 2>/dev/null)
+FIRST=$("$HOOK" pretool <<<"$(bash_ev 'make done FULL=1')" 2>/dev/null)
 printf '%s' "$FIRST" | grep -q '"additionalContext"' && { echo "  ok    the first run carries a reminder"; PASS=$((PASS+1)); } || { echo "  FAIL  no reminder on the first run"; FAIL=$((FAIL+1)); }
 printf '%s' "$FIRST" | jq empty 2>/dev/null && { echo "  ok    ...as valid JSON on stdout"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder is not valid JSON"; FAIL=$((FAIL+1)); }
 printf '%s' "$FIRST" | grep -q 'make static' && { echo "  ok    ...naming the command that answers the usual question"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make static"; FAIL=$((FAIL+1)); }
 printf '%s' "$FIRST" | grep -q 'make cov-file' && { echo "  FAIL  the reminder names make cov-file, deleted with pytest"; FAIL=$((FAIL+1)); } || { echo "  ok    ...and no deleted target"; PASS=$((PASS+1)); }
-SECOND=$("$HOOK" pretool <<<"$(bash_ev 'make test-full')" 2>/dev/null || true)
+SECOND=$("$HOOK" pretool <<<"$(bash_ev 'make done FULL=1')" 2>/dev/null || true)
 printf '%s' "$SECOND" | grep -q '"additionalContext"' && { echo "  FAIL  the reminder repeated on the blocked run"; FAIL=$((FAIL+1)); } || { echo "  ok    it is not repeated - a reminder that repeats is skimmed"; PASS=$((PASS+1)); }
 CHEAP=$("$HOOK" pretool <<<"$(bash_ev 'make quick')" 2>/dev/null)
 [ -z "$CHEAP" ] && { echo "  ok    the cheap loop gets no reminder at all"; PASS=$((PASS+1)); } || { echo "  FAIL  make quick was given a reminder"; FAIL=$((FAIL+1)); }
@@ -136,21 +136,21 @@ teardown
 echo "10. every firing is RECORDED (feature 162)"
 setup
 GL=$(mktemp -d); export GUARD_LOG_DIR="$GL"
-run "$(bash_ev 'make test-full')"                  # reminded
-run "$(bash_ev 'make test-full')"                  # blocked
-run "$(bash_ev 'make test-full  # MEASURE_OK: the record')"   # escaped
+run "$(bash_ev 'make done FULL=1')"                  # reminded
+run "$(bash_ev 'make done FULL=1')"                  # blocked
+run "$(bash_ev 'make done FULL=1  # MEASURE_OK: the record')"   # escaped
 for want in reminded blocked escaped; do
   grep -lq "\"event\": \"$want\"" "$GL"/*.json 2>/dev/null && { echo "  ok    a $want entry was written"; PASS=$((PASS+1)); } || { echo "  FAIL  no $want entry in the guard log"; FAIL=$((FAIL+1)); }
 done
-grep -hq '"detail": "make test-full"' "$GL"/*.json 2>/dev/null && { echo "  ok    the entry records the command, parsed rather than greedily matched"; PASS=$((PASS+1)); } || { echo "  FAIL  the recorded detail is not the command"; FAIL=$((FAIL+1)); }
+grep -hq '"detail": "make done FULL=1"' "$GL"/*.json 2>/dev/null && { echo "  ok    the entry records the command, parsed rather than greedily matched"; PASS=$((PASS+1)); } || { echo "  FAIL  the recorded detail is not the command"; FAIL=$((FAIL+1)); }
 rm -rf "$GL"; export GUARD_LOG_DIR="$GUARD_LOG_ROOT"   # GUARD_EDIT_OK: feature 162 - restore the FILE-level isolation, never unset it
 teardown
 
 echo "11. a log that cannot be written never takes the guard down with it"
 setup
 export GUARD_LOG_DIR=/proc/nonexistent/guard-log
-run "$(bash_ev 'make test-full')"; check "the first run still succeeds with an unwritable log" ok $?
-run "$(bash_ev 'make test-full')"; check "...and the second is still blocked" blocked $?
+run "$(bash_ev 'make done FULL=1')"; check "the first run still succeeds with an unwritable log" ok $?
+run "$(bash_ev 'make done FULL=1')"; check "...and the second is still blocked" blocked $?
 export GUARD_LOG_DIR="$GUARD_LOG_ROOT"   # GUARD_EDIT_OK: feature 162 - restore the FILE-level isolation, never unset it
 teardown
 
@@ -168,11 +168,11 @@ run "$(bash_ev 'git commit -q -m \"wave 47\"')"
 run "$(bash_ev 'make done')"; check "an engine edit and a commit do NOT reset it (the per-wave habit)" blocked $?
 teardown
 setup
-gate_rec 70 green test-full
-run "$(bash_ev 'make test-full')"; check "a test-full soon after a green test-full is refused too" blocked $?
+gate_rec 70 green
+run "$(bash_ev 'make done FULL=1')"; check "a FULL gate soon after a green one is refused too" blocked $?
 teardown
 setup
-gate_rec 20 "failed: test-full"
+gate_rec 20 "failed: done"
 run "$(bash_ev 'make done')"; check "a gate after a RED one goes through (fixing what it found)" ok $?
 teardown
 setup
@@ -194,20 +194,17 @@ run "$(bash_ev 'make quick')"; check "the quick loop is never refused" ok $?
 run "$(bash_ev 'make test-file FILE=tests/x.py')"; check "...nor a test file" ok $?
 teardown
 
-echo "13. a make perf outside a pair is reminded, never blocked (feature 328)"
+echo "13. make perf and make test-full have no rule, so they are neither reminded nor counted (feature 449 T225)"
 setup
 out=$("$HOOK" pretool <<<"$(bash_ev 'make perf LABEL=328-w51-check')" 2>"$HOOK_ERR"); rc=$?
 check "an ad-hoc make perf goes through" ok $rc
-printf '%s' "$out" | grep -q "make cohort N=4 SEED=4 HOUSEHOLDS=40" && { echo "  ok    ...with the untimed command named"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make cohort HOUSEHOLDS"; FAIL=$((FAIL+1)); }
-out=$("$HOOK" pretool <<<"$(bash_ev 'make perf LABEL=328-start')" 2>"$HOOK_ERR")
-[ -z "$out" ] && { echo "  ok    a pair's leg is left alone"; PASS=$((PASS+1)); } || { echo "  FAIL  a pair's leg was reminded"; FAIL=$((FAIL+1)); }
-out=$("$HOOK" pretool <<<"$(bash_ev 'make perf-profile SEED=39 STAGE=homesteads')" 2>"$HOOK_ERR")
-printf '%s' "$out" | grep -q "outside a timing pair" && { echo "  FAIL  a profile was reminded"; FAIL=$((FAIL+1)); } || { echo "  ok    a profile is left alone"; PASS=$((PASS+1)); }
+[ -z "$out" ] && { echo "  ok    ...and says nothing: a reminder naming a dead command is a defect"; PASS=$((PASS+1)); } || { echo "  FAIL  make perf was reminded: $out"; FAIL=$((FAIL+1)); }
+run "$(bash_ev 'make test-full')"; run "$(bash_ev 'make test-full')"; check "a second make test-full is no measurement" ok $?
 teardown
 
 echo "8. status reports the count"
 setup
-run "$(bash_ev 'make test-full')"
+run "$(bash_ev 'make done FULL=1')"
 "$HOOK" status <<<"$(bash_ev 'x')" | grep -q "measurements_since_reset=1" && { echo "  ok    status"; PASS=$((PASS+1)); } || { echo "  FAIL  status"; FAIL=$((FAIL+1)); }
 teardown
 

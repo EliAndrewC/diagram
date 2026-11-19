@@ -248,31 +248,8 @@ pub(super) fn keyed_files(root: &Path, counts: &[Value]) -> R<Vec<PathBuf>> {
     Ok(out)
 }
 
-/// A path's modification time as Python's `st_mtime` (seconds, the nanoseconds a float fraction).
-fn mtime(p: &Path) -> f64 {
-    use std::os::unix::fs::MetadataExt;
-    // every source was read before its time is asked (the counted and keyed modules, the stage's), so none fails here
-    #[expect(
-        clippy::cast_precision_loss,
-        reason = "a file time in seconds and nanoseconds, as CPython's st_mtime computes it"
-    )]
-    std::fs::metadata(p).map_or(0.0, |m| m.mtime() as f64 + m.mtime_nsec() as f64 * 1e-9)
-}
-
-/// The newest modification time of the engine's sources - its Python and its Rust phases (their build trees left out).
-fn newest_source(root: &Path) -> f64 {
-    let mut sources = rglob(&root.join("l7r"), ".py");
-    sources.extend(
-        rglob(&root.join(RUST), ".rs")
-            .into_iter()
-            .filter(|q| !in_build_tree(q)),
-    );
-    sources
-        .iter()
-        .fold(0.0_f64, |newest, q| newest.max(mtime(q)))
-}
-
-/// The stage's section of the newest kept `make perf-fanout` report, or why there is none (`STALE: ` opening a refusal).
+/// The stage's section of the newest kept call-chain report (`dev/perf-log/*-fanout-*.txt`, written by the Python engine's `perf-fanout`),
+/// or why there is none. Nothing writes one now (feature 449 T225), so an old report is read as history and never refused.
 ///
 /// # Errors
 ///
@@ -284,7 +261,7 @@ pub(super) fn fanout_section(root: &Path, phase: &str) -> R<String> {
         .next_back()
     else {
         return Ok(format!(
-            "no `make perf-fanout` report is kept: run `make perf-fanout STAGES={phase}`\n"
+            "no call-chain report is kept for {phase}, and nothing writes one now (the Python engine's perf-fanout left with it): the counts by function in this bundle are the evidence\n"
         ));
     };
     let rel = newest
@@ -292,11 +269,6 @@ pub(super) fn fanout_section(root: &Path, phase: &str) -> R<String> {
         .unwrap_or(&newest)
         .to_string_lossy()
         .into_owned();
-    // ...NEVER A STALE ONE (the round arbiter's tooling fix on ask:444-T16-field-audit-5: an audit got T12's report of a deleted
-    // engine and rebuilt the chains by hand): a report older than the newest engine source is refused, with the command
-    if mtime(&newest) < newest_source(root) {
-        return Ok(format!("STALE: {rel} is older than the engine it would describe - run `make perf-fanout STAGES={phase}` first\n"));
-    }
     let text = read(&newest)?;
     // a stage's section opens `<stage>: ` at column 0
     let section = py_re(&format!(
@@ -309,7 +281,7 @@ pub(super) fn fanout_section(root: &Path, phase: &str) -> R<String> {
         .flatten()
         .map(|m| m.as_str().to_owned());
     Ok(format!(
-        "from {rel}\n\n{}",
+        "from {rel} (history: nothing regenerates it, so it may describe an older engine)\n\n{}",
         found.unwrap_or_else(|| format!("(the report has no section for {phase})\n"))
     ))
 }

@@ -65,7 +65,7 @@ GM's words, the measurement, the trial's own decision rule, the evidence, the ti
   whose spike lands gets the ordinary full review (feature 442).
 
 The review gate holds the first and third rules (`scripts/gates/review-gate.sh`, its trial clause). For where the time is
-before a performance trial, `make perf-share` reads a module's share of each stage from the kept profiles.
+before a performance trial, `make work-budget` reads each stage's counted operations by function.
 
 ## Regressions and defects: the full rule
 

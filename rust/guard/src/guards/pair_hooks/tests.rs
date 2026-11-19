@@ -120,7 +120,8 @@ fn review(prompt: &str) -> Value {
 fn a_gate_is_an_invocation_not_a_mention() {
     assert!(is_gate_invocation("make done"));
     assert!(is_gate_invocation("cd x && make -s FULL=1 done 2>&1"));
-    assert!(is_gate_invocation("echo hi\nmake maps"));
+    assert!(is_gate_invocation("echo hi\nmake done"));
+    assert!(!is_gate_invocation("make maps")); // no rule since feature 449 T213 (T225)
     assert!(!is_gate_invocation("echo 'make done'"));
     assert!(!is_gate_invocation("cat <<EOF\nmake done\nEOF"));
     assert!(!is_gate_invocation("make -n done"));

@@ -173,7 +173,7 @@ pub(crate) fn read_context(path: &str) -> Option<&'static str> {
         return None;
     }
     Some(if path.ends_with("/tests/rolls.py") {
-        "This is the ROSTER OF ROLLED HAMLETS, and it is a GUARD file: an edit to it is refused unless the edit itself contains GUARD_EDIT_OK and a short reason. Before adding a row, read constitution VI, THE GATE ROLLS ONLY WHAT THE FLOOR NEEDS: the gate rolls a map only for engine lines no other roll reaches, and the census verdict FAILS a rostered roll with none. Run `make roll-audit` first and point the new row (its audit= field) at the research section recording it; pack the assertion onto a roll already made, make it a unit test, or move the test to tests/soak/ before you add a roll."
+        "This is the ROSTER OF ROLLED HAMLETS, and it is a GUARD file: an edit to it is refused unless the edit itself contains GUARD_EDIT_OK and a short reason. Before adding a row, read constitution VI, THE GATE ROLLS ONLY WHAT THE FLOOR NEEDS: the gate rolls a map only for engine lines no other roll reaches, and the census verdict FAILS a rostered roll with none. Pack the assertion onto a roll already made, make it a unit test, or move the test to tests/soak/ before you add a roll."
     } else if path.ends_with("/Makefile") {
         "This is the root Makefile, a GUARD file. It takes no GUARD_EDIT_OK comment: before editing it, run make guard-edit FILE=Makefile WHY=\"<why this edit is legitimate>\" - the reason goes in the guard log, and belongs in the commit message. Say which you are doing: fixing a guard that fires on correct work, adding a guard or an operation, or making a guard stop blocking something you want (that last one is what the rule exists to catch)."
     } else {
@@ -277,12 +277,31 @@ The reason goes in the guard log; put it in the commit message too. (feature 170
 
 fn hazard_text(file: &str, found: &[String]) -> String {
     format!(
-        "BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of {file}:\n\n{}\n\nA `: \"...\"` recipe comment is a shell string, and a backtick or a $$( inside it RUNS. On 2026-09-07\none such comment naming `make test-full` in backticks ran test-full from inside test-full, 914 levels\ndeep, until the container hit its process limit. Write the name without backticks, or escape them\n(\\` and \\$$( are literal), or use single quotes. There is no escape token for this - it is\na shell fact, not a policy. (rust/guard/src/guards/guard_file_hooks.rs; feature 212)",
+        "BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of {file}:\n\n{}\n\nA `: \"...\"` recipe comment is a shell string, and a backtick or a $$( inside it RUNS. On 2026-09-07\none such comment naming the full gate in backticks ran that gate from inside itself, 914 levels\ndeep, until the container hit its process limit. Write the name without backticks, or escape them\n(\\` and \\$$( are literal), or use single quotes. There is no escape token for this - it is\na shell fact, not a policy. (rust/guard/src/guards/guard_file_hooks.rs; feature 212)",
         found.join("\n")
     )
 }
 
+/// `dev/work-budget.json` takes no permit: `make guard-edit` refuses it, and its writers are the budget targets (feature 449 T225).
+fn budget_text(file: &str) -> String {
+    format!(
+        "BLOCKED: {file} is the work budgets, written only by the budget targets - not by an edit, and `make guard-edit` refuses it.
+
+Change a budgeted stage's figure with the GM's own words:
+
+    make budget-change PHASE=<stage> TO=<ops per thing> WORDS=\"<the GM's words>\"
+
+(a stage's FIRST budget is `make budget-set`, the whole roll's `make budget-program`, a rebuilt stage's acceptance `make budget-accept`;
+`make help` lists their arguments). The words are checked against the session and logged in dev/work-budget-changes.jsonl.
+
+(rust/guard/src/guards/guard_file_hooks.rs; feature 443, 449 T225)"
+    )
+}
+
 fn no_marker_text(file: &str) -> String {
+    if file.ends_with("/dev/work-budget.json") {
+        return budget_text(file);
+    }
     format!(
         "BLOCKED: {file} is a GUARD, not ordinary source.
 

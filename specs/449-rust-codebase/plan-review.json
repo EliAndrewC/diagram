@@ -1074,6 +1074,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T225 (T223: guards, gate messages and docs told a reader to run make targets that no longer exist)": {
+   "sha256": "2eb1668999827930846164ee115c0ea5e5c15620b66858dacab1d9fd9b47293a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T225 Approach (checklist part A)": {
+   "sha256": "cd5c52282f9bbd11044dbe0a0dc347bf391d00ee5522d27a56ede6e30ee9d985",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15040,6 +15052,89 @@
      "why": "Holding more files would be new refusing behavior nobody asked for; leaving it as a question narrows nothing the GM asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T225 (T223: guards, gate messages and docs told a reader to run make targets that no longer exist)",
+    "### T225 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T225-scope",
+     "summary": "Instructions to run `make <name>` checked by script over guard and gate message strings, agent files, docs/, dev/*.md, the CLAUDE.md files and the .specify templates; history (specs, run logs, fixtures, retirement notes) left as written.",
+     "class": "within",
+     "why": "A tip naming a command that does not run is a wrong outcome (constitution XIV), fixed as found under the GM's 2026-11-18 'fix all known bugs in each step'. Leaving history as written is not a narrowing: a record of what was run is not an instruction, and nothing in the request asks history rewritten."
+    },
+    {
+     "id": "T225-repoint-text",
+     "summary": "Live text re-pointed at the command that does the job now: the round-arbiter agent file, l7r/diagram/tools/CLAUDE.md, docs/efficiency-tooling.md, docs/guards.md, docs/session-clones.md, docs/spec-kit-and-reviews.md, dev/lessons.md, the .specify templates, and the dev/work-budget.json guard-file refusals naming `make budget-change`.",
+     "class": "within",
+     "why": "Re-pointing a tip at the command that does its job fixes the defect without changing what the tooling enforces; this is the fix-as-we-go rule applied."
+    },
+    {
+     "id": "T225-pair-hooks",
+     "summary": "pair_hooks' gate pattern matches `make done` only.",
+     "class": "within",
+     "why": "Rests on the block's premise that the other names it matched no longer exist as rules; a pattern on a dead command matches nothing, so narrowing it to the live command removes no enforcement."
+    },
+    {
+     "id": "T225-measure-hooks",
+     "summary": "measure_hooks' `make perf` reminder and `make test-full` detection removed; its cadence keyed on `make done` and `make done FULL=1`.",
+     "class": "within",
+     "why": "Rests on the block's premise that `make perf` and `make test-full` no longer exist (the perf family is also among the constitution's dead commands the block lists). The block gives no line on whether some live command does the perf reminder's job; it states the rule 're-pointed at the command that does the job now, or removed', so if one exists the reminder is re-pointed, not removed. Nothing in the request or spec asks for a perf reminder, so removing a tip to a dead command narrows nothing asked."
+    },
+    {
+     "id": "T225-perf-fanout",
+     "summary": "The work-budget bundle's `make perf-fanout` refusal removed.",
+     "class": "within",
+     "why": "Rests on the block's premise that nothing writes that report now: a refusal demanding an unwritable report refuses correct work, which FR-002's one exception has fixed in place, its suite case's expected result changed in the same commit and named."
+    },
+    {
+     "id": "T225-dead-code",
+     "summary": "The cohort note and the land's `make rust-gate` call removed.",
+     "class": "within",
+     "why": "Rests on the block's premise that the call is unreachable at rust-only; removing unreachable code and a note to a dead command changes no behavior."
+    },
+    {
+     "id": "T225-template-titles",
+     "summary": "The .specify templates' box titles kept so existing checklists still satisfy `make land`.",
+     "class": "within",
+     "why": "Keeps existing work valid; changes nothing the GM asked for."
+    },
+    {
+     "id": "T225-check",
+     "summary": "A make-only suite check, red first, refuses any `make <name>` in a guard or gate message or an agent file that names no rule (14 on HEAD, 2026-11-19, none now).",
+     "class": "within",
+     "why": "Enforcement of the fix: delete the defect fix and the check has nothing left to check. It serves the GM's 2026-11-18 'fix all known bugs' and the XIV rule that a fix is pinned; its reach (messages and agent files) is narrower than the fix, not wider."
+    },
+    {
+     "id": "T225-constitution",
+     "summary": "The constitution's six dead commands (`make maps`, `make full-hamlet-sweep`, `make roll-audit`, `make perf-ab`, `make perf SCALING=1`, `make perf-report`) left in this task; an amendment put to the GM through escalation-check.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are known defects by the block's own item 12, and 'fix all known bugs in each step' (2026-11-18) reaches them. But the session cannot amend the constitution alone: the GM's own 2026-11-18 words ('we should definitely amend our project guidelines and speckit constitution') show amendments are made at his word, so the fix is routed to the one authority that can make it, not dropped. Legitimate only as the block states it: the escalation-check question is filed by this task; a mention with no question filed would be a defect left and NOT LEGITIMATE."
+    },
+    {
+     "id": "T225-rust-tooling-inventory",
+     "summary": "dev/rust-tooling.md's Python-era rows left as history.",
+     "class": "within",
+     "why": "An inventory a gate reads, whose rows record what existed; history is left as written under the same rule as the scope decision, and no reader is told to run them."
+    },
+    {
+     "id": "T225-blind-spot",
+     "summary": "The check cannot see a command name assembled from pieces; the one known instance (pair_hooks') fixed by hand.",
+     "class": "within",
+     "why": "A stated limit of the enforcing check with no known defect left behind it: the one instance found is fixed. Not a narrowing of the fix, which reaches every instance found."
+    },
+    {
+     "id": "T225-order",
+     "summary": "Lands after T227, before T221, in one landing.",
+     "class": "within",
+     "why": "Sequencing only."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -26504,6 +26599,87 @@
      "summary": "Whether the guards' own sources should be held is left to the GM through escalation-check",
      "class": "within",
      "why": "Holding more files would be new refusing behavior nobody asked for; leaving it as a question narrows nothing the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T225": {
+   "section_sha256": "e23f447104967fbe70e6b37f85a7e20d7961209087232ef7016d8b462f64f46d",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T225-scope",
+     "summary": "Instructions to run `make <name>` checked by script over guard and gate message strings, agent files, docs/, dev/*.md, the CLAUDE.md files and the .specify templates; history (specs, run logs, fixtures, retirement notes) left as written.",
+     "class": "within",
+     "why": "A tip naming a command that does not run is a wrong outcome (constitution XIV), fixed as found under the GM's 2026-11-18 'fix all known bugs in each step'. Leaving history as written is not a narrowing: a record of what was run is not an instruction, and nothing in the request asks history rewritten."
+    },
+    {
+     "id": "T225-repoint-text",
+     "summary": "Live text re-pointed at the command that does the job now: the round-arbiter agent file, l7r/diagram/tools/CLAUDE.md, docs/efficiency-tooling.md, docs/guards.md, docs/session-clones.md, docs/spec-kit-and-reviews.md, dev/lessons.md, the .specify templates, and the dev/work-budget.json guard-file refusals naming `make budget-change`.",
+     "class": "within",
+     "why": "Re-pointing a tip at the command that does its job fixes the defect without changing what the tooling enforces; this is the fix-as-we-go rule applied."
+    },
+    {
+     "id": "T225-pair-hooks",
+     "summary": "pair_hooks' gate pattern matches `make done` only.",
+     "class": "within",
+     "why": "Rests on the block's premise that the other names it matched no longer exist as rules; a pattern on a dead command matches nothing, so narrowing it to the live command removes no enforcement."
+    },
+    {
+     "id": "T225-measure-hooks",
+     "summary": "measure_hooks' `make perf` reminder and `make test-full` detection removed; its cadence keyed on `make done` and `make done FULL=1`.",
+     "class": "within",
+     "why": "Rests on the block's premise that `make perf` and `make test-full` no longer exist (the perf family is also among the constitution's dead commands the block lists). The block gives no line on whether some live command does the perf reminder's job; it states the rule 're-pointed at the command that does the job now, or removed', so if one exists the reminder is re-pointed, not removed. Nothing in the request or spec asks for a perf reminder, so removing a tip to a dead command narrows nothing asked."
+    },
+    {
+     "id": "T225-perf-fanout",
+     "summary": "The work-budget bundle's `make perf-fanout` refusal removed.",
+     "class": "within",
+     "why": "Rests on the block's premise that nothing writes that report now: a refusal demanding an unwritable report refuses correct work, which FR-002's one exception has fixed in place, its suite case's expected result changed in the same commit and named."
+    },
+    {
+     "id": "T225-dead-code",
+     "summary": "The cohort note and the land's `make rust-gate` call removed.",
+     "class": "within",
+     "why": "Rests on the block's premise that the call is unreachable at rust-only; removing unreachable code and a note to a dead command changes no behavior."
+    },
+    {
+     "id": "T225-template-titles",
+     "summary": "The .specify templates' box titles kept so existing checklists still satisfy `make land`.",
+     "class": "within",
+     "why": "Keeps existing work valid; changes nothing the GM asked for."
+    },
+    {
+     "id": "T225-check",
+     "summary": "A make-only suite check, red first, refuses any `make <name>` in a guard or gate message or an agent file that names no rule (14 on HEAD, 2026-11-19, none now).",
+     "class": "within",
+     "why": "Enforcement of the fix: delete the defect fix and the check has nothing left to check. It serves the GM's 2026-11-18 'fix all known bugs' and the XIV rule that a fix is pinned; its reach (messages and agent files) is narrower than the fix, not wider."
+    },
+    {
+     "id": "T225-constitution",
+     "summary": "The constitution's six dead commands (`make maps`, `make full-hamlet-sweep`, `make roll-audit`, `make perf-ab`, `make perf SCALING=1`, `make perf-report`) left in this task; an amendment put to the GM through escalation-check.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are known defects by the block's own item 12, and 'fix all known bugs in each step' (2026-11-18) reaches them. But the session cannot amend the constitution alone: the GM's own 2026-11-18 words ('we should definitely amend our project guidelines and speckit constitution') show amendments are made at his word, so the fix is routed to the one authority that can make it, not dropped. Legitimate only as the block states it: the escalation-check question is filed by this task; a mention with no question filed would be a defect left and NOT LEGITIMATE."
+    },
+    {
+     "id": "T225-rust-tooling-inventory",
+     "summary": "dev/rust-tooling.md's Python-era rows left as history.",
+     "class": "within",
+     "why": "An inventory a gate reads, whose rows record what existed; history is left as written under the same rule as the scope decision, and no reader is told to run them."
+    },
+    {
+     "id": "T225-blind-spot",
+     "summary": "The check cannot see a command name assembled from pieces; the one known instance (pair_hooks') fixed by hand.",
+     "class": "within",
+     "why": "A stated limit of the enforcing check with no known defect left behind it: the one instance found is fixed. Not a narrowing of the fix, which reaches every instance found."
+    },
+    {
+     "id": "T225-order",
+     "summary": "Lands after T227, before T221, in one landing.",
+     "class": "within",
+     "why": "Sequencing only."
     }
    ],
    "verdict": "CLEAR"

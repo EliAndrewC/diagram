@@ -10,7 +10,7 @@
 //!
 //! MODE AUDIT judges the landed code against its counters: the stage's modules (the file defining `stage_<name>`, and the files under
 //! the stage's own package), the newest `make work-budget` run's counts for the stage at each size by kind and by function, its
-//! call chains (the stage's section of the newest kept `make perf-fanout` report, `dev/perf-log/*-fanout-*.txt`) and its budget
+//! call chains (the stage's section of the newest kept call-chain report, `dev/perf-log/*-fanout-*.txt`; nothing writes one now) and its budget
 //! (`dev/work-budget.json`, or `BUDGET=<file>` - the funnel fixture's, FR-009).
 //!
 //! Written to `/tmp/l7r-check/work-budget-<mode>-<stage>/`, a `MANIFEST.md` naming each file. The agent's first line is its verdict;
@@ -405,15 +405,6 @@ fn audit_bundle(root: &Path, phase: &str, out: &Path, budget: &str) -> R<(i32, S
         }
     }
     let chains = code::fanout_section(root, phase)?;
-    if let Some(stale) = chains.strip_prefix("STALE: ") {
-        return Ok((
-            2,
-            format!(
-                "work-budget-bundle: {}",
-                l7r_guard::shared::py_text::strip(stale)
-            ),
-        ));
-    }
     mkdir(out)?;
     mkdir(&out.join("code"))?;
     for p in &files {

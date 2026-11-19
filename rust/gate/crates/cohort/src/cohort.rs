@@ -28,7 +28,9 @@ pub mod seeds;
 pub const USAGE_LOG_TOOL: &str = "cohort_gate";
 const LOG: &str = "dev/cohort-log";
 const RUST_LOG: &str = "dev/rust-gate";
-const RUST_COMMAND: &str = "make rust-gate";
+/// What stands where the Rust stage gate's record was rolled: its writer, `make rust-gate`, left with the Python driver (feature 444 T39),
+/// so a message names what judges a Rust stage now (feature 449 T225).
+const RUST_NOW: &str = "nothing writes a Rust stage gate record now; a Rust stage is held to its work budget (`make work-budget`) and to `make done`";
 const COMMAND: &str = "make cohort-landing";
 const SWITCHES: &str = "dev/switches.json";
 const PORT_STATES: [&str; 2] = ["rust-only", "integrated"];
@@ -556,11 +558,11 @@ fn rust_refusal(repo: &Repo<'_>) -> Option<String> {
         .collect();
     let Some(last) = recs.last() else {
         return Some(format!(
-            "no Rust stage gate record on the engine being landed - run: {RUST_COMMAND}"
+            "no Rust stage gate record on the engine being landed - {RUST_NOW}"
         ));
     };
     let failing = int(&last["failing"]);
-    (failing != 0).then(|| format!("the Rust stage gate has {failing} failing seed(s) on this engine - no Rust stage may end with a failing check (FR-019): fix the Rust stage, then {RUST_COMMAND}"))
+    (failing != 0).then(|| format!("the Rust stage gate has {failing} failing seed(s) on this engine - no Rust stage may end with a failing check (FR-019): the record is old and {RUST_NOW}"))
 }
 
 fn port_state(text: &str) -> Option<String> {

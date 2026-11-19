@@ -1,4 +1,4 @@
-//! The second pass: the Rust stage gate's record, the gates the stamp names, the cohort beside them, the work-budget run.
+//! The second pass: the gates the stamp names, the cohort beside them, the work-budget run.
 
 use super::super::tests::{fx, tool};
 use super::{gate_machinery, stop_cohort};
@@ -18,7 +18,7 @@ fn a_covered_delta_runs_nothing_long() {
     assert!(!fx.log().contains("make"));
 }
 
-/// An engine delta on a Rust-only port: the stage gate owed.
+/// An engine delta on a Rust-only port.
 fn rust_engine(tag: &str) -> super::super::tests::Fx {
     let fx = fx(tag);
     fx.in_delta("rust/phases/src/a.rs", "fn a() {}\n");
@@ -26,23 +26,11 @@ fn rust_engine(tag: &str) -> super::super::tests::Fx {
     fx
 }
 
-#[test]
-fn the_rust_stage_gate_s_record_is_made_and_a_failing_seed_stops_the_landing() {
-    let fx = rust_engine("long-rust-gate");
-    fx.answer("make --no-print-directory rust-gate", "rc", "1");
-    assert_eq!(fx.land.long_runs(), Ok(1));
-    assert!(fx
-        .said()
-        .1
-        .contains("the Rust stage gate has a failing seed"));
-}
-
-/// The work-budget review after a green stage gate, apart from the failing seed above (feature 449 T167: the four second passes in one
+/// The work-budget review (feature 449 T167: the four second passes in one
 /// test ran over FR-008's tenth of a second); it counts for itself (T224), so its refusal stops the landing and nothing is run for it.
 #[test]
 fn the_work_budget_review_s_refusal_stops_the_landing() {
     let fx = rust_engine("long-budget");
-    fx.answer("make --no-print-directory rust-gate", "rc", "0");
     fx.answer(
         "make --no-print-directory work-budget-review ROUTE=GATED",
         "rc",

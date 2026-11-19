@@ -19,9 +19,6 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` - `make cohort N=... [SEED=...]` |
 | Will the gated push take this engine - 48 seeds on it, none regressed, and the fresh block's rate? | owed only at the port switch's `integrated` (feature 444 FR-023): `make cohort-landing` refuses while nothing writes its record (feature 449 T223); the gate is `l7r-gate cohort check`, `scripts/gates/cohort-gate.sh`, the trend `make cohort-seeds` |
 | Check every pool sheet against its tier's checks | the pool sweep, `make rust-test CRATE=rust/mode_a` (`rust/mode_a/src/pool_sweep.rs`; `make maps` and `mapcheck` went with the Python engine) |
-| Which modules are on the HAMLET PATH and owe 100% coverage? | `hamlet_floor` - a phase of `make test-full`, with no make route of its own; it drops the engine code the Rust port replaces (`dev/coverage-exempt.json`, feature 448, the GM 2026-11-02: "We can relax that for the engine code ... since that's going away") |
-| Which engine lines does only ONE rolling test context reach? | `roll_audit` - `make roll-audit` (feature 216) |
-| How many things does each check of a roll compare against, and which compare against too many? | `overlap_census` - `make census` |
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` - `make placement-stages` |
 | I lit one class on the page - which OTHER classes' pixels changed, and by how much of each? | `make page-lit` (`VECTOR=1` zooms past the raster switch, feature 245) - Rust since feature 449 T150, `rust/mode_a/src/diagnostics/page_lit.rs`, its browser half `rust/browser/src/lit.rs` |
 | Two renders of this map: how much differs, by how much, where, and on whose ink? | `make picture-diff` - Rust since feature 449 T150, `rust/mode_a/src/diagnostics/picture_diff.rs` (every format the `image` crate reads, held to PIL's reading; see `diagnostics/image.rs`) |
@@ -35,8 +32,7 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | Build or check the record's site from its per-entry fragments | `make record` (`l7r-gate record site`, Rust since feature 449 T148) |
 | The source vocabulary derived into the `source-applicability` contract | `make source-tags-contract` (feature 305; `l7r-gate record source-tags-contract`, Rust since feature 449 T148) |
 | How much work does each stage do, against its budget? | `make work-budget` (a hamlet stage, the Rust driver's counters), `make budget-sheets` (a Mode A stage); the Python snapshot, bands, profile and review records (`make perf`, `perf-report`, `perf-profile`, `perf-review` and the rest) went with the Python engine, their names with feature 449 T223 |
-| Which functions are called millions of times, and from which loop? | `perf_fanout` - `make perf-fanout` (feature 427): per-stage call totals and growth, the multiplier chains by anchor |
-| How long does this loop take, and where does the time go? | `make audit`, `make durations`, `scripts/measure/gatecost.py <target>`; the frozen ledger is `dev/timings.md` |
+| How long does this loop take, and where does the time go? | `make audit`, `l7r-gate measure gatecost <target>` (`scripts/gates/l7r-gate.sh measure gatecost`); the frozen ledger is `dev/timings.md` |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it. Read that before
 extending one. The operational guidance for `why_placed` and `open_seat` is [`dev/diagnostics.md`](../../../dev/diagnostics.md).

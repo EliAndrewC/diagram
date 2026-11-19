@@ -101,11 +101,11 @@ echo "6. THE ROSTER OF ROLLED HAMLETS IS A GUARD (feature 217), with its own Rea
 ROSTER="$ROOT/tests/rolls.py"
 check blocked "$ROSTER"
 check blocked "$ROSTER" "x" "Write"
-check ok "$ROSTER" "GUARD_EDIT_OK: adding a roll row after make roll-audit showed its lines"
+check ok "$ROSTER" "GUARD_EDIT_OK: adding a roll row to the roster"
 check ok "$ROOT/tests/test_rolls.py"   # the roster's TEST is ordinary source
 ctx=$(ev "$ROSTER" "" "Read" | "$HOOK" pretool 2>/dev/null)
-if printf '%s' "$ctx" | grep -q "roll-audit" && printf '%s' "$ctx" | grep -q "constitution VI" && printf '%s' "$ctx" | grep -q "tests/soak/"; then
-  echo "  ok      the Read of the roster names the doctrine, make roll-audit and the three exits"; PASS=$((PASS+1))
+if ! printf '%s' "$ctx" | grep -q "roll-audit" && printf '%s' "$ctx" | grep -q "constitution VI" && printf '%s' "$ctx" | grep -q "tests/soak/"; then
+  echo "  ok      the Read of the roster names the doctrine and the exits, and no deleted command (feature 449 T225)"; PASS=$((PASS+1))
 else echo "  FAIL    the roster's Read-time context is missing the doctrine or the command: $ctx"; FAIL=$((FAIL+1)); fi
 ctx=$(ev "$ROOT/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
 if printf '%s' "$ctx" | grep -q "GUARD file" && ! printf '%s' "$ctx" | grep -q "roll-audit"; then

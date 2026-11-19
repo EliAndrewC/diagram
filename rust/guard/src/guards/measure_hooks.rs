@@ -1,7 +1,7 @@
 //! `measure-hooks` (features 146, 162, 328; ported from `scripts/hooks/measure-hooks.sh`, feature 449 T008): THE EXPENSIVE
-//! MEASUREMENT IS BATCHED. A second `make test-full` (or `done FULL=1`) in a row with no engine edit and no commit between is
-//! refused once; a full gate within three hours of a green one is refused once (a run after a red gate is fixing what it found); a
-//! `make perf` outside a timing pair is reminded. `MEASURE_OK` with a reason stands it aside. The refusals' words are the shell's;
+//! MEASUREMENT IS BATCHED. A second `make done FULL=1` in a row with no engine edit and no commit between is
+//! refused once; a full gate within three hours of a green one is refused once (a run after a red gate is fixing what it found).
+//! `MEASURE_OK` with a reason stands it aside. The refusals' words are the shell's;
 //! the reasons behind each rule stand in its comments, kept in git history.
 //!
 //! Plan T008's decisions: (a) the sanitized command and the last full gate are read in-process, and `l7r-gate measure gatecost`'s median, for
@@ -131,22 +131,13 @@ pub(crate) fn judge(event: &Event, session: &Session, s: &Seams) -> Vec<Answer> 
         .filter(|c| !c.is_empty())
         .unwrap_or_else(|| cmd.to_owned());
     let has = |a: &str| scan.contains(a);
-    let after = |a: &str, b: &str| {
-        scan.find(a)
-            .is_some_and(|i| scan[i + a.len()..].contains(b))
-    };
-    let gate = has("make done") || has("make test-full") || after("make -C", "test-full");
+    let gate = has("make done");
     if !has("make -n") && !has("make --dry-run") && gate {
         if let Some(refused) = cadence(event, s, &log) {
             return vec![refused];
         }
     }
-    let perf = has("make perf ") || scan.ends_with("make perf") || after("make -C ", " perf ");
-    if perf && !after("LABEL=", "-start") && !after("LABEL=", "-end") {
-        log("reminded-perf", "");
-        return vec![Answer::Notice(PERF_REMINDER.to_owned())];
-    }
-    if has("make test-full") || after("make -C", "test-full") || has("done FULL=1") {
+    if has("done FULL=1") {
         return streak(event, s, &log);
     }
     Vec::new()
@@ -191,8 +182,7 @@ fn last_gate(root: &Path) -> Option<(i64, String, String)> {
         let Some(start) = parse_utc(field(&r, "utc")) else {
             continue;
         };
-        if p.extension().is_some_and(|x| x == "json") && (target == "done" || target == "test-full")
-        {
+        if p.extension().is_some_and(|x| x == "json") && target == "done" {
             // the record's seconds, as a number or a numeral (the shell's `float(r.get("seconds") or 0)`)
             let secs = r
                 .get("seconds")
@@ -338,14 +328,10 @@ its inputs moved - and the commonest wrong answer is that the test covered the g
     ))]
 }
 
-const PERF_REMINDER: &str = "REMINDER (measure-hooks): `make perf` outside a timing pair. If the question is whether a change refuses a \
-larger hamlet, `make cohort N=4 SEED=4 HOUSEHOLDS=40` (and HOUSEHOLDS=20) rolls those sizes without the snapshot's timing; the perf \
-snapshot belongs to the batch's one pair (LABEL=<feature>-start / -end, feature 328 FR-005).";
-
 const STREAK_REFUSAL: &str = "BLOCKED: that is the second EXPENSIVE measurement in a row with no engine change and no commit between.
 
 This is the expensive one; `make quick`, `make rust-test CRATE=` and `make static` are the cheap loop and are
-never blocked, however often they run. Measured on feature 146: 20 test-full runs, about an hour, almost all
+never blocked, however often they run. Measured on feature 146: 20 full-gate runs, about an hour, almost all
 of it re-deriving a coverage worklist the session already had written down.
 (GUARD_EDIT_OK: feature 162 - the durations that used to be quoted here are gone rather than restated. A
 number typed into a guard message in August is wrong in September and nothing tells anybody; `make audit`

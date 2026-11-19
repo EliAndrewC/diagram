@@ -505,7 +505,7 @@ fn an_audit_bundles_the_stage_its_counters_and_its_calls() {
     assert!(counts.starts_with("{\n \"run\": \"20261102T000000Z-b.json\",\n \"summary\": {\n  \"per\": {\n   \"40\": {\n    \"ops\": 1"), "{counts}");
     assert_eq!(
         std::fs::read_to_string(out.join("chains.txt")).unwrap(),
-        "from dev/perf-log/20261103T000000Z-fanout-adhoc.txt\n\nhem: the chains\n  a -> b\n"
+        "from dev/perf-log/20261103T000000Z-fanout-adhoc.txt (history: nothing regenerates it, so it may describe an older engine)\n\nhem: the chains\n  a -> b\n"
     );
     assert_eq!(
         std::fs::read_to_string(out.join("budget.json")).unwrap(),
@@ -577,19 +577,20 @@ fn a_bundle_that_cannot_be_written_fails() {
 }
 
 #[test]
-fn an_audit_refuses_a_stale_report_and_a_missing_run() {
+fn an_audit_reads_an_old_report_as_history_and_refuses_a_missing_run() {
     let d = scratch("wbb-stale");
     tree(&d);
     stale(&d);
-    assert_eq!(
-        run(&d, &["audit", "hem"]).stderr,
-        "work-budget-bundle: dev/perf-log/20261103T000000Z-fanout-adhoc.txt is older than the engine it would describe - run `make perf-fanout STAGES=hem` first\n"
-    );
+    // an old report is no refusal: nothing regenerates it (feature 449 T225)
+    assert_eq!(run(&d, &["audit", "hem"]).code, 0);
+    assert!(std::fs::read_to_string(d.join("out/chains.txt"))
+        .unwrap()
+        .contains("history"));
     std::fs::remove_dir_all(d.join("dev/perf-log")).unwrap();
     assert_eq!(run(&d, &["audit", "hem"]).code, 0);
     assert_eq!(
         std::fs::read_to_string(d.join("out/chains.txt")).unwrap(),
-        "no `make perf-fanout` report is kept: run `make perf-fanout STAGES=hem`\n"
+        "no call-chain report is kept for hem, and nothing writes one now (the Python engine's perf-fanout left with it): the counts by function in this bundle are the evidence\n"
     );
     std::fs::remove_dir_all(d.join("dev/work-budget")).unwrap();
     assert_eq!(

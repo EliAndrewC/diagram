@@ -26,10 +26,10 @@ spike that wins lands as any engine change does; its push then owes this brief's
 
 [The commands, in the order run, each with what it shows:]
 
-- where the time is: `make perf-share [MODULE=<path>] [STAGES=<a,b>]`
-- the change against its parent, quick form: `make perf-ab A=<parent>` (seed 25 at 40 households), read against its floor
-  (`make perf-ab AA=1`, once per form)
-- the calls of the stage it changes: `make perf-fanout STAGES=<stage>`
+- where the work is: `make work-budget` (a hamlet stage's counted operations by kind and by function at 10/20/40/80 households),
+  `make budget-sheets` (a Mode A stage, per pool sheet)
+- the change against its parent: the same command on the parent and on the change, the counted operations compared (a timing is
+  evidence, never a gate)
 
 ## The rule
 

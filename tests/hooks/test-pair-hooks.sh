@@ -98,7 +98,7 @@ check "...is not rewritten into make verify" '! run_pretool "$GATE" | grep -q "u
 check "...says nothing" '[ -z "$(run_pretool "$GATE")" ]'
 check "...and records the gate key for the pairing" 'grep -q "gate_key" "$CLONE/.git/pairing-state.json"'
 check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$GATE" | bash -x "$HOOK" pretool 2>&1 ) | grep -q "reviews owed"'
-for shape in "$GATE_FULL" "$(stdin_for Bash '{"command":"make maps SCOPE=all 2>&1 | tail -60"}')" "$(stdin_for Bash '{"command":"setsid nohup make done > /tmp/done.log 2>&1 &"}')" "$(stdin_for Bash '{"command":"make maps","run_in_background":true}')"; do
+for shape in "$GATE_FULL" "$(stdin_for Bash '{"command":"make done FULL=1 2>&1 | tail -60"}')" "$(stdin_for Bash '{"command":"setsid nohup make done > /tmp/done.log 2>&1 &"}')" "$(stdin_for Bash '{"command":"make done","run_in_background":true}')"; do
   check "every gate shape runs as typed: $(printf '%s' "$shape" | cut -c1-60)" '[ "$(rc_pretool "$shape")" -eq 0 ] && ! run_pretool "$shape" | grep -q "updatedInput"'
 done
 rm -f "$CLONE/.git/pairing-state.json"
