@@ -6,10 +6,10 @@
 //! The package's layers are kept (feature 173): every reference points backwards - checks, then the program and the map, then the
 //! registry over all of them, then the report - so a module is read alone.
 //!
-//! LOCKSTEP (`ask:449-engine-order` condition 3): the Python package stays for `compound.py` and `tests/test_mode_a_sheets.py` until step
-//! 3; an edit of one of its modules makes the same change in its Rust module here in the same commit, and `parse/lockstep_checks.rs`
-//! holds every function's records, verdicts and messages equal on the six pool sheets and the red fixtures. Its claims stay keyed to the
-//! `.py` units (`ask:449-phase4-slices` Q10); each Rust copy carries its claim word for word.
+//! LOCKSTEP (`ask:449-engine-order` condition 3): the Python package stays for its Python importers until T212 deletes it (the pool sweep
+//! is Rust since T211, `crate::pool_sweep`); an edit of one of its modules makes the same change in its Rust module here in the same
+//! commit, and `parse/lockstep_checks.rs` holds every function's records, verdicts and messages equal on the six pool sheets and the red
+//! fixtures. Its claims stay keyed to the `.py` units (`ask:449-phase4-slices` Q10); each Rust copy carries its claim word for word.
 //!
 //! Research:
 //!     the Mode A audit - NONE: the package's modules gathered, deciding nothing about a building

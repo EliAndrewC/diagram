@@ -392,7 +392,7 @@ A type is one declaration and one folder; nothing else in the engine learns its 
 5. **The exemplar** under `pool/<tier>/<name>/`: `<name>.svg` (tracked source, its precinct marked), `<name>.gen.py` (rasterizes only), `<name>.notes.md` (`**Program type**`, `**Form**` where the type has one, every knob, particulars, a Review log); `make size-table` then `size-audit`, then `building-review`, each pass a row in `review-ledger.md`. A subject that a settlement map already draws declares the map (`**On map**:`) and is drawn to it (the surroundings rule above): the audit then holds the sheet to the map in both directions and skips the crop check.
 6. **The ignore rule**: one `!pool/<tier>/*/*.svg` line in `.gitignore` for a hand-drawn tier (the declaration test holds the file to it).
 
-The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration; `make quick` runs it.
+The pool sweep (`rust/mode_a/src/pool_sweep.rs`) picks the tier up from the declaration; `make rust-test CRATE=rust/mode_a` runs it.
 
 ## Checklist for a new diagram
 

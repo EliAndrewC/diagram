@@ -5,7 +5,7 @@ failure names.
 WHY A REGISTRY. The GM (2026-09-19): "some of those automated checks will likely just be the same for
 all types of buildings, like whether different shapes end up overlapping with each other, and some of
 them may be specific to individual building types." A check is shared when `types` is None and the
-type's own when it lists tiers; the sweep (`tests/test_mode_a_sheets.py`) runs each sheet through the
+type's own when it lists tiers; the pool sweep (`rust/mode_a/src/pool_sweep.rs`) runs each sheet through the
 checks whose types cover its tier, the report prints them in this order, and a test holds every row
 to its fixture: a check with no red fixture, or one that does not fire on it, is not merged.
 

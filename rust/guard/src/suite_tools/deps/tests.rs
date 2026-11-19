@@ -215,7 +215,8 @@ fn a_test_depends_on_what_it_reaches_or_on_the_whole_tree_when_it_cannot_say() {
     };
     let reach = rel(&t, "tests/tooling/test_reach.py");
     assert!(
-        reach.contains(&"tests/conftest.py".to_owned())
+        reach.contains(&"tests/tooling/test_reach.py".to_owned())
+            && reach.contains(&"tests/conftest.py".to_owned())
             && reach.contains(&"tests/tooling/conftest.py".to_owned())
     );
     assert!(
@@ -391,14 +392,7 @@ fn over_the_real_tree_the_rules_hold() {
     {
         assert!(names(&t.shared, &file),);
     }
-    let lint = t
-        .pydeps(&root.join("tests/test_mode_a_sheets.py"))
-        .iter()
-        .map(|p| t.rel(p))
-        .collect::<Vec<_>>();
-    assert!(
-        lint.contains(&"tests/test_mode_a_sheets.py".to_owned())
-            && lint.contains(&"tests/conftest.py".to_owned())
-    );
+    // a Python test file's own freshness key (itself and each conftest above it) is the synthetic tree's to hold: the real tree's last
+    // test file under `tests/` was deleted by feature 449 T211
     assert!(t.key_for("l7r-guard.sh").len() == 16 && !t.rust_inputs("l7r-guard.sh").is_empty());
 }

@@ -14,8 +14,8 @@ a declared `new-program: <type> <sheet>`. `l7r-gate reviews owed` (`rust/gate/cr
 occasion. Run the sections that occasion owes (below) and say in one line which you skipped.
 
 What this review used to carry has gone where it belongs (`specs/294-settlement-review-rethink/research.md` R1): sizes are
-`size-audit`'s and then the registry's bands; the registry checks (`tools/pack_audit/registry.py`, run on every sheet by
-`tests/test_mode_a_sheets.py`) hold program completeness, structures on walls, the crop, the scale bar, the furniture, a door
+`size-audit`'s and then the registry's bands; the registry checks (`rust/mode_a/src/audit/registry.rs`, run on every pool sheet by
+the pool sweep, `rust/mode_a/src/pool_sweep.rs`) hold program completeness, structures on walls, the crop, the scale bar, the furniture, a door
 on every lodging block, privies by zone, fire-water distribution, the size hierarchy, roads leaving the frame, palette roles,
 a gate wide enough for its road and the sheet's agreement with its map (feature 257, `**On map**`); captions are placed by the
 one caption placer and their wording declared (features 266, 286, 289); spelling and house style are the hooks'; whether a

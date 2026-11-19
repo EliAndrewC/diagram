@@ -762,31 +762,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** no
 
 
-### T211 (<why: the finding or measurement that files it>)
+### T211 (T156's scoping, 2026-11-19: the pool sweep is pytest's last test of the sheets, and it runs on the Python audit)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `tests/test_mode_a_sheets.py` runs every pool sheet through the Python audit; it becomes Rust tests written fresh against the Rust audit (step 1's checks over small sheets, written fresh rather than ported, engine-plan.md): every sheet of every declared tier passes its tier's checks (hand sheets read from their svg, the two generated sheets composed in process from their spec, so no generated sheet is read stale), each check's red fixtures fail it on the Rust verdicts, the size table covers every tagged kind, each on-map declaration holds and its sheets are found, every declared tier is swept, and the round-trip's corridor draws as one passage. The census's pool check moves out of the parse lockstep into the sweep, so T212 can delete the lockstep without losing it. `tests/test_mode_a_sheets.py` and `tests/_sheets.py` are deleted; `_sheets.py`'s staleness test looked only at Python files, so it missed a Rust generator edit (a defect retired with it). The sweep is shown to go red once on a broken sheet.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the Rust pool sweep | its own tests, red once on a broken sheet | the sweep module in rust/mode_a | none | none |
 
 ### T211 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every pool sheet is held to its checks by Rust, with no pytest test left over the sheets.
+2. **The constraints.** FR-001b (pytest's exit); engine-plan.md (checks written fresh, lockstep retired with its Python); the audit's red fixtures still fail and the sheets still pass (T180's restatement of FR-002).
+3. **Where each comes from.** G: the GM, 2026-11-10 and 2026-11-19; O: T156's scoping (the test's assertions read).
+4. **Do they describe the world here?** Yes: the sweep runs on the six pool sheets the Python test ran on.
+5. **The order.** After T210, before T212 (which deletes the lockstep this sweep replaces) and T213.
+6. **The exits.** Green: the sweep green on today's sheets and red once on a broken one, the two Python files gone, `make quick` and `make static` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The sweep's tests listed, each with what it asserts; the red proof recorded.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** `_sheets.py`'s staleness test missed Rust edits (a test answering wrongly): retired with the file.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** none yet
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T212 (<why: the finding or measurement that files it>)

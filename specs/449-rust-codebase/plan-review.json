@@ -948,6 +948,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T211 (T156's scoping, 2026-11-19: the pool sweep is pytest's last test of the sheets, and it runs on the Python audit)": {
+   "sha256": "aba12028670c098e0ac104f6752767442c21514d8af9a7afbc7c67e386839cc0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T211 Approach (checklist part A)": {
+   "sha256": "af7e5b829eaa43d4de43bb7f427f613729fa5ed4d352a4d5d1f090d280f75d1b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14204,6 +14216,64 @@
      "why": "Enforcement that the requested deletion actually happens; it adds no behavior."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T211 (T156's scoping, 2026-11-19: the pool sweep is pytest's last test of the sheets, and it runs on the Python audit)",
+    "### T211 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-sweep-to-rust",
+     "summary": "tests/test_mode_a_sheets.py's pool sweep becomes Rust tests against the Rust audit, written fresh rather than ported",
+     "class": "within",
+     "why": "FR-001b names the sweep of the hand-drawn sheets as a test whose subject outlives the Python and is kept in Rust; 'written fresh rather than ported' follows the GM's 2026-11-19 words (rebuilding from derivations, not porting the Python's mistakes; 'lockstep tests retired as the Python goes') and engine-plan.md. It keeps the test's job and narrows nothing."
+    },
+    {
+     "id": "D2-assertions",
+     "summary": "The sweep asserts: every sheet of every declared tier passes its tier's checks; each check's red fixtures fail on the Rust verdicts; the size table covers every tagged kind; each on-map declaration holds and its sheets are found; every declared tier is swept; the round-trip's corridor draws as one passage",
+     "class": "within",
+     "why": "This is what FR-002 as amended by T180 asks of a ported check: its red fixtures still fail and the sheets it passed still pass. Its reach is set by every declared tier, not by a fixed list."
+    },
+    {
+     "id": "D3-sheet-sources",
+     "summary": "Hand sheets are read from their svg; the two generated sheets are composed in process from their spec so none is read stale",
+     "class": "within",
+     "why": "This is how the sweep gets its inputs, and it is a design choice inside the sweep's job. It excludes no sheet."
+    },
+    {
+     "id": "D4-census-pool-check-moves",
+     "summary": "The census's pool check moves out of the parse lockstep into the sweep, so T212 can delete the lockstep without losing it",
+     "class": "within",
+     "why": "It keeps an existing check alive past the lockstep's retirement (engine-plan.md; the GM 2026-11-19 'lockstep tests retired as the Python goes'). Nothing is dropped."
+    },
+    {
+     "id": "D5-delete-python-files",
+     "summary": "tests/test_mode_a_sheets.py and tests/_sheets.py are deleted once the Rust sweep is green",
+     "class": "within",
+     "why": "FR-001b: a kept Python test is replaced by its Rust port and the Python goes. The exits put the deletion after the sweep is green and red once on a broken sheet, which is consistent with FR-003."
+    },
+    {
+     "id": "D6-staleness-test-retired",
+     "summary": "_sheets.py's staleness test (which looked only at Python generator files and so missed Rust generator edits) is retired with the file and not replaced",
+     "class": "within",
+     "why": "It is the block's only removal of a check, so it was weighed as a possible narrowing. The block's own design leaves it nothing to check: the sweep composes the two generated sheets in process from their spec and never reads a generated sheet from disk, so a stale file cannot reach it (D3). The test was also a defect, a check answering wrongly, and it is retired rather than carried into the next step, which the GM's 2026-11-18 'fix all known bugs in each step' asks for. FR-001b deletes Python tests outside the named group by default."
+    },
+    {
+     "id": "D7-red-proof",
+     "summary": "The sweep is shown to go red once on a broken sheet, and the red proof is recorded",
+     "class": "within",
+     "why": "This is enforcement that the requested check does its job (FR-002: a ported check's red fixtures still fail). It is verification, not new behavior."
+    },
+    {
+     "id": "D8-order",
+     "summary": "After T210, before T212 (lockstep deletion) and T213",
+     "class": "within",
+     "why": "It orders tasks inside the feature's approved scope and decides nothing the request settles."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25120,6 +25190,62 @@
      "summary": "Done when the files and targets are gone, no reference left (a grep per deleted name finds none outside history), make quick, make figures and make hooks-test green; red recorded and set down, an impossibility claim through make arbiter-ask",
      "class": "within",
      "why": "Enforcement that the requested deletion actually happens; it adds no behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T211": {
+   "section_sha256": "888a8fcc829787530c397d9260dbd9e37adf37e93dc0297bd3d914245f5996ac",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-sweep-to-rust",
+     "summary": "tests/test_mode_a_sheets.py's pool sweep becomes Rust tests against the Rust audit, written fresh rather than ported",
+     "class": "within",
+     "why": "FR-001b names the sweep of the hand-drawn sheets as a test whose subject outlives the Python and is kept in Rust; 'written fresh rather than ported' follows the GM's 2026-11-19 words (rebuilding from derivations, not porting the Python's mistakes; 'lockstep tests retired as the Python goes') and engine-plan.md. It keeps the test's job and narrows nothing."
+    },
+    {
+     "id": "D2-assertions",
+     "summary": "The sweep asserts: every sheet of every declared tier passes its tier's checks; each check's red fixtures fail on the Rust verdicts; the size table covers every tagged kind; each on-map declaration holds and its sheets are found; every declared tier is swept; the round-trip's corridor draws as one passage",
+     "class": "within",
+     "why": "This is what FR-002 as amended by T180 asks of a ported check: its red fixtures still fail and the sheets it passed still pass. Its reach is set by every declared tier, not by a fixed list."
+    },
+    {
+     "id": "D3-sheet-sources",
+     "summary": "Hand sheets are read from their svg; the two generated sheets are composed in process from their spec so none is read stale",
+     "class": "within",
+     "why": "This is how the sweep gets its inputs, and it is a design choice inside the sweep's job. It excludes no sheet."
+    },
+    {
+     "id": "D4-census-pool-check-moves",
+     "summary": "The census's pool check moves out of the parse lockstep into the sweep, so T212 can delete the lockstep without losing it",
+     "class": "within",
+     "why": "It keeps an existing check alive past the lockstep's retirement (engine-plan.md; the GM 2026-11-19 'lockstep tests retired as the Python goes'). Nothing is dropped."
+    },
+    {
+     "id": "D5-delete-python-files",
+     "summary": "tests/test_mode_a_sheets.py and tests/_sheets.py are deleted once the Rust sweep is green",
+     "class": "within",
+     "why": "FR-001b: a kept Python test is replaced by its Rust port and the Python goes. The exits put the deletion after the sweep is green and red once on a broken sheet, which is consistent with FR-003."
+    },
+    {
+     "id": "D6-staleness-test-retired",
+     "summary": "_sheets.py's staleness test (which looked only at Python generator files and so missed Rust generator edits) is retired with the file and not replaced",
+     "class": "within",
+     "why": "It is the block's only removal of a check, so it was weighed as a possible narrowing. The block's own design leaves it nothing to check: the sweep composes the two generated sheets in process from their spec and never reads a generated sheet from disk, so a stale file cannot reach it (D3). The test was also a defect, a check answering wrongly, and it is retired rather than carried into the next step, which the GM's 2026-11-18 'fix all known bugs in each step' asks for. FR-001b deletes Python tests outside the named group by default."
+    },
+    {
+     "id": "D7-red-proof",
+     "summary": "The sweep is shown to go red once on a broken sheet, and the red proof is recorded",
+     "class": "within",
+     "why": "This is enforcement that the requested check does its job (FR-002: a ported check's red fixtures still fail). It is verification, not new behavior."
+    },
+    {
+     "id": "D8-order",
+     "summary": "After T210, before T212 (lockstep deletion) and T213",
+     "class": "within",
+     "why": "It orders tasks inside the feature's approved scope and decides nothing the request settles."
     }
    ],
    "verdict": "CLEAR"

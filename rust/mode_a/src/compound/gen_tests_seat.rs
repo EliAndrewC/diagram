@@ -492,9 +492,11 @@ fn a_gate_holds_its_passage_and_approach_on_any_wall() {
     assert!(matches!(l.grid.ents[0].what, What::Gate));
 }
 
-/// The pool's two generated sheets, composed from their specs and each held to every check the audit runs on a magistracy sheet.
+/// The pool's two generated sheets compose from their specs, each building in its declared court with the water and privies the program
+/// owes. Their checks are the pool sweep's (`crate::pool_sweep`, feature 449 T211): this test's report ran on a copy outside the pool,
+/// which the report read as a sheet of no tier, so it held them to the shared layer alone.
 #[test]
-fn the_pool_sheets_compose_and_pass_every_check() {
+fn the_pool_sheets_compose_in_their_courts() {
     let tree = tree();
     for name in ["ochiba-roundtrip-test", "county-magistracy-example"] {
         let spec = tree.join(format!("pool/magistracies/{name}/{name}.compound.json"));
@@ -513,19 +515,6 @@ fn the_pool_sheets_compose_and_pass_every_check() {
             s.wells.len(),
         );
         assert_eq!(owed, (true, true, 5, 3), "{name}");
-        let text = crate::caption_place::placed(&super::sheet(&p, &l, &s)).unwrap();
-        let dir = l7r_guard::shared::tempdir::TempDir::new("compound-pool");
-        let svg = dir.path().join(format!("{name}.svg"));
-        std::fs::write(&svg, &text).unwrap();
-        let r = crate::audit::report::main(&[svg.to_string_lossy().into_owned()], &tree);
-        let failing: Vec<&str> = r
-            .stdout
-            .lines()
-            .skip_while(|l| !l.starts_with("CHECKS"))
-            .skip(1)
-            .filter(|l| !l.trim().is_empty() && !l.ends_with(": OK") && !l.contains("skipped"))
-            .collect();
-        assert_eq!((r.code, failing), (0, Vec::<&str>::new()), "{name}");
     }
 }
 

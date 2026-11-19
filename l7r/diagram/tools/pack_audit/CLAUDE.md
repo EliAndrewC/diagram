@@ -1,6 +1,6 @@
 # `pack_audit/` - the Mode A sheet audit
 
-Split from one `pack_audit.py` by feature 173, as LAYERS emitted bottom-up (every cross-module reference points backwards, so no import cycle). **Load only the file the task calls for**; this index is the map. Run it as `make pack-audit`, which since feature 449 T175 runs the Rust (`l7r-mode-a pack-audit`, `rust/mode_a/src/audit/report.rs`); the package's `__main__.py` was deleted then, and these modules stay for their Python importers (`compound.py`, `tests/test_mode_a_sheets.py`) under the lockstep rule.
+Split from one `pack_audit.py` by feature 173, as LAYERS emitted bottom-up (every cross-module reference points backwards, so no import cycle). **Load only the file the task calls for**; this index is the map. Run it as `make pack-audit`, which since feature 449 T175 runs the Rust (`l7r-mode-a pack-audit`, `rust/mode_a/src/audit/report.rs`); the package's `__main__.py` was deleted then, and these modules stay for their Python importers under the lockstep rule until T212 deletes them (the pool sweep is Rust since T211, `rust/mode_a/src/pool_sweep.rs`).
 
 ## Look here when
 

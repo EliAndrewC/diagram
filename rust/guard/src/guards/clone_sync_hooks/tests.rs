@@ -628,10 +628,15 @@ fn every_makefile_target_that_reaches_pytest_is_behind_the_test_targets() {
         let calls =
             crate::shared::regex::build(&format!(r"\$\(MAKE\)[^\n]*?\b(?:{})\b", names.join("|")))
                 .unwrap();
+        // a target is kept or not in the one closure every recipe reaches: since feature 449 T211 emptied `test`, no recipe calls a
+        // target that runs pytest, and a closure reached only by a caller left a line no test reaches
         let mut grew: Vec<String> = recipes
             .iter()
-            .filter(|(_, r)| r.iter().any(|l| calls.is_match(l).unwrap()))
-            .map(|(t, _)| t.clone())
+            .filter_map(|(t, r)| {
+                r.iter()
+                    .any(|l| calls.is_match(l).unwrap())
+                    .then_some(t.clone())
+            })
             .collect();
         grew.extend(runs.iter().cloned());
         grew.sort();

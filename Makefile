@@ -966,7 +966,7 @@ durations:       ## [tests] where the suite's time goes - run when a target feel
 # Timed with date +%s, not $$SECONDS: make's shell is sh, where SECONDS is unset.
 # The ratchet and the budget judge warm, selective runs only; raise the budget only with a measurement.
 # The house-style scan is a phase, not a test: testmon selects tests by changed code and would never pick it.
-quick:           ## [tests] tier 2: lint and the kept Python tests that roll no map
+quick:           ## [tests] tier 2: lint and the fast tree checks (no Python test remains since feature 449 T211)
 	@python3 -m ruff check l7r/ tests/
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta --selftest >/dev/null
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta .
@@ -974,8 +974,7 @@ quick:           ## [tests] tier 2: lint and the kept Python tests that roll no 
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
 	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check partial-citations .; fi
-	@python3 -m pytest -q --no-cov -m "not rolls_map" tests
-	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(grep -rho --include='*.py' '@pytest.mark.rolls_map' tests | wc -l)"
+	@printf '\n\033[1mquick: clean\033[0m - `make done` before pushing.\n'
 	@$(STATE) green-local quick
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)
@@ -1116,10 +1115,10 @@ SOAK_DIR ?= tests/soak
 
 # A deselected test takes its coverage with it, so the 100% floors need the whole suite: done's test phase is test-full.
 
-test:            ## [tests] {internal} the pytest phase itself (internal - `done` and `test-full` call it, not you)
-	@tpy=$$(date +%s); $(GATE_EXHAUSTIVE_ENV) python3 -m pytest -q --no-cov $(ROLL_DESELECT) tests; ec=$$?; \
-	$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" pytest $$(( $$(date +%s) - tpy )) 2>/dev/null || true; \
-	exit $$ec
+# No Python test is left under tests/ (feature 449 T211 deleted the last, the pool sweep, now `rust/mode_a/src/pool_sweep.rs`): a pytest
+# run there collects nothing and exits 5, so the phase runs none; T213 retires the phase and pytest's other targets.
+test:            ## [tests] {internal} the pytest phase, empty since feature 449 T211 (internal - `done` and `test-full` call it, not you)
+	@printf 'test: no Python test remains under tests/ (feature 449 T211) - nothing to run\n'
 
 # EVERY MAKE INVOCATION RECORDS ITS RUN (feature 406 T02, D161; the GM 2026-10-19: "it is notionally possible for us to see how
 # often a tool is used"). The event log sees a target only when a session's Bash call runs it; one run from another target's

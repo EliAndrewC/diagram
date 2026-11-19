@@ -12,7 +12,7 @@ omitClaudeMd: true
 Only on an OCCASION (feature 294, GM 2026-10-01): a sized kind (`data-kind`) new to a sheet, or a feature's declared
 `new-program:`. `l7r-gate reviews owed` (`rust/gate/crates/reviews/src/reviews/owed.rs`) decides it; the dispatch names the kind (or the program) and the sheet. A size
 once anchored becomes a band in `l7r/diagram/buildings/types.json`, which the registry's `size_bands` check enforces on
-every sheet from then on (`tests/test_mode_a_sheets.py`), so a revised sheet owes no audit: the band is checked by a test.
+every pool sheet from then on (the pool sweep, `rust/mode_a/src/pool_sweep.rs`), so a revised sheet owes no audit: the band is checked by a test.
 What this audit used to carry has gone where it belongs (`specs/294-settlement-review-rethink/research.md` R1): the size
 table (`make size-table`) does the arithmetic and lists every tagged kind; the proportion pairs, coverage band, perimeter
 hugging, gate widths and the relays are registry checks; the dead-space, vacancy and gap sweeps are `building-review`'s on a

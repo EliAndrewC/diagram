@@ -1,10 +1,8 @@
-//! THE SHEETS' TYPED COUNTS (feature 294 B15b, the audit's B11 row; moved here from `tests/test_mode_a_sheets.py` by feature 449 T170,
-//! with the Python it called): a count of tubs, privies or wells typed in a pool sheet's notes' current prose agrees with what the sheet
-//! draws - dated history exempt, and a count of a part. Every pool sheet of a declared Mode A tier is read as it stands on disk; the pytest
-//! sweep regenerated a declared generated exception's sheet when absent or stale first, which a Rust test cannot, so such a sheet is held
-//! where it has been drawn (`make quick`'s sweep draws it). It runs inside the parse's lockstep (`parse/lockstep.rs`), FR-008's one
-//! end-to-end test, which reads every pool sheet already: alone it took 0.146 s, over the bar (observed 2026-11-17, method:
-//! `make test-times CRATE=rust/mode_a`).
+//! THE SHEETS' TYPED COUNTS (feature 294 B15b, the audit's B11 row; moved from the retired pytest sweep by feature 449 T170, with the
+//! Python it called): a count of tubs, privies or wells typed in a pool sheet's notes' current prose agrees with what the sheet draws -
+//! dated history exempt, and a count of a part. Asked by the Rust pool sweep (`crate::pool_sweep`, feature 449 T211) with the sheets it
+//! holds - a hand sheet as tracked, a generated one composed from its spec in process, so neither is read stale - and with the pool's
+//! census blocks (moved there from the parse's lockstep, which T212 deletes).
 //!
 //! Research:
 //!     the sheets' typed counts check - NONE: a check over the pool's sheets and their notes, deciding nothing about a building
@@ -13,13 +11,13 @@ use std::path::{Path, PathBuf};
 
 use super::stale_sheet_counts;
 
-/// Every pool sheet's notes type the counts it draws (asked by the lockstep's end-to-end test with the pool's sheets).
-pub(crate) fn every_pool_sheet_s_notes_type_the_counts_it_draws(sheets: &[PathBuf]) {
-    for svg in sheets {
+/// Every pool sheet's notes type the counts it draws: each sheet by its path in the pool (its notes beside it) and the text the sweep
+/// holds for it.
+pub(crate) fn every_pool_sheet_s_notes_type_the_counts_it_draws(sheets: &[(&Path, &str)]) {
+    for &(svg, text) in sheets {
         let notes =
             l7r_gate_core::record::read_text(&svg.with_extension("notes.md")).unwrap_or_default();
-        let text = l7r_gate_core::record::read_text(svg).unwrap();
-        let stale = stale_sheet_counts(&notes, &text).unwrap();
+        let stale = stale_sheet_counts(&notes, text).unwrap();
         // the fix rides in the compared value, so a failure prints it beside the sheet and its stale counts
         assert_eq!(
             (svg.display().to_string(), stale, FIX),
@@ -59,9 +57,8 @@ fn notes_with_blocks(root: &Path) -> Vec<PathBuf> {
 
 /// THE CENSUS BLOCKS ARE FRESH (feature 152's test, `tests/test_notes_census.py`, dropped by feature 444 T39 on a wrong label and
 /// restored by feature 449 T171): every census block a notes file carries is the one `make notes-census` writes from the manifest
-/// beside it, and the five scripted hamlets each carry one - the counts a review keeps catching stale are those. Asked by the
-/// lockstep's end-to-end test, which reads the pool already: the five hamlets' manifests and their ways out cost more than a unit test's
-/// bar.
+/// beside it, and the five scripted hamlets each carry one - the counts a review keeps catching stale are those. Asked by the pool
+/// sweep.
 pub(crate) fn every_census_block_is_its_manifest_s(root: &Path) {
     let with = notes_with_blocks(root);
     let names: Vec<String> = with

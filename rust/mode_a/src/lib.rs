@@ -43,6 +43,8 @@ pub mod notes;
 pub mod page;
 pub mod parse;
 pub mod place;
+#[cfg(test)]
+mod pool_sweep;
 pub mod programs;
 pub mod py;
 pub mod raster;
@@ -58,7 +60,7 @@ pub mod work_counts;
 const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | sheet-page <map.svg> [--with-raster | --no-raster] [--stdin] | hand-sheet <map.svg> [--placed OUT] | compound <map.compound.json> | sheet-render <map.svg> <out.png> | picture-diff a b [--page PAGE] [--svg SVG] [--threshold N] | page-lit <page.html> <key> [--vector] [--out OUT] | --version\n";
 
 /// The command: `building-programs [--check] [--path PATH]`, `notes-census <manifest.json> [...]` (`make notes-census`), the notes
-/// census's two checks and a sheet's counts as commands (the differential's doors onto what `tests/test_mode_a_sheets.py` once asked in
+/// census's two checks and a sheet's counts as commands (the differential's doors onto what the retired pytest sweep once asked in
 /// process, feature 449 T170), `size-table <plan> [--json JSON]` (`make size-table`, T174), or `--version` (the differential's cheap build
 /// probe), or `pack-audit <compound.svg> [...]` (`make pack-audit`, T175: the report of each sheet, its usage line the Python's own words, a
 /// usage `ask:449-usage-text` binds).

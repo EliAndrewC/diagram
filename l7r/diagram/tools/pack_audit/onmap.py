@@ -9,7 +9,7 @@ center in the map's own px; the sheet id names the rect that IS the subject on t
 is the transform's origin. A sheet with no such line is on no map, and the check says so.
 
 A sheet whose subject a pool or legacy map DOES record must carry the line (feature 294 B24,
-`tests/test_mode_a_sheets.py`), or opt out of it in so many words: `**On map**: none - <why>`.
+the pool sweep `rust/mode_a/src/pool_sweep.rs`), or opt out of it in so many words: `**On map**: none - <why>`.
 """
 
 from __future__ import annotations
