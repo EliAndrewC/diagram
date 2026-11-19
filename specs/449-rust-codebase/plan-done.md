@@ -5207,3 +5207,32 @@ censuses empty (work breakdown 8, FR-010).
 
 
 
+<!-- plan-archive: archived 2026-11-19 -->
+### T207 (the GM, 2026-11-19, on make where-time's idle hours: "Is that time where nothing was happening?!")
+
+- **Approach**: the report booked 379 idle minutes to feature 449 on 11-19 (observed 2026-11-19, method: `make where-time F=449 SINCE=2026-11-19`). Read against the event log, the idle gaps lay between session-less blank lines (`{"t":...,"sid":"","ev":""}`) that the report treated as a second session; the real session had no gap over 30 minutes that day (observed 2026-11-19, method: the event log's gaps by session). The blank lines came from the measure crate's own test feeding an empty payload to the event-log writer - one per test run, 367 in the log (observed 2026-11-19, method: `grep -c '"ev":""'` on the log). Fixed: the writer writes nothing for a payload naming no hook event (`event_log_hooks.rs`); the reader skips any line naming no event (`events.rs`); and SINCE keeps the last task started before the cut, so the window's first stretch is booked to the task in hand, not to `-` (`where_time.rs`). Corrected: idle 0 on every row, the day's total 733 minutes, not 1,374 (measured 2026-11-19 (`make where-time F=449 SINCE=2026-11-19` after the fix)). The session's earlier reading - a 5.5-hour stall on 11-17 - was wrong: that gap followed the session's final report and was the GM away (the untyped agent-finished event at 18:51 was Claude Code's away summary); 11-16's 143-minute gap was the weekly usage limit. No watchdog change.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the event log and its reader | `a_payload_naming_no_event_writes_no_line`, `a_row_naming_no_event_is_no_session`, `since_keeps_the_task_active_when_it_opens` | `event_log_hooks.rs`, `events.rs`, `where_time.rs` | none | none |
+
+### T207 Approach (checklist part A)
+
+1. **The goal, in the world.** The time report says where a feature's time went, so an efficiency report to the GM is true.
+2. **The constraints.** Feature 385's time report (T77, T89, T115); constitution XIV (a tool that answers wrongly is a defect).
+3. **Where each comes from.** G: the GM's question, 2026-11-19; O: the event log read by session.
+4. **Do they describe the world here?** Yes: the phantom session's lines are in the log and the old report counted them (the replay test gives 143 idle minutes on the old code, 0 on the new, measured 2026-11-19 (`a_row_naming_no_event_is_no_session` run on both)).
+5. **The order.** After T204, before T205 and T206, whose savings are measured with this report.
+6. **The exits.** Green: each test red on the old code, the corrected report's idle column 0, `make static` and `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** The corrected report, idle 0, total 733 minutes (measured 2026-11-19, as above).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** The report answered wrongly (379 idle minutes that were not idle): a defect under XIV.
+
+**Found and left?** Other clones keep writing blank lines until they pull this fix; the reader ignores them. The "carried" booking rule (681 of the 733 minutes, measured 2026-11-19 (the corrected report's booked-by line)) was not measured booking anything wrongly and is left.
+
+**Performance work?** no
+
+

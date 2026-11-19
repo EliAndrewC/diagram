@@ -52,8 +52,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T206 A claims re-check owes only the claims a change can bear on, measured first (the GM 2026-11-12: "if you identify concrete targets with significant measured expected savings then go ahead"): T202's three impl-drift rounds re-judged 259, 55 and 21 claims, most IN-STEP and unchanged in their cited code and blocks; first measure, over feature 449's claims rounds, how many re-owed claims had neither their unit's code nor their cited blocks changed since their last IN-STEP; if that share is large, narrow claims-owed to claims whose unit or cited block changed (every claim citing a changed file or block still owed), with tests that a claim citing a changed block is still owed (2026-11-19)
       research: rendering
-- [ ] T207 The idle time in make where-time (the GM 2026-11-19: "And that's sooooo much idle time!  Is that time where nothing was happening?!"): it was not real. A test's empty payload wrote session-less blank lines into the event log (367 of them, 11-08 to 11-19), which where-time read as a second session, and the gaps between them were 379 "idle" minutes (and inflated the model column); fixed: the event-log writer refuses a payload naming no hook event, the reader skips such lines, and SINCE keeps the task active when the window opens. The 11-17 gap was the GM away after the session's final report, not a stall (the untyped agent-finished event at 18:51 was Claude Code's away summary), and 11-16's was the weekly usage limit; no watchdog change.
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
