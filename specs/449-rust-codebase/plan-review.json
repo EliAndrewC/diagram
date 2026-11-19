@@ -798,6 +798,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T199 (the GM, 2026-11-19: steps 1, 2 and 3a were ported, not rebuilt, and carried the Python's mistakes)": {
+   "sha256": "52bb3d1ec7b2fa9ba654567ae77c9be06ad3d76a8f4348d13e33d7c250a431e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T199 Approach (checklist part A)": {
+   "sha256": "1514253fbbc795dfcdaa979dbf3dc7109f73ad19e9a3759f93dc44a5dfeba118",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T198 (the GM, 2026-11-19: \"if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible\")": {
+   "sha256": "240bd132399f1bc7283965c0bb6452e34561885a1049ee56df852e8f316be4c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T198 Approach (checklist part A)": {
+   "sha256": "33e6dee6f1106fb6c245fa268303e6aead2f2fce4875a5ea1bad74832e07ef6f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13178,6 +13202,93 @@
      "why": "Carries out 'fix all known bugs in each step before moving on to porting the next step'."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T199 (the GM, 2026-11-19: steps 1, 2 and 3a were ported, not rebuilt, and carried the Python's mistakes)",
+    "### T199 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T199-prose",
+     "summary": "The GM's 2026-10-30 rule is written into engine-plan.md (a new section 'Rebuilt from a derivation, not ported'), into spec.md's phase-4 paragraph as one sentence, and into this plan section; done is measured by a grep for the GM's words and the heading. No new guard.",
+     "class": "within",
+     "why": "The GM's 2026-11-19 words record that this feature's engine plan dropped the 10-30 rule and approve proceeding 'on that basis'. Writing the rule into the documents a later plan reads carries it. The approved basis asked for no new guard, so a prose-only change does not narrow it."
+    },
+    {
+     "id": "T199-rebuild",
+     "summary": "An algorithm is rebuilt from a SOUND derivation as feature 444 phase tasks, with old-code: naming the Python and any Rust port.",
+     "class": "within",
+     "why": "This is the 10-30 rule ('we are not trying to re-implement the same algorithms') and the approved basis ('step 3b rebuilt from a derivation as phase tasks') applied to the rest of the engine."
+    },
+    {
+     "id": "T199-plumbing",
+     "summary": "Code that is plumbing, not an algorithm, may be ported after a read for any search or scan that grows faster than its input.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'step 3b rebuilt from a derivation', which names the whole step, so it gets a ruling. Word test: the GM's own 10-30 rule covers 'algorithms', and gives its reason as 'the old algorithms were computationally inefficient and resulted in orders of magnitude more operations'. The founding request (2026-11-07) is that the Python be 'ported to Rust'. So porting code that is not an algorithm is implied by the GM's words, not completed for them. Purpose test: the rule exists to stop needless operations and the Python's mistakes from being carried over. The required read for a search or scan growing faster than its input targets exactly the operation-count failure. Any other wrong outcome stays under FR-002 and the fix-as-we-go rule. BOUND: the ruling covers only code with no search, placement, layout, optimization or iterative fitting. Code that does any of these is an algorithm under this rule, whatever it is labeled, and is not covered. Ported code later found to grow faster than its input falls back under the rebuild rule. This ruling rests only on request.md, not on what feature 444's guard permits, which the bundle does not show."
+    },
+    {
+     "id": "T199-steps-1-2-kept",
+     "summary": "Steps 1 and 2 are kept on their merits.",
+     "class": "within",
+     "why": "The GM approved this in the plan he answered on 2026-11-19 ('steps 1 and 2 kept'; 'okay, please proceed on that basis then')."
+    },
+    {
+     "id": "T199-lockstep",
+     "summary": "Lockstep tests are deleted with their Python.",
+     "class": "within",
+     "why": "The GM approved this in the 2026-11-19 plan ('lockstep tests retired as the Python goes')."
+    },
+    {
+     "id": "T199-order",
+     "summary": "This task runs after T198's count and before T152 (step 3b). T152's text is rewritten into phase tasks when it starts, from T198's verdict.",
+     "class": "within",
+     "why": "The approved basis puts the 3a placer's measurement before step 3b and has step 3b rebuilt as phase tasks. Rewriting T152 when it starts changes only timing, not reach."
+    },
+    {
+     "id": "T199-3a-not-decided",
+     "summary": "The block does not decide step 3a's fate. It cites T198's count (the 3a placer at 50 to 1,000 times its derived budget) only as evidence for the rule, keeps only steps 1 and 2, and orders T152 next.",
+     "class": "within",
+     "why": "T199 makes no decision about 3a, so there is no narrowing to rule on. The GM's 2026-11-19 condition ('if the 3a step is horribly inefficient then we might need to rip it out and restart') is open, and the block's own figure bears on it. This verdict does NOT clear starting step 3b (T152) with step 3a left as it is. Whether to rip out 3a is the GM's question, to be put to him from T198's verdict before T152 begins."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T198 (the GM, 2026-11-19: \"if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible\")",
+    "### T198 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T198-measure",
+     "summary": "Measure the step-3a placer against a work budget derived blind from 0242 and 0330 (derivations/T198-placer.md, judged SOUND by work-budget), with counters on the Rust placer behind a compiled-out `counters` feature of rust/mode_a, placement unchanged",
+     "class": "within",
+     "why": "The GM approved exactly this on 2026-11-19: 'the step-3a placer measured against a derived work budget before step 3b'. A blind derivation and counters that compile out and leave the placed sheets unchanged are the measurement, adding no behavior."
+    },
+    {
+     "id": "T198-rebuild",
+     "summary": "At 100x-4,400x over budget (704x over the four sheets), far past the derivation's 2x rule, the placer is rebuilt from the derivation as phase tasks with phase_source_hooks on, and the GM is told",
+     "class": "within",
+     "why": "This is the GM's own conditional: 'if the 3a step is horribly inefficient then we might need to rip it out and restart tomake it not terrible', read with the 2026-10-30 rule against 'orders of magnitude more operations being performed than needed'. Two to three orders of magnitude over budget meets that condition, and rebuilding with the phase-source guard on answers the GM's 2026-11-19 objection to ports done straight from the Python. The Rust's 2.8 s against the Python's 25 s is correctly not used to excuse the operation count. The plan files the rebuild as its own tasks and reports the verdict to the GM, so nothing is narrowed."
+    },
+    {
+     "id": "T198-hypot-left",
+     "summary": "dist()'s Python-exact software hypot, about half the placer's instructions, is left as found: not a defect and moot under the rebuild",
+     "class": "within",
+     "why": "No output is wrong, so under constitution XIV's definition (GM 2026-11-19) it is not a defect that 'fix all known bugs' reaches. The inefficiency it causes is not set aside either: the rebuild that replaces this placer covers it."
+    },
+    {
+     "id": "T198-order-budget",
+     "summary": "Ordered after T195 and before T199's landing and T152; one landing for the counters and the derivation, the rebuild as separate phase tasks; red exit sets the task down with any cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Matches the approved sequence (step 3a measured before step 3b) and leaves out nothing the request asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23418,6 +23529,89 @@
      "summary": "T195 runs after T194 and before step 3b's first port (T152).",
      "class": "within",
      "why": "Carries out 'fix all known bugs in each step before moving on to porting the next step'."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T199": {
+   "section_sha256": "175fec5589e209c7a2dfad8744a4d5f6138912297ef1fd6283290c435c09f035",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T199-prose",
+     "summary": "The GM's 2026-10-30 rule is written into engine-plan.md (a new section 'Rebuilt from a derivation, not ported'), into spec.md's phase-4 paragraph as one sentence, and into this plan section; done is measured by a grep for the GM's words and the heading. No new guard.",
+     "class": "within",
+     "why": "The GM's 2026-11-19 words record that this feature's engine plan dropped the 10-30 rule and approve proceeding 'on that basis'. Writing the rule into the documents a later plan reads carries it. The approved basis asked for no new guard, so a prose-only change does not narrow it."
+    },
+    {
+     "id": "T199-rebuild",
+     "summary": "An algorithm is rebuilt from a SOUND derivation as feature 444 phase tasks, with old-code: naming the Python and any Rust port.",
+     "class": "within",
+     "why": "This is the 10-30 rule ('we are not trying to re-implement the same algorithms') and the approved basis ('step 3b rebuilt from a derivation as phase tasks') applied to the rest of the engine."
+    },
+    {
+     "id": "T199-plumbing",
+     "summary": "Code that is plumbing, not an algorithm, may be ported after a read for any search or scan that grows faster than its input.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'step 3b rebuilt from a derivation', which names the whole step, so it gets a ruling. Word test: the GM's own 10-30 rule covers 'algorithms', and gives its reason as 'the old algorithms were computationally inefficient and resulted in orders of magnitude more operations'. The founding request (2026-11-07) is that the Python be 'ported to Rust'. So porting code that is not an algorithm is implied by the GM's words, not completed for them. Purpose test: the rule exists to stop needless operations and the Python's mistakes from being carried over. The required read for a search or scan growing faster than its input targets exactly the operation-count failure. Any other wrong outcome stays under FR-002 and the fix-as-we-go rule. BOUND: the ruling covers only code with no search, placement, layout, optimization or iterative fitting. Code that does any of these is an algorithm under this rule, whatever it is labeled, and is not covered. Ported code later found to grow faster than its input falls back under the rebuild rule. This ruling rests only on request.md, not on what feature 444's guard permits, which the bundle does not show."
+    },
+    {
+     "id": "T199-steps-1-2-kept",
+     "summary": "Steps 1 and 2 are kept on their merits.",
+     "class": "within",
+     "why": "The GM approved this in the plan he answered on 2026-11-19 ('steps 1 and 2 kept'; 'okay, please proceed on that basis then')."
+    },
+    {
+     "id": "T199-lockstep",
+     "summary": "Lockstep tests are deleted with their Python.",
+     "class": "within",
+     "why": "The GM approved this in the 2026-11-19 plan ('lockstep tests retired as the Python goes')."
+    },
+    {
+     "id": "T199-order",
+     "summary": "This task runs after T198's count and before T152 (step 3b). T152's text is rewritten into phase tasks when it starts, from T198's verdict.",
+     "class": "within",
+     "why": "The approved basis puts the 3a placer's measurement before step 3b and has step 3b rebuilt as phase tasks. Rewriting T152 when it starts changes only timing, not reach."
+    },
+    {
+     "id": "T199-3a-not-decided",
+     "summary": "The block does not decide step 3a's fate. It cites T198's count (the 3a placer at 50 to 1,000 times its derived budget) only as evidence for the rule, keeps only steps 1 and 2, and orders T152 next.",
+     "class": "within",
+     "why": "T199 makes no decision about 3a, so there is no narrowing to rule on. The GM's 2026-11-19 condition ('if the 3a step is horribly inefficient then we might need to rip it out and restart') is open, and the block's own figure bears on it. This verdict does NOT clear starting step 3b (T152) with step 3a left as it is. Whether to rip out 3a is the GM's question, to be put to him from T198's verdict before T152 begins."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T198": {
+   "section_sha256": "22087733ae009c1f2a5b4f05669dee1b264a1abaa9debefcf7b61ff119adb3f6",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T198-measure",
+     "summary": "Measure the step-3a placer against a work budget derived blind from 0242 and 0330 (derivations/T198-placer.md, judged SOUND by work-budget), with counters on the Rust placer behind a compiled-out `counters` feature of rust/mode_a, placement unchanged",
+     "class": "within",
+     "why": "The GM approved exactly this on 2026-11-19: 'the step-3a placer measured against a derived work budget before step 3b'. A blind derivation and counters that compile out and leave the placed sheets unchanged are the measurement, adding no behavior."
+    },
+    {
+     "id": "T198-rebuild",
+     "summary": "At 100x-4,400x over budget (704x over the four sheets), far past the derivation's 2x rule, the placer is rebuilt from the derivation as phase tasks with phase_source_hooks on, and the GM is told",
+     "class": "within",
+     "why": "This is the GM's own conditional: 'if the 3a step is horribly inefficient then we might need to rip it out and restart tomake it not terrible', read with the 2026-10-30 rule against 'orders of magnitude more operations being performed than needed'. Two to three orders of magnitude over budget meets that condition, and rebuilding with the phase-source guard on answers the GM's 2026-11-19 objection to ports done straight from the Python. The Rust's 2.8 s against the Python's 25 s is correctly not used to excuse the operation count. The plan files the rebuild as its own tasks and reports the verdict to the GM, so nothing is narrowed."
+    },
+    {
+     "id": "T198-hypot-left",
+     "summary": "dist()'s Python-exact software hypot, about half the placer's instructions, is left as found: not a defect and moot under the rebuild",
+     "class": "within",
+     "why": "No output is wrong, so under constitution XIV's definition (GM 2026-11-19) it is not a defect that 'fix all known bugs' reaches. The inefficiency it causes is not set aside either: the rebuild that replaces this placer covers it."
+    },
+    {
+     "id": "T198-order-budget",
+     "summary": "Ordered after T195 and before T199's landing and T152; one landing for the counters and the derivation, the rebuild as separate phase tasks; red exit sets the task down with any cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Matches the approved sequence (step 3a measured before step 3b) and leaves out nothing the request asked for."
     }
    ],
    "verdict": "CLEAR"
