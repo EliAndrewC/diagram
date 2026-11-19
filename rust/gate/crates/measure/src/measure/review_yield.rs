@@ -43,7 +43,7 @@ const COLUMNS: [&str; 11] = [
 ];
 
 fn compiled(p: &str) -> Regex {
-    Regex::new(p).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WALL: LazyLock<Regex> = LazyLock::new(|| compiled(r"(\d+(?:\.\d+)?)\s*s\b"));
@@ -170,7 +170,7 @@ fn table(rs: &[Vec<String>]) -> Vec<(String, Value)> {
         r.features.extend(
             FEATURE
                 .captures_iter(&c[2])
-                .flatten()
+                .map_while(Result::ok)
                 .map(|m| m[1].to_owned()),
         );
     }

@@ -9,7 +9,7 @@ use fancy_regex::{Captures, Regex};
 const HTML5: &str = include_str!("../../../gate/crates/record/src/record/html5_entities.tsv");
 
 static ENTITY: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"&(#[0-9]+;?|#[xX][0-9a-fA-F]+;?|[^\t\n\f <&#;]{1,32};?)")
+    crate::shared::regex::build(r"&(#[0-9]+;?|#[xX][0-9a-fA-F]+;?|[^\t\n\f <&#;]{1,32};?)")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 /// The three tables of `HTML5`, by kind.

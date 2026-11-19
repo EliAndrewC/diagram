@@ -65,7 +65,7 @@ static PATH_NUMBER: LazyLock<Regex> = LazyLock::new(|| py(r"-?\d*\.?\d+(?:e-?\d+
 fn split<'t>(re: &Regex, text: &'t str) -> Vec<&'t str> {
     let mut out = Vec::new();
     let mut at = 0;
-    for m in re.find_iter(text).flatten() {
+    for m in re.find_iter(text).map_while(Result::ok) {
         out.push(&text[at..m.start()]);
         at = m.end();
     }
@@ -75,7 +75,7 @@ fn split<'t>(re: &Regex, text: &'t str) -> Vec<&'t str> {
 
 fn numbers(re: &Regex, text: &str) -> Result<Vec<f64>, Error> {
     re.find_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| crate::py::float(m.as_str()))
         .collect()
 }
@@ -91,7 +91,7 @@ fn index_error() -> Error {
 pub fn parse_transform(t: Option<&str>) -> Result<Affine, Error> {
     let mut m = IDENTITY;
     let t = t.unwrap_or_default();
-    for c in TRANSFORM.captures_iter(t).flatten() {
+    for c in TRANSFORM.captures_iter(t).map_while(Result::ok) {
         let args = c.get(2).map_or("", |a| a.as_str());
         let v: Vec<f64> = split(&SEPARATORS, strip(args))
             .into_iter()
@@ -181,7 +181,7 @@ pub fn path_points(d: &str, tol: f64) -> Result<Vec<(Vec<Pt>, bool)>, Error> {
     // the last cubic's second control point, or the last quadratic's control point, which S and T reflect
     let mut ctrl: Option<Pt> = None;
     let mut last = ' ';
-    for c in PATH_STEP.captures_iter(d).flatten() {
+    for c in PATH_STEP.captures_iter(d).map_while(Result::ok) {
         let cmd = c[1].chars().next().unwrap_or('Z');
         let up = cmd.to_ascii_uppercase();
         if up == 'Z' {

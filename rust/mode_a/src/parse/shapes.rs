@@ -67,7 +67,7 @@ fn number(a: &Attrs, key: &str) -> Result<f64, Error> {
 pub(super) fn rects(text: &str, need_fill: bool) -> Result<Vec<Rect>, Error> {
     let offsets = Offsets::new(text);
     let mut out = Vec::new();
-    for tag in RECT_TAG.captures_iter(text).flatten() {
+    for tag in RECT_TAG.captures_iter(text).map_while(Result::ok) {
         let attr = attrs(&ATTR_ANY, &tag[1]);
         if !["x", "y", "width", "height"]
             .iter()
@@ -132,7 +132,7 @@ pub fn path_rings(d: &str) -> Result<Option<Vec<Ring>>, Error> {
     }
     let toks: Vec<&str> = PATH_TOKEN
         .find_iter(d)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str())
         .collect();
     let mut rings: Vec<Ring> = Vec::new();
@@ -189,7 +189,7 @@ pub fn path_rings(d: &str) -> Result<Option<Vec<Ring>>, Error> {
 )]
 fn path_rects(text: &str, offsets: &Offsets) -> Result<Vec<Rect>, Error> {
     let mut out = Vec::new();
-    for m in PATH_TAG.captures_iter(text).flatten() {
+    for m in PATH_TAG.captures_iter(text).map_while(Result::ok) {
         let a = attrs(&ATTR_ANY, &m[1]);
         let fill = get(&a, "fill");
         if fill.is_empty() || fill == "none" {
@@ -262,7 +262,7 @@ pub fn rooms_folded(buildings: Vec<Rect>) -> Vec<Rect> {
 pub(super) fn wall_bands(text: &str, offsets: &Offsets) -> Result<Vec<Rect>, Error> {
     let mut stack: Vec<Attrs> = Vec::new();
     let mut out = Vec::new();
-    for m in ELEM.captures_iter(text).flatten() {
+    for m in ELEM.captures_iter(text).map_while(Result::ok) {
         let (closing, name, own) = (&m[1], &m[2], &m[3]);
         if name == "g" {
             if closing.is_empty() {
@@ -321,7 +321,7 @@ pub(super) fn wall_bands(text: &str, offsets: &Offsets) -> Result<Vec<Rect>, Err
 /// Every court floor drawn with a roof's solid outline, in draw order.
 pub(super) fn roofed_courts(text: &str, offsets: &Offsets) -> Result<Vec<Rect>, Error> {
     let mut out = Vec::new();
-    for tag in RECT_TAG.captures_iter(text).flatten() {
+    for tag in RECT_TAG.captures_iter(text).map_while(Result::ok) {
         let attr = attrs(&ATTR_ANY, &tag[1]);
         if COURT_FLOORS.contains(&get(&attr, "fill"))
             && ROOF_STROKES.contains(&get(&attr, "stroke"))
@@ -339,18 +339,18 @@ pub(super) fn roofed_courts(text: &str, offsets: &Offsets) -> Result<Vec<Rect>, 
 /// green, or any circle in a group marked `id="trees"` or painted that green, outside the definitions and at least the glyph floor.
 pub(super) fn trees(text: &str, offsets: &Offsets) -> Result<Vec<Rect>, Error> {
     let mut starts: Vec<usize> = Vec::new();
-    for grp in TREE_GROUP.captures_iter(text).flatten() {
+    for grp in TREE_GROUP.captures_iter(text).map_while(Result::ok) {
         let (whole, body) = (&grp[0], &grp[1]);
         // the Python's `grp.group(0).index(grp.group(1))`: the body's FIRST occurrence in the match, which is where its circles are read
         let base = grp.get(0).map_or(0, |m| m.start()) + whole.find(body).unwrap_or(0);
         starts.extend(
             CIRCLE_TAG
                 .find_iter(body)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|c| base + c.start()),
         );
     }
-    for c in CIRCLE_TAG.captures_iter(text).flatten() {
+    for c in CIRCLE_TAG.captures_iter(text).map_while(Result::ok) {
         if get(&attrs(&ATTR_ANY, &c[1]), "fill") == TREE_FILL {
             starts.push(c.get(0).map_or(0, |m| m.start()));
         }
@@ -359,7 +359,7 @@ pub(super) fn trees(text: &str, offsets: &Offsets) -> Result<Vec<Rect>, Error> {
     starts.dedup();
     let defs: Vec<(usize, usize)> = DEFS
         .find_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| (m.start(), m.end()))
         .collect();
     let mut out = Vec::new();

@@ -28,7 +28,7 @@ pub const GUARD: Guard = Guard {
 };
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static OPEN: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \[ \] (T\d+[a-z]?) (.*)$"));
@@ -60,7 +60,7 @@ fn ids(pattern: &Regex, line: &str, into: &mut HashSet<String>) {
     into.extend(
         pattern
             .captures_iter(line)
-            .flatten()
+            .map_while(Result::ok)
             .filter_map(|m| Some(m.get(1)?.as_str().to_owned())),
     );
 }
@@ -84,7 +84,7 @@ fn running(path: &Path) -> std::io::Result<HashSet<String>> {
 /// The feature's open boxes, the GM's review box left out.
 fn open_boxes(text: &str) -> Vec<(String, String)> {
     OPEN.captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|m| Some((m.get(1)?.as_str().to_owned(), m.get(2)?.as_str().to_owned())))
         .filter(|(_, title)| !title.starts_with("GM review"))
         .collect()

@@ -139,7 +139,7 @@ fn kind_key(root: &Path, name: &str) -> Result<String, Fail> {
 /// (start, end, whole, own) of each block; a list item holding a nested list is one block judged by its OWN words (feature 352).
 fn blocks(html: &str) -> Vec<(usize, usize, String, String)> {
     let mut out = Vec::new();
-    for c in BLOCK.captures_iter(html).flatten() {
+    for c in BLOCK.captures_iter(html).map_while(Result::ok) {
         let (m, tag) = (
             c.get(0).unwrap_or_else(|| unreachable!()),
             c.get(1).map_or("", |g| g.as_str()),
@@ -147,7 +147,7 @@ fn blocks(html: &str) -> Vec<(usize, usize, String, String)> {
         let (whole, end) = (m.as_str(), m.end());
         if tag == "li" && !whole.ends_with("</li>") && hit(&NESTED_OPEN, whole) {
             let (mut depth, mut pos) = (1i64, end);
-            for t in LI_TAG.captures_iter(&html[end..]).flatten() {
+            for t in LI_TAG.captures_iter(&html[end..]).map_while(Result::ok) {
                 depth += if t.get(1).is_some_and(|g| !g.as_str().is_empty()) {
                     -1
                 } else {
@@ -178,7 +178,7 @@ fn blocks(html: &str) -> Vec<(usize, usize, String, String)> {
 pub(crate) fn notes_subset(notes_html: &str, keys: &HashSet<String>) -> String {
     NOTE_LI
         .captures_iter(notes_html)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|c| c.get(1).is_some_and(|k| keys.contains(k.as_str())))
         .map(|c| c.get(0).map_or("", |g| g.as_str()).to_owned())
         .collect()
@@ -605,7 +605,7 @@ fn note_batches(root: &Path, q: &str) -> Result<Vec<Vec<String>>, Fail> {
             continue;
         }
         let text = read_text(&root.join(&rel))?;
-        for c in NOTE_LI.captures_iter(&text).flatten() {
+        for c in NOTE_LI.captures_iter(&text).map_while(Result::ok) {
             let n = c.get(0).map_or(0, |g| g.as_str().len());
             if batches.last().is_some_and(|b| !b.is_empty()) && size + n > NOTES_BUDGET {
                 batches.push(Vec::new());

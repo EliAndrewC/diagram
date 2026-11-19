@@ -181,7 +181,7 @@ pub fn names_claimed(key: &str, claimed: &HashSet<(String, String)>) -> bool {
     let decision = rest.split_once('#').map_or("", |p| p.1);
     CONSTANT
         .find_iter(decision)
-        .flatten()
+        .map_while(Result::ok)
         .any(|n| claimed.contains(&(path.to_owned(), n.as_str().to_owned())))
 }
 

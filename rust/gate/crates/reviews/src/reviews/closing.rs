@@ -38,7 +38,7 @@ use super::gm_review::name;
 pub const GRANDFATHERED: &str = "scripts/gates/closed-before-375.txt";
 
 static CARRY: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"`?Carried:\s*(SC-\d+)\s*->\s*(\d+)\s+([\w.-]+)`?")
+    l7r_guard::shared::regex::build(r"`?Carried:\s*(SC-\d+)\s*->\s*(\d+)\s+([\w.-]+)`?")
         .unwrap_or_else(|_| unreachable!("the carry pattern compiles"))
 });
 
@@ -69,7 +69,7 @@ pub fn carries(specs: &Path) -> Result<Vec<Carry>, String> {
         let bytes =
             std::fs::read(&spec).map_err(|e| format!("OSError: {e}: {}", spec.display()))?;
         let text = String::from_utf8_lossy(&bytes);
-        for c in CARRY.captures_iter(&text).flatten() {
+        for c in CARRY.captures_iter(&text).map_while(Result::ok) {
             out.push((name(&d), c[1].to_owned(), c[2].to_owned(), c[3].to_owned()));
         }
     }

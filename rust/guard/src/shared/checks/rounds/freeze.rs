@@ -103,7 +103,7 @@ pub fn apply_refusal(state: &Value, command: &str, now: f64) -> String {
 
 fn word_set(t: &str) -> BTreeSet<String> {
     WORD.find_iter(&t.to_lowercase())
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect()
 }

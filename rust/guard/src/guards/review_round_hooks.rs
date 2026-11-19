@@ -43,7 +43,7 @@ const SNAP_SUFFIXES: [&str; 6] = ["md", "json", "txt", "py", "html", "csv"];
 const SNAP_MAX_BYTES: u64 = 2_000_000;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 fn hit(pattern: &Regex, text: &str) -> bool {

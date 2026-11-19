@@ -244,7 +244,10 @@ pub fn tasks_done(d: &Path) -> Result<(usize, usize), Raised> {
         &super::super::events::text_if_file(&d.join("tasks.md"))?,
         &super::super::events::text_if_file(&d.join("tasks-done.md"))?,
     );
-    Ok((DONE.find_iter(&text).count(), BOX.find_iter(&text).count()))
+    Ok((
+        DONE.find_iter(&text).map_while(Result::ok).count(),
+        BOX.find_iter(&text).map_while(Result::ok).count(),
+    ))
 }
 
 /// Each task's first `make task-start`, as epoch seconds, in the order first seen (`task_starts`).

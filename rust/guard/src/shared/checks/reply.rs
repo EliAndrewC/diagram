@@ -3,15 +3,13 @@
 use std::path::Path;
 use std::sync::LazyLock;
 
-use fancy_regex::{Regex, RegexBuilder};
+use fancy_regex::Regex;
 use serde_json::Value;
 
 static EDIT: LazyLock<Regex> = LazyLock::new(|| {
-    RegexBuilder::new(
+    crate::shared::regex::build(
         r"(?sm)^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n\k<ind><<<\n(?P<old>.*?)\n\k<ind>===\n(?P<new>.*?)\n?\k<ind>>>>[ \t]*$",
     )
-    .backtrack_limit(10_000_000)
-    .build()
     .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
@@ -99,7 +97,7 @@ fn undent(t: &str, ind: &str) -> String {
 #[must_use]
 pub fn blocks(reply: &str) -> Vec<(String, String, String)> {
     EDIT.captures_iter(reply)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| {
             let ind = m.name("ind").map_or("", |g| g.as_str());
             (

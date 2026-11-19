@@ -100,7 +100,7 @@ pub fn sections(markup: &str) -> Vec<(String, String)> {
     let body = strip_comments(&SCRIPT.replace_all(markup, ""));
     let mut parts: Vec<&str> = Vec::new();
     let mut from = 0;
-    for m in HEADING.find_iter(&body).flatten() {
+    for m in HEADING.find_iter(&body).map_while(std::result::Result::ok) {
         parts.push(&body[from..m.start()]);
         parts.push(m.as_str());
         from = m.end();
@@ -182,7 +182,7 @@ pub fn session_notes(markup: &str) -> Vec<Value> {
     let chars: Vec<char> = text.chars().collect();
     let mut found = Vec::new();
     for (label, pattern) in SESSION_NOTES.iter() {
-        for m in pattern.find_iter(&text).flatten() {
+        for m in pattern.find_iter(&text).map_while(std::result::Result::ok) {
             let (s, e) = (char_index(&text, m.start()), char_index(&text, m.end()));
             found.push(item(
                 "SESSION NOTE",
@@ -192,7 +192,10 @@ pub fn session_notes(markup: &str) -> Vec<Value> {
             ));
         }
     }
-    for m in CODE_SPAN.captures_iter(markup).flatten() {
+    for m in CODE_SPAN
+        .captures_iter(markup)
+        .map_while(std::result::Result::ok)
+    {
         let inner = strip(&unescape(&m[1])).to_owned();
         let at = m.get(0).map_or(0, |g| g.start());
         let linked = LINK_OPEN.is_match(&markup[..at]).unwrap_or(false);
@@ -221,7 +224,7 @@ pub fn rare_words<A: BuildHasher, B: BuildHasher, C: BuildHasher>(
     keys: &HashSet<String, C>,
 ) -> Vec<(String, usize)> {
     let mut out: BTreeMap<String, usize> = BTreeMap::new();
-    for raw in WORD.find_iter(text).flatten() {
+    for raw in WORD.find_iter(text).map_while(std::result::Result::ok) {
         let word = raw.as_str().to_lowercase();
         let seen = frequency.get(&word).copied().unwrap_or(0);
         if seen == 0 || defined.contains(&word) || keys.contains(&word) || seen > RARE_IN_AT_MOST {
@@ -265,7 +268,7 @@ pub fn registry_keys(reader: &Reader) -> Result<HashSet<String>> {
     let page = reader.record_text("SOURCES.html")?;
     Ok(REGISTRY_KEY
         .captures_iter(&page)
-        .flatten()
+        .map_while(std::result::Result::ok)
         .map(|c| c[1].to_owned())
         .collect())
 }
@@ -324,7 +327,7 @@ pub fn corpus_frequency(record_dir: &Path) -> Result<HashMap<String, usize>> {
                 .map_err(|e| Error::new("UnicodeDecodeError", e.to_string()))?;
             let words: HashSet<String> = WORD
                 .find_iter(&text_of(&strip_comments(&text)))
-                .flatten()
+                .map_while(std::result::Result::ok)
                 .map(|m| m.as_str().to_lowercase())
                 .collect();
             for word in words {
@@ -356,7 +359,10 @@ pub fn vocabulary<S: BuildHasher>(markup: &str, known: &HashSet<String, S>) -> V
             &sentence_around(&chars, s, s + term.chars().count()),
         ));
     };
-    for m in ITALIC.captures_iter(markup).flatten() {
+    for m in ITALIC
+        .captures_iter(markup)
+        .map_while(std::result::Result::ok)
+    {
         let term = text_of(&m[2]);
         let n = split(&term).len();
         if (1..=3).contains(&n) && !QUOTISH.is_match(&term).unwrap_or(false) {
@@ -370,7 +376,7 @@ pub fn vocabulary<S: BuildHasher>(markup: &str, known: &HashSet<String, S>) -> V
             );
         }
     }
-    for m in CJK.find_iter(&text).flatten() {
+    for m in CJK.find_iter(&text).map_while(std::result::Result::ok) {
         add("CJK term", m.as_str());
     }
     found

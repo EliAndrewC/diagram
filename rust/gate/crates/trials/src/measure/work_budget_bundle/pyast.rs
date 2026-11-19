@@ -81,7 +81,7 @@ static NUMBER: LazyLock<Regex> = LazyLock::new(|| {
     let exponent = format!("[eE][-+]?{digits}");
     let point = format!("(?:{digits})?\\.{digits}|{digits}\\.");
     let float = format!("(?:{point})(?:{exponent})?|{digits}{exponent}");
-    Regex::new(&format!(
+    l7r_guard::shared::regex::build(&format!(
         "^(?:0[xX](?:_?[0-9a-fA-F])+|0[oO](?:_?[0-7])+|0[bB](?:_?[01])+|[1-9](?:_?[0-9])*|0+(?:_?0)*|(?:{float})|(?:{float}|{digits})[jJ])$"
     ))
     .unwrap_or_else(|e| unreachable!("{e}"))

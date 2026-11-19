@@ -24,7 +24,7 @@ use crate::shared::tool::ask;
 use crate::suite_tools::pylex;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 fn found(pattern: &Regex, text: &str) -> bool {
@@ -234,7 +234,7 @@ impl Tree {
         let imported: HashSet<&str> = self
             .imports
             .captures_iter(body)
-            .flatten()
+            .map_while(Result::ok)
             .filter_map(|c| c.get(1))
             .map(|m| m.as_str())
             .collect();
@@ -402,7 +402,7 @@ impl Tree {
         {
             files.extend(Some(dir.join("conftest.py")).filter(|c| c.is_file()));
         }
-        for capture in TESTS_IMPORT.captures_iter(&raw).flatten() {
+        for capture in TESTS_IMPORT.captures_iter(&raw).map_while(Result::ok) {
             let module = capture.get(1).map_or("", |m| m.as_str()).replace('.', "/");
             files.extend(Some(self.root.join(format!("{module}.py"))).filter(|p| p.is_file()));
         }

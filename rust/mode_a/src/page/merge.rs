@@ -42,7 +42,7 @@ pub(crate) static NUM: LazyLock<Regex> = LazyLock::new(|| py(r"-?\d+(?:\.\d+)?")
 #[must_use]
 pub fn attrs(body: &str) -> Attrs {
     let mut out = Attrs::new();
-    for c in ATTR.captures_iter(body).flatten() {
+    for c in ATTR.captures_iter(body).map_while(Result::ok) {
         let (k, v) = (&c[1], &c[2]);
         match out.iter_mut().find(|(n, _)| n == k) {
             Some(slot) => v.clone_into(&mut slot.1),
@@ -175,7 +175,7 @@ pub fn extent(tag: &str, at: &Attrs) -> Result<Option<Extent>, Error> {
                 .unwrap_or("");
             let nums: Option<Vec<f64>> = NUM
                 .find_iter(geom)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|m| num(m.as_str()))
                 .collect();
             let Some(nums) = nums.filter(|n| n.len() >= 4) else {
@@ -474,7 +474,7 @@ pub fn merge_primitives(s: &str) -> Result<String, Error> {
     }
     let elems: Vec<Elem> = ELEM
         .captures_iter(s)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| {
             let whole = c.get(0).map_or(0..0, |m| m.range());
             Elem {

@@ -24,7 +24,7 @@ pub const GUARD: Guard = Guard {
 const GUARDED: [&str; 2] = ["budget-change", "budget-program"];
 
 static WORDS: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r#"(?<![\w-])WORDS=(?:"([^"]*)"|'([^']*)'|(\S+))"#)
+    crate::shared::regex::build(r#"(?<![\w-])WORDS=(?:"([^"]*)"|'([^']*)'|(\S+))"#)
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

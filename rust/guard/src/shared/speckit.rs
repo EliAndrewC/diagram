@@ -56,7 +56,7 @@ fn re(pattern: &str) -> Regex {
     let pattern = pattern
         .replace(r"\s", &format!("[{SPACE_CLASS}]"))
         .replace(r"\S", &format!("[^{SPACE_CLASS}]"));
-    Regex::new(&pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(&pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// A task box at column 0.
@@ -368,7 +368,7 @@ fn state_parts(d: &Path, spec: &str) -> Result<(String, String, usize, usize), S
     let tasks = tasks::all_text(d)?;
     let boxes: Vec<bool> = BOX
         .captures_iter(&tasks)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|c| &c[1] != " ")
         .collect();
     let (ticked, total) = (boxes.iter().filter(|b| **b).count(), boxes.len());

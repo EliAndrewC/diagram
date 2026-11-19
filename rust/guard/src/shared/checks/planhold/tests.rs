@@ -347,3 +347,26 @@ fn a_write_to_held_text_is_refused() {
         ""
     );
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A write past a million steps of command (feature 449 T185): `WRITE` erred at `fancy_regex`'s old limit and read as no write, so a
+/// held plan's `tee` went unseen.
+#[test]
+fn a_write_past_a_million_steps_is_seen() {
+    let command = format!(
+        "{}| tee plan.md",
+        "plain words of a long text ".repeat(50_000)
+    );
+    assert_eq!(
+        within(move || super::WRITE.is_match(&command).ok()),
+        Some(true)
+    );
+}

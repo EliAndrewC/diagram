@@ -6,7 +6,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// A heading, its level and its title.
@@ -26,7 +26,7 @@ pub fn task_sections(plan: &str) -> BTreeMap<String, String> {
 pub fn ordered_sections(plan: &str) -> Vec<(String, String)> {
     let heads: Vec<(usize, usize, &str)> = HEAD
         .captures_iter(plan)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| {
             let at = c.get(0).map_or(0, |g| g.start());
             (
@@ -41,7 +41,7 @@ pub fn ordered_sections(plan: &str) -> Vec<(String, String)> {
     for (i, (at, level, title)) in heads.iter().enumerate() {
         let ids: Vec<&str> = TASK_ID
             .find_iter(title)
-            .flatten()
+            .map_while(Result::ok)
             .map(|m| m.as_str())
             .collect();
         let end = heads[i + 1..]
@@ -90,7 +90,7 @@ pub fn leading_task(title: &str) -> Option<&str> {
 pub fn blocks(plan: &str) -> Vec<(String, String, usize)> {
     let heads: Vec<(usize, &str)> = ANY_HEAD
         .find_iter(plan)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| (m.start(), m.as_str()))
         .collect();
     let first = heads.first().map_or(plan.len(), |(a, _)| *a);

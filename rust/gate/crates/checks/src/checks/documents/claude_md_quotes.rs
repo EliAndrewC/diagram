@@ -44,7 +44,7 @@ fn quotes(root: &Path) -> Vec<(String, String, String)> {
     let quote = re(QUOTE);
     let mut out = Vec::new();
     for p in sources(root) {
-        for caps in quote.captures_iter(&read(&p)).flatten() {
+        for caps in quote.captures_iter(&read(&p)).map_while(Result::ok) {
             let name = NESTED
                 .iter()
                 .find(|n| caps[1].ends_with(*n))

@@ -15,7 +15,7 @@ use super::{field, required, row_of, text, Pass};
 use crate::record::bundle::head;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static BUNDLE: LazyLock<Regex> =
@@ -26,7 +26,7 @@ const PLAN_REVIEW: &str = "MODE 4: PLAN REVIEW";
 /// `make plan-verdict F=385 ...`" and quoted no line)
 static PLAN_RECORDED: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r"\b(?:CLEAR|BLOCKED|NOT-REVIEWABLE) recorded for\b|make plan-verdict\b[^\n]*\b(?:recorded|stored)\b|\b(?:recorded|stored)\b[^\n]*make plan-verdict\b|make plan-verdict F=\d+",
+        r"\b(?:CLEAR|BLOCKED|NOT-REVIEWABLE) recorded for\b|(?m:^)(?>[^\n]*?make plan-verdict\b)[^\n]*\b(?:recorded|stored)\b|(?m:^)(?>[^\n]*?\b(?:recorded|stored)\b)[^\n]*make plan-verdict\b|make plan-verdict F=\d+",
     )
 });
 const PLAN_WHERE: &str = "the plan-verdict record (make plan-verdict)";

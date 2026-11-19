@@ -22,7 +22,7 @@ const ABSENCE: &str = "no publicly readable source";
 /// Compiles a pattern the source spells out (`record_units`' own).
 #[must_use]
 pub fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static TAG: LazyLock<Regex> = LazyLock::new(|| re(r"<[^>]+>"));
@@ -53,7 +53,7 @@ static QUOTED: LazyLock<Regex> = LazyLock::new(|| {
 pub fn pairs_of(pattern: &Regex, text: &str) -> Vec<(String, String)> {
     pattern
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| {
             (
                 c.get(1).map_or_else(String::new, |g| g.as_str().to_owned()),
@@ -159,7 +159,7 @@ pub fn reading<S: std::hash::BuildHasher>(
 ) -> String {
     let origs: Vec<String> = ORIG_TOKEN
         .captures_iter(body)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| originals.get(&c[1]).cloned().unwrap_or_default())
         .collect();
     let passages: Vec<String> = if origs.is_empty() {
@@ -196,7 +196,7 @@ fn notes_parse(text: &str, originals: &str) -> NotesParse {
         (Keyed::default(), Keyed::default(), Keyed::default());
     for (key, body) in pairs_of(&NOTE, text) {
         let mut keys: Vec<String> = Vec::new();
-        for c in CODE.captures_iter(&body).flatten() {
+        for c in CODE.captures_iter(&body).map_while(Result::ok) {
             if !keys.iter().any(|k| k == &c[1]) {
                 keys.push(c[1].to_owned());
             }
@@ -564,7 +564,7 @@ pub fn owed(now: &Record, base: &Record) -> Vec<Unit> {
 pub fn claims_of(block_words: &str, note: &str) -> Vec<String> {
     let (mut out, mut start) = (Vec::new(), 0);
     let mark = format!("[^{note}]");
-    for m in SENTENCE_END.find_iter(block_words).flatten() {
+    for m in SENTENCE_END.find_iter(block_words).map_while(Result::ok) {
         let sentence = strip(&block_words[start..m.end()]);
         if sentence.contains(&mark) {
             out.push(sentence.to_owned());
@@ -634,7 +634,7 @@ pub fn quotation_key(rec: &Record, slug: &str) -> String {
         parts.extend(keys.iter().cloned());
     }
     parts.push("\x1e".to_owned());
-    for c in QUOTED.captures_iter(w).flatten() {
+    for c in QUOTED.captures_iter(w).map_while(Result::ok) {
         parts.push(
             (1..=3)
                 .find_map(|i| c.get(i))

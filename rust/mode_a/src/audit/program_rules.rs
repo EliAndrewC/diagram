@@ -557,7 +557,7 @@ pub fn sheet_furniture(svg: &Sheet) -> Result<Vec<String>, Error> {
             ));
         }
     }
-    for c in FURNITURE_ATTR.captures_iter(svg.text).flatten() {
+    for c in FURNITURE_ATTR.captures_iter(svg.text).map_while(Result::ok) {
         out.push(format!(
             "an element marked '{}' - the sheet draws no compass rose and no key box",
             &c[1]

@@ -99,7 +99,7 @@ fn paragraphs(text: &str, pattern: &Regex) -> Map<String, Value> {
 /// `{FR or SC id: its text}`: a `- **FR-NNN**` item to its paragraph's end, a `### FR-NNN` heading to the next heading.
 fn requirements(spec: &str) -> Map<String, Value> {
     let mut out = paragraphs(spec, &ITEM);
-    for c in HEAD_ITEM.captures_iter(spec).flatten() {
+    for c in HEAD_ITEM.captures_iter(spec).map_while(Result::ok) {
         let whole = c.get(0).map_or((0, 0), |g| (g.start(), g.end()));
         let rest = &spec[whole.1..];
         let end = NEXT_TOP
@@ -117,7 +117,7 @@ fn requirements(spec: &str) -> Map<String, Value> {
 fn request_sections(text: &str) -> (&str, Vec<(u32, &str)>) {
     let starts: Vec<(usize, u32)> = AMEND
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| (c.get(0).map_or(0, |g| g.start()), c[1].parse().unwrap_or(0)))
         .collect();
     let Some(first) = starts.first() else {
@@ -139,7 +139,7 @@ fn request_sections(text: &str) -> (&str, Vec<(u32, &str)>) {
 /// `{FR or SC id: the amendment whose spec section holds it}`.
 fn spec_amendments(spec: &str) -> BTreeMap<String, u32> {
     let mut out = BTreeMap::new();
-    for c in SPEC_AMEND.captures_iter(spec).flatten() {
+    for c in SPEC_AMEND.captures_iter(spec).map_while(Result::ok) {
         let start = c.get(0).map_or(0, |g| g.end());
         let rest = &spec[start..];
         let body = NEXT_TWO
@@ -147,7 +147,7 @@ fn spec_amendments(spec: &str) -> BTreeMap<String, u32> {
             .ok()
             .flatten()
             .map_or(rest, |n| &rest[..n.start()]);
-        for item in ITEM.captures_iter(body).flatten() {
+        for item in ITEM.captures_iter(body).map_while(Result::ok) {
             out.entry(item[1].to_owned())
                 .or_insert(c[1].parse().unwrap_or(0));
         }
@@ -171,7 +171,7 @@ fn answered(under: &[(String, String)], spec: &str) -> Option<u32> {
             .into_iter()
             .chain(
                 IDS.captures_iter(&joined)
-                    .flatten()
+                    .map_while(Result::ok)
                     .filter_map(|i| of.get(&i[1]).copied()),
             )
             .collect();
@@ -250,7 +250,7 @@ fn foreign(spec_dir: &Path, others: &[(String, String)]) -> Vec<String> {
 fn measured(spec_dir: &Path, bodies: &[&str]) -> String {
     let mut keys: Vec<String> = Vec::new();
     for body in bodies {
-        for c in MKEY.captures_iter(body).flatten() {
+        for c in MKEY.captures_iter(body).map_while(Result::ok) {
             if !keys.iter().any(|k| *k == c[1]) {
                 keys.push(c[1].to_owned());
             }
@@ -319,7 +319,7 @@ fn cited_text(
     let mut cited: Vec<String> = Vec::new();
     let mut own: BTreeSet<String> = BTreeSet::new();
     for (_, body) in under {
-        for c in QUALIFIED.captures_iter(body).flatten() {
+        for c in QUALIFIED.captures_iter(body).map_while(Result::ok) {
             let pair = (c[1].to_owned(), c[2].to_owned());
             if pair.0 != own_no && !others.contains(&pair) {
                 others.push(pair);
@@ -333,7 +333,7 @@ fn cited_text(
             }
         });
         let expanded = expand_ranges(&bare);
-        for c in IDS.captures_iter(&expanded).flatten() {
+        for c in IDS.captures_iter(&expanded).map_while(Result::ok) {
             if !cited.iter().any(|x| *x == c[1]) {
                 cited.push(c[1].to_owned());
             }
@@ -341,7 +341,7 @@ fn cited_text(
         own.extend(
             DECISION
                 .captures_iter(body)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|c| c[1].to_owned()),
         );
     }

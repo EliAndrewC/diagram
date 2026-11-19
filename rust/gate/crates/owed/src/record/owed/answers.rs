@@ -338,7 +338,7 @@ fn runs_of(text: &str) -> Vec<String> {
     };
     let found: Vec<String> = RUN
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| squeeze(&c[1]))
         .collect();
     if found.is_empty() {
@@ -381,7 +381,7 @@ fn note_parts(root: &Path, subject: &str) -> Result<(Vec<String>, Vec<String>), 
         {
             let origs: Vec<String> = ORIG_TOKEN
                 .captures_iter(&body)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|c| table.get(&c[1]).cloned().unwrap_or_default())
                 .collect();
             let passages = if origs.is_empty() {
@@ -677,12 +677,12 @@ fn answer_from_bundle(
     let manifest = Path::new(bundle).join("MANIFEST.md");
     let text = read_universal(&manifest)?.unwrap_or_default();
     let mut pages = Map::new();
-    for c in PAGE_LINE.captures_iter(&text).flatten() {
+    for c in PAGE_LINE.captures_iter(&text).map_while(Result::ok) {
         pages.insert(c[1].to_owned(), json!(c[2].to_owned()));
     }
     let pages = Value::Object(pages);
     let mut done = Vec::new();
-    for c in UNIT_LINE.captures_iter(&text).flatten() {
+    for c in UNIT_LINE.captures_iter(&text).map_while(Result::ok) {
         if checks.iter().any(|ch| c[1].split(':').next() == Some(ch)) {
             write_answer(s, &c[1], &c[2], result, Some(&pages))?;
             done.push(c[1].to_owned());

@@ -41,7 +41,8 @@ const RECORD: &str = "implementation-check.md";
 const USAGE: &str = "impl_check.py <feature dir>           what is owed and what is missing; exit 1 if anything is missing";
 
 fn re(p: &str) -> Regex {
-    Regex::new(p).unwrap_or_else(|_| unreachable!("a pattern of the code's own"))
+    l7r_guard::shared::regex::build(p)
+        .unwrap_or_else(|_| unreachable!("a pattern of the code's own"))
 }
 
 /// A findings page, under the project's old place too (before feature 329 moved it to the root a commit named its pages under it; the
@@ -169,7 +170,7 @@ fn recorded_none(d: &Path) -> BTreeMap<String, String> {
     let text = read_replace(&d.join(RECORD)).unwrap_or_default();
     NONE_LINE
         .captures_iter(&text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| (c[1].to_owned(), c[2].to_owned()))
         .collect()
 }

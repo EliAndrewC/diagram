@@ -26,7 +26,7 @@ const REVIEWS: [&str; 2] = ["spec", "plan"];
 const ROUND_ARBITER: &str = "round-arbiter";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static FAITHFUL_NOT: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)NOT\s+\**FAITHFUL"));

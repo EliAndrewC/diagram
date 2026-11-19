@@ -34,7 +34,7 @@ use kept::{kept_reads, undeclared, undeclared_refusal, unit_tests_only, Kept, Re
 const USAGE_LOG_TOOL: &str = "rust_checks";
 const CRATES: &str = "rust";
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static BUILD_HASH: LazyLock<Regex> = LazyLock::new(|| re(r"Cs[0-9A-Za-z]+_|17h[0-9a-f]{16}E"));
@@ -230,7 +230,7 @@ fn features(manifest: &Path) -> Vec<String> {
         .map_or(String::new(), |c| c[1].to_owned());
     re(r"(?m)^([A-Za-z_][\w-]*)\s*=")
         .captures_iter(&section)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect()
 }
@@ -322,7 +322,7 @@ fn dead_public(manifest: &Path) -> Vec<String> {
     let uses = family_words(&family(manifest));
     let names: BTreeSet<String> = PUB_FN
         .captures_iter(&own)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     names

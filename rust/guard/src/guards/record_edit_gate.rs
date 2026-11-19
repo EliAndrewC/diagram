@@ -12,7 +12,7 @@ use crate::shared::checks;
 use crate::shared::state::field;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 // `hm_checks._handle`'s `make done` test, verbatim: the arbiter's holds refuse the gate.

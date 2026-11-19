@@ -74,7 +74,7 @@ pub(super) fn checklist(root: &Path) -> Option<PathBuf> {
 
 fn numbers(text: &str) -> Vec<u32> {
     ITEM.captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].parse().unwrap_or(0))
         .collect()
 }
@@ -94,7 +94,7 @@ fn task_blocks(plan: &str, task: &str, part: &str) -> Vec<(String, String)> {
         fancy_regex::escape(heads(part))
     ));
     head.find_iter(plan)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| {
             let rest = &plan[m.end()..];
             let body = NEXT_HEAD
@@ -116,7 +116,7 @@ fn future_stamps(plan: &str, now: &str) -> Vec<String> {
     let clock = parse_utc(&minute_of(now)).unwrap_or(0);
     STAMPED_HEAD
         .find_iter(plan)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|m| parse_utc(m.as_str()).is_some_and(|t| t > clock))
         .map(|m| m.as_str().to_owned())
         .collect()

@@ -20,10 +20,7 @@ pub enum Refused {
 /// repeat without advancing - `make task-add`'s id scan over 449's 1.1 MB of tasks and plans spun without end on it (feature 449, found
 /// 2026-11-18: five minutes at 99.9% CPU, nothing written).
 pub(crate) fn re(pattern: &str) -> Regex {
-    fancy_regex::RegexBuilder::new(pattern)
-        .backtrack_limit(usize::MAX)
-        .build()
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static PHYSICAL: LazyLock<Regex> = LazyLock::new(|| {

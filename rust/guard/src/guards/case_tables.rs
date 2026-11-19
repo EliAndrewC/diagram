@@ -5,7 +5,6 @@ mod house_style_cases;
 mod repo_safety;
 mod shell_check;
 
-use fancy_regex::Regex;
 use serde_json::{json, Value};
 
 use crate::cli;
@@ -154,7 +153,7 @@ fn the_r6_corpus_replayed() {
     );
     let data: Value = serde_json::from_str(&std::fs::read_to_string(file).unwrap()).unwrap();
     let (expected, rows) = (&data["expected"], data["commands"].as_array().unwrap());
-    let rule = Regex::new(r#"rule "([a-z-]+)""#).unwrap();
+    let rule = crate::shared::regex::build(r#"rule "([a-z-]+)""#).unwrap();
     // Each of the 239 commands still goes through the guard and its real `bash -O extglob -n`, eight at a time: one after another they
     // took 0.39 s against FR-008's tenth of a second, the bash starts being the whole of it. An ordinary test, not the guard's one
     // end-to-end test (feature 449 T167, `ask:449-T167-realtree` item 4): it replays a recorded corpus, not the live tree, and it is not

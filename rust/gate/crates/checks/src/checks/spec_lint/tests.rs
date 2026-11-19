@@ -208,7 +208,7 @@ fn check_3_orphans_ranges_letters_and_a_criterion_naming_nothing() {
     );
     let ids: Vec<(String, String)> = ID
         .captures_iter("see FR-001a and SC-002")
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| (c[1].to_owned(), c[2].to_owned()))
         .collect();
     assert_eq!(

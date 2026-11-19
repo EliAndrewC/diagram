@@ -82,7 +82,7 @@ fn missing(repo: &Path, rows: &[Vec<String>]) -> Vec<String> {
     let roots = roots(repo);
     let mut out = Vec::new();
     for row in rows {
-        for caps in path.captures_iter(tool_cell(row)).flatten() {
+        for caps in path.captures_iter(tool_cell(row)).map_while(Result::ok) {
             let named = &caps[1];
             // a Python test the table names was deleted by feature 449 FR-001b, readable at the tag `python-tests-before-removal`
             if named.starts_with("tests/") || named.starts_with("test_") {

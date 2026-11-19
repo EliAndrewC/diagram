@@ -26,7 +26,7 @@ static TAG: LazyLock<Regex> = LazyLock::new(|| py(crate::sheet::TOKENS));
 pub fn start_tags(src: &str) -> Vec<(usize, usize)> {
     let offsets = Offsets::new(src);
     TAG.find_iter(src)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|m| {
             m.as_str().starts_with('<')
                 && !matches!(src.as_bytes()[m.start() + 1], b'!' | b'?' | b'/')

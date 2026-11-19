@@ -22,7 +22,7 @@ const CONFIRMED_NAME: &str = "partial-confirmations.jsonl";
 const UNREADABLE: [&str; 3] = ["paywalled", "gm-partial", "never-read"];
 
 fn compiled(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static NOTE: LazyLock<Regex> =
@@ -78,9 +78,9 @@ fn findings(
             .to_string_lossy()
             .into_owned();
         let text = read_text(&file).unwrap_or_default();
-        for note in NOTE.captures_iter(&text).flatten() {
+        for note in NOTE.captures_iter(&text).map_while(Result::ok) {
             let mut seen = HashSet::new();
-            for found in KEY.captures_iter(&note[2]).flatten() {
+            for found in KEY.captures_iter(&note[2]).map_while(Result::ok) {
                 let key = found[1].to_owned();
                 let place = format!("{name}#{}", &note[1]);
                 if seen.insert(key.clone())

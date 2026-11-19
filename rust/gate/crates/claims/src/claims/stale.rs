@@ -127,7 +127,7 @@ pub fn rust_stale(path: &str, old: &str, head: &str, pages: &[Page]) -> Vec<Stri
         }
         let cited: BTreeSet<String> = CITED
             .captures_iter(&both)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| c[1].to_owned())
             .collect();
         let links: Vec<Regex> = cited.iter().map(|q| re(&format!(r"\b{q}-[a-z]"))).collect();

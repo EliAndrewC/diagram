@@ -23,7 +23,7 @@ pub(super) static WARM: [&LazyLock<Regex>; 2] = [&FINDING, &HUNK];
 /// The new-side line ranges a `git diff -U0` changes; a pure deletion is the line it sits after.
 pub fn changed_lines(diff: &str) -> Vec<(i64, i64)> {
     HUNK.captures_iter(diff)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| {
             let a: i64 = c[1].parse().unwrap_or(0);
             let n: i64 = c.get(2).map_or(1, |g| g.as_str().parse().unwrap_or(0));

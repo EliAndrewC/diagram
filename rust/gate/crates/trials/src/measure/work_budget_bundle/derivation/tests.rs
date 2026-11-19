@@ -288,3 +288,20 @@ fn a_cost_past_the_reference_names_its_reason_and_its_bound() {
     assert!(reference_problems(&big.replace("## Totals", "## Sums")).is_empty());
     assert!(reference_problems(BASE).is_empty());
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A side in feet after many `side` words (feature 449 T185): unlimited, `SIDE` tried every one to its sentence's end (past 30 s on 100 KB,
+/// measured 2026-11-18, scratchpad t185/sizecurve.log), and at `fancy_regex`'s old limit it erred and read as no side; it now starts at the sentence's first.
+#[test]
+fn a_side_after_many_sides_is_seen_in_linear_time() {
+    let line = format!("{}. a side of 12 ft", "side x ".repeat(30_000));
+    assert_eq!(within(move || super::SIDE.is_match(&line).ok()), Some(true));
+}

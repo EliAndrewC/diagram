@@ -36,7 +36,7 @@ pub const EXEMPT: &str = "CONFLICT_MARKERS_OK:";
 pub const HEAD_LINES: usize = 40;
 
 static ASSIGNMENT: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?:^|[;&|\s])([A-Za-z_][A-Za-z0-9_]*)=([^\s;&|]+)")
+    crate::shared::regex::build(r"(?:^|[;&|\s])([A-Za-z_][A-Za-z0-9_]*)=([^\s;&|]+)")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
@@ -92,7 +92,7 @@ fn expand(token: &str, vars: &[(String, String)]) -> String {
 
 fn assignments(cmd: &str) -> Vec<(String, String)> {
     let mut out: Vec<(String, String)> = Vec::new();
-    for caps in ASSIGNMENT.captures_iter(cmd).filter_map(Result::ok) {
+    for caps in ASSIGNMENT.captures_iter(cmd).map_while(Result::ok) {
         let value = caps[2].trim_matches(|q| q == '"' || q == '\'').to_owned();
         match out.iter_mut().find(|(k, _)| *k == caps[1]) {
             Some(slot) => slot.1 = value,

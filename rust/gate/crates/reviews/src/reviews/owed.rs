@@ -46,7 +46,7 @@ pub(super) const DECLARED: [(&str, &[&str]); 8] = [
 const NOT_ELEMENTS: [&str; 2] = ["-", "place"];
 
 pub(super) fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static DATA_KIND: LazyLock<Regex> = LazyLock::new(|| re(r#"data-kind="([^"]+)""#));
@@ -304,7 +304,7 @@ pub fn ink_classes(text: Option<&str>) -> BTreeSet<String> {
 pub fn sheet_kinds(text: Option<&str>) -> BTreeSet<String> {
     DATA_KIND
         .captures_iter(text.unwrap_or(""))
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .filter_map(|c| c.get(1).map(|m| m.as_str().to_owned()))
         .collect()
 }

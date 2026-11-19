@@ -60,7 +60,7 @@ fn phase_of(block: &str) -> (String, Vec<String>) {
         .unwrap_or_default();
     let extra = OLD_CODE
         .captures_iter(block)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|c| c.get(1).map(|m| m.as_str().to_owned()))
         .flat_map(|line| {
             split(&line)

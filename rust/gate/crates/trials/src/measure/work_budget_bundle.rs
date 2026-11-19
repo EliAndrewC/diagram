@@ -81,7 +81,7 @@ pub(crate) fn py_re(pattern: &str) -> Regex {
             _ => out.push(c),
         }
     }
-    Regex::new(&out).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
+    l7r_guard::shared::regex::build(&out).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
 }
 
 /// Whether `c` is whitespace to Python.

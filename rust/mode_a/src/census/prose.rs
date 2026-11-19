@@ -107,7 +107,7 @@ static PART_OF_THE_WHOLE: LazyLock<Regex> = LazyLock::new(|| {
 fn split_blocks(text: &str) -> Vec<&str> {
     let mut out = Vec::new();
     let mut last = 0;
-    for m in BLOCKS.find_iter(text).flatten() {
+    for m in BLOCKS.find_iter(text).map_while(Result::ok) {
         out.push(&text[last..m.start()]);
         last = m.end();
     }
@@ -131,7 +131,7 @@ pub fn current_prose(text: &str) -> String {
     }
     let mut out = String::new();
     let (mut keep, mut last) = (true, 0);
-    for m in HEADING.find_iter(&text).flatten() {
+    for m in HEADING.find_iter(&text).map_while(Result::ok) {
         if keep {
             out += &text[last..m.start()];
         }
@@ -200,7 +200,10 @@ fn shipped(kind: &str, m: &Value) -> Result<usize, Error> {
 /// A manifest of the wrong shape, or a matched word with no value, as the Python raised them.
 pub fn stale_counts(text: &str, m: &Value) -> Result<Vec<String>, Error> {
     let mut out = Vec::new();
-    for c in COUNT.captures_iter(&current_prose(text)).flatten() {
+    for c in COUNT
+        .captures_iter(&current_prose(text))
+        .map_while(Result::ok)
+    {
         let n = typed(&c[1])?;
         let kind = c[2].to_lowercase();
         let ships = shipped(&kind, m)?;
@@ -250,7 +253,7 @@ pub fn stale_sheet_counts(notes: &str, svg: &str) -> Result<Vec<String>, Error> 
     let drawn = sheet_counts(svg)?;
     let prose = sheet_prose(notes);
     let mut out = Vec::new();
-    for c in SHEET_COUNT.captures_iter(&prose).flatten() {
+    for c in SHEET_COUNT.captures_iter(&prose).map_while(Result::ok) {
         let start = c.get(0).map_or(0, |m| m.start());
         // the 40 CHARACTERS before the count (the Python's slice of a `str`), searched as a string of their own
         let before = &prose[..start];

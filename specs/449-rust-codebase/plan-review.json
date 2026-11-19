@@ -738,6 +738,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T185 (the regex scans that spin past `fancy_regex`'s step limit, T151's finding and T194's rest: every scan and pattern builder under `rust/` outside the plan and task crates; constitution XIV; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
+   "sha256": "a555474d2102a6c6badc50c46851c58b22a410e919de8024ff1afdfa21721909",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T185 Approach (checklist part A)": {
+   "sha256": "6d09a8a0712843baaff2076379ae56d086cc58248837a2c71566d1744c6c78e8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12751,6 +12763,70 @@
      "why": "A known tooling bug fixed as found, its remainder filed before the next step, consistent with the GM's fix-as-we-go rule and the 2026-11-16/18 efficiency instructions."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T185 (the regex scans that spin past `fancy_regex`'s step limit, T151's finding and T194's rest: every scan and pattern builder under `rust/` outside the plan and task crates; constitution XIV; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T185 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "constructor",
+     "summary": "Every Regex::new / RegexBuilder::new under rust/ goes through l7r_guard::shared::regex::build/builder, compiled with no backtrack step limit; the three site-set limits (apply-edits' EDIT, checks::pages) and T151's `unbounded` fold into it.",
+     "class": "within",
+     "why": "Fixes the known bug T151/T194 found (a search past fancy_regex's 1,000,000-step default reads as no match, replace_all panics, a flattened iterator never ends) at every site, which is what the GM's 2026-11-18 'fix all known bugs in each step before moving on' asks. Dropping the three site-set limits for the shared, larger (none) limit narrows nothing: no site loses an answer it gave."
+    },
+    {
+     "id": "adapter",
+     "summary": "Every find_iter / captures_iter / regex split ends on its first error with .map_while(Result::ok) (spelled std::result::Result::ok where a crate shadows Result), replacing .flatten() / .filter_map(Result::ok) and three .count()s.",
+     "class": "within",
+     "why": "Removes the infinite repeat of the same Err that made scans spin, the same known bug; uses the adapter T194 already used."
+    },
+    {
+     "id": "label-replaced",
+     "summary": "LABEL, whose greedy lookaheads overflow fancy_regex's fixed VM stack on a megabyte sentence and answered 'no label' in error, is replaced by has_label: three plain linear searches (the measured word, an ISO date, an opening parenthesis; or an m: key), pinned by a 1.2 MB labeled/unlabeled test; plan crate 128 tests pass.",
+     "class": "within",
+     "why": "Last round's BLOCKED narrowing (a known bug left standing) is now fixed rather than carved out. Editing the plan crate, though the task line scopes its census to the crates outside plan and task, is fixing a known bug where it was found, as the GM asked. Under FR-002 (T180) the replacement is held to doing its job - its existing tests and the new megabyte case pass - not to a match-for-match equivalence with LABEL, so none is owed."
+    },
+    {
+     "id": "quadratic-rewrites",
+     "summary": "The eight patterns found quadratic by the leading-word probe (PLAN_RECORDED, SIDE, LOOP, GIT_WRITE, MAKE_WRITE, PGREP_F, APPLY, SEARCHER_COUNT) are anchored at their segment's first trigger with an atomic group; 7-12 ms on 100 KB; answers agreed on random texts.",
+     "class": "within",
+     "why": "Lifting the step limit would otherwise turn these known silent failures into multi-second-to-unbounded runs; fixing them is the known-bug fix the GM asked for, and the random-text agreement is the plan's own evidence that they still do their job, not an exactness standard imposed on the port."
+    },
+    {
+     "id": "runtime-patterns-untimed",
+     "summary": "Patterns built at run time (format!, read from files: coord's KEY, prereq's, diffrun's cases, the blocked list) are not timed, now run with no step limit, and their scans end quietly on an error as the backstop; the leading-word probe reached 533 of 982 literal patterns.",
+     "class": "within",
+     "why": "The GM's words are 'fix all known bugs'. Unlike LABEL last round, no measured failure stands among these sites: the bundle reports no erring or slow run-time pattern, and the plan states plainly what was not shown linear. The changed failure mode for such a pattern, should one exist (a long run, caught by the tests' 20 s bound and the stuck-command tooling, in place of a quiet wrong answer), is no narrowing of anything requested; no FR in the spec bounds a regex's run time."
+    },
+    {
+     "id": "regex-scans-check",
+     "summary": "A real-tree test in the checks crate (documents/regex_scans.rs) fails on a Regex::new/RegexBuilder::new outside the shared constructor, a find_iter/captures_iter followed by anything but .map_while(Result::ok) or .next(), and a regex split followed by .flatten()/.filter_map(Result::ok); self-test seeds each form.",
+     "class": "within",
+     "why": "A test whose only effect is to keep the requested fix fixed (GM 2026-09-20): it fails, it does not refuse or rewrite work, and with the fix removed it has nothing to check."
+    },
+    {
+     "id": "tests-20s-bound",
+     "summary": "The new regression tests are each bounded by a 20 s timeout (T194's convention) so a spin fails rather than hangs; twelve shown red on HEAD's code and green on the clone.",
+     "class": "within",
+     "why": "Pins the fix; the bound is a failure ceiling, not the tests' run time, so FR-008's tenth-of-a-second bar is not relaxed by it."
+    },
+    {
+     "id": "checks-run",
+     "summary": "Exits: make format, make rust-test, make static, make hooks-test HOOKS_ALL=1, make quick, plan review, gated make land; an lld incremental-object fault cleared with cargo clean -p, no source change.",
+     "class": "within",
+     "why": "The standing gate; nothing skipped."
+    },
+    {
+     "id": "order-and-classification",
+     "summary": "Ordered after T194 and before step 3b's first port; 'Performance work? No - a defect fixed'; differentials and pool manifests n/a (tooling).",
+     "class": "within",
+     "why": "The order is exactly the GM's 'fix all known bugs in each step before moving on to porting the next step'. The task changes tooling regex scans, no drawn output, so no differential or pool manifest is touched; and it fixes wrong answers and hangs, a defect, rather than claiming a speed saving under the 2026-11-12 pre-approval's conditions."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22634,6 +22710,68 @@
      "summary": "make decide/task-add spin from fancy_regex's step limit fixed in the plan and task crates with this task, tests red on the old code; the rest of the class left to T185, also before step 3b",
      "class": "within",
      "why": "A known tooling bug fixed as found, its remainder filed before the next step, consistent with the GM's fix-as-we-go rule and the 2026-11-16/18 efficiency instructions."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T185": {
+   "section_sha256": "a1865c56f7980b5b8e2f248a6c16debd813fa6d6ae14eccf615c477b0f0b6cbe",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "constructor",
+     "summary": "Every Regex::new / RegexBuilder::new under rust/ goes through l7r_guard::shared::regex::build/builder, compiled with no backtrack step limit; the three site-set limits (apply-edits' EDIT, checks::pages) and T151's `unbounded` fold into it.",
+     "class": "within",
+     "why": "Fixes the known bug T151/T194 found (a search past fancy_regex's 1,000,000-step default reads as no match, replace_all panics, a flattened iterator never ends) at every site, which is what the GM's 2026-11-18 'fix all known bugs in each step before moving on' asks. Dropping the three site-set limits for the shared, larger (none) limit narrows nothing: no site loses an answer it gave."
+    },
+    {
+     "id": "adapter",
+     "summary": "Every find_iter / captures_iter / regex split ends on its first error with .map_while(Result::ok) (spelled std::result::Result::ok where a crate shadows Result), replacing .flatten() / .filter_map(Result::ok) and three .count()s.",
+     "class": "within",
+     "why": "Removes the infinite repeat of the same Err that made scans spin, the same known bug; uses the adapter T194 already used."
+    },
+    {
+     "id": "label-replaced",
+     "summary": "LABEL, whose greedy lookaheads overflow fancy_regex's fixed VM stack on a megabyte sentence and answered 'no label' in error, is replaced by has_label: three plain linear searches (the measured word, an ISO date, an opening parenthesis; or an m: key), pinned by a 1.2 MB labeled/unlabeled test; plan crate 128 tests pass.",
+     "class": "within",
+     "why": "Last round's BLOCKED narrowing (a known bug left standing) is now fixed rather than carved out. Editing the plan crate, though the task line scopes its census to the crates outside plan and task, is fixing a known bug where it was found, as the GM asked. Under FR-002 (T180) the replacement is held to doing its job - its existing tests and the new megabyte case pass - not to a match-for-match equivalence with LABEL, so none is owed."
+    },
+    {
+     "id": "quadratic-rewrites",
+     "summary": "The eight patterns found quadratic by the leading-word probe (PLAN_RECORDED, SIDE, LOOP, GIT_WRITE, MAKE_WRITE, PGREP_F, APPLY, SEARCHER_COUNT) are anchored at their segment's first trigger with an atomic group; 7-12 ms on 100 KB; answers agreed on random texts.",
+     "class": "within",
+     "why": "Lifting the step limit would otherwise turn these known silent failures into multi-second-to-unbounded runs; fixing them is the known-bug fix the GM asked for, and the random-text agreement is the plan's own evidence that they still do their job, not an exactness standard imposed on the port."
+    },
+    {
+     "id": "runtime-patterns-untimed",
+     "summary": "Patterns built at run time (format!, read from files: coord's KEY, prereq's, diffrun's cases, the blocked list) are not timed, now run with no step limit, and their scans end quietly on an error as the backstop; the leading-word probe reached 533 of 982 literal patterns.",
+     "class": "within",
+     "why": "The GM's words are 'fix all known bugs'. Unlike LABEL last round, no measured failure stands among these sites: the bundle reports no erring or slow run-time pattern, and the plan states plainly what was not shown linear. The changed failure mode for such a pattern, should one exist (a long run, caught by the tests' 20 s bound and the stuck-command tooling, in place of a quiet wrong answer), is no narrowing of anything requested; no FR in the spec bounds a regex's run time."
+    },
+    {
+     "id": "regex-scans-check",
+     "summary": "A real-tree test in the checks crate (documents/regex_scans.rs) fails on a Regex::new/RegexBuilder::new outside the shared constructor, a find_iter/captures_iter followed by anything but .map_while(Result::ok) or .next(), and a regex split followed by .flatten()/.filter_map(Result::ok); self-test seeds each form.",
+     "class": "within",
+     "why": "A test whose only effect is to keep the requested fix fixed (GM 2026-09-20): it fails, it does not refuse or rewrite work, and with the fix removed it has nothing to check."
+    },
+    {
+     "id": "tests-20s-bound",
+     "summary": "The new regression tests are each bounded by a 20 s timeout (T194's convention) so a spin fails rather than hangs; twelve shown red on HEAD's code and green on the clone.",
+     "class": "within",
+     "why": "Pins the fix; the bound is a failure ceiling, not the tests' run time, so FR-008's tenth-of-a-second bar is not relaxed by it."
+    },
+    {
+     "id": "checks-run",
+     "summary": "Exits: make format, make rust-test, make static, make hooks-test HOOKS_ALL=1, make quick, plan review, gated make land; an lld incremental-object fault cleared with cargo clean -p, no source change.",
+     "class": "within",
+     "why": "The standing gate; nothing skipped."
+    },
+    {
+     "id": "order-and-classification",
+     "summary": "Ordered after T194 and before step 3b's first port; 'Performance work? No - a defect fixed'; differentials and pool manifests n/a (tooling).",
+     "class": "within",
+     "why": "The order is exactly the GM's 'fix all known bugs in each step before moving on to porting the next step'. The task changes tooling regex scans, no drawn output, so no differential or pool manifest is touched; and it fixes wrong answers and hangs, a defect, rather than claiming a speed saving under the 2026-11-12 pre-approval's conditions."
     }
    ],
    "verdict": "CLEAR"

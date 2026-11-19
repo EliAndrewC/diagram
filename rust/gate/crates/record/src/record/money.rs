@@ -44,7 +44,7 @@ const CENTS: (&str, &str) = ("cents", "dollar");
 const NUMBER: &str = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\d[\d,]*(?:\.\d+)?)?";
 const DOLLAR: &str = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\$?\d[\d,]*(?:\.\d+)?)?";
 fn compiled(p: &str) -> Regex {
-    Regex::new(p).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static MACRON: LazyLock<Regex> = LazyLock::new(|| compiled(r"\b(?:ryō|shū)(?![\w])"));
@@ -78,7 +78,7 @@ fn plain(markup: &str) -> String {
 
 fn years_in(text: &str) -> Vec<i64> {
     YEAR.captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|c| c[1].parse().ok())
         .collect()
 }
@@ -113,9 +113,9 @@ fn no_comments(text: &str) -> String {
 fn cited_years(page: &Path) -> HashMap<String, Vec<i64>> {
     let text = no_comments(&std::fs::read_to_string(page).unwrap_or_default());
     let mut out: HashMap<String, Vec<i64>> = HashMap::new();
-    for block in BLOCK.captures_iter(&text).flatten() {
+    for block in BLOCK.captures_iter(&text).map_while(Result::ok) {
         let years = years_in(&plain(&block[3]));
-        for key in NOTE_MARK.captures_iter(&block[3]).flatten() {
+        for key in NOTE_MARK.captures_iter(&block[3]).map_while(Result::ok) {
             out.entry(key[1].to_owned()).or_default().extend(&years);
         }
     }
@@ -205,12 +205,12 @@ fn scan(
             cited_years(&folder.join(format!("{base}.html")))
         });
     let mut out = Vec::new();
-    for block in BLOCK.captures_iter(&text).flatten() {
+    for block in BLOCK.captures_iter(&text).map_while(Result::ok) {
         let raw = &block[3];
         let note = NOTE_MARK.captures(&block[2]).ok().flatten();
         let mut marked: HashMap<String, usize> = HashMap::new();
-        for span in MARKED.captures_iter(raw).flatten() {
-            for x in pattern.find_iter(&plain(&span[1])).flatten() {
+        for span in MARKED.captures_iter(raw).map_while(Result::ok) {
+            for x in pattern.find_iter(&plain(&span[1])).map_while(Result::ok) {
                 *marked.entry(x.as_str().to_owned()).or_insert(0) += 1;
             }
         }
@@ -226,7 +226,7 @@ fn scan(
         if years.is_empty() {
             years.clone_from(&page_years);
         }
-        for m in pattern.find_iter(&flat).flatten() {
+        for m in pattern.find_iter(&flat).map_while(Result::ok) {
             let found = m.as_str();
             if found.ends_with(" bu")
                 && AREA_BEFORE

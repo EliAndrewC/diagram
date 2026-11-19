@@ -148,7 +148,7 @@ fn a_list_of_this_feature_s_ids_is_not_read_as_another_feature_s() {
     });
     let ids: Vec<String> = IDS
         .captures_iter(&kept)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     assert_eq!(ids, ["D1", "FR-001", "FR-002", "FR-007"]);

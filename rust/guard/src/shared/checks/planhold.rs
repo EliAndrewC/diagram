@@ -15,7 +15,7 @@ const HOLD_MAX_S: f64 = 1800.0;
 const PENDING_S: f64 = 60.0;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static BUNDLE: LazyLock<Regex> = LazyLock::new(|| {
@@ -77,7 +77,7 @@ pub fn hold(state: &mut Value, tid: &str, prompt: &str, now: f64) {
             std::fs::read_to_string(Path::new(&bundle).join("blocks.md")).unwrap_or_default();
         BLOCK_KEY
             .captures_iter(&text)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| unescape_key(&c[1]))
             .collect()
     };
@@ -307,7 +307,7 @@ fn bash_hits(cmd: &str, feature: &str, texts: &[String]) -> bool {
         .collect();
     let quoted: Vec<String> = QUOTED
         .captures_iter(cmd)
-        .flatten()
+        .map_while(Result::ok)
         .flat_map(|c| [c.get(1), c.get(2)])
         .flatten()
         .map(|g| g.as_str().to_owned())

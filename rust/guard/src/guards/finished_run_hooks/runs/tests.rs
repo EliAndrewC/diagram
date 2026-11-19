@@ -183,3 +183,26 @@ fn only_a_live_file_of_this_clone_makes_a_waiter_stale() {
     std::fs::write(tree.join("scripts/hooks/lib/writer-alive.sh"), "exit 0\n").unwrap();
     assert!(w.procs().stale_waiters(&tree, None).is_empty());
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A polling loop after a line of many `until` words (feature 449 T185): unlimited, `LOOP` tried every one to its line's end (17 s on
+/// 100 KB, measured 2026-11-18, scratchpad t185/sizecurve.log), and at `fancy_regex`'s old limit it erred and read as no loop; it now starts at the line's first.
+#[test]
+fn a_loop_after_many_untils_is_seen_in_linear_time() {
+    let command = format!(
+        "{}\nwhile sleep 1; do grep -q x f; done",
+        "until x ".repeat(30_000)
+    );
+    assert_eq!(
+        within(move || super::LOOP.is_match(&command).ok()),
+        Some(true)
+    );
+}

@@ -62,7 +62,7 @@ static REASON_SPLIT: LazyLock<Regex> = LazyLock::new(|| {
 pub fn cited_keys<'a>(bodies: impl IntoIterator<Item = &'a str>) -> Vec<String> {
     let mut keys: Vec<String> = Vec::new();
     for body in bodies {
-        for c in KEY_LINK.captures_iter(body).flatten() {
+        for c in KEY_LINK.captures_iter(body).map_while(Result::ok) {
             if !keys.iter().any(|k| k == &c[1]) {
                 keys.push(c[1].to_owned());
             }
@@ -133,7 +133,7 @@ pub fn grounds_reasons(body: &str) -> Vec<String> {
 fn py_split<'t>(pattern: &Regex, text: &'t str) -> Vec<&'t str> {
     let mut out = Vec::new();
     let mut at = 0;
-    for m in pattern.find_iter(text).flatten() {
+    for m in pattern.find_iter(text).map_while(Result::ok) {
         out.push(&text[at..m.start()]);
         at = m.end();
     }

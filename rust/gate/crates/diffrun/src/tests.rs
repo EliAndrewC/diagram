@@ -860,11 +860,11 @@ fn a_bare_world_compares_everything_under_it() {
     assert_eq!(kept["result"]["files"]["out/a2/f"].as_str(), Some("two\n"));
     // a separator that can match nothing is passed over
     assert_eq!(
-        crate::norm::sorted("b\na", &fancy_regex::Regex::new("\n*").unwrap()),
+        crate::norm::sorted("b\na", &l7r_guard::shared::regex::build("\n*").unwrap()),
         "a\nb"
     );
     assert_eq!(
-        crate::norm::sorted("ba", &fancy_regex::Regex::new("x").unwrap()),
+        crate::norm::sorted("ba", &l7r_guard::shared::regex::build("x").unwrap()),
         "ba"
     );
 }

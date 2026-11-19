@@ -17,7 +17,7 @@ const GATE_WORKERS: i64 = 6;
 /// A memory-watch notice this recent still describes the machine (the watch writes one only when the containers near their cap).
 const MEMWATCH_FRESH_S: f64 = 900.0;
 static SHARED: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"working set is ([\d.]+) of their shared ([\d.]+) GB")
+    l7r_guard::shared::regex::build(r"working set is ([\d.]+) of their shared ([\d.]+) GB")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

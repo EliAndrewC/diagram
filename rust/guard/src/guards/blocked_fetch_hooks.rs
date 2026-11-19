@@ -31,7 +31,7 @@ pub const GUARD: Guard = Guard {
 const SOUGHT_CHARS: usize = 300;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static FETCHER: LazyLock<Regex> = LazyLock::new(|| {
@@ -63,7 +63,7 @@ fn rules(tree: &Path) -> Option<Vec<Rule>> {
 /// `cmd` with each heredoc gone: a fetch named only in a body is a script's text, refused if blocked yet never logged as an attempt.
 fn sans_heredocs(cmd: &str) -> String {
     let (mut out, mut from) = (String::new(), 0);
-    for m in HEREDOC.find_iter(cmd).flatten() {
+    for m in HEREDOC.find_iter(cmd).map_while(Result::ok) {
         out.push_str(&cmd[from..m.start()]);
         from = m.end();
     }
@@ -73,7 +73,7 @@ fn sans_heredocs(cmd: &str) -> String {
 fn all(pattern: &Regex, cmd: &str) -> Vec<String> {
     pattern
         .find_iter(cmd)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect()
 }

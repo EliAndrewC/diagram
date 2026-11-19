@@ -24,7 +24,7 @@ pub const GUARD: Guard = Guard {
 const TOKEN: &str = "SOURCE_EDIT_OK";
 
 static BLOCK: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?si)<!--\s*SOURCE: GM NOTES.*?<!--\s*END SOURCE\s*-->")
+    crate::shared::regex::build(r"(?si)<!--\s*SOURCE: GM NOTES.*?<!--\s*END SOURCE\s*-->")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
@@ -37,7 +37,7 @@ pub(crate) fn report(path: &str, old: &str, new: &str) -> Option<String> {
         .unwrap_or_default();
     let blocks: Vec<&str> = BLOCK
         .find_iter(&disk)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str())
         .collect();
     let anchor = old.trim();

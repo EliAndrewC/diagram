@@ -129,7 +129,7 @@ pub fn hit_copies(s: &str, (factor, floor, bead): (f64, f64, f64)) -> Result<Str
         Some(c) => crate::py::float(&c[1])?,
         None => 1.0,
     };
-    for c in STROKED.captures_iter(s).flatten() {
+    for c in STROKED.captures_iter(s).map_while(Result::ok) {
         let (tag, attrs) = (&c[1], &c[2]);
         let open_fill = !attrs.contains("fill=\"none\"");
         if (tag == "polygon" || tag == "polyline") && open_fill {
@@ -144,7 +144,7 @@ pub fn hit_copies(s: &str, (factor, floor, bead): (f64, f64, f64)) -> Result<Str
         };
         let geom: Vec<&str> = GEOM
             .find_iter(attrs)
-            .flatten()
+            .map_while(Result::ok)
             .map(|m| m.as_str())
             .collect();
         let _ = write!(
@@ -154,7 +154,7 @@ pub fn hit_copies(s: &str, (factor, floor, bead): (f64, f64, f64)) -> Result<Str
             fixed(width(w), 1)
         );
     }
-    for c in BEAD.captures_iter(s).flatten() {
+    for c in BEAD.captures_iter(s).map_while(Result::ok) {
         let r = crate::py::float(&c[3])?;
         let _ = write!(
             out,

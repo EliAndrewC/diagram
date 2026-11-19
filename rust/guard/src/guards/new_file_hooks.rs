@@ -34,7 +34,7 @@ const KIND_OF: [(&str, &str); 3] = [
 ];
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 // Registry prefixes passed 9990 on 2026-09-27, so a prefix is four OR five digits; the lookbehind keeps a five-digit name from being read as its
@@ -82,7 +82,7 @@ fn depth(kind: &str) -> usize {
 fn assigned(cmd: &str) -> HashMap<String, Option<String>> {
     ASSIGN
         .captures_iter(cmd)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|m| {
             let name = m.get(1)?.as_str().to_owned();
             let value = (m.get(4).is_none())
@@ -121,7 +121,7 @@ fn shell_targets(cmd: &str, base: &Path) -> Vec<Target> {
     }
     let names = assigned(cmd);
     let mut out = Vec::new();
-    for m in TARGET.captures_iter(cmd).flatten() {
+    for m in TARGET.captures_iter(cmd).map_while(Result::ok) {
         let group = |n: usize| m.get(n).map_or("", |g| g.as_str());
         let Some(raw) = resolved(group(1), &names) else {
             continue;

@@ -72,7 +72,8 @@ const REVIEW_CHECKS: [&str; 5] = [
 const EDIT_TOOLS: [&str; 4] = ["Edit", "Write", "NotebookEdit", "MultiEdit"];
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
+    crate::shared::regex::build(pattern)
+        .unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
 }
 
 macro_rules! pattern {
@@ -132,7 +133,7 @@ fn head(text: &str, n: usize) -> &str {
 fn numbers(text: &str) -> Vec<String> {
     NUMBER
         .find_iter(text)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect()
 }
@@ -173,7 +174,7 @@ pub fn verdict_of(text: &str) -> String {
     }
     let units: Vec<String> = UNIT_SUMMARY
         .find_iter(text)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect();
     if !units.is_empty() {

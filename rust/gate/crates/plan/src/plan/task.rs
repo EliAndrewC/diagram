@@ -91,7 +91,7 @@ fn archivable(dir: &Path) -> Vec<String> {
     let tasks = l7r_guard::shared::speckit::tasks::all_text(dir).unwrap_or_default();
     let done: BTreeSet<String> = re(r"(?m)^- \[[xX]\] (T\d+[a-z]?)\b")
         .captures_iter(&tasks)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     let review = review_of(dir);
@@ -109,7 +109,7 @@ fn archivable(dir: &Path) -> Vec<String> {
         let heading = sec.lines().next().unwrap_or("");
         let ids: Vec<&str> = TASK_ID
             .find_iter(heading)
-            .flatten()
+            .map_while(Result::ok)
             .map(|m| m.as_str())
             .collect();
         if ids.is_empty()
@@ -144,7 +144,7 @@ pub(super) fn archive(dir: &Path, when: Option<&str>) -> Vec<String> {
     for sec in &sections {
         let ids: Vec<String> = TASK_ID
             .find_iter(sec.lines().next().unwrap_or(""))
-            .flatten()
+            .map_while(Result::ok)
             .map(|m| m.as_str().to_owned())
             .collect();
         let pieces: Vec<String> = if text.contains(sec.as_str()) {
@@ -209,7 +209,11 @@ pub(super) fn archive(dir: &Path, when: Option<&str>) -> Vec<String> {
 }
 
 fn pieces_of(split: &fancy_regex::Regex, sec: &str) -> Vec<String> {
-    let mut starts: Vec<usize> = split.find_iter(sec).flatten().map(|m| m.start()).collect();
+    let mut starts: Vec<usize> = split
+        .find_iter(sec)
+        .map_while(Result::ok)
+        .map(|m| m.start())
+        .collect();
     starts.push(sec.len());
     let mut out = Vec::new();
     let mut last = 0;

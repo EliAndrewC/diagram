@@ -27,13 +27,19 @@ static NAMED: LazyLock<Regex> = LazyLock::new(|| {
         r"(?i)\b(?:round|rounds|seed|seeds|hour|amendment|item|items|change|wave|batch|step|task|feature|proposal|part|tier|version|line|group)\s+\d+(?:\s*(?:-|and|to)\s*\d+)?\b",
     )
 });
-/// A sentence's label: a measurement's word, date and method anywhere in it, or an `m:` key. The lookaheads are tried at the start alone
-/// (`\A`), which answers as trying them everywhere did - each sees to the end - where every position, each running to the end, cost an
-/// unlabeled sentence about half its length squared in steps (feature 449, 2026-11-18: past a million near 1,400 characters by that
-/// arithmetic; a 20,000-character one erred at the old limit, measured by `the_label_search_is_linear_in_its_sentence`).
-static LABEL: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?is)\A(?=.*\bmeasured\b)(?=.*\b20\d\d-\d\d-\d\d\b)(?=.*\()|\bm:[\w.-]+")
-});
+/// A sentence's label: a measurement's word, date and method anywhere in it, or an `m:` key - three plain searches, not one pattern. WHY:
+/// the one pattern held three greedy lookaheads anchored at the start, which ran out of `fancy_regex`'s fixed backtracking stack on a
+/// sentence near a megabyte and so answered "no label" in error (T185's plan review, 2026-11-18: 449's own 1.1 MB of plan as one
+/// sentence, `t185/after-concat449.jsonl`); each search here is linear and keeps no stack.
+static MEASURED_WORD: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)\bmeasured\b"));
+static ISO_DATE: LazyLock<Regex> = LazyLock::new(|| re(r"\b20\d\d-\d\d-\d\d\b"));
+static M_KEY: LazyLock<Regex> = LazyLock::new(|| re(r"\bm:[\w.-]+"));
+
+/// Whether a sentence carries a measurement's label (see [`MEASURED_WORD`]); a search that errs counts as no label.
+fn has_label(sentence: &str) -> bool {
+    let hit = |p: &Regex| p.is_match(sentence).unwrap_or(false);
+    (hit(&MEASURED_WORD) && hit(&ISO_DATE) && sentence.contains('(')) || hit(&M_KEY)
+}
 static COMMAND_SPAN: LazyLock<Regex> = LazyLock::new(|| re(r"/|::|=|\bmake "));
 static SPLIT4: LazyLock<Regex> = LazyLock::new(|| re(r"(?<=\.)\s+|\n(?=\S)"));
 static LEAD4: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*4\."));
@@ -145,9 +151,7 @@ fn unlabeled_figure(section: &str) -> String {
         let lead = LEAD4.replace(sentence, " ");
         let bare = NOT_A_FIGURE.replace_all(&lead, " ");
         let bare = NAMED.replace_all(&bare, " ");
-        if BARE_FIGURE.is_match(&bare).unwrap_or(false)
-            && !LABEL.is_match(sentence).unwrap_or(false)
-        {
+        if BARE_FIGURE.is_match(&bare).unwrap_or(false) && !has_label(sentence) {
             return sentence.trim().chars().take(160).collect();
         }
     }
@@ -161,9 +165,10 @@ fn unlabeled_unit_figure(section: &str) -> String {
         let bare = SPAN.replace_all(sentence, " ");
         let bare = NOT_A_FIGURE.replace_all(&bare, " ");
         let bare = RULE.replace_all(&bare, " ");
-        let labeled = [&*LABEL, one_shot_pattern(), &*DECISION_LABEL]
-            .iter()
-            .any(|p| p.is_match(sentence).unwrap_or(false));
+        let labeled = has_label(sentence)
+            || [one_shot_pattern(), &*DECISION_LABEL]
+                .iter()
+                .any(|p| p.is_match(sentence).unwrap_or(false));
         if figure_pattern().is_match(&bare).unwrap_or(false) && !labeled {
             return sentence
                 .split_whitespace()
@@ -202,9 +207,10 @@ fn unlabeled_count(section: &str) -> String {
         let bare = SPAN.replace_all(sentence, " ");
         let bare = NOT_A_FIGURE.replace_all(&bare, " ");
         let bare = THRESHOLD.replace_all(&bare, " ");
-        let labeled = [&*LABEL, one_shot_pattern(), &*DECISION_LABEL]
-            .iter()
-            .any(|p| p.is_match(sentence).unwrap_or(false));
+        let labeled = has_label(sentence)
+            || [one_shot_pattern(), &*DECISION_LABEL]
+                .iter()
+                .any(|p| p.is_match(sentence).unwrap_or(false));
         if COUNT.is_match(&bare).unwrap_or(false) && !labeled {
             return sentence
                 .split_whitespace()

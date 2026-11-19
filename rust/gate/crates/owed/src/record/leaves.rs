@@ -20,7 +20,8 @@ const SITE: &str = "site";
 const GLOSSARY: &str = "l7r/diagram/interactive/assets/glossary.json";
 
 static STEM: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^(\d{4})-[^.]+(?:\.drawing)?\.html$").unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(r"^(\d{4})-[^.]+(?:\.drawing)?\.html$")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 fn number_of(name: &str) -> Option<u64> {

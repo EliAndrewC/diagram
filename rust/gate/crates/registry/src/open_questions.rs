@@ -58,13 +58,16 @@ fn drop(pattern: &Regex, text: &str) -> String {
 fn finds<'t>(pattern: &Regex, text: &'t str) -> Vec<&'t str> {
     pattern
         .find_iter(text)
-        .flatten()
+        .map_while(std::result::Result::ok)
         .map(|m| m.as_str())
         .collect()
 }
 
 fn splits<'t>(pattern: &Regex, text: &'t str) -> Vec<&'t str> {
-    pattern.split(text).flatten().collect()
+    pattern
+        .split(text)
+        .map_while(std::result::Result::ok)
+        .collect()
 }
 
 /// The text a reader sees: comments dropped, tags dropped, whitespace folded.
@@ -177,7 +180,7 @@ fn read_question(path: &Path, root: &Path) -> Option<Question> {
             .into_owned(),
         links: LINK
             .captures_iter(&plain)
-            .flatten()
+            .map_while(std::result::Result::ok)
             .map(|c| c[1].to_owned())
             .collect(),
         items: guess_sentences(&html)
@@ -197,7 +200,10 @@ fn read_question(path: &Path, root: &Path) -> Option<Question> {
         &name[..name.len() - ".html".len()]
     ));
     if let Some(text) = read(&notes) {
-        for c in NOTE_LI.captures_iter(&drop(&COMMENT, &text)).flatten() {
+        for c in NOTE_LI
+            .captures_iter(&drop(&COMMENT, &text))
+            .map_while(std::result::Result::ok)
+        {
             let item = visible(&c[2]);
             if item.contains(ABSENCE) {
                 let kind = if SETTLED.is_match(&item).unwrap_or(false) {

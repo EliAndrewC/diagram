@@ -96,7 +96,7 @@ pub(super) fn declared_reads(manifest: &Path) -> Vec<String> {
         .map_or(String::new(), |c| c[1].to_owned());
     re(r#""([^"]*)""#)
         .captures_iter(&list)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect()
 }
@@ -296,7 +296,7 @@ fn included(path: &str, text: &str) -> Vec<String> {
     let dir: Vec<&str> = path.split('/').collect();
     INCLUDE
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| {
             let mut at: Vec<&str> = dir[..dir.len() - 1].to_vec();
             for part in c[1].split('/') {

@@ -82,7 +82,8 @@ static PRUNING: LazyLock<Regex> = LazyLock::new(|| py_re(r"(?mi)^-\s*pruning:\s*
 static INDEX: LazyLock<Regex> = LazyLock::new(|| py_re(r"(?m)^-\s*([^:\n]+):\s*(.*)$"));
 static CELL_FT: LazyLock<Regex> =
     LazyLock::new(|| py_re(r"(?i)\bcells?\s+(?:of\s+)?[\d,.]+\s*ft\b"));
-static SIDE: LazyLock<Regex> = LazyLock::new(|| py_re(r"(?i)\bside\b[^.]*?[\d,.]+\s*ft\b"));
+static SIDE: LazyLock<Regex> =
+    LazyLock::new(|| py_re(r"(?i)(?:\A|(?<=\.))(?>[^.]*?\bside\b)[^.]*?[\d,.]+\s*ft\b"));
 static PX: LazyLock<Regex> = LazyLock::new(|| py_re(r"(?<![\w.])[\d,.]+\s*px\b"));
 static PX_FT: LazyLock<Regex> = LazyLock::new(|| py_re(r"^[^.;\n]{0,40}?[\d,.]+\s*ft\b"));
 static USED: LazyLock<Regex> =
@@ -108,7 +109,7 @@ fn search(re: &Regex, text: &str) -> Option<Vec<String>> {
 /// Every match's groups.
 fn finditer(re: &Regex, text: &str) -> Vec<Vec<String>> {
     re.captures_iter(text)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|c| {
             (0..c.len())
                 .map(|i| c.get(i).map_or_else(String::new, |m| m.as_str().to_owned()))
@@ -560,7 +561,7 @@ fn index_problems(text: &str) -> Vec<String> {
             out.push(format!("`## The count, factor by factor`: a row counting {name}'s cells - its factor naming `{name}` and its cells"));
         }
     }
-    for m in PX.find_iter(text).filter_map(Result::ok) {
+    for m in PX.find_iter(text).map_while(Result::ok) {
         let after = text[m.end()..].trim_start_matches([' ', '(']);
         if !PX_FT.is_match(after).unwrap_or(false) {
             out.push(format!(

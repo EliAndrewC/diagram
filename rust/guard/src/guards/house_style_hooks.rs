@@ -30,7 +30,7 @@ const EM: &str = "\u{2014}";
 const EN: &str = "\u{2013}";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
 }
 
 fn found(pattern: &Regex, text: &str) -> bool {
@@ -108,7 +108,7 @@ static PROSE_SPAN: LazyLock<Regex> =
 /// `text` with each match of `pattern` replaced by what `with` says of it.
 fn sub_all(pattern: &Regex, text: &str, with: &dyn Fn(&str) -> String) -> String {
     let (mut out, mut from) = (String::new(), 0);
-    for m in pattern.find_iter(text).flatten() {
+    for m in pattern.find_iter(text).map_while(Result::ok) {
         out.push_str(&text[from..m.start()]);
         out.push_str(&with(m.as_str()));
         from = m.end();
@@ -155,7 +155,7 @@ fn correct_plain(text: &str) -> (String, Vec<String>) {
 /// The corrected text and what was corrected, the spans exactly as they are.
 fn correct(text: &str, spans: &Regex) -> (String, Vec<String>) {
     let (mut out, mut notes, mut last) = (String::new(), Vec::new(), 0);
-    for m in spans.find_iter(text).flatten() {
+    for m in spans.find_iter(text).map_while(Result::ok) {
         let (piece, got) = correct_plain(&text[last..m.start()]);
         out += &piece;
         notes.extend(got);
@@ -180,13 +180,13 @@ pub fn americanize(text: &str) -> String {
 /// `cmd` with heredoc bodies and the insides of quoted strings blanked, at the same length: a separator inside quotes is not a separator.
 fn masked(cmd: &str) -> String {
     let mut bytes = cmd.as_bytes().to_vec();
-    for m in HEREDOC_BODY.captures_iter(cmd).flatten() {
+    for m in HEREDOC_BODY.captures_iter(cmd).map_while(Result::ok) {
         if let Some(body) = m.get(3) {
             bytes[body.start()..body.end()].fill(b' ');
         }
     }
     let blanked = String::from_utf8_lossy(&bytes).into_owned();
-    for m in QUOTED_SPAN.find_iter(&blanked).flatten() {
+    for m in QUOTED_SPAN.find_iter(&blanked).map_while(Result::ok) {
         bytes[m.start() + 1..m.end() - 1].fill(b' ');
     }
     String::from_utf8_lossy(&bytes).into_owned()
@@ -194,7 +194,7 @@ fn masked(cmd: &str) -> String {
 
 fn split_segments(cmd: &str) -> Vec<(usize, usize)> {
     let (mut out, mut start) = (Vec::new(), 0);
-    for m in SEPARATOR.find_iter(&masked(cmd)).flatten() {
+    for m in SEPARATOR.find_iter(&masked(cmd)).map_while(Result::ok) {
         out.push((start, m.start()));
         start = m.end();
     }
@@ -233,7 +233,7 @@ fn outside(path: &str) -> bool {
 /// The body of each heredoc whose file lands outside the project, held whole: a reply is a quotation (feature 405 T109).
 fn outside_heredocs(cmd: &str) -> Vec<Held> {
     let mut out = Vec::new();
-    for m in HEREDOC_TO.captures_iter(cmd).flatten() {
+    for m in HEREDOC_TO.captures_iter(cmd).map_while(Result::ok) {
         let named = |a: &str, b: &str| m.name(a).or_else(|| m.name(b)).map_or("", |g| g.as_str());
         let (path, tag) = (named("p1", "p2"), named("t1", "t2"));
         if !outside(path) {
@@ -264,7 +264,7 @@ fn held_ranges(cmd: &str) -> Vec<Held> {
         held.extend(
             pattern
                 .find_iter(cmd)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|m| (m.start(), m.end(), Kind::Mention)),
         );
     }
@@ -314,7 +314,7 @@ fn plan(cmd: &str, spans: &Regex) -> (String, Vec<String>, Vec<String>) {
     }
     let mut held: Vec<Held> = spans
         .find_iter(cmd)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| (m.start(), m.end(), Kind::Mention))
         .collect();
     held.extend(held_ranges(cmd));
@@ -334,7 +334,7 @@ fn plan(cmd: &str, spans: &Regex) -> (String, Vec<String>, Vec<String>) {
             warned.extend(
                 WORDS
                     .find_iter(&cmd[a..b])
-                    .flatten()
+                    .map_while(Result::ok)
                     .map(|m| m.as_str().to_lowercase()),
             );
         }
@@ -441,7 +441,7 @@ pub(crate) fn report(event: &Event) -> Report {
     let cmd = field(input, "command");
     let names: Vec<String> = NAMED_PATH
         .find_iter(cmd)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect();
     let path = Some(field(input, "file_path").to_owned())

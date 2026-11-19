@@ -40,7 +40,7 @@ const SIGNALS: [&str; 16] = [
 const SONNET: &str = "claude-sonnet-5-5";
 
 fn compiled(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WORDS: LazyLock<Vec<(&str, Regex)>> = LazyLock::new(|| {
@@ -128,7 +128,7 @@ pub fn read(transcript: &Path) -> Run {
 pub fn signature(reply: &str) -> String {
     let counted = WORDS
         .iter()
-        .map(|(s, re)| (*s, re.find_iter(reply).flatten().count()));
+        .map(|(s, re)| (*s, re.find_iter(reply).map_while(Result::ok).count()));
     counted
         .filter(|(_, n)| *n > 0)
         .map(|(s, n)| format!("{s}={n}"))
@@ -141,7 +141,7 @@ pub fn signature(reply: &str) -> String {
 pub fn outside_paths(prompt: &str) -> Vec<String> {
     let mut found: Vec<String> = OUTSIDE
         .find_iter(prompt)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| {
             m.as_str()
                 .trim_end_matches(['.', ',', ')', ':', ';', '`', '\'', '"'])

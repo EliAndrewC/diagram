@@ -24,7 +24,7 @@ pub const ENTRY_SCRIPTS: [&str; 3] = [
 ];
 
 fn compiled(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static HOOK: LazyLock<Regex> = LazyLock::new(|| compiled(r"scripts/hooks/([\w-]+)-hooks\.sh"));
@@ -110,7 +110,7 @@ pub fn hook_guards(root: &Path) -> Result<BTreeSet<String>, String> {
                 };
                 names.extend(
                     HOOK.captures_iter(command)
-                        .flatten()
+                        .map_while(Result::ok)
                         .map(|c| c[1].to_owned()),
                 );
             }
@@ -124,7 +124,7 @@ pub fn hook_guards(root: &Path) -> Result<BTreeSet<String>, String> {
 pub fn targets_of(make: &str) -> BTreeSet<String> {
     TARGET
         .captures_iter(make)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect()
 }
@@ -174,7 +174,7 @@ pub fn reached(make: &str) -> BTreeSet<String> {
             .unwrap_or_default();
         let subs: Vec<String> = SUB_MAKE
             .captures_iter(&text)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| c[1].to_owned())
             .collect();
         todo.extend(
@@ -229,7 +229,7 @@ pub fn check_paths(root: &Path) -> Result<BTreeSet<PathBuf>, String> {
         }
     }
     for text in &texts {
-        for found in SCRIPT.find_iter(text).flatten() {
+        for found in SCRIPT.find_iter(text).map_while(Result::ok) {
             let path = py_join(root, found.as_str());
             if !found.as_str().contains("/hooks/") && path.is_file() {
                 out.insert(path);

@@ -120,7 +120,7 @@ pub fn open_ids(d: &Path) -> Result<HashSet<String>, Fail> {
     let text = read_or_empty(&d.join("tasks.md"))?;
     Ok(BOX
         .captures_iter(&text)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|c| &c[1] == " ")
         .map(|c| c[2].to_owned())
         .collect())
@@ -179,7 +179,7 @@ fn ruled(d: &Path, ruling: &str) -> Result<bool, Fail> {
 }
 
 fn file_into(text: &str, task: &str, keys: &[String], by: &str) -> Result<String, String> {
-    for c in BOX.captures_iter(text).flatten() {
+    for c in BOX.captures_iter(text).map_while(Result::ok) {
         if &c[2] != task {
             continue;
         }
@@ -209,7 +209,7 @@ fn new_box(text: &str, done: &str, keys: &[String], ruling: &str) -> (String, St
     let all = l7r_guard::shared::speckit::tasks::joined(text, done);
     let top = BOX
         .captures_iter(&all)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|c| c[2][1..].parse::<u64>().ok())
         .max()
         .unwrap_or(0);
@@ -361,7 +361,7 @@ pub fn known_drifts(
         let found: Vec<(String, String)> = match cur.get(key) {
             Some(row) if is(v, "verdict", "DRIFTED") => TASK_NAMED
                 .captures_iter(&row.claim.account)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|c| (c[1].to_owned(), c[2].to_owned()))
                 .collect(),
             _ => Vec::new(),

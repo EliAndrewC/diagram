@@ -5,8 +5,6 @@ use std::collections::BTreeSet;
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
-use fancy_regex::Regex;
-
 use super::moves::moved_only;
 use super::{git_text, Outcome};
 
@@ -31,7 +29,7 @@ fn with_commas(n: usize) -> String {
 
 fn is_question(rel: &str) -> bool {
     let (dirs, name) = rel.rsplit_once('/').unwrap_or(("", rel));
-    let pattern = Regex::new(r"^[0-9]{4}-[^.]+(?:\.drawing)?\.html$").unwrap();
+    let pattern = l7r_guard::shared::regex::build(r"^[0-9]{4}-[^.]+(?:\.drawing)?\.html$").unwrap();
     pattern.is_match(name).unwrap_or(false) && dirs.split('/').any(|p| p == "questions")
 }
 
@@ -46,7 +44,8 @@ fn question_of(rel: &str) -> String {
 /// The question's prose in bytes: a money mark is markup around words already counted (feature 413).
 fn size(path: &Path) -> usize {
     let text = std::fs::read_to_string(path).unwrap_or_default();
-    let money = Regex::new(r#"(?s)<span class="money"[^>]*>(.*?)</span>"#).unwrap();
+    let money =
+        l7r_guard::shared::regex::build(r#"(?s)<span class="money"[^>]*>(.*?)</span>"#).unwrap();
     money.replace_all(&text, "$1").len()
 }
 

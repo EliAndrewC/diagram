@@ -102,7 +102,7 @@ pub fn unstated_rust(
         for (i, line) in super::units::splitlines(&body).iter().enumerate() {
             let code = LINE_COMMENT.replace_all(line, "");
             let code = STRING.replace_all(&code, "").into_owned();
-            for m in RUST_NUMBER.captures_iter(&code).flatten() {
+            for m in RUST_NUMBER.captures_iter(&code).map_while(Result::ok) {
                 let whole = m.get(0).unwrap_or_else(|| unreachable!());
                 let v: f64 = m[1].replace('_', "").parse().unwrap_or(0.0);
                 let index = code[whole.end()..].starts_with(']')

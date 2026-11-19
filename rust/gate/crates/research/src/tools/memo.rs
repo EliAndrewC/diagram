@@ -154,10 +154,10 @@ fn import_names(text: &str) -> Vec<String> {
     let text = text.replace("\\\n", " ");
     let alias = |a: &str| a.split_whitespace().next().unwrap_or("").to_owned();
     let mut out = Vec::new();
-    for c in IMPORT.captures_iter(&text).flatten() {
+    for c in IMPORT.captures_iter(&text).map_while(Result::ok) {
         out.extend(c[1].split(',').map(alias).filter(|a| !a.is_empty()));
     }
-    for c in FROM.captures_iter(&text).flatten() {
+    for c in FROM.captures_iter(&text).map_while(Result::ok) {
         let module = c[1].to_owned();
         let names: Vec<String> = c[2]
             .trim_matches(['(', ')'])

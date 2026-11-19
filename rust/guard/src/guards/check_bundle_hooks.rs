@@ -43,7 +43,7 @@ const CHECKS: [&str; 12] = [
 const MODALS: [&str; 3] = ["modal-form", "modal-research", "modal-depiction"];
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static DECIDE_OK: LazyLock<Regex> = LazyLock::new(|| re(r#"\bDECIDE_OK="([^"]*)""#));
@@ -146,7 +146,7 @@ fn not_owed_on(atype: &str, prompt: &str) -> Option<(String, String)> {
     }
     for path in MANIFESTS
         .captures_iter(prompt)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
     {
         let Ok(text) = std::fs::read_to_string(&path) else {
@@ -292,7 +292,7 @@ fn bundle_verdict(event: &Event, session: &Session, atype: &str, prompt: &str) -
     }
     let paths: Vec<String> = REPO_PATHS
         .find_iter(prompt)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect();
     if paths.is_empty() {

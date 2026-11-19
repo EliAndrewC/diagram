@@ -40,8 +40,10 @@ pub const HEAD: &str = "## The guidelines (generated - `make agent-sync` writes 
 
 /// A generated section left inside the agent's own part (`re.S`, the shortest section first).
 static SECTION: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?s)\n<!-- generated: [^>]*-->.*?<!-- /generated: [^>]*-->\n?")
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(
+        r"(?s)\n<!-- generated: [^>]*-->.*?<!-- /generated: [^>]*-->\n?",
+    )
+    .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 /// The agent file with its generated part (HEAD and the sections after it) written from `sources`, in their order.

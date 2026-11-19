@@ -13,14 +13,17 @@ const SEARCHERS: [&str; 7] = ["grep", "egrep", "fgrep", "rg", "ack", "ag", "ripg
 const REASON_WORDS: usize = 2;
 const REASON_CHARS: usize = 8;
 
-static FOR_IN: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"\bfor\s+\w+\s+in\b[^;\n]*(?:;|\n|$)").expect("the for pattern"));
+static FOR_IN: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(r"\bfor\s+\w+\s+in\b[^;\n]*(?:;|\n|$)").expect("the for pattern")
+});
 static SEGMENT: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r";|\|\||\||&&|\n").expect("the segment pattern"));
-static ASSIGN: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^[A-Za-z_][A-Za-z0-9_]*=\S*$").expect("the assignment pattern"));
-static QUOTED_REASON: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"^\s*(["'])(.*?)\1"#).expect("the quoted reason pattern"));
+    LazyLock::new(|| crate::shared::regex::build(r";|\|\||\||&&|\n").expect("the segment pattern"));
+static ASSIGN: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(r"^[A-Za-z_][A-Za-z0-9_]*=\S*$").expect("the assignment pattern")
+});
+static QUOTED_REASON: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(r#"^\s*(["'])(.*?)\1"#).expect("the quoted reason pattern")
+});
 
 /// The reason given for `token`'s escape in `text`, or "" (`escape_reason`): `TOKEN: why` to the end of its line, `TOKEN="why"`,
 /// `TOKEN='why'` or `TOKEN=why`.
@@ -31,7 +34,7 @@ static QUOTED_REASON: LazyLock<Regex> =
 #[must_use]
 pub fn reason(text: &str, token: &str) -> String {
     let pattern = format!(r"{}(\s*[:=]|\s|$)(.*)", fancy_regex::escape(token));
-    let Ok(Some(m)) = Regex::new(&pattern)
+    let Ok(Some(m)) = crate::shared::regex::build(&pattern)
         .expect("the token pattern")
         .captures(text)
     else {
@@ -96,7 +99,7 @@ pub fn used(cmd: &str, token: &str) -> bool {
 pub fn drop_search_segments(clean: &str) -> String {
     let kept: Vec<&str> = SEGMENT
         .split(clean)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|seg| {
             let head = seg
                 .split_whitespace()

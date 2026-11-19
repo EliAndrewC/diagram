@@ -182,3 +182,23 @@ fn decide_reads_the_command_and_skips_an_empty_one() {
     assert!(decide(&quoted, &s).is_empty());
     assert!(local_minute() < 60);
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A `pgrep -f` after many `pgrep` words (feature 449 T185): unlimited, the pattern tried every one to its segment's end (18 s on 100 KB,
+/// measured 2026-11-18, scratchpad t185/sizecurve.log), and at `fancy_regex`'s old limit it erred and read as no match; it now starts at its segment's first.
+#[test]
+fn a_pgrep_f_after_many_pgreps_is_seen_in_linear_time() {
+    let command = format!("{}; pgrep -f foo", "pgrep x ".repeat(30_000));
+    assert_eq!(
+        within(move || super::PGREP_F.is_match(&command).ok()),
+        Some(true)
+    );
+}

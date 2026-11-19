@@ -39,7 +39,7 @@ const FIGURE_SECTIONS: [&str; 4] = [
 const NARRATING_SECTIONS: [&str; 2] = ["decisions recorded", "review history"];
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static POINTER: LazyLock<Regex> =
@@ -78,7 +78,7 @@ fn def_id(c: &Captures<'_>) -> String {
 
 /// Each heading's name (a sub-heading carries its parent's in front, so a section reaches its subtree), its line, and its body.
 fn sections(text: &str) -> Vec<(String, usize, &str)> {
-    let marks: Vec<Captures<'_>> = HEADING.captures_iter(text).flatten().collect();
+    let marks: Vec<Captures<'_>> = HEADING.captures_iter(text).map_while(Result::ok).collect();
     let mut top = String::new();
     let mut out = Vec::new();
     for (i, m) in marks.iter().enumerate() {
@@ -130,7 +130,7 @@ fn check_figures(spec: &Path) -> Vec<String> {
 
 /// The ranges of the sections that exist to narrate a reversal, each to the next heading of its level or above.
 fn exempt_spans(text: &str) -> Vec<(usize, usize)> {
-    let marks: Vec<Captures<'_>> = HEADING.captures_iter(text).flatten().collect();
+    let marks: Vec<Captures<'_>> = HEADING.captures_iter(text).map_while(Result::ok).collect();
     let mut spans = Vec::new();
     for (i, m) in marks.iter().enumerate() {
         let title = m[1].to_lowercase();
@@ -201,7 +201,7 @@ fn check_withdrawn(spec_dir: &Path, tree_root: &Path) -> Vec<String> {
     }
     let source = read(&research);
     let (mut bad, mut marked) = (Vec::new(), Vec::new());
-    for m in WITHDRAWN.captures_iter(&source).flatten() {
+    for m in WITHDRAWN.captures_iter(&source).map_while(Result::ok) {
         let text = marker_text(&m[1]);
         let n = line_at(&source, m.get(0).map_or(0, |g| g.start()));
         if text.chars().count() < 12 || !text.chars().any(|c| c.is_ascii_alphabetic()) {
@@ -246,7 +246,7 @@ fn check_orphans(spec: &Path) -> Vec<String> {
     let text = read(spec);
     let frs: BTreeSet<String> = DEF
         .captures_iter(&text)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|c| &c[1] == "FR")
         .map(|c| def_id(&c))
         .collect();
@@ -258,14 +258,14 @@ fn check_orphans(spec: &Path) -> Vec<String> {
         }
         let mut line = start;
         for para in body.split("\n\n") {
-            for sc in CRITERION.captures_iter(para).flatten() {
+            for sc in CRITERION.captures_iter(para).map_while(Result::ok) {
                 let mut named: BTreeSet<String> = ID
                     .captures_iter(&sc[2])
-                    .flatten()
+                    .map_while(Result::ok)
                     .filter(|c| &c[1] == "FR")
                     .map(|c| def_id(&c))
                     .collect();
-                for range in RANGE.captures_iter(&sc[2]).flatten() {
+                for range in RANGE.captures_iter(&sc[2]).map_while(Result::ok) {
                     let (lo, hi): (u32, u32) =
                         (range[1].parse().unwrap_or(0), range[2].parse().unwrap_or(0));
                     named.extend(
@@ -290,7 +290,7 @@ fn check_orphans(spec: &Path) -> Vec<String> {
             line += para.matches('\n').count() + 2;
         }
     }
-    let defs: BTreeMap<String, usize> = DEF.captures_iter(&text).flatten().rev_first();
+    let defs: BTreeMap<String, usize> = DEF.captures_iter(&text).map_while(Result::ok).rev_first();
     for fr in frs.difference(&covered) {
         bad.push(format!(
             "{}:{}: {fr} is named by no success criterion",
@@ -332,12 +332,12 @@ fn check_stale_tasks(spec: &Path, tasks: &Path) -> Vec<String> {
     let spec_text = read(spec);
     let have: BTreeSet<String> = DEF
         .captures_iter(&spec_text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| def_id(&c))
         .collect();
     let body = read(tasks);
     let mut bad = Vec::new();
-    for m in ID.find_iter(&body).flatten() {
+    for m in ID.find_iter(&body).map_while(Result::ok) {
         if !NAMED_ELSEWHERE
             .is_match(before(&body, m.start()))
             .unwrap_or(false)

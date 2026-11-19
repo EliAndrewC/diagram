@@ -48,7 +48,7 @@ use serde_json::{json, Value};
 use crate::{raised, read_strict, reply};
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 // Python's `$` also matches before a final newline, so `\n?\z` stands for it; `\d` read as ASCII digits (Python's would take any decimal

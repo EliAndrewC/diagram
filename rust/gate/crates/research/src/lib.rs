@@ -63,10 +63,7 @@ pub(crate) fn re(pattern: &str) -> fancy_regex::Regex {
     // NO BACKTRACK LIMIT IN PRACTICE (feature 449 T145): Python's `re` has none, and the regex crate's default of a million steps panicked
     // the record-prepass of the whole registry (`SOURCES.html`, a page of about two megabytes) where an `<em>` met no `</em>` and the
     // lazy scan to the end ran past it (observed 2026-11-16, the T145 differential's sweep); a pattern here runs to its answer as Python's did
-    fancy_regex::RegexBuilder::new(pattern)
-        .backtrack_limit(usize::MAX)
-        .build()
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static DECIMAL: std::sync::LazyLock<fancy_regex::Regex> =
@@ -138,7 +135,10 @@ pub(crate) fn caps<'t>(
     pattern: &fancy_regex::Regex,
     text: &'t str,
 ) -> Vec<fancy_regex::Captures<'t>> {
-    pattern.captures_iter(text).flatten().collect()
+    pattern
+        .captures_iter(text)
+        .map_while(std::result::Result::ok)
+        .collect()
 }
 
 /// A file read as Python's `open(encoding="utf-8").read()`: universal newlines, None where it cannot be read.

@@ -67,7 +67,10 @@ pub fn split(item: &str) -> Result<(Option<Cond>, String)> {
 /// A malformed condition (never, the pattern holding only well-formed ones; kept as the Python's call is).
 pub fn entry_conditions(entry: &str) -> Result<Vec<(String, Cond)>> {
     let mut out: Vec<(String, Cond)> = Vec::new();
-    for m in AFTER_PATH.captures_iter(entry).flatten() {
+    for m in AFTER_PATH
+        .captures_iter(entry)
+        .map_while(std::result::Result::ok)
+    {
         // the pattern holds only well-formed conditions, so the Python's `if conds:` always held
         let conds = split(&m[2].replace(' ', ""))?.0.unwrap_or_default();
         match out.iter_mut().find(|(p, _)| p == &m[1]) {
@@ -120,7 +123,7 @@ pub fn shown_entry(entry: &str, meta: &Map<String, Value>) -> Result<String> {
     let stripped = strip_entry(entry);
     let kept: Vec<&str> = SEPARATOR
         .split(&stripped)
-        .flatten()
+        .map_while(std::result::Result::ok)
         .map(strip)
         .filter(|p| {
             !p.is_empty()

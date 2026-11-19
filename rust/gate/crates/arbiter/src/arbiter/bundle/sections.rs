@@ -680,7 +680,7 @@ pub fn claims_section(root: &Path, texts: &[String]) -> Result<Vec<String>, Fail
         .flat_map(|t| {
             NAMED
                 .captures_iter(t)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|c| {
                     c.get(1)
                         .or_else(|| c.get(2))

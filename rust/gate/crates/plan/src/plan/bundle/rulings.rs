@@ -43,7 +43,7 @@ pub(super) fn cited(bodies: &[&str]) -> Vec<String> {
     let mut keys: Vec<String> = Vec::new();
     for body in bodies {
         let mut last: Option<String> = None;
-        for c in ASK_OR_SIBLING.captures_iter(body).flatten() {
+        for c in ASK_OR_SIBLING.captures_iter(body).map_while(Result::ok) {
             let key = if let Some(full) = c.get(1) {
                 last = Some(full.as_str().to_owned());
                 full.as_str().to_owned()

@@ -31,11 +31,13 @@ use crate::Reply;
 /// The finding classes, in the report's column order.
 pub const CLASSES: [&str; 4] = ["geometric", "judgment", "paperwork", "nothing"];
 /// `_TOK`: the thousands of input tokens a tokens cell opens with (`\d` any script's decimal digit, as Python's `re` reads it).
-static TOK: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^(\d+)k in").unwrap_or_else(|e| unreachable!("{e}")));
+static TOK: LazyLock<Regex> = LazyLock::new(|| {
+    l7r_guard::shared::regex::build(r"^(\d+)k in").unwrap_or_else(|e| unreachable!("{e}"))
+});
 /// One decimal digit of any script (Unicode `Nd`), as Python's `\d` and `float()` read one.
-static ND: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^\d$").unwrap_or_else(|e| unreachable!("{e}")));
+static ND: LazyLock<Regex> = LazyLock::new(|| {
+    l7r_guard::shared::regex::build(r"^\d$").unwrap_or_else(|e| unreachable!("{e}"))
+});
 
 fn is_nd(c: char) -> bool {
     ND.is_match(c.encode_utf8(&mut [0; 4])).unwrap_or(false)

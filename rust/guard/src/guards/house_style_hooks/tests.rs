@@ -218,3 +218,20 @@ fn a_tool_s_text_is_americanized_its_quotations_held_out() {
         format!("a {us} band, <q>a {brit} quoted</q>")
     );
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A text past a million steps (feature 449 T185, the edit guard T151's search named): the spelling scan's `.flatten()` repeated the
+/// error `fancy_regex` gave at its old limit without advancing, so the correction spun; it reads to the end.
+#[test]
+fn a_spelling_past_a_million_steps_is_corrected() {
+    let text = format!("{}the {WORD}", "plain words of a long text ".repeat(50_000));
+    assert!(within(move || super::americanize(&text)).ends_with(&format!("the {WORD_FIXED}")));
+}

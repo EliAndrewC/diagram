@@ -32,11 +32,14 @@ pub const GUARD: Guard = Guard {
 const FILE_TOOLS: [&str; 3] = ["Edit", "Write", "NotebookEdit"];
 
 static GIT_WRITE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"\bgit\b[^;&|]*\b(commit|add)\b").unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(r"(?:\A|(?<=[;&|]))(?>[^;&|]*?\bgit\b)[^;&|]*\b(commit|add)\b")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
 static MAKE_WRITE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"\bmake\b[^;&|]*?\b(record-checked|tick|accept)\b")
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(
+        r"(?:\A|(?<=[;&|]))(?>[^;&|]*?\bmake\b)[^;&|]*?\b(record-checked|tick|accept)\b",
+    )
+    .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 /// What one decision reads.

@@ -45,7 +45,7 @@ pub struct Page {
 pub fn comments(html: &str) -> Vec<(usize, usize)> {
     COMMENT
         .find_iter(html)
-        .flatten()
+        .map_while(std::result::Result::ok)
         .map(|m| (m.start(), m.end()))
         .collect()
 }

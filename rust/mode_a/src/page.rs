@@ -79,7 +79,7 @@ pub fn ink_census(strings: &[String], tags: &[ClsTag]) -> (Vec<(String, i64)>, V
     for (s, tag) in strings.iter().zip(tags) {
         for (key, piece) in pieces(s, tag) {
             let stripped = NOT_INK.replace_all(piece, "");
-            let n = INK.find_iter(&stripped).flatten().count();
+            let n = INK.find_iter(&stripped).map_while(Result::ok).count();
             if n == 0 {
                 continue;
             }

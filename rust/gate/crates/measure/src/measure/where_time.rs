@@ -148,7 +148,7 @@ pub fn named_pattern(feature_no: &str) -> Regex {
 pub fn named_task(text: &str, pattern: &Regex) -> String {
     let mut ids: Vec<String> = pattern
         .captures_iter(text)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     ids.sort();

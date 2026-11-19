@@ -126,7 +126,7 @@ pub fn shape_box(tag: &str, body: &str) -> Result<Option<Box4>, Error> {
             };
             let nums: Option<Vec<f64>> = NUM
                 .find_iter(points)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|m| crate::py::float(m.as_str()).ok())
                 .collect();
             let Some(nums) = nums else { return Ok(None) };
@@ -149,7 +149,7 @@ pub fn shape_box(tag: &str, body: &str) -> Result<Option<Box4>, Error> {
 pub fn subpath_box(sp: &str) -> Result<Box4, Error> {
     let nums = |t: &str| -> Vec<f64> {
         NUM.find_iter(t)
-            .flatten()
+            .map_while(Result::ok)
             .filter_map(|m| crate::py::float(m.as_str()).ok())
             .collect()
     };
@@ -177,14 +177,14 @@ pub fn prepare_offmap(s: &str) -> Result<Vec<Part>, Error> {
     }
     let mut found: Vec<(usize, usize, bool, fancy_regex::Captures<'_>)> = PATH
         .captures_iter(s)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| {
             let r = c.get(0).map_or(0..0, |m| m.range());
             (r.start, r.end, true, c)
         })
         .collect();
     let paths: Vec<(usize, usize)> = found.iter().map(|(a, b, _, _)| (*a, *b)).collect();
-    for c in SHAPE.captures_iter(s).flatten() {
+    for c in SHAPE.captures_iter(s).map_while(Result::ok) {
         let r = c.get(0).map_or(0..0, |m| m.range());
         // a shape never sits inside a path's tag, but say so rather than assume it
         if !paths.iter().any(|&(a, b)| a <= r.start && r.start < b) {
@@ -203,7 +203,7 @@ pub fn prepare_offmap(s: &str) -> Result<Vec<Part>, Error> {
             if MERGE_GRAMMAR.is_match(d).unwrap_or(false) {
                 let subs: Vec<(String, Box4)> = SUBPATH
                     .find_iter(d)
-                    .flatten()
+                    .map_while(Result::ok)
                     .map(|sp| subpath_box(sp.as_str()).map(|b| (sp.as_str().to_owned(), b)))
                     .collect::<Result<_, _>>()?;
                 parts.push(Part::Path(m[1].to_owned(), subs, m[3].to_owned()));

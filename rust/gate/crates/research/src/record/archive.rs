@@ -52,7 +52,7 @@ pub fn urls_in(markup: &str, comments: bool) -> Vec<String> {
         drop_all(&COMMENT, markup)
     };
     let mut out: Vec<String> = Vec::new();
-    for m in URL.find_iter(&text).flatten() {
+    for m in URL.find_iter(&text).map_while(std::result::Result::ok) {
         let url = clean(m.as_str());
         if !out.contains(&url) {
             out.push(url);

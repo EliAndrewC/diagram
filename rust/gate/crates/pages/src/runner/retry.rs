@@ -29,11 +29,12 @@ const RESUME: &str = "Continue the work of the brief you were given, from where 
 const RETURNED: &str = " Your background agents returned while you waited - a headless session is not woken by them, and the notice that they did not finish is wrong. Every report is in {path}: read it, record each check from it, and do not dispatch them again.";
 
 // `\d` read as ASCII digits, and Python's whitespace for `\s`: a reset time in other digits is a message no service writes
-static EPOCH: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"\|([0-9]{10})\b").unwrap_or_else(|e| unreachable!("{e}")));
+static EPOCH: LazyLock<Regex> = LazyLock::new(|| {
+    l7r_guard::shared::regex::build(r"\|([0-9]{10})\b").unwrap_or_else(|e| unreachable!("{e}"))
+});
 static RESETS: LazyLock<Regex> = LazyLock::new(|| {
     let s = format!("[{SPACE_CLASS}]");
-    Regex::new(&format!(
+    l7r_guard::shared::regex::build(&format!(
         r"(?i)resets?{s}+(?:at{s}+)?([0-9]{{1,2}})(?::([0-9]{{2}}))?{s}*([ap]m)"
     ))
     .unwrap_or_else(|e| unreachable!("{e}"))

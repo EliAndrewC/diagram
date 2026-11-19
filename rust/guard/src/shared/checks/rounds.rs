@@ -42,7 +42,7 @@ const RESEARCH_UNITS: [&str; 3] = ["modal-accuracy", "modal-references", "modal-
 const SIMILAR: f64 = 0.6;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static UNIT: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^unit: (\S+?):(\S.*?) \S+$"));
@@ -63,8 +63,11 @@ static OWED_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^owed: (.+)$"));
 static UNIT_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^unit: "));
 static SENTENCE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<=[.!?])\s+"));
 static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"[a-z0-9]+"));
-static APPLY: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"\bmake\b[^;&|]*\bapply-edits\b[^;&|]*\bFROM=("[^"]+"|'[^']+'|\S+)"#));
+static APPLY: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r#"(?:\A|(?<=[;&|]))(?>[^;&|]*?\bmake\b)(?>[^;&|]*?\bapply-edits\b)[^;&|]*\bFROM=("[^"]+"|'[^']+'|\S+)"#,
+    )
+});
 static GEN: LazyLock<Regex> = LazyLock::new(|| {
     re(
         r"\.(svg|json|jsonl|png|webp)$|^specs/|^dev/(run-log|perf-log|bypass-log|idle-log)/|^pool/.*\.notes\.md$",
@@ -87,7 +90,7 @@ pub fn subject_of_unit(tail: &str) -> String {
 pub fn subjects_of_manifest(text_of: &str) -> Vec<String> {
     let set: BTreeSet<String> = UNIT
         .captures_iter(text_of)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| subject_of_unit(&c[2]))
         .filter(|s| !s.is_empty())
         .collect();
@@ -118,7 +121,7 @@ pub fn subject_of_path(path: &str) -> String {
 pub fn notes_of_manifest(text_of: &str) -> BTreeSet<String> {
     let named: BTreeSet<String> = NOTES
         .captures_iter(text_of)
-        .flatten()
+        .map_while(Result::ok)
         .flat_map(|c| {
             c[1].split(',')
                 .map(|n| n.trim().to_owned())
@@ -131,7 +134,7 @@ pub fn notes_of_manifest(text_of: &str) -> BTreeSet<String> {
     }
     UNIT_NOTE
         .captures_iter(text_of)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect()
 }
@@ -387,7 +390,7 @@ pub fn sentences(blocks: &[String]) -> Vec<String> {
     for b in blocks {
         let flat = collapsed(b);
         let mut last = 0;
-        for m in SENTENCE.find_iter(&flat).flatten() {
+        for m in SENTENCE.find_iter(&flat).map_while(Result::ok) {
             out.push(flat[last..m.start()].to_owned());
             last = m.end();
         }
@@ -466,7 +469,7 @@ fn moved_since_answer(root: &Path, text_of: &str, subject: &str) -> String {
     let store = record_store(root, std::env::var("RECORD_CHECKS_DIR").ok().as_deref());
     UNIT_FP
         .captures_iter(text_of)
-        .flatten()
+        .map_while(Result::ok)
         .find(|c| {
             let slug = &c[1];
             let tail = slug.split_once(':').map_or("", |(_, t)| t);
@@ -683,7 +686,7 @@ pub fn dispatch(state: &mut Value, ask: &Dispatch) -> String {
     row.insert("marks".to_owned(), marks);
     let owed: Vec<String> = OWED_LINE
         .captures_iter(ask.text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     row.insert("owed".to_owned(), json!(owed));

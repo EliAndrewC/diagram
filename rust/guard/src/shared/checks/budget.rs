@@ -13,7 +13,7 @@ use super::{name_of, text};
 const ROUND_CAP: usize = 2;
 
 static STAGE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"/work-budget-budget-([a-z_]+)/MANIFEST\.md")
+    crate::shared::regex::build(r"/work-budget-budget-([a-z_]+)/MANIFEST\.md")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
@@ -57,7 +57,7 @@ pub fn refusal(feature_dir: Option<&Path>, rulings: &Map<String, Value>, prompt:
     let stage = caps[1].to_owned();
     let found = verdicts(dir, &stage);
     let last = found.iter().map(|p| mtime(p)).fold(0.0_f64, f64::max);
-    let named = Regex::new(&format!(
+    let named = crate::shared::regex::build(&format!(
         r"(?<![a-z_]){}(?![a-z_])",
         fancy_regex::escape(&stage)
     ))

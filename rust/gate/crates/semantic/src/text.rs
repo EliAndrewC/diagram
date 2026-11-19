@@ -9,10 +9,12 @@ use l7r_guard::shared::py_text::is_space;
 
 use crate::{Error, Result, MODEL};
 
-static COMMENT: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(?s)<!--.*?-->").unwrap_or_else(|e| unreachable!("{e}")));
-static TAG: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"<[^>]+>").unwrap_or_else(|e| unreachable!("{e}")));
+static COMMENT: LazyLock<Regex> = LazyLock::new(|| {
+    l7r_guard::shared::regex::build(r"(?s)<!--.*?-->").unwrap_or_else(|e| unreachable!("{e}"))
+});
+static TAG: LazyLock<Regex> = LazyLock::new(|| {
+    l7r_guard::shared::regex::build(r"<[^>]+>").unwrap_or_else(|e| unreachable!("{e}"))
+});
 
 /// `path.read_text(encoding="utf-8", errors="replace")`: bad bytes as U+FFFD, `\r\n` and a lone `\r` read as `\n` (universal newlines).
 ///

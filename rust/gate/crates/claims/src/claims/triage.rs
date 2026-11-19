@@ -209,7 +209,7 @@ pub fn code_hunks(root: &Path, path: &str, lo: usize, hi: usize, base: &str) -> 
     let diff = git(root, &["diff", "-U3", base, "--", path]);
     let found: Vec<(usize, usize, usize)> = HUNK
         .captures_iter(&diff)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| {
             let first: usize = c[1].parse().unwrap_or(0);
             let n: usize = c.get(2).map_or(1, |g| g.as_str().parse().unwrap_or(0));
@@ -706,7 +706,7 @@ pub fn vet(
             let m = super::reply::VERDICT.captures(line).ok().flatten();
             let gone: Vec<String> = QUESTION_PATH
                 .find_iter(line)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|p| p.as_str().to_owned())
                 .filter(|p| !root.join(p).is_file())
                 .collect();

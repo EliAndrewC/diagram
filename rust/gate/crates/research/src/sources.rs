@@ -144,7 +144,10 @@ pub fn question_text(heading: &str) -> String {
 #[must_use]
 pub fn entry_fragments(entry: &str) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
-    for c in ENTRY_FRAGMENT.captures_iter(entry).flatten() {
+    for c in ENTRY_FRAGMENT
+        .captures_iter(entry)
+        .map_while(std::result::Result::ok)
+    {
         if !out.iter().any(|f| f == &c[1]) {
             out.push(c[1].to_owned());
         }
@@ -222,7 +225,7 @@ pub fn linkify(fragment: &str) -> String {
 fn link_text(part: &str) -> String {
     let mut out = String::new();
     let mut at = 0;
-    for m in CITE_URL.find_iter(part).flatten() {
+    for m in CITE_URL.find_iter(part).map_while(std::result::Result::ok) {
         let u = trimmed(m.as_str());
         out.push_str(&part[at..m.start()]);
         let _ = write!(
@@ -362,7 +365,7 @@ impl Reader {
         let src = self.record_text("SOURCES.html")?;
         Ok(ENTRY_HEAD
             .captures_iter(&src)
-            .flatten()
+            .map_while(std::result::Result::ok)
             .filter(|c| CANON_FILE.is_match(&c[2]).unwrap_or(false))
             .map(|c| c[1].to_owned())
             .collect())

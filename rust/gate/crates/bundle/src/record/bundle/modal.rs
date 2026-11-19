@@ -229,7 +229,7 @@ fn conditions_shown(text: &str) -> String {
     COND.replace_all(text, |c: &Captures<'_>| {
         let parts: Vec<String> = ONE
             .captures_iter(&c[2])
-            .flatten()
+            .map_while(Result::ok)
             .map(|o| {
                 format!(
                     "{} is {}",
@@ -343,7 +343,7 @@ pub fn prepass(root: &Path, m: &Modal) -> String {
         ),
     ];
     for pat in BARRED_RE.iter() {
-        for hit in pat.find_iter(about).flatten() {
+        for hit in pat.find_iter(about).map_while(Result::ok) {
             out.push(format!(
                 "- barred phrase in About (M11/M16): {} - ...{}...",
                 py_repr(hit.as_str()),

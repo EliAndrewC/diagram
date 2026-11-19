@@ -41,7 +41,7 @@ pub const CAP: usize = 4;
 pub const KINDS: [&str; 4] = ["check", "assertions", "split", "handover"];
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 // `re.match` anchors at the start, `re.fullmatch` at both ends: `^` and `\z` stand for them; `\Z` is the regex crate's `\z`
@@ -66,7 +66,7 @@ static ID_WORD: LazyLock<Regex> = LazyLock::new(|| re(r"^[A-Z]{1,2}\d+\z"));
 /// Every match of `rx` in `text`, as `re.findall` gives them (the first group where there is one).
 fn findall(rx: &Regex, text: &str, group: usize) -> Vec<String> {
     rx.captures_iter(text)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .filter_map(|c| c.get(group).map(|m| m.as_str().to_owned()))
         .collect()
 }

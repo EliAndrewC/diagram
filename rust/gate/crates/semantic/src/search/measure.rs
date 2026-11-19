@@ -46,7 +46,7 @@ pub fn measure_passages(body: &str, terms: &[String], n: usize) -> Vec<(i64, i64
     // each match's start in characters (`m.start()`), the byte offsets walked once
     let mut found = Vec::new();
     let (mut byte, mut chars) = (0, 0);
-    for m in MEASURE.find_iter(body).flatten() {
+    for m in MEASURE.find_iter(body).map_while(Result::ok) {
         chars += body[byte..m.start()].chars().count();
         byte = m.start();
         found.push(chars);

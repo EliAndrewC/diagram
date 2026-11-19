@@ -278,8 +278,8 @@ static WALL_GROUP: LazyLock<Regex> =
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 2.0 (a wall, fence or divider segment's least thickness, px)
 fn segments(group: &Regex, text: &str) -> Result<Vec<Rect>, Error> {
     let mut out = Vec::new();
-    for grp in group.captures_iter(text).flatten() {
-        for ln in LINE.captures_iter(&grp[1]).flatten() {
+    for grp in group.captures_iter(text).map_while(Result::ok) {
+        for ln in LINE.captures_iter(&grp[1]).map_while(Result::ok) {
             let mut v = [0.0; 4];
             for (i, slot) in v.iter_mut().enumerate() {
                 *slot = float(&ln[i + 1])?;
@@ -363,7 +363,7 @@ struct Ink {
 fn ink(text: &str, offsets: &Offsets, trees: &[Rect]) -> Result<Ink, Error> {
     let tree_pos: BTreeSet<i64> = trees.iter().map(|t| t.pos).collect();
     let mut glyphs = Vec::new();
-    for c in CIRCLE.captures_iter(text).flatten() {
+    for c in CIRCLE.captures_iter(text).map_while(Result::ok) {
         let [cx, cy, rad] = numbers::<3>(&c)?;
         let at = cp(offsets, c.get(0).map_or(0, |m| m.start()));
         if rad >= 4.0 && !tree_pos.contains(&at) {
@@ -371,20 +371,20 @@ fn ink(text: &str, offsets: &Offsets, trees: &[Rect]) -> Result<Ink, Error> {
         }
     }
     let fence_segs = segments(&FENCE_GROUP, text)?;
-    for e in ELLIPSE.captures_iter(text).flatten() {
+    for e in ELLIPSE.captures_iter(text).map_while(Result::ok) {
         let [ex, ey, rx, ry] = numbers::<4>(&e)?;
         let at = cp(offsets, e.get(0).map_or(0, |m| m.start()));
         glyphs.push(Rect::new(ex - rx, ey - ry, 2.0 * rx, 2.0 * ry, "", at));
     }
     let dividers = segments(&DIV_GROUP, text)?;
     let mut tubs = Vec::new();
-    for grp in TUB_GROUP.captures_iter(text).flatten() {
+    for grp in TUB_GROUP.captures_iter(text).map_while(Result::ok) {
         let (whole, inner) = (grp.get(0), grp.get(1));
         let (start, inner_at) = (
             whole.map_or(0, |m| m.start()),
             inner.map_or(0, |m| m.start()),
         );
-        for c in CIRCLE.captures_iter(&grp[1]).flatten() {
+        for c in CIRCLE.captures_iter(&grp[1]).map_while(Result::ok) {
             let [cx, cy, rad] = numbers::<3>(&c)?;
             // the Python's `grp.start() + c.start()`: the group's offset plus the circle's within the group's BODY
             let within = c.get(0).map_or(0, |m| m.start());
@@ -480,7 +480,7 @@ fn parse_with(text: &str, rects: &[Rect], marked: Option<&[Mark]>) -> Result<Par
         .collect();
     let ids = ID
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     let gate_posts = shapes::rects(text, false)?

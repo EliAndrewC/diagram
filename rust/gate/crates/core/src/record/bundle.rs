@@ -225,7 +225,7 @@ pub fn pyre(pattern: &str) -> fancy_regex::Regex {
 pub fn findall(pattern: &fancy_regex::Regex, text: &str, g: usize) -> Vec<String> {
     pattern
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c.get(g).map_or_else(String::new, |m| m.as_str().to_owned()))
         .collect()
 }
@@ -234,7 +234,7 @@ pub fn findall(pattern: &fancy_regex::Regex, text: &str, g: usize) -> Vec<String
 #[must_use]
 pub fn split_on<'a>(pattern: &fancy_regex::Regex, text: &'a str) -> Vec<&'a str> {
     let (mut out, mut at) = (Vec::new(), 0);
-    for m in pattern.find_iter(text).flatten() {
+    for m in pattern.find_iter(text).map_while(Result::ok) {
         out.push(&text[at..m.start()]);
         at = m.end();
     }

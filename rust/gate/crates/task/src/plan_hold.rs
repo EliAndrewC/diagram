@@ -178,7 +178,7 @@ fn is_engine_task(tree: &Path, d: &Path, task: &str, section: Option<&str>) -> R
         || found(&PHYSICAL, &lines)
         || WORD
             .find_iter(&text)
-            .flatten()
+            .map_while(Result::ok)
             .any(|w| names.contains(w.as_str()))
     {
         return Ok(true);

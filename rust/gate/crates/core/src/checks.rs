@@ -16,7 +16,7 @@ const UNITS: [&str; 18] = [
 ];
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// A figure with a unit: the longest unit first, so `minutes` is not read as `m`.

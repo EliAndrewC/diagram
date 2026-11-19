@@ -33,7 +33,7 @@ const PARSE_LIMIT: Duration = Duration::from_secs(10);
 const MESSAGE_FILE_BYTES: u64 = 200_000;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 fn hit(pattern: &Regex, text: &str) -> bool {
@@ -307,7 +307,7 @@ fn commit_dash_m_rewrite(cmd: &str) -> Option<String> {
         ));
         let found: Vec<(usize, usize)> = pattern
             .find_iter(&out)
-            .flatten()
+            .map_while(Result::ok)
             .map(|m| (m.start(), m.end()))
             .collect();
         let [(start, end)] = found[..] else {
@@ -386,7 +386,7 @@ fn messages(cmd: &str, base: &Path) -> Vec<String> {
                     texts.extend(
                         HEREDOC_BODY
                             .captures_iter(cmd)
-                            .flatten()
+                            .map_while(Result::ok)
                             .filter_map(|m| Some(m.get(1)?.as_str().to_owned())),
                     );
                 } else {
@@ -408,7 +408,7 @@ fn messages(cmd: &str, base: &Path) -> Vec<String> {
 
 fn coauthor_problem(cmd: &str, base: &Path) -> Option<String> {
     for text in messages(cmd, base) {
-        for m in CO_AUTHOR.captures_iter(&text).flatten() {
+        for m in CO_AUTHOR.captures_iter(&text).map_while(Result::ok) {
             let line = m.get(1).map_or("", |g| g.as_str());
             let inner = ADDRESS.captures(line).ok().flatten();
             let named = inner

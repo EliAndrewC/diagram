@@ -76,10 +76,7 @@ impl From<l7r_guard::shared::blocked::Fault> for Error {
 /// T145), where it panics.
 #[must_use]
 pub(crate) fn re(pattern: &str) -> fancy_regex::Regex {
-    fancy_regex::RegexBuilder::new(pattern)
-        .backtrack_limit(usize::MAX)
-        .build()
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// A result of this crate.

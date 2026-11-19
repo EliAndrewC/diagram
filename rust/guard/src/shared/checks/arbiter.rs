@@ -16,7 +16,7 @@ const CASCADE_RATIO: u64 = 1;
 const CASCADE_MIN: u64 = 10;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static ASK_FEATURE: LazyLock<Regex> = LazyLock::new(|| re(r"^ask:(\d{3})-"));

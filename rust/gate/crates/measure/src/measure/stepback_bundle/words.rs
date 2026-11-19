@@ -45,7 +45,7 @@ fn walk_or_none(value: Option<&Value>) -> Result<Vec<Value>, Raised> {
 #[must_use]
 pub fn command_key(cmd: &str) -> String {
     let mut makes: Vec<String> = Vec::new();
-    for c in MAKES.captures_iter(cmd).flatten() {
+    for c in MAKES.captures_iter(cmd).map_while(Result::ok) {
         if !makes.contains(&c[1].to_owned()) {
             makes.push(c[1].to_owned());
         }

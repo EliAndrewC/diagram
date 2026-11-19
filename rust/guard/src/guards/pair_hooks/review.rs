@@ -13,13 +13,14 @@ use crate::shared::checks;
 use crate::shared::escape::enough;
 
 static DECIDE_OK: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"\bDECIDE_OK="([^"]*)""#).unwrap());
+    LazyLock::new(|| crate::shared::regex::build(r#"\bDECIDE_OK="([^"]*)""#).unwrap());
 static GLYPH_DUE_OK: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"GLYPH_DUE_OK="([^"]*)""#).unwrap());
+    LazyLock::new(|| crate::shared::regex::build(r#"GLYPH_DUE_OK="([^"]*)""#).unwrap());
 static PREREQ_REASON: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"REVIEW_PREREQ_OK="([^"]*)""#).unwrap());
-static BUNDLE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"[^ `"]*/MANIFEST\.md|/tmp/l7r-check/[^ `")]*"#).unwrap());
+    LazyLock::new(|| crate::shared::regex::build(r#"REVIEW_PREREQ_OK="([^"]*)""#).unwrap());
+static BUNDLE: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(r#"[^ `"]*/MANIFEST\.md|/tmp/l7r-check/[^ `")]*"#).unwrap()
+});
 
 /// The first capture of `re` in `text`, or "".
 fn quoted(re: &Regex, text: &str) -> String {

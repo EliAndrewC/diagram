@@ -517,7 +517,7 @@ pub fn read_text(path: &Path) -> Result<String> {
 pub fn urls_in(text: &str) -> Vec<String> {
     consulted::URL
         .find_iter(text)
-        .flatten()
+        .map_while(std::result::Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect()
 }

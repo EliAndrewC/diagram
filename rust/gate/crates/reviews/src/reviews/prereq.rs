@@ -31,7 +31,7 @@ const GATE_TARGETS: [&str; 4] = ["done", "verify", "maps", "test-full"];
 const NR: &str = "NOT-REVIEWABLE";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static BACKTICKS: LazyLock<Regex> = LazyLock::new(|| re(r"`[^`\n]*`"));
@@ -302,7 +302,7 @@ pub fn figure_pattern(tree: &Path) -> Result<Regex, String> {
     let pattern = String::from_utf8_lossy(&done.stdout)
         .trim()
         .replace(r"\w", r"\w\p{N}");
-    Regex::new(&pattern).map_err(|e| e.to_string())
+    l7r_guard::shared::regex::build(&pattern).map_err(|e| e.to_string())
 }
 
 /// Each measured figure in the dispatch that no record backs, by feature 239's convention (FR-006): the spec lint's own pattern.
@@ -312,13 +312,13 @@ fn unresolved_figures(prompt: &str, records: &[Value], figure: &Regex) -> Vec<St
         .map(|r| (text_of(r, "key", "None"), r))
         .collect();
     let mut out = Vec::new();
-    for para in PARAGRAPH.split(prompt).filter_map(Result::ok) {
+    for para in PARAGRAPH.split(prompt).map_while(Result::ok) {
         if ONE_SHOT.is_match(para).unwrap_or(false) && para.to_lowercase().contains("method") {
             continue;
         }
         let values: Vec<Option<f64>> = KEY
             .captures_iter(para)
-            .filter_map(Result::ok)
+            .map_while(Result::ok)
             .filter_map(|c| {
                 by_key
                     .get(&c[1])
@@ -326,7 +326,7 @@ fn unresolved_figures(prompt: &str, records: &[Value], figure: &Regex) -> Vec<St
             })
             .collect();
         let bare = BACKTICKS.replace_all(para, " ");
-        for m in figure.find_iter(&bare).filter_map(Result::ok) {
+        for m in figure.find_iter(&bare).map_while(Result::ok) {
             let n = number(m.as_str());
             let backed = n.is_some_and(|n| {
                 values
@@ -348,7 +348,7 @@ fn units_named(prompt: &str, pool: &[String]) -> Vec<String> {
     for re in [&*UNIT, &*UNIT_SNAPSHOT] {
         units.extend(
             re.captures_iter(prompt)
-                .filter_map(Result::ok)
+                .map_while(Result::ok)
                 .map(|c| c[1].to_owned()),
         );
     }

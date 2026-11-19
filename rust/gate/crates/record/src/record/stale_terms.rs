@@ -28,7 +28,7 @@ const SKIP_DIR: &str = "measure";
 const COMMON: &str = "the and for that this with from are was were has have had not but its their they them then than into onto over each when where which while will would should could may must can one two all any more most some such only also both here there what how why who does did done being been same other after before under between against about";
 
 fn compiled(p: &str) -> Regex {
-    Regex::new(p).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static TOKEN: LazyLock<Regex> =
@@ -59,7 +59,7 @@ pub struct Candidate {
 fn tokens(line: &str) -> BTreeSet<String> {
     TOKEN
         .find_iter(line)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_lowercase())
         .filter(|t| !COMMON_SET.contains(t.as_str()))
         .collect()
@@ -68,7 +68,7 @@ fn tokens(line: &str) -> BTreeSet<String> {
 fn subjects(line: &str) -> BTreeSet<String> {
     TICKED
         .captures_iter(line)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].trim().to_owned())
         .collect()
 }
@@ -197,7 +197,7 @@ pub fn stale_candidates(old: &Files, new: &Files) -> Vec<Candidate> {
 fn tokens_all(line: &str) -> BTreeSet<String> {
     TOKEN
         .find_iter(line)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_lowercase())
         .collect()
 }
@@ -245,7 +245,7 @@ pub fn criteria_left_behind(old: &Files, new: &Files) -> Vec<Candidate> {
         for (sc, (n, body, cites)) in items(text, &CRIT) {
             let cited: BTreeSet<String> = FR
                 .find_iter(&cites)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|m| m.as_str().to_owned())
                 .filter(|f| rewritten.contains(f))
                 .collect();

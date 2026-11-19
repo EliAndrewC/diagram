@@ -222,7 +222,7 @@ fn lex(body: &str) -> Vec<String> {
 /// The counter functions' names in a source: `tally`, `merge`, and what a `use` renames either to; each with the one it is.
 fn callees(source: &str) -> HashMap<String, &'static str> {
     let mut out = HashMap::from([("tally".to_owned(), "tally"), ("merge".to_owned(), "merge")]);
-    for c in ALIAS.captures_iter(source).flatten() {
+    for c in ALIAS.captures_iter(source).map_while(Result::ok) {
         out.insert(
             c[2].to_owned(),
             if &c[1] == "tally" { "tally" } else { "merge" },

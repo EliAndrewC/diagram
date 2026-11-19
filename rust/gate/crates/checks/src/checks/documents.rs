@@ -13,6 +13,7 @@ mod citation_inventory;
 mod claude_md_quotes;
 mod docs_mechanism;
 mod one_root_claude_md;
+mod regex_scans;
 mod settlement_review_contract;
 
 use std::path::{Path, PathBuf};
@@ -26,7 +27,7 @@ fn root() -> PathBuf {
 }
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap()
+    l7r_guard::shared::regex::build(pattern).unwrap()
 }
 
 /// A file as Python's `read_text` reads it (`\r\n` and `\r` read as `\n`), or "" where it cannot be read: a missing file fails the

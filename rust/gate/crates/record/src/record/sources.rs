@@ -141,7 +141,10 @@ fn registry_urls(root: &Path) -> Result<BTreeMap<String, String>, Fault> {
         if !own.is_empty() {
             primary.entry(norm(&own)).or_insert_with(|| key.clone());
         }
-        for u in consulted::URL.find_iter(&text).flatten() {
+        for u in consulted::URL
+            .find_iter(&text)
+            .map_while(std::result::Result::ok)
+        {
             other
                 .entry(norm(&unescape(u.as_str())))
                 .or_insert_with(|| key.clone());

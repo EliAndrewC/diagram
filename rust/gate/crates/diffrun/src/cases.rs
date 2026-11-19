@@ -206,7 +206,7 @@ fn string_map(v: Option<&Value>, what: &str) -> Result<BTreeMap<String, String>,
 }
 
 fn regex(text: &str, what: &str) -> Result<Regex, String> {
-    Regex::new(text).map_err(|e| format!("{what}: {e}"))
+    l7r_guard::shared::regex::build(text).map_err(|e| format!("{what}: {e}"))
 }
 
 fn norm(v: &Value) -> Result<Norm, String> {

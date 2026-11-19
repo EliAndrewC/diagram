@@ -8,7 +8,6 @@
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use fancy_regex::Regex;
 use serde_json::{json, Value};
 
 use crate::Reply;
@@ -82,7 +81,7 @@ fn reply(stderr: String, code: i32) -> Reply {
 
 /// Is a process under `proc_root` a make of this target, working inside `top`?
 fn own_make(proc_root: &Path, top: &Path, target: &str) -> bool {
-    let Ok(pattern) = Regex::new(&format!("make {target}")) else {
+    let Ok(pattern) = l7r_guard::shared::regex::build(&format!("make {target}")) else {
         return false;
     };
     let prefix = format!("{}/", top.display());

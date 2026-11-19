@@ -173,7 +173,7 @@ fn non_empty_text(v: &Value) -> bool {
 /// reproduced (the regex crate's differ); the differential normalizes them as the library's.
 fn compiled(pattern: &str) -> Result<(), Error> {
     let translated = l7r_gate_research::pyre::translate(&format!("(?i){pattern}"));
-    fancy_regex::Regex::new(&translated)
+    l7r_guard::shared::regex::build(&translated)
         .map(|_| ())
         .map_err(|e| Error::new("re.PatternError", e.to_string()))
 }

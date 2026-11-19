@@ -36,7 +36,7 @@ static NULL: Value = Value::Null;
 /// A pattern of this port's own, compiled once.
 #[must_use]
 pub fn re(pattern: &str) -> fancy_regex::Regex {
-    fancy_regex::Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// `e.get(key)`: the value, `None` where it is missing.

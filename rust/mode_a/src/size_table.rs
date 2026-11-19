@@ -106,11 +106,11 @@ fn num(value: Option<&str>) -> Result<f64, Error> {
 fn shift_of(transform: Option<&str>) -> Result<(f64, f64, bool), Error> {
     let text = transform.unwrap_or("");
     let (mut dx, mut dy, mut other) = (0.0, 0.0, false);
-    for c in CALL.captures_iter(text).flatten() {
+    for c in CALL.captures_iter(text).map_while(Result::ok) {
         if &c[1] == "translate" {
             let mut vals = NUMBER
                 .find_iter(&c[2])
-                .flatten()
+                .map_while(Result::ok)
                 .map(|m| float(m.as_str()))
                 .collect::<Result<Vec<f64>, Error>>()?;
             vals.extend([0.0, 0.0]);

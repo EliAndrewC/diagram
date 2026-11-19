@@ -130,7 +130,7 @@ fn asked(rows: &[&Row], index: &Map<String, Value>) -> Vec<String> {
             asked.extend(
                 BACKTICKED
                     .captures_iter(field(&row, "note"))
-                    .flatten()
+                    .map_while(Result::ok)
                     .map(|c| c[1].to_owned()),
             );
         }

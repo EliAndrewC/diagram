@@ -37,7 +37,7 @@ use crate::Reply;
 const OUT: &str = "docs/make-targets.html";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(&pattern.replace(r"\s", &format!("[{SPACE_CLASS}]")))
+    l7r_guard::shared::regex::build(&pattern.replace(r"\s", &format!("[{SPACE_CLASS}]")))
         .unwrap_or_else(|e| unreachable!("{e}"))
 }
 
@@ -89,7 +89,7 @@ fn group<'t>(caps: &fancy_regex::Captures<'t>, i: usize) -> &'t str {
 /// Every documented target in name order, and the names that have a recipe but no `##` line.
 fn parse(text: &str) -> (Vec<Row>, Vec<String>) {
     let mut documented = Vec::new();
-    for caps in DOCUMENTED.captures_iter(text).flatten() {
+    for caps in DOCUMENTED.captures_iter(text).map_while(Result::ok) {
         let (name, mut rest) = (
             group(&caps, 1).to_owned(),
             strip(group(&caps, 2)).to_owned(),
@@ -110,7 +110,7 @@ fn parse(text: &str) -> (Vec<Row>, Vec<String>) {
         // arguments are written as WORD= in the help line; the prose is what remains
         let mut args: Vec<String> = ARG
             .captures_iter(&rest)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| group(&c, 1).to_owned())
             .collect();
         // ...and each may be DOCUMENTED on its own `##  NAME=<what>  description` line beneath the target (GM 2026-09-06: knowing an
@@ -148,7 +148,7 @@ fn parse(text: &str) -> (Vec<Row>, Vec<String>) {
         });
     }
     let mut with_rule = BTreeSet::new();
-    for caps in WITH_RULE.captures_iter(text).flatten() {
+    for caps in WITH_RULE.captures_iter(text).map_while(Result::ok) {
         with_rule.extend(
             l7r_guard::shared::py_text::split(group(&caps, 1))
                 .into_iter()

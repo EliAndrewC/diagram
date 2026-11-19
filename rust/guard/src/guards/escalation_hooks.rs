@@ -38,7 +38,7 @@ const CHUNK: u64 = 1 << 20;
 const TOLD_AT_DISPATCH: &str = "A review is running, so its findings will need the escalation-check filter before any of them reach the GM: dispatch `escalation-check` with your DRAFT writeup as the prompt, and it returns keep/cut/rewrite per item with the norms it could not verify. The GM asked for this after three findings reached them that no project norm supported (2026-09-12). If you will relay nothing, say so with ESCALATION_OK=\"<reason>\".";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static FENCE: LazyLock<Regex> = LazyLock::new(|| re(r"(?s)```.*?```"));
@@ -63,7 +63,7 @@ fn matches_any(pattern: &Regex, text: &str) -> bool {
 
 fn blank(pattern: &Regex, text: &str) -> String {
     let (mut out, mut from) = (String::new(), 0);
-    for m in pattern.find_iter(text).flatten() {
+    for m in pattern.find_iter(text).map_while(Result::ok) {
         out.push_str(&text[from..m.start()]);
         from = m.end();
     }

@@ -197,3 +197,27 @@ fn a_path_with_no_parent() {
     assert!(write(Path::new(""), "x").is_err());
     assert!(copy(Path::new("/no/such"), Path::new(""), Some("")).is_err());
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+#[cfg(test)]
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A scan past a million steps (feature 449 T185): `pyre` built with `fancy_regex`'s old limit, past which `findall`'s and `split_on`'s
+/// `.flatten()` repeated the error without advancing and spun; built unlimited, each reads to the end, bounded here so it cannot spin.
+#[test]
+fn a_scan_past_a_million_steps_reads_to_the_end() {
+    let text = format!("{}x7 end", "plain words of a long text ".repeat(50_000));
+    let got = within(move || {
+        (
+            findall(&pyre(r"\bx(\d)\b"), &text, 1),
+            split_on(&pyre(r"\bx\d\b"), &text).len(),
+        )
+    });
+    assert_eq!(got, (vec!["7".to_owned()], 2));
+}

@@ -34,7 +34,8 @@ pub const GUARD: Guard = Guard {
 };
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
+    crate::shared::regex::build(pattern)
+        .unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
 }
 
 static LOOP_WORD: LazyLock<Regex> =
@@ -49,8 +50,9 @@ static DISGUISED: LazyLock<Regex> = LazyLock::new(|| {
         r"(^|[;&|(]|[[:space:]])([\\]|(command|env|busybox)[[:space:]]+|/(bin|usr/bin)/)sleep[[:space:]]+[0-9.]",
     )
 });
-static PGREP_F: LazyLock<Regex> =
-    LazyLock::new(|| re(r"\b(pgrep|pkill)\b[^|;&]*[[:space:]]-[a-zA-Z]*f"));
+static PGREP_F: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"(?:\A|(?<=[|;&]))(?>[^|;&]*?\b(pgrep|pkill)\b)[^|;&]*[[:space:]]-[a-zA-Z]*f")
+});
 
 /// `grep -E`'s reading: a pattern matched against each line alone.
 fn grep(p: &Regex, text: &str) -> bool {

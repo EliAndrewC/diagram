@@ -12,7 +12,8 @@ use serde_json::Value;
 use super::shape::strip_quotes;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
+    crate::shared::regex::build(pattern)
+        .unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
 }
 
 macro_rules! pattern {
@@ -95,7 +96,7 @@ fn found(p: &Regex, text: &str) -> bool {
 }
 
 fn caps<'t>(p: &Regex, text: &'t str) -> Vec<Captures<'t>> {
-    p.captures_iter(text).filter_map(Result::ok).collect()
+    p.captures_iter(text).map_while(Result::ok).collect()
 }
 
 fn group<'t>(c: &Captures<'t>, name: &str) -> &'t str {
@@ -105,7 +106,7 @@ fn group<'t>(c: &Captures<'t>, name: &str) -> &'t str {
 fn split<'t>(p: &Regex, text: &'t str) -> Vec<&'t str> {
     let mut out = Vec::new();
     let mut at = 0;
-    for m in p.find_iter(text).filter_map(Result::ok) {
+    for m in p.find_iter(text).map_while(Result::ok) {
         out.push(&text[at..m.start()]);
         at = m.end();
     }
@@ -222,7 +223,7 @@ pub fn proof_of_life(cmd: &str, helper: &str) -> Option<String> {
         let c = watches_a_file(cond).filter(|c| !found(&PROOF_OF_LIFE, c))?;
         let last = PATH_OPERAND
             .find_iter(&c)
-            .filter_map(Result::ok)
+            .map_while(Result::ok)
             .last()?
             .as_str()
             .to_owned();
@@ -322,7 +323,7 @@ pub fn self_matching(cmd: &str) -> Vec<String> {
         .iter()
         .map(|c| c.get(4).map_or("", |m| m.as_str()))
         .filter(|pat| !pat.contains('$') && !pat.trim().is_empty())
-        .filter(|pat| Regex::new(pat).is_ok_and(|p| found(&p, cmd)))
+        .filter(|pat| crate::shared::regex::build(pat).is_ok_and(|p| found(&p, cmd)))
         .map(str::to_owned)
         .collect()
 }
@@ -373,7 +374,7 @@ fn done_of(text: &str, at: usize) -> Option<(usize, usize)> {
 /// Does a `sleep` run inside a `while`/`until`/`for` loop of `scan`, a sanitized command (`sleep_in_loop`)?
 #[must_use]
 pub fn sleep_in_loop(scan: &str) -> bool {
-    LOOP_KW.find_iter(scan).filter_map(Result::ok).any(|m| {
+    LOOP_KW.find_iter(scan).map_while(Result::ok).any(|m| {
         let end = done_from(scan, m.end()).unwrap_or(scan.len());
         SLEEP_CALL
             .find_from_pos(&scan[..end], m.start())

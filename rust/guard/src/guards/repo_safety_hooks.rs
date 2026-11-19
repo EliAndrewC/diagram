@@ -31,7 +31,7 @@ const HOST: &str = "/host-l7r-repo";
 const WRITES: &str = r"\b(?:commit|push|add|rm|mv|reset|revert|checkout|switch|restore|merge|rebase|cherry-pick|clean|stash|tag|am|apply)\b";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 fn at_pos(tail: &str) -> Regex {
@@ -64,7 +64,7 @@ static MOUNT: LazyLock<[Regex; 2]> = LazyLock::new(|| {
 fn sanitized(cmd: &str) -> String {
     let body = strip_heredocs(cmd);
     let (mut out, mut from) = (String::new(), 0);
-    for m in QUOTED.find_iter(&body).flatten() {
+    for m in QUOTED.find_iter(&body).map_while(Result::ok) {
         out.push_str(&body[from..m.start()]);
         out.push_str(" QUOTED ");
         from = m.end();

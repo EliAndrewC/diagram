@@ -51,7 +51,7 @@ fn quoted_passages(root: &Path, key: &str) -> Result<Vec<String>, Fail> {
     let mut out: Vec<String> = Vec::new();
     for notes in files {
         let text = read_text(&notes)?;
-        for c in li.captures_iter(&text).flatten() {
+        for c in li.captures_iter(&text).map_while(Result::ok) {
             let body = comment
                 .replace_all(c.get(1).map_or("", |g| g.as_str()), "")
                 .into_owned();

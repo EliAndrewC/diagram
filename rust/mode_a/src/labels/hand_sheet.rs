@@ -325,8 +325,9 @@ fn byte_offsets(src: &str) -> Vec<usize> {
 /// No end tag of that name after it, which a sheet the XML reader read whole never lacks.
 fn element_end(src: &str, a: usize, b: usize) -> Result<usize, Error> {
     let name = tag_name(src, a, b);
-    let close = Regex::new(&format!(r"</{}[ \t\r\n]*>", fancy_regex::escape(&name)))
-        .expect("an escaped name");
+    let close =
+        l7r_guard::shared::regex::build(&format!(r"</{}[ \t\r\n]*>", fancy_regex::escape(&name)))
+            .expect("an escaped name");
     match close.find_from_pos(src, b) {
         Ok(Some(m)) => Ok(m.end()),
         _ => Err(Error::new(
@@ -352,7 +353,8 @@ fn in_prefix(svg: &str, prefix: &str) -> String {
     if prefix.is_empty() {
         return svg.to_owned();
     }
-    let open = Regex::new(r"<(/?)(text|tspan|line)\b").expect("a fixed pattern");
+    let open =
+        l7r_guard::shared::regex::build(r"<(/?)(text|tspan|line)\b").expect("a fixed pattern");
     open.replace_all(svg, format!("<${{1}}{prefix}${{2}}").as_str())
         .into_owned()
 }

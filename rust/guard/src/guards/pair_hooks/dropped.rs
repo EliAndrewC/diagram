@@ -23,7 +23,7 @@ use crate::shared::state::field;
 use crate::shared::tool::ask;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static BUNDLE: LazyLock<Regex> =

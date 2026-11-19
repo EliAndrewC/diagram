@@ -11,17 +11,20 @@ use fancy_regex::{Captures, Regex};
 use crate::shared::tool::ask;
 
 static LOOP: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"\b(until|while)\b.*\bgrep\b").unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(r"(?m:^)(?>.*?\b(until|while)\b).*\bgrep\b")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
 static ASSIGN: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r#"(?:^|[\s;&|(])([A-Za-z_]\w*)=("[^"]*"|'[^']*'|[^\s;&|)]*)"#)
+    crate::shared::regex::build(r#"(?:^|[\s;&|(])([A-Za-z_]\w*)=("[^"]*"|'[^']*'|[^\s;&|)]*)"#)
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 static VAR: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"\$\{([A-Za-z_]\w*)\}|\$([A-Za-z_]\w*)").unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(r"\$\{([A-Za-z_]\w*)\}|\$([A-Za-z_]\w*)")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
-static WATCHED_PATH: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(?:/[\w.-]+)+\.\w+").unwrap_or_else(|e| unreachable!("{e}")));
+static WATCHED_PATH: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(r"(?:/[\w.-]+)+\.\w+").unwrap_or_else(|e| unreachable!("{e}"))
+});
 
 /// `os.path.realpath`: a path that need not exist, its existing part's symlinks resolved.
 pub(crate) fn realpath(p: &Path) -> PathBuf {
@@ -273,7 +276,7 @@ impl Procs {
             let mut seen = BTreeSet::new();
             for found in WATCHED_PATH
                 .find_iter(&cmd)
-                .filter_map(Result::ok)
+                .map_while(Result::ok)
                 .map(|m| m.as_str().to_owned())
             {
                 let f = Path::new(&found);
@@ -325,7 +328,7 @@ fn expand(text: &str, env: &HashMap<String, String>) -> String {
 pub(crate) fn files_named(cmd: &str, base: &Path) -> BTreeSet<PathBuf> {
     let mut env: HashMap<String, String> = ASSIGN
         .captures_iter(cmd)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|c| {
             (
                 c[1].to_owned(),

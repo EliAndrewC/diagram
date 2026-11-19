@@ -17,7 +17,7 @@ use super::{py_path, text, Env, Pass};
 use crate::record::bundle::py_str;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static FEATURE_DIR: LazyLock<Regex> = LazyLock::new(|| re(r"specs/(\d{3})-"));
@@ -42,7 +42,7 @@ fn found(pattern: &Regex, text: &str) -> bool {
 fn all(pattern: &Regex, text: &str) -> BTreeSet<String> {
     pattern
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|c| c.get(1).map(|m| m.as_str().to_owned()))
         .collect()
 }

@@ -708,3 +708,33 @@ fn a_silent_check_is_closed_by_name_or_silence() {
     let empty = close_dispatches(&mut json!({}), "s", "r", 1.0, "");
     assert_eq!((empty.closed, empty.still_running), (0, 0));
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// An `apply-edits` past a million steps, and after many `make` words (feature 449 T185): `APPLY` erred at `fancy_regex`'s old limit,
+/// and unlimited it tried every `make` to its segment's end, its time the square of their count (15 s on 100 KB, measured 2026-11-18, scratchpad t185/sizecurve.log);
+/// it now starts at its segment's first `make`.
+#[test]
+fn an_apply_edits_past_a_million_steps_or_many_makes_is_read() {
+    for lead in [
+        "plain words of a long text ".repeat(50_000),
+        "make x ".repeat(40_000),
+    ] {
+        let command = format!("{lead}; make apply-edits FROM=r.md");
+        let from = within(move || {
+            super::APPLY
+                .captures(&command)
+                .ok()
+                .flatten()
+                .map(|c| c[1].to_owned())
+        });
+        assert_eq!(from.as_deref(), Some("r.md"));
+    }
+}

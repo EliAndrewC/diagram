@@ -173,7 +173,7 @@ pub fn doc_units(text: &str, path: &str, tops: Option<&[&str]>) -> Vec<Unit> {
         let end = heads.get(j + 1).map_or(lines.len(), |h| h.0);
         let body = lines[i + 1..end].join("\n");
         let (mut claims, mut errors) = (Vec::new(), Vec::new());
-        for c in MARKER.captures_iter(&body).flatten() {
+        for c in MARKER.captures_iter(&body).map_while(Result::ok) {
             match parse_claim(&c[1]) {
                 Ok(claim) => claims.push(claim),
                 Err(e) => errors.push(e),

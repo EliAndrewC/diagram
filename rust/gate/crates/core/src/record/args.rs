@@ -126,8 +126,9 @@ impl Parsed {
     }
 }
 
-static NEGATIVE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^-\d+$|^-\d*\.\d+$").unwrap_or_else(|e| unreachable!("{e}")));
+static NEGATIVE: LazyLock<Regex> = LazyLock::new(|| {
+    l7r_guard::shared::regex::build(r"^-\d+$|^-\d*\.\d+$").unwrap_or_else(|e| unreachable!("{e}"))
+});
 
 fn resolve<'a>(specs: &'a [Spec], word: &str) -> Result<Option<&'a Spec>, String> {
     if let Some(s) = specs.iter().find(|s| s.name == word) {

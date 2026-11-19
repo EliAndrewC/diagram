@@ -35,7 +35,7 @@ const CHECK5_MARKS: [&str; 6] = [
 ];
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static KEY: LazyLock<Regex> = LazyLock::new(|| re(r"\bm:([a-z0-9][a-z0-9-]*)"));
@@ -65,7 +65,7 @@ fn recorded_numbers(value: &Value) -> Vec<f64> {
 /// FR-009a: some number token equals a recorded value, exactly or at the token's own precision.
 fn appears(value: &Value, paragraph: &str) -> bool {
     let numbers = recorded_numbers(value);
-    TOKEN.find_iter(paragraph).flatten().any(|raw| {
+    TOKEN.find_iter(paragraph).map_while(Result::ok).any(|raw| {
         let token = raw.as_str().replace(',', "");
         let places = token.split_once('.').map_or(0, |(_, d)| d.len());
         let wanted: f64 = token.parse().unwrap_or(f64::NAN);
@@ -85,7 +85,7 @@ fn paragraphs_in_scope(spec_dir: &Path) -> Vec<(PathBuf, usize, String, &'static
         };
         let mut blocks: Vec<&str> = Vec::new();
         let mut at = 0;
-        for gap in BLOCK_BREAK.find_iter(&text).flatten() {
+        for gap in BLOCK_BREAK.find_iter(&text).map_while(Result::ok) {
             blocks.extend([&text[at..gap.start()], gap.as_str()]);
             at = gap.end();
         }
@@ -138,7 +138,7 @@ fn check_paragraphs(spec_dir: &Path, recorded: &Value) -> Vec<String> {
         }
         let keys: Vec<String> = KEY
             .captures_iter(&para)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| key_of(&c))
             .collect();
         if keys.is_empty() {

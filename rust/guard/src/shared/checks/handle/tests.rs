@@ -496,3 +496,26 @@ fn check_closed_needs_a_reason_and_saves_what_it_closed() {
     );
     assert_eq!(code, 0);
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A `make done` past a million steps of command (feature 449 T185): `MAKE_DONE` erred at `fancy_regex`'s old limit and read as no
+/// gate run, so the arbiter's hold was not asked.
+#[test]
+fn a_make_done_past_a_million_steps_is_seen() {
+    let command = format!(
+        "{}\nmake done",
+        "plain words of a long text ".repeat(50_000)
+    );
+    assert_eq!(
+        within(move || super::MAKE_DONE.is_match(&command).ok()),
+        Some(true)
+    );
+}

@@ -60,7 +60,8 @@ struct Ctx<'a> {
 /// A pattern the code itself writes (a feature's number is all it takes in), never one that fails to compile.
 #[must_use]
 fn re(p: &str) -> Regex {
-    Regex::new(p).unwrap_or_else(|_| unreachable!("a pattern of the code's own"))
+    l7r_guard::shared::regex::build(p)
+        .unwrap_or_else(|_| unreachable!("a pattern of the code's own"))
 }
 
 /// A feature's number: `int(d.name.split("-", 1)[0])`.

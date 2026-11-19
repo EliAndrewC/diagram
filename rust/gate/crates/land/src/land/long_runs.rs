@@ -31,7 +31,7 @@ static GATE_MACHINERY: LazyLock<Regex> = LazyLock::new(|| {
 const MISSING_RUN: &str = "no work-budget run at the pushed engine";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// The delta's paths that decide how a landing and its gate run.
@@ -115,7 +115,7 @@ impl Land {
     /// recorded is committed after.
     fn named_gates(&self, stamp_said: &str) -> Result<i32, String> {
         let mut targets: Vec<String> = Vec::new();
-        for m in NAMED_GATE.captures_iter(stamp_said).flatten() {
+        for m in NAMED_GATE.captures_iter(stamp_said).map_while(Result::ok) {
             if !targets.iter().any(|t| t == &m[1]) {
                 targets.push(m[1].to_owned());
             }

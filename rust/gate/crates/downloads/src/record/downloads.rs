@@ -30,7 +30,7 @@ const HIGH_RISK: &str = "specs/312-uncited-source-catalog/high-risk-sources.md";
 const USAGE: &str = "usage: l7r-gate record downloads import [--gm F] [--high-risk F] | ingest [--keep IDS] [--drop IDS] [--mark ID=STATE ...] | sync | add <draft.md> | check [--base REF] | selftest | tag\n";
 
 fn compiled(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// `ingest`'s archive step: `record archive inbox <args>` from the clone, which `record`'s dispatch hands in (feature 449 T147: the

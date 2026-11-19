@@ -57,7 +57,7 @@ const FIXTURES: [&str; 21] = [
 const EXEMPT_EXT: [&str; 5] = [".png", ".webp", ".jpg", ".pdf", ".gz"];
 
 fn pattern(text: &str) -> Regex {
-    Regex::new(text).unwrap()
+    l7r_guard::shared::regex::build(text).unwrap()
 }
 
 /// The forms every line is asked about.
@@ -316,7 +316,7 @@ fn resolved(
 }
 
 fn retired_commands(text: &str, mapping: &Mapping, landed_spec: bool, out: &mut Vec<String>) {
-    for c in mapping.command.captures_iter(text).flatten() {
+    for c in mapping.command.captures_iter(text).map_while(Result::ok) {
         let whole = group(&c, 0);
         let (page, number) = (group(&c, 1), c.get(2));
         let Some(number) = number else {

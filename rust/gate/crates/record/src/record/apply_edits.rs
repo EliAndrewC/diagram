@@ -11,7 +11,7 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
-use fancy_regex::{Regex, RegexBuilder};
+use fancy_regex::Regex;
 use l7r_gate_research::prepass::prepass_words;
 use l7r_gate_research::pyre::py;
 use l7r_guard::guards::house_style_hooks::americanize;
@@ -33,11 +33,9 @@ const ROOTS: [&str; 4] = [RECORD, MODALS, SHEET_MODALS, MODAL_FILES];
 const TERMS: &str = "l7r/diagram/interactive/assets/glossary/";
 
 static EDIT: LazyLock<Regex> = LazyLock::new(|| {
-    RegexBuilder::new(
+    l7r_guard::shared::regex::build(
         r"(?sm)^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n\k<ind><<<\n(?P<old>.*?)\n\k<ind>===\n(?:(?P<new>.*?)\n)??\k<ind>>>>[ \t]*$",
     )
-    .backtrack_limit(10_000_000)
-    .build()
     .unwrap_or_else(|e| unreachable!("{e}"))
 });
 static GLOSSARY: LazyLock<Regex> = LazyLock::new(|| {
@@ -116,7 +114,7 @@ fn dedent(text: &str, indent: &str) -> String {
 #[must_use]
 pub fn blocks(report: &str) -> Vec<Block> {
     let mut found: Vec<(usize, Block)> = Vec::new();
-    for m in EDIT.captures_iter(report).flatten() {
+    for m in EDIT.captures_iter(report).map_while(Result::ok) {
         let g = |k: &str| m.name(k).map_or("", |x| x.as_str());
         let ind = g("ind");
         let new = m.name("new").map(|x| x.as_str());
@@ -132,7 +130,7 @@ pub fn blocks(report: &str) -> Vec<Block> {
             }),
         ));
     }
-    for m in GLOSSARY.captures_iter(report).flatten() {
+    for m in GLOSSARY.captures_iter(report).map_while(Result::ok) {
         let g = |k: &str| m.name(k).map_or("", |x| x.as_str());
         let variants = g("variants")
             .split(',')

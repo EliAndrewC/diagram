@@ -130,7 +130,10 @@ pub fn canon_list(line: &str) -> String {
     let mut items = Vec::new();
     let mut whole = String::new();
     let mut at = 0;
-    for u in PAREN_URL.captures_iter(rest).flatten() {
+    for u in PAREN_URL
+        .captures_iter(rest)
+        .map_while(std::result::Result::ok)
+    {
         let all = u.get(0).map_or(0..0, |g| g.range());
         let name = drop(&JOIN, &rest[at..all.start]);
         let name = l7r_guard::shared::py_text::strip(&name);

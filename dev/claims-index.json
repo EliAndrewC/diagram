@@ -14024,14 +14024,15 @@
  "rust/mode_a/src/audit/program_rules.rs::sheet_furniture#the sheet's furniture": {
   "body": "d922ff1b580538b8",
   "claim": "the sheet's furniture - CONVENTION: the sheet's largest text is a bold title above the compound, and it draws no compass rose (north is always up) and no key box; the-map-sheet-its-title-legend-frame-and-margins.drawing records the no-compass and no-key conventions for a settlement sheet, and the title's place is the building plans' own; nothing about a building.",
-  "code": "83510c21e33f7409",
-  "core": "7d0b508bc84ea6f7",
+  "code": "d103d1c1baf7f881",
+  "core": "70c6ff8721bc3afe",
   "date": "2026-11-17",
   "note": "title, no compass, no key: sheet furniture only",
   "pages": {},
   "reads": "ff051f61190c9277",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::size_hierarchy#the program rules": {
@@ -15542,8 +15543,8 @@
  "rust/mode_a/src/audit/shared/grounds.rs::one_compound_shrine#one shrine per compound": {
   "body": "8855b524fb504c37",
   "claim": "one shrine per compound - DEVIATION the-compounds-own-shrine-yashikigami.drawing: a compound draws one modest shrine however many a real office kept, a deliberate deviation; a second kami's own shrine, where the sheet's roll declares one, is not counted.",
-  "code": "464c5d67912875a0",
-  "core": "23d693b0ccd9d86a",
+  "code": "01ae4951dfae4835",
+  "core": "78aeb00264d6425b",
   "date": "2026-11-17",
   "note": "in step with its page",
   "pages": {
@@ -15555,6 +15556,7 @@
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::sanctuary_on_axis#the approach on the same axis": {
@@ -15692,20 +15694,21 @@
  "rust/mode_a/src/audit/shared/grounds.rs::well_gear#a well roof drawn on four posts": {
   "body": "ea290dc7ff7c6d43",
   "claim": "a well roof drawn on four posts - CONVENTION: a well's roof is an unfilled outline on four corner posts, so it reads as a roof over the well and not as the paved apron, the map drawing convention communal-wells-ido.drawing records.",
-  "code": "907c3cf78466e769",
-  "core": "858221d8832c1529",
+  "code": "5ce061691092aa58",
+  "core": "2b508a5c2d10e2b2",
   "date": "2026-11-17",
   "note": "in step with its page",
   "pages": {},
   "reads": "2bf4337aba415cd5",
   "research": "",
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an indoor well unroofed": {
   "body": "ea290dc7ff7c6d43",
   "claim": "an indoor well unroofed - communal-wells-ido.drawing: a well indoors takes no roof of its own, the house already roofing it.",
-  "code": "70b89517cc27e158",
-  "core": "858221d8832c1529",
+  "code": "b5882da8f1b80861",
+  "core": "2b508a5c2d10e2b2",
   "date": "2026-11-17",
   "note": "in step with its page",
   "pages": {
@@ -15716,13 +15719,14 @@
   "rests": [
    "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an indoor well's pulley": {
   "body": "ea290dc7ff7c6d43",
   "claim": "an indoor well's pulley - GUESS communal-wells-ido.drawing: a well indoors hangs its pulley from the beams, which the page records as a guess, no page naming an indoor well's gear.",
-  "code": "d1ee5f50050f1729",
-  "core": "858221d8832c1529",
+  "code": "e23ff6e8d0c43620",
+  "core": "2b508a5c2d10e2b2",
   "date": "2026-11-17",
   "note": "in step with its page",
   "pages": {
@@ -15733,13 +15737,14 @@
   "rests": [
    "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::well_gear#an open-air well's gear": {
   "body": "ea290dc7ff7c6d43",
   "claim": "an open-air well's gear - communal-wells-ido.drawing: a well in the open takes a sweep or a pulley frame, both attested, never the beam pulley.",
-  "code": "5f924fdea5f1cd9a",
-  "core": "858221d8832c1529",
+  "code": "293fea5ddf1f50a4",
+  "core": "2b508a5c2d10e2b2",
   "date": "2026-11-17",
   "note": "in step with its page",
   "pages": {
@@ -15752,13 +15757,14 @@
    "0196-communal-wells-ido.drawing.html:49e76daae7c37a24",
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::well_gear#every well carries gear": {
   "body": "ea290dc7ff7c6d43",
   "claim": "every well carries gear - communal-wells-ido.drawing: a well in the open is drawn with lifting gear over its curb; an indoor well carries the beam pulley, labeled on its own claim.",
-  "code": "e866567ac5dc1a9b",
-  "core": "858221d8832c1529",
+  "code": "a6e316ee8652dc3c",
+  "core": "2b508a5c2d10e2b2",
   "date": "2026-11-17",
   "note": "in step with its page",
   "pages": {
@@ -15771,19 +15777,21 @@
    "0196-communal-wells-ido.drawing.html:f6b4a849dffbdfef",
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::well_gear#its drawn sizes": {
   "body": "ea290dc7ff7c6d43",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 15 (smallest curb marker read as a well (px))",
-  "code": "33ed7ab5106a3728",
-  "core": "858221d8832c1529",
+  "code": "2543b037bf43b174",
+  "core": "2b508a5c2d10e2b2",
   "date": "2026-11-17",
   "note": "the 15 px marker floor is how the audit reads a glyph; the gear and roof rules are listed UNCLAIMED",
   "pages": {},
   "reads": "2bf4337aba415cd5",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/ink.rs::CROP_MAX_MARGIN_PX#sheet crop margin": {
@@ -16981,14 +16989,15 @@
  "rust/mode_a/src/census/prose.rs::current_prose#the typed counts": {
   "body": "cbc47d59853c1fc0",
   "claim": "the typed counts - NONE: a count read from a notes file's prose and compared, deciding nothing about the place",
-  "code": "5555901d41b05ab7",
-  "core": "8ead3fe0c5cad1ab",
+  "code": "640b942eb923ff1f",
+  "core": "d46cb069e6727fba",
   "date": "2026-11-17",
   "note": "text filter",
   "pages": {},
   "reads": "278c8825a94e963a",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/census/prose.rs::dated#the typed counts": {
@@ -17044,40 +17053,43 @@
  "rust/mode_a/src/census/prose.rs::split_blocks#the typed counts": {
   "body": "14238de608f57036",
   "claim": "the typed counts - NONE: a count read from a notes file's prose and compared, deciding nothing about the place",
-  "code": "5fecfdadd4464bc4",
-  "core": "ce0eea644a242ac9",
+  "code": "6dd748cbdf071d1d",
+  "core": "c7f3ebcd6b6dd5b8",
   "date": "2026-11-17",
   "note": "text split",
   "pages": {},
   "reads": "ff0921e7e67fa4af",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/census/prose.rs::stale_counts#the typed counts": {
   "body": "b87d6f3fccca9d1e",
   "claim": "the typed counts - NONE: a count read from a notes file's prose and compared, deciding nothing about the place",
-  "code": "01af4d9d8989d715",
-  "core": "858ce968a595276b",
+  "code": "739680de6f70efb9",
+  "core": "1ec7ca8833dbe1cc",
   "date": "2026-11-17",
   "note": "comparison",
   "pages": {},
   "reads": "129345639421ee81",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/census/prose.rs::stale_sheet_counts#the typed counts": {
   "body": "6c1c22c7ed5fed18",
   "claim": "the typed counts - NONE: a count read from a notes file's prose and compared, deciding nothing about the place",
-  "code": "c7873ab53e102f61",
-  "core": "14125ab262513f49",
+  "code": "44b4e4980d0525d2",
+  "core": "d0414c50568b618c",
   "date": "2026-11-17",
   "note": "comparison",
   "pages": {},
   "reads": "80bd7e4f8f52d72a",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/census/prose.rs::typed#the typed counts": {
@@ -19741,8 +19753,8 @@
  "rust/mode_a/src/hand_sheet.rs::start_tags#the hand sheet's start tags": {
   "body": "017027e97cd003c0",
   "claim": "the hand sheet's start tags - NONE: where each element's start tag lies in a sheet's text, deciding nothing about a building",
-  "code": "f6e4a641e317c300",
-  "core": "3c263b74b9c0c5aa",
+  "code": "ee4efa5535133918",
+  "core": "70cef4eb4c02a0b6",
   "date": "2026-11-17",
   "note": "offsets",
   "pages": {},
@@ -20353,8 +20365,8 @@
  "rust/mode_a/src/labels/hand_sheet.rs::element_end#the hand sheet's captions": {
   "body": "ccdb28d2ee8ea89c",
   "claim": "the hand sheet's captions - NONE: a sheet read, its captions' subjects found from their declarations and the placer asked, the rules each decision rests on claimed where it is made",
-  "code": "dee543a508091282",
-  "core": "803e7d28d7c1b41b",
+  "code": "fd3b5130beb9924a",
+  "core": "2800711b44c85cf0",
   "date": "2026-11-18",
   "note": "finds an end tag by its own name, parsing only",
   "pages": {},
@@ -20366,13 +20378,14 @@
  "rust/mode_a/src/labels/hand_sheet.rs::in_prefix#the hand sheet's captions": {
   "body": "2827bd6c2c4ab0bc",
   "claim": "the hand sheet's captions - NONE: a sheet read, its captions' subjects found from their declarations and the placer asked, the rules each decision rests on claimed where it is made",
-  "code": "f0ada690cdf10b3c",
-  "core": "9662dbd63833b9d4",
+  "code": "74e35599722116af",
+  "core": "fbfa3df41839a11e",
   "date": "2026-11-18",
   "note": "namespace plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet.rs::luma#its salts, guards and sentinels": {
@@ -21103,33 +21116,35 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::numbers#the sheet's reading": {
   "body": "52fece485c9c0a41",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "6eb5225720183d2a",
-  "core": "6956a44f3496aec0",
+  "code": "ab1f608072088f51",
+  "core": "155c0415d5c45a41",
   "date": "2026-11-18",
   "note": "parsing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::parse_transform#the sheet's reading": {
   "body": "fe5e26851c39b41c",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "64b96bac5bb89569",
-  "core": "a72183aae0b4ec6e",
+  "code": "8271c4b688d3c03a",
+  "core": "5084ea58208b4511",
   "date": "2026-11-18",
   "note": "parsing",
   "pages": {},
   "reads": "d84714956142a1c4",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::path_points#its salts, guards and sentinels": {
   "body": "75405a95924f14dd",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (SVG C-command argument count); 7 (SVG A-command argument count)",
-  "code": "1cfa18d3212f551d",
-  "core": "7c6da4aad649208a",
+  "code": "9013391db43db765",
+  "core": "5e5ec3e42de38e3a",
   "date": "2026-11-18",
   "note": "SVG argument counts",
   "pages": {},
@@ -21181,13 +21196,14 @@
  "rust/mode_a/src/labels/hand_sheet/read.rs::split#the sheet's reading": {
   "body": "fc7d0e6ce80238e0",
   "claim": "the sheet's reading - NONE: SVG geometry and paint read as drawn, deciding nothing about where a caption stands",
-  "code": "8c09039cb6d6a0ca",
-  "core": "1abc00defddf69ca",
+  "code": "8c589de6678b5da2",
+  "core": "425e6f11468d64bb",
   "date": "2026-11-18",
   "note": "parsing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/labels/hand_sheet/read.rs::steps#the sheet's reading": {
@@ -24916,27 +24932,29 @@
  "rust/mode_a/src/page.rs::ink_census#hover and modal presentation": {
   "body": "e9ce609546473cc4",
   "claim": "hover and modal presentation - CONVENTION: what lights, how wide a hit band is, what the modal shows",
-  "code": "91e0765c0e69044a",
-  "core": "b17c1d66269e17ec",
+  "code": "04a79379c56ccf5b",
+  "core": "d0b7cec2805f192c",
   "date": "2026-11-18",
   "note": "counting, nothing physical",
   "pages": {},
   "reads": "836bb66dce9b9ed9",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page.rs::ink_census#page plumbing": {
   "body": "e9ce609546473cc4",
   "claim": "page plumbing - NONE: wrapping, the ink census, merging, hit geometry and assembly",
-  "code": "fba34b60250f6aec",
-  "core": "b17c1d66269e17ec",
+  "code": "02eba51647958b60",
+  "core": "d0b7cec2805f192c",
   "date": "2026-11-18",
   "note": "the ink census",
   "pages": {},
   "reads": "836bb66dce9b9ed9",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page.rs::meta_str#hover and modal presentation": {
@@ -26158,14 +26176,15 @@
  "rust/mode_a/src/page/hits.rs::hit_copies#the thin marks' hit copies": {
   "body": "d6f02c4e7cfee649",
   "claim": "the thin marks' hit copies - CONVENTION: a stroked mark's invisible copy its factor times its drawn width with a floor, a bead's its radius times its factor, never under half the floor; a filled shape takes the pointer over its own body",
-  "code": "c87b406e3eb3d752",
-  "core": "5db0106245fe59cd",
+  "code": "5dbcebbf080d6f46",
+  "core": "d30e8b6b58be108d",
   "date": "2026-11-18",
   "note": "the invisible hit width is the factor times the drawn width with a floor, a bead's is its radius times bead, never under half the floor, and filled polygons and polylines (and filled paths with no stroke) are skipped; how the pointer is caught, not a fact about the place",
   "pages": {},
   "reads": "768da86273ce96a9",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page/hits.rs::hit_layer#the page's hit geometry": {
@@ -26555,14 +26574,15 @@
  "rust/mode_a/src/page/merge.rs::attrs#the merge's plumbing": {
   "body": "5f16f49969d96d9a",
   "claim": "the merge's plumbing - NONE: the extents, the buckets and the paths written, which change no pixel of the drawing",
-  "code": "e45813aa821f92d2",
-  "core": "015a9028cc8413e9",
+  "code": "79e6d0cb17d468d6",
+  "core": "239d7ede3ab212ae",
   "date": "2026-11-18",
   "note": "attribute parsing",
   "pages": {},
   "reads": "dcaed7e16ca8ae20",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page/merge.rs::cell#the merge's plumbing": {
@@ -26593,14 +26613,15 @@
  "rust/mode_a/src/page/merge.rs::extent#the merge's plumbing": {
   "body": "41cc8767516cd55d",
   "claim": "the merge's plumbing - NONE: the extents, the buckets and the paths written, which change no pixel of the drawing",
-  "code": "932fb94969ef06fb",
-  "core": "c08c4e35b4727334",
+  "code": "00b2f552d77fc014",
+  "core": "6f85dbce0823cd3c",
   "date": "2026-11-18",
   "note": "bounding geometry",
   "pages": {},
   "reads": "674460fac05b9c88",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page/merge.rs::get#the merge's plumbing": {
@@ -26642,14 +26663,15 @@
  "rust/mode_a/src/page/merge.rs::merge_primitives#the merge's plumbing": {
   "body": "a463a0df47b005f4",
   "claim": "the merge's plumbing - NONE: the extents, the buckets and the paths written, which change no pixel of the drawing",
-  "code": "fff0c3aae37e9f68",
-  "core": "fff234c8a3a1e2a1",
+  "code": "2c461dc2898edbf3",
+  "core": "3022da248a1a5139",
   "date": "2026-11-18",
   "note": "SVG primitive merging",
   "pages": {},
   "reads": "de3839faa7f04dfc",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/page/merge.rs::num#the merge's plumbing": {
@@ -27578,14 +27600,15 @@
  "rust/mode_a/src/parse.rs::ink#its salts, guards and sentinels": {
   "body": "df2ca427465610a1",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 4.0 (a point glyph's least radius, px)",
-  "code": "ff25c6ae767e9553",
-  "core": "bbaf06abc3f79b9a",
+  "code": "9306298bccaba7ac",
+  "core": "f09c36abc47c315b",
   "date": "2026-11-17",
   "note": "the `rad >= 4.0` glyph floor matches the claim's 4.0; it reads ink and decides nothing about the place",
   "pages": {},
   "reads": "b4db1f9d8ed00c1d",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse.rs::is_structure#the sheet's parse": {
@@ -27640,14 +27663,15 @@
  "rust/mode_a/src/parse.rs::parse_with#the sheet's parse": {
   "body": "e3c125f7a1297e0f",
   "claim": "the sheet's parse - NONE: a sheet's drawing read into rects and labels by its palette, deciding nothing about a building",
-  "code": "45320edc65ffe449",
-  "core": "9bc5f4c1bf0203ee",
+  "code": "2857835e21e61ab7",
+  "core": "455c6a43ecf36734",
   "date": "2026-11-17",
   "note": "sorts a sheet's rects by palette and the thresholds that carry their own claims; decides nothing",
   "pages": {},
   "reads": "bdb0546d70cb144d",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse.rs::precinct#the sheet's parse": {
@@ -27665,13 +27689,15 @@
  "rust/mode_a/src/parse.rs::segments#its salts, guards and sentinels": {
   "body": "4d84354f59f263b1",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 2.0 (a wall, fence or divider segment's least thickness, px)",
-  "code": "92c20a9336ee569f",
-  "core": "7a06aed13257b88f",
+  "code": "5566ac56e15b0c12",
+  "core": "d1e4caa6ea641f20",
   "date": "2026-11-17",
   "note": "least segment thickness, parser",
   "pages": {},
+  "reads": "3d4e0688e239d647",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse.rs::wall_kind#the sheet's parse": {
@@ -28176,14 +28202,15 @@
  "rust/mode_a/src/parse/labels.rs::parse_labels#its salts, guards and sentinels": {
   "body": "f34ac1a7ec890cf2",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.78 (font ascent figure)",
-  "code": "aa422025abf8a0c0",
-  "core": "8f211b7060038905",
+  "code": "e72811bda121c251",
+  "core": "5e43be1f77af034b",
   "date": "2026-11-17",
   "note": "`fs * 0.78` is the ascent figure the claim names; it only estimates a caption's box",
   "pages": {},
   "reads": "c24db89e6900d15e",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/labels.rs::unescape#the labels' boxes": {
@@ -29615,27 +29642,29 @@
  "rust/mode_a/src/parse/shapes.rs::path_rects#the parse's shapes": {
   "body": "9f1dcbf3ab72d3ce",
   "claim": "the parse's shapes - NONE: a sheet's rects, paths, walls and canopies read by their tags and palette, deciding nothing about a building",
-  "code": "dbb2e688860af4f5",
-  "core": "1908dd2c516c81fe",
+  "code": "bf3f5510eac9b839",
+  "core": "749c23efc8cda2ab",
   "date": "2026-11-17",
   "note": "splits a rectilinear path into rects; geometry",
   "pages": {},
   "reads": "9e76a0dcd749a0fd",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/shapes.rs::path_rings#the parse's shapes": {
   "body": "5838383087a9bb66",
   "claim": "the parse's shapes - NONE: a sheet's rects, paths, walls and canopies read by their tags and palette, deciding nothing about a building",
-  "code": "2e70502e26d8f41e",
-  "core": "1cca26a94da4b460",
+  "code": "fd6f580ac42f3570",
+  "core": "1929605558bd1e10",
   "date": "2026-11-17",
   "note": "path parsing",
   "pages": {},
   "reads": "7ac711574a4f08d1",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/shapes.rs::py_order#the parse's shapes": {
@@ -29653,27 +29682,29 @@
  "rust/mode_a/src/parse/shapes.rs::rects#the parse's shapes": {
   "body": "087e1af216641eba",
   "claim": "the parse's shapes - NONE: a sheet's rects, paths, walls and canopies read by their tags and palette, deciding nothing about a building",
-  "code": "b301ee81b8afa4a2",
-  "core": "3b427e0cb65b9003",
+  "code": "9b752793b9ad68d6",
+  "core": "b998f92c31672a79",
   "date": "2026-11-17",
   "note": "reads rect tags; parsing",
   "pages": {},
   "reads": "68220d3c4c134c9b",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/shapes.rs::roofed_courts#the parse's shapes": {
   "body": "48bfa29d5655398d",
   "claim": "the parse's shapes - NONE: a sheet's rects, paths, walls and canopies read by their tags and palette, deciding nothing about a building",
-  "code": "8c9aae9a14f68f0a",
-  "core": "21d37363c7a8ded5",
+  "code": "03073391d18533a2",
+  "core": "800db8e784ba188c",
   "date": "2026-11-17",
   "note": "selects rects by palette; parsing",
   "pages": {},
   "reads": "85e827525d9f1e40",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/shapes.rs::rooms_folded#the parse's shapes": {
@@ -29691,27 +29722,29 @@
  "rust/mode_a/src/parse/shapes.rs::trees#the parse's shapes": {
   "body": "79faf96140b2118a",
   "claim": "the parse's shapes - NONE: a sheet's rects, paths, walls and canopies read by their tags and palette, deciding nothing about a building",
-  "code": "7ecb5323d624c6d7",
-  "core": "363645f3850b807d",
+  "code": "deb4ba2f806c1cc0",
+  "core": "8c9be67206774924",
   "date": "2026-11-17",
   "note": "reads canopy circles; the radius floor is a separate constant with its own claim",
   "pages": {},
   "reads": "7c94d27d0897ac4f",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/shapes.rs::wall_bands#the parse's shapes": {
   "body": "5e7e8aacb91c7ad2",
   "claim": "the parse's shapes - NONE: a sheet's rects, paths, walls and canopies read by their tags and palette, deciding nothing about a building",
-  "code": "c8a34ccceb9d7892",
-  "core": "468b1a7397a31d46",
+  "code": "de0cb6ab5d7f848c",
+  "core": "a5738145f7580be3",
   "date": "2026-11-17",
   "note": "turns stroked lines into bands from their stroke width; geometry",
   "pages": {},
   "reads": "387a273b41c593ac",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/parse/tests.rs::a_path_s_rings_are_read_only_when_rectilinear#the parse's tests": {
@@ -30397,13 +30430,14 @@
  "rust/mode_a/src/programs.rs::BLOCK#the programs page's tables": {
   "body": "0a59e7b5c3fd3378",
   "claim": "the programs page's tables - NONE: rendered from the declaration, deciding nothing; the page's own claims are in `docs/building-programs.md`",
-  "code": "46bc669cdffbdf3c",
-  "core": "03053adabeccc415",
+  "code": "49a19a8c069d5a7c",
+  "core": "b4764344e541c143",
   "date": "2026-11-17",
   "note": "block-marker regex",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/programs.rs::HELP#the programs page's tables": {
@@ -30481,14 +30515,15 @@
  "rust/mode_a/src/programs.rs::blocks#the programs page's tables": {
   "body": "f26ca3e04133b06f",
   "claim": "the programs page's tables - NONE: rendered from the declaration, deciding nothing; the page's own claims are in `docs/building-programs.md`",
-  "code": "c0f5abcfa4fbe163",
-  "core": "bad67c59d9ba552d",
+  "code": "18940fb454c24910",
+  "core": "cd61717f8a46e578",
   "date": "2026-11-17",
   "note": "finds block spans",
   "pages": {},
-  "reads": "e892bb8cd73b6aef",
+  "reads": "07b0a9aad8ebc394",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/programs.rs::long#the programs page's tables": {
@@ -31838,27 +31873,29 @@
  "rust/mode_a/src/raster.rs::class_keys#low-zoom picture": {
   "body": "9bc817f1211d07d3",
   "claim": "low-zoom picture - CONVENTION: one image of the whole picture below a screen scale, at `RASTER_R` px per map px",
-  "code": "494519cd6c5dc6d7",
-  "core": "6942e659b6e0cc9e",
+  "code": "9dffb76f39a8b700",
+  "core": "bf5a84fc472d379c",
   "date": "2026-11-18",
   "note": "nothing physical",
   "pages": {},
   "reads": "b59f0dc3d31e7c13",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster.rs::class_keys#raster plumbing": {
   "body": "9bc817f1211d07d3",
   "claim": "raster plumbing - NONE: tiling, the off-map drop, the id map's documents and encoding, each picture setting a CONVENTION claimed beside it",
-  "code": "fdaf8472b5823c9b",
-  "core": "6942e659b6e0cc9e",
+  "code": "8759d78adb612620",
+  "core": "bf5a84fc472d379c",
   "date": "2026-11-18",
   "note": "key collection, plumbing",
   "pages": {},
   "reads": "b59f0dc3d31e7c13",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster.rs::data_uri#low-zoom picture": {
@@ -31925,27 +31962,29 @@
  "rust/mode_a/src/raster.rs::id_map_doc#low-zoom picture": {
   "body": "58b73513b2a2f421",
   "claim": "low-zoom picture - CONVENTION: one image of the whole picture below a screen scale, at `RASTER_R` px per map px",
-  "code": "8ffcdff5d8bcc9f6",
-  "core": "dabc90f6af71a7a4",
+  "code": "57cb09c3dc7e3a54",
+  "core": "2784e001182a37c5",
   "date": "2026-11-18",
   "note": "nothing physical",
   "pages": {},
   "reads": "eadefe3e9d5933e3",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster.rs::id_map_doc#raster plumbing": {
   "body": "58b73513b2a2f421",
   "claim": "raster plumbing - NONE: tiling, the off-map drop, the id map's documents and encoding, each picture setting a CONVENTION claimed beside it",
-  "code": "bcb005c5f52970aa",
-  "core": "dabc90f6af71a7a4",
+  "code": "6e0b43f7cbae016a",
+  "core": "2784e001182a37c5",
   "date": "2026-11-18",
   "note": "id map document build, plumbing",
   "pages": {},
   "reads": "eadefe3e9d5933e3",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster.rs::palette_key#low-zoom picture": {
@@ -32398,40 +32437,43 @@
  "rust/mode_a/src/raster/docs.rs::prepare_offmap#raster plumbing": {
   "body": "a3f8e8fe14b4ac6b",
   "claim": "raster plumbing - NONE: what is cut is outside the window that clips it",
-  "code": "bb608b250730a118",
-  "core": "c8abccb52582a151",
+  "code": "103d06b26ae18767",
+  "core": "34448bafabaa6b91",
   "date": "2026-11-18",
   "note": "parsing",
   "pages": {},
   "reads": "e2d64c419b606f96",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster/docs.rs::shape_box#raster plumbing": {
   "body": "8aa5522188203127",
   "claim": "raster plumbing - NONE: what is cut is outside the window that clips it",
-  "code": "dc2f796cab3755c6",
-  "core": "dc48436895a8dfe6",
+  "code": "af0f7cf0a758b478",
+  "core": "3556d379e089ce82",
   "date": "2026-11-18",
   "note": "bounding box geometry",
   "pages": {},
   "reads": "674460fac05b9c88",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster/docs.rs::subpath_box#raster plumbing": {
   "body": "88bbd17ce4090226",
   "claim": "raster plumbing - NONE: what is cut is outside the window that clips it",
-  "code": "6367eae40ba50076",
-  "core": "91bcb1ee4cd56d24",
+  "code": "8b5bdef3eeec9287",
+  "core": "dc5c1ef7bd95ee94",
   "date": "2026-11-18",
   "note": "bounding box geometry",
   "pages": {},
   "reads": "674460fac05b9c88",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster/docs.rs::tile_doc#raster plumbing": {
@@ -33054,8 +33096,8 @@
  "rust/mode_a/src/sheet.rs::parse#the sheet's reader": {
   "body": "e51cba7da5fa3507",
   "claim": "the sheet's reader - NONE: a tokenizer and a tree, deciding nothing about a building",
-  "code": "a586470a3ee3cc86",
-  "core": "4c6da90bee28118d",
+  "code": "554c0361d108d9bb",
+  "core": "4dffc8a607da5c51",
   "date": "2026-11-17",
   "note": "tokenizer and tree",
   "pages": {},
@@ -33910,14 +33952,15 @@
  "rust/mode_a/src/size_table.rs::shift_of#the size table": {
   "body": "f3e74adb51c4481f",
   "claim": "the size table - NONE: a plan's drawn sizes converted to feet at the audit's scale, deciding nothing about a building",
-  "code": "4c69a163d6f1ceb0",
-  "core": "55f4305bf3aba55e",
+  "code": "c5038ed7f007eb69",
+  "core": "dbb5fa8bca2a838e",
   "date": "2026-11-17",
   "note": "transform parsing",
   "pages": {},
   "reads": "581da9f7bfc8e8a9",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/size_table.rs::table#the size table": {
@@ -34473,8 +34516,8 @@
  "rust/mode_a/src/tagged.rs::attrs#the tagged marks": {
   "body": "2e5f076cc25bd993",
   "claim": "the tagged marks - NONE: a sheet's elements read with their tags and paint, deciding nothing about a building",
-  "code": "8b2c3c5aad6b0640",
-  "core": "b243323340fadd71",
+  "code": "b21182c8b85513eb",
+  "core": "64dad79973d81a48",
   "date": "2026-11-17",
   "note": "attribute collection",
   "pages": {},
@@ -34499,13 +34542,14 @@
  "rust/mode_a/src/tagged.rs::found#the tagged marks": {
   "body": "1cef8128cf8fc1cc",
   "claim": "the tagged marks - NONE: a sheet's elements read with their tags and paint, deciding nothing about a building",
-  "code": "94a3a90a15d4593b",
-  "core": "68b3caec0fdf08f6",
+  "code": "ec28b26b03c4ae5f",
+  "core": "72d78c9f97754551",
   "date": "2026-11-17",
   "note": "collects regex matches",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/tagged.rs::gap#the tagged marks": {
@@ -34573,14 +34617,15 @@
  "rust/mode_a/src/tagged.rs::path_walk#its salts, guards and sentinels": {
   "body": "a1f2c5012cf7235e",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (SVG arc arguments); 6 (SVG curve arguments)",
-  "code": "5f491660bad243c1",
-  "core": "bfced14c5ce7f2d5",
+  "code": "28cf313575d5f671",
+  "core": "3dc029469d59a421",
   "date": "2026-11-18",
   "note": "SVG argument counts",
   "pages": {},
   "reads": "33cfd5ce5106b6f1",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/tagged.rs::spread#the tagged marks": {
@@ -35023,13 +35068,14 @@
  "rust/mode_a/src/types.rs::compiled#the building types' reader": {
   "body": "fc3e254537d5fa47",
   "claim": "the building types' reader - NONE: the declaration read and validated; what each type requires is `types.json`'s, and its research is claimed in `docs/building-programs.md`",
-  "code": "a3d4e1e49bd362bd",
-  "core": "fa26b395273910cd",
+  "code": "62f21595fa5f05ec",
+  "core": "e92af2722ee8f887",
   "date": "2026-11-17",
   "note": "regex validation",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/types.rs::hand_drawn_tiers#the building types' reader": {

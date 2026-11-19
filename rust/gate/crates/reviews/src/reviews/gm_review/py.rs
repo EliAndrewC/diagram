@@ -234,7 +234,7 @@ static WORDSEP: LazyLock<Regex> = LazyLock::new(|| {
         r#"[\w!"'&.,?]"#,
         r"[^\d\W]",
     );
-    Regex::new(&format!(
+    l7r_guard::shared::regex::build(&format!(
         r"({ws}+|(?<={wp})-{{2,}}(?=\w)|{nws}+?(?:-(?:(?<={lt}{lt}-)|(?<={lt}-{lt}-))(?={lt}-?{lt})|(?={ws}|\z)|(?<={wp})(?=-{{2,}}\w)))"
     ))
     .unwrap_or_else(|_| unreachable!("a fixed pattern"))
@@ -274,7 +274,7 @@ pub(super) fn wrap(text: &str, width: i128, initial: &str, subsequent: &str) -> 
     let text = munge(text);
     let mut chunks: Vec<String> = Vec::new();
     let mut at = 0;
-    for m in WORDSEP.find_iter(&text).flatten() {
+    for m in WORDSEP.find_iter(&text).map_while(Result::ok) {
         chunks.push(text[at..m.start()].to_owned());
         chunks.push(m.as_str().to_owned());
         at = m.end();

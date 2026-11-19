@@ -39,7 +39,7 @@ const WAVE_N: usize = 3;
 const WAVE_S: f64 = 10.0;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WAVE_ESCAPE: LazyLock<Regex> = LazyLock::new(|| re(r#"WAVE_OK\s*[=:]\s*["']?\S+\s+\S+"#));

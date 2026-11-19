@@ -3,16 +3,13 @@
 use std::path::Path;
 use std::sync::LazyLock;
 
-use fancy_regex::{Captures, Regex, RegexBuilder};
+use fancy_regex::{Captures, Regex};
 
 use crate::shared::html_text::unescape;
 use crate::shared::py_text::{self, SPACE_CLASS};
 
 fn re(pattern: &str) -> Regex {
-    RegexBuilder::new(pattern)
-        .backtrack_limit(usize::MAX >> 8)
-        .build()
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static COMMENT: LazyLock<Regex> = LazyLock::new(|| re(r"(?s)<!--.*?-->"));
@@ -115,7 +112,7 @@ pub fn read_page(text: &str) -> Page {
                 return None;
             }
             let mut marks: Vec<String> = Vec::new();
-            for c in MARK.captures_iter(inner).flatten() {
+            for c in MARK.captures_iter(inner).map_while(Result::ok) {
                 if !marks.iter().any(|k| k == &c[1]) {
                     marks.push(c[1].to_owned());
                 }

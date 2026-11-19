@@ -30,7 +30,7 @@ const TOKEN: &str = "GUARD_EDIT_OK";
 const PERMIT_SECONDS: f64 = 3600.0;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 fn hit(pattern: &Regex, text: &str) -> bool {

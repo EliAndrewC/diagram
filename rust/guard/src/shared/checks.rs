@@ -29,8 +29,9 @@ pub const STATE: &str = "checks-open.json";
 /// The owed triggers' file.
 pub const OWED: &str = "arbiter-owed.json";
 
-static GITDIR: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^gitdir:\s*(.+)").unwrap_or_else(|e| unreachable!("{e}")));
+static GITDIR: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(r"^gitdir:\s*(.+)").unwrap_or_else(|e| unreachable!("{e}"))
+});
 /// Two temporaries one process writes never share a name.
 static SERIAL: AtomicU64 = AtomicU64::new(0);
 

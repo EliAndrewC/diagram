@@ -130,7 +130,7 @@ pub fn parse(svg: &str) -> Result<Node<'_>, Error> {
         start: -1,
         ..Node::default()
     }];
-    for m in TOKEN.find_iter(svg).flatten() {
+    for m in TOKEN.find_iter(svg).map_while(Result::ok) {
         let tok = m.as_str();
         // character data, kept as the sheet's bytes like any text run (T182: its `<` and `>` no longer read as tags)
         let cdata = tok.starts_with("<![CDATA[");

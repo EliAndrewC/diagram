@@ -76,7 +76,7 @@ fn around(text: &str, start: usize, end: usize, before: usize, after: usize) -> 
 pub fn old_absence(notes_html: &str) -> Vec<String> {
     OLD_ABSENCE
         .captures_iter(notes_html)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect()
 }
@@ -97,7 +97,7 @@ pub fn foreign_in_own_text(html: &str) -> Vec<String> {
     let text = own_text(html);
     FOREIGN
         .find_iter(&text)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|m| !GLOSS.is_match(&text[m.end()..]).unwrap_or(false))
         .map(|m| {
             format!(
@@ -114,7 +114,7 @@ pub fn foreign_in_own_text(html: &str) -> Vec<String> {
 pub fn glosses(html: &str) -> Vec<(String, String, String)> {
     let text = own_text(html);
     let mut out = Vec::new();
-    for m in FOREIGN.find_iter(&text).flatten() {
+    for m in FOREIGN.find_iter(&text).map_while(Result::ok) {
         if let Some(g) = GLOSS.captures(&text[m.end()..]).ok().flatten() {
             out.push((
                 m.as_str().to_owned(),
@@ -142,7 +142,7 @@ pub fn unconverted(html: &str) -> Vec<String> {
     let text = visible_prose(html);
     METRIC
         .find_iter(&text)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|m| !CONVERTED.is_match(&text[m.end()..]).unwrap_or(false))
         .map(|m| {
             format!(
@@ -159,7 +159,7 @@ pub fn unconverted(html: &str) -> Vec<String> {
 pub fn gm_mentions(html: &str) -> Vec<String> {
     let text = sub(&SPACES, &sub(&TAG, &sub(&COMMENT, html, " "), " "), " ");
     GM.find_iter(&text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| format!("...{}...", around(&text, m.start(), m.end(), 40, 60)))
         .collect()
 }
@@ -169,7 +169,7 @@ pub fn gm_mentions(html: &str) -> Vec<String> {
 pub fn long_paragraphs(html: &str) -> Vec<String> {
     let body = sub(&COMMENT, html, "");
     let mut out = Vec::new();
-    for m in BLOCK.captures_iter(&body).flatten() {
+    for m in BLOCK.captures_iter(&body).map_while(Result::ok) {
         let inner = m.get(1).or_else(|| m.get(2)).map_or("", |g| g.as_str());
         let text = sub(&TAG, &sub(&SUP, inner, ""), " ");
         let words = split(&text);
@@ -189,17 +189,17 @@ pub fn long_paragraphs(html: &str) -> Vec<String> {
 pub fn absence_sentences(html: &str, notes_html: &str) -> Vec<String> {
     let absent: HashSet<String> = ABSENT
         .captures_iter(notes_html)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     let mut out = Vec::new();
     let body = sub(&COMMENT, html, "");
-    for block in PARAGRAPH.split(&body).flatten() {
+    for block in PARAGRAPH.split(&body).map_while(Result::ok) {
         let block = FOOTED.replace_all(block, "$2$1");
-        for sentence in SENTENCE_END.split(&block).flatten() {
+        for sentence in SENTENCE_END.split(&block).map_while(Result::ok) {
             let keys: Vec<String> = DATA_NOTE
                 .captures_iter(sentence)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|c| c[1].to_owned())
                 .filter(|k| absent.contains(k))
                 .collect();
@@ -216,7 +216,7 @@ pub fn absence_sentences(html: &str, notes_html: &str) -> Vec<String> {
 fn leads(html: &str) -> Vec<(String, String)> {
     let flat = |t: &str| strip(&sub(&SPACES, &sub(&TAG, t, ""), " ")).to_owned();
     LEAD.captures_iter(&sub(&COMMENT, html, ""))
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| (flat(&m[1]), flat(&m[2])))
         .collect()
 }
@@ -229,7 +229,7 @@ pub fn lead_line_years<S: BuildHasher>(
 ) -> Vec<String> {
     let mut out = Vec::new();
     for (lead, _) in leads(html) {
-        for y in YEAR.find_iter(&lead).flatten() {
+        for y in YEAR.find_iter(&lead).map_while(Result::ok) {
             let y = y.as_str();
             let known = if glossary_words.contains(y) {
                 "a glossary tooltip"

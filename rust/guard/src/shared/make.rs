@@ -18,7 +18,8 @@ pub(crate) const POS: &str =
 pub(crate) const PY: &str = r"(?:\S*/)?python3?";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
+    crate::shared::regex::build(pattern)
+        .unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
 }
 
 static TARGET: LazyLock<Regex> = LazyLock::new(|| {
@@ -61,7 +62,7 @@ pub fn targets(cmd: &str) -> BTreeSet<String> {
     let clean = strip_quotes(&strip_heredocs(cmd));
     TARGET
         .captures_iter(&clean)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .filter_map(|c| c.get(1))
         .map(|m| m.as_str().to_owned())
         .collect()
@@ -71,7 +72,7 @@ pub fn targets(cmd: &str) -> BTreeSet<String> {
 fn goals(seg: &str) -> BTreeSet<String> {
     let clean = strip_quotes(&strip_heredocs(seg));
     let mut out = BTreeSet::new();
-    for c in GOALS.captures_iter(&clean).filter_map(Result::ok) {
+    for c in GOALS.captures_iter(&clean).map_while(Result::ok) {
         let mut skip = false;
         for word in c.get(1).map_or("", |m| m.as_str()).split_whitespace() {
             if std::mem::take(&mut skip) {
@@ -111,7 +112,7 @@ pub fn combine(cmd: &str) -> Option<String> {
     }
     // the segments and the separators between them (`re.split` with its group kept)
     let (mut segs, mut joints, mut at) = (Vec::new(), Vec::new(), 0);
-    for m in SEP.find_iter(cmd).filter_map(Result::ok) {
+    for m in SEP.find_iter(cmd).map_while(Result::ok) {
         segs.push(&cmd[at..m.start()]);
         joints.push(m.as_str());
         at = m.end();
@@ -164,7 +165,9 @@ pub fn combine(cmd: &str) -> Option<String> {
 }
 
 static SEARCHER_COUNT: LazyLock<Regex> = LazyLock::new(|| {
-    re(r#"((?:^|[\s;|&(])(?:grep|egrep|fgrep|rg|ugrep|ack|ag)\b[^\n;|&'"]*?\s)-c(\s+['"])"#)
+    re(
+        r#"(?:\A|(?<=[\n;|&'"]))((?>[^\n;|&'"]*?(?<![^\s;|&(])(?:grep|egrep|fgrep|rg|ugrep|ack|ag)\b)[^\n;|&'"]*?\s)-c(\s+['"])"#,
+    )
 });
 // only in a searcher's own segment: `sh -c foo\\|pytest` does run pytest once the shell strips the backslash
 static SEARCHER_SEGMENT: LazyLock<Regex> = LazyLock::new(|| {

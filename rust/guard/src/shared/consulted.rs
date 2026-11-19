@@ -25,7 +25,7 @@ pub const OUTCOMES: &str =
     "cited:<registry key> | rejected:<why> | nothing-found | unreadable | pending";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static OUTCOME: LazyLock<Regex> = LazyLock::new(|| {
@@ -451,7 +451,8 @@ pub fn earlier(dir: &Path, url: &str) -> Result<Vec<Value>, Fault> {
 /// # Errors
 /// A pattern that does not compile (`re.error`), or a line that is not a mapping.
 pub fn by_key(dir: &Path, pattern: &str) -> Result<Vec<Value>, Fault> {
-    let rx = Regex::new(pattern).map_err(|e| Fault::new("PatternError", e.to_string()))?;
+    let rx = crate::shared::regex::build(pattern)
+        .map_err(|e| Fault::new("PatternError", e.to_string()))?;
     let mut out = Vec::new();
     for r in read(dir)? {
         let outcome = get(&r, "outcome")?.map(py_str).unwrap_or_default();

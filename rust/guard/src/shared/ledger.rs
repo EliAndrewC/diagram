@@ -71,7 +71,7 @@ pub const COLUMNS: [&str; 10] = [
 const RULE_FROM: &str = "2026-10-11";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WALL: LazyLock<Regex> = LazyLock::new(|| re(r"^\d+ s$"));

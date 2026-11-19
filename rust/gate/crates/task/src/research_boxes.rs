@@ -28,7 +28,7 @@ const APPLICABILITY_BOX_FROM: u32 = 211;
 fn entries(text: &str) -> Vec<(String, bool, String)> {
     let task = re(r"(?m)^- \[(?P<tick>[ x])\] (?P<id>T\d+)\b");
     let head = re(r"(?m)^## ");
-    let starts: Vec<_> = task.captures_iter(text).flatten().collect();
+    let starts: Vec<_> = task.captures_iter(text).map_while(Result::ok).collect();
     let mut out = Vec::new();
     for (k, m) in starts.iter().enumerate() {
         let at = m.get(0).map_or(0, |g| g.start());

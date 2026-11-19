@@ -298,20 +298,14 @@ fn an_approach_block_past_a_megabyte_of_plan_done_is_found() {
 /// would have turned from an error into a crawl.
 #[test]
 fn the_label_search_is_linear_in_its_sentence() {
-    let long = format!("{}12 lines.", "word ".repeat(4_000));
-    let bounded = fancy_regex::RegexBuilder::new(super::LABEL.as_str())
-        .backtrack_limit(1_000_000)
-        .build()
-        .unwrap();
-    assert_eq!(bounded.is_match(&long).ok(), Some(false));
-    assert_eq!(
-        bounded
-            .is_match(&format!("{long} measured 2026-11-18 (wc -l)"))
-            .ok(),
-        Some(true)
-    );
-    assert_eq!(
-        bounded.is_match(&format!("{long} m:t194.lines")).ok(),
-        Some(true)
-    );
+    // a sentence near a megabyte: the one-pattern label ran out of fancy_regex's backtracking stack here and answered "no label"
+    let long = format!("{}12 lines.", "word ".repeat(240_000));
+    assert!(!super::has_label(&long));
+    assert!(super::has_label(&format!(
+        "{long} measured 2026-11-18 (wc -l)"
+    )));
+    assert!(super::has_label(&format!("{long} m:t194.lines")));
+    assert!(!super::has_label(&format!(
+        "{long} measured 2026-11-18 without a method"
+    )));
 }

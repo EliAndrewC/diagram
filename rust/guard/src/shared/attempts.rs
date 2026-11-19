@@ -34,7 +34,7 @@ pub const UNKNOWN_SOUGHT: &str = "unknown - recorded before feature 312";
 pub const SEED: &str = "ledger-2026-10-02";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 // `$` in Python's `re` also matches before a final newline
@@ -545,7 +545,7 @@ pub fn verdict(root: &Path, url: &str) -> Result<String, Fault> {
         let body = body.replace("\r\n", "\n").replace('\r', "\n");
         if consulted::URL
             .find_iter(&body)
-            .flatten()
+            .map_while(Result::ok)
             .any(|m| norm(m.as_str()) == n)
         {
             let name = p

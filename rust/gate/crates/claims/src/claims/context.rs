@@ -116,7 +116,7 @@ impl Tables {
                         path: rel(&p, root),
                         uses: USE
                             .captures_iter(&text)
-                            .flatten()
+                            .map_while(Result::ok)
                             .map(|c| c[1].to_owned())
                             .collect(),
                         items: items(&text, 0, "", false)

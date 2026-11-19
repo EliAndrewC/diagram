@@ -103,10 +103,7 @@ const TYPO_WORDS: usize = 3;
 /// over `fancy_regex` 0.14, each pattern's `find_iter` to the end; the label's lookaheads anchored first, `LABEL` in `lint.rs`), so the
 /// search runs to its end. The VM's stack limit still errs on a greedy span near a megabyte, which is why the scans end on an error.
 pub(super) fn re(pattern: &str) -> Regex {
-    fancy_regex::RegexBuilder::new(pattern)
-        .backtrack_limit(usize::MAX)
-        .build()
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"[A-Za-z0-9]+"));
@@ -170,7 +167,7 @@ fn distance(a: &str, b: &str) -> usize {
 fn words(text: &str) -> Vec<String> {
     let lower = text.to_lowercase();
     WORD.find_iter(&lower)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect()
 }
@@ -213,7 +210,7 @@ pub(super) fn repointed(old: &str, new: &str, task: &str, plan: &str) -> String 
         .collect();
     let named: BTreeSet<&str> = TASK_ID
         .find_iter(old)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str())
         .collect();
     for b in &splits {
@@ -243,7 +240,7 @@ pub(super) fn quiet_out(section: &str, plan: &str) -> String {
 fn defined_ids(text: &str) -> BTreeSet<String> {
     DEFINED
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect()
 }
@@ -251,7 +248,7 @@ fn defined_ids(text: &str) -> BTreeSet<String> {
 fn decision_ids(text: &str) -> BTreeSet<String> {
     DECISION_ID
         .find_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect()
 }
@@ -276,7 +273,7 @@ fn template_answers() -> BTreeMap<u32, String> {
 fn approach_decides_nothing(body: &str, plan: &str, done: &str) -> bool {
     let marks: Vec<(u32, usize, usize)> = ITEM
         .captures_iter(body)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| {
             (
                 c[1].parse().unwrap_or(0),
@@ -345,7 +342,7 @@ pub(super) fn decides_nothing(key: &str, body: &str, plan: &str, done: &str) -> 
 fn task_tokens(line: &str) -> Vec<&str> {
     BARE_TASK
         .find_iter(line)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str())
         .collect()
 }

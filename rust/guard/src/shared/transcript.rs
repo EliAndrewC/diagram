@@ -10,8 +10,10 @@ use serde_json::Value;
 
 /// The harness's words for an answered question, when the result carries no `answers`.
 static ANSWERED: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^\s*(?:Your questions have been answered|User has answered your questions)\b")
-        .unwrap()
+    crate::shared::regex::build(
+        r"^\s*(?:Your questions have been answered|User has answered your questions)\b",
+    )
+    .unwrap()
 });
 
 /// `text` with curly quotes straightened and its whitespace collapsed to single spaces (`norm`).

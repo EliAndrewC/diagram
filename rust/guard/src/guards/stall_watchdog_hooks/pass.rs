@@ -32,7 +32,8 @@ use crate::shared::tool::{ask_within, Said};
 const RETRY_SLACK: f64 = 300.0;
 
 static RETRY: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^failed (\S+) .* - waiting (\d+) min").unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(r"^failed (\S+) .* - waiting (\d+) min")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 /// CONVENTION, a knob (`STALL_LONG_RUN`): a gate run took at most 1,300 s in 1,051 of the 1,052 recorded in `dev/run-log/` for

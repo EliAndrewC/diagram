@@ -311,7 +311,7 @@ pub fn rewrite(
 ) -> (String, Vec<String>) {
     let hidden: Vec<(usize, usize)> = COMMENT
         .find_iter(markup)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| (m.start(), m.end()))
         .collect();
     let mut errors = Vec::new();

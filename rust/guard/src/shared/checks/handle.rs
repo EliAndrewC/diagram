@@ -29,7 +29,7 @@ const MANIFEST_REASON_TOKENS: [&str; 2] = ["FREEZE_OK", "ARBITER_OK"];
 const USAGE_LOG_TOOL: &str = "planhold-restore";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static MANIFEST_PATH: LazyLock<Regex> = LazyLock::new(|| re(r#"(/[^\s`"'<>)]*MANIFEST\.md)"#));

@@ -17,6 +17,7 @@ pub mod make;
 pub mod plan_text;
 pub mod py_text;
 pub mod pyjson;
+pub mod regex;
 pub mod session;
 pub mod sha1;
 pub mod sha256;

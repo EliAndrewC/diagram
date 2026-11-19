@@ -74,7 +74,7 @@ pub fn subagent_calls(
                 let text =
                     String::from_utf8_lossy(&std::fs::read(dir.join(&name)).unwrap_or_default())
                         .into_owned();
-                for c in TOOL_ID.captures_iter(&text).filter_map(Result::ok) {
+                for c in TOOL_ID.captures_iter(&text).map_while(Result::ok) {
                     out.entry(c[1].to_owned()).or_insert_with(|| aid.to_owned());
                 }
             }
@@ -464,7 +464,7 @@ impl<'a> Phases<'a> {
                 ));
             }
         }
-        for c in STAMP.captures_iter(plan_text).filter_map(Result::ok) {
+        for c in STAMP.captures_iter(plan_text).map_while(Result::ok) {
             let when = ts(&format!("{}:00Z", &c[3]))?;
             if &c[1] == task && start <= when && when <= end {
                 let what = if &c[2] == "part B" {

@@ -109,7 +109,10 @@ fn int_of(text: &str) -> i64 {
 /// The span a text names, `1745-1754`, `1745-54` or `1766`, as (first, last); none when it names no year.
 #[must_use]
 pub fn years(text: &str) -> Option<(i64, i64)> {
-    let m = YEARS.captures_iter(text).flatten().last()?;
+    let m = YEARS
+        .captures_iter(text)
+        .map_while(std::result::Result::ok)
+        .last()?;
     let first = int_of(&m[1]);
     let Some(tail) = m.get(2).map(|t| t.as_str()).filter(|t| !t.is_empty()) else {
         return Some((first, first));
@@ -350,7 +353,7 @@ pub fn hover_box(
 
 fn attrs(raw: &str) -> Vec<(String, String)> {
     let mut out: Vec<(String, String)> = Vec::new();
-    for c in ATTR.captures_iter(raw).flatten() {
+    for c in ATTR.captures_iter(raw).map_while(std::result::Result::ok) {
         let v = unescape(&c[2]);
         match out.iter_mut().find(|(k, _)| k == &c[1]) {
             Some(slot) => slot.1 = v,
@@ -458,7 +461,7 @@ pub fn annotate(markup: &str, place: &str, table: &Table) -> Result<(String, Vec
     let mut errors = Vec::new();
     let mut stack: Vec<(String, Vec<(String, String)>)> = Vec::new();
     let mut last = 0;
-    for m in TAG.captures_iter(markup).flatten() {
+    for m in TAG.captures_iter(markup).map_while(std::result::Result::ok) {
         let (closing, raw) = (!m[1].is_empty(), &m[3]);
         let name = m[2].to_lowercase();
         if closing {

@@ -50,7 +50,7 @@ pub const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
 
 /// The landing's own list of engine files (`codeid.ENGINE`, which stays in Python until phase 4).
 static ENGINE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")
+    l7r_guard::shared::regex::build(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

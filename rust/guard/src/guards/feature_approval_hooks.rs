@@ -40,7 +40,7 @@ const STANDING: &str =
     "you should treat features that I have asked to be filed as automatic approval";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static LINE: LazyLock<Regex> =
@@ -74,7 +74,7 @@ fn git(repo: &str, args: &[&str]) -> Said {
 /// The quotes of every approval line in a spec's text.
 fn quotes(text: &str) -> Vec<String> {
     LINE.captures_iter(text)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|c| c[2].to_owned())
         .collect()
 }
@@ -201,7 +201,7 @@ pub(crate) fn judge_staging(cmd: &str, base: &str, messages: &[String]) -> Vec<(
 fn push_repo(cmd: &str, at: usize, base: &str) -> String {
     let last = CD
         .captures_iter(&cmd[..at])
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .last()
         .map(|c| c[2].to_owned());
     let dest = last.map_or_else(
@@ -251,7 +251,7 @@ pub fn at_rev(top: &str, rev: &str, dir: &str) -> Option<AtRev> {
     let status_closed = CLOSING.iter().any(|w| status.starts_with(w));
     let boxes: Vec<String> = BOX
         .captures_iter(&tasks)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     let (total, ticked) = (boxes.len(), boxes.iter().filter(|b| *b != " ").count());
@@ -268,7 +268,7 @@ pub fn at_rev(top: &str, rev: &str, dir: &str) -> Option<AtRev> {
     };
     let open = OPEN_BOX
         .captures_iter(&tasks)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .map(|c| {
             let line = norm(&c[1]);
             TASK_ID

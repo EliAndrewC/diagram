@@ -148,11 +148,11 @@ fn judge(cx: &Ctx) -> Vec<Answer> {
 }
 
 static HEREDOC: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| Regex::new(r"(?s)<<\s*.?(\w+).?.*?\n\1").unwrap());
+    std::sync::LazyLock::new(|| crate::shared::regex::build(r"(?s)<<\s*.?(\w+).?.*?\n\1").unwrap());
 static QUOTED: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| Regex::new(r#"'[^']*'|"[^"]*""#).unwrap());
+    std::sync::LazyLock::new(|| crate::shared::regex::build(r#"'[^']*'|"[^"]*""#).unwrap());
 static INVOKES_GATE: std::sync::LazyLock<Regex> = std::sync::LazyLock::new(|| {
-    Regex::new(r#"(^|[;&|(]|[[:space:]])make([[:space:]]+[A-Za-z0-9_=./"-]+)*[[:space:]]+(done|maps)([[:space:]]|$)"#).unwrap()
+    crate::shared::regex::build(r#"(^|[;&|(]|[[:space:]])make([[:space:]]+[A-Za-z0-9_=./"-]+)*[[:space:]]+(done|maps)([[:space:]]|$)"#).unwrap()
 });
 
 /// An INVOCATION of the gate, not a mention of one (`is_gate_invocation`): heredocs and quoted strings blanked, a dry run excepted,

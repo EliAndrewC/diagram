@@ -289,7 +289,7 @@ static SHRINE_GROUP: LazyLock<Regex> =
 pub fn one_compound_shrine(text: &str) -> Vec<String> {
     let main = SHRINE_GROUP
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|g| !g[1].contains("data-form=\"own shrine\""))
         .count();
     if main > 1 {
@@ -566,11 +566,11 @@ fn indoor(cx: f64, cy: f64, found: &[Mark]) -> bool {
 pub fn well_gear(svg: &Sheet) -> Result<Vec<String>, Error> {
     let text = svg.text;
     let mut gears = Vec::new();
-    for m in GEAR.captures_iter(text).flatten() {
+    for m in GEAR.captures_iter(text).map_while(Result::ok) {
         gears.push((m[1].to_owned(), float(&m[2])?, float(&m[3])?));
     }
     let mut roofs = Vec::new();
-    for m in ROOF.captures_iter(text).flatten() {
+    for m in ROOF.captures_iter(text).map_while(Result::ok) {
         roofs.push((float(&m[1])?, float(&m[2])?, m[3].to_owned()));
     }
     let found = svg.marks()?;

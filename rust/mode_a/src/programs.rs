@@ -105,15 +105,17 @@ pub fn render(btype: &BuildingType, kinds: &mut Kinds) -> Result<String, Error> 
 }
 
 static BLOCK: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?s)<!-- types\.json:([a-z0-9-]+) -->\n(.*?)\n<!-- /types\.json:\1 -->")
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(
+        r"(?s)<!-- types\.json:([a-z0-9-]+) -->\n(.*?)\n<!-- /types\.json:\1 -->",
+    )
+    .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 /// Each tier's block body, by byte span; a tier marked twice keeps its last block, as the Python's dict did.
 fn blocks(text: &str) -> HashMap<String, (usize, usize)> {
     BLOCK
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|m| {
             Some((
                 m.get(1)?.as_str().to_owned(),

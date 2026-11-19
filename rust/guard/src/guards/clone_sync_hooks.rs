@@ -63,7 +63,8 @@ const BEHIND_TEST_TARGETS: [&str; 22] = [
 ];
 
 static ENGINE_PATH: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"^(l7r/.*\.py|pool/.*\.(gen\.py|json))$").unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(r"^(l7r/.*\.py|pool/.*\.(gen\.py|json))$")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 /// What one decision reads: the event, the session, the mirror, the tree's tools and the interpreter they run under.

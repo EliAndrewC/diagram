@@ -33,7 +33,7 @@ const GUARD_FILE: &str = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|t
 const SUITE_NAME: &str = "<a-suite>";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
 }
 
 fn hit(pattern: &Regex, text: &str) -> bool {
@@ -155,7 +155,11 @@ static BINDS: LazyLock<[Regex; 2]> = LazyLock::new(|| {
 fn write_via_name(raw: &str) -> bool {
     BINDS
         .iter()
-        .flat_map(|b| b.captures_iter(raw).flatten().collect::<Vec<_>>())
+        .flat_map(|b| {
+            b.captures_iter(raw)
+                .map_while(Result::ok)
+                .collect::<Vec<_>>()
+        })
         .any(|m| {
             let name = fancy_regex::escape(m.get(1).map_or("", |g| g.as_str())).into_owned();
             hit(&re(&format!(r"\b{name}\.write_text\s*\(")), raw)
@@ -170,11 +174,11 @@ fn write_via_name(raw: &str) -> bool {
 
 /// The variable one make invocation assigns twice, else "".
 fn doubled_var(clean: &str) -> String {
-    for m in MAKE_ARGS.captures_iter(clean).flatten() {
+    for m in MAKE_ARGS.captures_iter(clean).map_while(Result::ok) {
         let mut seen = Vec::new();
         for assign in ASSIGN
             .captures_iter(m.get(1).map_or("", |g| g.as_str()))
-            .flatten()
+            .map_while(Result::ok)
         {
             let name = assign.get(1).map_or("", |g| g.as_str());
             if seen.contains(&name) {
@@ -188,7 +192,7 @@ fn doubled_var(clean: &str) -> String {
 
 fn replace_suites(text: &str) -> String {
     let (mut out, mut from) = (String::new(), 0);
-    for m in SUITE.find_iter(text).flatten() {
+    for m in SUITE.find_iter(text).map_while(Result::ok) {
         out.push_str(&text[from..m.start()]);
         out.push_str(SUITE_NAME);
         from = m.end();
@@ -291,7 +295,7 @@ pub(crate) fn classify(cmd: &str) -> String {
 fn masked(cmd: &str) -> String {
     let blank = |pattern: &Regex, text: &str| {
         let mut bytes = text.as_bytes().to_vec();
-        for m in pattern.find_iter(text).flatten() {
+        for m in pattern.find_iter(text).map_while(Result::ok) {
             bytes[m.start()..m.end()].fill(b' ');
         }
         String::from_utf8_lossy(&bytes).into_owned()
@@ -496,7 +500,7 @@ fn wrapped_modules(text: &str) -> Table {
         };
         let tokens = RECIPE_ARG
             .captures_iter(&rest)
-            .flatten()
+            .map_while(Result::ok)
             .map(|a| {
                 let at = |n: usize| a.get(n).map_or("", |g| g.as_str()).to_owned();
                 if a.get(1).is_some() {

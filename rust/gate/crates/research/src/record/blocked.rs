@@ -34,7 +34,7 @@ pub fn patterns(record_dir: &Path) -> Result<Vec<(Regex, Rule)>> {
     let mut out = Vec::new();
     for (m, raw) in rows {
         let text = py_str(&m);
-        let compiled = Regex::new(&text).map_err(|e| {
+        let compiled = l7r_guard::shared::regex::build(&text).map_err(|e| {
             Error::new(
                 "BlockedListError",
                 format!("{place}: pattern {} does not compile ({e})", value_repr(&m)),

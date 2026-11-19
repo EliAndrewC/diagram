@@ -199,7 +199,7 @@ impl Modal {
 
 fn unique_paths(text: &str) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
-    for m in PATH.find_iter(text).flatten() {
+    for m in PATH.find_iter(text).map_while(Result::ok) {
         if !out.iter().any(|p| p == m.as_str()) {
             out.push(m.as_str().to_owned());
         }

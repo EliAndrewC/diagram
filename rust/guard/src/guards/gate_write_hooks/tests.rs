@@ -201,3 +201,32 @@ fn the_escape_serves_both_and_needs_a_reason() {
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A `git commit` or a `make tick` after many `git` or `make` words (feature 449 T185): unlimited, each pattern tried every trigger to its
+/// segment's end, its time the square of their count (24 s on 100 KB, measured 2026-11-18, scratchpad t185/sizecurve.log), and at `fancy_regex`'s old limit it erred and
+/// read as no write; each now starts at its segment's first trigger.
+#[test]
+fn a_write_after_many_triggers_is_seen_in_linear_time() {
+    let git = format!("{}; git commit -m x", "git x ".repeat(40_000));
+    let make = format!("{}; make tick F=1", "make x ".repeat(40_000));
+    let found = within(move || {
+        (
+            super::GIT_WRITE.is_match(&git).ok(),
+            super::MAKE_WRITE
+                .captures(&make)
+                .ok()
+                .flatten()
+                .map(|c| c[1].to_owned()),
+        )
+    });
+    assert_eq!(found, (Some(true), Some("tick".to_owned())));
+}

@@ -65,3 +65,32 @@ fn a_bare_pytest_is_one_no_earlier_verdict_claims() {
     ));
     assert!(!bare_pytest("grep 'pytest' x"));
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A searcher's count flag past a million steps, and after many searchers (feature 449 T185): `SEARCHER_COUNT` and `SEARCHER_SEGMENT`
+/// erred at `fancy_regex`'s old limit, which `replace_all` turned into a panic, and unlimited the count flag's pattern tried every
+/// searcher to its segment's end (22 s on 100 KB, measured 2026-11-18, scratchpad t185/sizecurve.log); it now starts at its segment's first searcher.
+#[test]
+fn a_pytest_view_past_a_million_steps_or_many_searchers_is_read() {
+    for lead in [
+        "plain words of a long text ".repeat(50_000),
+        "grep x ".repeat(30_000),
+    ] {
+        let (counted, run) = (
+            format!("{lead}; grep -c 'a|pytest' f"),
+            format!("{lead}; pytest tests"),
+        );
+        assert_eq!(
+            within(move || (bare_pytest(&counted), bare_pytest(&run))),
+            (false, true)
+        );
+    }
+}

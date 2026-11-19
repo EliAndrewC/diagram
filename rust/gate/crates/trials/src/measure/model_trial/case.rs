@@ -221,7 +221,7 @@ impl Trial {
         let mut prompt = run.prompt.clone();
         let mut rebuild: Vec<String> = SNAPSHOT_UNIT
             .captures_iter(&prompt)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| c[1].to_owned())
             .collect();
         rebuild.sort();

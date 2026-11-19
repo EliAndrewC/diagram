@@ -23,7 +23,6 @@
 use std::io::{Read as _, Seek as _, SeekFrom, Write as _};
 use std::path::{Path, PathBuf};
 
-use fancy_regex::Regex;
 use l7r_guard::shared::py_text::strip;
 use l7r_guard::shared::speckit::{py_name, py_parent, splitlines};
 
@@ -90,7 +89,7 @@ fn py_pattern(key: &str) -> String {
 pub fn lines(path: &Path, key: &str) -> Result<Vec<String>, Result<String, String>> {
     let text = l7r_guard::shared::speckit::read_text(path).map_err(Ok)?;
     let all = splitlines(&text);
-    let rx = Regex::new(&py_pattern(key)).map_err(|e| Err(e.to_string()))?;
+    let rx = l7r_guard::shared::regex::build(&py_pattern(key)).map_err(|e| Err(e.to_string()))?;
     let hits: Vec<String> = all
         .iter()
         .enumerate()

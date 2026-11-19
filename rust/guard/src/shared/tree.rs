@@ -14,7 +14,8 @@ use serde_json::{json, Value};
 use super::shape::strip_heredocs;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
+    crate::shared::regex::build(pattern)
+        .unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
 }
 
 const GIT_WRITES: [&str; 17] = [
@@ -212,7 +213,7 @@ fn env_from(cmd: &str, start: Option<&str>, home: &str) -> Env {
         env.insert("PWD".to_owned(), c.to_owned());
     }
     let text = strip_heredocs(cmd);
-    for c in ASSIGN.captures_iter(&text).filter_map(Result::ok) {
+    for c in ASSIGN.captures_iter(&text).map_while(Result::ok) {
         let name = c.get(1).map_or("", |m| m.as_str()).to_owned();
         let value = (2..=4)
             .find_map(|i| c.get(i))
@@ -458,7 +459,7 @@ fn writes_in(seg: &str, env: &Env, home: &str, eff: Option<&str>) -> Vec<Write> 
             );
         }
     }
-    for c in REDIRECT.captures_iter(seg).filter_map(Result::ok) {
+    for c in REDIRECT.captures_iter(seg).map_while(Result::ok) {
         found_writes.push(path_write(
             c.get(1).map_or("", |m| m.as_str()),
             env,

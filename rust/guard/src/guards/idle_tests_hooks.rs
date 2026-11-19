@@ -37,10 +37,11 @@ pub const GUARD: Guard = Guard {
 /// by setting this to true; a fixture arms by default, so every case still tests the machinery.
 pub const DEF_ARM: bool = false;
 
-static FAILED: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^\s*FAIL\S*\s+(\S+)").unwrap_or_else(|e| unreachable!("{e}")));
+static FAILED: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(r"^\s*FAIL\S*\s+(\S+)").unwrap_or_else(|e| unreachable!("{e}"))
+});
 static TRIPWIRE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"tripwire seed\s+(\d+): (?!ok|expected)(.+)")
+    crate::shared::regex::build(r"tripwire seed\s+(\d+): (?!ok|expected)(.+)")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

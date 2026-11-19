@@ -18,7 +18,8 @@ const SEEDS: usize = 48;
 type Verdicts = BTreeMap<i64, Vec<String>>;
 
 static RECORD: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"record committed \([^)]*\): (\S+\.json)").unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(r"record committed \([^)]*\): (\S+\.json)")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 /// How a probe reaches a command, so a test can answer for make.
@@ -61,7 +62,7 @@ fn git(h: &dyn Runs, root: &Path, args: &[&str]) -> String {
 fn record_of(h: &dyn Runs, out: &str, root: &Path) -> Result<Value, String> {
     let last = RECORD
         .captures_iter(out)
-        .flatten()
+        .map_while(Result::ok)
         .last()
         .map(|c| c[1].to_owned());
     let Some(name) = last else {

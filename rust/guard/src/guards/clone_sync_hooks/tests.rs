@@ -602,7 +602,7 @@ fn the_helpers_and_the_entry() {
 fn every_makefile_target_that_reaches_pytest_is_behind_the_test_targets() {
     let makefile =
         std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/../../Makefile")).unwrap();
-    let target = fancy_regex::Regex::new(r"^([a-z][\w-]*):").unwrap();
+    let target = crate::shared::regex::build(r"^([a-z][\w-]*):").unwrap();
     let mut recipes: Vec<(String, Vec<&str>)> = Vec::new();
     let mut open = false;
     for line in makefile.lines() {
@@ -626,7 +626,7 @@ fn every_makefile_target_that_reaches_pytest_is_behind_the_test_targets() {
             .map(|t| fancy_regex::escape(t).into_owned())
             .collect();
         let calls =
-            fancy_regex::Regex::new(&format!(r"\$\(MAKE\)[^\n]*?\b(?:{})\b", names.join("|")))
+            crate::shared::regex::build(&format!(r"\$\(MAKE\)[^\n]*?\b(?:{})\b", names.join("|")))
                 .unwrap();
         let mut grew: Vec<String> = recipes
             .iter()

@@ -53,7 +53,7 @@ pub fn sheet(var: Option<String>) -> PathBuf {
 }
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static RELEASED: LazyLock<Regex> =
@@ -77,7 +77,7 @@ static NEW_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"questions/(\d{4})-"));
 /// Every match of `rx` in `text`, its group `g`.
 fn all(rx: &Regex, text: &str, g: usize) -> Vec<String> {
     rx.captures_iter(text)
-        .filter_map(Result::ok)
+        .map_while(Result::ok)
         .filter_map(|c| c.get(g).map(|m| m.as_str().to_owned()))
         .collect()
 }
@@ -138,7 +138,7 @@ fn old_map(top: &Path) -> HashMap<(String, u32), String> {
 
 fn questions_of(item: &str, olds: &HashMap<(String, u32), String>) -> BTreeSet<String> {
     let mut found: BTreeSet<String> = all(&QNUM, item, 1).into_iter().collect();
-    for caps in OLD.captures_iter(item).filter_map(Result::ok) {
+    for caps in OLD.captures_iter(item).map_while(Result::ok) {
         let page = caps.get(1).map_or("", |m| m.as_str());
         let run = caps.get(2).map_or("", |m| m.as_str());
         for num in all(&THREE, run, 0) {

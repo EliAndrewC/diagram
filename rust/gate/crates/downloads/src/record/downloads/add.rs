@@ -138,7 +138,7 @@ fn pieces(text: &str) -> Vec<&str> {
 fn all_pointers(body: &str) -> Vec<String> {
     POINTER
         .find_iter(body)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| m.as_str().to_owned())
         .collect()
 }

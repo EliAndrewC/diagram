@@ -72,7 +72,7 @@ fn hit(pattern: &Regex, text: &str) -> bool {
 /// One block per inventory item. Two shapes: a bold label, or a numbered list.
 fn items(text: &str) -> Vec<String> {
     let (mut parts, mut last) = (Vec::new(), 0);
-    for m in SPLIT.find_iter(text).flatten() {
+    for m in SPLIT.find_iter(text).map_while(Result::ok) {
         parts.push(&text[last..m.start()]);
         last = m.end();
     }
@@ -106,7 +106,7 @@ fn items(text: &str) -> Vec<String> {
 /// The research page an item belongs to: the nearest `# ` heading above it that names an `.html`.
 fn page_of(text: &str) -> String {
     PAGE.captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .last()
         .and_then(|c| c.get(1))
         .map(|g| {

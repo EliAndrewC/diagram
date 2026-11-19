@@ -21,7 +21,7 @@ pub const GUARD: Guard = Guard {
 };
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static FILE: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)(^|/)README(\.[A-Za-z0-9]+)?$"));

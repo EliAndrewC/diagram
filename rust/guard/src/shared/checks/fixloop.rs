@@ -14,7 +14,7 @@ use super::{map_mut, text};
 const HOLD_AT: u64 = 2;
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static FLAG: LazyLock<Regex> = LazyLock::new(|| {
@@ -30,7 +30,7 @@ static NOTE_UNIT: LazyLock<Regex> =
 pub fn notes_of(manifest: &str) -> BTreeMap<String, String> {
     NOTE_UNIT
         .captures_iter(manifest)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|c| !c[1].ends_with("#unfootnoted"))
         .map(|c| (c[1].to_owned(), c[2].to_owned()))
         .collect()

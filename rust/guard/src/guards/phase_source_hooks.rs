@@ -31,7 +31,7 @@ const DEFAULT_GLOB: &str =
     "/diagram/.git/phase-sources.json /diagram/.clones/*/.git/phase-sources.json";
 
 static VERB: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?:^|[\s;&|(`$])(?:cat|sed|head|tail|less|more|grep|rg|ugrep|awk|nl|bat|python3?|git\s+(?:show|diff|log|blame))\b")
+    crate::shared::regex::build(r"(?:^|[\s;&|(`$])(?:cat|sed|head|tail|less|more|grep|rg|ugrep|awk|nl|bat|python3?|git\s+(?:show|diff|log|blame))\b")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
@@ -129,9 +129,10 @@ fn held_in_command(cmd: &str, files: &[&str]) -> Option<String> {
     files
         .iter()
         .find(|f| {
-            let named = Regex::new(&format!(r"(?<![\w.-]){}\b", fancy_regex::escape(f)))
-                .unwrap_or_else(|e| unreachable!("{e}"));
-            let dir = Regex::new(&format!(
+            let named =
+                crate::shared::regex::build(&format!(r"(?<![\w.-]){}\b", fancy_regex::escape(f)))
+                    .unwrap_or_else(|e| unreachable!("{e}"));
+            let dir = crate::shared::regex::build(&format!(
                 r#"(?<![\w.-]){}/?(?=[\s'"]|$)"#,
                 fancy_regex::escape(parent_of(f))
             ))

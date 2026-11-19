@@ -14,19 +14,11 @@ pub(super) const USAGE_LOG_TOOL: &str = "check-house-style-delta";
 const WORDS: &str = include_str!("../../../../../guard/src/guards/house_style_words.tsv");
 const EXEMPT_DIRS: [&str; 3] = ["/.clones/", "/host-l7r-repo/", "/tests/hooks/fixtures/"];
 
+/// A pattern with no step limit (`l7r_guard::shared::regex`, T185). WHY here first (feature 449 T151): a word-boundary pattern's search
+/// gave up past a million steps with an `Err` its `find_iter` repeated without advancing, so `.flatten()` over it never ended - a
+/// one-line JSON of 157 KB hung `make quick` past ten minutes (40 KB ran in 0.1 s; 60 KB never ended); an `Err` ends a scan.
 fn pattern(text: &str) -> Regex {
-    Regex::new(text).unwrap()
-}
-
-/// A pattern whose search has no step limit. WHY (feature 449 T151): `fancy_regex` 0.14 runs any pattern with a word boundary (`\b`)
-/// in its own backtracking VM (`Assertion::is_hard`), which gives up a search past a million steps with an `Err` that its `find_iter`
-/// then repeats without advancing, so `.flatten()` over it never ended - a one-line JSON of 157 KB hung `make quick` past ten minutes
-/// (40 KB ran in 0.1 s; 60 KB never ended). The scan's patterns run unbounded, and an `Err` ends a scan rather than spinning.
-fn unbounded(text: &str) -> Regex {
-    fancy_regex::RegexBuilder::new(text)
-        .backtrack_limit(usize::MAX)
-        .build()
-        .unwrap()
+    l7r_guard::shared::regex::build(text).unwrap()
 }
 
 fn british() -> Vec<&'static str> {
@@ -58,7 +50,7 @@ fn exempt_spans(text: &str, path: &str) -> Vec<(usize, usize)> {
     if super::has_ext(path, "md") || super::has_ext(path, "html") || super::has_ext(path, "txt") {
         body += "|\"[^\"\n]*\"";
     }
-    unbounded(&format!("(?si){body}"))
+    pattern(&format!("(?si){body}"))
         .find_iter(text)
         .map_while(Result::ok)
         .map(|m| (m.start(), m.end()))
@@ -152,7 +144,7 @@ fn inside_a_name(text: &str, start: usize, end: usize) -> bool {
 
 /// Any British spelling of the guard's table, as a whole word in any case.
 fn words() -> Regex {
-    unbounded(&format!(r"(?i)\b({})\b", british().join("|")))
+    pattern(&format!(r"(?i)\b({})\b", british().join("|")))
 }
 
 /// Every British spelling this change wrote, as `path:line: word`.

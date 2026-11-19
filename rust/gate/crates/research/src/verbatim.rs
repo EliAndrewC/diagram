@@ -316,11 +316,11 @@ pub fn strip_markup(markup: &str) -> String {
 #[must_use]
 pub fn footnotes(citations_html: &str) -> Vec<Map<String, Value>> {
     let mut notes = Vec::new();
-    for m in NOTE.captures_iter(citations_html).flatten() {
+    for m in NOTE.captures_iter(citations_html).map_while(Result::ok) {
         let body = FNBACK.replace_all(&m[2], "").into_owned();
         let links: Vec<String> = HREF
             .captures_iter(&body)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| unescape(&c[1]))
             .collect();
         let key = CODE
@@ -356,12 +356,16 @@ pub fn assertions(research_html: &str) -> Map<String, Value> {
     let body = COMMENT.replace_all(research_html, "");
     let marked = SUP.replace_all(&body, "\u{2063}$1\u{2063}");
     let mut out = Map::new();
-    for block in BLOCKS.split(&marked).flatten() {
+    for block in BLOCKS.split(&marked).map_while(Result::ok) {
         let text = strip_markup(block);
-        for m in MARK.captures_iter(&text).flatten() {
+        for m in MARK.captures_iter(&text).map_while(Result::ok) {
             let whole = m.get(0).map_or(0, |g| g.start());
             let before = MARK.replace_all(&text[..whole], "");
-            let sentence = SENTENCE.split(&before).flatten().last().unwrap_or("");
+            let sentence = SENTENCE
+                .split(&before)
+                .map_while(Result::ok)
+                .last()
+                .unwrap_or("");
             if !out.contains_key(&m[1]) {
                 out.insert(m[1].to_owned(), json!(squeeze(sentence)));
             }

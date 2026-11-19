@@ -213,12 +213,12 @@ fn help_stripped(line: &str) -> &str {
 
 /// The Makefile's test configuration: each line of the test targets' recipes, then every definition of every variable they reference, closed over the variables those reference, in file order.
 fn makefile_test_config(text: &str) -> String {
-    let var_def = Regex::new(
+    let var_def = l7r_guard::shared::regex::build(
         r"^(?:[\w.-]+:\s*)?(?:export\s+|override\s+)?([A-Z_][A-Z0-9_]*)\s*(?::=|\?=|\+=|=)",
     )
     .unwrap();
-    let reference = Regex::new(r"\$[({]([A-Z_][A-Z0-9_]*)[)}]").unwrap();
-    let target = Regex::new(r"^([\w.-]+)\s*:(?!=)").unwrap();
+    let reference = l7r_guard::shared::regex::build(r"\$[({]([A-Z_][A-Z0-9_]*)[)}]").unwrap();
+    let target = l7r_guard::shared::regex::build(r"^([\w.-]+)\s*:(?!=)").unwrap();
     let group = |re: &Regex, line: &str| {
         re.captures(line)
             .ok()
@@ -229,7 +229,7 @@ fn makefile_test_config(text: &str) -> String {
     let refs = |line: &str| {
         reference
             .captures_iter(line)
-            .flatten()
+            .map_while(Result::ok)
             .filter_map(|c| c.get(1).map(|m| m.as_str().to_owned()))
             .collect::<Vec<_>>()
     };
@@ -277,7 +277,7 @@ fn makefile_test_config(text: &str) -> String {
 
 /// `pyproject.toml`'s `[tool.pytest...]` and `[tool.coverage...]` tables, each with its lines.
 fn pyproject_test_config(text: &str) -> String {
-    let head = Regex::new(r"^\s*\[+\s*([^\]]+?)\s*\]+").unwrap();
+    let head = l7r_guard::shared::regex::build(r"^\s*\[+\s*([^\]]+?)\s*\]+").unwrap();
     let mut keep = false;
     let mut out = Vec::new();
     for line in text.lines() {

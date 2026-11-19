@@ -48,7 +48,7 @@ pub(crate) const WAVE_JOBS: [&str; 16] = [
 const WAVE: &str = "check-wave";
 
 fn re(pattern: &str) -> Regex {
-    Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static GP_ESCAPE: LazyLock<Regex> = LazyLock::new(|| re(r#"GP_OK\s*[=:]\s*["']?\S+\s+\S+"#));
@@ -90,7 +90,7 @@ fn calls(script: &str, name: &str) -> Vec<String> {
     let bytes = script.as_bytes();
     opening
         .find_iter(script)
-        .flatten()
+        .map_while(Result::ok)
         .map(|m| String::from_utf8_lossy(&bytes[m.start()..call_end(bytes, m.end())]).into_owned())
         .collect()
 }

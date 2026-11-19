@@ -117,7 +117,7 @@ fn crate_modules(root: &Path, rs: &[PathBuf]) -> R<Vec<PathBuf>> {
         let text = read(p)?;
         let names: BTreeSet<String> = CRATE_PATH
             .captures_iter(&text)
-            .filter_map(Result::ok)
+            .map_while(Result::ok)
             .filter_map(|c| c.get(1).map(|m| m.as_str().to_owned()))
             .collect();
         for name in names {
@@ -568,13 +568,13 @@ impl<'a> Code<'a> {
                 .to_string_lossy()
                 .into_owned();
             defined_names.extend([stem, parent].into_iter().filter(|n| n != "__init__"));
-            for c in KNOB.captures_iter(&src).filter_map(Result::ok) {
+            for c in KNOB.captures_iter(&src).map_while(Result::ok) {
                 allowed.insert(c.get(1).map_or("", |m| m.as_str()).to_owned());
                 let forms = c.get(2).map_or("", |m| m.as_str());
                 allowed.extend(
                     QUOTED
                         .captures_iter(forms)
-                        .filter_map(Result::ok)
+                        .map_while(Result::ok)
                         .filter_map(|q| q.get(1).map(|m| m.as_str().to_owned())),
                 );
             }
@@ -631,7 +631,7 @@ impl<'a> Code<'a> {
     pub(super) fn code_name_problems(&mut self, text: &str) -> R<Vec<String>> {
         let (defined_names, allowed) = self.code_names()?;
         let mut names = BTreeSet::new();
-        for c in IDENT.captures_iter(text).filter_map(Result::ok) {
+        for c in IDENT.captures_iter(text).map_while(Result::ok) {
             let r = c.get(1).or_else(|| c.get(2)).map_or("", |m| m.as_str());
             // a document beside the derivation (`placer.py.txt`) is not a name of the code
             if matches(&DOCUMENT, r) {

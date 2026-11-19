@@ -64,7 +64,7 @@ pub fn flag(
     if claim.pointers.is_empty() && found(&NAMED, account) && !found(&SILENT, account) {
         let names: BTreeSet<&str> = NAMED
             .find_iter(account)
-            .flatten()
+            .map_while(Result::ok)
             .map(|m| m.as_str())
             .collect();
         out.push(format!(
@@ -85,7 +85,7 @@ pub fn flag(
         let mut seen = HashSet::new();
         let missing: Vec<String> = FEET
             .captures_iter(account)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| c[1].to_owned())
             .filter(|fig| seen.insert(fig.clone()))
             .filter(|fig| !texts.iter().any(|t| states(t, fig)))

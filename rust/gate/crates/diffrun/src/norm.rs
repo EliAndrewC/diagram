@@ -88,7 +88,7 @@ fn apply(
 pub(crate) fn sorted(text: &str, sep: &Regex) -> String {
     let mut pieces = Vec::new();
     let (mut at, mut joint) = (0, None);
-    for m in sep.find_iter(text).flatten() {
+    for m in sep.find_iter(text).map_while(Result::ok) {
         if m.end() == m.start() {
             continue;
         }

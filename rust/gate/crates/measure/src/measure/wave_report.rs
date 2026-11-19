@@ -13,7 +13,8 @@ use super::{commas, median, reply};
 
 const WAVE_N: usize = 4;
 static TOOL_USE_ID: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"<tool-use-id>(\S+?)</tool-use-id>").unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(r"<tool-use-id>(\S+?)</tool-use-id>")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 fn records(path: &Path) -> Vec<Value> {
@@ -100,7 +101,7 @@ fn wakes(main: &Path, ids: Option<&BTreeSet<String>>, start: &str, end: &str) ->
         let hit = if let Some(wanted) = ids {
             TOOL_USE_ID
                 .captures_iter(&body)
-                .flatten()
+                .map_while(Result::ok)
                 .any(|c| wanted.contains(&c[1]))
         } else {
             let at = text(r, "timestamp");

@@ -28,8 +28,9 @@ use serde_json::Value;
 
 use crate::{raised, read_strict, reply};
 
-static INDENT: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^[ \t]*").unwrap_or_else(|e| unreachable!("{e}")));
+static INDENT: LazyLock<Regex> = LazyLock::new(|| {
+    l7r_guard::shared::regex::build(r"^[ \t]*").unwrap_or_else(|e| unreachable!("{e}"))
+});
 
 /// `anchor` as a pattern in which any run of whitespace matches any other run. A line wrap is whitespace, so an anchor copied from
 /// rendered prose matches the file's own wrapped copy of it; every other character is escaped, so `(`, `*` or `.` match literally.
@@ -39,7 +40,8 @@ fn anchor_regex(anchor: &str) -> Regex {
         .map(|w| fancy_regex::escape(w).into_owned())
         .collect();
     // every word escaped: the pattern always compiles
-    Regex::new(&words.join(&format!("[{SPACE_CLASS}]+"))).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_guard::shared::regex::build(&words.join(&format!("[{SPACE_CLASS}]+")))
+        .unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// `replacement`'s continuation lines given the indent the matched text stood at.
@@ -92,7 +94,7 @@ fn apply_edits(path: &Path, edits: &[Edit], report: &mut Vec<String>) -> Result<
         };
         let hits: Vec<(usize, usize)> = anchor_regex(anchor)
             .find_iter(&text)
-            .flatten()
+            .map_while(Result::ok)
             .map(|m| (m.start(), m.end()))
             .collect();
         let label: String = split(anchor).join(" ").chars().take(60).collect();

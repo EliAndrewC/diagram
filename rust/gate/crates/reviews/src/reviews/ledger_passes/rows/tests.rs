@@ -109,3 +109,27 @@ fn a_plan_reviews_record_answers_by_task_or_block() {
     record(r#"{"blocks": {}}"#);
     assert!(!in_the_record(&p(blocks, None), &repo).unwrap());
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A plan review's record named after a line of many `recorded` words (feature 449 T185): unlimited, `PLAN_RECORDED` tried every one to
+/// its line's end (14 s on 100 KB, measured 2026-11-18, scratchpad t185/sizecurve.log), and at `fancy_regex`'s old limit it erred and read as unrecorded; it now starts
+/// at the line's first.
+#[test]
+fn a_plan_record_after_many_recordeds_is_seen_in_linear_time() {
+    let reply = format!(
+        "{}\nI ran make plan-verdict and it stored the verdict",
+        "recorded x ".repeat(30_000)
+    );
+    assert_eq!(
+        within(move || super::PLAN_RECORDED.is_match(&reply).ok()),
+        Some(true)
+    );
+}

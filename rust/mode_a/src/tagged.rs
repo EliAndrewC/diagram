@@ -129,7 +129,7 @@ pub fn gap(a: &Mark, b: &Mark) -> f64 {
 /// Every `name="value"` of a tag, the last of a repeated name kept (a Python `dict` of `findall`).
 pub(crate) fn attrs(re: &Regex, text: &str) -> BTreeMap<String, String> {
     re.captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         // the value is the last group: [`ATTR`]'s quote is its second (T182)
         .map(|c| (c[1].to_owned(), c[c.len() - 1].to_owned()))
         .collect()
@@ -137,7 +137,10 @@ pub(crate) fn attrs(re: &Regex, text: &str) -> BTreeMap<String, String> {
 
 /// Every match of `re` in `text`, as text.
 fn found<'t>(re: &Regex, text: &'t str) -> Vec<&'t str> {
-    re.find_iter(text).flatten().map(|m| m.as_str()).collect()
+    re.find_iter(text)
+        .map_while(Result::ok)
+        .map(|m| m.as_str())
+        .collect()
 }
 
 /// A path's number: a sign, digits with or without a point, an exponent (feature 449 T182: `-?\d+(?:\.\d+)?` read `1e1` as two numbers
@@ -170,7 +173,7 @@ pub type Segment = (char, Vec<(f64, f64)>);
 pub fn path_walk(d: &str) -> Vec<Segment> {
     let mut out = Vec::new();
     let (mut x, mut y, mut sx, mut sy) = (0.0, 0.0, 0.0, 0.0);
-    for c in PATH_CMD.captures_iter(d).flatten() {
+    for c in PATH_CMD.captures_iter(d).map_while(Result::ok) {
         let cmd = c[1].chars().next().unwrap_or('Z');
         let (up, rel) = (cmd.to_ascii_uppercase(), cmd.is_ascii_lowercase());
         if up == 'Z' {

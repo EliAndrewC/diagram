@@ -21,7 +21,7 @@ const SKIP: [&str; 5] = [
 const PROVEN_FATES: [&str; 4] = ["one for one", "partial", "rewritten", "replaced"];
 
 fn pattern(text: &str) -> Regex {
-    Regex::new(text).unwrap()
+    l7r_guard::shared::regex::build(text).unwrap()
 }
 
 /// What marks a reader: Python's syntax tree imported, a `.py` glob or suffix test, a `.rs` one - compiled once a process, not once a

@@ -6,20 +6,25 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 
 static HEREDOC: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r#"(?s)<<-?\s*['"]?(\w+)['"]?\n.*?\n\s*\1\b"#).expect("the heredoc pattern")
+    crate::shared::regex::build(r#"(?s)<<-?\s*['"]?(\w+)['"]?\n.*?\n\s*\1\b"#)
+        .expect("the heredoc pattern")
 });
 static QUOTED_HEREDOC: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r#"(?sm)<<-?\s*(?:'(\w+)'|"(\w+)"|\\(\w+))(.*?)^[ \t]*(?:\1|\2|\3)[ \t]*$"#)
-        .expect("the quoted heredoc pattern")
+    crate::shared::regex::build(
+        r#"(?sm)<<-?\s*(?:'(\w+)'|"(\w+)"|\\(\w+))(.*?)^[ \t]*(?:\1|\2|\3)[ \t]*$"#,
+    )
+    .expect("the quoted heredoc pattern")
 });
 static UNQUOTED_HEREDOC: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?sm)<<-?\s*([A-Za-z_]\w*)[^\n]*\n(.*?)^[ \t]*\1[ \t]*$")
+    crate::shared::regex::build(r"(?sm)<<-?\s*([A-Za-z_]\w*)[^\n]*\n(.*?)^[ \t]*\1[ \t]*$")
         .expect("the unquoted heredoc pattern")
 });
-static BACKTICK_SPAN: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(?<!\\)`[^`\n]*(?<!\\)`").expect("the backtick pattern"));
+static BACKTICK_SPAN: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(r"(?<!\\)`[^`\n]*(?<!\\)`").expect("the backtick pattern")
+});
 static QUOTED: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r#"(?s)(?<!-c )(?<!-c\t)(["'])(?:\\.|(?!\1).)*\1"#).expect("the quoted pattern")
+    crate::shared::regex::build(r#"(?s)(?<!-c )(?<!-c\t)(["'])(?:\\.|(?!\1).)*\1"#)
+        .expect("the quoted pattern")
 });
 
 /// `cmd` with each heredoc's body replaced by ` <<BODY ` (`_strip_heredocs`).
@@ -40,7 +45,7 @@ pub fn executing_backticks(text: &str, in_double: bool) -> Vec<String> {
         spans.extend(
             BACKTICK_SPAN
                 .find_iter(body)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|m| m.as_str().to_owned()),
         );
     }
@@ -58,7 +63,7 @@ pub fn strip_quotes(cmd: &str) -> String {
 /// `text` with each match replaced by a space, and each match's group `group`.
 fn cut(pattern: &Regex, text: &str, group: usize) -> (String, Vec<String>) {
     let (mut out, mut from, mut groups) = (String::new(), 0, Vec::new());
-    for m in pattern.captures_iter(text).flatten() {
+    for m in pattern.captures_iter(text).map_while(Result::ok) {
         let (start, end) = m.get(0).map_or((from, from), |w| (w.start(), w.end()));
         out.push_str(&text[from..start]);
         out.push(' ');

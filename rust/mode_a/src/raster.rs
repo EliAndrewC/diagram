@@ -158,7 +158,7 @@ pub fn without_text(svg_text: &str) -> String {
 #[must_use]
 pub fn class_keys(svg_text: &str) -> Vec<String> {
     let mut keys: Vec<String> = Vec::new();
-    for c in GROUP.captures_iter(svg_text).flatten() {
+    for c in GROUP.captures_iter(svg_text).map_while(Result::ok) {
         let key = unescape(&c[1]);
         if !keys.contains(&key) {
             keys.push(key);
@@ -237,7 +237,7 @@ pub fn id_map_doc(
     }
     let mut out = String::new();
     let mut pos = 0;
-    for m in GROUP.captures_iter(svg_text).flatten() {
+    for m in GROUP.captures_iter(svg_text).map_while(Result::ok) {
         let whole = m.get(0).map_or(0..0, |w| w.range());
         if whole.start < pos {
             continue;

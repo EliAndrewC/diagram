@@ -225,7 +225,11 @@ impl Record {
     pub fn select(&self, term: &str) -> Vec<&Page> {
         let mut out: Vec<&Page> = Vec::new();
         let sections = ct::walk(&self.sections);
-        for t in TERMS.split(term).flatten().filter(|t| !t.is_empty()) {
+        for t in TERMS
+            .split(term)
+            .map_while(std::result::Result::ok)
+            .filter(|t| !t.is_empty())
+        {
             let found: Vec<&Page> = if let Some(p) = self.by_file(t) {
                 vec![p]
             } else if NUMBER.is_match(t).unwrap_or(false) {

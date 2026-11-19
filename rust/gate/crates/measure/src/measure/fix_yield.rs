@@ -206,7 +206,7 @@ fn tools_of_fix_in(
     let mut made = BTreeSet::new();
     let words: Vec<String> = MAKE_WORD
         .captures_iter(&note)
-        .flatten()
+        .map_while(Result::ok)
         .map(|c| c[1].to_owned())
         .collect();
     for t in words {
@@ -237,7 +237,7 @@ pub fn named_files(root: &Path, note: &str) -> Vec<String> {
         words.extend(
             pattern
                 .captures_iter(note)
-                .flatten()
+                .map_while(Result::ok)
                 .map(|c| c[1].to_owned()),
         );
     }

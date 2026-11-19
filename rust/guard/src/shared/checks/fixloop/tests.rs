@@ -133,3 +133,23 @@ fn a_footnote_whose_fix_keeps_failing_is_held() {
     let m = hold(&mut s, &d2, "quote-check", manifest, 1.0);
     assert!(m.contains("@7"));
 }
+
+/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
+/// fail the test rather than hang it).
+fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
+    let (tx, rx) = std::sync::mpsc::channel();
+    let _run = std::thread::spawn(move || tx.send(f()));
+    rx.recv_timeout(std::time::Duration::from_secs(20))
+        .expect("the search ran past its bound")
+}
+
+/// A reply line past a million steps (feature 449 T185): `FLAG` erred at `fancy_regex`'s old limit and `unwrap_or(false)` read the
+/// flag as absent, so a long line's DIFFERS passed.
+#[test]
+fn a_flag_on_a_line_past_a_million_steps_is_read() {
+    let line = format!(
+        "{}deed: DIFFERS",
+        "plain words of a long text ".repeat(50_000)
+    );
+    assert_eq!(within(move || super::FLAG.is_match(&line).ok()), Some(true));
+}

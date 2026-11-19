@@ -111,7 +111,7 @@ fn char_at(text: &str, byte: usize) -> usize {
 pub fn unmarked(have: &str) -> (Vec<char>, Vec<usize>) {
     let total = have.chars().count();
     let (mut kept, mut at) = (Vec::new(), 0);
-    for m in REF_MARK.find_iter(have).flatten() {
+    for m in REF_MARK.find_iter(have).map_while(Result::ok) {
         let (s, e) = (char_at(have, m.start()), char_at(have, m.end()));
         kept.extend(at..s);
         at = e;
@@ -125,7 +125,7 @@ pub fn unmarked(have: &str) -> (Vec<char>, Vec<usize>) {
 fn verdict_of(want: &str, have: &str) -> Map<String, Value> {
     let pieces: Vec<Vec<char>> = ELISION
         .split(want)
-        .flatten()
+        .map_while(Result::ok)
         .filter(|p| !p.is_empty())
         .map(chars)
         .collect();

@@ -45,7 +45,7 @@ fn wave_jobs(text: &str) -> Option<Vec<String>> {
     Some(
         re(r"`([\w-]+)`")
             .captures_iter(&caps[1])
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| c[1].to_owned())
             .collect(),
     )
@@ -92,7 +92,7 @@ fn wave_decider(text: &str) -> Option<Vec<String>> {
     Some(
         re(r#""([\w-]+)""#)
             .captures_iter(&caps[1])
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| c[1].to_owned())
             .collect(),
     )
@@ -133,7 +133,10 @@ fn check_wave(js: &str) -> Vec<String> {
     {
         bad.push(".claude/workflows/check-wave.js: every agent() typed, with the schema - `agent(prompt, { agentType: type, label, phase, schema: REPLY })`".to_owned());
     }
-    let calls = re(r"(?<![\w.])agent\(").find_iter(js).count();
+    let calls = re(r"(?<![\w.])agent\(")
+        .find_iter(js)
+        .map_while(Result::ok)
+        .count();
     if calls != 1 {
         bad.push(format!(
             ".claude/workflows/check-wave.js has {calls} agent() calls: one, the typed one"

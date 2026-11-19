@@ -67,7 +67,7 @@ fn count(n: usize) -> f64 {
 pub fn parse_labels(text: &str) -> Result<Vec<Label>, Error> {
     let offsets = Offsets::new(text);
     let mut out = Vec::new();
-    for found in TEXT.captures_iter(text).flatten() {
+    for found in TEXT.captures_iter(text).map_while(Result::ok) {
         let attr = attrs(&ATTR, &found[1]);
         let body = &found[2];
         let content = unescape(&INNER_TAG.replace_all(body, ""));
@@ -85,7 +85,7 @@ pub fn parse_labels(text: &str) -> Result<Vec<Label>, Error> {
         // each set their own x are lines, an inline tspan continuing the line it is in
         let spans: Vec<(String, String, String)> = TSPAN
             .captures_iter(body)
-            .flatten()
+            .map_while(Result::ok)
             .map(|c| {
                 let g = |i| c.get(i).map_or(String::new(), |m| m.as_str().to_owned());
                 (g(1), g(2), g(3))

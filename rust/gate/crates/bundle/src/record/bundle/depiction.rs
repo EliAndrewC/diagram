@@ -216,12 +216,12 @@ fn drawn_geometry(page: &Path, key: &str) -> String {
     }
     let lines: Vec<String> = SHAPE
         .captures_iter(&chunk)
-        .flatten()
+        .map_while(Result::ok)
         .take(8)
         .map(|c| {
             let attrs: Vec<String> = KEEP
                 .captures_iter(&c[2])
-                .flatten()
+                .map_while(Result::ok)
                 .map(|a| format!("{}=\"{}\"", &a[1], &a[2]))
                 .collect();
             format!("- <{}> {}", &c[1], attrs.join(" "))
