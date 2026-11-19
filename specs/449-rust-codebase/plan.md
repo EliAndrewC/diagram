@@ -931,34 +931,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T223 (T218: make targets in .PHONY with no rule pass by running nothing, and a notes-only edit skipped the sweep)
-
-- **Approach**: twelve `.PHONY` names had no rule, each answering "Nothing to be done" with exit 0, so a caller passed having checked nothing - `perf-review` on every push among them (observed 2026-11-19, method: `.PHONY` parsed against the Makefile's rules, each confirmed by `make -n`). Eleven lost their job with the Python engine and are removed with every call (the push's `perf-review` call and its seam included) and the docs and agent files that named them, `perf-audit.md` marked dormant and pointed at `make work-budget` and `make budget-sheets`; `cohort-landing` keeps a job feature 444 brings back, so it now refuses with its reason instead of passing, and the cohort gate says so at the current port switch. A test refuses any `.PHONY` name with no rule, red first on HEAD's Makefile. gate_write_hooks' dead cache-audit guard is removed. A pool sheet's `.notes.md`, which the sweep reads, now counts as engine for the land route (the frozen tree's notes stay excluded), red first; and `make hooks-test` now runs the cohort gate's own suite, which no gate ran.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| no target passes by running nothing; notes are engine | the make-only suite's section 7, the tree and cohort tests, the sync and cohort-gate suites | `delta.rs`, `cohort.rs`, `gate_write_hooks.rs` | none | none |
-
-### T223 Approach (checklist part A)
-
-1. **The goal, in the world.** Every check a make target names runs something, and an edit to anything the sweep reads runs the sweep.
-2. **The constraints.** Constitution XIV (a check passing the bad); T218's review condition (this lands before the next port step, T220); feature 444 FR-023 (the cohort's return).
-3. **Where each comes from.** O: T218's findings and this task's inventory; R: T218's plan review.
-4. **Do they describe the world here?** Yes: each name was confirmed to run nothing (observed 2026-11-19, as above).
-5. **The order.** After T218, before T220.
-6. **The exits.** Green: the tests red on HEAD and green now, `make quick`, `make static` and `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing.
-9. **Done, measured.** The `.PHONY` check passes with every name ruled; a notes path listed by `delta engine-paths`.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Each target passed with nothing run, and a notes edit skipped the checks reading it: defects.
-
-**Found and left?** The work-budget review prints suspended and exits 0 while stages are accepted, and the green-gate stamp misses pool-only changes: filed as T224, which lands before T220 (the next port step) - the work-budget review is the check this task points performance work at, so it must hold the accepted budgets before any rebuilt stage is judged by it. Stale command names in guards, gate messages and docs (wording only, no wrong outcome): filed as T225.
-
-**Performance work?** no
-
-
+<!-- plan-archive: T223 to T218 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 ### T224 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
