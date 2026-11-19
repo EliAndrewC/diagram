@@ -260,10 +260,10 @@
    "declared": "round-arbiter"
   },
   "### T156 Approach (checklist part A)": {
-   "sha256": "8d518fc0a06bc1048415e581489549987933f42408f03245ac8ff68d3c17df80",
+   "sha256": "612de322e46c3d6d3135e481df942bb27d654ad7ce8546b54cf656427669ed5f",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   },
   "### T157 (<why: the finding or measurement that files it>)": {
    "sha256": "4e3adf3aa84c166f7e886c5f21346e9b96eed0ae56ae5cf235e0c2b97d49a00f",
@@ -981,6 +981,24 @@
   },
   "### T213 Approach (checklist part A)": {
    "sha256": "e90cb245351e1adcfe19099596bd42eaab14e9f5d51671b1835ee09449423c27",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T156 (T156's scoping, 2026-11-19: split into four landings, each landed)": {
+   "sha256": "1a40706f098421bbee67526a955cebf3abadd8182b0f520cb42503e13c6e0a3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T214 (T156's scoping: the make-only guard refused a mention of pytest)": {
+   "sha256": "5591498a53e5acd0867e1d868f37a460b42204186a93ec05b687a237102c3a4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T214 Approach (checklist part A)": {
+   "sha256": "244f3d37b14fce19b3e1b109a625347837428e0b5660f188e31eca68e63506fc",
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
@@ -14396,6 +14414,62 @@
      "why": "Sequencing and a completion measure that, if anything, is broader than required; nothing in the request or spec is excluded. Nothing found and left; no defect carried forward."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T156 (T156's scoping, 2026-11-19: split into four landings, each landed)",
+    "### T156 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T156-split",
+     "summary": "T156's scope is carried by four landings - T210 (dead measurement tooling retired), T211 (pool sweep in Rust, Python sweep deleted), T212 (Python audit and lockstep retired, no claim stranded), T213 (pytest's exit) - and T156 itself changes nothing more; its tick records the scope done.",
+     "class": "within",
+     "why": "A split of the same work across tasks, each landed, narrows nothing: pytest's exit and the Python tests' deletion are FR-001b and the GM's 2026-11-10 words; the sweep that outlives Python is ported (FR-001b's kept group); claims are not stranded (ask:449-phase4-slices Q10)."
+    },
+    {
+     "id": "T156-compound-resvg",
+     "summary": "compound* went to T152 and resvg became a library in T150; neither is redone here.",
+     "class": "within",
+     "why": "A record of where already-landed work sits; nothing asked is dropped."
+    },
+    {
+     "id": "T156-sheet-driver-to-T157",
+     "summary": "The six .gen.py's one Rust sheet driver with a spec file per map (ask:449-phase4-slices Q6) and the pool walk's rebuild are folded into T157, whose pipeline finds maps by their .gen.py.",
+     "class": "within",
+     "why": "The driver is moved to the next task, not cut: Q6's one driver plus a spec file per map stays owed and is named in 'Found and left' as T157's. Re-homing work to the task whose pipeline depends on it does not narrow what the GM or the arbiter asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T214 (T156's scoping: the make-only guard refused a mention of pytest)",
+    "### T214 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T214-1",
+     "summary": "T214 is closed as already done by T213: T213 deleted pytest, and with it the make-only guard's pytest branch that refused a quoted mention, so there is nothing more to change and the tick records it.",
+     "class": "within",
+     "why": "The defect T156's scoping found is a check refusing good work (constitution XIV; FR-002's exception for a guard that refuses correct work). The GM asked 2026-11-18 that known bugs be fixed in each step. Removing the branch together with pytest is inside FR-001b, which deletes the Python tests and pytest. Nothing that was asked is left undone or excluded."
+    },
+    {
+     "id": "T214-2",
+     "summary": "Done is measured by the existing test make_only_hooks/tests.rs::a_pytest_command_or_mention_is_left_alone passing on main, which pins that a pytest command or mention goes through.",
+     "class": "within",
+     "why": "The test only fails if the fix is undone, so it enforces the fix and adds no scope. The make-only guard keeps covering what FR-005 asks it to cover. Only the branch for a tool that FR-001b deleted is gone."
+    },
+    {
+     "id": "T214-3",
+     "summary": "Ordered after T213; budget is the tick alone; exits are green (test in place) or red (recorded, set down, impossibility claim to make arbiter-ask).",
+     "class": "within",
+     "why": "Sequencing and procedure only; it neither narrows nor widens the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25462,6 +25536,58 @@
      "summary": "Order and exits: after T212, last of T156's four landings, T156 ticked with it; green when no make target runs pytest, no Rust keys its files, make quick/static/hooks-test/done green, and a grep for pytest finds it only in history.",
      "class": "within",
      "why": "Sequencing and a completion measure that, if anything, is broader than required; nothing in the request or spec is excluded. Nothing found and left; no defect carried forward."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T156": {
+   "section_sha256": "59304729706475c3fa06c0a191700107308ed3bab875681ee12b6feac351381c",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T156-split",
+     "summary": "T156's scope is carried by four landings - T210 (dead measurement tooling retired), T211 (pool sweep in Rust, Python sweep deleted), T212 (Python audit and lockstep retired, no claim stranded), T213 (pytest's exit) - and T156 itself changes nothing more; its tick records the scope done.",
+     "class": "within",
+     "why": "A split of the same work across tasks, each landed, narrows nothing: pytest's exit and the Python tests' deletion are FR-001b and the GM's 2026-11-10 words; the sweep that outlives Python is ported (FR-001b's kept group); claims are not stranded (ask:449-phase4-slices Q10)."
+    },
+    {
+     "id": "T156-compound-resvg",
+     "summary": "compound* went to T152 and resvg became a library in T150; neither is redone here.",
+     "class": "within",
+     "why": "A record of where already-landed work sits; nothing asked is dropped."
+    },
+    {
+     "id": "T156-sheet-driver-to-T157",
+     "summary": "The six .gen.py's one Rust sheet driver with a spec file per map (ask:449-phase4-slices Q6) and the pool walk's rebuild are folded into T157, whose pipeline finds maps by their .gen.py.",
+     "class": "within",
+     "why": "The driver is moved to the next task, not cut: Q6's one driver plus a spec file per map stays owed and is named in 'Found and left' as T157's. Re-homing work to the task whose pipeline depends on it does not narrow what the GM or the arbiter asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T214": {
+   "section_sha256": "abf585d10af395cab39e3fa32584526ffa8fbcad5d912eaa697084f69a5658de",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T214-1",
+     "summary": "T214 is closed as already done by T213: T213 deleted pytest, and with it the make-only guard's pytest branch that refused a quoted mention, so there is nothing more to change and the tick records it.",
+     "class": "within",
+     "why": "The defect T156's scoping found is a check refusing good work (constitution XIV; FR-002's exception for a guard that refuses correct work). The GM asked 2026-11-18 that known bugs be fixed in each step. Removing the branch together with pytest is inside FR-001b, which deletes the Python tests and pytest. Nothing that was asked is left undone or excluded."
+    },
+    {
+     "id": "T214-2",
+     "summary": "Done is measured by the existing test make_only_hooks/tests.rs::a_pytest_command_or_mention_is_left_alone passing on main, which pins that a pytest command or mention goes through.",
+     "class": "within",
+     "why": "The test only fails if the fix is undone, so it enforces the fix and adds no scope. The make-only guard keeps covering what FR-005 asks it to cover. Only the branch for a tool that FR-001b deleted is gone."
+    },
+    {
+     "id": "T214-3",
+     "summary": "Ordered after T213; budget is the tick alone; exits are green (test in place) or red (recorded, set down, impossibility claim to make arbiter-ask).",
+     "class": "within",
+     "why": "Sequencing and procedure only; it neither narrows nor widens the request."
     }
    ],
    "verdict": "CLEAR"

@@ -362,28 +362,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T151 to T151 moved to plan-done.md, 2026-11-18 (feature 375 FR-044) -->
 <!-- plan-archive: T152 to T208 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T152 to T152 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T156 (<why: the finding or measurement that files it>)
+### T156 (T156's scoping, 2026-11-19: split into four landings, each landed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: T156 was split by its scoping into T210 (the dead measurement tooling retired), T211 (the pool sweep written in Rust, the Python sweep deleted), T212 (the Python audit and its lockstep retired, no claim stranded) and T213 (pytest's exit); all four landed on 2026-11-19 (observed 2026-11-19, method: each task's tick commit on main). `compound*` went to T152 and resvg was a library since T150; the six `.gen.py`'s one Rust sheet driver with a spec file per map is folded into T157, whose pipeline finds maps by their `.gen.py`. T156 itself changes nothing more; this tick records that its scope is done.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| T156's scope, through T210-T213 | their own tests | none | none | none |
 
 ### T156 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+1. **The goal, in the world.** The Mode A top is Rust and pytest is gone.
+2. **The constraints.** `ask:449-phase4-slices` Q6 and Q9; FR-001b; engine-plan.md.
+3. **Where each comes from.** R: the arbiter's slices; G: the GM, 2026-11-10 and 2026-11-19; O: T156's scoping.
+4. **Do they describe the world here?** Yes: T210-T213 each landed with its checks green (observed 2026-11-19, as above).
+5. **The order.** After T213; before T157.
+6. **The exits.** Green: T210-T213 ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** The tick alone.
+9. **Done, measured.** T210-T213 ticked.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** n/a
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Found and left?** The sheet driver and the pool walk's rebuild (the pool index lists 6 of the pool's maps) are T157's.
+
+**Performance work?** no
 
 
 ### T157 (<why: the finding or measurement that files it>)
@@ -846,31 +850,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** no
 
 
-### T214 (<why: the finding or measurement that files it>)
+### T214 (T156's scoping: the make-only guard refused a mention of pytest)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: done by T213, which deleted the make-only guard's pytest branch - the branch that refused a quoted mention - with pytest itself; `make_only_hooks/tests.rs::a_pytest_command_or_mention_is_left_alone` pins that a mention passes (observed 2026-11-19, method: the test in T213's landing). Nothing more to change; this tick records it.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the mention left alone | `a_pytest_command_or_mention_is_left_alone` | none | none | none |
 
 ### T214 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** A word in a quoted string is never refused as a command.
+2. **The constraints.** Constitution XIV (a check refusing good work is a defect).
+3. **Where each comes from.** O: T156's scoping, where the refusal happened.
+4. **Do they describe the world here?** Yes: the branch is gone and the test pins the mention (observed 2026-11-19, as above).
+5. **The order.** After T213.
+6. **The exits.** Green: the test in place. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** The tick alone.
+9. **Done, measured.** The test passes on main.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** The refusal of good work was the defect; its branch is deleted.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** none
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T215 (<why: the finding or measurement that files it>)
