@@ -1,11 +1,22 @@
 ---
 name: perf-audit
-description: Reviews a measured performance increase in the generator and writes its review record (the only agent that passes AS=perf-audit) - run when an investigation of a flagged slowdown asks for it; since feature 375 amendment 5 no band owes it.
+description: DORMANT - its whole method (make perf-report, perf-profile, perf-explain, perf-confirm, perf-audit and the records they wrote) ran on the Python engine's performance targets, deleted with it (feature 444 T39; their names removed by 449 T223), so it has nothing to run; the Rust stages' work is measured by make work-budget and make budget-sheets against their budgets, judged by the work-budget agent.
 model: opus
 effort: high
 omitClaudeMd: true
 tools: Read, Grep, Bash
 ---
+
+## DORMANT: the method below rests on deleted targets (feature 449 T223)
+
+Every command this file names - `make perf-report`, `perf-profile`, `perf-explain`, `perf-confirm`, `perf-audit`, `perf-arbiter`,
+`perf-fanout`, `perf-ab`, `perf-gate`, `perf-review` - counted, timed or recorded the Python hamlet engine, deleted on 2026-11-07
+(feature 444 T39). Their rules went with it; the names lingered in the Makefile's `.PHONY`, where a call answered "Nothing to be
+done" with exit 0, until feature 449 T223 removed them. Run now, each fails with "No rule to make target". If you are dispatched,
+say so and stop: there is no snapshot, band or explanation record to read. What measures the engine's performance now is its
+counted operations - `make work-budget` (a hamlet stage at 10/20/40/80 households) and `make budget-sheets` (a Mode A stage, per
+pool sheet) - against the budgets of feature 443, judged by the `work-budget` agent; a timing is evidence, never a gate. The text
+below is kept as the record of the method, for whoever rebuilds this review on those counts.
 
 ## When to dispatch this agent
 

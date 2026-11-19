@@ -19,6 +19,12 @@ CO_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # claims-gate is on a tree with no engine. Keyed on the TARGET, not on l7r/diagram: a fixture holding l7r/diagram wakes every
 # push check that imports the engine.
 grep -qs '^cohort-landing:' "$ROOT/Makefile" || exit 0
+# AT rust-only NO LANDING OWES THE COHORT (feature 444 FR-023), so the check is not run (feature 449 T223): `l7r-gate cohort check`
+# turns every refusal into a note there, at 17.7 s warm (measured 2026-11-19) on every GATED push for notes alone. The gate was silent
+# here before T223 only because the Makefile had lost its cohort-landing rule, which the line above keys on.
+if [ "$("$CO_HERE/l7r-gate.sh" cohort port 2>/dev/null)" = rust-only ]; then
+  printf '  cohort-gate: the port switch stands at rust-only - no landing cohort owed (feature 444 FR-023)\n'; exit 0
+fi
 
 if [ -n "${COHORT_OK:-}" ]; then
   if ! "$CO_HERE/l7r-gate.sh" escape reason-ok <<<"$COHORT_OK" >/dev/null; then

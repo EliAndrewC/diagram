@@ -42,7 +42,7 @@ _FUNCS = (ast.FunctionDef, ast.AsyncFunctionDef)
 #: THE ENGINE PATHS of a landing - a delta with one owes the landing cohort (`l7r.diagram.ci.delta.is_engine`'s list, feature 132
 #: FR-008). `l7r-gate cohort`'s `ENGINE` (`rust/gate/crates/cohort/src/cohort.rs`) is its one live copy, which the counter-only test and
 #: `l7r-gate land` read since feature 449 T121 deleted `scripts/land.py`, its last Python reader; this one goes with this file (phase 4)
-ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json|pool/.*\.svg|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")  # rust/: 444 T17; .svg: 449 T218
+ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json|pool/.*\.svg|pool/.*\.notes\.md|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")  # rust/: 444 T17; .svg: 449 T218; .notes.md: 449 T223
 
 
 def strip_docstrings(tree: ast.AST, keep_module_docstring: bool = False) -> ast.AST:

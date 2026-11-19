@@ -47,7 +47,7 @@ last efficient stage parked in `rust/parked/`), and the stage-by-stage reference
 | [`dev/loop.md`](../../dev/loop.md) | you are about to run the gate or a pool sweep, or deciding how much to re-run after a change |
 | [`dev/placement.md`](../../dev/placement.md) | you add a map feature or change where anything is placed or drawn: the DRAW ORDER map (with the scripted `STAGES` table), CENTER vs FOOTPRINT, the KEEP-CLEAR CONTRACT |
 | [`dev/gate.md`](../../dev/gate.md) | you add or change a check, write a check test, or waive a rule for one map |
-| [`dev/diagnostics.md`](../../dev/diagnostics.md) | a map came out wrong and you need to know WHY: `open_seat`, `make why-placed`, and how a probe lies to you |
+| [`dev/diagnostics.md`](../../dev/diagnostics.md) | a map came out wrong and you need to know WHY, and how a probe lies to you (its `open_seat` and `why_placed` went with the Python engine, feature 444 T39) |
 | [`dev/performance.md`](../../dev/performance.md) | a gen or a check got slow (or "hangs"), or you are about to undo a time-for-memory trade |
 | [`dev/cache.md`](../../dev/cache.md) | the cache behaves oddly, you changed how generation is DRIVEN, or a coverage floor breached for no reason you can see |
 | [`dev/pool.md`](../../dev/pool.md) | you are about to touch a pool map or convert one to scripted generation |
@@ -78,10 +78,11 @@ diagnosed and the tooling improved.
 - `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
   `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make rust-test CRATE=<dir>`
   for one crate's tests. The Python tests, their planner and the coverage floor over Python were deleted (feature 449 FR-001b, the GM 2026-11-10), and pytest with them (T213); `make done` runs once, backgrounded, never polled.
-- **The cohort, by stage** (feature 386, the GM 2026-10-17): `make cohort` (ten seeds and the pinned rows, ~50 s) after each
-  fix; `make cohort-landing` before a GATED landing - seeds 1-48 and the pinned rows, ~2 min uncached - which `sync-with-main.sh
-  done` requires on the engine it lands, refusing a seed regressed against main. `make land` rolls a fresh block of 48 that
-  rotates with the engine AFTER its push (feature 415): a rate (`make cohort-seeds` keeps its trend), never a refusal.
+- **The cohort, by stage** (feature 386, the GM 2026-10-17): `make cohort` (the Rust driver, N seeds from SEED, each refusal or
+  broken rule named) after each fix. The LANDING cohort (`make cohort-landing`, seeds 1-48 and the pinned rows, its record read by
+  `scripts/gates/cohort-gate.sh` on a GATED push) is owed only at the port switch's `integrated` (feature 444 FR-023); at rust-only,
+  the switch's state now, no landing owes it, and the target refuses - nothing writes its record since the Python driver was deleted
+  (feature 449 T223).
 - Never run a test BESIDE a running gate - two writers on the same pool maps is a source of false RED. The one exception is
   `make land`'s landing cohort (feature 405 T48): it writes no pool map, its rolls are no gate's, and its new record is unseen by
   the gate's tree check.
@@ -109,13 +110,13 @@ diagnosed and the tooling improved.
 - **Time is the goal of performance work, calls the measure** (feature 435, the GM 2026-10-27: "timings are not a gate, but improving timings is the goal of any performance improvement ticket"): plan a speed change
   with `docs/performance-checklist.md` (`make task-add ... PERF=1`) - where the time goes, whether it removes work or only
   moves it (inlining, merging, writing a builtin out lowers the count, not the time), its growth with size - and read
-  `make perf-ab` (alternated, best of N, each arm's spread) as evidence, never as a gate.
-- **Call counts are watched, timings only recorded** (feature 427 T03, the GM 2026-10-26: "keep recording the timings, but
-  completely stop using timings as a gate on anything ... the call counts themselves are the thing that we are gating on"):
-  take the bookends (`make perf LABEL=<NNN>-start` / `-end`; `SCALING=1` adds the 10/20/40-household legs), each recording
-  each stage's Python calls per seed beside its seconds. A count up over 5% in a stage on a seed, or 2% in the total, refuses
-  the push until the round arbiter accepts it (`make arbiter-ask SUBJECT=<NNN>-calls-<commit>`, the refusal names it); a
-  timing refuses and flags nothing. `make perf-fanout` names the chains that grew; `make perf-report` shows the trend.
+  a before-and-after timing as evidence, never as a gate.
+- **Counted work is the measure, timings only recorded** (feature 427 T03, the GM 2026-10-26: "keep recording the timings, but
+  completely stop using timings as a gate on anything ... the call counts themselves are the thing that we are gating on"): the
+  Rust stages' counted operations, `make work-budget` (a hamlet stage) and `make budget-sheets` (a Mode A stage), against their
+  budgets (feature 443). The Python call-count bookends (`make perf`, `perf-report`, `perf-review`, `perf-profile`, the
+  perf-explain family) counted the Python engine and went with it (feature 444 T39); their names left the Makefile with
+  feature 449 T223.
 
 **Placement** ([`dev/placement.md`](../../dev/placement.md))
 
@@ -136,7 +137,7 @@ diagnosed and the tooling improved.
 a cached roll, which states what it FOUND before it judges it; placement and its test import the same predicate.
 
 **Diagnostics** ([`dev/diagnostics.md`](../../dev/diagnostics.md)) - ask the ENGINE where a feature fits
-(`s.open_seat(...)`) and the GEN who placed it (`make why-placed`); read derived geometry from the MANIFEST, not by
+(the Python engine's `s.open_seat(...)`) and the GEN who placed it (its `why_placed`, deleted with it); read derived geometry from the MANIFEST, not by
 re-running a generator; a diagnostic that restates what it observes will lie to you.
 
 **Performance** ([`dev/performance.md`](../../dev/performance.md))

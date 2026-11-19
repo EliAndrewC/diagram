@@ -332,6 +332,18 @@ phases=$( { printf '%s\n' "$lists" | tr ' ' '\n' | grep -E '^[a-z][a-z0-9-]+$'; 
 ruleless=$(for t in $phases; do grep -qE "^$t[ ]*:([^=]|\$)" "$MK" || echo "$t"; done)
 [ -n "$phases" ] && [ -z "$ruleless" ] && { echo "  ok      every phase make done runs has a rule ($(echo $phases))"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    make done runs a phase no rule bears (a .PHONY name with no rule passes having run nothing) - remove the call, or point it at the target that does the job: ${ruleless:-no phase list found}"; FAIL=$((FAIL+1)); }
+# Every .PHONY name has a rule (feature 449 T223): `make perf-review`, which sync-with-main.sh ran on every push, and `make
+# cohort-landing`, which `make land` ran at the port switch's `integrated`, had lost theirs with the Python engine and answered
+# "Nothing to be done" with exit 0 - each caller passing having checked nothing. A rule line is `name ...:` whose right side, its `##`
+# help cut, holds no `=` (`done: export X := ...` is a target-specific variable, no rule). Read from the text, never by running make:
+# a $(MAKE) line runs even under -n.
+phony=$(awk '/^\.PHONY[ \t]*:/ { on = 1; sub(/^\.PHONY[ \t]*:/, "") }
+  on { more = ($0 ~ /\\$/); n = split($0, w, /[ \t\\]+/); for (i = 1; i <= n; i++) if (w[i] != "") print w[i]; if (!more) on = 0 }' "$MK" | sort -u)
+rules=$(awk '!/^[\t#.]/ && /^[^=]*[^:=]:([^=]|$)/ { s = $0; sub(/[ \t]*##.*/, "", s); i = index(s, ":")
+  if (substr(s, i + 1) ~ /=/) next; n = split(substr(s, 1, i - 1), w, /[ \t]+/); for (j = 1; j <= n; j++) if (w[j] != "") print w[j] }' "$MK" | sort -u)
+ruleless=$(comm -23 <(printf '%s\n' $phony) <(printf '%s\n' $rules) | tr '\n' ' ')
+[ -n "$phony" ] && [ -z "$ruleless" ] && { echo "  ok      every .PHONY name has a rule ($(printf '%s\n' $phony | wc -l | tr -d ' ') names)"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    a .PHONY name has no rule, so make answers 'Nothing to be done' with exit 0 and its caller passes having run nothing - give it the rule that does its job now, or remove the name from .PHONY with every call to it: ${ruleless:-no .PHONY list found}"; FAIL=$((FAIL+1)); }
 # `make map` with no GEN is refused, naming the forms it takes, before anything runs:
 out=$( cd "$FX" && make --no-print-directory map 2>&1 ); rc=$?
 [ "$rc" = 2 ] && [[ $out == *"GEN=pool/<tier>/<map>/<map>.gen.py"* ]] && [[ $out == *"make hamlet SPEC="* ]] \

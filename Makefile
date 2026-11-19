@@ -1,7 +1,8 @@
 # The diagram project's operations: `make help` lists them, `make docs` writes docs/make-targets.html from the `##` lines.
 # A target's `##` line is published help text: keep notes and escape markers off it.
 # Comments go above a target as `#` lines. A recipe's `: "..."` string is shell, so a backtick or $$( in it RUNS.
-# A .PHONY name with no rule still exits 0: retire a target's .PHONY entry with its rule.
+# A .PHONY name with no rule still exits 0, a caller passing having run nothing: retire a target's .PHONY entry with its rule
+# (tests/hooks/test-make-only-hooks.sh section 7 fails on one, feature 449 T223).
 
 # FREE TEXT REACHES A RECIPE THROUGH THE ENVIRONMENT, NEVER THROUGH A QUOTED SHELL WORD (feature 449 T186): `--units "$(UNITS)"`
 # put a claim key holding `well` in backticks inside a double-quoted shell word, so the shell ran `well` and the bundle refused.
@@ -16,13 +17,12 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: modal-bundle modal-prepass done docs static format guard perf perf-report maps _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep hooks-test explain citations fragment-move \
+.PHONY: modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep hooks-test citations fragment-move \
 	 switches _switch \
 	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
-	 why-placed   pack-audit     help \
+	 pack-audit help \
 	 notes-census glossary page-lit picture-diff \
-	 ci-status gated-check \
-	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
+	 ci-status gated-check
 
 # ---- performance: a bookend pair over band 1 is a flag mentioned at landing, never a refusal ----
 
@@ -224,6 +224,14 @@ cohort-seeds:   ## [maps] which seeds found which failure, the fewest first seed
 cohort:         ## [maps] roll N cohort seeds through the Rust driver, one line a seed, each refusal or broken rule named, the time taken (feature 444 T42)   [N=48] [SEED=1] [FIELD=polder_grid|mulberry_dike_fishpond]
 	@$(HAMLET_RUN) --cohort $(or $(SEED),1) $(or $(N),48) $(FIELD)
 
+# THE LANDING COHORT HAS NO ROLLER WHILE THE PORT SWITCH STANDS AT rust-only (feature 449 T223): its recipe rolled the Python cohort and
+# wrote the dev/cohort-log/ record `l7r-gate cohort check` reads, and went with the Python driver (feature 444 T39), leaving a .PHONY name
+# with no rule - `make land` at `integrated` ran it, passed having rolled nothing, and landed. `make cohort` (the Rust driver) writes no
+# such record, so it cannot stand in. Feature 444 FR-023 brings the landing cohort back when the switch is thrown to `integrated`; until a
+# roller writes that record, the target refuses rather than pass. At rust-only nothing calls it: `make land` skips it, cohort-gate.sh notes it.
+cohort-landing: ## [maps] the landing cohort a GATED landing owes at the port switch's `integrated` (feature 386, 444 FR-023): REFUSES - no roller writes its dev/cohort-log/ record since the Python driver was deleted (444 T39); at rust-only nothing owes it (449 T223)
+	@printf 'cohort-landing: REFUSED - no landing cohort can be rolled. The Python driver that rolled it and wrote its dev/cohort-log/ record is deleted (feature 444 T39), and `make cohort` (the Rust driver) writes no record `l7r-gate cohort check` reads.\nThe port switch stands at %s. At rust-only no landing owes the cohort (444 FR-023) and nothing runs this; at integrated a landing owes it, so a roller writing that record is owed before one can land (or the switch goes back to rust-only: make switches).\n' "$$("$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" cohort port)" >&2; exit 2
+
 hamlet:         ## [maps] roll one pool hamlet with the Rust driver (feature 444 T42): its map and record written beside the spec, the wall time printed   SPEC=pool/hamlets/<name>/<name>.spec.json
 	@if [ -z "$(SPEC)" ]; then printf 'make hamlet: SPEC=pool/hamlets/<name>/<name>.spec.json is required\n' >&2; exit 2; fi
 	@$(HAMLET_RUN) "$(abspath $(SPEC))"
@@ -310,13 +318,13 @@ fragment-move:  ## [docs] rename or renumber a question - every file of its stem
 hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
+	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
 	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then "$$root/scripts/hooks/l7r-guard.sh" trace fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
 	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	: "THE LAUNCHERS' BINARIES BUILT AND CHECKED ONCE A RUN (feature 449 T205): each call of l7r-gate.sh or l7r-guard.sh walked its Rust sources to see whether to build, about 1,400 and 2,000 paths, and under the read recorder each path was a line of the suite's log - sync-with-main's run wrote 1,260,877 lines; with the fresh binaries named here a call skips the walk and hookrun.sh records the sources once a suite (an empty name, where a build failed, leaves every call to walk as before)"; \
 	export L7R_GATE_FRESH="$$(L7R_GATE_PRINT_FRESH=1 "$$root/scripts/gates/l7r-gate.sh" 2>/dev/null </dev/null)" L7R_GUARD_FRESH="$$(L7R_GUARD_PRINT_FRESH=1 "$$root/scripts/hooks/l7r-guard.sh" 2>/dev/null </dev/null)"; \
 	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster); \
-	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; case " $$seen " in *" $$b "*) continue ;; esac; seen="$$seen $$b"; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  if [ ! -f "$$root/tests/hooks/$$t" ]; then \
@@ -959,7 +967,7 @@ bypass-audit:    ## [project] every escape token taken, with the reason its user
 	  printf "command line skips it, and a backgrounded run cannot be asked to reconsider - which is\n"; \
 	  printf "exactly how feature 126 ran the full gate THREE times against a standing instruction to\n"; \
 	  printf "run only the reference settlement. Every bypass was logged and none was stopped.\n\n"; \
-	  printf "  \033[1mmake maps\033[0m        the pool, scoped by how the last run went - the reference alone after a failure\n"; \
+	  printf "  \033[1mmake rust-test CRATE=rust/mode_a\033[0m  the pool sweep: every pool sheet through its tier's checks\n"; \
 	  printf "  \033[1mmake done\033[0m        reference + lint/types + the suite (NOT the quick one)\n\n"; \
 	  printf "If you truly need the FULL set, run it in the FOREGROUND and answer the prompt.\n\n"; \
 	  $(LOGBYPASS) refused "$$why"; \

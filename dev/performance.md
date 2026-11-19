@@ -238,6 +238,13 @@ every speed change with `docs/performance-checklist.md`; read `make perf-ab` as 
 
 ## The call counts are watched; the timing bands are information only (feature 427 T03, 2026-10-26)
 
+**RETIRED - this section and the next record tooling that is gone.** The bookends, the bands, the profile and the review records
+(`make perf`, `perf-report`, `perf-profile`, `perf-review`, `perf-explain`, `perf-confirm`, `perf-audit`, `perf-signoff`) counted
+and timed the Python hamlet engine and were deleted with it (feature 444 T39); their names stayed in the Makefile's `.PHONY`, so
+a call answered "Nothing to be done" with exit 0, and the push's `make perf-review` passed reading nothing until feature 449 T223
+removed the names and the call. The Rust stages' counted work is `make work-budget` (a hamlet stage) and `make budget-sheets` (a
+Mode A stage), against the budgets of feature 443. The text below is kept as the record of what the GM ruled and why.
+
 Since feature 427 (the GM, 2026-10-26: "keep recording the timings, but completely stop using timings as a gate on anything
 ... the call counts themselves are the thing that we are gating on, because as you say, that is consistent") each snapshot also
 records each stage's Python calls per seed and size, counted in a separate untimed pass (`perf_snapshot.count_calls`, about 1.09

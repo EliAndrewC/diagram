@@ -822,6 +822,8 @@ fn the_landing_engine_is_codeid_s_list() {
         "pool/x.gen.py",
         "pool/m.json",
         "pool/magistracies/m/m.svg",
+        "pool/magistracies/m/m.notes.md",
+        "pool/hamlets/h/h.notes.md",
         "rust/gate/src/lib.rs",
         "rust/Cargo.toml",
         "rust/gate/Cargo.lock",
@@ -833,6 +835,8 @@ fn the_landing_engine_is_codeid_s_list() {
         "l7r/diagram/a.md",
         "rust/gate/CLAUDE.md",
         "pool/a.py",
+        "pool/a.md",
+        "legacy-hand-authored-pool/hamlets/h/h.notes.md",
         "xl7r/a.py",
     ] {
         assert!(!is_landing_engine(no), "{no}");

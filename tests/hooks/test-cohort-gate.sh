@@ -76,5 +76,12 @@ g add -A; g commit -qm "docs and a docstring"
 printf 'X = 3\n' > "$T/l7r/diagram/hamletgen/rows.py"; g commit -qam "a code token"
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 1 "a code token moved: the landing record no longer counts"
 
+# THE SWITCH AT rust-only (feature 449 T223): the same tree, its landing record stale, lands with no check run - a note, not the
+# check's 17.7 s for notes alone (its own note, "a Rust-stage landing", would show had it run)
+printf '{"port": {"state": "rust-only"}}\n' > "$T/dev/switches.json"
+out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 0 "rust-only: the gated push owes no landing cohort"
+case "$out" in *"rust-only - no landing cohort owed"*) ok y y "rust-only: says why it passes" ;; *) ok n y "rust-only: says why it passes" ;; esac
+case "$out" in *"Rust-stage landing"*|*"REFUSED"*) ok n y "rust-only: the check is not run" ;; *) ok y y "rust-only: the check is not run" ;; esac
+
 printf 'test-cohort-gate: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

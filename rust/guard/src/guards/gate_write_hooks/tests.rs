@@ -157,44 +157,16 @@ fn what_the_gate_does_not_see_passes() {
 }
 
 #[test]
-fn a_cache_audit_refuses_engine_edits_and_commits() {
-    let w = world("audit");
-    w.make(70, "make", "cache-audit", &w.top);
-    let got = w.bash("git commit -qm x");
-    assert!(refused(&got, "`make cache-audit` runs") && refused(&got, "335cfa840"));
-    assert!(refused(
-        &w.run("Edit", &json!({"file_path": w.file("l7r/x/m.py")})),
-        "an Edit of l7r/x/m.py"
-    ));
-    assert!(refused(
-        &w.run("Write", &json!({"file_path": w.file("pool/p.json")})),
-        "pool/p.json"
-    ));
-    assert!(w
-        .run("Edit", &json!({"file_path": w.file("docs/x.md")}))
-        .is_empty());
-    assert!(w
-        .run("Edit", &json!({"file_path": "/outside/l7r/x.py"}))
-        .is_empty());
-    assert!(w.bash("ls").is_empty() && w.run("Read", &json!({})).is_empty());
-}
-
-#[test]
-fn the_escape_serves_both_and_needs_a_reason() {
-    let w = world("escape");
-    w.make(70, "make", "cache-audit", &w.top);
-    assert!(w
-        .bash("GATE_WRITE_OK=\"a deliberate commit beside it\" git commit -qm x")
-        .is_empty());
-    assert!(refused(
-        &w.bash("git commit -qm x  # GATE_WRITE_OK"),
-        "with no reason"
-    ));
+fn the_escape_needs_a_reason() {
     let g = world("escape-gate");
     g.make(60, "make", "done", &g.top);
     assert!(g
         .bash("GATE_WRITE_OK=\"a deliberate fix for the gate\" git commit -qm x")
         .is_empty());
+    assert!(refused(
+        &g.bash("git commit -qm x  # GATE_WRITE_OK"),
+        "with no reason"
+    ));
     let e = Event {
         name: "PreToolUse".to_owned(),
         input: json!({"tool_name": "Bash", "tool_input": {"command": "ls"}}),

@@ -1014,6 +1014,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T223 (T218: make targets in .PHONY with no rule pass by running nothing, and a notes-only edit skipped the sweep)": {
+   "sha256": "7bcb5d7336694206649f6993f5f1712d9ff797611fea80e8cc7ef4d20c1d546b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T223 Approach (checklist part A)": {
+   "sha256": "72577312399d7a8b2f9fb3272474693eca76d6c24274c85e90511e7da3a68f3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14528,6 +14540,64 @@
      "why": "Sequencing and process the spec leaves open; nothing asked is narrowed and no exception is taken."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T223 (T218: make targets in .PHONY with no rule pass by running nothing, and a notes-only edit skipped the sweep)",
+    "### T223 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T223-D1",
+     "summary": "Remove eleven .PHONY names with no rule whose job left with the Python engine, with every caller (the push's perf-review call and its seam), and the docs and agent files that name them; perf-audit.md marked dormant and pointed at make work-budget and make budget-sheets.",
+     "class": "within",
+     "why": "Each target passed while checking nothing (observed 2026-11-19, .PHONY against rules, make -n), which is a defect under XIV: a check passing the bad. Removing a call that ran nothing changes no behavior except the false pass. The tooling port (2026-11-07 request) and the 2026-11-18 'fix all known bugs in each step' cover it. The performance review the GM wants is not dropped: it is pointed at the work-budget review, and T224 makes that review real before T220."
+    },
+    {
+     "id": "T223-D2",
+     "summary": "cohort-landing is kept, now refusing with its reason instead of passing; the cohort gate states this at the current port switch.",
+     "class": "within",
+     "why": "Feature 444 FR-023 has make land roll no landing cohort while the port switch stands at rust-only, and brings the cohort back when the switch is thrown to integrated. The caller states that make land calls cohort-landing only when the switch is not rust-only, so the refusal blocks no landing now. If the switch is thrown before feature 444 restores the job, an honest refusal is what FR-023's return requires, not a silent pass."
+    },
+    {
+     "id": "T223-D3",
+     "summary": "A test refuses any .PHONY name with no rule, red first on HEAD's Makefile.",
+     "class": "within",
+     "why": "Enforcement of D1's fix. It fails only when a target that runs nothing comes back, so it serves the request rather than adding scope."
+    },
+    {
+     "id": "T223-D4",
+     "summary": "Remove gate_write_hooks' dead cache-audit guard.",
+     "class": "within",
+     "why": "Dead code tied to a removed target. Removing it is part of the same cleanup and changes no live behavior."
+    },
+    {
+     "id": "T223-D5",
+     "summary": "A pool sheet's .notes.md, which the sweep reads, counts as engine for the land route, red first; the frozen tree's notes stay excluded.",
+     "class": "within",
+     "why": "Before this change, a notes-only edit skipped the checks that read it, which is a defect (a wrong outcome). The caller states that the frozen tree's notes are read by no check (the sweep reads pool/ only), so excluding them leaves no input unchecked and narrows nothing."
+    },
+    {
+     "id": "T223-D6",
+     "summary": "make hooks-test runs the cohort gate's own suite, which no gate ran.",
+     "class": "within",
+     "why": "A suite that no gate runs is a check that never runs. Wiring it in is a fix and adds no behavior."
+    },
+    {
+     "id": "T223-D7",
+     "summary": "Found and left: the work-budget review prints suspended and exits 0, and the green-gate stamp misses pool-only changes. Both are filed as T224, which lands before T220 (the next port step), with the reason recorded and also stated on T224's own line.",
+     "class": "within",
+     "why": "Both are defects (a check passing having judged nothing; a stamp missing changes). The GM, 2026-11-18: 'we should fix all known bugs in each step before moving on to porting the next step'. Filing them as a separate task that lands before T220 honors that rule. The step boundary is kept, so nothing that was asked is narrowed. This satisfies route (a) of the previous BLOCKED."
+    },
+    {
+     "id": "T223-D8",
+     "summary": "Stale command names in guards, gate messages and docs are filed as T225 (wording only).",
+     "class": "within",
+     "why": "The 2026-11-19 rule (constitution XIV v2.36.0) says a defect is a wrong outcome, and wording that misleads no check or map is not one. Leaving it for a later task is within what was asked and needs no ruling. If a stale name ever made a guard refuse or pass wrongly, it would be a defect, and the block states that none does."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25690,6 +25760,62 @@
      "summary": "First of T157's landings, before T219; one gated landing; exits green on the suites red-then-green, make quick, make static, make hooks-test; red recorded and set down, a cannot-be-done claim ruled through make arbiter-ask.",
      "class": "within",
      "why": "Sequencing and process the spec leaves open; nothing asked is narrowed and no exception is taken."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T223": {
+   "section_sha256": "1e20b098bb40181d184e565630a5dd4338e9b72f28dd1d7d0d118cb11e6b63dd",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T223-D1",
+     "summary": "Remove eleven .PHONY names with no rule whose job left with the Python engine, with every caller (the push's perf-review call and its seam), and the docs and agent files that name them; perf-audit.md marked dormant and pointed at make work-budget and make budget-sheets.",
+     "class": "within",
+     "why": "Each target passed while checking nothing (observed 2026-11-19, .PHONY against rules, make -n), which is a defect under XIV: a check passing the bad. Removing a call that ran nothing changes no behavior except the false pass. The tooling port (2026-11-07 request) and the 2026-11-18 'fix all known bugs in each step' cover it. The performance review the GM wants is not dropped: it is pointed at the work-budget review, and T224 makes that review real before T220."
+    },
+    {
+     "id": "T223-D2",
+     "summary": "cohort-landing is kept, now refusing with its reason instead of passing; the cohort gate states this at the current port switch.",
+     "class": "within",
+     "why": "Feature 444 FR-023 has make land roll no landing cohort while the port switch stands at rust-only, and brings the cohort back when the switch is thrown to integrated. The caller states that make land calls cohort-landing only when the switch is not rust-only, so the refusal blocks no landing now. If the switch is thrown before feature 444 restores the job, an honest refusal is what FR-023's return requires, not a silent pass."
+    },
+    {
+     "id": "T223-D3",
+     "summary": "A test refuses any .PHONY name with no rule, red first on HEAD's Makefile.",
+     "class": "within",
+     "why": "Enforcement of D1's fix. It fails only when a target that runs nothing comes back, so it serves the request rather than adding scope."
+    },
+    {
+     "id": "T223-D4",
+     "summary": "Remove gate_write_hooks' dead cache-audit guard.",
+     "class": "within",
+     "why": "Dead code tied to a removed target. Removing it is part of the same cleanup and changes no live behavior."
+    },
+    {
+     "id": "T223-D5",
+     "summary": "A pool sheet's .notes.md, which the sweep reads, counts as engine for the land route, red first; the frozen tree's notes stay excluded.",
+     "class": "within",
+     "why": "Before this change, a notes-only edit skipped the checks that read it, which is a defect (a wrong outcome). The caller states that the frozen tree's notes are read by no check (the sweep reads pool/ only), so excluding them leaves no input unchecked and narrows nothing."
+    },
+    {
+     "id": "T223-D6",
+     "summary": "make hooks-test runs the cohort gate's own suite, which no gate ran.",
+     "class": "within",
+     "why": "A suite that no gate runs is a check that never runs. Wiring it in is a fix and adds no behavior."
+    },
+    {
+     "id": "T223-D7",
+     "summary": "Found and left: the work-budget review prints suspended and exits 0, and the green-gate stamp misses pool-only changes. Both are filed as T224, which lands before T220 (the next port step), with the reason recorded and also stated on T224's own line.",
+     "class": "within",
+     "why": "Both are defects (a check passing having judged nothing; a stamp missing changes). The GM, 2026-11-18: 'we should fix all known bugs in each step before moving on to porting the next step'. Filing them as a separate task that lands before T220 honors that rule. The step boundary is kept, so nothing that was asked is narrowed. This satisfies route (a) of the previous BLOCKED."
+    },
+    {
+     "id": "T223-D8",
+     "summary": "Stale command names in guards, gate messages and docs are filed as T225 (wording only).",
+     "class": "within",
+     "why": "The 2026-11-19 rule (constitution XIV v2.36.0) says a defect is a wrong outcome, and wording that misleads no check or map is not one. Leaving it for a later task is within what was asked and needs no ruling. If a stale name ever made a guard refuse or pass wrongly, it would be a defect, and the block states that none does."
     }
    ],
    "verdict": "CLEAR"

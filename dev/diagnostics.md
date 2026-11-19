@@ -24,7 +24,7 @@ the feature belongs, not earlier.
 
 The other half of the same lesson. `open_seat` answers "where does this fit?"; **`tools/why_placed.py`** (deleted with the Python hamlet engine, feature 444 T39) answers *"who put this here?"* and *"what refused to put anything here?"* - the two questions you actually have when a map comes out wrong.
 
-    make why-placed GEN=pool/hamlets/inashiro/inashiro.gen.py AT=1102.6,1429.5
+    make why-placed GEN=pool/hamlets/inashiro/inashiro.gen.py AT=1102.6,1429.5      # as it ran; the target is gone (449 T223)
     make why-placed GEN=pool/hamlets/inashiro/inashiro.gen.py REFUSED=1102.6,1429.5
 
 `AT` prints every manifest record appended within the radius **with its call chain** - the gen
@@ -57,7 +57,7 @@ relaxation made to satisfy one map silently persisted and put Nagahara's boundar
 A cheap geometric pass may RANK candidates to keep the number of real checks small, but it never rejects, so a stale
 heuristic costs runtime rather than correctness. Same trap as "placement and its check must read the SAME manifest
 source" ([`gate.md`](gate.md)), one level up. (That tool, `tools/site_justice.py`, retired with the check battery in
-feature 166; ask the placer with `open_seat` and `make why-placed`.)
+feature 166; ask the placer with `open_seat` and `make why-placed` - both gone with the Python engine, feature 444 T39.)
 
 **"Adds no new failure" is only HALF of legal.** When an oracle scores a candidate as a DELTA against a baseline with
 the feature ABSENT, a feature whose absence is itself a failure has its governing check already in the baseline, so

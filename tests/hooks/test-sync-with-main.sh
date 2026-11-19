@@ -164,7 +164,7 @@ expect_out "route GATED"
 case_09() {
 echo "7b. An unknown route word is not a free push"
 D=$(topology gl)
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED-LOCAL\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\n' > Makefile && echo 'def a(): return 5' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"; start "$D" T02
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED-LOCAL\nwork-budget-review:\n\t@true\n' > Makefile && echo 'def a(): return 5' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"; start "$D" T02
 OUT=$(syncmain "$D" push); check "an unknown route refuses the push" 1 $?
 expect_out "could not decide the route"
 }
@@ -172,7 +172,7 @@ expect_out "could not decide the route"
 case_10() {  # 8 s measured 2026-10-11
 echo "7c. THE SEAMS ARE IGNORED IN A REAL-SHAPED TREE (feature 132): CI_ROUTE=DIRECT cannot skip the gated route"
 D=$(topology gs)
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nwork-budget-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="true" syncmain "$D" push); check "a real-shaped tree with CI_ROUTE=DIRECT does not push" 1 $?
 expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
@@ -289,20 +289,18 @@ expect_out "main moved; re-run"
 }
 
 case_15() {  # 9 s measured 2026-10-11
-echo "10. the performance review prints at the push; its refusal (the call counts, feature 427 T03) or a failure to run stops it; a timing band pushes"
+echo "10. the work budget's review at the push: its refusal (an accepted stage grown) or a failure to run stops it; a held budget pushes"
+# (the Python call counts' review, `make perf-review`, left the push with feature 449 T223: no rule bore it, so it passed reading nothing;
+# W2 and W3 below run the real push path on a Makefile without it, so a call to it would refuse there)
 D=$(topology j)
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
 gh_before=$(git -C "$D/github.git" rev-parse main)
-OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: REFUSED - the call counts owe the round arbiter'; false" syncmain "$D" push); check "IT FIRES: a perf-review refusal (or a failure to run) stops the push" 1 $?
-expect_out "make perf-review refused (or failed to run)"
-[ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the push landed though the review could not run"; FAIL=$((FAIL+1)); }
-# feature 443 T04 (FR-006): the work budget's ratchet, beside it - an accepted stage grown past its figure stops the push
-OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=true CI_WORK_BUDGET_REVIEW="echo 'work-budget-review: REFUSED - web: 2,000 counted operations at 40 households, over its accepted 1,500'; false" syncmain "$D" push); check "IT FIRES: a work-budget-review refusal stops the push" 1 $?
+# feature 443 T04 (FR-006): the work budget's ratchet - an accepted stage grown past its figure stops the push
+OUT=$(CI_ROUTE=DIRECT CI_WORK_BUDGET_REVIEW="echo 'work-budget-review: REFUSED - web: 2,000 counted operations at 40 households, over its accepted 1,500'; false" syncmain "$D" push); check "IT FIRES: a work-budget-review refusal stops the push" 1 $?
 expect_out "make work-budget-review refused (or failed to run)"
 expect_out "over its accepted 1,500"
 [ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  the push landed though the work budget refused"; FAIL=$((FAIL+1)); }
-OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: [local] timing band 3 (information only)'" CI_WORK_BUDGET_REVIEW="echo 'work-budget-review: every accepted stage within its figures'" syncmain "$D" push); check "STAYS QUIET: a timing band and a budget held push" 0 $?
-expect_out "timing band 3 (information only)"
+OUT=$(CI_ROUTE=DIRECT CI_WORK_BUDGET_REVIEW="echo 'work-budget-review: every accepted stage within its figures'" syncmain "$D" push); check "STAYS QUIET: a budget held push" 0 $?
 expect_out "every accepted stage within its figures"
 
 # GUARD_EDIT_OK: feature 449 T218 - THE ROLL CACHE IS NO LONGER SEEDED FROM A SIBLING. Feature 167 (GM 2026-08-30) copied a
@@ -479,7 +477,7 @@ case_22() {  # 11 s measured 2026-10-11
 echo "14. landing deletes the clone's backup; the sweep deletes exactly the backups main contains (SC-006)"
 D=$(topology bl)
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
-OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=false syncmain "$D" done); check "a refused stop (perf review) backs up" 1 $?
+OUT=$(CI_ROUTE=DIRECT CI_WORK_BUDGET_REVIEW=false syncmain "$D" done); check "a refused stop (work budget review) backs up" 1 $?
 [ -n "$(rref "$D" backup/c)" ] && yes_ || no_ "no backup after the refused stop"
 ( cd "$D/seed" && git push -q "$D/github.git" HEAD:refs/heads/backup/old && echo ahead > ahead && git add -A && git commit -qm ahead && git push -q "$D/github.git" HEAD:refs/heads/backup/ahead )
 OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "the stop that lands" 0 $?
@@ -488,7 +486,7 @@ expect_out "deleted backup/c on GitHub"
 [ -z "$(rref "$D" backup/old)" ] && yes_ || no_ "the sweep kept a backup main contains"
 [ -n "$(rref "$D" backup/ahead)" ] && yes_ || no_ "the sweep deleted a backup ahead of main"
 ( cd "$D/main/.clones/c" && echo more > note.md && git add -A && git commit -qm more && git push -q origin HEAD:refs/heads/backup/c )
-OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=false syncmain "$D" done); check "a stop with the backup already at HEAD" 1 $?
+OUT=$(CI_ROUTE=DIRECT CI_WORK_BUDGET_REVIEW=false syncmain "$D" done); check "a stop with the backup already at HEAD" 1 $?
 case "$OUT" in *"backed up HEAD"*) no_ "pushed a backup that was already at HEAD" ;; *) yes_ ;; esac
 }
 
@@ -557,7 +555,7 @@ case_27() {  # 6 s
 echo "W2. THE LANDING COHORT (feature 386): an engine tree with no cohort record is refused on the GATED route, before gated-check; COHORT_OK lands it"
 D=$(topology lc)
 # a real-shaped tree (a Makefile: the seams are off), whose route is GATED and whose gated-check would pass
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\ngated-check:\n\t@true\ncohort-landing:\n\t@true\n' > Makefile \
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED\nwork-budget-review:\n\t@true\ngated-check:\n\t@true\ncohort-landing:\n\t@true\n' > Makefile \
   && echo 'def a(): return 7' > pool/x/a.py && mkdir -p dev && printf '{"port": {"state": "integrated"}}\n' > dev/switches.json \
   && git add -A && git commit -qm engine ); stamp_hooks "$D"
 # (the port switch at integrated: feature 444 FR-023's rust-only, the shipped state while any stage is Python, lands an engine
@@ -571,7 +569,7 @@ OUT=$(COHORT_OK="a fixture with nothing rolled" syncmain "$D" push); check "COHO
 case_27b() {  # 6 s
 echo "W3. THE PORT SWITCH (feature 444 FR-023): at rust-only an engine tree with no landing cohort lands on the Rust stage gate alone"
 D=$(topology lr)
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\ngated-check:\n\t@true\ncohort-landing:\n\t@true\n' > Makefile \
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED\nwork-budget-review:\n\t@true\ngated-check:\n\t@true\ncohort-landing:\n\t@true\n' > Makefile \
   && echo 'def a(): return 7' > pool/x/a.py && mkdir -p dev && printf '{"port": {"state": "rust-only"}}\n' > dev/switches.json \
   && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(syncmain "$D" push); check "STAYS QUIET: rust-only, no landing cohort -> the gated push lands" 0 $?

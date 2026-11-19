@@ -17,10 +17,15 @@ use crate::codeid::{self, stated, Cache};
 /// A live pool `.svg` is engine (449 T218): the hand-drawn sheets are source the pool sweep (`rust/mode_a/src/pool_sweep.rs`) judges,
 /// and an edit to one landed DIRECT with no sweep while only `.gen.py` and `.json` (a `.compound.json` among them) counted. A render
 /// is gitignored, so it never reaches a delta or `ls-files -co --exclude-standard`: the ending alone names the tracked sheets.
+/// A live pool `.notes.md` is engine too (449 T223): the GM's 2026-08-25 ruling made a map's notes documentation ("even if the diagram
+/// documentation was touched, but not the code itself, then we should not rerun the tests"), and the pool sweep now reads them - a hand
+/// sheet's typed counts and `**On map**:` declaration, a hamlet's census block (`rust/mode_a/src/census/pool_check.rs`) - so a notes-only
+/// edit that broke one landed DIRECT, judged by no sweep. Every pool tier's notes are read, so the whole of `pool/` counts, not the Mode A
+/// tiers alone; the frozen exhibits' notes stay documentation, read by no check while none carries a census block.
 const ENGINE_DIRS: [(&str, &[&str]); 4] = [
     ("l7r/", &[".py"]),
     ("rust/", &[".rs", "Cargo.toml", "Cargo.lock"]),
-    ("pool/", &[".gen.py", ".json", ".svg"]),
+    ("pool/", &[".gen.py", ".json", ".svg", ".notes.md"]),
     ("legacy-hand-authored-pool/", &[".gen.py", ".json"]),
 ];
 
@@ -42,7 +47,7 @@ fn is_python(path: &str) -> bool {
 /// Is this repository-relative path engine code, the kind that owes the gate?
 #[must_use]
 pub fn is_engine(path: &str) -> bool {
-    if path.ends_with(".notes.md") || path.starts_with(NOT_ENGINE_DIR) {
+    if path.starts_with(NOT_ENGINE_DIR) {
         return false;
     }
     ENGINE_DIRS

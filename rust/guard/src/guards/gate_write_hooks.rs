@@ -1,8 +1,9 @@
 //! `gate-write-hooks` (feature 385 T02, plan D13; ported from the shell of the same name, feature 449 T024): NO WRITE TO THE WORKING TREE
 //! WHILE THIS TREE'S OWN `make done` RUNS. A gate ends by checking that the tree did not move while it ran; a session voided two gates
 //! this way, the second an hour after the round arbiter named the slip (the GM, 2026-10-17: "a guard, not a reminder"). A change the gate
-//! does not see passes, asked of the gate's own `l7r-gate preflight --tree-check` (feature 405 T41). While `make cache-audit` runs, an engine
-//! file holds a perturbed literal, so no engine edit and no commit (feature 426 T10). `GATE_WRITE_OK` with a reason is the escape.
+//! does not see passes, asked of the gate's own `l7r-gate preflight --tree-check` (feature 405 T41). `GATE_WRITE_OK` with a reason is the
+//! escape. (Feature 426 T10's refusal while `make cache-audit` ran left with that target, deleted by 449 T218: nothing runs it, so the
+//! branch watched for a process that cannot exist - removed by 449 T223.)
 //!
 //! Plan T024's decisions: (a) the guard and `own-make.sh`'s question in-process, by pid; (b) `preflight.py` is a phase-2 piece, asked by
 //! path, only while a gate runs.
@@ -118,19 +119,6 @@ fn file_of(event: &Event) -> &str {
         .unwrap_or(input_field(event, "notebook_path"))
 }
 
-/// What a running cache audit refuses: an engine edit, even a docstring, and a commit.
-fn audit_refusal(event: &Event, c: &Ctx) -> Option<String> {
-    let tool = event.tool();
-    if FILE_TOOLS.contains(&tool) {
-        let rel = relative_in(&c.top, file_of(event))?;
-        let first = rel.split('/').next().unwrap_or("");
-        return (first == "l7r" || first == "pool").then(|| format!("an {tool} of {rel}"));
-    }
-    let cmd = input_field(event, "command");
-    (tool == "Bash" && GIT_WRITE.is_match(cmd).unwrap_or(false))
-        .then(|| "a git commit or add".to_owned())
-}
-
 /// The question the gate itself asks: exit 0 when the change is one it does not see.
 fn unseen(c: &Ctx, extra: &[&str]) -> bool {
     let top = c.top.to_string_lossy();
@@ -241,27 +229,6 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 
 pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     let cmd = input_field(event, "command");
-    if running(c, "cache-audit") {
-        if let Some(answers) = escaped(event, session, cmd) {
-            return answers;
-        }
-        if let Some(what) = audit_refusal(event, c) {
-            log::fire(
-                "gate-write",
-                "blocked",
-                &what,
-                "write-during-cache-audit",
-                &event.input,
-                session,
-            );
-            return vec![Answer::Refuse(format!(
-                "\u{1b}[1mBLOCKED (gate-write): {what} while this tree's `make cache-audit` runs.\u{1b}[0m\n\
-The audit has a perturbed literal in an engine file until it ends; a commit now carries it (feature 426: 335cfa840).\n\
-Wait for its exit (it is a background job: its notification is the end), then make the change.\n\
-(feature 426 T10; escape GATE_WRITE_OK=\"<reason>\")"
-            ))];
-        }
-    }
     if !running(c, "done") {
         return Vec::new();
     }

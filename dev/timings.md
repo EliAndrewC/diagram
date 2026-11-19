@@ -16,7 +16,7 @@ gets iterated in; a 4-minute loop gets guessed around, and guess-and-check is wh
 request into a multi-hour slog. So the numbers are tracked rather than remembered.
 
 Nothing appends here any more (the frozen note above): never rewrite or prune a block - the trend is the product.
-The live trend is `make perf-report` over `dev/perf-log/`, and the gate's own costs are `make audit`.
+The live trend was `make perf-report` over `dev/perf-log/`, retired with the Python engine it timed (feature 444 T39; its name left the Makefile with 449 T223); the gate's own costs are `make audit`, the Rust stages' counted work `make work-budget`.
 
 ## How to read it
 

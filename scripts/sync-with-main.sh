@@ -388,20 +388,17 @@ push_cmd() {
   done
   rm -rf "$gdir"
   [ "${#failed[@]}" = 0 ] || { printf 'sync-with-main: refused by %s - each refusal is above; nothing pushed\n' "${failed[*]}" >&2; exit 1; }
-  # THE CALL COUNTS ARE WATCHED HERE, THE TIMINGS ONLY PRINTED (feature 427 T03, D3; the GM 2026-10-26: "keep recording the
-  # timings, but completely stop using timings as a gate on anything ... the call counts themselves are the thing that we are
-  # gating on"). `make perf-review` prints each pair's timing band for information and its call counts; it exits 1 when the
-  # counts rose over the line, or cannot be compared, with no round-arbiter accept, and names the `make arbiter-ask` that asks.
-  # It replaced the timing band's FLAG of feature 375 amendment 5. CI_PERF_REVIEW is the test seam (a fixture has no skill).
   # THE TEST SEAMS ARE HONORED ONLY IN A FIXTURE (feature 132, Principle XIV - the fidelity
   # reviewer's aside): a tree with no diagram skill Makefile is the only tree the tests build, and
   # on a real clone `CI_ROUTE=DIRECT` would have skipped the gated route entirely. So the seams
-  # (CI_PERF_REVIEW, CI_ROUTE, CI_MERGE) are read only when that Makefile is absent.
-  if [ -n "$seams" ] && [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/Makefile" ]; then ( cd "$ROOT" && make --no-print-directory perf-review ); else true; fi \
-    || die "make perf-review refused (or failed to run) - the call counts above owe the round arbiter's accept, named with its command; a timing refuses nothing (feature 427 T03)"
+  # (CI_WORK_BUDGET_REVIEW, CI_ROUTE, CI_MERGE) are read only when that Makefile is absent.
+  # (The Python call counts' review, `make perf-review` of feature 427 T03, ran here until feature 449 T223: its rule went with the
+  # Python engine it counted (feature 444 T39), and a .PHONY name with no rule answered exit 0, so every push passed a review that
+  # read nothing. The work budget's ratchet below is its successor - its own recipe suspended until feature 444 T42 counts the
+  # stages through the Rust driver.)
   # THE WORK BUDGET'S RATCHET (feature 443 FR-006, plan D7): an ACCEPTED stage's counted operations may not grow past its accepted
   # figure or its budget; nothing to hold while no stage is accepted, or on a push with no engine code. No round-arbiter accept
-  # clears it - the GM's words through `make budget-change` do. CI_WORK_BUDGET_REVIEW is its fixture seam, as CI_PERF_REVIEW is.
+  # clears it - the GM's words through `make budget-change` do. CI_WORK_BUDGET_REVIEW is its fixture seam.
   if [ -n "$seams" ] && [ -n "${CI_WORK_BUDGET_REVIEW:-}" ]; then bash -c "$CI_WORK_BUDGET_REVIEW"; elif [ -f "$ROOT/Makefile" ]; then ( cd "$ROOT" && make --no-print-directory work-budget-review ROUTE="$route" ); else true; fi \
     || die "make work-budget-review refused (or failed to run) - an accepted stage's work above grew past its figure; only the GM's words through make budget-change raise it (feature 443)"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta

@@ -14,12 +14,11 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 
 | You are asking | Reach for |
 |---|---|
-| Who put this thing here? What refused to put anything here? | `why_placed` - `make why-placed GEN=... AT=x,y` / `REFUSED=x,y` |
 | Is there too much empty space in this Mode A compound? Does its SVG break a geometric rule? | `make pack-audit` - Rust since feature 449 T175, `rust/mode_a/src/audit/` (its index is `audit.rs`'s module doc: which module holds which check, and where a new one is registered); the Python package deleted by T212 |
 | What does each declared Mode A type require, as a table? | `make building-programs` (writes `docs/building-programs.md` between markers) - Rust since feature 449 T168, `rust/mode_a/src/programs.rs` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` - `make cohort N=... [SEED=...]` |
-| Will the gated push take this engine - 48 seeds on it, none regressed, and the fresh block's rate? | `make cohort-landing` (feature 386; the gate is `l7r-gate cohort check`, `scripts/gates/cohort-gate.sh`), the trend `make cohort-seeds` |
-| Regenerate and check the pool, choosing the scope from how the last run went | `mapcheck` - `make maps` |
+| Will the gated push take this engine - 48 seeds on it, none regressed, and the fresh block's rate? | owed only at the port switch's `integrated` (feature 444 FR-023): `make cohort-landing` refuses while nothing writes its record (feature 449 T223); the gate is `l7r-gate cohort check`, `scripts/gates/cohort-gate.sh`, the trend `make cohort-seeds` |
+| Check every pool sheet against its tier's checks | the pool sweep, `make rust-test CRATE=rust/mode_a` (`rust/mode_a/src/pool_sweep.rs`; `make maps` and `mapcheck` went with the Python engine) |
 | Which modules are on the HAMLET PATH and owe 100% coverage? | `hamlet_floor` - a phase of `make test-full`, with no make route of its own; it drops the engine code the Rust port replaces (`dev/coverage-exempt.json`, feature 448, the GM 2026-11-02: "We can relax that for the engine code ... since that's going away") |
 | Which engine lines does only ONE rolling test context reach? | `roll_audit` - `make roll-audit` (feature 216) |
 | How many things does each check of a roll compare against, and which compare against too many? | `overlap_census` - `make census` |
@@ -35,7 +34,7 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | Assemble or check the glossary from its per-term files | `make glossary` (`l7r-gate record glossary`, Rust since feature 449 T148) |
 | Build or check the record's site from its per-entry fragments | `make record` (`l7r-gate record site`, Rust since feature 449 T148) |
 | The source vocabulary derived into the `source-applicability` contract | `make source-tags-contract` (feature 305; `l7r-gate record source-tags-contract`, Rust since feature 449 T148) |
-| A performance snapshot of the reference hamlet, its bands, its profile and its review records | `perf_snapshot` (`make perf`), `perf_bands` (`make perf-report`), `perf_profile` (`make perf-profile`), `perf_review` (`make perf-explain` / `perf-review` and the rest) |
+| How much work does each stage do, against its budget? | `make work-budget` (a hamlet stage, the Rust driver's counters), `make budget-sheets` (a Mode A stage); the Python snapshot, bands, profile and review records (`make perf`, `perf-report`, `perf-profile`, `perf-review` and the rest) went with the Python engine, their names with feature 449 T223 |
 | Which functions are called millions of times, and from which loop? | `perf_fanout` - `make perf-fanout` (feature 427): per-stage call totals and growth, the multiplier chains by anchor |
 | How long does this loop take, and where does the time go? | `make audit`, `make durations`, `scripts/measure/gatecost.py <target>`; the frozen ledger is `dev/timings.md` |
 

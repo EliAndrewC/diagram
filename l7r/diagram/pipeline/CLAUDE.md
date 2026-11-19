@@ -5,7 +5,7 @@ The BUILD side of the project. The other three sides are the drawing engines (`s
 diagnostics ([`../tools/`](../tools/CLAUDE.md)). Drive it through `make` at the repository root:
 
     make map GEN=pool/hamlets/sawada/sawada.gen.py    # one map: regenerated, or CACHED when nothing it depends on changed
-    make maps                                         # the pool, picking its own scope from how the last run went
+    make rust-test CRATE=rust/mode_a                  # the pool sweep: every pool sheet through its tier's checks (`make maps` left with the Python engine)
 
 | module | what it is | measured for coverage |
 |---|---|---|

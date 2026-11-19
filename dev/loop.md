@@ -14,7 +14,7 @@ the whole gate for after that map is green:
 
     make map GEN=pool/hamlets/sawada/sawada.gen.py       # regenerate ONE gen and gate it; PROFILE=1 for per-stage time
     make cohort N=24                                     # roll N seeds of the hamlet tier, fanned out (JOBS=<workers>)
-    make maps                                            # the pool, picking its own scope from how the last run went
+    make rust-test CRATE=rust/mode_a                     # the pool sweep: every pool sheet through its tier's checks (`make maps` left with the Python engine, its name with 449 T223)
 
 `pipeline/regen.py` regenerates a map only if something that map depends on actually changed, and prints `CACHED`,
 `REGENERATED` or (a frozen legacy map) `FROZEN`. Multi-map runs fan out across worker processes (`default_jobs` in

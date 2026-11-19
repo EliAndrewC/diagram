@@ -679,7 +679,7 @@ pub fn cli(args: &[String]) -> Reply {
         if gaps.is_empty() {
             return reply_of_run(String::new(), String::new(), 0);
         }
-        return reply_of_run(String::new(), format!("arbiter-ask: {}. Roll the pool under every route the question offers (`make maps SCOPE=all`) and cite it - in WHY or a FILES= summary - before asking: `make arbiter-ask SUBJECT=... WHY=\"...\" FILES=\"<the summaries>\"`\n", gaps.join("; ")), 2);
+        return reply_of_run(String::new(), format!("arbiter-ask: {}. Roll the pool under every route the question offers (the sheets: `make rust-test CRATE=rust/mode_a`, the pool sweep; the hamlets: `make cohort`) and cite it - in WHY or a FILES= summary - before asking: `make arbiter-ask SUBJECT=... WHY=\"...\" FILES=\"<the summaries>\"`\n", gaps.join("; ")), 2);
     }
     let root = resolve(p.text("--root", "."));
     let slug = {

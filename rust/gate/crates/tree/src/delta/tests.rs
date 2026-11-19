@@ -67,6 +67,10 @@ fn every_path_kind_is_pinned() {
         // judged by no sweep, while only .gen.py and .json counted)
         "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
         "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.compound.json",
+        // a pool sheet's notes, which the pool sweep reads - a hand sheet's typed counts and map declaration, a hamlet's census
+        // block (449 T223: a notes-only edit landed DIRECT, judged by no sweep)
+        "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+        "pool/hamlets/i/i.notes.md",
         "legacy-hand-authored-pool/x.gen.py",
         "rust/phases/src/field.rs",
         "rust/phases/Cargo.toml",
@@ -77,7 +81,9 @@ fn every_path_kind_is_pinned() {
     for path in [
         "l7r/diagram/ci/dispatch.py",
         "tests/pipeline/t.py",
-        "pool/hamlets/i/i.notes.md",
+        // the frozen exhibits' notes: no sweep reads them, their reason - documentation (the GM 2026-08-25) - still holds
+        "legacy-hand-authored-pool/hamlets/honda/honda.notes.md",
+        "pool/hamlets/i/i.md",
         "pool/hamlets/i/i.py",
         "Makefile",
         "pyproject.toml",

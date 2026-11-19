@@ -42,12 +42,12 @@ pub const TEMPLATE: &str = concat!(r#"### {T} (<why: the finding or measurement 
 pub const PERFORMANCE: &str = r"
 ### {T} Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: `make perf-profile` time beside `make phase-calls` / `make perf-fanout` calls>
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
 2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
    a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
 3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
 4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <calls; `make perf-ab` best of N with each arm's spread,
-   the host's load - evidence, not a pass>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 ";

@@ -2,6 +2,12 @@
 
 Load this file when: you plan, build or review a change whose goal is speed - any performance task, at any tier.
 
+**The tools this checklist first named counted and timed the Python engine and are gone** (`make perf`, `perf-profile`,
+`perf-fanout`, `phase-calls`, `perf-ab`; feature 444 T39, the names left the Makefile with feature 449 T223). The questions
+stand; the measure for the Rust stages is their counted operations - `make work-budget` (a hamlet stage, 10/20/40/80
+households) and `make budget-sheets` (a Mode A stage, per pool sheet) against their budgets (feature 443) - and a timing is
+any before-and-after wall time, read with the host's load beside it. The Tools table below says what is live.
+
 ## The sensibility (the GM, 2026-10-27; feature 435)
 
 - **Time is the goal of every performance change, and never a gate.** Nothing refuses on a timing - not a push, not a task's
@@ -48,9 +54,10 @@ the time, and it costs readability. Combining functions to lower the count is po
 
 | question | command |
 |---|---|
-| where the calls are, by stage and step | `make phase-calls` (the placement-stages page shows it), `make perf-fanout` |
-| where the time is, in one stage | `make perf-profile SEED=<n> STAGE=<stage> HOUSEHOLDS=<n>` |
-| before against after, while iterating | `make perf-ab A=<commit> [SEEDS=<one>] [HOUSEHOLDS=<one>]` (the quick form, one run a version; `N=` repeats it, rarely) |
-| the noise floor of that quick form | `make perf-ab AA=1 [SEEDS=] [HOUSEHOLDS=]` (one engine against itself, once) |
-| before against after, once before landing | `make perf-ab A=<commit> SEEDS=25,39,47 HOUSEHOLDS=20,40` or `FULL=1` (refused without a quick run first) |
-| the bookends | `make perf LABEL=<NNN>-start` / `-end` |
+| a hamlet stage's counted operations at 10/20/40/80 households, against its budget | `make work-budget` (`WRITE=1` replaces `dev/work-budget.md`) |
+| a Mode A stage's counted operations per pool sheet, against its per-sheet budget | `make budget-sheets PHASE=<stage> COUNTS="<sheet>=<ops> ..."` |
+| one hamlet rolled, its wall time printed | `make hamlet SPEC=pool/hamlets/<name>/<name>.spec.json` |
+| N seeds through the Rust driver, the time taken | `make cohort N=<n> SEED=<first>` |
+
+(Retired with the Python engine, feature 444 T39: `make phase-calls`, `perf-fanout`, `perf-profile`, `perf-ab` and the
+bookends `make perf LABEL=<NNN>-start` / `-end`.)

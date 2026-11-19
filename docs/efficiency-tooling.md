@@ -112,7 +112,7 @@ Different in kind: each asks for a DECISION, which no substitution can supply.
 | refusal | what it wants |
 |---|---|
 | **the reference settlement gates everything expensive** | `test`, `done` and `maps` roll Inashiro FIRST and stop there if it is red. Escape `REF_OK`, which demands a written reason |
-| **`make maps` picks its own scope** | after a failed run, the reference map alone; after a clean one, the whole tier. There is deliberately no second command |
+| **`make maps` picked its own scope** (retired with the Python engine, feature 444 T39; its name with 449 T223) | after a failed run, the reference map alone; after a clean one, the whole tier. The pool sweep is `make rust-test CRATE=rust/mode_a` now |
 | **`FULL=1` prompts and defaults to CANCEL** | a written justification, logged with the date, target and commit |
 | **`QUICK_BUDGET` (60 s)** | `quick` fails if it exceeds its budget and points at `make durations` |
 | **the switches** (`claims-*` / `port-*`) | a `REASON=`, committed |
