@@ -51,8 +51,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T203 make decide's figure lint skips a task section's heading: T202's heading carried '704x its SOUND derived budget' with no measured label, decide passed it, and spec-fidelity returned NOT-REVIEWABLE for it (a review round spent on what the lint exists to catch - a check passing the bad, constitution XIV); the lint reads the section's heading line as it reads the Approach, with a test red on the old lint (2026-11-19)
       research: rendering
-- [ ] T208 The Mode A compound generator's derivation, blind to its code (the GM 2026-10-30 and 2026-11-19, engine-plan.md 'Rebuilt from a derivation, not ported'): an efficient generator of the two generated compound sheets (pool/magistracies/county-magistracy-example, ochiba-roundtrip-test) written from docs/buildings.md's composition rules, docs/building-programs.md and the research pages they cite (0090, 0091, 0115, 0116 and the parts' pages), never from compound*.py, compound_parts.py, compound_model.py, well_gear.py or labels/*.py; its contract (what a program declares, what the sheet must hold - the court spine, perimeter-first placement, ranks, the parts by their rules, captions by the T202 placer), its operation count per sheet in the pool-sheet form (T201), judged SOUND by the work-budget agent, the budget set by make budget-set; before T152
-      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
