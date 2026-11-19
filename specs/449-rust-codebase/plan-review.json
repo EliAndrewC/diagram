@@ -894,6 +894,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T206 (the GM, 2026-11-19: \"Yes those two efficiency improvements both seem worth doing sooner rather than later\" - measured first, under his 2026-11-12 \"concrete targets with significant measured expected savings\")": {
+   "sha256": "141629dd7c60d730ee9fad54c4b1b8606bb7f7f854ac00ef28ba02ec15ad0e72",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T206 Approach (checklist part A)": {
+   "sha256": "81fd606f2998042e0c40f2c00278c767d86bda9380a5751a734bfcc367b5a60c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13741,6 +13753,46 @@
      "why": "Ordinary exits for the work that was asked; nothing is excluded."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T206 (the GM, 2026-11-19: \"Yes those two efficiency improvements both seem worth doing sooner rather than later\" - measured first, under his 2026-11-12 \"concrete targets with significant measured expected savings\")",
+    "### T206 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T206-1 claims-owed left unchanged",
+     "summary": "The measurement found that claims-owed already owes a claim only when its code, its claim line or a rested block changed. None of the 41 re-checks that had neither code nor a rested block changed came from claims-owed, so claims-owed is not narrowed.",
+     "class": "within",
+     "why": "The task line as filed, which the GM approved on 2026-11-19 ('Yes those two efficiency improvements both seem worth doing'), was conditional: 'first measure ... how many re-owed claims had neither their unit's code nor their cited blocks changed ...; if that share is large, narrow claims-owed'. Among claims that claims-owed re-owed, the measured share is zero (the 41 came from whole-file REASON bundles). The plan therefore takes the task's own not-large branch at any threshold, and narrowing claims-owed would save nothing. That also fails the GM's 2026-11-12 condition ('significant measured expected savings'). The decision rests on the zero, not on the bar."
+    },
+    {
+     "id": "T206-2 the session's bar",
+     "summary": "A bar of a quarter of re-checks, or about 10 agent-minutes a feature, labeled as the session's own reading of 'significant', not the GM's words.",
+     "class": "within",
+     "why": "No outcome in the block turns on it. claims-owed is left alone because it contributed none of the waste (T206-1). The 41's cause is 1 to 5 agent-minutes, which is not significant on any plain reading. The triage is left because it is unmeasured, not because of the bar. The block labels the bar honestly as the session's own. This record does not endorse it as the GM's threshold, and any later task that turns on it should take it to the GM."
+    },
+    {
+     "id": "T206-3 the 41's cause handled by practice",
+     "summary": "The 41 claims nobody owed came from the session bundling two whole files in T202 with make claims-bundle MODULE=<file> REASON=<why>. The remedy is that the session bundles owed claims with OWED=1. No tooling change.",
+     "class": "within",
+     "why": "Measured at 1 to 5 agent-minutes over four days (41 x 1.9 to 7.4 s, reproducible from the block's own rate), which is not 'significant measured expected savings' (2026-11-12). Under that same instruction the alternative is 'just keep working on the port'. I tested the 2026-11-11 'our tooling must enforce this' clause on its purpose: it targets iteration loops drifting back to running the slowest commands (10-minute full runs on every one-line edit) over and over. Two deliberate whole-file bundles, invoked with a stated reason, are not that drift class. REASON bundling remains a legitimate deliberate tool, and nothing answers wrongly."
+    },
+    {
+     "id": "T206-4 doc-section triage found and left",
+     "summary": "120 re-checks after a section triage (about 4 to 15 agent-minutes) were forced to a full check where the triage cannot recover a section's removed words. The candidate is not filed until a measurement shows how many were forced.",
+     "class": "within",
+     "why": "Its rested blocks changed, so it falls outside the task line's measure ('neither their unit's code nor their cited blocks changed'). I judged scope from the task line as quoted in the dispatch, which carries elisions. It is a cost, not a wrong outcome: no check passes bad work or refuses good work (constitution XIV as amended by T196). Leaving an unmeasured candidate unfiled is what the 2026-11-12 condition prescribes ('if you identify concrete targets with significant measured expected savings')."
+    },
+    {
+     "id": "T206-5 order, budget, exits, not-a-defect",
+     "summary": "Runs after T205 and before T152. One landing, the record only. Green exit: measurement recorded and decision taken. Red exit: through make arbiter-ask. Item 12: claims-owed answers rightly.",
+     "class": "within",
+     "why": "Routine sequencing and accounting. The section names its measured target and saving and quotes the GM's 2026-11-12 words, as request.md's 2026-11-12 entry requires of a task filed under the pre-approval."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -24392,6 +24444,44 @@
      "summary": "green means every suite green, the A/B saving shown and make static green; red means the failure is recorded and a cannot-be-done claim is ruled through make arbiter-ask",
      "class": "within",
      "why": "Ordinary exits for the work that was asked; nothing is excluded."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T206": {
+   "section_sha256": "9e1a7c6366e9312228f116928622bd858e968bd1c22bb2a4356e6c643ce21d92",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T206-1 claims-owed left unchanged",
+     "summary": "The measurement found that claims-owed already owes a claim only when its code, its claim line or a rested block changed. None of the 41 re-checks that had neither code nor a rested block changed came from claims-owed, so claims-owed is not narrowed.",
+     "class": "within",
+     "why": "The task line as filed, which the GM approved on 2026-11-19 ('Yes those two efficiency improvements both seem worth doing'), was conditional: 'first measure ... how many re-owed claims had neither their unit's code nor their cited blocks changed ...; if that share is large, narrow claims-owed'. Among claims that claims-owed re-owed, the measured share is zero (the 41 came from whole-file REASON bundles). The plan therefore takes the task's own not-large branch at any threshold, and narrowing claims-owed would save nothing. That also fails the GM's 2026-11-12 condition ('significant measured expected savings'). The decision rests on the zero, not on the bar."
+    },
+    {
+     "id": "T206-2 the session's bar",
+     "summary": "A bar of a quarter of re-checks, or about 10 agent-minutes a feature, labeled as the session's own reading of 'significant', not the GM's words.",
+     "class": "within",
+     "why": "No outcome in the block turns on it. claims-owed is left alone because it contributed none of the waste (T206-1). The 41's cause is 1 to 5 agent-minutes, which is not significant on any plain reading. The triage is left because it is unmeasured, not because of the bar. The block labels the bar honestly as the session's own. This record does not endorse it as the GM's threshold, and any later task that turns on it should take it to the GM."
+    },
+    {
+     "id": "T206-3 the 41's cause handled by practice",
+     "summary": "The 41 claims nobody owed came from the session bundling two whole files in T202 with make claims-bundle MODULE=<file> REASON=<why>. The remedy is that the session bundles owed claims with OWED=1. No tooling change.",
+     "class": "within",
+     "why": "Measured at 1 to 5 agent-minutes over four days (41 x 1.9 to 7.4 s, reproducible from the block's own rate), which is not 'significant measured expected savings' (2026-11-12). Under that same instruction the alternative is 'just keep working on the port'. I tested the 2026-11-11 'our tooling must enforce this' clause on its purpose: it targets iteration loops drifting back to running the slowest commands (10-minute full runs on every one-line edit) over and over. Two deliberate whole-file bundles, invoked with a stated reason, are not that drift class. REASON bundling remains a legitimate deliberate tool, and nothing answers wrongly."
+    },
+    {
+     "id": "T206-4 doc-section triage found and left",
+     "summary": "120 re-checks after a section triage (about 4 to 15 agent-minutes) were forced to a full check where the triage cannot recover a section's removed words. The candidate is not filed until a measurement shows how many were forced.",
+     "class": "within",
+     "why": "Its rested blocks changed, so it falls outside the task line's measure ('neither their unit's code nor their cited blocks changed'). I judged scope from the task line as quoted in the dispatch, which carries elisions. It is a cost, not a wrong outcome: no check passes bad work or refuses good work (constitution XIV as amended by T196). Leaving an unmeasured candidate unfiled is what the 2026-11-12 condition prescribes ('if you identify concrete targets with significant measured expected savings')."
+    },
+    {
+     "id": "T206-5 order, budget, exits, not-a-defect",
+     "summary": "Runs after T205 and before T152. One landing, the record only. Green exit: measurement recorded and decision taken. Red exit: through make arbiter-ask. Item 12: claims-owed answers rightly.",
+     "class": "within",
+     "why": "Routine sequencing and accounting. The section names its measured target and saving and quotes the GM's 2026-11-12 words, as request.md's 2026-11-12 entry requires of a task filed under the pre-approval."
     }
    ],
    "verdict": "CLEAR"

@@ -751,31 +751,31 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T204 to T202 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T204 to T204 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T205 to T205 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T206 (<why: the finding or measurement that files it>)
+### T206 (the GM, 2026-11-19: "Yes those two efficiency improvements both seem worth doing sooner rather than later" - measured first, under his 2026-11-12 "concrete targets with significant measured expected savings")
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured, and no change made. claims-owed already owes a claim only when its unit's code (or its claim line) changed, or a block its last verdict rested on is gone; a page that moved with its rested blocks standing is cleared by the triage with no agent (698 such rows over 11-16 to 11-19, measured 2026-11-19 (the claims index's rows marked triage-cleared, counted over its diffs in that span))). Of 599 re-checks in feature 449's rounds over those days, 41 (7%) had neither their code nor a rested block changed, about 1 to 5 agent-minutes in all, and none of the 41 came from claims-owed: the session bundled two whole files during T202 with `make claims-bundle MODULE=<file> REASON=<why>`, pulling in 41 claims nobody owed (measured 2026-11-19 (the claims index's diffs over 31 commits, and T202's bundles classified against claims-owed's lists)). The waste is under the bar the session set in its brief for this task on 2026-11-19 (a quarter of re-checks, or about 10 agent-minutes a feature - the session's own reading of the GM's "significant measured expected savings", not his words), so claims-owed is left as it is; the session bundles owed claims with `OWED=1`, not a whole file with a REASON.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the measurement | n/a | none | none | none |
 
 ### T206 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** Claims re-checks cost only what a change can break.
+2. **The constraints.** A fix must never break an untouched claim unseen (feature 432's rule that a claim whose rested block changed gets a full check); the GM's 2026-11-12 condition: "significant measured expected savings".
+3. **Where each comes from.** G: the GM, 2026-11-12 and 2026-11-19; O: the measurement above.
+4. **Do they describe the world here?** Yes: the rounds measured are this feature's own (measured 2026-11-19, as above).
+5. **The order.** After T205, before T152.
+6. **The exits.** Green: the measurement recorded and the decision taken from it. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (the record only).
+9. **Done, measured.** 41 wasted re-checks of 599, under the session's bar (measured 2026-11-19 (the claims index's diffs over 31 commits)).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Nothing answers wrongly: claims-owed already owes exactly what the task would have it owe. Not a defect.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** The larger remaining cost is the doc-section triage: 120 re-checks over 11-16 to 11-19, about 4 to 15 agent-minutes (measured 2026-11-19 (the claims index's diffs, rows re-judged after a section triage, at 1.9 to 7.4 s a claim from T202's rounds)), forced to a full check when the triage cannot recover a section's removed words; not filed until a measurement shows how many were forced.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a measurement that decided against a change.
 
 
-<!-- plan-archive: T207 to T207 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
