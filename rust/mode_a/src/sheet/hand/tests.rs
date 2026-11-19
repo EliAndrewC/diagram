@@ -89,7 +89,7 @@ fn a_sheet_is_placed_rendered_and_paged_and_its_reads_listed() {
         .collect();
     assert!(reads.contains(&at.as_str()), "{reads:?}");
     let placed = std::fs::read_to_string(&out).unwrap();
-    assert_eq!(placed, crate::labels::hand_sheet::placed(SHEET).unwrap());
+    assert_eq!(placed, crate::caption_place::placed(SHEET).unwrap());
     assert_ne!(placed, SHEET);
     let html = std::fs::read_to_string(dir.path().join("shrine.html")).unwrap();
     assert!(html.contains("<title>Shrine - interactive map</title>"));

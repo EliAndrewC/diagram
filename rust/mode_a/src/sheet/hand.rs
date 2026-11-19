@@ -1,7 +1,7 @@
 //! `l7r-mode-a hand-sheet`: a hand-drawn Mode A sheet drawn whole - its captions placed, its picture rendered and its page written - the
 //! one command a hand sheet's generator runs (feature 449 T151, the engine port's step 3a; the country shrine's generator first, the three
-//! caption-placing magistracies at step 3b). It does what the generator did in Python: the tracked sheet read, its captions placed by the
-//! one placer ([`crate::labels::hand_sheet::placed`], feature 286), the picture rendered from the placed text unless
+//! caption-placing magistracies' since T202, with the placer rebuilt). It does what the generator did in Python: the tracked sheet read, its captions placed by the
+//! one placer ([`crate::caption_place::placed`], feature 286; rebuilt from its derivation by feature 449 T202), the picture rendered from the placed text unless
 //! `DIAGRAM_SKIP_RENDER=1` ([`crate::labels::hand_sheet::render`]), the page written from the placed text ([`super::page::write_sheet_page`],
 //! feature 277), and the census judged: ink with no kind, or a kind nobody wrote up, fails the sheet (exit 1, its line on stderr).
 //!
@@ -20,7 +20,8 @@ use l7r_gate_registry::about::FeatureClass;
 use l7r_gate_research::Error;
 use serde_json::json;
 
-use crate::labels::hand_sheet::{placed, render};
+use crate::caption_place::placed;
+use crate::labels::hand_sheet::render;
 use crate::raster::Host;
 
 /// The command's usage line.

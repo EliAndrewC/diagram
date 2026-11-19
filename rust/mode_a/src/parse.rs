@@ -528,6 +528,4 @@ mod lockstep_checks;
 #[cfg(test)]
 mod lockstep_keep;
 #[cfg(test)]
-mod lockstep_labels;
-#[cfg(test)]
 mod tests;

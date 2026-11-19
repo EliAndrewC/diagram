@@ -20,8 +20,9 @@ use std::collections::BTreeMap;
 
 /// The kinds a key may open with: the Python's, and (T198) the caption placer's - a function's `call`, a `stage` of the search entered,
 /// the seats `built` and those skipped (`skip`) or scored (`seat`), what an index holds when it is asked (`held`), the grid cells it reads
-/// (`cell`), the entries it found measured exactly (`exact`), an index or ink `build`, a `leader` measured, and the greedy pass's `repair`.
-pub const KINDS: [&str; 20] = [
+/// (`cell`), the entries it found measured exactly (`exact`), an index or ink `build`, a `leader` measured, and the greedy pass's `repair`;
+/// and (T202) the rebuilt placer's, its derivation's counted kinds.
+pub const KINDS: [&str; 32] = [
     "pt_test",
     "seg_test",
     "dist",
@@ -42,6 +43,20 @@ pub const KINDS: [&str; 20] = [
     "repair",
     "cell",
     "exact",
+    // (T202) the kinds of the placer rebuilt from its derivation (`specs/449-rust-codebase/derivations/T198-placer.md`, "The counted
+    // kinds"), beside `seat` and `index_query` above: what `make budget-sheets` sums
+    "index_cell",
+    "index_entry",
+    "exact_test",
+    "shape_distance",
+    "sweep_interval",
+    "sweep_compare",
+    "leader_crossing",
+    "wrap_cut",
+    "index_insert",
+    "shape_box",
+    "name_lookup",
+    "write",
 ];
 
 thread_local! {

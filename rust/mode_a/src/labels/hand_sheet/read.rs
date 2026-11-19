@@ -18,15 +18,37 @@ use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
 use l7r_guard::shared::py_text::strip;
 
-use super::super::geom::{bbox, rect, Pt};
-use super::super::placer::{Cap, Join};
-use super::super::standard::{block_half, CENTER_ABOVE_BASELINE_EM, PITCH_EM};
-use super::{char_w_of, luma, Attrs, Shape, BUSY_FILLS, DARK, DISC_SAG_PX};
+use super::{
+    block_half, char_w_of, luma, Attrs, Cap, Join, Shape, BUSY_FILLS, CENTER_ABOVE_BASELINE_EM,
+    DARK, DISC_SAG_PX, PITCH_EM,
+};
 use crate::etree::Element;
-use crate::py::{hypot, max};
+use crate::py::{hypot, max, min};
+
+/// A point on the sheet.
+pub type Pt = (f64, f64);
 
 /// The SVG namespace, `ElementTree`'s `{...}` key of a tag.
 pub const SVG_NS: &str = "http://www.w3.org/2000/svg";
+
+/// A rectangle of half-extents `(hw, hh)` centered at `(cx, cy)`, turned by `angle` degrees about its center: a caption's block as drawn.
+fn rect(cx: f64, cy: f64, hw: f64, hh: f64, angle: f64) -> Vec<Pt> {
+    let (ca, sa) = (angle.to_radians().cos(), angle.to_radians().sin());
+    [(-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh)]
+        .iter()
+        .map(|&(dx, dy)| (cx + dx * ca - dy * sa, cy + dx * sa + dy * ca))
+        .collect()
+}
+
+/// The box `(x0, y0, x1, y1)` of the vertices (at least one): each extreme the first of its value, as Python's `min` and `max` take it.
+fn bbox(poly: &[Pt]) -> (f64, f64, f64, f64) {
+    let (x, y) = poly[0];
+    poly[1..]
+        .iter()
+        .fold((x, y, x, y), |(x0, y0, x1, y1), &(px, py)| {
+            (min(x0, px), min(y0, py), max(x1, px), max(y1, py))
+        })
+}
 
 /// An SVG transform as one affine matrix `(a, b, c, d, e, f)`.
 pub type Affine = (f64, f64, f64, f64, f64, f64);
@@ -783,3 +805,6 @@ fn text_shape(el: &Element, h: &Inherited, parent: Affine, here: usize) -> Shape
         ..Shape::default()
     }
 }
+
+#[cfg(test)]
+mod tests;

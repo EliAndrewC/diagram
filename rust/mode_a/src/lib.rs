@@ -13,8 +13,8 @@
 //! encoded in process), [`place`], [`notes`], [`tags`], [`dwellings`] and the sheet's page half ([`sheet::page`]); and (T150, step 2's wiring) the six
 //! pool generators' pages written by `sheet-page` ([`sheet::page::cli`], their Python deleted), with the reviewer's two picture measures
 //! `picture-diff` and `page-lit` ([`diagnostics`], `tools/picture_diff.py` and `page_lit.py`, deleted) and the files the page read
-//! listed for the generation cache ([`reads`]); and (T151, step 3a) the caption placer ([`labels`], `l7r/diagram/labels/`) and the
-//! country shrine drawn whole by `hand-sheet` ([`sheet::hand`]), its generator a call to it.
+//! listed for the generation cache ([`reads`]); and (T151, step 3a) the hand sheet's reader ([`labels`], `l7r/diagram/labels/`'s; its
+//! placer rebuilt from its derivation by T202, [`caption_place`]) and the country shrine drawn whole by `hand-sheet` ([`sheet::hand`]), its generator a call to it.
 //!
 //! WHY ITS OWN CRATE AND BINARY: the engine pulls `geo` (since T175, the audit's garden sun) and will pull `resvg` (the plan's steps 2-3), and a gate or guard build that compiled
 //! them would put minutes in front of every hook and check edit; so `l7r-mode-a` is built alone by `scripts/gates/l7r-gate.sh mode-a`,
@@ -30,6 +30,7 @@ use l7r_gate_core::Reply;
 use l7r_gate_research::Error;
 
 pub mod audit;
+pub mod caption_place;
 pub mod census;
 pub mod compound;
 pub mod diagnostics;

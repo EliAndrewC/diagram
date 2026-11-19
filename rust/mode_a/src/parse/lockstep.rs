@@ -68,8 +68,6 @@ def one(task):
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
     T.marks.cache_clear()
-    if part == "labels":
-        return json.dumps(caption_reading(text))
     if part == "sun":
         try:
             plan = P.parse_svg(text)
@@ -86,8 +84,7 @@ def one(task):
     return json.dumps(out)
 paths = json.load(sys.stdin)
 import multiprocessing
-label_sheets = json.load(open(sys.argv[2], encoding="utf-8"))["label_sheets"]
-tasks = [[p, "labels"] for p in label_sheets] + [[p, "sun"] for p in paths if sun_wanted(p)] + [[p, "sheet"] for p in paths]
+tasks = [[p, "sun"] for p in paths if sun_wanted(p)] + [[p, "sheet"] for p in paths]
 with multiprocessing.get_context("fork").Pool(4) as pool:
     done = [json.loads(d) for d in pool.map(one, tasks, chunksize=1)]
 out = {p: d for (p, part), d in zip(tasks, done) if part == "sheet"}
@@ -103,7 +100,7 @@ consts = {n: conv(getattr(P, n)) for n in names}
 given = json.load(open(sys.argv[2], encoding="utf-8"))
 consts.update(INHERITED=conv(T.INHERITED), SKIP=conv(T._SKIP), DEFS=S.DEFS, PRIVY_FILL=R.PRIVY_FILL, GRIDS=grid_defaults(),
               CHECKS=check_defaults(), LABELS=labels_reading(given["labels"]), MAIN=main_reading(given["main"]))
-print(json.dumps({"sheets": out, "consts": consts, "labels": {p: d for (p, part), d in zip(tasks, done) if part == "labels"}}))
+print(json.dumps({"sheets": out, "consts": consts}))
 "#;
 
 fn f(x: f64) -> Value {
@@ -305,20 +302,13 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
         .iter()
         .find(|n| n.ends_with("plain-check-refused-viewbox.svg"))
         .unwrap();
-    // (T151) the four caption-placing sheets, whose captions the Python seats as a task each
-    let label_sheets: Vec<String> = super::lockstep_labels::SHEETS
-        .iter()
-        .map(|s| real().join(s).to_string_lossy().into_owned())
-        .collect();
-    let given = json!({"labels": labels, "main": [[], [roundtrip], [roundtrip, "no-such-sheet.svg"], [refused]],
-                       "label_sheets": label_sheets});
+    let given = json!({"labels": labels, "main": [[], [roundtrip], [roundtrip, "no-such-sheet.svg"], [refused]]});
     let given_at = dir.path().join("given.json");
     std::fs::write(&given_at, given.to_string()).unwrap();
     let script = format!(
-        "{DUMP_HEAD}{}{}{}{DUMP_TAIL}",
+        "{DUMP_HEAD}{}{}{DUMP_TAIL}",
         super::lockstep_audit::PYTHON,
-        super::lockstep_checks::PYTHON,
-        super::lockstep_labels::PYTHON
+        super::lockstep_checks::PYTHON
     );
     let stdin = json!(names).to_string();
     // (T178) the Python's output kept by a key over everything it reads, and the Python run only when that key moves
@@ -376,48 +366,31 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
         .iter()
         .map(|p| l7r_gate_core::record::read_text(p).unwrap())
         .collect();
-    // in four threads, each every fourth sheet so the long pool sheets spread; with each sheet its gardens' unshaded areas, measured below;
-    // and (T151) beside them the four caption-placing sheets seated, a thread each
-    let (rust, areas, ours_labels): (Vec<Value>, Vec<Vec<f64>>, Vec<super::lockstep_labels::Ours>) =
-        std::thread::scope(|scope| {
-            let (paths, texts) = (&paths, &texts);
-            let seating: Vec<_> = label_sheets
-                .iter()
-                .map(|p| {
-                    scope.spawn(move || {
-                        super::lockstep_labels::ours(
-                            &l7r_gate_core::record::read_text(Path::new(p)).unwrap(),
-                        )
+    // in four threads, each every fourth sheet so the long pool sheets spread; with each sheet its gardens' unshaded areas, measured below
+    let (rust, areas): (Vec<Value>, Vec<Vec<f64>>) = std::thread::scope(|scope| {
+        let (paths, texts) = (&paths, &texts);
+        let threads: Vec<_> = (0..4)
+            .map(|k| {
+                scope.spawn(move || {
+                    let mine = paths
+                        .iter()
+                        .zip(texts)
+                        .enumerate()
+                        .filter(|(i, _)| i % 4 == k);
+                    mine.map(|(i, (p, t))| {
+                        (i, rust_reading(p, t), super::lockstep_checks::sun_areas(t))
                     })
+                    .collect::<Vec<_>>()
                 })
-                .collect();
-            let threads: Vec<_> = (0..4)
-                .map(|k| {
-                    scope.spawn(move || {
-                        let mine = paths
-                            .iter()
-                            .zip(texts)
-                            .enumerate()
-                            .filter(|(i, _)| i % 4 == k);
-                        mine.map(|(i, (p, t))| {
-                            (i, rust_reading(p, t), super::lockstep_checks::sun_areas(t))
-                        })
-                        .collect::<Vec<_>>()
-                    })
-                })
-                .collect();
-            let mut all: Vec<_> = threads
-                .into_iter()
-                .flat_map(|t| t.join().unwrap())
-                .collect();
-            all.sort_by_key(|(i, _, _)| *i);
-            let (r, a) = all.into_iter().map(|(_, r, a)| (r, a)).unzip();
-            (
-                r,
-                a,
-                seating.into_iter().map(|t| t.join().unwrap()).collect(),
-            )
-        });
+            })
+            .collect();
+        let mut all: Vec<_> = threads
+            .into_iter()
+            .flat_map(|t| t.join().unwrap())
+            .collect();
+        all.sort_by_key(|(i, _, _)| *i);
+        all.into_iter().map(|(_, r, a)| (r, a)).unzip()
+    });
     let ours = consts(&given);
     let rust_s = clock.elapsed().as_secs_f64();
     let out = keep::end(half, at.as_deref(), &key, dir.path());
@@ -524,33 +497,13 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     let held = measure.steps > 100 && measure.max_abs < measure.min_margin;
     assert!(held, "{measure:?}");
     let how = if out.ran { "ran" } else { "kept" };
-    // (T151) the labels: each caption-placing sheet's captions as the Python seats them and as the port does - every caption seated on both
-    // sides, the port's seats breaking no rule the Python's kept, every union's verdict the same - the differences recorded, never asserted
-    // zero (the GM 2026-11-17: the maps need not be bitwise identical)
-    let labels_clock = std::time::Instant::now();
-    let (mut labels, mut records) = (Vec::new(), Vec::new());
-    for (p, mine) in label_sheets.iter().zip(&ours_labels) {
-        let (record, found) =
-            super::lockstep_labels::compare(Path::new(p), mine, &python["labels"][p]);
-        assert!(found.holds(), "{record}");
-        labels.push(found.summary(&record));
-        records.push(record);
-    }
-    // every caption's two seats and the distance between them, kept beside the Python's kept half for the step's page (`--nocapture`
-    // names it)
-    let report = at
-        .as_ref()
-        .map(|keep| keep.with_file_name("mode_a-labels.json"));
-    if let Some(r) = &report {
-        std::fs::write(r, serde_json::to_string_pretty(&records).unwrap()).unwrap();
-    }
-    let labels_s = labels_clock.elapsed().as_secs_f64();
     // (T150) the page writer, its Python deleted: the cases that read the live tree and the six pool pages, their outcomes held
     let page_clock = std::time::Instant::now();
     let writer = crate::page::held::outcomes(&paths[..pool]);
     assert!(writer.pages == pool && writer.cases > 200 && writer.refusals > 0);
     // (T151) the country shrine drawn whole by the command its generator runs, a copy beside this test's world so the pool is untouched,
-    // the picture skipped: its census clean, its placed text the port's, the tracked sheet among the reads the generation cache is told of
+    // the picture skipped: its census clean, its placed text the placer's (T202: the placer rebuilt from its derivation, the comparison with the
+    // Python's seats deleted with the old port), the tracked sheet among the reads the generation cache is told of
     let shrine = dir.path().join("hoshigaoka-shrine.svg");
     let tracked = real().join("pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg");
     std::fs::copy(&tracked, &shrine).unwrap();
@@ -574,10 +527,10 @@ fn the_parse_is_the_python_s_on_every_pool_sheet_and_fixture() {
     );
     let drawn = std::fs::read_to_string(&drawn_to).unwrap();
     let text = std::fs::read_to_string(&tracked).unwrap();
-    assert_eq!(drawn, crate::labels::hand_sheet::placed(&text).unwrap());
+    assert_eq!(drawn, crate::caption_place::placed(&text).unwrap());
     assert!(dir.path().join("hoshigaoka-shrine.html").is_file());
     let page_s = page_clock.elapsed().as_secs_f64();
-    eprintln!("{measure:?}; {writer:?}; the port's half {rust_s:.2} s and its pages {page_s:.2} s, the Python's {python_s:.2} s ({how}), its key {key_s:.2} s; the labels compared in {labels_s:.2} s: {labels:?}, every caption in {report:?}");
+    eprintln!("{measure:?}; {writer:?}; the port's half {rust_s:.2} s and its pages {page_s:.2} s, the Python's {python_s:.2} s ({how}), its key {key_s:.2} s");
 }
 
 #[test]
