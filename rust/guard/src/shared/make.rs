@@ -1,14 +1,13 @@
 //! The make invocations a command makes (`scripts/hooks/lib/hm_make.py`, the parts `gate-hooks` reads - feature 449 T007 decision
-//! (a)): the targets it INVOKES, a mention never one; the quick-and-done combination; and `classify`'s verdict through a bare
-//! pytest. Each pattern is the Python's verbatim (research R8); the rest of `hm_make.py` moves with the guards that read it (T028,
-//! T029).
+//! (a)): the targets it INVOKES, a mention never one; and the quick-and-done combination. Each pattern is the Python's verbatim (research
+//! R8); the rest of `hm_make.py` moves with the guards that read it (T028, T029). `classify`'s verdict through a bare pytest and the view
+//! it read a command by left with pytest (feature 449 T213).
 
 use std::collections::BTreeSet;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 
-use super::escape::used;
 use super::shape::{strip_heredocs, strip_quotes};
 
 /// A command position: the start, or after `;`, `|`, `&&`, `||` or a newline, past `timeout N`, `env` and `VAR=value` prefixes.
@@ -162,54 +161,6 @@ pub fn combine(cmd: &str) -> Option<String> {
         .to_owned();
     let left = goals(&out);
     (!out.is_empty() && out != cmd && has(&left, "done") && !has(&left, "quick")).then_some(out)
-}
-
-static SEARCHER_COUNT: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r#"(?:\A|(?<=[\n;|&'"]))((?>[^\n;|&'"]*?(?<![^\s;|&(])(?:grep|egrep|fgrep|rg|ugrep|ack|ag)\b)[^\n;|&'"]*?\s)-c(\s+['"])"#,
-    )
-});
-// only in a searcher's own segment: `sh -c foo\\|pytest` does run pytest once the shell strips the backslash
-static SEARCHER_SEGMENT: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?:^|[\n;&(]|\|\|?)\s*(?:grep|egrep|fgrep|rg|ugrep|ack|ag)\b(?:[^\n;&|\\]|\\.)*")
-});
-/// `cmd` as a pytest check must read it (feature 449 T028, the constitution XIV fix): `strip_quotes` keeps the string after `-c `, which is a Python program after an
-/// interpreter and a search pattern after a searcher's count flag, and an escaped pipe is no separator. So `grep -c "a|pytest" f` is not a pytest run.
-#[must_use]
-pub fn pytest_view(cmd: &str) -> String {
-    let body = strip_heredocs(cmd);
-    let renamed = SEARCHER_COUNT.replace_all(&body, "${1}-C${2}");
-    let stripped = strip_quotes(&renamed);
-    SEARCHER_SEGMENT
-        .replace_all(&stripped, |caps: &fancy_regex::Captures| {
-            caps[0].replace("\\|", "  ")
-        })
-        .into_owned()
-}
-
-/// Whether `classify` reads `cmd` as a bare pytest run: its earlier verdicts - an escaped guard edit, a foreign makefile, an engine
-/// entry point - each a command that is not one.
-#[must_use]
-pub fn bare_pytest(cmd: &str) -> bool {
-    if !cmd.contains("pytest") || used(cmd, "GUARD_EDIT_OK") {
-        return false;
-    }
-    let c = strip_quotes(&strip_heredocs(cmd));
-    let at = |pat: &str| re(&format!("{POS}{pat}")).is_match(&c).unwrap_or(false);
-    if at(r"make\s+(?:-\S+\s+)*(?:-f|--file|--makefile)(?:[=\s]|$)") {
-        return false;
-    }
-    if at(&format!(r"{PY}\s+(?:-\S+\s+)*-m\s+l7r\.diagram\."))
-        || at(&format!(
-            r"{PY}\s+\S*l7r/diagram/(?:pipeline/regen|hamletgen/__main__)\.py"
-        ))
-    {
-        return false;
-    }
-    let view = pytest_view(cmd);
-    re(&format!(r"{POS}(?:{PY}\s+(?:-\S+\s+)*-m\s+)?pytest\b"))
-        .is_match(&view)
-        .unwrap_or(false)
 }
 
 #[cfg(test)]

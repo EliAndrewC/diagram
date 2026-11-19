@@ -818,31 +818,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** no
 
 
-### T213 (<why: the finding or measurement that files it>)
+### T213 (T156's scoping, 2026-11-19: pytest has no test left to run once the pool sweep is Rust)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: after T211 and T212 no Python test is left under `tests/` (observed 2026-11-19, method: `git ls-files` of the test files after T212 landed), so pytest's infrastructure goes: its conftest, package markers, scope switches, failure marks, heap trimming and `_memory`; its runs in the remaining make targets and `make done`'s phase; pyproject's pytest block; and the Rust that keys, hashes or times pytest's files (the tree hashing and state, the landing's long runs, the suites' freshness key, the make-only guard's pytest branch, the gate's cost measure), each crate kept at full coverage. The docs that name pytest as part of the gate are updated.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| pytest's exit | the Rust tests already holding every subject | none | none | none |
 
 ### T213 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The gate runs no Python test runner, and nothing keys or times what pytest no longer runs.
+2. **The constraints.** FR-001b (the GM 2026-11-10: the Python unit tests deleted); FR-004 (full coverage of Rust lines); engine-plan.md.
+3. **Where each comes from.** G: request.md, 2026-11-10; O: T156's scoping and the test files listed after T212.
+4. **Do they describe the world here?** Yes: no Python test file is left to collect (observed 2026-11-19, as above).
+5. **The order.** After T212; the last of T156's four landings, T156 ticked with it.
+6. **The exits.** Green: no make target runs pytest, no Rust keys its files, `make quick`, `make static`, `make hooks-test` and `make done` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** A grep for pytest finds it only in history.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** n/a (deletion of a test runner with nothing to run).
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** none yet
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T214 (<why: the finding or measurement that files it>)
@@ -907,6 +908,33 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 |---|---|---|---|---|
 
 ### T216 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T217 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T217 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

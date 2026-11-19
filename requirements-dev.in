@@ -1,4 +1,4 @@
-# The quality gate (`make done`): lint, format, types, tests, coverage, parallel runner.
+# The quality gate (`make done`): lint, format, types (pytest and its plugins left with the Python tests, feature 449 T213).
 # Re-lock: pip-compile -c requirements.txt --output-file=requirements-dev.txt requirements-dev.in
 #
 # THE `-c requirements.txt` IS LOAD-BEARING. setup-dev-env.sh installs both lockfiles in ONE pip
@@ -9,10 +9,6 @@
 # the runtime lock is what stops the drift recurring on the next shared dep.
 ruff
 pyrefly      # THE type checker (feature 142) - Rust, one-shot, no daemon
-pytest
-pytest-cov
-pytest-xdist
-pytest-testmon
 types-shapely
 playwright    # no importer left since feature 449 T150 ported `page_lit` to the browser crate (`l7r-browser lit`); kept until the requirements' cleanup (S13)
 pip-tools    # re-locks these files

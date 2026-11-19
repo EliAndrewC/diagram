@@ -10,7 +10,6 @@ pub mod feature_report;
 pub mod figures;
 pub mod fix_yield;
 pub mod fresh_tally;
-pub mod gate_costs;
 pub mod gatecost;
 pub mod guard_log;
 pub mod maps_moved;
@@ -35,7 +34,6 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let rest = args.get(1..).unwrap_or(&[]);
     match args.first().map(String::as_str) {
         Some("figures") => figures::cli(rest, root),
-        Some("gate-costs") => gate_costs::cli(rest, root),
         Some("gatecost") => gatecost::cli(rest, root),
         Some("ratchet") => ratchet::cli(rest, root),
         Some("probe") => probe::cli(rest, root),
@@ -83,7 +81,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         ),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit | spec\n"
+            "usage: l7r-gate measure figures | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit | spec\n"
                 .to_owned(),
             2,
         ),

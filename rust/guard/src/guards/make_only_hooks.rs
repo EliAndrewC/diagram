@@ -1,6 +1,8 @@
 //! `make-only-hooks` (feature 127; features 164, 212, 385, 444; ported from the shell of the same name and the deciding half of `lib/hm_make.py`, feature 449 T028): EVERY OPERATION GOES THROUGH ITS MAKE
-//! TARGET, so an expensive run can ask whether the cheap one would do first. A bare pytest, an engine entry point, a bare cargo or a replacement's binary, a foreign makefile, an inline override and a guard
-//! file written from the shell are refused; a targeted pytest and an entry point a make target wraps are rewritten into that target. `GUARD_EDIT_OK` with a reason is the escape.
+//! TARGET, so an expensive run can ask whether the cheap one would do first. An engine entry point, a bare cargo or a replacement's binary, a foreign makefile, an inline override and a guard file
+//! written from the shell are refused; an entry point a make target wraps is rewritten into that target. `GUARD_EDIT_OK` with a reason is the escape. The bare-pytest branch
+//! (refused, or a targeted run rewritten to `make test-file`) left with pytest and its targets (feature 449 T213); with it went T214's defect, a pytest MENTION in a
+//! quoted `python3 -c` program refused as a run.
 
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -13,7 +15,7 @@ use serde_json::{json, Value};
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, used, Escape};
 use crate::shared::log;
-use crate::shared::make::{pytest_view, POS, PY};
+use crate::shared::make::{POS, PY};
 use crate::shared::session::Session;
 use crate::shared::shape::{strip_heredocs, strip_quotes};
 use crate::shared::state::field;
@@ -66,10 +68,6 @@ lazy!(
     format!(r"{POS}{PY}\s+\S*l7r/diagram/(?:pipeline/regen|hamletgen/__main__)\.py")
 );
 lazy!(
-    PYTEST,
-    format!(r"{POS}(?:{PY}\s+(?:-\S+\s+)*-m\s+)?pytest\b")
-);
-lazy!(
     CARGO,
     format!(
         r"{POS}(?:\S*/)?cargo\s+(?:\+\S+\s+)?(?:build|test|run|clippy|check|fmt|llvm-cov|bench|nextest)\b"
@@ -91,20 +89,7 @@ lazy!(
     LANDING,
     r#"\bmake\s+(?:-\S+\s+)*(?:land-tooling\b[^\n;&|]*?\bFILES|arbiter-fix-done\b[^\n;&|]*?\bLAND)=("[^"]*"|'[^']*'|\S+)"#
 );
-lazy!(
-    DROP_FLAG,
-    r"^(-q|-qq|--quiet|-x|--exitfirst|--no-cov|--no-header|-v|-vv|-vvv|--tb=\S+|--color=\S+)$"
-);
 lazy!(REDIR, r"^(?:\d?>>?&?\S+|\d?<\S+)$");
-lazy!(REDIR_OP, r"^\d?>>?$");
-lazy!(
-    TESTPATH,
-    r"^(?:tests(?:/[\w.-]+)*/?|(?:[\w.-]+/)*test_[\w-]+\.py(?:::[\w\[\]:.,-]+)?)$"
-);
-lazy!(
-    PYTEST_RUN,
-    r"(?:\S*/)?python3?\s+(?:-\S+\s+)*-m\s+pytest\b|(?<![\w/.-])pytest\b"
-);
 lazy!(MASK_HEREDOC, r#"(?s)<<-?\s*['"]?(\w+)['"]?\n.*?\n\s*\1\b"#);
 lazy!(
     MASK_QUOTE,
@@ -120,10 +105,6 @@ lazy!(
 );
 lazy!(TARGET_LINE, r"^([a-z][\w-]*):(?!=)");
 lazy!(RUN_LINE, r"^\$\(RUN\)\.([\w.]+)\s*(.*)$");
-lazy!(
-    LABEL_FILE,
-    r#"make test-file FILE=(?:"[^"]*"|\S+)(?:\s+K="[^"]*")?"#
-);
 lazy!(LABEL_MODULE, r"-m\s+(l7r\.diagram\.[\w.]+)");
 lazy!(LABEL_TARGET, r"\bmake\s+([a-z][\w-]*(?:\s+[A-Z_]+=\S*)*)");
 
@@ -245,9 +226,6 @@ pub(crate) fn classify(cmd: &str) -> String {
     if cmd.contains("l7r") && (hit(&ENTRY_MODULE, &clean) || hit(&ENTRY_SCRIPT, &clean)) {
         return "engine-entry-point".to_owned();
     }
-    if cmd.contains("pytest") && hit(&PYTEST, &pytest_view(cmd)) {
-        return "bare-pytest".to_owned();
-    }
     if cmd.contains("cargo") && hit(&CARGO, &clean) {
         return "bare-cargo".to_owned();
     }
@@ -357,87 +335,6 @@ fn words(seg: &str) -> Vec<(String, String)> {
         start = end;
     }
     out
-}
-
-/// The compliant command for a targeted pytest, or why the shape keeps its refusal.
-pub(crate) fn targeted_pytest(cmd: &str) -> Result<String, String> {
-    let view = masked(cmd);
-    let Ok(Some(found)) = PYTEST_RUN.find(&view) else {
-        return Err("no pytest invocation".to_owned());
-    };
-    let (head, tail) = (&cmd[..found.start()], &cmd[found.end()..]);
-    let (seg, rest) = split_segment(tail);
-    let body = seg.trim_end();
-    let ending = &seg[body.len()..];
-    let list = words(body);
-    let (mut paths, mut redirs, mut key): (Vec<String>, Vec<String>, Option<String>) =
-        (Vec::new(), Vec::new(), None);
-    let mut i = 0;
-    while i < list.len() {
-        let (raw, w) = (&list[i].0, list[i].1.as_str());
-        let next = list.get(i + 1).map(|x| x.1.as_str());
-        if w == "-k" || w.starts_with("-k=") {
-            if key.is_some() {
-                return Err("`-k` given twice".to_owned());
-            }
-            if let Some(expr) = w.strip_prefix("-k=") {
-                key = Some(expr.to_owned());
-                i += 1;
-            } else {
-                key = Some(next.ok_or("`-k` with no expression")?.to_owned());
-                i += 2;
-            }
-        } else if hit(&REDIR_OP, w) {
-            next.ok_or("a redirect with no target")?;
-            redirs.push(format!("{raw} {}", list[i + 1].0));
-            i += 2;
-        } else if hit(&REDIR, w) {
-            redirs.push(raw.clone());
-            i += 1;
-        } else if w == "-p" {
-            if !next.is_some_and(|p| p.starts_with("no:")) {
-                return Err(format!("`-p {}` loads a plugin", next.unwrap_or("")));
-            }
-            i += 2;
-        } else if w.starts_with("-pno:") {
-            i += 1;
-        } else if ["-n", "--dist", "--tb", "--color"].contains(&w) {
-            i += 2;
-        } else if hit(&DROP_FLAG, w) {
-            i += 1;
-        } else if w.starts_with('-') {
-            return Err(format!("`{w}`"));
-        } else if w.starts_with('/') {
-            return Err(format!("the absolute path `{w}`"));
-        } else if hit(&TESTPATH, w) {
-            paths.push(w.to_owned());
-            i += 1;
-        } else {
-            return Err(format!("the argument `{w}`"));
-        }
-    }
-    if paths.is_empty() {
-        return Err("no test path".to_owned());
-    }
-    let file = if paths.len() > 1 {
-        format!("\"{}\"", paths.join(" "))
-    } else {
-        paths[0].clone()
-    };
-    let mut out = format!("{head}make test-file FILE={file}");
-    if let Some(expr) = key {
-        if expr.contains(['"', '$', '`']) {
-            return Err("a `-k` expression carrying a quote, a dollar or a backtick".to_owned());
-        }
-        out.push_str(" K=\"");
-        out.push_str(&expr);
-        out.push('"');
-    }
-    if !redirs.is_empty() {
-        out.push(' ');
-        out.push_str(&redirs.join(" "));
-    }
-    Ok(format!("{out}{ending}{rest}"))
 }
 
 /// One token of a recipe's arguments.
@@ -739,15 +636,6 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
                 rewrite(input, &fixed, note)
             }
             Err(why) => refuse(&verdict, &format!("an engine entry point run outside make - {why}."), "make <target>   (make help lists the operations)"),
-        },
-        "bare-pytest" => match targeted_pytest(cmd) {
-            Ok(fixed) => {
-                fire("rewrote", "targeted-pytest");
-                let label = LABEL_FILE.find(&fixed).ok().flatten().map_or("make test-file FILE=...".to_owned(), |m| m.as_str().to_owned());
-                let note = format!("That bare pytest was rewritten to `{label}` - everything here goes through make so an expensive run can ask whether the cheap one would do first. Next time write it that way: `make test-file FILE=<file|dir|node id> [K=\"<-k expression>\"]`; a K= or node-id run is a SUBSET and owes a whole-file run before the gate. Corrected rather than refused, because a refusal costs a model round trip.");
-                rewrite(input, &fixed, note)
-            }
-            Err(why) => refuse(&verdict, &format!("pytest run directly rather than through make. Everything here goes through a make target, so an expensive run can ask whether the cheap one would do first. A targeted run (files, a directory, a node id, -k, output flags, a pipeline after it) is rewritten for you; this one was not because of {why} - a marker, a deselect, a collection, a coverage or plugin flag changes WHAT runs, and that is yours to decide."), "make test-file FILE=<file|dir|node id> [K=\"<expr>\"]  or  make quick   (stops at the first failure)  or  make done   (the gate)"),
         },
         "inline-override" => refuse(&verdict, "an override supplied on the command line, which skips the prompt whose default answer is CANCEL. That prompt is the whole mechanism: it exists to be answered, not pre-empted.", "make <target>   without the override, and answer the prompt if it appears"),
         "guard-write" => refuse(&verdict, "a GUARD FILE written from a shell command. Layer 3 only sees the Edit and Write tools, so this route slips past it - the same ungated-sibling shape this feature exists to close.", "the Edit tool, or the same command ending in a trailing comment:  <command>  # GUARD_EDIT_OK: <reason>  - a marker INSIDE the text written does not count, since a guard file's text already holds old ones (GUARD_EDIT_OK: the round arbiter's fix on hour:383@4)"),

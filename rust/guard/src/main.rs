@@ -42,12 +42,7 @@ fn main() {
 fn sandbox() -> TempDir {
     let dir = TempDir::new("guard-self-check");
     let _ = std::env::set_current_dir(&dir);
-    for k in [
-        "GUARD_LOG_DIR",
-        "L7R_EVENTS_DIR",
-        "GATE_STATE_DIR",
-        "MEASURE_STATE_DIR",
-    ] {
+    for k in ["GUARD_LOG_DIR", "L7R_EVENTS_DIR", "MEASURE_STATE_DIR"] {
         std::env::set_var(k, dir.path());
     }
     std::env::set_var("HOME", dir.path());

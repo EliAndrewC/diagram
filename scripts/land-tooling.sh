@@ -194,12 +194,10 @@ step patch
 # output and seconds land in the landing's log. LAND_TOOLING_CHECKS, the suite's seam, stands for both;
 # LAND_TOOLING_GUARDS and LAND_TOOLING_TOOLING for one each.
 guards=${LAND_TOOLING_GUARDS:-${LAND_TOOLING_CHECKS:-make hooks-test}}
-# GUARD_EDIT_OK: feature 449 T133 (ask:449-phase3-remainder Q3) - the tooling tree's last test went to Rust, and pytest over a tree
-# with no test answers "no tests ran" (exit 5), which failed every landing; with no `test_*.py` left there the run is `true`
-tooling_run="make test-file FILE=tests/tooling"
-[ -n "$(find "$WT/tests/tooling" -name 'test_*.py' -print -quit 2>/dev/null)" ] || tooling_run=true
-tooling_tests=${LAND_TOOLING_TOOLING:-${LAND_TOOLING_CHECKS:-$tooling_run}}
-run_test=${LAND_TOOLING_TEST:-make test-file FILE=}
+# GUARD_EDIT_OK: feature 449 T213 - pytest left with its targets: the tooling tree's last test went to Rust (T133) and `make test-file`
+# is gone, so the default tooling run is `true` and a landed `tests/*test_*.py` has no default runner (only the suite's seam gives one)
+tooling_tests=${LAND_TOOLING_TOOLING:-${LAND_TOOLING_CHECKS:-true}}
+run_test=${LAND_TOOLING_TEST:-}
 # GUARD_EDIT_OK: feature 385 T52 - THE PYTHON THAT LANDS IS LINTED FIRST: T49's test landed with its imports unsorted (and a merge's
 # duplicate import after it), T51's fixture with the wrong blank lines - each caught by the next session's `make done`, on main.
 # `ruff check` on the landed .py files, in the worktree, beside the other two checks
@@ -208,7 +206,7 @@ pys=""; for f in "$@"; do case "$f" in *.py) pys="$pys $f" ;; esac; done
 # scripts/ and tests/hooks/ out on purpose - so without it a script's fix was refused for rules the gate never applies there
 lint=${LAND_TOOLING_LINT:-${pys:+ruff check --force-exclude$pys}}
 lint=${lint:-true}
-for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && tooling_tests="$tooling_tests && $run_test\"$f\"" ;; esac; done
+[ -z "$run_test" ] || for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && tooling_tests="$tooling_tests && $run_test\"$f\"" ;; esac; done
 # GUARD_EDIT_OK: feature 374 batch 4 - THE CHECKS RUN WITHOUT THE CALLER'S ESCAPES: a LEDGER_ROWS_OK meant for the push reached
 # the hook suites, where it waived the very refusals they test, and ten sync-with-main cases failed (twice, 2026-10-12). The
 # push below keeps them.

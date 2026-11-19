@@ -1,10 +1,9 @@
 //! The gate's view of the tree (feature 449 T92): the green-gate stamps, the delta and the engine paths, the verification state, the
-//! hashing of what runs, the coverage exemptions, the host-wide lock, the time ratchets, and which retained check a change starts.
+//! coverage exemptions, the host-wide lock, the time ratchets, and which retained check a change starts.
 
 pub mod checks;
 pub mod delta;
 pub mod exempt;
-pub mod hashing;
 pub mod lock;
 pub mod stamp;
 pub mod state;

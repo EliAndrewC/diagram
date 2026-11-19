@@ -125,10 +125,6 @@
       "kind": "check",
       "what": "rust/gate/crates/cohort/src/push.rs (`l7r-gate push-gate`) - whether a push gate may skip a delta: nothing it judges, or a pass stored for the same committed content (the claims, record and cohort gates; feature 430 T04); each run recorded skipped (0) or judged (1)"
     },
-    "gate_costs": {
-      "kind": "report",
-      "what": "rust/gate/crates/measure/src/measure/gate_costs.rs (`l7r-gate measure gate-costs`) - what a gate run costs, from the run records' phases and plan (make gate-costs; feature 415 T04)"
-    },
     "conflict-markers": {
       "kind": "check",
       "what": "rust/gate/crates/checks/src/checks/conflict.rs (`l7r-gate check conflict`) - a merge conflict committed; each run recorded passed or refused"

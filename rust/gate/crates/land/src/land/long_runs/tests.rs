@@ -1,11 +1,7 @@
 //! The second pass: the Rust stage gate's record, the gates the stamp names, the cohort beside them, the work-budget run.
 
-use std::path::PathBuf;
-
-use l7r_gate_core::ci::fixtures::put;
-
 use super::super::tests::{fx, tool};
-use super::{gate_machinery, stop_cohort, tooling_reads};
+use super::{gate_machinery, stop_cohort};
 
 fn stamp() -> String {
     format!("{} stamp --check origin/main", tool("gates/l7r-gate.sh"))
@@ -91,22 +87,6 @@ fn a_machinery_delta_whose_stamp_passes_runs_the_guard_suites() {
         .said()
         .0
         .contains("(scripts/gates/x.sh) - the gate's reuse stands"));
-}
-
-#[test]
-fn the_tooling_tests_a_delta_of_scripts_reaches_run() {
-    let fx = fx("long-tooling");
-    put(&fx.root, "tests/tooling/test_named.py", "import thing\n");
-    fx.in_delta("scripts/record/thing.py", "x = 1\n");
-    let line = "make --no-print-directory test-file FILE=tests/tooling/test_named.py";
-    fx.answer(line, "rc", "1");
-    assert_eq!(fx.land.long_runs(), Ok(1));
-    assert!(fx
-        .said()
-        .1
-        .contains("the tooling tests the delta reaches are red"));
-    fx.answer(line, "rc", "0");
-    assert_eq!(fx.land.long_runs(), Ok(0));
 }
 
 /// An engine delta whose stamp names `make done` and `make hooks-test`, with no landing cohort and 8 GB free.
@@ -225,7 +205,7 @@ fn a_gate_or_cohort_that_cannot_start_is_a_raise() {
 }
 
 #[test]
-fn the_machinery_and_the_tooling_reads_are_python_s() {
+fn the_machinery_is_python_s() {
     let names = |n: &[&str]| n.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
     assert_eq!(
         gate_machinery(&names(&[
@@ -233,46 +213,12 @@ fn the_machinery_and_the_tooling_reads_are_python_s() {
             "rust/gate/crates/land/src/land.rs",
             "rust/gate/crates/landx/src/lib.rs",
             "scripts/land.py",
-            "tests/_scope.py"
+            "scripts/gates/x.sh"
         ])),
         names(&[
             "Makefile",
             "rust/gate/crates/land/src/land.rs",
-            "tests/_scope.py"
+            "scripts/gates/x.sh"
         ])
     );
-    let fx = fx("long-reads");
-    put(&fx.root, "tests/tooling/test_a.py", "import alpha\n");
-    put(
-        &fx.root,
-        "tests/tooling/sub/test_b.py",
-        "from beta import x\n",
-    );
-    put(&fx.root, "tests/tooling/helper.py", "import alpha\n");
-    put(&fx.root, "tests/tooling/test_c.py", "nothing\n");
-    let reads = tooling_reads(
-        &fx.root,
-        &names(&[
-            "scripts/alpha.py",
-            "scripts/x/beta.py",
-            "tests/tooling/test_c.py",
-            "tests/tooling/test_gone.py",
-            "scripts/noext",
-        ]),
-    )
-    .unwrap();
-    assert_eq!(
-        reads,
-        names(&[
-            "tests/tooling/sub/test_b.py",
-            "tests/tooling/test_a.py",
-            "tests/tooling/test_c.py"
-        ])
-    );
-    std::fs::write(fx.root.join("tests/tooling/test_d.py"), [0xff]).unwrap();
-    assert!(tooling_reads(&fx.root, &names(&["scripts/alpha.py"])).is_err());
-    assert!(tooling_reads(&fx.root, &names(&["README.md"]))
-        .unwrap()
-        .is_empty());
-    let _ = PathBuf::new();
 }

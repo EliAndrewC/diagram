@@ -54,7 +54,7 @@ fn a_gated_push_needs_a_green_local_done_of_exactly_the_merged_engine_content() 
     assert!(
         none.stdout.contains("no local check recorded") && none.stdout.contains("verdict: REFUSE(")
     );
-    state::write(&dir, "failed-gate", "done", false, &py).unwrap();
+    state::write(&dir, "failed-gate", "done", &py).unwrap();
     assert!(ask(&dir, &py, &["status"])
         .stdout
         .contains("the last gate FAILED"));
@@ -65,7 +65,7 @@ fn a_gated_push_needs_a_green_local_done_of_exactly_the_merged_engine_content() 
 #[test]
 fn a_green_local_quick_is_no_green_local_done() {
     let (dir, py) = engine_delta("gated-quick");
-    state::write(&dir, "green-local", "quick", false, &py).unwrap();
+    state::write(&dir, "green-local", "quick", &py).unwrap();
     let quick = ask(&dir, &py, &["gated-check"]);
     assert!(quick.stdout.contains("no green local `make done`"));
 }
@@ -75,7 +75,7 @@ fn a_green_local_quick_is_no_green_local_done() {
 #[test]
 fn a_green_local_done_pushes_until_the_code_changes() {
     let (dir, py) = engine_delta("gated-done");
-    state::write(&dir, "green-local", "done", false, &py).unwrap();
+    state::write(&dir, "green-local", "done", &py).unwrap();
     let done = ask(&dir, &py, &["gated-check"]);
     assert_eq!(done.code, i32::from(!done.stdout.contains("verdict: PUSH")));
     assert!(done

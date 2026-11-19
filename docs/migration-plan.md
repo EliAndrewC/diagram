@@ -195,7 +195,7 @@ document is deliberately NOT a spec-kit feature: it outlives all of them.
    version), **move its folder into `pool/`** (`git mv legacy-hand-authored-pool/<tier>/<map>
    pool/<tier>/<map>`): the ignore rules are per-tree patterns (feature 161), so the move alone makes
    its renders derived and ignored - there is no `.gitignore` line to add or delete.
-5. **`make done` is green** - ruff, format, pyrefly (mypy-strict rules), pytest, 100% coverage.
+5. **`make done` is green** - the static checks, the Rust crates at 100% coverage, the guard suites (pytest left with the Python tests, feature 449 T213).
 6. **A `settlement-review` pass on at least one generated map.** The gate cannot see glyph
    legibility, feature FORM, or whether the map reads as a distinct place. The author is not a
    reliable reviewer of their own output (Constitution Principle I).

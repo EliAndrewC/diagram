@@ -5,8 +5,8 @@ use std::path::{Path, PathBuf};
 use serde_json::json;
 
 use super::{
-    classify, decide, judge, landing_lint, lay, makefile_for, recipes, split_segment,
-    targeted_pytest, words, wrapped, wrapped_modules, Ctx, Token,
+    classify, decide, judge, landing_lint, lay, makefile_for, recipes, split_segment, words,
+    wrapped, wrapped_modules, Ctx, Token,
 };
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
@@ -28,9 +28,6 @@ fn each_verdict_has_its_shape() {
             "python3 l7r/diagram/pipeline/regen.py a",
             "engine-entry-point",
         ),
-        ("pytest -q", "bare-pytest"),
-        ("python3 -m pytest", "bare-pytest"),
-        ("python3 -c 'import pytest; pytest.main()'", "bare-pytest"),
         ("cargo test", "bare-cargo"),
         ("~/.cargo/bin/cargo clippy", "bare-cargo"),
         ("make done FULL=1 REF_WHY=x", "inline-override"),
@@ -57,14 +54,19 @@ fn each_verdict_has_its_shape() {
     }
 }
 
+/// PYTEST IS NO LONGER THE GUARD'S (feature 449 T213): its targets left with it, so a run has nothing to be routed to and the branch that
+/// refused or rewrote one is gone - and with it T214's defect, a read-only `python3 -I -c` whose string held the word refused as a run.
 #[test]
-fn a_search_naming_pytest_is_not_a_pytest_run() {
-    assert_eq!(v("grep -c \"a|pytest\" f.txt"), "ok");
-    assert_eq!(v("rg -c 'x; pytest' f.txt"), "ok");
-    assert_eq!(v("grep a\\|pytest f.txt"), "ok");
-    assert_eq!(v("x | pytest -q"), "bare-pytest");
-    assert_eq!(v("sh -c foo\\|pytest"), "bare-pytest");
-    assert_eq!(v("grep a\\|b f | pytest"), "bare-pytest");
+fn a_pytest_command_or_mention_is_left_alone() {
+    for cmd in [
+        "pytest -q",
+        "python3 -m pytest tests/a/test_b.py -k x",
+        "x | pytest -q",
+        "grep -c \"a|pytest\" f.txt",
+        "python3 -I -c 'print(\"pytest\")'",
+    ] {
+        assert_eq!(v(cmd), "ok", "{cmd}");
+    }
 }
 
 #[test]
@@ -104,47 +106,6 @@ fn a_replacements_binary_is_refused_and_its_wrapper_is_not() {
     assert_eq!(v("scripts/hooks/l7r-guard.sh --version"), "ok");
     assert_eq!(v("git log --grep hamlet"), "ok");
     assert_eq!(v("make hamlet SPEC=x"), "ok");
-}
-
-#[test]
-fn a_targeted_run_is_rebuilt_and_the_rest_named() {
-    let ok = |c: &str| targeted_pytest(c).unwrap();
-    assert_eq!(
-        ok("python3 -m pytest tests/a/test_b.py -x -q --no-cov -p no:r 2>&1 | tail"),
-        "make test-file FILE=tests/a/test_b.py 2>&1 | tail"
-    );
-    assert_eq!(
-        ok("( cd x && pytest tests/test_a.py -k 'a or b' )"),
-        "( cd x && make test-file FILE=tests/test_a.py K=\"a or b\" )"
-    );
-    assert_eq!(
-        ok("pytest tests/a/test_b.py tests/c -n 4 -pno:x"),
-        "make test-file FILE=\"tests/a/test_b.py tests/c\""
-    );
-    assert_eq!(
-        ok("pytest test_a.py -k=x > log"),
-        "make test-file FILE=test_a.py K=\"x\" > log"
-    );
-    assert_eq!(
-        ok("pytest test_a.py >log &"),
-        "make test-file FILE=test_a.py >log &"
-    );
-    assert_eq!(
-        ok("pytest test_a.py 2>&1 && ls"),
-        "make test-file FILE=test_a.py 2>&1 && ls"
-    );
-    let why = |c: &str| targeted_pytest(c).unwrap_err();
-    assert_eq!(why("ls"), "no pytest invocation");
-    assert_eq!(why("pytest test_a.py -k a -k b"), "`-k` given twice");
-    assert_eq!(why("pytest test_a.py -k"), "`-k` with no expression");
-    assert_eq!(why("pytest test_a.py >"), "a redirect with no target");
-    assert!(why("pytest test_a.py -p x").contains("loads a plugin"));
-    assert!(why("pytest test_a.py -p").contains("loads a plugin"));
-    assert_eq!(why("pytest test_a.py -m x"), "`-m`");
-    assert!(why("pytest /tmp/x").contains("absolute path"));
-    assert_eq!(why("pytest notes.md"), "the argument `notes.md`");
-    assert_eq!(why("pytest -q"), "no test path");
-    assert!(why("pytest test_a.py -k '$x'").contains("carrying a quote"));
 }
 
 #[test]
@@ -296,7 +257,6 @@ fn each_refusal_names_what_to_run() {
         ("hamlet x", "make hamlet SPEC="),
         ("make -f x y", "from the repository root"),
         ("python3 -m l7r.diagram.none", "no make target wraps"),
-        ("pytest -q", "this one was not because of no test path"),
         ("REF_OK=1 make x", "answer the prompt"),
         ("sed -i s/a/b/ Makefile", "a marker INSIDE the text written"),
     ] {
@@ -317,10 +277,7 @@ fn each_refusal_names_what_to_run() {
 #[test]
 fn the_rewrites_and_the_escape() {
     let d = world("rewrite");
-    let got = run("pytest tests/a/test_b.py -q", &d, "sh");
-    assert!(
-        matches!(&got[..], [Answer::Rewrite(v), Answer::Notice(n)] if v["command"] == "make test-file FILE=tests/a/test_b.py" && v["description"] == "kept" && n.contains("a K= or node-id run is a SUBSET"))
-    );
+    assert!(run("pytest tests/a/test_b.py -q", &d, "sh").is_empty());
     let got = run("python3 -m l7r.diagram.ci status", &d, "sh");
     assert!(
         matches!(&got[..], [Answer::Rewrite(v), Answer::Notice(n)] if v["command"] == "make ci-status" && n.contains("`python3 -m l7r.diagram.ci` was rewritten to `make ci-status`"))

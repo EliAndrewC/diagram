@@ -17,7 +17,7 @@ pub use l7r_gate_record::record;
 pub use l7r_gate_registry as registry;
 pub use l7r_gate_reviews::reviews;
 pub use l7r_gate_rustc::rustc;
-pub use l7r_gate_tree::{delta, exempt, hashing, lock, stamp, state, top};
+pub use l7r_gate_tree::{delta, exempt, lock, stamp, state, top};
 
 /// `l7r-gate content-ids <path>...`: `<path> <id>` for each file (a tree's code ids, T062).
 fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {
@@ -127,7 +127,6 @@ pub fn cli(args: &[String]) -> Reply {
         Some("own-make") => lock::own_make_cli(&args[1..], Path::new("/proc")),
         Some("state") => state::cli(&args[1..], &top(), "python3"),
         Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),
-        Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
         Some("content-ids") => content_ids(&args[1..], Path::new("."), "python3"),
         Some("log") => logs::log_cli(&args[1..], Path::new(".")),
         // the reason floor's form (`escape take`, an escape taken outside a hook, left with `reserve-prefix.py`'s reservation, T145)
@@ -293,7 +292,6 @@ mod tests {
         assert_eq!(ask(&["stamp", "--nonsense"]).code, 2);
         assert_eq!(ask(&["state", "nonsense"]).code, 2);
         assert_eq!(ask(&["coverage-exempt", "nonsense"]).code, 2);
-        assert_eq!(ask(&["config-hash", "nonsense"]).code, 2);
         assert_eq!(ask(&["ci", "nonsense"]).code, 2);
         assert_eq!(ask(&["switches", "nonsense"]).code, 2);
         assert!([0, 1].contains(&ask(&["github-token"]).code));

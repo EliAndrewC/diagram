@@ -107,8 +107,7 @@ check_all() {
     # field engine needs real polygon booleans, so a missing wheel breaks map generation, not a test
     _t "python: shapely (diagram field engine)"  "python3 -c 'import shapely'"
     _t "python: pillow (render_cache, crop_map)" "python3 -c 'import PIL'"
-    # dev deps - the quality gate itself
-    _t "python: pytest + cov + xdist + testmon"  "python3 -c 'import pytest, pytest_cov, xdist, testmon'"
+    # dev deps - the quality gate itself (pytest and its plugins left with the Python tests, feature 449 T213)
     _t "python: ruff pyrefly"                    "python3 -m ruff --version; pyrefly --version"
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.
     # ~/.bashrc is NOT on a bind mount (only the repo and ~/.claude survive a rebuild), so this has

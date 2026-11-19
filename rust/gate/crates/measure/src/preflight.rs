@@ -355,7 +355,6 @@ pub fn stray_probes(root: &Path) -> Vec<String> {
 pub struct Asked {
     pub root: String,
     pub skip_quick: bool,
-    pub workers: String,
     pub tree_snap: String,
     pub tree_check: String,
     pub census: String,
@@ -368,7 +367,6 @@ pub struct Asked {
 pub fn parse(args: &[String]) -> Asked {
     let mut a = Asked {
         root: ".".to_owned(),
-        workers: std::env::var("XDIST_WORKERS").unwrap_or_else(|_| "4".to_owned()),
         ..Asked::default()
     };
     let mut words = args.iter();
@@ -376,7 +374,6 @@ pub fn parse(args: &[String]) -> Asked {
         let mut value = || words.next().cloned().unwrap_or_default();
         match word.as_str() {
             "--root" => a.root = value(),
-            "--workers" => a.workers = value(),
             "--tree-snap" => a.tree_snap = value(),
             "--tree-check" => a.tree_check = value(),
             "--census" => a.census = value(),

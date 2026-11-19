@@ -18,8 +18,8 @@ decision).
 
 | check | today (Python) | in the Rust phases | fate | keys |
 |---|---|---|---|---|
-| lint | ruff | clippy, all and pedantic, warnings refused | one for one | `make static` `make quick` `make done` `make format` `scripts/format-changed.sh` |
-| format | ruff format | rustfmt | one for one | `make format` `scripts/format-changed.sh` |
+| lint | ruff | clippy, all and pedantic, warnings refused | one for one | `make static` `make quick` `make done` `make format` |
+| format | ruff format | rustfmt | one for one | `make format` |
 | types | pyrefly | the Rust compiler, which is stricter | dropped, replaced by the compiler | `make static` |
 | function cap | PLR0915 and `check-function-cap.py`, 100 statements, a suppression says why | clippy `too_many_lines` (100 lines); `#[expect(lint, reason = "...")]` and `allow_attributes_without_reason` | one for one, counts lines | `scripts/gates/check-function-cap.py` |
 | file cap | `l7r-gate check file-scale`, 1,000 raw lines | the same check, reading `.rs` | one for one | `rust/gate/crates/checks/src/checks/file_scale.rs` |

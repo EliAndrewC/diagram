@@ -972,6 +972,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T213 (T156's scoping, 2026-11-19: pytest has no test left to run once the pool sweep is Rust)": {
+   "sha256": "a778c3ff1262c626c7d102482f9f567d0263469e6b600ed1f42dff3f143eefaa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T213 Approach (checklist part A)": {
+   "sha256": "e90cb245351e1adcfe19099596bd42eaab14e9f5d51671b1835ee09449423c27",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14338,6 +14350,52 @@
      "why": "Sequencing and verification of the requested removal; nothing narrowed, no unrequested scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T213 (T156's scoping, 2026-11-19: pytest has no test left to run once the pool sweep is Rust)",
+    "### T213 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T213-a",
+     "summary": "Delete pytest's infrastructure: conftest, package markers, scope switches, failure marks, heap trimming and _memory.",
+     "class": "within",
+     "why": "FR-001b and the GM 2026-11-10 ('delete all of the Python unit tests now ... if literally any of our tests or gates required that to work, we can edit them'): with T211/T212 having ported the kept group, no Python test is left (observed 2026-11-19 by git ls-files), so its runner's scaffolding has no subject. Removing it is what the request leads to, not a cut of it."
+    },
+    {
+     "id": "T213-b",
+     "summary": "Remove pytest's runs from the remaining make targets and make done's phase, and pyproject's pytest block.",
+     "class": "within",
+     "why": "The GM's own clause: gates that required the Python tests are edited 'to no longer run unit tests on any of the Python stuff'; FR-001b names this commit as standing in place of ask:449-T071-scope's commit that removes pytest."
+    },
+    {
+     "id": "T213-c",
+     "summary": "Remove the Rust that keys, hashes or times pytest's files: tree hashing and state, the landing's long runs, the suites' freshness key, the make-only guard's pytest branch, the gate's cost measure.",
+     "class": "within",
+     "why": "Same clause of the request (edit any gate that required the Python tests). The make-only guard's pytest branch enforces how a runner with nothing to run is invoked, so dropping it removes no enforcement of anything the GM asked to keep; the kept checks, guard suites and differentials FR-001b relies on are not touched by the block."
+    },
+    {
+     "id": "T213-d",
+     "summary": "Each touched crate kept at full coverage (FR-004).",
+     "class": "within",
+     "why": "FR-004 as written; no relaxation."
+    },
+    {
+     "id": "T213-e",
+     "summary": "Docs that name pytest as part of the gate updated.",
+     "class": "within",
+     "why": "Follows from removing pytest from the gate; adds no behavior."
+    },
+    {
+     "id": "T213-f",
+     "summary": "Order and exits: after T212, last of T156's four landings, T156 ticked with it; green when no make target runs pytest, no Rust keys its files, make quick/static/hooks-test/done green, and a grep for pytest finds it only in history.",
+     "class": "within",
+     "why": "Sequencing and a completion measure that, if anything, is broader than required; nothing in the request or spec is excluded. Nothing found and left; no defect carried forward."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25360,6 +25418,50 @@
      "summary": "After T211, before T213; green exit: no importer of the deleted packages, the lockstep gone, the sweep green, no claim stranded, make static and a make map of each sheet kind green; one landing.",
      "class": "within",
      "why": "Sequencing and verification of the requested removal; nothing narrowed, no unrequested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T213": {
+   "section_sha256": "126a7eef2341cc6f4e60142bb2ad3fd4a6ba2834a25bf8cf344217f7fa40af40",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T213-a",
+     "summary": "Delete pytest's infrastructure: conftest, package markers, scope switches, failure marks, heap trimming and _memory.",
+     "class": "within",
+     "why": "FR-001b and the GM 2026-11-10 ('delete all of the Python unit tests now ... if literally any of our tests or gates required that to work, we can edit them'): with T211/T212 having ported the kept group, no Python test is left (observed 2026-11-19 by git ls-files), so its runner's scaffolding has no subject. Removing it is what the request leads to, not a cut of it."
+    },
+    {
+     "id": "T213-b",
+     "summary": "Remove pytest's runs from the remaining make targets and make done's phase, and pyproject's pytest block.",
+     "class": "within",
+     "why": "The GM's own clause: gates that required the Python tests are edited 'to no longer run unit tests on any of the Python stuff'; FR-001b names this commit as standing in place of ask:449-T071-scope's commit that removes pytest."
+    },
+    {
+     "id": "T213-c",
+     "summary": "Remove the Rust that keys, hashes or times pytest's files: tree hashing and state, the landing's long runs, the suites' freshness key, the make-only guard's pytest branch, the gate's cost measure.",
+     "class": "within",
+     "why": "Same clause of the request (edit any gate that required the Python tests). The make-only guard's pytest branch enforces how a runner with nothing to run is invoked, so dropping it removes no enforcement of anything the GM asked to keep; the kept checks, guard suites and differentials FR-001b relies on are not touched by the block."
+    },
+    {
+     "id": "T213-d",
+     "summary": "Each touched crate kept at full coverage (FR-004).",
+     "class": "within",
+     "why": "FR-004 as written; no relaxation."
+    },
+    {
+     "id": "T213-e",
+     "summary": "Docs that name pytest as part of the gate updated.",
+     "class": "within",
+     "why": "Follows from removing pytest from the gate; adds no behavior."
+    },
+    {
+     "id": "T213-f",
+     "summary": "Order and exits: after T212, last of T156's four landings, T156 ticked with it; green when no make target runs pytest, no Rust keys its files, make quick/static/hooks-test/done green, and a grep for pytest finds it only in history.",
+     "class": "within",
+     "why": "Sequencing and a completion measure that, if anything, is broader than required; nothing in the request or spec is excluded. Nothing found and left; no defect carried forward."
     }
    ],
    "verdict": "CLEAR"

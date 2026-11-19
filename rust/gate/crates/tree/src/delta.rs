@@ -307,37 +307,6 @@ fn compute(root: &Path, base_ref: &str, python: &str) -> Result<String, String> 
     ))
 }
 
-/// Coverage follows the diff at reference scope (feature 135): the package directories of the engine modules changed since the merge base or in the working tree, a directory so that coverage matches by
-/// path and imports nothing. A repository with no `origin/main` has nothing committed to compare.
-fn coverage_scope(root: &Path, base_ref: &str) -> Result<Vec<String>, String> {
-    let committed = merge_base(root, base_ref)
-        .and_then(|base| git(root, &["diff", "--name-only", &base, "HEAD"]))
-        .unwrap_or_default();
-    let worktree = git(root, &["diff", "--name-only", "HEAD"])?;
-    let untracked = git(root, &["ls-files", "--others", "--exclude-standard"])?;
-    let mut mods: Vec<String> = [committed, worktree, untracked]
-        .iter()
-        .flat_map(|text| text.lines())
-        .map(str::trim)
-        .filter(|f| f.starts_with("l7r/") && is_python(f) && !f.contains("/tests/"))
-        .map(|f| f.rsplit_once('/').map_or("", |(dir, _)| dir).to_owned())
-        .collect();
-    mods.sort();
-    mods.dedup();
-    Ok(mods)
-}
-
-/// The pytest words that trace only those packages; nothing changed is no tracing at all.
-fn pytest_words(mods: &[String]) -> String {
-    match mods.split_first() {
-        None => "-o addopts= --no-cov\n".to_owned(),
-        Some((first, rest)) => {
-            let more: String = rest.iter().flat_map(|m| [" --cov=", m.as_str()]).collect();
-            format!("-o addopts=--cov={first}{more}\n")
-        }
-    }
-}
-
 /// The key from (git blob id, path) pairs: a semantic file by the id kept for that blob, its content read only on a miss, any other by the blob id; rows sorted and hashed as the Python hashed them.
 fn key_from_ids(
     root: &Path,
@@ -480,19 +449,22 @@ fn engine_paths(paths: &mut dyn Read) -> Result<String, String> {
     Ok(out)
 }
 
-/// `l7r-gate delta compute [base] | cov-scope [base] | key [tree|worktree] | engine-paths` (the paths on stdin; the engine ones back).
+/// `l7r-gate delta compute [base] | key [tree|worktree] | engine-paths` (the paths on stdin; the engine ones back).
 pub fn cli(args: &[String], root: &Path, python: &str, stdin: &mut dyn Read) -> crate::Reply {
     let second = args.get(1).map(String::as_str);
     let answer = match args.first().map(String::as_str) {
         Some("compute") => compute(root, second.unwrap_or("origin/main"), python),
-        Some("cov-scope") => coverage_scope(root, second.unwrap_or("origin/main")).map(|m| pytest_words(&m)),
-        Some("key") if second == Some("worktree") => engine_key_worktree(root, python).map(|k| format!("{k}\n")),
+        Some("key") if second == Some("worktree") => {
+            engine_key_worktree(root, python).map(|k| format!("{k}\n"))
+        }
         Some("key") => engine_key(root, second.unwrap_or("HEAD"), python).map(|k| format!("{k}\n")),
         Some("engine-paths") => engine_paths(stdin),
         _ => {
             return crate::Reply {
                 stdout: String::new(),
-                stderr: "usage: l7r-gate delta compute [base] | cov-scope [base] | key [tree|worktree] | engine-paths\n".to_owned(),
+                stderr:
+                    "usage: l7r-gate delta compute [base] | key [tree|worktree] | engine-paths\n"
+                        .to_owned(),
                 code: 2,
             }
         }

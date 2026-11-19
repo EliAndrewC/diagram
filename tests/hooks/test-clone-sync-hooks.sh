@@ -383,7 +383,7 @@ bm_notice() { bm "$1" "${3:-Bash}"; case "$OUT" in *"BEHIND MAIN"*) printf 'ok  
 bm_silent() { bm "$1" "${3:-Bash}"; case "$OUT" in "") printf 'ok    %s\n' "$2" ;; *) printf 'FAIL  %s (expected silence)\n      out: %s\n' "$2" "$OUT"; FAILED=1 ;; esac; }
 
 bm_notice "make quick"                  "a test invocation on a dirty, behind clone is told"
-bm_notice "make test-file FILE=x.py"    "a TARGETED test is told too - the GM asked for any type of test"
+bm_notice "make rust-test CRATE=x"      "a TARGETED test is told too - the GM asked for any type of test"
 bm_notice "cd /x && make quick ALL=1"   "a target past a cd and a variable still counts"
 bm_silent "grep -n 'make quick' README" "a MENTION is not an invocation"
 bm_silent "make switches"               "a non-test target says nothing"
@@ -404,9 +404,9 @@ bm_silent "make quick"                  "a CLEAN clone is left to the stale-base
 
 # THE TARGET LIST IS A CACHE, NOT A ROSTER (constitution Principle X clause 14). The hook carries a
 # literal so it costs nothing on a hook that fires for every tool call; the TRUTH is derived here from
-# the skill Makefile, and any target that reaches pytest but is missing from the hook fails this
-# suite. Three hand-written rosters in this repository were each short by one within a day.
-# (the derivation itself is the crate's `every_makefile_target_that_reaches_pytest_is_behind_the_test_targets`, feature 449 T052)
+# the skill Makefile: a name in the hook's list that no target bears fails the crate's
+# `every_test_target_named_is_a_target_of_the_makefile` (feature 449 T213; pytest's targets, whose
+# derivation from recipes running pytest stood here since T052, left with it).
 
 [ -n "${LIVE_PID:-}" ] && kill "$LIVE_PID" 2>/dev/null; true
 rm -rf "$TMP"

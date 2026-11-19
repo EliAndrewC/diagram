@@ -218,7 +218,7 @@ fn the_r6_corpus_replayed() {
 
 /// One make-only row of the refusal corpus (feature 212): every such refusal recovered from the transcripts of 2026-08-25 to 09-07, with the verdict expected of it.
 fn make_only_row_holds(row: &Value, makefile: &str) -> bool {
-    use crate::guards::make_only_hooks::{classify, targeted_pytest, wrapped};
+    use crate::guards::make_only_hooks::{classify, wrapped};
     let (command, want) = (row["command"].as_str().unwrap_or_default(), &row["expect"]);
     let (verdict_wanted, because) = (
         want["verdict"].as_str().unwrap_or_default(),
@@ -226,7 +226,6 @@ fn make_only_row_holds(row: &Value, makefile: &str) -> bool {
     );
     let verdict = classify(command);
     let answered = match verdict.as_str() {
-        "bare-pytest" => targeted_pytest(command),
         "engine-entry-point" => wrapped(command, makefile),
         "ok" => return verdict_wanted == "permit",
         other => return verdict_wanted == "refuse" && because == other,
@@ -238,6 +237,15 @@ fn make_only_row_holds(row: &Value, makefile: &str) -> bool {
                 && why.starts_with(&because.chars().take(40).collect::<String>())
         }
     }
+}
+
+/// The corpus holds no entry-point rewrite since its pytest rows turned to permits (feature 449 T213), so the rewrite arm is held here.
+#[test]
+fn a_rewrite_row_holds_on_its_rewritten_command_alone() {
+    let makefile = "ci-status:\n\t$(RUN).ci status\n";
+    let row = |want: &str| json!({"command": "python3 -m l7r.diagram.ci status", "expect": {"verdict": "rewrite", "command": want}});
+    assert!(make_only_row_holds(&row("make ci-status"), makefile));
+    assert!(!make_only_row_holds(&row("make other"), makefile));
 }
 
 #[test]

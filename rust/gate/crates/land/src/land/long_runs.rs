@@ -3,7 +3,7 @@
 //! `land.py`'s `start_cover` answered None and nothing else reached its branches), so its paths are not ported.
 
 use std::os::unix::process::CommandExt as _;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::process::{Child, Command};
 use std::sync::LazyLock;
 
@@ -11,7 +11,7 @@ use fancy_regex::Regex;
 use l7r_guard::shared::py_text::strip;
 use l7r_guard::shared::speckit::splitlines;
 
-use super::{py_read, stop, Land};
+use super::{stop, Land};
 
 /// The gate the green-gate stamp names for each stale area: "(make done again)", "(make hooks-test again)", "(make page-check again)".
 static NAMED_GATE: LazyLock<Regex> = LazyLock::new(|| re(r"\(make ([\w-]+) again\)"));
@@ -21,12 +21,10 @@ static NAMED_GATE: LazyLock<Regex> = LazyLock::new(|| re(r"\(make ([\w-]+) again
 /// ask:430-machinery-gate, 2026-10-26): the done recipe's reuse branch ignores scripts/, tests/ and the Makefile by the GM's 2026-08-25
 /// rule ("I thought we were omitting make done results for changes to the hooks or scripts or makefile changes"), so the `make done`
 /// this used to add always short-circuited. `land.py`'s list, with the landing's own code at its new home: the commit deleting
-/// `scripts/land.py` put it in `rust/gate/crates/land/`, which a delta changes as it changed the Python (feature 449 T121).
-static GATE_MACHINERY: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r"^(rust/gate/crates/land/.*|scripts/gates/.*|Makefile|tests/conftest\.py|tests/_scope\.py)$",
-    )
-});
+/// `scripts/land.py` put it in `rust/gate/crates/land/`, which a delta changes as it changed the Python (feature 449 T121); the
+/// suite's conftest and scope helper left the list with pytest (T213).
+static GATE_MACHINERY: LazyLock<Regex> =
+    LazyLock::new(|| re(r"^(rust/gate/crates/land/.*|scripts/gates/.*|Makefile)$"));
 /// `work_budget.review`'s refusal for a run never made.
 const MISSING_RUN: &str = "no work-budget run at the pushed engine";
 
@@ -65,21 +63,6 @@ impl Land {
             if !why.is_empty() {
                 self.warn(&why);
                 return Ok(1);
-            }
-        }
-        if machinery.is_empty() {
-            let reads = tooling_reads(&self.root, &names)?;
-            if !reads.is_empty() {
-                self.say(&format!("land: the delta changes scripts or tooling tests - the {} tooling test file(s) reaching them run", reads.len()));
-                let file = format!("FILE={}", reads.join(" "));
-                if self.loud(
-                    &[&self.make, "--no-print-directory", "test-file", &file],
-                    &[],
-                )? != 0
-                {
-                    self.warn("land: the tooling tests the delta reaches are red - nothing landed; fix them and run make land again");
-                    return Ok(1);
-                }
             }
         }
         if rc != 0 && self.named_gates(&out)? != 0 {
@@ -363,74 +346,6 @@ fn stop_cohort(cohort: Option<&mut Child>) {
             let _ = child.wait();
         }
         stop::release(child.id());
-    }
-}
-
-/// The tooling test files a delta of scripts reaches: each changed `tests/tooling/` test, and each one naming a changed `scripts/**/*.py`
-/// by its module name. WHY (feature 446 T03, 2026-10-28): a delta of `scripts/record/` and its tests is no gate machinery and its stamp
-/// owes only `make hooks-test`, so the tooling tests never ran - T02 landed a call that broke `test_known_drift.py`'s stub of `owed`,
-/// caught only by T03's Makefile line pulling in the whole tooling run.
-#[expect(
-    clippy::case_sensitive_file_extension_comparisons,
-    reason = "Python's `str.endswith`, case and all"
-)]
-fn tooling_reads(root: &Path, names: &[String]) -> Result<Vec<String>, String> {
-    let file_name = |n: &str| n.rsplit('/').next().unwrap_or_default().to_owned();
-    let mut tests: Vec<String> = names
-        .iter()
-        .filter(|n| {
-            n.starts_with("tests/tooling/")
-                && file_name(n).starts_with("test_")
-                && n.ends_with(".py")
-                && root.join(n).is_file()
-        })
-        .cloned()
-        .collect();
-    let mut stems: Vec<String> = names
-        .iter()
-        .filter(|n| n.starts_with("scripts/") && n.ends_with(".py"))
-        .map(|n| {
-            let name = file_name(n);
-            name.rsplit_once('.')
-                .map_or(name.as_str(), |(s, _)| s)
-                .to_owned()
-        })
-        .collect();
-    stems.sort();
-    stems.dedup();
-    if !stems.is_empty() {
-        let alternatives: Vec<String> = stems
-            .iter()
-            .map(|s| fancy_regex::escape(s).into_owned())
-            .collect();
-        let pattern = re(&format!(r"\b(?:{})\b", alternatives.join("|")));
-        let mut found = Vec::new();
-        walk_tests(&root.join("tests/tooling"), &mut found);
-        for p in found {
-            if pattern.is_match(&py_read(&p)?).unwrap_or(false) {
-                tests.push(super::rel_of(root, &p));
-            }
-        }
-    }
-    tests.sort();
-    tests.dedup();
-    Ok(tests)
-}
-
-/// Every `test_*.py` under `dir` (`rglob`).
-#[expect(
-    clippy::case_sensitive_file_extension_comparisons,
-    reason = "`rglob(\"test_*.py\")`, case and all"
-)]
-fn walk_tests(dir: &Path, out: &mut Vec<PathBuf>) {
-    for entry in std::fs::read_dir(dir).into_iter().flatten().flatten() {
-        let path = entry.path();
-        let name = entry.file_name().to_string_lossy().into_owned();
-        if entry.file_type().is_ok_and(|t| t.is_dir()) {
-            walk_tests(&path, out);
-        } else if name.starts_with("test_") && name.ends_with(".py") {
-            out.push(path);
-        }
     }
 }
 

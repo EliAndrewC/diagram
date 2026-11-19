@@ -126,7 +126,7 @@ fn a_failure_says_what_to_do() {
     let (_, msg) = verdict("quick", Some(&real("quick")), runs(99), 1.0);
     for expected in [
         "make audit",
-        "make durations",
+        "make test-times CRATE=",
         "pinned baseline",
         "written reason",
     ] {

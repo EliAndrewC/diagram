@@ -3,10 +3,7 @@
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use super::{
-    already_verified, cli, read, record_tooling, second_red_gate, state_file, tooling_hash, utc,
-    write, FAILED, GREEN,
-};
+use super::{already_verified, cli, read, second_red_gate, state_file, utc, write, FAILED, GREEN};
 
 fn git(dir: &Path, args: &[&str]) {
     assert!(Command::new("git")
@@ -72,16 +69,13 @@ fn a_worktree_keeps_its_record_in_its_own_git_directory() {
 #[test]
 fn a_green_gate_stands_against_a_green_subset_on_the_same_content() {
     let (_dir, dir, py) = repo("subset");
-    let gate = write(&dir, GREEN, "done", false, &py).unwrap();
-    assert!(!gate.tooling.is_empty() && !gate.commit.is_empty());
-    assert_eq!(write(&dir, GREEN, "quick", false, &py).unwrap(), gate);
+    let gate = write(&dir, GREEN, "done", &py).unwrap();
+    assert!(!gate.commit.is_empty() && !gate.engine_key.is_empty());
+    assert_eq!(write(&dir, GREEN, "quick", &py).unwrap(), gate);
     assert_eq!(read(&dir).unwrap().unwrap(), gate);
     put(&dir, "a.py", "x = 2\n");
-    let later = write(&dir, GREEN, "quick", false, &py).unwrap();
-    assert_eq!(
-        (later.target.as_str(), later.tooling.as_str()),
-        ("quick", gate.tooling.as_str())
-    );
+    let later = write(&dir, GREEN, "quick", &py).unwrap();
+    assert_eq!(later.target, "quick");
     let text = std::fs::read_to_string(state_file(&dir)).unwrap();
     assert!(
         text.starts_with("{\n  \"event\": \"green-local\",\n  \"target\": \"quick\",")
@@ -90,16 +84,9 @@ fn a_green_gate_stands_against_a_green_subset_on_the_same_content() {
 }
 
 #[test]
-fn only_a_green_gate_that_ran_vouches_for_the_tooling() {
-    let (_dir, dir, py) = repo("tooling");
-    assert_eq!(write(&dir, GREEN, "quick", false, &py).unwrap().tooling, "");
-    assert_eq!(write(&dir, FAILED, "done", false, &py).unwrap().tooling, "");
-    assert_eq!(write(&dir, GREEN, "done", true, &py).unwrap().tooling, "");
-    assert_eq!(
-        write(&dir, GREEN, "done", false, &py).unwrap().tooling,
-        tooling_hash(&dir, &py).unwrap()
-    );
-    assert!(write(&dir, "nonsense", "done", false, &py)
+fn an_unknown_event_is_refused() {
+    let (_dir, dir, py) = repo("event");
+    assert!(write(&dir, "nonsense", "done", &py)
         .unwrap_err()
         .contains("unknown verification event"));
 }
@@ -108,11 +95,11 @@ fn only_a_green_gate_that_ran_vouches_for_the_tooling() {
 fn a_second_red_gate_in_a_row_owes_the_arbiter_and_a_first_does_not() {
     let (_dir, dir, py) = repo("red");
     let owed = dir.join(".git/arbiter-owed.json");
-    write(&dir, FAILED, "done", false, &py).unwrap();
+    write(&dir, FAILED, "done", &py).unwrap();
     assert!(!owed.exists());
-    write(&dir, FAILED, "quick", false, &py).unwrap();
+    write(&dir, FAILED, "quick", &py).unwrap();
     assert!(!owed.exists());
-    write(&dir, FAILED, "done", false, &py).unwrap();
+    write(&dir, FAILED, "done", &py).unwrap();
     let text = std::fs::read_to_string(&owed).unwrap();
     assert!(
         text.contains("\"red-gate@")
@@ -125,32 +112,10 @@ fn a_second_red_gate_in_a_row_owes_the_arbiter_and_a_first_does_not() {
         serde_json::from_str(&std::fs::read_to_string(&owed).unwrap()).unwrap();
     assert_eq!(both.as_object().unwrap().len(), 2);
     assert!(both.get(format!("red-gate@{}", utc(0.0))).is_some());
-    write(&dir, GREEN, "done", false, &py).unwrap();
+    write(&dir, GREEN, "done", &py).unwrap();
     assert_eq!(
         std::fs::read_to_string(dir.join(".git/last-gate")).unwrap(),
         "green-local\n"
-    );
-}
-
-#[test]
-fn the_tooling_can_be_vouched_for_with_or_without_a_record() {
-    let (_dir, dir, py) = repo("vouch");
-    let hash = record_tooling(&dir, &py).unwrap();
-    let st = read(&dir).unwrap().unwrap();
-    assert_eq!(
-        (
-            st.target.as_str(),
-            st.tooling.as_str(),
-            st.engine_key.as_str()
-        ),
-        ("tooling", hash.as_str(), "")
-    );
-    write(&dir, FAILED, "quick", false, &py).unwrap();
-    record_tooling(&dir, &py).unwrap();
-    let kept = read(&dir).unwrap().unwrap();
-    assert_eq!(
-        (kept.event.as_str(), kept.tooling.as_str()),
-        (FAILED, hash.as_str())
     );
 }
 
@@ -162,15 +127,15 @@ fn only_a_green_gate_on_exactly_this_content_is_reused() {
         why(&dir),
         (false, "no local check recorded in this clone".to_owned())
     );
-    write(&dir, GREEN, "quick", false, &py).unwrap();
+    write(&dir, GREEN, "quick", &py).unwrap();
     assert!(why(&dir)
         .1
         .contains("only a green `make done` can be reused"));
-    write(&dir, GREEN, "done", false, &py).unwrap();
+    write(&dir, GREEN, "done", &py).unwrap();
     assert!(why(&dir).0 && why(&dir).1.starts_with("already verified"));
     put(&dir, "pool/a.json", "{}\n");
     assert!(why(&dir).1.contains("a pool gen or manifest changed"));
-    write(&dir, GREEN, "done", false, &py).unwrap();
+    write(&dir, GREEN, "done", &py).unwrap();
     put(&dir, "b.py", "y = 1\n");
     assert!(why(&dir).1.contains("the skill's Python changed"));
 }
@@ -191,10 +156,6 @@ fn the_command_line_answers_and_refuses() {
     assert_eq!(ask(&dir, &py, &["verified-done"]).code, 0);
     assert_eq!(ask(&dir, &py, &["write", FAILED, "quick"]).code, 0);
     assert_eq!(ask(&dir, &py, &["verified-done"]).code, 1);
-    assert!(ask(&dir, &py, &["tooling-green"])
-        .stdout
-        .starts_with("tooling: recorded green for "));
-    assert_eq!(ask(&dir, &py, &["tooling-hash"]).stdout.trim().len(), 64);
     assert_eq!(ask(&dir, &py, &["write", GREEN]).code, 2);
     assert!(ask(&dir, &py, &["write", "x", "y"])
         .stderr

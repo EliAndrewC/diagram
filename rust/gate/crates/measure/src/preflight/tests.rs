@@ -58,7 +58,6 @@ fn tools(root: &Path, fail: &str, door: &str) -> Tools {
 fn asked(root: &Path) -> Asked {
     Asked {
         root: root.display().to_string(),
-        workers: "1".to_owned(),
         ..Asked::default()
     }
 }
@@ -91,8 +90,6 @@ fn flags_are_read() {
         &[
             "--root",
             "r",
-            "--workers",
-            "9",
             "--tree-snap",
             "s",
             "--tree-check",
@@ -113,14 +110,13 @@ fn flags_are_read() {
     assert_eq!(
         (
             a.root.as_str(),
-            a.workers.as_str(),
             a.tree_snap.as_str(),
             a.tree_check.as_str(),
             a.census.as_str(),
             a.would_write.as_str(),
             a.content.as_str()
         ),
-        ("r", "9", "s", "c", "e", "w", "t")
+        ("r", "s", "c", "e", "w", "t")
     );
     assert!(a.skip_quick && a.quiet);
     assert_eq!(parse(&[]).root, ".");

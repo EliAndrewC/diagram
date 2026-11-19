@@ -3,10 +3,7 @@
 use std::path::Path;
 use std::process::Command;
 
-use super::{
-    cat_blobs, cli, compute, coverage_scope, engine_key, engine_key_worktree, is_engine,
-    pytest_words,
-};
+use super::{cat_blobs, cli, compute, engine_key, engine_key_worktree, is_engine};
 
 fn git(dir: &Path, args: &[&str]) -> String {
     let done = Command::new("git")
@@ -190,30 +187,6 @@ fn a_tree_with_no_engine_keys_on_nothing() {
 }
 
 #[test]
-fn coverage_follows_the_diff_and_needs_no_origin() {
-    let dir = repo("cov");
-    assert_eq!(coverage_scope(&dir, "base").unwrap(), Vec::<String>::new());
-    put(&dir, "l7r/diagram/a/x.py", "x = 1\n");
-    put(&dir, "l7r/diagram/tests/t.py", "x = 1\n");
-    put(&dir, "docs/x.py", "x = 1\n");
-    assert_eq!(
-        coverage_scope(&dir, "no-such-ref").unwrap(),
-        ["l7r/diagram/a"]
-    );
-    commit(&dir);
-    put(&dir, "l7r/b/y.py", "y = 1\n");
-    assert_eq!(
-        coverage_scope(&dir, "base").unwrap(),
-        ["l7r/b", "l7r/diagram/a"]
-    );
-    assert_eq!(pytest_words(&[]), "-o addopts= --no-cov\n");
-    assert_eq!(
-        pytest_words(&["a".to_owned(), "b".to_owned()]),
-        "-o addopts=--cov=a --cov=b\n"
-    );
-}
-
-#[test]
 fn a_blob_git_cannot_find_is_none_and_others_are_whole() {
     let dir = repo("blobs");
     let names = [
@@ -249,7 +222,6 @@ docs/b.md
         ask(&["key", "HEAD"]).stdout
     );
     assert_eq!(ask(&["compute", "base"]).code, 0);
-    assert_eq!(ask(&["cov-scope", "base"]).stdout, "-o addopts= --no-cov\n");
     assert_eq!(ask(&["engine-paths"]).stdout, "l7r/a.py\n");
     assert_eq!(ask(&["nonsense"]).code, 2);
     let bad = ask(&["compute", "no-such-ref"]);

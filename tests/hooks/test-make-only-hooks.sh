@@ -51,9 +51,6 @@ check "tier 1: a cohort run bare"              blocked "python3 -m l7r.diagram.t
 check "tier 1: the generator run bare"         blocked "python3 -m l7r.diagram.hamletgen --batch 24"
 check "tier 1: a pool sweep run bare"          blocked "python3 -m l7r.diagram.pipeline.regen pool/hamlets/inashiro/inashiro.gen.py"
 check "tier 1: regen by script path"           blocked "python3 l7r/diagram/pipeline/regen.py pool/hamlets/x/x.gen.py"
-check "tier 1: bare pytest"                    blocked "python3 -m pytest -n auto"
-check "tier 1: bare pytest, plain name"        blocked "pytest tests/hamletgen -q -m \"not slow\""   # GUARD_EDIT_OK: feature 212 - a bare directory now REWRITES (section 4); a marker filter still refuses
-check "tier 1: pytest run in-process via -c"   blocked "python3 -c 'import pytest; pytest.main()'"
 check "tier 1: a bare cargo test (feature 444)" blocked "cargo test --manifest-path rust/phases/Cargo.toml"   # GUARD_EDIT_OK: feature 444 T17 - the bare-cargo rule's cases
 check "tier 1: a bare cargo clippy, by path"   blocked "~/.cargo/bin/cargo clippy --all-targets"
 check "make rust-test is the compliant form"   ok "make rust-test"
@@ -93,8 +90,6 @@ check "the stop-work procedure"                   ok "./scripts/sync-with-main.s
 check "reading a source file"                  ok "grep -n 'def stage_ways' l7r/diagram/hamletgen/ways.py"
 check "a hook's own test"                      ok "tests/hooks/test-make-only-hooks.sh"
 check "an unrelated python one-liner"          ok "python3 -c 'print(1)'"
-# The word 'pytest' appearing inside a make invocation is the gate doing its job, not a bypass.
-check "make running pytest internally"         ok "make test  # runs pytest under the hood"
 # A `|` or `;` INSIDE A QUOTED STRING is not a command separator (2026-08-25: a pip-freeze grep
 # for the lockfile pins was blocked as a bare pytest run - the mention-versus-invocation defect).
 check "a quoted regex naming pytest"           ok "pip freeze | grep -iE '^(numpy|pytest|ruff)=='"
@@ -104,12 +99,12 @@ pytest
 pytest-cov
 EOF"
 
-# GUARD_EDIT_OK: feature 449 T028 - the constitution XIV fix: a search naming pytest is not a pytest run (found 2026-11-07)
+# GUARD_EDIT_OK: feature 449 T213 - PYTEST IS NO LONGER THE GUARD'S: its targets left with it, so a run has nothing to be routed to
+# and the bare-pytest branch went (and with it T214's defect, a pytest MENTION in a quoted `python3 -c` program refused as a run)
+check "a bare pytest"                          ok      "python3 -m pytest -n auto"
+check "a pipe into pytest"                     ok      'cat x | pytest -q'
+check "a pytest word in a quoted -c program"   ok      "python3 -I -c 'print(\"pytest\")'"
 check "grep -c with pytest in its pattern"     ok      'grep -c "a|pytest" notes.txt'
-check "rg -c with pytest in its pattern"       ok      "rg -c 'x; pytest' notes.txt"
-check "an escaped pipe naming pytest"          ok      'grep a\|pytest notes.txt'
-check "...a real pipe into pytest still refuses" blocked 'cat x | pytest -q'
-check "...and an escaped pipe outside a search still refuses" blocked 'sh -c foo\|pytest'
 # GUARD_EDIT_OK: feature 449 T028 - FR-005: a replacement's binary goes through make too
 names_a_target "the guards' binary run directly" "$HOME/.cache/l7r-cargo-target/x/release/l7r-guard --only a PreToolUse"
 names_a_target "the hamlet binary run directly"  "target/release/hamlet pool/hamlets/x/x.spec.json"
@@ -221,12 +216,10 @@ EOF"
 echo
 echo "3. THE REFUSAL IS USEFUL (FR-006) - it must name the target, not just say no"
 names_a_target "a blocked cohort names a target"  "python3 -m l7r.diagram.tools.cohort_audit"
-names_a_target "a blocked pytest names a target"  "pytest -q"
 names_a_target "a forged makefile names a target" "make -f /tmp/evil.mk x"
 
-# GUARD_EDIT_OK: feature 212 - THE TARGETED RUN IS REWRITTEN, THE REST REFUSED WITH THE TOKEN NAMED.
-echo
-echo "4. A TARGETED PYTEST RUN IS REWRITTEN INTO make test-file (feature 212)"
+# GUARD_EDIT_OK: feature 449 T213 - section 4 (a targeted pytest run rewritten into `make test-file`, feature 212) left with pytest;
+# its two helpers stay for the entry-point rewrites below
 rewritten() { # label, command, the exact rewritten command
   ev "$2" | "$HOOK" pretool >"$MO_OUT" 2>"$HOOK_ERR"; local rc=$?
   local got; got=$(jq -r '.hookSpecificOutput.updatedInput.command // empty' < "$MO_OUT" 2>/dev/null)
@@ -244,34 +237,6 @@ refused_because() { # label, command, the text the refusal must carry
     echo "  FAIL    $1 (rc=$rc; refusal did not name '$3')"; FAIL=$((FAIL+1))
   fi
 }
-rewritten "one file, output flags, a pipeline tail" \
-  "python3 -m pytest tests/gate/hamletgen/test_driver.py -x -q --no-header --no-cov -p no:randomly 2>&1 | sed -n '1,60p'" \
-  "make test-file FILE=tests/gate/hamletgen/test_driver.py 2>&1 | sed -n '1,60p'"
-rewritten "-k becomes K=, inside a subshell with a cd" \
-  '( cd $C && python3 -m pytest tests/interactive/test_page.py -k pond_sluice -x -q 2>&1 | sed -n "1,40p" )' \
-  '( cd $C && make test-file FILE=tests/interactive/test_page.py K="pond_sluice" 2>&1 | sed -n "1,40p" )'
-rewritten "a quoted -k expression with spaces" \
-  'python3 -m pytest tests/settlement/test_homestead_parts.py -q -x -p no:cacheprovider --no-cov -k "yard or work_yard" 2>&1 | tail -12' \
-  'make test-file FILE=tests/settlement/test_homestead_parts.py K="yard or work_yard" 2>&1 | tail -12'
-rewritten "a node id is a path" "python3 -m pytest tests/a/test_b.py::test_c -x" "make test-file FILE=tests/a/test_b.py::test_c"
-rewritten "a directory is a path" "pytest tests/tooling -q 2>&1 | tail -3" "make test-file FILE=tests/tooling 2>&1 | tail -3"
-rewritten "two files are two paths" "python3 -m pytest tests/a/test_b.py tests/c/test_d.py -n auto -q" 'make test-file FILE="tests/a/test_b.py tests/c/test_d.py"'
-rewritten "an env prefix and a chain after it" \
-  'FULL=1 python3 -m pytest tests/tooling/test_switches.py -q -n 4 --no-cov 2>&1 | tail -6; echo done' \
-  'FULL=1 make test-file FILE=tests/tooling/test_switches.py 2>&1 | tail -6; echo done'
-rewritten "a pytest AFTER a heredoc is still found (the body is masked, not the command)" \
-  "$(printf 'cat > /tmp/x.py <<EOF\nprint(\"pytest tests/never.py\")\nEOF\npython3 -m pytest tests/x/test_y.py -q')" \
-  "$(printf 'cat > /tmp/x.py <<EOF\nprint(\"pytest tests/never.py\")\nEOF\nmake test-file FILE=tests/x/test_y.py')"
-refused_because "a marker filter names its token"     'python3 -m pytest tests/x/test_y.py -m "not slow"' '`-m`'
-refused_because "a collection names its token"        "python3 -m pytest tests/x/test_y.py --collect-only -q" '`--collect-only`'
-refused_because "a coverage flag names its token"     "python3 -m pytest tests/x/test_y.py --cov=l7r" '`--cov=l7r`'
-refused_because "a plugin LOAD names its token"       "python3 -m pytest tests/x/test_y.py -p l7r.diagram.ci.selection" 'loads a plugin'
-refused_because "an absolute path names its token"    "python3 -m pytest /tmp/base/tests/test_y.py" 'absolute path'
-refused_because "an in-process pytest.main is refused" "python3 -c 'import pytest; pytest.main()'" 'no test path'
-grep -q "make test-file FILE=tests/gate/hamletgen/test_driver.py" "$MO_OUT" 2>/dev/null; ev "python3 -m pytest tests/gate/hamletgen/test_driver.py -q" | "$HOOK" pretool 2>/dev/null | grep -q "SUBSET" \
-  && { echo "  ok      the context teaches the K= form and the subset rule"; PASS=$((PASS+1)); } \
-  || { echo "  FAIL    the rewrite's context does not teach the form"; FAIL=$((FAIL+1)); }
-
 echo
 echo "5. AN ENGINE ENTRY POINT A MAKE TARGET WRAPS IS REWRITTEN INTO IT (feature 212)"
 # the pool index stands in for `building_programs`, ported to Rust and deleted by feature 449 T168; the CHECK=1 form (a recipe's

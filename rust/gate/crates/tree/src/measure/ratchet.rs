@@ -173,7 +173,7 @@ fn over(
         _ => r.baseline,
     };
     format!(
-        "\n\x1b[1m{target} is at {measured}s{net}, at or over its {ceiling}s ceiling{klass}.\x1b[0m\nMeasured on {what}, against a pinned baseline of {base}s.\nSTOP and find out what got slower - that is the point of this failing rather than you\nnoticing in three days' time. `make audit` shows the history; `make durations` shows where\nthe suite's time goes.\nIf the new time is legitimate and permanent, move the pinned baseline in dev/ratchets.json\nWITH a written reason - that is the only way it ever moves (feature 171, FR-003/FR-010).\n"
+        "\n\x1b[1m{target} is at {measured}s{net}, at or over its {ceiling}s ceiling{klass}.\x1b[0m\nMeasured on {what}, against a pinned baseline of {base}s.\nSTOP and find out what got slower - that is the point of this failing rather than you\nnoticing in three days' time. `make audit` shows the history; `make test-times CRATE=<dir>`\ntimes a crate's tests one by one.\nIf the new time is legitimate and permanent, move the pinned baseline in dev/ratchets.json\nWITH a written reason - that is the only way it ever moves (feature 171, FR-003/FR-010).\n"
     )
 }
 

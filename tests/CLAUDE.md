@@ -3,68 +3,31 @@
 <!-- the engine's dev loop applies to test work too -->
 @../l7r/diagram/CLAUDE.md
 
-## THE DIRECTORY DECIDES WHEN A TEST RUNS (feature 135, GM 2026-08-27)
+**No Python test is left here, and pytest is gone** (feature 449 FR-001b, the GM 2026-11-10: "Yes delete everything except that
+group, please."; T211 deleted the last test, the pool sweep, now `rust/mode_a/src/pool_sweep.rs`; T213 retired pytest, its
+configuration in `pyproject.toml`, its plugins in `requirements-dev.txt`, and the targets that ran it - `test`, `test-full`,
+`test-file`, `durations`, `soak`). The tests are Rust: each crate's own, run by `make rust-test` (one crate: `CRATE=<dir>`) and by
+`make static`'s coverage, 100% of a crate's lines owed by its own tests. The pytest trees this file once indexed (`tests/gate/`,
+`tests/full/`, `tests/tooling/`, `tests/tier_*/`) and their rules are in git history (the tag `python-tests-before-removal`).
 
-*"if we have one directory for our quick tests, one directory for our done tests, and one directory
-for our lengthy AWS tests, then that is probably both a useful efficiency improvement and also
-something that helps from an organizational perspective because when we are deciding whether a new
-test should be added, then the directory into which we added is the thing that inherently determines
-When and under what circumstance that test is run"*. So there is no deselect list and no file roster:
-the Makefile collects TREES, and where you put a test is the whole decision.
-
-| tree | runs under | put a test here when |
+| path | what it holds | run by |
 |---|---|---|
-| `tests/` (with its mirrored packages) | `make quick`, `make done`, the full run | it is a UNIT form: milliseconds to ~0.5 s, no map rolled, no tooling run. The quick suite's 60 s budget is the bar |
-| `tests/gate/` | `make done` and the full run - never quick | it earns MERGE time: a real roll of one representative spec (served from the roll cache while nothing it executes changed - `l7r/diagram/pipeline/rollcache.py`), the bad-map corpus, a proof of tooling |
-| `tests/full/` | a plain `make done` (its test phase IS `test-full`), `make test-full`, `make done FULL=1` and the AWS check | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. All three coverage floors are enforced here, including the derived 100% floor on every module the scripted hamlet rolls execute (`l7r/diagram/tools/hamlet_floor.py`, run inline by the gate); the engine code the Rust port replaces, named in `dev/coverage-exempt.json`, is reported and not held by any of them (feature 448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc).") |
-| `tests/tooling/` | the gate and the full run - never quick (GM 2026-09-27; a `tooling`-marked test outside this tree, as in `tests/tools/`, is kept out of quick by its marker); at the gate, run when the tooling hash moved (a full plan), each test reused when its reads are those that made the baseline's coverage of it, that coverage carried (feature 383 amendment 5; never in FULL or `INCREMENTAL=0`); `make test-file FILE=tests/tooling` on demand | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
-| `tests/tooling/real_tree/` | the gate when it plans FULL (a `scripts/`, gate-configuration or tooling change: the tool's own) and `FULL=1` - never for an engine or a Rust increment (feature 444 T36) | it checks a TOOL's behavior over the WHOLE repository (a cache's answers the same on and off, a bundle's shared text, a check in process and alone): a whole-tree scan reads every file, so selected by its reads it ran for every edit; its occasion is its tool's change. Its module's fixture-sized cases stay in `tests/tooling/` |
-| `tests/tier_town/`, `tests/tier_city/` | the gate and the full run | it is relevant to that tier only |
-| `tests/soak/` | **no ordinary run** (`norecursedirs`); `make soak` names it (GM 2026-09-08) | it rolls MORE than the gate's floor strictly needs - a behavior asserted on a real map that no coverage line requires (constitution VI, feature 216); [`soak/CLAUDE.md`](soak/CLAUDE.md) |
-
-## WHICH TARGET RUNS WHICH TREE - the table above read the other way round
-
-`make quick` runs `tests/` alone; a plain `make done` is INCREMENTAL over what it collects (not `tier_*/`; `tooling/` only on a
-stale stamp, reused per test); `make test-full` deselects nothing. A marker (`rolls_map`, `tooling`, `tiers`) filters within a
-tree, the tree is the collection scope; a test with a quick and a full form stays in one tree and reads `EXHAUSTIVE`
-(`tests/_scope.py`), a sweep-only test goes to `tests/full/`. **The layout mirrors the source**: a test for `X/y.py` is in
-`tests/X/test_y.py`. The per-directory indexes (`settlement/`, `hamletgen/ways/`, `full/interactive/page_browser/`, `soak/`) and
-the root-level suites (`test_villages.py`, `gate/test_*.py`, `test_compound.py`, `test_citybudget.py`) are listed in [`test-bed-detail.md`](test-bed-detail.md), with the full target table and what `done FULL=1` adds.
+| `hooks/` | each guard's suite, `test-<guard>.sh`, replayed through its link to `l7r-guard`; the frozen command corpora in `hooks/fixtures/` | `make hooks-test` |
+| `fixtures/` | the red sheets each Mode A check must fail (`*-red.svg`), the Rust fixture crate (`fixtures/rust/fixture`), the work-budget fixtures and the recorded inputs the Rust tests read | the crates' tests |
+| `tooling/` | fixtures the gate crates' tests read (`fixtures/archive`, `fixtures/brief_load`, `_deps_site`); no test of its own since T133 | the crates' tests |
+| `soak/` | the tier ABOVE the gate, declared and empty: [`soak/CLAUDE.md`](soak/CLAUDE.md) | nothing - its runner left with pytest |
 
 ## Running it
 
-    make quick                                         # while iterating: the tests your change reaches
-    make test-file FILE=tests/settlement/              # one mirrored package, WHOLE
-    make done                                          # the real gate: lint + format + pyrefly + tests + coverage
+    make quick                                         # while iterating: ruff's outright errors, the fast tree checks
+    make rust-test CRATE=rust/gate/crates/tree         # one crate's tests
+    make hooks-test                                    # the guard suites
+    make done                                          # the real gate: the static checks, the crates, the guard suites
 
-The hooks refuse a bare `pytest` (`make_only_hooks.rs` rewrites a targeted one to `make test-file`). Before the gate,
-run the WHOLE affected file or directory, never a `-k` subset: a filter selects the tests you were thinking about, and a
-change breaks the ones you were not (the gate-hooks guard (`rust/guard/src/guards/gate_hooks.rs`)).
-
-`testpaths = ["tests"]` in `pyproject.toml` pins collection here. Without it pytest walks the whole
-repository, every `.clones/` checkout included - pytest does not read `.gitignore`.
-
-## A HAMLET IS ROLLED ONCE PER GATE, AND ROLLING ANOTHER IS A RECORDED DECISION (feature 213, GM 2026-09-07)
-
-**`tests/rolls.py` is the roster** of every spec the gate may roll, each with its reason; a test rolls only through the roll cache, tests do not render, and a second roll of a spec fails the gate's census - in full: [`test-bed-detail.md`](test-bed-detail.md).
-
-## Conventions
-
-`_builders.py` per package; `test_surface.py` guards a package surface; **a closure you cannot reach is LIFTED OUT, never dropped**; a found defect becomes a unit test of the placer first; before retiring a check, read the placer and grep the
-record of what it has caught; never restore the hand-era corpus (a converted tier gets scripted negative fixtures) - in full, with the worked examples: [`test-bed-detail.md`](test-bed-detail.md).
+A bare `cargo` is refused and named its make target (`rust/guard/src/guards/make_only_hooks.rs`).
 
 ## `tests/` is invisible to the generation cache, on purpose
 
-`gencache.engine_files()` and `render_cache.engine_fingerprint()` both prune this directory. Before
-the 2026-08-16 reorganization every test was a root-level `test_*.py` and the name filter covered
-them; under `tests/` the helpers match no name filter, and counting them as engine inputs would
-invalidate every map in the pool on any edit to a test helper.
-
-The consequence worth knowing: **a `.py` file placed under `tests/` can never affect a map's cache
-key.** That is correct for tests and helpers. If you ever need a module here that a generator
-imports, it does not belong here - put it in the engine, or in
-[`../l7r/diagram/pipeline/`](../l7r/diagram/pipeline/CLAUDE.md).
-
-**`tests/` did not move under `l7r/diagram/` and should not.** The repository root is the `sys.path` root
-(feature 119), so `HERE`-style roots computed here resolve to it. Tests import the engine by its full name -
-`from l7r.diagram.settlement import Settlement`, `from l7r.diagram import overlap`.
+`gencache.engine_files()` and `render_cache.engine_fingerprint()` both prune this directory: a file here can never affect a
+map's cache key. If a generator needs a module, it belongs in the engine or in
+[`../l7r/diagram/pipeline/`](../l7r/diagram/pipeline/CLAUDE.md), never here.

@@ -598,54 +598,15 @@ fn the_helpers_and_the_entry() {
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
 
+/// The list is a cache of the Makefile's test targets, not a roster to trust: a name no target bears notices nothing (feature 449 T213
+/// found eight such names, five of them pytest's).
 #[test]
-fn every_makefile_target_that_reaches_pytest_is_behind_the_test_targets() {
+fn every_test_target_named_is_a_target_of_the_makefile() {
     let makefile =
         std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/../../Makefile")).unwrap();
-    let target = crate::shared::regex::build(r"^([a-z][\w-]*):").unwrap();
-    let mut recipes: Vec<(String, Vec<&str>)> = Vec::new();
-    let mut open = false;
-    for line in makefile.lines() {
-        if let Ok(Some(found)) = target.captures(line) {
-            recipes.push((found[1].to_owned(), Vec::new()));
-            open = true;
-        } else if line.starts_with('\t') && open {
-            recipes.last_mut().unwrap().1.push(line);
-        } else if !line.is_empty() && !line.starts_with(char::is_whitespace) {
-            open = false;
-        }
-    }
-    let mut runs: Vec<String> = recipes
+    let missing: Vec<&&str> = super::BEHIND_TEST_TARGETS
         .iter()
-        .filter(|(_, r)| r.iter().any(|l| l.contains("pytest")))
-        .map(|(t, _)| t.clone())
+        .filter(|t| !makefile.lines().any(|l| l.starts_with(&format!("{t}:"))))
         .collect();
-    for _ in 0..6 {
-        let names: Vec<String> = runs
-            .iter()
-            .map(|t| fancy_regex::escape(t).into_owned())
-            .collect();
-        let calls =
-            crate::shared::regex::build(&format!(r"\$\(MAKE\)[^\n]*?\b(?:{})\b", names.join("|")))
-                .unwrap();
-        // a target is kept or not in the one closure every recipe reaches: since feature 449 T211 emptied `test`, no recipe calls a
-        // target that runs pytest, and a closure reached only by a caller left a line no test reaches
-        let mut grew: Vec<String> = recipes
-            .iter()
-            .filter_map(|(t, r)| {
-                r.iter()
-                    .any(|l| calls.is_match(l).unwrap())
-                    .then_some(t.clone())
-            })
-            .collect();
-        grew.extend(runs.iter().cloned());
-        grew.sort();
-        grew.dedup();
-        runs = grew;
-    }
-    let missing: Vec<&String> = runs
-        .iter()
-        .filter(|t| !super::BEHIND_TEST_TARGETS.contains(&t.as_str()))
-        .collect();
-    assert_eq!(missing, Vec::<&String>::new());
+    assert_eq!(missing, Vec::<&&str>::new());
 }

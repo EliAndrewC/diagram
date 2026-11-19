@@ -325,8 +325,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "refuse",
-   "because": "`-m`"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "refuse",
+    "because": "`-m`"
+   }
   }
  },
  {
@@ -355,8 +359,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "refuse",
-   "because": "`- | tr -s ' '`"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "refuse",
+    "because": "`- | tr -s ' '`"
+   }
   }
  },
  {
@@ -370,8 +378,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "cd /diagram/.clones/reference-testing/.claude/skills/diagram; cat > tests/settlement/test_tmp_debug_wrap.py <<'EOF'\nfrom l7r.diagram.settlement import Settlement\n\n\ndef test_debug(capsys):\n    s = Settlement(W=1000, H=1000, seed=1)\n    s.M[\"houses\"].append({\"x\": 470, \"y\": 497, \"w\": 20, \"h\": 30, \"rot\": 0})\n    print(\"quads\", s.label_blocker_quads())\n    print(\"lines\", s._caption_lines(\"notice board\", 500, 500, 8, \"middle\", 0.0))\n    from l7r.diagram.settlement._geom import label_quad, rects_overlap\n    q = label_quad([473.6, 493.6, 526.4, 502.0, 0, \"t\", None, 0.0])\n    print(\"one-line quad\", q, \"overlap\", rects_overlap(q, s.label_blocker_quads()[0]) if s.label_blocker_quads() else \"no quads\")\n    assert False\nEOF\nmake test-file FILE=tests/settlement/test_tmp_debug_wrap.py 2>&1 | grep -E \"quads|lines|one-line|Error|refus\" | head -6; rm -f tests/settlement/test_tmp_debug_wrap.py"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "cd /diagram/.clones/reference-testing/.claude/skills/diagram; cat > tests/settlement/test_tmp_debug_wrap.py <<'EOF'\nfrom l7r.diagram.settlement import Settlement\n\n\ndef test_debug(capsys):\n    s = Settlement(W=1000, H=1000, seed=1)\n    s.M[\"houses\"].append({\"x\": 470, \"y\": 497, \"w\": 20, \"h\": 30, \"rot\": 0})\n    print(\"quads\", s.label_blocker_quads())\n    print(\"lines\", s._caption_lines(\"notice board\", 500, 500, 8, \"middle\", 0.0))\n    from l7r.diagram.settlement._geom import label_quad, rects_overlap\n    q = label_quad([473.6, 493.6, 526.4, 502.0, 0, \"t\", None, 0.0])\n    print(\"one-line quad\", q, \"overlap\", rects_overlap(q, s.label_blocker_quads()[0]) if s.label_blocker_quads() else \"no quads\")\n    assert False\nEOF\nmake test-file FILE=tests/settlement/test_tmp_debug_wrap.py 2>&1 | grep -E \"quads|lines|one-line|Error|refus\" | head -6; rm -f tests/settlement/test_tmp_debug_wrap.py"
+   }
   }
  },
  {
@@ -385,8 +397,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "cd /diagram/.clones/reference-testing/.claude/skills/diagram; grep -n \"def test_who_falls_back_when_git_has_no_identity\" -A 22 tests/test_switches.py | cut -c1-200; grep -n \"def who\\b\\|def who(\" -A 16 l7r/diagram/switches.py | cut -c1-200; (cd /diagram/.clones/reference-testing/.claude/skills/diagram && make test-file FILE=tests/test_switches.py 2>&1 | grep -n \"^E \\|passed\\|failed\" | head -8 | cut -c1-220)"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "cd /diagram/.clones/reference-testing/.claude/skills/diagram; grep -n \"def test_who_falls_back_when_git_has_no_identity\" -A 22 tests/test_switches.py | cut -c1-200; grep -n \"def who\\b\\|def who(\" -A 16 l7r/diagram/switches.py | cut -c1-200; (cd /diagram/.clones/reference-testing/.claude/skills/diagram && make test-file FILE=tests/test_switches.py 2>&1 | grep -n \"^E \\|passed\\|failed\" | head -8 | cut -c1-220)"
+   }
   }
  },
  {
@@ -444,7 +460,10 @@
   "file_path": null,
   "subagent_type": null,
   "run_in_background": false,
-  "expect": {"verdict": "refuse", "because": "no make target wraps"}
+  "expect": {
+   "verdict": "refuse",
+   "because": "no make target wraps"
+  }
  },
  {
   "guard": "make-only",
@@ -472,8 +491,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "cd /diagram/.clones/reference-testing/.claude/skills/diagram; grep -n \"def a_settlement\\|def a_plan\\|Settlement(\" tests/hamletgen/_builders.py | head -4; grep -n \"Settlement(\" tests/hamletgen/test_homesteads.py | head -2\ncat >> tests/hamletgen/test_ways.py <<'EOF'\n\n\n# ---- the splice helpers (feature 137 T04) ---------------------------------------------------------\n\n\ndef test_unretrace_collapses_an_out_and_back_spur() -> None:\n    \"\"\"A join link prepended whole doubled back along the piece's own first segment (cohort seed 07):\n    A -> B -> A' -> B -> C is A -> B -> C.\"\"\"\n    pts = [(0.0, 0.0), (20.0, 0.0), (0.5, 0.0), (20.0, 0.0), (60.0, 0.0)]\n    assert hg.ways._unretrace(pts) == [(0.0, 0.0), (20.0, 0.0), (60.0, 0.0)]\n\n\ndef test_unretrace_keeps_a_polyline_that_would_fold_away_entirely() -> None:\n    \"\"\"A door path whose link ran back past the door is an ugly lane, not an empty one (seed 03).\"\"\"\n    pts = [(0.0, 0.0), (20.0, 0.0), (0.0, 0.0)]\n    assert hg.ways._unretrace(pts) == pts\n\n\ndef test_unjog_takes_the_lattice_step_out_when_the_chord_is_clear() -> None:\n    \"\"\"Two turns past 50 degrees within 40 ft is the check's zigzag (seed 14: 7 ft up, 13 ft back).\"\"\"\n    path = [(0.0, 0.0), (60.0, 0.0), (60.0, 7.0), (47.0, 7.0), (47.0, 60.0)]\n    out = hg.ways._unjog(path, [], [], [])\n    assert out == [(0.0, 0.0), (60.0, 0.0), (47.0, 60.0)] or out == [(0.0, 0.0), (47.0, 7.0), (47.0, 60.0)]\n    assert all(hg.ways._turn_deg(out[k - 1], out[k], out[k + 1]) < 140.0 for k in range(1, len(out) - 1))\n\n\ndef test_unjog_keeps_the_jog_the_ground_forces() -> None:\n    \"\"\"A wall across the chord: the steps stay, because the chord would cross it.\"\"\"\n    wall = [(50.0, 2.0), (58.0, 2.0), (58.0, 5.0), (50.0, 5.0)]\n    path = [(0.0, 0.0), (60.0, 0.0), (60.0, 7.0), (47.0, 7.0), (47.0, 60.0)]\n    assert hg.ways._unjog(path, [wall], [], []) == path\n\n\ndef test_stop_at_network_cuts_a_link_where_it_crosses_the_way_it_was_sent_to() -> None:\n    \"\"\"Tripwire seed 27: the link touched a way at 20 ft and carried on to a `q` a trim later removed.\"\"\"\n    link = [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0)]\n    way = [((-20.0, 20.0), (20.0, 20.0))]\n    assert hg.ways._stop_at_network(link, way) == [(0.0, 0.0), (0.0, 20.0)]\n\n\ndef test_stop_at_network_lands_on_the_way_it_stops_beside() -> None:\n    \"\"\"A vertex 3 ft off a way is a piece to the web's 4 ft join tolerance once rounded - the cut\n    ends on the way's foot point, not beside it.\"\"\"\n    link = [(0.0, 0.0), (30.0, 3.0), (60.0, 3.0)]\n    way = [((20.0, 0.0), (40.0, 0.0))]\n    assert hg.ways._stop_at_network(link, way) == [(0.0, 0.0), (30.0, 3.0), (30.0, 0.0)]\n\n\ndef test_stop_at_network_leaves_a_link_that_meets_nothing_on_the_way() -> None:\n    link = [(0.0, 0.0), (30.0, 0.0), (60.0, 0.0)]\n    assert hg.ways._stop_at_network(link, []) == link\n    assert hg.ways._stop_at_network(link, [((0.0, 50.0), (60.0, 50.0))]) == link\nEOF\nmake test-file FILE=tests/hamletgen/test_ways.py 2>&1 | tail -4 | cut -c1-200"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "cd /diagram/.clones/reference-testing/.claude/skills/diagram; grep -n \"def a_settlement\\|def a_plan\\|Settlement(\" tests/hamletgen/_builders.py | head -4; grep -n \"Settlement(\" tests/hamletgen/test_homesteads.py | head -2\ncat >> tests/hamletgen/test_ways.py <<'EOF'\n\n\n# ---- the splice helpers (feature 137 T04) ---------------------------------------------------------\n\n\ndef test_unretrace_collapses_an_out_and_back_spur() -> None:\n    \"\"\"A join link prepended whole doubled back along the piece's own first segment (cohort seed 07):\n    A -> B -> A' -> B -> C is A -> B -> C.\"\"\"\n    pts = [(0.0, 0.0), (20.0, 0.0), (0.5, 0.0), (20.0, 0.0), (60.0, 0.0)]\n    assert hg.ways._unretrace(pts) == [(0.0, 0.0), (20.0, 0.0), (60.0, 0.0)]\n\n\ndef test_unretrace_keeps_a_polyline_that_would_fold_away_entirely() -> None:\n    \"\"\"A door path whose link ran back past the door is an ugly lane, not an empty one (seed 03).\"\"\"\n    pts = [(0.0, 0.0), (20.0, 0.0), (0.0, 0.0)]\n    assert hg.ways._unretrace(pts) == pts\n\n\ndef test_unjog_takes_the_lattice_step_out_when_the_chord_is_clear() -> None:\n    \"\"\"Two turns past 50 degrees within 40 ft is the check's zigzag (seed 14: 7 ft up, 13 ft back).\"\"\"\n    path = [(0.0, 0.0), (60.0, 0.0), (60.0, 7.0), (47.0, 7.0), (47.0, 60.0)]\n    out = hg.ways._unjog(path, [], [], [])\n    assert out == [(0.0, 0.0), (60.0, 0.0), (47.0, 60.0)] or out == [(0.0, 0.0), (47.0, 7.0), (47.0, 60.0)]\n    assert all(hg.ways._turn_deg(out[k - 1], out[k], out[k + 1]) < 140.0 for k in range(1, len(out) - 1))\n\n\ndef test_unjog_keeps_the_jog_the_ground_forces() -> None:\n    \"\"\"A wall across the chord: the steps stay, because the chord would cross it.\"\"\"\n    wall = [(50.0, 2.0), (58.0, 2.0), (58.0, 5.0), (50.0, 5.0)]\n    path = [(0.0, 0.0), (60.0, 0.0), (60.0, 7.0), (47.0, 7.0), (47.0, 60.0)]\n    assert hg.ways._unjog(path, [wall], [], []) == path\n\n\ndef test_stop_at_network_cuts_a_link_where_it_crosses_the_way_it_was_sent_to() -> None:\n    \"\"\"Tripwire seed 27: the link touched a way at 20 ft and carried on to a `q` a trim later removed.\"\"\"\n    link = [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0)]\n    way = [((-20.0, 20.0), (20.0, 20.0))]\n    assert hg.ways._stop_at_network(link, way) == [(0.0, 0.0), (0.0, 20.0)]\n\n\ndef test_stop_at_network_lands_on_the_way_it_stops_beside() -> None:\n    \"\"\"A vertex 3 ft off a way is a piece to the web's 4 ft join tolerance once rounded - the cut\n    ends on the way's foot point, not beside it.\"\"\"\n    link = [(0.0, 0.0), (30.0, 3.0), (60.0, 3.0)]\n    way = [((20.0, 0.0), (40.0, 0.0))]\n    assert hg.ways._stop_at_network(link, way) == [(0.0, 0.0), (30.0, 3.0), (30.0, 0.0)]\n\n\ndef test_stop_at_network_leaves_a_link_that_meets_nothing_on_the_way() -> None:\n    link = [(0.0, 0.0), (30.0, 0.0), (60.0, 0.0)]\n    assert hg.ways._stop_at_network(link, []) == link\n    assert hg.ways._stop_at_network(link, [((0.0, 50.0), (60.0, 50.0))]) == link\nEOF\nmake test-file FILE=tests/hamletgen/test_ways.py 2>&1 | tail -4 | cut -c1-200"
+   }
   }
  },
  {
@@ -607,8 +630,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "python3 /tmp/claude-1000/-diagram/e0bdc195-e11b-4031-9715-725b7f2ef130/scratchpad/patch_yard_tests.py && ( cd /diagram/.clones/diagram-html/.claude/skills/diagram && make test-file FILE=tests/settlement/test_homestead_parts.py K=\"yard or work_yard or placer or village_scale or attested\" 2>&1 | tail -12 )"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "python3 /tmp/claude-1000/-diagram/e0bdc195-e11b-4031-9715-725b7f2ef130/scratchpad/patch_yard_tests.py && ( cd /diagram/.clones/diagram-html/.claude/skills/diagram && make test-file FILE=tests/settlement/test_homestead_parts.py K=\"yard or work_yard or placer or village_scale or attested\" 2>&1 | tail -12 )"
+   }
   }
  },
  {
@@ -622,8 +649,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "C=/diagram/.clones/diagram-html/.claude/skills/diagram; ( cd $C && make test-file FILE=tests/hamletgen/test_ways.py 2>&1 | tail -25 )"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "C=/diagram/.clones/diagram-html/.claude/skills/diagram; ( cd $C && make test-file FILE=tests/hamletgen/test_ways.py 2>&1 | tail -25 )"
+   }
   }
  },
  {
@@ -651,7 +682,10 @@
   "file_path": null,
   "subagent_type": null,
   "run_in_background": false,
-  "expect": {"verdict": "refuse", "because": "no make target wraps"}
+  "expect": {
+   "verdict": "refuse",
+   "because": "no make target wraps"
+  }
  },
  {
   "guard": "make-only",
@@ -754,8 +788,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "C=/diagram/.clones/diagram-html/.claude/skills/diagram; ( cd $C && make test-file FILE=tests/interactive/test_page.py K=\"pond_sluice\" 2>&1 | sed -n '1,40p' )"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "C=/diagram/.clones/diagram-html/.claude/skills/diagram; ( cd $C && make test-file FILE=tests/interactive/test_page.py K=\"pond_sluice\" 2>&1 | sed -n '1,40p' )"
+   }
   }
  },
  {
@@ -828,7 +866,10 @@
   "file_path": null,
   "subagent_type": null,
   "run_in_background": false,
-  "expect": {"verdict": "refuse", "because": "no make target wraps"}
+  "expect": {
+   "verdict": "refuse",
+   "because": "no make target wraps"
+  }
  },
  {
   "guard": "make-only",
@@ -901,8 +942,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"tests/pipeline/test_render_cache.py\"); s = p.read_text()\ndef rep(old, new, n=1):\n    global s\n    assert old in s, f\"missed {old[:70]!r}\"\n    s = s.replace(old, new, n)\n\n# _make_gen builds a per-map FOLDER now.\nrep('''def _make_gen(pool: str, subdir: str, stem: str) -> str:\n    d = os.path.join(pool, subdir)\n    os.makedirs(d, exist_ok=True)\n    path = os.path.join(d, stem + \".gen.py\")''',\n'''def _make_gen(skill: str, tier: str, stem: str, tree: str = \"pool\") -> str:\n    \"\"\"One map bundle in its OWN folder: <skill>/<tree>/<tier>/<stem>/<stem>.gen.py (feature 161).\"\"\"\n    d = os.path.join(skill, tree, tier, stem)\n    os.makedirs(d, exist_ok=True)\n    path = os.path.join(d, stem + \".gen.py\")''')\n\nrep('''    pool/villages but keeps pool/magistracies svgs tracked (Mode A source), mirroring the real\n    skill. Returns (repo_dir, skill_dir, pool_dir).\"\"\"''',\n'''    pool/villages but keeps pool/magistracies svgs tracked (Mode A source), mirroring the real\n    skill's per-map-folder shape. Returns (repo_dir, skill_dir, pool_dir).\"\"\"''')\n\nrep('''        fh.write(\"skill/pool/villages/*.svg\\\\nskill/pool/villages/*.png\\\\nskill/pool/magistracies/*.png\\\\n\")''',\n'''        # The real rules are patterns over <tree>/<tier>/<map>/ since feature 161; mirror that depth\n        # here, or `is_cacheable` would judge Mode A and Mode B alike.\n        fh.write(\"skill/pool/*/*/*.svg\\\\nskill/pool/*/*/*.png\\\\nskill/pool/*/*/*.html\\\\n!skill/pool/magistracies/*/*.svg\\\\n\")''')\n\n# every _make_gen(pool, ...) -> _make_gen(skill, ...); the fixture unpack keeps `pool` for paths\ns = re.sub(r\"_make_gen\\(pool,\", \"_make_gen(skill,\", s)\n# tests that unpacked `repo_dir, _, pool` now need skill\nrep(\"    repo_dir, _, pool = repo\\n    mode_b = _make_gen(skill,\", \"    repo_dir, skill, _pool = repo\\n    mode_b = _make_gen(skill,\")\nrep(\"    _, skill, pool = repo\\n    gen = _make_gen(skill,\", \"    _, skill, _pool = repo\\n    gen = _make_gen(skill,\")\n\n# regen_pool / main signatures: one root, both trees\ns = s.replace(\"rc.regen_pool(pool, repo_dir, skill_dir=skill,\", \"rc.regen_pool(skill, repo_dir,\")\ns = s.replace('rc.main([\"--pool\", pool, \"--main-repo\", repo_dir, \"--skill-dir\", skill,', 'rc.main([\"--main-repo\", repo_dir, \"--skill-dir\", skill,')\ns = s.replace('rc.main([\"--pool\", pool, \"--main-repo\", repo_dir, \"--skill-dir\", skill])', 'rc.main([\"--main-repo\", repo_dir, \"--skill-dir\", skill])')\ns = s.replace('rc.main([\"--pool\", str(tmp_path), \"--skill-dir\", str(tmp_path)])', 'rc.main([\"--skill-dir\", str(tmp_path)])')\ns = s.replace('monkeypatch.setattr(rc.pool_index, \"write_index\", lambda pool: os.path.join(pool, \"index.html\"))',\n              'monkeypatch.setattr(rc.pool_index, \"write_index\", lambda skill: os.path.join(skill, \"index.html\"))')\n# the frozen-map test names minami, which now lives in the LEGACY tree\ns = s.replace('    frozen_gen = _make_gen(skill, \"villages\", \"minami\")  # the basename is what puts it on the frozen list',\n              '    # The basename is what puts it on the frozen list - and it now lives in the legacy TREE,\\n'\n              '    # which is where regen_pool has to look to warn about a missing exhibit at all (feature 161).\\n'\n              '    frozen_gen = _make_gen(skill, \"villages\", \"minami\", tree=\"legacy-hand-authored-pool\")')\n# the real-pool sweep glob\ns = s.replace('for gen in sorted(glob.glob(os.path.join(HERE, \"pool\", pool_tier_glob, \"*.gen.py\"))):',\n              'for gen in sorted(glob.glob(os.path.join(HERE, \"pool\", pool_tier_glob, \"*\", \"*.gen.py\"))):')\np.write_text(s); print(\"test_render_cache updated\")\nPY\nmake test-file FILE=tests/pipeline/test_render_cache.py 2>&1 | tail -18"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"tests/pipeline/test_render_cache.py\"); s = p.read_text()\ndef rep(old, new, n=1):\n    global s\n    assert old in s, f\"missed {old[:70]!r}\"\n    s = s.replace(old, new, n)\n\n# _make_gen builds a per-map FOLDER now.\nrep('''def _make_gen(pool: str, subdir: str, stem: str) -> str:\n    d = os.path.join(pool, subdir)\n    os.makedirs(d, exist_ok=True)\n    path = os.path.join(d, stem + \".gen.py\")''',\n'''def _make_gen(skill: str, tier: str, stem: str, tree: str = \"pool\") -> str:\n    \"\"\"One map bundle in its OWN folder: <skill>/<tree>/<tier>/<stem>/<stem>.gen.py (feature 161).\"\"\"\n    d = os.path.join(skill, tree, tier, stem)\n    os.makedirs(d, exist_ok=True)\n    path = os.path.join(d, stem + \".gen.py\")''')\n\nrep('''    pool/villages but keeps pool/magistracies svgs tracked (Mode A source), mirroring the real\n    skill. Returns (repo_dir, skill_dir, pool_dir).\"\"\"''',\n'''    pool/villages but keeps pool/magistracies svgs tracked (Mode A source), mirroring the real\n    skill's per-map-folder shape. Returns (repo_dir, skill_dir, pool_dir).\"\"\"''')\n\nrep('''        fh.write(\"skill/pool/villages/*.svg\\\\nskill/pool/villages/*.png\\\\nskill/pool/magistracies/*.png\\\\n\")''',\n'''        # The real rules are patterns over <tree>/<tier>/<map>/ since feature 161; mirror that depth\n        # here, or `is_cacheable` would judge Mode A and Mode B alike.\n        fh.write(\"skill/pool/*/*/*.svg\\\\nskill/pool/*/*/*.png\\\\nskill/pool/*/*/*.html\\\\n!skill/pool/magistracies/*/*.svg\\\\n\")''')\n\n# every _make_gen(pool, ...) -> _make_gen(skill, ...); the fixture unpack keeps `pool` for paths\ns = re.sub(r\"_make_gen\\(pool,\", \"_make_gen(skill,\", s)\n# tests that unpacked `repo_dir, _, pool` now need skill\nrep(\"    repo_dir, _, pool = repo\\n    mode_b = _make_gen(skill,\", \"    repo_dir, skill, _pool = repo\\n    mode_b = _make_gen(skill,\")\nrep(\"    _, skill, pool = repo\\n    gen = _make_gen(skill,\", \"    _, skill, _pool = repo\\n    gen = _make_gen(skill,\")\n\n# regen_pool / main signatures: one root, both trees\ns = s.replace(\"rc.regen_pool(pool, repo_dir, skill_dir=skill,\", \"rc.regen_pool(skill, repo_dir,\")\ns = s.replace('rc.main([\"--pool\", pool, \"--main-repo\", repo_dir, \"--skill-dir\", skill,', 'rc.main([\"--main-repo\", repo_dir, \"--skill-dir\", skill,')\ns = s.replace('rc.main([\"--pool\", pool, \"--main-repo\", repo_dir, \"--skill-dir\", skill])', 'rc.main([\"--main-repo\", repo_dir, \"--skill-dir\", skill])')\ns = s.replace('rc.main([\"--pool\", str(tmp_path), \"--skill-dir\", str(tmp_path)])', 'rc.main([\"--skill-dir\", str(tmp_path)])')\ns = s.replace('monkeypatch.setattr(rc.pool_index, \"write_index\", lambda pool: os.path.join(pool, \"index.html\"))',\n              'monkeypatch.setattr(rc.pool_index, \"write_index\", lambda skill: os.path.join(skill, \"index.html\"))')\n# the frozen-map test names minami, which now lives in the LEGACY tree\ns = s.replace('    frozen_gen = _make_gen(skill, \"villages\", \"minami\")  # the basename is what puts it on the frozen list',\n              '    # The basename is what puts it on the frozen list - and it now lives in the legacy TREE,\\n'\n              '    # which is where regen_pool has to look to warn about a missing exhibit at all (feature 161).\\n'\n              '    frozen_gen = _make_gen(skill, \"villages\", \"minami\", tree=\"legacy-hand-authored-pool\")')\n# the real-pool sweep glob\ns = s.replace('for gen in sorted(glob.glob(os.path.join(HERE, \"pool\", pool_tier_glob, \"*.gen.py\"))):',\n              'for gen in sorted(glob.glob(os.path.join(HERE, \"pool\", pool_tier_glob, \"*\", \"*.gen.py\"))):')\np.write_text(s); print(\"test_render_cache updated\")\nPY\nmake test-file FILE=tests/pipeline/test_render_cache.py 2>&1 | tail -18"
+   }
   }
  },
  {
@@ -946,8 +991,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "make test-file FILE=tests/gate/hamletgen/test_driver.py 2>&1 | sed -n '1,60p'"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "make test-file FILE=tests/gate/hamletgen/test_driver.py 2>&1 | sed -n '1,60p'"
+   }
   }
  },
  {
@@ -1036,8 +1085,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "cd /diagram/.clones/diagram-testing/.claude/skills/diagram\nmake test-file FILE=tests/hamletgen/test_surface.py 2>&1 | tail -4\necho \"=== switches test, with FULL set the way the FULL run sets it ===\"\nFULL=1 make test-file FILE=tests/tooling/test_switches.py 2>&1 | tail -6"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "cd /diagram/.clones/diagram-testing/.claude/skills/diagram\nmake test-file FILE=tests/hamletgen/test_surface.py 2>&1 | tail -4\necho \"=== switches test, with FULL set the way the FULL run sets it ===\"\nFULL=1 make test-file FILE=tests/tooling/test_switches.py 2>&1 | tail -6"
+   }
   }
  },
  {
@@ -1246,8 +1299,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "refuse",
-   "because": "`--collect-only`"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "refuse",
+    "because": "`--collect-only`"
+   }
   }
  },
  {
@@ -1321,8 +1378,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "cd /diagram/.clones/diagram-tooling\ngit log --oneline -1 origin/main\ngit worktree add --detach /tmp/base176 origin/main 2>&1 | tail -1\n( cd /tmp/base176/.claude/skills/diagram && make test-file FILE=tests/full/interactive/test_page_browser.py K=\"sibling_link_lights\" 2>&1 | tail -8 )"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "cd /diagram/.clones/diagram-tooling\ngit log --oneline -1 origin/main\ngit worktree add --detach /tmp/base176 origin/main 2>&1 | tail -1\n( cd /tmp/base176/.claude/skills/diagram && make test-file FILE=tests/full/interactive/test_page_browser.py K=\"sibling_link_lights\" 2>&1 | tail -8 )"
+   }
   }
  },
  {
@@ -1427,8 +1488,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "refuse",
-   "because": "`--co`"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "refuse",
+    "because": "`--co`"
+   }
   }
  },
  {
@@ -1517,8 +1582,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "refuse",
-   "because": "no test path"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "refuse",
+    "because": "no test path"
+   }
   }
  },
  {
@@ -1608,8 +1677,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "refuse",
-   "because": "the argument ``"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "refuse",
+    "because": "the argument ``"
+   }
   }
  },
  {
@@ -1668,8 +1741,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "refuse",
-   "because": "`--co`"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "refuse",
+    "because": "`--co`"
+   }
   }
  },
  {
@@ -1683,8 +1760,12 @@
   "subagent_type": null,
   "run_in_background": false,
   "expect": {
-   "verdict": "rewrite",
-   "command": "C=/diagram/.clones/diagram-research; S=$C/.claude/skills/diagram; python3 - <<'EOF'\np=\"/diagram/.clones/diagram-research/specs/211-citations-pages/split.py\"; s=open(p).read()\nold='''    foot = _BACK.sub(lambda mm: f'<a class=\"fnback\" href=\"{\"\" if f\"fnref-{mm.group(1)}\" in in_foot else \"../\" + page_rel}#fnref-{mm.group(1)}\">back</a>', foot)'''\nnew='''    foot = _BACK.sub(lambda mm: f'<a class=\"fnback\" href=\"{\"\" if f\"fnref-{mm.group(1)}\" in in_foot else up + page_rel}#fnref-{mm.group(1)}\">back</a>', foot)'''\nassert old in s; s=s.replace(old,new)\nold='''        f'<p><em>The passages behind the footnotes of <a href=\"../{page_rel}\">{h1}</a> - first'''\nnew='''        f'<p><em>The passages behind the footnotes of <a href=\"{up}{page_rel}\">{h1}</a> - first'''\nassert old in s; s=s.replace(old,new)\nopen(p,\"w\").write(s)\np=\"/diagram/.clones/diagram-research/.claude/skills/diagram/tests/interactive/test_footnotes.py\"; s=open(p).read()\nold='''    registry is not a page where a quote can be read - unless the key is canon; an absence note carries no key link\n    and no URL at all (its only anchor is the back link).\"\"\"\n    if _ABSENCE.match(body):\n        if \"<code>\" in body or re.search(r'href=\"(?!#fnref-)', body):'''\nnew='''    registry is not a page where a quote can be read - unless the key is canon; an absence note carries no key link\n    and no URL at all (its only anchor is the back link, which since feature 211 names the research page).\"\"\"\n    body = re.sub(r'<a class=\"fnback\" href=\"[^\"]*\">back</a>', \"\", body)\n    if _ABSENCE.match(body):\n        if \"<code>\" in body or 'href=\"' in body:'''\nassert old in s; s=s.replace(old,new)\ns=s.replace('''    assert footnote_form(\"no publicly readable source (searched 2026-09-06: doi 403; the passage came from registry entry k-1)\" + fnback, canon) == \"absence\"''','''    assert footnote_form(\"no publicly readable source (searched 2026-09-06: doi 403; the passage came from registry entry k-1)\" + fnback, canon) == \"absence\"\n    assert footnote_form(\"no publicly readable source (searched 2026-09-06: x)\" + ' <a class=\"fnback\" href=\"../cities/p.html#fnref-1\">back</a>', canon) == \"absence\", \"a back link to the research page (feature 211)\"''')\nopen(p,\"w\").write(s)\nprint(\"ok\")\nEOF\n: \"DISCARD_OK: re-running the recorded split script from HEAD after fixing its cities back links\"; git -C $C checkout -- .claude/skills/diagram/research/archetypes.html .claude/skills/diagram/research/buildings.html .claude/skills/diagram/research/fields.html .claude/skills/diagram/research/homesteads.html .claude/skills/diagram/research/religion-and-death.html .claude/skills/diagram/research/towns.html .claude/skills/diagram/research/urban-features.html .claude/skills/diagram/research/vegetation.html .claude/skills/diagram/research/water.html .claude/skills/diagram/research/cities/ && rm -rf $S/research/citations && ( cd $S && PYTHONPATH=. python3 $C/specs/211-citations-pages/split.py | tail -1 && make citations 2>&1 | tail -1; for f in interactive/test_record.py interactive/test_footnotes.py interactive/test_citations.py tools/test_citations_asset.py test_task_research_boxes.py; do echo \"=== $f\"; make test-file FILE=tests/$f 2>&1 | grep -E '^E  |passed|failed' | grep -v '^E   *$' | cut -c1-220 | head -8; done; make test-file FILE=tests/full/interactive/page_browser 2>&1 | grep -E '^E  |passed|failed' | head -8 )"
+   "verdict": "permit",
+   "because": "pytest and make test-file left with feature 449 T213 - a pytest command has nothing to be routed to, and the guard's bare-pytest branch is gone",
+   "was": {
+    "verdict": "rewrite",
+    "command": "C=/diagram/.clones/diagram-research; S=$C/.claude/skills/diagram; python3 - <<'EOF'\np=\"/diagram/.clones/diagram-research/specs/211-citations-pages/split.py\"; s=open(p).read()\nold='''    foot = _BACK.sub(lambda mm: f'<a class=\"fnback\" href=\"{\"\" if f\"fnref-{mm.group(1)}\" in in_foot else \"../\" + page_rel}#fnref-{mm.group(1)}\">back</a>', foot)'''\nnew='''    foot = _BACK.sub(lambda mm: f'<a class=\"fnback\" href=\"{\"\" if f\"fnref-{mm.group(1)}\" in in_foot else up + page_rel}#fnref-{mm.group(1)}\">back</a>', foot)'''\nassert old in s; s=s.replace(old,new)\nold='''        f'<p><em>The passages behind the footnotes of <a href=\"../{page_rel}\">{h1}</a> - first'''\nnew='''        f'<p><em>The passages behind the footnotes of <a href=\"{up}{page_rel}\">{h1}</a> - first'''\nassert old in s; s=s.replace(old,new)\nopen(p,\"w\").write(s)\np=\"/diagram/.clones/diagram-research/.claude/skills/diagram/tests/interactive/test_footnotes.py\"; s=open(p).read()\nold='''    registry is not a page where a quote can be read - unless the key is canon; an absence note carries no key link\n    and no URL at all (its only anchor is the back link).\"\"\"\n    if _ABSENCE.match(body):\n        if \"<code>\" in body or re.search(r'href=\"(?!#fnref-)', body):'''\nnew='''    registry is not a page where a quote can be read - unless the key is canon; an absence note carries no key link\n    and no URL at all (its only anchor is the back link, which since feature 211 names the research page).\"\"\"\n    body = re.sub(r'<a class=\"fnback\" href=\"[^\"]*\">back</a>', \"\", body)\n    if _ABSENCE.match(body):\n        if \"<code>\" in body or 'href=\"' in body:'''\nassert old in s; s=s.replace(old,new)\ns=s.replace('''    assert footnote_form(\"no publicly readable source (searched 2026-09-06: doi 403; the passage came from registry entry k-1)\" + fnback, canon) == \"absence\"''','''    assert footnote_form(\"no publicly readable source (searched 2026-09-06: doi 403; the passage came from registry entry k-1)\" + fnback, canon) == \"absence\"\n    assert footnote_form(\"no publicly readable source (searched 2026-09-06: x)\" + ' <a class=\"fnback\" href=\"../cities/p.html#fnref-1\">back</a>', canon) == \"absence\", \"a back link to the research page (feature 211)\"''')\nopen(p,\"w\").write(s)\nprint(\"ok\")\nEOF\n: \"DISCARD_OK: re-running the recorded split script from HEAD after fixing its cities back links\"; git -C $C checkout -- .claude/skills/diagram/research/archetypes.html .claude/skills/diagram/research/buildings.html .claude/skills/diagram/research/fields.html .claude/skills/diagram/research/homesteads.html .claude/skills/diagram/research/religion-and-death.html .claude/skills/diagram/research/towns.html .claude/skills/diagram/research/urban-features.html .claude/skills/diagram/research/vegetation.html .claude/skills/diagram/research/water.html .claude/skills/diagram/research/cities/ && rm -rf $S/research/citations && ( cd $S && PYTHONPATH=. python3 $C/specs/211-citations-pages/split.py | tail -1 && make citations 2>&1 | tail -1; for f in interactive/test_record.py interactive/test_footnotes.py interactive/test_citations.py tools/test_citations_asset.py test_task_research_boxes.py; do echo \"=== $f\"; make test-file FILE=tests/$f 2>&1 | grep -E '^E  |passed|failed' | grep -v '^E   *$' | cut -c1-220 | head -8; done; make test-file FILE=tests/full/interactive/page_browser 2>&1 | grep -E '^E  |passed|failed' | head -8 )"
+   }
   }
  },
  {

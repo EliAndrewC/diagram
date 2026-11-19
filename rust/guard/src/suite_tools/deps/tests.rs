@@ -1,7 +1,6 @@
 //! The derivation over fixture trees, and the rules that matter over the real one. The failure that matters is UNDER-running, so every assertion is written in that direction.
 
 use std::path::Path;
-use std::process::Command;
 
 use super::{answer, cli, Tree};
 
@@ -167,158 +166,8 @@ fn a_suite_that_drives_the_rust_guard_is_keyed_by_its_sources() {
 }
 
 #[test]
-fn a_script_loaded_by_a_string_is_reached_and_a_prose_mention_is_not() {
-    let root = tree("strings");
-    put(&root, "scripts/record/record_owed.py", "X = 1\n");
-    put(&root, "scripts/record/modal_owed.py", "X = 1\n");
-    put(&root, "scripts/record/moves.py", "X = 1\n");
-    put(&root, "scripts/record/loader.py", "X = 1\n");
-    put(&root, "scripts/hooks/lib/hm_arbiter.py", "X = 1\n");
-    let t = Tree::at(&root);
-    let refs = t.word_refs("x.py", "import json\nro = _sibling(\"record_owed\")\nmo = script(\"_modal_owed\")\nprint(\"see moves.py for why\")\n");
-    assert!(refs.contains("record_owed.py") && refs.contains("modal_owed.py"));
-    assert!(!refs.contains("moves.py"));
-    assert!(t
-        .word_refs(
-            "x.py",
-            "P = ROOT / \"scripts\" / \"record\" / \"loader.py\"\n"
-        )
-        .contains("loader.py"));
-    assert!(t
-        .word_refs("x.py", "from hm_arbiter import trip\n")
-        .contains("hm_arbiter.py"));
-    assert!(t
-        .word_refs("x.sh", ". \"$HERE/lib/guardlog.sh\"\n")
-        .contains("guardlog.sh"));
-    assert!(t
-        .word_refs("x.py", "x = 'broken\nguardlog.sh\n")
-        .contains("guardlog.sh"),);
-    assert!(!t
-        .word_refs("loader.py", "x = \"loader.py\"\n")
-        .contains("loader.py"),);
-}
-
-#[test]
-fn a_test_depends_on_what_it_reaches_or_on_the_whole_tree_when_it_cannot_say() {
-    let root = tree("pydeps");
-    put(&root, "tests/conftest.py", "");
-    put(&root, "tests/tooling/conftest.py", "");
-    put(&root, "tests/_scripts.py", "");
-    put(&root, "tests/tooling/test_reach.py", "from tests._scripts import script\nfrom tests._absent import x\nX = script(\"hm_shape\")\n");
-    let all = |t: &Tree| t.index.len();
-    let t = Tree::at(&root);
-    let rel = |t: &Tree, f: &str| {
-        t.pydeps(&root.join(f))
-            .iter()
-            .map(|p| t.rel(p))
-            .collect::<Vec<_>>()
-    };
-    let reach = rel(&t, "tests/tooling/test_reach.py");
-    assert!(
-        reach.contains(&"tests/tooling/test_reach.py".to_owned())
-            && reach.contains(&"tests/conftest.py".to_owned())
-            && reach.contains(&"tests/tooling/conftest.py".to_owned())
-    );
-    assert!(
-        reach.contains(&"tests/_scripts.py".to_owned())
-            && reach.contains(&"scripts/hooks/lib/hm_shape.py".to_owned())
-    );
-    assert!(!reach.contains(&"scripts/hooks/lib/hm_mention.py".to_owned()));
-    put(
-        &root,
-        "tests/tooling/test_shell.py",
-        "X = script(\"guardlog.sh\")\n",
-    );
-    assert!(rel(&Tree::at(&root), "tests/tooling/test_shell.py")
-        .contains(&"scripts/hooks/lib/hm_escape.py".to_owned()));
-    assert!(Tree::at(&root.join("no-such-tree")).index.is_empty());
-    for (file, body) in [
-        (
-            "tests/tooling/test_builds.py",
-            "X = script(\"hm_shape\")\np = ROOT / \"scripts\" / name\n",
-        ),
-        (
-            "tests/tooling/test_dir.py",
-            "X = script(\"hm_shape\")\nS = REPO / \"scripts\"\n",
-        ),
-        (
-            "tests/tooling/test_sh.py",
-            "X = script(\"hm_shape\")\nG = \"scripts/*.sh\"\n",
-        ),
-        (
-            "tests/tooling/test_py.py",
-            "X = script(\"hm_shape\")\nG = \"scripts/*.py\"\n",
-        ),
-        ("tests/tooling/test_nothing.py", "X = 1\n"),
-    ] {
-        put(&root, file, body);
-        let t = Tree::at(&root);
-        assert!(t.pydeps(&root.join(file)).len() > all(&t), "{file}");
-    }
-    assert_eq!(
-        Tree::at(&root).pydeps(&root.join("tests/absent.py")).len(),
-        all(&Tree::at(&root)) + 2
-    );
-}
-
-#[test]
-fn an_unchanged_tree_runs_none_and_a_changed_dependency_runs_its_tests() {
-    let root = tree("stale");
-    let gitdir = root.join("git");
-    put(&root, "tests/test_a.py", "X = script(\"hm_shape\")\n");
-    put(&root, "tests/test_b.py", "X = script(\"hm_mention\")\n");
-    let tests = strings(&["tests/test_a.py", "tests/test_b.py"]);
-    assert_eq!(Tree::at(&root).py_stale(&gitdir, &tests), tests);
-    Tree::at(&root).py_stamp(&gitdir, &tests);
-    assert!(gitdir.join("hooks-test/py/tests__test_a.py").is_file());
-    assert!(Tree::at(&root).py_stale(&gitdir, &tests).is_empty());
-    put(&root, "scripts/hooks/lib/hm_shape.py", "X = 3\n");
-    assert_eq!(
-        Tree::at(&root).py_stale(&gitdir, &tests),
-        ["tests/test_a.py"]
-    );
-}
-
-#[test]
-fn the_window_counts_what_each_commit_would_re_run() {
-    let root = tree("window");
-    put(&root, "tests/test_a.py", "X = script(\"hm_shape\")\n");
-    put(&root, "tests/test_b.py", "X = script(\"hm_mention\")\n");
-    let run = |args: &[&str]| {
-        assert!(Command::new("git")
-            .arg("-C")
-            .arg(&root)
-            .args(["-c", "user.name=t", "-c", "user.email=t@t"])
-            .args(args)
-            .output()
-            .unwrap()
-            .status
-            .success());
-    };
-    run(&["init", "-q"]);
-    run(&["add", "."]);
-    run(&["commit", "-q", "-m", "all"]);
-    put(&root, "scripts/hooks/lib/hm_shape.py", "X = 9\n");
-    run(&["add", "."]);
-    run(&["commit", "-q", "-m", "one"]);
-    let t = Tree::at(&root);
-    let got = t.window(
-        "HEAD",
-        "1",
-        &strings(&["tests/test_a.py", "tests/test_b.py"]),
-    );
-    let lines: Vec<&str> = got.lines().collect();
-    assert!(lines[0].ends_with(" 1"));
-    assert_eq!(lines[1], "mean 1.0 of 2");
-    let args = strings(&["--window", "HEAD", "1", "tests/test_a.py"]);
-    assert!(answer(&t, &args).stdout.ends_with("mean 1.0 of 1\n"));
-    assert_eq!(t.window("no-such-ref", "1", &[]), "mean 0.0 of 0\n");
-}
-
-#[test]
 fn the_command_line() {
     let root = tree("cli");
-    put(&root, "tests/test_a.py", "X = script(\"hm_shape\")\n");
     let t = Tree::at(&root);
     let ask = |words: &[&str]| answer(&t, &strings(words));
     let keys = ask(&["--keys", "a-hooks.sh", "gate-stamp.py"]).stdout;
@@ -332,18 +181,8 @@ fn the_command_line() {
     assert!(ask(&["--deps", "rusty-hooks.sh"])
         .stdout
         .contains("rust/Cargo.toml"));
-    assert!(ask(&["--pydeps", "tests/test_a.py"])
-        .stdout
-        .contains("hm_shape.py"));
     assert_eq!(ask(&["a-hooks.sh"]).stdout.trim(), t.key_for("a-hooks.sh"));
-    let git = root.join("g");
-    let git = git.to_str().unwrap();
-    assert_eq!(
-        ask(&["--pystale", git, "tests/test_a.py"]).stdout,
-        "tests/test_a.py\n"
-    );
-    assert_eq!(ask(&["--pystamp", git, "tests/test_a.py"]).code, 0);
-    assert_eq!(ask(&["--pystale", git, "tests/test_a.py"]).stdout, "\n");
+    assert_eq!(ask(&["--pydeps", "tests/test_a.py"]).code, 2);
     assert_eq!(ask(&["--bogus"]).code, 2);
     assert_eq!(ask(&[]).code, 2);
     assert_eq!(cli(&strings(&["--bogus"])).code, 2);
@@ -392,7 +231,11 @@ fn over_the_real_tree_the_rules_hold() {
     {
         assert!(names(&t.shared, &file),);
     }
-    // a Python test file's own freshness key (itself and each conftest above it) is the synthetic tree's to hold: the real tree's last
-    // test file under `tests/` was deleted by feature 449 T211
     assert!(t.key_for("l7r-guard.sh").len() == 16 && !t.rust_inputs("l7r-guard.sh").is_empty());
+}
+
+#[test]
+fn a_tree_that_is_not_there_indexes_nothing() {
+    let t = Tree::at(Path::new("/no/such/tree/at/all"));
+    assert!(t.index.is_empty() && t.shared == ["hookrun.sh"]);
 }

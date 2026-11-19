@@ -34,9 +34,9 @@ last efficient stage parked in `rust/parked/`), and the stage-by-stage reference
 | `rust/mode_a/src/compound/` and each generated sheet's `<map>.compound.json` | the Mode A compound generator (feature 449 T152: rebuilt in Rust from `specs/449-rust-codebase/derivations/T208-compound.md`; the Python `compound*.py` and `well_gear.py` deleted): the program read from its spec, the perimeter-first seating, the parts, the open ground, the sheet written; `l7r-mode-a compound <spec>` | you change a compound plan's draft or its program |
 | `rust/mode_a/src/dwellings.rs` (the Python `dwellings.py` deleted with the page writer it served, feature 449 T150) | what counts as a DWELLING, in one leaf module with no imports of its own | a count of houses or households disagrees between two readers |
 | `switches.py` | the iteration switch (feature 132) in `dev/switches.json`: remote on or off ([`docs/switches.md`](../../docs/switches.md)) | a remote run refused, or you throw the switch |
-| `_invocation.py`, `_census.py`, `_memory.py` | refuse an operation not invoked through this project's make; the roll census's writer; give freed C memory back after a roll | a refusal or the census fired |
+| `_invocation.py`, `_census.py` | refuse an operation not invoked through this project's make; the roll census's writer (`_memory.py`, the heap trim after a test or a roll, left with pytest, feature 449 T213) | a refusal or the census fired |
 | [`tools/`](tools/CLAUDE.md) | read-only diagnostics and audits | a map came out wrong and you need to ask WHY, or a number needs measuring |
-| [`tests/`](../../tests/CLAUDE.md) | every test, mirroring the source layout, plus the frozen fixtures | you need to find or add a test |
+| [`tests/`](../../tests/CLAUDE.md) | the guard suites and the fixtures the Rust tests read; no Python test is left (feature 449 T211, T213) | you need to find a fixture or a guard's suite |
 
 `pool/` holds the shipped maps (`<name>.gen.py`, its manifest, render and `.notes.md`); `legacy-hand-authored-pool/` the frozen hand-authored exhibits.
 
@@ -72,18 +72,16 @@ diagnosed and the tooling improved.
 
 **The loop** ([`dev/loop.md`](../../dev/loop.md))
 
-- **Nothing runs outside make**: a bare interpreter, a bare pytest or a foreign makefile is refused
+- **Nothing runs outside make**: an engine entry point, a bare cargo or a foreign makefile is refused
   (`rust/guard/src/guards/make_only_hooks.rs`), and the engine refuses in-process calls too (`_invocation.py`). A refusal on correct
   work is a BUG in the guard to fix (it was always a MENTION mistaken for an INVOCATION).
 - `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
-  `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make test-file FILE=...`
-  for a kept test file. The Python unit tests, their planner and the coverage floor over Python were deleted (feature 449 FR-001b, the GM 2026-11-10); `make done` runs the kept tests whole, once, backgrounded, never polled.
+  `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make rust-test CRATE=<dir>`
+  for one crate's tests. The Python tests, their planner and the coverage floor over Python were deleted (feature 449 FR-001b, the GM 2026-11-10), and pytest with them (T213); `make done` runs once, backgrounded, never polled.
 - **The cohort, by stage** (feature 386, the GM 2026-10-17): `make cohort` (ten seeds and the pinned rows, ~50 s) after each
   fix; `make cohort-landing` before a GATED landing - seeds 1-48 and the pinned rows, ~2 min uncached - which `sync-with-main.sh
   done` requires on the engine it lands, refusing a seed regressed against main. `make land` rolls a fresh block of 48 that
   rotates with the engine AFTER its push (feature 415): a rate (`make cohort-seeds` keeps its trend), never a refusal.
-- `make quick` fails over its own 60 s budget; a test that rolls a map carries `@pytest.mark.rolls_map`
-  (`tests/test_markers.py`).
 - Never run a test BESIDE a running gate - two writers on the same pool maps is a source of false RED. The one exception is
   `make land`'s landing cohort (feature 405 T48): it writes no pool map, its rolls are no gate's, and its new record is unseen by
   the gate's tree check.

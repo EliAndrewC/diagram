@@ -62,7 +62,7 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
 - Work only in the clone your brief names. Commit there as you finish each part; never push, never run
   `scripts/sync-with-main.sh`, never rewrite history (no rebase, amend, squash or force), no branches.
 - `git -C <path>` for every git call; no bare `cd`. Never run git against `/host-l7r-repo`.
-- Everything runs through `make` (a bare interpreter or pytest is refused or rewritten). Edit files with `Edit` or
+- Everything runs through `make` (an engine entry point or a bare cargo is refused or rewritten). Edit files with `Edit` or
   `Write`, never a heredoc'd script; read every file you will change in ONE message, then edit.
 - New glossary files and registry entries take their prefix from `make reserve KIND=glossary|registry KEY=<k>`. A new
   registry entry takes its source tags too: `TAGS="period=..; region=..; kind=.."` (values and cut-offs in

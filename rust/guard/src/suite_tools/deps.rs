@@ -1,4 +1,4 @@
-//! `l7r-guard deps` (feature 449 T050, the port of `tests/hooks/hookdeps.py`, feature 172): what each guard suite and each Python test of `scripts/` depends on,
+//! `l7r-guard deps` (feature 449 T050, the port of `tests/hooks/hookdeps.py`, feature 172): what each guard suite depends on,
 //! derived transitively. The failure that matters is UNDER-running: a derivation that misses a dependency skips a suite a change has broken and reports green,
 //! while over-running is merely slow, so every doubtful edge here counts as a dependency.
 //!
@@ -10,7 +10,6 @@
 
 use std::cell::{OnceCell, RefCell};
 use std::collections::{BTreeSet, HashMap, HashSet};
-use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use std::sync::LazyLock;
@@ -20,7 +19,6 @@ use fancy_regex::Regex;
 use crate::guards::agent_prefix_hooks::lines_kept;
 use crate::protocol::Reply;
 use crate::shared::sha256;
-use crate::shared::tool::ask;
 use crate::suite_tools::pylex;
 
 fn re(pattern: &str) -> Regex {
@@ -42,16 +40,6 @@ const RUST_GUARD: [&str; 4] = [
 
 static GLOB_TUPLE: LazyLock<Regex> =
     LazyLock::new(|| re(r#""scripts"\s*,\s*\(\s*"\*\.sh"\s*,\s*"\*\.py""#));
-// A test that builds a script path at run time, or names the scripts directory as a path's end, depends on all of it (feature 375 amendment 3).
-static BUILDS: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r#""scripts"\s*/\s*[A-Za-z_(]|join\([^)]*"scripts"\s*,\s*[A-Za-z_]|f"[^"]*scripts/\{|\{[^}]*\}/scripts|"scripts"\s*,\s*\(\s*"\*"#,
-    )
-});
-static NAMES_DIR: LazyLock<Regex> = LazyLock::new(|| re(r#"(?m)"scripts"\s*(?:\)|,|\]|$)"#));
-static TESTS_IMPORT: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?m)^\s*(?:from|import)\s+(tests(?:\.\w+)+)"));
-
 fn walk_into(dir: &Path, deep: bool, keep: &dyn Fn(&str) -> bool, out: &mut Vec<PathBuf>) {
     let Ok(entries) = std::fs::read_dir(dir) else {
         return;
@@ -353,151 +341,6 @@ impl Tree {
             .into_owned()
     }
 
-    /// The indexed files `body` reaches: a Python file what it imports and what a string constant of its code names (equal to a file's stem, or ending in its
-    /// name), any other file every name standing in it. A prose string that merely mentions a file reaches nothing.
-    fn word_refs(&self, name: &str, body: &str) -> BTreeSet<String> {
-        let by_mention = || {
-            self.index
-                .iter()
-                .filter(|(n, _)| n != name && body.contains(n.as_str()))
-                .map(|(n, _)| n.clone())
-                .collect()
-        };
-        let Some(facts) = (suffix(name) == "py").then(|| pylex::read(body)).flatten() else {
-            return by_mention();
-        };
-        let mut stems: HashMap<&str, &str> = HashMap::new();
-        for (n, _) in self.index.iter().filter(|(n, _)| n != name) {
-            stems
-                .entry(n.rsplit_once('.').map_or(n.as_str(), |(s, _)| s))
-                .or_insert(n);
-        }
-        let mut out: BTreeSet<String> = facts
-            .imported
-            .iter()
-            .filter_map(|i| stems.get(i.as_str()))
-            .map(|s| (*s).to_owned())
-            .collect();
-        for constant in &facts.strings {
-            let whole = constant.trim();
-            let tail = whole.rsplit('/').next().unwrap_or(whole);
-            for key in [
-                whole,
-                whole.trim_start_matches('_'),
-                tail,
-                tail.trim_start_matches('_'),
-            ] {
-                if key != name && self.paths.contains_key(key) {
-                    out.insert(key.to_owned());
-                } else if let Some(s) = stems.get(key) {
-                    out.insert((*s).to_owned());
-                }
-            }
-        }
-        out
-    }
-
-    fn py_closure(&self, seeds: BTreeSet<String>) -> BTreeSet<String> {
-        let (mut seen, mut stack): (BTreeSet<String>, Vec<String>) =
-            (BTreeSet::new(), seeds.into_iter().collect());
-        while let Some(name) = stack.pop() {
-            if !seen.contains(&name) && self.paths.contains_key(&name) {
-                let body = if suffix(&name) == "py" {
-                    self.text(&name).to_string()
-                } else {
-                    self.code(&name)
-                };
-                stack.extend(
-                    self.word_refs(&name, &body)
-                        .into_iter()
-                        .filter(|r| !seen.contains(r)),
-                );
-                seen.insert(name);
-            }
-        }
-        seen
-    }
-
-    /// The files whose contents are a Python test file's freshness key: itself, each conftest above it, the tests/ modules it imports, and the scripts it reaches -
-    /// or all of scripts/ and tests/hooks/ when it builds a script path at run time, names or globs the tree, or reaches no script at all.
-    #[must_use]
-    pub fn pydeps(&self, test: &Path) -> Vec<PathBuf> {
-        let test = test.canonicalize().unwrap_or_else(|_| test.to_path_buf());
-        let raw = std::fs::read_to_string(&test).unwrap_or_default();
-        let name = test
-            .file_name()
-            .map(|n| n.to_string_lossy().into_owned())
-            .unwrap_or_default();
-        let code = strip(&name, &raw);
-        let mut files = BTreeSet::from([test.clone()]);
-        let tests = self.root.join("tests");
-        for dir in test
-            .ancestors()
-            .skip(1)
-            .take_while(|d| d.starts_with(&tests))
-        {
-            files.extend(Some(dir.join("conftest.py")).filter(|c| c.is_file()));
-        }
-        for capture in TESTS_IMPORT.captures_iter(&raw).map_while(Result::ok) {
-            let module = capture.get(1).map_or("", |m| m.as_str()).replace('.', "/");
-            files.extend(Some(self.root.join(format!("{module}.py"))).filter(|p| p.is_file()));
-        }
-        let reached: BTreeSet<PathBuf> = self
-            .py_closure(self.word_refs(&name, &raw))
-            .iter()
-            .filter_map(|n| self.paths.get(n))
-            .cloned()
-            .collect();
-        let scripts = reached
-            .iter()
-            .any(|p| p.starts_with(&self.scripts) || p.starts_with(&self.here));
-        let whole = found(&BUILDS, &code)
-            || found(&NAMES_DIR, &code)
-            || code.contains("scripts/*.sh")
-            || code.contains("scripts/*.py")
-            || !scripts;
-        if whole {
-            files.extend(self.index.iter().map(|(_, p)| p.clone()));
-        } else {
-            files.extend(reached);
-        }
-        files.into_iter().collect()
-    }
-
-    fn py_key(&self, test: &str) -> String {
-        let mut data = Vec::new();
-        for path in self.pydeps(&self.root.join(test)) {
-            data.extend(self.rel(&path).into_bytes());
-            data.push(0);
-            data.extend(std::fs::read(&path).unwrap_or_default());
-            data.push(0);
-        }
-        sha256::hex(&data)[..16].to_owned()
-    }
-
-    fn stamp_of(gitdir: &Path, test: &str) -> PathBuf {
-        gitdir.join("hooks-test/py").join(test.replace('/', "__"))
-    }
-
-    /// The test files whose key differs from their last green stamp.
-    #[must_use]
-    pub fn py_stale(&self, gitdir: &Path, tests: &[String]) -> Vec<String> {
-        let stale = |t: &&String| {
-            std::fs::read_to_string(Self::stamp_of(gitdir, t))
-                .map_or(true, |s| s.trim() != self.py_key(t))
-        };
-        tests.iter().filter(stale).cloned().collect()
-    }
-
-    /// Stamp each test file green.
-    pub fn py_stamp(&self, gitdir: &Path, tests: &[String]) {
-        for test in tests {
-            let stamp = Self::stamp_of(gitdir, test);
-            let _ = stamp.parent().map(std::fs::create_dir_all);
-            let _ = std::fs::write(stamp, format!("{}\n", self.py_key(test)));
-        }
-    }
-
     fn roster(&self) -> Vec<String> {
         let mut hooks = Vec::new();
         walk_into(
@@ -514,57 +357,6 @@ impl Tree {
         names.sort();
         names.extend(["review-gate.sh", "l7r-gate.sh", "sync-with-main.sh"].map(str::to_owned));
         names
-    }
-
-    /// How many of `tests` each of the `count` first-parent commits up to `from` touching scripts/ or tests/hooks/ would re-run, and the mean (feature 375's SC-014).
-    fn window(&self, from: &str, count: &str, tests: &[String]) -> String {
-        let git = |args: &[&str]| ask(&self.root, "git", args, "").out;
-        let deps: Vec<BTreeSet<String>> = tests
-            .iter()
-            .map(|t| {
-                self.pydeps(&self.root.join(t))
-                    .iter()
-                    .map(|p| self.rel(p))
-                    .collect()
-            })
-            .collect();
-        let commits = git(&[
-            "log",
-            "--first-parent",
-            "-n",
-            count,
-            "--format=%h",
-            from,
-            "--",
-            "scripts",
-            "tests/hooks",
-        ]);
-        let (mut out, mut total, mut seen) = (String::new(), 0, 0);
-        for commit in commits.lines() {
-            let changed = git(&[
-                "diff-tree",
-                "-m",
-                "--first-parent",
-                "--no-commit-id",
-                "--name-only",
-                "-r",
-                commit,
-            ]);
-            let changed: BTreeSet<String> = changed.lines().map(str::to_owned).collect();
-            let runs = deps.iter().filter(|d| !d.is_disjoint(&changed)).count();
-            let _ = writeln!(out, "{commit} {runs}");
-            total += runs;
-            seen += 1;
-        }
-        let tenths = (total * 10 + seen / 2) / seen.max(1);
-        let _ = writeln!(
-            out,
-            "mean {}.{} of {}",
-            tenths / 10,
-            tenths % 10,
-            tests.len()
-        );
-        out
     }
 
     fn keys(&self, guards: &[String]) -> String {
@@ -591,7 +383,8 @@ pub fn tool_root() -> PathBuf {
     )
 }
 
-/// `l7r-guard deps`: `--all`, `--keys <guard>...`, `--deps <guard>`, `--pydeps <test>`, `--pystale|--pystamp <gitdir> <test>...`, `--window <from> <count> <test>...`, or `<guard>`'s key.
+/// `l7r-guard deps`: `--all`, `--keys <guard>...`, `--deps <guard>`, or `<guard>`'s key. A Python test's freshness key (`--pydeps`, `--pystale`,
+/// `--pystamp`) and the commit window over the Python tests of `scripts/` (`--window`, `make hooks-deps-window`) left with pytest (feature 449 T213).
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
     answer(&Tree::at(&tool_root()), args)
@@ -607,23 +400,23 @@ pub(crate) fn answer(tree: &Tree, args: &[String]) -> Reply {
     match (flag, args.len()) {
         ("--all", _) => say(tree.keys(&tree.roster())),
         ("--keys", 2..) => say(tree.keys(&args[1..])),
-        ("--pystale", 2..) => say(tree.py_stale(Path::new(&args[1]), &args[2..]).join("\n") + "\n"),
-        ("--pystamp", 2..) => {
-            tree.py_stamp(Path::new(&args[1]), &args[2..]);
-            say(String::new())
-        }
-        ("--window", 3..) => say(tree.window(&args[1], &args[2], &args[3..])),
-        ("--pydeps", 2..) => {
-            let deps: Vec<String> = tree.pydeps(&tree.root.join(&args[1])).iter().map(|p| tree.rel(p)).collect();
-            say(deps.join(" ") + "\n")
-        }
         ("--deps", 2..) => {
-            let named = tree.deps_for(&args[1]).into_iter().filter_map(|n| tree.paths.get(&n).map(|p| tree.rel(p)));
-            let deps: Vec<String> = named.chain(tree.rust_inputs(&args[1]).iter().map(|p| tree.rel(p))).collect();
+            let named = tree
+                .deps_for(&args[1])
+                .into_iter()
+                .filter_map(|n| tree.paths.get(&n).map(|p| tree.rel(p)));
+            let deps: Vec<String> = named
+                .chain(tree.rust_inputs(&args[1]).iter().map(|p| tree.rel(p)))
+                .collect();
             say(deps.join(" ") + "\n")
         }
         (guard, 1..) if !guard.starts_with('-') => say(tree.key_for(guard) + "\n"),
-        _ => Reply { stdout: String::new(), stderr: "usage: l7r-guard deps --all | --keys <guard>... | --deps <guard> | --pydeps <test> | --pystale|--pystamp <gitdir> <test>... | --window <from> <count> <test>... | <guard>\n".to_owned(), code: 2 },
+        _ => Reply {
+            stdout: String::new(),
+            stderr: "usage: l7r-guard deps --all | --keys <guard>... | --deps <guard> | <guard>\n"
+                .to_owned(),
+            code: 2,
+        },
     }
 }
 

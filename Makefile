@@ -16,7 +16,7 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: modal-bundle modal-prepass done docs static format test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep perf-gate hooks-test explain citations fragment-move \
+.PHONY: modal-bundle modal-prepass done docs static format guard perf perf-report maps _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep perf-gate hooks-test explain citations fragment-move \
 	 switches _switch \
 	 map cohort cohort-landing hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
@@ -75,7 +75,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$$ARBITER_OK",@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter gate-held || exit 1)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lock acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$$PREFLIGHT_OK",@:)
-	@$(if $(PREFLIGHT_OK),:,if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done >/dev/null 2>&1; then :; else tp=$$(date +%s); "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true; fi)
+	@$(if $(PREFLIGHT_OK),:,if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done >/dev/null 2>&1; then :; else tp=$$(date +%s); "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true; fi)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write diagram || true; \
@@ -87,7 +87,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit || exit 1;,) \
 	T0=$$(date +%s); fail=""; \
 	rm -f "$$(git rev-parse --absolute-git-dir)/roll-cache-class"; \
-	G=$$(git rev-parse --absolute-git-dir); $(RUNSTATS) start "$$G" 2>/dev/null || true; export L7R_GATE_FAILURES="$$G/gate-failures"; \
+	G=$$(git rev-parse --absolute-git-dir); $(RUNSTATS) start "$$G" 2>/dev/null || true; \
 	statics() { for phase in static format $(if $(filter rust-only,$(PORT)),seeds,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; ts=$$(date +%s); \
 	  $(MAKE) --no-print-directory $$phase || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
@@ -98,7 +98,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	if [ -n "$$par" ]; then ( statics; printf '%s' "$$fail" > "$$G/static-fail" ) > "$$G/static.log" 2>&1 & spid=$$!; else statics; fi; \
 	if [ -z "$$par" ] && [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
 	tr=$$(date +%s); $(if $(filter rust-only,$(PORT)),printf '\nreference step SKIPPED - the port switch stands at rust-only (feature 444 FR-023): make done rolls no map\n';,$(if $(REF_OK),$(LOGESCAPE) REF_OK "$$REF_WHY"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $$REF_WHY"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };)) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
-	for phase in hooks-test counters-inert test-full $(if $(FULL),perf-gate,); do \
+	for phase in hooks-test counters-inert $(if $(FULL),perf-gate,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && "$$root/scripts/gates/l7r-gate.sh" stamp --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
@@ -373,9 +373,6 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 inline-census:  ## [tests] phase 1's share of feature 449's second census: every inline Python site under scripts/hooks/ and tests/hooks/, each under a group FR-001 names; a site outside them fails
 	@bash "$$(git rev-parse --show-toplevel)/scripts/measure/inline-census.sh"
 
-hooks-deps-window: ## [tests] how many of the Python tests of scripts/ each of the last N commits touching scripts/ or tests/hooks/ would re-run, by what each test reaches (feature 375 SC-014)   FROM=<commit> N=<count>
-	@root=$$(git rev-parse --show-toplevel); pyt=$$(grep -rlE '/ *"scripts[/"]|"scripts" */|join\([^)]*"scripts"' "$$root/tests" --include='test_*.py' --exclude-dir=hooks | sed "s|^$$root/||" | sort); "$$root/scripts/hooks/l7r-guard.sh" deps --window "$(FROM)" "$(N)" $$pyt
-
 guard-edit: export GUARD_WHY = $(WHY)
 guard-edit:     ## [project] permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)   FILE=Makefile WHY="<why the edit is legitimate>"
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" permit grant "$(abspath $(FILE))" "$$GUARD_WHY"
@@ -559,8 +556,6 @@ land:           ## [project] land one task or several and tick them: every cheap
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
 
-gate-costs:     ## [performance] what a gate run costs here, from the run records: each run's mode, selection and phases, the fit (fixed + per selected test), the selection's growth between full runs (feature 415)   [SINCE=<utc prefix>]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure gate-costs $(if $(SINCE),--since "$(SINCE)",)
 
 land-stop:       ## [project] stop this tree's running `make land` cleanly - its gate and cohort stop with it (405 T90)
 	@$(LAND_RUN) --stop
@@ -631,7 +626,7 @@ replay-owing:   ## [project] replay recorded commits through the old owing and t
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" replay-owing $(REVS) $(if $(OUT),--out "$(OUT)",) $(if $(TRIAGE),--triage,)
 
 preflight:      ## [tests] the gate's first phase, in seconds: the derived files regenerated, the record and its pointers, make quick - and, here only (not in the gate, 405 T47), the changed engine lines a quick test runs (feature 375)
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)"
 
 gm-review:      ## [project] what waits on the GM: the questions escalation-check KEPT (his decisions, the one source - feature 432), the questions OWED escalation-check (the session's), rows waiting on other work, and per feature the TO REVIEW rows (he may overturn) - feature 375   [F=<NNN> that feature's rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=<n>]
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review $(if $(EXPLAIN),explain $(F) $(ROW),list $(F))
@@ -938,13 +933,6 @@ review-verdict:  ## [project] a review check's LAST act - write the unit's verdi
 ##  FINDINGS=<file>    a JSON list of {"id", "severity", "what"}; ids default to F1, F2, ...
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
 
-test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tests/pipeline/test_gencache.py [K="expr"]
-##  FILE=<paths>  the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run
-##  K=<expr>      a pytest `-k` expression - a SUBSET, which owes a whole-file run before the gate
-	@if [ -z "$(strip $(FILE))" ]; then echo "test-file: no FILE given - run \`make test-file FILE=tests/<path>\` (the variable is FILE, not F); \`make test-full\` runs every test" >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/format-changed.sh"
-	@python3 -m pytest -q --no-cov $(if $(K),-k "$$K",) $(FILE) && $(STATE) green-local test-file
-
 dead-closure:   ## [diagnostics] what a deletion leaves dead and which deleted name a file still calls (frozen exhibits included), against BASE (feature 388)   [BASE=HEAD]
 	@python3 scripts/measure/dead_closure.py --base "$(or $(BASE),HEAD)"
 
@@ -957,17 +945,10 @@ subagent-cache:  ## [project] what subagents write to the prompt cache fresh, pe
 wave-report:     ## [project] a workflow wave's cost - each agent's first-request cache read and write, the main session's wakes - against the last hand-launched wave (feature 383 amendment 7)   [WF=<.../workflows/wf_*>]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure wave-report $(if $(WF),--run $(WF),)
 
-durations:       ## [tests] where the suite's time goes - run when a target feels slow
-##  FULL=1        also profile `tests/full/` (default: it is ignored, so this is the quick tree only)
-##  MARK=<expr>   a pytest `-m` marker expression, e.g. `tooling` (default: `not rolls_map`)
-##  N=<rows>      how many of the slowest rows to print (default: 12)
-	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(FULL),,--ignore=tests/full) $(if $(MARK),-m "$$MARK",-m "not rolls_map") --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
-
 # Timed with date +%s, not $$SECONDS: make's shell is sh, where SECONDS is unset.
 # The ratchet and the budget judge warm, selective runs only; raise the budget only with a measurement.
-# The house-style scan is a phase, not a test: testmon selects tests by changed code and would never pick it.
-quick:           ## [tests] tier 2: lint and the fast tree checks (no Python test remains since feature 449 T211)
-	@python3 -m ruff check l7r/ tests/
+quick:           ## [tests] tier 2: lint and the fast tree checks (no Python test remains since feature 449 T211; pytest is gone since T213)
+	@python3 -m ruff check l7r/
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta --selftest >/dev/null
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size
@@ -1080,45 +1061,11 @@ format:         ## [static] rustfmt over the Rust phases' crates (feature 444 T1
 # going to have to change temporarily"): at rust-only, make done rolls no map - no map-rolling test, no reference map, no floor that
 # rolls a settlement - so nothing waits on the Python stages after the Rust front. `make port-integrated` throws it back.
 PORT = $(eval PORT := $(shell $(SWITCH) state port 2>/dev/null || echo rust-only))$(PORT)
-ROLL_DESELECT = $(if $(filter rust-only,$(PORT)),-m "not rolls_map",)
-# the Python settlement engine and its test trees are DELETED (feature 444 T39, FR-024; the GM 2026-11-07: "literally delete all of
-# the Python code that does any kind of Hamlet generation"), so no tree is left to ignore
-REFERENCE_TIER = hamlet
 CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
 
-# loadgroup, not worksteal: worksteal ignores xdist_group, and the browser package's modules must share one Chromium.
-DIST ?= loadgroup
-XDIST_WORKERS = $(shell [ "$(CPU_COUNT)" -lt 6 ] && echo "$(CPU_COUNT)" || echo 6)
-EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
-
-GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1
-
-
-test-full:      ## [tests] the gate's test phase: the kept Python tests, whole (feature 449 FR-001b)
-	@$(MAKE) --no-print-directory test && $(STATE) green-local test-full
-
-soak:           ## [tests] the tier ABOVE the gate, run by nothing ordinary (constitution VI v2.23.0): the tests that roll more than the floor needs; REFUSES when empty rather than reporting a vacuous green and larger maps (tests/soak/)
-	@n=$$(ls $(SOAK_DIR)/*.py 2>/dev/null | wc -l); \
-	if [ "$$n" -eq 0 ]; then \
-	  printf '\n\033[1mmake soak: the soak suite is EMPTY, so there is nothing to prove.\033[0m\n\n'; \
-	  printf 'tests/soak/ is declared and deliberately unfilled - the home of the tier above the gate\n'; \
-	  printf '(the same code over many seeds and larger, more realistic maps), kept as structure so that\n'; \
-	  printf 'when that work arrives there is no argument about where it goes.\n\n'; \
-	  printf 'Running it now would report a GREEN build having executed zero tests. Read\n'; \
-	  printf 'tests/soak/CLAUDE.md - it carries the membership rule (a test belongs there if removing\n'; \
-	  printf 'it does not change coverage) and the honest statement of when this tier earns its keep.\n\n'; \
-	  exit 1; \
-	fi; \
-	$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(SOAK_DIR) \
-	  && $(STATE) green-local soak
-SOAK_DIR ?= tests/soak
-
-# A deselected test takes its coverage with it, so the 100% floors need the whole suite: done's test phase is test-full.
-
-# No Python test is left under tests/ (feature 449 T211 deleted the last, the pool sweep, now `rust/mode_a/src/pool_sweep.rs`): a pytest
-# run there collects nothing and exits 5, so the phase runs none; T213 retires the phase and pytest's other targets.
-test:            ## [tests] {internal} the pytest phase, empty since feature 449 T211 (internal - `done` and `test-full` call it, not you)
-	@printf 'test: no Python test remains under tests/ (feature 449 T211) - nothing to run\n'
+# PYTEST IS GONE (feature 449 T213, after T211 deleted the last Python test and FR-001b, the GM 2026-11-10: "Yes delete everything except
+# that group, please."): the gate's test phase (`test`, `test-full`), `test-file`, `durations` and `soak` ran pytest and are retired with
+# it; the Rust crates' tests run under `make rust-test` and `make static`, the guard suites under `make hooks-test`.
 
 # EVERY MAKE INVOCATION RECORDS ITS RUN (feature 406 T02, D161; the GM 2026-10-19: "it is notionally possible for us to see how
 # often a tool is used"). The event log sees a target only when a session's Bash call runs it; one run from another target's

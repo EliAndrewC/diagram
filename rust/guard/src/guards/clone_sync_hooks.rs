@@ -36,29 +36,18 @@ pub const GUARD: Guard = Guard {
 /// The name a merge's run is recorded under in the `usage_log` (`scripts/tool-registry.json`).
 const USAGE_LOG_TOOL: &str = "clone-sync-merge";
 
-/// The make targets that run tests, whose clone a behind-main notice is for.
-const BEHIND_TEST_TARGETS: [&str; 21] = [
+/// The make targets that run tests, whose clone a behind-main notice is for. Each is a target of the Makefile (a test holds it): pytest's
+/// (`test`, `test-file`, `test-full`, `durations`, `soak`) left with it, and the names no target bore any more with them (feature 449 T213).
+const BEHIND_TEST_TARGETS: [&str; 9] = [
     "quick",
-    "test",
-    "test-file",
-    "test-full",
     "done",
     "verify",
-    "reference",
-    "maps",
     "hooks-test",
     "idle-tests",
     "cohort",
-    "tripwire",
-    "regressions",
-    "perf",
-    "perf-gate",
-    "cov-file",
-    "durations",
     "parts-sweep",
-    "tooling",
     "page-check",
-    "soak",
+    "rust-test",
 ];
 
 static ENGINE_PATH: LazyLock<Regex> = LazyLock::new(|| {

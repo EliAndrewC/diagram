@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for gate-hooks.sh. Feeds PreToolUse events and asserts when `make done` is blocked.
+# Tests for gate-hooks.sh. Feeds PreToolUse events and asserts when quick-and-done is combined and GATE_OK is honored.
 # Run: tests/hooks/test-gate-hooks.sh   (exit 0 = all green)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -35,76 +35,21 @@ check() { # label expected(ok|blocked) rc
   fi
 }
 
-echo "1. THE MOTIVATING CASE: a -k subset, then the gate"
+# GUARD_EDIT_OK: feature 449 T213 - THE SUBSET BLOCK LEFT WITH PYTEST: a `-k` run, `make test-file K=` or a `::` node id armed a
+# flag and the next `make done` was refused once (features 152, 212). No target runs pytest any more, so its vectors are deleted
+# rather than left passing vacuously, and these check that nothing is armed or refused for one.
+echo "1. a pytest subset arms nothing any more (feature 449 T213)"
 setup
-run "$(bash_ev 'python3 -m pytest test_settlement.py -q -n auto --no-cov -k \"kura_side or punishment\"')"; check "the subset run itself is allowed" ok $?
-run "$(bash_ev 'make done')"; check "make done BLOCKED after a subset-only run" blocked $?
-grep -q "WHOLE test file" "$HOOK_ERR" && { echo "  ok    message says what to run instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
-grep -qF "make done  # GATE_OK: <reason>" "$HOOK_ERR" && grep -q "refused as a prompt override" "$HOOK_ERR" && { echo "  ok    the escape tip names the form that passes (383 amendment 2)"; PASS=$((PASS+1)); } || { echo "  FAIL  the escape tip"; FAIL=$((FAIL+1)); }
-run "$(bash_ev 'make done')"; check "re-issuing the gate goes through (blocks once, no deadlock)" ok $?
+run "$(bash_ev 'python3 -m pytest test_settlement.py -q -k \"kura_side or punishment\"')"; check "the subset run itself is allowed" ok $?
+run "$(bash_ev 'make done')"; check "make done goes through after it" ok $?
+run "$(edit_ev '/gm-assistant/.clones/x/settlement.py')"; check "an edit is not the guard's" ok $?
 teardown
 
-# GUARD_EDIT_OK: feature 212 - the make-only guard rewrites a targeted bare pytest into
-# `make test-file FILE=... K=...` or a `::` node id, so those two forms must arm the subset flag
-# exactly as the bare `-k` does, and a plain `make test-file` must still clear it.
-echo "1a. a -k in another field arms nothing (feature 449 T007, constitution XIV: the shell read the command with a greedy sed)"
+echo "2. the GATE_OK escape hatch"
 setup
-desc_ev() { CMD="$1" DESC="$2" jq -nc '{"session_id":"g1","tool_name":"Bash","tool_input":{"command":env.CMD,"description":env.DESC}}'; }
-run "$(desc_ev 'make test-file FILE=tests/test_x.py' 'run the file -k fast')"; check "a whole-file run described with -k is allowed" ok $?
-run "$(bash_ev 'make done')"; check "make done passes: the description armed nothing" ok $?
-teardown
-
-echo "1b. the make-target spellings of a subset (feature 212)"
-setup
-run "$(bash_ev 'make test-file FILE=tests/test_x.py K="kura_side or punishment"')"; check "a K= run is allowed" ok $?
-run "$(bash_ev 'make done')"; check "make done BLOCKED after a K=-only run" blocked $?
-run "$(bash_ev 'make test-file FILE=tests/test_x.py::test_kura')"
-run "$(bash_ev 'make done')"; check "make done BLOCKED after a node-id-only run" blocked $?
-run "$(bash_ev 'make test-file FILE=tests/test_x.py::test_kura')"
-run "$(bash_ev 'make test-file FILE=tests/test_x.py')"
-run "$(bash_ev 'make done')"; check "a whole-file make test-file clears the flag" ok $?
-run "$(bash_ev 'make test-file FILE=tests/test_x.py SKIP_LOCK=1')"
-run "$(bash_ev 'make done')"; check "a variable merely ENDING in K= does not arm the flag" ok $?
-teardown
-
-echo "2. a WHOLE-FILE run clears the flag"
-setup
-run "$(bash_ev 'pytest test_settlement.py -k foo')"
-run "$(bash_ev 'python3 -m pytest test_settlement.py test_checks.py -q -n auto --no-cov')"
-run "$(bash_ev 'make done')"; check "gate allowed after the whole file ran" ok $?
-teardown
-
-echo "3. an EDIT after a subset run clears the flag (the run predates the code)"
-setup
-run "$(bash_ev 'pytest test_settlement.py -k foo')"
-run "$(edit_ev '/gm-assistant/.clones/x/settlement.py')"
-run "$(bash_ev 'make done')"; check "gate allowed - the stale subset cannot vouch either way" ok $?
-teardown
-
-echo "4. no local test run at all: the hook has no opinion"
-setup
-run "$(bash_ev 'make done')"; check "gate allowed (docs-only diffs must not be blocked)" ok $?
-teardown
-
-echo "5. the GATE_OK escape hatch"
-setup
-run "$(bash_ev 'pytest test_settlement.py -k foo')"
-run "$(bash_ev 'make done  # GATE_OK: docs-only since the subset run')"; check "GATE_OK passes" ok $?
-run "$(bash_ev 'make done')"; check "...and clears the flag" ok $?
-teardown
-
-echo "6. non-Python edits do not clear the flag (a .md edit is not a code change)"
-setup
-run "$(bash_ev 'pytest test_settlement.py -k foo')"
-run "$(edit_ev '/gm-assistant/.clones/x/docs/iteration-loop.md')"
-run "$(bash_ev 'make done')"; check "still blocked" blocked $?
-teardown
-
-echo "7. sessions are independent"
-setup
-run "$(bash_ev 'pytest test_settlement.py -k foo')"
-"$HOOK" pretool <<<'{"session_id":"other","tool_name":"Bash","tool_input":{"command":"make done"}}' 2>/dev/null
-check "another session is unaffected" ok $?
+run "$(bash_ev 'make quick && make done  # GATE_OK: comparing the two')"; check "GATE_OK with a reason passes" ok $?
+run "$(bash_ev 'make done  # GATE_OK')"; check "GATE_OK with no reason is refused" blocked $?
+grep -q "GATE_OK with no reason" "$HOOK_ERR" && { echo "  ok    the refusal says the reason is missing"; PASS=$((PASS+1)); } || { echo "  FAIL  the refusal"; FAIL=$((FAIL+1)); }
 teardown
 
 # GUARD_EDIT_OK: feature 162 - the REFUSAL IS RETIRED and its two vectors go with it, deleted rather
@@ -163,21 +108,6 @@ run "$(bash_ev 'grep -n "make quick.*make done" docs/iteration-loop.md')"; check
 run "$(bash_ev 'git commit -m "make quick while iterating, make done once at the end"')"; check "a commit message quoting both" ok $?
 run "$(bash_ev 'echo "make quick; make done" > /tmp/notes.txt')"; check "writing them into a file as text" ok $?
 teardown
-# a pytest MENTION must not arm the subset flag either - the seventh false positive of the day was this
-# file's own vectors (a quoted `-k foo`) arming a block for a run nobody made
-setup
-run "$(bash_ev 'python3 - <<PY
-print("the vector reads: pytest tests/test_x.py -k foo")
-PY')"
-run "$(bash_ev 'make done')"; check "a pytest mention does not arm the subset block" ok $?
-teardown
-# ...and the real thing is still caught, with the flag machinery untouched
-setup
-run "$(bash_ev 'pytest tests/test_x.py -k foo')"
-run "$(bash_ev 'echo "make done is what I will run next"')"; check "a mention does not consume the subset block" ok $?
-run "$(bash_ev 'make done')"; check "...and the real gate is still blocked once" blocked $?
-teardown
-
 echo
 # GUARD_EDIT_OK: feature 162 - THE SUITE MUST NOT WRITE TO THE REAL CENSUS. A section that borrows
 # GUARD_LOG_DIR has to hand it back; one that `unset` it silently dropped the file-level isolation and

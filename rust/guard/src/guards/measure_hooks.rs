@@ -291,7 +291,7 @@ fn cadence(event: &Event, s: &Seams, log: &dyn Fn(&str, &str)) -> Option<Answer>
         "BLOCKED (once): this tree's last full gate was GREEN {} min ago. Batch the expensive measurement; do not re-run it\n\
          after every small round of changes (GM 2026-10-08).\n\n\
          Do this instead, until the batch is done:\n \
-         - after each fix: `make quick` (or `make test-file FILE=<the test files your change reaches>`) - seconds, never blocked\n \
+         - after each fix: `make quick` (or `make rust-test CRATE=<the crate your change reaches>`) - seconds, never blocked\n \
          - after a map-changing fix: regenerate the maps it touches (`make map GEN=...`) and `make notes-census`\n \
          - claims: `make claims-owed` / `make claims-bundle` / impl-drift as you go - they are not the gate\n \
          - then ONE `make done` for the whole batch (feature 328: once per 4-5 waves, or before anything lands)\n\n\
@@ -332,7 +332,7 @@ fn streak(_event: &Event, s: &Seams, log: &dyn Fn(&str, &str)) -> Vec<Answer> {
         "REMINDER (measure-hooks, once per batch of work): this is the expensive measurement. {line}The NEXT one in this streak is \
 refused unless an engine edit or a git commit comes between - a test edit deliberately does not reset it, because writing one test \
 and re-measuring is the loop this guard exists to stop (measured on feature 146: about an hour of re-deriving a coverage worklist \
-the session already had). Work from the list instead: write the whole batch, run `make quick` or `make test-file FILE=...` between \
+the session already had). Work from the list instead: write the whole batch, run `make quick` or `make rust-test CRATE=...` between \
 edits, and ask `make cov-file FILE=... MOD=...` which lines one test file actually reaches - it is the only command here that \
 answers that, and the commonest wrong answer is that the test covered the guard ABOVE the branch it was aimed at."
     ))]
@@ -344,7 +344,7 @@ snapshot belongs to the batch's one pair (LABEL=<feature>-start / -end, feature 
 
 const STREAK_REFUSAL: &str = "BLOCKED: that is the second EXPENSIVE measurement in a row with no engine change and no commit between.
 
-This is the expensive one; `make quick`, `make test-file` and `make cov-file` are the cheap loop and are
+This is the expensive one; `make quick`, `make rust-test CRATE=` and `make cov-file` are the cheap loop and are
 never blocked, however often they run. Measured on feature 146: 20 test-full runs, about an hour, almost all
 of it re-deriving a coverage worklist the session already had written down.
 (GUARD_EDIT_OK: feature 162 - the durations that used to be quoted here are gone rather than restated. A
@@ -359,7 +359,7 @@ Do this instead:
    minutes an answer).
  - You already know what the measurement will say. Work from the LIST, not from the run: write the whole
    batch of tests or fixes in one go.
- - Between edits run `make quick` (or `make test-file FILE=...`) - free, and it catches a broken test at once.
+ - Between edits run `make quick` (or `make rust-test CRATE=...`) - free, and it catches a broken test at once.
  - Measure ONCE when the batch is done. `CLAUDE.md`: \"Iterate on ONE artifact; run the full test bed exactly
    once, at the end.\"
 
