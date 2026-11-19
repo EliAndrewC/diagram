@@ -36,11 +36,6 @@ The 44 guard tasks are independent of one another once T005 has landed: each tou
 ## Implementation strategy
 
 MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every session with the slowest guard moved, its suite green, the call timed. Then the guards in order, each landed as it passes, so the session speeds up guard by guard.
-- [ ] T152 phase: compound - the Mode A compound generator rebuilt in Rust from its SOUND derivation (T208), never ported (the GM 2026-10-30 and 2026-11-19; T199): the two generated compound sheets (county-magistracy-example, ochiba-roundtrip-test) drawn by Rust from their programs, each passing its checks (make pack-audit, the census, the size table) and holding docs/buildings.md's composition rules and the research claims they rest on, captions placed by T202's caption_place, its counters within twice each sheet's budget; the old Python (compound*.py, compound_parts.py, compound_model.py, well_gear.py, labels/*.py - and compound* moved here from T156) and its lockstep tests deleted in the landing, the generators' .gen.py wiring kept; the side-by-side page of every pool sheet before and after published for the GM (engine-plan.md)
-      research: rendering
-      phase: compound
-      derivation: specs/449-rust-codebase/derivations/T208-compound.md
-      old-code: l7r/diagram/compound.py l7r/diagram/compound_example.py l7r/diagram/compound_model.py l7r/diagram/compound_parts.py l7r/diagram/compound_view.py l7r/diagram/well_gear.py l7r/diagram/labels/*.py
 - [ ] T156 Phase 4 S11, the Mode A top and pytest's exit (ask:449-phase4-slices) Q6, Q9: compound*, the six pool .gen.py as one Rust sheet driver with a spec file per map, 335's harness.py, poolmaps, test_mode_a_sheets as Rust tests (2,253 lines); conftest, the __init__.py files, _scope, _gate_failures, _heap, _memory, collect_cost, collect_probe, test_operations_registry deleted (443); resvg pinned as a library
       research: rendering
 - [ ] T157 Phase 4 S12, the pipeline (ask:449-phase4-slices) Q8: gencache, regen, pool_index, render_cache (1,764 lines), gencache's key the binary, the spec and the inputs read; rollcache, pipeline/codeid, pipeline/__init__, _census and _invocation deleted (1,006); make scatter-bases' deleted script, render_cache.replate_page and sync-with-main.sh's RENDER_CACHE_MOD fixed or removed

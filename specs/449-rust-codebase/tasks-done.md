@@ -439,6 +439,12 @@
 - [x] T151 Phase 4 S8, labels (ask:449-phase4-slices) Q7: labels/* and work_counts (2,397 lines), shapely onto the geo crate, FR-002 binding what is written
       research: rendering
       verify: DONE. landed in batch T151+T181: step 3a: the labels in Rust and the shrine drawn by Rust, its checks as before, 310 claims checked; and T180's measure reworded to the GM's must-pass sense
+- [x] T152 phase: compound - the Mode A compound generator rebuilt in Rust from its SOUND derivation (T208), never ported (the GM 2026-10-30 and 2026-11-19; T199): the two generated compound sheets (county-magistracy-example, ochiba-roundtrip-test) drawn by Rust from their programs, each passing its checks (make pack-audit, the census, the size table) and holding docs/buildings.md's composition rules and the research claims they rest on, captions placed by T202's caption_place, its counters within twice each sheet's budget; the old Python (compound*.py, compound_parts.py, compound_model.py, well_gear.py, labels/*.py - and compound* moved here from T156) and its lockstep tests deleted in the landing, the generators' .gen.py wiring kept; the side-by-side page of every pool sheet before and after published for the GM (engine-plan.md)
+      research: rendering
+      phase: compound
+      derivation: specs/449-rust-codebase/derivations/T208-compound.md
+      old-code: l7r/diagram/compound.py l7r/diagram/compound_example.py l7r/diagram/compound_model.py l7r/diagram/compound_parts.py l7r/diagram/compound_view.py l7r/diagram/well_gear.py l7r/diagram/labels/*.py
+      verify: DONE. landed: the compound generator rebuilt from its derivation; the old Python deleted
 - [x] T153 Phase 4 S9b, pack_audit's leaves (ask:449-phase4-slices): tagged, parse, grids, onmap, labels, marks_drawn, size_marks, sun, palette (1,586 lines)
       research: rendering
       verify: DONE. done by T170 (tagged, parse), T174 (grids, size_marks) and T175 (onmap, labels, marks_drawn, sun, palette), which landed them measured: each ported into rust/mode_a and held to its Python by the lockstep, make pack-audit's 207 differential cases none differing
