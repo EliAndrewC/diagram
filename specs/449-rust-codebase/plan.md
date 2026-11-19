@@ -739,14 +739,42 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T199 (<why: the finding or measurement that files it>)
+### T199 (the GM, 2026-11-19: steps 1, 2 and 3a were ported, not rebuilt, and carried the Python's mistakes)
+
+- **Approach**: the GM's 2026-10-30 rule (specs/444-work-budget-program/request.md: "we are not trying to re-implement the same algorithms") is written into the three places a later plan reads: `engine-plan.md` gains the section `## Rebuilt from a derivation, not ported` (an algorithm rebuilt from a SOUND derivation as phase tasks with `old-code:` naming the Python and any Rust port; plumbing ported only after a read for a search or scan growing faster than its input; steps 1 and 2 kept on their merits; lockstep tests deleted with their Python); `spec.md`'s phase-4 paragraph gains the same rule in one sentence; this section records why. The finding behind it: no line of `engine-plan.md`, `spec.md` or `plan.md` cited the 10-30 rule or `phase_source_hooks` before this task (observed 2026-11-19, method: grep of the three files for "re-implement", "derivation" and "phase_source"), so the guard never applied to steps 1-3a.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the rule in engine-plan.md and spec.md | n/a (prose) | the new section and sentence | none | none |
+
+### T199 Approach (checklist part A)
+
+1. **The goal, in the world.** The rest of feature 449 rebuilds its algorithms from derivations, so no more of the Python's mistakes are carried into the Rust.
+2. **The constraints.** The GM's words of 2026-10-30 and 2026-11-19; the phase-task form and `phase_source_hooks` of feature 444; FR-002 as restated by T180.
+3. **Where each comes from.** G: the GM, 2026-10-30 (444's request.md) and 2026-11-19 (449's request.md, "okay, please proceed on that basis then").
+4. **Do they describe the world here?** Yes: step 3b's model places buildings and parts (a search), and T198's count of the step-3a placer (observed 2026-11-19, method: counters behind the `counters` feature on the four hand sheets) ran 50 to 1,000 times its blind derivation's budget (measured 2026-11-19 (the counters feature on the four hand sheets against specs/449-rust-codebase/derivations/T198-placer.md)), the GM's "orders of magnitude more operations being performed than needed to be performed".
+5. **The order.** After T198's count, before T152 (step 3b).
+6. **The exits.** Green: the rule in both files, `make quick` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** grep of engine-plan.md and spec.md finds the GM's 10-30 words and the new section's heading.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Nothing a reader of a map sees; a process rule. T152's task text is rewritten to phase tasks when it starts, from T198's verdict.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+### T200 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T199 Approach (checklist part A)
+### T200 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

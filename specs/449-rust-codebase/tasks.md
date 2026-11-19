@@ -50,6 +50,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T199 Feature 449's engine plan carries the GM's 2026-10-30 rule (specs/444-work-budget-program/request.md: "we are not trying to re-implement the same algorithms"), which the 2026-11-17 plan dropped: engine-plan.md, spec.md and plan.md say step 3b (the Mode A model: buildings, compound - T152) is rebuilt from a derivation as phase tasks, the phase-source guard refusing a read of the old Python while each runs, and step 4's pipeline stays a port only after a check that none of its modules does far more work than needed; the lockstep tests holding a Rust module to the Python's answers are retired as that Python is deleted, the module's tests then pinning research-backed behavior; the GM's words of 2026-11-19 quoted (request.md)
       research: rendering
+- [ ] T200 make work-budget-bundle MODE=budget refuses a derivation for naming today's code on plain English words: T198's placer derivation was refused for 'research' and 'write' (the code-name list holds common words, so a derivation written in ordinary prose cannot pass) - a check refusing good work, a defect under constitution XIV; the name match restricted to identifiers a derivation could only have learned from the code (snake_case or CamelCase names, function and module names), with a test red on the old check (2026-11-19)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

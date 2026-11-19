@@ -28,6 +28,31 @@ FR-002 says so since T180. Before it, what bound bytes was `ask:449-phase4-slice
 written (SVG bytes, check verdicts)", a written difference from GEOS a new ask, the `resvg` binary kept if they differ); its geo and
 resvg clauses were amended to the GM's rule (`ask:449-engine-order`, recorded in the spec's paragraph in this plan's commit).
 
+## Rebuilt from a derivation, not ported (the GM, 2026-10-30 and 2026-11-19)
+
+The GM's rule for the whole rewrite, written for feature 444's hamlet stages and dropped by this plan as first written (2026-11-17):
+"I cannot emphasize enough that a big part of the goal for the rewrite is that we are not trying to re-implement the same algorithms,
+because the old algorithms were computationally inefficient and resulted in orders of magnitude more operations being performed than
+needed to be performed" (specs/444-work-budget-program/request.md). Steps 1, 2 and 3a were ported with lockstep tests against the
+Python, as no phase task, so `phase_source_hooks` never applied; the cost was the GM's prediction: most of T183-T195's fixes were
+defects of the Python, carried over (the GM, 2026-11-19: "when we tried to port the Python code directly, we just ended up
+re-implementing the Python code's mistakes", request.md). From here:
+
+- **An algorithm is rebuilt, never ported.** A step whose code searches, places or scores (step 3b's Mode A model - the buildings,
+  the compound and its parts; the step-3a caption placer if T198 finds it far over its budget) is worked as feature 444's stages
+  were: a derivation written from the research record and the step's contract, blind to the old code, judged SOUND by the
+  `work-budget` agent; then phase tasks (`phase: <stage>` and an `old-code:` line naming BOTH the Python and any Rust port of it),
+  `make task-start` arming `phase_source_hooks` so a read of the old code is refused while each runs; the landing held to its
+  budget by its counters.
+- **Plumbing may be ported**, after a check that it holds no such algorithm: step 4's pipeline (caching, regeneration, the pool
+  index) is ported only once its modules are read for a search or a scan that grows faster than its input, and any found is
+  rebuilt like the rest.
+- **What is kept is kept on its merits.** Steps 1 and 2 (the audit's checks, the page writer, the raster) are checks and plumbing
+  over small sheets and stay; their known defects are fixed in both copies (T183-T195).
+- **Lockstep tests retire with the Python.** A test that holds a Rust module to the Python's answers pulls the Rust toward the
+  Python's mistakes; when a module's Python is deleted, its lockstep tests go with it and its own tests pin behavior the research
+  record states.
+
 ## The order, changed so the checks come first
 
 The slices as filed run the generator's parts (S8 labels, S9a model) before the audit (S9b-S10b). Proposed instead:
