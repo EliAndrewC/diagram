@@ -20,6 +20,8 @@ Guesses:
   of honor, belonged to a post town's lodging house, not to an office.
 - A garden between the gate and a guest's formal entrance, where a plan draws one: no account of a formal entrance puts one there, and the two drawings of that
   ground show it open; it is drawn from one loosely dated plate that runs a garden path from a second gateway to the entrance, and from the walled garden path by which a house without such an entrance led its guest.
+- The size the plan gives the guest quarters: how large a guest room was is not recorded, so a generated plan gives it the
+  front row's room left beside the reception, with no band of its own, and a hand-drawn plan the size its notes record.
 
 Depiction: The plan draws the guest quarters as one labeled room, though the real guest space was the zashiki and the rooms beside it. It stands for the guest room of the residence, by the reception, or on some plans for a guest house of
 its own. A guest's door opens onto the ground inside the gate - an open court a palanquin could cross, or on some plans a garden - never straight from the street or against the side

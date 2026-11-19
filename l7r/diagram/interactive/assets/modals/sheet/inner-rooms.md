@@ -15,7 +15,7 @@ recorded.
 Guesses:
 - The size of the bay the plan draws for the inner rooms, about 9 to 36 ft by 9 to 25 ft and 80 to 900 sq ft, one bay standing
   for one to four rooms: a band of this project's round the Aizu chief retainer's house, its 328 mats in 38 rooms about 8.6
-  mats (about 155 sq ft) a room, applied to the generated plans; the band is a guess, not a measurement.
+  mats (about 155 sq ft) a room; the band is a guess, not a measurement.
 
 Depiction: The plan draws the inner rooms as labeled bays, each standing for one to four rooms, at the far end of the residence
 from the reception or behind the master's and the family's rooms, in the palace's order. No altar room is drawn among them.

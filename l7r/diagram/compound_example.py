@@ -121,11 +121,11 @@ def county_magistracy_program() -> CompoundProgram:
         tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a 24 x 18 ft kura (432 sq ft), under the ~450 sq ft records-store ceiling, its shape a GUESS
         barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 23 x 70 ft range along the east wall, 23 ft deep, long and narrow, never squat; its length a GUESS within ~145 ft
         envelope - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: a 270 x 200 ft walled compound, inside 0090's range of real sites (Joge's ~20,300 sq ft to Takayama's ~105,600), its buildings covering 30% (measured 2026-10-26 with make pack-audit on the drawn county-magistracy-example sheet: 54,314 sq ft walled), in 0116's ~30-42% band; the divider at 90 ft a GUESS
-        gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the main gate's form rolled from the record's two (GATE_FORM: a one-bay gate, an 8 ft frontage in the yakuimon's ~6-8.5 ft, read as its pillar-center span); the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
+        gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the main gate's form rolled from the record's two (GATE_FORM: a one-bay gate, an 8 ft frontage in the yakuimon's ~6-8.5 ft, read as its pillar-center span; the example's fixed seed never rolls the gate range, whose form here would draw only its 12 ft opening and no range building, with the gatehouse beside it); the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
         one-bay gate passage - GUESS research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the frontage less one ~1 ft pillar, 7 ft; no yakuimon pillar was found measured
         garden before the house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the garden on the sunny south before the reception and the guest house; its 124 x 46 ft a GUESS
         vegetable garden site - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the site rolled among 0109's four, those the sun or the room rule out on this draft struck first (GARDEN_SITE: west of the residence)
-        vegetable garden size - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.html: the soup-greens plot of ~1,076 sq ft (36 x 30 ft), the field form ruled out by the room
+        vegetable garden size - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the size knob's low form, the soup-greens plot of ~1,076 sq ft (36 x 30 ft); its high form, a field over about half the grounds, cannot stand in the inner court, so the room takes the plot (that rule ours)
         service yard - GUESS: the kitchen yard's working ground beside the kitchen, named as Ochiba's sheet names its own; no page records a kitchen yard's use, and its bounds are a drawing convention
         rear yard - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: open working ground behind the house with the storehouses beyond it, as the Higuchi house kept; its bounds a drawing convention
         hearing court - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: before the dais, centered on the office hall and no longer than it, 80 x 26 ft; no roofed court's size was found
@@ -133,9 +133,9 @@ def county_magistracy_program() -> CompoundProgram:
         practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a swept patch beside the barracks, 33 x 42 ft
         outer yard - CONVENTION: named open ground between the hearing court and the practice ground, its bounds a drawing convention
         cart yard - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the loading ground before the service gate, carts, the stable's muck and the prisoners' way out, 37 x 20 ft, the apron's ~15-20 ft
-        residence form and size - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: one block in two rows, the reception at the east end, a 4 ft veranda on the garden face, 10 ft off the north wall; 56 x 24 ft, with the kitchen and the bath ~50 tsubo, the Yokota house's 49
+        residence form and size - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: the massing, the room order and the veranda faces are knobs of two attested forms each, and this example fixes one of each, not rolled, the choices the pages record for it (0091's: the county plan one block in two rows with the reception at its east end, the plans drawn so far in the palace order; 0102's: the generated compound's veranda on the garden face alone) - one block in two rows, the reception at the east end, a 4 ft veranda on the garden face, 10 ft off the north wall; 56 x 24 ft, with the kitchen and the bath ~50 tsubo, the Yokota house's 49
         residence room sizes - GUESS: the maids' room, the inner rooms, the family's and the lord's quarters and the reception at 10 x 10, 26 x 10, 18 x 10, 18 x 10 and 20 x 20 ft
-        storehouses - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: two household storehouses behind the house, unequal as the Yokota pair - 16 x 19 ft and the common 12 x 18 ft (two by three ken); the count and the sizes GUESSES
+        storehouses - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: two household storehouses behind the house, as the Yokota house kept two, the common 12 x 18 ft (two by three ken) and a larger 16 x 19 ft; the count, and the larger one's size, GUESSES - the drawing page draws each about 12 by 18 ft, and the Yokota pair (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html) measures about 9 x 12 and 18 x 15 ft
         kitchen ell - research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a 20 x 18 ft kitchen joined to the house's west end as an ell, its door west; its size a GUESS
         shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one modest shrine, 18 x 14 ft, on the inner court's east wall; its size a GUESS
         guest house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a detached 40 x 42 ft guest house (42 since feature 374 wave 134 holds the coverage band); a guest house apart was not found at a samurai house
@@ -154,7 +154,7 @@ def county_magistracy_program() -> CompoundProgram:
         residence inner entrance - GUESS research/questions/0107-kitchens-daidokoro.drawing.html: the house's inner entrance on its rear (north) face at the kitchen (west) end, clear of the family privy at the corner
         gatehouse door - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); the gatehouse's door on the gate passage, where the gatekeepers watch
         office hall doors - GUESS research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: the office takes the formal entrance where it shares a compound with the residence, facing open ground; its doors on its east face by the middle gate and on its west face, the faces a GUESS; each seated at 0.8 of its end face (0.7 its second seat), so it opens on the front room - the seat a GUESS: no page places an office hall's doors
-        servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a range on the south (street) wall, the menservants'; its entry form the compound's knob, rolled (this draft's roll: a door to each dwelling, five of ~15.2 ft); its 76 x 15 ft and the five dwellings GUESSES, the 15 ft depth 0115's
+        servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a range on the south (street) wall, the menservants'; its entry form the compound's knob, rolled (this draft's roll: a door to each dwelling, four of 15 ft); its 60 x 15 ft and the four dwellings GUESSES, the 15 ft depth 0115's
         postern places - GUESS: the kitchen postern 50 ft down the west wall on the kitchen yard, the service gate 221 ft along the south wall at the cart yard's south end; where a compound's lesser gates stood is not recorded
         stables seat - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the stables on the street (south) wall beside the servants' row, as a long-house gate's passage had servants' quarters and a stable beside it
         cell door - GUESS: searched, the record silent (feature 417 T36 pass P7, 2026-10-25); toward the cell's west end, so its approach leaves the barracks' south dwelling the ground for its own door
@@ -412,10 +412,8 @@ def county_magistracy_program() -> CompoundProgram:
         # its door toward its west end, so its approach leaves the barracks' south dwelling its door (feature 374 batch 4)
         b("cell", "cell", 12.0, 10.0, "outer", "S", order=1, feature="cell", door_fracs=(0.3, 0.5)),
         # The gatehouse stands BESIDE the gate, a building of its own (R19's Takayama form, research buildings 420),
-        # 18 x 12 ft - the one measured freestanding guardroom (Kita-in's 3 x 2 ken). It was 42 x 15 ft in the SW
-        # corner, 83 ft from the gate; ~40 ft is the gate range's scale. Left as found by feature 372 wave 105: 0093 now draws
-        # a gatehouse of its own ~40 ft (the hand sheets since wave 101), but at 40 ft the stables find no seat on this
-        # south wall - the draft's own row (`docs/building-programs.md` walled enclosure).
+        # 40 x 12 ft since feature 374 wave 128 (below); it was 18 x 12 ft, the one measured freestanding guardroom (Kita-in's
+        # 3 x 2 ken), and before that 42 x 15 ft in the SW corner, 83 ft from the gate.
         # Its door opens on the gate passage (east), where the gatekeepers watch - not on the court.
         # Feature 374 wave 128: the main gate's form is 0093's knob, rolled (GATE_FORM: this draft's roll is the one-bay gate),
         # and a one-bay gate has no range to hold a guardroom, so its gatekeepers sit in a gatehouse of their own - drawn
@@ -424,7 +422,7 @@ def county_magistracy_program() -> CompoundProgram:
         b("gatehouse", "dark", 40.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True, door_face="E"),
         # Feature 374 wave 126: 18 x 24 ft (it was 42 x 24), 0108's warrior's stable - three bays long of one-ken stalls on
         # the wall side, the earth passage running its length and the grooms' room across it toward the court
-        # (`compound_parts._stable_parts`; research/questions/0108-stables-umaya.drawing.html); its door at the east end into
+        # (`compound_parts._stable_parts`; research/questions/0108-stables-umaya.drawing.html); its door at the west end into
         # the passage, a gable-entered stable. The depths are GUESSES. Still under the barracks as docs/buildings.md asks.
         b("stables", "service", 18.0, 24.0, "outer", "S", order=5, feature="stables", door_face="W", door_fracs=(0.5,)),  # its west gable since wave 128: the gatehouse stands a foot off its east end
         # The grooms' and bearers' row (pass 5, building-review round 4: the bare SW ground by the stables while the
@@ -432,11 +430,11 @@ def county_magistracy_program() -> CompoundProgram:
         # (research: the domestic servants - cooks, grooms, cleaners - lived in a nagaya; a second row by the stables is
         # a GUESS), 44 x 18 ft. It takes the corner (order above the stables') so the stables' privy keeps its end face.
         # Feature 374 wave 124: the household's servants lodge here too - one servants' range on the street front, its
-        # south face the wall, the grooms' and the household's (0115's drawing page, above): 76 x 15 ft (it was the grooms'
-        # alone, 44 x 18 ft) - the 15 ft depth is 0115's GUESS for a retainer's range, its length a GUESS.
+        # south face the wall, the grooms' and the household's (0115's drawing page, above): 60 x 15 ft since feature 374 wave 128 (it was
+        # 76 x 15 ft, and before that the grooms' alone, 44 x 18 ft) - the 15 ft depth is 0115's GUESS for a retainer's range, its length a GUESS.
         # Its entry form is 0097's knob, rolled per compound as Ochiba's sheet rolls it (feature 374 batch 4: the filed
         # `servants' row entry form` row; research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, "a knob set
-        # per compound"): this draft's roll is a door to each dwelling, five of ~15.2 ft (inside 0097's 12-18 ft bays). Its
+        # per compound"): this draft's roll is a door to each dwelling, four of 15 ft (inside 0097's 12-18 ft bays). Its
         # lodgers are the menservants, whose work is the gate and the outer court (the grooms keep the stable's grooms' room,
         # research 0108); the maids and the kitchen hands sleep under the main roof at the kitchen end (the residence's maids'
         # room; plan R4-1, research 0115's Aizu house, that the maids slept there a GUESS).

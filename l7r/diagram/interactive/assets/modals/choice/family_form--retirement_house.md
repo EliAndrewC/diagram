@@ -23,4 +23,4 @@ Name: A retirement house
 Covers: `meta.family_form = retirement_house`
 Sources: kotobank-inkyo, oamishirasato-choshi-kaoku, wang-ochiai-2022
 Entry: research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.html
-Drawing: research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html
+Drawing: research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

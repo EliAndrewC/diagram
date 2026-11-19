@@ -6,18 +6,18 @@ In a lord's palace the family's rooms lay farthest from the front. The palace ra
 received, through the lord's own rooms, to the oku, which held the lord's private rooms and the quarters of the lord's wife;
 because women of high status lived there, who came and went was strictly limited. At Edo the shogun's great oku was walled off
 from the rest of the palace and joined to it by a single corridor. Lesser houses kept such rooms too: one at
-Matsue had a family room and the wife's living room besides its zashiki, and a chief retainer's great house at Aizu
+Matsue had a family room and the wife's living room besides its zashiki, the room where the master received guests, and a chief retainer's great house at Aizu
 counted the family's rooms as one of its four groups, with the lord's reception suite, the retainers' office and the servants'
 rooms.
 
-A samurai house was built in the shoin style with nearly every room matted, only its kitchen board-floored, so the family's
+A samurai house had nearly every room matted, only its kitchen board-floored, so the family's
 rooms were most likely laid with mats.
 
 How many rooms the family had, and how large, is not recorded.
 
 Guesses:
 - The size the plan gives the family's rooms, about 18 to 30 ft by 12 to 20 ft and 240 to 550 sq ft: how large the rooms were is not recorded, so this is a band of this
-  project's for a family room and the wife's room together, applied to the generated plans; the band is a guess, not a
+  project's for a family room and the wife's room together; the band is a guess, not a
   measurement.
 
 Depiction: The plan draws the family's rooms as one labeled bay standing for several rooms, beyond the master's rooms toward

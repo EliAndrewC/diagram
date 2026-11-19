@@ -93,6 +93,9 @@ def entrances(svg: str, plan: ParsedPlan) -> list[Mark]:
 #: 0106's long-house). A residence's rooms and an undivided block - 0097's common room behind one door - keep the building's rule.
 ROW_KINDS: frozenset[str] = frozenset({"barracks", "retainers' quarters", "servants' quarters"})
 """Research: the row-form lodgings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks and a retainers' long-house are divided into dwellings, each with a door of its own (0097, 0106), and a servants' quarters takes one of 0097's two forms, a row of dwellings each with its door or a common room behind one door, so these three kinds are the ones a dwelling wall can divide."""
+#: The one row kind 0097 lets stand undivided, a common room behind one door: the servants' quarters (feature 449 T187).
+COMMON_ROOM_KIND: str = "servants' quarters"
+"""Research: the common room is the servants' - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a compound's servants' quarters takes one of two forms, a common room entered by one door or a row of dwellings each with a door of its own, where the barracks is divided into dwellings, so a barracks or a retainers' long-house undivided is refused."""
 
 
 def dwellings(block: Mark, ms: tuple[Mark, ...], tol: float = JOIN_PX) -> list[tuple[float, float]]:
@@ -121,7 +124,7 @@ def lodging_entrances(svg: str, plan: ParsedPlan, tol: float = DOOR_FLUSH_TOL_PX
 
     Research:
         a lodging entered from the ground - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).
-        a door to each dwelling of a row - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks, a retainers' long-house and a servants' quarters in the row form are divided into dwellings, each with a door of its own, and a row of bays walled off from one another behind one shared door is never drawn, so each dwelling a solid wall divides off is held to its own door; a block undivided, or divided only by dashed sliding partitions, is 0097's common room behind one door.
+        a door to each dwelling of a row - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks, a retainers' long-house and a servants' quarters in the row form are divided into dwellings, each with a door of its own, and a row of bays walled off from one another behind one shared door is never drawn, so each dwelling a solid wall divides off is held to its own door; a servants' quarters undivided, or divided only by dashed sliding partitions, is 0097's common room behind one door, the one row kind 0097 lets stand undivided.
         every other lodging entered from the ground - UNRESEARCHED: the guest quarters, a shrine's hall and dwelling and the monk's rooms each reach the ground by a door or genkan on their own outer wall, not only through a building they do not join; no page asks how these were entered.
         the karo's own house entered from the ground - GUESS research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: the karo's small house of their own on the hand-drawn plans, a guess the page records, reaches the ground by a door on its own outer wall, as the long-house gives the karo's quarters a door of their own on the court.
     """
@@ -144,6 +147,10 @@ def lodging_entrances(svg: str, plan: ParsedPlan, tol: float = DOOR_FLUSH_TOL_PX
             along_x = b.w >= b.h
             mine = [d for d in outer if gap(d, b) <= tol]
             bare = sum(1 for lo, hi in spans if not any(lo <= ((d.x + d.x2) / 2 if along_x else (d.y + d.y2) / 2) <= hi for d in mine))
+            if len(spans) == 1 and b.kind != COMMON_ROOM_KIND:
+                out.append(
+                    f"the {b.kind} at svg({b.x:.0f},{b.y:.0f}) is undivided - a {b.kind} is divided into dwellings, each with a door of its own; only a servants' quarters is drawn as one common room behind one door"
+                )
             if len(spans) > 1 and bare:
                 out.append(
                     f"the {b.kind} at svg({b.x:.0f},{b.y:.0f}) has {bare} of its {len(spans)} dwellings with no door of its own on its outer wall - each dwelling of a row is entered by its own door"

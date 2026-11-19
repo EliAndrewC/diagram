@@ -34,4 +34,4 @@ Name: torii
 Covers: the approach torii before a compound shrine or a country shrine
 Sources: jinjahoncho-keidai, torii-enwiki, kokugakuin-eos-torii, jawiki-torii, hokora-jawiki, jawiki-yashikigami, fushimi-inari-senbon, fushimi-inari-jawiki, kudamatsu-stone-torii, kato-kawataka-torii, manzo-inari-note
 Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html
-Drawing: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
+Drawing: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html

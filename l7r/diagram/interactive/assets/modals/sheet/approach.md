@@ -19,8 +19,8 @@ Guesses:
   shrine's.
 
 Depiction: The plan draws the approach as a band of bare ground from the outermost arch to the hall's step, on the
-line of the hall and its sanctuary; that it runs on that line is a drawing convention, since where a village shrine's approach
-ran is not recorded, and its course is drawn to fit the ground it crosses. Its arches stand evenly spaced along it, the
+line of the hall and its sanctuary; that it runs on that line is a drawing convention, and
+its course is drawn to fit the ground it crosses. Its arches stand evenly spaced along it, the
 innermost as far off the hall's face as the arches stand from one another, so that the avenue reads as that hall's; how far
 a real innermost arch stood from its hall is not recorded.
 

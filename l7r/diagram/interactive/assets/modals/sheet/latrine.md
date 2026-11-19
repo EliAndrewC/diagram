@@ -27,7 +27,7 @@ reached along a board veranda - a guest parlor's privy at its rear and a council
 together - and the family's at the house's
 corner by the family's rooms. The others stand against the compound's service walls near a gate, where a collector's cart
 reaches them, never in a court, and never so deep that a collector would cross the inner court. At a village shrine the plan draws one privy at the
-country monk's dwelling.
+country monk's dwelling. Each privy is drawn as a gray square with a dark outline, a color the plans give it so that it reads apart from the tan buildings where the household lives and works, not a privy's real color.
 
 Name: latrine
 Covers: every privy building and its label

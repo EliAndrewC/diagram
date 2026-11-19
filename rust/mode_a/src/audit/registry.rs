@@ -460,7 +460,7 @@ pub const CHECKS: [Check; 43] = [
         run: |ctx| pr::lodging_entrances(&ctx.svg, ctx.plan, c::DOOR_FLUSH_TOL_PX),
         shared: true,
         fixture: "ochiba-lodging-no-door-red.svg",
-        fix: "draw a door (data-kind=\"door\") or a genkan on the lodging block's outer wall, flush in it",
+        fix: "draw a door (data-kind=\"door\") or a genkan on the lodging block's outer wall, flush in it; divide a barracks or a retainers' long-house into dwellings by solid walls, a door to each",
         skipped: never,
     },
     Check {

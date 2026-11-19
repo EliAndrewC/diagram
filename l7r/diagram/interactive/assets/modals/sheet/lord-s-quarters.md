@@ -3,7 +3,7 @@ where the lord received retainers and envoys and held audiences and ceremonies, 
 beyond, where who came and went was strictly limited.
 
 A samurai house was matted in nearly every room but its kitchen. At a house in Matsue lived in by turns by retainers of about
-500 to 1,000 koku, the master's living room was finished playfully, in contrast to the zashiki where guests were received,
+500 to 1,000 koku, a koku being reckoned the rice an adult ate in a year, the master's living room was finished playfully, in contrast to the zashiki where guests were received,
 which was built for formality. A chief retainer's great house at Aizu fell
 into four groups of rooms: the reception suite for the lord, the retainers' office and guard rooms, the family's rooms, and the
 rooms of the maids and servants.
@@ -13,12 +13,12 @@ large the master's rooms were is not recorded.
 
 Guesses:
 - The size the plan gives the master's rooms, about 12 to 26 ft by 12 to 16 ft: how large the master's rooms were is not recorded, so this is a band of this project's from one room up to a suite
-  of two, applied to the generated plans; the band is a guess, not a measurement.
+  of two; the band is a guess, not a measurement.
 
 Depiction: The plan draws the master's rooms as one labeled bay standing for several rooms, a work room and a bedroom among them.
 
 Name: lord's quarters
 Covers: the lord's suite in the residence, its floor and its labels
 Sources: shirobito-612-omote-oku, edojo-kotobank, liq-takayasu-daidokoro, matsue-bukeyashiki, aizu-bukeyashiki-guide, touken-world-buke-madori
-Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0107-kitchens-daidokoro.html
+Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

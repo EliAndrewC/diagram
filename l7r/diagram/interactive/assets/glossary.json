@@ -19398,5 +19398,30 @@
   "variants": [
    "Tsunenobu shasei zukan"
   ]
+ },
+ "double-layer eave": {
+  "def": "An eave carried on two tiers of rafters, the upper tier projecting beyond the lower, a mark of a more finished hall than a single-tier eave.",
+  "variants": [
+   "double-layer eave",
+   "double-layer eaves",
+   "futanoki"
+  ]
+ },
+ "sparse rafters": {
+  "def": "Eave rafters set wide apart, fewer to a bay than the close-set rafters of a grander hall.",
+  "variants": [
+   "sparse rafters",
+   "sparse rafter",
+   "mabaradaruki"
+  ]
+ },
+ "worship porch": {
+  "def": "A small roof projecting over the steps at the front of a shrine or temple hall, carried on its own posts, under which a worshipper stands to pray.",
+  "variants": [
+   "worship porch",
+   "worship porches",
+   "kōhai",
+   "kohai"
+  ]
  }
 }

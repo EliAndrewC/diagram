@@ -311,7 +311,8 @@ fn population_int(v: &Value) -> Result<i64, Error> {
 ///
 /// Research:
 ///     population from households - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: five to a
-///         DECLARED household (the meta households, not the drawn houses) where the tier records no figure of its own
+///         DECLARED household (the meta households, not the drawn houses) where neither the tier records a figure of its own nor
+///         the map's meta states its own `population`, the two overrides taken in that order
 ///     households named beside farmhouses - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:
 ///         stated only where the drawn count differs from the declared households
 ///

@@ -15,8 +15,8 @@ How large a house's zashiki was is not recorded.
 
 Guesses:
 - The size the plan gives the reception with its next room and alcove, about 18 to 36 ft by 12 to 18 ft and no more than
-  about 450 sq ft: how large a zashiki was is not recorded, so this is a band of this project's for a zashiki with its next room, applied to
-  the generated plans; the band is a guess, not a measurement.
+  about 450 sq ft: how large a zashiki was is not recorded, so this is a band of this project's for a zashiki with its next room,
+  and the band is a guess, not a measurement.
 
 Depiction: The plan draws the reception as one labeled bay at the end of the residence nearest the approach, in the palace's
 order, and never between the master's rooms and the family's. It faces the garden where the plan's buildings allow, and

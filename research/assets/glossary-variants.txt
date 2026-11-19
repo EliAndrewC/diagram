@@ -973,6 +973,8 @@ dou	dou
 double cropping	nimosaku
 double ninth	Double Ninth
 double-cropped	nimosaku
+double-layer eave	double-layer eave
+double-layer eaves	double-layer eave
 doyo	doyo
 doyoboshi	nakaboshi
 dozo	kura
@@ -1405,6 +1407,7 @@ furo	furo
 fuse	fuse
 fusekoshi	inverted siphon
 fusuma	fusuma
+futanoki	double-layer eave
 futatsu-takara	Futatsuho
 futatsuho	Futatsuho
 futatsuho silver	Futatsuho
@@ -2475,6 +2478,7 @@ kofun period	Kofun period
 kogein	kogein
 kogin	kogin
 koguchi	koguchi
+kohai	worship porch
 koike	koike
 koishikawa yojosho	Yojosho
 koji	koji
@@ -2603,6 +2607,7 @@ kyūyō	Kyuyo
 kō	kō
 kō group	kō
 kōeki kokusan kō	Koeki Kokusanko
+kōhai	worship porch
 kōri	kori
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
@@ -2778,6 +2783,7 @@ lye water	lye water
 lying willow	lying willow
 lùlu	lulu
 lüshi chunqiu	Lushi chunqiu
+mabaradaruki	sparse rafters
 mace	mace
 machi	machi
 machi-bikeshi	machi-bikeshi
@@ -4275,6 +4281,8 @@ southern song	Song dynasty
 sovereign temple	sovereign temple
 sovereign temples	sovereign temple
 sozu	sōzu
+sparse rafter	sparse rafters
+sparse rafters	sparse rafters
 spate	spate
 special historic site	Special Historic Site
 special historic sites	Special Historic Site
@@ -5137,6 +5145,8 @@ wood-fee lodging	kichin-yado
 wood-fee lodgings	kichin-yado
 worship hall	haiden
 worship halls	haiden
+worship porch	worship porch
+worship porches	worship porch
 wrought iron	wrought iron
 wu ding	Wu Ding
 wubei zhi	Wubei Zhi

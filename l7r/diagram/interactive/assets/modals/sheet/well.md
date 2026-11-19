@@ -1,6 +1,6 @@
 About: A well inside the compound's walls was where those who lived and worked there drew their water. Most wells in
-premodern Japan were shared, because digging one cost a great deal - as much as 200 ryo, beyond a samurai household's
-means, until by early in the nineteenth century a boring method had cut it to about 3 - but a samurai household could
+premodern Japan were shared, because digging one cost a great deal: in Edo it had cost more than a samurai household could pay,
+until by early in the nineteenth century a boring method had cut the cost and wells spread - but a samurai household could
 have one of its own: the samurai houses that survive at Kakunodate draw their water inside their own fences, and the residence at
 Takayama had its own well, besides a kitchen and a bath. In Edo, where the aqueduct served the samurai districts first, the
 samurai household's advantage was one of priority as much as of a private well.
@@ -15,16 +15,16 @@ How many wells a residence kept is not recorded.
 Guesses:
 - How many wells a residence had and where in the grounds they stood - one by the kitchen, one by the stables, one in the garden: a well is
   known just inside one house's gate, another beside a main house and another indoors on its earth floor, but no account places a kitchen's or a stable's well.
-- The curb's exact size, 3 to 4 ft: the one measured curb is undated, so the figure is fitted round a premodern shaft.
+- The curb's exact size, about 4 ft: the one measured curb is undated, so the figure is fitted round a premodern shaft.
 - That about three wells in four took the gear their water's depth favored, and about one in three had a roof: no count of
   the gear was found, and of roofs only a 1972 count in three Tohoku farm hamlets: about one well house to every five farms.
 - That a valley floor or river plain held shallow water and an upland or terrace deep: no source ties the depth to the ground
-  this way.
+  this way, and the one upland named for its wells, the loam uplands of the Kanto, is given shallow ones.
 - That a well indoors on a kitchen's earth floor hung its pulley from the kitchen's beams: no account names the gear of a well
   indoors.
 
 Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
-shows where the well stands; a real curb was about 4 ft square. Over each curb stands its lifting gear - a sweep, a
+shows where the well stands; an old curb of unknown date is about 4 ft square. Over each curb stands its lifting gear - a sweep, a
 pole crossing the curb from a post beside it, or a pulley frame, two posts and a beam - chosen for each well, most often the one suited to how deep the
 plan's water lies, and over about one well in three a roof, drawn as a dashed outline on four corner posts. A well inside a building, on a kitchen's earth floor, is drawn with neither a sweep nor a roof of its own: its pulley, a beam and a wheel across the curb, is drawn hung from the building's beams. Where the water stood so shallow that the bucket hung from a plain pole with no post, the map draws a sweep all the same, so that one mark stands for the shallow-water gear. At a shrine set apart from the houses, the map draws
 a well for its ablution water by convention: which waters a shrine used is not recorded.

@@ -43,6 +43,9 @@ def ochiba_program() -> C.CompoundProgram:
     Research:
         the residence and its rooms - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0101-privies-setchin.drawing.html: Ochiba's house measured off ochiba-magistracy.svg at 3 px = 1 ft (feature 449 T182), one block of 90 x 50 ft in two rows with its reception at one end, as 0091 draws the house - the family's quarters and the lord's in the north row, the guest room and the reception room in the south (garden) row, the maids' room 12 x 12 ft at the kitchen end; the reception room gives the placer the room 0101 seats the guests' privy behind, the house's second privy
         its rooms' sizes - GUESS: the reception room 28 x 15 ft, the lord's quarters 25 x 15 ft and the family quarters 20 x 18 ft, inside the bands of this project's round the ordinary houses measured (the kinds' Guesses), in the palace order (reception at the east end of the front row, the lord's rooms behind it, the family's beyond, the inner rooms behind), the rest captioned inner-room bays and corridors
+        its storehouses behind the house - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the household's storehouses stand behind the house, in its rear strip on the north wall as Ochiba's sheet draws them (feature 449 T187)
+        its lodgings' dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: 16.5 (the barracks' two dwellings); 17 (the long-house's three dwellings); 34 (the same) - each inside 0097's bays of about 12 to 18 ft, a door to each, as Ochiba's sheet draws them (feature 449 T187)
+        its doors at each dwelling's middle - GUESS: no page seats a dwelling's door along its face (feature 449 T187) - 0.25 (the barracks' court-face door); 0.5 (the barracks' end door, the long-house's middle door); 1 / 6 and 5 / 6 (the long-house's end doors, at its end dwellings' middles)
     """
     env = C.Envelope(w_ft=267.0, h_ft=200.0, divider_ft=100.0, gate_w_ft=13.3)
     # real open courts measured off the finished map
@@ -97,10 +100,13 @@ def ochiba_program() -> C.CompoundProgram:
             inset_ft=17.7,
         ),
         b("servants", "service", 65.0, 15.0, "outer", "S", order=7, feature="servants' quarters"),  # the street range, as Ochiba's since feature 374 wave 124 (0115)
-        # Ochiba's two storehouses, 18 x 12 ft each, behind the house as the second rank (feature 374 batch 4: the program's
-        # storehouse item, R4-6; the second rank holds stores only, W124-2)
-        b("storehouse (W)", "kura", 18.0, 12.0, "inner", "N", order=8, rank=2, feature="storehouse"),
-        b("storehouse (E)", "kura", 18.0, 12.0, "inner", "N", order=8, rank=2, feature="storehouse"),
+        # Ochiba's two storehouses, 18 x 12 ft each, behind the house in its rear strip on the north wall, as her sheet draws
+        # them (feature 374 batch 4: the program's storehouse item, R4-6; research/questions/0091-samurai-residences-and-their-
+        # rooms-buke-yashiki.drawing.html: "The household's storehouses stand behind the house"). Feature 449 T187: they were
+        # the north wall's second rank, which stood behind the house while it stood on the wall; with the house off the wall
+        # (T182) that rank stood before it, the storehouses' backs to the reception, so they are the wall's first rank again.
+        b("storehouse (W)", "kura", 18.0, 12.0, "inner", "N", order=8, feature="storehouse"),
+        b("storehouse (E)", "kura", 18.0, 12.0, "inner", "N", order=8, feature="storehouse"),
         # Ochiba's kitchen is an ELL on the house's west end, 24 x 18 ft (72 x 54 px at (268,308), abutting the house at x 340): with
         # the house off the wall (T182) the 24 ft kitchen on the west wall found no seat, so it is declared an ell as the sheet draws it
         # (the placer seats it at the house's east end, the house taking the west corner)
@@ -111,9 +117,28 @@ def ochiba_program() -> C.CompoundProgram:
         # outer (administrative) court
         b("office hall", "lord", 120.0, 28.0, "outer", "divider", order=10, feature="office hall"),
         b("tax archive", "kura", 24.0, 18.0, "outer", "W", order=6, feature="tax archive"),  # feature 372 wave 105: 0100's ceiling, as Ochiba's sheet
-        b("senior retainers", "service", 51.0, 17.0, "outer", "W", order=4, feature="retainers' quarters"),
+        # Ochiba's three dwellings of 17 ft, a door to each on the south face, as her sheet draws them (feature 449 T187:
+        # research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html and 0106's - the long-house is divided into
+        # dwellings, each with a door of its own; it was drawn one undivided hall behind one door)
+        b(
+            "senior retainers",
+            "service",
+            51.0,
+            17.0,
+            "outer",
+            "W",
+            order=4,
+            feature="retainers' quarters",
+            door_face="S",
+            extra_doors=("S", "S"),
+            door_fracs=(1 / 6, 0.5, 5 / 6),
+            bays=(17.0, 34.0),
+        ),
         b("granary", "kura", 50.0, 26.0, "outer", "E", order=6, feature="granary"),
-        b("barracks", "service", 24.0, 33.0, "outer", "E", order=4, feature="barracks"),  # Ochiba's 24 x 33 ft (feature 335), 0097: never deeper than ~24 ft
+        # Ochiba's 24 x 33 ft (feature 335), 0097: never deeper than ~24 ft; her two dwellings of 16.5 ft, a door to each - the
+        # north one's on its court face, the south one's on its south end, the garrison privy standing before the court face
+        # there (feature 449 T187, 0097: "The barracks is divided into dwellings"; it was drawn undivided)
+        b("barracks", "service", 24.0, 33.0, "outer", "E", order=4, feature="barracks", extra_doors=("S",), door_fracs=(0.25, 0.5), bays=(16.5,)),
         b("cell", "cell", 18.0, 15.0, "outer", "E", order=1, feature="cell"),
         b("gatehouse", "dark", 40.0, 14.0, "outer", "S", order=8, feature="gatehouse"),
         b("stables", "service", 18.0, 24.0, "outer", "S", order=5, feature="stables", door_face="E", door_fracs=(0.5,)),  # Ochiba's since feature 374 wave 126 (0108)

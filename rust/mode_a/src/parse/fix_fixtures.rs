@@ -129,6 +129,20 @@ pub(crate) const BATH_TUB: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" vi
 </svg>
 "##;
 
+/// A walled compound's three lodgings each behind one door (T187): an undivided barracks and an undivided retainers' long-house refused,
+/// 0097 dividing a barracks into dwellings and 0106 giving each long-house dwelling its door - one door passed both as a common room -
+/// and an undivided servants' quarters passed, 0097's common room.
+pub(crate) const UNDIVIDED: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+<rect id="precinct" x="20" y="20" width="360" height="260" fill="url(#court-earth)" data-kind="outer court"/>
+<g data-kind="barracks"><rect x="60" y="200" width="120" height="40" fill="#C9A57A" stroke="#6B4F2A"/>
+<rect x="68" y="236" width="14" height="4" fill="#B89868" data-kind="door"/></g>
+<g data-kind="retainers' quarters"><rect x="60" y="60" width="120" height="40" fill="#C9A57A" stroke="#6B4F2A"/>
+<rect x="68" y="96" width="14" height="4" fill="#B89868" data-kind="door"/></g>
+<g data-kind="servants' quarters"><rect x="250" y="40" width="80" height="40" fill="#C9A57A" stroke="#6B4F2A"/>
+<rect x="280" y="76" width="14" height="4" fill="#B89868" data-kind="door"/></g>
+</svg>
+"##;
+
 /// The defect fixes' sheets by name, a name's prefix giving its tier as the red fixtures' do.
 pub(crate) fn sheets() -> Vec<(&'static str, &'static str)> {
     vec![
@@ -141,13 +155,14 @@ pub(crate) fn sheets() -> Vec<(&'static str, &'static str)> {
         ("hoshigaoka-fix-basin.svg", BASIN),
         ("ochiba-fix-one-privy.svg", ONE_PRIVY),
         ("ochiba-fix-bath-tub.svg", BATH_TUB),
+        ("ochiba-fix-undivided.svg", UNDIVIDED),
     ]
 }
 
 #[cfg(test)]
 mod tests {
     use super::{ARCHES_ADRIFT, ARCHES_HELD, ARCHES_ORDER, BOARD, ROWS, SANCTUARY_FENCE};
-    use super::{BASIN, BATH_TUB, ONE_PRIVY};
+    use super::{BASIN, BATH_TUB, ONE_PRIVY, UNDIVIDED};
     use crate::audit::checks::{gap_tag, tubs_off_their_doors, Gap, DOOR_FLUSH_TOL_PX};
     use crate::audit::program_rules::{lodging_entrances, privies_by_zone, PRIVY_MIN};
     use crate::audit::roads::{gate_feeds_its_road, side_gates_met, ROAD_GATE_TOL_FT};
@@ -348,6 +363,18 @@ mod tests {
         assert_eq!(
             lodging_entrances(&svg, &plan, DOOR_FLUSH_TOL_PX).unwrap(),
             vec!["the barracks at svg(60,200) has 1 of its 4 dwellings with no door of its own on its outer wall - each dwelling of a row is entered by its own door"]
+        );
+    }
+
+    #[test]
+    fn a_barracks_or_a_long_house_behind_one_door_is_refused_a_servants_common_room_passed() {
+        let (plan, svg) = (parse_svg(UNDIVIDED).unwrap(), Sheet::new(UNDIVIDED));
+        assert_eq!(
+            lodging_entrances(&svg, &plan, DOOR_FLUSH_TOL_PX).unwrap(),
+            vec![
+                "the barracks at svg(60,200) is undivided - a barracks is divided into dwellings, each with a door of its own; only a servants' quarters is drawn as one common room behind one door",
+                "the retainers' quarters at svg(60,60) is undivided - a retainers' quarters is divided into dwellings, each with a door of its own; only a servants' quarters is drawn as one common room behind one door",
+            ]
         );
     }
 }

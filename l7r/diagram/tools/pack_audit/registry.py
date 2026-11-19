@@ -202,7 +202,7 @@ CHECKS: tuple[Check, ...] = (
         lambda ctx: pr.lodging_entrances(ctx.text, ctx.plan),
         True,
         "ochiba-lodging-no-door-red.svg",
-        "draw a door (data-kind=\"door\") or a genkan on the lodging block's outer wall, flush in it",
+        "draw a door (data-kind=\"door\") or a genkan on the lodging block's outer wall, flush in it; divide a barracks or a retainers' long-house into dwellings by solid walls, a door to each",
     ),
     Check(
         "size_hierarchy",

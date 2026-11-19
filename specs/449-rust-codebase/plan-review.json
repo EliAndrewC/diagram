@@ -774,6 +774,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T187 (step 1's third claims round, the county example's impl-drift and the round-trip's reviews, triaged under constitution XIV's \"What a defect is\" (v2.36.0); the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\", and 2026-11-19: \"don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine\")": {
+   "sha256": "f0418349901c480421024f032fcfd883a40dbd0da10517977074b4dbe217a7f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T187 Approach (checklist part A)": {
+   "sha256": "97dce5813011dc4721b60b40fdc582b86bd1f7472fdf4ca483bf7da7543b0001",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13002,6 +13014,94 @@
      "why": "A check that intermittently refuses good work is a defect under the definition this task installs and the GM's 2026-11-18 'fix broken things as we find them'; fixed in the step where found, not carried forward."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T187 (step 1's third claims round, the county example's impl-drift and the round-trip's reviews, triaged under constitution XIV's \"What a defect is\" (v2.36.0); the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\", and 2026-11-19: \"don't spent a lot of time 'fixing' things which are not actually wrong like things which are different than you expected but still work perfectly well and are in line with our research and produce maps which look fine\")",
+    "### T187 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "item-1-fix",
+     "summary": "lodging_entrances refuses an undivided barracks or retainers' long-house as a common room, in Rust and Python together, with a red-on-HEAD test and the round-trip redrawn in dwellings",
+     "class": "within",
+     "why": "A check that passes bad work against 0097 is a defect under XIV; the GM: 'fix all known bugs in each step before moving on'. Fixing it in every live copy and changing the check's verdict as fixed is FR-002's own exception."
+    },
+    {
+     "id": "item-30-fix",
+     "summary": "the round-trip's storehouses moved to the north wall's first rank behind the house, with the family privy and barracks door moved as consequences",
+     "class": "within",
+     "why": "A research finding contradicted on a pool sheet (0091: storehouses behind the house) is a defect; the knock-on moves are the fix's own geometry, and the sheet's checks pass after (FR-002: a map may change so long as checks and research hold)."
+    },
+    {
+     "id": "differences-in-words",
+     "summary": "items 2-12, 15, 17-19, 21, 24-26, 28, 32, 33 classed DIFFERENCE and restated in claims, comments, modals and drawing pages, no geometry or code moved",
+     "class": "within",
+     "why": "Each row's evidence is that no sheet reads wrong and no research finding is contradicted: sizes inside their guesses, an unreached fallback (item 5), words stale against code or pages. The GM 2026-11-19: don't fix 'things which are different than you expected but still work perfectly well'. XIV restates a difference in words."
+    },
+    {
+     "id": "item-13-divider-gate",
+     "summary": "the divider gate's 'narrower than the main gate' claim restated as holding only where the frontage is drawn above 7 ft, no rule tying the two",
+     "class": "within",
+     "why": "The plan measures the example's main gate at 8 ft frontage / 7 ft clear and its divider at 6 ft from GATE_W_FT and Envelope: the low-end case is not drawn by any input the example takes, so no sheet reads wrong; restating the claim is the XIV remedy."
+    },
+    {
+     "id": "item-16-gate-range",
+     "summary": "the gate-range form of the gates roll, which would draw no range building, left in code and recorded in the gates claim",
+     "class": "within",
+     "why": "The only one that could be a carried defect into step 3b. Its class rests on the plan's statement that the example's seed is a fixed string that always rolls the one-bay gate, so no input reaches the form and no map reads wrong; on that premise it is a latent difference, recorded. Should the premise fail (any caller varies the seed), it would be a defect owed a fix before step 3b."
+    },
+    {
+     "id": "item-27-room-bands",
+     "summary": "no check enforces the kinds' room bands on generated plans; the modals say the band is a guide no check holds",
+     "class": "within",
+     "why": "ask:449-T182-room-scope clause (1) reverts the county example's interiors by name, so its 20 x 20 and 18 x 10 ft rooms are kept, and no clause orders a check; clause (2)'s 'they apply to generated sheets' is satisfied by recording the bands as GUESS and sizing the round-trip to them, which sits inside every band. A band check would refuse the county sheet the arbiter kept - a check refusing good work, itself a defect - and the ruling files band-tightening findings as rows."
+    },
+    {
+     "id": "item-14-knob",
+     "summary": "the residence's massing, room order and veranda faces stay fixed rather than rolled as knobs; the claim names the fixed forms and the pages recording them",
+     "class": "within",
+     "why": "On the outcome test alone: each fixed form is attested (0091, 0102), so the map reads right and no research finding is contradicted - a difference under XIV v2.36.0, not a defect. The plan's cost argument (a placer step 3b ports) is not weighed. The project knob rule it touches is not in this bundle and is not part of feature 449's request."
+    },
+    {
+     "id": "not-worth-dropped",
+     "summary": "items 20, 29, 31 dropped as not worth doing",
+     "class": "within",
+     "why": "No page places a corridor's ends or a kitchen's end; the guests' privy stands where 0101 says. None is a wrong outcome, so 'fix all known bugs' does not reach them."
+    },
+    {
+     "id": "items-22-23-deferred",
+     "summary": "item 22's quotations onto 0091 and item 23's archive search for an inner corridor listed, not done, left to a record session (item 23's convention note itself is written)",
+     "class": "within",
+     "why": "Deferred, not restated: the modals' 'is not recorded' is true of the record now, so neither is a wrong outcome; these are research additions, not known bugs."
+    },
+    {
+     "id": "record-and-modal-edits",
+     "summary": "one-sentence edits to drawing pages 0090, 0004, 0242, 0220, 0222, 0104, 0091 and eight kinds' modals, citing nothing new",
+     "class": "within",
+     "why": "Words brought in line with fine behavior and with the pages' own sources, the restating XIV prescribes."
+    },
+    {
+     "id": "found-rows-closed",
+     "summary": "found.jsonl rows for the restated items and rows 76-78 (quotes no longer in the procedure) closed with reasons",
+     "class": "within",
+     "why": "Bookkeeping of the items this task settles; narrows nothing."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "worked after T196 and before step 3b's first port (T152); green exits are static, rust-test, quick, plan review, claims round and a gated land",
+     "class": "within",
+     "why": "The GM: fix all known bugs in each step before porting the next step."
+    },
+    {
+     "id": "county-unchanged-evidence",
+     "summary": "the county example regenerating to the same .svg is used as evidence its edits are words only",
+     "class": "within",
+     "why": "Used as a measurement of reach, not held as an exactness standard; nothing is refused or required on bytes."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23094,6 +23194,92 @@
      "summary": "reviews::prereq test a_verdict_record_is_the_reviews_last_act failed 1 of 3 make static runs (Text file busy on an in-process-written stub); stub now written via l7r_gate_core::write_executable.",
      "class": "within",
      "why": "A check that intermittently refuses good work is a defect under the definition this task installs and the GM's 2026-11-18 'fix broken things as we find them'; fixed in the step where found, not carried forward."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T187": {
+   "section_sha256": "af6de08e812972c0f9db5bc128fdc736bbc0dd2db1eccc22b5693d073b894230",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "item-1-fix",
+     "summary": "lodging_entrances refuses an undivided barracks or retainers' long-house as a common room, in Rust and Python together, with a red-on-HEAD test and the round-trip redrawn in dwellings",
+     "class": "within",
+     "why": "A check that passes bad work against 0097 is a defect under XIV; the GM: 'fix all known bugs in each step before moving on'. Fixing it in every live copy and changing the check's verdict as fixed is FR-002's own exception."
+    },
+    {
+     "id": "item-30-fix",
+     "summary": "the round-trip's storehouses moved to the north wall's first rank behind the house, with the family privy and barracks door moved as consequences",
+     "class": "within",
+     "why": "A research finding contradicted on a pool sheet (0091: storehouses behind the house) is a defect; the knock-on moves are the fix's own geometry, and the sheet's checks pass after (FR-002: a map may change so long as checks and research hold)."
+    },
+    {
+     "id": "differences-in-words",
+     "summary": "items 2-12, 15, 17-19, 21, 24-26, 28, 32, 33 classed DIFFERENCE and restated in claims, comments, modals and drawing pages, no geometry or code moved",
+     "class": "within",
+     "why": "Each row's evidence is that no sheet reads wrong and no research finding is contradicted: sizes inside their guesses, an unreached fallback (item 5), words stale against code or pages. The GM 2026-11-19: don't fix 'things which are different than you expected but still work perfectly well'. XIV restates a difference in words."
+    },
+    {
+     "id": "item-13-divider-gate",
+     "summary": "the divider gate's 'narrower than the main gate' claim restated as holding only where the frontage is drawn above 7 ft, no rule tying the two",
+     "class": "within",
+     "why": "The plan measures the example's main gate at 8 ft frontage / 7 ft clear and its divider at 6 ft from GATE_W_FT and Envelope: the low-end case is not drawn by any input the example takes, so no sheet reads wrong; restating the claim is the XIV remedy."
+    },
+    {
+     "id": "item-16-gate-range",
+     "summary": "the gate-range form of the gates roll, which would draw no range building, left in code and recorded in the gates claim",
+     "class": "within",
+     "why": "The only one that could be a carried defect into step 3b. Its class rests on the plan's statement that the example's seed is a fixed string that always rolls the one-bay gate, so no input reaches the form and no map reads wrong; on that premise it is a latent difference, recorded. Should the premise fail (any caller varies the seed), it would be a defect owed a fix before step 3b."
+    },
+    {
+     "id": "item-27-room-bands",
+     "summary": "no check enforces the kinds' room bands on generated plans; the modals say the band is a guide no check holds",
+     "class": "within",
+     "why": "ask:449-T182-room-scope clause (1) reverts the county example's interiors by name, so its 20 x 20 and 18 x 10 ft rooms are kept, and no clause orders a check; clause (2)'s 'they apply to generated sheets' is satisfied by recording the bands as GUESS and sizing the round-trip to them, which sits inside every band. A band check would refuse the county sheet the arbiter kept - a check refusing good work, itself a defect - and the ruling files band-tightening findings as rows."
+    },
+    {
+     "id": "item-14-knob",
+     "summary": "the residence's massing, room order and veranda faces stay fixed rather than rolled as knobs; the claim names the fixed forms and the pages recording them",
+     "class": "within",
+     "why": "On the outcome test alone: each fixed form is attested (0091, 0102), so the map reads right and no research finding is contradicted - a difference under XIV v2.36.0, not a defect. The plan's cost argument (a placer step 3b ports) is not weighed. The project knob rule it touches is not in this bundle and is not part of feature 449's request."
+    },
+    {
+     "id": "not-worth-dropped",
+     "summary": "items 20, 29, 31 dropped as not worth doing",
+     "class": "within",
+     "why": "No page places a corridor's ends or a kitchen's end; the guests' privy stands where 0101 says. None is a wrong outcome, so 'fix all known bugs' does not reach them."
+    },
+    {
+     "id": "items-22-23-deferred",
+     "summary": "item 22's quotations onto 0091 and item 23's archive search for an inner corridor listed, not done, left to a record session (item 23's convention note itself is written)",
+     "class": "within",
+     "why": "Deferred, not restated: the modals' 'is not recorded' is true of the record now, so neither is a wrong outcome; these are research additions, not known bugs."
+    },
+    {
+     "id": "record-and-modal-edits",
+     "summary": "one-sentence edits to drawing pages 0090, 0004, 0242, 0220, 0222, 0104, 0091 and eight kinds' modals, citing nothing new",
+     "class": "within",
+     "why": "Words brought in line with fine behavior and with the pages' own sources, the restating XIV prescribes."
+    },
+    {
+     "id": "found-rows-closed",
+     "summary": "found.jsonl rows for the restated items and rows 76-78 (quotes no longer in the procedure) closed with reasons",
+     "class": "within",
+     "why": "Bookkeeping of the items this task settles; narrows nothing."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "worked after T196 and before step 3b's first port (T152); green exits are static, rust-test, quick, plan review, claims round and a gated land",
+     "class": "within",
+     "why": "The GM: fix all known bugs in each step before porting the next step."
+    },
+    {
+     "id": "county-unchanged-evidence",
+     "summary": "the county example regenerating to the same .svg is used as evidence its edits are words only",
+     "class": "within",
+     "why": "Used as a measurement of reach, not held as an exactness standard; nothing is refused or required on bytes."
     }
    ],
    "verdict": "CLEAR"

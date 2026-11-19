@@ -139,11 +139,16 @@ pub fn entrances(svg: &Sheet, plan: &ParsedPlan) -> Result<Vec<Mark>, Error> {
 }
 
 /// The row kinds a partition divides into dwellings, each entered by a door of its own (feature 449 T177: 0097's rowhouse dwellings,
-/// 0106's long-house). A residence's rooms and an undivided block - 0097's common room behind one door - keep the building's rule.
+/// 0106's long-house). A residence's rooms keep the building's rule; an undivided servants' quarters is 0097's common room behind one door, and an undivided barracks or long-house is refused (T187).
 ///
 /// Research:
 ///     the row-form lodgings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks and a retainers' long-house are divided into dwellings, each with a door of its own (0097, 0106), and a servants' quarters takes one of 0097's two forms, a row of dwellings each with its door or a common room behind one door, so these three kinds are the ones a dwelling wall can divide.
 pub const ROW_KINDS: [&str; 3] = ["barracks", "retainers' quarters", "servants' quarters"];
+/// The one row kind 0097 lets stand undivided, a common room behind one door: the servants' quarters (feature 449 T187).
+///
+/// Research:
+///     the common room is the servants' - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a compound's servants' quarters takes one of two forms, a common room entered by one door or a row of dwellings each with a door of its own, where the barracks is divided into dwellings, so a barracks or a retainers' long-house undivided is refused.
+pub const COMMON_ROOM_KIND: &str = "servants' quarters";
 
 /// The spans (px, along its long axis) of the dwellings a row block is divided into: the block cut at every dwelling wall - a SOLID line
 /// of its own kind inside it that runs its full depth, within `tol`. A dashed line is a sliding partition, which 0097 lets a common
@@ -199,7 +204,7 @@ pub fn dwellings(block: &Mark, ms: &[Mark], tol: f64) -> Vec<(f64, f64)> {
 ///
 /// Research:
 ///     a lodging entered from the ground - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: each barracks dwelling has its earth-floored entry and a servants' quarters is entered by its door or by a door to each dwelling (0097); the residence is entered by its genkan where it stands alone and the household by its own kitchen door (0104); the retainers' long-house, where the karo lodges, gives each dwelling a door of its own on the court (0106).
-///     a door to each dwelling of a row - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks, a retainers' long-house and a servants' quarters in the row form are divided into dwellings, each with a door of its own, and a row of bays walled off from one another behind one shared door is never drawn, so each dwelling a solid wall divides off is held to its own door; a block undivided, or divided only by dashed sliding partitions, is 0097's common room behind one door.
+///     a door to each dwelling of a row - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: a barracks, a retainers' long-house and a servants' quarters in the row form are divided into dwellings, each with a door of its own, and a row of bays walled off from one another behind one shared door is never drawn, so each dwelling a solid wall divides off is held to its own door; a servants' quarters undivided, or divided only by dashed sliding partitions, is 0097's common room behind one door, the one row kind 0097 lets stand undivided.
 ///     every other lodging entered from the ground - UNRESEARCHED: the guest quarters, a shrine's hall and dwelling and the monk's rooms each reach the ground by a door or genkan on their own outer wall, not only through a building they do not join; no page asks how these were entered.
 ///     the karo's own house entered from the ground - GUESS research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: the karo's small house of their own on the hand-drawn plans, a guess the page records, reaches the ground by a door on its own outer wall, as the long-house gives the karo's quarters a door of their own on the court.
 ///
@@ -259,6 +264,13 @@ pub fn lodging_entrances(svg: &Sheet, plan: &ParsedPlan, tol: f64) -> Result<Vec
                         .any(|d| gap(d, b) <= tol && *lo <= mid(d) && mid(d) <= *hi)
                 })
                 .count();
+            if spans.len() == 1 && kind != COMMON_ROOM_KIND {
+                out.push(format!(
+                    "the {kind} at svg({},{}) is undivided - a {kind} is divided into dwellings, each with a door of its own; only a servants' quarters is drawn as one common room behind one door",
+                    fixed(b.x, 0),
+                    fixed(b.y, 0)
+                ));
+            }
             if spans.len() > 1 && bare > 0 {
                 out.push(format!(
                     "the {kind} at svg({},{}) has {bare} of its {} dwellings with no door of its own on its outer wall - each dwelling of a row is entered by its own door",

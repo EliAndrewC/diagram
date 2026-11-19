@@ -66,3 +66,14 @@ room 42 x 18 ft between; behind the garden row a 6 ft corridor, stepped 3 ft at 
 the back row captioned bays of inner rooms in two ranks - three bays 14 ft deep along the north wall side (32.7, 32.3 and 25 ft long), two 12 ft deep behind the west two (32.7 and 32.3 ft) - the maids' room 14 x 12 ft at the west end of the second rank's west bay; the corridor pieces drawn as one passage, one dotted outline round them and one caption. A door-kind building's fire-water tub is seated
 only within reach of one of its doors (compound_parts.py), so the karo's house, whose door faces the house 4 ft off, takes none (no
 check asks one there).
+
+2026-11-19 (feature 449 T187): the storehouses stand behind the house again, in its rear strip on the north wall as Ochiba's
+sheet draws them (0091's drawing page: "The household's storehouses stand behind the house"): they were the north wall's second
+rank, behind the house while it stood on the wall, and once T182 set the house off the wall that rank stood before it, the
+storehouses' backs to the reception. The senior retainers' long-house is drawn as Ochiba's three dwellings of 17 ft, a door to
+each on its south face, and the barracks as her two of 16.5 ft, the north one's door on its court face and the south one's on
+its south end, where the garrison privy stands before the court face (0097, 0106: each dwelling with a door of its own); both
+were drawn undivided behind one door, which `lodging_entrances` now refuses. The kitchen still joins the house's east end - the
+placer cannot seat the house with the kitchen first (measured: the house then finds no seat), and no page places a kitchen's end -
+and the guests' privy stands on the rear face behind the reception's span, as 0101's drawing page places it. The room bands are
+a guide for a generated plan's rooms that no check holds.
