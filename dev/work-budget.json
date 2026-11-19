@@ -398,6 +398,22 @@
     }
    },
    "all_sheets": 97983.0
+  },
+  "compound": {
+   "status": "budgeted",
+   "derivation": "specs/449-rust-codebase/derivations/T208-compound.md",
+   "verdict": "specs/449-rust-codebase/derivations/T208-compound.md.verdict-1.txt",
+   "sheets": {
+    "county-magistracy-example": {
+     "budget": 2400.0,
+     "items": 69.0
+    },
+    "ochiba-roundtrip-test": {
+     "budget": 2146.0,
+     "items": 65.0
+    }
+   },
+   "all_sheets": 4546.0
   }
  }
 }

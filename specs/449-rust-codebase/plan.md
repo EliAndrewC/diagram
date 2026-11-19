@@ -752,3 +752,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T204 to T204 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T205 to T205 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T206 to T206 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
+
+### T208 (T199: step 3b is rebuilt from a derivation, not ported - the GM, 2026-10-30 and 2026-11-19)
+
+- **Approach**: a derivation of an efficient Mode A compound generator written from docs/buildings.md's composition rules, docs/building-programs.md, types.json and the research pages they cite (0090, 0091, 0115, 0116, 0100, 0101, 0196, 0190), blind to the generator's code (`derivations/T208-compound.md`, its scripts in `derivations/T208-compound-scripts/`): the court spine and gate approaches filed first in a 40 ft grid (the cell measured 2026-11-19 (the derivation's scripts compared cells of 15 to 200 ft)); buildings in tiers (N/S rows, E/W columns, the divider), each wall keeping a sorted row so a search resumes at the first gap long enough; each seat read as the first free interval along the wall band; doors, the free ground and each part by its rule. Judged SOUND by the `work-budget` agent on its first round: 2,400 operations on county-magistracy-example and 2,146 on ochiba-roundtrip-test, 4,546 in all, about 34 per thing seated (measured 2026-11-19 (the derivation's Totals, re-run by its `tables.py`)); the budget `compound` set per sheet by `make budget-set`. Captions are the T202 placer's, budgeted apart.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the derivation and its budget | n/a (a derivation) | `derivations/T208-compound.md` | none | none |
+
+### T208 Approach (checklist part A)
+
+1. **The goal, in the world.** T152's rebuild has a budget an independent reviewer trusts was not anchored on today's generator.
+2. **The constraints.** The GM's 2026-10-30 rule; the derivation form with T201's pool-sheet form; the rubric's standards.
+3. **Where each comes from.** G: request.md (2026-10-30, 2026-11-19); R: docs/buildings.md and the pages it cites; O: the two sheets' own SVGs and programs.
+4. **Do they describe the world here?** Yes: the sizes are the two generated sheets' own, 69 and 65 things seated (measured 2026-11-19 (the derivation's count script over each SVG)).
+5. **The order.** After T206, before T152.
+6. **The exits.** Green: SOUND, the budget set. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** The SOUND verdict recorded beside the derivation, `make budget-set` done (observed 2026-11-19, method: its output naming both sheets' budgets).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** n/a (a derivation).
+
+**Found and left?** The county example's program lives in the generator's module, so the deriver read its walls and order off the drawn sheet; T152 reads the program itself. The reviewer's notes (an unstated radius, a "ten zones" slip, the fire gap priced at its band's low end at a kura) touch no total by more than a few operations and are left for the rebuild's audit.
+
+**Performance work?** yes - the derivation is the budget the rebuild is held to.
+
+

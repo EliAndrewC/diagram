@@ -906,6 +906,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T208 (T199: step 3b is rebuilt from a derivation, not ported - the GM, 2026-10-30 and 2026-11-19)": {
+   "sha256": "c7bff0780c5ff1e805f41693013cffe485f8b32ff05315e24b5aa20f869f86f6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T208 Approach (checklist part A)": {
+   "sha256": "85a161b553eba44249ef267dee0ba153dca096e9e914ae3456fd0e0004d088a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13793,6 +13805,58 @@
      "why": "Routine sequencing and accounting. The section names its measured target and saving and quotes the GM's 2026-11-12 words, as request.md's 2026-11-12 entry requires of a task filed under the pre-approval."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T208 (T199: step 3b is rebuilt from a derivation, not ported - the GM, 2026-10-30 and 2026-11-19)",
+    "### T208 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T208-D1 derivation blind to the generator's code",
+     "summary": "Step 3b's compound generator is derived from docs/buildings.md, docs/building-programs.md, types.json and the research pages they cite, without reading the generator's code; scripts kept beside the derivation.",
+     "class": "within",
+     "why": "This is the GM's 2026-10-30 rule carried by T199 and his 2026-11-19 plan approval ('step 3b rebuilt from a derivation as phase tasks'): the rewrite must not re-implement the old algorithms, and blindness to the code is the means the GM himself recalls ('tooling in place to stop you from even being able to see the Python code')."
+    },
+    {
+     "id": "T208-D2 the derived algorithm (40 ft grid, tiers, sorted wall rows, first-free-interval seats)",
+     "summary": "Spine and gate approaches filed first in a 40 ft grid; buildings by tier; each wall a sorted row so search resumes at the first long-enough gap; seats as the first free interval along the wall band.",
+     "class": "within",
+     "why": "The algorithm's design is the derivation's content, not a scope choice; it narrows no clause of the request. The cell size carries a one-shot label (measured 2026-11-19, cells of 15 to 200 ft compared)."
+    },
+    {
+     "id": "T208-D3 SOUND verdict by work-budget and the per-sheet budget set by make budget-set",
+     "summary": "The derivation is judged SOUND by the work-budget agent (4,546 operations over the two sheets, about 34 per thing seated) and the compound budget is set per sheet; T152's rebuild is held to it.",
+     "class": "within",
+     "why": "Serves the GM's 2026-10-30 efficiency purpose ('orders of magnitude more operations ... than needed') and the 2026-11-19 plan's derived work budget; enforcing the requested efficiency is not unrequested scope. Figures carry one-shot labels."
+    },
+    {
+     "id": "T208-D4 captions budgeted apart (T202's placer)",
+     "summary": "Caption placement is not in this derivation's budget; it is the T202 placer's, budgeted separately.",
+     "class": "within",
+     "why": "A division of work between tasks, not a carve-out from the rule: captions remain under their own derived budget, so nothing in step 3b escapes being held to a derivation."
+    },
+    {
+     "id": "T208-D5 county example's program read off the drawn sheet",
+     "summary": "The county-magistracy example's program lives in the generator's module, so the deriver took its walls and order from the drawn SVG rather than the code; T152 reads the program itself.",
+     "class": "within",
+     "why": "The program is the problem's input (which buildings, which walls), not the algorithm; reading it from the output keeps the derivation blind to the code, which is the rule's purpose. Problem sizes (69 and 65 things seated) are measured from the sheets and labeled."
+    },
+    {
+     "id": "T208-D6 reviewer's notes left for the rebuild's audit",
+     "summary": "An unstated radius, a 'ten zones' slip and the fire gap priced at its band's low end at a kura are left for T152's audit rather than fixed in the derivation now.",
+     "class": "within",
+     "why": "None is a wrong outcome under constitution XIV as the GM defined it 2026-11-19: they are wording or pricing imprecisions in the derivation that move no total by more than a few operations and do not change the SOUND verdict; they are carried into T152 within the same step 3b, so no known defect passes to the next step."
+    },
+    {
+     "id": "T208-D7 order and exits",
+     "summary": "After T206, before T152; red exit records what failed and sends a cannot-be-done claim to make arbiter-ask; done is the SOUND verdict recorded and make budget-set run.",
+     "class": "within",
+     "why": "Sequencing the derivation before the phase task it governs is what the 2026-11-19 approval describes; the red exit routes a narrowing to the arbiter rather than taking it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -24482,6 +24546,56 @@
      "summary": "Runs after T205 and before T152. One landing, the record only. Green exit: measurement recorded and decision taken. Red exit: through make arbiter-ask. Item 12: claims-owed answers rightly.",
      "class": "within",
      "why": "Routine sequencing and accounting. The section names its measured target and saving and quotes the GM's 2026-11-12 words, as request.md's 2026-11-12 entry requires of a task filed under the pre-approval."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T208": {
+   "section_sha256": "c03a9c2e66a17375fd7fef9978ccb2f316e693932f721de575cd6fe211a17c34",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T208-D1 derivation blind to the generator's code",
+     "summary": "Step 3b's compound generator is derived from docs/buildings.md, docs/building-programs.md, types.json and the research pages they cite, without reading the generator's code; scripts kept beside the derivation.",
+     "class": "within",
+     "why": "This is the GM's 2026-10-30 rule carried by T199 and his 2026-11-19 plan approval ('step 3b rebuilt from a derivation as phase tasks'): the rewrite must not re-implement the old algorithms, and blindness to the code is the means the GM himself recalls ('tooling in place to stop you from even being able to see the Python code')."
+    },
+    {
+     "id": "T208-D2 the derived algorithm (40 ft grid, tiers, sorted wall rows, first-free-interval seats)",
+     "summary": "Spine and gate approaches filed first in a 40 ft grid; buildings by tier; each wall a sorted row so search resumes at the first long-enough gap; seats as the first free interval along the wall band.",
+     "class": "within",
+     "why": "The algorithm's design is the derivation's content, not a scope choice; it narrows no clause of the request. The cell size carries a one-shot label (measured 2026-11-19, cells of 15 to 200 ft compared)."
+    },
+    {
+     "id": "T208-D3 SOUND verdict by work-budget and the per-sheet budget set by make budget-set",
+     "summary": "The derivation is judged SOUND by the work-budget agent (4,546 operations over the two sheets, about 34 per thing seated) and the compound budget is set per sheet; T152's rebuild is held to it.",
+     "class": "within",
+     "why": "Serves the GM's 2026-10-30 efficiency purpose ('orders of magnitude more operations ... than needed') and the 2026-11-19 plan's derived work budget; enforcing the requested efficiency is not unrequested scope. Figures carry one-shot labels."
+    },
+    {
+     "id": "T208-D4 captions budgeted apart (T202's placer)",
+     "summary": "Caption placement is not in this derivation's budget; it is the T202 placer's, budgeted separately.",
+     "class": "within",
+     "why": "A division of work between tasks, not a carve-out from the rule: captions remain under their own derived budget, so nothing in step 3b escapes being held to a derivation."
+    },
+    {
+     "id": "T208-D5 county example's program read off the drawn sheet",
+     "summary": "The county-magistracy example's program lives in the generator's module, so the deriver took its walls and order from the drawn SVG rather than the code; T152 reads the program itself.",
+     "class": "within",
+     "why": "The program is the problem's input (which buildings, which walls), not the algorithm; reading it from the output keeps the derivation blind to the code, which is the rule's purpose. Problem sizes (69 and 65 things seated) are measured from the sheets and labeled."
+    },
+    {
+     "id": "T208-D6 reviewer's notes left for the rebuild's audit",
+     "summary": "An unstated radius, a 'ten zones' slip and the fire gap priced at its band's low end at a kura are left for T152's audit rather than fixed in the derivation now.",
+     "class": "within",
+     "why": "None is a wrong outcome under constitution XIV as the GM defined it 2026-11-19: they are wording or pricing imprecisions in the derivation that move no total by more than a few operations and do not change the SOUND verdict; they are carried into T152 within the same step 3b, so no known defect passes to the next step."
+    },
+    {
+     "id": "T208-D7 order and exits",
+     "summary": "After T206, before T152; red exit records what failed and sends a cannot-be-done claim to make arbiter-ask; done is the SOUND verdict recorded and make budget-set run.",
+     "class": "within",
+     "why": "Sequencing the derivation before the phase task it governs is what the 2026-11-19 approval describes; the red exit routes a narrowing to the arbiter rather than taking it."
     }
    ],
    "verdict": "CLEAR"
