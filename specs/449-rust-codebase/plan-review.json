@@ -834,6 +834,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T201 (T198: the derivation template refused a Mode A stage for its form)": {
+   "sha256": "af194956a77cf771842e7ebddfa37833ac0a5058a6d914364d503036746c3fa7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
+  },
+  "### T201 Approach (checklist part A)": {
+   "sha256": "a7328905f3953ec5ec45c947719fe3a7cadded25ed4870234007f905f6286e39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13342,6 +13354,66 @@
      "why": "This is sequencing and bookkeeping. It narrows nothing that was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-19",
+   "blocks": [
+    "### T201 (T198: the derivation template refused a Mode A stage for its form)",
+    "### T201 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the pool-sheet form",
+     "summary": "The derivation template and its checks gain a pool-sheet form switched on by a Contract line '- Sizes: pool sheets: ...'; with no Sizes line the hamlet path runs untouched (49 feature-444 derivations bundled before and after, outputs and exit codes diffed, one-shot label 2026-11-19).",
+     "class": "within",
+     "why": "Serves the GM 2026-11-19 plan he approved ('the step-3a placer measured against a derived work budget before step 3b'): T198's SOUND derivation was refused for its form, a check refusing good work (XIV), so the template is extended to take it. The hamlet stages are left as they are, so nothing asked is narrowed."
+    },
+    {
+     "id": "D2 the pool-sheet form's rules",
+     "summary": "Under pool sheets: one Totals line per sheet plus an all-sheets line equal to their sum; a 'per <step>' scope accepted when it resolves through another row to per item, over the run or once; only a Grid bullet read as a grid; px accepted once '- Scale:' is stated.",
+     "class": "within",
+     "why": "These are the form's own terms for a stage measured on fixed sheets rather than a size range; each still ties the budget to a stated derivation (the sum is checked, scopes must resolve, px needs a stated scale). Nothing the GM asked is cut."
+    },
+    {
+     "id": "D3 per-row terms in each Totals line not mechanically checked",
+     "summary": "Under pool sheets the per-row terms of each sheet's Totals line are judged by the reviewing agent rather than checked by the tool; the all-sheets sum is checked.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own stated constraint (feature 443/444's rubric as enforced) for this form, so it is ruled. Against the request's purpose - the 3a placer held to a DERIVED budget so its inefficiency is measured before 3b - it does not gut anything: the derivation is still judged SOUND before make budget-set reads it, the per-sheet totals still have to add to the checked all-sheets line, and the budget is still derived rather than chosen. The hamlet-form check presumes a range of sizes, which a fixed pool sheet does not have, so applied literally it refuses correct work. Note for the author: the block says 'three checks are relaxed' but names two (this and D4); the third is presumably the px rule in the Approach, and the block should name it."
+    },
+    {
+     "id": "D4 densest-case-in-ft rule replaced",
+     "summary": "Under pool sheets the densest-case-in-ft rule is replaced by a count row of entries per cell measured on each sheet.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A densest-case rule picks the worst size from a range; a pool sheet is one fixed input, so it has no range, and the rule cannot be applied as written. It is replaced by a per-sheet measured count rather than dropped, so the density bound the rule exists for is still in the derivation. Nothing in the GM's words is contradicted."
+    },
+    {
+     "id": "D5 budget-set and budget-sheets read the per-sheet budgets",
+     "summary": "make budget-set reads a pool-sheet stage's per-sheet budgets from its Totals under sheet_stages; make budget-sheets compares counts to them.",
+     "class": "within",
+     "why": "This is how the placer is 'measured against a derived work budget' (GM 2026-11-19), and it is the task's done condition."
+    },
+    {
+     "id": "D6 T198-placer.md gains form lines only",
+     "summary": "The T198 derivation gains Sizes, Scale and Keeps lines only; its figures are not changed.",
+     "class": "within",
+     "why": "Leaves the derived budget as it was judged and adds only what the new form needs to read it."
+    },
+    {
+     "id": "D7 found and left: no change/raise/accept path, make work-budget not reading Mode A counts",
+     "summary": "A pool-sheet stage has no change, raise or accept path yet, and make work-budget does not read the Mode A counts; both are owed only when a rebuilt Mode A stage lands and go into its phase tasks.",
+     "class": "within",
+     "why": "Neither is a wrong outcome today (no rebuilt Mode A stage exists to raise or accept a budget for), so neither is a known defect carried into the next step. Measuring the current placer against its budget, which is what the GM asked for, goes through make budget-sheets (D5), not these paths. They are scheduled into the phase tasks of the stage that needs them, before it lands."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T200, before the placer's rebuild.",
+     "class": "within",
+     "why": "Matches the GM's 2026-11-19 order: the budget is set before the step-3a rebuild and step 3b, which are held to it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23704,6 +23776,64 @@
      "summary": "One landing: the code landed with T199's push and this ticks it. Ordered after T198 and before T201.",
      "class": "within",
      "why": "This is sequencing and bookkeeping. It narrows nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T201": {
+   "section_sha256": "1766d9f98df6eda885c2b1f75017aff33ae701360c76fd996316d258dcccc872",
+   "reviewed": "2026-11-19",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the pool-sheet form",
+     "summary": "The derivation template and its checks gain a pool-sheet form switched on by a Contract line '- Sizes: pool sheets: ...'; with no Sizes line the hamlet path runs untouched (49 feature-444 derivations bundled before and after, outputs and exit codes diffed, one-shot label 2026-11-19).",
+     "class": "within",
+     "why": "Serves the GM 2026-11-19 plan he approved ('the step-3a placer measured against a derived work budget before step 3b'): T198's SOUND derivation was refused for its form, a check refusing good work (XIV), so the template is extended to take it. The hamlet stages are left as they are, so nothing asked is narrowed."
+    },
+    {
+     "id": "D2 the pool-sheet form's rules",
+     "summary": "Under pool sheets: one Totals line per sheet plus an all-sheets line equal to their sum; a 'per <step>' scope accepted when it resolves through another row to per item, over the run or once; only a Grid bullet read as a grid; px accepted once '- Scale:' is stated.",
+     "class": "within",
+     "why": "These are the form's own terms for a stage measured on fixed sheets rather than a size range; each still ties the budget to a stated derivation (the sum is checked, scopes must resolve, px needs a stated scale). Nothing the GM asked is cut."
+    },
+    {
+     "id": "D3 per-row terms in each Totals line not mechanically checked",
+     "summary": "Under pool sheets the per-row terms of each sheet's Totals line are judged by the reviewing agent rather than checked by the tool; the all-sheets sum is checked.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own stated constraint (feature 443/444's rubric as enforced) for this form, so it is ruled. Against the request's purpose - the 3a placer held to a DERIVED budget so its inefficiency is measured before 3b - it does not gut anything: the derivation is still judged SOUND before make budget-set reads it, the per-sheet totals still have to add to the checked all-sheets line, and the budget is still derived rather than chosen. The hamlet-form check presumes a range of sizes, which a fixed pool sheet does not have, so applied literally it refuses correct work. Note for the author: the block says 'three checks are relaxed' but names two (this and D4); the third is presumably the px rule in the Approach, and the block should name it."
+    },
+    {
+     "id": "D4 densest-case-in-ft rule replaced",
+     "summary": "Under pool sheets the densest-case-in-ft rule is replaced by a count row of entries per cell measured on each sheet.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A densest-case rule picks the worst size from a range; a pool sheet is one fixed input, so it has no range, and the rule cannot be applied as written. It is replaced by a per-sheet measured count rather than dropped, so the density bound the rule exists for is still in the derivation. Nothing in the GM's words is contradicted."
+    },
+    {
+     "id": "D5 budget-set and budget-sheets read the per-sheet budgets",
+     "summary": "make budget-set reads a pool-sheet stage's per-sheet budgets from its Totals under sheet_stages; make budget-sheets compares counts to them.",
+     "class": "within",
+     "why": "This is how the placer is 'measured against a derived work budget' (GM 2026-11-19), and it is the task's done condition."
+    },
+    {
+     "id": "D6 T198-placer.md gains form lines only",
+     "summary": "The T198 derivation gains Sizes, Scale and Keeps lines only; its figures are not changed.",
+     "class": "within",
+     "why": "Leaves the derived budget as it was judged and adds only what the new form needs to read it."
+    },
+    {
+     "id": "D7 found and left: no change/raise/accept path, make work-budget not reading Mode A counts",
+     "summary": "A pool-sheet stage has no change, raise or accept path yet, and make work-budget does not read the Mode A counts; both are owed only when a rebuilt Mode A stage lands and go into its phase tasks.",
+     "class": "within",
+     "why": "Neither is a wrong outcome today (no rebuilt Mode A stage exists to raise or accept a budget for), so neither is a known defect carried into the next step. Measuring the current placer against its budget, which is what the GM asked for, goes through make budget-sheets (D5), not these paths. They are scheduled into the phase tasks of the stage that needs them, before it lands."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T200, before the placer's rebuild.",
+     "class": "within",
+     "why": "Matches the GM's 2026-11-19 order: the budget is set before the step-3a rebuild and step 3b, which are held to it."
     }
    ],
    "verdict": "CLEAR"

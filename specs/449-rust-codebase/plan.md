@@ -716,29 +716,31 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T199 to T199 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T200 to T198 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T200 to T200 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T201 (<why: the finding or measurement that files it>)
+### T201 (T198: the derivation template refused a Mode A stage for its form)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the template and its checks (`rust/gate/crates/trials/src/measure/work_budget_bundle/derivation.rs`) gain a pool-sheet form, switched on by a Contract line `- Sizes: pool sheets: <sheet>, ...`; with no `Sizes:` line the hamlet path runs untouched (the 49 feature-444 derivations bundle and refuse exactly as before, observed 2026-11-19, method: each bundled before and after, outputs and exit codes diffed). Under pool sheets: one Totals line per sheet and an all-sheets line equal to their sum; a `per <step>` scope accepted when it resolves through another row to per item, over the run or once; only a Grid bullet read as a grid; px accepted once `- Scale:` is stated. `make budget-set` reads a pool-sheet stage's per-sheet budgets from its Totals under `sheet_stages`, and `make budget-sheets` compares counts to them. T198-placer.md gains its form lines only (Sizes, Scale, Keeps), its figures untouched.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the pool-sheet form | `derivation/sheets/tests.rs`, `budget_change/sheets/tests.rs` | `sheets.rs` (two) | none | none |
 
 ### T201 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A Mode A stage's derivation is bundled, judged and budgeted like a hamlet stage's, so the placer's rebuild is held to its budget.
+2. **The constraints.** Feature 443/444's derivation form and rubric; FR-015 (a budget bundle holds no code); the hamlet stages' accepted budgets untouched.
+3. **Where each comes from.** O: T198's refusal; G: the GM, 2026-10-30 and 2026-11-19, the rebuild held to a derived budget.
+4. **Do they describe the world here?** Yes: the T198 derivation now bundles (measured 2026-11-19 (the real `make work-budget-bundle` command, exit zero)).
+5. **The order.** After T200, before the placer's rebuild.
+6. **The exits.** Green: the T198 derivation bundles, the hamlet derivations unchanged, tests red without the switch. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The placer's budget set by `make budget-set` from a recorded SOUND verdict.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** The check refused good work (a SOUND derivation) for its form: a defect under XIV. Under pool sheets three checks are relaxed, each because a pool sheet is one fixed input, not a range of sizes: the per-row terms in each Totals line (the agent judges them; the all-sheets sum is checked), and the densest-case-in-ft rule (replaced by a count row of entries per cell measured on each sheet).
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** A pool-sheet stage has no change, raise or accept path yet, and `make work-budget` does not read the Mode A counts; both are owed only when a rebuilt Mode A stage lands, and go into its phase tasks.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
+
 

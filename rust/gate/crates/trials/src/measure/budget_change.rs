@@ -28,9 +28,12 @@ use l7r_gate_core::record::args::{parse_with, Spec};
 use l7r_guard::shared::py_text::strip;
 use l7r_guard::shared::pyjson::py_float;
 
-use super::work_budget_bundle::{dumps_py, glob, loads, nonfinite, py_re, read, sizes, R, RUNS};
+use super::work_budget_bundle::{
+    dumps_py, glob, loads, nonfinite, pool_sheets, py_re, read, sizes, R, RUNS,
+};
 
 mod rules;
+mod sheets;
 
 const TABLE: &str = "dev/work-budget.json";
 const LOG: &str = "dev/work-budget-changes.jsonl";
@@ -233,7 +236,7 @@ fn usage(why: &str) -> crate::Reply {
     crate::Reply {
         stdout: String::new(),
         stderr: format!(
-            "usage: budget_change.py [--root ROOT] {{set,change,program,accept}} ...: {why}\n"
+            "usage: budget_change.py [--root ROOT] {{set,change,program,accept,sheets}} ...: {why}\n"
         ),
         code: 2,
     }
@@ -286,6 +289,7 @@ fn read_args(args: &[String], root: &Path) -> Result<Args, crate::Reply> {
             (s, 2)
         }
         "program" => (vec![Spec::value("--words")], 2),
+        "sheets" => (vec![], 2),
         "accept" => (vec![Spec::value("--arbiter")], 2),
         other => return Err(usage(&format!("argument cmd: invalid choice: '{other}'"))),
     };
@@ -323,10 +327,16 @@ fn items_of(a: &Args, sizes: &[i64]) -> Result<Vec<(i64, i64)>, crate::Reply> {
     Ok(out)
 }
 
+/// Whether the derivation at `derivation` sizes the pool sheets (feature 449 T201): a Mode A stage, budgeted per sheet.
+fn is_pool(root: &Path, derivation: &str) -> bool {
+    std::fs::read_to_string(root.join(derivation)).is_ok_and(|t| pool_sheets(&t).is_some())
+}
+
 fn run(a: &Args) -> Result<R<(String, String)>, crate::Reply> {
     let root = &a.root;
     let text = |name: &str| a.parsed.text(name, "").to_owned();
     Ok(match a.cmd.as_str() {
+        "set" if is_pool(root, &a.pos[3]) => sheets::set_cli(a),
         "set" => {
             let items = items_of(a, &[10, 20, 40, 80])?;
             let (phase, per_thing, exponent) = (&a.pos[0], &a.pos[1], &a.pos[2]);
@@ -399,6 +409,7 @@ fn run(a: &Args) -> Result<R<(String, String)>, crate::Reply> {
                 )
             })
         }
+        "sheets" => sheets::compare_cli(a),
         "accept" => {
             let phase = &a.pos[0];
             rules::accept_stage(root, phase, &a.pos[1], &text("--arbiter"))

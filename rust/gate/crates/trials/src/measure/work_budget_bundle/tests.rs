@@ -360,6 +360,43 @@ fn a_derivation_in_plain_words_passes_and_one_naming_the_code_is_refused() {
         .contains("today's code's names (2): diagram, record - write"));
 }
 
+/// A Mode A derivation bundles (feature 449 T201): T198's caption placer, judged SOUND, was refused for its form alone - and a stage of
+/// the roll's table cannot take the pool sheets' form to leave its households.
+#[test]
+fn a_mode_a_derivation_bundles_and_a_hamlet_stage_cannot_take_its_form() {
+    let d = scratch("wbb-mode-a");
+    tree(&d);
+    let t198 = include_str!("derivation/sheets/T198-placer.md");
+    let rel = "specs/x/derivations/T198-placer.md";
+    put(&d, rel, t198.as_bytes());
+    let got = run(&d, &["budget", "placer", "--derivation", rel]);
+    assert_eq!(got.code, 0, "{got:?}");
+    assert!(std::fs::read_to_string(d.join("out/contract.md"))
+        .unwrap()
+        .contains("- Sizes: pool sheets: county-magistracy-example"));
+    let hamlet = budget(&d, t198);
+    assert_eq!(hamlet.stderr, "work-budget-bundle: REFUSED - the derivation is short of the template's fields (.specify/templates/derivation.md):\n  `Sizes:` pool sheets - `grid` is a hamlet stage of dev/work-budget.json, sized by households\n");
+    // a form of a roll's stage is the roll's
+    put(
+        &d,
+        &format!("{PH}/grid.wide.derivation.md"),
+        t198.as_bytes(),
+    );
+    let form = run(
+        &d,
+        &[
+            "budget",
+            "grid.wide",
+            "--derivation",
+            &format!("{PH}/grid.wide.derivation.md"),
+        ],
+    );
+    assert!(form.stderr.contains("`grid.wide` is a hamlet stage"));
+    // no table: no stage is the roll's
+    std::fs::remove_file(d.join("dev/work-budget.json")).unwrap();
+    assert_eq!(budget(&d, t198).code, 0);
+}
+
 #[test]
 fn a_derivation_short_of_its_form_is_refused() {
     let d = scratch("wbb-form");

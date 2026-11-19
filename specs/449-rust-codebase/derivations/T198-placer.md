@@ -15,12 +15,14 @@ only each caption's words, size and what it names, and ignores its seat.
 
 ## Contract
 
+- Sizes: pool sheets: county-magistracy-example, hayakawa-magistracy, ochiba-magistracy, ochiba-roundtrip-test, ubame-magistracy, hoshigaoka-shrine
+- Scale: 3 px = 1 ft
 - Reads: the finished sheet, meaning every drawn shape with its kind (`data-kind`), its id (`data-id`) and its outline, plus the
   sheet's extent (the viewBox). It also reads each declared caption: its words, face, size and declared lines (`tspan`s,
   `data-cont` lines), and what it names (`data-names`, or else the drawn shapes of the tagged group it stands in).
 - Writes: each caption's seat (center and anchor), its angle, its lines, and a leader line where it stands more than twice the
   usual gap from its feature.
-- Keeps (0242, 0330):
+- Keeps: the rules of 0242 and 0330, below:
   - A feature large enough to hold its name is named on itself, over its middle when that is free.
   - A smaller feature is named beside it. Positions are tried in the ranked order above, below, right, upper right, lower right,
     left, upper left, lower left, at the usual gap, which is half the caption's letter height measured from the feature's drawn

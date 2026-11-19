@@ -11,6 +11,9 @@ use l7r_guard::shared::speckit::splitlines;
 
 use super::{py_re, read, R};
 
+mod sheets;
+pub use sheets::{pool_sheets, sheet_budget, SheetBudget};
+
 /// What a MODE BUDGET derivation may not hold, each with why (443 plan D10): each would put today's code or its numbers in front
 /// of the judge.
 static FORBIDDEN: LazyLock<[(Regex, &str); 3]> = LazyLock::new(|| {
@@ -590,7 +593,11 @@ fn cells_problems(text: &str) -> Vec<String> {
 ///
 /// Where a total's expression raised (`total_problems`).
 pub(super) fn form_problems(text: &str) -> R<Vec<String>> {
-    let mut out = Vec::new();
+    // A MODE A STAGE SIZES THE POOL SHEETS (feature 449 T201): its `Sizes:` line opts in; with none, every check below is the hamlet's
+    let (pool, mut out) = match sheets::sizing(text) {
+        Ok(pool) => (pool, Vec::new()),
+        Err(why) => (None, vec![why]),
+    };
     let contract = search(&CONTRACT, text)
         .map(|g| g[0].clone())
         .unwrap_or_default();
@@ -620,12 +627,16 @@ pub(super) fn form_problems(text: &str) -> R<Vec<String>> {
             COLUMNS.join(" | ")
         ));
     } else {
-        for r in rows.iter().skip(2) {
+        for (i, r) in rows.iter().enumerate().skip(2) {
             let name = if r[0].is_empty() { "a factor" } else { &r[0] };
             if r.len() != COLUMNS.len() || r.iter().any(|c| c.is_empty() || c.starts_with('<')) {
                 out.push(format!(
                     "`{name}`: every column filled (scope, value, reason, worst case)"
                 ));
+            } else if pool.is_some() {
+                if !sheets::scope_ok(&rows[2..], i - 2) {
+                    out.push(sheets::scope_problem(name, &r[1]));
+                }
             } else if !SCOPES.contains(&lower(&r[1]).as_str()) {
                 out.push(format!(
                     "`{name}`: its scope is one of {} - not `{}`",
@@ -651,9 +662,15 @@ pub(super) fn form_problems(text: &str) -> R<Vec<String>> {
         }
     }
     out.extend(cells_problems(text));
-    out.extend(index_problems(text));
-    out.extend(total_problems(text)?);
-    out.extend(reference_problems(text));
+    if let Some(names) = pool {
+        out.extend(sheets::index_problems(text));
+        out.extend(sheets::total_problems(text, &names)?);
+        out.extend(sheets::reference_problems(text, &names));
+    } else {
+        out.extend(index_problems(text));
+        out.extend(total_problems(text)?);
+        out.extend(reference_problems(text));
+    }
     Ok(out)
 }
 

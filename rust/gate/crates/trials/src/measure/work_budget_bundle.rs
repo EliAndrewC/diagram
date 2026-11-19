@@ -35,7 +35,7 @@ mod derivation;
 pub mod pyast;
 
 pub use code::{counted_files, stage_files};
-pub use derivation::sizes;
+pub use derivation::{pool_sheets, sheet_budget, sizes, SheetBudget};
 
 pub(crate) type R<T> = Result<T, String>;
 
@@ -273,6 +273,12 @@ fn budget_bundle(root: &Path, phase: &str, derivation: &str, out: &Path) -> R<(i
     };
     let mut short = derivation::form_problems(&text)?;
     short.extend(derivation::answer_problems(&src, &text)?);
+    // ...AND A HAMLET STAGE STAYS A HAMLET'S (feature 449 T201): a stage of the roll's table cannot opt out of its households
+    if derivation::pool_sheets(&text).is_some() && hamlet_stage(root, phase)? {
+        short.push(format!(
+            "`Sizes:` pool sheets - `{phase}` is a hamlet stage of {TABLE}, sized by households"
+        ));
+    }
     if !short.is_empty() {
         return Ok((1, format!("work-budget-bundle: REFUSED - the derivation is short of the template's fields ({}):\n{}", derivation::TEMPLATE, indented(&short))));
     }
@@ -300,6 +306,18 @@ fn budget_bundle(root: &Path, phase: &str, derivation: &str, out: &Path) -> R<(i
         ),
     )?;
     Ok((0, out.join("MANIFEST.md").to_string_lossy().into_owned()))
+}
+
+/// Whether `phase` is a stage of the roll's budget table (`stages`), or a form of one (`<stage>.<form>`, as `budget-set` reads it);
+/// no table, none is.
+fn hamlet_stage(root: &Path, phase: &str) -> R<bool> {
+    let path = root.join(TABLE);
+    if !path.is_file() {
+        return Ok(false);
+    }
+    let stages = &load(&path)?["stages"];
+    let head = phase.split_once('.').map_or(phase, |(h, _)| h);
+    Ok(stages.get(phase).is_some() || stages.get(head).is_some())
 }
 
 fn indented(lines: &[String]) -> String {

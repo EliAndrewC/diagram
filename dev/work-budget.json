@@ -365,5 +365,39 @@
    },
    "audit": "specs/444-work-budget-program/phases/waterward.audit-4.txt"
   }
+ },
+ "sheet_stages": {
+  "placer": {
+   "status": "budgeted",
+   "derivation": "specs/449-rust-codebase/derivations/T198-placer.md",
+   "verdict": "specs/449-rust-codebase/derivations/T198-placer.md.verdict-1.txt",
+   "sheets": {
+    "county-magistracy-example": {
+     "budget": 12344.0,
+     "items": 50.0
+    },
+    "hayakawa-magistracy": {
+     "budget": 19924.0,
+     "items": 63.0
+    },
+    "ochiba-magistracy": {
+     "budget": 14311.0,
+     "items": 52.0
+    },
+    "ochiba-roundtrip-test": {
+     "budget": 22393.0,
+     "items": 46.0
+    },
+    "ubame-magistracy": {
+     "budget": 27740.0,
+     "items": 66.0
+    },
+    "hoshigaoka-shrine": {
+     "budget": 1271.0,
+     "items": 9.0
+    }
+   },
+   "all_sheets": 97983.0
+  }
  }
 }
