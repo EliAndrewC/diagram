@@ -15,14 +15,23 @@ fn minute() -> u64 {
 }
 
 fn run_with(cmd: &str, background: bool) -> Vec<Answer> {
+    run_as(cmd, background, None)
+}
+
+/// `cmd` judged from the main session (`agent` None: no `agent_id` in the payload) or from the subagent `agent`.
+fn run_as(cmd: &str, background: bool, agent: Option<&str>) -> Vec<Answer> {
     crate::shared::log::quiet();
     let mut ti = json!({"command": cmd});
     if background {
         ti["run_in_background"] = Value::Bool(true);
     }
+    let mut input = json!({"tool_name": "Bash", "cwd": ".", "tool_input": ti});
+    if let Some(a) = agent {
+        input["agent_id"] = Value::String(a.to_owned());
+    }
     let e = Event {
         name: "PreToolUse".to_owned(),
-        input: json!({"tool_name": "Bash", "cwd": ".", "tool_input": ti}),
+        input,
     };
     let s = Session::from_input(&json!({}));
     let scan = strip_quotes(&strip_heredocs(cmd));
@@ -74,8 +83,9 @@ fn a_file_wait_is_made_safe_rather_than_refused() {
     );
     let cmd = v["command"].as_str().unwrap_or_default().to_owned();
     assert!(cmd.contains("/lib/writer-alive.sh") && cmd.contains("WAIT TIMED OUT"));
-    let (v2, said2) = rewritten(&run_with(&cmd, true));
-    assert!(v2.is_null() && said2.is_empty());
+    // fed back, it is permitted as it stands: no answer at all - `rewritten()` reads a refusal as no rewrite too, and hid one here
+    // (feature 451 T16)
+    assert_eq!(run_with(&cmd, true), Vec::new());
     let alive = "until grep -q x /tmp/a.log || ! pgrep -f '[m]ake x'; do sleep 5; done";
     let (_, said3) = rewritten(&run_with(alive, true));
     assert!(
@@ -456,4 +466,321 @@ fn a_payload_is_never_walked_and_a_named_wait_covers_only_its_own_list() {
         detached("for t in a b; do make $t & wait $!; done | cat"),
         None
     );
+}
+
+/// Whether `a` is the slow-poll refusal (feature 451 T16, D13): it names the escape and the 60 s form.
+fn slow_refusal(a: &[Answer]) -> bool {
+    let r = refused(a);
+    r.contains("SLOW_POLL_OK") && r.contains("every sleep at 60 s or less")
+}
+
+/// The command the slow-poll refusal offers in its place.
+fn offered(a: &[Answer]) -> String {
+    let r = refused(a);
+    r.split_once("60 s or less:\n\n  ")
+        .and_then(|(_, rest)| rest.split_once("\n\nA subagent"))
+        .map_or_else(String::new, |(form, _)| form.to_owned())
+}
+
+/// Research R5's observed wait, verbatim from the main session's transcript (a backgrounded Bash call): the agent's output file
+/// checked every 60 s and, when it has not grown, 420 s more before the agent is called idle, escaped with `POLL_OK`.
+const R5: &str = "POLL_OK=\"the resumed T227 agent's report\"; \
+f=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/tasks/a32196d5562b60215.output; s=$(stat -c %s $f); while true; \
+do sleep 60; n=$(stat -c %s $f); if [ \"$n\" = \"$s\" ]; then sleep 420; m=$(stat -c %s $f); [ \"$m\" = \"$n\" ] && break; s=$m; \
+else s=$n; fi; done; echo \"agent output idle\"";
+
+/// T16's cases, each by its plan line (D13, FR-008): from the main session a wait loop on the `POLL_OK` or the file-watching path
+/// whose longest `sleep` is over 60 s is refused naming the 60 s form, foreground and backgrounded alike.
+#[test]
+fn a_main_session_wait_slower_than_its_check_is_refused() {
+    let firing = [
+        R5,
+        "until test -s /tmp/a.out; do sleep 480; done  # POLL_OK: the agent's file",
+        "while sleep 480; do grep -q DONE /tmp/a.log && break; done  # POLL_OK: the agent's log",
+        "until grep -q DONE /tmp/a.log; do sleep 480; done",
+        "until grep -q DONE /tmp/a.log; do sleep 8m; done",
+        "until grep -q DONE /tmp/a.log; do sleep 60.5; done",
+        "until grep -q DONE /tmp/a.log; do sleep 1m 30s; done",
+        "until grep -q DONE /tmp/a.log; do sleep 2h; done",
+        "until grep -q DONE /tmp/a.log; do sleep 1d; done",
+        "until grep -q DONE /tmp/a.log; do sleep 30; sleep 90s; done",
+        "until grep -q DONE /tmp/a.log; do for i in 1 2; do sleep 120; done; done",
+        "until curl -s x; do /bin/sleep 300; done  # POLL_OK: the port is external",
+    ];
+    // every case judged before the verdict, so the check deleted shows each one red (FR-012)
+    let missed: Vec<(&str, bool)> = firing
+        .into_iter()
+        .flat_map(|c| [(c, false), (c, true)])
+        .filter(|&(c, bg)| !slow_refusal(&run_with(c, bg)))
+        .collect();
+    assert_eq!(missed, Vec::<(&str, bool)>::new(), "not refused");
+    let r = refused(&run(R5));
+    assert!(r.contains("420 s") && r.contains("POLL_CHECK_S"), "{r}");
+    assert!(offered(&run(R5)).contains("then sleep 60; m="), "{r}");
+}
+
+/// The quiet side (D13): a loop at 60 s or less, a subagent's slow loop, a sleep outside every loop, a quoted mention - none refused
+/// for its pace, each answered as before T16.
+#[test]
+fn a_wait_at_its_check_or_a_subagents_passes() {
+    let quiet = [
+        // R5's wait at 60 s throughout
+        "POLL_OK=\"the resumed T227 agent's report\"; f=/tmp/a.out; s=$(stat -c %s $f); while true; do sleep 60; \
+n=$(stat -c %s $f); if [ \"$n\" = \"$s\" ]; then sleep 60; m=$(stat -c %s $f); [ \"$m\" = \"$n\" ] && break; s=$m; else s=$n; fi; \
+done; echo \"agent output idle\"",
+        "until grep -q DONE /tmp/a.log; do sleep 60; done",
+        "until grep -q DONE /tmp/a.log; do sleep 1m; done",
+        "until grep -q DONE /tmp/a.log; do sleep 0.5; done",
+        "until grep -q \"sleep 480\" /tmp/a.log; do sleep 30; done",
+        "sleep 480; cat /tmp/a.out  # POLL_OK: the agent's file once",
+        "until grep -q DONE /tmp/a.log; do sleep 30; done; sleep 480; tail /tmp/a.log",
+    ];
+    let wrong: Vec<(&str, bool)> = quiet
+        .into_iter()
+        .flat_map(|c| [(c, false), (c, true)])
+        .filter(|&(c, bg)| !refused(&run_with(c, bg)).is_empty())
+        .collect();
+    assert_eq!(wrong, Vec::<(&str, bool)>::new(), "refused");
+    // a builder (a payload with an agent_id) is not held to it: the slow loop answered as it was before T16
+    let sub: Vec<(&str, bool)> = [R5, "until grep -q DONE /tmp/a.log; do sleep 480; done"]
+        .into_iter()
+        .flat_map(|c| [(c, false), (c, true)])
+        .filter(|&(c, bg)| {
+            let a = run_as(c, bg, Some("a1b2c3"));
+            let said = rewritten(&a).1;
+            let ceiled = said.contains("WAIT TIMED OUT") || said.contains("CEILING");
+            !(refused(&a).is_empty() && ceiled)
+        })
+        .collect();
+    assert_eq!(sub, Vec::<(&str, bool)>::new(), "a subagent held");
+    // the periodic report keeps its cron refusal, ahead of the pace
+    assert!(
+        refused(&run_with("while true; do date; sleep 1800; done", true)).contains("CronCreate")
+    );
+}
+
+/// The escape (FR-012): `SLOW_POLL_OK` and a reason stands the refusal aside, a bare token is refused for its reason; and it is
+/// no `POLL_OK` - the longer token never reads as the shorter one's escape.
+#[test]
+fn slow_poll_ok_with_a_reason_stands_the_refusal_aside() {
+    let (v, said) = rewritten(&run(
+        "until grep -q DONE /tmp/a.log; do sleep 480; done  # SLOW_POLL_OK: the producer writes hourly",
+    ));
+    assert!(v["run_in_background"] == true && said.contains("BACKGROUNDED"));
+    let (_, said2) = rewritten(&run(
+        "POLL_OK=\"the remote queue\" SLOW_POLL_OK=\"a nightly job checked slowly\" until curl -s x; do sleep 480; done",
+    ));
+    assert!(said2.contains("POLL_OK permitted this wait"), "{said2}");
+    assert!(refused(&run(
+        "until grep -q DONE /tmp/a.log; do sleep 480; done  # SLOW_POLL_OK"
+    ))
+    .contains("SLOW_POLL_OK with no reason"));
+    // SLOW_POLL_OK alone grants nothing POLL_OK grants: a busy-wait stays refused, a file wait stays on its own path
+    assert!(refused(&run(
+        "while ! nc -z localhost 8080; do sleep 2; done  # SLOW_POLL_OK: a slow port here"
+    ))
+    .contains("busy-wait loop"));
+    let (_, said3) = rewritten(&run(
+        "until grep -q x /tmp/a.log; do sleep 5; done  # SLOW_POLL_OK: two words here",
+    ));
+    assert!(said3.contains("BACKGROUNDED") && said3.contains("PROOF-OF-LIFE"));
+    assert!(refused(&run(
+        "while ! nc -z localhost 8080; do sleep 2; done  # SLOW_POLL_OK"
+    ))
+    .contains("busy-wait loop"));
+    // both tokens, in either order
+    let (_, said4) = rewritten(&run(
+        "until curl -s x; do sleep 480; done  # SLOW_POLL_OK: a slow remote job; POLL_OK: the port is external",
+    ));
+    assert!(said4.contains("POLL_OK permitted this wait"), "{said4}");
+}
+
+/// What the guard emits never trips its own refusal: each rewrite of a main-session wait (the file wait's proof and ceiling, the
+/// `POLL_OK` ceiling, the bracketed pattern, the make wait scoped to this tree) and the 60 s form the refusal offers, fed back.
+#[test]
+fn the_guards_own_rewrites_and_offer_pass_its_pace_check() {
+    // each rewrite with the backgrounding it was emitted with
+    let emitted: Vec<(String, bool)> = [
+        ("until grep -q x /tmp/a.log; do sleep 60; done", false),
+        ("until curl -s x; do sleep 60; done  # POLL_OK: the port is external", false),
+        ("while pgrep -f \"x y\"; do sleep 60; done  # POLL_OK: the remote queue", false),
+        ("until ! pgrep -f \"make done\" >/dev/null; do sleep 60; done  # POLL_OK: a detached gate", true),
+    ]
+    .into_iter()
+    .map(|(c, bg)| {
+        let v = rewritten(&run_with(c, bg)).0;
+        let cmd = v["command"].as_str().unwrap_or_default().to_owned();
+        (cmd, bg || v["run_in_background"] == true)
+    })
+    .collect();
+    assert!(emitted.iter().all(|(c, _)| c.contains("WAIT TIMED OUT")));
+    // none is refused for anything: the file wait's was, as a busy-wait, until `file_watching_loop` read past its own proof clause
+    let refused_again: Vec<&(String, bool)> = emitted
+        .iter()
+        .filter(|(c, bg)| !refused(&run_with(c, *bg)).is_empty())
+        .collect();
+    assert_eq!(refused_again, Vec::<&(String, bool)>::new());
+    let emitted: Vec<String> = emitted.into_iter().map(|(c, _)| c).collect();
+    let offers: Vec<String> = [
+        R5,
+        "until grep -q DONE /tmp/a.log; do sleep 8m; done",
+        "until grep -q DONE /tmp/a.log; do sleep 1m 30s; done",
+    ]
+    .into_iter()
+    .map(|c| offered(&run(c)))
+    .collect();
+    assert!(offers.iter().all(|c| !c.is_empty()), "{offers:#?}");
+    // none of it is refused for its pace, in the foreground or the background
+    let tripped: Vec<&String> = emitted
+        .iter()
+        .chain(&offers)
+        .filter(|c| {
+            [false, true]
+                .iter()
+                .any(|&bg| slow_refusal(&run_with(c, bg)))
+        })
+        .collect();
+    assert_eq!(tripped, Vec::<&String>::new(), "refused its own output");
+    // and an offer is refused for nothing at all: the R5 offer is still a POLL_OK wait, the file waits made safe in the background
+    let offer_refused: Vec<&String> = offers
+        .iter()
+        .filter(|c| !refused(&run_with(c, true)).is_empty())
+        .collect();
+    assert_eq!(offer_refused, Vec::<&String>::new(), "an offer refused");
+}
+
+/// The pace reader's edges (D13): a sleep no number gives is unreadable, read as endless, a loop left open runs to the text's end, a nested loop's
+/// sleep is its outer loop's too, and a sleep after the loop's `done` is outside it.
+#[test]
+fn the_pace_reader_reads_its_edges() {
+    use super::pace::{at_the_check, longest_loop_sleep, sleep_seconds, Set};
+    let none = Set::new();
+    assert_eq!(sleep_seconds(" 1m 30s", &none), Some(90.0));
+    assert_eq!(sleep_seconds(" 1.5h", &none), Some(5400.0));
+    assert_eq!(sleep_seconds(" .", &none), None);
+    assert_eq!(
+        longest_loop_sleep("until x; do sleep .; done", &none),
+        Some(f64::INFINITY)
+    );
+    assert_eq!(
+        longest_loop_sleep("until x; do sleep 480", &none),
+        Some(480.0)
+    );
+    assert_eq!(
+        longest_loop_sleep("until x; do sleep 5; done; sleep 480", &none),
+        Some(5.0)
+    );
+    assert_eq!(longest_loop_sleep("sleep 480; echo", &none), None);
+    assert_eq!(
+        longest_loop_sleep(
+            "until x; do for i in 1 2; do sleep 120; done; sleep 5; done",
+            &none
+        ),
+        Some(120.0)
+    );
+    // a redirection is no length
+    assert_eq!(
+        longest_loop_sleep(
+            "until x; do sleep 30 2>/dev/null; sleep 20 >/dev/null; done",
+            &none
+        ),
+        Some(30.0)
+    );
+    assert_eq!(
+        at_the_check("sleep 30; /bin/sleep 8m"),
+        "sleep 30; /bin/sleep 60"
+    );
+    // a loop a shell runs from its `-c` string is read; a quoted mention is not
+    let c =
+        "bash -c \"until grep -q X /tmp/a.log; do sleep 480; done\"  # POLL_OK: the agent's log";
+    assert!(slow_refusal(&run(c)), "{:?}", run(c));
+    assert_eq!(
+        longest_loop_sleep(
+            &strip_quotes("until x; do echo \"sleep 480\"; sleep 5; done"),
+            &none
+        ),
+        Some(5.0)
+    );
+}
+
+/// The four frozen corpora through the pace check (T16): every command judged from the main session, foreground and backgrounded,
+/// none refused for its pace. A raw grep finds 3 commands with a loop word and a `sleep` over 60 s, read by hand 2026-11-20: each a
+/// heredoc's payload (a Python script, a shell script written to a file), never a wait of the session's.
+#[test]
+fn the_frozen_corpora_through_the_pace_check() {
+    let all = the_corpora();
+    let slow: Vec<(&str, bool)> = all
+        .iter()
+        .flat_map(|c| [(c.as_str(), false), (c.as_str(), true)])
+        .filter(|&(c, bg)| slow_refusal(&run_with(c, bg)))
+        .collect();
+    assert_eq!(slow.len(), 0, "{slow:#?}");
+}
+
+/// The plan reviews' notes (T16): a sleep whose number the command itself sets is worked out and judged, and one whose length is
+/// still unreadable - a variable set nowhere in the command, an arithmetic or a command substitution - is refused as D12 refuses an
+/// unreadable `wait $P`, naming the literal `sleep 60` form.
+#[test]
+fn a_sleep_set_in_the_command_is_judged() {
+    let firing = [
+        "N=480; until grep -q DONE /tmp/a.log; do sleep $N; done",
+        "export N=8m; until grep -q DONE /tmp/a.log; do sleep ${N}; done",
+        "N=480; until grep -q DONE /tmp/a.log; do sleep \"$N\"; done",
+        "N=30; N=480; until grep -q DONE /tmp/a.log; do sleep $N; done",
+        "N=480 bash -c 'until grep -q DONE /tmp/a.log; do sleep $N; done'  # POLL_OK: the agent's log",
+        "N=\"480\"; until test -s /tmp/a.out; do sleep $N; done  # POLL_OK: the agent's file",
+        "until grep -q DONE /tmp/a.log; do sleep $N; done",
+        "until grep -q DONE /tmp/a.log; do sleep $WAIT; done",
+        "M=480; until grep -q DONE /tmp/a.log; do sleep $N; done",
+        "until grep -q DONE /tmp/a.log; do sleep \"$((N * 2))\"; done",
+        "until grep -q DONE /tmp/a.log; do sleep $(cat /tmp/n); done",
+        "until curl -s x; do sleep infinity; done  # POLL_OK: the port is external",
+    ];
+    let missed: Vec<(&str, bool)> = firing
+        .into_iter()
+        .flat_map(|c| [(c, false), (c, true)])
+        .filter(|&(c, bg)| !slow_refusal(&run_with(c, bg)))
+        .collect();
+    assert_eq!(missed, Vec::<(&str, bool)>::new());
+    // the offer sets the sleep at the knob, and passes its pace check fed back
+    let offer = offered(&run(firing[0]));
+    assert!(offer.contains("do sleep 60; done"));
+    assert!(!slow_refusal(&run_with(&offer, true)));
+    // a busy-wait whose sleep takes a variable is one too, for anyone (the digit the patterns asked for once let it through)
+    assert!(refused(&run_as(
+        "until curl -s x; do sleep $N; done",
+        false,
+        Some("a1")
+    ))
+    .contains("busy-wait loop"));
+    // ...and an unreadable one's offer is the literal form
+    let unread = refused(&run("until grep -q DONE /tmp/a.log; do sleep $N; done"));
+    assert!(unread.contains("cannot read") && unread.contains("do sleep 60; done"));
+    let quiet = [
+        "N=30; until grep -q DONE /tmp/a.log; do sleep $N; done",
+        "N=5; until grep -q DONE /tmp/a.log; do sleep \"$N\"; done",
+    ];
+    let wrong: Vec<(&str, bool)> = quiet
+        .into_iter()
+        .flat_map(|c| [(c, false), (c, true)])
+        .filter(|&(c, bg)| !refused(&run_with(c, bg)).is_empty())
+        .collect();
+    assert_eq!(wrong, Vec::<(&str, bool)>::new());
+}
+
+/// A `SLOW_POLL_OK` whose reason is empty or one word is refused for its reason (the plan review's note, T16): a pin, the shared
+/// escape reader refusing each before T16's check was asked.
+#[test]
+fn a_thin_slow_poll_ok_is_refused_for_its_reason() {
+    let thin = [
+        "SLOW_POLL_OK=\"\" until grep -q DONE /tmp/a.log; do sleep 480; done",
+        "SLOW_POLL_OK=\"hourly\" until grep -q DONE /tmp/a.log; do sleep 480; done",
+        "SLOW_POLL_OK=hourly until grep -q DONE /tmp/a.log; do sleep 480; done",
+        "until grep -q DONE /tmp/a.log; do sleep 480; done  # SLOW_POLL_OK: hourly",
+    ];
+    let let_through: Vec<&str> = thin
+        .into_iter()
+        .filter(|c| !refused(&run(c)).contains("SLOW_POLL_OK with no reason"))
+        .collect();
+    assert_eq!(let_through, Vec::<&str>::new());
 }

@@ -103,6 +103,11 @@ fn a_file_wait_is_given_a_proof_of_life_where_it_lacks_one() {
     )
     .unwrap();
     assert!(quoted.contains("{ w \\\"/tmp/a.log\\\" || exit 3; false; }"));
+    // the guard's own clause is still a file watch, and gets no second one (feature 451 T16: fed back, the wait was refused)
+    for given in [&until, &whiles, &quoted] {
+        assert!(file_watching_loop(given), "{given}");
+        assert_eq!(proof_of_life(given, "w"), None, "{given}");
+    }
     // ...and the whole command still parses: the no-poll suite's feature-295 case, which asked `hm_shape.py proof` by path until
     // feature 449 T129 deleted it (the guard reaches this shape only through `bash -c "..."`, whose quoted body it does not scan)
     let lit = proof_of_life(

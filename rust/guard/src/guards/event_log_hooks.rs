@@ -8,7 +8,7 @@
 //! timestamps that allow us to mechanically and trivially calculate these numbers"*. THE LINE (feature 375 plan D7): one JSON line a
 //! `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` and Stop payload, to `<git common dir>/l7r-events/<feature
 //! dir>.jsonl` (`_unassigned.jsonl` with no feature). Fields: `t` (UTC), `sid`, `ev`, and where they apply `tool`, `id` (`tool_use_id`),
-//! `cat` (`category`; a Bash call's by the category table, `BUCKETS`, feature 451 D2), `make` (a Bash call's make target) and `task`
+//! `cat` (`category`; a Bash call's by the category table, `BUCKETS`, feature 451 D2), `make` (a Bash call's first make target), `makes` (every target, where it runs more than one - 451 T14) and `task`
 //! (the task a tick, task-start, decide or land names, else the dispatch's brief's, else its feature's start in force - 451 D2), `fallback`
 //! (the line's feature was only the session's or feature.json's, nothing on the line naming one - 451 T26, `filed.rs`, which also says
 //! which feature's log a line goes to), `path`, `old`/`new`
@@ -642,6 +642,36 @@ fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>)
     ))
 }
 
+/// The directory a payload's call ran in: its `cwd`, else `here`.
+fn cwd_of(payload: &Value, here: &Path) -> PathBuf {
+    payload
+        .get("cwd")
+        .and_then(Value::as_str)
+        .filter(|c| !c.is_empty())
+        .map_or_else(|| here.to_path_buf(), PathBuf::from)
+}
+
+/// Where a payload's line is filed - its clone, its feature, that feature's log and its task - as [`append`] files it, nothing written (feature 451
+/// T14: `static_runs_hooks` counts a task's runs in the log its call's own line goes to, under the task that line carries, so the main
+/// session and its builders share one count). None outside any clone.
+pub(crate) fn filed_at(
+    payload: &Value,
+    here: &Path,
+    env: &dyn Fn(&str) -> Option<String>,
+) -> Option<(PathBuf, String, PathBuf, Option<String>)> {
+    let root = clone_root(&cwd_of(payload, here))?;
+    let row = line(payload, "");
+    let to = filed::filed(
+        payload,
+        row.get("task").and_then(Value::as_str),
+        None,
+        &root,
+        env,
+    );
+    let log = log_path_in(&root, &to.feature, env);
+    Some((root, to.feature, log, to.task))
+}
+
 /// Append the payload's line to its feature's log - the feature of the task it carries, feature.json's only where nothing else says
 /// (451 T26, [`filed`]); None outside any clone (`append`). A file missing or unreadable is no task, never an error: the hook never
 /// refuses.
@@ -656,12 +686,7 @@ pub(crate) fn append(
     if text_of(payload.get("hook_event_name")).is_empty() {
         return None;
     }
-    let cwd = payload
-        .get("cwd")
-        .and_then(Value::as_str)
-        .filter(|c| !c.is_empty())
-        .map_or_else(|| here.to_path_buf(), PathBuf::from);
-    let root = clone_root(&cwd)?;
+    let root = clone_root(&cwd_of(payload, here))?;
     let mut row = line(payload, t);
     let carried = row.get("task").and_then(Value::as_str).map(str::to_owned);
     let to = filed::filed(payload, carried.as_deref(), None, &root, env);

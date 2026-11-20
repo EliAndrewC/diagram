@@ -448,9 +448,42 @@ grep -rqs '"detach-ok"' "$GUARD_LOG_ROOT" \
 check "a bare DETACH_OK" blocked 'make static &  # DETACH_OK'
 }
 
+agent_check() { # label, expected(ok|blocked), command - from a subagent, its payload carrying an agent_id
+  jq -nc '{"session_id":"t1","agent_id":"a1b2c3","tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "$3" \
+    | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; local rc=$?
+  if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR"; FAIL=$((FAIL+1))
+  fi
+}
+
+case_9() {
+echo "9. a main-session wait slower than its check is refused, naming the 60 s form (feature 451 T16, D13)"
+# R5's wait, verbatim from the main session's transcript
+R5='POLL_OK="the resumed T227 agent'"'"'s report"; f=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/tasks/a32196d5562b60215.output; s=$(stat -c %s $f); while true; do sleep 60; n=$(stat -c %s $f); if [ "$n" = "$s" ]; then sleep 420; m=$(stat -c %s $f); [ "$m" = "$n" ] && break; s=$m; else s=$n; fi; done; echo "agent output idle"'
+check "R5's wait: checked every 60 s, then 420 s more" blocked "$R5"
+grep -q 'every sleep at 60 s or less' "$HOOK_ERR" && grep -q 'then sleep 60; m=' "$HOOK_ERR" && grep -q 'SLOW_POLL_OK' "$HOOK_ERR" \
+  && { echo "  ok      ...the refusal names the 60 s form and the escape"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the refusal does not name the 60 s form"; FAIL=$((FAIL+1)); }
+check "the same wait at 60 s throughout" ok "${R5/sleep 420/sleep 60}"
+check "a file wait sleeping 480 s" blocked 'until grep -q DONE /tmp/a.log; do sleep 480; done'
+bgcheck "...backgrounded" blocked 'until grep -q DONE /tmp/a.log; do sleep 8m; done' 1
+agent_check "a subagent's wait sleeping 480 s" ok 'until grep -q DONE /tmp/a.log; do sleep 480; done'
+agent_check "...and R5's, from a subagent" ok "$R5"
+check "SLOW_POLL_OK with a reason" ok 'until grep -q DONE /tmp/a.log; do sleep 480; done  # SLOW_POLL_OK: the producer writes hourly'
+grep -rqs '"slow-poll-ok"' "$GUARD_LOG_ROOT" \
+  && { echo "  ok      ...and the escape is recorded in the guard log"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the SLOW_POLL_OK escape was not recorded"; FAIL=$((FAIL+1)); }
+check "a bare SLOW_POLL_OK" blocked 'until grep -q DONE /tmp/a.log; do sleep 480; done  # SLOW_POLL_OK'
+OWN=$(run 'until grep -q DONE /tmp/a.log; do sleep 30; done' 2>/dev/null | jq -r '.hookSpecificOutput.updatedInput.command // empty')
+untouched "the guard's own file-wait rewrite, run again, passes as it stands" "$OWN" 1
+check "SLOW_POLL_OK is no POLL_OK: a busy-wait stays refused" blocked 'while ! nc -z localhost 8080; do sleep 2; done  # SLOW_POLL_OK: a slow port here'
+}
+
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)
 part_env() { HOOK_ERR="$T/hook-err"; : > "$HOOK_ERR"; GUARD_LOG_ROOT=$GUARD_LOG_DIR; mkdir -p "$GUARD_LOG_ROOT"; }  # each part its own captured stderr and guard log
-CASES=(case_1 case_2 case_2b case_5 case_3 case_4 case_4b case_4c case_6 case_7 case_6b case_8)
+CASES=(case_1 case_2 case_2b case_5 case_3 case_4 case_4b case_4c case_6 case_7 case_6b case_8 case_9)
 declare -A WEIGHT=()
 # shellcheck source=/dev/null
 source "$HERE/parts.sh"

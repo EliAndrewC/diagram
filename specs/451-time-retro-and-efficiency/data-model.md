@@ -56,7 +56,7 @@ why; a target moved between buckets later is a one-line change.
 
 ## The static count (FR-007)
 
-Per task, from the event log: the `PreToolUse` lines with `make: static` and that task, since the task's last landing (above), or,
+Per task, from the event log: the `PreToolUse` lines with `make: static` (or `static` among `makes`, every target the call runs, T14) and that task which have their `PostToolUse` or `PostToolUseFailure` line (a run that ran), since the task's last landing (above), or,
 where it has never landed, since its FIRST `task-starts.jsonl` entry (a task with neither: every line of it). A later `task-start`
 resets nothing, nor does a refused landing (plan D11). Third and later refused; escape `STATIC_OK`.
 

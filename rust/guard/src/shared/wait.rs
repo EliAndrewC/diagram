@@ -65,6 +65,12 @@ pattern!(
     CEILING_CLAUSE,
     r#"\s(?:\|\||&&) \{ \[ "\$SECONDS" -(?:ge|lt) \d+ \] (?:&&|\|\|) \{ echo "WAIT TIMED OUT[^"]*"; exit 4; \}; \}"#
 );
+// The proof-of-life clause `proof_of_life` adds, plain or fitted inside double quotes: the guard's own, so a wait given it is still the
+// file watch it was (feature 451 T16: fed back as a new call, the guard's own rewrite was refused as a busy-wait)
+pattern!(
+    PROOF_CLAUSE,
+    r#"\s(?:\|\||&&) \{ [^\s{}]+ \\?"(?:[^"\\]|\\[^"])*\\?" \|\| exit 3;(?: false;)? \}"#
+);
 pattern!(LOOP_KW, r"(?:^|[;&|\s(])(?:while|until|for)\s");
 pattern!(DO_DONE, r"(?:^|[;\n&])\s*(do|done)(?=[\s;&|)]|$)");
 pattern!(
@@ -121,6 +127,7 @@ fn cond_grammar(cond: &str) -> Option<String> {
         return None;
     }
     let cond = CEILING_CLAUSE.replace_all(cond, " ");
+    let cond = PROOF_CLAUSE.replace_all(&cond, " ");
     let neutral = QUOTED.replace_all(&cond, |c: &Captures| {
         let whole = c.get(0).map_or("", |m| m.as_str());
         QUOTE_PUNCT
@@ -220,7 +227,9 @@ fn insert_at_heads(cmd: &str, make: impl Fn(&str, &str) -> Option<String>) -> Op
 #[must_use]
 pub fn proof_of_life(cmd: &str, helper: &str) -> Option<String> {
     insert_at_heads(cmd, |kw, cond| {
-        let c = watches_a_file(cond).filter(|c| !found(&PROOF_OF_LIFE, c))?;
+        // the condition read for its proof as given: the grammar drops the guard's own clause
+        let c = watches_a_file(cond)
+            .filter(|c| !found(&PROOF_OF_LIFE, c) && !found(&PROOF_CLAUSE, cond))?;
         let last = PATH_OPERAND
             .find_iter(&c)
             .map_while(Result::ok)

@@ -66,5 +66,6 @@ pub mod set_down_hooks;
 pub mod shell_check_hooks;
 pub mod source_block_hooks;
 pub mod stall_watchdog_hooks;
+pub mod static_runs_hooks;
 pub mod wakeup_hooks;
 pub mod workflow_hooks;

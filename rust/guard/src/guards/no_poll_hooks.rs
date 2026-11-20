@@ -11,6 +11,10 @@
 //! started under `nohup` or `setsid`, or disowned, is refused naming the Bash tool's `run_in_background`; `DETACH_OK` escapes. The
 //! command is read by a small walk of its shell structure (`Shell`), never one pattern, since what covers a job is where its `wait`
 //! stands: the same shell, unconditional, not backgrounded.
+//!
+//! A MAIN-SESSION WAIT SLOWER THAN ITS CHECK (feature 451 T16, D13, FR-008): on the two permitted paths - a POLL_OK-escaped wait and
+//! the file-watching wait - a loop whose longest `sleep` is over `POLL_CHECK_S`, from a payload with no `agent_id`, is refused naming
+//! the same loop at the knob; `SLOW_POLL_OK` escapes, and a builder (a subagent) is not held to it.
 
 use std::path::PathBuf;
 use std::sync::LazyLock;
@@ -30,6 +34,7 @@ use crate::shared::wait::{
     add_ceiling, bracket_pattern, cron_for, file_watching_loop, file_watching_wait, periodic,
     poll_reason, proof_of_life, scope_make_waits, self_matching, sleep_in_loop, WAIT_CEILING_S,
 };
+use pace::{longest_wait_sleep, slow_poll};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -56,6 +61,7 @@ static DISGUISED: LazyLock<Regex> = LazyLock::new(|| {
         r"(^|[;&|(]|[[:space:]])([\\]|(command|env|busybox)[[:space:]]+|/(bin|usr/bin)/)sleep[[:space:]]+[0-9.]",
     )
 });
+
 static PGREP_F: LazyLock<Regex> = LazyLock::new(|| {
     re(r"(?:\A|(?<=[|;&]))(?>[^|;&]*?\b(pgrep|pkill)\b)[^|;&]*[[:space:]]-[a-zA-Z]*f")
 });
@@ -199,12 +205,16 @@ pub(crate) fn judge(cx: &Ctx) -> Vec<Answer> {
             }
         }
     }
-    match escape_or_refuse(&cx.cmd, "POLL_OK") {
+    // `SLOW_POLL_OK` holds `POLL_OK`, and the escape reader matches a token anywhere: the longer one is never read as the shorter
+    match escape_or_refuse(&cx.cmd.replace("SLOW_POLL_OK", "SLOW_POLL"), "POLL_OK") {
         Escape::Refused(text) => {
             cx.log("blocked", "POLL_OK-no-reason");
             return vec![Answer::Refuse(text)];
         }
         Escape::Escaped(why) => {
+            if let Some(refused) = slow_poll(cx) {
+                return refused;
+            }
             fire(
                 "no-poll",
                 "escaped",
@@ -223,9 +233,14 @@ pub(crate) fn judge(cx: &Ctx) -> Vec<Answer> {
         }
         Escape::None => {}
     }
-    if grep(&LOOP_WORD, &cx.scan) && grep(&SLEEP_RE, &cx.scan) && sleep_in_loop(&cx.scan) {
+    // a loop's `sleep` given a variable (`sleep $N`) is a sleep in a loop too: the digit the patterns ask for once let it through
+    // (feature 451 T16)
+    if grep(&LOOP_WORD, &cx.scan)
+        && (grep(&SLEEP_RE, &cx.scan) && sleep_in_loop(&cx.scan)
+            || longest_wait_sleep(cx).is_some())
+    {
         if file_watching_loop(&cx.cmd) {
-            return file_wait(cx, &ti);
+            return slow_poll(cx).unwrap_or_else(|| file_wait(cx, &ti));
         }
         return block(
             cx,
@@ -804,5 +819,6 @@ When the loop ends, read what the log DOES have: if the helper printed a line, t
 const CEILING: &str = "A CEILING was added to the loop: past 90 minutes it prints WAIT TIMED OUT and exits 4, so a wait whose line \
 never comes still ends and wakes you (2026-09-30: four hours lost to a wait that could not end).";
 
+mod pace;
 #[cfg(test)]
 mod tests;

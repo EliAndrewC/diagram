@@ -27,7 +27,18 @@ pub(super) fn tool_fields(
 ) {
     if tool == "Bash" {
         let command = text_of(ti.get("command"));
-        let target = make_target(&command);
+        // EVERY TARGET, where the call runs more than one (feature 451 T14): `make` is the first alone, so `make rust-test CRATE=x &&
+        // make static` logged no `static` and `static_runs_hooks` would not have counted it; `makes` lists them all, first included
+        let mut all: Vec<String> = Vec::new();
+        for t in crate::shared::make::invoked(&command) {
+            if !all.contains(&t) {
+                all.push(t);
+            }
+        }
+        let target = all.first().cloned().unwrap_or_default();
+        if all.len() > 1 {
+            out.insert("makes".into(), Value::from(all));
+        }
         if !target.is_empty() {
             if ["tick", "task-start", "decide", "land"].contains(&target.as_str()) {
                 if let Some(task) = first_group(&TASK, &command) {
