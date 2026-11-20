@@ -362,14 +362,70 @@ echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findi
 check "a stale record on a hamlet's map, the switch at integrated: refused" r4 blocked
 ( cd "$T/r4" && echo '{"port": {"state": "rust-only"}}' > dev/switches.json && git add -A && git commit -qm rust-only )
 check "...at rust-only it waits for the throw back and ships, no map redrawn" r4 ok
-# GUARD_EDIT_OK: feature 449 T231 - at rust-only no hamlet is redrawn for the gate: its units are set aside, so the redraw buys nothing
+# GUARD_EDIT_OK: feature 449 T232 - at rust-only a hamlet IS redrawn for the gate (T231 had it not: then an edited hamlet owed no unit
+# to set aside, and nothing was kept for the throw back); a redraw that leaves it not current refuses nothing, and is recorded
 b1 r5 'touch .git/redrawn'; echo '{"port": {"state": "rust-only"}}' > dev/switches.json; git add -A; git commit -qm rust-only
 check "a hamlet edited and not redrawn, at rust-only: ships" r5 ok
-has "...not redrawn" r5 '[ ! -f .git/redrawn ]'
+has "...redrawn, and recorded as not known" r5 '[ -f .git/redrawn ] && grep -q "\"hamlet\":\"pool/hamlets/m\"" dev/deferred-reviews.jsonl'
+}
+
+# GUARD_EDIT_OK: feature 449 T232 - A REVIEW SET ASIDE AT RUST-ONLY IS NOT LOST BEFORE THE THROW BACK. What a delta owes is read
+# against the landing's base, and a hamlet's base census is main's drawing of it: once the push lands, the delta no longer holds the
+# element, so at the throw back the review it owed was owed by nothing (measured 2026-11-19 in a scratch mirror: an edited hamlet
+# pushed at rust-only, the mirror's render-sync, the switch thrown - "review-gate: clean"). `landed` puts the work on main as the
+# push does and moves origin/main to it; `thrown` throws the switch to integrated in a new commit.
+landed() { git checkout -q main && git merge -q --ff-only "$1" && git update-ref refs/remotes/origin/main main && git checkout -q "$1"; }
+thrown() { echo '{"port": {"state": "integrated"}}' > dev/switches.json; git add -A; git commit -qm thrown; }
+case_5() {
+echo "5. A HAMLET REVIEW SET ASIDE AT RUST-ONLY IS OWED AT THE THROW BACK (449 T232)"
+V=.git/review-verdicts/glyph-check--well--m.json
+mkrepo d1 withmap; git checkout -q main; echo '{"port": {"state": "rust-only"}}' > dev/switches.json; git add -A; git commit -qm rust-only
+git update-ref refs/remotes/origin/main main; git checkout -q -B work main
+echo "$NEW" > "$POOL/m.json"; drawn "$NEW"; git add -A; git commit -qm "the hamlet gains a well"
+check "a hamlet's new element at rust-only: set aside, ships" d1 ok
+has "...its unit recorded, committed" d1 'grep -q "glyph-check--well--m" dev/deferred-reviews.jsonl && git diff --quiet HEAD -- dev/deferred-reviews.jsonl'
+( cd "$T/d1" && landed work && thrown )
+check "...landed, then the switch thrown back: owed" d1 blocked
+has "...named as set aside at rust-only" d1 'grep -q "glyph-check--well--m is owed and has no verdict record" <<<"$(said d1)"'
+mkdir -p "$T/d1/.git/review-verdicts"; echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/d1/$V"
+( cd "$T/d1" && echo "# spec" > specs/900-x/spec.md && git add -A && git commit -qm "a spec with no verdict" )
+check "...its review found on a push refused for another reason: refused" d1 blocked
+has "...and its review not recorded, so it stays owed" d1 '! grep -q "\"reviewed\"" dev/deferred-reviews.jsonl'
+( cd "$T/d1" && git rm -q specs/900-x/spec.md && git commit -qm "the spec withdrawn" )
+check "...and ships once its glyph-check returned PASS" d1 ok
+has "...its review recorded" d1 'grep -q "\"reviewed\":\"glyph-check--well--m\"" dev/deferred-reviews.jsonl'
+
+rm -f "$T/d1/$V"; ( cd "$T/d1" && landed work )
+check "...its review recorded on main: another clone with no verdict file owes it no more" d1 ok
+# the gate redraws a hamlet at rust-only too: a hamlet edited and not redrawn owed nothing it could set aside, so nothing was kept
+b1 d2 "$REDRAW"; printf '%s' "$NEW" > .git/next-census; echo '{"port": {"state": "rust-only"}}' > dev/switches.json; git add -A; git commit -qm rust-only
+check "a hamlet edited and not redrawn, at rust-only: ships" d2 ok
+has "...redrawn, its new element's unit recorded" d2 '[ -f .git/redrawn ] && grep -q "glyph-check--well--m" dev/deferred-reviews.jsonl'
+( cd "$T/d2" && landed stale && thrown )
+check "...landed, then thrown back: owed" d2 blocked
+# the escape skips the refusal, never the record: an escaped push at rust-only still records what it sets aside
+mkrepo d4 withmap; git checkout -q main; echo '{"port": {"state": "rust-only"}}' > dev/switches.json; git add -A; git commit -qm rust-only
+git update-ref refs/remotes/origin/main main; git checkout -q -B work main
+echo "$NEW" > "$POOL/m.json"; drawn "$NEW"; echo "# spec" > specs/900-x/spec.md; git add -A; git commit -qm "a well, and a spec with no verdict"
+if ( cd "$T/d4" && REVIEW_GATE_OK="superseded before implementation" "$GATE" main..HEAD >/dev/null 2>&1 ); then
+  echo "  ok      an escaped push at rust-only ships"; PASS=$((PASS+1))
+else echo "  FAIL    the escape did not work"; FAIL=$((FAIL+1)); fi
+has "...and still records the unit it set aside, committed" d4 'grep -q "glyph-check--well--m" dev/deferred-reviews.jsonl && git diff --quiet HEAD -- dev/deferred-reviews.jsonl'
+( cd "$T/d4" && git rm -q specs/900-x/spec.md && git commit -qm "the spec withdrawn" && landed work && thrown )
+check "...landed, then thrown back: owed" d4 blocked
+# a redraw that fails at rust-only refuses nothing (444 FR-023), and the hamlet is recorded with its elements before, so the
+# throw back owes what it draws new since
+b1 d3 'echo "the hamlet engine panicked" >&2; exit 1'; echo '{"port": {"state": "rust-only"}}' > dev/switches.json; git add -A; git commit -qm rust-only
+check "a hamlet whose redraw fails at rust-only: ships" d3 ok
+has "...recorded with its elements before" d3 'grep -q "\"hamlet\":\"pool/hamlets/m\"" dev/deferred-reviews.jsonl && grep -q "farmhouse" dev/deferred-reviews.jsonl'
+( cd "$T/d3" && landed stale && printf '%s' "$NEW" > pool/hamlets/m/m.json && printf '%s' "$NEW" > pool/hamlets/m/m.driver.json \
+  && python3 .git/draw.py "$PWD" && git add -A && git commit -qm "main's drawing catches up" && landed stale && thrown )
+check "...drawn with a new element since, landed, thrown back: owed" d3 blocked
+has "...the element new since the set-aside" d3 'grep -q "glyph-check--well--m is owed" <<<"$(said d3)"'
 }
 
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)
-CASES=(case_1 case_1b case_2 case_3 case_4)
+CASES=(case_1 case_1b case_2 case_3 case_4 case_5)
 declare -A WEIGHT=()
 # shellcheck source=/dev/null
 source "$HERE/parts.sh"

@@ -641,6 +641,15 @@ pub fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
             .position(|c| *c == u.check)
             .unwrap_or(usize::MAX)
     };
+    // THE REVIEWS SET ASIDE AT RUST-ONLY (444 FR-023, 449 T232): owed once the port switch is thrown back, from the record the review
+    // gate kept when it set them aside - the delta no longer holds them once the push has landed (`deferred.rs`)
+    if crate::cohort::port_mode(root) != "rust-only" {
+        for u in deferred::standing(&tree, &deferred::rows(root)) {
+            if !seen.iter().any(|p| p.slug() == u.slug()) {
+                seen.push(u);
+            }
+        }
+    }
     seen.sort_by(|a, b| (rank(a), &a.subject).cmp(&(rank(b), &b.subject)));
     let mut problems = tree.problems;
     problems.extend(declared.problems);
@@ -874,6 +883,7 @@ fn run(root: &Path, p: &crate::record::args::Parsed, mark: &str) -> Reply {
 }
 
 mod declared;
+pub mod deferred;
 pub use declared::declared;
 #[cfg(test)]
 pub use declared::occasions_section;

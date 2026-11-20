@@ -39,3 +39,49 @@ fn git_says_whether_it_ran() {
     let (ok, _) = git(std::path::Path::new("."), &["--no-such-flag-l7r"]);
     assert!(!ok);
 }
+
+#[test]
+fn the_port_switch_reads_its_entry_and_a_malformed_one_closes_to_the_committed_state() {
+    use super::{port_mode, SWITCHES};
+    let d = crate::checks::scratch("port");
+    let root = d.to_path_buf();
+    let put = |text: &str| {
+        std::fs::create_dir_all(root.join("dev")).unwrap();
+        std::fs::write(root.join(SWITCHES), text).unwrap();
+    };
+    // no file, no repository: the default
+    assert_eq!(port_mode(&root), "rust-only");
+    put("not json");
+    assert_eq!(port_mode(&root), "rust-only");
+    put("{\"port\": {\"state\": \"integrated\"}}");
+    assert_eq!(port_mode(&root), "integrated");
+    put("{\"claims\": {}}");
+    assert_eq!(port_mode(&root), "rust-only");
+    assert!(git(&root, &["init", "-q"]).0);
+    put("{\"port\": {\"state\": \"integrated\"}}");
+    assert!(git(&root, &["add", "-A"]).0);
+    assert!(
+        git(
+            &root,
+            &[
+                "-c",
+                "user.email=t@t",
+                "-c",
+                "user.name=t",
+                "commit",
+                "-qm",
+                "c"
+            ]
+        )
+        .0
+    );
+    for malformed in [
+        "not json",
+        "[]",
+        "{\"port\": {\"state\": \"maybe\"}}",
+        "{\"port\": {\"state\": 1}}",
+    ] {
+        put(malformed);
+        assert_eq!(port_mode(&root), "integrated", "{malformed}");
+    }
+}

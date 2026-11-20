@@ -39,6 +39,7 @@ pub fn cli(args: &[String]) -> Reply {
     let rest = args.get(1..).unwrap_or_default();
     match args.first().map(String::as_str) {
         Some("owed") => owed::cli(rest),
+        Some("deferred") => owed::deferred::cli(rest),
         Some("prereq") => prereq::cli(rest),
         Some("checkpoint") => checkpoint::cli(rest),
         Some("snapshot") => snapshot::cli(rest),
@@ -54,7 +55,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("ledger-passes") => ledger_passes::passes_cli(rest, &ledger_passes::Env::of_process()),
         _ => reply(
             String::new(),
-            "usage: l7r-gate reviews owed|prereq|checkpoint|snapshot|census|agent-sync|ledger-lint|ledger-rows|review-cost|ledger-owed|ledger-passes ...\n".to_owned(),
+            "usage: l7r-gate reviews owed|deferred|prereq|checkpoint|snapshot|census|agent-sync|ledger-lint|ledger-rows|review-cost|ledger-owed|ledger-passes ...\n".to_owned(),
             2,
         ),
     }

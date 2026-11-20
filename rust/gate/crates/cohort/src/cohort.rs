@@ -32,8 +32,6 @@ const RUST_LOG: &str = "dev/rust-gate";
 /// so a message names what judges a Rust stage now (feature 449 T225).
 const RUST_NOW: &str = "nothing writes a Rust stage gate record now; a Rust stage is held to its work budget (`make work-budget`) and to `make done`";
 const COMMAND: &str = "make cohort-landing";
-const SWITCHES: &str = "dev/switches.json";
-const PORT_STATES: [&str; 2] = ["rust-only", "integrated"];
 /// The landing cohort's size, fixed and fresh alike: the 48 the GM's recommendation names.
 const SEEDS: usize = 48;
 /// The fresh blocks start here: above the fixed range, the pinned rows and every hand roll the log holds.
@@ -564,33 +562,6 @@ fn rust_refusal(repo: &Repo<'_>) -> Option<String> {
     };
     let failing = int(&last["failing"]);
     (failing != 0).then(|| format!("the Rust stage gate has {failing} failing seed(s) on this engine - no Rust stage may end with a failing check (FR-019): the record is old and {RUST_NOW}"))
-}
-
-fn port_state(text: &str) -> Option<String> {
-    let data: Value = serde_json::from_str(text).ok()?;
-    if !data.is_object() {
-        return None;
-    }
-    let got = if truthy(&data["port"]) {
-        data["port"].get("state")?.as_str()?
-    } else {
-        "rust-only"
-    };
-    PORT_STATES.contains(&got).then(|| got.to_owned())
-}
-
-/// The port switch; a malformed entry closes to the last committed file's state, the state in force.
-#[must_use]
-pub fn port_mode(root: &Path) -> String {
-    let Ok(now) = std::fs::read_to_string(root.join(SWITCHES)) else {
-        return "rust-only".to_owned();
-    };
-    port_state(&now)
-        .or_else(|| {
-            let (ok, committed) = git(root, &["show", &format!("HEAD:{SWITCHES}")]);
-            port_state(&committed).filter(|_| ok)
-        })
-        .unwrap_or_else(|| "rust-only".to_owned())
 }
 
 fn rust_landing(root: &Path) -> bool {

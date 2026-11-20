@@ -45,13 +45,17 @@ if [ -n "${REVIEW_GATE_OK:-}" ]; then
     exit 1
   fi
   guard_log review-gate escaped "$REVIEW_GATE_OK" review-gate-ok
-  printf 'review-gate: BYPASSED - %s\n' "$REVIEW_GATE_OK"
-  exit 0
+  # GUARD_EDIT_OK: feature 449 T232 - AN ESCAPE SKIPS THE REFUSAL, NEVER THE RECORD: it exited here, before the reviews set aside at
+  # rust-only were recorded, so an escaped push dropped them for good once it landed. The gate now runs on and only its refusal is
+  # skipped, below.
+  escaped=1
 fi
+escaped="${escaped:-}"
+bypassed() { printf 'review-gate: BYPASSED - %s\n' "$REVIEW_GATE_OK"; exit 0; }
 
 changed=$(git diff --name-only "$RANGE" 2>/dev/null || true)
 rules=""   # GUARD_EDIT_OK: feature 248 - the map half's refusals, each named for the firing log
-[ -z "$changed" ] && exit 0
+[ -z "$changed" ] && { [ -n "$escaped" ] && bypassed; exit 0; }
 fail=""
 
 # THE NUMBER CLAIM IS NOT AN IMPLEMENTATION (feature 165, the GM's ruling 2026-08-30).
@@ -160,7 +164,11 @@ fi
 # as last drawn: so a map edited and not redrawn owed nothing, and at integrated an edited hamlet shipped without the glyph-check its new
 # element owes. `reviews owed --undrawn` names each such map (`<kind>\t<folder>`; nothing, one walk and a cache read, when nothing is
 # stale) and each is drawn by `make map MAP=` before anything is asked. A draw that fails, or leaves the map still not current, refuses:
-# what the reviews owe is not known. At rust-only a hamlet is not redrawn - its units are set aside below, so the draw buys nothing.
+# what the reviews owe is not known. GUARD_EDIT_OK: feature 449 T232 - AT RUST-ONLY A HAMLET IS REDRAWN TOO (T231 skipped it: its units
+# were set aside below, so the draw bought nothing - but an edited hamlet not redrawn owed no unit at all, so nothing was set aside and
+# the push left nothing for the throw back to owe; measured in a scratch mirror 2026-11-19). The draw is the Rust driver's, a tenth of a
+# second; what it owes is set aside and recorded below. A draw that fails, or leaves it not current, refuses nothing at rust-only (444
+# FR-023): the hamlet is recorded with its elements at the base, and the throw back owes what it draws new since.
 # (This replaces feature 375's redraw of what each owed unit sat on, after the ask: a stale render is a drawing not current, redrawn
 # here; a hand sheet's legend is its own `.svg`, its spec, which no redraw changes.)
 # A PUSH THAT TOUCHES NO ENGINE PATH REDRAWS NOTHING (449 T231): a fresh tree - land-tooling's worktree, a new clone - has drawn
@@ -173,14 +181,18 @@ undrawn=""
 if [ -n "$(printf '%s\n' "$changed" | "$RG_HERE/l7r-gate.sh" delta engine-paths 2>/dev/null)" ]; then
   undrawn="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --undrawn 2>/dev/null)"
 fi
+unknown=()   # GUARD_EDIT_OK: feature 449 T232 - the hamlets whose units are not known at rust-only, recorded with the set-aside units
 if [ -n "$undrawn" ]; then
   port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
   redrawn=""
   while IFS=$'\t' read -r kind at; do
     [ -n "$at" ] || continue
-    if [ "$kind" = hamlet ] && [ "$port" = "rust-only" ]; then continue; fi
     if drew="$(cd "$ROOT" && make -s map MAP="$at" </dev/null 2>&1)"; then
       redrawn="$redrawn $at"
+    elif [ "$kind" = hamlet ] && [ "$port" = "rust-only" ]; then
+      printf 'review-gate: %s did not draw (%s) - at rust-only that refuses nothing (444 FR-023); it is recorded, and the throw back owes what it draws new
+' "$at" "$(printf '%s\n' "$drew" | tail -n 1)"
+      unknown+=(--unknown "$at")
     else
       printf '\n\033[1mREVIEW GATE: %s is not drawn as it stands, and its redraw failed - the reviews it owes are not known.\033[0m\n' "$at"
       printf '%s\n' "$drew" | tail -n 8
@@ -191,6 +203,10 @@ if [ -n "$undrawn" ]; then
   if [ -n "$redrawn" ]; then
     while IFS=$'\t' read -r kind at; do
       case " $redrawn " in *" $at "*) ;; *) continue ;; esac
+      if [ "$kind" = hamlet ] && [ "$port" = "rust-only" ]; then
+        printf 'review-gate: %s is still not current after its redraw - at rust-only that refuses nothing (444 FR-023); it is recorded\n' "$at"
+        unknown+=(--unknown "$at"); continue
+      fi
       printf '\n\033[1mREVIEW GATE: %s is still not current after `make map MAP=%s` drew it.\033[0m\n' "$at" "$at"
       printf 'The generation cache does not serve the drawing it just made, so the reviews it owes are not known. Run\n'
       printf '`make map MAP=%s` and read its REGENERATED line; drawn under another DIAGRAM_SKIP_RENDER than this push, draw it\n' "$at"
@@ -206,22 +222,39 @@ owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/de
 # refused; it is owed again when the switch is thrown back to integrated. Every other unit is asked as before.
 # GUARD_EDIT_OK: feature 449 T221 - `make map` runs the Rust hamlet driver now (a tenth of a second, no Python); T231 - a hamlet not
 # current is redrawn above at integrated, and at rust-only is not, its units set aside here
-[ -n "$port" ] || [ -z "$owed_units" ] || port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
-if [ "$port" = "rust-only" ] && [ -n "$owed_units" ]; then
-  kept=""
+# GUARD_EDIT_OK: feature 449 T232 - the port asked once wherever a unit or an unknown hamlet may be set aside or a deferred one cleared
+[ -n "$port" ] || port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
+# GUARD_EDIT_OK: feature 449 T232 - WHAT IS SET ASIDE IS RECORDED, AND THE RECORD SHIPS WITH THE PUSH: the gate runs before the push,
+# and the push lands HEAD, so the record is committed here (as `make land` commits its escape records, feature 408)
+record_commit() {
+  [ -n "$(git status --porcelain -- dev/deferred-reviews.jsonl 2>/dev/null)" ] || return 0
+  git add -- dev/deferred-reviews.jsonl && git commit -q -m "$1" -- dev/deferred-reviews.jsonl \
+    && printf 'review-gate: dev/deferred-reviews.jsonl committed - %s\n' "$1"
+}
+if [ "$port" = "rust-only" ] && { [ -n "$owed_units" ] || [ "${#unknown[@]}" -gt 0 ]; }; then
+  kept=""; aside=()
   for unit in $owed_units; do
     # GUARD_EDIT_OK: feature 449 T220 - a hamlet is what the one pool walk classifies as one (its spec), not a folder name's tier
     if [ "$("$RG_HERE/l7r-gate.sh" pool find "${unit##*--}" 2>/dev/null | cut -f1)" = hamlet ]; then
-      printf 'review-gate: %s waits for the port switch thrown back to integrated (FR-023) - no hamlet map is rolled at rust-only\n' "$unit"
+      printf 'review-gate: %s waits for the port switch thrown back to integrated (FR-023), recorded in dev/deferred-reviews.jsonl\n' "$unit"
+      aside+=("$unit")
     else
       kept="$kept $unit"
     fi
   done
   owed_units="${kept# }"
+  # GUARD_EDIT_OK: feature 449 T232 - the units set aside and the hamlets not known, recorded until the throw back owes them
+  if ! "$RG_HERE/l7r-gate.sh" reviews deferred set-aside --root "$ROOT" --utc "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${unknown[@]}" "${aside[@]}"; then
+    printf '\n\033[1mREVIEW GATE: the reviews set aside at rust-only could not be recorded.\033[0m\n'
+    printf 'Without the record they are owed by nothing once this push lands (449 T232): fix what the line above names and push again.\n'
+    fail="$fail deferred-record"; rules="$rules deferred-not-recorded"
+  fi
+  record_commit "the review gate's set-aside hamlet reviews (444 FR-023, 449 T232)" || { fail="$fail deferred-record"; rules="$rules deferred-not-recorded"; }
 fi
 if [ -n "$owed_units" ]; then
   tree_key="$( cd "$ROOT" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
 fi
+passed=()   # GUARD_EDIT_OK: feature 449 T232 - the units whose review stands, so a deferred one is recorded reviewed on main
 for unit in $owed_units; do
   verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$unit.json"
   if [ ! -f "$verdict_rec" ]; then
@@ -242,11 +275,11 @@ for unit in $owed_units; do
     printf 'Fix what that verdict names (%s) and dispatch the review again.\n' "$verdict_rec"
     fail="$fail $unit"; rules="$rules map-not-reviewable"
   elif [ -n "${tree_key:-}" ] && [ "$rec_key" = "$tree_key" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
-    :   # the reviewer's record, at this content
+    passed+=("$unit")   # the reviewer's record, at this content
   elif [ "$rec_content" != "-" ] && [ "$rec_content" = "$now_content" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
-    :   # the engine moved, but this unit's sheet is what the reviewer read
+    passed+=("$unit")   # the engine moved, but this unit's sheet is what the reviewer read
   elif [ -n "$now_content" ] && ( cd "$ROOT" && "$RG_HERE/l7r-gate.sh" arbiter unit-ruled "$unit" "$now_content" ) 2>/dev/null; then
-    :   # GUARD_EDIT_OK: feature 374 batch 5 - the round arbiter ACCEPTED this unit on the sheet as it reads now: its ruling
+    passed+=("$unit")   # GUARD_EDIT_OK: feature 374 batch 5 - the round arbiter ACCEPTED this unit on the sheet as it reads now: its ruling
         # stands for the verdict, as a spec review's does (an accepted sheet's last verdict was NEEDS-WORK at an older key)
   else
     printf '\n\033[1mREVIEW GATE: %s has a %s verdict at engine key %s, but the tree being pushed is %s.\033[0m\n' "$unit" "$verdict" "${rec_key:0:12}" "${tree_key:0:12}"
@@ -254,6 +287,17 @@ for unit in $owed_units; do
     fail="$fail $unit"; rules="$rules map-stale-verdict"
   fi
 done
+
+# GUARD_EDIT_OK: feature 449 T232 - A SET-ASIDE UNIT'S REVIEW IS RECORDED ON MAIN: the verdict files are each clone's own, so the record
+# says it was reviewed, in the push, and no other clone owes it again; `reviews deferred reviewed` writes only the record's open units.
+# Only on a push that ships: a review cleared on a refused one would stand for a hamlet edited again before it lands
+if [ -z "$fail" ] && [ "$port" != "rust-only" ] && [ "${#passed[@]}" -gt 0 ] && [ -f "$ROOT/dev/deferred-reviews.jsonl" ]; then
+  "$RG_HERE/l7r-gate.sh" reviews deferred reviewed --root "$ROOT" --utc "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${passed[@]}" || true
+  record_commit "the review gate's reviewed set-aside hamlet reviews (444 FR-023, 449 T232)" || true
+fi
+
+# GUARD_EDIT_OK: feature 449 T232 - the escape's one effect: no refusal (and no landing mark), once everything is recorded
+[ -n "$escaped" ] && bypassed
 
 # GUARD_EDIT_OK: feature 375 amendment 9, D55 - THE PUSH ASKS EVERY OWED UNIT (--landing above), the glyph units' hour aside; a
 # glyph unit with no answer marks the work LANDING, so the dispatch this refusal asks for is due and passes the pair guard

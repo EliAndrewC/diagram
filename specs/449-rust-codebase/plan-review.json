@@ -1176,6 +1176,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T232 (T231's plan review: the hamlet reviews feature 444 FR-023 defers might be tracked only by staleness)": {
+   "sha256": "39021f6bc65d22179f3810dfe35364722a51ba44260f10a3f6535e704423285d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T232 Approach (checklist part A)": {
+   "sha256": "15c40fde5800ed809880a6d8a53aaaa868549ff46064eddb3c20197c719b32fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15813,6 +15825,65 @@
      "why": "Sequencing and procedure. This follows the GM's 2026-11-18 rule that each step's known defects are fixed before the next step's port, and narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T232 (T231's plan review: the hamlet reviews feature 444 FR-023 defers might be tracked only by staleness)",
+    "### T232 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T232-record",
+     "summary": "The gate writes each review unit set aside at rust-only to a tracked dev/deferred-reviews.jsonl (time, commit, union merge), committed with the push; at integrated 'reviews owed' owes every open unit; a review found writes its 'reviewed' row.",
+     "class": "within",
+     "why": "444 FR-023: a glyph-check the review gate owes for a pool hamlet a Rust stage moves 'is not owed while the switch stands - each is owed ... when it is thrown back'. The measured scratch run shows the staleness-only design loses it once main redraws; a durable record is the mechanism that makes the deferred review actually owed at the throw back. It enforces the clause, adds no behavior beyond it."
+    },
+    {
+     "id": "T232-still-stand",
+     "summary": "At the throw back, an open unit is owed only while its hamlet and its element still stand.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An only-when qualifier on FR-023's 'every pool hamlet the port moved', adjudicated in two halves. (a) Hamlet gone: it is no longer a pool hamlet and nothing exists to review - physically impossible, and FR-023's own words owe reviews for pool hamlets. (b) Element gone, hamlet stands: the unit is per (hamlet, element), so dropping it drops only a review of something no longer drawn; the hamlet's other units, and whatever the review gate owes for its present drawing, are untouched. Reviewing an absent element is impossible, and the purpose (no drawn work escapes review) is not reached by it."
+    },
+    {
+     "id": "T232-escape",
+     "summary": "REVIEW_GATE_OK skips the refusal, never the record.",
+     "class": "within",
+     "why": "Keeps the deferral record whole under the escape, so FR-023's 'owed when thrown back' cannot be lost through it; narrows nothing."
+    },
+    {
+     "id": "T232-redraw",
+     "summary": "At rust-only the gate redraws a stale hamlet (about 0.2 s), reversing T231's skip; a failed draw there refuses nothing.",
+     "class": "within",
+     "why": "FR-023 forbids refusing or waiting on what the Python stages after the Rust front do; a draw that fails refuses nothing, and the measured 0.2 s fits a Rust-front draw rather than a Python roll (premise: the redraw runs none of the Python stages after the Rust front - stated here by its figure, not in words; amendment 10's 'stop running all of the python map generating code' holds only on that premise). Without it a hamlet edited and not redrawn records no deferral, which defeats FR-023's owed clause; the redraw serves that clause."
+    },
+    {
+     "id": "T232-backfill",
+     "summary": "The two reviews already lost (Kuwabata's wet paddy, Sawada's field pond) are backfilled, owed at the throw back.",
+     "class": "within",
+     "why": "Selected by rule - drawn by the Rust, absent from the last Python census - and confirmed by a measured throw back naming both. FR-023 owes every pool hamlet the port moved; restoring lost ones is the request, and FIX AS WE GO requires the known defect fixed now."
+    },
+    {
+     "id": "T232-scope-of-kinds",
+     "summary": "The mechanism sits in review-gate.sh and 'reviews owed' (the review gate's glyph-check units); it does not separately address the settlement-review FR-019 owes.",
+     "class": "within",
+     "why": "The block narrows nothing about the settlement-review: it neither exempts it nor claims to cover it, and no measured loss of a deferred settlement-review is in the bundle (the bundle carries 444 FR-019 only by name, so whether its throw-back path depends on staleness cannot be shown from here). Not a defect left by this text; if that path is found to depend on staleness too, it is a separate defect to fix."
+    },
+    {
+     "id": "T232-red-first",
+     "summary": "Red first: the new review-gate case_5 and the reviews crate's deferred tests fail on the old gate (8 of 13 checks, and the escaped push's 2) and pass now.",
+     "class": "within",
+     "why": "Tests whose only effect is to make FR-023's owed-at-throw-back happen and keep happening: enforcement of the request."
+    },
+    {
+     "id": "T232-order-exits-budget",
+     "summary": "After T231, before T158; green and red exits (claims of impossibility via make arbiter-ask); one gated landing; port reader moved to core.",
+     "class": "within",
+     "why": "Sequencing, exits, budget and code placement; none narrows what was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27752,6 +27823,63 @@
      "summary": "Order: after T230, before T158; exits and budget as in checklist part A",
      "class": "within",
      "why": "Sequencing and procedure. This follows the GM's 2026-11-18 rule that each step's known defects are fixed before the next step's port, and narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T232": {
+   "section_sha256": "2ee9bbc3ca0d05d08175541738b127aad6baf9a8aace1954e9bdcc4d56677294",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T232-record",
+     "summary": "The gate writes each review unit set aside at rust-only to a tracked dev/deferred-reviews.jsonl (time, commit, union merge), committed with the push; at integrated 'reviews owed' owes every open unit; a review found writes its 'reviewed' row.",
+     "class": "within",
+     "why": "444 FR-023: a glyph-check the review gate owes for a pool hamlet a Rust stage moves 'is not owed while the switch stands - each is owed ... when it is thrown back'. The measured scratch run shows the staleness-only design loses it once main redraws; a durable record is the mechanism that makes the deferred review actually owed at the throw back. It enforces the clause, adds no behavior beyond it."
+    },
+    {
+     "id": "T232-still-stand",
+     "summary": "At the throw back, an open unit is owed only while its hamlet and its element still stand.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An only-when qualifier on FR-023's 'every pool hamlet the port moved', adjudicated in two halves. (a) Hamlet gone: it is no longer a pool hamlet and nothing exists to review - physically impossible, and FR-023's own words owe reviews for pool hamlets. (b) Element gone, hamlet stands: the unit is per (hamlet, element), so dropping it drops only a review of something no longer drawn; the hamlet's other units, and whatever the review gate owes for its present drawing, are untouched. Reviewing an absent element is impossible, and the purpose (no drawn work escapes review) is not reached by it."
+    },
+    {
+     "id": "T232-escape",
+     "summary": "REVIEW_GATE_OK skips the refusal, never the record.",
+     "class": "within",
+     "why": "Keeps the deferral record whole under the escape, so FR-023's 'owed when thrown back' cannot be lost through it; narrows nothing."
+    },
+    {
+     "id": "T232-redraw",
+     "summary": "At rust-only the gate redraws a stale hamlet (about 0.2 s), reversing T231's skip; a failed draw there refuses nothing.",
+     "class": "within",
+     "why": "FR-023 forbids refusing or waiting on what the Python stages after the Rust front do; a draw that fails refuses nothing, and the measured 0.2 s fits a Rust-front draw rather than a Python roll (premise: the redraw runs none of the Python stages after the Rust front - stated here by its figure, not in words; amendment 10's 'stop running all of the python map generating code' holds only on that premise). Without it a hamlet edited and not redrawn records no deferral, which defeats FR-023's owed clause; the redraw serves that clause."
+    },
+    {
+     "id": "T232-backfill",
+     "summary": "The two reviews already lost (Kuwabata's wet paddy, Sawada's field pond) are backfilled, owed at the throw back.",
+     "class": "within",
+     "why": "Selected by rule - drawn by the Rust, absent from the last Python census - and confirmed by a measured throw back naming both. FR-023 owes every pool hamlet the port moved; restoring lost ones is the request, and FIX AS WE GO requires the known defect fixed now."
+    },
+    {
+     "id": "T232-scope-of-kinds",
+     "summary": "The mechanism sits in review-gate.sh and 'reviews owed' (the review gate's glyph-check units); it does not separately address the settlement-review FR-019 owes.",
+     "class": "within",
+     "why": "The block narrows nothing about the settlement-review: it neither exempts it nor claims to cover it, and no measured loss of a deferred settlement-review is in the bundle (the bundle carries 444 FR-019 only by name, so whether its throw-back path depends on staleness cannot be shown from here). Not a defect left by this text; if that path is found to depend on staleness too, it is a separate defect to fix."
+    },
+    {
+     "id": "T232-red-first",
+     "summary": "Red first: the new review-gate case_5 and the reviews crate's deferred tests fail on the old gate (8 of 13 checks, and the escaped push's 2) and pass now.",
+     "class": "within",
+     "why": "Tests whose only effect is to make FR-023's owed-at-throw-back happen and keep happening: enforcement of the request."
+    },
+    {
+     "id": "T232-order-exits-budget",
+     "summary": "After T231, before T158; green and red exits (claims of impossibility via make arbiter-ask); one gated landing; port reader moved to core.",
+     "class": "within",
+     "why": "Sequencing, exits, budget and code placement; none narrows what was asked."
     }
    ],
    "verdict": "CLEAR"
