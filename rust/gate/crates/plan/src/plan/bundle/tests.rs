@@ -249,6 +249,13 @@ fn a_requirement_cited_as_another_feature_s_is_bundled_from_that_feature() {
             && cited.contains("FR-003 Unrelated")
             && !cited.contains("FR-002 The well.")
     );
+    // an id not where it is named is named as not found, never dropped without a word (451 T46)
+    assert!(cited.contains(
+        "<!-- feature 375 -->\n- **FR-099**: NOT FOUND - specs/375-enforced holds no FR-099"
+    ));
+    assert!(cited.contains(
+        "<!-- feature 123 -->\n- **FR-001**: NOT FOUND - feature 123 has no directory under specs/"
+    ));
     std::fs::write(
         other.join("plan.md"),
         "# Plan\n\n**D18 - lands open.** An open box holds the landing unless the line names it.\n",
@@ -576,5 +583,208 @@ fn a_list_item_runs_on_into_its_indented_lines_only() {
     assert_eq!(
         paragraphs(plan, &DECISION)["D9"],
         "- D9 - THE RULE: body\n\n\n  - its own clause\n"
+    );
+}
+
+/// A decision named as another feature's is carried from that feature and never from the reviewed one (feature 451 T46, found by T42's
+/// plan review 2026-11-20): the fixture is T42's section verbatim from 451's plan-done.md at 212266c482, which names "feature 204 D5",
+/// "feature 204 spec D5, D6", a bare "D5's form" and "; D6 (unknown resolves toward main)", and "house style's D11" - and
+/// `spec-cited.md` carried 451's own D5, D6 and D11 for all three. Feature 204 keeps its decisions in its spec (no plan.md).
+#[test]
+fn another_feature_s_decisions_are_carried_from_it_never_from_this_one() {
+    let root = repo();
+    let dir = root.join("specs/451-x");
+    let other = root.join("specs/204-guards");
+    for d in [&dir, &other] {
+        std::fs::create_dir_all(d).unwrap();
+    }
+    let ours = "# Plan\n\n**D5 - OURS FIVE.** x\n\n**D6 - OURS SIX.** x\n\n**D11 - OURS ELEVEN.** x\n\n**D3 - OURS THREE.** x\n";
+    std::fs::write(dir.join("plan.md"), ours).unwrap();
+    for d in ["specs/777-a", "specs/777-b"] {
+        std::fs::create_dir_all(root.join(d)).unwrap();
+    }
+    std::fs::write(
+        dir.join("spec.md"),
+        "## Requirements\n\n- **FR-013**: Performance work goes first.\n- **FR-002**: Ours.\n",
+    )
+    .unwrap();
+    std::fs::write(dir.join("request.md"), "> words\n").unwrap();
+    std::fs::write(
+        other.join("spec.md"),
+        format!("## Decisions\n\n{}", include_str!("fixtures/204-d5-d6.md")),
+    )
+    .unwrap();
+    let out = scratch("out");
+    let section = include_str!("fixtures/451-t42.md");
+    let m = build(
+        &dir,
+        &out,
+        "T42",
+        &under(&[("the section of T42", section)]),
+        &[],
+        "h",
+    )
+    .unwrap();
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    assert!(
+        !cited.contains("OURS ELEVEN")
+            && cited.matches("OURS FIVE").count() == 1
+            && cited.matches("OURS SIX").count() == 1
+    );
+    // the bare "D5's form" and "; D6 (unknown resolves toward main)" carry 451's text only under the line saying they may mean either
+    assert!(cited.contains("<!-- feature 451's D5, cited bare; the blocks also name feature 204's D5, so a bare D5 may mean either -->\n**D5 - OURS FIVE.**"));
+    assert!(cited.contains("<!-- feature 451's D6, cited bare; the blocks also name feature 204's D6, so a bare D6 may mean either -->\n**D6 - OURS SIX.**"));
+    assert!(cited.contains("<!-- feature 204 -->\n- **D5 - `python3 -c` remains a write.**"));
+    assert!(cited.contains("<!-- feature 204 -->\n- **D6 - unknown resolves toward main.**"));
+    assert!(cited.contains("- **D11**: NOT FOUND - named as house style's"));
+    assert!(cited.contains("FR-013**: Performance work goes first."));
+    // every other form: a bare number, a requirement of a feature with no such id, a feature with no directory, a list after "and";
+    // and the possessives that name this feature's own documents still carry its own decisions
+    let body = "## T05\n\n204 D5 holds, and feature 204's D5 and D6; 449 FR-023 and 123 D1 are named; the claims gate's FR-010 too. The plan's D3 and this feature's FR-002 are ours, the reviewed feature's FR-013 too, T31's D11 too; a gate's FR-020 is not; 777 D1 is twice.\n";
+    let m = build(&dir, &out, "T05", &under(&[("T05", body)]), &[], "h").unwrap();
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    assert!(!cited.contains("OURS FIVE") && !cited.contains("OURS SIX"));
+    assert_eq!(cited.matches("<!-- feature 204 -->").count(), 2);
+    assert!(cited.contains("- **FR-023**: NOT FOUND - feature 449 has no directory under specs/"));
+    assert!(cited.contains("- **D1**: NOT FOUND - feature 123 has no directory under specs/"));
+    assert!(cited.contains("- **FR-010**: NOT FOUND - named as claims gate's"));
+    assert!(cited.contains("OURS THREE") && cited.contains("- **FR-002**: Ours."));
+    assert!(
+        cited.contains("OURS ELEVEN")
+            && cited.contains("- **FR-020**: NOT FOUND - named as gate's")
+    );
+    assert!(
+        cited.contains("- **FR-013**: Performance work goes first.")
+            && !cited.contains("reviewed feature's")
+    );
+    assert!(cited.contains("- **D1**: NOT FOUND - feature 777 has 2 directories under specs/"));
+    std::fs::create_dir_all(root.join("specs/449-a")).unwrap();
+    std::fs::write(root.join("specs/449-a/spec.md"), "- **FR-001**: x\n").unwrap();
+    let m = build(
+        &dir,
+        &out,
+        "T06",
+        &under(&[(
+            "T06",
+            "449 FR-023 is cited; the style's FR-013; FR-013 bare.\n",
+        )]),
+        &[],
+        "h",
+    )
+    .unwrap();
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    assert!(cited.contains("- **FR-023**: NOT FOUND - specs/449-a holds no FR-023 in its spec.md, plan.md or plan-done.md"));
+    assert!(cited.contains("<!-- feature 451's FR-013, cited bare; the blocks also name style's FR-013, so a bare FR-013 may mean either -->\n- **FR-013**: Performance"));
+}
+
+/// A block citing another feature's requirement does not answer this feature's amendment holding the same id (451 T46).
+#[test]
+fn another_feature_s_id_answers_no_amendment_of_this_one() {
+    let (_root, dir) = feature();
+    let spec = "## Requirements\n\n- **FR-001** x\n\n### Amendment 2 - second\n\n- **FR-023** the amended one\n";
+    std::fs::write(dir.join("spec.md"), spec).unwrap();
+    std::fs::write(
+        dir.join("request.md"),
+        "> original\n\n## Amendment 1 (a)\n\n> one\n\n## Amendment 2 (b)\n\n> two\n",
+    )
+    .unwrap();
+    let out = scratch("out");
+    let m = build(
+        &dir,
+        &out,
+        "T07",
+        &under(&[("T07", "449 FR-023 and FR-001.\n")]),
+        &[],
+        "h",
+    )
+    .unwrap();
+    assert!(read(m.parent().unwrap(), "request.md").contains("> one"));
+}
+
+/// An index line is the requirement's first sentence whole, its wrapped lines joined (feature 451 T46: FR-009's line stopped at "unless
+/// it states why the defect is not"); a sentence past `INDEX_CAP` is cut at a word and marked, never cut silently.
+#[test]
+fn an_index_line_is_carried_whole() {
+    let (_root, dir) = feature();
+    let spec = "## Requirements\n\n- **FR-009**: `make decide` refuses a plan section whose found-and-left item defers a defect unless it states why the defect is not\n  fixed in this task, its filed task id and its order (\"lands before ...\"); and refuses a section whose fix names a class of defect\n  (every writer, every form, every file of a kind) without a line saying how every instance of the class was found, labeled as an\n  observation with its method.\n- **FR-010**: The three slowest hook suites are split.\n  1. a numbered clause\n- **FR-013**: Performance work goes first:\n  - its first clause\n- **FR-014**: The `a. b` span is code. Its second sentence.\n- **FR-016**: Each kind (e.g. a well) is drawn, cf. the sty. Then more.\n- **FR-017**: A list ... of things is kept, vs. none. More.\n- **FR-018**: A plain word ends here. then the sentence runs on. Then a new one.\n- **FR-030**: Kinds (e.g. `well`) are drawn. More.\n- **FR-031**: A thing (it runs. Here it ends) and more.\n- **FR-015**: word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word.\n\n### FR-020 A heading one\n\nits body\n";
+    std::fs::write(dir.join("spec.md"), spec).unwrap();
+    let out = scratch("out");
+    let m = build(
+        &dir,
+        &out,
+        "T08",
+        &under(&[("T08", "nothing cited")]),
+        &[],
+        "h",
+    )
+    .unwrap();
+    let index = read(m.parent().unwrap(), "spec-index.md");
+    assert!(index.starts_with("# Every other requirement, its first sentence on one line (past 420 characters cut at a word and marked [...])\n\n"));
+    assert!(index.contains("\n- **FR-009**: `make decide` refuses a plan section whose found-and-left item defers a defect unless it states why the defect is not fixed in this task, its filed task id and its order (\"lands before ...\"); and refuses a section whose fix names a class of defect (every writer, every form, every file of a kind) without a line saying how every instance of the class was found, labeled as an observation with its method.\n"));
+    assert!(index.contains("\n- **FR-010**: The three slowest hook suites are split.\n- **FR-013**: Performance work goes first:\n- **FR-014**: The `a. b` span is code. [...]\n"));
+    // a `.` before a lowercase word ends no sentence, whatever came before it (451 T46: no cut is left unmarked)
+    assert!(index
+        .contains("\n- **FR-018**: A plain word ends here. then the sentence runs on. [...]\n"));
+    // an abbreviation or an ellipsis before a lowercase word ends no sentence (451 T46's review)
+    assert!(index.contains("\n- **FR-016**: Each kind (e.g. a well) is drawn, cf. the sty. [...]\n- **FR-017**: A list ... of things is kept, vs. none. [...]\n"));
+    let marked = index
+        .lines()
+        .find(|l| l.starts_with("- **FR-015**"))
+        .unwrap();
+    assert!(marked.ends_with(" word [...]") && marked.chars().count() <= 420 + 6);
+    assert!(index.contains("\n### FR-020 A heading one\n"));
+    // by construction: every line shorter than its requirement's lead paragraph ends marked
+    for text in requirements(spec).values().filter_map(Value::as_str) {
+        let (line, whole) = (super::lead(text), super::paragraph(text));
+        assert!(line == whole || line.ends_with(" [...]"), "{line}");
+    }
+    // a line shorter than its lead paragraph always ends marked, whatever ended it (451 T46 round 2: 132 FR-023 at "e.g." before a
+    // backtick, 246 FR-002 inside an open parenthesis)
+    assert!(index
+        .contains("\n- **FR-030**: Kinds (e.g. [...]\n- **FR-031**: A thing (it runs. [...]\n"));
+}
+
+/// A number then a task's possessive names that feature's id ("444 T20's FR-043", "433 T01's D3b"; 451 T46's plan review): it is
+/// carried from that feature or named NOT FOUND, never dropped as this feature's.
+#[test]
+fn a_number_then_a_task_s_possessive_names_that_feature_s_id() {
+    let (root, dir) = feature();
+    let other = root.join("specs/444-x");
+    std::fs::create_dir_all(&other).unwrap();
+    std::fs::write(other.join("spec.md"), "- **FR-043**: THEIRS.\n").unwrap();
+    let out = scratch("out");
+    let body = "As 444 T20's FR-043 says; 449 T233's FR-005, and D1 and D3 in 999's sections; 204 D5, and FR-002 of feature 999; 123 D9 and FR-003 of feature 999; 123 D8 of the plan's; 433 T01's D3b too; 449 T233's FR-023 and FR-024; 999 T02's FR-001 is ours.\n";
+    let m = build(&dir, &out, "T09", &under(&[("T09", body)]), &[], "h").unwrap();
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    // T46's own sentence: the run stops at ", and D1 and D3 in 999's sections"
+    let own = "449 T233's FR-023 and FR-024, and D1 and D3 in 999's sections of T42 and T44.\n";
+    let k = build(&dir, &out, "T10", &under(&[("T10", own)]), &[], "h").unwrap();
+    let mine = read(k.parent().unwrap(), "spec-cited.md");
+    assert!(
+        mine.contains("D1 - shared.")
+            && mine.contains("D3 - the well.")
+            && mine.contains("- **FR-024**: NOT FOUND")
+            && !mine.contains("- **D1**: NOT FOUND")
+    );
+    assert!(cited.contains("<!-- feature 444 -->\n- **FR-043**: THEIRS."));
+    assert!(cited.contains("<!-- feature 433 -->\n- **D3b**: NOT FOUND"));
+    assert!(cited.contains("<!-- feature 449 -->\n- **FR-024**: NOT FOUND"));
+    assert!(cited.contains("FR-001 The sty."));
+    // a feature number's run stops at a clause naming another source (451 T46 round 2: "449 T233's FR-023 and FR-024, and D5 and D11 in
+    // 451's sections" carried 449's D5)
+    assert!(
+        !cited.contains("- **D1**: NOT FOUND")
+            && !cited.contains("- **D3**: NOT FOUND")
+            && !cited.contains("- **FR-002**: NOT FOUND")
+    );
+    assert!(
+        cited.contains("D1 - shared.")
+            && cited.contains("D3 - the well.")
+            && cited.contains("FR-002 The well.")
+    );
+    assert!(
+        cited.contains("FR-003 Unrelated")
+            && cited.contains("- **D9**: NOT FOUND")
+            && cited.contains("- **D8**: NOT FOUND")
     );
 }

@@ -49,78 +49,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T01 (the plan review the tick and the push require, feature 243)": {
-   "sha256": "e7b46689325a49e0f4b7bdb0ef4acbc83bd4e074ca9af77cdebd5440b2cabc8f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T01 Approach (checklist part A)": {
-   "sha256": "6cebf679c6ce9644838c1a2cbb9bab52bacc7c7e93ad4697e2b60f165ca6c877",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T02 (FR-001: two make detectors that disagree, so a timed or subshelled make run logs no target - research R1)": {
-   "sha256": "2d3a0c424777a1c43be4ed584b894da296c40d57046241d74339e4120e31b182",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T02 Approach (checklist part A)": {
-   "sha256": "6aec28f8ac08b53a8d04810db8466411be148df4f323eccde7291d9a24f14453",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\" - research R1)": {
-   "sha256": "3978dcd6b364f2796a923930e6e403259721b0580b0dcd18cc3190e58d6f5b4a",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T03 Approach (checklist part A)": {
-   "sha256": "0166cf3a2d32f22b5e262bf3ce652483cd28a3a4f4d7b2fca831875995ddf770",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)": {
-   "sha256": "5cc6e4cb93f326fa363264d6c99e070bf8814db88d358580a12e4f817cc5f447",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T04 Approach (checklist part A)": {
-   "sha256": "95c65559c895b829e558d3694b838117ce0b0d6d3e2a36a1db666135fe1c26ee",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)": {
-   "sha256": "7feb66da3fffcced3e0e3f2e04427dcdcb474e2736fe5271a60ea0e14bedad94",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T05 Approach (checklist part A)": {
-   "sha256": "9bc6c53b71eea4c3b167bc097a4d80bba5ba5cc65e047067fc0fb5ae67f1f3ca",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)": {
-   "sha256": "9867617ae7bd49850156a8b384af7af02819d81f93e038902e3eb6ea91d17abe",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T06 Approach (checklist part A)": {
-   "sha256": "f89f5d026801d6fe041e46cc2a50d292c8d2d82ebbac9b27110e2e0b4d3794fc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)": {
    "sha256": "1cfc974863092bffbf9da308a98704672ef30828692c398eff4b67f9a499f81f",
    "verdict": "CLEAR",
@@ -181,42 +109,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)": {
-   "sha256": "fd99e64a0721615101519e3fa436ebf894bfa28b7e593af5a9b1b00157bb4ab2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T12 Approach (checklist part A)": {
-   "sha256": "5ec9cbaf894e0362a3dc11378eedbc459b44b7d5bedd73a9aeaa460b578cc959",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)": {
-   "sha256": "395df1ee48f262e5616bc067df2533229c5905486762b969c8aeacb756534eec",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T13 Approach (checklist part A)": {
-   "sha256": "405d27c651a808f99e7659e346709f333440d66ea691b20edebe5f95ccd4b410",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)": {
-   "sha256": "b4d61f2101d35f1b9fed7e0c36b3b46a1c8d8d22c18ea6294201377bfe48ceb9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T14 Approach (checklist part A)": {
-   "sha256": "c92756cb5a80bfc151fd0ec06f98486076ef807e1b9d5fc4b064c3e5d325c974",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)": {
    "sha256": "e789135ccfa45597df5301fb7396d3261eb98ae774998819f9ea21874f7d0228",
    "verdict": "CLEAR",
@@ -229,30 +121,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T16 (FR-008: the main session's waits checked every 420 to 600 s - the spec's User Story 4, research R5)": {
-   "sha256": "762ed4aca4ba941a95825f8a8423d6692278ea2a7a4c3419ac1dab16708e31bc",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T16 Approach (checklist part A)": {
-   "sha256": "0900ba19809a1cd209f308ab13b39b0aeaddcbee61eab1e0ff71a159528153ed",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)": {
-   "sha256": "dedd4be60d19c9a7f6c6cf0607d7b94b227c5c172f4324b9849011120877dbca",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T17 Approach (checklist part A)": {
-   "sha256": "6fd5ef914b65ff054f0c459c0448f62c8fd15c141ac3b9d7fadd982d4dd2014d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)": {
    "sha256": "8b559f1abb7e688d90b1197deb25311173694a04323478cf4a6aa0a6adbd4ea9",
    "verdict": "CLEAR",
@@ -261,48 +129,6 @@
   },
   "### T18 Approach (checklist part A)": {
    "sha256": "7787dfecc8fa2773fca2d23dd7a5907f058ca52ec5ecd37106e1052779d3e652",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)": {
-   "sha256": "f5fe9fe62bad3485170d29b72b44398186f32595db320164db2717e53aa9508a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T19 Approach (checklist part A)": {
-   "sha256": "82b4b6b941664e56ab1d5b42b3444c98bcaba1b6b3ae206088e320a407f7c506",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)": {
-   "sha256": "eba631536c31ab16a8604ae39291a803d2d71c96c54c908dedbd95d07e1bac8a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T20 Approach (checklist part A)": {
-   "sha256": "975248dee4c2ba4b49004093a77c69ec10fa117d543e21f316fe818b7c675a54",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "60e79ef5aa273be1f6acf73469de961eb4b121c41b1eabf5fe765a6f130f819c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T21 (FR-010: the other two of the three slowest suites)": {
-   "sha256": "55d666d6ba085a5eef30adb0dd5b84378a406bc149c0277b1220f9166c55de74",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T21 Approach (checklist part A)": {
-   "sha256": "3999c33b8ea88bfbebcf1cd8ca2d0441e2651410c02a5858a55d1bfda4a5f055",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -338,22 +164,10 @@
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
-   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "sha256": "4e0d718ded310667080e5928ed1d5dfae001108a490216b8aa2d9716c7ae39f1",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\", observed 2026-11-20, method: the `ms` of the log's PostToolUse lines since 14:00Z summed by `cat` - research R1)": {
-   "sha256": "1ff051ce5b72cb1a7fcf15a2947843aea035b513802e860a29e995e8480ec5b3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)": {
-   "sha256": "3b5cd4eaef59a1d7c44b3462702dc65dd3875bfdce8e32a11bb45c65711a9f1e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T23 (two builders' cargo runs in one clone corrupted each other's coverage: T02's `make static` beside T234's cargo failed on corrupt or missing coverage profiles in seven crates, observed 2026-11-20, method: T02's `make static` log)": {
    "sha256": "47659170c04a4cb5e43bd28cdcd4040a6be061e85112fd0ded477973c549948e",
@@ -363,54 +177,6 @@
   },
   "### T23 Approach (checklist part A)": {
    "sha256": "014586e061a03c2441a27f080bfeaa8ceef7f924b2f89b7590419889ca6de23a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T26 (the event log filed every line under `.specify/feature.json`, which `make task-start` rewrites to the feature started last: 50 lines of 451's T26 and T03 sat in 449's log as 449's, observed 2026-11-20, method: the 449 log's lines whose `task` is no 449 task, matched to `task-starts.jsonl`)": {
-   "sha256": "a68e6579fb9406249b92e1170ddc994c1386f082ae9f2a7a4ddb7a11c48f450d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T26 Approach (checklist part A)": {
-   "sha256": "262978e2f9f2910978ff21acb51edf0ad20582e7cb278a364a39f706d99ec097",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T25 (`make decide`'s lint stopped at its first finding: a section with four findings took four runs and four turns to clear, found writing T23's section, 2026-11-20)": {
-   "sha256": "ecf04a641426cfbe47d89f6c7d39140fc3ee9c6159d03333cccb54256e88ff06",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T25 Approach (checklist part A)": {
-   "sha256": "e248416cf8c786d1772ca2d341f4d900a024cd3fd27ad1d5a5b26513753ae88d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T27 (T25: the item-4 rule read only a section's first Approach block)": {
-   "sha256": "acea1a47c33f70274005dffdc48f97121656499677889fff24221f2a78409003",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T27 Approach (checklist part A)": {
-   "sha256": "8950fc9ce0f21477c2dc6019ef2cca4b2914a22c77582340e3ed68f3386b7a39",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T24 Approach (checklist part A)": {
-   "sha256": "4d7692efb2e908aa223cbf403588cfa2c3653723b1d93c2928d8675745e7256b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T24 (a gate test read the real environment: with `SPECIFY_FEATURE` exported, `make static`'s coverage of the bundle crate went red, observed 2026-11-20, method: T02's `make static` log)": {
-   "sha256": "02ed9a9c18bb4cfc583a9670ec37c7abff66a6c109cbef71fbf62c4cfba69e1e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -427,42 +193,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T28 (FR-013, the GM 2026-11-20: \"can we in general priotitize performance improvements going forward?\" - nothing ordered the work by it, observed 2026-11-20, method: `make task-start`'s source and the Stop hook's, read)": {
-   "sha256": "56d430b7019607f9c2eb2c25bdeccce1023a3fd8cd1356adbac603349bbfc6ec",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T28 Approach (checklist part A)": {
-   "sha256": "814f2469e17f1cbb93dc9df0ba0cb73927308ea6b2131c8bc917bf406495ff3a",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T30 Approach (checklist part A)": {
-   "sha256": "1efbcb8490a7d852f877ee70eaa491dd5a46ea84ef4600904ad2794b94dc07c6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T30 (the shared shell readers' gaps)": {
-   "sha256": "3761aa33d0a2a93f1e856bcc63e069eb70e44ef917936d7b0931f15904b66b93",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T31 Approach (checklist part A)": {
-   "sha256": "f90a55bc51d2b2f3cfd4843d0cbf411f9144addd4f56a7e299f6514e0957f6c3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T32 Approach (checklist part A)": {
-   "sha256": "565e265bb4d52c5e82d62f6b5dd9b90a0adfe4aa2e67e660b81621ed042cc24a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T33 (<why: the finding or measurement that files it>)": {
    "sha256": "39436775e84ae7abbc8b5e616db6820fd538e5c90f9947ae3c7bd680375bf18a",
    "verdict": "CLEAR",
@@ -475,18 +205,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T34 Approach (checklist part A)": {
-   "sha256": "14ecd48f2484960a64a121dde7c02dc46ae1c8e5d7b881685e477b70f56dc892",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T35 Approach (checklist part A)": {
-   "sha256": "4c5f85f7feab493e1b1f2f288cab2961d08b46e1f16a87cd95ea43adec183026",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T36 (<why: the finding or measurement that files it>)": {
    "sha256": "dc847b818b674c921f73c225ed0aaff49dc81e77696f7385e745860981bc66f4",
    "verdict": "CLEAR",
@@ -494,139 +212,13 @@
    "declared": "spec-fidelity"
   },
   "### T36 Approach (checklist part A)": {
-   "sha256": "6be6f06c252eba1d25c30c6d58725e4ef5f70a1ed9ad505e301b9a90b3ee869a",
+   "sha256": "b1d9afb7a68ed775020344f143f9e6cae63bd273e65e3077a234a530e50f023e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T32 (the guard's own tests read the real environment: with `L7R_FEATURE_DIRECTORY` exported, as a page session exports it, 17-20 tests of the check state and its guards failed, found by T14, observed 2026-11-20, method: T14's `make rust-test` log)": {
-   "sha256": "ed6e6e313fe3601702d027d63abe2ca51f327f5c6d892d553ff715221b880974",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T37 Approach (checklist part A)": {
-   "sha256": "303c1cdf0c6295d91c600b2f083c787ffc9acc5960f9cc86668eed9c221f088a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T38 Approach (checklist part A)": {
-   "sha256": "ec4d90160deaaa4c484c0f46a7521ba8e03fdfb06433069be653a0bc41ff2e11",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "69f16d9b3b0db18b1feabc7ad123e0fcab56c89363321047faac4092571646f0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T39 Approach (checklist part A)": {
-   "sha256": "7377142007bb10322fa44099fd1e1d2df0c4cf4f92c12a3d62acda8472bce6b9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T35 (rustc's `another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused` asked for two waiting lines inside a 60 ms ceiling at a 10 ms poll of the wall clock and saw one under `make static`'s load, a red gate on correct work, observed 2026-11-20, method: T12's `make static` log; its land-tooling half folded into T20)": {
-   "sha256": "70d4f1a47cce22f24c64a2d6bb118d0b720263f161ed7a1e730869924ab38808",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T21 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "6c6e135ddd35fc77cb14f5cd555bf639bddc341508c16d84bf2b93a503b98271",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T40 Approach (checklist part A)": {
-   "sha256": "91c01f05dfc8dd722f4ee877a60d95e5f65bd045c908f6f5d67b76cf55d45503",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T39 (a FRESH=1 run queued behind the target-directory lock might replay the holder's kept result: T32's two `make rust-test CRATE=rust/guard FRESH=1` runs both said \"finished in 4.21s\", found by T32, observed 2026-11-20, method: T32's transcript, `/tmp/t32-final-plain.log` and `/tmp/t32-final-exported.log` at 17:30-17:31 UTC)": {
-   "sha256": "2d6aec36a49c3697e02ee29de6980edc1ed53e7d79c4da84e86273180720c7b1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T37 (the plan-review bundle cut a decision at its list: `spec-cited.md` stopped D16 at \"Two things make the comparison real:\" and D15 at its colon, so the reviewer judged each without its bullets, observed 2026-11-20, method: T19's and T17's plan reviews and T18's bundle rebuilt, `/tmp/t37-before/T18/spec-cited.md`)": {
-   "sha256": "0ad31c08042ca9d6d5b6641deb9783358143430f1d5174c439cb9ba1f49fac4d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T34 (found by T14, 2026-11-20: four builders formatted with a bare `rustfmt` outside make, because `make format` rewrites every crate and another builder's in-progress files with them)": {
-   "sha256": "fbf1b6b1c7586e7c0f3112ad9557b1bc37678add06653ba1426a1c9118e94266",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T41 Approach (checklist part A)": {
-   "sha256": "ea7f7e65625b5a081b58a6a4d802a3db7143d7343d40c5c14127e5cfd69c8e10",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T31 (found by T15's corpus replay, 2026-11-20: main-tree refused `python3 -c \"data = open('$SP/x.html','rb').read() ...\"` - a read - as a write where the shell stands, with no escape, the same before and after T15's shared-reader fix; observed 2026-11-20, method: T15's replay of the main-tree refusals corpus)": {
-   "sha256": "059eb3a780caae3976cea73c3e1dd5b1c32d0fd89ddbd1ff06bd93fb162d84e5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T40 (T21's finding: `make hooks-test`'s full-run wall is entry-gate's suite plus 2-3 s, measured 2026-11-20 (T21's full runs), its case-4 chain of record gates the last thing running)": {
-   "sha256": "1e79f7eb3a49016560943b81ac0340bd59ee4269cfed857e904e2d75fdb6644e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T42 Approach (checklist part A)": {
-   "sha256": "4b65ee61ebe0f6c0d6363ed00ce892b1b51d223a5680067a61fe5c9a1f76bf35",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T43 Approach (checklist part A)": {
-   "sha256": "800628cf48a04a92ea5c9c0b6430f4fe6176f3b633aea140e61bef3575ba872e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T41 (T34's reading of `scripts/gates/l7r-gate.sh`: the launcher rebuilds `l7r-gate` when `rust/guard` changes and the gate links the guard, so one builder's uncompiling guard edit fails every other builder's gate command in a shared clone - read, not measured, until this task)": {
-   "sha256": "d22c800d0f2457735fe897117e95c16208d1ef097bfb898f6676061fdf5e52e5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))": {
-   "sha256": "0c57647cca27d619b5dfe53345ecbcb1b9f092e7b387c250b90082cd037d67a0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)": {
-   "sha256": "2b8f5212bc847b429492003c8f00719bbbac70b5b64cd0a1a15c48004d28b8d4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T38 (the gate crates' tests read the real environment through the guard: with `L7R_FEATURE_DIRECTORY` and `L7R_EVENTS_DIR` exported, 49 tests of 7 gate crates failed, found by T32, observed 2026-11-20, method: T32's per-crate sweep, `/tmp/t32-sweep/all2/summary.txt`)": {
-   "sha256": "e44f0b75b880a4ed050f30b5b94cd0d99cd2ba9e223a2cab676a9348333a3bee",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T44 (<why: the finding or measurement that files it>)": {
-   "sha256": "8fd06ddb7c5affad290c7b19cbc28651b157ac6678e637476a1dee9fb0ac62d1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T44 Approach (checklist part A)": {
-   "sha256": "2e66f92724da2df6c1292677a53b75c2826abdc5bf3e39b80d32257d9426a91d",
+   "sha256": "c27995be4e0ed49d495fd2faa12e6805b8b0489f2990c8209910e6a72fc8838e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -643,14 +235,44 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T46 (<why: the finding or measurement that files it>)": {
-   "sha256": "a6d6d7f4558672edd2e620e93d1efdf44b07626217925d97bafdf5b200fdbf4d",
+  "### T46 Approach (checklist part A)": {
+   "sha256": "1a443e7c3519d8611d1982908bf4cdaa30465862002dfeaef92bd670394de3bb",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T46 Approach (checklist part A)": {
-   "sha256": "fb86b02562ac853e421713f4d7d04d55dac5d5219564afc60d03c42cd8745e7e",
+  "### T44 (found by T42, 2026-11-20: window#307's second heredoc, a read, runs `subprocess.run([\"git\",\"-C\",root,\"ls-files\"])` and main-tree refused it with no clone resolvable and rewrote it with one, since `subprocess` is on T31's denylist of known writers; observed 2026-11-20, method: T42's replay and a hand-read of each moved body)": {
+   "sha256": "a042f088cb43c248ba18840ab18075fe00e6cb771b7b40631d420b0d4d1c697c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T46 (T42's plan review was handed the wrong decisions: `spec-cited.md` carried 451's own D5, D6 and D11 for T42's \"feature 204 D5\", \"feature 204 spec D5, D6\" and \"house style's D11\", and `spec-index.md` cut FR-009 at \"unless it states why the defect is not\", observed 2026-11-20, method: T42's plan review and its bundle)": {
+   "sha256": "99348dc187dc33d5f418b98ada8f9ba6755e8e18c53f523196e190fee4678267",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T47 (<why: the finding or measurement that files it>)": {
+   "sha256": "7a542fe3838b569ed543db98b25fa8ea26791ca2493f70658406a81b3572dc9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T47 Approach (checklist part A)": {
+   "sha256": "758105f55fc394e57a6aab41c7c99e6ededbcd4f31f593c220aa8a46f3ecbe48",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T48 (<why: the finding or measurement that files it>)": {
+   "sha256": "6379478259667dd6106b61f5e9a1e1f55204eb710fc7eace6b24440528d74c42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T48 Approach (checklist part A)": {
+   "sha256": "b4cd3ee436ac46da7168bd6a517e77c286b22774c9b94975a6ac18f91592caed",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -5709,6 +5331,319 @@
      "why": "Their earlier text (earlier.md) was pure placeholder with no decision, so removing them loses no decision."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T44 (found by T42, 2026-11-20: window#307's second heredoc, a read, runs `subprocess.run([\"git\",\"-C\",root,\"ls-files\"])` and main-tree refused it with no clone resolvable and rewrote it with one, since `subprocess` is on T31's denylist of known writers; observed 2026-11-20, method: T42's replay and a hand-read of each moved body)",
+    "### T44 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T44-accounting",
+     "summary": "py_c.rs accounts for every mention of subprocess before the writer denylist is read: a plain import, the PIPE/DEVNULL/STDOUT constants, and run/check_output/check_call/call with one literal list argv and only listed keywords; only the name is masked, so arguments (input=, stdout=open(...)) are still judged; anything unaccounted stays a write.",
+     "class": "within",
+     "why": "Fixes a found defect (a guard refusing or rewriting a read, window#307) while keeping T31's closed side. Refusing good work is a wrong outcome under constitution XIV, and the fix serves FR-013's builders'-loop performance aim. It narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T44-admitted-commands",
+     "summary": "Admitted argv commands: git ls-files, show, rev-parse, log, cat-file, ls-tree (with any -C dir), plus grep, ls, cat, head, wc, each element literal and screened for writing or program-running options (git --output/--ext-diff/--textconv/--filters; ugrep --filter/--pager/--view/--save-config/--query/-Q/--config). The option search space and method are stated.",
+     "class": "within",
+     "why": "The set is the corpus-observed reads plus the task line's and the brief's additions, and the screen states its search space (completion-helper lists, --help, rev-list -h labeled as a reading). It is a choice made inside the fix, and none of it narrows the GM's request or any FR."
+    },
+    {
+     "id": "T44-left-as-writes",
+     "summary": "git status and git diff (measured to rewrite .git/index), git grep (-O runs a program), rg (--pre, --hostname-bin run a program), shell strings, shell=True, unlisted keywords, non-literal argv, Popen, getoutput, aliased imports, make, unknown commands, and tree-code scripts (window#56/68/69/299, refusals#149) all stay writes.",
+     "class": "within",
+     "why": "Each one either writes or can run a program, or is a shape the reader does not know, so T31's closed side keeps it as a write. That keeps a judgment that already stands. It does not leave a wrong outcome in place: no corpus row runs rg, git grep, status or diff from Python, so no observed read is refused by these exclusions. The rg exclusion departs from the session's brief, not from the GM's request or the spec."
+    },
+    {
+     "id": "T44-repo-config-filters",
+     "summary": "A filter or textconv named by the repository's own config may run on log -p/show without a flag; this is accepted as main-tree already accepts it for the same shell command (tree.rs git_write); the mirror's config names none.",
+     "class": "within",
+     "why": "It matches the existing shell-level judgment and the mirror's config, which was read. It changes no behavior the GM asked to change."
+    },
+    {
+     "id": "T44-perf-tag",
+     "summary": "The task is tagged [perf] (the builders' loop) and not filed PERF=1, because it touches no engine stage's counted operations or time.",
+     "class": "within",
+     "why": "FR-013 counts a task as performance work when it is filed PERF=1 OR tagged [perf], and it names the builders' loop explicitly. The tag satisfies the requirement."
+    },
+    {
+     "id": "T44-order-exits",
+     "summary": "Order: after T42, before T22, beside T46. Exits: red tests green, replays with every move accounted, crate-scoped rust-test, lint and 100% cover, make quick, make static once, make hooks-test. Budget: one landing.",
+     "class": "within",
+     "why": "It is a performance task placed early, consistent with FR-013. Running make static once agrees with FR-007's aim. Nothing is narrowed."
+    },
+    {
+     "id": "T44-found-and-left",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "The exclusions above are writes or unknown shapes kept closed, not defects carried forward. The 31 unmoved subprocess rows are each placed (26 allowed, 5 running tree code)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T46 (T42's plan review was handed the wrong decisions: `spec-cited.md` carried 451's own D5, D6 and D11 for T42's \"feature 204 D5\", \"feature 204 spec D5, D6\" and \"house style's D11\", and `spec-index.md` cut FR-009 at \"unless it states why the defect is not\", observed 2026-11-20, method: T42's plan review and its bundle)",
+    "### T46 Approach (checklist part A)",
+    "### T47 (<why: the finding or measurement that files it>)",
+    "### T47 Approach (checklist part A)",
+    "(removed) ### T44 (<why: the finding or measurement that files it>)",
+    "(removed) ### T46 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T46-qualified-forms",
+     "summary": "A number qualifies a run-on list, the `spec`/`plan` form and a task's possessive after the number; the id is read as that feature's.",
+     "class": "within",
+     "why": "Fixes the bundle handing a plan reviewer the wrong feature's decision (T42's review) - a wrong outcome of a check, so in scope under fix-as-we-go and approved improvement 4 (fewer plan re-rounds). Its REACH is ruled separately below."
+    },
+    {
+     "id": "T46-run-on-reach",
+     "summary": "As built, the run-on rule carries a number's qualification past a clause boundary: in T46's own every-plan bullet, \"449 T233's FR-023 and FR-024, and D5 and D11 in 451's sections of T42 and T44\" is read as 449's D5 and D11.",
+     "class": "narrowing",
+     "why": "The bundle shows it: spec-cited.md carries '<!-- feature 449 --> D5 - SHARED STATE KEPT' in full and '<!-- feature 449 --> D11: NOT FOUND', and blocks.md's only D5/D11 after a 449 is that clause, which means the D5/D11 of 451's T42/T44 sections (204's and house style's). That is the very wrong outcome T46 is filed to end - another feature's decision text handed to a reviewer under a mention that does not mean it - and it contradicts the section's 'never a wrong text' and its step 9, which lists no 449 text. A known defect left in the task (constitution XIV, fix as we go). Fix: the run-on stops at a clause boundary (e.g. ', and <id>' followed by its own qualifier such as 'in 451's', or any non-id word between), pinned by a red test on this sentence; or a deferral in D15's form. Rewording the sentence alone hides the defect.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T46-possessive-own-names",
+     "summary": "A non-number possessive names another source unless its name is the feature's own (OWN_NAMES, a labeled CONVENTION).",
+     "class": "within",
+     "why": "A misread costs a NOT FOUND line, never a wrong text; serves the same fix. Nothing in request or spec speaks to it."
+    },
+    {
+     "id": "T46-lookup-not-found",
+     "summary": "A named id is looked up in that feature's plans then its spec (requirements the other way round), else a NOT FOUND line with why; never carried from the reviewed feature.",
+     "class": "within",
+     "why": "Replaces silent drops with an explicit line (feature 204's decisions live in its spec). Serves the fix."
+    },
+    {
+     "id": "T46-bare-beside-qualified",
+     "summary": "A bare id the blocks also name as another's carries this feature's text under a line saying it may mean either.",
+     "class": "within",
+     "why": "Carries rather than withholds, on a survey finding both meanings. Note: no 'may mean either' line appears in this bundle's spec-cited.md although bare FR-013 sits beside '385 FR-013'; the carried text is right, so it does not move the verdict, but the section's 'this section among them' is not visible here."
+    },
+    {
+     "id": "T46-answered",
+     "summary": "`answered` reads the blocks with every other feature's ids taken out, so another feature's id trims no amendment.",
+     "class": "within",
+     "why": "Same defect class in the other reader of the ids; fixed here."
+    },
+    {
+     "id": "T46-index-first-sentence-cap",
+     "summary": "Index line = the requirement's first sentence, wrapped lines joined, ending at '. ' never before a lowercase word (runs_on); past INDEX_CAP 420 characters cut at a word and marked ' [...]'.",
+     "class": "within",
+     "why": "The defect was FR-009's SILENT mid-sentence cut; no cut is now unmarked. Departs from the task line's 'an index line whole' for lines over 420 characters, but the task line is the session's; neither request.md nor the spec carries any index-length requirement, and the bundle's own contract (feature 375 amendment 11, as the MANIFEST and spec-index header state) is 'first sentence, a long one cut and marked'. Whole lead paragraphs would multiply 449's index about five-fold against the GM's performance-first order. A marked cut is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T46-perf-tag",
+     "summary": "T46 is tagged [perf] under FR-013.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks or the builders' loop faster; a bundle handing wrong decisions costs a review round (T42's), and approved improvement 4 is 'fewer plan re-rounds'. Not an engine stage, so no performance checklist is owed."
+    },
+    {
+     "id": "T46-found-and-left",
+     "summary": "Five found-and-left items, each 'fixed here' and pinned by a named test.",
+     "class": "within",
+     "why": "No deferral; nothing left."
+    },
+    {
+     "id": "T47-template-and-removed-headings",
+     "summary": "T47's empty template (filed from T44's found-and-left) and the removal of T44's and T46's empty template headings.",
+     "class": "within",
+     "why": "Templates and their removal decide nothing; T44's section is not among the changed blocks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T46 (T42's plan review was handed the wrong decisions: `spec-cited.md` carried 451's own D5, D6 and D11 for T42's \"feature 204 D5\", \"feature 204 spec D5, D6\" and \"house style's D11\", and `spec-index.md` cut FR-009 at \"unless it states why the defect is not\", observed 2026-11-20, method: T42's plan review and its bundle)",
+    "### T46 Approach (checklist part A)",
+    "### T47 (<why: the finding or measurement that files it>)",
+    "### T47 Approach (checklist part A)",
+    "(removed) ### T44 (<why: the finding or measurement that files it>)",
+    "(removed) ### T46 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T46-qualified-forms",
+     "summary": "A number qualifies a run-on list, the `spec`/`plan` form and a task's possessive after the number; the id is read as that feature's.",
+     "class": "within",
+     "why": "Fixes the bundle handing a plan reviewer the wrong feature's decision (T42's review): a check giving a wrong outcome, in scope under fix-as-we-go and approved improvement 4 (fewer plan re-rounds)."
+    },
+    {
+     "id": "T46-own-run",
+     "summary": "A feature number's run of ids stops at its last comma, or before its last id, when the text after opens 'in N's', 'of feature N' or another possessive (own_run), red first in /tmp/t46-red6.log.",
+     "class": "within",
+     "why": "This fixes last round's NOT LEGITIMATE run-on reach. It is a fixed defect, so no ruling is needed. The bundle shows the fix: '<!-- feature 449 --> D11: NOT FOUND' is gone, and the 999 fixture string produced no 449 D1/D3. 449's D5 is still carried at spec-cited.md line 133, but the cause is the new found-and-left bullet's direct possessive 'carried 449's D5', which is a correct reading; D11's absence is the discriminator. Note, not blocking: the ids after a stopped run fall to the bare reading, so the quoted fixture 'D1 and D3 in 999's sections' carries 451's D1 and D3. In the one real instance, 'in 451's sections' says where a mention sits, not whose decision it is, so reading N as the owner would be no more correct. The trigger is a test string naming a feature that does not exist, and no reviewer gets another feature's text under a wrong label. That is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T46-possessive-own-names",
+     "summary": "A non-number possessive names another source unless its name is the feature's own (OWN_NAMES, a labeled CONVENTION).",
+     "class": "within",
+     "why": "A misread costs a NOT FOUND line, never a wrong text; serves the same fix."
+    },
+    {
+     "id": "T46-lookup-not-found",
+     "summary": "A named id is looked up in that feature's plans then its spec (requirements the other way round), else a NOT FOUND line with why; never carried from the reviewed feature.",
+     "class": "within",
+     "why": "Replaces silent drops with an explicit line; serves the fix. The bundle shows the 444/433/449/house-style NOT FOUND lines."
+    },
+    {
+     "id": "T46-bare-beside-qualified",
+     "summary": "A bare id the blocks also name as another's carries this feature's text under a line saying it may mean either.",
+     "class": "within",
+     "why": "Carries the text rather than withholding it, because the survey found both meanings. As last round: this bundle's spec-cited.md has no 'may mean either' line, though bare FR-013 sits beside '385 FR-013'. The dispatch says the mark is in T46's own bundle, which is not visible here. The right texts are carried, so this does not move the verdict."
+    },
+    {
+     "id": "T46-answered",
+     "summary": "`answered` reads the blocks with every other feature's ids taken out.",
+     "class": "within",
+     "why": "The same defect class in the other reader of the ids, fixed here."
+    },
+    {
+     "id": "T46-index-first-sentence-cap",
+     "summary": "Index line = the requirement's first sentence, wrapped lines joined (runs_on), cut at a word past INDEX_CAP 420; by construction every line shorter than its lead paragraph ends ' [...]', whatever ended it.",
+     "class": "within",
+     "why": "The defect was FR-009's SILENT cut, and no cut is now unmarked. This bundle bears it out. Of spec-index.md's 16 index lines, 2 end ' [...]' (FR-001 and SC-006, both mid-sentence), and the other 14 end at a real sentence end. FR-009 is carried in full in spec-cited.md. No index-length requirement exists in request.md or the spec, and a marked cut is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T46-perf-tag",
+     "summary": "T46 is tagged [perf] under FR-013.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks or the builders' loop faster, and a wrong bundle costs a review round (T42's). It is not an engine stage, so no performance checklist is owed."
+    },
+    {
+     "id": "T46-found-and-left",
+     "summary": "Six found-and-left items, each 'fixed here' and pinned by a named test.",
+     "class": "within",
+     "why": "No deferral; nothing left."
+    },
+    {
+     "id": "T47-template-and-removed-headings",
+     "summary": "T47's empty template and the removal of T44's and T46's empty template headings.",
+     "class": "within",
+     "why": "Templates and their removal decide nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T46 (T42's plan review was handed the wrong decisions: `spec-cited.md` carried 451's own D5, D6 and D11 for T42's \"feature 204 D5\", \"feature 204 spec D5, D6\" and \"house style's D11\", and `spec-index.md` cut FR-009 at \"unless it states why the defect is not\", observed 2026-11-20, method: T42's plan review and its bundle)",
+    "### T46 Approach (checklist part A)",
+    "### T47 (<why: the finding or measurement that files it>)",
+    "### T47 Approach (checklist part A)",
+    "(removed) ### T44 (<why: the finding or measurement that files it>)",
+    "(removed) ### T46 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T46-qualified-forms",
+     "summary": "A number qualifies a run-on list, the `spec`/`plan` form and a task's possessive after the number; the id is read as that feature's.",
+     "class": "within",
+     "why": "Fixes the bundle handing a plan reviewer the wrong feature's decision (T42's review): a check giving a wrong outcome, in scope under fix-as-we-go and approved improvement 4 (fewer plan re-rounds)."
+    },
+    {
+     "id": "T46-own-run",
+     "summary": "A feature number's run of ids stops at its last comma, or before its last id, when the text after opens 'in N's', 'of feature N' or another possessive (own_run), red first in /tmp/t46-red6.log.",
+     "class": "within",
+     "why": "This fixes last round's NOT LEGITIMATE run-on reach. It is a fixed defect, so no ruling is needed. The bundle shows the fix: '<!-- feature 449 --> D11: NOT FOUND' is gone, and the 999 fixture string produced no 449 D1/D3. 449's D5 is still carried at spec-cited.md line 133, but the cause is the new found-and-left bullet's direct possessive 'carried 449's D5', which is a correct reading; D11's absence is the discriminator. Note, not blocking: the ids after a stopped run fall to the bare reading, so the quoted fixture 'D1 and D3 in 999's sections' carries 451's D1 and D3. In the one real instance, 'in 451's sections' says where a mention sits, not whose decision it is, so reading N as the owner would be no more correct. The trigger is a test string naming a feature that does not exist, and no reviewer gets another feature's text under a wrong label. That is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T46-possessive-own-names",
+     "summary": "A non-number possessive names another source unless its name is the feature's own (OWN_NAMES, a labeled CONVENTION).",
+     "class": "within",
+     "why": "A misread costs a NOT FOUND line, never a wrong text; serves the same fix."
+    },
+    {
+     "id": "T46-lookup-not-found",
+     "summary": "A named id is looked up in that feature's plans then its spec (requirements the other way round), else a NOT FOUND line with why; never carried from the reviewed feature.",
+     "class": "within",
+     "why": "Replaces silent drops with an explicit line; serves the fix. The bundle shows the 444/433/449/house-style NOT FOUND lines."
+    },
+    {
+     "id": "T46-bare-beside-qualified",
+     "summary": "A bare id the blocks also name as another's carries this feature's text under a line saying it may mean either.",
+     "class": "within",
+     "why": "Carries the text rather than withholding it, because the survey found both meanings. As last round: this bundle's spec-cited.md has no 'may mean either' line, though bare FR-013 sits beside '385 FR-013'. The dispatch says the mark is in T46's own bundle, which is not visible here. The right texts are carried, so this does not move the verdict."
+    },
+    {
+     "id": "T46-answered",
+     "summary": "`answered` reads the blocks with every other feature's ids taken out.",
+     "class": "within",
+     "why": "The same defect class in the other reader of the ids, fixed here."
+    },
+    {
+     "id": "T46-index-first-sentence-cap",
+     "summary": "Index line = the requirement's first sentence, wrapped lines joined (runs_on), cut at a word past INDEX_CAP 420; by construction every line shorter than its lead paragraph ends ' [...]', whatever ended it.",
+     "class": "within",
+     "why": "The defect was FR-009's SILENT cut, and no cut is now unmarked. This bundle bears it out. Of spec-index.md's 17 index lines, 2 end ' [...]' (FR-001 and SC-006, both mid-sentence), and the other 15 end at a real sentence end. FR-009 is carried in full in spec-cited.md. No index-length requirement exists in request.md or the spec, and a marked cut is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T46-perf-tag",
+     "summary": "T46 is tagged [perf] under FR-013.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks or the builders' loop faster, and a wrong bundle costs a review round (T42's). It is not an engine stage, so no performance checklist is owed."
+    },
+    {
+     "id": "T46-found-and-left",
+     "summary": "Six found-and-left items, each 'fixed here' and pinned by a named test.",
+     "class": "within",
+     "why": "No deferral; nothing left."
+    },
+    {
+     "id": "T47-template-and-removed-headings",
+     "summary": "T47's empty template and the removal of T44's and T46's empty template headings.",
+     "class": "within",
+     "why": "Templates and their removal decide nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Complexity Tracking",
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T46-fourth-round",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T48 (<why: the finding or measurement that files it>)",
+    "### T48 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T48 budget",
+     "summary": "Checklist item 8 sets the task's budget at one landing.",
+     "class": "within",
+     "why": "The template's default budget; it scopes no part of the GM's request out and narrows no FR."
+    },
+    {
+     "id": "T48 exits",
+     "summary": "Checklist item 6's red exit: what failed is recorded and the task set down, a claim it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The template's standing exit; it decides nothing the request or spec left open and drops nothing asked for. The green exit is still an unfilled placeholder."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7786,6 +7721,113 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T44": {
+   "section_sha256": "8b4850e81052b2dd06ed9526288cc1eea811b544cb40a59b3149dc26f926aeeb",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T44-accounting",
+     "summary": "py_c.rs accounts for every mention of subprocess before the writer denylist is read: a plain import, the PIPE/DEVNULL/STDOUT constants, and run/check_output/check_call/call with one literal list argv and only listed keywords; only the name is masked, so arguments (input=, stdout=open(...)) are still judged; anything unaccounted stays a write.",
+     "class": "within",
+     "why": "Fixes a found defect (a guard refusing or rewriting a read, window#307) while keeping T31's closed side. Refusing good work is a wrong outcome under constitution XIV, and the fix serves FR-013's builders'-loop performance aim. It narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T44-admitted-commands",
+     "summary": "Admitted argv commands: git ls-files, show, rev-parse, log, cat-file, ls-tree (with any -C dir), plus grep, ls, cat, head, wc, each element literal and screened for writing or program-running options (git --output/--ext-diff/--textconv/--filters; ugrep --filter/--pager/--view/--save-config/--query/-Q/--config). The option search space and method are stated.",
+     "class": "within",
+     "why": "The set is the corpus-observed reads plus the task line's and the brief's additions, and the screen states its search space (completion-helper lists, --help, rev-list -h labeled as a reading). It is a choice made inside the fix, and none of it narrows the GM's request or any FR."
+    },
+    {
+     "id": "T44-left-as-writes",
+     "summary": "git status and git diff (measured to rewrite .git/index), git grep (-O runs a program), rg (--pre, --hostname-bin run a program), shell strings, shell=True, unlisted keywords, non-literal argv, Popen, getoutput, aliased imports, make, unknown commands, and tree-code scripts (window#56/68/69/299, refusals#149) all stay writes.",
+     "class": "within",
+     "why": "Each one either writes or can run a program, or is a shape the reader does not know, so T31's closed side keeps it as a write. That keeps a judgment that already stands. It does not leave a wrong outcome in place: no corpus row runs rg, git grep, status or diff from Python, so no observed read is refused by these exclusions. The rg exclusion departs from the session's brief, not from the GM's request or the spec."
+    },
+    {
+     "id": "T44-repo-config-filters",
+     "summary": "A filter or textconv named by the repository's own config may run on log -p/show without a flag; this is accepted as main-tree already accepts it for the same shell command (tree.rs git_write); the mirror's config names none.",
+     "class": "within",
+     "why": "It matches the existing shell-level judgment and the mirror's config, which was read. It changes no behavior the GM asked to change."
+    },
+    {
+     "id": "T44-perf-tag",
+     "summary": "The task is tagged [perf] (the builders' loop) and not filed PERF=1, because it touches no engine stage's counted operations or time.",
+     "class": "within",
+     "why": "FR-013 counts a task as performance work when it is filed PERF=1 OR tagged [perf], and it names the builders' loop explicitly. The tag satisfies the requirement."
+    },
+    {
+     "id": "T44-order-exits",
+     "summary": "Order: after T42, before T22, beside T46. Exits: red tests green, replays with every move accounted, crate-scoped rust-test, lint and 100% cover, make quick, make static once, make hooks-test. Budget: one landing.",
+     "class": "within",
+     "why": "It is a performance task placed early, consistent with FR-013. Running make static once agrees with FR-007's aim. Nothing is narrowed."
+    },
+    {
+     "id": "T44-found-and-left",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "The exclusions above are writes or unknown shapes kept closed, not defects carried forward. The 31 unmoved subprocess rows are each placed (26 allowed, 5 running tree code)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T46": {
+   "section_sha256": "f5498c7f6d844f83645c15a6948851ddf8e6130c757b250f83815bb295812339",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T46-named",
+     "summary": "Each block is read by `named`: a number qualifies a run-on list, the `spec`/`plan` forms and a task's possessive after the number; a possessive that is no number names another source unless it is in OWN_NAMES",
+     "class": "within",
+     "why": "Carries T46's line: an id named with another feature's number is read as that feature's, never as the reviewed feature's. The GM's request is silent on the bundle; this repairs a reader so the plan review the GM approved works."
+    },
+    {
+     "id": "T46-lookup-not-found",
+     "summary": "An id so named is looked up in that feature's plans, then its spec (requirements the other way round), or carried as a NOT FOUND line with why",
+     "class": "within",
+     "why": "The task's own rule, 'carried from that feature's spec or plans or named as not found'. The bundle shows it working: feature 204's D5 and D6 come from its spec; 444 FR-043, 433 D3b, 449 FR-023/024 and house style's D11 are NOT FOUND lines."
+    },
+    {
+     "id": "T46-bare-marked",
+     "summary": "A bare id the blocks also name as another's carries this feature's text under a line saying it may mean either (labeled convention)",
+     "class": "within",
+     "why": "The survey found bare ids meaning either one, so marking the text instead of withholding it gives the reviewer both readings. The bundle's FR-013 carries the marker."
+    },
+    {
+     "id": "T46-answered",
+     "summary": "`answered` reads the blocks with every other feature's ids taken out",
+     "class": "within",
+     "why": "The second reader of the same ids gets the same fix, so another feature's FR-023 no longer trims request.md."
+    },
+    {
+     "id": "T46-fix1-index-mark",
+     "summary": "Round 3 fix 1: the index line is the first sentence (runs_on boundary), capped at INDEX_CAP 420 (labeled CONVENTION knob), and any line shorter than its lead paragraph ends ' [...]', whatever cut it",
+     "class": "within",
+     "why": "The defect was the SILENT mid-sentence cut. Marking every line shorter than its lead paragraph removes it by construction. The recorded figure is 1,531 lines cut and marked, 0 cut unmarked. In this bundle's spec-index.md, each line without a mark ends at a full stop, and the two cut lines (FR-006 at the cap, SC-001 after its sentence) end ' [...]'. Under the arbiter's ruling, where a marked cut falls, the cap and the sentence heuristic's boundary are not defects. Aside, not a finding: spec-index.md's heading names only the 420 cut as marked."
+    },
+    {
+     "id": "T46-fix2-run-stops",
+     "summary": "Round 3 fix 2: `own_run` stops a feature number's run of ids at its last comma, or before its last id, when the text after it opens 'in N's', 'of feature N' or another possessive",
+     "class": "within",
+     "why": "The run now stops where the plan says it does. This section's own bundle carries 449's FR-005, FR-023 and FR-024 and no 449 D1, D3 or D11. 449's D5 is present only because line 46 writes \"449's D5\" outright."
+    },
+    {
+     "id": "T46-fix2-clause-ids-fall-to-own",
+     "summary": "Residue of fix 2: ids inside the clause that stops the run (the clause the plan itself calls one naming another source, e.g. 'D1 and D3 in 999's sections') are not read as N's. They fall to the reviewed feature, with no marker and no NOT FOUND line",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This section's own bundle shows it. blocks.md names D1 and D3 only on line 5, as 'D1 and D3 in 999's sections', yet spec-cited.md carries feature 451's own D1 (One make detector) and D3 (A background run's end) with no marker. T46's line, and checklist item 1, say an id named with another feature's number is 'never' carried from the reviewed feature. The plan's own own_run wording treats 'in N's' as naming another source, so it cannot also read those ids as bare. This is the T42 failure the task exists to end: the wrong feature's text, unmarked. It is a known defect left, and Found-and-left does not list it. It is not of the kind the arbiter excluded, which concerned where a marked index cut falls. Fix: read ids in a clause naming feature N as N's (looked up there, or NOT FOUND), with N's own name read as this feature's; or at the least carry them marked, as the bare form is. How often this occurs in real plans is not measured in this bundle."
+    },
+    {
+     "id": "T46-perf-tag",
+     "summary": "Tagged [perf] under FR-013: a decision handed to a plan reviewer under the wrong feature costs a round",
+     "class": "within",
+     "why": "FR-013 counts work that makes the landings or the builders' loop faster as performance work."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

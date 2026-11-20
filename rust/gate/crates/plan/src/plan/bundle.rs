@@ -20,12 +20,49 @@ use super::sections::{block_digest, blocks, digest, re, task_sections};
 use super::status::{reviewed_blocks, text_of, RECORD, REMOVED};
 
 static IDS: LazyLock<Regex> = LazyLock::new(|| re(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b"));
-/// Another feature's requirement or decision, named as its own (feature 385 T66, T71, T123).
+/// A requirement or decision id, and a list of them run on with commas, "and" or "or", which one qualifier names whole ("feature 204's
+/// D5 and D6", "feature 204 spec D5, D6"; 451 T46).
+const ID: &str = r"(?:(?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)";
+const RUN_ON: &str = r"(?:(?:,\s*|,?\s+(?:and|or)\s+)(?:(?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b)*";
+/// Another feature's requirements or decisions, named with its number (feature 385 T66, T71, T123; the `spec` form, the run-on list
+/// and a task's possessive after the number, "444 T20's FR-043", 451 T46).
 static QUALIFIED: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r"(?<![-\w])(?:[Ff]eature\s+)?(\d{3})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?\(?(?:plan\s+)?((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b",
-    )
+    re(&format!(
+        r"(?<![-\w])(?:[Ff]eature\s+)?(\d{{3}})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?(?:T\d+[a-z]?'s\s+)?\(?(?:(?:plan|spec)\s+)?({ID}\b{RUN_ON})"
+    ))
 });
+/// An id named with a possessive that is no feature number ("house style's D11", "the spec's FR-002"; 451 T46): the name before `'s`
+/// says whose it is, and only `OWN_NAMES` say this feature's.
+static NAMED: LazyLock<Regex> = LazyLock::new(|| {
+    re(&format!(
+        r"(?<![\w.-])(?:([A-Za-z][\w-]*)\s+)?([A-Za-z][\w.-]*)'s\s+({ID}\b{RUN_ON})"
+    ))
+});
+/// The names whose possessive is the reviewed feature's own (read 2026-11-20 over every `specs/*/plan.md`, `plan-done.md` and
+/// `spec.md`: "the spec's", "plan.md's", "the GM's", "the amendment's", "this feature's", "T31's" name the feature's own documents;
+/// "house style's" and "the claims gate's" name another's; 250's "every page's FR-002 list" is its own). `feature` is own after any
+/// word ("this feature's", "the reviewed feature's"): another feature is named by its number. A name misread as another's costs a NOT FOUND line, never a wrong text.
+const OWN_NAMES: [&str; 19] = [
+    "spec",
+    "spec.md",
+    "plan",
+    "plan.md",
+    "plan-done.md",
+    "tasks.md",
+    "request",
+    "request.md",
+    "research.md",
+    "gm",
+    "amendment",
+    "reopening",
+    "review",
+    "session",
+    "task",
+    "section",
+    "block",
+    "page",
+    "feature",
+];
 static ITEM: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b"));
 static RANGE: LazyLock<Regex> =
     LazyLock::new(|| re(r"\b(FR|SC)-(\d{3})\s*(?:-|to|through)\s*(?:(?:FR|SC)-)?(\d{3})\b"));
@@ -240,7 +277,34 @@ fn plans_of(dir: &Path) -> String {
     read(&dir.join("plan.md")) + &read(&dir.join("plan-done.md"))
 }
 
-/// Each (feature, id) another feature's requirement, from that feature's one directory, under a line naming it.
+/// The line a cited id stands on when it is not found where it is named.
+fn not_found(rid: &str, why: &str) -> String {
+    format!("- **{rid}**: NOT FOUND - {why}; the bundle has only the blocks' own words of it.\n")
+}
+
+/// `rid`'s text in a feature's directory: a decision from its plans, else its spec (feature 204 keeps its decisions in `spec.md`); a
+/// requirement from its spec, else its plans.
+fn lookup(dir: &Path, rid: &str) -> Option<String> {
+    let (plans, spec) = (plans_of(dir), read(&dir.join("spec.md")));
+    let found = |texts: [&str; 2], decision: bool| {
+        texts.into_iter().find_map(|t| {
+            let map = if decision {
+                paragraphs(t, &DECISION)
+            } else {
+                requirements(t)
+            };
+            map.get(rid).and_then(Value::as_str).map(str::to_owned)
+        })
+    };
+    if rid.starts_with('D') {
+        found([&plans, &spec], true)
+    } else {
+        found([&spec, &plans], false)
+    }
+}
+
+/// Each (feature, id) another feature's requirement or decision, from that feature's one directory, under a line naming it; one not
+/// found there, or a feature with no one directory, is named as not found (451 T46: it was dropped without a word).
 fn foreign(spec_dir: &Path, others: &[(String, String)]) -> Vec<String> {
     let parent = spec_dir.parent().unwrap_or(Path::new("."));
     let mut out = Vec::new();
@@ -253,17 +317,21 @@ fn foreign(spec_dir: &Path, others: &[(String, String)]) -> Vec<String> {
             .filter(|e| e.file_name().to_string_lossy().starts_with(&prefix) && e.path().is_dir())
             .map(|e| e.path())
             .collect();
-        let [hit] = hits.as_slice() else {
-            continue;
+        let text = match hits.as_slice() {
+            [] => not_found(rid, &format!("feature {no} has no directory under specs/")),
+            [hit] => lookup(hit, rid).unwrap_or_else(|| {
+                let name = hit.file_name().unwrap_or_default().to_string_lossy();
+                not_found(
+                    rid,
+                    &format!("specs/{name} holds no {rid} in its spec.md, plan.md or plan-done.md"),
+                )
+            }),
+            many => not_found(
+                rid,
+                &format!("feature {no} has {} directories under specs/", many.len()),
+            ),
         };
-        let found = if rid.starts_with('D') {
-            paragraphs(&plans_of(hit), &DECISION)
-        } else {
-            requirements(&read(&hit.join("spec.md")))
-        };
-        if let Some(text) = found.get(rid).and_then(Value::as_str) {
-            out.push(format!("<!-- feature {no} -->\n{text}"));
-        }
+        out.push(format!("<!-- feature {no} -->\n{text}"));
     }
     out
 }
@@ -328,7 +396,96 @@ fn ascii_json(text: &str) -> String {
         .collect()
 }
 
-/// The text of each requirement and decision the blocks cite, and the ids cited (another feature's are taken from that feature).
+/// What one block names: its ids named as another feature's `(feature, id)`, as another source's `(its name, id)`, the ids it names as
+/// this feature's in so many words, and its text with every other feature's and source's ids taken out (its ranges written out).
+struct Named {
+    others: Vec<(String, String)>,
+    sources: Vec<(String, String)>,
+    own: BTreeSet<String>,
+    bare: String,
+}
+
+fn ids_in(text: &str) -> Vec<String> {
+    IDS.captures_iter(text)
+        .map_while(Result::ok)
+        .map(|c| c[1].to_owned())
+        .collect()
+}
+
+/// A clause after a run of ids that names another source ("in 451's sections", "of feature 999"): the run's last part is its, not the
+/// number's (451 T46 round 2: "449 T233's FR-023 and FR-024, and D5 and D11 in 451's sections" carried 449's D5).
+static ANOTHER: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"^\s+(?:in|of|from)\s+(?:(?:[Ff]eature\s+)?\d{3}\b|(?:the\s+)?[A-Za-z][\w.-]*'s)")
+});
+
+/// (the part of a run of ids its number names, the rest, left to be read as written): the whole run, unless the text after it opens a
+/// clause naming another source - then the run stops at its last comma, or before its last id when it has no comma.
+fn own_run<'a>(run: &'a str, after: &str) -> (&'a str, &'a str) {
+    if !ANOTHER.is_match(after).unwrap_or(false) {
+        return (run, "");
+    }
+    let cut = run.rfind(',').or_else(|| {
+        IDS.find_iter(run)
+            .map_while(Result::ok)
+            .last()
+            .map(|m| m.start())
+            .filter(|&s| s > 0)
+    });
+    cut.map_or((run, ""), |at| (&run[..at], &run[at..]))
+}
+
+fn named(body: &str, own_no: &str) -> Named {
+    let mut n = Named {
+        others: Vec::new(),
+        sources: Vec::new(),
+        own: BTreeSet::new(),
+        bare: String::new(),
+    };
+    let expanded = expand_ranges(body);
+    let numbered = QUALIFIED.replace_all(&expanded, |c: &Captures<'_>| {
+        let (run, left) = own_run(&c[2], &expanded[c.get(0).map_or(0, |g| g.end())..]);
+        let ids = ids_in(run);
+        if c[1] == *own_no {
+            n.own.extend(ids);
+            c[2].to_owned()
+        } else {
+            n.others
+                .extend(ids.into_iter().map(|i| (c[1].to_owned(), i)));
+            left.to_owned()
+        }
+    });
+    n.bare = NAMED
+        .replace_all(&numbered, |c: &Captures<'_>| {
+            let before = c.get(1).map_or("", |g| g.as_str());
+            let word = c[2].to_lowercase();
+            let is_own = OWN_NAMES.contains(&word.as_str())
+                || IDS.is_match(&c[2]).unwrap_or(false)
+                || (word.len() > 1
+                    && word.starts_with('t')
+                    && word[1..].bytes().all(|b| b.is_ascii_digit()));
+            let ids = ids_in(&c[3]);
+            if is_own {
+                n.own.extend(ids);
+                return c[0].to_owned();
+            }
+            let article =
+                ["the", "this", "a", "an", "our"].contains(&before.to_lowercase().as_str());
+            let name = if before.is_empty() || article {
+                c[2].to_owned()
+            } else {
+                format!("{before} {}", &c[2])
+            };
+            n.sources.extend(ids.into_iter().map(|i| (name.clone(), i)));
+            String::new()
+        })
+        .into_owned();
+    n
+}
+
+/// The text of each requirement and decision the blocks cite, and the ids cited bare (another feature's are taken from that feature).
+/// An id named with another feature's number or name is never carried from this one; a bare mention of an id the blocks also name as
+/// another's carries this feature's text under a line saying it may mean either (451 T46: T42's bare "D5's form" was feature 204's,
+/// 417 T37's bare "FR-013 (speed first)" beside "(385 FR-013)" its own), so nothing is withheld and nothing arrives unmarked.
 fn cited_text(
     spec_dir: &Path,
     feature: &str,
@@ -338,48 +495,150 @@ fn cited_text(
 ) -> (Vec<String>, Vec<String>) {
     let own_no: String = feature.chars().take(3).collect();
     let mut others: Vec<(String, String)> = Vec::new();
+    let mut sources: Vec<(String, String)> = Vec::new();
+    let mut said_own: BTreeSet<String> = BTreeSet::new();
     let mut cited: Vec<String> = Vec::new();
-    let mut own: BTreeSet<String> = BTreeSet::new();
+    let mut defined: BTreeSet<String> = BTreeSet::new();
     for (_, body) in under {
-        for c in QUALIFIED.captures_iter(body).map_while(Result::ok) {
-            let pair = (c[1].to_owned(), c[2].to_owned());
-            if pair.0 != own_no && !others.contains(&pair) {
+        let n = named(body, &own_no);
+        for pair in n.others {
+            if !others.contains(&pair) {
                 others.push(pair);
             }
         }
-        let bare = QUALIFIED.replace_all(body, |c: &Captures<'_>| {
-            if c[1] == *own_no {
-                c[2].to_owned()
-            } else {
-                String::new()
-            }
-        });
-        let expanded = expand_ranges(&bare);
-        for c in IDS.captures_iter(&expanded).map_while(Result::ok) {
-            if !cited.iter().any(|x| *x == c[1]) {
-                cited.push(c[1].to_owned());
+        for pair in n.sources {
+            if !sources.contains(&pair) {
+                sources.push(pair);
             }
         }
-        own.extend(
+        said_own.extend(n.own);
+        for id in ids_in(&n.bare) {
+            if !cited.contains(&id) {
+                cited.push(id);
+            }
+        }
+        defined.extend(
             DECISION
                 .captures_iter(body)
                 .map_while(Result::ok)
                 .map(|c| c[1].to_owned()),
         );
     }
+    let elsewhere = |id: &str| -> Vec<String> {
+        let numbered = others
+            .iter()
+            .filter(|(_, i)| i == id)
+            .map(|(no, _)| format!("feature {no}'s"));
+        let by_name = sources
+            .iter()
+            .filter(|(_, i)| i == id)
+            .map(|(name, _)| format!("{name}'s"));
+        numbered.chain(by_name).collect()
+    };
     let text_at =
         |map: &Map<String, Value>, id: &str| map.get(id).and_then(Value::as_str).map(str::to_owned);
     let mut parts: Vec<String> = cited
         .iter()
-        .filter(|i| !own.contains(*i))
+        .filter(|i| !defined.contains(*i))
         .filter_map(|i| {
-            text_at(items, i)
+            let text = text_at(items, i)
                 .filter(|t| !t.is_empty())
-                .or_else(|| text_at(decisions, i))
+                .or_else(|| text_at(decisions, i))?;
+            let named = elsewhere(i);
+            if named.is_empty() || said_own.contains(i) {
+                return Some(text);
+            }
+            Some(format!("<!-- feature {own_no}'s {i}, cited bare; the blocks also name {} {i}, so a bare {i} may mean either -->\n{text}", named.join(" and ")))
         })
         .collect();
     parts.extend(foreign(spec_dir, &others));
+    parts.extend(sources.iter().map(|(name, rid)| {
+        format!(
+            "<!-- {name} -->\n{}",
+            not_found(rid, &format!("named as {name}'s, not feature {own_no}'s, with no feature number to find it by, so nothing is carried and never this feature's {rid}"))
+        )
+    }));
     (parts, cited)
+}
+
+/// The longest index line, in characters, before it is cut at a word and marked ` [...]` (451 T46, the coordinator 2026-11-20: the
+/// index is for grepping, and the defect was the SILENT cut, not the length). A CONVENTION, "about 400": 420 keeps FR-009's sentence,
+/// the defect's own line, whole at 418, measured 2026-11-20 (`/tmp/t46-scripts/idx2.py`: 267 of 4,686 lines marked at 420, 315 at 400).
+const INDEX_CAP: usize = 420;
+
+/// Whether the `.` before `after` ends no sentence: its next word starts lowercase (451 T46, the coordinator 2026-11-20: a real sentence
+/// starts with a capital, a digit, a backtick or a bold mark, so "(e.g. a well)", "... of things" and a plain word's ". then" run on and
+/// no cut is left unmarked).
+fn runs_on(after: &str) -> bool {
+    after
+        .trim_start()
+        .chars()
+        .next()
+        .is_some_and(char::is_lowercase)
+}
+
+/// A requirement's index line: its first sentence, ending at a `.` before a space or the end, outside a code span and not before a
+/// lowercase word (`runs_on`), its hard-wrapped lines joined (451 T46: the first line alone cut FR-009 mid-sentence), past `INDEX_CAP`
+/// cut at a word and marked ` [...]`.
+fn lead(text: &str) -> String {
+    let joined = paragraph(text);
+    let mut code = false;
+    let mut end = joined.len();
+    for (i, c) in joined.char_indices() {
+        if c == '`' {
+            code = !code;
+        } else if c == '.'
+            && !code
+            && joined[i + 1..].chars().next().is_none_or(|n| n == ' ')
+            && !runs_on(&joined[i + 1..])
+        {
+            end = i + 1;
+            break;
+        }
+    }
+    let sentence = &joined[..end];
+    // a line shorter than its lead paragraph always ends marked, whatever ended it (451 T46 round 2: no cut is silent by construction)
+    let short = sentence.trim_end().len() < joined.trim_end().len();
+    let line = if sentence.chars().count() <= INDEX_CAP {
+        sentence.to_owned()
+    } else {
+        let cut: String = sentence.chars().take(INDEX_CAP).collect();
+        let at = cut.rfind(' ').unwrap_or(cut.len());
+        return format!("{} [...]", &cut[..at]);
+    };
+    if short {
+        format!("{line} [...]")
+    } else {
+        line
+    }
+}
+
+/// A requirement's lead paragraph on one line, its wrapped lines joined; a nested list, table or fence under it is the requirement's
+/// own text, not its index line; a heading requirement is its heading. A wrapped line opening with `#` is prose: since T37 no item's
+/// text holds a heading line.
+fn paragraph(text: &str) -> String {
+    let mut lines = text.lines();
+    let mut out = lines.next().unwrap_or("").trim_end().to_owned();
+    if out.starts_with('#') {
+        return out;
+    }
+    for line in lines {
+        let t = line.trim();
+        let numbered = t
+            .split_once(". ")
+            .is_some_and(|(n, _)| !n.is_empty() && n.bytes().all(|b| b.is_ascii_digit()));
+        if t.is_empty()
+            || numbered
+            || ["- ", "* ", "+ ", "|", "```"]
+                .iter()
+                .any(|m| t.starts_with(m))
+        {
+            break;
+        }
+        out.push(' ');
+        out.push_str(t);
+    }
+    out
 }
 
 /// Write the bundle for the blocks `under` and return its MANIFEST; `earlier` is `{key: (its text when last judged, the verdict it got)}`.
@@ -434,20 +693,21 @@ pub(super) fn build(
     let index: String = items
         .iter()
         .filter(|(i, _)| !cited.contains(*i))
-        .map(|(_, p)| {
-            format!(
-                "{}\n",
-                p.as_str().unwrap_or("").lines().next().unwrap_or("")
-            )
-        })
+        .map(|(_, p)| format!("{}\n", lead(p.as_str().unwrap_or(""))))
         .collect();
     // every ruling a block cites, its record's ruling, why and what (feature 449 T169): the reviewer reads nothing in the repository
     write("rulings.md", rulings::rulings(spec_dir, &bodies));
     write(
         "spec-index.md",
-        format!("# Every other requirement, its first line\n\n{index}"),
+        format!("# Every other requirement, its first sentence on one line (past {INDEX_CAP} characters cut at a word and marked [...])\n\n{index}"),
     );
-    let (req, left) = trimmed_request(&read(&spec_dir.join("request.md")), answered(under, &spec));
+    // the amendment a block answers is read from this feature's ids alone: "449 FR-023" answers none of 451's (451 T46)
+    let own_no: String = feature.chars().take(3).collect();
+    let ours: Vec<(String, String)> = under
+        .iter()
+        .map(|(k, b)| (k.clone(), named(b, &own_no).bare))
+        .collect();
+    let (req, left) = trimmed_request(&read(&spec_dir.join("request.md")), answered(&ours, &spec));
     write("request.md", req);
     let shown = if left.is_empty() {
         "(none - the whole request is in request.md)\n".to_owned()
@@ -492,7 +752,7 @@ pub(super) fn build(
         format!("# Each changed block's text when last judged, with that verdict\n\n{before}"),
     );
     let manifest = out.join("MANIFEST.md");
-    let _ = std::fs::write(&manifest, format!("# Plan review bundle - {feature}, {name}\n\nA MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside\nthis MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment\nfrom the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,\ndecision and `m:` measurement the blocks name, in full; `rulings.md` the round arbiter's ruling, why and what, verbatim, for every `ask:`\nruling the blocks cite; `spec-index.md` the first line of every other requirement - grep it for one the blocks\nshould have named; `earlier.md` what a changed block said when last judged, and the verdict it got.\n\nFind each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).\n\n{how}\n"));
+    let _ = std::fs::write(&manifest, format!("# Plan review bundle - {feature}, {name}\n\nA MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside\nthis MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment\nfrom the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,\ndecision and `m:` measurement the blocks name, in full; `rulings.md` the round arbiter's ruling, why and what, verbatim, for every `ask:`\nruling the blocks cite; `spec-index.md` every other requirement's first sentence on one line, a long one cut and marked `[...]` - grep it for one the blocks\nshould have named; `earlier.md` what a changed block said when last judged, and the verdict it got.\n\nFind each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).\n\n{how}\n"));
     Ok(manifest)
 }
 
