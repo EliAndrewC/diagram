@@ -54,6 +54,10 @@
       research: rendering
       held: Makefile
       verify: DONE. landed in batch T13+T19: resume past the cap refused; task-add lints its line
+- [x] T20 [perf] The shard form - `tests/hooks/test-<name>.<k>.sh`, each shard a job under the suite's stamp key, the suite stamped green only when every shard is, the companion check accepting shards - in the `hooks-test` recipe and `tests/hooks/hookrun.sh`, proved on `tests/hooks/test-parts.sh` split in two; the entry-gate split moved to T21 with the other two (the session, 2026-11-20) (D17; FR-010, SC-004)
+      research: rendering
+      held: Makefile
+      verify: DONE. landed in batch T20+T32: the shard form; the guard's tests read their own environment
 - [x] T23 Two builders' cargo runs in one clone corrupt each other's coverage (found by T02, 2026-11-20): T02's make static ran beside T234's cargo in the same target directory and failed on corrupt or missing coverage profiles in seven crates, a collision, not a result - the Rust checks take one lock a target directory for the length of a run, the second waiting (named, with how long) rather than racing, red first with two concurrent runs
       research: rendering
       verify: DONE. landed: one lock a target directory for the Rust checks
@@ -78,3 +82,6 @@
 - [x] T30 [perf] Withdrawn: folded into T15 (T15's plan review, 2026-11-20, ruled leaving the shared readers' defects NOT LEGITIMATE). The shared shell readers miss forms (found by T15, 2026-11-20): shared::shape::strip_heredocs misses `cat <<'EOF' > f` (words after the delimiter), strip_quotes keeps a string after `-c ` (`grep -c "make x &"`) and blanks one after `bash -lc`, and shared::make::invoked misses `setsid make`, `bash -lc "make x"` and a goal-less make - every guard and the event log's make detector share them (T15 works around them in no_poll_hooks; the event log booked a landing launched after a python3 -c string as other tool, T08's note); fixed in the shared code, T15's work-arounds retired onto it, red first on each form
       research: rendering
       verify: DONE. landed in batch T18+T24+T28+T29+T15+T30: performance work first, and four of the improvements
+- [x] T32 [perf] Guard tests read the real environment (found by T14, 2026-11-20): with L7R_FEATURE_DIRECTORY exported (page sessions export it) 17-20 tests of checks_hooks, check_bundle_hooks, pair_hooks, review_round_hooks, shared::checks::arbiter and no_poll_hooks fail - T24's defect in the guard's own tests; each test given its own environment (no process-env mutation), asserting the one outcome it means, red first with the variable exported, and every other variable the guard reads swept the same way
+      research: rendering
+      verify: DONE. landed in batch T20+T32: the shard form; the guard's tests read their own environment

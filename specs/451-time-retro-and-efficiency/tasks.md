@@ -65,10 +65,6 @@ landing on its own, each small; T22 last.
 
 ### The hook-suite split (FR-010)
 
-- [ ] T20 [perf] The shard form - `tests/hooks/test-<name>.<k>.sh`, each shard a job under the suite's stamp key, the suite stamped green only when every shard is, the companion check accepting shards - in the `hooks-test` recipe and `tests/hooks/hookrun.sh`, proved on `tests/hooks/test-parts.sh` split in two; the entry-gate split moved to T21 with the other two (the session, 2026-11-20) (D17; FR-010, SC-004)
-      research: rendering
-      held: Makefile
-      verify: red first - a scratch roster's sharded fixture suite runs both shards and stamps only when both are green; `make hooks-test HOOKS_ALL=1`, each `.git/hooks-test/test-entry-gate.*.s` about 20 s or less (`SHARD_BAR_S`, GUESS); the case count before and after equal; `make quick`
 - [ ] T21 [perf] `tests/hooks/test-l7r-gate.sh`, `tests/hooks/test-sync-with-main.sh` and `tests/hooks/test-entry-gate.sh` (by its two cases, moved from T20) split into shards by their case groups (D17; FR-010, SC-004)
       research: rendering
       verify: each suite's case count before and after equal; `make hooks-test HOOKS_ALL=1`, each shard's kept seconds about 20 or less; `make quick`
@@ -79,8 +75,6 @@ landing on its own, each small; T22 last.
       research: rendering
       verify: `report.md` holds the three measurements against their bars; a missed bar names its number and the knob it retunes; `make quick`
 - [ ] T31 [perf] main-tree refuses a read as a write (found by T15's corpus replay, 2026-11-20): `python3 -c "data = open('$SP/x.html','rb').read() ..."` is refused with no escape as a write where the shell stands, the same before and after T15's shared-reader fix - measure it on the corpora (the main-tree refusals whose command only reads), and fix a refusal of correct work in the guard, red first
-      research: rendering
-- [ ] T32 [perf] Guard tests read the real environment (found by T14, 2026-11-20): with L7R_FEATURE_DIRECTORY exported (page sessions export it) 17-20 tests of checks_hooks, check_bundle_hooks, pair_hooks, review_round_hooks, shared::checks::arbiter and no_poll_hooks fail - T24's defect in the guard's own tests; each test given its own environment (no process-env mutation), asserting the one outcome it means, red first with the variable exported, and every other variable the guard reads swept the same way
       research: rendering
 - [ ] T33 guard_file_hooks refuses sed -i on a guard source but lets a Python heredoc write it (found by T14, 2026-11-20): a held file written through python3 -c, a heredoc-fed interpreter or tee is a write like sed -i - refused without a live make guard-edit permit, red first on each form, through T15's shared readers
       research: rendering
