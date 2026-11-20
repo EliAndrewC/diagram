@@ -11,6 +11,10 @@
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs
       verify: DONE. landed: the shared category table and the task on every line
+- [x] T04 A background run's end: `bg` on a backgrounded Bash call's PostToolUse, a `BgEnd` line from a `<task-notification>` prompt with a `<tool-use-id>`, `inflight` on Stop and SubagentStop from `background_tasks`, and `append_row` public for the gate's tools, in `rust/guard/src/guards/event_log_hooks.rs` (its tool fields moved to `event_log_hooks/fields.rs` if the file would pass the file cap); and the one reader, `rust/gate/crates/measure/src/measure/events.rs::load_events`, setting the new kinds (`BgEnd`, `Phase`) aside from the time-gap stream until T08 and T09 read them (D3, D4; FR-002)
+      research: rendering
+      held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/fields.rs if made)
+      verify: DONE. landed: a background run's end is logged
 - [x] T23 Two builders' cargo runs in one clone corrupt each other's coverage (found by T02, 2026-11-20): T02's make static ran beside T234's cargo in the same target directory and failed on corrupt or missing coverage profiles in seven crates, a collision, not a result - the Rust checks take one lock a target directory for the length of a run, the second waiting (named, with how long) rather than racing, red first with two concurrent runs
       research: rendering
       verify: DONE. landed: one lock a target directory for the Rust checks

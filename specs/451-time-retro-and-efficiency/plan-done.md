@@ -335,3 +335,48 @@ them: a fallback task is the log's own feature's start, so it always names a tas
 **Performance work?** no
 
 
+<!-- plan-archive: archived 2026-11-20 -->
+### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)
+
+- **Approach**: D3's writer half: `bg` on a backgrounded PostToolUse, the `BgEnd` line from a notification prompt, `inflight` on Stop
+  and SubagentStop; D4's `append_row`, public for the gate's tools; and the one reader's guard against the new kinds:
+  `rust/gate/crates/measure/src/measure/events.rs::load_events` sets `BgEnd` and `Phase` lines aside from the time-gap stream (else a
+  `Phase` line inside a `make static` call would book the rest of the call "thinking", and a line of no session would form a session of
+  its own, the T207 failure) and returns them for T08 and T09. Held: `rust/guard/src/guards/event_log_hooks.rs` (`make guard-edit`
+  first); the tool fields move to `event_log_hooks/fields.rs` if the file would pass the file cap. Red first: a fixture notification
+  prompt (R2's observed shell form) writes a `BgEnd` with its tool-use id, status and exit code; an agent notification writes none; a
+  Stop payload with two `background_tasks` writes both under `inflight`; a log holding a `BgEnd` and a `Phase` line gives `make
+  where-time` and `make feature-report` the tables the log without them gives.
+- **As built (2026-11-20), where it departs from the approach above**:
+  - **An agent's notice names its `<tool-use-id>` too**: 3,801 of 3,986 agent notices carry one, beside all 1,992 shell notices, measured 2026-11-20 (the `-diagram` and clone transcripts' enqueued `<task-notification>` rows tallied by summary and by a `<tool-use-id>` before any `<result>`). R2's "an agent's carries `<task-id>` ... `<usage>`" omits it. So the id alone would write a `BgEnd` for every agent. A notice writes none where its summary opens `Agent "` or its launch line is an Agent call. Only the tags before a `<result>` are read, and the prompt must open with the notice. Each check was deleted alone and its case seen red.
+  - **A workflow's and a Monitor's notice write their end.** Each names its launch: 46 workflow notices and 128 Monitor notices ("stream ended", "script failed", a task stopped) carry an id, measured 2026-11-20 (same tally). Each is a background run the session can wait on, so it is booked like a shell's, a fixture pinning each. This is wider than data-model's "a background shell ended".
+  - **A `BgEnd`'s `t` is when the notice reached the session, not when the run ended.** A notice waits in the queue while the session is mid-turn. One run was enqueued at 11:44:08 and delivered at 11:47:41, observed 2026-11-20 (the queue's enqueue and remove rows of one notice). So the `t` is right for the end of a wait, but late for the run's span when the session was busy. T08 can take the end from the queue's enqueue row where it needs the span.
+  - **The end is filed beside its launch.** It goes in the log that holds the launching call's line, not feature.json's fallback log where the prompt's line goes (a notice names no command or brief, so T26's chain has nothing to file it by). It copies that line's `make`, `cat`, `task` and `fallback` mark, and its `t` as `t0`: the run's span. A launch no log holds ends beside the prompt, under its task and mark. Its fields are data-model's: `id`, `bg` (the task id; `task` stays the spec task), `status`, and `exit`, the summary's last `exit code N`, absent where the run was stopped or its session ended.
+  - **The lookup's cost**: 3.7 ms a notice whose launch is in the newest log, measured 2026-11-20 (20 replays through the clone's `l7r-guard`, beside the 15.7 MB 449 log). It is 15.4 ms where no log holds the launch and the whole 449 log is read, measured 2026-11-20 (same method). A prompt that is no notice takes 3.3 ms, measured 2026-11-20 (same method).
+  - **`append_row`** stamps `t` where the row has none. It takes `sid` from `CLAUDE_CODE_SESSION_ID` where the row names none, files the row by its `task` through T26's chain, and writes nothing for a row with no `ev`.
+  - **The reader**: `events::load_all` returns `Loaded { stream, aside }`, the `ASIDE` kinds kept apart, a line repeated whole kept once, and `load_events` returns the stream. The tool fields moved to `event_log_hooks/fields.rs` with `bg`, `inflight` and the notice's parse.
+  - **The live `BgEnd` was replayed, not seen live.** The hooks run the mirror's binary until this lands, and a subagent's own notice never reaches a hook (R2). So R2's shell notice was replayed through this clone's built `l7r-guard` with a launch and a scratch `L7R_EVENTS_DIR`, and wrote its `BgEnd` with `make`, `cat` and `t0`. The first real one is read off the main session's log after the landing.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the end line and the in-flight runs | n/a - no map | n/a | none | n/a |
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a background run's start and end are both in the log.
+2. **The constraints.** FR-002; D3, D4; the hook never refuses and never prints; today's readers unchanged by the new kinds until T08 and T09 read them.
+3. **Where each comes from.** G: the GM's approval of "logs that end from its completion notice"; O: research R2 (the schema, the notification texts).
+4. **Do they describe the world here?** The notification's `<tool-use-id>` was read from the window's own transcript queue rows (observed 2026-11-20, method: research R2).
+5. **The order.** After T03; before T05 and T06 (`append_row`) and T09, which reads the lines.
+6. **The exits.** Green: the fixture cases pass. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The three red cases green; one real background run in the clone writes its `BgEnd` (read off the log).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a - new lines, no defect.
+
+**Found and left?** none
+
+**Performance work?** no
+

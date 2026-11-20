@@ -39,10 +39,6 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
 
 ### The event-log data (FR-001 to FR-004)
 
-- [ ] T04 A background run's end: `bg` on a backgrounded Bash call's PostToolUse, a `BgEnd` line from a `<task-notification>` prompt with a `<tool-use-id>`, `inflight` on Stop and SubagentStop from `background_tasks`, and `append_row` public for the gate's tools, in `rust/guard/src/guards/event_log_hooks.rs` (its tool fields moved to `event_log_hooks/fields.rs` if the file would pass the file cap); and the one reader, `rust/gate/crates/measure/src/measure/events.rs::load_events`, setting the new kinds (`BgEnd`, `Phase`) aside from the time-gap stream until T08 and T09 read them (D3, D4; FR-002)
-      research: rendering
-      held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/fields.rs if made)
-      verify: red first - research R2's observed shell notification writes its `BgEnd` (id, status, exit code), an agent notification writes none, a Stop with two `background_tasks` lists both; a log with a `BgEnd` and a `Phase` line gives `make where-time` and `make feature-report` the same tables as the log without them; one real background run in the clone writes its `BgEnd`; `make rust-test CRATE=rust/guard`; `make hooks-test`; `make quick`
 - [ ] T05 The Rust checks' phase lines: `build`, `test`, `cover-build` (per family), `cover-run`, `lint` and `format` per crate, each with its wall-clock span, through `append_row`, in `rust/gate/crates/rustc/src/rustc.rs`, `rustc/cover.rs`, `rustc/side.rs`, `rustc/kept.rs` (D4; FR-003); and every reader outside measure's load_events filters the event log by kind before it reads a line's time - reviews/glyph.rs takes the log's first event as the feature's start, which a Phase line would become (T04, 2026-11-20), red first
       research: rendering
       verify: red first - a fixture crate's `rust test` and `rust cover` in a scratch tree write nested phase lines, a kept green result writes none; `make rust-test CRATE=rust/gate/crates/rustc`; `make quick`
