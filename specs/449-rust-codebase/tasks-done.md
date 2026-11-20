@@ -695,3 +695,6 @@
 - [x] T237 reviews owed owes no review for a Rust drawing change that is not declared (found by T234, 2026-11-20): its list of drawing-code paths (the CODE pattern in rust/gate/crates/reviews/src/reviews/owed.rs) has no rust/ entry, so a change to a Rust stage's drawing (T234's sluice frame) owed no glyph-check until an Occasions line was written by hand - a check passing the bad; the Rust stages' and the Mode A engine's drawing code counted as drawing code, so a change to it owes the glyph-check of each element it redraws, red first; lands before T158
       research: rendering
       verify: DONE. landed: Rust drawing code owes the glyph-checks it redraws
+- [x] T239 Kuwabata's settlement ground is drawn over the north dike and the head canal (found by T236, 2026-11-20): roll_polder hands the seat the fields' outline as its ring, so the settlement's ground runs to the plots' edge (y 2340) past the dike (about y 2288-2296), where 0019 puts a village a few steps off its own polder's dike - a wrong outcome a reader sees; the seat handed the dike's outline (its candidates and placement change, measured), the claim restated, red first, the glyph and placement reviews it owes recorded deferred (feature 444 FR-023); lands before T158
+      research: rendering
+      verify: DONE. landed: the polder's settlement stands off the dike
