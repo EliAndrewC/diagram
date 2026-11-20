@@ -1,0 +1,42 @@
+{
+  "utc": "2026-11-20T02:04:03Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 14,
+  "result": "failed: counters-inert",
+  "commit": "32f2ebb73",
+  "first_failure_s": 9.2,
+  "last_failure_s": 9.2,
+  "host": {
+    "load": [
+      0.88,
+      1.94
+    ],
+    "mem_avail_mb": [
+      9939,
+      9560
+    ],
+    "cpu_temp_c": [
+      68.0,
+      92.0
+    ],
+    "stall_s": {
+      "cpu": 0.3,
+      "io": 0.2,
+      "io_full": 0.1,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 22508,
+      "package": 12075
+    }
+  },
+  "phases": {
+    "preflight": 5.0,
+    "reference": 0.0,
+    "counters-inert": 9.0,
+    "static": 10.0,
+    "format": 0.0,
+    "seeds": 4.0
+  }
+}
