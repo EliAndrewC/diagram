@@ -62,7 +62,7 @@ pub(super) fn tools(root: &Path) {
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
     l7r_gate_core::write_executable(
         &root.join("scripts/gates/l7r-gate.sh"),
-        "#!/bin/sh\nd=$(dirname \"$0\")/../..\nif [ \"$1\" = check ]; then [ -f \"$d/.git/no-pattern\" ] && { echo no pattern >&2; exit 1; }; echo '(?<![\\w.])\\d[\\d,]*(?:\\.\\d+)?\\s*(?:px|s)(?![\\w-])'; exit 0; fi\n[ -f .git/green ]\n",
+        "#!/bin/sh\nd=$(dirname \"$0\")/../..\nif [ \"$1\" = hamlet ]; then echo \"$(cd \"$d\" && pwd)/.git/engine.bin\"; exit 0; fi\nif [ \"$1\" = check ]; then [ -f \"$d/.git/no-pattern\" ] && { echo no pattern >&2; exit 1; }; echo '(?<![\\w.])\\d[\\d,]*(?:\\.\\d+)?\\s*(?:px|s)(?![\\w-])'; exit 0; fi\n[ -f .git/green ]\n",
     );
     put(
         root,
@@ -91,13 +91,18 @@ pub(super) fn repo(name: &str) -> l7r_guard::shared::tempdir::Held<PathBuf> {
     let branch = head.trim().strip_prefix("ref: ").unwrap().to_owned();
     let id = std::fs::read_to_string(d.join(".git").join(branch)).unwrap();
     put(&d, ".git/refs/remotes/origin/main", &id);
-    put(&d, ".git/info/exclude", "scripts/\nMakefile\n");
+    put(
+        &d,
+        ".git/info/exclude",
+        "scripts/\nMakefile\n.gencache/\n*.driver.json\n",
+    );
     tools(&d);
     d
 }
 
 /// A map folder: its manifest with these ink classes; in the live pool its spec too, which makes it a hamlet to the pool walk (feature
-/// 449 T220; a legacy folder with its manifest alone is a frozen exhibit; its `.gen.py` left with T221).
+/// 449 T220; a legacy folder with its manifest alone is a frozen exhibit; its `.gen.py` left with T221). A live hamlet's elements are
+/// its Rust drawing's since 449 T230: `drawn` draws one.
 pub(super) fn map(root: &Path, tree: &str, name: &str, classes: &[&str]) {
     if tree == "pool" {
         put(
@@ -106,15 +111,71 @@ pub(super) fn map(root: &Path, tree: &str, name: &str, classes: &[&str]) {
             "{}",
         );
     }
+    put(
+        root,
+        &format!("{tree}/hamlets/{name}/{name}.json"),
+        &census(classes),
+    );
+}
+
+fn census(classes: &[&str]) -> String {
     let census: serde_json::Map<String, serde_json::Value> = classes
         .iter()
         .map(|c| ((*c).to_owned(), json!(1)))
         .collect();
+    json!({"ink_classes": census}).to_string()
+}
+
+/// A live hamlet with its tracked manifest and the Rust driver's current drawing, both holding these classes (449 T230).
+pub(super) fn hamlet(root: &Path, name: &str, classes: &[&str]) {
+    map(root, "pool", name, classes);
+    drawn(root, name, classes);
+}
+
+/// The Rust driver's drawing of the live hamlet `name` as the generation cache publishes it (449 T230): its `.driver.json` holding these
+/// classes as its ink census, the entry's meta naming it and the stand-in engine the stub launcher names, so the drawing is current.
+pub(super) fn drawn(root: &Path, name: &str, classes: &[&str]) {
+    drawn_as(root, name, &census(classes));
+}
+
+/// The driver's current drawing of `name` with this record (`drawn`'s, its text given).
+pub(super) fn drawn_as(root: &Path, name: &str, record: &str) {
+    use l7r_gate_pool::cache::{engine, entry, stat, table, DIR, ENTRIES, TABLE};
+    use std::os::unix::fs::MetadataExt as _;
+    let dir = root.join("pool/hamlets").join(name);
     put(
         root,
-        &format!("{tree}/hamlets/{name}/{name}.json"),
-        &json!({"ink_classes": census}).to_string(),
+        &format!("pool/hamlets/{name}/{name}.driver.json"),
+        record,
     );
+    let bin = root.join(".git/engine.bin");
+    std::fs::write(&bin, "a stand-in engine").unwrap();
+    let spec = dir.join(format!("{name}.spec.json"));
+    let artifact = format!("{name}.driver.json");
+    let md = std::fs::metadata(dir.join(&artifact)).unwrap();
+    let meta = entry::Meta {
+        engine: "hamlet".to_owned(),
+        engine_id: engine::identity(&bin).unwrap().0,
+        skip_render: false,
+        spec: entry::Record {
+            path: spec.display().to_string(),
+            stat: stat::stat(&spec),
+            hashed: 0,
+            digest: l7r_guard::shared::sha256::hex(&std::fs::read(&spec).unwrap()),
+        },
+        artifacts: vec![entry::Artifact {
+            name: artifact,
+            size: md.size(),
+            mtime: i128::from(md.mtime()) * 1_000_000_000 + i128::from(md.mtime_nsec()),
+            ino: md.ino(),
+        }],
+        key: "k".to_owned(),
+        reads: 0,
+    };
+    let at = root.join(DIR).join(ENTRIES).join("hamlets").join(name);
+    std::fs::create_dir_all(&at).unwrap();
+    std::fs::write(at.join(entry::META), meta.json()).unwrap();
+    std::fs::write(root.join(DIR).join(TABLE), format!("{}\n", table::HEADER)).unwrap();
 }
 
 /// A Mode A sheet: its SVG tagging these kinds, in a tier the building types declaration declares (the pool walk tells a hand sheet by

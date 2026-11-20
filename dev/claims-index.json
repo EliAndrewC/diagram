@@ -33509,13 +33509,14 @@
  "rust/phases/src/driver.rs::Rolled#the driver": {
   "body": "1c55a9fe7132b968",
   "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "95633dc8dadb656b",
-  "core": "e7bf51b063c3a222",
+  "code": "bd8cd9c3541dfb4d",
+  "core": "d88aaed135884931",
   "date": "2026-11-07",
   "note": "a result holder",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::STANDOFF_FT#the settlement's standoff": {
@@ -33608,8 +33609,8 @@
  "rust/phases/src/driver.rs::draw_field#ditches by role": {
   "body": "1cb06376a152dac9",
   "claim": "ditches by role - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: supply and drainage kept apart; drawn in two hues, a map drawing convention",
-  "code": "2520b79a59c4cf13",
-  "core": "1cd2d11dc918aece",
+  "code": "329bacb7ad437986",
+  "core": "9d59f0d038a5ff47",
   "date": "2026-11-07",
   "note": "supply and drain kept apart, drawn in two hues",
   "pages": {
@@ -33621,62 +33622,80 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:56868c4083858740",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::draw_field#the bean beads": {
   "body": "1cb06376a152dac9",
   "claim": "the bean beads - CONVENTION: a bead 3 ft across in a single row on the bund (bunds-between-the-paddies-aze.drawing)",
-  "code": "e569108311ee6068",
-  "core": "1cd2d11dc918aece",
+  "code": "09219b2cbcd3ff20",
+  "core": "9d59f0d038a5ff47",
   "date": "2026-11-08",
   "note": "an ellipse of radius 1.5, so a bead 3 ft across; the size is a drawing choice, and the placement comes in as input",
   "pages": {},
   "reads": "50765e32c69be724",
   "research": "",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::draw_field#the field's floor": {
   "body": "1cb06376a152dac9",
   "claim": "the field's floor - CONVENTION: the fan's ring in the rice green beneath its plots, so no seam shows between them",
-  "code": "51a0b445430d0f7e",
-  "core": "1cd2d11dc918aece",
+  "code": "93d01e7cfaee125d",
+  "core": "9d59f0d038a5ff47",
   "date": "2026-11-07",
   "note": "the fan's ring in rice green",
   "pages": {},
   "reads": "50765e32c69be724",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::draw_field#the grave mound's size": {
   "body": "1cb06376a152dac9",
   "claim": "the grave mound's size - UNRESEARCHED: the deleted ink's 13 by 9 ft mound (ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing places a grave, not its size)",
-  "code": "759964780df21799",
-  "core": "1cd2d11dc918aece",
+  "code": "b3749473af03b3d9",
+  "core": "9d59f0d038a5ff47",
   "date": "2026-11-08",
   "note": "rx 6.5 and ry 4.5 give 13 by 9 ft; no page in the bundle sizes a grave",
   "pages": {},
   "reads": "50765e32c69be724",
   "research": "",
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::draw_field#the pocket pond's ring": {
-  "body": "1cb06376a152dac9",
-  "claim": "the pocket pond's ring - CONVENTION: flooded ground 2.5 ft wide round the pond, its bund line drawn, so the pond reads inside its plot",
-  "code": "0d712e01f4e6d57f",
-  "core": "1cd2d11dc918aece",
-  "date": "2026-11-08",
-  "note": "q.rx+2.5 / q.ry+2.5 draws a 2.5 ft margin of flooded ground round the pond, inside a bund stroked 2.2 ft wide where the bund is 1.5 ft; that is a physical decision, so the label should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "body": "039442de3214a2c6",
+  "claim": "the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin",
+  "code": "f08b32fa89aeb980",
+  "core": "9d59f0d038a5ff47",
+  "date": "2026-11-19",
+  "note": "the ring is 2.5 ft beyond the pond's radii with a 2.2 ft bund stroke, as the claim says; the change only adds kind tags, and nothing in the bundle sizes the margin",
   "pages": {},
   "reads": "50765e32c69be724",
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::draw_hem#the hem drawn": {
+  "body": "508a036d75140798",
+  "claim": "the hem drawn - CONVENTION: each dry plot in its crop's fill and furrows (`crop_ink`), the placeholder over them",
+  "code": "54bf55e9a3acb6ed",
+  "core": "5cbf026163ce884f",
+  "date": "2026-11-19",
+  "note": "each plot is drawn in crop_ink with its furrows, then the dashed placeholder; the kind tags (the crop, and `-` for the placeholder) are census plumbing",
+  "pages": {},
+  "reads": "05d9312df52b2683",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::draw_sink#the drain's run drawn": {
   "body": "ba5191445b0af9d1",
   "claim": "the drain's run drawn - field-drains-akusuiro.drawing: the drainage-ditch class whichever way it runs, at the collector's own outfall width",
-  "code": "a1ee2a9011d95cb3",
-  "core": "252fd656d5a56f5c",
+  "code": "4129b45159d178e6",
+  "core": "f8fb51243aee1943",
   "date": "2026-11-07",
   "note": "drawn at RUN_W in the drain hue",
   "pages": {
@@ -33689,6 +33708,7 @@
    "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f",
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
   ],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::field_in#a basin's cell": {
@@ -33799,22 +33819,35 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver.rs::paddy_kind#the paddy's kind": {
+  "body": "172732e9f630f57a",
+  "claim": "the paddy's kind - CONVENTION: the registry's `wet paddy` for a basin wet the year round, `paddy` for every other state, the review's legend",
+  "code": "0ae7d6dd1bbf953a",
+  "core": "68417c6482d2751a",
+  "date": "2026-11-19",
+  "note": "a legend name picked by state (Wet gives `wet paddy`, every other state gives `paddy`); it is a convention and changes nothing drawn",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver.rs::roll#the stages in order": {
   "body": "2e3084d4af0cb2a9",
   "claim": "the stages in order - which-way-water-flows-and-how-channels-bend-and-join.drawing: the fall and the water decided before anything is placed, the field laid from them",
-  "code": "dd68999626a76724",
-  "core": "03961700fb2cdcc1",
+  "code": "d5c6f9e987a29bd5",
+  "core": "3aa59bcf174e003d",
   "date": "2026-11-07",
   "note": "fall and water planned, the field built from them, then the rest",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "reads": "6fc3ef28a2f6aa6a",
+  "reads": "b36aec98ee64f95f",
   "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
   ],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::seat_refused#the driver": {
@@ -34729,23 +34762,62 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder.rs::dike_kind#the bank's kind": {
+  "body": "0d0a70a8ceec1d30",
+  "claim": "the bank's kind - CONVENTION: the registry's dike-pond kinds (`mulberry dike`, `fruit dike`, `tea dike`), the review's legend named by the bank's crop",
+  "code": "5324dce41c52adb4",
+  "core": "f5e214a22d625b5e",
+  "date": "2026-11-19",
+  "note": "the legend name follows the bank's crop (fruit, tea, otherwise mulberry)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::draw_polder#the feeder canal drawn 3.0 ft wide (svg.line(&s.polder.feeder, ink::SUPPLY, 3.0)), a canal width with no claim of its own": {
+  "code": "999d715bbd6b600e",
+  "core": "999d715bbd6b600e",
+  "date": "2026-11-19",
+  "note": "the feeder canal drawn 3.0 ft wide (svg.line(&s.polder.feeder, ink::SUPPLY, 3.0)), a canal width with no claim of its own",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
-  "body": "f1567600e8b43223",
+  "body": "e062de51033baa3d",
   "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it",
-  "code": "f189021d8e0b0340",
-  "core": "0ef6d4f90838d986",
-  "date": "2026-11-07",
-  "note": "inks, line weights, layer order, an 8 ft sluice symbol, all how things are shown",
+  "code": "0f8f050df9b80c30",
+  "core": "999d715bbd6b600e",
+  "date": "2026-11-19",
+  "note": "the kind tags name each mark; ditches are tagged by the same drain test that picks their ink, as §1 and §8 separate supply from drain; inks, widths and order are kept",
   "pages": {},
   "reads": "3b38a6cdb2bba286",
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder.rs::draw_polder#the polder's pocket pond ring, 2.5 ft of flooded ground inside a 2.2 ft bund; draw_field claims the same GUESS, draw_polder does not": {
+  "code": "999d715bbd6b600e",
+  "core": "999d715bbd6b600e",
+  "date": "2026-11-19",
+  "note": "the polder's pocket pond ring, 2.5 ft of flooded ground inside a 2.2 ft bund; draw_field claims the same GUESS, draw_polder does not",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/phases/src/driver/polder.rs::draw_polder#the sluice gate drawn 8 ft square (g +/- 4.0), a size a reader reads off the map, under a CONVENTION claim": {
+  "code": "999d715bbd6b600e",
+  "core": "999d715bbd6b600e",
+  "date": "2026-11-19",
+  "note": "the sluice gate drawn 8 ft square (g +/- 4.0), a size a reader reads off the map, under a CONVENTION claim",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "rust/phases/src/driver/polder.rs::roll_polder#the polder": {
   "body": "8e295ceaf2849138",
   "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "0dcad3af9df88e0a",
-  "core": "04a6f012bf8e6594",
+  "code": "111b539c5d42cab1",
+  "core": "3976591ed9442d27",
   "date": "2026-11-07",
   "note": "puts the polder, seat and waterward stages together; nothing here contradicts the enclosure order",
   "pages": {
@@ -34757,6 +34829,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
   ],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::stage_polder#the dike-pond's split": {
@@ -34817,6 +34890,18 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/record.rs::census_js#the record": {
+  "body": "1796feee2aff8937",
+  "claim": "the record - NONE: the driver's output, written from what the stages laid",
+  "code": "f8b80a75e6d8fdb4",
+  "core": "ac00b9a02ee3edc9",
+  "date": "2026-11-19",
+  "note": "writes the ink census into the record; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/record.rs::js#the record": {
   "body": "a661e76a99016cdd",
   "claim": "the record - NONE: the driver's output, written from what the stages laid",
@@ -34832,13 +34917,14 @@
  "rust/phases/src/driver/record.rs::manifest#the record": {
   "body": "3c235379f0947f21",
   "claim": "the record - NONE: the driver's output, written from what the stages laid",
-  "code": "4d5d94683081bd67",
-  "core": "3b55c33a877e98b0",
+  "code": "2e9ab07c0260d768",
+  "core": "d5adf68a98794e53",
   "date": "2026-11-07",
   "note": "serializes what the stages laid; decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/record.rs::ring_js#the record": {
@@ -35129,25 +35215,27 @@
  "rust/phases/src/driver/svg.rs::Svg#the SVG writer": {
   "body": "804c92e45f1a2b12",
   "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
-  "code": "0bf6301b4c1489db",
-  "core": "eb462fa11c22cdde",
+  "code": "f33e708cdc2fa1fa",
+  "core": "95b41630230c9a71",
   "date": "2026-11-08",
   "note": "struct holding the document body, its bounds and a clip counter; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/svg.rs::Svg.band#the SVG writer": {
   "body": "de744873001b0901",
   "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
-  "code": "aad7b011f090cfec",
-  "core": "3624564405edc2bd",
+  "code": "60058c18f998a98d",
+  "core": "d618e73fab5cff93",
   "date": "2026-11-08",
   "note": "writes an even-odd band in the ink and width it is handed",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/svg.rs::Svg.bbox#the SVG writer": {
@@ -35157,6 +35245,18 @@
   "core": "5ad8b23710bacb97",
   "date": "2026-11-08",
   "note": "accessor",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.census#the SVG writer": {
+  "body": "92f54e598b4b2ebb",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "127f66191821b2be",
+  "core": "55d25085ef4f82ff",
+  "date": "2026-11-19",
+  "note": "accessor; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -35177,13 +35277,14 @@
  "rust/phases/src/driver/svg.rs::Svg.ellipse#the SVG writer": {
   "body": "453fe2034e4faad5",
   "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
-  "code": "e20063205e54d1ba",
-  "core": "a6537124b94398c8",
+  "code": "edae7de7fb5c932e",
+  "core": "b25940bea95009a7",
   "date": "2026-11-08",
   "note": "writes an ellipse it is handed",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/svg.rs::Svg.finish#the ground's color": {
@@ -35254,6 +35355,31 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/svg.rs::Svg.inked#the SVG writer": {
+  "body": "3db27da6df528f26",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "a711a5518cc2dbbc",
+  "core": "426a896ec8f0ff8c",
+  "date": "2026-11-19",
+  "note": "counts each mark under its current kind; plumbing",
+  "pages": {},
+  "reads": "08bbb26f0ae3d06b",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.kind#the SVG writer": {
+  "body": "38dae5ffa4ef62e7",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "f151e9f6b19277b8",
+  "core": "2584acabe9137949",
+  "date": "2026-11-19",
+  "note": "sets the current kind; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/svg.rs::Svg.line#the SVG writer": {
   "body": "72ea7273878e86b8",
   "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
@@ -35269,13 +35395,14 @@
  "rust/phases/src/driver/svg.rs::Svg.polygon#the SVG writer": {
   "body": "51615b0acee6177b",
   "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
-  "code": "b99ab2220e344b3e",
-  "core": "53746d49b8e3296b",
+  "code": "c9880b19d0fb4794",
+  "core": "c26ae63ce899622f",
   "date": "2026-11-08",
   "note": "writes a polygon in the ink it is handed; the round join is rendering plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/svg.rs::Svg.reeds#the reed glyph": {
@@ -35293,13 +35420,14 @@
  "rust/phases/src/driver/svg.rs::Svg.reserved#the placeholder": {
   "body": "3fd1cfc4732bcd7a",
   "claim": "the placeholder - CONVENTION: a dashed outline 4 ft wide (24 on, 16 off) and a serif label 56 ft high at its centroid",
-  "code": "60706cecbaf3525a",
-  "core": "671f6155d4ccd4ab",
+  "code": "8e27f1c014ee5adc",
+  "core": "49385d630473b6ec",
   "date": "2026-11-08",
   "note": "the code draws a 4-wide outline dashed 24/16 and a 56-high serif label at the centroid, as the claim states",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/svg.rs::Svg.taper#a channel's taper": {
@@ -35317,10 +35445,23 @@
  "rust/phases/src/driver/svg.rs::Svg.unframed#the SVG writer": {
   "body": "67c912099273efba",
   "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
-  "code": "d9eaf9745ae181a1",
-  "core": "57446d7f349c9cd2",
+  "code": "1be78f07f5df9ae7",
+  "core": "2ce559d365181408",
   "date": "2026-11-08",
   "note": "writes an open path in the ink and width it is handed",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "triaged": "2026-11-19",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::UNNAMED#the SVG writer": {
+  "body": "19dbc935d29d5ba3",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "8f2a65570ead7852",
+  "core": "d63c6af66506fd62",
+  "date": "2026-11-19",
+  "note": "the census key for a mark with no kind; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -35345,6 +35486,116 @@
   "core": "910ea69472167297",
   "date": "2026-11-08",
   "note": "builds a path string",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::DIKE_EARTH_FOR_TEST#the driver's tests": {
+  "body": "11d3d28ca3f9256c",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "32893dbf23a644cd",
+  "core": "7fccd14819f8ee2e",
+  "date": "2026-11-19",
+  "note": "test fixture",
+  "pages": {},
+  "reads": "066e9613b8fbd7d4",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_cohort_seed_rolls_with_its_households_by_the_seed#the driver's tests": {
+  "body": "cb5bef66050c5385",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "6f3cf37b97cbe5af",
+  "core": "d5dfcad1c94d020c",
+  "date": "2026-11-19",
+  "note": "assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_comb_hamlet_rolls_and_draws_its_field#the driver's tests": {
+  "body": "6d03fb36931441ec",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "ca4c390c2d2d19fb",
+  "core": "2e61fcaffad1b2a9",
+  "date": "2026-11-19",
+  "note": "assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_dike_pond_polder_rolls_through_its_seat_and_its_waterside_reeds#the driver's tests": {
+  "body": "28e07fd72e424d05",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "2cfcc924a2c4b77e",
+  "core": "80f6038f4d8cd6b1",
+  "date": "2026-11-19",
+  "note": "assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_name_is_escaped_in_the_record#the driver's tests": {
+  "body": "18bbf3d2f7839067",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "dbaa7510892cd37e",
+  "core": "98b9f5177c9c0850",
+  "date": "2026-11-19",
+  "note": "assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::a_resting_field_drains_off_the_map#the driver's tests": {
+  "body": "abe8792bc5c00833",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "17f3c824063147da",
+  "core": "0c93e49e8b6fdb53",
+  "date": "2026-11-19",
+  "note": "assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::each_stage_run_reports_its_counted_work_and_not_its_placements#the driver's tests": {
+  "body": "d84d061cc218eb67",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "70c6d337bf885bb0",
+  "core": "06c7eefd458fc063",
+  "date": "2026-11-19",
+  "note": "assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::every_mark_drawn_is_a_registry_kind_in_the_census#the driver's tests": {
+  "body": "934f661f401ecbf4",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "8299f3c49ebc8e57",
+  "core": "400076a286e8e9b9",
+  "date": "2026-11-19",
+  "note": "checks the census against the registry's kinds; assertions only",
+  "pages": {},
+  "reads": "08bbb26f0ae3d06b",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/tests.rs::every_state_has_its_fill_and_a_field_refusal_names_its_rule#the driver's tests": {
+  "body": "aa0f6b8ecb4f51f0",
+  "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
+  "code": "745fa4a89b30e4b3",
+  "core": "fd50d90aca1f0ec9",
+  "date": "2026-11-19",
+  "note": "assertions only",
   "pages": {},
   "research": "",
   "rests": [],

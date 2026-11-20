@@ -96,9 +96,11 @@ diagnosed and the tooling improved.
   bearing from the river at the wharf, a well grid from the streets that cross the quarter), and its check measures the
   CURRENT geometry, both bounds. A pinned coordinate fails silently once the river moves (GM 2026-08-10: *"the angle of
   the river changed slightly, but the angle of the granaries did not"*).
-- **Did the wave move a map?** `make map` ends by saying whether its manifest differs from HEAD, and `make maps-moved`
-  lists every pool manifest that does (feature 429): record that, never a scratch copy, which a test or `make map` may
-  already have regenerated (feature 328 wave 68 recorded Sawada unchanged after its board moved 76 degrees).
+- **Did the wave move a map?** `make map` ends by saying whether the map's drawing (the generation cache's artifacts) differs
+  from HEAD's, and `make maps-moved` says it of every live map (feature 429; 449 T230): HEAD's drawing is the mirror's
+  render-sync one, so a map whose HEAD inputs are not the mirror's (a local commit of `rust/` or of its spec) is NOT COMPARED,
+  never unchanged. Record that, never a scratch copy, which a test or `make map` may already have regenerated (feature 328
+  wave 68 recorded Sawada unchanged after its board moved 76 degrees).
 - **No engine edit while a map review runs** (the `engine_freeze_hooks` guard, feature 429): a review's verdict is keyed to the
   engine it read, so draft a fix outside the clone until every review has returned.
 - **Deleting a repair step** is measured on a fresh block rolled BEFORE the change, seed by seed

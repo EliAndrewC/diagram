@@ -5,7 +5,7 @@ use std::path::Path;
 
 use serde_json::{json, Value};
 
-use super::super::tests::{events, feature, map, put, repo};
+use super::super::tests::{events, feature, hamlet, put, repo};
 use super::*;
 
 /// Worked from `secs` ago to a minute ago, an event every ten minutes: no idle gap.
@@ -164,7 +164,7 @@ fn events_log(root: &Path, feature: &str) -> Vec<(f64, Value)> {
 fn the_hold_names_what_the_checkpoint_owes() {
     let r = repo("hold");
     assert_eq!(hold(&r, None), "");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     feature(&r, "900-x", "- [ ] T1\n");
     worked(&r, 7200);
     assert!(hold(&r, None).starts_with("the feature has run an hour since its last checkpoint"));
@@ -184,7 +184,7 @@ fn the_hold_names_what_the_checkpoint_owes() {
 #[test]
 fn the_hold_names_the_units_the_last_checkpoint_owed_until_each_is_answered_or_dispatched() {
     let r = repo("hold-units");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     feature(&r, "900-x", "- [ ] T1\n");
     worked(&r, 7200);
     let t = int_of(now());
@@ -243,7 +243,7 @@ fn past_the_hour_a_gate_or_a_dispatch_is_refused_until_the_step_back() {
 #[test]
 fn the_hour_opens_once_and_its_ruling_closes_it() {
     let r = repo("open");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     let opened = |exported: &str| open_checkpoint(&r, now(), exported);
     assert_eq!(opened("").unwrap_err(), "the checkpoint is not due - the feature's next hour is up at never (no feature or event log)");
     feature(&r, "900-x", "- [ ] T1\n");

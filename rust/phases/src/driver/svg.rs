@@ -5,6 +5,7 @@
 //!     the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each
 //!     drawn figure are claimed where they are chosen
 
+use std::collections::BTreeMap;
 use std::fmt::Write as _;
 
 use crate::field::fan::Pt;
@@ -58,12 +59,19 @@ pub const BUND_W: f64 = 1.5;
 ///     furrow spacing - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html records 5 ft between rows as a guess (the deleted `_draw_furrows`)
 pub const ROW_FT: f64 = 5.0;
 
-/// An SVG under construction: the elements in draw order, and the box of everything drawn (for the crop).
+/// The census's key for a mark drawn with no kind named: a test holds every roll free of it.
+pub const UNNAMED: &str = "?";
+
+/// An SVG under construction: the elements in draw order, the box of everything drawn (for the crop), and the ink census - each kind
+/// of the registry the marks depict, with how many marks (feature 449 T230: the review owed lookup's legend of a hamlet, which the
+/// deleted Python's manifest held as `ink_classes`).
 #[derive(Debug, Default)]
 pub struct Svg {
     body: String,
     bbox: Option<[f64; 4]>,
     clips: usize,
+    kind: String,
+    census: BTreeMap<String, usize>,
 }
 
 fn f(v: f64) -> String {
@@ -89,6 +97,26 @@ fn path(pts: &[Pt], close: bool) -> String {
 }
 
 impl Svg {
+    /// The kind the marks drawn next depict, by the registry's name (`-` for a mark that is no element).
+    pub fn kind(&mut self, kind: &str) {
+        kind.clone_into(&mut self.kind);
+    }
+
+    /// The ink census: each kind drawn and how many marks.
+    #[must_use]
+    pub fn census(&self) -> &BTreeMap<String, usize> {
+        &self.census
+    }
+
+    fn inked(&mut self) {
+        let kind = if self.kind.is_empty() {
+            UNNAMED
+        } else {
+            &self.kind
+        };
+        *self.census.entry(kind.to_owned()).or_default() += 1;
+    }
+
     fn grow(&mut self, pts: &[Pt], pad: f64) {
         for p in pts {
             let b = self.bbox.get_or_insert([p.0, p.1, p.0, p.1]);
@@ -113,6 +141,7 @@ impl Svg {
                 f(w)
             )
         });
+        self.inked();
         let _ = writeln!(
             self.body,
             r#"<path d="{}" fill="{fill}"{edge}/>"#,
@@ -126,6 +155,7 @@ impl Svg {
             return;
         }
         self.grow(outer, edge.1 / 2.0);
+        self.inked();
         let _ = writeln!(
             self.body,
             r#"<path d="{} {}" fill="{fill}" fill-rule="evenodd" stroke="{}" stroke-width="{}"/>"#,
@@ -151,6 +181,7 @@ impl Svg {
         if pts.len() < 2 {
             return;
         }
+        self.inked();
         let _ = writeln!(
             self.body,
             r#"<path d="{}" fill="none" stroke="{stroke}" stroke-width="{}" stroke-linecap="round" stroke-linejoin="round"/>"#,
@@ -178,6 +209,7 @@ impl Svg {
             return;
         }
         self.grow(ring, 2.0);
+        self.inked();
         #[expect(clippy::cast_precision_loss, reason = "a ring of a few corners")]
         let n = ring.len() as f64;
         let (cx, cy) = (
@@ -283,6 +315,7 @@ impl Svg {
     /// An ellipse.
     pub fn ellipse(&mut self, c: Pt, rx: f64, ry: f64, fill: &str, stroke: Option<(&str, f64)>) {
         self.grow(&[(c.0 - rx, c.1 - ry), (c.0 + rx, c.1 + ry)], 0.0);
+        self.inked();
         let edge = stroke.map_or_else(String::new, |(s, w)| {
             format!(r#" stroke="{s}" stroke-width="{}""#, f(w))
         });
@@ -339,7 +372,19 @@ impl Svg {
 
 #[cfg(test)]
 mod tests {
-    use super::{ink, Svg};
+    use super::{ink, Svg, UNNAMED};
+
+    /// A mark drawn before any kind is named is counted unnamed, so a roll's test sees it.
+    #[test]
+    fn the_census_counts_each_mark_under_its_kind() {
+        let mut s = Svg::default();
+        s.ellipse((1.0, 1.0), 1.0, 1.0, ink::BEAN, None);
+        s.kind("well");
+        s.ellipse((1.0, 1.0), 1.0, 1.0, ink::BEAN, None);
+        s.ellipse((2.0, 1.0), 1.0, 1.0, ink::BEAN, None);
+        let got: Vec<(&str, usize)> = s.census().iter().map(|(k, v)| (k.as_str(), *v)).collect();
+        assert_eq!(got, [(UNNAMED, 1), ("well", 2)]);
+    }
 
     #[test]
     fn the_document_is_cropped_to_what_is_drawn() {

@@ -474,6 +474,9 @@ printf '{"meta":{"name":"glyphmap"},"ink_classes":{"farmhouse":2}}' > "$gm/glyph
 printf '{}' > "$gm/glyphmap.spec.json"   # GUARD_EDIT_OK: feature 449 T220 - a hamlet to the one pool walk by its spec
 ( cd "$CLONE" && git add -A pool/hamlets/glyphmap >/dev/null 2>&1 && git -c user.email=t@t -c user.name=t commit -qm glyphmap >/dev/null 2>&1 && git update-ref refs/remotes/origin/main HEAD )
 printf '{"meta":{"name":"glyphmap"},"ink_classes":{"farmhouse":2,"kiln":1}}' > "$gm/glyphmap.json"
+# GUARD_EDIT_OK: feature 449 T230 - a live hamlet's elements are its Rust drawing's ink census (`.driver.json`), read where the cache
+# serves that drawing as current: the kiln is drawn by the driver and the entry written; the base's census is the tracked manifest
+printf '{"ink_classes":{"farmhouse":2,"kiln":1}}' > "$gm/glyphmap.driver.json"; cached
 mkdir -p "$CLONE/specs/999-g" "$CLONE/.specify" "$CLONE/.git/l7r-events"
 printf '# 999\n\n**Status**: In progress\n' > "$CLONE/specs/999-g/spec.md"
 printf '# Tasks\n\n## Occasions\n\n- none: fixture\n\n## Work\n\n- [ ] T01 x\n' > "$CLONE/specs/999-g/tasks.md"

@@ -32,6 +32,17 @@ fn ring_js(ring: &[(f64, f64)]) -> String {
     o
 }
 
+/// THE INK CENSUS (449 T230): each kind of the registry the drawing depicts, with its marks, in the deleted Python manifest's shape,
+/// so the review owed lookup reads a hamlet's legend from what the driver drew.
+fn census_js(r: &Rolled) -> String {
+    let each: Vec<String> = r
+        .ink
+        .iter()
+        .map(|(k, v)| format!("{}: {v}", js(k)))
+        .collect();
+    format!("{{{}}}", each.join(", "))
+}
+
 /// The hamlet's record as JSON: the plan, the rolled forms, the stages run, each field's outline and plots, and the counted work.
 #[must_use]
 pub fn manifest(r: &Rolled) -> String {
@@ -118,6 +129,7 @@ pub fn manifest(r: &Rolled) -> String {
             .collect::<Vec<_>>()
             .join(", ")
     );
+    let _ = writeln!(o, " \"ink_classes\": {},", census_js(r));
     let counts: BTreeMap<&String, &u64> = r.counts.iter().collect();
     let _ = writeln!(
         o,

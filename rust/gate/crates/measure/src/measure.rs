@@ -1,5 +1,6 @@
 //! What things cost (feature 449 T75, the second slice of `scripts/measure/`, `ask:449-T068-scope`): the recorded figures re-run, the time
-//! ratchets, what a gate run costs and what a change does to every seed.
+//! ratchets and what a gate run costs. `probe`, which set each seed's verdict beside HEAD's, was removed by T230: no seed is let fail
+//! now (`make seeds` refuses any), so worse than HEAD is any failure, which `make cohort` names.
 
 use std::path::Path;
 
@@ -13,7 +14,6 @@ pub mod fresh_tally;
 pub mod gatecost;
 pub mod guard_log;
 pub mod maps_moved;
-pub mod probe;
 pub mod push_check_times;
 pub mod review_yield;
 pub mod runstats;
@@ -37,7 +37,6 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("figures") => figures::cli(rest, root),
         Some("gatecost") => gatecost::cli(rest, root),
         Some("ratchet") => ratchet::cli(rest, root),
-        Some("probe") => probe::cli(rest, root),
         Some("runstats") => runstats::cli(rest),
         Some("guard-log") => guard_log::cli(rest, &home()),
         Some("review-yield") => review_yield::cli(rest, root),
@@ -84,7 +83,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
         ),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit | spec\n"
+            "usage: l7r-gate measure figures | gatecost | ratchet | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally | maps-moved | popup-rounds | work-budget | push-check-times | model-trial | depiction-replay | feature-report | where-time | event-log | step-back | fix-yield | tool-yield | turn-time | audit | spec\n"
                 .to_owned(),
             2,
         ),

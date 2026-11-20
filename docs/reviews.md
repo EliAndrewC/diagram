@@ -13,7 +13,7 @@ category of thing"*. `l7r-gate reviews owed` (`rust/gate/crates/reviews/src/revi
 
 | check | owed when | looks at |
 |---|---|---|
-| `glyph-check` | an element new to a map or sheet, whatever its mark (detected from `ink_classes` / `data-kind`); a glyph redrawn or an element re-placed by substantially different rules (declared: `glyph-redrawn:`, `placement-changed:` - the GM's tannery). DUE on the feature's hour, all owed units together, or at landing (below) | that element, on one map where it stands |
+| `glyph-check` | an element new to a map or sheet, whatever its mark (detected from `ink_classes` / `data-kind`; a hamlet's `ink_classes` its Rust drawing's, `<name>.driver.json`, read only where the cache serves it as current, 449 T230); a glyph redrawn or an element re-placed by substantially different rules (declared: `glyph-redrawn:`, `placement-changed:` - the GM's tannery). DUE on the feature's hour, all owed units together, or at landing (below) | that element, on one map where it stands |
 | `settlement-review` | a map new to the pool (detected); a new settlement form or tier (declared: `new-form:`, `new-tier:`) | the whole map: does it read as a distinct place, its declared economy, a new tier's fabric |
 | `fix-check` | a feature closing a defect the GM reported by eye (declared: `gm-fix: <map> - <the complaint>`) | the GM's complaint, at fit zoom first |
 | `building-review` | a sheet new to the pool (detected); a layout revised or a new program (declared: `layout-revised:`, `new-program:`) | the sheet's layout, program and coherence |

@@ -5,7 +5,9 @@ use std::path::Path;
 
 use serde_json::json;
 
-use super::super::tests::{commit, events, feature, map, put, repo, sh, sheet};
+use super::super::tests::{
+    commit, drawn, drawn_as, events, feature, hamlet, map, put, repo, sh, sheet, tools,
+};
 use super::*;
 
 fn slugs(units: &[Unit]) -> Vec<String> {
@@ -90,10 +92,10 @@ fn ink_classes_and_sheet_kinds_read_their_census() {
 #[test]
 fn new_maps_and_sheets_are_occasions_and_their_elements_too() {
     let r = repo("new");
-    map(&r, "pool", "old", &["well"]);
+    hamlet(&r, "old", &["well"]);
     commit(&r, "old map");
     sh(&r, "git update-ref refs/remotes/origin/main HEAD");
-    map(&r, "pool", "fresh", &["well", "kiln"]);
+    hamlet(&r, "fresh", &["well", "kiln"]);
     sheet(&r, "pool", "hall", &["engawa", "well"]);
     // a generated compound with no svg drawn yet is a sheet by its program (the pool walk's precedence, feature 449 T220)
     put(&r, "pool/compounds/genonly/genonly.compound.json", "{}");
@@ -130,12 +132,12 @@ fn new_maps_and_sheets_are_occasions_and_their_elements_too() {
 #[test]
 fn an_element_new_to_a_standing_map_is_owed_and_a_moved_folder_is_not_new() {
     let r = repo("element");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     sheet(&r, "pool", "s", &["gate"]);
     put(&r, "pool/hamlets/m/m.notes.md", "notes\n");
     commit(&r, "maps");
     sh(&r, "git update-ref refs/remotes/origin/main HEAD");
-    map(&r, "pool", "m", &["well", "shrine"]);
+    hamlet(&r, "m", &["well", "shrine"]);
     sheet(&r, "pool", "s", &["gate", "bell"]);
     let units = all_owed(&r).1;
     assert_eq!(
@@ -151,6 +153,91 @@ fn an_element_new_to_a_standing_map_is_owed_and_a_moved_folder_is_not_new() {
     sh(&r, "git checkout -q -- pool && git mv pool/hamlets/m pool/hamlets/moved && git mv pool/hamlets/moved/m.json pool/hamlets/moved/moved.json && git mv pool/hamlets/moved/m.spec.json pool/hamlets/moved/moved.spec.json");
     commit(&r, "rename");
     assert!(owed_slugs(&r).is_empty(), "{:?}", owed_slugs(&r));
+}
+
+/// RED FIRST (449 T230): a live hamlet's legend was its tracked `<name>.json`, the deleted Python's ink census, never rewritten - so an
+/// element the Rust driver draws that the Python never did was new to no map, and owed no glyph-check.
+#[test]
+fn an_element_the_driver_draws_new_to_a_hamlet_is_owed() {
+    let r = repo("driver");
+    hamlet(&r, "m", &["well"]);
+    commit(&r, "map");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    // the driver draws a weir; the tracked manifest, never rewritten, still says the well alone
+    drawn(&r, "m", &["well", "weir"]);
+    let units = all_owed(&r).1;
+    assert_eq!(slugs(&units), ["glyph-check--weir--m"]);
+    assert_eq!(units[0].occasion, "'weir' is new to m");
+}
+
+/// A hamlet whose drawing the cache does not serve as current, or whose record keeps no census, owes nothing from it and says why.
+#[test]
+fn a_hamlet_drawing_not_current_or_with_no_census_is_a_problem() {
+    let r = repo("driver-stale");
+    hamlet(&r, "m", &["well"]);
+    commit(&r, "map");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    drawn(&r, "m", &["well", "weir"]);
+    put(&r, "pool/hamlets/m/m.spec.json", "{\"seed\": 2}");
+    let (_, units, problems) = all_owed(&r);
+    assert!(units.is_empty(), "{units:?}");
+    assert_eq!(
+        problems,
+        ["pool/hamlets/m: its Rust drawing is not current, so the elements it draws are not known - `make map MAP=pool/hamlets/m` \
+          draws it, and the reviews it owes are read from that"]
+    );
+    drawn_as(&r, "m", "{}");
+    let problems = all_owed(&r).2;
+    let (first, want) = (
+        &problems[0],
+        "its Rust drawing records no ink census (drawn before 449 T230)",
+    );
+    assert!(first.contains(want), "{first}");
+    assert!(ruling("x", &[], &problems).contains(" | PROBLEMS: pool/hamlets/m: "));
+}
+
+/// The base's census of a hamlet: main's mirror copy of its `.driver.json`, else (none there keeps a census) its tracked `<name>.json`
+/// at the base, else the mirror's copy of that.
+#[test]
+fn a_hamlets_base_census_is_the_mirrors_drawing_else_its_old_manifest() {
+    let top = super::super::tests::dir("driver-mirror");
+    let r = top.join(".clones/c");
+    std::fs::create_dir_all(&r).unwrap();
+    sh(
+        &r,
+        "git init -q && git config user.email t@t && git config user.name t",
+    );
+    put(
+        &r,
+        ".gitignore",
+        "*.driver.json\n.gencache/\nscripts/\nMakefile\n",
+    );
+    tools(&r);
+    hamlet(&r, "m", &["well"]);
+    commit(&r, "map");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    drawn(&r, "m", &["well", "weir", "kiln"]);
+    // main's mirror drew the weir already: only the kiln is new
+    put(
+        &top,
+        "pool/hamlets/m/m.driver.json",
+        r#"{"ink_classes": {"well": 1, "weir": 1}}"#,
+    );
+    assert_eq!(owed_slugs(&r), ["glyph-check--kiln--m"]);
+    // the mirror's drawing keeps no census: the base's tracked manifest, the well alone
+    put(&top, "pool/hamlets/m/m.driver.json", "{}");
+    assert_eq!(
+        owed_slugs(&r),
+        ["glyph-check--kiln--m", "glyph-check--weir--m"]
+    );
+    // no tracked manifest at the base either: the mirror's copy of it
+    sh(&r, "git rm -q --cached pool/hamlets/m/m.json && git commit -qm untrack && git update-ref refs/remotes/origin/main HEAD");
+    put(
+        &top,
+        "pool/hamlets/m/m.json",
+        r#"{"ink_classes": {"well": 1, "kiln": 1}}"#,
+    );
+    assert_eq!(owed_slugs(&r), ["glyph-check--weir--m"]);
 }
 
 #[test]
@@ -180,7 +267,7 @@ const OCCASIONS: &str = "- [ ] T1\n\n## Occasions\n\n- glyph-redrawn: well - red
 #[test]
 fn a_feature_declares_its_occasions() {
     let r = repo("declared");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     sheet(&r, "pool", "s", &["gate"]);
     commit(&r, "maps");
     sh(&r, "git update-ref refs/remotes/origin/main HEAD");
@@ -242,10 +329,10 @@ fn a_feature_declares_its_occasions() {
 #[test]
 fn a_detected_unit_gathers_the_declared_waves_words() {
     let r = repo("merge");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     commit(&r, "map");
     sh(&r, "git update-ref refs/remotes/origin/main HEAD");
-    map(&r, "pool", "m", &["well", "kiln"]);
+    hamlet(&r, "m", &["well", "kiln"]);
     feature(&r, "900-x", "- [ ] T1\n\n## Occasions\n\n- placement-changed: kiln on m - wave one\n- glyph-redrawn: kiln on m - wave one\n");
     let units = all_owed(&r).1;
     assert_eq!(units[0].occasion, "'kiln' is new to m: wave one");
@@ -254,7 +341,7 @@ fn a_detected_unit_gathers_the_declared_waves_words() {
 #[test]
 fn the_active_features_are_the_open_pointer_and_the_touched_unlanded_ones() {
     let r = repo("active");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     feature(
         &r,
         "901-landed",
@@ -291,7 +378,7 @@ fn the_active_features_are_the_open_pointer_and_the_touched_unlanded_ones() {
 #[test]
 fn a_tweak_declares_in_its_commit_message() {
     let r = repo("tweak");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     commit(&r, "map");
     sh(&r, "git update-ref refs/remotes/origin/main HEAD");
     sh(&r, "git commit -q --allow-empty -m 'tweak' -m 'Occasion: glyph-redrawn: well - its second crossbar' -m 'Occasion: nonsense'");
@@ -361,7 +448,7 @@ fn drawing_code_only_moved_is_no_change() {
 #[test]
 fn the_command_line_reads_as_argparse_did() {
     let r = repo("cli");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     let out = |extra: &[&str]| cli_in(&r, extra);
     assert_eq!(out(&[]).stdout, "settlement-review--m\n");
     assert_eq!(
@@ -385,7 +472,7 @@ fn the_command_line_reads_as_argparse_did() {
 #[test]
 fn the_command_line_refuses_undeclared_code_until_an_occasion_is_declared() {
     let r = repo("cli-declared");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     let out = |extra: &[&str]| cli_in(&r, extra);
     let refused = out(&["--check-declared"]);
     assert_eq!(
@@ -405,7 +492,7 @@ fn the_command_line_refuses_undeclared_code_until_an_occasion_is_declared() {
 #[test]
 fn the_command_line_refuses_what_argparse_refused_and_sets_the_marks() {
     let r = repo("cli-marks");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     let out = |extra: &[&str]| cli_in(&r, extra);
     assert_eq!(out(&["--why", "--units"]).code, 2);
     assert_eq!(out(&["--landing-mark", "maybe"]).code, 2);
@@ -433,7 +520,7 @@ fn the_command_line_refuses_what_argparse_refused_and_sets_the_marks() {
 #[test]
 fn the_glyph_hour_keeps_the_due_units_only() {
     let r = repo("hour");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     feature(&r, "900-x", "- [ ] T1\n");
     events(&r, "900-x", &[(7200, "PreToolUse", false)]);
     assert_eq!(
@@ -450,7 +537,7 @@ fn a_folder_of_one_name_in_both_trees_keeps_its_first_place() {
     let r = repo("twice");
     sheet(&r, "pool", "s", &["a"]);
     sheet(&r, "legacy-hand-authored-pool", "s", &["b"]);
-    map(&r, "pool", "z", &["b"]);
+    hamlet(&r, "z", &["b"]);
     let tree = Tree::read(&r);
     assert_eq!(tree.legends.get("s").unwrap(), &["b".to_owned()].into());
     assert_eq!(tree.legends.first_drawing("b"), "s");
@@ -477,7 +564,7 @@ fn an_unclassified_folder_draws_nothing() {
         "pool/hamlets/stray/stray.json",
         r#"{"ink_classes": {"kiln": 1}}"#,
     );
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     let tree = Tree::read(&r);
     assert!(tree.legends.get("stray").is_none());
     assert_eq!(tree.legends.first_drawing("kiln"), "");

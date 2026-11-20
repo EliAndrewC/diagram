@@ -9,7 +9,8 @@ use std::collections::HashMap;
 use super::plan::Plan;
 use super::svg::{ink, Svg, BUND_W};
 use super::{
-    fill, kept, settlement_ground, stage_seat, Ground, Rolled, CROP_MARGIN, RESERVED_INK, RUN_W,
+    fill, kept, paddy_kind, settlement_ground, stage_seat, Ground, Rolled, CROP_MARGIN,
+    RESERVED_INK, RUN_W,
 };
 use crate::field::staged::{polder_stage, PolderStage};
 use crate::seat::Seated;
@@ -45,6 +46,18 @@ const SLUICE: (&str, &str) = ("#8C7A5A", "#5A4A32");
 /// Research:
 ///     the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood
 const HEDGE: &str = "#5E7C40";
+/// The kind a pond bank and its crowns depict by the bank's crop: the mulberry, fruit or tea dike of a dike-pond.
+///
+/// Research:
+///     the bank's kind - CONVENTION: the registry's dike-pond kinds (`mulberry dike`, `fruit dike`, `tea dike`), the review's legend named by the bank's crop
+fn dike_kind(crop: &str) -> &'static str {
+    match crop {
+        "fruit" => "fruit dike",
+        "tea" => "tea dike",
+        _ => "mulberry dike",
+    }
+}
+
 /// A dike crown's color by its crop.
 ///
 /// Research:
@@ -116,33 +129,40 @@ fn stage_polder(p: &Plan) -> PolderStage {
 ///     the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it
 fn draw_polder(svg: &mut Svg, s: &PolderStage) {
     let (c, rx, ry) = s.polder.pond;
+    svg.kind("marsh");
     svg.reeds(&s.polder.fringe);
+    svg.kind("pond");
     svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, 2.4)));
     for (x, st) in s.polder.plots.iter().zip(&s.states) {
+        svg.kind(paddy_kind(*st));
         svg.polygon(&x.ring, fill(*st), Some((ink::AZE, BUND_W)));
     }
-    let parcels = s.converted.iter().flat_map(|(parcels, _, _)| parcels);
-    let banks = parcels
-        .clone()
-        .filter_map(|q| q.bank.as_ref())
-        .map(|(_, ring)| (ring, BANK_FILL, (ink::AZE, BUND_W)));
-    let waters = parcels.filter_map(|q| {
-        q.water.as_ref().map(|(_, ring)| {
-            (
-                ring,
-                if q.kind == "fry" {
-                    NURSERY_WATER
-                } else {
-                    ink::POND_WATER
-                },
-                (ink::RIM, 1.0),
-            )
-        })
-    });
-    for (ring, fill_ink, edge) in banks.chain(waters) {
-        svg.polygon(ring, fill_ink, Some(edge));
+    if let Some((parcels, crops, _)) = &s.converted {
+        svg.kind(dike_kind(&crops.crop));
+        for (_, ring) in parcels.iter().filter_map(|q| q.bank.as_ref()) {
+            svg.polygon(ring, BANK_FILL, Some((ink::AZE, BUND_W)));
+        }
+    }
+    let waters = s
+        .converted
+        .iter()
+        .flat_map(|(parcels, _, _)| parcels)
+        .filter_map(|q| q.water.as_ref().map(|(_, ring)| (q.kind == "fry", ring)));
+    for (fry, ring) in waters {
+        let (kind, water) = if fry {
+            ("fry pond", NURSERY_WATER)
+        } else {
+            ("fish pond", ink::POND_WATER)
+        };
+        svg.kind(kind);
+        svg.polygon(ring, water, Some((ink::RIM, 1.0)));
     }
     for d in &s.polder.ditches {
+        svg.kind(if d.role == "drain" || d.seg == "drain" {
+            "drainage ditch"
+        } else {
+            "irrigation ditch"
+        });
         svg.taper(
             &d.pts,
             if d.role == "drain" || d.seg == "drain" {
@@ -154,26 +174,34 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
             d.w_tail,
         );
     }
+    svg.kind("irrigation ditch");
     svg.line(&s.polder.feeder, ink::SUPPLY, 3.0);
+    svg.kind("drainage ditch");
     svg.unframed(&s.outfall, ink::DRAIN, RUN_W);
+    svg.kind("perimeter dike");
     svg.band(&s.dike.outer, &s.dike.inner, DIKE_EARTH, (DIKE_EDGE, 1.0));
     svg.group(0.92);
     let bank_crowns = s
         .converted
         .iter()
         .flat_map(|(_, crops, _)| crops.crowns.iter().map(move |c| (crops.crop.as_str(), *c)));
-    let dike_crowns = s
-        .dike
-        .trees
-        .iter()
-        .flat_map(|(crop, crowns)| crowns.iter().map(move |c| (*crop, *c)));
-    for (crop, (x, y, r)) in dike_crowns.chain(bank_crowns) {
+    // a perimeter dike's trees are its own glyph's, a pond bank's crowns its dike's
+    svg.kind("perimeter dike");
+    for (crop, crowns) in &s.dike.trees {
+        for &(x, y, r) in crowns {
+            svg.ellipse((x, y), r, r, crown_fill(crop), None);
+        }
+    }
+    for (crop, (x, y, r)) in bank_crowns {
+        svg.kind(dike_kind(crop));
         svg.ellipse((x, y), r, r, crown_fill(crop), None);
     }
     svg.close();
+    svg.kind("tea dike");
     for hedge in s.converted.iter().flat_map(|(_, crops, _)| &crops.hedges) {
         svg.line(hedge, HEDGE, 3.0);
     }
+    svg.kind("sluice gate");
     for g in &s.polder.sluices {
         svg.polygon(
             &[
@@ -187,6 +215,7 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
         );
     }
     if let Some((_, x, y, prx, pry)) = s.pocket {
+        svg.kind("field pond");
         svg.ellipse(
             (x, y),
             prx + 2.5,
@@ -244,11 +273,13 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     let ward = stage_waterward(&p, &s, seated.as_ref());
     let mut svg = Svg::default();
     draw_polder(&mut svg, &s);
+    svg.kind("marsh");
     for strip in &ward.strips {
         svg.reeds(strip);
     }
     // the settlement's ground marked, as on a comb (`roll`)
     if let Some(frame) = seated.as_ref().and_then(|x| x.frames.first()) {
+        svg.kind("-");
         svg.reserved(&settlement_ground(frame), RESERVED_INK, "the settlement");
     }
     let by_stage: Vec<(&'static str, HashMap<String, u64>)> = [
@@ -291,5 +322,6 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
         counts,
         by_stage,
         svg: doc,
+        ink: svg.census().clone(),
     }
 }

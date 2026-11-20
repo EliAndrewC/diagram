@@ -27,7 +27,7 @@ hamlet, a generated compound, a hand sheet, a frozen exhibit, or reported - keep
 the listing; the shell asks it as `l7r-gate pool find <map> [<suffix>]`, and `l7r-gate pool list` lists every map. No consumer globs,
 lists or greps the pool's shape itself: feature 161 found ten hand-rolled walks drifted apart. The two failure directions are not
 symmetric - a consumer that collects too MUCH trips its own assertions, one that collects too LITTLE is simply green (the probe's pool
-section, filtering hamlets on a `.gen.py` no map had after T221, printed nothing for every hamlet until T222) - so a consumer names the
+section, filtering hamlets on a `.gen.py` no map had after T221, printed nothing for every hamlet until T222; the probe itself was removed by T230) - so a consumer names the
 trees and kinds it means. `pool/index.html` is written from the walk (`index.rs`), every map of both trees; a hamlet's row links only
 what the Rust driver writes, never the deleted Python engine's `.png`, `.html` or `.svg` left beside it (T222).
 

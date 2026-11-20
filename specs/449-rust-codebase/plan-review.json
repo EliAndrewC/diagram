@@ -1152,6 +1152,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T230 (T222: two checks reported nothing - `make probe` could not run, and \"did the wave move a map?\" always said unchanged for a hamlet)": {
+   "sha256": "0b0159cf2869050927ec45584499d05b75da5f4e06ce0266aa7554880a024dee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T230 Approach (checklist part A)": {
+   "sha256": "9dc58afce1928e9b8bdb6fc903cc49e390b676293435b74388d5877160231f06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15689,6 +15701,47 @@
      "why": "This applies the GM's 2026-11-18 rule 'fix all known bugs in each step before moving on to porting the next step': the open findings are placed before the next step (T158), not carried past it. 'Found and left? none' agrees with that. Nothing known is left for after the next step."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T230 (T222: two checks reported nothing - `make probe` could not run, and \"did the wave move a map?\" always said unchanged for a hamlet)",
+    "### T230 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T230-probe-removed",
+     "summary": "make probe, which could not run, is removed with its callers and docs instead of being repaired or ported",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It takes away a tool rather than fixing it, so it is ruled. The GM's own words allow it: 'I don't think we need to port the past feature harnesses if those are not still used' (2026-11-09). Its job was to show a seed's verdict beside HEAD's, so that a seed made worse stood out from one already failing. That job only made sense while failing seeds were tolerated. Now make seeds refuses on any failing seed, and the cohort is clean at HEAD (observed 2026-11-19 by make cohort N=48, 48 of 48, with the method labeled). With nothing failing, 'worse than already failing' cannot happen. The map half of the job is maps-moved's, which this task repairs. Nothing the GM asked for is lost: what probe did is still done, and it adds no carve-out to any requirement."
+    },
+    {
+     "id": "T230-maps-moved-from-rust",
+     "summary": "maps-moved and make map's closing line compare the Rust driver's cached artifacts against the mirror's drawing of HEAD. The answer is moved (naming the files), unchanged, or NOT COMPARED with its reason and the fix, and never a false unchanged. A clone with an unpushed rust/ commit is NOT COMPARED and falls back to drawing HEAD in a worktree",
+     "class": "within",
+     "why": "This fixes a defect: a check that answered wrong, reporting a hamlet whose drawing changed as unchanged (XIV, fixing as we go, 2026-11-18). NOT COMPARED is an honest answer that names its fix and has a fallback. It replaces a false unchanged and drops no case from the check."
+    },
+    {
+     "id": "T230-legend-from-census",
+     "summary": "The hamlet driver writes an ink census into .driver.json, with the SVG unchanged. reviews owed builds a live hamlet's legend from that census, and only where the cache serves the drawing as current; otherwise it prints a problem line naming make map",
+     "class": "within",
+     "why": "This fixes a defect: a glyph-check was never owed for an element new to a Rust-drawn hamlet, and two such checks are now owed. The changed .driver.json output is allowed under FR-002: the outputs may differ and the drawing does not move."
+    },
+    {
+     "id": "T230-found-and-left",
+     "summary": "Three things are left. The review gate's failure to redraw a hamlet that is not current is filed as T231, before T158. The four remaining readers of the tracked <name>.json are left to T158. The reviews' prerequisites and snapshot that still expect Python artifacts are left to feature 444 T42",
+     "class": "within",
+     "why": "The one defect found, T231, is fixed before the next step (T158), as the fix-as-we-go rule requires. The readers of the Python's tracked manifest and the prerequisites' expectations are retirement work for when the Python goes. Neither is reported as a wrong outcome while those artifacts still exist, so no defect is carried past the step."
+    },
+    {
+     "id": "T230-order-exits-done",
+     "summary": "Runs after T222 and before T158. The exits are tests that fail first and then pass, plus quick, static and hooks-test, or a set-down with the arbiter asked. Done when make map MAP=--all counts every live map and reviews owed names the two owed checks",
+     "class": "within",
+     "why": "Ordering and acceptance for the defect fix. No scope is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27532,6 +27585,45 @@
      "summary": "Findings from the way landed as T223, T224, T225, T227, T229; those still open (T226, T228, T230) are each ordered before T158.",
      "class": "within",
      "why": "This applies the GM's 2026-11-18 rule 'fix all known bugs in each step before moving on to porting the next step': the open findings are placed before the next step (T158), not carried past it. 'Found and left? none' agrees with that. Nothing known is left for after the next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T230": {
+   "section_sha256": "8bc3cbf4684cfd8088ab387d6ded2de94c6f7cd1357f276af26e511ccbb08019",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T230-probe-removed",
+     "summary": "make probe, which could not run, is removed with its callers and docs instead of being repaired or ported",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It takes away a tool rather than fixing it, so it is ruled. The GM's own words allow it: 'I don't think we need to port the past feature harnesses if those are not still used' (2026-11-09). Its job was to show a seed's verdict beside HEAD's, so that a seed made worse stood out from one already failing. That job only made sense while failing seeds were tolerated. Now make seeds refuses on any failing seed, and the cohort is clean at HEAD (observed 2026-11-19 by make cohort N=48, 48 of 48, with the method labeled). With nothing failing, 'worse than already failing' cannot happen. The map half of the job is maps-moved's, which this task repairs. Nothing the GM asked for is lost: what probe did is still done, and it adds no carve-out to any requirement."
+    },
+    {
+     "id": "T230-maps-moved-from-rust",
+     "summary": "maps-moved and make map's closing line compare the Rust driver's cached artifacts against the mirror's drawing of HEAD. The answer is moved (naming the files), unchanged, or NOT COMPARED with its reason and the fix, and never a false unchanged. A clone with an unpushed rust/ commit is NOT COMPARED and falls back to drawing HEAD in a worktree",
+     "class": "within",
+     "why": "This fixes a defect: a check that answered wrong, reporting a hamlet whose drawing changed as unchanged (XIV, fixing as we go, 2026-11-18). NOT COMPARED is an honest answer that names its fix and has a fallback. It replaces a false unchanged and drops no case from the check."
+    },
+    {
+     "id": "T230-legend-from-census",
+     "summary": "The hamlet driver writes an ink census into .driver.json, with the SVG unchanged. reviews owed builds a live hamlet's legend from that census, and only where the cache serves the drawing as current; otherwise it prints a problem line naming make map",
+     "class": "within",
+     "why": "This fixes a defect: a glyph-check was never owed for an element new to a Rust-drawn hamlet, and two such checks are now owed. The changed .driver.json output is allowed under FR-002: the outputs may differ and the drawing does not move."
+    },
+    {
+     "id": "T230-found-and-left",
+     "summary": "Three things are left. The review gate's failure to redraw a hamlet that is not current is filed as T231, before T158. The four remaining readers of the tracked <name>.json are left to T158. The reviews' prerequisites and snapshot that still expect Python artifacts are left to feature 444 T42",
+     "class": "within",
+     "why": "The one defect found, T231, is fixed before the next step (T158), as the fix-as-we-go rule requires. The readers of the Python's tracked manifest and the prerequisites' expectations are retirement work for when the Python goes. Neither is reported as a wrong outcome while those artifacts still exist, so no defect is carried past the step."
+    },
+    {
+     "id": "T230-order-exits-done",
+     "summary": "Runs after T222 and before T158. The exits are tests that fail first and then pass, plus quick, static and hooks-test, or a set-down with the arbiter asked. Done when make map MAP=--all counts every live map and reviews owed names the two owed checks",
+     "class": "within",
+     "why": "Ordering and acceptance for the defect fix. No scope is narrowed."
     }
    ],
    "verdict": "CLEAR"

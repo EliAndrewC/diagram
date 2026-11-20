@@ -303,15 +303,43 @@ pub fn sheet_kinds(text: Option<&str>) -> BTreeSet<String> {
         .collect()
 }
 
-/// One folder's elements now: its manifest's ink classes, or its sheet's kinds.
-fn legend_of(d: &Folder) -> Option<BTreeSet<String>> {
-    if d.has(".json") {
-        Some(ink_classes(Some(&read_replace(&d.file(".json")))))
-    } else if d.has(".svg") {
+/// The Rust driver's record of a live hamlet's drawing (449 T230): its ink census is the hamlet's legend, where the tracked
+/// `<name>.json` is the deleted Python's, never rewritten.
+const DRIVER: &str = ".driver.json";
+
+/// Whether a record holds an ink census at all, as distinct from one naming no element: a record with none was drawn by no driver
+/// that keeps one.
+fn has_census(text: Option<&str>) -> bool {
+    serde_json::from_str::<Value>(text.unwrap_or("")).is_ok_and(|v| v.get("ink_classes").is_some())
+}
+
+/// One folder's elements now: a live hamlet's the Rust driver's ink census, read only where the generation cache serves that drawing
+/// as current (else the elements it draws are not known, and the problem says how to draw it); a sheet's its kinds. (A folder read by
+/// its `<name>.json` alone is a frozen exhibit, which only the legacy tree holds and which owes no review: `Folder::exempt`.)
+fn legend_of(
+    d: &Folder,
+    current: &mut dyn FnMut(&Folder) -> bool,
+) -> Result<Option<BTreeSet<String>>, String> {
+    if d.kind == Kind::Hamlet {
+        let text = std::fs::read(d.file(DRIVER))
+            .ok()
+            .map(|b| String::from_utf8_lossy(&b).into_owned());
+        return if !current(d) {
+            Err(
+                "its Rust drawing is not current, so the elements it draws are not known"
+                    .to_owned(),
+            )
+        } else if has_census(text.as_deref()) {
+            Ok(Some(ink_classes(text.as_deref())))
+        } else {
+            Err("its Rust drawing records no ink census (drawn before 449 T230)".to_owned())
+        };
+    }
+    Ok(if d.has(".svg") {
         Some(sheet_kinds(Some(&read_replace(&d.file(".svg")))))
     } else {
         None
-    }
+    })
 }
 
 /// Each folder's elements now, by name, in the order Python's dict kept them (a later folder of one name updates it in place).
@@ -342,35 +370,51 @@ impl Legends {
     }
 }
 
-/// `legends`: each non-exempt folder's elements now; a folder the pool walk could not classify is no map and draws nothing
-/// (feature 449 T220).
-#[must_use]
-pub fn legends(all: &[Folder]) -> Legends {
+/// `legends`: each non-exempt folder's elements now, and a problem for each live hamlet whose elements are not known; a folder the pool
+/// walk could not classify is no map and draws nothing (feature 449 T220).
+pub fn legends(
+    root: &Path,
+    all: &[Folder],
+    current: &mut dyn FnMut(&Folder) -> bool,
+) -> (Legends, Vec<String>) {
     let mut out = Legends::default();
+    let mut problems = Vec::new();
     for d in all.iter().filter(|d| !d.exempt() && d.drawn()) {
-        if let Some(set) = legend_of(d) {
-            out.put(&d.name, set);
+        match legend_of(d, current) {
+            Ok(Some(set)) => out.put(&d.name, set),
+            Ok(None) => {}
+            Err(why) => {
+                let at = rel(root, &d.path);
+                problems.push(format!(
+                    "{at}: {why} - `make map MAP={at}` draws it, and the reviews it owes are read from that"
+                ));
+            }
         }
     }
-    out
+    (out, problems)
 }
 
-/// What the owed lookup reads once a run: the folders and their legends now.
+/// What the owed lookup reads once a run: the folders, their legends now, and the hamlets whose legends are not known.
 pub struct Tree<'a> {
     pub root: &'a Path,
     pub folders: Vec<Folder>,
     pub legends: Legends,
+    pub problems: Vec<String>,
 }
 
 impl<'a> Tree<'a> {
+    /// The tree, a live hamlet's drawing asked of the generation cache read-only (`l7r_gate_pool::is_current`, no engine built).
     #[must_use]
     pub fn read(root: &'a Path) -> Self {
         let folders = folders(root);
-        let legends = legends(&folders);
+        let (legends, problems) = legends(root, &folders, &mut |d| {
+            l7r_gate_pool::is_current(root, &d.path.display().to_string())
+        });
         Self {
             root,
             folders,
             legends,
+            problems,
         }
     }
 }
@@ -410,6 +454,45 @@ fn element_units(
 /// A folder's legend at the base: known now (`Ok`, a moved folder) or to be read there (`Err((path, a manifest))`).
 type AtBaseOrNow = Result<BTreeSet<String>, (String, bool)>;
 
+/// Each folder's legend at the base, in folder order: known now (a moved folder), or read at the base in one batch.
+fn base_legends(root: &Path, at: &mut AtBase, order: Vec<(String, AtBaseOrNow)>) -> Legends {
+    let paths: Vec<String> = order
+        .iter()
+        .filter_map(|(_, w)| w.as_ref().err().map(|(p, _)| p.clone()))
+        .collect();
+    // A HAMLET'S BASE CENSUS (449 T230): its `.driver.json` is gitignored, so main's mirror copy - and where no driver's census stands
+    // there either (drawn before T230's driver, or no mirror), the tracked `<name>.json` the deleted Python wrote, the base's only
+    // record of what the hamlet drew. Without it every element the driver draws would read as new to the map.
+    let olds: Vec<String> = paths
+        .iter()
+        .filter_map(|p| p.strip_suffix(DRIVER).map(|stem| format!("{stem}.json")))
+        .collect();
+    let mut texts = at.read(&paths).into_iter();
+    let mut old_texts = at.read(&olds).into_iter();
+    let mut before = Legends::default();
+    for (name, was) in order {
+        let set = match was {
+            Ok(set) => set,
+            Err((path, manifest)) => {
+                let mut text = texts.next().flatten().or_else(|| mirror_copy(root, &path));
+                if let Some(stem) = path.strip_suffix(DRIVER) {
+                    let old = old_texts.next().flatten();
+                    if !has_census(text.as_deref()) {
+                        text = old.or_else(|| mirror_copy(root, &format!("{stem}.json")));
+                    }
+                }
+                if manifest {
+                    ink_classes(text.as_deref())
+                } else {
+                    sheet_kinds(text.as_deref())
+                }
+            }
+        };
+        before.put(&name, set);
+    }
+    before
+}
+
 /// The occasions the delta itself shows: maps and sheets new to the pool, and elements new to a map or sheet.
 #[must_use]
 pub fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
@@ -435,38 +518,22 @@ pub fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
         let r = rel(root, &d.path);
         if let Some(files) = unborn.get(&r) {
             if files.iter().any(|f| moved.contains(f)) {
-                order.push((d.name.clone(), Ok(legend_of(d).unwrap_or_default())));
+                order.push((
+                    d.name.clone(),
+                    Ok(tree.legends.get(&d.name).cloned().unwrap_or_default()),
+                ));
             } else {
                 new_folders.push(d);
             }
             continue;
         }
-        if d.has(".json") {
-            order.push((d.name.clone(), Err((rel(root, &d.file(".json")), true))));
+        if d.kind == Kind::Hamlet {
+            order.push((d.name.clone(), Err((rel(root, &d.file(DRIVER)), true))));
         } else if d.has(".svg") {
             order.push((d.name.clone(), Err((rel(root, &d.file(".svg")), false))));
         }
     }
-    let paths: Vec<String> = order
-        .iter()
-        .filter_map(|(_, w)| w.as_ref().err().map(|(p, _)| p.clone()))
-        .collect();
-    let mut texts = at.read(&paths).into_iter();
-    let mut before = Legends::default();
-    for (name, was) in order {
-        let set = match was {
-            Ok(set) => set,
-            Err((path, manifest)) => {
-                let text = texts.next().flatten().or_else(|| mirror_copy(root, &path));
-                if manifest {
-                    ink_classes(text.as_deref())
-                } else {
-                    sheet_kinds(text.as_deref())
-                }
-            }
-        };
-        before.put(&name, set);
-    }
+    let before = base_legends(root, &mut at, order);
     let empty = BTreeSet::new();
     let pool_legend: BTreeSet<String> = before.0.iter().flat_map(|(_, s)| s.clone()).collect();
     let mut units = Vec::new();
@@ -548,7 +615,9 @@ pub fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
             .unwrap_or(usize::MAX)
     };
     seen.sort_by(|a, b| (rank(a), &a.subject).cmp(&(rank(b), &b.subject)));
-    (desc, seen, declared.problems)
+    let mut problems = tree.problems;
+    problems.extend(declared.problems);
+    (desc, seen, problems)
 }
 
 /// The units DUE: every non-glyph unit, and the glyph units the feature's hour makes due; at `landing`, every owed unit.

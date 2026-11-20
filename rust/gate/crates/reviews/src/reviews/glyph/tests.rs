@@ -2,7 +2,7 @@
 
 use serde_json::{json, Value};
 
-use super::super::tests::{commit, events, feature, map, put, repo};
+use super::super::tests::{commit, events, feature, hamlet, put, repo};
 use super::*;
 
 fn glyph_unit() -> Unit {
@@ -186,7 +186,7 @@ fn a_glyph_unit_is_due_on_the_hour_in_its_batch_or_at_landing() {
 #[test]
 fn the_gate_passes_a_unit_not_owed_another_check_or_an_escape_and_holds_one_not_due() {
     let r = repo("gate");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     let slug = "glyph-check--well--m";
     assert_eq!(
         glyph_cli(&r, "glyph-check--nope", true, false),
@@ -205,7 +205,7 @@ fn the_gate_passes_a_unit_not_owed_another_check_or_an_escape_and_holds_one_not_
 #[test]
 fn a_dispatch_on_the_hour_or_escaped_opens_a_batch() {
     let r = repo("batch");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     let slug = "glyph-check--well--m";
     // no feature: a dispatch opens nothing
     assert_eq!(glyph_cli(&r, slug, false, true), (0, String::new()));
@@ -222,7 +222,7 @@ fn a_dispatch_on_the_hour_or_escaped_opens_a_batch() {
 #[test]
 fn on_the_hour_a_plain_dispatch_opens_the_batch() {
     let r = repo("batch-hour");
-    map(&r, "pool", "m", &["well"]);
+    hamlet(&r, "m", &["well"]);
     let slug = "glyph-check--well--m";
     feature(&r, "900-x", "- [ ] T1\n");
     events(&r, "900-x", &[(7200, "PreToolUse", false)]);

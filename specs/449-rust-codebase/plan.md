@@ -781,14 +781,42 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T229 to T229 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 
-### T230 (<why: the finding or measurement that files it>)
+### T230 (T222: two checks reported nothing - `make probe` could not run, and "did the wave move a map?" always said unchanged for a hamlet)
+
+- **Approach**: `make probe` is removed with its callers and docs: its job, a seed's verdict beside HEAD's so a seed made worse stood out from one already failing, went with the regime it served - no failing seed is tolerated now (`make seeds`, which `make done` runs, refuses on any), the cohort rolls clean at HEAD (observed 2026-11-19, method: `make cohort N=48`, 48 of 48 clean) and names each failure, and its map half is maps-moved's. `make maps-moved` and `make map`'s closing line now compare what the Rust driver drew (a map's cache entry's artifacts) against the mirror's drawing of HEAD, which render-sync keeps current: a map is `moved` (naming the files that differ), `unchanged`, or `NOT COMPARED` with its reason and the fix, never a false unchanged - compared only where `HEAD:rust`, the map's spec and every read its engine reported are the same objects in both and both entries are current; a clone with an unpushed `rust/` commit is NOT COMPARED, its fallback drawing HEAD in a worktree. Red first: 9 of 9 new tests failed on the old code, among them a hamlet whose drawing changed reported unchanged (measured 2026-11-19 (`make rust-test` against the old `maps_moved.rs`)); on the real tree a hamlet's seed changed and not committed now reports moved, restored unchanged (observed 2026-11-19, method: `make map MAP=sawada` both ways). A third defect of the same kind, found doing it: `reviews owed` built a hamlet's legend from the deleted Python's tracked `<name>.json`, so an element new to a Rust-drawn hamlet never owed a glyph-check. The hamlet driver now records the kinds it draws (an ink census in `.driver.json`, the SVG unchanged: maps-moved named only `.driver.json` moved for the five hamlets), and a live hamlet's legend is that census, read only where the cache serves the drawing as current (a problem line naming `make map` otherwise). Red first: a kind the driver draws and the old manifest lacks now owes its check, `[]` before (measured 2026-11-19 (the new test on the old `owed.rs`)); on the real tree it names a field pond on Sawada and wet paddy on Kuwabata, both drawn by the Rust and never by the Python (observed 2026-11-19, method: `reviews owed --why`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| maps-moved and the legend answer from the Rust drawing | the measure crate's maps-moved tests, the reviews tests, the census test, the review-gate and pair suites | `maps_moved.rs`, `owed.rs`, the driver's census | the five hamlets' `.driver.json` (a census added; the drawing unchanged) | none |
+
+### T230 Approach (checklist part A)
+
+1. **The goal, in the world.** A change that moves a map's drawing says so, and an element new to a map owes its glyph-check.
+2. **The constraints.** Constitution XIV; feature 429 (did the wave move a map?); the glyph-check's occasion (`docs/reviews.md`); T222's plan review (this lands before T158).
+3. **Where each comes from.** O: T222's finding and this task's measurements.
+4. **Do they describe the world here?** Yes: each failed as described on the old code (measured 2026-11-19, as above).
+5. **The order.** After T222, before T158.
+6. **The exits.** Green: the tests red first then green, `make quick`, `make static`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (gated: it changes Rust).
+9. **Done, measured.** `make map MAP=--all` ends with the maps-moved line counting every live map; `reviews owed` names the two owed glyph-checks.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Each check answered nothing or answered wrong: defects. Two glyph-checks are owed now that were hidden.
+
+**Found and left?** The review gate does not redraw a hamlet whose drawing is not current, so at integrated an edited hamlet could ship without its glyph-check: filed as T231, before T158 (2026-11-19). The tracked `<name>.json` has four readers left (the held cases, feature 261's measurements, the work-budget bundle's manifest keys, the prerequisites' sheet test), for T158. The reviews' prerequisites and snapshot still expect a hamlet's Python artifacts (on 444 T42).
+
+**Performance work?** no
+
+
+### T231 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T230 Approach (checklist part A)
+### T231 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

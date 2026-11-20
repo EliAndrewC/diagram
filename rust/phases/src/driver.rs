@@ -17,7 +17,7 @@ pub mod toe;
 
 pub use record::manifest;
 
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 use crate::field::brook::BrookIn;
 use crate::field::build::{build, Field, FieldIn, KnobIn};
@@ -191,6 +191,8 @@ pub struct Rolled {
     /// Each stage run and its counted operations, the work budget's unit (`ops`).
     pub by_stage: Vec<(&'static str, HashMap<String, u64>)>,
     pub svg: String,
+    /// The ink census of the drawing: each kind of the registry drawn, with how many marks (`Svg::census`, 449 T230).
+    pub ink: BTreeMap<String, usize>,
 }
 
 /// The field's inputs from the plan: its knobs as they roll, the weir, the rows and the cell.
@@ -254,6 +256,18 @@ fn field_in(p: &Plan) -> FieldIn {
     }
 }
 
+/// The kind a paddy depicts by its state: the wet paddy that never drains its own, every other state a paddy.
+///
+/// Research:
+///     the paddy's kind - CONVENTION: the registry's `wet paddy` for a basin wet the year round, `paddy` for every other state, the review's legend
+fn paddy_kind(s: State) -> &'static str {
+    if s == State::Wet {
+        "wet paddy"
+    } else {
+        "paddy"
+    }
+}
+
 /// A paddy's paint by its state.
 ///
 /// Research:
@@ -278,11 +292,18 @@ fn fill(s: State) -> &'static str {
 ///     the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin
 ///     the grave mound's size - UNRESEARCHED: the deleted ink's 13 by 9 ft mound (research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html places a grave, not its size)
 fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)], beans: &[Vec<(f64, f64)>]) {
+    svg.kind("paddy");
     svg.polygon(&f.fan.ring, ink::RICE_GREEN, None);
     for (b, s) in f.basins.iter().zip(&f.states) {
+        svg.kind(paddy_kind(*s));
         svg.polygon(&b.ring, fill(*s), Some((ink::AZE, BUND_W)));
     }
     for c in &f.channels {
+        svg.kind(if c.role == "drain" {
+            "drainage ditch"
+        } else {
+            "irrigation ditch"
+        });
         svg.taper(
             &c.pts,
             if c.role == "drain" {
@@ -294,11 +315,13 @@ fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)], beans: &[Vec<(f64,
             c.w_tail,
         );
     }
+    svg.kind("stream");
     svg.unframed(brook, ink::POND_WATER, BROOK_W);
     svg.group(0.55);
     svg.unframed(brook, ink::SHEEN, (0.35 * BROOK_W).max(2.0));
     svg.close();
     svg.group(0.85);
+    svg.kind("bund beans");
     for run in beans {
         for p in run {
             svg.ellipse(*p, 1.5, 1.5, ink::BEAN, None);
@@ -306,9 +329,11 @@ fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)], beans: &[Vec<(f64,
     }
     svg.close();
     if let Some((ring, _deg, _form)) = &f.weir {
+        svg.kind("weir");
         svg.polygon(ring, ink::WEIR_FILL, Some((ink::WEIR_EDGE, 0.6)));
     }
     if let Some((_, q)) = &f.pond {
+        svg.kind("field pond");
         svg.ellipse(
             (q.x, q.y),
             q.rx + 2.5,
@@ -325,6 +350,7 @@ fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)], beans: &[Vec<(f64,
         );
     }
     if let Some(g) = &f.grave {
+        svg.kind("field grave");
         svg.ellipse(g.at, 6.5, 4.5, ink::MOUND, Some((ink::MOUND_EDGE, 1.2)));
     }
 }
@@ -533,8 +559,10 @@ fn sink_refused(e: crate::sink::SinkRefused) -> Refused {
 /// Research:
 ///     the drain's run drawn - research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class whichever way it runs, at the collector's own outfall width
 fn draw_sink(svg: &mut Svg, s: &Sunk) {
+    svg.kind("drainage ditch");
     svg.line(&s.run, ink::DRAIN, RUN_W);
     if let Some((c, rx, ry)) = s.pond {
+        svg.kind("pond");
         svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, 2.4)));
         svg.ellipse(
             c,
@@ -543,6 +571,25 @@ fn draw_sink(svg: &mut Svg, s: &Sunk) {
             "none",
             Some((ink::SHEEN, 1.0)),
         );
+    }
+}
+
+/// The dry hem drawn: each plot furrowed in its crop's ink, then the settlement's ground the seat keeps, marked.
+///
+/// Research:
+///     the hem drawn - CONVENTION: each dry plot in its crop's fill and furrows (`crop_ink`), the placeholder over them
+fn draw_hem(svg: &mut Svg, laid: Option<&crate::hem::Laid>, seated: Option<&Seated>) {
+    for d in laid.iter().flat_map(|l| &l.plots) {
+        let (fill, furrow) = crop_ink(d.crop);
+        svg.kind(d.crop);
+        svg.furrowed(&d.poly, fill, DRY_EDGE, furrow, d.theta);
+    }
+    // THE SETTLEMENT'S GROUND MARKED (feature 444 amendment 11; the GM's look at the partial map): the seat keeps the ground the
+    // hem lays round, and with the homesteads past the cut nothing fills it, so it is dashed and named (CONVENTION: a placeholder
+    // for the stage that draws the houses, gone when it runs)
+    if let Some(frame) = seated.and_then(|s| s.frames.first()) {
+        svg.kind("-");
+        svg.reserved(&settlement_ground(frame), RESERVED_INK, "the settlement");
     }
 }
 
@@ -687,22 +734,14 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     // 44 ft out from the shore into the paddy above the pond's berth, and the deleted `pond_reeds` cut it there against the drawn
     // ground; here the field is painted over it, the same cut on the sheet (CONVENTION: the ring is kept whole in the record, the
     // seat's walls read it grown, and the field is a wall too)
+    svg.kind("marsh");
     sunk.iter().for_each(|s| svg.reeds(&s.reeds));
     for (i, (f, b)) in out.fields.iter().zip(&brooks).enumerate() {
         let beans = settled(f, b, sunk.as_ref().filter(|_| i == 0), &mut out.counts);
         draw_field(&mut svg, f, b, &beans);
     }
     sunk.iter().for_each(|s| draw_sink(&mut svg, s));
-    for d in laid.iter().flat_map(|l| &l.plots) {
-        let (fill, furrow) = crop_ink(d.crop);
-        svg.furrowed(&d.poly, fill, DRY_EDGE, furrow, d.theta);
-    }
-    // THE SETTLEMENT'S GROUND MARKED (feature 444 amendment 11; the GM's look at the partial map): the seat keeps the ground the
-    // hem lays round, and with the homesteads past the cut nothing fills it, so it is dashed and named (CONVENTION: a placeholder
-    // for the stage that draws the houses, gone when it runs)
-    if let Some(frame) = seated.as_ref().and_then(|s| s.frames.first()) {
-        svg.reserved(&settlement_ground(frame), RESERVED_INK, "the settlement");
-    }
+    draw_hem(&mut svg, laid.as_ref(), seated.as_ref());
     let by_stage: Vec<(&'static str, HashMap<String, u64>)> = [
         ("water_frame", p.counts.clone()),
         ("field", out.counts.clone()),
@@ -746,171 +785,9 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         counts: out.counts,
         by_stage,
         svg: doc,
+        ink: svg.census().clone(),
     })
 }
 
 #[cfg(test)]
-mod tests {
-    use super::{manifest, roll, spec::parse};
-
-    #[test]
-    fn a_comb_hamlet_rolls_and_draws_its_field() {
-        let r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        assert_eq!(
-            r.stages,
-            vec!["water_frame", "field", "sink", "seat", "hem"]
-        );
-        assert!(!r.dry.is_empty() && r.grain.is_some_and(|g| g.0 > 0.0));
-        assert_eq!(
-            ["barley", "millet", "buckwheat", "soy"]
-                .map(|c| super::crop_ink(c).0)
-                .iter()
-                .collect::<std::collections::HashSet<_>>()
-                .len(),
-            4
-        );
-        assert!(r.sunk.as_ref().is_some_and(|s| s.pond.is_some()));
-        assert!(!r.fields.is_empty() && !r.fields[0].basins.is_empty());
-        assert!(
-            r.svg.starts_with("<svg") && r.svg.matches("<path").count() > r.fields[0].basins.len()
-        );
-        let m = manifest(&r);
-        assert!(m.contains("\"grain_acres\": {\"field\": {\"drawn\": "));
-        assert!(
-            m.contains("\"name\": \"Inashiro\"")
-                && m.contains(
-                    "\"stages\": [\"water_frame\", \"field\", \"sink\", \"seat\", \"hem\"]"
-                )
-                && m.contains("\"plot_size\"")
-        );
-    }
-
-    #[test]
-    fn a_resting_field_drains_off_the_map() {
-        let r = roll(&parse(r#"{"name": "Sawada", "seed": 24, "households": 19, "down_deg": 225, "water_sink": "offmap", "intake": "open", "pins": {"paddy_rest": "unsettled"}}"#).unwrap()).unwrap();
-        assert!(r.fields[0]
-            .states
-            .contains(&crate::field::states::State::Rest));
-        assert!(r
-            .sunk
-            .as_ref()
-            .is_some_and(|s| s.pond.is_none() && !s.run.is_empty()));
-        // its fall runs into the wind: the seat backs the hill, recorded off the wind
-        assert!(r.refusals.is_empty() && r.seated.as_ref().is_some_and(|s| s.frames[0].offwind));
-        let mut kept_why = Vec::new();
-        assert!(super::kept::<u8>(
-            Err(super::Refused("the seat refused: x".into())),
-            &mut kept_why
-        )
-        .is_none());
-        let mut refused = r;
-        refused.refusals = kept_why;
-        assert!(manifest(&refused).contains("\"refusals\": [\"the seat refused: x\"]"));
-    }
-
-    #[test]
-    fn a_dike_pond_polder_rolls_through_its_seat_and_its_waterside_reeds() {
-        let r = roll(&parse(r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#).unwrap()).unwrap();
-        assert!(
-            r.stages.contains(&"waterward")
-                && r.polder.as_ref().is_some_and(|s| s.converted.is_some())
-        );
-        assert!(r.svg.contains(DIKE_EARTH_FOR_TEST));
-        assert!(manifest(&r).contains("\"grain_acres\": {\"field\": null, \"hem\": null}"));
-        let rice = roll(&parse(r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 0, "field_archetype": "polder_grid", "pins": {"paddy_rest": "unsettled"}}"#).unwrap()).unwrap();
-        assert!(rice.polder.as_ref().is_some_and(|s| s.converted.is_none()));
-        let tea = roll(&parse(r#"{"name": "T", "seed": 21, "households": 16, "down_deg": 0, "field_archetype": "mulberry_dike_fishpond", "dike_crop": "tea"}"#).unwrap()).unwrap();
-        assert!(tea
-            .polder
-            .as_ref()
-            .is_some_and(|s| s.converted.as_ref().is_some_and(|c| !c.1.hedges.is_empty())));
-        assert_eq!(
-            ["willow", "fruit", "tea", "mulberry"]
-                .map(super::polder::crown_fill)
-                .iter()
-                .collect::<std::collections::HashSet<_>>()
-                .len(),
-            4
-        );
-    }
-
-    const DIKE_EARTH_FOR_TEST: &str = super::polder::DIKE_EARTH;
-
-    #[test]
-    fn every_state_has_its_fill_and_a_field_refusal_names_its_rule() {
-        use crate::field::states::State;
-        let fills: Vec<&str> = [
-            State::Green,
-            State::Wet,
-            State::Flooded,
-            State::Gold,
-            State::Rest,
-        ]
-        .into_iter()
-        .map(super::fill)
-        .collect();
-        assert_eq!(
-            fills.iter().collect::<std::collections::HashSet<_>>().len(),
-            5
-        );
-        assert!(super::seat_refused(crate::seat::SeatRefused("x".into()))
-            .0
-            .starts_with("the seat refused"));
-        assert_eq!(
-            ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "?"]
-                .map(super::wind)
-                .iter()
-                .filter(|w| (w.0.hypot(w.1) - 1.0).abs() < 1e-9)
-                .count(),
-            9
-        );
-        assert!(super::sink_refused(crate::sink::SinkRefused("x".into()))
-            .0
-            .starts_with("the sink refused"));
-        let e = super::field_refused(crate::field::rules::FieldRefused {
-            rule: "a_rule",
-            detail: "why".into(),
-        });
-        assert!(e.0.starts_with("the field refused: "));
-    }
-
-    #[test]
-    fn a_cohort_seed_rolls_with_its_households_by_the_seed() {
-        let s = super::cohort_spec(4, None);
-        assert_eq!((s.name.as_str(), s.households), ("Audit-04", 16));
-        assert!(roll(&s).is_ok());
-        let p = roll(&super::cohort_spec(4, Some("polder_grid"))).unwrap();
-        assert!(p.polder.is_some());
-    }
-
-    #[test]
-    fn each_stage_run_reports_its_counted_work_and_not_its_placements() {
-        let c: std::collections::HashMap<String, u64> = [
-            ("placed", 5),
-            ("moved@settle_runs", 2),
-            ("dropped", 1),
-            ("write@frames", 3),
-            ("read", 4),
-        ]
-        .into_iter()
-        .map(|(k, n)| (k.to_owned(), n))
-        .collect();
-        assert_eq!(super::ops(&c), 7);
-        for r in [
-            roll(&super::cohort_spec(4, None)).unwrap(),
-            roll(&super::cohort_spec(4, Some("polder_grid"))).unwrap(),
-        ] {
-            assert_eq!(r.by_stage.iter().map(|s| s.0).collect::<Vec<_>>(), r.stages);
-        }
-    }
-
-    #[test]
-    fn a_name_is_escaped_in_the_record() {
-        // the record's counts, written as the counting build fills them (a default build's map is empty)
-        let mut r = roll(&super::cohort_spec(4, None)).unwrap();
-        r.counts.insert("write@x".to_owned(), 3);
-        assert!(super::manifest(&r).contains("\"write@x\": 3"));
-        assert_eq!(super::Refused("why".into()).to_string(), "why");
-        assert_eq!(super::record::js("a\"b\\c\nd"), "\"a\\\"b\\\\c\\nd\"");
-    }
-}
+mod tests;

@@ -1,4 +1,4 @@
-//! What things cost (feature 449 T75): `l7r-gate measure figures | gatecost | ratchet | probe | ...`; and the gate's first
+//! What things cost (feature 449 T75): `l7r-gate measure figures | gatecost | ratchet | ...`; and the gate's first
 //! phase and its tree check, `l7r-gate preflight` (T071).
 
 pub mod measure;

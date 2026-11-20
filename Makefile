@@ -189,11 +189,8 @@ map:            ## [maps] draw ONE pool map through the generation cache (Rust s
 	@$(MAKE) --no-print-directory pool-index-if-stale
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved $(if $(filter --all,$(MAP)),,--only "$(MAP)")
 
-maps-moved:     ## [maps] which pool manifests differ from HEAD - the comparison a wave records, never a scratch copy (feature 429)
+maps-moved:     ## [maps] which live maps' drawings (the generation cache's artifacts) moved against HEAD's - the mirror's render-sync drawing, wherever HEAD's inputs for a map are the mirror's; else NOT COMPARED with why, never unchanged (feature 429; 449 T230)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --root "$$(git rev-parse --show-toplevel)"
-
-probe:          ## [maps] what a change does to every seed and pool map against HEAD: the landing cohort, HEAD's fresh block and the pool in WT, every seed beside HEAD's stored verdict (feature 426)   [WT=<worktree>] [EXITFIRST=1] [JOBS=<n>]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure probe $(if $(WT),--wt $(WT),) $(if $(EXITFIRST),--exitfirst,) $(if $(JOBS),--jobs $(JOBS),)
 
 backup:         ## [project] save the clone's commits to backup/<clone> on GitHub without landing them - no gate runs (the GM 2026-11-07: "stop landing things until we've gotten this time down")
 	@"$$(git rev-parse --show-toplevel)/scripts/sync-with-main.sh" backup

@@ -34,8 +34,37 @@ mkrepo() {
   [ "${2:-}" = withmap ] && { echo '{}' > "$POOL/m.spec.json"; echo '{"v":1,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
   # GUARD_EDIT_OK: feature 444 FR-023 - the cases below are the integrated port's; case_4 throws the switch to rust-only
   mkdir -p dev; echo '{"port": {"state": "integrated"}}' > dev/switches.json
+  # GUARD_EDIT_OK: feature 449 T230 - the map drawn as the base holds it, so a case that owes nothing reads a current drawing
+  [ "${2:-}" = withmap ] && drawn '{"v":1,"ink_classes":{"farmhouse":1}}'
   git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work
   git update-ref refs/remotes/origin/main main
+}
+
+# GUARD_EDIT_OK: feature 449 T230 - a live hamlet's elements are its Rust drawing's ink census (`m.driver.json`), read only where the
+# generation cache serves that drawing as current: `drawn '<census>'` writes it, a stand-in engine the fixture's stub launcher names,
+# and the cache entry (its engine id the stand-in's hash, its spec's stat and digest), as test-pair-hooks.sh's `cached` does; the
+# base's census, with no mirror beside the fixture, is its tracked `m.json`
+drawn() {
+  mkdir -p scripts/gates; printf 'stand-in hamlet engine\n' > .git/stand-in-hamlet
+  printf '#!/bin/sh\n[ "$1" = hamlet ] && { echo "%s/.git/stand-in-hamlet"; exit 0; }\nexit 1\n' "$PWD" > scripts/gates/l7r-gate.sh
+  chmod +x scripts/gates/l7r-gate.sh; printf 'scripts/\n.gencache/\n*.driver.json\n' >> .git/info/exclude
+  printf '%s' "$1" > "$POOL/m.driver.json"
+  python3 - "$PWD" <<'PY'
+import hashlib, json, os, sys
+root = sys.argv[1]
+eng = "sha256:" + hashlib.sha256(open(os.path.join(root, ".git/stand-in-hamlet"), "rb").read()).hexdigest()
+spec = os.path.join(root, "pool/hamlets/m/m.spec.json")
+st = os.stat(spec)
+meta = {"engine": "hamlet", "engine_id": eng, "skip_render": os.environ.get("DIAGRAM_SKIP_RENDER") == "1",
+        "spec": {"path": "pool/hamlets/m/m.spec.json", "hashed": str(4102444800 * 10**9),
+                 "stat": [str(st.st_size), str(st.st_mtime_ns), str(st.st_ctime_ns), str(st.st_ino)],
+                 "digest": hashlib.sha256(open(spec, "rb").read()).hexdigest()},
+        "artifacts": [], "key": "k", "reads": 0}
+entry = os.path.join(root, ".gencache/rust/entries/hamlets/m")
+os.makedirs(entry, exist_ok=True)
+open(os.path.join(root, ".gencache/rust/reads.tsv"), "w").write("# l7r pool read table 1\n")
+open(os.path.join(entry, "meta.json"), "w").write(json.dumps(meta))
+PY
 }
 
 check() { # label repo expected
@@ -65,7 +94,7 @@ mkrepo a; echo "# spec" > specs/900-x/spec.md; echo work >> seed.txt; git add -A
 check "a spec with no fidelity verdict" a blocked
 
 # GUARD_EDIT_OK: feature 294 - the occasion is an element new to the map, not a moved manifest
-mkrepo b withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll
+mkrepo b withmap; echo "$NEW" > "$POOL/m.json"; drawn "$NEW"; git add -A; git commit -qm reroll
 check "a map gaining an element with no review recorded" b blocked
 # GUARD_EDIT_OK: feature 375 amendment 9, D55 - the push asks every owed unit (--landing), the glyph units' hour aside, and a glyph
 # unit with no answer marks the work LANDING, so the dispatch the refusal asks for is due and passes the pair guard
@@ -217,7 +246,7 @@ check "a map that has no notes file" f ok
 
 # GUARD_EDIT_OK: feature 240 FR-002 - a notes file touched is not a review that happened: a map whose latest
 # verdict record is NOT-REVIEWABLE is refused even with its notes updated, and a PASS lets it through.
-mkrepo nr withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-13" >> "$POOL/m.notes.md"
+mkrepo nr withmap; echo "$NEW" > "$POOL/m.json"; drawn "$NEW"; echo "reviewed 2026-09-13" >> "$POOL/m.notes.md"
 git add -A; git commit -qm reroll-with-notes; mkdir -p .git/review-verdicts
 echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"NOT-REVIEWABLE","findings":[]}' > .git/review-verdicts/glyph-check--well--m.json
 check "an owed unit whose last verdict is NOT-REVIEWABLE, notes updated or not" nr blocked
@@ -235,7 +264,7 @@ echo
 case_3() {
 echo "3. A MAP SHIPS ON ITS REVIEWER'S RECORD (feature 248)"
 V=.git/review-verdicts/glyph-check--well--m.json
-mkrepo r1 withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
+mkrepo r1 withmap; echo "$NEW" > "$POOL/m.json"; drawn "$NEW"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
 echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$V"
 check "a PASS record at this engine key, no notes touch" r1 ok
 echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"NEEDS-WORK","findings":[{"id":"F1"}]}' > "$T/r1/$V"
@@ -258,7 +287,7 @@ echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"NEEDS-WORK",
 check "a NEEDS-WORK record at another key ships on the arbiter's accept of the sheet as it reads" r1 ok
 ( cd "$T/r1" && echo "another line" >> "$POOL/m.notes.md" && git add -A && git commit -qm notes2 )
 check "...and once the sheet changes after the ruling, it is refused" r1 blocked
-mkrepo r2 withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-14" >> "$POOL/m.notes.md"; git add -A; git commit -qm reroll
+mkrepo r2 withmap; echo "$NEW" > "$POOL/m.json"; drawn "$NEW"; echo "reviewed 2026-09-14" >> "$POOL/m.notes.md"; git add -A; git commit -qm reroll
 mkdir -p .git/review-verdicts; echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
 check "...and a stale-key record with the notes touched is refused too (D5: no substitute on a map with a record)" r2 blocked
 # GUARD_EDIT_OK: feature 294 D2 - the rendering waiver is gone; drawing or placement code that moved must DECLARE its occasions
@@ -292,7 +321,7 @@ else echo "  FAIL    another session's map change was charged to this clone"; FA
 case_4() {
 echo "4. AT RUST-ONLY A HAMLET'S MAP REVIEW WAITS FOR THE THROW BACK (feature 444 FR-023)"
 V=.git/review-verdicts/glyph-check--well--m.json
-mkrepo r4 withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
+mkrepo r4 withmap; echo "$NEW" > "$POOL/m.json"; drawn "$NEW"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
 echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
 check "a stale record on a hamlet's map, the switch at integrated: refused" r4 blocked
 ( cd "$T/r4" && echo '{"port": {"state": "rust-only"}}' > dev/switches.json && git add -A && git commit -qm rust-only )
