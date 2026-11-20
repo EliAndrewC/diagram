@@ -2194,7 +2194,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "f084b2cfe8345946",
+  "section": "ec402aa99cf96124",
   "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
@@ -15935,13 +15935,14 @@
  "rust/mode_a/src/compound/cli.rs::USAGE#the compound sheet driver": {
   "body": "bb4213ad3a210806",
   "claim": "the compound sheet driver - NONE: the generator's steps in their order, each deciding where it is claimed",
-  "code": "f87f028a09ff5260",
-  "core": "2a9135bc18466c6b",
+  "code": "b6407f67d9c1612b",
+  "core": "aebfc96936242586",
   "date": "2026-11-19",
   "note": "the usage string; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/cli.rs::compose#the compound sheet driver": {
@@ -15971,14 +15972,15 @@
  "rust/mode_a/src/compound/cli.rs::draw#the compound sheet driver": {
   "body": "3fbdfe46d7a852e8",
   "claim": "the compound sheet driver - NONE: the generator's steps in their order, each deciding where it is claimed",
-  "code": "58d1716a764bf221",
-  "core": "ce01aeae579db0da",
+  "code": "42e80ed370d6aeba",
+  "core": "ed88bc85aaad99ee",
   "date": "2026-11-19",
   "note": "file I/O, the render switch and the sheet page; no physical decision",
   "pages": {},
   "reads": "096f6d190e4928c4",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/cli.rs::load#the compound sheet driver": {
@@ -16021,14 +16023,15 @@
  "rust/mode_a/src/compound/cli.rs::run#a sheet with untagged ink or an unknown kind fails": {
   "body": "2ac28e54faac1bdf",
   "claim": "a sheet with untagged ink or an unknown kind fails - CONVENTION: every drawn element carries a kind the registry knows, else the generator exits 1 naming them (feature 262, FR-006)",
-  "code": "9185492da29afae7",
-  "core": "cd6f69a76ae600fa",
+  "code": "a0dd3a4724e2902e",
+  "core": "15b3b93ff1011a1a",
   "date": "2026-11-19",
   "note": "when census.unclassed or census.unregistered is not empty, it exits 1 and names both; a check on how drawn ink is classed",
   "pages": {},
-  "reads": "c6c7be5b0504a799",
+  "reads": "714b275f2b36f4ed",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::DEFS#pattern library": {
@@ -17480,13 +17483,14 @@
  "rust/mode_a/src/compound/gen_tests_parts.rs::the_command_draws_a_spec_whole_or_refuses_it#the generator's parts tests": {
   "body": "40b20fd869ac45e4",
   "claim": "the generator's parts tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "3e6531b6340618b5",
-  "core": "871d451ff8a2df30",
+  "code": "279d54cccfc07e5d",
+  "core": "5f8587dd675116c2",
   "date": "2026-11-19",
   "note": "CLI test; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/gen_tests_parts.rs::the_house_keeps_two_privies_and_each_outer_one_stands_against_its_wall#the generator's parts tests": {
@@ -25089,10 +25093,23 @@
  "rust/mode_a/src/page/render.rs::write_html#the page's assembly": {
   "body": "e40e2deadf23b595",
   "claim": "the page's assembly - NONE: the page's parts put together in their order, each part's decisions claimed where it is made",
-  "code": "f69da5b8ab8cdedf",
-  "core": "140f992365147461",
+  "code": "dc2b18a55fea53b5",
+  "core": "3a0e62bcd2cf935d",
   "date": "2026-11-18",
   "note": "file open, truncate and write order; I/O only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "triaged": "2026-11-19",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/page/render.rs::write_html_beside#the page's assembly": {
+  "body": "9f07a4e4d249bb14",
+  "claim": "the page's assembly - NONE: the page's parts put together in their order, each part's decisions claimed where it is made",
+  "code": "d85da71da7636f4f",
+  "core": "06d91a38b70e101d",
+  "date": "2026-11-19",
+  "note": "file handling only: it reads the notes, opens the file, renders, then writes; it decides nothing physical or visual",
   "pages": {},
   "research": "",
   "rests": [],
@@ -28477,25 +28494,27 @@
  "rust/mode_a/src/raster.rs::HOST_VARS#low-zoom picture": {
   "body": "cb3b1358f607c527",
   "claim": "low-zoom picture - CONVENTION: one image of the whole picture below a screen scale, at `RASTER_R` px per map px",
-  "code": "d357deab6a124a32",
-  "core": "2f26ffeb4d033e48",
+  "code": "9447659e9e6db509",
+  "core": "ee2f210b655d2fb9",
   "date": "2026-11-18",
   "note": "nothing physical",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster.rs::HOST_VARS#raster plumbing": {
   "body": "cb3b1358f607c527",
   "claim": "raster plumbing - NONE: tiling, the off-map drop, the id map's documents and encoding, each picture setting a CONVENTION claimed beside it",
-  "code": "dafb8ca3cd1427b7",
-  "core": "2f26ffeb4d033e48",
+  "code": "5e5c5694442f20df",
+  "core": "ee2f210b655d2fb9",
   "date": "2026-11-18",
   "note": "environment names, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster.rs::Host#low-zoom picture": {
@@ -28548,39 +28567,15 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/raster.rs::Host.census_record#low-zoom picture": {
-  "body": "93c0b31d387c69c2",
-  "claim": "low-zoom picture - CONVENTION: one image of the whole picture below a screen scale, at `RASTER_R` px per map px",
-  "code": "d2b4cb267f902e99",
-  "core": "4e4da0d2a501f6de",
-  "date": "2026-11-18",
-  "note": "nothing physical",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/raster.rs::Host.census_record#raster plumbing": {
-  "body": "93c0b31d387c69c2",
-  "claim": "raster plumbing - NONE: tiling, the off-map drop, the id map's documents and encoding, each picture setting a CONVENTION claimed beside it",
-  "code": "da3c461927f8c607",
-  "core": "4e4da0d2a501f6de",
-  "date": "2026-11-18",
-  "note": "census log I/O, plumbing",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "rust/mode_a/src/raster.rs::Host.current#low-zoom picture": {
   "body": "7c630d90113e24bd",
   "claim": "low-zoom picture - CONVENTION: one image of the whole picture below a screen scale, at `RASTER_R` px per map px",
-  "code": "83a9651fbc712b9d",
-  "core": "09b856a7071d7836",
-  "date": "2026-11-18",
-  "note": "nothing physical",
+  "code": "6d4026d5bce82c42",
+  "core": "eca9c850571978bd",
+  "date": "2026-11-19",
+  "note": "it only picks up the host's render switch (HOST_VARS), as HOST_VARS was judged; it sets no picture scale",
   "pages": {},
-  "reads": "6e5e324b730062ed",
+  "reads": "e68ce4af69e326f0",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -28588,12 +28583,12 @@
  "rust/mode_a/src/raster.rs::Host.current#raster plumbing": {
   "body": "7c630d90113e24bd",
   "claim": "raster plumbing - NONE: tiling, the off-map drop, the id map's documents and encoding, each picture setting a CONVENTION claimed beside it",
-  "code": "930850a44e8b7678",
-  "core": "09b856a7071d7836",
-  "date": "2026-11-18",
-  "note": "env read, plumbing",
+  "code": "cdfcd822435da1d8",
+  "core": "eca9c850571978bd",
+  "date": "2026-11-19",
+  "note": "it reads environment variables into the host; plumbing",
   "pages": {},
-  "reads": "6e5e324b730062ed",
+  "reads": "e68ce4af69e326f0",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -28601,14 +28596,15 @@
  "rust/mode_a/src/raster.rs::Host.refuse_render_in_a_test#the render guard": {
   "body": "d1b6c54edd4f4e83",
   "claim": "the render guard - NONE: test-suite bookkeeping, no map decision",
-  "code": "58d8054d89406b84",
-  "core": "6c90ffc97018d490",
+  "code": "9f42f589a6e59224",
+  "core": "e406d75262b6f992",
   "date": "2026-11-18",
   "note": "test bookkeeping",
   "pages": {},
   "reads": "c5f1c94fb01314a4",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster.rs::Host.resvg_png#low-zoom picture": {
@@ -29376,14 +29372,15 @@
  "rust/mode_a/src/raster.rs::picture#the low-zoom picture": {
   "body": "24fffb8595447888",
   "claim": "the low-zoom picture - CONVENTION: one image of the whole map at `RASTER_R` px per map px, rendered in pixel-aligned tiles at once (features 200, 223)",
-  "code": "14571d264bec9c95",
-  "core": "11e8dd8566b1f079",
+  "code": "d13ceb297a40b960",
+  "core": "660b971518e9d5d0",
   "date": "2026-11-18",
   "note": "whole map at r, in tiles, workers in parallel",
   "pages": {},
   "reads": "22d08d74f8a0f0ce",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster.rs::picture_args#low-zoom picture": {
@@ -30094,38 +30091,28 @@
  "rust/mode_a/src/raster/tests.rs::a_host_is_read_from_the_process#the raster's tests": {
   "body": "518d217cc07092d8",
   "claim": "the raster's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "03d84ffef64011fa",
-  "core": "f3e96b35ebb17859",
+  "code": "23b6a3221539c5b6",
+  "core": "9773218ff0d5e33c",
   "date": "2026-11-18",
   "note": "assertion",
   "pages": {},
-  "reads": "6e5e324b730062ed",
+  "reads": "e68ce4af69e326f0",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster/tests.rs::a_render_is_drawn_in_process_and_its_refusals_are_the_python_s#the raster's tests": {
   "body": "582bfdaa3194fe00",
   "claim": "the raster's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "12caf6219ab87b49",
-  "core": "91c845e245b32a80",
+  "code": "8cd3a8073164efa0",
+  "core": "9f3a17753c0284be",
   "date": "2026-11-18",
   "note": "fixture and assertions",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/raster/tests.rs::the_census_takes_a_render_where_one_is_open#the raster's tests": {
-  "body": "dfe0bc6bb518d232",
-  "claim": "the raster's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "e94c95991eaea698",
-  "core": "a3d2ef22913d6abe",
-  "date": "2026-11-18",
-  "note": "fixture and assertions",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/raster/tests.rs::the_id_map_refuses_what_its_palette_cannot_hold#the raster's tests": {
@@ -30180,14 +30167,15 @@
  "rust/mode_a/src/reads.rs::note#the page's reads": {
   "body": "11522da234e2753e",
   "claim": "the page's reads - NONE: bookkeeping for the generation cache, no map decision",
-  "code": "82f43036237b73f3",
-  "core": "49cb78f49498226c",
+  "code": "dd0d37e17ce86d06",
+  "core": "da80351cc7f3e8d7",
   "date": "2026-11-18",
   "note": "cache bookkeeping",
   "pages": {},
   "reads": "17564bbde1fa2fc7",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/reads.rs::noted#the page's reads": {
@@ -30443,6 +30431,18 @@
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/sheet/hand.rs::Asked#the hand sheet driver": {
+  "body": "9a64c205b883897e",
+  "claim": "the hand sheet driver - NONE: the generator's four steps in its order, each deciding where it is claimed",
+  "code": "f8e16bb15a62de15",
+  "core": "92a77f3fc0da6908",
+  "date": "2026-11-19",
+  "note": "an argument tuple of sheet, placed path and out folder; it decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/sheet/hand.rs::Registry#the hand sheet driver": {
   "body": "712e42e6e978a51e",
   "claim": "the hand sheet driver - NONE: the generator's four steps in its order, each deciding where it is claimed",
@@ -30459,27 +30459,27 @@
  "rust/mode_a/src/sheet/hand.rs::USAGE#the hand sheet driver": {
   "body": "684209411f94a2a8",
   "claim": "the hand sheet driver - NONE: the generator's four steps in its order, each deciding where it is claimed",
-  "code": "1e8f939511c08ab5",
-  "core": "bcbc4e2cb9fee121",
+  "code": "420d0afa311aaf9a",
+  "core": "266f05777684bcda",
   "date": "2026-11-18",
   "note": "usage text",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/sheet/hand.rs::draw#the picture skipped under the render switch": {
-  "body": "19c72022140a7c12",
+  "body": "d19d11de4c82938f",
   "claim": "the picture skipped under the render switch - CONVENTION: `DIAGRAM_SKIP_RENDER=1` skips the sheet's picture as it skips every map's (feature 208), the page still written",
-  "code": "54b76f4da36630e9",
-  "core": "a8527544bc3222b5",
-  "date": "2026-11-18",
-  "note": "an environment switch that skips writing the PNG is I/O plumbing, not how anything is shown; should be NONE",
-  "outside": true,
+  "code": "641691f1efd60d85",
+  "core": "c65c6f420049f8bf",
+  "date": "2026-11-19",
+  "note": "`DIAGRAM_SKIP_RENDER == \"1\"` skips only `render`, and write_sheet_page still runs; sending the PNG to `--out DIR/<base>.png` is where the file goes, not how the sheet looks",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/mode_a/src/sheet/hand.rs::main#the hand sheet driver": {
   "body": "cd78de233c34fe22",
@@ -30496,13 +30496,14 @@
  "rust/mode_a/src/sheet/hand.rs::parse#the hand sheet driver": {
   "body": "aec4d36377ee65b8",
   "claim": "the hand sheet driver - NONE: the generator's four steps in its order, each deciding where it is claimed",
-  "code": "f6302c9ccd2fe4ba",
-  "core": "0cc4a357e8e1ea03",
+  "code": "add98ebca4ab5760",
+  "core": "2bf265232071b3df",
   "date": "2026-11-18",
   "note": "argument parsing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/sheet/hand.rs::py_list#the hand sheet driver": {
@@ -30533,15 +30534,16 @@
  "rust/mode_a/src/sheet/hand.rs::run#a sheet with untagged ink or an unknown kind fails": {
   "body": "88264f47ba230879",
   "claim": "a sheet with untagged ink or an unknown kind fails - CONVENTION: every drawn element carries a kind the registry knows, else the generator exits 1 naming them, as loudly as the pool test (feature 262, FR-006)",
-  "code": "82e5b1270810e184",
-  "core": "29976c26141a22f7",
+  "code": "5424d7e411831f28",
+  "core": "939abdc20d0503ff",
   "date": "2026-11-18",
   "note": "a validation exit code over the census is a gate, not a drawing convention; should be NONE",
   "outside": true,
   "pages": {},
-  "reads": "5c5663804205a019",
+  "reads": "274e57e4b423d9ef",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "MISLABELED"
  },
  "rust/mode_a/src/sheet/hand.rs::sheet_registry#the hand sheet driver": {
@@ -30584,8 +30586,8 @@
  "rust/mode_a/src/sheet/hand/tests.rs::a_sheet_is_placed_rendered_and_paged_and_its_reads_listed#the hand sheet driver's tests": {
   "body": "3c30edf8a82314f4",
   "claim": "the hand sheet driver's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "aa817ab60d347880",
-  "core": "92ce75458c8688c0",
+  "code": "123c2d21cedd18a9",
+  "core": "b746de01bb31294e",
   "date": "2026-11-18",
   "note": "test",
   "pages": {},
@@ -30594,13 +30596,13 @@
   "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/sheet/hand/tests.rs::the_arguments_are_one_sheet_and_where_its_placed_text_goes#the hand sheet driver's tests": {
-  "body": "31b4e21e4abb6aaf",
+ "rust/mode_a/src/sheet/hand/tests.rs::the_arguments_are_one_sheet_and_where_its_placed_text_and_its_outputs_go#the hand sheet driver's tests": {
+  "body": "46312d5ff364a431",
   "claim": "the hand sheet driver's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "13bb6b714d2cb73c",
-  "core": "742e35af1d1088d1",
-  "date": "2026-11-18",
-  "note": "test",
+  "code": "e0817ce7c8772d0d",
+  "core": "87c018ccd85b73b9",
+  "date": "2026-11-19",
+  "note": "argument-parsing assertions; they decide nothing about a building",
   "pages": {},
   "research": "",
   "rests": [],
@@ -30781,13 +30783,14 @@
  "rust/mode_a/src/sheet/page.rs::write_sheet_page#the sheet marks itself": {
   "body": "155df7d2c8ab63cd",
   "claim": "the sheet marks itself - CONVENTION: `data-sheet` keeps a sheet's lit labels in the map's ink, its labels sitting on their own features' fills (the GM 2026-09-27)",
-  "code": "7445904b29311922",
-  "core": "c05147dbb08b3018",
+  "code": "d1f4ce2ae99b2fdc",
+  "core": "b572e72a877f8698",
   "date": "2026-11-18",
   "note": "the data-sheet marker is display only",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/sheet/page/cli.rs::Registry#the page command": {
@@ -30853,26 +30856,28 @@
  "rust/mode_a/src/sheet/page/cli.rs::run#the page command": {
   "body": "698cadd522db1008",
   "claim": "the page command - NONE: arguments in, the census and the reads out, deciding nothing about a building",
-  "code": "71ac75c9680a5abc",
-  "core": "564067cfa29c19d0",
+  "code": "d219151088ca9fec",
+  "core": "13105d73f5804749",
   "date": "2026-11-18",
   "note": "I/O and JSON out",
   "pages": {},
   "reads": "16c3cc7296fd67ac",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/sheet/page/tests.rs::a_sheet_s_page_is_written_beside_it_and_its_census_returned#the sheet page's tests": {
   "body": "c9c3ee5d3355141f",
   "claim": "the sheet page's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "3fdbda624dd22228",
-  "core": "c78c5893537e811c",
+  "code": "7e6306541d4ea62e",
+  "core": "eac543b9f9fbc4b3",
   "date": "2026-11-18",
   "note": "fixture and assertions",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/sheet/tests.rs::a_sheet_that_does_not_balance_is_refused#the sheet reader's tests": {

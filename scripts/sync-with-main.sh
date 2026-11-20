@@ -464,6 +464,10 @@ render_sync() {
   # the grounds that render-sync is a LEGITIMATE caller. The fidelity review rejected that: legitimate
   # WORK does not imply a legitimate INVOCATION ROUTE, and compliance cost exactly this line.
   (cd "$MAIN" && flock "$LOCK" env DIAGRAM_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $MAIN --main-repo $MAIN")
+  # THE RUST INDEX WRITTEN LAST (feature 449 T221): render_cache's own index finds maps by their .gen.py, gone with T221, so it writes
+  # a page listing nothing; the Rust index, written after it under the same lock, is the one main keeps - until T222 deletes
+  # render_cache and this line with it.
+  (cd "$MAIN" && flock "$LOCK" make --no-print-directory pool-index)
   # --skill-dir, not --pool: since feature 161 the pool is TWO trees under the skill dir
   # (pool/ live, legacy-hand-authored-pool/ frozen), and render_cache walks both from that one
   # root - it warns about a frozen exhibit whose render is missing, and that job followed the

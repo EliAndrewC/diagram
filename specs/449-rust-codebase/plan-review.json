@@ -1086,6 +1086,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
+  },
+  "### T221 (T219's SOUND derivation: the generation key re-read and hashed every engine source for every map; the driver is rebuilt from it)": {
+   "sha256": "0a19c30bb572c2eb9548434869f15c01ef523cec32eff3efadc3c95f3592524b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T221 Approach (checklist part A)": {
+   "sha256": "9975c2f6a2bfaf94557ef0753cd6c9b3634486503f038aab5bbdd8d71a010188",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15135,6 +15147,272 @@
      "why": "Sequencing only."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T221 (T219's SOUND derivation: the generation key re-read and hashed every engine source for every map; the driver is rebuilt from it)",
+    "### T221 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T221-rebuild",
+     "summary": "The generation key and driver rebuilt from derivations/T219-pipeline.md with the phase guard on, in the pool crate; the Python driver files deleted unread.",
+     "class": "within",
+     "why": "The GM 2026-11-19 ('rebuilding from derivations, not porting the Python's mistakes') and the 2026-10-30 rule the request carries: not re-implementing the old algorithms. The deleted files are replaced by the Rust driver (FR-001)."
+    },
+    {
+     "id": "T221-cache-mechanics",
+     "summary": "One read table per clone, each read held by its stat under the racy-file rule; a changed read durably drops the entries of the maps it names before taking the new digest; publish order (artifacts, table, meta last) and hard link into the folder; engines identified by GNU build id; fonts by directory and file stats; table locked for the run.",
+     "class": "within",
+     "why": "Design of the rebuilt cache. Its purpose is that no map is served from content it was not built from, and that drawing does work in proportion to what changed. Both are the request's efficiency rule. Nothing is narrowed."
+    },
+    {
+     "id": "T221-defect-fixes",
+     "summary": "Mode A reports files it looked for and did not find as reads, and a looked-for file created later regenerates its sheet. A read that changes while the engine runs leaves the map unpublished. Both are red first.",
+     "class": "within",
+     "why": "Fix as we go (the GM 2026-11-18): both are wrong outcomes, a stale sheet served. Item 12 names them."
+    },
+    {
+     "id": "T221-make-map",
+     "summary": "make map MAP=<folder|file|name> or MAP=--all runs any pool map, hamlets included, printing CACHED, REGENERATED with its reason, or FROZEN. GEN= is refused with a message naming the MAP= form.",
+     "class": "within",
+     "why": "make stays the one entry point (FR-005). Usage text and argument form may differ (FR-002), and the moved callers' suites are pinned. Refusing GEN= with a pointer to MAP= is an interface change. It is not a refusal of valid work."
+    },
+    {
+     "id": "T221-bundle-door-render-sync",
+     "summary": "bundle_door's is_current asks the cache in process. render-sync draws every live map through the driver first (render-maps). Every map regenerates once on the first run.",
+     "class": "within",
+     "why": "The callers move onto the replacement, so the old driver does not keep running beside it (FR-003). The single regeneration is the cost of a new cache, not a narrowing."
+    },
+    {
+     "id": "T221-legacy-frozen",
+     "summary": "The legacy tree is always FROZEN. REGEN_FROZEN=1, the override that regenerated frozen maps with the Python engine, is gone with that engine.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It removes a capability: frozen maps can no longer be regenerated on request. It is legitimate because the override's only subject is the Python engine, which FR-001 deletes. Keeping it would mean porting a regeneration path for maps the default already never regenerates. The GM 2026-11-09 says unused tooling is not ported. The default behavior, legacy FROZEN, is unchanged."
+    },
+    {
+     "id": "T221-profile-switch",
+     "summary": "PROFILE=1 is gone with the Python engine it acted on.",
+     "class": "within",
+     "why": "A switch on deleted Python, removed with it (FR-001). No map outcome is lost."
+    },
+    {
+     "id": "T221-gate-reach",
+     "summary": "A map spec edit now counts as drawing code for reviews owed, and make verify and the review gate draw hamlets too.",
+     "class": "within",
+     "why": "These follow from the key now seeing the reads the old key missed, and item 12 names them. They widen what the gate covers and narrow nothing. A check changed as fixed and named is FR-002's own exception."
+    },
+    {
+     "id": "T221-python-kept-to-T222",
+     "summary": "gencache.py and _census.py stay because main's render_cache.py imports them until T222 deletes them.",
+     "class": "within",
+     "why": "FR-003: Python stays until its replacement passes. The generation cache itself is replaced here, and what remains is an import by a different piece. This is an ordering, not a narrowing."
+    },
+    {
+     "id": "T221-found-checks-to-T222",
+     "summary": "Three checks are left reading what no longer exists: the measure probe's pool-changes pattern (matches nothing), preflight's roll-census read, and land's census variable filter. They are filed to T222.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are known defects T221 leaves at its landing. A probe that matches nothing passes work it should flag. The GM's rule (2026-11-18) is per STEP: 'fix all known bugs in each step before moving on to porting the next step'. T222 is this step's own cleanup: it deletes gencache and _census, finishing the pipeline's Python. Deferring to T222 is therefore inside the GM's words. Condition: T222 must land before the next step's port begins. If it does not, carrying these past the step boundary is not legitimate."
+    },
+    {
+     "id": "T221-render-sync-failstop",
+     "summary": "Whether one failing map should stop render-sync before the record site is left as a question for T222.",
+     "class": "within",
+     "why": "A design question, not a known wrong outcome. Nothing asked is narrowed."
+    },
+    {
+     "id": "T221-gencache-dirs-left",
+     "summary": "The Python cache's old entries under .gencache/<map>/ are left on disk.",
+     "class": "within",
+     "why": "A one-time leftover that does not grow and that no reader of a map sees, so not a defect (constitution XIV v2.36.0). FR-013 reaches temporary directories made by checks and tests, the cargo cache and session scratch, not this."
+    },
+    {
+     "id": "T221-budget-and-exits",
+     "summary": "Held to T219's derived budget (pool 1,894, legacy 170) and landing at 1,589 and 170. The exits are the tests, quick, static, counters-inert, hooks-test, work-budget-review and render-sync in a scratch worktree. A claim that it cannot be done goes to arbiter-ask.",
+     "class": "within",
+     "why": "The 2026-10-30 rule and the GM 2026-11-19 'if the 3a step is horribly inefficient' words carried as a measured budget. Nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T221 (T219's SOUND derivation: the generation key re-read and hashed every engine source for every map; the driver is rebuilt from it)",
+    "### T221 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-rebuild-from-derivation",
+     "summary": "The driver and cache are rebuilt from derivations/T219-pipeline.md with the phase guard on, in the pool crate, not ported from the Python cache.",
+     "class": "within",
+     "why": "The GM 2026-11-19 ('rebuilding from derivations, not porting the Python's mistakes') and the 2026-10-30 rule against re-implementing the old algorithms ask for exactly this."
+    },
+    {
+     "id": "D2-cache-design",
+     "summary": "One read table per clone keyed by stat with the racy-file rule; a changed read removes every map entry its row names durably before taking the new digest; publish by rename with the meta last; engines identified by GNU build id; font set by directory and file stats; table locked for the run.",
+     "class": "within",
+     "why": "Implementation design serving FR-001 and the efficiency rule; it narrows no clause and is aimed at the stated goal that no map is served from content it was not built from."
+    },
+    {
+     "id": "D3-legacy-frozen",
+     "summary": "The legacy tree is always FROZEN; REGEN_FROZEN=1 and PROFILE=1 go with the deleted Python engine they acted on.",
+     "class": "within",
+     "why": "The knobs acted only on Python engine files this task deletes (FR-001); nothing in the request asks for frozen legacy sheets to stay regenerable, and FR-002 lets a tool's usage differ so long as it does its job for its callers. A removed debug switch is not a wrong outcome."
+    },
+    {
+     "id": "D4-make-map-interface",
+     "summary": "make map MAP=<folder|file|name> and MAP=--all run any pool map, hamlets included, printing CACHED, REGENERATED with reason, or FROZEN; GEN= is refused naming the MAP= form.",
+     "class": "within",
+     "why": "make stays the one entry point (FR-005); a usage change is allowed by FR-002, and the refusal points the caller at the new form, so callers still get their job done. Hamlets being drawable widens rather than narrows."
+    },
+    {
+     "id": "D5-engine-reads-and-unpublished-race",
+     "summary": "Engines draw into a staging folder; Mode A reports looked-for-but-missing files as reads; a read changed during a run leaves the map drawn but unpublished so the next run redraws it; both pinned red first.",
+     "class": "within",
+     "why": "Fixes two named defects of the old key (a sheet left stale when a looked-for file is created later; a race), which the GM's 2026-11-18 'fix all known bugs in each step' asks for. These are wrong outcomes (a stale map served), not mere differences."
+    },
+    {
+     "id": "D6-deletions",
+     "summary": "The six .gen.py, interactive/sheet.py, pipeline/regen.py and pipeline/rollcache.py are deleted unread; bundle_door's is_current asks the cache in process.",
+     "class": "within",
+     "why": "FR-001 (every Python file replaced) and FR-003 (replacement passes, then the Python goes; no piece runs both)."
+    },
+    {
+     "id": "D7-index-bridge",
+     "summary": "New since the last CLEAR: render_cache.py's own index, which finds maps by .gen.py, would now list nothing, so sync-with-main.sh writes the Rust index (make pool-index, 30 maps) after render-sync under the same lock until T222 deletes render_cache.py and that line.",
+     "class": "within",
+     "why": "It fixes a defect this task's deletions caused (an empty index page is a wrong outcome for its readers) in the same task instead of carrying it, as FR-002 ('what a caller reads of it ... it still finds') and the GM's 'fix all known bugs in each step' require. The bridge is temporary, its end named (T222), and T222 lands before T158 and before the next step's port, so nothing is left broken across a step boundary. It narrows nothing."
+    },
+    {
+     "id": "D8-no-before-after-page",
+     "summary": "New since the last CLEAR: no before-and-after page is published because no drawn sheet changed - the four hand sheets match main's and the two generated sheets differ only by the old render cache's stamp comment (observed 2026-11-19 by cmp and a line diff).",
+     "class": "within",
+     "why": "The GM's 2026-11-17 words attach the page to each engine slice, whose porting of drawing code moves sheets; T221 is the pipeline driver and cache, not a drawing slice. The page's purpose is for the GM to see how the maps changed, and a measured comparison shows no drawn content changed, so leaving it out takes nothing away from that purpose. It is a measured state, not an assumption. The byte comparison is offered as evidence of no change, not held as a standard."
+    },
+    {
+     "id": "D9-budget",
+     "summary": "A warm all-hit run counts pool 1,589 against budget 1,894 and legacy 170 against 170; warm --all 0.1 s, cold 22.6 s.",
+     "class": "within",
+     "why": "Holds the derivation's work budget, which is what the GM's 2026-10-30 efficiency rule and the 2026-11-19 plan ask for. Each figure carries a dated method label."
+    },
+    {
+     "id": "D10-gencache-census-kept-to-T222",
+     "summary": "gencache.py and _census.py stay because main's render_cache.py imports them until T222 deletes all three.",
+     "class": "within",
+     "why": "FR-003: Python stays until what reads it is replaced. The deletion is put off to T222 inside the same step, before T158 and before the next step's port, so FR-001's reach is not narrowed."
+    },
+    {
+     "id": "D11-order",
+     "summary": "New since the last CLEAR: after T227 and T225, then T229 (a guard fix, no port), then T222, both landing before T158 (the step's close) and before the next step's port.",
+     "class": "within",
+     "why": "This is the order the GM's 2026-11-18 rule requires: each step's known defects are fixed before the next step's port begins."
+    },
+    {
+     "id": "D12-found-and-left-to-T222",
+     "summary": "Checks still reading what no longer exists (measure probe's pool changes matching nothing, preflight's roll-census read, land's census variable filter) and whether one failing map should stop render-sync are put on T222's line; the Python cache's old .gencache/<map>/ entries are left on disk.",
+     "class": "within",
+     "why": "A check that matches nothing passes everything, which counts as a defect, but it goes to T222 inside this step, before T158 and the next port, which satisfies 'fix all known bugs in each step before moving on'. The stale .gencache entries are a one-time remnant that nothing writes to or reads any more. No map, check or tool gives a wrong outcome because of them, and FR-013 covers what the tooling keeps making, not a past pile, so this is a leftover, not a defect."
+    },
+    {
+     "id": "D13-side-effects",
+     "summary": "Every map regenerates once on the first run (new cache); a spec edit now counts as drawing code for reviews owed; make verify and the review gate draw hamlets too.",
+     "class": "within",
+     "why": "Consequences of the sound read set the GM's rebuild asks for: a spec a map reads is an input of that map. These widen coverage and narrow nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T221 (T219's SOUND derivation: the generation key re-read and hashed every engine source for every map; the driver is rebuilt from it)",
+    "### T221 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-rebuild-from-derivation",
+     "summary": "The driver and cache are rebuilt from derivations/T219-pipeline.md with the phase guard on, in the pool crate, not ported from the Python cache.",
+     "class": "within",
+     "why": "The GM 2026-11-19 ('rebuilding from derivations, not porting the Python's mistakes') and the 2026-10-30 rule against re-implementing the old algorithms ask for exactly this."
+    },
+    {
+     "id": "D2-cache-design",
+     "summary": "One read table per clone keyed by stat with the racy-file rule; a changed read removes every map entry its row names durably before taking the new digest; publish by rename with the meta last; engines identified by GNU build id; font set by directory and file stats; table locked for the run.",
+     "class": "within",
+     "why": "Implementation design serving FR-001 and the efficiency rule; it narrows no clause and is aimed at the stated goal that no map is served from content it was not built from."
+    },
+    {
+     "id": "D3-legacy-frozen",
+     "summary": "The legacy tree is always FROZEN; REGEN_FROZEN=1 and PROFILE=1 go with the deleted Python engine they acted on.",
+     "class": "within",
+     "why": "The knobs acted only on Python engine files this task deletes (FR-001); nothing in the request asks for frozen legacy sheets to stay regenerable, and FR-002 lets a tool's usage differ so long as it does its job for its callers. A removed debug switch is not a wrong outcome."
+    },
+    {
+     "id": "D4-make-map-interface",
+     "summary": "make map MAP=<folder|file|name> and MAP=--all run any pool map, hamlets included, printing CACHED, REGENERATED with reason, or FROZEN; GEN= is refused naming the MAP= form.",
+     "class": "within",
+     "why": "make stays the one entry point (FR-005); a usage change is allowed by FR-002, and the refusal points the caller at the new form, so callers still get their job done. Hamlets being drawable widens rather than narrows."
+    },
+    {
+     "id": "D5-engine-reads-and-unpublished-race",
+     "summary": "Engines draw into a staging folder; Mode A reports looked-for-but-missing files as reads; a read changed during a run leaves the map drawn but unpublished so the next run redraws it; both pinned red first.",
+     "class": "within",
+     "why": "Fixes two named defects of the old key (a sheet left stale when a looked-for file is created later; a race), which the GM's 2026-11-18 'fix all known bugs in each step' asks for. These are wrong outcomes (a stale map served), not mere differences."
+    },
+    {
+     "id": "D6-deletions",
+     "summary": "The six .gen.py, interactive/sheet.py, pipeline/regen.py and pipeline/rollcache.py are deleted unread; bundle_door's is_current asks the cache in process.",
+     "class": "within",
+     "why": "FR-001 (every Python file replaced) and FR-003 (replacement passes, then the Python goes; no piece runs both)."
+    },
+    {
+     "id": "D7-index-bridge",
+     "summary": "New since the last CLEAR: render_cache.py's own index, which finds maps by .gen.py, would now list nothing, so sync-with-main.sh writes the Rust index (make pool-index, 30 maps) after render-sync under the same lock until T222 deletes render_cache.py and that line.",
+     "class": "within",
+     "why": "It fixes a defect this task's deletions caused (an empty index page is a wrong outcome for its readers) in the same task instead of carrying it, as FR-002 ('what a caller reads of it ... it still finds') and the GM's 'fix all known bugs in each step' require. The bridge is temporary, its end named (T222), and T222 lands before T158 and before the next step's port, so nothing is left broken across a step boundary. It narrows nothing."
+    },
+    {
+     "id": "D8-no-before-after-page",
+     "summary": "New since the last CLEAR: no before-and-after page is published because no drawn sheet changed - the four hand sheets match main's and the two generated sheets differ only by the old render cache's stamp comment (observed 2026-11-19 by cmp and a line diff).",
+     "class": "within",
+     "why": "The request attaches the page to the engine slice, not to each task: 'each engine slice publishes a page of every pool sheet before and after' (request.md, 2026-11-17, 'the engine slices worked deliberately'). Whatever page the step owes falls due at the slice's close (T158), and this block does not take it away. Read that way, the block's 'no before-and-after page is owed' means none is owed by this task, and in that reading it narrows nothing. Its limit: the label's comparison covers six sheets, four hand sheets and two generated ones, while the block also says render-sync drew every live map and the pool index lists 30. The bundle does not show that those six are every pool sheet the slice's page must cover. So this decision does NOT stand as proof that no pool sheet moved, and it does NOT excuse the slice's page at T158. A byte comparison offered as evidence of no change is not held as a standard here."
+    },
+    {
+     "id": "D9-budget",
+     "summary": "A warm all-hit run counts pool 1,589 against budget 1,894 and legacy 170 against 170; warm --all 0.1 s, cold 22.6 s.",
+     "class": "within",
+     "why": "Holds the derivation's work budget, which is what the GM's 2026-10-30 efficiency rule and the 2026-11-19 plan ask for. Each figure carries a dated method label."
+    },
+    {
+     "id": "D10-gencache-census-kept-to-T222",
+     "summary": "gencache.py and _census.py stay because main's render_cache.py imports them until T222 deletes all three.",
+     "class": "within",
+     "why": "FR-003: Python stays until what reads it is replaced. The deletion is put off to T222 inside the same step, before T158 and before the next step's port, so FR-001's reach is not narrowed."
+    },
+    {
+     "id": "D11-order",
+     "summary": "New since the last CLEAR: after T227 and T225, then T229 (a guard fix, no port), then T222, both landing before T158 (the step's close) and before the next step's port.",
+     "class": "within",
+     "why": "This is the order the GM's 2026-11-18 rule requires: each step's known defects are fixed before the next step's port begins."
+    },
+    {
+     "id": "D12-found-and-left-to-T222",
+     "summary": "Checks still reading what no longer exists (measure probe's pool changes matching nothing, preflight's roll-census read, land's census variable filter) and whether one failing map should stop render-sync are put on T222's line; the Python cache's old .gencache/<map>/ entries are left on disk.",
+     "class": "within",
+     "why": "A check that matches nothing passes everything, which counts as a defect, but it goes to T222 inside this step, before T158 and the next port, which satisfies 'fix all known bugs in each step before moving on'. The stale .gencache entries are a one-time remnant that nothing writes to or reads any more. No map, check or tool gives a wrong outcome because of them, and FR-013 covers what the tooling keeps making, not a past pile, so this is a leftover, not a defect."
+    },
+    {
+     "id": "D13-side-effects",
+     "summary": "Every map regenerates once on the first run (new cache); a spec edit now counts as drawing code for reviews owed; make verify and the review gate draw hamlets too.",
+     "class": "within",
+     "why": "Consequences of the sound read set the GM's rebuild asks for: a spec a map reads is an input of that map. These widen coverage and narrow nothing that was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -26680,6 +26958,92 @@
      "summary": "Lands after T227, before T221, in one landing.",
      "class": "within",
      "why": "Sequencing only."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T221": {
+   "section_sha256": "3a343de8d118f523cb6bc17f22984101c842dfcc430025990027af1e1927891f",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-rebuild-from-derivation",
+     "summary": "The driver and cache are rebuilt from derivations/T219-pipeline.md with the phase guard on, in the pool crate, not ported from the Python cache.",
+     "class": "within",
+     "why": "The GM 2026-11-19 ('rebuilding from derivations, not porting the Python's mistakes') and the 2026-10-30 rule against re-implementing the old algorithms ask for exactly this."
+    },
+    {
+     "id": "D2-cache-design",
+     "summary": "One read table per clone keyed by stat with the racy-file rule; a changed read removes every map entry its row names durably before taking the new digest; publish by rename with the meta last; engines identified by GNU build id; font set by directory and file stats; table locked for the run.",
+     "class": "within",
+     "why": "Implementation design serving FR-001 and the efficiency rule; it narrows no clause and is aimed at the stated goal that no map is served from content it was not built from."
+    },
+    {
+     "id": "D3-legacy-frozen",
+     "summary": "The legacy tree is always FROZEN; REGEN_FROZEN=1 and PROFILE=1 go with the deleted Python engine they acted on.",
+     "class": "within",
+     "why": "The knobs acted only on Python engine files this task deletes (FR-001); nothing in the request asks for frozen legacy sheets to stay regenerable, and FR-002 lets a tool's usage differ so long as it does its job for its callers. A removed debug switch is not a wrong outcome."
+    },
+    {
+     "id": "D4-make-map-interface",
+     "summary": "make map MAP=<folder|file|name> and MAP=--all run any pool map, hamlets included, printing CACHED, REGENERATED with reason, or FROZEN; GEN= is refused naming the MAP= form.",
+     "class": "within",
+     "why": "make stays the one entry point (FR-005); a usage change is allowed by FR-002, and the refusal points the caller at the new form, so callers still get their job done. Hamlets being drawable widens rather than narrows."
+    },
+    {
+     "id": "D5-engine-reads-and-unpublished-race",
+     "summary": "Engines draw into a staging folder; Mode A reports looked-for-but-missing files as reads; a read changed during a run leaves the map drawn but unpublished so the next run redraws it; both pinned red first.",
+     "class": "within",
+     "why": "Fixes two named defects of the old key (a sheet left stale when a looked-for file is created later; a race), which the GM's 2026-11-18 'fix all known bugs in each step' asks for. These are wrong outcomes (a stale map served), not mere differences."
+    },
+    {
+     "id": "D6-deletions",
+     "summary": "The six .gen.py, interactive/sheet.py, pipeline/regen.py and pipeline/rollcache.py are deleted unread; bundle_door's is_current asks the cache in process.",
+     "class": "within",
+     "why": "FR-001 (every Python file replaced) and FR-003 (replacement passes, then the Python goes; no piece runs both)."
+    },
+    {
+     "id": "D7-index-bridge",
+     "summary": "New since the last CLEAR: render_cache.py's own index, which finds maps by .gen.py, would now list nothing, so sync-with-main.sh writes the Rust index (make pool-index, 30 maps) after render-sync under the same lock until T222 deletes render_cache.py and that line.",
+     "class": "within",
+     "why": "It fixes a defect this task's deletions caused (an empty index page is a wrong outcome for its readers) in the same task instead of carrying it, as FR-002 ('what a caller reads of it ... it still finds') and the GM's 'fix all known bugs in each step' require. The bridge is temporary, its end named (T222), and T222 lands before T158 and before the next step's port, so nothing is left broken across a step boundary. It narrows nothing."
+    },
+    {
+     "id": "D8-no-before-after-page",
+     "summary": "New since the last CLEAR: no before-and-after page is published because no drawn sheet changed - the four hand sheets match main's and the two generated sheets differ only by the old render cache's stamp comment (observed 2026-11-19 by cmp and a line diff).",
+     "class": "within",
+     "why": "The request attaches the page to the engine slice, not to each task: 'each engine slice publishes a page of every pool sheet before and after' (request.md, 2026-11-17, 'the engine slices worked deliberately'). Whatever page the step owes falls due at the slice's close (T158), and this block does not take it away. Read that way, the block's 'no before-and-after page is owed' means none is owed by this task, and in that reading it narrows nothing. Its limit: the label's comparison covers six sheets, four hand sheets and two generated ones, while the block also says render-sync drew every live map and the pool index lists 30. The bundle does not show that those six are every pool sheet the slice's page must cover. So this decision does NOT stand as proof that no pool sheet moved, and it does NOT excuse the slice's page at T158. A byte comparison offered as evidence of no change is not held as a standard here."
+    },
+    {
+     "id": "D9-budget",
+     "summary": "A warm all-hit run counts pool 1,589 against budget 1,894 and legacy 170 against 170; warm --all 0.1 s, cold 22.6 s.",
+     "class": "within",
+     "why": "Holds the derivation's work budget, which is what the GM's 2026-10-30 efficiency rule and the 2026-11-19 plan ask for. Each figure carries a dated method label."
+    },
+    {
+     "id": "D10-gencache-census-kept-to-T222",
+     "summary": "gencache.py and _census.py stay because main's render_cache.py imports them until T222 deletes all three.",
+     "class": "within",
+     "why": "FR-003: Python stays until what reads it is replaced. The deletion is put off to T222 inside the same step, before T158 and before the next step's port, so FR-001's reach is not narrowed."
+    },
+    {
+     "id": "D11-order",
+     "summary": "New since the last CLEAR: after T227 and T225, then T229 (a guard fix, no port), then T222, both landing before T158 (the step's close) and before the next step's port.",
+     "class": "within",
+     "why": "This is the order the GM's 2026-11-18 rule requires: each step's known defects are fixed before the next step's port begins."
+    },
+    {
+     "id": "D12-found-and-left-to-T222",
+     "summary": "Checks still reading what no longer exists (measure probe's pool changes matching nothing, preflight's roll-census read, land's census variable filter) and whether one failing map should stop render-sync are put on T222's line; the Python cache's old .gencache/<map>/ entries are left on disk.",
+     "class": "within",
+     "why": "A check that matches nothing passes everything, which counts as a defect, but it goes to T222 inside this step, before T158 and the next port, which satisfies 'fix all known bugs in each step before moving on'. The stale .gencache entries are a one-time remnant that nothing writes to or reads any more. No map, check or tool gives a wrong outcome because of them, and FR-013 covers what the tooling keeps making, not a past pile, so this is a leftover, not a defect."
+    },
+    {
+     "id": "D13-side-effects",
+     "summary": "Every map regenerates once on the first run (new cache); a spec edit now counts as drawing code for reviews owed; make verify and the review gate draw hamlets too.",
+     "class": "within",
+     "why": "Consequences of the sound read set the GM's rebuild asks for: a spec a map reads is an input of that map. These widen coverage and narrow nothing that was asked."
     }
    ],
    "verdict": "CLEAR"
