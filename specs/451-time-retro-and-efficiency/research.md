@@ -37,7 +37,7 @@ checked against the log and the transcripts where noted.
   subagent", `agent_id` and `agent_type` (the schema's own description: "Use this field (not agent_type) to distinguish subagent calls
   from main-thread calls"). Observed: 8,009 lines of the window's log carry `by`, which the writer takes from `agent_id` (observed
   2026-11-20, method: lines with a `by` field counted). `agent_type` is SCHEMA, NOT YET OBSERVED: no guard reads it on PreToolUse
-  today. T10's first step captures one real subagent PreToolUse payload and pins it as a fixture.
+  today. T12's first step captures one real subagent PreToolUse payload and pins it as a fixture.
 - **A subagent's `transcript_path` is the session's.** The guard log records `transcript_path` on every firing, and none of its
   89,695 entries names an `agent-*.jsonl` file (observed 2026-11-20, method: `grep` over `~/.claude/guard-log/*.json`). The subagent's
   own transcript is `<transcript_path without .jsonl>/subagents/agent-<agent_id>.jsonl`, beside `agent-<agent_id>.meta.json`
@@ -94,6 +94,12 @@ Bash commands, quotes and heredocs blanked, an `&` that is not `&&`, `>&`, `&>` 
   never as a word (constitution XVIII: a mention is not an invocation).
 - **With `wait` or a sampled pid in the same command, 6**: `make static > log 2>&1 & wait $!`, and five measurement runs that started a
   make, took its pid and sampled it, then waited. The harness tracks each of those: the Bash call does not return before the run ends.
+- **How they waited** (observed 2026-11-20, method: the session's Bash commands since 2026-11-12 with no heredoc, quotes blanked,
+  holding `make` or `cargo`, a lone `&` and `wait` at a command position, re-read; five found, the sixth of the count above not found
+  again by this search): three by a bare `wait`, one by `wait $!` with nothing between, one (2026-11-12, a memory-peak A/B) by `wait $P`
+  after `P=$!`. So plan D12's covering forms (bare, `wait $!`, `wait %N`) pass four of the five as written; the fifth is rewritten
+  `wait $!` (nothing between its `&` and its `wait` is backgrounded) or carries `DETACH_OK`. A `wait` merely somewhere later is not enough: `make static &
+  echo wait` holds the word and `make static & sleep 5 & wait $!` waits for the sleep, and both return with the run detached.
 
 ## R5 - The main session's waits (FR-008)
 
@@ -115,8 +121,13 @@ the main session is a payload with no `agent_id`. These are waits on an agent th
 - The whole log, 2026-11-08 onward, holds 608 `"make":"static"` lines (observed 2026-11-20, method: `grep -c` on the log), and a
   `grep` of the 15 MB log took 0.010 s (measured 2026-11-20 (`time grep -c`)) - a guard can count a task's static runs from the log on
   each `make static` call alone.
-- A task's start is `.git/task-starts.jsonl`'s last line for it; a landing is a `make land` naming it (`land`'s `T=`, which the writer's
-  task capture does not read today: it reads `T=` for `tick`, `task-start` and `decide` only).
+- A task's starts are `.git/task-starts.jsonl`'s lines for it, and a task can have several: 48 of the 498 (feature, task) pairs in the
+  clone's file have more than one line (observed 2026-11-20, method: the file's lines counted per feature and task in a Python
+  reader). So a count reset at a task's LAST start would let a second `make task-start` zero it; plan D11 counts from the last landing,
+  else the FIRST start. A landing is a `make land` of it that succeeded: plan D5's `end` line of code 0 naming the tasks it landed
+  (`land`'s `T=`, which the writer's task capture does not read today: it reads `T=` for `tick`, `task-start` and `decide` only). A
+  refused landing is not a landing, and the `end` line carries its own tasks because a `run_in_background` landing's call returns before
+  its `end` is written, so no span ties the two.
 
 ## R7 - The landing's `T=` (FR-011)
 
@@ -127,8 +138,12 @@ wrote `make land F=448 T=T01,T02` (observed 2026-11-20, method: `specs/448-engin
 
 `task_add.rs` (the `task` crate, which builds on `core`, `plan`, `reviews`, `trials`, `claims`, not on `checks`) writes the box and the
 section; `make quick` is ruff, `check house-style-delta`, `question-size`, `file-scale`, `spec-lint --delta` and `partial-citations`
-(the Makefile's `quick:` recipe). So task-add runs `make quick` as a process. A failure the new line introduces is told from one
-already there by withdrawing the line and running quick again only on a red: red then green means the line introduced it.
+(the Makefile's `quick:` recipe). The recipe is sequential `@` lines, so make stops at the first that fails (observed 2026-11-20,
+method: the `quick:` recipe read, lines 953-962 of the root `Makefile`): a failure already there in ruff hides any later check's. So
+task-add runs each check line of the recipe (from `make -n quick`, the `$(STATE)` stamp and the closing `printf` set aside) to its own
+end, with the line and, on a red, again without it, and compares the two runs' findings, line numbers masked: a finding the with-line
+run has and the other lacks is the line's, whatever else is red. "Red then green" alone would let a line's own failure through
+wherever quick was already red.
 
 ## R9 - The plan lint and the found-and-left item (FR-009)
 

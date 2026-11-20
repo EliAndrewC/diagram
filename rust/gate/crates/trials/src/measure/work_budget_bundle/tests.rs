@@ -520,6 +520,17 @@ fn an_audit_bundles_the_stage_its_counters_and_its_calls() {
         std::fs::read_to_string(out.join("budget.json")).unwrap(),
         "{\n \"per_thing\": 3\n}"
     );
+    // a form's stage is its stage's code, its own counts and budget (feature 449 T226: `waterward.polder` found no `stage_` of its name)
+    let form = run(&d, &["audit", "hem.polder"]);
+    assert_eq!(form.code, 0, "{form:?}");
+    assert!(std::fs::read_to_string(out.join("MANIFEST.md"))
+        .unwrap()
+        .contains("MODE AUDIT - hem.polder\n"));
+    assert!(out.join("code/rust__phases__src__hem.rs").is_file());
+    assert_eq!(
+        std::fs::read_to_string(out.join("budget.json")).unwrap(),
+        "null"
+    );
     // a stage the report has no section for, the Python stages in the package root and a subpackage, the module directory, a build tree
     assert_eq!(run(&d, &["audit", "target"]).code, 0);
     assert!(std::fs::read_to_string(out.join("chains.txt"))

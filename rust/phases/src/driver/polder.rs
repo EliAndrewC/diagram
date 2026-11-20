@@ -70,6 +70,21 @@ pub(super) fn crown_fill(crop: &str) -> &'static str {
         _ => "#87A45C",
     }
 }
+/// The sluice gate's side (ft): a square drawn on each sluice's point.
+///
+/// Research:
+///     the sluice gate's size - DEVIATION research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: a square 8 ft on a side on each sluice's point, the deleted ink's, carried as it stood, where the page draws a sluice as a board between two posts across its channel, a field channel's spanning about 16 to 24 ft - a departure the code keeps until feature 449 T234
+const SLUICE_FT: f64 = 8.0;
+/// The feeder's width (ft), from the wild pond to the inlet.
+///
+/// Research:
+///     the feeder's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page sizes a polder's feeder - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html's ladder puts a pond feeder at roughly twice its 1.5 ft floor and the head race carrying a whole fan's water at 6.0 ft, and says neither is this channel
+const FEEDER_W: f64 = 3.0;
+/// The tea hedge row's width (ft), on a tea-planted dike.
+///
+/// Research:
+///     the tea hedge row's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page in the record sizes a hedge row on a polder's dike (impl-drift on feature 449 T226, 2026-11-20)
+const HEDGE_W: f64 = 3.0;
 /// The waterside strip's half-breadth at a cut (ft).
 ///
 /// Research:
@@ -127,6 +142,7 @@ fn stage_polder(p: &Plan) -> PolderStage {
 ///
 /// Research:
 ///     the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it
+///     the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin
 fn draw_polder(svg: &mut Svg, s: &PolderStage) {
     let (c, rx, ry) = s.polder.pond;
     svg.kind("marsh");
@@ -175,7 +191,7 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
         );
     }
     svg.kind("irrigation ditch");
-    svg.line(&s.polder.feeder, ink::SUPPLY, 3.0);
+    svg.line(&s.polder.feeder, ink::SUPPLY, FEEDER_W);
     svg.kind("drainage ditch");
     svg.unframed(&s.outfall, ink::DRAIN, RUN_W);
     svg.kind("perimeter dike");
@@ -199,16 +215,17 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
     svg.close();
     svg.kind("tea dike");
     for hedge in s.converted.iter().flat_map(|(_, crops, _)| &crops.hedges) {
-        svg.line(hedge, HEDGE, 3.0);
+        svg.line(hedge, HEDGE, HEDGE_W);
     }
     svg.kind("sluice gate");
+    let h = SLUICE_FT / 2.0;
     for g in &s.polder.sluices {
         svg.polygon(
             &[
-                (g.0 - 4.0, g.1 - 4.0),
-                (g.0 + 4.0, g.1 - 4.0),
-                (g.0 + 4.0, g.1 + 4.0),
-                (g.0 - 4.0, g.1 + 4.0),
+                (g.0 - h, g.1 - h),
+                (g.0 + h, g.1 - h),
+                (g.0 + h, g.1 + h),
+                (g.0 - h, g.1 + h),
             ],
             SLUICE.0,
             Some((SLUICE.1, 0.8)),
@@ -240,7 +257,9 @@ fn stage_waterward(p: &Plan, s: &PolderStage, seated: Option<&Seated>) -> Fringe
         .chain(s.dike.inner.iter().rev())
         .copied()
         .collect();
-    fringe(
+    // the dike's two faces copied into the one outline the fringe reads, a point each (feature 449 T226: uncounted before)
+    let copied = ring.len() as u64;
+    let mut ward = fringe(
         &[(ring, s.dike.gaps.clone())],
         s.dike.widths.1,
         STRIP_CUT_HW,
@@ -248,7 +267,9 @@ fn stage_waterward(p: &Plan, s: &PolderStage, seated: Option<&Seated>) -> Fringe
         (p.w, p.h),
         (rad.cos(), rad.sin()),
         seated.and_then(|x| x.frames.first()).map(|f| f.out),
-    )
+    );
+    crate::counts::tally(&mut ward.counts, "read@stage_waterward", copied);
+    ward
 }
 
 /// The hamlet on a polder: the block, its seat and its waterside reeds, drawn.

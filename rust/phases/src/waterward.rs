@@ -109,6 +109,9 @@ pub fn face(
             buckets[k as usize].push(get(p, fi));
         }
     }
+    // the bins walked three times more - the filled ones found, each one's value, the runs kept - and each bin's points folded for
+    // its outermost: the points on the flank's own half, once each
+    *tests += 3 * BINS as u64 + buckets.iter().map(|b| b.len() as u64).sum::<u64>();
     let filled: Vec<usize> = (0..BINS).filter(|&k| !buckets[k].is_empty()).collect();
     let (first, last_filled) = (
         filled.first().copied().unwrap_or(BINS),
@@ -224,6 +227,9 @@ pub fn fringe(
     );
     let mut tests = 0;
     let fl = flanks(fall, seat_out);
+    // the ring boxed (one test a point), each notch filed against the four flanks, each flank asked of the seat's side
+    crate::counts::tally(&mut counts, "test@fringe", pts.len() as u64 + 4 * gaps);
+    crate::counts::tally(&mut counts, "test@flanks", 3);
     let none = Vec::new();
     let strips = fl
         .iter()

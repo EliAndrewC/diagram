@@ -1,0 +1,1 @@
+WITHIN - the waterward stage counts 2,125 at 10 households and 2,908 at 20, against an accepted 28,232 and 38,331 (and a first budget of 17,813 and 24,059); every loop over a growing set is counted, nothing is repaired, and it grows at an exponent of about 0.45.

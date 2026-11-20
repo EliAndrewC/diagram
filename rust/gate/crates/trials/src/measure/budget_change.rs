@@ -7,7 +7,7 @@
 //! roll (named as `make work-budget` names them). A stage is `unbudgeted`; `budgeted`, with `per_thing` (basic operations per thing
 //! placed), `exponent` (its growth with households), `derivation` (the path of its first-principles derivation) and `verdict` (the
 //! path of its `work-budget` MODE BUDGET verdict, whose first line is the verdict word); or `accepted`, which adds `accepted` (its
-//! counted operations at 40 and 80 households - T04).
+//! counted operations at its sizes: 40 and 80 households, a form's own `sizes` - T04).
 //!
 //! THE RULES (443 FR-005; the GM's approval of the design, 2026-10-28): a FIRST budget is set only from a SOUND verdict (`set`; LOOSE or
 //! UNDERIVED refuses); every later change, and the program's whole-roll budget, needs the GM's words (`change`, `program`, WORDS
@@ -412,8 +412,10 @@ fn run(a: &Args) -> Result<R<(String, String)>, crate::Reply> {
         "sheets" => sheets::compare_cli(a),
         "accept" => {
             let phase = &a.pos[0];
-            rules::accept_stage(root, phase, &a.pos[1], &text("--arbiter"))
-                .map(|why| (why, format!("`{phase}` accepted at its counted operations at 40 and 80 households, logged in {LOG}")))
+            rules::accept_stage(root, phase, &a.pos[1], &text("--arbiter")).map(|done| match done {
+                Ok(sizes) => (String::new(), format!("`{phase}` accepted at its counted operations at {} households, logged in {LOG}", rules::households_said(&sizes))),
+                Err(why) => (why, String::new()),
+            })
         }
         _ => {
             let ops = int_arg(&a.pos[0])?;

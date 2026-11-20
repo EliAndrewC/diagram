@@ -1200,6 +1200,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T226 (T224: the polder waterward stage counted about a twentieth of its accepted figure, with three counters firing)": {
+   "sha256": "9cbe30abd2ffeb52a9bc776aa18ecce79554ba8bc51c76d19137a67de661cc74",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T226 Approach (checklist part A)": {
+   "sha256": "4a81506d6150c2758ac641cd693c2428912aa753855987c2a9159c96270e8872",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15936,6 +15948,118 @@
      "why": "This is not a narrowing of what was asked. FR-023 throws the switch back to integrated once, when the last stage is Rust, and nothing asks for it to return to rust-only. In the reachable lifecycle no review is owed wrongly and none is lost, so no wrong outcome is left (constitution XIV v2.36.0). Even in that unreached state the error would be over-owing reviews, never dropping one the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T226 (T224: the polder waterward stage counted about a twentieth of its accepted figure, with three counters firing)",
+    "### T226 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T226-count",
+     "summary": "Count the work the polder waterward stage does and did not count: face()'s per-bin fold and three bin walks a flank, the outline's box pass, the notch filing at four a notch, the three flanks, and the dike outline's copy in stage_waterward; red first (test@face 568 vs 846, read@stage_waterward's own red test).",
+     "class": "within",
+     "why": "Work that went uncounted is a wrong outcome (the hold on the stage cannot see it grow), so fixing it serves the GM's 2026-11-19 plan that step 3a is measured against a derived work budget ('if the 3a step is horribly inefficient then we might need to rip it out') and his 2026-11-18 rule to fix known bugs as found. No drawing changes."
+    },
+    {
+     "id": "T226-tooling",
+     "summary": "make work-budget also runs the polder form, and the audit bundle takes PHASE=<stage>.<form>, so the stage's audit has its counts; dev/work-budget.md refreshed from the run.",
+     "class": "within",
+     "why": "Its only effect is to make the requested measurement of the stage against its budget actually happen and be audited; enforcement of what was asked, not new behavior."
+    },
+    {
+     "id": "T226-valley",
+     "summary": "Correct the review's stated reason the valley waterward is uncounted (the driver runs waterward on a polder alone, so no valley roll exists) and leave the valley budget entry as it is, printing its reason and refusing nothing.",
+     "class": "within",
+     "why": "A correction of a stated reason, and a budget entry for a stage that never runs produces no wrong outcome (constitution XIV v2.36.0: a difference that harms no reader is not a defect), so leaving it narrows nothing."
+    },
+    {
+     "id": "T226-claims",
+     "summary": "The polder drawing's three sizes carry claims: SLUICE_FT as DEVIATION from page 0179, FEEDER_W as GUESS, the pocket pond's ring worded as draw_field's; the sizes are named, not changed.",
+     "class": "within",
+     "why": "Brings the code's constants under the claims grammar the feature already runs on; no value moves and nothing a reader of the map sees changes."
+    },
+    {
+     "id": "T226-sluice-deferred",
+     "summary": "The sluice gate's 8 ft square, a wrong outcome against page 0179's board and frame, is not fixed in this counting task but filed as T234, which lands before T158.",
+     "class": "within",
+     "why": "The GM's rule is per step: 'fix all known bugs in each step before moving on to porting the next step' (2026-11-18). The defect is recorded, filed as its own task and ordered before T158, so it is fixed before the next step and not carried into it; putting it in a separate task rather than this one narrows nothing the GM asked. If T234 slips after the next step's port begins, that is the finding."
+    },
+    {
+     "id": "T226-budget-figure",
+     "summary": "The accepted polder figure (28,232) stays about 13x over the count (2,125 at 10 households) until the audit re-accepts it lower.",
+     "class": "within",
+     "why": "The figure is left to the audit this task runs ('the audit judged' is in its exits), which is the process feature 443/444's budget rules set; nothing the GM asked is narrowed by not re-accepting a budget inside the counting change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T226 (T224: the polder waterward stage counted about a twentieth of its accepted figure, with three counters firing)",
+    "### T226 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T226-count",
+     "summary": "Count the polder waterward stage's real uncounted work (face() bin folds and flank walks, the outline box pass, notch filing, the three flanks, the dike outline copy in stage_waterward), red first",
+     "class": "within",
+     "why": "The GM's 2026-11-19 plan measures step 3a against a derived work budget, and his rewrite rule is about the operations actually performed. Counting work the stage does but did not count is what makes that measurement mean something. It enforces the request and changes no drawing."
+    },
+    {
+     "id": "T226-tooling",
+     "summary": "make work-budget also runs the polder form; the audit bundle takes PHASE=<stage>.<form>",
+     "class": "within",
+     "why": "Tooling whose only job is to let the stage's counts be measured and audited. It serves the work-budget measurement the GM approved."
+    },
+    {
+     "id": "T226-valley-reason",
+     "summary": "Correct the stated reason the valley waterward is uncounted (the driver runs waterward on a polder only), and leave the valley entry as it is",
+     "class": "within",
+     "why": "Restating a wrong reason is a correction. The entry being left alone is a difference, not a defect: it prints its reason, refuses nothing and records 0 against a count of 0. By constitution XIV v2.36.0 and the GM's 2026-11-19 words, that needs no fix and no ruling."
+    },
+    {
+     "id": "T226-sizes",
+     "summary": "Give each of the polder drawing's three sizes its claim (SLUICE_FT DEVIATION from page 0179, FEEDER_W GUESS, the pocket pond's ring as draw_field's); the values are not changed",
+     "class": "within",
+     "why": "Labeling sizes under the claims grammar changes no output. Leaving the values unchanged is not a narrowing, because the one defect found among them is handled by its own decision (T226-sluice-deferred)."
+    },
+    {
+     "id": "T226-budget-accept-fixes",
+     "summary": "Fix four make budget-accept defects found while re-accepting the stage, each red first: it read Python-era -spec.json runs under the bare stage name and recorded 0; its message named the wrong sizes; it recorded a size with no count as 0; it took an audit path outside the repository",
+     "class": "within",
+     "why": "Each is a wrong outcome as constitution XIV defines one: a tool answering wrongly, or accepting input it should refuse. Fixing them is the GM's 2026-11-18 rule to fix broken things as we find them. Each fix only makes the acceptance record the stage's real count."
+    },
+    {
+     "id": "T226-accept",
+     "summary": "Accept the stage at its run's means (2,125 at 10 households, 2,908 at 20), with its audit judged WITHIN",
+     "class": "within",
+     "why": "Recording the measured count as the accepted figure is the measurement the GM's plan asked for. The figures carry a measured label (the run 20261120T053709Z-rust-e111c32c6). Nothing is loosened: the earlier accepted figure was the inflated one."
+    },
+    {
+     "id": "T226-sluice-deferred",
+     "summary": "The sluice gate's 8 ft square, against page 0179's board and frame across the channel, is a wrong outcome; it is filed as T234, landing before T158, and not fixed in this counting task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect is left out of this task, so this is a narrowing. The GM's own words set its bound: 'fix all known bugs in each step before moving on to porting the next step' (2026-11-18). That rule is per step, not per task. T234 is filed and ordered before T158, the point this section names as what follows it, so the defect is fixed before the port moves on. Keeping a drawing change out of a counting-only task is ordinary scoping and guts nothing. Legitimate only while T234 does land before T158 and before any next-step port begins."
+    },
+    {
+     "id": "T226-derivation-deferred",
+     "summary": "The derivation's first budget still prices the old marsh drawing, about 8x the stage's work (17,813 against 2,125 at 10 households); filed as T235, a re-derivation, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A stale derived budget can let the stage grow unseen, so it counts as a known defect, and leaving it out of this task is a narrowing. As with T234, the GM's per-step rule is met: it is filed and ordered before T158. Meanwhile the stage is accepted at its measured count, so the push's hold is not left at the inflated figure. Legitimate on the same condition, that T235 lands before T158."
+    },
+    {
+     "id": "T226-order",
+     "summary": "The task runs after T233 and before T158; its exits are the counting tests red then green, make quick, make static, make counters-inert, make hooks-test and the audit judged",
+     "class": "within",
+     "why": "Ordering and exits inside the approved plan. Neither narrows anything the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27970,6 +28094,70 @@
      "summary": "found and left: if the switch is set back to rust-only after the integrated reviews, --moved owes every live hamlet again whether or not it moved",
      "class": "within",
      "why": "This is not a narrowing of what was asked. FR-023 throws the switch back to integrated once, when the last stage is Rust, and nothing asks for it to return to rust-only. In the reachable lifecycle no review is owed wrongly and none is lost, so no wrong outcome is left (constitution XIV v2.36.0). Even in that unreached state the error would be over-owing reviews, never dropping one the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T226": {
+   "section_sha256": "b08cc329630b4b729738c68defef02e231680db38ec57ae80f6c022d603fef58",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T226-count",
+     "summary": "Count the polder waterward stage's real uncounted work (face() bin folds and flank walks, the outline box pass, notch filing, the three flanks, the dike outline copy in stage_waterward), red first",
+     "class": "within",
+     "why": "The GM's 2026-11-19 plan measures step 3a against a derived work budget, and his rewrite rule is about the operations actually performed. Counting work the stage does but did not count is what makes that measurement mean something. It enforces the request and changes no drawing."
+    },
+    {
+     "id": "T226-tooling",
+     "summary": "make work-budget also runs the polder form; the audit bundle takes PHASE=<stage>.<form>",
+     "class": "within",
+     "why": "Tooling whose only job is to let the stage's counts be measured and audited. It serves the work-budget measurement the GM approved."
+    },
+    {
+     "id": "T226-valley-reason",
+     "summary": "Correct the stated reason the valley waterward is uncounted (the driver runs waterward on a polder only), and leave the valley entry as it is",
+     "class": "within",
+     "why": "Restating a wrong reason is a correction. The entry being left alone is a difference, not a defect: it prints its reason, refuses nothing and records 0 against a count of 0. By constitution XIV v2.36.0 and the GM's 2026-11-19 words, that needs no fix and no ruling."
+    },
+    {
+     "id": "T226-sizes",
+     "summary": "Give each of the polder drawing's three sizes its claim (SLUICE_FT DEVIATION from page 0179, FEEDER_W GUESS, the pocket pond's ring as draw_field's); the values are not changed",
+     "class": "within",
+     "why": "Labeling sizes under the claims grammar changes no output. Leaving the values unchanged is not a narrowing, because the one defect found among them is handled by its own decision (T226-sluice-deferred)."
+    },
+    {
+     "id": "T226-budget-accept-fixes",
+     "summary": "Fix four make budget-accept defects found while re-accepting the stage, each red first: it read Python-era -spec.json runs under the bare stage name and recorded 0; its message named the wrong sizes; it recorded a size with no count as 0; it took an audit path outside the repository",
+     "class": "within",
+     "why": "Each is a wrong outcome as constitution XIV defines one: a tool answering wrongly, or accepting input it should refuse. Fixing them is the GM's 2026-11-18 rule to fix broken things as we find them. Each fix only makes the acceptance record the stage's real count."
+    },
+    {
+     "id": "T226-accept",
+     "summary": "Accept the stage at its run's means (2,125 at 10 households, 2,908 at 20), with its audit judged WITHIN",
+     "class": "within",
+     "why": "Recording the measured count as the accepted figure is the measurement the GM's plan asked for. The figures carry a measured label (the run 20261120T053709Z-rust-e111c32c6). Nothing is loosened: the earlier accepted figure was the inflated one."
+    },
+    {
+     "id": "T226-sluice-deferred",
+     "summary": "The sluice gate's 8 ft square, against page 0179's board and frame across the channel, is a wrong outcome; it is filed as T234, landing before T158, and not fixed in this counting task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect is left out of this task, so this is a narrowing. The GM's own words set its bound: 'fix all known bugs in each step before moving on to porting the next step' (2026-11-18). That rule is per step, not per task. T234 is filed and ordered before T158, the point this section names as what follows it, so the defect is fixed before the port moves on. Keeping a drawing change out of a counting-only task is ordinary scoping and guts nothing. Legitimate only while T234 does land before T158 and before any next-step port begins."
+    },
+    {
+     "id": "T226-derivation-deferred",
+     "summary": "The derivation's first budget still prices the old marsh drawing, about 8x the stage's work (17,813 against 2,125 at 10 households); filed as T235, a re-derivation, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A stale derived budget can let the stage grow unseen, so it counts as a known defect, and leaving it out of this task is a narrowing. As with T234, the GM's per-step rule is met: it is filed and ordered before T158. Meanwhile the stage is accepted at its measured count, so the push's hold is not left at the inflated figure. Legitimate on the same condition, that T235 lands before T158."
+    },
+    {
+     "id": "T226-order",
+     "summary": "The task runs after T233 and before T158; its exits are the counting tests red then green, make quick, make static, make counters-inert, make hooks-test and the audit judged",
+     "class": "within",
+     "why": "Ordering and exits inside the approved plan. Neither narrows anything the GM asked for."
     }
    ],
    "verdict": "CLEAR"

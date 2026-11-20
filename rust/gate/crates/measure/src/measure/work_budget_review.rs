@@ -44,7 +44,7 @@ const LEEWAY: f64 = 2.0;
 /// is held like any other).
 const NOT_ON_REFERENCE: [(&str, &str); 1] = [(
     "waterward",
-    "the reference roll is a comb with a pond, where no waterward runs (accepted at 0); its one form that runs, the polder's, is held as waterward.polder",
+    "the driver runs it on a polder alone (`driver::roll` hands a polder to `roll_polder` before any comb stage), so no comb counts it, whatever its sink (accepted at 0); its one form that runs, the polder's, is budgeted at the ten to twenty households a small polder holds, not the 40 and 80 this entry is held at, so it is counted by `hamlet --budget polder` and held as waterward.polder",
 )];
 
 /// What a counting command is handed for each sheet a stage is budgeted on.

@@ -16,7 +16,7 @@ work" should be under a tenth of the wall clock (SC-001).
 ```bash
 make rust-test CRATE=rust/guard          # the guard tests: each refusal's red fixture refused, its quiet case passing
 make hooks-test                           # every guard's suite, each shard under about 20 s (SC-004)
-make rust-test CRATE=rust/gate/crates/plan   # FR-009's five cases
+make rust-test CRATE=rust/gate/crates/plan   # FR-009's fourteen cases (unfiled, done and self-ordered ids among them)
 make rust-test CRATE=rust/gate/crates/land   # T="T1,T2" lands both
 make rust-test CRATE=rust/gate/crates/task   # task-add withdraws a red line
 ```
@@ -25,7 +25,8 @@ By hand, in a scratch clone:
 
 - `(make static > /tmp/s.log 2>&1) &` in a Bash call: refused, naming `run_in_background`. The same `make static` with
   `run_in_background: true`: passes.
-- A third `make static` after `make task-start F=451 T=T02` and two runs: refused, naming `l7r-gate.sh rust test --crate <dir>`;
+- A third `make static` after `make task-start F=451 T=T02` and two runs: refused, naming `l7r-gate.sh rust test --crate <dir>`, and
+  still refused after a second `make task-start F=451 T=T02` (only a landing that succeeded resets the count);
   `STATIC_OK="a reason here" make static` passes and `make guard-log GUARD=static-runs` shows the escape.
 - `make decide F=<n> T=<t>` on a section whose found-and-left line reads "the X is wrong, left": refused with the form.
 - `make land F=<n> T="T1,T2" NOTE=...`: both tasks land.

@@ -92,6 +92,24 @@ fn a_polder_s_strips_run_off_toward_the_frame_and_none_without_a_dike() {
     );
     #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(f.counts["write@strip"] > 0);
+    // EVERY LOOP COUNTED (feature 449 T226, rubric S5): the ring's 84 points, a notch on each of the two flanks. Each face reads the
+    // ring three times (its coordinates, their extremes, its bins: 3 x 84) and asks its one notch of each of the 32 bins (32), folds
+    // the 43 points on its own half for each bin's outermost, and walks its 32 bins three times more (the filled bins, the values,
+    // the runs); the fringe boxes the ring (84) and files each notch against the four flanks (2 x 4); the three flanks asked of the
+    // seat's side. Before T226 the folds, the bins' walks, the box, the filing and the flanks went uncounted: test@face read 568.
+    #[cfg(feature = "counters")]
+    assert_eq!(
+        (
+            f.counts.get("test@face"),
+            f.counts.get("test@fringe"),
+            f.counts.get("test@flanks")
+        ),
+        (
+            Some(&(2 * (3 * 84 + 32 + 43 + 3 * 32))),
+            Some(&(84 + 2 * 4)),
+            Some(&3)
+        )
+    );
     // held to 20 ft off the frame
     let tight = fringe(
         &[(

@@ -638,48 +638,149 @@ pub(super) fn change_budget(
 }
 
 /// A rebuilt phase accepted (feature 444 FR-005, checklist boxes 6-8): its MODE AUDIT verdict WITHIN, and its counted operations at
-/// 40 and 80 households in the newest `make work-budget` run at most its budget, recorded as `accepted` - the figures the push's
-/// ratchet then holds it to. "" when done, else why not.
+/// its sizes (`sizes`, a form's bounded n; else 40 and 80 households) in the newest `make work-budget` run at most its budget,
+/// recorded as `accepted` - the figures the push's ratchet then holds it to. The sizes accepted at when done, else why not.
+///
+/// THE RUN IS THE NEWEST BY THE STAMP ITS NAME OPENS WITH, whatever its name's form (`<stamp>-<code id>[-spec].json`, the Python
+/// roll's; `<stamp>-rust-<engine>.json`, the Rust driver's), and it counts a stage or a form under the phase's own name (feature
+/// 449 T226: on 2026-11-20 the accept read a Python-era `-spec` run, which held the stage's name at 0 operations, past the newest
+/// run that held the form's counts). A size it has no count at - none, or 0 operations, a count its counters missed - is refused,
+/// never recorded as 0; and the audit is a file of the repository, kept beside the stage's derivation, recorded relative to it.
 ///
 /// ...OR THE ROUND ARBITER'S ACCEPT IN ITS PLACE (`arbiter`, a trigger naming the phase in its log): feature 444 T16's sixth MODE AUDIT
 /// was made final for box 7, came back UNCOUNTED, and the arbiter accepted the cheaper rebuild that followed rather than owe a
 /// seventh (ask:444-T16-field-after-audit-6) - so `audit` is then the last audit, and every budget check below still holds.
-#[expect(
-    clippy::too_many_lines,
-    reason = "the rules in the order the Python checked them, each refusal's words beside its check"
-)]
-pub(super) fn accept_stage(root: &Path, phase: &str, audit: &str, arbiter: &str) -> R<String> {
+pub(super) fn accept_stage(
+    root: &Path,
+    phase: &str,
+    audit: &str,
+    arbiter: &str,
+) -> R<Result<Vec<i64>, String>> {
     let mut table = load(root)?;
     let mut st = match stage(&table, phase)? {
         Ok(st) => st,
-        Err(why) => return Ok(why),
+        Err(why) => return Ok(Err(why)),
     };
     if !st
         .get("status")
         .is_some_and(|s| is(s, "budgeted") || is(s, "accepted"))
     {
-        return Ok(format!("`{phase}` has no budget to be accepted against"));
+        return Ok(Err(format!(
+            "`{phase}` has no budget to be accepted against"
+        )));
     }
+    let derivation = st
+        .get("derivation")
+        .filter(|v| truthy(v))
+        .map_or_else(String::new, py_str);
+    let Some(audit) = in_repo(root, audit) else {
+        return Ok(Err(outside(root, audit, phase, &derivation)));
+    };
+    accept_checked(
+        root,
+        &mut table,
+        &mut st,
+        phase,
+        &audit,
+        arbiter,
+        &derivation,
+    )
+}
+
+/// `audit` as a path of the repository at `root`, relative to it - `.` and `..` resolved by their names, as the file need not
+/// exist yet - or none when it lies outside.
+fn in_repo(root: &Path, audit: &str) -> Option<String> {
+    use std::path::Component;
+    let lexical = |p: &Path| {
+        let mut out = std::path::PathBuf::new();
+        for c in p.components() {
+            if c == Component::ParentDir {
+                out.pop();
+            } else {
+                out.push(c);
+            }
+        }
+        out
+    };
+    let base = lexical(&std::path::absolute(root).ok()?);
+    let path = lexical(&base.join(audit));
+    Some(
+        path.strip_prefix(&base)
+            .ok()?
+            .to_string_lossy()
+            .into_owned(),
+    )
+}
+
+/// Why an audit outside the repository is refused, and where it belongs: beside the stage's derivation, under the name the
+/// existing audits take (`<phase, its dot an underscore>.audit-<n>.txt`, the next `n`).
+fn outside(root: &Path, audit: &str, phase: &str, derivation: &str) -> String {
+    let said = format!("{audit} is outside the repository - an audit verdict belongs beside the stage's derivation, as specs/444-work-budget-program/phases/waterward.audit-4.txt is");
+    if derivation.is_empty() {
+        return said;
+    }
+    let dir = Path::new(derivation).parent().unwrap_or(Path::new(""));
+    let name = format!("{}.audit-", phase.replace('.', "_"));
+    let next = glob(&root.join(dir), &name, ".txt")
+        .iter()
+        .filter_map(|p| {
+            let file = p.file_name()?.to_string_lossy().into_owned();
+            file[name.len()..file.len() - ".txt".len()]
+                .parse::<i64>()
+                .ok()
+        })
+        .max()
+        .unwrap_or(0)
+        + 1;
+    format!(
+        "{said}: save it as {} and pass that",
+        dir.join(format!("{name}{next}.txt")).display()
+    )
+}
+
+/// Sizes as a sentence names them: `10 and 20`, `20, 40 and 80`.
+pub(super) fn households_said(sizes: &[i64]) -> String {
+    let all = sizes
+        .iter()
+        .map(i64::to_string)
+        .collect::<Vec<_>>()
+        .join(", ");
+    all.rsplit_once(", ")
+        .map_or_else(|| all.clone(), |(rest, last)| format!("{rest} and {last}"))
+}
+
+/// The stamp a run's name opens with (`20261120T053709Z`, the name up to its first `-`), the runs' order.
+fn stamp_of(run: &Path) -> String {
+    let name = run.file_name().unwrap_or_default().to_string_lossy();
+    name.split('-').next().unwrap_or_default().to_owned()
+}
+
+/// Every check of an accept after its stage and its audit's place, and the write: the sizes accepted at, else why not.
+#[expect(
+    clippy::too_many_lines,
+    reason = "the rules in the order the Python checked them, each refusal's words beside its check"
+)]
+fn accept_checked(
+    root: &Path,
+    table: &mut Map<String, Value>,
+    st: &mut Map<String, Value>,
+    phase: &str,
+    audit: &str,
+    arbiter: &str,
+    derivation: &str,
+) -> R<Result<Vec<i64>, String>> {
     if arbiter.is_empty() {
         let word = verdict_of(&root.join(audit))?;
         if word != "WITHIN" && word != "LEEWAY" {
-            return Ok(format!(
+            return Ok(Err(format!(
                 "{audit} reads {}, not WITHIN or LEEWAY - a phase is accepted on its MODE AUDIT's WITHIN, or LEEWAY at up to 2 times its budget (`make work-budget-bundle MODE=audit PHASE={phase}`)",
                 if word.is_empty() { "nothing" } else { &word }
-            ));
+            )));
         }
-    } else {
-        let derivation = st
-            .get("derivation")
-            .filter(|v| truthy(v))
-            .map_or_else(String::new, py_str);
-        if !accepted_by(root, &derivation, phase, arbiter)? {
-            return Ok(format!("the round arbiter's log holds no accept at {arbiter} naming `{phase}` - a phase is accepted on its MODE AUDIT's WITHIN or that accept"));
-        }
+    } else if !accepted_by(root, derivation, phase, arbiter)? {
+        return Ok(Err(format!("the round arbiter's log holds no accept at {arbiter} naming `{phase}` - a phase is accepted on its MODE AUDIT's WITHIN or that accept")));
     }
-    // A FORM AT ITS BOUNDED N (`waterward.polder`, feature 444 T29) is counted by its own audit's run, `make work-budget SPEC=`
-    // (`<stamp>-<code id>-spec.json`), under its stage's name and at its own sizes; a stage, by the reference run alone - never a
-    // form's, which rolls another form of the same stage
+    // A FORM AT ITS BOUNDED N (`waterward.polder`, feature 444 T29) is accepted at its own sizes, a stage at the held 40 and 80
     let form = phase.contains('.');
     let sizes: Vec<i64> = match st.get("sizes") {
         Some(Value::Array(list)) if form && !list.is_empty() => {
@@ -690,41 +791,44 @@ pub(super) fn accept_stage(root: &Path, phase: &str, audit: &str, arbiter: &str)
         }
         _ => HELD.to_vec(),
     };
-    let runs: Vec<_> = glob(&root.join(RUNS), "", ".json")
+    let said = households_said(&sizes);
+    // the newest run, by its name's stamp, holds the counts: a form's under its own name (the Rust driver's `hamlet --budget
+    // polder`), never its stage's, which rolls another form
+    let newest = glob(&root.join(RUNS), "", ".json")
         .into_iter()
-        .filter(|r| r.to_string_lossy().ends_with("-spec.json") == form)
-        .collect();
-    let name = if form {
-        phase.split_once('.').map_or(phase, |(s, _)| s)
-    } else {
-        phase
-    };
-    let per = runs.last().and_then(|r| {
+        .max_by_key(|r| stamp_of(r));
+    let per = newest.as_ref().and_then(|r| {
         let run: Value = loads(&read(r).ok()?).ok()?;
         run.get("summary")?
             .get("stages")?
-            .get(name)?
+            .get(phase)?
             .get("per")
             .cloned()
     });
     let Some(per) = per else {
-        if form {
-            let said: Vec<String> = sizes.iter().map(i64::to_string).collect();
-            return Ok(format!("no `make work-budget SPEC=` run counts `{phase}` - run it with the form's spec at its sizes ({}) first", said.join(", ")));
-        }
-        return Ok(format!("no `make work-budget` run counts `{phase}` - run `make work-budget` (all of 10,20,40,80) first"));
+        return Ok(Err(format!("no `make work-budget` run counts `{phase}` - run `make work-budget`, which counts it at {said} households, first")));
     };
     let Value::Object(per) = per else {
         return Err("AttributeError: the run's per is no mapping".to_owned());
     };
+    let run = newest
+        .as_ref()
+        .and_then(|r| r.file_name())
+        .unwrap_or_default()
+        .to_string_lossy()
+        .into_owned();
     let mut got = Map::new();
     for h in &sizes {
-        let row = per.get(&h.to_string()).filter(|r| truthy(r));
-        let Some(row) = row else {
-            return Ok(format!("the newest run has no roll at {h} households for `{phase}` - run `make work-budget` at every size"));
+        let ops = match per.get(&h.to_string()).filter(|r| truthy(r)) {
+            Some(Value::Object(row)) if row.get("ops").is_some_and(truthy) => {
+                as_float(row.get("ops"))?
+            }
+            Some(Value::Object(_)) | None => {
+                return Ok(Err(format!("the newest run, {run}, has no count at {h} households for `{phase}` - run `make work-budget`, which counts it at {said} households; a stage is never accepted at 0 operations, a count its counters missed")));
+            }
+            Some(_) => return Err("AttributeError: a roll is no mapping".to_owned()),
         };
-        let ops = as_float(row.get("ops"))?;
-        let budget = budget_at(&st, *h)?;
+        let budget = budget_at(st, *h)?;
         // FR-022 rule 1: past the budget only on the audit's LEEWAY (the agent named the excess and judged it), never past twice it;
         // the arbiter's accept stands in for a WITHIN, never for a LEEWAY (FR-006: the arbiter accepts no phase over its budget)
         if ops > LEEWAY * budget
@@ -734,30 +838,30 @@ pub(super) fn accept_stage(root: &Path, phase: &str, audit: &str, arbiter: &str)
                 return Err("ZeroDivisionError: float division by zero".to_owned());
             }
             let past = ops > LEEWAY * budget;
-            return Ok(format!(
+            return Ok(Err(format!(
                 "`{phase}`: {} counted operations at {h} households, {} times its budget {}{} - rebuild it again, raise the budget on a SOUND re-derivation naming the work it missed (`make budget-set RAISE=1`, FR-022), or with the GM's words (`make budget-change`, FR-006)",
                 fixed(ops, 0, true),
                 fixed(ops / budget, 2, false),
                 fixed(budget, 0, true),
                 if past { ", past the leeway's 2 times" } else { " - over it, a phase is accepted on the MODE AUDIT's LEEWAY" }
-            ));
+            )));
         }
         // FR-022 rule 2: raise and leeway together - within twice the FIRST budget on a raise judged by one SOUND, within ten
         // times it on one judged by two independent ones; past that, the GM's words
         let second = st.get("second").is_some_and(truthy);
         let cap = if second { RAISE_CAP } else { LEEWAY };
-        if st.get("first").is_some_and(truthy) && ops > cap * first_budget(&st, *h)? {
-            return Ok(format!(
+        if st.get("first").is_some_and(truthy) && ops > cap * first_budget(st, *h)? {
+            return Ok(Err(format!(
                 "`{phase}`: {} counted operations at {h} households, past {} times its first budget {}{}",
                 fixed(ops, 0, true),
                 if second { "10" } else { "2" },
-                fixed(first_budget(&st, *h)?, 0, true),
+                fixed(first_budget(st, *h)?, 0, true),
                 if second {
                     " - an order of magnitude needs the GM's words (`make budget-change`, FR-022)"
                 } else {
                     " - past twice the first, its raise owes a second, independent SOUND (`make budget-set RAISE=1 SECOND=`) or the GM's words (FR-022)"
                 }
-            ));
+            )));
         }
         got.insert(h.to_string(), num(ops));
     }
@@ -778,13 +882,13 @@ pub(super) fn accept_stage(root: &Path, phase: &str, audit: &str, arbiter: &str)
     #[expect(clippy::cast_precision_loss, reason = "household sizes")]
     let ratio = hi as f64 / lo as f64;
     let g = growth(at_lo, at_hi, ratio);
-    let b = growth(budget_at(&st, lo)?, budget_at(&st, hi)?, ratio);
+    let b = growth(budget_at(st, lo)?, budget_at(st, hi)?, ratio);
     if g > b + GROWTH_SLACK {
-        return Ok(format!(
+        return Ok(Err(format!(
             "`{phase}` grows at an exponent of {} from {lo} to {hi} households, past its budget's {} (rubric S6, FR-005) - rebuild it again, or raise the budget with the GM's words",
             fixed(g, 2, false),
             fixed(b, 2, false)
-        ));
+        )));
     }
     st.insert("status".to_owned(), json!("accepted"));
     st.insert("accepted".to_owned(), Value::Object(got.clone()));
@@ -793,25 +897,16 @@ pub(super) fn accept_stage(root: &Path, phase: &str, audit: &str, arbiter: &str)
         st.insert("accept".to_owned(), json!(arbiter));
     }
     if let Some(Value::Object(stages)) = table.get_mut("stages") {
-        stages.insert(phase.to_owned(), Value::Object(st));
+        stages.insert(phase.to_owned(), Value::Object(st.clone()));
     }
-    save(root, &table)?;
-    let run = runs
-        .last()
-        .map(|r| {
-            r.file_name()
-                .unwrap_or_default()
-                .to_string_lossy()
-                .into_owned()
-        })
-        .unwrap_or_default();
+    save(root, table)?;
     let mut row =
         json!({"what": "accepted", "phase": phase, "accepted": got, "audit": audit, "run": run});
     if !arbiter.is_empty() {
         row["accept"] = json!(arbiter);
     }
     log(root, row)?;
-    Ok(String::new())
+    Ok(Ok(sizes))
 }
 
 /// The whole roll's budget (444 FR-002), set with the GM's words and logged: "" when done, else why not.

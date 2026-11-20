@@ -153,7 +153,7 @@ fn every_held_stage_within_passes_printing_its_counts_and_what_it_could_not_coun
     assert!(out.contains("every held stage within its figures (the hamlet stages re-counted, the pool-sheet stages re-counted)"));
     assert!(out.contains("  field: 110 at 40 (1.10x its budget 100; accepted 120); 150 at 80 (1.00x its budget 150; accepted 160)"));
     assert!(out.contains("  waterward.polder: 60 at 10 (1.20x its budget 50; accepted 70); 75 at 20 (1.25x its budget 60; accepted 80)"));
-    assert!(out.contains("  waterward: not counted - the reference roll is a comb with a pond"));
+    assert!(out.contains("  waterward: not counted - the driver runs it on a polder alone"));
     assert!(out.contains("  placer: hand 90 (0.90x its budget 100); made 40 (0.80x its budget 50)"));
     assert!(out.contains("  compound: made 30 (0.75x its budget 40)"));
     // T220, red first: the pipeline was printed `UNCOUNTED pipeline: budgeted per sheet (2), but nothing counts it` until the pool walk

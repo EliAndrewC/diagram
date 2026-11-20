@@ -34692,6 +34692,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder.rs::FEEDER_W#the feeder's width": {
+  "body": "3467c3edc57a3a07",
+  "claim": "the feeder's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page sizes a polder's feeder - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing's ladder puts a pond feeder at roughly twice its 1.5 ft floor and the head race carrying a whole fan's water at 6.0 ft, and says neither is this channel",
+  "code": "c316ed1d0724b84f",
+  "core": "8bce39cf9dfe3ec8",
+  "date": "2026-11-20",
+  "note": "GUESS; nothing in the bundle sizes a polder's feeder (0179 §13 names Shiro Daika's 66 ft moat feeders, not this channel; 0068 is not in the bundle)",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/polder.rs::HEDGE#the polder's paint": {
   "body": "3c8b66ae02319592",
   "claim": "the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood",
@@ -34699,6 +34710,18 @@
   "core": "9c6689dc96cdb39f",
   "date": "2026-11-08",
   "note": "an ink color only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::HEDGE_W#the tea hedge row's width": {
+  "body": "a388f711656d3a7f",
+  "claim": "the tea hedge row's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page in the record sizes a hedge row on a polder's dike (impl-drift on feature 449 T226, 2026-11-20)",
+  "code": "0944bfa290cfe4b7",
+  "core": "0e3586728472b0ae",
+  "date": "2026-11-20",
+  "note": "GUESS; no cited page sizes a dike hedge row",
   "pages": {},
   "research": "",
   "rests": [],
@@ -34727,6 +34750,25 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::SLUICE_FT#the sluice gate's size": {
+  "body": "48b99e939d683c85",
+  "claim": "the sluice gate's size - DEVIATION water-gates-and-sluices-shuimen.drawing: a square 8 ft on a side on each sluice's point, the deleted ink's, carried as it stood, where the page draws a sluice as a board between two posts across its channel, a field channel's spanning about 16 to 24 ft - a departure the code keeps until feature 449 T234",
+  "code": "82de929803489692",
+  "core": "12d295935dd0736d",
+  "date": "2026-11-20",
+  "note": "known (449 T234): `SLUICE_FT = 8.0` gives each sluice point an 8 ft square, where the page draws a timber board across its channel between two posts with its span drawn true, post to post, about 16 to 24 ft on a field channel; the claim states this departure correctly; fix: code; effect: a map reader sees a small 8 ft block on each sluice point instead of a board-and-posts frame across the channel, so it does not read as a gate across the water",
+  "pages": {
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
+  },
+  "research": "e305ba29a00899a2",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:5bfc7981ce08c3b7",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
+  ],
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/driver/polder.rs::STRIP_CUT_HW#the strip's cut": {
   "body": "f208ad96e59a170a",
@@ -34774,44 +34816,31 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::draw_polder#the feeder canal drawn 3.0 ft wide (svg.line(&s.polder.feeder, ink::SUPPLY, 3.0)), a canal width with no claim of its own": {
-  "code": "999d715bbd6b600e",
-  "core": "999d715bbd6b600e",
-  "date": "2026-11-19",
-  "note": "the feeder canal drawn 3.0 ft wide (svg.line(&s.polder.feeder, ink::SUPPLY, 3.0)), a canal width with no claim of its own",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
-  "body": "e062de51033baa3d",
-  "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it",
-  "code": "0f8f050df9b80c30",
-  "core": "999d715bbd6b600e",
-  "date": "2026-11-19",
-  "note": "the kind tags name each mark; ditches are tagged by the same drain test that picks their ink, as §1 and §8 separate supply from drain; inks, widths and order are kept",
+ "rust/phases/src/driver/polder.rs::draw_polder#the pocket pond's ring": {
+  "body": "66a84aa363e350b9",
+  "claim": "the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin",
+  "code": "01f3e3834d6385dc",
+  "core": "396a41e10c8ca6b6",
+  "date": "2026-11-20",
+  "note": "GUESS; no cited page sizes a pocket pond's flooded margin or its bund",
   "pages": {},
-  "reads": "3b38a6cdb2bba286",
+  "reads": "f76db7fb7ea295c2",
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::draw_polder#the polder's pocket pond ring, 2.5 ft of flooded ground inside a 2.2 ft bund; draw_field claims the same GUESS, draw_polder does not": {
-  "code": "999d715bbd6b600e",
-  "core": "999d715bbd6b600e",
-  "date": "2026-11-19",
-  "note": "the polder's pocket pond ring, 2.5 ft of flooded ground inside a 2.2 ft bund; draw_field claims the same GUESS, draw_polder does not",
-  "outside": true,
+ "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
+  "body": "66a84aa363e350b9",
+  "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it",
+  "code": "751c1e69d0e11fa7",
+  "core": "396a41e10c8ca6b6",
+  "date": "2026-11-20",
+  "note": "the code chooses colors, stroke weights, layer order and kind tags, which are drawing conventions; the sizes a reader could take as facts about the place (the feeder ditch's width FEEDER_W, the hedge row's width HEDGE_W, the sluice's square SLUICE_FT, the pond ring's 2.5 ft margin) sit in named constants or under the pocket ring's GUESS claim, and the marked lines only swap literals for those constants",
+  "pages": {},
+  "reads": "f76db7fb7ea295c2",
   "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver/polder.rs::draw_polder#the sluice gate drawn 8 ft square (g +/- 4.0), a size a reader reads off the map, under a CONVENTION claim": {
-  "code": "999d715bbd6b600e",
-  "core": "999d715bbd6b600e",
-  "date": "2026-11-19",
-  "note": "the sluice gate drawn 8 ft square (g +/- 4.0), a size a reader reads off the map, under a CONVENTION claim",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::roll_polder#the polder": {
   "body": "8e295ceaf2849138",
@@ -34874,18 +34903,19 @@
   "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/driver/polder.rs::stage_waterward#the reed strips": {
-  "body": "1c81add0f15468de",
+  "body": "8bf6becfef142378",
   "claim": "the reed strips - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: reeds on the flanks of a dike that face the water",
-  "code": "536cc343f4b99346",
-  "core": "7e13af43ff31618b",
-  "date": "2026-11-07",
-  "note": "fringes the dike ring outside its gaps, with the seat's outward frame passed in to keep the landward flank clear",
+  "code": "7c7ff39954da3499",
+  "core": "01da5e4aaff58745",
+  "date": "2026-11-20",
+  "note": "reeds run along the dike's outer face, broken at its gaps; this matches the fringe on the flanks that hold water back; the marked lines only count work",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "reads": "e32abb4b30750e72",
   "research": "765c28e2d975a432",
   "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
   "verdict": "IN-STEP"
@@ -35529,15 +35559,17 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/tests.rs::a_dike_pond_polder_rolls_through_its_seat_and_its_waterside_reeds#the driver's tests": {
-  "body": "28e07fd72e424d05",
+  "body": "1bb51551e58e7c56",
   "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "2cfcc924a2c4b77e",
-  "core": "80f6038f4d8cd6b1",
+  "cleared": "counter-only (feature 446)",
+  "code": "4139fc33429fd354",
+  "core": "fd6eacbea691ba4d",
   "date": "2026-11-19",
   "note": "assertions only",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-20",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/tests.rs::a_name_is_escaped_in_the_record#the driver's tests": {
@@ -44409,16 +44441,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::face#strip at the dike's outer face": {
-  "body": "1c26e871c5a310b2",
+  "body": "517e5bbda2122b70",
   "claim": "strip at the dike's outer face - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); the reeds stop at the outermost face, stepping in through a notch",
-  "code": "4a28979e994d3a2c",
-  "core": "ed680b1d053efd5f",
-  "date": "2026-11-04",
-  "note": "outermost coordinate per bin, stepped in by `cut` at a notch; the pages place the face at the water's edge but not where the reeds stop",
+  "code": "ba32769c82529129",
+  "core": "a1e81c1d5dd5846f",
+  "date": "2026-11-20",
+  "note": "the page puts a fringe on the water flanks but says nothing about where its edge stops or how it steps at a notch, so GUESS is right; the marked line only counts work",
   "pages": {},
   "reads": "5e1c3a6c7eece7b8",
   "research": "",
-  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::flanks#waterward flanks": {
@@ -44439,22 +44470,25 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::fringe#each notch one flank's": {
-  "body": "9ca2439c112ec432",
+  "body": "04b729284f530988",
   "claim": "each notch one flank's - GUESS: no page assigns a notch to a flank; the flank whose face it stands nearest, so a cut near a corner bites one strip, not two",
-  "code": "667b895b85d23118",
-  "core": "c856971507dce861",
+  "cleared": "counter-only (feature 446)",
+  "code": "23a77c713d92b400",
+  "core": "12b4674d84a60706",
   "date": "2026-11-07",
   "note": "the page is silent on which flank a sluice notch belongs to; the nearest face is a fair guess",
   "pages": {},
   "reads": "57ec1e6dc635e27a",
   "research": "",
+  "triaged": "2026-11-20",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::fringe#reed fringe on the waterward flanks": {
-  "body": "9ca2439c112ec432",
+  "body": "04b729284f530988",
   "claim": "reed fringe on the waterward flanks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a marsh strip off each water-facing flank",
-  "code": "5e37111aa33a0156",
-  "core": "c856971507dce861",
+  "cleared": "counter-only (feature 446)",
+  "code": "0eeae45d0eef8537",
+  "core": "12b4674d84a60706",
   "date": "2026-11-07",
   "note": "one marsh strip `depth` deep off each flank `flanks()` returns, as \"a reed fringe along their west flank ... as every flank of a polder but the landward one does\"; the marked lines are count bookkeeping only",
   "pages": {
@@ -44466,18 +44500,21 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
+  "triaged": "2026-11-20",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward/tests.rs::a_polder_s_strips_run_off_toward_the_frame_and_none_without_a_dike#the fringe's tests": {
-  "body": "9a31240d0c79644b",
+  "body": "da326d89f30f3203",
   "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
-  "code": "f732ebd3a0af13f8",
-  "core": "26c226e6a286ee77",
+  "cleared": "counter-only (feature 446)",
+  "code": "4198bf615336a3d8",
+  "core": "00d4026353dd0c17",
   "date": "2026-11-07",
   "note": "test fixtures and assertions only",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-20",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward/tests.rs::ring#the fringe's tests": {

@@ -42,15 +42,23 @@ why; a target moved between buckets later is a one-line change.
 
 - **Builder**: a payload with `agent_id` whose `agent_type` has no `.claude/agents/<agent_type>.md` in the clone (plan D8).
 - **Context**: the builder's transcript's last model call, `input + cache_read + cache_creation` tokens, read from its tail.
-- **Threshold**: `CONTEXT_CAP_TOKENS = 300_000`, GUESS (spec FR-006), a knob `make tunables` lists.
+- **Threshold**: `CONTEXT_CAP_TOKENS = 300_000`, GUESS (spec FR-006), a knob in `docs/guards.md`'s knob table (plan D14).
 - **Handoff file**: `<git common dir>/l7r-handoffs/<task or agent id>.md`; the one Write the cap lets through.
-- **Landed**: the agent's task (its meta `description`'s `T<n>`) is a ticked box in the feature's `tasks.md` or is in `tasks-done.md`
-  (`shared::speckit::tasks`).
+- **Dispatch**: the event-log line of the Agent call whose `id` is the agent's meta `toolUseId`, else the agent's first logged line,
+  else its transcript's first row (plan D10).
+- **The agent's task** (plan D10, D2's chain): its meta `description`'s `T<n>`; else the `task` its FIRST event-log line carries;
+  else the feature's `task-starts.jsonl` entry in force at its dispatch. None found: the landing check passes with a `context-cap:
+  resume, no task` guard-log record; the cap check needs no task, so a builder past the cap is still refused.
+- **Landing** (D10 and D11 alike): a `Phase` `end` line of code 0 whose `tasks` names the task (plan D5), whether the landing ran in
+  the foreground or the background; a refused landing is none.
+- **Landed** (a resume refused): a landing of the agent's task after its dispatch, or the task a ticked box in the feature's `tasks.md`
+  or in `tasks-done.md` (`shared::speckit::tasks`), whatever the log holds.
 
 ## The static count (FR-007)
 
-Per task, from the event log: the `PreToolUse` lines with `make: static` and that task, after the later of the task's last
-`task-starts.jsonl` entry and its last `BgEnd`/`PostToolUse` of `make land` naming it. Third and later refused; escape `STATIC_OK`.
+Per task, from the event log: the `PreToolUse` lines with `make: static` and that task, since the task's last landing (above), or,
+where it has never landed, since its FIRST `task-starts.jsonl` entry (a task with neither: every line of it). A later `task-start`
+resets nothing, nor does a refused landing (plan D11). Third and later refused; escape `STATIC_OK`.
 
 ## Knobs (each GUESS, labeled at its constant and in `docs/guards.md`'s knob table - `make tunables` does not walk the tooling crates, research R12)
 

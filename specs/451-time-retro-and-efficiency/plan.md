@@ -46,8 +46,8 @@ N/A: no generator change, no stage's counted work moves.
 - **XIV**: PASS - two defects found while measuring are fixed in the task that touches them: the two disagreeing make detectors (R1,
   T02), and the readers booking by the frozen `cat` (R1, T08).
 - **XVI**: PASS - built as the spec's FRs; the places this plan reads the spec narrowly or broadly are each named for the plan review
-  (T01): D4 (phases per family where FR-003 says per crate), D8 (the builder), D11 (the main session's runs counted), D12 (`cmd &
-  wait` passes) and D14 (`make tunables`).
+  (T01): D4 (phases per family where FR-003 says per crate), D8 (the builder), D11 (the main session's runs counted), D12 (`cmd &`
+  followed by a `wait` covering the job passes) and D14 (`make tunables`).
 - **XVIII**: PASS - each refusal ships with its suite case firing and its quiet case, proven by deleting the check (FR-012).
 - **XIX**: N/A - nothing placed on a map.
 
@@ -57,14 +57,16 @@ N/A: no generator change, no stage's counted work moves.
   background run's end reaches no hook at all, so the reader takes it from the subagent's transcript (D3).
 - **A subagent's `transcript_path` is the session's** (R2); its own transcript is derived from `agent_id` (D9).
 - **Coverage builds per family and runs side by side** (R6), so phase lines carry wall-clock spans, never per-crate sums (D4).
-- **The observed slow waits are POLL_OK-escaped loops** checking every 60 s and then sleeping 300-1500 s (R5), so the slow-poll refusal
-  sits on the escaped path and judges the longest sleep (D13).
+- **The observed slow waits are POLL_OK-escaped loops** checking every 60 s and then sleeping
+  300-1500 s (observed 2026-11-20, method: the main transcript's Bash inputs holding `sleep`, grouped by their sleeps; R5), so the
+  slow-poll refusal sits on the escaped path and judges the longest sleep (D13).
 - **`make tunables` does not walk the tooling crates** (R12), so the knobs are recorded where the guards' rules are (D14).
 
 ## Decisions
 
 **D1 - One make detector** (FR-001; R1). `shared::make` gains `invoked(cmd) -> Vec<String>`, the targets in command order, at a command
-position that also takes `(`, `flock <file>`, `nice`, `time` and `timeout N`; `targets()` becomes its set. The event-log writer's own
+position that also takes `(`, `{`, `flock <file>`, `nice`, `time` and `timeout N`, beside the `env` and `VAR=` it takes today (R1);
+`targets()` becomes its set. The event-log writer's own
 `MAKE` pattern is deleted and `make_target` is `invoked(cmd).first()`. The gate's own crate-scoped form `scripts/gates/l7r-gate.sh rust
 <cmd>` is read as the target `rust-<cmd>`. Every guard reading `shared::make` then sees `(make static) &` and `timeout 2400 make static`.
 
@@ -95,8 +97,10 @@ crate is what the runner can time: a coverage build serves a family of crates at
 narrow reading of FR-003's "per crate", named for the plan review).
 
 **D5 - The landing's phases** (FR-003). `land` writes a `Phase` line for each of its steps - `cheap` (the first pass), `gate` (`make
-done`), `cohort` (`make cohort-landing`), `claims` (the wait), `push` - and a last `end` line with its exit code, so a refused landing is
-counted from the landing's own line (FR-005's rework), not guessed from a tool response.
+done`), `cohort` (`make cohort-landing`), `claims` (the wait), `push` - and a last `end` line with its exit code and `tasks`, the task
+ids it was asked to land (`T=`, split as D16), so a refused landing is counted from the landing's own line (FR-005's rework), not
+guessed from a tool response, and D10 and D11 read a landing of a task from that one line, whether the landing ran in the foreground
+or in the background.
 
 **D6 - An agent's cost and task** (FR-004; R2). The Agent call's PreToolUse line records `task` from its `description` (else its
 prompt's first line). Each `SubagentStop` line records `tok` (`in`, `cached`, `created`, `out`), summed over `agent_transcript_path` with
@@ -127,20 +131,55 @@ Write is the cap's one exit, so its case runs through the whole guard chain (no 
 the git dir.
 
 **D10 - A builder resumed** (FR-006). The same guard, on SendMessage: `to` is the agent id (R2); refused where that agent is a builder
-past the cap, or its task (its meta `description`'s `T<n>`) is ticked in the feature's `tasks.md` or archived in `tasks-done.md`,
-naming a fresh dispatch with the handoff file or the next task's brief. Escape: `CONTEXT_OK` in the message's `summary`.
+past the cap, or its task has landed since it was dispatched, naming a fresh dispatch with the handoff file or the next task's brief.
+Escape: `CONTEXT_OK` in the message's `summary`.
+
+- **Its dispatch** is the event-log line of the Agent call whose `id` is the agent's meta `toolUseId` (R2), else the agent's first
+  logged line (its `aid`), else its transcript's first row.
+- **Its task** is found by D2's chain, never by the description alone (a builder with an unnamed brief is still a builder, D8): the
+  `T<n>` its meta `description` names; else the `task` its FIRST event-log line carries (by `aid`; never its latest, since D2 stamps a
+  line with no `T<n>` by the clone's active task at write time, and with two lanes running, T05 beside T06, a later line can carry the
+  other, open task); else the clone's
+  `task-starts.jsonl` entry for the feature IN FORCE AT ITS DISPATCH (the last entry before the dispatch time - read at resume time,
+  the last entry is today's open task, and a builder of a landed one would pass).
+- **A landing** (one definition, D11's too) is a `make land` of the task that SUCCEEDED: D5's `end` line of code 0 whose `tasks` names
+  it. The `end` line names its own tasks, so no span is matched: a `run_in_background` landing's call returns at once and its `end`
+  falls outside the call. A refused landing is not one. Any such landing after the dispatch
+  refuses the resume; so does the task ticked in the feature's `tasks.md` or archived in `tasks-done.md`, whatever the log holds (a
+  landing the log missed still refuses).
+- **No task found at all** (no `T<n>`, no line carrying one, no `task-starts.jsonl` entry before the dispatch): the LANDING check
+  passes, and the pass is written to the guard log as `context-cap: resume, no task` with the agent id, so it leaves a record. The cap
+  check does not need a task: a builder past the cap with no task found is still refused.
 
 **D11 - The third `make static`** (FR-007; R6). A new guard, `static_runs_hooks`, PreToolUse Bash, where `invoked` (D1) holds `static`:
-it counts the event log's `make: static` PreToolUse lines of this call's task (D2) after the later of its last `task-starts.jsonl`
-entry and its last landing (a `land` line naming it); the third and later is refused, naming the crate-scoped checks for the crates the
+it counts the event log's `make: static` PreToolUse lines of this call's task (D2) since its last landing (D10's definition: a `make
+land` naming it that succeeded, so a refused landing resets nothing), or, where it has never landed, since its FIRST
+`task-starts.jsonl` entry (a task with neither counts every line of it). A later `task-start` resets nothing: 48 of the clone's 498 started tasks have more than one entry (observed
+2026-11-20, method: `.git/task-starts.jsonl`'s entries counted per feature and task; R6), so a reset at the last start would let a
+second `make task-start` zero the count with no record. The third and later is refused, naming the crate-scoped checks for the crates the
 task's delta changes (`l7r_gate_tree`'s delta is the gate's; the guard lists the changed files' crates from `git diff --name-only` of
 the merge base), `make static` once before the landing, and `STATIC_OK`. Every session and agent's run counts, the main session's too:
 the spec counts runs in a task, not in an agent. Knob `STATIC_RUNS_A_TASK`, GUESS, 2.
 
 **D12 - A run the harness cannot track** (FR-008; R4). In `no_poll_hooks`: a job holding `make` or `cargo` (D1's detector, and
-`cargo` at a command position) followed by a lone `&` with no `wait` later in the command, or started under `nohup`, `setsid` or
-`disown` AT A COMMAND POSITION, is refused naming the Bash tool's `run_in_background`; `DETACH_OK` escapes. `cmd & wait $!` passes: the
-call does not return before the run ends, so the harness tracks it (R4's six cases).
+`cargo` at a command position) followed by a lone `&`, or started under `nohup` or `setsid` AT A COMMAND POSITION, or disowned, is
+refused naming the Bash tool's `run_in_background`; `DETACH_OK` escapes. DISOWNED: a `disown` at a command position after the job's
+`&` in the same command, in any form - bare (the current job), `disown %N`, `disown -h`, `disown -a`, `disown $!` - is refused WHATEVER
+`wait` follows, since a disowned job leaves the shell's job table and no `wait` covers it: `sleep 3 & disown; wait` returns in
+0.0005 s and `wait %1` after `disown` reports no such job, while `sleep 2 & disown -h; wait` still waits 2.0 s (measured 2026-11-20,
+method: `bash -c` runs of the three, timed by `$EPOCHREALTIME`; the plan review measured the first two, round 3). So `disown -h`
+alone keeps the job in the table, but FR-008 names `disown` without exception, so it is refused too. The guard does not work out which job a
+`disown` names: any `disown` after a make or cargo job's `&` refuses the call. The `&` form passes only where a `wait` that COVERS the job follows
+it: `wait` at a command position (never a word, so `make static & echo wait` is refused), a command of the same list as the job's `&`
+in the same shell (not in a `( )` or `$( )` of its own: `make static & (wait)` waits for nothing), run unconditionally (not the right
+side of `&&` or `||`, not in an `if` or `case` branch the job is outside of: `make static & false && wait` skips it) and not itself
+backgrounded (`make static & wait &` returns at once), and either bare (it waits for every job) or
+`wait $!` with no other `&` between the job's `&` and the `wait` (so `$!` is still that job: `make static & sleep 5 & wait $!` waits
+for the sleep and is refused), or `wait %N` where N is that job's number among the command's backgrounded jobs. Such a call does not
+return before the run ends, so the harness tracks it. A wait on a saved pid (`P=$!; ...; wait $P`) is not one of these forms and is
+refused: one of five of R4's tracked runs re-read took that form (observed 2026-11-20, method: R4's commands re-read for their `wait`), and it
+is written `wait $!` or bare `wait`, or carries `DETACH_OK`. Following the assignment instead was priced and not taken: it is more
+parsing for one observed run, and the plan review's fix named the three forms (T01 round 1, 2026-11-20).
 
 **D13 - A main-session wait slower than its check** (FR-008; R5). In `no_poll_hooks`, on both permitted paths - the POLL_OK-escaped
 loop and the file-watching wait - before either returns: a payload with no `agent_id` whose loop body's longest `sleep` is over
@@ -153,15 +192,44 @@ waits, the shard times). `make tunables` is not extended to the tooling crates: 
 engine's), and the spec names it only as where retuning happens. Named for the plan review.
 
 **D15 - The deferral's form** (FR-009; R9). `lint::refusal` gains `deferral_unformed`: a `**Found and left?**` item that is not `none`
-must carry why it is not fixed in this task, a task id `T<n>` and an order "lands before T<n>"; an item or fix naming a class of defect
+must carry why it is not fixed in this task, a task id `T<n>` and an order "lands before T<n>", each refused when missing:
+
+- **Both ids name an OPEN task**: an unticked box of the feature's `tasks.md`, judged when `make decide` judges the item. A made-up id
+  is refused like a missing one (FR-009's "its filed task id"), and so is a ticked box or an entry of `tasks-done.md`: a deferral to a
+  task already done, or ordered before one, defers to nothing.
+- **The order's id differs from the deferral's own**: "T123 lands before T123" orders nothing and is refused.
+- **Judged once, at the decision.** `lint::refusal` has two callers, `make decide` on the task's section and `make plan-delta` on every
+  changed block (observed 2026-11-20, method: its callers read, `rust/gate/crates/plan/src/plan.rs` lines 195 and 245; the tick and
+  the landing call neither). So `deferral_unformed` in `lint::refusal` holds the timeless parts - the reason, both ids present, the
+  order's id not the deferral's own, both ids filed in `tasks.md` or `tasks-done.md` - and the OPEN test runs in `decide` alone, after
+  it. A section already decided is not refused later because a task it names has since landed: a later `plan-delta` over its block
+  finds both ids still filed.
+
+An item or fix naming a class of defect
 ("every writer", "every form", "every file of a kind", "each of the ...", "all ...") must carry a line `observed <date>, method: ...`
 saying how every instance was found. The template's `**Found and left?**` placeholder states the form. `DEFER_FORM_OK` on `make
-decide` escapes, through `$(LOGESCAPE)`. No open section of any plan is refused by it today (R9).
+decide` escapes, through `$(LOGESCAPE)`. It holds on the `plan-delta` path too, since `lint::refusal` runs there: `make decide` under
+the escape records it in the guard log naming the feature and the task, and `make plan-delta` reads those records and does not run
+`deferral_unformed` on that task's section, so a section decided under the escape is not refused when its block later changes;
+`make plan-delta` also takes `DEFER_FORM_OK` itself, through `$(LOGESCAPE)` (a held Makefile line), for a section never decided. No
+open section of any plan is refused by it today (R9).
 
 **D16 - The landing's commas and task-add's quick check** (FR-011; R7, R8). `land.rs::main` splits `T=` on commas and whitespace.
-`task-add` runs `make quick` after it writes; on a red it withdraws what it wrote and runs `make quick` again: green, it refuses naming
-the failure and that the line was withdrawn; red again, the failure is not the line's, so it restores the line and reports the
-failure. `QUICK_OK` on `make task-add` escapes, through `$(LOGESCAPE)`.
+`task-add` runs `make quick`'s checks after it writes; on a red it withdraws what it wrote and runs them again, and COMPARES the two
+runs' failures: where the with-line run has any failure the without-line run lacks, the line stays withdrawn and task-add refuses,
+naming those failures and that the line was withdrawn; only where the failures are the same is the line restored, the failure
+reported as already there. Two things make the comparison real:
+
+- **Every check runs to its own end in both runs.** The `quick:` recipe is sequential lines, and make stops at the first that fails, so
+  a failure already there in an earlier check (ruff, say) would hide the line's own in a later one (spec-lint) and the two runs would
+  look the same. task-add takes the check lines from `make -n quick` (the recipe stays the one list), sets aside the `$(STATE)
+  green-local` stamp and the closing `printf`, and runs each line as its own process. Not `make -i quick`: it would still stamp quick
+  green.
+- **Findings are compared, not checks.** A failure is a check's line and each finding it prints, with line and column numbers masked
+  (the new line shifts every later finding in the file it writes), compared as a multiset; a check that fails in both runs with a
+  new finding in the with-line run is a new failure.
+
+`QUICK_OK` on `make task-add` escapes, through `$(LOGESCAPE)`.
 
 **D17 - Shards** (FR-010; R10). A suite may be split into `tests/hooks/test-<name>.<k>.sh` beside nothing else of that name: the runner
 (`make hooks-test` and `tests/hooks/hookrun.sh`) treats each shard as a job keyed by the suite's stamp key and stamps the suite green
@@ -198,8 +266,8 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 ### T02 (FR-001: two make detectors that disagree, so a timed or subshelled make run logs no target - research R1)
 
 - **Approach**: D1, in the guard crate. Held: `rust/guard/src/shared/make.rs`, `rust/guard/src/guards/event_log_hooks.rs` (`make
-  guard-edit` on each first). Red first: `timeout 2400 make static`, `flock /tmp/x make rust-test` and `(make hooks-test > log) &` each
-  yield their target; `echo make static` and a heredoc's `make` yield none; the guards reading `shared::make` keep their suites'
+  guard-edit` on each first). Red first: `timeout 2400 make static`, `flock /tmp/x make rust-test`, `(make hooks-test > log) &`, `{
+  make static; } &`, `VAR=x make static &` and `env X=1 make static &` each yield their target; `echo make static` and a heredoc's `make` yield none; the guards reading `shared::make` keep their suites'
   verdicts.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
@@ -225,7 +293,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Performance work?** no
 
-### T03 (FR-001: 210 of the window's tool-minutes booked "other tool" - research R1)
+### T03 (FR-001: 210 of the window's tool-minutes booked "other tool", observed 2026-11-20, method: the `ms` of the log's PostToolUse lines since 14:00Z summed by `cat` - research R1)
 
 - **Approach**: D2, in the writer. Held: `rust/guard/src/guards/event_log_hooks.rs` (`make guard-edit` first). The table's rows are
   `data-model.md`'s, finished from the Makefile's targets, `format`, `render-sync` and `map` among them (R1's largest after the tests),
@@ -323,7 +391,8 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 ### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)
 
 - **Approach**: D5 in `rust/gate/crates/land` (not held). Red first: the land tests' fake world writes `cheap`, `gate`, `claims`,
-  `push` and `end` lines in order, a refused landing's `end` with its non-zero code.
+  `push` and `end` lines in order, a refused landing's `end` with its non-zero code; a landing of `T="T1 T2"` writes an `end` whose
+  `tasks` is both ids (T13 and T14 read a landing from this line).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -534,8 +603,14 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 ### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)
 
 - **Approach**: D10 in `context_cap_hooks`. Held: `rust/guard/src/guards/context_cap_hooks.rs` (`make guard-edit` first). Red first:
-  a SendMessage to a builder fixture past the cap refused; to one whose task is ticked refused; to a defined agent passes; to a builder
-  under the cap with its task open passes; `CONTEXT_OK` in the summary passes and is recorded.
+  a SendMessage to a builder fixture past the cap refused; to one whose task is ticked refused; to one whose meta `description` names
+  NO `T<n>` (its task found through D2's chain, the `task-starts.jsonl` entry in force at its dispatch) and whose task landed after its
+  dispatch refused, while a later `task-starts.jsonl` entry for another, open task stands in the log and the builder's later lines
+  carry that open task (its first line's task is the one read); to one whose task landed in a background `make land` (its `end` line
+  after the land call returned) refused; to one whose task's only landing
+  after its dispatch was refused (`end` code 1) passes; to one under the cap with no task found anywhere passes and writes its `no task`
+  record; to one past the cap with no task found refused (the cap check needs no task); to a
+  defined agent passes; to a builder under the cap with its task open passes; `CONTEXT_OK` in the summary passes and is recorded.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -547,8 +622,8 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 2. **The constraints.** FR-006, FR-012; D10.
 3. **Where each comes from.** G: the approved "one task a builder"; O: research R2 (`to` is the agent id).
 4. **Do they describe the world here?** R2 read the window's SendMessage inputs.
-5. **The order.** After T12.
-6. **The exits.** Green: the five cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+5. **The order.** After T12, and after T03 (the `task` on each line) and T06 (the landing's `end` line naming its tasks).
+6. **The exits.** Green: the ten cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
 9. **Done, measured.** The suite's cases; the check deleted, the firing cases red.
@@ -565,8 +640,11 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 - **Approach**: D11, a new guard `static_runs_hooks`. Held: `rust/guard/src/guards/static_runs_hooks.rs` (new),
   `rust/guard/src/guards.rs`, `rust/guard/src/lib.rs` (`make guard-edit` on each first); its link, suite, `docs/guards.md` row and knob,
   `rust/guard/CLAUDE.md` mention. Red first: a fixture log with two `make static` lines of T06 after its start refuses a third, naming
-  the changed crates' checks; a run after a `land` line naming T06 passes; a task with no landing counts from its start;
-  `STATIC_OK="..."` passes and is recorded.
+  the changed crates' checks; a run after a landing of T06 that succeeded (an `end` line of code 0 whose `tasks` names T06, written
+  after a background land call returned) passes; a run after a refused landing of
+  T06 (`end` code 1) counts on and a third is refused; a task with no landing counts from its FIRST start; two runs of T06, then a
+  second `task-starts.jsonl` entry for T06, then a third run: refused (a second `task-start` resets nothing); `STATIC_OK="..."` passes
+  and is recorded.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -578,8 +656,8 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 2. **The constraints.** FR-007, FR-012; D2 (the task field), D11.
 3. **Where each comes from.** G: the approved "a crate-scoped check while iterating, with make static once at the end"; O: research R6.
 4. **Do they describe the world here?** R6 timed the log read the guard makes.
-5. **The order.** After T13; needs T02's `task` on each line.
-6. **The exits.** Green: the four cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+5. **The order.** After T13; needs T03's `task` on each line and T06's landing `end` line naming its tasks.
+6. **The exits.** Green: the six cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
 9. **Done, measured.** The suite's cases; the check deleted, the firing case red.
@@ -596,7 +674,15 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 - **Approach**: D12 in `no_poll_hooks`. Held: `rust/guard/src/guards/no_poll_hooks.rs` (`make guard-edit` first). Red first: R4's
   observed `(make static > /tmp/t225-static.log 2>&1; echo END >> ...) & sleep 1` refused naming `run_in_background`; `nohup make
   rust-test` refused; `for c in git setsid make; do ...` passes (a word, not a command); `make static > log 2>&1 & wait $!` passes;
-  `make static` with `run_in_background` passes; `DETACH_OK="..."` passes and is recorded.
+  `make static & echo wait` refused (a `wait` that is a word); `make static & sleep 5 & wait $!` refused (`$!` names the sleep); `make
+  static & P=$!; wait $P` refused (a saved pid, D12); `make static & (wait)` refused (another shell's wait); `make static & false &&
+  wait` refused (a conditional wait); `make static & wait &` refused (a backgrounded wait); `(make static > log) & make decide F=449
+  T=T121 | tail -40; wait` passes (R4's observed bare form); `sleep 30 & make static & wait %2` passes (`%2` names the make job,
+  the sleep no make or cargo); `setsid make static` refused; `make static & disown` refused; `make static & disown; wait` and `make static & disown;
+  wait $!` refused, each going red when the disown check is deleted (the covering wait would pass them); `make static & disown -h;
+  wait` and `make static & disown %1; wait` refused; `{ make static; } &`, `VAR=x make static &` and `env X=1 make
+  static &` each refused (D1's detector reads the target past `{`, `VAR=` and `env`); `make static` with `run_in_background` passes; `DETACH_OK="..."` passes and is
+  recorded.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -609,7 +695,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 3. **Where each comes from.** G: the approved "a guard refusing that pattern"; O: research R4.
 4. **Do they describe the world here?** R4's cases are the session's own commands.
 5. **The order.** After T14.
-6. **The exits.** Green: the six cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: the twenty-three cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
 9. **Done, measured.** The suite's cases; the check deleted, the firing cases red.
@@ -621,7 +707,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Performance work?** no
 
-### T16 (FR-008: the main session's waits checked every 420 to 600 s - the spec's User Story 4, research R5)
+### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)
 
 - **Approach**: D13 in `no_poll_hooks`. Held: `rust/guard/src/guards/no_poll_hooks.rs` (`make guard-edit` first). Red first: R5's
   observed POLL_OK loop with `sleep 60` then `sleep 420`, from the main session, refused naming the knob's form; the same loop at
@@ -653,10 +739,16 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 ### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)
 
-- **Approach**: D15 in `rust/gate/crates/plan` (`lint.rs`, `template.rs`; not held) and `make decide`'s `DEFER_FORM_OK`. Held: the root
-  `Makefile` (`make guard-edit FILE=Makefile` first). Red first: User Story 5's five cases - a deferral with no task id refused; task
-  and order but no reason refused; a reason, `T123` and "lands before T124" passes; `none` passes; a class fix with no labeled line
-  refused and with one passes.
+- **Approach**: D15 in `rust/gate/crates/plan` (`lint.rs`, `plan.rs::decide` for the open test, `template.rs`; not held) and `make decide`'s `DEFER_FORM_OK`. Held: the root
+  `Makefile` (`make guard-edit FILE=Makefile` first). Red first: User Story 5's five cases and seven more - a deferral with no task id
+  refused; task and order but no reason refused; a reason, `T123` and "lands before T124" passes, both unticked boxes of the fixture
+  feature's `tasks.md`; `none` passes; a class fix with no labeled line refused and with one passes; a deferral whose task id `T999` is
+  filed nowhere refused; one whose "lands before" id is filed nowhere refused; one whose own id is a ticked box (or in
+  `tasks-done.md`) refused; one whose "lands before" id is ticked (or in `tasks-done.md`) refused; "T123 lands before T123" refused; a
+  reason and a filed open task id with no "lands before" refused; and the passing section, decided, then T124 ticked: `make
+  plan-delta` over its block does not refuse it; a deferral with no order decided under `DEFER_FORM_OK`, then its block changed:
+  `make plan-delta` does not refuse it (the guard log's escape record read); `DEFER_FORM_OK` on `make plan-delta` passes and is
+  recorded.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -669,7 +761,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 3. **Where each comes from.** G: the approved "briefs that default to fixing in the task, and that ask for full coverage up front"; O: research R9.
 4. **Do they describe the world here?** R9 found no open section the rule would refuse.
 5. **The order.** After T16.
-6. **The exits.** Green: the five cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: the fourteen cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
 9. **Done, measured.** The plan crate's cases; the check deleted, the firing cases red.
@@ -713,7 +805,10 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 - **Approach**: D16's second half in `rust/gate/crates/task/src/task_add.rs` (not held) and `make task-add`'s `QUICK_OK`. Held: the root
   `Makefile` (`make guard-edit FILE=Makefile` first). Red first: a fixture task-add line citing a bare requirement id another feature defines is
-  withdrawn and refused; a clean line stays; a quick already red without the line keeps the line and reports.
+  withdrawn and refused; a clean line stays; a quick already red for another reason in an EARLIER check (a fixture ruff failure) plus
+  the line's own spec-lint failure: the line withdrawn and refused, naming the spec-lint failure alone (the case a sequential `make
+  quick` would hide); a quick already red where the line adds no failure - the existing finding sits below what task-add wrote in the
+  same file, its line number shifted - keeps the line and reports the failure as already there.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -726,7 +821,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 3. **Where each comes from.** G: the approved "run make quick after task-add"; O: research R8.
 4. **Do they describe the world here?** R8 read the crates task-add builds on.
 5. **The order.** After T18.
-6. **The exits.** Green: the three cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: the four cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
 9. **Done, measured.** The task crate's cases; the check deleted, the firing case red.

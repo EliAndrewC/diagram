@@ -38,12 +38,14 @@ fn in_build_tree(p: &Path) -> bool {
 
 /// The file defining `stage_<phase>` under the hamlet package, and, when that file is in a subpackage, its siblings; and a
 /// Rust phase's source beside it (feature 444 T17, `dev/rust-tooling.md` "the work-budget audit bundle"): the `.rs` file under
-/// `rust/` defining `fn stage_<phase>`, with its siblings when it sits in a module directory of its own.
+/// `rust/` defining `fn stage_<phase>`, with its siblings when it sits in a module directory of its own. A form's stage,
+/// `<stage>.<form>` (`waterward.polder`, budgeted at its own sizes), is the stage's code: `stage_<stage>` (feature 449 T226).
 ///
 /// # Errors
 ///
 /// A source that does not read.
 pub fn stage_files(root: &Path, phase: &str) -> R<Vec<PathBuf>> {
+    let phase = phase.split_once('.').map_or(phase, |(stage, _)| stage);
     let escaped = fancy_regex::escape(phase);
     let pat = py_re(&format!(r"(?m)^def stage_{escaped}\("));
     let hamlet = root.join(HAMLET);

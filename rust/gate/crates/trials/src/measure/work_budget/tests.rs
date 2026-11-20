@@ -2,12 +2,39 @@
 
 use serde_json::{json, Value};
 
-use super::{budget_at, cli, exponent, over, parse, run_file, table};
+use super::{budget_at, cli, exponent, forms, over, parse, run_file, table};
 
 const LINES: &str = "4\t10\tfield\t100\n4\t10\tfield\tcells\t7\n25\t10\tfield\t200\n4\t40\tfield\t4000\n4\t20\tfield\t1000\n4\t80\tfield\t16000\n4\t40\tsink\t50\nnot a budget line\n";
 
+/// The polder form's lines: a stage at its own sizes, and one counted at a size its entry does not name.
+const FORM: &str = "4\t10\tward.polder\t100\n4\t20\tward.polder\t300\n4\t10\tfield.polder\t50\n";
+
 fn budgets() -> Value {
-    json!({"field": {"per_thing": 10, "items_at_40": 100, "status": "accepted", "accepted": {"40": 3900}}, "sink": {"per_thing": null, "items_at_40": 5}})
+    json!({"field": {"per_thing": 10, "items_at_40": 100, "status": "accepted", "accepted": {"40": 3900}}, "sink": {"per_thing": null, "items_at_40": 5}, "ward.polder": {"per_thing": 1, "items_at_10": 50, "items_at_20": 100, "sizes": [10, 20], "status": "accepted", "accepted": {"10": 120, "20": 320}}})
+}
+
+#[test]
+fn a_form_stands_in_its_own_table_at_its_own_sizes_out_of_the_whole_roll() {
+    // feature 449 T226: the polder's stages were counted by no `make work-budget`, so its audit bundle carried no counts
+    let (counts, _) = parse(&(LINES.to_owned() + FORM)).unwrap();
+    let t = table(&counts, &budgets());
+    assert_eq!(t.len(), 5);
+    assert_eq!(t[4], "| **the whole roll** | 150 | 1,000 | 4,050 | 16,000 | 2.00 | 1,000 | - | 4.0x | through the cut |");
+    let f = forms(&counts, &budgets());
+    assert_eq!(
+        f[0],
+        "| stage | ops at each size (budget, accepted) | exponent | ratio | status |"
+    );
+    assert_eq!(f[1], "|---|---|---|---|---|");
+    assert_eq!(
+        f[2],
+        "| ward.polder | 100 @10 (50 budget, 120 accepted); 300 @20 (100 budget, 320 accepted) | 1.58 | 3.0x | accepted |"
+    );
+    assert_eq!(
+        f[3],
+        "| field.polder | 50 @10 (- budget, - accepted); 0 @20 (- budget, - accepted) | - | - | unbudgeted |"
+    );
+    assert!(forms(&parse(LINES).unwrap().0, &budgets()).is_empty());
 }
 
 #[test]
@@ -114,7 +141,8 @@ fn world(tag: &str, body: &str) -> l7r_guard::shared::tempdir::TempDir {
 }
 
 fn driver() -> String {
-    format!("#!/bin/sh\n[ \"$HAMLET_ARGS\" = --budget ] && [ \"$HAMLET_FEATURES\" = counters ] && [ \"$1\" = rust ] || exit 9\nprintf '{}'\n", LINES.replace('\t', "\\t").replace('\n', "\\n"))
+    let esc = |s: &str| s.replace('\t', "\\t").replace('\n', "\\n");
+    format!("#!/bin/sh\n[ \"$HAMLET_FEATURES\" = counters ] && [ \"$1\" = rust ] || exit 9\n[ \"$HAMLET_ARGS\" = --budget ] && printf '{}' && exit 0\n[ \"$HAMLET_ARGS\" = '--budget polder' ] && printf '{}' && exit 0\nexit 8\n", esc(LINES), esc(FORM))
 }
 
 #[test]
@@ -123,9 +151,10 @@ fn a_run_prints_the_table_and_writes_nothing_unasked() {
     let got = cli(&[], &root);
     assert_eq!(got.code, 0, "{}", got.stderr);
     assert!(got.stdout.contains("| field | 150 |"));
-    assert!(got
-        .stdout
-        .contains("past twice the budget at 40 (the audit's leeway, 444 FR-022): field"));
+    assert!(got.stdout.contains("| ward.polder | 100 @10 "));
+    assert!(got.stdout.contains(
+        "past twice the budget at 40, a form's at its largest size (the audit's leeway, 444 FR-022): field, ward.polder"
+    ));
     assert!(!root.join("dev/work-budget.md").exists());
 }
 
@@ -136,7 +165,21 @@ fn write_replaces_the_record_and_files_the_run() {
     assert_eq!(got.code, 0, "{}", got.stderr);
     let page = std::fs::read_to_string(root.join("dev/work-budget.md")).unwrap();
     assert!(page.starts_with("# The work budget - the standing record (feature 443)\n"));
-    assert!(page.contains("| field | 150 |") && page.ends_with("through the cut |\n"));
+    assert!(
+        page.contains("| field | 150 |") && page.contains("through the cut |\n\nThe polder form")
+    );
+    assert!(page.ends_with("| unbudgeted |\n"));
+    // no form counted, no form table
+    let bare = world(
+        "wb-bare",
+        &format!(
+            "#!/bin/sh\n[ \"$HAMLET_ARGS\" = --budget ] || exit 0\nprintf '{}'\n",
+            LINES.replace('\t', "\\t").replace('\n', "\\n")
+        ),
+    );
+    assert_eq!(cli(&["--write".to_owned()], &bare).code, 0);
+    let page = std::fs::read_to_string(bare.join("dev/work-budget.md")).unwrap();
+    assert!(page.ends_with("through the cut |\n") && !page.contains("polder"));
     let filed: Vec<_> = std::fs::read_dir(root.join("dev/work-budget"))
         .unwrap()
         .flatten()
@@ -158,7 +201,7 @@ fn a_failed_driver_is_reported() {
     assert_eq!(got.code, 1);
     assert_eq!(
         got.stderr,
-        "work-budget: the driver's budget run failed:\nout\nerr\n\n"
+        "work-budget: the driver's budget run `--budget` failed:\nout\nerr\n\n"
     );
     std::fs::remove_file(root.join("scripts/gates/l7r-gate.sh")).unwrap();
     assert!(cli(&[], &root)

@@ -1,0 +1,1142 @@
+{
+ "feature": "451-time-retro-and-efficiency",
+ "blocks": {
+  "preamble": {
+   "sha256": "51954797ca9f8676eb8b16902efe7c47601a4eb055cd35e677f97cbf20ecde0c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "64caec479cae7ff241078454d339902e4a3fa0d4c920539f9129c66d543d4b38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "413c8e59ef4776cde13d7bbc3f3803a1d812a1a08b7057eab081da07bbb8391f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "9ce8d69c69f80f0150f4425442ec6f8cb28bc412579b1327167b65e092ebb327",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "fac807f09e439e57e48c6a3b0361bb31bda6b1e1111bc3a06aadaf54edcf58ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## What the measurements changed (research.md)": {
+   "sha256": "6f7f4b3b91f1d3e10de058513d6a28f263724897a0959a474aa1530dd0c9c7e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "6cf3d0e952c5b9eedea674f8579fd7ef4143c9aaaec46944984f41f37ff5e0de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## Task sections": {
+   "sha256": "4235c91434b7d7d87cdb6e7b21147772bee35b1882d1189eb1ab7412e0a6cc45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T01 (the plan review the tick and the push require, feature 243)": {
+   "sha256": "e7b46689325a49e0f4b7bdb0ef4acbc83bd4e074ca9af77cdebd5440b2cabc8f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "6cebf679c6ce9644838c1a2cbb9bab52bacc7c7e93ad4697e2b60f165ca6c877",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T02 (FR-001: two make detectors that disagree, so a timed or subshelled make run logs no target - research R1)": {
+   "sha256": "2d3a0c424777a1c43be4ed584b894da296c40d57046241d74339e4120e31b182",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "6aec28f8ac08b53a8d04810db8466411be148df4f323eccde7291d9a24f14453",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\" - research R1)": {
+   "sha256": "3978dcd6b364f2796a923930e6e403259721b0580b0dcd18cc3190e58d6f5b4a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "f191ef5480cad404b5a7030b39ea34bec59cbe5b81ab668ddd653079535ca3b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)": {
+   "sha256": "bf82d12747a518c92299b8cc3c3e8215b87377441a2ca2d8c574f8a4c5afa9eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "95c65559c895b829e558d3694b838117ce0b0d6d3e2a36a1db666135fe1c26ee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)": {
+   "sha256": "85c781980c0b895778645de8411899d88d4c2771cf3fb8ca2ba051a0f0dde7df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "16146a6cc7410bc8b4e325491a63c2cd406eeef0490d1619bf584453ad7dee0a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)": {
+   "sha256": "abc41ac11b43645ae079ea8a2cf8c71274899cb629df2ee3f4bc0c8060616533",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "19b1575b7385dc7d1ed678e78a58a1e5965ca9a4ffa44cd5f0cb9c0107482b1f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)": {
+   "sha256": "1cfc974863092bffbf9da308a98704672ef30828692c398eff4b67f9a499f81f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "37a289b8a4a16edf3bdea119788a47e3228377998b106d9e1240b9d149bb0dd3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)": {
+   "sha256": "915d384a15bceae97ac831272e7771af9664401a6b42ab869ba80890964088c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "bbc1a94e07e816a3d4f59bfe4fb07cbe18af0067d05fd552307bbb57143ea8d7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)": {
+   "sha256": "820950d51028244c5a1a6b94163e39244011b83c4cc7a8de52249d80f9b1cab1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "85143aabf60da632fbed717d5f2467a762d32c9637c69789eb8921844854d181",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)": {
+   "sha256": "23cab13d08077a0cb1b024cf71433c0f145eb37dae83768aa8bca8486f9c9f38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "9bb98bd94a58d4141929947e56de69c53f3af5d16c188f15af967b5b0c15f1d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T11 (FR-005: `make feature-report` reads the same columns)": {
+   "sha256": "f2606bdb332c7ef3ded48c44d04feca7b76d3bcdd5314681234fdc1508d53f57",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T11 Approach (checklist part A)": {
+   "sha256": "9de76246c5af73e79aa68ce4d8ac79423c09b49fc9b63973b260e68131abbe85",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)": {
+   "sha256": "593607077c2dcea24863a5ae82cba35d43180503dd9c95494f89ab06c59b9ba2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T12 Approach (checklist part A)": {
+   "sha256": "08a6d9b8ec80d4406b0baa178a1df1675862d2e4415847bdfe199b2d0678ed95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)": {
+   "sha256": "bcc822c8531699e2bacee68ddaee3fbc3c7f393a280145bfa4de6ee16f4ac345",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T13 Approach (checklist part A)": {
+   "sha256": "970cd3b332dc12ff40bacb9e42bc7f1298ce1669817e74a9b671d64611334032",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)": {
+   "sha256": "f520804b7ea6be5167036e6930fac54e22c6fb0338a4ee607db330522b17a83f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T14 Approach (checklist part A)": {
+   "sha256": "c48b3b9a1005e82aedc78b720b10e56d32665de3ae8302367279f3fe477ef113",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)": {
+   "sha256": "75c334a974a9062d275cc71fc426248635404a174c2e6025a71019d1a92f221c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T15 Approach (checklist part A)": {
+   "sha256": "953e3ba2722cc7837d582a5f09a4d36f8873f3bbe9c6e5ec6827de4d659f44b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T16 (FR-008: the main session's waits checked every 420 to 600 s - the spec's User Story 4, research R5)": {
+   "sha256": "762ed4aca4ba941a95825f8a8423d6692278ea2a7a4c3419ac1dab16708e31bc",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Approach (checklist part A)": {
+   "sha256": "64892608f2528ac78fe164c38c31db0143c28d9f430c64151b8c3e46689a80f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)": {
+   "sha256": "003a9c10512c4c34b340ab125a4b13b93aa1ec64c91455ee58480305c1a43719",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (checklist part A)": {
+   "sha256": "64099d3c4e205e0f37aa5c058d9d7d6cadab242c790eaa377796d07ca279e553",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)": {
+   "sha256": "8b559f1abb7e688d90b1197deb25311173694a04323478cf4a6aa0a6adbd4ea9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (checklist part A)": {
+   "sha256": "53d4ff69e3d457143952f7a147bae7211bbf23a85904f0bd427d452df1f45b21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)": {
+   "sha256": "f6c37f220259c822bfb1e50d09c3738e3cad7110fac5ceac89d8ee4cac00f400",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Approach (checklist part A)": {
+   "sha256": "96aa0566fb96302e1ed6e34ac96d73b25c5e8ac8d14740608b693c36b511064d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)": {
+   "sha256": "5c5b0eb28928f1d901cdbe058c378e14b00b0fddc207d0b9e0f28b442faf84b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (checklist part A)": {
+   "sha256": "25fca10bfd6f4edb7527cf90af2abfc59712984fd565c39b88729967743f8913",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "6da289dbe140d8dabcea059f60f5e033a1a04ff4d3e16ce32f8c5230ff3729c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T21 (FR-010: the other two of the three slowest suites)": {
+   "sha256": "7eb70a0f621df0f6b7563f640ba088fe5cc6247c8de9bf6bfa2430747430f966",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Approach (checklist part A)": {
+   "sha256": "ab0c81f662aa75f4506fa09208ec621c9aaef5fb309ddd41b28aea35322ff441",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)": {
+   "sha256": "86cf246b0a27df7c373b501ac44d3789ce5cf25d16cbfe47794b8aa01d03448d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "46abed269fe4cdfd368dc99a46f561477ac934f9fa97acb4c27444c8f644a488",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## Project Structure": {
+   "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### Documentation (this feature)": {
+   "sha256": "a0acaf6671c4e77abe3c69c5079426015a082da0387995c976f9c6f3ea5ce9fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### Source Code": {
+   "sha256": "0d252782ea14ab28254919bf2aefc89cfa9c0e04e5de2c14dce8a303863e0bfe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "## Complexity Tracking": {
+   "sha256": "c45556bc44d9be401e7d618fbeccc1740039203eaf27a926f0e40c9797491e73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\", observed 2026-11-20, method: the `ms` of the log's PostToolUse lines since 14:00Z summed by `cat` - research R1)": {
+   "sha256": "1ff051ce5b72cb1a7fcf15a2947843aea035b513802e860a29e995e8480ec5b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)": {
+   "sha256": "3b5cd4eaef59a1d7c44b3462702dc65dd3875bfdce8e32a11bb45c65711a9f1e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task sections",
+    "## Technical Context",
+    "## What the measurements changed (research.md)",
+    "### Documentation (this feature)",
+    "### Source Code",
+    "### T01 (the plan review the tick and the push require, feature 243)",
+    "### T01 Approach (checklist part A)",
+    "### T02 (FR-001: two make detectors that disagree, so a timed or subshelled make run logs no target - research R1)",
+    "### T02 Approach (checklist part A)",
+    "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\" - research R1)",
+    "### T03 Approach (checklist part A)",
+    "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)",
+    "### T04 Approach (checklist part A)",
+    "### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)",
+    "### T05 Approach (checklist part A)",
+    "### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)",
+    "### T06 Approach (checklist part A)",
+    "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)",
+    "### T07 Approach (checklist part A)",
+    "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)",
+    "### T08 Approach (checklist part A)",
+    "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)",
+    "### T09 Approach (checklist part A)",
+    "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)",
+    "### T10 Approach (checklist part A)",
+    "### T11 (FR-005: `make feature-report` reads the same columns)",
+    "### T11 Approach (checklist part A)",
+    "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)",
+    "### T12 Approach (checklist part A)",
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)",
+    "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)",
+    "### T14 Approach (checklist part A)",
+    "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)",
+    "### T15 Approach (checklist part A)",
+    "### T16 (FR-008: the main session's waits checked every 420 to 600 s - the spec's User Story 4, research R5)",
+    "### T16 Approach (checklist part A)",
+    "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)",
+    "### T17 Approach (checklist part A)",
+    "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)",
+    "### T18 Approach (checklist part A)",
+    "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)",
+    "### T19 Approach (checklist part A)",
+    "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T21 (FR-010: the other two of the three slowest suites)",
+    "### T21 Approach (checklist part A)",
+    "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+    "### T22 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "one make detector shared by the log and the guards, the gate's crate-scoped form read as rust-<cmd>",
+     "class": "within",
+     "why": "FR-001's classing by target; fixes a found defect (R1) in the task touching it."
+    },
+    {
+     "id": "D2",
+     "summary": "one bucket_of table shared by writer and readers, readers book by the make field, every line carries task",
+     "class": "within",
+     "why": "FR-001's one table the readers share; re-booking a past log serves the GM's retrospective."
+    },
+    {
+     "id": "D3",
+     "summary": "bg on launch, BgEnd from the task-notification prompt, inflight on Stop; subagent ends from the subagent transcript",
+     "class": "within",
+     "why": "FR-002 and the approved 'logs that end from its completion notice'; the transcript read is where the plan states no hook carries a subagent run's end (R2)."
+    },
+    {
+     "id": "D4a",
+     "summary": "build, test, cover-run, lint and format phase lines per crate, wall-clock spans",
+     "class": "within",
+     "why": "FR-003 as written."
+    },
+    {
+     "id": "D4b",
+     "summary": "cover-build phase line per family (naming its crates), not per crate",
+     "class": "narrowing",
+     "why": "Physically impossible per crate: one coverage build compiles the family's crates at once, so no per-crate seconds exist to log. The line names every crate it served. The GM's own words ('append their phase seconds') carry no per-crate requirement, and the compile-vs-test split ('how much time ... recompiling') is kept whole.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D5",
+     "summary": "land writes cheap, gate, cohort, claims, push phases and an end line with exit code",
+     "class": "within",
+     "why": "FR-003 (make land's phases) and FR-005's refused-landing rework count."
+    },
+    {
+     "id": "D6",
+     "summary": "Agent PreToolUse records task; SubagentStop records deduplicated tok, ctx, task; reader keeps last per aid",
+     "class": "within",
+     "why": "FR-004 and the approved 'records it at each agent's stop'."
+    },
+    {
+     "id": "D7",
+     "summary": "where-time and feature-report read the same columns module; critical path apart from agent-minutes; rework counted; UNTIL=",
+     "class": "within",
+     "why": "FR-005 clause by clause."
+    },
+    {
+     "id": "D8a",
+     "summary": "a builder is any agent whose agent_type names no .claude/agents file - every defined agent exempt, where the spec exempts a defined REVIEW agent",
+     "class": "narrowing",
+     "why": "The spec's own exclusion, made mechanical. As the plan states (R3, not in the bundle), the rule caught every builder that passed the cap in the window. It would only reach too little if some defined agent that is not a reviewer were dispatched with a task's brief. If such an agent exists in .claude/agents, it must be capped too.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D8b",
+     "summary": "a general-purpose agent dispatched with no task is capped too",
+     "class": "within",
+     "why": "It narrows nothing. The test is structural, so a builder cannot escape the cap through how its brief is worded, which is the real-enforcement reading. As the plan states, every general-purpose dispatch is a brief."
+    },
+    {
+     "id": "D9",
+     "summary": "context_cap_hooks refuses a builder's every call past CONTEXT_CAP_TOKENS (GUESS 300k) but the handoff Write; CONTEXT_OK or a recorded make context-ok permit escapes",
+     "class": "within",
+     "why": "FR-006 and FR-012. The knob is the spec's GUESS. The handoff Write is tested through the whole guard chain."
+    },
+    {
+     "id": "D10a",
+     "summary": "SendMessage to a builder past the cap refused",
+     "class": "within",
+     "why": "FR-006 as written."
+    },
+    {
+     "id": "D10b",
+     "summary": "SendMessage to a builder whose task has landed: the task is taken ONLY from the meta description's T<n>",
+     "class": "narrowing",
+     "why": "FR-006 says a SendMessage resuming a builder whose task has landed is refused. D8 itself says a builder with an unnamed brief exists and must not slip through. Yet D10 finds the task only from a T<n> in the description, so for that builder the landed-task refusal never fires, and its resume leaves no record. Working out the task is not impossible: D2 already has a fallback chain (the task the agent's lines carry, else the clone's task-starts entry at its dispatch). Fix: D10 uses D2's chain, and a builder with any landing of its task after its dispatch is refused, with a red case for a builder whose description names no T<n>.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D11a",
+     "summary": "every session's and agent's make static runs count toward the task, the main session's too",
+     "class": "within",
+     "why": "FR-007 counts runs in one task and names no agent."
+    },
+    {
+     "id": "D11b",
+     "summary": "the count window starts at the later of the task's last task-starts entry and its last landing",
+     "class": "narrowing",
+     "why": "FR-007 has one reset: 'since its last landing'. Lines are already filtered by task, so a start bound adds nothing except a second reset, and the plan gives no reason for it. Whether an open task can gain a second task-starts entry is unmeasured. If it can, running task-start again zeroes the count with no recorded escape, which turns the refusal into an instruction. Fix: count the task's static lines since its last landing only (or since its FIRST start where it has never landed), with a red case where a second task-start does not reset the count.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D12a",
+     "summary": "a make or cargo run backgrounded with & and then waited on in the same call passes",
+     "class": "narrowing",
+     "why": "The approved fix targets a run whose end no notice reports ('no completion notice came, and it sat idle'). A call that waits on its job does not return before the run ends, so the harness tracks it. Refusing it would refuse a tracked run and serve none of the rule's purpose.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D12b",
+     "summary": "the pass test is 'no wait later in the command': no command position for wait, and nothing ties the wait to the make job",
+     "class": "narrowing",
+     "why": "D12a's reason holds only for a wait that covers the make job, but the plan's test is any later 'wait'. Under it, `make static & echo wait` and `make static & sleep 5 & wait $!` (which waits only for the sleep) both pass, return with the run detached, and leave no record: exactly T225's untracked run. The plan already asks command position for nohup, setsid and disown, and asks none for wait. Fix: pass only a wait at a command position that covers the make or cargo job (a bare wait, or wait $!/%N naming that job with no & between), with red cases for the two forms above.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D13",
+     "summary": "main session only (no agent_id), on both permitted no-poll paths including the POLL_OK-escaped loop, longest sleep over POLL_CHECK_S (GUESS 60 s) refused; SLOW_POLL_OK escapes",
+     "class": "within",
+     "why": "FR-008 as written. POLL_OK does not bypass it."
+    },
+    {
+     "id": "D14",
+     "summary": "knobs recorded as GUESS constants and a docs/guards.md knob table; make tunables not extended to the tooling crates",
+     "class": "within",
+     "why": "The GM's request names no knob register and no make tunables, and no cited FR does either, so leaving tunables as it is narrows nothing asked. The spec's Assumptions text was not in the bundle, so this rests on the plan's statement that the spec names tunables only as where retuning happens."
+    },
+    {
+     "id": "D15a",
+     "summary": "a deferral must carry a reason, 'a task id T<n>' and 'lands before T<n>' - checked as a form, not as a FILED task",
+     "class": "narrowing",
+     "why": "FR-009 asks for 'its filed task id'. The plan checks for a string T<n>, so a made-up id that is in no tasks.md passes make decide with no record: a form check where the request asked for real enforcement. Checking it is cheap (the feature's tasks.md and tasks-done.md). Fix: the deferral's T<n>, and its lands-before T<n>, must name tasks filed in the feature, with a red case for an unfiled id.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D15b",
+     "summary": "a class-of-defect fix must carry an observed-date-and-method line",
+     "class": "within",
+     "why": "FR-009's second clause as written."
+    },
+    {
+     "id": "D16a",
+     "summary": "make land splits T= on commas and whitespace",
+     "class": "within",
+     "why": "FR-011, the approved 'Accept commas in T='."
+    },
+    {
+     "id": "D16b",
+     "summary": "task-add: if quick is still red after withdrawing the line, the line is restored and the run only reports - no comparison of failures",
+     "class": "narrowing",
+     "why": "FR-011 refuses 'on any failure the new line introduces'. When make quick is already red for another reason, a line that adds a failure of its own is restored and passes with no record (T19's third case pins this). It is not impossible to catch: compare the failures with the line to those without it. Fix: refuse and withdraw whenever the with-line run has a failure the without-line run lacks, and keep the line only when the failures are the same; add a red case with a pre-existing failure plus the line's own.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D17",
+     "summary": "suites split into numbered shards, the runner stamps the suite when every shard is green, SHARD_BAR_S GUESS about 20 s measured, never a gate",
+     "class": "within",
+     "why": "FR-010 and SC-004."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task sections",
+    "## Technical Context",
+    "## What the measurements changed (research.md)",
+    "### Documentation (this feature)",
+    "### Source Code",
+    "### T01 (the plan review the tick and the push require, feature 243)",
+    "### T01 Approach (checklist part A)",
+    "### T02 (FR-001: two make detectors that disagree, so a timed or subshelled make run logs no target - research R1)",
+    "### T02 Approach (checklist part A)",
+    "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\", observed 2026-11-20, method: the `ms` of the log's PostToolUse lines since 14:00Z summed by `cat` - research R1)",
+    "### T03 Approach (checklist part A)",
+    "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)",
+    "### T04 Approach (checklist part A)",
+    "### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)",
+    "### T05 Approach (checklist part A)",
+    "### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)",
+    "### T06 Approach (checklist part A)",
+    "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)",
+    "### T07 Approach (checklist part A)",
+    "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)",
+    "### T08 Approach (checklist part A)",
+    "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)",
+    "### T09 Approach (checklist part A)",
+    "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)",
+    "### T10 Approach (checklist part A)",
+    "### T11 (FR-005: `make feature-report` reads the same columns)",
+    "### T11 Approach (checklist part A)",
+    "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)",
+    "### T12 Approach (checklist part A)",
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)",
+    "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)",
+    "### T14 Approach (checklist part A)",
+    "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)",
+    "### T15 Approach (checklist part A)",
+    "### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)",
+    "### T16 Approach (checklist part A)",
+    "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)",
+    "### T17 Approach (checklist part A)",
+    "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)",
+    "### T18 Approach (checklist part A)",
+    "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)",
+    "### T19 Approach (checklist part A)",
+    "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T21 (FR-010: the other two of the three slowest suites)",
+    "### T21 Approach (checklist part A)",
+    "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+    "### T22 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "One make detector shared by the event log and every guard; command positions also take (, flock, nice, time, timeout N; l7r-gate.sh rust <cmd> read as rust-<cmd>.",
+     "class": "within",
+     "why": "FR-001 classes each make run by target; one detector is how that holds. Unchanged since the last reading."
+    },
+    {
+     "id": "D2",
+     "summary": "One bucket_of table shared by writer and readers, past logs re-booked by their make field; every line carries task (T= of the command, else the subagent meta description's T<n>, else the clone's last task-starts entry).",
+     "class": "within",
+     "why": "FR-001's 'by one table the readers share'; the task field serves the GM's per-task breakdown. Unchanged."
+    },
+    {
+     "id": "D3",
+     "summary": "Background run end from the task-notification prompt (BgEnd), inflight on Stop/SubagentStop, subagent ends from their transcript's queued_command row, an unended run open to the window's end.",
+     "class": "within",
+     "why": "FR-002 as written, which is the approved 'logs that end from its completion notice'. Unchanged."
+    },
+    {
+     "id": "D4",
+     "summary": "Phase lines carry wall-clock spans; coverage builds are timed per family (naming the family's crates), not per crate.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-003 says per crate, but one coverage build serves a whole family at once and the runs go side by side (R6), so a per-crate cover-build time cannot be measured. That is physical impossibility. The line still names every crate in the family. Unchanged since the last reading, so the ruling stands."
+    },
+    {
+     "id": "D5",
+     "summary": "land writes cheap/gate/cohort/claims/push Phase lines and an end line with its exit code and tasks (T= split as D16), read by D10 and D11 for foreground and background landings alike.",
+     "class": "within",
+     "why": "FR-003's landing phases and FR-005's rework count. The new tasks field is how D10 and D11 recognize a landing, so it only enforces FR-006 and FR-007."
+    },
+    {
+     "id": "D6",
+     "summary": "Agent dispatch task from its description; SubagentStop records tok (deduped by message.id), ctx and task; the reader keeps the last per aid.",
+     "class": "within",
+     "why": "FR-004 as written. Unchanged."
+    },
+    {
+     "id": "D7",
+     "summary": "where-time gains the tests/compile/gate/land/review/background/model columns and UNTIL=; critical path apart from agent-minutes; rework = refused landings plus plan re-rounds; feature-report reads the same columns module.",
+     "class": "within",
+     "why": "FR-005 clause by clause; it is the GM's request for the overall breakdown. Unchanged."
+    },
+    {
+     "id": "D8",
+     "summary": "A builder is a payload with agent_id whose agent_type names no .claude/agents/<type>.md; a general-purpose agent with no task is capped too.",
+     "class": "within",
+     "why": "This is a mechanical test of the spec's definition ('dispatched with a task's brief, not a defined review agent'). Requiring a T<n> would let a builder with an unnamed brief through the cap, which would not be real enforcement. Anything it over-catches has the recorded make context-ok escape. Unchanged since the last reading, so it carries forward. Note: 'among defined agents, one call' is a count with no date or method; it is unchanged text and does not block."
+    },
+    {
+     "id": "D9",
+     "summary": "context_cap_hooks: past CONTEXT_CAP_TOKENS (GUESS 300k), a builder's every tool call is refused except the Write of its handoff file, naming the path and next step; escapes CONTEXT_OK and a recorded make context-ok permit; the handoff case runs through the whole guard chain.",
+     "class": "within",
+     "why": "FR-006's cap and handoff exit, with the escape and message FR-012 requires. Unchanged."
+    },
+    {
+     "id": "D10",
+     "summary": "Resume refused for a builder past the cap or whose task SUCCESSFULLY landed (end code 0 naming it, or ticked or archived) after dispatch. The task is found by meta T<n>, else its FIRST line's task, else the task-starts entry in force at dispatch.",
+     "class": "within",
+     "why": "FR-006 as written. The revision closes what the last round raised: no description-only lookup, the first line rather than the latest, the entry in force at dispatch, a background landing found through its end line's tasks, a refused landing not counted. T13 carries a red case for each of these."
+    },
+    {
+     "id": "D10-no-task",
+     "summary": "When no task can be found anywhere (no T<n>, no line carrying one, no task-starts entry before dispatch), the resume passes and 'context-cap: resume, no task' is written to the guard log.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible: with no task there is nothing to test for having landed. It is only reachable when the feature had no task-start before the dispatch, because D2 stamps every later line with the active task. The pass leaves a record. LEGITIMATE only for the landed half. A builder past the cap with no task is still refused, because the bullet does not reach the cap. The plan should say so, and T13 should carry a case for it (see the D15 entry's list)."
+    },
+    {
+     "id": "D11",
+     "summary": "static_runs_hooks counts a task's make static PreToolUse lines (every session and agent) since its last SUCCESSFUL landing, else since its FIRST task-start; a later task-start resets nothing; the third is refused naming the delta's crate-scoped checks; STATIC_OK escapes; knob GUESS 2.",
+     "class": "within",
+     "why": "FR-007 literally: 'a third make static in one task since its last landing'. It counts by task, so the main session's runs count too. The revision removes the last round's unrecorded resets (a second task-start, a refused landing), and T14 carries a red case for each."
+    },
+    {
+     "id": "D12",
+     "summary": "A make or cargo job followed by & is refused unless a wait that COVERS it follows: at a command position, in the same list and shell, unconditional, not backgrounded, and bare, wait $! with no & between, or wait %N. nohup/setsid/disown at a command position are refused. A saved-pid wait is refused. DETACH_OK escapes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-008 lists & with no exception. But the approved fix was 'a guard refusing that pattern', meaning T225's detached run whose end the session never learned of. A covering wait keeps the Bash call open until the run ends, so the harness tracks it. The exception is implied by the request's own words, and refusing it would serve no part of the request's purpose. The revision makes 'covers' real: words, other shells, conditional waits, a backgrounded wait and a stale $! are all refused, each with a T15 red case. Refusing the saved-pid form is stricter than FR-008 and is within it. Notes, not blocking: wait %N has no case either way in T15; setsid and disown have no firing case (only nohup does); and whether D1 sees '{ ...; } &', 'VAR=x make ... &' or 'env ... make &' cannot be judged from this bundle, so T02 or T15 should pin those forms."
+    },
+    {
+     "id": "D13",
+     "summary": "On both permitted no-poll paths, a main-session (no agent_id) loop whose longest sleep exceeds POLL_CHECK_S (GUESS 60 s) is refused naming the 60 s form; SLOW_POLL_OK escapes.",
+     "class": "within",
+     "why": "FR-008's second clause. It turns the approved 'shorter poll loop on my side' into a refusal, as 'real enforcement' asks. Unchanged."
+    },
+    {
+     "id": "D14",
+     "summary": "Knobs carry GUESS at their point of change and a knob table in docs/guards.md; make tunables is not extended to the tooling crates.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's request never mentions make tunables. Its mention is a spec Assumption about where retuning happens, and the knob table (knob, value, label, the data that retunes it) serves the same purpose. Unchanged since the last reading, so the ruling stands."
+    },
+    {
+     "id": "D15",
+     "summary": "deferral_unformed: a non-none Found-and-left item must carry a reason, a task id and 'lands before T<n>', both ids FILED in the feature (a box of tasks.md OR an entry of tasks-done.md); a class fix needs an 'observed <date>, method:' line; DEFER_FORM_OK escapes.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-009 asks for 'its filed task id and its order (\"lands before ...\")', so that a deferred defect actually gets fixed, and in a known order (the approved 'briefs that default to fixing in the task'). Accepting an entry of tasks-done.md, which T17's second variant passes on purpose, guts both. (a) An order 'lands before T124' where T124 has already landed cannot be kept, so it orders nothing. (b) A deferral to a task that is already done will never be fixed by that task. Any feature has dozens of done ids, so a done id passes the check as easily as the made-up id the last round flagged: the hole has moved, not closed. That is a word-level reading of 'filed' that is fatal to the rule's purpose. Required, all in one revision: (1) at make decide, when the item is judged, both ids must name an OPEN task (an unticked box in the feature's tasks.md), and a section already decided is not refused later because an id it named has since landed; (2) the order's id differs from the deferral's own task id ('T123 lands before T123' is refused); (3) T17 drops the passing tasks-done variant and adds refused cases for a done deferral id, a done order id and a self-order, plus the case T17's own heading names and its list lacks: a reason and a filed task id with no 'lands before' at all, refused. Also, from D10-no-task: say that a builder past the cap with no task is still refused, and add that case to T13."
+    },
+    {
+     "id": "D16",
+     "summary": "land splits T= on commas and whitespace. task-add runs quick's check lines (from make -n quick) each to its own end, with and without the line, compares the findings as a multiset with line and column numbers masked, refuses and withdraws on any new finding, and restores the line only when the findings are identical; QUICK_OK escapes.",
+     "class": "within",
+     "why": "FR-011 as written. 'On any failure the new line introduces, withdraws the line and refuses' now holds even when an earlier check is already red or a finding in the same file is shifted, and T19 carries a red case for each. Restoring the line when the findings are the same is FR-011's own boundary (the line introduced no failure), not a carve-out."
+    },
+    {
+     "id": "D17",
+     "summary": "Hook suites may be sharded as test-<name>.<k>.sh, stamped green when every shard is; entry-gate split by its two cases, the other two by case groups to about 20 s or less (SHARD_BAR_S GUESS, measured, never a gate).",
+     "class": "within",
+     "why": "FR-010 and SC-004. The approved improvement 5 is a split, not a refusal, so FR-012 does not reach it. Unchanged."
+    },
+    {
+     "id": "CC-X/XIII/XIV",
+     "summary": "Constitution check: event_log_hooks fields move to fields.rs past the file cap; XIII baseline in a detached worktree; the two defects found while measuring (the disagreeing make detectors, booking by the frozen cat) are fixed in T02 and T08.",
+     "class": "within",
+     "why": "Process the constitution requires; the XIV fixes are defects (wrong answers) inside FR-001 and FR-005's own scope."
+    },
+    {
+     "id": "T12-dump",
+     "summary": "T12 first captures a real subagent PreToolUse payload under L7R_GUARD_DUMP, removed before landing, and pins it as the fixture.",
+     "class": "within",
+     "why": "It measures the schema the cap depends on (R2's 'not yet observed') and adds no behavior that survives the landing."
+    },
+    {
+     "id": "T22",
+     "summary": "The close measures SC-001, SC-002 and SC-005 on the first full day after landing, checks the knob table, and writes the feature report.",
+     "class": "within",
+     "why": "The spec's success criteria, measured as the request asks ('I'd like to see some actual numbers')."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task sections",
+    "## Technical Context",
+    "## What the measurements changed (research.md)",
+    "### Documentation (this feature)",
+    "### Source Code",
+    "### T01 (the plan review the tick and the push require, feature 243)",
+    "### T01 Approach (checklist part A)",
+    "### T02 (FR-001: two make detectors that disagree, so a timed or subshelled make run logs no target - research R1)",
+    "### T02 Approach (checklist part A)",
+    "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\", observed 2026-11-20, method: the `ms` of the log's PostToolUse lines since 14:00Z summed by `cat` - research R1)",
+    "### T03 Approach (checklist part A)",
+    "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)",
+    "### T04 Approach (checklist part A)",
+    "### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)",
+    "### T05 Approach (checklist part A)",
+    "### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)",
+    "### T06 Approach (checklist part A)",
+    "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)",
+    "### T07 Approach (checklist part A)",
+    "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)",
+    "### T08 Approach (checklist part A)",
+    "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)",
+    "### T09 Approach (checklist part A)",
+    "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)",
+    "### T10 Approach (checklist part A)",
+    "### T11 (FR-005: `make feature-report` reads the same columns)",
+    "### T11 Approach (checklist part A)",
+    "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)",
+    "### T12 Approach (checklist part A)",
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)",
+    "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)",
+    "### T14 Approach (checklist part A)",
+    "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)",
+    "### T15 Approach (checklist part A)",
+    "### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)",
+    "### T16 Approach (checklist part A)",
+    "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)",
+    "### T17 Approach (checklist part A)",
+    "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)",
+    "### T18 Approach (checklist part A)",
+    "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)",
+    "### T19 Approach (checklist part A)",
+    "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T21 (FR-010: the other two of the three slowest suites)",
+    "### T21 Approach (checklist part A)",
+    "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+    "### T22 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "One make detector shared::make::invoked, reading targets past (, {, flock, nice, time, timeout N, env and VAR=; l7r-gate.sh rust <cmd> read as rust-<cmd>; the writer's own pattern deleted",
+     "class": "within",
+     "why": "FR-001 classes each Bash call that runs a make target or the gate's crate-scoped checks; one detector the log and the guards share makes that classing and FR-008's refusal see the same targets (T02's and T15's red cases now carry {, VAR= and env)."
+    },
+    {
+     "id": "D2",
+     "summary": "One category table bucket_of(target) shared by writer and both readers, booking past logs by their make field; every line carries task by the T= / meta description / active task-start chain",
+     "class": "within",
+     "why": "FR-001's 'one table the readers share'; the per-task attribution serves the GM's 'for each task ... a breakdown of where our time went'."
+    },
+    {
+     "id": "D3",
+     "summary": "Background run's end logged from the task-notification prompt as BgEnd; inflight on Stop/SubagentStop; subagent ends read from the subagent transcript; a run with no end open to the window's end",
+     "class": "within",
+     "why": "FR-002 and the approved 'logs that end from its completion notice'; the transcript fallback covers the subagent case R2 found reaches no hook, which widens rather than narrows."
+    },
+    {
+     "id": "D4",
+     "summary": "Phase lines from the rust checks: build and test per crate, cover-build per family (naming the family's crates), cover-run, lint, format per crate, as wall-clock spans",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-003 says per crate; a coverage build serves a family of crates in one build (R6), so a per-crate seconds figure for that build does not exist to be logged - the rule is physically impossible for that one phase, and the line names every crate it served. Build and test stay per crate."
+    },
+    {
+     "id": "D5",
+     "summary": "make land writes cheap, gate, cohort, claims, push phase lines and an end line with exit code and tasks",
+     "class": "within",
+     "why": "FR-003's landing phases and FR-005's refused-landing rework; cohort is one of land's own passes, not new scope."
+    },
+    {
+     "id": "D6",
+     "summary": "SubagentStop carries tok (in, cached, created, out) deduped by message.id, ctx, and task from the meta file; Agent PreToolUse records task",
+     "class": "within",
+     "why": "FR-004: token cost (input, cached input, output) and task; the extra created and ctx fields are data FR-006's knob is tuned from, not new behavior."
+    },
+    {
+     "id": "D7",
+     "summary": "where-time gains tests/compile/gate/land/review/background/model columns, UNTIL=, critical path vs summed agent-minutes, rework (refused landings, plan re-rounds); feature-report reads the same module",
+     "class": "within",
+     "why": "FR-005 clause by clause."
+    },
+    {
+     "id": "D8",
+     "summary": "A builder is an agent whose agent_type names no .claude/agents/<type>.md in the clone (so a general-purpose agent without a task is judged by the cap too)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The spec defines a builder as an agent dispatched with a task's brief, not a defined review agent. The plan's test drops 'with a task's brief' (broadening, which closes the unnamed-brief escape the GM's 'real enforcement' forbids) and excludes every defined agent; measured (R3), every builder that passed the cap is caught and among defined agents one call passed it, so the exclusion does not gut the purpose of the approved 'keep builder contexts small'."
+    },
+    {
+     "id": "D9",
+     "summary": "context_cap_hooks refuses every tool call of a builder past CONTEXT_CAP_TOKENS (GUESS 300k) but the Write of its handoff file, naming path and next step; CONTEXT_OK / make context-ok permit escapes, recorded",
+     "class": "within",
+     "why": "FR-006's cap with its handoff exception stated in the spec itself, FR-012's escape and message; the whole-chain handoff case makes the one exit real."
+    },
+    {
+     "id": "D10",
+     "summary": "SendMessage to a builder refused past the cap or once its task has landed (succeeded end line, or ticked/archived) since dispatch; task found by meta description, then first event line, then task-start in force at dispatch; with no task found the landing check passes with a guard-log record while the cap check still refuses",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'Its task has landed' cannot be evaluated for an agent with no task anywhere, so that one check passing is physically forced; it leaves a record, and the cap half of FR-006's resume refusal still applies to such a builder (T13 case 7). The first-line and in-force-at-dispatch rules close the two-lane and later-task escapes."
+    },
+    {
+     "id": "D11",
+     "summary": "static_runs_hooks counts make static runs of the task since its last successful landing (else since its FIRST task-start; a later task-start resets nothing), every session's runs counted; third refused naming the changed crates' checks; STATIC_OK; knob 2",
+     "class": "within",
+     "why": "FR-007 counts runs 'in one task since its last landing' and names the crate-scoped checks; counting the main session's runs too is the spec's own scope, and the first-start rule stops a second task-start from zeroing the count."
+    },
+    {
+     "id": "D12a",
+     "summary": "no_poll_hooks refuses make/cargo backgrounded with a lone &, nohup, setsid or disown inside a Bash call, naming run_in_background; DETACH_OK; a plain & job passes with a covering wait (bare, wait $! with no intervening &, or wait %N), unconditional, same shell, not backgrounded; a saved-pid wait refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The approved improvement is 'make agents start long runs the way the session can track'; a call whose own covering wait holds it open until a plain & job ends is tracked by the harness, so refusing it would refuse what the rule exists to permit. The forms are drawn tightly (a word, another shell's, a conditional, a backgrounded and a mis-aimed wait all refused; the saved-pid form refused)."
+    },
+    {
+     "id": "D12b",
+     "summary": "The covering-wait carve-out as written ('The & form passes only where a wait that COVERS the job follows it', bare wait 'waits for every job') does not say it yields to the disown refusal, so `make static & disown; wait` (or `; wait $!`) reads as a covered & job and passes; and T15's only disown case, `make static & disown`, is already refused by the lone-& rule",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Measured 2026-11-20 in this container: `bash -c 'sleep 3 & disown; time wait'` returns in 0.000 s, and `sleep 2 & disown %1; wait $!` likewise, so a disowned job is covered by no wait form - the carve-out applied to it admits exactly the untracked run FR-008 exists to refuse. FR-012 also fails for disown: with the disown check deleted, `make static & disown` is still refused by the & rule, so no case proves the disown refusal fires. Fix: D12 states that a job under disown (any form, disown, disown %N, disown -h) is refused whatever wait follows, and that a covering wait never excuses it; T15 adds `make static & disown; wait` refused and `make static & disown; wait $!` refused (each red with the disown check deleted). nohup and setsid jobs stay coverable: measured, `setsid sleep 2 & wait` and `nohup sleep 2 & wait` each wait the full 2 s."
+    },
+    {
+     "id": "D13",
+     "summary": "Main-session wait on the POLL_OK-escaped and file-watching paths refused when its longest sleep exceeds POLL_CHECK_S (GUESS 60 s); subagents not judged; SLOW_POLL_OK",
+     "class": "within",
+     "why": "FR-008's second half names the main session and 60 s; R5 shows the slow sleeps sit on the escaped path, so placing the check there is what makes it fire."
+    },
+    {
+     "id": "D14",
+     "summary": "Knobs carry GUESS and reason at their constant and a knob table in docs/guards.md; make tunables not extended to the tooling crates",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's words say nothing of make tunables; the knobs remain labeled and recorded with the data that retunes them (FR-004's tokens, the static counts, the waits, the shard times), which is the purpose the spec's assumption serves. Not extending a walk that skips tooling crates on purpose removes nothing the GM asked for."
+    },
+    {
+     "id": "D15",
+     "summary": "deferral_unformed: a non-none Found-and-left must carry a reason, a task id and 'lands before T<n>'; in lint::refusal (decide and plan-delta) both ids filed in tasks.md or tasks-done.md and distinct; in decide alone both ids must be OPEN (unticked boxes); a class fix needs an observed/method line; DEFER_FORM_OK escapes through LOGESCAPE",
+     "class": "within",
+     "why": "FR-009 places the refusal at make decide with 'its filed task id' and an order; the plan refuses there a missing, made-up, done or self-ordered id - stronger than the literal 'filed'. plan-delta keeps the timeless parts so a decided section is not refused after its task lands; a made-up id is refused by both callers. Note, not a ruling: DEFER_FORM_OK is named on make decide only, while lint::refusal also runs under make plan-delta; a section decided under the escape would be refused when its block later changes, against the block's own 'judged once, at the decision' - the escape (or its record) should be honored on the plan-delta path too."
+    },
+    {
+     "id": "D16",
+     "summary": "land splits T= on commas and whitespace; task-add runs quick's check lines each as its own process with and without the new line, compares findings (line numbers masked, as a multiset), withdraws and refuses on any new finding; QUICK_OK",
+     "class": "within",
+     "why": "FR-011 both halves; running each check to its end is what makes 'any failure the new line introduces' detectable behind an earlier red check."
+    },
+    {
+     "id": "D17",
+     "summary": "Shard form test-<name>.<k>.sh stamped green when every shard is; entry-gate split by its two cases, the other two by case groups to about 20 s a shard",
+     "class": "within",
+     "why": "FR-010 and SC-004."
+    },
+    {
+     "id": "Constitution X / T04 fields.rs",
+     "summary": "event_log_hooks.rs's tool fields move to event_log_hooks/fields.rs if the file would pass the file cap",
+     "class": "within",
+     "why": "A file-scale consequence of the requested writer changes, not new behavior."
+    },
+    {
+     "id": "T12 first step",
+     "summary": "Capture one real subagent PreToolUse payload under a one-shot L7R_GUARD_DUMP, removed before landing, pinned as fixture",
+     "class": "within",
+     "why": "Measures the payload the requested cap reads instead of assuming it."
+    },
+    {
+     "id": "T22",
+     "summary": "Close: SC-001, SC-002, SC-005 measured on a full day after landing; knob table checked; feature report written",
+     "class": "within",
+     "why": "The spec's success criteria, measured; a missed bar is reported with its knob rather than waived."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Project Structure",
+    "## Summary",
+    "## Task sections",
+    "## Technical Context",
+    "## What the measurements changed (research.md)",
+    "### Documentation (this feature)",
+    "### Source Code",
+    "### T01 (the plan review the tick and the push require, feature 243)",
+    "### T01 Approach (checklist part A)",
+    "### T02 (FR-001: two make detectors that disagree, so a timed or subshelled make run logs no target - research R1)",
+    "### T02 Approach (checklist part A)",
+    "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\", observed 2026-11-20, method: the `ms` of the log's PostToolUse lines since 14:00Z summed by `cat` - research R1)",
+    "### T03 Approach (checklist part A)",
+    "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)",
+    "### T04 Approach (checklist part A)",
+    "### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)",
+    "### T05 Approach (checklist part A)",
+    "### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)",
+    "### T06 Approach (checklist part A)",
+    "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)",
+    "### T07 Approach (checklist part A)",
+    "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)",
+    "### T08 Approach (checklist part A)",
+    "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)",
+    "### T09 Approach (checklist part A)",
+    "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)",
+    "### T10 Approach (checklist part A)",
+    "### T11 (FR-005: `make feature-report` reads the same columns)",
+    "### T11 Approach (checklist part A)",
+    "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)",
+    "### T12 Approach (checklist part A)",
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)",
+    "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)",
+    "### T14 Approach (checklist part A)",
+    "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)",
+    "### T15 Approach (checklist part A)",
+    "### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)",
+    "### T16 Approach (checklist part A)",
+    "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)",
+    "### T17 Approach (checklist part A)",
+    "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)",
+    "### T18 Approach (checklist part A)",
+    "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)",
+    "### T19 Approach (checklist part A)",
+    "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T21 (FR-010: the other two of the three slowest suites)",
+    "### T21 Approach (checklist part A)",
+    "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+    "### T22 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "One make detector, invoked(cmd), shared by the event-log writer and every guard reading shared::make; l7r-gate.sh rust <cmd> read as rust-<cmd>",
+     "class": "within",
+     "why": "Implements FR-001's classing of every make target and the gate's crate-scoped form; fixes the detectors' disagreement (a wrong outcome: timed and subshelled runs logged no target). Nothing narrowed."
+    },
+    {
+     "id": "D2",
+     "summary": "One bucket_of(target) table shared by writer and both readers, past lines re-booked by their make field; each line carries its task by a fixed chain",
+     "class": "within",
+     "why": "FR-001's 'one table the readers share' as written; the task field serves the GM's per-task breakdown."
+    },
+    {
+     "id": "D3",
+     "summary": "A background run's end from the <task-notification> prompt (main session) or the subagent transcript's queued_command row; inflight on Stop/SubagentStop; waits booked to the run in flight; a run with no end open to the window's end",
+     "class": "within",
+     "why": "FR-002 and the approved 'logs that end from its completion notice'; the subagent path is where that notice is, measured in R2. Not a narrowing."
+    },
+    {
+     "id": "D4",
+     "summary": "Phase lines with wall-clock spans: build/test/lint/format/cover-run per crate, cover-build per family naming the family's crates",
+     "class": "narrowing",
+     "why": "FR-003 says per crate. The plan reads it narrowly for the coverage build only. Physically impossible otherwise: one coverage build compiles a whole family of crates at once (R6), so there is no per-crate build time to log. Every step that does run per crate (build, test, cover-run, lint, format) is logged per crate, and the family line names its crates. The GM asked how much time goes to recompiling, which this answers. Nothing timeable is dropped.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D5",
+     "summary": "make land writes cheap/gate/cohort/claims/push phase lines and an end line with exit code and tasks",
+     "class": "within",
+     "why": "FR-003's landing phases; the end line serves FR-005's refused-landing count. The extra cohort step is a real step of the landing, not new scope."
+    },
+    {
+     "id": "D6",
+     "summary": "SubagentStop records tok (in, cached, created, out) deduplicated by message.id, ctx, and task",
+     "class": "within",
+     "why": "FR-004 as written; 'created' is a fourth part of the same input cost, not new behavior."
+    },
+    {
+     "id": "D7",
+     "summary": "where-time columns tests/compile/gate/land/review/background/model, UNTIL=, critical path apart from summed agent-minutes, rework counts; feature-report reads the same functions",
+     "class": "within",
+     "why": "FR-005 clause by clause and the GM's 'where-time and feature-report read those new lines, and where-time gains an UNTIL='."
+    },
+    {
+     "id": "D8",
+     "summary": "A builder is a payload with agent_id whose agent_type names no .claude/agents/<type>.md; a general-purpose agent with no task is judged by the same cap",
+     "class": "narrowing",
+     "why": "Named by the plan: its reach goes past FR-006's 'dispatched with a task's brief' to any undefined-type agent. The spec defines a builder as an agent with a task's brief that is not a defined review agent, and the brief is free text, so 'not a defined agent' is the only test a guard can apply. Requiring a T<n> would let a builder with an unnamed brief through and gut the cap. The extra reach, a general-purpose agent with no task, falls under the request's own purpose: model calls slow as context grows ('Keep builder contexts small'), whatever the brief says. The cap is a GUESS knob with a recorded escape.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D9",
+     "summary": "context_cap_hooks refuses a builder's every tool call past CONTEXT_CAP_TOKENS (GUESS 300k) but the handoff Write; escapes CONTEXT_OK and a recorded make context-ok permit; main session and defined agents never read",
+     "class": "within",
+     "why": "FR-006's cap, handoff exception and knob as written; the escapes are FR-012's, recorded. The approved 'a fresh builder per stage, with a handoff file' made a refusal."
+    },
+    {
+     "id": "D10",
+     "summary": "SendMessage refused to a builder past the cap or whose task landed (a successful land end line naming it, or ticked/archived) since dispatch; task found from meta, first line, then task-starts entry in force at dispatch; no task found: landing check passes with a guard-log record, cap check still refuses",
+     "class": "within",
+     "why": "FR-006's resume refusal. The no-task pass is not an exception to the rule: a resume to a builder with no task cannot be shown to have a landed task, and it leaves a record; the cap half still holds."
+    },
+    {
+     "id": "D11",
+     "summary": "static_runs_hooks refuses the third make static of a task since its last successful landing (else since its first task-start), counting every session's and agent's runs, the main session's included; STATIC_RUNS_A_TASK GUESS 2",
+     "class": "within",
+     "why": "FR-007 counts runs 'in one task since its last landing', not per agent, so counting the main session's runs is the literal reading, not a broadening; a second task-start resetting nothing keeps the refusal from being reset by hand without a record."
+    },
+    {
+     "id": "D12",
+     "summary": "no_poll_hooks refuses a make/cargo job behind a lone &, under nohup/setsid at a command position, or followed by any disown (bare, %N, -h, -a, $!) whatever wait follows; the & form passes only with a covering wait (bare, wait $! with no & between, wait %N for the job), unconditional, same shell, not backgrounded; a saved-pid wait refused; DETACH_OK escapes",
+     "class": "narrowing",
+     "why": "FR-008 lists & without exception; the plan lets a & with a covering wait pass. The disown half (round 3's D12b) is now refused in every form whatever wait follows, which is FR-008's literal 'disown' and closes the hole. Implied by the GM's approved words. The improvement is to 'make agents start long runs the way the session can track', and 'a guard refusing that pattern' means T225's plain & with no completion notice. A & whose wait covers the job does not return before the run ends, so the session tracks it, and refusing it would not serve the stated purpose. The pass is held tight: a wait that is a word, conditional, in another shell, backgrounded, a stale $! or a saved pid is refused, and any disown after the job's & is now refused whatever wait follows. Each of those has a red fixture, and T15 puts disown;wait and disown;wait $! red when the disown check is deleted. Under the GM's 'real enforcement', what passes is only what is in fact tracked.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D13",
+     "summary": "Slow-poll check on both permitted no-poll paths, main session only, judging the loop's longest sleep against POLL_CHECK_S (GUESS 60 s); SLOW_POLL_OK escapes",
+     "class": "within",
+     "why": "FR-008's second clause as written: a main-session permitted wait checking less often than every 60 s is refused, naming the 60 s form."
+    },
+    {
+     "id": "D14",
+     "summary": "Knobs labeled GUESS at their constants with a knob table in docs/guards.md; make tunables not extended to the tooling crates",
+     "class": "narrowing",
+     "why": "Named by the plan: the spec's Assumptions name make tunables as where retuning happens, and the plan does not extend it. The GM's words never mention make tunables. The approval asks for real enforcement, and each knob is a labeled, recorded constant with a table naming the data that retunes it, which serves that. Its walk skips the tooling crates on purpose (claims belong to the engine), so extending it would be unrequested scope. Not extending it leaves no defect.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D15",
+     "summary": "deferral_unformed in lint::refusal (reason, both ids filed, order id not its own), the OPEN test in make decide; class fixes need an observed/method line; DEFER_FORM_OK on decide recorded, honored at plan-delta by reading the escape record, and taken by plan-delta itself, recorded",
+     "class": "within",
+     "why": "FR-009 says make decide refuses, and decide judges the whole form every time it runs, its escape recorded (FR-012). The plan-delta check is enforcement beyond FR-009's floor; honoring a recorded decide escape there, and taking its own recorded escape, keeps that extra check from refusing work FR-009 lets through. Nothing FR-009 asks for is narrowed."
+    },
+    {
+     "id": "D16",
+     "summary": "land splits T= on commas and whitespace; task-add runs quick's check lines each to its end with and without the line, compares findings as a multiset with line numbers masked, and withdraws and refuses on any new failure; QUICK_OK escapes",
+     "class": "within",
+     "why": "FR-011 as written: 'on any failure the new line introduces, withdraws the line and refuses'. The per-line run and the comparison are what make 'the new line introduces' measurable instead of hidden by an earlier failing check."
+    },
+    {
+     "id": "D17",
+     "summary": "Suites split into tests/hooks/test-<name>.<k>.sh shards keyed by the suite's stamp key; entry-gate by its two cases, the other two by case groups, until each shard is about 20 s or less (SHARD_BAR_S GUESS, not a gate)",
+     "class": "within",
+     "why": "FR-010 and SC-004 as written; the approved 'Split the three slowest hook suites'."
+    }
+   ]
+  }
+ ]
+}
